@@ -267,6 +267,7 @@
         {
             QString elevation = favorite->getElevation();
             QString time = favorite->getTime();
+            QString creationTime = favorite->getCreationTime();
             QString title = favorite->getTitle();
             QString description = favorite->getDescription();
             QString address = favorite->getAddress();
@@ -279,6 +280,7 @@
             self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
                                                             elevation,
                                                             time,
+                                                            creationTime,
                                                             title,
                                                             description,
                                                             address,

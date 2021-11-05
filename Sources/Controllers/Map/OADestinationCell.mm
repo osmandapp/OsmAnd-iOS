@@ -340,19 +340,41 @@
     }
 }
 
-+ (void)setParkingTimerStr:(NSDate *)pickupDate label:(UILabel *)label shortText:(BOOL)shortText
++ (void)setParkingTimerStr:(NSDate *)pickupDate creationDate:(NSDate *)creationDate label:(UILabel *)label shortText:(BOOL)shortText
 {
-    if (!pickupDate)
-        return;
+    NSString *remainingTimeText = @"";
+    NSTimeInterval timeInterval = 0;
     
-    NSTimeInterval timeInterval = [pickupDate timeIntervalSinceNow];
+    if (pickupDate && pickupDate.timeIntervalSince1970 > 0)
+    {
+        timeInterval = [pickupDate timeIntervalSinceNow];
+        remainingTimeText = [OADestinationCell parkingTimeStr:pickupDate shortText:shortText];
+    }
     
-    label.text = [OADestinationCell parkingTimeStr:pickupDate shortText:shortText];
+    NSString *creationDateText = @"";
+    if (creationDate && creationDate.timeIntervalSince1970 > 0)
+    {
+        if (remainingTimeText.length > 0)
+            creationDateText = @"\n";
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+        [formatter setDateStyle:NSDateFormatterMediumStyle];
+        [formatter setTimeStyle:NSDateFormatterShortStyle];
+        creationDateText = [NSString stringWithFormat:@"%@%@ %@", creationDateText, OALocalizedString(@"parked_at"), [formatter stringFromDate:creationDate]];
+    }
     
-    if (timeInterval > 0.0)
-        label.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
-    else
-        label.textColor = [UIColor redColor];
+    NSString *fullText = [NSString stringWithFormat:@"%@%@", remainingTimeText, creationDateText];
+    NSRange fullRange = NSMakeRange(0, fullText.length);
+    NSRange coloredRange = NSMakeRange(0, remainingTimeText.length);
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
+    UIFont *font = [UIFont systemFontOfSize:15];
+    [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f] range:fullRange];
+    if (pickupDate && timeInterval <= 0.0)
+        [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:coloredRange];
+    
+    label.attributedText = attributedString;
 }
 
 - (void)reloadData

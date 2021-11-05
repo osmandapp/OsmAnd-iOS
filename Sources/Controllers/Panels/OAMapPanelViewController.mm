@@ -3286,6 +3286,7 @@ typedef enum
     {
         [plugin addOrRemoveParkingEvent:sender.addToCalActive];
         [plugin setParkingTime:sender.timeLimitActive ? ([sender.date timeIntervalSince1970] * 1000) : -1];
+        [plugin setParkingStartTime:[NSDate date].timeIntervalSince1970];
         [plugin setParkingPosition:sender.coord.latitude longitude:sender.coord.longitude limited:sender.timeLimitActive];
         
         if (sender.timeLimitActive && sender.addToCalActive)

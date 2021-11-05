@@ -527,7 +527,7 @@
 "use_points_as_intermediates" = "Calcular a rota entre pontos";
 "calculate_osmand_route_without_internet" = "Calcular segmento de rota OsmAnd sem Internet";
 "routing_settings_2" = "Configurações de navegação";
-"impassable_road" = "Evitar estradas";
+"impassable_road" = "Evitar...";
 "shared_string_do_not_use" = "Não use";
 "voice_provider" = "Instruções por voz";
 "shared_string_sound" = "Som";
@@ -772,7 +772,7 @@
 "track_save_descr" = "Salvar a trilha atual como arquivo GPX agora.";
 "poi_clear" = "Limpar";
 "track_during_nav" = "Auto-registrar a trilha";
-"track_during_nav_descr" = "Ativar para salvar automaticamente uma trilha durante a navegação";
+"track_during_nav_descr" = "Ativar para salvar automaticamente uma trilha durante a navegação.";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Atualização ao vivo";
 "osmand_live_available_maps" = "Mapas disponíveis";
@@ -846,10 +846,10 @@
 "wiki_buy_description" = "Para ler artigos completos - compre o plugin Wikipedia e faça o download dos dados da Wikipedia sobre %@";
 "wiki_download_description" = "Para ler artigos completos - baixar dados da Wikipedia de %@";
 "map_an_region" = "esta região";
-"osm_live_plan_pricing" = "Planos e Preços";
+"osm_live_plan_pricing" = "Planos e preços";
 "osm_live_payment_monthly_title" = "Pague mensalmente";
-"osm_live_payment_3_months_title" = "Pague uma vez a cada 3 meses";
-"osm_live_payment_annual_title" = "Pague uma vez por ano";
+"osm_live_payment_3_months_title" = "Pague trimestralmente";
+"osm_live_payment_annual_title" = "Pague anualmente";
 "osm_live_payment_month_cost_descr" = "%@ / mês";
 "osm_live_payment_month_cost_descr_ex" = "%@ %@ ao mês";
 "osm_live_payment_discount_descr" = "Economize %@!";
@@ -942,8 +942,8 @@
 "osm_working_days" = "Dias úteis";
 "osm_opening_hours_time" = "Tempo";
 "osm_around_the_clock" = "Sempre aberto (24/7)";
-"osm_opens_at" = "Abre em:";
-"osm_closes_at" = "Fecha em:";
+"osm_opens_at" = "Abre às:";
+"osm_closes_at" = "Fecha às:";
 "osm_editing_contact_info" = "Informações de contato";
 "osm_str_name" = "Nome da rua";
 "osm_building_num" = "Número do edifício";

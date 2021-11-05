@@ -1729,6 +1729,7 @@
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
 "parking" = "Parking";
+"parked_at" = "Parked at";
 
 "directions_more_options" = "Directions from";
 "nearby_search" = "Search nearby";

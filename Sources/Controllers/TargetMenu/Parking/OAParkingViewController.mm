@@ -43,6 +43,7 @@
         [_timeFmt setDateStyle:NSDateFormatterNoStyle];
         [_timeFmt setTimeStyle:NSDateFormatterShortStyle];
         _date = [self dateNoSec:[NSDate dateWithTimeIntervalSinceNow:60 * 60]];
+        _creationDate = [self dateNoSec:[NSDate dateWithTimeIntervalSinceNow:60 * 60]];
     }
     return self;
 }
@@ -66,6 +67,11 @@
                 _date = [NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000];
             else
                 _date = [self dateNoSec:[NSDate dateWithTimeIntervalSinceNow:60 * 60]];
+            
+            if (plugin.getStartParkingTime > 0)
+                _creationDate = [NSDate dateWithTimeIntervalSince1970:plugin.getStartParkingTime / 1000];
+            else
+                _creationDate = [self dateNoSec:[NSDate dateWithTimeIntervalSinceNow:60 * 60]];
         }
     }
     return self;

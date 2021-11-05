@@ -82,6 +82,9 @@
 - (NSDate *) getTimestamp;
 - (void) setTimestamp:(NSDate *)timestamp;
 
+- (NSDate *) getCreationTime;
+- (void) setCreationTime:(NSDate *)timestamp;
+
 - (bool) getCalendarEvent;
 - (void) setCalendarEvent:(BOOL)calendarEvent;
 

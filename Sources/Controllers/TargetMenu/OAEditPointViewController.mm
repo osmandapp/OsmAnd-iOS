@@ -589,8 +589,13 @@
         data.backgroundIcon = _backgroundIconNames[_selectedBackgroundIndex];
         data.icon = _selectedIconName;
 
-        if (_editPointType == EOAEditPointTypeWaypoint && !_pointHandler.gpxWptDelegate)
-            _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
+        if (_editPointType == EOAEditPointTypeWaypoint)
+        {
+            if (!_pointHandler.gpxWptDelegate)
+                _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
+            if ([savingGroup isEqualToString:OALocalizedString(@"gpx_waypoints")])
+                savingGroup = @"";
+        }
 
         if (_isNewItemAdding || ![self.name isEqualToString:_initialName] || ([self.name isEqualToString:_initialName] && ![self.groupTitle isEqualToString:_initialGroupName]))
         {

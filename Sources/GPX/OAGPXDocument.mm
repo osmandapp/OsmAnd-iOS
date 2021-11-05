@@ -1335,7 +1335,7 @@
         {
             categories[@"title"] = title;
             categories[@"color"] = color;
-            categories[@"count"] = count;
+            categories[@"count"] = [NSString stringWithFormat:@"%i", [[map objectForKey:title][@"count"] intValue] + 1];
             [map setObject:categories forKey:title];
         }
     }

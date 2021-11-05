@@ -84,7 +84,7 @@
                     [OAGPXTableCellData withData:@{
                             kCellKey: @"analyze",
                             kCellType: [OATitleIconRoundCell getCellIdentifier],
-                            kCellRightIconName: @"ic_custom_appearance",
+                            kCellRightIconName: @"ic_custom_graph",
                             kCellTitle: OALocalizedString(@"analyze_on_map"),
                             kCellButtonPressed: ^{
                                 if (self.trackMenuDelegate)

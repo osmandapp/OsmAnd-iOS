@@ -1315,6 +1315,9 @@
 
             UIColor *tintColor = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
+            cell.textView.font = [cellData.values.allKeys containsObject:@"font_value"]
+                    ? cellData.values[@"font_value"] : [UIFont systemFontOfSize:17.];
+
             cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.textView.text = cellData.title;
             cell.textView.textColor = tintColor;

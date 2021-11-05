@@ -21,12 +21,14 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     EOAEditTrackScreenSegmentsMode
 };
 
-@interface OAEditWaypointsGroupBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAEditWaypointsGroupOptionsDelegate>
+@interface OAEditWaypointsGroupBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, OAEditWaypointsGroupOptionsDelegate>
 
 @end
 
 @implementation OAEditWaypointsGroupBottomSheetViewController
 {
+    UITapGestureRecognizer *_backgroundTapRecognizer;
+
     NSArray<OAGPXTableSectionData *> *_tableData;
     EOAEditTrackScreenMode _mode;
 
@@ -70,6 +72,12 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     [super viewDidLoad];
 
     self.isFullScreenAvailable = NO;
+
+    _backgroundTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onBackgroundPressed:)];
+    _backgroundTapRecognizer.numberOfTapsRequired = 1;
+    _backgroundTapRecognizer.numberOfTouchesRequired = 1;
+    _backgroundTapRecognizer.delegate = self;
+    [self.view addGestureRecognizer:_backgroundTapRecognizer];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -217,8 +225,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                     [OAGPXTableCellData withData:@{
                             kCellKey: @"delete",
                             kCellType: [OATitleIconRoundCell getCellIdentifier],
-                            kCellRightIconName: @"ic_custom_remove_outlined",
                             kCellTitle: OALocalizedString(@"shared_string_delete"),
+                            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+                            kCellRightIconName: @"ic_custom_remove_outlined",
                             kCellTintColor: @color_primary_red,
                             kCellButtonPressed: ^() {
                                 if (_mode == EOAEditTrackScreenWaypointsMode)
@@ -296,6 +305,16 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     [self setLeftIcon];
 }
 
+#pragma mark - UITapGestureRecognizer
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if ([gestureRecognizer isKindOfClass:UITapGestureRecognizer.class])
+        return [self.tableView indexPathForRowAtPoint:[touch locationInView:self.tableView]] == nil;
+
+    return YES;
+}
+
 #pragma mark - OAEditWaypointsGroupOptionsDelegate
 
 - (void)updateWaypointsGroup:(NSString *)groupName
@@ -356,6 +375,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
             cell.titleView.text = cellData.title;
             cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
+
+            cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
+                    ? cellData.values[@"font_value"] : [UIFont systemFontOfSize:17.];
 
             if (hasIcon)
             {
@@ -440,7 +462,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         cellData.onButtonPressed();
 }
 
-#pragma mark - UISwitch pressed
+#pragma mark - Selectors
 
 - (void)onSwitchPressed:(id)sender
 {
@@ -452,6 +474,18 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         cellData.onSwitch(switchView.isOn);
 
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)onBackgroundPressed:(UIGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateEnded)
+    {
+        CGPoint touchInView = [recognizer locationInView:self.view];
+        if ((OAUtilities.isLandscape && (touchInView.x < self.bottomSheetView.frame.origin.x
+                || touchInView.x > self.bottomSheetView.frame.origin.x + self.bottomSheetView.frame.size.width))
+                || touchInView.y < self.bottomSheetView.frame.origin.y)
+            [self onRightButtonPressed];
+    }
 }
 
 @end

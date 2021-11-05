@@ -255,6 +255,13 @@
     return outCell;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (_screenType == EOAEditWaypointsGroupRenameScreen &&
+            [[self getCellData:indexPath].type isEqualToString:[OATextInputCell getCellIdentifier]])
+        [((OATextInputCell *) cell).inputField becomeFirstResponder];
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)sender

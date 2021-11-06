@@ -869,7 +869,7 @@
 "osm_str_name" = "Назва вулиці";
 "osm_building_num" = "Номер будинку";
 "osm_phone" = "телефон";
-"osm_website" = "Веб-сайт";
+"osm_website" = "Вебсайт";
 "osm_add_place" = "Додати місце";
 "osm_modify_place" = "Змінити місце";
 "osm_poi_delete_title" = "Вилучення POI";
@@ -2195,3 +2195,4 @@
 "shared_string_time_span" = "Проміжок часу";
 "shared_string_time_moving" = "Час переміщення";
 "distance_moving" = "Відкоригована відстань";
+"parked_at" = "Припарковано на";

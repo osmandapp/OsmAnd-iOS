@@ -272,7 +272,7 @@
         if (gpx.showArrows)
         {
             // Use black arrows for gradient colorization
-            UIColor *color = gpx.coloringType.length != 0 ? UIColor.whiteColor : UIColorFromARGB(gpx.color);
+            UIColor *color = gpx.coloringType.length != 0 && ![gpx.coloringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB(gpx.color);
             builder.setPathIcon([self bitmapForColor:color fileName:@"map_direction_arrow"])
                 .setSpecialPathIcon([self specialBitmapWithColor:colorARGB])
                 .setShouldShowArrows(true)

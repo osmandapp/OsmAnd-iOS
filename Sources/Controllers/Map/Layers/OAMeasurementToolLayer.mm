@@ -35,6 +35,8 @@
 #include <OsmAndCore/SkiaUtilities.h>
 #include <SkCGUtils.h>
 
+#define MIN_POINTS_PERCENTILE 5
+#define START_ZOOM 8
 
 @implementation OAMeasurementToolLayer
 {
@@ -284,26 +286,44 @@
     return nil;
 }
 
+- (double) getPointsDensity
+{
+    if (_editingCtx.getPointsCount == 0)
+        return 0;
+    NSArray<OAGpxTrkPt *> *points = [_editingCtx.getBeforePoints arrayByAddingObjectsFromArray:_editingCtx.getAfterPoints];
+    
+    NSMutableArray<NSNumber *> *distances = [NSMutableArray array];
+    OAGpxTrkPt *prev = nil;
+    for (OAGpxTrkPt *wptPt in points)
+    {
+        if (prev != nil)
+        {
+            double dist = getDistance(wptPt.position.latitude, wptPt.position.longitude, prev.position.latitude, prev.position.longitude);
+            [distances addObject:@(dist)];
+        }
+        prev = wptPt;
+    }
+    
+    [distances sortUsingComparator:^NSComparisonResult(NSNumber *obj1, NSNumber *obj2) {
+        return [obj1 compare:obj2];
+    }];
+    
+    return [self getPercentile:distances percentile:MIN_POINTS_PERCENTILE];
+}
+
+- (double) getPercentile:(NSArray<NSNumber *> *)sortedValues percentile:(int)percentile
+{
+    if (percentile < 0 || percentile > 100)
+    {
+        @throw [NSException exceptionWithName:@"Invalid percentile" reason:[NSString stringWithFormat:@"invalid percentile %d should be 0-100", percentile] userInfo:nil];
+    }
+    int index = (int) (sortedValues.count - 1) * percentile / 100;
+    return sortedValues[index].doubleValue;
+}
+
 - (void) drawPointMarkers:(const QVector<OsmAnd::PointI> &)points collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection
 {
-    const auto& markers = collection->getMarkers();
-    for (auto& marker : markers)
-    {
-        const auto& pos = marker->getPosition();
-        bool exists = false;
-        for (const auto& p : points)
-        {
-            if (pos == p)
-            {
-                exists = true;
-                break;
-            }
-        }
-        if (!exists)
-        {
-            collection->removeMarker(marker);
-        }
-    }
+    collection->removeAllMarkers();
     OsmAnd::MapMarkerBuilder pointMarkerBuilder;
     pointMarkerBuilder.setIsAccuracyCircleSupported(false);
     pointMarkerBuilder.setBaseOrder(self.baseOrder - 15);
@@ -311,19 +331,32 @@
     pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
     pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
     pointMarkerBuilder.setPinIcon(_pointMarkerIcon);
-    for (const auto& p : points)
+    
+    double density = [self getPointsDensity];
+    if (_editingCtx.getPointsCount > 500)
     {
-        bool exists = false;
-        for (auto& marker : markers)
+        if (density < 100)
         {
-            const auto& pos = marker->getPosition();
-            if (pos == p)
+            double distThreshold = MAX(1000, _editingCtx.getRouteDistance / 100);
+            double currentDist = 0;
+            OsmAnd::PointI prevPnt(-1, -1);
+            for (const auto& p : points)
             {
-                exists = true;
-                break;
+                if (prevPnt.x > 0 && prevPnt.y > 0)
+                    currentDist += OsmAnd::Utilities::distance(OsmAnd::Utilities::convert31ToLatLon(prevPnt), OsmAnd::Utilities::convert31ToLatLon(p));
+                prevPnt = p;
+                if (currentDist > distThreshold)
+                {
+                    auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
+                    marker->setPosition(p);
+                    currentDist = 0;
+                }
             }
         }
-        if (!exists)
+    }
+    else
+    {
+        for (const auto& p : points)
         {
             auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
             marker->setPosition(p);

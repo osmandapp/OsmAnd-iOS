@@ -341,7 +341,7 @@
 "you_searching" = "Du søger";
 "from_location" = "bort fra";
 "show_alt_in_drive" = "Vis højde i køretilstand";
-"res_hillshade" = "Reliefskygge";
+"res_hillshade" = "Terrænskygge";
 "purchase_get" = "Hent";
 "srtm_disabled" = "Højdekurver er deaktiveret";
 "prch_wiki_info" = "Wikipedia modul tilføjer oplysninger fra Wikipedia for kort, som er købt eller hentet inden for den gratis grænse.";
@@ -400,7 +400,7 @@
 "product_desc_ext_skimap" = "OsmAnd Skikort er en udvidelse til OsmAnd designet til at navigere på vintersportssteder. Giver oplysninger om skipister, skiliftsmarkører og endda farvede linjer med angivelse af spor kompleksitet. Få infomation om skispor såvel som de omgivende infrastrukturer.\n\nBrugsvejledning: Aktiver udvidelsen i OsmAnd, tryk på kort-knappen og sæt korttype til Skikort.";
 "product_desc_ext_track_recording" = "Optage ruter og gem dem manuelt ved hjælp af ruteoptagelse udvidelsen. Eksportere rutensom en gpx fil, dele den eller brug den til bidrag til OpenStreetMap projektet.  Et praktisk værktøj for løbere, vandrere og alle interesserede i at optage ruter.";
 "product_desc_ext_wiki" = "Få oplysninger om interessepunkter fra Wikipedia. En lomme offlineguide - aktiver Wikipedia udvidelsen og nyd artikler omkring omgivelserne.";
-"product_desc_ext_srtm" = "Udvidelsen giver højdekurver og reliefoverlejring, som kan vises i OsmAnd offline kort. Højdekurver indeholder oplysninger om højder af området, mens reliefoverlejring er deres visualisering. Se navnene på bjergtoppe og specifikke egenskaber i terræn ved hjælp af udvidelsen.\n\nDe globale data (mellem 70 grader nord og 70 grader syd) er baseret på målinger af SRTM (Shuttle Radar Topografi Mission) og ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), et billeddannende instrument ombord på Terra satellitten, flagskibet i NASAs Earth Observering system. ASTER er et samarbejde mellem NASA, Japans Ministry of Economy, Trade and Industry (METI), og Japan Space Systems (J-spacesystems).";
+"product_desc_ext_srtm" = "Udvidelsen giver højdekurver og terrænskygger, som kan vises i OsmAnd offline kort. Højdekurver indeholder oplysninger om højder af området, mens terrænskygger er deres visualisering. Se navnene på bjergtoppe og specifikke egenskaber i terræn ved hjælp af udvidelsen.\n\nDe globale data (mellem 70 grader nord og 70 grader syd) er baseret på målinger af SRTM (Shuttle Radar Topografi Mission) og ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), et billeddannende instrument ombord på Terra satellitten, flagskibet i NASAs Earth Observering system. ASTER er et samarbejde mellem NASA, Japans Ministry of Economy, Trade and Industry (METI), og Japan Space Systems (J-spacesystems).";
 "plugin_popup_wiki_ask" = "For at hente Wikipedia data, aktiver udvidelsen: <b>Wikipedia</b>";
 "plugin_popup_srtm_ask" = "For at hente højdekurver skal du aktivere udvidelsen: <b>Højdekurver</b>";
 "turn_on_plugin" = "Aktiver udvidelse";
@@ -415,7 +415,7 @@
 "show_region_on_map_title" = "Kort hentet";
 "show_region_on_map_desc" = "Kort over %@ er hentet. Gå til kortet for at begynde at bruge det.";
 "show_region_on_map_go" = "Gå til kortet";
-"map_settings_hillshade" = "Reliefskygge";
+"map_settings_hillshade" = "Terrænskygge";
 "sqlitedb_import_title" = "Importer Map Creator fil";
 "sqlitedb_import_already_exists" = "Den angivne sqlitedb-fil findes allerede. Vælg handling.";
 "map_creator" = "Map Creator";
@@ -870,7 +870,7 @@
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Ubegrænset hentninger";
 "wikipedia_offline" = "Wikipedia offline";
-"contour_lines_hillshade_maps" = "Højdekurver og reliefskygger";
+"contour_lines_hillshade_maps" = "Højdekurver og terrænskyggekort";
 "monthly_map_updates" = "Opdatering af kort: hver måned";
 "daily_map_updates" = "Opdatering af kort: hver time";
 "index_item_depth_contours_osmand_ext" = "Havdybdekurver";
@@ -1124,12 +1124,12 @@
 "download_pending" = "Afventer hentning";
 "reddit" = "Reddit";
 // Quick action
-"quick_action_name" = "Genveje";
+"quick_action_name" = "Genvej";
 "quick_action_no_overlay" = "Ingen overlejring";
 "quick_action_add_overlay" = "Tilføj overlejring";
 "quick_action_no_underlay" = "Ingen underlejring";
 "quick_action_add_underlay" = "Tilføj underlejring";
-"quick_action_list_descr" = "Tryk på genvejsknappen gennemløber nedenstående liste";
+"quick_action_list_descr" = "Tryk på denne genvejsknap gennemløber nedenstående liste";
 "map_overlays" = "Kortoverlejringer";
 "map_underlays" = "Kortunderlejring";
 "offline_vector_maps" = "Offline vektorkort";
@@ -1164,7 +1164,7 @@
 "show_hide_gpx" = "Vis/skjul ruter";
 "search_results" = "Søgeresultater";
 "quick_action_name_str" = "Genvejsnavn";
-"quick_action_name_alert" = "Navnet på genvejen blev ændret til %@ for at undgå dubletter.";
+"quick_action_name_alert" = "Navnet på genvej ændret til %@ for at undgå dubletter.";
 "quick_action_screen_header" = "Skærm %ld";
 "fav_add_group" = "Tilføj en gruppe";
 "group_properties" = "Gruppeegenskaber";
@@ -1192,14 +1192,14 @@
 "quick_action_get_info" = "Få oplysninger";
 "quick_action_enter_message" = "Indtast besked";
 "osm_note_action_field_descr" = "Meddelelsen inkluderes i kommentarfeltet.";
-"quick_action_source_switch_descr" = "Tryk på genvejsknappen gennemløber nedenstående liste.";
-"quick_action_poi_add_descr" = "Ved at trykke på genvejsknappen kan hurtigt tilføjes et interessepunkt på kortet med foruddefineret type og mærke.";
-"quick_action_day_night_descr" = "Tryk genvejsknappen skifter mellem dag-og natkort tilstand.";
+"quick_action_source_switch_descr" = "Tryk på denne genvejsknap gennemløber nedenstående liste.";
+"quick_action_poi_add_descr" = "Ved at trykke på denne genvejsknap kan du hurtigt tilføje et interessepunkt på kortet med foruddefineret type og mærke.";
+"quick_action_day_night_descr" = "Trykkes på denne genvejsknap skiftes der mellem dag-og natkort-tilstand.";
 "quick_action_parking_descr" = "Ved tryk på genvejsknappen tilføjes en parkeringsplacering ved kortets midtpunkt.";
 "quick_action_marker_descr" = "Tryk på genvejsknappen tilføjer en kortmarkør på midten af skærmen.";
 "quick_action_show_gpx_descr" = "Tryk på genvejsknappen viser eller skjuler de aktuelt viste GPX-spor.";
 "quick_action_voice_descr" = "Tryk på genvejsknappen deaktiverer eller aktivere stemmevejledning under navigation.";
-"quick_action_add_dest_descr" = "Tryk på genvejen tilføjer en destination på skærmens centrum. Enhver tidligere valgt destination bliver den sidste mellemliggende destination.";
+"quick_action_add_dest_descr" = "Tryk på denne genvejsknap tilføjer en destination på skærmens centrum. Enhver tidligere valgt destination bliver den sidste mellemliggende destination.";
 "quick_action_first_intermediate_descr" = "Ved tryk på genvejsknappen tilføjes et første mellemliggende punkt på skærmens centrum.";
 "quick_action_replace_dest_descr" = "Ved tryk på genvejsknappen angiver destinationen til skærmens centrum og erstatter den tidligere valgte destination (hvis nogen).";
 "quick_action_autozoom_descr" = "Ved tryk på genvejsknappen, tændes/slukkes den automatiske zoomtilstand i henhold til den aktuelle hastighed.";
@@ -1270,11 +1270,11 @@
 "tile_data" = "Flisedata";
 "online_map" = "Online kort";
 "calculating_progress" = "Beregner ...";
-"quick_action_hillshade_descr" = "Tryk på genvejsknappen viser eller skjuler reliefskygger på kortet.";
+"quick_action_hillshade_descr" = "Tryk på denne genvejsknap viser eller skjuler terrænlaget.";
 "show_hillshade" = "Vis reliefskygger";
 "hide_hillshade" = "Skjul reliefskygger";
 "toggle_contour_lines" = "Vis/skjul højdekurver";
-"toggle_hillshade" = "Vis/skjul reliefskygger";
+"toggle_hillshade" = "Vis/skjul terræn";
 "display_starting_at_zoom_level" = "Vis fra zoomniveau";
 "quick_action_contour_lines_descr" = "Tryk på genvejsknappen viser eller skjuler højdekurver på kortet.";
 "hide_contour_lines" = "Skjul højdekurver";
@@ -1650,7 +1650,7 @@
 "wiki_sheet_title" = "Hvordanåbner man Wikipedia artikler?";
 "all_group_points" = "Alle punkter i gruppen";
 "enable_contour_lines" = "Aktivér for visning af højdekurver på kortet";
-"map_settings_available_srtm_maps_descr" = "Yderligere kort er nødvendige for at se reliefskygger på kortet";
+"map_settings_available_srtm_maps_descr" = "Yderligere kort er nødvendige for at se terrænskygger på kortet";
 "map_settings_appearance" = "Udseende";
 "map_settings_contour_zoom_level_descr" = "Vælg zoomniveau, hvorfra højdekurver vises";
 "map_settings_line_density" = "Linjetæthed";
@@ -1677,7 +1677,7 @@
 "avoid_transport_type" = "Undgå transporttyper";
 "allow_3d_descr" = "Aktivér indstillingen for at kunne se kortet i 2.5D-perspektivet";
 "allow_3d" = "Tillad 2.5D-visning";
-"map_settings_hillshade_description" = "Reliefskygge kort visualiserer hældninger, toppe og lavområder ved hjælp af forskellige niveauer af gråt";
+"map_settings_hillshade_description" = "Terrænskyggekort visualiserer hældninger, toppe og lavområder ved hjælp af forskellige gråtoner";
 "public_transport_empty_warning_descr" = "Prøv at ændre indstillinger.";
 "public_transport_empty_warning_title" = "Kunne desværre ikke finde en rute, der passer til indstillingerne.";
 "res_slope" = "Hældning";
@@ -1843,7 +1843,7 @@
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Søg";
-"configure_screen_quick_action" = "Genveje";
+"configure_screen_quick_action" = "Genvej";
 "shared_string_settings" = "Indstillinger";
 "importing_from" = "Importerer data fra %@";
 "shared_string_importing" = "Importerer";
@@ -1883,7 +1883,7 @@
 "personal_category_name" = "Personlig";
 "osm_notes" = "OSM-noter";
 "reverse_route" = "Omvendt rute";
-"quick_action_switch_profile_descr" = "Handlingsknappen skifter mellem valgte profiler.";
+"quick_action_switch_profile_descr" = "Denne genvejsknap skifter mellem valgte profiler.";
 "maximum_speed" = "Maksimal hastighed";
 "units_t" = "t";
 "create_profile_descr" = "Basér den brugerdefinerede profil på en af standard app-profilerne, dette definerer den grundlæggende opsætning som standard synlighed for moduler og enheder for hastighed og distance. Dette er standard app-profilerne, sammen med eksempler på brugerdefinerede profiler kan de udvides til:";
@@ -2053,12 +2053,12 @@
 "show_coordinates" = "Vis koordinater";
 "unsupported_items" = "Ikke-understøttede elementer";
 "map_widget_parking" = "Parkeringsplads";
-"quick_action_dir_from_descr" = "Tryk på denne handling for at navigere fra skærmens aktuelle midtpunkt.";
+"quick_action_dir_from_descr" = "Tryk på denne genvej for at navigere fra skærmens aktuelle midtpunkt.";
 "change_application_profile" = "Ændr applikationsprofil";
 "help_what_is_new" = "Hvad er nyt";
-"quick_action_showhide_mapillary_descr" = "Hvis du trykker på denne handlingsknap, vises eller skjules Mapillary-laget på kortet.";
-"quick_action_transport_descr" = "Tryk på denne handling for at vise eller skjule ruter/stoppesteder for offentlig transport på kortet.";
-"unsupported_action_descr" = "Denne hurtighandling understøttes ikke aktuelt. Dette kan blive rettet i nye appversioner.";
+"quick_action_showhide_mapillary_descr" = "Hvis du trykker på denne genvejsknap, vises eller skjules Mapillary-laget på kortet.";
+"quick_action_transport_descr" = "Tryk på denne genvej for at vise eller skjule ruter/stoppesteder for offentlig transport på kortet.";
+"unsupported_action_descr" = "Denne genvej understøttes ikke aktuelt. Dette kan blive rettet i nye appversioner.";
 "replace_waypoint_confirmation" = "Er du sikker på, at du ønsker at erstatte rutepunkt %@?";
 "product_desc_openplacereviews" = "Send fotos, anmeldelser og links for offentlige steder";
 "gpx_split_interval_descr" = "Vælg det interval, hvormed markeringer med afstand eller tid skal vises på sporet.";
@@ -2097,7 +2097,7 @@
 "read_full_description" = "Læs hele beskrivelsen";
 "track_show_start_finish_icons" = "Vis start- og målikoner";
 "activity" = "Aktivitet";
-"quick_action_coordinates_widget_descr" = "Hvis du trykker på denne handlingsknap, vises eller skjules koordinat-modulet.";
+"quick_action_coordinates_widget_descr" = "Hvis du trykker på denne genvejsknap, vises eller skjules koordinat-modulet.";
 "gpx_saved_successfully" = "GPX-fil gemt til %@";
 "change_map_behavior" = "Ændr kortopførsel under navigation";
 "instructions_repeat" = "Tryk på \"Næste sving\"-modulet for at gentage instruktionerne";

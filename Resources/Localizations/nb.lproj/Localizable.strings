@@ -2027,3 +2027,20 @@
 "dialogs_and_notifications_descr" = "Kontroller oppsprett, dialoger, og merknader";
 "delete_group_confirm_short" = "Slett gruppe?";
 "delete_custom_categories" = "Slett egendefinerte kategorier";
+"parked_at" = "Parkert ved";
+
+// Shared Strings
+"shared_string_custom" = "Egendefinert";
+"navigate_point_format_UTM" = "UTM";
+"navigate_point_format_unknown" = "Ukjent format";
+"toggle_coordinates" = "Vis/skjul koordinat-miniprogram";
+"approximate_file_size" = "Anslått filstørrelse: %@";
+"help_travel" = "Rise (Wikipedia og Wikivoyage)";
+"shared_string_time_span" = "Tidsrom";
+"shared_string_start_time" = "Start";
+"shared_string_end_time" = "Slutt";
+"shared_string_time_moving" = "Tid i bevegelse";
+"regions" = "Regioner";
+"shared_string_overview" = "Oversikt";
+"activity" = "Aktivitet";
+"change_object_posiotion" = "Endre objektets posisjon";

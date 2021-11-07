@@ -252,7 +252,7 @@
 "si_m_s" = "م/ث";
 "si_min_km" = "دقيقة/كم";
 "si_min_m" = "دقيقة/ميل";
-"si_nm_h" = "ميل بحري في الساعة (عقدة)";
+"si_nm_h" = "أميال بحرية في الساعة (عقدة)";
 "nm" = "ميل بحري";
 "nm_h" = "ميل بحري/في الساعة";
 "min_mile" = "د/م";
@@ -1800,7 +1800,7 @@
 "profile_import_success" = "تم استيراد ملف تعريف التطبيق بنجاح";
 "err_profile_import" = "خطأ في قراءة بيانات العنصر:٪ @";
 "default_speed_dialog_msg" = "يستخدم لتقدير وقت الوصول لنوع غير معروف من الطرق ولتقليل السرعة لجميع الطرق (قد يغير المسار)";
-"vessel_width_limit_description" = "تحديد عرض السفينة لتجنب الجسور الضيقة";
+"vessel_width_limit_description" = "تحديد عرض السفينة لتجنب الجسور الضيقة.";
 "vessel_height_limit_description" = "ضبط الارتفاع لتجنب الجسور المنخفضة. ضع في اعتبارك أنه إذا كان الجسر متحركاً ، فسوف نستخدم ارتفاعه في الحالة المفتوحة.";
 "width_limit_description" = "أدل بعرض مركبتك، قد يتم تطبيق بعض القيود على المركبات العريضة.";
 "lenght_limit_description" = "أدل بوزن مركبتك ،قد يتم تطبيق بعض القيود على المركبات الثقيلة.";
@@ -2186,3 +2186,9 @@
 "delete_group_confirm" = "هل أنت متأكد أنك تريد حذف مجموعة ”%@” ؟";
 "delete_waypoints" = "احذف الإحداثيات";
 "delete_group_confirm_short" = "حذف المجموعة؟";
+"parked_at" = "متوقفة في";
+"shared_string_end_time" = "وقت الانتهاء";
+"shared_string_time_moving" = "الوقت المتحرك";
+"distance_moving" = "المسافة المصححة";
+"shared_string_time_span" = "الفترة الزمنية";
+"shared_string_start_time" = "وقت البدء";

@@ -37,7 +37,7 @@
     self = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""];
     if (self)
     {
-        _type = @"";
+        _type = POINT_TYPE_LOCATION;
         _name = @"";
         _lat = lat;
         _lon = lon;

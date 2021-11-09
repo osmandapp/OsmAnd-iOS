@@ -1014,8 +1014,8 @@
 "purchase_unlim_title" = "Comprar - %@";
 "subscribe_email_desc" = "Inscreva-se na nossa lista de email:<br/>• Obtenha 3 mapas extras para descarregar<br/>• Seja dos primeiros a saber sobre descontos<br/>• Participe nos <a href='https://osmand.net/giveaway'>códigos promocionais</a>";
 "osm_live_unlock_all" = "Desbloquear todos os recursos";
-"osm_live_unlock_updates" = "Desbloquear atualizações de mapas por hora";
-"osm_live_banner_descr" = "Inscreva-se no OsmAnd Live e ganhe atualizações a cada <b>1 hora</b> ilimitadas e <b>todas as funcionalidades</b> incluídas a partir de %@";
+"osm_live_unlock_updates" = "Desbloquear atualizações de mapas a cada hora";
+"osm_live_banner_descr" = "Compre a subscrição do OsmAnd Live e ganhe atualizações a <b>cada hora</b> ilimitadas e <b>todas as funcionalidades</b> incluídas a partir de %@";
 "osm_live_get_title" = "Obter OsmAnd Live";
 "subscriptions_public_info" = "O pagamento será debitado na sua conta iTunes no momento da confirmação da compra. A subscrição será renovada automaticamente a não ser que a renovação automática seja desativada pelo menos 24 horas antes do final do período atual. Será debitado na sua conta de acordo com o seu plano de renovação dentro de 24 horas antes do final do período atual. Pode gerir ou desativar a renovação automática nas Configurações da sua conta após a compra. Se comprar uma subscrição durante o período experimental gratuito, a parte não utilizada desse período será perdida.";
 "terms_of_use" = "Condições de utilização";

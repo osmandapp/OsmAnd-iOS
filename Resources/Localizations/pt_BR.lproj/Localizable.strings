@@ -899,7 +899,7 @@
 "inapp_not_found" = "O %@ não é encontrado no OsmAnd. Provavelmente foi cancelado.";
 "lon" = "Lon";
 "osmand_live_update_now" = "Atualizar agora";
-"osm_live_banner_descr" = "Inscreva-se no OsmAnd Live e ganhe ilimitado <b>1 hora</b>2 atualizações de mapas e <b>3 recursos</b>4 incluído a partir de %@";
+"osm_live_banner_descr" = "Compre a subscrição do OsmAnd Live e obtenha atualizações de mapa ilimitadas a <b>cada hora</b> e <b>todos os recursos</b> incluídos a partir de %@";
 // GPX colors
 "red" = "Vermelho";
 "orange" = "Laranja";

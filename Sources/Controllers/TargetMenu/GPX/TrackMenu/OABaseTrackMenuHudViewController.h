@@ -76,6 +76,7 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 @property (nonatomic, readonly) NSString *footer;
 @property (nonatomic, readonly) NSDictionary *values;
 @property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
+@property (nonatomic, readonly) OAGPXTableDataUpdateProperty updateProperty;
 
 - (void)setData:(NSDictionary *)data;
 - (BOOL)containsCell:(NSString *)key;
@@ -88,6 +89,7 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 
 @property (nonatomic, readonly) NSMutableArray<OAGPXTableSectionData *> *sections;
 @property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
+@property (nonatomic, readonly) OAGPXTableDataUpdateProperty updateProperty;
 
 - (void)setData:(NSDictionary *)data;
 

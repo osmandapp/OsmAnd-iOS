@@ -18,6 +18,7 @@
 - (instancetype)initWithSelectedTab:(EOATrackMenuHudTab)selectedTab;
 
 - (OAGPXTableData *)generateSectionsData;
+- (OAGPXTableData *)getTableData;
 - (void)updateSelectedTab:(EOATrackMenuHudTab)selectedTab;
 
 - (void)setupTabBar:(OATabBar *)tabBarView

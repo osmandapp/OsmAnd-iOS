@@ -34,9 +34,9 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (void)openEditSegmentScreen:(OAGpxTrkSeg *)segment
                      analysis:(OAGPXTrackAnalysis *)analysis;
 
-- (NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *)updateWaypointsData;
-- (void)refreshWaypoints;
 - (void)refreshLocationServices;
+- (NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *)getWaypointsData;
+- (NSArray<NSString *> *)getWaypointSortedGroups;
 - (NSInteger)getWaypointsCount:(NSString *)groupName;
 - (NSInteger)getWaypointsGroupColor:(NSString *)groupName;
 - (BOOL)isWaypointsGroupVisible:(NSString *)groupName;
@@ -46,15 +46,13 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (void)changeWaypointsGroup:(NSString *)groupName
                 newGroupName:(NSString *)newGroupName
                newGroupColor:(UIColor *)newGroupColor;
-- (NSDictionary *)updateGroupName:(NSString *)currentGroupName
-                     oldGroupName:(NSString *)oldGroupName;
 - (void)openConfirmDeleteWaypointsScreen:(NSString *)groupName;
-- (void)openDeleteWaypointsScreen:(NSArray *)sectionsData
-                   waypointGroups:(NSDictionary *)waypointGroups;
+- (void)openDeleteWaypointsScreen:(NSArray *)sectionsData;
 - (void)openWaypointsGroupOptionsScreen:(NSString *)groupName;
 - (void)openNewWaypointScreen;
 - (NSString *)checkGroupName:(NSString *)groupName;
 - (BOOL)isDefaultGroup:(NSString *)groupName;
+- (BOOL)isRteGroup:(NSString *)groupName;
 
 - (OARouteLineChartHelper *)getLineChartHelper;
 - (OAGpxTrk *)getTrack:(OAGpxTrkSeg *)segment;

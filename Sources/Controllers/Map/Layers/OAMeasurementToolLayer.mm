@@ -332,9 +332,9 @@
     pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
     pointMarkerBuilder.setPinIcon(_pointMarkerIcon);
     
-    double density = [self getPointsDensity];
     if (_editingCtx.getPointsCount > 500)
     {
+        double density = [self getPointsDensity];
         if (density < 100)
         {
             double distThreshold = MAX(1000, _editingCtx.getRouteDistance / 100);

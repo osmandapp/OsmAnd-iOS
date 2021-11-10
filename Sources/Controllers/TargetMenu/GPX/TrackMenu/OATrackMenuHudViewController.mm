@@ -838,7 +838,7 @@
 - (NSString *)getDirName
 {
     NSString *dirName = [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString;
-    return dirName.length > 0 ? dirName : OALocalizedString(@"tracks");;
+    return dirName.length > 0 ? dirName : OALocalizedString(@"tracks");
 }
 
 - (NSString *)getGpxFileSize

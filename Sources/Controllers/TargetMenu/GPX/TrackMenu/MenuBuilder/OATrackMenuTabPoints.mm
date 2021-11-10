@@ -116,7 +116,7 @@
                                     ? (worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName)
                                     : @"",
                             kCellLeftIcon: !isRte ? [currentWaypoint getCompositeIcon]
-                                    : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_action_marker"]
+                                    : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_location_marker"]
                                                                 color:UIColorFromRGB(color_footer_icon_gray)],
                             kCellButtonPressed: ^{
                                 if (self.trackMenuDelegate)
@@ -165,7 +165,7 @@
                                                 : [NSString stringWithFormat:@"%@ %lu", OALocalizedString(@"gpx_point"),
                                                         [currentWaypoints indexOfObject:currentWaypoint] + 1],
                                         kCellLeftIcon: !isRte ? [currentWaypoint getCompositeIcon]
-                                                : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_action_marker"]
+                                                : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_location_marker"]
                                                                             color:UIColorFromRGB(color_footer_icon_gray)],
                                         kCellButtonPressed: ^{
                                             if (self.trackMenuDelegate)

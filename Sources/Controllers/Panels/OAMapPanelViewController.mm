@@ -2935,7 +2935,7 @@ typedef enum
     _targetLongitude = latLon.longitude;
     
     targetPoint.title = _formattedTargetName;
-    targetPoint.icon = [UIImage imageNamed:@"ic_action_marker"];
+    targetPoint.icon = [UIImage imageNamed:@"ic_custom_location_marker"];
     targetPoint.toolbarNeeded = NO;
     
     _activeTargetType = targetPoint.type;

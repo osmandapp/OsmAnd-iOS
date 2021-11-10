@@ -243,7 +243,7 @@ static OATransportRouteToolbarViewController *toolbarController;
         if (name.length == 0)
             name = [self.class getStopType:_transportRoute];
         
-        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:[NSString stringWithFormat:@"stop_%d", i] icon:(currentStop == i ? [UIImage imageNamed:@"ic_action_marker"] : defaultIcon) textPrefix:@"" text:name textColor:nil isText:YES needLinks:NO order:i typeName:@"" isPhoneNumber:NO isUrl:NO];
+        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:[NSString stringWithFormat:@"stop_%d", i] icon:(currentStop == i ? [UIImage imageNamed:@"ic_custom_location_marker"] : defaultIcon) textPrefix:@"" text:name textColor:nil isText:YES needLinks:NO order:i typeName:@"" isPhoneNumber:NO isUrl:NO];
         rowInfo.delegate = self;
         [rows addObject:rowInfo];
     }

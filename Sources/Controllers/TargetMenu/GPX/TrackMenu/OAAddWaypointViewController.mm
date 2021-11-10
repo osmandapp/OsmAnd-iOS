@@ -76,7 +76,7 @@
 {
     [super viewDidLoad];
 
-    _iconView.image = [UIImage templateImageNamed:@"ic_action_marker"];
+    _iconView.image = [UIImage templateImageNamed:@"ic_custom_location_marker"];
     _iconView.tintColor = UIColorFromRGB(color_tint_gray);
 
     if (![OAUtilities isLandscapeIpadAware])

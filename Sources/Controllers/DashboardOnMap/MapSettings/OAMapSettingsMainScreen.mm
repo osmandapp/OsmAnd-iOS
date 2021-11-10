@@ -457,7 +457,7 @@ static BOOL _isRoutesGroupOpen = NO;
 
     if ([key hasPrefix:@"routes_"])
     {
-        NSString *routesValue = _routesParameters[index].value;
+        NSString *routesValue = _routesParameters[index - 1].value;
         return routesValue.length > 0 ? [key hasSuffix:HIKING_ROUTES_OSMC_ATTR] ? ![routesValue isEqualToString:@"disabled"] : [routesValue isEqualToString:@"true"] : NO;
     }
 
@@ -758,7 +758,7 @@ static BOOL _isRoutesGroupOpen = NO;
     else if ([item[@"key"] isEqualToString:@"mapillary_layer"])
         [self mapillaryChanged:switchView.isOn];
     else if ([item[@"key"] hasPrefix:@"routes_"])
-        [self mapSettingSwitchChanged:switchView.isOn index:indexPath.row];
+        [self mapSettingSwitchChanged:switchView.isOn index:indexPath.row - 1];
     else if ([item[@"key"] isEqualToString:@"category_transport"])
         [self transportChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"contour_lines_layer"])

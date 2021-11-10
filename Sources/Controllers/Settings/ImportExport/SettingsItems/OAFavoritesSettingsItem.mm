@@ -100,9 +100,13 @@
                         OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
                         if (plugin)
                         {
-                            BOOL isTimeRestricted = item.getTimestamp != nil && [item.getTimestamp timeIntervalSince1970] > 0;
+                            NSDate *timestamp = [item getTimestamp];
+                            NSDate *creationTime = [item getCreationTime];
+                            BOOL isTimeRestricted = timestamp != nil && [timestamp timeIntervalSince1970] > 0;
                             [plugin setParkingType:isTimeRestricted];
-                            [plugin setParkingTime:isTimeRestricted ? item.getTimestamp.timeIntervalSince1970 * 1000 : 0];
+                            [plugin setParkingTime:isTimeRestricted ? timestamp.timeIntervalSince1970 * 1000 : 0];
+                            if (creationTime)
+                                [plugin setParkingStartTime:creationTime.timeIntervalSince1970 * 1000];
                             [plugin setParkingPosition:item.getLatitude longitude:item.getLongitude];
                             [plugin addOrRemoveParkingEvent:item.getCalendarEvent];
                             if (item.getCalendarEvent)

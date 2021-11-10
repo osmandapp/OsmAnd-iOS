@@ -1729,6 +1729,7 @@
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
 "parking" = "Parking";
+"parked_at" = "Parked at";
 
 "directions_more_options" = "Directions from";
 "nearby_search" = "Search nearby";
@@ -2271,7 +2272,7 @@
 "default" = "Default";
 
 
-//Poi catagories
+//Icon categories
 "amenity" = "Amenity";
 "emergency" = "Emergency";
 "service" = "Service";
@@ -2281,6 +2282,8 @@
 "transport" = "Transport";
 "travel" = "Travel";
 "nautical" = "Nautical";
+"industrial" = "Industrial";
+"education" = "Education";
 
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Browse map";

@@ -29,6 +29,7 @@
 @property (nonatomic, readonly) BOOL timeLimitActive;
 @property (nonatomic, readonly) BOOL addToCalActive;
 @property (nonatomic, readonly) NSDate *date;
+@property (nonatomic, readonly) NSDate *creationDate;
 
 @property (nonatomic, readonly) BOOL isNew;
 

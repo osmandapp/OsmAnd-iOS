@@ -32,6 +32,11 @@
 #import "OAMapLayers.h"
 #import "OAOsmAndFormatter.h"
 #import "OAUtilities.h"
+#import "OANativeUtilities.h"
+#import "OAHistoryItem.h"
+#import "OAHistoryHelper.h"
+#import "OAQuickSearchListItem.h"
+#import "OASearchResult.h"
 
 #import "OsmAnd_Maps-Swift.h"
 #import <OsmAndCore/Utilities.h>
@@ -304,6 +309,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         @"direction" : _direction,
         @"distance" : _distanceString,
         @"coordinates" : title,
+        @"location" : location
     };
 }
 
@@ -710,6 +716,46 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     return NAN;
 }
 
+- (OASearchResult *)searchResultByLocation:(CLLocation *)location
+{
+    OASearchUICore *searchUICore = [[OAQuickSearchHelper instance] getCore];
+    OASearchPhrase *phrase = [searchUICore getPhrase];
+    OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+    sr.objectType = LOCATION;
+    sr.location = location;
+    sr.preferredZoom = 15;
+    sr.object = _searchLocation;
+    return sr;
+}
+
+- (void) addHistoryItem:(OASearchResult *)searchResult
+{
+    if (searchResult.location)
+    {
+        OAHistoryItem *h = [[OAHistoryItem alloc] init];
+        h.name = [OAQuickSearchListItem getName:searchResult];
+        h.latitude = searchResult.location.coordinate.latitude;
+        h.longitude = searchResult.location.coordinate.longitude;
+        h.date = [NSDate date];
+        h.iconName = [OAQuickSearchListItem getIconName:searchResult];
+        h.typeName = [OAQuickSearchListItem getTypeName:searchResult];
+        h.hType = OAHistoryTypeLocation;
+        [[OAHistoryHelper sharedInstance] addPoint:h];
+    }
+}
+
+- (void) showMapMenuForLocationPoint:(CLLocation *)location
+{
+    OAMapPanelViewController* mapPanel = [OARootViewController instance].mapPanel;
+    OAMapViewController* mapVC = mapPanel.mapViewController;
+    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:_searchLocation.coordinate.latitude longitude:_searchLocation.coordinate.longitude];
+    targetPoint.centerMap = YES;
+    const OsmAnd::LatLon latLon(location.coordinate.latitude, location.coordinate.longitude);
+    Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
+    [mapPanel showContextMenu:targetPoint];
+    [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - Current location updating
 
 - (void) updateDistanceAndDirection
@@ -911,9 +957,13 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         }
         else if ([cellType isEqualToString:[OAQuickSearchResultTableViewCell getCellIdentifier]] && ![item[@"isErrorCell"] boolValue])
         {
-            OATargetPoint *targetPoint = [OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:_searchLocation.coordinate.latitude longitude:_searchLocation.coordinate.longitude];
-            [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
-            [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            CLLocation *location = item[@"location"];
+            if (location)
+            {
+                OASearchResult *sr = [self searchResultByLocation:location];
+                [self addHistoryItem:sr];
+                [self showMapMenuForLocationPoint:location];
+            }
         }
         else if ([cellType isEqualToString:[OACoodinateSearchCell getCellIdentifier]])
         {

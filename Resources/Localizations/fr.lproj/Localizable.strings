@@ -181,8 +181,8 @@
 "cannot_access_calendar" = "Impossible d'accéder à calendrier";
 "reminder_not_set_text" = "Le rappel n'a pas été établi car vous n'êtes pas autorisé à accéder au calendrier";
 //inapps
-"product_title_nautical" = "Carte nautique";
-"product_desc_nautical" = "Carte nautique du monde entier";
+"product_title_nautical" = "Carte marine";
+"product_desc_nautical" = "Carte marine du monde entier";
 "product_title_africa" = "Afrique";
 "product_desc_africa" = "Téléchargement illimité de cartes pour l'Afrique";
 "product_title_australia" = "Australie";
@@ -324,7 +324,7 @@
 "sett_lang_trans" = "Translitération";
 "sett_lang_show_trans" = "Transcrire les noms";
 "purchases" = "Achats";
-"prch_nau_q1" = "Veuillez utiliser le style « Nautical » dans les paramètres de la carte et installer la carte de nautique mondiale.";
+"prch_nau_q1" = "Veuillez utiliser le style « Marine » dans les paramètres de la carte et installer la carte marine mondiale.";
 "prch_nau_q3" = "Vous pouvez l’installer plus tard via Cartes & Ressources.";
 "proceed_q" = "Appliquer ?";
 "prch_items_failed" = "Les objets n'ont pu être restaurés. Veuillez réessayer.";
@@ -647,7 +647,7 @@
 "plugin_popup_wiki_desc" = "Pour commencer à utiliser le plugin Wikipédia, veuillez d'abord télécharger les données Wikipédia d'une région";
 "plugin_popup_wiki_ask" = "Pour télécharger des données Wikipédia vous devez activer le plugin : <b>Wikipédia</b>";
 "plugin_popup_srtm_title" = "Télécharger les courbes de niveaux";
-"plugin_popup_nautical_title" = "Télécharger les cartes nautiques";
+"plugin_popup_nautical_title" = "Télécharger les cartes Marines";
 "plugin_popup_trip_planning_ask" = "Pour commencer à planifier l'itinéraire, vous devez activer le plugin : <b>Planification d'itinéraire</b>";
 "no_internet_avail_desc_first" = "Veuillez activer la connexion Internet pour télécharger la liste de cartes";
 "show_region_on_map_desc" = "La carte de %@ a été téléchargée. Rendez-vous sur la carte pour l'utiliser.";
@@ -726,7 +726,7 @@
 "plugin_popup_ski_desc" = "Pour activer <b>le style de carte Ski</b>, veuillez aller dans <b>les Paramètres de la carte</b> > <b>Type de carte</b>";
 "plugin_popup_srtm_desc" = "Pour utiliser la fonctionnalité courbes de niveaux, veuillez d'abord télécharger les courbes de niveaux pour une région";
 "plugin_popup_srtm_ask" = "Pour télécharger des courbes de niveaux, vous devez d'abord activer l'extension : <b>courbes de niveaux</b>";
-"plugin_popup_nautical_desc" = "Veuillez d'abord télécharger des Cartes nautiques.\nAllez ensuite dans <b>les Paramètres de la carte</b> > <b>Type de carte</b> et activer le style <b>Nautique</b>";
+"plugin_popup_nautical_desc" = "Veuillez d'abord télécharger des Cartes Marines.\nAllez ensuite dans <b>les Paramètres de la carte</b> > <b>Type de carte</b> et activer le style <b>Marine</b>";
 "all_world_popup_desc" = "Téléchargez le fond de carte mondial pour voir le nom des états, les frontières et d'autres informations";
 "items_selected" = "%d sélectionné(s)";
 "map_an_region" = "cette région";
@@ -807,7 +807,7 @@
 "help_follow_us" = "Suivez-nous";
 "product_title_wikivoyage" = "Guides de voyage";
 "product_desc_wikivoyage" = "Le guide de voyage mondial et gratuit que chacun peut améliorer.";
-"nearby_search" = "Rechercherà proximité";
+"nearby_search" = "Rechercher à proximité";
 "unlimited_downloads" = "Téléchargements illimités";
 "wikipedia_offline" = "Wikipedia hors-ligne";
 "monthly_map_updates" = "Mise à jour des cartes : Tous les mois";
@@ -985,7 +985,7 @@
 "translucent_yellow" = "Jaune translucide";
 "translucent_lightgreen" = "Vert clair translucide";
 "translucent_green" = "Vert translucide";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts est un plugin pour l'application OsmAnd Maps & Navigation. Il s'agit d'une représentation graphique détaillée des océans, des mers, des zones côtières et des rivières. Les cartes peuvent contenir diverses informations comme les routes de navigation, les feux de navigation, les zones dangereuses, les zones où il est permis ou non de naviguer ou d'accoster, etc..\n\nInstructions d'utilisation : il est fortement recommandé de télécharger la carte de base nautique afin de voir les cartes indépendamment de la présence d'une carte détaillée. Pour activer les cartes marines, appuyez sur le bouton Carte et réglez le type de carte sur Nautique.\n\nNote : Tous les marins professionnels sont tenus d'avoir des cartes marines officielles sur leurs navires.\n\nLes cartes marines OsmAnd Nautical sont basées sur les données du projet OpenSeaMap. Bien que les cartes OpenSeaMap ne puissent actuellement pas rivaliser avec les cartes nautiques officielles, elles peuvent être utilisées par les plaisanciers pour l'orientation ou la planification d'itinéraire.";
+"product_desc_ext_nautical" = "OsmAnd Nautical Charts est un greffon pour l'application OsmAnd Maps & Navigation. Il s'agit d'une représentation graphique détaillée des océans, des mers, des zones côtières et des rivières. Les cartes peuvent contenir diverses informations comme les routes de navigation, les feux de navigation, les zones dangereuses, les zones où il est permis ou non de naviguer ou d'accoster, etc..\n\nInstructions d'utilisation : il est fortement recommandé de télécharger la carte marine de base afin de voir les cartes indépendamment de la présence d'une carte détaillée. Pour activer les cartes marines, appuyez sur le bouton Carte et réglez le type de carte sur Nautical.\n\nNote : Tous les marins professionnels sont tenus d'avoir des cartes marines officielles sur leurs navires.\n\nLes cartes marines OsmAnd Nautical sont basées sur les données du projet OpenSeaMap. Bien que les cartes OpenSeaMap ne puissent actuellement pas rivaliser avec les cartes nautiques officielles, elles peuvent être utilisées par les plaisanciers pour l'orientation ou la planification d'itinéraire.";
 "product_desc_ext_parking" = "Le plugin OsmAnd Parking vous rappelle votre position de parking. C'est un plugin pour l'application OsmAnd Maps&Navigation.\nChoisissez un rappel indépendant du temps (seulement un marqueur sur la carte) ou un rappel limité dans le temps avec alarme à l'expiration du temps (inclut également un marqueur sur la carte). Pour utiliser le plugin, activez-le dans le menu Plugins.";
 "product_desc_ext_skimap" = "OsmAnd Ski Maps est un plugin de l'application OsmAnd Maps&Navigation conçu pour naviguer sur les sites de sports d'hiver. Il donne des informations sur les pistes de ski, des repères de remontées mécaniques et même des lignes colorées indiquant la complexité de chaque piste. Vous obtiendrez des informations sur les pistes de ski elles-mêmes ainsi que sur les infrastructures environnantes.\n\nInstructions d'utilisation : Activez le plugin dans l'application OsmAnd, appuyez sur le bouton Carte et réglez le type de carte sur Carte de ski.";
 "product_desc_ext_trip_planning" = "Le plugin de planification de trajet vous permet de créer votre trajet sur la carte, de le sauvegarder, de mesurer la distance entre les points reliés par des lignes droites, etc. Conçu pour la planification préliminaire des trajets plutôt que pour la construction d'un itinéraire complet.";
@@ -1002,7 +1002,7 @@
 "poi_select_type" = "Sélectionner le type";
 "purchase_dialog_travel_description" = "Achetez l\'une des options suivantes pour obtenir la fonctionnalité guide de voyage hors ligne :";
 "contour_lines_hillshade_maps" = "Cartes avec courbes de niveaux et ombrage du relief";
-"index_item_depth_contours_osmand_ext" = "Isobathes";
+"index_item_depth_contours_osmand_ext" = "Lignes de sonde marines";
 "in_app_purchase" = "Achat depuis l\'application";
 "in_app_purchase_desc_ex" = "La validité de votre achat sera permanente.";
 "subscribe_email_desc" = "Abonnez-vous à notre liste de diffusion :<br/>- Obtenez 3 cartes supplémentaires à télécharger <br/>- Écoutez d'abord les réductions <br/>- Participez aux promocodes <a href='https://osmand.net/giveaway'>ici</a>";
@@ -1156,7 +1156,7 @@
 "rendering_value_translucent_blue_name" = "Bleu translucide";
 "rendering_attr_surface_pebblestone_name" = "Galets";
 "routing_attr_avoid_ice_roads_fords_description" = "Éviter les routes sur glace et les fjords.";
-"rendering_attr_depthContours_name" = "Lignes de sonde de profondeur";
+"rendering_attr_depthContours_name" = "Lignes de sonde marines";
 "routing_attr_avoid_train_description" = "Éviter le train";
 "rendering_value_translucent_purple_name" = "Violet translucide";
 "routing_attr_avoid_sett_description" = "Éviter les pavés";
@@ -2176,10 +2176,16 @@
 "reset_to_original" = "Revenir à l'original";
 "gpx_split_interval_none_descr" = "Sélectionnez l'option de fractionnement souhaitée : par temps ou par distance.";
 "activity" = "Activité";
-"nautical" = "Nautique";
+"nautical" = "Marine";
 "m" = "m";
 "ios_release_4_1" = "- Nouvel écran pour la recherche par coordonnées dans différents formats\n- Amélioration de la recherche de coordonnées dans le format OLC\n- Nouveau menu convivial permettant de choisir la langue d'affichage des articles de Wikipédia sur la carte\n- Ajout de la possibilité de charger facilement les cartes de toutes les régions du pays en quelques clics\n- Ajout de courbes de niveau en pieds (Vous devez retélécharger les fichiers)\n- Ajout de la possibilité de télécharger des cartes en sélectionnant la région ou le pays souhaité sur la carte, ainsi que l'ajout d'une boîte de dialogue avec la suggestion de télécharger la carte si la région n’a pas été préalablement téléchargée.\n- Nouvelle apparence des boutons sur l’écran et ajout de la possibilité de modifier le zoom de la carte par un double tapotement ou un glissement.\n";
 "units_min_short" = "m";
 "delete_waypoints" = "Supprimer les points de passage";
 "delete_group_confirm_short" = "Supprimer le groupe ?";
 "delete_group_confirm" = "Êtes-vous sûr de vouloir supprimer le groupe \"%@\" ?";
+"parked_at" = "Stationné à";
+"distance_moving" = "Distance corrigée";
+"shared_string_time_span" = "Amplitude horaire";
+"shared_string_start_time" = "Heure de départ";
+"shared_string_end_time" = "Heure d'arrivée";
+"shared_string_time_moving" = "Durée de déplacement";

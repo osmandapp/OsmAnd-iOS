@@ -752,7 +752,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     targetPoint.centerMap = YES;
     const OsmAnd::LatLon latLon(location.coordinate.latitude, location.coordinate.longitude);
     Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
-    [mapVC goToPosition:pos andZoom:15 animated:NO];
     [mapPanel showContextMenu:targetPoint];
     [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }

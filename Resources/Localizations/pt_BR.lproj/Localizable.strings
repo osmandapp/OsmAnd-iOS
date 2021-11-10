@@ -2209,3 +2209,11 @@
 "reset_to_original" = "Redefinir para original";
 "gpx_split_interval_none_descr" = "Selecione a opção de divisão desejada: por tempo ou por distância.";
 "delete_waypoints" = "Apagar ponto fixo";
+"parked_at" = "Estacionado em";
+"shared_string_time_span" = "Intervalo de tempo";
+"shared_string_start_time" = "Hora de início";
+"shared_string_end_time" = "Hora de fim";
+"shared_string_time_moving" = "Tempo se movendo";
+"distance_moving" = "Distância corrigida";
+"industrial" = "Industrial";
+"education" = "Educação";

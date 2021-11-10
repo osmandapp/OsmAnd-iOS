@@ -1115,9 +1115,9 @@
 "product_desc_asia_short" = "Mapas da região da Ásia";
 "obf_import_title" = "Importar arquivo de mapa offline";
 "obf_import_already_exists" = "Um arquivo com este mesmo nome já existe. Por favor escolha uma ação.";
-"obf_import_success" = "Arquivo foi importado com sucesso";
+"obf_import_success" = "Arquivo importado com êxito";
 "obf_import_failed" = "Falha ao importar o arquivo";
-"res_import_success" = "%@ foi importado com sucesso";
+"res_import_success" = "%@ foi importado com êxito";
 "res_import_unsupported" = "Tipo incorreto de arquivo. Apenas arquivos routing.xml e *.render.xml são suportados.";
 "routing_import_please_restart" = "Para usar o novo routing.xml, por favor reinicie a aplicação.";
 "reddit" = "Reddit";

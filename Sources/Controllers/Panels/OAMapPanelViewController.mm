@@ -741,9 +741,9 @@ typedef enum
         if ([_dashboard isKindOfClass:[OAMapSettingsViewController class]])
             [self updateOverlayUnderlayView];
         
-        OADashboardViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
-        if (lastMapSettingsCtrl)
-            [lastMapSettingsCtrl hide:YES animated:YES duration:duration];
+        NSObject* lastMapSettingsCtrl = [self.childViewControllers lastObject];
+        if (lastMapSettingsCtrl && [lastMapSettingsCtrl isKindOfClass:OADashboardViewController.class])
+            [((OADashboardViewController *)lastMapSettingsCtrl) hide:YES animated:YES duration:duration];
         
         [self destroyShadowButton];
         
@@ -3351,6 +3351,7 @@ typedef enum
     {
         [plugin addOrRemoveParkingEvent:sender.addToCalActive];
         [plugin setParkingTime:sender.timeLimitActive ? ([sender.date timeIntervalSince1970] * 1000) : -1];
+        [plugin setParkingStartTime:[NSDate date].timeIntervalSince1970];
         [plugin setParkingPosition:sender.coord.latitude longitude:sender.coord.longitude limited:sender.timeLimitActive];
         
         if (sender.timeLimitActive && sender.addToCalActive)

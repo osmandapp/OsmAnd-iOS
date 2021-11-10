@@ -716,7 +716,7 @@
 "driving_region_descr" = "選擇駕駛區域：美國、歐洲、英國、亞洲和其它。";
 "driving_region_automatic" = "自動";
 "auto_follow_location_enabled" = "使用地圖檢視自動置中。";
-"unknown_location" = "未知地理位置。";
+"unknown_location" = "位置未知";
 "route_simulation" = "模擬路線";
 "animate_routing_route_not_calculated" = "請先計劃行車路線";
 "day_night_info_description" = "日出：%@\n日落：%@";
@@ -1223,7 +1223,7 @@
 "rendering_value_black_name" = "黑色";
 "rendering_attr_trolleybusRoutes_name" = "無軌電車路線";
 "routeInfo_piste_difficulty_name" = "滑雪難度";
-"rendering_attr_currentTrackColor_description" = "GPX的顏色";
+"rendering_attr_currentTrackColor_description" = "GPX 的顏色";
 "rendering_attr_surface_metal_name" = "金屬";
 "routing_attr_no_new_routing_description" = "在 v1.9 不使用路徑規則引導。";
 "routing_attr_prefer_unpaved_name" = "偏好無鋪面道路";
@@ -1690,3 +1690,8 @@
 "app_restart_required" = "需要重新啟動應用程式才能套用某些設定。";
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "last_used" = "最後使用";
+"start_navigation" = "開始導航";
+"no_active_route" = "沒有有效路線";
+"allow_3d" = "允許 2.5D 的檢視";
+"allow_3d_descr" = "啟用這個選項之後，你可以用 2.5D 視角觀看地圖";
+"angular_units" = "角度測量單位";

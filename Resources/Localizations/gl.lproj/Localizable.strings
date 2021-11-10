@@ -1511,7 +1511,6 @@
 "nav_type_geocoding" = "Xeocodificación";
 "res_online_source_cache_alert" = "Aplicando estas modificacións eliminarás os datos almacenados na caché para esta fonte de teselas";
 "map_widget_distance_by_tap" = "Distancia ao premer";
-
 "map_during_navigation" = "Mapa durante a navegación";
 "select_another_track" = "Escoller outra pista";
 "plan_route_create_new_route" = "Crear nova ruta";
@@ -1599,7 +1598,7 @@
 "some_articles_may_not_available_in_lang" = "Algúns artigos da Wikipedia poden non estar dispoñíbeis na túa lingua.";
 "navigate_point_olc" = "Código de Localización Aberto (OLC)";
 "product_title_mapillary" = "Mapillary";
-"last_used" = "Usado porúltima vez";
+"last_used" = "Usado por última vez";
 "shared_string_turn_off" = "Apagar";
 "restart" = "Reiniciar";
 "download_map_dialog" = "Diálogo de descarga do mapa";

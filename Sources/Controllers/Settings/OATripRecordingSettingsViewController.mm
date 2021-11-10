@@ -454,6 +454,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 cell.leftIconView.image = [UIImage templateImageNamed:img];
 
             [cell showLeftIcon:img != nil];
+            [cell updateConstraints];
         }
         return cell;
     }

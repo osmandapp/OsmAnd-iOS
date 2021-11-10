@@ -818,7 +818,7 @@
 "shared_string_milliradians" = "Мілірадіани";
 "osm_live_routing_descr" = "Використовувати оновлення OsmAnd Live для навігації";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Самооновлення";
+"osmand_live_updates" = "Оновлення OsmAnd Live";
 "osmand_live_available_maps" = "Доступні мапи";
 "osmand_live_last_changed" = "Остання зміна мапи: %@";
 "osmand_live_last_live_update" = "Останнє оновлення: %@";
@@ -869,7 +869,7 @@
 "osm_str_name" = "Назва вулиці";
 "osm_building_num" = "Номер будинку";
 "osm_phone" = "телефон";
-"osm_website" = "Веб-сайт";
+"osm_website" = "Вебсайт";
 "osm_add_place" = "Додати місце";
 "osm_modify_place" = "Змінити місце";
 "osm_poi_delete_title" = "Вилучення POI";
@@ -2190,3 +2190,9 @@
 "delete_group_confirm" = "Ви впевнені, що хочете видалити групу «%@»?";
 "delete_waypoints" = "Видалити маршрутні точки";
 "delete_group_confirm_short" = "Видалити групу?";
+"shared_string_start_time" = "Час початку";
+"shared_string_end_time" = "Час завершення";
+"shared_string_time_span" = "Проміжок часу";
+"shared_string_time_moving" = "Час переміщення";
+"distance_moving" = "Відкоригована відстань";
+"parked_at" = "Припарковано на";

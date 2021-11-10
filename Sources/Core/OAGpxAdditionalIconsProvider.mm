@@ -29,7 +29,7 @@
 #import "OANativeUtilities.h"
 #import "OAOsmAndFormatter.h"
 
-#define kIconShadowInset 11.0
+#define kIconShadowInset 15.0
 
 static const UIFont *textFont = [UIFont systemFontOfSize:15.];
 
@@ -262,7 +262,7 @@ void OAGpxAdditionalIconsProvider::buildStartFinishSymbolsGroup(const OsmAnd::Ar
         bool containsFinish = bbox31.contains(finishPos31);
         if (containsStart && containsFinish)
         {
-            double distance = ((_startIcon->width() - (kIconShadowInset * 2)) * metersPerPixel) / 2;
+            double distance = ((_startIcon->width() - (kIconShadowInset * UIScreen.mainScreen.scale * 2)) * metersPerPixel) / 2;
             const auto startIconArea = Utilities::boundingBox31FromAreaInMeters(distance, startPos31);
             const auto finishIconArea = Utilities::boundingBox31FromAreaInMeters(distance, finishPos31);
             

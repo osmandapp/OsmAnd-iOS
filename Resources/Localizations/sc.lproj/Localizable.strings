@@ -2209,3 +2209,9 @@
 "edit_track" = "Modìfica sa rasta";
 "duplicate_track" = "Dùplica sa rasta";
 "activity" = "Atividade";
+"parked_at" = "Parchegiadu in";
+"shared_string_time_span" = "Intervallu de tempus";
+"shared_string_start_time" = "Ora de tzucada";
+"shared_string_end_time" = "Ora de arrivu";
+"shared_string_time_moving" = "Tempus in movimentu";
+"distance_moving" = "Distàntzia curreta";

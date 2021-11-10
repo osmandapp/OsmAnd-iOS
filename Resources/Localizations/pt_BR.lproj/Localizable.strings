@@ -1118,7 +1118,7 @@
 "obf_import_success" = "Arquivo importado com êxito";
 "obf_import_failed" = "Falha ao importar o arquivo";
 "res_import_success" = "%@ foi importado com êxito";
-"res_import_unsupported" = "Tipo incorreto de arquivo. Apenas arquivos routing.xml e *.render.xml são suportados.";
+"res_import_unsupported" = "Tipo incorreto de arquivo. Apenas arquivos “routing.xml” e “*.render.xml” são suportados.";
 "routing_import_please_restart" = "Para usar o novo routing.xml, por favor reinicie a aplicação.";
 "reddit" = "Reddit";
 "download_pending" = "Download pendente";

@@ -1270,11 +1270,15 @@ typedef enum
 - (void) showContextMenu:(OATargetPoint *)targetPoint
 {
     if (targetPoint.type == OATargetGPX)
+    {
         return [self openTargetViewWithGPX:targetPoint.targetObj
                               trackHudMode:EOATrackMenuHudMode
                                      state:[OATrackMenuViewControllerState withPinLocation:targetPoint.location]];
+    }
     else
+    {
         return [self showContextMenu:targetPoint saveState:YES];
+    }
 }
 
 - (void) updateContextMenu:(OATargetPoint *)targetPoint
@@ -2603,15 +2607,17 @@ typedef enum
     switch (trackHudMode)
     {
         case EOATrackAppearanceHudMode:
+        {
             trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:targetPoint.targetObj
                                                                                                state:state];
             break;
-
-        case EOATrackMenuHudMode:
+        }
         default:
+        {
             trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj
                                                                                      state:state];
             break;
+        }
     }
 
     [self showScrollableHudViewController:trackMenuHudViewController];
@@ -2981,7 +2987,7 @@ typedef enum
     }];
 }
 
-- (void)displayGpxOnMap:(OAGPX *)item
+- (void) displayGpxOnMap:(OAGPX *)item
 {
     if (item.bounds.topLeft.latitude == DBL_MAX)
         return;

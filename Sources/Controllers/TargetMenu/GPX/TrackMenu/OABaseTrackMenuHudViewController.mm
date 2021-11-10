@@ -229,7 +229,7 @@
                                           ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
         [_mapPanelViewController targetSetBottomControlsVisible:YES
                                                      menuHeight:[self isLandscape] ? 0
-                                                             : [self getViewHeight] - [OAUtilities getBottomMargin]
+                                                             : [self getViewHeight] - [OAUtilities getBottomMargin] + 4.
                                                        animated:YES];
         [self changeMapRulerPosition];
         [_mapPanelViewController.hudViewController updateMapRulerData];

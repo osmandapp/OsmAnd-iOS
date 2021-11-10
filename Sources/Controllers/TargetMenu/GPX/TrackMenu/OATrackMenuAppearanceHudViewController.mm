@@ -116,7 +116,6 @@ static const NSInteger kCustomTrackWidthMax = 24;
     if (self)
     {
         _reopeningTrackMenuState = state;
-        [self commonInit];
     }
     return self;
 }
@@ -129,6 +128,11 @@ static const NSInteger kCustomTrackWidthMax = 24;
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    [self updateAllValues];
+}
+
+- (void)updateAllValues
+{
     _oldColor = self.gpx.color;
     _oldShowArrows = self.gpx.showArrows;
     _oldWidth = self.gpx.width;
@@ -153,26 +157,26 @@ static const NSInteger kCustomTrackWidthMax = 24;
     {
         if ([coloringType isRouteInfoAttribute])
             continue;
-        
+
         OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:coloringType title:coloringType.title attrName:nil isActive:[coloringType isAvailableForDrawingTrack:self.doc attributeName:nil]];
         [items addObject:item];
-        
+
         if (currentType == coloringType)
             _selectedItem = item;
     }
-    
+
     NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
-    
+
     for (NSString *attribute in attributes)
     {
         BOOL isAvailable = [OAColoringType.ATTRIBUTE isAvailableForDrawingTrack:self.doc attributeName:attribute];
         OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:OAColoringType.ATTRIBUTE title:OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]) attrName:attribute isActive:isAvailable];
         [items addObject:item];
-        
+
         if (currentType == OAColoringType.ATTRIBUTE && [self.gpx.coloringType isEqualToString:attribute])
             _selectedItem = item;
     }
-    
+
     _availableColoringTypes = items;
 
     NSMutableArray<NSNumber *> *trackColors = [NSMutableArray array];
@@ -454,17 +458,36 @@ static const NSInteger kCustomTrackWidthMax = 24;
             kTableUpdateProperty: ^(id value) {
                 if ([value isKindOfClass:NSNumber.class])
                 {
-                    _selectedSplit = [_appearanceCollection getAvailableSplitIntervals][[value intValue]];
-                    self.gpx.splitType = _selectedSplit.type;
-                    self.gpx.splitInterval = [_selectedSplit isCustom]
-                            ? [_selectedSplit.values[[sliderOrDescriptionCell.values[@"array_value"]
-                                    indexOfObject:sliderOrDescriptionCell.values[@"custom_string_value"]]] doubleValue]
-                            : 0.;
-                    if (self.gpx.splitInterval > 0 && self.gpx.splitType != EOAGpxSplitTypeNone)
-                        _selectedSplit.customValue =
-                                _selectedSplit.titles[[_selectedSplit.values indexOfObject:@(self.gpx.splitInterval)]];
+                    NSArray<OAGPXTrackSplitInterval *> *availableSplitIntervals = [_appearanceCollection getAvailableSplitIntervals];
+                    NSInteger index = [value intValue];
+                    if (availableSplitIntervals.count > index)
+                    {
+                        _selectedSplit = availableSplitIntervals[index];
+                        CGFloat splitInterval = 0.;
+                        if ([_selectedSplit isCustom])
+                        {
+                            NSInteger indexOfCustomValue = 0;
+                            if ([sliderOrDescriptionCell.values.allKeys containsObject:@"array_value"]
+                                    && [sliderOrDescriptionCell.values.allKeys containsObject:@"custom_string_value"])
+                            {
+                                indexOfCustomValue = [sliderOrDescriptionCell.values[@"array_value"]
+                                        indexOfObject:sliderOrDescriptionCell.values[@"custom_string_value"]];
+                            }
+                            if (indexOfCustomValue != NSNotFound)
+                                splitInterval = [_selectedSplit.values[indexOfCustomValue] doubleValue];
+                        }
 
-                    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                        self.gpx.splitType = _selectedSplit.type;
+                        self.gpx.splitInterval = splitInterval;
+                        if (self.gpx.splitInterval > 0 && self.gpx.splitType != EOAGpxSplitTypeNone)
+                        {
+                            NSInteger indexOfValue = [_selectedSplit.values indexOfObject:@(self.gpx.splitInterval)];
+                            if (indexOfValue != NSNotFound)
+                                _selectedSplit.customValue = _selectedSplit.titles[indexOfValue];
+                        }
+
+                        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                    }
                 }
             }
     }];
@@ -517,7 +540,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 self.gpx = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.gpxFilePath];
                                 [self updateGpxData];
-                                [self commonInit];
+                                [self updateAllValues];
                                 [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
                                 [[_app updateGpxTracksOnMapObservable] notifyEvent];
                                 [self generateData];

@@ -45,6 +45,7 @@
 + (void) addEmptyCategory:(NSString *)name;
 + (void) addEmptyCategory:(NSString *)name color:(UIColor *)color visible:(BOOL)visible;
 + (OAFavoriteGroup *) getOrCreateGroup:(OAFavoriteItem *)item defColor:(UIColor *)defColor;
++ (BOOL) deleteNewFavoriteItem:(OAFavoriteItem *)favoritesItem;
 + (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems;
 
 + (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point newName:(NSString *)newName newCategory:(NSString *)newCategory;

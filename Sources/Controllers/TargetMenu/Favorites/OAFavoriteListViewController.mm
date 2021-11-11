@@ -1094,13 +1094,39 @@ static UIViewController *parentController;
         NSInteger itemIndex = [group.favoriteGroup.points indexOfObject:item];
         if (itemIndex != NSNotFound)
         {
+            NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
             [self.favoriteTableView beginUpdates];
+            if (group.favoriteGroup.points.count == 1)
+            {
+                NSMutableArray *unsortedHeaderViews = [_unsortedHeaderViews mutableCopy];
+                [unsortedHeaderViews removeObject:_unsortedHeaderViews[indexPath.section]];
+                _unsortedHeaderViews = unsortedHeaderViews;
+
+                for (NSInteger i = indexPath.section; i < _unsortedHeaderViews.count - 1; i++)
+                {
+                    ((OAMultiselectableHeaderView *) _unsortedHeaderViews[i]).section--;
+                    [indexPaths addObject:[NSIndexPath indexPathForRow:0 inSection:i]];
+                }
+            }
             [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[group.favoriteGroup.points[itemIndex]]];
+
             NSInteger sortedItemIndex = [self.sortedFavoriteItems indexOfObject:item];
             if (sortedItemIndex != NSNotFound)
                 [self.sortedFavoriteItems removeObjectAtIndex:sortedItemIndex];
-            [self.favoriteTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+
+            if (group.favoriteGroup.points.count == 0)
+            {
+                [_data removeObjectAtIndex:indexPath.section];
+                [self.favoriteTableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+            }
+            else
+            {
+                [self.favoriteTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+            }
             [self.favoriteTableView endUpdates];
+
+            if (indexPaths.count > 0)
+                [self.favoriteTableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
         }
     }
 }
@@ -1180,9 +1206,22 @@ static UIViewController *parentController;
 
         [_data removeObjectAtIndex:indexPath.section];
 
+        NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
+        NSMutableArray *unsortedHeaderViews = [_unsortedHeaderViews mutableCopy];
+        [unsortedHeaderViews removeObject:_unsortedHeaderViews[indexPath.section]];
+        _unsortedHeaderViews = unsortedHeaderViews;
+
+        for (NSInteger i = indexPath.section; i < _unsortedHeaderViews.count - 1; i++)
+        {
+            ((OAMultiselectableHeaderView *) _unsortedHeaderViews[i]).section--;
+            [indexPaths addObject:[NSIndexPath indexPathForRow:0 inSection:i]];
+        }
+
         [self.favoriteTableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section]
                               withRowAnimation:UITableViewRowAnimationFade];
         [self.favoriteTableView endUpdates];
+        if (indexPaths.count > 0)
+            [self.favoriteTableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

@@ -867,11 +867,12 @@
 
 - (NSString *)getCreatedOn
 {
-    return self.doc.metadata.time > 0 ? [NSDateFormatter localizedStringFromDate:
-                    [NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
-                                                                       dateStyle:NSDateFormatterMediumStyle
-                                                                       timeStyle:NSDateFormatterNoStyle]
-            : @"";
+    if (self.doc.metadata.time <= [[NSDate date] timeIntervalSince1970])
+        return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
+                                              dateStyle:NSDateFormatterMediumStyle
+                                              timeStyle:NSDateFormatterNoStyle];
+
+    return @"";
 }
 
 - (NSString *)generateDescription

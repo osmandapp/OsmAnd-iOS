@@ -184,7 +184,7 @@
             [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
             UIColor *color;
             if (item[@"color"])
-                color = [item[@"color"] isKindOfClass:NSString.class] ? [OAUtilities colorFromString:item[@"color"]] : item[@"color"];
+                color = [item[@"color"] isKindOfClass:NSString.class] ? [UIColor colorFromString:item[@"color"]] : item[@"color"];
             cell.iconView.tintColor = color ? color : UIColorFromRGB(color_primary_purple);
             
             if ([item[@"isSelected"] boolValue])

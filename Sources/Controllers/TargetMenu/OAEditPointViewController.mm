@@ -141,7 +141,7 @@
         self.desc = gpxWpt.point.desc;
         self.address = [gpxWpt.point getExtensionByKey:ADDRESS_EXTENSION].value;
         self.groupTitle = [self getGroupTitle]/*gpxWpt.point.type*/;
-        self.groupColor = gpxWpt.color ? gpxWpt.color : [OAUtilities colorFromString:gpxWpt.point.color];
+        self.groupColor = gpxWpt.color ? gpxWpt.color : [UIColor colorFromString:gpxWpt.point.color];
         [self commonInit];
     }
     return self;
@@ -257,7 +257,7 @@
         for (NSDictionary<NSString *, NSString *> *group in [(OAGpxWptEditingHandler *) _pointHandler getGroups])
         {
             [names addObject:group[@"title"]];
-            [colors addObject:group[@"color"] ? [OAUtilities colorFromString:group[@"color"]] : UIColorFromRGB(color_primary_purple)];
+            [colors addObject:group[@"color"] ? [UIColor colorFromString:group[@"color"]] : UIColorFromRGB(color_primary_purple)];
             [sizes addObject:group[@"count"]];
         }
     }
@@ -1182,7 +1182,7 @@
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
-        selectedColor = [OAUtilities colorFromString:[(OAGpxWptEditingHandler *) _pointHandler getGroupsWithColors][self.groupTitle]];
+        selectedColor = [UIColor colorFromString:[(OAGpxWptEditingHandler *) _pointHandler getGroupsWithColors][self.groupTitle]];
     }
 
     if (selectedColor)
@@ -1223,7 +1223,7 @@
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
-        selectedColor = [OAUtilities colorFromString:[(OAGpxWptEditingHandler *)_pointHandler getGroupsWithColors][selectedGroupName]];
+        selectedColor = [UIColor colorFromString:[(OAGpxWptEditingHandler *)_pointHandler getGroupsWithColors][selectedGroupName]];
     }
 
     if (selectedColor)
@@ -1321,7 +1321,7 @@
 
         data.descr = waypointItem.point.desc;
         data.address = [waypointItem.point getAddress];
-        data.color = waypointItem.color ? waypointItem.color : [OAUtilities colorFromString:waypointItem.point.color];
+        data.color = waypointItem.color ? waypointItem.color : [UIColor colorFromString:waypointItem.point.color];
         data.backgroundIcon = [waypointItem.point getBackgroundIcon];
         data.icon = [waypointItem.point getIcon];
         data.category = waypointItem.point.type;

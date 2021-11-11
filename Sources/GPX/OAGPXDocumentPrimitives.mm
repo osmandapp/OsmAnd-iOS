@@ -364,7 +364,7 @@
 
 - (UIColor *) getColor
 {
-    return [OAUtilities colorFromString:self.color];
+    return [UIColor colorFromString:self.color];
 }
 
 - (NSString *)getIcon

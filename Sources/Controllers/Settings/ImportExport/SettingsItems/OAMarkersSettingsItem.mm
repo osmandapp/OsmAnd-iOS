@@ -167,7 +167,7 @@
         for (OAGpxWpt *wpt in gpxFile.locationMarks)
         {
             OADestination *dest = [[OADestination alloc] initWithDesc:wpt.name latitude:wpt.getLatitude longitude:wpt.getLongitude];
-            dest.color = [OAUtilities colorFromString:wpt.color];
+            dest.color = [UIColor colorFromString:wpt.color];
             dest.markerResourceName = [self getResourceName:[wpt.color upperCase]];
 
             for (OAGpxExtension *e in ((OAGpxExtensions *) wpt.extraData).extensions)

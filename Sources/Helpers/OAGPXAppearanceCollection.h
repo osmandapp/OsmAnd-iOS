@@ -44,6 +44,8 @@
 
 @interface OAGPXAppearanceCollection : NSObject
 
+- (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController;
+
 - (NSArray<OAGPXTrackColor *> *)getAvailableColors;
 - (NSArray<OAGPXTrackWidth *> *)getAvailableWidth;
 

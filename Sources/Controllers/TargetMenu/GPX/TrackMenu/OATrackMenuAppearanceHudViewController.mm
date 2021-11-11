@@ -134,7 +134,7 @@
     _oldWidth = self.gpx.width;
     _oldColoringType = self.gpx.coloringType;
 
-    _appearanceCollection = [[OAGPXAppearanceCollection alloc] init];
+    _appearanceCollection = [[OAGPXAppearanceCollection alloc] initWithMapViewController:self.mapViewController];
     _selectedColor = [_appearanceCollection getColorForValue:self.gpx.color];
     _selectedWidth = [_appearanceCollection getWidthForValue:self.gpx.width];
     if (!_selectedWidth)

@@ -156,7 +156,7 @@
             if ([item[@"isSelected"] boolValue])
             {
                 [cell setOverflowVisibility:NO];
-                [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_checmark_default"] forState:UIControlStateNormal];
+                [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_checkmark_default"] forState:UIControlStateNormal];
             }
             else
             {

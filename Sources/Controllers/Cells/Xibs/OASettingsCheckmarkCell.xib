@@ -16,7 +16,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_checmark_default.png" translatesAutoresizingMaskIntoConstraints="NO" id="MtN-sG-bto">
+                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_checkmark_default.png" translatesAutoresizingMaskIntoConstraints="NO" id="MtN-sG-bto">
                         <rect key="frame" x="20" y="7" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="UFV-kO-4yl"/>
@@ -60,6 +60,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_checmark_default.png" width="30" height="30"/>
+        <image name="ic_checkmark_default.png" width="30" height="30"/>
     </resources>
 </document>

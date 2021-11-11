@@ -30,9 +30,6 @@
 
 #define kColorGridOrDescriptionCell 2
 
-static const NSInteger kCustomTrackWidthMin = 1;
-static const NSInteger kCustomTrackWidthMax = 24;
-
 @interface OATrackAppearanceItem : NSObject
 
 @property (nonatomic) OAColoringType *coloringType;
@@ -40,13 +37,19 @@ static const NSInteger kCustomTrackWidthMax = 24;
 @property (nonatomic) NSString *attrName;
 @property (nonatomic, assign) BOOL isActive;
 
-- (instancetype) initWithColoringType:(OAColoringType *)coloringType title:(NSString *)title attrName:(NSString *)attrName isActive:(BOOL)isActive;
+- (instancetype)initWithColoringType:(OAColoringType *)coloringType
+                               title:(NSString *)title
+                            attrName:(NSString *)attrName
+                            isActive:(BOOL)isActive;
 
 @end
 
 @implementation OATrackAppearanceItem
 
-- (instancetype) initWithColoringType:(OAColoringType *)coloringType title:(NSString *)title attrName:(NSString *)attrName isActive:(BOOL)isActive
+- (instancetype)initWithColoringType:(OAColoringType *)coloringType
+                               title:(NSString *)title
+                            attrName:(NSString *)attrName
+                            isActive:(BOOL)isActive
 {
     self = [super init];
     if (self)
@@ -187,7 +190,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     _availableColors = trackColors;
 
     NSMutableArray *customWidthValues = [NSMutableArray array];
-    for (NSInteger i = kCustomTrackWidthMin; i <= kCustomTrackWidthMax; i++)
+    for (NSInteger i = [OAGPXTrackWidth getCustomTrackWidthMin]; i <= [OAGPXTrackWidth getCustomTrackWidthMax]; i++)
     {
         [customWidthValues addObject:[NSString stringWithFormat:@"%li", i]];
     }
@@ -215,7 +218,6 @@ static const NSInteger kCustomTrackWidthMax = 24;
 - (void)applyLocalization
 {
     [self.titleView setText:OALocalizedString(@"map_settings_appearance")];
-    [self.doneButton.titleLabel setText:OALocalizedString(@"shared_string_done")];
 }
 
 - (void)setupView
@@ -224,6 +226,10 @@ static const NSInteger kCustomTrackWidthMax = 24;
     self.titleIconView.tintColor = UIColorFromRGB(color_footer_icon_gray);
 
     [self.doneButton addBlurEffect:YES cornerRadius:12. padding:0.];
+    [self.doneButton setAttributedTitle:
+                    [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_done")
+                                                    attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
+                               forState:UIControlStateNormal];
 
     CGRect toolBarFrame = self.toolBarView.frame;
     toolBarFrame.origin.y = self.scrollableView.frame.size.height;
@@ -267,7 +273,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
             }
     }];
     [colorsCells addObject:colorTitle];
-    
+
     NSMutableArray<NSDictionary *> *trackColoringTypes = [NSMutableArray array];
     for (OATrackAppearanceItem *item in _availableColoringTypes)
     {
@@ -313,7 +319,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
                     @"array_value": _availableColors
                 }
             }];
-            
+
             [gridOrDescriptionCell setData:@{
                 kTableUpdateData: ^() {
                 [gridOrDescriptionCell setData:@{

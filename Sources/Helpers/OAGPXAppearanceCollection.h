@@ -36,6 +36,9 @@
 
 - (BOOL)isCustom;
 
++ (NSInteger)getCustomTrackWidthMin;
++ (NSInteger)getCustomTrackWidthMax;
+
 @end
 
 @interface OAGPXTrackSplitInterval : OAGPXTrackAppearance

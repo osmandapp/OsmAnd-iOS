@@ -199,7 +199,14 @@
 - (void) centerMapOnRoute:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
 {
     CGSize screenBBox = self.view.frame.size;
-    [[OARootViewController instance].mapPanel displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0. screenBBox:screenBBox bottomInset:0. leftInset:0. topInset:0.];
+    [[OARootViewController instance].mapPanel displayAreaOnMap:topLeft
+                                                   bottomRight:bottomRight
+                                                          zoom:0.
+                                                    screenBBox:screenBBox
+                                                   bottomInset:0.
+                                                     leftInset:0.
+                                                      topInset:0.
+                                                      animated:YES];
 }
 
 - (void) enterNavigationMode

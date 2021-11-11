@@ -244,15 +244,15 @@ const static NSString *URL = @"http://osmand.net/api/motd";
         NSString *buttonTitleColor = [map objectForKey:@"button_title_color"];
 
         if (bgColor)
-            [mutableDictionary setObject:[OAUtilities colorFromString:bgColor] forKey:@"bg_color"];
+            [mutableDictionary setObject:[UIColor colorFromString:bgColor] forKey:@"bg_color"];
         if (titleColor)
-            [mutableDictionary setObject:[OAUtilities colorFromString:titleColor] forKey:@"title_color"];
+            [mutableDictionary setObject:[UIColor colorFromString:titleColor] forKey:@"title_color"];
         if (descrColor)
-            [mutableDictionary setObject:[OAUtilities colorFromString:descrColor] forKey:@"description_color"];
+            [mutableDictionary setObject:[UIColor colorFromString:descrColor] forKey:@"description_color"];
         if (statusBarColor)
-            [mutableDictionary setObject:[OAUtilities colorFromString:statusBarColor] forKey:@"status_bar_color"];
+            [mutableDictionary setObject:[UIColor colorFromString:statusBarColor] forKey:@"status_bar_color"];
         if (buttonTitleColor)
-            [mutableDictionary setObject:[OAUtilities colorFromString:buttonTitleColor] forKey:@"button_title_color"];
+            [mutableDictionary setObject:[UIColor colorFromString:buttonTitleColor] forKey:@"button_title_color"];
         
         _colors = [NSDictionary dictionaryWithDictionary:mutableDictionary];
         

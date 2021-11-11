@@ -61,6 +61,16 @@
 
 @implementation OATrackMenuViewControllerState
 
++ (instancetype)withPinLocation:(CLLocationCoordinate2D)pinLocation
+{
+    OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
+    if (state)
+    {
+        state.pinLocation = pinLocation;
+    }
+    return state;
+}
+
 @end
 
 @interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, ChartViewDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate>
@@ -172,9 +182,11 @@
 
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _routeLineChartHelper.isLandscape = [self isLandscape];
-        _routeLineChartHelper.screenBBox = CGRectMake(0., 0.,
-                DeviceScreenWidth - ([self isLandscape] ? DeviceScreenWidth * 0.45 : 0.0),
-                DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight]));
+        _routeLineChartHelper.screenBBox = CGRectMake(
+                [self isLandscape] ? [self getLandscapeViewWidth] : 0.,
+                0.,
+                [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
+                [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]);
     }];
 }
 
@@ -396,7 +408,7 @@
 
 - (OATrackMenuViewControllerState *)getCurrentState
 {
-    OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
+    OATrackMenuViewControllerState *state = _reopeningState ? _reopeningState : [[OATrackMenuViewControllerState alloc] init];
     state.lastSelectedTab = _selectedTab;
     state.gpxFilePath = self.gpx.gpxFilePath;
 
@@ -511,6 +523,7 @@
 - (void)editSegment
 {
     [self hide:YES duration:.2 onComplete:^{
+        [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController showPlanRouteViewController:[
                 [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
                                                           targetMenuState:[self getCurrentState]]];
@@ -632,7 +645,7 @@
     {
         OAGpxWptItem *waypoint = _waypointGroups[groupName].firstObject;
         groupColor = waypoint.color ? waypoint.color
-                : waypoint.point.color ? [OAUtilities colorFromString:waypoint.point.color] : nil;
+                : waypoint.point.color ? [UIColor colorFromString:waypoint.point.color] : nil;
     }
     if (!groupColor)
         groupColor = [OADefaultFavorite getDefaultColor];
@@ -811,16 +824,19 @@
             [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
                                               bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
                                                      zoom:0
-                                              bottomInset:DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight])
-                                                leftInset:DeviceScreenWidth - ([self isLandscape] ? DeviceScreenWidth * 0.45 : 0.0)];
-                                       }
+                                              bottomInset:([self isLandscape] ? 0. : [self getViewHeight])
+                                                leftInset:([self isLandscape] ? [self getLandscapeViewWidth] : 0.)
+                                                 animated:YES];
+                                                               }
                                                                 adjustViewPort:^() {
-            [self adjustMapViewPort];
-        }];
+                                                                    [self adjustMapViewPort];
+                                                                }];
         _routeLineChartHelper.isLandscape = [self isLandscape];
-        _routeLineChartHelper.screenBBox = CGRectMake(0., 0.,
-                DeviceScreenWidth - ([self isLandscape]? DeviceScreenWidth * 0.45 : 0.0),
-                DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight]));
+        _routeLineChartHelper.screenBBox = CGRectMake(
+                [self isLandscape] ? [self getLandscapeViewWidth] : 0.,
+                0.,
+                [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
+                [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]);
     }
     return _routeLineChartHelper;
 }
@@ -837,7 +853,8 @@
 
 - (NSString *)getDirName
 {
-    return [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString;
+    NSString *dirName = [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString;
+    return dirName.length > 0 ? dirName : OALocalizedString(@"tracks");
 }
 
 - (NSString *)getGpxFileSize
@@ -924,6 +941,7 @@
 - (void)openAppearance
 {
     [self hide:YES duration:.2 onComplete:^{
+        [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController openTargetViewWithGPX:self.gpx
                                               trackHudMode:EOATrackAppearanceHudMode
                                                      state:[self getCurrentState]];
@@ -982,7 +1000,9 @@
                                                                       fromName:nil
                                                 useIntermediatePointsByDefault:YES
                                                                     showDialog:YES];
-        [self hide:YES duration:.2 onComplete:nil];
+        [self hide:YES duration:.2 onComplete:^{
+            [self.mapViewController hideContextPinMarker];
+        }];
     }
 }
 
@@ -1042,7 +1062,9 @@
             [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath];
         }
 
-        [self hide:YES duration:.2 onComplete:nil];
+        [self hide:YES duration:.2 onComplete:^{
+            [self.mapViewController hideContextPinMarker];
+        }];
     }]
     ];
 
@@ -1132,7 +1154,7 @@
     [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES];
     if (_selectedTab == EOATrackMenuHudActionsTab)
     {
-        OAGPXTableCellData *cellData = [self getCellData:[NSIndexPath indexPathForRow:kActionsSection inSection:kActionMoveCell]];
+        OAGPXTableCellData *cellData = [self getCellData:[NSIndexPath indexPathForRow:kActionMoveCell inSection:kActionsSection]];
         if (cellData.updateData)
             cellData.updateData();
 
@@ -1198,7 +1220,9 @@
                                                                   fromName:nil
                                             useIntermediatePointsByDefault:YES
                                                                 showDialog:YES];
-    [self hide:YES duration:.2 onComplete:nil];
+    [self hide:YES duration:.2 onComplete:^{
+        [self.mapViewController hideContextPinMarker];
+    }];
 }
 
 #pragma mark - UITabBarDelegate
@@ -1358,6 +1382,8 @@
         }
         if (cell)
         {
+            cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
+                    ? cellData.values[@"font_value"] : [UIFont systemFontOfSize:17];
             cell.titleView.text = cellData.title;
             cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
@@ -1632,6 +1658,7 @@
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]]
             || [cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]]
             || [cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
         return 48.;
     else if ([cellData.type isEqualToString:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]])

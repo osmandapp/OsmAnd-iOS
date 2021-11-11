@@ -387,17 +387,7 @@ static BOOL _favoritesLoaded = NO;
     _flatGroups[name] = group;
 }
 
-+ (BOOL) deleteNewFavoriteItem:(OAFavoriteItem *)favoritesItem
-{
-    return [self.class deleteFavoriteGroups:nil andFavoritesItems:@[favoritesItem] isNewFavorite:YES];
-}
-
 + (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems
-{
-    return [self.class deleteFavoriteGroups:groupsToDelete andFavoritesItems:favoritesItems isNewFavorite:NO];
-}
-
-+ (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems isNewFavorite:(BOOL)isNewFavorite
 {
     if (favoritesItems)
     {
@@ -410,11 +400,6 @@ static BOOL _favoritesLoaded = NO;
                 if (indexItem != NSNotFound)
                     [group.points removeObjectAtIndex:indexItem];
             }
-            if (group.points.count == 0 && (!isNewFavorite || (isNewFavorite && group.name.length > 0)))
-            {
-                [_flatGroups removeObjectForKey:group.name];
-                [_favoriteGroups removeObject:group];
-            }
             NSInteger cachedIndexItem = [_cachedFavoritePoints indexOfObject:item];
             if (cachedIndexItem != NSNotFound)
                 [_cachedFavoritePoints removeObjectAtIndex:cachedIndexItem];
@@ -423,23 +408,11 @@ static BOOL _favoritesLoaded = NO;
     }
     if (groupsToDelete)
     {
-        QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toDelete;
         for (OAFavoriteGroup *group in groupsToDelete)
         {
             [_flatGroups removeObjectForKey:group.name];
             [_favoriteGroups removeObject:group];
-
-            NSArray<OAFavoriteItem *> *favoriteItems = group.points;
-            for (OAFavoriteItem *favoriteItem in favoriteItems)
-            {
-                NSInteger cachedIndexItem = [_cachedFavoritePoints indexOfObject:favoriteItem];
-                if (cachedIndexItem != NSNotFound)
-                    [_cachedFavoritePoints removeObjectAtIndex:cachedIndexItem];
-
-                toDelete.push_back(favoriteItem.favorite);
-            }
         }
-        [OsmAndApp instance].favoritesCollection->removeFavoriteLocations(toDelete);
     }
     [OAFavoritesHelper saveCurrentPointsIntoFile];
     return YES;

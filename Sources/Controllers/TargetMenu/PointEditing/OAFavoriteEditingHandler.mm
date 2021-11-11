@@ -131,14 +131,14 @@
 - (void)deleteItem
 {
     if (_favorite)
-        [OAFavoritesHelper deleteNewFavoriteItem:_favorite];
+        [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[_favorite]];
 }
 
 - (NSDictionary *)checkDuplicates:(NSString *)name group:(NSString *)group
 {
     OAFavoriteItem *comparingPoint = [[OAFavoriteItem alloc] initWithLat:_favorite.getLatitude lon:_favorite.getLatitude name:_favorite.getName category:_favorite.getCategory];
     NSDictionary *result = [OAFavoritesHelper checkDuplicates:comparingPoint newName:name newCategory:group];
-    [OAFavoritesHelper deleteNewFavoriteItem:comparingPoint];
+    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[comparingPoint]];
     return result;
 }
 

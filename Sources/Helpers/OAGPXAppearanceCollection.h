@@ -37,6 +37,9 @@
 
 - (BOOL)isCustom;
 
++ (NSInteger)getCustomTrackWidthMin;
++ (NSInteger)getCustomTrackWidthMax;
+
 @end
 
 @interface OAGPXAppearanceCollection : NSObject

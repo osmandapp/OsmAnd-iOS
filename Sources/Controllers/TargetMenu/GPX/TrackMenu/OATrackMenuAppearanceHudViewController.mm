@@ -31,9 +31,6 @@
 
 #define kColorGridOrDescriptionCell 2
 
-static const NSInteger kCustomTrackWidthMin = 1;
-static const NSInteger kCustomTrackWidthMax = 24;
-
 @interface OATrackAppearanceItem : NSObject
 
 @property (nonatomic) OAColoringType *coloringType;
@@ -41,13 +38,19 @@ static const NSInteger kCustomTrackWidthMax = 24;
 @property (nonatomic) NSString *attrName;
 @property (nonatomic, assign) BOOL isActive;
 
-- (instancetype) initWithColoringType:(OAColoringType *)coloringType title:(NSString *)title attrName:(NSString *)attrName isActive:(BOOL)isActive;
+- (instancetype)initWithColoringType:(OAColoringType *)coloringType
+                               title:(NSString *)title
+                            attrName:(NSString *)attrName
+                            isActive:(BOOL)isActive;
 
 @end
 
 @implementation OATrackAppearanceItem
 
-- (instancetype) initWithColoringType:(OAColoringType *)coloringType title:(NSString *)title attrName:(NSString *)attrName isActive:(BOOL)isActive
+- (instancetype)initWithColoringType:(OAColoringType *)coloringType
+                               title:(NSString *)title
+                            attrName:(NSString *)attrName
+                            isActive:(BOOL)isActive
 {
     self = [super init];
     if (self)
@@ -114,7 +117,6 @@ static const NSInteger kCustomTrackWidthMax = 24;
     if (self)
     {
         _reopeningTrackMenuState = state;
-        [self commonInit];
     }
     return self;
 }
@@ -146,26 +148,26 @@ static const NSInteger kCustomTrackWidthMax = 24;
     {
         if ([coloringType isRouteInfoAttribute])
             continue;
-        
+
         OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:coloringType title:coloringType.title attrName:nil isActive:[coloringType isAvailableForDrawingTrack:self.doc attributeName:nil]];
         [items addObject:item];
-        
+
         if (currentType == coloringType)
             _selectedItem = item;
     }
-    
+
     NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
-    
+
     for (NSString *attribute in attributes)
     {
         BOOL isAvailable = [OAColoringType.ATTRIBUTE isAvailableForDrawingTrack:self.doc attributeName:attribute];
         OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:OAColoringType.ATTRIBUTE title:OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]) attrName:attribute isActive:isAvailable];
         [items addObject:item];
-        
+
         if (currentType == OAColoringType.ATTRIBUTE && [self.gpx.coloringType isEqualToString:attribute])
             _selectedItem = item;
     }
-    
+
     _availableColoringTypes = items;
 
     NSMutableArray<NSNumber *> *trackColors = [NSMutableArray array];
@@ -176,7 +178,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
     _availableColors = trackColors;
 
     NSMutableArray *customWidthValues = [NSMutableArray array];
-    for (NSInteger i = kCustomTrackWidthMin; i <= kCustomTrackWidthMax; i++)
+    for (NSInteger i = [OAGPXTrackWidth getCustomTrackWidthMin]; i <= [OAGPXTrackWidth getCustomTrackWidthMax]; i++)
     {
         [customWidthValues addObject:@(i)];
     }
@@ -204,7 +206,6 @@ static const NSInteger kCustomTrackWidthMax = 24;
 - (void)applyLocalization
 {
     [self.titleView setText:OALocalizedString(@"map_settings_appearance")];
-    [self.doneButton.titleLabel setText:OALocalizedString(@"shared_string_done")];
 }
 
 - (void)setupView
@@ -213,6 +214,10 @@ static const NSInteger kCustomTrackWidthMax = 24;
     self.titleIconView.tintColor = UIColorFromRGB(color_footer_icon_gray);
 
     [self.doneButton addBlurEffect:YES cornerRadius:12. padding:0.];
+    [self.doneButton setAttributedTitle:
+                    [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_done")
+                                                    attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
+                               forState:UIControlStateNormal];
 
     CGRect toolBarFrame = self.toolBarView.frame;
     toolBarFrame.origin.y = self.scrollableView.frame.size.height;
@@ -253,7 +258,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
             }
     }];
     [colorsCells addObject:colorTitle];
-    
+
     NSMutableArray<NSDictionary *> *trackColoringTypes = [NSMutableArray array];
     for (OATrackAppearanceItem *item in _availableColoringTypes)
     {
@@ -299,7 +304,7 @@ static const NSInteger kCustomTrackWidthMax = 24;
                     @"array_value": _availableColors
                 }
             }];
-            
+
             [gridOrDescriptionCell setData:@{
                 kTableUpdateData: ^() {
                 [gridOrDescriptionCell setData:@{
@@ -333,13 +338,13 @@ static const NSInteger kCustomTrackWidthMax = 24;
         if (data)
         {
             colorsSection.cells[kColorGridOrDescriptionCell] = data;
-            
+
             BOOL hasElevationGradient = [colorsSection.cells.lastObject.key isEqualToString:@"color_elevation_gradient"];
             if ([_selectedItem.coloringType isGradient] && !hasElevationGradient)
                 [colorsSection.cells addObject:[self generateDataForColorElevationGradientCell]];
             else if (![_selectedItem.coloringType isGradient] && hasElevationGradient)
                 [colorsSection.cells removeObject:colorsSection.cells.lastObject];
-            
+
             for (OAGPXTableCellData *cell in colorsSection.cells)
             {
                 if (cell.updateData)
@@ -943,6 +948,10 @@ static const NSInteger kCustomTrackWidthMax = 24;
         if ([cellData.key isEqualToString:@"width_value"])
         {
             _selectedWidth = [_appearanceCollection getAvailableWidth][segment.selectedSegmentIndex];
+
+            if ([_selectedWidth.customValue floatValue] > _customWidthValues.lastObject.floatValue)
+                _selectedWidth = [OAGPXTrackWidth getDefault];
+
             self.gpx.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;
 
             [[_app updateGpxTracksOnMapObservable] notifyEvent];

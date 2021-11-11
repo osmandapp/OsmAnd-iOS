@@ -77,8 +77,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self layoutSubviews];
-    [self show:YES state:EOADraggableMenuStateInitial onComplete:nil];
+    [self show:YES state:_currentState onComplete:^{
+        [self layoutSubviews];
+    }];
 }
 
 - (void) applyCornerRadius:(BOOL)enable
@@ -187,7 +188,7 @@
     {
         f.origin = CGPointMake(0., [self getLandscapeYOffset]);
         f.size.height = DeviceScreenHeight - self.additionalLandscapeOffset;
-        f.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
+        f.size.width = [self getLandscapeViewWidth];
         
         CGRect buttonsFrame = _toolBarView.frame;
         buttonsFrame.origin.y = f.size.height - [self getToolbarHeight] - bottomMargin;
@@ -252,6 +253,11 @@
     return NO;
 }
 
+- (CGFloat) getViewHeight
+{
+    return [self getViewHeight:_currentState];
+}
+
 - (CGFloat) getViewHeight:(EOADraggableMenuState)state
 {
     switch (state) {
@@ -266,9 +272,9 @@
     }
 }
 
-- (CGFloat) getViewHeight
+- (CGFloat) getLandscapeViewWidth
 {
-    return [self getViewHeight:_currentState];
+    return OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
 }
 
 - (CGPoint) calculateInitialPoint
@@ -310,7 +316,7 @@
         CGRect frame = _scrollableView.frame;
         if ([self isLeftSidePresentation])
         {
-            frame.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
+            frame.size.width = [self getLandscapeViewWidth];
             frame.origin.x = 0.0;
 
             if (self.menuHudMode == EOAScrollableMenuHudExtraHeaderInLandscapeMode)
@@ -333,9 +339,11 @@
         [UIView animateWithDuration:0.3 animations:^{
             _scrollableView.frame = frame;
         } completion:^(BOOL finished) {
-            if (onComplete)
-                onComplete();
+
         }];
+
+        if (onComplete)
+            onComplete();
     }
     else
     {

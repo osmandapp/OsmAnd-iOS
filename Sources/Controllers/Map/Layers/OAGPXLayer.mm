@@ -134,7 +134,7 @@
         const auto& values = extraData->getValues();
         const auto& it = values.find(QStringLiteral("color"));
         if (it != values.end())
-            return [OAUtilities colorFromString:it.value().toString().toNSString()];
+            return [UIColor colorFromString:it.value().toString().toNSString()];
     }
     return nil;
 }
@@ -348,7 +348,10 @@
         {
             if ([trackWidth isCustom])
             {
-                lineWidth = [trackWidth.customValue floatValue];
+                if (trackWidth.customValue.floatValue > [OAGPXTrackWidth getCustomTrackWidthMax])
+                    lineWidth = [OAGPXTrackWidth getDefault].customValue.floatValue;
+                else
+                    lineWidth = trackWidth.customValue.floatValue;
             }
             else
             {
@@ -414,6 +417,7 @@
         {
             OAGPX *item = mapViewController.foundGpx;
             OATargetPoint *targetPoint = [self getTargetPoint:item];
+            targetPoint.location = point;
             if (targetPoint && ![found containsObject:targetPoint])
                 [found addObject:targetPoint];
         }

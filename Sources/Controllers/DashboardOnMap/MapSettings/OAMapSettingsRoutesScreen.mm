@@ -11,7 +11,6 @@
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OATableViewCustomFooterView.h"
-#import "OADividerCell.h"
 #import "OASettingSwitchCell.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "Localization.h"
@@ -85,14 +84,9 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 {
     NSMutableArray *dataArr = [NSMutableArray new];
 
-    [dataArr addObject:@[
-                    @{@"type": [OADividerCell getCellIdentifier]},
-                    @{@"type": [OASettingSwitchCell getCellIdentifier]},
-                    @{@"type": [OADividerCell getCellIdentifier]}
-    ]];
+    [dataArr addObject:@[@{@"type": [OASettingSwitchCell getCellIdentifier]}]];
 
     NSMutableArray *colorsArr = [NSMutableArray new];
-    [colorsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
     if (_routesSettingType == ERoutesSettingCycle)
     {
         [colorsArr addObject:@{
@@ -100,13 +94,11 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
                 @"value": @"false",
                 @"title": OALocalizedString(@"gpx_route")
         }];
-        [colorsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
         [colorsArr addObject:@{
                 @"type": [OASettingsTitleTableViewCell getCellIdentifier],
                 @"value": @"true",
                 @"title": OALocalizedString(@"rendering_value_walkingRoutesOSMCNodes_name")
         }];
-        [colorsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
     }
     else
     {
@@ -119,7 +111,6 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
                         @"value": value.name,
                         @"title": value.title
                 }];
-                [colorsArr addObject:@{@"type": [OADividerCell getCellIdentifier]}];
             }
         }
     }
@@ -132,7 +123,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 {
     title = _routesParameter.title;
 
-    tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tblView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     [tblView.tableFooterView removeFromSuperview];
     tblView.tableFooterView = nil;
     [tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
@@ -151,15 +142,6 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
     NSString *propertyValueReplaced = [propertyValue stringByReplacingOccurrencesOfString:@"\\s+" withString:@"_"];
     NSString *value = OALocalizedString([NSString stringWithFormat:@"rendering_value_%@_description", propertyValueReplaced]);
     return value ? value : propertyValue;
-}
-
-- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
-{
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
-    else
-        return estimated ? 48. : UITableViewAutomaticDimension;
 }
 
 - (NSString *)getTextForFooter:(NSInteger)section
@@ -198,26 +180,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-    {
-        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
-            cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = UIColorFromRGB(color_tint_gray);
-            cell.dividerHight = 0.5;
-        }
-        if (cell)
-        {
-            CGFloat leftInset = indexPath.row == 0 || indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1 ? 0. : 20.;
-            cell.dividerInsets = UIEdgeInsetsMake(0., leftInset, 0., 0.);
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    NSDictionary *item = [self getItem:indexPath];if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
     {
         OASettingSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (cell == nil)
@@ -272,16 +235,6 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath estimated:NO];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath estimated:YES];
-}
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

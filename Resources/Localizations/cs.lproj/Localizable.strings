@@ -2180,3 +2180,5 @@
 "shared_string_start_time" = "Čas odjezdu";
 "shared_string_end_time" = "Čas příjezdu";
 "shared_string_time_moving" = "Doba pohybu";
+"industrial" = "Průmyslový";
+"education" = "Vzdělávání";

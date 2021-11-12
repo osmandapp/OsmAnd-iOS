@@ -94,8 +94,9 @@
     {
         OAGPXTableCellData *groupCellData = sectionData.cells.firstObject;
         originalData[groupCellData.key] = @{
-                @"toggle_bool_value": @(groupCellData.toggle),
-                @"update_value": groupCellData.updateData
+                kCellRightIconName: groupCellData.rightIconName,
+                kCellToggle: @(groupCellData.toggle),
+                kTableUpdateData: groupCellData.updateData
         };
         [groupCellData setData:@{
                 kTableUpdateData: ^() {
@@ -170,8 +171,9 @@
     {
         OAGPXTableCellData *groupCellData = sectionData.cells.firstObject;
         [groupCellData setData:@{
-                kCellToggle: _originalData[groupCellData.key][@"toggle_bool_value"],
-                kTableUpdateData: _originalData[groupCellData.key][@"update_value"]
+                kCellRightIconName: _originalData[groupCellData.key][kCellRightIconName],
+                kCellToggle: _originalData[groupCellData.key][kCellToggle],
+                kTableUpdateData: _originalData[groupCellData.key][kTableUpdateData]
         }];
     }
 }

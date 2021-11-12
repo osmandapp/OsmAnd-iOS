@@ -186,8 +186,7 @@
                     kTableUpdateData: ^() {
                         if (regenerateWaypoints)
                         {
-                            NSMutableArray *newCellsData = [waypointsSection.cells mutableCopy];
-                            [newCellsData removeAllObjects];
+                            NSMutableArray *newCellsData = [NSMutableArray array];
                             [newCellsData addObject:groupCellData];
                             if (self.trackMenuDelegate)
                                 [newCellsData addObjectsFromArray:

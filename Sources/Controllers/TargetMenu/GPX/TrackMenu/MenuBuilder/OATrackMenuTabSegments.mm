@@ -149,7 +149,7 @@
         }];
         [tabsCellData setData:@{
                 kTableUpdateData: ^() {
-                    NSInteger selectedIndex = [tabsCellData.values[@"selected_index_int_value"] intValue];
+                    NSInteger selectedIndex = [tabsCellData.values[@"selected_index_int_value"] integerValue];
                     mode = selectedIndex == 0 ? EOARouteStatisticsModeAltitudeSpeed
                             : selectedIndex == 1 ? EOARouteStatisticsModeAltitudeSlope : EOARouteStatisticsModeSpeed;
 

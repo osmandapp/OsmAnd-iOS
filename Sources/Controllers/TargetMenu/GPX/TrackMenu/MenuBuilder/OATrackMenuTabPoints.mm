@@ -232,7 +232,7 @@
                                         ? UIColorFromRGB(color_footer_icon_gray) : dataToUpdate[@"new_group_color"];
 
                             BOOL hasExist = [dataToUpdate.allKeys containsObject:@"exist_group_name_index"];
-                            NSInteger existI = [dataToUpdate[@"exist_group_name_index"] intValue];
+                            NSInteger existI = [dataToUpdate[@"exist_group_name_index"] integerValue];
                             regenerateWaypoints = (hasExist && existI > 0) || [dataToUpdate[@"regenerate_bool_value"] boolValue];
                         }
                     }
@@ -361,7 +361,7 @@
                     NSDictionary *dataToUpdate = value;
                     if ([dataToUpdate.allKeys containsObject:@"delete_group_name_index"])
                     {
-                        NSInteger deleteSectionI = [dataToUpdate[@"delete_group_name_index"] intValue];
+                        NSInteger deleteSectionI = [dataToUpdate[@"delete_group_name_index"] integerValue];
                         NSMutableArray *cells = [tableSections[deleteSectionI].cells mutableCopy];
                         NSArray<NSNumber *> *waypointsIdxToDelete = dataToUpdate[@"delete_waypoints_idx"];
                         if (cells.count - 1 == waypointsIdxToDelete.count)
@@ -391,9 +391,9 @@
                     {
                         BOOL hasExist = [dataToUpdate.allKeys containsObject:@"exist_group_name_index"];
                         BOOL hasNew = [dataToUpdate.allKeys containsObject:@"new_group_name_index"];
-                        NSInteger oldI = [dataToUpdate[@"old_group_name_index"] intValue];
-                        NSInteger existI = [dataToUpdate[@"exist_group_name_index"] intValue];
-                        NSInteger newI = [dataToUpdate[@"new_group_name_index"] intValue];
+                        NSInteger oldI = [dataToUpdate[@"old_group_name_index"] integerValue];
+                        NSInteger existI = [dataToUpdate[@"exist_group_name_index"] integerValue];
+                        NSInteger newI = [dataToUpdate[@"new_group_name_index"] integerValue];
                         if (hasExist && existI > -1 && hasNew)
                         {
                             NSMutableArray *cells = [tableSections[existI == newI + 1 ? existI : newI].cells mutableCopy];

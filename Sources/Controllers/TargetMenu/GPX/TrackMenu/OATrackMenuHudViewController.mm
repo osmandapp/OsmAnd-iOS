@@ -793,7 +793,7 @@
     else if (newGroupName)
     {
         [newWaypointGroups removeObjectForKey:groupName];
-        NSInteger existI = [dataToUpdate[@"exist_group_name_index"] intValue];
+        NSInteger existI = [dataToUpdate[@"exist_group_name_index"] integerValue];
         if (existI != -1)
         {
             NSArray<OAGpxWptItem *> *existWaypoints = newWaypointGroups[newGroupName];
@@ -825,7 +825,11 @@
     }
 
     if (newGroupName)
-        dataToUpdate[@"new_group_name_index"] = @([_waypointSortedGroupNames indexOfObject:newGroupName]);
+    {
+        NSInteger newI = [_waypointSortedGroupNames indexOfObject:newGroupName];
+        if (newI != NSNotFound)
+            dataToUpdate[@"new_group_name_index"] = @(newI);
+    }
 
     if (_tableData.updateProperty)
         _tableData.updateProperty(dataToUpdate);

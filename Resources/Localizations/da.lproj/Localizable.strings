@@ -2189,3 +2189,5 @@
 "delete_waypoints" = "Slet rutepunkter";
 "delete_group_confirm_short" = "Slet gruppe?";
 "parked_at" = "Parkeret ved";
+"industrial" = "Industriel";
+"education" = "Uddannelse";

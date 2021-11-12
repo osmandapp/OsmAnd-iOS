@@ -147,7 +147,7 @@
 		1509D52325E90F5600905CBC /* ic_action_ruler_line@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1509D52025E90F5500905CBC /* ic_action_ruler_line@3x.png */; };
 		151558BC24A34C470081BB8E /* img_settings_device_bottom_light@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 151558BB24A34C470081BB8E /* img_settings_device_bottom_light@3x.png */; };
 		151558BE24A34C510081BB8E /* img_settings_sreen_route_parameters@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 151558BD24A34C510081BB8E /* img_settings_sreen_route_parameters@3x.png */; };
-		1526689B259B8FCC0026997E /* ../resources/rendering_styles/snowmobile.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 1526689A259B8FCB0026997E /* ../resources/rendering_styles/snowmobile.render.xml */; };
+		1526689B259B8FCC0026997E /* snowmobile.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 1526689A259B8FCB0026997E /* snowmobile.render.xml */; };
 		1535D8E9243DDA390061220F /* ic_custom_map_online@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E3243DDA370061220F /* ic_custom_map_online@3x.png */; };
 		1535D8EB243DDA390061220F /* ic_custom_map@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E5243DDA380061220F /* ic_custom_map@3x.png */; };
 		1535D8ED243DDA390061220F /* ic_custom_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E7243DDA380061220F /* ic_custom_map@2x.png */; };
@@ -3034,7 +3034,7 @@
 		1509D52025E90F5500905CBC /* ic_action_ruler_line@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_ruler_line@3x.png"; path = "Resources/Icons/ic_action_ruler_line@3x.png"; sourceTree = "<group>"; };
 		151558BB24A34C470081BB8E /* img_settings_device_bottom_light@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_settings_device_bottom_light@3x.png"; path = "Resources/Icons/img_settings_device_bottom_light@3x.png"; sourceTree = "<group>"; };
 		151558BD24A34C510081BB8E /* img_settings_sreen_route_parameters@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_settings_sreen_route_parameters@3x.png"; path = "Resources/Icons/img_settings_sreen_route_parameters@3x.png"; sourceTree = "<group>"; };
-		1526689A259B8FCB0026997E /* ../resources/rendering_styles/snowmobile.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ../resources/rendering_styles/snowmobile.render.xml; sourceTree = "<group>"; };
+		1526689A259B8FCB0026997E /* snowmobile.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ../resources/rendering_styles/snowmobile.render.xml; sourceTree = "<group>"; };
 		1535D8E3243DDA370061220F /* ic_custom_map_online@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_online@3x.png"; path = "Resources/Icons/ic_custom_map_online@3x.png"; sourceTree = "<group>"; };
 		1535D8E5243DDA380061220F /* ic_custom_map@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map@3x.png"; path = "Resources/Icons/ic_custom_map@3x.png"; sourceTree = "<group>"; };
 		1535D8E7243DDA380061220F /* ic_custom_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map@2x.png"; path = "Resources/Icons/ic_custom_map@2x.png"; sourceTree = "<group>"; };
@@ -7954,7 +7954,7 @@
 				84F648D51E5B49C9001A7373 /* mapnik.render.xml */,
 				84E297551E2FD80A006EA6B1 /* topo.render.xml */,
 				844499B71AAF816E00ACA20D /* skimap.render.xml */,
-				1526689A259B8FCB0026997E /* ../resources/rendering_styles/snowmobile.render.xml */,
+				1526689A259B8FCB0026997E /* snowmobile.render.xml */,
 				84CC524B1AA5A539000063CF /* nautical.render.xml */,
 				846310051A8E463B005B39F2 /* default.render.xml */,
 				84630FCF1A8E197E005B39F2 /* LightRS.render.xml */,
@@ -13170,7 +13170,7 @@
 				845E06A91B5FF17400DFC2A7 /* ic_plugin_parking@3x.png in Resources */,
 				8415030D1DEED6AE007FAC50 /* ic_wifi_off@2x.png in Resources */,
 				DAF7A4E221786B5700FB94FD /* ic_action_ruler_circle@3x.png in Resources */,
-				1526689B259B8FCC0026997E /* ../resources/rendering_styles/snowmobile.render.xml in Resources */,
+				1526689B259B8FCC0026997E /* snowmobile.render.xml in Resources */,
 				3219705F25FA0DCE00C3FED6 /* bg_point_circle@3x.png in Resources */,
 				DA540D92229E63270069201E /* ic_custom_photo@3x.png in Resources */,
 				8A755A7921CBF92400E42699 /* ic_live_osmand_logo@3x.png in Resources */,
@@ -13883,12 +13883,13 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-input-files.xcfilelist",
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
+				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-output-files.xcfilelist",
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -15024,7 +15025,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 3.90.8;
-				OBJROOT = $SYMROOT;
+				OBJROOT = "$SYMROOT";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -15081,7 +15082,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 3.90.8;
-				OBJROOT = $SYMROOT;
+				OBJROOT = "$SYMROOT";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

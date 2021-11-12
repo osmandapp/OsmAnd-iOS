@@ -55,6 +55,8 @@
     BOOL _isIn3dMode;
     BOOL _forceZoom;
     
+    BOOL _needsLocationUpdate;
+    
     NSTimeInterval _startChangingMapModeTime;
 }
 
@@ -311,8 +313,12 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (!_mapViewController || ![_mapViewController isViewLoaded])
+        {
+            _needsLocationUpdate = YES;
             return;
+        }
         
+        _needsLocationUpdate = NO;
         // Obtain fresh location and heading
         CLLocation* newLocation = _app.locationServices.lastKnownLocation;
         CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
@@ -675,6 +681,8 @@
 {
     _mapViewController = mapViewController;
     _mapView = _mapViewController.mapView;
+    if (_needsLocationUpdate)
+        [self onLocationServicesUpdate];
 }
 
 - (void) switchToRoutePlanningMode

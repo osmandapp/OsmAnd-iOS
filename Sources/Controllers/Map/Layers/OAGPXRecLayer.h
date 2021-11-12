@@ -10,4 +10,6 @@
 
 @interface OAGPXRecLayer : OAGPXLayer
 
+- (void) updateGpxTrack:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs;
+
 @end

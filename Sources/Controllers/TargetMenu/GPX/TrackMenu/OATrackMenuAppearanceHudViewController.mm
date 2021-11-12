@@ -100,6 +100,8 @@
     OAGPXTrackSplitInterval *_selectedSplit;
 
     NSInteger _oldColor;
+    BOOL _oldShowStartFinish;
+    BOOL _oldJoinSegments;
     BOOL _oldShowArrows;
     NSString *_oldWidth;
     NSString *_oldColoringType;
@@ -137,6 +139,8 @@
 - (void)updateAllValues
 {
     _oldColor = self.gpx.color;
+    _oldShowStartFinish = self.gpx.showStartFinish;
+    _oldJoinSegments = self.gpx.joinSegments;
     _oldShowArrows = self.gpx.showArrows;
     _oldWidth = self.gpx.width;
     _oldColoringType = self.gpx.coloringType;
@@ -246,16 +250,28 @@
     NSMutableArray<OAGPXTableSectionData *> *appearanceSections = [NSMutableArray array];
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
-            kSectionCells: @[[OAGPXTableCellData withData:@{
-                    kCellKey:@"direction_arrows",
-                    kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
-                    kCellTitle:OALocalizedString(@"gpx_dir_arrows"),
-                    kCellOnSwitch: ^(BOOL toggle) {
-                            self.gpx.showArrows = toggle;
-                            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+            kSectionCells: @[
+                    [OAGPXTableCellData withData:@{
+                        kCellKey:@"direction_arrows",
+                        kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+                        kCellTitle:OALocalizedString(@"gpx_dir_arrows"),
+                        kCellOnSwitch: ^(BOOL toggle) {
+                                self.gpx.showArrows = toggle;
+                                [[_app updateGpxTracksOnMapObservable] notifyEvent];
                         },
-                    kCellIsOn: ^() { return self.gpx.showArrows; }
-            }]]
+                        kCellIsOn: ^() { return self.gpx.showArrows; }
+                    }],
+                    [OAGPXTableCellData withData:@{
+                        kCellKey:@"start_finish_icons",
+                        kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+                        kCellTitle:OALocalizedString(@"track_show_start_finish_icons"),
+                        kCellOnSwitch: ^(BOOL toggle) {
+                                self.gpx.showStartFinish = toggle;
+                                [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                        },
+                        kCellIsOn: ^() { return self.gpx.showStartFinish; }
+                    }]
+            ]
     }]];
 
     NSMutableArray<OAGPXTableCellData *> *colorsCells = [NSMutableArray array];
@@ -746,6 +762,8 @@
         if (_reopeningTrackMenuState)
         {
             self.gpx.color = _oldColor;
+            self.gpx.showStartFinish = _oldShowStartFinish;
+            self.gpx.joinSegments = _oldJoinSegments;
             self.gpx.showArrows = _oldShowArrows;
             self.gpx.width = _oldWidth;
             self.gpx.coloringType = _oldColoringType;

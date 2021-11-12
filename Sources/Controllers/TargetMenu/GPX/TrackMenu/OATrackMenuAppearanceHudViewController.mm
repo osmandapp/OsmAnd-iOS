@@ -465,7 +465,7 @@
                 if ([value isKindOfClass:NSNumber.class])
                 {
                     NSArray<OAGPXTrackSplitInterval *> *availableSplitIntervals = [_appearanceCollection getAvailableSplitIntervals];
-                    NSInteger index = [value intValue];
+                    NSInteger index = [value integerValue];
                     if (availableSplitIntervals.count > index)
                     {
                         _selectedSplit = availableSplitIntervals[index];

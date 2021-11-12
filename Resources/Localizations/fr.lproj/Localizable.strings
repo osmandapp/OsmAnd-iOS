@@ -18,7 +18,7 @@
 "shared_string_delete" = "Supprimer";
 // Rendering categories
 "rendering_category_hide" = "Masquer";
-"rendering_category_routes" = "Chemins";
+"rendering_category_routes" = "Itinéraires";
 "rendering_category_details" = "Détails";
 "rendering_category_transport" = "Transports en commun";
 "rendering_category_others" = "Autres caractéristiques de la carte";
@@ -1237,7 +1237,7 @@
 "rendering_attr_surface_mud_name" = "Boue";
 "routing_attr_avoid_ice_roads_fords_name" = "Éviter les routes sur glace, les fjords";
 "rendering_value_walkingRoutesOSMC_name" = "Couleur des itinéraires selon OSMC";
-"rendering_attr_alpineHiking_name" = "Difficulté des chemins de randonnée (échelle CAS)";
+"rendering_attr_alpineHiking_name" = "Difficulté des sentiers de randonnée (CAS)";
 "rendering_attr_hideOverground_name" = "Objets au sol";
 "rendering_attr_hmRendered_description" = "Augmenter le niveau de détail affiché.";
 "routing_attr_height_obstacles_name" = "Utiliser les données d\'altitude";
@@ -1368,7 +1368,7 @@
 "routing_attr_allow_intermediate_name" = "Autoriser les itinéraires intermédiaires";
 "rendering_value_dark_brown_name" = "Marron foncé";
 "rendering_attr_hideBuildings_name" = "Bâtiments";
-"rendering_attr_alpineHiking_description" = "Afficher la difficulté des chemins selon l\'échelle du CAS.";
+"rendering_attr_alpineHiking_description" = "Afficher la difficulté des sentiers de randonnée selon l'échelle de cotation du CAS.";
 "rendering_value_yellow_name" = "Jaune";
 "rendering_attr_OSMMapperAssistant_name" = "Assistant pour la cartographie OSM";
 "rendering_attr_smoothness_horrible_name" = "Horrible";
@@ -2178,7 +2178,7 @@
 "activity" = "Activité";
 "nautical" = "Marine";
 "m" = "m";
-"ios_release_4_1" = "- Nouvel écran pour la recherche par coordonnées dans différents formats\n- Amélioration de la recherche de coordonnées dans le format OLC\n- Nouveau menu convivial permettant de choisir la langue d'affichage des articles de Wikipédia sur la carte\n- Ajout de la possibilité de charger facilement les cartes de toutes les régions du pays en quelques clics\n- Ajout de courbes de niveau en pieds (Vous devez retélécharger les fichiers)\n- Ajout de la possibilité de télécharger des cartes en sélectionnant la région ou le pays souhaité sur la carte, ainsi que l'ajout d'une boîte de dialogue avec la suggestion de télécharger la carte si la région n’a pas été préalablement téléchargée.\n- Nouvelle apparence des boutons sur l’écran et ajout de la possibilité de modifier le zoom de la carte par un double tapotement ou un glissement.\n";
+"ios_release_4_1" = "- Interaction entièrement repensée des traces GPX : un nouveau menu avec des graphiques, des statistiques, la possibilité de changer l'apparence, la coloration en fonction de la vitesse, de l’altitude et de la pente, ainsi que la sélection des pistes sur la carte- Nouvel écran pour la recherche par coordonnées dans différents formats\n- Amélioration de la recherche de coordonnées au format OLC\n- Nouveau menu convivial pour le choix de la langues des articles de Wikipédia sur la carte\n- Ajout de la possibilité de télécharger facilement les cartes de toutes les régions du pays en quelques clics.\n- Ajout de courbes de niveau en pieds (Vous devez télécharger des fichiers supplémentaires)\n- Ajout de la possibilité de télécharger des cartes en sélectionnant la région ou le pays souhaité sur la carte, ainsi que l'ajout d'une boîte de dialogue avec la suggestion de télécharger une carte manquante d'une région affichée\n- Nouvelle apparence des boutons de contrôle de la carte et possibilité de modifier le zoom de la carte par un double tapotement ou un glissement.\n- Les paramètres de visibilité des routes ont été déplacés plus haut dans l'écran \"Configurer la carte\" et sont réorganisés pour une meilleure flexibilité.\n";
 "units_min_short" = "m";
 "delete_waypoints" = "Supprimer les points de passage";
 "delete_group_confirm_short" = "Supprimer le groupe ?";
@@ -2189,3 +2189,5 @@
 "shared_string_start_time" = "Heure de départ";
 "shared_string_end_time" = "Heure d'arrivée";
 "shared_string_time_moving" = "Durée de déplacement";
+"industrial" = "Industriel";
+"education" = "Éducation";

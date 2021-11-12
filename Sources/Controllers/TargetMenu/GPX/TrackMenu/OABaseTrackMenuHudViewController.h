@@ -28,6 +28,7 @@
 #define kTableSections @"sections"
 #define kTableValues @"values"
 #define kTableUpdateData @"update_data"
+#define kTableUpdateProperty @"update_property"
 
 typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 {
@@ -38,6 +39,7 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 typedef void(^OAGPXTableCellDataOnSwitch)(BOOL toggle);
 typedef BOOL(^OAGPXTableCellDataIsOn)();
 typedef void(^OAGPXTableDataUpdateData)();
+typedef void(^OAGPXTableDataUpdateProperty)(id value);
 
 @class OAGPX, OAGPXDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
 
@@ -58,6 +60,7 @@ typedef void(^OAGPXTableDataUpdateData)();
 @property (nonatomic, readonly) OAGPXTableCellDataIsOn isOn;
 @property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
 @property (nonatomic, readonly) OAGPXTableDataUpdateData onButtonPressed;
+@property (nonatomic, readonly) OAGPXTableDataUpdateProperty updateProperty;
 
 - (void)setData:(NSDictionary *)data;
 

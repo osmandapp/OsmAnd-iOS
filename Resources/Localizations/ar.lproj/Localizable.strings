@@ -2121,7 +2121,7 @@
 "population_num" = "تعداد السكان";
 "product_title_openplacereviews" = "موقع OpenPlaceReviews";
 "suggested_maps_descr" = "هذه الخرائط مطلوبة لاستخدامها مع الأداة الملحقة.";
-"product_desc_ext_openplacereviews" = "أرسل الصور والمراجعات والروابط حول الأماكن العامة مثل المطاعم والفنادق والمتاحف والإحداثيات كبيانات مفتوحة\nhttps://openplacereviews.org/data/.\n\nاقرأ المزيد في https://openplacereviews.org";
+"product_desc_ext_openplacereviews" = "أرسل الصور والمراجعات والروابط حول الأماكن العامة مثل المطاعم والفنادق والمتاحف والإحداثيات كبيانات مفتوحة\nhttps://openplacereviews.org/data/.\nاقرأ المزيد في https://openplacereviews.org";
 "product_desc_openplacereviews" = "أرسل الصور، المراجعات وروابط الأماكن العامة";
 "product_desc_ext_mapillary" = "صور على مستوى الشارع عبر الإنترنت متاحة للجميع. اكتشف الأماكن، تعاون، والتقط صورا للعالم.";
 "product_desc_mapillary" = "صور على مستوى الشارع عبر الإنترنت متاحة للجميع";
@@ -2192,3 +2192,5 @@
 "distance_moving" = "المسافة المصححة";
 "shared_string_time_span" = "الفترة الزمنية";
 "shared_string_start_time" = "وقت البدء";
+"industrial" = "صناعي";
+"education" = "تعليم";

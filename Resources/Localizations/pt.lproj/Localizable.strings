@@ -82,8 +82,8 @@
 "gpx_elev_range" = "Intervalo de elevação";
 "gpx_updown" = "Acima/abaixo";
 "gpx_uphills_total" = "Total de subida";
-"track_recording" = "Gravação do trajeto";
-"track_recording_name" = "A gravar o trajeto";
+"track_recording" = "Gravar viagem";
+"track_recording_name" = "A gravar o percurso";
 "track_stop_rec" = "Parar gravação";
 "track_new_segment" = "Iniciar novo segmento";
 "track_save" = "Guardar o trilho atual";
@@ -91,8 +91,8 @@
 "track_continue_rec_q" = "Quer continuar a gravar?";
 "rec_interval" = "Intervalo de registo";
 "rec_interval_minimum" = "Mínimo";
-"track_start_rec" = "Iniciar gravação do trilho";
-"track_rec_addon_q" = "Por favor, ative a extensão de gravação de trilhos para gravar e guardar os seus trilhos";
+"track_start_rec" = "Iniciar gravação do percurso";
+"track_rec_addon_q" = "Por favor, ative o complemento \"Gravar viagem\" para gravar e guardar os seus percursos";
 "track_interval_remember" = "Lembrar a minha escolha";
 "track_clear" = "Limpar trilho atual";
 "track_clear_q" = "Quer limpar o trilho atual?";
@@ -238,7 +238,7 @@
 "import_cannot" = "O ficheiro especificado não pode ser importado";
 "import_gpx" = "Trilho GPX";
 // Alerts
-"alert_inet_needed" = "É necessário estar ligado à Internet para executar esta ação. Por favor, verifique a conexão.";
+"alert_inet_needed" = "É necessário estar ligado à Internet para executar esta ação. Por favor verifique a sua ligação à Internet.";
 // Context menu
 "ctx_mnu_edit_fav" = "Alterar favorito";
 "ctx_mnu_add_fav" = "Adicionar favorito";
@@ -280,7 +280,7 @@
 "product_desc_parking" = "Permite lembrar facilmente onde o carro foi estacionado e quanto tempo resta, caso o estacionamento seja com tempo limitado";
 "product_title_skimap" = "Mapa de esqui";
 "product_desc_skimap" = "Pistas de esqui para todas as estações de esqui do mundo";
-"product_title_track_recording" = "Gravação de trilho";
+"product_title_track_recording" = "Gravar viagem";
 "product_desc_track_recording" = "Ativa a funcionalidade para gravar e guardar os seus trilhos";
 "product_title_africa" = "África";
 "product_desc_africa" = "Descarregamentos ilimitados de mapas de África";
@@ -399,7 +399,7 @@
 "speak_poi" = "POIs nas redondezas";
 "keep_and_add_destination_point" = "Adicionar destino posterior";
 "animate_routing_route_not_calculated" = "Calcule primeiro a rota";
-"save_global_track_interval_descr" = "Especifique o intervalo de registo para a gravação geral do trilho (ligado através do widget de 'Gravar viagem' no mapa).";
+"save_global_track_interval_descr" = "Especifique o intervalo de registo para a gravação do percurso (ativado através do widget \"Gravar viagem\" no mapa).";
 "select_gpx" = "Selecione GPX …";
 "traffic_warning_pedestrian" = "Passadeira";
 "unit_of_length" = "Unidades de comprimento";
@@ -432,7 +432,7 @@
 "day_night_info" = "Informação dia/noite";
 "daynight_mode_auto" = "Nascer/pôr do sol";
 "auto_follow_location_enabled" = "Mapa automaticamente centrado.";
-"unknown_location" = "Posição atual desconhecida.";
+"unknown_location" = "Posição atual desconhecida";
 "settings_preset" = "Perfil predefinido";
 "settings_preset_descr" = "A vista do mapa e as configurações de navegação são guardadas por perfil. Defina aqui o seu.";
 "coords_format" = "Formato de coordenada";
@@ -656,7 +656,7 @@
 "black" = "Preto";
 "product_title_wikivoyage" = "Guias de viagem";
 "product_desc_wikivoyage" = "O guia de viagem mundial livre, que qualquer pessoa pode editar.";
-"product_desc_ext_wikivoyage" = "Guias para os lugares mais interessantes do mundo dentro do OsmAnd, sem uma conexão com a Internet.";
+"product_desc_ext_wikivoyage" = "Guias para os lugares mais interessantes do mundo dentro do OsmAnd, sem ser preciso estar ligado constantemente à Internet.";
 "description" = "Descrição";
 "res_roads" = "Estradas";
 "res_srtm" = "Curvas de nível";
@@ -675,7 +675,7 @@
 "directions_more_options" = "Direções daqui";
 "nearby_search" = "Pesquisar perto daqui";
 "pedestrian" = "A pé";
-"plugins" = "Extensões";
+"plugins" = "Complementos";
 "restore" = "Restaurar";
 "show_region_on_map_title" = "Mapa descarregado";
 "local_names" = "Nomes no idioma local";
@@ -756,7 +756,7 @@
 "rotate_map_bearing_opt" = "Na direção do movimento";
 "rotate_map_none_opt" = "Sem rotação (norte sempre para cima)";
 "driving_region_descr" = "Selecione a região de condução: EUA, Europa, Reino Unido, Ásia e outros.";
-"logging_interval_navigation_descr" = "Escolha o intervalo de registo para a gravação do trilho durante a navegação";
+"logging_interval_navigation_descr" = "Escolha o intervalo de registo para a gravação do percurso durante a navegação";
 "logging_min_distance" = "Deslocamento mínimo";
 "logging_min_distance_descr" = "Filtro: distância mínima para registar um novo ponto";
 "logging_min_accuracy" = "Precisão mínima";
@@ -783,7 +783,7 @@
 "voice_provider_descr" = "Selecione a orientação por voz para navegação";
 "choose_audio_stream_descr" = "Selecione o altifalante para orientação por voz";
 "osm_live_routing_descr" = "Usar as atualizações do OsmAnd Live para navegação";
-"recording_preferences_descr" = "Preferências de gravação do trilho";
+"recording_preferences_descr" = "Preferências de gravação do percurso";
 "calculate_osmand_route_without_internet" = "Calcular segmento de rota OsmAnd sem Internet";
 "impassable_road_desc" = "Escolha as estradas que quer evitar durante a navegação.";
 "interrupt_music_descr" = "Interromper totalmente qualquer música durante as instruções de voz (não diminuir apenas o volume)";
@@ -903,22 +903,22 @@
 "yellow" = "Amarelo";
 "green" = "Verde";
 "brown" = "Castanho";
-"product_desc_ext_nautical" = "\"Mapa náutico\" é uma extensão para a aplicação OsmAnd. É uma representação gráfica detalhada dos oceanos, mares, rios e zonas costeiras. Os mapas podem conter várias informações como rotas, luzes de navegação, áreas perigosas, áreas onde é permitido ou proibido velejar e atracar, etc.\n\nInstruções de utilização: é altamente recomendável descarregar o mapa náutico base para ver os mapas, independentemente da presença do mapa náutico detalhado. Após ativar a extensão, para mostrar o mapa náutico altere o mapa em Menu > Configurar mapa > Tipo de mapa > Mapa náutico\n\nNota: todos os navegadores profissionais são obrigados a ter cartas náuticas oficiais nas suas embarcações.\n\nO mapa náutico OsmAnd baseiam-se nos dados do projeto OpenSeaMap. Apesar do mapa do OpenSeaMap neste momento não poderem substituir as cartas náuticas oficiais, eles podem ser usados por navegadores amadores para orientação ou planeamento de rota.";
-"product_desc_ext_parking" = "A extensão \"Local de estacionamento\" memoriza onde deixou o seu veículo estacionado. É uma extensão para a aplicação OsmAnd Mapas e Navegação.\nPode escolher um marcador do local de estacionamento no mapa ou pode definir o limite de tempo para lhe ser lembrado (também inclui um marcador no mapa). Para usar a extensão, ative-a no menu Extensões.";
-"product_desc_ext_skimap" = "\"Mapa de esqui\" é uma extensão para a aplicação OsmAnd projetada para navegar em locais de desportos de inverno. Mostra informações sobre pistas de esqui, teleféricos assim como apresenta linhas coloridas dos trilhos que indicam a complexidade de cada um deles. Pode-se obter informações sobre as pistas de esqui propriamente ditas, assim como as infraestruturas nas redondezas.\n\nInstruções de utilização: após ativar a extensão, para mostrar o mapa de esqui altere-o em Menu > Configurar mapa > Tipo de mapa > Winter and Sky.";
-"product_desc_ext_track_recording" = "Grave os seus trilhos e guarde manualmente usando a extensão \"Gravação de trilho\". Exporte o trilho como um ficheiro gpx, partilhe-o ou envie-o para o projeto OpenStreetMap. É uma ferramenta útil para corredores, caminhantes e qualquer pessoa interessada em gravar as suas viagens.";
+"product_desc_ext_nautical" = "\"Mapa náutico\" é um complemento para a aplicação OsmAnd. É uma representação gráfica detalhada dos oceanos, mares, rios e zonas costeiras. Os mapas podem conter várias informações como rotas, luzes de navegação, áreas perigosas, áreas onde é permitido ou proibido velejar e atracar, etc.\n\nInstruções de utilização: é altamente recomendável descarregar o mapa náutico base para ver os mapas, independentemente da presença do mapa náutico detalhado. Após ativar o complemento, para mostrar o mapa náutico altere o mapa em Menu ≡ → Configurar mapa → Tipo de mapa → Mapa náutico\n\nNota: todos os navegadores profissionais são obrigados a ter cartas náuticas oficiais nas suas embarcações.\n\nO mapa náutico OsmAnd baseiam-se nos dados do projeto OpenSeaMap. Apesar do mapa do OpenSeaMap neste momento não poderem substituir as cartas náuticas oficiais, eles podem ser usados por navegadores amadores para orientação ou planeamento de rota.";
+"product_desc_ext_parking" = "O complemento \"Local de estacionamento\" memoriza onde deixou o seu veículo estacionado. É um complemento para a aplicação OsmAnd Mapas e Navegação.\nPode escolher um marcador do local de estacionamento no mapa ou pode definir o limite de tempo para lhe ser lembrado (também inclui um marcador no mapa). Para usar o complemento, ative-a em Menu ≡ → Complementos.";
+"product_desc_ext_skimap" = "\"Mapa de esqui\" é um complemento para a aplicação OsmAnd projetado para navegar em locais de desportos de inverno. Mostra informações sobre pistas de esqui, teleféricos assim como apresenta linhas coloridas dos trilhos que indicam a complexidade de cada um deles. Pode-se obter informações sobre as pistas de esqui propriamente ditas, assim como as infraestruturas nas redondezas.\n\nInstruções de utilização: após ativar o complemento, para mostrar o mapa de esqui altere-o em Menu ≡ → Configurar mapa → Tipo de mapa → Winter and Sky.";
+"product_desc_ext_track_recording" = "Grave os seus percursos e guarde manualmente usando o complemento \"Gravar viagem\". Exporte o percurso como um ficheiro gpx, partilhe-o ou envie-o para o projeto OpenStreetMap. É uma ferramenta útil para corredores, caminhantes e qualquer pessoa interessada em gravar as suas viagens.";
 "product_title_trip_planning" = "Planeamento de viagem";
 "product_desc_trip_planning" = "Planeie a sua viagem, adicione pontos de paragem, meça a distância para o seu destino usando este complemento";
 "product_desc_ext_trip_planning" = "O complemento de planeamento de viagem permite que crie a sua viagem no mapa, guarde, meça a distância entre os pontos ligados com linhas retas, etc. Criado por planeamento de viagem preliminar em vez de rota por endereço.";
 "product_title_osm_editing" = "Editar o OpenStreetMap";
 "product_desc_osm_editing" = "Fazer alterações no OpenStreetMap diretamente do OsmAnd";
-"product_desc_ext_osm_editing" = "A extensão \"Editar o OpenStreetMap\" pode ser usada para contribuir para o OpenStreetMap de várias formas: criar ou alterar POI (pontos de interesse), abrir ou comentar notas do OpenStreetMap e contribuir com ficheiros GPX de percursos gravados. O OpenStreetMap é um projeto de mapeamento de domínio público global impulsionado pela comunidade. Para mais informações, consulte https://osm.org. As contribuições podem ser feitas diretamente no OsmAnd caso configure nas preferências os dados de acesso à sua conta de utilizador no OpenStreetMap em Configurações > selecione um perfil > Editar o OpenStreetMap > Adicionar conta.";
+"product_desc_ext_osm_editing" = "O complemento \"Editar o OpenStreetMap\" pode ser usado para contribuir para o OpenStreetMap de várias formas: criar ou alterar POI (pontos de interesse), abrir ou comentar notas do OpenStreetMap e contribuir com ficheiros GPX de percursos gravados. O OpenStreetMap é um projeto de mapeamento de domínio público global impulsionado pela comunidade. Para mais informações, consulte https://osm.org. As contribuições podem ser feitas diretamente no OsmAnd caso configure nas preferências os dados de acesso à sua conta de utilizador no OpenStreetMap em Configurações > selecione um perfil > Editar o OpenStreetMap > Adicionar conta.";
 "product_title_wiki" = "Wikipédia";
 "product_desc_wiki" = "Dados da Wikipédia";
-"product_desc_ext_wiki" = "Obter informações sobre pontos de interesse da Wikipédia. É o seu guia de bolso offline - basta ativar a extensão Wikipédia e desfrutar dos artigos sobre os elementos nas suas redondezas.";
+"product_desc_ext_wiki" = "Obtenha informações sobre pontos de interesse da Wikipédia. É o seu guia de bolso offline - basta ativar o complemento Wikipédia e desfrutar dos artigos sobre os elementos nas suas redondezas.";
 "product_title_srtm" = "Curvas de nível";
 "product_desc_srtm" = "Mostrar curvas de nível";
-"product_desc_ext_srtm" = "Esta extensão fornece as camadas \"curvas de nível\" e \"sombra de relevo\" por cima dos mapas offline do OsmAnd. As curvas de nível fornecem informações sobre a altura da área enquanto que as sombras de relevo altera a visualização dessas alturas. Veja os nomes dos cumes das montanhas e características específicas do terreno usando esta extensão.\n\nOs dados globais (entre as latitudes 70º norte e 70º sul) são baseados em medições do SRTM (Shuttle Radar Topography Mission) e ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), um instrumento de imagens do satélite \"Terra\", o principal satélite do Sistema de Observação da Terra da NASA. ASTER é um esforço conjunto da NASA, do Ministério Japonês da Economia, Comércio e Indústria (METI) e do Sistema Espacial Japonês (J-spacesystems).";
+"product_desc_ext_srtm" = "Este complemento fornece as camadas \"curvas de nível\" e \"sombra de relevo\" por cima dos mapas offline do OsmAnd. As curvas de nível fornecem informações sobre a altura da área enquanto que as sombras de relevo altera a visualização dessas alturas. Veja os nomes dos cumes das montanhas e características específicas do terreno usando este complemento.\n\nOs dados globais (entre as latitudes 70º norte e 70º sul) são baseados em medições do SRTM (Shuttle Radar Topography Mission) e ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), um instrumento de imagens do satélite \"Terra\", o principal satélite do Sistema de Observação da Terra da NASA. ASTER é um esforço conjunto da NASA, do Ministério Japonês da Economia, Comércio e Indústria (METI) e do Sistema Espacial Japonês (J-spacesystems).";
 "product_title_sea_depth_contours" = "Curvas de profundidades náuticas";
 "product_desc_sea_depth_contours" = "Curvas de nível e balizas marítimas";
 "enter_description" = "Insira a descrição";
@@ -960,21 +960,21 @@
 "plugin_popup_ski_title" = "Ativar estilo Mapa de esqui";
 "plugin_popup_ski_desc" = "Para ativar o estilo <b>Mapa de esqui</b>, vá às <b>Configurações do mapa</b> > <b>Tipo de mapa</b>";
 "plugin_popup_wiki_title" = "Descarregar Wikipédia";
-"plugin_popup_wiki_desc" = "Para usar a extensão Wikipédia, primeiro descarregue os dados da Wikipédia de uma região";
-"plugin_popup_wiki_ask" = "Para descarregar dados da Wikipédia, tem de ativar o a extensão: <b>Wikipédia</b>";
+"plugin_popup_wiki_desc" = "Para usar o complemento Wikipédia, primeiro descarregue os dados da Wikipédia de uma região";
+"plugin_popup_wiki_ask" = "Para descarregar dados da Wikipédia, tem de ativar o complemento: <b>Wikipédia</b>";
 "plugin_popup_srtm_title" = "Descarregar curvas de nível";
 "plugin_popup_srtm_desc" = "Para usar o recurso Curvas de nível, primeiro descarregue as curvas de nível de uma região";
-"plugin_popup_srtm_ask" = "Para descarregar curvas de nível, tem de ativar a extensão: <b>Curvas de nível</b>";
+"plugin_popup_srtm_ask" = "Para descarregar curvas de nível, tem de ativar o complemento: <b>Curvas de nível</b>";
 "plugin_popup_nautical_title" = "Descarregar mapas náuticos";
 "plugin_popup_nautical_desc" = "Descarregue primeiro os mapas náuticos.\nDepois aceda a <b>Configurações de mapa</b> > <b>Tipo de mapa</b> e ative o estilo <b>Náutico</b>";
 "plugin_popup_trip_planning_ask" = "Para começar a planear a viagem, tem de ativar o complemento: <b>Planeamento de viagem</b>";
 "go_to_downloads" = "Ir às descargas";
-"turn_on_plugin" = "Ativar extensão";
+"turn_on_plugin" = "Ativar complemento";
 "all_world_popup_desc" = "Descarregar mapa base mundial para ver nomes de estados, fronteiras e outras informações";
 "restore_all_purchases" = "Recuperar todas as compras";
 "no_statistics" = "Sem estatísticas";
 "no_internet_avail" = "Internet indisponível";
-"no_internet_avail_desc_first" = "Por favor, ligue a conexão de dados para descarregar a lista de mapas";
+"no_internet_avail_desc_first" = "Por favor ative a ligação à Internet para descarregar a lista de mapas";
 "show_region_on_map_desc" = "Mapa de %@ foi descarregado. Vá para o mapa para começar a usá-lo.";
 "show_region_on_map_go" = "Vá para o mapa";
 "sqlitedb_import_title" = "Importar ficheiro de mapa raster";
@@ -986,7 +986,7 @@
 "go_to_map" = "Ir para o mapa";
 "search_my_location" = "Encontrar a minha localização";
 "search_map" = "À procura de mapas…";
-"skip_map_downloading_desc" = "Não tem nenhum mapa offline instalado. Pode escolher um mapa na lista ou descarregar mapas mais tarde através do menu - Gerir ficheiros de mapas";
+"skip_map_downloading_desc" = "Não tem nenhum mapa offline instalado. Pode escolher um mapa na lista ou descarregar mapas mais tarde através do Menu - Mapas e recursos";
 "items_selected" = "%d selecionado";
 "shared_string_password" = "Palavra-passe";
 "poi_category_and_type" = "Categoria e tipo de POI";
@@ -995,7 +995,7 @@
 "shared_string_street_intersection" = "Cruzamento de rua";
 "do_not_show_discount" = "Não mostrar promoções";
 "do_not_send_anonymous_data" = "Não enviar dados anônimos";
-"wiki_buy_description" = "Para ler artigos completos - compre a extensão Wikipédia e descarregue os dados da Wikipédia de %@";
+"wiki_buy_description" = "Para ler artigos completos - compre o complemento Wikipédia e descarregue os dados da Wikipédia de %@";
 "wiki_download_description" = "Para ler artigos completos - descarregar dados da Wikipédia de %@";
 "map_an_region" = "esta região";
 "osm_live_payment_monthly_title" = "Pagar mensalmente";
@@ -1719,7 +1719,7 @@
 "shared_string_add_profile" = "Adicionar perfil";
 "whole_track" = "Trilho inteiro";
 "save_new_track" = "Guardar como novo trilho";
-"plugin_settings_reset" = "Repor configurações originais da extensão";
+"plugin_settings_reset" = "Repor configurações originais do complemento";
 "help_purchases" = "Compras de OsmAnd";
 "avoid_routes_and_road" = "Evitar determinados tipos de rotas e estradas";
 "select_icon" = "Selecionar ícone";
@@ -1789,7 +1789,7 @@
 "offline_raster_maps" = "Mapas raster offline";
 "offline_raster_map" = "Mapa raster offline";
 "online_raster_map" = "Mapa raster online";
-"plugin_popup_osm_editing_ask" = "Ative a extensão \"Editar o OpenStreetMap\" para adicionar elementos ao mapa e notas a outros editores";
+"plugin_popup_osm_editing_ask" = "Ative o complemento \"Editar o OpenStreetMap\" para adicionar elementos ao mapa e notas para outros editores";
 "plugin_popup_osm_editing_title" = "Ativar a edição do OpenStreetMap";
 "default_speed_descr" = "Estima a hora de chegada de categorias de estradas desconhecidas e limita a velocidade para todas as estradas (pode afetar o roteamento)";
 "change_position_descr" = "Mova o mapa para mudar a posição do objeto";
@@ -1835,7 +1835,7 @@
 // Coordinate widget
 "coordinates_widget" = "Widget de coordenadas";
 "osm_editing_access_descr" = "Pode ver todas as suas edições e notas locais em %@. Os pontos já enviados não são mostrados no OsmAnd.";
-"osm_editing_settings_descr" = "As configurações desta extensão são globais e aplicam-se a todos os perfis.";
+"osm_editing_settings_descr" = "As configurações deste complemento são globais e aplicam-se a todos os perfis.";
 "shared_string_loading" = "A carregar…";
 "res_offlineSQL_URL_warning" = "Não suportado para este tipo de mapa";
 "res_zoom_invalid_value" = "Os valores de ampliação devem estar no intervalo 1 - 22";
@@ -1936,7 +1936,7 @@
 "available_map_styles" = "Estilos de mapas disponíveis";
 "sett_deg360" = "360 graus";
 "sett_deg180" = "180 graus";
-"plugin_settings_descr" = "Configurações da extensão para o perfil selecionado.";
+"plugin_settings_descr" = "Configurações do complemento para o perfil selecionado.";
 "global_settings_descr" = "Afetam toda a aplicação.";
 "osmand_settings" = "Configurações do OsmAnd";
 "device_settings" = "Configurações do aparelho";
@@ -1950,7 +1950,7 @@
 "map_settings_line_density" = "Densidade da linha";
 "map_settings_line_width" = "Espessura da linha";
 "map_settings_add_maps_desc" = "Pode adicionar novos mapas com links, ou importando ficheiros SQLite.";
-"map_settings_hide_polygons_desc" = "Esta opção afeta apenas os mapas vetoriais OsmAnd offline";
+"map_settings_hide_polygons_desc" = "Esta opção afeta apenas os mapas vetoriais offline do OsmAnd";
 "map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_show_slider_map" = "Mostrar controlo deslizante no mapa";
 "map_settings_add_maps_hillshade" = "São necessários mapas adicionais para ver as sombras de relevo";
@@ -2068,16 +2068,16 @@
 "visible_categories" = "Categorias visíveis";
 "rearrange_categories" = "Reorganizar categorias";
 "extra_maps" = "Mapas adicionais";
-"custom_plugins" = "Extensões personalizadas";
-"custom_osmand_plugin_name" = "Extensão OsmAnd personalizada";
+"custom_plugins" = "Complementos personalizados";
+"custom_osmand_plugin_name" = "Complemento OsmAnd personalizado";
 "shared_string_disable" = "Desativar";
 
 // Shared Strings
 "shared_string_enable" = "Ativar";
-"new_plugin_added" = "Nova extensão adicionada";
+"new_plugin_added" = "Novo complemento adicionado";
 "search_poi_types_descr" = "Pode combinar tipos de POI de categorias diferentes.";
 "add_custom_category" = "Adicionar categoria personalizada";
-"ios_release_4_0" = "• Novo! Ecrã \"Adicionar favorito\" com opções para selecionar o ícone, cor e forma personalizados\n• Adicionado novo \"widget de Coordenadas\" com coordenadas da localização atual\n• Capacidade de importar extensões personalizadas definidas pelo utilizador\n• Funcionalidade de importação / exportação melhorada significativamente\n• \"Distância por toque\" movida da régua de raio para uma opção separada\n• Corrigido o bloqueio da aplicação CarPlay quando o ecrã do iPhone é desligado\n• O ecrã de extensões foi movido de \"Mapas e recursos\" para o \"Menu principal\"\n• Adicionada tradução finlandesa (locale)\n• Correção da interface no modo paisagem no ecrã \"Planear uma rota\"\n• Adicionado suporte para roteamento personalizado e ficheiros de renderização\n• Corrigido o desempenho da linha de direção dos marcadores\n• Corrigido problema com a importação de ficheiros GPX com extensões em maiúsculas\n• Corrigido problema com o menu \"Seguir trilho\"\n• Corrigida importação de ficheiros OBF\n";
+"ios_release_4_0" = "• Novo! Ecrã \"Adicionar favorito\" com opções para selecionar o ícone, cor e forma personalizados\n• Adicionado novo \"widget de Coordenadas\" com coordenadas da localização atual\n• Capacidade de importar complementos personalizados definidos pelo utilizador\n• Funcionalidade de importação / exportação melhorada significativamente\n• \"Distância por toque\" movida da régua de raio para uma opção separada\n• Corrigido o bloqueio da aplicação CarPlay quando o ecrã do iPhone é desligado\n• O ecrã de complementos foi movido de \"Mapas e recursos\" para \"Menu principal\"\n• Adicionada tradução finlandesa (locale)\n• Correção da interface no modo paisagem no ecrã \"Planear uma rota\"\n• Adicionado suporte para roteamento personalizado e ficheiros de renderização\n• Corrigido o desempenho da linha de direção dos marcadores\n• Corrigido problema com a importação de ficheiros GPX com extensões de ficheiro em maiúsculas\n• Corrigido problema com o menu \"Seguir trilho\"\n• Corrigida importação de ficheiros OBF\n";
 "approximate_file_size" = "Tamanho aproximado do ficheiro: %@";
 "gpx_upload_private_visibility_descr" = "\"Privado\" significa que o rastreamento não aparece em nenhuma listagem pública, mas os pontos de rastreamento dela em ordem não cronológica estão disponíveis através da API pública do GPS sem carimbos de tempo.";
 "gpx_upload_trackable_visibility_descr" = "\"Rastreável\" significa que o rastreamento não aparece em nenhuma listagem pública, mas pontos de rastreamento processados com carimbos de tempo a partir dele (que não podem ser associados diretamente a si) estarão disponíveis através da API pública de GPS.";
@@ -2109,9 +2109,9 @@
 "wiki_menu_download_descr" = "São necessários mapas adicionais para visualizar os POIs da Wikipédia no mapa.";
 "some_articles_may_not_available_in_lang" = "Alguns artigos da Wikipédia podem não estar disponíveis no seu idioma.";
 "population_num" = "População";
-"added_profiles_descr" = "Perfis adicionados pela extensão";
+"added_profiles_descr" = "Perfis adicionados pelo complemento";
 "added_profiles" = "Perfis adicionados";
-"suggested_maps_descr" = "Estes mapas são necessários para a extensão";
+"suggested_maps_descr" = "Estes mapas são necessários para o complemento";
 "suggested_maps" = "Mapas sugeridos";
 "product_desc_ext_openplacereviews" = "Envie fotografias, avaliações e hiperligações sobre lugares públicos como restaurantes, hotéis, museus e pontos de rotas em dados abertos https://openplacereviews.org/data/.\n\nLeia mais em https://openplacereviews.org";
 "product_desc_openplacereviews" = "Envie fotografias, avaliações e hiperligações sobre locais públicos";
@@ -2140,7 +2140,7 @@
 "dialogs_and_notifications" = "Ecrãs e notificações";
 "explore_wikipedia_offline" = "Explore a Wikipédia offline.";
 "contour_lines_hillshades_slope" = "Curvas de nível, sombras de relevo, declives";
-"navigate_point_olc" = "Código de localização aberto (OLC)";
+"navigate_point_olc" = "Open Location Code";
 "navigate_point_easting" = "Este";
 "navigate_point_zone" = "Zona";
 "navigate_point_northing" = "Norte";

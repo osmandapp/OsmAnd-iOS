@@ -50,7 +50,7 @@
 + (NSString *) getFormattedSpeed:(float) metersperseconds;
 + (NSString *) getFormattedAlt:(double) alt;
 + (NSString *) getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
-
++ (NSString *) getFormattedDistanceInterval:(double)interval;
 + (NSString *) getFormattedOsmTagValue:(NSString *)tagValue;
 
 @end

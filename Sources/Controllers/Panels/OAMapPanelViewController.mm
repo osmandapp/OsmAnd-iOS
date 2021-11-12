@@ -741,9 +741,9 @@ typedef enum
         if ([_dashboard isKindOfClass:[OAMapSettingsViewController class]])
             [self updateOverlayUnderlayView];
         
-        OADashboardViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
-        if (lastMapSettingsCtrl)
-            [lastMapSettingsCtrl hide:YES animated:YES duration:duration];
+        NSObject* lastMapSettingsCtrl = [self.childViewControllers lastObject];
+        if (lastMapSettingsCtrl && [lastMapSettingsCtrl isKindOfClass:OADashboardViewController.class])
+            [((OADashboardViewController *)lastMapSettingsCtrl) hide:YES animated:YES duration:duration];
         
         [self destroyShadowButton];
         
@@ -1270,11 +1270,15 @@ typedef enum
 - (void) showContextMenu:(OATargetPoint *)targetPoint
 {
     if (targetPoint.type == OATargetGPX)
+    {
         return [self openTargetViewWithGPX:targetPoint.targetObj
                               trackHudMode:EOATrackMenuHudMode
                                      state:[OATrackMenuViewControllerState withPinLocation:targetPoint.location]];
+    }
     else
+    {
         return [self showContextMenu:targetPoint saveState:YES];
+    }
 }
 
 - (void) updateContextMenu:(OATargetPoint *)targetPoint
@@ -2603,15 +2607,17 @@ typedef enum
     switch (trackHudMode)
     {
         case EOATrackAppearanceHudMode:
+        {
             trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:targetPoint.targetObj
                                                                                                state:state];
             break;
-
-        case EOATrackMenuHudMode:
+        }
         default:
+        {
             trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj
                                                                                      state:state];
             break;
+        }
     }
 
     [self showScrollableHudViewController:trackMenuHudViewController];
@@ -2981,7 +2987,7 @@ typedef enum
     }];
 }
 
-- (void)displayGpxOnMap:(OAGPX *)item
+- (void) displayGpxOnMap:(OAGPX *)item
 {
     if (item.bounds.topLeft.latitude == DBL_MAX)
         return;

@@ -1697,6 +1697,9 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (NSAttributedString *) getColoredString:(NSString *)wholeString highlightedString:(NSString *)hs highlightColor:(UIColor *)highlightColor fontSize:(CGFloat)fontSize centered:(BOOL)centered
 {
+    if (!wholeString || wholeString.length == 0 || !hs || hs.length == 0)
+        return nil;
+    
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:wholeString
                                                                                                     attributes:@{NSParagraphStyleAttributeName : style}];

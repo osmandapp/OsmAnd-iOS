@@ -926,7 +926,8 @@
 
 - (NSString *)getDirName
 {
-    return [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString;
+    NSString *dirName = [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString;
+    return dirName.length > 0 ? dirName : OALocalizedString(@"tracks");
 }
 
 - (NSString *)getGpxFileSize
@@ -939,11 +940,12 @@
 
 - (NSString *)getCreatedOn
 {
-    return self.doc.metadata.time > 0 ? [NSDateFormatter localizedStringFromDate:
-                    [NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
-                                                                       dateStyle:NSDateFormatterMediumStyle
-                                                                       timeStyle:NSDateFormatterNoStyle]
-            : @"";
+    if (self.doc.metadata.time <= [[NSDate date] timeIntervalSince1970])
+        return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
+                                              dateStyle:NSDateFormatterMediumStyle
+                                              timeStyle:NSDateFormatterNoStyle];
+
+    return @"";
 }
 
 - (NSString *)generateDescription
@@ -1222,7 +1224,7 @@
     [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES];
     if (_selectedTab == EOATrackMenuHudActionsTab)
     {
-        OAGPXTableCellData *cellData = [self getCellData:[NSIndexPath indexPathForRow:kActionsSection inSection:kActionMoveCell]];
+        OAGPXTableCellData *cellData = [self getCellData:[NSIndexPath indexPathForRow:kActionMoveCell inSection:kActionsSection]];
         if (cellData.updateData)
             cellData.updateData();
 
@@ -1461,6 +1463,8 @@
         }
         if (cell)
         {
+            cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
+                    ? cellData.values[@"font_value"] : [UIFont systemFontOfSize:17];
             cell.titleView.text = cellData.title;
             cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
@@ -1735,6 +1739,7 @@
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]]
             || [cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]]
             || [cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
         return 48.;
     else if ([cellData.type isEqualToString:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]])

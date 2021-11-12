@@ -308,7 +308,7 @@
 "latitude" = "Latitud";
 "longitude" = "Longitud";
 "add_as" = "Añadir como";
-"shared_string_buy_for" = "para";
+"shared_string_buy_for" = "por";
 "product_desc_parking" = "Memorice fácilmente cuándo se estacionó el automóvil y cuánto tiempo restan, si el aparcamiento es de tiempo limitado";
 "track_save_short_q" = "La traza es muy corta, ¿quieres guardarla?";
 "shared_string_and" = "y";

@@ -77,7 +77,7 @@
                             }
                     }]
             ],
-            kSectionHeaderHeight: @20.
+            kSectionHeaderHeight: @19.
     }]];
     [tableSections addObject:[OAGPXTableSectionData withData:@{
             kSectionCells: @[
@@ -92,7 +92,7 @@
                             }
                     }]
             ],
-            kSectionHeaderHeight: @20.
+            kSectionHeaderHeight: @19.
     }]];
     [tableSections addObject:[OAGPXTableSectionData withData:@{
             kSectionCells: @[
@@ -107,7 +107,7 @@
                             }
                     }]
             ],
-            kSectionHeaderHeight: @20.
+            kSectionHeaderHeight: @19.
     }]];
     [tableSections addObject:[OAGPXTableSectionData withData:@{
             kSectionCells: @[
@@ -132,7 +132,7 @@
                             }
                     }]
             ],
-            kSectionHeaderHeight: @20.
+            kSectionHeaderHeight: @19.
     }]];
 
     NSMutableArray<OAGPXTableCellData *> *changeCells = [NSMutableArray array];
@@ -161,7 +161,7 @@
     }];
     [moveCellData setData:@{
             kTableUpdateData: ^() {
-                [moveCellData setData:@{kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getDirName] : @"" }];
+                [moveCellData setData:@{ kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getDirName] : @"" }];
             }
     }];
     [changeCells addObject:moveCellData];
@@ -175,7 +175,7 @@
                         cellData.updateData();
                 }
             },
-            kSectionHeaderHeight: @20.
+            kSectionHeaderHeight: @19.
     }];
     [tableSections addObject:changeSection];
 
@@ -184,6 +184,7 @@
                     [OAGPXTableCellData withData:@{
                             kCellKey: @"delete",
                             kCellType: [OATitleIconRoundCell getCellIdentifier],
+                            kTableValues: @{ @"font_value": [UIFont boldSystemFontOfSize:17] },
                             kCellRightIconName: @"ic_custom_remove_outlined",
                             kCellTitle: OALocalizedString(@"shared_string_delete"),
                             kCellTintColor: @color_primary_red,
@@ -193,7 +194,7 @@
                             }
                     }]
             ],
-            kSectionHeaderHeight: @20.
+            kSectionHeaderHeight: @19.
     }]];
 
     self.tableData = [OAGPXTableData withData: @{ kTableSections: tableSections }];

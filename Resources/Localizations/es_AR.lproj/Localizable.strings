@@ -428,7 +428,7 @@
 "hist_select_remove" = "Elija elementos del historial a quitar";
 "hist_remove_q" = "¿Quitar los elementos del historial?";
 "gpx_edit_mode" = "Modo edición";
-"go_to_map" = "Ir al mapa";
+"go_to_map" = "Mostrar mapa";
 "edit_waypoint_short" = "Editar punto de ruta";
 "product_desc_trip_planning" = "Planifique su viaje, añada puntos de ruta y mida la distancia a su destino, usando este complemento";
 "product_desc_ext_trip_planning" = "El complemento de Planificación de viaje, le permite crear y guardar su viaje en el mapa, medir la distancia entre puntos conectados con líneas rectas, etc. Creado para una planificación de viaje preliminar, en lugar de construcción de la ruta completa.";
@@ -2210,3 +2210,11 @@
 "delete_group_confirm_short" = "¿Borrar grupo?";
 "delete_waypoints" = "Borrar puntos de referencia";
 "delete_group_confirm" = "¿Borrar el grupo «%@»?";
+"shared_string_start_time" = "Hora de inicio";
+"shared_string_time_span" = "Duración";
+"shared_string_end_time" = "Hora de fin";
+"shared_string_time_moving" = "Tiempo moviéndose";
+"distance_moving" = "Distancia recorrida";
+"parked_at" = "Estacionado a las";
+"education" = "Educación";
+"industrial" = "Industrial";

@@ -666,7 +666,7 @@
 
 - (void) deleteFavoriteItem:(OAFavoriteItem *)favoriteItem
 {
-    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[favoriteItem]];
+    [OAFavoritesHelper deleteNewFavoriteItem:favoriteItem];
 }
 
 -(void) clearButtonPressed:(UIButton *)sender

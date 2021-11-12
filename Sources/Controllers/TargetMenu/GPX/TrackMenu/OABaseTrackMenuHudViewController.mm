@@ -239,7 +239,7 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         if (![self isLandscape])
             [self goExpanded];
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) { }];
+    } completion:nil];
 }
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -293,8 +293,12 @@
 
 - (void)adjustMapViewPort
 {
-    _mapViewController.mapView.viewportXScale = [self isLandscape] ? VIEWPORT_SHIFTED_SCALE : VIEWPORT_NON_SHIFTED_SCALE;
-    _mapViewController.mapView.viewportYScale = [self getViewHeight] / DeviceScreenHeight;
+    if ([self isLandscape] && _mapViewController.mapView.viewportXScale != VIEWPORT_SHIFTED_SCALE)
+        _mapViewController.mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
+    else if (![self isLandscape] && _mapViewController.mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
+        _mapViewController.mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+    if (_mapViewController.mapView.viewportYScale != [self getViewHeight] / DeviceScreenHeight)
+        _mapViewController.mapView.viewportYScale = [self getViewHeight] / DeviceScreenHeight;
 }
 
 - (void)restoreMapViewPort

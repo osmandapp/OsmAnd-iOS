@@ -17,6 +17,7 @@
 #import "OAGpxWptItem.h"
 #import "OAGPXDatabase.h"
 #import "OASavingTrackHelper.h"
+#import "OAGPXMutableDocument.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -41,13 +42,19 @@
 
 - (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs
 {
-    if (!gpxDocs.empty() && !self.gpxDocs.empty() && gpxDocs.begin().value().get() == self.gpxDocs.begin().value().get())
+    OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+    const auto& doc = [helper.currentTrack getDocument];
+    if (doc)
     {
-        [self updateGpxTrack:gpxDocs];
-    }
-    else
-    {
-        [super refreshGpxTracks:gpxDocs];
+        const auto path = QString::fromNSString(helper.currentTrack.path);
+        if (gpxDocs.contains(path) && self.gpxDocs.contains(path))
+        {
+            [self updateGpxTrack:gpxDocs];
+        }
+        else
+        {
+            [super refreshGpxTracks:gpxDocs];
+        }
     }
 }
 
@@ -55,6 +62,7 @@
 {
     if (!gpxDocs.empty())
     {
+        [self.mapView removeKeyedSymbolsProvider:self.linesCollection];
         QList<QVector<OsmAnd::PointI>> pointsList;
         
         const auto& doc = gpxDocs.begin().value();
@@ -85,7 +93,7 @@
         {
             if (points.size() > 1)
             {
-                if (lineIndex == lines.size())
+                if (lineIndex == self.linesCollection->getLines().size())
                 {
                     OsmAnd::VectorLineBuilder builder;
                     builder.setBaseOrder(baseOrder--)
@@ -109,6 +117,7 @@
                 lineIndex++;
             }
         }
+        [self.mapView addKeyedSymbolsProvider:self.linesCollection];
     }
 }
 

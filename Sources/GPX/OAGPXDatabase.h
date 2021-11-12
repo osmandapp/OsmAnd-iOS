@@ -11,7 +11,7 @@
 #import "OACommonTypes.h"
 
 #define kDefaultTrackColor 0xFFFF0000
-#define kDefaultWidthMultiplier 17.5
+#define kDefaultWidthMultiplier 7
 
 typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
     EOAGpxSplitTypeNone = -1,

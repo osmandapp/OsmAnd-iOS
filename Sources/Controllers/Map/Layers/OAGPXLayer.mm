@@ -94,7 +94,7 @@
         });
     }
 
-    self.appearanceCollection = [[OAGPXAppearanceCollection alloc] initWithMapViewController:self.mapViewController];
+    self.appearanceCollection = [[OAGPXAppearanceCollection alloc] init];
 
     return YES;
 }

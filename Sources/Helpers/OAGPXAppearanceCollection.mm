@@ -7,7 +7,7 @@
 //
 
 #import "OAGPXAppearanceCollection.h"
-#import "OAMapViewController.h"
+#import "OARootViewController.h"
 #import "Localization.h"
 #import "OAMapStyleSettings.h"
 #import "OAOsmAndFormatter.h"
@@ -189,14 +189,19 @@
     NSArray<OAGPXTrackSplitInterval *> *_availableSplitInterval;
 }
 
-- (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController
+- (instancetype)init
 {
     self = [super init];
     if (self)
     {
-        _mapViewController = mapViewController;
+        [self commonInit];
     }
     return self;
+}
+
+- (void)commonInit
+{
+    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
 }
 
 - (NSArray<OAGPXTrackColor *> *)getAvailableColors

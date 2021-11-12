@@ -143,7 +143,7 @@
     _oldSplitType = self.gpx.splitType;
     _oldSplitInterval = self.gpx.splitInterval;
 
-    _appearanceCollection = [[OAGPXAppearanceCollection alloc] initWithMapViewController:self.mapViewController];
+    _appearanceCollection = [[OAGPXAppearanceCollection alloc] init];
     _selectedColor = [_appearanceCollection getColorForValue:self.gpx.color];
     _selectedWidth = [_appearanceCollection getWidthForValue:self.gpx.width];
     if (!_selectedWidth)

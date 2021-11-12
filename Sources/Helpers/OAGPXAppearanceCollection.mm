@@ -9,8 +9,8 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OARootViewController.h"
 #import "Localization.h"
-#import "OAGPXDatabase.h"
 #import "OAMapStyleSettings.h"
+#import "OAOsmAndFormatter.h"
 
 @implementation OAGPXTrackAppearance
 
@@ -79,12 +79,114 @@
 
 @end
 
+@implementation OAGPXTrackSplitInterval
+
+- (instancetype)initWithType:(EOAGpxSplitType)type
+{
+    self = [super init];
+    if (self)
+    {
+        NSString *key = [OAGPXDatabase splitTypeNameByValue:type];
+        self.key = key;
+        self.title = OALocalizedString([NSString stringWithFormat:@"shared_string_%@", type == EOAGpxSplitTypeNone ? @"none" : key]);
+        self.type = type;
+
+        switch (type)
+        {
+            case EOAGpxSplitTypeTime:
+            {
+                [self generateTimeOptionSplit];
+                break;
+            }
+            case EOAGpxSplitTypeDistance:
+            {
+                [self generateDistanceOptionSplit];
+                break;
+            }
+            default:
+            {
+                self.titles = [NSArray array];
+                self.values = [NSArray array];
+                break;
+            }
+        }
+
+        self.customValue = type != EOAGpxSplitTypeNone ? _titles.firstObject : @"0";
+    }
+    return self;
+}
+
++ (instancetype)getDefault
+{
+    return [[OAGPXTrackSplitInterval alloc] initWithType:EOAGpxSplitTypeNone];
+}
+
+- (BOOL)isCustom
+{
+    return self.type != EOAGpxSplitTypeNone;
+}
+
+- (void)generateDistanceOptionSplit
+{
+    NSArray<NSNumber *> *customValues = @[
+            @30, // 50 feet, 20 yards, 20 m
+            @60, // 100 feet, 50 yards, 50 m
+            @150, // 200 feet, 100 yards, 100 m
+            @300, // 500 feet, 200 yards, 200 m
+            @600, // 1000 feet, 500 yards, 500 m
+            @1500, // 2000 feet, 1000 yards, 1 km
+            @3000, // 1 mi, 2 km
+            @6000, // 2 mi, 5 km
+            @15000 // 5 mi, 10 k
+            ];
+
+    NSMutableArray<NSString *> *titles = [NSMutableArray array];
+    NSMutableArray<NSNumber *> *values = [NSMutableArray array];
+
+    for (NSNumber *customValue in customValues)
+    {
+        [titles addObject:[OAOsmAndFormatter getFormattedDistanceInterval:customValue.intValue]];
+        [values addObject:@([OAOsmAndFormatter calculateRoundedDist:customValue.intValue])];
+    }
+    self.titles = titles;
+    self.values = values;
+}
+
+- (void)generateTimeOptionSplit
+{
+    NSArray<NSNumber *> *customValues = @[
+            @15,
+            @30,
+            @60,
+            @120,
+            @150,
+            @300,
+            @600,
+            @900,
+            @1800
+            ];
+
+    NSMutableArray<NSString *> *titles = [NSMutableArray array];
+    NSMutableArray<NSNumber *> *values = [NSMutableArray array];
+
+    for (NSNumber *customValue in customValues)
+    {
+        [titles addObject:[OAOsmAndFormatter getFormattedTimeInterval:customValue.intValue shortFormat:YES]];
+        [values addObject:customValue];
+    }
+    self.titles = titles;
+    self.values = values;
+}
+
+@end
+
 @implementation OAGPXAppearanceCollection
 {
     OAMapViewController *_mapViewController;
 
     NSArray<OAGPXTrackColor *> *_availableColors;
     NSArray<OAGPXTrackWidth *> *_availableWidth;
+    NSArray<OAGPXTrackSplitInterval *> *_availableSplitInterval;
 }
 
 - (instancetype)init
@@ -217,6 +319,34 @@
     }
 
     return nil;
+}
+
+- (NSArray<OAGPXTrackSplitInterval *> *)getAvailableSplitIntervals
+{
+    if (_availableSplitInterval && [_availableSplitInterval count] > 0)
+        return _availableSplitInterval;
+
+    _availableSplitInterval = @[
+            [OAGPXTrackSplitInterval getDefault],
+            [[OAGPXTrackSplitInterval alloc] initWithType:EOAGpxSplitTypeTime],
+            [[OAGPXTrackSplitInterval alloc] initWithType:EOAGpxSplitTypeDistance]
+    ];
+
+    return _availableSplitInterval;
+}
+
+- (OAGPXTrackSplitInterval *)getSplitIntervalForType:(EOAGpxSplitType)type
+{
+    if (!_availableSplitInterval || [_availableSplitInterval count] == 0)
+        [self getAvailableSplitIntervals];
+
+    for (OAGPXTrackSplitInterval *splitInterval in _availableSplitInterval)
+    {
+        if (splitInterval.type == type)
+            return splitInterval;
+    }
+
+    return [OAGPXTrackSplitInterval getDefault];
 }
 
 @end

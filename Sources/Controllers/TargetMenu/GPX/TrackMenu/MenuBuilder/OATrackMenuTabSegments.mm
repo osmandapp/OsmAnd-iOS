@@ -150,14 +150,17 @@
         [tabsCellData setData:@{
                 kTableUpdateData: ^() {
                     NSInteger selectedIndex = [tabsCellData.values[@"selected_index_int_value"] integerValue];
-                    mode = selectedIndex == 0 ? EOARouteStatisticsModeAltitudeSpeed
-                            : selectedIndex == 1 ? EOARouteStatisticsModeAltitudeSlope : EOARouteStatisticsModeSpeed;
+                    if (selectedIndex != NSNotFound)
+                    {
+                        mode = selectedIndex == 0 ? EOARouteStatisticsModeAltitudeSpeed
+                                : selectedIndex == 1 ? EOARouteStatisticsModeAltitudeSlope : EOARouteStatisticsModeSpeed;
 
-                    if (chartCellData.updateData)
-                        chartCellData.updateData();
+                        if (chartCellData.updateData)
+                            chartCellData.updateData();
 
-                    if (statisticsCellData.updateData)
-                        statisticsCellData.updateData();
+                        if (statisticsCellData.updateData)
+                            statisticsCellData.updateData();
+                    }
                 }
         }];
 

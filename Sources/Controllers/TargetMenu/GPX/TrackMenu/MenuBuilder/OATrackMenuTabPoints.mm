@@ -362,29 +362,32 @@
                     if ([dataToUpdate.allKeys containsObject:@"delete_group_name_index"])
                     {
                         NSInteger deleteSectionI = [dataToUpdate[@"delete_group_name_index"] integerValue];
-                        NSMutableArray *cells = [tableSections[deleteSectionI].cells mutableCopy];
-                        NSArray<NSNumber *> *waypointsIdxToDelete = dataToUpdate[@"delete_waypoints_idx"];
-                        if (cells.count - 1 == waypointsIdxToDelete.count)
+                        if (deleteSectionI != NSNotFound)
                         {
-                            [tableSections removeObjectAtIndex:deleteSectionI];
-                        }
-                        else
-                        {
-                            NSMutableArray *cellsToDelete = [NSMutableArray array];
-                            for (NSNumber *waypointIdToDelete in waypointsIdxToDelete)
+                            NSMutableArray *cells = [tableSections[deleteSectionI].cells mutableCopy];
+                            NSArray<NSNumber *> *waypointsIdxToDelete = dataToUpdate[@"delete_waypoints_idx"];
+                            if (cells.count - 1 == waypointsIdxToDelete.count)
                             {
-                                [cellsToDelete addObject:[cells objectAtIndex:waypointIdToDelete.intValue + 1]];
+                                [tableSections removeObjectAtIndex:deleteSectionI];
                             }
-                            [cells removeObjectsInArray:cellsToDelete];
-                            [tableSections[deleteSectionI] setData:@{ kSectionCells: cells }];
-                        }
-                        [self.tableData setData:@{ kTableSections: tableSections }];
+                            else
+                            {
+                                NSMutableArray *cellsToDelete = [NSMutableArray array];
+                                for (NSNumber *waypointIdToDelete in waypointsIdxToDelete)
+                                {
+                                    [cellsToDelete addObject:[cells objectAtIndex:waypointIdToDelete.intValue + 1]];
+                                }
+                                [cells removeObjectsInArray:cellsToDelete];
+                                [tableSections[deleteSectionI] setData:@{ kSectionCells: cells }];
+                            }
+                            [self.tableData setData:@{ kTableSections: tableSections }];
 
-                        for (OAGPXTableSectionData *section in tableSections)
-                        {
-                            OAGPXTableCellData *groupCell = section.cells.firstObject;
-                            if (groupCell.updateProperty)
-                                groupCell.updateProperty(@{ @"regenerate_bool_value": @YES });
+                            for (OAGPXTableSectionData *section in tableSections)
+                            {
+                                OAGPXTableCellData *groupCell = section.cells.firstObject;
+                                if (groupCell.updateProperty)
+                                    groupCell.updateProperty(@{ @"regenerate_bool_value": @YES });
+                            }
                         }
                     }
                     else
@@ -394,36 +397,39 @@
                         NSInteger oldI = [dataToUpdate[@"old_group_name_index"] integerValue];
                         NSInteger existI = [dataToUpdate[@"exist_group_name_index"] integerValue];
                         NSInteger newI = [dataToUpdate[@"new_group_name_index"] integerValue];
-                        if (hasExist && existI > -1 && hasNew)
+                        if (oldI != NSNotFound && newI != NSNotFound)
                         {
-                            NSMutableArray *cells = [tableSections[existI == newI + 1 ? existI : newI].cells mutableCopy];
-                            NSMutableArray *extraCells = [tableSections[existI == newI + 1 ? oldI : newI == existI
-                                    ? oldI : existI].cells mutableCopy];
-                            [extraCells removeObjectAtIndex:0];
-                            [cells addObjectsFromArray:extraCells];
-                            [tableSections[existI == newI + 1 ? existI : newI] setData:@{ kSectionCells: cells }];
-                            [tableSections removeObjectAtIndex:existI == newI + 1 ? oldI : newI == existI ? oldI : existI];
-                            [self.tableData setData:@{ kTableSections: tableSections }];
-                        }
-                        else if ((!hasExist || existI == -1) && hasNew)
-                        {
-                            OAGPXTableSectionData *groupSection = tableSections[oldI];
-                            [tableSections removeObjectAtIndex:oldI];
-                            [tableSections insertObject:groupSection atIndex:newI];
-                            [self.tableData setData:@{ kTableSections: tableSections }];
-                        }
+                            if (hasExist && existI != NSNotFound && hasNew)
+                            {
+                                NSMutableArray *cells = [tableSections[existI == newI + 1 ? existI : newI].cells mutableCopy];
+                                NSMutableArray *extraCells = [tableSections[existI == newI + 1 ? oldI : newI == existI
+                                        ? oldI : existI].cells mutableCopy];
+                                [extraCells removeObjectAtIndex:0];
+                                [cells addObjectsFromArray:extraCells];
+                                [tableSections[existI == newI + 1 ? existI : newI] setData:@{ kSectionCells: cells }];
+                                [tableSections removeObjectAtIndex:existI == newI + 1 ? oldI : newI == existI ? oldI : existI];
+                                [self.tableData setData:@{ kTableSections: tableSections }];
+                            }
+                            else if ((!hasExist || existI != NSNotFound) && hasNew)
+                            {
+                                OAGPXTableSectionData *groupSection = tableSections[oldI];
+                                [tableSections removeObjectAtIndex:oldI];
+                                [tableSections insertObject:groupSection atIndex:newI];
+                                [self.tableData setData:@{ kTableSections: tableSections }];
+                            }
 
-                        if (hasNew)
-                        {
-                            OAGPXTableSectionData *groupSection = tableSections[existI == newI ? existI : newI];
-                            if (groupSection.updateProperty)
-                                groupSection.updateProperty(value);
-                        }
-                        else
-                        {
-                            OAGPXTableSectionData *groupSection = tableSections[oldI];
-                            if (groupSection.updateProperty)
-                                groupSection.updateProperty(value);
+                            if (hasNew && existI != NSNotFound)
+                            {
+                                OAGPXTableSectionData *groupSection = tableSections[existI == newI ? existI : newI];
+                                if (groupSection.updateProperty)
+                                    groupSection.updateProperty(value);
+                            }
+                            else
+                            {
+                                OAGPXTableSectionData *groupSection = tableSections[oldI];
+                                if (groupSection.updateProperty)
+                                    groupSection.updateProperty(value);
+                            }
                         }
                     }
                 }

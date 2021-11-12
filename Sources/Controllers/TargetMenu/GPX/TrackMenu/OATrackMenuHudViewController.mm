@@ -794,7 +794,7 @@
     {
         [newWaypointGroups removeObjectForKey:groupName];
         NSInteger existI = [dataToUpdate[@"exist_group_name_index"] integerValue];
-        if (existI != -1)
+        if (existI != NSNotFound)
         {
             NSArray<OAGpxWptItem *> *existWaypoints = newWaypointGroups[newGroupName];
             for (OAGpxWptItem *existWaypoint in existWaypoints)

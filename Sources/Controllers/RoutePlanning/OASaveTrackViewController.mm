@@ -39,6 +39,7 @@
     BOOL _showSimplifiedButton;
     BOOL _rightButtonEnabled;
     
+    BOOL _duplicate;
     BOOL _simplifiedTrack;
     BOOL _showOnMap;
     
@@ -47,7 +48,11 @@
     OACollectionViewCellState *_scrollCellsState;
 }
 
-- (instancetype) initWithFileName:(NSString *)fileName filePath:(NSString *)filePath showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
+- (instancetype) initWithFileName:(NSString *)fileName
+                         filePath:(NSString *)filePath
+                        showOnMap:(BOOL)showOnMap
+                  simplifiedTrack:(BOOL)simplifiedTrack
+                        duplicate:(BOOL)duplicate
 {
     self = [super init];
     if (self)
@@ -58,7 +63,8 @@
         _sourceFileName = fileName;
         _showSimplifiedButton = simplifiedTrack;
         _showOnMap = showOnMap;
-        
+        _duplicate = duplicate;
+
         _rightButtonEnabled = YES;
         _simplifiedTrack = NO;
         
@@ -117,6 +123,25 @@
     _selectedFolderName = [self getDisplayingFolderName:_filePath];
     _selectedFolderIndex = (int)[_allFolders indexOfObject:_selectedFolderName];
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
+
+    if (_duplicate)
+    {
+        NSRange range = [_fileName rangeOfString:@"_copy\\s*\\d*$" options:NSRegularExpressionSearch];
+        if (range.location == NSNotFound)
+            _fileName = [_fileName stringByAppendingString:@"_copy"];
+
+        NSString *path = [[OsmAndApp instance].gpxPath
+                stringByAppendingPathComponent:[_filePath stringByDeletingLastPathComponent]];
+        while ([[NSFileManager defaultManager] fileExistsAtPath:[[path stringByAppendingPathComponent:_fileName]
+                stringByAppendingPathExtension:@"gpx"]])
+        {
+            if ([_fileName hasSuffix:@"_copy"])
+                _fileName = [_fileName stringByAppendingString:@" 1"];
+
+            _fileName = [OAUtilities createNewFileName:_fileName];
+        }
+    }
+
     [self generateData];
 }
 

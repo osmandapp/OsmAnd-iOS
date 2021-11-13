@@ -297,7 +297,17 @@
 
     NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : newFolderName;
     NSString *newFolderPath = [_app.gpxPath stringByAppendingPathComponent:newFolder];
-    NSString *newName = newFileName ? [OAUtilities createNewFileName:newFileName] : self.gpx.gpxFileName;
+    NSString *newName = self.gpx.gpxFileName;
+
+    if (newFileName)
+    {
+        if ([[NSFileManager defaultManager]
+                fileExistsAtPath:[newFolderPath stringByAppendingPathComponent:newFileName]])
+            newName = [OAUtilities createNewFileName:newFileName];
+        else
+            newName = newFileName;
+    }
+
     NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
     NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
 
@@ -1017,10 +1027,11 @@
 - (void)openDuplicateTrack
 {
     OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc]
-            initWithFileName:[self.gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension stringByAppendingString:@"_copy"]
+            initWithFileName:self.gpx.gpxFileName.stringByDeletingPathExtension
                     filePath:self.gpx.gpxFilePath
                    showOnMap:YES
-             simplifiedTrack:NO];
+             simplifiedTrack:NO
+                   duplicate:YES];
 
     saveTrackViewController.delegate = self;
     [self presentViewController:saveTrackViewController animated:YES completion:nil];
@@ -1089,7 +1100,7 @@
                                             }]];
 
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.text = [self.gpx.gpxTitle lastPathComponent];
+        textField.text = self.gpx.gpxTitle.lastPathComponent.stringByDeletingPathExtension;
     }];
 
     [self presentViewController:alert animated:YES completion:nil];
@@ -1141,7 +1152,8 @@
                 initWithFileName:self.gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension
                         filePath:self.gpx.gpxFilePath
                        showOnMap:YES
-                 simplifiedTrack:YES];
+                 simplifiedTrack:YES
+                       duplicate:NO];
 
         saveTrackViewController.delegate = self;
         [self presentViewController:saveTrackViewController animated:YES completion:nil];

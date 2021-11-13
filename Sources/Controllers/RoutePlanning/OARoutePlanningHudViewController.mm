@@ -1172,7 +1172,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     if (_editingContext.getPointsCount > 0)
     {
-        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithFileName:[self getSuggestedFileName] filePath:[self getSuggestedFilePath] showOnMap:YES simplifiedTrack:YES];
+        OASaveTrackViewController *saveTrackViewController =
+                [[OASaveTrackViewController alloc] initWithFileName:[self getSuggestedFileName]
+                                                           filePath:[self getSuggestedFilePath]
+                                                          showOnMap:YES
+                                                    simplifiedTrack:YES
+                                                          duplicate:NO];
         saveTrackViewController.delegate = self;
         [self presentViewController:saveTrackViewController animated:YES completion:nil];
     }

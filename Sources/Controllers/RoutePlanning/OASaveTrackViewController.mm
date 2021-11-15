@@ -260,7 +260,12 @@
             savingPath = [_selectedFolderName stringByAppendingPathComponent:_fileName];
         
         if (self.delegate)
-            [self.delegate onSaveAsNewTrack:savingPath showOnMap:_showOnMap simplifiedTrack:_simplifiedTrack];
+        {
+            [self.delegate onSaveAsNewTrack:savingPath
+                                  showOnMap:_showOnMap
+                            simplifiedTrack:_simplifiedTrack
+                                  openTrack:YES];
+        }
     }
 }
 

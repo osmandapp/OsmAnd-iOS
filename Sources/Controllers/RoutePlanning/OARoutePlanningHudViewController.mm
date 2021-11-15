@@ -1835,7 +1835,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 #pragma mark - OASaveTrackViewControllerDelegate
 
-- (void)onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
+- (void)onSaveAsNewTrack:(NSString *)fileName
+               showOnMap:(BOOL)showOnMap
+         simplifiedTrack:(BOOL)simplifiedTrack
+               openTrack:(BOOL)openTrack
 {
     [self saveNewGpx:@"" fileName:fileName showOnMap:showOnMap simplifiedTrack:simplifiedTrack finalSaveAction:SHOW_IS_SAVED_FRAGMENT];
 }

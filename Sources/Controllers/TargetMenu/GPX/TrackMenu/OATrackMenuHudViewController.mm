@@ -291,6 +291,7 @@
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
            renameToNewName:(NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
+                 openTrack:(BOOL)openTrack
 {
     NSString *oldPath = self.gpx.gpxFilePath;
     NSString *sourcePath = [_app.gpxPath stringByAppendingPathComponent:oldPath];
@@ -333,6 +334,18 @@
 
         if ([self.settings.mapSettingVisibleGpx.get containsObject:oldPath])
             [self.settings showGpx:@[newStoringPath]];
+    }
+    if (openTrack)
+    {
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:
+                [newFolderName stringByAppendingPathComponent:newFileName]];
+        if (gpx)
+        {
+            [self hide:YES duration:.2 onComplete:^{
+                [self.mapViewController hideContextPinMarker];
+                [self.mapPanelViewController openTargetViewWithGPX:gpx];
+            }];
+        }
     }
 }
 
@@ -1164,7 +1177,7 @@
 
 - (void)onFolderSelected:(NSString *)selectedFolderName
 {
-    [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES];
+    [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES openTrack:NO];
     if (_selectedTab == EOATrackMenuHudActionsTab)
     {
         OAGPXTableCellData *cellData = [self getCellData:[NSIndexPath indexPathForRow:kActionMoveCell inSection:kActionsSection]];
@@ -1196,10 +1209,12 @@
 - (void)onSaveAsNewTrack:(NSString *)fileName
                showOnMap:(BOOL)showOnMap
          simplifiedTrack:(BOOL)simplifiedTrack
+               openTrack:(BOOL)openTrack
 {
     [self copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent
              renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"]
-          deleteOriginalFile:NO];
+          deleteOriginalFile:NO
+                   openTrack:YES];
 }
 
 #pragma mark - OASegmentSelectionDelegate

@@ -1672,7 +1672,7 @@
 
 #pragma mark - OASaveTrackViewControllerDelegate
 
-- (void)onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
+- (void)onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack openTrack:(BOOL)openTrack
 {
     [self copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"] deleteOriginalFile:NO];
 }

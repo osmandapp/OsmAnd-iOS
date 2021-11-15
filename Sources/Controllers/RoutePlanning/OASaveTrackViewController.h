@@ -10,7 +10,10 @@
 
 @protocol OASaveTrackViewControllerDelegate <NSObject>
 
-- (void) onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack;
+- (void) onSaveAsNewTrack:(NSString *)fileName
+                showOnMap:(BOOL)showOnMap
+          simplifiedTrack:(BOOL)simplifiedTrack
+                openTrack:(BOOL)openTrack;
 
 @end
 

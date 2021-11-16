@@ -381,6 +381,10 @@ static UIViewController *parentController;
         [fileManager moveItemAtPath:_importUrl.path toPath:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]] error:nil];
     }
     
+    NSString *importedFileFolder = [[_importUrl.path stringByDeletingLastPathComponent] lastPathComponent];
+    if ([importedFileFolder isEqualToString:@"app_opened_importing_files"])
+        [fileManager removeItemAtPath:[_importUrl.path stringByDeletingLastPathComponent] error:nil];
+    
     if (_newGpxName) {
         NSString *storingPathInFolder = [kImportFolderName stringByAppendingPathComponent:_newGpxName];
         item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];

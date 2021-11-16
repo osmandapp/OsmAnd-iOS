@@ -287,8 +287,17 @@
     {
         if (_rootViewController)
             return [_rootViewController handleIncomingURL:url];
-        
-        loadedURL = url;
+        else
+        {
+            NSString *backupFolder = [_app.documentsPath stringByAppendingPathComponent:@"app_opened_importing_files"];
+            [NSFileManager.defaultManager createDirectoryAtPath:backupFolder withIntermediateDirectories:YES attributes:nil error:nil];
+            NSString *backupPath = [backupFolder stringByAppendingPathComponent:url.path.lastPathComponent];
+            [[NSFileManager defaultManager] copyItemAtPath:url.path toPath:backupPath error:nil];
+            
+            NSURLComponents *components = [NSURLComponents componentsWithURL:[NSURL URLWithString:backupPath] resolvingAgainstBaseURL:YES];
+            components.scheme = @"file";
+            loadedURL =  components.URL;
+        }
     }
     else if ([scheme isEqualToString:@"osmandmaps"])
     {

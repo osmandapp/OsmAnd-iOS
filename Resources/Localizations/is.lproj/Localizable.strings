@@ -701,7 +701,7 @@
 "route_tl" = "Beygðu til vinstri og haltu áfram";
 "route_tshl" = "Beygðu skarpt til vinstri og haltu áfram";
 "route_tsll" = "Beygðu örlítið til vinstri og haltu áfram";
-"route_tu" = "Taktu U-beygju og haltuáfram";
+"route_tu" = "Taktu U-beygju og haltu áfram";
 "route_head" = "Beint";
 "looking_up_address" = "Fletti upp heimilisfangi";
 "no_address_found" = "Ekkert heimilisfang erákvarðað";
@@ -878,7 +878,7 @@
 "in_app_purchase_desc_ex" = "Eftir að það hefur verið keypt, verður það þér alltaf tiltækt.";
 "unlock_all_features" = "Aflæsa öllum eiginleikum OsmAnd";
 "subscribe_email_desc" = "Gerstu áskrifandi að póstlistanum okkar:<br/>• Fáðu ókeypis 3 niðurhöl á kortum til viðbótar<br/>• Heyrðu fyrstur um alla afslætti<br/>• Vertu með í afsláttum af forritum og <a href='https://osmand.net/giveaway'>kynningargjöfum</a>";
-"osm_live_subscribe_btn" = "Gerastáskrifandi";
+"osm_live_subscribe_btn" = "Gerast áskrifandi";
 "shared_string_email_address" = "Tölvupóstfang";
 "osm_live_enter_email" = "Settu inn gilt tölvupóstfang";
 "osm_live_enter_user_name" = "Settu inn opinbert nafn";
@@ -1231,7 +1231,7 @@
 "gpx_slope" = "Halli";
 "simulate_navigation" = "Herma eftir leiðsögn";
 "select_avoid_descr" = "Veldu þá vegi sem þú vilt forðast á meðan leiðsögn stendur. Þú getur annað hvort valið veg á landakortinu eða valið gerð vegar úr listanum hér fyrir neðan.";
-"route_parameters" = "Viðföng leiðar";
+"route_parameters" = "Breytur varðandi leiðarval";
 "by_name" = "Eftir nafni";
 "by_dist" = "Eftir vegalengd";
 "sort_by" = "Röðun";
@@ -1243,7 +1243,7 @@
 "parking_place" = "Bílastæði";
 "add_start" = "Bæta við upphafspunkti";
 "add_intermediate" = "Bæta við millipunkti";
-"add_home" = "Bæta við \"Heim\"";
+"add_home" = "Bæta við \"Heima\"";
 "add_work" = "Bæta við \"Vinna\"";
 "home_pt" = "Heim";
 "work_pt" = "Vinna";

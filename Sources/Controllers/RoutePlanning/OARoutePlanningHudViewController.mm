@@ -1172,7 +1172,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     if (_editingContext.getPointsCount > 0)
     {
-        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithFileName:[self getSuggestedFileName] filePath:[self getSuggestedFilePath] showOnMap:YES simplifiedTrack:YES];
+        OASaveTrackViewController *saveTrackViewController =
+                [[OASaveTrackViewController alloc] initWithFileName:[self getSuggestedFileName]
+                                                           filePath:[self getSuggestedFilePath]
+                                                          showOnMap:YES
+                                                    simplifiedTrack:YES
+                                                          duplicate:NO];
         saveTrackViewController.delegate = self;
         [self presentViewController:saveTrackViewController animated:YES completion:nil];
     }
@@ -1830,7 +1835,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 #pragma mark - OASaveTrackViewControllerDelegate
 
-- (void)onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
+- (void)onSaveAsNewTrack:(NSString *)fileName
+               showOnMap:(BOOL)showOnMap
+         simplifiedTrack:(BOOL)simplifiedTrack
+               openTrack:(BOOL)openTrack
 {
     [self saveNewGpx:@"" fileName:fileName showOnMap:showOnMap simplifiedTrack:simplifiedTrack finalSaveAction:SHOW_IS_SAVED_FRAGMENT];
 }

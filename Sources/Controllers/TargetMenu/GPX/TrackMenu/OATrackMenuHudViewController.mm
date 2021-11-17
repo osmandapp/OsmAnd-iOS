@@ -296,13 +296,24 @@
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
            renameToNewName:(NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
+                 openTrack:(BOOL)openTrack
 {
     NSString *oldPath = self.gpx.gpxFilePath;
     NSString *sourcePath = [_app.gpxPath stringByAppendingPathComponent:oldPath];
 
     NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : newFolderName;
     NSString *newFolderPath = [_app.gpxPath stringByAppendingPathComponent:newFolder];
-    NSString *newName = newFileName ? [OAUtilities createNewFileName:newFileName] : self.gpx.gpxFileName;
+    NSString *newName = self.gpx.gpxFileName;
+
+    if (newFileName)
+    {
+        if ([[NSFileManager defaultManager]
+                fileExistsAtPath:[newFolderPath stringByAppendingPathComponent:newFileName]])
+            newName = [OAUtilities createNewFileName:newFileName];
+        else
+            newName = newFileName;
+    }
+
     NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
     NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
 
@@ -328,6 +339,18 @@
 
         if ([self.settings.mapSettingVisibleGpx.get containsObject:oldPath])
             [self.settings showGpx:@[newStoringPath]];
+    }
+    if (openTrack)
+    {
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:
+                [newFolderName stringByAppendingPathComponent:newFileName]];
+        if (gpx)
+        {
+            [self hide:YES duration:.2 onComplete:^{
+                [self.mapViewController hideContextPinMarker];
+                [self.mapPanelViewController openTargetViewWithGPX:gpx];
+            }];
+        }
     }
 }
 
@@ -1095,10 +1118,11 @@
 - (void)openDuplicateTrack
 {
     OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc]
-            initWithFileName:[self.gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension stringByAppendingString:@"_copy"]
+            initWithFileName:self.gpx.gpxFileName.stringByDeletingPathExtension
                     filePath:self.gpx.gpxFilePath
                    showOnMap:YES
-             simplifiedTrack:NO];
+             simplifiedTrack:NO
+                   duplicate:YES];
 
     saveTrackViewController.delegate = self;
     [self presentViewController:saveTrackViewController animated:YES completion:nil];
@@ -1167,7 +1191,7 @@
                                             }]];
 
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.text = [self.gpx.gpxTitle lastPathComponent];
+        textField.text = self.gpx.gpxTitle.lastPathComponent.stringByDeletingPathExtension;
     }];
 
     [self presentViewController:alert animated:YES completion:nil];
@@ -1213,7 +1237,8 @@
                 initWithFileName:self.gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension
                         filePath:self.gpx.gpxFilePath
                        showOnMap:YES
-                 simplifiedTrack:YES];
+                 simplifiedTrack:YES
+                       duplicate:NO];
 
         saveTrackViewController.delegate = self;
         [self presentViewController:saveTrackViewController animated:YES completion:nil];
@@ -1224,7 +1249,7 @@
 
 - (void)onFolderSelected:(NSString *)selectedFolderName
 {
-    [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES];
+    [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES openTrack:NO];
     if (_selectedTab == EOATrackMenuHudActionsTab)
     {
         OAGPXTableCellData *cellData = [self getCellData:[NSIndexPath indexPathForRow:kActionMoveCell inSection:kActionsSection]];
@@ -1256,10 +1281,12 @@
 - (void)onSaveAsNewTrack:(NSString *)fileName
                showOnMap:(BOOL)showOnMap
          simplifiedTrack:(BOOL)simplifiedTrack
+               openTrack:(BOOL)openTrack
 {
     [self copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent
              renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"]
-          deleteOriginalFile:NO];
+          deleteOriginalFile:NO
+                   openTrack:YES];
 }
 
 #pragma mark - OASegmentSelectionDelegate

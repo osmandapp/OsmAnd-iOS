@@ -14,10 +14,7 @@
 
 @interface OADeleteWaypointsViewController : OACompoundViewController
 
-- (instancetype)initWithSectionsData:(NSArray<OAGPXTableSectionData *> *)sectionsData
-                      waypointGroups:(NSDictionary *)waypointGroups
-                      isCurrentTrack:(BOOL)isCurrentTrack
-                         gpxFilePath:(NSString *)gpxFilePath;
+- (instancetype)initWithSectionsData:(NSArray<OAGPXTableSectionData *> *)sectionsData;
 
 @property (nonatomic, weak) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 

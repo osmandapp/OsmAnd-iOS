@@ -92,6 +92,8 @@
         _values = data[kTableValues];
     if ([data.allKeys containsObject:kTableUpdateData])
         _updateData = data[kTableUpdateData];
+    if ([data.allKeys containsObject:kTableUpdateProperty])
+        _updateProperty = data[kTableUpdateProperty];
 }
 
 - (BOOL)containsCell:(NSString *)key
@@ -124,6 +126,8 @@
         _sections = data[kTableSections];
     if ([data.allKeys containsObject:kTableUpdateData])
         _updateData = data[kTableUpdateData];
+    if ([data.allKeys containsObject:kTableUpdateProperty])
+        _updateProperty = data[kTableUpdateProperty];
 }
 
 @end

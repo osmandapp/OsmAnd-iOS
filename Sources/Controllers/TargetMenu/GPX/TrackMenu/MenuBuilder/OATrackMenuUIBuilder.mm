@@ -51,6 +51,11 @@
     _selectedTab = selectedTab;
 }
 
+- (OAGPXTableData *)getTableData
+{
+    return [_tabs[_selectedTab] getTableData];
+}
+
 - (OAGPXTableData *)generateSectionsData
 {
     if (_selectedTab < _tabs.count)

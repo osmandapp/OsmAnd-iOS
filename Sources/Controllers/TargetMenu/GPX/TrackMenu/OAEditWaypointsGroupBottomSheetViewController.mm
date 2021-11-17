@@ -21,12 +21,14 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     EOAEditTrackScreenSegmentsMode
 };
 
-@interface OAEditWaypointsGroupBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAEditWaypointsGroupOptionsDelegate>
+@interface OAEditWaypointsGroupBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, OAEditWaypointsGroupOptionsDelegate>
 
 @end
 
 @implementation OAEditWaypointsGroupBottomSheetViewController
 {
+    UITapGestureRecognizer *_backgroundTapRecognizer;
+
     NSArray<OAGPXTableSectionData *> *_tableData;
     EOAEditTrackScreenMode _mode;
 
@@ -71,6 +73,12 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
     self.isFullScreenAvailable = NO;
 
+    _backgroundTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onBackgroundPressed:)];
+    _backgroundTapRecognizer.numberOfTapsRequired = 1;
+    _backgroundTapRecognizer.numberOfTouchesRequired = 1;
+    _backgroundTapRecognizer.delegate = self;
+    [self.view addGestureRecognizer:_backgroundTapRecognizer];
+
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -78,13 +86,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
     if (_mode == EOAEditTrackScreenWaypointsMode)
     {
-        _isShown = self.trackMenuDelegate
-                ? [self.trackMenuDelegate isWaypointsGroupVisible:[self.trackMenuDelegate isDefaultGroup:_groupName] ? @"" : _groupName]
-                : NO;
+        [self updateShown];
+        [self updateColor];
 
-        _groupColor = self.trackMenuDelegate
-                ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:_groupName])
-                : [OADefaultFavorite getDefaultColor];
         [self.headerDividerView removeFromSuperview];
         self.titleView.text = _groupName;
     }
@@ -118,10 +122,11 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         OAGPXTableCellData *showOnMap = [OAGPXTableCellData withData:@{
                 kCellKey: @"control_show_on_map",
                 kCellType: [OATitleSwitchRoundCell getCellIdentifier],
-                kTableValues: @{@"bool_value": @(_isShown)},
+                kTableValues: @{ @"bool_value": @(_isShown) },
                 kCellTitle: OALocalizedString(@"map_settings_show"),
                 kCellOnSwitch: ^(BOOL toggle) {
-                    [self onShowHidePressed:nil];
+                    _isShown = toggle;
+                    [self onShowHidePressed:_isShown];
                 },
                 kCellIsOn: ^() {
                     return _isShown;
@@ -217,8 +222,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                     [OAGPXTableCellData withData:@{
                             kCellKey: @"delete",
                             kCellType: [OATitleIconRoundCell getCellIdentifier],
-                            kCellRightIconName: @"ic_custom_remove_outlined",
                             kCellTitle: OALocalizedString(@"shared_string_delete"),
+                            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+                            kCellRightIconName: @"ic_custom_remove_outlined",
                             kCellTintColor: @color_primary_red,
                             kCellButtonPressed: ^() {
                                 if (_mode == EOAEditTrackScreenWaypointsMode)
@@ -287,13 +293,37 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     return _tableData[indexPath.section].cells[indexPath.row];
 }
 
-- (void)onShowHidePressed:(id)sender
+- (void)onShowHidePressed:(BOOL)show
 {
     if (self.trackMenuDelegate)
         [self.trackMenuDelegate setWaypointsGroupVisible:[self.trackMenuDelegate isDefaultGroup:_groupName] ? @"" : _groupName
-                                                    show:_isShown = !_isShown];
+                                                    show:show];
 
     [self setLeftIcon];
+}
+
+- (void)updateShown
+{
+    _isShown = self.trackMenuDelegate
+            ? [self.trackMenuDelegate isWaypointsGroupVisible:[self.trackMenuDelegate isDefaultGroup:_groupName]
+                    ? @"" : _groupName] : NO;
+}
+
+- (void)updateColor
+{
+    _groupColor = self.trackMenuDelegate
+            ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:_groupName])
+            : [OADefaultFavorite getDefaultColor];
+}
+
+#pragma mark - UITapGestureRecognizer
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if ([gestureRecognizer isKindOfClass:UITapGestureRecognizer.class])
+        return [self.tableView indexPathForRowAtPoint:[touch locationInView:self.tableView]] == nil;
+
+    return YES;
 }
 
 #pragma mark - OAEditWaypointsGroupOptionsDelegate
@@ -307,16 +337,20 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                                        newGroupColor:groupColor];
     if (groupName)
     {
+        self.titleView.text = groupName;
         _groupName = groupName;
-        self.titleView.text = _groupName;
+        [self updateShown];
+        if (_tableData.firstObject.cells.firstObject.updateData)
+            _tableData.firstObject.cells.firstObject.updateData();
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
+                              withRowAnimation:UITableViewRowAnimationNone];
+        [self updateColor];
     }
 
     if (groupColor)
-    {
         _groupColor = groupColor;
-        if (_isShown)
-            self.leftIconView.tintColor = _groupColor;
-    }
+
+    [self setLeftIcon];
 }
 
 #pragma mark - UITableViewDataSource
@@ -356,6 +390,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
             cell.titleView.text = cellData.title;
             cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
+
+            cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
+                    ? cellData.values[@"font_value"] : [UIFont systemFontOfSize:17.];
 
             if (hasIcon)
             {
@@ -440,7 +477,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         cellData.onButtonPressed();
 }
 
-#pragma mark - UISwitch pressed
+#pragma mark - Selectors
 
 - (void)onSwitchPressed:(id)sender
 {
@@ -450,8 +487,18 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
     if (cellData.onSwitch)
         cellData.onSwitch(switchView.isOn);
+}
 
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+- (void)onBackgroundPressed:(UIGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateEnded)
+    {
+        CGPoint touchInView = [recognizer locationInView:self.view];
+        if ((OAUtilities.isLandscape && (touchInView.x < self.bottomSheetView.frame.origin.x
+                || touchInView.x > self.bottomSheetView.frame.origin.x + self.bottomSheetView.frame.size.width))
+                || touchInView.y < self.bottomSheetView.frame.origin.y)
+            [self onRightButtonPressed];
+    }
 }
 
 @end

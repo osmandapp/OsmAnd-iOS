@@ -255,6 +255,13 @@
     return outCell;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (_screenType == EOAEditWaypointsGroupRenameScreen &&
+            [[self getCellData:indexPath].type isEqualToString:[OATextInputCell getCellIdentifier]])
+        [((OATextInputCell *) cell).inputField becomeFirstResponder];
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)sender
@@ -265,19 +272,20 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    if (textView.text.length == 0 ||
+    NSString *newGroupName = [textView.text trim];
+    if (newGroupName.length == 0 ||
             [self isIncorrectFileName:textView.text] ||
-            [OAFavoritesHelper getGroupByName:textView.text] ||
-            [textView.text isEqualToString:OALocalizedString(@"favorites")] ||
-            [textView.text isEqualToString:OALocalizedString(@"personal_category_name")] ||
-            [textView.text isEqualToString:kPersonalCategory] ||
-            [textView.text isEqualToString:_groupName])
+            [OAFavoritesHelper getGroupByName:newGroupName] ||
+            [newGroupName isEqualToString:OALocalizedString(@"favorites")] ||
+            [newGroupName isEqualToString:OALocalizedString(@"personal_category_name")] ||
+            [newGroupName isEqualToString:kPersonalCategory] ||
+            [newGroupName isEqualToString:_groupName])
     {
         self.doneButton.enabled = NO;
     }
     else
     {
-        _newGroupName = textView.text;
+        _newGroupName = newGroupName;
         self.doneButton.enabled = YES;
     }
 }

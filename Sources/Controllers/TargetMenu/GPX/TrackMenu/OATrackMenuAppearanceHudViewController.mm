@@ -350,24 +350,24 @@
     OAGPXTableSectionData *colorsSection = [OAGPXTableSectionData withData:@{ kSectionCells: colorsCells }];
     [colorsSection setData:@{
         kTableUpdateData: ^() {
-        NSInteger index = [colorsCells indexOfObject:gridOrDescriptionCell];
-        if (index != NSNotFound)
-        {
-            gridOrDescriptionCell = generateGridOrDescriptionCell();
-            colorsSection.cells[index] = gridOrDescriptionCell;
+            NSInteger index = [colorsCells indexOfObject:gridOrDescriptionCell];
+            if (index != NSNotFound)
+            {
+                gridOrDescriptionCell = generateGridOrDescriptionCell();
+                colorsSection.cells[index] = gridOrDescriptionCell;
 
-            BOOL hasElevationGradient = [colorsSection.cells.lastObject.key isEqualToString:@"color_elevation_gradient"];
-            if ([_selectedItem.coloringType isGradient] && !hasElevationGradient)
-                [colorsSection.cells addObject:[self generateDataForColorElevationGradientCell]];
-            else if (![_selectedItem.coloringType isGradient] && hasElevationGradient)
-                [colorsSection.cells removeObject:colorsSection.cells.lastObject];
+                BOOL hasElevationGradient = [colorsSection.cells.lastObject.key isEqualToString:@"color_elevation_gradient"];
+                if ([_selectedItem.coloringType isGradient] && !hasElevationGradient)
+                    [colorsSection.cells addObject:[self generateDataForColorElevationGradientCell]];
+                else if (![_selectedItem.coloringType isGradient] && hasElevationGradient)
+                    [colorsSection.cells removeObject:colorsSection.cells.lastObject];
+            }
+            for (OAGPXTableCellData *cell in colorsSection.cells)
+            {
+                if (cell.updateData)
+                    cell.updateData();
+            }
         }
-        for (OAGPXTableCellData *cell in colorsSection.cells)
-        {
-            if (cell.updateData)
-                cell.updateData();
-        }
-    }
     }];
 
     [appearanceSections addObject:colorsSection];

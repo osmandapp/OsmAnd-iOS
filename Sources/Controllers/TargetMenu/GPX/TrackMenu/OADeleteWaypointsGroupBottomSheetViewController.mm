@@ -98,7 +98,6 @@
                                     {
                                         [self.trackMenuDelegate deleteWaypointsGroup:_groupName
                                                                    selectedWaypoints:nil];
-                                        [self.trackMenuDelegate refreshWaypoints];
                                         [self.trackMenuDelegate refreshLocationServices];
                                     }
                                 }];

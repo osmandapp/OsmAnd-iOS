@@ -26,13 +26,13 @@
 @end
 
 @implementation OATrackMenuTabPoints
-{
-    NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *_waypointGroups;
-}
 
 - (BOOL)hasWaypoints
 {
-    return _waypointGroups.allKeys.count > 0;
+    NSMutableArray<NSString *> *waypointSortedGroupNames = self.trackMenuDelegate
+            ? [[self.trackMenuDelegate getWaypointSortedGroups] mutableCopy] : [NSMutableArray array];
+    [waypointSortedGroupNames removeObject:OALocalizedString(@"targets")];
+    return waypointSortedGroupNames.count > 0;
 }
 
 - (NSString *)getTabTitle
@@ -42,7 +42,7 @@
 
 - (UIImage *)getTabIcon
 {
-    return [OABaseTrackMenuTabItem getUnselectedIcon:@"ic_custom_waypoint"];
+    return [OABaseTrackMenuTabItem getUnselectedIcon:@"ic_custom_folder_points"];
 }
 
 - (EOATrackMenuHudTab)getTabMode
@@ -52,205 +52,206 @@
 
 - (void)generateData
 {
-    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
+    __block NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
     OsmAndAppInstance app = [OsmAndApp instance];
 
-    _waypointGroups = self.trackMenuDelegate ? [self.trackMenuDelegate updateWaypointsData] : [NSDictionary dictionary];
+    NSArray<NSString *> *waypointSortedGroupNames = self.trackMenuDelegate
+            ? [self.trackMenuDelegate getWaypointSortedGroups] : [NSArray array];
 
-    if (_waypointGroups.allKeys.count > 0)
+    if (waypointSortedGroupNames.count > 0)
     {
-        for (NSString *groupName in _waypointGroups.keyEnumerator)
+        for (NSString *groupName in waypointSortedGroupNames)
         {
+            NSMutableArray<OAGPXTableCellData *> *cellsData = [NSMutableArray array];
+            OAGPXTableSectionData *waypointsSection = [OAGPXTableSectionData withData:@{ kSectionCells: cellsData }];
+            __block NSString *currentGroupName = groupName;
+            BOOL isRte = self.trackMenuDelegate && [self.trackMenuDelegate isRteGroup:currentGroupName];
+            __block BOOL regenerateWaypoints = NO;
             __block BOOL isHidden = self.trackMenuDelegate
-                    ? ![self.trackMenuDelegate isWaypointsGroupVisible:[self.trackMenuDelegate isDefaultGroup:groupName]
-                            ? @"" : groupName] : NO;
-            __block UIImage *leftIcon = [UIImage templateImageNamed:
-                    isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"];
+                    ? ![self.trackMenuDelegate isWaypointsGroupVisible:[self.trackMenuDelegate isDefaultGroup:currentGroupName]
+                            ? @"" : currentGroupName] : NO;
             __block UIColor *tintColor = isHidden ? UIColorFromRGB(color_footer_icon_gray)
                     : self.trackMenuDelegate
-                            ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:groupName])
+                            ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:currentGroupName])
                             : [OADefaultFavorite getDefaultColor];
+
             OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
-                    kCellKey: [NSString stringWithFormat:@"group_%@", groupName],
+                    kCellKey: [NSString stringWithFormat:@"group_%@", currentGroupName],
                     kCellType: [OASelectionCollapsableCell getCellIdentifier],
-                    kCellTitle: groupName,
-                    kCellLeftIcon: leftIcon,
+                    kCellTitle: currentGroupName,
+                    kCellLeftIcon: [UIImage templateImageNamed:
+                            isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"],
                     kCellRightIconName: @"ic_custom_arrow_up",
                     kCellToggle: @YES,
                     kCellTintColor: @([OAUtilities colorToNumber:tintColor]),
                     kCellButtonPressed: ^() {
                         if (self.trackMenuDelegate)
-                            [self.trackMenuDelegate openWaypointsGroupOptionsScreen:groupName];
+                            [self.trackMenuDelegate openWaypointsGroupOptionsScreen:currentGroupName];
                     }
             }];
+            [cellsData addObject:groupCellData];
 
-            __block NSString *currentGroupName = groupName;
-            __block BOOL updated = NO;
+            NSArray<OAGPXTableCellData *> *(^generateDataForWaypointCells)(NSArray<OAGpxWptItem *> *) =
+                    ^(NSArray<OAGpxWptItem *> *currentWaypoints) {
+                NSMutableArray<OAGPXTableCellData *> *waypointsData = [NSMutableArray array];
+                for (OAGpxWptItem *currentWaypoint in currentWaypoints)
+                 {
+                    CLLocationCoordinate2D gpxLocation = self.trackMenuDelegate
+                            ? [self.trackMenuDelegate getCenterGpxLocation] : kCLLocationCoordinate2DInvalid;
+                    OAWorldRegion *worldRegion = gpxLocation.latitude != DBL_MAX
+                            ? [app.worldRegion findAtLat:gpxLocation.latitude lon:gpxLocation.longitude] : nil;
+
+                    OAGPXTableCellData *waypointCellData = [OAGPXTableCellData withData:@{
+                            kCellKey: [NSString stringWithFormat:@"waypoint_%@", currentWaypoint.point.name],
+                            kCellType: [OAPointWithRegionTableViewCell getCellIdentifier],
+                            kTableValues: @{
+                                    @"string_value_distance": currentWaypoint.distance
+                                            ? currentWaypoint.distance : [OAOsmAndFormatter getFormattedDistance:0],
+                                    @"float_value_direction": @(currentWaypoint.direction)
+                            },
+                            kCellTitle: !isRte ? currentWaypoint.point.name
+                                    : [NSString stringWithFormat:@"%@ %lu", OALocalizedString(@"gpx_point"),
+                                            [currentWaypoints indexOfObject:currentWaypoint] + 1],
+                            kCellDesc: worldRegion != nil
+                                    ? (worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName)
+                                    : @"",
+                            kCellLeftIcon: !isRte ? [currentWaypoint getCompositeIcon]
+                                    : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_location_marker"]
+                                                                color:UIColorFromRGB(color_footer_icon_gray)],
+                            kCellButtonPressed: ^{
+                                if (self.trackMenuDelegate)
+                                    [self.trackMenuDelegate openWptOnMap:currentWaypoint];
+                            }
+                    }];
+                    [waypointCellData setData:@{
+                            kTableUpdateData: ^() {
+                                CLLocation *newLocation = app.locationServices.lastKnownLocation;
+                                if (newLocation)
+                                {
+                                    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+                                    CLLocationDirection newDirection =
+                                            (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+                                                    ? newLocation.course : newHeading;
+
+                                    OsmAnd::LatLon latLon(currentWaypoint.point.position.latitude,
+                                            currentWaypoint.point.position.longitude);
+                                    const auto &wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+                                    const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
+                                    const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
+
+                                    const auto distance = OsmAnd::Utilities::distance(
+                                            newLocation.coordinate.longitude,
+                                            newLocation.coordinate.latitude,
+                                            wptLon,
+                                            wptLat
+                                    );
+
+                                    currentWaypoint.distance = [OAOsmAndFormatter getFormattedDistance:distance];
+                                    currentWaypoint.distanceMeters = distance;
+                                    CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[
+                                            [CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
+                                    currentWaypoint.direction =
+                                            OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+                                }
+
+                                [waypointCellData setData:@{
+                                        kCellKey: [NSString stringWithFormat:@"waypoint_%@", currentWaypoint.point.name],
+                                        kTableValues: @{
+                                                @"string_value_distance": currentWaypoint.distance
+                                                        ? currentWaypoint.distance : [OAOsmAndFormatter getFormattedDistance:0],
+                                                @"float_value_direction": @(currentWaypoint.direction)
+                                        },
+                                        kCellTitle: !isRte ? currentWaypoint.point.name
+                                                : [NSString stringWithFormat:@"%@ %lu", OALocalizedString(@"gpx_point"),
+                                                        [currentWaypoints indexOfObject:currentWaypoint] + 1],
+                                        kCellLeftIcon: !isRte ? [currentWaypoint getCompositeIcon]
+                                                : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_location_marker"]
+                                                                            color:UIColorFromRGB(color_footer_icon_gray)],
+                                        kCellButtonPressed: ^{
+                                            if (self.trackMenuDelegate)
+                                                [self.trackMenuDelegate openWptOnMap:currentWaypoint];
+                                        }
+                                }];
+                            },
+                    }];
+                    [waypointsData addObject:waypointCellData];
+                }
+                return waypointsData;
+            };
+            if (self.trackMenuDelegate)
+                [cellsData addObjectsFromArray:
+                        generateDataForWaypointCells([self.trackMenuDelegate getWaypointsData][currentGroupName])];
 
             [groupCellData setData:@{
                     kTableUpdateData: ^() {
-                        NSDictionary *newGroupData = self.trackMenuDelegate
-                                ? [self.trackMenuDelegate updateGroupName:currentGroupName
-                                                             oldGroupName:groupCellData.title]
-                                : [NSDictionary dictionary];
-                        if ([newGroupData.allKeys containsObject:@"current_group_name"])
-                            currentGroupName = newGroupData[@"current_group_name"];
-                        if ([newGroupData.allKeys containsObject:@"updated"])
-                            updated = [newGroupData[@"updated"] boolValue];
+                        if (regenerateWaypoints)
+                        {
+                            NSMutableArray *newCellsData = [NSMutableArray array];
+                            [newCellsData addObject:groupCellData];
+                            if (self.trackMenuDelegate)
+                                [newCellsData addObjectsFromArray:
+                                        generateDataForWaypointCells([self.trackMenuDelegate getWaypointsData][currentGroupName])];
+                            [waypointsSection setData:@{ kSectionCells: newCellsData }];
+                            regenerateWaypoints = NO;
+                        }
 
-                        isHidden = self.trackMenuDelegate
-                                ? ![self.trackMenuDelegate isWaypointsGroupVisible:[self.trackMenuDelegate isDefaultGroup:currentGroupName]
-                                        ? @"" : currentGroupName] : NO;
-                        leftIcon = [UIImage templateImageNamed:
-                                isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"];
+                        isHidden = self.trackMenuDelegate ? ![self.trackMenuDelegate isWaypointsGroupVisible:
+                                [self.trackMenuDelegate isDefaultGroup:currentGroupName] ? @"" : currentGroupName] : NO;
                         tintColor = isHidden ? UIColorFromRGB(color_footer_icon_gray)
                                 : self.trackMenuDelegate
                                         ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:currentGroupName])
                                         : [OADefaultFavorite getDefaultColor];
+
                         [groupCellData setData:@{
                                 kCellKey: [NSString stringWithFormat:@"group_%@", currentGroupName],
                                 kCellTitle: currentGroupName,
-                                kCellLeftIcon: leftIcon,
-                                kCellRightIconName: groupCellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right",
+                                kCellLeftIcon: [UIImage templateImageNamed:
+                                        isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"],
                                 kCellTintColor: @([OAUtilities colorToNumber:tintColor]),
                                 kCellButtonPressed: ^() {
                                     if (self.trackMenuDelegate)
                                         [self.trackMenuDelegate openWaypointsGroupOptionsScreen:currentGroupName];
                                 }
                         }];
-                    }
-            }];
+                    },
+                    kTableUpdateProperty: ^(id value) {
+                        if ([value isKindOfClass:NSDictionary.class])
+                        {
+                            NSDictionary *dataToUpdate = value;
 
-            NSArray<OAGPXTableCellData *> *(^generateDataForWaypointCells)(void) = ^{
-                NSMutableArray<OAGPXTableCellData *> *waypointsCells = [NSMutableArray array];
-                if (groupCellData.toggle)
-                {
-                    NSArray<OAGpxWptItem *> *waypoints = _waypointGroups[currentGroupName];
-
-                    for (OAGpxWptItem *waypoint in waypoints) {
-                        NSInteger waypointIndex = [waypoints indexOfObject:waypoint];
-                        __block OAGpxWptItem *currentWaypoint = waypoint;
-                        void (^newWaypoint)(void) = ^{
-                            if (updated)
+                            if ([dataToUpdate.allKeys containsObject:@"new_group_name"])
                             {
-                                currentWaypoint = _waypointGroups[currentGroupName][waypointIndex];
-                                updated = NO;
+                                currentGroupName = dataToUpdate[@"new_group_name"];
+                                isHidden = self.trackMenuDelegate ? ![self.trackMenuDelegate isWaypointsGroupVisible:
+                                        [self.trackMenuDelegate isDefaultGroup:currentGroupName] ? @"" : currentGroupName] : NO;
                             }
-                        };
-                        newWaypoint();
 
-                        CLLocationCoordinate2D gpxLocation = self.trackMenuDelegate
-                                ? [self.trackMenuDelegate getCenterGpxLocation] : kCLLocationCoordinate2DInvalid;
-                        OAWorldRegion *worldRegion = gpxLocation.latitude != DBL_MAX
-                                ? [app.worldRegion findAtLat:gpxLocation.latitude lon:gpxLocation.longitude] : nil;
+                            if ([dataToUpdate.allKeys containsObject:@"new_group_color"])
+                                tintColor = isHidden
+                                        ? UIColorFromRGB(color_footer_icon_gray) : dataToUpdate[@"new_group_color"];
 
-                        OAGPXTableCellData *waypointCellData = [OAGPXTableCellData withData:@{
-                                kCellKey: [NSString stringWithFormat:@"waypoint_%@", currentWaypoint.point.name],
-                                kCellType: [OAPointWithRegionTableViewCell getCellIdentifier],
-                                kTableValues: @{
-                                        @"string_value_distance": currentWaypoint.distance
-                                                ? currentWaypoint.distance : [OAOsmAndFormatter getFormattedDistance:0],
-                                        @"float_value_direction": @(currentWaypoint.direction)
-                                },
-                                kCellTitle: currentWaypoint.point.name,
-                                kCellDesc: worldRegion != nil
-                                        ? (worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName)
-                                        : @"",
-                                kCellLeftIcon: [currentWaypoint getCompositeIcon],
-                                kCellButtonPressed: ^{
-                                    if (self.trackMenuDelegate)
-                                        [self.trackMenuDelegate openWptOnMap:currentWaypoint];
-                                }
-                        }];
-
-                        [waypointCellData setData:@{
-                                kTableUpdateData: ^() {
-                                    newWaypoint();
-                                    CLLocation *newLocation = app.locationServices.lastKnownLocation;
-                                    if (newLocation)
-                                    {
-                                        CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-                                        CLLocationDirection newDirection =
-                                                (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-                                                        ? newLocation.course : newHeading;
-
-                                        OsmAnd::LatLon latLon(currentWaypoint.point.position.latitude,
-                                                              currentWaypoint.point.position.longitude);
-                                        const auto &wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-                                        const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
-                                        const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
-
-                                        const auto distance = OsmAnd::Utilities::distance(
-                                                newLocation.coordinate.longitude,
-                                                newLocation.coordinate.latitude,
-                                                wptLon,
-                                                wptLat
-                                        );
-
-                                        currentWaypoint.distance = [OAOsmAndFormatter getFormattedDistance:distance];
-                                        currentWaypoint.distanceMeters = distance;
-                                        CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[
-                                                [CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
-                                        currentWaypoint.direction =
-                                                OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-                                    }
-
-                                    [waypointCellData setData:@{
-                                            kTableValues: @{
-                                                    @"string_value_distance": currentWaypoint.distance
-                                                            ? currentWaypoint.distance : [OAOsmAndFormatter getFormattedDistance:0],
-                                                    @"float_value_direction": @(currentWaypoint.direction)
-                                            },
-                                            kCellTitle: currentWaypoint.point.name,
-                                            kCellLeftIcon: [currentWaypoint getCompositeIcon]
-                                    }];
-                                }
-                        }];
-                        [waypointsCells addObject:waypointCellData];
+                            BOOL hasExist = [dataToUpdate.allKeys containsObject:@"exist_group_name_index"];
+                            NSInteger existI = [dataToUpdate[@"exist_group_name_index"] integerValue];
+                            regenerateWaypoints = (hasExist && existI > 0) || [dataToUpdate[@"regenerate_bool_value"] boolValue];
+                        }
                     }
-                }
-                return waypointsCells;
-            };
-
-            OAGPXTableSectionData *waypointsSection = [OAGPXTableSectionData withData:@{
-                    kSectionCells: [@[groupCellData] arrayByAddingObjectsFromArray:generateDataForWaypointCells()],
             }];
+
             [tableSections addObject:waypointsSection];
 
             [waypointsSection setData:@{
                     kTableUpdateData: ^() {
-                        if (groupCellData.updateData)
-                            groupCellData.updateData();
-                        NSInteger sectionIndex = [_waypointGroups.allKeys indexOfObject:currentGroupName];
-
-                        BOOL isDuplicate = [waypointsSection.values[@"is_duplicate_bool_value"] boolValue];
-                        if (!isDuplicate && sectionIndex != NSNotFound)
+                        for (OAGPXTableCellData *cellData in waypointsSection.cells)
                         {
-                            if (updated || (self.trackMenuDelegate && waypointsSection.cells.count
-                                            != [self.trackMenuDelegate getWaypointsCount:currentGroupName] + 1)
-                                    || !groupCellData.toggle)
-                            {
-                                [waypointsSection setData:@{
-                                        kSectionCells: [@[groupCellData] arrayByAddingObjectsFromArray:generateDataForWaypointCells()]
-                                }];
-                            }
-                            else
-                            {
-                                for (OAGPXTableCellData *cellData in waypointsSection.cells)
-                                {
-                                    if (groupCellData != cellData && cellData.updateData)
-                                        cellData.updateData();
-                                }
-                            }
+                            if (cellData.updateData)
+                                cellData.updateData();
                         }
-
-                        if (isDuplicate || (waypointsSection.cells.count == 1 && self.trackMenuDelegate
-                                && [self.trackMenuDelegate getWaypointsCount:currentGroupName] == 0)
-                                || sectionIndex == NSNotFound)
+                    },
+                    kTableUpdateProperty: ^(id value) {
+                        for (OAGPXTableCellData *cellData in waypointsSection.cells)
                         {
-                            NSMutableArray<OAGPXTableSectionData *> *newTableData = [self.tableData.sections mutableCopy];
-                            [newTableData removeObject:waypointsSection];
-                            [self.tableData setData:@{ kTableSections: newTableData }];
+                            if (cellData.updateProperty)
+                                cellData.updateProperty(value);
                         }
                     },
                     kSectionHeaderHeight: tableSections.firstObject == waypointsSection ? @0.001 : @14.
@@ -262,6 +263,7 @@
             kCellKey: @"delete_waypoints",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"delete_waypoints"),
+            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellRightIconName: @"ic_custom_remove_outlined",
             kCellToggle: @([self hasWaypoints]),
             kCellTintColor: [self hasWaypoints] ? @color_primary_purple : @unselected_tab_icon,
@@ -276,12 +278,13 @@
                     NSMutableArray<OAGPXTableSectionData *> *sectionsData = [NSMutableArray array];
                     for (OAGPXTableSectionData *sectionData in self.tableData.sections)
                     {
-                        if (![sectionData.header isEqualToString:OALocalizedString(@"actions")])
+                        BOOL isAction = [sectionData.header isEqualToString:OALocalizedString(@"actions")];
+                        BOOL isRte = [sectionData.cells.firstObject.title isEqualToString:OALocalizedString(@"targets")];
+                        if (!isAction && !isRte)
                             [sectionsData addObject:sectionData];
                     }
                     if (self.trackMenuDelegate)
-                        [self.trackMenuDelegate openDeleteWaypointsScreen:sectionsData
-                                                           waypointGroups:_waypointGroups];
+                        [self.trackMenuDelegate openDeleteWaypointsScreen:sectionsData];
                 }
             }
     }];
@@ -299,6 +302,7 @@
                     [OAGPXTableCellData withData:@{
                             kCellKey: @"add_waypoint",
                             kCellType: [OAIconTitleValueCell getCellIdentifier],
+                            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
                             kCellTitle: OALocalizedString(@"add_waypoint"),
                             kCellRightIconName: @"ic_custom_add_gpx_waypoint",
                             kCellToggle: @YES,
@@ -328,12 +332,105 @@
     self.tableData = [OAGPXTableData withData: @{ kTableSections: tableSections }];
     [self.tableData setData:@{
             kTableUpdateData: ^() {
-                _waypointGroups = self.trackMenuDelegate ? [self.trackMenuDelegate updateWaypointsData] : [NSDictionary dictionary];
-
                 for (OAGPXTableSectionData *sectionData in tableSections)
                 {
                     if (sectionData.updateData)
                         sectionData.updateData();
+                }
+
+                [self.tableData setData:@{
+                        kTableSections: tableSections = [[tableSections sortedArrayUsingComparator:
+                                ^NSComparisonResult(OAGPXTableSectionData *obj1, OAGPXTableSectionData *obj2) {
+                                    return obj2 == actionsSection ? NSOrderedAscending
+                                            : [obj1.cells.firstObject.key compare:obj2.cells.firstObject.key];
+                                }] mutableCopy]
+                }];
+
+                for (OAGPXTableSectionData *sectionData in self.tableData.sections)
+                {
+                    if (sectionData != actionsSection)
+                        [sectionData setData:@{
+                                kSectionHeaderHeight: self.tableData.sections.firstObject == sectionData ? @0.001 : @14.
+                        }];
+                }
+            },
+            kTableUpdateProperty: ^(id value) {
+                if ([value isKindOfClass:NSDictionary.class])
+                {
+                    NSDictionary *dataToUpdate = value;
+                    if ([dataToUpdate.allKeys containsObject:@"delete_group_name_index"])
+                    {
+                        NSInteger deleteSectionI = [dataToUpdate[@"delete_group_name_index"] integerValue];
+                        if (deleteSectionI != NSNotFound)
+                        {
+                            NSMutableArray *cells = [tableSections[deleteSectionI].cells mutableCopy];
+                            NSArray<NSNumber *> *waypointsIdxToDelete = dataToUpdate[@"delete_waypoints_idx"];
+                            if (cells.count - 1 == waypointsIdxToDelete.count)
+                            {
+                                [tableSections removeObjectAtIndex:deleteSectionI];
+                            }
+                            else
+                            {
+                                NSMutableArray *cellsToDelete = [NSMutableArray array];
+                                for (NSNumber *waypointIdToDelete in waypointsIdxToDelete)
+                                {
+                                    [cellsToDelete addObject:[cells objectAtIndex:waypointIdToDelete.intValue + 1]];
+                                }
+                                [cells removeObjectsInArray:cellsToDelete];
+                                [tableSections[deleteSectionI] setData:@{ kSectionCells: cells }];
+                            }
+                            [self.tableData setData:@{ kTableSections: tableSections }];
+
+                            for (OAGPXTableSectionData *section in tableSections)
+                            {
+                                OAGPXTableCellData *groupCell = section.cells.firstObject;
+                                if (groupCell.updateProperty)
+                                    groupCell.updateProperty(@{ @"regenerate_bool_value": @YES });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        BOOL hasExist = [dataToUpdate.allKeys containsObject:@"exist_group_name_index"];
+                        BOOL hasNew = [dataToUpdate.allKeys containsObject:@"new_group_name_index"];
+                        NSInteger oldI = [dataToUpdate[@"old_group_name_index"] integerValue];
+                        NSInteger existI = [dataToUpdate[@"exist_group_name_index"] integerValue];
+                        NSInteger newI = [dataToUpdate[@"new_group_name_index"] integerValue];
+                        if (oldI != NSNotFound && newI != NSNotFound)
+                        {
+                            if (hasExist && existI != NSNotFound && hasNew)
+                            {
+                                NSMutableArray *cells = [tableSections[existI == newI + 1 ? existI : newI].cells mutableCopy];
+                                NSMutableArray *extraCells = [tableSections[existI == newI + 1 ? oldI : newI == existI
+                                        ? oldI : existI].cells mutableCopy];
+                                [extraCells removeObjectAtIndex:0];
+                                [cells addObjectsFromArray:extraCells];
+                                [tableSections[existI == newI + 1 ? existI : newI] setData:@{ kSectionCells: cells }];
+                                [tableSections removeObjectAtIndex:existI == newI + 1 ? oldI : newI == existI ? oldI : existI];
+                                [self.tableData setData:@{ kTableSections: tableSections }];
+                            }
+                            else if ((!hasExist || existI != NSNotFound) && hasNew)
+                            {
+                                OAGPXTableSectionData *groupSection = tableSections[oldI];
+                                [tableSections removeObjectAtIndex:oldI];
+                                [tableSections insertObject:groupSection atIndex:newI];
+                                [self.tableData setData:@{ kTableSections: tableSections }];
+                            }
+
+                            if (hasNew && existI != NSNotFound)
+                            {
+                                OAGPXTableSectionData *groupSection = tableSections[existI == newI ? existI : newI];
+                                if (groupSection.updateProperty)
+                                    groupSection.updateProperty(value);
+                            }
+                            else
+                            {
+                                OAGPXTableSectionData *groupSection = tableSections[oldI];
+                                if (groupSection.updateProperty)
+                                    groupSection.updateProperty(value);
+                            }
+                        }
+                    }
                 }
             }
     }];

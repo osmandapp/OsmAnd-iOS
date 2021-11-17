@@ -385,7 +385,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 
 + (void)onPrepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters
 {
-    for (OAPlugin *plugin in [self getEnabledPlugins])
+    for (OAPlugin *plugin in [self.class getEnabledPlugins])
     {
         [plugin prepareExtraTopPoiFilters:poiUIFilters];
     }

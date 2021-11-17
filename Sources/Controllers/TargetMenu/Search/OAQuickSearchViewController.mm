@@ -580,7 +580,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
                 OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
                 [mapVC updatePoiLayer];
-                [self showToolbar];
+                [self showToolbar:filter];
                 [self dismissViewControllerAnimated:YES completion:nil];
             }
             else
@@ -687,7 +687,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         _searchToolbarViewController.searchDelegate = self;
     }
     [_searchToolbarViewController setFilter:filter];
-    _searchToolbarViewController.toolbarTitle = filter ? filter.name : [_textField.text trim];
+    _searchToolbarViewController.toolbarTitle =
+            filter && ![filter.filterId isEqualToString:BY_NAME_FILTER_ID]
+                    ? filter.name : [_textField.text trim];
     [[OARootViewController instance].mapPanel showToolbar:_searchToolbarViewController];
 }
 
@@ -1996,6 +1998,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void)searchToolbarOpenSearch:(OAPOIUIFilter *)filter
 {
+    if ([filter.filterId isEqualToString:BY_NAME_FILTER_ID])
+        [[OAPOIFiltersHelper sharedInstance] removeSelectedPoiFilter:filter];
+
     if (filter)
     {
         [[OARootViewController instance].mapPanel hideToolbar:_searchToolbarViewController];

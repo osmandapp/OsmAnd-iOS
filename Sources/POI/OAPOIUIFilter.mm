@@ -380,7 +380,7 @@
 
 - (OAAmenityNameFilter *) getNameFilter:(NSString *)filter
 {
-    if (filter.length == 0)
+    if (!filter || filter.length == 0)
     {
         return [[OAAmenityNameFilter alloc] initWithAcceptFunc:^BOOL(OAPOI *poi) {
             return YES;
@@ -423,102 +423,134 @@
     return [self getNameFilterInternal:nmFilter allTime:allTime open:open poiAdditionals:poiAdditionalsFilter];
 }
 
-- (OAAmenityNameFilter *) getNameFilterInternal:(NSMutableString *)nmFilter allTime:(BOOL)allTime open:(BOOL)open poiAdditionals:(NSArray<OAPOIType *> *)poiAdds
+- (OAAmenityNameFilter *) getNameFilterInternal:(NSMutableString *)nmFilter
+                                        allTime:(BOOL)allTime
+                                           open:(BOOL)open
+                                 poiAdditionals:(NSArray<OAPOIType *> *)selectedFilters
 {
     OANameStringMatcher __block *sm = nmFilter.length > 0 ?
 				[[OANameStringMatcher alloc] initWithNamePart:[nmFilter trim] mode:CHECK_STARTS_FROM_SPACE] : nil;
 
-    return [[OAAmenityNameFilter alloc] initWithAcceptFunc:^BOOL(OAPOI *poi) {
-
-        if (sm)
-        {
-            NSString *lower = [poiHelper getPoiStringWithoutType:poi];
-            if (![sm matches:lower] && ![sm matchesMap:poi.localizedNames.allValues])
-                return NO;
-        }
-        if (poiAdds)
-        {
-            NSMapTable<OAPOIType *, OAPOIType *> *textPoiAdditionalsMap = [NSMapTable strongToStrongObjectsMapTable];
-            NSMapTable<NSString *, NSMutableArray<OAPOIType *> *> *poiAdditionalCategoriesMap = [NSMapTable strongToStrongObjectsMapTable];
-            for (OAPOIType *pt in poiAdds)
-            {
-                NSString *category = pt.poiAdditionalCategory;
-                if (!category)
-                    category = @"";
-                NSMutableArray<OAPOIType *> *types = [poiAdditionalCategoriesMap objectForKey:category];
-                if (!types)
-                    types = [NSMutableArray array];
-                
-                [types addObject:pt];
-                [poiAdditionalCategoriesMap setObject:types forKey:category];
-
-                NSString *osmTag = pt.tag;
-                if (osmTag.length < pt.name.length)
-                {
-                    OAPOIType *textPoiType = [poiHelper getTextPoiAdditionalByKey:osmTag];
-                    if (!textPoiType)
-                        [textPoiAdditionalsMap setObject:textPoiType forKey:pt];
-                }
-            }
-            for (NSMutableArray<OAPOIType *> *types in poiAdditionalCategoriesMap.objectEnumerator)
-            {
-                BOOL acceptedAnyInCategory = NO;
-                for (OAPOIType *p in types)
-                {
-                    NSString *inf = [poi.values objectForKey:p.name];
-                    if (inf)
-                    {
-                        acceptedAnyInCategory = YES;
-                        break;
-                    }
-                    else
-                    {
-                        OAPOIType *textPoiType = [textPoiAdditionalsMap objectForKey:p];
-                        if (textPoiType)
-                        {
-                            inf = [poi.values objectForKey:textPoiType.name];
-                            if (inf.length > 0)
-                            {
-                                NSArray<NSString *> *items = [inf componentsSeparatedByString:@";"];
-                                NSString *val = [[p.value trim] lowerCase];
-                                for (NSString *item in items)
-                                {
-                                    if ([[[item trim] lowerCase] isEqualToString:val])
-                                    {
-                                        acceptedAnyInCategory = YES;
-                                        break;
-                                    }
-                                }
-                                if (acceptedAnyInCategory)
-                                    break;
-                            }
-                        }
-                    }
-                }
-                if (!acceptedAnyInCategory)
-                    return NO;
-            }
-        }
+    return [[OAAmenityNameFilter alloc] initWithAcceptFunc:^BOOL(OAPOI *amenity) {
         if (allTime)
         {
-            if (!poi.openingHours || (![@"24/7" isEqualToString:poi.openingHours] && ![@"Mo-Su 00:00-24:00" isEqualToString:poi.openingHours]))
+            if (!amenity.openingHours
+                    || (![@"24/7" isEqualToString:amenity.openingHours]&& ![@"Mo-Su 00:00-24:00" isEqualToString:amenity.openingHours]))
                 return NO;
         }
+
         if (open)
         {
-            if (!poi.openingHours)
+            if (!amenity.openingHours)
             {
                 return NO;
             }
             else
             {
-                auto parser = OpeningHoursParser::parseOpenedHours([poi.openingHours UTF8String]);
+                auto parser = OpeningHoursParser::parseOpenedHours([amenity.openingHours UTF8String]);
                 if (!parser || !parser->isOpened())
                     return NO;
             }
         }
+
+        if (sm)
+        {
+            NSString *lower = [poiHelper getPoiStringWithoutType:amenity];
+            if (![sm matches:lower] && ![sm matchesMap:amenity.localizedNames.allValues])
+                return NO;
+        }
+
+        if (![self acceptedAnyFilterOfEachCategory:amenity selectedFilters:selectedFilters])
+            return NO;
+
         return YES;
     }];
+}
+
+- (BOOL)acceptedAnyFilterOfEachCategory:(OAPOI *)amenity
+                        selectedFilters:(NSArray<OAPOIType *> *)selectedFilters
+{
+    if (!selectedFilters)
+        return YES;
+
+    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *filterCategories = [NSMutableDictionary dictionary];
+    NSMapTable <OAPOIType *, OAPOIType *> *textFilters = [NSMapTable strongToStrongObjectsMapTable];
+
+    [self fillFilterCategories:selectedFilters filterCategories:filterCategories textFilters:textFilters];
+
+    for (NSMutableArray<OAPOIType *> *category in filterCategories.allValues)
+    {
+        if (![self acceptedAnyFilterOfCategory:amenity category:category textFilters:textFilters])
+            return NO;
+    }
+
+    return YES;
+}
+
+- (void)fillFilterCategories:(NSArray<OAPOIType *> *)selectedFilters
+            filterCategories:(NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *)filterCategories
+                 textFilters:(NSMapTable <OAPOIType *, OAPOIType *> *)textFilters
+{
+    for (OAPOIType *filter in selectedFilters)
+    {
+        NSString *category = filter.poiAdditionalCategory;
+        NSMutableArray<OAPOIType *> *filtersOfCategory = filterCategories[category ? category : @""];
+        if (!filtersOfCategory)
+        {
+            filtersOfCategory = [NSMutableArray array];
+            filterCategories[category ? category : @""] = filtersOfCategory;
+        }
+        [filtersOfCategory addObject:filter];
+
+        NSString *osmTag = [filter getOsmTag];
+        if (osmTag.length < filter.name.length)
+        {
+            OAPOIType *textFilter = [poiHelper getTextPoiAdditionalByKey:osmTag];
+            if (!textFilter)
+                [textFilters setObject:textFilter forKey:filter];
+        }
+    }
+}
+
+- (BOOL)acceptedAnyFilterOfCategory:(OAPOI *)amenity
+                           category:(NSMutableArray<OAPOIType *> *)category
+                        textFilters:(NSMapTable <OAPOIType *, OAPOIType *> *)textFilters
+{
+    for (OAPOIType *filter in category)
+    {
+        if ([self acceptedFilter:amenity filter:filter textFilterCategories:textFilters])
+            return YES;
+    }
+
+    return NO;
+}
+
+- (BOOL)acceptedFilter:(OAPOI *)amenity
+                filter:(OAPOIType *)filter
+  textFilterCategories:(NSMapTable <OAPOIType *, OAPOIType *> *)textFilterCategories
+{
+    NSString *filterValue = [amenity getAdditionalInfo][filter.name];
+
+    if (filterValue)
+        return YES;
+
+    OAPOIType *textPoiType = [textFilterCategories objectForKey:filter];
+    if (!textPoiType)
+        return NO;
+
+    filterValue = [amenity getAdditionalInfo][textPoiType.name];
+    if (!filterValue || filterValue.length == 0)
+        return NO;
+
+    NSArray<NSString *> *items = [filterValue componentsSeparatedByString:@";"];
+    NSString *val = [[filter getOsmValue] trim].lowercaseString;
+    for (NSString *item in items)
+    {
+        if ([[item trim].lowercaseString isEqualToString:val])
+            return YES;
+    }
+
+    return NO;
 }
 
 - (NSString *) getNameToken24H

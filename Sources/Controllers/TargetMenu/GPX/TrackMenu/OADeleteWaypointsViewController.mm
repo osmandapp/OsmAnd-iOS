@@ -37,23 +37,15 @@
     NSArray<OAGPXTableSectionData *> *_tableData;
     NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *_waypointGroups;
     NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *_selectedWaypointGroups;
-    NSArray<NSNumber *> *_originalCloseOpenGroups;
-    BOOL _isCurrentTrack;
-    NSString *_gpxFilePath;
+    NSDictionary<NSString *, NSDictionary *> *_originalData;
 }
 
 - (instancetype)initWithSectionsData:(NSArray<OAGPXTableSectionData *> *)sectionsData
-                      waypointGroups:(NSDictionary *)waypointGroups
-                      isCurrentTrack:(BOOL)isCurrentTrack
-                         gpxFilePath:(NSString *)gpxFilePath
 {
     self = [super init];
     if (self)
     {
         _tableData = sectionsData;
-        _waypointGroups = waypointGroups;
-        _isCurrentTrack = isCurrentTrack;
-        _gpxFilePath = gpxFilePath;
         _app = [OsmAndApp instance];
         _selectedWaypointGroups = [NSMutableDictionary dictionary];
     }
@@ -96,27 +88,28 @@
 
 - (void)updateGroupData
 {
-    NSMutableArray<NSNumber *> *closeOpenGroups = [NSMutableArray array];
+    _waypointGroups = self.trackMenuDelegate ? [self.trackMenuDelegate getWaypointsData] : [NSDictionary dictionary];
+    NSMutableDictionary<NSString *, NSDictionary *> *originalData = [NSMutableDictionary dictionary];
     for (OAGPXTableSectionData *sectionData in _tableData)
     {
         OAGPXTableCellData *groupCellData = sectionData.cells.firstObject;
-        [closeOpenGroups addObject:@(groupCellData.toggle)];
+        originalData[groupCellData.key] = @{
+                kCellRightIconName: groupCellData.rightIconName,
+                kCellToggle: @(groupCellData.toggle),
+                kTableUpdateData: groupCellData.updateData
+        };
         [groupCellData setData:@{
                 kTableUpdateData: ^() {
-                    NSString *groupName = groupCellData.title;
-                    NSArray *selectedWaypoints = _selectedWaypointGroups[groupName];
+                    NSArray *selectedWaypoints = _selectedWaypointGroups[groupCellData.title];
                     [groupCellData setData:@{
-                            kCellKey: [NSString stringWithFormat:@"group_%@", groupName],
                             kTableValues: @{
                                     @"bool_value_selected": @(selectedWaypoints != nil ? selectedWaypoints.count > 0 : NO)
                             },
-                            kCellTitle: groupName,
-                            kCellRightIconName: groupCellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right"
                     }];
                 }
         }];
     }
-    _originalCloseOpenGroups = closeOpenGroups;
+    _originalData = originalData;
 }
 
 - (void)updateDistanceAndDirection
@@ -172,13 +165,15 @@
     [self.deleteButton setAttributedTitle:attrShow forState:UIControlStateNormal];
 }
 
-- (void)restoreCloseOpenGroups
+- (void)restoreOriginalData
 {
-    for (NSInteger i = 0; i < _tableData.count; i++)
+    for (OAGPXTableSectionData *sectionData in _tableData)
     {
-        OAGPXTableCellData *groupCellData = _tableData[i].cells.firstObject;
+        OAGPXTableCellData *groupCellData = sectionData.cells.firstObject;
         [groupCellData setData:@{
-                kCellToggle: _originalCloseOpenGroups[i]
+                kCellRightIconName: _originalData[groupCellData.key][kCellRightIconName],
+                kCellToggle: _originalData[groupCellData.key][kCellToggle],
+                kTableUpdateData: _originalData[groupCellData.key][kTableUpdateData]
         }];
     }
 }
@@ -253,7 +248,10 @@
 
 - (NSArray<OAGpxWptItem *> *)getGpxWptItems:(NSInteger)section
 {
-    return _waypointGroups[_waypointGroups.allKeys[section]];
+    NSArray<NSString *> *waypointSortedGroupNames = self.trackMenuDelegate
+            ? [self.trackMenuDelegate getWaypointSortedGroups] : [NSArray array];
+    return waypointSortedGroupNames.count > 0
+            ? _waypointGroups[waypointSortedGroupNames[section]] : _waypointGroups[_waypointGroups.allKeys[section]];
 }
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
@@ -269,17 +267,19 @@
     [cellData setData:@{
             kCellToggle: @(!cellData.toggle)
     }];
-    if (_tableData[indexPath.section].updateData)
-        _tableData[indexPath.section].updateData();
+    [cellData setData:@{
+            kCellRightIconName: cellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right"
+    }];
 
     [self.tableView beginUpdates];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                  withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView endUpdates];
 }
 
 - (IBAction)onCancelButtonClicked:(id)sender
 {
-    [self restoreCloseOpenGroups];
+    [self restoreOriginalData];
     if (self.trackMenuDelegate)
         [self.trackMenuDelegate refreshLocationServices];
 
@@ -288,9 +288,12 @@
 
 - (IBAction)onSelectAllButtonClicked:(id)sender
 {
-    for (NSInteger i = 0; i < _waypointGroups.allKeys.count; i++)
+    NSMutableArray<NSString *> *waypointSortedGroupNames = self.trackMenuDelegate
+            ? [[self.trackMenuDelegate getWaypointSortedGroups] mutableCopy] : [NSMutableArray array];
+    [waypointSortedGroupNames removeObject:OALocalizedString(@"targets")];
+    for (NSInteger i = 0; i < waypointSortedGroupNames.count; i++)
     {
-        NSString *groupName = _waypointGroups.allKeys[i];
+        NSString *groupName = waypointSortedGroupNames[i];
         _selectedWaypointGroups[groupName] = [_waypointGroups[groupName] mutableCopy];
         OAGPXTableCellData *groupCellData = _tableData[i].cells.firstObject;
         if (groupCellData.updateData)
@@ -311,6 +314,7 @@
 
 - (IBAction)onDeleteButtonClicked:(id)sender
 {
+    [self restoreOriginalData];
     for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
     {
         if (self.trackMenuDelegate)
@@ -318,12 +322,8 @@
                                        selectedWaypoints:_selectedWaypointGroups[groupName]];
     }
 
-    [self restoreCloseOpenGroups];
     if (self.trackMenuDelegate)
-    {
-        [self.trackMenuDelegate refreshWaypoints];
         [self.trackMenuDelegate refreshLocationServices];
-    }
 
     [self dismissViewController];
 }
@@ -337,7 +337,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _tableData[section].cells.count;
+    return _tableData[section].cells.firstObject.toggle ? _tableData[section].cells.count : 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
@@ -428,10 +428,8 @@
 
             if ([cellData.values[@"bool_value_selected"] boolValue])
             {
-                NSString *groupName = _waypointGroups[_waypointGroups.allKeys[indexPath.section]][indexPath.row].point.type;
-                if (self.trackMenuDelegate)
-                    groupName = [self.trackMenuDelegate checkGroupName:groupName];
-                UIImage *selectionImage =  _selectedWaypointGroups[groupName].count == _waypointGroups[groupName].count
+                NSString *groupName = self.trackMenuDelegate ? [self.trackMenuDelegate checkGroupName:cellData.title] : @"";
+                UIImage *selectionImage = _selectedWaypointGroups[groupName].count == _waypointGroups[groupName].count
                         ? [UIImage imageNamed:@"ic_system_checkbox_selected"]
                         : [UIImage imageNamed:@"ic_system_checkbox_indeterminate"];
                 [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];

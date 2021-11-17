@@ -60,6 +60,8 @@
         _updateData = data[kTableUpdateData];
     if ([data.allKeys containsObject:kCellButtonPressed])
         _onButtonPressed = data[kCellButtonPressed];
+    if ([data.allKeys containsObject:kTableUpdateProperty])
+        _updateProperty = data[kTableUpdateProperty];
 }
 
 @end
@@ -90,6 +92,8 @@
         _values = data[kTableValues];
     if ([data.allKeys containsObject:kTableUpdateData])
         _updateData = data[kTableUpdateData];
+    if ([data.allKeys containsObject:kTableUpdateProperty])
+        _updateProperty = data[kTableUpdateProperty];
 }
 
 - (BOOL)containsCell:(NSString *)key
@@ -122,6 +126,8 @@
         _sections = data[kTableSections];
     if ([data.allKeys containsObject:kTableUpdateData])
         _updateData = data[kTableUpdateData];
+    if ([data.allKeys containsObject:kTableUpdateProperty])
+        _updateProperty = data[kTableUpdateProperty];
 }
 
 @end
@@ -195,7 +201,6 @@
     [super viewDidLoad];
     [self applyLocalization];
     _cachedYViewPort = _mapViewController.mapView.viewportYScale;
-    [self adjustMapViewPort];
 
     [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"] forState:UIControlStateNormal];
     self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
@@ -206,10 +211,7 @@
     [self generateData];
     [self setupHeaderView];
 
-    if (![self isLandscape])
-        [self goExpanded];
-    else
-        [self goFullScreen];
+    [self updateShowingState:[self isLandscape] ? EOADraggableMenuStateFullScreen : EOADraggableMenuStateExpanded];
 }
 
 - (void)applyLocalization
@@ -217,23 +219,18 @@
     //override
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    [_mapPanelViewController setTopControlsVisible:NO
+                              customStatusBarStyle:[OAAppSettings sharedManager].nightMode
+                                      ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
+    [_mapPanelViewController targetSetBottomControlsVisible:YES
+                                                 menuHeight:[self isLandscape] ? 0
+                                                         : [self getViewHeight] - [OAUtilities getBottomMargin] + 4
+                                                   animated:YES];
+    [_mapPanelViewController.hudViewController updateMapRulerData];
     [self updateViewAnimated];
-    [self show:YES
-         state:[self isLandscape] ? EOADraggableMenuStateFullScreen : EOADraggableMenuStateExpanded
-    onComplete:^{
-        [_mapPanelViewController targetGoToGPX];
-        [_mapPanelViewController setTopControlsVisible:NO
-                                  customStatusBarStyle:[OAAppSettings sharedManager].nightMode
-                                          ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
-        [_mapPanelViewController targetSetBottomControlsVisible:YES
-                                                     menuHeight:[self isLandscape] ? 0
-                                                             : [self getViewHeight] - [OAUtilities getBottomMargin]
-                                                       animated:YES];
-        [self changeMapRulerPosition];
-        [_mapPanelViewController.hudViewController updateMapRulerData];
-    }];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -242,9 +239,7 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         if (![self isLandscape])
             [self goExpanded];
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self adjustMapViewPort];
-    }];
+    } completion:nil];
 }
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -290,13 +285,20 @@
 
 - (void)doAdditionalLayout
 {
-    self.backButtonLeadingConstraint.constant = [self isLandscape] ? self.tableView.frame.size.width : [OAUtilities getLeftMargin] + 10.;
+    self.backButtonLeadingConstraint.constant = [self isLandscape]
+            ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 20.
+            : [OAUtilities getLeftMargin] + 10.;
     self.backButtonContainerView.hidden = ![self isLandscape] && self.currentState == EOADraggableMenuStateFullScreen;
 }
 
 - (void)adjustMapViewPort
 {
-    _mapViewController.mapView.viewportXScale = [self isLandscape] ? VIEWPORT_SHIFTED_SCALE : VIEWPORT_NON_SHIFTED_SCALE;
+    if ([self isLandscape] && _mapViewController.mapView.viewportXScale != VIEWPORT_SHIFTED_SCALE)
+        _mapViewController.mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
+    else if (![self isLandscape] && _mapViewController.mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
+        _mapViewController.mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+    if (_mapViewController.mapView.viewportYScale != [self getViewHeight] / DeviceScreenHeight)
+        _mapViewController.mapView.viewportYScale = [self getViewHeight] / DeviceScreenHeight;
 }
 
 - (void)restoreMapViewPort
@@ -311,9 +313,11 @@
 - (void)changeMapRulerPosition
 {
     CGFloat bottomMargin = [self isLandscape] ? 0 : (-[self getViewHeight] + [OAUtilities getBottomMargin] - 20.);
+    CGFloat leftMargin = [self isLandscape]
+            ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 20.
+            : [OAUtilities getLeftMargin] + 20.;
     [_mapPanelViewController targetSetMapRulerPosition:bottomMargin
-                                                  left:([self isLandscape] ? self.tableView.frame.size.width
-                                                          : [OAUtilities getLeftMargin] + 20.)];
+                                                  left:leftMargin];
 }
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem
@@ -345,7 +349,9 @@
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
-    [self hide:YES duration:.2 onComplete:nil];
+    [self hide:YES duration:.2 onComplete:^{
+        [_mapViewController hideContextPinMarker];
+    }];
 }
 
 #pragma mark - OADraggableViewActions
@@ -356,7 +362,7 @@
                                                  menuHeight:[self isLandscape] ? 0
                                                          : height - [OAUtilities getBottomMargin]
                                                    animated:YES];
-    if (self.currentState != EOADraggableMenuStateFullScreen)
+    if ((self.currentState != EOADraggableMenuStateFullScreen && ![self isLandscape]) || [self isLandscape])
     {
         [self changeMapRulerPosition];
         [self adjustMapViewPort];

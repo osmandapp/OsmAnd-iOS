@@ -188,6 +188,11 @@
                  lroundf(b * 255)];
 }
 
++ (UIColor *) colorFromString:(NSString *)string
+{
+    return UIColorFromRGBA([OAUtilities colorToNumberFromString:string]);
+}
+
 @end
 
 @implementation NSString (util)
@@ -897,13 +902,12 @@
     return res;
 }
 
-
-+ (UIColor *) colorFromString:(NSString *)string
++ (int) colorToNumberFromString:(NSString *)string
 {
     string = [string lowercaseString];
     string = [string stringByReplacingOccurrencesOfString:@"#" withString:@""];
     string = [string stringByReplacingOccurrencesOfString:@"0x" withString:@""];
-    
+
     switch ([string length])
     {
         case 0:
@@ -938,7 +942,7 @@
     uint32_t rgba;
     NSScanner *scanner = [NSScanner scannerWithString:string];
     [scanner scanHexInt:&rgba];
-    return UIColorFromRGBA(rgba);
+    return rgba;
 }
 
 + (BOOL) areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2
@@ -1693,6 +1697,9 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (NSAttributedString *) getColoredString:(NSString *)wholeString highlightedString:(NSString *)hs highlightColor:(UIColor *)highlightColor fontSize:(CGFloat)fontSize centered:(BOOL)centered
 {
+    if (!wholeString || wholeString.length == 0 || !hs || hs.length == 0)
+        return nil;
+    
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:wholeString
                                                                                                     attributes:@{NSParagraphStyleAttributeName : style}];

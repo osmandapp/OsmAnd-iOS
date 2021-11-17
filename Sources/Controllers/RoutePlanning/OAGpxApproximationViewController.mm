@@ -365,7 +365,7 @@
                 cell.secondaryImageView.tintColor = UIColorFromRGB(profile.getIconColor);
             }
 			cell.iconView.hidden = indexPath.row == 0;
-			cell.iconView.image = selected ? [UIImage templateImageNamed:@"ic_checmark_default"] : nil;
+			cell.iconView.image = selected ? [UIImage templateImageNamed:@"ic_checkmark_default"] : nil;
 
             [cell roundCorners:indexPath.row == 0 bottomCorners:indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1];
             cell.separatorView.hidden = indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1;

@@ -8,6 +8,7 @@
 
 #import "OAAddWaypointViewController.h"
 #import "OARootViewController.h"
+#import "OATrackMenuHudViewController.h"
 #import "OAMapRendererView.h"
 #import "OAContextMenuLayer.h"
 #import "OAMapLayers.h"
@@ -75,7 +76,7 @@
 {
     [super viewDidLoad];
 
-    _iconView.image = [UIImage templateImageNamed:@"ic_action_marker"];
+    _iconView.image = [UIImage templateImageNamed:@"ic_custom_location_marker"];
     _iconView.tintColor = UIColorFromRGB(color_tint_gray);
 
     if (![OAUtilities isLandscapeIpadAware])
@@ -207,9 +208,10 @@
 {
     [_contextLayer exitChangePositionMode:_movedPoint applyNewPosition:NO];
     [_mapPanelViewController targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
-        [_mapPanelViewController openTargetViewWithGPX:_gpx
-                                          trackHudMode:EOATrackMenuHudMode
-                                                 state:_targetMenuState];
+        if ([_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
+            [_mapPanelViewController openTargetViewWithGPX:_gpx
+                                              trackHudMode:EOATrackMenuHudMode
+                                                     state:(OATrackMenuViewControllerState *) _targetMenuState];
     }];
 
 }

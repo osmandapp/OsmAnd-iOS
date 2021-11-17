@@ -96,7 +96,9 @@
         });
     }
 
-    self.appearanceCollection = [[OAGPXAppearanceCollection alloc] init];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.appearanceCollection = [[OAGPXAppearanceCollection alloc] init];
+    });
 
     return YES;
 }
@@ -136,7 +138,7 @@
         const auto& values = extraData->getValues();
         const auto& it = values.find(QStringLiteral("color"));
         if (it != values.end())
-            return [OAUtilities colorFromString:it.value().toString().toNSString()];
+            return [UIColor colorFromString:it.value().toString().toNSString()];
     }
     return nil;
 }
@@ -350,7 +352,10 @@
         {
             if ([trackWidth isCustom])
             {
-                lineWidth = [trackWidth.customValue floatValue];
+                if (trackWidth.customValue.floatValue > [OAGPXTrackWidth getCustomTrackWidthMax])
+                    lineWidth = [OAGPXTrackWidth getDefault].customValue.floatValue;
+                else
+                    lineWidth = trackWidth.customValue.floatValue;
             }
             else
             {
@@ -400,11 +405,9 @@
         if (points != nil)
         {
             OATargetPoint *targetPoint = [self getTargetPoint:gpx];
+            targetPoint.location = point;
             if (targetPoint && ![res containsObject:targetPoint])
                 [res addObject:targetPoint];
-//            LatLon latLon = tb.getLatLonFromPixel(mx, my);
-//            res.add(createSelectedGpxPoint(selectedGpxFile, points.first, points.second, latLon,
-//                                           showTrackPointMenu));
         }
     }
 }

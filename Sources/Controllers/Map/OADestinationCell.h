@@ -55,7 +55,7 @@
 @property (nonatomic) UIColor *unitsColor;
 @property (nonatomic) UIColor *descColor;
 
-+ (void)setParkingTimerStr:(NSDate *)pickupDate label:(UILabel *)label shortText:(BOOL)shortText;
++ (void)setParkingTimerStr:(NSDate *)pickupDate creationDate:(NSDate *)creationDate label:(UILabel *)label shortText:(BOOL)shortText;
 + (NSString *)parkingTimeStr:(NSDate *)pickupDate shortText:(BOOL)shortText;
 
 - (instancetype)initWithDestination:(OADestination *)destination destinationIndex:(NSInteger)destinationIndex;

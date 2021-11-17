@@ -1539,8 +1539,8 @@
 "offline_raster_maps" = "Mappe raster Offline";
 "res_edit_map_source" = "Modifica il sorgente della mappa";
 "app_mode_pedestrian" = "A piedi";
-"app_mode_bicycle" = "In bicicletta";
-"app_mode_car" = "Alla guida";
+"app_mode_bicycle" = "Bicicletta";
+"app_mode_car" = "Automobile";
 "online_webpage_warning" = "Pagina disponibile solo online. Aprirla in un browser?";
 "app_mode_skiing" = "Sci";
 "app_mode_helicopter" = "Elicottero";

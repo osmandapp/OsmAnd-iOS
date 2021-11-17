@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@class OAMapViewController;
+#import "OAGPXDatabase.h"
 
 @interface OAGPXTrackAppearance : NSObject
 
@@ -37,14 +36,33 @@
 
 - (BOOL)isCustom;
 
++ (NSInteger)getCustomTrackWidthMin;
++ (NSInteger)getCustomTrackWidthMax;
+
+@end
+
+@interface OAGPXTrackSplitInterval : OAGPXTrackAppearance
+
+@property (nonatomic) EOAGpxSplitType type;
+@property (nonatomic) NSArray<NSString *> *titles;
+@property (nonatomic) NSArray<NSNumber *> *values;
+@property (nonatomic) NSString *customValue;
+
+- (instancetype)initWithType:(EOAGpxSplitType)type;
++ (instancetype)getDefault;
+
+- (BOOL)isCustom;
+
 @end
 
 @interface OAGPXAppearanceCollection : NSObject
 
 - (NSArray<OAGPXTrackColor *> *)getAvailableColors;
 - (NSArray<OAGPXTrackWidth *> *)getAvailableWidth;
+- (NSArray<OAGPXTrackSplitInterval *> *)getAvailableSplitIntervals;
 
 - (OAGPXTrackColor *)getColorForValue:(NSInteger)value;
 - (OAGPXTrackWidth *)getWidthForValue:(NSString *)value;
+- (OAGPXTrackSplitInterval *)getSplitIntervalForType:(EOAGpxSplitType)type;
 
 @end

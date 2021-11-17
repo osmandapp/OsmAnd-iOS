@@ -16,6 +16,7 @@
 #import "OAEditPointViewController.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXDocument.h"
+#import "Localization.h"
 
 @implementation OAGpxWptEditingHandler
 {
@@ -81,12 +82,12 @@
 
 - (UIColor *)getColor
 {
-    return _gpxWpt.color ? _gpxWpt.color : [OAUtilities colorFromString:_gpxWpt.point.color];
+    return _gpxWpt.color ? _gpxWpt.color : [UIColor colorFromString:_gpxWpt.point.color];
 }
 
 - (NSString *)getGroupTitle
 {
-    return _gpxWpt.point.type ? _gpxWpt.point.type : @"";
+    return _gpxWpt.point.type && _gpxWpt.point.type.length > 0 ? _gpxWpt.point.type : OALocalizedString(@"gpx_waypoints");
 }
 - (OAGPXDocument *)getGpxDocument
 {
@@ -95,7 +96,7 @@
 
 - (NSArray<NSDictionary<NSString *, NSString *> *> *)getGroups
 {
-    NSArray<NSDictionary<NSString *, NSString *> *> *groups = [_gpxDocument getWaypointCategoriesWithAllData:NO];
+    NSArray<NSDictionary<NSString *, NSString *> *> *groups = [_gpxDocument getWaypointCategoriesWithAllData:YES];
 
     if (_newGroupTitle)
     {
@@ -106,6 +107,32 @@
 
         NSMutableArray *newGroups = [NSMutableArray arrayWithArray:groups];
         [newGroups addObject:newGroup];
+        groups = newGroups;
+    }
+
+    BOOL hasDefaultGroup = NO;
+    for (NSDictionary<NSString *, NSString *> *group in groups)
+    {
+        if ([group[@"title"] isEqualToString:@""])
+        {
+            NSMutableDictionary *newGroup = [group mutableCopy];
+            newGroup[@"title"] = OALocalizedString(@"gpx_waypoints");
+            NSMutableArray *newGroups = [groups mutableCopy];
+            [newGroups removeObject:group];
+            [newGroups insertObject:newGroup atIndex:0];
+            groups = newGroups;
+            hasDefaultGroup = YES;
+            break;
+        }
+    }
+    if (!hasDefaultGroup)
+    {
+        NSMutableDictionary<NSString *, NSString *> *defaultGroup = [NSMutableDictionary new];
+        defaultGroup[@"title"] = OALocalizedString(@"gpx_waypoints");
+        defaultGroup[@"color"] = [OADefaultFavorite getDefaultColor].toHexString;
+        defaultGroup[@"count"] = @"0";
+        NSMutableArray *newGroups = [groups mutableCopy];
+        [newGroups insertObject:defaultGroup atIndex:0];
         groups = newGroups;
     }
 

@@ -2163,3 +2163,11 @@
 "delete_waypoints" = "Ștergerea punctelor de trecere";
 "delete_group_confirm_short" = "Ștergeți grupul?";
 "delete_group_confirm" = "Sunteți sigur că doriți să ștergeți grupul \"%@\"?";
+"shared_string_time_span" = "Perioada de timp";
+"shared_string_start_time" = "Ora de start";
+"shared_string_time_moving" = "Timp în mișcare";
+"shared_string_end_time" = "Timpul final";
+"distance_moving" = "Distanța corectată";
+"parked_at" = "Parcat la";
+"industrial" = "Industrială";
+"education" = "Educație";

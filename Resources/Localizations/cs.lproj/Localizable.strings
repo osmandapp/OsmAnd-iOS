@@ -2174,3 +2174,11 @@
 "edit_track" = "Editovat stopu";
 "duplicate_track" = "Duplikovat stopu";
 "activity" = "Aktivita";
+"parked_at" = "Zaparkováno v";
+"distance_moving" = "Vzdálenost opravená";
+"shared_string_time_span" = "Časový rozsah";
+"shared_string_start_time" = "Čas odjezdu";
+"shared_string_end_time" = "Čas příjezdu";
+"shared_string_time_moving" = "Doba pohybu";
+"industrial" = "Průmyslový";
+"education" = "Vzdělávání";

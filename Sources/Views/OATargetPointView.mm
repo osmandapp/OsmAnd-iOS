@@ -1563,8 +1563,8 @@ static const NSInteger _buttonsCount = 4;
         [_addressLabel setText:OALocalizedString(@"parking_marker")];
         [self updateAddressLabel];
         OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
-        if (plugin && plugin.getParkingType)
-            [OADestinationCell setParkingTimerStr:[NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000] label:self.coordinateLabel shortText:NO];
+        if (plugin)
+            [OADestinationCell setParkingTimerStr:[NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000] creationDate:[NSDate dateWithTimeIntervalSince1970:plugin.getStartParkingTime / 1000] label:self.coordinateLabel shortText:NO];
     }
     else
     {

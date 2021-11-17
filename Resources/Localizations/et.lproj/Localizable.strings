@@ -2175,3 +2175,7 @@
 "duplicate_track" = "Dubleeri rada";
 "shared_string_overview" = "Ülevaade";
 "activity" = "Tegevus";
+"shared_string_time_span" = "Ajavahemik";
+"shared_string_end_time" = "Lõpuaeg";
+"shared_string_start_time" = "Algusaeg";
+"distance_moving" = "Korrigeeritud vahemaa";

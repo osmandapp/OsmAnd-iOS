@@ -45,7 +45,7 @@
 
 - (void)addHiddenGroups:(NSString *)groupName
 {
-    self.hiddenGroups = self.hiddenGroups ? [self.hiddenGroups setByAddingObject:groupName] : [NSSet set];
+    self.hiddenGroups = self.hiddenGroups ? [self.hiddenGroups setByAddingObject:groupName] : [NSSet setWithObject:groupName];
 }
 
 - (NSInteger)color

@@ -68,7 +68,7 @@ std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const
         const auto& values = locationMark->extraData->getValues();
         const auto& it = values.find(QStringLiteral("color"));
         if (it != values.end())
-            color = [OAUtilities colorFromString:it.value().toString().toNSString()];
+            color = [UIColor colorFromString:it.value().toString().toNSString()];
         
         const auto& shapeIt = values.find(QStringLiteral("background"));
         if (shapeIt != values.end())
@@ -118,7 +118,7 @@ std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::createCompositeBitmap(con
         const auto& values = locationMark->extraData->getValues();
         const auto& it = values.find(QStringLiteral("color"));
         if (it != values.end())
-            color = [OAUtilities colorFromString:it.value().toString().toNSString()];
+            color = [UIColor colorFromString:it.value().toString().toNSString()];
         const auto& shapeIt = values.find(QStringLiteral("background"));
         if (shapeIt != values.end())
             shapeName = shapeIt.value().toString().toNSString();

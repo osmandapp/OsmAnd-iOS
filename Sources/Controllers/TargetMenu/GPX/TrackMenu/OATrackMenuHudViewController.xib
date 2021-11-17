@@ -20,9 +20,9 @@
                 <outlet property="scrollableView" destination="9Ef-HN-sbO" id="Doq-y2-NC3"/>
                 <outlet property="sliderView" destination="Lnt-DR-w5c" id="b7J-u8-9Bk"/>
                 <outlet property="statusBarBackgroundView" destination="4cH-hU-LaH" id="PTu-hZ-Wjg"/>
-                <outlet property="tabBarView" destination="j7s-w5-BDJ" id="acJ-fY-zfP"/>
+                <outlet property="tabBarView" destination="j7s-w5-BDJ" id="FnS-hT-WOm"/>
                 <outlet property="tableView" destination="Gu6-5b-7IF" id="w0M-t6-8aa"/>
-                <outlet property="toolBarView" destination="BcL-vj-cdz" id="N3m-oB-g55"/>
+                <outlet property="toolBarView" destination="BcL-vj-cdz" id="VVH-8q-I2Z"/>
                 <outlet property="topHeaderContainerView" destination="Dhz-uG-Jnh" id="n0w-Ll-fBV"/>
                 <outlet property="view" destination="6t7-p7-sHH" id="u6m-eH-HBk"/>
             </connections>
@@ -45,27 +45,27 @@
                             <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <view contentMode="scaleToFill" id="J4M-wt-sVQ" userLabel="Content Container">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="338.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="347"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lnt-DR-w5c" userLabel="Slider">
-                                    <rect key="frame" x="191" y="6" width="32" height="3"/>
+                                    <rect key="frame" x="197.5" y="6" width="19" height="2"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </view>
                                 <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="Dhz-uG-Jnh" userLabel="Top Header Container" customClass="OATrackMenuHeaderView">
-                                    <rect key="frame" x="0.0" y="15" width="414" height="48.5"/>
+                                    <rect key="frame" x="0.0" y="14" width="414" height="48.5"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SFR-w4-dKd" userLabel="Separator">
-                                    <rect key="frame" x="0.0" y="63" width="414" height="0.5"/>
+                                    <rect key="frame" x="0.0" y="61.5" width="414" height="0.5"/>
                                     <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="0.5" id="DUv-Ue-5oZ"/>
                                     </constraints>
                                 </view>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="-1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="Gu6-5b-7IF">
-                                    <rect key="frame" x="0.0" y="63.5" width="414" height="281.5"/>
+                                    <rect key="frame" x="0.0" y="63" width="414" height="284"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                                 </tableView>

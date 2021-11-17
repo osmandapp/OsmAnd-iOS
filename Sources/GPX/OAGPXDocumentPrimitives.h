@@ -17,6 +17,7 @@
 #define BACKGROUND_TYPE_EXTENSION @"background"
 #define ADDRESS_EXTENSION @"address"
 #define CALENDAR_EXTENSION @"calendar_event"
+#define CREATION_TIME_EXTENSION @"creation_date"
 
 typedef enum
 {

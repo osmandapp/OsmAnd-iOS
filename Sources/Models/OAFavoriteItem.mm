@@ -157,6 +157,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
     QString qElevation = altitude > 0 ? QString::fromNSString([self toStringAltitude:altitude]) : QString();
     QString qTime = timestamp ? QString::fromNSString([self.class toStringDate:timestamp]) : QString();
+    QString qCreationTime = QString::fromNSString([self.class toStringDate:[NSDate date]]);
     
     QString qName = name ? QString::fromNSString(name) : QString();
     QString qDescription = description ? QString::fromNSString(description) : QString();
@@ -175,6 +176,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     std::shared_ptr<OsmAnd::IFavoriteLocation> favorite = [OsmAndApp instance].favoritesCollection->createFavoriteLocation(locationPoint,
                                                                      qElevation,
                                                                      qTime,
+                                                                     qCreationTime,
                                                                      qName,
                                                                      qDescription,
                                                                      qAddress,
@@ -458,6 +460,31 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         self.favorite->setTime(QString());
 }
 
+- (NSDate *) getCreationTime
+{
+    if (!self.favorite->getCreationTime().isNull())
+    {
+        NSString *timeString = self.favorite->getCreationTime().toNSString();
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+        [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+        return [dateFormat dateFromString:timeString];
+    }
+    else
+    {
+        return nil;
+    }
+}
+
+- (void) setCreationTime:(NSDate *)timestamp
+{
+    NSString *savingString = [self.class toStringDate:timestamp];
+    if (savingString)
+        self.favorite->setCreationTime(QString::fromNSString(savingString));
+    else
+        self.favorite->setCreationTime(QString());
+}
+
 - (bool) getCalendarEvent
 {
     return self.favorite->getCalendarEvent();
@@ -489,6 +516,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = ADDRESS_EXTENSION;
         e.value = self.getAddress;
+        [exts addObject:e];
+    }
+    if (self.getCreationTime)
+    {
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = CREATION_TIME_EXTENSION;
+        e.value = self.favorite->getCreationTime().toNSString();
         [exts addObject:e];
     }
     if (self.getIcon)

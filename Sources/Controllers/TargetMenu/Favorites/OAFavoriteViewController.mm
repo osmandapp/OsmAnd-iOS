@@ -72,6 +72,7 @@
         
         QString elevation = QString::null;
         QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
+        QString creationTime = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
         
         QString title = QString::fromNSString(formattedLocation);
         
@@ -104,6 +105,7 @@
         auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
                                                                         elevation,
                                                                         time,
+                                                                        creationTime,
                                                                         title,
                                                                         description,
                                                                         address,

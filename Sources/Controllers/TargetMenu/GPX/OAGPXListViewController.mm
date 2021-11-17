@@ -649,7 +649,14 @@ static UIViewController *parentController;
     }
     visibleGroup.isOpen = YES;
     if (visibleGroup.groupItems.count > 0)
+    {
+        visibleGroup.groupItems = [visibleGroup.groupItems sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
+            NSString *title1 = obj1[@"title"];
+            NSString *title2 = obj2[@"title"];
+            return [title1 compare: title2];
+        }];
         [tableData addObject:visibleGroup];
+    }
     
     for (NSString *key in _gpxFolders.allKeys)
     {
@@ -670,13 +677,32 @@ static UIViewController *parentController;
                 @"track" : track.gpx,
                 @"distance" : [OAOsmAndFormatter getFormattedDistance:track.gpx.totalDistance],
                 @"time" : [OAOsmAndFormatter getFormattedTimeInterval:track.gpx.timeSpan shortFormat:YES],
+                @"importDate" : track.gpx.importDate,
                 @"wpt" : [NSString stringWithFormat:@"%d", track.gpx.wptPoints],
                 @"key" : @"track_group"
             }];
         }
         tracksGroup.isOpen = NO;
         if (tracksGroup.groupItems.count > 0)
+        {
+            if ([key isEqualToString:@"import"])
+            {
+                tracksGroup.groupItems = [tracksGroup.groupItems sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
+                    NSDate *importDate1 = obj1[@"importDate"];
+                    NSDate *importDate2 = obj2[@"importDate"];
+                    return [importDate2 compare: importDate1];
+                }];
+            }
+            else
+            {
+                tracksGroup.groupItems = [tracksGroup.groupItems sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
+                    NSString *title1 = obj1[@"title"];
+                    NSString *title2 = obj2[@"title"];
+                    return [title1 compare: title2];
+                }];
+            }
             [tableData addObject:tracksGroup];
+        }
     }
     
     // Generate menu items

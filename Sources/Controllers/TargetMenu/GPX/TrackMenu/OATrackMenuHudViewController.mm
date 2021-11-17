@@ -61,6 +61,16 @@
 
 @implementation OATrackMenuViewControllerState
 
++ (instancetype)withPinLocation:(CLLocationCoordinate2D)pinLocation
+{
+    OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
+    if (state)
+    {
+        state.pinLocation = pinLocation;
+    }
+    return state;
+}
+
 @end
 
 @interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, ChartViewDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate>
@@ -96,7 +106,7 @@
     OATrackMenuViewControllerState *_reopeningState;
 
     NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *_waypointGroups;
-    NSMutableDictionary<NSString *, NSString *> *_waypointGroupsOldNewNames;
+    NSArray<NSString *> *_waypointSortedGroupNames;
     NSArray<OAGpxTrkSeg *> *_segments;
 }
 
@@ -172,10 +182,17 @@
 
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _routeLineChartHelper.isLandscape = [self isLandscape];
-        _routeLineChartHelper.screenBBox = CGRectMake(0., 0.,
-                DeviceScreenWidth - ([self isLandscape] ? DeviceScreenWidth * 0.45 : 0.0),
-                DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight]));
+        _routeLineChartHelper.screenBBox = CGRectMake(
+                [self isLandscape] ? [self getLandscapeViewWidth] : 0.,
+                0.,
+                [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
+                [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]);
     }];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    _exportController = nil;
 }
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -396,7 +413,7 @@
 
 - (OATrackMenuViewControllerState *)getCurrentState
 {
-    OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
+    OATrackMenuViewControllerState *state = _reopeningState ? _reopeningState : [[OATrackMenuViewControllerState alloc] init];
     state.lastSelectedTab = _selectedTab;
     state.gpxFilePath = self.gpx.gpxFilePath;
 
@@ -423,6 +440,62 @@
     [super updateGpxData];
     [self updateSegmentsData];
     [self updateWaypointsData];
+    [self updateWaypointSortedGroups];
+}
+
+- (void)updateWaypointsData
+{
+    NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *waypointGroups = [NSMutableDictionary dictionary];
+    if ([self.doc hasWptPt])
+    {
+        NSMutableArray<OAGpxWptItem *> *withoutGroup = [NSMutableArray array];
+        for (OAGpxWpt *gpxWpt in self.doc.locationMarks)
+        {
+            OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
+            if (gpxWpt.type.length == 0)
+            {
+                [withoutGroup addObject:gpxWptItem];
+            }
+            else
+            {
+                NSMutableArray<OAGpxWptItem *> *group = waypointGroups[gpxWpt.type];
+                if (!group)
+                    group = [@[gpxWptItem] mutableCopy];
+                else
+                    [group addObject:gpxWptItem];
+
+                waypointGroups[gpxWpt.type] = group;
+            }
+        }
+
+        if (withoutGroup.count > 0)
+            waypointGroups[OALocalizedString(@"shared_string_gpx_points")] = withoutGroup;
+    }
+
+    if ([self.doc hasRtePt])
+    {
+        NSMutableArray<OAGpxWptItem *> *rtePtsGroup = [NSMutableArray array];
+        NSArray<OAGpxRtePt *> *rtePts = [self.doc getRoutePoints];
+        for (OAGpxRtePt *rtePt in rtePts)
+        {
+            OAGpxWpt *gpxWpt = [[OAGpxWpt alloc] init];
+            [gpxWpt fillWithTrkPt:[[OAGpxTrkPt alloc] initWithRtePt:rtePt]];
+            [rtePtsGroup addObject:[OAGpxWptItem withGpxWpt:gpxWpt]];
+        }
+
+        if (rtePtsGroup.count > 0)
+            waypointGroups[OALocalizedString(@"targets")] = rtePtsGroup;
+    }
+
+    _waypointGroups = waypointGroups;
+}
+
+- (void)updateWaypointSortedGroups
+{
+    _waypointSortedGroupNames = [_waypointGroups.allKeys
+            sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+                return [obj1 compare:obj2];
+            }];
 }
 
 - (void)updateDistanceAndDirection
@@ -511,6 +584,7 @@
 - (void)editSegment
 {
     [self hide:YES duration:.2 onComplete:^{
+        [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController showPlanRouteViewController:[
                 [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
                                                           targetMenuState:[self getCurrentState]]];
@@ -567,47 +641,6 @@
     [editWaypointsBottomSheet presentInViewController:self];
 }
 
-- (NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *)updateWaypointsData
-{
-    NSMutableArray<OAGpxWptItem *> *withoutGroup = [NSMutableArray array];
-    NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *waypointGroups = [NSMutableDictionary dictionary];
-    for (OAGpxWpt *gpxWpt in self.doc.locationMarks)
-    {
-        OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
-        if (gpxWpt.type.length == 0)
-        {
-            [withoutGroup addObject:gpxWptItem];
-        }
-        else
-        {
-            NSMutableArray<OAGpxWptItem *> *group = waypointGroups[gpxWpt.type];
-            if (!group)
-                group = [@[gpxWptItem] mutableCopy];
-            else
-                [group addObject:gpxWptItem];
-
-            waypointGroups[gpxWpt.type] = group;
-        }
-    }
-
-    if (withoutGroup.count > 0)
-        waypointGroups[OALocalizedString(@"shared_string_gpx_points")] = withoutGroup;
-
-    return _waypointGroups = waypointGroups;
-}
-
-- (void)refreshWaypoints
-{
-    [self updateGpxData];
-    if (_tableData.updateData)
-        _tableData.updateData();
-
-    [self.tableView reloadData];
-
-    if (_headerView)
-        [_headerView setDescription];
-}
-
 - (void)refreshLocationServices
 {
     if (_selectedTab == EOATrackMenuHudPointsTab)
@@ -619,6 +652,16 @@
     }
 }
 
+- (NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *)getWaypointsData
+{
+    return _waypointGroups;
+}
+
+- (NSArray<NSString *> *)getWaypointSortedGroups
+{
+    return _waypointSortedGroupNames;
+}
+
 - (NSInteger)getWaypointsCount:(NSString *)groupName
 {
     NSArray<OAGpxWptItem *> *waypoints = _waypointGroups[groupName];
@@ -627,12 +670,15 @@
 
 - (NSInteger)getWaypointsGroupColor:(NSString *)groupName
 {
+    if ([self isRteGroup:groupName])
+        return [OAUtilities colorToNumber:UIColorFromRGB(color_footer_icon_gray)];
+
     UIColor *groupColor;
     if (groupName && groupName.length > 0 && [self getWaypointsCount:groupName] > 0)
     {
         OAGpxWptItem *waypoint = _waypointGroups[groupName].firstObject;
         groupColor = waypoint.color ? waypoint.color
-                : waypoint.point.color ? [OAUtilities colorFromString:waypoint.point.color] : nil;
+                : waypoint.point.color ? [UIColor colorFromString:waypoint.point.color] : nil;
     }
     if (!groupColor)
         groupColor = [OADefaultFavorite getDefaultColor];
@@ -654,7 +700,7 @@
     [[OAGPXDatabase sharedDb] save];
 
     groupName = [self checkGroupName:groupName];
-    NSInteger groupIndex = [_waypointGroups.allKeys indexOfObject:groupName];
+    NSInteger groupIndex = [_waypointSortedGroupNames indexOfObject:groupName];
     OAGPXTableSectionData *groupSection = _tableData.sections[groupIndex];
     if (groupSection.updateData)
         groupSection.updateData();
@@ -671,10 +717,17 @@
            selectedWaypoints:(NSArray<OAGpxWptItem *> *)selectedWaypoints
 {
     OASavingTrackHelper *savingHelper = [OASavingTrackHelper sharedInstance];
+    NSMutableArray<NSNumber *> *waypointsIdxToDelete = [NSMutableArray array];
+    NSArray<OAGpxWptItem *> *waypointsToDelete = selectedWaypoints ? selectedWaypoints : _waypointGroups[groupName];
+    for (OAGpxWptItem *waypoint in _waypointGroups[groupName])
+    {
+        if ([waypointsToDelete containsObject:waypoint])
+            [waypointsIdxToDelete addObject:@([_waypointGroups[groupName] indexOfObject:waypoint])];
+    }
+
     if (self.isCurrentTrack)
     {
-        NSArray<OAGpxWptItem *> *waypoints = selectedWaypoints ? selectedWaypoints : _waypointGroups[groupName];
-        for (OAGpxWptItem *waypoint in waypoints)
+        for (OAGpxWptItem *waypoint in waypointsToDelete)
         {
             [savingHelper deleteWpt:waypoint.point];
         }
@@ -683,39 +736,87 @@
     else
     {
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
-        NSArray<OAGpxWptItem *> *waypoints = selectedWaypoints ? selectedWaypoints : _waypointGroups[groupName];
-        [self.mapViewController deleteWpts:waypoints docPath:path];
+        [self.mapViewController deleteWpts:waypointsToDelete docPath:path];
     }
+
+    NSDictionary *dataToUpdate = @{
+            @"delete_group_name_index": @([_waypointSortedGroupNames indexOfObject:groupName]),
+            @"delete_waypoints_idx": waypointsIdxToDelete
+    };
+
+    [self updateGpxData];
+
+    if (_tableData.updateProperty)
+        _tableData.updateProperty(dataToUpdate);
+
+    if (_tableData.updateData)
+        _tableData.updateData();
+
+    [self.tableView reloadData];
+
+    if (_headerView)
+        [_headerView setDescription];
 }
 
 - (void)changeWaypointsGroup:(NSString *)groupName
                 newGroupName:(NSString *)newGroupName
                newGroupColor:(UIColor *)newGroupColor
 {
-    NSArray<OAGpxWptItem *> *waypoints = _waypointGroups[groupName];
-    NSInteger groupIndex = [_waypointGroups.allKeys indexOfObject:groupName];
-    NSInteger existGroupIndex = newGroupName ? [_waypointGroups.allKeys indexOfObject:newGroupName] : -1;
+    NSMutableDictionary *dataToUpdate = [NSMutableDictionary dictionary];
+    dataToUpdate[@"old_group_name_index"] = @([_waypointSortedGroupNames indexOfObject:groupName]);
     if (newGroupName)
     {
-        if (!_waypointGroupsOldNewNames)
-            _waypointGroupsOldNewNames = [NSMutableDictionary dictionary];
-
-        _waypointGroupsOldNewNames[groupName] = newGroupName;
+        dataToUpdate[@"new_group_name"] = newGroupName;
+        dataToUpdate[@"exist_group_name_index"] = @([_waypointSortedGroupNames indexOfObject:newGroupName]);
     }
-    for (OAGpxWptItem *gpxWptItem in waypoints)
+    else if (newGroupColor)
+    {
+        dataToUpdate[@"new_group_color"] = newGroupColor;
+    }
+
+    NSArray<OAGpxWptItem *> *waypoints = _waypointGroups[groupName];
+    for (OAGpxWptItem *waypoint in waypoints)
     {
         if (newGroupName)
-            gpxWptItem.point.type = newGroupName;
+            waypoint.point.type = newGroupName;
 
         if (newGroupColor)
-            gpxWptItem.color = newGroupColor;
+            waypoint.color = newGroupColor;
 
         if (self.isCurrentTrack)
         {
-            [OAGPXDocument fillWpt:gpxWptItem.point.wpt usingWpt:gpxWptItem.point];
-            [self.savingHelper saveWpt:gpxWptItem.point];
+            [OAGPXDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
+            [self.savingHelper saveWpt:waypoint.point];
         }
     }
+
+    NSMutableDictionary *newWaypointGroups = [_waypointGroups mutableCopy];
+    if (newGroupColor)
+    {
+        newWaypointGroups[groupName] = waypoints;
+    }
+    else if (newGroupName)
+    {
+        [newWaypointGroups removeObjectForKey:groupName];
+        NSInteger existI = [dataToUpdate[@"exist_group_name_index"] integerValue];
+        if (existI != NSNotFound)
+        {
+            NSArray<OAGpxWptItem *> *existWaypoints = newWaypointGroups[newGroupName];
+            for (OAGpxWptItem *existWaypoint in existWaypoints)
+            {
+                existWaypoint.color = UIColorFromRGB([self getWaypointsGroupColor:groupName]);
+                if (self.isCurrentTrack)
+                {
+                    [OAGPXDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
+                    [self.savingHelper saveWpt:existWaypoint.point];
+                }
+            }
+            waypoints = [waypoints arrayByAddingObjectsFromArray:existWaypoints];
+        }
+        newWaypointGroups[newGroupName] = waypoints;
+    }
+    _waypointGroups = newWaypointGroups;
+    [self updateWaypointSortedGroups];
 
     if (!self.isCurrentTrack)
     {
@@ -728,30 +829,23 @@
         [[_app trackRecordingObservable] notifyEvent];
     }
 
-    if (existGroupIndex != NSNotFound && existGroupIndex > 0 && existGroupIndex != groupIndex)
+    if (newGroupName)
     {
-        OAGPXTableSectionData *sectionToDelete = _tableData.sections[existGroupIndex];
-        [sectionToDelete setData:@{ kTableValues: @{@"is_duplicate_bool_value": @YES } }];
-    }
-    [self refreshWaypoints];
-}
-
-- (NSDictionary *)updateGroupName:(NSString *)currentGroupName
-                     oldGroupName:(NSString *)oldGroupName
-{
-    NSMutableDictionary *newGroupData = [NSMutableDictionary dictionary];
-    if (_waypointGroupsOldNewNames && [_waypointGroupsOldNewNames.allKeys containsObject:currentGroupName])
-    {
-        newGroupData[@"current_group_name"] = _waypointGroupsOldNewNames[currentGroupName];
-        [_waypointGroupsOldNewNames removeObjectForKey:oldGroupName];
-        newGroupData[@"updated"] = @(YES);
-    }
-    else
-    {
-        newGroupData[@"updated"] = @(NO);
+        NSInteger newI = [_waypointSortedGroupNames indexOfObject:newGroupName];
+        if (newI != NSNotFound)
+            dataToUpdate[@"new_group_name_index"] = @(newI);
     }
 
-    return newGroupData;
+    if (_tableData.updateProperty)
+        _tableData.updateProperty(dataToUpdate);
+
+    if (_tableData.updateData)
+        _tableData.updateData();
+
+    [self.tableView reloadData];
+
+    if (_headerView)
+        [_headerView setDescription];
 }
 
 - (void)openConfirmDeleteWaypointsScreen:(NSString *)groupName
@@ -763,13 +857,9 @@
 }
 
 - (void)openDeleteWaypointsScreen:(NSArray *)sectionsData
-                   waypointGroups:(NSDictionary *)waypointGroups
 {
     OADeleteWaypointsViewController *deleteWaypointsViewController =
-            [[OADeleteWaypointsViewController alloc] initWithSectionsData:sectionsData
-                                                           waypointGroups:waypointGroups
-                                                           isCurrentTrack:self.isCurrentTrack
-                                                              gpxFilePath:self.gpx.gpxFilePath];
+            [[OADeleteWaypointsViewController alloc] initWithSectionsData:sectionsData];
     deleteWaypointsViewController.trackMenuDelegate = self;
     [self presentViewController:deleteWaypointsViewController animated:YES completion:nil];
 }
@@ -802,6 +892,11 @@
     return [groupName isEqualToString:OALocalizedString(@"shared_string_gpx_points")];
 }
 
+- (BOOL)isRteGroup:(NSString *)groupName
+{
+    return [groupName isEqualToString:OALocalizedString(@"targets")];
+}
+
 - (OARouteLineChartHelper *)getLineChartHelper
 {
     if (!_routeLineChartHelper)
@@ -811,16 +906,19 @@
             [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
                                               bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
                                                      zoom:0
-                                              bottomInset:DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight])
-                                                leftInset:DeviceScreenWidth - ([self isLandscape] ? DeviceScreenWidth * 0.45 : 0.0)];
-                                       }
+                                              bottomInset:([self isLandscape] ? 0. : [self getViewHeight])
+                                                leftInset:([self isLandscape] ? [self getLandscapeViewWidth] : 0.)
+                                                 animated:YES];
+                                                               }
                                                                 adjustViewPort:^() {
-            [self adjustMapViewPort];
-        }];
+                                                                    [self adjustMapViewPort];
+                                                                }];
         _routeLineChartHelper.isLandscape = [self isLandscape];
-        _routeLineChartHelper.screenBBox = CGRectMake(0., 0.,
-                DeviceScreenWidth - ([self isLandscape]? DeviceScreenWidth * 0.45 : 0.0),
-                DeviceScreenHeight - ([self isLandscape] ? 0.0 : [self getViewHeight]));
+        _routeLineChartHelper.screenBBox = CGRectMake(
+                [self isLandscape] ? [self getLandscapeViewWidth] : 0.,
+                0.,
+                [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
+                [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]);
     }
     return _routeLineChartHelper;
 }
@@ -837,7 +935,8 @@
 
 - (NSString *)getDirName
 {
-    return [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString;
+    NSString *dirName = [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString;
+    return dirName.length > 0 ? dirName : OALocalizedString(@"tracks");
 }
 
 - (NSString *)getGpxFileSize
@@ -850,11 +949,12 @@
 
 - (NSString *)getCreatedOn
 {
-    return self.doc.metadata.time > 0 ? [NSDateFormatter localizedStringFromDate:
-                    [NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
-                                                                       dateStyle:NSDateFormatterMediumStyle
-                                                                       timeStyle:NSDateFormatterNoStyle]
-            : @"";
+    if (self.doc.metadata.time <= [[NSDate date] timeIntervalSince1970])
+        return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
+                                              dateStyle:NSDateFormatterMediumStyle
+                                              timeStyle:NSDateFormatterNoStyle];
+
+    return @"";
 }
 
 - (NSString *)generateDescription
@@ -875,11 +975,7 @@
         }
         case EOATrackMenuHudPointsTab:
         {
-            NSInteger groupsCount = _waypointGroups.allKeys.count;
-            if ([_waypointGroups.allKeys containsObject:OALocalizedString(@"shared_string_gpx_points")])
-                groupsCount--;
-
-            _description = [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"groups"), groupsCount];
+            _description = [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"groups"), _waypointGroups.allKeys.count];
             break;
         }
         default:
@@ -924,6 +1020,7 @@
 - (void)openAppearance
 {
     [self hide:YES duration:.2 onComplete:^{
+        [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController openTargetViewWithGPX:self.gpx
                                               trackHudMode:EOATrackAppearanceHudMode
                                                      state:[self getCurrentState]];
@@ -952,7 +1049,7 @@
     else
     {
         _exportFileName = self.gpx.gpxFileName;
-        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:self.gpx.gpxFilePath];
+        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:self.gpx.gpxFilePath.lastPathComponent];
         [OAGPXUIHelper addAppearanceToGpx:self.doc gpxItem:self.gpx];
         [self.doc saveTo:_exportFilePath];
     }
@@ -982,7 +1079,9 @@
                                                                       fromName:nil
                                                 useIntermediatePointsByDefault:YES
                                                                     showDialog:YES];
-        [self hide:YES duration:.2 onComplete:nil];
+        [self hide:YES duration:.2 onComplete:^{
+            [self.mapViewController hideContextPinMarker];
+        }];
     }
 }
 
@@ -1042,7 +1141,9 @@
             [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath];
         }
 
-        [self hide:YES duration:.2 onComplete:nil];
+        [self hide:YES duration:.2 onComplete:^{
+            [self.mapViewController hideContextPinMarker];
+        }];
     }]
     ];
 
@@ -1082,12 +1183,6 @@
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate
-
-- (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
-{
-    if (controller == _exportController)
-        _exportController = nil;
-}
 
 - (void)documentInteractionControllerDidDismissOpenInMenu:(UIDocumentInteractionController *)controller
 {
@@ -1132,7 +1227,7 @@
     [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES];
     if (_selectedTab == EOATrackMenuHudActionsTab)
     {
-        OAGPXTableCellData *cellData = [self getCellData:[NSIndexPath indexPathForRow:kActionsSection inSection:kActionMoveCell]];
+        OAGPXTableCellData *cellData = [self getCellData:[NSIndexPath indexPathForRow:kActionMoveCell inSection:kActionsSection]];
         if (cellData.updateData)
             cellData.updateData();
 
@@ -1198,7 +1293,9 @@
                                                                   fromName:nil
                                             useIntermediatePointsByDefault:YES
                                                                 showDialog:YES];
-    [self hide:YES duration:.2 onComplete:nil];
+    [self hide:YES duration:.2 onComplete:^{
+        [self.mapViewController hideContextPinMarker];
+    }];
 }
 
 #pragma mark - UITabBarDelegate
@@ -1263,7 +1360,15 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _tableData.sections[section].cells.count;
+    OAGPXTableSectionData *sectionData = _tableData.sections[section];
+    if (_selectedTab == EOATrackMenuHudPointsTab)
+    {
+        OAGPXTableCellData *groupCellData = sectionData.cells.firstObject;
+        BOOL isGroup = [groupCellData.key hasPrefix:@"group_"];
+        return (isGroup && groupCellData.toggle) || !isGroup ? sectionData.cells.count : 1;
+    }
+
+    return sectionData.cells.count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -1291,6 +1396,9 @@
                     UIEdgeInsetsMake(0., _selectedTab == EOATrackMenuHudSegmentsTab ? self.tableView.frame.size.width : 20., 0., 0.);
 
             UIColor *tintColor = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
+
+            cell.textView.font = [cellData.values.allKeys containsObject:@"font_value"]
+                    ? cellData.values[@"font_value"] : [UIFont systemFontOfSize:17.];
 
             cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.textView.text = cellData.title;
@@ -1358,6 +1466,8 @@
         }
         if (cell)
         {
+            cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
+                    ? cellData.values[@"font_value"] : [UIFont systemFontOfSize:17];
             cell.titleView.text = cellData.title;
             cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
@@ -1468,11 +1578,11 @@
             cell = (OASelectionCollapsableCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsZero;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell showOptionsButton:YES];
             [cell makeSelectable:NO];
         }
         if (cell)
         {
+            [cell showOptionsButton:![self isRteGroup:cellData.title]];
             [cell.titleView setText:cellData.title];
 
             [cell.leftIconView setImage:cellData.leftIcon];
@@ -1632,6 +1742,7 @@
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]]
             || [cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
+            || [cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]]
             || [cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
         return 48.;
     else if ([cellData.type isEqualToString:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]])
@@ -1666,8 +1777,6 @@
 
     if (cellData.onSwitch)
         cellData.onSwitch(switchView.isOn);
-
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)openCloseGroupButtonAction:(id)sender
@@ -1678,8 +1787,9 @@
     [cellData setData:@{
             kCellToggle: @(!cellData.toggle)
     }];
-    if (_tableData.sections[indexPath.section].updateData)
-        _tableData.sections[indexPath.section].updateData();
+    [cellData setData:@{
+            kCellRightIconName: cellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right"
+    }];
 
     [self.tableView beginUpdates];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]

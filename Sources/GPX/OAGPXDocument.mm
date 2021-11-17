@@ -114,14 +114,9 @@
 
 - (int) parseColor:(NSString *)colorString defColor:(int)defColor
 {
-    if (colorString.length > 0) {
-        unsigned result = 0;
-        NSScanner *scanner = [NSScanner scannerWithString:colorString];
+    if (colorString.length > 0)
+        return [OAUtilities colorToNumberFromString:colorString];
 
-        [scanner setScanLocation:1]; // bypass '#' character
-        [scanner scanHexInt:&result];
-        return result;
-    }
     return defColor;
 }
 
@@ -1340,7 +1335,7 @@
         {
             categories[@"title"] = title;
             categories[@"color"] = color;
-            categories[@"count"] = count;
+            categories[@"count"] = [NSString stringWithFormat:@"%i", [[map objectForKey:title][@"count"] intValue] + 1];
             [map setObject:categories forKey:title];
         }
     }

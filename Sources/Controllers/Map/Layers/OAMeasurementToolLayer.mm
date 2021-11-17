@@ -288,7 +288,7 @@
 
 - (double) getPointsDensity
 {
-    if (_editingCtx.getPointsCount == 0)
+    if (_editingCtx.getPointsCount < 2)
         return 0;
     NSArray<OAGpxTrkPt *> *points = [_editingCtx.getBeforePoints arrayByAddingObjectsFromArray:_editingCtx.getAfterPoints];
     
@@ -332,9 +332,9 @@
     pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
     pointMarkerBuilder.setPinIcon(_pointMarkerIcon);
     
-    double density = [self getPointsDensity];
     if (_editingCtx.getPointsCount > 500)
     {
+        double density = [self getPointsDensity];
         if (density < 100)
         {
             double distThreshold = MAX(1000, _editingCtx.getRouteDistance / 100);
@@ -433,7 +433,7 @@
             }
         }
         
-        [self drawLines:points collection:_lastLineCollection lineId:300];
+        [self drawLines:points collection:_lastLineCollection lineId:10000];
         
         if (_isInMovingMode || _editingCtx.isInAddPointMode)
             [self drawMarker:center collection:_selectedMarkerCollection bitmap:_selectedMarkerIcon];
@@ -450,6 +450,7 @@
 {
     NSArray<OAGpxTrkSeg *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
     NSArray<OAGpxTrkSeg *> *afterSegs = _editingCtx.getAfterTrkSegmentLine;
+    int lineId = 100;
     for (OAGpxTrkSeg *seg in beforeSegs)
     {
         QVector<OsmAnd::PointI> beforePoints;
@@ -457,7 +458,7 @@
         {
             beforePoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
         }
-        [self drawLines:beforePoints collection:_collection lineId:100];
+        [self drawLines:beforePoints collection:_collection lineId:lineId++];
     }
     
     for (OAGpxTrkSeg *seg in afterSegs)
@@ -467,7 +468,7 @@
         {
             afterPoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
         }
-        [self drawLines:afterPoints collection:_collection lineId:200];
+        [self drawLines:afterPoints collection:_collection lineId:lineId++];
     }
 }
 

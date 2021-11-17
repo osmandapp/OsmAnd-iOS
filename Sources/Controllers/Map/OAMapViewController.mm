@@ -2012,7 +2012,7 @@
              andZoom:(CGFloat)zoom
             animated:(BOOL)animated
 {
-    if (!self.mapViewLoaded)
+    if (!self.mapViewLoaded || (position31.x == 0 && position31.y == 0))
         return;
     
     @synchronized(_rendererSync)

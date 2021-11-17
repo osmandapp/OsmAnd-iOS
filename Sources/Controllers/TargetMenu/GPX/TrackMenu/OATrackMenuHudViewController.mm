@@ -190,6 +190,11 @@
     }];
 }
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    _exportController = nil;
+}
+
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
@@ -971,7 +976,7 @@
     else
     {
         _exportFileName = self.gpx.gpxFileName;
-        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:self.gpx.gpxFilePath];
+        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:self.gpx.gpxFilePath.lastPathComponent];
         [OAGPXUIHelper addAppearanceToGpx:self.doc gpxItem:self.gpx];
         [self.doc saveTo:_exportFilePath];
     }
@@ -1105,12 +1110,6 @@
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate
-
-- (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
-{
-    if (controller == _exportController)
-        _exportController = nil;
-}
 
 - (void)documentInteractionControllerDidDismissOpenInMenu:(UIDocumentInteractionController *)controller
 {

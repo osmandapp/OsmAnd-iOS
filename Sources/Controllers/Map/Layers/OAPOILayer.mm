@@ -35,7 +35,7 @@
     BOOL _showWikiOnMap;
 
     OAPOIUIFilter *_poiUiFilter;
-    OAPOIUIFilter *_wikiUiFilters;
+    OAPOIUIFilter *_wikiUiFilter;
     OAAmenityNameFilter *_poiUiNameFilter;
     OAAmenityNameFilter *_wikiUiNameFilter;
     NSString *_poiCategoryName;
@@ -126,7 +126,7 @@
     _showPoiOnMap = YES;
     _prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
 
-    _wikiUiFilters = wikiOnMap;
+    _wikiUiFilter = wikiOnMap;
     _showWikiOnMap = wikiOnMap != nil;
 
     BOOL noValidByName = filters.count == 1
@@ -144,7 +144,7 @@
 
 - (void) doShowPoiUiFilterOnMap
 {
-    if (!_poiUiFilter && !_wikiUiFilters)
+    if (!_poiUiFilter && !_wikiUiFilter)
         return;
 
     [self.mapViewController runWithRenderSync:^{
@@ -176,7 +176,7 @@
                     [=](const std::shared_ptr<const OsmAnd::Amenity> &amenity)
                     {
                         OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
-                        BOOL check = !_wikiUiNameFilter && !_wikiUiFilters && _poiUiNameFilter
+                        BOOL check = !_wikiUiNameFilter && !_wikiUiFilter && _poiUiNameFilter
                                 && _poiUiFilter && _poiUiFilter.filterByName && _poiUiFilter.filterByName.length > 0;
                         if (!isWiki && [poi.type.tag isEqualToString:OSM_WIKI_CATEGORY])
                             return check ? [_poiUiNameFilter accept:poi] : false;
@@ -217,8 +217,8 @@
         else
             _poiUiNameFilter = nil;
 
-        if (_wikiUiFilters)
-            _generate(_wikiUiFilters);
+        if (_wikiUiFilter)
+            _generate(_wikiUiFilter);
         else
             _wikiUiNameFilter = nil;
 

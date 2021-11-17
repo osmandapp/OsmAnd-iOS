@@ -62,7 +62,10 @@
 
 + (BOOL)intersects:(QuadRect *)a b:(QuadRect *)b
 {
-    return a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+    return MIN(a.left, a.right) <= MAX(b.left, b.right)
+    && MAX(a.left, a.right) >= MIN(b.left, b.right)
+    && MIN(a.bottom, a.top) <= MAX(b.bottom, b.top)
+    && MAX(a.bottom, a.top) >= MIN(b.bottom, b.top);
 }
 
 - (double)centerX

@@ -73,7 +73,6 @@
 @property (readonly) OAObservable* mapObservable;
 @property (readonly) OAObservable* mapSourceUpdatedObservable;
 
-@property (nonatomic) OAGPX *foundGpx;
 @property (nonatomic) OAGpxWpt *foundWpt;
 @property (nonatomic) NSArray *foundWptGroups;
 @property (nonatomic) NSString *foundWptDocPath;
@@ -104,7 +103,6 @@
 
 - (BOOL) findWpt:(CLLocationCoordinate2D)location;
 - (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly;
-- (BOOL) findTrack:(CLLocationCoordinate2D)location;
 - (BOOL) deleteFoundWpt;
 - (BOOL) saveFoundWpt;
 - (BOOL) addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName;

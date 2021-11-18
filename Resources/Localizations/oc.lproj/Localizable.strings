@@ -1384,7 +1384,8 @@
 "searching_gps" = "Recèrca GPS en trin";
 "shared_string_enable" = "Activar";
 "icon" = "Icòna";
-"coordinates_widget" = "Emoticòna  de coordonadas";
+"coordinates_widget" = ""Emoticòna  de coordonadas"";
 "show_compass_ruler" = "Mostrar la règla de la bossòla";
 "shared_string_wifi_only" = "Per wi-fi solament";
 "dialogs_and_notifications" = "Dialògs e notificacions";
+"shared_string_width" = "Ample";

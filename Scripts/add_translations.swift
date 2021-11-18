@@ -17,7 +17,7 @@ let languageDict = [
                     "es_AR" : "es-rAR",
                     "hsb" : "b+hsb",
                     "kab" : "b+kab",
-                    "pt_BR" : "pt-rBR",
+                    "pt-BR" : "pt-rBR",
                     "ro-RO" : "ro",
                     "zh-Hans" : "zh-rCN" ,
                     "zh-Hant" : "zh-rTW",
@@ -83,18 +83,27 @@ func compareDicts(language: String, iosDict: [String : String], androidDict: [St
     {
         if let androidValue = androidDict[elem.key] {
             if androidValue == elem.value || equalWithoutDots(str1: androidValue, str2: elem.value) {
+                /// iosKey == androidKey && iosEnValue == androidEnValue
                 common[elem.key] = elem.value
+            } else {
+                /// iosKey == androidKey && iosEnValue != androidEnValue
+                /// ignoring
+                //pringDebugLog(iosKey: elem.key, iosValue: elem.value, androidKey: elem.key, androidValue: androidValue)
             }
         }
         else {
+            /// iosKey != androidKey.
+            /// find androidKey where iosEnValue == androidEnValue
             var keys: [String] = []
             if androidDict.values.contains(elem.value) {
                 keys = (androidDict as NSDictionary).allKeys(for: elem.value) as! [String]
                 commonValuesDict[elem.key] = keys
+                //pringDebugLog(iosKey: elem.key, iosValue: elem.value, androidKey: keys.first!, androidValue: androidDict[keys.first!]!)
             }
             else if elem.value.last == "." && androidDict.values.contains(String(elem.value.dropLast())) {
                 keys = (androidDict as NSDictionary).allKeys(for: String(elem.value.dropLast())) as! [String]
                 commonValuesDict[elem.key] = keys
+                //pringDebugLog(iosKey: elem.key, iosValue: elem.value, androidKey: keys.first!, androidValue: androidDict[keys.first!]!)
             }
         }
     }
@@ -158,7 +167,7 @@ func makeNewDict(language: String, iosDict: [String : String], androidDict: [Str
             for elem in existingLinesDict {
                 for i in 0 ..< strings.count {
                     if strings[i].contains("\"" + elem.key + "\"") {
-                        strings[i] = strings[i].replacingOccurrences(of: "\"" + iosDict[elem.key]! + "\"", with: "\"" + filterUnsafeChars(elem.value) + "\"")
+                        strings[i] = replaceValueText(newValue: filterUnsafeChars(elem.value), inFullString: strings[i] )
                     }
                 }
             }
@@ -182,10 +191,36 @@ func makeNewDict(language: String, iosDict: [String : String], androidDict: [Str
     print(language, "added: ", newLinesDict.count, "   udated: ", existingLinesDict.count, "   deleted duplicates: ", duplicatesCount)
 }
 
+func getAllSubstringIndexes(fullString: String, subString: String) -> [Int] {
+    var indexes = [Int]()
+    for i in 0..<fullString.count {
+        let index = fullString.index(fullString.startIndex, offsetBy: i)
+        let charAtIndex = fullString[index]
+        if (String(charAtIndex) == subString) {
+            indexes.append(i)
+        }
+    }
+    return indexes
+}
+
+func replaceValueText(newValue: String, inFullString fullString: String) -> String {
+    /// Localzable.strings  one string format:
+    /// "key" = "value";
+    let quotationMarkIndexes = getAllSubstringIndexes(fullString: fullString, subString: "\"")
+    guard (quotationMarkIndexes.count >= 4) else {return fullString}
+    
+    let startIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes[2] + 1)
+    let endIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes.last!)
+
+    var resultString = fullString
+    resultString.replaceSubrange(startIndex ..< endIndex, with: newValue)
+    return resultString
+}
+
 func filterEndingEmptyStrings(_ stringsArray: [String]) -> [String] {
     var strings = stringsArray
     repeat {
-        while strings.last!.hasSuffix("\n")
+        while strings.last!.hasSuffix("\n") && strings.count > 1
         {
             strings[strings.count - 1] = String(strings[strings.count - 1].dropLast())
         }
@@ -224,13 +259,7 @@ func filterDuplicateStrings(_ stringsArray: [String], iosDict: [String : String]
 
 func filterUnsafeChars(_ text: String) -> String {
     var result: String = text;
-    if result.hasPrefix("\"") {
-        result = String(result.dropFirst())
-    }
     if result.hasSuffix(";") {
-        result = String(result.dropLast())
-    }
-    if result.hasSuffix("\"") {
         result = String(result.dropLast())
     }
     return result
@@ -401,6 +430,14 @@ class Parser: NSObject, XMLParserDelegate {
     }
 }
 
+func pringDebugLog(iosKey: String, iosValue: String, androidKey: String, androidValue: String)
+{
+    print("#### ios key       :  " + iosKey)
+    print("#### ios value     :  " + iosValue)
+    print("#### android key   :  " + androidKey)
+    print("#### android value :  " + androidValue)
+    print("#### ================================================================================================")
+}
 
 //change directory to OsmAnd-ios repo folder.
 //uncomment this line for debugging.

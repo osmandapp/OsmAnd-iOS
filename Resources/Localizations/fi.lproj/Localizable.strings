@@ -634,7 +634,7 @@
 // Map settings
 "m_style_car" = "Auto";
 "m_style_walk" = "Kävely";
-"m_style_bicycle" = "Pyörä";
+"m_style_bicycle" = "Pyöräily";
 "m_style_pulic_transport" = "Joukkoliikenne";
 "map_settings_map" = "Kartta";
 "layer_amenity_label" = "Pisteiden nimet (KP:t, suosikit)";
@@ -892,7 +892,7 @@
 "split_before" = "Jaa ennen";
 "split_after" = "Jaa jälkeen";
 "follow_track" = "Seuraa jälkeä";
-"track" = "Polku";
+"track" = "Jälki";
 "select_another_track" = "Valitse toinen jälki";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Kiinnitä teihin";
@@ -992,7 +992,7 @@
 "res_elliptic_mercator" = "Elliptic mercator";
 "res_pseudo_mercator" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
-"res_source_sqlite" = "SQLiteDB file";
+"res_source_sqlite" = "SQLiteDB -tiedosto";
 "res_source_one_per_tile" = "One image file per tile";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
@@ -1028,7 +1028,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osm_note" = "OSM-huomautus";
 "osm_created" = "Created";
-"osm_deleted" = "KP poistettiin onnistuneesti";
+"osm_deleted" = "Poistettu";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1042,7 +1042,7 @@
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "Yhteystiedot";
-"osm_str_name" = "Kadun nimi";
+"osm_str_name" = "Katunimi";
 "osm_building_num" = "Building number";
 "osm_phone" = "puhelin";
 "osm_website" = "Sivusto";
@@ -1107,7 +1107,7 @@
 "shared_string_reload" = "Lataa uudelleen";
 "shared_string_show_more" = "Näytä lisää";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
-"shared_string_filter" = "Suodin";
+"shared_string_filter" = "Suodata";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
@@ -1295,7 +1295,7 @@
 "units_nm" = "mpk";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "h";
+"units_hour" = "t";
 "units_min" = "min";
 "units_sec" = "sek";
 "units_sec_short" = "s";
@@ -1319,7 +1319,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Karttaselite";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Muuta";
+"help_other_header" = "Muu";
 "help_what_is_new" = "Mitä uutta";
 "help_install_and_troubleshoot" = "Asennus ja ongelmien ratkaisu";
 "help_tech_articles" = "Tekniset artikkelit";
@@ -1477,9 +1477,9 @@
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "product_title_wikivoyage" = "Matkaoppaat";
-"product_desc_wikivoyage" = "The free worldwide travel guide anyone can edit.";
+"product_desc_wikivoyage" = "Ilmainen maailmanlaajuinen matkaopas, jota kuka tahansa voi muokata.";
 "product_desc_ext_wikivoyage" = "Oppaita planeetan mielenkiintoisimpiin paikkoihin OsmAndin sisällä, ilman Internet-yhteyttä.";
-"product_title_sea_depth_contours" = "Merelliset syvyyskäyrät";
+"product_title_sea_depth_contours" = "Merelliset korkeuskäyrät";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 "my_location" = "Sijaintini";
 "all_categories" = "Kaikki kategoriat";
@@ -2059,7 +2059,7 @@
 
 //Poi catagories
 "amenity" = "Mukavuus";
-"emergency" = "Hätätapaus";
+"emergency" = "Hätäpalvelu";
 "service" = "Palvelu";
 "special" = "Erityinen";
 "sport" = "Urheilu";
@@ -2166,3 +2166,30 @@
 "explore_wikipedia_offline" = "Tutustu Wikipediaan offline-tilassa.";
 "navigate_point_zone" = "Vyöhyke";
 "navigate_point_northing" = "Pohjoiseen";
+"shared_string_width" = "Leveys";
+"edit_track" = "Muokkaa jälkeä";
+"track_coloring_solid" = "Kiinteä";
+"units_min_short" = "m";
+"shared_string_overview" = "Yleiskatsaus";
+"upload_to_openstreetmap" = "Lähetä OpenStreetMappiin";
+"m" = "m";
+"gpx_split_interval_descr" = "Valitse kuinka usein merkit näytetään välimatkalle tai ajalle jäljellä.";
+"analyze_on_map" = "Analysoi kartalla";
+"shared_string_end_time" = "Päättymisaika";
+"shared_string_interval" = "Väli";
+"track_show_start_finish_icons" = "Näytä alku- ja lopetusikonit";
+"shared_string_time_span" = "Aikajänne";
+"shared_string_custom" = "Mukautettu";
+"gpx_split_interval" = "Jakoväli";
+"gpx_join_gaps" = "Yhdistä aukot";
+"reset_to_original" = "Palauta alkuperäiseen";
+"shared_string_start_time" = "Aloitusaika";
+"attribute" = "Ominaisuus";
+"delete_waypoints" = "Poista väyläpisteet";
+"education" = "Koulutus";
+"gpx_dir_arrows" = "Suuntanuolet";
+"gpx_split_interval_none_descr" = "Valitse mieluisin jakoasetus: ajan tai välimatkan perusteella.";
+"distance_moving" = "Etäisyys korjattu";
+"shared_string_time_moving" = "Aika liikkuu";
+"regions" = "Alueet";
+"tones" = "tonnia";

@@ -57,7 +57,7 @@
 "poi_search_near_center" = "Arama haritanın merkezine yakın yapılır";
 "poi_hide" = "Gizle";
 // My Places
-"favorites" = "Favoriler";
+"favorites" = "Sık Kullanılanlar";
 "tracks" = "İzlenen yollar";
 // GPX
 "gpx_point" = "Mevki";
@@ -79,7 +79,7 @@
 "gpx_route_time" = "Rotası süresi";
 "gpx_uphldownhl" = "Yokuş / downhills";
 "gpx_average_speed" = "Ortalama hız";
-"gpx_start" = "Başlat";
+"gpx_start" = "Başlangıç";
 "gpx_finish" = "Bitir";
 "gpx_avg_elev" = "Ortalama yükseklik";
 "gpx_elev_range" = "Yükseklik aralığı";
@@ -113,13 +113,13 @@
 "map_settings_show" = "Haritada göster";
 "map_settings_type" = "Harita türü";
 "map_mode" = "Harita kipi";
-"map_settings_day" = "Gündüz";
+"map_settings_day" = "Gün";
 "map_settings_night" = "Gece";
 "map_settings_style" = "Harita tarzı";
 "map_settings_overunder" = "Üst katman / Alt katman";
 "map_settings_over" = "Üst katman";
 "map_settings_under" = "Altına koymak";
-"shared_string_none" = "Yok";
+"shared_string_none" = "Hiçbiri";
 "map_settings_offline" = "Çevrim dışı haritalar için tarzlar";
 "map_settings_online" = "Çevrim içi haritalar";
 "map_settings_transp" = "Şeffaflık";
@@ -236,7 +236,7 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "sa";
+"units_hour" = "h";
 "units_min" = "dk";
 "units_sec" = "sn";
 // Map
@@ -805,7 +805,7 @@
 "first_intermediate_dest_description" = "Rotadaki ilk durağı ekler";
 "last_intermediate_dest_description" = "Rota boyunca son durağı ekler";
 "transport_routes" = "Güzergah";
-"transport_stop" = "Durak";
+"transport_stop" = "Durdur";
 "route_stops_before" = "%d durak önce";
 "logging_interval_navigation" = "Navigasyon sırasında kayıt aralığı";
 "logging_interval_navigation_descr" = "Navigasyon sırasında yol kaydı için kayıt aralığını seçin";
@@ -882,7 +882,7 @@
 "toggle_voice" = "Ses açık/kapalı";
 "day_mode" = "Gündüz modu";
 "osm_edits_notes" = "Notlar";
-"shared_string_filter" = "Filtrele";
+"shared_string_filter" = "Süzgeç";
 "osmand_live_support_reg_title" = "Destek bölgesi";
 "work_pt" = "İş";
 "wake_on_voice_descr" = "Bir dönüşe yaklaşırken (kapalı ise) aygıtın ekranını aç.";
@@ -924,7 +924,7 @@
 "open_osm_note" = "OSM Not\'u aç";
 "menu_help" = "Yardım";
 "osm_note_upload" = "OSM Not yükle";
-"osm_alert_message" = "İleti";
+"osm_alert_message" = "Mesaj";
 "display_starting_at_zoom_level" = "Yakınlaştırma seviyesinde başlayarak görüntüle";
 "mapillary_get_title" = "Mapillary ile fotoğraf kapsama alanını geliştir";
 "shared_string_time_of_day" = "Günün zamanı";
@@ -2011,7 +2011,7 @@
 "sport" = "Spor";
 "special" = "Özel";
 "service" = "Hizmet";
-"emergency" = "Acil durum";
+"emergency" = "Acil";
 "shared_string_gpx_points" = "Noktalar";
 "res_standard" = "Standart harita";
 "quick_action_coordinates_widget_descr" = "Bu eylem düğmesine dokunmak, koordinatlar widget'ını gösterir veya gizler.";
@@ -2149,3 +2149,30 @@
 "navigate_point_easting" = "doğuya doğru yönelme";
 "navigate_point_northing" = "Kuzeye doğru katedilen mesafe";
 "navigate_point_olc" = "Açık Konum Kodu (Open Location Code - OLC)";
+"shared_string_time_span" = "Zaman aralığı";
+"units_min_short" = "m";
+"shared_string_overview" = "Genel bakış";
+"nautical" = "Deniz";
+"gpx_join_gaps" = "Boşlukları birleştir";
+"education" = "Eğitim";
+"shared_string_start_time" = "Başlangıç zamanı";
+"m" = "m";
+"gpx_split_interval_none_descr" = "İstediğiniz bölme seçeneğini seçin: zamana veya mesafeye göre.";
+"reset_to_original" = "Orijinale sıfırla";
+"shared_string_width" = "Genişlik";
+"shared_string_interval" = "Aralık";
+"analyze_on_map" = "Haritaüzerinde analiz et";
+"track_show_start_finish_icons" = "Başlangıç ve bitiş simgelerini göster";
+"shared_string_custom" = "Özel";
+"attribute" = "Özellik";
+"gpx_split_interval" = "Bölme aralığı";
+"gpx_split_interval_descr" = "Yolüzerinde mesafe veya zaman işaretlerinin görüntüleneceği aralığı seçin.";
+"distance_moving" = "Düzeltilmiş uzaklık";
+"regions" = "Bölgeler";
+"edit_track" = "Yolu düzenle";
+"shared_string_time_moving" = "Hareket zamanı";
+"gpx_dir_arrows" = "Yön okları";
+"delete_waypoints" = "Ara noktaları sil";
+"shared_string_end_time" = "Bitiş zamanı";
+"track_coloring_solid" = "Koyu";
+"upload_to_openstreetmap" = "OpenStreetMap\'e yükle";

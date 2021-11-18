@@ -362,7 +362,7 @@
 "shared_string_and" = "a";
 "shared_string_edit" = "Wobdźěłać";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Pozdźišo";
+"shared_string_later" = "Dale";
 "shared_string_of" = "of";
 "shared_string_all" = "All";
 "shared_string_from" = "wot";
@@ -425,7 +425,7 @@
 "poi_hide" = "Schować";
 // My Places
 "favorites" = "Fawority";
-"tracks" = "Puće";
+"tracks" = "Čary";
 // GPX
 "gpx_point" = "Dypk";
 "gpx_waypoint" = "Čarowy dypk";
@@ -473,7 +473,7 @@
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
 "poi_clear" = "Wotstronić";
-"poi_list" = "Lisćina  POI";
+"poi_list" = ""Lisćina  POI"";
 "track_during_nav" = "Auto-record trip during navigation";
 "track_during_nav_descr" = "A trip is automatically saved during navigation";
 "gpx_distance_points" = "Distance (points)";
@@ -876,7 +876,6 @@
 "units_hour" = "h";
 "units_min" = "mjeńš";
 "units_sec" = "sec";
-"units_min_short" = "m";
 "units_sec_short" = "s";
 // Help
 "help_first_steps" = "First steps";
@@ -1459,10 +1458,15 @@
 "context_menu_item_edit_waypoint" = "GPX-dypk wobdźěłać";
 "shared_string_navigation" = "Nawigacija";
 "gpxup_private" = "Priwatne";
-"m" = "m";
 "added_profiles" = "Přidate profile";
 "gpxup_public" = "Zjawne";
 "gpxup_identifiable" = "Spóznajomne";
 "welmode_download_maps" = "Karty sćahnyć";
-"rendering_value_pink_name" = "pink";
 "product_title_mapillary" = "Mapillary";
+"shared_string_end_time" = "čas přichada";
+"analyze_on_map" = "Na karće analyzować";
+"shared_string_overview" = "Přehlad";
+"shared_string_start_time" = "čas wotjězda";
+"education" = "Kubłanje";
+"regions" = "Regiony";
+"distance_moving" = "Zdalenosć skorigowana";

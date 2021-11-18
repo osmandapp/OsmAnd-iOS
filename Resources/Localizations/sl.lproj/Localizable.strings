@@ -81,7 +81,7 @@
 "rendering_value_browse_map_name" = "Poišči na zemljevidu";
 "m_style_car" = "Navigacija v avtomobilu";
 "m_style_walk" = "Hoja";
-"m_style_bicycle" = "Kolesarska navigacija";
+"m_style_bicycle" = "Kolesarjenje";
 "map_settings_map" = "Zemljevid";
 "map_settings_show" = "Pokaži na zemljevidu";
 "map_settings_type" = "Vrsta zemljevida";
@@ -141,8 +141,8 @@
 "gpx_distance_points" = "Razdalja (točke)";
 "gpx_max_speed" = "Največja hitrost";
 "gpx_speed" = "Hitrost";
-"map_settings_day" = "Svetli dnevni izris";
-"map_settings_night" = "Zvečer";
+"map_settings_day" = "Dan";
+"map_settings_night" = "Temni nočni izris";
 "map_settings_offline" = "Slog prikaza zemljevida";
 // HUD
 "hud_heading" = "Naslov";
@@ -260,13 +260,13 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "h";
+"units_hour" = "ur";
 "units_min" = "min";
 "units_sec" = "sek";
 "map_remind" = "Opomni kasneje";
 // Import
 "import_title" = "Uvozi podatke";
-"import_favorite" = "Priljubljene";
+"import_favorite" = "Priljubljena točka";
 "import_failed" = "Uvoz je spodletel";
 "import_gpx" = "Sled GPX";
 // Context menu
@@ -358,7 +358,7 @@
 "product_desc_asia" = "Neomejeno prenašanje zemljevidov Azije";
 "product_title_wiki" = "Wikipedija";
 "product_desc_wiki" = "Podatki Wikipedije";
-"product_title_srtm" = "Podatki izohips";
+"product_title_srtm" = "Izohipse";
 "product_desc_srtm" = "Prikaz izohips na zemljevidu";
 "my_location" = "Trenutno mesto";
 "all_categories" = "Vse kategorije";
@@ -369,7 +369,7 @@
 "enter_fav_name" = "Vnesite ime priljubljene točke";
 "res_installing" = "Poteka nameščanje …";
 "res_roads" = "Poti";
-"res_srtm" = "Podatki izohips";
+"res_srtm" = "Izohipse";
 "res_wiki" = "Wikipedija";
 "select_language" = "Izbor jezika";
 "language_short" = "Jezik";
@@ -633,7 +633,7 @@
 "transport_nearby_routes_within" = "Bližnje poti v";
 "transport_nearby_routes" = "Blizu";
 "route_stops_before" = "%1$s se zaustavi pred";
-"transport_routes" = "Dodatne poti";
+"transport_routes" = "Poti";
 "logging_interval_navigation" = "Interval beleženja med navigacijo";
 "logging_min_distance" = "Najmanjša razdalja za beleženje";
 "logging_min_distance_descr" = "Filter: najmanjša razdalja za beleženje nove točke";
@@ -671,7 +671,7 @@
 "gpx_cancel_route_q" = "Ali želite preklicati to pot?";
 "show_all" = "Pokaži vse";
 "get_directions" = "Navigacija";
-"parking" = "Parkirišča";
+"parking" = "Parkiranje";
 "directions_more_options" = "Navigacija od…";
 "nearby_search" = "Poišči v bližini";
 "est_travel_time" = "Oceni čas potovanja";
@@ -680,7 +680,7 @@
 "plugins" = "Upravljalnik vstavkov";
 "plugin_popup_nautical_title" = "Prejmi navtične zemljevide";
 "go_to_downloads" = "Skoči v mapo prejemov";
-"transport_stop" = "Končaj";
+"transport_stop" = "Postaja";
 "auto_split_gap" = "Samodejno razdeli beleženje po vmesnih točkah";
 "map_widget_ruler_control" = "Krožno ravnilo";
 "speak_tunnels" = "Tuneli";
@@ -691,7 +691,7 @@
 "poi_clear" = "Počisti";
 "track_during_nav" = "Samodejno beleži sled med navigacijo";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Sprotne posodobitve";
+"osmand_live_updates" = "Posodobitve vživo";
 "osmand_live_available_maps" = "Razpoložljivi zemljevidi";
 "osmand_live_hourly" = "Vsako uro";
 "osmand_live_daily" = "Dnevno";
@@ -868,7 +868,6 @@
 "blue" = "Modra";
 "toggle_nav" = "Začni/Končaj navigacijo";
 "prev_route" = "Predhodna pot";
-"units_min_short" = "m";
 "translucent_purple" = "Prosojna vijolična";
 "show_contour_lines" = "Izriši izohipse";
 "gpx_slope" = "Naklon";
@@ -898,7 +897,7 @@
 "edit_action" = "Uredi dejanje";
 "day_mode" = "Dnevni način";
 "brown" = "Rjava";
-"product_title_sea_depth_contours" = "Navtični relief globine (izobate)";
+"product_title_sea_depth_contours" = "Navtične globinske izohipse";
 "create_items" = "Ustvari predmete";
 "gpx_avg_altitude" = "Povprečna nadmorska višina";
 "night_mode" = "Nočni način";
@@ -925,7 +924,7 @@
 "quick_action_name_footer" = "Pusti prazno za uporabo naslova ali imena mesta.";
 "pause_resume_nav" = "Ustavi/Nadaljuj navigacijo";
 "coordinates_example" = "Primer";
-"osm_deleted" = "Točka POI je izbrisana";
+"osm_deleted" = "Izbrisano";
 "mapillary" = "Mapillary";
 "poi_type" = "Vrsta točke POI";
 "translucent_blue" = "Prosojna modra";
@@ -1338,7 +1337,7 @@
 "position_icon_while_moving" = "Izbor navigacijske ikone";
 "nav_type_geocoding" = "Geokodiranje";
 "units_t" = "t";
-"m_style_pulic_transport" = "Javni potniški promet";
+"m_style_pulic_transport" = "Javni prevozi";
 "enter_profile_name" = "Ime profila";
 "profile_type_custom_string" = "Profil po meri";
 "quick_action_map_source_title" = "Viri zemljevida";
@@ -1400,7 +1399,7 @@
 "split_before" = "Razdeli pred";
 "replace_favorite_confirmation" = "Ali ste prepričani, da želite zamenjati priljubljeno točko %@?";
 "displayed_trips" = "Prikazane sledi";
-"emergency" = "Nujna medicinska pomoč";
+"emergency" = "Pomoč v sili";
 "transport" = "Prevoz";
 "context_menu_item_edit_waypoint" = "Uredi vmesno točko GPX";
 "no_waypoints_found" = "Ni vmesnih točk";
@@ -1420,7 +1419,26 @@
 "gpxup_trackable" = "Sledljivo";
 "default" = "Privzeto";
 "welmode_download_maps" = "Prejmi zemljevide";
-"m" = "m";
 "gpxup_public" = "Javno";
 "navigate_point_olc" = "Odpri kodo območja";
 "added_profiles" = "Dodani profili";
+"upload_to_openstreetmap" = "Naloži v OpenStreetMap";
+"shared_string_overview" = "Pregled";
+"shared_string_width" = "Širina";
+"gpx_split_interval" = "Interval za razdelitev";
+"delete_waypoints" = "Brisanje točk";
+"edit_track" = "Uredi sled";
+"shared_string_start_time" = "Čas odhoda";
+"track_show_start_finish_icons" = "Pokaži ikone začetka in konca";
+"shared_string_time_span" = "Časovni okvir";
+"distance_moving" = "Razdalja je popravljena";
+"shared_string_end_time" = "Čas prihoda";
+"shared_string_custom" = "Po meri";
+"gpx_split_interval_none_descr" = "Izbor načina razdeljevanja: po času ali po razdalji.";
+"analyze_on_map" = "Preuči na zemljevidu";
+"gpx_join_gaps" = "Združi prekinjene sledi";
+"regions" = "Območja";
+"gpx_dir_arrows" = "Smerne puščice";
+"education" = "Izobraževalna ustanova";
+"shared_string_time_moving" = "Čas premikanja";
+"nautical" = "Navtični prikaz";

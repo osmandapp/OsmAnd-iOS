@@ -37,7 +37,7 @@
 "transport_routes" = "Ruter";
 "transport_nearby_routes_within" = "Ruter i nærheten innen";
 "transport_nearby_routes" = "Innenfor";
-"transport_stop" = "Stopp";
+"transport_stop" = "Stoppested";
 "cancel_navigation" = "Stopp navigering";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sorter dør-til-dør";
@@ -845,7 +845,7 @@
 "modify_edit_short" = "Modifiser OSM-endring";
 "open_osm_note" = "Åpne OSM-notat";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Send";
+"osm_alert_title" = "Send inn";
 "osm_alert_message" = "Melding";
 "osm_alert_button_ok" = "Opprett notat";
 "modify_poi" = "Modify the POI information";
@@ -872,7 +872,6 @@
 "units_hour" = "t";
 "units_min" = "min";
 "units_sec" = "sek";
-"units_min_short" = "m";
 "units_sec_short" = "S";
 // Help
 "help_first_steps" = "First steps";
@@ -886,7 +885,7 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Turplanlegging";
 "help_legend" = "Kartforklaring";
-"help_other_header" = "Annet";
+"help_other_header" = "Andre";
 "help_install_and_troubleshoot" = "Installering og problemløsing";
 "help_tech_articles" = "Tekniske artikler";
 "help_versions" = "Versjoner";
@@ -1816,7 +1815,7 @@
 "point_to_navigate" = "Naviger til";
 "attach_to_the_roads" = "Følg veier";
 "select_another_track" = "Velg et annet spor";
-"track" = "Turvei";
+"track" = "Spor";
 "follow_track" = "Følg spor";
 "split_before" = "Del før";
 "split_after" = "Del etter";
@@ -1891,7 +1890,7 @@
 "shared_string_others" = "Andre";
 "coordinates" = "Koordinater";
 "reverse_track_dir" = "Snu GPX-retning";
-"emergency" = "Nødsfall";
+"emergency" = "Nødsituasjon";
 "copied_to_clipboard" = "Kopiert til utklippstavle";
 "icon" = "Ikon";
 "some_of" = "%d av %d";
@@ -1998,13 +1997,12 @@
 "download_map_dialog" = "Kartnedlastingsdialog";
 "shared_string_navigation" = "Navigering";
 "added_profiles_descr" = "Profiler lagt til av programtillegg";
-"m" = "m";
 "no_waypoints_found" = "Fant ingen rutepunkter";
 "navigate_point_easting" = "Østverdi";
 "walking_route_osmc_description" = "Fargelegg ruter i henhold til deres individuelle lokale farge (hvis den forefinnes i OpenStreetMap) og type (internasjonal, regional, lokal).";
 "navigate_point_zone" = "Sone";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Fargelegg ruter i henhold til deres nodenettverkstype (internasjonal, regional, lokal).";
-"default" = "Forvalg";
+"default" = "Standard";
 "dialogs_and_notifications" = "Dialogvinduer og merknader";
 "some_articles_may_not_available_in_lang" = "Noen Wikipedia-artikler er kanskje ikke tilgjengelige på ditt språk.";
 "product_title_mapillary" = "Mapillary";
@@ -2044,3 +2042,19 @@
 "shared_string_overview" = "Oversikt";
 "activity" = "Aktivitet";
 "change_object_posiotion" = "Endre objektets posisjon";
+"attribute" = "Attributt";
+"reset_to_original" = "Tilbakestill til forvalg";
+"education" = "Utdanning";
+"nautical" = "Maritimt";
+"edit_track" = "Rediger spor";
+"upload_to_openstreetmap" = "Last opp til OpenStreetMap";
+"delete_waypoints" = "Slett rutepunkter";
+"gpx_split_interval_none_descr" = "Velg detønskede oppdelingsalternativet: etter tid eller etter avstand.";
+"distance_moving" = "Korrigert avstand";
+"gpx_join_gaps" = "Fjern mellomrom";
+"track_coloring_solid" = "Utfylt";
+"gpx_split_interval_descr" = "Velg intervallet hvor markeringer med avstand eller tid på sporet vil vises.";
+"track_show_start_finish_icons" = "Vis start- og målikoner";
+"analyze_on_map" = "Analyser på kartet";
+"gpx_split_interval" = "Oppdelingsintervall";
+"industrial" = "Industriell";

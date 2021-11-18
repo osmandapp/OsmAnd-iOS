@@ -37,7 +37,7 @@
 "transport_routes" = "Čary";
 "transport_nearby_routes_within" = "Bliske linije w radiusu";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Zastanišćo";
+"transport_stop" = "Stop";
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
@@ -425,7 +425,7 @@
 "poi_hide" = "Schować";
 // My Places
 "favorites" = "Fawority";
-"tracks" = "Čary";
+"tracks" = "Puće";
 // GPX
 "gpx_point" = "Dypk";
 "gpx_waypoint" = "Čarowy dypk";
@@ -473,7 +473,7 @@
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
 "poi_clear" = "Wotstronić";
-"poi_list" = ""Lisćina  POI"";
+"poi_list" = "\"Lisćina  POI\"";
 "track_during_nav" = "Auto-record trip during navigation";
 "track_during_nav_descr" = "A trip is automatically saved during navigation";
 "gpx_distance_points" = "Distance (points)";
@@ -491,7 +491,7 @@
 "map_mode" = "Kartowy modus";
 "map_settings_map_magnifier" = "Powjetšenje karty";
 "map_settings_text_size" = "Wulkosć teksta";
-"map_settings_day" = "Dźeń";
+"map_settings_day" = "dźeń";
 "map_settings_night" = "Nóc";
 "map_settings_style" = "Stil karty";
 "map_settings_overunder" = "Overlay / Underlay";
@@ -672,7 +672,7 @@
 "osm_website" = "Webstrona";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"osm_poi_delete_title" = "POI wušmórnyć";
+"osm_poi_delete_title" = "POI wotstronić";
 "osm_target_modified" = "Změnjene OSM POI-dypki";
 "osm_target_deleted" = "Wotstronjene OSM POI-dypki";
 "osm_target_created" = "OSM POI-dypk wutworjeny";
@@ -889,7 +889,7 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Jězbu planować";
 "help_legend" = "Legenda karty";
-"help_other_header" = "druhe";
+"help_other_header" = "Druhe";
 "help_install_and_troubleshoot" = "Instalacija a rozrisowanje problemow";
 "help_tech_articles" = "Technical articles";
 "help_versions" = "Wersije";
@@ -1091,7 +1091,7 @@
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
-"plugins" = "Rozšěrjenja";
+"plugins" = "Přidatki";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";

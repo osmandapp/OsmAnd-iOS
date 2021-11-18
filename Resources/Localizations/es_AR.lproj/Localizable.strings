@@ -163,8 +163,8 @@
 "map_settings_show" = "Mostrar en el mapa";
 "map_settings_type" = "Tipo de mapa";
 "map_settings_mode" = "Modo de aplicación";
-"map_settings_day" = "Diurno";
-"map_settings_night" = "Por la noche";
+"map_settings_day" = "Día";
+"map_settings_night" = "Nocturno";
 "map_settings_style" = "Estilo del mapa";
 "map_settings_overunder" = "Superpuesta/Subyacente";
 "map_settings_over" = "Superposición";
@@ -379,7 +379,7 @@
 "directions" = "Indicaciones";
 "shared_string_dismiss" = "Descartar";
 "shared_string_modify" = "Modificar";
-"parking" = "Estacionamientos";
+"parking" = "Estacionamiento";
 "est_travel_time" = "Tiempo de viaje estimado";
 "pedestrian" = "Peatón";
 "sorting" = "Ordenar";
@@ -487,7 +487,7 @@
 "postcode" = "Código postal";
 "show_something_on_map" = "Mostrar«%@» en el mapa";
 "search_POI_level_btn" = "Aumentar radio de búsqueda";
-"shared_string_street" = "Calle residencial";
+"shared_string_street" = "Calle";
 "shared_string_building" = "Edificio";
 "shared_string_street_intersection" = "Intersección de calles";
 "shared_string_address" = "Dirección";
@@ -1973,7 +1973,7 @@
 "start_of_track" = "Inicio de la traza";
 "point_to_navigate" = "Navegar a";
 "reverse_track_dir" = "Invertir la dirección de la traza";
-"track" = "Camino rural";
+"track" = "Traza";
 "split_after" = "Dividir después";
 "split_before" = "Dividir antes";
 "gpx_already_exsists" = "Ya existe un archivo con ese nombre";
@@ -2035,7 +2035,7 @@
 "symbols" = "Símbolos";
 "sport" = "Deporte";
 "special" = "Especial";
-"service" = "Servicio";
+"service" = "Vía de servicio";
 "emergency" = "Emergencia";
 "square" = "Cuadrado";
 "octagon" = "Octágono";

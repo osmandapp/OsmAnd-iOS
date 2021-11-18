@@ -177,3 +177,5 @@
 "osm_notes" = "Notên OSMê";
 "group_name" = "Navê komê";
 "regions" = "Herêman";
+"units_min_short" = "m";
+"m" = "m";

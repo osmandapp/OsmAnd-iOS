@@ -1,7 +1,7 @@
 "OsmAnd Maps" = "Mapy OsmAnd";
 "shared_string_previous" = "Předchozí";
 "route_stops_before" = "%1$s zastávek před";
-"transport_routes" = "Cesty";
+"transport_routes" = "Trasy";
 "transport_nearby_routes_within" = "Nejbližší trasy v okruhu";
 "transport_nearby_routes" = "V okruhu";
 "transport_stop" = "Zastavit";
@@ -293,7 +293,7 @@
 "shared_string_and" = "a";
 "shared_string_edit" = "Upravit";
 "shared_string_modify" = "Upravit";
-"shared_string_later" = "Později";
+"shared_string_later" = "Pokračujte";
 "shared_string_of" = "of";
 "shared_string_all" = "Všechny";
 "shared_string_from" = "od";
@@ -393,7 +393,7 @@
 "map_settings_type" = "Typ mapy";
 "map_mode" = "Režim mapy";
 "map_settings_day" = "Den";
-"map_settings_night" = "Noc";
+"map_settings_night" = "V noci";
 "map_settings_style" = "Styl mapy";
 "map_settings_overunder" = "Překryvná / podkladová";
 "map_settings_over" = "Překryvná";
@@ -418,7 +418,7 @@
 "sett_km" = "Kilometry";
 "sett_ml" = "Míle";
 "sett_zoom" = "Tlačítko přiblížení";
-"sett_show" = "Zobrazit";
+"sett_show" = "Ukázat";
 "sett_notshow" = "Nezobrazovat";
 "sett_loc_fmt" = "Location format";
 "sett_deg" = "Degrees";
@@ -442,7 +442,7 @@
 "prch_nau_q3" = "Instalaci lze provést později přes Mapy a zdroje.";
 "proceed_q" = "Pokračovat?";
 "download" = "Stáhnout";
-"nothanks" = "Ne, díky";
+"nothanks" = "Není potřeba";
 "download_now" = "Stáhnout mapu nyní";
 "prch_failed" = "Nákup \"%@\" se nezdařil";
 "prch_items_failed" = "položek nebylo obnoveno. Zkuste to prosím znovu.";
@@ -670,11 +670,11 @@
 "gpx_group_select" = "Výběr skupiny";
 "show_all" = "Zobrazit vše";
 "get_directions" = "Navigace";
-"parking" = "Parkování";
+"parking" = "Parkoviště";
 "est_travel_time" = "Odhadovaný čas jízdy";
 "pedestrian" = "Chodec";
 "sorting" = "Řazení";
-"plugins" = "Moduly";
+"plugins" = "Správce modulů";
 "open_map_settings" = "Otevřít nastavení mapy";
 "plugin_popup_ski_title" = "Zapnout lyžařský mapový styl";
 "plugin_popup_ski_desc" = "Pro zapnutí <b>lyžařského</b> stylu mapy, přejděte prosím do <b>Nastavení mapy</b> > <b>Typ mapy</b>";
@@ -797,7 +797,7 @@
 "help_search" = "Hledání v mapě";
 "help_trip_planning" = "Plánování cesty";
 "help_legend" = "Legenda mapy";
-"help_other_header" = "Jiné";
+"help_other_header" = "Další";
 "help_install_and_troubleshoot" = "Instalace ařešení problémů";
 "help_tech_articles" = "Technické články";
 "help_versions" = "Verze";
@@ -809,7 +809,7 @@
 "shared_string_close" = "Zavřít";
 "actions" = "Akce";
 "directions_more_options" = "Navigovat odsud";
-"nearby_search" = "Hledat v okolí";
+"nearby_search" = "Hledat poblíž";
 "map_widget_ruler_control" = "Kruhové pravítko";
 "import_from_docs" = "Import z dokumentů";
 "osm_live_routing" = "OsmAnd Live navigace";
@@ -974,7 +974,7 @@
 "red" = "Červená";
 "map_settings_text_size" = "Velikost písma";
 "key_hint_deselect" = "Zrušit výběr";
-"osm_str_name" = "Jméno ulice";
+"osm_str_name" = "Název ulice";
 "add_action" = "Přidat akci";
 "add_gpx_waypoint" = "Přidat GPX mezicíl";
 "osm_note" = "OSM poznámka";
@@ -1004,7 +1004,7 @@
 "green" = "Zelená";
 "osm_edit_without_name" = "Bez názvu";
 "replace_destination" = "Nahradit cíl";
-"osm_poi_delete_title" = "Vymazat POI";
+"osm_poi_delete_title" = "Smazat POI";
 "osm_target_created" = "Vytvořen OSM POI";
 "quick_action_name_footer" = "Ponecháte-li prázdné, bude použita adresa nebo název místa.";
 "dark_yellow" = "Tmavě žlutá";
@@ -1012,7 +1012,7 @@
 "add_intermediate" = "Přidat mezicíl";
 "osm_alert_title" = "Odeslat";
 "translucent_red" = "Průsvitná červená";
-"home_pt" = "Doma";
+"home_pt" = "Domov";
 "simulate_navigation" = "Simulovat navigaci";
 "add_first_inermediate" = "Přidat první mezicíl";
 "mapil_pano_only" = "Zobrazit pouze 360° obrázky";
@@ -1029,7 +1029,7 @@
 "quick_action_add_underlay" = "Přidat podklad";
 "osm_deleted" = "Odstraněné";
 "map_styles" = "Styly mapy";
-"osm_alert_message" = "Zpráva";
+"osm_alert_message" = "Hlášení";
 "shared_string_retry" = "Zkusit znovu";
 "shared_string_filter" = "Filtr";
 "map_settings_map_magnifier" = "Lupa mapy";
@@ -2002,7 +2002,7 @@
 "symbols" = "Symboly";
 "sport" = "Sport";
 "special" = "Speciální";
-"service" = "Dopravní obsluha";
+"service" = "Služby";
 "emergency" = "Pomoc v nouzi";
 "search_poi_types_descr" = "Můžete kombinovat body zájmu různých kategorií.";
 "reset_to_default_category_button_promo" = "Obnovení do základního nastavení vrátí pořadí do výchozího stavu.";
@@ -2179,4 +2179,6 @@
 "shared_string_end_time" = "Čas příjezdu";
 "shared_string_time_moving" = "Doba pohybu";
 "industrial" = "Průmysl";
-"education" = "Školství";
+"education" = "Vzdělávání";
+"m" = "m";
+"units_min_short" = "m";

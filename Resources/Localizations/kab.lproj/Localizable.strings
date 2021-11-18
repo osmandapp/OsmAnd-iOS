@@ -116,7 +116,7 @@
 "shared_string_info" = "Talɣut";
 "rendering_attr_piste_difficulty_connection_name" = "Tuqqna";
 "get_discount_second_part" = "di  %@";
-"shared_string_in_name" = ""di  %@"";
+"shared_string_in_name" = "\"di  %@\"";
 "driving_region_canada" = "Kanada";
 "download_map" = "Sider";
 "shared_string_go" = "Ddu";
@@ -146,7 +146,7 @@
 "maps" = "Tikarḍiwin";
 "poi_list" = "Umuɣ";
 "product_title_europe" = "Turuft";
-"map_settings_show" = ""Skenɣef  tkarḍa"";
+"map_settings_show" = "\"Skenɣef  tkarḍa\"";
 "shared_string_unexpected_error" = "Tuccḍa tarussint.";
 "rendering_attr_highway_class_state_road_name" = "Aɣrem";
 "shared_string_street" = "Abrid";
@@ -168,7 +168,7 @@
 "rendering_value_bold_name" = "Azuran";
 "region_russia" = "Rruss";
 "shared_string_from" = "sɣur";
-"res_type" = ""Type "";
+"res_type" = "\"Type \"";
 "key_hint_select" = "Fren";
 "speak_street_names" = "Ismawen n yiberdan (TTS)";
 "loading_poi_obj" = "Asali...";
@@ -265,7 +265,7 @@
 "sett_show" = "Sken";
 "shared_string_email_address" = "Tansa imayl";
 "gpx_route" = "Abrid";
-"help_other_header" = "Wayeḍ";
+"help_other_header" = "Nniḍen";
 "rendering_attr_smoothness_very_bad_name" = "Dirit";
 "clear_all_intermediates" = "Sfeḍ akk tineqqiḍin";
 "map_settings_appearance" = "Udem";
@@ -426,8 +426,8 @@
 "postcode" = "Tangalt n lpusṭa";
 "rendering_value_yellow_name" = "Awraɣ";
 "region_others" = "Wayeḍ";
-"home_pt" = "Agejdan";
-"osm_deleted" = "Yettwakkes";
+"home_pt" = "Tinefrent tagejdant";
+"osm_deleted" = "Ittwakkes";
 "shared_string_my_location" = "ideg";
 "get_started" = "Aha bdu tura";
 "product_title_track_recording" = "Asekles";
@@ -584,7 +584,7 @@
 "select_group" = "Fren agraw";
 "favorite_friends_category" = "Imdukal";
 "circle" = "Tawinest";
-"track" = "Abrid";
+"track" = "Piste";
 "service" = "Ameẓlu";
 "ctx_mnu_direction" = "marker";
 "square" = "Amkuẓ";
@@ -637,3 +637,5 @@
 "gpx_join_gaps" = "Semlil";
 "track_coloring_solid" = "Iqqur";
 "shared_string_overview" = "Agzul";
+"m" = "m";
+"units_min_short" = "m";

@@ -53,7 +53,7 @@
 "poi_insrease_radius" = "Aumenta su raju de chirca a";
 "poi_max_radius_reached" = "Raju de chirca màssimu segudadu";
 "poi_search_near_center" = "Sa chirca est fata a curtzu de su tzentru de sa mapa";
-"poi_hide" = "Istichi";
+"poi_hide" = "Cua";
 // My Places
 "favorites" = "Preferidos";
 "tracks" = "Rastas";
@@ -77,7 +77,7 @@
 "gpx_route_time" = "Tempus de s’àndala";
 "gpx_uphldownhl" = "Artziadas/Faladas";
 "gpx_average_speed" = "Lestresa mèdia";
-"gpx_start" = "Allughe";
+"gpx_start" = "Incumintza";
 "gpx_finish" = "Acabba·la";
 "gpx_avg_elev" = "Artària mèdia";
 "fav_remove_q" = "Bogare su preferidu?";
@@ -168,7 +168,7 @@
 "prch_nau_q3" = "As a lu pòdere installare prus a tardu dae Mapas e Resursas.";
 "proceed_q" = "Sighire?";
 "download" = "Iscàrriga";
-"nothanks" = "Nono, gràtzias";
+"nothanks" = "No, gràtzias";
 "download_now" = "Iscarriga sa mapa";
 "prch_failed" = "Sa còmpora de \"%@\" est faddida";
 "prch_items_failed" = "Sos elementos non sunt istados ripristinados. Torra a proare prus a tardu.";
@@ -379,10 +379,10 @@
 "show_all" = "AMMUSTRA TOTU";
 "directions" = "Indicatziones";
 "shared_string_modify" = "Modìfica";
-"shared_string_later" = "Prus a tardu";
+"shared_string_later" = "A pustis";
 "map_settings_hillshade" = "Umbraduras de sos rilievos";
 "product_title_trip_planning" = "Pianificatzione biàgiu";
-"parking" = "Parchègiu";
+"parking" = "Parchezu";
 "est_travel_time" = "Tempus dàbile de biàgiu";
 "pedestrian" = "A pedes";
 "sorting" = "Ordinamentu";
@@ -818,7 +818,7 @@
 "osm_live_routing" = "Navigatzione OsmAnd Live";
 "osm_live_routing_descr" = "Imprea sos agiornamentos de OsmAnd Live pro sa navigatzione";
 "osmand_live_title" = "OsmAnd in direta";
-"osmand_live_updates" = "Agiornamentos in tempus reale";
+"osmand_live_updates" = "Agiornamentos automàticos";
 "osmand_live_available_maps" = "Mapas disponìbiles";
 "osmand_live_last_changed" = "Ùrtima modìfica de sa mapa: %@";
 "osmand_live_last_live_update" = "Ùrtimu agiornamentu: %@";
@@ -873,7 +873,7 @@
 "product_title_wikivoyage" = "Ghias de biàgiu";
 "product_desc_wikivoyage" = "Sa ghia turìstica lìbera pro totu su mundu chi totus podent megiorare.";
 "product_desc_ext_wikivoyage" = "Ghias pro sos logos prus interessantes de su mundu, in intro de OsmAnd, chi non tenent bisòngiu de impreare una connessione a ìnternet.";
-"product_title_sea_depth_contours" = "Curvas de profondidade nàuticas";
+"product_title_sea_depth_contours" = "Curvas de livellu nàuticas";
 "product_desc_sea_depth_contours" = "Mapas de sas curvas de livellu nàuticas e de sos pidagnos";
 "in_app_purchase_desc_ex" = "A pustis de sa còmpora at a èssere disponìbile pro semper.";
 "unlock_all_features" = "Isbloca totu sas funtzionalidades de OsmAnd";
@@ -1855,7 +1855,7 @@
 "import_profile_descr" = "Pro importare unu profilu incarca in su documentu netzessàriu (*.osf) in cale si siat aplicatzione e ischerta \"Còpia in OsmAnd Maps\"";
 "profile_prefs_reset_successful" = "Totu sas impostatziones de sos profilos sunt torradas a s\'istadu predefinidu.";
 "gpx_parse_error" = "Su GPX de OsmAnd no est fraigadu bene, pro praghere cuntata s\'iscuadra de suportu pro investigare prus a fundu.";
-"nothing_found_empty" = "Nudda de agatadu";
+"nothing_found_empty" = "Nudda agatau";
 "shared_string_next" = "Imbeniente";
 "add_one_more_pnt" = "Annanghe un'àteru puntu";
 "delete_point" = "Iscantzella puntu";
@@ -2035,7 +2035,7 @@
 "sport" = "Isport";
 "special" = "Ispetziales";
 "service" = "Servìtziu";
-"emergency" = "Emergèntzia";
+"emergency" = "Apretu/Emergèntzia";
 "square" = "Cuadradu";
 "octagon" = "Otàgonu";
 
@@ -2215,3 +2215,5 @@
 "distance_moving" = "Distàntzia curreta";
 "industrial" = "Industriale";
 "education" = "Istrutzione";
+"m" = "m";
+"units_min_short" = "m";

@@ -41,7 +41,7 @@
 "transport_routes" = "Reitit";
 "transport_nearby_routes_within" = "Lähellä olevat reitit";
 "transport_nearby_routes" = "Sisältäen";
-"transport_stop" = "Lopeta";
+"transport_stop" = "Pysähdys";
 "cancel_navigation" = "Keskeytä navigointi";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Lajittele ovelta ovelle";
@@ -559,7 +559,7 @@
 
 // My Places
 "favorites" = "Suosikit";
-"tracks" = "Jäljet";
+"tracks" = "Reittini";
 "personal_category_name" = "Henkilökohtainen";
 "visible" = "Näkyvissä";
 
@@ -634,7 +634,7 @@
 // Map settings
 "m_style_car" = "Auto";
 "m_style_walk" = "Kävely";
-"m_style_bicycle" = "Pyöräily";
+"m_style_bicycle" = "Pyörä";
 "m_style_pulic_transport" = "Joukkoliikenne";
 "map_settings_map" = "Kartta";
 "layer_amenity_label" = "Pisteiden nimet (KP:t, suosikit)";
@@ -892,7 +892,7 @@
 "split_before" = "Jaa ennen";
 "split_after" = "Jaa jälkeen";
 "follow_track" = "Seuraa jälkeä";
-"track" = "Jälki";
+"track" = "Polku";
 "select_another_track" = "Valitse toinen jälki";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Kiinnitä teihin";
@@ -1042,7 +1042,7 @@
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "Yhteystiedot";
-"osm_str_name" = "Katunimi";
+"osm_str_name" = "Kadun nimi";
 "osm_building_num" = "Building number";
 "osm_phone" = "puhelin";
 "osm_website" = "Sivusto";
@@ -1295,7 +1295,7 @@
 "units_nm" = "mpk";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "t";
+"units_hour" = "h";
 "units_min" = "min";
 "units_sec" = "sek";
 "units_sec_short" = "s";
@@ -1562,7 +1562,7 @@
 "pedestrian" = "Jalankulkija";
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
-"plugins" = "Lisäosat";
+"plugins" = "Liitännäiset";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -2059,7 +2059,7 @@
 
 //Poi catagories
 "amenity" = "Mukavuus";
-"emergency" = "Hätäpalvelu";
+"emergency" = "Hätätapaus";
 "service" = "Palvelu";
 "special" = "Erityinen";
 "sport" = "Urheilu";
@@ -2169,10 +2169,8 @@
 "shared_string_width" = "Leveys";
 "edit_track" = "Muokkaa jälkeä";
 "track_coloring_solid" = "Kiinteä";
-"units_min_short" = "m";
 "shared_string_overview" = "Yleiskatsaus";
 "upload_to_openstreetmap" = "Lähetä OpenStreetMappiin";
-"m" = "m";
 "gpx_split_interval_descr" = "Valitse kuinka usein merkit näytetään välimatkalle tai ajalle jäljellä.";
 "analyze_on_map" = "Analysoi kartalla";
 "shared_string_end_time" = "Päättymisaika";
@@ -2192,4 +2190,3 @@
 "distance_moving" = "Etäisyys korjattu";
 "shared_string_time_moving" = "Aika liikkuu";
 "regions" = "Alueet";
-"tones" = "tonnia";

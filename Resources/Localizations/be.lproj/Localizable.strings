@@ -25,7 +25,7 @@
 "fav_replace" = "Замяніць";
 "poi_hide" = "Схаваць";
 // My Places
-"favorites" = "Улюбёныя мясціны";
+"favorites" = "Улюбёнае";
 "gpx_waypoints" = "Пункты шляху";
 "shared_string_export" = "Экспартаваць";
 "gpx_stat" = "Статыстыка";
@@ -260,7 +260,7 @@
 // Import
 "import_title" = "Імпартаваць даныя";
 "import_choose_type" = "Абярыце што імпартаваць";
-"import_favorite" = "Улюбёнае";
+"import_favorite" = "Улюбёныя мясціны";
 "import_failed" = "Не атрымалася імпартаваць";
 "import_cannot" = "Вызначаны файл не можа быць імпартаваны";
 "import_gpx" = "GPX-сляды";
@@ -446,7 +446,7 @@
 "nothing_found" = "Нічога не знойдзена: %@";
 "nothing_found_descr" = "Змяніць запыт пошуку ці павялічыць радыус пошуку";
 "shared_string_in_name" = "у %@";
-"shared_string_later" = "Пазней";
+"shared_string_later" = "Далей";
 "shared_string_of" = "з";
 "right_side_navigation" = "Правабаковы рух";
 "si_mi_meters" = "Мілі/метры";
@@ -480,7 +480,7 @@
 "traffic_warning_speed_limit" = "Абмежаванне хуткасці";
 "traffic_warning_border_control" = "Памежны кантроль";
 "traffic_warning_payment" = "Платны праезд";
-"traffic_warning_stop" = "Знак \"СТОП\"";
+"traffic_warning_stop" = "Знак \"СТОП\\"";
 "traffic_warning_calming" = "Паменшыце хуткасць";
 "traffic_warning_speed_camera" = "Камера кантролю хуткасці";
 "traffic_warning" = "Абмежаванні руху";
@@ -503,7 +503,7 @@
 "menu_my_directions" = "Мае напрамкі";
 "product_title_trip_planning" = "Планаванне паездак";
 "shared_string_street_intersection" = "Скрыжаванне вуліц";
-"shared_string_building" = "Будынак";
+"shared_string_building" = "Дом";
 "shared_string_street" = "Вуліца";
 "arrived_at_intermediate_point" = "Вы дасягнулі прамежкавага пункта";
 "ending_point_too_far" = "Канцавы пункт занадта далёка ад бліжэйшай дарогі.";
@@ -728,7 +728,7 @@
 "twitter" = "Twitter";
 "route_stops_before" = "%1$s прыпынкаў да абранага";
 "transport_routes" = "Маршруты";
-"transport_stop" = "Прыпынак";
+"transport_stop" = "Спыніць";
 "new_destination_point_dialog" = "Вы ўжо абралі пункт прызначэння";
 "show_poi_over_map" = "Паказваць POI";
 "search_radius" = "Радыус пошуку";
@@ -878,7 +878,7 @@
 "quick_actions_show_dialog" = "Паказваць прамежкавы дыялог";
 "mapillary_get_title" = "Палепшыць фотапакрыццё Mapillary";
 "osm_website" = "Вэб-сайт";
-"osm_edits_advanced" = "Пашыранае";
+"osm_edits_advanced" = "Высокая";
 "add_first_inermediate" = "Дадаць прамежкавы пункт";
 "help_map_viewing" = "Агляд мапы";
 "directions_more_options" = "Маршрут адсюль";
@@ -1921,7 +1921,7 @@
 "shared_string_gpx_points" = "Пункты";
 "select_group" = "Абраць групу";
 "extra_maps" = "Дадатковыя мапы";
-"track" = "След";
+"track" = "Грунтовая дарога";
 "shared_string_disable" = "Выключыць";
 "icon" = "Значок";
 "search_preogress" = "Пошук…";
@@ -1952,7 +1952,7 @@
 "octagon" = "Васьмівугольнік";
 "custom_osmand_plugin_name" = "Адвольная ўбудова OsmAnd";
 "markers_history" = "Гісторыя адзнак";
-"service" = "Паслугі";
+"service" = "Сэрвіс";
 "add_custom_category" = "Дадаць адвольную катэгорыю";
 "units_nm" = "м.мілі";
 "shared_string_others" = "Іншае";

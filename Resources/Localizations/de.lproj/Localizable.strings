@@ -35,7 +35,7 @@
 // POI
 "poi_insrease_radius" = "Erweitere Suchradius nach";
 "poi_max_radius_reached" = "Maximaler Suchradius erreicht";
-"poi_hide" = "Verbergen";
+"poi_hide" = "Ausblenden";
 // My Places
 "favorites" = "Favoriten";
 "tracks" = "Tracks";
@@ -69,7 +69,7 @@
 "map_settings_type" = "Kartentyp";
 "map_mode" = "Kartenmodus";
 "map_settings_day" = "Tag";
-"map_settings_night" = "Nacht";
+"map_settings_night" = "Nachts";
 "map_settings_style" = "Kartendarstellung";
 "shared_string_none" = "Keine";
 "map_settings_offline" = "Stile für Offline Karten";
@@ -93,7 +93,7 @@
 "prch_ski_q" = "Bitte den \"Ski Karten\" Stil einschalten in den Karten Einstellungen";
 "proceed_q" = "fortfahren?";
 "download" = "Herunterladen";
-"nothanks" = "Nicht verwendet";
+"nothanks" = "Nein, danke";
 "download_now" = "Karte jetzt herunterladen";
 "shared_string_ok" = "OK";
 "shared_string_add" = "Hinzufügen";
@@ -376,7 +376,7 @@
 "gpx_group_select" = "Gruppenauswahl";
 "show_all" = "Alle anzeigen";
 "get_directions" = "Navigation";
-"parking" = "Parkplatz";
+"parking" = "Parken";
 "est_travel_time" = "Reisezeit abschätzen";
 "pedestrian" = "Fußgänger";
 "sorting" = "Sortierung";
@@ -767,7 +767,7 @@
 "search_radius" = "Suchradius";
 "transport_routes" = "Routen";
 "transport_nearby_routes_within" = "Nahegelegene Routen innerhalb von";
-"transport_stop" = "Beenden";
+"transport_stop" = "Stopp";
 "transport_nearby_routes" = "Innerhalb";
 "route_stops_before" = "%d Haltestellen davor";
 "shared_string_previous" = "Zurück";
@@ -815,7 +815,7 @@
 "shared_string_close" = "Schließen";
 "actions" = "Aktionen";
 "directions_more_options" = "Navigiere von";
-"nearby_search" = "Suche um Aufenthaltsort";
+"nearby_search" = "In der Nähe suchen";
 "map_widget_ruler_control" = "Zirkel";
 "import_from_docs" = "Aus Dokumenten importieren";
 "osm_live_routing" = "OsmAnd-Live-Navigation";
@@ -954,7 +954,7 @@
 "osm_website" = "Webseite";
 "osm_add_place" = "Ort hinzufügen";
 "osm_modify_place" = "Ort bearbeiten";
-"osm_poi_delete_title" = "Lösche POI";
+"osm_poi_delete_title" = "POI löschen";
 "osm_target_modified" = "Geänderter OSM-POI";
 "osm_target_deleted" = "Gelöschter OSM-POI";
 "osm_target_created" = "OSM-POI erstellt";
@@ -1047,7 +1047,7 @@
 "tile_cache" = "Kachelzwischenspeicher";
 "shared_string_reload" = "Neu laden";
 "mapil_reload_cache" = "Kacheln neu laden, um die neuesten Daten zu sehen";
-"shared_string_filter" = "Filtern";
+"shared_string_filter" = "Filter";
 "mapil_filter_user_descr" = "Bilder nach Benutzer filtern";
 "mapil_filter_date" = "Bilder nach Datum filtern";
 "mapil_usernames" = "Benutzernamen";
@@ -1672,7 +1672,7 @@
 "public_transport_ped_route_title" = "Die Route zu Fuß beträgt ca. %1$s und könnte schneller sein, als mit öffentlichen Verkehrsmitteln.";
 "product_desc_antarctica" = "Unbegrenzte Karten-Downloads für die Antarktis";
 "product_title_antarctica" = "Antarktis";
-"m_style_pulic_transport" = "Öffentlicher Verkehr";
+"m_style_pulic_transport" = "ÖPNV";
 "transfers" = "Umstiege:";
 "consider_limitations_param" = "Vorübergehende Einschränkungen berücksichtigen";
 "avoid_transport_type" = "Transportarten vermeiden";
@@ -1736,7 +1736,7 @@
 "online_sources" = "Online-Quellen";
 "select_online_source" = "Quelle auswählen";
 "download_size" = "Downloadgröße";
-"update_map" = "Aktualisieren";
+"update_map" = "Karte aktualisieren";
 "enter_profile_name" = "Profilnamen eingeben";
 "position_icon_while_moving" = "Positionssymbol in Bewegung";
 "position_icon_at_rest" = "Positionssymbol im Ruhezustand";
@@ -1971,7 +1971,7 @@
 "nearest_point" = "Nächstgelegener Punkt";
 "start_of_track" = "Startpunkt des Tracks";
 "point_to_navigate" = "Navigation";
-"track" = "Track";
+"track" = "Wirtschaftsweg";
 "reverse_track_dir" = "Trackrichtung umkehren";
 "attach_to_the_roads" = "Auf Straßen einrasten";
 "select_another_track" = "Anderen Track wählen";

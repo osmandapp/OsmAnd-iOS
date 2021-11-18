@@ -33,7 +33,7 @@
 "shared_string_and" = "与";
 "shared_string_edit" = "编辑";
 "shared_string_modify" = "修改";
-"shared_string_later" = "稍后";
+"shared_string_later" = "后来";
 "shared_string_of" = "";
 "shared_string_all" = "全部";
 "shared_string_from" = "从";
@@ -126,13 +126,13 @@
 // Map settings
 "rendering_value_browse_map_name" = "浏览地图";
 "m_style_car" = "驾驶";
-"m_style_walk" = "走路";
-"m_style_bicycle" = "骑车";
+"m_style_walk" = "步行";
+"m_style_bicycle" = "自行车";
 "map_settings_map" = "地图";
 "map_settings_show" = "在地图上显示";
 "map_settings_type" = "地图类型";
 "map_mode" = "地图模式";
-"map_settings_day" = "白天";
+"map_settings_day" = "日";
 "map_settings_night" = "晚上";
 "map_settings_style" = "地图风格";
 "map_settings_overunder" = "叠加层 / 背景层";
@@ -259,7 +259,7 @@
 "units_ft" = "脚";
 "units_kmh" = "千米/时";
 "units_mph" = "英里";
-"units_hour" = "时";
+"units_hour" = "小时";
 "units_min" = "分";
 "units_sec" = "秒";
 // Map
@@ -920,7 +920,7 @@
 "osm_live_cancel_subscription" = "取消订阅";
 "key_hint_select" = "选择";
 "prev_route" = "上一条路径";
-"osm_alert_title" = "提交";
+"osm_alert_title" = "承諾";
 "help_tech_articles" = "技术文章";
 "change_map_source" = "改变地图来源";
 "add_gpx_waypoint" = "添加 GPX 地标";
@@ -960,7 +960,7 @@
 "shared_string_category" = "类别";
 "osm_alert_message" = "信息";
 "key_hint_deselect" = "取消选中";
-"osm_poi_delete_title" = "删除兴趣点";
+"osm_poi_delete_title" = "删除 POI";
 "osm_edits_basic" = "基本";
 "quick_action_no_underlay" = "无衬底层";
 "osm_edit_without_name" = "没有名称";

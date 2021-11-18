@@ -810,7 +810,7 @@
 "shared_string_close" = "Loka";
 "actions" = "Aðgerðir";
 "directions_more_options" = "Leiðir frá";
-"nearby_search" = "Leitaí nágrenninu";
+"nearby_search" = "Leitaí nágrenni";
 "map_widget_ruler_control" = "Mælistika út frá miðju hrings";
 "import_from_docs" = "Flytja inn úr skjölum";
 "osm_live_routing" = "OsmAnd Live leiðsögn";
@@ -999,7 +999,7 @@
 "osm_edits_offline_layer" = "OSM breytingar/minnispunktar (ónettengt)";
 "osm_notes_online_layer" = "OSM-minnispunktar (nettengt)";
 "osm_edits_basic" = "Einfalt";
-"osm_edits_advanced" = "Vanir";
+"osm_edits_advanced" = "Nánar";
 "osm_edits_all" = "Allar breytingar";
 "osm_edits_poi" = "Breytingar á merkisstöðum (POI)";
 "osm_edits_notes" = "Minnispunktar";
@@ -1243,8 +1243,8 @@
 "parking_place" = "Bílastæði";
 "add_start" = "Bæta við upphafspunkti";
 "add_intermediate" = "Bæta við millipunkti";
-"add_home" = "Bæta við \"Heima\"";
-"add_work" = "Bæta við \"Vinna\"";
+"add_home" = "Bæta við \"Heima\\"";
+"add_work" = "Bæta við \"Vinna\\"";
 "home_pt" = "Heima";
 "work_pt" = "Vinna";
 "no_active_route" = "Engin virk leið";
@@ -1967,7 +1967,7 @@
 "reverse_track_dir" = "Snúa við stefnu ferils";
 "attach_to_the_roads" = "Tengja við vegina";
 "select_another_track" = "Velja annan feril";
-"track" = "Slóð";
+"track" = "Ferill";
 "follow_track" = "Fylgja ferli";
 "split_after" = "Skipta uppá eftir";
 "split_before" = "Skipta uppá undan";
@@ -2150,7 +2150,6 @@
 "attribute" = "Eigindi";
 "regions" = "Svæði";
 "shared_string_start_time" = "Upphafstími";
-"units_min_short" = "m";
 "shared_string_time_moving" = "Tími á ferð";
 "industrial" = "Iðnaðar";
 "analyze_on_map" = "Greinaá korti";
@@ -2166,7 +2165,6 @@
 "gpx_split_interval_none_descr" = "Veldu hvernigþú vilt skipta upp: eftir tíma eða vegalengd.";
 "shared_string_custom" = "Sérsniðið";
 "education" = "Menntun";
-"m" = "m";
 "distance_moving" = "Leiðrétt fjarlægð";
 "gpx_dir_arrows" = "Stefnuörvar";
 "delete_waypoints" = "Eyða ferilpunktum";

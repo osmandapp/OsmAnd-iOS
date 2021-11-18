@@ -451,7 +451,7 @@
 "gpx_route_time" = "Teekonna time";
 "gpx_uphldownhl" = "Ülesmäge/allamäge";
 "gpx_average_speed" = "Keskmine kiirus";
-"gpx_start" = "Alusta";
+"gpx_start" = "Start";
 "gpx_finish" = "Lõpp-punkt";
 "gpx_avg_elev" = "Keskmine kõrgus";
 "gpx_elev_range" = "Kõrguse vahemik";
@@ -491,7 +491,7 @@
 "rendering_value_browse_map_name" = "Sirvi kaarti";
 "m_style_car" = "Sõites";
 "m_style_walk" = "Kõndimine";
-"m_style_bicycle" = "Jalgrattasõit";
+"m_style_bicycle" = "Rattasõit";
 "map_settings_map" = "Kaart";
 "map_settings_show" = "Näita kaardil";
 "map_settings_type" = "Kaardi liik";
@@ -527,7 +527,7 @@
 "sett_km" = "Kilomeetrid";
 "sett_ml" = "Miilid";
 "sett_zoom" = "Suurendamise nupp";
-"sett_show" = "Näita";
+"sett_show" = "Kuva";
 "sett_notshow" = "Ära kuva";
 "sett_deg180" = "180 kraadi";
 "sett_deg360" = "360 kraadi";
@@ -704,7 +704,7 @@
 "osm_edits_offline_layer" = "OSM muudatused/märkmed (võrguühenduseta)";
 "osm_notes_online_layer" = "OSM märkmed (veebis)";
 "osm_edits_basic" = "Põhiline";
-"osm_edits_advanced" = "Täpsem";
+"osm_edits_advanced" = "Edasijõudnud";
 "osm_edits_all" = "Kõik muudatused";
 "osm_edits_poi" = "HP muudatused";
 "osm_edits_notes" = "Märkmed";
@@ -889,7 +889,7 @@
 "units_ft" = "jalga";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "t";
+"units_hour" = "h";
 "units_min" = "min";
 "units_sec" = "sek";
 "units_sec_short" = "s";
@@ -2023,7 +2023,7 @@
 "shared_string_gpx_points" = "Punktid";
 "shared_string_disable" = "Keela";
 "special" = "Eriteenused";
-"emergency" = "Hädaabi";
+"emergency" = "Hädaolukord";
 "square" = "Ruut";
 "symbols" = "Sümbolid";
 "sport" = "Sport";
@@ -2179,3 +2179,5 @@
 "distance_moving" = "Korrigeeritud vahemaa";
 "education" = "Haridus";
 "shared_string_time_moving" = "Aeg liigub";
+"m" = "m";
+"units_min_short" = "m";

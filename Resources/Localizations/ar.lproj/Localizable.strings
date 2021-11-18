@@ -1,10 +1,10 @@
 "OsmAnd Maps" = "خرائط أوسماند";
 "shared_string_previous" = "السابق";
 "route_stops_before" = "%d محطة توقف قبل";
-"transport_routes" = "المسارات الرياضية";
+"transport_routes" = "طرق";
 "transport_nearby_routes_within" = "الطرق الداخلية المجاورة";
 "transport_nearby_routes" = "في غضون";
-"transport_stop" = "موقف";
+"transport_stop" = "إيقاف";
 "cancel_navigation" = "إيقاف التوجيه";
 "intermediate_items_sort_by_distance" = "فرز من الباب إلى الباب";
 "switch_start_finish" = "اعكس نقطة الانطلاق والوصول";
@@ -114,9 +114,9 @@
 "general_settings_descr" = "ثيم التطبيق ، وحدات ، المنطقة";
 "routing_settings_descr" = "تكوين الملاحة";
 "auto_zoom_none" = "بدون تكبير تلقائي";
-"auto_zoom_close" = "إلى مدى قريب \"١٠٠م\"";
-"auto_zoom_far" = "إلى مدى متوسط \"٢٠٠م\"";
-"auto_zoom_farthest" = "إلى مدى بعيد \"٥٠٠م\"";
+"auto_zoom_close" = "إلى مدى قريب \"١٠٠م\\"";
+"auto_zoom_far" = "إلى مدى متوسط \"٢٠٠م\\"";
+"auto_zoom_farthest" = "إلى مدى بعيد \"٥٠٠م\\"";
 "keep_informing_never" = "يدوياً فقط (اضغط على السهم)";
 "arrival_distance_factor_early" = "مبكر";
 "arrival_distance_factor_normally" = "طبيعي";
@@ -385,14 +385,14 @@
 "gpx_speed" = "السرعة";
 // Map settings
 "rendering_value_browse_map_name" = "استعراض";
-"m_style_car" = "القيادة";
+"m_style_car" = "سيارة";
 "m_style_walk" = "مشي";
 "m_style_bicycle" = "دراجة";
 "map_settings_map" = "إدارة الخرائط";
 "map_settings_show" = "عرض على الخريطة";
 "map_settings_type" = "نمط الخريطة";
 "map_mode" = "مظهرالخريطة";
-"map_settings_day" = "نهاري";
+"map_settings_day" = "نهار";
 "map_settings_night" = "ليلي";
 "map_settings_style" = "نمط الخريطة";
 "map_settings_overunder" = "الخريطة العلوية/ السفلية";
@@ -418,7 +418,7 @@
 "sett_km" = "كيلومترات";
 "sett_ml" = "أميال";
 "sett_zoom" = "زر التكبير/التصغير";
-"sett_show" = "عرض";
+"sett_show" = "أظهر";
 "sett_notshow" = "عدم الإظهار";
 "sett_loc_fmt" = "Location format";
 "sett_deg" = "Degrees";
@@ -442,7 +442,7 @@
 "prch_nau_q3" = "يمكنك تثبيته لاحقا من خلال مصادر الخرائط.";
 "proceed_q" = "تقدم؟";
 "download" = "تحميل";
-"nothanks" = "لا شكراً";
+"nothanks" = "لا ، شكراً";
 "download_now" = "تحميل الخريطة الآن";
 "prch_failed" = "الشراء \"%@\" فشل";
 "prch_items_failed" = "لم تتم استعادة العنصر (العناصر). حاول مرة أخرى.";
@@ -611,7 +611,7 @@
 "product_title_wiki" = "ويكيبيديا";
 "product_desc_wiki" = "بيانات ويكيبيديا";
 "product_desc_ext_wiki" = "الحصول على معلومات حول النقاط المثيرة للاهتمام من ويكيبيديا. إنه دليلك غير المتصل بجيبك - ما عليك سوى تمكين المكون الإضافي ويكبيديا والاستمتاع بمقالات حول الكائنات من حولك.";
-"product_title_srtm" = "خرائط الخطوط الكنتورية";
+"product_title_srtm" = "الخطوط الكنتورية";
 "product_desc_srtm" = "إظهارالخطوط الكنتورية";
 "product_desc_ext_srtm" = "توفر هذه الأداة طبقة الخطوط الكنتورية وطبقة للتضاريس ظاهرة على الخريطة الأساسية للتطبيق. هذه الوظيفة ستكوم محل تقدير من طرف الرياضيين، المتنزهين، الرحالة، وكل من هو مهتم بجمال ورخاء الطبيعة. \n \nالبيانات العالمية (بين 70 درجة شمالا و70 جنوبا) مبنية حسب قياسات SRTM (مكوك رادار البعثة الطبوغرافية) وASTER (المكوك المتقدم الخاص بالإنبعاث الحراري والانعكاس الإشعاعي)، أداة تصوير على متن Terra، القمر الصناعي الرئيسي لنظام رصد الأرض التابع لناسا. ASTER هو جهد تعاوني فيما بين وكالة ناسا، وزارة الاقتصاد اليابانية، التجارة والصناعة (METI)، و أنظمة الفضاء اليابانية (J-spacesystems).";
 "my_location" = "موقعي";
@@ -627,7 +627,7 @@
 "enter_fav_name" = "أدخل اسم المفضلة";
 "res_installing" = "تثبيت…";
 "res_roads" = "الطرق";
-"res_srtm" = "خرائط الخطوط الكنتورية";
+"res_srtm" = "الخطوط الكنتورية";
 "res_wiki" = "ويكيبيديا";
 "res_hillshade" = "التضاريس";
 "select_language" = "اختيار اللغة";
@@ -1663,7 +1663,7 @@
 "public_transport_warning_title" = "يخضع التنقل في وسائل النقل العام حاليًا للاختبار التجريبي ، ويتوقع أن يكون فيه أخطاء .";
 "calc_pedestrian_route" = "احسب طريق المشاة";
 "public_transport_ped_route_title" = "المسار على الأقدام حوالي %@, وقد يكون أسرع من وسائل النقل العام.";
-"m_style_pulic_transport" = "وسائل النقل العام";
+"m_style_pulic_transport" = "النقل العام";
 "transfers" = "النقل:";
 "consider_limitations_param" = "النظر في القيود المؤقتة";
 "avoid_transport_type" = "تجنب أنواع النقل";
@@ -1810,7 +1810,7 @@
 "configure_map_descr" = "مظهر الخريطة";
 "export_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد نسخ إلى أوسماند.";
 "profile_sett_descr" = "تؤثر على ملف التعريف المحدد";
-"app_profiles" = "تطبيق الوضع";
+"app_profiles" = "أوضاع التطبيق";
 "selected_profile" = "الوضع المحدد";
 "osmand_profile" = "ملف تعريف أوسماند";
 "ui_customization_descr" = "عناصر الدرج، قائمة السياق";
@@ -1847,7 +1847,7 @@
 "import_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد \"نسخ إلى أوسماند\"";
 "profile_prefs_reset_successful" = "تمت استعادة جميع إعدادات الوضع إلى الحالة الافتراضية.";
 "gpx_parse_error" = "لم يتم تكوين OsmAnd GPX بشكل جيد ، يرجى الاتصال بفريق الدعم لمزيد من التحقيقات.";
-"nothing_found_empty" = "لم يتم العثور على شيء";
+"nothing_found_empty" = "لا يوجد نتائج";
 "shared_string_next" = "التالي";
 "ltr_or_rtl_combine_via_colon" = "%@ :%@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
@@ -2016,7 +2016,7 @@
 "sport" = "رياضة";
 "special" = "خاص";
 "service" = "خدمة";
-"emergency" = "الطوارئ";
+"emergency" = "حالة طوارئ";
 "square" = "مربع";
 "octagon" = "مثمن";
 
@@ -2098,7 +2098,7 @@
 "no_waypoints_found" = "لم يتم العثور على احداثيات وجهة";
 "context_menu_item_edit_waypoint" = "تعدبل إحداثية GPX";
 "replace_waypoint_confirmation" = "هل تريد بالتأكيد استبدال إحداثية النقطة ٪@؟";
-"default" = "الافتراضي";
+"default" = "افتراضي";
 "map_widget_parking" = "مكان للوقوف";
 "select_profile" = "تحديد ملف التعريف";
 "threshold_distance" = "بداية المسافة";

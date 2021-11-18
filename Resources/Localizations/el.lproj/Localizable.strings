@@ -218,7 +218,7 @@
 "units_km" = "χλμ";
 "gpx_waypoint" = "Σημείο διαδρομής";
 "show_pedestrian_warnings" = "Διαβάσεις πεζών";
-"nearby_search" = "Αναζήτηση κοντινών αποστάσεων";
+"nearby_search" = "Αναζήτηση στη γύρω περιοχή";
 "help_versions" = "Εκδόσεις";
 "prefer_in_routing_descr" = "Να προτιμώνται αυτοκινητόδρομοι.";
 "gpx_deactivated" = "Απενεργοποιημένο";
@@ -457,7 +457,7 @@
 "shared_string_building" = "Κτήριο";
 "osmand_live_updates" = "Ζωντανές ενημερώσεις";
 "create_items" = "Δημιουργία στοιχείων";
-"transport_routes" = "Διαδρομές";
+"transport_routes" = "Δρομολόγια";
 "get_discount_second_part" = "έπειτα %@";
 "sett_settings" = "Επιλογές";
 "edit_action" = "Επεξεργασία ενέργειας";
@@ -535,7 +535,7 @@
 "shared_string_remove" = "Αφαίρεση";
 "osm_live_payment_renews_quarterly" = "Τριμηνιαίες ανανεώσεις";
 "city_type_district" = "Περιοχή";
-"help_other_header" = "Άλλη";
+"help_other_header" = "Άλλα";
 "osm_live_enter_email" = "Παρακαλούμε, εισάγετε μια έγκυρη διεύθυνση ηλεκτρονικής αλληλογραφίας";
 "intro_skip" = "Παράλειψη";
 "speak_cameras" = "Κάμερες ταχύτητας";
@@ -564,11 +564,11 @@
 "custom_search" = "Προσαρμοσμένη αναζήτηση";
 "poi_opening_hours" = "Ώρες λειτουργίας";
 "unlimited_downloads" = "Απεριόριστες λήψεις";
-"osm_edits_advanced" = "Προχωρημένο";
+"osm_edits_advanced" = "Προχωρημένη";
 "units_mph" = "μαω";
 "gpx_avg_altitude" = "Μέσο υψόμετρο";
 "simulate_navigation" = "Προσομοίωση πλοήγησης";
-"transport_stop" = "Σταμάτημα";
+"transport_stop" = "Διακοπή";
 "rendering_category_others" = "Άλλα χαρακτηριστικά χάρτη";
 "m_style_bicycle" = "Ποδηλασία";
 "osm_live_hide_user_name" = "Να μην εμφανίζεται το όνομά μου στις αναφορές";
@@ -1017,7 +1017,7 @@
 "default_speed_dialog_msg" = "Εκτιμά τον χρόνο άφιξης αγνώστων τύπων δρόμων και περιορίζει την ταχύτητα σε όλους τους δρόμους (μπορεί να επηρεάσει τη διαδρομή)";
 "base_profile_descr_car" = "Αυτοκίνητο, φορτηγό, μηχανή";
 "reverse_route" = "Αντιστροφή διαδρομής";
-"nothing_found_empty" = "Δεν βρέθηκε τίποτα";
+"nothing_found_empty" = "Δε βρέθηκε τίποτα";
 "announce" = "Ανακοίνωση";
 "base_profile_descr_pedestrian" = "Περπάτημα, πεζοπορία, τρέξιμο";
 "map_settings_legend" = "Υπόμνημα";
@@ -1175,7 +1175,7 @@
 "group_name" = "Όνομα ομάδας";
 "shared_string_import" = "Εισαγωγή";
 "fav_points_not_exist" = "Δεν υπάρχουν αγαπημένα σημεία";
-"track" = "Ίχνος";
+"track" = "Αγροτική Οδός";
 "track_save_descr" = "Αποθήκευση τρέχοντος ίχνους ως αρχείου GPX τώρα.";
 "emergency" = "Επείγοντα";
 "select_group" = "Επιλογή ομάδας";

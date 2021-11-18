@@ -57,25 +57,165 @@ let languageDict = [
 var allLanguagesDict = languageDict
 allLanguagesDict["en"] = ""
 
+
+
+//mark: Add Routing Params
+
+func addRoutingParams (language: String) {
+    var routeDict: [String:String] = [:]
+    var outputArray: [String] = []
+    
+    let url = URL(fileURLWithPath: "../Resources/Localizations/" + language + ".lproj/Localizable.strings")
+    let path = url.path
+    
+    var str: String = ""
+    do {
+        str = try String(contentsOfFile: path)
+    } catch {
+        return
+    }
+    var iosArr = str.components(separatedBy: "\n")
+    
+    
+    var myLang: String = ""
+    if language != "en" {
+        if let lang = languageDict[language] {
+            myLang = "-" + lang
+        }
+    }
+    let androidURL = URL(fileURLWithPath: "../../android/OsmAnd/res/values" + myLang + "/strings.xml")
+    let myparser = Parser()
+    let androidDict = myparser.myparser(path: androidURL)
+    for elem in androidDict {
+       if elem.key.hasPrefix("routeInfo_") || elem.key.hasPrefix("routing_attr_") || elem.key.hasPrefix("rendering_attr_") || elem.key.hasPrefix("rendering_value_") {
+           routeDict[elem.key] = elem.value
+       }
+    }
+  
+    for elem in iosArr {
+        if elem.hasPrefix("\"routeInfo_") || elem.hasPrefix("\"routing_attr_") || elem.hasPrefix("\"rendering_attr_") || elem.hasPrefix("\"rendering_value_") {
+            if let index = iosArr.firstIndex(of: elem) {
+                iosArr.remove(at: index)
+            }
+        }
+    }
+    
+    for elem in routeDict {
+        outputArray.append(makeOutputString(str1: elem.key, str2: elem.value))
+    }
+    print(language, outputArray.count)
+    let joined1 = iosArr.joined(separator: "\n")
+    let joined2 = outputArray.joined(separator: "")
+    let joined = joined1 + joined2
+    do {
+        try joined.write(to: url, atomically: false, encoding: .utf8)
+    }
+    catch {return}
+}
+
+
+
+//mark: Add Translations
+
 func addTranslations(language: String, initial: Bool) {
     let iosDict = parseIos(language: language, initial: initial)
-    parseAndroidAndCompare(language: language, iosDict: iosDict, initial: initial)
-}
-
-func equalWithoutDots(str1: String, str2: String) -> Bool {
-    if (str1.last == "." && str1.dropLast() == str2) || (str2.last == "." && str2.dropLast() == str1) {
-        return true
+    let androidDict = parseAndroid(language: language, initial: initial)
+    if initial {
+        compareDicts(language: language, iosDict: iosDict, androidDict: androidDict)
     }
-    return false
-}
-
-func withoutDot(str: String) -> String {
-    if str.last == "." {
-        return String(str.dropLast())
+    else {
+        makeNewDict(language: language, iosDict: iosDict, androidDict: androidDict)
     }
-    return str
 }
 
+
+
+//mark: IOS specific methods
+func parseIos (language: String, initial: Bool) -> [String : String] {
+    var iosDict: [String:String] = [:]
+    var myLang: String = "en"
+    if !initial {
+        myLang = language
+    }
+    let url = URL(fileURLWithPath: "../Resources/Localizations/" + myLang + ".lproj/Localizable.strings")
+    guard let dict = NSDictionary(contentsOf: url) else {return iosDict }
+    iosDict = dict as! [String : String]
+    return iosDict
+}
+
+func replaceValueText(newValue: String, inFullString fullString: String) -> String {
+    /// Localzable.strings  one string format:
+    /// "key" = "value";
+    let quotationMarkIndexes = getAllSubstringIndexes(fullString: fullString, subString: "\"")
+    guard (quotationMarkIndexes.count >= 4) else {return fullString}
+    
+    let startIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes[2] + 1)
+    let endIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes.last!)
+
+    var resultString = fullString
+    resultString.replaceSubrange(startIndex ..< endIndex, with: newValue)
+    return resultString
+}
+
+func getAllSubstringIndexes(fullString: String, subString: String) -> [Int] {
+    var indexes = [Int]()
+    for i in 0..<fullString.count {
+        let index = fullString.index(fullString.startIndex, offsetBy: i)
+        let charAtIndex = fullString[index]
+        if (String(charAtIndex) == subString) {
+            indexes.append(i)
+        }
+    }
+    return indexes
+}
+
+func makeOutputString(str1: String, str2: String) -> String {
+    var str2 = str2;
+    var i = 0
+    while i < str2.count {
+        let index = str2.index(str2.startIndex, offsetBy: i)
+        if str2[index] == "\\" {
+            i += 2
+        }
+        else if str2[index] == "\"" {
+            str2.remove(at: index)
+        }
+        else {
+            i += 1
+        }
+    }
+    return "\n\"" + str1 + "\" = \"" + str2 + "\";"
+}
+
+
+
+//mark: Android specific methods
+func parseAndroid(language: String, initial: Bool) -> [String : String] {
+    var myLang: String = ""
+    if !initial {
+        if let lang = languageDict[language] {
+            myLang = "-" + lang
+        }
+    }
+    let url = URL(fileURLWithPath: "../../android/OsmAnd/res/values" + myLang + "/strings.xml")
+    let myparser = Parser()
+    return myparser.myparser(path: url)
+}
+
+func androidContains(androidDict: [String:String], keys: [String]) -> String? {
+    for elem in androidDict.keys {
+        for key in keys {
+            if elem == key {
+                return key
+            }
+        }
+    }
+    return nil
+}
+
+
+
+//mark: Compare Dict
 func compareDicts(language: String, iosDict: [String : String], androidDict: [String : String]){
     let androidDict = modifyVariables(dict: androidDict)
     var common: Dictionary = [String:String]()
@@ -85,6 +225,7 @@ func compareDicts(language: String, iosDict: [String : String], androidDict: [St
             if androidValue == elem.value || equalWithoutDots(str1: androidValue, str2: elem.value) {
                 /// iosKey == androidKey && iosEnValue == androidEnValue
                 common[elem.key] = elem.value
+                //pringDebugLog(iosKey: elem.key, iosValue: elem.value, androidKey: elem.key, androidValue: androidValue)
             } else {
                 /// iosKey == androidKey && iosEnValue != androidEnValue
                 /// ignoring
@@ -113,20 +254,16 @@ func compareDicts(language: String, iosDict: [String : String], androidDict: [St
     }
 }
 
-func androidContains(androidDict: [String:String], keys: [String]) -> String? {
-    for elem in androidDict.keys {
-        for key in keys {
-            if elem == key {
-                return key
-            }
-        }
+func equalWithoutDots(str1: String, str2: String) -> Bool {
+    if (str1.last == "." && str1.dropLast() == str2) || (str2.last == "." && str2.dropLast() == str1) {
+        return true
     }
-    return nil
+    return false
 }
 
-func isValueCorrect(value: String) -> Bool {
-    return value.count > 0 && !value.contains("$")
-}
+
+
+//mark: Make new dict
 
 func makeNewDict(language: String, iosDict: [String : String], androidDict: [String : String]) {
     let androidDict = modifyVariables(dict: androidDict)
@@ -191,30 +328,8 @@ func makeNewDict(language: String, iosDict: [String : String], androidDict: [Str
     print(language, "added: ", newLinesDict.count, "   udated: ", existingLinesDict.count, "   deleted duplicates: ", duplicatesCount)
 }
 
-func getAllSubstringIndexes(fullString: String, subString: String) -> [Int] {
-    var indexes = [Int]()
-    for i in 0..<fullString.count {
-        let index = fullString.index(fullString.startIndex, offsetBy: i)
-        let charAtIndex = fullString[index]
-        if (String(charAtIndex) == subString) {
-            indexes.append(i)
-        }
-    }
-    return indexes
-}
-
-func replaceValueText(newValue: String, inFullString fullString: String) -> String {
-    /// Localzable.strings  one string format:
-    /// "key" = "value";
-    let quotationMarkIndexes = getAllSubstringIndexes(fullString: fullString, subString: "\"")
-    guard (quotationMarkIndexes.count >= 4) else {return fullString}
-    
-    let startIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes[2] + 1)
-    let endIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes.last!)
-
-    var resultString = fullString
-    resultString.replaceSubrange(startIndex ..< endIndex, with: newValue)
-    return resultString
+func isValueCorrect(value: String) -> Bool {
+    return value.count > 0 && !value.contains("$")
 }
 
 func filterEndingEmptyStrings(_ stringsArray: [String]) -> [String] {
@@ -262,69 +377,20 @@ func filterUnsafeChars(_ text: String) -> String {
     if result.hasSuffix(";") {
         result = String(result.dropLast())
     }
+    if result.hasPrefix("\"") {
+        result = String(result.dropFirst())
+        result = "\\\"" + result
+    }
+    if result.hasSuffix("\"") {
+        result = String(result.dropLast())
+        result = result + "\\\""
+    }
     return result
 }
 
-func parseIos (language: String, initial: Bool) -> [String : String] {
-    var iosDict: [String:String] = [:]
-    var myLang: String = "en"
-    if !initial {
-        myLang = language
-    }
-    let url = URL(fileURLWithPath: "../Resources/Localizations/" + myLang + ".lproj/Localizable.strings")
-    guard let dict = NSDictionary(contentsOf: url) else {return iosDict }
-    iosDict = dict as! [String : String]
-    return iosDict
-}
 
-func parseAndroidAndCompare(language: String, iosDict: [String:String], initial: Bool) {
-    var myLang: String = ""
-    if !initial {
-        if let lang = languageDict[language] {
-            myLang = "-" + lang
-        }
-    }
-    let url = URL(fileURLWithPath: "../../android/OsmAnd/res/values" + myLang + "/strings.xml")
-    let myparser = Parser()
-    let androidDict = myparser.myparser(path: url)
-    if initial {
-        compareDicts(language: language, iosDict: iosDict, androidDict: androidDict)
-    }
-    else {
-        makeNewDict(language: language, iosDict: iosDict, androidDict: androidDict)
-    }
-}
 
-func makeOutputString(str1: String, str2: String) -> String {
-    var str2 = str2;
-    var i = 0
-    while i < str2.count {
-        let index = str2.index(str2.startIndex, offsetBy: i)
-        if str2[index] == "\\" {
-            i += 2
-        }
-        else if str2[index] == "\"" {
-            str2.remove(at: index)
-        }
-        else {
-            i += 1
-        }
-    }
-    return "\n\"" + str1 + "\" = \"" + str2 + "\";"
-}
-
-func replace(str: String) -> String {
-    let range = NSRange(location: 0, length: str.utf16.count)
-    var regex = try! NSRegularExpression(pattern: "%[0-9]*[$]?[s]")
-    if regex.firstMatch(in: str, options: [], range: range) != nil {
-        return "%@"
-    }
-    regex = try! NSRegularExpression(pattern: "%[0-9]*[$]?[d]")
-    if regex.firstMatch(in: str, options: [], range: range) != nil {
-       return "%d"
-    }
-    return str
-}
+//mark: Global utils
 
 func modifyVariables(dict: [String : String]) -> [String : String] {
     var androidDict = dict
@@ -340,57 +406,29 @@ func modifyVariables(dict: [String : String]) -> [String : String] {
     return androidDict
 }
 
-func addRoutingParams (language: String) {
-    var routeDict: [String:String] = [:]
-    var outputArray: [String] = []
-    
-    let url = URL(fileURLWithPath: "../Resources/Localizations/" + language + ".lproj/Localizable.strings")
-    let path = url.path
-    
-    var str: String = ""
-    do {
-        str = try String(contentsOfFile: path)
-    } catch {
-        return
+func replace(str: String) -> String {
+    let range = NSRange(location: 0, length: str.utf16.count)
+    var regex = try! NSRegularExpression(pattern: "%[0-9]*[$]?[s]")
+    if regex.firstMatch(in: str, options: [], range: range) != nil {
+        return "%@"
     }
-    var iosArr = str.components(separatedBy: "\n")
-    
-    
-    var myLang: String = ""
-    if language != "en" {
-        if let lang = languageDict[language] {
-            myLang = "-" + lang
-        }
+    regex = try! NSRegularExpression(pattern: "%[0-9]*[$]?[d]")
+    if regex.firstMatch(in: str, options: [], range: range) != nil {
+       return "%d"
     }
-    let androidURL = URL(fileURLWithPath: "../../android/OsmAnd/res/values" + myLang + "/strings.xml")
-    let myparser = Parser()
-    let androidDict = myparser.myparser(path: androidURL)
-    for elem in androidDict {
-       if elem.key.hasPrefix("routeInfo_") || elem.key.hasPrefix("routing_attr_") || elem.key.hasPrefix("rendering_attr_") || elem.key.hasPrefix("rendering_value_") {
-           routeDict[elem.key] = elem.value
-       }
-    }
-  
-    for elem in iosArr {
-        if elem.hasPrefix("\"routeInfo_") || elem.hasPrefix("\"routing_attr_") || elem.hasPrefix("\"rendering_attr_") || elem.hasPrefix("\"rendering_value_") {
-            if let index = iosArr.firstIndex(of: elem) {
-                iosArr.remove(at: index)
-            }
-        }
-    }
-    
-    for elem in routeDict {
-        outputArray.append(makeOutputString(str1: elem.key, str2: elem.value))
-    }
-    print(language, outputArray.count)
-    let joined1 = iosArr.joined(separator: "\n")
-    let joined2 = outputArray.joined(separator: "")
-    let joined = joined1 + joined2
-    do {
-        try joined.write(to: url, atomically: false, encoding: .utf8)
-    }
-    catch {return}
+    return str
 }
+
+func pringDebugLog(iosKey: String, iosValue: String, androidKey: String, androidValue: String)
+{
+    print("#### ios key       :  " + iosKey)
+    print("#### ios value     :  " + iosValue)
+    print("#### android key   :  " + androidKey)
+    print("#### android value :  " + androidValue)
+    print("#### ================================================================================================")
+}
+
+
 
 class Parser: NSObject, XMLParserDelegate {
 
@@ -430,18 +468,13 @@ class Parser: NSObject, XMLParserDelegate {
     }
 }
 
-func pringDebugLog(iosKey: String, iosValue: String, androidKey: String, androidValue: String)
-{
-    print("#### ios key       :  " + iosKey)
-    print("#### ios value     :  " + iosValue)
-    print("#### android key   :  " + androidKey)
-    print("#### android value :  " + androidValue)
-    print("#### ================================================================================================")
-}
 
-//change directory to OsmAnd-ios repo folder.
-//uncomment this line for debugging.
-//FileManager.default.changeCurrentDirectoryPath("/Users/nnngrach/Documents/Projects/Coding/OsmAnd/ios/Scripts/")
+
+//mark: Start script
+
+///change directory to OsmAnd-ios repo folder.
+///uncomment this line for debugging.
+// FileManager.default.changeCurrentDirectoryPath("/Users/nnngrach/Documents/Projects/Coding/OsmAnd/ios/Scripts/")
 
 if (CommandLine.arguments.count == 2) && (CommandLine.arguments[1] == "-routing") {
     for lang in allLanguagesDict {

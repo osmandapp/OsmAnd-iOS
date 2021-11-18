@@ -4,7 +4,7 @@
 "transport_routes" = "Liñas";
 "transport_nearby_routes_within" = "Liñas próximas a menos dos";
 "transport_nearby_routes" = "Preto dos";
-"transport_stop" = "Stop";
+"transport_stop" = "Deter";
 "cancel_navigation" = "Deter a navegación";
 "intermediate_items_sort_by_distance" = "Ordenar porta a porta";
 "switch_start_finish" = "Inverter o punto de partida e o destino";
@@ -407,7 +407,7 @@
 "gpx_speed" = "Velocidade";
 // Map settings
 "rendering_value_browse_map_name" = "Ollar mapa";
-"m_style_car" = "Automóbil";
+"m_style_car" = "Conducindo";
 "m_style_walk" = "Camiñando";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
@@ -1025,7 +1025,7 @@
 "shared_string_clear_all" = "Limpar todo";
 "translucent_orange" = "Laranxa translúcido";
 "modify_edit_short" = "Modificar modificación do OSM";
-"home_pt" = "Casa";
+"home_pt" = "Inicio";
 "show_notes" = "Amosar notas do OSM";
 "hide_notes" = "Agochar notas do OSM";
 "res_elliptic_mercator" = "Mercator elíptico";
@@ -1368,7 +1368,7 @@
 "edit_profile_list" = "Editar a listaxe de perfís";
 "amenity" = "Instalación";
 "profile_type_custom_string" = "Perfil personalizado";
-"nothing_found_empty" = "Non se atopou ren";
+"nothing_found_empty" = "Non se atopou nada";
 "position_icon_at_rest" = "Icona de posición en asueto";
 "app_profiles" = "Perfís de aplicación";
 "reverse_route" = "Ruta inversa";
@@ -1550,7 +1550,7 @@
 "hide_compass_ruler" = "Agochar a regra de compás";
 "street_level_imagery" = "Imaxes a nivel de rúa";
 "fav_point_dublicate" = "Favorito especificado con nome duplicado";
-"emergency" = "Urxencias";
+"emergency" = "Emerxencia";
 "custom_osmand_plugin_name" = "Plugin personalizado do OsmAnd";
 "plan_route_change_folder" = "Mudar cartafol";
 "shared_string_others" = "Outros";
@@ -1563,12 +1563,12 @@
 "square" = "Cadrado";
 "simplified_track_description" = "Só gravarase a liña da ruta, os puntos intermedios serán eliminados.";
 "show_compass_ruler" = "Amosar a regra de compás";
-"sport" = "Deporte";
+"sport" = "Sport";
 "shared_string_enable" = "Activar";
 "displayed_trips" = "Pistas amosadas";
 "res_standard" = "Mapa normal";
 "shared_string_resources" = "Recursos";
-"service" = "Servizo";
+"service" = "Vía de servizo";
 "shared_string_import" = "Importar";
 "join_segments" = "Unir segmentos";
 "special" = "Especial";
@@ -1639,3 +1639,5 @@
 "track_show_start_finish_icons" = "Amosar iconas de comezo e final";
 "shared_string_start_time" = "Hora do comezo";
 "shared_string_overview" = "Vista xeral";
+"m" = "m";
+"units_min_short" = "m";

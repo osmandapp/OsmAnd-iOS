@@ -73,7 +73,7 @@
 "gpx_route_time" = "Tempo del percorso";
 "gpx_uphldownhl" = "Salite/discese";
 "gpx_average_speed" = "Velocità media";
-"gpx_start" = "Partenza";
+"gpx_start" = "Avvia";
 "gpx_finish" = "Fine";
 "gpx_avg_elev" = "Quota media";
 "gpx_elev_range" = "Gamma di elevazione";
@@ -81,9 +81,9 @@
 "gpx_uphills_total" = "Totale salite";
 // Map settings
 "rendering_value_browse_map_name" = "Esplorazione mappa";
-"m_style_car" = "Automobile";
+"m_style_car" = "Driving";
 "m_style_walk" = "A piedi";
-"m_style_bicycle" = "Bicicletta";
+"m_style_bicycle" = "Bici";
 "map_settings_map" = "Mappa";
 "map_settings_show" = "Mostra sulla mappa";
 "map_settings_type" = "Tipo mappa";
@@ -102,7 +102,7 @@
 // Intro
 "intro_skip" = "Salta";
 "intro_download" = "Scarica\nmappa";
-"intro_next" = "Avanti";
+"intro_next" = "Successivo";
 "intro_welcome" = "Benvenuti su \nOsmAnd";
 "intro_promo" = "Mappe globali offline";
 "intro_placeholder" = "immetti il nome della tua regione";
@@ -361,7 +361,7 @@
 "product_desc_skimap" = "Piste da sci per tutte le stazioni sciistiche del mondo";
 "shared_string_dismiss" = "Abbandona";
 "shared_string_modify" = "Modifica";
-"shared_string_later" = "Dopo";
+"shared_string_later" = "In seguito";
 "offline_maps" = "Mappe offline";
 "download_map" = "Download mappa";
 "gpx_route" = "Percorso";
@@ -858,7 +858,7 @@
 "my_places" = "I miei luoghi";
 "map_sources" = "Sorgenti della mappa";
 "create_items" = "Crea oggetti";
-"osm_alert_title" = "Esegui";
+"osm_alert_title" = "Invia";
 "show_contour_lines" = "Visualizza le isoipse";
 "black" = "Nero";
 "route_parameters" = "Parametri del percorso";
@@ -886,7 +886,7 @@
 "help_follow_us" = "Seguici";
 "map_underlays" = "Mappa di sottofondo";
 "key_hint_deselect" = "Deseleziona";
-"osm_edits_advanced" = "Esteso";
+"osm_edits_advanced" = "Avanzata";
 "lightgreen" = "Verde chiaro";
 "product_desc_ext_wikivoyage" = "Guide dei luoghi più interessanti del pianeta, integrata in OsmAnd, senza connessione a Internet.";
 "destination_point" = "Destinazione %@";
@@ -957,7 +957,7 @@
 "shared_string_street" = "Strada";
 "brown" = "Marrone";
 "osm_note_created" = "Nota di OSM creata";
-"osm_str_name" = "Nome della strada";
+"osm_str_name" = "Nome strada";
 "work_pt" = "Lavoro";
 "keep_informing_descr" = "Annuncia nuovamente a intervalli regolari le indicazioni di navigazione.";
 "add_gpx_waypoint" = "Aggiungi un punto intermedio GPX";
@@ -1687,10 +1687,10 @@
 "download_size" = "Dimensione del download";
 "number_of_tiles" = "Numero di riquadri";
 "move_map_to_select_area" = "Sposta la mappa per selezionare l'area necessaria.";
-"update_map" = "Aggiorna mappa";
+"update_map" = "Aggiorna la mappa";
 "shared_string_max" = "Massimo";
 "shared_string_min" = "Min";
-"nothing_found_empty" = "Nonè stato tovato nulla";
+"nothing_found_empty" = "Nessun risultato";
 "shared_string_meters" = "metri";
 "tones" = "toni";
 "announce" = "Annunci";
@@ -1824,7 +1824,7 @@
 "copied_to_clipboard" = "Copiato negli appunti";
 "street_level_imagery" = "Immagini stradali";
 "markers_history" = "Cronologia dei marcatori";
-"track" = "Carrareccia";
+"track" = "Traccia";
 "split_after" = "Spezza dopo";
 "shared_string_others" = "Ancora";
 "select_group" = "Seleziona il gruppo";
@@ -1883,7 +1883,7 @@
 "explore_wikipedia_offline" = "Esplora Wikipedia offline.";
 "foot" = "ft";
 "suggested_maps_descr" = "Queste mappe sono richieste per il plugin.";
-"default" = "Predefinita";
+"default" = "Predefinito";
 "app_restart_required" = "Il riavvio dell\'appè richiesto per applicare alcune impostazioni.";
 "navigate_point_northing" = "In direzione Nord";
 "shared_strings_all_regions" = "Tutte le regioni";
@@ -1920,3 +1920,5 @@
 "reset_to_original" = "Ripristina le originali";
 "attribute" = "Attributo";
 "shared_string_time_moving" = "In movimento";
+"m" = "m";
+"units_min_short" = "m";

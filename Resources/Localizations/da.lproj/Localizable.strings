@@ -225,7 +225,7 @@
 "gpx_uphldownhl" = "Op-/nedstigning";
 "track_recording" = "Optagelse af spor";
 "track_continue_rec_q" = "Fortsæt optagelsen?";
-"m_style_walk" = "Fodgænger";
+"m_style_walk" = "Gå";
 "map_settings_type" = "Korttype";
 "map_mode" = "Korttilstand";
 "map_settings_over" = "Overlejret";
@@ -765,7 +765,7 @@
 "cancel_navigation" = "Stop navigation";
 "transport_routes" = "Ruter";
 "transport_nearby_routes_within" = "Nærliggende ruter indenfor";
-"transport_stop" = "Stop";
+"transport_stop" = "Stoppested";
 "transport_nearby_routes" = "Indenfor";
 "route_stops_before" = "%d stop før";
 "shared_string_previous" = "Forrige";
@@ -782,7 +782,7 @@
 "logging_min_speed_descr" = "Filter: Ingen logning under denne hastighed";
 "help_trip_planning" = "Turplanlægning";
 "help_legend" = "Signaturforklaring";
-"help_other_header" = "Andet";
+"help_other_header" = "Andre";
 "help_install_and_troubleshoot" = "Installation og fejlfinding";
 "help_tech_articles" = "Tekniske artikler";
 "help_versions" = "Versioner";
@@ -1001,7 +1001,7 @@
 "osm_notes_online_layer" = "OSM-noter (online)";
 "my_places" = "Foretrukne";
 "osm_edits_basic" = "Grundlæggende";
-"osm_edits_advanced" = "Udvidet";
+"osm_edits_advanced" = "Avanceret";
 "osm_edits_all" = "Alle redigeringer";
 "osm_edits_poi" = "IP-redigeringer";
 "osm_edits_notes" = "Noter";
@@ -1867,7 +1867,7 @@
 "shared_string_preparing" = "Forbereder";
 "shared_string_deselect_all" = "Fravælg alle";
 "shared_string_continue" = "Fortsæt";
-"nothing_found_empty" = "Fandt ikke noget";
+"nothing_found_empty" = "Fandt intet";
 "nav_type_direct_to" = "Direkte-til-punkt";
 "nav_type_osmand" = "OsmAnd (offline ruteberegning)";
 "nav_type_descr" = "Vælg, hvordan en rute skal beregnes for profilen";
@@ -2189,3 +2189,5 @@
 "parked_at" = "Parkeret ved";
 "industrial" = "Industriel";
 "education" = "Uddannelse";
+"units_min_short" = "m";
+"m" = "m";

@@ -91,7 +91,7 @@
 // Map settings
 "rendering_value_browse_map_name" = "Parcourir la carte";
 "m_style_car" = "En voiture";
-"m_style_bicycle" = "Vélo";
+"m_style_bicycle" = "À vélo";
 "map_settings_map" = "Carte";
 "map_settings_show" = "Afficher sur la carte";
 "map_settings_type" = "Type de carte";
@@ -119,7 +119,7 @@
 "prch_addons" = "Addons";
 "incur_high_charges" = "Cela peut entrainer des frais élevés.";
 "download" = "Télécharger";
-"nothanks" = "Pas nécessaire";
+"nothanks" = "Non, merci";
 "download_now" = "Télécharger la carte maintenant";
 "download_tab_local" = "Installé";
 "res_banner_free_maps_title" = "Vous avez %d cartes gratuites !";
@@ -291,7 +291,7 @@
 "gpx_trip_groups" = "Groupes de traces";
 "gpx_group_select" = "Sélection de groupe";
 "get_directions" = "Guidages";
-"plugins" = "Gestionnaire de greffons";
+"plugins" = "Greffons";
 "open_map_settings" = "Ouvrez les paramètres de la carte";
 "plugin_popup_wiki_title" = "Télécharger Wikipédia";
 "gpx_no_tracks" = "Il n'y a aucune trace";
@@ -758,12 +758,12 @@
 "poi_clear" = "Effacer";
 "map_creator" = "Map Creator";
 "shared_string_close" = "Fermer";
-"transport_routes" = "Itinéraires";
+"transport_routes" = "Lignes";
 "new_destination_point_dialog" = "Vous avez déjà défini une destination";
 "logging_interval_navigation" = "Intervalle d\'enregistrement pendant le guidage";
 "logging_min_speed_descr" = "Filtre : pas d'enregistrement en dessous de la vitesse choisie";
 "route_stops_before" = "%d arrêts avant";
-"transport_stop" = "Arrêt";
+"transport_stop" = "Arrêter";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "logging_interval_navigation_descr" = "Choisissez l'intervalle d'enregistrement de votre trace durant la navigation";
@@ -949,7 +949,7 @@
 "osm_edits_offline_layer" = "Modifications/Notes OSM (hors ligne)";
 "osm_notes_online_layer" = "Notes OSM (en ligne)";
 "osm_edits_basic" = "Basique";
-"osm_edits_advanced" = "Étendue";
+"osm_edits_advanced" = "Avancé";
 "osm_edits_all" = "Toutes les modifications";
 "osm_edits_poi" = "Modifications du POI";
 "osm_edits_notes" = "Notes";
@@ -964,7 +964,7 @@
 "modify_edit_short" = "Modifier la contribution OSM";
 "open_osm_note" = "Signaler une anomalie OSM";
 "edit_osm_note" = "Modifier la note OSM";
-"osm_alert_title" = "Soumettre";
+"osm_alert_title" = "Envoyer";
 "osm_alert_message" = "Message";
 "osm_alert_button_ok" = "Créer une note";
 "modify_poi" = "Modifier le point d'intérêt OSM";
@@ -2176,7 +2176,7 @@
 "reset_to_original" = "Revenirà l\'original";
 "gpx_split_interval_none_descr" = "Sélectionnez l\'option de fractionnement souhaitée : par temps ou par distance.";
 "activity" = "Activité";
-"nautical" = "Carte marine";
+"nautical" = "Nautisme";
 "ios_release_4_1" = "- Interaction entièrement repensée des traces GPX : un nouveau menu avec des graphiques, des statistiques, la possibilité de changer l'apparence, la coloration en fonction de la vitesse, de l’altitude et de la pente, ainsi que la sélection des pistes sur la carte- Nouvel écran pour la recherche par coordonnées dans différents formats\n- Amélioration de la recherche de coordonnées au format OLC\n- Nouveau menu convivial pour le choix de la langues des articles de Wikipédia sur la carte\n- Ajout de la possibilité de télécharger facilement les cartes de toutes les régions du pays en quelques clics.\n- Ajout de courbes de niveau en pieds (Vous devez télécharger des fichiers supplémentaires)\n- Ajout de la possibilité de télécharger des cartes en sélectionnant la région ou le pays souhaité sur la carte, ainsi que l'ajout d'une boîte de dialogue avec la suggestion de télécharger une carte manquante d'une région affichée\n- Nouvelle apparence des boutons de contrôle de la carte et possibilité de modifier le zoom de la carte par un double tapotement ou un glissement.\n- Les paramètres de visibilité des routes ont été déplacés plus haut dans l'écran \"Configurer la carte\" et sont réorganisés pour une meilleure flexibilité.\n";
 "delete_waypoints" = "Supprimer les points de passage";
 "delete_group_confirm_short" = "Supprimer le groupe ?";
@@ -2189,3 +2189,5 @@
 "shared_string_time_moving" = "Durée de déplacement";
 "industrial" = "Industrie";
 "education" = "Éducation";
+"units_min_short" = "m";
+"m" = "m";

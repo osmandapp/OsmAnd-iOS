@@ -300,7 +300,7 @@
 "poi_hide" = "نشان نده";
 // My Places
 "favorites" = "علاقه‌مندی‌ها";
-"tracks" = "Tracks";
+"tracks" = "ردها";
 // GPX
 "gpx_point" = "نقطه";
 "gpx_waypoint" = "راه‌نشان‌ها";
@@ -407,7 +407,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "بارگیری";
-"nothanks" = "نه، متشکرم";
+"nothanks" = "خیر، سپاسگزارم";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -494,7 +494,7 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "علاقه‌مندی‌ها";
+"import_favorite" = "علاقه‌مندی";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -762,7 +762,7 @@
 "transport_nearby_routes" = "تا";
 "route_stops_before" = "%d ایستگاه قبلی";
 "transport_routes" = "مسیرها";
-"transport_stop" = "ایستگاه";
+"transport_stop" = "توقف";
 "new_destination_point_dialog" = "قبلاً مقصدی را انتخاب کرده‌اید";
 "show_poi_over_map" = "نمایش نقاط کاربردی";
 "search_radius" = "شعاع جست‌وجو";
@@ -867,7 +867,7 @@
 "lightblue" = "آبی روشن";
 "quick_action_name_footer" = "خالی بگذارید تا از نشانی یا نام محل استفاده شود.";
 "brown" = "قهوه‌ای";
-"osm_alert_title" = "اجرا";
+"osm_alert_title" = "ارسال";
 "osm_poi_delete_title" = "حذف POI";
 "translucent_lightgreen" = "سبز روشن شفاف";
 "translucent_yellow" = "زرد شفاف";
@@ -931,7 +931,7 @@
 "add_first_inermediate" = "افزودن اولین میانی";
 "gpx_descent" = "نزول";
 "quick_action_start_stop_nav_descr" = "این دکمه را لمس کنید تا ناوبری را شروع کنید یا پایان دهید.";
-"osm_edits_advanced" = "پیشرفته";
+"osm_edits_advanced" = "دشوار";
 "add_action" = "افزودن کنش";
 "osmand_live_weekly" = "هفتگی";
 "osm_live_cancel_subscription" = "لغو اشتراک";
@@ -968,7 +968,7 @@
 "shared_string_retry" = "تلاش مجدد";
 "translucent_orange" = "نارنجی شفاف";
 "download_depth_countours" = "منحنی‌های میزان عمق دریایی";
-"shared_string_filter" = "پالایش";
+"shared_string_filter" = "پالایه";
 "help_about" = "درباره";
 "traffic_warning_tunnel" = "تونل";
 "product_title_sea_depth_contours" = "منحنی‌های میزان عمق دریایی";
@@ -1533,7 +1533,7 @@
 "favorite_places_category" = "مکان‌ها";
 "osmand_live_upd_frequency" = "تکرار روزآمدسازی";
 "plan_route_select_folder" = "انتخاب پوشه";
-"sport" = "ورزشی";
+"sport" = "ورزش";
 "group_name" = "نام گروه";
 "address_search" = "جست‌وجوی نشانی";
 "extra_maps" = "نقشه‌های بیشتر";
@@ -1733,3 +1733,5 @@
 "edit_track" = "ویرایش رد";
 "distance_moving" = "مسافت اصلاح‌شده";
 "regions" = "مناطق";
+"units_min_short" = "m";
+"m" = "m";

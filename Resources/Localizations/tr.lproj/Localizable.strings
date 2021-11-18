@@ -382,7 +382,7 @@
 "gpx_group_select" = "Grup Seç";
 "show_all" = "Tümünü göster";
 "get_directions" = "Yol tarifleri";
-"parking" = "Park Etme";
+"parking" = "Park et";
 "est_travel_time" = "Tahmini seyahat süresi";
 "pedestrian" = "Yaya";
 "sorting" = "Sıralama";
@@ -805,7 +805,7 @@
 "first_intermediate_dest_description" = "Rotadaki ilk durağı ekler";
 "last_intermediate_dest_description" = "Rota boyunca son durağı ekler";
 "transport_routes" = "Güzergah";
-"transport_stop" = "Durdur";
+"transport_stop" = "Durak";
 "route_stops_before" = "%d durak önce";
 "logging_interval_navigation" = "Navigasyon sırasında kayıt aralığı";
 "logging_interval_navigation_descr" = "Navigasyon sırasında yol kaydı için kayıt aralığını seçin";
@@ -853,7 +853,7 @@
 "mapil_pano_only" = "Sadece 360° resimleri göster";
 "shared_string_in_name" = "%@ \'de";
 "help_legend" = "Harita lejandı";
-"osmand_live_updates" = "Canlı güncelleştirmeler";
+"osmand_live_updates" = "Canlı güncellemeler";
 "translucent_purple" = "Yarı saydam mor";
 "show_contour_lines" = "Eş yükselti eğrilerini göster";
 "help_about" = "Hakkında";
@@ -882,7 +882,7 @@
 "toggle_voice" = "Ses açık/kapalı";
 "day_mode" = "Gündüz modu";
 "osm_edits_notes" = "Notlar";
-"shared_string_filter" = "Süzgeç";
+"shared_string_filter" = "Filtrele";
 "osmand_live_support_reg_title" = "Destek bölgesi";
 "work_pt" = "İş";
 "wake_on_voice_descr" = "Bir dönüşe yaklaşırken (kapalı ise) aygıtın ekranını aç.";
@@ -1663,7 +1663,7 @@
 "transfers" = "Aktarmalar:";
 "avoid_transport_type" = "Kaçınılacak taşıma türleri";
 "consider_limitations_param" = "Geçici sınırlamaları göz önünde bulundur";
-"m_style_pulic_transport" = "Toplu Taşıma";
+"m_style_pulic_transport" = "Toplu taşıma";
 "exit_at" = "Buradaçık";
 "public_transport_warning_title" = "Toplu taşıma navigasyonu şu anda beta testindedir, hatalar ve yanlışlıklar olabilir.";
 "allow_3d" = "2.5B görüntülemeye izin ver";
@@ -1968,7 +1968,7 @@
 "reverse_track_dir" = "İzlenen yol yönünü tersine çevir";
 "attach_to_the_roads" = "Yollara ekle";
 "select_another_track" = "Başka bir yol seç";
-"track" = "Takip et";
+"track" = "Tarımsal yol";
 "follow_track" = "Yolu takip et";
 "split_after" = "Sonra böl";
 "split_before" = "Önce böl";
@@ -2150,13 +2150,11 @@
 "navigate_point_northing" = "Kuzeye doğru katedilen mesafe";
 "navigate_point_olc" = "Açık Konum Kodu (Open Location Code - OLC)";
 "shared_string_time_span" = "Zaman aralığı";
-"units_min_short" = "m";
 "shared_string_overview" = "Genel bakış";
 "nautical" = "Deniz";
 "gpx_join_gaps" = "Boşlukları birleştir";
 "education" = "Eğitim";
 "shared_string_start_time" = "Başlangıç zamanı";
-"m" = "m";
 "gpx_split_interval_none_descr" = "İstediğiniz bölme seçeneğini seçin: zamana veya mesafeye göre.";
 "reset_to_original" = "Orijinale sıfırla";
 "shared_string_width" = "Genişlik";

@@ -335,7 +335,7 @@
 "poi_hide" = "Verberg";
 // My Places
 "favorites" = "Favorieten";
-"tracks" = "Routes";
+"tracks" = "GPX-tracks";
 // GPX
 "gpx_point" = "Punt";
 "gpx_waypoint" = "Routepunt";
@@ -385,7 +385,7 @@
 "gpx_speed" = "Snelheid";
 // Map settings
 "rendering_value_browse_map_name" = "Bekijk kaart";
-"m_style_car" = "Auto";
+"m_style_car" = "Rijden";
 "m_style_walk" = "Wandelen";
 "m_style_bicycle" = "Fietsen";
 "map_settings_map" = "Kaart";
@@ -393,7 +393,7 @@
 "map_settings_type" = "Map type";
 "map_mode" = "Dag/Nacht stijl";
 "map_settings_day" = "Dag";
-"map_settings_night" = "\'s avonds";
+"map_settings_night" = "Nacht";
 "map_settings_style" = "Kaartstijl";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -442,7 +442,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "Download";
-"nothanks" = "Nee, dankje";
+"nothanks" = "Niet nodig";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -519,7 +519,7 @@
 "units_ft" = "voet";
 "units_kmh" = "km/u";
 "units_mph" = "mpu";
-"units_hour" = "u.";
+"units_hour" = "u";
 "units_min" = "min";
 "units_sec" = "sec";
 // Map
@@ -674,7 +674,7 @@
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
-"plugins" = "Plugins beheren";
+"plugins" = "Plugins";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -757,7 +757,7 @@
 "show_something_on_map" = "Toon %@ op de kaart";
 "search_POI_level_btn" = "Increase search radius";
 "shared_string_street" = "Straat";
-"shared_string_building" = "Huisnummer";
+"shared_string_building" = "Gebouw";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Adres";
 "do_not_show_discount" = "Do not show promotions";
@@ -849,7 +849,7 @@
 "edit_action" = "Sneltoets bewerken";
 "fav_add_group" = "Een groep toevoegen";
 "shared_string_filter" = "Filter";
-"help_other_header" = "Overige";
+"help_other_header" = "Andere";
 "blue" = "Blauw";
 "poi_type" = "POI type";
 "osm_target_modified" = "Gewijzigde OSM POI";
@@ -859,7 +859,7 @@
 "osm_editing_lost_changes_title" = "Afsluiten zonder op te slaan?";
 "translucent_orange" = "Doorschijnend oranje";
 "toggle_poi" = "POI tonen/verbergen";
-"osmand_live_updates" = "Live updates";
+"osmand_live_updates" = "Live Updates gebruiken";
 "open_osm_note" = "OSM-opmerking aanmaken";
 "green" = "Groen";
 "res_world_region" = "Wereld";
@@ -875,7 +875,7 @@
 "help_versions" = "Versies";
 "osm_edits_notes" = "AV-Notities";
 "logging_interval_navigation" = "Registratie-interval bij navigatie";
-"nearby_search" = "Zoek dichtbij";
+"nearby_search" = "Zoek hier dichtbij";
 "gpx_alt_range" = "Hoogtebereik";
 "red" = "Rood";
 "help_install_and_troubleshoot" = "Installeren en foutoplossen";
@@ -979,7 +979,7 @@
 "save_poi_too_many_uppercase" = "Naam bevat erg veel hoofdletters, toch doorgaan?";
 "gpx_slope" = "Helling";
 "osm_editing_offline" = "Offline bewerking";
-"product_title_sea_depth_contours" = "Zeedieptelijnen";
+"product_title_sea_depth_contours" = "Nautische dieptelijnen";
 "translucent_lightgreen" = "Doorschijnend lichtgroen";
 "product_desc_wikivoyage" = "De gratis wereldwijde reisgids die iedereen kan bewerken.";
 "help_tech_articles" = "Technische artikelen";
@@ -988,7 +988,7 @@
 "change_map_style" = "Kaartstijl wijzigen";
 "shared_string_time_of_day" = "Huidige tijd";
 "osm_alert_button_ok" = "Notitie aanmaken";
-"osm_edits_advanced" = "Gevorderd";
+"osm_edits_advanced" = "Geavanceerd";
 "quick_action_name_footer" = "Leeg laten om adres of plaatsnaam te gebruiken.";
 "offline_vector_maps" = "OsmAnd Offline vectorkaart";
 "black" = "Zwart";
@@ -1467,7 +1467,7 @@
 "configure_map_descr" = "Kaartweergave";
 "total" = "Totaal";
 "announce" = "Meld";
-"m_style_pulic_transport" = "Openbaar vervoer";
+"m_style_pulic_transport" = "Openbaar Vervoer";
 "nav_type_title" = "Navigatietype";
 "profile_type_user_string" = "Gebruikersprofiel";
 "help_mapillary" = "OsmAnd + Mapillary";
@@ -1592,7 +1592,7 @@
 "replace_favorite_confirmation" = "Wil je Favoriet %@ inderdaad vervangen\?";
 "address_search" = "Adres zoeken";
 "fav_points_not_exist" = "Er zijn geen favoriete punten";
-"track" = "Track";
+"track" = "Veld- of bosweg";
 "select_group" = "Groep kiezen";
 "shared_string_wifi_only" = "Alleen met Wifi";
 "srtm_download_list_help_message" = "OsmAnd biedt gegevens van contourlijnen in meters en voet aan. Je zal het bestand opnieuw moeten downloaden om het formaat te wijzigen.";
@@ -1660,4 +1660,6 @@
 "gpx_split_interval_descr" = "Selecteer het interval waarmee markeringen met afstand of tijd op de track worden weergegeven.";
 "delete_waypoints" = "Waypoints verwijderen";
 "gpx_split_interval" = "Splits om de";
-"nautical" = "Nautisch";
+"nautical" = "Zeekaart";
+"units_min_short" = "m";
+"m" = "m";

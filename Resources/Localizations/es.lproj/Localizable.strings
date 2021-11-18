@@ -88,7 +88,7 @@
 "map_settings_show" = "Mostrar en el mapa";
 "map_settings_type" = "Tipo de mapa";
 "map_mode" = "Modo del mapa";
-"map_settings_day" = "Día";
+"map_settings_day" = "Diurno";
 "map_settings_night" = "Nocturno";
 "map_settings_style" = "Estilo del mapa";
 "shared_string_none" = "Ninguno";
@@ -768,7 +768,7 @@
 "clear_all_intermediates" = "Limpiar todos los puntos intermedios";
 "transport_nearby_routes_within" = "Rutas a menos de";
 "transport_routes" = "Rutas";
-"transport_stop" = "Parada";
+"transport_stop" = "Parar";
 "transport_nearby_routes" = "A menos de";
 "route_stops_before" = "%d parada(s) anterior(es)";
 "shared_string_previous" = "Anterior";
@@ -808,7 +808,7 @@
 "help_search" = "Búsqueda en el mapa";
 "help_trip_planning" = "Planificación de viaje";
 "help_legend" = "Leyenda del mapa";
-"help_other_header" = "Otra";
+"help_other_header" = "Otros";
 "help_install_and_troubleshoot" = "Instalación y solución de problemas";
 "help_tech_articles" = "Artículos técnicos";
 "help_versions" = "Versiones";
@@ -2113,3 +2113,5 @@
 "shared_string_custom" = "Personalizado";
 "contour_lines_hillshades_slope" = "Curvas de nivel, sombreados, pendientes";
 "track_show_start_finish_icons" = "Mostrar los iconos de inicio y fin";
+"units_min_short" = "m";
+"m" = "m";

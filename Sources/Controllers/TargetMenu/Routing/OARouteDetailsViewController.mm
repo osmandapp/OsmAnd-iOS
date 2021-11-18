@@ -603,9 +603,6 @@
 
 - (IBAction)buttonDonePressed:(id)sender
 {
-    if (!self.gpx)
-        return;
-    
     OARootViewController *rootVC = [OARootViewController instance];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd"];
@@ -613,8 +610,12 @@
     NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:title];
     [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
     [formatter setDateFormat:@"yyyy-MM-dd_HH-mm_EEE"];
-    self.gpx.tracks.firstObject.name = [formatter stringFromDate:[NSDate date]];
-    [self.gpx saveTo:path];
+    OAGPXDocument *doc = [OARoutingHelper.sharedInstance generateGPXFileWithRoute:[formatter stringFromDate:[NSDate date]]];
+    if (!doc)
+        return;
+    
+    doc.tracks.firstObject.name = [formatter stringFromDate:[NSDate date]];
+    [doc saveTo:path];
     NSURL* url = [NSURL fileURLWithPath:path];
     
     UIActivityViewController *activityViewController =

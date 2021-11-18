@@ -22,6 +22,7 @@
 #import "OAGPXUIHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocument.h"
+#import "OARouteExporter.h"
 #import "OATransportRoutingHelper.h"
 #import "OAGpxRouteApproximation.h"
 
@@ -1429,6 +1430,48 @@ static BOOL _isDeviatedFromRoute = false;
         for (id<OARouteCalculationProgressCallback> callback in _progressRoutes)
             [callback finish];
     }
+}
+
+- (OAGPXDocument *) generateGPXFileWithRoute:(NSString *)name
+{
+    return [self generateGPXFileWithRoute:_route name:name];
+}
+
+- (OAGPXDocument *) generateGPXFileWithRoute:(OARouteCalculationResult *)route name:(NSString *)name
+{
+    OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
+    NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray array];
+    NSArray<OARTargetPoint *> *ps = targets.getIntermediatePointsWithTarget;
+    for (NSInteger k = 0; k < ps.count; k++)
+    {
+        OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] init];
+        pt.position = CLLocationCoordinate2DMake(ps[k].getLatitude, ps[k].getLongitude);
+        if (k < ps.count)
+        {
+            pt.name = ps[k].getOnlyName;
+            if (k == ps.count - 1)
+            {
+                NSString *target = [NSString stringWithFormat:OALocalizedString(@"destination_point"), @""];
+                if ([pt.name hasPrefix:target])
+                    pt.name = [NSString stringWithFormat:OALocalizedString(@"destination_point"), pt.name];
+            }
+            else
+            {
+                NSString *prefix = [NSString stringWithFormat:@"%ld. ", (k+1)];
+                if(pt.name.length == 0)
+                    pt.name = [NSString stringWithFormat:OALocalizedString(@"destination_point"), pt.name];
+                if ([pt.name hasPrefix:prefix])
+                    pt.name = [prefix stringByAppendingString:pt.name];
+            }
+            pt.desc = pt.name;
+        }
+        [points addObject:pt];
+    }
+    
+    NSArray<CLLocation *> *locations = route.getImmutableAllLocations;
+    auto originalRoute = route.getOriginalRoute;
+    OARouteExporter *exporter = [[OARouteExporter alloc] initWithName:name route:originalRoute locations:locations points:points];
+    return [exporter exportRoute];
 }
 
 + (void) applyApplicationSettings:(OARouteCalculationParams *) params  appMode:(OAApplicationMode *) mode

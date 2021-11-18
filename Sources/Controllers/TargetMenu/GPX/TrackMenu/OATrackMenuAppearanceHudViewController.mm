@@ -360,7 +360,7 @@
             gridOrDescriptionCell = [OAGPXTableCellData withData:@{
                     kCellKey: @"color_attribute_description",
                     kCellType: [OATextLineViewCell getCellIdentifier],
-                    kCellTitle: OALocalizedString(@"slope_grey_color_descr")
+                    kCellTitle: OALocalizedString(@"white_color_undefined")
             }];
         }
         return gridOrDescriptionCell;
@@ -601,7 +601,7 @@
         else if ([self isSelectedTypeAltitude])
             return [OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation];
         else if ([self isSelectedTypeSlope])
-            return OALocalizedString(@"slope_grey_color_descr");
+            return OALocalizedString(@"grey_color_undefined");
         return @"";
     };
 

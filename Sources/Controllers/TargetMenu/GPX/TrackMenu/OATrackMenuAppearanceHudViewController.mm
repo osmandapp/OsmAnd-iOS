@@ -323,6 +323,14 @@
     }];
     [colorsCells addObject:colorValues];
 
+    OAGPXTableCellData * (^generateDescriptionCell) (NSString *, NSString *) = ^ (NSString *key, NSString *description) {
+        return [OAGPXTableCellData withData:@{
+                kCellKey: key,
+                kCellType: [OATextLineViewCell getCellIdentifier],
+                kCellTitle: description
+        }];
+    };
+
     OAGPXTableCellData * (^generateGridOrDescriptionCell) (void) = ^{
         OAGPXTableCellData *gridOrDescriptionCell;
         if ([_selectedItem.coloringType isTrackSolid])
@@ -349,19 +357,13 @@
         }
         else if ([_selectedItem.coloringType isGradient])
         {
-            gridOrDescriptionCell = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_elevation_description",
-                kCellType: [OATextLineViewCell getCellIdentifier],
-                kCellTitle: OALocalizedString(@"route_line_color_elevation_description")
-            }];
+            gridOrDescriptionCell = generateDescriptionCell(@"color_elevation_description",
+                    OALocalizedString(@"route_line_color_elevation_description"));
         }
         else if ([_selectedItem.coloringType isRouteInfoAttribute])
         {
-            gridOrDescriptionCell = [OAGPXTableCellData withData:@{
-                    kCellKey: @"color_attribute_description",
-                    kCellType: [OATextLineViewCell getCellIdentifier],
-                    kCellTitle: OALocalizedString(@"white_color_undefined")
-            }];
+            gridOrDescriptionCell = generateDescriptionCell(@"color_attribute_description",
+                    OALocalizedString(@"white_color_undefined"));
         }
         return gridOrDescriptionCell;
     };
@@ -369,7 +371,15 @@
     [colorsCells addObject:gridOrDescriptionCell];
 
     if ([_selectedItem.coloringType isGradient])
+    {
         [colorsCells addObject:[self generateDataForColorElevationGradientCell]];
+
+        if ([self isSelectedTypeSpeed] || [self isSelectedTypeAltitude])
+        {
+            [colorsCells addObject:generateDescriptionCell(@"color_extra_description",
+                    OALocalizedString(@"grey_color_undefined"))];
+        }
+    }
 
     OAGPXTableSectionData *colorsSection = [OAGPXTableSectionData withData:@{ kSectionCells: colorsCells }];
     [colorsSection setData:@{
@@ -380,11 +390,19 @@
                 gridOrDescriptionCell = generateGridOrDescriptionCell();
                 colorsSection.cells[index] = gridOrDescriptionCell;
 
+                OAGPXTableCellData *lastCell = colorsSection.cells.lastObject;
+                if ([lastCell.key isEqualToString:@"color_extra_description"])
+                    [colorsSection.cells removeObject:lastCell];
+
                 BOOL hasElevationGradient = [colorsSection.cells.lastObject.key isEqualToString:@"color_elevation_gradient"];
                 if ([_selectedItem.coloringType isGradient] && !hasElevationGradient)
                     [colorsSection.cells addObject:[self generateDataForColorElevationGradientCell]];
                 else if (![_selectedItem.coloringType isGradient] && hasElevationGradient)
                     [colorsSection.cells removeObject:colorsSection.cells.lastObject];
+
+                if ([self isSelectedTypeSpeed] || [self isSelectedTypeAltitude])
+                    [colorsSection.cells addObject:generateDescriptionCell(@"color_extra_description",
+                            OALocalizedString(@"grey_color_undefined"))];
             }
             for (OAGPXTableCellData *cell in colorsSection.cells)
             {
@@ -878,6 +896,7 @@
                                                          owner:self options:nil];
             cell = (OAImageTextViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
         }
         if (cell)
         {

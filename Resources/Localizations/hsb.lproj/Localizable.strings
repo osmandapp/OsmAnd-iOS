@@ -362,7 +362,7 @@
 "shared_string_and" = "a";
 "shared_string_edit" = "Wobdźěłać";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Pozdźišo";
+"shared_string_later" = "Dale";
 "shared_string_of" = "of";
 "shared_string_all" = "All";
 "shared_string_from" = "wot";
@@ -425,7 +425,7 @@
 "poi_hide" = "Schować";
 // My Places
 "favorites" = "Fawority";
-"tracks" = "Puće";
+"tracks" = "Čary";
 // GPX
 "gpx_point" = "Dypk";
 "gpx_waypoint" = "Čarowy dypk";
@@ -473,7 +473,7 @@
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
 "poi_clear" = "Wotstronić";
-"poi_list" = "Lisćina  POI";
+"poi_list" = "\"Lisćina  POI\"";
 "track_during_nav" = "Auto-record trip during navigation";
 "track_during_nav_descr" = "A trip is automatically saved during navigation";
 "gpx_distance_points" = "Distance (points)";
@@ -491,7 +491,7 @@
 "map_mode" = "Kartowy modus";
 "map_settings_map_magnifier" = "Powjetšenje karty";
 "map_settings_text_size" = "Wulkosć teksta";
-"map_settings_day" = "Dźeń";
+"map_settings_day" = "dźeń";
 "map_settings_night" = "Nóc";
 "map_settings_style" = "Stil karty";
 "map_settings_overunder" = "Overlay / Underlay";
@@ -652,7 +652,7 @@
 "osm_failed_uploads" = "Failed";
 "osm_note" = "OSM-notica";
 "osm_created" = "Created";
-"osm_deleted" = "Zajimawostka je so wotstroniła";
+"osm_deleted" = "Wotstronjene";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -672,7 +672,7 @@
 "osm_website" = "Webstrona";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"osm_poi_delete_title" = "POI wušmórnyć";
+"osm_poi_delete_title" = "POI wotstronić";
 "osm_target_modified" = "Změnjene OSM POI-dypki";
 "osm_target_deleted" = "Wotstronjene OSM POI-dypki";
 "osm_target_created" = "OSM POI-dypk wutworjeny";
@@ -876,7 +876,6 @@
 "units_hour" = "h";
 "units_min" = "mjeńš";
 "units_sec" = "sec";
-"units_min_short" = "m";
 "units_sec_short" = "s";
 // Help
 "help_first_steps" = "First steps";
@@ -1088,11 +1087,11 @@
 "get_directions" = "Nawigacija";
 "parking" = "Parkowanišćo";
 "directions_more_options" = "Nawigacija wottud";
-"nearby_search" = "Wokoło stejišća pytać";
+"nearby_search" = "We wokolinje pytać";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
-"plugins" = "Rozšěrjenja";
+"plugins" = "Přidatki";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -1411,7 +1410,7 @@
 "app_theme_light" = "Swětłe";
 "update_map" = "Kartowe kachlicy zaktualizować";
 "enter_profile_name" = "Zapodaj mjeno profila";
-"nothing_found_empty" = "Žadyn pytanski wuslědk";
+"nothing_found_empty" = "Žadyn wuslědk";
 "res_slope" = "spad";
 "export_profile" = "Profil eksportować";
 "base_profile_descr_public_transport" = "Wše typy zjawneho wobchada";
@@ -1420,7 +1419,7 @@
 "avoid_routes_and_road" = "Wěste čary a pućne typy wobeńć";
 "avoid_road" = "Dróhu wobeńć";
 "num_stops" = "zastanišća";
-"m_style_pulic_transport" = "Zjawny wobchad";
+"m_style_pulic_transport" = "Zjawny transport";
 "arrival_announcement_frequency" = "Hdy chceće připowědź přijězda?";
 "profile_alert_delete_title" = "Profil wotstronić";
 "profile_type_base_string" = "zakładny profil";
@@ -1459,10 +1458,18 @@
 "context_menu_item_edit_waypoint" = "GPX-dypk wobdźěłać";
 "shared_string_navigation" = "Nawigacija";
 "gpxup_private" = "Priwatne";
-"m" = "m";
 "added_profiles" = "Přidate profile";
 "gpxup_public" = "Zjawne";
 "gpxup_identifiable" = "Spóznajomne";
 "welmode_download_maps" = "Karty sćahnyć";
-"rendering_value_pink_name" = "pink";
 "product_title_mapillary" = "Mapillary";
+"shared_string_end_time" = "čas přichada";
+"analyze_on_map" = "Na karće analyzować";
+"shared_string_overview" = "Přehlad";
+"shared_string_start_time" = "čas wotjězda";
+"education" = "Kubłanje";
+"regions" = "Regiony";
+"distance_moving" = "Zdalenosć skorigowana";
+"m" = "m";
+"units_min_short" = "m";
+"rendering_value_pink_name" = "pink";

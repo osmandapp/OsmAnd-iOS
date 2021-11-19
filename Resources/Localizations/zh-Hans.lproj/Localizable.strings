@@ -33,7 +33,7 @@
 "shared_string_and" = "与";
 "shared_string_edit" = "编辑";
 "shared_string_modify" = "修改";
-"shared_string_later" = "后来";
+"shared_string_later" = "稍后";
 "shared_string_of" = "";
 "shared_string_all" = "全部";
 "shared_string_from" = "从";
@@ -126,14 +126,14 @@
 // Map settings
 "rendering_value_browse_map_name" = "浏览地图";
 "m_style_car" = "驾驶";
-"m_style_walk" = "步行";
-"m_style_bicycle" = "骑车";
+"m_style_walk" = "走路";
+"m_style_bicycle" = "自行车";
 "map_settings_map" = "地图";
 "map_settings_show" = "在地图上显示";
 "map_settings_type" = "地图类型";
 "map_mode" = "地图模式";
 "map_settings_day" = "日";
-"map_settings_night" = "夜晚";
+"map_settings_night" = "晚上";
 "map_settings_style" = "地图风格";
 "map_settings_overunder" = "叠加层 / 背景层";
 "map_settings_over" = "叠加层";
@@ -259,7 +259,7 @@
 "units_ft" = "脚";
 "units_kmh" = "千米/时";
 "units_mph" = "英里";
-"units_hour" = "时";
+"units_hour" = "小时";
 "units_min" = "分";
 "units_sec" = "秒";
 // Map
@@ -564,7 +564,7 @@
 "m_s" = "米/秒";
 // Shared Strings
 "shared_string_apply" = "应用";
-"transport_routes" = "线路";
+"transport_routes" = "路线";
 "switch_start_finish" = "交换起始点和目的地";
 "replace_destination_point" = "替换目的地";
 "traffic_warning_stop" = "停止标志";
@@ -591,7 +591,7 @@
 "show_pedestrian_warnings" = "人行横道";
 "osm_live_payment_header" = "选择适合你的付款周期：";
 "osm_live_payment_contribute_descr" = "部分收入归 OpenStreetMap 贡献者所得。";
-"transport_stop" = "停止";
+"transport_stop" = "站点";
 "show_poi_over_map" = "显示兴趣点";
 "road_blocked" = "阻塞的道路";
 "starting_point" = "起始点";
@@ -913,14 +913,14 @@
 "min_km" = "分/千米";
 "help_install_and_troubleshoot" = "安装和疑难解答";
 "shared_string_io_error" = "I/O错误";
-"help_other_header" = "其他";
+"help_other_header" = "其它";
 "shared_string_unexpected_error" = "意外的错误";
 "map_styles" = "地图样式";
 "poi_list" = "POI列表";
 "osm_live_cancel_subscription" = "取消订阅";
 "key_hint_select" = "选择";
 "prev_route" = "上一条路径";
-"osm_alert_title" = "提交";
+"osm_alert_title" = "承諾";
 "help_tech_articles" = "技术文章";
 "change_map_source" = "改变地图来源";
 "add_gpx_waypoint" = "添加 GPX 地标";
@@ -1364,13 +1364,13 @@
 "configure_screen_quick_action" = "快捷操作";
 "select_icon" = "选择图标";
 "one" = "一";
-"nothing_found_empty" = "什么也没找到";
+"nothing_found_empty" = "什么都没找到";
 "export_profile" = "导出配置文件";
 "osm_notes" = "OSM注记";
 "select_color" = "选择颜色";
 "selected_profiles" = "%d中的 %d";
 "public_transport_empty_warning_descr" = "尝试更改设置。";
-"quick_action_remove_next_destination" = "删除下一个目的地";
+"quick_action_remove_next_destination" = "删除最近的目的地点";
 "shared_string_settings" = "设置";
 "vessel_width_limit_description" = "设置船只宽度以避免狭窄的桥梁";
 "none_point_error" = "请添加至少一个点。";
@@ -1467,7 +1467,7 @@
 "enter_profile_name" = "输入配置文件名称";
 "group_name" = "组名称";
 "search_history" = "搜索历史记录";
-"track" = "轨迹";
+"track" = "轨道";
 "distance_indication" = "距离指示";
 "search_preogress" = "正在搜索…";
 "osm_note_comment_title" = "评论 OSM 注记";
@@ -1559,3 +1559,27 @@
 "gpxup_public" = "公共";
 "navigate_point_easting" = "东距";
 "no_waypoints_found" = "未发现路径点";
+"gpx_split_interval_none_descr" = "选择所需的拆分选项：“按时间”或“按距离”。";
+"gpx_split_interval" = "分割间隔";
+"shared_string_interval" = "间隔";
+"gpx_split_interval_descr" = "选择显示轨迹上带有距离或时间标记的间隔。";
+"regions" = "地图";
+"track_coloring_solid" = "实线";
+"shared_string_custom" = "自定义";
+"distance_moving" = "距离已修正";
+"delete_waypoints" = "删除航点";
+"shared_string_start_time" = "开始时间";
+"track_show_start_finish_icons" = "显示开始和完成图标";
+"edit_track" = "编辑轨迹";
+"shared_string_width" = "宽度";
+"upload_to_openstreetmap" = "上传到 OpenStreetMap";
+"shared_string_overview" = "概览";
+"analyze_on_map" = "在地图上分析";
+"shared_string_end_time" = "结束时间";
+"education" = "教育";
+"reset_to_original" = "重置为原始状态";
+"shared_string_time_moving" = "移动的时间";
+"attribute" = "属性";
+"gpx_dir_arrows" = "方向箭头";
+"shared_string_time_span" = "时间跨度";
+"nautical" = "航海";

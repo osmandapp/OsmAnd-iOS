@@ -62,7 +62,7 @@
 "gpx_route" = "Cesta";
 "gpx_route_time" = "Čas trasy";
 "gpx_average_speed" = "Priemerná rýchlosť";
-"gpx_start" = "Spustiť";
+"gpx_start" = "Štart";
 "gpx_finish" = "Dokončiť";
 "gpx_avg_elev" = "Priemerná nadmorská výška";
 "gpx_elev_range" = "Rozsah nadmorskej výšky";
@@ -72,12 +72,12 @@
 "rendering_value_browse_map_name" = "Štandardná";
 "m_style_car" = "Riadenie vozidla";
 "m_style_walk" = "Chôdza";
-"m_style_bicycle" = "Cyklistika";
+"m_style_bicycle" = "Jazda na bicykli";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Zobraziť na mape";
 "map_settings_type" = "Typ mapy";
 "map_mode" = "Režim mapy";
-"map_settings_day" = "Denný režim";
+"map_settings_day" = "Deň";
 "map_settings_night" = "Nočný režim";
 "map_settings_style" = "Štýl vykresľovania";
 "map_settings_overunder" = "Prekrývacia/Podkladová";
@@ -92,7 +92,7 @@
 // Intro
 "intro_skip" = "Preskočiť";
 "intro_download" = "Stiahnuť\nmapu";
-"intro_next" = "Nasledujúci";
+"intro_next" = "Ďalší";
 "intro_welcome" = "Vitajte v\nOsmAnd";
 "intro_promo" = "Globálne offline mapy";
 "intro_placeholder" = "zadajte názov svojho regiónu";
@@ -191,7 +191,7 @@
 "download" = "Stiahnuť";
 "gpx_uphldownhl" = "Do kopca/Z kopca";
 "gpx_uphills_total" = "Spolu do kopca";
-"nothanks" = "Nie,ďakujem";
+"nothanks" = "Netreba";
 "download_now" = "Stiahnuť mapu teraz";
 "prch_failed" = "Nákup \"%@\" zlyhal";
 "prch_items_failed" = "položiek nebolo obnovených. Prosím skúste to znova.";
@@ -268,7 +268,7 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "hod";
+"units_hour" = "h";
 "units_min" = "min";
 "units_sec" = "sek.";
 // Map
@@ -486,7 +486,7 @@
 "show_something_on_map" = "Zobraziť %@ na mape";
 "search_POI_level_btn" = "Zväčšiť polomer vyhľadávania";
 "shared_string_street" = "Ulica";
-"shared_string_building" = "Číslo";
+"shared_string_building" = "Popisné číslo";
 "shared_string_street_intersection" = "Križovatka ulíc";
 "shared_string_address" = "Adresa";
 "do_not_show_discount" = "Nezobrazovať reklamné ponuky";
@@ -594,7 +594,7 @@
 "routing_settings_2" = "Navigačné nastavenia";
 "gpx_navigation" = "Nasledovať stopu";
 "impassable_road" = "Vyhnúť sa cestám";
-"impassable_road_desc" = "Vyberte cesty, ktorým sa chcete pri navigácii vyhnúť";
+"impassable_road_desc" = "Vyberte cesty, ktorým sa chcete pri navigácii vyhnúť.";
 "interrupt_music_descr" = "Úplne pozastaviť hudby počas hlasových povelov (nie len znížiť hlasitosť)";
 "interrupt_music" = "Pozastaviť hudbu";
 "shared_string_do_not_use" = "Nepoužívať";
@@ -632,12 +632,12 @@
 "map_orientation_change_in_accordance_with_speed" = "Citlivosť zmeny orientácie mapy";
 "map_orientation_change_in_accordance_with_speed_descr" = "Zvoľte pod akou rýchlosťou sa orientácia mapy zmení zo \"V smere pohybu\" na \"Smer kompasu\"";
 "fast_route_mode" = "Najrýchlejšia trasa";
-"fast_route_mode_descr" = "Zapnite pre výpočet najrýchlejšej trasy alebo vypnite pre ekonomickú trasu";
+"fast_route_mode_descr" = "Zapnite pre výpočet najrýchlejšej trasy alebo vypnite pre ekonomickú trasu.";
 "avoid_in_routing_title" = "Vyhnúť sa…";
 "avoid_in_routing_descr" = "Obídenie spoplatnených ciest, nespevnených ciest, trajektov";
 "prefer_in_routing_title" = "Uprednostniť…";
-"prefer_in_routing_descr" = "Uprednostniť diaľnice";
-"relief_smoothness_factor_descr" = "Preferovaný terén: roviny alebo pahorky";
+"prefer_in_routing_descr" = "Uprednostniť diaľnice.";
+"relief_smoothness_factor_descr" = "Preferovaný terén: roviny alebo pahorky.";
 "choose_auto_follow_route" = "Automatické centrovanie";
 "choose_auto_follow_route_descr" = "Čas pokiaľ sa mapové zobrazenie zosynchronizuje s pozíciou";
 "auto_zoom_map" = "Automatické priblíženie mapy";
@@ -649,15 +649,15 @@
 "speak_title" = "Ohlásiť…";
 "speak_descr" = "Konfigurácia ohlásení názvov ulíc, dopravných varovaní (vynútené zastavenia, spomaľovače), upozornení na radary, obmedzení rýchlosti";
 "keep_informing" = "Opakovať navigačné pokyny";
-"keep_informing_descr" = "Opakovať navigačné pokyny v pravidelných intervaloch";
+"keep_informing_descr" = "Opakovať navigačné pokyny v pravidelných intervaloch.";
 "arrival_distance" = "Oznámenie príjazdu";
 "arrival_distance_descr" = "Ako skoro má byť oznámený príjazd do cieľa?";
 "default_speed_system" = "Jednotka rýchlosti";
-"default_speed_system_descr" = "Zvoľte jednotku rýchlosti";
+"default_speed_system_descr" = "Zvoľte jednotku rýchlosti.";
 "speed_limit_exceed" = "Tolerancia prekročenia povolenej rýchlosti";
 "speed_limit_exceed_message" = "Zvoľte toleranciu prekročenia povolenej rýchlosti, po ktorej dostanete hlasové oznámenie.";
 "wake_on_voice" = "Rozsvietiť obrazovku";
-"wake_on_voice_descr" = "Rozsvietiť obrazovku (ak je vypnutá), keď sa blíži odbočenie";
+"wake_on_voice_descr" = "Rozsvietiť obrazovku (ak je vypnutá), keď sa blíži odbočenie.";
 "voice_pref_title" = "Hlas";
 "voice_provider_descr" = "Výber hlasových údajov pre navigáciu";
 "choose_audio_stream" = "Výstup hlasových pokynov";
@@ -715,7 +715,7 @@
 "driving_region_descr" = "Vyberte jazdnú oblasť: USA, Európa, Spojené kráľovstvo, Ázia a ostatné.";
 "driving_region_automatic" = "Automaticky";
 "auto_follow_location_enabled" = "Automatické nasledovanie je povolené.";
-"unknown_location" = "Poloha zatiaľ nezistená";
+"unknown_location" = "Poloha zatiaľ nezistená.";
 "route_simulation" = "Simulácia trasy";
 "animate_routing_route_not_calculated" = "Prosím najprv vypočítajte trasu";
 "day_night_info_description" = "Východ slnka: %@\nZápad slnka: %@";
@@ -761,9 +761,9 @@
 "switch_start_finish" = "Vymeniť východzí a cieľový bod";
 "clear_all_intermediates" = "Zmazať všetky prechodné body";
 "cancel_navigation" = "Zastaviť navigáciu";
-"transport_routes" = "Linky";
+"transport_routes" = "Trasy";
 "transport_nearby_routes_within" = "Blízke trasy do";
-"transport_stop" = "Zastaviť";
+"transport_stop" = "Zastávka";
 "transport_nearby_routes" = "Do vzdialenosti";
 "shared_string_previous" = "Predchádzajúci";
 "route_stops_before" = "%d zastávok pred";
@@ -811,7 +811,7 @@
 "shared_string_close" = "Zavrieť";
 "actions" = "Akcie";
 "directions_more_options" = "Pokyny odtiaľto";
-"nearby_search" = "Hľadať neďaleko Vás";
+"nearby_search" = "Hľadať v okolí";
 "map_widget_ruler_control" = "Kruhové pravítko";
 "import_from_docs" = "Importovať z dokumentov";
 "osm_live_routing" = "Navigácia OsmAnd Live";
@@ -880,7 +880,7 @@
 "osm_website" = "Webstránka";
 "osm_add_place" = "Pridať miesto";
 "osm_modify_place" = "Upraviť miesto";
-"osm_poi_delete_title" = "Vymazať bod záujmu (POI)";
+"osm_poi_delete_title" = "Vymazať POI";
 "osm_target_modified" = "Upravený OSM POI";
 "osm_target_deleted" = "Odstránený OSM POI";
 "osm_target_created" = "Vytvorený OSM POI";
@@ -1186,7 +1186,6 @@
 "key_hint_deselect" = "Zrušiť výber";
 "region_nautical" = "Námorné mapy";
 "quick_action_add_overlay" = "Pridať prekrytie";
-"units_min_short" = "m";
 "quick_action_add_poi_category" = "Pridať kategóriu";
 "map_sources" = "Zdroje mapy";
 "add_map_source" = "Pridať zdroj mapy";
@@ -1339,7 +1338,7 @@
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Zobraziť sieť cyklotrás";
 "routing_attr_short_way_name" = "Ekonomická trasa";
 "rendering_attr_noPolygons_name" = "Polygóny";
-"routing_attr_width_description" = "Zadajte šírku vozidla, ktorá musí byť povolená na cestách.";
+"routing_attr_width_description" = "Zadajtešírku vozidla, ktorá musí byť povolená na cestách.";
 "rendering_attr_piste_difficulty_expert_name" = "Pre expertov";
 "routeInfo_piste_difficulty_name" = "Obtiažnosť zjazdovky";
 "routing_attr_allow_intermediate_name" = "Povoliť trasy strednej náročnosti";
@@ -1569,7 +1568,7 @@
 "routing_attr_length_name" = "Limit dĺžky";
 "weight_limit_description" = "Zadajte hmotnosť vášho vozidla, pretože na trase môžu byť obmedzenia pre ťažké vozidlá.";
 "default_speed_dialog_msg" = "Odhaduječas na cestách neznámeho typu a obmedzuje rýchlosť na všetkých cestách (môže ovplyvniť trasu)";
-"width_limit_description" = "Zadajte šírku vášho vozidla, pretože na trase môžu byť obmedzenia pre široké vozidlá.";
+"width_limit_description" = "Zadajtešírku vášho vozidla, pretože na trase môžu byť obmedzenia pre široké vozidlá.";
 "height_limit_description" = "Zadajte výšku vášho vozidla, pretože na trase môžu byť obmedzenia pre vysoké vozidlá.";
 "export_profile" = "Exportovať";
 "profile_appearance" = "Vzhľad profilu";
@@ -1620,7 +1619,7 @@
 "ui_customization_descr" = "Položky v úvodnom paneli a kontextovom menu";
 "nav_type_ski" = "Lyžovanie";
 "configure_map_descr" = "Zobrazenie mapy";
-"vessel_width_limit_description" = "Nastavte šírku plavidla, aby sa dalo vyhnúť úzkym mostom.";
+"vessel_width_limit_description" = "Nastavtešírku plavidla, aby sa dalo vyhnúť úzkym mostom";
 "profile_type_user_string" = "Profil používateľa";
 "quick_action_mapillary_hide" = "Skryť Mapillary";
 "shared_string_terrain" = "Terén";
@@ -1638,7 +1637,7 @@
 "product_title_antarctica" = "Antarktída";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "quick_action_remove_next_destination" = "Vymazať najbližší cieľový bod";
-"profile_prefs_reset_successful" = "Všetky nastavenia profilov obnovené do východzieho stavu";
+"profile_prefs_reset_successful" = "Všetky nastavenia profilov obnovené do východzieho stavu.";
 "route_betw_points" = "Trasa medzi bodmi";
 "select_icon" = "Zvoľte ikonu";
 "res_pseudo_mercator" = "Pseudo-Mercatorovo zobrazenie";
@@ -1697,7 +1696,7 @@
 "default_speed" = "Predvolená rýchlosť";
 "help_osmand_live" = "Predplatné - OsmAnd Live";
 "public_transport_show" = "Zobraziť verejnú dopravu";
-"arrived_at_destination" = "Dorazili ste do cieľa";
+"arrived_at_destination" = "Dorazili ste do cieľa.";
 "nearest_point" = "Najbližší bod";
 "attach_to_the_roads" = "Pripojiť k cestám";
 "select_another_track" = "Zvoliť inú stopu";
@@ -1748,7 +1747,7 @@
 "shared_string_import" = "Import";
 "symbols" = "Symboly";
 "add_custom_category" = "Pridať vlastnú kategóriu";
-"emergency" = "Pomoc v núdzi";
+"emergency" = "Núdzová situácia/Záchrana";
 "sport" = "Šport";
 "select_group" = "Zvoľte skupinu";
 "favorite_friends_category" = "Priatelia";
@@ -1785,7 +1784,6 @@
 "download_map_dialog" = "Okno sťahovania máp";
 "gpxup_identifiable" = "Identifikovateľná";
 "welmode_download_maps" = "Stiahnuť mapy";
-"m" = "m";
 "shared_strings_all_regions" = "Všetky oblasti";
 "navigate_point_zone" = "Zóna";
 "travel_routes" = "Cestovné trasy";
@@ -1811,7 +1809,7 @@
 "shared_string_feet" = "stopy";
 "walking_route_osmc_description" = "Vyfarbiť trasy podľa ich vlastných farieb (ak sú zadané v OpenStreetMap) a typu (medzinárodné, regionálne, lokálne).";
 "shared_string_turn_off" = "Vypnúť";
-"suggested_maps_descr" = "Tieto mapy sú potrebné pre zásuvný modul";
+"suggested_maps_descr" = "Tieto mapy sú potrebné pre zásuvný modul.";
 "contour_lines_hillshades_slope" = "Vrstevnice, tieňované svahy, sklony";
 "wiki_menu_download_descr" = "Pre zobrazenie bodov Wikipedie na mape sú potrebné ďalšie mapy.";
 "context_menu_item_edit_waypoint" = "Upraviť bod GPX";
@@ -1821,3 +1819,29 @@
 "foot" = "ft";
 "navigate_point_olc" = "Otvorený kód pre polohu (OLC)";
 "some_articles_may_not_available_in_lang" = "Niektoré články Wikipedia nemusia byť dostupné vo vašom jazyku.";
+"shared_string_width" = "Šírka";
+"shared_string_time_span" = "Časový rozsah";
+"distance_moving" = "Vzdialenosť opravená";
+"attribute" = "Vlastnosť";
+"shared_string_time_moving" = "Čas v pohybe";
+"gpx_dir_arrows" = "Smerové šípky";
+"reset_to_original" = "Obnoviť na pôvodné";
+"track_coloring_solid" = "Plné";
+"nautical" = "Námorný";
+"shared_string_interval" = "Interval";
+"track_show_start_finish_icons" = "Zobraziť ikony štartu a cieľa";
+"shared_string_start_time" = "Čas začiatku";
+"regions" = "Oblasti";
+"gpx_split_interval_none_descr" = "Zvoľte spôsob rozdeľovania: podľa času alebo podľa vzdialenosti.";
+"shared_string_overview" = "Prehľad";
+"education" = "Vzdelávanie";
+"industrial" = "Priemysel";
+"shared_string_custom" = "Vlastné";
+"edit_track" = "Upraviť stopu";
+"gpx_split_interval" = "Interval rozdelenia";
+"upload_to_openstreetmap" = "Nahrať do OpenStreetMap";
+"delete_waypoints" = "Odstrániť body trasy";
+"shared_string_end_time" = "Čas konca";
+"gpx_join_gaps" = "Spojiť medzery";
+"analyze_on_map" = "Analyzovať na mape";
+"gpx_split_interval_descr" = "Zvoľte interval, po ktorom budú na stope zobrazené značky so vzdialenosťou alebo časom.";

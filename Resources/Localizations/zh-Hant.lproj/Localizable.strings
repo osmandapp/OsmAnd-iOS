@@ -48,7 +48,7 @@
 "poi_search_near_center" = "已執行在地圖中心附近的查尋";
 "poi_hide" = "隱藏";
 // My Places
-"favorites" = "收藏";
+"favorites" = "我的收藏";
 // GPX
 "gpx_point" = "標點";
 // Rendering categories
@@ -109,7 +109,7 @@
 "map_settings_show" = "在地圖上顯示";
 "map_settings_type" = "地圖類型";
 "map_mode" = "地圖模式";
-"map_settings_day" = "天";
+"map_settings_day" = "日間";
 "map_settings_night" = "夜間";
 "map_settings_style" = "地圖樣式";
 "map_settings_overunder" = "上層 / 下層";
@@ -123,7 +123,7 @@
 // Intro
 "intro_skip" = "跳過";
 "intro_download" = "下載\n地圖";
-"intro_next" = "下一頁";
+"intro_next" = "下頁";
 "intro_welcome" = "歡迎使用\nOsmAnd";
 "intro_promo" = "全球離線地圖";
 "intro_placeholder" = "請輸入您所在地區的名稱";
@@ -482,7 +482,7 @@
 "postcode" = "郵遞區號";
 "show_something_on_map" = "在地圖上顯示 %@";
 "search_POI_level_btn" = "增加搜尋半徑";
-"shared_string_street" = "街道";
+"shared_string_street" = "道路";
 "shared_string_building" = "建築物";
 "shared_string_street_intersection" = "街道路口";
 "shared_string_address" = "地址";
@@ -716,7 +716,7 @@
 "driving_region_descr" = "選擇駕駛區域：美國、歐洲、英國、亞洲和其它。";
 "driving_region_automatic" = "自動";
 "auto_follow_location_enabled" = "使用地圖檢視自動置中。";
-"unknown_location" = "位置未知";
+"unknown_location" = "未知地理位置。";
 "route_simulation" = "模擬路線";
 "animate_routing_route_not_calculated" = "請先計劃行車路線";
 "day_night_info_description" = "日出：%@\n日落：%@";
@@ -762,9 +762,9 @@
 "switch_start_finish" = "起始點與目的地對調";
 "clear_all_intermediates" = "清除所有中轉地點";
 "cancel_navigation" = "停止導航";
-"transport_routes" = "路線";
+"transport_routes" = "導航路線";
 "transport_nearby_routes_within" = "在附近的路線";
-"transport_stop" = "中止";
+"transport_stop" = "停靠點";
 "transport_nearby_routes" = "範圍內";
 "route_stops_before" = "%1$s 之前停止";
 "shared_string_previous" = "上一頁";
@@ -1073,7 +1073,7 @@
 "angular_units_descr" = "變更測量的方位角。";
 "quick_action_name" = "快速動作";
 "osm_edit_without_name" = "沒有名稱";
-"home_pt" = "住家";
+"home_pt" = "家";
 "gpx_descent" = "下坡";
 "osm_note_action_field_descr" = "此訊息會包含在註解欄。";
 "add_parking_place" = "增加停車地點";
@@ -1223,7 +1223,7 @@
 "rendering_value_black_name" = "黑色";
 "rendering_attr_trolleybusRoutes_name" = "無軌電車路線";
 "routeInfo_piste_difficulty_name" = "滑雪難度";
-"rendering_attr_currentTrackColor_description" = "GPX 的顏色";
+"rendering_attr_currentTrackColor_description" = "GPX的顏色";
 "rendering_attr_surface_metal_name" = "金屬";
 "routing_attr_no_new_routing_description" = "在 v1.9 不使用路徑規則引導。";
 "routing_attr_prefer_unpaved_name" = "偏好無鋪面道路";
@@ -1483,7 +1483,7 @@
 "quick_action_remove_next_destination" = "刪除最近的目的地點";
 "public_transport_hide" = "隱藏大眾運輸";
 "add_point" = "新增標點";
-"save_changes" = "儲存更改";
+"save_changes" = "儲存變更";
 "shared_string_account" = "帳號";
 "public_transport_menu" = "交通工具";
 "announce" = "公告";
@@ -1495,7 +1495,7 @@
 "public_transport_show" = "顯示大眾運輸";
 "position_icon_at_rest" = "靜止位置圖示";
 "nav_type_geocoding" = "天氣預報";
-"nothing_found_empty" = "找不到";
+"nothing_found_empty" = "没有找到";
 "product_title_antarctica" = "南極洲";
 "res_source_one_per_tile" = "每個圖磚一個圖片檔案";
 "osmand_routing" = "OsmAnd規畫路徑";
@@ -1550,7 +1550,7 @@
 "listed_exist" = "列出的 %@ 已存在於 OsmAnd 中。";
 "shared_string_meters" = "公尺";
 "shared_string_add_profile" = "新增設定檔";
-"m_style_pulic_transport" = "公共交通";
+"m_style_pulic_transport" = "大眾運輸";
 "one" = "一";
 "consider_limitations_param" = "考慮暫時限制";
 "create_profile_descr" = "讓您自訂的設定檔以其中一個預設應用程式設定檔為基礎，這定義了如小工具、速度單位與距離的顯示方式。這些是預設的應用程式設定檔，連同其可以擴展成的自訂設定檔範例：";
@@ -1576,7 +1576,7 @@
 "fav_points_not_exist" = "沒有我的收藏標點存在";
 "shared_string_enable" = "啟用";
 "open_saved_track" = "開啟已儲存的軌跡";
-"emergency" = "緊急救助";
+"emergency" = "警急";
 "default_color" = "預設顏色";
 "coordinates_widget" = "座標小工具";
 "shared_string_resources" = "資源";
@@ -1590,7 +1590,7 @@
 "address_search" = "地址查尋";
 "rearrange_categories" = "重新排列分類";
 "service" = "服務";
-"track" = "小徑";
+"track" = "軌跡";
 "markers_history" = "標記歷史";
 "displayed_trips" = "顯示軌跡";
 "attach_to_the_roads" = "依附於道路";
@@ -1695,3 +1695,29 @@
 "allow_3d" = "允許 2.5D 的檢視";
 "allow_3d_descr" = "啟用這個選項之後，你可以用 2.5D 視角觀看地圖";
 "angular_units" = "角度測量單位";
+"distance_moving" = "距離已校正";
+"gpx_split_interval_none_descr" = "選取所需的分割選項：按時間或按距離。";
+"analyze_on_map" = "在地圖上分析";
+"shared_string_time_moving" = "時間移動";
+"shared_string_overview" = "概要";
+"delete_waypoints" = "刪除航點";
+"education" = "教育";
+"attribute" = "屬性";
+"gpx_split_interval" = "分割的間隔";
+"edit_track" = "編輯軌跡";
+"gpx_split_interval_descr" = "選擇在軌跡上要顯示帶有距離或時間標記的間隔。";
+"shared_string_end_time" = "結束時間";
+"shared_string_custom" = "自訂";
+"regions" = "地區";
+"track_coloring_solid" = "密實";
+"reset_to_original" = "重設為原始設定";
+"upload_to_openstreetmap" = "上傳到 OpenStreetMap";
+"shared_string_interval" = "間隔";
+"shared_string_time_span" = "時間間隔";
+"shared_string_start_time" = "開始時間";
+"nautical" = "航海";
+"gpx_dir_arrows" = "方向箭頭";
+"gpx_join_gaps" = "加入 gaps";
+"industrial" = "工業區";
+"shared_string_width" = "寬度";
+"track_show_start_finish_icons" = "顯示開始與結束圖示";

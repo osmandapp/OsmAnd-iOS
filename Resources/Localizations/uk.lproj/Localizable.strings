@@ -54,7 +54,7 @@
 "fav_replace_all" = "Замінити все";
 // POI
 "poi_insrease_radius" = "Збільшити радіус пошуку до";
-"poi_hide" = "Приховати";
+"poi_hide" = "Сховати";
 // GPX
 "gpx_point" = "Точка";
 "shared_string_export" = "Експорт";
@@ -82,7 +82,7 @@
 // Map settings
 "rendering_value_browse_map_name" = "Огляд мапи";
 "m_style_car" = "Водіння";
-"m_style_walk" = "Ходьба";
+"m_style_walk" = "Ходіння";
 "m_style_bicycle" = "Їзда на велосипеді";
 "map_settings_map" = "Мапа";
 "map_settings_show" = "Показати";
@@ -427,8 +427,8 @@
 "gpx_group_select" = "Вибір груп";
 "show_all" = "Показати усе";
 "get_directions" = "Напрямки";
-"parking" = "Стоянка";
-"est_travel_time" = "Приблизний час";
+"parking" = "Стоянки";
+"est_travel_time" = "Розрахунковий час подорожі";
 "pedestrian" = "Пішохід";
 "sorting" = "Сортування";
 "plugins" = "Розширення";
@@ -582,7 +582,7 @@
 "routing_settings_2" = "Налаштування навігації";
 "gpx_navigation" = "Навігація за треком";
 "impassable_road" = "Уникати дороги";
-"impassable_road_desc" = "Виберіть дороги, які потрібно уникнути під час навігації";
+"impassable_road_desc" = "Виберіть дороги, які потрібно уникнути під час навігації.";
 "interrupt_music_descr" = "Повністю призупинити будь-яку музику під час голосових підказок (а не лише знизити її гучність)";
 "interrupt_music" = "Призупиняти музику";
 "shared_string_do_not_use" = "Не використовувати";
@@ -608,12 +608,12 @@
 "app_mode_boat" = "Човен";
 "app_mode_aircraft" = "Літак";
 "fast_route_mode" = "Найшвидший маршрут";
-"fast_route_mode_descr" = "Увімкнути обчислення найшвидшого маршруту, або ж вимкнути режим паливо-ощадного маршруту";
+"fast_route_mode_descr" = "Увімкнути обчислення найшвидшого маршруту, або ж вимкнути режим паливо-ощадного маршруту.";
 "avoid_in_routing_title" = "Уникати…";
 "avoid_in_routing_descr" = "Уникати платних і доріг без покриття, поромів";
 "prefer_in_routing_title" = "Надавати перевагу…";
-"prefer_in_routing_descr" = "Надавати перевагу автомагістралям";
-"relief_smoothness_factor_descr" = "Переважний рельєф: рівнинний або гористий";
+"prefer_in_routing_descr" = "Надавати перевагу автомагістралям.";
+"relief_smoothness_factor_descr" = "Переважний рельєф: рівнинний або гористий.";
 "choose_auto_follow_route" = "Автоцентрування мапи";
 "choose_auto_follow_route_descr" = "Час, через який мапа повернеться до поточної позиції";
 "auto_zoom_map" = "Самозменшення/збільшення";
@@ -657,15 +657,15 @@
 "speak_title" = "Оголошувати…";
 "speak_descr" = "Налаштувати оголошення назв вулиць, дорожніх обмежень (вимушені зупинки, лежачі поліцейські), попередження про камери контролю швидкості, обмеження швидкості";
 "keep_informing" = "Повторювати навігаційні вказівки";
-"keep_informing_descr" = "Повторювати навігаційні вказівки через регулярні проміжки часу";
+"keep_informing_descr" = "Повторювати навігаційні вказівки через регулярні проміжки часу.";
 "arrival_distance" = "Оголошення про прибуття";
 "arrival_distance_descr" = "Як швидко Ви хочете чути повідомлення про прибуття?";
 "default_speed_system" = "Одиниця вимірювання швидкості";
-"default_speed_system_descr" = "Визначити одиницю вимірювання швидкості";
+"default_speed_system_descr" = "Визначити одиницю вимірювання швидкості.";
 "speed_limit_exceed" = "Допустиме значення перевищення швидкості";
 "speed_limit_exceed_message" = "Виберіть допустиме значення перевищення швидкості, при перевищенні якого Ви отримаєте голосове попередження.";
 "wake_on_voice" = "Увімкнути екран";
-"wake_on_voice_descr" = "Увімкнути екран пристрою (якщо його вимкнено) під час наближення до повороту";
+"wake_on_voice_descr" = "Увімкнути екран пристрою (якщо його вимкнено) під час наближення до повороту.";
 "voice_pref_title" = "Голос";
 "voice_provider_descr" = "Виберіть голосові вказівки для навігації";
 "choose_audio_stream" = "Вивід голосових вказівок";
@@ -694,7 +694,7 @@
 "map_widget_next_turn_small" = "Наступний поворот (невеликий)";
 "map_widget_next_next_turn" = "Другий наступний поворот";
 "auto_follow_location_enabled" = "Використовується режим автоматичного осереднення мапи.";
-"unknown_location" = "Розташування ще не визначено";
+"unknown_location" = "Розташування ще не визначено.";
 "settings_preset" = "Типовий профіль";
 "settings_preset_descr" = "Вид мапи й налаштування навігації зберігаються для кожного окремого профілю. Установіть ваш типовий профіль.";
 "animate_routing_route_not_calculated" = "Будь ласка, спершу обчисліть маршрут";
@@ -818,7 +818,7 @@
 "shared_string_milliradians" = "Мілірадіани";
 "osm_live_routing_descr" = "Використовувати оновлення OsmAnd Live для навігації";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Оновлення OsmAnd Live";
+"osmand_live_updates" = "Оновлення Osmand Live";
 "osmand_live_available_maps" = "Доступні мапи";
 "osmand_live_last_changed" = "Остання зміна мапи: %@";
 "osmand_live_last_live_update" = "Останнє оновлення: %@";
@@ -1162,11 +1162,11 @@
 "brown" = "Коричневий";
 "black" = "Чорний";
 "modify_poi_short" = "Редагувати POI";
-"create_poi_short" = "Створити POI";
+"create_poi_short" = "Додати POI";
 "modify_edit_short" = "Редагувати OSM зміну";
 "open_osm_note" = "Відкрити примітку OSM";
 "edit_osm_note" = "Редагувати нотатку OSM";
-"osm_alert_title" = "Підтвердити";
+"osm_alert_title" = "Зберегти";
 "osm_alert_message" = "Повідомлення";
 "osm_alert_button_ok" = "Створити примітку";
 "modify_poi" = "Редагувати відомості про POI";
@@ -1803,7 +1803,7 @@
 "special_routing" = "Спеціальна маршрутизація";
 "choose_auto_center_map_view_descr" = "Час, за який мапа повернеться до поточного розташування";
 "weight_limit_description" = "Укажіть вагу транспортного засобу тому, що для вантажівок можуть застосовуватися деякі маршрутні обмеження.";
-"vessel_width_limit_description" = "Укажіть ширину судна, щоб уникнути вузьких мостів.";
+"vessel_width_limit_description" = "Укажіть ширину судна, щоб уникнути вузьких мостів";
 "lenght_limit_description" = "Зазначте довжину вашого автомобіля, для довгих транспортних засобів можуть застосовуватися деякі обмеження на маршрутах.";
 "configure_map_descr" = "Вигляд мапи";
 "app_profiles" = "Профілі застосунку";
@@ -1848,7 +1848,7 @@
 "help_nav_profiles" = "Профілі навігації";
 "reset_profile_action_descr" = "Відновіть всі налаштування профілю до типових значень. Натискання \"Відновити\" призведе до скасування всіх змін, цю дію не можна скасувати.";
 "import_profile_descr" = "Щоб імпортувати профіль, натисніть на потрібний файл (*.osf) в будь-якому застосунку й виберіть \"Копіювати до OsmAnd Maps\"";
-"profile_prefs_reset_successful" = "Усі налаштування профілю відновлено до типових";
+"profile_prefs_reset_successful" = "Усі налаштування профілю відновлено до типових.";
 "gpx_parse_error" = "OsmAnd GPXнедостатньо сформований. Зверніться до служби підтримки для подальшого дослідження.";
 "nothing_found_empty" = "Нічого не знайдено";
 "shared_string_next" = "Наступний";
@@ -1947,7 +1947,7 @@
 "unsupported_action" = "Непідтримувана дія";
 "unsupported_items" = "Непідтримувані елементи";
 "quick_action_showhide_mapillary_title" = "Увімкнути/вимкнути Mapillary";
-"arrived_at_destination" = "Ви прибули";
+"arrived_at_destination" = "Ви прибули.";
 "profile_type_osmand_string" = "Профіль OsmAnd";
 "quick_action_switch_profile_descr" = "Перемикання між профілями здійснюється торканням до кнопки дій.";
 "quick_action_mapillary_show" = "Показати Mapillary";
@@ -2120,7 +2120,7 @@
 "population_num" = "Населення";
 "added_profiles_descr" = "Профілі, додані розширенням";
 "added_profiles" = "Додані профілі";
-"suggested_maps_descr" = "Ці мапи потрібно використовувати з розширенням";
+"suggested_maps_descr" = "Ці мапи потрібно використовувати з розширенням.";
 "suggested_maps" = "Пропоновані мапи";
 "product_desc_ext_openplacereviews" = "Надсилайте світлини, відгуки та посилання про громадські місця, як-от ресторани, готелі, музеї та точки шляху відкритими даними https://openplacereviews.org/data/.\n\nДізнайтеся більше на https://openplacereviews.org";
 "product_desc_openplacereviews" = "Надсилайте світлини, відгуки та посилання про громадські місця";
@@ -2175,7 +2175,7 @@
 "read_full_description" = "Читати повний опис";
 "gpx_split_interval" = "Розділений інтервал";
 "gpx_split_interval_descr" = "Виберіть інтервал, впродовж якого зображатимуться позначки відстані або часу на треку.";
-"gpx_join_gaps" = "Об'єднати проміжки";
+"gpx_join_gaps" = "Об\'єднати проміжки";
 "reset_to_original" = "Відновити початкові значення";
 "route_line_color_elevation_description" = "Лінія маршруту буде розфарбована залежно від профілю висоти маршруту.";
 "gpx_split_interval_none_descr" = "Виберіть потрібний варіант поділу: за часом або за відстанню.";
@@ -2196,5 +2196,5 @@
 "shared_string_time_moving" = "Час переміщення";
 "distance_moving" = "Відкоригована відстань";
 "parked_at" = "Припарковано на";
-"industrial" = "Промисловий";
+"industrial" = "Промисловість";
 "education" = "Освіта";

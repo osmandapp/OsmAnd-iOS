@@ -2330,50 +2330,6 @@
     return [self findWpt:location currentTrackOnly:NO];
 }
 
-- (BOOL) findTrack:(CLLocationCoordinate2D)location
-{
-    auto activeGpx = _selectedGpxHelper.activeGpx;
-    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-    {
-        NSString *gpxFilePath = [it.key().toNSString()
-                stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
-                                          withString:@""];
-        auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
-        for (auto &loc : doc->locationMarks)
-        {
-            if ([OAUtilities isCoordEqual:location.latitude
-                                   srcLon:location.longitude
-                                  destLat:loc->position.latitude
-                                  destLon:loc->position.longitude
-                               upToDigits:3])
-            {
-                self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
-                return YES;
-            }
-        }
-        for (auto &track : doc->tracks)
-        {
-            for (auto &segment : track->segments)
-            {
-                for (auto &point : segment->points)
-                {
-                    if ([OAUtilities isCoordEqual:location.latitude
-                                           srcLon:location.longitude
-                                          destLat:point->position.latitude
-                                          destLon:point->position.longitude
-                                       upToDigits:3])
-                    {
-                        self.foundGpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
-                        return YES;
-                    }
-                }
-            }
-        }
-    }
-
-    return NO;
-}
-
 - (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly
 {
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];

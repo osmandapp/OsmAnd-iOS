@@ -230,7 +230,7 @@
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
-    return 8;
+    return 12;
 }
 
 #pragma mark - UICollectionViewDelegate

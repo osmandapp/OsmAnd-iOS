@@ -656,8 +656,9 @@ static OAApplicationMode *DEFAULT_APP_MODE;
                 {
                     if (sPnts.count > 0)
                     {
+                        s.points = sPnts;
                         s = [[OAGpxTrkSeg alloc] init];
-                        [sPnts removeAllObjects];
+                        sPnts = [NSMutableArray array];
                         [segments addObject:s];
                         defaultMode = YES;
                     }

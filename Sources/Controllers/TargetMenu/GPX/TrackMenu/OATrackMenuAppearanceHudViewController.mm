@@ -355,6 +355,14 @@
                 kCellTitle: OALocalizedString(@"route_line_color_elevation_description")
             }];
         }
+        else if ([_selectedItem.coloringType isRouteInfoAttribute])
+        {
+            gridOrDescriptionCell = [OAGPXTableCellData withData:@{
+                    kCellKey: @"color_attribute_description",
+                    kCellType: [OATextLineViewCell getCellIdentifier],
+                    kCellTitle: OALocalizedString(@"white_color_undefined")
+            }];
+        }
         return gridOrDescriptionCell;
     };
     __block OAGPXTableCellData *gridOrDescriptionCell = generateGridOrDescriptionCell();
@@ -593,7 +601,7 @@
         else if ([self isSelectedTypeAltitude])
             return [OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation];
         else if ([self isSelectedTypeSlope])
-            return OALocalizedString(@"slope_grey_color_descr");
+            return OALocalizedString(@"grey_color_undefined");
         return @"";
     };
 

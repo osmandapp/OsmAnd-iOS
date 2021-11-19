@@ -35,7 +35,7 @@
 
 @end
 
-@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OALocationsHolder, OAGpxRouteApproximation;
+@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OALocationsHolder, OAGpxRouteApproximation, OAGPXDocument;
 
 struct GpxPoint;
 struct GpxRouteApproximation;
@@ -106,6 +106,8 @@ struct RouteSegmentResult;
 														   gctx:(std::shared_ptr<GpxRouteApproximation>)gctx
 														 points:(std::vector<std::shared_ptr<GpxPoint>> &)points
 												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
+
+- (OAGPXDocument *) generateGPXFileWithRoute:(NSString *)name;
 
 + (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards;
 

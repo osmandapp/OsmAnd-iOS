@@ -1086,7 +1086,7 @@
         _exportFilePath = nil;
         _exportController = nil;
 
-        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithFileName:_gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension filePath:_gpx.gpxFilePath showOnMap:YES simplifiedTrack:YES];
+        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithFileName:_gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension filePath:_gpx.gpxFilePath showOnMap:YES simplifiedTrack:YES duplicate:NO];
         saveTrackViewController.delegate = self;
         [OARootViewController.instance presentViewController:saveTrackViewController animated:YES completion:nil];
     }
@@ -1672,7 +1672,7 @@
 
 #pragma mark - OASaveTrackViewControllerDelegate
 
-- (void)onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
+- (void)onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack openTrack:(BOOL)openTrack
 {
     [self copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"] deleteOriginalFile:NO];
 }

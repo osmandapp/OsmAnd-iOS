@@ -1071,6 +1071,7 @@ typedef enum
         OASearchUICore *searchUICore = [[OAQuickSearchHelper instance] getCore];
         OASearchResult *sr;
         OASearchPhrase *phrase;
+        BOOL filterByName = NO;
 
         if ([object isKindOfClass:[OAPOICategory class]])
         {
@@ -1079,7 +1080,9 @@ typedef enum
         }
         else if ([object isKindOfClass:[OAPOIUIFilter class]])
         {
-            objectLocalizedName = ((OAPOIUIFilter *) object).name;
+            OAPOIUIFilter *filter = (OAPOIUIFilter *) object;
+            filterByName = [filter.filterId isEqualToString:BY_NAME_FILTER_ID];
+            objectLocalizedName = filterByName ? filter.filterByName : filter.name;
             phrase = [searchUICore resetPhrase];
         }
 
@@ -1094,7 +1097,8 @@ typedef enum
             [searchUICore selectSearchResult:sr];
         }
 
-        searchQuery = [NSString stringWithFormat:@"%@ ", objectLocalizedName.trim];
+        searchQuery = [NSString stringWithFormat:@"%@ ",
+                filterByName ? ((OAPOIUIFilter *) object).filterByName : objectLocalizedName.trim];
     }
 
     if (searchQuery)

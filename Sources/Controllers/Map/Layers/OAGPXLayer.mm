@@ -26,6 +26,8 @@
 #import "OAColoringType.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAGpxAdditionalIconsProvider.h"
+#import "OASelectedGPXHelper.h"
+#import "QuadRect.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -370,6 +372,157 @@
     return lineWidth * 3;
 }
 
+- (int) getDefaultRadiusPoi
+{
+    int r;
+    double zoom = self.mapView.zoom;
+    if (zoom <= 15) {
+        r = 10;
+    } else if (zoom <= 16) {
+        r = 14;
+    } else if (zoom <= 17) {
+        r = 16;
+    } else {
+        r = 18;
+    }
+    return (int) (r * self.mapView.displayDensityFactor);
+}
+
+- (void) getTracksFromPoint:(CLLocationCoordinate2D)point res:(NSMutableArray<OATargetPoint *> *)res
+{
+    double textSize = [OAAppSettings.sharedManager.textSize get];
+    textSize = textSize < 1. ? 1. : textSize;
+    int r = [self getDefaultRadiusPoi] * textSize;
+    const auto activeGpx = OASelectedGPXHelper.instance.activeGpx;
+    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
+    {
+        auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
+        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
+        NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+        OAGpxTrkSeg *generalSeg = gpx.joinSegments ? doc.getGeneralSegment : nil;
+        NSArray<OAGpxTrkPt *> *points = [self findPointsNearSegments:gpx.joinSegments ? (generalSeg ? @[generalSeg] : @[]) : [doc getNonEmptyTrkSegments:NO] radius:r point:point];
+        if (points != nil)
+        {
+            OATargetPoint *targetPoint = [self getTargetPoint:gpx];
+            targetPoint.location = point;
+            if (targetPoint && ![res containsObject:targetPoint])
+                [res addObject:targetPoint];
+        }
+    }
+}
+
+- (NSArray<OAGpxTrkPt *> *) findPointsNearSegments:(NSArray<OAGpxTrkSeg *> *)segments radius:(int)radius point:(CLLocationCoordinate2D)point
+{
+    const auto screenBbox = self.mapView.getVisibleBBox31;
+    const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
+    const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
+    QuadRect *screenRect = [[QuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
+    for (OAGpxTrkSeg *segment in segments)
+    {
+        QuadRect *trackBounds = [self.class calculateBounds:segment.points];
+        if ([QuadRect intersects:screenRect b:trackBounds])
+        {
+            NSArray<OAGpxTrkPt *> *points = [self.class findPointsNearSegment:segment.points radius:radius point:point];
+            if (points != nil)
+                return points;
+        }
+    }
+    return nil;
+}
+
++ (QuadRect *) calculateBounds:(NSArray<OAGpxTrkPt *> *)pts
+{
+    return [self updateBounds:pts startIndex:0];;
+}
+
++ (QuadRect *) updateBounds:(NSArray<OAGpxTrkPt *> *)pts startIndex:(int)startIndex
+{
+    double left = DBL_MAX, top = DBL_MIN, right = DBL_MIN, bottom = DBL_MAX;
+    for (NSInteger i = startIndex; i < pts.count; i++)
+    {
+        OAGpxTrkPt *pt = pts[i];
+        right = MAX(right, pt.position.longitude);
+        left = MIN(left, pt.position.longitude);
+        top = MAX(top, pt.position.latitude);
+        bottom = MIN(bottom, pt.position.latitude);
+    }
+    return [[QuadRect alloc] initWithLeft:left top:top right:right bottom:bottom];
+}
+
++ (int) placeInBbox:(int)x y:(int)y mx:(int)mx my:(int)my halfw:(int)halfw halfh:(int)halfh
+{
+    int cross = 0;
+    cross |= (x < mx - halfw ? 1 : 0);
+    cross |= (x > mx + halfw ? 2 : 0);
+    cross |= (y < my - halfh ? 4 : 0);
+    cross |= (y > my + halfh ? 8 : 0);
+    return cross;
+}
+
++ (NSArray<OAGpxTrkPt *> *) findPointsNearSegment:(NSArray<OAGpxTrkPt *> *)points radius:(int)r point:(CLLocationCoordinate2D)coordinatePoint
+{
+    if (points.count == 0)
+        return nil;
+    
+    CGPoint point;
+    auto coordI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(coordinatePoint.latitude, coordinatePoint.longitude));
+    if (![OARootViewController.instance.mapPanel.mapViewController.mapView convert:&coordI toScreen:&point checkOffScreen:YES])
+        return nil;
+    
+    OAGpxTrkPt *prevPoint = points.firstObject;
+    auto prevPointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(prevPoint.position.latitude, prevPoint.position.longitude));
+    CGPoint prevPxPoint;
+    [OARootViewController.instance.mapPanel.mapViewController.mapView convert:&prevPointI toScreen:&prevPxPoint checkOffScreen:YES];
+    int pcross = [self placeInBbox:prevPxPoint.x y:prevPxPoint.y mx:point.x my:point.y halfw:r halfh:r];
+    for (NSInteger i = 1; i < points.count; i++)
+    {
+        OAGpxTrkPt *pnt = points[i];
+        auto ptI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pnt.position.latitude, pnt.position.longitude));
+        CGPoint ptPx;
+        if (![OARootViewController.instance.mapPanel.mapViewController.mapView convert:&ptI toScreen:&ptPx checkOffScreen:YES])
+            continue;
+        int cross = [self placeInBbox:ptPx.x y:ptPx.y mx:point.x my:point.y halfw:r halfh:r];
+        if (cross == 0)
+            return @[prevPoint, pnt];
+
+        if ((pcross & cross) == 0)
+        {
+            int mpx = ptPx.x;
+            int mpy = ptPx.y;
+            int mcross = cross;
+            while (fabs(mpx - prevPxPoint.x) > r || fabs(mpy - prevPxPoint.y) > r)
+            {
+                int mpxnew = mpx / 2 + prevPxPoint.x / 2;
+                int mpynew = mpy / 2 + prevPxPoint.y / 2;
+                int mcrossnew = [self placeInBbox:mpxnew y:mpynew mx:point.x my:point.y halfw:r halfh:r];
+                if (mcrossnew == 0) {
+                    return @[prevPoint, pnt];
+                }
+                if ((mcrossnew & mcross) != 0)
+                {
+                    mpx = mpxnew;
+                    mpy = mpynew;
+                    mcross = mcrossnew;
+                } else if ((mcrossnew & pcross) != 0)
+                {
+                    prevPxPoint = CGPointMake(mpxnew, mpynew);
+                    pcross = mcrossnew;
+                }
+                else
+                {
+                    // this should never happen theoretically
+                    break;
+                }
+            }
+        }
+        pcross = cross;
+        prevPxPoint = ptPx;
+        prevPoint = pnt;
+    }
+    return nil;
+}
+
 #pragma mark - OAContextMenuProvider
 
 - (OATargetPoint *) getTargetPoint:(id)obj
@@ -415,14 +568,7 @@
     OAMapViewController *mapViewController = self.mapViewController;
     if (!symbolInfo)
     {
-        if ([mapViewController findTrack:point])
-        {
-            OAGPX *item = mapViewController.foundGpx;
-            OATargetPoint *targetPoint = [self getTargetPoint:item];
-            targetPoint.location = point;
-            if (targetPoint && ![found containsObject:targetPoint])
-                [found addObject:targetPoint];
-        }
+        [self getTracksFromPoint:point res:found];
     }
     else if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
     {

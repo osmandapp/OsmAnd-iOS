@@ -10,7 +10,10 @@
 
 @protocol OASaveTrackViewControllerDelegate <NSObject>
 
-- (void) onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack;
+- (void) onSaveAsNewTrack:(NSString *)fileName
+                showOnMap:(BOOL)showOnMap
+          simplifiedTrack:(BOOL)simplifiedTrack
+                openTrack:(BOOL)openTrack;
 
 @end
 
@@ -24,6 +27,10 @@
 
 @property (weak, nonatomic) id<OASaveTrackViewControllerDelegate> delegate;
 
-- (instancetype) initWithFileName:(NSString *)fileName filePath:(NSString *)filePath showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack;
+- (instancetype) initWithFileName:(NSString *)fileName
+                         filePath:(NSString *)filePath
+                        showOnMap:(BOOL)showOnMap
+                  simplifiedTrack:(BOOL)simplifiedTrack
+                        duplicate:(BOOL)duplicate;
 
 @end

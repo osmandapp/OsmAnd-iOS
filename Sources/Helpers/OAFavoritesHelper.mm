@@ -68,6 +68,26 @@ static BOOL _favoritesLoaded = NO;
         
         if (group.points.count == 1)
             group.color = [favorite getColor];
+        
+        // Setup parking
+        if (favorite.specialPointType == OASpecialPointType.PARKING)
+        {
+            OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+            if (plugin)
+            {
+                NSDate *timestamp = [favorite getTimestamp];
+                NSDate *creationTime = [favorite getCreationTime];
+                BOOL isTimeRestricted = timestamp != nil && [timestamp timeIntervalSince1970] > 0;
+                [plugin setParkingType:isTimeRestricted];
+                [plugin setParkingTime:isTimeRestricted ? timestamp.timeIntervalSince1970 * 1000 : 0];
+                if (creationTime)
+                    [plugin setParkingStartTime:creationTime.timeIntervalSince1970 * 1000];
+                [plugin setParkingPosition:favorite.getLatitude longitude:favorite.getLongitude];
+                [plugin addOrRemoveParkingEvent:favorite.getCalendarEvent];
+                if (favorite.getCalendarEvent)
+                    [OAFavoritesHelper addParkingReminderToCalendar];
+            }
+        }
     }
     
     [OAFavoritesHelper sortAll];

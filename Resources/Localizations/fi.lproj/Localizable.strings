@@ -559,7 +559,7 @@
 
 // My Places
 "favorites" = "Suosikit";
-"tracks" = "Reittini";
+"tracks" = "Jäljet";
 "personal_category_name" = "Henkilökohtainen";
 "visible" = "Näkyvissä";
 
@@ -1028,7 +1028,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osm_note" = "OSM-huomautus";
 "osm_created" = "Created";
-"osm_deleted" = "Poistettu";
+"osm_deleted" = "KP poistettiin onnistuneesti";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1295,7 +1295,7 @@
 "units_nm" = "mpk";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "h";
+"units_hour" = "t";
 "units_min" = "min";
 "units_sec" = "sek";
 "units_sec_short" = "s";
@@ -1319,7 +1319,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Karttaselite";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Muu";
+"help_other_header" = "Muuta";
 "help_what_is_new" = "Mitä uutta";
 "help_install_and_troubleshoot" = "Asennus ja ongelmien ratkaisu";
 "help_tech_articles" = "Tekniset artikkelit";
@@ -1479,7 +1479,7 @@
 "product_title_wikivoyage" = "Matkaoppaat";
 "product_desc_wikivoyage" = "Ilmainen maailmanlaajuinen matkaopas, jota kuka tahansa voi muokata.";
 "product_desc_ext_wikivoyage" = "Oppaita planeetan mielenkiintoisimpiin paikkoihin OsmAndin sisällä, ilman Internet-yhteyttä.";
-"product_title_sea_depth_contours" = "Merelliset korkeuskäyrät";
+"product_title_sea_depth_contours" = "Merelliset syvyyskäyrät";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 "my_location" = "Sijaintini";
 "all_categories" = "Kaikki kategoriat";
@@ -1562,7 +1562,7 @@
 "pedestrian" = "Jalankulkija";
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
-"plugins" = "Liitännäiset";
+"plugins" = "Lisäosat";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -2190,3 +2190,6 @@
 "distance_moving" = "Etäisyys korjattu";
 "shared_string_time_moving" = "Aika liikkuu";
 "regions" = "Alueet";
+"m" = "m";
+"tones" = "tonnia";
+"units_min_short" = "m";

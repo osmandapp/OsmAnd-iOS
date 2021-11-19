@@ -407,7 +407,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "بارگیری";
-"nothanks" = "خیر، سپاسگزارم";
+"nothanks" = "نه، متشکرم";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -867,7 +867,7 @@
 "lightblue" = "آبی روشن";
 "quick_action_name_footer" = "خالی بگذارید تا از نشانی یا نام محل استفاده شود.";
 "brown" = "قهوه‌ای";
-"osm_alert_title" = "ارسال";
+"osm_alert_title" = "اجرا";
 "osm_poi_delete_title" = "حذف POI";
 "translucent_lightgreen" = "سبز روشن شفاف";
 "translucent_yellow" = "زرد شفاف";
@@ -931,7 +931,7 @@
 "add_first_inermediate" = "افزودن اولین میانی";
 "gpx_descent" = "نزول";
 "quick_action_start_stop_nav_descr" = "این دکمه را لمس کنید تا ناوبری را شروع کنید یا پایان دهید.";
-"osm_edits_advanced" = "دشوار";
+"osm_edits_advanced" = "پیشرفته";
 "add_action" = "افزودن کنش";
 "osmand_live_weekly" = "هفتگی";
 "osm_live_cancel_subscription" = "لغو اشتراک";
@@ -1489,7 +1489,7 @@
 "walk" = "پیاده";
 "configure_map_descr" = "ظاهر نقشه";
 "res_pseudo_mercator" = "فراتابی شبه مرکاتور";
-"save_changes" = "ذخیرهٔ تغییرات";
+"save_changes" = "ذخیره‌کردن تغییرات";
 "import_complete_description" = "همهٔ داده از %@ درون‌برد شد. با استفاده از دکمه‌های زیر می‌توانید بخش موردنیاز برنامه را برای مدیریت آن باز کنید.";
 "map_settings_legend" = "کلید";
 "quick_action_switch_profile_descr" = "با لمس دکمهٔ عملیاتی بین نمایه‌های انتخاب‌شده جابه‌جا شوید.";
@@ -1627,7 +1627,7 @@
 // Help
 "help_first_steps" = "اولین مراحل";
 "track_during_nav" = "ضبط خودکار رد";
-"default" = "پیش‌فرض";
+"default" = "پیشفرض";
 "gpxup_private" = "خصوصی";
 "gpxup_trackable" = "قابل ردیابی";
 "gpxup_public" = "عمومی";
@@ -1733,5 +1733,3 @@
 "edit_track" = "ویرایش رد";
 "distance_moving" = "مسافت اصلاح‌شده";
 "regions" = "مناطق";
-"units_min_short" = "m";
-"m" = "m";

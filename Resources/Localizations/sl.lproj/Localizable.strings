@@ -47,8 +47,8 @@
 "poi_search_near_center" = "Iskanje se izvaja v bližini trenutne sredine zemljevida";
 "poi_hide" = "Skrij";
 // My Places
-"favorites" = "Priljubljene";
-"tracks" = "Shranjene sledi";
+"favorites" = "Shranjeni kraji";
+"tracks" = "Sledi";
 // GPX
 "gpx_point" = "Točka";
 "gpx_waypoints" = "Vmesne točke";
@@ -80,7 +80,7 @@
 // Map settings
 "rendering_value_browse_map_name" = "Poišči na zemljevidu";
 "m_style_car" = "Navigacija v avtomobilu";
-"m_style_walk" = "Hoja";
+"m_style_walk" = "Navigacija za pohodnike";
 "m_style_bicycle" = "Kolesarjenje";
 "map_settings_map" = "Zemljevid";
 "map_settings_show" = "Pokaži na zemljevidu";
@@ -96,7 +96,7 @@
 // Intro
 "intro_skip" = "Preskoči";
 "intro_download" = "Prejem\nzemljevida";
-"intro_next" = "Naslenja";
+"intro_next" = "Naslednji";
 "intro_welcome" = "Dobrodošli v\nOsmAnd";
 // Settings
 "sett_settings" = "Nastavitve";
@@ -266,7 +266,7 @@
 "map_remind" = "Opomni kasneje";
 // Import
 "import_title" = "Uvozi podatke";
-"import_favorite" = "Priljubljena točka";
+"import_favorite" = "Priljubljene";
 "import_failed" = "Uvoz je spodletel";
 "import_gpx" = "Sled GPX";
 // Context menu
@@ -633,7 +633,7 @@
 "transport_nearby_routes_within" = "Bližnje poti v";
 "transport_nearby_routes" = "Blizu";
 "route_stops_before" = "%1$s se zaustavi pred";
-"transport_routes" = "Poti";
+"transport_routes" = "Dodatne poti";
 "logging_interval_navigation" = "Interval beleženja med navigacijo";
 "logging_min_distance" = "Najmanjša razdalja za beleženje";
 "logging_min_distance_descr" = "Filter: najmanjša razdalja za beleženje nove točke";
@@ -652,7 +652,7 @@
 "help_search" = "Iskanje po zemljevidu";
 "help_trip_planning" = "Načrtovanje potovanj";
 "help_legend" = "Legenda oznak na zemljevidu";
-"help_other_header" = "Drugo";
+"help_other_header" = "Ostalo";
 "help_install_and_troubleshoot" = "Namestitev in odpravljanje napak";
 "help_tech_articles" = "Tehnični prispevki o možnostih programa";
 "help_versions" = "Različice";
@@ -680,7 +680,7 @@
 "plugins" = "Upravljalnik vstavkov";
 "plugin_popup_nautical_title" = "Prejmi navtične zemljevide";
 "go_to_downloads" = "Skoči v mapo prejemov";
-"transport_stop" = "Končaj";
+"transport_stop" = "Postaja";
 "auto_split_gap" = "Samodejno razdeli beleženje po vmesnih točkah";
 "map_widget_ruler_control" = "Krožno ravnilo";
 "speak_tunnels" = "Tuneli";
@@ -897,7 +897,7 @@
 "edit_action" = "Uredi dejanje";
 "day_mode" = "Dnevni način";
 "brown" = "Rjava";
-"product_title_sea_depth_contours" = "Navtične globinske izohipse";
+"product_title_sea_depth_contours" = "Navtični relief globine";
 "create_items" = "Ustvari predmete";
 "gpx_avg_altitude" = "Povprečna nadmorska višina";
 "night_mode" = "Nočni način";
@@ -1325,7 +1325,7 @@
 "public_transport_menu" = "Javni prevozi";
 "shared_string_quick_actions" = "Hitra dejanja";
 "num_stops" = "postaje";
-"update_map" = "Posodobi zemljevid";
+"update_map" = "Osveži zemljevid";
 "copy_from_other_profile" = "Kopiraj iz drugega profila";
 "position_icon_at_rest" = "Izbor ikone zemljevida";
 "shared_string_preparing" = "Poteka priprava ...";
@@ -1442,5 +1442,3 @@
 "education" = "Izobraževalna ustanova";
 "shared_string_time_moving" = "Čas premikanja";
 "nautical" = "Navtični prikaz";
-"m" = "m";
-"units_min_short" = "m";

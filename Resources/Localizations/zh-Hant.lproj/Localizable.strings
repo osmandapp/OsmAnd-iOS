@@ -109,7 +109,7 @@
 "map_settings_show" = "在地圖上顯示";
 "map_settings_type" = "地圖類型";
 "map_mode" = "地圖模式";
-"map_settings_day" = "天";
+"map_settings_day" = "日間";
 "map_settings_night" = "夜間";
 "map_settings_style" = "地圖樣式";
 "map_settings_overunder" = "上層 / 下層";
@@ -123,7 +123,7 @@
 // Intro
 "intro_skip" = "跳過";
 "intro_download" = "下載\n地圖";
-"intro_next" = "下一頁";
+"intro_next" = "下頁";
 "intro_welcome" = "歡迎使用\nOsmAnd";
 "intro_promo" = "全球離線地圖";
 "intro_placeholder" = "請輸入您所在地區的名稱";
@@ -153,7 +153,7 @@
 "prch_nau_q3" = "您稍後可以通過地圖和資源安裝。";
 "proceed_q" = "是否繼續？";
 "download" = "下載";
-"nothanks" = "不需要，謝謝";
+"nothanks" = "不，謝了";
 "download_now" = "現在下載地圖";
 "prch_failed" = "購買\"%@\"失敗";
 "prch_items_failed" = "項目未還原。請再試一次。";
@@ -482,7 +482,7 @@
 "postcode" = "郵遞區號";
 "show_something_on_map" = "在地圖上顯示 %@";
 "search_POI_level_btn" = "增加搜尋半徑";
-"shared_string_street" = "街道";
+"shared_string_street" = "道路";
 "shared_string_building" = "建築物";
 "shared_string_street_intersection" = "街道路口";
 "shared_string_address" = "地址";
@@ -762,7 +762,7 @@
 "switch_start_finish" = "起始點與目的地對調";
 "clear_all_intermediates" = "清除所有中轉地點";
 "cancel_navigation" = "停止導航";
-"transport_routes" = "路線";
+"transport_routes" = "導航路線";
 "transport_nearby_routes_within" = "在附近的路線";
 "transport_stop" = "停靠點";
 "transport_nearby_routes" = "範圍內";
@@ -802,7 +802,7 @@
 "help_search" = "地圖搜尋";
 "help_trip_planning" = "規劃一次旅程";
 "help_legend" = "地圖圖例";
-"help_other_header" = "其他";
+"help_other_header" = "其它";
 "help_install_and_troubleshoot" = "安裝和疑難排除";
 "help_tech_articles" = "技術文章";
 "help_versions" = "版本";
@@ -958,7 +958,7 @@
 "osm_note_reopen" = "重新開啟";
 "osm_notes_online_layer" = "OSM 註解(連線)";
 "osm_edits_basic" = "基本";
-"osm_edits_advanced" = "展開";
+"osm_edits_advanced" = "進階";
 "osm_edits_notes" = "註解";
 "modify_poi_short" = "修改 POI";
 "create_poi_short" = "建立 POI";
@@ -1483,7 +1483,7 @@
 "quick_action_remove_next_destination" = "刪除最近的目的地點";
 "public_transport_hide" = "隱藏大眾運輸";
 "add_point" = "新增標點";
-"save_changes" = "儲存更改";
+"save_changes" = "儲存變更";
 "shared_string_account" = "帳號";
 "public_transport_menu" = "交通工具";
 "announce" = "公告";
@@ -1550,7 +1550,7 @@
 "listed_exist" = "列出的 %@ 已存在於 OsmAnd 中。";
 "shared_string_meters" = "公尺";
 "shared_string_add_profile" = "新增設定檔";
-"m_style_pulic_transport" = "公共交通";
+"m_style_pulic_transport" = "大眾運輸";
 "one" = "一";
 "consider_limitations_param" = "考慮暫時限制";
 "create_profile_descr" = "讓您自訂的設定檔以其中一個預設應用程式設定檔為基礎，這定義了如小工具、速度單位與距離的顯示方式。這些是預設的應用程式設定檔，連同其可以擴展成的自訂設定檔範例：";
@@ -1576,7 +1576,7 @@
 "fav_points_not_exist" = "沒有我的收藏標點存在";
 "shared_string_enable" = "啟用";
 "open_saved_track" = "開啟已儲存的軌跡";
-"emergency" = "緊急救助";
+"emergency" = "警急";
 "default_color" = "預設顏色";
 "coordinates_widget" = "座標小工具";
 "shared_string_resources" = "資源";

@@ -55,7 +55,7 @@
 "map_settings_map" = "Kort";
 "map_settings_show" = "Vis på kort";
 "map_settings_day" = "Dag";
-"map_settings_night" = "Aften";
+"map_settings_night" = "Nat";
 "map_settings_style" = "Kortstilart";
 "map_settings_overunder" = "Over-/underlejring";
 "map_settings_under" = "Underlejret";
@@ -225,7 +225,7 @@
 "gpx_uphldownhl" = "Op-/nedstigning";
 "track_recording" = "Optagelse af spor";
 "track_continue_rec_q" = "Fortsæt optagelsen?";
-"m_style_walk" = "Gå";
+"m_style_walk" = "Fodgænger";
 "map_settings_type" = "Korttype";
 "map_mode" = "Korttilstand";
 "map_settings_over" = "Overlejret";
@@ -765,7 +765,7 @@
 "cancel_navigation" = "Stop navigation";
 "transport_routes" = "Ruter";
 "transport_nearby_routes_within" = "Nærliggende ruter indenfor";
-"transport_stop" = "Stoppested";
+"transport_stop" = "Stop";
 "transport_nearby_routes" = "Indenfor";
 "route_stops_before" = "%d stop før";
 "shared_string_previous" = "Forrige";
@@ -782,7 +782,7 @@
 "logging_min_speed_descr" = "Filter: Ingen logning under denne hastighed";
 "help_trip_planning" = "Turplanlægning";
 "help_legend" = "Signaturforklaring";
-"help_other_header" = "Andre";
+"help_other_header" = "Andet";
 "help_install_and_troubleshoot" = "Installation og fejlfinding";
 "help_tech_articles" = "Tekniske artikler";
 "help_versions" = "Versioner";
@@ -2189,5 +2189,3 @@
 "parked_at" = "Parkeret ved";
 "industrial" = "Industriel";
 "education" = "Uddannelse";
-"units_min_short" = "m";
-"m" = "m";

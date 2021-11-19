@@ -54,7 +54,7 @@
 "fav_replace_all" = "Замінити все";
 // POI
 "poi_insrease_radius" = "Збільшити радіус пошуку до";
-"poi_hide" = "Приховати";
+"poi_hide" = "Сховати";
 // GPX
 "gpx_point" = "Точка";
 "shared_string_export" = "Експорт";
@@ -82,7 +82,7 @@
 // Map settings
 "rendering_value_browse_map_name" = "Огляд мапи";
 "m_style_car" = "Водіння";
-"m_style_walk" = "Ходьба";
+"m_style_walk" = "Ходіння";
 "m_style_bicycle" = "Їзда на велосипеді";
 "map_settings_map" = "Мапа";
 "map_settings_show" = "Показати";
@@ -295,7 +295,7 @@
 // Import
 "import_title" = "Імпортувати дані";
 "import_choose_type" = "Виберіть що імпортувати";
-"import_favorite" = "Закладка";
+"import_favorite" = "Закладки";
 "import_failed" = "Імпорт завершився невдачею";
 "import_cannot" = "Зазначений файл неможливо імпортувати";
 "import_gpx" = "GPX трек";
@@ -752,7 +752,7 @@
 "transport_routes" = "Маршрути";
 "transport_nearby_routes_within" = "Близькі маршрути в межах";
 "transport_nearby_routes" = "В межах";
-"transport_stop" = "Зупинка";
+"transport_stop" = "Зупинити";
 "add_as_first_destination_point" = "Додати першою проміжною точкою";
 "first_intermediate_dest_description" = "Додає першу зупинку на маршруті";
 "add_as_last_destination_point" = "Додати останньою проміжною точкою";
@@ -904,7 +904,7 @@
 "osm_notes_online_layer" = "OSM Примітки (мережні)";
 "my_places" = "Мої місця";
 "osm_edits_basic" = "Основні";
-"osm_edits_advanced" = "Розширені";
+"osm_edits_advanced" = "Розширений";
 "osm_edits_all" = "Всі правки";
 "osm_edits_poi" = "Правки POI";
 "osm_edits_notes" = "Примітки";
@@ -1166,7 +1166,7 @@
 "modify_edit_short" = "Редагувати OSM зміну";
 "open_osm_note" = "Відкрити примітку OSM";
 "edit_osm_note" = "Редагувати нотатку OSM";
-"osm_alert_title" = "Підтвердити";
+"osm_alert_title" = "Зберегти";
 "osm_alert_message" = "Повідомлення";
 "osm_alert_button_ok" = "Створити примітку";
 "modify_poi" = "Редагувати відомості про POI";

@@ -808,7 +808,7 @@
 "help_search" = "Búsqueda en el mapa";
 "help_trip_planning" = "Planificación de viaje";
 "help_legend" = "Leyenda del mapa";
-"help_other_header" = "Otros";
+"help_other_header" = "Otro";
 "help_install_and_troubleshoot" = "Instalación y solución de problemas";
 "help_tech_articles" = "Artículos técnicos";
 "help_versions" = "Versiones";
@@ -1964,7 +1964,7 @@
 "trim_after" = "Recortar después de este punto";
 "tracks_on_map" = "Trazas en el mapa";
 "track_is_saved" = "¡Se ha guardado \n«%s»!";
-"track" = "Traza";
+"track" = "Camino rural";
 "touting_specified_vehicle_parameters_descr" = "Los parámetros definidos del vehículo pueden afectar la navegación.";
 "toggle_public_transport" = "Mostrar u ocultar transporte público";
 "toggle_hillshade" = "Mostrar/Ocultar terreno";
@@ -2004,7 +2004,7 @@
 "shared_string_others" = "Otros";
 "copied_to_clipboard" = "Copiado al portapapeles";
 "circle" = "Círculo";
-"service" = "Vía de servicio";
+"service" = "Servicio";
 "symbols" = "Símbolos";
 "plan_route_change_folder" = "Cambiar carpeta";
 "special" = "Especial";
@@ -2113,5 +2113,3 @@
 "shared_string_custom" = "Personalizado";
 "contour_lines_hillshades_slope" = "Curvas de nivel, sombreados, pendientes";
 "track_show_start_finish_icons" = "Mostrar los iconos de inicio y fin";
-"units_min_short" = "m";
-"m" = "m";

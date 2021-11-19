@@ -75,9 +75,9 @@
 "gpx_uphills_total" = "Всего подъем";
 // Map settings
 "rendering_value_browse_map_name" = "Обзор карты";
-"m_style_car" = "Автомобиль";
+"m_style_car" = "Вождение";
 "m_style_walk" = "Пешеход";
-"m_style_bicycle" = "Велосипед";
+"m_style_bicycle" = "Езда на велосипеде";
 "map_settings_map" = "Карта";
 "map_settings_fav" = "Избранное";
 "map_settings_tracks" = "Треки";
@@ -100,7 +100,7 @@
 // Intro
 "intro_skip" = "Пропустить";
 "intro_download" = "Загрузить\nкарту";
-"intro_next" = "Следующий";
+"intro_next" = "Далее";
 "intro_welcome" = "Добро пожаловать\nOsmAnd";
 "intro_promo" = "Мировые офлайн карты";
 "intro_placeholder" = "введите название региона";
@@ -179,7 +179,7 @@
 // Import
 "import_title" = "Импортировать данные";
 "import_choose_type" = "Выберите что импортировать";
-"import_favorite" = "Избранное";
+"import_favorite" = "Сохранено";
 "import_failed" = "Импорт не удался";
 "import_gpx" = "GPX трек";
 // Context menu
@@ -2158,7 +2158,7 @@
 "edit_track" = "Редактировать трек";
 "gpx_join_gaps" = "Соединить разрывы (исключить пробелы)";
 "shared_string_width" = "Ширина";
-"nautical" = "Морские";
+"nautical" = "Морской";
 "gpx_split_interval_descr" = "Интервал между метками расстояния или времени на треке.";
 "attribute" = "Атрибут";
 "shared_string_time_moving" = "Время движения";

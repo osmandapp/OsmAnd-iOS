@@ -100,14 +100,14 @@
 // Map settings
 "rendering_value_browse_map_name" = "Explorar mapa";
 "m_style_car" = "Condução";
-"m_style_walk" = "A pé";
+"m_style_walk" = "Caminhando";
 "m_style_bicycle" = "Ciclismo";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Exibir no mapa";
 "map_settings_type" = "Tipo de mapa";
 "map_mode" = "Modo do mapa";
 "map_settings_day" = "Dia";
-"map_settings_night" = "Noite";
+"map_settings_night" = "À noite";
 "map_settings_style" = "Estilo do mapa";
 "map_settings_overunder" = "Camada superior / inferior";
 "map_settings_over" = "Camada superior";
@@ -1690,7 +1690,7 @@
 "maximum_speed" = "Velocidade máxima";
 "configure_map_descr" = "Aparência do mapa";
 "public_transport_show" = "Mostrar transporte público";
-"app_profiles" = "Perfis do aplicativo";
+"app_profiles" = "Perfis de aplicação";
 "quick_action_remove_next_destination" = "Apagar o ponto de destino mais próximo";
 "shared_string_terrain" = "Terreno";
 "announce" = "Anunciar";
@@ -1701,7 +1701,7 @@
 "nav_type_title" = "Tipo de navegação";
 "nav_type_straight_line" = "Em linha reta";
 "app_theme_light" = "Claro";
-"nothing_found_empty" = "Nada encontrado";
+"nothing_found_empty" = "Nada foi encontrado";
 "res_online_source_cache_alert" = "A aplicação dessas alterações limpará os dados em cache dessa origem de bloco";
 "importing_from" = "Importando dados de %@";
 "reverse_route" = "Rota reversa";
@@ -1767,7 +1767,7 @@
 "symbols" = "Símbolos";
 "sport" = "Esporte";
 "special" = "Especial";
-"service" = "Serviço";
+"service" = "Via de serviço";
 "emergency" = "Emergência";
 "vessel_height_limit_description" = "Defina a altura da embarcação para evitar pontes baixas. Tenha em conta que se a ponte for móvel, o cálculo utiliza a altura da ponte no estado aberto.";
 "lenght_limit_description" = "Forneça o comprimento do seu veículo, podem ser aplicadas algumas restrições de rota a veículos longos.";
@@ -2188,5 +2188,3 @@
 "parked_at" = "Estacionado em";
 "education" = "Educação";
 "industrial" = "Industrial";
-"units_min_short" = "m";
-"m" = "m";

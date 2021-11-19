@@ -1,7 +1,7 @@
 "OsmAnd Maps" = "Mapas do OsmAnd";
 "shared_string_previous" = "Anterior";
 "route_stops_before" = "Paraxes anteriores: %d";
-"transport_routes" = "Liñas";
+"transport_routes" = "Rotas";
 "transport_nearby_routes_within" = "Liñas próximas a menos dos";
 "transport_nearby_routes" = "Preto dos";
 "transport_stop" = "Deter";
@@ -310,7 +310,7 @@
 "shared_string_and" = "e";
 "shared_string_edit" = "Editar";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Despois";
+"shared_string_later" = "Noutro intre";
 "shared_string_of" = "of";
 "shared_string_all" = "Todo";
 "shared_string_from" = "dende";
@@ -407,8 +407,8 @@
 "gpx_speed" = "Velocidade";
 // Map settings
 "rendering_value_browse_map_name" = "Ollar mapa";
-"m_style_car" = "Conducindo";
-"m_style_walk" = "Camiñando";
+"m_style_car" = "Automóbil";
+"m_style_walk" = "Peón";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Amosar no mapa";
@@ -1025,7 +1025,7 @@
 "shared_string_clear_all" = "Limpar todo";
 "translucent_orange" = "Laranxa translúcido";
 "modify_edit_short" = "Modificar modificación do OSM";
-"home_pt" = "Inicio";
+"home_pt" = "Casa";
 "show_notes" = "Amosar notas do OSM";
 "hide_notes" = "Agochar notas do OSM";
 "res_elliptic_mercator" = "Mercator elíptico";
@@ -1370,7 +1370,7 @@
 "profile_type_custom_string" = "Perfil personalizado";
 "nothing_found_empty" = "Non se atopou nada";
 "position_icon_at_rest" = "Icona de posición en asueto";
-"app_profiles" = "Perfís de aplicación";
+"app_profiles" = "Perfís da aplicación";
 "reverse_route" = "Ruta inversa";
 "plugin_settings_reset" = "Restabelecer a configuración do plugin ós valores por defecto";
 "app_theme_light" = "Claro";
@@ -1563,12 +1563,12 @@
 "square" = "Cadrado";
 "simplified_track_description" = "Só gravarase a liña da ruta, os puntos intermedios serán eliminados.";
 "show_compass_ruler" = "Amosar a regra de compás";
-"sport" = "Sport";
+"sport" = "Deporte";
 "shared_string_enable" = "Activar";
 "displayed_trips" = "Pistas amosadas";
 "res_standard" = "Mapa normal";
 "shared_string_resources" = "Recursos";
-"service" = "Vía de servizo";
+"service" = "Servizo";
 "shared_string_import" = "Importar";
 "join_segments" = "Unir segmentos";
 "special" = "Especial";
@@ -1581,7 +1581,7 @@
 "split_before" = "Dividir antes";
 "select_group" = "Escoller grupo";
 "gpxup_trackable" = "Seguíbel";
-"default" = "Predefinido";
+"default" = "Predeterminado";
 "context_menu_item_edit_waypoint" = "Editar punto de pasaxe GPX";
 "navigate_point_zone" = "Zona";
 "dialogs_and_notifications" = "Diálogos e notificacións";
@@ -1639,5 +1639,3 @@
 "track_show_start_finish_icons" = "Amosar iconas de comezo e final";
 "shared_string_start_time" = "Hora do comezo";
 "shared_string_overview" = "Vista xeral";
-"m" = "m";
-"units_min_short" = "m";

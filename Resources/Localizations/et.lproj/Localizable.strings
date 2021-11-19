@@ -38,7 +38,7 @@
 "transport_routes" = "Teekonnad";
 "transport_nearby_routes_within" = "Lähedalolevad teekonnad";
 "transport_nearby_routes" = "Ulatus";
-"transport_stop" = "Peatus";
+"transport_stop" = "Stop";
 "cancel_navigation" = "Lõpeta navigeerimine";
 "start_navigation" = "Alusta navigeerimist";
 "intermediate_items_sort_by_distance" = "Sorteeri ukselt-uksele";
@@ -427,7 +427,7 @@
 "poi_hide" = "Peida";
 // My Places
 "favorites" = "Lemmikud";
-"tracks" = "Rajad";
+"tracks" = "Rajafailid";
 // GPX
 "gpx_point" = "Punkt";
 "gpx_waypoint" = "Teekonnapunkt";
@@ -451,7 +451,7 @@
 "gpx_route_time" = "Teekonna time";
 "gpx_uphldownhl" = "Ülesmäge/allamäge";
 "gpx_average_speed" = "Keskmine kiirus";
-"gpx_start" = "Start";
+"gpx_start" = "Alusta";
 "gpx_finish" = "Lõpp-punkt";
 "gpx_avg_elev" = "Keskmine kõrgus";
 "gpx_elev_range" = "Kõrguse vahemik";
@@ -489,9 +489,9 @@
 "stats_select_graph_data" = "Vali graafiku andmed";
 // Map settings
 "rendering_value_browse_map_name" = "Sirvi kaarti";
-"m_style_car" = "Sõites";
+"m_style_car" = "Autosõit";
 "m_style_walk" = "Kõndimine";
-"m_style_bicycle" = "Rattasõit";
+"m_style_bicycle" = "Jalgrattasõit";
 "map_settings_map" = "Kaart";
 "map_settings_show" = "Näita kaardil";
 "map_settings_type" = "Kaardi liik";
@@ -527,7 +527,7 @@
 "sett_km" = "Kilomeetrid";
 "sett_ml" = "Miilid";
 "sett_zoom" = "Suurendamise nupp";
-"sett_show" = "Kuva";
+"sett_show" = "Näita";
 "sett_notshow" = "Ära kuva";
 "sett_deg180" = "180 kraadi";
 "sett_deg360" = "360 kraadi";
@@ -704,7 +704,7 @@
 "osm_edits_offline_layer" = "OSM muudatused/märkmed (võrguühenduseta)";
 "osm_notes_online_layer" = "OSM märkmed (veebis)";
 "osm_edits_basic" = "Põhiline";
-"osm_edits_advanced" = "Edasijõudnud";
+"osm_edits_advanced" = "Täpsem";
 "osm_edits_all" = "Kõik muudatused";
 "osm_edits_poi" = "HP muudatused";
 "osm_edits_notes" = "Märkmed";
@@ -744,7 +744,7 @@
 "mapil_pano_only" = "Kuva ainult 360° pildid";
 "mapil_select_user" = "Vali kasutaja";
 // Quick action
-"quick_action_name" = "Kiirtoiming";
+"quick_action_name" = "Kiirtegevus";
 "quick_action_no_overlay" = "Ülekate puudub";
 "quick_action_add_overlay" = "Lisaülekate";
 "quick_action_no_underlay" = "Aluskiht puudub";
@@ -866,7 +866,7 @@
 "open_osm_note" = "Ava OSM märge";
 "edit_osm_note" = "Muuda OSM märget";
 "osm_alert_title" = "Kinnita";
-"osm_alert_message" = "Teade";
+"osm_alert_message" = "Sõnum";
 "osm_alert_button_ok" = "Loo märge";
 "modify_poi" = "Muuda HP teavet";
 "actions" = "Tegevused";
@@ -1987,7 +1987,7 @@
 "simplified_track" = "Lihtsustatud teekond";
 "tracks_on_map" = "Teekonnad kaardil";
 "tracks_empty" = "Su teekondade loend on tühi";
-"track" = "Rada";
+"track" = "Teekond";
 "nearest_point" = "Lähim punkt";
 "attach_to_the_roads" = "Kinnita teede külge";
 "none_point_error" = "Palun lisa vähemalt üks punkt.";
@@ -2023,7 +2023,7 @@
 "shared_string_gpx_points" = "Punktid";
 "shared_string_disable" = "Keela";
 "special" = "Eriteenused";
-"emergency" = "Hädaolukord";
+"emergency" = "Hädaabi";
 "square" = "Ruut";
 "symbols" = "Sümbolid";
 "sport" = "Sport";
@@ -2041,7 +2041,7 @@
 "search_history" = "Otsinguajalugu";
 "group_name" = "Grupi nimi";
 "copied_to_clipboard" = "Kopeeritud lõikelauale";
-"service" = "Teenused";
+"service" = "Teenindus";
 "replace_favorite_confirmation" = "Oled kindel, et soovid asendada lemmiku %@\?";
 "ios_release_4_0" = "• Uus! \"Lisa lemmik\" ekraan, kus saab valida kohandatud ikooni, värvi ja kuju.\n• Lisatud uus \"Koordinaatide vidin\" praeguse asukoha koordinaatidega\n• Lisatud võimalus importida kasutaja poolt määratud kohandatud pistikprogramme\n• Laiendatud oluliselt impordi/ekspordi funktsionaalsust\n• Kaugus koputades viidi raadiusjoonlaudast eraldi valikuks üle\n• Parandatud CarPlay rakenduse külmutamine, kui iPhone'i ekraan on välja lülitatud\n• Pluginate ekraan viidi kaardid ja ressursid peamenüüst üle peamenüüsse\n• Lisatud soome lokaliseerimine\n• Parandatud kasutajaliidese maastikuorientatsiooniga ekraanil \"Plan a route\" (marsruudi planeerimine)\n• Lisatud tugi kohandatud navigeerimis- ja renderdamisfailidele\n• Parandatud markerite suunajoonte jõudlust\n• Parandatud probleem suurtähtedega GPX-failide importimisel\n• Parandatud probleem menüüga \"Jälgi rada\"\n• Parandatud OBF-failide importimine\n";
 "default" = "Vaikimisi";
@@ -2179,5 +2179,3 @@
 "distance_moving" = "Korrigeeritud vahemaa";
 "education" = "Haridus";
 "shared_string_time_moving" = "Aeg liigub";
-"m" = "m";
-"units_min_short" = "m";

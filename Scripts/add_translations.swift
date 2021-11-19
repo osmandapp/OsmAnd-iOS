@@ -14,7 +14,7 @@ var commonValuesDict: [String:[String]] = [:]
 var duplicatesCount = 0
 
 let languageDict = [
-                    "es_AR" : "es-rAR",
+                    "es-419" : "es-rAR",
                     "hsb" : "b+hsb",
                     "kab" : "b+kab",
                     "pt-BR" : "pt-rBR",
@@ -377,11 +377,11 @@ func filterUnsafeChars(_ text: String) -> String {
     if result.hasSuffix(";") {
         result = String(result.dropLast())
     }
-    if result.hasPrefix("\"") {
+    if result.hasPrefix("\"") && !result.hasPrefix("\\\"") {
         result = String(result.dropFirst())
         result = "\\\"" + result
     }
-    if result.hasSuffix("\"") {
+    if result.hasSuffix("\"") && !result.hasSuffix("\\\"") {
         result = String(result.dropLast())
         result = result + "\\\""
     }

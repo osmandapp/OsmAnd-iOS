@@ -37,7 +37,7 @@
 "transport_routes" = "Čary";
 "transport_nearby_routes_within" = "Bliske linije w radiusu";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Stop";
+"transport_stop" = "Zastanišćo";
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
@@ -425,7 +425,7 @@
 "poi_hide" = "Schować";
 // My Places
 "favorites" = "Fawority";
-"tracks" = "Puće";
+"tracks" = "Čary";
 // GPX
 "gpx_point" = "Dypk";
 "gpx_waypoint" = "Čarowy dypk";
@@ -652,7 +652,7 @@
 "osm_failed_uploads" = "Failed";
 "osm_note" = "OSM-notica";
 "osm_created" = "Created";
-"osm_deleted" = "Zajimawostka je so wotstroniła";
+"osm_deleted" = "Wotstronjene";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -889,7 +889,7 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Jězbu planować";
 "help_legend" = "Legenda karty";
-"help_other_header" = "Druhe";
+"help_other_header" = "druhe";
 "help_install_and_troubleshoot" = "Instalacija a rozrisowanje problemow";
 "help_tech_articles" = "Technical articles";
 "help_versions" = "Wersije";
@@ -1087,7 +1087,7 @@
 "get_directions" = "Nawigacija";
 "parking" = "Parkowanišćo";
 "directions_more_options" = "Nawigacija wottud";
-"nearby_search" = "Wokoło stejišća pytać";
+"nearby_search" = "We wokolinje pytać";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -1410,7 +1410,7 @@
 "app_theme_light" = "Swětłe";
 "update_map" = "Kartowe kachlicy zaktualizować";
 "enter_profile_name" = "Zapodaj mjeno profila";
-"nothing_found_empty" = "Žadyn pytanski wuslědk";
+"nothing_found_empty" = "Žadyn wuslědk";
 "res_slope" = "spad";
 "export_profile" = "Profil eksportować";
 "base_profile_descr_public_transport" = "Wše typy zjawneho wobchada";
@@ -1419,7 +1419,7 @@
 "avoid_routes_and_road" = "Wěste čary a pućne typy wobeńć";
 "avoid_road" = "Dróhu wobeńć";
 "num_stops" = "zastanišća";
-"m_style_pulic_transport" = "Zjawny wobchad";
+"m_style_pulic_transport" = "Zjawny transport";
 "arrival_announcement_frequency" = "Hdy chceće připowědź přijězda?";
 "profile_alert_delete_title" = "Profil wotstronić";
 "profile_type_base_string" = "zakładny profil";
@@ -1470,3 +1470,6 @@
 "education" = "Kubłanje";
 "regions" = "Regiony";
 "distance_moving" = "Zdalenosć skorigowana";
+"m" = "m";
+"units_min_short" = "m";
+"rendering_value_pink_name" = "pink";

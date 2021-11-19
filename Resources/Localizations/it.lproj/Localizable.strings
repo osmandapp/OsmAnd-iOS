@@ -73,7 +73,7 @@
 "gpx_route_time" = "Tempo del percorso";
 "gpx_uphldownhl" = "Salite/discese";
 "gpx_average_speed" = "Velocità media";
-"gpx_start" = "Avvia";
+"gpx_start" = "Partenza";
 "gpx_finish" = "Fine";
 "gpx_avg_elev" = "Quota media";
 "gpx_elev_range" = "Gamma di elevazione";
@@ -81,9 +81,9 @@
 "gpx_uphills_total" = "Totale salite";
 // Map settings
 "rendering_value_browse_map_name" = "Esplorazione mappa";
-"m_style_car" = "Driving";
+"m_style_car" = "Automobile";
 "m_style_walk" = "A piedi";
-"m_style_bicycle" = "Bici";
+"m_style_bicycle" = "Bicicletta";
 "map_settings_map" = "Mappa";
 "map_settings_show" = "Mostra sulla mappa";
 "map_settings_type" = "Tipo mappa";
@@ -762,7 +762,7 @@
 "sett_generic_ext_input" = "Tastiera generica";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "transport_routes" = "Percorsi";
-"transport_stop" = "Ferma";
+"transport_stop" = "Fermata";
 "route_stops_before" = "%d fermate prima";
 "logging_interval_navigation" = "Intervallo di registrazione durante la navigazione";
 "logging_interval_navigation_descr" = "Scegli l'intervallo di registrazione per la registrazione del viaggio durante la navigazione";
@@ -917,7 +917,7 @@
 "res_world_region" = "Mondo";
 "osmand_live_update_now" = "Aggiorna ora";
 "quick_action_add_underlay" = "Aggiungi sottofondo";
-"osmand_live_updates" = "Aggiornamenti automatici";
+"osmand_live_updates" = "Aggiornamenti Live";
 "toggle_poi" = "Mostra/nascondi PDI";
 "restore" = "Ripristina";
 "region_nautical" = "Mappe nautiche";
@@ -944,7 +944,7 @@
 "nearby_search" = "Ricerca vicino";
 "help_first_use" = "Primo utilizzo";
 "fav_add_group" = "Aggiungi un gruppo";
-"quick_action_name" = "Azione rapida";
+"quick_action_name" = "Azione veloce";
 "osm_alert_button_ok" = "Crea nota";
 "mapil_pano_only" = "Mostra solo immagini a 360°";
 "routing_settings_descr" = "Configura la navigazione";
@@ -957,7 +957,7 @@
 "shared_string_street" = "Strada";
 "brown" = "Marrone";
 "osm_note_created" = "Nota di OSM creata";
-"osm_str_name" = "Nome strada";
+"osm_str_name" = "Nome della strada";
 "work_pt" = "Lavoro";
 "keep_informing_descr" = "Annuncia nuovamente a intervalli regolari le indicazioni di navigazione.";
 "add_gpx_waypoint" = "Aggiungi un punto intermedio GPX";
@@ -972,7 +972,7 @@
 "purchase_unlim_title" = "Acquista - %@";
 "osmand_live_available_maps" = "Mappe disponibili";
 "region_others" = "Altre mappe";
-"osm_poi_delete_title" = "Elimina PDI";
+"osm_poi_delete_title" = "Eliminazione PDI";
 "open_osm_note" = "Apri una nota di OSM";
 "toggle_nav" = "Avvia/ferma navigazione";
 "shared_string_time_of_day" = "Orario";
@@ -1690,7 +1690,7 @@
 "update_map" = "Aggiorna la mappa";
 "shared_string_max" = "Massimo";
 "shared_string_min" = "Min";
-"nothing_found_empty" = "Nessun risultato";
+"nothing_found_empty" = "Nonè stato tovato nulla";
 "shared_string_meters" = "metri";
 "tones" = "toni";
 "announce" = "Annunci";
@@ -1824,7 +1824,7 @@
 "copied_to_clipboard" = "Copiato negli appunti";
 "street_level_imagery" = "Immagini stradali";
 "markers_history" = "Cronologia dei marcatori";
-"track" = "Traccia";
+"track" = "Carrareccia";
 "split_after" = "Spezza dopo";
 "shared_string_others" = "Ancora";
 "select_group" = "Seleziona il gruppo";
@@ -1883,7 +1883,7 @@
 "explore_wikipedia_offline" = "Esplora Wikipedia offline.";
 "foot" = "ft";
 "suggested_maps_descr" = "Queste mappe sono richieste per il plugin.";
-"default" = "Predefinito";
+"default" = "Default";
 "app_restart_required" = "Il riavvio dell\'appè richiesto per applicare alcune impostazioni.";
 "navigate_point_northing" = "In direzione Nord";
 "shared_strings_all_regions" = "Tutte le regioni";
@@ -1920,5 +1920,3 @@
 "reset_to_original" = "Ripristina le originali";
 "attribute" = "Attributo";
 "shared_string_time_moving" = "In movimento";
-"m" = "m";
-"units_min_short" = "m";

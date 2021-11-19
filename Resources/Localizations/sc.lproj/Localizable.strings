@@ -53,7 +53,7 @@
 "poi_insrease_radius" = "Aumenta su raju de chirca a";
 "poi_max_radius_reached" = "Raju de chirca màssimu segudadu";
 "poi_search_near_center" = "Sa chirca est fata a curtzu de su tzentru de sa mapa";
-"poi_hide" = "Cua";
+"poi_hide" = "Istichi";
 // My Places
 "favorites" = "Preferidos";
 "tracks" = "Rastas";
@@ -105,7 +105,7 @@
 "record_trip" = "Registra sa rasta tua";
 // Map settings
 "m_style_overview" = "Resumu";
-"m_style_car" = "In vetura";
+"m_style_car" = "Màchina";
 "m_style_walk" = "A pee";
 "m_style_bicycle" = "Bitzicleta";
 "map_settings_map" = "Mapa";
@@ -759,7 +759,7 @@
 "product_desc_ext_parking" = "S'estensione Positzione Parchègiu de Osmand t'ammentat sa positzione de su parchègiu tuo. Est un'estensione pro s'aplicatzione OsmAnd Maps&Navigation.\nIssèbera unu promemòria indipendente dae su tempus (petzi unu marcadore in sa mapa) o unu a tempus limitadu cun un'allarme chi sonat cando su tempus est acabbadu (incluet fintzas unu marcadore in sa mapa). Pro impreare s'estensione, abilita·la in su menù Estensiones.";
 "transport_routes" = "Àndalas";
 "transport_nearby_routes_within" = "Àndalas a curtzu intre";
-"transport_stop" = "Firma";
+"transport_stop" = "Stop";
 "transport_nearby_routes" = "Intre";
 "route_stops_before" = "%1$s firmadas in antis";
 "shared_string_previous" = "Antepostu";
@@ -935,7 +935,7 @@
 "osm_str_name" = "Nùmene de sa carrera";
 "osm_phone" = "Telèfonu";
 "osm_website" = "Situ web";
-"osm_poi_delete_title" = "Iscantzelladura PDI";
+"osm_poi_delete_title" = "Iscantzella PDI";
 "osm_target_modified" = "PDI OSM modificadu";
 "osm_target_deleted" = "PDI OSM iscantzelladu";
 "osm_target_created" = "PDI de OSM creadu";
@@ -1855,7 +1855,7 @@
 "import_profile_descr" = "Pro importare unu profilu incarca in su documentu netzessàriu (*.osf) in cale si siat aplicatzione e ischerta \"Còpia in OsmAnd Maps\"";
 "profile_prefs_reset_successful" = "Totu sas impostatziones de sos profilos sunt torradas a s\'istadu predefinidu.";
 "gpx_parse_error" = "Su GPX de OsmAnd no est fraigadu bene, pro praghere cuntata s\'iscuadra de suportu pro investigare prus a fundu.";
-"nothing_found_empty" = "Nudda agatau";
+"nothing_found_empty" = "Nudda de agatadu";
 "shared_string_next" = "Imbeniente";
 "add_one_more_pnt" = "Annanghe un'àteru puntu";
 "delete_point" = "Iscantzella puntu";
@@ -2035,7 +2035,7 @@
 "sport" = "Isport";
 "special" = "Ispetziales";
 "service" = "Servìtziu";
-"emergency" = "Apretu/Emergèntzia";
+"emergency" = "Emergèntzia";
 "square" = "Cuadradu";
 "octagon" = "Otàgonu";
 
@@ -2215,5 +2215,3 @@
 "distance_moving" = "Distàntzia curreta";
 "industrial" = "Industriale";
 "education" = "Istrutzione";
-"m" = "m";
-"units_min_short" = "m";

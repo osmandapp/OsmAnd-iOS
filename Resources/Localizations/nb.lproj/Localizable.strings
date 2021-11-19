@@ -1890,7 +1890,7 @@
 "shared_string_others" = "Andre";
 "coordinates" = "Koordinater";
 "reverse_track_dir" = "Snu GPX-retning";
-"emergency" = "Nødsfall";
+"emergency" = "Nødsituasjon";
 "copied_to_clipboard" = "Kopiert til utklippstavle";
 "icon" = "Ikon";
 "some_of" = "%d av %d";
@@ -2002,7 +2002,7 @@
 "walking_route_osmc_description" = "Fargelegg ruter i henhold til deres individuelle lokale farge (hvis den forefinnes i OpenStreetMap) og type (internasjonal, regional, lokal).";
 "navigate_point_zone" = "Sone";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Fargelegg ruter i henhold til deres nodenettverkstype (internasjonal, regional, lokal).";
-"default" = "Forvalg";
+"default" = "Standard";
 "dialogs_and_notifications" = "Dialogvinduer og merknader";
 "some_articles_may_not_available_in_lang" = "Noen Wikipedia-artikler er kanskje ikke tilgjengelige på ditt språk.";
 "product_title_mapillary" = "Mapillary";
@@ -2045,7 +2045,7 @@
 "attribute" = "Attributt";
 "reset_to_original" = "Tilbakestill til forvalg";
 "education" = "Utdanning";
-"nautical" = "Maritimt";
+"nautical" = "Nautisk";
 "edit_track" = "Rediger spor";
 "upload_to_openstreetmap" = "Last opp til OpenStreetMap";
 "delete_waypoints" = "Slett rutepunkter";
@@ -2058,5 +2058,3 @@
 "analyze_on_map" = "Analyser på kartet";
 "gpx_split_interval" = "Oppdelingsintervall";
 "industrial" = "Industriell";
-"m" = "m";
-"units_min_short" = "m";

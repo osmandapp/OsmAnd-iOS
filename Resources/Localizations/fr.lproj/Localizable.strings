@@ -238,7 +238,7 @@
 "cannot_add_marker" = "Impossible d'ajouter un Parking";
 "map_no_address" = "L'adresse n'est pas encore connue";
 "import_choose_type" = "Merci de choisir ce qu'il faut importer";
-"import_favorite" = "Favori";
+"import_favorite" = "Favoris";
 // Alerts
 "alert_inet_needed" = "Connexion Internet requise pour effectuer cette action. Veuillez vérifier votre connexion Internet.";
 "ctx_mnu_add_fav" = "Ajouter un favori";
@@ -291,7 +291,7 @@
 "gpx_trip_groups" = "Groupes de traces";
 "gpx_group_select" = "Sélection de groupe";
 "get_directions" = "Guidages";
-"plugins" = "Greffons";
+"plugins" = "Gestionnaire de greffons";
 "open_map_settings" = "Ouvrez les paramètres de la carte";
 "plugin_popup_wiki_title" = "Télécharger Wikipédia";
 "gpx_no_tracks" = "Il n'y a aucune trace";
@@ -303,7 +303,7 @@
 "gpx_import_already_exists" = "Le fichier de trace spécifié existe déjà dans la liste. Choisissez une action.";
 "gpx_import_desc" = "Pour importer vos fichiers GPX (format d'enregistrement classique de données GPS) depuis Dropbox, un courriel ou toute autre source utilisez la fonction « Copier vers OsmAnd Maps »";
 "gpx_uphldownhl" = "Montées/Descentes";
-"gpx_start" = "Départ";
+"gpx_start" = "Démarrer";
 "gpx_uphills_total" = "Total de montées";
 "track_recording" = "Enregistrement du trajet";
 "track_recording_name" = "Enregistrement d\'itinéraire en cours";
@@ -313,7 +313,7 @@
 "track_rec_addon_q" = "Veuillez activer le greffon d'enregistrement de traces pour les enregistrer et les sauvegarder";
 "track_clear" = "Effacer la trace actuelle";
 "track_clear_q" = "Voulez-vous effacer la trace actuelle ?";
-"m_style_walk" = "Marche";
+"m_style_walk" = "À pied";
 "map_settings_offline" = "Styles de cartes hors ligne";
 "map_settings_hillshade" = "Ombrage du relief";
 "intro_download" = "Télécharger\nla carte";
@@ -801,7 +801,7 @@
 "help_faq" = "FAQ";
 "help_faq_descr" = "Foire Aux Questions";
 "help_features" = "Fonctionnalités";
-"help_other_header" = "Autre";
+"help_other_header" = "Divers";
 "help_contact_us" = "Contactez-nous";
 "help_about" = "À propos";
 "help_follow_us" = "Suivez-nous";
@@ -894,7 +894,7 @@
 "osm_editing_offline" = "Modifications hors-ligne";
 "osm_working_days" = "Jours travaillés";
 "osm_editing_contact_info" = "Contact";
-"osm_str_name" = "Nom de rue";
+"osm_str_name" = "Nom de la rue";
 "osm_phone" = "Téléphone";
 "osm_website" = "Site web";
 "osm_add_place" = "Ajouter un lieu";
@@ -949,7 +949,7 @@
 "osm_edits_offline_layer" = "Modifications/Notes OSM (hors ligne)";
 "osm_notes_online_layer" = "Notes OSM (en ligne)";
 "osm_edits_basic" = "Basique";
-"osm_edits_advanced" = "Avancé";
+"osm_edits_advanced" = "Étendue";
 "osm_edits_all" = "Toutes les modifications";
 "osm_edits_poi" = "Modifications du POI";
 "osm_edits_notes" = "Notes";
@@ -964,7 +964,7 @@
 "modify_edit_short" = "Modifier la contribution OSM";
 "open_osm_note" = "Signaler une anomalie OSM";
 "edit_osm_note" = "Modifier la note OSM";
-"osm_alert_title" = "Envoyer";
+"osm_alert_title" = "Soumettre";
 "osm_alert_message" = "Message";
 "osm_alert_button_ok" = "Créer une note";
 "modify_poi" = "Modifier le point d'intérêt OSM";
@@ -1774,7 +1774,7 @@
 "shared_string_import" = "Importer le profil";
 "shared_string_max" = "Max";
 "shared_string_min" = "Min";
-"nothing_found_empty" = "Rien n\'aété trouvé";
+"nothing_found_empty" = "Aucun résultat";
 "road_max_speed_descr" = "Définit la vitesse maximale pour toutes les routes sur le trajet. Cela diminuera la priorité des routes dont la vitesse autorisée est supérieure à ce maximum.";
 "road_min_speed_descr" = "Définit la vitesse minimale pour toutes les routes sur le trajet. Augmentera la priorité des routes dont la vitesse recommandée est inférieure à ce minimum.";
 "road_speeds_descr" = "Ces paramètres peuvent modifer le calcul d'itinéraire.";
@@ -1787,7 +1787,7 @@
 "add_point" = "Ajouter un point";
 "next_seg" = "Segment suivant";
 "total" = "Total";
-"app_profiles" = "Profils de l\'application";
+"app_profiles" = "Profils de l\'appli";
 "units_t" = "t";
 "create_profile_descr" = "Basez votre profil personnel sur l\'un des profils par défaut pour définir les unités de vitesse, de distance ou la visibilité des widgets. Voici les profils par défaut de l\'application ainsi que des exemples de profils personnalisés :";
 "listed_exist" = "Les %@ listés existent déjà dans OsmAnd.";
@@ -1841,7 +1841,7 @@
 "start_of_track" = "Début de la trace";
 "reverse_track_dir" = "Inverser le sens de la trace";
 "select_another_track" = "Sélectionner une autre trace";
-"track" = "Piste";
+"track" = "Trace";
 "follow_track" = "Suivre la trace";
 "gpx_already_exsists" = "Un fichier avec ce nom existe déjà";
 "empty_filename" = "Le nom du fichier ne peut être vide";
@@ -2189,5 +2189,3 @@
 "shared_string_time_moving" = "Durée de déplacement";
 "industrial" = "Industrie";
 "education" = "Éducation";
-"units_min_short" = "m";
-"m" = "m";

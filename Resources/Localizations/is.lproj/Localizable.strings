@@ -1243,8 +1243,8 @@
 "parking_place" = "Bílastæði";
 "add_start" = "Bæta við upphafspunkti";
 "add_intermediate" = "Bæta við millipunkti";
-"add_home" = "Bæta við \"Heima\\"";
-"add_work" = "Bæta við \"Vinna\\"";
+"add_home" = "Bæta við \"Heima\"";
+"add_work" = "Bæta við \"Vinna\"";
 "home_pt" = "Heima";
 "work_pt" = "Vinna";
 "no_active_route" = "Engin virk leið";
@@ -1967,7 +1967,7 @@
 "reverse_track_dir" = "Snúa við stefnu ferils";
 "attach_to_the_roads" = "Tengja við vegina";
 "select_another_track" = "Velja annan feril";
-"track" = "Ferill";
+"track" = "Slóð";
 "follow_track" = "Fylgja ferli";
 "split_after" = "Skipta uppá eftir";
 "split_before" = "Skipta uppá undan";
@@ -2168,5 +2168,7 @@
 "distance_moving" = "Leiðrétt fjarlægð";
 "gpx_dir_arrows" = "Stefnuörvar";
 "delete_waypoints" = "Eyða ferilpunktum";
-"nautical" = "Sjótengt";
+"nautical" = "Sjókort";
 "gpx_split_interval" = "Skipta millibili";
+"units_min_short" = "m";
+"m" = "m";

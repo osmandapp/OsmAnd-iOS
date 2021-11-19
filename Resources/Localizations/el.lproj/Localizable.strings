@@ -347,7 +347,7 @@
 "settings_preset_descr" = "Η εμφάνιση χάρτη και οι ρυθμίσεις πλοήγησης απομνημονευονται ανά προφίλ χρήστη. Καθορίστε το προεπιλεγμένο προφίλ σας εδώ.";
 "green" = "Πράσινο";
 "road_blocked" = "Κλειστός δρόμος";
-"osm_alert_title" = "Υποβολή";
+"osm_alert_title" = "Commit";
 "min_mile" = "λεπτά/μίλι";
 "shared_string_is_open" = "Άνοιγμα";
 "day_night_info" = "Πληρ. Ημέρας/Νύχτας";
@@ -428,7 +428,7 @@
 "si_nm" = "Ναυτικά μίλια";
 "selected_categories" = "Επιλεγμένες κατηγορίες";
 "product_title_sea_depth_contours" = "Ναυτικές ισοβαθείς καμπύλες";
-"home_pt" = "Αρχική σελίδα";
+"home_pt" = "Σπίτι";
 "traffic_warning_pedestrian" = "Διάβαση πεζών";
 "price_free" = "Δωρεάν";
 "map_markers" = "Δείκτες χάρτη";
@@ -457,7 +457,7 @@
 "shared_string_building" = "Κτήριο";
 "osmand_live_updates" = "Ζωντανές ενημερώσεις";
 "create_items" = "Δημιουργία στοιχείων";
-"transport_routes" = "Δρομολόγια";
+"transport_routes" = "Διαδρομές";
 "get_discount_second_part" = "έπειτα %@";
 "sett_settings" = "Επιλογές";
 "edit_action" = "Επεξεργασία ενέργειας";
@@ -564,11 +564,11 @@
 "custom_search" = "Προσαρμοσμένη αναζήτηση";
 "poi_opening_hours" = "Ώρες λειτουργίας";
 "unlimited_downloads" = "Απεριόριστες λήψεις";
-"osm_edits_advanced" = "Προχωρημένη";
+"osm_edits_advanced" = "Προχωρημένο";
 "units_mph" = "μαω";
 "gpx_avg_altitude" = "Μέσο υψόμετρο";
 "simulate_navigation" = "Προσομοίωση πλοήγησης";
-"transport_stop" = "Διακοπή";
+"transport_stop" = "Σταμάτημα";
 "rendering_category_others" = "Άλλα χαρακτηριστικά χάρτη";
 "m_style_bicycle" = "Ποδηλασία";
 "osm_live_hide_user_name" = "Να μην εμφανίζεται το όνομά μου στις αναφορές";
@@ -1017,7 +1017,7 @@
 "default_speed_dialog_msg" = "Εκτιμά τον χρόνο άφιξης αγνώστων τύπων δρόμων και περιορίζει την ταχύτητα σε όλους τους δρόμους (μπορεί να επηρεάσει τη διαδρομή)";
 "base_profile_descr_car" = "Αυτοκίνητο, φορτηγό, μηχανή";
 "reverse_route" = "Αντιστροφή διαδρομής";
-"nothing_found_empty" = "Δε βρέθηκε τίποτα";
+"nothing_found_empty" = "Δεν βρέθηκε τίποτα";
 "announce" = "Ανακοίνωση";
 "base_profile_descr_pedestrian" = "Περπάτημα, πεζοπορία, τρέξιμο";
 "map_settings_legend" = "Υπόμνημα";

@@ -120,7 +120,7 @@
 // Intro
 "intro_skip" = "Ignorar";
 "intro_download" = "Descarregar\nmapa";
-"intro_next" = "Seguinte";
+"intro_next" = "Próximo";
 "intro_welcome" = "Bem-vindo(a) ao\nOsmAnd";
 "intro_promo" = "Mapas globais offline";
 "intro_placeholder" = "Digite o nome da sua região";
@@ -568,7 +568,7 @@
 "shared_string_select" = "Selecionar";
 "shared_string_close" = "Fechar";
 "shared_string_upload" = "Enviar";
-"shared_string_later" = "Continuar";
+"shared_string_later" = "Mais tarde";
 "shared_string_all" = "Tudo";
 "download_map" = "Descarregar mapa";
 "poi_type" = "Tipo de POI";
@@ -578,7 +578,7 @@
 "poi_clear" = "Limpar";
 "track_during_nav" = "Gravar o trilho automaticamente";
 "gpx_speed" = "Velocidade";
-"osmand_live_updates" = "Atualizações em tempo real";
+"osmand_live_updates" = "Atualizações sincronizadas";
 "osmand_live_available_maps" = "Mapas disponíveis";
 "osmand_live_hourly" = "A cada hora";
 "osmand_live_daily" = "Diariamente";
@@ -620,7 +620,7 @@
 "osm_edits_advanced" = "Avançado";
 "osm_edits_notes" = "Notas";
 "modify_poi_short" = "Alterar POI OSM";
-"create_poi_short" = "Criar POI";
+"create_poi_short" = "Criar POI OpenStreetMap";
 "modify_edit_short" = "Alterar edição do OpenStreetMap";
 "open_osm_note" = "Criar nota OSM";
 "osm_alert_title" = "Enviar";
@@ -634,7 +634,7 @@
 "help_map_viewing" = "Visualização do mapa";
 "help_trip_planning" = "Planear uma viagem";
 "help_legend" = "Legenda do mapa";
-"help_other_header" = "Outro";
+"help_other_header" = "Outros";
 "help_install_and_troubleshoot" = "Instalação e resolução de problemas";
 "help_tech_articles" = "Artigos técnicos";
 "help_versions" = "Versões";
@@ -673,7 +673,7 @@
 "get_directions" = "Direções";
 "parking" = "Estacionamento";
 "directions_more_options" = "Direções daqui";
-"nearby_search" = "Procurar nas proximidades";
+"nearby_search" = "Pesquisar perto daqui";
 "pedestrian" = "A pé";
 "plugins" = "Complementos";
 "restore" = "Restaurar";
@@ -1073,7 +1073,7 @@
 "key_hint_zoom_out" = "Afastar";
 "osm_live_cancel_subscription" = "Cancelar subscrição";
 // Quick action
-"quick_action_name" = "Botão de ações rápidas";
+"quick_action_name" = "Botão de ação rápida";
 "quick_action_no_overlay" = "Sem camada superior";
 "quick_action_add_overlay" = "Adicionar camada superior";
 "quick_action_no_underlay" = "Sem camada inferior";
@@ -2188,5 +2188,3 @@
 "parked_at" = "Estacionado em";
 "education" = "Educação";
 "industrial" = "Industrial";
-"m" = "m";
-"units_min_short" = "m";

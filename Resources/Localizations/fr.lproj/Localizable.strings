@@ -570,7 +570,7 @@
 "speak_traffic_warnings" = "Alertes de circulation";
 "announce_gpx_waypoints" = "Points de passage de la trace";
 "speak_favorites" = "Favoris à proximité";
-"speak_poi" = "POIà proximité";
+"speak_poi" = "POI à proximité";
 "speak_pedestrian" = "Passages piétons";
 "int_seconds" = "secondes";
 "shared_string_never" = "Jamais";
@@ -946,7 +946,7 @@
 "osm_note_empty_message" = "Veuillez préciser le message pour cette note.";
 "osm_note_comment" = "Commentaire";
 "osm_note_reopen" = "Ré-ouvrir";
-"osm_edits_offline_layer" = "Modifications/Notes OSM (hors ligne)";
+"osm_edits_offline_layer" = "Éditions/Notes OSM (hors ligne)";
 "osm_notes_online_layer" = "Notes OSM (en ligne)";
 "osm_edits_basic" = "Basique";
 "osm_edits_advanced" = "Avancé";
@@ -1221,7 +1221,7 @@
 "rendering_attr_smoothness_intermediate_name" = "Intermédiaire";
 "rendering_attr_winter_road_name" = "Route sur neige";
 "rendering_attr_horseRoutes_name" = "Itinéraires à cheval";
-"routing_attr_short_way_name" = "Trajetéconome en carburant";
+"routing_attr_short_way_name" = "Trajet économe en carburant";
 "rendering_attr_contourWidth_description" = "Épaisseur des traits pour les courbes de niveaux";
 "routing_attr_avoid_stairs_name" = "Éviter les escaliers";
 "rendering_value_medium_w_name" = "Moyen";

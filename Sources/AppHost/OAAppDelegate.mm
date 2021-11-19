@@ -137,6 +137,7 @@
                     [self handleIncomingURL:loadedURL];
                 loadedURL = nil;
             }
+            [OAUtilities clearTmpDirectory];
             
             _appInitDone = YES;
             _appInitializing = NO;

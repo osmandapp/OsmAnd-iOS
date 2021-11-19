@@ -83,11 +83,13 @@
             NSAttributedString *strWithImage = [NSAttributedString attributedStringWithAttachment:attachment];
             [title replaceCharactersInRange:NSMakeRange(imgIndex, 5) withAttributedString:strWithImage];
             [title addAttribute:NSForegroundColorAttributeName value:imgColor range:NSMakeRange(imgIndex - 1, strWithImage.length + 1)];
-            [title addAttribute:NSBaselineOffsetAttributeName value:@(-8.0) range:NSMakeRange(imgIndex - 1, strWithImage.length + 1)];
-
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.minimumLineHeight = 30.;
+            [title addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(imgIndex - 1, strWithImage.length + 1)];
+            
             [title addAttribute:NSForegroundColorAttributeName value:descrColor range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
             [title addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13.0] range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
-            [title addAttribute:NSBaselineOffsetAttributeName value:@(-6.0) range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
+            [title addAttribute:NSBaselineOffsetAttributeName value:@(3.0) range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
         }
         
         UIImage *stopPlate = [OATransportStopViewController createStopPlate:[OATransportStopViewController adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];

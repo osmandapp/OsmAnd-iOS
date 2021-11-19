@@ -489,7 +489,7 @@ static BOOL _isRoutesGroupOpen = NO;
     if ([self isCollapsableGroup:tableData[indexPath.section][@"group_name"]] && _isRoutesGroupOpen)
     {
         NSDictionary *groupData = cells[_routesWithoutGroup.count];
-        if (indexPath.row == _routesWithoutGroup.count + _routesWithGroup.count)
+        if (indexPath.row == _routesParameters.count)
             return groupData;
         else if (indexPath.row >= _routesWithoutGroup.count)
             return ((OATableCollapsableGroup *) groupData[@"group"]).groupItems[indexPath.row - _routesWithoutGroup.count];
@@ -513,7 +513,7 @@ static BOOL _isRoutesGroupOpen = NO;
     group.groupName = OALocalizedString(_isRoutesGroupOpen ? @"shared_string_collapse" : @"show_all");
 
     NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
-    for (NSInteger i = _routesWithoutGroup.count; i < _routesWithoutGroup.count + _routesWithGroup.count; i++)
+    for (NSInteger i = _routesWithoutGroup.count; i < _routesParameters.count; i++)
     {
         [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
     }
@@ -528,7 +528,7 @@ static BOOL _isRoutesGroupOpen = NO;
             [NSIndexPath indexPathForRow:_routesWithoutGroup.count inSection:indexPath.section]]
                    withRowAnimation:UITableViewRowAnimationNone];
     if (_isRoutesGroupOpen)
-        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_routesWithoutGroup.count + _routesWithGroup.count
+        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_routesParameters.count
                                                              inSection:indexPath.section]]
                        withRowAnimation:UITableViewRowAnimationNone];
 
@@ -568,7 +568,7 @@ static BOOL _isRoutesGroupOpen = NO;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if ([self isCollapsableGroup:tableData[section][@"group_name"]])
-        return 1 + (_isRoutesGroupOpen ? _routesWithoutGroup.count + _routesWithGroup.count : _routesWithoutGroup.count);
+        return 1 + (_isRoutesGroupOpen ? _routesParameters.count : _routesWithoutGroup.count);
 
     return ((NSArray *) tableData[section][@"cells"]).count;
 }
@@ -580,7 +580,7 @@ static BOOL _isRoutesGroupOpen = NO;
     BOOL hasOptions = [item[@"has_options"] boolValue];
     BOOL isGroup = [self isCollapsableGroup:tableData[indexPath.section][@"group_name"]];
     BOOL isLastIndex = isGroup && (indexPath.row == (_isRoutesGroupOpen
-            ? _routesWithoutGroup.count + _routesWithGroup.count : _routesWithoutGroup.count) - 1);
+            ? _routesParameters.count : _routesWithoutGroup.count) - 1);
 
     UITableViewCell *outCell = nil;
     if ([item[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])

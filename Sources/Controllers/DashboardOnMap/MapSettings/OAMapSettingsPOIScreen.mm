@@ -109,7 +109,7 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
     NSArray<OAPOIUIFilter *> *filters = [OAPOIFiltersHelper.sharedInstance getSortedPoiFilters:YES];
     for (OAPOIUIFilter *filter in filters)
     {
-        if (!filter.isTopWikiFilter)
+        if (!filter.isWikiFilter)
             [rows addObject:[[OAPOIFilterTableRow alloc] initWithRowType:EOAPoiRowTypePoiFilter title:filter.getName poiFilter:filter]];
     }
 }

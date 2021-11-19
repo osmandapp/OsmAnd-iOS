@@ -51,6 +51,11 @@
     _selectedTab = selectedTab;
 }
 
+- (void)runAdditionalActions
+{
+    [_tabs[_selectedTab] runAdditionalActions];
+}
+
 - (OAGPXTableData *)getTableData
 {
     return [_tabs[_selectedTab] getTableData];

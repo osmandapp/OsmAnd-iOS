@@ -62,4 +62,9 @@
     return self.tableData;
 }
 
+- (void)runAdditionalActions
+{
+    //override
+}
+
 @end

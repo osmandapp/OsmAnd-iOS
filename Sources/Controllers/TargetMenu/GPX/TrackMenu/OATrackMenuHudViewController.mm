@@ -17,6 +17,7 @@
 #import "OAEditWaypointsGroupBottomSheetViewController.h"
 #import "OADeleteWaypointsGroupBottomSheetViewController.h"
 #import "OARouteBaseViewController.h"
+#import "OAMapRendererView.h"
 #import "OATabBar.h"
 #import "OAIconTitleValueCell.h"
 #import "OATextViewSimpleCell.h"
@@ -645,6 +646,8 @@
                     [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:segmentIndex]
                                   withRowAnimation:UITableViewRowAnimationNone];
                     [self.tableView endUpdates];
+
+                    [self.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
                 }
 
                 if (_headerView)
@@ -920,6 +923,56 @@
     return [groupName isEqualToString:OALocalizedString(@"targets")];
 }
 
+- (void)updateChartHighlightValue:(LineChartView *)chart
+                          segment:(OAGpxTrkSeg *)segment
+{
+    CLLocationCoordinate2D pinLocation = [self getPinLocation];
+    LineChartData *lineData = chart.lineData;
+    NSArray<id <IChartDataSet>> *ds = lineData != nil ? lineData.dataSets : nil;
+    if (ds && ds.count > 0 && segment)
+    {
+        float pos;
+        double totalDistance = 0;
+        OAGpxTrkPt *previousPoint = nil;
+        for (OAGpxTrkPt *currentPoint in segment.points)
+        {
+           if (currentPoint.position.latitude == pinLocation.latitude
+                   && currentPoint.position.longitude == pinLocation.longitude)
+            {
+                totalDistance += getDistance(previousPoint.position.latitude,
+                                             previousPoint.position.longitude,
+                                             currentPoint.position.latitude,
+                                             currentPoint.position.longitude);
+                pos = (float) (totalDistance / [GpxUIHelper getDivXWithDataSet:ds[0]]);
+
+                float lowestVisibleX = chart.lowestVisibleX;
+                float highestVisibleX = chart.highestVisibleX;
+                float nextVisibleX = lowestVisibleX + (pos - chart.lastHighlighted.x);
+                float oneFourthDiff = (highestVisibleX - lowestVisibleX) / 4;
+                if (pos > oneFourthDiff)
+                    nextVisibleX = pos - oneFourthDiff;
+
+                [chart moveViewToX:nextVisibleX];
+
+                [chart highlightValueWithX:pos
+                              dataSetIndex:0
+                                 dataIndex:-1];
+
+                break;
+            }
+
+            if (previousPoint)
+            {
+                totalDistance += getDistance(previousPoint.position.latitude,
+                        previousPoint.position.longitude,
+                        currentPoint.position.latitude,
+                        currentPoint.position.longitude);
+            }
+            previousPoint = currentPoint;
+        }
+    }
+}
+
 - (OARouteLineChartHelper *)getLineChartHelper
 {
     if (!_routeLineChartHelper)
@@ -1038,6 +1091,11 @@
 - (CLLocationCoordinate2D)getCenterGpxLocation
 {
     return self.doc.bounds.center;
+}
+
+- (CLLocationCoordinate2D)getPinLocation
+{
+    return _reopeningState.pinLocation;
 }
 
 - (void)openAppearance
@@ -1343,6 +1401,7 @@
         [self setupTableView];
         [self generateData];
         [self setupHeaderView];
+        [_uiBuilder runAdditionalActions];
 
         switch (_selectedTab)
         {

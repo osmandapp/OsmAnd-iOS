@@ -28,6 +28,7 @@
 #import "OAGpxAdditionalIconsProvider.h"
 #import "OASelectedGPXHelper.h"
 #import "QuadRect.h"
+#import "OAMapUtils.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -404,8 +405,14 @@
         NSArray<OAGpxTrkPt *> *points = [self findPointsNearSegments:gpx.joinSegments ? (generalSeg ? @[generalSeg] : @[]) : [doc getNonEmptyTrkSegments:NO] radius:r point:point];
         if (points != nil)
         {
+            CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
+                                                                                                longitude:point.longitude]
+                                                        fromLocation:[[CLLocation alloc] initWithLatitude:points.firstObject.position.latitude
+                                                                                                longitude:points.firstObject.position.longitude]
+                                                          toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
+                                                                                                longitude:points.lastObject.position.longitude]];
             OATargetPoint *targetPoint = [self getTargetPoint:gpx];
-            targetPoint.location = point;
+            targetPoint.location = selectedGpxPoint.coordinate;
             if (targetPoint && ![res containsObject:targetPoint])
                 [res addObject:targetPoint];
         }

@@ -205,7 +205,13 @@ public enum GPXDataSetAxisType: String {
             }
         }
     }
-    
+
+    @objc static public func getDivX(dataSet: IChartDataSet) -> Double
+    {
+        let orderedDataSet: OrderedLineDataSet? = dataSet as? OrderedLineDataSet
+        return orderedDataSet?.divX ?? 0
+    }
+
     private class GPXChartMarker: MarkerView {
         
         private var text: NSAttributedString = NSAttributedString(string: "")

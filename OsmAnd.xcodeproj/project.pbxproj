@@ -3275,6 +3275,8 @@
 		32A001642610B43700ABE0D2 /* widget_coordinates_utm_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_utm_day@2x.png"; path = "Resources/Icons/Widgets/widget_coordinates_utm_day@2x.png"; sourceTree = "<group>"; };
 		32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@2x.png"; path = "Resources/Icons/ic_custom_clipboard@2x.png"; sourceTree = "<group>"; };
 		32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@3x.png"; path = "Resources/Icons/ic_custom_clipboard@3x.png"; sourceTree = "<group>"; };
+		32A7863D27452C4E00FE7881 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		32A786422747206600FE7881 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-419"; path = "es-419.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		32A7EE0D261BBF5C00F7A697 /* bg_point_circle_contour@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle_contour@2x.png"; path = "Resources/Icons/bg_point_circle_contour@2x.png"; sourceTree = "<group>"; };
 		32A7EE0E261BBF5D00F7A697 /* bg_point_circle_contour@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle_contour@3x.png"; path = "Resources/Icons/bg_point_circle_contour@3x.png"; sourceTree = "<group>"; };
 		32A7EE13261BBF6B00F7A697 /* bg_point_octagon_contour@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_octagon_contour@3x.png"; path = "Resources/Icons/bg_point_octagon_contour@3x.png"; sourceTree = "<group>"; };
@@ -11886,6 +11888,8 @@
 				el,
 				kab,
 				fi,
+				"pt-BR",
+				"es-419",
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -13899,13 +13903,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
-				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -14849,6 +14852,8 @@
 				8A6E582023F003BD001C9A04 /* el */,
 				8AE0197224505D4400DA5C33 /* kab */,
 				32ECBEAD2657AD7F005D33BD /* fi */,
+				32A7863D27452C4E00FE7881 /* pt-BR */,
+				32A786422747206600FE7881 /* es-419 */,
 			);
 			name = Localizable.strings;
 			path = Resources/Localizations;
@@ -15150,7 +15155,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LM67P5MQ23;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;

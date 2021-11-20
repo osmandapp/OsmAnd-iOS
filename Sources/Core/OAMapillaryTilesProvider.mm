@@ -34,6 +34,8 @@
 #define LINE_WIDTH 3.0f
 #define MAPILLARY_ACCESS_TOKEN "MLY|4444816185556934|29475a355616c979409a5adc377a00fa"
 
+#define MAX_SEQUENCE_LAYER_ZOOM 13
+
 OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFactor /* = 1.0f*/, const unsigned long long physicalMemory /*= 0*/)
 : _vectorName(QStringLiteral("mapillary_vector"))
 , _vectorPathSuffix(QString(_vectorName).replace(QRegExp(QLatin1String("\\W+")), QLatin1String("_")))
@@ -74,17 +76,27 @@ OsmAnd::AlphaChannelPresence OAMapillaryTilesProvider::getAlphaChannelPresence()
     return OsmAnd::AlphaChannelPresence::Present;
 }
 
+OsmAnd::ZoomLevel OAMapillaryTilesProvider::getZoomForRequest(const OsmAnd::IMapTiledDataProvider::Request &req)
+{
+    OsmAnd::ZoomLevel zoom;
+    if (req.zoom < getPointsZoom())
+        zoom = OsmAnd::ZoomLevel(MAX_SEQUENCE_LAYER_ZOOM);
+    else
+        zoom = _vectorZoomLevel;
+    return zoom;
+}
+
 void OAMapillaryTilesProvider::drawPoints(
                                           const OsmAnd::IMapTiledDataProvider::Request &req,
                                           const OsmAnd::TileId &tileId,
                                           const std::shared_ptr<const OsmAnd::MvtReader::Tile>& geometryTile,
                                           SkCanvas& canvas)
 {
-    int dzoom = req.zoom - _vectorZoomLevel;
+    int dzoom = req.zoom - getZoomForRequest(req);
     double mult = (int) pow(2.0, dzoom);
     const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom));
     const auto zoomShift = OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom;
-    const auto& tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
+    const auto tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
     const auto tileSize = getTileSize();
     const auto px31Size = tileSize31 / tileSize;
     const auto bitmapHalfSize = _image->width() / 2;
@@ -154,38 +166,64 @@ void OAMapillaryTilesProvider::drawLine(
                                         const OsmAnd::TileId &tileId,
                                         SkCanvas& canvas)
 {
-    int dzoom = req.zoom - _vectorZoomLevel;
+    if (line->getCoordinateSequence().isEmpty())
+        return;
+    
+    int dzoom = req.zoom - getZoomForRequest(req);
     int mult = (int) pow(2.0, dzoom);
     double px, py;
     const auto &linePts = line->getCoordinateSequence();
     const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom));
     const auto zoomShift = OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom;
-    const auto& tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
+    const auto tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
     const auto tileSize = getTileSize();
-
+    const auto px31Size = tileSize31 / tileSize;
+    const auto bitmapHalfSize = _image->width() / 2;
+    const auto& tileBBox31Enlarged = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom).enlargeBy(bitmapHalfSize * px31Size);
+    
     SkScalar x1, y1, x2, y2 = 0;
-    bool first = true;
-    for (const auto &point : linePts)
+    
+    double lastTileX, lastTileY;
+    const auto firstPnt = linePts[0];
+    px = firstPnt.x / EXTENT;
+    py = firstPnt.y / EXTENT;
+    lastTileX = ((tileId.x << zoomShift) + (tileSize31 * px)) * mult;
+    lastTileY = ((tileId.y << zoomShift) + (tileSize31 * py)) * mult;
+    x1 = ((lastTileX - tileBBox31.left()) / tileSize31) * tileSize;
+    y1 = ((lastTileY - tileBBox31.top()) / tileSize31) * tileSize;
+    
+    bool recalculateLastXY = false;
+    for (int i = 1; i < linePts.size(); i++)
     {
+        const auto& point = linePts[i];
         px = point.x / EXTENT;
         py = point.y / EXTENT;
         
         double tileX = ((tileId.x << zoomShift) + (tileSize31 * px)) * mult;
         double tileY = ((tileId.y << zoomShift) + (tileSize31 * py)) * mult;
-        
-        x2 = ((tileX - tileBBox31.left()) / tileSize31) * tileSize;
-        y2 = ((tileY - tileBBox31.top()) / tileSize31) * tileSize;
 
-        if (tileBBox31.contains(tileX, tileY))
+        if (tileBBox31Enlarged.contains(tileX, tileY))
         {
-            if (!first)
-                canvas.drawLine(x1, y1, x2, y2, *_linePaint);
-            else
-                first = false;
+            x2 = ((tileX - tileBBox31.left()) / tileSize31) * tileSize;
+            y2 = ((tileY - tileBBox31.top()) / tileSize31) * tileSize;
+            
+            if (recalculateLastXY)
+            {
+                x1 = ((lastTileX - tileBBox31.left()) / tileSize31) * tileSize;
+                y1 = ((lastTileY - tileBBox31.top()) / tileSize31) * tileSize;
+                recalculateLastXY = false;
+            }
+            canvas.drawLine(x1, y1, x2, y2, *_linePaint);
+            
+            x1 = x2;
+            y1 = y2;
         }
-        
-        x1 = x2;
-        y1 = y2;
+        else
+        {
+            recalculateLastXY = true;
+        }
+        lastTileX = tileX;
+        lastTileY = tileY;
     }
 }
 
@@ -351,7 +389,7 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
 {
     QReadLocker scopedLocker(&_localCacheLock);
 
-    const unsigned int absZoomShift = req.zoom - _vectorZoomLevel;
+    const unsigned int absZoomShift = req.zoom - getZoomForRequest(req);
     const auto tileId = OsmAnd::Utilities::getTileIdOverscaledByZoomShift(req.tileId, absZoomShift);
     //const auto tileIds = OsmAnd::Utilities::getTileIdsUnderscaledByZoomShift(req.tileId, absZoomShift);
     // Check if requested tile is already being processed, and wait until that's done
@@ -411,7 +449,7 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     
     // Check if requested tile is already in local storage.
     const auto tileLocalRelativePath =
-    QString::number(_vectorZoomLevel) + QDir::separator() +
+    QString::number(getZoomForRequest(req)) + QDir::separator() +
     QString::number(tileId.x) + QDir::separator() +
     QString::number(tileId.y) + QLatin1String(".mvt");
     
@@ -472,7 +510,7 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     
     // Perform synchronous download
     const auto tileUrl = QString(_vectorUrlPattern)
-    .replace(QLatin1String("${osm_zoom}"), QString::number(_vectorZoomLevel))
+    .replace(QLatin1String("${osm_zoom}"), QString::number(getZoomForRequest(req)))
     .replace(QLatin1String("${osm_x}"), QString::number(tileId.x))
     .replace(QLatin1String("${osm_y}"), QString::number(tileId.y));
     
@@ -616,7 +654,7 @@ bool OAMapillaryTilesProvider::supportsNaturalObtainDataAsync() const
 
 OsmAnd::ZoomLevel OAMapillaryTilesProvider::getMinZoom() const
 {
-    return OsmAnd::ZoomLevel0;
+    return OsmAnd::ZoomLevel15;
 }
 
 OsmAnd::ZoomLevel OAMapillaryTilesProvider::getMaxZoom() const
@@ -652,7 +690,7 @@ void OAMapillaryTilesProvider::setLocalCachePath(
 
 OsmAnd::ZoomLevel OAMapillaryTilesProvider::getPointsZoom() const
 {
-    return OsmAnd::ZoomLevel16;
+    return OsmAnd::ZoomLevel17;
 }
 
 OsmAnd::ZoomLevel OAMapillaryTilesProvider::getVectorTileZoom() const

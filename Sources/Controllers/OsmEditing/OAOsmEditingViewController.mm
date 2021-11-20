@@ -76,10 +76,28 @@ typedef NS_ENUM(NSInteger, EditingTab)
     if (self) {
         _editPoiData = [[OAEditPOIData alloc] initWithEntity:entity];
         _editingPlugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
-        _editingUtil = _editingPlugin.getPoiModificationLocalUtil;
+        _editingUtil = [self getEditingUtil];
     }
     return self;
 }
+
+- (id<OAOpenStreetMapUtilsProtocol>) getEditingUtil
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    if ([settings.offlineEditing get]
+        || [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable
+        || [settings.osmUserName get].length == 0
+        || [settings.osmUserPassword get].length == 0)
+    {
+        return _editingPlugin.getPoiModificationLocalUtil;
+    }
+    else
+    {
+        return _editingPlugin.getPoiModificationRemoteUtil;
+    }
+}
+
+- (BOOL) isOnlineEditing
 
 +(void)commitEntity:(EOAAction)action
              entity:(OAEntity *)entity

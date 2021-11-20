@@ -184,7 +184,7 @@ void OAMapillaryTilesProvider::drawLine(
     SkScalar x1, y1, x2, y2 = 0;
     
     double lastTileX, lastTileY;
-    const auto firstPnt = linePts[0];
+    const auto& firstPnt = linePts[0];
     px = firstPnt.x / EXTENT;
     py = firstPnt.y / EXTENT;
     lastTileX = ((tileId.x << zoomShift) + (tileSize31 * px)) * mult;

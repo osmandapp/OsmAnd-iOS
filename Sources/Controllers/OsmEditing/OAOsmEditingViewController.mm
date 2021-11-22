@@ -197,11 +197,14 @@ typedef NS_ENUM(NSInteger, EditingTab)
         case 0:
         {
             [_pageController setViewControllers:@[_basicEditingController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
+            [_basicEditingController.view endEditing:YES];
             break;
         }
         case 1:
         {
+            _advancedEditingController.isKeyboardHidingAllowed = YES;
             [_pageController setViewControllers:@[_advancedEditingController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
+            [_advancedEditingController.view endEditing:YES];
             break;
         }
     }

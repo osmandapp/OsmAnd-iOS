@@ -1,10 +1,10 @@
 "OsmAnd Maps" = "Mapas do OsmAnd";
 "shared_string_previous" = "Anterior";
 "route_stops_before" = "Paraxes anteriores: %d";
-"transport_routes" = "Rotas";
+"transport_routes" = "Liñas";
 "transport_nearby_routes_within" = "Liñas próximas a menos dos";
 "transport_nearby_routes" = "Preto dos";
-"transport_stop" = "Deter";
+"transport_stop" = "Stop";
 "cancel_navigation" = "Deter a navegación";
 "intermediate_items_sort_by_distance" = "Ordenar porta a porta";
 "switch_start_finish" = "Inverter o punto de partida e o destino";
@@ -407,8 +407,8 @@
 "gpx_speed" = "Velocidade";
 // Map settings
 "rendering_value_browse_map_name" = "Ollar mapa";
-"m_style_car" = "Automóbil";
-"m_style_walk" = "Peón";
+"m_style_car" = "Conducindo";
+"m_style_walk" = "A pé";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Amosar no mapa";
@@ -715,7 +715,7 @@
 "get_directions" = "Indicacións";
 "parking" = "Aparcamento";
 "directions_more_options" = "Indicacións dende";
-"nearby_search" = "Procurar preto";
+"nearby_search" = "Procurar preto daquí";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -879,6 +879,7 @@
 "in_app_purchase_desc" = "Pagamento só unha vez";
 "osmand_live_hourly" = "Cada hora";
 "osm_editing_lost_changes_title" = "Saír sen gardar?";
+"units_min_short" = "m";
 "create_items" = "Crear elementos";
 "add_intermediate" = "Engadir punto intermedio";
 "osm_target_deleted" = "PDI do OSM eliminado";
@@ -1025,7 +1026,7 @@
 "shared_string_clear_all" = "Limpar todo";
 "translucent_orange" = "Laranxa translúcido";
 "modify_edit_short" = "Modificar modificación do OSM";
-"home_pt" = "Casa";
+"home_pt" = "Inicio";
 "show_notes" = "Amosar notas do OSM";
 "hide_notes" = "Agochar notas do OSM";
 "res_elliptic_mercator" = "Mercator elíptico";
@@ -1368,9 +1369,9 @@
 "edit_profile_list" = "Editar a listaxe de perfís";
 "amenity" = "Instalación";
 "profile_type_custom_string" = "Perfil personalizado";
-"nothing_found_empty" = "Non se atopou nada";
+"nothing_found_empty" = "Non se atopou ren";
 "position_icon_at_rest" = "Icona de posición en asueto";
-"app_profiles" = "Perfís da aplicación";
+"app_profiles" = "Perfís de aplicación";
 "reverse_route" = "Ruta inversa";
 "plugin_settings_reset" = "Restabelecer a configuración do plugin ós valores por defecto";
 "app_theme_light" = "Claro";
@@ -1563,7 +1564,7 @@
 "square" = "Cadrado";
 "simplified_track_description" = "Só gravarase a liña da ruta, os puntos intermedios serán eliminados.";
 "show_compass_ruler" = "Amosar a regra de compás";
-"sport" = "Deporte";
+"sport" = "Sport";
 "shared_string_enable" = "Activar";
 "displayed_trips" = "Pistas amosadas";
 "res_standard" = "Mapa normal";
@@ -1581,6 +1582,7 @@
 "split_before" = "Dividir antes";
 "select_group" = "Escoller grupo";
 "gpxup_trackable" = "Seguíbel";
+"m" = "m";
 "default" = "Predeterminado";
 "context_menu_item_edit_waypoint" = "Editar punto de pasaxe GPX";
 "navigate_point_zone" = "Zona";
@@ -1596,7 +1598,7 @@
 "some_articles_may_not_available_in_lang" = "Algúns artigos da Wikipedia poden non estar dispoñíbeis na túa lingua.";
 "navigate_point_olc" = "Código de Localización Aberto (OLC)";
 "product_title_mapillary" = "Mapillary";
-"last_used" = "Usado porúltima vez";
+"last_used" = "Usado por última vez";
 "shared_string_turn_off" = "Apagar";
 "restart" = "Reiniciar";
 "download_map_dialog" = "Diálogo de descarga do mapa";
@@ -1616,26 +1618,3 @@
 "wiki_menu_download_descr" = "Precísanse mapas adicionais para ollar os PDI da Wikipedia no mapa.";
 "gpxup_public" = "Público";
 "product_desc_ext_mapillary" = "Imaxes a nivel de rúa en liña para todos. Descobre lugares, contribúe, captura o mundo.";
-"nautical" = "Náutico";
-"delete_waypoints" = "Eliminar puntos de referencia";
-"shared_string_time_moving" = "Tempo en movemento";
-"shared_string_end_time" = "Hora do remate";
-"gpx_split_interval_none_descr" = "Selecciona a opción de división desexada: por tempo ou por distancia.";
-"gpx_dir_arrows" = "Frechas de dirección";
-"shared_string_custom" = "Personalizado";
-"gpx_join_gaps" = "Xuntar espazos";
-"gpx_split_interval_descr" = "Selecciona o intre no cal as marcas con distancia ou tempo na pista serán amosadas.";
-"shared_string_width" = "Anchura";
-"regions" = "Rexións";
-"gpx_split_interval" = "Intre de división";
-"shared_string_interval" = "Intre";
-"edit_track" = "Editar pista";
-"upload_to_openstreetmap" = "Subir ao OpenStreetMap";
-"shared_string_time_span" = "Espazo de tempo";
-"education" = "Educación";
-"track_coloring_solid" = "Sólido";
-"distance_moving" = "Distancia corrixida";
-"analyze_on_map" = "Analizar no mapa";
-"track_show_start_finish_icons" = "Amosar iconas de comezo e final";
-"shared_string_start_time" = "Hora do comezo";
-"shared_string_overview" = "Vista xeral";

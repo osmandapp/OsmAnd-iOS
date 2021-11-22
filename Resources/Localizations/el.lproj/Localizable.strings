@@ -347,7 +347,7 @@
 "settings_preset_descr" = "Η εμφάνιση χάρτη και οι ρυθμίσεις πλοήγησης απομνημονευονται ανά προφίλ χρήστη. Καθορίστε το προεπιλεγμένο προφίλ σας εδώ.";
 "green" = "Πράσινο";
 "road_blocked" = "Κλειστός δρόμος";
-"osm_alert_title" = "Commit";
+"osm_alert_title" = "Υποβολή";
 "min_mile" = "λεπτά/μίλι";
 "shared_string_is_open" = "Άνοιγμα";
 "day_night_info" = "Πληρ. Ημέρας/Νύχτας";
@@ -428,7 +428,7 @@
 "si_nm" = "Ναυτικά μίλια";
 "selected_categories" = "Επιλεγμένες κατηγορίες";
 "product_title_sea_depth_contours" = "Ναυτικές ισοβαθείς καμπύλες";
-"home_pt" = "Σπίτι";
+"home_pt" = "Αρχική σελίδα";
 "traffic_warning_pedestrian" = "Διάβαση πεζών";
 "price_free" = "Δωρεάν";
 "map_markers" = "Δείκτες χάρτη";
@@ -457,7 +457,7 @@
 "shared_string_building" = "Κτήριο";
 "osmand_live_updates" = "Ζωντανές ενημερώσεις";
 "create_items" = "Δημιουργία στοιχείων";
-"transport_routes" = "Διαδρομές";
+"transport_routes" = "Δρομολόγια";
 "get_discount_second_part" = "έπειτα %@";
 "sett_settings" = "Επιλογές";
 "edit_action" = "Επεξεργασία ενέργειας";
@@ -467,7 +467,7 @@
 "si_m_s" = "Μέτρα ανά δευτερόλεπτο";
 "opening_changeset" = "Άνοιγμα ομάδας αλλαγών…";
 "route_tr" = "Στρίψτε δεξιά και προχωρήστε";
-"map_settings_night" = "Νύχτα";
+"map_settings_night" = "Βράδυ";
 "toggle_poi" = "Εμφάνιση/απόκρυψη ΣΕ";
 "map_widget_max_speed" = "Όριο ταχύτητας";
 "rendering_category_transport" = "Μ.Μ.Μ";
@@ -492,7 +492,7 @@
 "speak_title" = "Εκφώνηση…";
 "app_mode_bus" = "Λεωφορείο";
 "help_faq_descr" = "Συχνές ερωτήσεις";
-"osm_deleted" = "Διαγράφτηκε";
+"osm_deleted" = "Διαγραμμένο";
 "arrival_distance" = "Αναγγελία άφιξης";
 "actions" = "Ενέργειες";
 "res_details" = "Λεπτομέρειες";
@@ -1017,7 +1017,7 @@
 "default_speed_dialog_msg" = "Εκτιμά τον χρόνο άφιξης αγνώστων τύπων δρόμων και περιορίζει την ταχύτητα σε όλους τους δρόμους (μπορεί να επηρεάσει τη διαδρομή)";
 "base_profile_descr_car" = "Αυτοκίνητο, φορτηγό, μηχανή";
 "reverse_route" = "Αντιστροφή διαδρομής";
-"nothing_found_empty" = "Δεν βρέθηκε τίποτα";
+"nothing_found_empty" = "Δε βρέθηκε τίποτα";
 "announce" = "Ανακοίνωση";
 "base_profile_descr_pedestrian" = "Περπάτημα, πεζοπορία, τρέξιμο";
 "map_settings_legend" = "Υπόμνημα";
@@ -1243,22 +1243,3 @@
 "shared_string_navigation" = "Πλοήγηση";
 "shared_string_turn_off" = "Απενεργοποίηση";
 "suggested_maps" = "Προτεινόμενοι χάρτες";
-"shared_string_time_span" = "Χρονική διάρκεια";
-"track_show_start_finish_icons" = "Να εμφανίζονται εικονίδια αρχής τέλους";
-"shared_string_time_moving" = "Διάρκεια κίνησης";
-"shared_string_overview" = "Επισκόπηση";
-"gpx_split_interval_none_descr" = "Επιλέξτε την επιθυμητή επιλογή διαίρεσης: κατά χρόνο ή απόσταση.";
-"analyze_on_map" = "Ανάλυση στον χάρτη";
-"shared_string_start_time" = "Χρόνος έναρξης";
-"education" = "Εκπαίδευση";
-"distance_moving" = "Η απόσταση διορθώθηκε";
-"nautical" = "Ναυτικός";
-"gpx_dir_arrows" = "Βέλη κατεύθυνσης";
-"shared_string_width" = "Πλάτος";
-"shared_string_end_time" = "Χρόνος λήξης";
-"gpx_split_interval_descr" = "Επιλέξτε το διάστημα στο οποίο θα εμφανίζονται σημάδια με απόσταση ή χρόνο στο ίχνος.";
-"gpx_join_gaps" = "Ένωση κενών";
-"regions" = "Περιοχές";
-"shared_string_custom" = "Προσαρμοσμένο";
-"gpx_split_interval" = "Διάστημα κατακερματισμού";
-"track_coloring_solid" = "Συμπαγές";

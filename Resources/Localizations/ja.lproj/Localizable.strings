@@ -362,7 +362,7 @@
 "shared_string_and" = "と";
 "shared_string_edit" = "編集";
 "shared_string_modify" = "変更する";
-"shared_string_later" = "続ける";
+"shared_string_later" = "後で";
 "shared_string_of" = "of";
 "shared_string_all" = "全て";
 "shared_string_from" = "から";
@@ -492,7 +492,7 @@
 "map_settings_map_magnifier" = "マップ表示倍率";
 "map_settings_text_size" = "文字サイズ";
 "map_settings_day" = "昼固定";
-"map_settings_night" = "夜";
+"map_settings_night" = "夜固定";
 "map_settings_style" = "マップスタイル";
 "map_settings_overunder" = "オーバーレイ / アンダーレイ";
 "map_settings_over" = "オーバーレイ";
@@ -697,7 +697,7 @@
 "osm_edits_offline_layer" = "OSM編集/メモ (オフライン)";
 "osm_notes_online_layer" = "OSMメモ (オンライン)";
 "osm_edits_basic" = "基本";
-"osm_edits_advanced" = "上級者向け";
+"osm_edits_advanced" = "拡張";
 "osm_edits_all" = "すべての編集";
 "osm_edits_poi" = "POIの編集";
 "osm_edits_notes" = "メモ";
@@ -858,7 +858,7 @@
 "modify_edit_short" = "修正をOSMに反映";
 "open_osm_note" = "OSMでの注釈を開く";
 "edit_osm_note" = "OSMメモの編集";
-"osm_alert_title" = "コミット";
+"osm_alert_title" = "情報の追加、返信等";
 "osm_alert_message" = "メッセージ";
 "osm_alert_button_ok" = "注釈の作成";
 "modify_poi" = "POI情報を変更";
@@ -885,6 +885,7 @@
 "units_hour" = "時間";
 "units_min" = "分";
 "units_sec" = "秒";
+"units_min_short" = "m";
 "units_sec_short" = "s";
 // Help
 "help_first_steps" = "ファーストステップ";
@@ -1096,7 +1097,7 @@
 "get_directions" = "ナビ開始";
 "parking" = "駐車場";
 "directions_more_options" = "ここから出発";
-"nearby_search" = "近くを検索";
+"nearby_search" = "近隣を検索";
 "est_travel_time" = "所要時間の見積もり";
 "pedestrian" = "徒歩";
 "sorting" = "並び替え";
@@ -1920,7 +1921,7 @@
 "point_to_navigate" = "案内する";
 "select_another_track" = "別の経路を選択";
 "select_track_to_follow" = "たどる経路の選択";
-"track" = "経路";
+"track" = "農業用道路、林道";
 "follow_track" = "経路をたどる";
 "split_after" = "この後で分割";
 "split_before" = "この前で分割";
@@ -2011,10 +2012,10 @@
 "travel" = "旅行";
 "transport" = "交通";
 "symbols" = "記号";
-"service" = "アクセス道路、特定施設用道路";
+"service" = "設備・技術";
 "special" = "特別";
 "sport" = "スポーツ";
-"emergency" = "救急";
+"emergency" = "緊急";
 "key_hint_recenter_map" = "マップを中央に再配置";
 "shared_z_a" = "降順(Z～A)";
 "shared_a_z" = "昇順(A～Z)";
@@ -2112,29 +2113,6 @@
 "context_menu_item_edit_waypoint" = "GPX経由地点の編集";
 "dialogs_and_notifications" = "ダイアログと通知";
 "gpxup_identifiable" = "識別可能";
-"default" = "デフォルト";
+"default" = "標準";
+"m" = "m";
 "product_title_mapillary" = "Mapillary";
-"nautical" = "航海";
-"gpx_dir_arrows" = "方向矢印";
-"upload_to_openstreetmap" = "OpenStreetMapにアップロード";
-"shared_string_end_time" = "終了時刻";
-"shared_string_width" = "幅";
-"gpx_split_interval_none_descr" = "時間または距離で、必要な分割オプションを選択します。";
-"shared_string_time_span" = "時間間隔";
-"delete_waypoints" = "経由地点を削除";
-"gpx_join_gaps" = "ギャップを埋める";
-"shared_string_overview" = "概要";
-"gpx_split_interval" = "区間を分割";
-"shared_string_time_moving" = "移動時間";
-"distance_moving" = "距離補正済み";
-"shared_string_start_time" = "開始時刻";
-"track_show_start_finish_icons" = "出発地点と目的地アイコンを表示";
-"edit_track" = "経路の編集";
-"regions" = "地域";
-"gpx_split_interval_descr" = "距離または時間のマーカーが経路に表示される間隔を選択します。";
-"analyze_on_map" = "分析をマップ上で閲覧";
-"track_coloring_solid" = "通常色";
-"shared_string_custom" = "カスタム";
-"shared_string_interval" = "間隔";
-"reset_to_original" = "初期値へリセット";
-"education" = "教育";

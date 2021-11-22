@@ -109,7 +109,7 @@
 // Intro
 "intro_skip" = "Omet";
 "intro_download" = "Baixa\nel mapa";
-"intro_next" = "Endavant";
+"intro_next" = "Següent";
 "intro_welcome" = "Benvinguts a\nl'OsmAnd";
 "gpx_avg_elev" = "Elevació mitjana";
 "gpx_elev_range" = "Gamma d'elevació";
@@ -318,14 +318,14 @@
 "help_quiz" = "Consulta";
 "product_title_wiki" = "Viquipèdia";
 "product_desc_wiki" = "Dades de la Viquipèdia";
-"product_title_srtm" = "Corbes de nivell";
+"product_title_srtm" = "Línies de nivell";
 "product_desc_srtm" = "Mostra les corbes de nivell";
 "enter_description" = "Introduïu la descripció";
 "description" = "Descripció";
 "enter_fav_name" = "Introduïu el nom del preferit";
 "res_installing" = "S'està instal·lant…";
 "res_roads" = "Carreteres";
-"res_srtm" = "Corbes de nivell";
+"res_srtm" = "Línies de nivell";
 "res_wiki" = "Viquipèdia";
 "select_language" = "Tria la llengua";
 "language_short" = "Llengua";
@@ -383,7 +383,7 @@
 "est_travel_time" = "Durada estimada del trajecte";
 "pedestrian" = "Vianant";
 "sorting" = "Classificant";
-"plugins" = "Gestor de connectors";
+"plugins" = "Connectors";
 "shared_string_later" = "Mes tard";
 "open_map_settings" = "Obre la configuració del mapa";
 "plugin_popup_wiki_title" = "Baixa dades de Viquipèdia";
@@ -813,7 +813,7 @@
 "shared_string_close" = "Tanca";
 "actions" = "Accions";
 "directions_more_options" = "Indicacions des de";
-"nearby_search" = "Cerca pel voltant";
+"nearby_search" = "Cerca a prop";
 "map_widget_ruler_control" = "Radi de distància";
 "import_from_docs" = "Importa des de documents";
 "osm_live_routing" = "Navegació OsmAnd Live";
@@ -931,7 +931,7 @@
 "loading_poi_obj" = "S\'està carregant el PDI…";
 "osm_note" = "Nota d\'OSM";
 "osm_created" = "Creat";
-"osm_deleted" = "Eliminat";
+"osm_deleted" = "S\'ha esborrat";
 "osm_modified" = "Modificat";
 "osm_reopened" = "Tornat a obrir";
 "osm_name" = "Nom d'usuari OpenStreetMap";
@@ -946,7 +946,7 @@
 "osm_opens_at" = "Obre a les:";
 "osm_closes_at" = "Tanca a les:";
 "osm_editing_contact_info" = "Informació de contacte";
-"osm_str_name" = "Nom del carrer";
+"osm_str_name" = "Nom de carrer";
 "osm_building_num" = "Número de finca";
 "osm_phone" = "Telèfon";
 "osm_website" = "Lloc web";
@@ -964,7 +964,7 @@
 "modify_edit_short" = "Modifica el canvi OSM";
 "open_osm_note" = "Obre una nota d\'OSM";
 "edit_osm_note" = "Edita la nota d'OSM";
-"osm_alert_title" = "Publica";
+"osm_alert_title" = "Valida";
 "osm_alert_message" = "Missatge";
 "osm_alert_button_ok" = "Crea nota";
 "modify_poi" = "Modifica la informació del PDI";
@@ -1243,7 +1243,7 @@
 "add_intermediate" = "Afegiu un punt intermedi";
 "add_home" = "Afegeix casa meva";
 "add_work" = "Afegeix lloc de la feina";
-"home_pt" = "Inici";
+"home_pt" = "Casa";
 "work_pt" = "Feina";
 "select_route_intermediate" = "Seleccioneu un punt intermedi";
 "sett_deg180" = "180 graus";
@@ -1264,6 +1264,7 @@
 "show_edits" = "Mostra edicions properes";
 "hide_edits" = "Amaga edicions properes";
 "quick_action_edit_list" = "Edita la llista d’accions";
+"units_min_short" = "m";
 "units_sec_short" = "s";
 "map_settings_install_more" = "Instal·la més...";
 "tile_data" = "Dades de tessel·la";
@@ -1990,7 +1991,7 @@
 "split_after" = "Separa després";
 "favorite_places_category" = "Llocs";
 "replace_favorite_confirmation" = "Confirmeu que voleu substituir el Preferit %@?";
-"sport" = "Esports";
+"sport" = "Esport";
 "plan_route_open_existing_track" = "Obre una traça existent";
 "transport" = "Transport col·lectiu";
 "icon" = "Icona";
@@ -2041,28 +2042,9 @@
 "some_articles_may_not_available_in_lang" = "Alguns articles de la Viquipèdia podrien no estar disponibles en el vostre idioma.";
 "shared_string_navigation" = "Navegació";
 "added_profiles_descr" = "El connector ha afegit els perfils";
+"m" = "m";
 "navigate_point_northing" = "Ordenada";
 "navigate_point_zone" = "Àrea";
 "last_used" = "Darrera utilització";
 "foot" = "ft";
 "threshold_distance" = "Llindar de distància";
-"shared_string_custom" = "Personalitzat";
-"shared_string_width" = "Amplada";
-"gpx_split_interval" = "Divideix l\'interval";
-"education" = "Educació";
-"analyze_on_map" = "Analitza en el mapa";
-"track_coloring_solid" = "Sòlid";
-"shared_string_end_time" = "Hora de finalització";
-"gpx_split_interval_none_descr" = "Seleccioneu el criteri limitant desitjat: temps o distància.";
-"shared_string_overview" = "Visió general";
-"shared_string_time_span" = "Lapse temporal";
-"gpx_split_interval_descr" = "Trieu l\'interval a què les marques de distància o temps sobre la ruta es mostraran.";
-"shared_string_start_time" = "Hora inicial";
-"nautical" = "Nàutica";
-"regions" = "Regions";
-"gpx_join_gaps" = "Uneix separacions";
-"distance_moving" = "Distància corregida";
-"shared_string_interval" = "Interval";
-"shared_string_time_moving" = "Temps en moviment";
-"track_show_start_finish_icons" = "Mostra icones d\'inici i final";
-"gpx_dir_arrows" = "Fletxes de direcció";

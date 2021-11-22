@@ -107,13 +107,35 @@
                 kCellToggle: @NO
         }] : nil;
 
+        CLLocationCoordinate2D startChartPoint = kCLLocationCoordinate2DInvalid;
+        if (self.trackMenuDelegate)
+        {
+            CLLocationCoordinate2D centerGpxLocation = [self.trackMenuDelegate getCenterGpxLocation];
+            CLLocationCoordinate2D pinLocation = [self.trackMenuDelegate getPinLocation];
+            if (centerGpxLocation.latitude != pinLocation.latitude
+                    && centerGpxLocation.longitude != pinLocation.longitude)
+                startChartPoint = pinLocation;
+        }
+
         OAGPXTableCellData *chartCellData = [OAGPXTableCellData withData:@{
                 kCellKey: [NSString stringWithFormat:@"chart_%li", index],
                 kCellType: [OALineChartCell getCellIdentifier],
                 kTableValues: @{
                         @"cell_value": cell,
                         @"points_value": _routeLineChartHelper
-                                ? [_routeLineChartHelper generateTrackChartPoints:cell.lineChartView] : [[OATrackChartPoints alloc] init]
+                                ? [_routeLineChartHelper generateTrackChartPoints:cell.lineChartView
+                                                                       startPoint:startChartPoint]
+                                : [[OATrackChartPoints alloc] init],
+                        @"additional_actions": ^() {
+                            if (_routeLineChartHelper)
+                            {
+                                [_routeLineChartHelper refreshHighlightOnMap:NO
+                                                               lineChartView:cell.lineChartView
+                                                            trackChartPoints:chartCellData.values[@"points_value"]];
+                            }
+                            if (self.trackMenuDelegate)
+                                [self.trackMenuDelegate updateChartHighlightValue:cell.lineChartView segment:segment];
+                        }
                 }
         }];
         [chartCellData setData:@{
@@ -239,6 +261,23 @@
                 }
             }
     }];
+}
+
+- (void)runAdditionalActions
+{
+    if (self.tableData.sections.count > 0)
+    {
+        OAGPXTableSectionData *segmentsSectionData = self.tableData.sections.firstObject;
+        for (OAGPXTableCellData *segmentCellData in segmentsSectionData.cells)
+        {
+            if ([segmentCellData.type isEqualToString:[OALineChartCell getCellIdentifier]]
+                && [segmentCellData.values.allKeys containsObject:@"additional_actions"])
+            {
+                void (^runAdditionalActions)() = segmentCellData.values[@"additional_actions"];
+                runAdditionalActions();
+            }
+        }
+    }
 }
 
 - (NSDictionary<NSString *, NSDictionary *> *)getStatisticsDataForAnalysis:(OAGPXTrackAnalysis *)analysis

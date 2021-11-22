@@ -2568,27 +2568,32 @@ typedef enum
     if (_dashboard)
         [self closeDashboard];
 
-    OAMapRendererView *renderView = (OAMapRendererView *) _mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-    if (item.bounds.center.latitude == DBL_MAX)
+    if (!state || !CLLocationCoordinate2DIsValid(state.pinLocation))
     {
-        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
-        targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-        _targetLatitude = latLon.latitude;
-        _targetLongitude = latLon.longitude;
+        if (CLLocationCoordinate2DIsValid(item.bounds.center))
+        {
+            targetPoint.location = CLLocationCoordinate2DMake(item.bounds.center.latitude, item.bounds.center.longitude);
+        }
+        else
+        {
+            OAMapRendererView *renderView = (OAMapRendererView *) _mapViewController.view;
+            OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+            targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+        }
     }
     else
     {
-        targetPoint.location = CLLocationCoordinate2DMake(item.bounds.center.latitude, item.bounds.center.longitude);
+        targetPoint.location = state.pinLocation;
     }
 
-    [_mapViewController showContextPinMarker:state && state.pinLocation.latitude != DBL_MAX
-                    ? state.pinLocation.latitude : targetPoint.location.latitude
-                                   longitude:state && state.pinLocation.latitude != DBL_MAX
-                    ? state.pinLocation.longitude : targetPoint.location.longitude
-                                    animated:_targetLatitude != item.bounds.bottomRight.latitude
-                                            && _targetLongitude != item.bounds.topLeft.longitude];
+    [_mapViewController showContextPinMarker:targetPoint.location.latitude
+                                   longitude:targetPoint.location.longitude
+                                    animated:_targetLatitude != targetPoint.location.latitude
+                                            && targetPoint.location.longitude];
 
+    _targetLatitude = targetPoint.location.latitude;
+    _targetLongitude = targetPoint.location.longitude;
 
     targetPoint.type = OATargetGPX;
     targetPoint.title = _formattedTargetName;

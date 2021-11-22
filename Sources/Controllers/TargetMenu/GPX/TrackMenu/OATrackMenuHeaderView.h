@@ -16,6 +16,10 @@
 
 @interface OATrackMenuHeaderView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
+@property (weak, nonatomic) IBOutlet UIView *contentView;
+
+@property (weak, nonatomic) IBOutlet UIView *sliderView;
+
 @property (weak, nonatomic) IBOutlet UIView *titleContainerView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
@@ -39,6 +43,8 @@
 @property (weak, nonatomic) IBOutlet OAButton *appearanceButton;
 @property (weak, nonatomic) IBOutlet OAButton *exportButton;
 @property (weak, nonatomic) IBOutlet OAButton *navigationButton;
+
+@property (weak, nonatomic) IBOutlet UIView *bottomDividerView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomDescriptionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionConstraint;

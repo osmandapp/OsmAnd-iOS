@@ -20,6 +20,7 @@
 - (OAGPXTableData *)generateSectionsData;
 - (OAGPXTableData *)getTableData;
 - (void)updateSelectedTab:(EOATrackMenuHudTab)selectedTab;
+- (void)runAdditionalActions;
 
 - (void)setupTabBar:(OATabBar *)tabBarView
         parentWidth:(CGFloat)parentWidth;

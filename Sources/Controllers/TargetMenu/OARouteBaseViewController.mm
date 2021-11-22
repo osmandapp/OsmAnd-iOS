@@ -206,11 +206,19 @@
 
 - (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView
 {
+    return [self generateTrackChartPoints:lineChartView startPoint:kCLLocationCoordinate2DInvalid];
+}
+
+- (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView
+                                      startPoint:(CLLocationCoordinate2D)startPoint
+{
     OATrackChartPoints *trackChartPoints = [[OATrackChartPoints alloc] init];
     trackChartPoints.segmentColor = -1;
     trackChartPoints.gpx = _gpxDoc;
     trackChartPoints.axisPointsInvalidated = YES;
     trackChartPoints.xAxisPoints = [self getXAxisPoints:trackChartPoints lineChartView:lineChartView];
+    if (CLLocationCoordinate2DIsValid(startPoint))
+        trackChartPoints.highlightedPoint = OsmAnd::LatLon(startPoint.latitude, startPoint.longitude);
 
     return trackChartPoints;
 }

@@ -41,6 +41,8 @@ typedef void(^OARouteLineChartAdjustViewPort)();
              trackChartPoints:(OATrackChartPoints *)trackChartPoints;
 
 - (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView;
+- (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView
+                                      startPoint:(CLLocationCoordinate2D)startPoint;
 
 @end
 

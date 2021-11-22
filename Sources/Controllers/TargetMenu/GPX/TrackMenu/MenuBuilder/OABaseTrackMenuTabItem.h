@@ -23,5 +23,6 @@
 
 - (void)generateData;
 - (OAGPXTableData *)getTableData;
+- (void)runAdditionalActions;
 
 @end

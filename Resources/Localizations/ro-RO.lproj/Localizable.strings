@@ -2126,8 +2126,8 @@
 "navigate_point_easting" = "Estul";
 "navigate_point_olc" = "Codul locației deschise";
 "read_full_description" = "Citiți descrierea completă";
-"nautical" = "Nautică";
-"ios_release_4_1" = "• Ecran nou pentru căutarea după coordonate în diferite formate\n• Căutare îmbunătățită a coordonatelor în format OLC\n• Un nou meniu ușor de utilizat pentru alegerea limbilor de afișare a articolelor Wikipedia pe hartă\n• A fost adăugată posibilitatea de a încărca cu ușurință hărțile tuturor regiunilor țării cu câteva clicuri\n• Adăugat linii de contur în picioare (Trebuie să reîncărcați fișierele)\n• Adăugată posibilitatea de a descărca hărți prin selectarea regiunii sau țării dorite de pe hartă, precum și adăugarea unei casete de dialog cu sugestia de a încărca harta dacă regiunea este vizualizată fără hartă\n• Apariție nouă a butoanelor de pe hartă și adăugarea posibilității de a schimba zoom-ul hărții prin apăsare dublă și glisare\n";
+"nautical" = "Nautic";
+"ios_release_4_1" = "•Interacțiune complet reproiectată cu piesele: un nou meniu cu grafice, statistici, posibilitatea de a schimba aspectul, colorarea în funcție de viteză, înălțime și pantă și selectarea piesei pe hartă- Ecran nou pentru căutarea după coordonate în diferite formate\n• Căutare îmbunătățită a coordonatelor în format OLC\n• Un nou meniu ușor de utilizat pentru alegerea limbilor de afișare a articolelor Wikipedia pe hartă\n• A fost adăugată posibilitatea de a încărca cu ușurință hărțile tuturor regiunilor țării cu câteva clicuri\n• Adăugat linii de contur în picioare (Trebuie să reîncărcați fișierele)\n•Adăugată posibilitatea de a descărca hărți prin selectarea regiunii sau țării dorite de pe hartă, precum și adăugarea unei casete de dialog cu sugestia de a încărca o hartă lipsă a unei regiuni afișate\n•Aspect nou butoanele de control al hărții și posibilitatea de a schimba zoom-ul hărții prin apăsare dublă și glisare\n• Setările privind vizibilitatea rutelor sunt mutate mai sus în ecranul \"Configurare hartă\" și sunt reorganizate pentru o mai bună flexibilitate\n";
 
 // Shared Strings
 "shared_string_custom" = "Personalizat";

@@ -2122,7 +2122,7 @@
 "product_desc_ext_mapillary" = "Götumyndir af netinu fyrir alla. Uppgötvaðu staði, útvíkkaðu heiminn og vertu með í samstarfinu.";
 "product_desc_mapillary" = "Ljósmyndir í götuhæð fyrir alla";
 "product_title_mapillary" = "Mapillary";
-"population_num" = "Íbúafjöldi: %@";
+"population_num" = "Íbúafjöldi";
 "shared_string_turn_off" = "Slökkva";
 "welmode_download_maps" = "Sækja kort";
 "shared_strings_all_regions" = "Öll landsvæði";

@@ -76,10 +76,8 @@
 
 @interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, ChartViewDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet OATabBar *tabBarView;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorHeight;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorTopConstraint;
 
 @property (nonatomic) BOOL isShown;
 
@@ -109,9 +107,11 @@
     NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *_waypointGroups;
     NSArray<NSString *> *_waypointSortedGroupNames;
     NSArray<OAGpxTrkSeg *> *_segments;
+
+    BOOL _isHeaderBlurred;
 }
 
-@dynamic isShown;
+@dynamic isShown, contentContainer;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
 {
@@ -180,7 +180,28 @@
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        _headerView.sliderView.hidden = [self isLandscape];
 
+        if (_selectedTab == EOATrackMenuHudOverviewTab)
+        {
+            _headerView.collectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
+        }
+        else if (_selectedTab == EOATrackMenuHudSegmentsTab && _tableData.sections.count > 0)
+        {
+            NSMutableArray *indexPaths = [NSMutableArray array];
+            for (NSInteger i = 0; i < _tableData.sections.count; i++)
+            {
+                OAGPXTableSectionData *sectionData = _tableData.sections[i];
+                for (NSInteger j = 0; j < sectionData.cells.count; j++)
+                {
+                    OAGPXTableCellData *cellData = sectionData.cells[j];
+                    if ([cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
+                        [indexPaths addObject:[NSIndexPath indexPathForRow:j inSection:i]];
+                }
+            }
+            if (indexPaths.count > 0)
+                [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+        }
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _routeLineChartHelper.isLandscape = [self isLandscape];
         _routeLineChartHelper.screenBBox = CGRectMake(
@@ -191,7 +212,7 @@
     }];
 }
 
-- (void) viewWillDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
     _exportController = nil;
 }
@@ -208,12 +229,20 @@
 
 - (CGFloat)initialMenuHeight
 {
-    CGFloat baseHeight = self.topHeaderContainerView.frame.origin.y + self.toolBarView.frame.size.height + 10.;
-    CGFloat totalHeightWithoutDescription = baseHeight + _headerView.titleContainerView.frame.size.height;
-    CGFloat totalHeightWithDescription = baseHeight + _headerView.descriptionContainerView.frame.origin.y
-            + _headerView.descriptionContainerView.frame.size.height;
+    if (_headerView.descriptionContainerView.hidden)
+    {
+        return self.toolBarView.frame.size.height + 20. + _headerView.titleContainerView.frame.size.height;
+    }
+    else
+    {
+        return self.toolBarView.frame.size.height + 10. + _headerView.descriptionContainerView.frame.origin.y
+                + _headerView.descriptionContainerView.frame.size.height;
+    }
+}
 
-    return _headerView.descriptionContainerView.hidden ? totalHeightWithoutDescription : totalHeightWithDescription;
+- (BOOL)hasCustomHeaderFooter
+{
+    return YES;
 }
 
 - (void)setupView
@@ -221,6 +250,8 @@
     [_uiBuilder setupTabBar:self.tabBarView
                 parentWidth:self.scrollableView.frame.size.width];
     self.tabBarView.delegate = self;
+    [self.tabBarView makeTranslucent:YES];
+    [self.toolBarView addBlurEffect:YES cornerRadius:0. padding:0.];
 
     [self setupTableView];
 }
@@ -240,48 +271,62 @@
 
     _headerView = [[OATrackMenuHeaderView alloc] init];
     _headerView.trackMenuDelegate = self;
+    _headerView.sliderView.hidden = [self isLandscape];
     [_headerView setDescription];
 
     BOOL isOverview = _selectedTab == EOATrackMenuHudOverviewTab;
     if (isOverview)
+    {
+        _headerView.collectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
         [_headerView generateGpxBlockStatistics:self.analysis
                                     withoutGaps:!self.gpx.joinSegments && (self.isCurrentTrack
                                             ? (self.doc.tracks.count == 0 || self.doc.tracks.firstObject.generalTrack)
                                             : (self.doc.tracks.count > 0 && self.doc.tracks.firstObject.generalTrack))];
+    }
 
     [_headerView updateHeader:_selectedTab
                  currentTrack:self.isCurrentTrack
                    shownTrack:self.isShown
                         title:[self.gpx getNiceTitle]];
 
+    [self.scrollableView addSubview:_headerView];
+    _headerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.scrollableView addConstraints:@[
+            [self createBaseEqualConstraint:self.scrollableView
+                             firstAttribute:NSLayoutAttributeTrailing
+                                 secondItem:_headerView
+                            secondAttribute:NSLayoutAttributeTrailing],
+            [self createBaseEqualConstraint:self.scrollableView
+                             firstAttribute:NSLayoutAttributeLeading
+                                 secondItem:_headerView
+                            secondAttribute:NSLayoutAttributeLeading],
+            [self createBaseEqualConstraint:self.topHeaderContainerView
+                             firstAttribute:NSLayoutAttributeTop
+                                 secondItem:_headerView
+                            secondAttribute:NSLayoutAttributeTop],
+            [self createBaseEqualConstraint:self.scrollableView
+                             firstAttribute:NSLayoutAttributeTrailingMargin
+                                 secondItem:_headerView.contentView
+                            secondAttribute:NSLayoutAttributeTrailing],
+            [self createBaseEqualConstraint:self.scrollableView
+                             firstAttribute:NSLayoutAttributeLeadingMargin
+                                 secondItem:_headerView.contentView
+                            secondAttribute:NSLayoutAttributeLeading],
+            [self createBaseEqualConstraint:self.scrollableView
+                             firstAttribute:NSLayoutAttributeTrailing
+                                 secondItem:_headerView.collectionView
+                            secondAttribute:NSLayoutAttributeTrailing],
+            [self createBaseEqualConstraint:self.scrollableView
+                             firstAttribute:NSLayoutAttributeLeading
+                                 secondItem:_headerView.collectionView
+                            secondAttribute:NSLayoutAttributeLeading],
+    ]];
+
     CGRect topHeaderContainerFrame = self.topHeaderContainerView.frame;
     topHeaderContainerFrame.size.height = _headerView.frame.size.height;
     self.topHeaderContainerView.frame = topHeaderContainerFrame;
 
-    [self.topHeaderContainerView insertSubview:_headerView atIndex:0];
-    [self.topHeaderContainerView sendSubviewToBack:_headerView];
-    self.topHeaderContainerView.superview.backgroundColor =
-            isOverview ? UIColor.whiteColor : UIColorFromRGB(color_bottom_sheet_background);
-
-    [self.topHeaderContainerView addConstraints:@[
-            [self createBaseEqualConstraint:_headerView
-                             firstAttribute:NSLayoutAttributeLeading
-                                 secondItem:self.topHeaderContainerView
-                            secondAttribute:NSLayoutAttributeLeadingMargin],
-            [self createBaseEqualConstraint:_headerView
-                             firstAttribute:NSLayoutAttributeTop
-                                 secondItem:self.topHeaderContainerView
-                            secondAttribute:NSLayoutAttributeTop],
-            [self createBaseEqualConstraint:_headerView
-                             firstAttribute:NSLayoutAttributeTrailing
-                                 secondItem:self.topHeaderContainerView
-                            secondAttribute:NSLayoutAttributeTrailingMargin],
-            [self createBaseEqualConstraint:_headerView
-                             firstAttribute:NSLayoutAttributeBottom
-                                 secondItem:self.topHeaderContainerView
-                            secondAttribute:NSLayoutAttributeBottom]
-            ]
-    ];
+    [self.scrollableView bringSubviewToFront:self.toolBarView];
 }
 
 - (void)generateData
@@ -1738,9 +1783,6 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARadiusCellEx getCellIdentifier] owner:self options:nil];
             cell = (OARadiusCellEx *) nib[0];
-            cell.buttonRight.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-            cell.buttonRight.titleEdgeInsets = UIEdgeInsetsMake(0., 0., 0., 30.);
-            cell.buttonRight.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonRight.frame.size.width + 19., 0., -21.);
             cell.buttonRight.imageView.layer.cornerRadius = 12;
             cell.buttonRight.imageView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:0.1];
             cell.buttonRight.tintColor = UIColorFromRGB(color_primary_purple);
@@ -1751,8 +1793,7 @@
         {
             [cell.buttonLeft setTitle:cellData.values[@"left_title_string_value"] forState:UIControlStateNormal];
 
-            UIImage *rightIcon = [UIImage templateImageNamed:cellData.values[@"right_icon_string_value"]];
-
+            cell.buttonLeft.titleLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
             cell.buttonLeft.tag = tag;
             [cell.buttonLeft removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
             [cell.buttonLeft addTarget:self
@@ -1762,8 +1803,19 @@
             [cell showButtonRight:cellData.toggle];
             if (cellData.toggle)
             {
+                UIImage *rightIcon = [UIImage templateImageNamed:cellData.values[@"right_icon_string_value"]];
                 [cell.buttonRight setImage:[OAUtilities resizeImage:rightIcon newSize:CGSizeMake(24., 24.)] forState:UIControlStateNormal];
+                cell.buttonRight.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+
+                CGFloat buttonWidth = ((![self isLandscape] ? tableView.frame.size.width
+                        : tableView.frame.size.width - [OAUtilities getLeftMargin]) - 40) / 2;
+                CGFloat imageWidth = cell.buttonRight.imageView.image.size.width;
+
+                cell.buttonRight.titleEdgeInsets = UIEdgeInsetsMake(0., 0., 0., imageWidth + 6);
+                cell.buttonRight.imageEdgeInsets = UIEdgeInsetsMake(0., buttonWidth - imageWidth, 0., 0.);
+
                 [cell.buttonRight setTitle:cellData.values[@"right_title_string_value"] forState:UIControlStateNormal];
+                cell.buttonRight.titleLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
                 cell.buttonRight.tag = tag;
                 [cell.buttonRight removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
                 [cell.buttonRight addTarget:self
@@ -1832,7 +1884,7 @@
             || [cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
         return 48.;
     else if ([cellData.type isEqualToString:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]])
-        return cellData.toggle ? 136. : 69.;
+        return cellData.toggle ? 142. : 69.;
 
     return UITableViewAutomaticDimension;
 }
@@ -1840,7 +1892,14 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     OAGPXTableSectionData *sectionData = _tableData.sections[section];
-    return sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.01;
+    CGFloat headerHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.01;
+    return section == 0 ? headerHeight + _headerView.frame.size.height : headerHeight;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return _tableData.sections && _tableData.sections.count > 0 && section == _tableData.sections.count - 1
+            ? self.toolBarView.frame.size.height + 60. : 0.01;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1927,6 +1986,31 @@
             [NSIndexPath indexPathForRow:[cellData.values[@"row_to_update_int_value"] intValue]
                                inSection:indexPath.section]]
                           withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (_selectedTab == EOATrackMenuHudSegmentsTab)
+    {
+        if (!_isHeaderBlurred && scrollView.contentOffset.y > 0)
+        {
+            [_headerView addBlurEffect:YES cornerRadius:0. padding:0.];
+            _isHeaderBlurred = YES;
+        }
+        else if (_isHeaderBlurred && scrollView.contentOffset.y <= 0)
+        {
+            [_headerView removeBlurEffect];
+            _isHeaderBlurred = NO;
+        }
+    }
+
+    if ([self shouldScrollInAllModes])
+        return;
+
+    if (scrollView.contentOffset.y <= 0 || self.contentContainer.frame.origin.y != [OAUtilities getStatusBarHeight])
+        [scrollView setContentOffset:CGPointZero animated:NO];
 }
 
 @end

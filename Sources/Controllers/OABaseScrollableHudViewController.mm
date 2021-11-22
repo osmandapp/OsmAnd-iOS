@@ -154,8 +154,14 @@
     _sliderView.hidden = isLandscape;
     
     CGFloat tableViewY = CGRectGetMaxY(_topHeaderContainerView.frame);
-    _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
-    
+    _tableView.frame = CGRectMake(
+            0.,
+            [self hasCustomHeaderFooter] ? 0. : tableViewY,
+            contentFrame.size.width,
+            [self hasCustomHeaderFooter] ? contentFrame.size.height + self.toolBarView.frame.size.height
+                    : contentFrame.size.height - tableViewY
+    );
+
     _topHeaderContainerView.frame = CGRectMake(OAUtilities.getLeftMargin, _topHeaderContainerView.frame.origin.y, contentFrame.size.width - OAUtilities.getLeftMargin, _topHeaderContainerView.frame.size.height);
     
     [self applyCornerRadius:!isLandscape && _currentState != EOADraggableMenuStateFullScreen];
@@ -295,6 +301,11 @@
 - (BOOL) shouldScrollInAllModes
 {
     return YES;
+}
+
+- (BOOL) hasCustomHeaderFooter
+{
+    return NO; //override
 }
 
 - (CGFloat) getViewWidthForPad
@@ -467,7 +478,13 @@
             _contentContainer.frame = contentFrame;
             
             CGFloat tableViewY = CGRectGetMaxY(_topHeaderContainerView.frame);
-            _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
+            _tableView.frame = CGRectMake(
+                    0.,
+                    [self hasCustomHeaderFooter] ? 0 : tableViewY,
+                    contentFrame.size.width,
+                    [self hasCustomHeaderFooter] ? contentFrame.size.height + self.toolBarView.frame.size.height
+                            : contentFrame.size.height - tableViewY
+            );
             
             [self applyCornerRadius:newY > 0];
             return;

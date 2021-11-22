@@ -89,8 +89,6 @@
 
         tabBarView.selectedItem = tabBarView.items[_selectedTab];
         tabBarView.itemWidth = parentWidth / _tabs.count;
-        tabBarView.backgroundImage = [UIImage new];
-        tabBarView.shadowImage = [UIImage new];
     }
 }
 

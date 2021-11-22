@@ -332,6 +332,7 @@
                 ? UIBlurEffectStyleLight : UIBlurEffectStyleDark];
 
     UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    blurView.tag = -999;
     blurView.userInteractionEnabled = NO;
     blurView.backgroundColor = [UIColor clearColor];
     if (cornerRadius > 0)
@@ -347,6 +348,19 @@
     [self.trailingAnchor constraintEqualToAnchor:blurView.trailingAnchor constant:-padding].active = YES;
     [self.topAnchor constraintEqualToAnchor:blurView.topAnchor constant:padding].active = YES;
     [self.bottomAnchor constraintEqualToAnchor:blurView.bottomAnchor constant:-padding].active = YES;
+}
+
+- (void) removeBlurEffect
+{
+    for (UIView *subview in self.subviews)
+    {
+        if ([subview isKindOfClass:UIVisualEffectView.class] && subview.tag == -999)
+        {
+            [subview removeFromSuperview];
+            self.backgroundColor = UIColor.whiteColor;
+            break;
+        }
+    }
 }
 
 @end

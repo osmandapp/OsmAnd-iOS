@@ -1503,7 +1503,7 @@
             cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
 
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
-            [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast];
+            [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast hasLeftMargin:YES];
             cell.separatorView.hidden = isLast;
         }
         outCell = cell;
@@ -1530,7 +1530,7 @@
             cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
 
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
-            [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast];
+            [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast hasLeftMargin:YES];
             cell.separatorView.hidden = isLast;
         }
         outCell = cell;
@@ -1553,7 +1553,7 @@
             cell.titleView.text = cellData.title;
 
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
-            [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast];
+            [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast hasLeftMargin:YES];
             cell.separatorView.hidden = isLast;
 
             cell.switchView.on = cellData.isOn ? cellData.isOn() : NO;

@@ -21,6 +21,7 @@ static UIFont *_titleFont;
 {
     BOOL _bottomCorners;
     BOOL _topCorners;
+    BOOL _hasLeftMargin;
 }
 
 - (void) awakeFromNib
@@ -89,6 +90,8 @@ static UIFont *_titleFont;
 - (void) applyCornerRadius
 {
     CGFloat width = self.bounds.size.width - 40.;
+    if (_hasLeftMargin)
+        width -= ([OAUtilities isLandscape] ? [OAUtilities getLeftMargin] : 0.);
     CGFloat height = [self getHeight:_titleView.text cellWidth:width];
     _contentContainer.frame = CGRectMake(20., 0., width, height);
     UIRectCorner corners;
@@ -103,8 +106,16 @@ static UIFont *_titleFont;
 
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners
 {
+    [self roundCorners:topCorners bottomCorners:bottomCorners hasLeftMargin:NO];
+}
+
+- (void) roundCorners:(BOOL)topCorners
+        bottomCorners:(BOOL)bottomCorners
+        hasLeftMargin:(BOOL)hasLeftMargin
+{
     _bottomCorners = bottomCorners;
     _topCorners = topCorners;
+    _hasLeftMargin = hasLeftMargin;
 }
 
 - (void)prepareForReuse

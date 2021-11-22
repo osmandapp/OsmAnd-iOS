@@ -4,7 +4,7 @@
 "transport_routes" = "المسارات الرياضية";
 "transport_nearby_routes_within" = "الطرق الداخلية المجاورة";
 "transport_nearby_routes" = "في غضون";
-"transport_stop" = "إيقاف";
+"transport_stop" = "موقف";
 "cancel_navigation" = "إيقاف التوجيه";
 "intermediate_items_sort_by_distance" = "فرز من الباب إلى الباب";
 "switch_start_finish" = "اعكس نقطة الانطلاق والوصول";
@@ -48,7 +48,7 @@
 "daynight_mode_auto" = "تلقائي";
 "route_simulation" = "محاكاة الطريق";
 "auto_follow_location_enabled" = "تم توسيط موقعك تلقائياً.";
-"unknown_location" = "الموقع غير معروف بعد.";
+"unknown_location" = "الموقع غير معروف بعد";
 "animate_routing_route_not_calculated" = "لا يوجد توجيه نشط حالياً";
 "settings_preset" = "الوضع الافتراضي";
 "settings_preset_descr" = "اختيار وضع افتراضي لعرض الخريطة: استعراض، سيارة، مشي .";
@@ -92,14 +92,14 @@
 "shared_string_widgets" = "شريط جانبي";
 "map_widget_right" = "العدادات على اليسار";
 "map_widget_left" = "العدادات على اليمين";
-"layer_map_appearance" = "تخصيص الشاشة";
+"layer_map_appearance" = "الاختصارات";
 "map_markers" = "التوجيه المباشر";
 "select_gpx" = "اختر GPX…";
 "confirm_usage_speed_cameras" = "غير مسموح استخدام تحذيرات كاميرا السرعة بالقانون في العديد من البلدان (ألمانيا وفرنسا، وإيطاليا، وغيرها). أوسماند لا تتحمل أي مسؤولية إذا كنت تنتهك القانون. الرجاء انقر فوق \"نعم\" فقط إذا كنت مؤهلاً استخدام هذه الميزة.";
 "show_traffic_warnings" = "تحذيرات حركة المرور";
 "show_pedestrian_warnings" = "ممرات الراجلين";
 "show_cameras" = "كاميرات السرعة";
-"show_lanes" = "عرض مسارات الطريق";
+"show_lanes" = "الممرات";
 "speak_street_names" = "نطق أسماء الشوارع ( نطق آلي TTS )";
 "speak_speed_limit" = "السرعة القصوى";
 "speak_cameras" = "كاميرات السرعة";
@@ -125,12 +125,12 @@
 "map_orientation_change_in_accordance_with_speed" = "عتبة توجيه الخريطة";
 "map_orientation_change_in_accordance_with_speed_descr" = "حدد أدناه السرعة التي ينتقل بها اتجاه الخريطة من \"اتجاه الحركة\" إلى \"البوصلة\"";
 "fast_route_mode" = "الطريق الأسرع";
-"fast_route_mode_descr" = "تفعيل لحساب الطريق الأسرع أو تعطيل لحساب مسار أقل استهلاكا للوقود.";
+"fast_route_mode_descr" = "تفعيل لحساب الطريق الأسرع أو تعطيل لحساب مسار أقل استهلاكا للوقود";
 "avoid_in_routing_title" = "التجنب…";
 "avoid_in_routing_descr" = "تجنب الطرق ، والعبارات غير المعبدة";
 "prefer_in_routing_title" = "فضّل…";
-"prefer_in_routing_descr" = "تفضيل الطرق السريعة.";
-"relief_smoothness_factor_descr" = "التضاريس المفضلة : مسطحة أو تلال.";
+"prefer_in_routing_descr" = "تفضيل الطرق السريعة";
+"relief_smoothness_factor_descr" = "التضاريس المفضلة : مسطحة أو تلال";
 "choose_auto_follow_route" = "التوسيط التلقائي";
 "choose_auto_follow_route_descr" = "إعادة توسيط الموقع الحالي بعد مدة معينه";
 "auto_zoom_map" = "التكبير التلقائي";
@@ -142,15 +142,15 @@
 "speak_title" = "الإعلامات…";
 "speak_descr" = "تكوين للإعلان عن أسماء الشوارع ، وتحذيرات المرور (توقف القسري ، المطبات السرعة) ، تحذيرات الكاميرا السرعة ، حدود السرعة";
 "keep_informing" = "إعادة تعليمات الملاحة";
-"keep_informing_descr" = "إعادة إعلان تعليمات الملاحة في فترات منتظمة.";
+"keep_informing_descr" = "إعادة إعلان تعليمات الملاحة في فترات منتظمة";
 "arrival_distance" = "تنبيه الوصول";
 "arrival_distance_descr" = "متى تريد إعلان الوصول؟";
 "default_speed_system" = "وحدات السرعة";
-"default_speed_system_descr" = "اختيار وحدة للسرعة.";
+"default_speed_system_descr" = "اختيار وحدة للسرعة";
 "speed_limit_exceed" = "حد السرعة";
 "speed_limit_exceed_message" = "حدد مجال السرعة المسموح به لتتلقى تنبيه صوتي ما إذا تجاوزته.";
 "wake_on_voice" = "تشغيل الشاشة";
-"wake_on_voice_descr" = "تشغيل شاشة الجهاز (إذا كانت منطفئة) عند الاقتراب من منعطف.";
+"wake_on_voice_descr" = "تشغيل شاشة الجهاز (إذا كانت منطفئة) عند الاقتراب من منعطف";
 "voice_pref_title" = "تفضيلات الصوت";
 "voice_provider" = "التوجيه الصوتي";
 "voice_provider_descr" = "تحديد التوجيه الصوتي للتنقل";
@@ -174,7 +174,7 @@
 "routing_settings_2" = "إعدادات الملاحة";
 "gpx_navigation" = "تتبع المسار";
 "impassable_road" = "تجنب طرقات";
-"impassable_road_desc" = "حدد طرق تريد تجنبها خلال التنقل.";
+"impassable_road_desc" = "حدد طرق تريد تجنبها خلال التنقل";
 "interrupt_music_descr" = "قم بإيقاف الموسيقى مؤقتًا أثناء المطالبات الصوتية (لايكفي خفض مستوى الصوت)";
 "interrupt_music" = "إيقاف الموسيقى";
 "shared_string_do_not_use" = "لا تستخدم";
@@ -358,7 +358,7 @@
 "gpx_route_time" = "وقت التوجيه";
 "gpx_uphldownhl" = "الصعود والهبوط";
 "gpx_average_speed" = "متوسط السرعة";
-"gpx_start" = "ابدأ";
+"gpx_start" = "بدء";
 "gpx_finish" = "إنهاء";
 "gpx_avg_elev" = "متوسط الارتفاع";
 "gpx_elev_range" = "نطاق الارتفاع";
@@ -388,12 +388,12 @@
 "m_style_car" = "القيادة";
 "m_style_walk" = "مشي";
 "m_style_bicycle" = "دراجة";
-"map_settings_map" = "إدارة الخرائط";
+"map_settings_map" = "الخرائط العادية";
 "map_settings_show" = "عرض على الخريطة";
 "map_settings_type" = "نمط الخريطة";
 "map_mode" = "مظهرالخريطة";
 "map_settings_day" = "نهاري";
-"map_settings_night" = "ليلاً";
+"map_settings_night" = "ليلي";
 "map_settings_style" = "نمط الخريطة";
 "map_settings_overunder" = "الخريطة العلوية/ السفلية";
 "map_settings_over" = "الخريطة العلوية";
@@ -418,7 +418,7 @@
 "sett_km" = "كيلومترات";
 "sett_ml" = "أميال";
 "sett_zoom" = "زر التكبير/التصغير";
-"sett_show" = "أظهر";
+"sett_show" = "عرض";
 "sett_notshow" = "عدم الإظهار";
 "sett_loc_fmt" = "Location format";
 "sett_deg" = "Degrees";
@@ -958,7 +958,7 @@
 "loading_poi_obj" = "تحميل POI…";
 "osm_note" = "ملاحظة OSM";
 "osm_created" = "تم إنشاءة";
-"osm_deleted" = "تم الحذف";
+"osm_deleted" = "حذف";
 "osm_modified" = "تم التعديل";
 "osm_reopened" = "إعادة فتح";
 "osm_name" = "اسم مستخدم خريطة الشارع المفتوح";
@@ -990,8 +990,8 @@
 "modify_edit_short" = "تعديل OSM";
 "open_osm_note" = "فتح ملاحظة OSM";
 "edit_osm_note" = "تحرير ملاحظة OSM";
-"osm_alert_title" = "ارتكب";
-"osm_alert_message" = "الرسالة";
+"osm_alert_title" = "تقديم";
+"osm_alert_message" = "رسالة";
 "osm_alert_button_ok" = "إنشاء الملاحظة";
 "modify_poi" = "تعديل معلومات POI";
 "product_title_osm_editing" = "تعديلات خريطة الشارع المفتوح";
@@ -1120,7 +1120,7 @@
 "download_pending" = "تحميل معلق";
 "reddit" = "موقع Reddit";
 // Quick action
-"quick_action_name" = "إجراء سريع";
+"quick_action_name" = "إجراءات سريعة";
 "quick_action_no_overlay" = "بدون طبقة";
 "quick_action_add_overlay" = "إضافة طبقة علوية";
 "quick_action_no_underlay" = "بدون طبقة";
@@ -1277,7 +1277,7 @@
 // World Regions
 "region_antarctica" = "القارة القطبية الجنوبية";
 "region_others" = "خرائط أخرى";
-"gpx_descent" = "منحدر";
+"gpx_descent" = "المنحدرات";
 "gpx_avg_altitude" = "متوسط الارتفاع";
 "gpx_ascent" = "مرتفع";
 "download_depth_countours" = "محيطات الأعماق البحرية";
@@ -1378,7 +1378,7 @@
 "routing_attr_allow_classic_only_name" = "السماح للطرق الكلاسيكية فقط";
 "rendering_attr_piste_type_nordic_name" = "دول الشمال";
 "routing_attr_avoid_ferry_name" = "تجنب العبارات";
-"rendering_attr_hideUnderground_name" = "الأشياء تحت مستوى سطح الأرض";
+"rendering_attr_hideUnderground_name" = "أشياء تحت الأرض";
 "rendering_attr_noAdminboundaries_name" = "الحدود";
 "routing_attr_avoid_sett_name" = "عدم تجنب الحصى والطرق المرصوفة";
 "rendering_attr_piste_difficulty_expert_name" = "خبير";
@@ -1663,7 +1663,7 @@
 "public_transport_warning_title" = "يخضع التنقل في وسائل النقل العام حاليًا للاختبار التجريبي ، ويتوقع أن يكون فيه أخطاء .";
 "calc_pedestrian_route" = "احسب طريق المشاة";
 "public_transport_ped_route_title" = "المسار على الأقدام حوالي %@, وقد يكون أسرع من وسائل النقل العام.";
-"m_style_pulic_transport" = "وسائل النقل العام";
+"m_style_pulic_transport" = "النقل العام";
 "transfers" = "النقل:";
 "consider_limitations_param" = "النظر في القيود المؤقتة";
 "avoid_transport_type" = "تجنب أنواع النقل";
@@ -1800,7 +1800,7 @@
 "profile_import_success" = "تم استيراد ملف تعريف التطبيق بنجاح";
 "err_profile_import" = "خطأ في قراءة بيانات العنصر:٪ @";
 "default_speed_dialog_msg" = "يستخدم لتقدير وقت الوصول لنوع غير معروف من الطرق ولتقليل السرعة لجميع الطرق (قد يغير المسار)";
-"vessel_width_limit_description" = "تحديد عرض السفينة لتجنب الجسور الضيقة";
+"vessel_width_limit_description" = "تحديد عرض السفينة لتجنب الجسور الضيقة.";
 "vessel_height_limit_description" = "ضبط الارتفاع لتجنب الجسور المنخفضة. ضع في اعتبارك أنه إذا كان الجسر متحركاً ، فسوف نستخدم ارتفاعه في الحالة المفتوحة.";
 "width_limit_description" = "أدل بعرض مركبتك، قد يتم تطبيق بعض القيود على المركبات العريضة.";
 "lenght_limit_description" = "أدل بوزن مركبتك ،قد يتم تطبيق بعض القيود على المركبات الثقيلة.";
@@ -1845,7 +1845,7 @@
 "help_nav_profiles" = "أوضاع الملاحة";
 "reset_profile_action_descr" = "إعادة تعيين كافة إعدادات ملف التعريف إلى إعدادات التثبيت الافتراضية. سيؤدي النقر فوق إعادة التعيين إلى تجاهل جميع التغييرات ، ولا يمكن التراجع عن هذا الإجراء.";
 "import_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد \"نسخ إلى أوسماند\"";
-"profile_prefs_reset_successful" = "تمت استعادة جميع إعدادات الوضع إلى الحالة الافتراضية.";
+"profile_prefs_reset_successful" = "تمت استعادة جميع إعدادات الوضع إلى الحالة الافتراضية";
 "gpx_parse_error" = "لم يتم تكوين OsmAnd GPX بشكل جيد ، يرجى الاتصال بفريق الدعم لمزيد من التحقيقات.";
 "nothing_found_empty" = "لم يتم العثور على شيء";
 "shared_string_next" = "التالي";
@@ -1947,7 +1947,7 @@
 "quick_action_showhide_mapillary_title" = "إظهار/إخفاء مابيلاري";
 "profile_type_user_string" = "ملف تعريف المستخدم";
 "quick_action_switch_profile_descr" = "سيتم تبديل زر الإجراء التسجيل بين التشكيلات الجانبية المحددة.";
-"arrived_at_destination" = "لقد وصلت.";
+"arrived_at_destination" = "لقد وصلت";
 "quick_action_remove_next_destination" = "حذف نقطة الوجهة التالية";
 "quick_action_mapillary_show" = "إظهار مابيلاري";
 "reverse_route" = "عكس الطريق";
@@ -2098,7 +2098,7 @@
 "no_waypoints_found" = "لم يتم العثور على احداثيات وجهة";
 "context_menu_item_edit_waypoint" = "تعدبل إحداثية GPX";
 "replace_waypoint_confirmation" = "هل تريد بالتأكيد استبدال إحداثية النقطة ٪@؟";
-"default" = "الافتراضي";
+"default" = "افتراضي";
 "map_widget_parking" = "مكان للوقوف";
 "select_profile" = "تحديد ملف التعريف";
 "threshold_distance" = "بداية المسافة";
@@ -2126,7 +2126,7 @@
 "product_desc_ext_mapillary" = "صور على مستوى الشارع عبر الإنترنت متاحة للجميع. اكتشف الأماكن، تعاون، والتقط صورا للعالم.";
 "product_desc_mapillary" = "صور على مستوى الشارع عبر الإنترنت متاحة للجميع";
 "shared_strings_all_regions" = "كل المناطق";
-"welmode_download_maps" = "إدارة الخرائط";
+"welmode_download_maps" = "تنزيل الخرائط";
 "travel_routes" = "طرق السفر";
 "routes_color_by_type" = "لون المسارات حسب…";
 "rendering_value_walkingRoutesOSMC_description" = "لون الطرق وفقا للون المحلي الفردي (إذا كان موجودا على OpenStreetMap) ورمز درع المشي/التنزه.";

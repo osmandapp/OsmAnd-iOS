@@ -75,9 +75,9 @@
 "gpx_uphills_total" = "Всего подъем";
 // Map settings
 "rendering_value_browse_map_name" = "Обзор карты";
-"m_style_car" = "Вождение";
+"m_style_car" = "Автомобиль";
 "m_style_walk" = "Пешеход";
-"m_style_bicycle" = "Езда на велосипеде";
+"m_style_bicycle" = "Велосипед";
 "map_settings_map" = "Карта";
 "map_settings_fav" = "Избранное";
 "map_settings_tracks" = "Треки";
@@ -100,7 +100,7 @@
 // Intro
 "intro_skip" = "Пропустить";
 "intro_download" = "Загрузить\nкарту";
-"intro_next" = "Далее";
+"intro_next" = "Следующий";
 "intro_welcome" = "Добро пожаловать\nOsmAnd";
 "intro_promo" = "Мировые офлайн карты";
 "intro_placeholder" = "введите название региона";
@@ -179,7 +179,7 @@
 // Import
 "import_title" = "Импортировать данные";
 "import_choose_type" = "Выберите что импортировать";
-"import_favorite" = "Сохранено";
+"import_favorite" = "Избранное";
 "import_failed" = "Импорт не удался";
 "import_gpx" = "GPX трек";
 // Context menu
@@ -390,7 +390,7 @@
 "gpx_speed" = "Скорость";
 "shared_string_dismiss" = "Отменить";
 "shared_string_modify" = "Изменить";
-"shared_string_later" = "Позже";
+"shared_string_later" = "Продолжить";
 "offline_maps" = "Офлайн-карты";
 "download_map" = "Скачать карту";
 "gpx_route" = "Маршрут";
@@ -686,7 +686,7 @@
 "osm_website" = "Веб-сайт";
 "osm_add_place" = "Добавить место";
 "osm_modify_place" = "Изменить место";
-"osm_poi_delete_title" = "Удаление POI";
+"osm_poi_delete_title" = "Удалить POI";
 "osm_alert_message" = "Сообщение";
 "osm_alert_button_ok" = "Создать заметку";
 "osm_upload_failed_title" = "Ошибка отправки";
@@ -759,7 +759,7 @@
 "help_search" = "Поиск по карте";
 "help_trip_planning" = "Планирование маршрута при навигации";
 "help_legend" = "Легенда";
-"help_other_header" = "Прочее";
+"help_other_header" = "Другие";
 "help_install_and_troubleshoot" = "Установка и решение проблем";
 "help_tech_articles" = "Технические статьи";
 "help_versions" = "Версии";
@@ -1971,7 +1971,7 @@
 "profile_type_osmand_string" = "Профиль OsmAnd";
 "quick_action_remove_next_destination_descr" = "Следующая точка маршрута будет удалена. Если это конечный пункт, навигация завершится.";
 "gpx_export_failed" = "Не удалось сохранить созданный маршрут";
-"visible" = "Видны";
+"visible" = "Видимые";
 "hide_compass_ruler" = "Скрыть компас-линейку";
 "show_compass_ruler" = "Показать компас-линейку";
 "address_search" = "Поиск по адресу";
@@ -2006,7 +2006,7 @@
 "fav_points_not_exist" = "Избранные точки отсутствуют";
 "res_standard" = "Стандартная карта";
 "select_another_track" = "Выбрать другой трек";
-"travel" = "Путешествие";
+"travel" = "Путешествия";
 "plan_route_change_folder" = "Изменить папку";
 "favorite_places_category" = "Места";
 "street_level_imagery" = "Фото с улиц";
@@ -2145,29 +2145,3 @@
 "navigate_point_zone" = "Зона";
 "suggested_maps" = "Предлагаемые карты";
 "added_profiles" = "Добавленные профили";
-"regions" = "Регионы";
-"education" = "Образование";
-"analyze_on_map" = "Анализ на карте";
-"industrial" = "Промышленность";
-"shared_string_start_time" = "Отправление";
-"shared_string_end_time" = "Прибытие";
-"distance_moving" = "Исправл. путь";
-"gpx_split_interval" = "Интервал разбиения";
-"shared_string_time_span" = "Общее время";
-"gpx_split_interval_none_descr" = "Выберите способ разбиения: по времени или по расстоянию.";
-"edit_track" = "Редактировать трек";
-"gpx_join_gaps" = "Соединить разрывы (исключить пробелы)";
-"shared_string_width" = "Ширина";
-"nautical" = "Морской";
-"gpx_split_interval_descr" = "Интервал между метками расстояния или времени на треке.";
-"attribute" = "Атрибут";
-"shared_string_time_moving" = "Время движения";
-"track_show_start_finish_icons" = "Значки старта и финиша";
-"reset_to_original" = "Сбросить к начальному значению";
-"shared_string_overview" = "Обзор";
-"delete_waypoints" = "Удалить путевые точки";
-"gpx_dir_arrows" = "Стрелки направления";
-"upload_to_openstreetmap" = "Отправить в OpenStreetMap";
-"shared_string_interval" = "Интервал";
-"track_coloring_solid" = "Сплошной";
-"shared_string_custom" = "Своё значение";

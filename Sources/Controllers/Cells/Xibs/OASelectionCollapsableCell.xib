@@ -52,14 +52,11 @@
                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tAX-2s-LP5">
-                        <rect key="frame" x="364" y="15" width="24" height="24"/>
-                        <color key="backgroundColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                        <rect key="frame" x="364" y="12" width="30" height="30"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="24" id="ccV-2Z-LJe"/>
-                            <constraint firstAttribute="height" constant="24" id="f0E-eB-JNI"/>
+                            <constraint firstAttribute="width" constant="30" id="ccV-2Z-LJe"/>
+                            <constraint firstAttribute="height" constant="30" id="f0E-eB-JNI"/>
                         </constraints>
-                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                        <state key="normal" image="ic_custom_overflow_menu.png"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                 <real key="value" value="10.75"/>
@@ -100,15 +97,15 @@
                     <constraint firstItem="atX-fb-f5r" firstAttribute="leading" secondItem="okd-0B-Irj" secondAttribute="leading" id="D5J-he-Og6"/>
                     <constraint firstItem="tAX-2s-LP5" firstAttribute="leading" secondItem="RJs-NT-27z" secondAttribute="trailing" constant="12" id="DNy-Yw-B9O"/>
                     <constraint firstItem="6HJ-NK-afp" firstAttribute="top" secondItem="okd-0B-Irj" secondAttribute="top" constant="15" id="JXc-cP-lE2"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="ktH-lW-QhX" secondAttribute="trailing" priority="999" id="NzX-df-ZdC"/>
+                    <constraint firstAttribute="trailing" secondItem="ktH-lW-QhX" secondAttribute="trailing" priority="999" id="NzX-df-ZdC"/>
                     <constraint firstItem="ktH-lW-QhX" firstAttribute="top" secondItem="okd-0B-Irj" secondAttribute="top" id="OgY-Ej-w5r"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="tAX-2s-LP5" secondAttribute="trailing" constant="6" id="Oyu-X3-VL6"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="tAX-2s-LP5" secondAttribute="trailing" id="Oyu-X3-VL6"/>
                     <constraint firstAttribute="bottom" secondItem="RJs-NT-27z" secondAttribute="bottom" constant="12" id="VIj-Rc-2cp"/>
                     <constraint firstItem="Gs1-fR-3ze" firstAttribute="top" secondItem="okd-0B-Irj" secondAttribute="top" constant="12" id="W6Q-9S-1RG"/>
                     <constraint firstItem="M9y-XT-vrN" firstAttribute="top" secondItem="okd-0B-Irj" secondAttribute="top" id="WV4-9Q-nNv"/>
                     <constraint firstItem="atX-fb-f5r" firstAttribute="top" secondItem="okd-0B-Irj" secondAttribute="top" id="XFP-Gz-mun"/>
                     <constraint firstItem="bcI-8d-le5" firstAttribute="top" secondItem="okd-0B-Irj" secondAttribute="top" constant="12" id="ZwL-PW-MZf"/>
-                    <constraint firstItem="RJs-NT-27z" firstAttribute="leading" secondItem="ktH-lW-QhX" secondAttribute="trailing" id="a00-VL-Frk"/>
+                    <constraint firstItem="Gs1-fR-3ze" firstAttribute="trailing" secondItem="ktH-lW-QhX" secondAttribute="trailing" constant="-12" id="a00-VL-Frk"/>
                     <constraint firstAttribute="bottom" secondItem="6HJ-NK-afp" secondAttribute="bottom" constant="15" id="afO-Bq-0Xo"/>
                     <constraint firstItem="bcI-8d-le5" firstAttribute="leading" secondItem="okd-0B-Irj" secondAttribute="leadingMargin" priority="999" id="ciL-Sr-1zP"/>
                     <constraint firstAttribute="bottom" secondItem="M9y-XT-vrN" secondAttribute="bottom" id="dPN-aj-zIg"/>
@@ -117,17 +114,17 @@
                     <constraint firstItem="bcI-8d-le5" firstAttribute="leading" secondItem="atX-fb-f5r" secondAttribute="trailing" id="iOM-GU-sxo"/>
                     <constraint firstAttribute="bottom" secondItem="ktH-lW-QhX" secondAttribute="bottom" id="jou-LD-kbt"/>
                     <constraint firstAttribute="bottom" secondItem="7i5-t6-bXQ" secondAttribute="bottom" constant="16" id="ljY-q6-roC"/>
-                    <constraint firstItem="tAX-2s-LP5" firstAttribute="top" secondItem="okd-0B-Irj" secondAttribute="top" constant="15" id="msD-RF-pXb"/>
+                    <constraint firstItem="tAX-2s-LP5" firstAttribute="top" secondItem="okd-0B-Irj" secondAttribute="top" constant="12" id="msD-RF-pXb"/>
                     <constraint firstAttribute="bottom" secondItem="bcI-8d-le5" secondAttribute="bottom" constant="12" id="nsR-o7-2Gn"/>
                     <constraint firstItem="RJs-NT-27z" firstAttribute="top" secondItem="okd-0B-Irj" secondAttribute="top" constant="12" id="r2i-6I-Hfv"/>
                     <constraint firstItem="7i5-t6-bXQ" firstAttribute="leading" secondItem="bcI-8d-le5" secondAttribute="trailing" constant="16" id="rTG-f5-Icv"/>
-                    <constraint firstAttribute="bottom" secondItem="tAX-2s-LP5" secondAttribute="bottom" constant="15" id="sI5-d8-VfC"/>
+                    <constraint firstAttribute="bottom" secondItem="tAX-2s-LP5" secondAttribute="bottom" constant="12" id="sI5-d8-VfC"/>
                     <constraint firstItem="bcI-8d-le5" firstAttribute="leading" secondItem="6HJ-NK-afp" secondAttribute="trailing" constant="16" id="sKq-Lh-YPb"/>
                     <constraint firstItem="6HJ-NK-afp" firstAttribute="leading" secondItem="okd-0B-Irj" secondAttribute="leadingMargin" id="wMN-qO-XCk"/>
                     <constraint firstItem="VYd-Q8-uEF" firstAttribute="centerX" secondItem="6HJ-NK-afp" secondAttribute="centerX" id="wST-tj-mxh"/>
-                    <constraint firstItem="ktH-lW-QhX" firstAttribute="leading" secondItem="okd-0B-Irj" secondAttribute="leadingMargin" priority="999" id="xsK-zB-MVC"/>
+                    <constraint firstItem="ktH-lW-QhX" firstAttribute="leading" secondItem="okd-0B-Irj" secondAttribute="leading" priority="999" id="xsK-zB-MVC"/>
                     <constraint firstAttribute="trailing" secondItem="M9y-XT-vrN" secondAttribute="trailing" id="zEJ-HB-Gn7"/>
-                    <constraint firstItem="M9y-XT-vrN" firstAttribute="leading" secondItem="ktH-lW-QhX" secondAttribute="trailing" id="zSe-mT-MQv"/>
+                    <constraint firstItem="M9y-XT-vrN" firstAttribute="leading" secondItem="Gs1-fR-3ze" secondAttribute="trailing" constant="12" id="zSe-mT-MQv"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
@@ -159,6 +156,5 @@
     <resources>
         <image name="ic_custom_arrow_up.png" width="30" height="30"/>
         <image name="ic_custom_folder.png" width="30" height="30"/>
-        <image name="ic_custom_overflow_menu.png" width="30" height="30"/>
     </resources>
 </document>

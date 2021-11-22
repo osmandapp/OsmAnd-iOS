@@ -626,6 +626,7 @@
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Export";
 "gpx_selection_segment_title" = "Segments";
+"route_points" = "Route points";
 
 "import_export" = "Import/Export";
 

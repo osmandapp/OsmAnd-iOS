@@ -2160,3 +2160,7 @@
 "shared_string_interval" = "Интервал";
 "duplicate_track" = "Дублировать трек";
 "delete_group_confirm_short" = "Удалить группу?";
+"delete_group_confirm" = "Вы уверены, что хотите удалить группу ”%@”?";
+"upload_to_openstreetmap" = "Отправить в OpenStreetMap";
+"change_application_profile" = "Изменить профиль приложения";
+"select_application_profile" = "Выбрать профиль приложения";

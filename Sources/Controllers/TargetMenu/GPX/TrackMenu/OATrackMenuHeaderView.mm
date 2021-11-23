@@ -326,10 +326,18 @@
 
 - (void)updateShowHideButton:(BOOL)shownTrack
 {
-    [self.showHideButton setTitle:shownTrack ? OALocalizedString(@"poi_hide") : OALocalizedString(@"sett_show")
-                         forState:UIControlStateNormal];
-    [self.showHideButton setImage:[UIImage templateImageNamed:shownTrack ? @"ic_custom_hide" : @"ic_custom_show"]
-                         forState:UIControlStateNormal];
+    [UIView transitionWithView:self.showHideButton
+                      duration:0.35f
+                       options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
+                    animations:^(void) {
+                        [self.showHideButton setTitle:shownTrack
+                                        ? OALocalizedString(@"poi_hide") : OALocalizedString(@"sett_show")
+                                             forState:UIControlStateNormal];
+                        [self.showHideButton setImage:[UIImage templateImageNamed:shownTrack
+                                        ? @"ic_custom_hide" : @"ic_custom_show"]
+                                             forState:UIControlStateNormal];
+                    }
+                    completion:nil];
 }
 
 - (void)updateFrame

@@ -342,7 +342,7 @@
         blurView = [[UIView alloc] init];
         blurView.backgroundColor = UIColorFromRGB(color_dialog_transparent_bg_argb_light);
     }
-    blurView.tag = -999;
+    blurView.tag = kBlurViewTag;
     blurView.userInteractionEnabled = NO;
     if (cornerRadius > 0)
     {
@@ -363,8 +363,7 @@
 {
     for (UIView *subview in self.subviews)
     {
-        if (subview.tag == -999 && ([subview isKindOfClass:UIVisualEffectView.class]
-                || UIAccessibilityIsReduceTransparencyEnabled()))
+        if (subview.tag == kBlurViewTag)
         {
             [subview removeFromSuperview];
             self.backgroundColor = UIColor.whiteColor;

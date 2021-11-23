@@ -51,4 +51,6 @@
 
 #define kUndefinedAttr @"undefined"
 
+#define kBlurViewTag -999
+
 #endif

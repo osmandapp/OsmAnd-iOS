@@ -31,7 +31,7 @@
 
 #define kIconShadowInset 15.0
 
-static const UIFont *textFont = [UIFont systemFontOfSize:15.];
+static const UIFont *textFont = [UIFont systemFontOfSize:12. weight:UIFontWeightSemibold];
 
 OAGpxAdditionalIconsProvider::OAGpxAdditionalIconsProvider()
 : _startIcon([OANativeUtilities skBitmapFromPngResource:@"map_track_point_start"])
@@ -45,7 +45,7 @@ OAGpxAdditionalIconsProvider::OAGpxAdditionalIconsProvider()
         .setMaxLines(1)
         .setBold(false)
         .setItalic(false)
-        .setSize(15.0 * UIScreen.mainScreen.scale);
+        .setSize(12.0 * UIScreen.mainScreen.scale);
     
     const auto& activeGpx = OASelectedGPXHelper.instance.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
@@ -171,13 +171,14 @@ std::shared_ptr<SkBitmap> OAGpxAdditionalIconsProvider::getSplitIconForValue(con
         textColor = ColorARGB(0xFFFFFFFF);
     
     _captionStyle.setColor(textColor);
+    _captionStyle.setBold(true);
     
     const auto textBmp = _textRasterizer->rasterize(text, _captionStyle);
     if (textBmp)
     {
         const auto bitmap = std::make_shared<SkBitmap>();
         CGFloat bitmapWidth = textBmp->width() + (20 * UIScreen.mainScreen.scale);
-        CGFloat bitmapHeight = textBmp->height() + (20 * UIScreen.mainScreen.scale);
+        CGFloat bitmapHeight = textBmp->height() + (17 * UIScreen.mainScreen.scale);
         CGFloat strokeWidth = 2.5 * UIScreen.mainScreen.scale;
         if (bitmap->isNull())
         {
@@ -197,17 +198,18 @@ std::shared_ptr<SkBitmap> OAGpxAdditionalIconsProvider::getSplitIconForValue(con
         SkCanvas canvas(&target);
         SkPaint paint;
         paint.setStyle(SkPaint::Style::kStroke_Style);
+        paint.setAntiAlias(true);
         paint.setColor(SkColorSetARGBInline(255, r * 255, g * 255, b * 255));
         paint.setStrokeWidth(strokeWidth);
         SkRect rect;
         rect.setXYWH(strokeWidth, strokeWidth, bitmapWidth - (strokeWidth * 2), bitmapHeight - (strokeWidth * 2));
-        canvas.drawRoundRect(rect, 20, 20, paint);
+        canvas.drawRoundRect(rect, 40, 40, paint);
         
         paint.reset();
         paint.setStyle(SkPaint::Style::kFill_Style);
         paint.setColor(SkColorSetARGBInline(200, r * 255, g * 255, b * 255));
-        rect.setXYWH(strokeWidth * 1.5, strokeWidth * 1.5, rect.width() - strokeWidth, rect.height() - strokeWidth);
-        canvas.drawRoundRect(rect, 16, 16, paint);
+        rect.setXYWH(strokeWidth, strokeWidth, rect.width(), rect.height());
+        canvas.drawRoundRect(rect, 36, 36, paint);
         
         canvas.drawBitmap(*textBmp,
                           (bitmapWidth - textBmp->width()) / 2.0f,
@@ -323,7 +325,7 @@ void OAGpxAdditionalIconsProvider::buildVisibleSplits(const double metersPerPixe
             const auto nextPos31 = (*posIterator).first;
             NSString *nextTitle = (*posIterator).second.first.toNSString();
             CGSize size = [nextTitle sizeWithAttributes:attrs];
-            double nextDistance = ((fmax(size.width, size.height) + 40) * UIScreen.mainScreen.scale * metersPerPixel) / 2;
+            double nextDistance = ((fmax(size.width, size.height) + 20) * UIScreen.mainScreen.scale * metersPerPixel) / 2;
             const auto nextIconArea = Utilities::boundingBox31FromAreaInMeters(nextDistance, nextPos31);
             if (!currentIconArea.intersects(nextIconArea))
             {
@@ -332,6 +334,8 @@ void OAGpxAdditionalIconsProvider::buildVisibleSplits(const double metersPerPixe
             }
             posIterator++;
         }
+        if (posIterator == _labelsAndCoordinates.end())
+            break;
     }
 }
 

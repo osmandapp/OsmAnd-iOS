@@ -2111,7 +2111,7 @@
 "population_num" = "População";
 "added_profiles_descr" = "Perfis adicionados pelo complemento";
 "added_profiles" = "Perfis adicionados";
-"suggested_maps_descr" = "Esses mapas são necessários para o complemento.";
+"suggested_maps_descr" = "Esses mapas são necessários para o complemento";
 "suggested_maps" = "Mapas sugeridos";
 "product_desc_ext_openplacereviews" = "Envie fotografias, avaliações e hiperligações sobre lugares públicos como restaurantes, hotéis, museus e pontos de rotas em dados abertos https://openplacereviews.org/data/.\n\nLeia mais em https://openplacereviews.org";
 "product_desc_openplacereviews" = "Envie fotografias, avaliações e hiperligações sobre locais públicos";

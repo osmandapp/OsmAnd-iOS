@@ -21,4 +21,8 @@
 
 - (void)roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners;
 
+- (void) roundCorners:(BOOL)topCorners
+        bottomCorners:(BOOL)bottomCorners
+        hasLeftMargin:(BOOL)leftMargin;
+
 @end

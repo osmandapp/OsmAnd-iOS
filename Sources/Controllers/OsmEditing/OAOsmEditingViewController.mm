@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     id<OAOpenStreetMapUtilsProtocol> _editingUtil;
     
     BOOL _isAddingNewPOI;
+    BOOL _isOnScreenSwitching;
 }
 
 -(id) initWithLat:(double)latitude lon:(double)longitude
@@ -192,19 +193,19 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (IBAction)segmentChanged:(UISegmentedControl *)sender
 {
+    _isOnScreenSwitching = YES;
+    [self.view endEditing:YES];
+    
     switch (_segmentControl.selectedSegmentIndex)
     {
         case 0:
         {
             [_pageController setViewControllers:@[_basicEditingController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-            [_basicEditingController.view endEditing:YES];
             break;
         }
         case 1:
         {
-            _advancedEditingController.isKeyboardHidingAllowed = YES;
             [_pageController setViewControllers:@[_advancedEditingController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-            [_advancedEditingController.view endEditing:YES];
             break;
         }
     }
@@ -454,7 +455,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (void) keyboardWillHide:(NSNotification *)notification;
 {
-    if (_segmentControl.selectedSegmentIndex == ADVANCED && !_advancedEditingController.isKeyboardHidingAllowed)
+    if (!_isOnScreenSwitching && (_segmentControl.selectedSegmentIndex == ADVANCED && !_advancedEditingController.isKeyboardHidingAllowed))
     {
         // Filter wrong "HideKeyboard" notifications from OAAdvancedEditingViewController.
         return;
@@ -468,6 +469,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         [self applyHeight:42.0 cornerRadius:9.0 toView:_buttonApply];
         [self applyHeight:42.0 cornerRadius:9.0 toView:_buttonDelete];
         [[self view] layoutIfNeeded];
+        _isOnScreenSwitching = NO;
         _advancedEditingController.isKeyboardHidingAllowed = NO;
     } completion:nil];
 }

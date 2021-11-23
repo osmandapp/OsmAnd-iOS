@@ -95,6 +95,8 @@ private:
     QByteArray getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
     
     virtual void performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap);
+    
+    OsmAnd::ZoomLevel getZoomForRequest(const OsmAnd::IMapTiledDataProvider::Request &req);
 
 protected:
 public:

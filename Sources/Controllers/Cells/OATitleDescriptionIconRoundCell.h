@@ -20,6 +20,9 @@
 @property (nonatomic) UIColor *textColorNormal;
 
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners;
-- (void) applyCornerRadius;
+
+- (void) roundCorners:(BOOL)topCorners
+        bottomCorners:(BOOL)bottomCorners
+        hasLeftMargin:(BOOL)leftMargin;
 
 @end

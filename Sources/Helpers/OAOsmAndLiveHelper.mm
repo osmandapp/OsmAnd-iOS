@@ -80,7 +80,7 @@
 
 + (void) setDefaultPreferencesForLocalIndex:(NSString *)regionName
 {
-    [OAOsmAndLiveHelper setPreferenceEnabledForLocalIndex:regionName value:YES];
+    [OAOsmAndLiveHelper setPreferenceEnabledForLocalIndex:regionName value:NO];
     [OAOsmAndLiveHelper setPreferenceWifiForLocalIndex:regionName value:NO];
     [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:regionName value:ELiveUpdateFrequencyHourly];
     [OAOsmAndLiveHelper setPreferenceLastUpdateForLocalIndex:regionName value:-1.0];

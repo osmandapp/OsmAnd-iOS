@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     id<OAOpenStreetMapUtilsProtocol> _editingUtil;
     
     BOOL _isAddingNewPOI;
+    BOOL _isOnScreenSwitching;
 }
 
 -(id) initWithLat:(double)latitude lon:(double)longitude
@@ -213,6 +214,9 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (IBAction)segmentChanged:(UISegmentedControl *)sender
 {
+    _isOnScreenSwitching = YES;
+    [self.view endEditing:YES];
+    
     switch (_segmentControl.selectedSegmentIndex)
     {
         case 0:
@@ -472,7 +476,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (void) keyboardWillHide:(NSNotification *)notification;
 {
-    if (_segmentControl.selectedSegmentIndex == ADVANCED && !_advancedEditingController.isKeyboardHidingAllowed)
+    if (!_isOnScreenSwitching && (_segmentControl.selectedSegmentIndex == ADVANCED && !_advancedEditingController.isKeyboardHidingAllowed))
     {
         // Filter wrong "HideKeyboard" notifications from OAAdvancedEditingViewController.
         return;
@@ -486,6 +490,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         [self applyHeight:42.0 cornerRadius:9.0 toView:_buttonApply];
         [self applyHeight:42.0 cornerRadius:9.0 toView:_buttonDelete];
         [[self view] layoutIfNeeded];
+        _isOnScreenSwitching = NO;
         _advancedEditingController.isKeyboardHidingAllowed = NO;
     } completion:nil];
 }

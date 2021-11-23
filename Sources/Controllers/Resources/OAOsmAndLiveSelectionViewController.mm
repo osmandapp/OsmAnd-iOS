@@ -395,7 +395,6 @@ static const NSInteger groupCount = 1;
 }
 - (IBAction)backButtonClicked:(id)sender
 {
-    [self onDissmissViewContoller];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

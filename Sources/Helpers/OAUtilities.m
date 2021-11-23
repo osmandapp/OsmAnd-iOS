@@ -331,10 +331,19 @@
         blurEffect = [UIBlurEffect effectWithStyle:light
                 ? UIBlurEffectStyleLight : UIBlurEffectStyleDark];
 
-    UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    UIView *blurView;
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    {
+        blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        blurView.backgroundColor = [UIColor clearColor];
+    }
+    else
+    {
+        blurView = [[UIView alloc] init];
+        blurView.backgroundColor = UIColorFromRGB(color_dialog_transparent_bg_argb_light);
+    }
     blurView.tag = -999;
     blurView.userInteractionEnabled = NO;
-    blurView.backgroundColor = [UIColor clearColor];
     if (cornerRadius > 0)
     {
         blurView.layer.cornerRadius = cornerRadius;
@@ -354,7 +363,8 @@
 {
     for (UIView *subview in self.subviews)
     {
-        if ([subview isKindOfClass:UIVisualEffectView.class] && subview.tag == -999)
+        if (subview.tag == -999 && ([subview isKindOfClass:UIVisualEffectView.class]
+                || UIAccessibilityIsReduceTransparencyEnabled()))
         {
             [subview removeFromSuperview];
             self.backgroundColor = UIColor.whiteColor;

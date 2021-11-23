@@ -153,6 +153,12 @@ static const NSInteger groupCount = 1;
     _footerView.subviews[0].frame = CGRectMake(btnMargin, 0, _footerView.frame.size.width - btnMargin * 2, 44.0);
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self onDissmissViewContoller];
+}
+
 -(UIView *) getTopView
 {
     return _navBarView;
@@ -389,6 +395,11 @@ static const NSInteger groupCount = 1;
 }
 - (IBAction)backButtonClicked:(id)sender
 {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)onDissmissViewContoller
+{
     if (!_initialStateEnabled)
     {
         [OAOsmAndLiveHelper removePreferencesForLocalIndex:_regionNameNSString];
@@ -396,8 +407,6 @@ static const NSInteger groupCount = 1;
     }
     else
         [self restoreInitialSettings];
-
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)applyButtonClicked:(id)sender

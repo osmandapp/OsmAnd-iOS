@@ -2573,11 +2573,11 @@ typedef enum
     {
         if (CLLocationCoordinate2DIsValid(item.bounds.center))
         {
-            targetPoint.location = CLLocationCoordinate2DMake(item.bounds.center.latitude, item.bounds.center.longitude);
+            targetPoint.location = item.bounds.center;
         }
         else
         {
-            OAMapRendererView *renderView = (OAMapRendererView *) _mapViewController.view;
+            OAMapRendererView *renderView = _mapViewController.mapView;
             OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
             targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
         }

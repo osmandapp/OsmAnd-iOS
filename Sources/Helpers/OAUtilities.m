@@ -21,6 +21,8 @@
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 
+#define kBlurViewTag -999
+
 @implementation UIBezierPath (util)
 
 /**
@@ -331,10 +333,19 @@
         blurEffect = [UIBlurEffect effectWithStyle:light
                 ? UIBlurEffectStyleLight : UIBlurEffectStyleDark];
 
-    UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-    blurView.tag = -999;
+    UIView *blurView;
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    {
+        blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        blurView.backgroundColor = [UIColor clearColor];
+    }
+    else
+    {
+        blurView = [[UIView alloc] init];
+        blurView.backgroundColor = UIColorFromRGB(color_dialog_transparent_bg_argb_light);
+    }
+    blurView.tag = kBlurViewTag;
     blurView.userInteractionEnabled = NO;
-    blurView.backgroundColor = [UIColor clearColor];
     if (cornerRadius > 0)
     {
         blurView.layer.cornerRadius = cornerRadius;
@@ -354,7 +365,7 @@
 {
     for (UIView *subview in self.subviews)
     {
-        if ([subview isKindOfClass:UIVisualEffectView.class] && subview.tag == -999)
+        if (subview.tag == kBlurViewTag)
         {
             [subview removeFromSuperview];
             self.backgroundColor = UIColor.whiteColor;

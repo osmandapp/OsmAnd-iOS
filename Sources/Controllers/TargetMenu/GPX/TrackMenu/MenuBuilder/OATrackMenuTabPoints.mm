@@ -31,7 +31,7 @@
 {
     NSMutableArray<NSString *> *waypointSortedGroupNames = self.trackMenuDelegate
             ? [[self.trackMenuDelegate getWaypointSortedGroups] mutableCopy] : [NSMutableArray array];
-    [waypointSortedGroupNames removeObject:OALocalizedString(@"targets")];
+    [waypointSortedGroupNames removeObject:OALocalizedString(@"route_points")];
     return waypointSortedGroupNames.count > 0;
 }
 
@@ -84,10 +84,12 @@
                     kCellRightIconName: @"ic_custom_arrow_up",
                     kCellToggle: @YES,
                     kCellTintColor: @([OAUtilities colorToNumber:tintColor]),
-                    kCellButtonPressed: ^() {
-                        if (self.trackMenuDelegate)
-                            [self.trackMenuDelegate openWaypointsGroupOptionsScreen:currentGroupName];
-                    }
+                    kTableValues: @{
+                        @"extra_button_pressed_value": ^() {
+                            if (self.trackMenuDelegate)
+                                [self.trackMenuDelegate openWaypointsGroupOptionsScreen:currentGroupName];
+                        }
+                   }
             }];
             [cellsData addObject:groupCellData];
 
@@ -208,9 +210,11 @@
                                 kCellLeftIcon: [UIImage templateImageNamed:
                                         isHidden ? @"ic_custom_folder_hidden" : @"ic_custom_folder"],
                                 kCellTintColor: @([OAUtilities colorToNumber:tintColor]),
-                                kCellButtonPressed: ^() {
-                                    if (self.trackMenuDelegate)
-                                        [self.trackMenuDelegate openWaypointsGroupOptionsScreen:currentGroupName];
+                                kTableValues: @{
+                                        @"extra_button_pressed_value": ^() {
+                                            if (self.trackMenuDelegate)
+                                                [self.trackMenuDelegate openWaypointsGroupOptionsScreen:currentGroupName];
+                                        }
                                 }
                         }];
                     },
@@ -279,7 +283,7 @@
                     for (OAGPXTableSectionData *sectionData in self.tableData.sections)
                     {
                         BOOL isAction = [sectionData.header isEqualToString:OALocalizedString(@"actions")];
-                        BOOL isRte = [sectionData.cells.firstObject.title isEqualToString:OALocalizedString(@"targets")];
+                        BOOL isRte = [sectionData.cells.firstObject.title isEqualToString:OALocalizedString(@"route_points")];
                         if (!isAction && !isRte)
                             [sectionsData addObject:sectionData];
                     }
@@ -341,8 +345,14 @@
                 [self.tableData setData:@{
                         kTableSections: tableSections = [[tableSections sortedArrayUsingComparator:
                                 ^NSComparisonResult(OAGPXTableSectionData *obj1, OAGPXTableSectionData *obj2) {
-                                    return obj2 == actionsSection ? NSOrderedAscending
-                                            : [obj1.cells.firstObject.key compare:obj2.cells.firstObject.key];
+                                    if (obj2 == actionsSection)
+                                        return NSOrderedAscending;
+
+                                    NSString *group1 = obj1.cells.firstObject.key;
+                                    NSString *group2 = obj2.cells.firstObject.key;
+                                    return [group1 hasSuffix:OALocalizedString(@"route_points")] ? NSOrderedDescending
+                                            : [group2 hasSuffix:OALocalizedString(@"route_points")] ? NSOrderedAscending
+                                                    : [group1 compare:group2];
                                 }] mutableCopy]
                 }];
 

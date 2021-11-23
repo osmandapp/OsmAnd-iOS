@@ -76,9 +76,30 @@ typedef NS_ENUM(NSInteger, EditingTab)
     if (self) {
         _editPoiData = [[OAEditPOIData alloc] initWithEntity:entity];
         _editingPlugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
-        _editingUtil = _editingPlugin.getPoiModificationLocalUtil;
+        _editingUtil = [self getEditingUtil];
     }
     return self;
+}
+
+- (id<OAOpenStreetMapUtilsProtocol>) getEditingUtil
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    if ([settings.offlineEditing get]
+        || [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable
+        || [settings.osmUserName get].length == 0
+        || [settings.osmUserPassword get].length == 0)
+    {
+        return _editingPlugin.getPoiModificationLocalUtil;
+    }
+    else
+    {
+        return _editingPlugin.getPoiModificationRemoteUtil;
+    }
+}
+
+- (BOOL) isOnlineEditing
+{
+    return [_editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class];
 }
 
 +(void)commitEntity:(EOAAction)action
@@ -152,7 +173,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 {
     _titleView.text = _isAddingNewPOI ? OALocalizedString(@"osm_add_place") : OALocalizedString(@"osm_modify_place");
     [_buttonDelete setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
-    [_buttonApply setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+    [_buttonApply setTitle:[self isOnlineEditing] ? OALocalizedString(@"shared_string_upload") : OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
     [_segmentControl setTitle:OALocalizedString(@"osm_edits_basic") forSegmentAtIndex:0];
     [_segmentControl setTitle:OALocalizedString(@"osm_edits_advanced") forSegmentAtIndex:1];
 }
@@ -212,7 +233,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_delete_confirmation_descr") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingPlugin.getPoiModificationLocalUtil changedTags:nil callback:^(OAEntity * entity){
+        [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingUtil changedTags:nil callback:^(OAEntity * entity){
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.navigationController popViewControllerAnimated:YES];
                 [[OARootViewController instance].mapPanel targetHide];
@@ -246,7 +267,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         else
         {
             [self.navigationController popViewControllerAnimated:YES];
-            [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getPoiModificationLocalUtil closeChangeSet:NO editingDelegate:self.delegate];
+            [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
         }
     }
     else if ([self testTooManyCapitalLetters:[_editPoiData getTag:[OAOSMSettings getOSMKey:NAME]]])
@@ -256,7 +277,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     else
     {
         [self.navigationController popViewControllerAnimated:YES];
-        [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getPoiModificationLocalUtil closeChangeSet:NO editingDelegate:self.delegate];
+        [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
     }
 }
 
@@ -302,7 +323,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         {
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self.navigationController popViewControllerAnimated:YES];
-                [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getPoiModificationLocalUtil closeChangeSet:NO editingDelegate:self.delegate];
+                [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
             }]];
         }
         

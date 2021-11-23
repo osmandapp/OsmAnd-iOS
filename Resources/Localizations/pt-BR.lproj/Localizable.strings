@@ -432,7 +432,7 @@
 "day_night_info" = "Informações dia/noite";
 "daynight_mode_auto" = "Nascer/pôr do sol";
 "auto_follow_location_enabled" = "Mapa automaticamente centrado.";
-"unknown_location" = "Posição ainda desconhecida.";
+"unknown_location" = "Posição ainda desconhecida";
 "settings_preset" = "Perfil predefinido";
 "settings_preset_descr" = "Configurações de exibição e navegação de mapa são gravadas por perfil de uso. Defina seu perfil padrão aqui.";
 "coords_format" = "Formato de coordenada";
@@ -771,7 +771,7 @@
 "routing_settings_descr" = "Configurar navegação";
 "fast_route_mode_descr" = "Ative para calcular a rota mais rápida ou desative para calcular a rota mais econômica.";
 "avoid_in_routing_descr" = "Evitar estradas com portagem, não pavimentadas e balsas/ferries";
-"prefer_in_routing_descr" = "Preferir autoestradas.";
+"prefer_in_routing_descr" = "Preferir autoestradas";
 "choose_auto_follow_route_descr" = "Tempo até o mapa ser centrado na posição atual";
 "auto_zoom_map_descr" = "Nível de ampliação automático de acordo com a velocidade (enquanto o mapa é sincronizado com a posição atual).";
 "snap_to_road_descr" = "Ajustar posição às vias próximas durante a navegação";
@@ -1012,7 +1012,7 @@
 "monthly_map_updates" = "Atualizações de mapas: a cada mês";
 "daily_map_updates" = "Atualizações de mapas: a cada hora";
 "purchase_unlim_title" = "Comprar - %@";
-"subscribe_email_desc" = "Inscreva-se na nossa lista de email:<br/>• Obtenha 3 mapas extras para descarregar<br/>• Seja dos primeiros a saber sobre descontos<br/>• Participe nos <a href='https://osmand.net/giveaway'>códigos promocionais</a>";
+"subscribe_email_desc" = "Inscreva-se na nossa lista de email:<br/>• Obtenha 3 mapas extras para descarregar<br/>• Seja dos primeiros a saber sobre descontos<br/>• Participe nos <a href=\"https://osmand.net/giveaway\">códigos promocionais</a>";
 "osm_live_unlock_all" = "Desbloquear todos os recursos";
 "osm_live_unlock_updates" = "Desbloquear atualizações de mapas a cada hora";
 "osm_live_banner_descr" = "Compre a subscrição do OsmAnd Live e ganhe atualizações a <b>cada hora</b> ilimitadas e <b>todas as funcionalidades</b> incluídas a partir de %@";
@@ -1694,7 +1694,7 @@
 "quick_action_remove_next_destination" = "Apagar o ponto de destino mais próximo";
 "shared_string_terrain" = "Terreno";
 "announce" = "Anunciar";
-"profile_prefs_reset_successful" = "Todas as configurações de perfil são restauradas para o padrão.";
+"profile_prefs_reset_successful" = "Todas as configurações de perfil são restauradas para o padrão";
 "consider_limitations_param" = "Considere limitações temporárias";
 "two" = "Dois";
 "shared_string_max" = "Máx.";
@@ -2111,7 +2111,7 @@
 "population_num" = "População";
 "added_profiles_descr" = "Perfis adicionados pelo complemento";
 "added_profiles" = "Perfis adicionados";
-"suggested_maps_descr" = "Esses mapas são necessários para o complemento.";
+"suggested_maps_descr" = "Esses mapas são necessários para o complemento";
 "suggested_maps" = "Mapas sugeridos";
 "product_desc_ext_openplacereviews" = "Envie fotografias, avaliações e hiperligações sobre lugares públicos como restaurantes, hotéis, museus e pontos de rotas em dados abertos https://openplacereviews.org/data/.\n\nLeia mais em https://openplacereviews.org";
 "product_desc_openplacereviews" = "Envie fotografias, avaliações e hiperligações sobre locais públicos";
@@ -2188,3 +2188,5 @@
 "parked_at" = "Estacionado em";
 "education" = "Educação";
 "industrial" = "Industrial";
+"units_min_short" = "m";
+"m" = "m";

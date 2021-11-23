@@ -19,6 +19,9 @@
     NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
                                      NSFontAttributeName: [UIFont systemFontOfSize:15.]};
     _descView.linkTextAttributes = linkAttributes;
+
+    _extraDescView.textContainerInset = UIEdgeInsetsZero;
+    _extraDescView.textContainer.lineFragmentPadding = 0;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

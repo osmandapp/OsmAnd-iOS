@@ -155,7 +155,9 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
     NSMutableArray<NSString *> *preferredLocales = [NSMutableArray new];
     for (NSString *langCode in [NSLocale preferredLanguages])
     {
-        [preferredLocales addObject:[langCode substringToIndex:[langCode indexOf:@"-"]]];
+        NSInteger index = [langCode indexOf:@"-"];
+        if (index != NSNotFound && index < langCode.length)
+            [preferredLocales addObject:[langCode substringToIndex:index]];
     }
 
     _isGlobalWikiPoiEnabled = [_wikiPlugin isShowAllLanguages];

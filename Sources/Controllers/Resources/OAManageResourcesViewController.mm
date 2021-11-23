@@ -1467,7 +1467,7 @@ static BOOL _lackOfResources;
         };
 
         // Regions that start with given name have higher priority
-        NSPredicate *startsWith = [NSPredicate predicateWithFormat:@"(ANY resourceTypes == 0) AND name BEGINSWITH[cd] %@", searchString];
+        NSPredicate *startsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", searchString];
         NSMutableArray *regions_startsWith = [[searchableContent filteredArrayUsingPredicate:startsWith] mutableCopy];
         if ([regions_startsWith count] == 0)
         {
@@ -1478,14 +1478,14 @@ static BOOL _lackOfResources;
 
         // Regions that only contain given string have less priority
         NSPredicate *onlyContains = [NSPredicate predicateWithFormat:
-                                     @"(ANY resourceTypes == 0) AND (name CONTAINS[cd] %@) AND NOT (name BEGINSWITH[cd] %@)",
+                                     @"(name CONTAINS[cd] %@) AND NOT (name BEGINSWITH[cd] %@)",
                                      searchString,
                                      searchString];
         NSMutableArray *regions_onlyContains = [[searchableContent filteredArrayUsingPredicate:onlyContains] mutableCopy];
         if ([regions_onlyContains count] == 0)
         {
             NSPredicate *anyOnlyContains = [NSPredicate predicateWithFormat:
-                                            @"(ANY resourceTypes == 0) AND (ANY allNames CONTAINS[cd] %@) AND NOT (ANY allNames BEGINSWITH[cd] %@)",
+                                            @"(ANY allNames CONTAINS[cd] %@) AND NOT (ANY allNames BEGINSWITH[cd] %@)",
                                             searchString,
                                             searchString];
             [regions_onlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyOnlyContains]];

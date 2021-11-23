@@ -21,6 +21,8 @@
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 
+#define kBlurViewTag -999
+
 @implementation UIBezierPath (util)
 
 /**

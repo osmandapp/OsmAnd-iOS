@@ -1508,7 +1508,7 @@
 "routing_attr_avoid_ferries_name" = "Без паромов";
 "rendering_attr_hikingRoutesOSMC_name" = "Пешеходные маршруты";
 "rendering_value_translucent_lightblue_name" = "Полупрозрачный голубой";
-"rendering_attr_showCycleRoutes_name" = "Веломаршруты";
+"rendering_attr_showCycleRoutes_name" = "Велосипедные маршруты";
 "routing_attr_piste_type_skitour_description" = "Маршруты для горнолыжного туризма.";
 "rendering_attr_hideWoodScrubs_name" = "Леса и кустарники";
 "rendering_value__name" = "По умолчанию";
@@ -2145,3 +2145,18 @@
 "navigate_point_zone" = "Зона";
 "suggested_maps" = "Предлагаемые карты";
 "added_profiles" = "Добавленные профили";
+"edit_track" = "Редактировать трек";
+"delete_waypoints" = "Удалить путевые точки";
+"attribute" = "Атрибут";
+"shared_string_width" = "Ширина";
+"gpx_selection_segment_title" = "Сегменты";
+"navigate_point_format_unknown" = "Неизвестный формат";
+"invalid_format" = "Недопустимый формат";
+"population_num" = "Население";
+"shared_string_overview" = "Обзор";
+"map_widget_parking" = "Парковочное место";
+"education" = "Образование";
+"regions" = "Регионы";
+"shared_string_interval" = "Интервал";
+"duplicate_track" = "Дублировать трек";
+"delete_group_confirm_short" = "Удалить группу?";

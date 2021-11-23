@@ -38,7 +38,7 @@
 "fav_export_title" = "Exportar favorito";
 "fav_select_remove" = "Selecione os favoritos a remover";
 "fav_export_select" = "Selecione os favoritos a exportar";
-"fav_import_desc" = "Pode importar os seus favoritos como marcos de trajeto no ficheiro GPX (formato de dados GPS comum)\n\nPara partilhar o ficheiro favorites.gpx pode abri-lo no Dropbox, email ou qualquer outra origem - use a função 'Abrir com'.";
+"fav_import_desc" = "Pode importar os seus favoritos como marcos de trajeto no ficheiro GPX (formato de dados GPS comum)\n\nPara partilhar o ficheiro favorites.gpx pode abri-lo no Dropbox, email ou qualquer outra origem - use a funcionalidade \"Abrir com\".";
 "fav_create_group" = "Criar novo grupo";
 "fav_enter_group_name" = "Digite o nome do grupo";
 "fav_exists" = "O favorito com o nome \"%@\" já existe";
@@ -321,7 +321,7 @@
 "device_memory" = "Memória do aparelho";
 "free_memory" = "%@ livre";
 "map_orientation_change_in_accordance_with_speed" = "Limite para orientação do mapa";
-"map_orientation_change_in_accordance_with_speed_descr" = "Selecione abaixo em qual velocidade a orientação do mapa alterna de 'Na direção do movimento' para 'Na direção da bússola'";
+"map_orientation_change_in_accordance_with_speed_descr" = "Selecione abaixo em qual velocidade a orientação do mapa alterna de \"Na direção do movimento\" para \"Na direção da bússola\"";
 "today" = "Hoje";
 "yesterday" = "Ontem";
 "shared_string_widgets" = "Widgets";
@@ -991,7 +991,7 @@
 "shared_string_password" = "Palavra-passe";
 "poi_category_and_type" = "Categoria e tipo de POI";
 "poi_select_type" = "Selecionar o tipo";
-"show_something_on_map" = "Ver \'%@\' no mapa";
+"show_something_on_map" = "Ver \"%@\" no mapa";
 "shared_string_street_intersection" = "Cruzamento de rua";
 "do_not_show_discount" = "Não mostrar promoções";
 "do_not_send_anonymous_data" = "Não enviar dados anônimos";
@@ -1012,7 +1012,7 @@
 "monthly_map_updates" = "Atualizações de mapas: a cada mês";
 "daily_map_updates" = "Atualizações de mapas: a cada hora";
 "purchase_unlim_title" = "Comprar - %@";
-"subscribe_email_desc" = "Inscreva-se na nossa lista de email:<br/>• Obtenha 3 mapas extras para descarregar<br/>• Seja dos primeiros a saber sobre descontos<br/>• Participe nos <a href='https://osmand.net/giveaway'>códigos promocionais</a>";
+"subscribe_email_desc" = "Inscreva-se na nossa lista de email:<br/>• Obtenha 3 mapas extras para descarregar<br/>• Seja dos primeiros a saber sobre descontos<br/>• Participe nos <a href=\"https://osmand.net/giveaway\">códigos promocionais</a>";
 "osm_live_unlock_all" = "Desbloquear todos os recursos";
 "osm_live_unlock_updates" = "Desbloquear atualizações de mapas a cada hora";
 "osm_live_banner_descr" = "Compre a subscrição do OsmAnd Live e ganhe atualizações a <b>cada hora</b> ilimitadas e <b>todas as funcionalidades</b> incluídas a partir de %@";
@@ -1449,7 +1449,7 @@
 "rendering_value_translucent_yellow_name" = "Amarelo translúcido";
 "rendering_value_translucent_red_name" = "Vermelho translúcido";
 "rendering_attr_ice_road_name" = "Estrada de gelo";
-"routing_attr_freeride_policy_description" = "'Freerides' e 'fora de pista' são rotas e passagens não oficiais. Tipicamente sem preparação do piso, sem manutenção e não verificados à noite. Aceda a estas rotas por sua própria conta e risco.";
+"routing_attr_freeride_policy_description" = "\"Freeride\" e \"fora de pista\" são rotas e passagens não oficiais. Tipicamente sem preparação do piso, sem manutenção e não verificados à noite. Aceda a estas rotas por sua própria conta e risco.";
 "routing_attr_avoid_unpaved_description" = "Evitar estradas não pavimentadas";
 "routing_attr_avoid_ferries_description" = "Evita balsas/ferries";
 "routing_attr_allow_expert_name" = "Permitir rotas para especialistas";
@@ -1608,7 +1608,7 @@
 "new_profile" = "Novo perfil";
 "screen_alerts" = "Alertas no ecrã";
 "vehicle_parameters" = "Parâmetros do veículo";
-"select_nav_profile_dialog_message" = "O 'Tipo de navegação' controla como as rotas são calculadas.";
+"select_nav_profile_dialog_message" = "O \"Tipo de navegação\" controla como as rotas são calculadas.";
 "select_color" = "Selecionar a cor";
 "routing_attr_length_name" = "Limite de comprimento";
 "export_profile" = "Exportar";

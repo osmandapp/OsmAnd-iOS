@@ -1013,7 +1013,7 @@
 "rendering_attr_publicTransportMode_name" = "Busz-, trolibusz-, ingajárat-útvonalak";
 "rendering_value_thin_name" = "Vékony";
 "rendering_value_fine_name" = "Finom";
-"routing_attr_piste_type_downhill_description" = "Alpesi vagy lesikló sípályák és a felvonókhoz vezető utak";
+"routing_attr_piste_type_downhill_description" = "Alpesi vagy lesikló sípályák és a felvonókhoz vezető utak.";
 "routing_attr_allow_intermediate_description" = "Nehezebbútvonalak meredekebb szakaszokkal. Általában kikerülendő akadályokat is tartalmaz.";
 "routing_attr_height_name" = "Magasságkorlátozás";
 "routing_attr_relief_smoothness_factor_hills_name" = "Dombos";
@@ -1076,7 +1076,7 @@
 "rendering_attr_highway_class_motorway_name" = "Autópálya";
 "routing_attr_avoid_bus_description" = "Elkerüli a buszokat és a trolibuszokat";
 "rendering_attr_surface_cobblestone_name" = "Nagy kavics (görgeteg)";
-"routing_attr_piste_type_sled_description" = "Szánkópályák";
+"routing_attr_piste_type_sled_description" = "Szánkópályák.";
 "routing_attr_weight_name" = "Súlykorlátozás";
 "rendering_attr_streetLightingNight_name" = "Csakéjszaka jelenjék meg";
 "rendering_attr_roadColors_name" = "Útszín sémája";
@@ -1125,8 +1125,8 @@
 "rendering_attr_busRoutes_name" = "Buszvonalak";
 "routing_attr_avoid_toll_name" = "Fizetős út nélkül";
 "routing_attr_avoid_stairs_name" = "Lépcső nélkül";
-"routing_attr_piste_type_nordic_description" = "Északi vagy sífutónyomok";
-"routing_attr_piste_type_skitour_description" = "Sítúraútvonalak";
+"routing_attr_piste_type_nordic_description" = "Északi vagy sífutónyomok.";
+"routing_attr_piste_type_skitour_description" = "Sítúraútvonalak.";
 "rendering_attr_surface_dirt_name" = "Föld";
 "rendering_value_medium_name" = "Közepes";
 "routing_attr_prefer_unpaved_name" = "Burkolatlan utak előnyben részesítése";

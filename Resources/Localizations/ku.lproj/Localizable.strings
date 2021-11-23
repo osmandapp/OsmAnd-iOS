@@ -147,7 +147,6 @@
 "menu_feedback" = "Gotinên we";
 "help_features" = "Taybetmendî";
 "actions" = "Çalakî";
-"units_min_short" = "m";
 "plugins" = "Lehikan";
 "osmand_live_weekly" = "Hefteyî";
 "product_title_track_recording" = "Qeydkirina gerrê";
@@ -177,4 +176,4 @@
 "shared_string_finish" = "Xilasek";
 "osm_notes" = "Notên OSMê";
 "group_name" = "Navê komê";
-"m" = "m";
+"regions" = "Herêman";

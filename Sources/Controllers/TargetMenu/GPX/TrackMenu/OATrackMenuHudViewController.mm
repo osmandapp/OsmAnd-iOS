@@ -507,7 +507,7 @@
         }
 
         if (rtePtsGroup.count > 0)
-            waypointGroups[OALocalizedString(@"targets")] = rtePtsGroup;
+            waypointGroups[OALocalizedString(@"route_points")] = rtePtsGroup;
     }
 
     _waypointGroups = waypointGroups;
@@ -517,7 +517,9 @@
 {
     _waypointSortedGroupNames = [_waypointGroups.allKeys
             sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-                return [obj1 compare:obj2];
+                return [obj1 isEqualToString:OALocalizedString(@"route_points")] ? NSOrderedDescending
+                        : [obj2 isEqualToString:OALocalizedString(@"route_points")] ? NSOrderedAscending
+                                : [obj1 compare:obj2];
             }];
 }
 
@@ -917,7 +919,7 @@
 
 - (BOOL)isRteGroup:(NSString *)groupName
 {
-    return [groupName isEqualToString:OALocalizedString(@"targets")];
+    return [groupName isEqualToString:OALocalizedString(@"route_points")];
 }
 
 - (OARouteLineChartHelper *)getLineChartHelper
@@ -1615,27 +1617,31 @@
             [cell.leftIconView setImage:cellData.leftIcon];
             cell.leftIconView.tintColor = UIColorFromRGB(cellData.tintColor);
 
-            [cell.optionsButton.imageView setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]];
-            cell.optionsButton.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.optionsButton setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]
+                                forState:UIControlStateNormal];
+            cell.optionsButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
 
             cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.arrowIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
             if (!cellData.toggle && [cell isDirectionRTL])
                 cell.arrowIconView.image = cell.arrowIconView.image.imageFlippedForRightToLeftLayoutDirection;
 
-            [cell.openCloseGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
             cell.openCloseGroupButton.tag = tag;
-            [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.openCloseGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+            [cell.openCloseGroupButton addTarget:self
+                                          action:@selector(openCloseGroupButtonAction:)
+                                forControlEvents:UIControlEventTouchUpInside];
 
             cell.optionsButton.tag = tag;
             [cell.optionsButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
             [cell.optionsButton addTarget:self
-                                   action:@selector(cellButtonPressed:)
+                                   action:@selector(cellExtraButtonPressed:)
                          forControlEvents:UIControlEventTouchUpInside];
+
             cell.optionsGroupButton.tag = tag;
             [cell.optionsGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
             [cell.optionsGroupButton addTarget:self
-                                        action:@selector(cellButtonPressed:)
+                                        action:@selector(cellExtraButtonPressed:)
                               forControlEvents:UIControlEventTouchUpInside];
         }
         outCell = cell;
@@ -1681,9 +1687,7 @@
             cell = (OARadiusCellEx *) nib[0];
             cell.buttonRight.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
             cell.buttonRight.titleEdgeInsets = UIEdgeInsetsMake(0., 0., 0., 30.);
-            cell.buttonRight.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonRight.frame.size.width + 19., 0., -21.);
-            cell.buttonRight.imageView.layer.cornerRadius = 12;
-            cell.buttonRight.imageView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:0.1];
+            cell.buttonRight.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonRight.frame.size.width + 19., 0., -15.);
             cell.buttonRight.tintColor = UIColorFromRGB(color_primary_purple);
             [cell.buttonRight setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
             [cell.buttonLeft setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
@@ -1703,7 +1707,7 @@
             [cell showButtonRight:cellData.toggle];
             if (cellData.toggle)
             {
-                [cell.buttonRight setImage:[OAUtilities resizeImage:rightIcon newSize:CGSizeMake(24., 24.)] forState:UIControlStateNormal];
+                [cell.buttonRight setImage:[OAUtilities resizeImage:rightIcon newSize:CGSizeMake(30., 30.)] forState:UIControlStateNormal];
                 [cell.buttonRight setTitle:cellData.values[@"right_title_string_value"] forState:UIControlStateNormal];
                 cell.buttonRight.tag = tag;
                 [cell.buttonRight removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
@@ -1822,6 +1826,16 @@
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
                   withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView endUpdates];
+}
+
+- (void)cellExtraButtonPressed:(id)sender
+{
+    UIButton *button = (UIButton *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+
+    if ([cellData.values.allKeys containsObject:@"extra_button_pressed_value"])
+        ((void (^) ()) cellData.values[@"extra_button_pressed_value"])();
 }
 
 - (void)cellButtonPressed:(id)sender

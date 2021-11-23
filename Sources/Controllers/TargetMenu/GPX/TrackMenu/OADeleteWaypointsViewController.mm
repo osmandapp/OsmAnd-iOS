@@ -290,7 +290,7 @@
 {
     NSMutableArray<NSString *> *waypointSortedGroupNames = self.trackMenuDelegate
             ? [[self.trackMenuDelegate getWaypointSortedGroups] mutableCopy] : [NSMutableArray array];
-    [waypointSortedGroupNames removeObject:OALocalizedString(@"targets")];
+    [waypointSortedGroupNames removeObject:OALocalizedString(@"route_points")];
     for (NSInteger i = 0; i < waypointSortedGroupNames.count; i++)
     {
         NSString *groupName = waypointSortedGroupNames[i];

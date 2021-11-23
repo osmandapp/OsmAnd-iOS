@@ -133,9 +133,11 @@
                title:(NSString *)title
 {
     _selectedTab = selectedTab;
-    BOOL isOverview = _selectedTab == EOATrackMenuHudOverviewTab;
 
-    self.backgroundColor = isOverview ? UIColor.whiteColor : UIColorFromRGB(color_bottom_sheet_background);
+    self.backgroundColor = _selectedTab == EOATrackMenuHudOverviewTab || _selectedTab == EOATrackMenuHudSegmentsTab
+            ? UIColor.whiteColor : UIColorFromRGB(color_bottom_sheet_background);
+
+    self.bottomDividerView.hidden = _selectedTab == EOATrackMenuHudSegmentsTab;
 
     if (_selectedTab != EOATrackMenuHudActionsTab)
     {
@@ -144,7 +146,7 @@
         self.titleIconView.tintColor = UIColorFromRGB(color_icon_inactive);
     }
 
-    if (isOverview)
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         CLLocationCoordinate2D gpxLocation = self.trackMenuDelegate ? [self.trackMenuDelegate getCenterGpxLocation] : kCLLocationCoordinate2DInvalid;
 

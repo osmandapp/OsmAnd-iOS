@@ -10,6 +10,7 @@
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OAMapPanelViewController.h"
 
+@class LineChartView;
 @class OAGpxTrk, OAGpxTrkSeg, OARouteLineChartHelper;
 
 typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
@@ -54,6 +55,9 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (BOOL)isDefaultGroup:(NSString *)groupName;
 - (BOOL)isRteGroup:(NSString *)groupName;
 
+
+- (void)updateChartHighlightValue:(LineChartView *)chart
+                          segment:(OAGpxTrkSeg *)segment;
 - (OARouteLineChartHelper *)getLineChartHelper;
 - (OAGpxTrk *)getTrack:(OAGpxTrkSeg *)segment;
 - (NSString *)getDirName;
@@ -65,6 +69,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (BOOL)currentTrack;
 - (BOOL)isJoinSegments;
 - (CLLocationCoordinate2D)getCenterGpxLocation;
+- (CLLocationCoordinate2D)getPinLocation;
 - (void)openAppearance;
 - (void)openExport;
 - (void)openNavigation;

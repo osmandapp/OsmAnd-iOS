@@ -62,5 +62,6 @@ typedef NS_ENUM(NSUInteger, EOAScrollableMenuHudMode)
 - (BOOL) isLeftSidePresentation;
 
 - (BOOL) shouldScrollInAllModes;
+- (BOOL) hasCustomHeaderFooter;
 
 @end

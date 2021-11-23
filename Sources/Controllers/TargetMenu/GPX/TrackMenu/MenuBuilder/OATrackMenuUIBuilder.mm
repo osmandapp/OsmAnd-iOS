@@ -51,6 +51,11 @@
     _selectedTab = selectedTab;
 }
 
+- (void)runAdditionalActions
+{
+    [_tabs[_selectedTab] runAdditionalActions];
+}
+
 - (OAGPXTableData *)getTableData
 {
     return [_tabs[_selectedTab] getTableData];
@@ -84,8 +89,6 @@
 
         tabBarView.selectedItem = tabBarView.items[_selectedTab];
         tabBarView.itemWidth = parentWidth / _tabs.count;
-        tabBarView.backgroundImage = [UIImage new];
-        tabBarView.shadowImage = [UIImage new];
     }
 }
 

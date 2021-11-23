@@ -14,11 +14,8 @@
                 <outlet property="backButton" destination="URZ-Ef-ym2" id="bqw-1A-b1D"/>
                 <outlet property="backButtonContainerView" destination="qvQ-Gx-z0V" id="Ux5-Ps-3aN"/>
                 <outlet property="backButtonLeadingConstraint" destination="5gx-vm-gOg" id="RMi-NX-0SF"/>
-                <outlet property="bottomSeparatorHeight" destination="DUv-Ue-5oZ" id="G2d-yQ-k90"/>
-                <outlet property="bottomSeparatorTopConstraint" destination="Mz6-HQ-5Rd" id="hGZ-7Z-ccg"/>
                 <outlet property="contentContainer" destination="J4M-wt-sVQ" id="lWz-d9-8rW"/>
                 <outlet property="scrollableView" destination="9Ef-HN-sbO" id="Doq-y2-NC3"/>
-                <outlet property="sliderView" destination="Lnt-DR-w5c" id="b7J-u8-9Bk"/>
                 <outlet property="statusBarBackgroundView" destination="4cH-hU-LaH" id="PTu-hZ-Wjg"/>
                 <outlet property="tabBarView" destination="j7s-w5-BDJ" id="FnS-hT-WOm"/>
                 <outlet property="tableView" destination="Gu6-5b-7IF" id="w0M-t6-8aa"/>
@@ -48,21 +45,10 @@
                             <rect key="frame" x="0.0" y="0.0" width="414" height="347"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lnt-DR-w5c" userLabel="Slider">
-                                    <rect key="frame" x="197.5" y="6" width="19" height="2"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
-                                </view>
                                 <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="Dhz-uG-Jnh" userLabel="Top Header Container" customClass="OATrackMenuHeaderView">
-                                    <rect key="frame" x="0.0" y="14" width="414" height="48.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="63"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                </view>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SFR-w4-dKd" userLabel="Separator">
-                                    <rect key="frame" x="0.0" y="61.5" width="414" height="0.5"/>
-                                    <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="0.5" id="DUv-Ue-5oZ"/>
-                                    </constraints>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 </view>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="-1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="Gu6-5b-7IF">
                                     <rect key="frame" x="0.0" y="63" width="414" height="284"/>
@@ -71,11 +57,6 @@
                                 </tableView>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            <constraints>
-                                <constraint firstItem="SFR-w4-dKd" firstAttribute="top" secondItem="Dhz-uG-Jnh" secondAttribute="bottom" constant="-1" id="Mz6-HQ-5Rd"/>
-                                <constraint firstAttribute="trailing" secondItem="SFR-w4-dKd" secondAttribute="trailing" id="yLf-JW-DQ1"/>
-                                <constraint firstItem="SFR-w4-dKd" firstAttribute="leading" secondItem="J4M-wt-sVQ" secondAttribute="leading" id="yVC-7c-Kle"/>
-                            </constraints>
                         </view>
                         <view contentMode="scaleToFill" id="BcL-vj-cdz" userLabel="Toolbar">
                             <rect key="frame" x="0.0" y="345" width="414" height="62"/>
@@ -90,17 +71,17 @@
                                 </view>
                                 <tabBar clipsSubviews="YES" contentMode="scaleToFill" translucent="NO" itemPositioning="centered" itemSpacing="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="j7s-w5-BDJ" customClass="OATabBar">
                                     <rect key="frame" x="8" y="1" width="398" height="61"/>
-                                    <color key="backgroundColor" white="0.99616858237547889" alpha="0.89811320754716983" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="61" id="HFD-Wt-gxy"/>
                                     </constraints>
                                     <items/>
-                                    <color key="barTintColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="displayP3"/>
+                                    <color key="barTintColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <color key="selectedImageTintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </tabBar>
                             </subviews>
                             <viewLayoutGuide key="safeArea" id="smV-cK-v4k"/>
-                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="displayP3"/>
+                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="displayP3"/>
                             <constraints>
                                 <constraint firstItem="j7s-w5-BDJ" firstAttribute="trailing" secondItem="BcL-vj-cdz" secondAttribute="trailingMargin" id="3Qx-Yf-Mbo"/>
                                 <constraint firstItem="j7s-w5-BDJ" firstAttribute="top" secondItem="e2q-mJ-Ycy" secondAttribute="bottom" id="8bX-zV-lQ4"/>

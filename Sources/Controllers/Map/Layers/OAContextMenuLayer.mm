@@ -541,7 +541,7 @@
         }];
     }
     
-    if (found.count == 1 && CLLocationCoordinate2DIsValid(objectCoord))
+    if (found.count == 1 && CLLocationCoordinate2DIsValid(objectCoord) && found.firstObject.type != OATargetGPX)
         found[0].location = objectCoord;
     
     return found;

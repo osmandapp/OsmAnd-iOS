@@ -678,7 +678,7 @@
 
 - (NSArray<OAGpxTrkSeg *> *)updateSegmentsData
 {
-    _mutableDoc = [[OAGPXMutableDocument alloc] initWithGpxFile:
+    _mutableDoc = self.isCurrentTrack ? self.savingHelper.currentTrack : [[OAGPXMutableDocument alloc] initWithGpxFile:
             [(_app ? _app : [OsmAndApp instance]).gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]];
     _segments = [_mutableDoc && [_mutableDoc getGeneralSegment] ? @[_mutableDoc.generalSegment] : @[]
             arrayByAddingObjectsFromArray:[_mutableDoc getNonEmptyTrkSegments:NO]];

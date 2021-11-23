@@ -16,6 +16,7 @@
 #import "OAGPXDocument.h"
 #import "OsmAndApp.h"
 #import "OASavingTrackHelper.h"
+#import "OAGPXTrackAnalysis.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -185,8 +186,8 @@
     _doc = _isCurrentTrack ? (OAGPXDocument *) _savingHelper.currentTrack
             : [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
 
-    _analysis = [_doc getAnalysis:_isCurrentTrack ? 0
-            : (long) [[OAUtilities getFileLastModificationDate:_gpx.gpxFilePath] timeIntervalSince1970]];
+    _analysis = [_doc getGeneralTrack] && [_doc getGeneralSegment]
+            ? [OAGPXTrackAnalysis segment:0 seg:_doc.generalSegment] : [_doc getAnalysis:0];
 
     _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
 }

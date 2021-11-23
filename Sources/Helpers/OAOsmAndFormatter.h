@@ -45,6 +45,7 @@
 + (NSString *) getFormattedAlarmInfoDistance:(float)meters;
 + (NSString *) getFormattedAzimuth:(float)bearing;
 + (NSString *) getFormattedTimeHM:(NSTimeInterval)timeInterval;
++ (NSString*) getFormattedTimeInterval:(NSTimeInterval)interval;
 + (NSString *) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat;
 + (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive;
 + (NSString *) getFormattedSpeed:(float) metersperseconds;

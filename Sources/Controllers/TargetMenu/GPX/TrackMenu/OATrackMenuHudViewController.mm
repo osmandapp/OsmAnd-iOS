@@ -629,13 +629,6 @@
     }
 }
 
-- (BOOL)openedFromMap
-{
-    CLLocationCoordinate2D pinLocation = [self getPinLocation];
-    CLLocationCoordinate2D centerGpxLocation = [self getCenterGpxLocation];
-    return pinLocation.latitude != centerGpxLocation.latitude && pinLocation.latitude != centerGpxLocation.longitude;
-}
-
 - (IBAction)onBackButtonPressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
@@ -1342,6 +1335,13 @@
         [_locationServicesUpdateObserver detach];
         _locationServicesUpdateObserver = nil;
     }
+}
+
+- (BOOL)openedFromMap
+{
+    CLLocationCoordinate2D pinLocation = [self getPinLocation];
+    CLLocationCoordinate2D centerGpxLocation = [self getCenterGpxLocation];
+    return pinLocation.latitude != centerGpxLocation.latitude && pinLocation.latitude != centerGpxLocation.longitude;
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate

@@ -107,15 +107,8 @@
                 kCellToggle: @NO
         }] : nil;
 
-        CLLocationCoordinate2D startChartPoint = kCLLocationCoordinate2DInvalid;
-        if (self.trackMenuDelegate)
-        {
-            CLLocationCoordinate2D centerGpxLocation = [self.trackMenuDelegate getCenterGpxLocation];
-            CLLocationCoordinate2D pinLocation = [self.trackMenuDelegate getPinLocation];
-            if (centerGpxLocation.latitude != pinLocation.latitude
-                    && centerGpxLocation.longitude != pinLocation.longitude)
-                startChartPoint = pinLocation;
-        }
+        CLLocationCoordinate2D startChartPoint = self.trackMenuDelegate && [self.trackMenuDelegate openedFromMap]
+                ? [self.trackMenuDelegate getPinLocation] : kCLLocationCoordinate2DInvalid;
 
         OAGPXTableCellData *chartCellData = [OAGPXTableCellData withData:@{
                 kCellKey: [NSString stringWithFormat:@"chart_%li", index],

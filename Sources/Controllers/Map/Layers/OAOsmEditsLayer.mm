@@ -162,7 +162,8 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self hide];
         [self refreshOsmEditsCollection];
-        [self show];
+        if ([[OAAppSettings sharedManager].mapSettingShowOfflineEdits get])
+            [self show];
     });
 }
 

@@ -184,7 +184,7 @@
 "shared_string_apply" = "적용";
 "shared_string_select" = "선택";
 "shared_string_back" = "뒤로";
-"shared_string_ok" = "오케이";
+"shared_string_ok" = "승인";
 "shared_string_exit" = "퇴장";
 "shared_string_no" = "아니요";
 "shared_string_yes" = "네";
@@ -492,3 +492,16 @@
 "osm_editing_offline" = "오프라인 편집";
 "osm_note_upload_immediately" = "즉시 업로드";
 "configure_profile" = "프로파일 구성";
+"default_speed" = "기본 속도";
+"save_global_track_interval_descr" = "(지도의 GPX 기록 위젯을 통해 활성화) 일반 트랙 기록에 대한 기록 간격을 선택합니다.";
+"logging_interval_navigation" = "탐색 중 로깅 간격";
+"map_widget_transparent" = "투명 위젯";
+"map_widget_compass" = "나침반";
+"sett_lang" = "지도 언어";
+"sett_pref_lang" = "기본 언어";
+"sett_lang_show_local" = "로컬 이름 표시";
+"sett_lang_show_trans" = "이름 번역";
+"shared_string_all_languages" = "모든 언어";
+"logging_min_speed" = "최저 속도";
+"street_level_imagery" = "거리 기반의 파노라마 영상 서비스";
+"sett_lang_local" = "로컬";

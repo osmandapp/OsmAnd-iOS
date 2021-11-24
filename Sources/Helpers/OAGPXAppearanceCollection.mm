@@ -171,7 +171,7 @@
 
     for (NSNumber *customValue in customValues)
     {
-        [titles addObject:[OAOsmAndFormatter getFormattedTimeInterval:customValue.intValue shortFormat:YES]];
+        [titles addObject:[OAOsmAndFormatter getFormattedTimeInterval:customValue.intValue]];
         [values addObject:customValue];
     }
     self.titles = titles;

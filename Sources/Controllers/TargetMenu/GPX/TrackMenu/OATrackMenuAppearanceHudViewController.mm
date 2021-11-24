@@ -1002,7 +1002,8 @@
                                                  forState:UIControlStateSelected];
             [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple)}
                                                  forState:UIControlStateNormal];
-
+            [cell.segmentedControl setTitleTextAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:15.0f]}
+                                                 forState:UIControlStateNormal];
             if (@available(iOS 13.0, *))
                 cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
             else
@@ -1084,6 +1085,8 @@
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             cell.topLeftLabel.text = cellData.title;
             cell.topRightLabel.text = cellData.values[@"custom_string_value"];
+            cell.topRightLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.topRightLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
             cell.bottomLeftLabel.text = arrayValue.firstObject;
             cell.bottomRightLabel.text = arrayValue.lastObject;
             cell.numberOfMarks = arrayValue.count;

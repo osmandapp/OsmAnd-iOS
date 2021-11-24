@@ -36,6 +36,30 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
     return time;
 }
 
++ (NSString*) getFormattedTimeInterval:(NSTimeInterval)interval
+{
+    NSString *unitsStr;
+    double intervalInUnits;
+    if (interval < 60)
+    {
+        unitsStr = OALocalizedString(@"units_sec");
+        intervalInUnits = interval;
+    }
+    else if (((int)interval) % 60 == 0)
+    {
+        unitsStr = OALocalizedString(@"units_min");
+        intervalInUnits = ((int)interval) / 60;
+    }
+    else
+    {
+        unitsStr = OALocalizedString(@"units_min");
+        intervalInUnits = interval / 60.0;
+    }
+    
+    NSString *formattedInterval = [NSString stringWithFormat:@"%d", (int)intervalInUnits];
+    return [NSString stringWithFormat:@"%@ %@", formattedInterval, unitsStr];
+}
+
 + (NSString*) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat
 {
     int hours, minutes, seconds;

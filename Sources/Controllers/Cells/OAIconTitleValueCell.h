@@ -18,6 +18,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftIconTextLeadingMargin;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *noRightIconDecsLeadingMargin;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *rightIconDescLeadingMargin;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *topLabelMargin;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomLabelMargin;
 @property (weak, nonatomic) IBOutlet UIButton *openCloseGroupButton;
 
 -(void)showLeftIcon:(BOOL)show;

@@ -2164,3 +2164,9 @@
 "upload_to_openstreetmap" = "Отправить в OpenStreetMap";
 "change_application_profile" = "Изменить профиль приложения";
 "select_application_profile" = "Выбрать профиль приложения";
+"track_coloring_solid" = "Сплошной";
+
+// Shared Strings
+"shared_string_custom" = "Своё значение";
+"dialogs_and_notifications_descr" = "Управление всплывающими окнами, диалогами и уведомлениями";
+"shared_string_time_span" = "Общее время";

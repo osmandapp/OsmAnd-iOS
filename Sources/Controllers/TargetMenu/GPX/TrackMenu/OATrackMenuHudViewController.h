@@ -55,7 +55,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (BOOL)isDefaultGroup:(NSString *)groupName;
 - (BOOL)isRteGroup:(NSString *)groupName;
 
-
 - (void)updateChartHighlightValue:(LineChartView *)chart
                           segment:(OAGpxTrkSeg *)segment;
 - (OARouteLineChartHelper *)getLineChartHelper;
@@ -81,6 +80,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (void)showAlertRenameTrack;
 
 - (void)stopLocationServices;
+- (BOOL)openedFromMap;
 
 @end
 

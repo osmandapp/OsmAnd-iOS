@@ -26,6 +26,8 @@
 		0A31AFCB26FBAC39000EE842 /* ic_small_time_end@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A31AFC526FBAC38000EE842 /* ic_small_time_end@3x.png */; };
 		0A31AFCC26FBAC39000EE842 /* ic_small_max_speed@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A31AFC626FBAC39000EE842 /* ic_small_max_speed@3x.png */; };
 		0A31AFCD26FBAC39000EE842 /* ic_small_speed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A31AFC726FBAC39000EE842 /* ic_small_speed@2x.png */; };
+		0A361BA0274D0B7F002D43E0 /* ic_custom_cancel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A361B9E274D0B7F002D43E0 /* ic_custom_cancel@3x.png */; };
+		0A361BA1274D0B7F002D43E0 /* ic_custom_cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A361B9F274D0B7F002D43E0 /* ic_custom_cancel@2x.png */; };
 		0A5395B626E0EDF900848E0D /* OAIconTextDividerSwitchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A5395B526E0EDF900848E0D /* OAIconTextDividerSwitchCell.xib */; };
 		0A6B69D326725D1F00778353 /* ic_custom_road_works@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A6B69D126725D1E00778353 /* ic_custom_road_works@2x.png */; };
 		0A6B69D426725D1F00778353 /* ic_custom_road_works@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A6B69D226725D1F00778353 /* ic_custom_road_works@3x.png */; };
@@ -2915,6 +2917,8 @@
 		0A31AFC526FBAC38000EE842 /* ic_small_time_end@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_time_end@3x.png"; path = "Resources/Icons/ic_small_time_end@3x.png"; sourceTree = "<group>"; };
 		0A31AFC626FBAC39000EE842 /* ic_small_max_speed@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_max_speed@3x.png"; path = "Resources/Icons/ic_small_max_speed@3x.png"; sourceTree = "<group>"; };
 		0A31AFC726FBAC39000EE842 /* ic_small_speed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_speed@2x.png"; path = "Resources/Icons/ic_small_speed@2x.png"; sourceTree = "<group>"; };
+		0A361B9E274D0B7F002D43E0 /* ic_custom_cancel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cancel@3x.png"; path = "Resources/Icons/ic_custom_cancel@3x.png"; sourceTree = "<group>"; };
+		0A361B9F274D0B7F002D43E0 /* ic_custom_cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cancel@2x.png"; path = "Resources/Icons/ic_custom_cancel@2x.png"; sourceTree = "<group>"; };
 		0A5395B526E0EDF900848E0D /* OAIconTextDividerSwitchCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAIconTextDividerSwitchCell.xib; sourceTree = "<group>"; };
 		0A6B69D126725D1E00778353 /* ic_custom_road_works@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_road_works@2x.png"; path = "Resources/Icons/ic_custom_road_works@2x.png"; sourceTree = "<group>"; };
 		0A6B69D226725D1F00778353 /* ic_custom_road_works@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_road_works@3x.png"; path = "Resources/Icons/ic_custom_road_works@3x.png"; sourceTree = "<group>"; };
@@ -7000,6 +7004,8 @@
 				DA84E84821D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png */,
 				DAB048EF21CB729000275456 /* ic_action_plus@2x.png */,
 				DAB048F121CB729000275456 /* ic_action_plus@3x.png */,
+				0A361B9F274D0B7F002D43E0 /* ic_custom_cancel@2x.png */,
+				0A361B9E274D0B7F002D43E0 /* ic_custom_cancel@3x.png */,
 				0AD6B8CE273BF0C800D68E0B /* ic_custom_location_marker@2x.png */,
 				0AD6B8CF273BF0C800D68E0B /* ic_custom_location_marker@3x.png */,
 				0AA2F04527356BC6008EAF35 /* ic_custom_folder_points@2x.png */,
@@ -12086,6 +12092,7 @@
 				DA5A82D926C563A800F274C7 /* OATextViewTableViewCell.xib in Resources */,
 				32A001802610B43700ABE0D2 /* widget_coordinates_longitude_east_day@3x.png in Resources */,
 				DA23424C23477F33003911B8 /* ic_custom_alert_color@3x.png in Resources */,
+				0A361BA1274D0B7F002D43E0 /* ic_custom_cancel@2x.png in Resources */,
 				DA5F21F0229551A300B0D7B6 /* ic_action_wifi_off@2x.png in Resources */,
 				84686AC81E09740500DA09BC /* ic_search_filter@2x.png in Resources */,
 				8431E7771B380D010063C9AF /* ic_dialog_export@3x.png in Resources */,
@@ -13731,6 +13738,7 @@
 				843394C91FF54A19006205A5 /* list_warnings_traffic_calming@2x.png in Resources */,
 				DA5A82B426C563A800F274C7 /* OAColorsCollectionViewCell.xib in Resources */,
 				DA1341DA243DC5A90039D214 /* ic_action_offroad@2x.png in Resources */,
+				0A361BA0274D0B7F002D43E0 /* ic_custom_cancel@3x.png in Resources */,
 				DABF8187228BDE9300651A91 /* map_mapillary_photo_dot@2x.png in Resources */,
 				DA5A849026C563A900F274C7 /* OABaseTableViewController.xib in Resources */,
 				844499601AAA1FC000ACA20D /* bt_buy_addon@3x.png in Resources */,

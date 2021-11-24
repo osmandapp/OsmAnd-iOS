@@ -17,6 +17,8 @@
 #import "OAEditWaypointsGroupBottomSheetViewController.h"
 #import "OADeleteWaypointsGroupBottomSheetViewController.h"
 #import "OARouteBaseViewController.h"
+#import "OAGPXListViewController.h"
+#import "OARootViewController.h"
 #import "OAMapRendererView.h"
 #import "OATabBar.h"
 #import "OAIconTitleValueCell.h"
@@ -46,7 +48,6 @@
 #import "OAMapActions.h"
 #import "OARouteProvider.h"
 #import "OAOsmAndFormatter.h"
-#import "OAAutoObserverProxy.h"
 #import "OAGpxWptItem.h"
 #import "OADefaultFavorite.h"
 #import "OAMapLayers.h"
@@ -76,6 +77,7 @@
 
 @interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, ChartViewDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate>
 
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet OATabBar *tabBarView;
 
@@ -111,7 +113,7 @@
     BOOL _isHeaderBlurred;
 }
 
-@dynamic isShown, contentContainer;
+@dynamic isShown, backButton, contentContainer;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
 {
@@ -166,6 +168,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if ([self openedFromMap])
+        [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -625,6 +629,28 @@
     }
 }
 
+- (IBAction)onBackButtonPressed:(id)sender
+{
+    [self hide:YES duration:.2 onComplete:^{
+        [self.mapViewController hideContextPinMarker];
+
+        if (![self openedFromMap])
+        {
+            UITabBarController *myPlacesViewController =
+                    [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+            [myPlacesViewController setSelectedIndex:1];
+
+            OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
+            if (gpxController == nil)
+                return;
+
+            [gpxController setShouldPopToParent:YES];
+
+            [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+        }
+    }];
+}
+
 #pragma mark - OATrackMenuViewControllerDelegate
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType
@@ -645,7 +671,7 @@
 
 - (NSArray<OAGpxTrkSeg *> *)updateSegmentsData
 {
-    _mutableDoc = [[OAGPXMutableDocument alloc] initWithGpxFile:
+    _mutableDoc = self.isCurrentTrack ? self.savingHelper.currentTrack : [[OAGPXMutableDocument alloc] initWithGpxFile:
             [(_app ? _app : [OsmAndApp instance]).gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]];
     _segments = [_mutableDoc && [_mutableDoc getGeneralSegment] ? @[_mutableDoc.generalSegment] : @[]
             arrayByAddingObjectsFromArray:[_mutableDoc getNonEmptyTrkSegments:NO]];
@@ -1309,6 +1335,13 @@
         [_locationServicesUpdateObserver detach];
         _locationServicesUpdateObserver = nil;
     }
+}
+
+- (BOOL)openedFromMap
+{
+    CLLocationCoordinate2D pinLocation = [self getPinLocation];
+    CLLocationCoordinate2D centerGpxLocation = [self getCenterGpxLocation];
+    return pinLocation.latitude != centerGpxLocation.latitude && pinLocation.latitude != centerGpxLocation.longitude;
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate

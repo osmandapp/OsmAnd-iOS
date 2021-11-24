@@ -470,16 +470,15 @@ static BOOL dataInvalidated = NO;
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
-        const auto resourceId = QString::fromNSString(nsResourceId);
-        const auto resource = _app.resourcesManager->getResource(resourceId);
-
         if (!self.isViewLoaded || self.view.window == nil)
         {
             self.dataInvalidated = YES;
             return;
         }
 
+        NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
+        const auto resourceId = QString::fromNSString(nsResourceId);
+        const auto resource = _app.resourcesManager->getResource(resourceId);
         if (resource)
         {
             OAWorldRegion *foundRegion;

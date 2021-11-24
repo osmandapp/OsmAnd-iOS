@@ -477,9 +477,6 @@ static BOOL dataInvalidated = NO;
         if (!self.isViewLoaded || self.view.window == nil)
         {
             self.dataInvalidated = YES;
-            if (resource->type == OsmAndResourceType::MapRegion)
-                [_app.data.mapLayerChangeObservable notifyEvent];
-
             return;
         }
 
@@ -520,6 +517,9 @@ static BOOL dataInvalidated = NO;
         }
         else
         {
+            if (resource->type == OsmAndResourceType::MapRegion)
+                [_app.data.mapLayerChangeObservable notifyEvent];
+
             [self refreshDownloadingContent:task.key];
         }
 

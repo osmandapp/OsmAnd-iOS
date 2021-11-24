@@ -470,15 +470,19 @@ static BOOL dataInvalidated = NO;
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
-        {
-            self.dataInvalidated = YES;
-            return;
-        }
-
         NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
         const auto resourceId = QString::fromNSString(nsResourceId);
         const auto resource = _app.resourcesManager->getResource(resourceId);
+
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            self.dataInvalidated = YES;
+            if (resource->type == OsmAndResourceType::MapRegion)
+                [_app.data.mapLayerChangeObservable notifyEvent];
+
+            return;
+        }
+
         if (resource)
         {
             OAWorldRegion *foundRegion;

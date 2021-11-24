@@ -1685,6 +1685,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                     if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
                         [app.data.terrainResourcesChangeObservable notifyEvent];
                 }
+
+                if (item.resourceType == OsmAndResourceType::MapRegion)
+                    [app.data.mapLayerChangeObservable notifyEvent];
             }
         }
         if (block)

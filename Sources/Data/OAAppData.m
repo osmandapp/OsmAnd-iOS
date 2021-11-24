@@ -848,7 +848,6 @@
     defaults.mapLastViewedState.target31 = centerOfWorld;
     defaults.mapLastViewedState.zoom = 1.0f;
     defaults.mapLastViewedState.azimuth = 0.0f;
-    defaults.mapLastViewedState.elevationAngle = 90.0f;
 
     return defaults;
 }

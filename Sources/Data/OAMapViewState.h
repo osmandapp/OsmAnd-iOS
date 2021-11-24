@@ -15,6 +15,5 @@
 @property Point31 target31;
 @property float zoom;
 @property float azimuth;
-@property float elevationAngle;
 
 @end

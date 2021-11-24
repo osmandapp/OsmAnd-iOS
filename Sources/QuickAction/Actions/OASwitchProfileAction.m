@@ -16,6 +16,7 @@
 #import "OAButtonCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
+#import "OARootViewController.h"
 
 #define KEY_PROFILES @"profiles"
 
@@ -78,6 +79,7 @@ static OAQuickActionType *TYPE;
     if (appMode)
     {
         [OAAppSettings.sharedManager setApplicationModePref:appMode];
+        [OARootViewController.instance.mapPanel setMapElevation:[OAAppSettings.sharedManager.mapElevation get:appMode]];
     }
 }
 

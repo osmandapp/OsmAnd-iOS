@@ -51,6 +51,9 @@
 
 - (void) modifyMapAfterReuse:(OAGpxBounds)mapBounds azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated;
 
+- (float) getMapElevation;
+- (void) setMapElevation:(float)newElevationAngle;
+
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller;
 - (void) hideScrollableHudViewController;
 

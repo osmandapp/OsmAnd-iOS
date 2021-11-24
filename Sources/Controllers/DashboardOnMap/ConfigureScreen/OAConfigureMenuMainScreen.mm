@@ -255,6 +255,7 @@
 - (void) appModeChanged:(OAApplicationMode *)mode
 {
     [_settings setApplicationModePref:mode];
+    [OARootViewController.instance.mapPanel setMapElevation:[_settings.mapElevation get:mode]];
     [self setupView];
 }
 

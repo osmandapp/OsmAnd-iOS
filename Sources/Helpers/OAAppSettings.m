@@ -34,6 +34,7 @@
 #define settingOsmAndLiveEnabledKey @"settingOsmAndLiveEnabledKey"
 #define liveUpdatesRetriesKey @"liveUpdatesRetriesKey"
 #define settingExternalInputDeviceKey @"settingExternalInputDeviceKey"
+#define mapElevationKey @"mapElevationKey"
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingShowPoiLabelKey @"mapSettingShowPoiLabelKey"
@@ -3300,6 +3301,9 @@
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode BICYCLE]];
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_keepInforming forKey:@"keep_informing"];
+        
+        _mapElevation = [OACommonDouble withKey:mapElevationKey defValue:90];
+        [_profilePreferences setObject:_keepInforming forKey:mapElevationKey];
 
         _settingAllow3DView = [OACommonBoolean withKey:settingEnable3DViewKey defValue:YES];
         _drivingRegionAutomatic = [OACommonBoolean withKey:drivingRegionAutomaticKey defValue:YES];

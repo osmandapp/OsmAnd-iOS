@@ -14,6 +14,7 @@
 #import "OATableViewCustomHeaderView.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OARootViewController.h"
 
 #define kCarplayHeaderTopMargin 40
 
@@ -335,6 +336,7 @@
                 OAApplicationMode *am = item[@"mode"];
                 [_settings.defaultApplicationMode set:am];
                 [_settings setApplicationModePref:am];
+                [OARootViewController.instance.mapPanel setMapElevation:[_settings.mapElevation get:am]];
                 [self backButtonClicked:nil];
                 break;
             }

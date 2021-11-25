@@ -249,6 +249,7 @@
 "route_parameters" = "Route parameters";
 "fast_route_mode" = "Fastest route";
 "nav_type_title" = "Navigation type";
+"connect_rp" = "Connect route points";
 "voice_announces" = "Voice prompts";
 "screen_alerts" = "Screen alerts";
 "vehicle_parameters" = "Vehicle parameters";

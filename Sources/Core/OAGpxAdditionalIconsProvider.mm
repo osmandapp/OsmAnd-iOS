@@ -227,7 +227,7 @@ std::shared_ptr<SkBitmap> OAGpxAdditionalIconsProvider::getSplitIconForValue(con
 void OAGpxAdditionalIconsProvider::buildSplitIntervalsSymbolsGroup(const OsmAnd::AreaI &bbox31, double metersPerPixel, QList<QPair<PointI, QPair<QString, int>>> visibleLabels, QList<std::shared_ptr<MapSymbolsGroup>>& mapSymbolsGroups) {
     const auto mapSymbolsGroup = std::make_shared<OsmAnd::MapSymbolsGroup>();
     
-    for (auto it = visibleLabels.begin(); it != visibleLabels.end(); ++it)
+    for (auto it = visibleLabels.begin(); it != visibleLabels.end() && !visibleLabels.isEmpty(); ++it)
     {
         const auto pos31 = (*it).first;
         const auto textInfo = (*it).second;
@@ -365,6 +365,7 @@ bool OAGpxAdditionalIconsProvider::obtainData(const IMapDataProvider::Request& r
     
     if (req.mapState.zoomLevel != _cachedZoomLevel)
     {
+        QWriteLocker scopedLocker(&_lock);
         _cachedZoomLevel = req.mapState.zoomLevel;
         _visibleSplitLabels.clear();
         buildVisibleSplits(req.mapState.metersPerPixel, _visibleSplitLabels);

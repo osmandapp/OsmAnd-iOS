@@ -175,35 +175,42 @@
             NSArray<CLLocation *> *ps = [rp getPoints];
             if (ps.count > 0)
             {
-                if (rp.file.getNonEmptySegmentsCount > 0)
+                CLLocation *firstLoc = ps.firstObject;
+                CLLocation *lastLoc = ps.lastObject;
+                OARTargetPoint *pointToStart = tg.getPointToStart;
+                OARTargetPoint *pointToNavigate = tg.getPointToNavigate;
+                if (rp.file.hasRoute)
                 {
-                    OARTargetPoint *endPoint = selected ? [tg getPointToStart] : nil;
-                    CLLocation *endLocation = endPoint != nil ? endPoint.point : ps.lastObject;
-                    CLLocation *startLoc = selected ? ps.firstObject : ([tg getPointToNavigate] != nil ? [tg getPointToNavigate].point : ps.firstObject);
-                    [tg navigateToPoint:endLocation updateRoute:NO intermediate:-1];
-                    if ([tg getPointToStart])
-                        [tg setStartPoint:startLoc updateRoute:false name:nil];
+                    CLLocationCoordinate2D firstLatLon = CLLocationCoordinate2DMake(firstLoc.coordinate.latitude, firstLoc.coordinate.longitude);
+                    CLLocationCoordinate2D endLocation = pointToStart != nil ? pointToStart.point.coordinate :
+                    CLLocationCoordinate2DMake(lastLoc.coordinate.latitude, lastLoc.coordinate.longitude);
+                    CLLocationCoordinate2D startLocation = pointToNavigate != nil ? pointToNavigate.point.coordinate : firstLatLon;
+                    [tg navigateToPoint:[[CLLocation alloc] initWithLatitude:endLocation.latitude longitude:endLocation.longitude] updateRoute:NO intermediate:-1];
+                    if (pointToStart != nil)
+                    {
+                        [tg setStartPoint:[[CLLocation alloc] initWithLatitude:startLocation.latitude longitude:startLocation.longitude] updateRoute:NO name:nil];
+                    }
                     [tg updateRouteAndRefresh:YES];
                 }
                 else
                 {
-                    CLLocation *first = ps[0];
-                    CLLocation *end = ps[ps.count - 1];
-                    OARTargetPoint *pn = [tg getPointToNavigate];
-                    BOOL update = false;
-                    if (!pn || [pn.point distanceFromLocation:first] < 10)
+                    BOOL update = NO;
+                    if (pointToNavigate == nil
+                        || getDistance(pointToNavigate.point.coordinate.latitude, pointToNavigate.point.coordinate.longitude, firstLoc.coordinate.latitude, firstLoc.coordinate.longitude) < 10)
                     {
-                        [tg navigateToPoint:end updateRoute:false intermediate:-1];
-                        update = true;
+                        [tg navigateToPoint:lastLoc updateRoute:NO intermediate:-1];
+                        update = YES;
                     }
-                    if (![tg getPointToStart] || [[tg getPointToStart].point distanceFromLocation:end] < 10)
+                    if (pointToStart != nil
+                        && getDistance(pointToStart.point.coordinate.latitude, pointToStart.point.coordinate.longitude,
+                                       lastLoc.coordinate.latitude, lastLoc.coordinate.longitude) < 10)
                     {
-                        [tg setStartPoint:first updateRoute:false name:nil];
-                        update = true;
+                        [tg setStartPoint:firstLoc updateRoute:NO name:nil];
+                        update = YES;
                     }
                     if (update)
                     {
-                        [tg updateRouteAndRefresh:true];
+                        [tg updateRouteAndRefresh:YES];
                     }
                 }
             }
@@ -228,6 +235,10 @@
             [rp setCalculateOsmAndRoute:selected];
             if (self.delegate)
                 [self.delegate updateParameters];
+        }
+        else if ([gpxParam getId] == connect_route_points_id)
+        {
+            [rp setConnectRoutePoints:selected];
         }
     }
     if ([gpxParam getId] == calculate_osmand_route_without_internet_id)

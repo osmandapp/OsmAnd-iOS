@@ -115,7 +115,14 @@
 {
     OAGPXRouteParamsBuilder *params = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
     _passWholeRoute = [[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_from_start_point_id text:OALocalizedString(@"gpx_option_from_start_point") selected:params.passWholeRoute];
-    _navigationType = [[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_calculate_first_last_segment_id text:OALocalizedString(@"gpx_option_calculate_first_last_segment") selected:params.calculateOsmAndRouteParts];
+    if (params.useIntermediatePointsRTE)
+    {
+        _navigationType = [[OAOtherLocalRoutingParameter alloc] initWithId:connect_route_points_id text:OALocalizedString(@"connect_rp") selected:params.connectRoutePoints];
+    }
+    else
+    {
+        _navigationType = [[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_calculate_first_last_segment_id text:OALocalizedString(@"gpx_option_calculate_first_last_segment") selected:params.calculateOsmAndRouteParts];
+    }
     
     _reverseParam = [[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_reverse_route_id text:OALocalizedString(@"gpx_option_reverse_route") selected:params.reverse];
 }
@@ -200,6 +207,10 @@
 	}
 	
 	[data addObject:items];
+    
+    NSString *navTypeTitle1 = OALocalizedString(@"nav_type_straight_line");
+    NSString *navTypeTitle2 = OARoutingHelper.sharedInstance.getAppMode.toHumanString;
+    BOOL useRtePt = params.useIntermediatePointsRTE;
     [data addObject:@[
         @{
             @"type" : [OATitleRightIconCell getCellIdentifier],
@@ -213,12 +224,12 @@
         },
         @{
             @"type" : [OATitleRightIconCell getCellIdentifier],
-            @"title" : OALocalizedString(@"nav_type_title")
+            @"title" : useRtePt ? OALocalizedString(@"connect_rp") : OALocalizedString(@"nav_type_title")
         },
         @{
             @"type" : [OASegmentTableViewCell getCellIdentifier],
-            @"title0" : OALocalizedString(@"nav_type_straight_line"),
-            @"title1" : OARoutingHelper.sharedInstance.getAppMode.toHumanString,
+            @"title0" : useRtePt ? navTypeTitle2 : navTypeTitle1,
+            @"title1" : useRtePt ? navTypeTitle1 : navTypeTitle2,
             @"key" : @"nav_type"
         }
     ]];

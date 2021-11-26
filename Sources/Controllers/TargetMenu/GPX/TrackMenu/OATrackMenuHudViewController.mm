@@ -178,6 +178,9 @@
         [self changeTrackVisible];
 
     [self startLocationServices];
+
+    if (_reopeningState && _reopeningState.showingState != EOADraggableMenuStateInitial)
+        [self updateShowingState:_reopeningState.showingState];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -489,6 +492,7 @@
     OATrackMenuViewControllerState *state = _reopeningState ? _reopeningState : [[OATrackMenuViewControllerState alloc] init];
     state.lastSelectedTab = _selectedTab;
     state.gpxFilePath = self.gpx.gpxFilePath;
+    state.showingState = self.currentState;
 
     return state;
 }

@@ -30,6 +30,7 @@
 #import "OASRTMPlugin.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPOIUIFilter.h"
+#import "OAOpenPlaceReviews.h"
 
 @implementation OAPlugin
 {
@@ -266,33 +267,25 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     NSMutableSet<NSString *> *enabledPlugins = [NSMutableSet setWithSet:[settings getEnabledPlugins]];
-    
-    [self.class enablePluginByDefault:enabledPlugins plugin:[[OAMapillaryPlugin alloc] init]];
-    
+
     /*
     allPlugins.add(new OsmandRasterMapsPlugin(app));
-    allPlugins.add(new OsmandMonitoringPlugin(app));
-    checkMarketPlugin(app, new SRTMPlugin(app), true, SRTM_PLUGIN_COMPONENT_PAID, SRTM_PLUGIN_COMPONENT);
-    
-    checkMarketPlugin(app, new NauticalMapsPlugin(app), false, NauticalMapsPlugin.COMPONENT, null);
-    checkMarketPlugin(app, new SkiMapsPlugin(app), false, SkiMapsPlugin.COMPONENT, null);
-    
     allPlugins.add(new AudioVideoNotesPlugin(app));
-
     allPlugins.add(new AccessibilityPlugin(app));
-    allPlugins.add(new OsmEditingPlugin(app));
     allPlugins.add(new OsmandDevelopmentPlugin(app));
     */
 
-    [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
-    [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
-    [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
-    [allPlugins addObject:[[OASkiMapsPlugin alloc] init]];
-    [allPlugins addObject:[[OANauticalMapsPlugin alloc] init]];
-    [allPlugins addObject:[[OASRTMPlugin alloc] init]];
     [allPlugins addObject:[[OAWikipediaPlugin alloc] init]];
+    [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
+    [allPlugins addObject:[[OASRTMPlugin alloc] init]];
+    [allPlugins addObject:[[OANauticalMapsPlugin alloc] init]];
+    [allPlugins addObject:[[OASkiMapsPlugin alloc] init]];
+    [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
+    [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
+    [allPlugins addObject:[[OAOpenPlaceReviews alloc] init]];
 
     [self loadCustomPlugins];
+    [self.class enablePluginByDefault:enabledPlugins plugin:[[OAMapillaryPlugin alloc] init]];
     [self activatePlugins:enabledPlugins];
 }
 

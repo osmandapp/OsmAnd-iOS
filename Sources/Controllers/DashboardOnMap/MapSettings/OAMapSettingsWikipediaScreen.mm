@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         tblView = tableView;
         _wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
         _dataLock = [[NSObject alloc] init];
-        _wikipediaEnabled = [[OAPOIFiltersHelper sharedInstance] isTopWikiFilterSelected];
+        _wikipediaEnabled = [[OAPOIFiltersHelper sharedInstance] isPoiFilterSelectedByFilterId:[OAPOIFiltersHelper getTopWikiPoiFilterId]];
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
         [self commonInit];
         [self initData];

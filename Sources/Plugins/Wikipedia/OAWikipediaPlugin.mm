@@ -20,11 +20,10 @@
 
 #define PLUGIN_ID kInAppId_Addon_Wiki
 
-@implementation OAWikipediaPlugin {
-
+@implementation OAWikipediaPlugin
+{
     OsmAndAppInstance _app;
     OAPOIUIFilter *_topWikiPoiFilter;
-
 }
 
 - (instancetype)init
@@ -57,13 +56,6 @@
     return OALocalizedString(@"product_desc_ext_wiki");
 }
 
-- (void)updateLayers
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self toggleWikipediaPoi:!self.isActive ? NO : _app.data.wikipedia];
-    });
-}
-
 - (NSArray<OAPOIUIFilter *> *)getCustomPoiFilters
 {
     NSMutableArray<OAPOIUIFilter *> *poiFilters = [NSMutableArray new];
@@ -79,10 +71,11 @@
 
 - (void)updateWikipediaState
 {
-    [self toggleWikipediaPoi:[self isShowAllLanguages] || [self hasLanguagesFilter]];
-    [self refreshWikiOnMap];
+    if ([self isShowAllLanguages] || [self hasLanguagesFilter])
+        [self refreshWikiOnMap];
+    else
+        [self toggleWikipediaPoi:NO];
 }
-
 
 - (BOOL)hasCustomSettings
 {
@@ -158,22 +151,28 @@
 - (void)refreshWikiOnMap
 {
     [[OAPOIFiltersHelper sharedInstance] loadSelectedPoiFilters];
-//    [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
+    [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
     [[OARootViewController instance].mapPanel refreshMap];
 }
 
 - (void)showWikiOnMap
 {
     OAPOIUIFilter *wiki = [[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter];
-    [[OAPOIFiltersHelper sharedInstance] loadSelectedPoiFilters];
-    [[OAPOIFiltersHelper sharedInstance] addSelectedPoiFilter:wiki];
+    if (wiki)
+    {
+        [[OAPOIFiltersHelper sharedInstance] loadSelectedPoiFilters];
+        [[OAPOIFiltersHelper sharedInstance] addSelectedPoiFilter:wiki];
+    }
 }
 
 - (void)hideWikiFromMap
 {
     OAPOIUIFilter *wiki = [[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter];
-    [[OAPOIFiltersHelper sharedInstance] removePoiFilter:wiki];
-    [[OAPOIFiltersHelper sharedInstance] removeSelectedPoiFilter:wiki];
+    if (wiki)
+    {
+        [[OAPOIFiltersHelper sharedInstance] removePoiFilter:wiki];
+        [[OAPOIFiltersHelper sharedInstance] removeSelectedPoiFilter:wiki];
+    }
 }
 
 - (NSString *)getLanguagesSummary

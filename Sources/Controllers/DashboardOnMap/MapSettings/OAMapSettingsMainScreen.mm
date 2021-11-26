@@ -402,8 +402,8 @@ static BOOL _isRoutesGroupOpen = NO;
 - (NSString *)getPOIDescription
 {
     NSMutableString *descr = [[NSMutableString alloc] init];
-    NSMutableArray<OAPOIUIFilter *> *selectedFilters = [[[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] allObjects] mutableCopy];
-    [selectedFilters removeObject:[[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter]];
+    OAPOIFiltersHelper *filtersHelper = [OAPOIFiltersHelper sharedInstance];
+    NSArray<OAPOIUIFilter *> *selectedFilters = [[filtersHelper getSelectedPoiFilters:@[[filtersHelper getTopWikiPoiFilter]]] allObjects];
     NSUInteger size = [selectedFilters count];
     if (size > 0)
     {

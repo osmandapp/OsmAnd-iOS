@@ -99,14 +99,12 @@
         _showWikiOnMap = NO;
     }
 
-    NSMutableSet<OAPOIUIFilter *> *filters = [[_filtersHelper getSelectedPoiFilters] mutableCopy];
-    if ([_filtersHelper isTopWikiFilterSelected])
-        [filters removeObject:[_filtersHelper getTopWikiPoiFilter]];
-
+    NSMutableSet<OAPOIUIFilter *> *filters =
+            [[_filtersHelper getSelectedPoiFilters:@[[_filtersHelper getTopWikiPoiFilter]]] mutableCopy];
     [OAPOIUIFilter combineStandardPoiFilters:filters];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_filtersHelper isTopWikiFilterSelected])
+        if ([_filtersHelper isPoiFilterSelectedByFilterId:[OAPOIFiltersHelper getTopWikiPoiFilterId]])
             [self showPoiOnMap:filters wikiOnMap:[_filtersHelper getTopWikiPoiFilter]];
         else
             [self showPoiOnMap:filters wikiOnMap:nil];

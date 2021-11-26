@@ -431,11 +431,16 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     return _customPOIFilter;
 }
 
++ (NSString *)getTopWikiPoiFilterId
+{
+    return [STD_PREFIX stringByAppendingString:OSM_WIKI_CATEGORY];
+}
+
 - (OAPOIUIFilter *) getTopWikiPoiFilter
 {
     if (_topWikiPoiFilter == nil)
     {
-        NSString *wikiFilterId = [STD_PREFIX stringByAppendingString:OSM_WIKI_CATEGORY];
+        NSString *wikiFilterId = [self.class getTopWikiPoiFilterId];
         for (OAPOIUIFilter *filter in [self getTopDefinedPoiFilters])
         {
             if ([wikiFilterId isEqualToString:filter.getFilterId])
@@ -788,6 +793,34 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     return [NSSet setWithSet:_selectedPoiFilters];
 }
 
+- (NSSet<OAPOIUIFilter *> *) getSelectedPoiFilters:(NSArray<OAPOIUIFilter *> *)filtersToExclude
+{
+    if (filtersToExclude && filtersToExclude.count > 0)
+    {
+        NSMutableSet<OAPOIUIFilter *> *filters = [NSMutableSet set];
+        for (OAPOIUIFilter *filter in _selectedPoiFilters)
+        {
+            BOOL skip = NO;
+            for (OAPOIUIFilter *filterToExclude in filtersToExclude)
+            {
+                if (filterToExclude)
+                {
+                    NSString *filterToExcludeId = filterToExclude.filterId;
+                    if (filterToExcludeId && [filterToExcludeId isEqualToString:filter.filterId])
+                    {
+                        skip = YES;
+                        break;
+                    }
+                }
+            }
+            if (!skip)
+                [filters addObject:filter];
+        }
+        return filters;
+    }
+    return [NSSet setWithSet:_selectedPoiFilters];
+}
+
 - (void) addSelectedPoiFilter:(OAPOIUIFilter *)filter
 {
     [_selectedPoiFilters addObject:filter];
@@ -823,11 +856,14 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             BOOL skip = NO;
             for (OAPOIUIFilter *filterToExclude in filtersToExclude)
             {
-                NSString *filterToExcludeId = filterToExclude.filterId;
-                if (filterToExcludeId && [filterToExcludeId isEqualToString:selectedFilter.filterId])
+                if (filterToExclude)
                 {
-                    skip = YES;
-                    break;
+                    NSString *filterToExcludeId = filterToExclude.filterId;
+                    if (filterToExcludeId && [filterToExcludeId isEqualToString:selectedFilter.filterId])
+                    {
+                        skip = YES;
+                        break;
+                    }
                 }
             }
             if (!skip)
@@ -895,17 +931,6 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 - (BOOL) isPoiFilterSelected:(OAPOIUIFilter *)filter
 {
     return [_selectedPoiFilters containsObject:filter];
-}
-
-- (BOOL)isTopWikiFilterSelected
-{
-    NSString *wikiFilterId = [[self getTopWikiPoiFilter] getFilterId];
-    for (OAPOIUIFilter *filter in _selectedPoiFilters)
-    {
-        if ([wikiFilterId isEqualToString:[filter getFilterId]])
-            return YES;
-    }
-    return NO;
 }
 
 - (BOOL) isPoiFilterSelectedByFilterId:(NSString *)filterId

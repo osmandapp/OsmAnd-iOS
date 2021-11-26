@@ -41,6 +41,12 @@
     return PLUGIN_ID;
 }
 
+- (void)disable
+{
+    [super disable];
+    [self toggleWikipediaPoi:NO];
+}
+
 - (NSString *)getLogoResourceId
 {
     return @"ic_plugin_wikipedia";

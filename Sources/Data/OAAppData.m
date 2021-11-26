@@ -675,7 +675,7 @@
     @synchronized (_lock)
     {
         OAWikipediaPlugin *plugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
-        [plugin setActive:wikipedia];
+        [plugin setEnabled:wikipedia];
         [plugin toggleWikipediaPoi:wikipedia];
         [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(wikipedia)];
     }

@@ -97,7 +97,7 @@
 - (void) updateLayers
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self isActive])
+        if ([self isEnabled])
         {
             if (!_monitoringControl)
                 [self registerWidget];

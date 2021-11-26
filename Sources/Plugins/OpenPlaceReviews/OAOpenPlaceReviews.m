@@ -18,4 +18,9 @@
     return PLUGIN_ID;
 }
 
+- (BOOL)isEnableByDefault
+{
+    return YES;
+}
+
 @end

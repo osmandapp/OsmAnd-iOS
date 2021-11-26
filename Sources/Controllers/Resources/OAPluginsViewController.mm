@@ -217,7 +217,7 @@
             {
                 OACustomPlugin *plugin = _customPlugins[indexPath.row];
                 purchased = YES;
-                disabled = !plugin.isActive;
+                disabled = ![plugin isEnabled];
                 
                 imgTitle = plugin.getLogoResource;
                 
@@ -308,7 +308,7 @@
     else if (indexPath.section == kCustomPluginsSection)
     {
         OACustomPlugin *plugin = _customPlugins[indexPath.row];
-        [OAPlugin enablePlugin:plugin enable:!plugin.isActive];
+        [OAPlugin enablePlugin:plugin enable:![plugin isEnabled]];
         [self refreshProduct:indexPath];
         [OAResourcesBaseViewController setDataInvalidated];
     }

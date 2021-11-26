@@ -792,8 +792,8 @@
 "month_short" = "شهر";
 "months_short" = "أشهر";
 "year_short" = "سنة";
-"years_short" = "سنين";
-"day" = "نهار";
+"years_short" = "سنوات";
+"day" = "يوم";
 "days_2_4" = "أيام";
 "days_5" = "أيام";
 "week" = "أسبوع";
@@ -1280,7 +1280,7 @@
 "gpx_descent" = "المنحدرات";
 "gpx_avg_altitude" = "متوسط الارتفاع";
 "gpx_ascent" = "مرتفع";
-"download_depth_countours" = "محيطات الأعماق البحرية";
+"download_depth_countours" = "ملامح العمق البحري";
 "gpx_alt_range" = "مدى الارتفاع";
 "region_nautical" = "الخرائط البحرية";
 "stats_select_graph_data" = "حدد بيانات الرسم البياني";
@@ -2194,3 +2194,4 @@
 "shared_string_start_time" = "وقت البدء";
 "industrial" = "صناعي";
 "education" = "تعليم";
+"route_points" = "نقاط الطريق";

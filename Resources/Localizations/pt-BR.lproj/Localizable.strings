@@ -2191,3 +2191,4 @@
 "units_min_short" = "m";
 "m" = "m";
 "route_points" = "Pontos da rota";
+"connect_rp" = "Conectar pontos de rota";

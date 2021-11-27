@@ -2189,3 +2189,7 @@
 "shared_string_time_moving" = "Durée de déplacement";
 "industrial" = "Industrie";
 "education" = "Éducation";
+"m" = "m";
+"units_min_short" = "m";
+"route_points" = "Point de passage";
+"connect_rp" = "Relier les points de passage";

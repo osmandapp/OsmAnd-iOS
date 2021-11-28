@@ -14,44 +14,65 @@ var commonValuesDict: [String:[String]] = [:]
 var duplicatesCount = 0
 
 let languageDict = [
-                    "es-419" : "es-rAR",
-                    "hsb" : "b+hsb",
-                    "kab" : "b+kab",
-                    "pt-BR" : "pt-rBR",
-                    "ro-RO" : "ro",
-                    "zh-Hans" : "zh-rCN" ,
-                    "zh-Hant" : "zh-rTW",
-                    "ar" : "ar",
-                    "be" : "be",
-                    "ca" : "ca",
-                    "cs" : "cs",
-                    "da" : "da",
-                    "de" : "de",
-                    "es" : "es",
-                    "et" : "et",
-                    "fa" : "fa",
-                    "fi" : "fi",
-                    "fr" : "fr",
-                    "gl" : "gl",
-                    "hu" : "hu",
-                    "is" : "is",
-                    "it" : "it",
-                    "ja" : "ja",
-                    "ku" : "ku",
-                    "my" : "my",
-                    "nb" : "nb",
-                    "nl" : "nl",
-                    "oc" : "oc",
-                    "pl" : "pl",
-                    "pt" : "pt",
-                    "ru" : "ru",
-                    "sc" : "sc",
-                    "sk" : "sk",
-                    "sl" : "sl",
-                    "sq" : "sq",
-                    "tr" : "tr",
-                    "uk" : "uk",
-                    "el" : "el"
+    "ar" : "ar",
+    "ast" : "ast",
+    "az" : "az",
+    "be" : "be",
+    "bg" : "bg",
+    "ca" : "ca",
+    "cs" : "cs",
+    "cy" : "cy",
+    "da" : "da",
+    "de" : "de",
+    "el" : "el",
+    "en-GB" : "en-rGB",
+    "eo" : "eo",
+    "es" : "es",
+    "es-AR" : "es-rAR",
+    "es-US" : "es-rUS",
+    "et" : "et",
+    "eu" : "eu",
+    "fa" : "fa",
+    "fi" : "fi",
+    "fr" : "fr",
+    "gl" : "gl",
+    "he" : "iw",
+    "hsb" : "b+hsb",
+    "hu" : "hu",
+    "hy" : "hy",
+    "id" : "id",
+    "is" : "is",
+    "it" : "it",
+    "ja" : "ja",
+    "ka" : "ka",
+    "kab" : "b+kab",
+    "kn" : "kn",
+    "ko" : "ko",
+    "ku" : "ku",
+    "lt" : "lt",
+    "lv" : "lv",
+    "ml" : "ml",
+    "my" : "my",
+    "nb" : "nb",
+    "nl" : "nl",
+    "oc" : "oc",
+    "pl" : "pl",
+    "pt-BR" : "pt-rBR",
+    "ro-RO" : "ro",
+    "ru" : "ru",
+    "sc" : "sc",
+    "sk" : "sk",
+    "sl" : "sl",
+    "sq" : "sq",
+    "sr" : "sr",
+    "sr-Latn" : "b+sr+Latn",
+    "sv" : "sv",
+    "ta" : "ta",
+    "tr" : "tr",
+    "uk" : "uk",
+    "vi" : "vi",
+    "zh-Hans" : "zh-rCN" ,
+    "zh-Hant" : "zh-rTW",
 ]
 
 var allLanguagesDict = languageDict
@@ -470,11 +491,82 @@ class Parser: NSObject, XMLParserDelegate {
 
 
 
+//mark: Bash commands helper
+
+func shell(_ command: String) -> String {
+    let task = Process()
+    let pipe = Pipe()
+    
+    task.standardOutput = pipe
+    task.standardError = pipe
+    task.arguments = ["-c", command]
+    task.launchPath = "/bin/zsh"
+    task.launch()
+    
+    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+    let output = String(data: data, encoding: .utf8)!
+    
+    return output
+}
+
+func changeDir(_ argument: String) -> String {
+    var path = ""
+    if argument == ".." {
+        let currentFolderPath = URL(fileURLWithPath: shell("echo $PWD"), isDirectory: true)
+        let parentFolder = currentFolderPath.deletingLastPathComponent()
+        path = parentFolder.path
+    } else {
+        path = argument
+    }
+    
+    if !path.hasPrefix("/") {
+        path = "/" + path
+    }
+    if path.contains("\n") {
+        path = path.replacingOccurrences(of: "\n", with: "")
+    }
+    
+    FileManager.default.changeCurrentDirectoryPath(path)
+    return path
+}
+
+
+
+
+
+
 //mark: Start script
 
-///change directory to OsmAnd-ios repo folder.
-///uncomment this line for debugging.
-// FileManager.default.changeCurrentDirectoryPath("/Users/nnngrach/Documents/Projects/Coding/OsmAnd/ios/Scripts/")
+///Uncomment this line for debugging. Change this path to your "OsmAnd/ios/Scripts/" folder's path.
+//print( changeDir("/Users/nnngrach/Documents/Projects/Coding/OsmAnd/ios/Scripts/") )
+
+
+// Update repositories to avoid Weblate merge conflicts
+
+let currentIosScriptsFolder = URL(fileURLWithPath: shell("echo $PWD"), isDirectory: true)
+let osmandRepositoriesFolder = currentIosScriptsFolder.deletingLastPathComponent().deletingLastPathComponent()
+//
+print( changeDir(osmandRepositoriesFolder.appendingPathComponent("android/").path) )
+print( shell("git pull") )
+
+print( changeDir(osmandRepositoriesFolder.appendingPathComponent("ios/").path) )
+print( shell("git pull") )
+
+print( changeDir(osmandRepositoriesFolder.appendingPathComponent("resources/").path) )
+print( shell("git pull") )
+
+
+// Update phrases
+
+print( changeDir(osmandRepositoriesFolder.appendingPathComponent("resources/poi/").path) )
+print( shell("./copy_phrases.sh"))
+//?? should we commit that changes immidietelu ??
+
+
+
+
+//mark: run translation updating
+print( changeDir(currentIosScriptsFolder.path) )
 
 if (CommandLine.arguments.count == 2) && (CommandLine.arguments[1] == "-routing") {
     for lang in allLanguagesDict {

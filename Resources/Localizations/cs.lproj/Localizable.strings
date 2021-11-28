@@ -2166,7 +2166,7 @@
 "delete_group_confirm" = "Opravdu chcete smazat skupinu ”%@”?";
 "gpx_split_interval" = "Rozdělit interval";
 "shared_string_overview" = "Přehled";
-"ios_release_4_1" = "• Nová obrazovka pro vyhledávání podle souřadnic v různých formátech\n• Vylepšené vyhledávání podle souřadnic ve formátu OLC\n• Nová uživatelsky přívětivá nabídka pro výběr jazyků, v nichž se zobrazí články Wikipedie na mapě\n• Přidaná možnost jednoduchého stažení map všech oblastí dané země\n• Přidané vrstevnice ve stopách (je potřeba znovu stáhnout soubory)\n• Přidaná možnost stáhnout mapy výběrem požadované oblasti nebo země na mapě, spolu s novým oknem s návrhem stažení mapy, pokud si oblast prohlížíte bez mapy\n• Nový vzhled tlačítek na mapě a přidaná možnost měnit přiblížení mapy pomocí dvojitého poklepání a tažení\n";
+"ios_release_4_1" = "• Zcela přepracované rozhraní pro práci se stopami: nová nabídka s grafy a statistikami, možnost měnit vzhled, obarvení podle rychlosti, výšky a sklonu, výběr stop na mapě\n• Nová obrazovka pro vyhledávání podle souřadnic v různých formátech\n• Vylepšené vyhledávání podle souřadnic ve formátu OLC\n• Nová uživatelsky přívětivá nabídka pro výběr jazyků, v nichž se zobrazí články Wikipedie na mapě\n• Přidaná možnost jednoduchého stažení map všech oblastí dané země\n• Přidané vrstevnice ve stopách (je potřeba stáhnout dodatečné soubory)\n• Přidaná možnost stáhnout mapy výběrem požadované oblasti nebo země na mapě, spolu s novým oknem s návrhem stažení chybějící mapy zobrazené oblasti\n• Nový vzhled tlačítek na mapě a přidaná možnost měnit přiblížení mapy pomocí dvojitého poklepání a tažení\n• Nastavení viditelnosti tras bylo přesunuto výše na obrazovce \"Nastavení mapy\" a bylo přeuspořádáno pro větší flexibilitu\n";
 "gpx_split_interval_descr" = "Vyberte interval pro zobrazování značek na trase se vzdáleností nebo časem.";
 "gpx_join_gaps_descr" = "Mezery mezi úseky budou propojeny.";
 "track_show_start_finish_icons" = "Zobrazit ikony startu a cíle";
@@ -2182,3 +2182,5 @@
 "shared_string_time_moving" = "Doba pohybu";
 "industrial" = "Průmyslový";
 "education" = "Vzdělávání";
+"route_points" = "Body trasy";
+"connect_rp" = "Spojit body trasy";

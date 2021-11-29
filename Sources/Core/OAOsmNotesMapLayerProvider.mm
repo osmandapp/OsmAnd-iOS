@@ -104,15 +104,22 @@ bool OAOsmNotesMapLayerProvider::parseResponse(const QByteArray &buffer,
             {
                 currentNote = std::make_shared<OAOnlineOsmNote>();
                 double lat = -1, lon = -1;
-                for(auto it = xmlReader.attributes().begin(); it != xmlReader.attributes().end(); ++it)
+                const auto& attributes = xmlReader.attributes();
+                for(auto it = attributes.begin(); it != attributes.end(); ++it)
                 {
-                    const auto& attr = *it;
-                    if (attr.name().isNull())
+                    const auto attr = it;
+                    const auto stringRef = attr->name();
+                    if (stringRef.isNull() || stringRef.isEmpty())
                         continue;
-                    if (attr.name().toString() == QStringLiteral("lat"))
-                        lat = attr.value().toDouble();
-                    else if (attr.name().toString() == QStringLiteral("lon"))
-                        lon = attr.value().toDouble();
+                    
+                    const auto string = stringRef.toString();
+                    if (string == QStringLiteral("lat"))
+                        lat = attr->value().toDouble();
+                    else if (string == QStringLiteral("lon"))
+                        lon = attr->value().toDouble();
+                    
+                    if (lat != -1 && lon != -1)
+                        break;
                 }
                 if (lat != -1 && lon != -1)
                 {

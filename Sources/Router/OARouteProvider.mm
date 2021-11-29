@@ -156,6 +156,7 @@
     _reverse = builder.reverse;
     self.passWholeRoute = builder.passWholeRoute;
     self.useIntermediatePointsRTE = builder.useIntermediatePointsRTE;
+    self.connectRoutePoints = builder.connectRoutePoints;
     builder.calculateOsmAndRoute = NO; // Disabled temporary builder.calculateOsmAndRoute;
     if (file.locationMarks.count > 0)
     {
@@ -231,6 +232,11 @@
         {
             self.points = [[points reverseObjectEnumerator] allObjects];
             _segmentEndPoints = [[_segmentEndPoints reverseObjectEnumerator] allObjects];
+        }
+        else
+        {
+            self.points = points;
+            _segmentEndPoints = endPoints;
         }
     }
     self.calculateOsmAndRouteParts = builder.calculateOsmAndRouteParts && [self isStartPointClose];
@@ -957,7 +963,7 @@
     return [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
 }
 
-- (OARouteCalculationResult *) calculateOsmAndRouteWithIntermediatePoints:(OARouteCalculationParams *)routeParams intermediates:(NSArray<CLLocation *> *)intermediates
+- (OARouteCalculationResult *) calculateOsmAndRouteWithIntermediatePoints:(OARouteCalculationParams *)routeParams intermediates:(NSArray<CLLocation *> *)intermediates connectRtePts:(BOOL)connectRtePts
 {
     OARouteCalculationParams *rp = [[OARouteCalculationParams alloc] init];
     rp.calculationProgress = routeParams.calculationProgress;
@@ -969,24 +975,38 @@
     rp.onlyStartPointChanged = routeParams.onlyStartPointChanged;
     rp.previousToRecalculate =  routeParams.previousToRecalculate;
     NSMutableArray<CLLocation *> *rpIntermediates = [NSMutableArray array];
-    int closest = 0;
-    double maxDist = DBL_MAX;
-    for (int i = 0; i < intermediates.count; i++)
-    {
-        CLLocation *loc = intermediates[i];
-        double dist = [loc distanceFromLocation:rp.start];
-        if (dist <= maxDist)
+    NSInteger closest = 0;
+    if (!routeParams.gpxRoute.passWholeRoute) {
+        double maxDist = DBL_MAX;
+        for (NSInteger i = 0; i < intermediates.count; i++)
         {
-            closest = i;
-            maxDist = dist;
+            CLLocation *loc = intermediates[i];
+            double dist = getDistance(loc.coordinate.latitude, loc.coordinate.longitude,
+                                               rp.start.coordinate.latitude, rp.start.coordinate.longitude);
+            if (dist <= maxDist)
+            {
+                closest = i;
+                maxDist = dist;
+            }
         }
     }
-    for (int i = closest; i < intermediates.count ; i++ )
+    for (NSInteger i = closest; i < intermediates.count; i++)
     {
         CLLocation *w = intermediates[i];
         [rpIntermediates addObject:[[CLLocation alloc] initWithLatitude:w.coordinate.latitude longitude:w.coordinate.longitude]];
     }
     rp.intermediates = [NSArray arrayWithArray:rpIntermediates];
+    EOARouteService routeService = (EOARouteService) routeParams.mode.getRouterService;
+//    if (routeService == RouteService.BROUTER) {
+//        try {
+//            return findBROUTERRoute(rp);
+//        } catch (ParserConfigurationException | SAXException e) {
+//            throw new IOException(e);
+//        }
+//    } else
+    if (routeService == STRAIGHT || routeService == DIRECT_TO || connectRtePts)
+        return [self findStraightRoute:rp];
+    
     return [self findVectorMapsRoute:rp calcGPXRoute:NO];
 }
 
@@ -1298,7 +1318,7 @@
     }
     
     if (routeParams.gpxRoute.useIntermediatePointsRTE)
-        return [self calculateOsmAndRouteWithIntermediatePoints:routeParams intermediates:gpxParams.points];
+        return [self calculateOsmAndRouteWithIntermediatePoints:routeParams intermediates:gpxParams.points connectRtePts:gpxParams.connectRoutePoints];
     
     NSMutableArray<CLLocation *> *gpxRoute = [NSMutableArray array];
     NSMutableArray<NSNumber *> *startI = [NSMutableArray arrayWithObject:@(0)];

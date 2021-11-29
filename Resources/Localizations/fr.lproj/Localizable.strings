@@ -1908,7 +1908,7 @@
 "checking_for_duplicate_description" = "OsmAnd vérifie que l'élément %@ n'existe pas déjà dans l'application. Cela peut prendre un certain temps.";
 "checking_for_duplicates" = "Recherche de doublons...";
 "reset_profile_action_descr" = "Réinitialiser tous les paramètres du profil aux valeurs par défaut de l'installation. Appuyez sur Réinitialiser pour annuler toutes vos modifications, cette action ne peut pas être annulée.";
-"new_plugin_added" = "Nouveau greffon ajouté";
+"new_plugin_added" = "Nouvel extension ajoutée";
 "preparing_file" = "Préparation du fichier";
 "reading_file" = "Lecture du fichier";
 "extra_maps" = "Cartes supplémentaires";
@@ -2116,7 +2116,7 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Couleur des itinéraires en fonction du type de réseau (international, régional, local).";
 "walking_route_osmc_description" = "Couleur des itinéraires en fonction de leurs définitions locale (si elle est connue d’OpenStreetMap) et du type d\'itinéraire (international, régional, local).";
 "travel_routes" = "Itinéraires de voyage";
-"added_profiles_descr" = "Profils ajoutés par plugin";
+"added_profiles_descr" = "Profils ajoutés par extension";
 "added_profiles" = "Profils ajoutés";
 "suggested_maps_descr" = "Ces cartes sont nécessaires pour utiliser le greffon.";
 "suggested_maps" = "Cartes suggérées";
@@ -2189,3 +2189,7 @@
 "shared_string_time_moving" = "Durée de déplacement";
 "industrial" = "Industrie";
 "education" = "Éducation";
+"m" = "m";
+"units_min_short" = "m";
+"route_points" = "Point de passage";
+"connect_rp" = "Relier les points de passage";

@@ -1634,3 +1634,5 @@
 "no_waypoints_found" = "Geen punten gevonden";
 "gpx_upload_identifiable_visibility_descr" = "\"Identificeerbaar\" betekent dat de track openbaar wordt getoond in je GPS-tracks en in openbare GPS-track-lijsten. Dat wil zeggen dat andere gebruikers de onbewerkte track kunnen downloaden en deze aan je gebruikersnaam kunnen koppelen. Gegevens die via de trackpoints-API worden aangeboden, verwijzen naar je oorspronkelijke trackpagina. Tijdaanduidingen van de traceerpunten zijn beschikbaar via de openbare GPS-API.";
 "srtm_download_single_help_message" = "Selecteer a.u.b. het benodigde formaat. Je zal het bestand opnieuw moeten downloaden om het formaat te wijzigen.";
+"contour_lines_hillshades_slope" = "Hoogtelijnen, reliëfschaduwen en hellingen";
+"search_more" = "Zoek meer…";

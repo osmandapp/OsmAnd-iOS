@@ -77,11 +77,17 @@ typedef enum {
 - (void) hideMarkers
 {
     _locationMarkerDay->setIsHidden(true);
+    _locationMarkerDay->setIsAccuracyCircleVisible(false);
     _locationMarkerNight->setIsHidden(true);
+    _locationMarkerNight->setIsAccuracyCircleVisible(false);
     _locationMarkerLostDay->setIsHidden(true);
+    _locationMarkerLostDay->setIsAccuracyCircleVisible(false);
     _locationMarkerLostNight->setIsHidden(true);
+    _locationMarkerLostNight->setIsAccuracyCircleVisible(false);
     _courseMarkerDay->setIsHidden(true);
+    _courseMarkerDay->setIsAccuracyCircleVisible(false);
     _courseMarkerNight->setIsHidden(true);
+    _courseMarkerNight->setIsAccuracyCircleVisible(false);
 }
 
 - (void) setState:(EOAMarkerCollectionState)state

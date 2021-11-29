@@ -16,6 +16,7 @@
 #define gpx_option_calculate_first_last_segment_id 105
 #define calculate_osmand_route_gpx_id 106
 #define speak_favorites_id 107
+#define connect_route_points_id 108
 
 @class OAApplicationMode, OARoutingHelper, OAAppSettings;
 @class OALocalRoutingParameterGroup;

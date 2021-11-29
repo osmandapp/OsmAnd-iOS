@@ -113,6 +113,8 @@
 
 - (std::shared_ptr<OsmAnd::VectorLine>) findSharedLine:(const OsmAnd::VectorLine* const)vectorLine
 {
+    if (_fullSymbolsGroupByLine.isEmpty())
+        return nullptr;
     const auto lines = _fullSymbolsGroupByLine.keys();
     for (auto it = lines.begin(); it != lines.end(); ++it)
     {

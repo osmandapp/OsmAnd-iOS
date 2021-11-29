@@ -65,6 +65,7 @@ struct RouteSegmentResult;
 @property (nonatomic) BOOL passWholeRoute;
 @property (nonatomic) BOOL calculateOsmAndRouteParts;
 @property (nonatomic) BOOL useIntermediatePointsRTE;
+@property (nonatomic) BOOL connectRoutePoints;
 @property (nonatomic) BOOL reverse;
 @property (nonatomic) NSArray<id<OALocationPoint>> *wpt;
 @property (nonatomic, readonly) NSArray<CLLocation *> *segmentEndPoints;
@@ -85,6 +86,7 @@ struct RouteSegmentResult;
 @property (nonatomic) BOOL passWholeRoute;
 @property (nonatomic) BOOL calculateOsmAndRouteParts;
 @property (nonatomic) BOOL useIntermediatePointsRTE;
+@property (nonatomic) BOOL connectRoutePoints;
 @property (nonatomic) NSInteger selectedSegment;
 
 - (instancetype)initWithDoc:(OAGPXDocument *)document;

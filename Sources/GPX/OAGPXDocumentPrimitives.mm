@@ -765,6 +765,24 @@
     return self;
 }
 
+- (OAGpxExtension *)getExtensionByKey:(NSString *)key
+{
+    for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
+    {
+        if ([e.name isEqualToString:key])
+            return e;
+    }
+    return nil;
+}
+
+- (NSString *) getProfileType
+{
+    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
+    if (e)
+        return e.value;
+    return nil;
+}
+
 @end
 @implementation OAGpxLink
 @end

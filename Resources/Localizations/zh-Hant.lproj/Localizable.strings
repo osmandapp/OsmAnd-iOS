@@ -48,7 +48,7 @@
 "poi_search_near_center" = "已執行在地圖中心附近的查尋";
 "poi_hide" = "隱藏";
 // My Places
-"favorites" = "收藏";
+"favorites" = "我的收藏";
 // GPX
 "gpx_point" = "標點";
 // Rendering categories
@@ -103,13 +103,13 @@
 // Map settings
 "rendering_value_browse_map_name" = "瀏覽地圖";
 "m_style_car" = "駕駛";
-"m_style_walk" = "走路";
+"m_style_walk" = "步行";
 "m_style_bicycle" = "腳踏車";
 "map_settings_map" = "地圖";
 "map_settings_show" = "在地圖上顯示";
 "map_settings_type" = "地圖類型";
 "map_mode" = "地圖模式";
-"map_settings_day" = "天";
+"map_settings_day" = "日間";
 "map_settings_night" = "夜間";
 "map_settings_style" = "地圖樣式";
 "map_settings_overunder" = "上層 / 下層";
@@ -123,7 +123,7 @@
 // Intro
 "intro_skip" = "跳過";
 "intro_download" = "下載\n地圖";
-"intro_next" = "下一頁";
+"intro_next" = "下頁";
 "intro_welcome" = "歡迎使用\nOsmAnd";
 "intro_promo" = "全球離線地圖";
 "intro_placeholder" = "請輸入您所在地區的名稱";
@@ -764,7 +764,7 @@
 "cancel_navigation" = "停止導航";
 "transport_routes" = "導航路線";
 "transport_nearby_routes_within" = "在附近的路線";
-"transport_stop" = "停止";
+"transport_stop" = "中止";
 "transport_nearby_routes" = "範圍內";
 "route_stops_before" = "%1$s 之前停止";
 "shared_string_previous" = "上一頁";
@@ -958,7 +958,7 @@
 "osm_note_reopen" = "重新開啟";
 "osm_notes_online_layer" = "OSM 註解(連線)";
 "osm_edits_basic" = "基本";
-"osm_edits_advanced" = "展開";
+"osm_edits_advanced" = "進階";
 "osm_edits_notes" = "註解";
 "modify_poi_short" = "修改 POI";
 "create_poi_short" = "建立 POI";
@@ -1073,7 +1073,7 @@
 "angular_units_descr" = "變更測量的方位角。";
 "quick_action_name" = "快速動作";
 "osm_edit_without_name" = "沒有名稱";
-"home_pt" = "家";
+"home_pt" = "住家";
 "gpx_descent" = "下坡";
 "osm_note_action_field_descr" = "此訊息會包含在註解欄。";
 "add_parking_place" = "增加停車地點";
@@ -1223,7 +1223,7 @@
 "rendering_value_black_name" = "黑色";
 "rendering_attr_trolleybusRoutes_name" = "無軌電車路線";
 "routeInfo_piste_difficulty_name" = "滑雪難度";
-"rendering_attr_currentTrackColor_description" = "GPX 的顏色";
+"rendering_attr_currentTrackColor_description" = "GPX的顏色";
 "rendering_attr_surface_metal_name" = "金屬";
 "routing_attr_no_new_routing_description" = "在 v1.9 不使用路徑規則引導。";
 "routing_attr_prefer_unpaved_name" = "偏好無鋪面道路";
@@ -1550,7 +1550,7 @@
 "listed_exist" = "列出的 %@ 已存在於 OsmAnd 中。";
 "shared_string_meters" = "公尺";
 "shared_string_add_profile" = "新增設定檔";
-"m_style_pulic_transport" = "大眾運輸";
+"m_style_pulic_transport" = "公共交通";
 "one" = "一";
 "consider_limitations_param" = "考慮暫時限制";
 "create_profile_descr" = "讓您自訂的設定檔以其中一個預設應用程式設定檔為基礎，這定義了如小工具、速度單位與距離的顯示方式。這些是預設的應用程式設定檔，連同其可以擴展成的自訂設定檔範例：";

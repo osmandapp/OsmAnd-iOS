@@ -422,6 +422,18 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             }
             
             OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:track.gpxFilePath]];
+            
+            NSArray<OAGpxRtePt *> *points = [doc getRoutePoints];
+            if (points && points.count > 0)
+            {
+                OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:[points[0] getProfileType] def:nil];
+                if (mode)
+                {
+                    [OARoutingHelper.sharedInstance setAppMode:mode];
+                    [OsmAndApp.instance initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
+                }
+            }
+            
             if (doc.getNonEmptySegmentsCount > 1)
             {
                 OATrackSegmentsViewController *trackSegments = [[OATrackSegmentsViewController alloc] initWithFile:doc];

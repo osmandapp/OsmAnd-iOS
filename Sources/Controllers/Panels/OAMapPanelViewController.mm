@@ -1931,25 +1931,11 @@ typedef enum
 - (void) targetGoToPoint
 {
     OsmAnd::LatLon latLon(_targetLatitude, _targetLongitude);
-    Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
     _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
 
-    BOOL landscape = [self.targetMenuView isLandscape];
-    CGFloat leftInset = 0;
-    CGFloat bottomInset = 0;
-    if (self.targetMenuView.superview)
-    {
-        leftInset = landscape ? kInfoViewLanscapeWidth : 0.0;
-        bottomInset = landscape ? 0.0 : [self.targetMenuView getVisibleHeight];
-    }
-    else if ([OARouteInfoView isVisible])
-    {
-        leftInset = landscape ? kInfoViewLanscapeWidth : 0.0;
-        bottomInset = landscape ? 0.0 : self.routeInfoView.frame.size.height;
-    }
-    
-    [_mapViewController correctPosition:point originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:bottomInset centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
-
+    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:
+            OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
+    [_mapViewController goToPosition:targetPoint31 animated:NO];
 }
 
 - (void) targetGoToGPX

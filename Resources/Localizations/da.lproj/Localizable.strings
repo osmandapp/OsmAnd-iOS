@@ -2191,3 +2191,5 @@
 "parked_at" = "Parkeret ved";
 "industrial" = "Industriel";
 "education" = "Uddannelse";
+"route_points" = "Rutepunkter";
+"connect_rp" = "Forbind rutepunkter";

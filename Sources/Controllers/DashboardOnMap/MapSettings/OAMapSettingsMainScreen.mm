@@ -37,6 +37,8 @@
 #define kTransportCategory @"transport"
 #define kRoutesCategory @"routes"
 
+#define kMaxCountRoutesWithoutGroup 5
+
 @interface OAMapSettingsMainScreen () <OAAppModeCellDelegate, OAMapTypeDelegate>
 
 @end
@@ -69,9 +71,6 @@ static BOOL _isRoutesGroupOpen = NO;
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
         _styleSettings = [OAMapStyleSettings sharedInstance];
-        _routesWithoutGroup = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, ALPINE_HIKING_ATTR];
-        _routesWithGroup = [_app.data.lastMapSource.resourceId hasPrefix:@"skimap"] ? @[PISTE_ROUTES_ATTR] : @[];
-        _routesWithGroup = [_routesWithGroup arrayByAddingObjectsFromArray:@[HORSE_ROUTES_ATTR, WHITE_WATER_SPORTS_ATTR]];
 
         title = OALocalizedString(@"configure_map");
 
@@ -178,15 +177,9 @@ static BOOL _isRoutesGroupOpen = NO;
             @"cells": showSectionData
     }];
 
-    const auto resource = _app.resourcesManager->getResource(QString::fromNSString(_app.data.lastMapSource.resourceId).remove(QStringLiteral(".sqlitedb")));
-    _routesParameters = !([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)) ? [_styleSettings getParameters:kRoutesCategory sorted:NO] : [NSArray array];
+    [self generateRoutesData];
     if (_routesParameters.count > 0)
     {
-        NSArray<NSString *> *orderedNames = [_routesWithoutGroup arrayByAddingObjectsFromArray:_routesWithGroup];
-        NSMutableArray<OAMapStyleParameter *> *routesParameters = [[_routesParameters sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameter *obj1, OAMapStyleParameter *obj2) {
-            return [@([orderedNames indexOfObject:obj1.name]) compare:@([orderedNames indexOfObject:obj2.name])];
-        }] mutableCopy];
-
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.groupName = OALocalizedString(_isRoutesGroupOpen ? @"shared_string_collapse" : @"show_all");
         group.type = [OACustomSelectionCollapsableCell getCellIdentifier];
@@ -194,35 +187,32 @@ static BOOL _isRoutesGroupOpen = NO;
 
         NSMutableArray<NSDictionary *> *routeCells = [NSMutableArray array];
         NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
-        [routesParameters enumerateObjectsUsingBlock:^(OAMapStyleParameter * _Nonnull routeParameter, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([routeParameter.name isEqualToString:CYCLE_NODE_NETWORK_ROUTES_ATTR])
-            {
-                [routesParameters removeObject:routeParameter];
-            }
-            else
-            {
-                NSDictionary *routeData = @{
-                        @"name": routeParameter.title,
-                        @"image": [self getImageForParameterOrCategory:routeParameter.name],
-                        @"key": [NSString stringWithFormat:@"routes_%@", routeParameter.name],
-                        @"type": [hasParameters containsObject:routeParameter.name] ? [OAIconTitleValueCell getCellIdentifier] : [OAIconTextDividerSwitchCell getCellIdentifier]
-                };
+        for (OAMapStyleParameter *routeParameter in _routesParameters)
+        {
+            NSDictionary *routeData = @{
+                    @"name": routeParameter.title,
+                    @"image": [self getImageForParameterOrCategory:routeParameter.name],
+                    @"key": [NSString stringWithFormat:@"routes_%@", routeParameter.name],
+                    @"type": [hasParameters containsObject:routeParameter.name] ? [OAIconTitleValueCell getCellIdentifier] : [OAIconTextDividerSwitchCell getCellIdentifier]
+            };
 
-                if ([_routesWithoutGroup containsObject:routeParameter.name])
-                    [routeCells addObject:routeData];
-                else if ([_routesWithGroup containsObject:routeParameter.name])
-                    [group.groupItems addObject:routeData];
-            }
-        }];
-        _routesParameters = routesParameters;
+            if ([_routesWithoutGroup containsObject:routeParameter.name])
+                [routeCells addObject:routeData];
+            else if ([_routesWithGroup containsObject:routeParameter.name])
+                [group.groupItems addObject:routeData];
+        }
+        if ([self hasCollapsableRoutesGroup])
+        {
+            [routeCells addObject:@{
+                    @"group": group,
+                    @"type": NSStringFromClass([group class]),
+                    @"key": @"collapsed_routes"
+            }];
+        }
 
         [data addObject:@{
                 @"group_name": OALocalizedString(@"rendering_category_routes"),
-                @"cells": [routeCells arrayByAddingObject:@{
-                        @"group": group,
-                        @"type": NSStringFromClass([group class]),
-                        @"key": @"collapsed_routes"
-                }]
+                @"cells": routeCells
         }];
     }
 
@@ -362,6 +352,40 @@ static BOOL _isRoutesGroupOpen = NO;
                     completion: nil];
 }
 
+- (void)generateRoutesData
+{
+    const auto resource = _app.resourcesManager->getResource(QString::fromNSString(_app.data.lastMapSource.resourceId)
+            .remove(QStringLiteral(".sqlitedb")));
+    _routesParameters = !([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"]
+            || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources))
+            ? [_styleSettings getParameters:kRoutesCategory sorted:NO] : [NSArray array];
+    _isRoutesGroupOpen = _isRoutesGroupOpen && _routesParameters.count > kMaxCountRoutesWithoutGroup;
+    if (_routesParameters.count > 0)
+    {
+        NSArray<NSString *> *orderedNames = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR,
+                ALPINE_HIKING_ATTR, PISTE_ROUTES_ATTR, HORSE_ROUTES_ATTR, WHITE_WATER_SPORTS_ATTR];
+        _routesParameters = [_routesParameters sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameter *obj1, OAMapStyleParameter *obj2) {
+            return [@([orderedNames indexOfObject:obj1.name]) compare:@([orderedNames indexOfObject:obj2.name])];
+        }];
+        NSMutableArray<OAMapStyleParameter *> *routesParameters = [_routesParameters mutableCopy];
+        [routesParameters removeObject:[_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR]];
+        _routesParameters = routesParameters;
+
+        NSMutableArray<NSString *> *routesWithoutGroup = [NSMutableArray array];
+        NSMutableArray<NSString *> *routesWithGroup = [NSMutableArray array];
+        for (NSInteger i = 0; i < _routesParameters.count; i++)
+        {
+            OAMapStyleParameter *routesParameter = routesParameters[i];
+            if (i < kMaxCountRoutesWithoutGroup - 1 || ((i == _routesParameters.count - 1) && (i == routesWithoutGroup.count)))
+                [routesWithoutGroup addObject:routesParameter.name];
+            else
+                [routesWithGroup addObject:routesParameter.name];
+        }
+        _routesWithoutGroup = routesWithoutGroup;
+        _routesWithGroup = routesWithGroup;
+    }
+}
+
 - (NSString *)getMapLangValueStr
 {
     NSString *prefLangId = _settings.settingPrefMapLanguage.get;
@@ -478,7 +502,12 @@ static BOOL _isRoutesGroupOpen = NO;
     return YES;
 }
 
-- (BOOL)isCollapsableGroup:(NSString *)groupName
+- (BOOL)hasCollapsableRoutesGroup
+{
+    return _routesParameters.count > kMaxCountRoutesWithoutGroup;
+}
+
+- (BOOL)isCollapsableRoutesGroup:(NSString *)groupName
 {
     return [groupName isEqualToString:OALocalizedString(@"rendering_category_routes")];
 }
@@ -486,14 +515,19 @@ static BOOL _isRoutesGroupOpen = NO;
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
     NSArray *cells = tableData[indexPath.section][@"cells"];
-    if ([self isCollapsableGroup:tableData[indexPath.section][@"group_name"]] && _isRoutesGroupOpen)
+    if ([self hasCollapsableRoutesGroup] && [self isCollapsableRoutesGroup:tableData[indexPath.section][@"group_name"]])
     {
-        NSDictionary *groupData = cells[_routesWithoutGroup.count];
-        if (indexPath.row == _routesParameters.count)
-            return groupData;
-        else if (indexPath.row >= _routesWithoutGroup.count)
-            return ((OATableCollapsableGroup *) groupData[@"group"]).groupItems[indexPath.row - _routesWithoutGroup.count];
+        if (indexPath.row >= _routesWithoutGroup.count)
+        {
+            OATableCollapsableGroup *group = cells.lastObject[@"group"];
+            if ((_isRoutesGroupOpen && (indexPath.row == (cells.count + group.groupItems.count) - 1))
+                || (!_isRoutesGroupOpen && indexPath.row == cells.count - 1))
+                return cells.lastObject;
+
+            return group.groupItems[indexPath.row - _routesWithoutGroup.count];
+        }
     }
+
     return cells[indexPath.row];
 }
 
@@ -508,34 +542,51 @@ static BOOL _isRoutesGroupOpen = NO;
 
 - (void)openCloseGroup:(NSIndexPath *)indexPath
 {
-    OATableCollapsableGroup *group = [self getItem:indexPath][@"group"];
-    _isRoutesGroupOpen = group.isOpen = !group.isOpen;
-    group.groupName = OALocalizedString(_isRoutesGroupOpen ? @"shared_string_collapse" : @"show_all");
-
-    NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
-    for (NSInteger i = _routesWithoutGroup.count; i < _routesParameters.count; i++)
+    if ([self hasCollapsableRoutesGroup] && [self isCollapsableRoutesGroup:tableData[indexPath.section][@"group_name"]])
     {
-        [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+        OATableCollapsableGroup *group = [self getItem:indexPath][@"group"];
+        if (group.groupItems.count > 0)
+        {
+            _isRoutesGroupOpen = group.isOpen = !group.isOpen;
+            group.groupName = OALocalizedString(_isRoutesGroupOpen ? @"shared_string_collapse" : @"show_all");
+
+            NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
+            for (NSInteger i = _routesWithoutGroup.count + 1; i <= _routesParameters.count; i++)
+            {
+                [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+            }
+            [tblView beginUpdates];
+            if (_isRoutesGroupOpen)
+            {
+                [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_routesWithoutGroup.count
+                                                                     inSection:indexPath.section]]
+                               withRowAnimation:UITableViewRowAnimationNone];
+                [tblView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+            }
+            else
+            {
+                [tblView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+                [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_routesWithoutGroup.count
+                                                                     inSection:indexPath.section]]
+                               withRowAnimation:UITableViewRowAnimationNone];
+            }
+            [tblView endUpdates];
+            [UIView setAnimationsEnabled:NO];
+            [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_routesWithoutGroup.count - 1
+                                                                 inSection:indexPath.section]]
+                           withRowAnimation:UITableViewRowAnimationNone];
+            [UIView setAnimationsEnabled:YES];
+
+            if (_isRoutesGroupOpen
+                    && [tblView indexPathForCell:[tblView visibleCells].lastObject].section <= indexPath.section)
+            {
+                [tblView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_routesWithoutGroup.count
+                                                                   inSection:indexPath.section]
+                               atScrollPosition:UITableViewScrollPositionMiddle
+                                       animated:YES];
+            }
+        }
     }
-    [tblView beginUpdates];
-    if (_isRoutesGroupOpen)
-        [tblView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-    else
-        [tblView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-    [tblView endUpdates];
-
-    [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_routesWithoutGroup.count - 1 inSection:indexPath.section],
-            [NSIndexPath indexPathForRow:_routesWithoutGroup.count inSection:indexPath.section]]
-                   withRowAnimation:UITableViewRowAnimationNone];
-    if (_isRoutesGroupOpen)
-        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_routesParameters.count
-                                                             inSection:indexPath.section]]
-                       withRowAnimation:UITableViewRowAnimationNone];
-
-    if (_isRoutesGroupOpen && [tblView indexPathForCell:[tblView visibleCells].lastObject].section <= indexPath.section)
-        [tblView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_routesWithoutGroup.count inSection:indexPath.section]
-                       atScrollPosition:UITableViewScrollPositionMiddle
-                               animated:YES];
 }
 
 - (void)openCloseGroupButtonAction:(id)sender
@@ -567,7 +618,7 @@ static BOOL _isRoutesGroupOpen = NO;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([self isCollapsableGroup:tableData[section][@"group_name"]])
+    if ([self hasCollapsableRoutesGroup] && [self isCollapsableRoutesGroup:tableData[section][@"group_name"]])
         return 1 + (_isRoutesGroupOpen ? _routesParameters.count : _routesWithoutGroup.count);
 
     return ((NSArray *) tableData[section][@"cells"]).count;
@@ -578,9 +629,10 @@ static BOOL _isRoutesGroupOpen = NO;
     NSDictionary *item = [self getItem:indexPath];
     BOOL isOn = [self isEnabled:item[@"key"] index:indexPath.row];
     BOOL hasOptions = [item[@"has_options"] boolValue];
-    BOOL isGroup = [self isCollapsableGroup:tableData[indexPath.section][@"group_name"]];
-    BOOL isLastIndex = isGroup && (indexPath.row == (_isRoutesGroupOpen
-            ? _routesParameters.count : _routesWithoutGroup.count) - 1);
+    BOOL isGroup = [self hasCollapsableRoutesGroup] && [self isCollapsableRoutesGroup:tableData[indexPath.section][@"group_name"]];
+    BOOL isLastIndex = indexPath.row == (!isGroup
+            ? [self tableView:self.tblView numberOfRowsInSection:indexPath.section] - 1
+            : ((_isRoutesGroupOpen ? _routesParameters.count : _routesWithoutGroup.count) - 1));
 
     UITableViewCell *outCell = nil;
     if ([item[@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]])

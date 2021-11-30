@@ -299,6 +299,9 @@ struct RouteDataBundle;
 
 - (instancetype) initWithTrkPt:(OAGpxTrkPt *)point;
 
+- (OAGpxExtension *)getExtensionByKey:(NSString *)key;
+- (NSString *) getProfileType;
+
 @end
 
 @interface OAGpxRte : OARoute

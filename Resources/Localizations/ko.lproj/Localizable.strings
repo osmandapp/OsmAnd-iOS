@@ -107,7 +107,7 @@
 // Intro
 "intro_skip" = "건너뛰기";
 "prch_nau_q3" = "나중에 지도 & 자료를 통해 설치할 수 있다.";
-"search_another_country" = "다른 영역 선택";
+"search_another_country" = "다른 지역 선택";
 "download_depth_countours" = "해상 깊이 등고선";
 "angular_units_descr" = "방위각 측정 단위를 변경합니다.";
 "shared_string_search" = "검색";
@@ -533,7 +533,7 @@
 "selected_categories" = "선택한 범주";
 "subcategories" = "하위 카테고리";
 "rearrange_categories" = "카테고리 재정렬";
-"routing_attr_height_obstacles_name" = "표면고도 데이터 사용";
+"routing_attr_height_obstacles_name" = "해발고도 데이터 사용";
 "routing_attr_driving_style_name" = "운전 스타일";
 "routing_attr_driving_style_prefer_unpaved_description" = "여정을 위해 포장되지 않은 도로보다 포장 도로를 선호합니다.";
 "routing_attr_allow_motorway_name" = "자동차 전용도로 이용";
@@ -923,7 +923,6 @@
 "rendering_category_others" = "다른 지도 속성";
 "routing_attr_avoid_shuttle_train_description" = "셔틀 열차 피하기";
 "lang_bpy" = "비슈프리야어";
-"map_markers" = "맵 마커";
 "lang_tl" = "타갈로그어";
 "product_title_wikivoyage" = "여행 가이드";
 "rendering_value_translucent_yellow_name" = "반투명 노랑";
@@ -1008,3 +1007,30 @@
 "shared_string_unexpected_error" = "예기치 않은 오류가 발생 했습니다";
 "lang_ar" = "아랍어";
 "osm_note_comment_title" = "OSM노트 주석달기";
+"rendering_attr_highway_class_bridleway_name" = "둘레길";
+"profile_type_base_string" = "기준 프로파일";
+"simplified_track_description" = "경로선만 저장되고 경유지는 삭제됩니다.";
+"add_home" = "집 추가";
+"get_started" = "지금 시작";
+"first_usage_wizard_desc" = "OsmAnd가 사용자의 위치를 결정하고 해당 지역에 대해 다운로드할 지도를 제안하도록 하십시오.";
+"shared_string_is_open_24_7" = "24시간 영업";
+"osm_live_subscribe_btn" = "구독";
+"rendering_attr_piste_difficulty_aerialway_name" = "항공노선";
+"rendering_attr_highway_class_street_name" = "길거리";
+"rendering_attr_highway_class_road_name" = "도로";
+"rendering_attr_highway_class_steps_name" = "걸음";
+"rendering_attr_highway_class_cycleway_name" = "자전거길";
+"rendering_attr_highway_class_motorway_name" = "고속도로";
+"rendering_attr_highway_class_path_name" = "경로";
+"map_widget_ruler_control" = "반지름 눈금자";
+"map_markers" = "지도 마커";
+"shared_string_topbar" = "상단 바";
+"routing_attr_avoid_ferry_description" = "차량페리 회피";
+"rendering_attr_undefined_name" = "정의되지 않음";
+"rendering_attr_depthContours_name" = "해상 깊이 등고선";
+"rendering_attr_highway_class_service_name" = "서비스";
+"rendering_attr_highway_class_footway_name" = "도보";
+"routing_attr_avoid_ferry_name" = "차량페리 제외";
+"app_mode_train" = "열차";
+"rendering_attr_highway_class_state_road_name" = "주 도로";
+"app_mode_helicopter" = "헬리콥터";

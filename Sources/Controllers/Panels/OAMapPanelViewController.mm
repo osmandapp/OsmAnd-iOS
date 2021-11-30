@@ -2586,11 +2586,8 @@ typedef enum
     {
         targetPoint.location = state.pinLocation;
     }
-
-    [_mapViewController showContextPinMarker:targetPoint.location.latitude
-                                   longitude:targetPoint.location.longitude
-                                    animated:_targetLatitude != targetPoint.location.latitude
-                                            && targetPoint.location.longitude];
+    BOOL pinAnimation = _targetLatitude != targetPoint.location.latitude
+            && _targetLongitude != targetPoint.location.longitude;
 
     _targetLatitude = targetPoint.location.latitude;
     _targetLongitude = targetPoint.location.longitude;
@@ -2625,6 +2622,9 @@ typedef enum
         {
             trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj
                                                                                      state:state];
+            [_mapViewController showContextPinMarker:targetPoint.location.latitude
+                                           longitude:targetPoint.location.longitude
+                                            animated:pinAnimation];
             break;
         }
     }

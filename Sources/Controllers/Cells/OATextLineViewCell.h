@@ -12,4 +12,11 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textTopLargeConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textTopSmallConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomLargeConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomSmallConstraint;
+
+- (void)makeSmallMargins:(BOOL)small;
+
 @end

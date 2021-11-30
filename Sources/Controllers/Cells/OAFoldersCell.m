@@ -37,6 +37,7 @@
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
     [_collectionView registerNib:[UINib nibWithNibName:[OAFoldersCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAFoldersCollectionViewCell getCellIdentifier]];
+    _collectionView.contentInset = UIEdgeInsetsMake(0., kMargin , 0., kMargin);
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     [_collectionView setCollectionViewLayout:layout];
@@ -179,7 +180,7 @@
         else
         {
             destCell.layer.backgroundColor = available
-                    ? UIColorFromARGB(color_primary_purple_10).CGColor : UIColorFromARGB(color_bottom_sheet_secondary_10).CGColor;
+                    ? UIColorFromARGB(color_primary_purple_10).CGColor : [UIColorFromARGB(color_route_button_inactive) colorWithAlphaComponent:1].CGColor;
             destCell.titleLabel.textColor = available
                     ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
             destCell.imageView.tintColor = available
@@ -221,11 +222,6 @@
                          }
                          completion:nil];
     }
-}
-
-- (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
-{
-    return UIEdgeInsetsMake(0, kMargin, kMargin, kMargin);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section

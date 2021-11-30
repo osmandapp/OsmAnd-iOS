@@ -34,9 +34,10 @@
 - (NSArray<OAApplicationMode *> *) getAddedAppModes;
 
 - (BOOL) initPlugin;
-- (void) setActive:(BOOL)active;
-- (BOOL) isActive;
+- (void) setEnabled:(BOOL)enabled;
+- (BOOL) isEnabled;
 - (BOOL) isVisible;
+- (BOOL) isEnableByDefault;
 - (void) disable;
 - (NSString *) getHelpFileName;
 - (NSArray<OAQuickActionType *> *) getQuickActionTypes;
@@ -53,6 +54,7 @@
 + (OAPlugin *) getEnabledPlugin:(Class) cl;
 + (OAPlugin *) getPlugin:(Class) cl;
 + (OAPlugin *) getPluginById:(NSString *)pluginId;
++ (BOOL) isEnabled:(Class) cl;
 + (BOOL) onDestinationReached;
 + (void) createLayers;
 + (void) updateLocationPlugins:(CLLocation *)location;

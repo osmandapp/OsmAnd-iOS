@@ -73,7 +73,7 @@
                                                        withHandler:@selector(onEditsCollectionChanged)
                                                        andObserve:self.app.osmEditsChangeObservable];
     
-    BOOL shouldShow = [_plugin isActive] && [[OAAppSettings sharedManager].mapSettingShowOfflineEdits get];
+    BOOL shouldShow = [_plugin isEnabled] && [[OAAppSettings sharedManager].mapSettingShowOfflineEdits get];
     
     [self refreshOsmEditsCollection];
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
@@ -82,7 +82,7 @@
 
 - (BOOL)isVisible
 {
-    return [_plugin isActive] && [[OAAppSettings sharedManager].mapSettingShowOfflineEdits get];
+    return [_plugin isEnabled] && [[OAAppSettings sharedManager].mapSettingShowOfflineEdits get];
 }
 
 - (BOOL) updateLayer

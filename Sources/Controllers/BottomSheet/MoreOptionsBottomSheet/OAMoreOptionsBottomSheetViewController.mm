@@ -155,7 +155,7 @@
             else if ([addon.addonId isEqualToString:kId_Addon_OsmEditing_Edit_POI])
             {
                 _editingAddon = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
-                if (_editingAddon.isActive)
+                if ([_editingAddon isEnabled])
                 {
                     BOOL createNewPoi = (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit) || _targetPoint.type == OATargetOsmNote;
                     [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"create_poi_short") : _targetPoint.type == OATargetOsmEdit ?

@@ -16,6 +16,8 @@
 
 + (OAPOIFiltersHelper *)sharedInstance;
 
++ (NSString *) getTopWikiPoiFilterId;
+
 - (OAPOIUIFilter *) getSearchByNamePOIFilter;
 - (OAPOIUIFilter *) getCustomPOIFilter;
 - (OAPOIUIFilter *) getTopWikiPoiFilter;
@@ -29,6 +31,7 @@
 - (BOOL) createPoiFilter:(OAPOIUIFilter *)filter;
 - (BOOL) editPoiFilter:(OAPOIUIFilter *)filter;
 - (NSSet<OAPOIUIFilter *> *) getSelectedPoiFilters;
+- (NSSet<OAPOIUIFilter *> *) getSelectedPoiFilters:(NSArray<OAPOIUIFilter *> *)filtersToExclude;
 - (void) addSelectedPoiFilter:(OAPOIUIFilter *)filter;
 - (void) removeSelectedPoiFilter:(OAPOIUIFilter *)filter;
 - (BOOL) isShowingAnyPoi;
@@ -38,7 +41,6 @@
 - (NSString *) getFiltersName:(NSSet<OAPOIUIFilter *> *)filters;
 - (NSString *) getSelectedPoiFiltersName;
 - (BOOL) isPoiFilterSelected:(OAPOIUIFilter *)filter;
-- (BOOL) isTopWikiFilterSelected;
 - (BOOL) isPoiFilterSelectedByFilterId:(NSString *)filterId;
 - (void) loadSelectedPoiFilters;
 - (void) saveSelectedPoiFilters;

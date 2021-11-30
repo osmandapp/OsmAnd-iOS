@@ -242,7 +242,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     else if (_screenType == EOAPluginScreenTypeCustomPlugin)
     {
         purchased = YES;
-        disabled = !_plugin.isActive;
+        disabled = ![_plugin isEnabled];
     }
     
     if (purchased)
@@ -313,7 +313,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     }
     else
     {
-        [OAPlugin enablePlugin:_plugin enable:!_plugin.isActive];
+        [OAPlugin enablePlugin:_plugin enable:![_plugin isEnabled]];
         [self updatePurchaseButton];
     }
 }

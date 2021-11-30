@@ -666,7 +666,7 @@
 {
     @synchronized (_lock)
     {
-        return [[OAPOIFiltersHelper sharedInstance] isTopWikiFilterSelected];
+        return [[OAPOIFiltersHelper sharedInstance] isPoiFilterSelectedByFilterId:[OAPOIFiltersHelper getTopWikiPoiFilterId]];
     }
 }
 
@@ -675,6 +675,7 @@
     @synchronized (_lock)
     {
         OAWikipediaPlugin *plugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
+        [plugin setEnabled:wikipedia];
         [plugin toggleWikipediaPoi:wikipedia];
         [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(wikipedia)];
     }

@@ -30,10 +30,11 @@
 #import "OASRTMPlugin.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPOIUIFilter.h"
+#import "OAOpenPlaceReviews.h"
 
 @implementation OAPlugin
 {
-    BOOL _active;
+    BOOL _enabled;
     NSString *_titleId;
     NSString *_shortDescriptionId;
     NSString *_descriptionId;
@@ -187,22 +188,31 @@ static NSMutableArray<OAPlugin *> *allPlugins;
  */
 - (BOOL) initPlugin
 {
+    for (OAApplicationMode *appMode in [self getAddedAppModes])
+    {
+        [OAApplicationMode changeProfileAvailability:appMode isSelected:YES];
+    }
     return YES;
 }
 
-- (void) setActive:(BOOL)active
+- (void) setEnabled:(BOOL)enabled
 {
-    _active = active;
+    _enabled = enabled;
 }
 
-- (BOOL) isActive
+- (BOOL) isEnabled
 {
-    return _active;
+    return _enabled;
 }
 
 - (BOOL) isVisible
 {
     return YES;
+}
+
+- (BOOL)isEnableByDefault
+{
+    return NO;
 }
 
 - (void) disable
@@ -264,35 +274,28 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 
 + (void) initPlugins
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSMutableSet<NSString *> *enabledPlugins = [NSMutableSet setWithSet:[settings getEnabledPlugins]];
-    
-    [self.class enablePluginByDefault:enabledPlugins plugin:[[OAMapillaryPlugin alloc] init]];
-    
+    NSMutableSet<NSString *> *enabledPlugins = [[[OAAppSettings sharedManager] getEnabledPlugins] mutableCopy];
+    [allPlugins removeAllObjects];
+
     /*
     allPlugins.add(new OsmandRasterMapsPlugin(app));
-    allPlugins.add(new OsmandMonitoringPlugin(app));
-    checkMarketPlugin(app, new SRTMPlugin(app), true, SRTM_PLUGIN_COMPONENT_PAID, SRTM_PLUGIN_COMPONENT);
-    
-    checkMarketPlugin(app, new NauticalMapsPlugin(app), false, NauticalMapsPlugin.COMPONENT, null);
-    checkMarketPlugin(app, new SkiMapsPlugin(app), false, SkiMapsPlugin.COMPONENT, null);
-    
     allPlugins.add(new AudioVideoNotesPlugin(app));
-
     allPlugins.add(new AccessibilityPlugin(app));
-    allPlugins.add(new OsmEditingPlugin(app));
     allPlugins.add(new OsmandDevelopmentPlugin(app));
     */
 
-    [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
-    [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
-    [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
-    [allPlugins addObject:[[OASkiMapsPlugin alloc] init]];
-    [allPlugins addObject:[[OANauticalMapsPlugin alloc] init]];
-    [allPlugins addObject:[[OASRTMPlugin alloc] init]];
     [allPlugins addObject:[[OAWikipediaPlugin alloc] init]];
+    [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
+    [allPlugins addObject:[[OASRTMPlugin alloc] init]];
+    [allPlugins addObject:[[OANauticalMapsPlugin alloc] init]];
+    [allPlugins addObject:[[OASkiMapsPlugin alloc] init]];
+    [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
+    [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
+    [allPlugins addObject:[[OAOpenPlaceReviews alloc] init]];
+    [allPlugins addObject:[[OAMapillaryPlugin alloc] init]];
 
     [self loadCustomPlugins];
+    [self enablePluginsByDefault:enabledPlugins];
     [self activatePlugins:enabledPlugins];
 }
 
@@ -312,34 +315,48 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
 }
 
-+ (void) enablePluginByDefault:(NSMutableSet<NSString *> *)enabledPlugins plugin:(OAPlugin *)plugin
++ (void)enablePluginsByDefault:(NSMutableSet<NSString *> *)enabledPlugins
 {
-    [allPlugins addObject:plugin];
-    if (![enabledPlugins containsObject:plugin.getId] && ![OAAppSettings.sharedManager.getPlugins containsObject:[@"-" stringByAppendingString:plugin.getId]])
+    for (OAPlugin *plugin in allPlugins)
     {
-        [enabledPlugins addObject:plugin.getId];
-        [OAAppSettings.sharedManager enablePlugin:plugin.getId enable:YES];
+        if ([plugin isEnableByDefault]
+                && ![enabledPlugins containsObject:[plugin getId]]
+                && ![self isPluginDisabledManually:plugin])
+        {
+            [enabledPlugins addObject:[plugin getId]];
+            [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:YES];
+        }
     }
+}
+
++ (BOOL)isPluginDisabledManually:(OAPlugin *)plugin
+{
+    return [[[OAAppSettings sharedManager] getPlugins] containsObject:[@"-" stringByAppendingString:[plugin getId]]];
 }
 
 + (void) activatePlugins:(NSSet<NSString *> *)enabledPlugins
 {
     for (OAPlugin *plugin in allPlugins)
     {
-        if ([enabledPlugins containsObject:[plugin getId]] || [plugin isActive])
+        if ([enabledPlugins containsObject:[plugin getId]] || [plugin isEnabled])
         {
-            @try
-            {
-                if ([plugin initPlugin])
-                    [plugin setActive:YES];
-            }
-            @catch (NSException *e)
-            {
-                NSLog(@"Plugin initialization failed %@ reason=%@", [plugin getId], e.reason);
-            }
+            [self initPlugin:plugin];
         }
     }
     [OAQuickActionRegistry.sharedInstance updateActionTypes];
+}
+
++ (void) initPlugin:(OAPlugin *)plugin
+{
+    @try
+    {
+        if ([plugin initPlugin])
+            [plugin setEnabled:YES];
+    }
+    @catch (NSException *e)
+    {
+        NSLog(@"Plugin initialization failed %@ reason=%@", [plugin getId], e.reason);
+    }
 }
 
 + (NSArray<OAWorldRegion *> *) getCustomDownloadRegions
@@ -373,7 +390,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 
 + (void)registerCustomPoiFilters:(NSMutableArray<OAPOIUIFilter *> *)poiUIFilters
 {
-    for (OAPlugin *p in [self.class getAvailablePlugins])
+    for (OAPlugin *p in [self getAvailablePlugins])
     {
         [poiUIFilters addObjectsFromArray:[p getCustomPoiFilters]];
     }
@@ -420,27 +437,27 @@ private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, 
     {
         if (![plugin initPlugin])
         {
-            [plugin setActive:NO];
+            [plugin setEnabled:NO];
             return NO;
         }
         else
         {
-            [plugin setActive:YES];
+            [plugin setEnabled:YES];
         }
     }
     else
     {
         [plugin disable];
-        [plugin setActive:NO];
+        [plugin setEnabled:NO];
     }
     [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:enable];
     [OAQuickActionRegistry.sharedInstance updateActionTypes];
     [plugin updateLayers];
     
-    if (enable)
+    if ([plugin isEnabled])
         [plugin showInstalledScreen];
     
-    return true;
+    return YES;
 }
 
 - (void) updateLayers
@@ -533,7 +550,7 @@ public List<String> indexingFiles(IProgress progress) {
     NSMutableArray<OAPlugin *> *list = [NSMutableArray arrayWithCapacity:allPlugins.count];
     for (OAPlugin *p in allPlugins)
     {
-        if ([p isActive])
+        if ([p isEnabled])
             [list addObject:p];
     }
     return [NSArray arrayWithArray:list];
@@ -544,7 +561,7 @@ public List<String> indexingFiles(IProgress progress) {
     NSMutableArray<OAPlugin *> *list = [NSMutableArray arrayWithCapacity:allPlugins.count];
     for (OAPlugin *p in allPlugins)
     {
-        if ([p isActive] && [p isVisible])
+        if ([p isEnabled] && [p isVisible])
             [list addObject:p];
     }
     return [NSArray arrayWithArray:list];
@@ -555,7 +572,7 @@ public List<String> indexingFiles(IProgress progress) {
     NSMutableArray<OAPlugin *> *list = [NSMutableArray arrayWithCapacity:allPlugins.count];
     for (OAPlugin *p in allPlugins)
     {
-        if (![p isActive])
+        if (![p isEnabled])
             [list addObject:p];
     }
     return [NSArray arrayWithArray:list];
@@ -566,7 +583,7 @@ public List<String> indexingFiles(IProgress progress) {
     NSMutableArray<OAPlugin *> *list = [NSMutableArray arrayWithCapacity:allPlugins.count];
     for (OAPlugin *p in allPlugins)
     {
-        if (![p isActive] && [p isVisible])
+        if (![p isEnabled] && [p isVisible])
             [list addObject:p];
     }
     return [NSArray arrayWithArray:list];
@@ -574,7 +591,7 @@ public List<String> indexingFiles(IProgress progress) {
 
 + (OAPlugin *) getEnabledPlugin:(Class) cl
 {
-    for (OAPlugin *p in [self.class getEnabledPlugins])
+    for (OAPlugin *p in [self getEnabledPlugins])
     {
         if ([p isKindOfClass:cl])
             return p;
@@ -584,7 +601,7 @@ public List<String> indexingFiles(IProgress progress) {
 
 + (OAPlugin *) getPlugin:(Class) cl
 {
-    for (OAPlugin *p in [self.class getAvailablePlugins])
+    for (OAPlugin *p in [self getAvailablePlugins])
     {
         if ([p isKindOfClass:cl])
             return p;
@@ -600,6 +617,11 @@ public List<String> indexingFiles(IProgress progress) {
             return plugin;
     }
     return nil;
+}
+
++ (BOOL) isEnabled:(Class) cl
+{
+    return [self getEnabledPlugin:cl] != nil;
 }
 
 /*
@@ -654,7 +676,7 @@ public static void onMapActivityScreenOff(MapActivity activity) {
 + (BOOL) onDestinationReached
 {
     BOOL b = YES;
-    for (OAPlugin *plugin in [self.class getEnabledPlugins])
+    for (OAPlugin *plugin in [self getEnabledPlugins])
     {
         if (![plugin destinationReached])
             b = NO;
@@ -664,7 +686,7 @@ public static void onMapActivityScreenOff(MapActivity activity) {
 
 + (void) createLayers
 {
-    for (OAPlugin *plugin in [self.class getEnabledPlugins])
+    for (OAPlugin *plugin in [self getEnabledPlugins])
     {
         [plugin registerLayers];
     }
@@ -729,7 +751,7 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
 
 + (void) updateLocationPlugins:(CLLocation *)location
 {
-    for (OAPlugin *p in [self.class getEnabledPlugins])
+    for (OAPlugin *p in [self getEnabledPlugins])
     {
         [p updateLocation:location];
     }
@@ -738,10 +760,10 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
 + (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types disabled:(BOOL)disabled
 {
     if (!disabled)
-        for (OAPlugin *p in [self.class getEnabledPlugins])
+        for (OAPlugin *p in [self getEnabledPlugins])
             [types addObjectsFromArray:p.getQuickActionTypes];
     else
-        for (OAPlugin *p in [self.class getNotEnabledPlugins])
+        for (OAPlugin *p in [self getNotEnabledPlugins])
             [types addObjectsFromArray:p.getQuickActionTypes];
 }
 
@@ -752,7 +774,7 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
         [allPlugins removeObject:oldPlugin];
     
     [allPlugins addObject:plugin];
-    [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:YES];
+    [self enablePlugin:plugin enable:YES];
     [self saveCustomPlugins];
 }
 
@@ -760,7 +782,7 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
 {
     [allPlugins removeObject:plugin];
     NSFileManager *fileManager = NSFileManager.defaultManager;
-    if (plugin.isActive)
+    if (plugin.isEnabled)
     {
         [plugin removePluginItems:^{
             [fileManager removeItemAtPath:plugin.getPluginDir error:nil];

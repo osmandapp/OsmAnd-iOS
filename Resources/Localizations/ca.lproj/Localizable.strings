@@ -1849,7 +1849,7 @@
 "help_nav_profiles" = "Perfils de navegació";
 "units_t" = "t";
 "reset_profile_action_descr" = "Reinicialitza la configuració de tots els perfils als valors inicials d'instal·lació. Si toqueu Restableix, es descartaran tots els canvis i no es podrà desfer aquesta acció.";
-"gpx_parse_error" = "No s\'ha generat correctament l\'arxiu GPX. Indiqueu-ho a l\'equip de suport per continuar investigant.";
+"gpx_parse_error" = "No s'ha generat correctament el fitxer GPX. Indiqueu-ho a l'equip de suport per continuar investigant.";
 "nothing_found_empty" = "No s\'ha trobat res";
 "shared_string_next" = "Endavant";
 "shared_string_finish" = "Finalitza";
@@ -1864,7 +1864,7 @@
 "shared_string_poi_types" = "Tipus de PDI";
 "shared_string_quick_actions" = "Accions directes";
 "shared_string_profiles" = "Perfils";
-"replace_all_desc" = "Els elements actuals es substituiran amb elements de l\'arxiu";
+"replace_all_desc" = "Els elements actuals es substituiran amb elements del fitxer";
 "replace_all" = "Reemplaça-ho tot";
 "keep_both_desc" = "Els elements importats s\'afegiran amb prefix";
 "keep_both" = "Manté tots dos";
@@ -1947,7 +1947,6 @@
 "unsupported_action_title" = "Acció no admesa (%@)";
 "unsupported_action" = "Acció no admesa";
 "unsupported_items" = "Elements no admesos";
-
 "shared_string_add_profile" = "Afegeix un perfil";
 "profile_type_user_string" = "Perfil d\'usuari";
 "quick_action_remove_next_destination" = "Suprimeix la fita més propera";
@@ -1958,7 +1957,6 @@
 "arrived_at_destination" = "Heu arribat.";
 "quick_action_showhide_mapillary_title" = "Mostra/amaga Mapil·lary";
 "reverse_route" = "Ruta inversa";
-
 "plan_route_create_new_route" = "Crea una ruta nova";
 "split_before" = "Separa abans";
 "rearrange_categories" = "Reorganitza les categories";

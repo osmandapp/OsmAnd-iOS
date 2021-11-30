@@ -162,29 +162,37 @@
     }
 }
 
+- (NSDictionary *) loadPhraseFileForLanguage:(NSString *)langguageCode
+{
+    NSString *phrasesXmlPath = [[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"xml" inDirectory:[NSString stringWithFormat:@"phrases/%@", langguageCode]];
+
+    if ([[NSFileManager defaultManager] fileExistsAtPath:phrasesXmlPath])
+    {
+        OAPhrasesParser *parser = [[OAPhrasesParser alloc] init];
+        [parser getPhrasesSync:phrasesXmlPath];
+        return parser.phrases;
+    }
+    return nil;
+}
+
 - (void) updatePhrases
 {
     if (!_phrases)
     {
-        NSString *lang = [OAUtilities currentLang];
-
-        NSString *phrasesXmlPath = [[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"xml" inDirectory:[NSString stringWithFormat:@"phrases/%@", lang]];
-
-        if ([[NSFileManager defaultManager] fileExistsAtPath:phrasesXmlPath])
+        NSString *fullLanguageCode = [[NSLocale preferredLanguages] firstObject];
+        _phrases = [self loadPhraseFileForLanguage:fullLanguageCode];
+        
+        if (!_phrases)
         {
-            OAPhrasesParser *parser = [[OAPhrasesParser alloc] init];
-            [parser getPhrasesSync:phrasesXmlPath];
-            _phrases = parser.phrases;
+            NSLog(@"ERROR: Not found phrases translation file at path: %@", [NSString stringWithFormat:@"phrases/%@/phrases.xml", fullLanguageCode]);
+            NSString *primaryLanguageCode = [OAUtilities currentLang];
+            _phrases = [self loadPhraseFileForLanguage:primaryLanguageCode];
         }
     }
     
     if (!_phrasesEN)
     {
-        NSString *phrasesXmlPath = [[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"xml" inDirectory:@"phrases/en"];
-        
-        OAPhrasesParser *parser = [[OAPhrasesParser alloc] init];
-        [parser getPhrasesSync:phrasesXmlPath];
-        _phrasesEN = parser.phrases;
+        _phrasesEN = [self loadPhraseFileForLanguage:@"en"];
     }
 
     if (_phrases.count > 0)

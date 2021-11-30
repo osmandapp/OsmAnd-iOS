@@ -451,7 +451,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSString *) getLocalizedParamValue:(NSString *)value
 {
-    return OALocalizedString([NSString stringWithFormat:@"rendering_value_%@_name", value]);
+    NSString *paramName = [NSString stringWithFormat:@"rendering_value_%@_name", value];
+    NSString *localizedParamName = OALocalizedString(paramName);
+    return [localizedParamName isEqualToString:paramName] ? value :localizedParamName;
 }
 
 - (void) refreshDownloadTasks

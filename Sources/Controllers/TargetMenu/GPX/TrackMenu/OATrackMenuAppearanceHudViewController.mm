@@ -1000,10 +1000,10 @@
 
             [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor}
                                                  forState:UIControlStateSelected];
-            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple)}
+            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple),
+                                                                       NSFontAttributeName : [UIFont boldSystemFontOfSize:15.0f]}
                                                  forState:UIControlStateNormal];
-            [cell.segmentedControl setTitleTextAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:15.0f]}
-                                                 forState:UIControlStateNormal];
+
             if (@available(iOS 13.0, *))
                 cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
             else

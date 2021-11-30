@@ -470,15 +470,19 @@ static BOOL dataInvalidated = NO;
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
+        const auto resourceId = QString::fromNSString(nsResourceId);
+        const auto resource = _app.resourcesManager->getResource(resourceId);
+
         if (!self.isViewLoaded || self.view.window == nil)
         {
+            if (task.progressCompleted == 1. && resource != nullptr && resource->type == OsmAndResourceType::MapRegion)
+                [_app.data.mapLayerChangeObservable notifyEvent];
+
             self.dataInvalidated = YES;
             return;
         }
 
-        NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
-        const auto resourceId = QString::fromNSString(nsResourceId);
-        const auto resource = _app.resourcesManager->getResource(resourceId);
         if (resource)
         {
             OAWorldRegion *foundRegion;
@@ -516,7 +520,7 @@ static BOOL dataInvalidated = NO;
         }
         else
         {
-            if (resource->type == OsmAndResourceType::MapRegion)
+            if (resource != nullptr && resource->type == OsmAndResourceType::MapRegion)
                 [_app.data.mapLayerChangeObservable notifyEvent];
 
             [self refreshDownloadingContent:task.key];

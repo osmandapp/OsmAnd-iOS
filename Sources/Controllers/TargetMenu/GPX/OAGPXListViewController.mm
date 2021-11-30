@@ -653,7 +653,7 @@ static UIViewController *parentController;
         visibleGroup.groupItems = [visibleGroup.groupItems sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
             NSString *title1 = obj1[@"title"];
             NSString *title2 = obj2[@"title"];
-            return [title1 compare: title2];
+            return [title1.lowerCase compare: title2.lowerCase];
         }];
         [tableData addObject:visibleGroup];
     }
@@ -698,7 +698,7 @@ static UIViewController *parentController;
                 tracksGroup.groupItems = [tracksGroup.groupItems sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
                     NSString *title1 = obj1[@"title"];
                     NSString *title2 = obj2[@"title"];
-                    return [title1 compare: title2];
+                    return [title1.lowerCase compare: title2.lowerCase];
                 }];
             }
             [tableData addObject:tracksGroup];

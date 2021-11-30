@@ -16,9 +16,10 @@
 
 + (OAPOIFiltersHelper *)sharedInstance;
 
++ (NSString *) getTopWikiPoiFilterId;
+
 - (OAPOIUIFilter *) getSearchByNamePOIFilter;
 - (OAPOIUIFilter *) getCustomPOIFilter;
-+ (NSString*) getTopWikiPoiFilterId;
 - (OAPOIUIFilter *) getTopWikiPoiFilter;
 - (OAPOIUIFilter *) getShowAllPOIFilter;
 - (OAPOIUIFilter *) getFilterById:(NSString *)filterId;

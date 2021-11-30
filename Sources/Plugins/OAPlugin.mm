@@ -286,10 +286,10 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 
     [allPlugins addObject:[[OAWikipediaPlugin alloc] init]];
     [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
-    [allPlugins addObject:[[OASRTMPlugin alloc] init]];             //checkMarketPlugin
-    [allPlugins addObject:[[OANauticalMapsPlugin alloc] init]];     //checkMarketPlugin
-    [allPlugins addObject:[[OASkiMapsPlugin alloc] init]];          //checkMarketPlugin
-    [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];  //checkMarketPlugin
+    [allPlugins addObject:[[OASRTMPlugin alloc] init]];
+    [allPlugins addObject:[[OANauticalMapsPlugin alloc] init]];
+    [allPlugins addObject:[[OASkiMapsPlugin alloc] init]];
+    [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
     [allPlugins addObject:[[OAOpenPlaceReviews alloc] init]];
     [allPlugins addObject:[[OAMapillaryPlugin alloc] init]];

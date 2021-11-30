@@ -42,13 +42,13 @@
 
 "access_intermediate_arrival_time" = "Intermediate arrival time";
 "map_widget_intermediate_time" = "Intermediate time";
-"shared_string_previous" = "Previous";
-"shared_string_next" = "Next";
+"shared_string_previous" = "Quay lại";
+"shared_string_next" = "Tiếp";
 "route_stops_before" = "%d stops before";
-"transport_routes" = "Routes";
+"transport_routes" = "Tuyến";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Stop";
+"transport_stop" = "Dừng";
 
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
@@ -74,7 +74,7 @@
 "search_radius" = "Search radius";
 "targets" = "Destinations";
 "search_radius_proximity" = "Within";
-"poi" = "POI";
+"poi" = "Địa điểm";
 "search_more" = "Search more…";
 
 "day_off_label" = "off";
@@ -87,7 +87,7 @@
 
 "error_avoid_specific_road" = "No bypass found";
 "road_blocked" = "Blocked road";
-"starting_point" = "Starting point";
+"starting_point" = "Điểm xuất phát";
 "shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
 "shared_string_road" = "Road";
 "avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
@@ -101,19 +101,19 @@
 
 "day_night_info_description" = "Sunrise: %@\nSunset: %@";
 "day_night_info" = "Day/night info";
-"daynight_mode_auto" = "Sunrise/sunset";
+"daynight_mode_auto" = "Bình minh/Hoàng hôn";
 
 "route_simulation" = "Route simulation";
-"auto_follow_location_enabled" = "Auto-center map view in use.";
-"unknown_location" = "Position not yet known";
+"auto_follow_location_enabled" = "Đã kích hoạt thiết lập tự động bám theo.";
+"unknown_location" = "Vị trí chưa được biết";
 "animate_routing_route_not_calculated" = "Please calculate the route first";
 
-"settings_preset" = "Default profile";
+"settings_preset" = "Chế độ Ứng dụng";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
 "dialogs_and_notifications" = "Dialogs and notifications";
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
-"settings_preset_descr" = "Map view and navigation settings are remembered per use profile. Set your default profile here.";
-"unit_of_length" = "Units of length";
+"settings_preset_descr" = "Chọn một cấu hình sử dụng. (Mỗi cấu hình\'s có thể được tùy chỉnh dưới đây.)";
+"unit_of_length" = "Đơn vị độ dài";
 "unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Coordinates format";
 "coords_format_descr_quick_search" = "You can change coordinates format for profile in General settings";
@@ -121,7 +121,7 @@
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
-"rotate_map_to_bearing" = "Map orientation";
+"rotate_map_to_bearing" = "Xoay bản đồ";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "To compass";
 "rotate_map_bearing_opt" = "To direction of movement";
@@ -141,7 +141,7 @@
 // Track recording settings
 "save_global_track_interval" = "General logging interval";
 "save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
-"logging_interval_navigation" = "Logging interval during navigation";
+"logging_interval_navigation" = "Khoảng thời gian lưu Track";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
 "logging_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
@@ -228,7 +228,7 @@
 
 // Route info
 
-"int_seconds" = "seconds";
+"int_seconds" = "giây";
 "shared_string_never" = "Never";
 "shared_setting_always_ask" = "Always ask";
 "general_settings_2" = "General settings";
@@ -247,9 +247,8 @@
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 
 "route_parameters" = "Route parameters";
-"fast_route_mode" = "Fastest route";
+"fast_route_mode" = "Nhanh nhất";
 "nav_type_title" = "Navigation type";
-"connect_rp" = "Connect route points";
 "voice_announces" = "Voice prompts";
 "screen_alerts" = "Screen alerts";
 "vehicle_parameters" = "Vehicle parameters";
@@ -262,7 +261,7 @@
 "nav_type_brouter" = "BRouter";
 "nav_type_ski" = "Ski";
 "nav_type_geocoding" = "Geocoding";
-"fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
+"fast_route_mode_descr" = "Bật/tắt tính năng tìm đường đi nhanh nhất";
 "avoid_in_routing_title" = "Avoid…";
 "avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Prefer…";
@@ -271,7 +270,7 @@
 "choose_auto_follow_route" = "Auto-center map view";
 "choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
 "choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
-"auto_zoom_map" = "Auto zoom map";
+"auto_zoom_map" = "Tự động Zoom bản đồ";
 "auto_zoom_map_descr" = "Auto zoom map according to your speed (while map is synchronized with current position)";
 "snap_to_road" = "Snap to road";
 "snap_to_road_descr" = "Snap position to roads during navigation";
@@ -288,12 +287,12 @@
 "default_speed_system_descr" = "Define unit of speed";
 "speed_limit_exceed" = "Speed limit tolerance";
 "speed_limit_exceed_message" = "Select speed limit tolerance margin, above which you will receive a voice warning.";
-"wake_on_voice" = "Turn screen on";
-"wake_on_voice_descr" = "Turn on device screen (if off) when approaching a turn";
+"wake_on_voice" = "Bật màn hình";
+"wake_on_voice_descr" = "Bật màn hình thiết bị (nếu đang tắt) khi tiếp cận một chỗ rẽ.";
 "voice_pref_title" = "Voice";
-"voice_provider" = "Voice guidance";
+"voice_provider" = "Hướng dẫn bằng giọng nói";
 "voice_provider_descr" = "Select voice guidance for navigation";
-"choose_audio_stream" = "Voice guidance output";
+"choose_audio_stream" = "Đầu ra hướng dẫn bằng giọng nói";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
 "osm_live_routing" = "OsmAnd Live navigation";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
@@ -314,9 +313,9 @@
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
 "recording_preferences_descr" = "Track recording preferences";
-"routing_settings" = "Navigation";
+"routing_settings" = "Tìm đường";
 "shared_string_navigation" = "Navigation";
-"get_directions" = "Directions";
+"get_directions" = "Hướng";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Train";
 "app_mode_truck" = "Truck";
@@ -325,7 +324,7 @@
 "app_mode_boat" = "Boat";
 "app_mode_aircraft" = "Aircraft";
 "gpx_option_calculate_first_last_segment" = "Calculate OsmAnd route for first and last route segment";
-"gpx_option_from_start_point" = "Pass along entire track";
+"gpx_option_from_start_point" = "Dọc theo toàn bộ track";
 "gpx_option_reverse_route" = "Reverse GPX direction";
 "use_points_as_intermediates" = "Calculate route between points";
 "calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
@@ -382,20 +381,20 @@
 "starting_point_too_far" = "Starting point too far from nearest road.";
 "ending_point_too_far" = "Ending point too far from nearest road.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
-"arrived_at_destination" = "You have arrived";
+"arrived_at_destination" = "Bạn đã đến điểm đích";
 
 "towards" = "toward";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Take %d exit and go";
 "route_kl" = "Keep left and go";
 "route_kr" = "Keep right and go";
-"route_tr" = "Turn right and go";
-"route_tshr" = "Turn sharply right and go";
-"route_tslr" = "Turn slightly right and go";
-"route_tl" = "Turn left and go";
-"route_tshl" = "Turn sharply left and go";
-"route_tsll" = "Turn slightly left and go";
-"route_tu" = "Make U-turn and go";
+"route_tr" = "Rẽ phải và đi";
+"route_tshr" = "Quẹo trái và đi";
+"route_tslr" = "Quẹo phải và đi";
+"route_tl" = "Rẽ trái và đi";
+"route_tshl" = "Rẽ trái và đi";
+"route_tsll" = "Quẹo trái và đi";
+"route_tu" = "Quayđầu và đi";
 
 "route_head" = "Head";
 "looking_up_address" = "Looking up address";
@@ -442,7 +441,7 @@
 "tones" = "tones";
 
 "nothing_found" = "Nothing found: %@";
-"nothing_found_empty" = "Nothing found";
+"nothing_found_empty" = "Không tìm thấy";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Select street";
 "shared_string_in_name" = "in %@";
@@ -464,33 +463,33 @@
 "shared_string_custom" = "Custom";
 "shared_string_enable" = "Enable";
 "shared_string_disable" = "Disable";
-"shared_string_apply" = "Apply";
-"shared_string_select" = "Select";
+"shared_string_apply" = "Áp dụng";
+"shared_string_select" = "Chọn";
 "shared_string_back" = "Back";
 "shared_string_ok" = "OK";
-"shared_string_cancel" = "Cancel";
-"shared_string_exit" = "Exit";
-"shared_string_close" = "Close";
-"shared_string_no" = "No";
-"shared_string_yes" = "Yes";
-"shared_string_save" = "Save";
+"shared_string_cancel" = "Hủy";
+"shared_string_exit" = "Thoát";
+"shared_string_close" = "Đóng";
+"shared_string_no" = "Không";
+"shared_string_yes" = "OK";
+"shared_string_save" = "Lưu";
 "shared_string_done" = "Done";
-"shared_string_clear_all" = "Clear all";
+"shared_string_clear_all" = "Xóa hết";
 "shared_string_update" = "Update";
 "shared_string_install" = "Install";
 "shared_string_uninstall" = "Uninstall";
-"shared_string_delete" = "Delete";
+"shared_string_delete" = "Xóa";
 "shared_string_upload" = "Upload";
-"shared_string_remove" = "Remove";
+"shared_string_remove" = "Gỡ bỏ";
 "shared_string_dismiss" = "Dismiss";
-"shared_string_add" = "Add";
+"shared_string_add" = "Thêm";
 "shared_string_buy" = "Buy";
 "shared_string_buy_for" = "for";
 "shared_string_or" = "or";
 "shared_string_and" = "and";
 "shared_string_edit" = "Edit";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Later";
+"shared_string_later" = "Tiếp tục";
 "shared_string_of" = "of";
 "shared_string_all" = "All";
 "shared_string_from" = "from";
@@ -507,7 +506,7 @@
 "shared_string_end_date" = "End date";
 "shared_string_not_set" = "Not set";
 "shared_string_reset" = "Reset";
-"shared_string_read_more" = "Read more";
+"shared_string_read_more" = "Đọc thêm";
 "shared_string_on" = "On";
 "shared_string_off" = "Off";
 "shared_string_clear_cache" = "Clear cache";
@@ -525,14 +524,14 @@
 "regions" = "Regions";
 "shared_string_width" = "Width";
 "shared_string_interval" = "Interval";
-"shared_string_none" = "None";
+"shared_string_none" = "Không";
 
 "restart" = "Restart";
 
 "offline_maps" = "Offline Maps";
-"download_map" = "Download map";
+"download_map" = "Tải bản đồ";
 "download_map_dialog" = "Download map dialog";
-"update_map" = "Update map";
+"update_map" = "Cập nhật bản đồ";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "Move map to select needed area.";
@@ -555,7 +554,7 @@
 "fav_name" = "Name";
 "fav_group" = "Group";
 "groups" = "Groups";
-"favorite" = "Favorite";
+"favorite" = "Ưa thích";
 "poi_overlay" = "POI Overlay";
 "poi_type" = "POI Type";
 "my_favorites" = "My Favorites";
@@ -567,7 +566,7 @@
 "available_groups" = "Available groups";
 "group_name" = "Group name";
 "fav_remove_q" = "Remove favorite?";
-"fav_import" = "Import";
+"fav_import" = "Nhập";
 "fav_import_title" = "Import favorite";
 "fav_export_title" = "Export favorite";
 "fav_select_remove" = "Please select favorites to remove";
@@ -577,11 +576,11 @@
 "fav_enter_group_name" = "Enter group name";
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
-"fav_rename" = "Rename";
-"fav_replace" = "Replace";
+"fav_rename" = "Đổi tên";
+"fav_replace" = "Thayđổi";
 "fav_replace_all" = "Replace all";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
-"fav_points_not_exist" = "No Favorite points exist";
+"fav_points_not_exist" = "Không có điểm ưa thích nào";
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
 "fav_select" = "Please select favorites";
@@ -599,9 +598,9 @@
 "default_color" = "Default color";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 
-"favorite_friends_category" = "Friends";
-"favorite_places_category" = "Places";
-"shared_string_others" = "Others";
+"favorite_friends_category" = "Bạn bè";
+"favorite_places_category" = "Địa điểm";
+"shared_string_others" = "Khác";
 
 // Shapes
 "circle" = "Circle";
@@ -615,7 +614,7 @@
 "poi_hide" = "Hide";
 
 // My Places
-"favorites" = "Favorites";
+"favorites" = "Ưa thích";
 "tracks" = "Tracks";
 "personal_category_name" = "Personal";
 "visible" = "Visible";
@@ -669,9 +668,9 @@
 "track_recording_name" = "Currently recording track";
 "track_stop_rec" = "Stop recording";
 "track_new_segment" = "Start new segment";
-"track_save" = "Save current track";
+"track_save" = "Lưu track hiện tại";
 "displayed_route_save" = "Save to OsmAnd Tracks";
-"track_save_descr" = "Save current track as GPX file now.";
+"track_save_descr" = "Lưu track hiện tại vào thẻ nhớ SD";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
 "rec_interval" = "Logging interval";
@@ -683,7 +682,7 @@
 "track_clear_q" = "Do you want to clear current track?";
 "show_info" = "Show Info";
 "record_trip" = "Record your track";
-"poi_clear" = "Clear";
+"poi_clear" = "Làm lại";
 "poi_list" = "POI list";
 
 "gpxup_public" = "Public";
@@ -707,20 +706,20 @@
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
-"m_style_car" = "Driving";
-"m_style_walk" = "Walking";
-"m_style_bicycle" = "Cycling";
+"m_style_car" = "Ô tô";
+"m_style_walk" = "Đi bộ";
+"m_style_bicycle" = "Xeđạp";
 "m_style_pulic_transport" = "Public transport";
 
 "map_settings_map" = "Map";
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
-"map_settings_show" = "Show on map";
+"map_settings_show" = "Hiện trên bản đồ";
 "map_settings_type" = "Map type";
 "map_mode" = "Map mode";
 "map_settings_map_magnifier" = "Map magnifier";
 "map_settings_text_size" = "Text size";
-"map_settings_day" = "Day";
-"map_settings_night" = "Night";
+"map_settings_day" = "Ngày";
+"map_settings_night" = "Đêm";
 "map_settings_style" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -730,7 +729,7 @@
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online maps";
 "map_settings_transp" = "Transparency";
-"map_settings_base_transp" = "Base map transparency";
+"map_settings_base_transp" = "Độ trong suốt bản đồ nền";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 "mapillary" = "Mapillary";
@@ -773,13 +772,13 @@
 // Intro
 "intro_skip" = "Skip";
 "intro_download" = "Download\nmap";
-"intro_next" = "Next";
+"intro_next" = "Tiếp";
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global offline maps";
 "intro_placeholder" = "enter the name of your region";
 
 // Settings
-"sett_settings" = "Settings";
+"sett_settings" = "Thiết lập";
 "sett_units" = "Units";
 "sett_lang" = "Map Language";
 "sett_km" = "Kilometers";
@@ -958,7 +957,7 @@
 "available_map_sources" = "Available map sources";
 
 "export_profile" = "Export";
-"shared_string_import" = "Import";
+"shared_string_import" = "Nhập";
 "create_profile" = "Create profile";
 "import_profile_select_descr" = "Select the data to be imported.";
 "export_profile_select_descr" = "Select the data to be exported.";
@@ -987,9 +986,9 @@
 "shared_string_importing" = "Importing";
 "importing_from" = "Importing data from %@";
 
-"shared_string_settings" = "Settings";
+"shared_string_settings" = "Thiết lập";
 "configure_screen_quick_action" = "Quick action";
-"search_activity" = "Search";
+"search_activity" = "Tìm kiếm";
 
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
@@ -1063,8 +1062,8 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 
-"download" = "Download";
-"nothanks" = "No, thanks";
+"download" = "Tải xuống";
+"nothanks" = "Không cần";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -1076,7 +1075,7 @@
 "point_num" = "Point %d";
 "points_count" = "Points:";
 "route_betw_points" = "Route between points";
-"save_changes" = "Save changes";
+"save_changes" = "Lưu thay đổi";
 "save_new_track" = "Save as new track";
 "add_to_track" = "Add to a track";
 "move_point" = "Move point";
@@ -1127,7 +1126,7 @@
 "select_another_track" = "Select another track";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Attach to the roads";
-"reverse_track_dir" = "Reverse track direction";
+"reverse_track_dir" = "Đảo hướng GPX";
 "point_to_navigate" = "Navigate to";
 "start_of_track" = "Start of the track";
 "nearest_point" = "Nearest point";
@@ -1205,7 +1204,7 @@
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
 "res_details" = "Details";
-"res_type" = "Type";
+"res_type" = "Loại";
 "res_unknown" = "Unknown";
 "res_size" = "Size";
 "res_created_on" = "Created on";
@@ -1255,8 +1254,8 @@
 // OSM Editing actions
 "opening_changeset" = "Opening changeset…";
 "closing_changeset" = "Closing changeset…";
-"commiting_node" = "Committing node…";
-"loading_poi_obj" = "Loading POI…";
+"commiting_node" = "Nút kết thúc…";
+"loading_poi_obj" = "Đang đọc địa điểm…";
 "shared_string_loading" = "Loading…";
 
 "osm_upload_failed_title" = "Upload failed";
@@ -1271,7 +1270,7 @@
 
 "osm_note" = "OSM Note";
 "osm_created" = "Created";
-"osm_deleted" = "Deleted";
+"osm_deleted" = "Đã xóa địa điểm thành công";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1287,12 +1286,12 @@
 "osm_editing_contact_info" = "Contact info";
 "osm_str_name" = "Street name";
 "osm_building_num" = "Building number";
-"osm_phone" = "Phone";
-"osm_website" = "Website";
+"osm_phone" = "Điện thoại";
+"osm_website" = "web site";
 "population_num" = "Population";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"osm_poi_delete_title" = "Delete POI";
+"osm_poi_delete_title" = "Xóa địa điểm";
 "osm_target_modified" = "Modified OSM POI";
 "osm_target_deleted" = "Deleted OSM POI";
 "osm_target_created" = "Created OSM POI";
@@ -1312,7 +1311,7 @@
 "osm_note_upload_immediately" = "Upload immediately";
 "osm_note_upload_anonymously" = "Upload anonymously";
 "osm_note_empty_message" = "Please specify the message for this note.";
-"osm_note_comment" = "Comment";
+"osm_note_comment" = "Bình luận";
 "osm_note_reopen" = "Reopen";
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
@@ -1351,7 +1350,7 @@
 "shared_string_reload" = "Reload";
 "shared_string_show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
-"shared_string_filter" = "Filter";
+"shared_string_filter" = "Bộ lọc";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
@@ -1376,7 +1375,7 @@
 "quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "map_overlays" = "Map overlays";
 "map_underlays" = "Map underlays";
-"offline_vector_maps" = "Offline vector maps";
+"offline_vector_maps" = "Bản đồ vector Offline";
 "add_map_source" = "Add map source";
 "add_map_style" = "Add map style";
 "map_sources" = "Map sources";
@@ -1412,7 +1411,7 @@
 "add_intermediate" = "Add intermediate point";
 "add_home" = "Add home";
 "add_work" = "Add work";
-"home_pt" = "Home";
+"home_pt" = "Nhà";
 "work_pt" = "Work";
 "map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Add first intermediate";
@@ -1517,13 +1516,13 @@
 "edit_waypoint_short" = "Edit waypoint";
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
 "no_waypoints_found" = "No waypoints found";
-"modify_poi_short" = "Modify POI";
-"create_poi_short" = "Create POI";
+"modify_poi_short" = "Sửa địa điểm";
+"create_poi_short" = "Tạo địa điểm";
 "modify_edit_short" = "Modify OSM change";
 "open_osm_note" = "Open OSM Note";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Commit";
-"osm_alert_message" = "Message";
+"osm_alert_title" = "Phạm";
+"osm_alert_message" = "Nội dung";
 "osm_alert_button_ok" = "Create note";
 "modify_poi" = "Modify the POI information";
 "actions" = "Actions";
@@ -1541,7 +1540,6 @@
 
 // Units
 "units_km" = "km";
-"units_m" = "m";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
@@ -1552,22 +1550,21 @@
 "units_hour" = "h";
 "units_min" = "min";
 "units_sec" = "sec";
-"units_min_short" = "m";
 "units_sec_short" = "s";
 
 "units_t" = "t";
 
 // Help
 "help_first_steps" = "First steps";
-"help_first_use" = "First use";
+"help_first_use" = "Sử dụng lần đầu";
 "help_first_use_descr" = "How to download maps and set basic settings";
 "help_navigation_descr" = "How to set up navigation";
-"help_faq" = "FAQ";
+"help_faq" = "Câu hỏi thường gặp";
 "help_faq_descr" = "Frequently asked questions";
-"help_features" = "Features";
+"help_features" = "Tính năng";
 "help_map_viewing" = "Map viewing";
 "help_search" = "Map search";
-"help_trip_planning" = "Planning a trip";
+"help_trip_planning" = "Lập kế hoạch cho một chuyến đi";
 "help_nav_profiles" = "Navigation profiles";
 "help_purchases" = "OsmAnd purchases";
 "help_osmand_live" = "Subscription - OsmAnd Live";
@@ -1575,7 +1572,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Map legend";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Other";
+"help_other_header" = "Mục khác";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Installation and troubleshooting";
 "help_tech_articles" = "Technical articles";
@@ -1596,7 +1593,7 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "Favorite";
+"import_favorite" = "Ưa thích";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -1763,8 +1760,8 @@
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
 
-"latitude" = "Latitude";
-"longitude" = "Longitude";
+"latitude" = "Vĩ độ";
+"longitude" = "Kinhđộ";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
@@ -1804,7 +1801,7 @@
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
 "enter_name" = "Enter name";
-"not_selected" = "Not selected";
+"not_selected" = "Chưa được chọn";
 "language" = "Language";
 
 "you_searching" = "You are searching";
@@ -1816,7 +1813,7 @@
 "prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 
-"time_open" = "Open";
+"time_open" = "Thời gian mở";
 "time_closed" = "Closed";
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
@@ -1836,7 +1833,7 @@
 "board_at" = "Board at";
 "exit_at" = "Exit at";
 "by_type" = "By %@";
-"num_stops" = "stops";
+"num_stops" = "Dừng";
 "total_time" = "Total time";
 "moving_time" = "Moving time";
 "change_group" = "Change group";
@@ -1854,7 +1851,7 @@
 "activity"= "Activity";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
-"gpx_deactivated" = "Deactivated";
+"gpx_deactivated" = "Sao lưu";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
@@ -1862,7 +1859,7 @@
 "parked_at" = "Parked at";
 
 "directions_more_options" = "Directions from";
-"nearby_search" = "Search nearby";
+"nearby_search" = "Tìm xung quanh";
 "change_object_posiotion" = "Change object's position";
 "change_position_descr" = "Move the map to change object's position";
 
@@ -1871,7 +1868,7 @@
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
 
-"plugins" = "Plugins";
+"plugins" = "Plugin";
 "open_map_settings" = "Open Map Settings";
 
 "plugin_popup_ski_title" = "Turn on Ski map style";
@@ -1918,7 +1915,7 @@
 "online_map" = "Online map";
 "calculating_progress" = "Calculating...";
 "local_names" = "Local names";
-"history" = "History";
+"history" = "Lịch sử";
 "today" = "Today";
 "yesterday" = "Yesterday";
 "hist_select_remove" = "Please select history items to remove";
@@ -1948,7 +1945,7 @@
 "no_inet_connection_desc_map" = "Required to download maps.";
 "try_again" = "Try again";
 
-"search_preogress" = "Searching…";
+"search_preogress" = "Tìm kiếm…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "Select another region";
@@ -1968,14 +1965,14 @@
 
 "custom_search" = "Custom search";
 "add_custom_category" = "Add custom category";
-"poi_filter_custom_filter" = "Custom filter";
+"poi_filter_custom_filter" = "Tùy chỉnh bộ lọc";
 "delete_custom_categories" = "Delete custom categories";
-"poi_filter_closest_poi" = "Nearest POIs";
+"poi_filter_closest_poi" = "Địa điểm gần nhất";
 "shared_string_is_open_24_7" = "Open 24/7";
 "shared_string_is_open" = "Open now";
-"poi_filter_by_name" = "Search by name";
+"poi_filter_by_name" = "Tìm theo tên";
 "subcategories" = "Subcategories";
-"select_all" = "Select all";
+"select_all" = "Lựa chọn tất cả";
 "create_custom_poi" = "Create custom filter";
 "selected_categories" = "Selected categories";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
@@ -1991,10 +1988,10 @@
 "shared_string_account" = "Account";
 "shared_string_account_add" = "Add account";
 "shared_string_email" = "Email";
-"shared_string_password" = "Password";
+"shared_string_password" = "Mật khẩu";
 "shared_string_filters" = "Filters";
 "edit_filter" = "Edit categories";
-"shared_string_save_as" = "Save As";
+"shared_string_save_as" = "Lưu thành";
 "delete_filter" = "Delete filter";
 "save_filter" = "Save filter";
 "edit_filter_delete_dialog_title" = "Delete selected filter?";
@@ -2002,25 +1999,25 @@
 "filter_poi_hint" = "Filter by name";
 "shared_string_category" = "Category";
 "poi_category_and_type" = "Category and POI Type";
-"poi_opening_hours" = "Opening hours";
+"poi_opening_hours" = "Giờ mở cửa";
 "poi_select_category" = "Select category";
 "poi_select_type" = "Select type";
 "shared_a_z" = "A - Z";
 "shared_z_a" = "Z - A";
 
-"city_type_suburb" = "Suburb";
-"city_type_hamlet" = "Hamlet";
-"city_type_village" = "Village";
-"city_type_town" = "Town";
-"city_type_city" = "City";
+"city_type_suburb" = "Ngoại thành";
+"city_type_hamlet" = "Thôn/Xóm";
+"city_type_village" = "Làng";
+"city_type_town" = "Thị xã";
+"city_type_city" = "Thành phố";
 "city_type_district" = "District";
 "city_type_neighbourhood" = "Neighbourhood";
 "postcode" = "Postcode";
 "show_something_on_map" = "Show %@ on the map";
 "search_POI_level_btn" = "Increase search radius";
 
-"shared_string_street" = "Street";
-"shared_string_building" = "Building";
+"shared_string_street" = "Phố";
+"shared_string_building" = "Tòa nhà";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Address";
 
@@ -2034,7 +2031,7 @@
 
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";
-"key_hint_select" = "Select";
+"key_hint_select" = "Chọn";
 "key_hint_deselect" = "Deselect";
 "key_hint_goback" = "Go Back";
 "key_hint_recenter_map" = "Recenter Map";
@@ -2080,7 +2077,7 @@
 "unlock_all_features" = "Unlock all OsmAnd features";
 "subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
 "osm_live_subscribe_btn" = "Subscribe";
-"shared_string_email_address" = "E-mail address";
+"shared_string_email_address" = "Địa chỉ E-mail";
 "osm_live_enter_email" = "Please enter a valid e-mail address";
 "osm_live_enter_user_name" = "Please enter public name";
 "shared_string_unexpected_error" = "Unexpected error";
@@ -2090,7 +2087,7 @@
 "osm_live_banner_descr" = "Subscribe to OsmAnd Live and get unlimited <b>hourly</b> map updates and <b>all features</b> included from %@";
 "osm_live_get_title" = "Get OsmAnd Live";
 "osm_live_ask_for_purchase" = "Please purchase a subscription to OsmAnd Live first";
-"shared_string_io_error" = "I/O error";
+"shared_string_io_error" = "Có lỗi xảy ra với I/O";
 "osm_live_hide_user_name" = "Do not show my name in reports";
 
 "subscriptions_public_info" = "Payment will be charged to your iTunes Account at confirmation of purchase. The subscription will automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period. Your account will be charged according to your plan for renewal within 24 hours prior to the end of the current period. You can manage or turn off auto-renew in your Account Settings after purchase. If you purchase a subscription during a free trial period, the unused portion of this period will be forfeited.";
@@ -2233,7 +2230,7 @@
 "rendering_attr_hideBuildings_name" = "Buildings";
 "routing_attr_max_num_changes_description" = "Specify upper limit of changes";
 "rendering_attr_winter_road_name" = "Winter road";
-"rendering_attr_tramTrainRoutes_name" = "Tram and train routes";
+"rendering_attr_tramTrainRoutes_name" = "Xeđiện và xe lửa";
 "rendering_attr_smoothness_intermediate_name" = "Intermediate";
 "rendering_attr_surface_snow_name" = "Snow";
 "rendering_attr_highway_class_cycleway_name" = "Cycleway";
@@ -2284,7 +2281,7 @@
 "osm_notes" = "OSM notes";
 "rendering_attr_hidePOILabels_name" = "POI labels";
 "rendering_attr_piste_difficulty_novice_name" = "Novice";
-"rendering_attr_hideUnderground_name" = "Underground objects";
+"rendering_attr_hideUnderground_name" = "Vật thể dưới lòng đất";
 "rendering_value_dark_brown_name" = "Dark brown";
 "routeInfo_piste_type_name" = "Piste type";
 "routing_attr_driving_style_safety_name" = "Prefer byways";
@@ -2352,7 +2349,7 @@
 "rendering_attr_surface_metal_name" = "Metal";
 "rendering_value_translucent_purple_name" = "Translucent purple";
 "rendering_attr_hmRendered_description" = "Increase amount of map detail shown.";
-"rendering_attr_tramRoutes_name" = "Tram routes";
+"rendering_attr_tramRoutes_name" = "Định tuyến xe điện";
 "rendering_attr_tracktype_grade2_name" = "Solid (unpaved)";
 "rendering_attr_piste_type_hike_name" = "Hike";
 "rendering_value_medium_name" = "Medium";
@@ -2365,7 +2362,7 @@
 "routeInfo_roadClass_name" = "Road type";
 "routing_attr_allow_skating_only_description" = "Routes groomed for freestyle or skating only without classic tracks.";
 "rendering_attr_piste_type_nordic_name" = "Nordic";
-"rendering_attr_trainLightrailRoutes_name" = "Train routes";
+"rendering_attr_trainLightrailRoutes_name" = "Đường đi của tàu hoả";
 "rendering_value_pedestrian_name" = "On foot";
 "rendering_attr_highway_class_track_grade5_name" = "Grade 5";
 "routing_attr_height_name" = "Height limit";
@@ -2379,7 +2376,7 @@
 "rendering_attr_subwayMode_name" = "Subway routes";
 "rendering_attr_highway_class_motorway_name" = "Motorway";
 "rendering_value_brown_name" = "Brown";
-"rendering_attr_hideIcons_name" = "POI icons";
+"rendering_attr_hideIcons_name" = "Ẩn biểu tượng POI";
 "rendering_attr_roadColors_description" = "Select a road color scheme:";
 "rendering_value_browse_map_name" = "Browse map";
 "rendering_attr_surface_asphalt_name" = "Asphalt";
@@ -2404,22 +2401,22 @@
 
 //Icon categories
 "amenity" = "Amenity";
-"emergency" = "Emergency";
+"emergency" = "Khẩn cấp";
 "service" = "Service";
 "special" = "Special";
-"sport" = "Sport";
+"sport" = "Thể thao";
 "symbols" = "Symbols";
-"transport" = "Transport";
+"transport" = "Giao thông";
 "travel" = "Travel";
 "nautical" = "Nautical";
 "industrial" = "Industrial";
-"education" = "Education";
+"education" = "Giáo dục";
 
 "settings_item_read_error" = "Could not read %@.";
-"app_mode_default" = "Browse map";
-"app_mode_car" = "Driving";
-"app_mode_bicycle" = "Cycling";
-"app_mode_pedestrian" = "Walking";
+"app_mode_default" = "Mặc định";
+"app_mode_car" = "Ô tô";
+"app_mode_bicycle" = "Xeđạp";
+"app_mode_pedestrian" = "Đi bộ";
 "app_mode_taxi" = "Taxi";
 "app_mode_shuttle_bus" = "Shuttle bus";
 "app_mode_subway" = "Subway";

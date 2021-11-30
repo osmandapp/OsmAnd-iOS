@@ -561,7 +561,7 @@ print( shell("git pull") )
 print( changeDir(osmandRepositoriesFolder.appendingPathComponent("resources/poi/").path) )
 print( shell("./copy_phrases.sh"))
 //Don't commit this changes by script to avoid merge conflicts.
-//Do manual commit of Resources repo щт new app version build.
+//Do manual commit of Resources repo on new app version build.
 
 
 

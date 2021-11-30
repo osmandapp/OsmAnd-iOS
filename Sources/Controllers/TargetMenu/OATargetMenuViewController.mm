@@ -13,6 +13,8 @@
 #import "Localization.h"
 
 #import "OAFavoriteItem.h"
+#import "OAPluginPopupViewController.h"
+#import "OAIAPHelper.h"
 #import "OAFavoriteViewController.h"
 #import "OATargetDestinationViewController.h"
 #import "OATargetHistoryItemViewController.h"
@@ -1008,11 +1010,19 @@
 {
     if (_localMapIndexItem)
     {
-        [OAResourcesUIHelper offerDownloadAndInstallOf:_localMapIndexItem onTaskCreated:^(id<OADownloadTask> task) {
-            if (self.delegate && [self.delegate respondsToSelector:@selector(showProgressBar)])
-                [self.delegate showProgressBar];
-            _localMapIndexItem.downloadTask = task;
-        } onTaskResumed:nil];
+        OAIAPHelper *iapHelper = OAIAPHelper.sharedInstance;
+        if ((_localMapIndexItem.resourceType == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion || _localMapIndexItem.resourceType == OsmAnd::ResourcesManager::ResourceType::HillshadeRegion || _localMapIndexItem.resourceType == OsmAnd::ResourcesManager::ResourceType::SlopeRegion) && ![iapHelper.srtm isActive])
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
+        else if (_localMapIndexItem.resourceType == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion && ![iapHelper.wiki isActive])
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+        else
+        {
+            [OAResourcesUIHelper offerDownloadAndInstallOf:_localMapIndexItem onTaskCreated:^(id<OADownloadTask> task) {
+                if (self.delegate && [self.delegate respondsToSelector:@selector(showProgressBar)])
+                    [self.delegate showProgressBar];
+                _localMapIndexItem.downloadTask = task;
+            } onTaskResumed:nil];
+        }
     }
 }
 

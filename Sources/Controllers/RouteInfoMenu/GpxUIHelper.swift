@@ -713,7 +713,8 @@ public enum GPXDataSetAxisType: String {
         let index: Int = Int((slopeProximity / step) / 2.0)
         for k in 0..<calculatedSlopeDist.count {
             calculatedSlopeDist[k] = calculatedDist[index + k]
-            calculatedSlope[k] = (calculatedH[2 * index + k] - calculatedH[k]) * 100 / slopeProximity
+            // Sometimes calculatedH.count - calculatedSlope.count < 2 which causes a rare crash
+            calculatedSlope[k] = (2 * index + k) < calculatedH.count ? (calculatedH[2 * index + k] - calculatedH[k]) * 100 / slopeProximity : 0
             if (calculatedSlope[k].isNaN) {
                 calculatedSlope[k] = 0
             }

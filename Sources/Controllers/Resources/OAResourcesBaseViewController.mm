@@ -476,7 +476,8 @@ static BOOL dataInvalidated = NO;
 
         if (!self.isViewLoaded || self.view.window == nil)
         {
-            if (task.progressCompleted == 1. && resource != nullptr && resource->type == OsmAndResourceType::MapRegion)
+            if (task.progressCompleted == 1. && ((resource != nullptr && resource->type == OsmAndResourceType::MapRegion)
+                    || (resource == nullptr && [nsResourceId hasSuffix:@".live.obf"])))
                 [_app.data.mapLayerChangeObservable notifyEvent];
 
             self.dataInvalidated = YES;
@@ -520,7 +521,8 @@ static BOOL dataInvalidated = NO;
         }
         else
         {
-            if (resource != nullptr && resource->type == OsmAndResourceType::MapRegion)
+            if ((resource != nullptr && resource->type == OsmAndResourceType::MapRegion)
+                || (resource == nullptr && [nsResourceId hasSuffix:@".live.obf"]))
                 [_app.data.mapLayerChangeObservable notifyEvent];
 
             [self refreshDownloadingContent:task.key];

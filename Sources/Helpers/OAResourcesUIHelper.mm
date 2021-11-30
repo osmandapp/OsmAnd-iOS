@@ -1645,7 +1645,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     dispatch_block_t proc = ^{
         OsmAndAppInstance app = [OsmAndApp instance];
-        BOOL liveUpdateDeleted = NO;
         for (OALocalResourceItem *item in items)
         {
             if ([item isKindOfClass:[OASqliteDbResourceItem class]])
@@ -1689,12 +1688,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
                 if (item.resourceType == OsmAndResourceType::MapRegion)
                     [app.data.mapLayerChangeObservable notifyEvent];
-                else if (item.resourceType == OsmAndResourceType::LiveUpdateRegion)
-                    liveUpdateDeleted = YES;
             }
         }
-        if (liveUpdateDeleted)
-            [app.data.mapLayerChangeObservable notifyEvent];
 
         if (block)
             block();

@@ -79,7 +79,7 @@ static OAQuickActionType *TYPE;
     if (appMode)
     {
         [OAAppSettings.sharedManager setApplicationModePref:appMode];
-        [OARootViewController.instance.mapPanel setMapElevation:[OAAppSettings.sharedManager.mapElevation get:appMode]];
+        [OARootViewController.instance.mapPanel setMapElevationAngle:[OAAppSettings.sharedManager.mapElevationAngle get:appMode]];
     }
 }
 

@@ -83,7 +83,7 @@ typedef enum : NSUInteger {
     [self setLeftPanel:[[OAOptionsPanelBlackViewController alloc] initWithNibName:@"OptionsPanel" bundle:nil]];
     [self setCenterPanel:[[OAMapPanelViewController alloc] init]];
     //[self setRightPanel:[[OAActionsPanelViewController alloc] init]];
-    [self.mapPanel setMapElevation:[[OAAppSettings sharedManager].mapElevation get]];
+    [self.mapPanel setMapElevationAngle:[[OAAppSettings sharedManager].mapElevationAngle get]];
 }
 
 + (OARootViewController*) instance

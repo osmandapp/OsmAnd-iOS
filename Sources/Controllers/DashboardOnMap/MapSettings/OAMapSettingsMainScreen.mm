@@ -550,7 +550,7 @@ static BOOL _isRoutesGroupOpen = NO;
 - (void)appModeChanged:(OAApplicationMode *)mode
 {
     [_settings setApplicationModePref:mode];
-    [OARootViewController.instance.mapPanel setMapElevation:[_settings.mapElevation get:mode]];
+    [OARootViewController.instance.mapPanel setMapElevationAngle:[_settings.mapElevationAngle get:mode]];
     [self setupView];
 }
 

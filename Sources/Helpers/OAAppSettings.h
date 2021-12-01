@@ -604,7 +604,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
-@property (nonatomic) OACommonDouble *mapElevation;
+@property (nonatomic) OACommonDouble *mapElevationAngle;
 
 @property (nonatomic) OACommonBoolean *mapSettingShowFavorites;
 @property (nonatomic) OACommonBoolean *mapSettingShowPoiLabel;

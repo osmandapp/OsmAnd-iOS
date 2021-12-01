@@ -336,7 +336,7 @@
                 OAApplicationMode *am = item[@"mode"];
                 [_settings.defaultApplicationMode set:am];
                 [_settings setApplicationModePref:am];
-                [OARootViewController.instance.mapPanel setMapElevation:[_settings.mapElevation get:am]];
+                [OARootViewController.instance.mapPanel setMapElevationAngle:[_settings.mapElevationAngle get:am]];
                 [self backButtonClicked:nil];
                 break;
             }

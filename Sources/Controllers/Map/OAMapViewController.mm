@@ -454,7 +454,7 @@
                                            _app.data.mapLastViewedState.target31.y);
         _mapView.zoom = _app.data.mapLastViewedState.zoom;
         _mapView.azimuth = _app.data.mapLastViewedState.azimuth;
-        _mapView.elevationAngle = [[OAAppSettings sharedManager].mapElevation get];
+        _mapView.elevationAngle = [[OAAppSettings sharedManager].mapElevationAngle get];
     }
     
     // Mark that map source is no longer valid
@@ -1292,7 +1292,7 @@
             _app.data.mapLastViewedState.zoom = _mapView.zoom;
             break;
         case OAMapRendererViewStateEntryElevationAngle:
-            [OAAppSettings.sharedManager.mapElevation set:_mapView.elevationAngle];
+            [OAAppSettings.sharedManager.mapElevationAngle set:_mapView.elevationAngle];
             break;
         case OAMapRendererViewStateEntryTarget:
             OsmAnd::PointI newTarget31 = _mapView.target31;

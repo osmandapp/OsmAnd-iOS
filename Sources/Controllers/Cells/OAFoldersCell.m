@@ -180,7 +180,7 @@
         else
         {
             destCell.layer.backgroundColor = available
-                    ? UIColorFromARGB(color_primary_purple_10).CGColor : [UIColorFromARGB(color_route_button_inactive) colorWithAlphaComponent:1].CGColor;
+                    ? UIColorFromARGB(color_primary_purple_10).CGColor : UIColorFromARGB(color_bottom_sheet_secondary_10).CGColor;
             destCell.titleLabel.textColor = available
                     ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
             destCell.imageView.tintColor = available

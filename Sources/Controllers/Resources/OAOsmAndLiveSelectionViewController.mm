@@ -426,6 +426,7 @@ static const NSInteger groupCount = 1;
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         _app.resourcesManager->changesManager->deleteUpdates(_regionName);
+        [_app.data.mapLayerChangeObservable notifyEvent];
     });
 }
 

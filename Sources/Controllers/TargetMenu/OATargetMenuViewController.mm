@@ -615,6 +615,9 @@
         }
         else if (_localMapIndexItem && [_localMapIndexItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
         {
+            if (_localMapIndexItem.resourceType == OsmAndResourceType::MapRegion)
+                [_app.data.mapLayerChangeObservable notifyEvent];
+
             _localMapIndexItem = nil;
             _downloadControlButton = nil;
             if (self.delegate && [self.delegate respondsToSelector:@selector(hideProgressBar)])

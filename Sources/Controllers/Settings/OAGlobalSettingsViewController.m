@@ -14,6 +14,8 @@
 #import "OATableViewCustomHeaderView.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OARootViewController.h"
+#import "OsmAndApp.h"
 
 #define kCarplayHeaderTopMargin 40
 
@@ -335,6 +337,7 @@
                 OAApplicationMode *am = item[@"mode"];
                 [_settings.defaultApplicationMode set:am];
                 [_settings setApplicationModePref:am];
+                [OARootViewController.instance.mapPanel setMapElevationAngle:[[OsmAndApp instance].data.mapLastViewedState elevationAngle:am]];
                 [self backButtonClicked:nil];
                 break;
             }

@@ -944,7 +944,7 @@
             cell.collectionView.backgroundColor = UIColor.whiteColor;
             cell.cellIndex = indexPath;
             cell.state = _scrollCellsState;
-            cell.delegate = self;
+            cell.foldersDelegate = self;
         }
         if (cell)
         {

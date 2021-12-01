@@ -20,7 +20,7 @@
 #define kLabelMaxWidth 120.0
 #define kMargin 16
 
-@interface OAFoldersCell() <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface OAFoldersCell() <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @end
 
@@ -28,7 +28,6 @@
 {
     NSArray<NSDictionary *> *_data ;
     NSInteger _selectionIndex;
-    BOOL _isFirstLoad;
 }
 
 - (void) awakeFromNib
@@ -38,14 +37,8 @@
     _collectionView.dataSource = self;
     [_collectionView registerNib:[UINib nibWithNibName:[OAFoldersCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAFoldersCollectionViewCell getCellIdentifier]];
     _collectionView.contentInset = UIEdgeInsetsMake(0., kMargin , 0., kMargin);
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    [_collectionView setCollectionViewLayout:layout];
-    [_collectionView setShowsHorizontalScrollIndicator:NO];
-    [_collectionView setShowsVerticalScrollIndicator:NO];
     _data = [NSMutableArray array];
     _selectionIndex = 0;
-    _isFirstLoad = YES;
 }
 
 - (void) setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(NSInteger)index
@@ -122,6 +115,13 @@
     return labelWidth;
 }
 
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self saveOffset];
+}
+
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -132,12 +132,6 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return _data.count;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    CGFloat labelWidth = [self calculateCellWidth:indexPath.row];    
-    return CGSizeMake(labelWidth, kCellHeight);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -157,38 +151,35 @@
         destCell.layer.cornerRadius = 9;
         NSString *iconName = item[@"img"];
         BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
-        if (iconName && iconName.length > 0)
-        {
-            [destCell.imageView setImage:[UIImage templateImageNamed:item[@"img"]]];
-            destCell.imageView.hidden = NO;
-            destCell.labelNoIconConstraint.priority = 1;
-            destCell.labelWithIconConstraint.priority = 1000;
-        }
-        else
-        {
-            destCell.imageView.hidden = YES;
-            destCell.labelNoIconConstraint.priority = 1000;
-            destCell.labelWithIconConstraint.priority = 1;
-        }
-        
+
+        BOOL hasIcon = iconName && iconName.length > 0;
+        [destCell showImage:hasIcon];
+        [destCell.imageView setImage:hasIcon ? [UIImage templateImageNamed:item[@"img"]] : nil];
+
         if (indexPath.row == _selectionIndex)
         {
-            destCell.layer.backgroundColor = UIColorFromRGB(color_primary_purple).CGColor;
+            [destCell setBackgroundColor:UIColorFromRGB(color_primary_purple)];
             destCell.titleLabel.textColor = UIColor.whiteColor;
             destCell.imageView.tintColor = UIColor.whiteColor;
         }
         else
         {
-            destCell.layer.backgroundColor = available
-                    ? UIColorFromARGB(color_primary_purple_10).CGColor : UIColorFromARGB(color_bottom_sheet_secondary_10).CGColor;
+            [destCell setBackgroundColor:available
+                    ? UIColorFromARGB(color_primary_purple_10) : UIColorFromARGB(color_route_button_inactive)];
             destCell.titleLabel.textColor = available
                     ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
             destCell.imageView.tintColor = available
                     ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
         }
     }
+
+    if ([cell needsUpdateConstraints])
+        [cell setNeedsUpdateConstraints];
+
     return cell;
 }
+
+#pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)colView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -213,23 +204,15 @@
     BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
     if (available)
     {
-        UICollectionViewCell *cell = [colView cellForItemAtIndexPath:indexPath];
         [UIView animateWithDuration:0.2
                               delay:0
                             options:(UIViewAnimationOptionAllowUserInteraction)
                          animations:^{
-                             [colView reloadData];
+                             [colView reloadItemsAtIndexPaths:@[indexPath]];
                          }
                          completion:nil];
     }
 }
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 12;
-}
-
-#pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -237,18 +220,25 @@
     BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
     if (available)
     {
+        NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:_selectionIndex inSection:indexPath.section];
         _selectionIndex = indexPath.row;
+        [collectionView reloadItemsAtIndexPaths:@[oldIndexPath, indexPath]];
 
-        if (_delegate)
-            [_delegate onItemSelected:_selectionIndex type:_data[_selectionIndex][@"type"]];
+        if (self.foldersDelegate)
+            [self.foldersDelegate onItemSelected:_selectionIndex type:_data[_selectionIndex][@"type"]];
     }
 
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+#pragma mark - UICollectionViewDelegateFlowLayout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self saveOffset];
+    CGFloat labelWidth = [self calculateCellWidth:indexPath.row];
+    return CGSizeMake(labelWidth, kCellHeight);
 }
 
 @end

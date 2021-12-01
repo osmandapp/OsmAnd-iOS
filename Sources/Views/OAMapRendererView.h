@@ -88,8 +88,6 @@ struct CLLocationCoordinate2D;
 @property (nonatomic) float viewportXScale;
 @property (nonatomic) float viewportYScale;
 
-- (void)setElevationAngle:(float)elevationAngle;
-
 @property (nonatomic, readonly) unsigned int symbolsCount;
 @property (nonatomic, readonly) BOOL isSymbolsUpdateSuspended;
 - (BOOL)suspendSymbolsUpdate;

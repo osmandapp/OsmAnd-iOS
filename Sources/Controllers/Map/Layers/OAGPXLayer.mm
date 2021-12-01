@@ -577,9 +577,9 @@
     {
         [self getTracksFromPoint:point res:found];
     }
-    else if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    else if (symbolInfo)
     {
-        if ([mapViewController findWpt:point])
+        if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr) && [mapViewController findWpt:point])
         {
             OAGpxWpt *wpt = mapViewController.foundWpt;
             NSArray *foundWptGroups = mapViewController.foundWptGroups;

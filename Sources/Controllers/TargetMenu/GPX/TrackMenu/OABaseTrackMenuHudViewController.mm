@@ -203,7 +203,9 @@
     [self applyLocalization];
     _cachedYViewPort = _mapViewController.mapView.viewportYScale;
 
-    [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"] forState:UIControlStateNormal];
+    UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
+    [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
+                     forState:UIControlStateNormal];
     self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
 
@@ -227,11 +229,9 @@
                               customStatusBarStyle:[OAAppSettings sharedManager].nightMode
                                       ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
     [_mapPanelViewController targetSetBottomControlsVisible:YES
-                                                 menuHeight:[self isLandscape] ? 0
-                                                         : [self getViewHeight] - [OAUtilities getBottomMargin] + 4
+                                                 menuHeight:[self isLandscape] ? 0 : [self getViewHeight] - [OAUtilities getBottomMargin] + 4
                                                    animated:YES];
     [_mapPanelViewController.hudViewController updateMapRulerData];
-    [self updateViewAnimated];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -246,6 +246,7 @@
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [self restoreMapViewPort];
+    [_mapViewController hideContextPinMarker];
     [super hide:YES duration:duration onComplete:^{
         [_mapPanelViewController.hudViewController resetToDefaultRulerLayout];
         [_mapPanelViewController hideScrollableHudViewController];
@@ -267,6 +268,16 @@
 - (void)generateData
 {
     //override
+}
+
+- (BOOL)isTabSelecting
+{
+    return NO;  //override
+}
+
+- (BOOL)adjustCentering
+{
+    return NO;  //override
 }
 
 - (void)setupModeViewShadowVisibility
@@ -359,15 +370,17 @@
 
 - (void)onViewHeightChanged:(CGFloat)height
 {
-    [_mapPanelViewController targetSetBottomControlsVisible:YES
-                                                 menuHeight:[self isLandscape] ? 0
-                                                         : height - [OAUtilities getBottomMargin]
-                                                   animated:YES];
-    if ((self.currentState != EOADraggableMenuStateFullScreen && ![self isLandscape]) || [self isLandscape])
+    if (![self isTabSelecting] && [self adjustCentering])
     {
-        [self changeMapRulerPosition];
-        [self adjustMapViewPort];
-        [_mapPanelViewController targetGoToGPX];
+        [_mapPanelViewController targetSetBottomControlsVisible:YES
+                                                     menuHeight:[self isLandscape] ? 0 : height - [OAUtilities getBottomMargin]
+                                                       animated:YES];
+        if ((self.currentState != EOADraggableMenuStateFullScreen && ![self isLandscape]) || [self isLandscape])
+        {
+            [self changeMapRulerPosition];
+            [self adjustMapViewPort];
+            [_mapPanelViewController targetGoToGPX];
+        }
     }
 }
 

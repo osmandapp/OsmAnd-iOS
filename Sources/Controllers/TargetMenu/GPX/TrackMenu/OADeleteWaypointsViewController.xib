@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -27,10 +27,11 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uTh-UY-xYJ">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cpg-9X-Jh3">
-                            <rect key="frame" x="16" y="58" width="53" height="28"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cpg-9X-Jh3">
+                            <rect key="frame" x="16" y="58" width="105" height="28"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="28" id="Vle-V3-171"/>
+                                <constraint firstAttribute="width" constant="105" id="s0J-U4-XfN"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -41,19 +42,11 @@
                                 <action selector="onCancelButtonClicked:" destination="-1" eventType="touchUpInside" id="DEQ-GZ-cCC"/>
                             </connections>
                         </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete Waypoints" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eU4-oc-Lsv">
-                            <rect key="frame" x="137.5" y="61" width="139.5" height="22"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="22" id="P8V-Y3-w57"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="twp-js-XcL">
-                            <rect key="frame" x="327" y="58" width="71" height="28"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="twp-js-XcL">
+                            <rect key="frame" x="293" y="58" width="105" height="28"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="28" id="FnA-b6-S4x"/>
+                                <constraint firstAttribute="width" constant="105" id="Pn0-3F-5a5"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -71,11 +64,22 @@
                                 <constraint firstAttribute="height" constant="1" id="69F-op-0d5"/>
                             </constraints>
                         </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete Waypoints" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eU4-oc-Lsv">
+                            <rect key="frame" x="121" y="61" width="172" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="22" id="P8V-Y3-w57"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="centerX" secondItem="eU4-oc-Lsv" secondAttribute="centerX" id="12w-Vf-pgc"/>
                         <constraint firstAttribute="trailing" secondItem="twp-js-XcL" secondAttribute="trailing" constant="16" id="2cQ-pS-JG8"/>
+                        <constraint firstItem="eU4-oc-Lsv" firstAttribute="leading" secondItem="Cpg-9X-Jh3" secondAttribute="trailing" id="HjZ-4B-bsr"/>
+                        <constraint firstItem="twp-js-XcL" firstAttribute="leading" secondItem="eU4-oc-Lsv" secondAttribute="trailing" id="NE9-YV-jQj"/>
                         <constraint firstAttribute="bottom" secondItem="eU4-oc-Lsv" secondAttribute="bottom" constant="17" id="NhS-t0-83J"/>
                         <constraint firstItem="twp-js-XcL" firstAttribute="centerY" secondItem="eU4-oc-Lsv" secondAttribute="centerY" id="Pbo-j6-J45"/>
                         <constraint firstItem="Cpg-9X-Jh3" firstAttribute="leading" secondItem="uTh-UY-xYJ" secondAttribute="leading" constant="16" id="YnF-ul-XMo"/>
@@ -151,7 +155,7 @@
                 <constraint firstItem="7tK-Lh-ccN" firstAttribute="leading" secondItem="9vq-51-93s" secondAttribute="leading" id="fuS-ig-rNk"/>
                 <constraint firstAttribute="bottom" secondItem="OGE-fG-Yjv" secondAttribute="bottom" constant="104" id="xP7-vm-z9m"/>
             </constraints>
-            <point key="canvasLocation" x="-254" y="69"/>
+            <point key="canvasLocation" x="-255.07246376811597" y="68.973214285714278"/>
         </view>
     </objects>
     <resources>

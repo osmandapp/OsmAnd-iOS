@@ -434,9 +434,24 @@
             kTableValues: @{ @"array_value": [_appearanceCollection getAvailableWidth] },
             kCellToggle: @YES
     }];
+    [widthCells addObject:widthValue];
+    [widthCells addObject:[OAGPXTableCellData withData:@{
+            kCellKey: @"width_empty_space",
+            kCellType: [OADividerCell getCellIdentifier],
+            kTableValues: @{ @"float_value": @14.0 }
+    }]];
+
+    if ([_selectedWidth isCustom])
+        [widthCells addObject:[self generateDataForWidthCustomSliderCell]];
+
+    OAGPXTableSectionData *widthSection = [OAGPXTableSectionData withData:@{ kSectionCells: widthCells }];
+
     [widthValue setData:@{
             kTableUpdateData: ^() {
                 [widthValue setData:@{ kTableValues: @{ @"array_value": [_appearanceCollection getAvailableWidth] } }];
+        
+                if ([_selectedWidth isCustom] && widthSection.cells.lastObject.updateProperty)
+                    widthSection.cells.lastObject.updateProperty(@([_selectedWidth.customValue intValue] - 1));
             },
             kTableUpdateProperty: ^(id value) {
                 if ([value isKindOfClass:NSNumber.class])
@@ -448,18 +463,7 @@
                 }
             }
     }];
-    [widthCells addObject:widthValue];
 
-    [widthCells addObject:[OAGPXTableCellData withData:@{
-            kCellKey: @"width_empty_space",
-            kCellType: [OADividerCell getCellIdentifier],
-            kTableValues: @{ @"float_value": @14.0 }
-    }]];
-
-    if ([_selectedWidth isCustom])
-        [widthCells addObject:[self generateDataForWidthCustomSliderCell]];
-
-    OAGPXTableSectionData *widthSection = [OAGPXTableSectionData withData:@{ kSectionCells: widthCells }];
     [widthSection setData:@{
             kTableUpdateData: ^() {
                 BOOL hasCustomSlider = [widthSection.cells.lastObject.key isEqualToString:@"width_custom_slider"];
@@ -543,7 +547,10 @@
 
     [splitCells addObject:sliderOrDescriptionCell];
 
-    OAGPXTableSectionData *splitSection = [OAGPXTableSectionData withData:@{ kSectionCells: splitCells }];
+    OAGPXTableSectionData *splitSection = [OAGPXTableSectionData withData:@{
+            kSectionCells: splitCells,
+            kSectionFooter: OALocalizedString(@"gpx_split_interval_descr")
+    }];
     [splitSection setData:@{
             kTableUpdateData: ^() {
                 NSInteger index = [splitCells indexOfObject:sliderOrDescriptionCell];
@@ -609,6 +616,11 @@
     }]];
 
     _tableData = appearanceSections;
+}
+
+- (BOOL)adjustCentering
+{
+    return YES;
 }
 
 - (OAGPXTableCellData *)generateDataForColorElevationGradientCell
@@ -977,6 +989,7 @@
         }
         if (cell)
         {
+            [cell makeSmallMargins:indexPath.row != [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1];
             cell.textView.text = cellData.title;
             cell.textView.font = [UIFont systemFontOfSize:15];
             cell.textView.textColor = UIColorFromRGB(color_text_footer);

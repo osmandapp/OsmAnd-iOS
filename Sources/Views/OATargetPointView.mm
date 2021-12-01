@@ -2020,15 +2020,8 @@ static const NSInteger _buttonsCount = 4;
 {
     if (_showFullScreen)
         return;
-    
-    if (_targetPoint.type == OATargetGPX)
-    {
-        [self.menuViewDelegate targetGoToGPX];
-    }
-    else
-    {
-        [self.menuViewDelegate targetGoToPoint];
-    }
+
+    [self.menuViewDelegate targetGoToPoint];
 }
 
 - (IBAction)buttonCancelDownloadPressed:(id)sender

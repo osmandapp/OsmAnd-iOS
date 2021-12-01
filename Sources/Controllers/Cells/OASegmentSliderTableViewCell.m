@@ -8,6 +8,7 @@
 
 #import "OASegmentSliderTableViewCell.h"
 #import "OAColors.h"
+#import "OAUtilities.h"
 
 #define kMarkTag 1000
 const CGFloat kMarkHeight = 14.0;
@@ -25,6 +26,12 @@ const CGFloat kMarkWidth = 2.0;
     [super awakeFromNib];
     self.sliderView.minimumTrackTintColor = UIColorFromRGB(color_menu_button);
     self.sliderView.maximumTrackTintColor = UIColorFromRGB(color_slider_gray);
+
+    if ([self isDirectionRTL])
+    {
+        self.topRightLabel.textAlignment = NSTextAlignmentLeft;
+        self.bottomRightLabel.textAlignment = NSTextAlignmentLeft;
+    }
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
@@ -120,16 +127,17 @@ const CGFloat kMarkWidth = 2.0;
 
 - (void) paintMarks
 {
+    BOOL isRTL = [self isDirectionRTL];
     CGFloat value = self.sliderView.value;
     for (int i = 0; i < _markViews.count; i++)
     {
-        CGFloat step = (CGFloat)i / (_markViews.count - 1);
-        _markViews[i].backgroundColor = UIColorFromRGB(value > step ? color_menu_button : color_slider_gray);
+        CGFloat step = (CGFloat) i / (_markViews.count - 1);
+        _markViews[i].backgroundColor = UIColorFromRGB(value > (isRTL ? 1 - step : step) ? color_menu_button : color_slider_gray);
     }
-    
-    if (value == 1)
+
+    if ((value == 1 && !isRTL) || (value == 0 && isRTL))
         _markViews.lastObject.backgroundColor = UIColor.clearColor;
-    else if (value == 0)
+    else if ((value == 0 && !isRTL) || (value == 1 && isRTL))
         _markViews.firstObject.backgroundColor = UIColor.clearColor;
 }
 

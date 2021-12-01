@@ -92,6 +92,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 @property (nonatomic, assign) EOARouteStatisticsMode routeStatistics;
 @property (nonatomic, assign) NSString *gpxFilePath;
 @property (nonatomic, assign) CLLocationCoordinate2D pinLocation;
+@property (nonatomic, assign) EOADraggableMenuState showingState;
 
 @end
 

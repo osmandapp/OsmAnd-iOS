@@ -194,7 +194,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                                 kCellKey: @"analyze_on_map",
                                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                                 kCellTitle: OALocalizedString(@"analyze_on_map"),
-                                kCellRightIconName: @"none",
+                                kCellRightIconName: @"ic_custom_graph",
                                 kCellButtonPressed: ^() {
                                     if (self.trackMenuDelegate)
                                         [self.trackMenuDelegate openAnalysis:_analysis
@@ -386,26 +386,15 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         }
         if (cell)
         {
-            BOOL hasIcon = ![cellData.rightIconName isEqualToString:@"none"];
-
             cell.titleView.text = cellData.title;
             cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
             cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont systemFontOfSize:17.];
 
-            if (hasIcon)
-            {
-                cell.iconColorNormal = cellData.tintColor > 0
-                        ? UIColorFromRGB(cellData.tintColor) : UIColorFromRGB(color_primary_purple);
-                cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
-            }
-            else
-            {
-                cell.iconView.layer.cornerRadius = 12.;
-                cell.iconColorNormal = UIColorFromRGB(color_tint_gray);
-                cell.iconView.image = [OAUtilities resizeImage:[OAUtilities imageWithColor:UIColorFromRGB(color_tint_gray)] newSize:CGSizeMake(24., 24.)];
-            }
+            cell.iconColorNormal = cellData.tintColor > 0
+                    ? UIColorFromRGB(cellData.tintColor) : UIColorFromRGB(color_primary_purple);
+            cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
 
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
             [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast];

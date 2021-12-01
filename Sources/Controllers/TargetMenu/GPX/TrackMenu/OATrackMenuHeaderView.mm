@@ -134,10 +134,10 @@
 {
     _selectedTab = selectedTab;
 
-    self.backgroundColor = _selectedTab == EOATrackMenuHudOverviewTab || _selectedTab == EOATrackMenuHudSegmentsTab
+    self.backgroundColor = _selectedTab != EOATrackMenuHudActionsTab
             ? UIColor.whiteColor : UIColorFromRGB(color_bottom_sheet_background);
 
-    self.bottomDividerView.hidden = _selectedTab == EOATrackMenuHudSegmentsTab;
+    self.bottomDividerView.hidden = _selectedTab == EOATrackMenuHudSegmentsTab || _selectedTab == EOATrackMenuHudPointsTab;
 
     if (_selectedTab != EOATrackMenuHudActionsTab)
     {

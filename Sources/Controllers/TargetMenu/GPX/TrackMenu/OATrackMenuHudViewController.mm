@@ -111,6 +111,8 @@
     NSArray<OAGpxTrkSeg *> *_segments;
 
     BOOL _isHeaderBlurred;
+    BOOL _isTabSelecting;
+    BOOL _wasFirstOpening;
 }
 
 @dynamic isShown, backButton, contentContainer;
@@ -178,6 +180,15 @@
         [self changeTrackVisible];
 
     [self startLocationServices];
+
+    if (_reopeningState && _reopeningState.showingState != EOADraggableMenuStateInitial)
+        [self updateShowingState:_reopeningState.showingState];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    _wasFirstOpening = YES;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -338,6 +349,18 @@
     _tableData = [_uiBuilder generateSectionsData];
 }
 
+- (BOOL)isTabSelecting
+{
+    return _isTabSelecting;
+}
+
+- (BOOL)adjustCentering
+{
+    return [self openedFromMap] && _wasFirstOpening
+            || ![self openedFromMap] && _wasFirstOpening
+            || ![self openedFromMap] && !_wasFirstOpening;
+}
+
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
     return _tableData.sections[indexPath.section].cells[indexPath.row];
@@ -489,6 +512,7 @@
     OATrackMenuViewControllerState *state = _reopeningState ? _reopeningState : [[OATrackMenuViewControllerState alloc] init];
     state.lastSelectedTab = _selectedTab;
     state.gpxFilePath = self.gpx.gpxFilePath;
+    state.showingState = self.currentState;
 
     return state;
 }
@@ -1118,8 +1142,8 @@
         case EOATrackMenuHudSegmentsTab:
         {
             _description = [NSString stringWithFormat:@"%@: %li",
-                            OALocalizedString(@"gpx_selection_segment_title"),
-                                                      _mutableDoc && [_segments containsObject:_mutableDoc.generalSegment] ? _segments.count - 1 : _segments.count];
+                    OALocalizedString(@"gpx_selection_segment_title"),
+                    _mutableDoc && [_segments containsObject:_mutableDoc.generalSegment] ? _segments.count - 1 : _segments.count];
             break;
         }
         case EOATrackMenuHudPointsTab:
@@ -1469,6 +1493,7 @@
 {
     if (_selectedTab != item.tag)
     {
+        _isTabSelecting = YES;
         if (_selectedTab == EOATrackMenuHudSegmentsTab)
             [self.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
 
@@ -1513,7 +1538,9 @@
                         animations:^(void) {
                             [self.tableView reloadData];
                         }
-                        completion:nil];
+                        completion: ^(BOOL finished) {
+                            _isTabSelecting = NO;
+                        }];
     }
 }
 
@@ -1742,7 +1769,7 @@
                                                          owner:self
                                                        options:nil];
             cell = (OASelectionCollapsableCell *) nib[0];
-            cell.separatorInset = UIEdgeInsetsZero;
+            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell makeSelectable:NO];
         }
@@ -1842,9 +1869,12 @@
             [cell showButtonRight:cellData.toggle];
             if (cellData.toggle)
             {
-                UIImage *rightIcon = [UIImage templateImageNamed:cellData.values[@"right_icon_string_value"]];
-                [cell.buttonRight setImage:[OAUtilities resizeImage:rightIcon newSize:CGSizeMake(30., 30.)] forState:UIControlStateNormal];
+                UIImage *rightIcon = [UIImage imageNamed:cellData.values[@"right_icon_string_value"]];
+                rightIcon = [OAUtilities resizeImage:rightIcon newSize:CGSizeMake(30., 30.)];
+                [cell.buttonRight setImage:[OAUtilities getTintableImage:rightIcon] forState:UIControlStateNormal];
                 cell.buttonRight.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+                cell.buttonRight.imageView.backgroundColor = UIColor.clearColor;
+                cell.buttonRight.imageView.tintColor = UIColorFromRGB(color_primary_purple);
 
                 CGFloat buttonWidth = ((![self isLandscape] ? tableView.frame.size.width
                         : tableView.frame.size.width - [OAUtilities getLeftMargin]) - 40) / 2;
@@ -2006,10 +2036,11 @@
             if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
             {
                 BOOL isLeftButton = [recognizer locationInView:self.view].x < self.tableView.frame.size.width / 2;
+                BOOL isRTL = [button isDirectionRTL];
 
-                if (isLeftButton && cellData.values[@"left_on_button_pressed"])
+                if (((isLeftButton && !isRTL) || (!isLeftButton && isRTL)) && cellData.values[@"left_on_button_pressed"])
                     ((OAGPXTableDataUpdateData) cellData.values[@"left_on_button_pressed"])();
-                else if (!isLeftButton && cellData.values[@"right_on_button_pressed"])
+                else if (((!isLeftButton && !isRTL) || (isLeftButton && isRTL)) && cellData.values[@"right_on_button_pressed"])
                     ((OAGPXTableDataUpdateData) cellData.values[@"right_on_button_pressed"])();
 
                 break;
@@ -2041,7 +2072,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (_selectedTab == EOATrackMenuHudSegmentsTab)
+    if (_selectedTab == EOATrackMenuHudSegmentsTab || _selectedTab == EOATrackMenuHudPointsTab)
     {
         if (!_isHeaderBlurred && scrollView.contentOffset.y > 0)
         {

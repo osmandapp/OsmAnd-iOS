@@ -389,37 +389,32 @@
     return (int) (r * self.mapView.displayDensityFactor);
 }
 
-- (void) getTracksFromPoint:(CLLocationCoordinate2D)point
-                        res:(NSMutableArray<OATargetPoint *> *)res
-            unknownLocation:(BOOL)unknownLocation
+- (void) getTracksFromPoint:(CLLocationCoordinate2D)point res:(NSMutableArray<OATargetPoint *> *)res
 {
-    if (!unknownLocation)
+    double textSize = [OAAppSettings.sharedManager.textSize get];
+    textSize = textSize < 1. ? 1. : textSize;
+    int r = [self getDefaultRadiusPoi] * textSize;
+    const auto activeGpx = OASelectedGPXHelper.instance.activeGpx;
+    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
-        double textSize = [OAAppSettings.sharedManager.textSize get];
-        textSize = textSize < 1. ? 1. : textSize;
-        int r = [self getDefaultRadiusPoi] * textSize;
-        const auto activeGpx = OASelectedGPXHelper.instance.activeGpx;
-        for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
+        auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
+        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
+        NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+        OAGpxTrkSeg *generalSeg = gpx.joinSegments ? doc.getGeneralSegment : nil;
+        NSArray<OAGpxTrkPt *> *points = [self findPointsNearSegments:gpx.joinSegments ? (generalSeg ? @[generalSeg] : @[]) : [doc getNonEmptyTrkSegments:NO] radius:r point:point];
+        if (points != nil)
         {
-            auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
-            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
-            NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
-            OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
-            OAGpxTrkSeg *generalSeg = gpx.joinSegments ? doc.getGeneralSegment : nil;
-            NSArray<OAGpxTrkPt *> *points = [self findPointsNearSegments:gpx.joinSegments ? (generalSeg ? @[generalSeg] : @[]) : [doc getNonEmptyTrkSegments:NO] radius:r point:point];
-            if (points != nil)
-            {
-                CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
-                                                                                                    longitude:point.longitude]
-                                                            fromLocation:[[CLLocation alloc] initWithLatitude:points.firstObject.position.latitude
-                                                                                                    longitude:points.firstObject.position.longitude]
-                                                              toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
-                                                                                                    longitude:points.lastObject.position.longitude]];
-                OATargetPoint *targetPoint = [self getTargetPoint:gpx];
-                targetPoint.location = selectedGpxPoint.coordinate;
-                if (targetPoint && ![res containsObject:targetPoint])
-                    [res addObject:targetPoint];
-            }
+            CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
+                                                                                                longitude:point.longitude]
+                                                        fromLocation:[[CLLocation alloc] initWithLatitude:points.firstObject.position.latitude
+                                                                                                longitude:points.firstObject.position.longitude]
+                                                          toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
+                                                                                                longitude:points.lastObject.position.longitude]];
+            OATargetPoint *targetPoint = [self getTargetPoint:gpx];
+            targetPoint.location = selectedGpxPoint.coordinate;
+            if (targetPoint && ![res containsObject:targetPoint])
+                [res addObject:targetPoint];
         }
     }
 }
@@ -578,9 +573,9 @@
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
     OAMapViewController *mapViewController = self.mapViewController;
-    if (!symbolInfo)
+    if (!symbolInfo && !unknownLocation)
     {
-        [self getTracksFromPoint:point res:found unknownLocation:unknownLocation];
+        [self getTracksFromPoint:point res:found];
     }
     else if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
     {

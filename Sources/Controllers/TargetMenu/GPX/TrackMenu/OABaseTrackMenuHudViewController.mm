@@ -229,8 +229,7 @@
                               customStatusBarStyle:[OAAppSettings sharedManager].nightMode
                                       ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
     [_mapPanelViewController targetSetBottomControlsVisible:YES
-                                                 menuHeight:[self isLandscape] ? 0
-                                                         : [self getViewHeight] - [OAUtilities getBottomMargin] + 4
+                                                 menuHeight:[self isLandscape] ? 0 : [self getViewHeight] - [OAUtilities getBottomMargin] + 4
                                                    animated:YES];
     [_mapPanelViewController.hudViewController updateMapRulerData];
 }
@@ -374,8 +373,7 @@
     if (![self isTabSelecting] && [self adjustCentering])
     {
         [_mapPanelViewController targetSetBottomControlsVisible:YES
-                                                     menuHeight:[self isLandscape] ? 0
-                                                             : height - [OAUtilities getBottomMargin]
+                                                     menuHeight:[self isLandscape] ? 0 : height - [OAUtilities getBottomMargin]
                                                        animated:YES];
         if ((self.currentState != EOADraggableMenuStateFullScreen && ![self isLandscape]) || [self isLandscape])
         {

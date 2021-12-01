@@ -188,7 +188,7 @@
                         <stackView contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="dzH-uG-dio" userLabel="Action Buttons Container">
                             <rect key="frame" x="0.0" y="169" width="374" height="57"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ev-Ap-uIN" customClass="OAButton">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ev-Ap-uIN" customClass="OAButton">
                                     <rect key="frame" x="0.0" y="0.0" width="89" height="57"/>
                                     <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="0.050000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
@@ -208,7 +208,7 @@
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vDF-Mt-jg2" customClass="OAButton">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vDF-Mt-jg2" customClass="OAButton">
                                     <rect key="frame" x="95" y="0.0" width="89" height="57"/>
                                     <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="0.050000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
@@ -218,7 +218,7 @@
                                     <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <inset key="titleEdgeInsets" minX="-24" minY="28" maxX="0.0" maxY="0.0"/>
                                     <inset key="imageEdgeInsets" minX="35" minY="-18" maxX="0.0" maxY="0.0"/>
-                                    <state key="normal" title="Appearance" image="ic_custom_appearance.png">
+                                    <state key="normal" title="Appearance fghxcfh xcfh" image="ic_custom_appearance.png">
                                         <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
                                     <userDefinedRuntimeAttributes>
@@ -228,7 +228,7 @@
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="41j-Jh-0aW" customClass="OAButton">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="41j-Jh-0aW" customClass="OAButton">
                                     <rect key="frame" x="190" y="0.0" width="89" height="57"/>
                                     <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="0.050000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
@@ -248,7 +248,7 @@
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pbl-cu-esO" customClass="OAButton">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pbl-cu-esO" customClass="OAButton">
                                     <rect key="frame" x="285" y="0.0" width="89" height="57"/>
                                     <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="0.050000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
@@ -276,6 +276,9 @@
                         </stackView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="19G-L5-8Rc" firstAttribute="centerX" secondItem="Fdl-Nv-zcK" secondAttribute="centerX" id="5Vu-xG-0Pt"/>
+                    </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="77c-3b-9tk" userLabel="Bottom Divider View">
                     <rect key="frame" x="0.0" y="241.5" width="414" height="0.5"/>
@@ -295,11 +298,9 @@
                 <constraint firstItem="Fdl-Nv-zcK" firstAttribute="trailing" secondItem="Uvg-4A-Ywj" secondAttribute="trailing" id="Dbt-bW-cti"/>
                 <constraint firstItem="VTD-C4-FFB" firstAttribute="leading" secondItem="Fdl-Nv-zcK" secondAttribute="leading" id="EdZ-hd-mpC"/>
                 <constraint firstItem="Uvg-4A-Ywj" firstAttribute="leading" secondItem="Fdl-Nv-zcK" secondAttribute="leading" id="KJh-rx-brk"/>
-                <constraint firstItem="19G-L5-8Rc" firstAttribute="leading" secondItem="Fdl-Nv-zcK" secondAttribute="leading" constant="177.5" id="M91-fe-892"/>
                 <constraint firstItem="bg1-Wv-H5u" firstAttribute="top" secondItem="0oj-SL-cMW" secondAttribute="bottom" id="QmN-gL-7dO"/>
                 <constraint firstItem="0oj-SL-cMW" firstAttribute="top" secondItem="19G-L5-8Rc" secondAttribute="bottom" constant="6" id="UJl-JG-SjF"/>
                 <constraint firstItem="0oj-SL-cMW" firstAttribute="leading" secondItem="Fdl-Nv-zcK" secondAttribute="leading" id="Ypd-uH-pLc"/>
-                <constraint firstItem="Fdl-Nv-zcK" firstAttribute="trailing" secondItem="19G-L5-8Rc" secondAttribute="trailing" constant="177.5" id="Zx6-Fr-KOT"/>
                 <constraint firstAttribute="trailingMargin" secondItem="Fdl-Nv-zcK" secondAttribute="trailing" id="a90-T4-zET"/>
                 <constraint firstItem="Fdl-Nv-zcK" firstAttribute="trailing" secondItem="dzH-uG-dio" secondAttribute="trailing" id="bfj-3w-WBU"/>
                 <constraint firstItem="Fdl-Nv-zcK" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="big-ot-pnt"/>

@@ -2021,7 +2021,7 @@ static const NSInteger _buttonsCount = 4;
     if (_showFullScreen)
         return;
 
-        [self.menuViewDelegate targetGoToPoint];
+    [self.menuViewDelegate targetGoToPoint];
 }
 
 - (IBAction)buttonCancelDownloadPressed:(id)sender

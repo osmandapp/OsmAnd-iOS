@@ -2036,10 +2036,11 @@
             if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
             {
                 BOOL isLeftButton = [recognizer locationInView:self.view].x < self.tableView.frame.size.width / 2;
+                BOOL isRTL = [button isDirectionRTL];
 
-                if (isLeftButton && cellData.values[@"left_on_button_pressed"])
+                if (((isLeftButton && !isRTL) || (!isLeftButton && isRTL)) && cellData.values[@"left_on_button_pressed"])
                     ((OAGPXTableDataUpdateData) cellData.values[@"left_on_button_pressed"])();
-                else if (!isLeftButton && cellData.values[@"right_on_button_pressed"])
+                else if (((!isLeftButton && !isRTL) || (isLeftButton && isRTL)) && cellData.values[@"right_on_button_pressed"])
                     ((OAGPXTableDataUpdateData) cellData.values[@"right_on_button_pressed"])();
 
                 break;

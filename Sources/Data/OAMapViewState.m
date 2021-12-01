@@ -64,4 +64,16 @@
     return self;
 }
 
+#pragma mark - Profile dependent settings
+
+- (float)elevationAngle
+{
+    return [_mapElevationAngle get];
+}
+
+- (void)setElevationAngle:(float)elevationAngle
+{
+    [_mapElevationAngle set:elevationAngle];
+}
+
 @end

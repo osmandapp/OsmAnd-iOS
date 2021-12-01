@@ -10,8 +10,6 @@
 
 #import "OACommonTypes.h"
 
-@class OAApplicationMode;
-
 @interface OAMapViewState : NSObject <NSCoding>
 
 @property Point31 target31;

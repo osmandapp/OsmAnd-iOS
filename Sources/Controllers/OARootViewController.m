@@ -150,9 +150,8 @@ typedef enum : NSUInteger {
         Point31 currentMapCenter = [OsmAndApp instance].data.mapLastViewedState.target31;
         float currentZoom = self.mapPanel.mapViewController.mapRendererView.zoom;
         float currentAzimuth = self.mapPanel.mapViewController.mapRendererView.azimuth;
-        CLLocation *cureentLocation = [self.mapPanel.mapViewController getMapLocation];
-        float elevationAngle = [[OsmAndApp instance].data.mapLastViewedState elevationAngle];
-        [self.mapPanel prepareMapForReuse:currentMapCenter zoom:currentZoom newAzimuth:currentAzimuth newElevationAngle:elevationAngle animated:NO];
+        float newProfileElevationAngle = [[OsmAndApp instance].data.mapLastViewedState elevationAngle];
+        [self.mapPanel prepareMapForReuse:currentMapCenter zoom:currentZoom newAzimuth:currentAzimuth newElevationAngle:newProfileElevationAngle animated:NO];
     });
 }
 

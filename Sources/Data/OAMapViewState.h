@@ -18,9 +18,5 @@
 @property float zoom;
 @property float azimuth;
 @property float elevationAngle;
-@property float defaultElevationAngle;
-
-- (float)elevationAngle:(OAApplicationMode *)mode;
-- (void)setElevationAngle:(float)elevationAngle mode:(OAApplicationMode *)mode;
 
 @end

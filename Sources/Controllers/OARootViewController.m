@@ -32,6 +32,7 @@
 #import "OAFileImportHelper.h"
 #import "OASettingsHelper.h"
 #import "OAXmlImportHandler.h"
+#import "OsmAndApp.h"
 
 #import "Localization.h"
 #import "OAGPXDatabase.h"
@@ -63,6 +64,7 @@ typedef enum : NSUInteger {
     BOOL _productsRequestWithProgress;
     BOOL _productsRequestReload;
     BOOL _restoringPurchases;
+    OAAutoObserverProxy* _applicaionModeObserver;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -136,6 +138,22 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPurchase:) name:OAIAPRequestPurchaseProductNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
+    _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onApplicationModeChanged:)
+                                                         andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+}
+
+- (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        Point31 currentMapCenter = [OsmAndApp instance].data.mapLastViewedState.target31;
+        float currentZoom = self.mapPanel.mapViewController.mapRendererView.zoom;
+        float currentAzimuth = self.mapPanel.mapViewController.mapRendererView.azimuth;
+        CLLocation *cureentLocation = [self.mapPanel.mapViewController getMapLocation];
+        float elevationAngle = [[OsmAndApp instance].data.mapLastViewedState elevationAngle];
+        [self.mapPanel prepareMapForReuse:currentMapCenter zoom:currentZoom newAzimuth:currentAzimuth newElevationAngle:elevationAngle animated:NO];
+    });
 }
 
 - (BOOL) prefersStatusBarHidden

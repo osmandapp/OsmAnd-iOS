@@ -255,7 +255,6 @@
 - (void) appModeChanged:(OAApplicationMode *)mode
 {
     [_settings setApplicationModePref:mode];
-    [OARootViewController.instance.mapPanel setMapElevationAngle:[_app.data.mapLastViewedState elevationAngle:mode]];
     [self setupView];
 }
 

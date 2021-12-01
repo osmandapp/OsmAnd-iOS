@@ -199,7 +199,6 @@
                 state.target31 = pos31;
                 state.zoom = zoom;
                 state.azimuth = 0.0f;
-                state.defaultElevationAngle = 90.0f;
                 _app.initialURLMapState = state;
                 return;
             }

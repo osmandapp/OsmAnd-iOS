@@ -35,7 +35,6 @@
 @synthesize target31 = _target31;
 @synthesize zoom = _zoom;
 @synthesize azimuth = _azimuth;
-@synthesize defaultElevationAngle = _defaultElevationAngle;
 
 #pragma mark - NSCoding
 
@@ -63,28 +62,6 @@
         _azimuth = [aDecoder decodeFloatForKey:kAzimuth];
     }
     return self;
-}
-
-#pragma mark - Profile dependent settings
-
-- (float)elevationAngle
-{
-    return [_mapElevationAngle get];
-}
-
-- (float)elevationAngle:(OAApplicationMode *)mode
-{
-    return [_mapElevationAngle get:mode];
-}
-
-- (void)setElevationAngle:(float)elevationAngle
-{
-    [_mapElevationAngle set:elevationAngle];
-}
-
-- (void)setElevationAngle:(float)elevationAngle mode:(OAApplicationMode *)mode
-{
-    [_mapElevationAngle set:elevationAngle mode:mode];
 }
 
 @end

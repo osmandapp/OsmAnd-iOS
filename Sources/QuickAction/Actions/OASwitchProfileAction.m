@@ -16,8 +16,6 @@
 #import "OAButtonCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
-#import "OARootViewController.h"
-#import "OsmAndApp.h"
 
 #define KEY_PROFILES @"profiles"
 
@@ -80,7 +78,6 @@ static OAQuickActionType *TYPE;
     if (appMode)
     {
         [OAAppSettings.sharedManager setApplicationModePref:appMode];
-        [OARootViewController.instance.mapPanel setMapElevationAngle:[[OsmAndApp instance].data.mapLastViewedState elevationAngle:appMode]];
     }
 }
 

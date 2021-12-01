@@ -446,7 +446,7 @@
                                            _app.initialURLMapState.target31.y);
         _mapView.zoom = _app.initialURLMapState.zoom;
         _mapView.azimuth = _app.initialURLMapState.azimuth;
-        _mapView.elevationAngle = _app.initialURLMapState.defaultElevationAngle;
+        _mapView.elevationAngle = kMapModePositionTrackingDefaultElevationAngle;
     }
     else
     {

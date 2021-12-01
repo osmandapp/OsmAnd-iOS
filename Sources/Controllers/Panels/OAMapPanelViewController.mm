@@ -532,18 +532,6 @@ typedef enum
     renderView.elevationAngle = newElevationAngle;
 }
 
-- (float)getMapElevationAngle
- {
-     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.mapView;
-     return renderView.elevationAngle;
- }
-
- - (void)setMapElevationAngle:(float)newElevationAngle
- {
-     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.mapView;
-     renderView.elevationAngle = newElevationAngle;
- }
-
 - (void) prepareMapForReuse:(UIView *)destinationView mapBounds:(OAGpxBounds)mapBounds newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated
 {
     [self saveMapStateIfNeeded];

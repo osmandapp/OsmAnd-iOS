@@ -17,6 +17,8 @@
 #import "OAWikipediaPlugin.h"
 #import "OAPlugin.h"
 #import "OAIAPHelper.h"
+#import "OARootViewController.h"
+#import "OAMapViewController.h"
 
 #include <objc/runtime.h>
 
@@ -172,7 +174,6 @@
     _destinationShowObservable = [[OAObservable alloc] init];
     _destinationHideObservable = [[OAObservable alloc] init];
     _mapLayersConfigurationChangeObservable = [[OAObservable alloc] init];
-    _mapElevationAngleChangeObservable = [[OAObservable alloc] init];
 
     _wikipediaChangeObservable = [[OAObservable alloc] init];
 
@@ -233,7 +234,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_mapLayersConfiguration resetConfigutation];
-        [_mapElevationAngleChangeObservable notifyEvent];
+        [self updateMapElevationAngle];
         [_overlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
         [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.underlayAlpha)];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@YES];
@@ -243,6 +244,15 @@
         [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(self.wikipedia)];
         [self setLastMapSourceVariant:[OAAppSettings sharedManager].applicationMode.get.variantKey];
     });
+}
+
+- (void) updateMapElevationAngle
+{
+    [OARootViewController.instance.mapPanel prepareMapForReuse:_mapLastViewedState.target31
+                                                          zoom:_mapLastViewedState.zoom
+                                                    newAzimuth:_mapLastViewedState.azimuth
+                                             newElevationAngle:_mapLastViewedState.elevationAngle
+                                                      animated:NO];
 }
 
 - (void) safeInit

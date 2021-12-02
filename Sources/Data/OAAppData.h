@@ -34,7 +34,6 @@
 @property (readonly) OAObservable* overlayAlphaChangeObservable;
 @property (readonly) OAObservable* underlayAlphaChangeObservable;
 @property (readonly) OAObservable* mapLayersConfigurationChangeObservable;
-@property (readonly) OAObservable* mapElevationAngleChangeObservable;
 
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 

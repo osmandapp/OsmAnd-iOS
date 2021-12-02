@@ -163,7 +163,6 @@ typedef enum
     OAAutoObserverProxy* _addonsSwitchObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
     OAAutoObserverProxy* _mapillaryChangeObserver;
-    OAAutoObserverProxy* _mapElevationAngleChangeObserver;
 
     BOOL _mapNeedsRestore;
     OAMapMode _mainMapMode;
@@ -230,10 +229,6 @@ typedef enum
     _mapillaryChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onMapillaryChanged)
                                                           andObserve:_app.data.mapillaryChangeObservable];
-    
-    _mapElevationAngleChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                        withHandler:@selector(onMapElevationAngleChanged)
-                                                         andObserve:_app.data.mapElevationAngleChangeObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
 
@@ -516,17 +511,6 @@ typedef enum
     _mainMapZoom = renderView.zoom;
     _mainMapAzimuth = renderView.azimuth;
     _mainMapEvelationAngle = renderView.elevationAngle;
-}
-
-- (void) onMapElevationAngleChanged
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        Point31 currentMapCenter = [OsmAndApp instance].data.mapLastViewedState.target31;
-        float currentZoom = self.mapViewController.mapRendererView.zoom;
-        float currentAzimuth = self.mapViewController.mapRendererView.azimuth;
-        float newProfileElevationAngle = [[OsmAndApp instance].data.mapLastViewedState elevationAngle];
-        [self prepareMapForReuse:currentMapCenter zoom:currentZoom newAzimuth:currentAzimuth newElevationAngle:newProfileElevationAngle animated:NO];
-    });
 }
 
 - (void) prepareMapForReuse:(Point31)destinationPoint zoom:(CGFloat)zoom newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated

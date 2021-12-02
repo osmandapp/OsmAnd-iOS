@@ -13,7 +13,6 @@
 
 @implementation OAMapViewState
 {
-    NSMapTable<NSString *, OACommonPreference *> *_profilePreferences;
     OACommonDouble *_mapElevationAngle;
 }
 
@@ -29,7 +28,6 @@
 - (void)commonInit
 {
     _mapElevationAngle = [OACommonDouble withKey:kMapElevationAngleKey defValue:90];
-    [_profilePreferences setObject:_mapElevationAngle forKey:kMapElevationAngleKey];
 }
 
 @synthesize target31 = _target31;

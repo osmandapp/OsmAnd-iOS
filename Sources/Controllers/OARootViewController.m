@@ -64,7 +64,6 @@ typedef enum : NSUInteger {
     BOOL _productsRequestWithProgress;
     BOOL _productsRequestReload;
     BOOL _restoringPurchases;
-    OAAutoObserverProxy* _applicaionModeObserver;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -138,21 +137,6 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPurchase:) name:OAIAPRequestPurchaseProductNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-    
-    _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                        withHandler:@selector(onApplicationModeChanged:)
-                                                         andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
-}
-
-- (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        Point31 currentMapCenter = [OsmAndApp instance].data.mapLastViewedState.target31;
-        float currentZoom = self.mapPanel.mapViewController.mapRendererView.zoom;
-        float currentAzimuth = self.mapPanel.mapViewController.mapRendererView.azimuth;
-        float newProfileElevationAngle = [[OsmAndApp instance].data.mapLastViewedState elevationAngle];
-        [self.mapPanel prepareMapForReuse:currentMapCenter zoom:currentZoom newAzimuth:currentAzimuth newElevationAngle:newProfileElevationAngle animated:NO];
-    });
 }
 
 - (BOOL) prefersStatusBarHidden

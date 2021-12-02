@@ -172,6 +172,7 @@
     _destinationShowObservable = [[OAObservable alloc] init];
     _destinationHideObservable = [[OAObservable alloc] init];
     _mapLayersConfigurationChangeObservable = [[OAObservable alloc] init];
+    _mapElevationAngleChangeObservable = [[OAObservable alloc] init];
 
     _wikipediaChangeObservable = [[OAObservable alloc] init];
 
@@ -232,6 +233,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_mapLayersConfiguration resetConfigutation];
+        [_mapElevationAngleChangeObservable notifyEvent];
         [_overlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
         [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.underlayAlpha)];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@YES];

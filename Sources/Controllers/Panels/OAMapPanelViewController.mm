@@ -163,7 +163,7 @@ typedef enum
     OAAutoObserverProxy* _addonsSwitchObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
     OAAutoObserverProxy* _mapillaryChangeObserver;
-    OAAutoObserverProxy* _applicaionModeObserver;
+    OAAutoObserverProxy* _mapElevationAngleChangeObserver;
 
     BOOL _mapNeedsRestore;
     OAMapMode _mainMapMode;
@@ -231,9 +231,9 @@ typedef enum
                                                          withHandler:@selector(onMapillaryChanged)
                                                           andObserve:_app.data.mapillaryChangeObservable];
     
-    _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                        withHandler:@selector(onApplicationModeChanged:)
-                                                         andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+    _mapElevationAngleChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onMapElevationAngleChanged)
+                                                         andObserve:_app.data.mapElevationAngleChangeObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
 
@@ -518,7 +518,7 @@ typedef enum
     _mainMapEvelationAngle = renderView.elevationAngle;
 }
 
-- (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
+- (void) onMapElevationAngleChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         Point31 currentMapCenter = [OsmAndApp instance].data.mapLastViewedState.target31;

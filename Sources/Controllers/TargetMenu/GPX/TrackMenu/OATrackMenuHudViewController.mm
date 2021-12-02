@@ -361,6 +361,11 @@
             || ![self openedFromMap] && !_wasFirstOpening;
 }
 
+- (BOOL)stopScrolling:(UIView *)view
+{
+    return [view isKindOfClass:[LineChartView class]];
+}
+
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
     return _tableData.sections[indexPath.section].cells[indexPath.row];
@@ -725,6 +730,7 @@
             if ([_mutableDoc removeTrackSegment:segment])
             {
                 [_mutableDoc saveTo:_mutableDoc.path];
+                [_mutableDoc processPoints];
                 [self updateGpxData];
 
                 if (self.isCurrentTrack)

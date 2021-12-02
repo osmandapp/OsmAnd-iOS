@@ -661,16 +661,21 @@
 - (void) addTrackPoint:(OAGpxTrkPt *)pt newSegment:(BOOL)newSegment time:(long)time
 {
         OAGpxTrk *track = [currentTrack.tracks firstObject];
-        if(track.segments.count == 0 || newSegment)
+        BOOL segmentAdded = NO;
+        if (track.segments.count == 0 || newSegment)
         {
             OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
             segment.points = [NSMutableArray array];
             [currentTrack addTrackSegment:segment track:track];
+            segmentAdded = YES;
         }
-        if (pt != nil) {
+        if (pt != nil)
+        {
             OAGpxTrkSeg *lt = [track.segments lastObject];
             [currentTrack addTrackPoint:pt segment:lt];
         }
+        if (segmentAdded)
+            [currentTrack processPoints];
         currentTrack.modifiedTime = time;
     }
     
@@ -876,7 +881,8 @@
         [currentTrack.tracks removeAllObjects];
         [self collectRecordedData:YES];
         [currentTrack applyBounds];
-        
+
+        [currentTrack processPoints];
         [self prepareCurrentTrackForRecording];
         
         OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:(long)[[NSDate date] timeIntervalSince1970]];

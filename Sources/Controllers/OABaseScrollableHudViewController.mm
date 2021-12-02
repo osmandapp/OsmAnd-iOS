@@ -9,13 +9,9 @@
 #import "OABaseScrollableHudViewController.h"
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
-#import "OAMapViewController.h"
-#import "OAMapRendererView.h"
 #import "OASizes.h"
-#import "OAColors.h"
 
-@interface OABaseScrollableHudViewController () <UIScrollViewDelegate>
+@interface OABaseScrollableHudViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
@@ -31,8 +27,9 @@
     
     BOOL _isDragging;
     BOOL _isHiding;
-    BOOL _topOverScroll;
     CGFloat _initialTouchPoint;
+    CGFloat _tableViewContentOffsetY;
+    BOOL _isDraggingOnTable;
 }
 
 - (instancetype) init
@@ -67,6 +64,7 @@
         _panGesture.maximumNumberOfTouches = 1;
         _panGesture.minimumNumberOfTouches = 1;
         [_scrollableView addGestureRecognizer:_panGesture];
+        _panGesture.delegate = self;
     }
     _currentState = EOADraggableMenuStateInitial;
     _menuHudMode = EOAScrollableMenuHudBaseMode;
@@ -443,19 +441,25 @@
         case UIGestureRecognizerStateChanged:
         {
             CGFloat newY = touchPoint.y - _initialTouchPoint;
-            if (_scrollableView.frame.origin.y > OAUtilities.getStatusBarHeight
-                || (_initialTouchPoint < _tableView.frame.origin.y && _tableView.contentOffset.y > 0))
-            {
-                [_tableView setContentOffset:CGPointZero];
-            }
+            _tableViewContentOffsetY = _tableView.contentOffset.y;
+
+            if (_isDraggingOnTable)
+                _tableView.contentOffset = CGPointMake(0., 0.);
             
-            if (newY <= OAUtilities.getStatusBarHeight || _tableView.contentOffset.y > 0)
+            if (_scrollableView.frame.origin.y > OAUtilities.getStatusBarHeight
+                || (_initialTouchPoint < _tableView.frame.origin.y && _tableViewContentOffsetY > 0))
+                _tableViewContentOffsetY = 0;
+            
+            if ((self.supportsFullScreen && _currentState != EOADraggableMenuStateFullScreen)
+                    && (newY <= OAUtilities.getStatusBarHeight || _tableViewContentOffsetY > 0))
             {
                 newY = 0;
-                if (_tableView.contentOffset.y > 0)
+                if (_tableViewContentOffsetY > 0)
                     _initialTouchPoint = [recognizer locationInView:_scrollableView].y;
             }
-            else if (DeviceScreenHeight - newY < _toolBarView.frame.size.height)
+            else if ((DeviceScreenHeight - newY < _toolBarView.frame.size.height)
+                    || newY <= 0
+                    || (_currentState == EOADraggableMenuStateFullScreen && newY < OAUtilities.getStatusBarHeight))
             {
                 return;
             }
@@ -465,7 +469,9 @@
             frame.size.height = DeviceScreenHeight - newY;
             _scrollableView.frame = frame;
             
-            _statusBarBackgroundView.frame = newY == 0 && [self showStatusBarWhenFullScreen] ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
+            _statusBarBackgroundView.frame = newY == 0 && [self showStatusBarWhenFullScreen]
+                    ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight)
+                    : CGRectZero;
             
             CGRect buttonsFrame = _toolBarView.frame;
             buttonsFrame.origin.y = frame.size.height - buttonsFrame.size.height;
@@ -507,21 +513,41 @@
             }
             else if ((newY < fullScreenAnchor || (!slidingDown && _currentState == EOADraggableMenuStateExpanded) || fastUpSlide) && self.supportsFullScreen)
             {
-                _currentState = EOADraggableMenuStateFullScreen;
+                if (!slidingDown && _currentState == EOADraggableMenuStateExpanded)
+                {
+                    if (newY > DeviceScreenHeight - self.initialMenuHeight)
+                        _currentState = EOADraggableMenuStateInitial;
+                    else if (newY > DeviceScreenHeight - self.expandedMenuHeight)
+                        _currentState = EOADraggableMenuStateExpanded;
+                    else
+                        _currentState = EOADraggableMenuStateFullScreen;
+                }
+                else
+                    _currentState = EOADraggableMenuStateFullScreen;
             }
             else if ((newY < expandedAnchor || (newY > expandedAnchor && !slidingDown)) && !fastDownSlide)
             {
                 shouldRefresh = YES;
-                _currentState = EOADraggableMenuStateExpanded;
+                if (!slidingDown && newY > DeviceScreenHeight - self.initialMenuHeight)
+                    _currentState = EOADraggableMenuStateInitial;
+                else if (!slidingDown && newY < DeviceScreenHeight - self.expandedMenuHeight)
+                    _currentState = EOADraggableMenuStateFullScreen;
+                else
+                    _currentState = EOADraggableMenuStateExpanded;
             }
             else
             {
                 shouldRefresh = YES;
-                _currentState = EOADraggableMenuStateInitial;
+                if (slidingDown && _currentState == EOADraggableMenuStateExpanded && newY < DeviceScreenHeight - self.expandedMenuHeight)
+                    _currentState = EOADraggableMenuStateExpanded;
+                else
+                    _currentState = EOADraggableMenuStateInitial;
             }
             [UIView animateWithDuration:0.2 animations:^{
                 [self layoutSubviews];
-            } completion:nil];
+            } completion:^(BOOL) {
+                _isDraggingOnTable = NO;
+            }];
         }
         default:
         {
@@ -577,11 +603,39 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    return ![self isLeftSidePresentation];
+    BOOL stopScrolling = [self stopScrolling:touch.view];
+    return !stopScrolling && ![self isLeftSidePresentation];
+}
+
+- (BOOL)stopScrolling:(UIView *)view
+{
+    return NO; //override
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
+    UIView *otherView = otherGestureRecognizer.view;
+    if ([self stopScrolling:otherView])
+        return NO;
+
+    if (otherView == _tableView)
+    {
+        if ([otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]])
+        {
+            UIPanGestureRecognizer *otherPanGestureRecognizer = (UIPanGestureRecognizer *) otherGestureRecognizer;
+            CGFloat velocity = [otherPanGestureRecognizer velocityInView:self.view].y;
+            BOOL slidingDown = velocity > 0.;
+            CGFloat tableContentOffsetY = _tableView.contentOffset.y;
+            if (slidingDown && tableContentOffsetY <= 0.)
+                return _isDraggingOnTable = YES;
+            else
+                return NO;
+        }
+        else
+        {
+            return NO;
+        }
+    }
     return YES;
 }
 

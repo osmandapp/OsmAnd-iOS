@@ -588,3 +588,8 @@
 "app_mode_train" = "열차";
 "rendering_attr_highway_class_state_road_name" = "주 도로";
 "app_mode_helicopter" = "헬리콥터";
+"device_settings" = "장치 설정";
+"searching_gps" = "GPS 검색";
+"you_searching" = "검색 중";
+"shared_string_finish" = "끝내기";
+"duplicate_track" = "중복 트랙";

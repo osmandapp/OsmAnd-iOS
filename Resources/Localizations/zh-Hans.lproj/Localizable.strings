@@ -1055,7 +1055,7 @@
 "rendering_attr_currentTrackWidth_name" = "GPX宽度";
 "rendering_attr_hideBuildings_name" = "建筑";
 "rendering_attr_trolleybusRoutes_name" = "无轨电车线路";
-"rendering_attr_hikingRoutesOSMC_name" = "徒步旅行符号叠加层";
+"rendering_attr_hikingRoutesOSMC_name" = "徒步旅行路线";
 "routing_attr_prefer_unpaved_description" = "偏好未铺设道路。";
 "rendering_attr_highway_class_street_name" = "街道";
 "routing_attr_height_obstacles_name" = "使用标高数据";
@@ -1085,7 +1085,7 @@
 "routing_attr_avoid_ferries_name" = "无轮渡";
 "rendering_attr_smoothness_horrible_name" = "极端";
 "routing_attr_prefer_motorway_name" = "更喜欢机动车路";
-"rendering_value_walkingRoutesOSMC_name" = "按 OSMC 徒步旅行标志着色";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "routing_attr_avoid_ferries_description" = "避开轮渡";
 "rendering_attr_alpineHiking_name" = "高山远足量表（SAC）";
 "rendering_attr_OSMMapperAssistant_name" = "OSM制图助手";
@@ -1124,7 +1124,7 @@
 "rendering_attr_hideNonVehicleHighways_name" = "非车辆公路";
 "rendering_attr_smoothness_good_name" = "优良";
 "routing_attr_height_description" = "指定路线上允许的车辆高度。";
-"rendering_value_walkingRoutesScopeOSMC_name" = "按网络从属着色";
+"rendering_value_walkingRoutesScopeOSMC_name" = "网络从属";
 "routing_attr_avoid_tram_description" = "避免电车";
 "rendering_attr_currentTrackWidth_description" = "GPX宽度";
 "rendering_value_blue_name" = "蓝色";
@@ -1143,7 +1143,7 @@
 "rendering_value_defaultTranslucentCyan_name" = "默认 (半透明青色)";
 "rendering_value_default_name" = "默认";
 "routing_attr_avoid_tram_name" = "不乘坐电车";
-"rendering_attr_showCycleRoutes_name" = "显示";
+"rendering_attr_showCycleRoutes_name" = "骑车路线";
 "rendering_attr_contourDensity_description" = "等高线密度";
 "rendering_attr_hideProposed_name" = "隐藏已提议对象";
 "routing_attr_avoid_borders_name" = "无边界穿越";
@@ -1165,7 +1165,7 @@
 "rendering_attr_buildings15zoom_name" = "15级缩放建筑物";
 "rendering_value_thin_name" = "细";
 "routing_attr_avoid_stairs_name" = "无阶梯";
-"rendering_attr_showMtbRoutes_name" = "显示山地自行车道";
+"rendering_attr_showMtbRoutes_name" = "山地自行车路线";
 "rendering_attr_currentTrackColor_name" = "GPX颜色";
 "rendering_attr_hideWoodScrubs_name" = "木材和磨砂";
 "rendering_attr_highway_class_service_name" = "服务站";
@@ -1708,3 +1708,5 @@
 "lang_hsb" = "索布语（上游）";
 "lang_vo" = "沃拉普克语";
 "lang_sv" = "瑞典语";
+"grey_color_undefined" = "没有数据的部分是灰色的。";
+"shared_string_feet" = "英尺";

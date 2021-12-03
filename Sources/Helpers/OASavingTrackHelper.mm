@@ -569,10 +569,9 @@
 - (void) updateLocation
 {
     dispatch_sync(syncQueue, ^{
-        CLLocation* location = _app.locationServices.lastKnownLocation;
+        CLLocation* location = [_app.locationServices.lastKnownLocation copy];
         if (location)
         {
-            location = [location copy];
             long locationTime = (long)[location.timestamp timeIntervalSince1970];
             
             BOOL record = NO;

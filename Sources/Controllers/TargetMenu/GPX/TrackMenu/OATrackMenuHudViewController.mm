@@ -361,9 +361,9 @@
             || ![self openedFromMap] && !_wasFirstOpening;
 }
 
-- (BOOL)stopScrolling:(UIView *)view
+- (BOOL)stopChangingHeight:(UIView *)view
 {
-    return [view isKindOfClass:[LineChartView class]];
+    return [view isKindOfClass:[LineChartView class]] || [view isKindOfClass:[UICollectionView class]];
 }
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath

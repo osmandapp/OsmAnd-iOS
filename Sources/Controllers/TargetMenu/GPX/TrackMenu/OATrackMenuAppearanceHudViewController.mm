@@ -623,9 +623,11 @@
     return YES;
 }
 
-- (BOOL)stopScrolling:(UIView *)view
+- (BOOL)stopChangingHeight:(UIView *)view
 {
-    return [view isKindOfClass:[UISlider class]] || [view isKindOfClass:[UISegmentedControl class]];
+    return [view isKindOfClass:[UISlider class]]
+            || [view isKindOfClass:[UISegmentedControl class]]
+            || [view isKindOfClass:[UICollectionView class]];
 }
 
 - (OAGPXTableCellData *)generateDataForColorElevationGradientCell

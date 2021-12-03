@@ -603,11 +603,10 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    BOOL stopScrolling = [self stopScrolling:touch.view];
-    return !stopScrolling && ![self isLeftSidePresentation];
+    return ![self stopChangingHeight:touch.view] && ![self isLeftSidePresentation];
 }
 
-- (BOOL)stopScrolling:(UIView *)view
+- (BOOL)stopChangingHeight:(UIView *)view
 {
     return NO; //override
 }
@@ -615,7 +614,7 @@
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     UIView *otherView = otherGestureRecognizer.view;
-    if ([self stopScrolling:otherView])
+    if ([self stopChangingHeight:otherView])
         return NO;
 
     if (otherView == _tableView)

@@ -45,8 +45,13 @@ typedef NS_ENUM(NSInteger, EOAXmlFileType) {
 - (void) doImport:(NSString *)path destPath:(NSString *)destPath
 {
     BOOL imported = [[OAFileImportHelper sharedInstance] importResourceFileFromPath:path toPath:destPath];
-    if (imported && _fileType == EOAXmlFileTypeRouting)
-        [OsmAndApp.instance loadRoutingFiles];
+    if (imported)
+    {
+        if (_fileType == EOAXmlFileTypeRouting)
+            [OsmAndApp.instance loadRoutingFiles];
+        else if (_fileType == EOAXmlFileTypeRendering)
+            OsmAndApp.instance.resourcesManager->rescanUnmanagedStoragePaths();
+    }
     NSString *message = imported ? [NSString stringWithFormat:OALocalizedString(@"res_import_success"), destPath.lastPathComponent] : OALocalizedString(@"obf_import_failed");
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];

@@ -12,7 +12,10 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *labelWithIconConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *labelNoIconConstraint;
+
+- (void)showImage:(BOOL)show;
 
 @end

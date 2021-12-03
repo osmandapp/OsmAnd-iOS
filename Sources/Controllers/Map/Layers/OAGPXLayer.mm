@@ -399,10 +399,7 @@
     {
         auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
         OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
-        NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
-        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
-        OAGpxTrkSeg *generalSeg = gpx.joinSegments ? doc.getGeneralSegment : nil;
-        NSArray<OAGpxTrkPt *> *points = [self findPointsNearSegments:gpx.joinSegments ? (generalSeg ? @[generalSeg] : @[]) : [doc getNonEmptyTrkSegments:NO] radius:r point:point];
+        NSArray<OAGpxTrkPt *> *points = [self findPointsNearSegments:[doc getPointsToDisplay] radius:r point:point];
         if (points != nil)
         {
             CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
@@ -411,6 +408,8 @@
                                                                                                 longitude:points.firstObject.position.longitude]
                                                           toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
                                                                                                 longitude:points.lastObject.position.longitude]];
+            NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
+            OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
             OATargetPoint *targetPoint = [self getTargetPoint:gpx];
             targetPoint.location = selectedGpxPoint.coordinate;
             if (targetPoint && ![res containsObject:targetPoint])

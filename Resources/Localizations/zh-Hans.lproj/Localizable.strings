@@ -1708,3 +1708,5 @@
 "lang_hsb" = "索布语（上游）";
 "lang_vo" = "沃拉普克语";
 "lang_sv" = "瑞典语";
+"grey_color_undefined" = "没有数据的部分是灰色的。";
+"shared_string_feet" = "英尺";

@@ -10,6 +10,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OAUtilities.h"
 #import "QuadRect.h"
+#import "OAGPXDatabase.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -20,6 +21,9 @@
     double top;
     double right;
     double bottom;
+
+    NSArray<OAGpxTrkSeg *> *_processedPointsToDisplay;
+    BOOL _routePoints;
 }
 
 - (id)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
@@ -643,6 +647,7 @@
 
     [self applyBounds];
     [self addGeneralTrack];
+    [self processPoints];
 
     return YES;
 }
@@ -1216,6 +1221,81 @@
         }
     }
     return segments;
+}
+
+- (NSArray<OAGpxTrkSeg *> *) getPointsToDisplay
+{
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.path]];
+//    if (filteredSelectedGpxFile != null) {
+//        return filteredSelectedGpxFile.getPointsToDisplay();
+//    } else
+    if (gpx && gpx.joinSegments)
+        return [self getGeneralTrack] ? self.generalTrack.segments : [NSArray array];
+    else
+        return _processedPointsToDisplay;
+}
+
+- (NSArray<OAGpxTrkSeg *> *) proccessPoints
+{
+    NSMutableArray<OAGpxTrkSeg *> *tpoints = [NSMutableArray array];
+    for (OAGpxTrk *t in _tracks)
+    {
+//        int trackColor = t.getColor(getColor(0));
+        for (OAGpxTrkSeg *ts in t.segments)
+        {
+            if (!ts.generalSegment && ts.points.count > 0)
+            {
+                OAGpxTrkSeg *sgmt = [OAGpxTrkSeg new];
+                [tpoints addObject:sgmt];
+                sgmt.points = ts.points;
+//                sgmt.setColor(trackColor);
+            }
+        }
+    }
+    return tpoints;
+}
+
+- (NSArray<OAGpxTrkSeg *> *) processRoutePoints
+{
+    NSMutableArray<OAGpxTrkSeg *> *tpoints = [NSMutableArray  array];
+    if (_routes.count > 0)
+    {
+        for (OAGpxRte *r in _routes)
+        {
+//            int routeColor = r.getColor(getColor(0));
+            if (r.points.count > 0)
+            {
+                OAGpxTrkSeg *sgmt = [OAGpxTrkSeg new];
+                [tpoints addObject:sgmt];
+                NSMutableArray *rtes = [NSMutableArray array];
+                for (OAGpxRtePt *point in r.points)
+                {
+                    [rtes addObject:[[OAGpxTrkPt alloc] initWithRtePt:point]];
+                }
+                sgmt.points = rtes;
+//                sgmt.setColor(routeColor);
+            }
+        }
+    }
+    return tpoints;
+}
+
+- (void) processPoints
+{
+    _processedPointsToDisplay = [self proccessPoints];
+    if (!_processedPointsToDisplay || _processedPointsToDisplay.count == 0)
+    {
+        _processedPointsToDisplay = [self processRoutePoints];
+        _routePoints = _processedPointsToDisplay && _processedPointsToDisplay.count > 0;
+    }
+//    if (filteredSelectedGpxFile != null) {
+//        filteredSelectedGpxFile.processPoints(app);
+//    }
+}
+
+- (BOOL) isRoutesPoints
+{
+    return _routePoints;
 }
 
 - (BOOL) hasRoute

@@ -21,7 +21,7 @@
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
-@property (nonatomic) id<OAFoldersCellDelegate> delegate;
+@property (nonatomic) id<OAFoldersCellDelegate> foldersDelegate;
 @property (weak, nonatomic) OACollectionViewCellState *state;
 @property (nonatomic) NSIndexPath *cellIndex;
 

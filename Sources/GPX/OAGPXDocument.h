@@ -53,6 +53,9 @@
 
 - (BOOL) isCloudmadeRouteFile;
 
+- (void) processPoints;
+- (NSArray<OAGpxTrkSeg *> *) getPointsToDisplay;
+
 - (BOOL) isEmpty;
 - (void) addGeneralTrack;
 - (OALocationMark *) findPointToShow;
@@ -60,6 +63,7 @@
 - (BOOL) hasWptPt;
 - (BOOL) hasTrkPt;
 - (BOOL) hasRoute;
+- (BOOL) isRoutesPoints;
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp;
 

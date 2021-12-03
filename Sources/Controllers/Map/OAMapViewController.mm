@@ -446,7 +446,6 @@
                                            _app.initialURLMapState.target31.y);
         _mapView.zoom = _app.initialURLMapState.zoom;
         _mapView.azimuth = _app.initialURLMapState.azimuth;
-        _mapView.elevationAngle = kMapModePositionTrackingDefaultElevationAngle;
     }
     else
     {
@@ -454,8 +453,8 @@
                                            _app.data.mapLastViewedState.target31.y);
         _mapView.zoom = _app.data.mapLastViewedState.zoom;
         _mapView.azimuth = _app.data.mapLastViewedState.azimuth;
-        _mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
     }
+    _mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
     
     // Mark that map source is no longer valid
     _mapSourceInvalidated = YES;

@@ -45,9 +45,8 @@
 {
     NSString *colorKey = [NSString stringWithFormat:@"%li", color];
     if (self.translucentDataDict && [self.translucentDataDict.allKeys containsObject:colorKey])
-    {
         return [self.translucentDataDict[colorKey] floatValue];
-    }
+
     return 1.;
 }
 

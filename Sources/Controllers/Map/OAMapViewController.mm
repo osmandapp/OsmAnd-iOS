@@ -1509,11 +1509,7 @@
 - (void) onAppModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [OARootViewController.instance.mapPanel prepareMapForReuse:_app.data.mapLastViewedState.target31
-                                                              zoom:_app.data.mapLastViewedState.zoom
-                                                        newAzimuth:_app.data.mapLastViewedState.azimuth
-                                                 newElevationAngle:_app.data.mapLastViewedState.elevationAngle
-                                                          animated:NO];
+        self.mapRendererView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
     });
 }
 

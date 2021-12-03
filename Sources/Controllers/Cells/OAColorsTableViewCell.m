@@ -9,7 +9,6 @@
 #import "OAColorsTableViewCell.h"
 #import "OAColorsCollectionViewCell.h"
 #import "OAColors.h"
-#import "OAUtilities.h"
 
 #define kWhiteColor 0x44FFFFFF
 
@@ -42,32 +41,59 @@
     return _dataArray.count;
 }
 
+- (CGFloat)getAlphaForColor:(NSInteger)color
+{
+    NSString *colorKey = [NSString stringWithFormat:@"%li", color];
+    if (self.translucentDataDict && [self.translucentDataDict.allKeys containsObject:colorKey])
+    {
+        return [self.translucentDataDict[colorKey] floatValue];
+    }
+    return 1.;
+}
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAColorsCollectionViewCell* cell = nil;
-    cell = (OAColorsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
-    
-    int color = [_dataArray[indexPath.row] intValue];
-    cell.colorView.backgroundColor = UIColorFromRGB(color);
-    if (color == kWhiteColor)
+    OAColorsCollectionViewCell *cell =
+            [collectionView dequeueReusableCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier]
+                                                      forIndexPath:indexPath];
+    if (cell == nil)
     {
-        cell.colorView.layer.borderWidth = 1;
-        cell.colorView.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsCollectionViewCell getCellIdentifier]
+                                                     owner:self
+                                                   options:nil];
+        cell = nib[0];
     }
-    else
+    if (cell)
     {
-        cell.colorView.layer.borderWidth = 0;
-    }
-    
-    if (indexPath.row == _currentColor)
-    {
-        cell.backView.layer.borderWidth = 2;
-        cell.backView.layer.borderColor = UIColorFromARGB(color_primary_purple_50).CGColor;
-    }
-    else
-    {
-        cell.backView.layer.borderWidth = 0;
-        cell.backView.layer.borderColor = [UIColor clearColor].CGColor;
+        NSInteger color = [_dataArray[indexPath.row] integerValue];
+        if (color == kWhiteColor)
+        {
+            cell.colorView.layer.borderWidth = 1;
+            cell.colorView.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
+        }
+        else
+        {
+            cell.colorView.layer.borderWidth = 0;
+        }
+
+        UIColor *backgroundColor = UIColorFromRGB(color);
+        cell.colorView.backgroundColor = backgroundColor;
+
+        UIImage *image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
+        cell.chessboardView.image = image;
+        cell.chessboardView.tintColor = backgroundColor;
+        [cell setChessboardAlpha:[self getAlphaForColor:color]];
+
+        if (indexPath.row == _currentColor)
+        {
+            cell.backView.layer.borderWidth = 2;
+            cell.backView.layer.borderColor = UIColorFromARGB(color_primary_purple_50).CGColor;
+        }
+        else
+        {
+            cell.backView.layer.borderWidth = 0;
+            cell.backView.layer.borderColor = [UIColor clearColor].CGColor;
+        }
     }
     
     return cell;

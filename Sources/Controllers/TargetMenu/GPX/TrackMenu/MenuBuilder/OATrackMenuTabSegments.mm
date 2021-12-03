@@ -24,7 +24,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OARouteStatisticsHelper.h"
 
-@interface OATrackMenuTabSegments () <ChartViewDelegate>
+@interface OATrackMenuTabSegments () <UIGestureRecognizerDelegate, ChartViewDelegate>
 
 @property (nonatomic) OAGPXTableData *tableData;
 
@@ -95,7 +95,10 @@
         for (UIGestureRecognizer *recognizer in cell.lineChartView.gestureRecognizers)
         {
             if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
+            {
                 [recognizer addTarget:self action:@selector(onBarChartScrolled:)];
+                recognizer.delegate = self;
+            }
 
             [recognizer addTarget:self action:@selector(onChartGesture:)];
         }
@@ -391,6 +394,16 @@
 - (double)getRoundedDouble:(double)toRound
 {
     return floorf(toRound * 100 + 0.5) / 100;
+}
+
+#pragma - mark UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    if ([otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] && [otherGestureRecognizer.view isKindOfClass:[UITableView class]])
+        return NO;
+
+    return YES;
 }
 
 #pragma - mark ChartViewDelegate

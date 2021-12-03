@@ -642,8 +642,11 @@
     }
 
     [[OAWaypointHelper sharedInstance] locationChanged:location];
-    _lastLocation = updatedLocation;
-    [_updateObserver notifyEvent];
+    @synchronized(_lock)
+    {
+        _lastLocation = updatedLocation;
+        [_updateObserver notifyEvent];
+    }
 }
 
 #pragma mark - CLLocationManagerDelegate
@@ -707,11 +710,13 @@
         [_statusObservable notifyEvent];
         _waitingForAuthorization = NO;
     }
-
-    _lastHeading = newHeading.trueHeading;
-    _lastMagneticHeading = newHeading.magneticHeading;
-    if (![_locationSimulation isRouteAnimating])
-        [_updateObserver notifyEvent];
+    @synchronized(_lock)
+    {
+        _lastHeading = newHeading.trueHeading;
+        _lastMagneticHeading = newHeading.magneticHeading;
+        if (![_locationSimulation isRouteAnimating])
+            [_updateObserver notifyEvent];
+    }
 }
 
 #pragma mark -

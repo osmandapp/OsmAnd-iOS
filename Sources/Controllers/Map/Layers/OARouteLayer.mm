@@ -17,6 +17,7 @@
 #import "OARouteStatisticsHelper.h"
 #import "OATransportRoutingHelper.h"
 #import "OATransportStopType.h"
+#import "OARouteDirectionInfo.h"
 #import "OAColors.h"
 
 #include <OsmAndCore.h>
@@ -30,6 +31,12 @@
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SkiaUtilities.h>
 #include <SkCGUtils.h>
+
+#include <SkBitmapDevice.h>
+#include <SkCanvas.h>
+#include <SkBitmap.h>
+#include <SkData.h>
+#include <SkPaint.h>
 
 #include <transportRouteResultSegment.h>
 
@@ -50,6 +57,8 @@
     std::shared_ptr<SkBitmap> _xAxisLocationIcon;
     std::shared_ptr<SkBitmap> _transportTransferIcon;
     std::shared_ptr<SkBitmap> _transportShieldIcon;
+    
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _actionArrowsCollection;
 
     BOOL _initDone;
 }
@@ -70,6 +79,7 @@
     _currentGraphPosition = std::make_shared<OsmAnd::MapMarkersCollection>();
     _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
+    _actionArrowsCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
     
     _xAxisLocationIcon = [OANativeUtilities skBitmapFromPngResource:@"map_mapillary_location"];
     _transportTransferIcon = [OANativeUtilities skBitmapFromPngResource:@"map_public_transport_transfer"];
@@ -100,10 +110,12 @@
     [self.mapView removeKeyedSymbolsProvider:_collection];
     [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
     [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
+    [self.mapView removeKeyedSymbolsProvider:_actionArrowsCollection];
     
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
     _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
+    _actionArrowsCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
 
     _locationMarker->setIsHidden(true);
 }
@@ -236,7 +248,6 @@
             OsmAnd::VectorLineBuilder builder;
             builder.setBaseOrder(baseOrder--)
             .setIsHidden(points.size() == 0)
-//            .setApproximationEnabled(false)
             .setLineId(1)
             .setLineWidth(30.)
             .setPoints(points);
@@ -260,7 +271,258 @@
         {
             lines[0]->setPoints(points);
         }
+        [self buildActionArrows];
     }];
+}
+
+- (OsmAnd::AreaI) calculateBounds:(NSArray<CLLocation *> *)pts
+{
+    double left = DBL_MAX, top = DBL_MIN, right = DBL_MIN, bottom = DBL_MAX;
+    for (NSInteger i = 0; i < pts.count; i++)
+    {
+        CLLocation *pt = pts[i];
+        right = MAX(right, pt.coordinate.longitude);
+        left = MIN(left, pt.coordinate.longitude);
+        top = MAX(top, pt.coordinate.latitude);
+        bottom = MIN(bottom, pt.coordinate.latitude);
+    }
+    OsmAnd::PointI topLeft = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(top, left));
+    OsmAnd::PointI bottomRight = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottom, right));
+    return OsmAnd::AreaI(topLeft, bottomRight);
+}
+
+- (void) buildActionArrows
+{
+    _actionArrowsCollection->removeAllMarkers();
+    const auto zoom = self.mapView.zoomLevel;
+    
+    std::shared_ptr<SkPaint> linePaint(new SkPaint());
+    linePaint->setColor(OsmAnd::ColorARGB(color_mapillary).toSkColor());
+    linePaint->setStrokeWidth(10 * UIScreen.mainScreen.scale);
+    linePaint->setAntiAlias(true);
+    linePaint->setStrokeJoin(SkPaint::kRound_Join);
+    linePaint->setStrokeCap(SkPaint::kRound_Cap);
+    if (zoom > OsmAnd::ZoomLevel4)
+    {
+        NSArray<NSArray<CLLocation *> *> *actionPoints = [self calculateActionPoints];
+        if (actionPoints.count > 0)
+        {
+            CGFloat screenScale = UIScreen.mainScreen.scale;
+            double tileSize = 256 * screenScale;
+            const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - zoom));
+            const auto px31Size = tileSize31 / tileSize;
+            for (NSArray<CLLocation *> *arrow in actionPoints)
+            {
+                if (arrow.count == 0)
+                    continue;
+                const auto area = [self calculateBounds:arrow];
+                double w = area.width() / px31Size * screenScale, h = area.height() / px31Size * screenScale;
+                std::shared_ptr<SkBitmap> bitmap(new SkBitmap());
+                // Create a bitmap that will be hold entire symbol (if target is empty)
+                if (bitmap->isNull())
+                {
+                    if (!bitmap->tryAllocPixels(SkImageInfo::MakeN32Premul(w, h)))
+                    {
+                        NSLog(@"Failed to allocate image for route action arrow");
+                        continue;
+                    }
+                    
+                    bitmap->eraseColor(SK_ColorTRANSPARENT);
+                }
+                SkBitmapDevice target(*bitmap.get());
+                SkCanvas canvas(&target);
+                
+                SkScalar x1, y1, x2, y2 = 0;
+                
+                double lastTileX, lastTileY;
+                const auto firstPnt = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(arrow.firstObject.coordinate.latitude, arrow.firstObject.coordinate.longitude));
+                lastTileX = firstPnt.x;
+                lastTileY = firstPnt.y;
+                x1 = ((lastTileX - area.left()) / area.width()) * w;
+                y1 = ((lastTileY - area.top()) / area.height()) * h;
+                
+                bool recalculateLastXY = false;
+                for (int i = 1; i < arrow.count; i++)
+                {
+                    const auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(arrow[i].coordinate.latitude, arrow[i].coordinate.longitude));
+                    
+                    double tileX = point.x;
+                    double tileY = point.y;
+                    
+                    x2 = ((tileX - area.left()) / area.width()) * w;
+                    y2 = ((tileY - area.top()) / area.height()) * h;
+                    
+                    if (recalculateLastXY)
+                    {
+                        x1 = ((lastTileX - area.left()) / area.width()) * w;
+                        y1 = ((lastTileY - area.top()) / area.height()) * h;
+                        recalculateLastXY = false;
+                    }
+                    canvas.drawLine(x1, y1, x2, y2, *linePaint);
+                    
+                    x1 = x2;
+                    y1 = y2;
+                    lastTileX = tileX;
+                    lastTileY = tileY;
+                }
+                canvas.flush();
+                OsmAnd::MapMarkerBuilder arrowBuilder;
+                arrowBuilder.setIsAccuracyCircleSupported(false);
+                arrowBuilder.setBaseOrder(self.baseOrder - 15);
+                arrowBuilder.setIsHidden(false);
+                arrowBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
+                arrowBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
+                arrowBuilder.setPosition(area.center());
+                arrowBuilder.setPinIcon(bitmap);
+                arrowBuilder.buildAndAddToCollection(_actionArrowsCollection);
+            }
+        }
+    }
+    [self.mapView addKeyedSymbolsProvider:_actionArrowsCollection];
+}
+
+- (NSArray<NSArray<CLLocation *> *> *) calculateActionPoints
+{
+    NSArray<OARouteDirectionInfo *> *directions = _routingHelper.getRouteDirections;
+    NSInteger dirIdx = 0;
+    NSArray<CLLocation *> *routeNodes = _routingHelper.getRoute.getRouteLocations;
+    CLLocation *lastProjection = _routingHelper.getLastProjection;
+    int cd = _routingHelper.getRoute.currentRoute;
+    OsmAnd::ZoomLevel zoom = self.mapView.zoomLevel;
+    
+    OARouteDirectionInfo *nf = nil;
+    double DISTANCE_ACTION = 35;
+    if(zoom >= OsmAnd::ZoomLevel17)
+        DISTANCE_ACTION = 15;
+    else if (zoom == OsmAnd::ZoomLevel15)
+        DISTANCE_ACTION = 70;
+    else if (zoom < OsmAnd::ZoomLevel15)
+        DISTANCE_ACTION = 110;
+    
+    double actionDist = 0;
+    CLLocation *previousAction = nil;
+    NSMutableArray<NSArray<CLLocation *> *> *res = [NSMutableArray array];
+    NSMutableArray<CLLocation *> *actionPoints = [NSMutableArray array];
+    int prevFinishPoint = -1;
+    for (int routePoint = 0; routePoint < routeNodes.count; routePoint++)
+    {
+        CLLocation *loc = routeNodes[routePoint];
+        if(nf != nil)
+        {
+            int pnt = nf.routeEndPointOffset == 0 ? nf.routePointOffset : nf.routeEndPointOffset;
+            if (pnt < routePoint + cd)
+                nf = nil;
+        }
+        while (nf == nil && dirIdx < directions.count)
+        {
+            nf = directions[dirIdx++];
+            int pnt = nf.routeEndPointOffset == 0 ? nf.routePointOffset : nf.routeEndPointOffset;
+            if (pnt < routePoint + cd)
+                nf = nil;
+        }
+        BOOL action = nf != nil && (nf.routePointOffset == routePoint + cd ||
+                                        (nf.routePointOffset <= routePoint + cd && routePoint + cd  <= nf.routeEndPointOffset));
+        if(!action && previousAction == nil)
+        {
+            // no need to check
+            continue;
+        }
+//        if(action && previousAction == nil)
+//        {
+//            continue;
+//        }
+        if (!action)
+        {
+            // previousAction != null
+            double dist = [loc distanceFromLocation:previousAction];
+            actionDist += dist;
+            if (actionDist >= DISTANCE_ACTION)
+            {
+                [actionPoints addObject:[self calculateProjection:1 - (actionDist - DISTANCE_ACTION) / dist lp:previousAction l:loc]];
+                [res addObject:actionPoints];
+                actionPoints = [NSMutableArray array];
+                prevFinishPoint = routePoint;
+                previousAction = nil;
+                actionDist = 0;
+            }
+            else
+            {
+                [actionPoints addObject:loc];
+                previousAction = loc;
+            }
+        }
+        else
+        {
+            // action point
+            if (previousAction == nil)
+            {
+                [self addPreviousToActionPoints:actionPoints
+                                 lastProjection:lastProjection
+                                     routeNodes:routeNodes
+                                DISTANCE_ACTION:DISTANCE_ACTION
+                                prevFinishPoint:prevFinishPoint
+                                     routePoint:routePoint
+                                            loc:loc];
+            }
+            [actionPoints addObject:loc];
+            previousAction = loc;
+            prevFinishPoint = -1;
+            actionDist = 0;
+        }
+    }
+    if(previousAction != nil)
+    {
+        [res addObject:actionPoints];
+    }
+    return res;
+}
+
+- (void) addPreviousToActionPoints:(NSMutableArray<CLLocation *> *)actionPoints
+                    lastProjection:(CLLocation *)lastProjection
+                        routeNodes:(NSArray<CLLocation *> *)routeNodes
+                   DISTANCE_ACTION:(double)DISTANCE_ACTION
+                   prevFinishPoint:(int)prevFinishPoint
+                        routePoint:(int)routePoint
+                               loc:(CLLocation *)loc
+{
+    // put some points in front
+    NSInteger ind = actionPoints.count;
+    CLLocation *lprevious = loc;
+    double dist = 0;
+    for (NSInteger k = routePoint - 1; k >= -1; k--)
+    {
+        CLLocation *l = k == -1 ? lastProjection : routeNodes[k];
+        double locDist = [lprevious distanceFromLocation:l];
+        dist += locDist;
+        if (dist >= DISTANCE_ACTION)
+        {
+            if (locDist > 1)
+            {
+                [actionPoints insertObject:[self calculateProjection:(1 - (dist - DISTANCE_ACTION) / locDist) lp:lprevious l:l] atIndex:ind];
+            }
+            break;
+        }
+        else
+        {
+            [actionPoints insertObject:l atIndex:ind];
+            lprevious = l;
+        }
+        if (prevFinishPoint == k)
+        {
+            if (ind >= 2)
+            {
+                [actionPoints removeObjectAtIndex:ind - 2];
+                [actionPoints removeObjectAtIndex:ind - 2];
+            }
+            break;
+        }
+    }
+}
+
+- (CLLocation *) calculateProjection:(double)part lp:(CLLocation *)lp l:(CLLocation *)l
+{
+    CLLocation *p = [[CLLocation alloc] initWithLatitude:lp.coordinate.latitude + part * (l.coordinate.latitude - lp.coordinate.latitude) longitude:lp.coordinate.longitude + part * (l.coordinate.longitude - lp.coordinate.longitude)];
+    return p;
 }
 
 - (void) refreshRoute

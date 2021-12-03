@@ -440,7 +440,7 @@
 
 + (QuadRect *) calculateBounds:(NSArray<OAGpxTrkPt *> *)pts
 {
-    return [self updateBounds:pts startIndex:0];;
+    return [self updateBounds:pts startIndex:0];
 }
 
 + (QuadRect *) updateBounds:(NSArray<OAGpxTrkPt *> *)pts startIndex:(int)startIndex

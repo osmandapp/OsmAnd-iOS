@@ -178,7 +178,7 @@ void OAMapillaryTilesProvider::drawLine(
     const auto tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
     const auto tileSize = getTileSize();
     const auto px31Size = tileSize31 / tileSize;
-    const auto bitmapHalfSize = _image->width() / 2;
+    const auto bitmapHalfSize = tileSize / 2;
     const auto& tileBBox31Enlarged = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom).enlargeBy(bitmapHalfSize * px31Size);
     
     SkScalar x1, y1, x2, y2 = 0;

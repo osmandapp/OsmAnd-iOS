@@ -7,9 +7,13 @@
 //
 
 #import "OAMapViewState.h"
+#import "OAAppSettings.h"
+
+#define kMapElevationAngleKey @"kMapElevationAngleKey"
 
 @implementation OAMapViewState
 {
+    OACommonDouble *_mapElevationAngle;
 }
 
 - (instancetype)init
@@ -23,12 +27,12 @@
 
 - (void)commonInit
 {
+    _mapElevationAngle = [OACommonDouble withKey:kMapElevationAngleKey defValue:90];
 }
 
 @synthesize target31 = _target31;
 @synthesize zoom = _zoom;
 @synthesize azimuth = _azimuth;
-@synthesize elevationAngle = _elevationAngle;
 
 #pragma mark - NSCoding
 
@@ -36,7 +40,6 @@
 #define kTarget31y @"target31.y"
 #define kZoom @"zoom"
 #define kAzimuth @"azimuth"
-#define kElevationAngle @"elevation_angle"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -44,7 +47,6 @@
     [aCoder encodeInt32:_target31.y forKey:kTarget31y];
     [aCoder encodeFloat:_zoom forKey:kZoom];
     [aCoder encodeFloat:_azimuth forKey:kAzimuth];
-    [aCoder encodeFloat:_elevationAngle forKey:kElevationAngle];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -56,11 +58,20 @@
         _target31.y = [aDecoder decodeInt32ForKey:kTarget31y];
         _zoom = [aDecoder decodeFloatForKey:kZoom];
         _azimuth = [aDecoder decodeFloatForKey:kAzimuth];
-        _elevationAngle = [aDecoder decodeFloatForKey:kElevationAngle];
     }
     return self;
 }
 
-#pragma mark -
+#pragma mark - Profile dependent settings
+
+- (float)elevationAngle
+{
+    return [_mapElevationAngle get];
+}
+
+- (void)setElevationAngle:(float)elevationAngle
+{
+    [_mapElevationAngle set:elevationAngle];
+}
 
 @end

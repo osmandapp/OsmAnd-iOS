@@ -166,6 +166,7 @@
     OAAutoObserverProxy* _mapSettingsChangeObserver;
     OAAutoObserverProxy* _mapLayerChangeObserver;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
+    OAAutoObserverProxy* _applicationModeChangedObserver;
     
     OAAutoObserverProxy* _stateObserver;
     OAAutoObserverProxy* _settingsObserver;
@@ -283,6 +284,10 @@
     
     _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onMapRendererFramePrepared)];
+    
+    _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onAppModeChanged)
+                                                            andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
     
     // Subscribe to application notifications to correctly suspend and resume rendering
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -453,8 +458,8 @@
                                            _app.data.mapLastViewedState.target31.y);
         _mapView.zoom = _app.data.mapLastViewedState.zoom;
         _mapView.azimuth = _app.data.mapLastViewedState.azimuth;
+        _mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
     }
-    _mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
     
     // Mark that map source is no longer valid
     _mapSourceInvalidated = YES;
@@ -1498,6 +1503,17 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self updateCurrentMapSource];
         });
+    });
+}
+
+- (void) onAppModeChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [OARootViewController.instance.mapPanel prepareMapForReuse:_app.data.mapLastViewedState.target31
+                                                              zoom:_app.data.mapLastViewedState.zoom
+                                                        newAzimuth:_app.data.mapLastViewedState.azimuth
+                                                 newElevationAngle:_app.data.mapLastViewedState.elevationAngle
+                                                          animated:NO];
     });
 }
 

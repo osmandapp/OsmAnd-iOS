@@ -22,7 +22,7 @@
 "shared_string_done" = "Готово";
 "shared_string_update" = "Оновити";
 "shared_string_install" = "Встановити";
-"shared_string_uninstall" = "Вилучити";
+"shared_string_uninstall" = "Видалити";
 "shared_string_remove" = "Вилучити";
 "shared_string_buy" = "Придбати";
 "shared_string_buy_for" = "для";

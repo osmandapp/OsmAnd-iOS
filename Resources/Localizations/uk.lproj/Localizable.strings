@@ -1987,7 +1987,7 @@
 "open_saved_track" = "Відкрити збережений трек";
 "simplified_track_description" = "Буде збережено лише лінію маршруту, а проміжні точки буде вилучено.";
 "simplified_track" = "Спрощений трек";
-"join_segments" = "Об’єднати відрізки";
+"join_segments" = "Об’єднати відтинки";
 "gpx_export_failed" = "Не вдалося зберегти створений маршрут";
 "hide_compass_ruler" = "Сховати компас-лінійку";
 "show_compass_ruler" = "Показати компас-лінійку";

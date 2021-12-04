@@ -263,7 +263,7 @@
 "alert_inet_needed" = "Internettenging er nauðsynleg til að geta framkvæmt þessa aðgerð. Athugaðu nettenginguna þína.";
 // Context menu
 "ctx_mnu_edit_fav" = "Breyta eftirlæti";
-"ctx_mnu_add_fav" = "Bæta við sem eftirlæti";
+"ctx_mnu_add_fav" = "Bæta við eftirlæti";
 "ctx_mnu_share" = "Deila";
 "ctx_mnu_direction" = "Kortamerki";
 // Location Services
@@ -701,7 +701,7 @@
 "route_tl" = "Beygðu til vinstri og haltu áfram";
 "route_tshl" = "Beygðu skarpt til vinstri og haltu áfram";
 "route_tsll" = "Beygðu örlítið til vinstri og haltu áfram";
-"route_tu" = "Taktu U-beygju og haltuáfram";
+"route_tu" = "Taktu U-beygju og haltu áfram";
 "route_head" = "Beint";
 "looking_up_address" = "Fletti upp heimilisfangi";
 "no_address_found" = "Ekkert heimilisfang erákvarðað";
@@ -878,7 +878,7 @@
 "in_app_purchase_desc_ex" = "Eftir að það hefur verið keypt, verður það þér alltaf tiltækt.";
 "unlock_all_features" = "Aflæsa öllum eiginleikum OsmAnd";
 "subscribe_email_desc" = "Gerstu áskrifandi að póstlistanum okkar:<br/>• Fáðu ókeypis 3 niðurhöl á kortum til viðbótar<br/>• Heyrðu fyrstur um alla afslætti<br/>• Vertu með í afsláttum af forritum og <a href='https://osmand.net/giveaway'>kynningargjöfum</a>";
-"osm_live_subscribe_btn" = "Gerastáskrifandi";
+"osm_live_subscribe_btn" = "Gerast áskrifandi";
 "shared_string_email_address" = "Tölvupóstfang";
 "osm_live_enter_email" = "Settu inn gilt tölvupóstfang";
 "osm_live_enter_user_name" = "Settu inn opinbert nafn";
@@ -2101,7 +2101,7 @@
 "default" = "Sjálfgefið";
 "map_widget_parking" = "Bílastæði";
 "select_profile" = "Veldu snið";
-"threshold_distance" = "Þolvik vegalengdar";
+"threshold_distance" = "Mörk vegalengdar";
 "carplay_profile_descr" = "Notkunarsnið sem verður notað á meðan tengst er við CarPlay.";
 "carplay_profile" = "CarPlay-snið";
 "last_used" = "Síðast notað";
@@ -2181,7 +2181,7 @@
 "invalid_format" = "Ógilt snið";
 "gpx_join_gaps_descr" = "Bil milli búta verða tengd.";
 "gpx_selection_segment_title" = "Bútar";
-"lang_af" = "Afrikaans";
+"lang_af" = "Afríkanska";
 "lang_al" = "Albanska";
 "lang_als" = "Albanska (Tosk)";
 "lang_an" = "Aragónska";
@@ -2319,3 +2319,7 @@
 "duplicate_track" = "Tvítaka feril";
 "connect_rp" = "Tengja leiðarpunkta";
 "read_full_description" = "Lesa fulla lýsingu";
+"walking_route_osmc_description" = "Lita leiðir eftir stökum staðbundnum litum (ef til staðar í OpenStreetMap) og tegund vega (alþjóðlegt, héraðsbundið, staðbundið.";
+"ios_release_4_0" = "• Nýtt! \"Bæta við eftirlæti\" skjár með möguleikum til að velja táknmynd, lit og lögun\n• Bætt við nýjum vðmótshluta fyrir hnit fyrirliggjandi staðsetningar\n• Hægt að flytja inn sérsniðnar viðbætur fyrir hvern notanda\n• Bætt umtalsvert við eiginleika inn-/útflutnings\n• Fjarlægð með því að ýta fært úr mælistiku í sérstakan valkost\n• Lagað þegar CarPlay frýs við að slökkt sé á skjá iPhone\n• Viðbóta-skjár færður úr Kort & tilföng yfir í aðalvalmynd\n• Bætt við Finnskri staðfærslu\n• Lagað \"Skipuleggja leið\" viðmót í láréttri stefnu\n• Bættur stuðningur við sérsniðna leiðagerð og myndgerð skráa\n• Löguð vinnsla stefnulínu merkja\n • Löguð vandamál við innflutning GPX-skráa með skráarendingu í hástöfum\n• Löguð vandamál í \"Fylgja ferli\" valmynd\n• Lagaður innflutningur á OBF-skrám\n";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Lita leiðir eftir tegund vega í vegakerfi (alþjóðlegt, héraðsbundið, staðbundið.";
+"rendering_value_walkingRoutesOSMC_description" = "Lita leiðir eftir stökum staðbundnum litum (ef til staðar í OpenStreetMap) og tákni í gönguleiðaflokkun.";

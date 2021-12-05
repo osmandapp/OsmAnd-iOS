@@ -1,6 +1,6 @@
 "shared_string_cancel" = "Скасувати";
 "shared_string_edit" = "Редагувати";
-"shared_string_ok" = "Гаразд";
+"shared_string_ok" = "Так";
 "shared_string_yes" = "Так";
 "shared_string_no" = "Ні";
 "shared_string_and" = "та";
@@ -660,7 +660,7 @@
 "keep_informing_descr" = "Повторювати навігаційні вказівки через регулярні проміжки часу";
 "arrival_distance" = "Оголошення про прибуття";
 "arrival_distance_descr" = "Як швидко Ви хочете чути повідомлення про прибуття?";
-"default_speed_system" = "Одиниця вимірювання швидкості";
+"default_speed_system" = "Одиниці вимірювання швидкості";
 "default_speed_system_descr" = "Визначити одиницю вимірювання швидкості";
 "speed_limit_exceed" = "Допустиме значення перевищення швидкості";
 "speed_limit_exceed_message" = "Виберіть допустиме значення перевищення швидкості, при перевищенні якого Ви отримаєте голосове попередження.";
@@ -843,7 +843,7 @@
 "osmand_live_subscription_canceled" = "Ви скасували передплату OsmAnd Live";
 "osmand_live_cancel_descr" = "Поновіть передплату, щоб продовжити користування повною функціональністю:";
 "osmand_live_update_now" = "Оновити зараз";
-"shared_string_upload" = "Вивантажити";
+"shared_string_upload" = "Надіслати";
 "poi_type" = "Тип точки інтересу";
 // OSM Editing actions
 "opening_changeset" = "Відкривається набір змін…";
@@ -949,7 +949,7 @@
 "osm_live_ask_for_purchase" = "Будь ласка, спочатку передплатіть OsmAnd Live";
 "osm_live_enter_user_name" = "Введіть загальнодоступне ім'я";
 "shared_string_io_error" = "Помилка вводу/виводу";
-"osm_live_hide_user_name" = "Не показувати моє ім’я у звітах";
+"osm_live_hide_user_name" = "Не показувати мене у звітах";
 "shared_string_enabled" = "Увімкнено";
 "shared_string_reset" = "Скинути";
 "shared_string_reload" = "Перезавантажити";
@@ -1439,7 +1439,7 @@
 "rendering_value_translucent_purple_name" = "Напівпрозорий пурпурний";
 "rendering_attr_ice_road_name" = "Льодова дорога";
 "rendering_attr_highway_class_track_grade4_name" = "4клас";
-"rendering_value_pink_name" = "рожевий";
+"rendering_value_pink_name" = "Рожевий";
 "routing_attr_allow_private_name" = "Дозволити приватний доступ";
 "rendering_attr_tracktype_grade4_name" = "Переважно м\'яке";
 "rendering_attr_piste_type_hike_name" = "Пішій туризм";
@@ -1455,7 +1455,7 @@
 "routing_attr_allow_expert_name" = "Дозволити експертні маршрути";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_connection_name" = "З\'єднання";
-"rendering_value_translucent_orange_name" = "Напівпрозорий жовтогарячий";
+"rendering_value_translucent_orange_name" = "Напівпрозорий помаранчевий";
 "rendering_value_light_brown_name" = "Світло-коричневий";
 "rendering_value_translucent_red_name" = "Напівпрозорий червоний";
 "routing_attr_avoid_share_taxi_description" = "Уникати маршрутних таксі";
@@ -1498,7 +1498,7 @@
 "rendering_value_low_name" = "Низька";
 "routing_attr_prefer_motorway_name" = "Надавати перевагу автомагістралям";
 "rendering_attr_smoothness_good_name" = "Хороша";
-"rendering_value_orange_name" = "Жовтогарячий";
+"rendering_value_orange_name" = "Помаранчевий";
 "rendering_attr_smoothness_horrible_name" = "Жахлива";
 "rendering_value_lightgreen_name" = "Світло зелений";
 "rendering_attr_highway_class_street_name" = "Вулиця";
@@ -1703,7 +1703,7 @@
 "two" = "Два";
 // Dirrection appearance
 "one" = "Один";
-"active_markers" = "Наявні позназчки";
+"active_markers" = "Наявні позначки";
 "nav_type_direct_to" = "Прямо-до-точки";
 "nav_type_straight_line" = "Пряма лінія";
 "nav_type_osmand" = "OsmAnd (автономний режим)";
@@ -1851,7 +1851,7 @@
 "profile_prefs_reset_successful" = "Усі налаштування профілю відновлено до типових";
 "gpx_parse_error" = "OsmAnd GPXнедостатньо сформований. Зверніться до служби підтримки для подальшого дослідження.";
 "nothing_found_empty" = "Нічого не знайдено";
-"shared_string_next" = "Наступний";
+"shared_string_next" = "Вперед";
 "add_one_more_pnt" = "Додати ще одну точку";
 "delete_point" = "Вилучити точку";
 "change_route_type_after" = "Змінити тип маршруту після цієї точки";
@@ -1883,7 +1883,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Пошук";
 "configure_screen_quick_action" = "Швидка дія";
-"shared_string_settings" = "Параметри";
+"shared_string_settings" = "Налаштування";
 "importing_from" = "Імпорт даних з %@";
 "shared_string_importing" = "Імпорт";
 "avoid_road" = "Уникати доріг";
@@ -2050,7 +2050,7 @@
 "hide_coordinates" = "Сховати координати";
 "show_coordinates" = "Показати координати";
 "toggle_coordinates" = "Показати/сховати віджет координат";
-"copied_to_clipboard" = "Скопійовано до буферу обміну";
+"copied_to_clipboard" = "Скопійовано до буфера обміну";
 "searching_gps" = "Пошук GPS";
 
 // Coordinate widget

@@ -2193,7 +2193,7 @@
 "shared_string_start_time" = "Час початку";
 "shared_string_end_time" = "Час завершення";
 "shared_string_time_span" = "Час";
-"shared_string_time_moving" = "Час в дорозі";
+"shared_string_time_moving" = "Час у дорозі";
 "distance_moving" = "Скоригована відстань";
 "parked_at" = "Припарковано на";
 "industrial" = "Промисловий";

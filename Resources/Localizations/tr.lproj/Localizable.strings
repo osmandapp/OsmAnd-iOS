@@ -199,8 +199,8 @@
 "res_details" = "Ayrıntılar";
 "res_type" = "Tür";
 "res_unknown" = "Bilinmiyor";
-"res_size" = "Boyutu";
-"res_created_on" = "Oluşturulma";
+"res_size" = "Boyut";
+"res_created_on" = "Oluşturulma tarihi";
 "res_update_all" = "Hepsini güncelle";
 "res_updates_no_space" = "%d için güncelleştirmeleri yüklemek için yeterli alan yok. %@ gereklidir. Lütfen biraz yer boşaltın.";
 "res_updates_avail_q" = "için güncelleştirmeleri kullanılabilir.";

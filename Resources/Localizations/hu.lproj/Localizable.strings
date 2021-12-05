@@ -1650,3 +1650,5 @@
 "connect_rp" = "útvonalpontok összekötése";
 "show_warnings_descr" = "Forgalmi figyelmeztetések beállítása (sebességkorlátok, stoptáblák, fekvőrendőrök, alagutak), traffipaxfigyelmeztetések és sávinformációk";
 "speak_descr" = "Utcanevek, forgalmi figyelmeztetések (stoptáblák, fekvőrendőrök), sebességmérő kamerák, sebességhatárok bemondásának beállítása";
+"lang_pnb" = "pandzsábi";
+"lang_zh_hk" = "kínai (hongkongi)";

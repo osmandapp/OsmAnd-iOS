@@ -1455,7 +1455,7 @@
 "routing_attr_allow_expert_name" = "Дозволити експертні маршрути";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_connection_name" = "З\'єднання";
-"rendering_value_translucent_orange_name" = "Напівпрозорий помаранчевий";
+"rendering_value_translucent_orange_name" = "Напівпрозорий жовтогарячий";
 "rendering_value_light_brown_name" = "Світло-коричневий";
 "rendering_value_translucent_red_name" = "Напівпрозорий червоний";
 "routing_attr_avoid_share_taxi_description" = "Уникати маршрутних таксі";
@@ -1498,7 +1498,7 @@
 "rendering_value_low_name" = "Низька";
 "routing_attr_prefer_motorway_name" = "Надавати перевагу автомагістралям";
 "rendering_attr_smoothness_good_name" = "Хороша";
-"rendering_value_orange_name" = "Помаранчевий";
+"rendering_value_orange_name" = "Жовтогарячий";
 "rendering_attr_smoothness_horrible_name" = "Жахлива";
 "rendering_value_lightgreen_name" = "Світло зелений";
 "rendering_attr_highway_class_street_name" = "Вулиця";

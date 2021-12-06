@@ -574,7 +574,7 @@
 "shared_string_select_on_map" = "Обрати на мапі";
 "shared_string_my_location" = "Моя локація";
 "route_descr_select_destination" = "Виберіть пункт призначення";
-"gpx_option_calculate_first_last_segment" = "Прокласти маршрут в OsmAnd для першого та останнього відрізків маршруту";
+"gpx_option_calculate_first_last_segment" = "Прокласти маршрут в OsmAnd для першого та останнього відтинків маршруту";
 "gpx_option_from_start_point" = "Пройдіть по усьому треку";
 "gpx_option_reverse_route" = "Зворотній напрямок GPX";
 "use_points_as_intermediates" = "Обчислити маршрут між точками";

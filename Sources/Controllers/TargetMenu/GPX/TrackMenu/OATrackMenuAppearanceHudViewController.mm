@@ -303,23 +303,31 @@
     OAGPXTableCellData *colorValues = [OAGPXTableCellData withData:@{
             kCellKey: @"color_values",
             kCellType: [OAFoldersCell getCellIdentifier],
-            kTableValues: @{ @"array_value": trackColoringTypes },
+            kTableValues: @{
+                @"array_value": trackColoringTypes,
+                @"selected_integer_value": @([_availableColoringTypes indexOfObject:_selectedItem])
+            },
             kCellTitle: OALocalizedString(@"fav_color")
     }];
 
     [colorValues setData:@{
         kTableUpdateData: ^() {
-        NSMutableArray<NSDictionary *> *newTrackColoringTypes = [NSMutableArray array];
-        for (OATrackAppearanceItem *item in _availableColoringTypes)
-        {
-            [newTrackColoringTypes addObject:@{
-                @"title": item.title,
-                @"type": item.coloringType == OAColoringType.ATTRIBUTE ? item.attrName : item.coloringType.name,
-                @"available": @(item.isActive)
+            NSMutableArray<NSDictionary *> *newTrackColoringTypes = [NSMutableArray array];
+            for (OATrackAppearanceItem *item in _availableColoringTypes)
+            {
+                [newTrackColoringTypes addObject:@{
+                        @"title": item.title,
+                        @"type": item.coloringType == OAColoringType.ATTRIBUTE ? item.attrName : item.coloringType.name,
+                        @"available": @(item.isActive)
+                }];
+            }
+            [colorValues setData:@{
+                kTableValues: @{
+                    @"array_value": newTrackColoringTypes,
+                    @"selected_integer_value": @([_availableColoringTypes indexOfObject:_selectedItem])
+                }
             }];
         }
-        [colorValues setData:@{ kTableValues: @{@"array_value": newTrackColoringTypes } }];
-    }
     }];
     [colorsCells addObject:colorValues];
 
@@ -955,7 +963,14 @@
         }
         if (cell)
         {
-            [cell setValues:cellData.values[@"array_value"] withSelectedIndex:[_availableColoringTypes indexOfObject:_selectedItem]];
+            [cell setValues:cellData.values[@"array_value"]
+          withSelectedIndex:[cellData.values[@"selected_integer_value"] integerValue]];
+        }
+        if (!_colorValuesCell)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [cell.collectionView reloadData];
+            });
         }
         outCell = _colorValuesCell = cell;
     }

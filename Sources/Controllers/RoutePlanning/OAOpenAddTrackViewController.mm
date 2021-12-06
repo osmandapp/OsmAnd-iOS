@@ -335,10 +335,15 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }
         if (cell)
         {
-            [cell setValues:item[@"values"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
+            [cell setValues:item[@"values"] withSelectedIndex:[item[@"selectedValue"] intValue]];
         }
-        _foldersCell = cell;
-        return cell;
+        if (!_foldersCell)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [cell.collectionView reloadData];
+            });
+        }
+        return _foldersCell = cell;
     }
     else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {

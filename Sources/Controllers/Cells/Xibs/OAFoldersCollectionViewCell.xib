@@ -30,23 +30,31 @@
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
-                <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                <constraints>
-                    <constraint firstItem="doX-K3-ADJ" firstAttribute="leading" secondItem="P0A-ql-UAQ" secondAttribute="leading" priority="999" constant="10" id="CGt-za-PH4"/>
-                    <constraint firstAttribute="bottom" secondItem="doX-K3-ADJ" secondAttribute="bottom" constant="9" id="EQb-gF-pAL"/>
-                    <constraint firstItem="PNd-rc-yzh" firstAttribute="top" secondItem="P0A-ql-UAQ" secondAttribute="top" constant="3" id="ETf-Pf-cQu"/>
-                    <constraint firstItem="doX-K3-ADJ" firstAttribute="top" secondItem="P0A-ql-UAQ" secondAttribute="top" constant="9" id="VkL-Fq-D0d"/>
-                    <constraint firstItem="doX-K3-ADJ" firstAttribute="leading" secondItem="PNd-rc-yzh" secondAttribute="trailing" constant="8" id="dFz-2p-F2N"/>
-                    <constraint firstAttribute="trailing" secondItem="doX-K3-ADJ" secondAttribute="trailing" constant="10" id="jTU-EU-jSn"/>
-                    <constraint firstItem="PNd-rc-yzh" firstAttribute="leading" secondItem="P0A-ql-UAQ" secondAttribute="leading" constant="8" id="lmF-58-LOo"/>
-                    <constraint firstAttribute="bottom" secondItem="PNd-rc-yzh" secondAttribute="bottom" constant="3" id="mJw-XM-soY"/>
-                </constraints>
-            </collectionViewCellContentView>
+            </view>
+            <color key="backgroundColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="uq0-fh-3wu" firstAttribute="leading" secondItem="OKS-FL-Rwe" secondAttribute="trailing" constant="8" id="9OH-cr-XuL"/>
+                <constraint firstItem="OKS-FL-Rwe" firstAttribute="centerX" secondItem="j5u-2X-hOB" secondAttribute="centerX" priority="1" id="AV3-kG-EDo"/>
+                <constraint firstItem="uq0-fh-3wu" firstAttribute="leading" secondItem="j5u-2X-hOB" secondAttribute="leading" priority="1" constant="10" id="IgV-No-hrb"/>
+                <constraint firstAttribute="bottom" secondItem="uq0-fh-3wu" secondAttribute="bottom" constant="9" id="M5S-7n-ZRp"/>
+                <constraint firstItem="uq0-fh-3wu" firstAttribute="top" secondItem="j5u-2X-hOB" secondAttribute="top" constant="9" id="aZq-sv-nRg"/>
+                <constraint firstItem="OKS-FL-Rwe" firstAttribute="centerY" secondItem="j5u-2X-hOB" secondAttribute="centerY" id="bBU-zO-0e3"/>
+                <constraint firstItem="OKS-FL-Rwe" firstAttribute="leading" secondItem="j5u-2X-hOB" secondAttribute="leading" constant="8" id="gDg-au-8Rj"/>
+                <constraint firstAttribute="trailing" secondItem="uq0-fh-3wu" secondAttribute="trailing" constant="10" id="lgY-7O-nNp"/>
+            </constraints>
+            <size key="customSize" width="458" height="191"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                    <integer key="value" value="12"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
             <connections>
-                <outlet property="imageView" destination="PNd-rc-yzh" id="Npk-9I-3uv"/>
-                <outlet property="labelNoIconConstraint" destination="CGt-za-PH4" id="rux-UX-Yvt"/>
-                <outlet property="labelWithIconConstraint" destination="dFz-2p-F2N" id="nLH-Dr-UEE"/>
-                <outlet property="titleLabel" destination="doX-K3-ADJ" id="FZx-XT-iHO"/>
+                <outlet property="centerAlignIconConstraint" destination="AV3-kG-EDo" id="ozb-Gz-ie4"/>
+                <outlet property="imageView" destination="OKS-FL-Rwe" id="kg3-qq-blp"/>
+                <outlet property="labelNoIconConstraint" destination="IgV-No-hrb" id="Fx1-YE-baH"/>
+                <outlet property="labelWithIconConstraint" destination="9OH-cr-XuL" id="10L-Z6-11k"/>
+                <outlet property="leftIconConstraint" destination="gDg-au-8Rj" id="vzC-0l-o4d"/>
+                <outlet property="titleLabel" destination="uq0-fh-3wu" id="B4S-y0-7ps"/>
             </connections>
             <point key="canvasLocation" x="-406" y="77"/>
         </collectionViewCell>

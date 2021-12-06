@@ -329,7 +329,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             cell.collectionView.backgroundColor = UIColor.clearColor;
-            cell.delegate = self;
+            cell.foldersDelegate = self;
             cell.cellIndex = indexPath;
             cell.state = _scrollCellsState;
         }

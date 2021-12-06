@@ -218,7 +218,7 @@
                                     <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <inset key="titleEdgeInsets" minX="-24" minY="28" maxX="0.0" maxY="0.0"/>
                                     <inset key="imageEdgeInsets" minX="35" minY="-18" maxX="0.0" maxY="0.0"/>
-                                    <state key="normal" title="Appearance fghxcfh xcfh" image="ic_custom_appearance.png">
+                                    <state key="normal" title="Appearance" image="ic_custom_appearance.png">
                                         <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
                                     <userDefinedRuntimeAttributes>

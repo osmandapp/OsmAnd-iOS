@@ -623,6 +623,13 @@
     return YES;
 }
 
+- (BOOL)stopChangingHeight:(UIView *)view
+{
+    return [view isKindOfClass:[UISlider class]]
+            || [view isKindOfClass:[UISegmentedControl class]]
+            || [view isKindOfClass:[UICollectionView class]];
+}
+
 - (OAGPXTableCellData *)generateDataForColorElevationGradientCell
 {
     NSString * (^generateDescription) (void) = ^{
@@ -944,7 +951,7 @@
             cell.collectionView.backgroundColor = UIColor.whiteColor;
             cell.cellIndex = indexPath;
             cell.state = _scrollCellsState;
-            cell.delegate = self;
+            cell.foldersDelegate = self;
         }
         if (cell)
         {
@@ -1095,7 +1102,6 @@
         if (cell)
         {
             [cell showLabels:hasTopLabels topRight:hasTopLabels bottomLeft:hasBottomLabels bottomRight:hasBottomLabels];
-            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             cell.topLeftLabel.text = cellData.title;
             cell.topRightLabel.text = cellData.values[@"custom_string_value"];
             cell.topRightLabel.textColor = UIColorFromRGB(color_primary_purple);
@@ -1106,7 +1112,7 @@
             cell.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.sliderView addTarget:self
                                 action:@selector(sliderChanged:)
                       forControlEvents:UIControlEventTouchUpInside];

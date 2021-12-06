@@ -1048,3 +1048,10 @@
 "new_profile" = "새 프로필";
 "no_inet_connection" = "인터넷에 연결되지 않음";
 "rendering_value_bold_name" = "굵게";
+"track_coloring_solid" = "단색 레이어";
+"rendering_attr_tracktype_grade2_name" = "단색 레이어 (비포장)";
+"routing_attr_piste_type_sled_description" = "썰매 사용을 위한 슬로프.";
+"rendering_attr_tracktype_grade1_name" = "단색 레이어 (포장)";
+"shared_string_time_span" = "시간 범위";
+"shared_string_start_time" = "시작시간";
+"shared_string_end_time" = "종료시간";

@@ -211,33 +211,11 @@
             destCell.titleLabel.text = item[@"title"];
             destCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
             NSString *iconName = item[@"img"];
-            if (iconName && iconName.length > 0)
-            {
-                [destCell.imageView setImage:[UIImage templateImageNamed:item[@"img"]]];
-                destCell.imageView.hidden = NO;
-                
-                if (destCell.titleLabel.text && destCell.titleLabel.text.length > 0)
-                {
-                    destCell.labelNoIconConstraint.priority = 1;
-                    destCell.labelWithIconConstraint.priority = 1000;
-                    destCell.leftIconConstraint.priority = 1000;
-                    destCell.centerAlignIconConstraint.priority = 1;
-                }
-                else
-                {
-                    destCell.labelNoIconConstraint.priority = 1;
-                    destCell.labelWithIconConstraint.priority = 1;
-                    destCell.leftIconConstraint.priority = 1;
-                    destCell.centerAlignIconConstraint.priority = 1000;
-                }
-            }
-            else
-            {
-                destCell.imageView.hidden = YES;
-                destCell.labelNoIconConstraint.priority = 1000;
-                destCell.labelWithIconConstraint.priority = 1;
-            }
-            
+
+            BOOL hasIcon = iconName && iconName.length > 0;
+            [destCell showImage:hasIcon];
+            [destCell.imageView setImage:hasIcon ? [UIImage templateImageNamed:item[@"img"]] : nil];
+
             NSString *categoryName = item[@"categoryName"];
             if ([categoryName isEqualToString:_currentCategory])
             {
@@ -252,8 +230,13 @@
                 destCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
             }
         }
+        
         if ([self isDirectionRTL])
             [cell.contentView setTransform:CGAffineTransformMakeScale(-1, 1)];
+
+        if ([cell needsUpdateConstraints])
+            [cell setNeedsUpdateConstraints];
+
         return cell;
     }
     else

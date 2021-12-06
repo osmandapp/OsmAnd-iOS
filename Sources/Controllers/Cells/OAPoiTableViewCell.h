@@ -16,6 +16,11 @@
 
 @end
 
+@interface OAForcedLeftAlignCollectionViewLayout : UICollectionViewFlowLayout
+
+@end
+
+
 @interface OAPoiTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;

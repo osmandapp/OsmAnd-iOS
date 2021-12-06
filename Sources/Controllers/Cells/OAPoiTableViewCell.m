@@ -21,11 +21,36 @@
 #define kLabelOffsetsWidth 20
 #define kLabelMinimumWidth 50.0
 #define kCellHeightWithoutIcons 116
-#define kCategoriesCellsSpacing 12
+#define kCategoriesCellsSpacing 10
+
+@implementation OAForcedLeftAlignCollectionViewLayout
+
+- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
+{
+    NSArray *attributes = [super layoutAttributesForElementsInRect:rect];
+    CGFloat leftMargin = self.sectionInset.left;
+    CGFloat maxY = -1.0f;
+
+    for (UICollectionViewLayoutAttributes *attribute in attributes)
+    {
+        if (attribute.frame.origin.y >= maxY)
+        {
+            leftMargin = self.sectionInset.left;
+        }
+        attribute.frame = CGRectMake(leftMargin, attribute.frame.origin.y, attribute.frame.size.width, attribute.frame.size.height);
+        leftMargin += attribute.frame.size.width + self.minimumInteritemSpacing;
+        maxY = MAX(CGRectGetMaxY(attribute.frame), maxY);
+    }
+    return attributes;
+}
+
+@end
+
 
 @implementation OAPoiTableViewCell
 {
     NSArray<NSString *> *_categoryNames;
+    NSArray<NSString *> *_categoryTitles;
 }
 
 - (void)awakeFromNib
@@ -34,7 +59,10 @@
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     [self.collectionView registerNib:[UINib nibWithNibName:[OAPoiCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAPoiCollectionViewCell getCellIdentifier]];
+    UICollectionViewFlowLayout *forcedLeftAlignLayout = [[OAForcedLeftAlignCollectionViewLayout alloc] init];
+    [self.collectionView setCollectionViewLayout:forcedLeftAlignLayout];
     
+
     self.categoriesCollectionView.delegate = self;
     self.categoriesCollectionView.dataSource = self;
     [self.categoriesCollectionView registerNib:[UINib nibWithNibName:[OAFoldersCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAFoldersCollectionViewCell getCellIdentifier]];
@@ -45,6 +73,12 @@
     [self.categoriesCollectionView setCollectionViewLayout:layout];
     [self.categoriesCollectionView setShowsHorizontalScrollIndicator:NO];
     [self.categoriesCollectionView setShowsVerticalScrollIndicator:NO];
+    
+    if ([self isDirectionRTL])
+    {
+        [self.collectionView setTransform:CGAffineTransformMakeScale(-1, 1)];
+        [self.categoriesCollectionView setTransform:CGAffineTransformMakeScale(-1, 1)];
+    }
     
     _categoryDataArray = [NSMutableArray new];
 }
@@ -71,11 +105,14 @@
 - (void) updateCategoryNames
 {
     NSMutableArray *names = [NSMutableArray new];
+    NSMutableArray *titles = [NSMutableArray new];
     for (NSDictionary *category in _categoryDataArray)
     {
         [names addObject:category[@"categoryName"]];
+        [titles addObject:category[@"title"]];
     }
     _categoryNames = [NSArray arrayWithArray:names];
+    _categoryTitles = [NSArray arrayWithArray:titles];
 }
 
 #pragma mark - Scroll offset calculations
@@ -108,8 +145,8 @@
 
 - (CGPoint) calculateOffset:(NSInteger)index
 {
-    CGPoint selectedOffset = [self calculateOffsetToSelectedIndex:index labels:_categoryNames];
-    CGPoint fullLength = [self calculateOffsetToSelectedIndex:_categoryNames.count labels:_categoryNames];
+    CGPoint selectedOffset = [self calculateOffsetToSelectedIndex:index labels:_categoryTitles];
+    CGPoint fullLength = [self calculateOffsetToSelectedIndex:_categoryNames.count labels:_categoryTitles];
     CGFloat maxOffset = fullLength.x - DeviceScreenWidth + kCategoriesCellsSpacing;
     if (selectedOffset.x > maxOffset)
         selectedOffset.x = maxOffset;
@@ -122,7 +159,7 @@
     CGFloat offset = 0;
     for (NSInteger i = 0; i < index; i++)
     {
-        offset += [self calculateCellWidth:labels[i] iconName:nil];
+        offset += [self calculateCellWidth:labels[i] iconName:_categoryDataArray[i][@"img"]];
         offset += kCategoriesCellsSpacing;
     }
     return CGPointMake(offset, 0);
@@ -178,8 +215,21 @@
             {
                 [destCell.imageView setImage:[UIImage templateImageNamed:item[@"img"]]];
                 destCell.imageView.hidden = NO;
-                destCell.labelNoIconConstraint.priority = 1;
-                destCell.labelWithIconConstraint.priority = 1000;
+                
+                if (destCell.titleLabel.text && destCell.titleLabel.text.length > 0)
+                {
+                    destCell.labelNoIconConstraint.priority = 1;
+                    destCell.labelWithIconConstraint.priority = 1000;
+                    destCell.leftIconConstraint.priority = 1000;
+                    destCell.centerAlignIconConstraint.priority = 1;
+                }
+                else
+                {
+                    destCell.labelNoIconConstraint.priority = 1;
+                    destCell.labelWithIconConstraint.priority = 1;
+                    destCell.leftIconConstraint.priority = 1;
+                    destCell.centerAlignIconConstraint.priority = 1000;
+                }
             }
             else
             {
@@ -202,6 +252,8 @@
                 destCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
             }
         }
+        if ([self isDirectionRTL])
+            [cell.contentView setTransform:CGAffineTransformMakeScale(-1, 1)];
         return cell;
     }
     else
@@ -230,7 +282,8 @@
             cell.iconView.backgroundColor = UIColorFromARGB(color_primary_purple_10);
             cell.iconImageView.tintColor = UIColorFromRGB(color_primary_purple);
         }
-        
+        if ([self isDirectionRTL])
+            [cell.contentView setTransform:CGAffineTransformMakeScale(-1, 1)];
         return cell;
     }
 }

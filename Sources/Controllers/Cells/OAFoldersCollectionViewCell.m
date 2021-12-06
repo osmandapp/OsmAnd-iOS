@@ -18,9 +18,22 @@
 - (void)updateConstraints
 {
     BOOL hasImage = !self.imageView.hidden;
-
-    self.labelWithIconConstraint.active = hasImage;
-    self.labelNoIconConstraint.active = !hasImage;
+    BOOL hasText = self.titleLabel.text.length > 0;
+    
+    if (hasImage && !hasText)
+    {
+        self.labelWithIconConstraint.active = NO;
+        self.labelNoIconConstraint.active = NO;
+        self.leftIconConstraint.priority = 1;
+        self.centerAlignIconConstraint.priority = 1000;
+    }
+    else
+    {
+        self.labelWithIconConstraint.active = hasImage;
+        self.labelNoIconConstraint.active = !hasImage;
+        self.leftIconConstraint.priority = 1000;
+        self.centerAlignIconConstraint.priority = 1;
+    }
 
     [super updateConstraints];
 }

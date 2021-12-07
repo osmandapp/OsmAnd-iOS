@@ -12,12 +12,20 @@ typedef NS_ENUM(NSUInteger, EOAEditWaypointsGroupScreen)
 {
     EOAEditWaypointsGroupRenameScreen = 0,
     EOAEditWaypointsGroupColorScreen,
+    EOAEditWaypointsGroupVisibleScreen
 };
 
 @protocol OAEditWaypointsGroupOptionsDelegate <NSObject>
 
-- (void)updateWaypointsGroup:(NSString *)groupName
-                  groupColor:(UIColor *)groupColor;
+@optional
+
+- (void)updateWaypointsGroup:(NSString *)groupName color:(UIColor *)color;
+
+- (NSArray<NSString *> *)getWaypointSortedGroups;
+- (NSInteger)getWaypointsGroupColor:(NSString *)groupName;
+- (BOOL)isWaypointsGroupVisible:(NSString *)groupName;
+- (void)setWaypointsGroupVisible:(NSString *)groupName show:(BOOL)show;
+- (BOOL)isRteGroup:(NSString *)groupName;
 
 @end
 

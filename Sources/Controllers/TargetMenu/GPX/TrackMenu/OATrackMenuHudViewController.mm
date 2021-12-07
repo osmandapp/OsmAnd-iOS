@@ -8,6 +8,7 @@
 
 #import "OATrackMenuHudViewController.h"
 #import "OATrackMenuHeaderView.h"
+#import "OAFoldersCollectionView.h"
 #import "OASaveTrackViewController.h"
 #import "OATrackSegmentsViewController.h"
 #import "OATrackMenuDescriptionViewController.h"
@@ -15,6 +16,7 @@
 #import "OARoutePlanningHudViewController.h"
 #import "OADeleteWaypointsViewController.h"
 #import "OAEditWaypointsGroupBottomSheetViewController.h"
+#import "OAEditWaypointsGroupOptionsViewController.h"
 #import "OADeleteWaypointsGroupBottomSheetViewController.h"
 #import "OARouteBaseViewController.h"
 #import "OAGPXListViewController.h"
@@ -52,6 +54,7 @@
 #import "OADefaultFavorite.h"
 #import "OAMapLayers.h"
 #import "OATrackMenuUIBuilder.h"
+#import "QuadRect.h"
 
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
@@ -75,11 +78,15 @@
 
 @end
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, ChartViewDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, ChartViewDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UIView *groupsButtonContainerView;
+@property (weak, nonatomic) IBOutlet UIButton *groupsButton;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet OATabBar *tabBarView;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *groupsButtonTrailingConstraint;
 
 @property (nonatomic) BOOL isShown;
 
@@ -183,6 +190,12 @@
 
     if (_reopeningState && _reopeningState.showingState != EOADraggableMenuStateInitial)
         [self updateShowingState:_reopeningState.showingState];
+
+    UIImage *groupsImage = [UIImage templateImageNamed:@"ic_custom_folder_visible"];
+    [self.groupsButton setImage:groupsImage forState:UIControlStateNormal];
+    self.groupsButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+    [self.groupsButton addBlurEffect:YES cornerRadius:12. padding:0];
+    [self updateGroupsButton];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -199,7 +212,8 @@
 
         if (_selectedTab == EOATrackMenuHudOverviewTab)
         {
-            _headerView.collectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
+            _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
+            _headerView.groupsCollectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 16. , 0., 16.);
         }
         else if (_selectedTab == EOATrackMenuHudSegmentsTab && _tableData.sections.count > 0)
         {
@@ -292,11 +306,25 @@
     BOOL isOverview = _selectedTab == EOATrackMenuHudOverviewTab;
     if (isOverview)
     {
-        _headerView.collectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
+        _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
         [_headerView generateGpxBlockStatistics:self.analysis
                                     withoutGaps:!self.gpx.joinSegments && (self.isCurrentTrack
                                             ? (self.doc.tracks.count == 0 || self.doc.tracks.firstObject.generalTrack)
                                             : (self.doc.tracks.count > 0 && self.doc.tracks.firstObject.generalTrack))];
+    }
+    else if (_selectedTab == EOATrackMenuHudPointsTab)
+    {
+        _headerView.groupsCollectionView.foldersDelegate = self;
+        _headerView.groupsCollectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 16. , 0., 16.);
+        NSMutableArray<NSDictionary *> *groupsData = [NSMutableArray array];
+        for (NSString *groupName in _waypointSortedGroupNames)
+        {
+            [groupsData addObject:@{
+                    @"title": groupName,
+                    @"type": groupName
+            }];
+        }
+        [_headerView setGroupsCollection:groupsData];
     }
 
     [_headerView updateHeader:_selectedTab
@@ -329,12 +357,20 @@
                             secondAttribute:NSLayoutAttributeLeading],
             [self createBaseEqualConstraint:self.scrollableView
                              firstAttribute:NSLayoutAttributeTrailing
-                                 secondItem:_headerView.collectionView
+                                 secondItem:_headerView.statisticsCollectionView
                             secondAttribute:NSLayoutAttributeTrailing],
             [self createBaseEqualConstraint:self.scrollableView
                              firstAttribute:NSLayoutAttributeLeading
-                                 secondItem:_headerView.collectionView
+                                 secondItem:_headerView.statisticsCollectionView
                             secondAttribute:NSLayoutAttributeLeading],
+            [self createBaseEqualConstraint:self.scrollableView
+                             firstAttribute:NSLayoutAttributeTrailing
+                                 secondItem:_headerView.groupsCollectionView
+                            secondAttribute:NSLayoutAttributeTrailing],
+            [self createBaseEqualConstraint:self.scrollableView
+                             firstAttribute:NSLayoutAttributeLeading
+                                 secondItem:_headerView.groupsCollectionView
+                            secondAttribute:NSLayoutAttributeLeading]
     ]];
 
     CGRect topHeaderContainerFrame = self.topHeaderContainerView.frame;
@@ -364,6 +400,12 @@
 - (BOOL)stopChangingHeight:(UIView *)view
 {
     return [view isKindOfClass:[LineChartView class]] || [view isKindOfClass:[UICollectionView class]];
+}
+
+- (void)doAdditionalLayout
+{
+    [super doAdditionalLayout];
+    self.groupsButtonContainerView.hidden = ![self isLandscape] && self.currentState == EOADraggableMenuStateFullScreen;
 }
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
@@ -658,6 +700,16 @@
     }
 }
 
+- (void)updateGroupsButton
+{
+    NSString *groupsCount = [NSString stringWithFormat:@"%li/%li",
+            _waypointGroups.allKeys.count - self.gpx.hiddenGroups.count,
+            _waypointGroups.allKeys.count];
+    [self.groupsButton setTitle:groupsCount forState:UIControlStateNormal];
+    self.groupsButtonContainerView.hidden = _waypointGroups.allKeys.count == 0;
+    self.groupsButton.hidden = _waypointGroups.allKeys.count == 0;
+}
+
 - (IBAction)onBackButtonPressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
@@ -678,6 +730,17 @@
             [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
         }
     }];
+}
+
+- (IBAction)onGroupsButtonPressed:(id)sender
+{
+    OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
+            [[OAEditWaypointsGroupOptionsViewController alloc]
+                    initWithScreenType:EOAEditWaypointsGroupVisibleScreen
+                             groupName:nil
+                            groupColor:nil];
+    editWaypointsGroupOptions.delegate = self;
+    [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
 }
 
 #pragma mark - OATrackMenuViewControllerDelegate
@@ -828,14 +891,22 @@
         [self.gpx addHiddenGroups:groupName];
     [[OAGPXDatabase sharedDb] save];
 
-    groupName = [self checkGroupName:groupName];
-    NSInteger groupIndex = [_waypointSortedGroupNames indexOfObject:groupName];
-    OAGPXTableSectionData *groupSection = _tableData.sections[groupIndex];
-    if (groupSection.updateData)
-        groupSection.updateData();
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:groupIndex]]
-                          withRowAnimation:UITableViewRowAnimationNone];
+    if (_selectedTab == EOATrackMenuHudPointsTab)
+    {
+        groupName = [self checkGroupName:groupName];
+        NSInteger groupIndex = [_waypointSortedGroupNames indexOfObject:groupName];
+        if (groupIndex != NSNotFound)
+        {
+            OAGPXTableSectionData *groupSection = _tableData.sections[groupIndex];
+            if (groupSection.updateData)
+                groupSection.updateData();
 
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:groupIndex]]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
+
+    [self updateGroupsButton];
     if (self.isCurrentTrack)
         [[_app trackRecordingObservable] notifyEvent];
     else
@@ -882,7 +953,7 @@
         _tableData.updateData();
 
     [self.tableView reloadData];
-
+    [self updateGroupsButton];
     if (_headerView)
         [_headerView setDescription];
 }
@@ -2097,6 +2168,26 @@
 
     if (scrollView.contentOffset.y <= 0 || self.contentContainer.frame.origin.y != [OAUtilities getStatusBarHeight])
         [scrollView setContentOffset:CGPointZero animated:NO];
+
+    BOOL shouldShow = self.tableView.contentOffset.y > 0;
+    self.topHeaderContainerView.layer.shadowOpacity = shouldShow ? 0.15 : 0.0;
+}
+
+#pragma mark - OAFoldersCellDelegate
+
+- (void)onItemSelected:(NSInteger)index type:(NSString *)type
+{
+    if (_selectedTab == EOATrackMenuHudPointsTab)
+    {
+        OAGPXTableSectionData *sectionData = _tableData.sections[index];
+        CGFloat headerHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.01;
+        CGRect rectForSection = [self.tableView rectForSection:index];
+        CGFloat yOffset = rectForSection.origin.y;
+        if (index > 0)
+            yOffset -= _headerView.frame.size.height - headerHeight;
+
+        [self.tableView setContentOffset:CGPointMake(0, yOffset) animated:NO];
+    }
 }
 
 @end

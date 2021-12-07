@@ -8,6 +8,7 @@
 
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OATableViewCustomFooterView.h"
+#import "OAFoldersCollectionView.h"
 #import "OAIconTextDividerSwitchCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAColorsTableViewCell.h"
@@ -957,13 +958,13 @@
             cell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
             cell.backgroundColor = UIColor.whiteColor;
             cell.collectionView.backgroundColor = UIColor.whiteColor;
-            cell.cellIndex = indexPath;
-            cell.state = _scrollCellsState;
-            cell.foldersDelegate = self;
+            cell.collectionView.cellIndex = indexPath;
+            cell.collectionView.state = _scrollCellsState;
+            cell.collectionView.foldersDelegate = self;
         }
         if (cell)
         {
-            [cell setValues:cellData.values[@"array_value"]
+            [cell.collectionView setValues:cellData.values[@"array_value"]
           withSelectedIndex:[cellData.values[@"selected_integer_value"] integerValue]];
         }
         if (!_colorValuesCell)

@@ -526,6 +526,8 @@
 "shared_string_width" = "Width";
 "shared_string_interval" = "Interval";
 "shared_string_none" = "None";
+"shared_string_hide_all" = "Hide all";
+"shared_string_show_all" = "Show all";
 
 "restart" = "Restart";
 

@@ -30,6 +30,7 @@
 #import "OAFoldersCell.h"
 #import "OACollectionViewCellState.h"
 #import "OAOsmAndFormatter.h"
+#import "OAFoldersCollectionView.h"
 
 #define kAllFoldersKey @"kAllFoldersKey"
 #define kFolderKey @"kFolderKey"
@@ -329,13 +330,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             cell.collectionView.backgroundColor = UIColor.clearColor;
-            cell.foldersDelegate = self;
-            cell.cellIndex = indexPath;
-            cell.state = _scrollCellsState;
+            cell.collectionView.foldersDelegate = self;
+            cell.collectionView.cellIndex = indexPath;
+            cell.collectionView.state = _scrollCellsState;
         }
         if (cell)
         {
-            [cell setValues:item[@"values"] withSelectedIndex:[item[@"selectedValue"] intValue]];
+            [cell.collectionView setValues:item[@"values"] withSelectedIndex:[item[@"selectedValue"] intValue]];
         }
         if (!_foldersCell)
         {
@@ -369,7 +370,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
      if ([type isEqualToString:[OAFoldersCell getCellIdentifier]])
      {
          OAFoldersCell *folderCell = (OAFoldersCell *)cell;
-         [folderCell updateContentOffset];
+         [folderCell.collectionView updateContentOffset];
      }
  }
 

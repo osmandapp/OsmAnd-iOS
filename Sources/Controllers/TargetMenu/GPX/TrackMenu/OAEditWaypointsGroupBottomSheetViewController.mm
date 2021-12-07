@@ -328,17 +328,17 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
 #pragma mark - OAEditWaypointsGroupOptionsDelegate
 
-- (void)updateWaypointsGroup:(NSString *)groupName
-                  groupColor:(UIColor *)groupColor
+- (void)updateWaypointsGroup:(NSString *)name
+                       color:(UIColor *)color
 {
     if (self.trackMenuDelegate)
         [self.trackMenuDelegate changeWaypointsGroup:_groupName
-                                        newGroupName:groupName
-                                       newGroupColor:groupColor];
-    if (groupName)
+                                        newGroupName:name
+                                       newGroupColor:color];
+    if (name)
     {
-        self.titleView.text = groupName;
-        _groupName = groupName;
+        self.titleView.text = name;
+        _groupName = name;
         [self updateShown];
         if (_tableData.firstObject.cells.firstObject.updateData)
             _tableData.firstObject.cells.firstObject.updateData();
@@ -347,8 +347,8 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         [self updateColor];
     }
 
-    if (groupColor)
-        _groupColor = groupColor;
+    if (color)
+        _groupColor = color;
 
     [self setLeftIcon];
 }

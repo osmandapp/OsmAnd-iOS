@@ -322,6 +322,12 @@
         mapView.viewportYScale = _cachedYViewPort;
 }
 
+- (BOOL)isAdjustedMapViewPort
+{
+    OAMapRendererView *mapView = _mapViewController.mapView;
+    return mapView.viewportYScale != _cachedYViewPort && mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE;
+}
+
 - (void)changeMapRulerPosition
 {
     CGFloat bottomMargin = [self isLandscape] ? 0 : (-[self getViewHeight] + [OAUtilities getBottomMargin] - 20.);

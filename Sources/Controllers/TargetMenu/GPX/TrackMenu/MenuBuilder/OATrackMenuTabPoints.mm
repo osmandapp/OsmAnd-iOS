@@ -16,6 +16,7 @@
 #import "OADefaultFavorite.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
+#import "QuadRect.h"
 
 #import <OsmAndCore/Utilities.h>
 
@@ -43,6 +44,25 @@
 - (UIImage *)getTabIcon
 {
     return [OABaseTrackMenuTabItem getUnselectedIcon:@"ic_custom_folder_points"];
+}
+
+- (QuadRect *)updateQR:(QuadRect *)q p:(OAGpxWpt *)p defLat:(CGFloat)defLat defLon:(CGFloat)defLon
+{
+    if (q.left == defLon && q.top == defLat &&
+            q.right == defLon && q.bottom == defLat)
+    {
+        return [[QuadRect alloc] initWithLeft:p.position.longitude
+                                          top:p.position.latitude
+                                        right:p.position.longitude
+                                       bottom:p.position.latitude];
+    }
+    else
+    {
+        return [[QuadRect alloc] initWithLeft:MIN(q.left, p.position.longitude)
+                                          top:MAX(q.top, p.position.latitude)
+                                        right:MAX(q.right, p.position.longitude)
+                                       bottom:MIN(q.bottom, p.position.latitude)];
+    }
 }
 
 - (EOATrackMenuHudTab)getTabMode
@@ -180,20 +200,52 @@
                 }
                 return waypointsData;
             };
+
+            __block NSArray<OAGpxWptItem *> *waypoints = [self.trackMenuDelegate getWaypointsData][currentGroupName];
             if (self.trackMenuDelegate)
-                [cellsData addObjectsFromArray:
-                        generateDataForWaypointCells([self.trackMenuDelegate getWaypointsData][currentGroupName])];
+                [cellsData addObjectsFromArray:generateDataForWaypointCells(waypoints)];
+
+            QuadRect *(^getQuadRectForSelectedGroup)(NSArray<OAGpxWptItem *> *) =
+                    ^(NSArray<OAGpxWptItem *> *currentWaypoints) {
+                QuadRect *pointsRect = nil;
+
+                if (!currentWaypoints || currentWaypoints.count == 0)
+                    return pointsRect;
+
+                OAGpxWpt *p = currentWaypoints.firstObject.point;
+                pointsRect = [[QuadRect alloc] initWithLeft:p.position.longitude
+                                                        top:p.position.latitude
+                                                      right:p.position.longitude
+                                                     bottom:p.position.latitude];
+                if (currentWaypoints.count > 1)
+                {
+                    for (OAGpxWptItem *waypoint in waypoints)
+                    {
+                        pointsRect = [self updateQR:pointsRect p:waypoint.point defLat:0. defLon:0.];
+                    }
+                }
+
+                return pointsRect;
+            };
+
+            [waypointsSection setData:@{
+                    kTableValues: @{ @"points_quad_rect_value": getQuadRectForSelectedGroup(waypoints) }
+            }];
 
             [groupCellData setData:@{
                     kTableUpdateData: ^() {
                         if (regenerateWaypoints)
                         {
+                            if (self.trackMenuDelegate)
+                                waypoints = [self.trackMenuDelegate getWaypointsData][currentGroupName];
+
                             NSMutableArray *newCellsData = [NSMutableArray array];
                             [newCellsData addObject:groupCellData];
-                            if (self.trackMenuDelegate)
-                                [newCellsData addObjectsFromArray:
-                                        generateDataForWaypointCells([self.trackMenuDelegate getWaypointsData][currentGroupName])];
-                            [waypointsSection setData:@{ kSectionCells: newCellsData }];
+                            [newCellsData addObjectsFromArray:generateDataForWaypointCells(waypoints)];
+                            [waypointsSection setData:@{
+                                    kSectionCells: newCellsData,
+                                    kTableValues: @{ @"points_quad_rect_value": getQuadRectForSelectedGroup(waypoints) }
+                            }];
                             regenerateWaypoints = NO;
                         }
 

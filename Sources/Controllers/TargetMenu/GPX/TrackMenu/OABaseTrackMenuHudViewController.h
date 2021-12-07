@@ -125,5 +125,6 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
                                          constant:(CGFloat)constant;
 
 - (void)adjustMapViewPort;
+- (BOOL)isAdjustedMapViewPort;
 
 @end

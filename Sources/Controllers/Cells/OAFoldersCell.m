@@ -16,9 +16,4 @@
     [super awakeFromNib];
 }
 
-- (void)updateContentOffset
-{
-    [self.collectionView updateContentOffset];
-}
-
 @end

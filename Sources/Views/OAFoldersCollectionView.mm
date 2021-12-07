@@ -74,6 +74,16 @@
     _selectionIndex = index;
 }
 
+- (void)setSelectedIndex:(NSInteger)index
+{
+    _selectionIndex = index;
+}
+
+- (NSInteger)getSelectedIndex
+{
+    return _selectionIndex;
+}
+
 #pragma mark - Scroll offset calculations
 
 - (void)updateContentOffset
@@ -179,12 +189,19 @@
     if (cell && [cell isKindOfClass:OAFoldersCollectionViewCell.class])
     {
         OAFoldersCollectionViewCell *destCell = (OAFoldersCollectionViewCell *) cell;
-        destCell.titleLabel.text = item[@"title"];
-        destCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
-        destCell.layer.cornerRadius = 9;
-        NSString *iconName = item[@"img"];
-        BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
+        destCell.layer.cornerRadius = 9.;
 
+        BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
+        BOOL enabled = [item.allKeys containsObject:@"enabled"] ? [item[@"enabled"] boolValue] : YES;
+
+        destCell.titleLabel.text = item[@"title"];
+        destCell.titleLabel.font = enabled
+                ? [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
+                : [UIFont fontWithDescriptor:[destCell.titleLabel.font.fontDescriptor
+                                fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic | UIFontDescriptorTraitBold]
+                                        size:15.];
+
+        NSString *iconName = item[@"img"];
         BOOL hasIcon = iconName && iconName.length > 0;
         [destCell showImage:hasIcon];
         [destCell.imageView setImage:hasIcon ? [UIImage templateImageNamed:item[@"img"]] : nil];
@@ -194,15 +211,20 @@
             [destCell setBackgroundColor:UIColorFromRGB(color_primary_purple)];
             destCell.titleLabel.textColor = UIColor.whiteColor;
             destCell.imageView.tintColor = UIColor.whiteColor;
+            destCell.layer.borderWidth = 0.;
+            destCell.layer.borderColor = UIColor.clearColor.CGColor;
         }
         else
         {
-            [destCell setBackgroundColor:available
-                    ? UIColorFromARGB(color_primary_purple_10) : UIColorFromARGB(color_route_button_inactive)];
+            UIColor *backgroundColor = available
+                    ? UIColorFromARGB(color_primary_purple_10) : UIColorFromARGB(color_route_button_inactive);
+            [destCell setBackgroundColor:enabled ? backgroundColor : UIColor.clearColor];
             destCell.titleLabel.textColor = available
                     ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
             destCell.imageView.tintColor = available
                     ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
+            destCell.layer.borderWidth = enabled ? 0. : 1.;
+            destCell.layer.borderColor = enabled ? UIColor.clearColor.CGColor : UIColorFromRGB(color_tint_gray).CGColor;
         }
     }
 
@@ -257,9 +279,9 @@
     if (available)
     {
         if (self.foldersDelegate)
-            [self.foldersDelegate onItemSelected:indexPath.row type:_data[_selectionIndex][@"type"]];
+            [self.foldersDelegate onItemSelected:indexPath.row];
+        _selectionIndex = indexPath.row;
     }
-    [collectionView reloadData];
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 

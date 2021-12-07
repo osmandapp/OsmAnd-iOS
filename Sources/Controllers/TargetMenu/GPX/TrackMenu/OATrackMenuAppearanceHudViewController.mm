@@ -296,7 +296,6 @@
     {
         [trackColoringTypes addObject:@{
             @"title": item.title,
-            @"type": item.coloringType == OAColoringType.ATTRIBUTE ? item.attrName : item.coloringType.name,
             @"available": @(item.isActive)
         }];
     }
@@ -318,7 +317,6 @@
             {
                 [newTrackColoringTypes addObject:@{
                         @"title": item.title,
-                        @"type": item.coloringType == OAColoringType.ATTRIBUTE ? item.attrName : item.coloringType.name,
                         @"available": @(item.isActive)
                 }];
             }
@@ -1252,7 +1250,7 @@
 
 #pragma mark - OAFoldersCellDelegate
 
-- (void)onItemSelected:(NSInteger)index type:(NSString *)type
+- (void)onItemSelected:(NSInteger)index
 {
     _selectedItem = _availableColoringTypes[index];
     self.gpx.coloringType = _selectedItem.coloringType == OAColoringType.ATTRIBUTE ? _selectedItem.attrName : _selectedItem.coloringType.name;

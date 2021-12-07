@@ -24,6 +24,7 @@
 @implementation OATrackMenuHeaderView
 {
     NSArray<OAGPXTableCellData *> *_statisticsData;
+    NSArray<NSDictionary *> *_groupsData;
     EOATrackMenuHudTab _selectedTab;
     OsmAndAppInstance _app;
 }
@@ -235,6 +236,9 @@
         [self makeOnlyHeader:YES];
     }
 
+    self.groupsCollectionView.hidden = _selectedTab != EOATrackMenuHudPointsTab
+            || (_selectedTab == EOATrackMenuHudPointsTab && _groupsData.count == 0);
+
     if ([self needsUpdateConstraints])
         [self updateConstraints];
 
@@ -361,8 +365,7 @@
 
     if (self.onlyTitleAndDescriptionConstraint.active)
     {
-        headerFrame.size.height = self.descriptionContainerView.frame.origin.y
-                + self.descriptionContainerView.frame.size.height/* + self.onlyTitleAndDescriptionConstraint.constant*/;
+        headerFrame.size.height = self.descriptionContainerView.frame.origin.y + self.descriptionContainerView.frame.size.height;
     }
     else if (self.onlyTitleAndDescriptionAndGroupsConstraint.active)
     {
@@ -419,11 +422,18 @@
     self.statisticsCollectionView.hidden = !hasData;
 }
 
-- (void)setGroupsCollection:(NSArray<NSDictionary *> *)data
+- (void)setSelectedIndexGroupsCollection:(NSInteger)index
+{
+    [self.groupsCollectionView setSelectedIndex:index];
+    [self.groupsCollectionView reloadData];
+}
+- (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index
 {
     BOOL hasData = data && data.count > 0;
 
-    [self.groupsCollectionView setValues:data withSelectedIndex:0];
+    _groupsData = data;
+    [self.groupsCollectionView setValues:data withSelectedIndex:index];
+    [self.groupsCollectionView reloadData];
     self.groupsCollectionView.hidden = !hasData;
 }
 
@@ -433,9 +443,6 @@
     self.statisticsCollectionView.hidden = YES;
     self.locationContainerView.hidden = YES;
     self.actionButtonsContainerView.hidden = YES;
-
-    if (_selectedTab != EOATrackMenuHudPointsTab)
-        self.groupsCollectionView.hidden = YES;
 }
 
 - (void)showLocation:(BOOL)show

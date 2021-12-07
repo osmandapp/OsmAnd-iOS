@@ -213,6 +213,9 @@
         if (_selectedTab == EOATrackMenuHudOverviewTab)
         {
             _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
+        }
+        if (_selectedTab == EOATrackMenuHudPointsTab)
+        {
             _headerView.groupsCollectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 16. , 0., 16.);
         }
         else if (_selectedTab == EOATrackMenuHudSegmentsTab && _tableData.sections.count > 0)
@@ -293,6 +296,19 @@
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 }
 
+- (NSArray<NSDictionary *> *)generateGroupCollectionData
+{
+    NSMutableArray<NSDictionary *> *groupsData = [NSMutableArray array];
+    for (NSString *groupName in _waypointSortedGroupNames)
+    {
+        [groupsData addObject:@{
+                @"title": groupName.length > 5 ? [[groupName substringToIndex:5] stringByAppendingString:@"..."] : groupName,
+                @"enabled": @([self isWaypointsGroupVisible:groupName])
+        }];
+    }
+    return groupsData;
+}
+
 - (void)setupHeaderView
 {
     if (_headerView)
@@ -316,15 +332,7 @@
     {
         _headerView.groupsCollectionView.foldersDelegate = self;
         _headerView.groupsCollectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 16. , 0., 16.);
-        NSMutableArray<NSDictionary *> *groupsData = [NSMutableArray array];
-        for (NSString *groupName in _waypointSortedGroupNames)
-        {
-            [groupsData addObject:@{
-                    @"title": groupName,
-                    @"type": groupName
-            }];
-        }
-        [_headerView setGroupsCollection:groupsData];
+        [_headerView setGroupsCollection:[self generateGroupCollectionData] withSelectedIndex:0];
     }
 
     [_headerView updateHeader:_selectedTab
@@ -708,6 +716,37 @@
     [self.groupsButton setTitle:groupsCount forState:UIControlStateNormal];
     self.groupsButtonContainerView.hidden = _waypointGroups.allKeys.count == 0;
     self.groupsButton.hidden = _waypointGroups.allKeys.count == 0;
+    if (_selectedTab == EOATrackMenuHudPointsTab)
+    {
+        [_headerView setGroupsCollection:[self generateGroupCollectionData]
+                       withSelectedIndex:[_headerView.groupsCollectionView getSelectedIndex]];
+    }
+}
+
+- (void)fitSelectedPointsGroupOnMap:(NSInteger)groupIndex
+{
+    if (_waypointSortedGroupNames.count > groupIndex && _tableData.sections.count - 1 > groupIndex)
+    {
+        OAGPXTableSectionData *sectionData = _tableData.sections[groupIndex];
+        if (sectionData.values[@"points_quad_rect_value"])
+        {
+            CGSize screenBBox = CGSizeMake(
+                    [self isLandscape] ? DeviceScreenWidth - [self getLandscapeViewWidth] : DeviceScreenWidth,
+                    [self isLandscape] ? DeviceScreenHeight : DeviceScreenHeight - [self getViewHeight]
+            );
+            QuadRect *pointsRect = sectionData.values[@"points_quad_rect_value"];
+            [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(pointsRect.top, pointsRect.left)
+                                              bottomRight:CLLocationCoordinate2DMake(pointsRect.bottom, pointsRect.right)
+                                                     zoom:0.
+                                               screenBBox:screenBBox
+                                              bottomInset:0.
+                                                leftInset:0.
+                                                 topInset:0.
+                                                 animated:YES];
+            if (![self isAdjustedMapViewPort])
+                [self adjustMapViewPort];
+        }
+    }
 }
 
 - (IBAction)onBackButtonPressed:(id)sender
@@ -1614,6 +1653,7 @@
                            options:UIViewAnimationOptionTransitionCrossDissolve
                         animations:^(void) {
                             [self.tableView reloadData];
+                            [self.tableView setContentOffset:CGPointZero];
                         }
                         completion: ^(BOOL finished) {
                             _isTabSelecting = NO;
@@ -2161,6 +2201,28 @@
             [_headerView removeBlurEffect];
             _isHeaderBlurred = NO;
         }
+        if (_selectedTab == EOATrackMenuHudPointsTab && _waypointSortedGroupNames.count > 0)
+        {
+            CGPoint p = scrollView.contentOffset;
+            p.y += _headerView.frame.size.height;
+            NSIndexPath *ip = [self.tableView indexPathForRowAtPoint:p];
+            if (ip)
+            {
+                if (ip.section != 0)
+                    p.y += [self tableView:self.tableView heightForHeaderInSection:ip.section];
+                ip = [self.tableView indexPathForRowAtPoint:p];
+                if (ip)
+                {
+                    [_headerView setSelectedIndexGroupsCollection:ip.section];
+                    if (ip.section < _waypointSortedGroupNames.count)
+                    {
+                            [_headerView.groupsCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:ip.section inSection:0]
+                                                                 atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                                                         animated:YES];
+                    }
+                }
+            }
+        }
     }
 
     if ([self shouldScrollInAllModes])
@@ -2175,7 +2237,7 @@
 
 #pragma mark - OAFoldersCellDelegate
 
-- (void)onItemSelected:(NSInteger)index type:(NSString *)type
+- (void)onItemSelected:(NSInteger)index
 {
     if (_selectedTab == EOATrackMenuHudPointsTab)
     {
@@ -2187,6 +2249,8 @@
             yOffset -= _headerView.frame.size.height - headerHeight;
 
         [self.tableView setContentOffset:CGPointMake(0, yOffset) animated:NO];
+        [self fitSelectedPointsGroupOnMap:index];
+        [_headerView.groupsCollectionView reloadData];
     }
 }
 

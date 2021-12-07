@@ -14,7 +14,7 @@
 
 @required
 
-- (void)onItemSelected:(NSInteger)index type:(NSString *)type;
+- (void)onItemSelected:(NSInteger)index;
 
 @end
 
@@ -25,6 +25,8 @@
 @property (nonatomic) NSIndexPath *cellIndex;
 
 - (void)setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(NSInteger)index;
+- (void)setSelectedIndex:(NSInteger)index;
+- (NSInteger)getSelectedIndex;
 - (void)updateContentOffset;
 
 @end

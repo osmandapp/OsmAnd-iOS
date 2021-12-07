@@ -10,8 +10,9 @@
 
 @interface OAColorsCollectionViewCell : UICollectionViewCell
 
-@property (weak, nonatomic) IBOutlet UIView *colorView;
 @property (weak, nonatomic) IBOutlet UIView *backView;
+@property (weak, nonatomic) IBOutlet UIImageView *chessboardView;
+@property (weak, nonatomic) IBOutlet UIView *colorView;
 
 @end
 

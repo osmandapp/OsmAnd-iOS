@@ -223,7 +223,6 @@
         if (self.foldersDelegate)
             [self.foldersDelegate onItemSelected:indexPath.row type:_data[_selectionIndex][@"type"]];
     }
-    [collectionView reloadData];
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 

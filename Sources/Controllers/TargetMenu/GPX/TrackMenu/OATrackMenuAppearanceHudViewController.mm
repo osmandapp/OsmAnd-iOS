@@ -948,31 +948,26 @@
     }
     else if ([cellData.type isEqualToString:[OAFoldersCell getCellIdentifier]])
     {
-        OAFoldersCell *cell = _colorValuesCell;
-        if (cell == nil)
+        if (_colorValuesCell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFoldersCell getCellIdentifier] owner:self options:nil];
-            cell = (OAFoldersCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
-            cell.backgroundColor = UIColor.whiteColor;
-            cell.collectionView.backgroundColor = UIColor.whiteColor;
-            cell.cellIndex = indexPath;
-            cell.state = _scrollCellsState;
-            cell.foldersDelegate = self;
+            _colorValuesCell = (OAFoldersCell *) nib[0];
+            _colorValuesCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            _colorValuesCell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
+            _colorValuesCell.backgroundColor = UIColor.whiteColor;
+            _colorValuesCell.collectionView.backgroundColor = UIColor.whiteColor;
+            _colorValuesCell.cellIndex = indexPath;
+            _colorValuesCell.state = _scrollCellsState;
+            _colorValuesCell.foldersDelegate = self;
         }
-        if (cell)
+        if (_colorValuesCell)
         {
-            [cell setValues:cellData.values[@"array_value"]
-          withSelectedIndex:[cellData.values[@"selected_integer_value"] integerValue]];
+            NSInteger selectedIndex = [cellData.values[@"selected_integer_value"] integerValue];
+            [_colorValuesCell setValues:cellData.values[@"array_value"]
+                      withSelectedIndex:selectedIndex != NSNotFound ? selectedIndex : 0];
+            [_colorValuesCell.collectionView reloadData];
         }
-        if (!_colorValuesCell)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [cell.collectionView reloadData];
-            });
-        }
-        outCell = _colorValuesCell = cell;
+        outCell = _colorValuesCell;
     }
     else if ([cellData.type isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
     {

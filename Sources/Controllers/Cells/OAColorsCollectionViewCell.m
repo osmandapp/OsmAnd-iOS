@@ -10,10 +10,13 @@
 
 @implementation OAColorsCollectionViewCell
 
-- (void)awakeFromNib {
+- (void)awakeFromNib
+{
     [super awakeFromNib];
-    self.colorView.layer.cornerRadius = self.colorView.frame.size.height/2;
+
     self.backView.layer.cornerRadius = self.backView.frame.size.height/2;
+    self.chessboardView.layer.cornerRadius = self.chessboardView.frame.size.height/2;
+    self.colorView.layer.cornerRadius = self.colorView.frame.size.height/2;
 }
 
 @end

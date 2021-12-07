@@ -19,10 +19,4 @@
     self.colorView.layer.cornerRadius = self.colorView.frame.size.height/2;
 }
 
-- (void)setChessboardAlpha:(CGFloat)alpha
-{
-    self.colorView.alpha = alpha;
-    self.chessboardView.hidden = alpha == 1.;
-}
-
 @end

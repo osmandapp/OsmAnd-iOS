@@ -14,7 +14,5 @@
 @property (weak, nonatomic) IBOutlet UIImageView *chessboardView;
 @property (weak, nonatomic) IBOutlet UIView *colorView;
 
-- (void)setChessboardAlpha:(CGFloat)alpha;
-
 @end
 

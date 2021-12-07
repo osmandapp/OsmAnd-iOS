@@ -75,13 +75,9 @@
             cell.colorView.layer.borderWidth = 0;
         }
 
-        UIColor *backgroundColor = UIColorFromRGB(color);
-        cell.colorView.backgroundColor = backgroundColor;
-
-        UIImage *image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
-        cell.chessboardView.image = image;
-        cell.chessboardView.tintColor = backgroundColor;
-        [cell setChessboardAlpha:[self getAlphaForColor:color]];
+        cell.colorView.backgroundColor = [UIColorFromRGB(color) colorWithAlphaComponent:[self getAlphaForColor:color]];
+        cell.chessboardView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
+        cell.chessboardView.tintColor = UIColorFromRGB(color);
 
         if (indexPath.row == _currentColor)
         {

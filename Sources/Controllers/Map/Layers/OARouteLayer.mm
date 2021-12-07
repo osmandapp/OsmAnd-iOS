@@ -17,6 +17,8 @@
 #import "OARouteStatisticsHelper.h"
 #import "OATransportRoutingHelper.h"
 #import "OATransportStopType.h"
+#import "OARouteDirectionInfo.h"
+#import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 
 #include <OsmAndCore.h>
@@ -50,6 +52,11 @@
     std::shared_ptr<SkBitmap> _xAxisLocationIcon;
     std::shared_ptr<SkBitmap> _transportTransferIcon;
     std::shared_ptr<SkBitmap> _transportShieldIcon;
+    
+    std::shared_ptr<OsmAnd::VectorLinesCollection> _actionLinesCollection;
+    OAAutoObserverProxy* _mapZoomObserver;
+    
+    NSDictionary<NSString *, NSNumber *> *_routeAttributes;
 
     BOOL _initDone;
 }
@@ -57,6 +64,11 @@
 - (NSString *) layerId
 {
     return kRouteLayerId;
+}
+
+- (void)dealloc
+{
+    [_mapZoomObserver detach];
 }
 
 - (void) initLayer
@@ -70,6 +82,7 @@
     _currentGraphPosition = std::make_shared<OsmAnd::MapMarkersCollection>();
     _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
+    _actionLinesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     
     _xAxisLocationIcon = [OANativeUtilities skBitmapFromPngResource:@"map_mapillary_location"];
     _transportTransferIcon = [OANativeUtilities skBitmapFromPngResource:@"map_public_transport_transfer"];
@@ -85,12 +98,18 @@
                                                        [OANativeUtilities skBitmapFromPngResource:@"map_pedestrian_location"]);
     _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_currentGraphPosition);
     
+    _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
+    
     _initDone = YES;
     
     [self.mapView addKeyedSymbolsProvider:_collection];
     [self.mapView addKeyedSymbolsProvider:_currentGraphPosition];
     [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
     [self.mapView addKeyedSymbolsProvider:_transportRouteMarkers];
+    
+    _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onMapZoomChanged:withKey:andValue:)
+                                                  andObserve:self.mapViewController.zoomObservable];
 }
 
 - (void) resetLayer
@@ -100,10 +119,14 @@
     [self.mapView removeKeyedSymbolsProvider:_collection];
     [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
     [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
+    [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
     
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
     _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
+    _actionLinesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    
+    _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
 
     _locationMarker->setIsHidden(true);
 }
@@ -202,7 +225,7 @@
                 builder.setBaseOrder(baseOrder--)
                 .setIsHidden(way->nodes.size() == 0)
                 .setLineId(1)
-                .setLineWidth(30.)
+                .setLineWidth(50.)
                 .setPoints(points)
                 .setFillColor(colorARGB);
                 builder.buildAndAddToCollection(_collection);
@@ -227,7 +250,9 @@
             int baseOrder = self.baseOrder;
             BOOL isNight = [OAAppSettings sharedManager].nightMode;
             
-            NSDictionary<NSString *, NSNumber *> *result = [self.mapViewController getLineRenderingAttributes:@"route"];
+            NSDictionary<NSString *, NSNumber *> *result = _routeAttributes;
+            if (!result)
+                result = [self.mapViewController getLineRenderingAttributes:@"route"];
             NSNumber *colorVal = [result valueForKey:@"color"];
             BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
             OsmAnd::ColorARGB lineColor = hasStyleColor ? OsmAnd::ColorARGB(colorVal.intValue) : isNight ?
@@ -236,9 +261,8 @@
             OsmAnd::VectorLineBuilder builder;
             builder.setBaseOrder(baseOrder--)
             .setIsHidden(points.size() == 0)
-//            .setApproximationEnabled(false)
             .setLineId(1)
-            .setLineWidth(30.)
+            .setLineWidth(60.)
             .setPoints(points);
             
             UIColor *color = UIColorFromARGB(lineColor.argb);
@@ -260,7 +284,238 @@
         {
             lines[0]->setPoints(points);
         }
+        [self buildActionArrows];
     }];
+}
+
+- (OsmAnd::AreaI) calculateBounds:(NSArray<CLLocation *> *)pts
+{
+    double left = DBL_MAX, top = DBL_MIN, right = DBL_MIN, bottom = DBL_MAX;
+    for (NSInteger i = 0; i < pts.count; i++)
+    {
+        CLLocation *pt = pts[i];
+        right = MAX(right, pt.coordinate.longitude);
+        left = MIN(left, pt.coordinate.longitude);
+        top = MAX(top, pt.coordinate.latitude);
+        bottom = MIN(bottom, pt.coordinate.latitude);
+    }
+    OsmAnd::PointI topLeft = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(top, left));
+    OsmAnd::PointI bottomRight = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottom, right));
+    return OsmAnd::AreaI(topLeft, bottomRight);
+}
+
+- (void) onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self buildActionArrows];
+    });
+}
+
+- (void) buildActionArrows
+{
+    [self.mapViewController runWithRenderSync:^{
+        const auto zoom = self.mapView.zoomLevel;
+        
+        if (_collection->getLines().isEmpty() || zoom <= OsmAnd::ZoomLevel14)
+        {
+            [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
+            _actionLinesCollection->removeAllLines();
+            return;
+        }
+        else
+        {
+            NSDictionary<NSString *, NSNumber *> *result = _routeAttributes;
+            if (!result)
+                result = [self.mapViewController getLineRenderingAttributes:@"route"];
+            NSNumber *colorVal = [result valueForKey:@"color_3"];
+            BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
+            BOOL isNight = [OAAppSettings sharedManager].nightMode;
+            OsmAnd::ColorARGB lineColor = hasStyleColor ? OsmAnd::ColorARGB(colorVal.intValue) : isNight ?
+            OsmAnd::ColorARGB(0xff41a6d9) : OsmAnd::ColorARGB(0xffffde5b);
+            
+            int baseOrder = self.baseOrder - 1000;
+            NSArray<NSArray<CLLocation *> *> *actionPoints = [self calculateActionPoints];
+            if (actionPoints.count > 0)
+            {
+                int lineIdx = 0;
+                int initialLinesCount = _actionLinesCollection->getLines().count();
+                for (NSArray<CLLocation *> *line in actionPoints)
+                {
+                    QVector<OsmAnd::PointI> points;
+                    for (CLLocation *point in line)
+                    {
+                        points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.coordinate.latitude, point.coordinate.longitude)));
+                    }
+                    if (lineIdx < initialLinesCount)
+                    {
+                        auto line = _actionLinesCollection->getLines()[lineIdx];
+                        line->setPoints(points);
+                        line->setIsHidden(false);
+                        lineIdx++;
+                    }
+                    else
+                    {
+                        OsmAnd::VectorLineBuilder builder;
+                        builder.setBaseOrder(baseOrder--)
+                            .setIsHidden(false)
+                            .setLineId(_actionLinesCollection->getLines().size())
+                            .setLineWidth(25.) // change this to dynamic width in the future
+                            .setPoints(points)
+                            .setEndCapStyle(OsmAnd::LineEndCapStyle::ARROW)
+                            .setFillColor(lineColor);
+                        builder.buildAndAddToCollection(_actionLinesCollection);
+                    }
+                }
+                QList< std::shared_ptr<OsmAnd::VectorLine> > toDelete;
+                while (lineIdx < initialLinesCount)
+                {
+                    _actionLinesCollection->getLines()[lineIdx]->setIsHidden(true);
+                    lineIdx++;
+                }
+            }
+        }
+        [self.mapView addKeyedSymbolsProvider:_actionLinesCollection];
+    }];
+}
+
+- (NSArray<NSArray<CLLocation *> *> *) calculateActionPoints
+{
+    NSArray<OARouteDirectionInfo *> *directions = _routingHelper.getRouteDirections;
+    NSInteger dirIdx = 0;
+    NSArray<CLLocation *> *routeNodes = _routingHelper.getRoute.getRouteLocations;
+    CLLocation *lastProjection = _routingHelper.getLastProjection;
+    int cd = _routingHelper.getRoute.currentRoute;
+    OsmAnd::ZoomLevel zoom = self.mapView.zoomLevel;
+    
+    OARouteDirectionInfo *nf = nil;
+    double DISTANCE_ACTION = 35;
+    if(zoom >= OsmAnd::ZoomLevel17)
+        DISTANCE_ACTION = 15;
+    else if (zoom == OsmAnd::ZoomLevel15)
+        DISTANCE_ACTION = 70;
+    else if (zoom < OsmAnd::ZoomLevel15)
+        DISTANCE_ACTION = 110;
+    
+    double actionDist = 0;
+    CLLocation *previousAction = nil;
+    NSMutableArray<NSArray<CLLocation *> *> *res = [NSMutableArray array];
+    NSMutableArray<CLLocation *> *actionPoints = [NSMutableArray array];
+    int prevFinishPoint = -1;
+    for (int routePoint = 0; routePoint < routeNodes.count; routePoint++)
+    {
+        CLLocation *loc = routeNodes[routePoint];
+        if(nf != nil)
+        {
+            int pnt = nf.routeEndPointOffset == 0 ? nf.routePointOffset : nf.routeEndPointOffset;
+            if (pnt < routePoint + cd)
+                nf = nil;
+        }
+        while (nf == nil && dirIdx < directions.count)
+        {
+            nf = directions[dirIdx++];
+            int pnt = nf.routeEndPointOffset == 0 ? nf.routePointOffset : nf.routeEndPointOffset;
+            if (pnt < routePoint + cd)
+                nf = nil;
+        }
+        BOOL action = nf != nil && (nf.routePointOffset == routePoint + cd ||
+                                        (nf.routePointOffset <= routePoint + cd && routePoint + cd  <= nf.routeEndPointOffset));
+        if(!action && previousAction == nil)
+        {
+            // no need to check
+            continue;
+        }
+        if (!action)
+        {
+            // previousAction != null
+            double dist = [loc distanceFromLocation:previousAction];
+            actionDist += dist;
+            if (actionDist >= DISTANCE_ACTION)
+            {
+                [actionPoints addObject:[self calculateProjection:1 - (actionDist - DISTANCE_ACTION) / dist lp:previousAction l:loc]];
+                [res addObject:actionPoints];
+                actionPoints = [NSMutableArray array];
+                prevFinishPoint = routePoint;
+                previousAction = nil;
+                actionDist = 0;
+            }
+            else
+            {
+                [actionPoints addObject:loc];
+                previousAction = loc;
+            }
+        }
+        else
+        {
+            // action point
+            if (previousAction == nil)
+            {
+                [self addPreviousToActionPoints:actionPoints
+                                 lastProjection:lastProjection
+                                     routeNodes:routeNodes
+                                DISTANCE_ACTION:DISTANCE_ACTION
+                                prevFinishPoint:prevFinishPoint
+                                     routePoint:routePoint
+                                            loc:loc];
+            }
+            [actionPoints addObject:loc];
+            previousAction = loc;
+            prevFinishPoint = -1;
+            actionDist = 0;
+        }
+    }
+    if(previousAction != nil)
+    {
+        [res addObject:actionPoints];
+    }
+    return res;
+}
+
+- (void) addPreviousToActionPoints:(NSMutableArray<CLLocation *> *)actionPoints
+                    lastProjection:(CLLocation *)lastProjection
+                        routeNodes:(NSArray<CLLocation *> *)routeNodes
+                   DISTANCE_ACTION:(double)DISTANCE_ACTION
+                   prevFinishPoint:(int)prevFinishPoint
+                        routePoint:(int)routePoint
+                               loc:(CLLocation *)loc
+{
+    // put some points in front
+    NSInteger ind = actionPoints.count;
+    CLLocation *lprevious = loc;
+    double dist = 0;
+    for (NSInteger k = routePoint - 1; k >= -1; k--)
+    {
+        CLLocation *l = k == -1 ? lastProjection : routeNodes[k];
+        double locDist = [lprevious distanceFromLocation:l];
+        dist += locDist;
+        if (dist >= DISTANCE_ACTION)
+        {
+            if (locDist > 1)
+            {
+                [actionPoints insertObject:[self calculateProjection:(1 - (dist - DISTANCE_ACTION) / locDist) lp:lprevious l:l] atIndex:ind];
+            }
+            break;
+        }
+        else
+        {
+            [actionPoints insertObject:l atIndex:ind];
+            lprevious = l;
+        }
+        if (prevFinishPoint == k)
+        {
+            if (ind >= 2)
+            {
+                [actionPoints removeObjectAtIndex:ind - 2];
+                [actionPoints removeObjectAtIndex:ind - 2];
+            }
+            break;
+        }
+    }
+}
+
+- (CLLocation *) calculateProjection:(double)part lp:(CLLocation *)lp l:(CLLocation *)l
+{
+    CLLocation *p = [[CLLocation alloc] initWithLatitude:lp.coordinate.latitude + part * (l.coordinate.latitude - lp.coordinate.latitude) longitude:lp.coordinate.longitude + part * (l.coordinate.longitude - lp.coordinate.longitude)];
+    return p;
 }
 
 - (void) refreshRoute

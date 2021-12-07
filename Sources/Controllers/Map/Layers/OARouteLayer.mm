@@ -33,12 +33,6 @@
 #include <OsmAndCore/SkiaUtilities.h>
 #include <SkCGUtils.h>
 
-#include <SkBitmapDevice.h>
-#include <SkCanvas.h>
-#include <SkBitmap.h>
-#include <SkData.h>
-#include <SkPaint.h>
-
 #include <transportRouteResultSegment.h>
 
 @implementation OARouteLayer
@@ -70,6 +64,11 @@
 - (NSString *) layerId
 {
     return kRouteLayerId;
+}
+
+- (void)dealloc
+{
+    [_mapZoomObserver detach];
 }
 
 - (void) initLayer
@@ -319,6 +318,7 @@
         
         if (_collection->getLines().isEmpty() || zoom <= OsmAnd::ZoomLevel14)
         {
+            [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
             _actionLinesCollection->removeAllLines();
             return;
         }
@@ -372,10 +372,6 @@
                     _actionLinesCollection->getLines()[lineIdx]->setIsHidden(true);
                     lineIdx++;
                 }
-                //            for (const auto& line : toDelete)
-                //            {
-                //                _actionLinesCollection->removeLine(line);
-                //            }
             }
         }
         [self.mapView addKeyedSymbolsProvider:_actionLinesCollection];
@@ -428,10 +424,6 @@
             // no need to check
             continue;
         }
-//        if(action && previousAction == nil)
-//        {
-//            continue;
-//        }
         if (!action)
         {
             // previousAction != null

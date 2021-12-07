@@ -93,7 +93,6 @@
 
     OAGPXTrackColor *_selectedColor;
     NSArray<NSNumber *> *_availableColors;
-    NSDictionary<NSString *, NSNumber *> *_translucentColors;
 
     OAGPXTrackWidth *_selectedWidth;
     NSArray<NSString *> *_customWidthValues;
@@ -188,16 +187,11 @@
     _availableColoringTypes = items;
 
     NSMutableArray<NSNumber *> *trackColors = [NSMutableArray array];
-    NSMutableDictionary<NSString *, NSNumber *> *translucentColors = [NSMutableDictionary dictionary];
     for (OAGPXTrackColor *trackColor in [_appearanceCollection getAvailableColors])
     {
         [trackColors addObject:@(trackColor.colorValue)];
-        CGFloat alpha = CGColorGetAlpha(trackColor.color.CGColor);
-        if (alpha < 1)
-            translucentColors[[NSString stringWithFormat:@"%li", trackColor.colorValue]] = @(alpha);
     }
     _availableColors = trackColors;
-    _translucentColors = translucentColors;
 
     NSMutableArray *customWidthValues = [NSMutableArray array];
     for (NSInteger i = [OAGPXTrackWidth getCustomTrackWidthMin]; i <= [OAGPXTrackWidth getCustomTrackWidthMax]; i++)
@@ -346,8 +340,7 @@
                 kCellType: [OAColorsTableViewCell getCellIdentifier],
                 kTableValues: @{
                     @"int_value": @(_selectedColor.colorValue),
-                    @"array_value": _availableColors,
-                    @"translucent_dictionary_value": _translucentColors
+                    @"array_value": _availableColors
                 }
             }];
 
@@ -356,8 +349,7 @@
                 [gridOrDescriptionCell setData:@{
                     kTableValues: @{
                         @"int_value": @(_selectedColor.colorValue),
-                        @"array_value": _availableColors,
-                        @"translucent_dictionary_value": _translucentColors
+                        @"array_value": _availableColors
                     }
                 }];
             }
@@ -977,7 +969,6 @@
                                                          owner:self options:nil];
             cell = (OAColorsTableViewCell *) nib[0];
             cell.dataArray = arrayValue;
-            cell.translucentDataDict = cellData.values[@"translucent_dictionary_value"];
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell showLabels:NO];

@@ -41,15 +41,6 @@
     return _dataArray.count;
 }
 
-- (CGFloat)getAlphaForColor:(NSInteger)color
-{
-    NSString *colorKey = [NSString stringWithFormat:@"%li", color];
-    if (self.translucentDataDict && [self.translucentDataDict.allKeys containsObject:colorKey])
-        return [self.translucentDataDict[colorKey] floatValue];
-
-    return 1.;
-}
-
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     OAColorsCollectionViewCell *cell =
@@ -75,7 +66,10 @@
             cell.colorView.layer.borderWidth = 0;
         }
 
-        cell.colorView.backgroundColor = [UIColorFromRGB(color) colorWithAlphaComponent:[self getAlphaForColor:color]];
+        UIColor *aColor = UIColorFromARGB(color);
+        if (CGColorGetAlpha(aColor.CGColor) == 0.)
+            aColor = [aColor colorWithAlphaComponent:1.];
+        cell.colorView.backgroundColor = aColor;
         cell.chessboardView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
         cell.chessboardView.tintColor = UIColorFromRGB(color);
 

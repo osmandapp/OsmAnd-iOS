@@ -25,7 +25,6 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewNoLabelsTopConstraint;
 
 @property (nonatomic) NSArray *dataArray;
-@property (nonatomic) NSDictionary *translucentDataDict;
 @property (nonatomic) NSInteger currentColor;
 
 @property (nonatomic, weak) id<OAColorsTableViewCellDelegate> delegate;

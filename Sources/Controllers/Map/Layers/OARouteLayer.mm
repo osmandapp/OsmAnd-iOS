@@ -18,6 +18,7 @@
 #import "OATransportRoutingHelper.h"
 #import "OATransportStopType.h"
 #import "OARouteDirectionInfo.h"
+#import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 
 #include <OsmAndCore.h>
@@ -58,7 +59,10 @@
     std::shared_ptr<SkBitmap> _transportTransferIcon;
     std::shared_ptr<SkBitmap> _transportShieldIcon;
     
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _actionArrowsCollection;
+    std::shared_ptr<OsmAnd::VectorLinesCollection> _actionLinesCollection;
+    OAAutoObserverProxy* _mapZoomObserver;
+    
+    NSDictionary<NSString *, NSNumber *> *_routeAttributes;
 
     BOOL _initDone;
 }
@@ -79,7 +83,7 @@
     _currentGraphPosition = std::make_shared<OsmAnd::MapMarkersCollection>();
     _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
-    _actionArrowsCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+    _actionLinesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     
     _xAxisLocationIcon = [OANativeUtilities skBitmapFromPngResource:@"map_mapillary_location"];
     _transportTransferIcon = [OANativeUtilities skBitmapFromPngResource:@"map_public_transport_transfer"];
@@ -95,12 +99,18 @@
                                                        [OANativeUtilities skBitmapFromPngResource:@"map_pedestrian_location"]);
     _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_currentGraphPosition);
     
+    _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
+    
     _initDone = YES;
     
     [self.mapView addKeyedSymbolsProvider:_collection];
     [self.mapView addKeyedSymbolsProvider:_currentGraphPosition];
     [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
     [self.mapView addKeyedSymbolsProvider:_transportRouteMarkers];
+    
+    _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onMapZoomChanged:withKey:andValue:)
+                                                  andObserve:self.mapViewController.zoomObservable];
 }
 
 - (void) resetLayer
@@ -110,12 +120,14 @@
     [self.mapView removeKeyedSymbolsProvider:_collection];
     [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
     [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
-    [self.mapView removeKeyedSymbolsProvider:_actionArrowsCollection];
+    [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
     
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
     _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
-    _actionArrowsCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+    _actionLinesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    
+    _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
 
     _locationMarker->setIsHidden(true);
 }
@@ -214,7 +226,7 @@
                 builder.setBaseOrder(baseOrder--)
                 .setIsHidden(way->nodes.size() == 0)
                 .setLineId(1)
-                .setLineWidth(30.)
+                .setLineWidth(50.)
                 .setPoints(points)
                 .setFillColor(colorARGB);
                 builder.buildAndAddToCollection(_collection);
@@ -239,7 +251,9 @@
             int baseOrder = self.baseOrder;
             BOOL isNight = [OAAppSettings sharedManager].nightMode;
             
-            NSDictionary<NSString *, NSNumber *> *result = [self.mapViewController getLineRenderingAttributes:@"route"];
+            NSDictionary<NSString *, NSNumber *> *result = _routeAttributes;
+            if (!result)
+                result = [self.mapViewController getLineRenderingAttributes:@"route"];
             NSNumber *colorVal = [result valueForKey:@"color"];
             BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
             OsmAnd::ColorARGB lineColor = hasStyleColor ? OsmAnd::ColorARGB(colorVal.intValue) : isNight ?
@@ -249,7 +263,7 @@
             builder.setBaseOrder(baseOrder--)
             .setIsHidden(points.size() == 0)
             .setLineId(1)
-            .setLineWidth(30.)
+            .setLineWidth(60.)
             .setPoints(points);
             
             UIColor *color = UIColorFromARGB(lineColor.argb);
@@ -291,94 +305,81 @@
     return OsmAnd::AreaI(topLeft, bottomRight);
 }
 
+- (void) onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self buildActionArrows];
+    });
+}
+
 - (void) buildActionArrows
 {
-    _actionArrowsCollection->removeAllMarkers();
-    const auto zoom = self.mapView.zoomLevel;
-    
-    std::shared_ptr<SkPaint> linePaint(new SkPaint());
-    linePaint->setColor(OsmAnd::ColorARGB(color_mapillary).toSkColor());
-    linePaint->setStrokeWidth(10 * UIScreen.mainScreen.scale);
-    linePaint->setAntiAlias(true);
-    linePaint->setStrokeJoin(SkPaint::kRound_Join);
-    linePaint->setStrokeCap(SkPaint::kRound_Cap);
-    if (zoom > OsmAnd::ZoomLevel4)
-    {
-        NSArray<NSArray<CLLocation *> *> *actionPoints = [self calculateActionPoints];
-        if (actionPoints.count > 0)
+    [self.mapViewController runWithRenderSync:^{
+        const auto zoom = self.mapView.zoomLevel;
+        
+        if (_collection->getLines().isEmpty() || zoom <= OsmAnd::ZoomLevel14)
         {
-            CGFloat screenScale = UIScreen.mainScreen.scale;
-            double tileSize = 256 * screenScale;
-            const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - zoom));
-            const auto px31Size = tileSize31 / tileSize;
-            for (NSArray<CLLocation *> *arrow in actionPoints)
+            _actionLinesCollection->removeAllLines();
+            return;
+        }
+        else
+        {
+            NSDictionary<NSString *, NSNumber *> *result = _routeAttributes;
+            if (!result)
+                result = [self.mapViewController getLineRenderingAttributes:@"route"];
+            NSNumber *colorVal = [result valueForKey:@"color_3"];
+            BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
+            BOOL isNight = [OAAppSettings sharedManager].nightMode;
+            OsmAnd::ColorARGB lineColor = hasStyleColor ? OsmAnd::ColorARGB(colorVal.intValue) : isNight ?
+            OsmAnd::ColorARGB(0xff41a6d9) : OsmAnd::ColorARGB(0xffffde5b);
+            
+            int baseOrder = self.baseOrder - 1000;
+            NSArray<NSArray<CLLocation *> *> *actionPoints = [self calculateActionPoints];
+            if (actionPoints.count > 0)
             {
-                if (arrow.count == 0)
-                    continue;
-                const auto area = [self calculateBounds:arrow];
-                double w = area.width() / px31Size * screenScale, h = area.height() / px31Size * screenScale;
-                std::shared_ptr<SkBitmap> bitmap(new SkBitmap());
-                // Create a bitmap that will be hold entire symbol (if target is empty)
-                if (bitmap->isNull())
+                int lineIdx = 0;
+                int initialLinesCount = _actionLinesCollection->getLines().count();
+                for (NSArray<CLLocation *> *line in actionPoints)
                 {
-                    if (!bitmap->tryAllocPixels(SkImageInfo::MakeN32Premul(w, h)))
+                    QVector<OsmAnd::PointI> points;
+                    for (CLLocation *point in line)
                     {
-                        NSLog(@"Failed to allocate image for route action arrow");
-                        continue;
+                        points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.coordinate.latitude, point.coordinate.longitude)));
                     }
-                    
-                    bitmap->eraseColor(SK_ColorTRANSPARENT);
+                    if (lineIdx < initialLinesCount)
+                    {
+                        auto line = _actionLinesCollection->getLines()[lineIdx];
+                        line->setPoints(points);
+                        line->setIsHidden(false);
+                        lineIdx++;
+                    }
+                    else
+                    {
+                        OsmAnd::VectorLineBuilder builder;
+                        builder.setBaseOrder(baseOrder--)
+                            .setIsHidden(false)
+                            .setLineId(_actionLinesCollection->getLines().size())
+                            .setLineWidth(25.) // change this to dynamic width in the future
+                            .setPoints(points)
+                            .setEndCapStyle(OsmAnd::LineEndCapStyle::ARROW)
+                            .setFillColor(lineColor);
+                        builder.buildAndAddToCollection(_actionLinesCollection);
+                    }
                 }
-                SkBitmapDevice target(*bitmap.get());
-                SkCanvas canvas(&target);
-                
-                SkScalar x1, y1, x2, y2 = 0;
-                
-                double lastTileX, lastTileY;
-                const auto firstPnt = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(arrow.firstObject.coordinate.latitude, arrow.firstObject.coordinate.longitude));
-                lastTileX = firstPnt.x;
-                lastTileY = firstPnt.y;
-                x1 = ((lastTileX - area.left()) / area.width()) * w;
-                y1 = ((lastTileY - area.top()) / area.height()) * h;
-                
-                bool recalculateLastXY = false;
-                for (int i = 1; i < arrow.count; i++)
+                QList< std::shared_ptr<OsmAnd::VectorLine> > toDelete;
+                while (lineIdx < initialLinesCount)
                 {
-                    const auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(arrow[i].coordinate.latitude, arrow[i].coordinate.longitude));
-                    
-                    double tileX = point.x;
-                    double tileY = point.y;
-                    
-                    x2 = ((tileX - area.left()) / area.width()) * w;
-                    y2 = ((tileY - area.top()) / area.height()) * h;
-                    
-                    if (recalculateLastXY)
-                    {
-                        x1 = ((lastTileX - area.left()) / area.width()) * w;
-                        y1 = ((lastTileY - area.top()) / area.height()) * h;
-                        recalculateLastXY = false;
-                    }
-                    canvas.drawLine(x1, y1, x2, y2, *linePaint);
-                    
-                    x1 = x2;
-                    y1 = y2;
-                    lastTileX = tileX;
-                    lastTileY = tileY;
+                    _actionLinesCollection->getLines()[lineIdx]->setIsHidden(true);
+                    lineIdx++;
                 }
-                canvas.flush();
-                OsmAnd::MapMarkerBuilder arrowBuilder;
-                arrowBuilder.setIsAccuracyCircleSupported(false);
-                arrowBuilder.setBaseOrder(self.baseOrder - 15);
-                arrowBuilder.setIsHidden(false);
-                arrowBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
-                arrowBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
-                arrowBuilder.setPosition(area.center());
-                arrowBuilder.setPinIcon(bitmap);
-                arrowBuilder.buildAndAddToCollection(_actionArrowsCollection);
+                //            for (const auto& line : toDelete)
+                //            {
+                //                _actionLinesCollection->removeLine(line);
+                //            }
             }
         }
-    }
-    [self.mapView addKeyedSymbolsProvider:_actionArrowsCollection];
+        [self.mapView addKeyedSymbolsProvider:_actionLinesCollection];
+    }];
 }
 
 - (NSArray<NSArray<CLLocation *> *> *) calculateActionPoints

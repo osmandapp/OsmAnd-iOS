@@ -303,23 +303,31 @@
     OAGPXTableCellData *colorValues = [OAGPXTableCellData withData:@{
             kCellKey: @"color_values",
             kCellType: [OAFoldersCell getCellIdentifier],
-            kTableValues: @{ @"array_value": trackColoringTypes },
+            kTableValues: @{
+                @"array_value": trackColoringTypes,
+                @"selected_integer_value": @([_availableColoringTypes indexOfObject:_selectedItem])
+            },
             kCellTitle: OALocalizedString(@"fav_color")
     }];
 
     [colorValues setData:@{
         kTableUpdateData: ^() {
-        NSMutableArray<NSDictionary *> *newTrackColoringTypes = [NSMutableArray array];
-        for (OATrackAppearanceItem *item in _availableColoringTypes)
-        {
-            [newTrackColoringTypes addObject:@{
-                @"title": item.title,
-                @"type": item.coloringType == OAColoringType.ATTRIBUTE ? item.attrName : item.coloringType.name,
-                @"available": @(item.isActive)
+            NSMutableArray<NSDictionary *> *newTrackColoringTypes = [NSMutableArray array];
+            for (OATrackAppearanceItem *item in _availableColoringTypes)
+            {
+                [newTrackColoringTypes addObject:@{
+                        @"title": item.title,
+                        @"type": item.coloringType == OAColoringType.ATTRIBUTE ? item.attrName : item.coloringType.name,
+                        @"available": @(item.isActive)
+                }];
+            }
+            [colorValues setData:@{
+                kTableValues: @{
+                    @"array_value": newTrackColoringTypes,
+                    @"selected_integer_value": @([_availableColoringTypes indexOfObject:_selectedItem])
+                }
             }];
         }
-        [colorValues setData:@{ kTableValues: @{@"array_value": newTrackColoringTypes } }];
-    }
     }];
     [colorsCells addObject:colorValues];
 
@@ -940,24 +948,26 @@
     }
     else if ([cellData.type isEqualToString:[OAFoldersCell getCellIdentifier]])
     {
-        OAFoldersCell *cell = _colorValuesCell;
-        if (cell == nil)
+        if (_colorValuesCell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFoldersCell getCellIdentifier] owner:self options:nil];
-            cell = (OAFoldersCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
-            cell.backgroundColor = UIColor.whiteColor;
-            cell.collectionView.backgroundColor = UIColor.whiteColor;
-            cell.cellIndex = indexPath;
-            cell.state = _scrollCellsState;
-            cell.foldersDelegate = self;
+            _colorValuesCell = (OAFoldersCell *) nib[0];
+            _colorValuesCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            _colorValuesCell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
+            _colorValuesCell.backgroundColor = UIColor.whiteColor;
+            _colorValuesCell.collectionView.backgroundColor = UIColor.whiteColor;
+            _colorValuesCell.cellIndex = indexPath;
+            _colorValuesCell.state = _scrollCellsState;
+            _colorValuesCell.foldersDelegate = self;
         }
-        if (cell)
+        if (_colorValuesCell)
         {
-            [cell setValues:cellData.values[@"array_value"] withSelectedIndex:[_availableColoringTypes indexOfObject:_selectedItem]];
+            NSInteger selectedIndex = [cellData.values[@"selected_integer_value"] integerValue];
+            [_colorValuesCell setValues:cellData.values[@"array_value"]
+                      withSelectedIndex:selectedIndex != NSNotFound ? selectedIndex : 0];
+            [_colorValuesCell.collectionView reloadData];
         }
-        outCell = _colorValuesCell = cell;
+        outCell = _colorValuesCell;
     }
     else if ([cellData.type isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
     {

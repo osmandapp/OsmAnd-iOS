@@ -9,9 +9,6 @@
 #import "OAFoldersCell.h"
 #import "OAFoldersCollectionViewCell.h"
 #import "OAColors.h"
-#import "OAUtilities.h"
-#import "Localization.h"
-#import "OACollectionViewCellState.h"
 
 #define kCellHeight 36
 #define kImageWidth 38
@@ -204,11 +201,14 @@
     BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
     if (available)
     {
+        UICollectionViewCell *cell = [colView cellForItemAtIndexPath:indexPath];
         [UIView animateWithDuration:0.2
                               delay:0
                             options:(UIViewAnimationOptionAllowUserInteraction)
                          animations:^{
-                             [colView reloadItemsAtIndexPaths:@[indexPath]];
+                             [cell setBackgroundColor:indexPath.row == _selectionIndex
+                                     ? UIColorFromRGB(color_primary_purple)
+                                     : UIColorFromARGB(color_primary_purple_10)];
                          }
                          completion:nil];
     }
@@ -220,14 +220,9 @@
     BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
     if (available)
     {
-        NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:_selectionIndex inSection:indexPath.section];
-        _selectionIndex = indexPath.row;
-        [collectionView reloadItemsAtIndexPaths:@[oldIndexPath, indexPath]];
-
         if (self.foldersDelegate)
-            [self.foldersDelegate onItemSelected:_selectionIndex type:_data[_selectionIndex][@"type"]];
+            [self.foldersDelegate onItemSelected:indexPath.row type:_data[_selectionIndex][@"type"]];
     }
-
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 

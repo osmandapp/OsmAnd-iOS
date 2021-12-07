@@ -321,24 +321,23 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }
     else if ([type isEqualToString:[OAFoldersCell getCellIdentifier]])
     {
-        OAFoldersCell* cell = _foldersCell;
-        if (cell == nil)
+        if (_foldersCell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFoldersCell getCellIdentifier] owner:self options:nil];
-            cell = (OAFoldersCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.backgroundColor = UIColor.clearColor;
-            cell.collectionView.backgroundColor = UIColor.clearColor;
-            cell.foldersDelegate = self;
-            cell.cellIndex = indexPath;
-            cell.state = _scrollCellsState;
+            _foldersCell = (OAFoldersCell *)[nib objectAtIndex:0];
+            _foldersCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            _foldersCell.backgroundColor = UIColor.clearColor;
+            _foldersCell.collectionView.backgroundColor = UIColor.clearColor;
+            _foldersCell.foldersDelegate = self;
+            _foldersCell.cellIndex = indexPath;
+            _foldersCell.state = _scrollCellsState;
         }
-        if (cell)
+        if (_foldersCell)
         {
-            [cell setValues:item[@"values"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
+            [_foldersCell setValues:item[@"values"] withSelectedIndex:[item[@"selectedValue"] intValue]];
+            [_foldersCell.collectionView reloadData];
         }
-        _foldersCell = cell;
-        return cell;
+        return _foldersCell;
     }
     else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {

@@ -158,7 +158,7 @@
 
             for (NSString *groupName in groups)
             {
-                if ([self.delegate isRteGroup:groupName])
+                if (self.delegate && [self.delegate isRteGroup:groupName])
                     continue;
 
                 __block BOOL visible = NO;

@@ -567,7 +567,7 @@
 "shared_setting_always_ask" = "항상 요청";
 "rendering_attr_coloredBuildings_name" = "유형별 색상 코드 건물";
 "rendering_category_hide" = "숨기기";
-"show_all" = "모두 표시";
+"shared_string_show_all" = "모두 표시";
 "sport" = "스포츠";
 "keep_informing_never" = "수동으로 (화살표를 누르세요)";
 "routing_attr_avoid_motorway_name" = "전용도로 회피";

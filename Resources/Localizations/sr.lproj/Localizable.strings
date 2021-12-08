@@ -1854,7 +1854,7 @@
 "gpx_deactivated" = "Искључено";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Прикажи све";
+"shared_string_show_all" = "Прикажи све";
 "parking" = "Паркинг";
 "parked_at" = "Parked at";
 

@@ -668,7 +668,7 @@
 "gpx_deactivated" = "معطلة";
 "gpx_trip_groups" = "مجموعات المسار";
 "gpx_group_select" = "اختيار المجموعة";
-"show_all" = "عرض الكل";
+"shared_string_show_all" = "عرض الكل";
 "get_directions" = "التوجيه مع الطرق";
 "parking" = "موقف السيارة";
 "est_travel_time" = "تقدير وقت السفر";

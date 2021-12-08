@@ -1766,7 +1766,7 @@
 "gpx_deactivated" = "מנוטרל";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "להציג הכול";
+"shared_string_show_all" = "להציג הכול";
 "parking" = "חנייה";
 "parked_at" = "Parked at";
 "directions_more_options" = "הנחיות מ־";

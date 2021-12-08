@@ -425,7 +425,7 @@
 "gpx_deactivated" = "Знедіяні";
 "gpx_trip_groups" = "Групи треків";
 "gpx_group_select" = "Вибір груп";
-"show_all" = "Показати усе";
+"shared_string_show_all" = "Показати усе";
 "get_directions" = "Маршрути";
 "parking" = "Стоянка";
 "est_travel_time" = "Приблизний час";

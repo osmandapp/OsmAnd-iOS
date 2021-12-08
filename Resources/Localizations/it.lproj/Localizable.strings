@@ -386,7 +386,7 @@
 "gpx_cancel_route_q" = "Vuoi cancellare questo percorso?";
 "gpx_deactivated" = "Disattivato";
 "gpx_trip_groups" = "Gruppi viaggio";
-"show_all" = "Mostra tutto";
+"shared_string_show_all" = "Mostra tutto";
 "parking" = "Parcheggio";
 "est_travel_time" = "Durata del viaggio prevista";
 "pedestrian" = "Pedone";

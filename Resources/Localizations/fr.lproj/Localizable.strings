@@ -214,7 +214,7 @@
 "time_open" = "Ouvert";
 "time_closed" = "Fermé";
 "gpx_deactivated" = "Désactivé";
-"show_all" = "AFFICHER TOUT";
+"shared_string_show_all" = "AFFICHER TOUT";
 "est_travel_time" = "Temps de voyage estimé";
 "pedestrian" = "Piéton";
 "go_to_downloads" = "Accéder aux téléchargements";

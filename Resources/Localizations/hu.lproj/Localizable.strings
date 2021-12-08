@@ -375,7 +375,7 @@
 "gpx_deactivated" = "Inaktiválva";
 "gpx_trip_groups" = "Utazás csoportok";
 "gpx_group_select" = "Csoportos kijelölés";
-"show_all" = "Összes megjelenítése";
+"shared_string_show_all" = "Összes megjelenítése";
 "get_directions" = "Navigáció";
 "shared_string_dismiss" = "Bezárás";
 "shared_string_modify" = "Módosítás";

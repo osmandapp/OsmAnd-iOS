@@ -394,7 +394,7 @@
 "gpx_deactivated" = "Afvirkjað";
 "gpx_trip_groups" = "Hópar ferla";
 "gpx_group_select" = "Velja eftir hóp";
-"show_all" = "Sýna allt";
+"shared_string_show_all" = "Sýna allt";
 "get_directions" = "Leiðarlýsingar";
 "parking" = "Bílastæði";
 "est_travel_time" = "Áætla ferðatíma";

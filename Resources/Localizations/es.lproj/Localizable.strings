@@ -379,7 +379,7 @@
 "gpx_deactivated" = "Desactivado";
 "gpx_trip_groups" = "Grupos de trazas";
 "gpx_group_select" = "Grupo elegido";
-"show_all" = "Mostrar todo";
+"shared_string_show_all" = "Mostrar todo";
 "get_directions" = "Indicaciones";
 "shared_string_dismiss" = "Descartar";
 "shared_string_modify" = "Modificar";

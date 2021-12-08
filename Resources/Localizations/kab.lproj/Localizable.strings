@@ -16,7 +16,7 @@
 "nothanks" = "Ala, tanmirt";
 "enter_name" = "Ger isem";
 "groups" = "Igrawen";
-"show_all" = "Sken akk";
+"shared_string_show_all" = "Sken akk";
 "red" = "Azeggaɣ";
 "map_settings_transp" = "Afrawan";
 "min_km" = "tasint";

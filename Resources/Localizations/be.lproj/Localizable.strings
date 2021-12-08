@@ -375,7 +375,7 @@
 "gpx_deactivated" = "Не актыўны";
 "gpx_trip_groups" = "Групы слядоў";
 "gpx_group_select" = "Выбар групы";
-"show_all" = "Паказаць усе";
+"shared_string_show_all" = "Паказаць усе";
 "get_directions" = "Навігацыя";
 "shared_string_dismiss" = "Адхіліць";
 "shared_string_modify" = "Змяніць";

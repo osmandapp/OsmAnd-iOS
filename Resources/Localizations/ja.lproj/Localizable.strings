@@ -1093,7 +1093,7 @@
 "gpx_deactivated" = "無効化されました";
 "gpx_trip_groups" = "経路のグループ";
 "gpx_group_select" = "グループの選択";
-"show_all" = "全て表示";
+"shared_string_show_all" = "全て表示";
 "get_directions" = "ナビ開始";
 "parking" = "駐車場";
 "directions_more_options" = "ここから出発";

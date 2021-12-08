@@ -7,7 +7,7 @@
 "m_style_walk" = "Πεζοπορία";
 "osm_edits_basic" = "Βασικό";
 "map_settings_map" = "Χάρτης";
-"show_all" = "Εμφάνιση όλων";
+"shared_string_show_all" = "Εμφάνιση όλων";
 "traffic_warning_border_control" = "Συνοριακός έλεγχος";
 "intermediate_items_sort_by_distance" = "Ταξινόμηση πόρτα-πόρτα";
 "shared_string_dismiss" = "Απόρριψη";

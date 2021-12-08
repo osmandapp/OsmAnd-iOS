@@ -1854,7 +1854,7 @@
 "gpx_deactivated" = "დეაქტივირებულია";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "ყველას ჩვენება";
+"shared_string_show_all" = "ყველას ჩვენება";
 "parking" = "პარკინგი";
 "parked_at" = "Parked at";
 

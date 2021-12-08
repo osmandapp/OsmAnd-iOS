@@ -380,7 +380,7 @@
 "total_time" = "Całkowity czas";
 "moving_time" = "Czas w ruchu";
 "change_group" = "Zmień grupę";
-"show_all" = "Wyświetl wszystko";
+"shared_string_show_all" = "Wyświetl wszystko";
 "parking" = "Parking";
 "pedestrian" = "Pieszy";
 "sorting" = "Sortowanie";

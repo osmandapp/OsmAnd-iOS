@@ -1552,7 +1552,7 @@
 "gpx_deactivated" = "Poistettu käytöstä";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Ryhmän valinta";
-"show_all" = "Näytä kaikki";
+"shared_string_show_all" = "Näytä kaikki";
 "parking" = "Pysäköinti";
 "directions_more_options" = "Suunnat lähtien";
 "nearby_search" = "Etsi läheltä";

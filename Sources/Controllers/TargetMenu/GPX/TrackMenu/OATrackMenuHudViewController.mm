@@ -710,12 +710,11 @@
 
 - (void)updateGroupsButton
 {
-    NSString *groupsCount = [NSString stringWithFormat:@"%li/%li",
-            _waypointGroups.allKeys.count - self.gpx.hiddenGroups.count,
-            _waypointGroups.allKeys.count];
-    [self.groupsButton setTitle:groupsCount forState:UIControlStateNormal];
-    self.groupsButtonContainerView.hidden = _waypointGroups.allKeys.count == 0;
-    self.groupsButton.hidden = _waypointGroups.allKeys.count == 0;
+    NSInteger groupsCount = [self.doc hasRtePt] ? _waypointSortedGroupNames.count - 1 : _waypointSortedGroupNames.count;
+    [self.groupsButton setTitle:[NSString stringWithFormat:@"%li/%li", groupsCount - self.gpx.hiddenGroups.count, groupsCount]
+                       forState:UIControlStateNormal];
+    self.groupsButtonContainerView.hidden = groupsCount == 0;
+    self.groupsButton.hidden = groupsCount == 0;
     if (_selectedTab == EOATrackMenuHudPointsTab)
     {
         [_headerView setGroupsCollection:[self generateGroupCollectionData]

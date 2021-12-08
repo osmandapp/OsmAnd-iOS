@@ -1766,7 +1766,7 @@
 "gpx_deactivated" = "Desactivado";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Mostrar todo";
+"shared_string_show_all" = "Mostrar todo";
 "parking" = "Estacionamiento";
 "parked_at" = "Parked at";
 "directions_more_options" = "Ir desde";

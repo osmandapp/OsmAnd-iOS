@@ -380,7 +380,7 @@
 "gpx_deactivated" = "Devre dışı";
 "gpx_trip_groups" = "Yol grupları";
 "gpx_group_select" = "Grup Seç";
-"show_all" = "Tümünü göster";
+"shared_string_show_all" = "Tümünü göster";
 "get_directions" = "Yol tarifleri";
 "parking" = "Park Etme";
 "est_travel_time" = "Tahmini seyahat süresi";

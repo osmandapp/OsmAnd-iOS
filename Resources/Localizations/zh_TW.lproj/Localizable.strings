@@ -403,7 +403,7 @@
 "gpx_deactivated" = "已停用";
 "gpx_trip_groups" = "旅程群組";
 "gpx_group_select" = "群組選擇";
-"show_all" = "全部顯示";
+"shared_string_show_all" = "全部顯示";
 "directions" = "導引";
 "shared_string_dismiss" = "離開";
 "shared_string_modify" = "修改";

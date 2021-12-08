@@ -206,9 +206,10 @@
         [destCell showImage:hasIcon];
         [destCell.imageView setImage:hasIcon ? [UIImage templateImageNamed:item[@"img"]] : nil];
 
+        UIColor *backgroundColor = UIColorFromARGB(color_primary_purple_10);
         if (indexPath.row == _selectionIndex)
         {
-            [destCell setBackgroundColor:UIColorFromRGB(color_primary_purple)];
+            backgroundColor = UIColorFromRGB(color_primary_purple);
             destCell.titleLabel.textColor = UIColor.whiteColor;
             destCell.imageView.tintColor = UIColor.whiteColor;
             destCell.layer.borderWidth = 0.;
@@ -216,9 +217,11 @@
         }
         else
         {
-            UIColor *backgroundColor = available
-                    ? UIColorFromARGB(color_primary_purple_10) : UIColorFromARGB(color_route_button_inactive);
-            [destCell setBackgroundColor:enabled ? backgroundColor : UIColor.clearColor];
+            if (available && !enabled)
+                backgroundColor = UIColor.clearColor;
+            else if (!available && enabled)
+                backgroundColor = UIColorFromRGB(color_route_button_inactive);
+
             destCell.titleLabel.textColor = available
                     ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
             destCell.imageView.tintColor = available
@@ -226,6 +229,8 @@
             destCell.layer.borderWidth = enabled ? 0. : 1.;
             destCell.layer.borderColor = enabled ? UIColor.clearColor.CGColor : UIColorFromRGB(color_tint_gray).CGColor;
         }
+
+        [cell setBackgroundColor:backgroundColor];
     }
 
     if ([cell needsUpdateConstraints])

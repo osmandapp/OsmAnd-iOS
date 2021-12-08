@@ -28,7 +28,7 @@
 		0A31AFCD26FBAC39000EE842 /* ic_small_speed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A31AFC726FBAC39000EE842 /* ic_small_speed@2x.png */; };
 		0A361BA0274D0B7F002D43E0 /* ic_custom_cancel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A361B9E274D0B7F002D43E0 /* ic_custom_cancel@3x.png */; };
 		0A361BA1274D0B7F002D43E0 /* ic_custom_cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A361B9F274D0B7F002D43E0 /* ic_custom_cancel@2x.png */; };
-		0A3EE20E275E4EE600C8B772 /* OAFoldersView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3EE20D275E4EE600C8B772 /* OAFoldersView.xib */; };
+		0A3EE20E275E4EE600C8B772 /* OAFoldersCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3EE20D275E4EE600C8B772 /* OAFoldersCollectionView.xib */; };
 		0A3EE212275E9F9B00C8B772 /* ic_custom_folder_visible@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A3EE210275E9F9A00C8B772 /* ic_custom_folder_visible@3x.png */; };
 		0A3EE213275E9F9B00C8B772 /* ic_custom_folder_visible@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A3EE211275E9F9B00C8B772 /* ic_custom_folder_visible@2x.png */; };
 		0A5395B626E0EDF900848E0D /* OAIconTextDividerSwitchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A5395B526E0EDF900848E0D /* OAIconTextDividerSwitchCell.xib */; };
@@ -2925,7 +2925,7 @@
 		0A31AFC726FBAC39000EE842 /* ic_small_speed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_speed@2x.png"; path = "Resources/Icons/ic_small_speed@2x.png"; sourceTree = "<group>"; };
 		0A361B9E274D0B7F002D43E0 /* ic_custom_cancel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cancel@3x.png"; path = "Resources/Icons/ic_custom_cancel@3x.png"; sourceTree = "<group>"; };
 		0A361B9F274D0B7F002D43E0 /* ic_custom_cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cancel@2x.png"; path = "Resources/Icons/ic_custom_cancel@2x.png"; sourceTree = "<group>"; };
-		0A3EE20D275E4EE600C8B772 /* OAFoldersView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAFoldersView.xib; sourceTree = "<group>"; };
+		0A3EE20D275E4EE600C8B772 /* OAFoldersCollectionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAFoldersCollectionView.xib; sourceTree = "<group>"; };
 		0A3EE210275E9F9A00C8B772 /* ic_custom_folder_visible@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_folder_visible@3x.png"; path = "Resources/Icons/ic_custom_folder_visible@3x.png"; sourceTree = "<group>"; };
 		0A3EE211275E9F9B00C8B772 /* ic_custom_folder_visible@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_folder_visible@2x.png"; path = "Resources/Icons/ic_custom_folder_visible@2x.png"; sourceTree = "<group>"; };
 		0A5395B526E0EDF900848E0D /* OAIconTextDividerSwitchCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAIconTextDividerSwitchCell.xib; sourceTree = "<group>"; };
@@ -11472,7 +11472,7 @@
 				DA5A808626C563A500F274C7 /* OAIntermediateDistanceControl.xib */,
 				DA5A808726C563A500F274C7 /* OALanesControl.xib */,
 				0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */,
-				0A3EE20D275E4EE600C8B772 /* OAFoldersView.xib */,
+				0A3EE20D275E4EE600C8B772 /* OAFoldersCollectionView.xib */,
 			);
 			path = XibViews;
 			sourceTree = "<group>";
@@ -12185,7 +12185,7 @@
 				DA68B3D7233B822100F5ACCC /* ic_profile_pedestrian@3x.png in Resources */,
 				0CF5854C244072EC0081238D /* widget_marker_day@2x.png in Resources */,
 				0A7DAF8F270C401E0059238B /* ic_custom_folder_move@3x.png in Resources */,
-				0A3EE20E275E4EE600C8B772 /* OAFoldersView.xib in Resources */,
+				0A3EE20E275E4EE600C8B772 /* OAFoldersCollectionView.xib in Resources */,
 				DA8A924D25DE78B000F5320A /* map_turn_right@3x.png in Resources */,
 				DA5A840426C563A800F274C7 /* OADeleteCustomFiltersViewController.xib in Resources */,
 				849E81A21AFA5D6700549953 /* btn_map_type_icon_view_selected@2x.png in Resources */,

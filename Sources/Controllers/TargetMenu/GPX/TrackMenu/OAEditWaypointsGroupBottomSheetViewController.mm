@@ -119,132 +119,126 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
     if (_mode == EOAEditTrackScreenWaypointsMode)
     {
-        OAGPXTableCellData *showOnMap = [OAGPXTableCellData withData:@{
+        OAGPXTableCellData *showOnMapCellData = [OAGPXTableCellData withData:@{
                 kCellKey: @"control_show_on_map",
                 kCellType: [OATitleSwitchRoundCell getCellIdentifier],
                 kTableValues: @{ @"bool_value": @(_isShown) },
-                kCellTitle: OALocalizedString(@"map_settings_show"),
-                kCellOnSwitch: ^(BOOL toggle) {
-                    _isShown = toggle;
-                    [self onShowHidePressed:_isShown];
-                },
-                kCellIsOn: ^() {
-                    return _isShown;
-                }
+                kCellTitle: OALocalizedString(@"map_settings_show")
         }];
+        showOnMapCellData.onSwitch = ^(BOOL toggle) {
+            _isShown = toggle;
+            [self onShowHidePressed:_isShown];
+        };
+        showOnMapCellData.isOn = ^() {
+            return _isShown;
+        };
+        showOnMapCellData.updateData = ^() {
+            [showOnMapCellData setData:@{ kTableValues: @{@"bool_value": @(_isShown) } }];
+        };
 
-        [showOnMap setData:@{
-                kTableUpdateData: ^() {
-                    [showOnMap setData:@{ kTableValues: @{ @"bool_value": @(_isShown) } }];
-                }
+        [controlCells addObject:showOnMapCellData];
+
+        OAGPXTableSectionData *controlsSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: controlCells }];
+        controlsSectionData.updateData = ^() {
+            for (OAGPXTableCellData *cellData in controlsSectionData.cells)
+            {
+                if (cellData.updateData)
+                    cellData.updateData();
+            }
+        };
+
+        [tableSections addObject:controlsSectionData];
+
+        OAGPXTableCellData *renameCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"rename",
+                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                kCellRightIconName: @"ic_custom_edit",
+                kCellTitle: OALocalizedString(@"fav_rename")
         }];
-        [controlCells addObject:showOnMap];
+        renameCellData.onButtonPressed = ^() {
+            OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
+                    [[OAEditWaypointsGroupOptionsViewController alloc]
+                            initWithScreenType:EOAEditWaypointsGroupRenameScreen
+                                     groupName:_groupName
+                                    groupColor:nil];
+            editWaypointsGroupOptions.delegate = self;
+            [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
+        };
 
-        OAGPXTableSectionData *controlsSection = [OAGPXTableSectionData withData:@{ kSectionCells: controlCells}];
-        [controlsSection setData:@{
-                kTableUpdateData: ^() {
-                    for (OAGPXTableCellData *cellData in controlsSection.cells) {
-                        if (cellData.updateData)
-                            cellData.updateData();
-                    }
-                }
+        OAGPXTableCellData *changeColorCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"change_color",
+                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                kCellRightIconName: @"ic_custom_appearance",
+                kCellTitle: OALocalizedString(@"change_color")
         }];
-        [tableSections addObject:controlsSection];
+        changeColorCellData.onButtonPressed = ^() {
+            OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
+                    [[OAEditWaypointsGroupOptionsViewController alloc]
+                            initWithScreenType:EOAEditWaypointsGroupColorScreen
+                                     groupName:nil
+                                    groupColor:_groupColor];
+            editWaypointsGroupOptions.delegate = self;
+            [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
+        };
 
-        [tableSections addObject:[OAGPXTableSectionData withData:@{
-                kSectionCells: @[
-                        [OAGPXTableCellData withData:@{
-                                kCellKey: @"rename",
-                                kCellType: [OATitleIconRoundCell getCellIdentifier],
-                                kCellRightIconName: @"ic_custom_edit",
-                                kCellTitle: OALocalizedString(@"fav_rename"),
-                                kCellButtonPressed: ^() {
-                                    OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
-                                            [[OAEditWaypointsGroupOptionsViewController alloc]
-                                                    initWithScreenType:EOAEditWaypointsGroupRenameScreen
-                                                             groupName:_groupName
-                                                            groupColor:nil];
-                                    editWaypointsGroupOptions.delegate = self;
-                                    [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
-                                }
-                        }],
-                        [OAGPXTableCellData withData:@{
-                                kCellKey: @"change_color",
-                                kCellType: [OATitleIconRoundCell getCellIdentifier],
-                                kCellRightIconName: @"ic_custom_appearance",
-                                kCellTitle: OALocalizedString(@"change_color"),
-                                kCellButtonPressed: ^() {
-                                    OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
-                                            [[OAEditWaypointsGroupOptionsViewController alloc]
-                                                    initWithScreenType:EOAEditWaypointsGroupColorScreen
-                                                             groupName:nil
-                                                            groupColor:_groupColor];
-                                    editWaypointsGroupOptions.delegate = self;
-                                    [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
-                                }
-                        }]
-                ]
-        }]];
+        [tableSections addObject:[OAGPXTableSectionData withData:@{ kSectionCells: @[renameCellData, changeColorCellData] }]];
     }
     else
     {
-        [tableSections addObject:[OAGPXTableSectionData withData:@{
-                kSectionCells: @[
-                        [OAGPXTableCellData withData:@{
-                                kCellKey: @"analyze_on_map",
-                                kCellType: [OATitleIconRoundCell getCellIdentifier],
-                                kCellTitle: OALocalizedString(@"analyze_on_map"),
-                                kCellRightIconName: @"ic_custom_graph",
-                                kCellButtonPressed: ^() {
-                                    if (self.trackMenuDelegate)
-                                        [self.trackMenuDelegate openAnalysis:_analysis
-                                                                    withMode:EOARouteStatisticsModeAltitudeSlope];
-                                }
-                        }],
-                        [OAGPXTableCellData withData:@{
-                                kCellKey: @"edit",
-                                kCellType: [OATitleIconRoundCell getCellIdentifier],
-                                kCellRightIconName: @"ic_custom_trip_edit",
-                                kCellTitle: OALocalizedString(@"shared_string_edit"),
-                                kCellButtonPressed: ^() {
-                                    [self hide:YES completion:^{
-                                        if (self.trackMenuDelegate)
-                                            [self.trackMenuDelegate editSegment];
-                                    }];
-                                }
-                        }]
-                ]
-        }]];
+        OAGPXTableCellData *analyzeOnMapCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"analyze_on_map",
+                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                kCellTitle: OALocalizedString(@"analyze_on_map"),
+                kCellRightIconName: @"ic_custom_graph"
+        }];
+        analyzeOnMapCellData.onButtonPressed = ^() {
+            if (self.trackMenuDelegate)
+                [self.trackMenuDelegate openAnalysis:_analysis
+                                            withMode:EOARouteStatisticsModeAltitudeSlope];
+        };
+
+        OAGPXTableCellData *editCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"edit",
+                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                kCellRightIconName: @"ic_custom_trip_edit",
+                kCellTitle: OALocalizedString(@"shared_string_edit")
+        }];
+        editCellData.onButtonPressed = ^() {
+            [self hide:YES completion:^{
+                if (self.trackMenuDelegate)
+                    [self.trackMenuDelegate editSegment];
+            }];
+        };
+
+        [tableSections addObject:[OAGPXTableSectionData withData:@{ kSectionCells: @[analyzeOnMapCellData, editCellData] }]];
     }
 
-    [tableSections addObject:[OAGPXTableSectionData withData:@{
-            kSectionCells: @[
-                    [OAGPXTableCellData withData:@{
-                            kCellKey: @"delete",
-                            kCellType: [OATitleIconRoundCell getCellIdentifier],
-                            kCellTitle: OALocalizedString(@"shared_string_delete"),
-                            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
-                            kCellRightIconName: @"ic_custom_remove_outlined",
-                            kCellTintColor: @color_primary_red,
-                            kCellButtonPressed: ^() {
-                                if (_mode == EOAEditTrackScreenWaypointsMode)
-                                {
-                                    [self hide:YES completion:^{
-                                        if (self.trackMenuDelegate)
-                                            [self.trackMenuDelegate openConfirmDeleteWaypointsScreen:_groupName];
-                                    }];
-                                }
-                                else
-                                {
-                                    [self hide:YES completion:^{
-                                        if (self.trackMenuDelegate)
-                                            [self.trackMenuDelegate deleteAndSaveSegment:_segment];
-                                    }];
-                                }
-                            }
-                    }]
-            ]
-    }]];
+    OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
+            kCellKey: @"delete",
+            kCellType: [OATitleIconRoundCell getCellIdentifier],
+            kCellTitle: OALocalizedString(@"shared_string_delete"),
+            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kCellRightIconName: @"ic_custom_remove_outlined",
+            kCellTintColor: @color_primary_red
+    }];
+    deleteCellData.onButtonPressed = ^() {
+        if (_mode == EOAEditTrackScreenWaypointsMode)
+        {
+            [self hide:YES completion:^{
+                if (self.trackMenuDelegate)
+                    [self.trackMenuDelegate openConfirmDeleteWaypointsScreen:_groupName];
+            }];
+        }
+        else
+        {
+            [self hide:YES completion:^{
+                if (self.trackMenuDelegate)
+                    [self.trackMenuDelegate deleteAndSaveSegment:_segment];
+            }];
+        }
+    };
+
+    [tableSections addObject:[OAGPXTableSectionData withData:@{ kSectionCells: @[deleteCellData] }]];
 
     _tableData = tableSections;
 }

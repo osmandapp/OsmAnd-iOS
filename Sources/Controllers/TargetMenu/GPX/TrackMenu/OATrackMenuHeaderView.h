@@ -75,7 +75,7 @@
 
 - (void)setDirection:(NSString *)direction;
 - (void)setDescription;
-- (void)setStatisticsCollection:(NSArray<OAGPXTableCellData *> *)data;
+- (void)setStatisticsCollection:(NSArray<OAGPXTableCellData *> *)cells;
 - (void)setSelectedIndexGroupsCollection:(NSInteger)index;
 - (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index;
 

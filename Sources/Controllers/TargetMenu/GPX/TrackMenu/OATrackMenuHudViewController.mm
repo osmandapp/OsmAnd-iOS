@@ -936,9 +936,9 @@
         NSInteger groupIndex = [_waypointSortedGroupNames indexOfObject:groupName];
         if (groupIndex != NSNotFound)
         {
-            OAGPXTableSectionData *groupSection = _tableData.sections[groupIndex];
-            if (groupSection.updateData)
-                groupSection.updateData();
+            OAGPXTableSectionData *groupSectionData = _tableData.sections[groupIndex];
+            if (groupSectionData.updateData)
+                groupSectionData.updateData();
 
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:groupIndex]]
                                   withRowAnimation:UITableViewRowAnimationNone];

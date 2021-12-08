@@ -127,18 +127,15 @@
                 kCellTitle: OALocalizedString(@"fav_color"),
                 kCellDesc: _selectedColor.name
         }];
-
-        [cellData setData:@{
-                kTableUpdateData: ^() {
-                    [cellData setData:@{
-                            kTableValues: @{
-                                    @"int_value": @([OAUtilities colorToNumber:_selectedColor.color]),
-                                    @"array_value": _colors
-                            },
-                            kCellDesc: _selectedColor.name
-                    }];
-                }
-        }];
+        cellData.updateData = ^() {
+            [cellData setData:@{
+                    kTableValues: @{
+                    @"int_value": @([OAUtilities colorToNumber:_selectedColor.color]),
+                    @"array_value": _colors
+                    },
+                    kCellDesc: _selectedColor.name
+            }];
+        };
 
         sectionData = [OAGPXTableSectionData withData:@{
                 kSectionCells: @[cellData],
@@ -185,32 +182,29 @@
                         kCellTitle: groupName,
                         kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
                         kCellToggle: @(isRTE),
-                        kCellTintColor: @(visible ? color : color_footer_icon_gray),
-                        kCellIsOn: ^() { return visible; }
+                        kCellTintColor: @(visible ? color : color_footer_icon_gray)
                 }];
-
-                [cellData setData:@{
-                        kCellOnSwitch: ^(BOOL toggle) {
-                            visible = toggle;
-                            if (cellData.updateData)
-                                cellData.updateData();
-                        },
-                        kTableUpdateData: ^() {
-                            self.doneButton.enabled = YES;
-                            [cellData setData:@{
-                                    kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
-                                    kCellTintColor: @(visible ? color : color_footer_icon_gray),
-                            }];
-                        },
-                        kTableUpdateProperty: ^(id property) {
-                            if ([property isKindOfClass:NSNumber.class])
-                            {
-                                NSInteger visibleGroupsCount = ((NSNumber *) property).integerValue;
-                                if (((visibleGroupsCount == 0) || (visibleGroupsCount == (hasRTE ? groups.count - 1 : groups.count))) && hideShowAllCellData.onButtonPressed)
-                                    hideShowAllCellData.onButtonPressed();
-                            }
-                        }
-                }];
+                cellData.isOn = ^() { return visible; };
+                cellData.onSwitch = ^(BOOL toggle) {
+                    visible = toggle;
+                    if (cellData.updateData)
+                        cellData.updateData();
+                };
+                cellData.updateProperty = ^(id property) {
+                    if ([property isKindOfClass:NSNumber.class])
+                    {
+                        NSInteger visibleGroupsCount = ((NSNumber *) property).integerValue;
+                        if (((visibleGroupsCount == 0) || (visibleGroupsCount == (hasRTE ? groups.count - 1 : groups.count))) && hideShowAllCellData.onButtonPressed)
+                            hideShowAllCellData.onButtonPressed();
+                    }
+                };
+                cellData.updateData = ^() {
+                    self.doneButton.enabled = YES;
+                    [cellData setData:@{
+                            kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
+                            kCellTintColor: @(visible ? color : color_footer_icon_gray),
+                    }];
+                };
 
                 [cellsData addObject:cellData];
             }
@@ -223,30 +217,29 @@
                     kCellRightIconName: allShown ? @"ic_custom_hide" : @"ic_custom_show",
                     kCellTintColor: @color_primary_purple
             }];
-            [hideShowAllCellData setData:@{
-                    kTableUpdateData: ^() {
-                        [hideShowAllCellData setData:@{
-                                kCellTitle: allShown ? OALocalizedString(@"shared_string_hide_all") : OALocalizedString(@"shared_string_show_all"),
-                                kCellRightIconName: allShown ? @"ic_custom_hide" : @"ic_custom_show"
-                        }];
-                    },
-                    kCellButtonPressed: ^{
-                        allShown = !allShown;
-                        for (OAGPXTableCellData *cellData in cellsData)
-                        {
-                            if (![cellData.key isEqualToString:@"hide_show_all"] && !cellData.toggle)
-                            {
-                                if (cellData.onSwitch)
-                                    cellData.onSwitch(allShown);
-                            }
-                        }
-                        if (hideShowAllCellData.updateData)
-                            hideShowAllCellData.updateData();
-
-                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0]
-                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+            hideShowAllCellData.onButtonPressed = ^{
+                allShown = !allShown;
+                for (OAGPXTableCellData *cellData in cellsData)
+                {
+                    if (![cellData.key isEqualToString:@"hide_show_all"] && !cellData.toggle)
+                    {
+                        if (cellData.onSwitch)
+                            cellData.onSwitch(allShown);
                     }
-            }];
+                }
+                if (hideShowAllCellData.updateData)
+                    hideShowAllCellData.updateData();
+
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+            };
+            hideShowAllCellData.updateData = ^() {
+                [hideShowAllCellData setData:@{
+                        kCellTitle: allShown ? OALocalizedString(@"shared_string_hide_all") : OALocalizedString(@"shared_string_show_all"),
+                        kCellRightIconName: allShown ? @"ic_custom_hide" : @"ic_custom_show"
+                }];
+            };
+
             [cellsData insertObject:hideShowAllCellData atIndex:0];
 
             sectionData = [OAGPXTableSectionData withData:@{
@@ -255,16 +248,13 @@
             }];
         }
     }
-
-    [sectionData setData:@{
-            kTableUpdateData: ^() {
-                for (OAGPXTableCellData *cell in sectionData.cells)
-                {
-                    if (cell.updateData)
-                        cell.updateData();
-                }
-            }
-    }];
+    sectionData.updateData = ^() {
+        for (OAGPXTableCellData *cellData in sectionData.cells)
+        {
+            if (cellData.updateData)
+                cellData.updateData();
+        }
+    };
 
     _tableData = @[sectionData];
 }

@@ -23,7 +23,7 @@
 
 @implementation OATrackMenuHeaderView
 {
-    NSArray<OAGPXTableCellData *> *_statisticsData;
+    NSArray<OAGPXTableCellData *> *_statisticsCells;
     NSArray<NSDictionary *> *_groupsData;
     EOATrackMenuHudTab _selectedTab;
     OsmAndAppInstance _app;
@@ -413,11 +413,11 @@
     self.descriptionContainerView.hidden = !hasDescription;
 }
 
-- (void)setStatisticsCollection:(NSArray<OAGPXTableCellData *> *)data
+- (void)setStatisticsCollection:(NSArray<OAGPXTableCellData *> *)cells
 {
-    BOOL hasData = data && data.count > 0;
+    BOOL hasData = cells && cells.count > 0;
 
-    _statisticsData = data;
+    _statisticsCells = cells;
     [self.statisticsCollectionView reloadData];
     self.statisticsCollectionView.hidden = !hasData;
 }
@@ -487,13 +487,13 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _statisticsData.count;
+    return _statisticsCells.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                    cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAGPXTableCellData *cellData = _statisticsData[indexPath.row];
+    OAGPXTableCellData *cellData = _statisticsCells[indexPath.row];
     OAGpxStatBlockCollectionViewCell *cell =
             [collectionView dequeueReusableCellWithReuseIdentifier:[OAGpxStatBlockCollectionViewCell getCellIdentifier]
                     forIndexPath:indexPath];
@@ -527,7 +527,7 @@
                    layout:(UICollectionViewLayout *)collectionViewLayout
    sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAGPXTableCellData *cellData = _statisticsData[indexPath.row];
+    OAGPXTableCellData *cellData = _statisticsCells[indexPath.row];
     BOOL isLast = indexPath.row == [self collectionView:collectionView numberOfItemsInSection:indexPath.section] - 1;
     return [self getSizeForItem:cellData.title value:cellData.values[@"string_value"] isLast:isLast];
 }
@@ -561,7 +561,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAGPXTableCellData *cellData = _statisticsData[indexPath.row];
+    OAGPXTableCellData *cellData = _statisticsCells[indexPath.row];
     EOARouteStatisticsMode modeType = (EOARouteStatisticsMode) [cellData.values[@"int_value"] intValue];
     if (self.trackMenuDelegate)
         [self.trackMenuDelegate openAnalysis:modeType];

@@ -53,16 +53,6 @@
         _toggle = [data[kCellToggle] boolValue];
     if ([data.allKeys containsObject:kCellTintColor])
         _tintColor = [data[kCellTintColor] integerValue];
-    if ([data.allKeys containsObject:kCellOnSwitch])
-        _onSwitch = data[kCellOnSwitch];
-    if ([data.allKeys containsObject:kCellIsOn])
-        _isOn = data[kCellIsOn];
-    if ([data.allKeys containsObject:kTableUpdateData])
-        _updateData = data[kTableUpdateData];
-    if ([data.allKeys containsObject:kCellButtonPressed])
-        _onButtonPressed = data[kCellButtonPressed];
-    if ([data.allKeys containsObject:kTableUpdateProperty])
-        _updateProperty = data[kTableUpdateProperty];
 }
 
 @end
@@ -91,10 +81,6 @@
         _footer = data[kSectionFooter];
     if ([data.allKeys containsObject:kTableValues])
         _values = data[kTableValues];
-    if ([data.allKeys containsObject:kTableUpdateData])
-        _updateData = data[kTableUpdateData];
-    if ([data.allKeys containsObject:kTableUpdateProperty])
-        _updateProperty = data[kTableUpdateProperty];
 }
 
 - (BOOL)containsCell:(NSString *)key
@@ -125,10 +111,6 @@
 {
     if ([data.allKeys containsObject:kTableSections])
         _sections = data[kTableSections];
-    if ([data.allKeys containsObject:kTableUpdateData])
-        _updateData = data[kTableUpdateData];
-    if ([data.allKeys containsObject:kTableUpdateProperty])
-        _updateProperty = data[kTableUpdateProperty];
 }
 
 @end

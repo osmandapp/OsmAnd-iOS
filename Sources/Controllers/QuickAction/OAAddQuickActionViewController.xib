@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -27,7 +27,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add action" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="Te4-7D-UvL">
-                            <rect key="frame" x="60" y="36" width="294" height="43"/>
+                            <rect key="frame" x="60" y="44" width="294" height="43"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="43" id="jPt-dB-agz"/>
                             </constraints>
@@ -36,12 +36,12 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TOj-Zt-z4Z">
-                            <rect key="frame" x="362" y="36" width="44" height="44"/>
+                            <rect key="frame" x="362" y="44" width="44" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="ECK-Ia-Sl9"/>
                                 <constraint firstAttribute="width" constant="44" id="Tge-Z6-hHR"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="13"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <state key="normal" image="ic_navbar_search.png">
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -51,12 +51,12 @@
                             </connections>
                         </button>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wIR-hG-J8L">
-                            <rect key="frame" x="8" y="36" width="44" height="44"/>
+                            <rect key="frame" x="8" y="44" width="44" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="VKS-vk-s7F"/>
                                 <constraint firstAttribute="width" constant="44" id="guS-g0-nrn"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="13"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <state key="normal" image="ic_navbar_chevron.png">
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

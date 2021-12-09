@@ -11,6 +11,7 @@
 #import "OAUtilities.h"
 #import "QuadRect.h"
 #import "OAGPXDatabase.h"
+#import "OAApplicationMode.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -1323,6 +1324,18 @@
         [points addObjectsFromArray:rt.points];
     }
     return points;
+}
+
+- (OAApplicationMode *) getRouteProfile
+{
+    NSArray<OAGpxRtePt *> *points = [self getRoutePoints];
+    if (points && points.count > 0)
+    {
+        OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:[points[0] getProfileType] def:nil];
+        if (mode)
+            return mode;
+    }
+    return nil;
 }
 
 - (NSArray<NSString *> *)getWaypointCategories:(BOOL)withDefaultCategory

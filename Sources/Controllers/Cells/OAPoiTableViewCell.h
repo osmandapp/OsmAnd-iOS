@@ -16,6 +16,13 @@
 
 @end
 
+@interface OAForcedLeftAlignCollectionViewLayout : UICollectionViewFlowLayout
+
+- (instancetype)initWithIconWidth:(CGFloat)iconWidth minIconsSpacing:(CGFloat)minIconsSpacing;
+
+@end
+
+
 @interface OAPoiTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;

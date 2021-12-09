@@ -1015,7 +1015,7 @@
 "upload_to_osm" = "Enviar cambios a OSM";
 "osm_edit_show_on_map" = "Mostrar modificación en el mapa";
 "osm_edit_show_on_map_descr" = "Abrir el mapa centrado en este punto";
-"shared_string_milliradians" = "Milirradianes";
+"shared_string_milliradians" = "Miliradián";
 "angular_units" = "Unidades de medición angular";
 "angular_units_descr" = "Cambiar las unidades de medición del acimut.";
 "access_intermediate_arrival_time" = "Hora de llegada intermedia";
@@ -2087,3 +2087,10 @@
 "product_desc_ext_mapillary" = "Fotos a nivel de calle en línea para todos. Descubre lugares, colabora, captura el mundo.";
 "travel_routes" = "Rutas de viaje";
 "ios_release_4_1" = "• Nueva pantalla de búsqueda por coordenadas en diferentes formatos\n• Mejoras de la búsqueda por coordenadas en formato OLC\n• Nuevo menú de fácil manejo para elegir los idiomas en los que se muestran los artículos de Wikipedia en el mapa\n• Se ha añadido la posibilidad de cargar fácilmente los mapas de todas las regiones del país con un par de clics\n• Se han añadido curvas de nivel en pies (es necesario volver a descargar los archivos)\n• Se ha añadido la posibilidad de descargar mapas marcando la región o el país deseado en el mapa, así como la adición de un cuadro de diálogo con la sugerencia de cargar el mapa si la región se ve sin mapa\n• Nueva apariencia de los botones en el mapa y posibilidad de cambiar el zum del mapa pulsando dos veces y deslizando el dedo.\n";
+"lang_pnb" = "Panyabí";
+"lang_pt" = "Portugués";
+"lang_pt_br" = "Portugués (Brasil)";
+"lang_ru" = "Ruso";
+"lang_sc" = "Sardo";
+"grey_color_undefined" = "Los tramos sin datos son grises.";
+"lang_ro" = "Rumano";

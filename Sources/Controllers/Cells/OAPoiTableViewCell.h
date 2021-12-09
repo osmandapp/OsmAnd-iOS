@@ -18,6 +18,8 @@
 
 @interface OAForcedLeftAlignCollectionViewLayout : UICollectionViewFlowLayout
 
+- (instancetype)initWithIconWidth:(CGFloat)iconWidth minIconsSpacing:(CGFloat)minIconsSpacing;
+
 @end
 
 

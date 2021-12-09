@@ -294,7 +294,7 @@
     else if (_poi)
     {
         NSString *iconName = [_poi.iconName lastPathComponent];
-        if (![iconName isEqualToString:@"mx_(null)_(null)"])
+        if (iconName)
         {
             iconName = [iconName stringByReplacingOccurrencesOfString:@"mx_" withString:@""];
             if ([[OAFavoritesHelper getFlatIconNamesList] containsObject:iconName])

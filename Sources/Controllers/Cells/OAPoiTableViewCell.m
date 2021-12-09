@@ -13,6 +13,7 @@
 #import "OAUtilities.h"
 #import "Localization.h"
 #import "OATargetInfoViewController.h"
+#import "OAUtilities.h"
 
 #define kCategoryCellIndex 0
 #define kPoiCellIndex 1
@@ -23,10 +24,31 @@
 #define kCellHeightWithoutIcons 116
 #define kCategoriesCellsSpacing 10
 
+#define kEstimatedIcomWidth 48
+#define kMinIconsSpacing 8
+
 @implementation OAForcedLeftAlignCollectionViewLayout
+{
+    CGFloat _iconWidth;
+    CGFloat _minIconsSpacing;
+}
+
+- (instancetype)initWithIconWidth:(CGFloat)iconWidth minIconsSpacing:(CGFloat)minIconsSpacing
+{
+    self = [super init];
+    if (self)
+    {
+        _iconWidth = iconWidth;
+        _minIconsSpacing = minIconsSpacing;
+    }
+    return self;
+}
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
 {
+    CGFloat collectionViewWidth = rect.size.width;
+    int iconsPerRowCount = floor(collectionViewWidth / (_iconWidth + _minIconsSpacing));
+    self.minimumInteritemSpacing = (collectionViewWidth - (_iconWidth * iconsPerRowCount)) / (iconsPerRowCount - 1);
     NSArray *attributes = [super layoutAttributesForElementsInRect:rect];
     CGFloat leftMargin = self.sectionInset.left;
     CGFloat maxY = -1.0f;
@@ -59,7 +81,7 @@
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     [self.collectionView registerNib:[UINib nibWithNibName:[OAPoiCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAPoiCollectionViewCell getCellIdentifier]];
-    UICollectionViewFlowLayout *forcedLeftAlignLayout = [[OAForcedLeftAlignCollectionViewLayout alloc] init];
+    UICollectionViewFlowLayout *forcedLeftAlignLayout = [[OAForcedLeftAlignCollectionViewLayout alloc] initWithIconWidth:kEstimatedIcomWidth minIconsSpacing:kMinIconsSpacing];
     [self.collectionView setCollectionViewLayout:forcedLeftAlignLayout];
     
 

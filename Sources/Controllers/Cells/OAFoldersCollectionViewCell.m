@@ -31,8 +31,8 @@
     {
         self.labelWithIconConstraint.active = hasImage;
         self.labelNoIconConstraint.active = !hasImage;
-        self.leftIconConstraint.priority = 1000;
         self.centerAlignIconConstraint.priority = 1;
+        self.leftIconConstraint.priority = 1000;
     }
 
     [super updateConstraints];

@@ -9,6 +9,7 @@
 #import "OAOsmEditingViewController.h"
 #import "OABasicEditingViewController.h"
 #import "OAAdvancedEditingViewController.h"
+#import "OAUploadOsmPointsAsyncTask.h"
 #import "OASizes.h"
 #import "OAEditPOIData.h"
 #import "OAEntity.h"
@@ -381,25 +382,37 @@ typedef NS_ENUM(NSInteger, EditingTab)
         comment = comment ? comment : @"";
     }
     EOAAction action = original.getId <= 0 ? CREATE : MODIFY;
-    [OAOsmEditingViewController commitEntity:action entity:entity entityInfo:[editingUtil getEntityInfo:poiData.getEntity.getId] comment:comment shouldClose:closeChangeset editingUtil:editingUtil changedTags:action == MODIFY ? poiData.getChangedTags : nil callback:^(OAEntity *result) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (editingDelegate)
-            {
-                [editingDelegate refreshData];
-            }
-            else if (result)
-            {
-                OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-                NSArray<OAOpenStreetMapPoint *> *points = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
-                if (points.count > 0)
+    if (offlineEdit)
+    {
+        [OAOsmEditingViewController commitEntity:action entity:entity entityInfo:[editingUtil getEntityInfo:poiData.getEntity.getId] comment:comment shouldClose:closeChangeset editingUtil:editingUtil changedTags:action == MODIFY ? poiData.getChangedTags : nil callback:^(OAEntity *result) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (editingDelegate)
                 {
-                    OAOsmPoint *p = points[points.count - 1];
-                    OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p];
-                    [mapPanel showContextMenu:newTarget];
+                    [editingDelegate refreshData];
                 }
-            }
-        });
-    }];
+                else if (result)
+                {
+                    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+                    NSArray<OAOpenStreetMapPoint *> *points = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
+                    if (points.count > 0)
+                    {
+                        OAOsmPoint *p = points[points.count - 1];
+                        OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p];
+                        [mapPanel showContextMenu:newTarget];
+                    }
+                }
+            });
+        }];
+    }
+    else
+    {
+        OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
+        [p setEntity:entity];
+        [p setAction:action];
+        [p setComment:comment];
+        OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:@[p] closeChangeset:closeChangeset anonymous:NO comment:comment bottomSheetDelegate:nil];
+        [uploadTask uploadPoints];
+    }
 }
 
 + (void) savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset

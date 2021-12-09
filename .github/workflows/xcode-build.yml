@@ -43,11 +43,13 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: ios
+        ref: 'r4.1'
     - name: Checkout android
       uses: actions/checkout@v2
       with:
         repository: osmandapp/OsmAnd
         path: android
+        ref: 'r4.1'
     - name: Checkout build
       uses: actions/checkout@v2
       with:
@@ -58,21 +60,25 @@ jobs:
       with:
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
+        ref: 'r4.1'
     - name: Checkout core
       uses: actions/checkout@v2
       with:
         repository: osmandapp/OsmAnd-core
         path: core
+        ref: 'r4.1'
     - name: Checkout help
       uses: actions/checkout@v2
       with:
         repository: osmandapp/osmandapp.github.io
         path: help
+        ref: 'r4.1'
     - name: Checkout resources
       uses: actions/checkout@v2
       with:
         repository: osmandapp/OsmAnd-resources
         path: resources
+        ref: 'r4.1'
     # - name: Select XCode 11.3
     #   run: sudo xcode-select -switch /Applications/Xcode_11.3.app
     #- name: Patch __bsfd

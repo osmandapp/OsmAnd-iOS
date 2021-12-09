@@ -18,7 +18,7 @@
 #include <OsmAndCore/GpxDocument.h>
 
 @class OAGPXTrackAnalysis;
-@class OASplitMetric, QuadRect;
+@class OASplitMetric, QuadRect, OAApplicationMode;
 
 @interface OAGPXDocument : NSObject
 
@@ -73,6 +73,7 @@
 
 - (NSArray<OAGpxRtePt *> *) getRoutePoints;
 - (NSArray<OAGpxRtePt *> *) getRoutePoints:(NSInteger)routeIndex;
+- (OAApplicationMode *) getRouteProfile;
 
 
 + (OAGpxWpt *)fetchWpt:(const std::shared_ptr<const OsmAnd::GpxDocument::GpxWpt>)mark;

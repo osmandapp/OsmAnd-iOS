@@ -81,7 +81,10 @@
     [_settings.useIntermediatePointsNavigation set:useIntermediatePointsByDefault];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
     
-    OAApplicationMode *mode = appMode ? appMode : [self getRouteMode];
+    OAApplicationMode *mode = appMode ? appMode : [gpxFile getRouteProfile];
+    if (!mode)
+        mode = appMode ? appMode : [self getRouteMode];
+    
     [_routingHelper setAppMode:mode];
     [_app initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
     // save application mode controls

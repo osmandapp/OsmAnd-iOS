@@ -80,6 +80,7 @@
 @property (nonatomic) NSMutableArray<OARTargetPoint *> *intermediatePointsBackup;
 
 @property (readonly) OAObservable* applicationModeChangedObservable;
+@property (readonly) OAObservable* routingModeChangedObservable;
 
 - (void) clearPointToStart;
 - (void) clearPointToNavigate;

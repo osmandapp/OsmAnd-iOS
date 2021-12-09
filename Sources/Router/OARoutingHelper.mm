@@ -279,6 +279,7 @@ static BOOL _isDeviatedFromRoute = false;
     ARRIVAL_DISTANCE_FACTOR = MAX([_settings.arrivalDistanceFactor get:mode], 0.1f);
     GPS_TOLERANCE = (NSInteger) (DEFAULT_GPS_TOLERANCE * ARRIVAL_DISTANCE_FACTOR);
     [_voiceRouter updateAppMode];
+    [_app.data.applicationModeChangedObservable notifyEventWithKey:mode];
 }
 
 - (OAApplicationMode *) getAppMode

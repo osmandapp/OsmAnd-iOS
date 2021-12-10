@@ -1102,7 +1102,7 @@
 "gpx_deactivated" = "Keelatud";
 "gpx_trip_groups" = "Teekondade grupid";
 "gpx_group_select" = "Grupi valik";
-"show_all" = "Näita kõik";
+"shared_string_show_all" = "Näita kõik";
 "get_directions" = "Juhised";
 "parking" = "Parkimine";
 "directions_more_options" = "Juhised lähtekohast";

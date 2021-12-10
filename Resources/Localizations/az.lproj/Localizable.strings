@@ -1854,7 +1854,7 @@
 "gpx_deactivated" = "Qeyri-aktiv edilmiş";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Hamısını göstər";
+"shared_string_show_all" = "Hamısını göstər";
 "parking" = "Parking";
 "parked_at" = "Parked at";
 

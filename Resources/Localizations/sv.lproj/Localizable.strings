@@ -1854,7 +1854,7 @@
 "gpx_deactivated" = "Inaktiverade";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Visa alla";
+"shared_string_show_all" = "Visa alla";
 "parking" = "Parkering";
 "parked_at" = "Parked at";
 

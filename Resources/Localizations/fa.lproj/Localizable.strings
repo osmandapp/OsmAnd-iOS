@@ -633,7 +633,7 @@
 "gpx_deactivated" = "غیرفعال";
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "نمایش همه";
+"shared_string_show_all" = "نمایش همه";
 "get_directions" = "مسیریابی";
 "parking" = "پارکینگ";
 "est_travel_time" = "Estimate travel time";

@@ -375,7 +375,7 @@
 "gpx_deactivated" = "Deaktiveret";
 "gpx_trip_groups" = "Rutegrupper";
 "gpx_group_select" = "Vælg gruppe";
-"show_all" = "Vis alle";
+"shared_string_show_all" = "Vis alle";
 "get_directions" = "Rutevejledning";
 "shared_string_dismiss" = "Annuller";
 "shared_string_modify" = "Ændre";

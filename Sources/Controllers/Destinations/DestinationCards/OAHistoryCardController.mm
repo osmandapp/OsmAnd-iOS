@@ -69,7 +69,7 @@
         
         _cardHeaderView = [[OADestinationCardHeaderView alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.frame.size.width, 50.0)];
         _cardHeaderView.title.text = [OALocalizedString(@"history") uppercaseStringWithLocale:[NSLocale currentLocale]];
-        [_cardHeaderView setRightButtonTitle:[OALocalizedString(@"show_all") uppercaseStringWithLocale:[NSLocale currentLocale]]];
+        [_cardHeaderView setRightButtonTitle:[OALocalizedString(@"shared_string_show_all") uppercaseStringWithLocale:[NSLocale currentLocale]]];
         [_cardHeaderView.rightButton addTarget:self action:@selector(headerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         
         _items = [NSMutableArray array];

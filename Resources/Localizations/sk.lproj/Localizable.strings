@@ -382,7 +382,7 @@
 "gpx_deactivated" = "Záloha";
 "gpx_trip_groups" = "Skupiny stôp";
 "gpx_group_select" = "Výber skupiny";
-"show_all" = "Zobraziť všetko";
+"shared_string_show_all" = "Zobraziť všetko";
 "get_directions" = "Pokyny";
 "parking" = "Parkovanie";
 "est_travel_time" = "Odhadovaný čas cesty";

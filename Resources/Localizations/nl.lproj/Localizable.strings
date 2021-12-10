@@ -668,7 +668,7 @@
 "gpx_deactivated" = "Gedeactiveerd";
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Toon alles";
+"shared_string_show_all" = "Toon alles";
 "get_directions" = "Routebeschrijving";
 "parking" = "Parkeren";
 "est_travel_time" = "Estimate travel time";

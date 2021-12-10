@@ -9,23 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "OACollectionViewCellState.h"
 
-@protocol OAFoldersCellDelegate <NSObject>
+@class OAFoldersCollectionView;
 
-@required
-
-- (void) onItemSelected:(NSInteger)index type:(NSString *)type;
-
-@end
+@protocol OAFoldersCellDelegate;
 
 @interface OAFoldersCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-
-@property (nonatomic) id<OAFoldersCellDelegate> foldersDelegate;
-@property (weak, nonatomic) OACollectionViewCellState *state;
-@property (nonatomic) NSIndexPath *cellIndex;
-
-- (void) setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(NSInteger)index;
-- (void) updateContentOffset;
+@property (weak, nonatomic) IBOutlet OAFoldersCollectionView *collectionView;
 
 @end

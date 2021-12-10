@@ -1853,7 +1853,7 @@
 "gpx_deactivated" = "Arhivēts";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Rādīt visu";
+"shared_string_show_all" = "Rādīt visu";
 "parking" = "Autostāvvietas";
 "parked_at" = "Parked at";
 

@@ -669,7 +669,7 @@
 "menu_active_trips" = "Ativo";
 "moving_time" = "Tempo em movimento";
 "gpx_deactivated" = "Desativado";
-"show_all" = "Mostrar todos";
+"shared_string_show_all" = "Mostrar todos";
 "get_directions" = "Direções";
 "parking" = "Estacionamento";
 "directions_more_options" = "Rota a partir daqui";

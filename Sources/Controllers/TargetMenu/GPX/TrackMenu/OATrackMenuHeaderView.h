@@ -10,7 +10,7 @@
 #import "OATrackMenuHudViewController.h"
 
 @class OAGPX, OAGPXDocument, OAGPXTrackAnalysis;
-@class OAButton;
+@class OAButton, OAFoldersCollectionView;
 
 @protocol OATrackMenuViewControllerDelegate;
 
@@ -27,7 +27,8 @@
 @property (weak, nonatomic) IBOutlet UIView *descriptionContainerView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UICollectionView *statisticsCollectionView;
+@property (weak, nonatomic) IBOutlet OAFoldersCollectionView *groupsCollectionView;
 
 @property (weak, nonatomic) IBOutlet UIView *locationContainerView;
 @property (weak, nonatomic) IBOutlet UIView *directionContainerView;
@@ -56,7 +57,10 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomNoCollectionConstraint;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *onlyTitleAndDescriptionConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *onlyTitleAndDescriptionAndGroupsConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *onlyTitleNoDescriptionConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *groupsBottomConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *actionsBottomConstraint;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionDirectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoDirectionConstraint;
@@ -73,7 +77,9 @@
 
 - (void)setDirection:(NSString *)direction;
 - (void)setDescription;
-- (void)setCollection:(NSArray *)data;
+- (void)setStatisticsCollection:(NSArray<OAGPXTableCellData *> *)cells;
+- (void)setSelectedIndexGroupsCollection:(NSInteger)index;
+- (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index;
 - (CGFloat)getDescriptionHeight;
 
 @end

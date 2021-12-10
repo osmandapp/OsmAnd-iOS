@@ -711,7 +711,7 @@
 "gpx_deactivated" = "Desactivado";
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "AMOSAR TODO";
+"shared_string_show_all" = "AMOSAR TODO";
 "get_directions" = "Indicacións";
 "parking" = "Aparcamento";
 "directions_more_options" = "Indicacións dende";

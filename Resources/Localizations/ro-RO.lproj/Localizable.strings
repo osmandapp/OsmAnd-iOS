@@ -105,7 +105,7 @@
 "osm_edits_basic" = "De bază";
 "osm_alert_message" = "Mesaj";
 "driving_region_automatic" = "Automat";
-"show_all" = "Arată tot";
+"shared_string_show_all" = "Arată tot";
 "arrival_distance" = "Anunţ de sosire";
 "access_intermediate_arrival_time" = "Timp intermediar de sosire";
 "keep_informing_descr" = "Re-anunțați instrucțiunile de navigare la intervale regulate";

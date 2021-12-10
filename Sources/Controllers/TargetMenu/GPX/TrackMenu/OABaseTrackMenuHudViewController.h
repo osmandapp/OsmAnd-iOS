@@ -16,9 +16,6 @@
 #define kCellRightIconName @"right_icon_name"
 #define kCellToggle @"toggle"
 #define kCellTintColor @"tint_color"
-#define kCellOnSwitch @"on_switch"
-#define kCellIsOn @"isOn"
-#define kCellButtonPressed @"on_button_pressed"
 
 #define kSectionCells @"cells"
 #define kSectionHeader @"header"
@@ -27,8 +24,6 @@
 
 #define kTableSections @"sections"
 #define kTableValues @"values"
-#define kTableUpdateData @"update_data"
-#define kTableUpdateProperty @"update_property"
 
 typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 {
@@ -56,11 +51,11 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 @property (nonatomic, readonly) NSString *rightIconName;
 @property (nonatomic, readonly) BOOL toggle;
 @property (nonatomic, readonly) NSInteger tintColor;
-@property (nonatomic, readonly) OAGPXTableCellDataOnSwitch onSwitch;
-@property (nonatomic, readonly) OAGPXTableCellDataIsOn isOn;
-@property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
-@property (nonatomic, readonly) OAGPXTableDataUpdateData onButtonPressed;
-@property (nonatomic, readonly) OAGPXTableDataUpdateProperty updateProperty;
+@property (nonatomic) OAGPXTableCellDataOnSwitch onSwitch;
+@property (nonatomic) OAGPXTableCellDataIsOn isOn;
+@property (nonatomic) OAGPXTableDataUpdateData updateData;
+@property (nonatomic) OAGPXTableDataUpdateData onButtonPressed;
+@property (nonatomic) OAGPXTableDataUpdateProperty updateProperty;
 
 - (void)setData:(NSDictionary *)data;
 
@@ -75,8 +70,8 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 @property (nonatomic, readonly) CGFloat headerHeight;
 @property (nonatomic, readonly) NSString *footer;
 @property (nonatomic, readonly) NSDictionary *values;
-@property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
-@property (nonatomic, readonly) OAGPXTableDataUpdateProperty updateProperty;
+@property (nonatomic) OAGPXTableDataUpdateData updateData;
+@property (nonatomic) OAGPXTableDataUpdateProperty updateProperty;
 
 - (void)setData:(NSDictionary *)data;
 - (BOOL)containsCell:(NSString *)key;
@@ -88,8 +83,8 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 + (instancetype)withData:(NSDictionary *)data;
 
 @property (nonatomic, readonly) NSMutableArray<OAGPXTableSectionData *> *sections;
-@property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
-@property (nonatomic, readonly) OAGPXTableDataUpdateProperty updateProperty;
+@property (nonatomic) OAGPXTableDataUpdateData updateData;
+@property (nonatomic) OAGPXTableDataUpdateProperty updateProperty;
 
 - (void)setData:(NSDictionary *)data;
 
@@ -125,5 +120,6 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
                                          constant:(CGFloat)constant;
 
 - (void)adjustMapViewPort;
+- (BOOL)isAdjustedMapViewPort;
 
 @end

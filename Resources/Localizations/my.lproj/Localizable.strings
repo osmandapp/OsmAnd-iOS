@@ -633,7 +633,7 @@
 "gpx_deactivated" = "Deactivated";
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Show all";
+"shared_string_show_all" = "Show all";
 "get_directions" = "Directions";
 "parking" = "Parking";
 "est_travel_time" = "Estimate travel time";

@@ -1857,7 +1857,7 @@
 "gpx_deactivated" = "Deactivated";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "அனைத்தையும் காட்டு";
+"shared_string_show_all" = "அனைத்தையும் காட்டு";
 "parking" = "Parking";
 "parked_at" = "Parked at";
 

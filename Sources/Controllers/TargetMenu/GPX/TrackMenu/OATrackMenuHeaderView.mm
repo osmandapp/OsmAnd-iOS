@@ -7,6 +7,7 @@
 //
 
 #import "OATrackMenuHeaderView.h"
+#import "OAFoldersCollectionView.h"
 #import "OAGpxStatBlockCollectionViewCell.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -23,7 +24,8 @@
 
 @implementation OATrackMenuHeaderView
 {
-    NSArray<OAGPXTableCellData *> *_collectionData;
+    NSArray<OAGPXTableCellData *> *_statisticsCells;
+    NSArray<NSDictionary *> *_groupsData;
     EOATrackMenuHudTab _selectedTab;
     OsmAndAppInstance _app;
     CGFloat _descriptionHeight;
@@ -62,10 +64,10 @@
 {
     [super awakeFromNib];
 
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:[OAGpxStatBlockCollectionViewCell getCellIdentifier] bundle:nil]
-          forCellWithReuseIdentifier:[OAGpxStatBlockCollectionViewCell getCellIdentifier]];
+    self.statisticsCollectionView.delegate = self;
+    self.statisticsCollectionView.dataSource = self;
+    [self.statisticsCollectionView registerNib:[UINib nibWithNibName:[OAGpxStatBlockCollectionViewCell getCellIdentifier] bundle:nil]
+                    forCellWithReuseIdentifier:[OAGpxStatBlockCollectionViewCell getCellIdentifier]];
 }
 
 - (void)commonInit
@@ -77,24 +79,31 @@
 - (void)updateConstraints
 {
     BOOL hasDescription = !self.descriptionContainerView.hidden;
-    BOOL hasCollection = !self.collectionView.hidden;
-    BOOL hasContent = hasCollection || !self.locationContainerView.hidden || !self.actionButtonsContainerView.hidden;
-    BOOL isOnlyTitleAndDescription = hasDescription && !hasContent;
+    BOOL hasCollection = !self.statisticsCollectionView.hidden;
+    BOOL hasActions = !self.actionButtonsContainerView.hidden;
+    BOOL hasContent = hasCollection || !self.locationContainerView.hidden || hasActions;
+    BOOL hasGroups = !self.groupsCollectionView.hidden;
+    BOOL isOnlyTitleAndDescription = hasDescription && !hasContent && !hasGroups;
+    BOOL isOnlyTitleAndDescriptionAndGroup = hasDescription && !hasContent && hasGroups;
     BOOL isOnlyTitle = !hasDescription && !hasContent;
     BOOL hasDirection = !self.directionContainerView.hidden;
 
     self.onlyTitleAndDescriptionConstraint.active = isOnlyTitleAndDescription;
+    self.onlyTitleAndDescriptionAndGroupsConstraint.active = isOnlyTitleAndDescriptionAndGroup;
     self.onlyTitleNoDescriptionConstraint.active = isOnlyTitle;
+    self.groupsBottomConstraint.active = hasGroups;
+    self.actionsBottomConstraint.active = hasActions;
 
     self.titleBottomDescriptionConstraint.active = hasDescription;
     self.titleBottomNoDescriptionConstraint.active = !hasDescription && hasCollection;
     self.titleBottomNoDescriptionNoCollectionConstraint.active =
-            !hasDescription && !hasCollection && !isOnlyTitleAndDescription && !isOnlyTitle;
+            !hasDescription && !hasCollection && !isOnlyTitleAndDescription
+                    && !isOnlyTitleAndDescriptionAndGroup && !isOnlyTitle;
 
+    self.descriptionBottomCollectionConstraint.active = hasDescription && hasCollection;
+    self.descriptionBottomNoCollectionConstraint.active = hasDescription && !hasCollection && !hasGroups;
     self.descriptionHeightConstraint.constant = _descriptionHeight;
     self.descriptionContainerHeightConstraint.constant = _descriptionHeight;
-    self.descriptionBottomCollectionConstraint.active = hasCollection;
-    self.descriptionBottomNoCollectionConstraint.active = !hasCollection;
 
     self.regionDirectionConstraint.active = hasDirection;
     self.regionNoDirectionConstraint.active = !hasDirection;
@@ -108,24 +117,31 @@
     if (!res)
     {
         BOOL hasDescription = !self.descriptionContainerView.hidden;
-        BOOL hasCollection = !self.collectionView.hidden;
-        BOOL hasContent = hasCollection || !self.locationContainerView.hidden || !self.actionButtonsContainerView.hidden;
-        BOOL isOnlyTitleAndDescription = hasDescription && !hasContent;
+        BOOL hasCollection = !self.statisticsCollectionView.hidden;
+        BOOL hasActions = !self.actionButtonsContainerView.hidden;
+        BOOL hasContent = hasCollection || !self.locationContainerView.hidden || hasActions;
+        BOOL hasGroups = !self.groupsCollectionView.hidden;
+        BOOL isOnlyTitleAndDescription = hasDescription && !hasContent && !hasGroups;
+        BOOL isOnlyTitleAndDescriptionAndGroup = hasDescription && !hasContent && hasGroups;
         BOOL isOnlyTitle = !hasDescription && !hasContent;
         BOOL hasDirection = !self.directionContainerView.hidden;
 
         res = res || self.onlyTitleAndDescriptionConstraint.active != isOnlyTitleAndDescription;
+        res = res || self.onlyTitleAndDescriptionAndGroupsConstraint.active != isOnlyTitleAndDescriptionAndGroup;
         res = res || self.onlyTitleNoDescriptionConstraint.active != isOnlyTitle;
+        res = res || self.groupsBottomConstraint.active != hasGroups;
+        res = res || self.actionsBottomConstraint.active != hasActions;
 
         res = res || self.titleBottomDescriptionConstraint.active != hasDescription;
         res = res || self.titleBottomNoDescriptionConstraint.active != !hasDescription && hasCollection;
         res = res || self.titleBottomNoDescriptionNoCollectionConstraint.active !=
-                !hasDescription && !hasCollection && !isOnlyTitleAndDescription && !isOnlyTitle;
+                !hasDescription && !hasCollection && !isOnlyTitleAndDescription
+                        && !isOnlyTitleAndDescriptionAndGroup && !isOnlyTitle;
 
         res = res || self.descriptionHeightConstraint.constant != _descriptionHeight;
         res = res || self.descriptionContainerHeightConstraint.constant != _descriptionHeight;
         res = res || self.descriptionBottomCollectionConstraint.active != hasDescription && hasCollection;
-        res = res || self.descriptionBottomNoCollectionConstraint.active != hasDescription && !hasCollection;
+        res = res || self.descriptionBottomNoCollectionConstraint.active != hasDescription && !hasCollection && !hasGroups;
 
         res = res || self.regionDirectionConstraint.active != hasDirection;
         res = res || self.regionNoDirectionConstraint.active != !hasDirection;
@@ -225,6 +241,9 @@
     {
         [self makeOnlyHeader:YES];
     }
+
+    self.groupsCollectionView.hidden = _selectedTab != EOATrackMenuHudPointsTab
+            || (_selectedTab == EOATrackMenuHudPointsTab && _groupsData.count == 0);
 
     if ([self needsUpdateConstraints])
         [self updateConstraints];
@@ -327,7 +346,7 @@
             }]];
         }
     }
-    [self setCollection:statisticCells];
+    [self setStatisticsCollection:statisticCells];
 }
 
 - (void)updateShowHideButton:(BOOL)shownTrack
@@ -353,9 +372,15 @@
     {
         headerFrame.size.height = self.descriptionContainerView.frame.origin.y + _descriptionHeight + self.onlyTitleAndDescriptionConstraint.constant;
     }
+    else if (self.onlyTitleAndDescriptionAndGroupsConstraint.active)
+    {
+        headerFrame.size.height = self.groupsCollectionView.frame.origin.y + self.groupsCollectionView.frame.size.height
+                - self.groupsBottomConstraint.constant;
+    }
     else if (self.onlyTitleNoDescriptionConstraint.active)
     {
-        headerFrame.size.height = self.titleContainerView.frame.size.height + self.onlyTitleNoDescriptionConstraint.constant;
+        headerFrame.size.height = self.titleContainerView.frame.origin.y + self.titleContainerView.frame.size.height
+                + self.onlyTitleNoDescriptionConstraint.constant;
     }
     else
     {
@@ -363,11 +388,11 @@
         if (!self.descriptionContainerView.hidden)
             headerFrame.size.height += _descriptionHeight;
 
+        if (self.statisticsCollectionView.hidden)
+            headerFrame.size.height -= self.statisticsCollectionView.frame.size.height;
+
         if (self.locationContainerView.hidden)
             headerFrame.size.height -= self.locationContainerView.frame.size.height;
-
-        if (self.collectionView.hidden)
-            headerFrame.size.height -= self.collectionView.frame.size.height;
 
         if (self.actionButtonsContainerView.hidden)
             headerFrame.size.height -= self.actionButtonsContainerView.frame.size.height;
@@ -407,13 +432,28 @@
     self.descriptionView.frame = frame;
 }
 
-- (void)setCollection:(NSArray<OAGPXTableCellData *> *)data
+- (void)setStatisticsCollection:(NSArray<OAGPXTableCellData *> *)cells
+{
+    BOOL hasData = cells && cells.count > 0;
+
+    _statisticsCells = cells;
+    [self.statisticsCollectionView reloadData];
+    self.statisticsCollectionView.hidden = !hasData;
+}
+
+- (void)setSelectedIndexGroupsCollection:(NSInteger)index
+{
+    [self.groupsCollectionView setSelectedIndex:index];
+    [self.groupsCollectionView reloadData];
+}
+- (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index
 {
     BOOL hasData = data && data.count > 0;
 
-    _collectionData = data;
-    [self.collectionView reloadData];
-    self.collectionView.hidden = !hasData;
+    _groupsData = data;
+    [self.groupsCollectionView setValues:data withSelectedIndex:index];
+    [self.groupsCollectionView reloadData];
+    self.groupsCollectionView.hidden = !hasData;
 }
 
 - (CGFloat)getDescriptionHeight
@@ -424,7 +464,7 @@
 - (void)makeOnlyHeader:(BOOL)hasDescription
 {
     self.descriptionContainerView.hidden = !hasDescription;
-    self.collectionView.hidden = YES;
+    self.statisticsCollectionView.hidden = YES;
     self.locationContainerView.hidden = YES;
     self.actionButtonsContainerView.hidden = YES;
 }
@@ -471,13 +511,13 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _collectionData.count;
+    return _statisticsCells.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                    cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAGPXTableCellData *cellData = _collectionData[indexPath.row];
+    OAGPXTableCellData *cellData = _statisticsCells[indexPath.row];
     OAGpxStatBlockCollectionViewCell *cell =
             [collectionView dequeueReusableCellWithReuseIdentifier:[OAGpxStatBlockCollectionViewCell getCellIdentifier]
                     forIndexPath:indexPath];
@@ -511,7 +551,7 @@
                    layout:(UICollectionViewLayout *)collectionViewLayout
    sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAGPXTableCellData *cellData = _collectionData[indexPath.row];
+    OAGPXTableCellData *cellData = _statisticsCells[indexPath.row];
     BOOL isLast = indexPath.row == [self collectionView:collectionView numberOfItemsInSection:indexPath.section] - 1;
     return [self getSizeForItem:cellData.title value:cellData.values[@"string_value"] isLast:isLast];
 }
@@ -545,7 +585,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAGPXTableCellData *cellData = _collectionData[indexPath.row];
+    OAGPXTableCellData *cellData = _statisticsCells[indexPath.row];
     EOARouteStatisticsMode modeType = (EOARouteStatisticsMode) [cellData.values[@"int_value"] intValue];
     if (self.trackMenuDelegate)
         [self.trackMenuDelegate openAnalysis:modeType];

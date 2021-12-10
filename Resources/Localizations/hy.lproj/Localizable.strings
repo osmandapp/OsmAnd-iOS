@@ -1854,7 +1854,7 @@
 "gpx_deactivated" = "Անջատված է";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Ցույց տալ ամբողջը";
+"shared_string_show_all" = "Ցույց տալ ամբողջը";
 "parking" = "Կայանատեղ";
 "parked_at" = "Parked at";
 

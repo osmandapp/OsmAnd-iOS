@@ -668,7 +668,7 @@
 "gpx_deactivated" = "Záloha";
 "gpx_trip_groups" = "Skupiny stop";
 "gpx_group_select" = "Výběr skupiny";
-"show_all" = "Zobrazit vše";
+"shared_string_show_all" = "Zobrazit vše";
 "get_directions" = "Navigace";
 "parking" = "Parkoviště";
 "est_travel_time" = "Odhadovaný čas jízdy";

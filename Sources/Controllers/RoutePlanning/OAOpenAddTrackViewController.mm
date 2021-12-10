@@ -30,9 +30,8 @@
 #import "OAFoldersCell.h"
 #import "OACollectionViewCellState.h"
 #import "OAOsmAndFormatter.h"
+#import "OAFoldersCollectionView.h"
 
-#define kAllFoldersKey @"kAllFoldersKey"
-#define kFolderKey @"kFolderKey"
 #define kAllFoldersIndex 0
 #define kVerticalMargin 16.
 #define kHorizontalMargin 16.
@@ -192,15 +191,15 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSMutableArray *folderButtonsData = [NSMutableArray new];
     [folderButtonsData addObject:@{
         @"title" : OALocalizedString(@"shared_string_all"),
-        @"img" : @"",
-        @"type" : kAllFoldersKey}];
+        @"img" : @""
+    }];
     
     for (int i = 0; i < folderNames.count; i++)
     {
         [folderButtonsData addObject:@{
             @"title" : folderNames[i],
-            @"img" : @"ic_custom_folder",
-            @"type" : kFolderKey}];
+            @"img" : @"ic_custom_folder"
+        }];
     }
     return folderButtonsData;
 }
@@ -328,13 +327,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             _foldersCell.selectionStyle = UITableViewCellSelectionStyleNone;
             _foldersCell.backgroundColor = UIColor.clearColor;
             _foldersCell.collectionView.backgroundColor = UIColor.clearColor;
-            _foldersCell.foldersDelegate = self;
-            _foldersCell.cellIndex = indexPath;
-            _foldersCell.state = _scrollCellsState;
+            _foldersCell.collectionView.foldersDelegate = self;
+            _foldersCell.collectionView.cellIndex = indexPath;
+            _foldersCell.collectionView.state = _scrollCellsState;
         }
         if (_foldersCell)
         {
-            [_foldersCell setValues:item[@"values"] withSelectedIndex:[item[@"selectedValue"] intValue]];
+            [_foldersCell.collectionView setValues:item[@"values"] withSelectedIndex:[item[@"selectedValue"] intValue]];
             [_foldersCell.collectionView reloadData];
         }
         return _foldersCell;
@@ -363,7 +362,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
      if ([type isEqualToString:[OAFoldersCell getCellIdentifier]])
      {
          OAFoldersCell *folderCell = (OAFoldersCell *)cell;
-         [folderCell updateContentOffset];
+         [folderCell.collectionView updateContentOffset];
      }
  }
 
@@ -486,7 +485,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 #pragma mark - OAFoldersCellDelegate
 
-- (void) onItemSelected:(NSInteger)index type:(NSString *)type
+- (void) onItemSelected:(NSInteger)index
 {
     _selectedFolderIndex = index;
     [self generateData];

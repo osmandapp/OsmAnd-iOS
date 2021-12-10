@@ -710,7 +710,6 @@
         [_statusObservable notifyEvent];
         _waitingForAuthorization = NO;
     }
-
     @synchronized(_lock)
     {
         _lastHeading = newHeading.trueHeading;

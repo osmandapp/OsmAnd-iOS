@@ -1854,7 +1854,7 @@
 "gpx_deactivated" = "നിര്‍ജീവം";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "എല്ലാം കാണിക്കുക";
+"shared_string_show_all" = "എല്ലാം കാണിക്കുക";
 "parking" = "പാര്‍ക്കിങ്ങ്";
 "parked_at" = "Parked at";
 

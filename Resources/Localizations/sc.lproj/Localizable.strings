@@ -376,7 +376,7 @@
 "gpx_trip_groups" = "Grupos de rastas";
 "gpx_group_select" = "Ischerta grupu";
 "shared_string_dismiss" = "Abbandona";
-"show_all" = "AMMUSTRA TOTU";
+"shared_string_show_all" = "AMMUSTRA TOTU";
 "directions" = "Indicatziones";
 "shared_string_modify" = "Modìfica";
 "shared_string_later" = "Prus a tardu";

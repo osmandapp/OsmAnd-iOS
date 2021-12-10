@@ -33,11 +33,7 @@
 
 - (BOOL) handleIncomingURL:(NSURL *)url;
 - (void) importAsGPX:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView;
-- (void) importAsGPX:(NSURL *)url
-          showAlerts:(BOOL)showAlerts
-         openGpxView:(BOOL)openGpxView
-              reload:(BOOL)reload
-          onComplete:(void (^)(void))onComplete;
+- (void) importAsGPX:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView onComplete:(void (^)(void))onComplete;
 
 - (void) showNoInternetAlert;
 - (void) showNoInternetAlertFor:(NSString*)actionTitle;

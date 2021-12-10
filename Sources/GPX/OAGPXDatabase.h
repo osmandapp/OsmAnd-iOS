@@ -74,6 +74,7 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 
 - (void)removeHiddenGroups:(NSString *)groupName;
 - (void)addHiddenGroups:(NSString *)groupName;
+- (void)resetAppearanceToOriginal;
 
 @end
 
@@ -99,9 +100,9 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 -(NSString *)getFileDir:(NSString *)filePath;
 
 - (void)load;
-- (void)reloadGPXFile:(NSString *)filePath onComplete:(void (^)(void))onComplete;
 - (void)save;
 
++ (EOAGpxSplitType) splitTypeByName:(NSString *)splitName;
 + (NSString *) splitTypeNameByValue:(EOAGpxSplitType)splitType;
 
 @end

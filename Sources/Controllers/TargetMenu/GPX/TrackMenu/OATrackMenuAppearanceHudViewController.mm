@@ -598,11 +598,10 @@
                     kCellRightIconName: @"ic_custom_reset",
                     kCellToggle: @YES,
                     kCellButtonPressed: ^() {
-                        NSString *gpxFilePath = self.gpx.gpxFilePath;
-                        [[OAGPXDatabase sharedDb] reloadGPXFile:[_app.gpxPath stringByAppendingPathComponent:gpxFilePath]
+                        [[OAGPXDatabase sharedDb] reloadGPXFile:[_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]
                                                      onComplete:^{
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                self.gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+                                self.gpx = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.gpxFilePath];
                                 [self updateGpxData];
                                 [self updateAllValues];
                                 [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];

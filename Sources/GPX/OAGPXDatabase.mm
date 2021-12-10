@@ -253,28 +253,15 @@
 
 -(void)removeGpxItem:(NSString *)filePath
 {
-    [self removeGpxItem:filePath removeFile:YES];
-}
-
--(void)removeGpxItem:(NSString *)filePath removeFile:(BOOL)removeFile
-{
-    NSMutableArray *newGpxList = [gpxList mutableCopy];
-    OAGPX *gpx;
-    for (OAGPX *item in newGpxList)
-    {
-        if ([item.gpxFilePath isEqualToString:filePath])
-        {
-            gpx = item;
-            break;
-        }
-    }
+    OAGPX *gpx = [self getGPXItem:filePath];
+    if (!gpx)
+        gpx = [self getGPXItemByFileName:filePath];
     if (gpx)
     {
+        NSMutableArray *newGpxList = [gpxList mutableCopy];
         [newGpxList removeObject:gpx];
         gpxList = newGpxList;
-
-        if (removeFile)
-            [[NSFileManager defaultManager] removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath] error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath] error:nil];
     }
 }
 

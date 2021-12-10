@@ -174,7 +174,9 @@ static UIViewController *parentController;
 
 - (void) removeFromDB:(BOOL)removeFile
 {
-    NSString *gpxFilePath = [OAUtilities getGpxShortPath:_importUrl.path];
+    NSString *gpxFilePath = [_importUrl.path hasPrefix:_app.gpxPath]
+            ? [OAUtilities getGpxShortPath:_importUrl.path]
+            : [_importUrl.path lastPathComponent];
     [[OAGPXDatabase sharedDb] removeGpxItem:gpxFilePath removeFile:removeFile];
 }
 
@@ -198,8 +200,8 @@ static UIViewController *parentController;
                 }
                 
                 _newGpxName = [newName copy];
-                
-                [self doImport:YES];
+
+                [self doImport:YES hasGpxFolderName:NO];
             });
         };
         
@@ -207,7 +209,7 @@ static UIViewController *parentController;
             dispatch_async(dispatch_get_main_queue(), ^{
                 _newGpxName = nil;
                 [self removeFromDB:YES];
-                [self doImport:YES];
+                [self doImport:YES hasGpxFolderName:NO];
             });
         };
         
@@ -274,7 +276,11 @@ static UIViewController *parentController;
     }
 }
 
-- (void) processUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView onComplete:(void (^)(void))onComplete
+- (void) processUrl:(NSURL *)url
+         showAlerts:(BOOL)showAlerts
+        openGpxView:(BOOL)openGpxView
+             reload:(BOOL)reload
+         onComplete:(void (^)(void))onComplete
 {
     _importUrl = [url copy];
     OAGPX *item;
@@ -304,15 +310,13 @@ static UIViewController *parentController;
             }
             else
             {
-                if (![_importUrl.path hasPrefix:_app.gpxPath])
-                    [[NSFileManager defaultManager] removeItemAtPath:[_importGpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
-                [self removeFromDB:![_importUrl.path hasPrefix:_app.gpxPath]];
-                item = [self doImport:NO];
+                [self removeFromDB:!reload];
+                item = [self doImport:NO hasGpxFolderName:[_importUrl.path hasPrefix:_app.gpxPath]];
             }
         }
         else
         {
-            item = [self doImport:NO];
+            item = [self doImport:NO hasGpxFolderName:NO];
         }
     }
     else
@@ -340,12 +344,16 @@ static UIViewController *parentController;
         onComplete();
 }
 
-- (void)prepareProcessUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView onComplete:(void (^)(void))onComplete
+- (void)prepareProcessUrl:(NSURL *)url
+               showAlerts:(BOOL)showAlerts
+              openGpxView:(BOOL)openGpxView
+                   reload:(BOOL)reload
+               onComplete:(void (^)(void))onComplete
 {
     if ([url isFileURL])
     {
         [self prepareProcessUrl:^{
-            [self processUrl:url showAlerts:showAlerts openGpxView:openGpxView onComplete:onComplete];
+            [self processUrl:url showAlerts:showAlerts openGpxView:openGpxView reload:reload onComplete:onComplete];
         }];
     }
 }
@@ -369,27 +377,29 @@ static UIViewController *parentController;
     _settings = [OAAppSettings sharedManager];
 }
 
--(OAGPX *)doImport:(BOOL)doRefresh
+-(OAGPX *)doImport:(BOOL)doRefresh hasGpxFolderName:(BOOL)hasGpxFolderName
 {
     OAGPX *item;
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    if (![fileManager fileExistsAtPath:_importGpxPath])
-        [fileManager createDirectoryAtPath:_importGpxPath withIntermediateDirectories:YES attributes:nil error:nil];
-    if (_newGpxName) {
-        [fileManager moveItemAtPath:_importUrl.path toPath:[_importGpxPath stringByAppendingPathComponent:_newGpxName] error:nil];
-    } else {
-        [fileManager moveItemAtPath:_importUrl.path toPath:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]] error:nil];
+    NSString *gpxPath = hasGpxFolderName ? [_importUrl.path stringByDeletingLastPathComponent] : _importGpxPath;
+    if (![fileManager fileExistsAtPath:gpxPath])
+        [fileManager createDirectoryAtPath:gpxPath withIntermediateDirectories:YES attributes:nil error:nil];
+
+    if (!hasGpxFolderName)
+    {
+        [fileManager moveItemAtPath:_importUrl.path
+                             toPath:[gpxPath stringByAppendingPathComponent:_newGpxName
+                                     ? _newGpxName
+                                     : [self getCorrectedFilename:[_importUrl.path lastPathComponent]]]
+                              error:nil];
     }
-    
-    if (_newGpxName) {
-        NSString *storingPathInFolder = [kImportFolderName stringByAppendingPathComponent:_newGpxName];
-        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
-    } else {
-        NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
-        NSString *storingPathInFolder = [kImportFolderName stringByAppendingPathComponent:name];
-        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
-    }
+
+    NSString *name = _newGpxName ? _newGpxName : [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
+    NSString *storingPathInFolder = hasGpxFolderName ? [gpxPath stringByAppendingPathComponent:name] : [kImportFolderName stringByAppendingPathComponent:name];
+    item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
+
     [[OAGPXDatabase sharedDb] save];
+
     if (![_importUrl.path hasPrefix:_app.gpxPath])
         [fileManager removeItemAtPath:_importUrl.path error:nil];
     
@@ -397,7 +407,8 @@ static UIViewController *parentController;
     _importUrl = nil;
     _newGpxName = nil;
     
-    if (doRefresh) {
+    if (doRefresh)
+    {
         [self generateData];
         [self setupView];
     }
@@ -483,7 +494,7 @@ static UIViewController *parentController;
                                     [url.pathExtension.lowercaseString isEqualToString:KMZ_EXT]) &&
                             ![url.lastPathComponent isEqualToString:@"favourites.gpx"])
                     {
-                        [self processUrl:url showAlerts:NO openGpxView:NO onComplete:nil];
+                        [self processUrl:url showAlerts:NO openGpxView:NO reload:NO onComplete:nil];
                     }
                 }
             }

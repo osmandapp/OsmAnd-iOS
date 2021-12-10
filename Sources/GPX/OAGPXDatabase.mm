@@ -243,18 +243,12 @@
 
 -(void)removeGpxItem:(NSString *)filePath removeFile:(BOOL)removeFile
 {
-    NSMutableArray *newGpxList = [gpxList mutableCopy];
-    OAGPX *gpx;
-    for (OAGPX *item in newGpxList)
-    {
-        if ([item.gpxFilePath isEqualToString:filePath])
-        {
-            gpx = item;
-            break;
-        }
-    }
+    OAGPX *gpx = [self getGPXItem:filePath];
+    if (!gpx)
+        gpx = [self getGPXItemByFileName:filePath];
     if (gpx)
     {
+        NSMutableArray *newGpxList = [gpxList mutableCopy];
         [newGpxList removeObject:gpx];
         gpxList = newGpxList;
 
@@ -362,6 +356,7 @@
     [[OARootViewController instance] importAsGPX:[NSURL fileURLWithPath:filePath]
                                       showAlerts:NO
                                      openGpxView:NO
+                                          reload:YES
                                       onComplete:onComplete];
 }
 

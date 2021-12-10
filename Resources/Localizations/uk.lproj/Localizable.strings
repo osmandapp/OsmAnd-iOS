@@ -71,7 +71,7 @@
 "track_recording" = "Запис треку";
 "track_recording_name" = "Поточний трек, що записується";
 "track_stop_rec" = "Зупинити запис";
-"track_new_segment" = "Розпочати новий відтинок";
+"track_new_segment" = "Розпочати новий відрізок";
 "track_continue_rec" = "Продовжити запис";
 "rec_interval_minimum" = "Мінімум";
 "track_start_rec" = "Почати запис треку";
@@ -574,11 +574,11 @@
 "shared_string_select_on_map" = "Обрати на мапі";
 "shared_string_my_location" = "Моя локація";
 "route_descr_select_destination" = "Виберіть пункт призначення";
-"gpx_option_calculate_first_last_segment" = "Прокласти маршрут в OsmAnd для першого та останнього відтинків маршруту";
+"gpx_option_calculate_first_last_segment" = "Прокласти маршрут в OsmAnd для першого та останнього відрізків маршруту";
 "gpx_option_from_start_point" = "Пройдіть по усьому треку";
 "gpx_option_reverse_route" = "Зворотній напрямок GPX";
 "use_points_as_intermediates" = "Обчислити маршрут між точками";
-"calculate_osmand_route_without_internet" = "Обчислити ділянку маршруту OsmAnd без Інтернету";
+"calculate_osmand_route_without_internet" = "Прокласти відрізок маршруту в OsmAnd без Інтернету";
 "routing_settings_2" = "Налаштування навігації";
 "gpx_navigation" = "Навігація за треком";
 "impassable_road" = "Уникати дороги";
@@ -691,7 +691,7 @@
 "map_widget_intermediate_distance" = "Проміжний пункт призначення";
 "map_widget_distance" = "Пункт призначення";
 "map_widget_next_turn" = "Наступний маневр";
-"map_widget_next_turn_small" = "Наступний маневр (незначний)";
+"map_widget_next_turn_small" = "Наступний маневр (зменшено)";
 "map_widget_next_next_turn" = "Другий наступний маневр";
 "auto_follow_location_enabled" = "Автоматичне центрування мапи.";
 "unknown_location" = "Розташування ще не визначено";
@@ -776,7 +776,7 @@
 "logging_min_speed" = "Найнижча швидкість";
 "logging_min_speed_descr" = "Фільтр: не журналювати нижче вибраної швидкості";
 "auto_split_gap" = "Авто-розрив запису після перерви";
-"auto_split_gap_descr" = "Почніть новий відтинок після 6-хвилинної перерви, новий трек після 2-годинної перерви або новий файл після довшої перерви";
+"auto_split_gap_descr" = "Почніть новий відрізок після 6-хвилинної перерви, новий трек після 2-годинної перерви або новий файл після довшої перерви";
 "speak_tunnels" = "Тунелі";
 "shared_setting_always_ask" = "Завжди питати";
 "recording_preferences_descr" = "Налаштування запису треку";
@@ -886,7 +886,7 @@
 "osm_upload_no_internet" = "Перевірте підключення до Інтернету та повторіть спробу.";
 "osm_delete_confirmation_descr" = "Ви впевнені, що точно бажаєте вилучити цю точку інтересу?";
 "amenity" = "Зручності";
-"osm_tag" = "Мітка";
+"osm_tag" = "Теґ";
 "osm_value" = "Значення";
 "osm_note_created" = "Створено примітку OSM";
 "osm_note_create" = "Створити примітку OSM";
@@ -915,7 +915,7 @@
 "access_intermediate_arrival_time" = "Прибуття в проміжний пункт призначення";
 "map_widget_intermediate_time" = "Час до проміжного пункту призначення";
 "shared_string_time" = "Час";
-"shared_string_distance" = "Віддаль";
+"shared_string_distance" = "Відстань";
 "angular_units" = "Кутові одиниці виміру";
 "angular_units_descr" = "Змінити одиниці вимірювання азимуту.";
 "show_tunnels" = "Тунелі";
@@ -1002,7 +1002,7 @@
 "osm_failed_uploads" = "Помилка";
 "osm_edit_without_name" = "Без назви";
 "osm_upload_complete" = "Надсилання завершено";
-"osm_tag_too_long_message" = "Найбільша довжина мітки %@ — 255 символів. \nЩоб продовжити, скоротіть її.";
+"osm_tag_too_long_message" = "Максимальна довжина значення для теґу %@ становить 255 символів. \nЩоб продовжити, зробіть його коротшим.";
 "save_poi_without_poi_type_message" = "Зберегти точку інтересу без типу?";
 "osm_edit_uploading" = "Надсилання…";
 "short_location_on_map" = "Широта %@ Довгота %@";
@@ -1246,13 +1246,13 @@
 "quick_action_fill_params_alert" = "Будь ласка, заповніть спочатку параметри";
 "quick_action_dialog" = "Діалог";
 "edit_action" = "Редагувати дію";
-"quick_action_add_tag" = "Додати мітку";
-"quick_action_tags" = "Мітки";
+"quick_action_add_tag" = "Додати теґ";
+"quick_action_tags" = "Теґи";
 "quick_action_get_info" = "Отримати відомості";
 "quick_action_enter_message" = "Введіть повідомлення";
 "osm_note_action_field_descr" = "Це повідомлення включено у поле коментаря.";
 "quick_action_source_switch_descr" = "Ця кнопка дії переміщує на наступну сторінку списку нижче.";
-"quick_action_poi_add_descr" = "Ця кнопка дає змогу швидко додавати точки інтересу на мапу з попередньо визначеним типом та мітками.";
+"quick_action_poi_add_descr" = "Ця кнопка дозволяє швидко додавати точки інтересу на мапу з попередньо визначеним типом та теґами.";
 "quick_action_day_night_descr" = "Ця кнопка дії перемикає між денним та нічним режимом мапи.";
 "quick_action_parking_descr" = "Натискання на цю кнопку додасть місце стоянки в центрі екрана.";
 "quick_action_marker_descr" = "Натискання на цю кнопку додасть позначку на мапі в центрі екрана.";
@@ -1350,7 +1350,7 @@
 "rendering_attr_surface_sett_name" = "Бруківка";
 "rendering_attr_showMtbRoutes_name" = "Маршрути для гірських велосипедів";
 "rendering_attr_roadStyle_name" = "Стиль доріг";
-"routing_attr_piste_type_downhill_description" = "Траси для високогірних і гірських лиж та доступ до лижних підіймачів.";
+"routing_attr_piste_type_downhill_description" = "Траси для високогірних і гірських лиж та доступ до витягів.";
 "routing_attr_no_new_routing_description" = "Не використовувати для побудови маршруту алгоритм представлений у версії 1.9.";
 "rendering_attr_currentTrackColor_description" = "Колір GPX";
 "rendering_value_americanRoadAtlas_name" = "Атлас доріг Америки";
@@ -1379,7 +1379,7 @@
 "routeInfo_road_types_name" = "Види доріг";
 "routing_attr_avoid_sett_name" = "Уник. мостових та бруківки";
 "rendering_attr_currentTrackWidth_description" = "Товщина GPX";
-"routing_attr_allow_advanced_description" = "Складні маршрути з небезпечними перешкодами і крутими ділянками.";
+"routing_attr_allow_advanced_description" = "Складні маршрути з небезпечними перешкодами та крутими ділянками.";
 "rendering_attr_piste_difficulty_novice_name" = "Новачок";
 "rendering_attr_pisteRoutes_name" = "Лижні траси";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Рівно";
@@ -1471,14 +1471,14 @@
 "routing_attr_avoid_tram_description" = "Уникати трамваїв";
 "rendering_attr_contourDensity_description" = "Щільність ізоліній";
 "rendering_attr_hideIcons_name" = "Значки точок інтересу";
-"routing_attr_freeride_policy_description" = "\"Безкоштовні проїзди\" та \"позатрекові\" є неофіційними маршрутами та проїздами. Зазвичай недоглянуті, непомічені чиновниками і не перевіряються по вечорам. Заходьте лише на власний ризик.";
+"routing_attr_freeride_policy_description" = "\"Фрірайд\" та \"позатрекові\" є неофіційними маршрутами та проїздами. Зазвичай недоглянуті, офіційно непозначені та не підтримуються в належному стані. Використовуйте на власний розсуд.";
 "routing_attr_avoid_bus_description" = "Уникати автобусів і тролейбусів";
 "routing_attr_piste_type_sled_description" = "Схили для катання на санях.";
 "rendering_value_dark_brown_name" = "Темно-коричневий";
 "rendering_value_high_name" = "Висока";
 "rendering_attr_depthContours_name" = "Ізолінії морських глибин";
 "routing_attr_avoid_borders_description" = "Уникати перетину національних кордонів";
-"routing_attr_allow_intermediate_description" = "Більш складні маршрути з крутішими ділянками. Як правило, деякі перешкоди, яких слід уникати.";
+"routing_attr_allow_intermediate_description" = "Складніші маршрути з крутішими ділянками. Як правило, мають деякі перешкоди, яких слід уникати.";
 "rendering_attr_trolleybusRoutes_name" = "Маршрути тролейбусів";
 "rendering_value_green_name" = "Зелений";
 "rendering_attr_surface_paving_stones_name" = "Бруківка";
@@ -1519,7 +1519,7 @@
 "routing_attr_width_name" = "Обмеження ширини";
 "routing_attr_relief_smoothness_factor_plains_name" = "Менш горбисто";
 "routing_attr_piste_type_skitour_name" = "Лижні тури";
-"routing_attr_allow_classic_only_description" = "Маршрути, створені тільки для класичної їзди, без роликових треків. Сюди входять маршрути, доглянуті малим снігоходом з більш твердим треком, та траси, зроблені лижниками вручну.";
+"routing_attr_allow_classic_only_description" = "Маршрути, створені тільки для класичної їзди, без треків для ковзанів. Сюди входять маршрути, які доглядаються за допомогою малих снігоходів, з цупкішою лижнею, та траси, накатані лижниками самостійно.";
 "routing_attr_driving_style_safety_name" = "Надавати перевагу провулкам";
 "routing_attr_max_num_changes_description" = "Зазначте максимальну кількість змін";
 "routing_attr_avoid_toll_name" = "Уник. платних доріг";
@@ -1547,7 +1547,7 @@
 "rendering_attr_highway_class_footway_name" = "Пішохідна доріжка";
 "rendering_attr_highway_class_track_grade2_name" = "2клас";
 "rendering_attr_piste_difficulty_advanced_name" = "Для досвідчених";
-"routing_attr_difficulty_preference_description" = "Надавати перевагу маршрутам такої складності, хоча маршрутизація через складніші або легші треки все ж можлива, якщо коротша.";
+"routing_attr_difficulty_preference_description" = "Надавати перевагу маршрутам такої складності, хоча маршрутизація через складніші або простіші треки все ж можлива, якщо коротша.";
 "rendering_attr_contourWidth_description" = "Товщина ізоліній";
 "routing_attr_freeride_policy_name" = "Позатрековий";
 "routeInfo_steepness_name" = "Крутість";
@@ -1914,7 +1914,7 @@
 "road_min_speed_descr" = "Установлює найменшу швидкість руху всіма дорогами маршруту. Підвищує пріоритет доріг з рекомендованою швидкістю менше мінімальної.";
 "road_speeds_descr" = "Ці параметри можуть вплинути на обчислення маршруту.";
 "maximum_speed" = "Найбільша швидкість";
-"ios_release_3_90" = "• Представлено функцію «План маршруту» для планування майбутніх поїздок з можливістю створення відтинків треків різного типу навігації\n• Додано можливість вмикати компас через інструмент «Радіусна лінійка»\n• Додано параметр «Показ назв точок інтересу», який дозволяє показувати назви точок інтересу із закладок, маршрутних точок та позначок на мапі\n• Додано нові Швидкі дії показу ізоліній і рельєфу на мапі, зміни профілю застосунку, вилучення найближчої проміжної точки\n• Усунено ваду відсутньої категорії пошуку Вікіпедії\n• Перенесення налаштувань: виправлено помилки, додано підтримку всіх типів даних, доступних в OsmAnd\n• Редагування OpenStreetMap: виправлено інструмент вибору часу та неможливість змінити коментар до набору змін\n";
+"ios_release_3_90" = "• Представлено функцію «План маршруту» для планування майбутніх поїздок з можливістю створення відрізків треків різного типу навігації\n• Додано можливість вмикати компас через інструмент «Радіусна лінійка»\n• Додано параметр «Показ назв точок інтересу», який дозволяє показувати назви точок інтересу із закладок, маршрутних точок та позначок на мапі\n• Додано нові Швидкі дії показу ізоліній і рельєфу на мапі, зміни профілю застосунку, вилучення найближчої проміжної точки\n• Усунено ваду відсутньої категорії пошуку Вікіпедії\n• Перенесення налаштувань: виправлено помилки, додано підтримку всіх типів даних, доступних в OsmAnd\n• Редагування OpenStreetMap: виправлено інструмент вибору часу та неможливість змінити коментар до набору змін\n";
 "ios_release_3_80" = "• Введено «Профілі застосунків» з незалежними налаштуваннями\n• Нове розташування налаштувань за профілями та типами: навігація, загальна, карта й екран\n• Можливість імпорту або експорту налаштувань профілю\n• Додано джерела даних для світлин з Мережі\n• Додано можливість завантажувати мережні мапи в кеш\n• Вдосконалено алгоритми пошуку\n";
 
 
@@ -1930,17 +1930,17 @@
 "plugin_popup_osm_editing_ask" = "Увімкніть втулок редагування OpenStreetMap, щоб вносити та керувати змінами мапи та примітками";
 "plugin_popup_osm_editing_title" = "Увімкнути редагування OpenStreetMap";
 "personal_category_name" = "Особистий";
-"prev_segs_recalc_descr" = "Усі наступні відтинки буде переобчислено за допомогою вибраного профілю";
-"next_segs_recalc_descr" = "Усі наступні відтинки буде переобчислено за допомогою вибраного профілю";
-"selected_seg_recalc_descr" = "Лише вибраний відтинок буде переобчислено за допомогою вибраного профілю";
-"prev_segs_dist" = "Усі попередні відтинки %@";
-"prev_seg_dist" = "Попередній відтинок %@";
-"next_segs_dist" = "Усі наступні відтинки %@";
-"next_seg_dist" = "Наступний відтинок %@";
+"prev_segs_recalc_descr" = "Усі наступні відрізки будуть прокладені наново за допомогою вибраного профілю";
+"next_segs_recalc_descr" = "Усі наступні відрізки будуть прокладені наново за допомогою вибраного профілю";
+"selected_seg_recalc_descr" = "Лише вибраний відрізок буде прокладений наново за допомогою вибраного профілю";
+"prev_segs_dist" = "Усі попередні відрізки %@";
+"prev_seg_dist" = "Попередній відрізок %@";
+"next_segs_dist" = "Усі наступні відрізки %@";
+"next_seg_dist" = "Наступний відрізок %@";
 "whole_track" = "Весь трек";
-"next_seg" = "Наступний відтинок";
+"next_seg" = "Наступний відрізок";
 "whole_track_descr" = "Весь трек буде перераховано за допомогою вибраного профілю.";
-"next_seg_descr" = "Наступний відтинок буде переобчислено за допомогою вибраного профілю.";
+"next_seg_descr" = "Наступний відрізок буде створено за допомогою вибраного профілю.";
 "route_betw_points_descr" = "Виберіть як з'єднати точки: прямою лінією або обчисленням маршруту за допомогою одного з профілів, перерахованих внизу.";
 "unsupported_action_descr" = "Ця швидка дія зараз не підтримується. Це може бути виправлено в нових версіях застосунку.";
 "unsupported_action_title" = "Непідтримувана дія (%@)";
@@ -1979,7 +1979,7 @@
 "none_point_error" = "Необхідно додати хоча б одну точку.";
 "gpx_saved_successfully" = "Файл GPX збережено до %@";
 "plan_route_exit_message" = "Ви впевнені, що хочете закрити планування маршруту без збереження? Ви втратите всі зміни.";
-"route_between_points_add_track_desc" = "Виберіть файл треку, до якого буде додано новий відтинок.";
+"route_between_points_add_track_desc" = "Виберіть файл треку, до якого буде додано новий відрізок.";
 "plan_route_last_modified" = "Востаннє змінено";
 "plan_route_open_existing_track" = "Відкрити наявний трек";
 "track_is_saved" = "%@\nзбережено!";
@@ -1987,7 +1987,7 @@
 "open_saved_track" = "Відкрити збережений трек";
 "simplified_track_description" = "Буде збережено лише лінію маршруту, а проміжні точки буде вилучено.";
 "simplified_track" = "Спрощений трек";
-"join_segments" = "Об’єднати відтинки";
+"join_segments" = "Об’єднати відрізки";
 "gpx_export_failed" = "Не вдалося зберегти створений маршрут";
 "hide_compass_ruler" = "Сховати компас-лінійку";
 "show_compass_ruler" = "Показати компас-лінійку";
@@ -2010,9 +2010,9 @@
 "street_level_imagery" = "Зображення вулиць";
 "map_widget_distance_by_tap" = "Відстань дотиком";
 "some_of" = "%dзі %d";
-"segnet_num" = "Відтинок %d";
-"track_multiple_segments_select" = "%@ має кілька відтинків. Виберіть частину треку, яку слід використовувати для навігації.";
-"select_segment" = "Вибрати відтинок";
+"segnet_num" = "Відрізок %d";
+"track_multiple_segments_select" = "%@ має кілька відрізків. Виберіть частину треку, яку слід використовувати для навігації.";
+"select_segment" = "Вибрати відрізок";
 "select_track_to_follow" = "Виберіть файл треку для слідування";
 "transport" = "Транспорт";
 "travel" = "Мандрівка";
@@ -2156,9 +2156,9 @@
 "navigate_point_northing" = "Північної широти";
 "shared_string_overview" = "Огляд";
 "attribute" = "Атрибут";
-"gpx_selection_segment_title" = "Відтинки";
+"gpx_selection_segment_title" = "Відрізки";
 "gpx_dir_arrows" = "Стрілки напрямку";
-"gpx_join_gaps_descr" = "Проміжки між відтинками будуть об'єднані.";
+"gpx_join_gaps_descr" = "Проміжки між відрізками будуть об'єднані.";
 "track_show_start_finish_icons" = "Показати значки старту та фінішу";
 "coords_format_descr_quick_search" = "Формат координат профілю можна змінити в загальних налаштуваннях";
 "track_coloring_solid" = "Суцільний";

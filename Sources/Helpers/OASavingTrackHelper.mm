@@ -323,7 +323,7 @@
     points = 0;
     
     lastTimeUpdated = 0;
-    lastPoint = CLLocationCoordinate2DMake(0.0, 0.0);
+    lastPoint = kCLLocationCoordinate2DInvalid;
     
     [currentTrack getDocument]->locationMarks.clear();
     [currentTrack getDocument]->tracks.clear();
@@ -558,7 +558,7 @@
         if (lastTimeUpdated != 0 || lastPoint.latitude != 0 || lastPoint.longitude != 0)
         {
             lastTimeUpdated = 0;
-            lastPoint = CLLocationCoordinate2DMake(0.0, 0.0);
+            lastPoint = kCLLocationCoordinate2DInvalid;
             long time = (long)[[NSDate date] timeIntervalSince1970];
             [self doUpdateTrackLat:0.0 lon:0.0 alt:0.0 speed:0.0 hdop:0.0 time:time];
             [self addTrackPoint:nil newSegment:YES time:time];
@@ -575,40 +575,39 @@
             long locationTime = (long)[location.timestamp timeIntervalSince1970];
             
             BOOL record = NO;
-//            isRecording = NO;
             
-            if ([self isPointAccurateForRouting:location])
+            OAAppSettings *settings = [OAAppSettings sharedManager];
+            if ([settings.saveTrackToGPX get]
+                && locationTime - lastTimeUpdated > [settings.mapSettingSaveTrackInterval get]
+                && [[OARoutingHelper sharedInstance] isFollowingMode])
             {
-                OAAppSettings *settings = [OAAppSettings sharedManager];
-                if ([settings.saveTrackToGPX get:settings.applicationMode.get]
-                    && locationTime - lastTimeUpdated > [settings.mapSettingSaveTrackInterval get]
-                    && [[OARoutingHelper sharedInstance] isFollowingMode]) {
-                    record = true;
-                }
-                else if (settings.mapSettingTrackRecording
-                    && locationTime - lastTimeUpdated > [settings.mapSettingSaveTrackIntervalGlobal get])
-                {
-                    record = true;
-                }
-                float minDistance = [settings.saveTrackMinDistance get];
-                if(minDistance > 0 && &lastPoint != nil && OsmAnd::Utilities::distance(lastPoint.longitude, lastPoint.latitude,
-                                                                                       location.coordinate.longitude, location.coordinate.latitude) <
-                                                                                       minDistance) {
-                    record = false;
-                }
-                float precision = [settings.saveTrackPrecision get];
-                if(precision > 0 && (!location.horizontalAccuracy || location.horizontalAccuracy > precision)) {
-                    record = false;
-                }
-                float minSpeed = [settings.saveTrackMinSpeed get];
-                if(minSpeed > 0 && (!location.speed || (location.speed < minSpeed))) {
-                    record = false;
-                }
+                record = true;
+            }
+            else if (settings.mapSettingTrackRecording
+                     && locationTime - lastTimeUpdated > [settings.mapSettingSaveTrackIntervalGlobal get])
+            {
+                record = true;
+            }
+            float minDistance = [settings.saveTrackMinDistance get];
+            if(minDistance > 0 && CLLocationCoordinate2DIsValid(lastPoint) && OsmAnd::Utilities::distance(lastPoint.longitude, lastPoint.latitude,
+                                                                                   location.coordinate.longitude, location.coordinate.latitude) <
+               minDistance) {
+                record = false;
+            }
+            float precision = [settings.saveTrackPrecision get];
+            if(precision > 0 && (location.horizontalAccuracy < 0 || location.horizontalAccuracy > precision))
+            {
+                record = false;
+            }
+            float minSpeed = [settings.saveTrackMinSpeed get];
+            if(minSpeed > 0 && (location.speed < 0 || location.speed < minSpeed))
+            {
+                record = NO;
             }
             
             if (record)
             {
-                [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:location.horizontalAccuracy time:(long)[location.timestamp timeIntervalSince1970]];
+                [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:location.horizontalAccuracy time:[location.timestamp timeIntervalSince1970]];
                 
                 [[_app trackRecordingObservable] notifyEvent];
             }
@@ -907,19 +906,6 @@
     {
         return NO;
     }
-}
-
-- (BOOL) isPointAccurateForRouting:(CLLocation *)loc
-{
-    BOOL res = loc != nil && (loc.horizontalAccuracy < ACCURACY_FOR_GPX_AND_ROUTING * 3.0 / 2.0);
-    if (res)
-    {
-        CLLocationDistance dist = OsmAnd::Utilities::distance(loc.coordinate.longitude, loc.coordinate.latitude, lastPoint.longitude, lastPoint.latitude);
-        NSTimeInterval timeInt = [[NSDate date] timeIntervalSince1970] - lastTimeUpdated;
-        res = (dist > 4.0 || timeInt > 60.0);
-    }
-
-    return res;
 }
 
 - (void) runSyncBlock:(void (^)(void))block

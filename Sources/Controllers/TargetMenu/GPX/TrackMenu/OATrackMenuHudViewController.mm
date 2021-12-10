@@ -262,9 +262,9 @@
 - (CGFloat)initialMenuHeight
 {
     if (_selectedTab == EOATrackMenuHudOverviewTab)
-        return self.toolBarView.frame.size.height += _headerView.descriptionContainerView.frame.origin.y + [_headerView getDescriptionHeight] + 10.;
+        return self.toolBarView.frame.size.height + _headerView.descriptionContainerView.frame.origin.y + [_headerView getDescriptionHeight] + 10.;
     else
-        return self.toolBarView.frame.size.height += _headerView.frame.size.height;
+        return self.toolBarView.frame.size.height + _headerView.frame.size.height;
 }
 
 - (CGFloat)expandedMenuHeight

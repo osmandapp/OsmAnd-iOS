@@ -13,6 +13,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAGPXTrackAnalysis.h"
 
+#define kDescriptionHeightMax 36.
 #define kBlockStatistickHeight 40.
 #define kBlockStatistickWidthMin 80.
 #define kBlockStatistickWidthMinByValue 60.
@@ -25,6 +26,7 @@
     NSArray<OAGPXTableCellData *> *_collectionData;
     EOATrackMenuHudTab _selectedTab;
     OsmAndAppInstance _app;
+    CGFloat _descriptionHeight;
 }
 
 - (instancetype)init
@@ -89,6 +91,8 @@
     self.titleBottomNoDescriptionNoCollectionConstraint.active =
             !hasDescription && !hasCollection && !isOnlyTitleAndDescription && !isOnlyTitle;
 
+    self.descriptionHeightConstraint.constant = _descriptionHeight;
+    self.descriptionContainerHeightConstraint.constant = _descriptionHeight;
     self.descriptionBottomCollectionConstraint.active = hasCollection;
     self.descriptionBottomNoCollectionConstraint.active = !hasCollection;
 
@@ -118,6 +122,8 @@
         res = res || self.titleBottomNoDescriptionNoCollectionConstraint.active !=
                 !hasDescription && !hasCollection && !isOnlyTitleAndDescription && !isOnlyTitle;
 
+        res = res || self.descriptionHeightConstraint.constant != _descriptionHeight;
+        res = res || self.descriptionContainerHeightConstraint.constant != _descriptionHeight;
         res = res || self.descriptionBottomCollectionConstraint.active != hasDescription && hasCollection;
         res = res || self.descriptionBottomNoCollectionConstraint.active != hasDescription && !hasCollection;
 
@@ -343,19 +349,19 @@
 - (void)updateFrame
 {
     CGRect headerFrame = self.frame;
-
     if (self.onlyTitleAndDescriptionConstraint.active)
     {
-        headerFrame.size.height =
-                self.descriptionContainerView.frame.origin.y + self.descriptionContainerView.frame.size.height;
+        headerFrame.size.height = self.descriptionContainerView.frame.origin.y + _descriptionHeight + self.onlyTitleAndDescriptionConstraint.constant;
     }
     else if (self.onlyTitleNoDescriptionConstraint.active)
     {
         headerFrame.size.height = self.titleContainerView.frame.size.height + self.onlyTitleNoDescriptionConstraint.constant;
     }
-    else {
-        if (self.descriptionContainerView.hidden)
-            headerFrame.size.height -= self.descriptionContainerView.frame.size.height;
+    else
+    {
+        headerFrame.size.height -= kDescriptionHeightMax;
+        if (!self.descriptionContainerView.hidden)
+            headerFrame.size.height += _descriptionHeight;
 
         if (self.locationContainerView.hidden)
             headerFrame.size.height -= self.locationContainerView.frame.size.height;
@@ -386,6 +392,19 @@
 
     [self.descriptionView setText:description];
     self.descriptionContainerView.hidden = !hasDescription;
+
+    _descriptionHeight = !self.descriptionContainerView.hidden
+            ? [self.descriptionView.text boundingRectWithSize:CGSizeMake(self.descriptionView.frame.size.width, kDescriptionHeightMax)
+                                                      options:NSStringDrawingUsesLineFragmentOrigin
+                                                   attributes:@{ NSFontAttributeName : self.descriptionView.font }
+                                                      context:nil].size.height
+            : 0.;
+    CGRect frame = self.descriptionContainerView.frame;
+    frame.size.height = _descriptionHeight;
+    self.descriptionContainerView.frame = frame;
+    frame = self.descriptionView.frame;
+    frame.size.height = _descriptionHeight;
+    self.descriptionView.frame = frame;
 }
 
 - (void)setCollection:(NSArray<OAGPXTableCellData *> *)data
@@ -395,6 +414,11 @@
     _collectionData = data;
     [self.collectionView reloadData];
     self.collectionView.hidden = !hasData;
+}
+
+- (CGFloat)getDescriptionHeight
+{
+    return _descriptionHeight;
 }
 
 - (void)makeOnlyHeader:(BOOL)hasDescription

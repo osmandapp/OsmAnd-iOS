@@ -30,6 +30,7 @@
     CGFloat _initialTouchPoint;
     CGFloat _tableViewContentOffsetY;
     BOOL _isDraggingOnTable;
+    BOOL _firstStateChanged;
 }
 
 - (instancetype) init
@@ -374,6 +375,11 @@
     _currentState = self.isLeftSidePresentation ? EOADraggableMenuStateFullScreen : state;
 }
 
+- (BOOL)isFirstStateChanged
+{
+    return _firstStateChanged;
+}
+
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     _isHiding = YES;
@@ -547,6 +553,7 @@
                 [self layoutSubviews];
             } completion:^(BOOL) {
                 _isDraggingOnTable = NO;
+                _firstStateChanged = YES;
             }];
         }
         default:

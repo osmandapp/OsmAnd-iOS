@@ -50,6 +50,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionNoCollectionConstraint;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionContainerHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomCollectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomNoCollectionConstraint;
 
@@ -72,5 +74,6 @@
 - (void)setDirection:(NSString *)direction;
 - (void)setDescription;
 - (void)setCollection:(NSArray *)data;
+- (CGFloat)getDescriptionHeight;
 
 @end

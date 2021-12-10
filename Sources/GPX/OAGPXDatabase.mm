@@ -68,6 +68,21 @@
     return _splitType == 0 ? EOAGpxSplitTypeNone : _splitType;
 }
 
+- (void)resetAppearanceToOriginal
+{
+    OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpxFilePath]];
+    if (document)
+    {
+        _splitType = [OAGPXDatabase splitTypeByName:[document getSplitType]];
+        _splitInterval = [document getSplitInterval];
+        _color = [document getColor:kDefaultTrackColor];
+        _coloringType = [document getColoringType];
+        _width = [document getWidth:nil];
+        _showArrows = [document isShowArrows];
+        _showStartFinish = [document isShowStartFinish];
+    }
+}
+
 @end
 
 
@@ -355,14 +370,6 @@
              [res addObject:gpx];
     }
     gpxList = res;
-}
-
-- (void)reloadGPXFile:(NSString *)filePath onComplete:(void (^)(void))onComplete
-{
-    [[OARootViewController instance] importAsGPX:[NSURL fileURLWithPath:filePath]
-                                      showAlerts:NO
-                                     openGpxView:NO
-                                      onComplete:onComplete];
 }
 
 - (void)save

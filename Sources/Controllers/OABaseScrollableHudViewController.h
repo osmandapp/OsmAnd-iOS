@@ -56,6 +56,7 @@ typedef NS_ENUM(NSUInteger, EOAScrollableMenuHudMode)
 - (CGFloat) getLandscapeYOffset;
 - (CGFloat) additionalLandscapeOffset;
 - (void) updateShowingState:(EOADraggableMenuState)state;
+- (BOOL) isFirstStateChanged;
 
 - (void) updateViewAnimated;
 - (BOOL) isLandscape;

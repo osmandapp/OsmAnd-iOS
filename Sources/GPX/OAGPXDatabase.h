@@ -90,7 +90,6 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
 -(void)replaceGpxItem:(OAGPX *)gpx;
 -(void)removeGpxItem:(NSString *)filePath;
--(void)removeGpxItem:(NSString *)filePath removeFile:(BOOL)removeFile;
 -(BOOL)containsGPXItem:(NSString *)filePath;
 -(BOOL)containsGPXItemByFileName:(NSString *)fileName;
 -(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;

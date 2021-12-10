@@ -375,7 +375,7 @@
 "gpx_deactivated" = "Desactivat";
 "gpx_trip_groups" = "Agrupacions de trajectes";
 "gpx_group_select" = "Selecciona grup";
-"show_all" = "MOSTRA\'LS TOTS";
+"shared_string_show_all" = "MOSTRA\'LS TOTS";
 "get_directions" = "Direccions";
 "shared_string_dismiss" = "Descarta";
 "shared_string_modify" = "Modifica";

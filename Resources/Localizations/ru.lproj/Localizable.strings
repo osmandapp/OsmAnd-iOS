@@ -410,7 +410,7 @@
 "gpx_deactivated" = "Архивировано";
 "gpx_trip_groups" = "Группы треков";
 "gpx_group_select" = "Выбор групп";
-"show_all" = "Показать все";
+"shared_string_show_all" = "Показать все";
 "get_directions" = "Маршрут";
 "parking" = "Парковки";
 "est_travel_time" = "Время в пути";

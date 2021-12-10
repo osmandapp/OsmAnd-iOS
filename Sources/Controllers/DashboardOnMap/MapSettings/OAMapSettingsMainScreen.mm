@@ -181,7 +181,7 @@ static BOOL _isRoutesGroupOpen = NO;
     if (_routesParameters.count > 0)
     {
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
-        group.groupName = OALocalizedString(_isRoutesGroupOpen ? @"shared_string_collapse" : @"show_all");
+        group.groupName = OALocalizedString(_isRoutesGroupOpen ? @"shared_string_collapse" : @"shared_string_show_all");
         group.type = [OACustomSelectionCollapsableCell getCellIdentifier];
         group.isOpen = _isRoutesGroupOpen;
 
@@ -548,7 +548,7 @@ static BOOL _isRoutesGroupOpen = NO;
         if (group.groupItems.count > 0)
         {
             _isRoutesGroupOpen = group.isOpen = !group.isOpen;
-            group.groupName = OALocalizedString(_isRoutesGroupOpen ? @"shared_string_collapse" : @"show_all");
+            group.groupName = OALocalizedString(_isRoutesGroupOpen ? @"shared_string_collapse" : @"shared_string_show_all");
 
             NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
             for (NSInteger i = _routesWithoutGroup.count + 1; i <= _routesParameters.count; i++)

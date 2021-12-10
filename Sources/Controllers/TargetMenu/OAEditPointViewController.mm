@@ -37,6 +37,8 @@
 #import "OAPointDescription.h"
 #import "OAGPXDatabase.h"
 #import "OATrackMenuHudViewController.h"
+#import "OAAppSettings.h"
+#import "OAPOI.h"
 
 #include "Localization.h"
 #import "OAGPXDocument.h"
@@ -50,7 +52,9 @@
 #define kSelectGroupKey @"kSelectGroupKey"
 #define kReplaceKey @"kReplaceKey"
 #define kDeleteKey @"kDeleteKey"
+#define kLastUsedIconsKey @"kLastUsedIconsKey"
 
+#define kDefaultIcon @"special_star"
 #define kVerticalMargin 8.
 #define kSideMargin 20.
 #define kEmptyTextCellHeight 48.
@@ -60,6 +64,7 @@
 #define kPoiCellIndex 1
 #define kFullHeaderHeight 100
 #define kCompressedHeaderHeight 62
+#define kLastUsedIconsLimit 20
 
 @interface OAEditPointViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UITextViewDelegate, OAColorsTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate, MDCMultilineTextInputLayoutDelegate, OAReplacePointDelegate, OAFolderCardsCellDelegate, OASelectFavoriteGroupDelegate, OAAddFavoriteGroupDelegate, UIGestureRecognizerDelegate, UIAdaptivePresentationControllerDelegate>
 
@@ -74,6 +79,9 @@
     NSString *_initialName;
     NSString *_initialGroupName;
     EOAEditPointType _editPointType;
+    OAFavoriteItem *_favorite;
+    OAGpxWptItem *_waypoint;
+    OAPOI *_poi;
     
     OABasePointEditingHandler *_pointHandler;
     
@@ -81,6 +89,7 @@
     NSArray<NSNumber *> *_colors;
     NSDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
     NSArray *_poiCategories;
+    NSArray<NSString *> *_lastUsedIcons;
     NSArray<NSString *> *_backgroundIcons;
     NSArray<NSString *> *_backgroundIconNames;
     NSArray<NSString *> *_backgroundContourIconNames;
@@ -118,6 +127,7 @@
         _isNewItemAdding = NO;
         _isUnsaved = YES;
         _pointHandler = [[OAFavoriteEditingHandler alloc] initWithItem:favorite];
+        _favorite = favorite;
         self.name = [favorite getDisplayName];
         self.desc = [favorite getDescription];
         self.address = [favorite getAddress];
@@ -138,6 +148,7 @@
         _isNewItemAdding = NO;
         _isUnsaved = YES;
         _pointHandler = [[OAGpxWptEditingHandler alloc] initWithItem:gpxWpt];self.name = gpxWpt.point.name;
+        _waypoint = gpxWpt;
         self.desc = gpxWpt.point.desc;
         self.address = [gpxWpt.point getExtensionByKey:ADDRESS_EXTENSION].value;
         self.groupTitle = [self getGroupTitle]/*gpxWpt.point.type*/;
@@ -152,6 +163,7 @@
                      customParam:(NSString *)customParam
                        pointType:(EOAEditPointType)pointType
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
+                             poi:(OAPOI *)poi
 {
     self = [super initWithNibName:@"OAEditPointViewController" bundle:nil];
     if (self)
@@ -161,6 +173,7 @@
         _isUnsaved = YES;
         _app = [OsmAndApp instance];
         _targetMenuState = targetMenuState;
+        _poi = poi;
 
         if (_editPointType == EOAEditPointTypeFavorite)
         {
@@ -180,7 +193,7 @@
         self.groupColor = [_pointHandler getColor];
 
         _selectedIconCategoryName = @"special";
-        _selectedIconName = @"special_star";
+        _selectedIconName = kDefaultIcon;
         _selectedColorIndex = 0;
         _selectedBackgroundIndex = 0;
 
@@ -205,6 +218,7 @@
     _shapeRowIndex = -1;
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
 
+    [self initLastUsedIcons];
     [self setupGroups];
     [self setupColors];
     [self setupIcons];
@@ -267,55 +281,125 @@
     _groupColors = [NSArray arrayWithArray:colors];
 }
 
+- (NSString *) getPreselectedIconName
+{
+    if (_favorite)
+    {
+        return [_favorite getIcon];
+    }
+    else if (_waypoint)
+    {
+        return _waypoint.point.getIcon;
+    }
+    else if (_poi)
+    {
+        NSString *iconName = [_poi.iconName lastPathComponent];
+        if (iconName)
+        {
+            iconName = [iconName stringByReplacingOccurrencesOfString:@"mx_" withString:@""];
+            if ([[OAFavoritesHelper getFlatIconNamesList] containsObject:iconName])
+                return iconName;
+        }
+    }
+    return nil;
+}
+
 - (void)setupIcons
 {
-    NSString *loadedPoiIconName = [_pointHandler getIcon];
+    NSString *preselectedIconName = [self getPreselectedIconName];
+
     _poiIcons = [OAFavoritesHelper getCategirizedIconNames];
-    
+    if (_lastUsedIcons && _lastUsedIcons.count > 0)
+    {
+        NSMutableDictionary<NSString *, NSArray<NSString *> *> *poiIconsMutable = _poiIcons.mutableCopy;
+        poiIconsMutable[kLastUsedIconsKey] = _lastUsedIcons;
+        _poiIcons = poiIconsMutable.copy;
+
+        if (!preselectedIconName)
+            preselectedIconName = _lastUsedIcons[0];
+    }
+
+    if (!preselectedIconName)
+        preselectedIconName = kDefaultIcon;
+
     for (NSString *categoryName in _poiIcons.allKeys)
     {
         NSArray<NSString *> *icons = _poiIcons[categoryName];
         if (icons)
         {
-            int index = (int)[icons indexOfObject:loadedPoiIconName];
+            int index = (int)[icons indexOfObject:preselectedIconName];
             if (index != -1)
             {
-                _selectedIconName = loadedPoiIconName;
+                _selectedIconName = preselectedIconName;
                 _selectedIconCategoryName = categoryName;
             }
         }
     }
-    
-    NSArray *categories = [_poiIcons.allKeys sortedArrayUsingSelector:@selector(compare:)];
+
+    NSArray *categories = _poiIcons.allKeys;
     NSMutableArray *categoriesData = [NSMutableArray new];
     for (NSString *category in categories)
     {
-        [categoriesData addObject: @{
-            @"title" : OALocalizedString(category),
-            @"categoryName" : category,
-            @"img" : @"",
-        }];
+        if ([category isEqualToString:kLastUsedIconsKey])
+        {
+            [categoriesData addObject: @{
+                @"title" : @"",
+                @"categoryName" : kLastUsedIconsKey,
+                @"img" : @"ic_custom_history",
+            }];
+        }
+        else
+        {
+            [categoriesData addObject: @{
+                @"title" : OALocalizedString(category),
+                @"categoryName" : category,
+                @"img" : @"",
+            }];
+        }
     }
-    _poiCategories = [NSArray arrayWithArray:categoriesData];
-    
+
+    _poiCategories = [categoriesData sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
+        return [[obj1[@"title"] lowerCase] compare:[obj2[@"title"] lowerCase]];
+    }];
+
     if (!_selectedIconName || _selectedIconName.length == 0)
-        _selectedIconName = @"special_star";
-    
+        _selectedIconName = kDefaultIcon;
+
     if (!_selectedIconCategoryName || _selectedIconCategoryName.length == 0)
         _selectedIconCategoryName = @"special";
-        
+    
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
     _backgroundContourIconNames = [OAFavoritesHelper getFlatBackgroundContourIconNamesList];
-    
+
     NSMutableArray * tempBackgroundIcons = [NSMutableArray new];
     for (NSString *iconName in _backgroundIconNames)
         [tempBackgroundIcons addObject:[NSString stringWithFormat:@"bg_point_%@", iconName]];
 
     _backgroundIcons = [NSArray arrayWithArray:tempBackgroundIcons];
-    
+
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[_pointHandler getBackgroundIcon]];
     if (_selectedBackgroundIndex == -1)
         _selectedBackgroundIndex = 0;
+}
+
+- (void) initLastUsedIcons
+{
+    _lastUsedIcons = @[];
+    NSArray<NSString *> *fromPref = [OAAppSettings.sharedManager.lastUsedFavIcons get];
+    if (fromPref && fromPref.count > 0)
+        _lastUsedIcons = fromPref;
+}
+
+- (void) addLastUsedIcon:(NSString *)iconName
+{
+    NSMutableArray<NSString *> *mutableLastUsedIcons = _lastUsedIcons.mutableCopy;
+    [mutableLastUsedIcons removeObject:iconName];
+    if (mutableLastUsedIcons.count >= kLastUsedIconsLimit)
+        [mutableLastUsedIcons removeLastObject];
+    
+    [mutableLastUsedIcons insertObject:iconName atIndex:0];
+    _lastUsedIcons = mutableLastUsedIcons.copy;
+    [OAAppSettings.sharedManager.lastUsedFavIcons set:_lastUsedIcons];
 }
 
 - (void)setupColors
@@ -588,6 +672,7 @@
         data.color = _selectedColor.color;
         data.backgroundIcon = _backgroundIconNames[_selectedBackgroundIndex];
         data.icon = _selectedIconName;
+        [self addLastUsedIcon:_selectedIconName];
 
         if (_editPointType == EOAEditPointTypeWaypoint)
         {

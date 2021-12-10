@@ -1856,7 +1856,7 @@
 "gpx_deactivated" = "Malaktivaj";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Montriĉiujn";
+"shared_string_show_all" = "Montriĉiujn";
 "parking" = "Parkumejo";
 "parked_at" = "Parked at";
 

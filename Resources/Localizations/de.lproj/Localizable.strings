@@ -374,7 +374,7 @@
 "gpx_deactivated" = "Deaktiviert";
 "gpx_trip_groups" = "Trackgruppen";
 "gpx_group_select" = "Gruppenauswahl";
-"show_all" = "Alle anzeigen";
+"shared_string_show_all" = "Alle anzeigen";
 "get_directions" = "Navigation";
 "parking" = "Parkplatz";
 "est_travel_time" = "Reisezeit abschätzen";

@@ -1080,7 +1080,7 @@
 "gpx_deactivated" = "Deaktivert";
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Vis alle";
+"shared_string_show_all" = "Vis alle";
 "get_directions" = "Anvisninger";
 "parking" = "Parkering";
 "directions_more_options" = "Anvisninger fra";

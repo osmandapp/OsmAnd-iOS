@@ -58,12 +58,12 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bg1-Wv-H5u" userLabel="Desription Container">
                             <rect key="frame" x="0.0" y="44" width="374" height="31"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WmA-ig-XeZ">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WmA-ig-XeZ">
                                     <rect key="frame" x="0.0" y="0.0" width="374" height="31"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="lessThanOrEqual" constant="36" id="rqf-0f-Iaa"/>
                                     </constraints>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" red="0.59215686270000001" green="0.56078431370000004" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -274,10 +274,26 @@
                                 <constraint firstAttribute="height" constant="57" id="8CZ-Jb-1IB"/>
                             </constraints>
                         </stackView>
+                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="8XG-hO-pN3" customClass="OAFoldersCollectionView">
+                            <rect key="frame" x="0.0" y="81" width="374" height="48"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="48" id="2ML-mP-Hqj"/>
+                            </constraints>
+                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="12" id="CDv-4T-dCy">
+                                <size key="itemSize" width="120" height="36"/>
+                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                <inset key="sectionInset" minX="0.0" minY="6" maxX="0.0" maxY="6"/>
+                            </collectionViewFlowLayout>
+                        </collectionView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="19G-L5-8Rc" firstAttribute="centerX" secondItem="Fdl-Nv-zcK" secondAttribute="centerX" id="5Vu-xG-0Pt"/>
+                        <constraint firstAttribute="trailing" secondItem="8XG-hO-pN3" secondAttribute="trailing" id="XPK-R7-w01"/>
+                        <constraint firstItem="8XG-hO-pN3" firstAttribute="leading" secondItem="Fdl-Nv-zcK" secondAttribute="leading" id="snP-Ql-SZa"/>
+                        <constraint firstItem="8XG-hO-pN3" firstAttribute="top" secondItem="bg1-Wv-H5u" secondAttribute="bottom" constant="6" id="znT-sT-420"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="77c-3b-9tk" userLabel="Bottom Divider View">
@@ -294,6 +310,7 @@
                 <constraint firstItem="Fdl-Nv-zcK" firstAttribute="trailing" secondItem="VTD-C4-FFB" secondAttribute="trailing" id="0Db-TF-xrb"/>
                 <constraint firstAttribute="trailing" secondItem="77c-3b-9tk" secondAttribute="trailing" id="17g-lT-Ouu"/>
                 <constraint firstItem="77c-3b-9tk" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8PT-lJ-hr0"/>
+                <constraint firstAttribute="bottom" secondItem="8XG-hO-pN3" secondAttribute="bottom" priority="999" constant="6" id="9rN-Et-IFT"/>
                 <constraint firstItem="Fdl-Nv-zcK" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="A90-71-HGS"/>
                 <constraint firstItem="Fdl-Nv-zcK" firstAttribute="trailing" secondItem="Uvg-4A-Ywj" secondAttribute="trailing" id="Dbt-bW-cti"/>
                 <constraint firstItem="VTD-C4-FFB" firstAttribute="leading" secondItem="Fdl-Nv-zcK" secondAttribute="leading" id="EdZ-hd-mpC"/>
@@ -327,9 +344,9 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="actionButtonsContainerView" destination="dzH-uG-dio" id="td5-Lm-ioT"/>
+                <outlet property="actionsBottomConstraint" destination="n4M-M4-G9g" id="aZY-dz-hJn"/>
                 <outlet property="appearanceButton" destination="vDF-Mt-jg2" id="mF1-rx-VgB"/>
                 <outlet property="bottomDividerView" destination="77c-3b-9tk" id="pFU-kg-NwT"/>
-                <outlet property="collectionView" destination="Uvg-4A-Ywj" id="Uon-fX-TwM"/>
                 <outlet property="contentView" destination="Fdl-Nv-zcK" id="6uw-Sd-7ZA"/>
                 <outlet property="descriptionBottomCollectionConstraint" destination="lmx-5w-UHo" id="fZn-1c-HNh"/>
                 <outlet property="descriptionBottomNoCollectionConstraint" destination="ydK-og-mpj" id="SBa-9C-nyF"/>
@@ -339,9 +356,12 @@
                 <outlet property="directionIconView" destination="zXJ-Kc-6n6" id="zpr-me-xi2"/>
                 <outlet property="directionTextView" destination="snd-9X-hbz" id="8VC-Gr-ztq"/>
                 <outlet property="exportButton" destination="41j-Jh-0aW" id="AOj-im-orj"/>
+                <outlet property="groupsBottomConstraint" destination="9rN-Et-IFT" id="jSz-Np-w3s"/>
+                <outlet property="groupsCollectionView" destination="8XG-hO-pN3" id="3Y7-M3-L5Y"/>
                 <outlet property="locationContainerView" destination="VTD-C4-FFB" id="l9C-sA-78j"/>
                 <outlet property="locationSeparatorView" destination="jqG-9D-3Mp" id="ljT-4l-rva"/>
                 <outlet property="navigationButton" destination="pbl-cu-esO" id="GNS-Td-eSJ"/>
+                <outlet property="onlyTitleAndDescriptionAndGroupsConstraint" destination="znT-sT-420" id="hgk-i5-TZ7"/>
                 <outlet property="onlyTitleAndDescriptionConstraint" destination="pao-Pt-7rc" id="b0a-as-BQ6"/>
                 <outlet property="onlyTitleNoDescriptionConstraint" destination="oac-Lt-1sc" id="ddX-lF-XK8"/>
                 <outlet property="regionContainerView" destination="WEo-uC-2EY" id="zrC-rh-ELX"/>
@@ -351,6 +371,7 @@
                 <outlet property="regionTextView" destination="wVj-5r-123" id="R6P-Aa-cbU"/>
                 <outlet property="showHideButton" destination="3Ev-Ap-uIN" id="ncK-Wh-dip"/>
                 <outlet property="sliderView" destination="19G-L5-8Rc" id="pLK-Bo-MiB"/>
+                <outlet property="statisticsCollectionView" destination="Uvg-4A-Ywj" id="Uon-fX-TwM"/>
                 <outlet property="titleBottomDescriptionConstraint" destination="QmN-gL-7dO" id="MXe-qU-ymK"/>
                 <outlet property="titleBottomNoDescriptionConstraint" destination="had-JX-7it" id="yq1-fp-Bnr"/>
                 <outlet property="titleBottomNoDescriptionNoCollectionConstraint" destination="sks-0a-29l" id="kuM-PL-kKm"/>

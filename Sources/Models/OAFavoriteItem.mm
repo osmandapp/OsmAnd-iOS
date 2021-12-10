@@ -585,8 +585,9 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     NSString *iconName = [@"mx_" stringByAppendingString:[self getIcon]];
     UIImage *iconImg = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
     iconImg = [OAUtilities tintImageWithColor:iconImg color:UIColor.whiteColor];
-    CGFloat smallIconSize = 26;
-    iconImg  = [OAUtilities resizeImage:iconImg newSize:CGSizeMake(smallIconSize, smallIconSize)];
+ 
+    CGFloat scaledIconSize = backgroundImg.size.width * backgroundImg.scale;
+    backgroundImg  = [OAUtilities resizeImage:backgroundImg newSize:CGSizeMake(scaledIconSize, scaledIconSize)];
     CGFloat centredIconOffset = (backgroundImg.size.width - iconImg.size.width) / 2;
     
     UIGraphicsBeginImageContext(backgroundImg.size);

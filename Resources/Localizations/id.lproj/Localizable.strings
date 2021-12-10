@@ -1854,7 +1854,7 @@
 "gpx_deactivated" = "Deactivated";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Tampilkan semua";
+"shared_string_show_all" = "Tampilkan semua";
 "parking" = "Parking";
 "parked_at" = "Parked at";
 

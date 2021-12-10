@@ -701,7 +701,7 @@ typedef enum
                 }
                 if (!showAll && categoryPoiAdditionals.count > 0)
                 {
-                    [items addObject:[[OAPOIFilterListItem alloc] initWithType:BUTTON_ITEM icon:nil text:[OALocalizedString(@"show_all") upperCase] groupIndex:groupId expandable:NO expanded:NO checked:NO category:category keyName:nil]];
+                    [items addObject:[[OAPOIFilterListItem alloc] initWithType:BUTTON_ITEM icon:nil text:[OALocalizedString(@"shared_string_show_all") upperCase] groupIndex:groupId expandable:NO expanded:NO checked:NO category:category keyName:nil]];
                 }
 
                 [groups setObject:items forKey:[NSNumber numberWithInt:groupId]];

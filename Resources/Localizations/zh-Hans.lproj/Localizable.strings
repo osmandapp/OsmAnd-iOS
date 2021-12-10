@@ -408,7 +408,7 @@
 "gpx_deactivated" = "已停用";
 "gpx_trip_groups" = "";
 "gpx_group_select" = "";
-"show_all" = "显示全部";
+"shared_string_show_all" = "显示全部";
 "get_directions" = "导航";
 "parking" = "停車";
 "est_travel_time" = "";

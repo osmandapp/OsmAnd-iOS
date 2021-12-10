@@ -669,7 +669,7 @@
 "wpt_select" = "Izberite vmesne točke";
 "create_new_trip" = "Ustvari novo potovanje";
 "gpx_cancel_route_q" = "Ali želite preklicati to pot?";
-"show_all" = "Pokaži vse";
+"shared_string_show_all" = "Pokaži vse";
 "get_directions" = "Navigacija";
 "parking" = "Parkirišča";
 "directions_more_options" = "Navigacija od…";

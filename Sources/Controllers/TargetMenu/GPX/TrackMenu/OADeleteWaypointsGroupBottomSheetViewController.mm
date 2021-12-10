@@ -77,6 +77,24 @@
 
 - (void)generateData
 {
+    OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
+            kCellKey: @"delete",
+            kCellType: [OAFilledButtonCell getCellIdentifier],
+            kTableValues: @{ @"title_color_value_integer": @color_icon_color_night },
+            kCellTitle: OALocalizedString(@"shared_string_delete"),
+            kCellTintColor: @color_primary_red
+    }];
+    deleteCellData.onButtonPressed = ^() {
+        [self hide:YES completion:^{
+            if (self.trackMenuDelegate)
+            {
+                [self.trackMenuDelegate deleteWaypointsGroup:_groupName
+                                           selectedWaypoints:nil];
+                [self.trackMenuDelegate refreshLocationServices];
+            }
+        }];
+    };
+
     _tableData = @[
             [OAGPXTableSectionData withData:@{
                     kSectionCells: @[[OAGPXTableCellData withData:@{
@@ -85,25 +103,7 @@
                             kCellTitle: [NSString stringWithFormat:OALocalizedString(@"delete_group_confirm"), _groupName]
                     }]]
             }],
-            [OAGPXTableSectionData withData:@{
-                    kSectionCells: @[[OAGPXTableCellData withData:@{
-                            kCellKey: @"delete",
-                            kCellType: [OAFilledButtonCell getCellIdentifier],
-                            kTableValues: @{ @"title_color_value_integer": @color_icon_color_night },
-                            kCellTitle: OALocalizedString(@"shared_string_delete"),
-                            kCellTintColor: @color_primary_red,
-                            kCellButtonPressed: ^() {
-                                [self hide:YES completion:^{
-                                    if (self.trackMenuDelegate)
-                                    {
-                                        [self.trackMenuDelegate deleteWaypointsGroup:_groupName
-                                                                   selectedWaypoints:nil];
-                                        [self.trackMenuDelegate refreshLocationServices];
-                                    }
-                                }];
-                            }
-                    }]]
-            }]
+            [OAGPXTableSectionData withData:@{ kSectionCells: @[deleteCellData] }]
     ];
 }
 

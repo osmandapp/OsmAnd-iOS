@@ -1854,7 +1854,7 @@
 "gpx_deactivated" = "Isključeno";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Pokaži sve";
+"shared_string_show_all" = "Pokaži sve";
 "parking" = "Parkiralište";
 "parked_at" = "Parked at";
 

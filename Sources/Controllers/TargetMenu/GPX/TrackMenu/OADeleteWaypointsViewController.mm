@@ -96,18 +96,16 @@
         originalData[groupCellData.key] = @{
                 kCellRightIconName: groupCellData.rightIconName,
                 kCellToggle: @(groupCellData.toggle),
-                kTableUpdateData: groupCellData.updateData
+                @"update_data": groupCellData.updateData
         };
-        [groupCellData setData:@{
-                kTableUpdateData: ^() {
-                    NSArray *selectedWaypoints = _selectedWaypointGroups[groupCellData.title];
-                    [groupCellData setData:@{
-                            kTableValues: @{
-                                    @"bool_value_selected": @(selectedWaypoints != nil ? selectedWaypoints.count > 0 : NO)
-                            },
-                    }];
-                }
-        }];
+        groupCellData.updateData = ^() {
+            NSArray *selectedWaypoints = _selectedWaypointGroups[groupCellData.title];
+            [groupCellData setData:@{
+                    kTableValues: @{
+                            @"bool_value_selected": @(selectedWaypoints != nil ? selectedWaypoints.count > 0 : NO)
+                    },
+            }];
+        };
     }
     _originalData = originalData;
 }
@@ -172,9 +170,9 @@
         OAGPXTableCellData *groupCellData = sectionData.cells.firstObject;
         [groupCellData setData:@{
                 kCellRightIconName: _originalData[groupCellData.key][kCellRightIconName],
-                kCellToggle: _originalData[groupCellData.key][kCellToggle],
-                kTableUpdateData: _originalData[groupCellData.key][kTableUpdateData]
+                kCellToggle: _originalData[groupCellData.key][kCellToggle]
         }];
+        groupCellData.updateData = _originalData[groupCellData.key][@"update_data"];
     }
 }
 

@@ -21,6 +21,17 @@
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     [self.collectionView registerNib:[UINib nibWithNibName:[OAColorsCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier]];
+    
+    if ([self isDirectionRTL])
+    {
+        self.titleLabel.textAlignment = NSTextAlignmentRight;
+        self.valueLabel.textAlignment = NSTextAlignmentLeft;
+    }
+    else
+    {
+        self.titleLabel.textAlignment = NSTextAlignmentLeft;
+        self.valueLabel.textAlignment = NSTextAlignmentRight;
+    }
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {

@@ -134,15 +134,15 @@
                         }
                 }
         }];
-        [chartCellData setData:@{
-                kTableUpdateData: ^() {
-                    if (_routeLineChartHelper)
-                        [_routeLineChartHelper changeChartMode:mode
-                                                         chart:cell.lineChartView
-                                                      analysis:analysis
-                                                      modeCell:nil];
-                }
-        }];
+        chartCellData.updateData = ^() {
+            if (_routeLineChartHelper)
+            {
+                [_routeLineChartHelper changeChartMode:mode
+                                                 chart:cell.lineChartView
+                                              analysis:analysis
+                                              modeCell:nil];
+            }
+        };
 
         OAGPXTableCellData *statisticsCellData = [OAGPXTableCellData withData:@{
                 kCellKey: [NSString stringWithFormat:@"statistics_%li", index],
@@ -151,36 +151,32 @@
                 kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
                         || mode != EOARouteStatisticsModeAltitudeSpeed)
         }];
-        [statisticsCellData setData:@{
-                kTableUpdateData: ^() {
-                    [statisticsCellData setData:@{
-                            kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:mode],
-                            kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
-                                    || mode != EOARouteStatisticsModeAltitudeSpeed)
-                    }];
-                }
-        }];
+        statisticsCellData.updateData = ^() {
+            [statisticsCellData setData:@{
+                    kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:mode],
+                    kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
+                            || mode != EOARouteStatisticsModeAltitudeSpeed)
+            }];
+        };
 
         OAGPXTableCellData *tabsCellData = [OAGPXTableCellData withData:@{
                 kCellKey: [NSString stringWithFormat:@"tabs_%li", index],
                 kCellType: [OASegmentTableViewCell getCellIdentifier]
         }];
-        [tabsCellData setData:@{
-                kTableUpdateData: ^() {
-                    NSInteger selectedIndex = [tabsCellData.values[@"selected_index_int_value"] integerValue];
-                    if (selectedIndex != NSNotFound)
-                    {
-                        mode = selectedIndex == 0 ? EOARouteStatisticsModeAltitudeSpeed
-                                : selectedIndex == 1 ? EOARouteStatisticsModeAltitudeSlope : EOARouteStatisticsModeSpeed;
+        tabsCellData.updateData = ^() {
+            NSInteger selectedIndex = [tabsCellData.values[@"selected_index_int_value"] integerValue];
+            if (selectedIndex != NSNotFound)
+            {
+                mode = selectedIndex == 0 ? EOARouteStatisticsModeAltitudeSpeed
+                        : selectedIndex == 1 ? EOARouteStatisticsModeAltitudeSlope : EOARouteStatisticsModeSpeed;
 
-                        if (chartCellData.updateData)
-                            chartCellData.updateData();
+                if (chartCellData.updateData)
+                    chartCellData.updateData();
 
-                        if (statisticsCellData.updateData)
-                            statisticsCellData.updateData();
-                    }
-                }
-        }];
+                if (statisticsCellData.updateData)
+                    statisticsCellData.updateData();
+            }
+        };
 
         OAGPXTableCellData *buttonsCellData = [OAGPXTableCellData withData:@{
                 kCellKey: [NSString stringWithFormat:@"buttons_%li", index],
@@ -222,24 +218,24 @@
         OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: segmentCells }];
         [tableSections addObject:segmentSectionData];
         [segmentSectionData setData:@{
-                kTableUpdateData: ^() {
-                    if ([segmentSectionData.values[@"delete_section_bool_value"] boolValue])
-                    {
-                        NSMutableArray<OAGPXTableSectionData *> *newTableData = [self.tableData.sections mutableCopy];
-                        [newTableData removeObject:segmentSectionData];
-                        [self.tableData setData:@{ kTableSections: newTableData }];
-                    }
-                    else
-                    {
-                        for (OAGPXTableCellData *cellData in segmentSectionData.cells)
-                        {
-                            if (cellData.updateData)
-                                cellData.updateData();
-                        }
-                    }
-                },
                 kSectionHeaderHeight: tableSections.firstObject == segmentSectionData ? @0.001 : @36.
         }];
+        segmentSectionData.updateData = ^() {
+            if ([segmentSectionData.values[@"delete_section_bool_value"] boolValue])
+            {
+                NSMutableArray<OAGPXTableSectionData *> *newTableData = [self.tableData.sections mutableCopy];
+                [newTableData removeObject:segmentSectionData];
+                [self.tableData setData:@{ kTableSections: newTableData }];
+            }
+            else
+            {
+                for (OAGPXTableCellData *cellData in segmentSectionData.cells)
+                {
+                    if (cellData.updateData)
+                        cellData.updateData();
+                }
+            }
+        };
 
         cell.lineChartView.tag =
                 [tableSections indexOfObject:segmentSectionData] << 10 | [segmentCells indexOfObject:chartCellData];
@@ -248,15 +244,13 @@
     }
 
     self.tableData = [OAGPXTableData withData: @{ kTableSections: tableSections }];
-    [self.tableData setData:@{
-            kTableUpdateData: ^() {
-                for (OAGPXTableSectionData *sectionData in tableSections)
-                {
-                    if (sectionData.updateData)
-                        sectionData.updateData();
-                }
-            }
-    }];
+    self.tableData.updateData = ^() {
+        for (OAGPXTableSectionData *sectionData in tableSections)
+        {
+            if (sectionData.updateData)
+                sectionData.updateData();
+        }
+    };
 }
 
 - (void)runAdditionalActions

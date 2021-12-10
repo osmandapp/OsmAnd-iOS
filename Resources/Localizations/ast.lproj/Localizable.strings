@@ -1854,7 +1854,7 @@
 "gpx_deactivated" = "Desactivóse";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "Amosar too";
+"shared_string_show_all" = "Amosar too";
 "parking" = "Parking";
 "parked_at" = "Parked at";
 

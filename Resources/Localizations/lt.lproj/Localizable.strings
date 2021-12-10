@@ -1854,7 +1854,7 @@
 "gpx_deactivated" = "Deaktyvuota";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"show_all" = "RODYTI VISKĄ";
+"shared_string_show_all" = "RODYTI VISKĄ";
 "parking" = "Automobilio statymas";
 "parked_at" = "Parked at";
 

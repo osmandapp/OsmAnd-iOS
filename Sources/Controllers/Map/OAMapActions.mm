@@ -29,6 +29,8 @@
 #import "OAWaypointHelper.h"
 #import "OAAddWaypointBottomSheetViewController.h"
 
+#define START_TRACK_POINT_MY_LOCATION_RADIUS_METERS 50 * 1000
+
 @implementation OAMapActions
 {
     OsmAndAppInstance _app;
@@ -131,10 +133,17 @@
         [_settings.followTheGpxRoute set:path];
         if (ps.count > 0)
         {
-            OATargetPointsHelper *tg = [OATargetPointsHelper sharedInstance];
-            [tg clearStartPoint:NO];
-            CLLocation *loc = ps.lastObject;
-            [tg navigateToPoint:loc updateRoute:false intermediate:-1];
+            OATargetPointsHelper *pointsHelper = [OATargetPointsHelper sharedInstance];
+            CLLocation *startLoc = ps.firstObject;
+            CLLocation *finishLoc = ps.lastObject;
+            CLLocation *location = _app.locationServices.lastKnownLocation;
+            [pointsHelper clearAllIntermediatePoints:NO];
+            if (!location || [location distanceFromLocation:startLoc] <= START_TRACK_POINT_MY_LOCATION_RADIUS_METERS)
+                [pointsHelper clearStartPoint:NO];
+            else
+                [pointsHelper setStartPoint:startLoc.copy updateRoute:NO name:nil];
+            
+            [pointsHelper navigateToPoint:finishLoc.copy updateRoute:NO intermediate:-1];
         }
     }
 }

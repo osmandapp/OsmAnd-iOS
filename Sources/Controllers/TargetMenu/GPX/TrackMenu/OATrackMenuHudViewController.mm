@@ -261,15 +261,18 @@
 
 - (CGFloat)initialMenuHeight
 {
-    if (_headerView.descriptionContainerView.hidden)
-    {
-        return self.toolBarView.frame.size.height + 20. + _headerView.titleContainerView.frame.size.height;
-    }
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
+        return self.toolBarView.frame.size.height + _headerView.descriptionContainerView.frame.origin.y + [_headerView getDescriptionHeight] + 10.;
     else
-    {
-        return self.toolBarView.frame.size.height + 10. + _headerView.descriptionContainerView.frame.origin.y
-                + _headerView.descriptionContainerView.frame.size.height;
-    }
+        return self.toolBarView.frame.size.height + _headerView.frame.size.height;
+}
+
+- (CGFloat)expandedMenuHeight
+{
+    if (![self isFirstStateChanged] && _selectedTab == EOATrackMenuHudOverviewTab)
+        return self.toolBarView.frame.size.height + _headerView.frame.size.height;
+
+    return DeviceScreenHeight / 2;
 }
 
 - (BOOL)hasCustomHeaderFooter
@@ -1623,29 +1626,24 @@
         [self setupHeaderView];
         [_uiBuilder runAdditionalActions];
 
-        switch (_selectedTab)
-        {
-            case EOATrackMenuHudOverviewTab:
-            case EOATrackMenuHudPointsTab:
-            {
-                [self startLocationServices];
-                break;
-            }
-            case EOATrackMenuHudActionsTab:
-            {
-                [self goFullScreen];
-                break;
-            }
-            default:
-            {
-                break;
-            }
-        }
+        if (_selectedTab == EOATrackMenuHudOverviewTab || _selectedTab == EOATrackMenuHudPointsTab)
+            [self startLocationServices];
 
-        if (self.currentState == EOADraggableMenuStateInitial)
-            [self goExpanded];
+        if (_selectedTab == EOATrackMenuHudActionsTab)
+        {
+            [self goFullScreen];
+        }
+        else if ([self isFirstStateChanged])
+        {
+            if (self.currentState == EOADraggableMenuStateInitial)
+                [self goExpanded];
+            else
+                [self updateViewAnimated];
+        }
         else
+        {
             [self updateViewAnimated];
+        }
 
         [UIView transitionWithView:self.tableView
                           duration:0.35f

@@ -51,6 +51,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionNoCollectionConstraint;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionContainerHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomCollectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomNoCollectionConstraint;
 
@@ -78,5 +80,6 @@
 - (void)setStatisticsCollection:(NSArray<OAGPXTableCellData *> *)cells;
 - (void)setSelectedIndexGroupsCollection:(NSInteger)index;
 - (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index;
+- (CGFloat)getDescriptionHeight;
 
 @end

@@ -134,16 +134,16 @@
         if (ps.count > 0)
         {
             OATargetPointsHelper *pointsHelper = [OATargetPointsHelper sharedInstance];
-			CLLocation *startLoc = ps.firstObject;
-			CLLocation *finishLoc = ps.lastObject;
-			CLLocation *location = _app.locationServices.lastKnownLocation;
-			[pointsHelper clearAllIntermediatePoints:NO];
-			if (!location || [location distanceFromLocation:startLoc] <= START_TRACK_POINT_MY_LOCATION_RADIUS_METERS)
-				[pointsHelper clearStartPoint:NO];
-			else
-				[pointsHelper setStartPoint:startLoc.copy updateRoute:NO name:nil];
-			
-			[pointsHelper navigateToPoint:finishLoc.copy updateRoute:NO intermediate:-1];
+            CLLocation *startLoc = ps.firstObject;
+            CLLocation *finishLoc = ps.lastObject;
+            CLLocation *location = _app.locationServices.lastKnownLocation;
+            [pointsHelper clearAllIntermediatePoints:NO];
+            if (!location || [location distanceFromLocation:startLoc] <= START_TRACK_POINT_MY_LOCATION_RADIUS_METERS)
+                [pointsHelper clearStartPoint:NO];
+            else
+                [pointsHelper setStartPoint:startLoc.copy updateRoute:NO name:nil];
+            
+            [pointsHelper navigateToPoint:finishLoc.copy updateRoute:NO intermediate:-1];
         }
     }
 }

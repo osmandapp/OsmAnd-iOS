@@ -72,7 +72,7 @@
     NSMapTable<NSString *, OACommonPreference *> *_registeredPreferences;
 }
 
-@synthesize applicationModeChangedObservable = _applicationModeChangedObservable, routingModeChangedObservable = _routingModeChangedObservable, mapLayersConfiguration = _mapLayersConfiguration;
+@synthesize applicationModeChangedObservable = _applicationModeChangedObservable, mapLayersConfiguration = _mapLayersConfiguration;
 
 - (instancetype) init
 {
@@ -179,7 +179,6 @@
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
                                                             andObserve:_applicationModeChangedObservable];
-    _routingModeChangedObservable  = [[OAObservable alloc] init];
     
     _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     // Profile settings

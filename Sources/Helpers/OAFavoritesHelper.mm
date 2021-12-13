@@ -85,7 +85,7 @@ static BOOL _favoritesLoaded = NO;
                 [plugin setParkingPosition:favorite.getLatitude longitude:favorite.getLongitude];
                 [plugin addOrRemoveParkingEvent:favorite.getCalendarEvent];
                 if (favorite.getCalendarEvent)
-                    [OAFavoritesHelper addParkingReminderToCalendar];
+                    [OAFavoritesHelper addParkingReminderToCalendar:NO];
             }
         }
     }
@@ -634,7 +634,7 @@ static BOOL _favoritesLoaded = NO;
     return gpx;
 }
 
-+ (void) addParkingReminderToCalendar
++ (void) addParkingReminderToCalendar:(BOOL)showDialog
 {
     OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *) [OAPlugin getPlugin:OAParkingPositionPlugin.class];
     if (plugin && ![self.class isEventExistsForParking:[self.class getSpecialPoint:OASpecialPointType.PARKING]])
@@ -642,15 +642,15 @@ static BOOL _favoritesLoaded = NO;
         EKEventStore *eventStore = [[EKEventStore alloc] init];
         [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (error)
+                if (error && showDialog)
                 {
                     [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
                 }
-                else if (!granted)
+                else if (!granted && showDialog)
                 {
                     [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:OALocalizedString(@"reminder_not_set_text") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
                 }
-                else
+                else if (!error && granted)
                 {
                     EKEvent *event = [EKEvent eventWithEventStore:eventStore];
                     event.title = OALocalizedString(@"pickup_car");
@@ -666,7 +666,7 @@ static BOOL _favoritesLoaded = NO;
                     [event setCalendar:[eventStore defaultCalendarForNewEvents]];
                     NSError *err;
                     [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
-                    if (err)
+                    if (err && showDialog)
                         [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
                     else
                         [plugin setEventIdentifier:[event.eventIdentifier copy]];

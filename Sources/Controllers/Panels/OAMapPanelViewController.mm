@@ -3350,7 +3350,7 @@ typedef enum
         [plugin setParkingPosition:sender.coord.latitude longitude:sender.coord.longitude limited:sender.timeLimitActive];
 
         if (sender.timeLimitActive && sender.addToCalActive)
-            [OAFavoritesHelper addParkingReminderToCalendar];
+            [OAFavoritesHelper addParkingReminderToCalendar:YES];
         else if (!sender.addToCalActive)
             [OAFavoritesHelper removeParkingReminderFromCalendar];
         

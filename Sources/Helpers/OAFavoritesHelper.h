@@ -60,7 +60,7 @@
 
 + (OAGPXDocument *) asGpxFile:(NSArray<OAFavoriteItem *> *)favoritePoints;
 
-+ (void) addParkingReminderToCalendar;
++ (void) addParkingReminderToCalendar:(BOOL)showDialog;
 + (void) removeParkingReminderFromCalendar;
 
 @end

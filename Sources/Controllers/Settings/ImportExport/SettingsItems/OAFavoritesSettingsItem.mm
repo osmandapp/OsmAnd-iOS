@@ -110,7 +110,7 @@
                             [plugin setParkingPosition:item.getLatitude longitude:item.getLongitude];
                             [plugin addOrRemoveParkingEvent:item.getCalendarEvent];
                             if (item.getCalendarEvent)
-                                [OAFavoritesHelper addParkingReminderToCalendar];
+                                [OAFavoritesHelper addParkingReminderToCalendar:YES];
                         }
                     }
                 }

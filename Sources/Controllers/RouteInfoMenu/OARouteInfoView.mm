@@ -78,7 +78,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     EOARouteInfoMenuStateFullScreen
 };
 
-@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, UITextViewDelegate, OASegmentSelectionDelegate>
+@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, UITextViewDelegate, OASegmentSelectionDelegate, OARoutingSettingsCellDelegate>
 
 @end
 
@@ -1423,6 +1423,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARoutingSettingsCell getCellIdentifier] owner:self options:nil];
             cell = (OARoutingSettingsCell *)[nib objectAtIndex:0];
+            cell.delegate = self;
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
@@ -1687,6 +1688,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             if (mode)
             {
                 [_routingHelper setAppMode:mode];
+                _appModeView.selectedMode = mode;
                 [_app initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
             }
             
@@ -2113,6 +2115,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     [self updateData];
     [self.tableView reloadData];
+}
+
+#pragma mark - OARoutingSettingsCellDelegate
+
+- (void) reloadUI
+{
+    _appModeView.selectedMode = [_routingHelper getAppMode];
 }
 
 @end

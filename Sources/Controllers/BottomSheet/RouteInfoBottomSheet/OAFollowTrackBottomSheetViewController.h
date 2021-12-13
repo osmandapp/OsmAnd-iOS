@@ -10,7 +10,18 @@
 
 @class OAGPXDocument;
 
+@protocol OAFollowTrackBottomSheetDelegate <NSObject>
+
+@optional
+
+- (void) reloadUI;
+
+@end
+
+
 @interface OAFollowTrackBottomSheetViewController : OABaseBottomSheetViewController
+
+@property (nonatomic) id<OAFollowTrackBottomSheetDelegate> delegate;
 
 - (instancetype) initWithFile:(OAGPXDocument *)gpx;
 - (void)presentOpenTrackViewController:(BOOL)animated;

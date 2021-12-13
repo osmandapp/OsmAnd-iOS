@@ -37,7 +37,7 @@
 
 #include <generalRouter.h>
 
-@interface OARouteSettingsBaseViewController () <OARoutePreferencesParametersDelegate, OASettingsDataDelegate>
+@interface OARouteSettingsBaseViewController () <OARoutePreferencesParametersDelegate, OASettingsDataDelegate, OAFollowTrackBottomSheetDelegate>
 
 @end
 
@@ -348,6 +348,7 @@
         OAGPXRouteParamsBuilder *gpxParams = _routingHelper.getCurrentGPXRoute;
         OAGPXDocument *gpx = gpxParams ? gpxParams.file : nil;
         OAFollowTrackBottomSheetViewController *followTrack = [[OAFollowTrackBottomSheetViewController alloc] initWithFile:gpx];
+        followTrack.delegate = self;
         
         if (gpx)
         {
@@ -387,6 +388,14 @@
     [self generateData];
     [self setupView];
     [self.tableView reloadData];
+}
+
+#pragma mapr - OAFollowTrackBottomSheetDelegate
+
+- (void) reloadUI;
+{
+    if (self.delegate)
+        [self.delegate reloadUI];
 }
 
 @end

@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, EOAPlanningTrackScreenType) {
 
 - (void) closeBottomSheet;
 - (void) onFileSelected:(NSString *)gpxFilePath;
+- (void) reloadUI;
 
 @optional
 

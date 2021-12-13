@@ -73,7 +73,7 @@ static BOOL _favoritesLoaded = NO;
         if (favorite.specialPointType == OASpecialPointType.PARKING)
         {
             OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
-            if (plugin)
+            if (plugin && ![self.class isEventExistsForParking:favorite])
             {
                 NSDate *timestamp = [favorite getTimestamp];
                 NSDate *creationTime = [favorite getCreationTime];
@@ -636,25 +636,25 @@ static BOOL _favoritesLoaded = NO;
 
 + (void) addParkingReminderToCalendar
 {
-    EKEventStore *eventStore = [[EKEventStore alloc] init];
-    [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (error)
-            {
-                [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-            }
-            else if (!granted)
-            {
-                [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:OALocalizedString(@"reminder_not_set_text") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-            }
-            else
-            {
-                EKEvent *event = [EKEvent eventWithEventStore:eventStore];
-                event.title = OALocalizedString(@"pickup_car");
-                
-                OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *) [OAPlugin getPlugin:OAParkingPositionPlugin.class];
-                if (plugin)
+    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *) [OAPlugin getPlugin:OAParkingPositionPlugin.class];
+    if (plugin && ![self.class isEventExistsForParking:[self.class getSpecialPoint:OASpecialPointType.PARKING]])
+    {
+        EKEventStore *eventStore = [[EKEventStore alloc] init];
+        [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (error)
                 {
+                    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                }
+                else if (!granted)
+                {
+                    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:OALocalizedString(@"reminder_not_set_text") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                }
+                else
+                {
+                    EKEvent *event = [EKEvent eventWithEventStore:eventStore];
+                    event.title = OALocalizedString(@"pickup_car");
+
                     if (plugin.getEventIdentifier)
                         [self.class removeParkingReminderFromCalendar];
                     NSDate *pickupDate = [NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000];
@@ -671,9 +671,9 @@ static BOOL _favoritesLoaded = NO;
                     else
                         [plugin setEventIdentifier:[event.eventIdentifier copy]];
                 }
-            }
-        });
-    }];
+            });
+        }];
+    }
 }
 
 + (void) removeParkingReminderFromCalendar
@@ -692,6 +692,29 @@ static BOOL _favoritesLoaded = NO;
                 [plugin setEventIdentifier:nil];
         }
     }
+}
+
++ (BOOL)isEventExistsForParking:(OAFavoriteItem *)parkingPoint
+{
+    BOOL exists = NO;
+    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+    if (plugin && [plugin getEventIdentifier])
+    {
+        EKEventStore *eventStore = [[EKEventStore alloc] init];
+        EKEvent *event = [eventStore eventWithIdentifier:[plugin getEventIdentifier]];
+        NSDate *startDate = event.startDate;
+        NSDate *endDate = event.endDate;
+        NSDate *pickupDate = [NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000];
+        CLLocation *parkingPosition = [plugin getParkingPosition];
+        exists = parkingPoint
+                && [OAUtilities isCoordEqual:parkingPosition.coordinate.latitude
+                                      srcLon:parkingPosition.coordinate.longitude
+                                     destLat:[parkingPoint getLatitude]
+                                     destLon:[parkingPoint getLongitude]]
+                && [startDate isEqualToDate:pickupDate]
+                && [endDate isEqualToDate:pickupDate];
+    }
+    return exists;
 }
 
 @end

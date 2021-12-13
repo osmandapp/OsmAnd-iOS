@@ -74,6 +74,7 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 
 - (void)removeHiddenGroups:(NSString *)groupName;
 - (void)addHiddenGroups:(NSString *)groupName;
+- (void)resetAppearanceToOriginal;
 
 @end
 
@@ -89,7 +90,6 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
 -(void)replaceGpxItem:(OAGPX *)gpx;
 -(void)removeGpxItem:(NSString *)filePath;
--(void)removeGpxItem:(NSString *)filePath removeFile:(BOOL)removeFile;
 -(BOOL)containsGPXItem:(NSString *)filePath;
 -(BOOL)containsGPXItemByFileName:(NSString *)fileName;
 -(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;
@@ -99,9 +99,9 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 -(NSString *)getFileDir:(NSString *)filePath;
 
 - (void)load;
-- (void)reloadGPXFile:(NSString *)filePath onComplete:(void (^)(void))onComplete;
 - (void)save;
 
++ (EOAGpxSplitType) splitTypeByName:(NSString *)splitName;
 + (NSString *) splitTypeNameByValue:(EOAGpxSplitType)splitType;
 
 @end

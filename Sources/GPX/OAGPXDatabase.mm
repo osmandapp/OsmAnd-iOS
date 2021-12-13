@@ -68,6 +68,21 @@
     return _splitType == 0 ? EOAGpxSplitTypeNone : _splitType;
 }
 
+- (void)resetAppearanceToOriginal
+{
+    OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpxFilePath]];
+    if (document)
+    {
+        _splitType = [OAGPXDatabase splitTypeByName:[document getSplitType]];
+        _splitInterval = [document getSplitInterval];
+        _color = [document getColor:kDefaultTrackColor];
+        _coloringType = [document getColoringType];
+        _width = [document getWidth:nil];
+        _showArrows = [document isShowArrows];
+        _showStartFinish = [document isShowStartFinish];
+    }
+}
+
 @end
 
 
@@ -238,28 +253,15 @@
 
 -(void)removeGpxItem:(NSString *)filePath
 {
-    [self removeGpxItem:filePath removeFile:YES];
-}
-
--(void)removeGpxItem:(NSString *)filePath removeFile:(BOOL)removeFile
-{
-    NSMutableArray *newGpxList = [gpxList mutableCopy];
-    OAGPX *gpx;
-    for (OAGPX *item in newGpxList)
-    {
-        if ([item.gpxFilePath isEqualToString:filePath])
-        {
-            gpx = item;
-            break;
-        }
-    }
+    OAGPX *gpx = [self getGPXItem:filePath];
+    if (!gpx)
+        gpx = [self getGPXItemByFileName:filePath];
     if (gpx)
     {
+        NSMutableArray *newGpxList = [gpxList mutableCopy];
         [newGpxList removeObject:gpx];
         gpxList = newGpxList;
-
-        if (removeFile)
-            [[NSFileManager defaultManager] removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath] error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath] error:nil];
     }
 }
 
@@ -355,14 +357,6 @@
              [res addObject:gpx];
     }
     gpxList = res;
-}
-
-- (void)reloadGPXFile:(NSString *)filePath onComplete:(void (^)(void))onComplete
-{
-    [[OARootViewController instance] importAsGPX:[NSURL fileURLWithPath:filePath]
-                                      showAlerts:NO
-                                     openGpxView:NO
-                                      onComplete:onComplete];
 }
 
 - (void)save

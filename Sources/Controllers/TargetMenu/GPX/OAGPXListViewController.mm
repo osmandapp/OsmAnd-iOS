@@ -172,10 +172,12 @@ static UIViewController *parentController;
     return self;
 }
 
-- (void) removeFromDB:(BOOL)removeFile
+- (void) removeFromDB
 {
-    NSString *gpxFilePath = [OAUtilities getGpxShortPath:_importUrl.path];
-    [[OAGPXDatabase sharedDb] removeGpxItem:gpxFilePath removeFile:removeFile];
+    NSString *gpxFilePath = [_importUrl.path hasPrefix:_app.gpxPath]
+            ? [OAUtilities getGpxShortPath:_importUrl.path]
+            : [_importUrl.path lastPathComponent];
+    [[OAGPXDatabase sharedDb] removeGpxItem:gpxFilePath];
 }
 
 - (void) setShouldPopToParent:(BOOL)shouldPop
@@ -206,7 +208,7 @@ static UIViewController *parentController;
         id overwriteHandler = ^(UIAlertAction * _Nonnull action) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 _newGpxName = nil;
-                [self removeFromDB:YES];
+                [self removeFromDB];
                 [self doImport:YES];
             });
         };
@@ -274,7 +276,7 @@ static UIViewController *parentController;
     }
 }
 
-- (void) processUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView onComplete:(void (^)(void))onComplete
+- (void) processUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView
 {
     _importUrl = [url copy];
     OAGPX *item;
@@ -304,9 +306,8 @@ static UIViewController *parentController;
             }
             else
             {
-                if (![_importUrl.path hasPrefix:_app.gpxPath])
-                    [[NSFileManager defaultManager] removeItemAtPath:[_importGpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
-                [self removeFromDB:![_importUrl.path hasPrefix:_app.gpxPath]];
+                [[NSFileManager defaultManager] removeItemAtPath:[_importGpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
+                [self removeFromDB];
                 item = [self doImport:NO];
             }
         }
@@ -336,16 +337,14 @@ static UIViewController *parentController;
             [[OARootViewController instance].mapPanel openTargetViewWithGPX:item];
         });
     }
-    if (onComplete)
-        onComplete();
 }
 
-- (void)prepareProcessUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView onComplete:(void (^)(void))onComplete
+- (void)prepareProcessUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView
 {
     if ([url isFileURL])
     {
         [self prepareProcessUrl:^{
-            [self processUrl:url showAlerts:showAlerts openGpxView:openGpxView onComplete:onComplete];
+            [self processUrl:url showAlerts:showAlerts openGpxView:openGpxView];
         }];
     }
 }
@@ -483,7 +482,7 @@ static UIViewController *parentController;
                                     [url.pathExtension.lowercaseString isEqualToString:KMZ_EXT]) &&
                             ![url.lastPathComponent isEqualToString:@"favourites.gpx"])
                     {
-                        [self processUrl:url showAlerts:NO openGpxView:NO onComplete:nil];
+                        [self processUrl:url showAlerts:NO openGpxView:NO];
                     }
                 }
             }

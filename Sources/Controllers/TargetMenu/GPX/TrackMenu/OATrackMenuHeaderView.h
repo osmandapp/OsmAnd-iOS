@@ -47,6 +47,8 @@
 
 @property (weak, nonatomic) IBOutlet UIView *bottomDividerView;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleContainerHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomDescriptionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionNoCollectionConstraint;
@@ -62,6 +64,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *groupsBottomConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *actionsBottomConstraint;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *locationWithStatisticsTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionDirectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoDirectionConstraint;
 
@@ -80,6 +83,7 @@
 - (void)setStatisticsCollection:(NSArray<OAGPXTableCellData *> *)cells;
 - (void)setSelectedIndexGroupsCollection:(NSInteger)index;
 - (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index;
+- (CGFloat)getTitleHeight;
 - (CGFloat)getDescriptionHeight;
 
 @end

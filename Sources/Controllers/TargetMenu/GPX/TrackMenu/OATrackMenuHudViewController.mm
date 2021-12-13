@@ -1971,8 +1971,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     OAGPXTableSectionData *sectionData = _tableData.sections[section];
-    CGFloat headerHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.01;
-    return section == 0 ? headerHeight + _headerView.frame.size.height : headerHeight;
+    CGFloat sectionHeaderHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.01;
+    CGFloat menuHeaderHeight = _headerView.frame.size.height - kTitleHeightMax + [_headerView getTitleHeight];
+    return section == 0 ? sectionHeaderHeight + menuHeaderHeight : sectionHeaderHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

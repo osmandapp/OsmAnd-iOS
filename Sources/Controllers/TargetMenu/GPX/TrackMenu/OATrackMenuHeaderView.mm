@@ -14,7 +14,6 @@
 #import "OAGPXTrackAnalysis.h"
 
 #define kTitleHeightMin 30.
-#define kTitleHeightMax 44.
 #define kDescriptionHeightMax 36.
 #define kBlockStatistickHeight 40.
 #define kBlockStatistickWidthMin 80.

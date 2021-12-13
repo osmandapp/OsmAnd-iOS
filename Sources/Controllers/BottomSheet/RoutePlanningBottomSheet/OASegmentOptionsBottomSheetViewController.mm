@@ -306,6 +306,8 @@
                 cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             }
             cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
+            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+            cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
         }
         return cell;
     }
@@ -344,6 +346,16 @@
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self hide:YES];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+    {
+        return 48.0;
+    }
+    return UITableViewAutomaticDimension;
 }
 
 @end

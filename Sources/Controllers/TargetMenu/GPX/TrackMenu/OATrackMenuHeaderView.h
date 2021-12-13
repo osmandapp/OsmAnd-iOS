@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "OATrackMenuHudViewController.h"
 
+#define kTitleHeightMax 44.
+
 @class OAGPX, OAGPXDocument, OAGPXTrackAnalysis;
 @class OAButton, OAFoldersCollectionView;
 

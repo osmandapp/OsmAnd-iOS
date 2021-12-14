@@ -9,8 +9,8 @@
 #import "OAAppModeCell.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
-#import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
+#import "OAObservable.h"
 #import "OARoutingHelper.h"
 
 @implementation OAAppModeCell

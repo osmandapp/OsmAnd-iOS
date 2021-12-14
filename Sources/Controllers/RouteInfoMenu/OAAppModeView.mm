@@ -10,7 +10,7 @@
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
 #import "OAColors.h"
-#import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 #import "OARoutingHelper.h"
 

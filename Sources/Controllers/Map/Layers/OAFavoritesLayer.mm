@@ -17,6 +17,8 @@
 #import "OAFavoritesMapLayerProvider.h"
 #import "OAFavoritesHelper.h"
 #import "OATargetInfoViewController.h"
+#import "OAParkingPositionPlugin.h"
+#import "OAPlugin.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -275,9 +277,10 @@
             QString icon = favorite->getIcon();
             QString background = favorite->getBackground();
             OsmAnd::ColorRGB color = favorite->getColor();
+            bool calendarEvent = favorite->getCalendarEvent();
             
             self.app.favoritesCollection->removeFavoriteLocation(favorite);
-            self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
+            const auto newItem = self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
                                                             elevation,
                                                             time,
                                                             creationTime,
@@ -287,8 +290,18 @@
                                                             group,
                                                             icon,
                                                             background,
-                                                            color);
+                                                            color,
+                                                            calendarEvent);
+            if (item.specialPointType == OASpecialPointType.PARKING)
+            {
+                OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+                if (plugin)
+                {
+                    [plugin setParkingPosition:position.latitude longitude:position.longitude];
+                }
+            }
             [self.app saveFavoritesToPermamentStorage];
+            [OAFavoritesHelper loadFavorites];
         }
     }
 }

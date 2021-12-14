@@ -14,17 +14,8 @@
 @class OAAppSettings;
 @class OARoutingHelper;
 
-@protocol OARouteSettingsBaseViewControllerDelegate <NSObject>
-
-@optional
-
-- (void) reloadUI;
-
-@end
-
 @interface OARouteSettingsBaseViewController : OACompoundViewController
 
-@property (nonatomic, weak) id<OARouteSettingsBaseViewControllerDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;

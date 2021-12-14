@@ -551,12 +551,6 @@
     self.view.hidden = NO;
 }
 
-- (void) reloadUI
-{
-    if (self.delegate)
-        [self.delegate reloadUI];
-}
-
 - (void)closeBottomSheet
 {
     if (!_gpx)

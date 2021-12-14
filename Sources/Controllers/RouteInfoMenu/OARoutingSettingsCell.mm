@@ -15,11 +15,6 @@
 #import "OARoutingHelper.h"
 #import "OAColors.h"
 #import "Localization.h"
-#import "OARouteSettingsBaseViewController.h"
-
-@interface OARoutingSettingsCell() <OARouteSettingsBaseViewControllerDelegate>
-
-@end
 
 @implementation OARoutingSettingsCell
 {
@@ -97,7 +92,7 @@
 
 - (IBAction)optionsButtonPressed:(id)sender
 {
-    [[OARootViewController instance].mapPanel showRoutePreferencesWithDelegate:self];
+    [[OARootViewController instance].mapPanel showRoutePreferences];
 }
 
 - (IBAction)soundButtonPressed:(id)sender
@@ -106,14 +101,6 @@
     OAApplicationMode *am = [OARoutingHelper sharedInstance].getAppMode;
     [[OARoutingHelper sharedInstance].getVoiceRouter setMute:![settings.voiceMute get:am] mode:am];
     [self refreshSoundButton];
-}
-
-#pragma mapr - OARouteSettingsBaseViewControllerDelegate
-
-- (void) reloadUI;
-{
-    if (self.delegate)
-        [self.delegate reloadUI];
 }
 
 @end

@@ -88,7 +88,7 @@
 - (void) closeRouteInfo:(void (^)(void))onComplete;
 - (void) updateRouteInfo;
 - (void) showWaypoints;
-- (void) showRoutePreferencesWithDelegate:(id)delegate;
+- (void) showRoutePreferences;
 - (void) showConfigureScreen;
 - (void) showConfigureScreen:(OAApplicationMode *)targetMode;
 - (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;

@@ -36,10 +36,6 @@
                                                                  andObserve:OARoutingHelper.sharedInstance.routingModeChangedObservable];
 }
 
-- (void) deinit
-{
-}
-
 - (void) dealloc
 {
     if (_routingModeChangedObserver)
@@ -47,8 +43,6 @@
         [_routingModeChangedObserver detach];
         _routingModeChangedObserver = nil;
     }
-
-    [self deinit];
 }
 
 - (void) onRoutingModeChanged:(id)observable withKey:(id)key

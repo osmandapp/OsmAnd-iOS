@@ -8,16 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol OARoutingSettingsCellDelegate <NSObject>
-
-- (void) reloadUI;
-
-@end
-
-
 @interface OARoutingSettingsCell : UITableViewCell
 
-@property (nonatomic, weak) id<OARoutingSettingsCellDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIButton *optionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *soundButton;
 

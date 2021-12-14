@@ -912,7 +912,7 @@ typedef enum
     self.sidePanelController.recognizesPanGesture = NO;
 }
 
-- (void) showRoutePreferencesWithDelegate:(id)delegate
+- (void) showRoutePreferences
 {
     [OAAnalyticsHelper logEvent:@"route_preferences_open"];
     
@@ -927,7 +927,6 @@ typedef enum
 //
 //    self.sidePanelController.recognizesPanGesture = NO;
     OARouteSettingsViewController *routePrefs = [[OARouteSettingsViewController alloc] init];
-    routePrefs.delegate = delegate;
     [self presentViewController:routePrefs animated:YES completion:nil];
 }
 
@@ -1915,7 +1914,7 @@ typedef enum
 {
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     if (!self.targetMenuView.skipOpenRouteSettings)
-        [self showRoutePreferencesWithDelegate:nil];
+        [self showRoutePreferences];
     else
         self.targetMenuView.skipOpenRouteSettings = NO;
 }

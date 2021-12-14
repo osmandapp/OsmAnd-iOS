@@ -429,9 +429,6 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
                 [OsmAndApp.instance initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
             }
             
-            if (self.delegate && [self.delegate respondsToSelector:@selector(reloadUI)])
-                [self.delegate reloadUI];
-
             if (doc.getNonEmptySegmentsCount > 1)
             {
                 OATrackSegmentsViewController *trackSegments = [[OATrackSegmentsViewController alloc] initWithFile:doc];

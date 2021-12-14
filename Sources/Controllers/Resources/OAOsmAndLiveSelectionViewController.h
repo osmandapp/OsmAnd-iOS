@@ -22,8 +22,6 @@ typedef NS_ENUM(NSInteger, ELiveSettingsScreen)
 
 @protocol OAOsmAndLiveSelectionDelegate <NSObject>
 
-@required
-
 - (void) updateFrequency:(ELiveUpdateFrequency)frequency;
 
 @end
@@ -34,7 +32,7 @@ typedef NS_ENUM(NSInteger, ELiveSettingsScreen)
 - (id) initWithRegionName:(QString)regionName titleName:(NSString *)title;
 - (id) initWithType:(ELiveSettingsScreen)type regionName:(QString)regionName titleName:(NSString *)title;
 
-@property (nonatomic) id<OAOsmAndLiveSelectionDelegate> delegate;
+@property (weak, nonatomic) id<OAOsmAndLiveSelectionDelegate> delegate;
 @property (nonatomic, readonly) ELiveSettingsScreen settingsScreen;
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;

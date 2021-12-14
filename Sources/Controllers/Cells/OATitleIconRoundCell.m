@@ -14,7 +14,7 @@
 #define titleTextWidthDelta 64.0
 #define maxButtonWidth 30.0
 #define textMarginVertical 6.0
-#define cellMaegin 20.0
+#define cellMargin 20.0
 
 static UIFont *_titleFont;
 
@@ -69,7 +69,7 @@ static UIFont *_titleFont;
 
 + (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth
 {
-    CGFloat textWidth = cellWidth - titleTextWidthDelta - maxButtonWidth - 2*cellMaegin;
+    CGFloat textWidth = cellWidth - titleTextWidthDelta - maxButtonWidth - 2*cellMargin;
     return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text]);
 }
 
@@ -82,26 +82,26 @@ static UIFont *_titleFont;
 - (void) applyCornerRadius
 {
     CGFloat fullCellWidth = self.bounds.size.width;
-    CGFloat width = self.bounds.size.width - 2*cellMaegin;
+    CGFloat width = self.bounds.size.width - 2*cellMargin;
     if (_hasLeftMargin && (_bottomCorners || _topCorners))
         width -= [OAUtilities getLeftMargin];
     
     CGFloat height = [self.class getHeight:_titleView.text cellWidth:fullCellWidth];
-    _contentContainer.frame = CGRectMake(cellMaegin, 0., width, height);
+    _contentContainer.frame = CGRectMake(cellMargin, 0., width, height);
     
-    CGFloat textX = cellMaegin;
+    CGFloat textX = cellMargin;
     CGFloat textWidth = width - titleTextWidthDelta - maxButtonWidth;
     CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.titleView.text];
     
     self.titleView.frame = CGRectMake(textX, 0.0, textWidth, MAX(defaultCellHeight, titleHeight));
     
     CGRect iconFrame = self.iconView.frame;
-    iconFrame.origin.x = _contentContainer.frame.size.width - cellMaegin - iconFrame.size.width;
+    iconFrame.origin.x = _contentContainer.frame.size.width - cellMargin - iconFrame.size.width;
     iconFrame.origin.y = _contentContainer.frame.size.height / 2 - iconFrame.size.height / 2;
     self.iconView.frame = iconFrame;
     
     CGFloat separatoreHeight = 1.0 / [UIScreen mainScreen].scale;
-    self.separatorView.frame = CGRectMake(cellMaegin, height - separatoreHeight, width, separatoreHeight);
+    self.separatorView.frame = CGRectMake(cellMargin, height - separatoreHeight, width, separatoreHeight);
     
     UIRectCorner corners;
     if (_topCorners && _bottomCorners)

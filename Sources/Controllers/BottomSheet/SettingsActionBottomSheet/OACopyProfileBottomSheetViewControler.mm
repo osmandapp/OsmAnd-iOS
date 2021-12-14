@@ -245,6 +245,7 @@
             [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == OAApplicationMode.allPossibleValues.count - 2)];
             cell.separatorView.hidden = indexPath.row == OAApplicationMode.allPossibleValues.count - 2;
         }
+        [cell layoutIfNeeded];
         return cell;
     }
     return nil;

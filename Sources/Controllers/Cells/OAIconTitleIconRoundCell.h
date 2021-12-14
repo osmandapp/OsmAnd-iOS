@@ -20,6 +20,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftSeparatorPrimaryConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftSeparatorSecondaryConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textHeightConstraint;
 
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners;
 

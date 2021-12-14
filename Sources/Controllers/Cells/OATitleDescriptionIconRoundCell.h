@@ -25,4 +25,6 @@
         bottomCorners:(BOOL)bottomCorners
         hasLeftMargin:(BOOL)leftMargin;
 
++ (CGFloat) getHeight:(NSString *)text descr:(NSString *)descr cellWidth:(CGFloat)cellWidth;
+
 @end

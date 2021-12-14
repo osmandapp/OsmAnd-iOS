@@ -1683,6 +1683,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             OAGPXDocument *gpx = (OAGPXDocument *) obj;
             
+            OAApplicationMode *mode = [gpx getRouteProfile];
+            if (mode)
+            {
+                [_routingHelper setAppMode:mode];
+                [_app initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
+            }
+            
             if (gpx.getNonEmptySegmentsCount > 1)
             {
                 OATrackSegmentsViewController *segmentsController = [[OATrackSegmentsViewController alloc] initWithFile:gpx];

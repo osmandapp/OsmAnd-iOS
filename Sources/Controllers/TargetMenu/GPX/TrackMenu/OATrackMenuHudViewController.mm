@@ -303,6 +303,11 @@
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     else
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+
+    if (_selectedTab == EOATrackMenuHudPointsTab)
+        self.tableView.estimatedRowHeight = 66.;
+    else
+        self.tableView.estimatedRowHeight = 48.;
 }
 
 - (NSArray<NSDictionary *> *)generateGroupCollectionData
@@ -2245,14 +2250,9 @@
 {
     if (_selectedTab == EOATrackMenuHudPointsTab)
     {
-        OAGPXTableSectionData *sectionData = _tableData.sections[index];
-        CGFloat headerHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.01;
-        CGRect rectForSection = [self.tableView rectForSection:index];
-        CGFloat yOffset = rectForSection.origin.y;
-        if (index > 0)
-            yOffset -= _headerView.frame.size.height - headerHeight;
-
-        [self.tableView setContentOffset:CGPointMake(0, yOffset) animated:NO];
+        CGRect rectForSection = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
+        [self.tableView setContentOffset:CGPointMake(0, rectForSection.origin.y - _headerView.frame.size.height)
+                                animated:NO];
         [self fitSelectedPointsGroupOnMap:index];
         [_headerView.groupsCollectionView reloadData];
     }

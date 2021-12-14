@@ -13,6 +13,8 @@
 #import "OAFavoritesHelper.h"
 #import "OADefaultFavorite.h"
 #import "OATargetInfoViewController.h"
+#import "OAParkingPositionPlugin.h"
+#import "OAPlugin.h"
 #import "OAColors.h"
 
 #import "OsmAndApp.h"
@@ -222,6 +224,31 @@
         
         _app.favoritesCollection->mergeFrom(_favoritesCollection);
         [OAFavoritesHelper loadFavorites];
+        // Re-apply parking
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        if (plugin)
+        {
+            for (OAFavoriteItem *item in [OAFavoritesHelper getFavoriteItems])
+            {
+                if (item.specialPointType == OASpecialPointType.PARKING)
+                {
+                    NSDate *timestamp = [item getTimestamp];
+                    NSDate *creationTime = [item getCreationTime];
+                    BOOL isTimeRestricted = timestamp != nil && [timestamp timeIntervalSince1970] > 0;
+                    [plugin setParkingType:isTimeRestricted];
+                    [plugin setParkingTime:isTimeRestricted ? timestamp.timeIntervalSince1970 * 1000 : 0];
+                    if (creationTime)
+                        [plugin setParkingStartTime:creationTime.timeIntervalSince1970 * 1000];
+                    [plugin setParkingPosition:item.getLatitude longitude:item.getLongitude];
+                    [plugin addOrRemoveParkingEvent:item.getCalendarEvent];
+                    if (item.getCalendarEvent)
+                        [OAFavoritesHelper addParkingReminderToCalendar];
+                    else
+                        [OAFavoritesHelper removeParkingReminderFromCalendar];
+                    break;
+                }
+            }
+        }
         [self.ignoredNames removeAllObjects];
         self.conflictedName = @"";
         

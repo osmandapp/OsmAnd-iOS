@@ -238,7 +238,6 @@ static double ARRIVAL_DISTANCE_FACTOR = 1;
     NSMutableArray<id<OARouteCalculationProgressCallback>> *_progressRoutes;
     
     OATransportRoutingHelper *_transportRoutingHelper;
-    OAObservable* _routingModeChangedObservable;
 }
 
 static BOOL _isDeviatedFromRoute = false;

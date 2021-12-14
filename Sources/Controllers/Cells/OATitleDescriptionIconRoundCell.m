@@ -14,6 +14,7 @@
 #define titleTextWidthDelta 64.0
 #define maxButtonWidth 30.0
 #define textMarginVertical 9.0
+#define textForOneLineLabel @"One line"
 
 static UIFont *_titleFont;
 static UIFont *_descrFont;
@@ -72,14 +73,14 @@ static UIFont *_descrFont;
     }
 }
 
-- (CGFloat) getHeight:(NSString *)text descr:(NSString *)descr cellWidth:(CGFloat)cellWidth
++ (CGFloat) getHeight:(NSString *)text descr:(NSString *)descr cellWidth:(CGFloat)cellWidth
 {
-    CGFloat textWidth = cellWidth - titleTextWidthDelta - maxButtonWidth;
-    return MAX(60., [self getViewHeightWithWidth:textWidth text:text font:_titleFont] + [self getViewHeightWithWidth:textWidth text:descr font:_descrFont] + 2 + textMarginVertical);
+    CGFloat textWidth = cellWidth - titleTextWidthDelta - maxButtonWidth - 40.;
+    return MAX(60., [self.class getViewHeightWithWidth:textWidth text:text font:_titleFont] + [self getViewHeightWithWidth:textWidth text:textForOneLineLabel font:_descrFont] + 2 + textMarginVertical);
 
 }
 
-- (CGFloat) getViewHeightWithWidth:(CGFloat)width text:(NSString *)text font:(UIFont *)font
++ (CGFloat) getViewHeightWithWidth:(CGFloat)width text:(NSString *)text font:(UIFont *)font
 {
     return [OAUtilities calculateTextBounds:text width:width font:font].height;
 }
@@ -95,7 +96,8 @@ static UIFont *_descrFont;
     CGFloat width = self.bounds.size.width - 40.;
     if (_hasLeftMargin && (_bottomCorners || _topCorners))
         width -= [OAUtilities getLeftMargin];
-    CGFloat height = [self getHeight:_titleView.text descr:_descrView.text cellWidth:width];
+    CGFloat height = [self.class getHeight:_titleView.text descr:_descrView.text cellWidth:self.bounds.size.width];
+    
     _contentContainer.frame = CGRectMake(20., 0., width, height);
     UIRectCorner corners;
     if (_topCorners && _bottomCorners)

@@ -2070,6 +2070,10 @@
     {
         return [OATitleIconRoundCell getHeight:cellData.title cellWidth:tableView.bounds.size.width];
     }
+    else if ([cellData.type isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
+    {
+        return [OATitleDescriptionIconRoundCell getHeight:cellData.title descr:cellData.desc cellWidth:tableView.bounds.size.width];
+    }
 
     return UITableViewAutomaticDimension;
 }

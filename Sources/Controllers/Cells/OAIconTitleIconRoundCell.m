@@ -10,6 +10,8 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 
+#define kTitleTopBottomMargin 13.0
+
 @implementation OAIconTitleIconRoundCell
 {
     BOOL _bottomCorners;
@@ -50,6 +52,9 @@
 	CGFloat width = self.bounds.size.width - 40.;
 	CGFloat height = self.bounds.size.height;
 	_contentContainer.frame = CGRectMake(20., 0., width, height);
+    
+    _titleView.frame = CGRectMake( _titleView.frame.origin.x, _titleView.frame.origin.y,  _titleView.frame.size.width, height - 2 * kTitleTopBottomMargin);
+    
 	UIRectCorner corners;
 	if (_topCorners && _bottomCorners)
 		corners = UIRectCornerAllCorners;

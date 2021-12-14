@@ -134,20 +134,24 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    [self setOldValues];
     [self updateAllValues];
+}
+
+- (void)setOldValues
+{
+    _oldShowArrows = self.gpx.showArrows;
+    _oldShowStartFinish = self.gpx.showStartFinish;
+    _oldColoringType = self.gpx.coloringType;
+    _oldColor = self.gpx.color;
+    _oldWidth = self.gpx.width;
+    _oldSplitType = self.gpx.splitType;
+    _oldSplitInterval = self.gpx.splitInterval;
+    _oldJoinSegments = self.gpx.joinSegments;
 }
 
 - (void)updateAllValues
 {
-    _oldColor = self.gpx.color;
-    _oldShowStartFinish = self.gpx.showStartFinish;
-    _oldJoinSegments = self.gpx.joinSegments;
-    _oldShowArrows = self.gpx.showArrows;
-    _oldWidth = self.gpx.width;
-    _oldColoringType = self.gpx.coloringType;
-    _oldSplitType = self.gpx.splitType;
-    _oldSplitInterval = self.gpx.splitInterval;
-
     _appearanceCollection = [[OAGPXAppearanceCollection alloc] init];
     _selectedColor = [_appearanceCollection getColorForValue:self.gpx.color];
     _selectedWidth = [_appearanceCollection getWidthForValue:self.gpx.width];
@@ -240,10 +244,6 @@
     toolBarFrame.origin.y = self.scrollableView.frame.size.height;
     toolBarFrame.size.height = 0.;
     self.toolBarView.frame = toolBarFrame;
-}
-
-- (void)setupHeaderView
-{
 }
 
 - (void)generateData
@@ -604,7 +604,26 @@
     };
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
-            kSectionCells: @[resetCellData],
+            kSectionCells: @[[OAGPXTableCellData withData:@{
+                    kCellKey: @"reset",
+                    kCellType: [OAIconTitleValueCell getCellIdentifier],
+                    kCellTitle: OALocalizedString(@"reset_to_original"),
+                    kCellRightIconName: @"ic_custom_reset",
+                    kCellToggle: @YES,
+                    kCellButtonPressed: ^() {
+                        [self.gpx resetAppearanceToOriginal];
+                        [self updateAllValues];
+                        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                        [self generateData];
+                        [UIView transitionWithView:self.tableView
+                                          duration:0.35f
+                                           options:UIViewAnimationOptionTransitionCrossDissolve
+                                        animations:^(void) {
+                                            [self.tableView reloadData];
+                                        }
+                                        completion:nil];
+                    }
+            }]],
             kSectionHeader:OALocalizedString(@"actions")
     }]];
 
@@ -815,9 +834,11 @@
     [self hide:YES duration:.2 onComplete:^{
         [[OAGPXDatabase sharedDb] save];
         if (_reopeningTrackMenuState)
+        {
             [self.mapPanelViewController openTargetViewWithGPX:self.gpx
                                                   trackHudMode:EOATrackMenuHudMode
                                                          state:_reopeningTrackMenuState];
+        }
     }];
 }
 

@@ -461,6 +461,11 @@
     return _descriptionHeight;
 }
 
+- (CGFloat)getDescriptionHeight
+{
+    return _descriptionHeight;
+}
+
 - (void)makeOnlyHeader:(BOOL)hasDescription
 {
     self.descriptionContainerView.hidden = !hasDescription;

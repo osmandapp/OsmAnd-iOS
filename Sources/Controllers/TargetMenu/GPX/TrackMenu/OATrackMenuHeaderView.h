@@ -80,6 +80,7 @@
 - (void)setStatisticsCollection:(NSArray<OAGPXTableCellData *> *)cells;
 - (void)setSelectedIndexGroupsCollection:(NSInteger)index;
 - (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index;
+- (void)setCollection:(NSArray *)data;
 - (CGFloat)getDescriptionHeight;
 
 @end

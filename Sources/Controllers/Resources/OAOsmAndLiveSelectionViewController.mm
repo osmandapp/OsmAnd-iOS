@@ -9,7 +9,6 @@
 #import "OAOsmAndLiveSelectionViewController.h"
 #import "Localization.h"
 #import "Reachability.h"
-#import "OAOsmAndLiveHelper.h"
 #import "OsmAndApp.h"
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
@@ -32,9 +31,9 @@
     NSString *_titleName;
     OsmAndAppInstance _app;
     
-    BOOL _initialStateEnabled;
-    BOOL _initialStateWifi;
-    ELiveUpdateFrequency _initialFrequency;
+    BOOL _isLiveUpdatesEnabled;
+    BOOL _isWifiUpdatesOnly;
+    ELiveUpdateFrequency _updatingFrequency;
     
     UIView *_footerView;
     
@@ -76,21 +75,16 @@ static const NSInteger groupCount = 1;
 
 -(void) setInitialValues
 {
-    _initialStateEnabled = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:_regionNameNSString];
-    if (!_initialStateEnabled)
+    _isLiveUpdatesEnabled = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:_regionNameNSString];
+    if (!_isLiveUpdatesEnabled)
+    {
         [OAOsmAndLiveHelper setDefaultPreferencesForLocalIndex:_regionNameNSString];
+    }
     else
     {
-        _initialStateWifi = [OAOsmAndLiveHelper getPreferenceWifiForLocalIndex:_regionNameNSString];
-        _initialFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:_regionNameNSString];
+        _isWifiUpdatesOnly = [OAOsmAndLiveHelper getPreferenceWifiForLocalIndex:_regionNameNSString];
+        _updatingFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:_regionNameNSString];
     }
-}
-
--(void) restoreInitialSettings
-{
-    [OAOsmAndLiveHelper setPreferenceEnabledForLocalIndex:_regionNameNSString value:_initialStateEnabled];
-    [OAOsmAndLiveHelper setPreferenceWifiForLocalIndex:_regionNameNSString value:_initialStateWifi];
-    [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:_regionNameNSString value:_initialFrequency];
 }
 
 -(void) applyLocalization
@@ -173,11 +167,12 @@ static const NSInteger groupCount = 1;
             _backButton.hidden = YES;
             _cancelButton.hidden = NO;
             _applyButton.hidden = NO;
+             
             [dataArr addObject:
              @{
                @"name" : @"osm_live_enabled",
                @"title" : OALocalizedString(@"osmand_live_updates"),
-               @"value" : @([OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:_regionNameNSString]),
+               @"value" : @(_isLiveUpdatesEnabled),
                @"type" : [OASwitchTableViewCell getCellIdentifier]
                }];
             
@@ -185,7 +180,7 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"wifi_only",
                @"title" : OALocalizedString(@"osmand_live_wifi_only"),
-               @"value" : @([OAOsmAndLiveHelper getPreferenceWifiForLocalIndex:_regionNameNSString]),
+               @"value" : @(_isWifiUpdatesOnly),
                @"type" : [OASwitchTableViewCell getCellIdentifier],
                }];
             
@@ -193,7 +188,7 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"update_frequency",
                @"title" : OALocalizedString(@"osmand_live_upd_frequency"),
-               @"value" : [OAOsmAndLiveHelper getFrequencyString:[OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:_regionNameNSString]],
+               @"value" : [OAOsmAndLiveHelper getFrequencyString:_updatingFrequency],
                @"img" : @"menu_cell_pointer.png",
                @"type" : [OASettingsTableViewCell getCellIdentifier] }
              ];
@@ -363,10 +358,9 @@ static const NSInteger groupCount = 1;
         NSString *name = item[@"name"];
 
         if ([name isEqualToString:@"osm_live_enabled"])
-            [OAOsmAndLiveHelper setPreferenceEnabledForLocalIndex:_regionNameNSString value:isChecked];
+            _isLiveUpdatesEnabled = isChecked;
         else if ([name isEqualToString:@"wifi_only"])
-            [OAOsmAndLiveHelper setPreferenceWifiForLocalIndex:_regionNameNSString value:isChecked];
-
+            _isWifiUpdatesOnly = isChecked;
     }
 }
 
@@ -378,11 +372,13 @@ static const NSInteger groupCount = 1;
     if ([@"update_frequency" isEqualToString:item[@"name"]])
     {
         OAOsmAndLiveSelectionViewController* selectionViewController = [[OAOsmAndLiveSelectionViewController alloc] initWithType:ELiveSettingsScreenFrequency regionName:_regionName titleName:_titleName];
+        selectionViewController.delegate = self;
         [self.navigationController pushViewController:selectionViewController animated:YES];
     }
     else if (_settingsScreen == ELiveSettingsScreenFrequency)
     {
-        [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:_regionNameNSString value:(ELiveUpdateFrequency)indexPath.row];
+        if (self.delegate)
+            [self.delegate updateFrequency:(ELiveUpdateFrequency)indexPath.row];
         [self backInSelectionClicked:nil];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:true];
@@ -395,25 +391,25 @@ static const NSInteger groupCount = 1;
 
 - (void)onDissmissViewContoller
 {
-    if (!_initialStateEnabled)
-    {
-        [OAOsmAndLiveHelper removePreferencesForLocalIndex:_regionNameNSString];
-        [self removeUpdates];
-    }
-    else
-        [self restoreInitialSettings];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)applyButtonClicked:(id)sender
 {
+    [OAOsmAndLiveHelper setPreferenceEnabledForLocalIndex:_regionNameNSString value:_isLiveUpdatesEnabled];
+    [OAOsmAndLiveHelper setPreferenceWifiForLocalIndex:_regionNameNSString value:_isWifiUpdatesOnly];
+    [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:_regionNameNSString value:_updatingFrequency];
+    
     NSString *regionNameStr = _regionName.toNSString();
-    if (![OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:regionNameStr])
+    if (_isLiveUpdatesEnabled)
+    {
+        [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager];
+    }
+    else
     {
         [OAOsmAndLiveHelper removePreferencesForLocalIndex:regionNameStr];
         [self removeUpdates];
     }
-    [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -428,6 +424,14 @@ static const NSInteger groupCount = 1;
         _app.resourcesManager->changesManager->deleteUpdates(_regionName);
         [_app.data.mapLayerChangeObservable notifyEvent];
     });
+}
+
+#pragma mark - OAOsmAndLiveSelectionDelegate
+
+- (void) updateFrequency:(ELiveUpdateFrequency)frequency
+{
+    _updatingFrequency = frequency;
+    [self setupView];
 }
 
 @end

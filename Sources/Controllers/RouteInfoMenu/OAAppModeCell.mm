@@ -1,35 +1,39 @@
 //
-//  OAAppModeView.m
+//  OAAppModeCell.m
 //  OsmAnd
 //
-//  Created by Paul on 09/20/2019.
-//  Copyright © 2019 OsmAnd. All rights reserved.
+//  Created by Alexey Kulish on 10/08/2017.
+//  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OAAppModeView.h"
+#import "OAAppModeCell.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
-#import "OAColors.h"
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
+#import "OARoutingHelper.h"
 
-@implementation OAAppModeView
+@implementation OAAppModeCell
 {
     NSMutableArray<UIButton *> *_modeButtons;
     CALayer *_divider;
-    OAAutoObserverProxy *_applicationModeChangedObserver;
+    OAAutoObserverProxy *_routingModeChangedObserver;
 }
 
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    
+
+    _divider = [CALayer layer];
+    _divider.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [self.contentView.layer addSublayer:_divider];
+
     _modeButtons = [NSMutableArray array];
     [self setupModeButtons];
     
-    _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+    _routingModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onAppModeChanged:withKey:)
-                                                                 andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+                                                                 andObserve:OARoutingHelper.sharedInstance.routingModeChangedObservable];
 }
 
 - (void) onAppModeChanged:(id)observable withKey:(id)key
@@ -44,8 +48,14 @@
 - (void) layoutSubviews
 {
     [super layoutSubviews];
-    if ([self isDirectionRTL])
-        [self setTransform:CGAffineTransformMakeScale(-1, 1)];
+
+    _divider.frame = CGRectMake(0.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width, 0.5);
+}
+
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+    
+    // Configure the view for the selected state
 }
 
 - (void) setSelectedMode:(OAApplicationMode *)selectedMode
@@ -76,9 +86,9 @@
         [_modeButtons removeAllObjects];
     }
     
-    CGFloat x = 0.;
-    CGFloat h = 36.0;
-    CGFloat w = 48.0;
+    CGFloat x = 8;
+    CGFloat h = self.scrollView.bounds.size.height;
+    CGFloat w = 50.0;
     NSArray<OAApplicationMode *> *availableModes = [OAApplicationMode values];
     for (NSInteger i = 0; i < availableModes.count; i++)
     {
@@ -86,11 +96,10 @@
         if (mode == [OAApplicationMode DEFAULT] && !_showDefault)
             continue;
         
-        x += 12.;
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        btn.frame = CGRectMake(x, 0, w, h);
+        btn.frame = CGRectMake(x, 4.0, w, h - 8.0);
+        btn.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         [btn setImage:mode.getIcon forState:UIControlStateNormal];
-        btn.contentMode = UIViewContentModeCenter;
         btn.tintColor = UIColorFromRGB(mode.getIconColor);
         btn.backgroundColor = _selectedMode == mode ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
         btn.layer.cornerRadius = 4.;

@@ -29,11 +29,11 @@
     [self setupModeButtons];
     
     _routingModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                withHandler:@selector(onAppModeChanged:withKey:)
+                                                                withHandler:@selector(onRoutingModeChanged:withKey:)
                                                                  andObserve:OARoutingHelper.sharedInstance.routingModeChangedObservable];
 }
 
-- (void) onAppModeChanged:(id)observable withKey:(id)key
+- (void) onRoutingModeChanged:(id)observable withKey:(id)key
 {
     OAApplicationMode *newMode = key;
     dispatch_async(dispatch_get_main_queue(), ^{

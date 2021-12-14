@@ -179,7 +179,6 @@
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
                                                             andObserve:_applicationModeChangedObservable];
-    
     _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     // Profile settings
     _lastMapSourceProfile = [OACommonMapSource withKey:kLastMapSourceKey defValue:[[OAMapSource alloc] initWithResource:@"default.render.xml"

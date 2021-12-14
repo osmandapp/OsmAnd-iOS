@@ -275,7 +275,7 @@
     }
     else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
-        return 48.0;
+        return [OATitleIconRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
     else if ([item[@"type"] isEqualToString:[OACollectionViewCell getCellIdentifier]])
     {
@@ -349,7 +349,6 @@
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
             cell.separatorView.hidden = [item[@"round_bottom"] boolValue];
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
-            cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;

@@ -14,10 +14,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *separatorView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightConstraint;
 
 @property (nonatomic) UIColor *iconColorNormal;
 @property (nonatomic) UIColor *textColorNormal;
+
++ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth;
 
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners;
 

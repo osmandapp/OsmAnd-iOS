@@ -10,11 +10,15 @@
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
 #import "OAColors.h"
+#import "OsmAndApp.h"
+#import "OAAutoObserverProxy.h"
+#import "OARoutingHelper.h"
 
 @implementation OAAppModeView
 {
     NSMutableArray<UIButton *> *_modeButtons;
     CALayer *_divider;
+    OAAutoObserverProxy *_routingModeChangedObserver;
 }
 
 - (void) awakeFromNib
@@ -23,6 +27,19 @@
     
     _modeButtons = [NSMutableArray array];
     [self setupModeButtons];
+    
+    _routingModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                withHandler:@selector(onAppModeChanged:withKey:)
+                                                                 andObserve:OARoutingHelper.sharedInstance.routingModeChangedObservable];
+}
+
+- (void) onAppModeChanged:(id)observable withKey:(id)key
+{
+    OAApplicationMode *newMode = key;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (newMode)
+            [self setSelectedMode:newMode];
+    });
 }
 
 - (void) layoutSubviews

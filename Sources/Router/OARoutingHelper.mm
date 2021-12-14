@@ -238,6 +238,7 @@ static double ARRIVAL_DISTANCE_FACTOR = 1;
     NSMutableArray<id<OARouteCalculationProgressCallback>> *_progressRoutes;
     
     OATransportRoutingHelper *_transportRoutingHelper;
+    OAObservable* _routingModeChangedObservable;
 }
 
 static BOOL _isDeviatedFromRoute = false;
@@ -259,6 +260,7 @@ static BOOL _isDeviatedFromRoute = false;
         [self setAppMode:_settings.applicationMode.get];
         _progressRoutes = [NSMutableArray new];
         _transportRoutingHelper = OATransportRoutingHelper.sharedInstance;
+        _routingModeChangedObservable  = [[OAObservable alloc] init];
     }
     return self;
 }
@@ -279,6 +281,7 @@ static BOOL _isDeviatedFromRoute = false;
     ARRIVAL_DISTANCE_FACTOR = MAX([_settings.arrivalDistanceFactor get:mode], 0.1f);
     GPS_TOLERANCE = (NSInteger) (DEFAULT_GPS_TOLERANCE * ARRIVAL_DISTANCE_FACTOR);
     [_voiceRouter updateAppMode];
+    [_routingModeChangedObservable notifyEventWithKey:mode];
 }
 
 - (OAApplicationMode *) getAppMode

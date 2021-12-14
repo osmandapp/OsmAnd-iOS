@@ -176,7 +176,6 @@
             }
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
-            cell.separatorHeightConstraint.constant = _separatorHeight;
         }
         return cell;
     }
@@ -266,6 +265,16 @@
                 [[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
         return;
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+    {
+        return [OATitleIconRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+    }
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - OAOpenExistingTrackDelegate

@@ -132,9 +132,13 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
+    }
+    else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+    {
+        return [OATitleIconRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
     else
     {

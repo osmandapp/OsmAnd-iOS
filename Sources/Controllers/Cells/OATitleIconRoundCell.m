@@ -83,9 +83,9 @@ static UIFont *_titleFont;
 {
     CGFloat fullCellWidth = self.bounds.size.width;
     CGFloat width = self.bounds.size.width - 2*cellMargin;
-    if (_hasLeftMargin && (_bottomCorners || _topCorners))
+    if (_hasLeftMargin)
         width -= [OAUtilities getLeftMargin];
-    
+
     CGFloat height = [self.class getHeight:_titleView.text cellWidth:fullCellWidth];
     _contentContainer.frame = CGRectMake(cellMargin, 0., width, height);
     
@@ -101,7 +101,7 @@ static UIFont *_titleFont;
     self.iconView.frame = iconFrame;
     
     CGFloat separatorHeight = 1.0 / [UIScreen mainScreen].scale;
-    self.separatorView.frame = CGRectMake(cellMargin, height - separatorHeight, width, separatorHeight);
+    self.separatorView.frame = CGRectMake(cellMargin, height - separatorHeight, width - cellMargin, separatorHeight);
     
     UIRectCorner corners;
     if (_topCorners && _bottomCorners)

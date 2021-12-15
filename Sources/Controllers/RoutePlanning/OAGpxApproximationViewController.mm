@@ -325,9 +325,6 @@
             cell.sliderView.value = _distanceThreshold;
 			cell.valueLabel.text = [OAOsmAndFormatter getFormattedDistance:_distanceThreshold];
             cell.contentContainer.layer.cornerRadius = 12.;
-
-            cell.backgroundColor = UIColor.greenColor;
-            
             return cell;
         }
     }

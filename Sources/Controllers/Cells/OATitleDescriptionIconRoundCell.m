@@ -15,6 +15,7 @@
 #define maxButtonWidth 30.0
 #define textMarginVertical 9.0
 #define textForOneLineLabel @"One line"
+#define cellMargin 20.0
 
 static UIFont *_titleFont;
 static UIFont *_descrFont;
@@ -75,9 +76,8 @@ static UIFont *_descrFont;
 
 + (CGFloat) getHeight:(NSString *)text descr:(NSString *)descr cellWidth:(CGFloat)cellWidth
 {
-    CGFloat textWidth = cellWidth - titleTextWidthDelta - maxButtonWidth - 40.;
-    return MAX(60., [self.class getViewHeightWithWidth:textWidth text:text font:_titleFont] + [self getViewHeightWithWidth:textWidth text:textForOneLineLabel font:_descrFont] + 2 + textMarginVertical);
-
+    CGFloat textWidth = cellWidth - 5*cellMargin - maxButtonWidth;
+    return MAX(60., [self.class getViewHeightWithWidth:textWidth text:text font:_titleFont] + [self.class getViewHeightWithWidth:textWidth text:textForOneLineLabel font:_descrFont] + 2*textMarginVertical);
 }
 
 + (CGFloat) getViewHeightWithWidth:(CGFloat)width text:(NSString *)text font:(UIFont *)font
@@ -97,8 +97,23 @@ static UIFont *_descrFont;
     if (_hasLeftMargin && (_bottomCorners || _topCorners))
         width -= [OAUtilities getLeftMargin];
     CGFloat height = [self.class getHeight:_titleView.text descr:_descrView.text cellWidth:self.bounds.size.width];
-    
     _contentContainer.frame = CGRectMake(20., 0., width, height);
+    
+    CGFloat textWidth = self.bounds.size.width - 5*cellMargin - maxButtonWidth;
+    CGFloat titleHeight = [self.class getViewHeightWithWidth:textWidth text:_titleView.text font:_titleFont];
+    CGFloat descHeight = [self.class getViewHeightWithWidth:textWidth text:textForOneLineLabel font:_descrFont];
+    
+    _titleView.frame = CGRectMake(cellMargin, textMarginVertical, textWidth, titleHeight);
+    _descrView.frame = CGRectMake(cellMargin, height - _descrView.frame.size.height - textMarginVertical, textWidth, descHeight);
+    
+    CGRect iconFrame = self.iconView.frame;
+    iconFrame.origin.x = width - maxButtonWidth - cellMargin;
+    iconFrame.origin.y = _contentContainer.frame.size.height / 2 - iconFrame.size.height / 2;
+    self.iconView.frame = iconFrame;
+    
+    CGFloat separatorHeight = 1.0 / [UIScreen mainScreen].scale;
+    self.separatorView.frame = CGRectMake(_titleView.frame.origin.x, height - separatorHeight, width - _titleView.frame.origin.x, separatorHeight);
+    
     UIRectCorner corners;
     if (_topCorners && _bottomCorners)
         corners = UIRectCornerAllCorners;
@@ -107,6 +122,20 @@ static UIFont *_descrFont;
      
     if (_topCorners || _bottomCorners)
         [OAUtilities setMaskTo:_contentContainer byRoundingCorners:corners radius:12.];
+    
+    if ([self isDirectionRTL])
+    {
+        [_contentContainer setTransform:CGAffineTransformMakeScale(-1, 1)];
+        [_titleView setTransform:CGAffineTransformMakeScale(-1, 1)];
+        _titleView.textAlignment = NSTextAlignmentRight;
+        [_descrView setTransform:CGAffineTransformMakeScale(-1, 1)];
+        _descrView.textAlignment = NSTextAlignmentRight;
+    }
+    else
+    {
+        _titleView.textAlignment = NSTextAlignmentLeft;
+        _descrView.textAlignment = NSTextAlignmentLeft;
+    }
 }
 
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners

@@ -197,6 +197,7 @@
             cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
         }
+        [cell layoutIfNeeded];
         return cell;
     }
     else if ([item[@"type"] isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
@@ -228,6 +229,7 @@
             }
             cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
         }
+        [cell layoutIfNeeded];
         return cell;
     }
     return nil;
@@ -303,7 +305,7 @@
     {
         return [OATitleIconRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
-    else if ([item[@"title"] isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
     {
         return [OATitleDescriptionIconRoundCell getHeight:item[@"title"] descr:item[@"descr"] cellWidth:tableView.bounds.size.width];
     }

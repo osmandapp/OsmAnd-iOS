@@ -82,7 +82,7 @@
 // Map settings
 "rendering_value_browse_map_name" = "Огляд мапи";
 "m_style_car" = "Водіння";
-"m_style_walk" = "Ходьба";
+"m_style_walk" = "Пішохід";
 "m_style_bicycle" = "Їзда на велосипеді";
 "map_settings_map" = "Мапа";
 "map_settings_show" = "Показати";
@@ -1642,7 +1642,7 @@
 "app_mode_subway" = "Метро";
 "app_mode_shuttle_bus" = "Приміський автобус";
 "app_mode_taxi" = "Таксі";
-"app_mode_pedestrian" = "Пішки";
+"app_mode_pedestrian" = "Пішохід";
 "app_mode_bicycle" = "Велосипед";
 "app_mode_car" = "Автівка";
 "app_mode_default" = "Огляд мапи";

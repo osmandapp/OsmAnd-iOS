@@ -64,7 +64,6 @@ static UIFont *_titleFont;
     CGFloat textWidth = width - _titleView.frame.origin.x - 2*cellMargin;
     if (!self.secondaryImageView.hidden)
         textWidth = textWidth - self.secondaryImageView.frame.size.width - cellMargin;
-        
     _titleView.frame = CGRectMake(2*cellMargin + self.iconView.frame.size.width, _titleView.frame.origin.y, textWidth, height - 2 * kTitleTopBottomMargin);
     
     CGFloat separatorHeight = 1.0 / [UIScreen mainScreen].scale;

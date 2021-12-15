@@ -111,6 +111,17 @@ static UIFont *_titleFont;
      
     if (_topCorners || _bottomCorners)
         [OAUtilities setMaskTo:_contentContainer byRoundingCorners:corners radius:12.];
+    
+    if ([self isDirectionRTL])
+    {
+        [_contentContainer setTransform:CGAffineTransformMakeScale(-1, 1)];
+        [self.titleView setTransform:CGAffineTransformMakeScale(-1, 1)];
+        self.titleView.textAlignment = NSTextAlignmentRight;
+    }
+    else
+    {
+        self.titleView.textAlignment = NSTextAlignmentLeft;
+    }
 }
 
 + (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text

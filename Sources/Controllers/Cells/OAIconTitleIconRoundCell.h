@@ -22,6 +22,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftSeparatorSecondaryConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *textHeightConstraint;
 
++ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth;
+
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners;
 
 @end

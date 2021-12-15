@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "OATrackMenuHudViewController.h"
 
-#define kTitleHeightMax 44.
-
 @class OAGPX, OAGPXDocument, OAGPXTrackAnalysis;
 @class OAButton, OAFoldersCollectionView;
 
@@ -49,14 +47,11 @@
 
 @property (weak, nonatomic) IBOutlet UIView *bottomDividerView;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleHeightConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleContainerHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomDescriptionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionNoCollectionConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionNoCollectionNoLocationConstraint;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionHeightConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionContainerHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomCollectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomNoCollectionConstraint;
 
@@ -85,7 +80,7 @@
 - (void)setStatisticsCollection:(NSArray<OAGPXTableCellData *> *)cells;
 - (void)setSelectedIndexGroupsCollection:(NSInteger)index;
 - (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index;
-- (CGFloat)getTitleHeight;
-- (CGFloat)getDescriptionHeight;
+
+- (CGFloat)getInitialHeight:(CGFloat)additionalHeight;
 
 @end

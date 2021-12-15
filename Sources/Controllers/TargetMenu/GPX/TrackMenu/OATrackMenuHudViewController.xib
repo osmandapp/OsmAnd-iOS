@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -45,7 +45,7 @@
                             <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <view contentMode="scaleToFill" id="J4M-wt-sVQ" userLabel="Content Container">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="347"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="315"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="Dhz-uG-Jnh" userLabel="Top Header Container" customClass="OATrackMenuHeaderView">
@@ -54,7 +54,7 @@
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 </view>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="-1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="Gu6-5b-7IF">
-                                    <rect key="frame" x="0.0" y="63" width="414" height="284"/>
+                                    <rect key="frame" x="0.0" y="63" width="414" height="252"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                                 </tableView>
@@ -62,7 +62,7 @@
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </view>
                         <view contentMode="scaleToFill" id="BcL-vj-cdz" userLabel="Toolbar">
-                            <rect key="frame" x="0.0" y="345" width="414" height="62"/>
+                            <rect key="frame" x="0.0" y="313" width="414" height="94"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e2q-mJ-Ycy" userLabel="Separator">
@@ -73,10 +73,10 @@
                                     </constraints>
                                 </view>
                                 <tabBar clipsSubviews="YES" contentMode="scaleToFill" translucent="NO" itemPositioning="centered" itemSpacing="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="j7s-w5-BDJ" customClass="OATabBar">
-                                    <rect key="frame" x="8" y="1" width="398" height="61"/>
+                                    <rect key="frame" x="8" y="1" width="398" height="93"/>
                                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="61" id="HFD-Wt-gxy"/>
+                                        <constraint firstAttribute="height" constant="93" id="HFD-Wt-gxy"/>
                                     </constraints>
                                     <items/>
                                     <color key="barTintColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

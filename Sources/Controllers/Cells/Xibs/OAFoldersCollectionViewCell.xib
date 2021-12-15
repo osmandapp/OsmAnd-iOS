@@ -36,6 +36,7 @@
                     <constraint firstAttribute="bottom" secondItem="doX-K3-ADJ" secondAttribute="bottom" constant="9" id="EQb-gF-pAL"/>
                     <constraint firstItem="PNd-rc-yzh" firstAttribute="top" secondItem="P0A-ql-UAQ" secondAttribute="top" constant="3" id="ETf-Pf-cQu"/>
                     <constraint firstItem="doX-K3-ADJ" firstAttribute="top" secondItem="P0A-ql-UAQ" secondAttribute="top" constant="9" id="VkL-Fq-D0d"/>
+                    <constraint firstItem="PNd-rc-yzh" firstAttribute="centerX" secondItem="P0A-ql-UAQ" secondAttribute="centerX" priority="1" id="coa-CW-SFo"/>
                     <constraint firstItem="doX-K3-ADJ" firstAttribute="leading" secondItem="PNd-rc-yzh" secondAttribute="trailing" constant="8" id="dFz-2p-F2N"/>
                     <constraint firstAttribute="trailing" secondItem="doX-K3-ADJ" secondAttribute="trailing" constant="10" id="jTU-EU-jSn"/>
                     <constraint firstItem="PNd-rc-yzh" firstAttribute="leading" secondItem="P0A-ql-UAQ" secondAttribute="leading" constant="8" id="lmF-58-LOo"/>
@@ -43,9 +44,11 @@
                 </constraints>
             </collectionViewCellContentView>
             <connections>
+                <outlet property="centerAlignIconConstraint" destination="coa-CW-SFo" id="A6P-OS-4Fg"/>
                 <outlet property="imageView" destination="PNd-rc-yzh" id="Npk-9I-3uv"/>
                 <outlet property="labelNoIconConstraint" destination="CGt-za-PH4" id="rux-UX-Yvt"/>
                 <outlet property="labelWithIconConstraint" destination="dFz-2p-F2N" id="nLH-Dr-UEE"/>
+                <outlet property="leftIconConstraint" destination="lmF-58-LOo" id="NYC-Sj-imT"/>
                 <outlet property="titleLabel" destination="doX-K3-ADJ" id="FZx-XT-iHO"/>
             </connections>
             <point key="canvasLocation" x="-406" y="77"/>

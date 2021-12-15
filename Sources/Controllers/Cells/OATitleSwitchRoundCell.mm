@@ -78,6 +78,17 @@ static UIFont *_titleFont;
 
     if (_topCorners || _bottomCorners)
         [OAUtilities setMaskTo:_contentContainer byRoundingCorners:corners radius:12.];
+    
+    if ([self isDirectionRTL])
+    {
+        [_contentContainer setTransform:CGAffineTransformMakeScale(-1, 1)];
+        [_titleView setTransform:CGAffineTransformMakeScale(-1, 1)];
+        _titleView.textAlignment = NSTextAlignmentRight;
+    }
+    else
+    {
+        _titleView.textAlignment = NSTextAlignmentLeft;
+    }
 }
 
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners

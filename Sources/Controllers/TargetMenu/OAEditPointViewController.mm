@@ -629,6 +629,8 @@
     }
     else
     {
+        if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite)
+            [[OARootViewController instance].mapPanel openTargetViewWithFavorite:((OAFavoriteEditingHandler *)_pointHandler).getFavoriteItem pushed:NO];
         [self doDismiss];
     }
 }

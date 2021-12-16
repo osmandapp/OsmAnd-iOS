@@ -19,6 +19,8 @@ struct CLLocationCoordinate2D;
 - (instancetype) initWithItem:(OAFavoriteItem *)favorite;
 - (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation;
 
+- (OAFavoriteItem *) getFavoriteItem;
+
 @end
 
 NS_ASSUME_NONNULL_END

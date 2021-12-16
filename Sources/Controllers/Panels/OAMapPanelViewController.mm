@@ -2373,6 +2373,7 @@ typedef enum
         
         [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:NO];
         [_targetMenuView setTargetPoint:targetPoint];
+        [self enterContextMenuMode];
         
         [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
             [self goToTargetPointDefault];

@@ -441,7 +441,7 @@
     [super doAdditionalLayout];
     BOOL isRTL = [self.groupsButtonContainerView isDirectionRTL];
     self.groupsButtonTrailingConstraint.constant = [self isLandscape]
-            ? ([self.groupsButtonContainerView isDirectionRTL] ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10. : 0.)
+            ? (isRTL ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10. : 0.)
             : [OAUtilities getLeftMargin] + 10.;
     self.groupsButtonContainerView.hidden = ![self isLandscape] && self.currentState == EOADraggableMenuStateFullScreen;
 }

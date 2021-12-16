@@ -1795,7 +1795,6 @@
             cell = (OATitleIconRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
@@ -1852,7 +1851,6 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = UIColor.blackColor;
-            cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
@@ -2089,12 +2087,22 @@
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]]
             || [cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
         return 48.;
     else if ([cellData.type isEqualToString:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]])
         return cellData.toggle ? 142. : 69.;
+    else if ([cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+    {
+        return [OATitleIconRoundCell getHeight:cellData.title cellWidth:tableView.bounds.size.width];
+    }
+    else if ([cellData.type isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
+    {
+        return [OATitleDescriptionIconRoundCell getHeight:cellData.title descr:cellData.desc cellWidth:tableView.bounds.size.width];
+    }
+    else if ([cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]])
+    {
+        return [OATitleSwitchRoundCell getHeight:cellData.title cellWidth:tableView.bounds.size.width];
+    }
 
     return UITableViewAutomaticDimension;
 }

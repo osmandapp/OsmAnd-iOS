@@ -124,7 +124,7 @@
     }
     else if ([type isEqualToString:[OATitleTwoIconsRoundCell getCellIdentifier]])
     {
-        return UITableViewAutomaticDimension;
+        return [OATitleTwoIconsRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
     else if ([type isEqualToString:[OADividerCell getCellIdentifier]])
     {

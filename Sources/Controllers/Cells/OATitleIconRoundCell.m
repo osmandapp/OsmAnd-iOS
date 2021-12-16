@@ -14,6 +14,7 @@
 #define titleTextWidthDelta 64.0
 #define maxButtonWidth 30.0
 #define textMarginVertical 6.0
+#define cellMargin 20.0
 
 static UIFont *_titleFont;
 
@@ -66,19 +67,10 @@ static UIFont *_titleFont;
     }
 }
 
-- (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth
++ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth
 {
-    CGFloat textWidth = cellWidth - titleTextWidthDelta - maxButtonWidth;
-    return MAX(48., [self getTitleViewHeightWithWidth:textWidth text:text]);
-
-}
-
-- (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_titleFont)
-        _titleFont = [UIFont systemFontOfSize:17.0];
-
-    return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical * 2;
+    CGFloat textWidth = cellWidth - titleTextWidthDelta - maxButtonWidth - 2*cellMargin;
+    return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text]);
 }
 
 - (void)layoutSubviews
@@ -89,11 +81,28 @@ static UIFont *_titleFont;
 
 - (void) applyCornerRadius
 {
-    CGFloat width = self.bounds.size.width - 40.;
-    if (_hasLeftMargin && (_bottomCorners || _topCorners))
+    CGFloat fullCellWidth = self.bounds.size.width;
+    CGFloat width = self.bounds.size.width - 2*cellMargin;
+    if (_hasLeftMargin)
         width -= [OAUtilities getLeftMargin];
-    CGFloat height = [self getHeight:_titleView.text cellWidth:width];
-    _contentContainer.frame = CGRectMake(20., 0., width, height);
+
+    CGFloat height = [self.class getHeight:_titleView.text cellWidth:fullCellWidth];
+    _contentContainer.frame = CGRectMake(cellMargin, 0., width, height);
+    
+    CGFloat textX = cellMargin;
+    CGFloat textWidth = width - titleTextWidthDelta - maxButtonWidth;
+    CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.titleView.text];
+    
+    self.titleView.frame = CGRectMake(textX, 0.0, textWidth, MAX(defaultCellHeight, titleHeight));
+    
+    CGRect iconFrame = self.iconView.frame;
+    iconFrame.origin.x = _contentContainer.frame.size.width - cellMargin - iconFrame.size.width;
+    iconFrame.origin.y = _contentContainer.frame.size.height / 2 - iconFrame.size.height / 2;
+    self.iconView.frame = iconFrame;
+    
+    CGFloat separatorHeight = 1.0 / [UIScreen mainScreen].scale;
+    self.separatorView.frame = CGRectMake(cellMargin, height - separatorHeight, width - cellMargin, separatorHeight);
+    
     UIRectCorner corners;
     if (_topCorners && _bottomCorners)
         corners = UIRectCornerAllCorners;
@@ -102,6 +111,25 @@ static UIFont *_titleFont;
      
     if (_topCorners || _bottomCorners)
         [OAUtilities setMaskTo:_contentContainer byRoundingCorners:corners radius:12.];
+    
+    if ([self isDirectionRTL])
+    {
+        [_contentContainer setTransform:CGAffineTransformMakeScale(-1, 1)];
+        [self.titleView setTransform:CGAffineTransformMakeScale(-1, 1)];
+        self.titleView.textAlignment = NSTextAlignmentRight;
+    }
+    else
+    {
+        self.titleView.textAlignment = NSTextAlignmentLeft;
+    }
+}
+
++ (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
+{
+    if (!_titleFont)
+        _titleFont = [UIFont systemFontOfSize:17.0];
+
+    return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical * 2;
 }
 
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners

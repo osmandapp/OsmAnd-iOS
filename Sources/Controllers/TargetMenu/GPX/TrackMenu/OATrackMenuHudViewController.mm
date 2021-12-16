@@ -293,7 +293,7 @@
     if (_headerView)
         [_headerView removeFromSuperview];
 
-    _headerView = [[OATrackMenuHeaderView alloc] initWithFrame:CGRectMake(0., 0., [self isLandscape] ? [self getLandscapeViewWidth] : DeviceScreenWidth, 231.)];
+    _headerView = [[OATrackMenuHeaderView alloc] initWithFrame:CGRectMake(0., 0., [self isLandscape] ? [self getLandscapeViewWidth] : DeviceScreenWidth, 0.)];
     _headerView.trackMenuDelegate = self;
     _headerView.sliderView.hidden = [self isLandscape];
     [_headerView setDescription];

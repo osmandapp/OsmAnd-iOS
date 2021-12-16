@@ -286,6 +286,12 @@
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     else
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+
+    if (_selectedTab == EOATrackMenuHudPointsTab)
+        self.tableView.estimatedRowHeight = 66.;
+    else
+        self.tableView.estimatedRowHeight = 48.;
+
 }
 
 - (void)setupHeaderView

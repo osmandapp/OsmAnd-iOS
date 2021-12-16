@@ -16,6 +16,8 @@
 
     self.topButtonsWithBottomButtonsConstraint.active = hasBottomButtons;
     self.topButtonsNoBottomButtonsConstraint.active = !hasBottomButtons;
+    self.separatorWithBottomButtonsConstraint.active = hasBottomButtons;
+    self.bottomButtonsBottomConstraint.active = hasBottomButtons;
 
     [super updateConstraints];
 }
@@ -29,6 +31,8 @@
 
         res = res || self.topButtonsWithBottomButtonsConstraint.active != hasBottomButtons;
         res = res || self.topButtonsNoBottomButtonsConstraint.active != !hasBottomButtons;
+        res = res || self.separatorWithBottomButtonsConstraint.active != hasBottomButtons;
+        res = res || self.bottomButtonsBottomConstraint.active != hasBottomButtons;
     }
     return res;
 }

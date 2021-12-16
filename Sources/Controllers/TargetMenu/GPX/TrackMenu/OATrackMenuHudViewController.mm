@@ -1957,20 +1957,6 @@
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
-        return 48.;
-    else if ([cellData.type isEqualToString:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]])
-        return cellData.toggle ? 142. : 69.;
-
-    return UITableViewAutomaticDimension;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     OAGPXTableSectionData *sectionData = _tableData.sections[section];

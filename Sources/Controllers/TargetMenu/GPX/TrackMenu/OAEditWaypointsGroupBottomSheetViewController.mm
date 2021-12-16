@@ -381,7 +381,6 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             cell = (OATitleIconRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
@@ -415,7 +414,6 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             cell.textColorNormal = UIColor.blackColor;
-            cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
@@ -446,9 +444,10 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    if ([cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]]
-        || [cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]])
-        return 48.;
+    if ([cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+        return [OATitleIconRoundCell getHeight:cellData.title cellWidth:tableView.bounds.size.width];
+    else if ([cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]])
+        return [OATitleSwitchRoundCell getHeight:cellData.title cellWidth:tableView.bounds.size.width];
 
     return UITableViewAutomaticDimension;
 }

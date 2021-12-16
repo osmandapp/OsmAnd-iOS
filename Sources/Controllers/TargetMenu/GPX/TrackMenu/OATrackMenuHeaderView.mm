@@ -361,7 +361,7 @@
     headerFrame.size.height += self.sliderView.frame.size.height;
     headerFrame.size.height += 6.;
 
-    CGRect titleFrame = CGRectMake(0., 0., contentFrame.size.width, 0.);
+    CGRect titleFrame = CGRectMake([self isDirectionRTL] ? 46. : 0., 0., contentFrame.size.width, 0.);
     CGFloat titleWidth = titleFrame.size.width - self.titleIconView.frame.size.width - 16.;
     CGSize titleSize = [OAUtilities calculateTextBounds:self.titleView.text
                                                   width:titleWidth
@@ -371,7 +371,7 @@
     titleFrame.size.height = titleSize.height;
     titleFrame.size.width = titleWidth;
     self.titleView.frame = titleFrame;
-    self.titleIconView.frame = CGRectMake(titleFrame.size.width + 16., (titleSize.height - 30.) / 2, 30., 30.);
+    self.titleIconView.frame = CGRectMake([self isDirectionRTL] ? 0. : titleFrame.size.width + 16., (titleSize.height - 30.) / 2, 30., 30.);
     titleFrame = self.titleContainerView.frame;
     titleFrame.size.height = titleSize.height;
     titleFrame.size.width = contentFrame.size.width;

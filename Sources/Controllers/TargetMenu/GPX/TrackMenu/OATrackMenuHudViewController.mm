@@ -196,10 +196,19 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _headerView.sliderView.hidden = [self isLandscape];
+        [_headerView updateFrame:[self isLandscape] ? [self getLandscapeViewWidth] : DeviceScreenWidth];
 
         if (_selectedTab == EOATrackMenuHudOverviewTab)
         {
             _headerView.collectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
+            _headerView.collectionView.contentInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20. , 0., 20.);
+            NSArray<NSIndexPath *> *visibleItems = _headerView.collectionView.indexPathsForVisibleItems;
+            if (visibleItems && visibleItems.count > 0 && visibleItems.firstObject.row == 0)
+            {
+                [_headerView.collectionView scrollToItemAtIndexPath:visibleItems.firstObject
+                                                             atScrollPosition:UICollectionViewScrollPositionLeft
+                                                                     animated:NO];
+            }
         }
         else if (_selectedTab == EOATrackMenuHudSegmentsTab && _tableData.sections.count > 0)
         {
@@ -284,7 +293,7 @@
     if (_headerView)
         [_headerView removeFromSuperview];
 
-    _headerView = [[OATrackMenuHeaderView alloc] init];
+    _headerView = [[OATrackMenuHeaderView alloc] initWithFrame:CGRectMake(0., 0., [self isLandscape] ? [self getLandscapeViewWidth] : DeviceScreenWidth, 231.)];
     _headerView.trackMenuDelegate = self;
     _headerView.sliderView.hidden = [self isLandscape];
     [_headerView setDescription];

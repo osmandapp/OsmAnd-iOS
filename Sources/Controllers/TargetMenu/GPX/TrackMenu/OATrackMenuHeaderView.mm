@@ -77,7 +77,7 @@
 
 - (void)updateConstraints
 {
-    BOOL hasDescription = !self.descriptionContainerView.hidden;
+    BOOL hasDescription = !self.descriptionView.hidden;
     BOOL hasStatistics = !self.collectionView.hidden;
     BOOL hasLocation = !self.locationContainerView.hidden;
     BOOL hasContent = hasStatistics || hasLocation || !self.actionButtonsContainerView.hidden;
@@ -110,7 +110,7 @@
     BOOL res = [super needsUpdateConstraints];
     if (!res)
     {
-        BOOL hasDescription = !self.descriptionContainerView.hidden;
+        BOOL hasDescription = !self.descriptionView.hidden;
         BOOL hasStatistics = !self.collectionView.hidden;
         BOOL hasLocation = !self.locationContainerView.hidden;
         BOOL hasContent = hasStatistics || hasLocation || !self.actionButtonsContainerView.hidden;
@@ -232,7 +232,7 @@
         [self makeOnlyHeader:YES];
     }
 
-    [self updateFrame];
+    [self updateFrame:self.frame.size.width];
 
     if ([self needsUpdateConstraints])
         [self updateConstraints];
@@ -352,45 +352,49 @@
                     completion:nil];
 }
 
-- (void)updateFrame
+- (void)updateFrame:(CGFloat)width
 {
-    CGRect headerFrame = CGRectMake(0., 0., self.frame.size.width, 0.);
+    CGRect headerFrame = CGRectMake(0., 0., width, 0.);
+    CGRect contentFrame = CGRectMake([OAUtilities getLeftMargin] + 20., 0., width - [OAUtilities getLeftMargin] - 40., 0.);
+
     headerFrame.size.height += 6.;
     headerFrame.size.height += self.sliderView.frame.size.height;
     headerFrame.size.height += 6.;
 
-    CGRect titleFrame = CGRectMake(0., 0., self.titleView.frame.size.width, 0.);
+    CGRect titleFrame = CGRectMake(0., 0., contentFrame.size.width, 0.);
+    CGFloat titleWidth = titleFrame.size.width - self.titleIconView.frame.size.width - 16.;
     CGSize titleSize = [OAUtilities calculateTextBounds:self.titleView.text
-                                                  width:headerFrame.size.width - [OAUtilities getLeftMargin] * 2 - self.titleIconView.frame.size.width - 16.
+                                                  width:titleWidth
                                                  height:kTitleHeightMax
                                                    font:self.titleView.font];
-    titleSize.height = (titleSize.width > titleFrame.size.width) || (titleSize.height > kTitleHeightMin) ? kTitleHeightMax : kTitleHeightMin;
+    titleSize.height = (titleSize.width > titleWidth) || (titleSize.height > kTitleHeightMin) ? kTitleHeightMax : kTitleHeightMin;
     titleFrame.size.height = titleSize.height;
+    titleFrame.size.width = titleWidth;
     self.titleView.frame = titleFrame;
+    self.titleIconView.frame = CGRectMake(titleFrame.size.width + 16., (titleSize.height - 30.) / 2, 30., 30.);
     titleFrame = self.titleContainerView.frame;
     titleFrame.size.height = titleSize.height;
+    titleFrame.size.width = contentFrame.size.width;
     self.titleContainerView.frame = titleFrame;
     headerFrame.size.height += self.titleContainerView.frame.size.height;
 
-    if (self.descriptionContainerView.hidden && self.collectionView.hidden
+    if (self.descriptionView.hidden && self.collectionView.hidden
             && self.locationContainerView.hidden && !self.actionButtonsContainerView.hidden)
         headerFrame.size.height += 16.;
 
-    CGRect descriptionFrame = CGRectMake(0., 0., self.descriptionView.frame.size.width, 0.);
+    CGRect descriptionFrame = self.descriptionView.frame;
+    descriptionFrame.size.width = contentFrame.size.width;
     CGFloat descriptionHeight = [OAUtilities calculateTextBounds:self.descriptionView.text
-                                                           width:headerFrame.size.width - [OAUtilities getLeftMargin] * 2
+                                                           width:descriptionFrame.size.width
                                                           height:kDescriptionHeightMax
                                                             font:self.descriptionView.font].height;
     descriptionHeight = descriptionHeight > kDescriptionHeightMin ? kDescriptionHeightMax : kDescriptionHeightMin;
     descriptionFrame.size.height = descriptionHeight;
-    self.descriptionView.frame = descriptionFrame;
-    descriptionFrame = self.descriptionContainerView.frame;
-    descriptionFrame.size.height = descriptionHeight;
-    if (!self.descriptionContainerView.hidden)
+    if (!self.descriptionView.hidden)
         descriptionFrame.origin.y = titleFrame.origin.y + titleFrame.size.height + (_selectedTab == EOATrackMenuHudOverviewTab ? 8. : 2.);
-    self.descriptionContainerView.frame = descriptionFrame;
-    headerFrame.size.height += !self.descriptionContainerView.hidden
-            ? self.descriptionContainerView.frame.size.height + (_selectedTab == EOATrackMenuHudOverviewTab ? 8. : 2.)
+    self.descriptionView.frame = descriptionFrame;
+    headerFrame.size.height += !self.descriptionView.hidden
+            ? self.descriptionView.frame.size.height + (_selectedTab == EOATrackMenuHudOverviewTab ? 8. : 2.)
             : 0.;
 
     headerFrame.size.height += !self.collectionView.hidden ? self.collectionView.frame.size.height + 2. : 0.;
@@ -403,6 +407,8 @@
     headerFrame.size.height += 16.;
 
     self.frame = headerFrame;
+    contentFrame.size.height = headerFrame.size.height;
+    self.contentView.frame = contentFrame;
 }
 
 - (void)setDirection:(NSString *)direction
@@ -420,7 +426,7 @@
     BOOL hasDescription = description && description.length > 0;
 
     [self.descriptionView setText:description];
-    self.descriptionContainerView.hidden = !hasDescription;
+    self.descriptionView.hidden = !hasDescription;
 }
 
 - (void)setCollection:(NSArray<OAGPXTableCellData *> *)data
@@ -437,8 +443,8 @@
     CGFloat height = additionalHeight;
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
-        height += (!self.descriptionContainerView.hidden
-                ? (self.descriptionContainerView.frame.origin.y + self.descriptionContainerView.frame.size.height)
+        height += (!self.descriptionView.hidden
+                ? (self.descriptionView.frame.origin.y + self.descriptionView.frame.size.height)
                 : (self.titleContainerView.frame.origin.y + self.titleContainerView.frame.size.height));
 
         if (!self.collectionView.hidden)
@@ -458,7 +464,7 @@
 
 - (void)makeOnlyHeader:(BOOL)hasDescription
 {
-    self.descriptionContainerView.hidden = !hasDescription;
+    self.descriptionView.hidden = !hasDescription;
     self.collectionView.hidden = YES;
     self.locationContainerView.hidden = YES;
     self.actionButtonsContainerView.hidden = YES;

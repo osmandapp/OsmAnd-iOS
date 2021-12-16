@@ -24,7 +24,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
 
-@property (weak, nonatomic) IBOutlet UIView *descriptionContainerView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -75,6 +74,7 @@
 - (void)setDescription;
 - (void)setCollection:(NSArray *)data;
 
+- (void)updateFrame:(CGFloat)width;
 - (CGFloat)getInitialHeight:(CGFloat)additionalHeight;
 
 @end

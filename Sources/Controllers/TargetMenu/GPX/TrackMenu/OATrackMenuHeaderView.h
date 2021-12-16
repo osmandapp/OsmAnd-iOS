@@ -24,7 +24,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
 
-@property (weak, nonatomic) IBOutlet UIView *descriptionContainerView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *statisticsCollectionView;
@@ -81,6 +80,7 @@
 - (void)setSelectedIndexGroupsCollection:(NSInteger)index;
 - (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index;
 
+- (void)updateFrame:(CGFloat)width;
 - (CGFloat)getInitialHeight:(CGFloat)additionalHeight;
 
 @end

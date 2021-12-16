@@ -338,7 +338,6 @@
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-			cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
         }
         if (cell)
         {

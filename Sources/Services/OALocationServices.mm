@@ -242,14 +242,11 @@
 
 - (void) start
 {
-    @synchronized(_lock)
+    if ([self doStart])
     {
-        if ([self doStart])
-        {
-            OALog(@"Started location services");
-            
-            [_statusObservable notifyEvent];
-        }
+        OALog(@"Started location services");
+        
+        [_statusObservable notifyEvent];
     }
 }
 
@@ -298,16 +295,13 @@
 
 - (void) resume
 {
-    @synchronized(_lock)
+    if ([self doStart])
     {
-        if ([self doStart])
-        {
-            OALog(@"Resumed location services");
-
-            _isSuspended = NO;
-
-            [_statusObservable notifyEvent];
-        }
+        OALog(@"Resumed location services");
+        
+        _isSuspended = NO;
+        
+        [_statusObservable notifyEvent];
     }
 }
 
@@ -448,14 +442,8 @@
     if (_manager.desiredAccuracy == newDesiredAccuracy || self.status != OALocationServicesStatusActive)
         return;
 
-    OALog(@"Changing desired location accuracy from %f to %f", _manager.desiredAccuracy, newDesiredAccuracy);
-
-    @synchronized(_lock)
-    {
-        _manager.desiredAccuracy = newDesiredAccuracy;
-        if ([self doStop])
-            [self doStart];
-    }
+    if ([self doStop])
+        [self doStart];
 }
 
 - (BOOL) shouldBeRunningInBackground

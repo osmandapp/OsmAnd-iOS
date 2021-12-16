@@ -142,6 +142,8 @@
     
     CGRect buttonsFrame = _toolBarView.frame;
     buttonsFrame.size.width = _scrollableView.bounds.size.width;
+    if ([self getToolbarHeight] == 0)
+        buttonsFrame.size.height = 0.;
     _toolBarView.frame = buttonsFrame;
     
     CGRect contentFrame = _contentContainer.frame;
@@ -189,6 +191,7 @@
 {
     CGRect f = _scrollableView.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
+    CGFloat toolbarHeight = [self getToolbarHeight];
     if ([self isLeftSidePresentation])
     {
         f.origin = CGPointMake(0., [self getLandscapeYOffset]);
@@ -196,8 +199,8 @@
         f.size.width = [self getLandscapeViewWidth];
         
         CGRect buttonsFrame = _toolBarView.frame;
-        buttonsFrame.origin.y = f.size.height - [self getToolbarHeight] - bottomMargin;
-        buttonsFrame.size.height = [self getToolbarHeight] + bottomMargin;
+        buttonsFrame.size.height = toolbarHeight > 0 ? toolbarHeight + bottomMargin : 0.;
+        buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
         _toolBarView.frame = buttonsFrame;
         
         CGRect contentFrame = _contentContainer.frame;
@@ -207,7 +210,7 @@
     else
     {
         CGRect buttonsFrame = _toolBarView.frame;
-        buttonsFrame.size.height = [self getToolbarHeight] + bottomMargin;
+        buttonsFrame.size.height = toolbarHeight > 0 && toolbarHeight != bottomMargin ? toolbarHeight + bottomMargin : toolbarHeight;
         f.size.height = [self getViewHeight];
         f.size.width = DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
@@ -479,8 +482,13 @@
                     ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight)
                     : CGRectZero;
             
+            BOOL hasToolbar = [self getToolbarHeight] > 0;
             CGRect buttonsFrame = _toolBarView.frame;
-            buttonsFrame.origin.y = frame.size.height - buttonsFrame.size.height;
+            if (_toolBarView.frame.size.height == [OAUtilities getBottomMargin] && !slidingDown)
+                hasToolbar = NO;
+            buttonsFrame.origin.y = hasToolbar ? (frame.size.height - buttonsFrame.size.height) : 0./*[OAUtilities getBottomMargin]*/;
+            if (!hasToolbar)
+                buttonsFrame.size.height = 0.;
             _toolBarView.frame = buttonsFrame;
             
             CGRect contentFrame = _contentContainer.frame;

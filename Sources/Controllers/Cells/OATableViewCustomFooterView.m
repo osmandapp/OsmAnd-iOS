@@ -72,14 +72,14 @@
     BOOL hasIcon = _iconView != nil && _iconView.superview != nil;
     if (hasIcon)
     {
-        _iconView.frame = CGRectMake(16.0 + leftMargin, 8.0, 30.0, 30.0);
+        _iconView.frame = CGRectMake(20.0 + leftMargin, 8.0, 30.0, 30.0);
     }
-    CGFloat w = self.bounds.size.width - 32. - leftMargin * 2 - (hasIcon ? 30.0 : 0.0) - 16.;
+    CGFloat w = self.bounds.size.width - 40. - leftMargin * 2 - (hasIcon ? 30.0 : 0.0) - 20.;
     CGFloat height = _label.attributedText.length > 0 ? [OAUtilities calculateTextBounds:_label.attributedText width:w].height : [self.class getTextHeight:_label.text width:w];
     if (_label.text.length > 0)
     {
         _label.hidden = NO;
-        _label.frame = CGRectMake(16.0 + (hasIcon ? CGRectGetMaxX(_iconView.frame) : leftMargin), 8.0, w, height);
+        _label.frame = CGRectMake(20.0 + (hasIcon ? CGRectGetMaxX(_iconView.frame) : leftMargin), 8.0, w, height);
     }
     else
     {
@@ -113,7 +113,7 @@
 + (CGFloat) getHeight:(NSString *)text width:(CGFloat)width
 {
     if (text.length > 0)
-        return [self.class getTextHeight:text width:width - 32.0 - OAUtilities.getLeftMargin * 2] + 5.0;
+        return [self.class getTextHeight:text width:width - 40.0 - OAUtilities.getLeftMargin * 2] + 5.0;
     else
         return 0.01;
 }

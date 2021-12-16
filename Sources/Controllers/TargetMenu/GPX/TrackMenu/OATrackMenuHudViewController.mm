@@ -195,6 +195,9 @@
     [self.groupsButton setImage:groupsImage forState:UIControlStateNormal];
     self.groupsButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     [self.groupsButton addBlurEffect:YES cornerRadius:12. padding:0];
+    BOOL isRTL = [self.groupsButton isDirectionRTL];
+    self.groupsButton.titleEdgeInsets = UIEdgeInsetsMake(0., isRTL ? -4. : 0., 0., isRTL ? 0. : -4.);
+    self.groupsButton.imageEdgeInsets = UIEdgeInsetsMake(0., isRTL ? 10. : -4., 0., isRTL ? -4. : 10.);
     [self updateGroupsButton];
 }
 
@@ -436,6 +439,10 @@
 - (void)doAdditionalLayout
 {
     [super doAdditionalLayout];
+    BOOL isRTL = [self.groupsButtonContainerView isDirectionRTL];
+    self.groupsButtonTrailingConstraint.constant = [self isLandscape]
+            ? ([self.groupsButtonContainerView isDirectionRTL] ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10. : 0.)
+            : [OAUtilities getLeftMargin] + 10.;
     self.groupsButtonContainerView.hidden = ![self isLandscape] && self.currentState == EOADraggableMenuStateFullScreen;
 }
 

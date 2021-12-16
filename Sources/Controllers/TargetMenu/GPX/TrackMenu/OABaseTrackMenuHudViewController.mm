@@ -279,8 +279,9 @@
 
 - (void)doAdditionalLayout
 {
+    BOOL isRTL = [self.backButtonContainerView isDirectionRTL];
     self.backButtonLeadingConstraint.constant = [self isLandscape]
-            ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 20.
+            ? (isRTL ? 0. : [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.)
             : [OAUtilities getLeftMargin] + 10.;
     self.backButtonContainerView.hidden = ![self isLandscape] && self.currentState == EOADraggableMenuStateFullScreen;
 }

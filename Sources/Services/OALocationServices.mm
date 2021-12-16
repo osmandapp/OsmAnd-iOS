@@ -199,85 +199,82 @@
 
 - (BOOL) doStart
 {
-    @synchronized(_lock)
+    // Do nothing if waiting for authorization
+    if (self.status == OALocationServicesStatusAuthorizing)
+        return NO;
+    
+    BOOL didChange = NO;
+    
+    [self updateDeviceOrientation];
+    
+    // Set desired accuracy depending on app mode, and query for updates
+    if (!_locationActive)
     {
-        // Do nothing if waiting for authorization
-        if (self.status == OALocationServicesStatusAuthorizing)
-            return NO;
-
-        BOOL didChange = NO;
-
-        [self updateDeviceOrientation];
-
-        // Set desired accuracy depending on app mode, and query for updates
-        if (!_locationActive)
+        _waitingForAuthorization = !self.allowed;
+        
+        if (!self.allowed &&
+            [_manager respondsToSelector:@selector(requestAlwaysAuthorization)])
         {
-            _waitingForAuthorization = !self.allowed;
-
-            if (!self.allowed &&
-                [_manager respondsToSelector:@selector(requestAlwaysAuthorization)])
-            {
-                [_manager requestAlwaysAuthorization];
-            }
-
-            _manager.desiredAccuracy = [self desiredAccuracy];
-            [_manager startUpdatingLocation];
-            _locationActive = YES;
-            didChange = YES;
-
-            OALog(@"Setting desired location accuracy to %f", _manager.desiredAccuracy);
+            [_manager requestAlwaysAuthorization];
         }
-
-        // Also, if compass is available, query it for updates
-        if (!_compassActive && [CLLocationManager headingAvailable])
-        {
-            [_manager startUpdatingHeading];
-            _compassActive = YES;
-            didChange = YES;
-        }
-
-        return didChange;
+        
+        _manager.desiredAccuracy = [self desiredAccuracy];
+        [_manager startUpdatingLocation];
+        _locationActive = YES;
+        didChange = YES;
+        
+        OALog(@"Setting desired location accuracy to %f", _manager.desiredAccuracy);
     }
+    
+    // Also, if compass is available, query it for updates
+    if (!_compassActive && [CLLocationManager headingAvailable])
+    {
+        [_manager startUpdatingHeading];
+        _compassActive = YES;
+        didChange = YES;
+    }
+    
+    return didChange;
 }
 
 - (void) start
 {
-    if ([self doStart])
+    @synchronized(_lock)
     {
-        OALog(@"Started location services");
-        
-        [_statusObservable notifyEvent];
+        if ([self doStart])
+        {
+            OALog(@"Started location services");
+            
+            [_statusObservable notifyEvent];
+        }
     }
 }
 
 - (BOOL) doStop
 {
-    @synchronized(_lock)
+    BOOL didChange = NO;
+    
+    if (_waitingForAuthorization)
     {
-        BOOL didChange = NO;
-
-        if (_waitingForAuthorization)
-        {
-            _waitingForAuthorization = NO;
-            didChange = YES;
-        }
-
-        if (_locationActive)
-        {
-            [_manager stopUpdatingLocation];
-            _locationActive = NO;
-            didChange = YES;
-        }
-
-        if (_compassActive)
-        {
-            [_manager stopUpdatingHeading];
-            _compassActive = NO;
-            didChange = YES;
-        }
-
-        return didChange;
+        _waitingForAuthorization = NO;
+        didChange = YES;
     }
+    
+    if (_locationActive)
+    {
+        [_manager stopUpdatingLocation];
+        _locationActive = NO;
+        didChange = YES;
+    }
+    
+    if (_compassActive)
+    {
+        [_manager stopUpdatingHeading];
+        _compassActive = NO;
+        didChange = YES;
+    }
+    
+    return didChange;
 }
 
 - (void) stop
@@ -295,13 +292,16 @@
 
 - (void) resume
 {
-    if ([self doStart])
+    @synchronized(_lock)
     {
-        OALog(@"Resumed location services");
-        
-        _isSuspended = NO;
-        
-        [_statusObservable notifyEvent];
+        if ([self doStart])
+        {
+            OALog(@"Resumed location services");
+
+            _isSuspended = NO;
+
+            [_statusObservable notifyEvent];
+        }
     }
 }
 
@@ -442,8 +442,11 @@
     if (_manager.desiredAccuracy == newDesiredAccuracy || self.status != OALocationServicesStatusActive)
         return;
 
-    if ([self doStop])
-        [self doStart];
+    @synchronized(_lock)
+    {
+        if ([self doStop])
+            [self doStart];
+    }
 }
 
 - (BOOL) shouldBeRunningInBackground

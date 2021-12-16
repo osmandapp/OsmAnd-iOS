@@ -445,15 +445,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     if ([cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
-        return 48.;
-    else if ([cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
-    {
         return [OATitleIconRoundCell getHeight:cellData.title cellWidth:tableView.bounds.size.width];
-    }
     else if ([cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]])
-    {
         return [OATitleSwitchRoundCell getHeight:cellData.title cellWidth:tableView.bounds.size.width];
-    }
 
     return UITableViewAutomaticDimension;
 }

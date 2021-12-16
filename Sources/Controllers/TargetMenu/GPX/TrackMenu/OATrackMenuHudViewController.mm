@@ -244,16 +244,7 @@
 
 - (CGFloat)initialMenuHeight
 {
-    if (_selectedTab == EOATrackMenuHudOverviewTab)
-    {
-        return self.toolBarView.frame.size.height + 10. + (!_headerView.descriptionContainerView.hidden
-                ? (_headerView.descriptionContainerView.frame.origin.y + [_headerView getDescriptionHeight])
-                : (_headerView.titleContainerView.frame.origin.y + [_headerView getTitleHeight]));
-    }
-    else
-    {
-        return self.toolBarView.frame.size.height + _headerView.frame.size.height;
-    }
+    return [_headerView getInitialHeight:self.toolBarView.frame.size.height];
 }
 
 - (CGFloat)expandedMenuHeight
@@ -298,8 +289,7 @@
     _headerView.sliderView.hidden = [self isLandscape];
     [_headerView setDescription];
 
-    BOOL isOverview = _selectedTab == EOATrackMenuHudOverviewTab;
-    if (isOverview)
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         _headerView.collectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
         [_headerView generateGpxBlockStatistics:self.analysis
@@ -328,6 +318,10 @@
                              firstAttribute:NSLayoutAttributeTop
                                  secondItem:_headerView
                             secondAttribute:NSLayoutAttributeTop],
+            [self createBaseEqualConstraint:self.topHeaderContainerView
+                             firstAttribute:NSLayoutAttributeBottom
+                                 secondItem:_headerView
+                            secondAttribute:NSLayoutAttributeBottom],
             [self createBaseEqualConstraint:self.scrollableView
                              firstAttribute:NSLayoutAttributeTrailingMargin
                                  secondItem:_headerView.contentView
@@ -1972,8 +1966,7 @@
 {
     OAGPXTableSectionData *sectionData = _tableData.sections[section];
     CGFloat sectionHeaderHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.01;
-    CGFloat menuHeaderHeight = _headerView.frame.size.height - kTitleHeightMax + [_headerView getTitleHeight];
-    return section == 0 ? sectionHeaderHeight + menuHeaderHeight : sectionHeaderHeight;
+    return section == 0 ? sectionHeaderHeight + _headerView.frame.size.height : sectionHeaderHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

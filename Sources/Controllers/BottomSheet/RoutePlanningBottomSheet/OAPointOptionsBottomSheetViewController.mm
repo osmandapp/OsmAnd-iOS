@@ -367,4 +367,14 @@
     [self hide:YES];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+    {
+        return [OATitleIconRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+    }
+    return UITableViewAutomaticDimension;
+}
+
 @end

@@ -15,11 +15,8 @@
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIImageView *secondaryImageView;
 @property (weak, nonatomic) IBOutlet UIView *separatorView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftTextPrimaryConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftTextSecondaryConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftSeparatorPrimaryConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftSeparatorSecondaryConstraint;
+
++ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth;
 
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners;
 

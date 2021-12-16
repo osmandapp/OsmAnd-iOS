@@ -325,7 +325,6 @@
             cell.sliderView.value = _distanceThreshold;
 			cell.valueLabel.text = [OAOsmAndFormatter getFormattedDistance:_distanceThreshold];
             cell.contentContainer.layer.cornerRadius = 12.;
-
             return cell;
         }
     }
@@ -339,7 +338,6 @@
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-			cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
         }
         if (cell)
         {
@@ -366,13 +364,10 @@
             }
 			cell.iconView.hidden = indexPath.row == 0;
 			cell.iconView.image = selected ? [UIImage templateImageNamed:@"ic_checkmark_default"] : nil;
-
             [cell roundCorners:indexPath.row == 0 bottomCorners:indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1];
             cell.separatorView.hidden = indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1;
 
-            if ([cell needsUpdateConstraints])
-                [cell updateConstraints];
-
+            [cell layoutIfNeeded];
             return cell;
         }
     }
@@ -396,6 +391,26 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 16.;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
+    if ([item[@"type"] isEqualToString:[OAIconTitleIconRoundCell getCellIdentifier]])
+    {
+        NSString *text;
+        if (item[@"title"])
+        {
+            text = [item[@"title"] uppercaseString];
+        }
+        else
+        {
+            OAApplicationMode *profile = item[@"profile"];
+            text = profile.toHumanString;
+        }
+        return [OAIconTitleIconRoundCell getHeight:text cellWidth:tableView.bounds.size.width];
+    }
+    return UITableViewAutomaticDimension;
 }
 
 // MARK: OAGpxApproximationProgressDelegate

@@ -162,4 +162,9 @@
     [OAFavoritesHelper loadFavorites];
 }
 
+- (OAFavoriteItem *) getFavoriteItem
+{
+    return _favorite;
+}
+
 @end

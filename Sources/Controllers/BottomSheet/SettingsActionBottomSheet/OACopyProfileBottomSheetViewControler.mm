@@ -56,7 +56,7 @@
     self.tableView.layer.cornerRadius = 12.;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void) applyLocalization
@@ -245,6 +245,7 @@
             [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == OAApplicationMode.allPossibleValues.count - 2)];
             cell.separatorView.hidden = indexPath.row == OAApplicationMode.allPossibleValues.count - 2;
         }
+        [cell layoutIfNeeded];
         return cell;
     }
     return nil;
@@ -279,6 +280,17 @@
     description.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [vw addSubview:description];
     return vw;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:[OAIconTitleIconRoundCell getCellIdentifier]])
+    {
+        OAApplicationMode *am = item[@"app_mode"];
+        return [OAIconTitleIconRoundCell getHeight:am.toHumanString cellWidth:tableView.bounds.size.width];
+    }
+    return UITableViewAutomaticDimension;
 }
 
 @end

@@ -1663,12 +1663,18 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    
+    OAPOI *poi = nil;
+    if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAPOI.class])
+        poi = self.targetMenuView.targetPoint.targetObj;
+    
     OAEditPointViewController *controller =
             [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
                                                           title:self.targetMenuView.targetPoint.title
                                                     customParam:self.targetMenuView.targetPoint.titleAddress
                                                       pointType:EOAEditPointTypeFavorite
-                                                targetMenuState:nil];
+                                                targetMenuState:nil
+                                                            poi:poi];
     [self presentViewController:controller animated:YES completion:nil];
 }
 
@@ -1858,11 +1864,17 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    
+    OAPOI *poi = nil;
+    if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAPOI.class])
+        poi = self.targetMenuView.targetPoint.targetObj;
+    
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location
                                                                                           title:title
                                                                                     customParam:gpxFileName
                                                                                       pointType:EOAEditPointTypeWaypoint
-                                                                                targetMenuState:_activeViewControllerState];
+                                                                                targetMenuState:_activeViewControllerState
+                                                                                            poi:poi];
     controller.gpxWptDelegate = self;
     [self presentViewController:controller animated:YES completion:nil];
 }
@@ -2361,6 +2373,7 @@ typedef enum
         
         [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:NO];
         [_targetMenuView setTargetPoint:targetPoint];
+        [self enterContextMenuMode];
         
         [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
             [self goToTargetPointDefault];
@@ -3351,6 +3364,8 @@ typedef enum
         
         if (sender.timeLimitActive && sender.addToCalActive)
             [OAFavoritesHelper addParkingReminderToCalendar];
+        else if (!sender.addToCalActive)
+            [OAFavoritesHelper removeParkingReminderFromCalendar];
         
         [OAFavoritesHelper setParkingPoint:sender.coord.latitude lon:sender.coord.longitude address:nil pickupDate:sender.timeLimitActive ? sender.date : nil addToCalendar:sender.addToCalActive];
         

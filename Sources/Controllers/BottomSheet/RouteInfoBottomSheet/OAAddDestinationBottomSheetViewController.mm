@@ -180,7 +180,7 @@
 
 - (void) setupView
 {
-    tblView.separatorColor = UIColorFromRGB(color_tint_gray);
+    tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray array];
@@ -269,9 +269,13 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
+    }
+    else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+    {
+        return [OATitleIconRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
     else if ([item[@"type"] isEqualToString:[OACollectionViewCell getCellIdentifier]])
     {
@@ -343,7 +347,8 @@
                 [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
             }
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
-            cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 20.);
+            cell.separatorView.hidden = [item[@"round_bottom"] boolValue];
+            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;

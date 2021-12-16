@@ -35,7 +35,7 @@
 
 @end
 
-@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OALocationsHolder, OAGpxRouteApproximation, OAGPXDocument;
+@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OALocationsHolder, OAGpxRouteApproximation, OAGPXDocument, OAObservable;
 
 struct GpxPoint;
 struct GpxRouteApproximation;
@@ -45,6 +45,8 @@ struct RouteSegmentResult;
 @interface OARoutingHelper : NSObject
 
 + (OARoutingHelper *)sharedInstance;
+
+@property (readonly) OAObservable *routingModeChangedObservable;
 
 - (void) setAppMode:(OAApplicationMode *)mode;
 - (OAApplicationMode *) getAppMode;

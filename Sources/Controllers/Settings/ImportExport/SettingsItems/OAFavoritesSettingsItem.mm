@@ -111,6 +111,8 @@
                             [plugin addOrRemoveParkingEvent:item.getCalendarEvent];
                             if (item.getCalendarEvent)
                                 [OAFavoritesHelper addParkingReminderToCalendar];
+                            else
+                                [OAFavoritesHelper removeParkingReminderFromCalendar];
                         }
                     }
                 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -113,9 +113,8 @@
                     <constraint firstItem="IDx-nd-Kah" firstAttribute="leading" secondItem="SCa-JN-ypM" secondAttribute="trailing" constant="16" id="N0i-Qz-M9G"/>
                     <constraint firstItem="LwU-jf-dlt" firstAttribute="leading" secondItem="SCa-JN-ypM" secondAttribute="trailing" constant="16" id="W5X-wW-qZS"/>
                     <constraint firstAttribute="bottom" secondItem="IDx-nd-Kah" secondAttribute="bottom" constant="9" id="b5s-jc-P8U"/>
-                    <constraint firstItem="SCa-JN-ypM" firstAttribute="top" secondItem="DPG-xU-8Vj" secondAttribute="top" constant="18" id="d9M-n9-6v9"/>
-                    <constraint firstAttribute="bottom" secondItem="SCa-JN-ypM" secondAttribute="bottom" constant="18" id="f1J-dK-Gcf"/>
                     <constraint firstAttribute="bottom" secondItem="LwU-jf-dlt" secondAttribute="bottom" priority="999" constant="9" id="i2a-XV-vEA"/>
+                    <constraint firstItem="SCa-JN-ypM" firstAttribute="centerY" secondItem="DPG-xU-8Vj" secondAttribute="centerY" id="tO4-Y2-IVc"/>
                     <constraint firstItem="SCa-JN-ypM" firstAttribute="leading" secondItem="DPG-xU-8Vj" secondAttribute="leadingMargin" id="v38-lR-pyI"/>
                     <constraint firstAttribute="trailingMargin" secondItem="LwU-jf-dlt" secondAttribute="trailing" id="xvO-V4-l8Y"/>
                     <constraint firstAttribute="trailingMargin" secondItem="IDx-nd-Kah" secondAttribute="trailing" id="z4C-RA-S4o"/>

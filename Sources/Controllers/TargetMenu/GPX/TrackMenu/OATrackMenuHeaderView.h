@@ -24,7 +24,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
 
-@property (weak, nonatomic) IBOutlet UIView *descriptionContainerView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -46,18 +45,7 @@
 
 @property (weak, nonatomic) IBOutlet UIView *bottomDividerView;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomDescriptionConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionNoCollectionConstraint;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionHeightConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionContainerHeightConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomCollectionConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomNoCollectionConstraint;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *onlyTitleAndDescriptionConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *onlyTitleNoDescriptionConstraint;
-
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *locationWithStatisticsTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionDirectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoDirectionConstraint;
 
@@ -74,6 +62,8 @@
 - (void)setDirection:(NSString *)direction;
 - (void)setDescription;
 - (void)setCollection:(NSArray *)data;
-- (CGFloat)getDescriptionHeight;
+
+- (void)updateFrame:(CGFloat)width;
+- (CGFloat)getInitialHeight:(CGFloat)additionalHeight;
 
 @end

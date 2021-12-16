@@ -196,10 +196,19 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _headerView.sliderView.hidden = [self isLandscape];
+        [_headerView updateFrame:[self isLandscape] ? [self getLandscapeViewWidth] : DeviceScreenWidth];
 
         if (_selectedTab == EOATrackMenuHudOverviewTab)
         {
             _headerView.collectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
+            _headerView.collectionView.contentInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20. , 0., 20.);
+            NSArray<NSIndexPath *> *visibleItems = _headerView.collectionView.indexPathsForVisibleItems;
+            if (visibleItems && visibleItems.count > 0 && visibleItems.firstObject.row == 0)
+            {
+                [_headerView.collectionView scrollToItemAtIndexPath:visibleItems.firstObject
+                                                             atScrollPosition:UICollectionViewScrollPositionLeft
+                                                                     animated:NO];
+            }
         }
         else if (_selectedTab == EOATrackMenuHudSegmentsTab && _tableData.sections.count > 0)
         {
@@ -244,10 +253,7 @@
 
 - (CGFloat)initialMenuHeight
 {
-    if (_selectedTab == EOATrackMenuHudOverviewTab)
-        return self.toolBarView.frame.size.height + _headerView.descriptionContainerView.frame.origin.y + [_headerView getDescriptionHeight] + 10.;
-    else
-        return self.toolBarView.frame.size.height + _headerView.frame.size.height;
+    return [_headerView getInitialHeight:self.toolBarView.frame.size.height];
 }
 
 - (CGFloat)expandedMenuHeight
@@ -287,13 +293,12 @@
     if (_headerView)
         [_headerView removeFromSuperview];
 
-    _headerView = [[OATrackMenuHeaderView alloc] init];
+    _headerView = [[OATrackMenuHeaderView alloc] initWithFrame:CGRectMake(0., 0., [self isLandscape] ? [self getLandscapeViewWidth] : DeviceScreenWidth, 0.)];
     _headerView.trackMenuDelegate = self;
     _headerView.sliderView.hidden = [self isLandscape];
     [_headerView setDescription];
 
-    BOOL isOverview = _selectedTab == EOATrackMenuHudOverviewTab;
-    if (isOverview)
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         _headerView.collectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
         [_headerView generateGpxBlockStatistics:self.analysis
@@ -322,6 +327,10 @@
                              firstAttribute:NSLayoutAttributeTop
                                  secondItem:_headerView
                             secondAttribute:NSLayoutAttributeTop],
+            [self createBaseEqualConstraint:self.topHeaderContainerView
+                             firstAttribute:NSLayoutAttributeBottom
+                                 secondItem:_headerView
+                            secondAttribute:NSLayoutAttributeBottom],
             [self createBaseEqualConstraint:self.scrollableView
                              firstAttribute:NSLayoutAttributeTrailingMargin
                                  secondItem:_headerView.contentView
@@ -1949,23 +1958,12 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
-        return 48.;
-    else if ([cellData.type isEqualToString:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]])
-        return cellData.toggle ? 142. : 69.;
-    else if ([cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
-    {
+    if ([cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
         return [OATitleIconRoundCell getHeight:cellData.title cellWidth:tableView.bounds.size.width];
-    }
     else if ([cellData.type isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
-    {
         return [OATitleDescriptionIconRoundCell getHeight:cellData.title descr:cellData.desc cellWidth:tableView.bounds.size.width];
-    }
     else if ([cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]])
-    {
         return [OATitleSwitchRoundCell getHeight:cellData.title cellWidth:tableView.bounds.size.width];
-    }
 
     return UITableViewAutomaticDimension;
 }
@@ -1973,8 +1971,8 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     OAGPXTableSectionData *sectionData = _tableData.sections[section];
-    CGFloat headerHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.01;
-    return section == 0 ? headerHeight + _headerView.frame.size.height : headerHeight;
+    CGFloat sectionHeaderHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.01;
+    return section == 0 ? sectionHeaderHeight + _headerView.frame.size.height : sectionHeaderHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

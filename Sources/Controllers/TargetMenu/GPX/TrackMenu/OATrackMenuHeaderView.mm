@@ -14,6 +14,9 @@
 #import "OAOsmAndFormatter.h"
 #import "OAGPXTrackAnalysis.h"
 
+#define kTitleHeightMax 44.
+#define kTitleHeightMin 30.
+#define kDescriptionHeightMin 18.
 #define kDescriptionHeightMax 36.
 #define kBlockStatistickHeight 40.
 #define kBlockStatistickWidthMin 80.
@@ -28,7 +31,6 @@
     NSArray<NSDictionary *> *_groupsData;
     EOATrackMenuHudTab _selectedTab;
     OsmAndAppInstance _app;
-    CGFloat _descriptionHeight;
 }
 
 - (instancetype)init
@@ -73,20 +75,22 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
-    self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 }
 
 - (void)updateConstraints
 {
-    BOOL hasDescription = !self.descriptionContainerView.hidden;
-    BOOL hasCollection = !self.statisticsCollectionView.hidden;
+    BOOL hasDescription = !self.descriptionView.hidden;
+    BOOL hasStatistics = !self.statisticsCollectionView.hidden;
     BOOL hasActions = !self.actionButtonsContainerView.hidden;
-    BOOL hasContent = hasCollection || !self.locationContainerView.hidden || hasActions;
+    BOOL hasLocation = !self.locationContainerView.hidden;
+    BOOL hasContent = hasStatistics || hasLocation || hasActions;
     BOOL hasGroups = !self.groupsCollectionView.hidden;
     BOOL isOnlyTitleAndDescription = hasDescription && !hasContent && !hasGroups;
     BOOL isOnlyTitleAndDescriptionAndGroup = hasDescription && !hasContent && hasGroups;
     BOOL isOnlyTitle = !hasDescription && !hasContent;
     BOOL hasDirection = !self.directionContainerView.hidden;
+    BOOL noDescriptionNoStatistics = !hasDescription && !hasStatistics && !isOnlyTitleAndDescription
+            && !isOnlyTitleAndDescriptionAndGroup && !isOnlyTitle;
 
     self.onlyTitleAndDescriptionConstraint.active = isOnlyTitleAndDescription;
     self.onlyTitleAndDescriptionAndGroupsConstraint.active = isOnlyTitleAndDescriptionAndGroup;
@@ -95,16 +99,15 @@
     self.actionsBottomConstraint.active = hasActions;
 
     self.titleBottomDescriptionConstraint.active = hasDescription;
-    self.titleBottomNoDescriptionConstraint.active = !hasDescription && hasCollection;
-    self.titleBottomNoDescriptionNoCollectionConstraint.active =
-            !hasDescription && !hasCollection && !isOnlyTitleAndDescription
-                    && !isOnlyTitleAndDescriptionAndGroup && !isOnlyTitle;
+    self.titleBottomNoDescriptionConstraint.active = !hasDescription && hasStatistics;
+    self.titleBottomNoDescriptionNoCollectionConstraint.active = noDescriptionNoStatistics && hasLocation;
+    self.titleBottomNoDescriptionNoCollectionNoLocationConstraint.active = noDescriptionNoStatistics && !hasLocation;
+    self.titleBottomDescriptionConstraint.constant = _selectedTab == EOATrackMenuHudOverviewTab ? 8. : 2.;
 
-    self.descriptionBottomCollectionConstraint.active = hasDescription && hasCollection;
-    self.descriptionBottomNoCollectionConstraint.active = hasDescription && !hasCollection && !hasGroups;
-    self.descriptionHeightConstraint.constant = _descriptionHeight;
-    self.descriptionContainerHeightConstraint.constant = _descriptionHeight;
+    self.descriptionBottomCollectionConstraint.active = hasDescription && hasStatistics;
+    self.descriptionBottomNoCollectionConstraint.active = hasDescription && !hasStatistics && !hasGroups;
 
+    self.locationWithStatisticsTopConstraint.active = hasLocation && hasStatistics;
     self.regionDirectionConstraint.active = hasDirection;
     self.regionNoDirectionConstraint.active = !hasDirection;
 
@@ -116,15 +119,18 @@
     BOOL res = [super needsUpdateConstraints];
     if (!res)
     {
-        BOOL hasDescription = !self.descriptionContainerView.hidden;
-        BOOL hasCollection = !self.statisticsCollectionView.hidden;
+        BOOL hasDescription = !self.descriptionView.hidden;
+        BOOL hasStatistics = !self.statisticsCollectionView.hidden;
         BOOL hasActions = !self.actionButtonsContainerView.hidden;
-        BOOL hasContent = hasCollection || !self.locationContainerView.hidden || hasActions;
+        BOOL hasLocation = !self.locationContainerView.hidden;
+        BOOL hasContent = hasStatistics || hasLocation || hasActions;
         BOOL hasGroups = !self.groupsCollectionView.hidden;
         BOOL isOnlyTitleAndDescription = hasDescription && !hasContent && !hasGroups;
         BOOL isOnlyTitleAndDescriptionAndGroup = hasDescription && !hasContent && hasGroups;
         BOOL isOnlyTitle = !hasDescription && !hasContent;
         BOOL hasDirection = !self.directionContainerView.hidden;
+        BOOL noDescriptionNoStatistics = !hasDescription && !hasStatistics && !isOnlyTitleAndDescription
+                && !isOnlyTitleAndDescriptionAndGroup && !isOnlyTitle;
 
         res = res || self.onlyTitleAndDescriptionConstraint.active != isOnlyTitleAndDescription;
         res = res || self.onlyTitleAndDescriptionAndGroupsConstraint.active != isOnlyTitleAndDescriptionAndGroup;
@@ -133,16 +139,16 @@
         res = res || self.actionsBottomConstraint.active != hasActions;
 
         res = res || self.titleBottomDescriptionConstraint.active != hasDescription;
-        res = res || self.titleBottomNoDescriptionConstraint.active != !hasDescription && hasCollection;
-        res = res || self.titleBottomNoDescriptionNoCollectionConstraint.active !=
-                !hasDescription && !hasCollection && !isOnlyTitleAndDescription
-                        && !isOnlyTitleAndDescriptionAndGroup && !isOnlyTitle;
+        res = res || self.titleBottomNoDescriptionConstraint.active != (!hasDescription && hasStatistics);
+        res = res || self.titleBottomNoDescriptionNoCollectionConstraint.active != (noDescriptionNoStatistics && hasLocation);
+        res = res || self.titleBottomNoDescriptionNoCollectionNoLocationConstraint.active != (noDescriptionNoStatistics && !hasLocation);
+        res = res || (_selectedTab == EOATrackMenuHudOverviewTab && self.titleBottomDescriptionConstraint.constant != 8.)
+                || (_selectedTab != EOATrackMenuHudOverviewTab && self.titleBottomDescriptionConstraint.constant != 2.);
 
-        res = res || self.descriptionHeightConstraint.constant != _descriptionHeight;
-        res = res || self.descriptionContainerHeightConstraint.constant != _descriptionHeight;
-        res = res || self.descriptionBottomCollectionConstraint.active != hasDescription && hasCollection;
-        res = res || self.descriptionBottomNoCollectionConstraint.active != hasDescription && !hasCollection && !hasGroups;
+        res = res || self.descriptionBottomCollectionConstraint.active != (hasDescription && hasStatistics);
+        res = res || self.descriptionBottomNoCollectionConstraint.active != (hasDescription && !hasStatistics && !hasGroups);
 
+        res = res || self.locationWithStatisticsTopConstraint.active != (hasLocation && hasStatistics);
         res = res || self.regionDirectionConstraint.active != hasDirection;
         res = res || self.regionNoDirectionConstraint.active != !hasDirection;
     }
@@ -245,10 +251,10 @@
     self.groupsCollectionView.hidden = _selectedTab != EOATrackMenuHudPointsTab
             || (_selectedTab == EOATrackMenuHudPointsTab && _groupsData.count == 0);
 
+    [self updateFrame:self.frame.size.width];
+
     if ([self needsUpdateConstraints])
         [self updateConstraints];
-
-    [self updateFrame];
 }
 
 - (void)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis
@@ -365,40 +371,65 @@
                     completion:nil];
 }
 
-- (void)updateFrame
+- (void)updateFrame:(CGFloat)width
 {
-    CGRect headerFrame = self.frame;
-    if (self.onlyTitleAndDescriptionConstraint.active)
-    {
-        headerFrame.size.height = self.descriptionContainerView.frame.origin.y + _descriptionHeight + self.onlyTitleAndDescriptionConstraint.constant;
-    }
-    else if (self.onlyTitleAndDescriptionAndGroupsConstraint.active)
-    {
-        headerFrame.size.height = self.groupsCollectionView.frame.origin.y + self.groupsCollectionView.frame.size.height
-                - self.groupsBottomConstraint.constant;
-    }
-    else if (self.onlyTitleNoDescriptionConstraint.active)
-    {
-        headerFrame.size.height = self.titleContainerView.frame.origin.y + self.titleContainerView.frame.size.height
-                + self.onlyTitleNoDescriptionConstraint.constant;
-    }
-    else
-    {
-        headerFrame.size.height -= kDescriptionHeightMax;
-        if (!self.descriptionContainerView.hidden)
-            headerFrame.size.height += _descriptionHeight;
+    CGRect headerFrame = CGRectMake(0., 0., width, 0.);
+    CGRect contentFrame = CGRectMake([OAUtilities getLeftMargin] + 20., 0., width - [OAUtilities getLeftMargin] - 40., 0.);
 
-        if (self.statisticsCollectionView.hidden)
-            headerFrame.size.height -= self.statisticsCollectionView.frame.size.height;
+    headerFrame.size.height += 6.;
+    headerFrame.size.height += self.sliderView.frame.size.height;
+    headerFrame.size.height += 6.;
 
-        if (self.locationContainerView.hidden)
-            headerFrame.size.height -= self.locationContainerView.frame.size.height;
+    CGRect titleFrame = CGRectMake([self isDirectionRTL] ? 46. : 0., 0., contentFrame.size.width, 0.);
+    CGFloat titleWidth = titleFrame.size.width - self.titleIconView.frame.size.width - 16.;
+    CGSize titleSize = [OAUtilities calculateTextBounds:self.titleView.text
+                                                     width:titleWidth
+                                                    height:kTitleHeightMax
+                                                      font:self.titleView.font];
+    titleSize.height = (titleSize.width > titleWidth) || (titleSize.height > kTitleHeightMin) ? kTitleHeightMax : kTitleHeightMin;
+    titleFrame.size.height = titleSize.height;
+    titleFrame.size.width = titleWidth;
+    self.titleView.frame = titleFrame;
+    self.titleIconView.frame = CGRectMake([self isDirectionRTL] ? 0. : titleFrame.size.width + 16., (titleSize.height - 30.) / 2, 30., 30.);
+    titleFrame = self.titleContainerView.frame;
+    titleFrame.size.height = titleSize.height;
+    titleFrame.size.width = contentFrame.size.width;
+    self.titleContainerView.frame = titleFrame;
+    headerFrame.size.height += self.titleContainerView.frame.size.height;
 
-        if (self.actionButtonsContainerView.hidden)
-            headerFrame.size.height -= self.actionButtonsContainerView.frame.size.height;
-    }
+
+    if (self.descriptionView.hidden && self.statisticsCollectionView.hidden
+            && self.locationContainerView.hidden && !self.actionButtonsContainerView.hidden)
+        headerFrame.size.height += 16.;
+
+    CGRect descriptionFrame = self.descriptionView.frame;
+    descriptionFrame.size.width = contentFrame.size.width;
+    CGFloat descriptionHeight = [OAUtilities calculateTextBounds:self.descriptionView.text
+                                                           width:descriptionFrame.size.width
+                                                          height:kDescriptionHeightMax
+                                                            font:self.descriptionView.font].height;
+    descriptionHeight = descriptionHeight > kDescriptionHeightMin ? kDescriptionHeightMax : kDescriptionHeightMin;
+    descriptionFrame.size.height = descriptionHeight;
+    if (!self.descriptionView.hidden)
+        descriptionFrame.origin.y = titleFrame.origin.y + titleFrame.size.height + (_selectedTab == EOATrackMenuHudOverviewTab ? 8. : 2.);
+    self.descriptionView.frame = descriptionFrame;
+    headerFrame.size.height += !self.descriptionView.hidden
+            ? self.descriptionView.frame.size.height + (_selectedTab == EOATrackMenuHudOverviewTab ? 8. : 2.)
+            : 0.;
+
+    headerFrame.size.height += !self.statisticsCollectionView.hidden ? self.statisticsCollectionView.frame.size.height + 2. : 0.;
+    headerFrame.size.height += !self.groupsCollectionView.hidden ? self.groupsCollectionView.frame.size.height : 0.;
+
+    headerFrame.size.height += !self.locationContainerView.hidden ? self.locationContainerView.frame.size.height : 0.;
+    if (!self.locationContainerView.hidden)
+        headerFrame.size.height += self.statisticsCollectionView.hidden ? 20. : 10.;
+
+    headerFrame.size.height += !self.actionButtonsContainerView.hidden ? self.actionButtonsContainerView.frame.size.height : 0.;
+    headerFrame.size.height += !self.groupsCollectionView.hidden ? 12. : 16.;
 
     self.frame = headerFrame;
+    contentFrame.size.height = headerFrame.size.height;
+    self.contentView.frame = contentFrame;
 }
 
 - (void)setDirection:(NSString *)direction
@@ -416,20 +447,7 @@
     BOOL hasDescription = description && description.length > 0;
 
     [self.descriptionView setText:description];
-    self.descriptionContainerView.hidden = !hasDescription;
-
-    _descriptionHeight = !self.descriptionContainerView.hidden
-            ? [self.descriptionView.text boundingRectWithSize:CGSizeMake(self.descriptionView.frame.size.width, kDescriptionHeightMax)
-                                                      options:NSStringDrawingUsesLineFragmentOrigin
-                                                   attributes:@{ NSFontAttributeName : self.descriptionView.font }
-                                                      context:nil].size.height
-            : 0.;
-    CGRect frame = self.descriptionContainerView.frame;
-    frame.size.height = _descriptionHeight;
-    self.descriptionContainerView.frame = frame;
-    frame = self.descriptionView.frame;
-    frame.size.height = _descriptionHeight;
-    self.descriptionView.frame = frame;
+    self.descriptionView.hidden = !hasDescription;
 }
 
 - (void)setStatisticsCollection:(NSArray<OAGPXTableCellData *> *)cells
@@ -446,6 +464,7 @@
     [self.groupsCollectionView setSelectedIndex:index];
     [self.groupsCollectionView reloadData];
 }
+
 - (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index
 {
     BOOL hasData = data && data.count > 0;
@@ -456,14 +475,33 @@
     self.groupsCollectionView.hidden = !hasData;
 }
 
-- (CGFloat)getDescriptionHeight
+- (CGFloat)getInitialHeight:(CGFloat)additionalHeight
 {
-    return _descriptionHeight;
+    CGFloat height = additionalHeight;
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
+    {
+        height += (!self.descriptionView.hidden
+                ? (self.descriptionView.frame.origin.y + self.descriptionView.frame.size.height)
+                : (self.titleContainerView.frame.origin.y + self.titleContainerView.frame.size.height));
+
+        if (!self.statisticsCollectionView.hidden || !self.groupsCollectionView.hidden)
+            height += 12.;
+        else if (!self.locationContainerView.hidden)
+            height += 10.;
+        else
+            height += 16.;
+    }
+    else
+    {
+        height += self.frame.size.height;
+    }
+
+    return height;
 }
 
 - (void)makeOnlyHeader:(BOOL)hasDescription
 {
-    self.descriptionContainerView.hidden = !hasDescription;
+    self.descriptionView.hidden = !hasDescription;
     self.statisticsCollectionView.hidden = YES;
     self.locationContainerView.hidden = YES;
     self.actionButtonsContainerView.hidden = YES;
@@ -479,9 +517,7 @@
 - (void)onShowHidePressed:(id)sender
 {
     if (self.trackMenuDelegate)
-    {
         [self updateShowHideButton:[self.trackMenuDelegate changeTrackVisible]];
-    }
 }
 
 - (void)onAppearancePressed:(id)sender

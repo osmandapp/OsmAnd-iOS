@@ -24,7 +24,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
 
-@property (weak, nonatomic) IBOutlet UIView *descriptionContainerView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *statisticsCollectionView;
@@ -50,9 +49,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomDescriptionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionNoCollectionConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionNoCollectionNoLocationConstraint;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionHeightConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionContainerHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomCollectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomNoCollectionConstraint;
 
@@ -62,6 +60,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *groupsBottomConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *actionsBottomConstraint;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *locationWithStatisticsTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionDirectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoDirectionConstraint;
 
@@ -80,6 +79,8 @@
 - (void)setStatisticsCollection:(NSArray<OAGPXTableCellData *> *)cells;
 - (void)setSelectedIndexGroupsCollection:(NSInteger)index;
 - (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index;
-- (CGFloat)getDescriptionHeight;
+
+- (void)updateFrame:(CGFloat)width;
+- (CGFloat)getInitialHeight:(CGFloat)additionalHeight;
 
 @end

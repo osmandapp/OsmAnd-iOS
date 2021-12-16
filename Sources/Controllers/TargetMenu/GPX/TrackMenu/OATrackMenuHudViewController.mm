@@ -195,6 +195,9 @@
     [self.groupsButton setImage:groupsImage forState:UIControlStateNormal];
     self.groupsButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     [self.groupsButton addBlurEffect:YES cornerRadius:12. padding:0];
+    BOOL isRTL = [self.groupsButton isDirectionRTL];
+    self.groupsButton.titleEdgeInsets = UIEdgeInsetsMake(0., isRTL ? -4. : 0., 0., isRTL ? 0. : -4.);
+    self.groupsButton.imageEdgeInsets = UIEdgeInsetsMake(0., isRTL ? 10. : -4., 0., isRTL ? -4. : 10.);
     [self updateGroupsButton];
 }
 
@@ -209,14 +212,29 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _headerView.sliderView.hidden = [self isLandscape];
+        [_headerView updateFrame:[self isLandscape] ? [self getLandscapeViewWidth] : DeviceScreenWidth];
 
         if (_selectedTab == EOATrackMenuHudOverviewTab)
         {
-            _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
+            _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20. , 0., 20.);
+            NSArray<NSIndexPath *> *visibleItems = _headerView.statisticsCollectionView.indexPathsForVisibleItems;
+            if (visibleItems && visibleItems.count > 0 && visibleItems.firstObject.row == 0)
+            {
+                [_headerView.statisticsCollectionView scrollToItemAtIndexPath:visibleItems.firstObject
+                                                             atScrollPosition:UICollectionViewScrollPositionLeft
+                                                                     animated:NO];
+            }
         }
         if (_selectedTab == EOATrackMenuHudPointsTab)
         {
-            _headerView.groupsCollectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 16. , 0., 16.);
+            _headerView.groupsCollectionView.contentInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 16 , 0., 16);
+            NSArray<NSIndexPath *> *visibleItems = _headerView.groupsCollectionView.indexPathsForVisibleItems;
+            if (visibleItems && visibleItems.count > 0 && visibleItems.firstObject.row == 0)
+            {
+                [_headerView.groupsCollectionView scrollToItemAtIndexPath:visibleItems.firstObject
+                                                         atScrollPosition:UICollectionViewScrollPositionLeft
+                                                                 animated:NO];
+            }
         }
         else if (_selectedTab == EOATrackMenuHudSegmentsTab && _tableData.sections.count > 0)
         {
@@ -261,10 +279,7 @@
 
 - (CGFloat)initialMenuHeight
 {
-    if (_selectedTab == EOATrackMenuHudOverviewTab)
-        return self.toolBarView.frame.size.height + _headerView.descriptionContainerView.frame.origin.y + [_headerView getDescriptionHeight] + 10.;
-    else
-        return self.toolBarView.frame.size.height + _headerView.frame.size.height;
+    return [_headerView getInitialHeight:self.toolBarView.frame.size.height];
 }
 
 - (CGFloat)expandedMenuHeight
@@ -297,6 +312,11 @@
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     else
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+
+    if (_selectedTab == EOATrackMenuHudPointsTab)
+        self.tableView.estimatedRowHeight = 66.;
+    else
+        self.tableView.estimatedRowHeight = 48.;
 }
 
 - (NSArray<NSDictionary *> *)generateGroupCollectionData
@@ -317,13 +337,12 @@
     if (_headerView)
         [_headerView removeFromSuperview];
 
-    _headerView = [[OATrackMenuHeaderView alloc] init];
+    _headerView = [[OATrackMenuHeaderView alloc] initWithFrame:CGRectMake(0., 0., [self isLandscape] ? [self getLandscapeViewWidth] : DeviceScreenWidth, 0.)];
     _headerView.trackMenuDelegate = self;
     _headerView.sliderView.hidden = [self isLandscape];
     [_headerView setDescription];
 
-    BOOL isOverview = _selectedTab == EOATrackMenuHudOverviewTab;
-    if (isOverview)
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
         [_headerView generateGpxBlockStatistics:self.analysis
@@ -358,6 +377,10 @@
                              firstAttribute:NSLayoutAttributeTop
                                  secondItem:_headerView
                             secondAttribute:NSLayoutAttributeTop],
+            [self createBaseEqualConstraint:self.topHeaderContainerView
+                             firstAttribute:NSLayoutAttributeBottom
+                                 secondItem:_headerView
+                            secondAttribute:NSLayoutAttributeBottom],
             [self createBaseEqualConstraint:self.scrollableView
                              firstAttribute:NSLayoutAttributeTrailingMargin
                                  secondItem:_headerView.contentView
@@ -416,6 +439,10 @@
 - (void)doAdditionalLayout
 {
     [super doAdditionalLayout];
+    BOOL isRTL = [self.groupsButtonContainerView isDirectionRTL];
+    self.groupsButtonTrailingConstraint.constant = [self isLandscape]
+            ? (isRTL ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10. : 0.)
+            : [OAUtilities getLeftMargin] + 10.;
     self.groupsButtonContainerView.hidden = ![self isLandscape] && self.currentState == EOADraggableMenuStateFullScreen;
 }
 
@@ -2075,8 +2102,8 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     OAGPXTableSectionData *sectionData = _tableData.sections[section];
-    CGFloat headerHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.01;
-    return section == 0 ? headerHeight + _headerView.frame.size.height : headerHeight;
+    CGFloat sectionHeaderHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.01;
+    return section == 0 ? sectionHeaderHeight + _headerView.frame.size.height : sectionHeaderHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -2238,14 +2265,9 @@
 {
     if (_selectedTab == EOATrackMenuHudPointsTab)
     {
-        OAGPXTableSectionData *sectionData = _tableData.sections[index];
-        CGFloat headerHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.01;
-        CGRect rectForSection = [self.tableView rectForSection:index];
-        CGFloat yOffset = rectForSection.origin.y;
-        if (index > 0)
-            yOffset -= _headerView.frame.size.height - headerHeight;
-
-        [self.tableView setContentOffset:CGPointMake(0, yOffset) animated:NO];
+        CGRect rectForSection = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:index]];
+        [self.tableView setContentOffset:CGPointMake(0, rectForSection.origin.y - _headerView.frame.size.height)
+                                animated:NO];
         [self fitSelectedPointsGroupOnMap:index];
         [_headerView.groupsCollectionView reloadData];
     }

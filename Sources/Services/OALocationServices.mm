@@ -459,18 +459,20 @@
 
 - (void) onMapModeChanged
 {
-    // If services are running, simply update accuracy
-    OALocationServicesStatus status = self.status;
-    if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
-    {
-        [self updateRequestedAccuracy];
-    }
-    // If map mode is OAMapModePositionTrack or OAMapModeFollow, and services are not running,
-    // launch them (except if waiting for user authorization).
-    else if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
-    {
-        [self start];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // If services are running, simply update accuracy
+        OALocationServicesStatus status = self.status;
+        if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
+        {
+            [self updateRequestedAccuracy];
+        }
+        // If map mode is OAMapModePositionTrack or OAMapModeFollow, and services are not running,
+        // launch them (except if waiting for user authorization).
+        else if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
+        {
+            [self start];
+        }
+    });
 }
 
 - (void) onFollowTheRouteChanged

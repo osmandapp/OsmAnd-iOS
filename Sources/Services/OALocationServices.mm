@@ -477,12 +477,14 @@
 
 - (void) onFollowTheRouteChanged
 {
-    // If services are running, simply update accuracy
-    OALocationServicesStatus status = self.status;
-    if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
-        [self updateRequestedAccuracy];
-    else
-        [self start];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // If services are running, simply update accuracy
+        OALocationServicesStatus status = self.status;
+        if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
+            [self updateRequestedAccuracy];
+        else
+            [self start];
+    });
 }
 
 - (void) onSimulateRoutingChanged

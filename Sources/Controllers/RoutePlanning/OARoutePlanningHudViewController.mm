@@ -352,14 +352,14 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (isLandscape)
     {
         if (self.currentState == EOADraggableMenuStateInitial && !_editingContext.isInAddPointMode && !_editingContext.originalPointToMove && !_currentPopupController)
-            [self goMinimized:NO];
+            [super updateShowingState:EOADraggableMenuStateInitial];
         else
-            [self goFullScreen:NO];
+            [super updateShowingState:EOADraggableMenuStateFullScreen];
     }
     else
     {
         if (self.currentState == EOADraggableMenuStateFullScreen)
-            [self goMinimized:NO];
+            [super updateShowingState:EOADraggableMenuStateInitial];
     }
 }
 
@@ -370,7 +370,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) updateShowingState:(EOADraggableMenuState)state
 {
-    [self goMinimized:NO];
+    [super updateShowingState:EOADraggableMenuStateInitial];
 }
 
 - (BOOL)supportsFullScreen

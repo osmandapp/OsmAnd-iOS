@@ -2182,7 +2182,7 @@
 "navigate_point_format_unknown" = "Formadu disconnotu";
 "navigate_point_olc_short" = "OLC";
 "invalid_format" = "Formadu non vàlidu";
-"ios_release_4_1" = "• Ischermada noa pro chircare coordinadas in formados diferentes\n• Chirca de coordinadas megiorada in formadu OLC\n• Menù fàtzile de impreare pro isseberare sas limbas pro ammustrare sos artìculos de Wikipedia in sa mapa\n• Possibilidade de carrigare in manera fàtzile totu sas regiones de un'istadu cun una paja de incarcadas annanta\n• Curvas de livellu in pees annantas (Depes torrare a carrigare sos archìvios)\n• Annanghidura de s'abilidade de iscarrigare mapas ischertende sa regione o s'istadu chi boles in sa mapa, e fintzas de una ventanedda de diàlogu cun su cussìgiu de carrigare sa mapa si sa regione si bidet chene mapa\n• Aspetu nou de sos butones in sa mapa e annanghidura de s'abilidade de mudare s'ismanniamentu de sa mapa cun unu tocu dòpiu e cun sa trisinadura\n";
+"ios_release_4_1" = "• Interatzione cun sas rastas mudada de su totu: unu menù nou cun gràficos, istatìsticas e sa possibilidade de mudare s'aspetu, su colorimentu pro lestresa, artària e pendèntzia, e sa seletzione de sas rastas in sa mapa\n• Ischermada noa pro chircare coordinadas in formados diferentes\n• Chirca de coordinadas megiorada in formadu OLC\n• Menù fàtzile de impreare pro isseberare sas limbas pro ammustrare sos artìculos de Wikipedia in sa mapa\n• Possibilidade de carrigare in manera fàtzile totu sas regiones de un'istadu cun una paja de incarcadas annanta\n• Curvas de livellu in pees annantas (Depes iscarrigare archìvios additzionales)\n• Annanghidura de s'abilidade de iscarrigare mapas ischertende sa regione o s'istadu chi boles in sa mapa, e fintzas de una ventanedda de diàlogu cun su cussìgiu de carrigare sa mapa chi mancat de una regione ammustrada\n• Aspetu nou de sos butones in sa mapa e possibilidade de mudare s'ismanniamentu de sa mapa cun unu tocu dòpiu e cun sa trisinadura\n• Impostatziones de visibilidade mòvidas prus a artu in s'ischermada \"Cunfigura sa mapa\" e torradas a assentare pro una flessibilidade prus manna\n";
 "delete_waypoints" = "Iscantzella sos puntos de coladòrgiu";
 "gpx_split_interval_descr" = "Ischerta s\'intervallu in ue sos sinnos cun distàntzia o oràriu in sa mapa ant a èssere ammustrados.";
 "nautical" = "Nàutica";
@@ -2344,3 +2344,8 @@
 "lang_lo" = "Laotianu";
 "lang_ast" = "Asturianu";
 "lang_mr" = "Marathi";
+"lang_af" = "Afrikaans";
+"shared_string_hide_all" = "Cua totu";
+"grey_color_undefined" = "Sas partes chene datos sunt in colore murru.";
+"white_color_undefined" = "Sas partes chene datos sunt biancas.";
+"connect_rp" = "Collega sos puntos de s'àndala";

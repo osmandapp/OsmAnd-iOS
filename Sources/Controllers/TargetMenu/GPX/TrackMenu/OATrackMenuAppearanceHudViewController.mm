@@ -379,7 +379,10 @@
         }
     }
 
-    OAGPXTableSectionData *colorsSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: colorsCells }];
+    OAGPXTableSectionData *colorsSection = [OAGPXTableSectionData withData:@{
+            kSectionCells: colorsCells,
+            kSectionHeaderHeight: @36.
+    }];
     colorsSectionData.updateData = ^() {
         NSInteger index = [colorsCells indexOfObject:gridOrDescriptionCellData];
         if (index != NSNotFound)
@@ -440,8 +443,10 @@
     if ([_selectedWidth isCustom])
         [widthCells addObject:[self generateDataForWidthCustomSliderCellData]];
 
-    OAGPXTableSectionData *widthSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: widthCells }];
-
+    OAGPXTableSectionData *widthSection = [OAGPXTableSectionData withData:@{
+            kSectionCells: widthCells,
+            kSectionHeaderHeight: @36.
+    }];
     widthValueCellData.updateData = ^() {
         [widthValueCellData setData:@{ kTableValues: @{@"array_value": [_appearanceCollection getAvailableWidth] } }];
 
@@ -539,6 +544,7 @@
 
     OAGPXTableSectionData *splitSectionData = [OAGPXTableSectionData withData:@{
             kSectionCells: splitCells,
+            kSectionHeaderHeight: @36.,
             kSectionFooter: OALocalizedString(@"gpx_split_interval_descr")
     }];
     splitSectionData.updateData = ^() {
@@ -570,6 +576,7 @@
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
             kSectionCells: @[joinGapsCellData],
+            kSectionHeaderHeight: @14.,
             kSectionFooter: OALocalizedString(@"gpx_join_gaps_descr")
     }]];
 
@@ -596,10 +603,17 @@
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
             kSectionCells: @[resetCellData],
-            kSectionHeader:OALocalizedString(@"actions")
+            kSectionHeaderHeight: @56.,
+            kSectionHeader:OALocalizedString(@"actions"),
+            kSectionFooterHeight: @60.
     }]];
 
     _tableData = appearanceSections;
+}
+
+- (CGFloat)initialMenuHeight
+{
+    return self.topHeaderContainerView.frame.origin.y + self.topHeaderContainerView.frame.size.height + [OAUtilities getBottomMargin];
 }
 
 - (BOOL)adjustCentering
@@ -761,7 +775,7 @@
 
 - (CGFloat)getToolbarHeight
 {
-    return 0;
+    return self.currentState == EOADraggableMenuStateInitial ? [OAUtilities getBottomMargin] : 0.;
 }
 
 - (BOOL)isSelectedTypeSlope
@@ -1121,19 +1135,21 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-        return 0.001;
-
-    return 36.;
+    OAGPXTableSectionData *sectionData = _tableData[section];
+    CGFloat sectionHeaderHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.;
+    return section == 0 || sectionData.headerHeight == 0. ? 0.001 : sectionHeaderHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    NSString *footer = _tableData[section].footer;
-    if (!footer || footer.length == 0)
-        return 0.001;
+    OAGPXTableSectionData *sectionData = _tableData[section];
+    NSString *footer = sectionData.footer;
+    CGFloat footerHeight = sectionData.footerHeight > 0 ? sectionData.footerHeight : 0.;
 
-    return [OATableViewCustomFooterView getHeight:footer width:self.tableView.bounds.size.width];
+    if (!footer || footer.length == 0)
+        return footerHeight > 0 ? footerHeight : 0.001;
+
+    return [OATableViewCustomFooterView getHeight:footer width:self.tableView.bounds.size.width] + footerHeight;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section

@@ -619,7 +619,7 @@
                                         completion:nil];
                     }
             }]],
-            kSectionHeaderHeight: @56.,
+            kSectionHeaderHeight: @42.,
             kSectionHeader:OALocalizedString(@"actions"),
             kSectionFooterHeight: @60.
     }]];
@@ -1158,8 +1158,14 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     OAGPXTableSectionData *sectionData = _tableData[section];
-    CGFloat sectionHeaderHeight = sectionData.headerHeight > 0 ? sectionData.headerHeight : 0.;
-    return section == 0 || sectionData.headerHeight == 0. ? 0.001 : sectionHeaderHeight;
+    if (section == 0 || sectionData.headerHeight == 0.)
+        return 0.001;
+
+    return sectionData.headerHeight > 0
+    ? [OAUtilities calculateTextBounds:sectionData.header
+                                 width:self.scrollableView.frame.size.width - 40. - [OAUtilities getLeftMargin]
+                                  font:[UIFont systemFontOfSize:13]].height + sectionData.headerHeight
+    : 0.;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

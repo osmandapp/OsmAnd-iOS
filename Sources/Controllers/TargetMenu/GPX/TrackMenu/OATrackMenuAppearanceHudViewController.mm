@@ -379,7 +379,7 @@
         }
     }
 
-    OAGPXTableSectionData *colorsSection = [OAGPXTableSectionData withData:@{
+    OAGPXTableSectionData *colorsSectionData = [OAGPXTableSectionData withData:@{
             kSectionCells: colorsCells,
             kSectionHeaderHeight: @36.
     }];
@@ -443,7 +443,7 @@
     if ([_selectedWidth isCustom])
         [widthCells addObject:[self generateDataForWidthCustomSliderCellData]];
 
-    OAGPXTableSectionData *widthSection = [OAGPXTableSectionData withData:@{
+    OAGPXTableSectionData *widthSectionData = [OAGPXTableSectionData withData:@{
             kSectionCells: widthCells,
             kSectionHeaderHeight: @36.
     }];

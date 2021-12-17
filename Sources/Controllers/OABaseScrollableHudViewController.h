@@ -58,7 +58,7 @@ typedef NS_ENUM(NSUInteger, EOAScrollableMenuHudMode)
 - (void) updateShowingState:(EOADraggableMenuState)state;
 - (BOOL) isFirstStateChanged;
 
-- (void) updateViewAnimated;
+- (void) updateView:(BOOL)animated;
 - (BOOL) isLandscape;
 - (BOOL) isLeftSidePresentation;
 

@@ -324,63 +324,88 @@
 
 - (void)updateFrame:(CGFloat)width
 {
+    CGFloat leftSafeMargin = [OAUtilities getLeftMargin];
+    CGFloat leftMargin = 20. + leftSafeMargin;
+    CGFloat contentMargin = 20. * 2 + leftSafeMargin;
+
     CGRect headerFrame = CGRectMake(0., 0., width, 0.);
-    CGRect contentFrame = CGRectMake([OAUtilities getLeftMargin] + 20., 0., width - [OAUtilities getLeftMargin] - 40., 0.);
 
     headerFrame.size.height += 6.;
     headerFrame.size.height += self.sliderView.frame.size.height;
     headerFrame.size.height += 6.;
 
-    CGRect titleFrame = CGRectMake([self isDirectionRTL] ? 46. : 0., 0., contentFrame.size.width, 0.);
-    CGFloat titleWidth = titleFrame.size.width - self.titleIconView.frame.size.width - 16.;
+    CGRect titleFrame = CGRectMake([self isDirectionRTL] ? 46. : 0., 0., headerFrame.size.width - (contentMargin + 46.), 0.);
     CGSize titleSize = [OAUtilities calculateTextBounds:self.titleView.text
-                                                     width:titleWidth
+                                                     width:titleFrame.size.width
                                                     height:kTitleHeightMax
                                                       font:self.titleView.font];
-    titleSize.height = (titleSize.width > titleWidth) || (titleSize.height > kTitleHeightMin) ? kTitleHeightMax : kTitleHeightMin;
+    titleSize.height = (titleSize.width > titleFrame.size.width) || (titleSize.height > kTitleHeightMin)
+            ? kTitleHeightMax
+            : kTitleHeightMin;
     titleFrame.size.height = titleSize.height;
-    titleFrame.size.width = titleWidth;
     self.titleView.frame = titleFrame;
-    self.titleIconView.frame = CGRectMake([self isDirectionRTL] ? 0. : titleFrame.size.width + 16., (titleSize.height - 30.) / 2, 30., 30.);
-    titleFrame = self.titleContainerView.frame;
-    titleFrame.size.height = titleSize.height;
-    titleFrame.size.width = contentFrame.size.width;
-    self.titleContainerView.frame = titleFrame;
-    headerFrame.size.height += self.titleContainerView.frame.size.height;
+    self.titleIconView.frame = CGRectMake(
+            [self isDirectionRTL] ? 0. : titleFrame.size.width + 16.,
+            (titleSize.height - 30.) / 2,
+            30.,
+            30.
+    );
 
+    CGRect titleCollectionFrame = CGRectMake(leftMargin, headerFrame.size.height, headerFrame.size.width - contentMargin, titleSize.height);
+    self.titleContainerView.frame = titleCollectionFrame;
+    headerFrame.size.height += self.titleContainerView.frame.size.height;
 
     if (self.descriptionView.hidden && self.statisticsCollectionView.hidden
             && self.locationContainerView.hidden && !self.actionButtonsContainerView.hidden)
         headerFrame.size.height += 16.;
 
-    CGRect descriptionFrame = self.descriptionView.frame;
-    descriptionFrame.size.width = contentFrame.size.width;
     CGFloat descriptionHeight = [OAUtilities calculateTextBounds:self.descriptionView.text
-                                                           width:descriptionFrame.size.width
+                                                           width:headerFrame.size.width - contentMargin
                                                           height:kDescriptionHeightMax
                                                             font:self.descriptionView.font].height;
     descriptionHeight = descriptionHeight > kDescriptionHeightMin ? kDescriptionHeightMax : kDescriptionHeightMin;
-    descriptionFrame.size.height = descriptionHeight;
+    CGRect descriptionFrame = CGRectMake(leftMargin, headerFrame.size.height, headerFrame.size.width - contentMargin, descriptionHeight);
     if (!self.descriptionView.hidden)
-        descriptionFrame.origin.y = titleFrame.origin.y + titleFrame.size.height + (_selectedTab == EOATrackMenuHudOverviewTab ? 8. : 2.);
+        descriptionFrame.origin.y = titleCollectionFrame.origin.y + titleCollectionFrame.size.height + (_selectedTab == EOATrackMenuHudOverviewTab ? 8. : 2.);
     self.descriptionView.frame = descriptionFrame;
     headerFrame.size.height += !self.descriptionView.hidden
             ? self.descriptionView.frame.size.height + (_selectedTab == EOATrackMenuHudOverviewTab ? 8. : 2.)
             : 0.;
 
+    CGRect statisticsCollectionFrame = CGRectMake(0., headerFrame.size.height + 2., headerFrame.size.width, self.statisticsCollectionView.frame.size.height);
+    self.statisticsCollectionView.frame = statisticsCollectionFrame;
     headerFrame.size.height += !self.statisticsCollectionView.hidden ? self.statisticsCollectionView.frame.size.height + 2. : 0.;
+
+    if (!self.groupsCollectionView.hidden)
+        headerFrame.size.height += 6.;
+    CGRect groupsCollectionFrame = CGRectMake(0., headerFrame.size.height, headerFrame.size.width, self.groupsCollectionView.frame.size.height);
+    self.groupsCollectionView.frame = groupsCollectionFrame;
     headerFrame.size.height += !self.groupsCollectionView.hidden ? self.groupsCollectionView.frame.size.height : 0.;
 
-    headerFrame.size.height += !self.locationContainerView.hidden ? self.locationContainerView.frame.size.height : 0.;
-    if (!self.locationContainerView.hidden)
-        headerFrame.size.height += self.statisticsCollectionView.hidden ? 20. : 10.;
+    if (!self.locationContainerView.hidden && self.statisticsCollectionView.hidden)
+        headerFrame.size.height += 10.;
 
+    CGRect locationFrame = CGRectMake(
+            leftMargin,
+            headerFrame.size.height,
+            headerFrame.size.width - contentMargin,
+            self.locationContainerView.frame.size.height
+    );
+    self.locationContainerView.frame = locationFrame;
+    headerFrame.size.height += !self.locationContainerView.hidden ? self.locationContainerView.frame.size.height + 10. : 0.;
+
+    CGRect actionButtonsFrame = CGRectMake(
+            16. + leftSafeMargin,
+            headerFrame.size.height,
+            headerFrame.size.width - (32. + leftSafeMargin),
+            self.actionButtonsContainerView.frame.size.height
+    );
+    self.actionButtonsContainerView.frame = actionButtonsFrame;
     headerFrame.size.height += !self.actionButtonsContainerView.hidden ? self.actionButtonsContainerView.frame.size.height : 0.;
-    headerFrame.size.height += !self.groupsCollectionView.hidden ? 12. : 16.;
+
+    headerFrame.size.height += !self.groupsCollectionView.hidden ? 6. : 16.;
 
     self.frame = headerFrame;
-    contentFrame.size.height = headerFrame.size.height;
-    self.contentView.frame = contentFrame;
 }
 
 - (void)setDirection:(NSString *)direction

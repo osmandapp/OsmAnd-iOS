@@ -1165,7 +1165,7 @@
     ? [OAUtilities calculateTextBounds:sectionData.header
                                  width:self.scrollableView.frame.size.width - 40. - [OAUtilities getLeftMargin]
                                   font:[UIFont systemFontOfSize:13]].height + sectionData.headerHeight
-    : 0.;
+    : 0.001;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

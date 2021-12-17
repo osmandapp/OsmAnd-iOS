@@ -801,7 +801,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _approximationController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.scrollableView addSubview:_approximationController.view];
     [self addChildViewController:_approximationController];
-    [self updateViewAnimated];
+    [self updateView:YES];
     
     self.actionButtonsContainer.hidden = YES;
     [self changeMapRulerPosition];
@@ -1865,7 +1865,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_approximationController removeFromParentViewController];
         _currentPopupController = nil;
         _approximationController = nil;
-        [self updateViewAnimated];
+        [self updateView:YES];
     }
     self.actionButtonsContainer.hidden = NO;
     [self changeMapRulerPosition];
@@ -1885,7 +1885,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onContinueSnapApproximation:(OAPlanningPopupBaseViewController *)approximationController
 {
     _currentPopupController = approximationController;
-    [self updateViewAnimated];
+    [self updateView:YES];
 }
 
 - (OAMeasurementEditingContext *)getCurrentEditingContext

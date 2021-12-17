@@ -24,6 +24,7 @@
 #define kSectionHeader @"header"
 #define kSectionHeaderHeight @"header_height"
 #define kSectionFooter @"footer"
+#define kSectionFooterHeight @"footer_height"
 
 #define kTableSections @"sections"
 #define kTableValues @"values"
@@ -74,6 +75,7 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 @property (nonatomic, readonly) NSString *header;
 @property (nonatomic, readonly) CGFloat headerHeight;
 @property (nonatomic, readonly) NSString *footer;
+@property (nonatomic, readonly) CGFloat footerHeight;
 @property (nonatomic, readonly) NSDictionary *values;
 @property (nonatomic, readonly) OAGPXTableDataUpdateData updateData;
 @property (nonatomic, readonly) OAGPXTableDataUpdateProperty updateProperty;

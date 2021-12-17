@@ -96,6 +96,7 @@
         originalData[groupCellData.key] = @{
                 kCellRightIconName: groupCellData.rightIconName,
                 kCellToggle: @(groupCellData.toggle),
+                kTableValues: groupCellData.values,
                 kTableUpdateData: groupCellData.updateData
         };
         [groupCellData setData:@{
@@ -173,6 +174,7 @@
         [groupCellData setData:@{
                 kCellRightIconName: _originalData[groupCellData.key][kCellRightIconName],
                 kCellToggle: _originalData[groupCellData.key][kCellToggle],
+                kTableValues: _originalData[groupCellData.key][kTableValues],
                 kTableUpdateData: _originalData[groupCellData.key][kTableUpdateData]
         }];
     }
@@ -314,18 +316,41 @@
 
 - (IBAction)onDeleteButtonClicked:(id)sender
 {
-    [self restoreOriginalData];
-    for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
+    NSInteger waypointsCount = 0;
+    for (NSMutableArray<OAGpxWptItem *> *waypoints in _selectedWaypointGroups.allValues)
     {
-        if (self.trackMenuDelegate)
-            [self.trackMenuDelegate deleteWaypointsGroup:groupName
-                                       selectedWaypoints:_selectedWaypointGroups[groupName]];
+        waypointsCount += waypoints.count;
     }
 
-    if (self.trackMenuDelegate)
-        [self.trackMenuDelegate refreshLocationServices];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                   message:[NSString stringWithFormat:OALocalizedString(@"points_delete_multiple"), waypointsCount]
+                                                            preferredStyle:UIAlertControllerStyleAlert];
 
-    [self dismissViewController];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                              style:UIAlertActionStyleDefault
+                                            handler:nil]];
+
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete")
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action)
+                                            {
+                                                [self restoreOriginalData];
+
+                                                for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
+                                                {
+                                                    if (self.trackMenuDelegate)
+                                                        [self.trackMenuDelegate deleteWaypointsGroup:groupName
+                                                                                   selectedWaypoints:_selectedWaypointGroups[groupName]];
+                                                }
+
+                                                if (self.trackMenuDelegate)
+                                                    [self.trackMenuDelegate refreshLocationServices];
+
+                                                [self dismissViewController];
+                                            }
+    ]];
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource

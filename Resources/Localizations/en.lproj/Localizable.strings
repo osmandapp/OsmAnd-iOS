@@ -1512,6 +1512,7 @@
 "add_waypoint" = "Add waypoint to track";
 "add_waypoint_short" = "Add waypoint";
 "delete_waypoints" = "Delete waypoints";
+"points_delete_multiple" = "Delete %d point(s)?";
 "delete_group_confirm_short" = "Delete group?";
 "delete_group_confirm" = "Are you sure you want to delete ”%@” group?";
 "edit_waypoint_short" = "Edit waypoint";

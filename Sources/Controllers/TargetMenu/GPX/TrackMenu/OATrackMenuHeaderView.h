@@ -16,8 +16,6 @@
 
 @interface OATrackMenuHeaderView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
-@property (weak, nonatomic) IBOutlet UIView *contentView;
-
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 
 @property (weak, nonatomic) IBOutlet UIView *titleContainerView;

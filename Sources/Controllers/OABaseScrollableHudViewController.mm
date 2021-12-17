@@ -135,13 +135,23 @@
     
     BOOL isFullScreen = _currentState == EOADraggableMenuStateFullScreen;
     _statusBarBackgroundView.frame = isFullScreen && [self showStatusBarWhenFullScreen] ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
-    
+
+    UIView *customHeader = [self getCustomHeader];
+    if (customHeader)
+    {
+        CGRect customHeaderFrame = customHeader.frame;
+        customHeaderFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
+        customHeader.frame = customHeaderFrame;
+    }
+
     CGRect sliderFrame = _sliderView.frame;
     sliderFrame.origin.x = _scrollableView.bounds.size.width / 2 - sliderFrame.size.width / 2;
     _sliderView.frame = sliderFrame;
     
     CGRect buttonsFrame = _toolBarView.frame;
     buttonsFrame.size.width = _scrollableView.bounds.size.width;
+    if ([self getToolbarHeight] == 0)
+        buttonsFrame.size.height = 0.;
     _toolBarView.frame = buttonsFrame;
     
     CGRect contentFrame = _contentContainer.frame;
@@ -189,6 +199,7 @@
 {
     CGRect f = _scrollableView.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
+    CGFloat toolbarHeight = [self getToolbarHeight];
     if ([self isLeftSidePresentation])
     {
         f.origin = CGPointMake(0., [self getLandscapeYOffset]);
@@ -196,8 +207,8 @@
         f.size.width = [self getLandscapeViewWidth];
         
         CGRect buttonsFrame = _toolBarView.frame;
-        buttonsFrame.origin.y = f.size.height - [self getToolbarHeight] - bottomMargin;
-        buttonsFrame.size.height = [self getToolbarHeight] + bottomMargin;
+        buttonsFrame.size.height = toolbarHeight > 0 ? toolbarHeight + bottomMargin : 0.;
+        buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
         _toolBarView.frame = buttonsFrame;
         
         CGRect contentFrame = _contentContainer.frame;
@@ -207,7 +218,7 @@
     else
     {
         CGRect buttonsFrame = _toolBarView.frame;
-        buttonsFrame.size.height = [self getToolbarHeight] + bottomMargin;
+        buttonsFrame.size.height = toolbarHeight > 0 && toolbarHeight != bottomMargin ? toolbarHeight + bottomMargin : toolbarHeight;
         f.size.height = [self getViewHeight];
         f.size.width = DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
@@ -231,6 +242,11 @@
 - (CGFloat) getLandscapeYOffset
 {
     return self.additionalLandscapeOffset;
+}
+
+- (UIView *)getCustomHeader
+{
+    return nil; //override
 }
 
 - (CGFloat)initialMenuHeight
@@ -478,9 +494,22 @@
             _statusBarBackgroundView.frame = newY == 0 && [self showStatusBarWhenFullScreen]
                     ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight)
                     : CGRectZero;
+
+            UIView *customHeader = [self getCustomHeader];
+            if (customHeader)
+            {
+                CGRect customHeaderFrame = customHeader.frame;
+                customHeaderFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
+                customHeader.frame = customHeaderFrame;
+            }
             
+            BOOL hasToolbar = [self getToolbarHeight] > 0;
             CGRect buttonsFrame = _toolBarView.frame;
-            buttonsFrame.origin.y = frame.size.height - buttonsFrame.size.height;
+            if (_toolBarView.frame.size.height == [OAUtilities getBottomMargin] && !slidingDown)
+                hasToolbar = NO;
+            buttonsFrame.origin.y = hasToolbar ? (frame.size.height - buttonsFrame.size.height) : 0.;
+            if (!hasToolbar)
+                buttonsFrame.size.height = 0.;
             _toolBarView.frame = buttonsFrame;
             
             CGRect contentFrame = _contentContainer.frame;
@@ -563,11 +592,18 @@
     }
 }
 
-- (void) updateViewAnimated
+- (void) updateView:(BOOL)animated
 {
-    [UIView animateWithDuration:0.2 animations:^{
+    if (animated)
+    {
+        [UIView animateWithDuration:0.2 animations:^{
+            [self layoutSubviews];
+        } completion:nil];
+    }
+    else
+    {
         [self layoutSubviews];
-    } completion:nil];
+    }
 }
 
 - (void) goExpanded
@@ -590,22 +626,19 @@
 - (void) goExpanded:(BOOL)animated
 {
     _currentState = EOADraggableMenuStateExpanded;
-    if (animated)
-        [self updateViewAnimated];
+    [self updateView:animated];
 }
 
 - (void) goMinimized:(BOOL)animated
 {
     _currentState = EOADraggableMenuStateInitial;
-    if (animated)
-        [self updateViewAnimated];
+    [self updateView:animated];
 }
 
 - (void) goFullScreen:(BOOL)animated
 {
     _currentState = EOADraggableMenuStateFullScreen;
-    if (animated)
-        [self updateViewAnimated];
+    [self updateView:animated];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch

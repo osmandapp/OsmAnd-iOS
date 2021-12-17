@@ -389,7 +389,10 @@
         }
     }
 
-    OAGPXTableSectionData *colorsSection = [OAGPXTableSectionData withData:@{ kSectionCells: colorsCells }];
+    OAGPXTableSectionData *colorsSection = [OAGPXTableSectionData withData:@{
+            kSectionCells: colorsCells,
+            kSectionHeaderHeight: @36.
+    }];
     [colorsSection setData:@{
         kTableUpdateData: ^() {
             NSInteger index = [colorsCells indexOfObject:gridOrDescriptionCell];
@@ -452,7 +455,10 @@
     if ([_selectedWidth isCustom])
         [widthCells addObject:[self generateDataForWidthCustomSliderCell]];
 
-    OAGPXTableSectionData *widthSection = [OAGPXTableSectionData withData:@{ kSectionCells: widthCells }];
+    OAGPXTableSectionData *widthSection = [OAGPXTableSectionData withData:@{
+            kSectionCells: widthCells,
+            kSectionHeaderHeight: @36.
+    }];
 
     [widthValue setData:@{
             kTableUpdateData: ^() {
@@ -557,6 +563,7 @@
 
     OAGPXTableSectionData *splitSection = [OAGPXTableSectionData withData:@{
             kSectionCells: splitCells,
+            kSectionHeaderHeight: @36.,
             kSectionFooter: OALocalizedString(@"gpx_split_interval_descr")
     }];
     [splitSection setData:@{
@@ -587,6 +594,7 @@
                     },
                     kCellIsOn: ^() { return self.gpx.joinSegments; }
             }]],
+            kSectionHeaderHeight: @14.,
             kSectionFooter: OALocalizedString(@"gpx_join_gaps_descr")
     }]];
 
@@ -611,10 +619,17 @@
                                         completion:nil];
                     }
             }]],
-            kSectionHeader:OALocalizedString(@"actions")
+            kSectionHeaderHeight: @42.,
+            kSectionHeader:OALocalizedString(@"actions"),
+            kSectionFooterHeight: @60.
     }]];
 
     _tableData = appearanceSections;
+}
+
+- (CGFloat)initialMenuHeight
+{
+    return self.topHeaderContainerView.frame.origin.y + self.topHeaderContainerView.frame.size.height + [OAUtilities getBottomMargin];
 }
 
 - (BOOL)adjustCentering
@@ -782,7 +797,7 @@
 
 - (CGFloat)getToolbarHeight
 {
-    return 0;
+    return self.currentState == EOADraggableMenuStateInitial ? [OAUtilities getBottomMargin] : 0.;
 }
 
 - (BOOL)isSelectedTypeSlope
@@ -1142,19 +1157,27 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
+    OAGPXTableSectionData *sectionData = _tableData[section];
+    if (section == 0 || sectionData.headerHeight == 0.)
         return 0.001;
 
-    return 36.;
+    return sectionData.headerHeight > 0
+    ? [OAUtilities calculateTextBounds:sectionData.header
+                                 width:self.scrollableView.frame.size.width - 40. - [OAUtilities getLeftMargin]
+                                  font:[UIFont systemFontOfSize:13]].height + sectionData.headerHeight
+    : 0.001;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    NSString *footer = _tableData[section].footer;
-    if (!footer || footer.length == 0)
-        return 0.001;
+    OAGPXTableSectionData *sectionData = _tableData[section];
+    NSString *footer = sectionData.footer;
+    CGFloat footerHeight = sectionData.footerHeight > 0 ? sectionData.footerHeight : 0.;
 
-    return [OATableViewCustomFooterView getHeight:footer width:self.tableView.bounds.size.width];
+    if (!footer || footer.length == 0)
+        return footerHeight > 0 ? footerHeight : 0.001;
+
+    return [OATableViewCustomFooterView getHeight:footer width:self.tableView.bounds.size.width] + footerHeight;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section

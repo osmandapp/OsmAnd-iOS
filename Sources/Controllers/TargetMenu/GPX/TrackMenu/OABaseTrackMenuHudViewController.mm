@@ -79,6 +79,8 @@
         _headerHeight = [data[kSectionHeaderHeight] floatValue];
     if ([data.allKeys containsObject:kSectionFooter])
         _footer = data[kSectionFooter];
+    if ([data.allKeys containsObject:kSectionFooterHeight])
+        _footerHeight = [data[kSectionFooterHeight] floatValue];
     if ([data.allKeys containsObject:kTableValues])
         _values = data[kTableValues];
 }

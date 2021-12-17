@@ -352,14 +352,14 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (isLandscape)
     {
         if (self.currentState == EOADraggableMenuStateInitial && !_editingContext.isInAddPointMode && !_editingContext.originalPointToMove && !_currentPopupController)
-            [self goMinimized:NO];
+            [super updateShowingState:EOADraggableMenuStateInitial];
         else
-            [self goFullScreen:NO];
+            [super updateShowingState:EOADraggableMenuStateFullScreen];
     }
     else
     {
         if (self.currentState == EOADraggableMenuStateFullScreen)
-            [self goMinimized:NO];
+            [super updateShowingState:EOADraggableMenuStateInitial];
     }
 }
 
@@ -370,7 +370,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) updateShowingState:(EOADraggableMenuState)state
 {
-    [self goMinimized:NO];
+    [super updateShowingState:EOADraggableMenuStateInitial];
 }
 
 - (BOOL)supportsFullScreen
@@ -801,7 +801,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _approximationController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.scrollableView addSubview:_approximationController.view];
     [self addChildViewController:_approximationController];
-    [self updateViewAnimated];
+    [self updateView:YES];
     
     self.actionButtonsContainer.hidden = YES;
     [self changeMapRulerPosition];
@@ -1865,7 +1865,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_approximationController removeFromParentViewController];
         _currentPopupController = nil;
         _approximationController = nil;
-        [self updateViewAnimated];
+        [self updateView:YES];
     }
     self.actionButtonsContainer.hidden = NO;
     [self changeMapRulerPosition];
@@ -1885,7 +1885,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onContinueSnapApproximation:(OAPlanningPopupBaseViewController *)approximationController
 {
     _currentPopupController = approximationController;
-    [self updateViewAnimated];
+    [self updateView:YES];
 }
 
 - (OAMeasurementEditingContext *)getCurrentEditingContext

@@ -80,6 +80,7 @@
 
 @interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, ChartViewDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIView *groupsButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *groupsButton;
@@ -122,7 +123,7 @@
     BOOL _wasFirstOpening;
 }
 
-@dynamic isShown, backButton, contentContainer;
+@dynamic isShown, backButton, statusBarBackgroundView, contentContainer;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
 {
@@ -216,7 +217,7 @@
 
         if (_selectedTab == EOATrackMenuHudOverviewTab)
         {
-            _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20. , 0., 20.);
+            _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., 20. , 0., 20.);
             NSArray<NSIndexPath *> *visibleItems = _headerView.statisticsCollectionView.indexPathsForVisibleItems;
             if (visibleItems && visibleItems.count > 0 && visibleItems.firstObject.row == 0)
             {
@@ -227,7 +228,7 @@
         }
         if (_selectedTab == EOATrackMenuHudPointsTab)
         {
-            _headerView.groupsCollectionView.contentInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 16 , 0., 16);
+            _headerView.groupsCollectionView.contentInset = UIEdgeInsetsMake(0., 16 , 0., 16);
             NSArray<NSIndexPath *> *visibleItems = _headerView.groupsCollectionView.indexPathsForVisibleItems;
             if (visibleItems && visibleItems.count > 0 && visibleItems.firstObject.row == 0)
             {
@@ -277,6 +278,11 @@
     }];
 }
 
+- (UIView *)getCustomHeader
+{
+    return _headerView;
+}
+
 - (CGFloat)initialMenuHeight
 {
     return [_headerView getInitialHeight:self.toolBarView.frame.size.height];
@@ -285,7 +291,7 @@
 - (CGFloat)expandedMenuHeight
 {
     if (![self isFirstStateChanged] && _selectedTab == EOATrackMenuHudOverviewTab)
-        return self.toolBarView.frame.size.height + _headerView.frame.size.height;
+        return self.toolBarView.frame.size.height + _headerView.frame.size.height - 0.5;
 
     return DeviceScreenHeight / 2;
 }
@@ -337,14 +343,19 @@
     if (_headerView)
         [_headerView removeFromSuperview];
 
-    _headerView = [[OATrackMenuHeaderView alloc] initWithFrame:CGRectMake(0., 0., [self isLandscape] ? [self getLandscapeViewWidth] : DeviceScreenWidth, 0.)];
+    _headerView = [[OATrackMenuHeaderView alloc] initWithFrame:CGRectMake(
+            0.,
+            CGRectGetMaxY(self.statusBarBackgroundView.frame),
+            [self isLandscape] ? [self getLandscapeViewWidth] : DeviceScreenWidth,
+            0.
+    )];
     _headerView.trackMenuDelegate = self;
     _headerView.sliderView.hidden = [self isLandscape];
     [_headerView setDescription];
 
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
-        _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 20. , 0., 20.);
+        _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., 20., 0., 20.);
         [_headerView generateGpxBlockStatistics:self.analysis
                                     withoutGaps:!self.gpx.joinSegments && (self.isCurrentTrack
                                             ? (self.doc.tracks.count == 0 || self.doc.tracks.firstObject.generalTrack)
@@ -353,7 +364,7 @@
     else if (_selectedTab == EOATrackMenuHudPointsTab)
     {
         _headerView.groupsCollectionView.foldersDelegate = self;
-        _headerView.groupsCollectionView.contentInset = UIEdgeInsetsMake(0., OAUtilities.getLeftMargin + 16. , 0., 16.);
+        _headerView.groupsCollectionView.contentInset = UIEdgeInsetsMake(0., 16. , 0., 16.);
         [_headerView setGroupsCollection:[self generateGroupCollectionData] withSelectedIndex:0];
     }
 
@@ -363,55 +374,13 @@
                         title:[self.gpx getNiceTitle]];
 
     [self.scrollableView addSubview:_headerView];
-    _headerView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.scrollableView addConstraints:@[
-            [self createBaseEqualConstraint:self.scrollableView
-                             firstAttribute:NSLayoutAttributeTrailing
-                                 secondItem:_headerView
-                            secondAttribute:NSLayoutAttributeTrailing],
-            [self createBaseEqualConstraint:self.scrollableView
-                             firstAttribute:NSLayoutAttributeLeading
-                                 secondItem:_headerView
-                            secondAttribute:NSLayoutAttributeLeading],
-            [self createBaseEqualConstraint:self.topHeaderContainerView
-                             firstAttribute:NSLayoutAttributeTop
-                                 secondItem:_headerView
-                            secondAttribute:NSLayoutAttributeTop],
-            [self createBaseEqualConstraint:self.topHeaderContainerView
-                             firstAttribute:NSLayoutAttributeBottom
-                                 secondItem:_headerView
-                            secondAttribute:NSLayoutAttributeBottom],
-            [self createBaseEqualConstraint:self.scrollableView
-                             firstAttribute:NSLayoutAttributeTrailingMargin
-                                 secondItem:_headerView.contentView
-                            secondAttribute:NSLayoutAttributeTrailing],
-            [self createBaseEqualConstraint:self.scrollableView
-                             firstAttribute:NSLayoutAttributeLeadingMargin
-                                 secondItem:_headerView.contentView
-                            secondAttribute:NSLayoutAttributeLeading],
-            [self createBaseEqualConstraint:self.scrollableView
-                             firstAttribute:NSLayoutAttributeTrailing
-                                 secondItem:_headerView.statisticsCollectionView
-                            secondAttribute:NSLayoutAttributeTrailing],
-            [self createBaseEqualConstraint:self.scrollableView
-                             firstAttribute:NSLayoutAttributeLeading
-                                 secondItem:_headerView.statisticsCollectionView
-                            secondAttribute:NSLayoutAttributeLeading],
-            [self createBaseEqualConstraint:self.scrollableView
-                             firstAttribute:NSLayoutAttributeTrailing
-                                 secondItem:_headerView.groupsCollectionView
-                            secondAttribute:NSLayoutAttributeTrailing],
-            [self createBaseEqualConstraint:self.scrollableView
-                             firstAttribute:NSLayoutAttributeLeading
-                                 secondItem:_headerView.groupsCollectionView
-                            secondAttribute:NSLayoutAttributeLeading]
-    ]];
 
     CGRect topHeaderContainerFrame = self.topHeaderContainerView.frame;
     topHeaderContainerFrame.size.height = _headerView.frame.size.height;
     self.topHeaderContainerView.frame = topHeaderContainerFrame;
 
     [self.scrollableView bringSubviewToFront:self.toolBarView];
+    [self.scrollableView bringSubviewToFront:self.statusBarBackgroundView];
 }
 
 - (void)generateData
@@ -1656,20 +1625,21 @@
         if (_selectedTab == EOATrackMenuHudOverviewTab || _selectedTab == EOATrackMenuHudPointsTab)
             [self startLocationServices];
 
+        BOOL animated = self.currentState != EOADraggableMenuStateFullScreen;
         if (_selectedTab == EOATrackMenuHudActionsTab)
         {
-            [self goFullScreen];
+            [self goFullScreen:animated];
         }
         else if ([self isFirstStateChanged])
         {
             if (self.currentState == EOADraggableMenuStateInitial)
-                [self goExpanded];
+                [self goExpanded:animated];
             else
-                [self updateViewAnimated];
+                [self updateView:animated];
         }
         else
         {
-            [self updateViewAnimated];
+            [self updateView:animated];
         }
 
         [UIView transitionWithView:self.tableView
@@ -2086,23 +2056,12 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]]
-            || [cellData.type isEqualToString:[OARadiusCellEx getCellIdentifier]])
-        return 48.;
-    else if ([cellData.type isEqualToString:[OAQuadItemsWithTitleDescIconCell getCellIdentifier]])
-        return cellData.toggle ? 142. : 69.;
-    else if ([cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
-    {
+    if ([cellData.type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
         return [OATitleIconRoundCell getHeight:cellData.title cellWidth:tableView.bounds.size.width];
-    }
     else if ([cellData.type isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
-    {
         return [OATitleDescriptionIconRoundCell getHeight:cellData.title descr:cellData.desc cellWidth:tableView.bounds.size.width];
-    }
     else if ([cellData.type isEqualToString:[OATitleSwitchRoundCell getCellIdentifier]])
-    {
         return [OATitleSwitchRoundCell getHeight:cellData.title cellWidth:tableView.bounds.size.width];
-    }
 
     return UITableViewAutomaticDimension;
 }

@@ -16,8 +16,6 @@
 
 @interface OATrackMenuHeaderView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
-@property (weak, nonatomic) IBOutlet UIView *contentView;
-
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 
 @property (weak, nonatomic) IBOutlet UIView *titleContainerView;
@@ -45,20 +43,6 @@
 @property (weak, nonatomic) IBOutlet OAButton *navigationButton;
 
 @property (weak, nonatomic) IBOutlet UIView *bottomDividerView;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomDescriptionConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionNoCollectionConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionNoCollectionNoLocationConstraint;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomCollectionConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomNoCollectionConstraint;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *onlyTitleAndDescriptionConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *onlyTitleAndDescriptionAndGroupsConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *onlyTitleNoDescriptionConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *groupsBottomConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *actionsBottomConstraint;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *locationWithStatisticsTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionDirectionConstraint;

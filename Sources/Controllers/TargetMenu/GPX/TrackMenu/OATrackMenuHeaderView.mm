@@ -79,33 +79,9 @@
 
 - (void)updateConstraints
 {
-    BOOL hasDescription = !self.descriptionView.hidden;
     BOOL hasStatistics = !self.statisticsCollectionView.hidden;
-    BOOL hasActions = !self.actionButtonsContainerView.hidden;
     BOOL hasLocation = !self.locationContainerView.hidden;
-    BOOL hasContent = hasStatistics || hasLocation || hasActions;
-    BOOL hasGroups = !self.groupsCollectionView.hidden;
-    BOOL isOnlyTitleAndDescription = hasDescription && !hasContent && !hasGroups;
-    BOOL isOnlyTitleAndDescriptionAndGroup = hasDescription && !hasContent && hasGroups;
-    BOOL isOnlyTitle = !hasDescription && !hasContent;
     BOOL hasDirection = !self.directionContainerView.hidden;
-    BOOL noDescriptionNoStatistics = !hasDescription && !hasStatistics && !isOnlyTitleAndDescription
-            && !isOnlyTitleAndDescriptionAndGroup && !isOnlyTitle;
-
-    self.onlyTitleAndDescriptionConstraint.active = isOnlyTitleAndDescription;
-    self.onlyTitleAndDescriptionAndGroupsConstraint.active = isOnlyTitleAndDescriptionAndGroup;
-    self.onlyTitleNoDescriptionConstraint.active = isOnlyTitle;
-    self.groupsBottomConstraint.active = hasGroups;
-    self.actionsBottomConstraint.active = hasActions;
-
-    self.titleBottomDescriptionConstraint.active = hasDescription;
-    self.titleBottomNoDescriptionConstraint.active = !hasDescription && hasStatistics;
-    self.titleBottomNoDescriptionNoCollectionConstraint.active = noDescriptionNoStatistics && hasLocation;
-    self.titleBottomNoDescriptionNoCollectionNoLocationConstraint.active = noDescriptionNoStatistics && !hasLocation;
-    self.titleBottomDescriptionConstraint.constant = _selectedTab == EOATrackMenuHudOverviewTab ? 8. : 2.;
-
-    self.descriptionBottomCollectionConstraint.active = hasDescription && hasStatistics;
-    self.descriptionBottomNoCollectionConstraint.active = hasDescription && !hasStatistics && !hasGroups;
 
     self.locationWithStatisticsTopConstraint.active = hasLocation && hasStatistics;
     self.regionDirectionConstraint.active = hasDirection;
@@ -119,34 +95,9 @@
     BOOL res = [super needsUpdateConstraints];
     if (!res)
     {
-        BOOL hasDescription = !self.descriptionView.hidden;
         BOOL hasStatistics = !self.statisticsCollectionView.hidden;
-        BOOL hasActions = !self.actionButtonsContainerView.hidden;
         BOOL hasLocation = !self.locationContainerView.hidden;
-        BOOL hasContent = hasStatistics || hasLocation || hasActions;
-        BOOL hasGroups = !self.groupsCollectionView.hidden;
-        BOOL isOnlyTitleAndDescription = hasDescription && !hasContent && !hasGroups;
-        BOOL isOnlyTitleAndDescriptionAndGroup = hasDescription && !hasContent && hasGroups;
-        BOOL isOnlyTitle = !hasDescription && !hasContent;
         BOOL hasDirection = !self.directionContainerView.hidden;
-        BOOL noDescriptionNoStatistics = !hasDescription && !hasStatistics && !isOnlyTitleAndDescription
-                && !isOnlyTitleAndDescriptionAndGroup && !isOnlyTitle;
-
-        res = res || self.onlyTitleAndDescriptionConstraint.active != isOnlyTitleAndDescription;
-        res = res || self.onlyTitleAndDescriptionAndGroupsConstraint.active != isOnlyTitleAndDescriptionAndGroup;
-        res = res || self.onlyTitleNoDescriptionConstraint.active != isOnlyTitle;
-        res = res || self.groupsBottomConstraint.active != hasGroups;
-        res = res || self.actionsBottomConstraint.active != hasActions;
-
-        res = res || self.titleBottomDescriptionConstraint.active != hasDescription;
-        res = res || self.titleBottomNoDescriptionConstraint.active != (!hasDescription && hasStatistics);
-        res = res || self.titleBottomNoDescriptionNoCollectionConstraint.active != (noDescriptionNoStatistics && hasLocation);
-        res = res || self.titleBottomNoDescriptionNoCollectionNoLocationConstraint.active != (noDescriptionNoStatistics && !hasLocation);
-        res = res || (_selectedTab == EOATrackMenuHudOverviewTab && self.titleBottomDescriptionConstraint.constant != 8.)
-                || (_selectedTab != EOATrackMenuHudOverviewTab && self.titleBottomDescriptionConstraint.constant != 2.);
-
-        res = res || self.descriptionBottomCollectionConstraint.active != (hasDescription && hasStatistics);
-        res = res || self.descriptionBottomNoCollectionConstraint.active != (hasDescription && !hasStatistics && !hasGroups);
 
         res = res || self.locationWithStatisticsTopConstraint.active != (hasLocation && hasStatistics);
         res = res || self.regionDirectionConstraint.active != hasDirection;

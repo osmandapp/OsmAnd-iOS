@@ -43,9 +43,6 @@
                                     <color key="tintColor" red="0.64313725489999995" green="0.61568627450000002" blue="0.68627450980000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </imageView>
                             </subviews>
-                            <constraints>
-                                <constraint firstItem="pVn-K9-1IG" firstAttribute="leading" secondItem="0oj-SL-cMW" secondAttribute="leading" id="EmI-Vw-Taf"/>
-                            </constraints>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WmA-ig-XeZ">
                             <rect key="frame" x="0.0" y="44" width="374" height="18"/>
@@ -270,7 +267,6 @@
                     <constraints>
                         <constraint firstItem="19G-L5-8Rc" firstAttribute="centerX" secondItem="Fdl-Nv-zcK" secondAttribute="centerX" id="5Vu-xG-0Pt"/>
                         <constraint firstAttribute="trailing" secondItem="8XG-hO-pN3" secondAttribute="trailing" id="XPK-R7-w01"/>
-                        <constraint firstItem="dzH-uG-dio" firstAttribute="top" secondItem="0oj-SL-cMW" secondAttribute="bottom" priority="999" constant="16" id="sOR-Rl-6nc"/>
                         <constraint firstItem="8XG-hO-pN3" firstAttribute="leading" secondItem="Fdl-Nv-zcK" secondAttribute="leading" id="snP-Ql-SZa"/>
                         <constraint firstItem="8XG-hO-pN3" firstAttribute="top" secondItem="WmA-ig-XeZ" secondAttribute="bottom" constant="6" id="znT-sT-420"/>
                     </constraints>
@@ -294,9 +290,6 @@
                 <constraint firstItem="Fdl-Nv-zcK" firstAttribute="trailing" secondItem="Uvg-4A-Ywj" secondAttribute="trailing" id="Dbt-bW-cti"/>
                 <constraint firstItem="VTD-C4-FFB" firstAttribute="leading" secondItem="Fdl-Nv-zcK" secondAttribute="leading" id="EdZ-hd-mpC"/>
                 <constraint firstItem="Uvg-4A-Ywj" firstAttribute="leading" secondItem="Fdl-Nv-zcK" secondAttribute="leading" id="KJh-rx-brk"/>
-                <constraint firstItem="WmA-ig-XeZ" firstAttribute="top" secondItem="0oj-SL-cMW" secondAttribute="bottom" id="QmN-gL-7dO"/>
-                <constraint firstItem="0oj-SL-cMW" firstAttribute="top" secondItem="19G-L5-8Rc" secondAttribute="bottom" constant="6" id="UJl-JG-SjF"/>
-                <constraint firstItem="0oj-SL-cMW" firstAttribute="leading" secondItem="Fdl-Nv-zcK" secondAttribute="leading" id="Ypd-uH-pLc"/>
                 <constraint firstAttribute="trailingMargin" secondItem="Fdl-Nv-zcK" secondAttribute="trailing" id="a90-T4-zET"/>
                 <constraint firstItem="Fdl-Nv-zcK" firstAttribute="trailing" secondItem="dzH-uG-dio" secondAttribute="trailing" id="bfj-3w-WBU"/>
                 <constraint firstItem="Fdl-Nv-zcK" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="big-ot-pnt"/>
@@ -305,17 +298,8 @@
                 <constraint firstItem="VTD-C4-FFB" firstAttribute="top" secondItem="Uvg-4A-Ywj" secondAttribute="bottom" id="eGK-QY-S4g"/>
                 <constraint firstItem="dzH-uG-dio" firstAttribute="leading" secondItem="Fdl-Nv-zcK" secondAttribute="leading" id="ey6-l0-t8U"/>
                 <constraint firstItem="19G-L5-8Rc" firstAttribute="top" secondItem="Fdl-Nv-zcK" secondAttribute="top" constant="6" id="hRP-Fo-Xd1"/>
-                <constraint firstItem="Uvg-4A-Ywj" firstAttribute="top" secondItem="0oj-SL-cMW" secondAttribute="bottom" priority="999" constant="2" id="had-JX-7it"/>
-                <constraint firstItem="Uvg-4A-Ywj" firstAttribute="top" secondItem="WmA-ig-XeZ" secondAttribute="bottom" constant="2" id="lmx-5w-UHo"/>
                 <constraint firstAttribute="bottom" secondItem="dzH-uG-dio" secondAttribute="bottom" constant="16" id="n4M-M4-G9g"/>
-                <constraint firstAttribute="bottom" secondItem="0oj-SL-cMW" secondAttribute="bottom" priority="999" constant="16" id="oac-Lt-1sc"/>
-                <constraint firstAttribute="bottom" secondItem="WmA-ig-XeZ" secondAttribute="bottom" priority="999" constant="16" id="pao-Pt-7rc"/>
                 <constraint firstAttribute="bottom" secondItem="77c-3b-9tk" secondAttribute="bottom" id="piP-7d-40E"/>
-                <constraint firstItem="0oj-SL-cMW" firstAttribute="bottom" secondItem="VTD-C4-FFB" secondAttribute="top" priority="999" constant="10" id="sks-0a-29l"/>
-                <constraint firstItem="WmA-ig-XeZ" firstAttribute="leading" secondItem="Fdl-Nv-zcK" secondAttribute="leading" id="vdh-Iy-Gu0"/>
-                <constraint firstItem="Fdl-Nv-zcK" firstAttribute="trailing" secondItem="0oj-SL-cMW" secondAttribute="trailing" id="x7l-yi-5LV"/>
-                <constraint firstItem="VTD-C4-FFB" firstAttribute="top" secondItem="WmA-ig-XeZ" secondAttribute="bottom" priority="999" constant="10" id="ydK-og-mpj"/>
-                <constraint firstItem="Fdl-Nv-zcK" firstAttribute="trailing" secondItem="WmA-ig-XeZ" secondAttribute="trailing" id="yrf-rI-6Hx"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>
@@ -323,26 +307,19 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="actionButtonsContainerView" destination="dzH-uG-dio" id="td5-Lm-ioT"/>
-                <outlet property="actionsBottomConstraint" destination="n4M-M4-G9g" id="aZY-dz-hJn"/>
                 <outlet property="appearanceButton" destination="vDF-Mt-jg2" id="mF1-rx-VgB"/>
                 <outlet property="bottomDividerView" destination="77c-3b-9tk" id="pFU-kg-NwT"/>
                 <outlet property="contentView" destination="Fdl-Nv-zcK" id="6uw-Sd-7ZA"/>
-                <outlet property="descriptionBottomCollectionConstraint" destination="lmx-5w-UHo" id="fZn-1c-HNh"/>
-                <outlet property="descriptionBottomNoCollectionConstraint" destination="ydK-og-mpj" id="SBa-9C-nyF"/>
                 <outlet property="descriptionView" destination="WmA-ig-XeZ" id="ALT-Le-c3n"/>
                 <outlet property="directionContainerView" destination="Iio-8u-at5" id="7m0-xY-S07"/>
                 <outlet property="directionIconView" destination="zXJ-Kc-6n6" id="zpr-me-xi2"/>
                 <outlet property="directionTextView" destination="snd-9X-hbz" id="8VC-Gr-ztq"/>
                 <outlet property="exportButton" destination="41j-Jh-0aW" id="AOj-im-orj"/>
-                <outlet property="groupsBottomConstraint" destination="9rN-Et-IFT" id="jSz-Np-w3s"/>
                 <outlet property="groupsCollectionView" destination="8XG-hO-pN3" id="3Y7-M3-L5Y"/>
                 <outlet property="locationContainerView" destination="VTD-C4-FFB" id="l9C-sA-78j"/>
                 <outlet property="locationSeparatorView" destination="jqG-9D-3Mp" id="ljT-4l-rva"/>
                 <outlet property="locationWithStatisticsTopConstraint" destination="eGK-QY-S4g" id="MmK-mN-tKY"/>
                 <outlet property="navigationButton" destination="pbl-cu-esO" id="GNS-Td-eSJ"/>
-                <outlet property="onlyTitleAndDescriptionAndGroupsConstraint" destination="znT-sT-420" id="hgk-i5-TZ7"/>
-                <outlet property="onlyTitleAndDescriptionConstraint" destination="pao-Pt-7rc" id="b0a-as-BQ6"/>
-                <outlet property="onlyTitleNoDescriptionConstraint" destination="oac-Lt-1sc" id="ddX-lF-XK8"/>
                 <outlet property="regionContainerView" destination="WEo-uC-2EY" id="zrC-rh-ELX"/>
                 <outlet property="regionDirectionConstraint" destination="aLt-O4-RaB" id="bze-pL-bUl"/>
                 <outlet property="regionIconView" destination="XVR-ZX-2dk" id="ZiF-bq-zPy"/>
@@ -351,10 +328,6 @@
                 <outlet property="showHideButton" destination="3Ev-Ap-uIN" id="ncK-Wh-dip"/>
                 <outlet property="sliderView" destination="19G-L5-8Rc" id="pLK-Bo-MiB"/>
                 <outlet property="statisticsCollectionView" destination="Uvg-4A-Ywj" id="Uon-fX-TwM"/>
-                <outlet property="titleBottomDescriptionConstraint" destination="QmN-gL-7dO" id="MXe-qU-ymK"/>
-                <outlet property="titleBottomNoDescriptionConstraint" destination="had-JX-7it" id="yq1-fp-Bnr"/>
-                <outlet property="titleBottomNoDescriptionNoCollectionConstraint" destination="sks-0a-29l" id="kuM-PL-kKm"/>
-                <outlet property="titleBottomNoDescriptionNoCollectionNoLocationConstraint" destination="sOR-Rl-6nc" id="xu4-5t-vij"/>
                 <outlet property="titleContainerView" destination="0oj-SL-cMW" id="So2-Ab-gUr"/>
                 <outlet property="titleIconView" destination="fzz-Q2-eTx" id="AvQ-dH-qSL"/>
                 <outlet property="titleView" destination="pVn-K9-1IG" id="7gv-xf-rBR"/>

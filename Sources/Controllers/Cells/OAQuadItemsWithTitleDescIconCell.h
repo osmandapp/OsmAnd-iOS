@@ -34,6 +34,8 @@
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topButtonsWithBottomButtonsConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topButtonsNoBottomButtonsConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorWithBottomButtonsConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomButtonsBottomConstraint;
 
 - (void)showBottomButtons:(BOOL)show;
 

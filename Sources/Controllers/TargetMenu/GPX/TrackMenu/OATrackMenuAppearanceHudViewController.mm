@@ -769,7 +769,10 @@
 - (void)doAdditionalLayout
 {
     [super doAdditionalLayout];
-
+    BOOL isRTL = [self.doneButtonContainerView isDirectionRTL];
+    self.doneButtonTrailingConstraint.constant = [self isLandscape]
+            ? (isRTL ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10. : 0.)
+            : [OAUtilities getLeftMargin] + 10.;
     self.doneButtonContainerView.hidden = ![self isLandscape] && self.currentState == EOADraggableMenuStateFullScreen;
 }
 

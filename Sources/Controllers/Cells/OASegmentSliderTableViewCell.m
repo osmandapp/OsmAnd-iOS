@@ -11,7 +11,7 @@
 #import "OAUtilities.h"
 
 #define kMarkTag 1000
-const CGFloat kMarkHeight = 14.0;
+const CGFloat kMarkHeight = 16.0;
 const CGFloat kMarkWidth = 2.0;
 
 @implementation OASegmentSliderTableViewCell
@@ -98,28 +98,25 @@ const CGFloat kMarkWidth = 2.0;
         return;
     
     CGFloat segments = _numberOfMarks - 1;
-    CGFloat sliderViewWidth = self.frame.size.width - 2 * 14 - (DeviceScreenWidth > self.frame.size.width ? OAUtilities.getLeftMargin : OAUtilities.getLeftMargin * 2);
+    CGFloat sliderViewWidth = self.frame.size.width - self.sliderView.frame.origin.x * 2 - OAUtilities.getLeftMargin;
     CGFloat sliderViewHeight = self.sliderView.frame.size.height;
     CGRect sliderViewBounds = CGRectMake(0, 0, sliderViewWidth, sliderViewHeight);
     CGRect trackRect = [self.sliderView trackRectForBounds:sliderViewBounds];
     CGFloat trackWidth = trackRect.size.width;
     CGFloat markWidth = trackRect.size.height;
-    CGFloat markWidthH = trackRect.size.height / 2.0;
 
     CGFloat inset = (sliderViewWidth - trackRect.size.width) / 2;
     
     CGFloat x = inset;
     CGFloat y = trackRect.origin.y + trackRect.size.height / 2 - kMarkHeight / 2;
-    
+
     for (int i = 0; i < _numberOfMarks; i++)
     {
         UIView *mark = [self getMarkView:i];
         if (i == 0)
             mark.frame = CGRectMake(x, y, markWidth, kMarkHeight);
-        else if (i == _numberOfMarks - 1)
-            mark.frame = CGRectMake(x - markWidth, y, markWidth, kMarkHeight);
         else
-            mark.frame = CGRectMake(x - markWidthH, y, markWidth, kMarkHeight);
+            mark.frame = CGRectMake(x - markWidth, y, markWidth, kMarkHeight);
         
         x += trackWidth / segments;
     }
@@ -132,13 +129,9 @@ const CGFloat kMarkWidth = 2.0;
     for (int i = 0; i < _markViews.count; i++)
     {
         CGFloat step = (CGFloat) i / (_markViews.count - 1);
-        _markViews[i].backgroundColor = UIColorFromRGB(value > (isRTL ? 1 - step : step) ? color_menu_button : color_slider_gray);
+        BOOL filled = (value > (isRTL ? 1 - step : step)) || (value == (isRTL ? 1 - step : step));
+        _markViews[i].backgroundColor = UIColorFromRGB(filled ? color_menu_button : color_slider_gray);
     }
-
-    if ((value == 1 && !isRTL) || (value == 0 && isRTL))
-        _markViews.lastObject.backgroundColor = UIColor.clearColor;
-    else if ((value == 0 && !isRTL) || (value == 1 && isRTL))
-        _markViews.firstObject.backgroundColor = UIColor.clearColor;
 }
 
 - (void) generateFeedback

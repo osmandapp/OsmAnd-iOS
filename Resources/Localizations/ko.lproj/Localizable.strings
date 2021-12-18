@@ -1055,3 +1055,13 @@
 "shared_string_time_span" = "시간 범위";
 "shared_string_start_time" = "시작시간";
 "shared_string_end_time" = "종료시간";
+"explore_wikipedia_offline" = "오프라인에서 Wikipedia를 탐색합니다.";
+"rendering_attr_piste_type_skitour_name" = "스키투어";
+"grey_color_undefined" = "데이터가 없는 부품은 회색입니다.";
+"routing_attr_piste_type_skitour_description" = "스키 투어를 위한 경로입니다.";
+"track_show_start_finish_icons" = "시작 및 완료 아이콘 표시";
+"rendering_value_walkingRoutesOSMC_description" = "색상 경로는 각각의 로컬 색상(OpenStreetMap에 있는 경우) 및 하이킹 실드 기호에 따라 달라집니다.";
+"routes_color_by_type" = "색상 경로 지정 기준…";
+"shared_string_sound" = "소리";
+"routing_attr_piste_type_skitour_name" = "스키 투어";
+"travel_routes" = "이동 경로";

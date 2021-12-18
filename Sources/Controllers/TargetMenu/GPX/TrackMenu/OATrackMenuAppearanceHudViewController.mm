@@ -916,7 +916,8 @@
             NSString *extraDesc = cellData.values[@"extra_desc"];
             [cell showExtraDesc:extraDesc && extraDesc.length > 0];
 
-            cell.iconView.image = [UIImage imageNamed:cellData.rightIconName];
+            UIImage *image = [UIImage imageNamed:cellData.rightIconName];
+            cell.iconView.image = [cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image;
 
             cell.descView.text = cellData.desc;
             cell.descView.font = [UIFont systemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];

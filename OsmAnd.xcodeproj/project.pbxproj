@@ -1108,6 +1108,7 @@
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
 		BBA3AFDF197FC4BB0039D991 /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
 		CA4EDC45F03787B5F481123A /* OASlider.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED20CACFB86C3CEE9C486 /* OASlider.m */; };
+		CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */; };
 		DA03184222DF0E50008FC564 /* ic_custom_boat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */; };
 		DA03184422DF0E50008FC564 /* ic_custom_boat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */; };
 		DA08A0D2227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
@@ -4121,6 +4122,8 @@
 		BBE1D2B5190D1C9600D90F0A /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = "../resources/countries-info/regions.ocbf"; sourceTree = "<group>"; };
 		CA4ED20CACFB86C3CEE9C486 /* OASlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASlider.m; sourceTree = "<group>"; };
 		CA4ED5B77046F2C3F6FB7181 /* OASlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASlider.h; sourceTree = "<group>"; };
+		CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACollectionViewFlowLayout.m; sourceTree = "<group>"; };
+		CA4ED8CABB8E66D48FDF5F2B /* OACollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollectionViewFlowLayout.h; sourceTree = "<group>"; };
 		DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_boat@2x.png"; path = "Resources/Icons/ic_custom_boat@2x.png"; sourceTree = "<group>"; };
 		DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_boat@3x.png"; path = "Resources/Icons/ic_custom_boat@3x.png"; sourceTree = "<group>"; };
 		DA08A0D1227096DA000A53BA /* offroad.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = offroad.render.xml; path = ../resources/rendering_styles/offroad.render.xml; sourceTree = "<group>"; };
@@ -11448,6 +11451,8 @@
 				B0D61CD2F84591156B0F5F6D /* OAFoldersCollectionView.h */,
 				CA4ED20CACFB86C3CEE9C486 /* OASlider.m */,
 				CA4ED5B77046F2C3F6FB7181 /* OASlider.h */,
+				CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */,
+				CA4ED8CABB8E66D48FDF5F2B /* OACollectionViewFlowLayout.h */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -14878,6 +14883,7 @@
 				B0D610DBE05EACD61CFE6859 /* OATrackMenuTabSegments.mm in Sources */,
 				B0D61E373B1DC253E7C0BB0C /* OAFoldersCollectionView.mm in Sources */,
 				CA4EDC45F03787B5F481123A /* OASlider.m in Sources */,
+				CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2326,3 +2326,4 @@
 "lang_zhminnan" = "مين الجنوبية";
 "white_color_undefined" = "الأجزاء بدون بيانات بيضاء.";
 "shared_string_hide_all" = "أخف الكل";
+"points_delete_multiple" = "حذف %d نقطة؟";

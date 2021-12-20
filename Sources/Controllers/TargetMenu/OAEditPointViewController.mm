@@ -293,12 +293,14 @@
     }
     else if (_poi)
     {
-        NSString *iconName = [_poi.iconName lastPathComponent];
+        NSString *iconName = [[_poi.type getCheckedIconName] lastPathComponent];
         if (iconName)
         {
-            iconName = [iconName stringByReplacingOccurrencesOfString:@"mx_" withString:@""];
-            if ([[OAFavoritesHelper getFlatIconNamesList] containsObject:iconName])
-                return iconName;
+            NSString * trimmedIconName = [iconName stringByReplacingOccurrencesOfString:@"mx_" withString:@""];
+            if (![[OAFavoritesHelper getFlatIconNamesList] containsObject:trimmedIconName])
+                [self addLastUsedIcon:trimmedIconName save:NO];
+            
+            return trimmedIconName;
         }
     }
     return nil;
@@ -321,17 +323,20 @@
 
     if (!preselectedIconName)
         preselectedIconName = kDefaultIcon;
-
-    for (NSString *categoryName in _poiIcons.allKeys)
+    
+    else
     {
-        NSArray<NSString *> *icons = _poiIcons[categoryName];
-        if (icons)
+        for (NSString *categoryName in _poiIcons.allKeys)
         {
-            int index = (int)[icons indexOfObject:preselectedIconName];
-            if (index != -1)
+            NSArray<NSString *> *icons = _poiIcons[categoryName];
+            if (icons)
             {
-                _selectedIconName = preselectedIconName;
-                _selectedIconCategoryName = categoryName;
+                int index = (int)[icons indexOfObject:preselectedIconName];
+                if (index != -1)
+                {
+                    _selectedIconName = preselectedIconName;
+                    _selectedIconCategoryName = categoryName;
+                }
             }
         }
     }
@@ -390,7 +395,7 @@
         _lastUsedIcons = fromPref;
 }
 
-- (void) addLastUsedIcon:(NSString *)iconName
+- (void) addLastUsedIcon:(NSString *)iconName save:(BOOL)save
 {
     NSMutableArray<NSString *> *mutableLastUsedIcons = _lastUsedIcons.mutableCopy;
     [mutableLastUsedIcons removeObject:iconName];
@@ -399,7 +404,8 @@
     
     [mutableLastUsedIcons insertObject:iconName atIndex:0];
     _lastUsedIcons = mutableLastUsedIcons.copy;
-    [OAAppSettings.sharedManager.lastUsedFavIcons set:_lastUsedIcons];
+    if (save)
+        [OAAppSettings.sharedManager.lastUsedFavIcons set:_lastUsedIcons];
 }
 
 - (void)setupColors
@@ -674,7 +680,7 @@
         data.color = _selectedColor.color;
         data.backgroundIcon = _backgroundIconNames[_selectedBackgroundIndex];
         data.icon = _selectedIconName;
-        [self addLastUsedIcon:_selectedIconName];
+        [self addLastUsedIcon:_selectedIconName save:YES];
 
         if (_editPointType == EOAEditPointTypeWaypoint)
         {

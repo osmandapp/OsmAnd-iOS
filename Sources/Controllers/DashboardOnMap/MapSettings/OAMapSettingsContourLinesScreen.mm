@@ -30,6 +30,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OADownloadMultipleResourceViewController.h"
+#import "OASlider.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>

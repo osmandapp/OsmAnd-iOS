@@ -7,6 +7,7 @@
 //
 
 #import "OASegmentSliderTableViewCell.h"
+#import "OASlider.h"
 #import "OAColors.h"
 #import "OAUtilities.h"
 

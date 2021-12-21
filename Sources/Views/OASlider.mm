@@ -1,5 +1,5 @@
 //
-//  OASlider.h
+//  OASlider.mm
 //  OsmAnd
 //
 //  Created by Skalii on 18.12.2021.

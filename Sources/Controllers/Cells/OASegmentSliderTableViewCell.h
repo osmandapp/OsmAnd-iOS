@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class OASlider;
+
 @interface OASegmentSliderTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *topLeftLabel;
 @property (weak, nonatomic) IBOutlet UILabel *topRightLabel;
-@property (weak, nonatomic) IBOutlet UISlider *sliderView;
+@property (weak, nonatomic) IBOutlet OASlider *sliderView;
 @property (weak, nonatomic) IBOutlet UILabel *bottomLeftLabel;
 @property (weak, nonatomic) IBOutlet UILabel *bottomRightLabel;
 

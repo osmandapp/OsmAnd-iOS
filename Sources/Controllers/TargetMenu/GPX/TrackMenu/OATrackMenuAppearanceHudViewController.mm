@@ -9,6 +9,7 @@
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
+#import "OASlider.h"
 #import "OAIconTextDividerSwitchCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAColorsTableViewCell.h"

@@ -18,8 +18,9 @@
 #include <OsmAndCore/GpxDocument.h>
 #import <OsmAndCore/TextRasterizer.h>
 
-#include <SkBitmapDevice.h>
+#include <SkCanvas.h>
 #include <SkBitmap.h>
+#include <SkImage.h>
 #include <SkRect.h>
 
 #import "OAGPXDatabase.h"
@@ -34,9 +35,9 @@
 static const UIFont *textFont = [UIFont systemFontOfSize:12. weight:UIFontWeightSemibold];
 
 OAGpxAdditionalIconsProvider::OAGpxAdditionalIconsProvider()
-: _startIcon([OANativeUtilities skBitmapFromPngResource:@"map_track_point_start"])
-, _finishIcon([OANativeUtilities skBitmapFromPngResource:@"map_track_point_finish"])
-, _startFinishIcon([OANativeUtilities skBitmapFromPngResource:@"map_track_point_start_finish"])
+: _startIcon([OANativeUtilities skImageFromPngResource:@"map_track_point_start"])
+, _finishIcon([OANativeUtilities skImageFromPngResource:@"map_track_point_finish"])
+, _startFinishIcon([OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"])
 , _textRasterizer(TextRasterizer::getDefault())
 , _cachedZoomLevel(MinZoomLevel)
 {
@@ -156,7 +157,7 @@ bool OAGpxAdditionalIconsProvider::supportsNaturalObtainData() const
     return true;
 }
 
-std::shared_ptr<SkBitmap> OAGpxAdditionalIconsProvider::getSplitIconForValue(const QPair<QString, int>& labelData)
+sk_sp<SkImage> OAGpxAdditionalIconsProvider::getSplitIconForValue(const QPair<QString, int>& labelData)
 {
     const auto& text = labelData.first;
     int colorValue = labelData.second;
@@ -176,30 +177,26 @@ std::shared_ptr<SkBitmap> OAGpxAdditionalIconsProvider::getSplitIconForValue(con
     const auto textBmp = _textRasterizer->rasterize(text, _captionStyle);
     if (textBmp)
     {
-        const auto bitmap = std::make_shared<SkBitmap>();
+        SkBitmap bitmap;
         CGFloat bitmapWidth = textBmp->width() + (20 * UIScreen.mainScreen.scale);
         CGFloat bitmapHeight = textBmp->height() + (17 * UIScreen.mainScreen.scale);
         CGFloat strokeWidth = 2.5 * UIScreen.mainScreen.scale;
-        if (bitmap->isNull())
+        if (!bitmap.tryAllocPixels(SkImageInfo::MakeN32Premul(bitmapWidth, bitmapHeight)))
         {
-            if (!bitmap->tryAllocPixels(SkImageInfo::MakeN32Premul(bitmapWidth, bitmapHeight)))
-            {
-                LogPrintf(OsmAnd::LogSeverityLevel::Error,
-                          "Failed to allocate bitmap of size %dx%d",
-                          bitmapWidth,
-                          bitmapHeight);
-                return nullptr;
-            }
-            
-            bitmap->eraseColor(SK_ColorTRANSPARENT);
+            LogPrintf(OsmAnd::LogSeverityLevel::Error,
+                      "Failed to allocate bitmap of size %dx%d",
+                      bitmapWidth,
+                      bitmapHeight);
+            return nullptr;
         }
+        
+        bitmap.eraseColor(SK_ColorTRANSPARENT);
 
-        SkBitmapDevice target(*bitmap.get());
-        SkCanvas canvas(&target);
+        SkCanvas canvas(bitmap);
         SkPaint paint;
         paint.setStyle(SkPaint::Style::kStroke_Style);
         paint.setAntiAlias(true);
-        paint.setColor(SkColorSetARGBInline(255, r * 255, g * 255, b * 255));
+        paint.setColor(SkColorSetARGB(255, r * 255, g * 255, b * 255));
         paint.setStrokeWidth(strokeWidth);
         SkRect rect;
         rect.setXYWH(strokeWidth, strokeWidth, bitmapWidth - (strokeWidth * 2), bitmapHeight - (strokeWidth * 2));
@@ -207,18 +204,17 @@ std::shared_ptr<SkBitmap> OAGpxAdditionalIconsProvider::getSplitIconForValue(con
         
         paint.reset();
         paint.setStyle(SkPaint::Style::kFill_Style);
-        paint.setColor(SkColorSetARGBInline(200, r * 255, g * 255, b * 255));
+        paint.setColor(SkColorSetARGB(200, r * 255, g * 255, b * 255));
         rect.setXYWH(strokeWidth, strokeWidth, rect.width(), rect.height());
         canvas.drawRoundRect(rect, 36, 36, paint);
         
-        canvas.drawBitmap(*textBmp,
-                          (bitmapWidth - textBmp->width()) / 2.0f,
-                          (bitmapHeight - textBmp->height()) / 2.0f,
-                          nullptr);
+        canvas.drawImage(textBmp,
+                         (bitmapWidth - textBmp->width()) / 2.0f,
+                         (bitmapHeight - textBmp->height()) / 2.0f);
         
         canvas.flush();
         
-        return bitmap;
+        return bitmap.asImage();
     }
     
     return textBmp;
@@ -242,7 +238,7 @@ void OAGpxAdditionalIconsProvider::buildSplitIntervalsSymbolsGroup(const OsmAnd:
         {
             const auto mapSymbol = std::make_shared<OsmAnd::BillboardRasterMapSymbol>(mapSymbolsGroup);
             mapSymbol->order = -120000;
-            mapSymbol->bitmap = bitmap;
+            mapSymbol->image = bitmap;
             mapSymbol->size = OsmAnd::PointI(bitmap->width(), bitmap->height());
             mapSymbol->languageId = OsmAnd::LanguageId::Invariant;
             mapSymbol->position31 = pos31;
@@ -272,7 +268,7 @@ void OAGpxAdditionalIconsProvider::buildStartFinishSymbolsGroup(const OsmAnd::Ar
             {
                 const auto mapSymbol = std::make_shared<OsmAnd::BillboardRasterMapSymbol>(mapSymbolsGroup);
                 mapSymbol->order = -120000;
-                mapSymbol->bitmap = _startFinishIcon;
+                mapSymbol->image = _startFinishIcon;
                 mapSymbol->size = PointI(_startFinishIcon->width(), _startFinishIcon->height());
                 mapSymbol->languageId = LanguageId::Invariant;
                 mapSymbol->position31 = startPos31;
@@ -285,7 +281,7 @@ void OAGpxAdditionalIconsProvider::buildStartFinishSymbolsGroup(const OsmAnd::Ar
         {
             const auto mapSymbol = std::make_shared<OsmAnd::BillboardRasterMapSymbol>(mapSymbolsGroup);
             mapSymbol->order = -120000;
-            mapSymbol->bitmap = _startIcon;
+            mapSymbol->image = _startIcon;
             mapSymbol->size = OsmAnd::PointI(_startIcon->width(), _startIcon->height());
             mapSymbol->languageId = OsmAnd::LanguageId::Invariant;
             mapSymbol->position31 = startPos31;
@@ -296,7 +292,7 @@ void OAGpxAdditionalIconsProvider::buildStartFinishSymbolsGroup(const OsmAnd::Ar
         {
             const auto mapSymbol = std::make_shared<OsmAnd::BillboardRasterMapSymbol>(mapSymbolsGroup);
             mapSymbol->order = -120000;
-            mapSymbol->bitmap = _finishIcon;
+            mapSymbol->image = _finishIcon;
             mapSymbol->size = OsmAnd::PointI(_finishIcon->width(), _finishIcon->height());
             mapSymbol->languageId = OsmAnd::LanguageId::Invariant;
             mapSymbol->position31 = finishPos31;

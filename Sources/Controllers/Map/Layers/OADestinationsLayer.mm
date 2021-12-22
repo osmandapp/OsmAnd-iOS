@@ -230,7 +230,7 @@
     builder.setIsAccuracyCircleSupported(false)
     .setBaseOrder(self.baseOrder)
     .setIsHidden(false)
-    .setPinIcon([OANativeUtilities skBitmapFromPngResource:markerResourceName])
+    .setPinIcon([OANativeUtilities skImageFromPngResource:markerResourceName])
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)

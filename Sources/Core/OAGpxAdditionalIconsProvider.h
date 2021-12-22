@@ -25,7 +25,7 @@
 #include <OsmAndCore/Map/MapSymbolsGroup.h>
 #include <OsmAndCore/Map/IAmenityIconProvider.h>
 #include <OsmAndCore/Map/CoreResourcesAmenityIconProvider.h>
-#include <SkBitmap.h>
+#include <SkImage.h>
 
 using namespace OsmAnd;
 
@@ -59,16 +59,16 @@ private:
     QList<QPair<PointI, PointI>> _startFinishLocations;
     QList<QPair<PointI, QPair<QString, int>>> _labelsAndCoordinates;
     
-    const std::shared_ptr<SkBitmap> _startIcon;
-    const std::shared_ptr<SkBitmap> _finishIcon;
-    const std::shared_ptr<SkBitmap> _startFinishIcon;
+    const sk_sp<SkImage> _startIcon;
+    const sk_sp<SkImage> _finishIcon;
+    const sk_sp<SkImage> _startFinishIcon;
     
     void buildStartFinishSymbolsGroup(const OsmAnd::AreaI &bbox31, double metersPerPixel, QList<std::shared_ptr<MapSymbolsGroup>>& mapSymbolsGroups);
     void buildSplitIntervalsSymbolsGroup(const OsmAnd::AreaI &bbox31, double metersPerPixel, QList<QPair<PointI, QPair<QString, int>>> visibleLabels, QList<std::shared_ptr<MapSymbolsGroup>>& mapSymbolsGroups);
     
     void buildVisibleSplits(const double metersPerPixel, QList<QPair<PointI, QPair<QString, int>>>& visibleSplits);
     
-    std::shared_ptr<SkBitmap> getSplitIconForValue(const QPair<QString, int>& labelData);
+    sk_sp<SkImage> getSplitIconForValue(const QPair<QString, int>& labelData);
 protected:
 public:
     OAGpxAdditionalIconsProvider();

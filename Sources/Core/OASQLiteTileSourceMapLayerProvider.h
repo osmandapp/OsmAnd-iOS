@@ -38,11 +38,11 @@ private:
         const OsmAnd::ZoomLevel zoom,
         const std::shared_ptr<const OsmAnd::IQueryController>& queryController = nullptr);
     
-    const std::shared_ptr<const SkBitmap> downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const NSData *data, double offsetY);
-    const std::shared_ptr<const SkBitmap> createShiftedTileBitmap(const NSData *data, const NSData* dataNext, double offsetY);
-    const std::shared_ptr<const SkBitmap> decodeBitmap(const NSData *data);
+    const sk_sp<SkImage> downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const NSData *data, double offsetY);
+    const sk_sp<SkImage> createShiftedTileBitmap(const NSData *data, const NSData* dataNext, double offsetY);
+    const sk_sp<SkImage> decodeBitmap(const NSData *data);
 
-    virtual void performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap);
+    virtual void performAdditionalChecks(sk_sp<SkImage> bitmap);
 
 protected:
 public:
@@ -51,14 +51,13 @@ public:
     
     OASQLiteTileSource *ts;
     
-    virtual QByteArray obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
-    virtual const std::shared_ptr<const SkBitmap> obtainImageBitmap(
-        const OsmAnd::IMapTiledDataProvider::Request& request);
-    virtual bool supportsObtainImageBitmap() const;
+    virtual QByteArray obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request);
+    virtual sk_sp<SkImage> obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
+    virtual bool supportsObtainImage() const;
 
     virtual void obtainImageAsync(
         const OsmAnd::IMapTiledDataProvider::Request& request,
-        const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage);
+        const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData);
     
     virtual OsmAnd::AlphaChannelPresence getAlphaChannelPresence() const;
     virtual OsmAnd::MapStubStyle getDesiredStubsStyle() const;

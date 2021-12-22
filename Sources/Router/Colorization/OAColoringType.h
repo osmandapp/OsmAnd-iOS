@@ -33,6 +33,7 @@
 
 - (OAGradientScaleType *) toGradientScaleType;
 
+- (BOOL) isCustomColor;
 - (BOOL) isTrackSolid;
 - (BOOL) isGradient;
 - (BOOL) isRouteInfoAttribute;

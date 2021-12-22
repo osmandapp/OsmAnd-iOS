@@ -22,13 +22,17 @@
 #import "OsmAndApp.h"
 #import "OAProfileDataUtils.h"
 #import "OASettingsHelper.h"
+#import "OARootViewController.h"
+#import "OARouteLineAppearanceHudViewController.h"
+#import "OAMainSettingsViewController.h"
+#import "OAConfigureProfileViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
 #define kOsmAndNavigation @"osmand_navigation"
 
-@interface OAProfileNavigationSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAProfileNavigationSettingsViewController () <UITableViewDelegate, UITableViewDataSource, OARouteLineAppearanceViewControllerDelegate>
 
 @end
 
@@ -106,6 +110,12 @@
         @"title" : OALocalizedString(@"vehicle_parameters"),
         @"icon" : self.appMode.getIconName,
         @"key" : @"vehicleParams",
+    }];
+    [navigationArr addObject:@{
+        @"type" : [OAIconTextTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"customize_route_line"),
+        @"icon" : @"ic_custom_appearance",
+        @"key" : @"routeLineAppearance",
     }];
     [otherArr addObject:@{
         @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
@@ -202,21 +212,34 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemKey = item[@"key"];
-    OABaseSettingsViewController* settingsViewController = nil;
-    if ([itemKey isEqualToString:@"navigationType"])
-        settingsViewController = [[OANavigationTypeViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"routeParams"])
-        settingsViewController = [[OARouteParametersViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"voicePrompts"])
-        settingsViewController = [[OAVoicePromptsViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"screenAlerts"])
-        settingsViewController = [[OAScreenAlertsViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"vehicleParams"])
-        settingsViewController = [[OAVehicleParametersViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"mapBehavior"])
-        settingsViewController = [[OAMapBehaviorViewController alloc] initWithAppMode:self.appMode];
-    settingsViewController.delegate = self;
-    [self showViewController:settingsViewController];
+    if ([itemKey isEqualToString:@"routeLineAppearance"])
+    {
+        [self.navigationController popToViewController:OARootViewController.instance animated:YES];
+        OARouteLineAppearanceHudViewController *routeLineAppearanceHudViewController = [[OARouteLineAppearanceHudViewController alloc] init];
+        routeLineAppearanceHudViewController.delegate = self;
+        [OARootViewController.instance.mapPanel showScrollableHudViewController:routeLineAppearanceHudViewController];
+    }
+    else
+    {
+        OABaseSettingsViewController *settingsViewController = nil;
+        if ([itemKey isEqualToString:@"navigationType"])
+            settingsViewController = [[OANavigationTypeViewController alloc] initWithAppMode:self.appMode];
+        else if ([itemKey isEqualToString:@"routeParams"])
+            settingsViewController = [[OARouteParametersViewController alloc] initWithAppMode:self.appMode];
+        else if ([itemKey isEqualToString:@"voicePrompts"])
+            settingsViewController = [[OAVoicePromptsViewController alloc] initWithAppMode:self.appMode];
+        else if ([itemKey isEqualToString:@"screenAlerts"])
+            settingsViewController = [[OAScreenAlertsViewController alloc] initWithAppMode:self.appMode];
+        else if ([itemKey isEqualToString:@"vehicleParams"])
+            settingsViewController = [[OAVehicleParametersViewController alloc] initWithAppMode:self.appMode];
+        else if ([itemKey isEqualToString:@"mapBehavior"])
+            settingsViewController = [[OAMapBehaviorViewController alloc] initWithAppMode:self.appMode];
+        if (settingsViewController)
+        {
+            settingsViewController.delegate = self;
+            [self showViewController:settingsViewController];
+        }
+    }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -259,6 +282,15 @@
     [super onSettingsChanged];
     if (self.delegate)
         [self.delegate onSettingsChanged];
+}
+
+#pragma mark - OARouteLineAppearanceViewControllerDelegate
+
+-(void) onCloseAppearance
+{
+    OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] initWithTargetAppMode:self.appMode
+                                                                                           targetScreenKey:kNavigationSettings];
+    [OARootViewController.instance.navigationController pushViewController:settingsVC animated:NO];
 }
 
 @end

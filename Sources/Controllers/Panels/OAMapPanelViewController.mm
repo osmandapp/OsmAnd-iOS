@@ -752,7 +752,8 @@ typedef enum
         
         if (_targetAppMode && _reopenSettings)
         {
-            OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] initWithTargetAppMode:_targetAppMode];
+            OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] initWithTargetAppMode:_targetAppMode
+                                                                                                   targetScreenKey:nil];
             [OARootViewController.instance.navigationController pushViewController:settingsVC animated:NO];
         }
         _targetAppMode = nil;
@@ -768,12 +769,12 @@ typedef enum
 
 - (void) closeRouteInfo
 {
-    [self closeRouteInfo:nil];
+    [self closeRouteInfo:YES onComplete:nil];
 }
 
-- (void) closeRouteInfo:(void (^)(void))onComplete
+- (void) closeRouteInfo:(BOOL)topControlsVisibility onComplete:(void (^)(void))onComplete
 {
-    [self closeRouteInfoWithTopControlsVisibility:YES bottomsControlHeight:@0 onComplete:onComplete];
+    [self closeRouteInfoWithTopControlsVisibility:topControlsVisibility bottomsControlHeight:@0 onComplete:onComplete];
 }
 
 - (void) closeRouteInfoWithTopControlsVisibility:(BOOL)topControlsVisibility bottomsControlHeight:(NSNumber *)bottomsControlHeight onComplete:(void (^)(void))onComplete

@@ -8,10 +8,12 @@
 
 #import "OABaseBigTitleSettingsViewController.h"
 
+#define kNavigationSettings @"nav_settings"
+
 @class OAApplicationMode;
 
 @interface OAConfigureProfileViewController : OABaseBigTitleSettingsViewController
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)mode;
+- (instancetype) initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey;
 
 @end

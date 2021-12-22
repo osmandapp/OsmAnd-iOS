@@ -28,6 +28,7 @@ struct RoutingParameter;
 @required
 - (void) updateParameters;
 - (void) openNavigationSettings;
+- (void) openRouteLineAppearance;
 - (void) showParameterGroupScreen:(OALocalRoutingParameterGroup *)group;
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
 - (void) showAvoidRoadsScreen;
@@ -113,4 +114,7 @@ struct RoutingParameter;
 @end
 
 @interface OAOtherSettingsRoutingParameter : OALocalRoutingParameter
+@end
+
+@interface OACustomizeRouteLineRoutingParameter : OALocalRoutingParameter
 @end

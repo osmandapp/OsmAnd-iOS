@@ -85,7 +85,7 @@
 - (void) showRouteInfo;
 - (void) showRouteInfo:(BOOL)fullMenu;
 - (void) closeRouteInfo;
-- (void) closeRouteInfo:(void (^)(void))onComplete;
+- (void) closeRouteInfo:(BOOL)topControlsVisibility onComplete:(void (^)(void))onComplete;
 - (void) updateRouteInfo;
 - (void) showWaypoints;
 - (void) showRoutePreferences;

@@ -33,6 +33,16 @@
     BOOL _firstStateChanged;
 }
 
+- (BOOL)hasCustomStatusBar
+{
+    return NO; //override
+}
+
+- (CGFloat)getStatusBarHeight
+{
+    return [self hasCustomStatusBar] ? _statusBarBackgroundView.frame.size.height : [OAUtilities getStatusBarHeight]; //override
+}
+
 - (instancetype) init
 {
     self = [super initWithNibName:@"OABaseScrollableHudViewController"
@@ -67,10 +77,11 @@
         [_scrollableView addGestureRecognizer:_panGesture];
         _panGesture.delegate = self;
     }
-    _currentState = EOADraggableMenuStateInitial;
+    _currentState = [self hasInitialState] ? EOADraggableMenuStateInitial : EOADraggableMenuStateExpanded;
     _menuHudMode = EOAScrollableMenuHudBaseMode;
 
     _sliderView.layer.cornerRadius = 3.;
+    _statusBarBackgroundView.hidden = ![self hasCustomStatusBar];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -132,15 +143,28 @@
             [mapPanel refreshMap];
         }
     }
-    
-    BOOL isFullScreen = _currentState == EOADraggableMenuStateFullScreen;
-    _statusBarBackgroundView.frame = isFullScreen && [self showStatusBarWhenFullScreen] ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
+
+    if (![self hasCustomStatusBar])
+    {
+        BOOL showStatusBar = _currentState == EOADraggableMenuStateFullScreen && [self showStatusBarWhenFullScreen];
+        _statusBarBackgroundView.frame = showStatusBar
+                ? CGRectMake(0., 0., DeviceScreenWidth, [self getStatusBarHeight])
+                : CGRectZero;
+    }
+    else
+    {
+        _statusBarBackgroundView.frame = ![self isLandscape]
+                ? CGRectMake(0., 0., DeviceScreenWidth, [self getStatusBarHeight])
+                : CGRectZero;
+    }
 
     UIView *customHeader = [self getCustomHeader];
     if (customHeader)
     {
         CGRect customHeaderFrame = customHeader.frame;
-        customHeaderFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
+        customHeaderFrame.origin.y = [self hasCustomStatusBar] && _scrollableView.frame.origin.y > [self getStatusBarHeight]
+                ? 0.
+                : CGRectGetMaxY(_statusBarBackgroundView.frame);
         customHeader.frame = customHeaderFrame;
     }
 
@@ -156,7 +180,9 @@
     
     CGRect contentFrame = _contentContainer.frame;
     contentFrame.size.width = _scrollableView.bounds.size.width;
-    contentFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
+    contentFrame.origin.y =  [self hasCustomStatusBar] && _scrollableView.frame.origin.y > [self getStatusBarHeight]
+            ? 0.
+            : CGRectGetMaxY(_statusBarBackgroundView.frame);
     contentFrame.size.height -= contentFrame.origin.y;
     _contentContainer.frame = contentFrame;
     
@@ -174,8 +200,8 @@
     _topHeaderContainerView.frame = CGRectMake(OAUtilities.getLeftMargin, _topHeaderContainerView.frame.origin.y, contentFrame.size.width - OAUtilities.getLeftMargin, _topHeaderContainerView.frame.size.height);
     
     [self applyCornerRadius:!isLandscape && _currentState != EOADraggableMenuStateFullScreen];
-    
-    [self onViewHeightChanged:self.getViewHeight];
+
+    [self onViewStateChanged:self.getViewHeight];
     
     [self doAdditionalLayout];
 }
@@ -192,7 +218,7 @@
 
 - (CGFloat) additionalLandscapeOffset
 {
-    return OAUtilities.isIPad && !OAUtilities.isWindowed ? OAUtilities.getStatusBarHeight : 0.;
+    return OAUtilities.isIPad && !OAUtilities.isWindowed ? [self getStatusBarHeight] : 0.;
 }
 
 - (void) adjustFrame
@@ -249,6 +275,11 @@
     return nil; //override
 }
 
+- (BOOL)hasInitialState
+{
+    return YES; //override
+}
+
 - (CGFloat)initialMenuHeight
 {
     return _topHeaderContainerView.frame.origin.y + _topHeaderContainerView.frame.size.height + _toolBarView.frame.size.height; // override
@@ -281,7 +312,8 @@
 
 - (CGFloat) getViewHeight:(EOADraggableMenuState)state
 {
-    switch (state) {
+    switch (state)
+    {
         case EOADraggableMenuStateInitial:
             return self.initialMenuHeight;
         case EOADraggableMenuStateExpanded:
@@ -453,7 +485,7 @@
     CGPoint initialPoint = [self calculateInitialPoint];
     
     CGFloat expandedAnchor = DeviceScreenHeight / 4 + 40.;
-    CGFloat fullScreenAnchor = OAUtilities.getStatusBarHeight + 40.;
+    CGFloat fullScreenAnchor = [self getStatusBarHeight] + 40.;
     
     switch (recognizer.state)
     {
@@ -468,12 +500,12 @@
             if (_isDraggingOnTable)
                 _tableView.contentOffset = CGPointMake(0., 0.);
             
-            if (_scrollableView.frame.origin.y > OAUtilities.getStatusBarHeight
+            if (_scrollableView.frame.origin.y > [self getStatusBarHeight]
                 || (_initialTouchPoint < _tableView.frame.origin.y && _tableViewContentOffsetY > 0))
                 _tableViewContentOffsetY = 0;
             
             if ((self.supportsFullScreen && _currentState != EOADraggableMenuStateFullScreen)
-                    && (newY <= OAUtilities.getStatusBarHeight || _tableViewContentOffsetY > 0))
+                    && (newY <= [self getStatusBarHeight] || _tableViewContentOffsetY > 0))
             {
                 newY = 0;
                 if (_tableViewContentOffsetY > 0)
@@ -481,25 +513,37 @@
             }
             else if ((DeviceScreenHeight - newY < _toolBarView.frame.size.height)
                     || newY <= 0
-                    || (_currentState == EOADraggableMenuStateFullScreen && newY < OAUtilities.getStatusBarHeight))
+                    || (_currentState == EOADraggableMenuStateFullScreen && newY < [self getStatusBarHeight]))
             {
                 return;
             }
             
             CGRect frame = _scrollableView.frame;
-            frame.origin.y = newY > 0 && newY <= OAUtilities.getStatusBarHeight ? OAUtilities.getStatusBarHeight : newY;
+            frame.origin.y = newY > 0 && newY <= [self getStatusBarHeight] ? [self getStatusBarHeight] : newY;
             frame.size.height = DeviceScreenHeight - newY;
             _scrollableView.frame = frame;
-            
-            _statusBarBackgroundView.frame = newY == 0 && [self showStatusBarWhenFullScreen]
-                    ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight)
-                    : CGRectZero;
+
+            if (![self hasCustomStatusBar])
+            {
+                BOOL showStatusBar = (newY == 0 && [self showStatusBarWhenFullScreen]) || [self hasCustomStatusBar];
+                _statusBarBackgroundView.frame = showStatusBar
+                        ? CGRectMake(0., 0., DeviceScreenWidth, [self getStatusBarHeight])
+                        : CGRectZero;
+            }
+            else
+            {
+                _statusBarBackgroundView.frame = ![self isLandscape]
+                        ? CGRectMake(0., 0., DeviceScreenWidth, [self getStatusBarHeight])
+                        : CGRectZero;
+            }
 
             UIView *customHeader = [self getCustomHeader];
             if (customHeader)
             {
                 CGRect customHeaderFrame = customHeader.frame;
-                customHeaderFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
+                customHeaderFrame.origin.y =  [self hasCustomStatusBar] && newY > [self getStatusBarHeight]
+                        ? 0.
+                        : CGRectGetMaxY(_statusBarBackgroundView.frame);
                 customHeader.frame = customHeaderFrame;
             }
             
@@ -514,7 +558,9 @@
             
             CGRect contentFrame = _contentContainer.frame;
             contentFrame.size.width = _scrollableView.bounds.size.width;
-            contentFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
+            contentFrame.origin.y = [self hasCustomStatusBar] && newY > [self getStatusBarHeight]
+                    ? 0.
+                    : CGRectGetMaxY(_statusBarBackgroundView.frame);
             contentFrame.size.height = frame.size.height - buttonsFrame.size.height - contentFrame.origin.y;
             _contentContainer.frame = contentFrame;
             
@@ -526,7 +572,10 @@
                     [self hasCustomHeaderFooter] ? contentFrame.size.height + self.toolBarView.frame.size.height
                             : contentFrame.size.height - tableViewY
             );
-            
+
+            [UIView animateWithDuration:0.2 animations:^{
+                [self onViewHeightChanged:DeviceScreenHeight - _scrollableView.frame.origin.y];
+            } completion:nil];
             [self applyCornerRadius:newY > 0];
             return;
         }
@@ -536,12 +585,12 @@
             _isDragging = NO;
             BOOL shouldRefresh = NO;
             CGFloat newY = touchPoint.y - _initialTouchPoint;
-            if ((newY - initialPoint.y > self.toolBarView.frame.size.height || fastDownSlide) && _currentState == EOADraggableMenuStateInitial)
+            if (([self hasInitialState] && (newY - initialPoint.y > self.toolBarView.frame.size.height || fastDownSlide) && _currentState == EOADraggableMenuStateInitial) || (![self hasInitialState] && (newY > DeviceScreenHeight - ([self getToolbarHeight] == 0 ? self.topHeaderContainerView.frame.size.height + [OAUtilities getBottomMargin] : self.toolBarView.frame.size.height))))
             {
                 [self hide:YES duration:0.2 onComplete:nil];
                 break;
             }
-            else if (newY > DeviceScreenHeight - [self initialMenuHeight] + _toolBarView.frame.size.height + _tableView.frame.origin.y && !fastUpSlide)
+            else if (newY > DeviceScreenHeight - [self initialMenuHeight] + _toolBarView.frame.size.height + _tableView.frame.origin.y && !fastUpSlide && [self hasInitialState])
             {
                 shouldRefresh = YES;
                 _currentState = EOADraggableMenuStateInitial;
@@ -550,7 +599,7 @@
             {
                 if (!slidingDown && _currentState == EOADraggableMenuStateExpanded)
                 {
-                    if (newY > DeviceScreenHeight - self.initialMenuHeight)
+                    if (newY > DeviceScreenHeight - self.initialMenuHeight && [self hasInitialState])
                         _currentState = EOADraggableMenuStateInitial;
                     else if (newY > DeviceScreenHeight - self.expandedMenuHeight)
                         _currentState = EOADraggableMenuStateExpanded;
@@ -560,10 +609,10 @@
                 else
                     _currentState = EOADraggableMenuStateFullScreen;
             }
-            else if ((newY < expandedAnchor || (newY > expandedAnchor && !slidingDown)) && !fastDownSlide)
+            else if (newY < expandedAnchor || (newY > expandedAnchor && !slidingDown))
             {
                 shouldRefresh = YES;
-                if (!slidingDown && newY > DeviceScreenHeight - self.initialMenuHeight)
+                if (!slidingDown && newY > DeviceScreenHeight - self.initialMenuHeight && [self hasInitialState])
                     _currentState = EOADraggableMenuStateInitial;
                 else if (!slidingDown && newY < DeviceScreenHeight - self.expandedMenuHeight)
                     _currentState = EOADraggableMenuStateFullScreen;
@@ -576,7 +625,7 @@
                 if (slidingDown && _currentState == EOADraggableMenuStateExpanded && newY < DeviceScreenHeight - self.expandedMenuHeight)
                     _currentState = EOADraggableMenuStateExpanded;
                 else
-                    _currentState = EOADraggableMenuStateInitial;
+                    _currentState = [self hasInitialState] ? EOADraggableMenuStateInitial : EOADraggableMenuStateExpanded;
             }
             [UIView animateWithDuration:0.2 animations:^{
                 [self layoutSubviews];
@@ -683,13 +732,18 @@
     if (self.shouldScrollInAllModes)
         return;
     
-    if (scrollView.contentOffset.y <= 0 || self.contentContainer.frame.origin.y != OAUtilities.getStatusBarHeight)
+    if (scrollView.contentOffset.y <= 0 || self.contentContainer.frame.origin.y != [self getStatusBarHeight])
         [scrollView setContentOffset:CGPointZero animated:NO];
     
     [self setupModeViewShadowVisibility];
 }
 
 #pragma mark - OADraggableViewMethods
+
+- (void)onViewStateChanged:(CGFloat)height
+{
+    //override
+}
 
 - (void)onViewHeightChanged:(CGFloat)height
 {

@@ -66,12 +66,13 @@
 
 @implementation OATrackMenuViewControllerState
 
-+ (instancetype)withPinLocation:(CLLocationCoordinate2D)pinLocation
++ (instancetype)withPinLocation:(CLLocationCoordinate2D)pinLocation openedFromMap:(BOOL)openedFromMap
 {
     OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
     if (state)
     {
         state.pinLocation = pinLocation;
+        state.openedFromMap = openedFromMap;
     }
     return state;
 }
@@ -1477,9 +1478,7 @@
 
 - (BOOL)openedFromMap
 {
-    CLLocationCoordinate2D pinLocation = [self getPinLocation];
-    CLLocationCoordinate2D centerGpxLocation = [self getCenterGpxLocation];
-    return pinLocation.latitude != centerGpxLocation.latitude && pinLocation.latitude != centerGpxLocation.longitude;
+    return _reopeningState ? _reopeningState.openedFromMap : NO;
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate

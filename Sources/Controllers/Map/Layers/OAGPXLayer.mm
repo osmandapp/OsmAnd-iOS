@@ -544,6 +544,8 @@
         targetPoint.title = [item getNiceTitle];
 
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
+        targetPoint.values = @{ @"opened_from_map": @YES };
+
         return targetPoint;
     }
     else if ([obj isKindOfClass:[OAGpxWptItem class]])

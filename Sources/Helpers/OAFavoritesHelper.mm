@@ -29,6 +29,7 @@ static NSMutableArray<OAFavoriteItem *> *_cachedFavoritePoints;
 static NSMutableArray<OAFavoriteGroup *> *_favoriteGroups;
 static NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
 static NSDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
+static NSArray<NSString *> *_poiIconsCatagories;
 static NSArray<NSString *> *_flatPoiIcons;
 static NSArray<NSString *> *_flatBackgroundIcons;
 static NSArray<NSString *> *_flatBackgroundContourIcons;
@@ -548,6 +549,7 @@ static BOOL _favoritesLoaded = NO;
 {
     NSString* path = [[NSBundle mainBundle] pathForResource:@"poi_categories" ofType:@"json"];
     NSData *data = [NSData dataWithContentsOfFile:path];
+    NSString* jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
 
     NSMutableDictionary<NSString *, NSArray<NSString *> *> *tempIcons  = [NSMutableDictionary new];
@@ -572,6 +574,23 @@ static BOOL _favoritesLoaded = NO;
     }
     _poiIcons = [NSDictionary dictionaryWithDictionary:tempIcons];
     _flatPoiIcons = [NSArray arrayWithArray:tempFlatIcons];
+    [self setupPoiIconCategoriesOrder:json jsonString:jsonString];
+}
+
++ (void) setupPoiIconCategoriesOrder:(NSDictionary *)json jsonString:(NSString *)jsonString
+{
+    NSMutableDictionary<NSString *, NSNumber *> *categoriesOrder = [NSMutableDictionary dictionary];
+    
+    NSDictionary *categories = json[@"categories"];
+    for (NSString *category in categories.allKeys)
+    {
+        NSNumber *order = [NSNumber numberWithInt: [jsonString indexOf:category]];
+        categoriesOrder[category] = order;
+    }
+    
+    _poiIconsCatagories = [categories.allKeys sortedArrayUsingComparator:^NSComparisonResult(NSString * obj1, NSString* obj2) {
+        return [categoriesOrder[obj1] compare:categoriesOrder[obj2]];
+    }];
 }
 
 + (NSDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames
@@ -579,6 +598,11 @@ static BOOL _favoritesLoaded = NO;
     if (!_poiIcons)
         [self setupIcons];
     return _poiIcons;
+}
+
++ (NSArray<NSString *> *) getOrderedPoiIconsCatagories
+{
+    return _poiIconsCatagories;
 }
 
 + (NSArray<NSString *> *) getFlatIconNamesList

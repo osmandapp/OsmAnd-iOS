@@ -54,6 +54,7 @@
 + (void) recalculateCachedFavPoints;
 
 + (NSDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames;
++ (NSArray<NSString *> *) getOrderedPoiIconsCatagories;
 + (NSArray<NSString *> *) getFlatIconNamesList;
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList;
 + (NSArray<NSString *> *) getFlatBackgroundContourIconNamesList;

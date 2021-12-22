@@ -311,11 +311,17 @@
     NSString *preselectedIconName = [self getPreselectedIconName];
 
     _poiIcons = [OAFavoritesHelper getCategirizedIconNames];
+    NSArray<NSString *> *categories = [OAFavoritesHelper getOrderedPoiIconsCatagories];
+    
     if (_lastUsedIcons && _lastUsedIcons.count > 0)
     {
         NSMutableDictionary<NSString *, NSArray<NSString *> *> *poiIconsMutable = _poiIcons.mutableCopy;
         poiIconsMutable[kLastUsedIconsKey] = _lastUsedIcons;
         _poiIcons = poiIconsMutable.copy;
+        
+        NSMutableArray<NSString *> *categoriesMutable = [categories mutableCopy];
+        [categoriesMutable insertObject:kLastUsedIconsKey atIndex:0];
+        categories = categoriesMutable.copy;
 
         if (!preselectedIconName)
             preselectedIconName = _lastUsedIcons[0];
@@ -326,7 +332,7 @@
     
     else
     {
-        for (NSString *categoryName in _poiIcons.allKeys)
+        for (NSString *categoryName in categories)
         {
             NSArray<NSString *> *icons = _poiIcons[categoryName];
             if (icons)
@@ -340,8 +346,7 @@
             }
         }
     }
-
-    NSArray *categories = _poiIcons.allKeys;
+    
     NSMutableArray *categoriesData = [NSMutableArray new];
     for (NSString *category in categories)
     {
@@ -363,9 +368,7 @@
         }
     }
 
-    _poiCategories = [categoriesData sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
-        return [[obj1[@"title"] lowerCase] compare:[obj2[@"title"] lowerCase]];
-    }];
+    _poiCategories = categoriesData;
 
     if (!_selectedIconName || _selectedIconName.length == 0)
         _selectedIconName = kDefaultIcon;

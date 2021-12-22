@@ -240,11 +240,6 @@
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_done")
                                                     attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
                                forState:UIControlStateNormal];
-
-    CGRect toolBarFrame = self.toolBarView.frame;
-    toolBarFrame.origin.y = self.scrollableView.frame.size.height;
-    toolBarFrame.size.height = 0.;
-    self.toolBarView.frame = toolBarFrame;
 }
 
 - (void)generateData

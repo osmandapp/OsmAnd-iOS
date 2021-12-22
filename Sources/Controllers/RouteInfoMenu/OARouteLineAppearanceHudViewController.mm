@@ -22,14 +22,18 @@
 
 @property (weak, nonatomic) IBOutlet UIView *backButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UIButton *backNavBarButton;
 
-@property (weak, nonatomic) IBOutlet UIView *doneButtonContainerView;
-@property (weak, nonatomic) IBOutlet UIButton *doneButton;
+@property (weak, nonatomic) IBOutlet UIView *applyButtonContainerView;
+@property (weak, nonatomic) IBOutlet UIButton *applyButton;
+@property (weak, nonatomic) IBOutlet UIButton *applyNavBarButton;
 
+@property (weak, nonatomic) IBOutlet UILabel *titleNavBarView;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionNavBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *doneButtonTrailingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonTrailingConstraint;
 
 @end
 
@@ -49,12 +53,13 @@
 
 @dynamic statusBarBackgroundView;
 
-- (instancetype)init
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
 {
     self = [super initWithNibName:@"OARouteLineAppearanceHudViewController"
                            bundle:nil];
     if (self)
     {
+        _appMode = appMode;
         [self commonInit];
     }
     return self;
@@ -65,7 +70,6 @@
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
     _mapPanelViewController = [OARootViewController instance].mapPanel;
-    _appMode = [_settings.applicationMode get];
     _previewRouteLineInfo = [self createPreviewRouteLineInfo];
 
     [self setOldValues];
@@ -87,9 +91,8 @@
     [super viewDidLoad];
     [self applyLocalization];
 
-    [self setupView];
     [self generateData];
-    [self setupHeaderView];
+    [self setupView];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -117,7 +120,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
         if (!landscape)
             [self goExpanded];
         self.backButtonContainerView.hidden = !landscape;
-        self.doneButtonContainerView.hidden = !landscape;
+        self.applyButtonContainerView.hidden = !landscape;
     } completion:nil];
 }
 
@@ -138,25 +141,8 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 
 - (void)setupView
 {
-    [self.statusBarBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
-    _originalStatusBarHeight = self.statusBarBackgroundView.frame.size.height;
-
-    UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
-    [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
-                     forState:UIControlStateNormal];
-    self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
-    [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
-
-    [self.doneButton addBlurEffect:YES cornerRadius:12. padding:0.];
-    [self.doneButton setAttributedTitle:
-                    [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_done")
-                                                    attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
-                               forState:UIControlStateNormal];
-
-    CGRect toolBarFrame = self.toolBarView.frame;
-    toolBarFrame.origin.y = self.scrollableView.frame.size.height;
-    toolBarFrame.size.height = 0.;
-    self.toolBarView.frame = toolBarFrame;
+    [self setupHeaderView];
+    [self setupButtonsNavigationBarView];
 }
 
 - (void)setupHeaderView
@@ -164,19 +150,39 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 
 }
 
-- (void)setupNavigationBarView
+- (void)setupButtonsNavigationBarView
 {
-    UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_back")
-                                                                      style:UIBarButtonItemStylePlain
-                                                                     target:self
-                                                                     action:@selector(onBackButtonPressed:)];
-    self.navigationItem.leftBarButtonItem = leftBarButton;
+    [self.statusBarBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
+    _originalStatusBarHeight = self.statusBarBackgroundView.frame.size.height;
 
-    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_apply")
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:self
-                                                                      action:@selector(onDoneButtonPressed:)];
-    self.navigationItem.rightBarButtonItem = rightBarButton;
+    [self.titleNavBarView setText:OALocalizedString(@"customize_route_line")];
+    [self.descriptionNavBarView setText:_appMode.name];
+
+    BOOL isRTL = [self.statusBarBackgroundView isDirectionRTL];
+    UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
+    [self.backButton setImage:isRTL ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
+                     forState:UIControlStateNormal];
+    self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+    [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
+    backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
+
+    [self.backNavBarButton setImage:isRTL ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
+                           forState:UIControlStateNormal];
+    self.backNavBarButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+    [self.backNavBarButton setAttributedTitle:
+                    [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_back")
+                                                    attributes:@{ NSFontAttributeName:[UIFont systemFontOfSize:17.] }]
+                                     forState:UIControlStateNormal];
+
+    [self.applyButton addBlurEffect:YES cornerRadius:12. padding:0.];
+    [self.applyButton setAttributedTitle:
+                    [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_apply")
+                                                    attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
+                                forState:UIControlStateNormal];
+    [self.applyNavBarButton setAttributedTitle:
+                    [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_apply")
+                                                    attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
+                                      forState:UIControlStateNormal];
 }
 
 - (void)generateData
@@ -234,10 +240,10 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             : [OAUtilities getLeftMargin] + 10.;
     self.backButtonContainerView.hidden = ![self isLandscape];
 
-    self.doneButtonTrailingConstraint.constant = [self isLandscape]
+    self.applyButtonTrailingConstraint.constant = [self isLandscape]
             ? (isRTL ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10. : 0.)
             : [OAUtilities getLeftMargin] + 10.;
-    self.doneButtonContainerView.hidden = ![self isLandscape];
+    self.applyButtonContainerView.hidden = ![self isLandscape];
 }
 
 - (void)changeMapRulerPosition:(CGFloat)height
@@ -287,7 +293,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
     }];
 }
 
-- (IBAction)onDoneButtonPressed:(id)sender
+- (IBAction)onApplyButtonPressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
@@ -347,6 +353,13 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
         [cell updateConstraints];
 
     return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return section == 0 ? 0.001 : tableView.sectionHeaderHeight;
 }
 
 @end

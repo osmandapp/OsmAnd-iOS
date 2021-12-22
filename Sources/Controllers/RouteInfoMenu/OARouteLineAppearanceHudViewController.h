@@ -8,6 +8,8 @@
 
 #import "OABaseScrollableHudViewController.h"
 
+@class OAApplicationMode;
+
 @protocol OARouteLineAppearanceViewControllerDelegate <NSObject>
 
 @required
@@ -17,6 +19,8 @@
 @end
 
 @interface OARouteLineAppearanceHudViewController : OABaseScrollableHudViewController
+
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode;
 
 @property (nonatomic) id<OARouteLineAppearanceViewControllerDelegate> delegate;
 

@@ -153,16 +153,17 @@
     }
     else
     {
-        _statusBarBackgroundView.frame = ![self isLandscape]
+        _statusBarBackgroundView.hidden = [self isLandscape];
+        /*_statusBarBackgroundView.frame = ![self isLandscape]
                 ? CGRectMake(0., 0., DeviceScreenWidth, [self getStatusBarHeight])
-                : CGRectZero;
+                : CGRectZero;*/
     }
 
     UIView *customHeader = [self getCustomHeader];
     if (customHeader)
     {
         CGRect customHeaderFrame = customHeader.frame;
-        customHeaderFrame.origin.y = [self hasCustomStatusBar] && _scrollableView.frame.origin.y > [self getStatusBarHeight]
+        customHeaderFrame.origin.y = [self hasCustomStatusBar] && ([self isLandscape] || _scrollableView.frame.origin.y > [self getStatusBarHeight])
                 ? 0.
                 : CGRectGetMaxY(_statusBarBackgroundView.frame);
         customHeader.frame = customHeaderFrame;
@@ -180,7 +181,7 @@
     
     CGRect contentFrame = _contentContainer.frame;
     contentFrame.size.width = _scrollableView.bounds.size.width;
-    contentFrame.origin.y =  [self hasCustomStatusBar] && _scrollableView.frame.origin.y > [self getStatusBarHeight]
+    contentFrame.origin.y =  [self hasCustomStatusBar] && ([self isLandscape] || _scrollableView.frame.origin.y > [self getStatusBarHeight])
             ? 0.
             : CGRectGetMaxY(_statusBarBackgroundView.frame);
     contentFrame.size.height -= contentFrame.origin.y;
@@ -532,16 +533,17 @@
             }
             else
             {
-                _statusBarBackgroundView.frame = ![self isLandscape]
+                _statusBarBackgroundView.hidden = [self isLandscape];
+                /*_statusBarBackgroundView.frame = ![self isLandscape]
                         ? CGRectMake(0., 0., DeviceScreenWidth, [self getStatusBarHeight])
-                        : CGRectZero;
+                        : CGRectZero;*/
             }
 
             UIView *customHeader = [self getCustomHeader];
             if (customHeader)
             {
                 CGRect customHeaderFrame = customHeader.frame;
-                customHeaderFrame.origin.y =  [self hasCustomStatusBar] && newY > [self getStatusBarHeight]
+                customHeaderFrame.origin.y =  [self hasCustomStatusBar] && ([self isLandscape] || newY > [self getStatusBarHeight])
                         ? 0.
                         : CGRectGetMaxY(_statusBarBackgroundView.frame);
                 customHeader.frame = customHeaderFrame;
@@ -558,7 +560,7 @@
             
             CGRect contentFrame = _contentContainer.frame;
             contentFrame.size.width = _scrollableView.bounds.size.width;
-            contentFrame.origin.y = [self hasCustomStatusBar] && newY > [self getStatusBarHeight]
+            contentFrame.origin.y = [self hasCustomStatusBar] && ([self isLandscape] || newY > [self getStatusBarHeight])
                     ? 0.
                     : CGRectGetMaxY(_statusBarBackgroundView.frame);
             contentFrame.size.height = frame.size.height - buttonsFrame.size.height - contentFrame.origin.y;

@@ -86,13 +86,14 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 
 @interface OATrackMenuViewControllerState : OATargetMenuViewControllerState
 
-+ (instancetype)withPinLocation:(CLLocationCoordinate2D)pinLocation;
++ (instancetype)withPinLocation:(CLLocationCoordinate2D)pinLocation openedFromMap:(BOOL)openedFromMap;
 
 @property (nonatomic, assign) EOATrackMenuHudTab lastSelectedTab;
 @property (nonatomic, assign) EOARouteStatisticsMode routeStatistics;
 @property (nonatomic, assign) NSString *gpxFilePath;
 @property (nonatomic, assign) CLLocationCoordinate2D pinLocation;
 @property (nonatomic, assign) EOADraggableMenuState showingState;
+@property (nonatomic, assign) BOOL openedFromMap;
 
 @end
 

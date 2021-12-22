@@ -1278,7 +1278,8 @@ typedef enum
     {
         return [self openTargetViewWithGPX:targetPoint.targetObj
                               trackHudMode:EOATrackMenuHudMode
-                                     state:[OATrackMenuViewControllerState withPinLocation:targetPoint.location]];
+                                     state:[OATrackMenuViewControllerState withPinLocation:targetPoint.location
+                                                                             openedFromMap:[targetPoint.values[@"opened_from_map"] boolValue]]];
     }
     else
     {
@@ -2533,7 +2534,9 @@ typedef enum
     [self openTargetViewWithGPX:item
                    trackHudMode:EOATrackMenuHudMode
                           state:[_activeViewControllerState isKindOfClass:OATrackMenuViewControllerState.class]
-                    ? _activeViewControllerState : [OATrackMenuViewControllerState withPinLocation:item.bounds.center]];
+                                  ? _activeViewControllerState
+                                  : [OATrackMenuViewControllerState withPinLocation:item.bounds.center
+                                                                      openedFromMap:NO]];
 }
 
 - (void)openTargetViewWithGPX:(OAGPX *)item

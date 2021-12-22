@@ -1108,6 +1108,8 @@
 		BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
 		BBA3AFDF197FC4BB0039D991 /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
+		CA4EDC45F03787B5F481123A /* OASlider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED20CACFB86C3CEE9C486 /* OASlider.mm */; };
+		CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */; };
 		CA4ED710806E780B7FAB796A /* OAPreviewRouteLineInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED0D4B38A47C7C60819AA /* OAPreviewRouteLineInfo.mm */; };
 		CA4ED74E88CC146ED42AE3D2 /* OARouteLineAppearanceHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDE5AC5CCE1F6DFDC5D41 /* OARouteLineAppearanceHudViewController.mm */; };
 		DA03184222DF0E50008FC564 /* ic_custom_boat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */; };
@@ -4122,6 +4124,10 @@
 		BBB3F6AA18A4DEF0001C3175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BBBDADB818BCF53500E4A359 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		BBE1D2B5190D1C9600D90F0A /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = "../resources/countries-info/regions.ocbf"; sourceTree = "<group>"; };
+		CA4ED20CACFB86C3CEE9C486 /* OASlider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASlider.mm; sourceTree = "<group>"; };
+		CA4ED5B77046F2C3F6FB7181 /* OASlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASlider.h; sourceTree = "<group>"; };
+		CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACollectionViewFlowLayout.m; sourceTree = "<group>"; };
+		CA4ED8CABB8E66D48FDF5F2B /* OACollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollectionViewFlowLayout.h; sourceTree = "<group>"; };
 		CA4ED0D4B38A47C7C60819AA /* OAPreviewRouteLineInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPreviewRouteLineInfo.mm; sourceTree = "<group>"; };
 		CA4ED4ED6060269841C56359 /* OAPreviewRouteLineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPreviewRouteLineInfo.h; sourceTree = "<group>"; };
 		CA4EDD64C998F4C38A58E4D5 /* OARouteLineAppearanceHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteLineAppearanceHudViewController.h; sourceTree = "<group>"; };
@@ -11456,6 +11462,10 @@
 				B0D61F5A5B3B39B9CD1CF5CB /* OAGpxStatBlockCollectionViewCell.h */,
 				B0D61E710CB296B034792F68 /* OAFoldersCollectionView.mm */,
 				B0D61CD2F84591156B0F5F6D /* OAFoldersCollectionView.h */,
+				CA4ED20CACFB86C3CEE9C486 /* OASlider.mm */,
+				CA4ED5B77046F2C3F6FB7181 /* OASlider.h */,
+				CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */,
+				CA4ED8CABB8E66D48FDF5F2B /* OACollectionViewFlowLayout.h */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -14886,6 +14896,8 @@
 				B0D6143C1114AC3D58A2F898 /* OATrackMenuTabPoints.mm in Sources */,
 				B0D610DBE05EACD61CFE6859 /* OATrackMenuTabSegments.mm in Sources */,
 				B0D61E373B1DC253E7C0BB0C /* OAFoldersCollectionView.mm in Sources */,
+				CA4EDC45F03787B5F481123A /* OASlider.mm in Sources */,
+				CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */,
 				CA4ED74E88CC146ED42AE3D2 /* OARouteLineAppearanceHudViewController.mm in Sources */,
 				CA4ED710806E780B7FAB796A /* OAPreviewRouteLineInfo.mm in Sources */,
 			);

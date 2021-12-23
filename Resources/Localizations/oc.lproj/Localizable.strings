@@ -498,7 +498,7 @@
 "map_settings_over" = "Jaça subrepausada";
 "map_settings_under" = "Jaça de fons";
 "shared_string_none" = "None";
-"map_settings_offline" = "Estiles : mapas fòra de linha";
+"map_settings_offline" = "Mapas fòra de linha";
 "map_settings_online" = "Mapas en linha";
 "map_settings_transp" = "Transparència";
 "map_settings_avail_lay" = "Jaças disponiblas";
@@ -1221,7 +1221,7 @@
 "get_osmand_live" = "Obtenètz OsmAnd Live per dispausar de totei lei foncionalitats :";
 "osm_live_subscription" = "Abonament OsmAnd Live";
 "osm_live_cancel_subscription" = "Anullar l'abonament";
-"wikivoyage_offline" = "Wikiviatge sensa connexion";
+"wikivoyage_offline" = "Wikiviatge fòra de linha";
 "unlimited_downloads" = "Teledescargaments illimitats";
 "wikipedia_offline" = "Wikipèdia fòra de linha";
 "contour_lines_hillshade_maps" = "Ombras de relèu e corbas de nivèu";

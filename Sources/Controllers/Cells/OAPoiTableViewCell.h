@@ -41,6 +41,6 @@
 @property (weak, nonatomic) OACollectionViewCellState *state;
 @property (nonatomic) NSIndexPath *cellIndex;
 
-- (void) updateContentOffset;
+- (void) updateContentOffsetForce:(BOOL)forceUpdade;
 
 @end

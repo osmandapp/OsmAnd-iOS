@@ -1029,7 +1029,7 @@
      else if ([type isEqualToString:[OAPoiTableViewCell getCellIdentifier]])
      {
          OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *)cell;
-         [poiCell updateContentOffset];
+         [poiCell updateContentOffsetForce:NO];
      }
  }
 
@@ -1049,7 +1049,7 @@
  
     int offset = section == 0 ? 32 : 16;
     [vw setYOffset:offset];
-    
+    [vw setXOffset:20];
     return vw;
 }
 

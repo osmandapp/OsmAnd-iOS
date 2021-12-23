@@ -9,12 +9,16 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OAColors.h"
 
+#define defaultXOffset 16.0
+#define defaultYOffset 17.0
+
 @interface OATableViewCustomHeaderView ()
 
 @end
 
 @implementation OATableViewCustomHeaderView
 {
+    CGFloat _xOffset;
     CGFloat _yOffset;
 }
 
@@ -26,6 +30,11 @@
         [self setupView];
     }
     return self;
+}
+
+- (void) setXOffset:(CGFloat)xOffset
+{
+    _xOffset = xOffset;
 }
 
 - (void) setYOffset:(CGFloat)yOffset
@@ -48,7 +57,8 @@
     self.userInteractionEnabled = YES;
     [self.textLabel removeFromSuperview];
     [self.detailTextLabel removeFromSuperview];
-    _yOffset = 17.;
+    _xOffset = defaultXOffset;
+    _yOffset = defaultYOffset;
     
     _label = [[UITextView alloc] init];
     _label.backgroundColor = [UIColor clearColor];
@@ -73,12 +83,12 @@
 - (void)layoutSubviews
 {
     CGFloat leftMargin = OAUtilities.getLeftMargin;
-    CGFloat w = self.bounds.size.width - 32. - leftMargin * 2;
+    CGFloat w = self.bounds.size.width - 2 * _xOffset - leftMargin * 2;
     CGFloat height = [self.class getTextHeight:_label.text ? _label.text : _label.attributedText.string width:w font:_label.font];
     if (_label.text.length > 0 || _label.attributedText.length > 0)
     {
         _label.hidden = NO;
-        _label.frame = CGRectMake(16.0 + leftMargin, _yOffset, w, height);
+        _label.frame = CGRectMake(_xOffset + leftMargin, _yOffset, w, height);
     }
     else
     {
@@ -89,13 +99,18 @@
 
 + (CGFloat) getHeight:(NSString *)text width:(CGFloat)width
 {
-    return [self getHeight:text width:width yOffset:17. font:self.class.font];
+    return [self getHeight:text width:width yOffset:defaultYOffset font:self.class.font];
 }
 
 + (CGFloat) getHeight:(NSString *)text width:(CGFloat)width yOffset:(CGFloat)yOffset font:(UIFont *)font
 {
+    return [self getHeight:text width:width xOffset:defaultXOffset yOffset:yOffset font:font];
+}
+
++ (CGFloat) getHeight:(NSString *)text width:(CGFloat)width xOffset:(CGFloat)xOffset yOffset:(CGFloat)yOffset font:(UIFont *)font
+{
     if (text.length > 0)
-        return [self.class getTextHeight:text width:width - 32.0 - OAUtilities.getLeftMargin * 2 font:font] + 5.0 + yOffset;
+        return [self.class getTextHeight:text width:width - 2 * xOffset - OAUtilities.getLeftMargin * 2 font:font] + 5.0 + yOffset;
     else
         return 0.01;
 }

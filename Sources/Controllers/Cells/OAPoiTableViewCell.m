@@ -90,7 +90,7 @@
     [self.categoriesCollectionView registerNib:[UINib nibWithNibName:[OAFoldersCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAFoldersCollectionViewCell getCellIdentifier]];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     
-    layout.sectionInset = UIEdgeInsetsMake(0, kCategoriesCellsSpacing, 0, 8);
+    layout.sectionInset = UIEdgeInsetsMake(0, 2*kCategoriesCellsSpacing, 0, 2*kCategoriesCellsSpacing);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     [self.categoriesCollectionView setCollectionViewLayout:layout];
     [self.categoriesCollectionView setShowsHorizontalScrollIndicator:NO];
@@ -110,6 +110,7 @@
     self.contentView.frame = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, fullHeight);
     [self.contentView layoutIfNeeded];
     self.collectionViewHeight.constant = self.collectionView.contentSize.height;
+    [self updateContentOffsetForce:YES];
     return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }
 
@@ -139,9 +140,9 @@
 
 #pragma mark - Scroll offset calculations
 
-- (void) updateContentOffset
+- (void) updateContentOffsetForce:(BOOL)forceUpdade;
 {
-    if (![_state containsValueForIndex:_cellIndex])
+    if (![_state containsValueForIndex:_cellIndex] || forceUpdade)
     {
         NSInteger selectedIndex = [_categoryNames indexOfObject:_currentCategory];
         CGPoint initialOffset = [self calculateOffset:selectedIndex];
@@ -169,7 +170,7 @@
 {
     CGPoint selectedOffset = [self calculateOffsetToSelectedIndex:index labels:_categoryTitles];
     CGPoint fullLength = [self calculateOffsetToSelectedIndex:_categoryNames.count labels:_categoryTitles];
-    CGFloat maxOffset = fullLength.x - DeviceScreenWidth + kCategoriesCellsSpacing;
+    CGFloat maxOffset = fullLength.x - DeviceScreenWidth + 3*kCategoriesCellsSpacing;
     if (selectedOffset.x > maxOffset)
         selectedOffset.x = maxOffset;
 

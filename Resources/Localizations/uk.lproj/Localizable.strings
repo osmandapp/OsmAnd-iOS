@@ -2330,3 +2330,4 @@
 "lang_zh_tw" = "Китайська (традиційна)";
 "grey_color_undefined" = "Частки без даних – сірі.";
 "shared_string_hide_all" = "Приховати все";
+"points_delete_multiple" = "Вилучити %d точку(и)?";

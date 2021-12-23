@@ -17,11 +17,11 @@
 "settings_preset" = "기본 프로필";
 "default_profile_descr" = "응용 프로그램 실행을 사용할 프로필을 선택하십시오.";
 "unit_of_length" = "측정 단위";
-"routing_settings" = "운행";
+"routing_settings" = "내비게이션";
 "coords_format" = "좌표 형식";
 "coordinates" = "좌표";
 "do_not_show_discount_desc" = "앱 할인 및 특수 로컬 이벤트 메시지 표시 억제입니다.";
-"send_anonymous_data_desc" = "OsmAnd 지도 다운로드 통계로 전송, 위치 데이터나 개인 정보를 수집하지 않는다.";
+"send_anonymous_data_desc" = "OsmAnd 지도 다운로드 통계로 전송, 위치 데이터나 개인 정보를 수집하지 않습니다.";
 "rotate_map_to_bearing_descr" = "지도 화면 정렬을 선택하십시오.";
 "driving_region" = "운전 지역";
 "min_speed" = "최소. 속도";
@@ -37,7 +37,7 @@
 "use_of_downloaded_map" = "이제 이 지도를 기본 지도 원본 또는 오버레이/언더레이 계층으로 오프라인으로 사용할 수 있음";
 "intro_placeholder" = "해당 지역의 이름을 입력";
 "export_profile_descr" = "모든 프로파일 설정을 내보내거나, 다른 프로파일에서 모든 설정을 복사하거나, 모든 프로파일 설정을 기본 상태로 재설정할 수 있다.";
-"plan_route_exit_message" = "저장하지 않고 계획 경로를 닫으시겠습니까? 너는 모든 변화를 잃게 될 것이다.";
+"plan_route_exit_message" = "저장하지 않고 경로 계획을 닫으시겠습니까? 모든 변경 사항을 잃게 됩니다.";
 "select_another_track" = "다른 트랙 선택";
 "osmand_live_support_reg_title" = "지역 지원";
 "osmand_live_subscription_canceled" = "당신은 OsmAnd Live Subscription을 취소";
@@ -94,7 +94,7 @@
 "unit_of_length_descr" = "길이 단위를 변경한다.";
 "dialogs_and_notifications" = "대화상자 및 알림";
 "dialogs_and_notifications_descr" = "팝업, 대화 상자 및 알림 제어";
-"settings_preset_descr" = "각 프로필마다 맵뷰어 와 운행 설정을 기억합니다. 여기에 기본 프로필을 설정합니다.";
+"settings_preset_descr" = "각 프로필마다 맵 뷰어와 운행 설정을 기억합니다. 여기에 기본 프로필을 설정합니다.";
 "specify_number_of_dir_indicators" = "방향 표시기 수를 지정하십시오. 이 표시기는 아래 모든 설정에 영향을 미칩니다.";
 "general_settings_descr" = "앱 테마, 단위, 영역";
 "general_settings_2" = "일반 설정";
@@ -106,7 +106,7 @@
 
 // Intro
 "intro_skip" = "건너뛰기";
-"prch_nau_q3" = "나중에 지도 & 자료를 통해 설치할 수 있다.";
+"prch_nau_q3" = "나중에 지도 & 리소스를 통해 설치할 수 있습니다.";
 "search_another_country" = "다른 지역 선택";
 "download_depth_countours" = "해상 깊이 등고선";
 "angular_units_descr" = "방위각 측정 단위를 변경합니다.";
@@ -257,7 +257,7 @@
 
 // My Places
 "favorites" = "즐겨찾기";
-"personal_category_name" = "개인적인";
+"personal_category_name" = "개인";
 "gpx_waypoint" = "경유지";
 "shared_string_export" = "내보내기";
 "gpx_selection_segment_title" = "세그먼트";
@@ -273,8 +273,8 @@
 "track_recording_name" = "현재 기록중인 경로";
 "track_stop_rec" = "녹화 중지";
 "track_new_segment" = "새로운 세그먼트 시작";
-"gpx_upload_private_visibility_descr" = "\"Private\"는 추적이 공개 목록에 나타나지 않음을 의미하지만, 그 추적이 비동기적 순서로 된 추적점은 타임스탬프 없이 공개 GPS API를 통해 이용할 수 있다.";
-"wiki_menu_download_descr" = "지도에서 위키피디아 POI를 보려면 추가 지도가 필요하다.";
+"gpx_upload_private_visibility_descr" = "\"Private\"는 추적이 공개 목록에 나타나지 않음을 의미하지만, 그 추적이 비동기적 순서로 된 추적점은 타임스탬프 없이 공개 GPS API를 통해 이용할 수 있습니다.";
+"wiki_menu_download_descr" = "지도에서 위키피디아 POI를 보려면 추가 지도가 필요합니다.";
 "rendering_attr_piste_type_downhill_name" = "내리막";
 "speak_traffic_warnings" = "교통 경고";
 "announce_gpx_waypoints" = "트랙 경유지";
@@ -364,7 +364,7 @@
 "gpxup_identifiable" = "식별 가능";
 "gpxup_trackable" = "추적 가능";
 "gpxup_private" = "사설";
-"gpx_upload_public_visibility_descr" = "\"공개\"란 추적이 사용자의 GPS 추적 목록과 공개 GPS 추적 목록, 그리고 공개 추적 목록에 원시 형태의 타임스탬프와 함께 공개적으로 표시됨을 의미한다. API를 통해 제공되는 데이터는 추적 페이지를 참조하지 않는다. 추적점 타임스탬프는 공개 GPS API를 통해 사용할 수 없으며, 추적점은 연대순으로 정렬되지 않는다.";
+"gpx_upload_public_visibility_descr" = "\"공개\"란 추적이 사용자의 GPS 추적 목록과 공개 GPS 추적 목록, 그리고 공개 추적 목록에 원시 형태의 타임스탬프와 함께 공개적으로 표시됨을 의미합니다. API를 통해 제공되는 데이터는 추적 페이지를 참조하지 않습니다. 추적점 타임스탬프는 공개 GPS API를 통해 사용할 수 없으며, 추적점은 연대순으로 정렬되지 않습니다.";
 "fav_replace_all" = "모두 바꾸기";
 "fav_points_not_exist" = "즐겨찾기 포인트가 없음";
 "poi_search_near_center" = "지도 중앙 부근에서 검색 수행";
@@ -453,8 +453,8 @@
 "fav_import_title" = "즐겨찾기 가져오기";
 "track_during_nav" = "자동 기록 트랙";
 "size_of_downloaded_data" = "줌 수준 간의 큰 차이는 다운로드되는 데이터의 크기를 증가시킬 수 있다.";
-"prch_nau_q2_wifi" = "다운로드하려면 WiFi 네트워크를 통해 %@가 필요하다.";
-"prch_nau_q2_cell" = "다운로드하려면 무선 네트워크를 통해 %@가 필요하다.";
+"prch_nau_q2_wifi" = "다운로드하려면 WiFi 네트워크를 통해 %@가 필요합니다.";
+"prch_nau_q2_cell" = "다운로드하려면 무선 네트워크를 통해 %@가 필요합니다.";
 "download" = "다운로드";
 "download_now" = "지금 지도 다운로드";
 "downloading" = "다운로드 중";
@@ -484,7 +484,7 @@
 "app_mode_shuttle_bus" = "셔틀버스";
 "rendering_value_walkingRoutesOSMCNodes_description" = "노드 네트워크 유형(국제, 지역, 로컬)에 따른 색상 경로다.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "네트워크 계열별 색상이다.";
-"res_updates_no_space" = "공간이 부족하여 %d 업데이트를 설치할 수 없음 %@가 필요하다. 공간을 좀 확보하십시오.";
+"res_updates_no_space" = "공간이 부족하여 %d 업데이트를 설치할 수 없습니다. %@가 필요합니다. 저장공간을 확보해주세요.";
 "res_banner_free_maps_desc" = "업데이트 없이 %d개의 무료 맵을 다운로드할 수 있음";
 "res_size" = "크기";
 "res_created_on" = "작성 날짜";
@@ -543,7 +543,7 @@
 "map_settings_type" = "지도 종류";
 "map_settings_map_magnifier" = "지도 확대경";
 "edit_filter" = "카테고리 편집";
-"osmand_settings" = "OsmAnd설정";
+"osmand_settings" = "OsmAnd 설정";
 "map_settings_offline" = "오프라인 지도 스타일";
 "map_settings_install_maps" = "설치 또는 업데이트할 지도 선택";
 "map_settings_install_more" = "추가 설치...";
@@ -792,7 +792,7 @@
 "maps" = "지도";
 "route_tr" = "우회전 후 직진";
 "lang_ceb" = "세부아노어";
-"purchases" = "구입내역";
+"purchases" = "구입 내역";
 "lang_be" = "백러시아어";
 "rendering_attr_shareTaxiRoutes_name" = "택시 노선 공유";
 "rendering_attr_showCycleRoutes_name" = "자전거 경로 표시";
@@ -907,11 +907,11 @@
 "routing_attr_weight_name" = "중량 제한";
 "lang_sk" = "슬로바키아어";
 "default" = "기본";
-"shared_string_navigation" = "운행";
+"shared_string_navigation" = "내비게이션";
 "lang_sv" = "스웨덴어";
 "lang_lt" = "리투아니아어";
 "route_tsll" = "약한 좌회전 후 직진";
-"osmand_live_title" = "OsmAnd라이브";
+"osmand_live_title" = "OsmAnd 라이브";
 "shared_string_all" = "모두";
 "osm_note" = "OSM노트";
 "units_min_short" = "m";
@@ -1056,7 +1056,7 @@
 "shared_string_start_time" = "시작시간";
 "shared_string_end_time" = "종료시간";
 "explore_wikipedia_offline" = "오프라인에서 Wikipedia를 탐색합니다.";
-"rendering_attr_piste_type_skitour_name" = "스키투어";
+"rendering_attr_piste_type_skitour_name" = "스키 투어";
 "grey_color_undefined" = "데이터가 없는 부품은 회색입니다.";
 "routing_attr_piste_type_skitour_description" = "스키 투어를 위한 경로입니다.";
 "track_show_start_finish_icons" = "시작 및 완료 아이콘 표시";
@@ -1065,3 +1065,21 @@
 "shared_string_sound" = "소리";
 "routing_attr_piste_type_skitour_name" = "스키 투어";
 "travel_routes" = "이동 경로";
+
+// Route planning
+"plan_route" = "경로 계획";
+"plan_route_open_existing_track" = "기존 트랙 열기";
+"plan_route_last_modified" = "마지막 수정";
+"proceed_q" = "진행할까요?";
+"route_descr_select_destination" = "도착지 선택";
+"profile_type_custom_string" = "커스텀 프로필";
+
+// Resources
+"shared_string_resources" = "리소스";
+"res_mapsres" = "지도 & 리소스";
+"plan_route_folder" = "폴더";
+"plan_route_create_new_route" = "새 경로 만들기";
+"res_updates_avail_q" = "업데이트가 있습니다.";
+"edit_profile_list" = "프로필 리스트 수정";
+"plan_route_change_folder" = "폴더 변경";
+"plan_route_select_folder" = "폴더 선택";

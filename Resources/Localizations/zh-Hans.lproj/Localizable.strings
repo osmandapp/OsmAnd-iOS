@@ -1515,7 +1515,7 @@
 "replace_favorite_confirmation" = "你确定你想要替换收藏的 %@？";
 "profile_appearance" = "配置外观";
 "configure_profile" = "更改配置";
-"app_restart_required" = "应用需要重新启动以应用某些设置。";
+"app_restart_required" = "程序需要重新启动以应用某些设置。";
 "routing_attr_allow_intermediate_name" = "允许中转点线路";
 "routes_color_by_type" = "路线着色依据…";
 "rendering_value_walkingRoutesOSMC_description" = "根据路线各自的本地颜色（如果 OpenStreetMap 上存在）和远足盾牌符号为路线着色。";
@@ -1710,3 +1710,5 @@
 "lang_sv" = "瑞典语";
 "grey_color_undefined" = "没有数据的部分是灰色的。";
 "shared_string_feet" = "英尺";
+"search_more" = "搜索更多…";
+"srtm_download_list_help_message" = "OsmAnd 提供以米和英尺为单位的等高线数据。您需要重新下载文件以更改格式。";

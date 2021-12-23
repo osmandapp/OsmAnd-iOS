@@ -15,10 +15,15 @@
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconViewHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconDescBottomConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconExtraDescBottomConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconNoDescBottomConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *extraDescLeadingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descExtraTrailingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descNoExtraTrailingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *extraDescEqualDescWidth;
 
+- (void)showDesc:(BOOL)show;
 - (void)showExtraDesc:(BOOL)show;
 
 @end

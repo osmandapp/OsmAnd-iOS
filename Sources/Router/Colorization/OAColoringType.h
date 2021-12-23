@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAGPXDocument, OAGradientScaleType;
+@class OAGPXDocument, OAGradientScaleType, OARouteCalculationResult;
 
 @interface OAColoringType : NSObject
 
@@ -27,8 +27,10 @@
 + (NSArray<OAColoringType *> *) getRouteColoringTypes;
 + (NSArray<OAColoringType *> *) getTrackColoringTypes;
 
++ (OAColoringType *) getRouteColoringTypeByName:(NSString *)name;
 + (OAColoringType *) getNonNullTrackColoringTypeByName:(NSString *)name;
 
+- (BOOL) isAvailableForDrawingRoute:(OARouteCalculationResult *)route attributeName:(NSString *)attributeName;
 - (BOOL) isAvailableForDrawingTrack:(OAGPXDocument *)selectedGpxFile attributeName:(NSString *)attributeName;
 
 - (OAGradientScaleType *) toGradientScaleType;

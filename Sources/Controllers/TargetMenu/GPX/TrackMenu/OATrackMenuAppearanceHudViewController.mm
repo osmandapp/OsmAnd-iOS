@@ -1252,7 +1252,10 @@
 
     [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
-    _tableData[kColorsSection].updateData();
+    OAGPXTableSectionData *section = _tableData[kColorsSection];
+    if (section.updateData)
+        section.updateData();
+
     [UIView transitionWithView:self.tableView
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve
@@ -1272,11 +1275,22 @@
 
     [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
-    _tableData[kColorsSection].cells[kColorGridOrDescriptionCell].updateData();
-    [UIView setAnimationsEnabled:NO];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection]]
-                          withRowAnimation:UITableViewRowAnimationNone];
-    [UIView setAnimationsEnabled:YES];
+    if (_tableData.count > kColorsSection)
+    {
+        OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
+        if (colorSection.cells.count - 1 >= kColorGridOrDescriptionCell)
+        {
+            OAGPXTableCellData *colorGridCell = colorSection.cells[kColorGridOrDescriptionCell];
+            if (colorGridCell.updateData)
+                colorGridCell.updateData();
+
+            [UIView setAnimationsEnabled:NO];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kColorGridOrDescriptionCell
+                                                                        inSection:kColorsSection]]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+            [UIView setAnimationsEnabled:YES];
+        }
+    }
 }
 
 @end

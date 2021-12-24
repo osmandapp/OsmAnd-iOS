@@ -1809,7 +1809,7 @@
 "gpxup_public" = "Public";
 "gpxup_identifiable" = "Identificable";
 "gpxup_private" = "Privat";
-"gpx_upload_private_visibility_descr" = "« Privat » vòu dire que la traça pareisse pas en ges de lista publica, mai lei ponchs de seguiment d'aquesta dins un òrdre non cronologic son disponibles per l'API GPS publica sensa orodatatge.";
+"gpx_upload_private_visibility_descr" = "\"Privada\" vòu dire que la traça es pas visibla en ges de lista publica, mai lei ponchs que contèn seràn disponibles per l'API publica GPS, desordenadas e sensa informacion temporala.";
 "map_settings_add_maps_slopes" = "Son necessàrias de mapas suplementàrias per visualizar la penda sus la mapa";
 "map_settings_show_slider_map" = "Mostrar lo cursor sus la mapa";
 "map_settings_add_online_source" = "Ajustar la fònt en linha";
@@ -1925,10 +1925,10 @@
 "distance_moving" = "Distància corregida";
 "stats_select_graph_data" = "Seleccionatz lei donadas graficas";
 "map_widget_parking" = "Aparcament";
-"gpx_upload_public_visibility_descr" = "« Public » significa que la traça es visibla publicament entre vòstrei traças GPS, dins lei listas de traças GPS publicas, e dins la lista de traças publica amb un orodatatge de forma bruta. Lei donadas fornidas per l'API remandan pas a vòstra pagina de traças. L'orodatatge dei ponchs de traça es pas disponible per l'API GPS publica nimai lei ponchs de traça classats per òrdre cronologic.";
-"gpx_upload_identifiable_visibility_descr" = "« Identificable » significa que la traça serà visibla publicament entre vòstrei traças GPS e dins lei listas de traças GPS publicas, valent-a-dire que leis autreis utilizators podràn teledescargar la traça bruta e l'associar a vòstre nom d'utilizator. Lei donadas de ponch de traça orodatadas publicas de l'API GPS servidas per l'API dei ponchs de traça referençaràn vòstra pagina de traça d'origina.";
+"gpx_upload_public_visibility_descr" = "\"Public\" vòu dire que la traça se visualiza publicament dins vòstrei traças GPS, dins lei listas publicas de traças GPS amb seis informacions temporalas en forma grassa. Lei donadas fornidas per l'API menan pas a vòstra pagina de traças. Leis informacions temporalas dei ponchs de traça son pas disponibles per l'API GPS publica, e lei ponchs de la traça son pas ordenats segon lo temps.";
+"gpx_upload_identifiable_visibility_descr" = "\"Identificable\" vòu dire que la traça se visualiza publicament dins vòstrei traças GPS e sus la lista publica de traças GPS, valent a dire, que leis autreis utilizators la podràn teledescargar en forma grassa e l'associar amb vòstre nom d'utilizator. Lei donadas temporalas e lei ponchs de la traça servits per l’API GPS faràn referéncia a la pagina de vòstra traça originala.";
 "lang_ku" = "Kurd";
-"gpx_upload_trackable_visibility_descr" = "« Traçable » vòu dire que la traça pareisse pas en ges de lista publica, mai lei ponchs de traça tractats amb leis orodatatges (sensa associacion amb vos) o fan per de teledescargaments partent de l'API GPS publica.";
+"gpx_upload_trackable_visibility_descr" = "« Traçable » vòu dire que la traça pareisse pas dins ges de lista publica, mai solament lei ponchs intermediaris e son informacion temporala (que se pòdon pas associar directament amb vos) per lei teledescargaments de l'API GPS publica.";
 "lang_az" = "Azerbaijanés";
 "do_not_rotate" = "Ges de rotacion";
 "navigate_point_zone" = "Airau";

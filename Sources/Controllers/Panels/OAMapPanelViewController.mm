@@ -124,6 +124,7 @@
 #import "OAPOIUIFilter.h"
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OAMapRulerView.h"
+#import "OAPOIHelper.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -1664,9 +1665,7 @@ typedef enum
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     
-    OAPOI *poi = nil;
-    if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAPOI.class])
-        poi = self.targetMenuView.targetPoint.targetObj;
+    NSString *preselectedIconName = [self getIconName:self.targetMenuView.targetPoint.targetObj];
     
     OAEditPointViewController *controller =
             [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
@@ -1674,8 +1673,47 @@ typedef enum
                                                     customParam:self.targetMenuView.targetPoint.titleAddress
                                                       pointType:EOAEditPointTypeFavorite
                                                 targetMenuState:nil
-                                                            poi:poi];
+                                            preselectedIconName:preselectedIconName];
     [self presentViewController:controller animated:YES completion:nil];
+}
+
+- (NSString *) getIconName:(id)object
+{
+    NSString *preselectedIconName;
+    if (object)
+    {
+        if ([object isKindOfClass:OAPOI.class])
+        {
+            OAPOI *poi = (OAPOI *)object;
+            preselectedIconName = [self getPreselectedIconName:poi];
+        }
+    }
+    return preselectedIconName;
+}
+
+- (NSString *) getPreselectedIconName:(OAPOI *)poi
+{
+    NSString *poiIcon = [poi.iconName lastPathComponent];
+    NSString *preselectedIconName = ([self isExistsIcon:poiIcon]) ? poiIcon : [self getIconNameForPOI:poi];
+    return preselectedIconName;
+}
+
+- (NSString *) getIconNameForPOI:(OAPOI *)poi
+{
+    OAPOIType *poiType = poi.type;
+    if (!poiType)
+        return nil;
+    else if ([self isExistsIcon:[NSString stringWithFormat:@"mx_%@", poiType.value]])
+        return [NSString stringWithFormat:@"mx_%@", poiType.value];
+    else if ([self isExistsIcon:[NSString stringWithFormat:@"mx_%@_%@", poiType.tag, poiType.value]])
+        return [NSString stringWithFormat:@"mx_%@_%@", poiType.tag, poiType.value];
+    return nil;
+}
+
+- (BOOL) isExistsIcon:(NSString *)iconName
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource:[@"poi-icons-png/drawable-xhdpi/" stringByAppendingPathComponent:iconName] ofType:@"png"];
+    return [[NSFileManager defaultManager] fileExistsAtPath:path];
 }
 
 - (void) targetPointEditFavorite:(OAFavoriteItem *)item
@@ -1865,16 +1903,14 @@ typedef enum
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     
-    OAPOI *poi = nil;
-    if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAPOI.class])
-        poi = self.targetMenuView.targetPoint.targetObj;
+    NSString *preselectedIconName = [self getIconName:self.targetMenuView.targetPoint.targetObj];
     
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location
                                                                                           title:title
                                                                                     customParam:gpxFileName
                                                                                       pointType:EOAEditPointTypeWaypoint
                                                                                 targetMenuState:_activeViewControllerState
-                                                                                            poi:poi];
+                                                                            preselectedIconName:preselectedIconName];
     controller.gpxWptDelegate = self;
     [self presentViewController:controller animated:YES completion:nil];
 }

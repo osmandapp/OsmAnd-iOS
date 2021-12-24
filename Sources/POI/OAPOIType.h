@@ -55,6 +55,5 @@
 -(NSString *) getOsmTag2;
 
 - (BOOL) isReference;
-- (NSString *) getCheckedIconName;
 
 @end

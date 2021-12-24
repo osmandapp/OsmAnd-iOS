@@ -63,22 +63,6 @@
     return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", self.getOsmTag, self.getOsmValue]];
 }
 
-- (NSString *) getCheckedIconName
-{
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *currentIconName = [self iconName];
-    NSString *currentIconPath =  [[NSBundle mainBundle] pathForResource:currentIconName ofType:@"png"];
-    if ([fileManager fileExistsAtPath:currentIconPath])
-        return currentIconName;
-    
-    NSString *parentIconName = [super iconName];
-    NSString *parentIconPath =  [[NSBundle mainBundle] pathForResource:parentIconName ofType:@"png"];
-    if ([fileManager fileExistsAtPath:parentIconPath])
-        return parentIconName;
-    
-    return nil;
-}
-
 - (UIImage *) mapIcon
 {
     UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [self.name stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];

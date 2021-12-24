@@ -81,7 +81,7 @@
     EOAEditPointType _editPointType;
     OAFavoriteItem *_favorite;
     OAGpxWptItem *_waypoint;
-    OAPOI *_poi;
+    NSString *_preselectedIconName;
     
     OABasePointEditingHandler *_pointHandler;
     
@@ -163,7 +163,7 @@
                      customParam:(NSString *)customParam
                        pointType:(EOAEditPointType)pointType
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
-                             poi:(OAPOI *)poi
+             preselectedIconName:(NSString *)preselectedIconName
 {
     self = [super initWithNibName:@"OAEditPointViewController" bundle:nil];
     if (self)
@@ -173,7 +173,7 @@
         _isUnsaved = YES;
         _app = [OsmAndApp instance];
         _targetMenuState = targetMenuState;
-        _poi = poi;
+        _preselectedIconName = [preselectedIconName stringByReplacingOccurrencesOfString:@"mx_" withString:@""];
 
         if (_editPointType == EOAEditPointTypeFavorite)
         {
@@ -283,25 +283,17 @@
 
 - (NSString *) getPreselectedIconName
 {
-    if (_favorite)
+    if (_preselectedIconName)
+    {
+        return _preselectedIconName;
+    }
+    else if (_favorite)
     {
         return [_favorite getIcon];
     }
     else if (_waypoint)
     {
         return _waypoint.point.getIcon;
-    }
-    else if (_poi)
-    {
-        NSString *iconName = [[_poi.type getCheckedIconName] lastPathComponent];
-        if (iconName)
-        {
-            NSString * trimmedIconName = [iconName stringByReplacingOccurrencesOfString:@"mx_" withString:@""];
-            if (![[OAFavoritesHelper getFlatIconNamesList] containsObject:trimmedIconName])
-                [self addLastUsedIcon:trimmedIconName save:NO];
-            
-            return trimmedIconName;
-        }
     }
     return nil;
 }
@@ -315,6 +307,11 @@
     
     if (_lastUsedIcons && _lastUsedIcons.count > 0)
     {
+        if (_preselectedIconName)
+            [self addLastUsedIcon:_preselectedIconName save:NO];
+        else
+            preselectedIconName = _lastUsedIcons[0];
+
         NSMutableDictionary<NSString *, NSArray<NSString *> *> *poiIconsMutable = _poiIcons.mutableCopy;
         poiIconsMutable[kLastUsedIconsKey] = _lastUsedIcons;
         _poiIcons = poiIconsMutable.copy;
@@ -322,9 +319,6 @@
         NSMutableArray<NSString *> *categoriesMutable = [categories mutableCopy];
         [categoriesMutable insertObject:kLastUsedIconsKey atIndex:0];
         categories = categoriesMutable.copy;
-
-        if (!preselectedIconName)
-            preselectedIconName = _lastUsedIcons[0];
     }
 
     if (!preselectedIconName)

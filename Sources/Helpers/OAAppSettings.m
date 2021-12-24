@@ -2927,7 +2927,7 @@
 
 - (OAColoringType *) get
 {
-    return [OAColoringType getRouteColoringTypes][[super get]];
+    return [OAColoringType getRouteColoringTypes][[super get:self.appMode]];
 }
 
 - (void) set:(OAColoringType *)coloringType
@@ -3422,10 +3422,10 @@
         _routeRecalculationDistance = [OACommonDouble withKey:routeRecalculationDistanceKey defValue:0.];
         [_profilePreferences setObject:_routeRecalculationDistance forKey:@"routing_recalc_distance"];
 
-        _customRouteColorDay = [OACommonInteger withKey:customRouteColorDayKey defValue:[OAUtilities colorToNumber:UIColorFromARGB(0xff41a6d9)]];
+        _customRouteColorDay = [OACommonInteger withKey:customRouteColorDayKey defValue:[OAUtilities colorToNumber:UIColorFromARGB(kDefaultRouteLineDayColor)]];
         [_profilePreferences setObject:_customRouteColorDay forKey:@"route_line_color"];
 
-        _customRouteColorNight = [OACommonInteger withKey:customRouteColorNightKey defValue:[OAUtilities colorToNumber:UIColorFromARGB(0xffffde5b)]];
+        _customRouteColorNight = [OACommonInteger withKey:customRouteColorNightKey defValue:[OAUtilities colorToNumber:UIColorFromARGB(kDefaultRouteLineNightColor)]];
         [_profilePreferences setObject:_customRouteColorNight forKey:@"route_line_color_night"];
 
         _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT];

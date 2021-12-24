@@ -20,11 +20,14 @@
 #import "OATextLineViewCell.h"
 #import "OARoutingHelper.h"
 #import "OARouteStatisticsHelper.h"
+#import "OADayNightHelper.h"
 #import "OAPreviewRouteLineInfo.h"
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
+#import "OARouteLayer.h"
+#import "OAMapLayers.h"
 
 #define kColoringSection 0
 #define kColorGridCell 3
@@ -103,22 +106,20 @@
     OAApplicationMode *_appMode;
     OAMapPanelViewController *_mapPanelViewController;
 
+    CGFloat _originalStatusBarHeight;
     OAPreviewRouteLineInfo *_previewRouteLineInfo;
     OAGPXTableData *_tableData;
-
     BOOL _nightMode;
+    NSString *_selectedDayNightMode;
+
     OAFoldersCell *_colorValuesCell;
     OACollectionViewCellState *_scrollCellsState;
     NSArray<OARouteAppearanceType *> *_coloringTypes;
     OARouteAppearanceType *_selectedType;
-    NSString *_selectedDayNightMode;
-
-    OAFavoriteColor *_selectedDayColor;
-    OAFavoriteColor *_selectedNightColor;
     NSArray<NSNumber *> *_availableColors;
-    OAColoringType *_oldColoringType;
 
-    CGFloat _originalStatusBarHeight;
+    OAPreviewRouteLineInfo *_oldPreviewRouteLineInfo;
+    NSInteger _oldDayNightMode;
 }
 
 @dynamic statusBarBackgroundView;
@@ -200,27 +201,19 @@
         [lineColors addObject:@([OAUtilities colorToNumber:lineColor.color])];
     }
     _availableColors = lineColors;
-    _selectedDayColor = [OADefaultFavorite getFavoriteColor:UIColorFromRGB([_previewRouteLineInfo getCustomColor:NO])];
-    _selectedNightColor = [OADefaultFavorite getFavoriteColor:UIColorFromRGB([_previewRouteLineInfo getCustomColor:YES])];
 
     [self setOldValues];
-    [self updateAllValues];
 }
 
 - (void)setOldValues
 {
-
-}
-
-- (void)updateAllValues
-{
-
+    _oldPreviewRouteLineInfo = [_mapPanelViewController.mapViewController.mapLayers.routeMapLayer getPreviewRouteLineInfo];
+    _oldDayNightMode = [_settings.appearanceMode get];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self applyLocalization];
 
     [self generateData];
     [self setupView];
@@ -255,11 +248,6 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
     } completion:nil];
 }
 
-- (void)applyLocalization
-{
-
-}
-
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
@@ -267,6 +255,8 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
         [_mapPanelViewController hideScrollableHudViewController];
         if (onComplete)
             onComplete();
+
+        [_mapPanelViewController.mapViewController.mapLayers.routeMapLayer setPreviewRouteLineInfo:nil];
     }];
 }
 
@@ -342,14 +332,14 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
         NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
 
         // color section
-        __block BOOL colorMapStyle = _selectedType.coloringType == OAColoringType.DEFAULT;
+        __block BOOL colorMapStyle = _previewRouteLineInfo.coloringType == OAColoringType.DEFAULT;
         NSMutableArray<OAGPXTableCellData *> *colorsCells = [NSMutableArray array];
 
         OAGPXTableSectionData *colorsSectionData = [OAGPXTableSectionData withData:@{
                 kSectionCells: colorsCells,
                 kSectionFooter: colorMapStyle
                         ? [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_color"),
-                                [_settings.renderer get:_appMode]]
+                                [_settings.renderer get]]
                         : @""
         }];
 
@@ -358,6 +348,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
                 kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
                 kCellTitle:OALocalizedString(@"map_settings_style")
         }];
+        colorMapStyleCellData.isOn = ^() { return colorMapStyle; };
         colorMapStyleCellData.onSwitch = ^(BOOL toggle) {
             colorMapStyle = toggle;
             if (colorMapStyle)
@@ -366,8 +357,21 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
                 _selectedType = [self getRouteAppearanceType:OAColoringType.CUSTOM_COLOR];
             else
                 _selectedType = [self getRouteAppearanceType:_previewRouteLineInfo.coloringType];
+
+            _previewRouteLineInfo.coloringType = _selectedType.coloringType;
+            [self updateRouteLayer:_previewRouteLineInfo];
         };
-        colorMapStyleCellData.isOn = ^() { return colorMapStyle; };
+        colorMapStyleCellData.updateData = ^() {
+            if ([_selectedType.coloringType isCustomColor])
+            {
+                UIColor *customColorDay = UIColorFromRGB([_previewRouteLineInfo getCustomColor:NO]);
+                UIColor *customColorNight = UIColorFromRGB([_previewRouteLineInfo getCustomColor:YES]);
+                UIColor *defaultColorDay = UIColorFromRGB(kDefaultRouteLineDayColor);
+                UIColor *defaultColorNight = UIColorFromRGB(kDefaultRouteLineNightColor);
+                if ([customColorDay isEqual:defaultColorDay] || [customColorNight isEqual:defaultColorNight])
+                    [_previewRouteLineInfo setCustomColor:_availableColors.firstObject.intValue nightMode:_nightMode];
+            }
+        };
         [colorsCells addObject:colorMapStyleCellData];
 
         // custom coloring settings
@@ -408,13 +412,16 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
         }];
         colorDayNightCellData.updateProperty = ^(id value) {
             if ([value isKindOfClass:NSNumber.class])
-                _nightMode = [dayNightValues[[value intValue]] isEqualToString:kColorNightMode];
-
-            if (colorDayNightCellData.updateData)
-                colorDayNightCellData.updateData();
+            {
+                NSInteger index = [value integerValue];
+                _nightMode = [dayNightValues[index] isEqualToString:kColorNightMode];
+                _selectedDayNightMode = _nightMode ? dayNightValues[1] : dayNightValues[0];
+                [_settings.appearanceMode set:index];
+            }
         };
         colorDayNightCellData.updateData = ^() {
-            _selectedDayNightMode = _nightMode ? dayNightValues[1] : dayNightValues[0];
+            [[OADayNightHelper instance] forceUpdate];
+            [self updateRouteLayer:_previewRouteLineInfo];
         };
 
         OAGPXTableCellData *colorGridCellData = [OAGPXTableCellData withData:@{
@@ -422,9 +429,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
                 kCellType: [OAColorsTableViewCell getCellIdentifier],
                 kTableValues: @{
                         @"array_value": _availableColors,
-                        @"int_value": @([OAUtilities colorToNumber:_nightMode
-                                ? _selectedNightColor.color
-                                : _selectedDayColor.color])
+                        @"int_value": @([_previewRouteLineInfo getCustomColor:_nightMode])
                 }
         }];
 
@@ -432,9 +437,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             [colorGridCellData setData:@{
                     kTableValues: @{
                             @"array_value": _availableColors,
-                            @"int_value": @([OAUtilities colorToNumber:_nightMode
-                                    ? _selectedNightColor.color
-                                    : _selectedDayColor.color])
+                            @"int_value": @([_previewRouteLineInfo getCustomColor:_nightMode])
                     }
             }];
         };
@@ -461,27 +464,19 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
                 kCellKey: @"color_elevation_gradient",
                 kCellType: [OAImageTextViewCell getCellIdentifier],
                 kTableValues: @{
-                        @"extra_desc": OALocalizedString([self isSelectedTypeAltitude]
-                                ? @"shared_string_max_height"
-                                : @""),
+                        @"extra_desc": OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_max_height" : @""),
                         @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
                 },
-                kCellDesc: OALocalizedString([self isSelectedTypeAltitude]
-                        ? @"shared_string_min_height"
-                        : @""/*@"grey_color_undefined"*/),
+                kCellDesc: OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_min_height" : @""),
                 kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
         }];
         colorGradientCellData.updateData = ^() {
             [colorGradientCellData setData:@{
                     kTableValues: @{
-                            @"extra_desc": OALocalizedString([self isSelectedTypeAltitude]
-                                    ? @"shared_string_max_height"
-                                    : @""),
+                            @"extra_desc": OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_max_height" : @""),
                             @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
                     },
-                    kCellDesc: OALocalizedString([self isSelectedTypeAltitude]
-                            ? @"shared_string_min_height"
-                            : @""/*@"grey_color_undefined"*/),
+                    kCellDesc: OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_min_height" : @""),
                     kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
             }];
         };
@@ -499,7 +494,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             ]];
         };
 
-        colorsSectionData.updateData = ^() {
+        void (^setColorCells) () = ^() {
             if (!colorMapStyle)
             {
                 clearColorSection(NO);
@@ -518,6 +513,10 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             {
                 clearColorSection(YES);
             }
+        };
+
+        colorsSectionData.updateData = ^() {
+            setColorCells();
 
             for (OAGPXTableCellData *cellData in colorsCells)
             {
@@ -534,6 +533,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
         };
         [tableSections addObject:colorsSectionData];
 
+        setColorCells();
         _tableData = [OAGPXTableData withData:@{ kTableSections: tableSections }];
     }
 }
@@ -631,10 +631,6 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
                                                                                routeInfoAttribute:routeInfoAttribute
                                                                                             width:widthKey
                                                                                    showTurnArrows:showTurnArrows];
-
-//    previewRouteLineInfo.setIconId(appMode.getNavigationIcon().getIconId());
-//    previewRouteLineInfo.setIconColor(appMode.getProfileColor(isNightMode()));
-
     return previewRouteLineInfo;
 }
 
@@ -648,9 +644,26 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
     return _selectedType.coloringType == OAColoringType.ALTITUDE;
 }
 
+- (void)updateRouteLayer:(OAPreviewRouteLineInfo *)previewInfo
+{
+    OARouteLayer *routeLayer = _mapPanelViewController.mapViewController.mapLayers.routeMapLayer;
+    [routeLayer setPreviewRouteLineInfo:previewInfo];
+    [_mapPanelViewController.mapViewController runWithRenderSync:^{
+        [routeLayer resetLayer];
+    }];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [routeLayer refreshRoute];
+    });
+}
+
 - (IBAction)onBackButtonPressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
+        [_settings.appearanceMode set:_oldDayNightMode];
+        [[OADayNightHelper instance] forceUpdate];
+
+        [self updateRouteLayer:_oldPreviewRouteLineInfo];
+
         if (self.delegate)
             [self.delegate onCloseAppearance];
     }];
@@ -659,6 +672,17 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 - (IBAction)onApplyButtonPressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
+        [_settings.customRouteColorDay set:[_previewRouteLineInfo getCustomColor:NO] mode:_appMode];
+        [_settings.customRouteColorNight set:[_previewRouteLineInfo getCustomColor:YES] mode:_appMode];
+        [_settings.routeColoringType set:_previewRouteLineInfo.coloringType mode:_appMode];
+        [_settings.routeInfoAttribute set:_previewRouteLineInfo.routeInfoAttribute mode:_appMode];
+        [_settings.routeLineWidth set:_previewRouteLineInfo.width mode:_appMode];
+        [_settings.routeShowTurnArrows set:_previewRouteLineInfo.showTurnArrows mode:_appMode];
+        [_settings.appearanceMode set:_oldDayNightMode];
+        [[OADayNightHelper instance] forceUpdate];
+
+        [self updateRouteLayer:_previewRouteLineInfo];
+
         if (self.delegate)
             [self.delegate onCloseAppearance];
     }];
@@ -983,6 +1007,8 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 - (void)onItemSelected:(NSInteger)index
 {
     _selectedType = _coloringTypes[index];
+    _previewRouteLineInfo.coloringType = _selectedType.coloringType;
+    [self updateRouteLayer:_previewRouteLineInfo];
 
     OAGPXTableSectionData *section = _tableData.sections[kColoringSection];
     if (section.updateData)
@@ -1002,11 +1028,8 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 
 - (void)colorChanged:(NSInteger)tag
 {
-    OAFavoriteColor *selectedColor = [OADefaultFavorite getFavoriteColor:UIColorFromRGB(_availableColors[tag].intValue)];
-    if (_nightMode)
-        _selectedNightColor = selectedColor;
-    else
-        _selectedDayColor = selectedColor;
+    [_previewRouteLineInfo setCustomColor:_availableColors[tag].intValue nightMode:_nightMode];
+    [self updateRouteLayer:_previewRouteLineInfo];
 
     if (_tableData.sections.count >= 1)
     {

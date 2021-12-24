@@ -28,9 +28,5 @@
 
 - (void)setCustomColor:(NSInteger)color nightMode:(BOOL)nightMode;
 - (NSInteger)getCustomColor:(BOOL)nightMode;
-/*- (void)setRouteColoringType:(OAColoringType *)coloringType;
-- (void)setRouteInfoAttribute:(NSString *)routeInfoAttribute;
-- (void)setWidth:(NSString *)width;
-- (void)setShowTurnArrows:(BOOL)showTurnArrows;*/
 
 @end

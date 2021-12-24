@@ -39,26 +39,6 @@
         _customColorDay = color;
 }
 
-/*- (void)setRouteColoringType:(OAColoringType *)coloringType
-{
-    _coloringType = coloringType;
-}
-
-- (void)setRouteInfoAttribute:(NSString *)routeInfoAttribute
-{
-    _routeInfoAttribute = routeInfoAttribute;
-}
-
-- (void)setWidth:(NSString *)width
-{
-    _width = width;
-}
-
-- (void)setShowTurnArrows:(BOOL)showTurnArrows
-{
-    _showTurnArrows = showTurnArrows;
-}*/
-
 - (NSInteger)getCustomColor:(BOOL)nightMode
 {
     return nightMode ? self.customColorNight : self.customColorDay;

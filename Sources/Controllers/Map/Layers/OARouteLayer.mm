@@ -20,6 +20,7 @@
 #import "OARouteDirectionInfo.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
+#import "OAPreviewRouteLineInfo.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -59,6 +60,11 @@
     NSDictionary<NSString *, NSNumber *> *_routeAttributes;
 
     BOOL _initDone;
+
+    OAPreviewRouteLineInfo *_previewRouteLineInfo;
+    NSInteger _routeLineColor;
+    OAColoringType *_routeColoringType;
+    NSString *_routeInfoAttribute;
 }
 
 - (NSString *) layerId
@@ -110,6 +116,8 @@
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:self.mapViewController.zoomObservable];
+
+    _routeColoringType = OAColoringType.DEFAULT;
 }
 
 - (void) resetLayer
@@ -234,9 +242,20 @@
     }];
 }
 
+- (OsmAnd::FColorARGB) argbFromUIColor:(UIColor *)color
+{
+    CGFloat red, green, blue, alpha;
+    [color getRed:&red green:&green blue:&blue alpha:&alpha];
+    return OsmAnd::ColorARGB(alpha * 255, red * 255, green * 255, blue * 255);
+}
+
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points addToExisting:(BOOL)addToExisting
 {
     [self.mapViewController runWithRenderSync:^{
+        BOOL isNight = [OAAppSettings sharedManager].nightMode;
+        [self updateRouteColoringType];
+        [self updateRouteColors:isNight];
+
         const auto& lines = _collection->getLines();
         if (lines.empty() || addToExisting)
         {
@@ -246,34 +265,34 @@
                 [self.mapView removeKeyedSymbolsProvider:_collection];
                 _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
             }
-            
+
             int baseOrder = self.baseOrder;
-            BOOL isNight = [OAAppSettings sharedManager].nightMode;
-            
-            NSDictionary<NSString *, NSNumber *> *result = _routeAttributes;
-            if (!result)
-                result = [self.mapViewController getLineRenderingAttributes:@"route"];
-            NSNumber *colorVal = [result valueForKey:@"color"];
-            BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
-            OsmAnd::ColorARGB lineColor = hasStyleColor ? OsmAnd::ColorARGB(colorVal.intValue) : isNight ?
-            OsmAnd::ColorARGB(0xff, 0xff, 0xdf, 0x3d) : OsmAnd::ColorARGB(0x88, 0x2a, 0x4b, 0xd1);
-            
             OsmAnd::VectorLineBuilder builder;
             builder.setBaseOrder(baseOrder--)
-            .setIsHidden(points.size() == 0)
-            .setLineId(1)
-            .setLineWidth(60.)
-            .setPoints(points);
-            
-            UIColor *color = UIColorFromARGB(lineColor.argb);
+                    .setIsHidden(points.size() == 0)
+                    .setLineId(1)
+                    .setLineWidth(60.)
+                    .setPoints(points);
+
+            UIColor *color = UIColorFromARGB(_routeLineColor);
+            if (CGColorGetAlpha(color.CGColor) == 0.)
+                color = [color colorWithAlphaComponent:1.];
+
+            OsmAnd::ColorARGB lineColor = [self argbFromUIColor:color];
+
+            NSNumber *colorVal = [self getColorFromAttr];
+            BOOL hasStyleColor = (colorVal && colorVal.intValue != -1 && colorVal.intValue == _routeLineColor)
+                    || _routeLineColor == kDefaultRouteLineDayColor
+                    || _routeLineColor == kDefaultRouteLineNightColor;
+
             builder.setFillColor(lineColor)
-            .setPathIcon([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color fileName:@"map_direction_arrow"])
-            .setSpecialPathIcon([self specialBitmapWithColor:lineColor])
-            .setShouldShowArrows(true)
-            .setScreenScale(UIScreen.mainScreen.scale);
-            
+                    .setPathIcon([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color fileName:@"map_direction_arrow"])
+                    .setSpecialPathIcon([self specialBitmapWithColor:lineColor])
+                    .setShouldShowArrows(true)
+                    .setScreenScale(UIScreen.mainScreen.scale);
+
             builder.buildAndAddToCollection(_collection);
-            
+
             if (isFirstLine)
             {
                 [self.mapView addKeyedSymbolsProvider:_collection];
@@ -286,6 +305,74 @@
         }
         [self buildActionArrows];
     }];
+}
+
+- (NSNumber *)getColorFromAttr
+{
+    NSDictionary<NSString *, NSNumber *> *result = _routeAttributes;
+    if (!result)
+        result = [self.mapViewController getLineRenderingAttributes:@"route"];
+    return result[@"color"];
+}
+
+- (NSInteger)getOriginalColor
+{
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    NSNumber *colorVal = [self getColorFromAttr];
+    BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
+    return hasStyleColor ? colorVal.intValue : isNight ? kDefaultRouteLineNightColor : kDefaultRouteLineDayColor;
+}
+
+- (OAPreviewRouteLineInfo *)getPreviewRouteLineInfo
+{
+    return _previewRouteLineInfo;
+}
+
+- (void)setPreviewRouteLineInfo:(OAPreviewRouteLineInfo *)previewInfo
+{
+    _previewRouteLineInfo = previewInfo;
+}
+
+- (void)updateRouteColors:(BOOL)night
+{
+    if ([_routeColoringType isCustomColor])
+        [self updateCustomColor:night];
+    else
+        _routeLineColor = [self getOriginalColor];
+}
+
+- (void)updateCustomColor:(BOOL)night
+{
+    NSInteger customColor;
+    if (_previewRouteLineInfo)
+    {
+        customColor = [_previewRouteLineInfo getCustomColor:night];
+    }
+    else
+    {
+        OACommonInteger *colorPreference = night
+                ? [OAAppSettings sharedManager].customRouteColorNight
+                : [OAAppSettings sharedManager].customRouteColorDay;
+        customColor = [colorPreference get:[_routingHelper getAppMode]];
+    }
+
+    _routeLineColor = customColor;
+}
+
+- (void)updateRouteColoringType
+{
+    if (_previewRouteLineInfo)
+    {
+        _routeColoringType = _previewRouteLineInfo.coloringType;
+        _routeInfoAttribute = _previewRouteLineInfo.routeInfoAttribute;
+    }
+    else
+    {
+        OAApplicationMode *mode = [_routingHelper getAppMode];
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        _routeColoringType = [settings.routeColoringType get:mode];
+        _routeInfoAttribute = [settings.routeInfoAttribute get:mode];
+    }
 }
 
 - (OsmAnd::AreaI) calculateBounds:(NSArray<CLLocation *> *)pts

@@ -527,7 +527,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             [colorsSectionData setData:@{
                     kSectionFooter: colorMapStyle
                             ? [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_color"),
-                                                         [_settings.renderer get:_appMode]]
+                                                         [_settings.renderer get]]
                             : @""
             }];
         };

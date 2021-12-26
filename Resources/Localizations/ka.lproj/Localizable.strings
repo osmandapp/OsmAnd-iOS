@@ -329,7 +329,7 @@
 "sort_by" = "Sort";
 "map_markers_other" = "სხვა სანიშნები";
 "directions_other" = "Other directions";
-"shared_string_turn" = "Turn";
+"shared_string_turn" = "მოხვევა";
 "stop_routing_confirm" = "Are you sure you want to stop the navigation?";
 "cancel_route" = "Dismiss route";
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
@@ -494,9 +494,9 @@
 "shared_strings_all_regions" = "All regions";
 "regions" = "რეგიონები";
 "shared_string_width" = "სიგანე";
-"shared_string_interval" = "Interval";
+"shared_string_interval" = "დაყოვნება";
 "shared_string_none" = "არა";
-"restart" = "Restart";
+"restart" = "რესტარტი";
 "offline_maps" = "Offline Maps";
 "download_map" = "რუკის გადმოწერა";
 "download_map_dialog" = "რუკის დიალოგის ფანჯარა";
@@ -897,7 +897,7 @@
 "lang_zhminnan" = "სამხრეთული ძმინნური";
 "lang_zhyue" = "კანტონური";
 "maps" = "რუკები";
-"purchases" = "Purchases";
+"purchases" = "შესყიდვები";
 "select_map_style" = "Select map style";
 "select_map_source" = "Select map source";
 "select_overlay" = "Select overlay map";
@@ -1180,7 +1180,7 @@
 "srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
 "srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "მეტრი";
-"shared_string_feet" = "feet";
+"shared_string_feet" = "ფუტი";
 "foot" = "ფტ";
 "m" = "მ";
 
@@ -1914,7 +1914,7 @@
 "sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
 "sett_ext_input" = "External input devices";
 "sett_generic_ext_input" = "Generic Keyboard";
-"sett_wunderlinq_ext_input" = "WunderLINQ";
+"sett_wunderlinq_ext_input" = "BMW WunderLINQ";
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";
 "key_hint_select" = "არჩევა";
@@ -2115,7 +2115,7 @@
 "routing_attr_piste_type_downhill_description" = "Slopes for alpine or downhill skiing and access to ski lifts.";
 "rendering_attr_hideWaterPolygons_name" = "წყლის დამალვა";
 "routing_attr_avoid_stairs_name" = "არა კიბეები";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "ოსმც";
 "rendering_attr_piste_type_skitour_name" = "სასრიალო";
 "routing_attr_avoid_unpaved_description" = "Avoids unpaved roads";
 "routing_attr_prefer_unpaved_description" = "Prefer unpaved roads.";

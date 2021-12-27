@@ -55,8 +55,8 @@
     
     BOOL _showingLine;
     
-    std::shared_ptr<SkBitmap> _centerIconDay;
-    std::shared_ptr<SkBitmap> _centerIconNight;
+    sk_sp<SkImage> _centerIconDay;
+    sk_sp<SkImage> _centerIconNight;
 }
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder
@@ -81,8 +81,8 @@
     _linesCollection.reset(new OsmAnd::VectorLinesCollection());
     _lineEndsMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
     
-    _centerIconDay = [OANativeUtilities skBitmapFromPngResource:@"ic_ruler_center"];
-    _centerIconNight = [OANativeUtilities skBitmapFromPngResource:@"ic_ruler_center_light"];
+    _centerIconDay = [OANativeUtilities skImageFromPngResource:@"ic_ruler_center"];
+    _centerIconNight = [OANativeUtilities skImageFromPngResource:@"ic_ruler_center_light"];
 }
 
 - (void) deinitLayer

@@ -8,11 +8,10 @@
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 
-#include <SkImageDecoder.h>
 #include <SkImageEncoder.h>
 #include <SkStream.h>
 #include <SkData.h>
-#include <SkBitmap.h>
+#include <SkImage.h>
 
 #include <OsmAndCore/WebClient.h>
 #include <OsmAndCore/Utilities.h>
@@ -37,7 +36,7 @@ OsmAnd::AlphaChannelPresence OASQLiteTileSourceMapLayerProvider::getAlphaChannel
     return OsmAnd::AlphaChannelPresence::Present;
 }
 
-QByteArray OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
+QByteArray OASQLiteTileSourceMapLayerProvider::obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request)
 {
     return nullptr;
 }
@@ -82,44 +81,30 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
     return nullptr;
 }
 
-const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::createShiftedTileBitmap(const NSData *data, const NSData* dataNext, double offsetY)
+const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::createShiftedTileBitmap(const NSData *data, const NSData* dataNext, double offsetY)
 {
     if (data.length == 0 && dataNext.length == 0)
         return nullptr;
 
-    std::shared_ptr<SkBitmap> firstBitmap;
-    std::shared_ptr<SkBitmap> secondBitmap;
+    sk_sp<SkImage> firstImage = nullptr;
+    sk_sp<SkImage> secondImage = nullptr;
     if (data.length > 0)
     {
-        firstBitmap.reset(new SkBitmap());
-        if (!SkImageDecoder::DecodeMemory(
-             data.bytes, data.length,
-             firstBitmap.get(),
-             SkColorType::kUnknown_SkColorType,
-             SkImageDecoder::kDecodePixels_Mode))
-        {
-            firstBitmap.reset();
-        }
+        const auto skData = SkData::MakeWithoutCopy(data.bytes, data.length);
+        firstImage = SkImage::MakeFromEncoded(skData);
     }
     if (dataNext.length > 0)
     {
-        secondBitmap.reset(new SkBitmap());
-        if (!SkImageDecoder::DecodeMemory(
-             dataNext.bytes, dataNext.length,
-             secondBitmap.get(),
-             SkColorType::kUnknown_SkColorType,
-             SkImageDecoder::kDecodePixels_Mode))
-        {
-            secondBitmap.reset();
-        }
+        const auto skData = SkData::MakeWithoutCopy(dataNext.bytes, dataNext.length);
+        secondImage = SkImage::MakeFromEncoded(skData);
     }
-    if (!firstBitmap && !secondBitmap)
+    if (!firstImage && !secondImage)
         return nullptr;
     
-    return OsmAnd::SkiaUtilities::createTileBitmap(firstBitmap, secondBitmap, offsetY);
+    return OsmAnd::SkiaUtilities::createTileImage(firstImage, secondImage, offsetY);
 }
 
-const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const NSData *data, double offsetY)
+const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const NSData *data, double offsetY)
 {
     NSNumber *timeNext = [[NSNumber alloc] init];
     NSData *dataNext = [ts getBytes:tileIdNext.x y:tileIdNext.y zoom:zoom timeHolder:&timeNext];
@@ -137,25 +122,22 @@ const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::downlo
     return nullptr;
 }
 
-const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::decodeBitmap(const NSData *data)
+const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::decodeBitmap(const NSData *data)
 {
     // Decode image data
-    const std::shared_ptr<SkBitmap> bitmap(new SkBitmap());
-    if (!SkImageDecoder::DecodeMemory(
-            data.bytes, data.length,
-            bitmap.get(),
-            SkColorType::kUnknown_SkColorType,
-            SkImageDecoder::kDecodePixels_Mode))
+    const auto skData = SkData::MakeWithoutCopy(data.bytes, data.length);
+    const sk_sp<SkImage> image = SkImage::MakeFromEncoded(skData);
+    if (!image)
     {
         LogPrintf(OsmAnd::LogSeverityLevel::Error,
             "Failed to decode image tile");
 
         return nullptr;
     }
-    return bitmap;
+    return image;
 }
 
-const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::obtainImageBitmap(const OsmAnd::IMapTiledDataProvider::Request& request)
+sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
 {
     auto tileId = request.tileId;
     auto zoom = request.zoom;
@@ -215,7 +197,8 @@ const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::obtain
             if (shiftedTile)
                 unlockTile(tileIdNext, zoom);
 
-            return OsmAnd::ImageMapLayerProvider::decodeBitmap(downloadResult);
+            const auto skData = SkData::MakeWithoutCopy(downloadResult.constData(), downloadResult.length());
+            return SkImage::MakeFromEncoded(skData);
         }
     }
     unlockTile(tileId, zoom);
@@ -224,16 +207,15 @@ const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::obtain
     return nullptr;
 }
 
-bool OASQLiteTileSourceMapLayerProvider::supportsObtainImageBitmap() const
+bool OASQLiteTileSourceMapLayerProvider::supportsObtainImage() const
 {
     return true;
 }
 
 void OASQLiteTileSourceMapLayerProvider::obtainImageAsync(
                                                    const OsmAnd::IMapTiledDataProvider::Request& request,
-                                                   const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage)
+                                                   const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData)
 {
-    //
 }
 
 void OASQLiteTileSourceMapLayerProvider::lockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)
@@ -290,7 +272,7 @@ OsmAnd::ZoomLevel OASQLiteTileSourceMapLayerProvider::getMaxZoom() const
     return (OsmAnd::ZoomLevel)[ts maximumZoomSupported];
 }
 
-void OASQLiteTileSourceMapLayerProvider::performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap)
+void OASQLiteTileSourceMapLayerProvider::performAdditionalChecks(sk_sp<SkImage> bitmap)
 {
     if (ts.tileSize != bitmap->width() && bitmap->width() != 0)
     {

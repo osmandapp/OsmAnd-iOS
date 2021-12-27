@@ -28,7 +28,7 @@ public:
     const float displayDensityFactor;
     const float symbolsScaleFactor;
     
-    virtual std::shared_ptr<SkBitmap> getIcon(
+    virtual sk_sp<const SkImage> getIcon(
         const std::shared_ptr<const OsmAnd::TransportRoute>& transportRoute = nullptr,
         const OsmAnd::ZoomLevel zoomLevel = OsmAnd::ZoomLevel12,
         const bool largeIcon = false) const Q_DECL_OVERRIDE;

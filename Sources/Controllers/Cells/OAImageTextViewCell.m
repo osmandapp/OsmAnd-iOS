@@ -22,6 +22,12 @@
 
     _extraDescView.textContainerInset = UIEdgeInsetsZero;
     _extraDescView.textContainer.lineFragmentPadding = 0;
+
+    if ([self isDirectionRTL])
+    {
+        self.descView.textAlignment = NSTextAlignmentRight;
+        self.extraDescView.textAlignment = NSTextAlignmentLeft;
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

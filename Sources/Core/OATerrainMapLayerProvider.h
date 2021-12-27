@@ -15,7 +15,7 @@ class OATerrainMapLayerProvider : public OsmAnd::ImageMapLayerProvider
 {
 
 private:
-    virtual void performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap);
+    virtual void performAdditionalChecks(sk_sp<SkImage> bitmap);
     
     OsmAnd::ZoomLevel minZoom;
     OsmAnd::ZoomLevel maxZoom;
@@ -25,10 +25,11 @@ public:
     OATerrainMapLayerProvider(OsmAnd::ZoomLevel minZoom_, OsmAnd::ZoomLevel maxZoom_);
     virtual ~OATerrainMapLayerProvider();
     
-    virtual QByteArray obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
+    virtual QByteArray obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request);
+    virtual sk_sp<SkImage> obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
     virtual void obtainImageAsync(
                           const OsmAnd::IMapTiledDataProvider::Request& request,
-                          const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage);
+                          const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData);
 
     virtual OsmAnd::AlphaChannelPresence getAlphaChannelPresence() const;
     virtual OsmAnd::MapStubStyle getDesiredStubsStyle() const;

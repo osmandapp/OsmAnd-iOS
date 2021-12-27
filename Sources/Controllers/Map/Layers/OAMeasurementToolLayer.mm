@@ -48,8 +48,8 @@
     std::shared_ptr<OsmAnd::MapMarkersCollection> _pointMarkers;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _selectedMarkerCollection;
     
-    std::shared_ptr<SkBitmap> _pointMarkerIcon;
-    std::shared_ptr<SkBitmap> _selectedMarkerIcon;
+    sk_sp<SkImage> _pointMarkerIcon;
+    sk_sp<SkImage> _selectedMarkerIcon;
     
     OsmAnd::PointI _cachedCenter;
     BOOL _isInMovingMode;
@@ -71,8 +71,8 @@
     _pointMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     _selectedMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
     
-    _pointMarkerIcon = [OANativeUtilities skBitmapFromPngResource:@"map_plan_route_point_normal"];
-    _selectedMarkerIcon = [OANativeUtilities skBitmapFromPngResource:@"map_plan_route_point_movable"];
+    _pointMarkerIcon = [OANativeUtilities skImageFromPngResource:@"map_plan_route_point_normal"];
+    _selectedMarkerIcon = [OANativeUtilities skImageFromPngResource:@"map_plan_route_point_movable"];
     
     _initDone = YES;
     
@@ -157,7 +157,7 @@
     return nullptr;
 }
 
-- (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)position collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection bitmap:(std::shared_ptr<SkBitmap>&)bitmap
+- (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)position collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection bitmap:(sk_sp<SkImage>&)bitmap
 {
     if (collection->getMarkers().isEmpty())
     {

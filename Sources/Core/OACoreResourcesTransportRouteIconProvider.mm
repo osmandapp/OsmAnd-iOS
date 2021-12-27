@@ -13,7 +13,7 @@
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/SkiaUtilities.h>
 #include <SkCGUtils.h>
-#include <SkBitmap.h>
+#include <SkImage.h>
 
 #import <Foundation/Foundation.h>
 #import "OALog.h"
@@ -37,7 +37,7 @@ OACoreResourcesTransportRouteIconProvider::~OACoreResourcesTransportRouteIconPro
 {
 }
 
-std::shared_ptr<SkBitmap> OACoreResourcesTransportRouteIconProvider::getIcon(
+sk_sp<const SkImage> OACoreResourcesTransportRouteIconProvider::getIcon(
     const std::shared_ptr<const OsmAnd::TransportRoute>& transportRoute /*= nullptr*/,
     const OsmAnd::ZoomLevel zoomLevel,
     const bool largeIcon /*= false*/) const
@@ -47,9 +47,8 @@ std::shared_ptr<SkBitmap> OACoreResourcesTransportRouteIconProvider::getIcon(
         if (transportRoute)
         {
             UIImage *backgroundImg = [UIImage imageNamed:@"map_transport_stop_bg"];
-            auto backgroundBmp = std::make_shared<SkBitmap>();
-            bool res = SkCreateBitmapFromCGImage(backgroundBmp.get(), backgroundImg.CGImage);
-            if (res)
+            auto backgroundBmp = SkMakeImageFromCGImage(backgroundImg.CGImage);
+            if (backgroundBmp)
             {
                 OATransportStopType *type = [OATransportStopType findType:transportRoute->type.toNSString()];
                 UIImage *origIcon = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", type.resName]]];
@@ -57,14 +56,14 @@ std::shared_ptr<SkBitmap> OACoreResourcesTransportRouteIconProvider::getIcon(
                 {
                     origIcon = [OAUtilities applyScaleFactorToImage:origIcon];
                     UIImage *tintedIcon = [OAUtilities tintImageWithColor:origIcon color:[UIColor whiteColor]];
-                    auto stopBmp = std::make_shared<SkBitmap>();
-                    bool res = SkCreateBitmapFromCGImage(stopBmp.get(), tintedIcon.CGImage);
-                    if (res)
+                    auto stopBmp = SkMakeImageFromCGImage(tintedIcon.CGImage);
+                    if (stopBmp)
                     {
-                        QList< std::shared_ptr<const SkBitmap>> composition;
-                        composition << OsmAnd::SkiaUtilities::scaleBitmap(backgroundBmp, symbolsScaleFactor, symbolsScaleFactor);
-                        composition << OsmAnd::SkiaUtilities::scaleBitmap(stopBmp, symbolsScaleFactor, symbolsScaleFactor);
-                        return OsmAnd::SkiaUtilities::mergeBitmaps(composition);
+                        const QList< sk_sp<const SkImage>> composition({
+                            OsmAnd::SkiaUtilities::scaleImage(backgroundBmp, symbolsScaleFactor, symbolsScaleFactor),
+                            OsmAnd::SkiaUtilities::scaleImage(stopBmp, symbolsScaleFactor, symbolsScaleFactor)
+                        });
+                        return OsmAnd::SkiaUtilities::mergeImages(composition);
                     }
                 }
             }
@@ -72,9 +71,8 @@ std::shared_ptr<SkBitmap> OACoreResourcesTransportRouteIconProvider::getIcon(
         else
         {
             UIImage *busImage = [UIImage imageNamed:@"map_transport_stop_bus"];
-            auto icon = std::make_shared<SkBitmap>();
-            bool res = SkCreateBitmapFromCGImage(icon.get(), busImage.CGImage);
-            if (res)
+            auto icon = SkMakeImageFromCGImage(busImage.CGImage);
+            if (icon)
                 return icon;
         }
     }

@@ -59,7 +59,7 @@
 + (instancetype)getDefault
 {
     return [[OAGPXTrackWidth alloc] initWithKey:@""
-                                          value:[NSString stringWithFormat:@"%i", kDefaultWidthMultiplier]];
+                                          value:[NSString stringWithFormat:@"%li", [self.class getCustomTrackWidthMin]]];
 }
 
 - (BOOL)isCustom

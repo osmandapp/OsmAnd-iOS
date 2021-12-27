@@ -1240,25 +1240,6 @@
     return NO;
 }
 
-- (UIImage *) findIconAtPoint:(OsmAnd::PointI)touchPoint
-{
-    CGFloat delta = 8.0;
-    OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
-    const auto& symbolInfos = [_mapView getSymbolsIn:area strict:NO];
-
-    for (const auto symbolInfo : symbolInfos) {
-        
-        if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(symbolInfo.mapSymbol))
-        {
-            std::shared_ptr<const SkBitmap> outIcon;
-            _mapPresentationEnvironment->obtainMapIcon(rasterMapSymbol->content, outIcon);
-            if (outIcon != nullptr)
-                return [OANativeUtilities skBitmapToUIImage:*outIcon];
-        }
-    }
-    return nil;
-}
-
 - (id<OAMapRendererViewProtocol>) mapRendererView
 {
     if (!self.mapViewLoaded)

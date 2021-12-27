@@ -187,8 +187,8 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> OAOsmNotesMapLayerProvider::buil
 {
     QReadLocker scopedLocker(&_lock);
 
-    const auto iconOpen = [OANativeUtilities skBitmapFromPngResource:@"map_osm_note_unresolved"];
-    const auto iconClosed = [OANativeUtilities skBitmapFromPngResource:@"map_osm_note_resolved"];
+    const auto iconOpen = [OANativeUtilities skImageFromPngResource:@"map_osm_note_unresolved"];
+    const auto iconClosed = [OANativeUtilities skImageFromPngResource:@"map_osm_note_resolved"];
     QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> mapSymbolsGroups;
 
     for (const auto note : _notesCache)
@@ -199,7 +199,7 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> OAOsmNotesMapLayerProvider::buil
             const auto mapSymbolsGroup = std::make_shared<NotesSymbolsGroup>(note);
             const auto mapSymbol = std::make_shared<OsmAnd::BillboardRasterMapSymbol>(mapSymbolsGroup);
             mapSymbol->order = -120000;
-            mapSymbol->bitmap = note->isOpened() ? iconOpen : iconClosed;
+            mapSymbol->image = note->isOpened() ? iconOpen : iconClosed;
             mapSymbol->size = OsmAnd::PointI(iconOpen->width(), iconOpen->height());
             mapSymbol->languageId = OsmAnd::LanguageId::Invariant;
             mapSymbol->position31 = pos31;

@@ -13,7 +13,7 @@
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/SkiaUtilities.h>
 #include <SkCGUtils.h>
-#include <SkBitmap.h>
+#include <SkImage.h>
 
 #import <Foundation/Foundation.h>
 #import "OALog.h"
@@ -56,7 +56,7 @@ OACoreResourcesAmenityIconProvider::~OACoreResourcesAmenityIconProvider()
 {
 }
 
-std::shared_ptr<SkBitmap> OACoreResourcesAmenityIconProvider::getIcon(
+sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
     const std::shared_ptr<const OsmAnd::Amenity>& amenity,
     const OsmAnd::ZoomLevel zoomLevel,
     const bool largeIcon /*= false*/) const
@@ -66,10 +66,8 @@ std::shared_ptr<SkBitmap> OACoreResourcesAmenityIconProvider::getIcon(
         
         if (zoomLevel <= OsmAnd::ZoomLevel13)
         {
-            auto iconBackground = coreResourcesProvider->getResourceAsBitmap(
-                                                                             "map/shields/white_orange_poi_shield.png",
-                                                                             displayDensityFactor);
-            return OsmAnd::SkiaUtilities::scaleBitmap(iconBackground, 0.5f, 0.5f);
+            auto iconBackground = coreResourcesProvider->getResourceAsImage("map/shields/white_orange_poi_shield.png", displayDensityFactor);
+            return OsmAnd::SkiaUtilities::scaleImage(iconBackground, 0.5f, 0.5f);
         }
         
         const auto& decodedCategories = amenity->getDecodedCategories();
@@ -88,25 +86,22 @@ std::shared_ptr<SkBitmap> OACoreResourcesAmenityIconProvider::getIcon(
                 continue;
             
             UIImage *tintedIcon = [OAUtilities tintImageWithColor:origIcon color:[UIColor whiteColor]];
-            
-            auto icon = std::make_shared<SkBitmap>();
-            bool res = SkCreateBitmapFromCGImage(icon.get(), tintedIcon.CGImage);
-            if (!res)
+            auto icon = SkMakeImageFromCGImage(tintedIcon.CGImage);
+            if (!icon)
                 continue;
             
-            auto iconBackground = coreResourcesProvider->getResourceAsBitmap(
-                                                                             "map/shields/white_orange_poi_shield.png",
-                                                                             displayDensityFactor);
+            auto iconBackground = coreResourcesProvider->getResourceAsImage("map/shields/white_orange_poi_shield.png", displayDensityFactor);
             if (iconBackground)
             {
-                QList< std::shared_ptr<const SkBitmap>> icons;
-                icons << OsmAnd::SkiaUtilities::scaleBitmap(iconBackground, symbolsScaleFactor, symbolsScaleFactor);
-                icons << OsmAnd::SkiaUtilities::scaleBitmap(icon, symbolsScaleFactor, symbolsScaleFactor);
-                return OsmAnd::SkiaUtilities::mergeBitmaps(icons);
+                const QList<sk_sp<const SkImage>> icons({
+                    OsmAnd::SkiaUtilities::scaleImage(iconBackground, symbolsScaleFactor, symbolsScaleFactor),
+                    OsmAnd::SkiaUtilities::scaleImage(icon, symbolsScaleFactor, symbolsScaleFactor)
+                });
+                return OsmAnd::SkiaUtilities::mergeImages(icons);
             }
             else
             {
-                return OsmAnd::SkiaUtilities::scaleBitmap(icon, symbolsScaleFactor, symbolsScaleFactor);
+                return OsmAnd::SkiaUtilities::scaleImage(icon, symbolsScaleFactor, symbolsScaleFactor);
             }
         }
         

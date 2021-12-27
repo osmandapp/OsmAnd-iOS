@@ -454,6 +454,7 @@
         metadata.desc = gpxDocument->metadata->description.toNSString();
         metadata.time = gpxDocument->metadata->timestamp.toTime_t();
         metadata.links = [self.class fetchLinks:gpxDocument->metadata->links];
+        metadata.extraData = [self.class fetchExtra:gpxDocument->metadata->extraData];
         _extraData = [self.class fetchExtra:gpxDocument->extraData];
         
         self.metadata = metadata;

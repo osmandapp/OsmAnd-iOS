@@ -17,5 +17,7 @@
 + (OARepositoryResourceItem *) findResourceItem:(OAWorldRegion *)worldRegion;
 
 + (void) showWikiArticle:(CLLocationCoordinate2D)location url:(NSString *)url;
++ (NSString *) getFirstParagraph:(NSString *)descriptionHtml;
++ (NSString *) getPartialContent:(NSString *)source;
 
 @end

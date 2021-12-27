@@ -11,6 +11,10 @@
 #import "OATextLineViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "Localization.h"
+#import "OAWebViewCell.h"
+#import "OAColors.h"
+#import "OAWikiArticleHelper.h"
+#import "OAImageDescTableViewCell.h"
 
 #define kInfoCreatedOnCell 0
 
@@ -21,6 +25,11 @@
 @end
 
 @implementation OATrackMenuTabOverview
+{
+    NSMutableArray *_results;
+    NSMutableString *_parsedString;
+    NSXMLParser *_xmlParser;
+}
 
 - (NSString *)getTabTitle
 {
@@ -35,13 +44,49 @@
 - (void)generateData
 {
     NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
-
+    NSString *imageURL = [self.trackMenuDelegate getMetadataImageLink];
     NSString *description = self.trackMenuDelegate ? [self.trackMenuDelegate generateDescription] : @"";
-
-    if (description && description.length > 0)
+    NSMutableArray<OAGPXTableCellData *> *descriptionCells = [NSMutableArray array];
+    
+    if ((!imageURL || imageURL.length == 0) && description && description.length > 0)
+        imageURL = [self findFirstImageURL:description];
+    if (imageURL)
     {
-        NSMutableArray<OAGPXTableCellData *> *descriptionCells = [NSMutableArray array];
+        OAGPXTableCellData *imageCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"image",
+                kCellType: [OAImageDescTableViewCell getCellIdentifier],
+                kTableValues: @{ @"img": imageURL }
+        }];
+        [descriptionCells addObject:imageCellData];
+    }
 
+    if (!description || description.length == 0)
+    {
+        OAGPXTableCellData *addDescriptionCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"add_description",
+                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+                kCellTitle: OALocalizedString(@"add_description"),
+                kCellToggle: @YES,
+                kCellTintColor: @color_primary_purple
+        }];
+        addDescriptionCellData.onButtonPressed = ^{
+            if (self.trackMenuDelegate)
+                [self.trackMenuDelegate openDescriptionEditor];
+        };
+        [descriptionCells addObject:addDescriptionCellData];
+        
+        OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
+                kSectionCells: descriptionCells,
+                kSectionHeader: OALocalizedString(@"description"),
+                kSectionHeaderHeight: @56.
+        }];
+        [tableSections addObject:descriptionSectionData];
+    }
+    else
+    {
+        description = [OAWikiArticleHelper getFirstParagraph:description];
+        
         NSAttributedString * (^generateDescriptionAttrString) (void) = ^{
             return [OAUtilities createAttributedString:
                             [description componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
@@ -61,24 +106,36 @@
         descriptionCellData.updateData = ^() {
             [descriptionCellData setData:@{ kTableValues: @{ @"attr_string_value": generateDescriptionAttrString() } }];
         };
-
         [descriptionCells addObject:descriptionCellData];
 
-        OAGPXTableCellData * (^generateDataForFullDescriptionCellData) (void) = ^{
-            OAGPXTableCellData *fullDescriptionCellData = [OAGPXTableCellData withData:@{
-                    kCellKey: @"full_description",
-                    kCellType: [OATextLineViewCell getCellIdentifier],
-                    kCellTitle: OALocalizedString(@"read_full_description") 
-            }];
-            fullDescriptionCellData.onButtonPressed = ^{
-                if (self.trackMenuDelegate)
-                    [self.trackMenuDelegate openDescription];
-            };
-            return fullDescriptionCellData;
+        OAGPXTableCellData *editDescriptionCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"context_menu_edit_descr",
+                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+                kCellTitle: OALocalizedString(@"context_menu_edit_descr"),
+                kCellToggle: @YES,
+                kCellTintColor: @color_primary_purple
+        }];
+        editDescriptionCellData.onButtonPressed = ^{
+            if (self.trackMenuDelegate)
+                [self.trackMenuDelegate openDescriptionEditor];
         };
-
-        if (description.length > descriptionAttr.length)
-            [descriptionCells addObject:generateDataForFullDescriptionCellData()];
+        
+        OAGPXTableCellData *readFullDescriptionCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"read_full_description",
+                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+                kCellTitle: OALocalizedString(@"read_full_description"),
+                kCellToggle: @YES,
+                kCellTintColor: @color_primary_purple
+        }];
+        readFullDescriptionCellData.onButtonPressed = ^{
+            if (self.trackMenuDelegate)
+                [self.trackMenuDelegate openDescription];
+        };
+        
+        [descriptionCells addObject:editDescriptionCellData];
+        [descriptionCells addObject:readFullDescriptionCellData];
 
         OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
                 kSectionCells: descriptionCells,
@@ -86,14 +143,6 @@
                 kSectionHeaderHeight: @56.
         }];
         descriptionSectionData.updateData = ^() {
-            NSAttributedString *newDescriptionAttr = generateDescriptionAttrString();
-
-            BOOL hasFullDescription = [descriptionSectionData.cells.lastObject.key isEqualToString:@"full_description"];
-            if (description.length > newDescriptionAttr.length && !hasFullDescription)
-                [descriptionSectionData.cells addObject:generateDataForFullDescriptionCellData()];
-            else if (description.length <= newDescriptionAttr.length && hasFullDescription)
-                [descriptionSectionData.cells removeObject:descriptionSectionData.cells.lastObject];
-
             for (OAGPXTableCellData *cellData in descriptionSectionData.cells)
             {
                 if (cellData.updateData)
@@ -194,6 +243,27 @@
                 sectionData.updateData();
         }
     };
+}
+
+- (NSString *) findFirstImageURL:(NSString *)htmlText
+{
+    NSRange openImgTagRange = [htmlText rangeOfString:@"<img"];
+    if (openImgTagRange.location != NSNotFound)
+    {
+        NSString *trimmedString = [htmlText substringFromIndex:openImgTagRange.location + openImgTagRange.length];
+        NSRange openSrcTagRange = [trimmedString rangeOfString:@"src=\""];
+        if (openSrcTagRange.location != NSNotFound)
+        {
+            trimmedString = [trimmedString substringFromIndex:openSrcTagRange.location + openSrcTagRange.length];
+            NSRange closeSrcTagRange = [trimmedString rangeOfString:@"\""];
+            if (closeSrcTagRange.location != NSNotFound)
+            {
+                trimmedString = [trimmedString substringToIndex:closeSrcTagRange.location];
+                return trimmedString;
+            }
+        }
+    }
+    return nil;
 }
 
 @end

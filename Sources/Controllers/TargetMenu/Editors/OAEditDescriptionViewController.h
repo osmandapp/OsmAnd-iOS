@@ -32,6 +32,6 @@
 
 @property (nonatomic, copy) NSString *desc;
 
--(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew readOnly:(BOOL)readOnly;
+-(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew isEditing:(BOOL)isEditing readOnly:(BOOL)readOnly;
 
 @end

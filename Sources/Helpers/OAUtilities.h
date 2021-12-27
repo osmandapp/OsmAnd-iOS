@@ -228,4 +228,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (natural_t) get_free_memory;
 
++ (NSString *) regexReplaceInString:(NSString *)searchedString pattern:(NSString *)pattern newString:(NSString *)newString;
++ (NSArray<NSString *> *) regexSplitInString:(NSString *)searchedString pattern:(NSString *)pattern;
+
 @end

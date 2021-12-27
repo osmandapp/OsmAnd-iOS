@@ -1776,6 +1776,8 @@
 "enter_description" = "Enter description";
 "description" = "Description";
 "read_full_description" = "Read full description";
+"context_menu_edit_descr" = "Edit description";
+"add_description" = "Add description";
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Roads";

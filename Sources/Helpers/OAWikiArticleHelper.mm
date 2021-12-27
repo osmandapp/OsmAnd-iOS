@@ -20,6 +20,10 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
 
+#define kPOpened @"<p>"
+#define kPClosed @"</p>"
+#define kPartialContentPhrases 3
+
 @implementation OAWikiArticleHelper
 
 + (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion
@@ -116,5 +120,59 @@
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
++ (NSString *) getFirstParagraph:(NSString *)descriptionHtml
+{
+   if (descriptionHtml)
+   {
+       NSString *firstParagraph = [self.class getPartialContent:descriptionHtml];
+       if (firstParagraph && firstParagraph.length > 0)
+           return firstParagraph;
+   }
+   return descriptionHtml;
+}
+
++ (NSString *) getPartialContent:(NSString *)source
+{
+    if (!source || source.length == 0)
+        return nil;
+    
+    NSString *content = [OAUtilities regexReplaceInString:source pattern:@"\\n" newString:@""];
+    int firstParagraphStart = [content indexOf:kPOpened];
+    int firstParagraphEnd = [content indexOf:kPClosed];
+    firstParagraphEnd = firstParagraphEnd < firstParagraphStart ? [content indexOf:kPClosed start:firstParagraphStart] : firstParagraphEnd;
+    NSString *firstParagraphHtml = nil;
+    if (firstParagraphStart != -1 && firstParagraphEnd != -1 && firstParagraphEnd >= firstParagraphStart)
+    {
+        firstParagraphHtml = [content substringWithRange:NSMakeRange(firstParagraphStart, firstParagraphEnd - firstParagraphStart + kPClosed.length)];
+        while ([[firstParagraphHtml substringWithRange:NSMakeRange(kPOpened.length, firstParagraphHtml.length - kPOpened.length - kPClosed.length)] trim].length == 0
+               && (firstParagraphEnd + kPClosed.length < content.length)
+               || [[OAUtilities regexReplaceInString:firstParagraphHtml pattern:@"(<a.+?/a>)|(<div.+?/div>)" newString:@""] trim].length == 0)
+        {
+            firstParagraphStart = [content indexOf:kPOpened start:firstParagraphEnd];
+            firstParagraphEnd = firstParagraphStart == -1 ? -1 : [content indexOf:kPClosed start:firstParagraphStart];
+            if (firstParagraphStart != -1 && firstParagraphEnd != -1)
+                firstParagraphHtml = [content substringWithRange:NSMakeRange(firstParagraphStart, firstParagraphEnd - firstParagraphStart + kPClosed.length)];
+            else
+                break;
+        }
+    }
+    
+    if (!firstParagraphHtml || firstParagraphHtml.length == 0)
+        firstParagraphHtml = source;
+    if (!firstParagraphHtml || firstParagraphHtml.length == 0)
+        return nil;
+    
+    NSString *firstParagraphText = [[[OAUtilities regexReplaceInString:firstParagraphHtml pattern:@"(<(/)(a|img)>)|(<(a|img).+?>)|(<div.+?/div>)" newString:@""] stringByReplacingOccurrencesOfString:@"<br>" withString:@""] trim];
+    NSArray<NSString *> *phrases = [OAUtilities regexSplitInString:firstParagraphText pattern:@"\\. "];
+    NSMutableString *res = [NSMutableString string];
+    NSInteger limit = MIN(phrases.count, kPartialContentPhrases);
+    for (NSInteger i = 0; i < limit; i++)
+    {
+        [res appendString:phrases[i]];
+        if (i < limit - 1)
+            [res appendString:@". "];
+    }
+    return [NSString stringWithString:res];
+}
 
 @end

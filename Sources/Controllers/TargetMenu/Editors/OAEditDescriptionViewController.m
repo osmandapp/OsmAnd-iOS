@@ -8,8 +8,11 @@
 
 #import "OAEditDescriptionViewController.h"
 #import "Localization.h"
+#import "OAColors.h"
+#import "OAIconTitleValueCell.h"
+#import "OAWebViewCell.h"
 
-@interface OAEditDescriptionViewController ()
+@interface OAEditDescriptionViewController () <WKNavigationDelegate>
 
 @end
 
@@ -21,7 +24,7 @@
     BOOL _isEditing;
 }
 
--(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew readOnly:(BOOL)readOnly
+-(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew isEditing:(BOOL)isEditing readOnly:(BOOL)readOnly
 {
     self = [super init];
     if (self)
@@ -30,7 +33,7 @@
         _isNew = isNew;
         _readOnly = readOnly;
         _keyboardHeight = 0.0;
-        _isEditing = (desc.length == 0) && !readOnly;
+        _isEditing = isEditing || ((desc.length == 0) && !readOnly);
     }
     return self;
 }
@@ -39,6 +42,7 @@
 {
     _titleView.text = OALocalizedString(@"description");
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (BOOL)isHtml:(NSString *)text
@@ -82,7 +86,6 @@
     [super viewWillAppear:animated];
     [self registerForKeyboardNotifications];
     [self applySafeAreaMargins];
-    _textView.frame = _webView.frame;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -119,12 +122,19 @@
 {
     _textView.textContainerInset = UIEdgeInsetsMake(5,5,5,5);
     
+    
     if (_isEditing)
     {
         _saveButton.hidden = NO;
         _editButton.hidden = YES;
         _textView.hidden = NO;
         _webView.hidden = YES;
+        _toolbarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        _titleView.textColor = UIColor.blackColor;
+        _saveButton.tintColor = UIColorFromRGB(color_primary_purple);
+        _backButton.tintColor = UIColorFromRGB(color_primary_purple);
+        [_backButton setTitle:@"" forState:UIControlStateNormal];
+        [_backButton setImage:[UIImage templateImageNamed:@"ic_navbar_close"] forState:UIControlStateNormal];
     }
     else
     {
@@ -132,16 +142,20 @@
         _saveButton.hidden = YES;
         _textView.hidden = YES;
         _webView.hidden = NO;
+        _toolbarView.backgroundColor = UIColorFromRGB(color_chart_orange);
+        _titleView.textColor = UIColor.whiteColor;
+        _backButton.tintColor = UIColor.whiteColor;
+        [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+        [_backButton setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
+        if ([self.view isDirectionRTL])
+            _backButton.imageView.image = _backButton.imageView.image.imageFlippedForRightToLeftLayoutDirection;
     }
     _textView.editable = !_readOnly;
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (UIStatusBarStyle)preferredStatusBarStyle
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        _textView.frame = _webView.frame;
-    } completion:nil];
+    return _isEditing ? UIStatusBarStyleBlackOpaque : UIStatusBarStyleLightContent;
 }
 
 // keyboard notifications register+process

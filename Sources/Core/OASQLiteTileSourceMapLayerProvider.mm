@@ -90,12 +90,12 @@ const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::createShiftedTileBitmap
     sk_sp<SkImage> secondImage = nullptr;
     if (data.length > 0)
     {
-        const auto skData = SkData::MakeWithoutCopy(data.bytes, data.length);
+        const auto skData = SkData::MakeWithCopy(data.bytes, data.length);
         firstImage = SkImage::MakeFromEncoded(skData);
     }
     if (dataNext.length > 0)
     {
-        const auto skData = SkData::MakeWithoutCopy(dataNext.bytes, dataNext.length);
+        const auto skData = SkData::MakeWithCopy(dataNext.bytes, dataNext.length);
         secondImage = SkImage::MakeFromEncoded(skData);
     }
     if (!firstImage && !secondImage)
@@ -125,7 +125,7 @@ const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::downloadShiftedTile(con
 const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::decodeBitmap(const NSData *data)
 {
     // Decode image data
-    const auto skData = SkData::MakeWithoutCopy(data.bytes, data.length);
+    const auto skData = SkData::MakeWithCopy(data.bytes, data.length);
     const sk_sp<SkImage> image = SkImage::MakeFromEncoded(skData);
     if (!image)
     {
@@ -197,7 +197,7 @@ sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMa
             if (shiftedTile)
                 unlockTile(tileIdNext, zoom);
 
-            const auto skData = SkData::MakeWithoutCopy(downloadResult.constData(), downloadResult.length());
+            const auto skData = SkData::MakeWithCopy(downloadResult.constData(), downloadResult.length());
             return SkImage::MakeFromEncoded(skData);
         }
     }

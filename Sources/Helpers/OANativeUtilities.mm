@@ -74,7 +74,7 @@
     if (!resourceData)
         return nullptr;
     
-    return SkImage::MakeFromEncoded(SkData::MakeWithoutCopy(resourceData.bytes, resourceData.length));
+    return SkImage::MakeFromEncoded(SkData::MakeWithCopy(resourceData.bytes, resourceData.length));
 }
 
 + (NSMutableArray*) QListOfStringsToNSMutableArray:(const QList<QString>&)list

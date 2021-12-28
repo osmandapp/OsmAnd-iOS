@@ -1,12 +1,12 @@
 "OsmAnd Maps" = "OsmAnd Maps";
 "download_depth_countours" = "Поморске изобате";
 "day_short" = "D";
-"week_short" = "Wk";
-"weeks_short" = "Wks";
-"month_short" = "Mo";
-"months_short" = "Mos";
-"year_short" = "Yr";
-"years_short" = "Yrs";
+"week_short" = "нед.";
+"weeks_short" = "нед.";
+"month_short" = "м";
+"months_short" = "м";
+"year_short" = "год.";
+"years_short" = "год.";
 "day" = "Дан";
 "days_2_4" = "Дана";
 "days_5" = "Дана";
@@ -362,7 +362,7 @@
 "arrived_at_destination" = "Стигли сте.";
 "towards" = "према";
 "route_roundabout" = "Roundabout: take %d exit and go";
-"route_roundabout_short" = "Одреди %d излаз и иди";
+"route_roundabout_short" = "Искључите се на %d. излазу";
 "route_kl" = "Држите лево и наставите";
 "route_kr" = "Држите десно и наставите";
 "route_tr" = "Скрените десно и наставите";

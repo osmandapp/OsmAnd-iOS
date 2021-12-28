@@ -29,7 +29,7 @@ static NSMutableArray<OAFavoriteItem *> *_cachedFavoritePoints;
 static NSMutableArray<OAFavoriteGroup *> *_favoriteGroups;
 static NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
 static NSDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
-static NSArray<NSString *> *_poiIconsCatagories;
+static NSArray<NSString *> *_poiIconsCategories;
 static NSArray<NSString *> *_flatPoiIcons;
 static NSArray<NSString *> *_flatBackgroundIcons;
 static NSArray<NSString *> *_flatBackgroundContourIcons;
@@ -554,6 +554,7 @@ static BOOL _favoritesLoaded = NO;
 
     NSMutableDictionary<NSString *, NSArray<NSString *> *> *tempIcons  = [NSMutableDictionary new];
     NSMutableArray<NSString *> *tempFlatIcons  = [NSMutableArray new];
+    NSMutableDictionary<NSString *, NSNumber *> *categoriesOrder = [NSMutableDictionary dictionary];
     _flatPoiIcons = [NSMutableArray new];
     
     if (json)
@@ -563,6 +564,9 @@ static BOOL _favoritesLoaded = NO;
         {
             for (NSString *categoryName in categories.allKeys)
             {
+                NSNumber *order = [NSNumber numberWithInt:[jsonString indexOf:[NSString stringWithFormat:@"\"%@\"", categoryName]]];
+                categoriesOrder[categoryName] = order;
+
                 NSArray<NSString *> *icons = categories[categoryName][@"icons"];
                 if (icons)
                 {
@@ -574,23 +578,7 @@ static BOOL _favoritesLoaded = NO;
     }
     _poiIcons = [NSDictionary dictionaryWithDictionary:tempIcons];
     _flatPoiIcons = [NSArray arrayWithArray:tempFlatIcons];
-    [self setupPoiIconCategoriesOrder:json jsonString:jsonString];
-}
-
-+ (void) setupPoiIconCategoriesOrder:(NSDictionary *)json jsonString:(NSString *)jsonString
-{
-    NSMutableDictionary<NSString *, NSNumber *> *categoriesOrder = [NSMutableDictionary dictionary];
-    
-    NSDictionary *categories = json[@"categories"];
-    for (NSString *category in categories.allKeys)
-    {
-        NSNumber *order = [NSNumber numberWithInt: [jsonString indexOf:category]];
-        categoriesOrder[category] = order;
-    }
-    
-    _poiIconsCatagories = [categories.allKeys sortedArrayUsingComparator:^NSComparisonResult(NSString * obj1, NSString* obj2) {
-        return [categoriesOrder[obj1] compare:categoriesOrder[obj2]];
-    }];
+    _poiIconsCategories = [categoriesOrder keysSortedByValueUsingSelector:@selector(compare:)];
 }
 
 + (NSDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames
@@ -600,9 +588,9 @@ static BOOL _favoritesLoaded = NO;
     return _poiIcons;
 }
 
-+ (NSArray<NSString *> *) getOrderedPoiIconsCatagories
++ (NSArray<NSString *> *) getOrderedPoiIconsCategories
 {
-    return _poiIconsCatagories;
+    return _poiIconsCategories;
 }
 
 + (NSArray<NSString *> *) getFlatIconNamesList

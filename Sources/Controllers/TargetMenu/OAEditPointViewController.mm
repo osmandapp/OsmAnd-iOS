@@ -303,7 +303,7 @@
     NSString *preselectedIconName = [self getPreselectedIconName];
 
     _poiIcons = [OAFavoritesHelper getCategirizedIconNames];
-    NSArray<NSString *> *categories = [OAFavoritesHelper getOrderedPoiIconsCatagories];
+    NSArray<NSString *> *categories = [OAFavoritesHelper getOrderedPoiIconsCategories];
     
     if (_lastUsedIcons && _lastUsedIcons.count > 0)
     {

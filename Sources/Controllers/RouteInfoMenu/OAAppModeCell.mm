@@ -126,8 +126,11 @@
     for (UIButton *btn in _modeButtons)
     {
         NSInteger modeIndex = [self getAppModeIndex:_selectedMode];
-        btn.tintColor = UIColorFromRGB(OAApplicationMode.values[btn.tag].getIconColor);
-        btn.backgroundColor = modeIndex == btn.tag ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
+        if (modeIndex != NSNotFound)
+        {
+            btn.tintColor = UIColorFromRGB(OAApplicationMode.values[modeIndex].getIconColor);
+            btn.backgroundColor = modeIndex == btn.tag ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
+        }
     }
 }
 

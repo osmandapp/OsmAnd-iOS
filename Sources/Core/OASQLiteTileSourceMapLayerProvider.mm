@@ -7,6 +7,7 @@
 //
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
+#include "OANativeUtilities.h"
 
 #include <SkImageEncoder.h>
 #include <SkStream.h>
@@ -89,15 +90,11 @@ const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::createShiftedTileBitmap
     sk_sp<SkImage> firstImage = nullptr;
     sk_sp<SkImage> secondImage = nullptr;
     if (data.length > 0)
-    {
-        const auto skData = SkData::MakeWithCopy(data.bytes, data.length);
-        firstImage = SkImage::MakeFromEncoded(skData);
-    }
+        firstImage = [OANativeUtilities skImageFromNSData:data];
+
     if (dataNext.length > 0)
-    {
-        const auto skData = SkData::MakeWithCopy(dataNext.bytes, dataNext.length);
-        secondImage = SkImage::MakeFromEncoded(skData);
-    }
+        secondImage = [OANativeUtilities skImageFromNSData:dataNext];
+
     if (!firstImage && !secondImage)
         return nullptr;
     
@@ -125,8 +122,7 @@ const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::downloadShiftedTile(con
 const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::decodeBitmap(const NSData *data)
 {
     // Decode image data
-    const auto skData = SkData::MakeWithCopy(data.bytes, data.length);
-    const sk_sp<SkImage> image = SkImage::MakeFromEncoded(skData);
+    const sk_sp<SkImage> image = [OANativeUtilities skImageFromNSData:data];
     if (!image)
     {
         LogPrintf(OsmAnd::LogSeverityLevel::Error,
@@ -197,8 +193,7 @@ sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMa
             if (shiftedTile)
                 unlockTile(tileIdNext, zoom);
 
-            const auto skData = SkData::MakeWithCopy(downloadResult.constData(), downloadResult.length());
-            return SkImage::MakeFromEncoded(skData);
+            return OsmAnd::SkiaUtilities::createImageFromData(downloadResult);
         }
     }
     unlockTile(tileId, zoom);

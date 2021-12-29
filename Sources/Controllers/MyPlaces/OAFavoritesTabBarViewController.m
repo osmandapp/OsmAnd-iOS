@@ -22,6 +22,13 @@
         [self setViewControllers:newTabs];
     }
     [self applyLocalization];
+    if (@available(iOS 15.0, *))
+    {
+        UITabBarAppearance *appearance = [[UITabBarAppearance alloc] init];
+        [appearance configureWithDefaultBackground];
+        self.tabBar.standardAppearance = appearance;
+        self.tabBar.scrollEdgeAppearance = appearance;
+    }
     [super viewDidLoad];
 }
 

@@ -1,4 +1,4 @@
-"OsmAnd Maps" = "OsmAnd Maps";
+"OsmAnd Maps" = "OsmAnd карте";
 "download_depth_countours" = "Поморске изобате";
 "day_short" = "D";
 "week_short" = "нед.";
@@ -21,8 +21,8 @@
 "years_5" = "Година";
 "months_3" = "Три месеца";
 "price_free" = "Бесплатно";
-"get_discount_title" = "Get %d %@ at %d%% off.";
-"get_free_trial_title" = "Start your %d %@ free trial.";
+"get_discount_title" = "Добијте %d %@ са %d%% попуста.";
+"get_free_trial_title" = "Започните %d %@ бесплатну пробу.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
 "get_discount_first_part" = "%@ for first %@";
 "get_discount_first_few_parts" = "%@ for first %@";
@@ -91,7 +91,7 @@
 "daynight_mode_auto" = "Излазак/залазак сунца";
 "route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "Ауто-центрирање карте током употребе.";
-"unknown_location" = "Положај још није познат.";
+"unknown_location" = "Положај још није познат";
 "animate_routing_route_not_calculated" = "Најпре израчунајте путању";
 "settings_preset" = "Примарни профил";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
@@ -240,12 +240,12 @@
 "nav_type_brouter" = "BRouter";
 "nav_type_ski" = "Скијање";
 "nav_type_geocoding" = "Геокодирање";
-"fast_route_mode_descr" = "Укључите да рачунате најбржи пут или искључите да рачунате пут са највећом уштедњом горива.";
+"fast_route_mode_descr" = "Укључите да рачунате најбржу руту или искључите да рачунате руту са највећом уштедњом горива";
 "avoid_in_routing_title" = "Избегавати…";
 "avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Предност…";
-"prefer_in_routing_descr" = "Предност путевима за моторна возила.";
-"relief_smoothness_factor_descr" = "Омиљени терен: павно или брдовито.";
+"prefer_in_routing_descr" = "Предност путевима за моторна возила";
+"relief_smoothness_factor_descr" = "Омиљени терен: равно или брдовито";
 "choose_auto_follow_route" = "Аутоцентрирање карте";
 "choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
 "choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
@@ -259,15 +259,15 @@
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
 "keep_informing" = "Понови инструкције навођења";
 "repeat_after" = "Repeat after";
-"keep_informing_descr" = "Понављај инструкције навођења у правилним размацима.";
+"keep_informing_descr" = "Понављај инструкције навођења у правилним размацима";
 "arrival_distance" = "Обавештење о доласку";
 "arrival_distance_descr" = "Колико брзо желите да добијете обавештење о пристизању?";
 "default_speed_system" = "Јединица за брзину";
-"default_speed_system_descr" = "Одредите мерне јединице за брзину.";
+"default_speed_system_descr" = "Одредите мерну јединицу за брзину";
 "speed_limit_exceed" = "Допуштено прекорачење брзине";
 "speed_limit_exceed_message" = "Select speed limit tolerance margin, above which you will receive a voice warning.";
 "wake_on_voice" = "Укључи екран";
-"wake_on_voice_descr" = "Укључи екран уређаја (ако је искључен) када се приближи скретање.";
+"wake_on_voice_descr" = "Укључи екран уређаја (ако је искључен) када се приближи скретање";
 "voice_pref_title" = "Глас";
 "voice_provider" = "Гласовно навођење";
 "voice_provider_descr" = "Select voice guidance for navigation";
@@ -312,7 +312,7 @@
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
 "consider_limitations_param" = "Укључи у обзир и привремена ограничења";
-"impassable_road_desc" = "Изаберите које путеве желите да избегавате током навођења.";
+"impassable_road_desc" = "Изаберите које путеве желите да избегнете током навођења";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Паузирај музику";
 "shared_string_do_not_use" = "Do not use";
@@ -359,7 +359,7 @@
 "starting_point_too_far" = "Starting point too far from nearest road.";
 "ending_point_too_far" = "Завршна тачка је предалеко од најближег пута.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
-"arrived_at_destination" = "Стигли сте.";
+"arrived_at_destination" = "Стигли сте";
 "towards" = "према";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Искључите се на %d. излазу";
@@ -769,7 +769,7 @@
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Преслови имена";
-"lang_af" = "Afrikaan";
+"lang_af" = "Африкаанс";
 "lang_al" = "Албански";
 "lang_als" = "Албански (тоскијски)";
 "lang_an" = "Арагонски";
@@ -980,7 +980,7 @@
 "reading_file" = "Reading file";
 "preparing_file" = "Preparing file";
 "profile_import_success" = "Application profile was imported successfully";
-"profile_prefs_reset_successful" = "Све поставке профила враћене на подразумевано.";
+"profile_prefs_reset_successful" = "Све поставке профила враћене на подразумевано";
 "not_available_profile_name" = "Profile with this name already exists.";
 "profile_type_base_string" = "Основни профил";
 "selected_profile" = "Изабрани профил";
@@ -1833,7 +1833,7 @@
 "get_started" = "Почнимо";
 "first_usage_wizard_desc" = "Пусти да OsmAnd одреди Ваш положај и да према томе предложи карте за преузимање те области.";
 "suggested_maps" = "Предложене карте";
-"suggested_maps_descr" = "Ове карте су потребне за рад овог додатка.";
+"suggested_maps_descr" = "Ове карте су потребне за рад овог додатка";
 "added_profiles" = "Додати профили";
 "added_profiles_descr" = "Профили додати од стране додатка";
 "location_not_found" = "Није препознат положај";
@@ -2272,7 +2272,7 @@
 "lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
 "width_limit_description" = "Унесите ширину возила, нека ограничења пута могу бити примењена за широка возила.";
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
-"vessel_width_limit_description" = "Подесите ширину пловила и избегните уске мостове";
+"vessel_width_limit_description" = "Подесите ширину пловила да би избели уске мостове.";
 "default_speed_dialog_msg" = "Процењује време стизања код непознатих типова путева, ограничава брзину на свим путевима (може да промени руту)";
 "default" = "Подразумевано";
 
@@ -2328,3 +2328,10 @@
 "ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"grey_color_undefined" = "Делови без података су сиви.";
+"units_min_short" = "м";
+"connect_rp" = "Повежи тачке руте";
+"shared_string_hide_all" = "Сакриј све";
+"points_delete_multiple" = "Обрисати %d тачку(е)?";
+"units_m" = "m";
+"white_color_undefined" = "Делови без података су бели.";

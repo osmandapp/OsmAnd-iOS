@@ -560,7 +560,7 @@
 "intermediate_point" = "Проміжний пункт призначення %@";
 "arrived_at_intermediate_point" = "Ви прибули у проміжний пункт призначення";
 "starting_point_too_far" = "Початок маршруту надто далеко від найближчої дороги.";
-"ending_point_too_far" = "Кінець маршруту надто далеко від найближчої дороги.";
+"ending_point_too_far" = "Кінець маршруту далеко від найближчої дороги.";
 "intermediate_point_too_far" = "Проміжний пункт призначення %d надто далеко від найближчої дороги.";
 "route_to" = "До";
 "route_via" = "Через";
@@ -650,7 +650,7 @@
 "arrival_distance_factor_at_last" = "На останніх метрах";
 "map_orientation_change_in_accordance_with_speed" = "Зміна орієнтації мапи";
 "map_orientation_change_in_accordance_with_speed_descr" = "Виберіть нижче, на якій швидкості орієнтація мапи перемикається зі „за напрямком руху“ на „за компасом“";
-"snap_to_road" = "Прив’язуватися до доріг";
+"snap_to_road" = "Притягування до доріг";
 "snap_to_road_descr" = "Прив’язуватися до доріг під час навігації";
 "show_warnings_title" = "Показувати попередження…";
 "show_warnings_descr" = "Налаштувати попередження дорожнього руху (обмеження швидкості, вимушені зупинки, лежачі поліцейські, тунелі), попередження про камери контролю швидкості та відомості про рух по смугах";
@@ -753,9 +753,9 @@
 "transport_nearby_routes_within" = "Найближчі маршрути в межах";
 "transport_nearby_routes" = "В межах";
 "transport_stop" = "Зупинка";
-"add_as_first_destination_point" = "Перший проміжний пункт призначення";
+"add_as_first_destination_point" = "Додати першим проміжним пунктом";
 "first_intermediate_dest_description" = "Додає першу зупинку на маршруті";
-"add_as_last_destination_point" = "Останній проміжний пункт призначення";
+"add_as_last_destination_point" = "Додати останнім проміжним пунктом";
 "last_intermediate_dest_description" = "Додає останню зупинку на маршруті";
 "show_poi_over_map" = "Показувати точки інтересу";
 "shared_string_search" = "Пошук";
@@ -1333,7 +1333,7 @@
 "rendering_attr_surface_metal_name" = "Метал";
 "rendering_attr_piste_type_skitour_name" = "Лижні мандри";
 "rendering_attr_roadStyle_description" = "Стиль доріг";
-"rendering_attr_showRoadMaps_name" = "Тільки дорожні мапи";
+"rendering_attr_showRoadMaps_name" = "Мапи доріг";
 "routing_attr_avoid_subway_name" = "Уник. метро";
 "rendering_attr_surface_salt_name" = "Сіль";
 "rendering_attr_surface_grass_paver_name" = "Газонна решітка";
@@ -1406,7 +1406,7 @@
 "rendering_attr_surface_fine_gravel_name" = "Відсів";
 "rendering_attr_hideOverground_name" = "Надземні об’єкти";
 "rendering_attr_hideUnderground_name" = "Підземні обʼєкти";
-"rendering_attr_showRoadMaps_description" = "Виберіть коли показувати тільки дорожні мапи:";
+"rendering_attr_showRoadMaps_description" = "Виберіть коли показувати мапи доріг:";
 "routing_attr_avoid_bus_name" = "Уникати автобусів";
 "rendering_attr_transportStops_name" = "Зупинки транспорту";
 "routing_attr_avoid_ferry_description" = "Уникати поромних переправ";

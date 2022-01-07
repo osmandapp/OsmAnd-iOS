@@ -1917,7 +1917,7 @@
 "gpxup_trackable" = "Traçable";
 "route_points" = "Ponchs d'etapa";
 "gpx_analyze" = "Analizar";
-"street_level_imagery" = "Imatges de carriera";
+"street_level_imagery" = "Imatges de carrieras";
 "map_settings_line_width" = "Graissa de la linha";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "Format inconegut";
@@ -2121,3 +2121,5 @@
 "create_custom_categories_list_promo" = "Podètz filtrar de categorias personalizadas, amagar lei categorias que trobatz pas necessàrias e modificar l'òrdre de la lista. Lei categorias personalizadas se pòdon importar emai exportar amb de lei perfius.";
 "add_custom_category" = "Ajustar una categoria personalizada";
 "search_poi_types_descr" = "Podètz combinar lei menas de PDI de divèrsei categorias.";
+"gpx_split_interval_none_descr" = "Chausir lo critèri desirat : segon lo temps ò segon la distància.";
+"gpx_split_interval_descr" = "Chausir l'intervalle que lei marcas de distància ò de temps seràn visualizadas.";

@@ -634,7 +634,7 @@
 "speak_favorites" = "Довколишні закладки";
 "speak_poi" = "Точки інтересу поруч";
 "speak_pedestrian" = "Пішохідні переходи";
-"int_seconds" = "секунд(и)";
+"int_seconds" = "сек";
 "shared_string_never" = "Ніколи";
 "general_settings_2" = "Загальні налаштування";
 "general_settings_descr" = "Тема застосунку, одиниці вимірювання, регіон";
@@ -708,7 +708,7 @@
 "day_night_info" = "Схід/захід сонця";
 "daynight_mode_auto" = "Схід/захід сонця";
 "route_simulation" = "Імітація маршруту";
-"save_global_track_interval" = "Загальний інтервал запису треку";
+"save_global_track_interval" = "Загальний інтервал між точками";
 "save_global_track_interval_descr" = "Укажіть інтервал для загального записування подорожі (увімкнено через віджет записування GPX на мапі).";
 "rotate_map_to_bearing" = "Орієнтація мапи";
 "rotate_map_to_bearing_descr" = "Виберіть спосіб обертання мапи.";
@@ -1626,16 +1626,16 @@
 "open_wiki_online" = "Відкрити статтю в Інтернеті";
 "online_webpage_warning" = "Сторінка доступна лише онлайн. Відкрити в оглядачі?";
 "app_mode_osm" = "OSM";
-"app_mode_utv" = "Всюдихід";
+"app_mode_utv" = "Мотовсюдихід";
 "app_mode_pickup_truck" = "Пікап";
 "app_mode_wagon" = "Фургон";
 "app_mode_campervan" = "Дім на колесах";
 "app_mode_camper" = "Кемпер";
-"app_mode_offroad" = "Бездоріжжя";
+"app_mode_offroad" = "Всюдихід";
 "app_mode_ufo" = "НЛО";
 "app_mode_scooter" = "Самокат";
 "app_mode_monowheel" = "Моноколесо";
-"app_mode_personal_transporter" = "Моноколесо, Сігвей";
+"app_mode_personal_transporter" = "Моноколесо, Гіроборд";
 "app_mode_skiing" = "Лижі";
 "app_mode_helicopter" = "Вертоліт";
 "app_mode_horse" = "Їзда верхи";

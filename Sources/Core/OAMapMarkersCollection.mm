@@ -118,19 +118,19 @@ bool OAMapMarkersCollection::obtainData(
         
         // SpriteMapSymbol with pinIconBitmap as an icon
         
-        std::shared_ptr<SkBitmap> pinIcon([OANativeUtilities skBitmapFromPngResource:@"icon_star_fill"]);
+        sk_sp<SkImage> pinIcon([OANativeUtilities skImageFromPngResource:@"icon_star_fill"]);
         
         const std::shared_ptr<OsmAnd::BillboardRasterMapSymbol> pinIconSymbol(new OsmAnd::BillboardRasterMapSymbol(
                                                                                                    symbolsGroup));
         pinIconSymbol->order = order++;
-        pinIconSymbol->bitmap = pinIcon;
+        pinIconSymbol->image = pinIcon;
         pinIconSymbol->size = OsmAnd::PointI(pinIcon->width(), pinIcon->height());
         pinIconSymbol->contentClass = OsmAnd::RasterMapSymbol::ContentClass::Icon;
         pinIconSymbol->content = QString().sprintf(
                                                    "markerGroup(%p:%p)->pinIconBitmap:%p",
                                                    this,
                                                    symbolsGroup.get(),
-                                                   pinIcon->getPixels());
+                                                   pinIcon.get());
         pinIconSymbol->languageId = OsmAnd::LanguageId::Invariant;
         
         pinIconSymbol->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(50.4486, 30.51348));

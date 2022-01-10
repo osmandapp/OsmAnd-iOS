@@ -102,8 +102,8 @@
                     .setLineWidth(lineWidth)
                     .setPoints(points)
                     .setFillColor(OsmAnd::ColorARGB(kDefaultTrackColor))
-                    .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_white_nobg"])
-                    .setSpecialPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_white_nobg"])
+                    .setPathIcon([OANativeUtilities skImageFromMmPngResource:@"arrow_triangle_white_nobg"])
+                    .setSpecialPathIcon([OANativeUtilities skImageFromMmPngResource:@"arrow_triangle_white_nobg"])
                     .setShouldShowArrows(true)
                     .setScreenScale(UIScreen.mainScreen.scale);
                     

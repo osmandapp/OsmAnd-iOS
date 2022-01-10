@@ -24,9 +24,9 @@
 #include <OsmAndCore/IQueryController.h>
 #include "OAWebClient.h"
 #include <SkImageEncoder.h>
-#include <SkBitmapDevice.h>
 #include <SkCanvas.h>
 #include <SkBitmap.h>
+#include <SkImage.h>
 #include <SkData.h>
 #include <SkPaint.h>
 
@@ -46,7 +46,7 @@ OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFac
 , _displayDensityFactor(displayDensityFactor)
 , _physicalMemory(physicalMemory)
 , _mvtReader(new OsmAnd::MvtReader())
-, _image([OANativeUtilities skBitmapFromPngResource:@"map_mapillary_photo_dot"])
+, _image([OANativeUtilities skImageFromPngResource:@"map_mapillary_photo_dot"])
 , _linePaint(new SkPaint())
 {
     if (physicalMemory > (unsigned long long) 2 << 30)
@@ -122,7 +122,7 @@ void OAMapillaryTilesProvider::drawPoints(
             
             SkScalar x = ((tileX - tileBBox31.left()) / tileSize31) * tileSize - bitmapHalfSize;
             SkScalar y = ((tileY - tileBBox31.top()) / tileSize31) * tileSize - bitmapHalfSize;
-            canvas.drawBitmap(*_image, x, y);
+            canvas.drawImage(_image, x, y);
         }
     }
 }
@@ -342,21 +342,18 @@ QByteArray OAMapillaryTilesProvider::drawTile(const std::shared_ptr<const OsmAnd
     SkBitmap bitmap;
     const auto tileSize = getTileSize();
     // Create a bitmap that will be hold entire symbol (if target is empty)
-    if (bitmap.isNull())
+    if (!bitmap.tryAllocPixels(SkImageInfo::MakeN32Premul(tileSize, tileSize)))
     {
-        if (!bitmap.tryAllocPixels(SkImageInfo::MakeN32Premul(tileSize, tileSize)))
-        {
-            LogPrintf(OsmAnd::LogSeverityLevel::Error,
-                      "Failed to allocate bitmap of size %dx%d",
-                      tileSize,
-                      tileSize);
-            return nullptr;
-        }
-        
-        bitmap.eraseColor(SK_ColorTRANSPARENT);
+        LogPrintf(OsmAnd::LogSeverityLevel::Error,
+                  "Failed to allocate bitmap of size %dx%d",
+                  tileSize,
+                  tileSize);
+        return nullptr;
     }
-    SkBitmapDevice target(bitmap);
-    SkCanvas canvas(&target);
+    
+    bitmap.eraseColor(SK_ColorTRANSPARENT);
+    
+    SkCanvas canvas(bitmap);
     
     drawLines(req, tileId, geometryTile, canvas);
     if (req.zoom >= getPointsZoom())
@@ -364,8 +361,8 @@ QByteArray OAMapillaryTilesProvider::drawTile(const std::shared_ptr<const OsmAnd
     
     canvas.flush();
     
-    SkAutoTUnref<SkData> data(SkImageEncoder::EncodeData(bitmap, SkImageEncoder::kPNG_Type, 100));
-    if (NULL == data.get())
+    const auto data = bitmap.asImage()->encodeToData(SkEncodedImageFormat::kPNG, 100);
+    if (!data)
     {
         LogPrintf(OsmAnd::LogSeverityLevel::Error,
                   "Failed to encode bitmap of size %dx%d",
@@ -376,13 +373,18 @@ QByteArray OAMapillaryTilesProvider::drawTile(const std::shared_ptr<const OsmAnd
     return QByteArray(reinterpret_cast<const char *>(data->bytes()), (int) data->size());
 }
 
-QByteArray OAMapillaryTilesProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& req)
+QByteArray OAMapillaryTilesProvider::obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& req)
 {
     // Check provider can supply this zoom level
     if (req.zoom > getMaxZoom() || req.zoom < getMinZoom())
         return nullptr;
     
     return getVectorTileImage(req);
+}
+
+sk_sp<SkImage> OAMapillaryTilesProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
+{
+    return nullptr;
 }
 
 QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req)
@@ -622,9 +624,8 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
 
 void OAMapillaryTilesProvider::obtainImageAsync(
                                                 const OsmAnd::IMapTiledDataProvider::Request& request,
-                                                const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage)
+                                                const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData)
 {
-    //
 }
 
 OsmAnd::MapStubStyle OAMapillaryTilesProvider::getDesiredStubsStyle() const
@@ -698,6 +699,6 @@ OsmAnd::ZoomLevel OAMapillaryTilesProvider::getVectorTileZoom() const
     return _vectorZoomLevel;
 }
 
-void OAMapillaryTilesProvider::performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap)
+void OAMapillaryTilesProvider::performAdditionalChecks(sk_sp<SkImage> bitmap)
 {
 }

@@ -964,6 +964,7 @@
 		8A1CF1E1227ED4A70083A04E /* warnings_tunnel_us@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1D9227ED4A60083A04E /* warnings_tunnel_us@2x.png */; };
 		8A1CF1E3227ED4A70083A04E /* warnings_tunnel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1DA227ED4A60083A04E /* warnings_tunnel@2x.png */; };
 		8A1CF1E5227ED4A70083A04E /* warnings_tunnel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1DB227ED4A70083A04E /* warnings_tunnel@3x.png */; };
+		8A5A002827735D76002227DD /* libharfbuzz_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A5A002727735D76002227DD /* libharfbuzz_static.a */; };
 		8A6CBCA821CE25F0004033C7 /* ic_live_purchased@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A6CBC9821CE25EE004033C7 /* ic_live_purchased@3x.png */; };
 		8A6CBCAA21CE25F0004033C7 /* img_logo_38dp_sea_depth@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A6CBC9921CE25EE004033C7 /* img_logo_38dp_sea_depth@3x.png */; };
 		8A6CBCAE21CE25F0004033C7 /* img_help_osmand_live@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A6CBC9B21CE25EE004033C7 /* img_help_osmand_live@3x.png */; };
@@ -1023,6 +1024,7 @@
 		8AE0197024505C8B00DA5C33 /* ic_custom_parking@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE0194524505C8B00DA5C33 /* ic_custom_parking@3x.png */; };
 		8AE1C8B221D6224B00434F07 /* ic_action_message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE1C8AE21D6224A00434F07 /* ic_action_message@2x.png */; };
 		8AE1C8B421D6224B00434F07 /* ic_action_message@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE1C8AF21D6224A00434F07 /* ic_action_message@3x.png */; };
+		8AF348772779D88100A64824 /* libproj_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF348762779D88100A64824 /* libproj_static.a */; };
 		8AFC2BBF24334A4E0095BA9F /* map_location_car_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2B8924334A4D0095BA9F /* map_location_car_center@3x.png */; };
 		8AFC2BC124334A4E0095BA9F /* map_navigation_nautical_bottom@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2B8A24334A4D0095BA9F /* map_navigation_nautical_bottom@3x.png */; };
 		8AFC2BC324334A4E0095BA9F /* map_location_bicycle_top@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2B8B24334A4D0095BA9F /* map_location_bicycle_top@3x.png */; };
@@ -3940,6 +3942,7 @@
 		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
 		8A4D82C623C1CD85003DC887 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A55FDAB22C2791F004B27B1 /* ro-RO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ro-RO"; path = "ro-RO.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		8A5A002727735D76002227DD /* libharfbuzz_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libharfbuzz_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A5BD75B2397F68300ADE5C2 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A6CBC9821CE25EE004033C7 /* ic_live_purchased@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_live_purchased@3x.png"; sourceTree = "<group>"; };
 		8A6CBC9921CE25EE004033C7 /* img_logo_38dp_sea_depth@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "img_logo_38dp_sea_depth@3x.png"; sourceTree = "<group>"; };
@@ -4002,6 +4005,7 @@
 		8AE0197224505D4400DA5C33 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8AE1C8AE21D6224A00434F07 /* ic_action_message@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_message@2x.png"; path = "Resources/Icons/ic_action_message@2x.png"; sourceTree = "<group>"; };
 		8AE1C8AF21D6224A00434F07 /* ic_action_message@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_message@3x.png"; path = "Resources/Icons/ic_action_message@3x.png"; sourceTree = "<group>"; };
+		8AF348762779D88100A64824 /* libproj_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libproj_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AFC2B8924334A4D0095BA9F /* map_location_car_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_car_center@3x.png"; sourceTree = "<group>"; };
 		8AFC2B8A24334A4D0095BA9F /* map_navigation_nautical_bottom@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_navigation_nautical_bottom@3x.png"; sourceTree = "<group>"; };
 		8AFC2B8B24334A4D0095BA9F /* map_location_bicycle_top@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_bicycle_top@3x.png"; sourceTree = "<group>"; };
@@ -6757,6 +6761,7 @@
 				84EE2D951AFB8F91007C9A94 /* EventKit.framework in Frameworks */,
 				8440E2DA1ABEA7370088856A /* libexpat_static.a in Frameworks */,
 				8440E2DB1ABEA7370088856A /* libgdal_static.a in Frameworks */,
+				8AF348772779D88100A64824 /* libproj_static.a in Frameworks */,
 				8440E2DC1ABEA7370088856A /* libgif_static.a in Frameworks */,
 				8440E2DD1ABEA7370088856A /* libicu4c_static.a in Frameworks */,
 				8440E2DE1ABEA7370088856A /* libjpeg_static.a in Frameworks */,
@@ -6765,6 +6770,7 @@
 				8440E2E01ABEA7370088856A /* libprotobuf_static.a in Frameworks */,
 				8440E2E11ABEA7370088856A /* libskia_static.a in Frameworks */,
 				8440E2E21ABEA7370088856A /* libz_static.a in Frameworks */,
+				8A5A002827735D76002227DD /* libharfbuzz_static.a in Frameworks */,
 				8440E2D01ABEA7200088856A /* libarchive_static.a in Frameworks */,
 				DA578C4C26626422007A086E /* libqtpcre2.a in Frameworks */,
 				8440E2CE1ABEA7100088856A /* libOsmAndCore_static_standalone.a in Frameworks */,
@@ -8398,6 +8404,8 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8AF348762779D88100A64824 /* libproj_static.a */,
+				8A5A002727735D76002227DD /* libharfbuzz_static.a */,
 				DADC09E927295A4B00ADBB3B /* MobileCoreServices.framework */,
 				DADC09E727295A2C00ADBB3B /* SystemConfiguration.framework */,
 				DADC09E52729591100ADBB3B /* libexpat_static.a */,
@@ -15049,7 +15057,9 @@
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtNetwork",
 					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
+					"${PROJECT_DIR}/../core/externals/skia/upstream.patched",
 					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
+					"${PROJECT_DIR}/../core/externals/harfbuzz/upstream.patched/src",
 					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
 					/usr/include/libxml2,
 					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
@@ -15123,7 +15133,9 @@
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtNetwork",
 					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
+					"${PROJECT_DIR}/../core/externals/skia/upstream.patched",
 					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
+					"${PROJECT_DIR}/../core/externals/harfbuzz/upstream.patched/src",
 					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
 					/usr/include/libxml2,
 					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
@@ -15186,7 +15198,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 3.90.8;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -15243,7 +15255,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 3.90.8;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

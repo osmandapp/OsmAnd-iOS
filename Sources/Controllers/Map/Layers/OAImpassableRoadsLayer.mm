@@ -79,7 +79,7 @@
             .setIsAccuracyCircleSupported(false)
             .setBaseOrder(self.baseOrder + 1)
             .setIsHidden(false)
-            .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"map_pin_avoid_road"])
+            .setPinIcon([OANativeUtilities skImageFromPngResource:@"map_pin_avoid_road"])
             .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
             .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
             .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))

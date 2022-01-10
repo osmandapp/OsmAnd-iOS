@@ -2323,3 +2323,4 @@
 "lang_pms" = "Piémontais";
 "lang_sw" = "Swahili";
 "shared_string_hide_all" = "Tout masquer";
+"points_delete_multiple" = "Supprimer %1$d point(s) ?";

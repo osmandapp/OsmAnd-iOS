@@ -181,6 +181,7 @@
 - (void) setupView
 {
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tblView.contentInset = UIEdgeInsetsMake(-8, 0, 0, 0);
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray array];
@@ -271,7 +272,7 @@
     
     if ([item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]])
     {
-        return UITableViewAutomaticDimension;
+        return 58.;
     }
     else if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
@@ -398,11 +399,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 0.01;
-}
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {

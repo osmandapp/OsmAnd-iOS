@@ -2333,3 +2333,5 @@
 "connect_rp" = "Conectar puntos de ruta";
 "units_min_short" = "m";
 "grey_color_undefined" = "Los tramos sin datos son grises.";
+"shared_string_hide_all" = "Ocultar todo";
+"points_delete_multiple" = "¿Borrar %d punto(s)?";

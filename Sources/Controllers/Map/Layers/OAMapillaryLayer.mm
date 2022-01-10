@@ -56,10 +56,10 @@
     
     _imageMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
     imageAndCourseMarkerBuilder.addOnMapSurfaceIcon(_imageMainIconKey,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"map_mapillary_location"]);
+                                                       [OANativeUtilities skImageFromPngResource:@"map_mapillary_location"]);
     _imageHeadingIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
     imageAndCourseMarkerBuilder.addOnMapSurfaceIcon(_imageHeadingIconKey,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"map_mapillary_location_view_angle"]);
+                                                       [OANativeUtilities skImageFromPngResource:@"map_mapillary_location_view_angle"]);
     _imageMarker = imageAndCourseMarkerBuilder.buildAndAddToCollection(_currentImagePosition);
     
     _mapillaryChangeObserver = [[OAAutoObserverProxy alloc] initWith:self

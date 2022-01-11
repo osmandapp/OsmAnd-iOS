@@ -2321,3 +2321,5 @@
 "lang_sk" = "Eslovaco";
 "lang_vi" = "Vietnamita";
 "lang_zh_hk" = "Chinês (Hong Kong)";
+"shared_string_hide_all" = "Ocultar tudo";
+"points_delete_multiple" = "Eliminar %d ponto(s)?";

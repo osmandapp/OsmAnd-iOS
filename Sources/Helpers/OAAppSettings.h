@@ -28,6 +28,9 @@
 #define kDefaultRouteLineDayColor 0x882a4bd1
 #define kDefaultRouteLineNightColor 0xffffdf3d
 
+#define kDefaultTurnArrowsDayColor 0xffffde5b
+#define kDefaultTurnArrowsNightColor 0xff41a6d9
+
 @class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration;
 
 typedef NS_ENUM(NSInteger, EOARouteService)

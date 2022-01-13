@@ -12,25 +12,28 @@
 #import "OAMapHudViewController.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
+#import "OASlider.h"
+#import "OADividerCell.h"
 #import "OAIconTextDividerSwitchCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OAImageTextViewCell.h"
 #import "OAFoldersCell.h"
 #import "OASegmentedControlCell.h"
+#import "OASegmentSliderTableViewCell.h"
 #import "OATextLineViewCell.h"
+#import "OAIconTitleValueCell.h"
+#import "OsmAndApp.h"
+#import "OAColors.h"
+#import "Localization.h"
 #import "OARoutingHelper.h"
 #import "OARouteStatisticsHelper.h"
 #import "OADayNightHelper.h"
+#import "OAMapLayers.h"
 #import "OAPreviewRouteLineInfo.h"
 #import "OADefaultFavorite.h"
-#import "OAColors.h"
-#import "Localization.h"
-#import "OsmAndApp.h"
-#import "OARouteLayer.h"
-#import "OAMapLayers.h"
 
 #define kColoringSection 0
-#define kColorGridCell 3
+#define kColorGridCell 5
 
 #define kColorDayMode OALocalizedString(@"map_settings_day")
 #define kColorNightMode OALocalizedString(@"map_settings_night")
@@ -77,6 +80,104 @@
 
 @end
 
+@interface OARouteWidthMode : NSObject
+
+@property (nonatomic) NSString *title;
+@property (nonatomic) NSString *icon;
+@property (nonatomic) NSString *widthKey;
+
++ (OARouteWidthMode *)DEFAULT;
++ (OARouteWidthMode *)THIN;
++ (OARouteWidthMode *)MEDIUM;
++ (OARouteWidthMode *)THICK;
++ (OARouteWidthMode *)CUSTOM;
+
++ (NSArray<OARouteWidthMode *> *)getRouteWidthModes;
+
+@end
+
+static OARouteWidthMode * DEFAULT;
+static OARouteWidthMode * THIN;
+static OARouteWidthMode * MEDIUM;
+static OARouteWidthMode * THICK;
+static OARouteWidthMode * CUSTOM;
+
+static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARouteWidthMode.MEDIUM, OARouteWidthMode.THICK, OARouteWidthMode.CUSTOM];
+
+@implementation OARouteWidthMode
+
+- (instancetype)initWithTitle:(NSString *)title icon:(NSString *)icon widthKey:(NSString *)widthKey
+{
+    self = [super init];
+    if (self) {
+        _title = title;
+        _icon = icon;
+        _widthKey = widthKey;
+    }
+    return self;
+}
+
++ (OARouteWidthMode *)DEFAULT
+{
+    if (!DEFAULT)
+    {
+        DEFAULT = [[OARouteWidthMode alloc] initWithTitle:@"map_settings_style"
+                                                     icon:nil
+                                                 widthKey:nil];
+    }
+    return DEFAULT;
+}
++ (OARouteWidthMode *)THIN
+{
+    if (!THIN)
+    {
+        THIN = [[OARouteWidthMode alloc] initWithTitle:@"rendering_value_thin_name"
+                                                  icon:@"ic_custom_track_line_thin"
+                                              widthKey:@"thin"];
+    }
+    return THIN;
+}
+
++ (OARouteWidthMode *)MEDIUM
+{
+    if (!MEDIUM)
+    {
+        MEDIUM = [[OARouteWidthMode alloc] initWithTitle:@"rendering_value_medium_name"
+                                                    icon:@"ic_custom_track_line_medium"
+                                                widthKey:@"medium"];
+    }
+    return MEDIUM;
+}
+
++ (OARouteWidthMode *)THICK
+{
+    if (!THICK)
+    {
+        THICK = [[OARouteWidthMode alloc] initWithTitle:@"rendering_value_bold_name"
+                                                   icon:@"ic_custom_track_line_bold"
+                                               widthKey:@"bold"];
+    }
+    return THICK;
+}
+
++ (OARouteWidthMode *)CUSTOM
+{
+    if (!CUSTOM)
+    {
+        CUSTOM = [[OARouteWidthMode alloc] initWithTitle:@"shared_string_custom"
+                                                    icon:@"ic_custom_slider"
+                                                widthKey:nil];
+    }
+    return CUSTOM;
+}
+
++ (NSArray<OARouteWidthMode *> *)getRouteWidthModes
+{
+    return WIDTH_MODES;
+}
+
+@end
+
 @interface OARouteLineAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAFoldersCellDelegate, OAColorsTableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
@@ -92,6 +193,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleNavBarView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionNavBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
+
+@property (weak, nonatomic) IBOutlet UIView *contentContainer;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonTrailingConstraint;
@@ -118,11 +221,13 @@
     OARouteAppearanceType *_selectedType;
     NSArray<NSNumber *> *_availableColors;
 
+    OARouteWidthMode *_selectedWidthMode;
+
     OAPreviewRouteLineInfo *_oldPreviewRouteLineInfo;
     NSInteger _oldDayNightMode;
 }
 
-@dynamic statusBarBackgroundView;
+@dynamic statusBarBackgroundView, contentContainer;
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)appMode
 {
@@ -142,6 +247,19 @@
     _settings = [OAAppSettings sharedManager];
     _routingHelper = [OARoutingHelper sharedInstance];
     _mapPanelViewController = [OARootViewController instance].mapPanel;
+
+    [self setOldValues];
+    [self updateAllValues];
+}
+
+- (void)setOldValues
+{
+    _oldPreviewRouteLineInfo = [_mapPanelViewController.mapViewController.mapLayers.routeMapLayer getPreviewRouteLineInfo];
+    _oldDayNightMode = [_settings.appearanceMode get];
+}
+
+- (void)updateAllValues
+{
     _previewRouteLineInfo = [self createPreviewRouteLineInfo];
 
     OAColoringType *currentType = [OAColoringType getRouteColoringTypeByName:_previewRouteLineInfo.coloringType.name];
@@ -202,13 +320,31 @@
     }
     _availableColors = lineColors;
 
-    [self setOldValues];
+    _selectedWidthMode = [self findAppropriateMode:_previewRouteLineInfo.width];
 }
 
-- (void)setOldValues
+- (OARouteWidthMode *)findAppropriateMode:(NSString *)widthKey
 {
-    _oldPreviewRouteLineInfo = [_mapPanelViewController.mapViewController.mapLayers.routeMapLayer getPreviewRouteLineInfo];
-    _oldDayNightMode = [_settings.appearanceMode get];
+    if (widthKey)
+    {
+        for (OARouteWidthMode *mode in [OARouteWidthMode getRouteWidthModes])
+        {
+            if (mode.widthKey && [mode.widthKey isEqualToString:widthKey])
+                return mode;
+        }
+        return OARouteWidthMode.CUSTOM;
+    }
+    return OARouteWidthMode.DEFAULT;
+}
+
+- (BOOL)isDefaultWidthMode
+{
+    return _selectedWidthMode == OARouteWidthMode.DEFAULT;
+}
+
+- (BOOL)isCustomWidthMode
+{
+    return _selectedWidthMode == OARouteWidthMode.CUSTOM;
 }
 
 - (void)viewDidLoad
@@ -227,6 +363,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [_mapPanelViewController targetViewDisableMapInteraction];
     [_mapPanelViewController.hudViewController hideTopControls];
     [_mapPanelViewController targetSetBottomControlsVisible:YES
                                                  menuHeight:[self isLandscape]
@@ -251,6 +388,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
+        [_mapPanelViewController targetViewEnableMapInteraction];
         [_mapPanelViewController.hudViewController resetToDefaultRulerLayout];
         [_mapPanelViewController hideScrollableHudViewController];
         if (onComplete)
@@ -268,7 +406,20 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 
 - (void)setupHeaderView
 {
+    [self updateHeaderTitle:0];
+}
 
+- (void)updateHeaderTitle:(NSInteger)sectionIndex
+{
+    NSString *headerTitle = @"";
+    if (sectionIndex == 0)
+        headerTitle = OALocalizedString(@"fav_color");
+
+    OAGPXTableSectionData *sectionData = _tableData.sections[sectionIndex];
+    if (sectionData.header)
+        headerTitle = sectionData.header;
+
+    [self.titleView setText:headerTitle.upperCase];
 }
 
 - (void)setupButtonsNavigationBarView
@@ -340,7 +491,8 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
                 kSectionFooter: colorMapStyle
                         ? [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_color"),
                                 [_settings.renderer get]]
-                        : @""
+                        : @"",
+                kSectionFooterHeight: @36.
         }];
 
         OAGPXTableCellData *colorMapStyleCellData = [OAGPXTableCellData withData:@{
@@ -376,6 +528,12 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 
         // custom coloring settings
 
+        OAGPXTableCellData *colorTypesEmptySpaceCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"color_types_empty_space",
+                kCellType: [OADividerCell getCellIdentifier],
+                kTableValues: @{ @"float_value": @10. }
+        }];
+
         NSMutableArray<NSDictionary *> *lineColoringTypes = [NSMutableArray array];
         for (OARouteAppearanceType *type in _coloringTypes)
         {
@@ -391,8 +549,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
                 kTableValues: @{
                         @"array_value": lineColoringTypes,
                         @"selected_integer_value": @([_coloringTypes indexOfObject:_selectedType])
-                },
-                kCellTitle: OALocalizedString(@"fav_color")
+                }
         }];
         colorTypesCellData.updateData = ^() {
             [colorTypesCellData setData:@{
@@ -402,6 +559,12 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
                     }
             }];
         };
+
+        OAGPXTableCellData *colorDayNightEmptySpaceCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"color_day_night_empty_space",
+                kCellType: [OADividerCell getCellIdentifier],
+                kTableValues: @{ @"float_value": @8. }
+        }];
 
         NSArray<NSString *> *dayNightValues = @[kColorDayMode, kColorNightMode];
         OAGPXTableCellData *colorDayNightCellData = [OAGPXTableCellData withData:@{
@@ -483,9 +646,10 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 
         void (^clearColorSection) (BOOL) = ^(BOOL withTypes) {
             if (withTypes)
-                [colorsCells removeObject:colorTypesCellData];
+                [colorsCells removeObjectsInArray:@[colorTypesEmptySpaceCellData, colorTypesCellData]];
 
             [colorsCells removeObjectsInArray:@[
+                    colorDayNightEmptySpaceCellData,
                     colorDayNightCellData,
                     colorGridCellData,
                     topDescriptionCellData,
@@ -500,10 +664,10 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
                 clearColorSection(NO);
 
                 if (![colorsCells containsObject:colorTypesCellData])
-                    [colorsCells addObject:colorTypesCellData];
+                    [colorsCells addObjectsFromArray:@[colorTypesEmptySpaceCellData, colorTypesCellData]];
 
                 if ([_selectedType.coloringType isCustomColor])
-                    [colorsCells addObjectsFromArray:@[colorDayNightCellData, colorGridCellData]];
+                    [colorsCells addObjectsFromArray:@[colorDayNightEmptySpaceCellData, colorDayNightCellData, colorGridCellData]];
                 else if ([_selectedType.coloringType isGradient])
                     [colorsCells addObjectsFromArray:@[topDescriptionCellData, colorGradientCellData, bottomDescriptionCellData]];
                 else if ([_selectedType.coloringType isRouteInfoAttribute])
@@ -534,6 +698,206 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
         [tableSections addObject:colorsSectionData];
 
         setColorCells();
+
+        // width section
+        NSMutableArray<OAGPXTableCellData *> *widthCells = [NSMutableArray array];
+
+        OAGPXTableSectionData *widthSectionData = [OAGPXTableSectionData withData:@{
+                kSectionCells: widthCells,
+                kSectionHeader: OALocalizedString(@"shared_string_width"),
+                kSectionFooter: [self isDefaultWidthMode]
+                        ? [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_width"),
+                                                     [_settings.renderer get]]
+                        : @"",
+                kSectionFooterHeight: @36.
+        }];
+
+        OAGPXTableCellData *widthMapStyleCellData = [OAGPXTableCellData withData:@{
+                kCellKey:@"width_map_style",
+                kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+                kCellTitle:OALocalizedString(@"map_settings_style")
+        }];
+        widthMapStyleCellData.isOn = ^() { return [self isDefaultWidthMode]; };
+        widthMapStyleCellData.onSwitch = ^(BOOL toggle) {
+            _selectedWidthMode = toggle ? OARouteWidthMode.DEFAULT : [OARouteWidthMode getRouteWidthModes].firstObject;
+            _previewRouteLineInfo.width = _selectedWidthMode.widthKey;
+            [self updateRouteLayer:_previewRouteLineInfo];
+        };
+        [widthCells addObject:widthMapStyleCellData];
+
+        // custom width settings
+        OAGPXTableCellData *widthTypesEmptySpaceCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"width_types_empty_space",
+                kCellType: [OADividerCell getCellIdentifier],
+                kTableValues: @{ @"float_value": @12. }
+        }];
+
+        OAGPXTableCellData *widthValueCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"width_value",
+                kCellType: [OASegmentedControlCell getCellIdentifier],
+                kTableValues: @{ @"array_value": [OARouteWidthMode getRouteWidthModes] },
+                kCellToggle: @YES
+        }];
+
+        OAGPXTableCellData *widthSliderEmptySpaceCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"width_slider_empty_space",
+                kCellType: [OADividerCell getCellIdentifier],
+                kTableValues: @{ @"float_value": [self isCustomWidthMode] ? @6. : @19. }
+        }];
+        widthSliderEmptySpaceCellData.updateData = ^() {
+            [widthSliderEmptySpaceCellData setData:@{ kTableValues: @{ @"float_value": [self isCustomWidthMode] ? @6. : @19. } }];
+        };
+
+        __block NSInteger customWidthValue = kCustomRouteWidthMin;
+        if (_previewRouteLineInfo.width && [NSCharacterSet.decimalDigitCharacterSet
+                isSupersetOfSet:[NSCharacterSet characterSetWithCharactersInString:_previewRouteLineInfo.width]])
+            customWidthValue = _previewRouteLineInfo.width.integerValue;
+
+        NSMutableArray<NSString *> *customWidthValues = [NSMutableArray array];
+        for (NSInteger i = kCustomRouteWidthMin; i <= kCustomRouteWidthMax; i++)
+        {
+            [customWidthValues addObject:[NSString stringWithFormat:@"%li", i]];
+        }
+        OAGPXTableCellData *customSliderCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"width_custom_slider",
+                kCellType: [OASegmentSliderTableViewCell getCellIdentifier],
+                kTableValues: @{
+                        @"custom_string_value": [NSString stringWithFormat:@"%li", customWidthValue],
+                        @"array_value": customWidthValues
+                }
+        }];
+        customSliderCellData.updateProperty = ^(id value) {
+            if ([value isKindOfClass:NSNumber.class])
+                customWidthValue = ((NSNumber *) value).integerValue;
+        };
+        customSliderCellData.updateData = ^() {
+            _previewRouteLineInfo.width = [NSString stringWithFormat:@"%li", customWidthValue];
+            [self updateRouteLayer:_previewRouteLineInfo];
+
+            [customSliderCellData setData:@{
+                    kTableValues: @{
+                            @"custom_string_value": [NSString stringWithFormat:@"%li", customWidthValue],
+                            @"array_value": customWidthValues
+                    }
+            }];
+        };
+
+        void (^clearWidthSection) (BOOL) = ^(BOOL withTypes) {
+
+            if (withTypes)
+            {
+                [widthCells removeObjectsInArray:@[
+                        widthTypesEmptySpaceCellData,
+                        widthValueCellData,
+                        widthSliderEmptySpaceCellData
+                ]];
+            }
+
+            [widthCells removeObject:customSliderCellData];
+        };
+
+        void (^setWidthCells) () = ^() {
+            if (![self isDefaultWidthMode])
+            {
+                clearWidthSection(NO);
+
+                if (![widthCells containsObject:widthValueCellData])
+                {
+                    [widthCells addObjectsFromArray:@[
+                            widthTypesEmptySpaceCellData,
+                            widthValueCellData,
+                            widthSliderEmptySpaceCellData
+                    ]];
+                }
+
+                if ([self isCustomWidthMode] && ![widthCells containsObject:customSliderCellData])
+                    [widthCells addObject:customSliderCellData];
+            }
+            else
+            {
+                clearWidthSection(YES);
+            }
+        };
+
+        widthValueCellData.updateProperty = ^(id value) {
+            if ([value isKindOfClass:NSNumber.class])
+            {
+                NSInteger modeIndex = ((NSNumber *) value).integerValue;
+                _selectedWidthMode = [OARouteWidthMode getRouteWidthModes][modeIndex];
+            }
+        };
+        widthValueCellData.updateData = ^() {
+            _previewRouteLineInfo.width = [self isCustomWidthMode]
+                    ? [NSString stringWithFormat:@"%li", customWidthValue]
+                    : _selectedWidthMode.widthKey;
+            [self updateRouteLayer:_previewRouteLineInfo];
+        };
+
+        widthSectionData.updateData = ^() {
+            setWidthCells();
+
+            for (OAGPXTableCellData *cellData in widthCells)
+            {
+                if (cellData.updateData)
+                    cellData.updateData();
+            }
+
+            [widthSectionData setData:@{
+                    kSectionFooter: [self isDefaultWidthMode]
+                            ? [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_width"),
+                                                         [_settings.renderer get]]
+                            : @""
+            }];
+        };
+        [tableSections addObject:widthSectionData];
+
+        setWidthCells();
+
+        // turn arrows section
+        OAGPXTableCellData *turnArrowsCellData = [OAGPXTableCellData withData:@{
+                kCellKey:@"turn_arrows",
+                kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+                kCellTitle:OALocalizedString(@"turn_arrows")
+        }];
+        turnArrowsCellData.onSwitch = ^(BOOL toggle) {
+            _previewRouteLineInfo.showTurnArrows = toggle;
+            [self updateRouteLayer:_previewRouteLineInfo];
+        };
+        turnArrowsCellData.isOn = ^() {
+            return _previewRouteLineInfo.showTurnArrows;
+        };
+        [tableSections addObject:[OAGPXTableSectionData withData:@{
+                kSectionCells: @[turnArrowsCellData],
+                kSectionFooter: OALocalizedString(@"turn_arrows_descr"),
+                kSectionFooterHeight: @36.
+        }]];
+
+        // actions section
+        OAGPXTableCellData *resetCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"reset",
+                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kCellTitle: OALocalizedString(@"reset_to_original"),
+                kCellRightIconName: @"ic_custom_reset"
+        }];
+        resetCellData.onButtonPressed = ^() {
+            [self updateAllValues];
+            [self updateRouteLayer:_oldPreviewRouteLineInfo];
+            [self generateData];
+            [UIView transitionWithView:self.tableView
+                              duration:0.35f
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^(void) {
+                                [self.tableView reloadData];
+                            }
+                            completion:nil];
+        };
+
+        [tableSections addObject:[OAGPXTableSectionData withData:@{
+                kSectionCells: @[resetCellData],
+                kSectionHeader:OALocalizedString(@"actions"),
+                kSectionFooterHeight: @60.
+        }]];
+
         _tableData = [OAGPXTableData withData:@{ kTableSections: tableSections }];
     }
 }
@@ -714,14 +1078,29 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"";
+    return _tableData.sections[section].header;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     UITableViewCell *outCell = nil;
-    if ([cellData.type isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OADividerCell getCellIdentifier]])
+    {
+        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
+            cell = (OADividerCell *) nib[0];
+            cell.backgroundColor = UIColor.whiteColor;
+            cell.dividerColor = UIColor.whiteColor;
+            cell.dividerInsets = UIEdgeInsetsZero;
+            cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
+            cell.dividerHight = 0.;
+        }
+        outCell = cell;
+    }
+    else if ([cellData.type isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
     {
         OAIconTextDividerSwitchCell *cell =
                 [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
@@ -760,10 +1139,10 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell showLabels:NO];
+            cell.valueLabel.tintColor = UIColorFromRGB(color_text_footer);
         }
         if (cell)
         {
-            cell.valueLabel.tintColor = UIColorFromRGB(color_text_footer);
             cell.currentColor = [arrayValue indexOfObject:cellData.values[@"int_value"]];
 
             [cell.collectionView reloadData];
@@ -805,6 +1184,8 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             cell = (OAImageTextViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
+            cell.descView.textColor = UIColorFromRGB(color_text_footer);
+            cell.extraDescView.textColor = UIColorFromRGB(color_text_footer);
         }
         if (cell)
         {
@@ -815,13 +1196,11 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             [cell showDesc:desc && desc.length > 0];
             cell.descView.text = desc;
             cell.descView.font = [UIFont systemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
-            cell.descView.textColor = UIColorFromRGB(color_text_footer);
 
             NSString *extraDesc = cellData.values[@"extra_desc"];
             [cell showExtraDesc:extraDesc && extraDesc.length > 0];
             cell.extraDescView.text = extraDesc;
             cell.extraDescView.font = [UIFont systemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
-            cell.extraDescView.textColor = UIColorFromRGB(color_text_footer);
         }
 
         if ([cell needsUpdateConstraints])
@@ -839,13 +1218,13 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             cell = (OATextLineViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
+            cell.textView.textColor = UIColorFromRGB(color_text_footer);
         }
         if (cell)
         {
             [cell makeSmallMargins:indexPath.row != [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1];
             cell.textView.text = cellData.title;
             cell.textView.font = [UIFont systemFontOfSize:15];
-            cell.textView.textColor = UIColorFromRGB(color_text_footer);
         }
         outCell = cell;
     }
@@ -866,8 +1245,9 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 
             [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor}
                                                  forState:UIControlStateSelected];
-            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple),
-                            NSFontAttributeName : [UIFont boldSystemFontOfSize:15.0f]}
+            [cell.segmentedControl setTitleTextAttributes:@{
+                    NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple),
+                    NSFontAttributeName : [UIFont boldSystemFontOfSize:15.0f]}
                                                  forState:UIControlStateNormal];
 
             if (@available(iOS 13.0, *))
@@ -877,32 +1257,35 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
         }
         if (cell)
         {
-            int i = 0;
-            for (id value in arrayValue)
+            for (NSInteger i = 0; i < arrayValue.count; i++)
             {
+                id value = arrayValue[i];
+                if ([value isKindOfClass:OARouteWidthMode.class])
+                    value = ((OARouteWidthMode *) value).icon;
                 if ([value isKindOfClass:NSString.class])
                 {
                     if (cellData.toggle)
                     {
                         UIImage *icon = [UIImage templateImageNamed:value];
                         if (i == cell.segmentedControl.numberOfSegments)
-                            [cell.segmentedControl insertSegmentWithImage:icon atIndex:i++ animated:NO];
+                            [cell.segmentedControl insertSegmentWithImage:icon atIndex:i animated:NO];
                         else
-                            [cell.segmentedControl setImage:icon forSegmentAtIndex:i++];
+                            [cell.segmentedControl setImage:icon forSegmentAtIndex:i];
                     }
                     else
                     {
                         if (i == cell.segmentedControl.numberOfSegments)
-                            [cell.segmentedControl insertSegmentWithTitle:value atIndex:i++ animated:NO];
+                            [cell.segmentedControl insertSegmentWithTitle:value atIndex:i animated:NO];
                         else
-                            [cell.segmentedControl setTitle:value forSegmentAtIndex:i++];
+                            [cell.segmentedControl setTitle:value forSegmentAtIndex:i];
                     }
                 }
             }
-
             NSInteger selectedIndex = 0;
             if ([cellData.key isEqualToString:@"color_day_night_value"])
                 selectedIndex = [arrayValue indexOfObject:_selectedDayNightMode];
+            else if ([cellData.key isEqualToString:@"width_value"])
+                selectedIndex = [[OARouteWidthMode getRouteWidthModes] indexOfObject:_selectedWidthMode];
             [cell.segmentedControl setSelectedSegmentIndex:selectedIndex];
 
             cell.segmentedControl.tag = indexPath.section << 10 | indexPath.row;
@@ -917,6 +1300,84 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
         }
         outCell = cell;
     }
+    else if ([cellData.type isEqualToString:[OASegmentSliderTableViewCell getCellIdentifier]])
+    {
+        OASegmentSliderTableViewCell *cell =
+                [tableView dequeueReusableCellWithIdentifier:[OASegmentSliderTableViewCell getCellIdentifier]];
+        NSArray *arrayValue = cellData.values[@"array_value"];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier]
+                                                         owner:self options:nil];
+            cell = (OASegmentSliderTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.topRightLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.topRightLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+        }
+        if (cell)
+        {
+            [cell showLabels:NO topRight:NO bottomLeft:YES bottomRight:YES];
+            cell.bottomLeftLabel.text = arrayValue.firstObject;
+            cell.bottomRightLabel.text = arrayValue.lastObject;
+            cell.numberOfMarks = arrayValue.count;
+            cell.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
+
+            cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.sliderView addTarget:self
+                                action:@selector(sliderChanged:)
+                      forControlEvents:UIControlEventTouchUpInside];
+        }
+        outCell = cell;
+    }
+    else if ([cellData.type isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
+    {
+        OAIconTextDividerSwitchCell *cell =
+                [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier]
+                                                         owner:self options:nil];
+            cell = (OAIconTextDividerSwitchCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+            cell.dividerView.hidden = YES;
+            cell.iconView.image = nil;
+        }
+        if (cell)
+        {
+            cell.switchView.on = cellData.isOn ? cellData.isOn() : NO;
+            cell.textView.text = cellData.title;
+
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
+        }
+        outCell = cell;
+    }
+    else if ([cellData.type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    {
+        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier]
+                                                         owner:self options:nil];
+            cell = (OAIconTitleValueCell *) nib[0];
+            [cell showLeftIcon:NO];
+            [cell showRightIcon:YES];
+            cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            cell.textView.textColor = UIColorFromRGB(color_primary_purple);
+            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.descriptionView.text = @"";
+        }
+        if (cell)
+        {
+            cell.textView.text = cellData.title;
+            cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
+        }
+        outCell = cell;
+    }
 
     if ([outCell needsUpdateConstraints])
         [outCell updateConstraints];
@@ -926,9 +1387,23 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 
 #pragma mark - UITableViewDelegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    if ([cellData.type isEqualToString:[OADividerCell getCellIdentifier]])
+        return [cellData.values[@"float_value"] floatValue];
+
+    return UITableViewAutomaticDimension;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return section == 0 ? 0.001 : tableView.sectionHeaderHeight;
+    OAGPXTableSectionData *sectionData = _tableData.sections[section];
+    return section == 0 || !sectionData.header || sectionData.header.length == 0
+            ? 0.001
+            : [OAUtilities calculateTextBounds:sectionData.header
+                                         width:self.scrollableView.frame.size.width - 40. - [OAUtilities getLeftMargin]
+                                          font:[UIFont systemFontOfSize:13]].height;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -960,26 +1435,37 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
     return vw;
 }
 
-#pragma mark - UISwitch pressed
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+
+    if (cellData.onButtonPressed)
+        cellData.onButtonPressed();
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Selectors
 
 - (void)onSwitchPressed:(id)sender
 {
     UISwitch *switchView = (UISwitch *) sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
-    
-    OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    if (cellData.onSwitch)
-        cellData.onSwitch(switchView.isOn);
+    if (switchView)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
 
-    OAGPXTableSectionData *sectionData = _tableData.sections[indexPath.section];
-    if (sectionData.updateData)
-        sectionData.updateData();
+        OAGPXTableCellData *cellData = [self getCellData:indexPath];
+        if (cellData.onSwitch)
+            cellData.onSwitch(switchView.isOn);
 
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
-                  withRowAnimation:UITableViewRowAnimationAutomatic];
+        OAGPXTableSectionData *sectionData = _tableData.sections[indexPath.section];
+        if (sectionData.updateData)
+            sectionData.updateData();
+
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                      withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
-
-#pragma mark - UISegmentedControl pressed
 
 - (void)segmentChanged:(id)sender
 {
@@ -987,13 +1473,14 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
     if (segment)
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:segment.tag & 0x3FF inSection:segment.tag >> 10];
-        OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
+        OAGPXTableCellData *cellData = [self getCellData:indexPath];
         if (cellData.updateProperty)
             cellData.updateProperty(@(segment.selectedSegmentIndex));
 
-        if (_tableData.sections[indexPath.section].updateData)
-            _tableData.sections[indexPath.section].updateData();
+        OAGPXTableSectionData *sectionData = _tableData.sections[indexPath.section];
+        if (sectionData.updateData)
+            sectionData.updateData();
 
         [UIView setAnimationsEnabled:NO];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
@@ -1002,12 +1489,54 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
     }
 }
 
+- (void)sliderChanged:(id)sender
+{
+    UISlider *slider = (UISlider *) sender;
+    if (sender)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:slider.tag & 0x3FF inSection:slider.tag >> 10];
+
+        OASegmentSliderTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        OAGPXTableCellData *cellData = [self getCellData:indexPath];
+        if (cellData.updateProperty)
+            cellData.updateProperty(@(cell.selectedMark + 1));
+
+        if (cellData.updateData)
+            cellData.updateData();
+
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGPoint p = scrollView.contentOffset;
+    p.y += self.topHeaderContainerView.frame.origin.y + self.topHeaderContainerView.frame.size.height;
+    NSIndexPath *ip = [self.tableView indexPathForRowAtPoint:p];
+    if (ip)
+        [self updateHeaderTitle:ip.section];
+
+    if ([self shouldScrollInAllModes])
+        return;
+
+    if (scrollView.contentOffset.y <= 0 || self.contentContainer.frame.origin.y != [self getStatusBarHeight])
+        [scrollView setContentOffset:CGPointZero animated:NO];
+
+    BOOL shouldShow = self.tableView.contentOffset.y > 0;
+    self.topHeaderContainerView.layer.shadowOpacity = shouldShow ? 0.15 : 0.0;
+}
+
 #pragma mark - OAFoldersCellDelegate
 
 - (void)onItemSelected:(NSInteger)index
 {
     _selectedType = _coloringTypes[index];
     _previewRouteLineInfo.coloringType = _selectedType.coloringType;
+    _previewRouteLineInfo.routeInfoAttribute = [_selectedType.coloringType isRouteInfoAttribute]
+            ? _selectedType.attrName
+            : nil;
     [self updateRouteLayer:_previewRouteLineInfo];
 
     OAGPXTableSectionData *section = _tableData.sections[kColoringSection];

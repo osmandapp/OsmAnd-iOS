@@ -29,6 +29,7 @@
 #import "OASelectedGPXHelper.h"
 #import "QuadRect.h"
 #import "OAMapUtils.h"
+#import "OARouteImporter.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -36,10 +37,6 @@
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
-
-#define COLORIZATION_NONE 0
-#define COLORIZATION_GRADIENT 1
-#define COLORIZATION_SOLID 2
 
 @interface OAGPXLayer ()
 
@@ -144,6 +141,25 @@
     return nil;
 }
 
+- (void) calculateSegments:(QList<OsmAnd::FColorARGB> &)colors
+                  attrName:(NSString *)attrName
+                       gpx:(OAGPXDocument *)gpx
+{
+    OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:gpx];
+    const auto segs = [routeImporter importRoute];
+
+    NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
+    for (OAGpxTrkSeg *seg in [gpx getNonEmptyTrkSegments:YES])
+    {
+        for (OAGpxTrkPt *trkPt in seg.points)
+        {
+            [locations addObject:[[CLLocation alloc] initWithLatitude:trkPt.position.latitude
+                                                            longitude:trkPt.position.longitude]];
+        }
+    }
+    [self calculateSegmentsColor:colors attrName:attrName segmentResult:segs locations:locations];
+}
+
 - (void) refreshGpxTracks
 {
     if (!_gpxDocs.empty())
@@ -179,7 +195,7 @@
                 else if (type == OAColoringType.ATTRIBUTE)
                 {
                     colorizationScheme = COLORIZATION_SOLID;
-                    [self calculateSegmentsColor:colors attrName:gpx.coloringType gpx:doc];
+                    [self calculateSegments:colors attrName:gpx.coloringType gpx:doc];
                 }
             }
 

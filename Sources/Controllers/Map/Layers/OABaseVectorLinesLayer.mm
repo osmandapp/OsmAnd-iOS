@@ -238,21 +238,13 @@
     return bitmap.asImage();
 }
 
-- (void) calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors attrName:(NSString *)attrName gpx:(OAGPXDocument *)gpx
+- (void) calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors
+                       attrName:(NSString *)attrName
+                  segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>>)segs
+                      locations:(NSMutableArray<CLLocation *> *)locations
 {
-    OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:gpx];
-    const auto segs = [routeImporter importRoute];
     const auto& env = [OsmAndApp instance].defaultRenderer;
-    
     OARouteStatisticsComputer *statsComputer = [[OARouteStatisticsComputer alloc] initWithPresentationEnvironment:env];
-    NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
-    for (OAGpxTrkSeg *seg in [gpx getNonEmptyTrkSegments:YES])
-    {
-        for (OAGpxTrkPt *trkPt in seg.points)
-        {
-            [locations addObject:[[CLLocation alloc] initWithLatitude:trkPt.position.latitude longitude:trkPt.position.longitude]];
-        }
-    }
     int firstSegmentLocationIdx = [self getIdxOfFirstSegmentLocation:locations routeSegments:segs];
     for (NSInteger i = 0; i < segs.size(); i++)
     {

@@ -332,6 +332,9 @@
 "routing_settings_2" = "Navigation settings";
 "customize_route_line" = "Customize route line";
 "route_line_use_map_style_color" = "Use map style (%@) default color.";
+"route_line_use_map_style_width" = "Use map style (%@) default width.";
+"turn_arrows" = "Turn Arrows";
+"turn_arrows_descr" = "Control the visibility of the turn arrows on the route line.";
 "gpx_navigation" = "Follow track";
 "impassable_road" = "Avoid roads";
 "road_speeds" = "Road speeds";

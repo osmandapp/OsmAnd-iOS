@@ -55,6 +55,7 @@
 - (void) hideScrollableHudViewController;
 
 - (void) showPlanRouteViewController:(OARoutePlanningHudViewController *)controller;
+- (void) showRouteLineAppearanceViewController:(OABaseScrollableHudViewController *)controller;
 
 - (BOOL) gpxModeActive;
 

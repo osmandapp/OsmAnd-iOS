@@ -363,7 +363,6 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [_mapPanelViewController targetViewDisableMapInteraction];
     [_mapPanelViewController.hudViewController hideTopControls];
     [_mapPanelViewController targetSetBottomControlsVisible:YES
                                                  menuHeight:[self isLandscape]
@@ -388,7 +387,6 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
-        [_mapPanelViewController targetViewEnableMapInteraction];
         [_mapPanelViewController.hudViewController resetToDefaultRulerLayout];
         [_mapPanelViewController hideScrollableHudViewController];
         if (onComplete)

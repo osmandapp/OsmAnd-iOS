@@ -425,6 +425,12 @@ typedef enum
     [self showScrollableHudViewController:controller];
 }
 
+- (void)showRouteLineAppearanceViewController:(OABaseScrollableHudViewController *)controller
+{
+    _activeTargetType = OATargetRouteLineAppearance;
+    [self showScrollableHudViewController:controller];
+}
+
 - (void) refreshToolbar
 {
     [_destinationViewController refreshView];
@@ -1232,7 +1238,8 @@ typedef enum
     || _activeTargetType == OATargetRouteDetailsGraph
     || _activeTargetType == OATargetRouteDetails
     || _activeTargetType == OATargetRoutePlanning
-    || _activeTargetType == OATargetGPX;
+    || _activeTargetType == OATargetGPX
+    || _activeTargetType == OATargetRouteLineAppearance;
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState

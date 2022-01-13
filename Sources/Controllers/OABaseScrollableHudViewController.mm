@@ -154,9 +154,6 @@
     else
     {
         _statusBarBackgroundView.hidden = [self isLandscape];
-        /*_statusBarBackgroundView.frame = ![self isLandscape]
-                ? CGRectMake(0., 0., DeviceScreenWidth, [self getStatusBarHeight])
-                : CGRectZero;*/
     }
 
     UIView *customHeader = [self getCustomHeader];
@@ -534,9 +531,6 @@
             else
             {
                 _statusBarBackgroundView.hidden = [self isLandscape];
-                /*_statusBarBackgroundView.frame = ![self isLandscape]
-                        ? CGRectMake(0., 0., DeviceScreenWidth, [self getStatusBarHeight])
-                        : CGRectZero;*/
             }
 
             UIView *customHeader = [self getCustomHeader];

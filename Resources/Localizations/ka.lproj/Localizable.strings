@@ -1986,7 +1986,7 @@
 "rendering_attr_appMode_description" = "რუკის გაუმჯობესება მომხმარებლის პროფილის მიხედვით";
 "routing_attr_avoid_ice_roads_fords_name" = "No ice roads or fords";
 "rendering_value_germanRoadAtlas_name" = "გერმანიის გზების ატლასი";
-"rendering_attr_hikingRoutesOSMC_name" = "Hiking routes";
+"rendering_attr_hikingRoutesOSMC_name" = "სალაშქრო გზები";
 "rendering_attr_showRoadMaps_name" = "რუკები მხოლოდ გზებით";
 "routing_attr_avoid_ferries_description" = "ბორნების თავიდან აცილება";
 "rendering_attr_contourWidth_description" = "კონტურული ხაზის სისქე";
@@ -2067,7 +2067,7 @@
 "rendering_value_translucent_yellow_name" = "გამჭირვალე ყვითელი";
 "rendering_attr_OSMMapperAssistant_name" = "OSM mapper assistant";
 "routing_attr_avoid_borders_name" = "საზღვრის გადაკვეთის გარეშე";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Network affiliation";
+"rendering_value_walkingRoutesScopeOSMC_name" = "ქსელი";
 "rendering_attr_smoothness_excellent_name" = "შესანიშნავი";
 "rendering_value_pink_name" = "ვარდისფერი";
 "routing_attr_allow_expert_name" = "Allow expert routes";

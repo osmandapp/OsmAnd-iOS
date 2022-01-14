@@ -124,7 +124,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @interface OAResourceGroupItem : NSObject
 
 @property (nonatomic, readonly) NSString *key;
-@property (nonatomic, readonly) OAWorldRegion *region;
+@property (nonatomic, readonly, weak) OAWorldRegion *region;
 
 + (instancetype)withParent:(OAWorldRegion *)parentRegion;
 - (BOOL)isEmpty;

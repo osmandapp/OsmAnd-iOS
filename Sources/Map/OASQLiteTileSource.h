@@ -37,11 +37,9 @@
 - (int) minimumZoomSupported;
 
 - (BOOL) exists:(int)x y:(int)y zoom:(int)zoom;
-- (BOOL) isLocked;
 - (NSData* ) getBytes:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
 - (NSData *) getBytes:(int)x y:(int)y zoom:(int)zoom;
 - (UIImage *) getImage:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
-- (QuadRect *) getRectBoundary:(int)coordinatesZoom minZ:(int)minZ;
 - (void) deleteImage:(int)x y:(int)y zoom:(int)zoom;
 - (void) deleteCache:(dispatch_block_t)block;
 - (void) deleteImages:(OsmAnd::AreaI)area zoom:(int)zoom;

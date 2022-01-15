@@ -123,4 +123,9 @@ struct CLLocationCoordinate2D;
 
 @property(nonatomic, readonly, getter=getAnimator) const std::shared_ptr<OsmAnd::MapAnimator>& animator;
 
+@property (nonatomic) int maxMissingDataZoomShift;
+@property (nonatomic) int maxMissingDataUnderZoomShift;
+@property (nonatomic) int heixelsPerTileSide;
+
+
 @end

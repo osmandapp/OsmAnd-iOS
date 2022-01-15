@@ -169,6 +169,21 @@
     _renderer->setElevationDataProvider(elevationDataProvider);
 }
 
+- (int) maxMissingDataZoomShift
+{
+    return _renderer->getMaxMissingDataZoomShift();
+}
+
+- (int) maxMissingDataUnderZoomShift
+{
+    return _renderer->getMaxMissingDataUnderZoomShift();
+}
+
+- (int) heixelsPerTileSide
+{
+    return _renderer->getHeixelsPerTileSide();
+}
+
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsAt:(OsmAnd::PointI)screenPoint
 {
     return _renderer->getSymbolsAt(screenPoint);

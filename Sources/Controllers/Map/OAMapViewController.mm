@@ -95,6 +95,8 @@
 #include <OsmAndCore/Map/MapSymbolsGroup.h>
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/IFavoriteLocation.h>
+#include <OsmAndCore/TileSqliteDatabasesCollection.h>
+#include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
 
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
@@ -1679,6 +1681,16 @@
 
         _gpxDocsRec.clear();
         
+        
+        // TODO: Setup heights map from Documents folder temporarily
+        // >>>---------------
+        std::shared_ptr<const OsmAnd::ITileSqliteDatabasesCollection> heightsCollection;
+        const auto manualHeightsCollection = new OsmAnd::TileSqliteDatabasesCollection();
+        manualHeightsCollection->addDirectory(_app.resourcesManager->userStoragePath);
+        heightsCollection.reset(manualHeightsCollection);
+        [_mapView setElevationDataProvider:
+            std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(heightsCollection, _mapView.heixelsPerTileSide)];
+        // <<<---------------
         
         // Determine what type of map-source is being activated
         typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;

@@ -323,7 +323,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 @interface OAResourceGroupItem ()
 
 @property (nonatomic) NSString *key;
-@property (nonatomic) OAWorldRegion *region;
+@property (nonatomic, weak) OAWorldRegion *region;
 
 @end
 

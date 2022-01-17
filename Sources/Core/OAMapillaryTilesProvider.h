@@ -52,7 +52,7 @@ private:
 
     QHash<OsmAnd::TileId, std::shared_ptr<const OsmAnd::MvtReader::Tile> > _geometryCache;
     const std::shared_ptr<const OsmAnd::IWebClient> _webClient;
-    const std::shared_ptr<SkBitmap> _image;
+    const sk_sp<SkImage> _image;
     const std::shared_ptr<SkPaint> _linePaint;
 
     bool _networkAccessAllowed;
@@ -94,7 +94,7 @@ private:
     
     QByteArray getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
     
-    virtual void performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap);
+    virtual void performAdditionalChecks(sk_sp<SkImage> bitmap);
     
     OsmAnd::ZoomLevel getZoomForRequest(const OsmAnd::IMapTiledDataProvider::Request &req);
 
@@ -103,10 +103,11 @@ public:
     OAMapillaryTilesProvider(const float displayDensityFactor = 1.0f, const unsigned long long physicalMemory = 0);
     virtual ~OAMapillaryTilesProvider();
     
-    virtual QByteArray obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
+    virtual QByteArray obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request);
+    virtual sk_sp<SkImage> obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
     virtual void obtainImageAsync(
                                   const OsmAnd::IMapTiledDataProvider::Request& request,
-                                  const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage);
+                                  const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData);
     
     virtual OsmAnd::AlphaChannelPresence getAlphaChannelPresence() const;
     virtual OsmAnd::MapStubStyle getDesiredStubsStyle() const;

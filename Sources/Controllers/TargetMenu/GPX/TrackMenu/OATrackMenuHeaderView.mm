@@ -19,12 +19,12 @@
 #define kTitleHeightMin 30.
 #define kDescriptionHeightMin 18.
 #define kDescriptionHeightMax 36.
-#define kBlockStatistickHeight 40.
-#define kBlockStatistickWidthMin 80.
-#define kBlockStatistickWidthMinByValue 60.
-#define kBlockStatistickWidthMax 120.
-#define kBlockStatistickWidthMaxByValue 100.
-#define kBlockStatistickDivider 13.
+#define kBlockStatisticsHeight 40.
+#define kBlockStatisticsWidthMin 80.
+#define kBlockStatisticsWidthMinByValue 60.
+#define kBlockStatisticsWidthMax 120.
+#define kBlockStatisticsWidthMaxByValue 100.
+#define kBlockStatisticsDivider 13.
 
 @implementation OATrackMenuHeaderView
 {
@@ -549,8 +549,9 @@
         cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
         [cell.titleView setText:cellData.title];
 
-        cell.separatorView.hidden =
-                indexPath.row == [self collectionView:collectionView numberOfItemsInSection:indexPath.section] - 1;
+        cell.separatorView.hidden = [cell isDirectionRTL]
+                ? (indexPath.row == 0)
+                : (indexPath.row == [self collectionView:collectionView numberOfItemsInSection:indexPath.section] - 1);
 
         if ([cell needsUpdateConstraints])
             [cell updateConstraints];
@@ -573,26 +574,26 @@
 - (CGSize)getSizeForItem:(NSString *)title value:(NSString *)value isLast:(BOOL)isLast
 {
     CGSize sizeByTitle = [OAUtilities calculateTextBounds:title
-                                                    width:kBlockStatistickWidthMax
-                                                   height:kBlockStatistickHeight
+                                                    width:kBlockStatisticsWidthMax
+                                                   height:kBlockStatisticsHeight
                                                      font:[UIFont systemFontOfSize:13. weight:UIFontWeightRegular]];
     CGSize sizeByValue = [OAUtilities calculateTextBounds:value
-                                                    width:kBlockStatistickWidthMaxByValue
-                                                   height:kBlockStatistickHeight
+                                                    width:kBlockStatisticsWidthMaxByValue
+                                                   height:kBlockStatisticsHeight
                                                      font:[UIFont systemFontOfSize:13. weight:UIFontWeightMedium]];
-    CGFloat widthByTitle = sizeByTitle.width < kBlockStatistickWidthMin
-            ? kBlockStatistickWidthMin : sizeByTitle.width > kBlockStatistickWidthMax
-                    ? kBlockStatistickWidthMax : sizeByTitle.width;
-    CGFloat widthByValue = (sizeByValue.width < kBlockStatistickWidthMinByValue
-            ? kBlockStatistickWidthMinByValue : sizeByValue.width > kBlockStatistickWidthMaxByValue
-                    ? kBlockStatistickWidthMaxByValue : sizeByValue.width)
-                            + kBlockStatistickWidthMax - kBlockStatistickWidthMaxByValue;
+    CGFloat widthByTitle = sizeByTitle.width < kBlockStatisticsWidthMin
+            ? kBlockStatisticsWidthMin : sizeByTitle.width > kBlockStatisticsWidthMax
+                    ? kBlockStatisticsWidthMax : sizeByTitle.width;
+    CGFloat widthByValue = (sizeByValue.width < kBlockStatisticsWidthMinByValue
+            ? kBlockStatisticsWidthMinByValue : sizeByValue.width > kBlockStatisticsWidthMaxByValue
+                    ? kBlockStatisticsWidthMaxByValue : sizeByValue.width)
+                            + kBlockStatisticsWidthMax - kBlockStatisticsWidthMaxByValue;
     if (!isLast)
     {
-        widthByTitle += kBlockStatistickDivider;
-        widthByValue += kBlockStatistickDivider;
+        widthByTitle += kBlockStatisticsDivider;
+        widthByValue += kBlockStatisticsDivider;
     }
-    return CGSizeMake(MAX(widthByTitle, widthByValue), kBlockStatistickHeight);
+    return CGSizeMake(MAX(widthByTitle, widthByValue), kBlockStatisticsHeight);
 }
 
 #pragma mark - UICollectionViewDelegate

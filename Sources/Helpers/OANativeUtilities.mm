@@ -13,10 +13,8 @@
 
 #include <QString>
 
-#include <SkImageDecoder.h>
 #include <SkCGUtils.h>
 #include <SkCanvas.h>
-#include <SkBitmapDevice.h>
 
 @implementation NSDate (nsDateNative)
 
@@ -41,7 +39,7 @@
 
 @implementation OANativeUtilities
 
-+ (std::shared_ptr<SkBitmap>) skBitmapFromMmPngResource:(NSString *)resourceName
++ (sk_sp<SkImage>) skImageFromMmPngResource:(NSString *)resourceName
 {
     resourceName = [OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", resourceName]];
     
@@ -49,10 +47,10 @@
     if (resourcePath == nil)
         return nullptr;
 
-    return [self.class skBitmapFromResourcePath:resourcePath];
+    return [self.class skImageFromResourcePath:resourcePath];
 }
 
-+ (std::shared_ptr<SkBitmap>) skBitmapFromPngResource:(NSString *)resourceName
++ (sk_sp<SkImage>) skImageFromPngResource:(NSString *)resourceName
 {
     if ([UIScreen mainScreen].scale > 2.0f)
         resourceName = [resourceName stringByAppendingString:@"@3x"];
@@ -64,19 +62,35 @@
     if (resourcePath == nil)
         return nullptr;
 
-    return [self.class skBitmapFromResourcePath:resourcePath];
+    return [self.class skImageFromResourcePath:resourcePath];
 }
 
-+ (std::shared_ptr<SkBitmap>) skBitmapFromResourcePath:(NSString *)resourcePath
++ (sk_sp<SkImage>) skImageFromResourcePath:(NSString *)resourcePath
 {
     if (resourcePath == nil)
         return nullptr;
     
-    const std::unique_ptr<SkImageDecoder> pngDecoder(CreatePNGImageDecoder());
-    std::shared_ptr<SkBitmap> outputBitmap(new SkBitmap());
-    if (!pngDecoder->DecodeFile(qPrintable(QString::fromNSString(resourcePath)), outputBitmap.get()))
+    NSData* resourceData = [NSData dataWithContentsOfFile:resourcePath];
+    if (!resourceData)
         return nullptr;
-    return outputBitmap;
+    
+    return [self.class skImageFromNSData:resourceData];
+}
+
++ (sk_sp<SkImage>) skImageFromNSData:(const NSData *)data
+{
+    if (!data)
+        return nullptr;
+        
+    CFDataRef dataRef = (CFDataRef)CFBridgingRetain(data);
+    return SkImage::MakeFromEncoded(SkData::MakeWithProc(
+             CFDataGetBytePtr(dataRef),
+             CFDataGetLength(dataRef),
+             [](const void* ptr, void* context) {
+                 CFRelease(context);
+             },
+             (void *)dataRef
+         ));
 }
 
 + (NSMutableArray*) QListOfStringsToNSMutableArray:(const QList<QString>&)list
@@ -103,29 +117,9 @@
     return output;
 }
 
-+ (UIImage *) skBitmapToUIImage:(const SkBitmap&) skBitmap
++ (sk_sp<SkImage>) skImageFromCGImage:(CGImageRef)image
 {
-    if (skBitmap.isNull())
-        return nil;
-    
-    // First convert SkBitmap to CGImageRef.
-    CGImageRef cgImage = SkCreateCGImageRefWithColorspace(skBitmap, NULL);
-    // Now convert to UIImage.
-    UIImage *img = [UIImage imageWithCGImage:cgImage
-                                       scale:[UIScreen mainScreen].scale
-                                 orientation:UIImageOrientationUp];
-    CGImageRelease(cgImage);
-    
-    return img;
-}
-
-+ (std::shared_ptr<SkBitmap>) skBitmapFromCGImage:(CGImageRef)image
-{
-    SkBitmap *res = new SkBitmap();
-    BOOL ok = SkCreateBitmapFromCGImage(res, image);
-    if (ok)
-        return std::shared_ptr<SkBitmap>(res);
-    return nullptr;
+    return SkMakeImageFromCGImage(image);
 }
 
 + (QHash<QString, QString>) dictionaryToQHash:(NSDictionary<NSString *, NSString*> *)dictionary

@@ -9,6 +9,7 @@
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
+#import "OASlider.h"
 #import "OAIconTextDividerSwitchCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAColorsTableViewCell.h"
@@ -769,7 +770,10 @@
 - (void)doAdditionalLayout
 {
     [super doAdditionalLayout];
-
+    BOOL isRTL = [self.doneButtonContainerView isDirectionRTL];
+    self.doneButtonTrailingConstraint.constant = [self isLandscape]
+            ? (isRTL ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10. : 0.)
+            : [OAUtilities getLeftMargin] + 10.;
     self.doneButtonContainerView.hidden = ![self isLandscape] && self.currentState == EOADraggableMenuStateFullScreen;
 }
 
@@ -916,7 +920,8 @@
             NSString *extraDesc = cellData.values[@"extra_desc"];
             [cell showExtraDesc:extraDesc && extraDesc.length > 0];
 
-            cell.iconView.image = [UIImage imageNamed:cellData.rightIconName];
+            UIImage *image = [UIImage imageNamed:cellData.rightIconName];
+            cell.iconView.image = [cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image;
 
             cell.descView.text = cellData.desc;
             cell.descView.font = [UIFont systemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];

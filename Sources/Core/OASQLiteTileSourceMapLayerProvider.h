@@ -9,23 +9,32 @@
 #include <objc/objc.h>
 #include <OsmAndCore/Map/ImageMapLayerProvider.h>
 #include <OsmAndCore/IWebClient.h>
+#include <OsmAndCore/Map/ImageMapLayerProvider.h>
+#include <OsmAndCore/TileSqliteDatabase.h>
+
+#include <OsmAndCore/QtExtensions.h>
+#include <OsmAndCore/stdlib_common.h>
+
 #include <QWaitCondition>
 #include <QReadWriteLock>
 #include <QList>
 #include <QHash>
-#include <OsmAndCore/QtExtensions.h>
 #include <array>
-#include <OsmAndCore/stdlib_common.h>
 #include <functional>
 #include <QSet>
 
-#import "OASQLiteTileSource.h"
 
 class OASQLiteTileSourceMapLayerProvider : public OsmAnd::ImageMapLayerProvider
 {
 private:
     const std::shared_ptr<const OsmAnd::IWebClient> _webClient;
-
+    
+    OsmAnd::TileSqliteDatabase *_ts;
+    int _tileSize;
+    bool _ellipsoid;
+    int64_t _expirationTimeMillis;
+    QList<QString> _randomsArray;
+    
     mutable QMutex _tilesInProcessMutex;
     std::array< QSet< OsmAnd::TileId >, OsmAnd::ZoomLevelsCount > _tilesInProcess;
     QWaitCondition _waitUntilAnyTileIsProcessed;
@@ -33,32 +42,32 @@ private:
     void lockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
     void unlockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
 
+    QString getUrlToLoad(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
+    bool expired(const int64_t time);
+
     QByteArray downloadTile(
         const OsmAnd::TileId tileId,
         const OsmAnd::ZoomLevel zoom,
         const std::shared_ptr<const OsmAnd::IQueryController>& queryController = nullptr);
     
-    const std::shared_ptr<const SkBitmap> downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const NSData *data, double offsetY);
-    const std::shared_ptr<const SkBitmap> createShiftedTileBitmap(const NSData *data, const NSData* dataNext, double offsetY);
-    const std::shared_ptr<const SkBitmap> decodeBitmap(const NSData *data);
+    const sk_sp<SkImage> downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const QByteArray& data, double offsetY);
+    const sk_sp<SkImage> createShiftedTileBitmap(const QByteArray& data, const QByteArray& dataNext, double offsetY);
+    const sk_sp<SkImage> decodeBitmap(const QByteArray& data);
 
-    virtual void performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap);
+    virtual void performAdditionalChecks(sk_sp<SkImage> image);
 
 protected:
 public:
     OASQLiteTileSourceMapLayerProvider(const QString& fileName);
     virtual ~OASQLiteTileSourceMapLayerProvider();
-    
-    OASQLiteTileSource *ts;
-    
-    virtual QByteArray obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
-    virtual const std::shared_ptr<const SkBitmap> obtainImageBitmap(
-        const OsmAnd::IMapTiledDataProvider::Request& request);
-    virtual bool supportsObtainImageBitmap() const;
+        
+    virtual QByteArray obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request);
+    virtual sk_sp<SkImage> obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
+    virtual bool supportsObtainImage() const;
 
     virtual void obtainImageAsync(
         const OsmAnd::IMapTiledDataProvider::Request& request,
-        const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage);
+        const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData);
     
     virtual OsmAnd::AlphaChannelPresence getAlphaChannelPresence() const;
     virtual OsmAnd::MapStubStyle getDesiredStubsStyle() const;

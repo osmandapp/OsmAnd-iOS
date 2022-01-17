@@ -70,7 +70,7 @@
     .setIsAccuracyCircleSupported(false)
     .setBaseOrder(self.baseOrder)
     .setIsHidden(true)
-    .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"ic_map_pin"])
+    .setPinIcon([OANativeUtilities skImageFromPngResource:@"ic_map_pin"])
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
     .buildAndAddToCollection(_contextPinMarkersCollection);

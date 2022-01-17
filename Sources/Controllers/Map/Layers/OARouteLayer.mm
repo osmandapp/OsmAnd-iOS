@@ -49,9 +49,9 @@
     std::shared_ptr<OsmAnd::MapMarker> _locationMarker;
     OsmAnd::MapMarker::OnSurfaceIconKey _locationIconKey;
     
-    std::shared_ptr<SkBitmap> _xAxisLocationIcon;
-    std::shared_ptr<SkBitmap> _transportTransferIcon;
-    std::shared_ptr<SkBitmap> _transportShieldIcon;
+    sk_sp<SkImage> _xAxisLocationIcon;
+    sk_sp<SkImage> _transportTransferIcon;
+    sk_sp<SkImage> _transportShieldIcon;
     
     std::shared_ptr<OsmAnd::VectorLinesCollection> _actionLinesCollection;
     OAAutoObserverProxy* _mapZoomObserver;
@@ -84,9 +84,9 @@
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     _actionLinesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     
-    _xAxisLocationIcon = [OANativeUtilities skBitmapFromPngResource:@"map_mapillary_location"];
-    _transportTransferIcon = [OANativeUtilities skBitmapFromPngResource:@"map_public_transport_transfer"];
-    _transportShieldIcon = [OANativeUtilities skBitmapFromPngResource:@"map_public_transport_stop_shield"];
+    _xAxisLocationIcon = [OANativeUtilities skImageFromPngResource:@"map_mapillary_location"];
+    _transportTransferIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_transfer"];
+    _transportShieldIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_stop_shield"];
     
     OsmAnd::MapMarkerBuilder locationMarkerBuilder;
     locationMarkerBuilder.setIsAccuracyCircleSupported(false);
@@ -95,7 +95,7 @@
     
     _locationIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
     locationMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"map_pedestrian_location"]);
+                                                       [OANativeUtilities skImageFromPngResource:@"map_pedestrian_location"]);
     _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_currentGraphPosition);
     
     _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
@@ -156,24 +156,21 @@
     OATransportStopType *type = [OATransportStopType findType:[NSString stringWithUTF8String:routeSegment->route->type.c_str()]];
     NSString *resId = type != nil ? type.resId : [OATransportStopType getResId:TST_BUS];
     UIImage *origIcon = [UIImage imageNamed:[OAUtilities drawablePath:resId]];
-    std::shared_ptr<SkBitmap> stopBmp = std::make_shared<SkBitmap>();
-    bool res = false;
+    sk_sp<SkImage> stopImg = nullptr;
     if (origIcon)
     {
         origIcon = [OAUtilities applyScaleFactorToImage:origIcon];
         UIImage *tintedIcon = [OAUtilities tintImageWithColor:origIcon color:[UIColor blackColor]];
-        res = SkCreateBitmapFromCGImage(stopBmp.get(), tintedIcon.CGImage);
+        stopImg = SkMakeImageFromCGImage(tintedIcon.CGImage);
     }
-    std::shared_ptr<SkBitmap> icon = nullptr;
-    if (res)
+    sk_sp<SkImage> icon = nullptr;
+    if (stopImg)
     {
-        QList< std::shared_ptr<const SkBitmap>> composition;
-        composition << _transportShieldIcon;
-        composition << OsmAnd::SkiaUtilities::scaleBitmap(stopBmp, 0.5, 0.5);
-        icon = OsmAnd::SkiaUtilities::mergeBitmaps(composition);
+        const QList<sk_sp<const SkImage>> composition({_transportShieldIcon, OsmAnd::SkiaUtilities::scaleImage(stopImg, 0.5, 0.5)});
+        icon = OsmAnd::SkiaUtilities::mergeImages(composition);
     }
     
-    transportMarkerBuilder.setPinIcon(res ? icon : _transportShieldIcon);
+    transportMarkerBuilder.setPinIcon(icon ? icon : _transportShieldIcon);
     for (int i = routeSegment->start + 1; i < routeSegment->end; i++)
     {
         const auto& stop = routeSegment->getStop(i);

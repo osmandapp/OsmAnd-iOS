@@ -31,7 +31,12 @@ OsmAnd::AlphaChannelPresence OATerrainMapLayerProvider::getAlphaChannelPresence(
     return OsmAnd::AlphaChannelPresence::Present;
 }
 
-QByteArray OATerrainMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
+sk_sp<SkImage> OATerrainMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
+{
+    return nullptr;
+}
+
+QByteArray OATerrainMapLayerProvider::obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request)
 {
     NSData *data;
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -47,9 +52,8 @@ QByteArray OATerrainMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataPro
 
 void OATerrainMapLayerProvider::obtainImageAsync(
                       const OsmAnd::IMapTiledDataProvider::Request& request,
-                      const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage)
+                      const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData)
 {
-    //
 }
 
 OsmAnd::MapStubStyle OATerrainMapLayerProvider::getDesiredStubsStyle() const
@@ -97,6 +101,6 @@ OsmAnd::ZoomLevel OATerrainMapLayerProvider::getMaxVisibleZoom() const
     return maxZoom;
 }
 
-void OATerrainMapLayerProvider::performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap)
+void OATerrainMapLayerProvider::performAdditionalChecks(sk_sp<SkImage> bitmap)
 {
 }

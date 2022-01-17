@@ -7,29 +7,57 @@
 //
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
+#include "OANativeUtilities.h"
 
-#include <SkImageDecoder.h>
 #include <SkImageEncoder.h>
 #include <SkStream.h>
 #include <SkData.h>
-#include <SkBitmap.h>
+#include <SkImage.h>
 
 #include <OsmAndCore/WebClient.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/SkiaUtilities.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
+#include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
 #include <OsmAndCore/Logging.h>
 
 #import "OAWebClient.h"
 
 OASQLiteTileSourceMapLayerProvider::OASQLiteTileSourceMapLayerProvider(const QString& fileName)
 : _webClient(std::shared_ptr<const OsmAnd::IWebClient>(new OAWebClient()))
+, _ts(new OsmAnd::TileSqliteDatabase(fileName))
+, _tileSize(256)
+, _ellipsoid(0)
+, _expirationTimeMillis(-1)
 {
-    ts = [[OASQLiteTileSource alloc] initWithFilePath:fileName.toNSString()];
+    if (_ts->open())
+    {
+        OsmAnd::TileSqliteDatabase::Meta meta;
+        if (_ts->obtainMeta(meta))
+        {
+            bool ok = false;
+            
+            auto tileSize = meta.getTileSize(&ok);
+            if (ok)
+                _tileSize = (int) tileSize;
+            
+            auto ellipsoid = meta.getEllipsoid(&ok);
+            if (ok)
+                _ellipsoid = ellipsoid > 0;
+            
+            auto expireMinutes = meta.getExpireMinutes(&ok);
+            if (ok)
+                _expirationTimeMillis = expireMinutes * 60 * 1000;
+            
+            _randomsArray = OsmAnd::OnlineTileSources::parseRandoms(meta.getRandoms());
+        }
+    }
 }
 
 OASQLiteTileSourceMapLayerProvider::~OASQLiteTileSourceMapLayerProvider()
 {
-    ts = nil;
+    _ts->close();
+    delete _ts;
 }
 
 OsmAnd::AlphaChannelPresence OASQLiteTileSourceMapLayerProvider::getAlphaChannelPresence() const
@@ -37,9 +65,42 @@ OsmAnd::AlphaChannelPresence OASQLiteTileSourceMapLayerProvider::getAlphaChannel
     return OsmAnd::AlphaChannelPresence::Present;
 }
 
-QByteArray OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
+QByteArray OASQLiteTileSourceMapLayerProvider::obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request)
 {
     return nullptr;
+}
+
+QString OASQLiteTileSourceMapLayerProvider::getUrlToLoad(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)
+{
+    int32_t x = tileId.x;
+    int32_t y = tileId.y;
+    
+    OsmAnd::TileSqliteDatabase::Meta meta;
+    if (!_ts->obtainMeta(meta))
+        return QString();
+
+    auto maxZoom = _ts->getMaxZoom();
+    if (zoom > maxZoom)
+        return QString();
+    
+    auto url = meta.getUrl();
+    if (url.isEmpty())
+        return QString();
+
+    bool ok = false;
+    auto invertedY = meta.getInvertedY(&ok);
+    if (ok && invertedY > 0)
+        y = (1 << zoom) - 1 - y;
+        
+    return OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(url, _randomsArray, x, y, zoom);
+}
+
+bool OASQLiteTileSourceMapLayerProvider::expired(const int64_t time)
+{
+    if (_ts->isTileTimeSupported() && _expirationTimeMillis > 0)
+        return QDateTime::currentMSecsSinceEpoch() - time > _expirationTimeMillis;
+    
+    return false;
 }
 
 QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
@@ -47,10 +108,9 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
     const OsmAnd::ZoomLevel zoom,
     const std::shared_ptr<const OsmAnd::IQueryController>& queryController/* = nullptr*/)
 {
-    NSString *url = [ts getUrlToLoad:tileId.x y:tileId.y zoom:zoom];
-    if (url != nil)
+    const auto& tileUrl = getUrlToLoad(tileId, zoom);
+    if (!tileUrl.isEmpty())
     {
-        QString tileUrl = QString::fromNSString(url);
         std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
         const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult, nullptr, queryController);
         
@@ -68,62 +128,43 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
                 
                 // 404 means that this tile does not exist, so delete it
                 if (httpStatus == 404)
-                {
-                    [ts deleteImage:tileId.x y:tileId.y zoom:zoom];
-                }
+                    _ts->removeTileData(tileId, zoom);
             }
             requestResult.reset();
             return nullptr;
         }
-        [ts insertImage:tileId.x y:tileId.y zoom:zoom data:downloadResult.toNSData()];
+        _ts->storeTileData(tileId, zoom, downloadResult, QDateTime::currentMSecsSinceEpoch());
         requestResult.reset();
         return downloadResult;
     }
     return nullptr;
 }
 
-const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::createShiftedTileBitmap(const NSData *data, const NSData* dataNext, double offsetY)
+const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::createShiftedTileBitmap(const QByteArray& data, const QByteArray& dataNext, double offsetY)
 {
-    if (data.length == 0 && dataNext.length == 0)
-        return nullptr;
-
-    std::shared_ptr<SkBitmap> firstBitmap;
-    std::shared_ptr<SkBitmap> secondBitmap;
-    if (data.length > 0)
-    {
-        firstBitmap.reset(new SkBitmap());
-        if (!SkImageDecoder::DecodeMemory(
-             data.bytes, data.length,
-             firstBitmap.get(),
-             SkColorType::kUnknown_SkColorType,
-             SkImageDecoder::kDecodePixels_Mode))
-        {
-            firstBitmap.reset();
-        }
-    }
-    if (dataNext.length > 0)
-    {
-        secondBitmap.reset(new SkBitmap());
-        if (!SkImageDecoder::DecodeMemory(
-             dataNext.bytes, dataNext.length,
-             secondBitmap.get(),
-             SkColorType::kUnknown_SkColorType,
-             SkImageDecoder::kDecodePixels_Mode))
-        {
-            secondBitmap.reset();
-        }
-    }
-    if (!firstBitmap && !secondBitmap)
+    if (data.isEmpty() && dataNext.isEmpty())
         return nullptr;
     
-    return OsmAnd::SkiaUtilities::createTileBitmap(firstBitmap, secondBitmap, offsetY);
+    sk_sp<SkImage> firstImage = nullptr;
+    sk_sp<SkImage> secondImage = nullptr;
+    if (!data.isEmpty())
+        firstImage = OsmAnd::SkiaUtilities::createImageFromData(data);
+
+    if (!dataNext.isEmpty())
+        secondImage = OsmAnd::SkiaUtilities::createImageFromData(dataNext);
+
+    if (!firstImage && !secondImage)
+        return nullptr;
+    
+    return OsmAnd::SkiaUtilities::createTileImage(firstImage, secondImage, offsetY);
 }
 
-const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const NSData *data, double offsetY)
+const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const QByteArray& data, double offsetY)
 {
-    NSNumber *timeNext = [[NSNumber alloc] init];
-    NSData *dataNext = [ts getBytes:tileIdNext.x y:tileIdNext.y zoom:zoom timeHolder:&timeNext];
-    if (dataNext && ![ts expired:timeNext])
+    QByteArray dataNext;
+    int64_t timeNext;
+    bool ok = _ts->obtainTileData(tileIdNext, zoom, dataNext, &timeNext);
+    if (ok && !expired(timeNext))
     {
         const auto shiftedTile = createShiftedTileBitmap(data, dataNext, offsetY);
         return shiftedTile;
@@ -132,38 +173,34 @@ const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::downlo
     {
         // download next tile
         const auto& downloadResult = downloadTile(tileIdNext, zoom);
-        return createShiftedTileBitmap(data, downloadResult.toNSData(), offsetY);
+        return createShiftedTileBitmap(data, downloadResult, offsetY);
     }
     return nullptr;
 }
 
-const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::decodeBitmap(const NSData *data)
+const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::decodeBitmap(const QByteArray& data)
 {
     // Decode image data
-    const std::shared_ptr<SkBitmap> bitmap(new SkBitmap());
-    if (!SkImageDecoder::DecodeMemory(
-            data.bytes, data.length,
-            bitmap.get(),
-            SkColorType::kUnknown_SkColorType,
-            SkImageDecoder::kDecodePixels_Mode))
+    const sk_sp<SkImage> image = OsmAnd::SkiaUtilities::createImageFromData(data);
+    if (!image)
     {
         LogPrintf(OsmAnd::LogSeverityLevel::Error,
             "Failed to decode image tile");
 
         return nullptr;
     }
-    return bitmap;
+    return image;
 }
 
-const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::obtainImageBitmap(const OsmAnd::IMapTiledDataProvider::Request& request)
+sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
 {
     auto tileId = request.tileId;
     auto zoom = request.zoom;
     double offsetY = 0;
-    if (ts.isEllipticYTile)
+    if (_ellipsoid)
     {
         double latitude = OsmAnd::Utilities::getLatitudeFromTile(zoom, tileId.y);
-        auto numberOffset = OsmAnd::Utilities::getTileEllipsoidNumberAndOffsetY(zoom, latitude, ts.tileSize);
+        auto numberOffset = OsmAnd::Utilities::getTileEllipsoidNumberAndOffsetY(zoom, latitude, _tileSize);
         tileId.y = numberOffset.x;
         offsetY = numberOffset.y;
     }
@@ -175,9 +212,10 @@ const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::obtain
     if (shiftedTile)
         lockTile(tileIdNext, zoom);
 
-    NSNumber *time = [[NSNumber alloc] init];
-    NSData *data = [ts getBytes:tileId.x y:tileId.y zoom:zoom timeHolder:&time];
-    if (data && ![ts expired:time])
+    QByteArray data;
+    int64_t time;
+    bool ok = _ts->obtainTileData(tileId, zoom, data, &time);
+    if (ok && !data.isEmpty() && !expired(time))
     {
         if (shiftedTile)
         {
@@ -203,7 +241,7 @@ const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::obtain
         {
             if (shiftedTile)
             {
-                const auto shiftedTile = downloadShiftedTile(tileIdNext, zoom, downloadResult.toNSData(), offsetY);
+                const auto shiftedTile = downloadShiftedTile(tileIdNext, zoom, downloadResult, offsetY);
                 if (shiftedTile)
                 {
                     unlockTile(tileId, zoom);
@@ -215,7 +253,7 @@ const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::obtain
             if (shiftedTile)
                 unlockTile(tileIdNext, zoom);
 
-            return OsmAnd::ImageMapLayerProvider::decodeBitmap(downloadResult);
+            return OsmAnd::SkiaUtilities::createImageFromData(downloadResult);
         }
     }
     unlockTile(tileId, zoom);
@@ -224,16 +262,15 @@ const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::obtain
     return nullptr;
 }
 
-bool OASQLiteTileSourceMapLayerProvider::supportsObtainImageBitmap() const
+bool OASQLiteTileSourceMapLayerProvider::supportsObtainImage() const
 {
     return true;
 }
 
 void OASQLiteTileSourceMapLayerProvider::obtainImageAsync(
                                                    const OsmAnd::IMapTiledDataProvider::Request& request,
-                                                   const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage)
+                                                   const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData)
 {
-    //
 }
 
 void OASQLiteTileSourceMapLayerProvider::lockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)
@@ -267,7 +304,7 @@ float OASQLiteTileSourceMapLayerProvider::getTileDensityFactor() const
 
 uint32_t OASQLiteTileSourceMapLayerProvider::getTileSize() const
 {
-    return [ts getTileSize];
+    return _tileSize;
 }
 
 bool OASQLiteTileSourceMapLayerProvider::supportsNaturalObtainData() const
@@ -282,18 +319,24 @@ bool OASQLiteTileSourceMapLayerProvider::supportsNaturalObtainDataAsync() const
 
 OsmAnd::ZoomLevel OASQLiteTileSourceMapLayerProvider::getMinZoom() const
 {
-    return (OsmAnd::ZoomLevel)[ts minimumZoomSupported];
+    return _ts->getMinZoom();
 }
 
 OsmAnd::ZoomLevel OASQLiteTileSourceMapLayerProvider::getMaxZoom() const
 {
-    return (OsmAnd::ZoomLevel)[ts maximumZoomSupported];
+    return _ts->getMaxZoom();
 }
 
-void OASQLiteTileSourceMapLayerProvider::performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap)
+void OASQLiteTileSourceMapLayerProvider::performAdditionalChecks(sk_sp<SkImage> image)
 {
-    if (ts.tileSize != bitmap->width() && bitmap->width() != 0)
+    if (_tileSize != image->width() && image->width() != 0)
     {
-        [ts setTileSize:bitmap->width()];
+        OsmAnd::TileSqliteDatabase::Meta meta;
+        if (_ts->obtainMeta(meta))
+        {
+            _tileSize = image->width();
+            meta.setTileSize(_tileSize);
+            _ts->storeMeta(meta);
+        }
     }
 }

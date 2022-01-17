@@ -134,7 +134,7 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> IOAMapTiledCollectionProvider::b
             .setPinIconVerticalAlignment(getPinIconVerticalAlignment())
             .setPinIconHorisontalAlignment(getPinIconHorisontalAlignment());
 
-            std::shared_ptr<SkBitmap> img;
+            sk_sp<SkImage> img;
             
             if (intr)
             {

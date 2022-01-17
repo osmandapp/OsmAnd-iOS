@@ -51,13 +51,13 @@ int OAWaypointsMapLayerProvider::getPointsCount() const
     return _locationMarks.size();
 }
 
-std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::getImageBitmap(const int index, bool isFullSize /*= true*/)
+sk_sp<SkImage> OAWaypointsMapLayerProvider::getImageBitmap(const int index, bool isFullSize /*= true*/)
 {
     const auto locationMark = _locationMarks[index];
     return getBitmapByWaypoint(locationMark, isFullSize);
 }
 
-std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark> &locationMark, bool isFullSize)
+sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark> &locationMark, bool isFullSize)
 {
     UIColor* color = nil;
     NSString *shapeName = nil;
@@ -95,7 +95,7 @@ std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const
     QString iconId = QString([[NSString stringWithFormat:@"%@_%@_%@_%@", [OAUtilities colorToString:color], iconName, shapeName, size]UTF8String]);
 
     const auto bitmapIt = _iconsCache.find(iconId);
-    std::shared_ptr<SkBitmap> bitmap;
+    sk_sp<SkImage> bitmap;
     if (bitmapIt == _iconsCache.end())
     {
         bitmap = createCompositeBitmap(locationMark, isFullSize);
@@ -108,7 +108,7 @@ std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const
     return bitmap;
 }
 
-std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::createCompositeBitmap(const OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark> &locationMark, bool isFullSize) const
+sk_sp<SkImage> OAWaypointsMapLayerProvider::createCompositeBitmap(const OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark> &locationMark, bool isFullSize) const
 {
     UIColor* color = nil;
     NSString *shapeName = nil;
@@ -135,11 +135,11 @@ std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::createCompositeBitmap(con
     
     NSString *sizeName = isFullSize ? @"" : @"_small";
 
-    std::shared_ptr<SkBitmap> result;
+    sk_sp<SkImage> result;
 
     // shadow icon
     NSString *shadowIconName = [NSString stringWithFormat:@"ic_bg_point_%@_bottom%@", shapeName, sizeName];
-    auto shadowIcon = [OANativeUtilities skBitmapFromPngResource:shadowIconName];
+    auto shadowIcon = [OANativeUtilities skImageFromPngResource:shadowIconName];
     if (!shadowIcon)
         return result;
 
@@ -147,12 +147,12 @@ std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::createCompositeBitmap(con
     NSString *backgroundIconName = [NSString stringWithFormat:@"ic_bg_point_%@_center%@", shapeName, sizeName];
     UIImage *img = getIcon(backgroundIconName, @"ic_bg_point_circle_center");
     img = [OAUtilities tintImageWithColor:img color:color];
-    auto backgroundIcon = [OANativeUtilities skBitmapFromCGImage:img.CGImage];
+    auto backgroundIcon = [OANativeUtilities skImageFromCGImage:img.CGImage];
     if (!backgroundIcon)
         return result;
 
     // poi image icon
-    std::shared_ptr<SkBitmap> poiIcon;
+    sk_sp<SkImage> poiIcon;
     if (isFullSize)
     {
         UIImage *origImage;
@@ -163,27 +163,27 @@ std::shared_ptr<SkBitmap> OAWaypointsMapLayerProvider::createCompositeBitmap(con
         // xhdpi & xxhdpi do not directly correspond to @2x & @3x therefore a correction is needed to fit the background icon
         UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(14, 14)];
         UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
-        poiIcon = [OANativeUtilities skBitmapFromCGImage:coloredImage.CGImage];
+        poiIcon = [OANativeUtilities skImageFromCGImage:coloredImage.CGImage];
         if (!poiIcon)
             return result;
     }
 
     // highlight icon
     NSString *highlightIconName = [NSString stringWithFormat:@"ic_bg_point_%@_top%@", shapeName, sizeName];
-    auto highlightIcon = [OANativeUtilities skBitmapFromPngResource:highlightIconName];
+    auto highlightIcon = [OANativeUtilities skImageFromPngResource:highlightIconName];
     if (!highlightIcon)
         return result;
 
     
     if (isFullSize && shadowIcon && backgroundIcon && poiIcon && highlightIcon)
     {
-        QList<std::shared_ptr<const SkBitmap>> toMerge({shadowIcon, backgroundIcon, poiIcon, highlightIcon});
-        result = OsmAnd::SkiaUtilities::mergeBitmaps(toMerge);
+        const QList<sk_sp<const SkImage>> toMerge({shadowIcon, backgroundIcon, poiIcon, highlightIcon});
+        result = OsmAnd::SkiaUtilities::mergeImages(toMerge);
     }
     else if (! isFullSize && shadowIcon && backgroundIcon && highlightIcon)
     {
-        QList<std::shared_ptr<const SkBitmap>> toMerge({shadowIcon, backgroundIcon, highlightIcon});
-        result = OsmAnd::SkiaUtilities::mergeBitmaps(toMerge);
+        const QList<sk_sp<const SkImage>> toMerge({shadowIcon, backgroundIcon, highlightIcon});
+        result = OsmAnd::SkiaUtilities::mergeImages(toMerge);
     }
     return result;
 }

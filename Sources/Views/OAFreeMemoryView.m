@@ -137,7 +137,7 @@
     CGColorSpaceRef rgbColorspace = CGColorSpaceCreateDeviceRGB();
     
     double radius = 3.0f;
-    CGRect frame = CGRectMake(15, 35, self.bounds.size.width - 30, 20);
+    CGRect frame = CGRectMake(15, 35, DeviceScreenWidth - 30, 20);
     
     /*
     CGFloat compShadow[4] = { 0.2, 0.2, 0.2, 0.9 };

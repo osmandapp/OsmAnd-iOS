@@ -221,10 +221,10 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     NSMutableArray<OASearchWord *> *leftWords = [NSMutableArray arrayWithArray:_words];
     NSString *thisTxt = [self getText:YES];
     NSMutableArray<OASearchWord *> *foundWords = [NSMutableArray new];
-    if ([text hasPrefix:thisTxt])
+    if ([textToSearch hasPrefix:thisTxt])
     {
         // string is longer
-        textToSearch = [text substringFromIndex:[self getText:NO].length];
+        textToSearch = [textToSearch substringFromIndex:[self getText:NO].length];
         [foundWords addObjectsFromArray:_words];
         [leftWords removeAllObjects];
     }
@@ -250,7 +250,8 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     BOOL norm = NO;
     for (NSInteger i = 0; i < s.length && !norm; i++)
     {
-        NSString *ch = [NSString stringWithFormat:@"%c", [s characterAtIndex:i]];
+        unichar uc = (unichar)[s characterAtIndex:i];
+        NSString *ch = [NSString stringWithCharacters:&uc length:1];
         for (NSInteger j = 0; j < CHARS_TO_NORMALIZE_KEY.count; j++) {
             if ([ch isEqualToString:CHARS_TO_NORMALIZE_KEY[j]]) {
                 norm = true;

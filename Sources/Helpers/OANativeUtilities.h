@@ -13,7 +13,7 @@
 #include <OsmAndCore/QtExtensions.h>
 #include <QList>
 
-#include <SkBitmap.h>
+#include <SkImage.h>
 
 #include <OsmAndCore/CommonTypes.h>
 
@@ -29,15 +29,15 @@
 
 @interface OANativeUtilities : NSObject
 
-+ (std::shared_ptr<SkBitmap>) skBitmapFromMmPngResource:(NSString *)resourceName;
-+ (std::shared_ptr<SkBitmap>) skBitmapFromPngResource:(NSString *)resourceName;
-+ (std::shared_ptr<SkBitmap>) skBitmapFromResourcePath:(NSString *)resourcePath;
++ (sk_sp<SkImage>) skImageFromMmPngResource:(NSString *)resourceName;
++ (sk_sp<SkImage>) skImageFromPngResource:(NSString *)resourceName;
++ (sk_sp<SkImage>) skImageFromResourcePath:(NSString *)resourcePath;
++ (sk_sp<SkImage>) skImageFromNSData:(const NSData *)data;
 
 + (NSMutableArray*) QListOfStringsToNSMutableArray:(const QList<QString>&)list;
 + (Point31) convertFromPointI:(OsmAnd::PointI)input;
 + (OsmAnd::PointI) convertFromPoint31:(Point31)input;
-+ (UIImage *) skBitmapToUIImage:(const SkBitmap&) skBitmap;
-+ (std::shared_ptr<SkBitmap>) skBitmapFromCGImage:(CGImageRef) image;
++ (sk_sp<SkImage>) skImageFromCGImage:(CGImageRef) image;
 
 + (QHash<QString, QString>) dictionaryToQHash:(NSDictionary<NSString *, NSString*> *)dictionary;
 

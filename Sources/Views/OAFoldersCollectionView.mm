@@ -9,6 +9,7 @@
 #import "OAFoldersCollectionView.h"
 #import "OAFoldersCollectionViewCell.h"
 #import "OACollectionViewCellState.h"
+#import "OACollectionViewFlowLayout.h"
 #import "OAColors.h"
 
 #define kCellHeight 36
@@ -56,7 +57,7 @@
     forCellWithReuseIdentifier:[OAFoldersCollectionViewCell getCellIdentifier]];
     self.contentInset = UIEdgeInsetsMake(0., kMargin , 0., kMargin);
 
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    OACollectionViewFlowLayout *layout = [[OACollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     layout.sectionInset = UIEdgeInsetsMake(6., 0, 6., 0);
     layout.minimumInteritemSpacing = 12.;

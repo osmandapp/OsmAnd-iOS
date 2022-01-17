@@ -19,7 +19,7 @@
 #import "OATargetPointsHelper.h"
 
 #include <SkCGUtils.h>
-#include <SkBitmap.h>
+#include <SkImage.h>
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/SkiaUtilities.h>
@@ -84,7 +84,7 @@
         .setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.baseOrder)
         .setIsHidden(false)
-        .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"map_start_point"])
+        .setPinIcon([OANativeUtilities skImageFromPngResource:@"map_start_point"])
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
@@ -113,7 +113,7 @@
         .setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.baseOrder + 2)
         .setIsHidden(false)
-        .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"map_target_point"])
+        .setPinIcon([OANativeUtilities skImageFromPngResource:@"map_target_point"])
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
@@ -156,18 +156,12 @@
     return flagImage;
 }
 
-- (std::shared_ptr<SkBitmap>) getIntermediateImage:(OARTargetPoint *)point
+- (sk_sp<SkImage>) getIntermediateImage:(OARTargetPoint *)point
 {
     @autoreleasepool
     {
         UIImage *image = [self getIntermediateUIImage:point.index + 1];
-        if (image)
-        {
-            auto skImage = std::make_shared<SkBitmap>();
-            bool res = SkCreateBitmapFromCGImage(skImage.get(), image.CGImage);
-            return res ? skImage : nullptr;
-        }
-        return nullptr;
+        return image ? SkMakeImageFromCGImage(image.CGImage) : nullptr;
     }
 }
 

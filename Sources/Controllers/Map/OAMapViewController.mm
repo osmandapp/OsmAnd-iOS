@@ -95,6 +95,8 @@
 #include <OsmAndCore/Map/MapSymbolsGroup.h>
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/IFavoriteLocation.h>
+#include <OsmAndCore/TileSqliteDatabasesCollection.h>
+#include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
 
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
@@ -1240,25 +1242,6 @@
     return NO;
 }
 
-- (UIImage *) findIconAtPoint:(OsmAnd::PointI)touchPoint
-{
-    CGFloat delta = 8.0;
-    OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
-    const auto& symbolInfos = [_mapView getSymbolsIn:area strict:NO];
-
-    for (const auto symbolInfo : symbolInfos) {
-        
-        if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(symbolInfo.mapSymbol))
-        {
-            std::shared_ptr<const SkBitmap> outIcon;
-            _mapPresentationEnvironment->obtainMapIcon(rasterMapSymbol->content, outIcon);
-            if (outIcon != nullptr)
-                return [OANativeUtilities skBitmapToUIImage:*outIcon];
-        }
-    }
-    return nil;
-}
-
 - (id<OAMapRendererViewProtocol>) mapRendererView
 {
     if (!self.mapViewLoaded)
@@ -1698,6 +1681,16 @@
 
         _gpxDocsRec.clear();
         
+        
+        // TODO: Setup heights map from Documents folder temporarily
+        // >>>---------------
+        std::shared_ptr<const OsmAnd::ITileSqliteDatabasesCollection> heightsCollection;
+        const auto manualHeightsCollection = new OsmAnd::TileSqliteDatabasesCollection();
+        manualHeightsCollection->addDirectory(_app.resourcesManager->userStoragePath);
+        heightsCollection.reset(manualHeightsCollection);
+        [_mapView setElevationDataProvider:
+            std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(heightsCollection, _mapView.heixelsPerTileSide)];
+        // <<<---------------
         
         // Determine what type of map-source is being activated
         typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;

@@ -323,7 +323,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 @interface OAResourceGroupItem ()
 
 @property (nonatomic) NSString *key;
-@property (nonatomic) OAWorldRegion *region;
+@property (nonatomic, weak) OAWorldRegion *region;
 
 @end
 
@@ -1658,21 +1658,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                 [[NSFileManager defaultManager] removeItemAtPath:tilesItem.path error:nil];
                 app.resourcesManager->uninstallTilesResource(QString::fromNSString(item.title));
                 if ([tilesItem.title isEqualToString:@"OsmAnd (online tiles)"])
-                    app.resourcesManager->installOsmAndOnlineTileSource();
+                    app.resourcesManager->installBuiltInTileSources();
 
                 [app.localResourcesChangedObservable notifyEvent];
             }
             else
             {
-                if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
-                {
-                    NSString *filename = [app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString() lastPathComponent];
-                    if (app.data.terrainType == EOATerrainTypeHillshade)
-                        [[OATerrainLayer sharedInstanceHillshade] removeFromDB:filename];
-                    else if (app.data.terrainType == EOATerrainTypeSlope)
-                        [[OATerrainLayer sharedInstanceSlope] removeFromDB:filename];
-                }
-
                 const auto success = item.resourceId.isEmpty() || app.resourcesManager->uninstallResource(item.resourceId);
                 if (!success)
                 {

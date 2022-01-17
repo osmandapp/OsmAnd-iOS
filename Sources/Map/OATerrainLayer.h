@@ -10,15 +10,11 @@
 
 @interface OATerrainLayer : NSObject
 
-+ (OATerrainLayer *)sharedInstanceHillshade;
-+ (OATerrainLayer *)sharedInstanceSlope;
++ (OATerrainLayer *) sharedInstanceHillshade;
++ (OATerrainLayer *) sharedInstanceSlope;
 
-- (void)indexHillshadeFiles;
-
-- (BOOL)exists:(int)x y:(int)y zoom:(int)zoom;
-- (NSData *)getBytes:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
-- (UIImage *)getImage:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
-
-- (void)removeFromDB:(NSString *)filename;
+- (BOOL) exists:(int)x y:(int)y zoom:(int)zoom;
+- (NSData *) getBytes:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
+- (UIImage *) getImage:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
 
 @end

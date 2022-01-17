@@ -10,7 +10,7 @@
 
 #include <OsmAndCore/Map/VectorLinesCollection.h>
 
-#include <SkBitmap.h>
+#include <SkImage.h>
 
 @class OAGPXDocument;
 
@@ -18,8 +18,8 @@
 
 - (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection;
 
-- (std::shared_ptr<SkBitmap>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName;
-- (std::shared_ptr<SkBitmap>) specialBitmapWithColor:(OsmAnd::ColorARGB)color;
+- (sk_sp<SkImage>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName;
+- (sk_sp<SkImage>) specialBitmapWithColor:(OsmAnd::ColorARGB)color;
 
 - (void) calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors attrName:(NSString *)attrName gpx:(OAGPXDocument *)gpx;
 

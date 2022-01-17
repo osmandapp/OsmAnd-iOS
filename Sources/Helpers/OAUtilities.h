@@ -56,6 +56,8 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 - (NSString *) escapeUrl;
 - (NSString *) sanitizeFileName;
 - (NSString *) xmlStringToString;
+- (NSString *) regexReplacePattern:(NSString *)pattern newString:(NSString *)newString;
+- (NSArray<NSString *> *) regexSplitInStringByPattern:(NSString *)pattern;
 
 @end
 
@@ -227,8 +229,5 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSString *) createNewFileName:(NSString *)oldName;
 
 + (natural_t) get_free_memory;
-
-+ (NSString *) regexReplaceInString:(NSString *)searchedString pattern:(NSString *)pattern newString:(NSString *)newString;
-+ (NSArray<NSString *> *) regexSplitInString:(NSString *)searchedString pattern:(NSString *)pattern;
 
 @end

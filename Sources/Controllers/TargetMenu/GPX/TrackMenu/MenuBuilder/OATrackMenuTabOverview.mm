@@ -28,7 +28,6 @@
 {
     NSMutableArray *_results;
     NSMutableString *_parsedString;
-    NSXMLParser *_xmlParser;
 }
 
 - (NSString *)getTabTitle

@@ -128,6 +128,7 @@
     
     BOOL _isImageDownladFinished;
     UIImage *_cachedImage;
+    NSString *_cachedImageURL;
     OAEditDescriptionViewController *_editDescController;
 }
 
@@ -394,6 +395,39 @@
 - (void)generateData
 {
     _tableData = [_uiBuilder generateSectionsData];
+    [self fetchDecriptionImageIfNeeded];
+}
+
+- (void)fetchDecriptionImageIfNeeded
+{
+    for (int i = 0; i < _tableData.sections.count; i++)
+    {
+        OAGPXTableSectionData *section = _tableData.sections[i];
+        for (int j = 0; j < section.cells.count; j++)
+        {
+            OAGPXTableCellData *cellData = section.cells[j];
+            if ([cellData.type isEqualToString:[OAImageDescTableViewCell getCellIdentifier]])
+            {
+                NSString *url = cellData.values[@"img"];
+                if (![url isEqualToString:_cachedImageURL])
+                {
+                    _cachedImage = nil;
+                    _cachedImageURL = url;
+
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString: url]];
+                        UIImage *image = [UIImage imageWithData:data];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            _cachedImage = image;
+                            NSIndexPath *imageCellIndex = [NSIndexPath indexPathForRow:j inSection:i];
+                            [self.tableView reloadRowsAtIndexPaths:@[imageCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        });
+                    });
+                }
+                break;
+            }
+        }
+    }
 }
 
 - (BOOL)isTabSelecting
@@ -2107,41 +2141,27 @@
         cell.imageBottomToLabelConstraint.priority = 1;
         cell.imageBottomConstraint.priority = 1000;
         cell.imageBottomConstraint.constant = 0;
-        NSString *imageUrl = cellData.values[@"img"];
-        
-        cell.iconView.image = nil;
-        if (_isImageDownladFinished)
+
+        BOOL isDownloaded = _cachedImageURL && _cachedImage;
+        BOOL isDownloadingFailed = _cachedImageURL;
+        if (isDownloaded)
         {
             cell.activityIndicatorView.hidden = YES;
             cell.iconView.image = _cachedImage;
-            if (_cachedImage)
-            {
-                cell.imageTopConstraint.constant = 16;
-                cell.iconViewHeight.constant = 149;
-            }
-            else
-            {
-                cell.imageTopConstraint.constant = 1;
-                cell.iconViewHeight.constant = 1;
-            }
+            cell.imageTopConstraint.constant = 16;
+            cell.iconViewHeight.constant = 149;
+        }
+        else if (isDownloadingFailed)
+        {
+            cell.activityIndicatorView.hidden = YES;
+            cell.iconView.image = nil;
+            cell.imageTopConstraint.constant = 1;
+            cell.iconViewHeight.constant = 1;
         }
         else
         {
             cell.activityIndicatorView.hidden = NO;
             [cell.activityIndicatorView startAnimating];
-            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
-            dispatch_async(queue, ^{
-                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString: imageUrl]];
-                UIImage *image = [UIImage imageWithData:data];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    _isImageDownladFinished = YES;
-                    _cachedImage = image;
-                    cell.iconView.image = image;
-                    cell.activityIndicatorView.hidden = YES;
-                    [cell.activityIndicatorView stopAnimating];
-                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                });
-            });
         }
         outCell =  cell;
     }
@@ -2350,9 +2370,6 @@
     _description = [self generateDescription];
     [_headerView setDescription];
     [self generateData];
-    
-    _isImageDownladFinished = NO;
-    _cachedImage = nil;
     [self.tableView reloadData];
 }
 

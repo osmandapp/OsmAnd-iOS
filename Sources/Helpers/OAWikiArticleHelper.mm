@@ -136,7 +136,7 @@
     if (!source || source.length == 0)
         return nil;
     
-    NSString *content = [OAUtilities regexReplaceInString:source pattern:@"\\n" newString:@""];
+    NSString *content = [source regexReplacePattern:@"\\n" newString:@""];
     int firstParagraphStart = [content indexOf:kPOpened];
     int firstParagraphEnd = [content indexOf:kPClosed];
     firstParagraphEnd = firstParagraphEnd < firstParagraphStart ? [content indexOf:kPClosed start:firstParagraphStart] : firstParagraphEnd;
@@ -146,7 +146,7 @@
         firstParagraphHtml = [content substringWithRange:NSMakeRange(firstParagraphStart, firstParagraphEnd - firstParagraphStart + kPClosed.length)];
         while ([[firstParagraphHtml substringWithRange:NSMakeRange(kPOpened.length, firstParagraphHtml.length - kPOpened.length - kPClosed.length)] trim].length == 0
                && (firstParagraphEnd + kPClosed.length < content.length)
-               || [[OAUtilities regexReplaceInString:firstParagraphHtml pattern:@"(<a.+?/a>)|(<div.+?/div>)" newString:@""] trim].length == 0)
+               || [[firstParagraphHtml regexReplacePattern:@"(<a.+?/a>)|(<div.+?/div>)" newString:@""] trim].length == 0)
         {
             firstParagraphStart = [content indexOf:kPOpened start:firstParagraphEnd];
             firstParagraphEnd = firstParagraphStart == -1 ? -1 : [content indexOf:kPClosed start:firstParagraphStart];
@@ -162,8 +162,8 @@
     if (!firstParagraphHtml || firstParagraphHtml.length == 0)
         return nil;
     
-    NSString *firstParagraphText = [[[OAUtilities regexReplaceInString:firstParagraphHtml pattern:@"(<(/)(a|img)>)|(<(a|img).+?>)|(<div.+?/div>)" newString:@""] stringByReplacingOccurrencesOfString:@"<br>" withString:@""] trim];
-    NSArray<NSString *> *phrases = [OAUtilities regexSplitInString:firstParagraphText pattern:@"\\. "];
+    NSString *firstParagraphText = [[[firstParagraphHtml regexReplacePattern:@"(<(/)(a|img)>)|(<(a|img).+?>)|(<div.+?/div>)" newString:@""] stringByReplacingOccurrencesOfString:@"<br>" withString:@""] trim];
+    NSArray<NSString *> *phrases = [firstParagraphText regexSplitInStringByPattern:@"\\. "];
     NSMutableString *res = [NSMutableString string];
     NSInteger limit = MIN(phrases.count, kPartialContentPhrases);
     for (NSInteger i = 0; i < limit; i++)

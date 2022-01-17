@@ -286,6 +286,41 @@
     return res.string;
 }
 
+- (NSString *) regexReplacePattern:(NSString *)pattern newString:(NSString *)newString
+{
+    NSMutableString *result = [NSMutableString stringWithString:self];
+    NSRange searchedRange = NSMakeRange(0, [self length]);
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+    [regex replaceMatchesInString:result options:NSRegularExpressionCaseInsensitive range:searchedRange withTemplate:@""];
+    return [NSString stringWithString:result];
+}
+
+- (NSArray<NSString *> *) regexSplitInStringByPattern:(NSString *)pattern
+{
+    NSRange searchedRange = NSMakeRange(0, [self length]);
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+    NSArray *matches = [regex matchesInString:self options:0 range:searchedRange];
+    if (matches.count == 0)
+        return @[self];
+    
+    NSMutableArray *results = [NSMutableArray array];
+    [matches enumerateObjectsUsingBlock:^(NSTextCheckingResult *obj, NSUInteger idx, BOOL *stop) {
+        for (int i = 1; i< [obj numberOfRanges]; ++i) {
+            NSRange range = [obj rangeAtIndex:i];
+            NSString *string = [pattern substringWithRange:range];
+            if ([string rangeOfString:@";"].location == NSNotFound) {
+                [results addObject: string];
+            } else {
+                NSArray *a = [string componentsSeparatedByString:@";"];
+                for (NSString *s  in a) {
+                    [results addObject: [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+                }
+            }
+        }
+    }];
+    return [NSArray arrayWithArray:results];
+}
+
 @end
 
 @implementation UIView (utils)
@@ -1855,41 +1890,6 @@ static const double d180PI = 180.0 / M_PI_2;
     /* Stats in bytes */
     natural_t mem_free = vm_stat.free_count * pagesize;
     return mem_free;
-}
-
-+ (NSString *) regexReplaceInString:(NSString *)searchedString pattern:(NSString *)pattern newString:(NSString *)newString
-{
-    NSMutableString *result = [NSMutableString stringWithString:searchedString];
-    NSRange searchedRange = NSMakeRange(0, [searchedString length]);
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
-    [regex replaceMatchesInString:result options:NSRegularExpressionCaseInsensitive range:searchedRange withTemplate:@""];
-    return [NSString stringWithString:result];
-}
-
-+ (NSArray<NSString *> *) regexSplitInString:(NSString *)searchedString pattern:(NSString *)pattern
-{
-    NSRange searchedRange = NSMakeRange(0, [searchedString length]);
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
-    NSArray *matches = [regex matchesInString:searchedString options:0 range:searchedRange];
-    if (matches.count == 0)
-        return @[searchedString];
-    
-    NSMutableArray *results = [NSMutableArray array];
-    [matches enumerateObjectsUsingBlock:^(NSTextCheckingResult *obj, NSUInteger idx, BOOL *stop) {
-        for (int i = 1; i< [obj numberOfRanges]; ++i) {
-            NSRange range = [obj rangeAtIndex:i];
-            NSString *string = [pattern substringWithRange:range];
-            if ([string rangeOfString:@";"].location == NSNotFound) {
-                [results addObject: string];
-            } else {
-                NSArray *a = [string componentsSeparatedByString:@";"];
-                for (NSString *s  in a) {
-                    [results addObject: [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
-                }
-            }
-        }
-    }];
-    return [NSArray arrayWithArray:results];
 }
 
 @end

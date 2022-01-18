@@ -345,6 +345,8 @@
 		323BD9112628850400D255ED /* ic_bg_point_octagon_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 323BD8E12628850300D255ED /* ic_bg_point_octagon_top@2x.png */; };
 		323BD9122628850400D255ED /* ic_bg_point_octagon_bottom@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 323BD8E22628850300D255ED /* ic_bg_point_octagon_bottom@3x.png */; };
 		3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */; };
+		325A27372796CE6E0053F8BF /* ic_navbar_pencil@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325A27352796CE6D0053F8BF /* ic_navbar_pencil@3x.png */; };
+		325A27382796CE6E0053F8BF /* ic_navbar_pencil@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325A27362796CE6D0053F8BF /* ic_navbar_pencil@2x.png */; };
 		325B69FD26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */; };
 		325B6A0126D8FEAE00D8B67C /* OACoodinateSearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 325B6A0026D8FEAE00D8B67C /* OACoodinateSearchCell.m */; };
 		325B6A0226D9009800D8B67C /* OACoodinateSearchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 325B69FE26D8FE4500D8B67C /* OACoodinateSearchCell.xib */; };
@@ -3281,6 +3283,8 @@
 		323BD8E22628850300D255ED /* ic_bg_point_octagon_bottom@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_bg_point_octagon_bottom@3x.png"; path = "Resources/Icons/ic_bg_point_octagon_bottom@3x.png"; sourceTree = "<group>"; };
 		3242A46D26CB0F05001CA174 /* OACollapsableNearestPoiTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableNearestPoiTypeView.h; sourceTree = "<group>"; };
 		3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableNearestPoiTypeView.mm; sourceTree = "<group>"; };
+		325A27352796CE6D0053F8BF /* ic_navbar_pencil@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_navbar_pencil@3x.png"; sourceTree = "<group>"; };
+		325A27362796CE6D0053F8BF /* ic_navbar_pencil@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_navbar_pencil@2x.png"; sourceTree = "<group>"; };
 		325B69FB26D828DC00D8B67C /* OAQuickSearchCoordinatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinatesViewController.h; sourceTree = "<group>"; };
 		325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchCoordinatesViewController.mm; sourceTree = "<group>"; };
 		325B69FE26D8FE4500D8B67C /* OACoodinateSearchCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACoodinateSearchCell.xib; sourceTree = "<group>"; };
@@ -6898,6 +6902,8 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				325A27362796CE6D0053F8BF /* ic_navbar_pencil@2x.png */,
+				325A27352796CE6D0053F8BF /* ic_navbar_pencil@3x.png */,
 				DA80D99D2716CC1700445DAF /* map_track_point_finish@2x.png */,
 				DA80D99E2716CC1700445DAF /* map_track_point_finish@3x.png */,
 				DA80D99C2716CC1600445DAF /* map_track_point_start_finish@2x.png */,
@@ -12724,6 +12730,7 @@
 				DA134138243DC5A80039D214 /* map_action_aircraft@3x.png in Resources */,
 				84C102911FBDC10800D3E5EE /* warnings_limit@2x.png in Resources */,
 				842432091AEFDD1900925821 /* ic_action_save@3x.png in Resources */,
+				325A27372796CE6E0053F8BF /* ic_navbar_pencil@3x.png in Resources */,
 				323BD8FF2628850400D255ED /* ic_bg_point_octagon_top_small@2x.png in Resources */,
 				848F55931FBB609900CEFB4B /* ic_action_relative_bearing@2x.png in Resources */,
 				84F3A8EF1B4DA93100D16EBC /* ic_trip_directions@2x.png in Resources */,
@@ -13246,6 +13253,7 @@
 				DA1340C6243DC5A70039D214 /* map_action_sail_boat_dark@3x.png in Resources */,
 				844D203C1E364F7600AC5626 /* icudt52l.dat in Resources */,
 				840C9FB81CF353C800F2F991 /* ic_coordinates_location@3x.png in Resources */,
+				325A27382796CE6E0053F8BF /* ic_navbar_pencil@2x.png in Resources */,
 				DAF345A922F4482C009E2EB6 /* ic_custom_arrow_forward@2x.png in Resources */,
 				DA5A823326C563A700F274C7 /* OAExportItemsSelectionViewController.xib in Resources */,
 				DAFE4D3922169B4D009731CA /* map_osm_edit@2x.png in Resources */,
@@ -13999,12 +14007,13 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-input-files.xcfilelist",
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
+				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-output-files.xcfilelist",
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

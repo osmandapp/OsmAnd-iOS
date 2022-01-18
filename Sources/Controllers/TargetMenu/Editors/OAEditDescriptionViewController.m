@@ -144,6 +144,8 @@
         _webView.hidden = NO;
         _toolbarView.backgroundColor = UIColorFromRGB(color_chart_orange);
         _titleView.textColor = UIColor.whiteColor;
+        _editButton.tintColor = UIColor.whiteColor;
+        [_editButton setImage:[UIImage templateImageNamed:@"ic_navbar_pencil"] forState:UIControlStateNormal];
         _backButton.tintColor = UIColor.whiteColor;
         [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
         [_backButton setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];

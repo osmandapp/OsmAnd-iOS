@@ -184,6 +184,11 @@
     return _renderer->getHeixelsPerTileSide();
 }
 
+- (int) elevationDataTileSize
+{
+    return _renderer->getElevationDataTileSize();
+}
+
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsAt:(OsmAnd::PointI)screenPoint
 {
     return _renderer->getSymbolsAt(screenPoint);

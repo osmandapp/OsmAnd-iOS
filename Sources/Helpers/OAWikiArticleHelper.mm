@@ -144,8 +144,8 @@
     if (firstParagraphStart != -1 && firstParagraphEnd != -1 && firstParagraphEnd >= firstParagraphStart)
     {
         firstParagraphHtml = [content substringWithRange:NSMakeRange(firstParagraphStart, firstParagraphEnd - firstParagraphStart + kPClosed.length)];
-        while ([[firstParagraphHtml substringWithRange:NSMakeRange(kPOpened.length, firstParagraphHtml.length - kPOpened.length - kPClosed.length)] trim].length == 0
-               && (firstParagraphEnd + kPClosed.length < content.length)
+        while (([[firstParagraphHtml substringWithRange:NSMakeRange(kPOpened.length, firstParagraphHtml.length - kPOpened.length - kPClosed.length)] trim].length == 0
+               && (firstParagraphEnd + kPClosed.length < content.length))
                || [[firstParagraphHtml regexReplacePattern:@"(<a.+?/a>)|(<div.+?/div>)" newString:@""] trim].length == 0)
         {
             firstParagraphStart = [content indexOf:kPOpened start:firstParagraphEnd];
@@ -163,6 +163,7 @@
         return nil;
     
     NSString *firstParagraphText = [[[firstParagraphHtml regexReplacePattern:@"(<(/)(a|img)>)|(<(a|img).+?>)|(<div.+?/div>)" newString:@""] stringByReplacingOccurrencesOfString:@"<br>" withString:@""] trim];
+    firstParagraphText = [firstParagraphHtml regexReplacePattern:@"<[^>]*>" newString:@""];
     NSArray<NSString *> *phrases = [firstParagraphText regexSplitInStringByPattern:@"\\. "];
     NSMutableString *res = [NSMutableString string];
     NSInteger limit = MIN(phrases.count, kPartialContentPhrases);

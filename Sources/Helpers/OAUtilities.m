@@ -290,9 +290,9 @@
 {
     NSMutableString *result = [NSMutableString stringWithString:self];
     NSRange searchedRange = NSMakeRange(0, [self length]);
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
-    [regex replaceMatchesInString:result options:NSRegularExpressionCaseInsensitive range:searchedRange withTemplate:@""];
-    return [NSString stringWithString:result];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSMutableString *modifiedString = [regex stringByReplacingMatchesInString:result options:0 range:searchedRange withTemplate:@""];
+    return [NSString stringWithString:modifiedString];
 }
 
 - (NSArray<NSString *> *) regexSplitInStringByPattern:(NSString *)pattern

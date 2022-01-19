@@ -9,10 +9,9 @@
 #import "OAEditDescriptionViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OAIconTitleValueCell.h"
-#import "OAWebViewCell.h"
+#import "OATextViewSimpleCell.h"
 
-@interface OAEditDescriptionViewController () <WKNavigationDelegate>
+@interface OAEditDescriptionViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
 @end
 
@@ -22,6 +21,8 @@
     BOOL _isNew;
     BOOL _readOnly;
     BOOL _isEditing;
+    NSArray<NSDictionary<NSString *, NSString *> *> *_cellsData;
+    NSString *_textViewContent;
 }
 
 -(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew isEditing:(BOOL)isEditing readOnly:(BOOL)readOnly
@@ -38,13 +39,6 @@
     return self;
 }
 
-- (void)applyLocalization
-{
-    _titleView.text = OALocalizedString(@"description");
-    [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-}
-
 - (BOOL)isHtml:(NSString *)text
 {
     BOOL res = NO;
@@ -58,27 +52,31 @@
     res = res || [text containsString:@"<div "];
     res = res || [text containsString:@"<a "];
     res = res || [text containsString:@"<p "];
+    res = res || [text containsString:@"<img "];
     return res;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
+    self.tableView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
     
-    [self setupView];
-
-    NSString *textHtml;
-    if (![self isHtml:self.desc])
+    NSString *textHtml = self.desc;
+    if (![self isHtml:textHtml])
     {
-        textHtml = [self.desc stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
-        textHtml = [NSString stringWithFormat:@"<p><font size=\"6\" face=\"-apple-system\"> %@ </font></p>", textHtml];
+        textHtml = [textHtml stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
     }
-    else
+    if (![textHtml containsString:@"<header"])
     {
-        textHtml = self.desc;
+        NSString *head = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'><style> body { font-family: -apple-system; font-size: 17px; color:#000009} b {font-family: -apple-system; font-weight: bolder; font-size: 17px; color:#000000 }</style></header><head></head><div class=\"main\">%@</div>";
+        textHtml = [NSString stringWithFormat:head, textHtml];
     }
     [_webView loadHTMLString:textHtml baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
-    _textView.text = self.desc;
+    
+    [self setupView];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -86,14 +84,6 @@
     [super viewWillAppear:animated];
     [self registerForKeyboardNotifications];
     [self applySafeAreaMargins];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    if (_isNew)
-        [self.textView becomeFirstResponder];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -115,20 +105,19 @@
 
 -(UIView *) getMiddleView
 {
-    return _webView;
+    return _tableView;
 }
 
 -(void)setupView
 {
-    _textView.textContainerInset = UIEdgeInsetsMake(5,5,5,5);
-    
-    
+    [self generateData];
     if (_isEditing)
     {
+        _titleView.text = OALocalizedString(@"context_menu_edit_descr");
+        _tableView.hidden = NO;
+        _webView.hidden = YES;
         _saveButton.hidden = NO;
         _editButton.hidden = YES;
-        _textView.hidden = NO;
-        _webView.hidden = YES;
         _toolbarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
         _titleView.textColor = UIColor.blackColor;
         _saveButton.tintColor = UIColorFromRGB(color_primary_purple);
@@ -138,10 +127,11 @@
     }
     else
     {
+        _titleView.text = OALocalizedString(@"description");
+        _tableView.hidden = YES;
+        _webView.hidden = NO;
         _editButton.hidden = _readOnly;
         _saveButton.hidden = YES;
-        _textView.hidden = YES;
-        _webView.hidden = NO;
         _toolbarView.backgroundColor = UIColorFromRGB(color_chart_orange);
         _titleView.textColor = UIColor.whiteColor;
         _editButton.tintColor = UIColor.whiteColor;
@@ -152,7 +142,25 @@
         if ([self.view isDirectionRTL])
             _backButton.imageView.image = _backButton.imageView.image.imageFlippedForRightToLeftLayoutDirection;
     }
-    _textView.editable = !_readOnly;
+    [self.tableView reloadData];
+}
+
+- (void) generateData
+{
+    if (_isEditing)
+    {
+        _cellsData = @[
+            @{
+                @"type" : [OATextViewSimpleCell getCellIdentifier],
+                @"title" : self.desc,
+                @"separatorInset" : @0
+            }
+        ];
+    }
+    else
+    {
+        _cellsData = @[];
+    }
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -221,7 +229,7 @@
 
 - (IBAction)saveClicked:(id)sender
 {
-    self.desc = _textView.text;
+    self.desc = _textViewContent;
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(descriptionChanged)])
         [self.delegate descriptionChanged];
@@ -233,7 +241,57 @@
 {
     _isEditing = YES;
     [self setupView];
-    [_textView becomeFirstResponder];
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return _cellsData.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _cellsData[indexPath.row];
+    
+    if ([item[@"type"] isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
+    {
+        OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextViewSimpleCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (cell)
+        {
+            NSNumber *inset = item[@"separatorInset"];
+            cell.separatorInset = UIEdgeInsetsMake(0, inset.floatValue, 0, 0);
+            cell.textView.delegate = self;
+            cell.textView.text = item[@"title"];
+            cell.textView.font = [UIFont systemFontOfSize:16];
+            [cell.textView sizeToFit];
+            cell.textView.editable = YES;
+            [cell.textView becomeFirstResponder];
+        }
+        return cell;
+    }
+
+    return nil;
+}
+
+#pragma mark - UITextViewDelegate
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    _textViewContent = textView.text;
+    [_tableView beginUpdates];
+    [_tableView endUpdates];
 }
 
 @end

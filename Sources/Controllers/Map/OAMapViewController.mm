@@ -1689,7 +1689,7 @@
         manualHeightsCollection->addDirectory(_app.resourcesManager->userStoragePath);
         heightsCollection.reset(manualHeightsCollection);
         [_mapView setElevationDataProvider:
-            std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(heightsCollection, _mapView.heixelsPerTileSide)];
+            std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(heightsCollection, _mapView.elevationDataTileSize)];
         // <<<---------------
         
         // Determine what type of map-source is being activated

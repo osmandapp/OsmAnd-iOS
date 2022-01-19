@@ -229,7 +229,7 @@
     if (self)
     {
         _name = @"";
-        _value =@ "";
+        _value = @"";
         _attributes = @{};
         _subextensions = @[];
     }
@@ -673,9 +673,10 @@
     OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
     if (e)
     {
-        NSMutableArray *arr = [self.extensions mutableCopy];
-        [arr removeObject:e];
-        self.extensions = arr;
+        NSMutableArray *extensions = [self.extensions mutableCopy];
+        [extensions removeObject:e];
+
+        self.extensions = extensions;
     }
 }
 

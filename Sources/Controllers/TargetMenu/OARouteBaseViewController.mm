@@ -35,7 +35,6 @@
 #import "OAGPXDatabase.h"
 
 #import <Charts/Charts-Swift.h>
-#import <OsmAnd_Maps-Swift.h>
 
 @implementation OARouteLineChartHelper
 {

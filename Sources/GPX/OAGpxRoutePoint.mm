@@ -89,17 +89,16 @@
 {
     if (self.extensions.count > 0)
     {
-        NSMutableArray *newArray = [self.extensions mutableCopy];
-        
-        for (OAGpxExtension *e in newArray)
+        NSMutableArray *extensions = [self.extensions mutableCopy];
+        for (OAGpxExtension *e in extensions)
         {
             if ([e.name isEqualToString:@"routeInfo"])
             {
-                [newArray removeObject:e];
+                [extensions removeObject:e];
                 break;
             }
         }
-        self.extensions = newArray;
+        self.extensions = extensions;
 
         [OAGPXDocument fillWpt:self.wpt usingWpt:self];
     }

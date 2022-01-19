@@ -302,12 +302,9 @@
 
 + (NSArray<OAGpxExtension *> *)fetchExtra:(OsmAnd::Ref<OsmAnd::GeoInfoDocument::ExtraData>)extraData
 {
-    if (extraData != nullptr)
-    {
-        OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtensions> *_e = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtensions>*)&extraData;
-        const std::shared_ptr<const OsmAnd::GpxDocument::GpxExtensions> e = _e->shared_ptr();
-        return [self fetchExtensions:e->extensions];
-    }
+    OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtensions> *_e = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtensions>*)&extraData;
+    const std::shared_ptr<const OsmAnd::GpxDocument::GpxExtensions> e = _e->shared_ptr();
+    return [self fetchExtensions:e->extensions];
 }
 
 + (NSArray *)fetchLinks:(QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::Link>>)links
@@ -891,7 +888,7 @@
             [extArray addObject:e];
         }
         
-        p.extensions = [NSArray arrayWithArray:extArray];
+        p.extensions = extArray;
         
         std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());

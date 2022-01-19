@@ -118,7 +118,6 @@
     NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *_waypointGroups;
     NSArray<NSString *> *_waypointSortedGroupNames;
     NSDictionary<NSString *, NSDictionary *> *_segments;
-    NSArray<NSString *> *_trackSegmentTitles;
 
     BOOL _isHeaderBlurred;
     BOOL _isTabSelecting;

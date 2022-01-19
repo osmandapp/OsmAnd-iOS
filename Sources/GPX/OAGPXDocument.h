@@ -20,13 +20,12 @@
 @class OAGPXTrackAnalysis;
 @class OASplitMetric, QuadRect, OAApplicationMode;
 
-@interface OAGPXDocument : NSObject
+@interface OAGPXDocument : OAGpxExtensions
 
 @property (nonatomic) OAMetadata* metadata;
 @property (nonatomic) NSArray<OAGpxWpt *> *locationMarks;
 @property (nonatomic) NSArray<OAGpxTrk *> *tracks;
 @property (nonatomic) NSArray<OAGpxRte *> *routes;
-@property (nonatomic) OAExtraData *extraData;
 
 @property (nonatomic) NSArray<OAGpxRouteSegment *> *routeSegments;
 @property (nonatomic) NSArray<OAGpxRouteType *> *routeTypes;
@@ -92,9 +91,9 @@
 
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions;
 
-- (int) getColor:(int)defColor;
-- (void) setColor:(int)value;
-
++ (NSString *)buildTrackSegmentName:(OAGPXDocument *)gpxFile
+                              track:(OAGpxTrk *)track
+                            segment:(OAGpxTrkSeg *)segment;
 - (NSString *) getColoringType;
 - (NSString *) getGradientScaleType;
 - (void) setColoringType:(NSString *)coloringType;

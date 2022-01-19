@@ -200,10 +200,14 @@
     _tableView.estimatedRowHeight = 125.;
 
     if (!self.trackChartPoints)
-        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart];
+    {
+        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
+                                                                           analysis:self.analysis];
+    }
     [self.routeLineChartHelper refreshHighlightOnMap:NO
                                        lineChartView:self.statisticsChart
-                                    trackChartPoints:self.trackChartPoints];
+                                    trackChartPoints:self.trackChartPoints
+                                            analysis:self.analysis];
     [self updateRouteStatisticsGraph];
 }
 
@@ -347,10 +351,14 @@
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
         if (!self.trackChartPoints)
-            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart];
+        {
+            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
+                                                                               analysis:self.analysis];
+        }
         [self.routeLineChartHelper refreshHighlightOnMap:YES
                                            lineChartView:self.statisticsChart
-                                        trackChartPoints:self.trackChartPoints];
+                                        trackChartPoints:self.trackChartPoints
+                                                analysis:self.analysis];
     }
 }
 
@@ -462,10 +470,12 @@
 - (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry highlight:(ChartHighlight *)highlight
 {
     if (!self.trackChartPoints)
-        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart];
+        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
+                                                                           analysis:self.analysis];
     [self.routeLineChartHelper refreshHighlightOnMap:NO
                                        lineChartView:self.statisticsChart
-                                    trackChartPoints:self.trackChartPoints];
+                                    trackChartPoints:self.trackChartPoints
+                                            analysis:self.analysis];
 }
 
 

@@ -30,8 +30,49 @@ typedef enum
     
 } OAGpxFixType;
 
+typedef NS_ENUM(NSInteger, EOAGPXColor)
+{
+    BLACK = 0,
+    DARKGRAY,
+    GRAY,
+    LIGHTGRAY,
+    WHITE,
+    RED,
+    GREEN,
+    DARKGREEN,
+    BLUE,
+    YELLOW,
+    CYAN,
+    MAGENTA,
+    AQUA,
+    FUCHSIA,
+    DARKGREY,
+    GREY,
+    LIGHTGREY,
+    LIME,
+    MAROON,
+    NAVY,
+    OLIVE,
+    PURPLE,
+    SILVER,
+    TEAL
+};
+
 struct RouteDataBundle;
 @class OAGpxExtension;
+
+@interface OAGPXColor : NSObject
+
+@property (nonatomic) EOAGPXColor type;
+@property (nonatomic) NSString *name;
+@property (nonatomic) int color;
+
++ (instancetype)withType:(EOAGPXColor)type name:(NSString *)name color:(int)color;
+
++ (NSArray<OAGPXColor *> *)values;
++ (OAGPXColor *)getColorFromName:(NSString *)name;
+
+@end
 
 @interface OARouteSegment : NSObject
 
@@ -70,8 +111,30 @@ struct RouteDataBundle;
 
 @end
 
+// TODO: Sync code with Android (get rid of OAGpxExtension)
 
-@interface OAExtraData : NSObject
+@interface OAGpxExtension : NSObject
+
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *value;
+@property (nonatomic) NSDictionary *attributes;
+@property (nonatomic) NSArray *subextensions;
+
+@end
+
+@interface OAGpxExtensions : NSObject
+
+@property (nonatomic) NSArray<OAGpxExtension *> *extensions;
+
+- (void) copyExtensions:(OAGpxExtensions *)e;
+- (OAGpxExtension *) getExtensionByKey:(NSString *)key;
+- (void) addExtension:(OAGpxExtension *)e;
+- (void) removeExtension:(OAGpxExtension *)e;
+- (void) setExtension:(NSString *)key value:(NSString *)value;
+
+- (int) getColor:(int)defColor;
+- (void) setColor:(int)value;
+
 @end
 
 @interface OALink : NSObject
@@ -81,17 +144,16 @@ struct RouteDataBundle;
 
 @end
 
-@interface OAMetadata : NSObject
+@interface OAMetadata : OAGpxExtensions
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *desc;
 @property (nonatomic) NSArray *links;
 @property (nonatomic) long time;
-@property (nonatomic) OAExtraData *extraData;
 
 @end
 
-@interface OALocationMark : NSObject<OALocationPoint>
+@interface OALocationMark : OAGpxExtensions<OALocationPoint>
 
 @property (nonatomic) BOOL firstPoint;
 @property (nonatomic) BOOL lastPoint;
@@ -103,7 +165,6 @@ struct RouteDataBundle;
 @property (nonatomic) NSString *comment;
 @property (nonatomic) NSString *type;
 @property (nonatomic) NSArray *links;
-@property (nonatomic) OAExtraData *extraData;
 @property (nonatomic) double distance;
 
 @end
@@ -114,16 +175,16 @@ struct RouteDataBundle;
 
 @class OAGpxTrkPt;
 
-@interface OATrackSegment : NSObject
+@interface OATrackSegment : OAGpxExtensions
 
+@property (nonatomic) NSString *name;
 @property (nonatomic) NSArray<OAGpxTrkPt *> *points;
-@property (nonatomic) OAExtraData *extraData;
 
 @end
 
 @class OAGpxTrkSeg;
 
-@interface OATrack : NSObject
+@interface OATrack : OAGpxExtensions
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *desc;
@@ -131,7 +192,6 @@ struct RouteDataBundle;
 @property (nonatomic) NSString *type;
 @property (nonatomic) NSArray *links;
 @property (nonatomic) NSArray<OAGpxTrkSeg *> *segments;
-@property (nonatomic) OAExtraData *extraData;
 
 @end
 
@@ -141,7 +201,7 @@ struct RouteDataBundle;
 
 @class OAGpxRtePt;
 
-@interface OARoute : NSObject
+@interface OARoute : OAGpxExtensions
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *desc;
@@ -149,29 +209,6 @@ struct RouteDataBundle;
 @property (nonatomic) NSString *type;
 @property (nonatomic) NSArray *links;
 @property (nonatomic) NSArray<OAGpxRtePt *> *points;
-@property (nonatomic) OAExtraData *extraData;
-
-@end
-
-// TODO: Sync code with Android (get rid of OAGpxExtension)
-
-@interface OAGpxExtension : OAExtraData
-
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSString *value;
-@property (nonatomic) NSDictionary *attributes;
-@property (nonatomic) NSArray *subextensions;
-
-@end
-
-@interface OAGpxExtensions : OAExtraData
-
-// TODO: Sync with Android
-@property (nonatomic) NSDictionary *attributes;
-@property (nonatomic) NSString *value;
-@property (nonatomic) NSArray<OAGpxExtension *> *extensions;
-
-- (void) copyExtensions:(OAGpxExtensions *)e;
 
 @end
 
@@ -189,7 +226,6 @@ struct RouteDataBundle;
 
 @property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> wpt;
 
-@property (nonatomic) NSString *color;
 @property (nonatomic) double speed;
 @property (nonatomic) double magneticVariation;
 @property (nonatomic) double geoidHeight;
@@ -206,9 +242,6 @@ struct RouteDataBundle;
 
 - (void) fillWithWpt:(OAGpxWpt *)gpxWpt;
 - (void) fillWithTrkPt:(OAGpxTrkPt *)gpxWpt;
-
-- (OAGpxExtension *)getExtensionByKey:(NSString *)key;
-- (void)setExtension:(NSString *)key value:(NSString *)value;
 
 - (NSString *)getIcon;
 - (NSString *)getBackgroundIcon;
@@ -242,7 +275,6 @@ struct RouteDataBundle;
 - (BOOL) hasProfile;
 - (BOOL) isGap;
 - (void) setGap;
-- (void) copyExtensions:(OAGpxTrkPt *)pt;
 
 - (NSInteger) getTrkPtIndex;
 - (void) setTrkPtIndex:(NSInteger)index;
@@ -299,7 +331,6 @@ struct RouteDataBundle;
 
 - (instancetype) initWithTrkPt:(OAGpxTrkPt *)point;
 
-- (OAGpxExtension *)getExtensionByKey:(NSString *)key;
 - (NSString *) getProfileType;
 
 @end

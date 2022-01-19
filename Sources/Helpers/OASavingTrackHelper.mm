@@ -430,7 +430,7 @@
                         wpt.name = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
                     
                     if (sqlite3_column_text(statement, 4) != nil)
-                        wpt.color = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)];
+                        [wpt setColor:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)].intValue];
                     if (sqlite3_column_text(statement, 5) != nil)
                         wpt.type = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)];
                     if (sqlite3_column_text(statement, 6) != nil)
@@ -683,10 +683,14 @@
     currentTrack.modifiedTime = wpt.time;
     
     points++;
-    
-    NSString *color = (wpt.color ? wpt.color : @"");
-    
-    [self doAddPointsLat:wpt.position.latitude lon:wpt.position.longitude time:wpt.time desc:wpt.desc name:wpt.name color:color group:wpt.type];
+
+    [self doAddPointsLat:wpt.position.latitude
+                     lon:wpt.position.longitude
+                    time:wpt.time
+                    desc:wpt.desc
+                    name:wpt.name
+                   color:UIColorFromRGBA([wpt getColor:0]).toHexString
+                   group:wpt.type];
 }
 
 - (void) doUpdateTrackLat:(double)lat lon:(double)lon alt:(double)alt speed:(double)speed hdop:(double)hdop time:(long)time
@@ -757,7 +761,7 @@
             sqlite3_bind_double(statement, 2, newLocation.longitude);
             sqlite3_bind_text(statement, 3, [(wpt.desc ? wpt.desc : @"") UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(statement, 4, [(wpt.name ? wpt.name : @"") UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 5, [(wpt.color ? wpt.color : @"") UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 5, [UIColorFromRGBA([wpt getColor:0]).toHexString UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(statement, 6, [(wpt.type ? wpt.type : @"") UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_int64(statement, 7, wpt.time);
             
@@ -866,9 +870,13 @@
 
 - (void)saveWpt:(OAGpxWpt *)wpt
 {
-    NSString *color = (wpt.color ? wpt.color : @"");
-    
-    [self doUpdatePointsLat:wpt.position.latitude lon:wpt.position.longitude time:wpt.time desc:wpt.desc name:wpt.name color:color group:wpt.type];
+    [self doUpdatePointsLat:wpt.position.latitude
+                        lon:wpt.position.longitude
+                       time:wpt.time
+                       desc:wpt.desc
+                       name:wpt.name
+                      color:UIColorFromRGBA([wpt getColor:0]).toHexString
+                      group:wpt.type];
 }
 
 - (void) loadGpxFromDatabase

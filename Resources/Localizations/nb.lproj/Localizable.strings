@@ -1816,7 +1816,7 @@
 "point_to_navigate" = "Naviger til";
 "attach_to_the_roads" = "Følg veier";
 "select_another_track" = "Velg et annet spor";
-"track" = "Turvei";
+"shared_string_gpx_track" = "Turvei";
 "follow_track" = "Følg spor";
 "split_before" = "Del før";
 "split_after" = "Del etter";

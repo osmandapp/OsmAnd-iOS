@@ -1965,7 +1965,7 @@
 "start_of_track" = "بداية المسار";
 "point_to_navigate" = "تنقل إلى";
 "reverse_track_dir" = "عكس اتجاه المسار";
-"track" = "مسار";
+"shared_string_gpx_track" = "مسار";
 "split_after" = "تقسيم بعد";
 "split_before" = "تقسيم قبل";
 "gpx_already_exsists" = "يوجد ملف بهذا الاسم";

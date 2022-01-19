@@ -39,13 +39,14 @@
     if (!self.point)
         return;
     
-    self.point.color = [OAUtilities colorToString:self.color];
+    [self.point setColor:[OAUtilities colorToNumber:self.color]];
 }
 
 - (void) acquireColor
 {
-    if (self.point.color.length > 0)
-        self.color = [UIColor colorFromString:self.point.color];
+    int color = [self.point getColor:0];
+    if (color != 0)
+        self.color = UIColorFromRGBA(color);
 }
 
 - (BOOL) isEqual:(id)o
@@ -87,8 +88,8 @@
     UIImage *resultImg;
     NSString *backgrounfIconName = [@"bg_point_" stringByAppendingString:_point.getBackgroundIcon];
     UIImage *backgroundImg = [UIImage imageNamed:backgrounfIconName];
-    backgroundImg = [OAUtilities tintImageWithColor:backgroundImg color:_point.getColor];
-    
+    backgroundImg = [OAUtilities tintImageWithColor:backgroundImg color:UIColorFromRGBA([_point getColor:0])];
+
     NSString *iconName = [@"mx_" stringByAppendingString:_point.getIcon];
     UIImage *iconImg = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
     iconImg = [OAUtilities tintImageWithColor:iconImg color:UIColor.whiteColor];

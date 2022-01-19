@@ -1912,7 +1912,7 @@
 "open_saved_track" = "Åben gemt spor";
 "fav_points_not_exist" = "Der eksisterer ingen Favoritpunkter";
 "nearest_point" = "Nærmeste punkt";
-"track" = "Spor";
+"shared_string_gpx_track" = "Spor";
 "street_level_imagery" = "Billeder på gadeniveau";
 "show_compass_ruler" = "Vis kompas lineal";
 "res_standard" = "Standard kort";

@@ -82,7 +82,7 @@
         fileName = _gpx.tracks.firstObject.name;
     
     if (fileName == nil || fileName.length == 0)
-        fileName = OALocalizedString(@"track");
+        fileName = OALocalizedString(@"shared_string_gpx_track");
     return fileName;
 }
 

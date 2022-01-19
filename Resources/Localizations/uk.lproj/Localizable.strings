@@ -1970,7 +1970,7 @@
 "reverse_track_dir" = "Зворотний напрямок треку";
 "attach_to_the_roads" = "Прикріпити до доріг";
 "select_another_track" = "Обрати інший трек";
-"track" = "Трек";
+"shared_string_gpx_track" = "Трек";
 "follow_track" = "Навігація за треком";
 "split_after" = "Розділити після";
 "split_before" = "Розділити перед";

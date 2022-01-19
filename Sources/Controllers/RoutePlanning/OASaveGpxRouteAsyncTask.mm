@@ -93,7 +93,7 @@
         if (gpx.metadata != nil)
         {
             gpx.metadata = [[OAMetadata alloc] init];
-            gpx.metadata.extraData = _gpxFile.metadata.extraData;
+            gpx.metadata.extensions = _gpxFile.metadata.extensions;
         }
 //        if (!gpx.showCurrentTrack) {
 //            res = GPXUtilities.writeGpxFile(outFile, gpx);

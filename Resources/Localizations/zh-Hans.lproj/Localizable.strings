@@ -1467,7 +1467,7 @@
 "enter_profile_name" = "输入配置文件名称";
 "group_name" = "组名称";
 "search_history" = "搜索历史记录";
-"track" = "轨道";
+"shared_string_gpx_track" = "轨道";
 "distance_indication" = "距离指示";
 "search_preogress" = "正在搜索…";
 "osm_note_comment_title" = "评论 OSM 注记";

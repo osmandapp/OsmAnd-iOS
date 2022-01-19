@@ -1967,7 +1967,7 @@
 "reverse_track_dir" = "Snúa við stefnu ferils";
 "attach_to_the_roads" = "Tengja við vegina";
 "select_another_track" = "Velja annan feril";
-"track" = "Slóð";
+"shared_string_gpx_track" = "Slóð";
 "follow_track" = "Fylgja ferli";
 "split_after" = "Skipta uppá eftir";
 "split_before" = "Skipta uppá undan";

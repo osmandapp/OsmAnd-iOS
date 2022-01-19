@@ -1975,7 +1975,7 @@
 "reverse_track_dir" = "Fùrria sa diretzione de sa rasta";
 "attach_to_the_roads" = "Bloca in sos caminos";
 "select_another_track" = "Ischerta un\'àtera rasta";
-"track" = "Rasta";
+"shared_string_gpx_track" = "Rasta";
 "follow_track" = "Sighi sa rasta";
 "split_after" = "Iscroba a pustis de";
 "split_before" = "Iscroba in antis de";

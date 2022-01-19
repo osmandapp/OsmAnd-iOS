@@ -94,8 +94,7 @@
     document->creator = QString::fromNSString(self.creator);
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (self.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)self.extraData];
+    [self.class fillExtensions:extensions ext:self];
     document->extraData = extensions;
     extensions = nullptr;
     
@@ -108,8 +107,7 @@
         [self.class fillLinks:metadata->links linkArray:self.metadata.links];
         
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        if (self.metadata.extraData)
-            [self.class fillExtensions:extensions ext:(OAGpxExtensions *)self.metadata.extraData];
+        [self.class fillExtensions:extensions ext:self.metadata];
         metadata->extraData = extensions;
         extensions = nullptr;
     }
@@ -155,13 +153,10 @@
     [self.class fillLinks:wpt->links linkArray:w.links];
     
     NSMutableArray *extArray = [NSMutableArray array];
-    if (w.extraData)
+    for (OAGpxExtension *e in w.extensions)
     {
-        OAGpxExtensions *exts = (OAGpxExtensions *)w.extraData;
-        if (exts.extensions)
-            for (OAGpxExtension *e in exts.extensions)
-                if (![e.name isEqualToString:@"speed"] && ![e.name isEqualToString:@"color"])
-                    [extArray addObject:e];
+        if (![e.name isEqualToString:@"speed"] && ![e.name isEqualToString:@"color"])
+            [extArray addObject:e];
     }
     
     if (w.speed >= 0)
@@ -171,24 +166,19 @@
         e.value = [NSString stringWithFormat:@"%.3f", w.speed];
         [extArray addObject:e];
     }
-    if (w.color.length > 0)
+    int color = [w getColor:0];
+    if (color != 0)
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"color";
-        e.value = w.color;
+        e.value = UIColorFromRGBA(color).toHexString;
         [extArray addObject:e];
     }
     
-    if (extArray.count > 0)
-    {
-        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
-        ext.extensions = [NSArray arrayWithArray:extArray];
-        w.extraData = ext;
-    }
+    w.extensions = extArray;
 
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (w.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)w.extraData];
+    [self.class fillExtensions:extensions ext:w];
     wpt->extraData = extensions;
     extensions = nullptr;
     
@@ -286,17 +276,14 @@
         
         if (!isnan(p.speed))
         {
-            OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
             OAGpxExtension *e = [[OAGpxExtension alloc] init];
             e.name = @"speed";
             e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-            ext.extensions = @[e];
-            p.extraData = ext;
+            p.extensions = @[e];
         }
 
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        if (p.extraData)
-            [self.class fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
+        [self.class fillExtensions:extensions ext:p];
         rtept->extraData = extensions;
         extensions = nullptr;
         
@@ -308,14 +295,11 @@
     }
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (r.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)r.extraData];
+    [self.class fillExtensions:extensions ext:r];
     rte->extraData = extensions;
     extensions = nullptr;
     
-    
     [self.class fillLinks:rte->links linkArray:r.links];
-    
     
     r.rte = rte;
     document->routes.append(rte);
@@ -355,17 +339,14 @@
     
     if (!isnan(p.speed))
     {
-        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"speed";
         e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-        ext.extensions = @[e];
-        p.extraData = ext;
+        p.extensions = @[e];
     }
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (p.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
+    [self.class fillExtensions:extensions ext:p];
     rtept->extraData = extensions;
     extensions = nullptr;
     
@@ -435,17 +416,14 @@
             
             if (!isnan(p.speed))
             {
-                OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
                 OAGpxExtension *e = [[OAGpxExtension alloc] init];
                 e.name = @"speed";
                 e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-                ext.extensions = @[e];
-                p.extraData = ext;
+                p.extensions = @[e];
             }
 
             extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-            if (p.extraData)
-                [self.class fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
+            [self.class fillExtensions:extensions ext:p];
             trkpt->extraData = extensions;
             extensions = nullptr;
             
@@ -457,8 +435,7 @@
         }
         
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        if (s.extraData)
-            [self.class fillExtensions:extensions ext:(OAGpxExtensions *)s.extraData];
+        [self.class fillExtensions:extensions ext:s];
         trkseg->extraData = extensions;
         extensions = nullptr;
         
@@ -470,8 +447,7 @@
     [self.class fillLinks:trk->links linkArray:t.links];
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (t.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)t.extraData];
+    [self.class fillExtensions:extensions ext:t];
     trk->extraData = extensions;
     extensions = nullptr;
     
@@ -521,17 +497,14 @@
         
         if (!isnan(p.speed))
         {
-            OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
             OAGpxExtension *e = [[OAGpxExtension alloc] init];
             e.name = @"speed";
             e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-            ext.extensions = @[e];
-            p.extraData = ext;
+            p.extensions = @[e];
         }
 
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        if (p.extraData)
-            [self.class fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
+        [self.class fillExtensions:extensions ext:p];
         trkpt->extraData = extensions;
         extensions = nullptr;
         
@@ -543,8 +516,7 @@
     }
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (s.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)s.extraData];
+    [self.class fillExtensions:extensions ext:s];
     trkseg->extraData = extensions;
     extensions = nullptr;
     
@@ -620,17 +592,14 @@
     
     if (!isnan(p.speed))
     {
-        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"speed";
         e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-        ext.extensions = @[e];
-        p.extraData = ext;
+        p.extensions = @[e];
     }
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (p.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
+    [self.class fillExtensions:extensions ext:p];
     trkpt->extraData = extensions;
     extensions = nullptr;
     

@@ -2013,7 +2013,7 @@
 "special" = "Специальные";
 "start_of_track" = "Начало трека";
 "split_after" = "Разделить после";
-"track" = "Трек";
+"shared_string_gpx_track" = "Трек";
 "some_of" = "%dиз %d";
 "rearrange_categories" = "Упорядочить категории";
 "join_segments" = "Объединить сегменты";

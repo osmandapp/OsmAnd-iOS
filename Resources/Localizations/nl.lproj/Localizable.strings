@@ -1593,7 +1593,7 @@
 "replace_favorite_confirmation" = "Wil je Favoriet %@ inderdaad vervangen\?";
 "address_search" = "Adres zoeken";
 "fav_points_not_exist" = "Er zijn geen favoriete punten";
-"track" = "Veld- of bosweg";
+"shared_string_gpx_track" = "Veld- of bosweg";
 "select_group" = "Groep kiezen";
 "shared_string_wifi_only" = "Alleen met Wifi";
 "srtm_download_list_help_message" = "OsmAnd biedt gegevens van contourlijnen in meters en voet aan. Je zal het bestand opnieuw moeten downloaden om het formaat te wijzigen.";

@@ -152,7 +152,7 @@
         self.desc = gpxWpt.point.desc;
         self.address = [gpxWpt.point getExtensionByKey:ADDRESS_EXTENSION].value;
         self.groupTitle = [self getGroupTitle]/*gpxWpt.point.type*/;
-        self.groupColor = gpxWpt.color ? gpxWpt.color : [UIColor colorFromString:gpxWpt.point.color];
+        self.groupColor = gpxWpt.color ? gpxWpt.color : UIColorFromRGBA([gpxWpt.point getColor:0]);
         [self commonInit];
     }
     return self;
@@ -1413,7 +1413,7 @@
 
         data.descr = waypointItem.point.desc;
         data.address = [waypointItem.point getAddress];
-        data.color = waypointItem.color ? waypointItem.color : [UIColor colorFromString:waypointItem.point.color];
+        data.color = waypointItem.color ? waypointItem.color : UIColorFromRGBA([waypointItem.point getColor:0]);
         data.backgroundIcon = [waypointItem.point getBackgroundIcon];
         data.icon = [waypointItem.point getIcon];
         data.category = waypointItem.point.type;

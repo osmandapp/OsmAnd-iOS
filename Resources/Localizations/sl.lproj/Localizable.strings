@@ -1393,7 +1393,7 @@
 "search_preogress" = "Iskanje…";
 "favorite_places_category" = "Priljubljeni kraji";
 "map_during_navigation" = "Zemljevid med navigacijo";
-"track" = "Sled";
+"shared_string_gpx_track" = "Sled";
 "copied_to_clipboard" = "Vsebina je kopirana v odložišče";
 "units_nm" = "nmi";
 "shared_string_enable" = "Omogoči";

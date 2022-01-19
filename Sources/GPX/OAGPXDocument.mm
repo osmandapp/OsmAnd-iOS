@@ -12,6 +12,7 @@
 #import "QuadRect.h"
 #import "OAGPXDatabase.h"
 #import "OAApplicationMode.h"
+#import "Localization.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -59,70 +60,53 @@
     }
 }
 
-- (OAGpxExtension *)getExtensionByKey:(NSString *)key
+- (BOOL)hasGeneralTrack
 {
-    for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
+    return _generalTrack != nil;
+}
+
++ (NSString *)getSegmentTitle:(OAGpxTrkSeg *)segment segmentIdx:(NSInteger)segmentIdx
+{
+    NSString *segmentName = !segment.name || segment.name.length == 0
+            ? [NSString stringWithFormat:@"%li", segmentIdx + 1]
+            : segment.name;
+    NSString *segmentString = OALocalizedString(@"gpx_selection_segment_title");
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), segmentString, segmentName];
+}
+
++ (NSString *)getTrackTitle:(OAGPXDocument *)gpxFile track:(OAGpxTrk *)track
+{
+    NSString *trackName;
+    if (!track.name || track.name.length == 0)
     {
-        if ([e.name isEqualToString:key])
-            return e;
+        NSInteger trackIdx = [gpxFile.tracks indexOfObject:track];
+        NSInteger visibleTrackIdx = [gpxFile hasGeneralTrack] ? trackIdx : trackIdx + 1;
+        trackName = [NSString stringWithFormat:@"%li", visibleTrackIdx];
     }
-    return nil;
-}
-
-- (void) addExtension:(OAGpxExtension *)e
-{
-    if (!self.extraData)
-        self.extraData = [[OAGpxExtensions alloc] init];
-    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
-    if (![exts containsObject:e])
-        ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];
-}
-
-- (void) removeExtension:(OAGpxExtension *)e
-{
-    if (!self.extraData)
-        return;
-    NSMutableArray<OAGpxExtension *> *exts = [NSMutableArray arrayWithArray:((OAGpxExtensions *)self.extraData).extensions];
-    [exts removeObject:e];
-
-    ((OAGpxExtensions *)self.extraData).extensions = exts;
-}
-
-- (int) getColor:(int)defColor
-{
-    
-    OAGpxExtension *e = [self getExtensionByKey:@"color"];
-    if (!e)
-        e = [self getExtensionByKey:@"colour"];
-    if (!e)
-        e = [self getExtensionByKey:@"displaycolor"];
-    if (!e)
-        e = [self getExtensionByKey:@"displaycolour"];
-    
-    return [self parseColor:e.value defColor:defColor];
-}
-
-- (void) setColor:(int)value
-{
-    NSString *hexString = [NSString stringWithFormat:@"#%0X", value];
-    OAGpxExtension *e = [self getExtensionByKey:@"color"];
-    if (!e)
+    else
     {
-        e = [[OAGpxExtension alloc] init];
-        e.name = @"color";
-        e.value = hexString;
-        [self addExtension:e];
-        return;
+        trackName = track.name;
     }
-    e.value = hexString;
+    NSString *trackString = OALocalizedString(@"shared_string_gpx_track");
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), trackString, trackName];
 }
 
-- (int) parseColor:(NSString *)colorString defColor:(int)defColor
++ (NSString *)buildTrackSegmentName:(OAGPXDocument *)gpxFile track:(OAGpxTrk *)track segment:(OAGpxTrkSeg *)segment
 {
-    if (colorString.length > 0)
-        return [OAUtilities colorToNumberFromString:colorString];
+    NSString *trackTitle = [self getTrackTitle:gpxFile track:track];
+    NSString *segmentTitle = [self getSegmentTitle:segment segmentIdx:[track.segments indexOfObject:segment]];
 
-    return defColor;
+    BOOL oneSegmentPerTrack =
+            [gpxFile getNonEmptySegmentsCount] == [gpxFile getNonEmptyTracksCount];
+    BOOL oneOriginalTrack = [gpxFile hasGeneralTrack] && [gpxFile getNonEmptyTracksCount] == 2
+            || ![gpxFile hasGeneralTrack] && [gpxFile getNonEmptyTracksCount] == 1;
+
+    if (oneSegmentPerTrack)
+        return trackTitle;
+    else if (oneOriginalTrack)
+        return segmentTitle;
+    else
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"), trackTitle, segmentTitle];
 }
 
 - (NSString *) getColoringType
@@ -281,58 +265,49 @@
     e.value = strValue;
 }
 
-+ (NSArray *)fetchExtensions:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtension>>)extensions
++ (NSArray<OAGpxExtension *> *)fetchExtensions:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtension>>)extensions
 {
-    if (!extensions.isEmpty()) {
-        
-        NSMutableArray *_OAExtensions = [NSMutableArray array];
-        for (const auto& ext : extensions)
+    if (!extensions.isEmpty())
+    {
+        NSMutableArray<OAGpxExtension *> *extensionsArray = [NSMutableArray array];
+        NSString *name = extensions[0]->name.toNSString();
+        if ([name isEqualToString:@"TrackExtension"] || [name isEqualToString:@"WaypointExtension"])
         {
-            OAGpxExtension *e = [[OAGpxExtension alloc] init];
-            
-            e.name = ext->name.toNSString();
-            e.value = ext->value.toNSString();
-            if (!ext->attributes.isEmpty()) {
-                NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-                for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(ext->attributes))) {
-                    [dict setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
-                }
-                e.attributes = dict;
-            }
-            
-            e.subextensions = [self fetchExtensions:ext->subextensions];
-            
-            [_OAExtensions addObject:e];
+            [extensionsArray addObjectsFromArray:[self fetchExtensions:extensions[0]->subextensions]];
         }
-        
-        return _OAExtensions;
+        else
+        {
+            for (const auto &ext: extensions)
+            {
+                OAGpxExtension *e = [[OAGpxExtension alloc] init];
+                e.name = ext->name.toNSString().lowerCase;
+                e.value = ext->value.toNSString();
+                if (!ext->attributes.isEmpty())
+                {
+                    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                    for (const auto &entry: OsmAnd::rangeOf(OsmAnd::constOf(ext->attributes)))
+                    {
+                        dict[entry.key().toNSString()] = entry.value().toNSString();
+                    }
+                    e.attributes = dict;
+                }
+                e.subextensions = [self fetchExtensions:ext->subextensions];
+                [extensionsArray addObject:e];
+            }
+        }
+        return extensionsArray;
     }
-    
-    return nil;
+    return @[];
 }
 
-+ (OAGpxExtensions *)fetchExtra:(OsmAnd::Ref<OsmAnd::GeoInfoDocument::ExtraData>)extraData
++ (NSArray<OAGpxExtension *> *)fetchExtra:(OsmAnd::Ref<OsmAnd::GeoInfoDocument::ExtraData>)extraData
 {
-    if (extraData != nullptr) {
-        
+    if (extraData != nullptr)
+    {
         OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtensions> *_e = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtensions>*)&extraData;
         const std::shared_ptr<const OsmAnd::GpxDocument::GpxExtensions> e = _e->shared_ptr();
-        
-        OAGpxExtensions *exts = [[OAGpxExtensions alloc] init];
-        exts.value = e->value.toNSString();
-        if (!e->attributes.isEmpty()) {
-            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-            for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(e->attributes))) {
-                [dict setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
-            }
-            exts.attributes = dict;
-        }
-        
-        exts.extensions = [self fetchExtensions:e->extensions];
-        
-        return exts;
+        return [self fetchExtensions:e->extensions];
     }
-    return nil;
 }
 
 + (NSArray *)fetchLinks:(QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::Link>>)links
@@ -416,25 +391,18 @@
     _mark.dgpsStationId = mark->dgpsStationId;
     
     _mark.links = [self.class fetchLinks:mark->links];
-    
-    _mark.extraData = [self.class fetchExtra:mark->extraData];
-    
-    if (_mark.extraData)
+
+    if (mark->extraData != nullptr)
+        _mark.extensions = [self fetchExtra:mark->extraData];
+
+    for (OAGpxExtension *e in _mark.extensions)
     {
-        OAGpxExtensions *exts = (OAGpxExtensions *)_mark.extraData;
-        for (OAGpxExtension *e in exts.extensions)
-        {
-            if ([e.name isEqualToString:@"speed"])
-            {
-                _mark.speed = [e.value doubleValue];
-            }
-            else if ([e.name isEqualToString:@"color"])
-            {
-                _mark.color = e.value;
-            }
-        }
+        if ([e.name isEqualToString:@"speed"])
+            _mark.speed = [e.value doubleValue];
+        else if ([e.name isEqualToString:@"color"])
+            [_mark setColor:[OAUtilities colorToNumberFromString:e.value]];
     }
-    
+
     return _mark;
 }
 
@@ -448,14 +416,17 @@
     self.version = gpxDocument->version.toNSString();
     self.creator = gpxDocument->creator.toNSString();
     
-    if (gpxDocument->metadata != nullptr) {
+    if (gpxDocument->metadata != nullptr)
+    {
         OAGpxMetadata *metadata = [[OAGpxMetadata alloc] init];
         metadata.name = gpxDocument->metadata->name.toNSString();
         metadata.desc = gpxDocument->metadata->description.toNSString();
         metadata.time = gpxDocument->metadata->timestamp.toTime_t();
         metadata.links = [self.class fetchLinks:gpxDocument->metadata->links];
-        _extraData = [self.class fetchExtra:gpxDocument->extraData];
-        
+
+        if (gpxDocument->extraData != nullptr)
+            self.extensions = [self.class fetchExtra:gpxDocument->extraData];
+
         self.metadata = metadata;
     }
     
@@ -536,14 +507,15 @@
                             _p.ageOfGpsData = p->ageOfGpsData;
                             _p.dgpsStationId = p->dgpsStationId;
 
-                            _p.extraData = [self.class fetchExtra:p->extraData];
-                            if (_p.extraData) {
-                                OAGpxExtensions *exts = (OAGpxExtensions *)_p.extraData;
-                                for (OAGpxExtension *e in exts.extensions) {
-                                    if ([e.name isEqualToString:@"speed"]) {
-                                        _p.speed = [e.value doubleValue];
-                                        break;
-                                    }
+                            if (p->extraData != nullptr)
+                                _p.extensions = [self.class fetchExtra:p->extraData];
+
+                            for (OAGpxExtension *e in _p.extensions)
+                            {
+                                if ([e.name isEqualToString:@"speed"])
+                                {
+                                    _p.speed = [e.value doubleValue];
+                                    break;
                                 }
                             }
 
@@ -552,8 +524,10 @@
                         }
                         _seg.points = pts;
                     }
-                    
-                    _seg.extraData = [self.class fetchExtra:s->extraData];
+
+                    if (s->extraData != nullptr)
+                        _seg.extensions = [self.class fetchExtra:s->extraData];
+
                     [_seg fillRouteDetails];
                     _seg.trkseg = _s->shared_ptr();
                     [seg addObject:_seg];
@@ -561,8 +535,10 @@
                 
                 _track.segments = seg;
             }
-            
-            _track.extraData = [self.class fetchExtra:t->extraData];
+
+            if (t->extraData != nullptr)
+                _track.extensions = [self.class fetchExtra:t->extraData];
+
             _track.trk = _t->shared_ptr();
             [_trcks addObject:_track];
         }
@@ -619,18 +595,19 @@
                     _p.positionDilutionOfPrecision = p->positionDilutionOfPrecision;
                     _p.ageOfGpsData = p->ageOfGpsData;
                     _p.dgpsStationId = p->dgpsStationId;
-                    
-                    _p.extraData = [self.class fetchExtra:p->extraData];
-                    if (_p.extraData) {
-                        OAGpxExtensions *exts = (OAGpxExtensions *)_p.extraData;
-                        for (OAGpxExtension *e in exts.extensions) {
-                            if ([e.name isEqualToString:@"speed"]) {
-                                _p.speed = [e.value doubleValue];
-                                break;
-                            }
+
+                    if (p->extraData != nullptr)
+                        _p.extensions = [self.class fetchExtra:p->extraData];
+
+                    for (OAGpxExtension *e in _p.extensions)
+                    {
+                        if ([e.name isEqualToString:@"speed"])
+                        {
+                            _p.speed = [e.value doubleValue];
+                            break;
                         }
                     }
-                    
+
                     [self processBounds:_p.position];
                     [_points addObject:_p];
                     
@@ -638,9 +615,10 @@
                 
                 _route.points = _points;
             }
-            
-            _route.extraData = [self.class fetchExtra:r->extraData];
-            
+
+            if (r->extraData != nullptr)
+                _route.extensions = [self.class fetchExtra:r->extraData];
+
             [_rts addObject:_route];
         }
         self.routes = _rts;
@@ -713,8 +691,7 @@
     
     std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (m.extraData)
-        [self fillExtensions:extensions ext:(OAGpxExtensions *)m.extraData];
+    [self fillExtensions:extensions ext:m];
     meta->extraData = extensions;
     extensions = nullptr;
 }
@@ -744,13 +721,10 @@
     [self fillLinks:wpt->links linkArray:w.links];
     
     NSMutableArray *extArray = [NSMutableArray array];
-    if (w.extraData)
+    for (OAGpxExtension *e in w.extensions)
     {
-        OAGpxExtensions *exts = (OAGpxExtensions *)w.extraData;
-        if (exts.extensions)
-            for (OAGpxExtension *e in exts.extensions)
-                if (![e.name isEqualToString:@"speed"] && ![e.name isEqualToString:@"color"])
-                    [extArray addObject:e];
+        if (![e.name isEqualToString:@"speed"] && ![e.name isEqualToString:@"color"])
+            [extArray addObject:e];
     }
     
     if (w.speed >= 0)
@@ -760,25 +734,20 @@
         e.value = [NSString stringWithFormat:@"%.3f", w.speed];
         [extArray addObject:e];
     }
-    if (w.color.length > 0)
+    int color = [w getColor:0];
+    if (color != 0)
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"color";
-        e.value = w.color;
+        e.value = UIColorFromRGBA(color).toHexString;
         [extArray addObject:e];
     }
     
-    if (extArray.count > 0)
-    {
-        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
-        ext.extensions = [NSArray arrayWithArray:extArray];
-        w.extraData = ext;
-    }
+    w.extensions = extArray;
     
     std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (w.extraData)
-        [self fillExtensions:extensions ext:(OAGpxExtensions *)w.extraData];
+    [self fillExtensions:extensions ext:w];
     wpt->extraData = extensions;
     extensions = nullptr;
 }
@@ -825,13 +794,10 @@
             [self.class fillLinks:trkpt->links linkArray:p.links];
             
             NSMutableArray *extArray = [NSMutableArray array];
-            if (p.extraData)
+            for (OAGpxExtension *e in p.extensions)
             {
-                OAGpxExtensions *exts = (OAGpxExtensions *)p.extraData;
-                if (exts.extensions)
-                    for (OAGpxExtension *e in exts.extensions)
-                        if (![e.name isEqualToString:@"speed"])
-                            [extArray addObject:e];
+                if (![e.name isEqualToString:@"speed"])
+                    [extArray addObject:e];
             }
             
             if (p.speed >= 0.0)
@@ -842,17 +808,11 @@
                 [extArray addObject:e];
             }
             
-            if (extArray.count > 0)
-            {
-                OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
-                ext.extensions = [NSArray arrayWithArray:extArray];
-                p.extraData = ext;
-            }
+            p.extensions = extArray;
             
             std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
             extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-            if (p.extraData)
-                [self.class fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
+            [self.class fillExtensions:extensions ext:p];
             trkpt->extraData = extensions;
             extensions = nullptr;
             
@@ -862,8 +822,7 @@
         
         std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        if (s.extraData)
-            [self.class fillExtensions:extensions ext:(OAGpxExtensions *)s.extraData];
+        [self.class fillExtensions:extensions ext:s];
         trkseg->extraData = extensions;
         extensions = nullptr;
         
@@ -875,8 +834,7 @@
     
     std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (t.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)t.extraData];
+    [self.class fillExtensions:extensions ext:t];
     trk->extraData = extensions;
     extensions = nullptr;
 }
@@ -919,15 +877,12 @@
         [self.class fillLinks:rtept->links linkArray:p.links];
         
         NSMutableArray *extArray = [NSMutableArray array];
-        if (p.extraData)
+        for (OAGpxExtension *e in p.extensions)
         {
-            OAGpxExtensions *exts = (OAGpxExtensions *)p.extraData;
-            if (exts.extensions)
-                for (OAGpxExtension *e in exts.extensions)
-                    if (![e.name isEqualToString:@"speed"])
-                        [extArray addObject:e];
+            if (![e.name isEqualToString:@"speed"])
+                [extArray addObject:e];
         }
-        
+
         if (p.speed >= 0.0)
         {
             OAGpxExtension *e = [[OAGpxExtension alloc] init];
@@ -936,17 +891,11 @@
             [extArray addObject:e];
         }
         
-        if (extArray.count > 0)
-        {
-            OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
-            ext.extensions = [NSArray arrayWithArray:extArray];
-            p.extraData = ext;
-        }
+        p.extensions = [NSArray arrayWithArray:extArray];
         
         std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        if (p.extraData)
-            [self.class fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
+        [self.class fillExtensions:extensions ext:p];
         rtept->extraData = extensions;
         extensions = nullptr;
         
@@ -957,8 +906,7 @@
     
     std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (r.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)r.extraData];
+    [self.class fillExtensions:extensions ext:r];
     rte->extraData = extensions;
     extensions = nullptr;
 }
@@ -971,15 +919,13 @@
     std::shared_ptr<OsmAnd::GpxDocument::GpxTrk> trk;
     std::shared_ptr<OsmAnd::GpxDocument::GpxRte> rte;
     std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
-    
-    
+
     document.reset(new OsmAnd::GpxDocument());
     document->version = QString::fromNSString(self.version);
     document->creator = QString::fromNSString(self.creator);
-    
+
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (self.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)self.extraData];
+    [self.class fillExtensions:extensions ext:self];
     document->extraData = extensions;
     extensions = nullptr;
 
@@ -1116,6 +1062,23 @@
     }
 }
 
+- (NSInteger)getNonEmptyTracksCount
+{
+    NSInteger count = 0;
+    for (OAGpxTrk *track in _tracks)
+    {
+        for (OAGpxTrkSeg *segment in track.segments)
+        {
+            if (segment.points.count > 0)
+            {
+                count++;
+                break;
+            }
+        }
+    }
+    return count;
+}
+
 - (NSInteger) getNonEmptySegmentsCount
 {
     int count = 0;
@@ -1241,7 +1204,7 @@
     NSMutableArray<OAGpxTrkSeg *> *tpoints = [NSMutableArray array];
     for (OAGpxTrk *t in _tracks)
     {
-//        int trackColor = t.getColor(getColor(0));
+        int trackColor = [t getColor:kDefaultTrackColor];
         for (OAGpxTrkSeg *ts in t.segments)
         {
             if (!ts.generalSegment && ts.points.count > 0)
@@ -1249,7 +1212,7 @@
                 OAGpxTrkSeg *sgmt = [OAGpxTrkSeg new];
                 [tpoints addObject:sgmt];
                 sgmt.points = ts.points;
-//                sgmt.setColor(trackColor);
+                [sgmt setColor:trackColor];
             }
         }
     }
@@ -1263,7 +1226,7 @@
     {
         for (OAGpxRte *r in _routes)
         {
-//            int routeColor = r.getColor(getColor(0));
+            int routeColor = [r getColor:kDefaultTrackColor];
             if (r.points.count > 0)
             {
                 OAGpxTrkSeg *sgmt = [OAGpxTrkSeg new];
@@ -1274,7 +1237,7 @@
                     [rtes addObject:[[OAGpxTrkPt alloc] initWithRtePt:point]];
                 }
                 sgmt.points = rtes;
-//                sgmt.setColor(routeColor);
+                [sgmt setColor:routeColor];
             }
         }
     }
@@ -1356,7 +1319,7 @@
     for (OAGpxWpt *point in _locationMarks)
     {
         NSString *title = point.type == nil ? @"" : point.type;
-        NSString *color = point.type == nil ? @"" : point.color;
+        NSString *color = point.type == nil ? @"" : UIColorFromRGBA([point getColor:0]).toHexString;
         BOOL emptyCategory = title.length == 0;
         if (!emptyCategory)
         {
@@ -1403,7 +1366,7 @@
         NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
         NSString *title = point.type == nil ? @"" : point.type;
         categories[@"title"] = title;
-        NSString *color = point.type == nil ? @"" : point.color;
+        NSString *color = point.type == nil ? @"" : UIColorFromRGBA([point getColor:0]).toHexString;
         NSString *count = @"1";
         categories[@"count"] = count;
 

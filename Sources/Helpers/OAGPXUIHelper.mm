@@ -223,4 +223,171 @@
         [gpxFile setColoringType:gpxItem.coloringType];
 }
 
++ (OsmAnd::LatLon)getSegmentPointByTime:(OAGpxTrkSeg *)segment
+                                gpxFile:(OAGPXDocument *)gpxFile
+                                   time:(float)time
+                        preciseLocation:(BOOL)preciseLocation
+                           joinSegments:(BOOL)joinSegments
+{
+    if (!segment.generalSegment || joinSegments)
+    {
+        return [self getSegmentPointByTime:segment
+                               timeToPoint:time
+                        passedSegmentsTime:0
+                           preciseLocation:preciseLocation];
+    }
+
+    long passedSegmentsTime = 0;
+    for (OAGpxTrk *track in gpxFile.tracks)
+    {
+        if (track.generalTrack)
+            continue;
+
+        for (OAGpxTrkSeg *seg in track.segments)
+        {
+            OsmAnd::LatLon latLon = [self
+                    getSegmentPointByTime:seg
+                              timeToPoint:time
+                       passedSegmentsTime:passedSegmentsTime
+                          preciseLocation:preciseLocation];
+
+            if (latLon.latitude != 0 && latLon.longitude != 0)
+                return latLon;
+
+            long segmentStartTime = !seg.points || seg.points.count == 0 ? 0 : seg.points.firstObject.time;
+            long segmentEndTime = !seg.points || seg.points.count == 0 ?
+                    0 : seg.points[seg.points.count - 1].time;
+            passedSegmentsTime += segmentEndTime - segmentStartTime;
+        }
+    }
+
+    return OsmAnd::LatLon(0, 0);
+}
+
++ (OsmAnd::LatLon)getSegmentPointByTime:(OAGpxTrkSeg *)segment
+                            timeToPoint:(float)timeToPoint
+                     passedSegmentsTime:(long)passedSegmentsTime
+                        preciseLocation:(BOOL)preciseLocation
+{
+    OAGpxTrkPt *previousPoint = nil;
+    long segmentStartTime = segment.points.firstObject.time;
+    for (OAGpxTrkPt *currentPoint in segment.points)
+    {
+        long totalPassedTime = passedSegmentsTime + currentPoint.time - segmentStartTime;
+        if (totalPassedTime >= timeToPoint)
+        {
+            return preciseLocation && previousPoint
+                    ? [self getIntermediatePointByTime:totalPassedTime
+                                           timeToPoint:timeToPoint
+                                             prevPoint:previousPoint
+                                             currPoint:currentPoint]
+                    : OsmAnd::LatLon(currentPoint.position.latitude, currentPoint.position.longitude);
+        }
+        previousPoint = currentPoint;
+    }
+    return OsmAnd::LatLon(0, 0);
+}
+
++ (OsmAnd::LatLon)getSegmentPointByDistance:(OAGpxTrkSeg *)segment
+                                    gpxFile:(OAGPXDocument *)gpxFile
+                            distanceToPoint:(float)distanceToPoint
+                            preciseLocation:(BOOL)preciseLocation
+                               joinSegments:(BOOL)joinSegments
+{
+    double passedDistance = 0;
+
+    if (!segment.generalSegment || joinSegments)
+    {
+        OAGpxTrkPt *prevPoint = nil;
+        for (int i = 0; i < segment.points.count; i++)
+        {
+            OAGpxTrkPt *currPoint = segment.points[i];
+            if (prevPoint)
+            {
+                passedDistance += getDistance(
+                        prevPoint.position.latitude,
+                        prevPoint.position.longitude,
+                        currPoint.position.latitude,
+                        currPoint.position.longitude
+                );
+            }
+            if (currPoint.distance >= distanceToPoint || ABS(passedDistance - distanceToPoint) < 0.1)
+            {
+                return preciseLocation && prevPoint && currPoint.distance >= distanceToPoint
+                        ? [self getIntermediatePointByDistance:passedDistance
+                                               distanceToPoint:distanceToPoint
+                                                     currPoint:currPoint
+                                                     prevPoint:prevPoint]
+                        : OsmAnd::LatLon(currPoint.position.latitude, currPoint.position.longitude);
+            }
+            prevPoint = currPoint;
+        }
+    }
+
+    double passedSegmentsPointsDistance = 0;
+    OAGpxTrkPt *prevPoint = nil;
+    for (OAGpxTrk *track in gpxFile.tracks)
+    {
+        if (track.generalTrack)
+            continue;
+
+        for (OAGpxTrkSeg *seg in track.segments)
+        {
+            if (!seg.points || seg.points.count == 0)
+                continue;
+
+            for (OAGpxTrkPt *currPoint in seg.points)
+            {
+                if (prevPoint)
+                {
+                    passedDistance += getDistance(prevPoint.position.latitude, prevPoint.position.longitude,
+                            currPoint.position.latitude, currPoint.position.longitude);
+                }
+
+                if (passedSegmentsPointsDistance + currPoint.distance >= distanceToPoint
+                        || ABS(passedDistance - distanceToPoint) < 0.1)
+                {
+                    return preciseLocation && prevPoint
+                            && currPoint.distance + passedSegmentsPointsDistance >= distanceToPoint
+                            ? [self getIntermediatePointByDistance:passedDistance
+                                                         distanceToPoint:distanceToPoint
+                                                               currPoint:currPoint
+                                                               prevPoint:prevPoint]
+                            : OsmAnd::LatLon(currPoint.position.latitude, currPoint.position.longitude);
+                }
+                prevPoint = currPoint;
+            }
+            prevPoint = nil;
+            passedSegmentsPointsDistance += seg.points[seg.points.count - 1].distance;
+        }
+    }
+    return OsmAnd::LatLon(0, 0);
+}
+
++ (OsmAnd::LatLon)getIntermediatePointByTime:(double)passedTime
+                                 timeToPoint:(double)timeToPoint
+                                   prevPoint:(OAGpxTrkPt *)prevPoint
+                                   currPoint:(OAGpxTrkPt *)currPoint
+{
+    double percent = 1 - (passedTime - timeToPoint) / (currPoint.time - prevPoint.time);
+    double dLat = (currPoint.position.latitude - prevPoint.position.latitude) * percent;
+    double dLon = (currPoint.position.longitude - prevPoint.position.longitude) * percent;
+
+    OsmAnd::LatLon latLon(prevPoint.position.latitude + dLat, prevPoint.position.longitude + dLon);
+    return latLon;
+}
+
++ (OsmAnd::LatLon)getIntermediatePointByDistance:(double)passedDistance
+                                 distanceToPoint:(double)distanceToPoint
+                                       currPoint:(OAGpxTrkPt *)currPoint
+                                       prevPoint:(OAGpxTrkPt *)prevPoint
+{
+    double percent = 1 - (passedDistance - distanceToPoint) / (currPoint.distance - prevPoint.distance);
+    double dLat = (currPoint.position.latitude - prevPoint.position.latitude) * percent;
+    double dLon = (currPoint.position.longitude - prevPoint.position.longitude) * percent;
+
+    OsmAnd::LatLon latLon(prevPoint.position.latitude + dLat, prevPoint.position.longitude + dLon);
+    return latLon;
+}
+
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <OsmAndCore/Utilities.h>
 
 @class OAGPXDocument, OAGpxTrkSeg;
 @class OARouteCalculationResult;
@@ -34,6 +35,18 @@
 + (NSArray<OAGpxFileInfo *> *) getSortedGPXFilesInfo:(NSString *)dir selectedGpxList:(NSArray<NSString *> *)selectedGpxList absolutePath:(BOOL)absolutePath;
 
 + (void) addAppearanceToGpx:(OAGPXDocument *)gpxFile gpxItem:(OAGPX *)gpxItem;
+
++ (OsmAnd::LatLon)getSegmentPointByTime:(OAGpxTrkSeg *)segment
+                                gpxFile:(OAGPXDocument *)gpxFile
+                                   time:(float)time
+                        preciseLocation:(BOOL)preciseLocation
+                           joinSegments:(BOOL)joinSegments;
+
++ (OsmAnd::LatLon)getSegmentPointByDistance:(OAGpxTrkSeg *)segment
+                                    gpxFile:(OAGPXDocument *)gpxFile
+                            distanceToPoint:(float)distanceToPoint
+                            preciseLocation:(BOOL)preciseLocation
+                               joinSegments:(BOOL)joinSegments;
 
 @end
 

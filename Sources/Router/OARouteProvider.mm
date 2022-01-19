@@ -443,14 +443,12 @@
             OAGpxRtePt *item = route.points[i];
             try
             {
-                OAGpxExtensions *exts = (OAGpxExtensions *)item.extraData;
-                
-                NSString *stime = [OARouteProvider getExtensionValue:exts key:@"time"];
+                NSString *stime = [OARouteProvider getExtensionValue:item key:@"time"];
                 int time  = 0;
                 if (stime)
                     time = [stime intValue];
                 
-                int offset = [[OARouteProvider getExtensionValue:exts key:@"offset"] intValue];
+                int offset = [[OARouteProvider getExtensionValue:item key:@"offset"] intValue];
                 if (directions.count > 0)
                 {
                     OARouteDirectionInfo *last = directions[directions.count - 1];
@@ -473,18 +471,18 @@
                         avgSpeed = defSpeed;
                 }
                 
-                NSString *stype = [OARouteProvider getExtensionValue:exts key:@"turn"];
+                NSString *stype = [OARouteProvider getExtensionValue:item key:@"turn"];
                 std::shared_ptr<TurnType> turnType = nullptr;
                 if (stype)
                     turnType = std::make_shared<TurnType>(TurnType::fromString([[stype uppercaseString] UTF8String], leftSide));
                 else
                     turnType = TurnType::ptrStraight();
                 
-                NSString *sturn = [OARouteProvider getExtensionValue:exts key:@"turn-angle"];
+                NSString *sturn = [OARouteProvider getExtensionValue:item key:@"turn-angle"];
                 if (sturn)
                     turnType->setTurnAngle([sturn floatValue]);
                 
-                NSString *slanes = [OARouteProvider getExtensionValue:exts key:@"lanes"];
+                NSString *slanes = [OARouteProvider getExtensionValue:item key:@"lanes"];
                 if (slanes)
                 {
                     turnType->setLanes([self stringToIntVector:slanes]);
@@ -495,15 +493,15 @@
                 dirInfo.routePointOffset = offset;
                 
                 // Issue #2894
-                NSString *sref = [OARouteProvider getExtensionValue:exts key:@"ref"];
+                NSString *sref = [OARouteProvider getExtensionValue:item key:@"ref"];
                 if (sref && ![@"null" isEqualToString:sref])
                     dirInfo.ref = sref;
 
-                NSString *sstreetname = [OARouteProvider getExtensionValue:exts key:@"street-name"];
+                NSString *sstreetname = [OARouteProvider getExtensionValue:item key:@"street-name"];
                 if (sstreetname && ![@"null" isEqualToString:sstreetname])
                     dirInfo.streetName = sstreetname;
                 
-                NSString *sdest = [OARouteProvider getExtensionValue:exts key:@"dest"];
+                NSString *sdest = [OARouteProvider getExtensionValue:item key:@"dest"];
                 if (sdest && ![@"null" isEqualToString:sdest])
                     dirInfo.destinationName = sdest;
                 

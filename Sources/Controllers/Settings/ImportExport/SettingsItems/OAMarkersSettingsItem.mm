@@ -167,10 +167,11 @@
         for (OAGpxWpt *wpt in gpxFile.locationMarks)
         {
             OADestination *dest = [[OADestination alloc] initWithDesc:wpt.name latitude:wpt.getLatitude longitude:wpt.getLongitude];
-            dest.color = [UIColor colorFromString:wpt.color];
-            dest.markerResourceName = [self getResourceName:[wpt.color upperCase]];
+            int color = [wpt getColor:0];
+            dest.color = UIColorFromRGBA(color);
+            dest.markerResourceName = [self getResourceName:[UIColorFromRGBA(color).toHexString upperCase]];
 
-            for (OAGpxExtension *e in ((OAGpxExtensions *) wpt.extraData).extensions)
+            for (OAGpxExtension *e in wpt.extensions)
             {
                 if ([e.name isEqualToString:@"creation_date"])
                 {

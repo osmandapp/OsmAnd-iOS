@@ -892,7 +892,7 @@
 "split_before" = "Jaa ennen";
 "split_after" = "Jaa jälkeen";
 "follow_track" = "Seuraa jälkeä";
-"track" = "Polku";
+"shared_string_gpx_track" = "Polku";
 "select_another_track" = "Valitse toinen jälki";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Kiinnitä teihin";

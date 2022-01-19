@@ -1987,7 +1987,7 @@
 "simplified_track" = "Lihtsustatud teekond";
 "tracks_on_map" = "Teekonnad kaardil";
 "tracks_empty" = "Su teekondade loend on tühi";
-"track" = "Teekond";
+"shared_string_gpx_track" = "Teekond";
 "nearest_point" = "Lähim punkt";
 "attach_to_the_roads" = "Kinnita teede külge";
 "none_point_error" = "Palun lisa vähemalt üks punkt.";

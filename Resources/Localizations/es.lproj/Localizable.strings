@@ -1965,7 +1965,7 @@
 "trim_after" = "Recortar después de este punto";
 "tracks_on_map" = "Trazas en el mapa";
 "track_is_saved" = "¡Se ha guardado \n«%s»!";
-"track" = "Camino rural";
+"shared_string_gpx_track" = "Camino rural";
 "touting_specified_vehicle_parameters_descr" = "Los parámetros definidos del vehículo pueden afectar la navegación.";
 "toggle_public_transport" = "Mostrar u ocultar transporte público";
 "toggle_hillshade" = "Mostrar/Ocultar terreno";

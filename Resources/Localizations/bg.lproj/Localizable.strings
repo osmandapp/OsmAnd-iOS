@@ -1122,7 +1122,7 @@
 "split_before" = "Split before";
 "split_after" = "Split after";
 "follow_track" = "Follow track";
-"track" = "Track";
+"shared_string_gpx_track" = "Track";
 "select_another_track" = "Select another track";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Прикрепяне към пътищата";

@@ -1866,7 +1866,7 @@
 "point_to_navigate" = "Navegar para";
 "reverse_track_dir" = "Inverter direção da trilha";
 "select_track_to_follow" = "Selecione o trilho a seguir";
-"track" = "Trilha";
+"shared_string_gpx_track" = "Trilha";
 "split_after" = "Dividir depois";
 "split_before" = "Dividir antes";
 "gpx_already_exsists" = "Já existe um ficheiro com este nome";

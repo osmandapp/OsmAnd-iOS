@@ -124,7 +124,6 @@
         wpt.position = CLLocationCoordinate2DMake(historyItem.latitude, historyItem.longitude);
         wpt.name = historyItem.name;
 
-        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"visited_date";
 
@@ -132,9 +131,7 @@
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
         e.value = [dateFormatter stringFromDate:historyItem.date];;
 
-        ext.extensions = @[e];
-        wpt.extraData = ext;
-
+        wpt.extensions = @[e];
         [doc addWpt:wpt];
     }
     return doc;
@@ -159,7 +156,7 @@
             historyItem.longitude = wpt.getLongitude;
             historyItem.hType = OAHistoryTypeDirection;
 
-            for (OAGpxExtension *e in ((OAGpxExtensions *) wpt.extraData).extensions)
+            for (OAGpxExtension *e in wpt.extensions)
             {
                 if ([e.name isEqualToString:@"visited_date"]) {
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

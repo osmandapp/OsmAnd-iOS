@@ -575,10 +575,14 @@
              && recognizer.state == UIGestureRecognizerStateEnded)
     {
         if (!self.trackChartPoints)
-            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart];
+        {
+            self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
+                                                                               analysis:self.analysis];
+        }
         [self.routeLineChartHelper refreshHighlightOnMap:YES
                                            lineChartView:self.statisticsChart
-                                        trackChartPoints:self.trackChartPoints];
+                                        trackChartPoints:self.trackChartPoints
+                                                analysis:self.analysis];
     }
 }
 
@@ -717,10 +721,14 @@
     }
 
     if (!self.trackChartPoints)
-        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart];
+    {
+        self.trackChartPoints = [self.routeLineChartHelper generateTrackChartPoints:self.statisticsChart
+                                                                           analysis:self.analysis];
+    }
     [self.routeLineChartHelper refreshHighlightOnMap:NO
                                        lineChartView:self.statisticsChart
-                                    trackChartPoints:self.trackChartPoints];
+                                    trackChartPoints:self.trackChartPoints
+                                            analysis:self.analysis];
 }
 
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY

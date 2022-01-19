@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
             withMode:(EOARouteStatisticsMode)mode;
 
-- (NSArray<OAGpxTrkSeg *> *)updateSegmentsData;
+- (NSDictionary<NSString *, NSDictionary *> *)updateSegmentsData;
 - (void)editSegment;
 - (void)deleteAndSaveSegment:(OAGpxTrkSeg *)segment;
 - (void)openEditSegmentScreen:(OAGpxTrkSeg *)segment
@@ -59,6 +59,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
                           segment:(OAGpxTrkSeg *)segment;
 - (OARouteLineChartHelper *)getLineChartHelper;
 - (OAGpxTrk *)getTrack:(OAGpxTrkSeg *)segment;
+- (NSString *)getTrackSegmentTitle:(OAGpxTrkSeg *)segment;
 - (NSString *)getDirName;
 - (NSString *)getGpxFileSize;
 - (NSString *)getCreatedOn;

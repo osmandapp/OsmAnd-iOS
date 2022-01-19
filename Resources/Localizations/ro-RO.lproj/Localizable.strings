@@ -941,7 +941,7 @@
 "favorite_places_category" = "Locuri";
 "track_save_descr" = "Salvează traseul curent ca fișier GPX acum.";
 "gpx_curr_new_track" = "Pista curentă";
-"track" = "Track(pistă)";
+"shared_string_gpx_track" = "Track(pistă)";
 "units_nm" = "nmi ( nautic miles)";
 "plan_route_open_existing_track" = "Deschideți o rută existentă";
 "displayed_trips" = "Trasee afișate";

@@ -46,7 +46,7 @@
 
 - (NSString *)getTabTitle
 {
-    return OALocalizedString(@"track");
+    return OALocalizedString(@"shared_string_gpx_track");
 }
 
 - (UIImage *)getTabIcon
@@ -62,15 +62,16 @@
 - (void)generateData
 {
     NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
-    NSInteger index = 0;
 
-    NSArray<OAGpxTrkSeg *> *segments = self.trackMenuDelegate ? [self.trackMenuDelegate updateSegmentsData] : [NSArray array];
+    NSDictionary<NSString *, NSDictionary *> *segments = self.trackMenuDelegate ? [self.trackMenuDelegate updateSegmentsData] : [NSDictionary dictionary];
     if (!_routeLineChartHelper)
         _routeLineChartHelper = self.trackMenuDelegate ? [self.trackMenuDelegate getLineChartHelper] : nil;
 
-    for (OAGpxTrkSeg *segment in segments)
+    for (NSInteger index = 0; index < segments.count; index++)
     {
-        OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segment];
+        NSDictionary *segmentDict = segments[[NSString stringWithFormat:@"segment_%li", index]];
+        OAGpxTrkSeg *segment = segmentDict[@"segment"];
+        OAGPXTrackAnalysis *analysis = segmentDict[@"analysis"];
         __block EOARouteStatisticsMode mode = EOARouteStatisticsModeAltitudeSpeed;
 
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
@@ -87,10 +88,12 @@
         ];
 
         if (_routeLineChartHelper)
+        {
             [_routeLineChartHelper changeChartMode:mode
                                              chart:cell.lineChartView
                                           analysis:analysis
                                           modeCell:nil];
+        }
 
         for (UIGestureRecognizer *recognizer in cell.lineChartView.gestureRecognizers)
         {
@@ -103,10 +106,16 @@
             [recognizer addTarget:self action:@selector(onChartGesture:)];
         }
 
+        NSString *segmentTitle = nil;
+        if (self.trackMenuDelegate)
+            segmentTitle = [self.trackMenuDelegate getTrackSegmentTitle:segment];
+        if (!segmentTitle)
+            segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), index];
+
         OAGPXTableCellData *segmentCellData = index != 0 ? [OAGPXTableCellData withData:@{
                 kCellKey: [NSString stringWithFormat:@"segment_%li", index],
                 kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kCellTitle: [NSString stringWithFormat:OALocalizedString(@"segnet_num"), index],
+                kCellTitle: segmentTitle,
                 kCellToggle: @NO
         }] : nil;
 
@@ -118,16 +127,19 @@
                 kCellType: [OALineChartCell getCellIdentifier],
                 kTableValues: @{
                         @"cell_value": cell,
+                        @"segment_value": segment,
                         @"points_value": _routeLineChartHelper
                                 ? [_routeLineChartHelper generateTrackChartPoints:cell.lineChartView
-                                                                       startPoint:startChartPoint]
+                                                                       startPoint:startChartPoint
+                                                                         segment:segment]
                                 : [[OATrackChartPoints alloc] init],
                         @"additional_actions": ^() {
                             if (_routeLineChartHelper)
                             {
                                 [_routeLineChartHelper refreshHighlightOnMap:NO
                                                                lineChartView:cell.lineChartView
-                                                            trackChartPoints:chartCellData.values[@"points_value"]];
+                                                            trackChartPoints:chartCellData.values[@"points_value"]
+                                                                    segment:segment];
                             }
                             if (self.trackMenuDelegate)
                                 [self.trackMenuDelegate updateChartHighlightValue:cell.lineChartView segment:segment];
@@ -239,8 +251,6 @@
 
         cell.lineChartView.tag =
                 [tableSections indexOfObject:segmentSectionData] << 10 | [segmentCells indexOfObject:chartCellData];
-
-        index++;
     }
 
     self.tableData = [OAGPXTableData withData: @{ kTableSections: tableSections }];
@@ -415,9 +425,13 @@
     OAGPXTableCellData *cellData = self.tableData.sections[indexPath.section].cells[indexPath.row];
 
     if (_routeLineChartHelper)
+    {
+        OAGpxTrkSeg *segment = cellData.values[@"segment_value"];
         [_routeLineChartHelper refreshHighlightOnMap:NO
                                        lineChartView:(LineChartView *) chartView
-                                    trackChartPoints:cellData.values[@"points_value"]];
+                                    trackChartPoints:cellData.values[@"points_value"]
+                                             segment:segment];
+    }
 }
 
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
@@ -498,9 +512,13 @@
             OAGPXTableCellData *cellData = self.tableData.sections[indexPath.section].cells[indexPath.row];
 
             if (_routeLineChartHelper)
+            {
+                OAGpxTrkSeg *segment = cellData.values[@"segment_value"];
                 [_routeLineChartHelper refreshHighlightOnMap:YES
                                                lineChartView:lineChartView
-                                            trackChartPoints:cellData.values[@"points_value"]];
+                                            trackChartPoints:cellData.values[@"points_value"]
+                                                    segment:segment];
+            }
         }
     }
 }

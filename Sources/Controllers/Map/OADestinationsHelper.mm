@@ -314,9 +314,8 @@
         OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
         wpt.position = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
         wpt.name = marker.desc;
-        wpt.color = marker.color.toHexString;
+        [wpt setColor:[OAUtilities colorToNumber:marker.color]];
 
-        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"creation_date";
 
@@ -324,8 +323,7 @@
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
         e.value = [dateFormatter stringFromDate:marker.creationDate];;
 
-        ext.extensions = @[e];
-        wpt.extraData = ext;
+        wpt.extensions = @[e];
 
 //        if (completeBackup)
 //        {

@@ -1806,7 +1806,7 @@
 "reverse_track_dir" = "Obrátit směr stopy";
 "attach_to_the_roads" = "Připojit k cestám";
 "select_another_track" = "Zvolit jinou stopu";
-"track" = "Trasa";
+"shared_string_gpx_track" = "Trasa";
 "follow_track" = "Sledovat stopu";
 "split_after" = "Rozdělit po";
 "split_before" = "Rozdělit před";

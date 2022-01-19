@@ -20,6 +20,62 @@
 #define GAP_PROFILE_TYPE @"gap"
 #define TRKPT_INDEX_EXTENSION @"trkpt_idx"
 
+@implementation OAGPXColor
+
++ (instancetype)withType:(EOAGPXColor)type name:(NSString *)name color:(int)color
+{
+    OAGPXColor *obj = [[OAGPXColor alloc] init];
+    if (obj)
+    {
+        obj.type = type;
+        obj.name = name;
+        obj.color = color;
+    }
+    return obj;
+}
+
++ (NSArray<OAGPXColor *> *)values
+{
+    return @[
+            [OAGPXColor withType:BLACK name:@"BLACK" color:0xFF000000],
+            [OAGPXColor withType:DARKGRAY name:@"DARKGRAY" color:0xFF444444],
+            [OAGPXColor withType:GRAY name:@"GRAY" color:0xFF888888],
+            [OAGPXColor withType:LIGHTGRAY name:@"LIGHTGRAY" color:0xFFCCCCCC],
+            [OAGPXColor withType:WHITE name:@"WHITE" color:0xFFFFFFFF],
+            [OAGPXColor withType:RED name:@"RED" color:0xFFFF0000],
+            [OAGPXColor withType:GREEN name:@"GREEN" color:0xFF00FF00],
+            [OAGPXColor withType:DARKGREEN name:@"DARKGREEN" color:0xFF006400],
+            [OAGPXColor withType:BLUE name:@"BLUE" color:0xFF0000FF],
+            [OAGPXColor withType:YELLOW name:@"YELLOW" color:0xFFFFFF00],
+            [OAGPXColor withType:CYAN name:@"CYAN" color:0xFF00FFFF],
+            [OAGPXColor withType:MAGENTA name:@"MAGENTA" color:0xFFFF00FF],
+            [OAGPXColor withType:AQUA name:@"AQUA" color:0xFF00FFFF],
+            [OAGPXColor withType:FUCHSIA name:@"FUCHSIA" color:0xFFFF00FF],
+            [OAGPXColor withType:DARKGREY name:@"DARKGREY" color:0xFF444444],
+            [OAGPXColor withType:GREY name:@"GREY" color:0xFF888888],
+            [OAGPXColor withType:LIGHTGREY name:@"LIGHTGREY" color:0xFFCCCCCC],
+            [OAGPXColor withType:LIME name:@"LIME" color:0xFF00FF00],
+            [OAGPXColor withType:MAROON name:@"MAROON" color:0xFF800000],
+            [OAGPXColor withType:NAVY name:@"NAVY" color:0xFF000080],
+            [OAGPXColor withType:OLIVE name:@"OLIVE" color:0xFF808000],
+            [OAGPXColor withType:PURPLE name:@"PURPLE" color:0xFF800080],
+            [OAGPXColor withType:SILVER name:@"SILVER" color:0xFFC0C0C0],
+            [OAGPXColor withType:TEAL name:@"TEAL" color:0xFF008080]
+    ];
+}
+
++ (OAGPXColor *)getColorFromName:(NSString *)name
+{
+    for (OAGPXColor *c in [self values])
+    {
+        if ([c.name caseInsensitiveCompare:name] == NSOrderedSame)
+            return c;
+    }
+    return nil;
+}
+
+@end
+
 @implementation OARouteSegment
 
 - (instancetype)initWithDictionary:(NSDictionary<NSString *,NSString *> *)dict
@@ -165,35 +221,156 @@
 
 @end
 
-@implementation OAMetadata
-@end
-@implementation OALink
-@end
 @implementation OAGpxExtension
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _name = @"";
+        _value =@ "";
+        _attributes = @{};
+        _subextensions = @[];
+    }
+    return self;
+}
+
 @end
+
 @implementation OAGpxExtensions
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _extensions = @[];
+    }
+    return self;
+}
 
 - (NSArray<OAGpxExtension *> *)extensions
 {
     if (!_extensions)
         _extensions = @[];
+
     return _extensions;
 }
 
-- (void) copyExtensions:(OAGpxExtensions *)e
+- (void)copyExtensions:(OAGpxExtensions *)e
 {
-    _extensions = e.extensions;
+    if (e && e.extensions.count > 0)
+        _extensions = [_extensions arrayByAddingObjectsFromArray:e.extensions];
+}
+
+- (OAGpxExtension *)getExtensionByKey:(NSString *)key
+{
+    for (OAGpxExtension *e in self.extensions)
+    {
+        if ([e.name isEqualToString:key])
+            return e;
+    }
+    return nil;
+}
+
+- (void)addExtension:(OAGpxExtension *)e
+{
+    if (![self.extensions containsObject:e])
+        self.extensions = [self.extensions arrayByAddingObject:e];
+}
+
+- (void)removeExtension:(OAGpxExtension *)e
+{
+    NSMutableArray<OAGpxExtension *> *extensions = [self.extensions mutableCopy];
+    [extensions removeObject:e];
+
+    self.extensions = extensions;
+}
+
+- (void)setExtension:(NSString *)key value:(NSString *)value
+{
+    OAGpxExtension *e = [self getExtensionByKey:key];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = key;
+        e.value = value;
+        if (![self.extensions containsObject:e])
+            self.extensions = [self.extensions arrayByAddingObject:e];
+    }
+    else
+    {
+        e.value = value;
+    }
+}
+
+- (int) getColor:(int)defColor
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"color"];
+    if (!e)
+        e = [self getExtensionByKey:@"colour"];
+    if (!e)
+        e = [self getExtensionByKey:@"displaycolor"];
+    if (!e)
+        e = [self getExtensionByKey:@"displaycolour"];
+
+    return [self parseColor:e.value defColor:defColor];
+}
+
+- (void) setColor:(int)value
+{
+    NSString *hexString = [NSString stringWithFormat:@"#%0X", value];
+    OAGpxExtension *e = [self getExtensionByKey:@"color"];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = @"color";
+        e.value = hexString;
+        [self addExtension:e];
+        return;
+    }
+    e.value = hexString;
+}
+
+- (int) parseColor:(NSString *)colorString defColor:(int)defColor
+{
+    if (colorString.length > 0)
+    {
+        if ([colorString hasPrefix:@"#"])
+        {
+            return [OAUtilities colorToNumberFromString:colorString];
+        }
+        else
+        {
+            OAGPXColor *gpxColor = [OAGPXColor getColorFromName:colorString];
+            if (gpxColor)
+                return gpxColor.color;
+        }
+    }
+    return defColor;
 }
 
 @end
+
+@implementation OAMetadata
+@end
+
+@implementation OALink
+@end
+
 @implementation OARoute
 @end
+
 @implementation OARoutePoint
 @end
+
 @implementation OATrack
 @end
+
 @implementation OATrackPoint
 @end
+
 @implementation OATrackSegment
 @end
 
@@ -279,9 +456,6 @@
 
 @end
 
-@implementation OAExtraData
-@end
-
 @implementation OAGpxWpt
 
 - (instancetype) init
@@ -310,7 +484,7 @@
     self.wpt = gpxWpt.wpt;
     
     self.position = gpxWpt.position;
-    self.color = gpxWpt.color;
+    [self setColor:[gpxWpt getColor:0]];
     self.name = gpxWpt.name;
     self.desc = gpxWpt.desc;
     self.elevation = gpxWpt.elevation;
@@ -332,7 +506,7 @@
     self.distance = gpxWpt.distance;
     
     self.links = gpxWpt.links;
-    self.extraData = gpxWpt.extraData;
+    self.extensions = gpxWpt.extensions;
 }
 
 - (void) fillWithTrkPt:(OAGpxTrkPt *)gpxWpt
@@ -359,12 +533,7 @@
     self.distance = gpxWpt.distance;
     
     self.links = gpxWpt.links;
-    self.extraData = gpxWpt.extraData;
-}
-
-- (UIColor *) getColor
-{
-    return [UIColor colorFromString:self.color];
+    self.extensions = gpxWpt.extensions;
 }
 
 - (NSString *)getIcon
@@ -383,36 +552,6 @@
 {
     NSString *value = [self getExtensionByKey:ADDRESS_EXTENSION].value;
     return value ? value : @"";
-}
-
-- (OAGpxExtension *)getExtensionByKey:(NSString *)key
-{
-    for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
-    {
-        if ([e.name isEqualToString:key])
-            return e;
-    }
-    return nil;
-}
-
-- (void)setExtension:(NSString *)key value:(NSString *)value
-{
-    if (!self.extraData)
-        self.extraData = [[OAGpxExtensions alloc] init];
-    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
-    OAGpxExtension *e = [self getExtensionByKey:key];
-    if (!e)
-    {
-        e = [[OAGpxExtension alloc] init];
-        e.name = key;
-        e.value = value;
-        if (![exts containsObject:e])
-            ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];
-    }
-    else
-    {
-        e.value = value;
-    }
 }
 
 @end
@@ -501,20 +640,10 @@
         self.comment = point.comment;
         self.type = point.type;
         self.links = point.links;
-        self.extraData = point.extraData;
+        self.extensions = point.extensions;
         self.distance = point.distance;
     }
     return self;
-}
-
-- (OAGpxExtension *)getExtensionByKey:(NSString *)key
-{
-    for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
-    {
-        if ([e.name isEqualToString:key])
-            return e;
-    }
-    return nil;
 }
 
 - (NSString *) getProfileType
@@ -523,15 +652,6 @@
     if (e)
         return e.value;
     return nil;
-}
-
-- (void) addExtension:(OAGpxExtension *)e
-{
-    if (!self.extraData)
-        self.extraData = [[OAGpxExtensions alloc] init];
-    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
-    if (![exts containsObject:e])
-        ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];
 }
 
 - (void) setProfileType:(NSString *)profileType
@@ -553,9 +673,9 @@
     OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
     if (e)
     {
-        NSMutableArray *arr = [NSMutableArray arrayWithArray:((OAGpxExtensions *)self.extraData).extensions];
+        NSMutableArray *arr = [self.extensions mutableCopy];
         [arr removeObject:e];
-        ((OAGpxExtensions *)self.extraData).extensions = arr;
+        self.extensions = arr;
     }
 }
 
@@ -568,9 +688,7 @@
 - (NSInteger) getTrkPtIndex
 {
     OAGpxExtension *e = [self getExtensionByKey:TRKPT_INDEX_EXTENSION];
-    if (e)
-        return e ? e.value.integerValue : -1;
-    return -1;
+    return e ? e.value.integerValue : -1;
 }
 
 - (void) setTrkPtIndex:(NSInteger)index
@@ -597,11 +715,6 @@
 - (void)setGap
 {
     [self setProfileType:GAP_PROFILE_TYPE];
-}
-
-- (void) copyExtensions:(OAGpxTrkPt *)pt
-{
-    self.extraData = pt.extraData;
 }
 
 @end
@@ -642,7 +755,7 @@
 
 - (void) fillRouteDetails
 {
-    for (OAGpxExtension *ext in ((OAGpxExtensions *) self.extraData).extensions)
+    for (OAGpxExtension *ext in self.extensions)
     {
         if ([ext.name isEqualToString:@"route"])
         {
@@ -697,19 +810,11 @@
     }
 }
 
-- (void) addExtension:(OAGpxExtension *)e
-{
-    if (!self.extraData)
-        self.extraData = [[OAGpxExtensions alloc] init];
-    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
-    if (![exts containsObject:e])
-        ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];
-}
-
 @end
 
 @implementation OAGpxRte
 @end
+
 @implementation OAGpxRtePt
 
 - (instancetype) init
@@ -759,20 +864,10 @@
         self.comment = point.comment;
         self.type = point.type;
         self.links = point.links;
-        self.extraData = point.extraData;
+        self.extensions = point.extensions;
         self.distance = point.distance;
     }
     return self;
-}
-
-- (OAGpxExtension *)getExtensionByKey:(NSString *)key
-{
-    for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
-    {
-        if ([e.name isEqualToString:key])
-            return e;
-    }
-    return nil;
 }
 
 - (NSString *) getProfileType
@@ -786,6 +881,7 @@
 @end
 @implementation OAGpxLink
 @end
+
 @implementation OAGpxMetadata
 @end
 

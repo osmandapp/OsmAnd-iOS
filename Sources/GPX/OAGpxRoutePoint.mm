@@ -29,10 +29,9 @@
 
 - (void)readRouteInfo
 {
-    if (self.extraData)
+    if (self.extensions)
     {
-        OAGpxExtensions *exts = (OAGpxExtensions *)self.extraData;
-        for (OAGpxExtension *e in exts.extensions)
+        for (OAGpxExtension *e in self.extensions)
         {
             if ([e.name isEqualToString:@"routeInfo"])
             {
@@ -63,35 +62,24 @@
     [attrs setValue:[NSString stringWithFormat:@"%d", self.index] forKey:@"index"];
     
     BOOL found = NO;
-    if (self.extraData)
+
+    for (OAGpxExtension *e in self.extensions)
     {
-        OAGpxExtensions *exts = (OAGpxExtensions *)self.extraData;
-        for (OAGpxExtension *e in exts.extensions)
+        if ([e.name isEqualToString:@"routeInfo"])
         {
-            if ([e.name isEqualToString:@"routeInfo"])
-            {
-                e.attributes = [NSDictionary dictionaryWithDictionary:attrs];
-                found = YES;
-                break;
-            }
+            e.attributes = [NSDictionary dictionaryWithDictionary:attrs];
+            found = YES;
+            break;
         }
     }
-    else
-    {
-        self.extraData = [[OAGpxExtensions alloc] init];
-    }
-    
+
     if (!found)
     {
-        OAGpxExtensions *exts = (OAGpxExtensions *)self.extraData;
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"routeInfo";
         e.attributes = [NSDictionary dictionaryWithDictionary:attrs];
-        
-        if (exts.extensions)
-            exts.extensions = [exts.extensions arrayByAddingObjectsFromArray:@[e]];
-        else
-            exts.extensions = @[e];
+
+        self.extensions = self.extensions.count > 0 ? [self.extensions arrayByAddingObject:e] : @[e];
     }
     
     [OAGPXDocument fillWpt:self.wpt usingWpt:self];
@@ -99,11 +87,9 @@
 
 - (void)clearRouteInfo
 {
-    if (self.extraData)
+    if (self.extensions.count > 0)
     {
-        OAGpxExtensions *exts = (OAGpxExtensions *)self.extraData;
-
-        NSMutableArray *newArray = [NSMutableArray arrayWithArray:exts.extensions];
+        NSMutableArray *newArray = [self.extensions mutableCopy];
         
         for (OAGpxExtension *e in newArray)
         {
@@ -113,8 +99,8 @@
                 break;
             }
         }
-        exts.extensions = [NSArray arrayWithArray:newArray];
-        
+        self.extensions = newArray;
+
         [OAGPXDocument fillWpt:self.wpt usingWpt:self];
     }
 }

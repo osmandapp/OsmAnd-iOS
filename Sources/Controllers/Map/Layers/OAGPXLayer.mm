@@ -144,6 +144,13 @@
     return nil;
 }
 
+- (OsmAnd::FColorARGB) argbFromUIColor:(UIColor *)color
+{
+    CGFloat red, green, blue, alpha;
+    [color getRed:&red green:&green blue:&blue alpha:&alpha];
+    return OsmAnd::ColorARGB(alpha * 255, red * 255, green * 255, blue * 255);
+}
+
 - (void) refreshGpxTracks
 {
     if (!_gpxDocs.empty())
@@ -154,26 +161,29 @@
         {
             if (it.key().isNull() || !it.value())
                 continue;
-            
+
             BOOL routePoints = NO;
-            
+
             OAGPX *gpx = [self getGpxItem:it.key()];
+            NSString *path = [self.app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+            QString qPath = QString::fromNSString(path);
+            auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[qPath]);
+            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
+            doc.path = path;
+
             QList<OsmAnd::FColorARGB> colors;
             int colorizationScheme = COLORIZATION_NONE;
             if (gpx.coloringType.length > 0)
             {
-                NSString *path = [self.app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
-                QString qPath = QString::fromNSString(path);
-                auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[qPath]);
-                OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
-                doc.path = path;
-
                 OAColoringType *type = [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType];
                 if ([type isGradient])
                 {
                     colorizationScheme = COLORIZATION_GRADIENT;
-                    OARouteColorizationHelper *routeColorization = [[OARouteColorizationHelper alloc] initWithGpxFile:doc analysis:[doc getAnalysis:0] type:type.toGradientScaleType.toColorizationType maxProfileSpeed:0];
-
+                    OARouteColorizationHelper *routeColorization =
+                            [[OARouteColorizationHelper alloc] initWithGpxFile:doc
+                                                                      analysis:[doc getAnalysis:0]
+                                                                          type:type.toGradientScaleType.toColorizationType
+                                                               maxProfileSpeed:0];
                     colors = routeColorization ? [routeColorization getResult] : QList<OsmAnd::FColorARGB>();
                 }
                 else if (type == OAColoringType.ATTRIBUTE)
@@ -199,6 +209,13 @@
                         if (points.size() > 1 && !colors.isEmpty() && segStartIndex < colors.size() && segStartIndex + points.size() - 1 < colors.size())
                         {
                             segmentColors = colors.mid(segStartIndex, points.size());
+                        }
+                        else if (colorizationScheme == COLORIZATION_NONE && segmentColors.isEmpty() && gpx.color == 0)
+                        {
+                            int trackIndex = it.value()->tracks.indexOf(track);
+                            OAGpxTrk *gpxTrack = doc.tracks[trackIndex];
+                            const auto colorARGB = [self argbFromUIColor:UIColorFromARGB([gpxTrack getColor:kDefaultTrackColor])];
+                            segmentColors.push_back(colorARGB);
                         }
                         segStartIndex += points.size() - 1;
                         if (!gpx.joinSegments || !segmentColors.isEmpty())
@@ -235,14 +252,19 @@
     [self refreshStartFinishPoints];
 }
 
-- (void) drawLine:(QVector<OsmAnd::PointI> &)points gpx:(OAGPX *)gpx baseOrder:(int)baseOrder lineId:(int)lineId colors:(const QList<OsmAnd::FColorARGB> &)colors colorizationScheme:(int)colorizationScheme
+- (void) drawLine:(QVector<OsmAnd::PointI> &)points
+              gpx:(OAGPX *)gpx
+        baseOrder:(int)baseOrder
+           lineId:(int)lineId
+           colors:(const QList<OsmAnd::FColorARGB> &)colors
+colorizationScheme:(int)colorizationScheme
 {
     if (points.size() > 1)
     {
         CGFloat lineWidth = [self getLineWidth:gpx.width];
 
         // Add outline for colorized lines
-        if (!colors.isEmpty())
+        if (!colors.isEmpty() && colorizationScheme != 0)
         {
             const auto outlineColor = OsmAnd::ColorARGB(150, 0, 0, 0);
             
@@ -258,8 +280,20 @@
             
             outlineBuilder.buildAndAddToCollection(_linesCollection);
         }
-        
-        const auto colorARGB = OsmAnd::ColorARGB((int) gpx.color);
+
+        OsmAnd::FColorARGB colorARGB;
+        if (gpx.color != 0)
+        {
+            colorARGB = OsmAnd::ColorARGB((int) gpx.color);
+        }
+        else
+        {
+            if (!colors.isEmpty() && colorizationScheme == 0)
+                colorARGB = colors[0];
+            else
+                colorARGB = [self argbFromUIColor:UIColorFromRGB(kDefaultTrackColor)];
+        }
+
         OsmAnd::VectorLineBuilder builder;
         builder.setBaseOrder(baseOrder)
             .setIsHidden(points.size() == 0)
@@ -267,8 +301,8 @@
             .setLineWidth(lineWidth)
             .setPoints(points)
             .setFillColor(colorARGB);
-        
-        if (!colors.empty())
+
+        if (!colors.empty() && colorizationScheme != 0)
         {
             builder.setColorizationMapping(colors)
                 .setColorizationScheme(colorizationScheme);

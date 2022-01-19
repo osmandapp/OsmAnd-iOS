@@ -1968,7 +1968,7 @@
 "reverse_track_dir" = "İzlenen yol yönünü tersine çevir";
 "attach_to_the_roads" = "Yollara ekle";
 "select_another_track" = "Başka bir yol seç";
-"track" = "Takip et";
+"shared_string_gpx_track" = "Takip et";
 "follow_track" = "Yolu takip et";
 "split_after" = "Sonra böl";
 "split_before" = "Önce böl";

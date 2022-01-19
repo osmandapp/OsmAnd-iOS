@@ -1062,7 +1062,7 @@
 "split_before" = "Dividir antes";
 "split_after" = "Dividir después";
 "follow_track" = "Seguir traza";
-"track" = "Traza";
+"shared_string_gpx_track" = "Traza";
 "select_another_track" = "Elegir otra traza";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Unir a los caminos";

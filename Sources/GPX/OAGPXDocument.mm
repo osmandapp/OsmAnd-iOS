@@ -944,6 +944,9 @@
 
     for (OAGpxTrk *t in self.tracks)
     {
+        if (t.generalTrack)
+            continue;
+
         trk.reset(new OsmAnd::GpxDocument::GpxTrk());
         [self.class fillTrack:trk usingTrack:t];
         

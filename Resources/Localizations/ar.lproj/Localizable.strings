@@ -1783,7 +1783,7 @@
 "choose_auto_center_map_view_descr" = "إعادة توسيط الموقع الحالي بعد مدة معينه";
 "nav_type_geocoding" = "الترميز الجغرافي";
 "nav_type_ski" = "تزلج";
-"nav_type_brouter" = "توجيه";
+"nav_type_brouter" = "التوجيه عبر BRouter";
 "voice_announces" = "المطالبات الصوتية";
 "max_speed" = "السرعة القصوى";
 "min_speed" = "الحد الأدنى للسرعة";

@@ -878,7 +878,7 @@
 "prefer_in_routing_descr" = "Autópályák előnyben részesítése.";
 "osm_editing_offline" = "Offline szerkesztés";
 "translucent_orange" = "Átlátszó narancs";
-"route_parameters" = "Útvonal paraméterek";
+"route_parameters" = "Útvonal paraméterei";
 "osm_alert_title" = "Véglegesítés";
 "create_poi_short" = "POI készítés";
 "osmand_live_weekly" = "Hetente";
@@ -1314,7 +1314,7 @@
 "base_profile_descr_car" = "Személyautó, teherautó, motorkerékpár";
 "new_profile" = "Új profil";
 "screen_alerts" = "Képernyő riasztások";
-"vehicle_parameters" = "Jármű paraméterek";
+"vehicle_parameters" = "Jármű paraméterei";
 "units_and_formats" = "Mértékegységek & formátumok";
 "select_nav_profile_dialog_message" = "A navigációtípus határozza meg az útvonalszámítás módját.";
 "select_color" = "Szín kijelölése";

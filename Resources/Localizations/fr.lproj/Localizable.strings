@@ -782,7 +782,7 @@
 "track_during_nav" = "Auto-enregistrement de la trace";
 "track_during_nav_descr" = "Activez pour enregistrer automatiquement une trace durant la navigation";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Miseà jour automatique";
+"osmand_live_updates" = "Mise à jour automatique";
 "osmand_live_available_maps" = "Cartes disponibles";
 "osmand_live_last_changed" = "Dernière modification de la carte : %@";
 "osmand_live_last_live_update" = "Dernière mise à jour : %@";
@@ -2323,3 +2323,4 @@
 "lang_pms" = "Piémontais";
 "lang_sw" = "Swahili";
 "shared_string_hide_all" = "Tout masquer";
+"points_delete_multiple" = "Supprimer %1$d point(s) ?";

@@ -32,6 +32,7 @@
 + (sk_sp<SkImage>) skImageFromMmPngResource:(NSString *)resourceName;
 + (sk_sp<SkImage>) skImageFromPngResource:(NSString *)resourceName;
 + (sk_sp<SkImage>) skImageFromResourcePath:(NSString *)resourcePath;
++ (sk_sp<SkImage>) skImageFromNSData:(const NSData *)data;
 
 + (NSMutableArray*) QListOfStringsToNSMutableArray:(const QList<QString>&)list;
 + (Point31) convertFromPointI:(OsmAnd::PointI)input;

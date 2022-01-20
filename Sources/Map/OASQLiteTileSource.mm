@@ -12,13 +12,14 @@
 
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
+#include <OsmAndCore/TileSqliteDatabase.h>
+
 #include <QList>
 
 @implementation OASQLiteTileSource
 {
-    dispatch_queue_t _dbQueue;
-    sqlite3 *_db;
-    
+    std::shared_ptr<OsmAnd::TileSqliteDatabase> _db;
+        
     NSString *_filePath;
     int _minZoom;
     int _maxZoom;
@@ -38,6 +39,8 @@
         _filePath = [filePath copy];
         _name = [[_filePath lastPathComponent] stringByDeletingPathExtension];
         
+        _db = std::make_shared<OsmAnd::TileSqliteDatabase>(QString::fromNSString(_filePath));
+                
         _minZoom = 1;
         _maxZoom = 17;
         _inversiveZoom = YES; // BigPlanet
@@ -48,6 +51,12 @@
         [self initDatabase];
     }
     return self;
+}
+
+- (void) dealloc
+{
+    if (_db)
+        _db->close();
 }
 
 - (int) bitDensity
@@ -84,303 +93,143 @@
     return [self.name isEqualToString:obj.name];
 }
 
-+ (NSString *) getValueOf:(int)fieldIndex statement:(sqlite3_stmt *)statement
-{
-    if (sqlite3_column_text(statement, fieldIndex) != nil)
-        return [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, fieldIndex)];
-    else
-        return nil;
-}
-
 - (void) initDatabase
 {
-    _dbQueue = dispatch_queue_create("sqliteTileSourceDbQueue", DISPATCH_QUEUE_SERIAL);
-    dispatch_sync(_dbQueue, ^{
-        
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
-        {
-            NSString *querySQL = @"SELECT * FROM info";
-            sqlite3_stmt *statement;
-            
-            const char *query_stmt = [querySQL UTF8String];
-            if (sqlite3_prepare_v2(_db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
-            {
-                while (sqlite3_step(statement) == SQLITE_ROW)
-                {
-                    int columnCount = sqlite3_column_count(statement);
-                    NSMutableDictionary *mapper= [[NSMutableDictionary alloc] init];
-                    for(int i = 0; i < columnCount; i++)
-                    {
-                        const char *_columnName = sqlite3_column_name(statement, i);
-                        NSString *columnName = [[NSString alloc] initWithUTF8String:_columnName];
-                        [mapper setObject:[NSNumber numberWithInteger:i] forKey:columnName];
-                    }
-                    
-                    NSNumber *titleId = [mapper objectForKey:@"title"];
-                    if (titleId)
-                        _title = [self.class getValueOf:[titleId intValue] statement:statement];
-                    else
-                        [self addInfoColumn:@"title" value:[_name stringByReplacingOccurrencesOfString:@"_" withString:@" "]];
-
-                    if (_title.length == 0)
-                        _title = [_name stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-                    
-                    NSNumber *ruleId = [mapper objectForKey:@"rule"];
-                    if (ruleId)
-                        _rule = [self.class getValueOf:[ruleId intValue] statement:statement];
-                    
-                    NSNumber *refererId = [mapper objectForKey:@"referer"];
-                    if (refererId)
-                        _referer = [self.class getValueOf:[refererId intValue] statement:statement];
-                    
-                    NSNumber *urlTemplateId = [mapper objectForKey:@"url"];
-                    if (urlTemplateId)
-                    {
-                        QString urlTemplate = QString::fromNSString([self.class getValueOf:[urlTemplateId intValue] statement:statement]);
-                        _urlTemplate = OsmAnd::OnlineTileSources::normalizeUrl(urlTemplate).toNSString();
-                    }
-                    
-                    NSNumber *tnumbering = [mapper objectForKey:@"tilenumbering"];
-                    if (tnumbering)
-                    {
-                        _inversiveZoom = ([@"BigPlanet" caseInsensitiveCompare:[self.class getValueOf:[tnumbering intValue] statement:statement]] == NSOrderedSame);
-                    }
-                    else
-                    {
-                        _inversiveZoom = YES;
-                        [self addInfoColumn:@"tilenumbering" value:@"BigPlanet"];
-                    }
-                    
-                    NSNumber *timecolumn = [mapper objectForKey:@"timecolumn"];
-                    if (timecolumn)
-                    {
-                        NSLog(@"%@", [self.class getValueOf:[timecolumn intValue] statement:statement]);
-                        _timeSupported = ([@"yes" caseInsensitiveCompare:[self.class getValueOf:[timecolumn intValue] statement:statement]] == NSOrderedSame);
-                    }
-                    else
-                    {
-                        _timeSupported = [self hasTimeColumn];
-                        [self addInfoColumn:@"timecolumn" value:(_timeSupported ? @"yes" : @"no")];
-                    }
-                    
-                    NSNumber *tileSizeColumn = [mapper objectForKey:@"tilesize"];
-                    _tileSizeSpecified = tileSizeColumn != nil;
-                    if(_tileSizeSpecified)
-                        _tileSize = sqlite3_column_int(statement, [tileSizeColumn intValue]);;
-                    
-                    NSNumber *expireminutes = [mapper objectForKey:@"expireminutes"];
-                    _expirationTimeMillis = -1;
-                    if (expireminutes)
-                    {
-                        int minutes = sqlite3_column_int(statement, [expireminutes intValue]);
-                        if (minutes > 0)
-                            _expirationTimeMillis = (long) minutes * 60 * 1000;
-                    }
-                    else
-                    {
-                        [self addInfoColumn:@"expireminutes" value:@"0"];
-                    }
-                    NSNumber *ellipsoid = [mapper objectForKey:@"ellipsoid"];
-                    if (ellipsoid)
-                    {
-                        int set = sqlite3_column_int(statement, [ellipsoid intValue]);
-                        if (set == 1)
-                            _isEllipsoid = YES;
-                    }
-                    else
-                    {
-                        _isEllipsoid = NO;
-                        [self addInfoColumn:@"ellipsoid" value:@"0"];
-                    }
-                    NSNumber *invertedY = [mapper objectForKey:@"inverted_y"];
-                    if(invertedY)
-                    {
-                        int set = sqlite3_column_int(statement, [invertedY intValue]);
-                        if (set == 1)
-                            _invertedY = YES;
-                    }
-                    
-                    NSNumber *randomsId = [mapper objectForKey:@"randoms"];
-                    if(randomsId)
-                    {
-                        _randoms = [self.class getValueOf:[randomsId intValue] statement:statement];
-                        _randomsArray = OsmAnd::OnlineTileSources::parseRandoms(QString::fromNSString(_randoms));
-                    }
-
-                    BOOL inversiveInfoZoom = _inversiveZoom;
-                    NSNumber *mnz = [mapper objectForKey:@"minzoom"];
-                    if (mnz)
-                        _minZoom = sqlite3_column_int(statement, [mnz intValue]);
-
-                    NSNumber *mxz = [mapper objectForKey:@"maxzoom"];
-                    if (mxz)
-                        _maxZoom = sqlite3_column_int(statement, [mxz intValue]);
-
-                    if (inversiveInfoZoom)
-                    {
-                        int minZ = _minZoom;
-                        _minZoom = 17 - _maxZoom;
-                        _maxZoom = 17 - minZ;
-                    }
-                    
-                    break;
-                }
-                sqlite3_finalize(statement);
-            }
-            sqlite3_close(_db);
-        }
-    });
-}
-
-- (void) addInfoColumn:(NSString *)columnName value:(NSString *)value
-{
-    dispatch_async(_dbQueue, ^{
-        [self.class addInfoColumn:columnName value:value filePath:_filePath db:_db];
-    });
-}
-
-+ (void) addInfoColumn:(NSString *)columnName value:(NSString *)value filePath:(NSString *)filePath db:(sqlite3 *)db
-{
-    if (sqlite3_open([filePath UTF8String], &db) == SQLITE_OK)
-    {
-        const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE info ADD COLUMN %@ TEXT", columnName] UTF8String];
-        sqlite3_exec(db, sql_stmt, NULL, NULL, NULL);
-        
-        sqlite3_stmt *statement;
-        sql_stmt = [[NSString stringWithFormat:@"UPDATE info SET %@ = ?", columnName] UTF8String];
-        sqlite3_prepare_v2(db, sql_stmt, -1, &statement, NULL);
-        
-        sqlite3_bind_text(statement, 1, [value UTF8String], -1, 0);
-        sqlite3_step(statement);
-        sqlite3_finalize(statement);
-        
-        sqlite3_close(db);
+    if (!_db->open()) {
+        return;
     }
-}
-
-- (BOOL) hasTimeColumn
-{
-    BOOL res = NO;
     
-    sqlite3 *tilesDb;
-    sqlite3_stmt *statement;
-    
-    if (sqlite3_open([_filePath UTF8String], &tilesDb) == SQLITE_OK)
+    OsmAnd::TileSqliteDatabase::Meta meta;
+    if (_db->obtainMeta(meta))
     {
-        NSString *querySQL = @"SELECT * FROM tiles";
-        
-        const char *query_stmt = [querySQL UTF8String];
-        if (sqlite3_prepare_v2(tilesDb, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+        bool ok = false;
+        bool metaChanged = NO;
+
+        const auto title = meta.getTitle(&ok);
+        if (ok)
         {
-            while (sqlite3_step(statement) == SQLITE_ROW)
-            {
-                int columnCount = sqlite3_column_count(statement);
-                for(int i = 0; i < columnCount; i++)
-                {
-                    const char *_columnName = sqlite3_column_name(statement, i);
-                    NSString *columnName = [[NSString alloc] initWithUTF8String:_columnName];
-                    if ([columnName caseInsensitiveCompare:@"time"] == NSOrderedSame)
-                    {
-                        res = YES;
-                        break;
-                    }
-                }
+            _title = title.toNSString();
+        }
+        else
+        {
+            meta.setTitle(QString::fromNSString([_name stringByReplacingOccurrencesOfString:@"_" withString:@" "]));
+            metaChanged = YES;
+        }
+        if (_title.length == 0)
+            _title = [_name stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+
+        const auto rule = meta.getRule(&ok);
+        if (ok)
+            _rule = rule.toNSString();
+        
+        const auto referer = meta.getReferer(&ok);
+        if (ok)
+            _referer = referer.toNSString();
+        
+        auto url = meta.getUrl(&ok);
+        if (ok)
+            _urlTemplate = OsmAnd::OnlineTileSources::normalizeUrl(url).toNSString();
+
+        const auto tnumbering = meta.getTileNumbering(&ok);
+        if (ok)
+        {
+            _inversiveZoom = QString::compare(QStringLiteral("BigPlanet"), tnumbering, Qt::CaseInsensitive) == 0;
+        }
+        else
+        {
+            _inversiveZoom = YES;
+            meta.setTileNumbering(QStringLiteral("BigPlanet"));
+            metaChanged = YES;
+        }
+        
+        const auto timecolumn = meta.getTimeColumn(&ok);
+        if (ok)
+        {
+            _timeSupported = QString::compare(QStringLiteral("yes"), timecolumn, Qt::CaseInsensitive) == 0;
+        }
+        else
+        {
+            _timeSupported = _db->hasTimeColumn();
+            meta.setTimeColumn(_timeSupported ? QStringLiteral("yes") : QStringLiteral("no"));
+            metaChanged = YES;
+        }
+
+        const auto tileSize = meta.getTileSize(&ok);
+        _tileSizeSpecified = ok;
+        if (ok)
+            _tileSize = (int) tileSize;
                 
-                break;
-            }
-            sqlite3_finalize(statement);
+        const auto expireminutes = meta.getExpireMinutes(&ok);
+        _expirationTimeMillis = -1;
+        if (ok)
+        {
+            if (expireminutes > 0)
+                _expirationTimeMillis = (long) expireminutes * 60 * 1000;
         }
-        sqlite3_close(tilesDb);
+        else
+        {
+            meta.setExpireMinutes(0);
+            metaChanged = YES;
+        }
+
+        const auto ellipsoid = meta.getEllipsoid(&ok);
+        if (ok)
+        {
+            _isEllipsoid = ellipsoid > 0;
+        }
+        else
+        {
+            _isEllipsoid = NO;
+            meta.setEllipsoid(0);
+            metaChanged = YES;
+        }
+        
+        const auto invertedY = meta.getInvertedY(&ok);
+        if (ok)
+            _invertedY = invertedY > 0;
+        
+        const auto randoms = meta.getRandoms(&ok);
+        if (ok)
+        {
+            _randoms = randoms.toNSString();
+            _randomsArray = OsmAnd::OnlineTileSources::parseRandoms(randoms);
+        }
+
+        const auto minZoomValue = meta.getMinZoom(&ok);
+        if (ok)
+            _minZoom = (int) minZoomValue;
+        
+        const auto maxZoomValue = meta.getMaxZoom(&ok);
+        if (ok)
+            _maxZoom = (int) maxZoomValue;
+
+        BOOL inversiveInfoZoom = _inversiveZoom;
+        if (inversiveInfoZoom)
+        {
+            int minZ = _minZoom;
+            _minZoom = 17 - _maxZoom;
+            _maxZoom = 17 - minZ;
+        }
     }
-    
-    return res;
 }
 
 - (BOOL) exists:(int)x y:(int)y zoom:(int)zoom
 {
-    BOOL __block res = NO;
-    int z = [self getFileZoom:zoom];
-    
-    dispatch_sync(_dbQueue, ^{
-        
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
-        {
-            NSString *querySQL = [NSString stringWithFormat:@"SELECT 1 FROM tiles WHERE x = %d AND y = %d AND z = %d", x, y, z];
-            sqlite3_stmt *statement;
-            
-            const char *query_stmt = [querySQL UTF8String];
-            if (sqlite3_prepare_v2(_db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
-            {
-                while (sqlite3_step(statement) == SQLITE_ROW)
-                {
-                    res = YES;
-                    break;
-                }
-                sqlite3_finalize(statement);
-            }
-            sqlite3_close(_db);
-        }
-    });
-        
-    return res;
-}
-
-- (BOOL) isLocked
-{
-    BOOL __block res;
-    
-    dispatch_sync(_dbQueue, ^{
-        
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
-        {
-            sqlite3_close(_db);
-            res = NO;
-        }
-        else
-        {
-            res = YES;
-        }
-    });
-    
-    return res;
+    return _db->containsTileData(OsmAnd::TileId::fromXY(x, y), (OsmAnd::ZoomLevel) zoom);
 }
 
 - (NSData *) getBytes:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber **)timeHolder
 {
-    NSData * __block res;
-    dispatch_sync(_dbQueue, ^{
-        
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
+    NSData *res;
+    if (zoom <= _maxZoom)
+    {
+        QByteArray data;
+        int64_t time;
+        if (_db->obtainTileData(OsmAnd::TileId::fromXY(x, y), (OsmAnd::ZoomLevel) zoom, data, timeHolder && _timeSupported ? &time : nullptr))
         {
-            if (zoom <= _maxZoom)
-            {
-                BOOL queryTime = (timeHolder && _timeSupported);
-
-                NSString *querySQL = [NSString stringWithFormat:@"SELECT image%@ FROM tiles WHERE x = %d AND y = %d AND z = %d", (queryTime ? @", time" : @""), x, y, [self getFileZoom:zoom]];
-                sqlite3_stmt *statement;
-                
-                const char *query_stmt = [querySQL UTF8String];
-                if (sqlite3_prepare_v2(_db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
-                {
-                    while (sqlite3_step(statement) == SQLITE_ROW)
-                    {
-                        const void * bytes = sqlite3_column_blob(statement, 0);
-                        int lenght = sqlite3_column_bytes(statement, 0);
-                        res = [NSData dataWithBytes:bytes length:lenght];
-                        
-                        if (queryTime)
-                            *timeHolder = [NSNumber numberWithLong:(long)sqlite3_column_int64(statement, 1)];
-                        
-                        break;
-                    }
-                    sqlite3_finalize(statement);
-                }
-            }
-            
-            sqlite3_close(_db);
+            res = [NSData dataWithBytes:data.constData() length:data.length()];
         }
-    });
-    
+    }
     return res;
 }
 
@@ -406,108 +255,24 @@
     return nil;
 }
 
-- (QuadRect *) getRectBoundary:(int)coordinatesZoom minZ:(int)minZ
-{
-    if (coordinatesZoom > 25)
-        return nil;
-    
-    NSString *querySQL;
-    if (_inversiveZoom)
-    {
-        int minZoom = (17 - minZ) + 1;
-        // 17 - z = zoom, x << (25 - zoom) = 25th x tile = 8 + z,
-        querySQL = [NSString stringWithFormat:@"SELECT max(x << (8+z)), min(x << (8+z)), max(y << (8+z)), min(y << (8+z)) from tiles where z < %d", minZoom];
-    }
-    else
-    {
-        querySQL = [NSString stringWithFormat:@"SELECT max(x << (25-z)), min(x << (25-z)), max(y << (25-z)), min(y << (25-z)) from tiles where z > %d", minZ];
-    }
-
-    int __block right;
-    int __block left;
-    int __block top;
-    int __block bottom;
-
-    dispatch_sync(_dbQueue, ^{
-        
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
-        {
-            sqlite3_stmt *statement;
-            
-            const char *query_stmt = [querySQL UTF8String];
-            if (sqlite3_prepare_v2(_db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
-            {
-                while (sqlite3_step(statement) == SQLITE_ROW)
-                {
-                    right = (int) (sqlite3_column_int(statement, 0) >> (25 - coordinatesZoom));
-                    left = (int) (sqlite3_column_int(statement, 1) >> (25 - coordinatesZoom));
-                    top = (int) (sqlite3_column_int(statement, 3) >> (25 - coordinatesZoom));
-                    bottom  = (int) (sqlite3_column_int(statement, 2) >> (25 - coordinatesZoom));
-                    break;
-                }
-                sqlite3_finalize(statement);
-            }
-            
-            sqlite3_close(_db);
-        }
-    });
-    
-    return [[QuadRect alloc] initWithLeft:left top:top right:right bottom:bottom];
-}
-
 - (void) deleteImage:(int)x y:(int)y zoom:(int)zoom
 {
-    dispatch_async(_dbQueue, ^{
-        
-        sqlite3_stmt    *statement;
-        
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
-        {
-            NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM tiles WHERE x = %d AND y = %d AND z = %d", x, y, [self getFileZoom:zoom]];
-            const char *update_stmt = [updateSQL UTF8String];
-            
-            sqlite3_prepare_v2(_db, update_stmt, -1, &statement, NULL);
-            sqlite3_step(statement);
-            sqlite3_finalize(statement);
-            
-            sqlite3_close(_db);
-        }
-    });
+    _db->removeTileData(OsmAnd::TileId::fromXY(x, y), (OsmAnd::ZoomLevel) zoom);
 }
 
 - (void) deleteCache:(dispatch_block_t)block
 {
-    dispatch_async(_dbQueue, ^{
-
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
-        {
-            sqlite3_exec(_db, "DELETE FROM tiles", NULL, NULL, NULL);
-            sqlite3_exec(_db, "VACUUM", NULL, NULL, NULL);
-            sqlite3_close(_db);
-            if (block)
-                block();
-        }
-    });
+    _db->removeTilesData();
+    _db->compact();
+    
+    if (block)
+        block();
 }
 
 - (void) deleteImages:(OsmAnd::AreaI)area zoom:(int)zoom
 {
-    dispatch_async(_dbQueue, ^{
-        
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
-        {
-            NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM tiles WHERE (x >= %d AND x <= %d) AND (y >= %d AND y <= %d) AND z = %d", area.topLeft.x, area.bottomRight.x, area.topLeft.y, area.bottomRight.y, [self getFileZoom:zoom]];
-            const char *update_stmt = [updateSQL UTF8String];
-            
-            sqlite3_stmt *statement;
-            sqlite3_prepare_v2(_db, update_stmt, -1, &statement, NULL);
-            sqlite3_step(statement);
-            sqlite3_finalize(statement);
-            
-            sqlite3_exec(_db, "VACUUM", NULL, NULL, NULL);
-            sqlite3_close(_db);
-        }
-    });
+    _db->removeTilesData(area, (OsmAnd::ZoomLevel) zoom);
+    _db->compact();
 }
 
 - (void) insertImage:(int)x y:(int)y zoom:(int)zoom filePath:(NSString *)filePath
@@ -518,90 +283,59 @@
 
 - (void) insertImage:(int)x y:(int)y zoom:(int)zoom data:(NSData *)data
 {
-    dispatch_async(_dbQueue, ^{
-        
-        sqlite3_stmt    *statement;
-        
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
-        {
-            NSString *query = (_timeSupported ? @"INSERT OR REPLACE INTO tiles(x,y,z,s,image,time) VALUES(?, ?, ?, ?, ?, ?)"
-            : @"INSERT OR REPLACE INTO tiles(x,y,z,s,image) VALUES(?, ?, ?, ?, ?)");
-            
-            const char *update_stmt = [query UTF8String];
-            sqlite3_prepare_v2(_db, update_stmt, -1, &statement, NULL);
-            
-            sqlite3_bind_int(statement, 1, x);
-            sqlite3_bind_int(statement, 2, y);
-            sqlite3_bind_int(statement, 3, [self getFileZoom:zoom]);
-            sqlite3_bind_int(statement, 4, 0);
-
-            sqlite3_bind_blob(statement, 5, [data bytes], (int) data.length, SQLITE_TRANSIENT);
-            if (_timeSupported)
-                sqlite3_bind_int64(statement, 6, (int64_t)([[NSDate date] timeIntervalSince1970] * 1000.0));
-            
-            sqlite3_step(statement);
-            sqlite3_finalize(statement);
-            
-            sqlite3_close(_db);
-        }
-    });
+    _db->storeTileData(OsmAnd::TileId::fromXY(x, y),
+                       (OsmAnd::ZoomLevel) zoom,
+                       qMove(QByteArray::fromNSData(data)),
+                       (int64_t) (_timeSupported ? [[NSDate date] timeIntervalSince1970] * 1000.0 : 0));
 }
 
 - (void) updateInfo:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile title:(NSString *)title
 {
-    dispatch_async(_dbQueue, ^{
-        
-        sqlite3_stmt *statement;
-        
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
+    OsmAnd::TileSqliteDatabase::Meta meta;
+    if (_db->obtainMeta(meta))
+    {
+        auto timeSupported = expireTimeMillis != -1 ? QStringLiteral("yes") : QStringLiteral("no");
+        auto timeInMinutes = expireTimeMillis != -1 ? QString::number((long)(expireTimeMillis / 60000)) : QString();
+        int minZ = minZoom;
+        int maxZ = maxZoom;
+        if (_inversiveZoom)
         {
-            BOOL isOnlineSqlite = [self supportsTileDownload];
-            NSString *query = isOnlineSqlite ? @"UPDATE info SET timecolumn = ?, expireminutes = ?, url = ?, title = ?, ellipsoid = ?, minzoom = ?, maxzoom = ?" : @"UPDATE info SET ellipsoid = ?, minzoom = ?, maxzoom = ?";
-            
-            const char *update_stmt = [query UTF8String];
-            sqlite3_prepare_v2(_db, update_stmt, -1, &statement, NULL);
-
-            NSString *timeSupported = expireTimeMillis != -1 ? @"yes" : @"no";
-            NSString *timeInMinutes = expireTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", expireTimeMillis / 60000] : @"";
-            int minZ = minZoom;
-            int maxZ = maxZoom;
-            if (_inversiveZoom)
-            {
-                int cachedMax = maxZ;
-                maxZ = 17 - minZ;
-                minZ = 17 - cachedMax;
-            }
-            
-            if (isOnlineSqlite)
-            {
-                sqlite3_bind_text(statement, 1, [timeSupported UTF8String], -1, 0);
-                sqlite3_bind_text(statement, 2, [timeInMinutes UTF8String], -1, 0);
-                sqlite3_bind_text(statement, 3, [url UTF8String], -1, 0);
-                sqlite3_bind_text(statement, 4, [title UTF8String], -1, 0);
-                sqlite3_bind_int(statement, 5, isEllipticYTile ? 1 : 0);
-                sqlite3_bind_text(statement, 6, [[NSString stringWithFormat:@"%d", minZ] UTF8String], -1, 0);
-                sqlite3_bind_text(statement, 7, [[NSString stringWithFormat:@"%d", maxZ] UTF8String], -1, 0);
-            }
-            else
-            {
-                sqlite3_bind_int(statement, 1, isEllipticYTile ? 1 : 0);
-                sqlite3_bind_text(statement, 2, [[NSString stringWithFormat:@"%d", minZ] UTF8String], -1, 0);
-                sqlite3_bind_text(statement, 3, [[NSString stringWithFormat:@"%d", maxZ] UTF8String], -1, 0);
-            }
-
-            sqlite3_step(statement);
-            sqlite3_finalize(statement);
-            
-            sqlite3_close(_db);
+            int cachedMax = maxZ;
+            maxZ = 17 - minZ;
+            minZ = 17 - cachedMax;
         }
-    });
+        
+        BOOL isOnlineSqlite = [self supportsTileDownload];
+        if (isOnlineSqlite)
+        {
+            meta.setTimeColumn(expireTimeMillis != -1 ? QStringLiteral("yes") : QStringLiteral("no"));
+            meta.setExpireMinutes(expireTimeMillis != -1 ? (long)(expireTimeMillis / 60000) : 0);
+            meta.setUrl(QString::fromNSString(url));
+            meta.setTitle(QString::fromNSString(title));
+            meta.setEllipsoid(isEllipticYTile ? 1 : 0);
+            meta.setMinZoom(minZ);
+            meta.setMaxZoom(maxZ);
+        }
+        else
+        {
+            meta.setEllipsoid(isEllipticYTile ? 1 : 0);
+            meta.setMinZoom(minZ);
+            meta.setMaxZoom(maxZ);
+        }
+        _db->storeMeta(meta);
+    }
 }
 
 - (void) setTileSize:(int)tileSize
 {
     _tileSize = tileSize;
     _tileSizeSpecified = YES;
-    [self addInfoColumn:@"tilesize" value:[NSString stringWithFormat:@"%d", _tileSize]];
+    OsmAnd::TileSqliteDatabase::Meta meta;
+    if (_db->obtainMeta(meta))
+    {
+        meta.setTileSize(tileSize);
+        _db->storeMeta(meta);
+    }
 }
 
 - (int) getFileZoom:(int)zoom
@@ -626,10 +360,7 @@
 
 - (long) getExpirationTimeMinutes
 {
-    if(_expirationTimeMillis  < 0) {
-        return -1;
-    }
-    return _expirationTimeMillis / (60  * 1000);
+    return _expirationTimeMillis < 0 ? -1 : _expirationTimeMillis / (60  * 1000);
 }
 
 - (long) getExpirationTimeMillis
@@ -666,9 +397,7 @@
 
 - (int) getTileSize
 {
-    if (_tileSizeSpecified)
-        return _tileSize;
-    return 256;
+    return _tileSizeSpecified ? _tileSize : 256;
 }
 
 - (BOOL) supportsTileDownload
@@ -682,116 +411,65 @@
     if ([fileManager fileExistsAtPath:path])
         [fileManager removeItemAtPath:path error:nil];
     
-    sqlite3 *tmpDatabase;
-    sqlite3_stmt *statement;
-    if (sqlite3_open([path UTF8String], &tmpDatabase) == SQLITE_OK)
+    BOOL res = NO;
+    auto db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(path));
+    if (db->open())
     {
-        const char *sqlInfoStatement = "CREATE TABLE info (minzoom TEXT, maxzoom TEXT, url TEXT, ellipsoid INTEGER, rule TEXT, expireminutes TEXT, timecolumn TEXT, referer TEXT, tilenumbering TEXT, title TEXT)";
-        const char *sqlTilesStatement = "CREATE TABLE tiles (x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, s INTEGER, image BLOB, time INTEGER, PRIMARY KEY (x, y, z))";
-        const char *sqlSIndexStatement = "CREATE INDEX index_tiles_on_s ON tiles (s)";
-        const char *sqlXIndexStatement = "CREATE INDEX index_tiles_on_x ON tiles (x)";
-        const char *sqlYIndexStatement = "CREATE INDEX index_tiles_on_y ON tiles (y)";
-        const char *sqlZIndexStatement = "CREATE INDEX index_tiles_on_z ON tiles (z)";
-        
-        char *error;
-        sqlite3_exec(tmpDatabase, sqlInfoStatement, NULL, NULL, &error);
-        sqlite3_exec(tmpDatabase, sqlTilesStatement, NULL, NULL, &error);
-        sqlite3_exec(tmpDatabase, sqlSIndexStatement, NULL, NULL, &error);
-        sqlite3_exec(tmpDatabase, sqlXIndexStatement, NULL, NULL, &error);
-        sqlite3_exec(tmpDatabase, sqlYIndexStatement, NULL, NULL, &error);
-        sqlite3_exec(tmpDatabase, sqlZIndexStatement, NULL, NULL, &error);
-                
-        NSString *query = @"INSERT OR REPLACE INTO info(minzoom, maxzoom, url, title, ellipsoid, rule, expireminutes, timecolumn, referer, tilenumbering) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        const char *update_stmt = [query UTF8String];
-        sqlite3_prepare_v2(tmpDatabase, update_stmt, -1, &statement, NULL);
-        
+        OsmAnd::TileSqliteDatabase::Meta meta;
+
         int minZoom = [parameters[@"minzoom"] intValue];
         int maxZoom = [parameters[@"maxzoom"] intValue];
         int cachedMax = maxZoom;
         maxZoom = 17 - minZoom;
         minZoom = 17 - cachedMax;
         
-        sqlite3_bind_text(statement, 1, [[NSString stringWithFormat:@"%d", minZoom] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 2, [[NSString stringWithFormat:@"%d", maxZoom] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 3, [parameters[@"url"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 4, [parameters[@"title"] UTF8String], -1, 0);
-        sqlite3_bind_int(statement, 5, [parameters[@"ellipsoid"] intValue]);
-        sqlite3_bind_text(statement, 6, [parameters[@"rule"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 7, [parameters[@"expireminutes"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 8, [parameters[@"timecolumn"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 9, [parameters[@"referer"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 10, [parameters[@"tilenumbering"] ? parameters[@"tilenumbering"] : @"BigPlanet" UTF8String], -1, 0);
-                
-        sqlite3_step(statement);
-        sqlite3_finalize(statement);
+        meta.setMinZoom(minZoom);
+        meta.setMaxZoom(maxZoom);
+        meta.setUrl(QString::fromNSString(parameters[@"url"]));
+        meta.setTitle(QString::fromNSString(parameters[@"title"]));
+        meta.setEllipsoid([parameters[@"ellipsoid"] intValue]);
+        meta.setRule(QString::fromNSString(parameters[@"rule"]));
+        meta.setExpireMinutes([parameters[@"expireminutes"] intValue]);
+        meta.setTimeColumn(QString::fromNSString(parameters[@"timecolumn"]));
+        meta.setReferer(QString::fromNSString(parameters[@"referer"]));
+        meta.setTileNumbering(QString::fromNSString(parameters[@"tilenumbering"] ? parameters[@"tilenumbering"] : @"BigPlanet"));
+        meta.setRandoms(QString::fromNSString(parameters[@"randoms"]));
+        meta.setInvertedY([parameters[@"inverted_y"] intValue]);
         
-        NSString *randoms = parameters[@"randoms"];
-        if (randoms)
-            [self.class addInfoColumn:@"randoms" value:randoms filePath:path db:tmpDatabase];
-
-        NSNumber *invertedY = parameters[@"inverted_y"];
-        if (invertedY)
-            [self.class addInfoColumn:@"inverted_y" value:invertedY.stringValue filePath:path db:tmpDatabase];
-
-        sqlite3_close(tmpDatabase);
-        return error == NULL;
+        res = db->storeMeta(meta);
+        db->close();
     }
-    return NO;
+    delete db;
+    
+    return res;
 }
 
 + (BOOL) isOnlineTileSource:(NSString *)filePath
 {
     BOOL res = NO;
-    sqlite3 *db;
-    if (sqlite3_open([filePath UTF8String], &db) == SQLITE_OK)
-    {
-        NSString *querySQL = @"SELECT url FROM info LIMIT 1";
-        sqlite3_stmt *statement;
-        const char *query_stmt = [querySQL UTF8String];
-        if (sqlite3_prepare_v2(db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
-        {
-            while (sqlite3_step(statement) == SQLITE_ROW)
-            {
-                int columnCount = sqlite3_column_count(statement);
-                if (columnCount == 1)
-                {
-                    NSString *urlTemplate = [self.class getValueOf:0 statement:statement];
-                    res = urlTemplate != nil && urlTemplate.length > 0;
-                    break;
-                }
-            }
-            sqlite3_finalize(statement);
-        }
-        sqlite3_close(db);
-    }
+
+    auto *db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(filePath));
+    OsmAnd::TileSqliteDatabase::Meta meta;
+    if (db->obtainMeta(meta))
+        res = !meta.getUrl().isEmpty();
+    
+    delete db;
+    
     return res;
 }
 
 + (NSString *) getTitleOf:(NSString *)filePath
 {
     NSString *title = nil;
-    sqlite3 *db;
-    if (sqlite3_open([filePath UTF8String], &db) == SQLITE_OK)
-    {
-        NSString *querySQL = @"SELECT title FROM info LIMIT 1";
-        sqlite3_stmt *statement;
-        const char *query_stmt = [querySQL UTF8String];
-        if (sqlite3_prepare_v2(db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
-        {
-            while (sqlite3_step(statement) == SQLITE_ROW)
-            {
-                int columnCount = sqlite3_column_count(statement);
-                if (columnCount == 1)
-                {
-                    title = [self.class getValueOf:0 statement:statement];
-                    break;
-                }
-            }
-            sqlite3_finalize(statement);
-        }
-        sqlite3_close(db);
-    }
-    return title.length > 0 ? title : [[[filePath lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];;
+
+    auto *db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(filePath));
+    OsmAnd::TileSqliteDatabase::Meta meta;
+    if (db->obtainMeta(meta))
+        title = meta.getTitle().toNSString();
+
+    delete db;
+
+    return title.length > 0 ? title : [[[filePath lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 }
 
 @end

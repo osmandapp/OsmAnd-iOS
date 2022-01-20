@@ -325,7 +325,7 @@
 "min_km" = "min/km";
 "m_s" = "m/s";
 "nothing_found" = "Nothing found :(";
-"nothing_found_descr" = "Modificar la recèrca o augmentar lo rai de recèrca";
+"nothing_found_descr" = "Modificar o relargar la recèrca";
 "select_street" = "Chausir la carriera";
 "shared_string_in_name" = "in %@";
 "select_city" = "Chausir la vila";
@@ -419,7 +419,7 @@
 "group_properties" = "Proprietats de grop";
 "add_group" = "Ajustatz un grop";
 // POI
-"poi_insrease_radius" = "Aumentar lo rai de recèrca a";
+"poi_insrease_radius" = "Relargar la recèrca a";
 "poi_max_radius_reached" = "Rai de recèrca maximau ajonch";
 "poi_search_near_center" = "La recèrca se fa dins lo ròdol dau centre de la mapa";
 "poi_hide" = "Amagar";
@@ -518,7 +518,7 @@
 "sett_km" = "Quilomètres";
 "sett_ml" = "Milas";
 "sett_zoom" = "Boton de zoom";
-"sett_show" = "Mòstrar";
+"sett_show" = "Mostrar";
 "sett_notshow" = "Amagar";
 "sett_deg" = "Degrees";
 "sett_deg_min" = "Gras e minutas";
@@ -726,7 +726,7 @@
 "shared_string_reload" = "Actualizar";
 "shared_string_show_more" = "Mostrar mai";
 "mapil_reload_cache" = "Actualizar lei teules per veire lei donadas mai recentas";
-"shared_string_filter" = "Filter";
+"shared_string_filter" = "Filtre";
 "mapil_filter_user_descr" = "Filtrar leis imatges per utilizator";
 "mapil_filter_date" = "Filtrar leis imatges per data";
 "mapil_usernames" = "Noms d'utilisator";
@@ -836,7 +836,7 @@
 "quick_action_edit_list" = "Modificar la lista d'accions";
 "other_options" = "Other options";
 "add_parking" = "Ajustar per posicion d'aparcament";
-"add_parking_short" = "Add Parking";
+"add_parking_short" = "Ajustar un aparcament";
 "add_waypoint" = "Add waypoint to trip";
 "add_waypoint_short" = "Ajustar un ponch d'etapa";
 "edit_waypoint_short" = "Modificar un ponch d'etapa";
@@ -1152,7 +1152,7 @@
 "poi_filter_custom_filter" = "Filtre personalizat";
 "poi_filter_closest_poi" = "PDI vesins";
 "shared_string_is_open_24_7" = "Open 24/7";
-"shared_string_is_open" = "Dobèrt desenant";
+"shared_string_is_open" = "Ara dobèrt";
 "poi_filter_by_name" = "Recercar per lo nom";
 "subcategories" = "Sotacategorias";
 "select_all" = "Tot seleccionar";
@@ -1160,14 +1160,14 @@
 "selected_categories" = "Categorias seleccionadas";
 "new_filter_desc" = "Nomatz lo novèu filtre. Serà ajustat a la lista dei Categorias.";
 "shared_string_password" = "Password";
-"shared_string_filters" = "Filters";
+"shared_string_filters" = "Filtres";
 "edit_filter" = "Modificar lei categorias";
 "shared_string_save_as" = "Sauvagardar per";
 "delete_filter" = "Escafar un filtre";
 "save_filter" = "Sauvagardar lo filtre";
 "edit_filter_delete_dialog_title" = "Escafar lo filtre seleccionat ?";
 "apply_filters" = "Aplicar lei filtres";
-"filter_poi_hint" = "Filter by name";
+"filter_poi_hint" = "Filtrar per nom";
 "shared_string_category" = "Categoria";
 "poi_category_and_type" = "Categoria e mena de PDI";
 "poi_opening_hours" = "Orari de dobertura";
@@ -1182,7 +1182,7 @@
 "city_type_neighbourhood" = "Quartier";
 "postcode" = "Còde postau";
 "show_something_on_map" = "Mostrar %@ sus la mapa";
-"search_POI_level_btn" = "Aumentar lo rai de recèrca";
+"search_POI_level_btn" = "Relargar la recèrca";
 "shared_string_street" = "Carriera";
 "shared_string_building" = "Edifici";
 "shared_string_street_intersection" = "Crosament";
@@ -1214,7 +1214,7 @@
 "osm_live_payment_renews_annually" = "Abonament annadier";
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Seleccionatz lo periòde de pagament que vos convèn :";
-"osm_live_payment_contribute_descr" = "Part of income goes to OpenStreetMap contributors.";
+"osm_live_payment_contribute_descr" = "Una part dei dons es per lei collaboradors d'OpenStreetMap.";
 "purchase_dialog_title" = "Seleccionar un plan";
 "purchase_dialog_travel_description" = "Compratz un deis elements seguents per dispausar la foncionalitat de guida de viatge sensa connexion:";
 "free_version_message" = "Podètz teledescargar ò actualizar %d mapas";
@@ -1249,7 +1249,7 @@
 "shared_string_io_error" = "I/O error";
 "osm_live_hide_user_name" = "Pas mostrar mon nom dins lei rapòrts";
 "subscriptions_public_info" = "Lo pagament se debita de vòstre còmpte iTunes quand confirmatz la cròmpa. L'abonament se renovelarà automaticament franc de l'anullar aumens 24 oras avans la fin dau periòde en cors. Lo còmpte es debitat 24 oras avans la fins dau periòde. Podrètz administrar o desactivar lo renovelament automatic dins lei Parametres dau Còmpte après la cròmpa. Si quand crompatz dispausatz encara d'un periòde d'assai a gratis, perdretz lo restant non utilitzat.";
-"terms_of_use" = "Terms of use";
+"terms_of_use" = "Condicions d'utilisacion";
 "privacy_policy" = "Politica de privadesa";
 "already_has_subscription" = "Siatz ja abonat a OsmAnd Live e avètz totei lei fonccions activadas.";
 "already_has_inapp" = "Avètz ja soscrich a %@.";
@@ -1696,7 +1696,7 @@
 "rendering_attr_tracktype_grade1_name" = "Compacte (caladat)";
 "rendering_attr_showCycleRoutes_name" = "Percors ciclables";
 "rendering_value_translucent_purple_name" = "Porpra translucida";
-"rendering_attr_hmRendered_description" = "Augmenta la quantitat de detalhs mostrats sus la mapa.";
+"rendering_attr_hmRendered_description" = "Augmenta la quantitat de detalhs visibles sus la mapa.";
 "rendering_value_darkyellow_name" = "Jaune fosc";
 "rendering_value_default_name" = "Per defaut";
 "rendering_value_brown_name" = "Marron";
@@ -1917,7 +1917,7 @@
 "gpxup_trackable" = "Traçable";
 "route_points" = "Ponchs d'etapa";
 "gpx_analyze" = "Analizar";
-"street_level_imagery" = "Imatges de carriera";
+"street_level_imagery" = "Imatges de carrieras";
 "map_settings_line_width" = "Graissa de la linha";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "Format inconegut";
@@ -2104,3 +2104,22 @@
 "selected_profiles" = "%d de %d";
 "profile_settings" = "Configuracion dau perfiu";
 "upload_to_openstreetmap" = "Telecargar vèrs OpenStreetMap";
+"shared_string_meters" = "mètres";
+"shared_string_feet" = "pès";
+"foot" = "ft";
+"visible_categories" = "Categorias visiblas";
+"parked_at" = "Aparcat a";
+"rearrange_categories" = "Reorganizar lei categorias";
+"population_num" = "Populacion";
+"delete_custom_categories" = "Escafar lei filtres personalizats";
+"hidden_categories" = "Categorias amagadas";
+
+// Menu
+"menu" = "Menut";
+"shared_string_loading" = "A se telecargar…";
+"m" = "m";
+"create_custom_categories_list_promo" = "Podètz filtrar de categorias personalizadas, amagar lei categorias que trobatz pas necessàrias e modificar l'òrdre de la lista. Lei categorias personalizadas se pòdon importar emai exportar amb de lei perfius.";
+"add_custom_category" = "Ajustar una categoria personalizada";
+"search_poi_types_descr" = "Podètz combinar lei menas de PDI de divèrsei categorias.";
+"gpx_split_interval_none_descr" = "Chausir lo critèri desirat : segon lo temps ò segon la distància.";
+"gpx_split_interval_descr" = "Chausir l'intervalle que lei marcas de distància ò de temps seràn visualizadas.";

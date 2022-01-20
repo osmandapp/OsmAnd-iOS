@@ -357,7 +357,7 @@
     if (_firstLaunch)
     {
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
-        _resourcesManager->installOsmAndOnlineTileSource();
+        _resourcesManager->installBuiltInTileSources();
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }
     else if (currentVersion != prevVersion)
@@ -368,7 +368,7 @@
             _data.overlayMapSource = nil;
             _data.underlayMapSource = nil;
             _data.lastMapSource = [OAAppData defaultMapSource];
-            _resourcesManager->installOsmAndOnlineTileSource();
+            _resourcesManager->installBuiltInTileSources();
             
             [self clearUnsupportedTilesCache];
         }

@@ -74,7 +74,23 @@
     if (!resourceData)
         return nullptr;
     
-    return SkImage::MakeFromEncoded(SkData::MakeWithoutCopy(resourceData.bytes, resourceData.length));
+    return [self.class skImageFromNSData:resourceData];
+}
+
++ (sk_sp<SkImage>) skImageFromNSData:(const NSData *)data
+{
+    if (!data)
+        return nullptr;
+        
+    CFDataRef dataRef = (CFDataRef)CFBridgingRetain(data);
+    return SkImage::MakeFromEncoded(SkData::MakeWithProc(
+             CFDataGetBytePtr(dataRef),
+             CFDataGetLength(dataRef),
+             [](const void* ptr, void* context) {
+                 CFRelease(context);
+             },
+             (void *)dataRef
+         ));
 }
 
 + (NSMutableArray*) QListOfStringsToNSMutableArray:(const QList<QString>&)list

@@ -18,7 +18,6 @@
 #import "OAMapPanelViewController.h"
 #import "OARootViewController.h"
 #import "OAMapRendererView.h"
-#import "OASQLiteTileSource.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAPlugin.h"
 #import "OAEntity.h"

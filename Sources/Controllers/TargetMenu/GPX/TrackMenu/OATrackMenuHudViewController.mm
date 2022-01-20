@@ -1991,7 +1991,12 @@
                 [cell.segmentControl insertSegmentWithTitle:cellData.values[@"tab_2_string_value"] atIndex:2 animated:NO];
 
             [cell.segmentControl setTitle:cellData.values[@"tab_0_string_value"] forSegmentAtIndex:0];
-            [cell.segmentControl setTitle:cellData.values[@"tab_1_string_value"] forSegmentAtIndex:1];
+
+            if ([cellData.values.allKeys containsObject:@"tab_1_string_value"])
+                [cell.segmentControl setTitle:cellData.values[@"tab_1_string_value"] forSegmentAtIndex:1];
+            else
+                [cell.segmentControl removeSegmentAtIndex:1 animated:NO];
+
             cell.segmentControl.tag = tag;
             [cell.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];

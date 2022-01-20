@@ -214,13 +214,19 @@
         if (segmentCellData != nil)
             [segmentCells addObject:segmentCellData];
         [segmentCells addObject:tabsCellData];
-        [segmentCells addObject:chartCellData];
+
+        LineChartData *lineData = cell.lineChartView.lineData;
+        NSInteger entryCount = lineData ? lineData.entryCount : 0;
+        if (entryCount > 0)
+            [segmentCells addObject:chartCellData];
+
         [segmentCells addObject:statisticsCellData];
         [segmentCells addObject:buttonsCellData];
 
         NSMutableDictionary *values = [NSMutableDictionary dictionary];
         values[@"tab_0_string_value"] = OALocalizedString(@"shared_string_overview");
-        values[@"tab_1_string_value"] = OALocalizedString(@"map_widget_altitude");
+        if (analysis.hasElevationData)
+            values[@"tab_1_string_value"] = OALocalizedString(@"map_widget_altitude");
         if (analysis.isSpeedSpecified)
             values[@"tab_2_string_value"] = OALocalizedString(@"gpx_speed");
         values[@"row_to_update_int_value"] = @([segmentCells indexOfObject:statisticsCellData]);

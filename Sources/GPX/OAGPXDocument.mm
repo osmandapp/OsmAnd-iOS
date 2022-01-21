@@ -271,7 +271,7 @@
     {
         NSMutableArray<OAGpxExtension *> *extensionsArray = [NSMutableArray array];
         NSString *name = extensions[0]->name.toNSString();
-        if ([name isEqualToString:@"TrackExtension"] || [name isEqualToString:@"WaypointExtension"])
+        if (!extensions[0]->subextensions.isEmpty() && [name localizedCaseInsensitiveContainsString:@"extension"])
         {
             [extensionsArray addObjectsFromArray:[self fetchExtensions:extensions[0]->subextensions]];
         }

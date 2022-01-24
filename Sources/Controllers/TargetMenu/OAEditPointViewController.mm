@@ -39,6 +39,7 @@
 #import "OATrackMenuHudViewController.h"
 #import "OAAppSettings.h"
 #import "OAPOI.h"
+#import "OrderedDictionary.h"
 
 #include "Localization.h"
 #import "OAGPXDocument.h"

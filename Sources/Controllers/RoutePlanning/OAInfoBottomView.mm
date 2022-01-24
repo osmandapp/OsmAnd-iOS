@@ -180,12 +180,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_data.count > 0)
-    {
-        NSDictionary *item = _data[indexPath.row];
-        if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
-            return [OATitleIconRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
-    }
+    NSDictionary *item = _data[indexPath.row];
+    if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
+        return [OATitleIconRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+
     return UITableViewAutomaticDimension;
 }
 

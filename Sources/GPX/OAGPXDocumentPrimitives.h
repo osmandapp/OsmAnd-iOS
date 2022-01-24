@@ -211,6 +211,7 @@ struct RouteDataBundle;
 - (void)setExtension:(NSString *)key value:(NSString *)value;
 
 - (NSString *)getIcon;
+- (void)setIcon:(NSString *)iconName;
 - (NSString *)getBackgroundIcon;
 - (NSString *)getAddress;
 

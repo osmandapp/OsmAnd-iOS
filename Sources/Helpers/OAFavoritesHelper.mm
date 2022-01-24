@@ -28,9 +28,6 @@
 static NSMutableArray<OAFavoriteItem *> *_cachedFavoritePoints;
 static NSMutableArray<OAFavoriteGroup *> *_favoriteGroups;
 static NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
-static NSDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
-static NSArray<NSString *> *_poiIconsCategories;
-static NSArray<NSString *> *_flatPoiIcons;
 static NSArray<NSString *> *_flatBackgroundIcons;
 static NSArray<NSString *> *_flatBackgroundContourIcons;
 static BOOL _favoritesLoaded = NO;
@@ -543,61 +540,6 @@ static BOOL _favoritesLoaded = NO;
      }];
     
     return [NSString stringWithString:tempString];
-}
-
-+ (void) setupIcons
-{
-    NSString* path = [[NSBundle mainBundle] pathForResource:@"poi_categories" ofType:@"json"];
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    NSString* jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-
-    NSMutableDictionary<NSString *, NSArray<NSString *> *> *tempIcons  = [NSMutableDictionary new];
-    NSMutableArray<NSString *> *tempFlatIcons  = [NSMutableArray new];
-    NSMutableDictionary<NSString *, NSNumber *> *categoriesOrder = [NSMutableDictionary dictionary];
-    _flatPoiIcons = [NSMutableArray new];
-    
-    if (json)
-    {
-        NSDictionary *categories = json[@"categories"];
-        if (categories)
-        {
-            for (NSString *categoryName in categories.allKeys)
-            {
-                NSNumber *order = [NSNumber numberWithInt:[jsonString indexOf:[NSString stringWithFormat:@"\"%@\"", categoryName]]];
-                categoriesOrder[categoryName] = order;
-
-                NSArray<NSString *> *icons = categories[categoryName][@"icons"];
-                if (icons)
-                {
-                    tempIcons[categoryName] = icons;
-                    [tempFlatIcons addObjectsFromArray:icons];
-                }
-            }
-        }
-    }
-    _poiIcons = [NSDictionary dictionaryWithDictionary:tempIcons];
-    _flatPoiIcons = [NSArray arrayWithArray:tempFlatIcons];
-    _poiIconsCategories = [categoriesOrder keysSortedByValueUsingSelector:@selector(compare:)];
-}
-
-+ (NSDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames
-{
-    if (!_poiIcons)
-        [self setupIcons];
-    return _poiIcons;
-}
-
-+ (NSArray<NSString *> *) getOrderedPoiIconsCategories
-{
-    return _poiIconsCategories;
-}
-
-+ (NSArray<NSString *> *) getFlatIconNamesList
-{
-    if (!_flatPoiIcons)
-        [self setupIcons];
-    return _flatPoiIcons;
 }
 
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList

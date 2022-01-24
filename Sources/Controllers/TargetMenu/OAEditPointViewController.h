@@ -52,6 +52,6 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
            customParam:(NSString *)customParam
              pointType:(EOAEditPointType)pointType
        targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
-   preselectedIconName:(NSString *)preselectedIconName;
+                   poi:(OAPOI *)poi;
 
 @end

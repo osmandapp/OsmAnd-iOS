@@ -7,6 +7,7 @@
 //
 
 #import "OABasePointEditingHandler.h"
+#import "OAPOI.h"
 
 @class OAGpxWptItem, OAGPXDocument;
 
@@ -23,7 +24,7 @@ struct CLLocationCoordinate2D;
 - (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save;
 
 - (instancetype)initWithItem:(OAGpxWptItem *)gpxWpt;
-- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle gpxFileName:(NSString*)gpxFileName;
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi;
 
 @end
 

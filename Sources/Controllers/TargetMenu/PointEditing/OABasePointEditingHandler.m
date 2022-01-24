@@ -7,6 +7,7 @@
 //
 
 #import "OABasePointEditingHandler.h"
+#import "OAPOI.h"
 
 @implementation OAPointEditingData
 
@@ -57,6 +58,46 @@
 - (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
 {
     // override
+}
+
++ (NSString *) getPoiIconName:(id)object
+{
+    NSString *preselectedIconName;
+    if (object)
+    {
+        if ([object isKindOfClass:OAPOI.class])
+        {
+            OAPOI *poi = (OAPOI *)object;
+            preselectedIconName = [self getPreselectedIconName:poi];
+            preselectedIconName = [preselectedIconName stringByReplacingOccurrencesOfString:@"mx_" withString:@""];
+        }
+    }
+    return preselectedIconName;
+}
+
++ (NSString *) getPreselectedIconName:(OAPOI *)poi
+{
+    NSString *poiIcon = [poi.iconName lastPathComponent];
+    NSString *preselectedIconName = ([self isExistsIcon:poiIcon]) ? poiIcon : [self getIconNameForPOI:poi];
+    return preselectedIconName;
+}
+
++ (NSString *) getIconNameForPOI:(OAPOI *)poi
+{
+    OAPOIType *poiType = poi.type;
+    if (!poiType)
+        return nil;
+    else if ([self isExistsIcon:[NSString stringWithFormat:@"mx_%@", poiType.value]])
+        return [NSString stringWithFormat:@"mx_%@", poiType.value];
+    else if ([self isExistsIcon:[NSString stringWithFormat:@"mx_%@_%@", poiType.tag, poiType.value]])
+        return [NSString stringWithFormat:@"mx_%@_%@", poiType.tag, poiType.value];
+    return nil;
+}
+
++ (BOOL) isExistsIcon:(NSString *)iconName
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource:[@"poi-icons-png/drawable-xhdpi/" stringByAppendingPathComponent:iconName] ofType:@"png"];
+    return [[NSFileManager defaultManager] fileExistsAtPath:path];
 }
 
 @end

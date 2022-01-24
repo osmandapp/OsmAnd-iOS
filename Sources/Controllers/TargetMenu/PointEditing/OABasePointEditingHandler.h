@@ -43,6 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint;
 
++ (NSString *) getPoiIconName:(id)object;
+
 @end
 
 NS_ASSUME_NONNULL_END

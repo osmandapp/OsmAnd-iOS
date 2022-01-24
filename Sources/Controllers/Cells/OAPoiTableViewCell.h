@@ -31,7 +31,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
 @property (weak, nonatomic) IBOutlet UICollectionView *categoriesCollectionView;
 
-@property (nonatomic) NSDictionary<NSString *, NSArray<NSString *> *> *poiData;
+@property (nonatomic) NSArray<NSString *> *poiData;
 @property (nonatomic) NSInteger currentColor;
 @property (nonatomic) NSString *currentIcon;
 @property (nonatomic) NSArray *categoryDataArray;
@@ -42,5 +42,6 @@
 @property (nonatomic) NSIndexPath *cellIndex;
 
 - (void) updateContentOffsetForce:(BOOL)forceUpdade;
+- (void) updateIconsList:(NSArray<NSString *> *)icons;
 
 @end

@@ -161,8 +161,9 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
         {
             if (str.length > 0)
                 [str appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
-            
-            NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", [NSString stringWithUTF8String:info->getInfo().c_str()]]];
+
+            NSString *time = [NSString stringWithUTF8String:info->getInfo().c_str()];
+            NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", time]];
             NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
             attachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_travel_time"] color:info->opened ? colorOpen : colorClosed];
             
@@ -301,6 +302,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
             auto parser = OpeningHoursParser::parseOpenedHours([value UTF8String]);
             if (parser != nullptr)
             {
+                value = [NSString stringWithUTF8String:parser->toLocalString().c_str()];
                 bool isOpened = parser->isOpened();
                 textColor = isOpened ? UIColorFromRGB(color_place_open) : UIColorFromRGB(color_place_closed);
             }

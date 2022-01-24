@@ -65,7 +65,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+@property (weak, nonatomic) IBOutlet UITextView *descriptionLabel;
 
 @property (weak, nonatomic) IBOutlet UIView *transportView;
 @property (weak, nonatomic) IBOutlet UILabel *nearbyLabel;
@@ -1189,10 +1189,10 @@ static const NSInteger _buttonsCount = 4;
     }
     if (hasDescription)
     {
-        CGFloat descriptionHeight = [OAUtilities calculateTextBounds:_addressLabel.text != nil ? _addressLabel.text : _descriptionLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
-        _descriptionLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-        _descriptionLabel.frame = CGRectMake(itemsX, topY + 8.0, labelPreferredWidth, descriptionHeight);
-        CGRect df = _descriptionLabel.frame;
+        CGFloat descriptionHeight = [OAUtilities calculateTextBounds:_descriptionLabel.text
+                                                               width:labelPreferredWidth
+                                                                font:_addressLabel.font].height;
+        CGRect df = CGRectMake(itemsX, topY + 8.0, labelPreferredWidth, descriptionHeight);
         df.size.height += 14;
         _descriptionLabel.frame = df;
         if ([_descriptionLabel isDirectionRTL])

@@ -780,10 +780,14 @@
         cell.textView.text = item[@"label"];
         cell.descrLabel.hidden = NO;
         cell.descrLabel.text = item[@"description"];
+        [cell setDescription:item[@"description"]];
 
         cell.collapsableView = self.collapsableGroupView;
         [cell setCollapsed:self.collapsableGroupView.collapsed rawHeight:64.];
-        
+
+        if ([cell needsUpdateConstraints])
+            [cell updateConstraints];
+
         return cell;
     }
     else if ([item[@"type"] isEqualToString:[OATargetInfoCollapsableCoordinatesViewCell getCellIdentifier]])

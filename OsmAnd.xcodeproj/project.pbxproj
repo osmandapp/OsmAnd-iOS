@@ -15176,7 +15176,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 3.90.8;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -15233,7 +15233,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 3.90.8;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

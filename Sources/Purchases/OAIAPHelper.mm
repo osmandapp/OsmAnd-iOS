@@ -1020,6 +1020,14 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 {
     NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
     NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
+    
+#if TARGET_OS_SIMULATOR
+    if (onComplete)
+        onComplete(nil, nil, YES);
+    
+    return;
+#endif
+    
     if (!receipt)
     {
         NSLog(@"No local receipt. Requesting new one...");

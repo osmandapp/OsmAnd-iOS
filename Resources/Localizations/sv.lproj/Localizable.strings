@@ -91,7 +91,7 @@
 "daynight_mode_auto" = "Soluppgång/solnedgång";
 "route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "Auto-centrera aktuell kartvy.";
-"unknown_location" = "Positionenär ännu inte känd.";
+"unknown_location" = "Positionenär ännu inte känd";
 "animate_routing_route_not_calculated" = "Beräkna rutten först";
 "settings_preset" = "Standardprofil";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
@@ -240,12 +240,12 @@
 "nav_type_brouter" = "BRouter";
 "nav_type_ski" = "Skida";
 "nav_type_geocoding" = "Geokodning";
-"fast_route_mode_descr" = "Aktivera för att beräkna den snabbaste vägen eller inaktivera för den bränslesnålaste vägen.";
+"fast_route_mode_descr" = "Aktivera för att beräkna den snabbaste vägen eller inaktivera för den bränslesnålaste vägen";
 "avoid_in_routing_title" = "Undvik…";
 "avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Föredra …";
-"prefer_in_routing_descr" = "Föredra motorvägar.";
-"relief_smoothness_factor_descr" = "Föredragen terräng: slätt eller kuperat.";
+"prefer_in_routing_descr" = "Föredra motorvägar";
+"relief_smoothness_factor_descr" = "Föredragen terräng: slätt eller kuperat";
 "choose_auto_follow_route" = "Auto-centrerad kartvy";
 "choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
 "choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
@@ -259,15 +259,15 @@
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
 "keep_informing" = "Upprepa navigationsinstruktioner";
 "repeat_after" = "Repeat after";
-"keep_informing_descr" = "Läs upp navigationsinstruktioner med regelbundna intervall.";
+"keep_informing_descr" = "Läs upp navigationsinstruktioner med regelbundna intervall";
 "arrival_distance" = "Ankomstmeddelande";
 "arrival_distance_descr" = "Hur tidigt vill du höra ankomstmeddelandet?";
 "default_speed_system" = "Enhet för hastighet";
-"default_speed_system_descr" = "Ange enhet för hastighet.";
+"default_speed_system_descr" = "Ange enhet för hastighet";
 "speed_limit_exceed" = "Tolerans för hastighetsgräns";
 "speed_limit_exceed_message" = "Select speed limit tolerance margin, above which you will receive a voice warning.";
 "wake_on_voice" = "Slå på skärmen";
-"wake_on_voice_descr" = "Slå på skärmen (om den är av) när jag närmar mig en sväng.";
+"wake_on_voice_descr" = "Slå på skärmen (om den är av) när jag närmar mig en sväng";
 "voice_pref_title" = "Röst";
 "voice_provider" = "Röstvägledning";
 "voice_provider_descr" = "Select voice guidance for navigation";
@@ -312,7 +312,7 @@
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
 "consider_limitations_param" = "Överväg tillfälliga begränsningar";
-"impassable_road_desc" = "Välj de vägar du vill undvika under navigering.";
+"impassable_road_desc" = "Välj de vägar du vill undvika under navigering";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pausa musiken";
 "shared_string_do_not_use" = "Do not use";
@@ -359,7 +359,7 @@
 "starting_point_too_far" = "Starting point too far from nearest road.";
 "ending_point_too_far" = "Slutpunkten för långt från närmaste väg.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
-"arrived_at_destination" = "Du har anlänt.";
+"arrived_at_destination" = "Du har anlänt";
 "towards" = "mot";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Tag den %d avfarten och kör";
@@ -1833,7 +1833,7 @@
 "get_started" = "Kom igång";
 "first_usage_wizard_desc" = "Låt OsmAnd avgöra din plats och föreslå kartor att hämta för den regionen.";
 "suggested_maps" = "Föreslagna kartor";
-"suggested_maps_descr" = "Dessa kartor erfordras av insticksprogrammet.";
+"suggested_maps_descr" = "Dessa kartor erfordras av insticksprogrammet";
 "added_profiles" = "Tillagda profiler";
 "added_profiles_descr" = "Profiler tillaggda av insticksprogram";
 "location_not_found" = "Platsen hittades inte";
@@ -2272,7 +2272,7 @@
 "lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
 "width_limit_description" = "Ange bredden på ditt fordon; vissa ruttrestriktioner kan gälla för breda fordon.";
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
-"vessel_width_limit_description" = "Ställ in fartygets bredd för att undvika smala broar";
+"vessel_width_limit_description" = "Ställ in fartygets bredd för att undvika smala broar.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
 "default" = "Standard";
 

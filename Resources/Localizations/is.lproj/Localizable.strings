@@ -537,7 +537,7 @@
 "daynight_mode_auto" = "Sólarupprás/Sólsetur";
 "route_simulation" = "Leiðarhermun";
 "auto_follow_location_enabled" = "Sjálfvirkt miðja sýn á kort sem er í notkun.";
-"unknown_location" = "Staðsetning er ekki enn þekkt.";
+"unknown_location" = "Staðsetning er ekki enn þekkt";
 "animate_routing_route_not_calculated" = "Reikna leiðina fyrst";
 "settings_preset" = "Sjálfgefið setusnið";
 "settings_preset_descr" = "Kortasýn og leiðsagnarstillingar eru geymdar fyrir hvert notandasnið. Stilltu hér sjálfgefið notandasnið.";
@@ -606,12 +606,12 @@
 "arrival_distance_factor_late" = "Seint";
 "arrival_distance_factor_at_last" = "Á síðustu metrunum";
 "fast_route_mode" = "Hraðasta leið";
-"fast_route_mode_descr" = "Virkja til að reikna hröðustu leið eða gera óvirkt til að reikna hagkvæmustu leið.";
+"fast_route_mode_descr" = "Virkja til að reikna hröðustu leið eða gera óvirkt til að reikna hagkvæmustu leið";
 "avoid_in_routing_title" = "Forðast…";
 "avoid_in_routing_descr" = "Forðast gjaldskyldu, óbundið slitlag, ferjur";
 "prefer_in_routing_title" = "Gefa forgang…";
-"prefer_in_routing_descr" = "Velja hraðbrautir.";
-"relief_smoothness_factor_descr" = "Kjörið landslag: slétt eða hæðótt.";
+"prefer_in_routing_descr" = "Velja hraðbrautir";
+"relief_smoothness_factor_descr" = "Kjörið landslag: slétt eða hæðótt";
 "choose_auto_follow_route" = "Sjálfvirkt miðja sýn á kort";
 "choose_auto_follow_route_descr" = "Tími þar til kortasýn samstillist við núverandi staðsetningu";
 "auto_zoom_map" = "Sjálfvirkur aðdráttur korts";
@@ -623,15 +623,15 @@
 "speak_title" = "Tilkynna…";
 "speak_descr" = "Stilla til að tilkynna götuheiti og fá umferðaraðvaranir (lokanir, umferðarhnúta, hraðahindranir), aðvaranir um hraðamyndavélar og hraðatakmarkanir";
 "keep_informing" = "Endurtaka leiðsagnarleiðbeiningar";
-"keep_informing_descr" = "Endurtaka leiðsagnarleiðbeiningar með reglulegu millibili.";
+"keep_informing_descr" = "Endurtaka leiðsagnarleiðbeiningar með reglulegu millibili";
 "arrival_distance" = "Tilkynning um komu";
 "arrival_distance_descr" = "Hve snemma viltu fá tilkynningu um komu?";
 "default_speed_system" = "Hraðaeining";
-"default_speed_system_descr" = "Skilgreindu einingu fyrir hraða.";
+"default_speed_system_descr" = "Skilgreindu einingu fyrir hraða";
 "speed_limit_exceed" = "Þolvik hraðatakmarka";
 "speed_limit_exceed_message" = "Veldu þolvik hraðatakmarkana, ef þú ert þetta mikið fyrir ofan verður lesin aðvörun.";
 "wake_on_voice" = "Kveikjaá skjá";
-"wake_on_voice_descr" = "Kveikjaá skjá (ef slökkt er á honum) þegar beygja nálgast.";
+"wake_on_voice_descr" = "Kveikja á skjá (ef slökkt er á honum) þegar beygja nálgast";
 "voice_pref_title" = "Tal";
 "voice_provider_descr" = "Veldu raddleiðsögn fyrir leiðsögukerfið";
 "choose_audio_stream" = "Frálag raddleiðsagnar";
@@ -654,7 +654,7 @@
 "routing_settings_2" = "Leiðsagnarstillingar";
 "gpx_navigation" = "Fylgja ferli";
 "impassable_road" = "Forðast vegi";
-"impassable_road_desc" = "Velduþá vegi sem þú vilt forðast á meðan leiðsögn stendur.";
+"impassable_road_desc" = "Veldu þá vegi sem þú vilt forðast á meðan leiðsögn stendur";
 "interrupt_music_descr" = "Gera hlé á tónlist á meðan raddskilaboð eru flutt (ekki bara lækka hljóðstyrk hennar)";
 "interrupt_music" = "Hlé á tónlist";
 "shared_string_do_not_use" = "Ekki nota";
@@ -1757,7 +1757,7 @@
 "public_transport_hide" = "Fela almenningssamgöngur";
 "plugin_settings_reset" = "Frumstilla stillingar viðbótar á sjálfgefin gildi";
 "shared_string_exit" = "Hætta";
-"vessel_width_limit_description" = "Settu breidd skips til að geta forðast þröngar brýr";
+"vessel_width_limit_description" = "Settu breidd skips til að geta forðast þröngar brýr.";
 "shared_string_email" = "Tölvupóstur";
 "download_size" = "Stærð niðurhals";
 "choose_auto_center_map_view_descr" = "Tími eftir hreyfingu þar til kortasýn samstillist við núverandi staðsetningu";
@@ -1833,7 +1833,7 @@
 "logging_accuracy" = "Nákvæmni skráninga";
 "settings_item_read_error" = "Gat ekki lesið %@.";
 "screen_alerts" = "Aðvaranir á skjá";
-"profile_prefs_reset_successful" = "Allar stillingar sniðs endurheimtar í sjálfgefina stöðu.";
+"profile_prefs_reset_successful" = "Allar stillingar sniðs endurheimtar í sjálfgefina stöðu";
 "profile_alert_delete_msg" = "Ertu viss um að þú viljir eyða notkunarsniðinu \"%@\"?";
 "profile_alert_delete_title" = "Eyða notkunarsniði";
 "reset_to_default" = "Frumstillaá sjálfgefið";
@@ -1950,7 +1950,7 @@
 "shared_string_add_profile" = "Bæta við sniði";
 "profile_type_osmand_string" = "OsmAnd-snið";
 "quick_action_remove_next_destination_descr" = "Eyðir næsta áfangastað leiðarinnar. Ef þetta er sjálfur áfangastaðurinn, mun leiðsögn stöðvast.";
-"arrived_at_destination" = "Þú hefur náð á áfangastað.";
+"arrived_at_destination" = "Þú hefur náð á áfangastað";
 "quick_action_remove_next_destination" = "Eyða næsta markpunkti";
 "quick_action_mapillary_show" = "Sýna Mapillary";
 "quick_action_showhide_mapillary_title" = "Sýna/fela Mapillary";
@@ -2114,7 +2114,7 @@
 "shared_string_all_languages" = "Öll tungumál";
 "added_profiles_descr" = "Notkunarsnið bætt við af forritsviðbótinni";
 "added_profiles" = "Notkunarsniðum bætt við";
-"suggested_maps_descr" = "Þessi kort eru nauðsynleg með forritsviðbótinni.";
+"suggested_maps_descr" = "Þessi kort eru nauðsynleg með forritsviðbótinni";
 "suggested_maps" = "Kort sem stungið er upp á";
 "product_desc_openplacereviews" = "Sendu ljósmyndir, umsagnir og tengla um opinbera staði";
 "product_desc_ext_openplacereviews" = "Sendu ljósmyndir, umsagnir og tengla í aðrar veitur um opinbera staði á borð við veitingastaði, hótel, söfn og leiðarpunkta inn sem opin gögn á https://openplacereviews.org/data.\n\nÞú getur lesið meira um verkefnið hér: https://openplacereviews.org";
@@ -2323,3 +2323,5 @@
 "ios_release_4_0" = "• Nýtt! \"Bæta við eftirlæti\" skjár með möguleikum til að velja táknmynd, lit og lögun\n• Bætt við nýjum vðmótshluta fyrir hnit fyrirliggjandi staðsetningar\n• Hægt að flytja inn sérsniðnar viðbætur fyrir hvern notanda\n• Bætt umtalsvert við eiginleika inn-/útflutnings\n• Fjarlægð með því að ýta fært úr mælistiku í sérstakan valkost\n• Lagað þegar CarPlay frýs við að slökkt sé á skjá iPhone\n• Viðbóta-skjár færður úr Kort & tilföng yfir í aðalvalmynd\n• Bætt við Finnskri staðfærslu\n• Lagað \"Skipuleggja leið\" viðmót í láréttri stefnu\n• Bættur stuðningur við sérsniðna leiðagerð og myndgerð skráa\n• Löguð vinnsla stefnulínu merkja\n • Löguð vandamál við innflutning GPX-skráa með skráarendingu í hástöfum\n• Löguð vandamál í \"Fylgja ferli\" valmynd\n• Lagaður innflutningur á OBF-skrám\n";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Lita leiðir eftir tegund vega í vegakerfi (alþjóðlegt, héraðsbundið, staðbundið.";
 "rendering_value_walkingRoutesOSMC_description" = "Lita leiðir eftir stökum staðbundnum litum (ef til staðar í OpenStreetMap) og tákni í gönguleiðaflokkun.";
+"shared_string_hide_all" = "Fela allt";
+"points_delete_multiple" = "Eyða %d punkt(um)?";

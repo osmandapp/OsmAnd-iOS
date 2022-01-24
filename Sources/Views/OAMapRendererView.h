@@ -29,8 +29,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 {
     _DECLARE_ENTRY(MapLayers_Providers),
     _DECLARE_ENTRY(MapLayers_Configuration),
-    _DECLARE_ENTRY(ElevationData_Provider),
-    _DECLARE_ENTRY(ElevationData_Configuration),
+    _DECLARE_ENTRY(Elevation_DataProvider),
+    _DECLARE_ENTRY(Elevation_Configuration),
     _DECLARE_ENTRY(Symbols_Providers),
     _DECLARE_ENTRY(WindowSize),
     _DECLARE_ENTRY(Viewport),
@@ -122,5 +122,12 @@ struct CLLocationCoordinate2D;
 @property (nonatomic, weak) id<OAMapRendererDelegate> rendererDelegate;
 
 @property(nonatomic, readonly, getter=getAnimator) const std::shared_ptr<OsmAnd::MapAnimator>& animator;
+
+@property (nonatomic) int maxMissingDataZoomShift;
+@property (nonatomic) int maxMissingDataUnderZoomShift;
+@property (nonatomic) int heixelsPerTileSide;
+@property (nonatomic) int elevationDataTileSize;
+
+
 
 @end

@@ -20,7 +20,6 @@
 #import "OAButtonCell.h"
 #import "OAColors.h"
 #import "OALocalResourceInformationViewController.h"
-#import "OASQLiteTileSource.h"
 #import "OAOnlineTilesEditingViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAAutoObserverProxy.h"

@@ -1008,6 +1008,7 @@
 		8A836B5A227B43DF005EE20E /* widget_intermediate_time_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B54227B43DF005EE20E /* widget_intermediate_time_night@2x.png */; };
 		8A836B5B227B43DF005EE20E /* widget_intermediate_time_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B55227B43DF005EE20E /* widget_intermediate_time_day@3x.png */; };
 		8A836B5C227B43DF005EE20E /* widget_intermediate_time_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B56227B43DF005EE20E /* widget_intermediate_time_day@2x.png */; };
+		8AAFE753278DE23700F6504E /* libsqlite_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAFE752278DE23700F6504E /* libsqlite_static.a */; };
 		8AB2BBC523ACBAEB00D2AD03 /* desert.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */; };
 		8AE0194624505C8B00DA5C33 /* img_empty_state_terrain@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE0193024505C8500DA5C33 /* img_empty_state_terrain@3x.png */; };
 		8AE0194824505C8B00DA5C33 /* ic_custom_offline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE0193124505C8500DA5C33 /* ic_custom_offline@2x.png */; };
@@ -1102,7 +1103,6 @@
 		BBA3AF7B197FC4BB0039D991 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4C7474192111730018E1EE /* SystemConfiguration.framework */; };
 		BBA3AF7C197FC4BB0039D991 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
 		BBA3AF7D197FC4BB0039D991 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
-		BBA3AF7E197FC4BB0039D991 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
 		BBA3AF7F197FC4BB0039D991 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA8179BBD21004C5567 /* libz.dylib */; };
 		BBA3AF80197FC4BB0039D991 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB32C04819262B80007999A0 /* libbz2.dylib */; };
 		BBA3AF81197FC4BB0039D991 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EE6179BF2A7004C5567 /* libiconv.dylib */; };
@@ -1545,7 +1545,6 @@
 		DA5A81C926C563A700F274C7 /* OAPointIContainer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A7F26C563A000F274C7 /* OAPointIContainer.mm */; };
 		DA5A81CA26C563A700F274C7 /* OAAtomicInteger.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A8026C563A000F274C7 /* OAAtomicInteger.m */; };
 		DA5A81CB26C563A700F274C7 /* OASQLiteTileSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A8526C563A000F274C7 /* OASQLiteTileSource.mm */; };
-		DA5A81CC26C563A700F274C7 /* OAHillshadeTileSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A8826C563A000F274C7 /* OAHillshadeTileSource.mm */; };
 		DA5A81CD26C563A700F274C7 /* QuadTree.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A8926C563A000F274C7 /* QuadTree.m */; };
 		DA5A81CE26C563A700F274C7 /* OATileSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A8B26C563A000F274C7 /* OATileSource.mm */; };
 		DA5A81CF26C563A700F274C7 /* QuadRect.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A8E26C563A000F274C7 /* QuadRect.m */; };
@@ -2575,7 +2574,6 @@
 		DA80D9AA2716D0B400445DAF /* OAGpxAdditionalIconsProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80D9A92716D0B400445DAF /* OAGpxAdditionalIconsProvider.mm */; };
 		DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */; };
 		DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
-		DA80DABD251E2CB7008E6267 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
 		DA80DAC1251E2CB8008E6267 /* libQt5Xml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DABF251E2CB7008E6267 /* libQt5Xml.a */; };
 		DA80DAC2251E2CB8008E6267 /* libQt5Concurrent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */; };
 		DA80DACB251E3412008E6267 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
@@ -3988,6 +3986,7 @@
 		8A836B54227B43DF005EE20E /* widget_intermediate_time_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_intermediate_time_night@2x.png"; sourceTree = "<group>"; };
 		8A836B55227B43DF005EE20E /* widget_intermediate_time_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_intermediate_time_day@3x.png"; sourceTree = "<group>"; };
 		8A836B56227B43DF005EE20E /* widget_intermediate_time_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_intermediate_time_day@2x.png"; sourceTree = "<group>"; };
+		8AAFE752278DE23700F6504E /* libsqlite_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libsqlite_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = desert.render.xml; path = ../resources/rendering_styles/desert.render.xml; sourceTree = "<group>"; };
 		8AE0193024505C8500DA5C33 /* img_empty_state_terrain@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_empty_state_terrain@3x.png"; path = "Resources/Icons/img_empty_state_terrain@3x.png"; sourceTree = "<group>"; };
 		8AE0193124505C8500DA5C33 /* ic_custom_offline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_offline@2x.png"; path = "Resources/Icons/ic_custom_offline@2x.png"; sourceTree = "<group>"; };
@@ -4121,7 +4120,6 @@
 		BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "OsmAnd-Info.plist"; path = "Resources/OsmAnd-Info.plist"; sourceTree = "<group>"; };
 		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Core.a"; sourceTree = "<group>"; };
 		BBB34EA3179BB42A004C5567 /* libQt5Network.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Network.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Network.a"; sourceTree = "<group>"; };
-		BBB34EA4179BB42A004C5567 /* libQt5Sql.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Sql.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Sql.a"; sourceTree = "<group>"; };
 		BBB34EA8179BBD21004C5567 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BBB34ED6179BC516004C5567 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		BBB34EE6179BF2A7004C5567 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
@@ -4755,7 +4753,6 @@
 		DA5A7A8526C563A000F274C7 /* OASQLiteTileSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASQLiteTileSource.mm; sourceTree = "<group>"; };
 		DA5A7A8626C563A000F274C7 /* OATileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATileSource.h; sourceTree = "<group>"; };
 		DA5A7A8726C563A000F274C7 /* QuadRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadRect.h; sourceTree = "<group>"; };
-		DA5A7A8826C563A000F274C7 /* OAHillshadeTileSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHillshadeTileSource.mm; sourceTree = "<group>"; };
 		DA5A7A8926C563A000F274C7 /* QuadTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuadTree.m; sourceTree = "<group>"; };
 		DA5A7A8A26C563A000F274C7 /* OAMapCreatorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapCreatorHelper.h; sourceTree = "<group>"; };
 		DA5A7A8B26C563A000F274C7 /* OATileSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATileSource.mm; sourceTree = "<group>"; };
@@ -4763,7 +4760,6 @@
 		DA5A7A8D26C563A000F274C7 /* OATerrainLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATerrainLayer.h; sourceTree = "<group>"; };
 		DA5A7A8E26C563A000F274C7 /* QuadRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuadRect.m; sourceTree = "<group>"; };
 		DA5A7A8F26C563A000F274C7 /* OAMapCreatorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapCreatorHelper.m; sourceTree = "<group>"; };
-		DA5A7A9026C563A000F274C7 /* OAHillshadeTileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHillshadeTileSource.h; sourceTree = "<group>"; };
 		DA5A7A9126C563A000F274C7 /* QuadTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadTree.h; sourceTree = "<group>"; };
 		DA5A7A9226C563A000F274C7 /* OATerrainLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATerrainLayer.mm; sourceTree = "<group>"; };
 		DA5A7A9326C563A000F274C7 /* OAFileImportHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFileImportHelper.mm; sourceTree = "<group>"; };
@@ -6778,6 +6774,7 @@
 				84185A821AA9A00D00F70328 /* StoreKit.framework in Frameworks */,
 				BBA3AF73197FC4BB0039D991 /* Security.framework in Frameworks */,
 				DA7F2592231A697200E54F77 /* Charts.framework in Frameworks */,
+				8AAFE753278DE23700F6504E /* libsqlite_static.a in Frameworks */,
 				BBA3AF74197FC4BB0039D991 /* CoreText.framework in Frameworks */,
 				BBA3AF75197FC4BB0039D991 /* QuartzCore.framework in Frameworks */,
 				BBA3AF76197FC4BB0039D991 /* OpenGLES.framework in Frameworks */,
@@ -6788,7 +6785,6 @@
 				BBA3AF7B197FC4BB0039D991 /* SystemConfiguration.framework in Frameworks */,
 				BBA3AF7C197FC4BB0039D991 /* libQt5Core.a in Frameworks */,
 				BBA3AF7D197FC4BB0039D991 /* libQt5Network.a in Frameworks */,
-				BBA3AF7E197FC4BB0039D991 /* libQt5Sql.a in Frameworks */,
 				BBA3AF7F197FC4BB0039D991 /* libz.dylib in Frameworks */,
 				BBA3AF80197FC4BB0039D991 /* libbz2.dylib in Frameworks */,
 				BBA3AF81197FC4BB0039D991 /* libiconv.dylib in Frameworks */,
@@ -6811,7 +6807,6 @@
 				DA80DAC2251E2CB8008E6267 /* libQt5Concurrent.a in Frameworks */,
 				DA80DACB251E3412008E6267 /* libQt5Core.a in Frameworks */,
 				DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */,
-				DA80DABD251E2CB7008E6267 /* libQt5Sql.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8404,6 +8399,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8AAFE752278DE23700F6504E /* libsqlite_static.a */,
 				8AF348762779D88100A64824 /* libproj_static.a */,
 				8A5A002727735D76002227DD /* libharfbuzz_static.a */,
 				DADC09E927295A4B00ADBB3B /* MobileCoreServices.framework */,
@@ -8451,7 +8447,6 @@
 				BB48B5B519A8870C008FCCA0 /* libskia_static.a */,
 				BBB34EA2179BB42A004C5567 /* libQt5Core.a */,
 				BBB34EA3179BB42A004C5567 /* libQt5Network.a */,
-				BBB34EA4179BB42A004C5567 /* libQt5Sql.a */,
 				8A4866641D426C7000AD2051 /* libqtpcre.a */,
 				BBB34EA8179BBD21004C5567 /* libz.dylib */,
 				BBB34EE6179BF2A7004C5567 /* libiconv.dylib */,
@@ -9350,8 +9345,6 @@
 			children = (
 				DA5A7A8C26C563A000F274C7 /* OAFileImportHelper.h */,
 				DA5A7A9326C563A000F274C7 /* OAFileImportHelper.mm */,
-				DA5A7A9026C563A000F274C7 /* OAHillshadeTileSource.h */,
-				DA5A7A8826C563A000F274C7 /* OAHillshadeTileSource.mm */,
 				DA5A7A8A26C563A000F274C7 /* OAMapCreatorHelper.h */,
 				DA5A7A8F26C563A000F274C7 /* OAMapCreatorHelper.m */,
 				DA5A7A9426C563A000F274C7 /* OASQLiteTileSource.h */,
@@ -14226,7 +14219,6 @@
 				DA5A832A26C563A800F274C7 /* OASwitchTableViewCell.m in Sources */,
 				DA5A84D126C563A900F274C7 /* PXAlertView.m in Sources */,
 				DA5A835226C563A800F274C7 /* OATextInputIconCell.mm in Sources */,
-				DA5A81CC26C563A700F274C7 /* OAHillshadeTileSource.mm in Sources */,
 				DA5A84C826C563A900F274C7 /* OAOsmEditingBottomSheetViewController.mm in Sources */,
 				DA5A83C926C563A800F274C7 /* OAEditPointViewController.mm in Sources */,
 				DA5A84AD26C563A900F274C7 /* OARootViewController.m in Sources */,
@@ -15060,6 +15052,7 @@
 					"${PROJECT_DIR}/../core/externals/skia/upstream.patched",
 					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
 					"${PROJECT_DIR}/../core/externals/harfbuzz/upstream.patched/src",
+					"${PROJECT_DIR}/../core/externals/protobuf/upstream.patched/src",
 					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
 					/usr/include/libxml2,
 					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
@@ -15136,6 +15129,7 @@
 					"${PROJECT_DIR}/../core/externals/skia/upstream.patched",
 					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
 					"${PROJECT_DIR}/../core/externals/harfbuzz/upstream.patched/src",
+					"${PROJECT_DIR}/../core/externals/protobuf/upstream.patched/src",
 					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
 					/usr/include/libxml2,
 					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",

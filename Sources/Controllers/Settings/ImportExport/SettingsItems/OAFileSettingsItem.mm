@@ -520,10 +520,20 @@
     BOOL res = NO;
     if (!isDir)
     {
-        NSError *copyError;
-        res = [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:destFilePath error:&copyError];
-        if (error && copyError)
-            *error = copyError;
+        NSError *removeError;
+        if (exists)
+        {
+            [[NSFileManager defaultManager] removeItemAtPath:destFilePath error:&removeError];
+            if (error && removeError)
+                *error = removeError;
+        }
+        if (!exists || !removeError)
+        {
+            NSError *copyError;
+            res = [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:destFilePath error:&copyError];
+            if (error && copyError)
+                *error = copyError;
+        }
     }
     else
     {

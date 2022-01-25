@@ -441,7 +441,7 @@
 "shared_string_cancel" = "Cancelar";
 "shared_string_exit" = "Salir";
 "shared_string_close" = "Cerrar";
-"shared_string_no" = "No";
+"shared_string_no" = "Productos orgánicos: no";
 "shared_string_yes" = "Sí";
 "shared_string_save" = "Guardar";
 "shared_string_done" = "Listo";
@@ -2297,7 +2297,7 @@
 "app_mode_taxi" = "Taxi";
 "app_mode_shuttle_bus" = "Autobús de enlace";
 "app_mode_subway" = "Metro";
-"app_mode_horse" = "Caballo";
+"app_mode_horse" = "Equino";
 "app_mode_helicopter" = "Helicóptero";
 "app_mode_skiing" = "Esquí";
 "app_mode_personal_transporter" = "Transportador personal";

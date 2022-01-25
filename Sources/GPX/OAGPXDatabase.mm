@@ -101,7 +101,7 @@
     return _sharedDb;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -112,17 +112,16 @@
     return self;
 }
 
--(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
+- (OAGPX *) addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
 {
-    NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
-    
     OAGPX *gpx = [self buildGpxItem:filePath.lastPathComponent path:filePath title:title desc:desc bounds:bounds document:document];
+    NSMutableArray *res = [NSMutableArray array];
+    for (OAGPX *item in gpxList)
+        if (![item.gpxFilePath isEqualToString:gpx.gpxFilePath])
+            [res addObject:item];
     
-    if (![self containsGPXItem:filePath])
-        [res addObject:gpx];
-    
+    [res addObject:gpx];
     gpxList = res;
-    
     return gpx;
 }
 
@@ -136,12 +135,12 @@
     gpxList = res;
 }
 
--(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
+- (OAGPX *) buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
 {
     return [self buildGpxItem:fileName path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds document:document];
 }
 
--(OAGPX *)buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
+- (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
 {
     OAGPXTrackAnalysis *analysis = [document getAnalysis:0];
     

@@ -1693,45 +1693,6 @@ typedef enum
     [self presentViewController:controller animated:YES completion:nil];
 }
 
-- (NSString *) getIconName:(id)object
-{
-    NSString *preselectedIconName;
-    if (object)
-    {
-        if ([object isKindOfClass:OAPOI.class])
-        {
-            OAPOI *poi = (OAPOI *)object;
-            preselectedIconName = [self getPreselectedIconName:poi];
-        }
-    }
-    return preselectedIconName;
-}
-
-- (NSString *) getPreselectedIconName:(OAPOI *)poi
-{
-    NSString *poiIcon = [poi.iconName lastPathComponent];
-    NSString *preselectedIconName = ([self isExistsIcon:poiIcon]) ? poiIcon : [self getIconNameForPOI:poi];
-    return preselectedIconName;
-}
-
-- (NSString *) getIconNameForPOI:(OAPOI *)poi
-{
-    OAPOIType *poiType = poi.type;
-    if (!poiType)
-        return nil;
-    else if ([self isExistsIcon:[NSString stringWithFormat:@"mx_%@", poiType.value]])
-        return [NSString stringWithFormat:@"mx_%@", poiType.value];
-    else if ([self isExistsIcon:[NSString stringWithFormat:@"mx_%@_%@", poiType.tag, poiType.value]])
-        return [NSString stringWithFormat:@"mx_%@_%@", poiType.tag, poiType.value];
-    return nil;
-}
-
-- (BOOL) isExistsIcon:(NSString *)iconName
-{
-    NSString *path = [[NSBundle mainBundle] pathForResource:[@"poi-icons-png/drawable-xhdpi/" stringByAppendingPathComponent:iconName] ofType:@"png"];
-    return [[NSFileManager defaultManager] fileExistsAtPath:path];
-}
-
 - (void) targetPointEditFavorite:(OAFavoriteItem *)item
 {
     [self targetHideContextPinMarker];

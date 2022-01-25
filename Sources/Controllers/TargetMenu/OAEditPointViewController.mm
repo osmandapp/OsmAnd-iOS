@@ -397,7 +397,7 @@
     return kDefaultIcon;
 }
 
-- (void) addLastUsedIcon:(NSString *)iconName save:(BOOL)save
+- (void) addLastUsedIcon:(NSString *)iconName
 {
     NSMutableArray<NSString *> *mutableLastUsedIcons = _lastUsedIcons.mutableCopy;
     [mutableLastUsedIcons removeObject:iconName];
@@ -406,8 +406,7 @@
     
     [mutableLastUsedIcons insertObject:iconName atIndex:0];
     _lastUsedIcons = mutableLastUsedIcons.copy;
-    if (save)
-        [OAAppSettings.sharedManager.lastUsedFavIcons set:_lastUsedIcons];
+    [OAAppSettings.sharedManager.lastUsedFavIcons set:_lastUsedIcons];
 }
 
 - (void)createIconForCategory
@@ -745,7 +744,7 @@
         data.color = _selectedColor.color;
         data.backgroundIcon = _backgroundIconNames[_selectedBackgroundIndex];
         data.icon = _selectedIconName;
-        [self addLastUsedIcon:_selectedIconName save:YES];
+        [self addLastUsedIcon:_selectedIconName];
 
         if (_editPointType == EOAEditPointTypeWaypoint)
         {

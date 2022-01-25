@@ -18,6 +18,8 @@
 #define COLORIZATION_GRADIENT 1
 #define COLORIZATION_SOLID 2
 
+#define kOutlineColor OsmAnd::ColorARGB(150, 0, 0, 0)
+
 @class OAGPXDocument, OAGpxTrkSeg;
 
 struct RouteSegmentResult;
@@ -32,6 +34,6 @@ struct RouteSegmentResult;
 - (void)calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors
                       attrName:(NSString *)attrName
                  segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>>)segs
-                     locations:(NSMutableArray<CLLocation *> *)locations;
+                     segments:(NSArray<OAGpxTrkSeg *> *)segments;
 
 @end

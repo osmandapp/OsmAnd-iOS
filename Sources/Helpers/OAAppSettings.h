@@ -25,12 +25,6 @@
 #define kReceiptValidationMinPeriod 60.0 * 60.0 * 24.0 * 1.0 // 1 day
 #define kReceiptValidationMaxPeriod 60.0 * 60.0 * 24.0 * 30.0 // 30 days
 
-#define kDefaultRouteLineDayColor 0x882a4bd1
-#define kDefaultRouteLineNightColor 0xffffdf3d
-
-#define kDefaultTurnArrowsDayColor 0xffffde5b
-#define kDefaultTurnArrowsNightColor 0xff41a6d9
-
 @class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration;
 
 typedef NS_ENUM(NSInteger, EOARouteService)

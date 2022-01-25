@@ -141,25 +141,6 @@
     return nil;
 }
 
-- (void) calculateSegments:(QList<OsmAnd::FColorARGB> &)colors
-                  attrName:(NSString *)attrName
-                       gpx:(OAGPXDocument *)gpx
-{
-    OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:gpx];
-    const auto segs = [routeImporter importRoute];
-
-    NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
-    for (OAGpxTrkSeg *seg in [gpx getNonEmptyTrkSegments:YES])
-    {
-        for (OAGpxTrkPt *trkPt in seg.points)
-        {
-            [locations addObject:[[CLLocation alloc] initWithLatitude:trkPt.position.latitude
-                                                            longitude:trkPt.position.longitude]];
-        }
-    }
-    [self calculateSegmentsColor:colors attrName:attrName segmentResult:segs locations:locations];
-}
-
 - (void) refreshGpxTracks
 {
     if (!_gpxDocs.empty())
@@ -195,7 +176,12 @@
                 else if (type == OAColoringType.ATTRIBUTE)
                 {
                     colorizationScheme = COLORIZATION_SOLID;
-                    [self calculateSegments:colors attrName:gpx.coloringType gpx:doc];
+                    OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:doc];
+                    const auto segs = [routeImporter importRoute];
+                    [self calculateSegmentsColor:colors
+                                        attrName:gpx.coloringType
+                                   segmentResult:segs
+                                        segments:[doc getNonEmptyTrkSegments:YES]];
                 }
             }
 
@@ -260,8 +246,6 @@
         // Add outline for colorized lines
         if (!colors.isEmpty())
         {
-            const auto outlineColor = OsmAnd::ColorARGB(150, 0, 0, 0);
-            
             OsmAnd::VectorLineBuilder outlineBuilder;
             outlineBuilder.setBaseOrder(baseOrder--)
                 .setIsHidden(points.size() == 0)
@@ -269,7 +253,7 @@
                 .setLineWidth(lineWidth + 10)
                 .setOutlineWidth(10)
                 .setPoints(points)
-                .setFillColor(outlineColor)
+                .setFillColor(kOutlineColor)
                 .setApproximationEnabled(false);
             
             outlineBuilder.buildAndAddToCollection(_linesCollection);

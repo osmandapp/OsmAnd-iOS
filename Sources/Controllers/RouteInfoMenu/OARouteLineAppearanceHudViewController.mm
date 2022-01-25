@@ -32,9 +32,6 @@
 #import "OAPreviewRouteLineInfo.h"
 #import "OADefaultFavorite.h"
 
-#define kColoringSection 0
-#define kColorGridCell 5
-
 #define kColorDayMode OALocalizedString(@"map_settings_day")
 #define kColorNightMode OALocalizedString(@"map_settings_night")
 
@@ -225,6 +222,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
     OAPreviewRouteLineInfo *_oldPreviewRouteLineInfo;
     NSInteger _oldDayNightMode;
+
+    NSInteger _sectionColors;
+    NSInteger _cellColorGrid;
 }
 
 @dynamic statusBarBackgroundView, contentContainer;
@@ -675,6 +675,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             {
                 clearColorSection(YES);
             }
+            _cellColorGrid = [colorsCells indexOfObject:colorGridCellData];
         };
 
         colorsSectionData.updateData = ^() {
@@ -694,6 +695,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             }];
         };
         [tableSections addObject:colorsSectionData];
+        _sectionColors = [tableSections indexOfObject:colorsSectionData];
 
         setColorCells();
 
@@ -1013,9 +1015,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
     [_mapPanelViewController.mapViewController runWithRenderSync:^{
         [routeLayer resetLayer];
     }];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [routeLayer refreshRoute];
-    });
+    [routeLayer refreshRoute];
 }
 
 - (IBAction)onBackButtonPressed:(id)sender
@@ -1537,7 +1537,7 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             : nil;
     [self updateRouteLayer:_previewRouteLineInfo];
 
-    OAGPXTableSectionData *section = _tableData.sections[kColoringSection];
+    OAGPXTableSectionData *section = _tableData.sections[_sectionColors];
     if (section.updateData)
         section.updateData();
 
@@ -1560,16 +1560,16 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
 
     if (_tableData.sections.count >= 1)
     {
-        OAGPXTableSectionData *colorSection = _tableData.sections[kColoringSection];
-        if (colorSection.cells.count - 1 >= kColorGridCell)
+        OAGPXTableSectionData *colorSection = _tableData.sections[_sectionColors];
+        if (colorSection.cells.count - 1 >= _cellColorGrid)
         {
-            OAGPXTableCellData *colorGridCell = colorSection.cells[kColorGridCell];
+            OAGPXTableCellData *colorGridCell = colorSection.cells[_cellColorGrid];
             if (colorGridCell.updateData)
                 colorGridCell.updateData();
 
             [UIView setAnimationsEnabled:NO];
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kColorGridCell
-                                                                        inSection:kColoringSection]]
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_cellColorGrid
+                                                                        inSection:_sectionColors]]
                                   withRowAnimation:UITableViewRowAnimationNone];
             [UIView setAnimationsEnabled:YES];
         }

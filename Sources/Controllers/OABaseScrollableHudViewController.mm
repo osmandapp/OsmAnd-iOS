@@ -275,7 +275,7 @@
 
 - (BOOL)hasInitialState
 {
-    return YES; //override
+    return YES;
 }
 
 - (CGFloat)initialMenuHeight

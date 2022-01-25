@@ -230,6 +230,12 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [self generateData];
     [self applyLocalization];
     [self.tableView reloadData];
+    
+    if (_targetScreenKey)
+    {
+        [self openTargetSettingsScreen:_targetScreenKey];
+        _targetScreenKey = nil;
+    }
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -261,9 +267,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-
-    if (_targetScreenKey)
-        [self openTargetSettingsScreen:_targetScreenKey];
 }
 
 - (void)openDashboardScreen:(EOADashboardScreenType)type
@@ -377,17 +380,17 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     else
     {
         UIViewController *settingsScreen = nil;
-        if ([targetScreenKey isEqualToString:@"general_settings"])
+        if ([targetScreenKey isEqualToString:kGeneralSettings])
             settingsScreen = [[OAProfileGeneralSettingsViewController alloc] initWithAppMode:_appMode];
         else if ([targetScreenKey isEqualToString:kNavigationSettings])
             settingsScreen = [[OAProfileNavigationSettingsViewController alloc] initWithAppMode:_appMode];
-        else if ([targetScreenKey isEqualToString:@"profile_appearance"])
+        else if ([targetScreenKey isEqualToString:kProfileAppearanceSettings])
             settingsScreen = [[OAProfileAppearanceViewController alloc] initWithProfile:_appMode];
-        else if ([targetScreenKey isEqualToString:@"export_profile"])
+        else if ([targetScreenKey isEqualToString:kExportProfileSettings])
             settingsScreen = [[OAExportItemsViewController alloc] initWithAppMode:_appMode];
-        else if ([targetScreenKey isEqualToString:@"trip_rec"])
+        else if ([targetScreenKey isEqualToString:kTrackRecordingSettings])
             settingsScreen = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:_appMode];
-        else if ([targetScreenKey isEqualToString:@"osm_edits"])
+        else if ([targetScreenKey isEqualToString:kOsmEditsSettings])
             settingsScreen = [[OAOsmEditingSettingsViewController alloc] init];
 
         if (settingsScreen)

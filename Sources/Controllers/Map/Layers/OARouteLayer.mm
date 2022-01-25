@@ -40,6 +40,9 @@
 
 #include <transportRouteResultSegment.h>
 
+#define kTurnArrowsColoringByAttr 0xffffffff
+#define kOutlineId 1001
+
 @implementation OARouteLayer
 {
     OARoutingHelper *_routingHelper;
@@ -286,16 +289,14 @@
             // Add outline for colorized lines
             if (!colors.isEmpty())
             {
-                const auto outlineColor = OsmAnd::ColorARGB(150, 0, 0, 0);
-
                 OsmAnd::VectorLineBuilder outlineBuilder;
                 outlineBuilder.setBaseOrder(baseOrder--)
                         .setIsHidden(points.size() == 0)
-                        .setLineId(1001)
+                        .setLineId(kOutlineId)
                         .setLineWidth(_lineWidth + 10)
                         .setOutlineWidth(10)
                         .setPoints(points)
-                        .setFillColor(outlineColor)
+                        .setFillColor(kOutlineColor)
                         .setApproximationEnabled(false);
 
                 outlineBuilder.buildAndAddToCollection(_collection);
@@ -382,7 +383,7 @@
     if ([_routeColoringType isGradient]
             && [_routeColoringType isAvailableForDrawingRoute:[_routingHelper getRoute]
                                                 attributeName:_previewRouteLineInfo.routeInfoAttribute])
-        _customTurnArrowsColor = 0xffffffff;
+        _customTurnArrowsColor = kTurnArrowsColoringByAttr;
     else
         _customTurnArrowsColor = [self getDefaultColor:YES];
 }
@@ -710,27 +711,6 @@
     return p;
 }
 
-- (void) calculateSegments:(QList<OsmAnd::FColorARGB> &)colors
-                  attrName:(NSString *)attrName
-                       gpx:(OAGPXDocument *)gpx
-{
-    const auto segs = _routingHelper.getRoute.getOriginalRoute;
-
-    NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
-    for (OAGpxTrk *track in gpx.tracks)
-    {
-        for (OAGpxTrkSeg *seg in track.segments)
-        {
-            for (OAGpxTrkPt *trkPt in seg.points)
-            {
-                [locations addObject:[[CLLocation alloc] initWithLatitude:trkPt.position.latitude
-                                                                longitude:trkPt.position.longitude]];
-            }
-        }
-    }
-    [self calculateSegmentsColor:colors attrName:attrName segmentResult:segs locations:locations];
-}
-
 - (void) refreshRoute
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
@@ -794,7 +774,11 @@
         else if (_routeColoringType == OAColoringType.ATTRIBUTE)
         {
             colorizationScheme = COLORIZATION_SOLID;
-            [self calculateSegments:colors attrName:_routeInfoAttribute gpx:gpx];
+            const auto segs = _routingHelper.getRoute.getOriginalRoute;
+            [self calculateSegmentsColor:colors
+                                attrName:_routeInfoAttribute
+                           segmentResult:segs
+                                segments:[gpx getNonEmptyTrkSegments:NO]];
         }
 
         int segStartIndex = 0;

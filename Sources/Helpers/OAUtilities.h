@@ -58,6 +58,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 - (NSString *) xmlStringToString;
 - (NSString *) regexReplacePattern:(NSString *)pattern newString:(NSString *)newString;
 - (NSArray<NSString *> *) regexSplitInStringByPattern:(NSString *)pattern;
+- (NSString *) fromHtml;
 
 @end
 

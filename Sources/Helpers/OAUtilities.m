@@ -291,8 +291,8 @@
     NSMutableString *result = [NSMutableString stringWithString:self];
     NSRange searchedRange = NSMakeRange(0, [self length]);
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:nil];
-    NSMutableString *modifiedString = [regex stringByReplacingMatchesInString:result options:0 range:searchedRange withTemplate:@""];
-    return [NSString stringWithString:modifiedString];
+    NSString *modifiedString = [regex stringByReplacingMatchesInString:result options:0 range:searchedRange withTemplate:newString];
+    return modifiedString;
 }
 
 - (NSArray<NSString *> *) regexSplitInStringByPattern:(NSString *)pattern
@@ -319,6 +319,15 @@
         }
     }];
     return [NSArray arrayWithArray:results];
+}
+
+- (NSString *) fromHtml
+{
+    NSString *result;
+    NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:self fontSize:17];
+    if (attrString)
+        result = attrString.string;
+    return result;
 }
 
 @end

@@ -129,6 +129,7 @@
     BOOL _isImageDownladFinished;
     UIImage *_cachedImage;
     NSString *_cachedImageURL;
+    BOOL _isScreenClosing;
     OAEditDescriptionViewController *_editDescController;
 }
 
@@ -275,6 +276,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     _exportController = nil;
+    _isScreenClosing = YES;
 }
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -418,9 +420,12 @@
                         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString: url]];
                         UIImage *image = [UIImage imageWithData:data];
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            _cachedImage = image;
-                            NSIndexPath *imageCellIndex = [NSIndexPath indexPathForRow:j inSection:i];
-                            [self.tableView reloadRowsAtIndexPaths:@[imageCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                            if (!_isScreenClosing)
+                            {
+                                _cachedImage = image;
+                                NSIndexPath *imageCellIndex = [NSIndexPath indexPathForRow:j inSection:i];
+                                [self.tableView reloadRowsAtIndexPaths:@[imageCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                            }
                         });
                     });
                 }

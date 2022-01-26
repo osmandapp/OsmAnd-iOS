@@ -136,7 +136,7 @@
     if (!source || source.length == 0)
         return nil;
     
-    NSString *content = [source regexReplacePattern:@"\\n" newString:@""];
+    NSString *content = [source regexReplacePattern:@"\n" newString:@""];
     int firstParagraphStart = [content indexOf:kPOpened];
     int firstParagraphEnd = [content indexOf:kPClosed];
     firstParagraphEnd = firstParagraphEnd < firstParagraphStart ? [content indexOf:kPClosed start:firstParagraphStart] : firstParagraphEnd;
@@ -162,8 +162,9 @@
     if (!firstParagraphHtml || firstParagraphHtml.length == 0)
         return nil;
     
-    NSString *firstParagraphText = [[[firstParagraphHtml regexReplacePattern:@"(<(/)(a|img)>)|(<(a|img).+?>)|(<div.+?/div>)" newString:@""] stringByReplacingOccurrencesOfString:@"<br>" withString:@""] trim];
-    firstParagraphText = [firstParagraphHtml regexReplacePattern:@"<[^>]*>" newString:@""];
+    NSString *firstParagraphText = [[firstParagraphHtml regexReplacePattern:@"(<(/)(a|img)>)|(<(a|img).+?>)|(<div.+?/div>)" newString:@""] stringByReplacingOccurrencesOfString:@"<br>" withString:@""];
+    firstParagraphText = [[firstParagraphText fromHtml] trim];
+    
     NSArray<NSString *> *phrases = [firstParagraphText regexSplitInStringByPattern:@"\\. "];
     NSMutableString *res = [NSMutableString string];
     NSInteger limit = MIN(phrases.count, kPartialContentPhrases);

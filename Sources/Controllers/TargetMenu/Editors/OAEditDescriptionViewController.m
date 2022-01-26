@@ -10,8 +10,10 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OATextViewSimpleCell.h"
+#import "OAWebViewCell.h"
+#import "OAIconTitleValueCell.h"
 
-@interface OAEditDescriptionViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
+@interface OAEditDescriptionViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, WKNavigationDelegate>
 
 @end
 
@@ -23,6 +25,8 @@
     BOOL _isEditing;
     NSArray<NSDictionary<NSString *, NSString *> *> *_cellsData;
     NSString *_textViewContent;
+    CGFloat _webViewHeight;
+    int _webViewReloadingsCount;
 }
 
 -(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew isEditing:(BOOL)isEditing readOnly:(BOOL)readOnly
@@ -64,18 +68,6 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
     self.tableView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
     
-    NSString *textHtml = self.desc;
-    if (![self isHtml:textHtml])
-    {
-        textHtml = [textHtml stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
-    }
-    if (![textHtml containsString:@"<header"])
-    {
-        NSString *head = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'><style> body { font-family: -apple-system; font-size: 17px; color:#000009} b {font-family: -apple-system; font-weight: bolder; font-size: 17px; color:#000000 }</style></header><head></head><div class=\"main\">%@</div>";
-        textHtml = [NSString stringWithFormat:head, textHtml];
-    }
-    [_webView loadHTMLString:textHtml baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
-    
     [self setupView];
 }
 
@@ -90,6 +82,21 @@
 {
     [super viewDidDisappear:animated];
     [self unregisterKeyboardNotifications];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        if(!_isEditing)
+        {
+            _webViewHeight = 0.0;
+            _webViewReloadingsCount = 0;
+            [self generateData];
+            [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        
+    } completion:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -114,8 +121,6 @@
     if (_isEditing)
     {
         _titleView.text = OALocalizedString(@"context_menu_edit_descr");
-        _tableView.hidden = NO;
-        _webView.hidden = YES;
         _saveButton.hidden = NO;
         _editButton.hidden = YES;
         _toolbarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
@@ -128,8 +133,6 @@
     else
     {
         _titleView.text = OALocalizedString(@"description");
-        _tableView.hidden = YES;
-        _webView.hidden = NO;
         _editButton.hidden = _readOnly;
         _saveButton.hidden = YES;
         _toolbarView.backgroundColor = UIColorFromRGB(color_chart_orange);
@@ -142,7 +145,6 @@
         if ([self.view isDirectionRTL])
             _backButton.imageView.image = _backButton.imageView.image.imageFlippedForRightToLeftLayoutDirection;
     }
-    [self.tableView reloadData];
 }
 
 - (void) generateData
@@ -159,7 +161,29 @@
     }
     else
     {
-        _cellsData = @[];
+        NSString *textHtml = self.desc;
+        if (![self isHtml:textHtml])
+        {
+            textHtml = [textHtml stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
+        }
+        if (![textHtml containsString:@"<header"])
+        {
+            NSString *head = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'><style> body { font-family: -apple-system; font-size: 17px; color:#000009} b {font-family: -apple-system; font-weight: bolder; font-size: 17px; color:#000000 }</style></header><head></head><div class=\"main\">%@</div>";
+            textHtml = [NSString stringWithFormat:head, textHtml];
+        }
+        
+        _cellsData = @[
+            @{
+                @"type" : [OAWebViewCell getCellIdentifier],
+                @"title" : textHtml,
+                @"separatorInset" : @(16 + OAUtilities.getLeftMargin)
+            },
+            @{
+                @"type" : [OAIconTitleValueCell getCellIdentifier],
+                @"title" : OALocalizedString(@"context_menu_edit_descr"),
+                @"separatorInset" : @0
+            }
+        ];
     }
 }
 
@@ -241,6 +265,7 @@
 {
     _isEditing = YES;
     [self setupView];
+    [_tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
@@ -281,8 +306,69 @@
         }
         return cell;
     }
+    else if ([item[@"type"] isEqualToString:[OAWebViewCell getCellIdentifier]])
+    {
+        OAWebViewCell* cell;
+        cell = (OAWebViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAWebViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAWebViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAWebViewCell *)[nib objectAtIndex:0];
+        }
+        if (cell)
+        {
+            NSNumber *inset = item[@"separatorInset"];
+            cell.separatorInset = UIEdgeInsetsMake(0, inset.floatValue, 0, 0);
+            cell.iconView.hidden = YES;
+            cell.arrowIconView.hidden = YES;
+            cell.webViewLeftConstraint.constant = 0;
+            cell.webViewRightConstraint.constant = 0;
+            cell.backgroundColor = UIColor.whiteColor;
+            cell.webView.navigationDelegate = self;
+            [cell.webView loadHTMLString:item[@"title"]  baseURL:nil];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    {
+        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTitleValueCell *) nib[0];
+            [cell showLeftIcon:NO];
+            [cell showRightIcon:NO];
+        }
+        if (cell)
+        {
+            NSNumber *inset = item[@"separatorInset"];
+            cell.separatorInset = UIEdgeInsetsMake(0, inset.floatValue, 0, 0);
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            cell.textView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.textView.textColor = UIColorFromRGB(color_primary_purple);
+            cell.textView.text = item[@"title"];
+            cell.descriptionView.hidden = YES;
+        }
+        return cell;
+    }
 
     return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _cellsData[indexPath.row];
+    if ([item[@"type"] isEqualToString:[OAWebViewCell getCellIdentifier]])
+        return _webViewHeight;
+    return UITableViewAutomaticDimension;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _cellsData[indexPath.row];
+    if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+        [self editClicked:nil];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - UITextViewDelegate
@@ -292,6 +378,27 @@
     _textViewContent = textView.text;
     [_tableView beginUpdates];
     [_tableView endUpdates];
+}
+
+#pragma mark - WKNavigationDelegate
+
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
+{
+    BOOL shouldSkipFirstLoadingWithIncorrectData = _webViewReloadingsCount == 0;
+    BOOL isEmptyResponce = webView.scrollView.contentSize.height == 0 && webView.scrollView.contentSize.width;
+    BOOL isLayoutReady = webView.scrollView.contentSize.width == (self.tableView.frame.size.width - 2*OAUtilities.getLeftMargin);
+    BOOL isValuesStopChanging = _webViewHeight == webView.scrollView.contentSize.height;
+    
+    _webViewReloadingsCount++;
+    if (shouldSkipFirstLoadingWithIncorrectData || isEmptyResponce || !isLayoutReady || !isValuesStopChanging)
+    {
+        _webViewHeight = webView.scrollView.contentSize.height;
+        [_tableView reloadData];
+    }
+    else
+    {
+        //correct value. don't reload again
+    }
 }
 
 @end

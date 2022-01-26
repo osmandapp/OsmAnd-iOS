@@ -190,7 +190,7 @@
 "prch_addons" = "Erweiterungen";
 "prch_items_failed" = "Elemente wurde nicht wieder hergestellt. Bitte versuch es erneut.";
 // Resources
-"res_mapsres" = "Karten & Resourcen";
+"res_mapsres" = "Karten & Ressourcen";
 "res_banner_many" = "Es sind %d kostenlose Karten zum herunterladen verfügbar";
 "res_banner_one" = "Es gibt eine kostenlose Karte zum herunterladen";
 "res_banner_no" = "Du hast keine kostenlosen Karten zum herunterladen";
@@ -291,7 +291,7 @@
 "sett_pref_lang" = "Bevorzugte Sprache";
 "sett_lang_show_local" = "Lokale Namen anzeigen";
 "prch_nau_q1" = "Bitte schalten Sie den \"Nautischen\" Stil in den Karteneinstellungen ein und installieren Sie die weltweite Basiskarte Seemarken.";
-"prch_nau_q3" = "Du kannst es später installieren über die Karten & Resourcen.";
+"prch_nau_q3" = "Du kannst es später installieren über die Karten & Ressourcen.";
 "res_banner_free_maps_title" = "Du hast %d freie Karten!";
 "parking_marker" = "Parkmarkierung";
 "pickup_car" = "Zum Auto gehen";

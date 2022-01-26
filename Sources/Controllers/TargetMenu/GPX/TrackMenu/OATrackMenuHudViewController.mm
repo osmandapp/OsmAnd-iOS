@@ -216,6 +216,7 @@
 {
     [super viewDidAppear:animated];
     _wasFirstOpening = YES;
+    _isScreenClosing = NO;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -411,7 +412,7 @@
             if ([cellData.type isEqualToString:[OAImageDescTableViewCell getCellIdentifier]])
             {
                 NSString *url = cellData.values[@"img"];
-                if (![url isEqualToString:_cachedImageURL])
+                if (!_cachedImage || ![url isEqualToString:_cachedImageURL])
                 {
                     _cachedImage = nil;
                     _cachedImageURL = url;
@@ -428,6 +429,11 @@
                             }
                         });
                     });
+                }
+                else
+                {
+                    NSIndexPath *imageCellIndex = [NSIndexPath indexPathForRow:j inSection:i];
+                    [self.tableView reloadRowsAtIndexPaths:@[imageCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
                 }
                 break;
             }

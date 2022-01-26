@@ -34,7 +34,7 @@
     self = [super init];
     if (self)
     {
-        self.desc = desc;
+        self.desc = desc ? desc : @"";
         _isNew = isNew;
         _readOnly = readOnly;
         _keyboardHeight = 0.0;

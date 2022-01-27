@@ -623,7 +623,7 @@
 
 - (void) changeDescriptionClicked
 {
-    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:self.desc isNew:self.newItem readOnly:YES];
+    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:self.desc isNew:self.newItem isEditing:NO readOnly:YES];
     _editDescController.delegate = self;
     [self.navController pushViewController:_editDescController animated:YES];
 }

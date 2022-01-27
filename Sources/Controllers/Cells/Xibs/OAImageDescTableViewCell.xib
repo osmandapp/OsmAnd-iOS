@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -32,22 +32,32 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="WCi-xi-Iq6">
+                        <rect key="frame" x="150" y="91.5" width="20" height="20"/>
+                    </activityIndicatorView>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="Y2Z-m2-Bti" secondAttribute="bottom" constant="8" id="2hb-M3-7He"/>
+                    <constraint firstItem="Y2Z-m2-Bti" firstAttribute="top" secondItem="QZa-dq-tFg" secondAttribute="bottom" constant="8" id="38C-t1-GpS"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Y2Z-m2-Bti" secondAttribute="trailing" id="BiF-AB-ffQ"/>
-                    <constraint firstItem="Y2Z-m2-Bti" firstAttribute="top" secondItem="QZa-dq-tFg" secondAttribute="bottom" constant="8" id="Owg-Ny-a5C"/>
+                    <constraint firstItem="WCi-xi-Iq6" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="Q1T-N7-3Ib"/>
                     <constraint firstItem="Y2Z-m2-Bti" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="Sge-vW-Yip"/>
+                    <constraint firstAttribute="bottom" secondItem="QZa-dq-tFg" secondAttribute="bottom" priority="1" id="Sz2-0Y-ARA"/>
                     <constraint firstItem="QZa-dq-tFg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="Vsl-4r-HUv"/>
                     <constraint firstItem="QZa-dq-tFg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="gqU-z9-zHb"/>
                     <constraint firstAttribute="trailingMargin" secondItem="QZa-dq-tFg" secondAttribute="trailing" id="pWi-SZ-eI5"/>
+                    <constraint firstItem="WCi-xi-Iq6" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="zKD-fW-L8o"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
+                <outlet property="activityIndicatorView" destination="WCi-xi-Iq6" id="PDF-Wj-gYw"/>
                 <outlet property="descView" destination="Y2Z-m2-Bti" id="oW4-U8-JmX"/>
                 <outlet property="iconView" destination="QZa-dq-tFg" id="v7N-C5-6I7"/>
                 <outlet property="iconViewHeight" destination="VOe-OX-Zmn" id="JLP-Wu-QmM"/>
+                <outlet property="imageBottomConstraint" destination="Sz2-0Y-ARA" id="ueA-FY-WVy"/>
+                <outlet property="imageBottomToLabelConstraint" destination="38C-t1-GpS" id="2Xi-mj-VlO"/>
+                <outlet property="imageTopConstraint" destination="gqU-z9-zHb" id="gxy-uf-4Fs"/>
             </connections>
             <point key="canvasLocation" x="131.8840579710145" y="173.10267857142856"/>
         </tableViewCell>

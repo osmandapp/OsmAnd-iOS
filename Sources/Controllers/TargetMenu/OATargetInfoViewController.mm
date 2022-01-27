@@ -938,7 +938,7 @@
     }
     else if (info.isText && info.moreText)
     {
-        OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO readOnly:YES];
+        OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO readOnly:YES];
         [self.navController pushViewController:_editDescController animated:YES];
     }
     else if ([info.typeName isEqualToString:kCollapseDetailsRowType])

@@ -67,6 +67,8 @@
 #define kInfoCreatedOnCell 0
 #define kActionMoveCell 1
 
+#define kGpxDescriptionImageHeight 149
+
 @implementation OATrackMenuViewControllerState
 
 + (instancetype)withPinLocation:(CLLocationCoordinate2D)pinLocation openedFromMap:(BOOL)openedFromMap
@@ -126,10 +128,11 @@
     BOOL _isTabSelecting;
     BOOL _wasFirstOpening;
     
-    BOOL _isImageDownladFinished;
+    BOOL _isImageDownloadFinished;
+    BOOL _isImageDownloadSucceed;
     UIImage *_cachedImage;
     NSString *_cachedImageURL;
-    BOOL _isScreenClosing;
+    BOOL _isViewVisible;
     OAEditDescriptionViewController *_editDescController;
 }
 
@@ -215,7 +218,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    _isScreenClosing = NO;
+    _isViewVisible = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -282,7 +285,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     _exportController = nil;
-    _isScreenClosing = YES;
+    _isViewVisible = YES;
 }
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -419,14 +422,18 @@
                 NSString *url = cellData.values[@"img"];
                 if (!_cachedImage || ![url isEqualToString:_cachedImageURL])
                 {
+                    _isImageDownloadFinished = NO;
                     _cachedImage = nil;
                     _cachedImageURL = url;
 
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString: url]];
                         UIImage *image = [UIImage imageWithData:data];
+                        _isImageDownloadFinished = YES;
+                        _isImageDownloadSucceed = image != nil;
+                        
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            if (!_isScreenClosing)
+                            if (!_isViewVisible)
                             {
                                 _cachedImage = image;
                                 NSIndexPath *imageCellIndex = [NSIndexPath indexPathForRow:j inSection:i];
@@ -2158,26 +2165,29 @@
         cell.imageBottomConstraint.priority = 1000;
         cell.imageBottomConstraint.constant = 0;
 
-        BOOL isDownloaded = _cachedImageURL && _cachedImage;
-        BOOL isDownloadingFailed = _cachedImageURL;
-        if (isDownloaded)
-        {
-            cell.activityIndicatorView.hidden = YES;
-            cell.iconView.image = _cachedImage;
-            cell.imageTopConstraint.constant = 16;
-            cell.iconViewHeight.constant = 149;
-        }
-        else if (isDownloadingFailed)
-        {
-            cell.activityIndicatorView.hidden = YES;
-            cell.iconView.image = nil;
-            cell.imageTopConstraint.constant = 1;
-            cell.iconViewHeight.constant = 1;
-        }
-        else
+        if (!_isImageDownloadFinished)
         {
             cell.activityIndicatorView.hidden = NO;
             [cell.activityIndicatorView startAnimating];
+            cell.iconView.image = nil;
+            cell.iconViewHeight.constant = 40;
+        }
+        else
+        {
+            cell.activityIndicatorView.hidden = YES;
+            [cell.activityIndicatorView stopAnimating];
+            if (_isImageDownloadSucceed)
+            {
+                cell.iconView.image = _cachedImage;
+                cell.imageTopConstraint.constant = 16;
+                cell.iconViewHeight.constant = kGpxDescriptionImageHeight;
+            }
+            else
+            {
+                cell.iconView.image = nil;
+                cell.imageTopConstraint.constant = 1;
+                cell.iconViewHeight.constant = 1;
+            }
         }
         outCell =  cell;
     }

@@ -163,7 +163,7 @@
         return nil;
     
     NSString *firstParagraphText = [[firstParagraphHtml regexReplacePattern:@"(<(/)(a|img)>)|(<(a|img).+?>)|(<div.+?/div>)" newString:@""] stringByReplacingOccurrencesOfString:@"<br>" withString:@""];
-    firstParagraphText = [[firstParagraphText fromHtml] trim];
+    firstParagraphText = [[self fromHtml:firstParagraphText] trim];
     
     NSArray<NSString *> *phrases = [firstParagraphText regexSplitInStringByPattern:@"\\. "];
     NSMutableString *res = [NSMutableString string];
@@ -176,5 +176,16 @@
     }
     return [NSString stringWithString:res];
 }
+
++ (NSString *) fromHtml:(NSString *)htmlText
+{
+    //method to replace Java Html.fromHtml()
+    NSString *result;
+    NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:htmlText fontSize:17];
+    if (attrString)
+        result = attrString.string;
+    return result;
+}
+
 
 @end

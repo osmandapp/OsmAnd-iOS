@@ -321,15 +321,6 @@
     return [NSArray arrayWithArray:results];
 }
 
-- (NSString *) fromHtml
-{
-    NSString *result;
-    NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:self fontSize:17];
-    if (attrString)
-        result = attrString.string;
-    return result;
-}
-
 @end
 
 @implementation UIView (utils)

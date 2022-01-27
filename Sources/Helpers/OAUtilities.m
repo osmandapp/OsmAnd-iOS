@@ -297,27 +297,30 @@
 
 - (NSArray<NSString *> *) regexSplitInStringByPattern:(NSString *)pattern
 {
+    NSRegularExpressionOptions regexOptions = NSRegularExpressionCaseInsensitive;
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:regexOptions error:&error];
+
     NSRange searchedRange = NSMakeRange(0, [self length]);
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
     NSArray *matches = [regex matchesInString:self options:0 range:searchedRange];
     if (matches.count == 0)
         return @[self];
     
     NSMutableArray *results = [NSMutableArray array];
-    [matches enumerateObjectsUsingBlock:^(NSTextCheckingResult *obj, NSUInteger idx, BOOL *stop) {
-        for (int i = 1; i< [obj numberOfRanges]; ++i) {
-            NSRange range = [obj rangeAtIndex:i];
-            NSString *string = [pattern substringWithRange:range];
-            if ([string rangeOfString:@";"].location == NSNotFound) {
-                [results addObject: string];
-            } else {
-                NSArray *a = [string componentsSeparatedByString:@";"];
-                for (NSString *s  in a) {
-                    [results addObject: [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
-                }
-            }
-        }
-    }];
+    NSInteger phraseStartIndex = 0;
+    
+    for (NSTextCheckingResult *match in matches) {
+        NSRange separatorRange = [match range];
+        NSString *phrase = [self substringWithRange:NSMakeRange(phraseStartIndex, separatorRange.location - phraseStartIndex)];
+        if (phrase.length > 0)
+            [results addObject:phrase];
+        phraseStartIndex = separatorRange.location + separatorRange.length;
+    }
+    
+    NSString *lastPhrase = [self substringFromIndex:phraseStartIndex];
+    if (lastPhrase.length > 0)
+        [results addObject:lastPhrase];
+  
     return [NSArray arrayWithArray:results];
 }
 

@@ -585,6 +585,7 @@
                     OAFavoriteItem *favItem = [[OAFavoriteItem alloc] initWithFavorite:favorite];
                     [cell.titleView setText:[item getName]];
                     cell.titleIcon.image = favItem.getCompositeIcon;
+                    cell.titleIcon.contentMode = UIViewContentModeScaleAspectFit;
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
@@ -599,11 +600,14 @@
                 if (cell)
                 {
                     [cell.titleView setText:[item getName]];
-                    cell.titleIcon.image = [UIImage imageNamed:[OAQuickSearchListItem getIconName:res]];
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
+                    OAGpxWpt *wpt = (OAGpxWpt *)res.object;
+                    OAGpxWptItem *wptItem = [OAGpxWptItem withGpxWpt:wpt];
+                    cell.titleIcon.image = [wptItem getCompositeIcon];
+                    cell.titleIcon.contentMode = UIViewContentModeScaleAspectFit;
                     [self setCellDistanceDirection:cell item:item];
                 }
                 return cell;

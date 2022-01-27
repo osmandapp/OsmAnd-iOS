@@ -1662,7 +1662,7 @@ typedef enum
                                fromName:targetPoint.pointDescription checkDisplayedGpx:NO];
 }
 
-- (OAPOI *) getPOI
+- (OAPOI *) getTargetPointPoi
 {
     OAPOI *poi = nil;
     if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAPOI.class])
@@ -1682,7 +1682,7 @@ typedef enum
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     
-    OAPOI *poi = [self getPOI];
+    OAPOI *poi = [self getTargetPointPoi];
     OAEditPointViewController *controller =
             [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
                                                           title:self.targetMenuView.targetPoint.title
@@ -1880,7 +1880,7 @@ typedef enum
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     
-    OAPOI *poi = [self getPOI];
+    OAPOI *poi = [self getTargetPointPoi];
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location
                                                                                           title:title
                                                                                     customParam:gpxFileName

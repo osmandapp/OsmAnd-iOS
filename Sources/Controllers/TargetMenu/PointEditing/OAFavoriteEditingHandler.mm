@@ -61,7 +61,7 @@
         
         NSString *poiIconName = [self.class getPoiIconName:poi];
         if (poiIconName && poiIconName.length > 0)
-            icon = QString([poiIconName UTF8String]);
+            icon = QString::fromNSString(poiIconName);
         
         _iconName = poiIconName;
         

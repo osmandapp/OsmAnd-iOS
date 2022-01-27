@@ -328,9 +328,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     if (!self.favorite->getIcon().isNull())
     {
-        NSString *iconName = self.favorite->getIcon().toNSString();
-        if ([[OAFavoritesHelper getFlatIconNamesList] containsObject:iconName])
-            return iconName;
+        return self.favorite->getIcon().toNSString();
     }
     return @"special_star";
 }

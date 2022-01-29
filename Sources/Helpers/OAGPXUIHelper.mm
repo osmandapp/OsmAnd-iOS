@@ -42,10 +42,10 @@
     {
         OAGpxTrk *track = [[OAGpxTrk alloc] init];
         OAGpxTrkSeg *seg = [[OAGpxTrkSeg alloc] init];
-        NSMutableArray<OAGpxTrkPt *> *segPoints = [NSMutableArray new];
+        NSMutableArray<OAWptPt *> *segPoints = [NSMutableArray new];
         for (CLLocation *l in locations)
         {
-            OAGpxTrkPt *point = [[OAGpxTrkPt alloc] init];
+            OAWptPt *point = [[OAWptPt alloc] init];
             [point setPosition:l.coordinate];
             if (l.altitude != 0)
             {
@@ -54,7 +54,7 @@
                 point.elevation = h;
                 if (lastHeight == RouteDataObject::HEIGHT_UNDEFINED && seg.points.count > 0)
                 {
-                    for (OAGpxTrkPt *pt in seg.points)
+                    for (OAWptPt *pt in seg.points)
                     {
                         if (pt.elevation == NAN)
                             pt.elevation = h;
@@ -84,7 +84,7 @@
     long endTime = LONG_MIN;
     for (NSInteger i = 0; i < segment.points.count; i++)
     {
-        OAGpxTrkPt *point = segment.points[i];
+        OAWptPt *point = segment.points[i];
         long time = point.time;
         if (time != 0) {
             startTime = MIN(startTime, time);
@@ -97,10 +97,10 @@
 + (double) getSegmentDistance:(OAGpxTrkSeg *)segment
 {
     double distance = 0;
-    OAGpxTrkPt *prevPoint = nil;
+    OAWptPt *prevPoint = nil;
     for (NSInteger i = 0; i < segment.points.count; i++)
     {
-        OAGpxTrkPt *point = segment.points[i];
+        OAWptPt *point = segment.points[i];
         if (prevPoint != nil)
             distance += getDistance(prevPoint.getLatitude, prevPoint.getLongitude, point.getLatitude, point.getLongitude);
         prevPoint = point;
@@ -225,7 +225,7 @@
 
 + (OsmAnd::LatLon)getSegmentPointByTime:(OAGpxTrkSeg *)segment
                                 gpxFile:(OAGPXDocument *)gpxFile
-                                   time:(float)time
+                                   time:(double)time
                         preciseLocation:(BOOL)preciseLocation
                            joinSegments:(BOOL)joinSegments
 {
@@ -269,9 +269,9 @@
                      passedSegmentsTime:(long)passedSegmentsTime
                         preciseLocation:(BOOL)preciseLocation
 {
-    OAGpxTrkPt *previousPoint = nil;
+    OAWptPt *previousPoint = nil;
     long segmentStartTime = segment.points.firstObject.time;
-    for (OAGpxTrkPt *currentPoint in segment.points)
+    for (OAWptPt *currentPoint in segment.points)
     {
         long totalPassedTime = passedSegmentsTime + currentPoint.time - segmentStartTime;
         if (totalPassedTime >= timeToPoint)
@@ -290,7 +290,7 @@
 
 + (OsmAnd::LatLon)getSegmentPointByDistance:(OAGpxTrkSeg *)segment
                                     gpxFile:(OAGPXDocument *)gpxFile
-                            distanceToPoint:(float)distanceToPoint
+                            distanceToPoint:(double)distanceToPoint
                             preciseLocation:(BOOL)preciseLocation
                                joinSegments:(BOOL)joinSegments
 {
@@ -298,10 +298,10 @@
 
     if (!segment.generalSegment || joinSegments)
     {
-        OAGpxTrkPt *prevPoint = nil;
+        OAWptPt *prevPoint = nil;
         for (int i = 0; i < segment.points.count; i++)
         {
-            OAGpxTrkPt *currPoint = segment.points[i];
+            OAWptPt *currPoint = segment.points[i];
             if (prevPoint)
             {
                 passedDistance += getDistance(
@@ -325,7 +325,7 @@
     }
 
     double passedSegmentsPointsDistance = 0;
-    OAGpxTrkPt *prevPoint = nil;
+    OAWptPt *prevPoint = nil;
     for (OAGpxTrk *track in gpxFile.tracks)
     {
         if (track.generalTrack)
@@ -336,7 +336,7 @@
             if (!seg.points || seg.points.count == 0)
                 continue;
 
-            for (OAGpxTrkPt *currPoint in seg.points)
+            for (OAWptPt *currPoint in seg.points)
             {
                 if (prevPoint)
                 {
@@ -366,8 +366,8 @@
 
 + (OsmAnd::LatLon)getIntermediatePointByTime:(double)passedTime
                                  timeToPoint:(double)timeToPoint
-                                   prevPoint:(OAGpxTrkPt *)prevPoint
-                                   currPoint:(OAGpxTrkPt *)currPoint
+                                   prevPoint:(OAWptPt *)prevPoint
+                                   currPoint:(OAWptPt *)currPoint
 {
     double percent = 1 - (passedTime - timeToPoint) / (currPoint.time - prevPoint.time);
     double dLat = (currPoint.position.latitude - prevPoint.position.latitude) * percent;
@@ -379,8 +379,8 @@
 
 + (OsmAnd::LatLon)getIntermediatePointByDistance:(double)passedDistance
                                  distanceToPoint:(double)distanceToPoint
-                                       currPoint:(OAGpxTrkPt *)currPoint
-                                       prevPoint:(OAGpxTrkPt *)prevPoint
+                                       currPoint:(OAWptPt *)currPoint
+                                       prevPoint:(OAWptPt *)prevPoint
 {
     double percent = 1 - (passedDistance - distanceToPoint) / (currPoint.distance - prevPoint.distance);
     double dLat = (currPoint.position.latitude - prevPoint.position.latitude) * percent;

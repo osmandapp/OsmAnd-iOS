@@ -325,10 +325,10 @@
     lastTimeUpdated = 0;
     lastPoint = kCLLocationCoordinate2DInvalid;
     
-    [currentTrack getDocument]->locationMarks.clear();
+    [currentTrack getDocument]->points.clear();
     [currentTrack getDocument]->tracks.clear();
     
-    [currentTrack.locationMarks removeAllObjects];
+    [currentTrack.points removeAllObjects];
     [currentTrack.tracks removeAllObjects];
     [currentTrack initBounds];
     currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
@@ -351,7 +351,7 @@
             OAGPXMutableDocument *doc = data[f];
             if (![doc isEmpty])
             {
-                OALocationMark *pt = [doc findPointToShow];
+                OAWptPt *pt = [doc findPointToShow];
                 
                 NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
                 [simpleFormat setDateFormat:@"HH-mm_EEE"];
@@ -421,7 +421,7 @@
             {
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
-                    OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+                    OAWptPt *wpt = [[OAWptPt alloc] init];
                     double lat = sqlite3_column_double(statement, 0);
                     double lon = sqlite3_column_double(statement, 1);
                     wpt.position = CLLocationCoordinate2DMake(lat, lon);
@@ -484,7 +484,7 @@
 
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
-                    OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] init];
+                    OAWptPt *pt = [[OAWptPt alloc] init];
                     double lat = sqlite3_column_double(statement, 0);
                     double lon = sqlite3_column_double(statement, 1);
                     pt.position = CLLocationCoordinate2DMake(lat, lon);
@@ -646,7 +646,7 @@
     
     lastTimeUpdated = time;
     
-    OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] init];
+    OAWptPt *pt = [[OAWptPt alloc] init];
     pt.position = CLLocationCoordinate2DMake(lat, lon);
     pt.time = time;
     pt.elevation = alt;
@@ -656,7 +656,7 @@
     [self addTrackPoint:pt newSegment:newSegment time:time];
 }
 
-- (void) addTrackPoint:(OAGpxTrkPt *)pt newSegment:(BOOL)newSegment time:(long)time
+- (void) addTrackPoint:(OAWptPt *)pt newSegment:(BOOL)newSegment time:(long)time
 {
         OAGpxTrk *track = [currentTrack.tracks firstObject];
         BOOL segmentAdded = NO;
@@ -677,7 +677,7 @@
         currentTrack.modifiedTime = time;
     }
     
-- (void)addWpt:(OAGpxWpt *)wpt
+- (void)addWpt:(OAWptPt *)wpt
 {
     [currentTrack addWpt:wpt];
     currentTrack.modifiedTime = wpt.time;
@@ -742,7 +742,7 @@
     });
 }
 
-- (void) updatePointCoordinates:(OAGpxWpt *)wpt newLocation:(CLLocationCoordinate2D)newLocation
+- (void) updatePointCoordinates:(OAWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation
 {
     dispatch_async(dbQueue, ^{
         sqlite3_stmt    *statement;
@@ -850,7 +850,7 @@
     });
 }
 
-- (void)deleteWpt:(OAGpxWpt *)wpt
+- (void)deleteWpt:(OAWptPt *)wpt
 {
     [currentTrack deleteWpt:wpt];
     
@@ -868,7 +868,7 @@
     [self doDeleteAllPoints];
 }
 
-- (void)saveWpt:(OAGpxWpt *)wpt
+- (void)saveWpt:(OAWptPt *)wpt
 {
     [self doUpdatePointsLat:wpt.position.latitude
                         lon:wpt.position.longitude
@@ -883,7 +883,7 @@
 {
     dispatch_sync(syncQueue, ^{
         
-        [currentTrack.locationMarks removeAllObjects];
+        [currentTrack.points removeAllObjects];
         [currentTrack.tracks removeAllObjects];
         [self collectRecordedData:YES];
         [currentTrack applyBounds];

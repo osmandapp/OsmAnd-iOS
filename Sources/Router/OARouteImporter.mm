@@ -94,7 +94,7 @@
     double lastElevation = RouteDataObject::HEIGHT_UNDEFINED;
     if (segment.hasRoute)
     {
-        for (OAGpxTrkPt *point in segment.points)
+        for (OAWptPt *point in segment.points)
         {
             Location loc(point.getLatitude, point.getLongitude);
             if (!isnan(point.elevation))

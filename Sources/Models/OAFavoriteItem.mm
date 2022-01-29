@@ -494,9 +494,9 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self.favorite->setCalendarEvent(calendarEvent);
 }
 
-- (OAGpxWpt *) toWpt
+- (OAWptPt *) toWpt
 {
-    OAGpxWpt *pt = [[OAGpxWpt alloc] init];
+    OAWptPt *pt = [[OAWptPt alloc] init];
     pt.position = CLLocationCoordinate2DMake(self.getLatitude, self.getLongitude);
     if (self.getAltitude > 0)
         pt.elevation = self.getAltitude;

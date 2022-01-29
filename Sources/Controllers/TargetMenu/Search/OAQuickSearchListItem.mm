@@ -156,7 +156,7 @@
         }
         case WPT:
         {
-            OAGpxWpt *wpt = (OAGpxWpt *)searchResult.object;
+            OAWptPt *wpt = (OAWptPt *) searchResult.object;
             UIColor *color = UIColorFromRGBA([wpt getColor:0]);
             OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
             return favCol.iconName;

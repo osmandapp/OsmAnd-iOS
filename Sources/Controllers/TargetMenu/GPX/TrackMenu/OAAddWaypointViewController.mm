@@ -66,7 +66,7 @@
 
 - (void)commonInit
 {
-    OAGpxWpt *movedPoint = [[OAGpxWpt alloc] init];
+    OAWptPt *movedPoint = [[OAWptPt alloc] init];
     movedPoint.name = OALocalizedString(@"gpx_waypoint");
     movedPoint.position = _gpx.bounds.center;
     _movedPoint = [OAGpxWptItem withGpxWpt:movedPoint];

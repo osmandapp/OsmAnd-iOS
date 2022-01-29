@@ -18,17 +18,10 @@
 #define ADDRESS_EXTENSION @"address"
 #define CALENDAR_EXTENSION @"calendar_event"
 #define CREATION_TIME_EXTENSION @"creation_date"
-
-typedef enum
-{
-    Unknown = -1,
-    None,
-    PositionOnly,
-    PositionAndElevation,
-    DGPS,
-    PPS
-    
-} OAGpxFixType;
+#define DEFAULT_ICON_NAME @"special_star"
+#define PROFILE_TYPE_EXTENSION @"profile"
+#define GAP_PROFILE_TYPE @"gap"
+#define TRKPT_INDEX_EXTENSION @"trkpt_idx"
 
 typedef NS_ENUM(NSInteger, EOAGPXColor)
 {
@@ -124,6 +117,8 @@ struct RouteDataBundle;
 
 @interface OAGpxExtensions : NSObject
 
+@property (nonatomic) NSDictionary *attributes;
+@property (nonatomic) NSString *value;
 @property (nonatomic) NSArray<OAGpxExtension *> *extensions;
 
 - (void) copyExtensions:(OAGpxExtensions *)e;
@@ -131,6 +126,12 @@ struct RouteDataBundle;
 - (void) addExtension:(OAGpxExtension *)e;
 - (void) removeExtension:(OAGpxExtension *)e;
 - (void) setExtension:(NSString *)key value:(NSString *)value;
+
+- (NSArray<OAGpxExtension *> *) fetchExtension:(QList<OsmAnd::Ref<OsmAnd::Extensions::Extension>>)extensions;
+- (void) fetchExtensions:(std::shared_ptr<OsmAnd::Extensions>)extensions;
+
+- (void) fillExtension:(const std::shared_ptr<OsmAnd::Extensions::Extension>&)extension ext:(OAGpxExtension *)e;
+- (void) fillExtensions:(const std::shared_ptr<OsmAnd::Extensions>&)extensions;
 
 - (int) getColor:(int)defColor;
 - (void) setColor:(int)value;
@@ -153,121 +154,28 @@ struct RouteDataBundle;
 
 @end
 
-@interface OALocationMark : OAGpxExtensions<OALocationPoint>
+@interface OAWptPt : OAGpxExtensions<OALocationPoint>
+
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> wpt;
 
 @property (nonatomic) BOOL firstPoint;
 @property (nonatomic) BOOL lastPoint;
 @property (nonatomic) CLLocationCoordinate2D position;
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *desc;
-@property (nonatomic) CLLocationDistance elevation;
+@property (nonatomic) double elevation;
 @property (nonatomic) long time;
 @property (nonatomic) NSString *comment;
 @property (nonatomic) NSString *type;
 @property (nonatomic) NSArray *links;
 @property (nonatomic) double distance;
-
-@end
-
-@interface OATrackPoint : OALocationMark
-
-@end
-
-@class OAGpxTrkPt;
-
-@interface OATrackSegment : OAGpxExtensions
-
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSArray<OAGpxTrkPt *> *points;
-
-@end
-
-@class OAGpxTrkSeg;
-
-@interface OATrack : OAGpxExtensions
-
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSString *desc;
-@property (nonatomic) NSString *comment;
-@property (nonatomic) NSString *type;
-@property (nonatomic) NSArray *links;
-@property (nonatomic) NSArray<OAGpxTrkSeg *> *segments;
-
-@end
-
-@interface OARoutePoint : OALocationMark
-
-@end
-
-@class OAGpxRtePt;
-
-@interface OARoute : OAGpxExtensions
-
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSString *desc;
-@property (nonatomic) NSString *comment;
-@property (nonatomic) NSString *type;
-@property (nonatomic) NSArray *links;
-@property (nonatomic) NSArray<OAGpxRtePt *> *points;
-
-@end
-
-@interface OAGpxLink : OALink
-
-@property (nonatomic) NSString *type;
-
-@end
-
-@interface OAGpxMetadata : OAMetadata
-
-@end
-
-@interface OAGpxWpt : OALocationMark
-
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> wpt;
-
 @property (nonatomic) double speed;
-@property (nonatomic) double magneticVariation;
-@property (nonatomic) double geoidHeight;
-@property (nonatomic) NSString *source;
-@property (nonatomic) NSString *symbol;
-@property (nonatomic) OAGpxFixType fixType;
-@property (nonatomic) int satellitesUsedForFixCalculation;
 @property (nonatomic) double horizontalDilutionOfPrecision;
 @property (nonatomic) double verticalDilutionOfPrecision;
-@property (nonatomic) double positionDilutionOfPrecision;
-@property (nonatomic) double ageOfGpsData;
-@property (nonatomic) int dgpsStationId;
-@property (nonatomic) NSString *profileType;
 
-- (void) fillWithWpt:(OAGpxWpt *)gpxWpt;
-- (void) fillWithTrkPt:(OAGpxTrkPt *)gpxWpt;
-
-- (NSString *)getIcon;
-- (NSString *)getBackgroundIcon;
-- (NSString *)getAddress;
-
-@end
-
-@interface OAGpxTrkPt : OATrackPoint
-
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxTrkPt> trkpt;
-
-@property (nonatomic) double speed;
-@property (nonatomic) double magneticVariation;
-@property (nonatomic) double geoidHeight;
-@property (nonatomic) NSString *source;
-@property (nonatomic) NSString *symbol;
-@property (nonatomic) OAGpxFixType fixType;
-@property (nonatomic) int satellitesUsedForFixCalculation;
-@property (nonatomic) double horizontalDilutionOfPrecision;
-@property (nonatomic) double verticalDilutionOfPrecision;
-@property (nonatomic) double positionDilutionOfPrecision;
-@property (nonatomic) double ageOfGpsData;
-@property (nonatomic) int dgpsStationId;
-
-- (instancetype) initWithPoint:(OAGpxTrkPt *)point;
-- (instancetype) initWithRtePt:(OAGpxRtePt *)point;
+- (NSString *) getIcon;
+- (NSString *) getBackgroundIcon;
+- (NSString *) getAddress;
 
 - (NSString *) getProfileType;
 - (void) setProfileType:(NSString *)profileType;
@@ -278,6 +186,37 @@ struct RouteDataBundle;
 
 - (NSInteger) getTrkPtIndex;
 - (void) setTrkPtIndex:(NSInteger)index;
+
+@end
+
+@interface OATrackSegment : OAGpxExtensions
+
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSArray<OAWptPt *> *points;
+
+@end
+
+@class OAGpxTrkSeg;
+
+@interface OATrack : OAGpxExtensions
+
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *desc;
+@property (nonatomic) NSArray<OAGpxTrkSeg *> *segments;
+
+@end
+
+@interface OARoute : OAGpxExtensions
+
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *desc;
+@property (nonatomic) NSArray<OAWptPt *> *points;
+
+@end
+
+@interface OAGpxLink : OALink
+
+@property (nonatomic) NSString *type;
 
 @end
 
@@ -309,29 +248,6 @@ struct RouteDataBundle;
 @property (nonatomic) NSString *source;
 @property (nonatomic) int slotNumber;
 @property (nonatomic) BOOL generalTrack;
-
-@end
-
-@interface OAGpxRtePt : OARoutePoint
-
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxRtePt> rtept;
-
-@property (nonatomic) double speed;
-@property (nonatomic) double magneticVariation;
-@property (nonatomic) double geoidHeight;
-@property (nonatomic) NSString *source;
-@property (nonatomic) NSString *symbol;
-@property (nonatomic) OAGpxFixType fixType;
-@property (nonatomic) int satellitesUsedForFixCalculation;
-@property (nonatomic) double horizontalDilutionOfPrecision;
-@property (nonatomic) double verticalDilutionOfPrecision;
-@property (nonatomic) double positionDilutionOfPrecision;
-@property (nonatomic) double ageOfGpsData;
-@property (nonatomic) int dgpsStationId;
-
-- (instancetype) initWithTrkPt:(OAGpxTrkPt *)point;
-
-- (NSString *) getProfileType;
 
 @end
 

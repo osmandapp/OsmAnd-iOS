@@ -75,7 +75,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     else if (_replaceItemType == EOAReplacePointTypeWaypoint)
     {
         NSMutableArray *arr = [NSMutableArray array];
-        for (OAGpxWpt *point in _gpxDocument.locationMarks)
+        for (OAWptPt *point in _gpxDocument.points)
         {
             OAGpxWptItem *itemData = [[OAGpxWptItem alloc] init];
             itemData.point = point;

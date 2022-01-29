@@ -15,15 +15,15 @@
     std::shared_ptr<OsmAnd::GpxDocument> document;
 }
 
-@dynamic locationMarks, tracks, routes;
+@dynamic points, tracks, routes;
 
 - (instancetype)init
 {
     self = [super init];
     if (self)
     {
-        self.metadata = [[OAGpxMetadata alloc] init];
-        self.locationMarks = [NSMutableArray array];
+        self.metadata = [[OAMetadata alloc] init];
+        self.points = [NSMutableArray array];
         self.tracks = [NSMutableArray array];
         self.routes = [NSMutableArray array];
         
@@ -88,16 +88,12 @@
 {
     std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> metadata;
     std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
-    
+
     document->version = QString::fromNSString(self.version);
     document->creator = QString::fromNSString(self.creator);
     
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    [self.class fillExtensions:extensions ext:self];
-    document->extraData = extensions;
-    extensions = nullptr;
-    
+    [self fillExtensions:document];
+
     metadata.reset(new OsmAnd::GpxDocument::GpxMetadata());
     if (self.metadata)
     {
@@ -106,49 +102,35 @@
         
         [self.class fillLinks:metadata->links linkArray:self.metadata.links];
         
-        extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        [self.class fillExtensions:extensions ext:self.metadata];
-        metadata->extraData = extensions;
-        extensions = nullptr;
+        [self.metadata fillExtensions:metadata];
     }
     document->metadata = metadata;
     metadata = nullptr;
-    
 }
 
-- (void) addWpts:(NSArray<OAGpxWpt *> *)wpts
+- (void) addWpts:(NSArray<OAWptPt *> *)wpts
 {
-    [wpts enumerateObjectsUsingBlock:^(OAGpxWpt * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [wpts enumerateObjectsUsingBlock:^(OAWptPt * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [self addWpt:obj];
     }];
 }
 
-- (void) addWpt:(OAGpxWpt *)w
+- (void) addWpt:(OAWptPt *)w
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> wpt;
+    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> wpt;
     std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
 
-    wpt.reset(new OsmAnd::GpxDocument::GpxWpt());
+    wpt.reset(new OsmAnd::GpxDocument::GpxWptPt());
     wpt->position.latitude = w.position.latitude;
     wpt->position.longitude = w.position.longitude;
     wpt->name = QString::fromNSString(w.name);
     wpt->description = QString::fromNSString(w.desc);
     wpt->elevation = w.elevation;
     wpt->timestamp = w.time != 0 ? QDateTime::fromTime_t(w.time).toUTC() : QDateTime();
-    wpt->magneticVariation = w.magneticVariation;
-    wpt->geoidHeight = w.geoidHeight;
     wpt->comment = QString::fromNSString(w.comment);
-    wpt->source = QString::fromNSString(w.source);
-    wpt->symbol = QString::fromNSString(w.symbol);
     wpt->type = QString::fromNSString(w.type);
-    wpt->fixType = (OsmAnd::GpxDocument::GpxFixType)w.fixType;
-    wpt->satellitesUsedForFixCalculation = w.satellitesUsedForFixCalculation;
     wpt->horizontalDilutionOfPrecision = w.horizontalDilutionOfPrecision;
     wpt->verticalDilutionOfPrecision = w.verticalDilutionOfPrecision;
-    wpt->positionDilutionOfPrecision = w.positionDilutionOfPrecision;
-    wpt->ageOfGpsData = w.ageOfGpsData;
-    wpt->dgpsStationId = w.dgpsStationId;
     
     [self.class fillLinks:wpt->links linkArray:w.links];
     
@@ -177,28 +159,25 @@
     
     w.extensions = extArray;
 
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    [self.class fillExtensions:extensions ext:w];
-    wpt->extraData = extensions;
-    extensions = nullptr;
-    
+    [w fillExtensions:wpt];
+
     w.wpt = wpt;
-    document->locationMarks.append(wpt);
+    document->points.append(wpt);
     wpt = nullptr;
 
     [self processBounds:w.position];
     
-    [self.locationMarks addObject:w];
+    [self.points addObject:w];
 }
 
-- (void)deleteWpt:(OAGpxWpt *)w
+- (void)deleteWpt:(OAWptPt *)w
 {
-    for (OAGpxWpt *wpt in self.locationMarks)
+    for (OAWptPt *wpt in self.points)
     {
         if (wpt == w || wpt.time == w.time)
         {
-            [self.locationMarks removeObject:wpt];
-            document->locationMarks.removeOne(wpt.wpt);
+            [self.points removeObject:wpt];
+            document->points.removeOne(wpt.wpt);
             w.wpt = nullptr;
             break;
         }
@@ -207,18 +186,18 @@
 
 - (void)deleteAllWpts
 {
-    [self.locationMarks removeAllObjects];
-    document->locationMarks.clear();
+    [self.points removeAllObjects];
+    document->points.clear();
 }
 
-- (void) addRoutePoints:(NSArray<OAGpxRtePt *> *)points addRoute:(BOOL)addRoute
+- (void) addRoutePoints:(NSArray<OAWptPt *> *)points addRoute:(BOOL)addRoute
 {
     if (self.routes.count == 0 || addRoute)
     {
         OAGpxRte *route = [[OAGpxRte alloc] init];
         [self addRoute:route];
     }
-    for (OAGpxRtePt *pt in points)
+    for (OAWptPt *pt in points)
         [self addRoutePoint:pt route:self.routes.lastObject];
     
 //    self.modifiedTime = System.currentTimeMillis();
@@ -234,43 +213,29 @@
 - (void) addRoute:(OAGpxRte *)r
 {
     std::shared_ptr<OsmAnd::GpxDocument::GpxRte> rte;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxRtePt> rtept;
+    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> rtept;
     std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
-    
+
     if (!r.points)
         r.points = [NSMutableArray new];
     
     rte.reset(new OsmAnd::GpxDocument::GpxRte());
     rte->name = QString::fromNSString(r.name);
     rte->description = QString::fromNSString(r.desc);
-    rte->comment = QString::fromNSString(r.comment);
-    rte->source = QString::fromNSString(r.source);
-    rte->type = QString::fromNSString(r.type);
-    rte->slotNumber = r.slotNumber;
-    
-    for (OAGpxRtePt *p in r.points)
+
+    for (OAWptPt *p in r.points)
     {
-        rtept.reset(new OsmAnd::GpxDocument::GpxRtePt());
+        rtept.reset(new OsmAnd::GpxDocument::GpxWptPt());
         rtept->position.latitude = p.position.latitude;
         rtept->position.longitude = p.position.longitude;
         rtept->name = QString::fromNSString(p.name);
         rtept->description = QString::fromNSString(p.desc);
         rtept->elevation = p.elevation;
         rtept->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
-        rtept->magneticVariation = p.magneticVariation;
-        rtept->geoidHeight = p.geoidHeight;
         rtept->comment = QString::fromNSString(p.comment);
-        rtept->source = QString::fromNSString(p.source);
-        rtept->symbol = QString::fromNSString(p.symbol);
         rtept->type = QString::fromNSString(p.type);
-        rtept->fixType = (OsmAnd::GpxDocument::GpxFixType)p.fixType;
-        rtept->satellitesUsedForFixCalculation = p.satellitesUsedForFixCalculation;
         rtept->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
         rtept->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
-        rtept->positionDilutionOfPrecision = p.positionDilutionOfPrecision;
-        rtept->ageOfGpsData = p.ageOfGpsData;
-        rtept->dgpsStationId = p.dgpsStationId;
         
         [self.class fillLinks:rtept->links linkArray:p.links];
         
@@ -282,25 +247,17 @@
             p.extensions = @[e];
         }
 
-        extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        [self.class fillExtensions:extensions ext:p];
-        rtept->extraData = extensions;
-        extensions = nullptr;
+        [p fillExtensions:rtept];
         
-        p.rtept = rtept;
+        p.wpt = rtept;
         rte->points.append(rtept);
         rtept = nullptr;
         
         [self processBounds:p.position];
     }
     
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    [self.class fillExtensions:extensions ext:r];
-    rte->extraData = extensions;
-    extensions = nullptr;
-    
-    [self.class fillLinks:rte->links linkArray:r.links];
-    
+    [r fillExtensions:rte];
+
     r.rte = rte;
     document->routes.append(rte);
     rte = nullptr;
@@ -308,32 +265,22 @@
     [self.routes addObject:r];
 }
 
-- (void) addRoutePoint:(OAGpxRtePt *)p route:(OAGpxRte *)route
+- (void) addRoutePoint:(OAWptPt *)p route:(OAGpxRte *)route
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxRtePt> rtept;
+    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> rtept;
     std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
-    
-    rtept.reset(new OsmAnd::GpxDocument::GpxRtePt());
+
+    rtept.reset(new OsmAnd::GpxDocument::GpxWptPt());
     rtept->position.latitude = p.position.latitude;
     rtept->position.longitude = p.position.longitude;
     rtept->name = QString::fromNSString(p.name);
     rtept->description = QString::fromNSString(p.desc);
     rtept->elevation = p.elevation;
     rtept->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime();
-    rtept->magneticVariation = p.magneticVariation;
-    rtept->geoidHeight = p.geoidHeight;
     rtept->comment = QString::fromNSString(p.comment);
-    rtept->source = QString::fromNSString(p.source);
-    rtept->symbol = QString::fromNSString(p.symbol);
     rtept->type = QString::fromNSString(p.type);
-    rtept->fixType = (OsmAnd::GpxDocument::GpxFixType)p.fixType;
-    rtept->satellitesUsedForFixCalculation = p.satellitesUsedForFixCalculation;
     rtept->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
     rtept->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
-    rtept->positionDilutionOfPrecision = p.positionDilutionOfPrecision;
-    rtept->ageOfGpsData = p.ageOfGpsData;
-    rtept->dgpsStationId = p.dgpsStationId;
     
     [self.class fillLinks:rtept->links linkArray:p.links];
     
@@ -345,12 +292,9 @@
         p.extensions = @[e];
     }
     
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    [self.class fillExtensions:extensions ext:p];
-    rtept->extraData = extensions;
-    extensions = nullptr;
-    
-    p.rtept = rtept;
+    [p fillExtensions:rtept];
+
+    p.wpt = rtept;
     route.rte->points.append(rtept);
     rtept = nullptr;
     
@@ -369,10 +313,9 @@
 - (void) addTrack:(OAGpxTrk *)t
 {
     std::shared_ptr<OsmAnd::GpxDocument::GpxTrk> trk;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrkPt> trkpt;
+    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> trkpt;
     std::shared_ptr<OsmAnd::GpxDocument::GpxTrkSeg> trkseg;
     std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
 
     if (!t.segments)
         t.segments = [NSMutableArray array];
@@ -380,37 +323,24 @@
     trk.reset(new OsmAnd::GpxDocument::GpxTrk());
     trk->name = QString::fromNSString(t.name);
     trk->description = QString::fromNSString(t.desc);
-    trk->comment = QString::fromNSString(t.comment);
-    trk->source = QString::fromNSString(t.source);
-    trk->type = QString::fromNSString(t.type);
-    trk->slotNumber = t.slotNumber;
-    
+
     for (OAGpxTrkSeg *s in t.segments)
     {
         trkseg.reset(new OsmAnd::GpxDocument::GpxTrkSeg());
         
-        for (OAGpxTrkPt *p in s.points)
+        for (OAWptPt *p in s.points)
         {
-            trkpt.reset(new OsmAnd::GpxDocument::GpxTrkPt());
+            trkpt.reset(new OsmAnd::GpxDocument::GpxWptPt());
             trkpt->position.latitude = p.position.latitude;
             trkpt->position.longitude = p.position.longitude;
             trkpt->name = QString::fromNSString(p.name);
             trkpt->description = QString::fromNSString(p.desc);
             trkpt->elevation = p.elevation;
             trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
-            trkpt->magneticVariation = p.magneticVariation;
-            trkpt->geoidHeight = p.geoidHeight;
             trkpt->comment = QString::fromNSString(p.comment);
-            trkpt->source = QString::fromNSString(p.source);
-            trkpt->symbol = QString::fromNSString(p.symbol);
             trkpt->type = QString::fromNSString(p.type);
-            trkpt->fixType = (OsmAnd::GpxDocument::GpxFixType)p.fixType;
-            trkpt->satellitesUsedForFixCalculation = p.satellitesUsedForFixCalculation;
             trkpt->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
             trkpt->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
-            trkpt->positionDilutionOfPrecision = p.positionDilutionOfPrecision;
-            trkpt->ageOfGpsData = p.ageOfGpsData;
-            trkpt->dgpsStationId = p.dgpsStationId;
             
             [self.class fillLinks:trkpt->links linkArray:p.links];
             
@@ -422,35 +352,24 @@
                 p.extensions = @[e];
             }
 
-            extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-            [self.class fillExtensions:extensions ext:p];
-            trkpt->extraData = extensions;
-            extensions = nullptr;
-            
-            p.trkpt = trkpt;
+            [p fillExtensions:trkpt];
+
+            p.wpt = trkpt;
             trkseg->points.append(trkpt);
             trkpt = nullptr;
             
             [self processBounds:p.position];
         }
         
-        extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        [self.class fillExtensions:extensions ext:s];
-        trkseg->extraData = extensions;
-        extensions = nullptr;
-        
+        [s fillExtensions:trkseg];
+
         s.trkseg = trkseg;
         trk->segments.append(trkseg);
         trkseg = nullptr;
     }
-    
-    [self.class fillLinks:trk->links linkArray:t.links];
-    
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    [self.class fillExtensions:extensions ext:t];
-    trk->extraData = extensions;
-    extensions = nullptr;
-    
+
+    [t fillExtensions:trk];
+
     t.trk = trk;
     document->tracks.append(trk);
     trk = nullptr;
@@ -460,38 +379,28 @@
 
 - (void) addTrackSegment:(OAGpxTrkSeg *)s track:(OAGpxTrk *)track
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrkPt> trkpt;
+    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> trkpt;
     std::shared_ptr<OsmAnd::GpxDocument::GpxTrkSeg> trkseg;
     std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
-    
+
     if (!s.points)
         s.points = [NSMutableArray array];
     
     trkseg.reset(new OsmAnd::GpxDocument::GpxTrkSeg());
     
-    for (OAGpxTrkPt *p in s.points)
+    for (OAWptPt *p in s.points)
     {
-        trkpt.reset(new OsmAnd::GpxDocument::GpxTrkPt());
+        trkpt.reset(new OsmAnd::GpxDocument::GpxWptPt());
         trkpt->position.latitude = p.position.latitude;
         trkpt->position.longitude = p.position.longitude;
         trkpt->name = QString::fromNSString(p.name);
         trkpt->description = QString::fromNSString(p.desc);
         trkpt->elevation = p.elevation;
         trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
-        trkpt->magneticVariation = p.magneticVariation;
-        trkpt->geoidHeight = p.geoidHeight;
         trkpt->comment = QString::fromNSString(p.comment);
-        trkpt->source = QString::fromNSString(p.source);
-        trkpt->symbol = QString::fromNSString(p.symbol);
         trkpt->type = QString::fromNSString(p.type);
-        trkpt->fixType = (OsmAnd::GpxDocument::GpxFixType)p.fixType;
-        trkpt->satellitesUsedForFixCalculation = p.satellitesUsedForFixCalculation;
         trkpt->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
         trkpt->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
-        trkpt->positionDilutionOfPrecision = p.positionDilutionOfPrecision;
-        trkpt->ageOfGpsData = p.ageOfGpsData;
-        trkpt->dgpsStationId = p.dgpsStationId;
         
         [self.class fillLinks:trkpt->links linkArray:p.links];
         
@@ -503,23 +412,17 @@
             p.extensions = @[e];
         }
 
-        extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        [self.class fillExtensions:extensions ext:p];
-        trkpt->extraData = extensions;
-        extensions = nullptr;
-        
-        p.trkpt = trkpt;
+        [p fillExtensions:trkpt];
+
+        p.wpt = trkpt;
         trkseg->points.append(trkpt);
         trkpt = nullptr;
 
         [self processBounds:p.position];
     }
     
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    [self.class fillExtensions:extensions ext:s];
-    trkseg->extraData = extensions;
-    extensions = nullptr;
-    
+    [s fillExtensions:trkseg];
+
     s.trkseg = trkseg;
     track.trk->segments.append(trkseg);
     trkseg = nullptr;
@@ -561,32 +464,22 @@
     }
 }
 
-- (void) addTrackPoint:(OAGpxTrkPt *)p segment:(OAGpxTrkSeg *)segment
+- (void) addTrackPoint:(OAWptPt *)p segment:(OAGpxTrkSeg *)segment
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrkPt> trkpt;
+    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> trkpt;
     std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
-    
-    trkpt.reset(new OsmAnd::GpxDocument::GpxTrkPt());
+
+    trkpt.reset(new OsmAnd::GpxDocument::GpxWptPt());
     trkpt->position.latitude = p.position.latitude;
     trkpt->position.longitude = p.position.longitude;
     trkpt->name = QString::fromNSString(p.name);
     trkpt->description = QString::fromNSString(p.desc);
     trkpt->elevation = p.elevation;
     trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime();
-    trkpt->magneticVariation = p.magneticVariation;
-    trkpt->geoidHeight = p.geoidHeight;
     trkpt->comment = QString::fromNSString(p.comment);
-    trkpt->source = QString::fromNSString(p.source);
-    trkpt->symbol = QString::fromNSString(p.symbol);
     trkpt->type = QString::fromNSString(p.type);
-    trkpt->fixType = (OsmAnd::GpxDocument::GpxFixType)p.fixType;
-    trkpt->satellitesUsedForFixCalculation = p.satellitesUsedForFixCalculation;
     trkpt->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
     trkpt->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
-    trkpt->positionDilutionOfPrecision = p.positionDilutionOfPrecision;
-    trkpt->ageOfGpsData = p.ageOfGpsData;
-    trkpt->dgpsStationId = p.dgpsStationId;
     
     [self.class fillLinks:trkpt->links linkArray:p.links];
     
@@ -598,12 +491,9 @@
         p.extensions = @[e];
     }
     
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    [self.class fillExtensions:extensions ext:p];
-    trkpt->extraData = extensions;
-    extensions = nullptr;
-    
-    p.trkpt = trkpt;
+    [p fillExtensions:trkpt];
+
+    p.wpt = trkpt;
     segment.trkseg->points.append(trkpt);
     trkpt = nullptr;
     

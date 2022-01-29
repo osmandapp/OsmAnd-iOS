@@ -1079,7 +1079,7 @@
         else if (_editPointType == EOAEditPointTypeWaypoint)
         {
             OAGPXDocument *gpxDocument = [(OAGpxWptEditingHandler *)_pointHandler getGpxDocument];
-            if (gpxDocument.locationMarks.count > 0)
+            if (gpxDocument.points.count > 0)
                 replaceScreen = [[OAReplaceFavoriteViewController alloc] initWithItemType:EOAReplacePointTypeWaypoint gpxDocument:gpxDocument];
             else
                 return [self showAlertNotFoundReplaceItem];

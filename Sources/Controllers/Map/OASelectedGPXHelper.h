@@ -11,7 +11,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/GeoInfoDocument.h>
 
-@class OAGPXDocument, OAGpxWpt;
+@class OAGPXDocument, OAWptPt;
 
 @interface OASelectedGPXHelper : NSObject
 
@@ -21,7 +21,7 @@
 + (OASelectedGPXHelper *)instance;
 
 - (BOOL)buildGpxList;
-- (OAGPXDocument *)getSelectedGpx:(OAGpxWpt *)gpxWpt;
+- (OAGPXDocument *)getSelectedGpx:(OAWptPt *)gpxWpt;
 - (BOOL)isShowingAnyGpxFiles;
 
 -(void)clearAllGpxFilesToShow:(BOOL) backupSelection;

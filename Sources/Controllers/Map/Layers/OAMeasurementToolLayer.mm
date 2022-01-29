@@ -89,7 +89,7 @@
         double distance = 0, bearing = 0;
         if (_editingCtx.getPointsCount > 0)
         {
-            OAGpxTrkPt *lastPoint = _editingCtx.getPoints[_editingCtx.getPointsCount - 1];
+            OAWptPt *lastPoint = _editingCtx.getPoints[_editingCtx.getPointsCount - 1];
             OsmAnd::LatLon centerLatLon = OsmAnd::Utilities::convert31ToLatLon(self.mapView.target31);
             distance = getDistance(lastPoint.getLatitude, lastPoint.getLongitude, centerLatLon.latitude, centerLatLon.longitude);
             CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:lastPoint.getLatitude longitude:lastPoint.getLongitude];
@@ -231,7 +231,7 @@
 {
     _isInMovingMode = YES;
     [self moveMapToPoint:_editingCtx.selectedPointPosition];
-    OAGpxTrkPt *pt = [_editingCtx removePoint:_editingCtx.selectedPointPosition updateSnapToRoad:NO];
+    OAWptPt *pt = [_editingCtx removePoint:_editingCtx.selectedPointPosition updateSnapToRoad:NO];
     _editingCtx.originalPointToMove = pt;
     [_editingCtx splitSegments:_editingCtx.selectedPointPosition];
     [self updateLayer];
@@ -242,22 +242,20 @@
     _isInMovingMode = NO;
 }
 
-- (OAGpxTrkPt *) getMovedPointToApply
+- (OAWptPt *) getMovedPointToApply
 {
     const auto latLon = OsmAnd::Utilities::convert31ToLatLon(self.mapViewController.mapView.target31);
     
-    OAGpxTrkPt *originalPoint = _editingCtx.originalPointToMove;
-    OAGpxTrkPt *point = [[OAGpxTrkPt alloc] initWithPoint:originalPoint];
+    OAWptPt *point = _editingCtx.originalPointToMove;
     point.position = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-    [point copyExtensions:originalPoint];
     return point;
 }
 
-- (OAGpxTrkPt *) addPoint:(BOOL)addPointBefore
+- (OAWptPt *) addPoint:(BOOL)addPointBefore
 {
     if (_pressPointLocation)
     {
-        OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] init];
+        OAWptPt *pt = [[OAWptPt alloc] init];
         [pt setPosition:_pressPointLocation.coordinate];
         _pressPointLocation = nil;
         BOOL allowed = _editingCtx.getPointsCount == 0 || ![_editingCtx.getAllPoints containsObject:pt];
@@ -270,12 +268,12 @@
     return nil;
 }
 
-- (OAGpxTrkPt *) addCenterPoint:(BOOL)addPointBefore
+- (OAWptPt *) addCenterPoint:(BOOL)addPointBefore
 {
     const auto center = self.mapViewController.mapView.target31;
     const auto latLon = OsmAnd::Utilities::convert31ToLatLon(center);
     
-    OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] init];
+    OAWptPt *pt = [[OAWptPt alloc] init];
     [pt setPosition:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
     BOOL allowed = _editingCtx.getPointsCount == 0 || ![_editingCtx.getAllPoints containsObject:pt];
     if (allowed)
@@ -290,11 +288,11 @@
 {
     if (_editingCtx.getPointsCount < 2)
         return 0;
-    NSArray<OAGpxTrkPt *> *points = [_editingCtx.getBeforePoints arrayByAddingObjectsFromArray:_editingCtx.getAfterPoints];
+    NSArray<OAWptPt *> *points = [_editingCtx.getBeforePoints arrayByAddingObjectsFromArray:_editingCtx.getAfterPoints];
     
     NSMutableArray<NSNumber *> *distances = [NSMutableArray array];
-    OAGpxTrkPt *prev = nil;
-    for (OAGpxTrkPt *wptPt in points)
+    OAWptPt *prev = nil;
+    for (OAWptPt *wptPt in points)
     {
         if (prev != nil)
         {
@@ -368,12 +366,12 @@
 {
     QVector<OsmAnd::PointI> points;
     
-    OAGpxRtePt *lastBeforePoint = nil;
-    NSMutableArray<OAGpxRtePt *> *beforePoints = [NSMutableArray arrayWithArray:_editingCtx.getBeforePoints];
+    OAWptPt *lastBeforePoint = nil;
+    NSMutableArray<OAWptPt *> *beforePoints = [NSMutableArray arrayWithArray:_editingCtx.getBeforePoints];
     if (beforePoints.count > 0)
         lastBeforePoint = beforePoints[beforePoints.count - 1];
-    OAGpxRtePt *firstAfterPoint = nil;
-    NSMutableArray<OAGpxRtePt *> *afterPoints = [NSMutableArray arrayWithArray:_editingCtx.getAfterPoints];
+    OAWptPt *firstAfterPoint = nil;
+    NSMutableArray<OAWptPt *> *afterPoints = [NSMutableArray arrayWithArray:_editingCtx.getAfterPoints];
     if (afterPoints.count > 0)
         firstAfterPoint = afterPoints.firstObject;
     
@@ -381,7 +379,7 @@
 
     for (int i = 0; i < beforePoints.count; i++)
     {
-        OAGpxRtePt *pt = beforePoints[i];
+        OAWptPt *pt = beforePoints[i];
         points.append(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
     }
     
@@ -407,7 +405,7 @@
             if (segment.points.count > 0)
             {
                 hasPointsBefore = YES;
-                OAGpxTrkPt *pt = segment.points.lastObject;
+                OAWptPt *pt = segment.points.lastObject;
                 hasGapBefore = pt.isGap;
                 if (!pt.isGap || (_editingCtx.isInAddPointMode && _editingCtx.addPointMode != EOAAddPointModeBefore))
                 {
@@ -427,7 +425,7 @@
                 }
                 if (!hasGapBefore || (_editingCtx.isInAddPointMode && _editingCtx.addPointMode != EOAAddPointModeBefore))
                 {
-                    OAGpxTrkPt *pt = segment.points.firstObject;
+                    OAWptPt *pt = segment.points.firstObject;
                     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
                 }
             }
@@ -454,7 +452,7 @@
     for (OAGpxTrkSeg *seg in beforeSegs)
     {
         QVector<OsmAnd::PointI> beforePoints;
-        for (OAGpxTrkPt *pt in seg.points)
+        for (OAWptPt *pt in seg.points)
         {
             beforePoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
         }
@@ -464,7 +462,7 @@
     for (OAGpxTrkSeg *seg in afterSegs)
     {
         QVector<OsmAnd::PointI> afterPoints;
-        for (OAGpxTrkPt *pt in seg.points)
+        for (OAWptPt *pt in seg.points)
         {
             afterPoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
         }
@@ -498,7 +496,7 @@
             pos = _editingCtx.getPointsCount - 1;
         else if (pos < 0)
             pos = 0;
-        OAGpxTrkPt *pt = _editingCtx.getPoints[pos];
+        OAWptPt *pt = _editingCtx.getPoints[pos];
         auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude));
         auto point31 = [OANativeUtilities convertFromPointI:point];
         [self.mapViewController goToPosition:point31 animated:YES];

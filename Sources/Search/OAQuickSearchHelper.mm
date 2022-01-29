@@ -151,14 +151,16 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     for (auto gpxIt = _geoDocList.begin(); gpxIt != _geoDocList.end(); ++gpxIt)
     {
         const auto& gpx = *gpxIt;
-        for (auto it = gpx->locationMarks.begin(); it != gpx->locationMarks.end(); ++it)
+        for (auto it = gpx->points.begin(); it != gpx->points.end(); ++it)
         {
             const auto& point = *it;
             OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
             sr.localeName = point->name.toNSString();
             sr.wpt = point;
-            const auto& gpxWpt = std::dynamic_pointer_cast<const OsmAnd::GpxDocument::GpxWpt>(sr.wpt);
-            sr.object = [OAGPXDocument fetchWpt:qMove(gpxWpt)];
+
+            auto wptPt = std::const_pointer_cast<OsmAnd::GeoInfoDocument::WptPt>(sr.wpt);
+            auto gpxWptPt = std::dynamic_pointer_cast<OsmAnd::GpxDocument::GpxWptPt>(wptPt);
+            sr.object = [OAGPXDocument fetchWpt:gpxWptPt];
             sr.priority = SEARCH_WPT_OBJECT_PRIORITY;
             sr.objectType = WPT;
             sr.location = [[CLLocation alloc] initWithLatitude:point->position.latitude longitude:point->position.longitude];

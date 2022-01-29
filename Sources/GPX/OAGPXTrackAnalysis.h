@@ -10,12 +10,11 @@
 #import <CoreLocation/CoreLocation.h>
 
 @class OAGpxTrkSeg;
-@class OAGpxWpt;
-@class OALocationMark;
+@class OAWptPt;
 
 @interface OASplitMetric : NSObject
 
--(double) metric:(OALocationMark *)p1 p2:(OALocationMark *)p2;
+-(double)metric:(OAWptPt *)p1 p2:(OAWptPt *)p2;
 
 @end
 
@@ -96,8 +95,8 @@
 
 @property (nonatomic) double metricEnd;
 @property (nonatomic) double secondaryMetricEnd;
-@property (nonatomic) OAGpxWpt *locationStart;
-@property (nonatomic) OAGpxWpt *locationEnd;
+@property (nonatomic) OAWptPt *locationStart;
+@property (nonatomic) OAWptPt *locationEnd;
 
 @property (nonatomic) NSArray<OAElevation *> *elevationData;
 @property (nonatomic) NSArray<OASpeed *> *speedData;

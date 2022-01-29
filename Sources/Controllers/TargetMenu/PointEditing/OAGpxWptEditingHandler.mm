@@ -52,7 +52,7 @@
         UIColor* color = favCol.color;
 
         OAGpxWptItem* wpt = [[OAGpxWptItem alloc] init];
-        OAGpxWpt* p = [[OAGpxWpt alloc] init];
+        OAWptPt* p = [[OAWptPt alloc] init];
         p.name = formattedLocation;
         CLLocationCoordinate2D loc = location;
         p.position = loc;

@@ -41,7 +41,7 @@
 
 @implementation OAFollowTrackBottomSheetViewController
 {
-    OAGpxTrkPt *_point;
+    OAWptPt *_point;
     NSArray<NSArray<NSDictionary *> *> *_data;
     
     OAGPXDocument *_gpx;

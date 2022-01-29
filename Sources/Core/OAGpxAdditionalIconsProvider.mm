@@ -121,7 +121,7 @@ OAGpxAdditionalIconsProvider::OAGpxAdditionalIconsProvider()
                 {
                     OAGPXTrackAnalysis *seg = splitData[i];
                     double metricStartValue = splitData[i - 1].metricEnd;
-                    OAGpxWpt *pt = seg.locationStart;
+                    OAWptPt *pt = seg.locationStart;
                     if (pt)
                     {
                         const auto pos31 = Utilities::convertLatLonTo31(LatLon(pt.getLatitude, pt.getLongitude));

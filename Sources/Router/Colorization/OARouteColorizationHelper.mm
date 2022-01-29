@@ -101,7 +101,7 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
                 if (seg.generalSegment || seg.points.count < 2)
                     continue;
                 
-                for (OAGpxTrkPt *pt in seg.points)
+                for (OAWptPt *pt in seg.points)
                 {
                     [latList addObject:@(pt.getLatitude)];
                     [lonList addObject:@(pt.getLongitude)];

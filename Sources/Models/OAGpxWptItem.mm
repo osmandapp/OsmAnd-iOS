@@ -12,7 +12,7 @@
 
 @implementation OAGpxWptItem
 
-+ (instancetype)withGpxWpt:(OAGpxWpt *)gpxWpt
++ (instancetype)withGpxWpt:(OAWptPt *)gpxWpt
 {
     OAGpxWptItem *gpxWptItem = [[OAGpxWptItem alloc] init];
     if (gpxWptItem)
@@ -22,7 +22,7 @@
     return gpxWptItem;
 }
 
-- (void) setPoint:(OAGpxWpt *)point
+- (void) setPoint:(OAWptPt *)point
 {
     _point = point;
     [self acquireColor];

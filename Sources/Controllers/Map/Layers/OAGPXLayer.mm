@@ -132,11 +132,11 @@
     return color;
 }
 
-- (UIColor *) getWptColor:(OsmAnd::Ref<OsmAnd::GeoInfoDocument::ExtraData>)extraData
+- (UIColor *) getWptColor:(OsmAnd::Ref<OsmAnd::Extensions>)extensions
 {
-    if (extraData)
+    if (extensions)
     {
-        const auto& values = extraData->getValues();
+        const auto& values = extensions->getValues();
         const auto& it = values.find(QStringLiteral("color"));
         if (it != values.end())
             return [UIColor colorFromString:it.value().toString().toNSString()];
@@ -345,23 +345,23 @@ colorizationScheme:(int)colorizationScheme
 
     if (!_gpxDocs.empty())
     {
-        QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>> locationMarks;
+        QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::WptPt>> points;
         QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >::iterator it;
         for (it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
         {
             if (!it.value())
                 continue;
             
-            if (!it.value()->locationMarks.empty())
+            if (!it.value()->points.empty())
             {
                 NSString *gpxFilePath = [it.key().toNSString()
                         stringByReplacingOccurrencesOfString:[self.app.gpxPath stringByAppendingString:@"/"]
                                                   withString:@""];
                 OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
-                for (const auto& waypoint : it.value()->locationMarks)
+                for (const auto& waypoint : it.value()->points)
                 {
                     if (![gpx.hiddenGroups containsObject:waypoint->type.toNSString()])
-                        locationMarks.append(waypoint);
+                        points.append(waypoint);
                 }
             }
         }
@@ -371,7 +371,7 @@ colorizationScheme:(int)colorizationScheme
         if (_hiddenPointPos31 != OsmAnd::PointI())
             hiddenPoints.append(_hiddenPointPos31);
         
-        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(locationMarks, self.baseOrder - locationMarks.count() - 1, hiddenPoints,
+        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(points, self.baseOrder - points.count() - 1, hiddenPoints,
                                                                     self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize));
         [self.mapView addTiledSymbolsProvider:_waypointsMapProvider];
     }
@@ -433,7 +433,7 @@ colorizationScheme:(int)colorizationScheme
     {
         auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
         OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
-        NSArray<OAGpxTrkPt *> *points = [self findPointsNearSegments:[doc getPointsToDisplay] radius:r point:point];
+        NSArray<OAWptPt *> *points = [self findPointsNearSegments:[doc getPointsToDisplay] radius:r point:point];
         if (points != nil)
         {
             CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
@@ -452,7 +452,7 @@ colorizationScheme:(int)colorizationScheme
     }
 }
 
-- (NSArray<OAGpxTrkPt *> *) findPointsNearSegments:(NSArray<OAGpxTrkSeg *> *)segments radius:(int)radius point:(CLLocationCoordinate2D)point
+- (NSArray<OAWptPt *> *) findPointsNearSegments:(NSArray<OAGpxTrkSeg *> *)segments radius:(int)radius point:(CLLocationCoordinate2D)point
 {
     const auto screenBbox = self.mapView.getVisibleBBox31;
     const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
@@ -463,7 +463,7 @@ colorizationScheme:(int)colorizationScheme
         QuadRect *trackBounds = [self.class calculateBounds:segment.points];
         if ([QuadRect intersects:screenRect b:trackBounds])
         {
-            NSArray<OAGpxTrkPt *> *points = [self.class findPointsNearSegment:segment.points radius:radius point:point];
+            NSArray<OAWptPt *> *points = [self.class findPointsNearSegment:segment.points radius:radius point:point];
             if (points != nil)
                 return points;
         }
@@ -471,17 +471,17 @@ colorizationScheme:(int)colorizationScheme
     return nil;
 }
 
-+ (QuadRect *) calculateBounds:(NSArray<OAGpxTrkPt *> *)pts
++ (QuadRect *) calculateBounds:(NSArray<OAWptPt *> *)pts
 {
     return [self updateBounds:pts startIndex:0];
 }
 
-+ (QuadRect *) updateBounds:(NSArray<OAGpxTrkPt *> *)pts startIndex:(int)startIndex
++ (QuadRect *) updateBounds:(NSArray<OAWptPt *> *)pts startIndex:(int)startIndex
 {
     double left = DBL_MAX, top = DBL_MIN, right = DBL_MIN, bottom = DBL_MAX;
     for (NSInteger i = startIndex; i < pts.count; i++)
     {
-        OAGpxTrkPt *pt = pts[i];
+        OAWptPt *pt = pts[i];
         right = MAX(right, pt.position.longitude);
         left = MIN(left, pt.position.longitude);
         top = MAX(top, pt.position.latitude);
@@ -500,7 +500,7 @@ colorizationScheme:(int)colorizationScheme
     return cross;
 }
 
-+ (NSArray<OAGpxTrkPt *> *) findPointsNearSegment:(NSArray<OAGpxTrkPt *> *)points radius:(int)r point:(CLLocationCoordinate2D)coordinatePoint
++ (NSArray<OAWptPt *> *) findPointsNearSegment:(NSArray<OAWptPt *> *)points radius:(int)r point:(CLLocationCoordinate2D)coordinatePoint
 {
     if (points.count == 0)
         return nil;
@@ -510,14 +510,14 @@ colorizationScheme:(int)colorizationScheme
     if (![OARootViewController.instance.mapPanel.mapViewController.mapView convert:&coordI toScreen:&point checkOffScreen:YES])
         return nil;
     
-    OAGpxTrkPt *prevPoint = points.firstObject;
+    OAWptPt *prevPoint = points.firstObject;
     auto prevPointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(prevPoint.position.latitude, prevPoint.position.longitude));
     CGPoint prevPxPoint;
     [OARootViewController.instance.mapPanel.mapViewController.mapView convert:&prevPointI toScreen:&prevPxPoint checkOffScreen:YES];
     int pcross = [self placeInBbox:prevPxPoint.x y:prevPxPoint.y mx:point.x my:point.y halfw:r halfh:r];
     for (NSInteger i = 1; i < points.count; i++)
     {
-        OAGpxTrkPt *pnt = points[i];
+        OAWptPt *pnt = points[i];
         auto ptI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pnt.position.latitude, pnt.position.longitude));
         CGPoint ptPx;
         if (![OARootViewController.instance.mapPanel.mapViewController.mapView convert:&ptI toScreen:&ptPx checkOffScreen:YES])
@@ -616,7 +616,7 @@ colorizationScheme:(int)colorizationScheme
     {
         if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr) && [mapViewController findWpt:point])
         {
-            OAGpxWpt *wpt = mapViewController.foundWpt;
+            OAWptPt *wpt = mapViewController.foundWpt;
             NSArray *foundWptGroups = mapViewController.foundWptGroups;
             NSString *foundWptDocPath = mapViewController.foundWptDocPath;
 

@@ -38,13 +38,13 @@
 
 + (OsmAnd::LatLon)getSegmentPointByTime:(OAGpxTrkSeg *)segment
                                 gpxFile:(OAGPXDocument *)gpxFile
-                                   time:(float)time
+                                   time:(double)time
                         preciseLocation:(BOOL)preciseLocation
                            joinSegments:(BOOL)joinSegments;
 
 + (OsmAnd::LatLon)getSegmentPointByDistance:(OAGpxTrkSeg *)segment
                                     gpxFile:(OAGPXDocument *)gpxFile
-                            distanceToPoint:(float)distanceToPoint
+                            distanceToPoint:(double)distanceToPoint
                             preciseLocation:(BOOL)preciseLocation
                                joinSegments:(BOOL)joinSegments;
 

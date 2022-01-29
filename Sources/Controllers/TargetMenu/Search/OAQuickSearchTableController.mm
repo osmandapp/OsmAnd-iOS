@@ -177,7 +177,7 @@
         OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
         if ([mapVC findWpt:point])
         {
-            OAGpxWpt *wpt = mapVC.foundWpt;
+            OAWptPt *wpt = mapVC.foundWpt;
             NSArray *foundWptGroups = mapVC.foundWptGroups;
             NSString *foundWptDocPath = mapVC.foundWptDocPath;
             
@@ -406,8 +406,9 @@
             {
                 if (searchResult.wpt)
                 {
-                    const auto& gpxWpt = std::dynamic_pointer_cast<const OsmAnd::GpxDocument::GpxWpt>(searchResult.wpt);
-                    OAGpxWpt *wpt = [OAGPXDocument fetchWpt:gpxWpt];
+                    auto wptPt = std::const_pointer_cast<OsmAnd::GeoInfoDocument::WptPt>(searchResult.wpt);
+                    auto gpxWptPt = std::dynamic_pointer_cast<OsmAnd::GpxDocument::GpxWptPt>(wptPt);
+                    OAWptPt *wpt = [OAGPXDocument fetchWpt:gpxWptPt];
                     OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
                     wptItem.point = wpt;
 

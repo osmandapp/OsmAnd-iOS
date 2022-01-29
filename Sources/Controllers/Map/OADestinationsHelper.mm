@@ -9,7 +9,6 @@
 #import "OADestinationsHelper.h"
 #import "OsmAndApp.h"
 #import "OADestination.h"
-#import "OAGpxRouteWptItem.h"
 #import "OAUtilities.h"
 #import "OALog.h"
 #import "Localization.h"
@@ -311,7 +310,7 @@
                      [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
     for (OADestination *marker in markers)
     {
-        OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+        OAWptPt *wpt = [[OAWptPt alloc] init];
         wpt.position = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
         wpt.name = marker.desc;
         [wpt setColor:[OAUtilities colorToNumber:marker.color]];

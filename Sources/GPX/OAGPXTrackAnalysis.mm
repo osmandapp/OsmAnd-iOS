@@ -17,14 +17,14 @@
 
 @implementation OASplitMetric
 
--(double) metric:(OAGpxWpt*)p1 p2:(OAGpxWpt*)p2 { return 0; };
+-(double) metric:(OAWptPt *)p1 p2:(OAWptPt *)p2 { return 0; };
 
 @end
 
 
 @implementation OADistanceMetric
 
--(double) metric:(OAGpxWpt*)p1 p2:(OAGpxWpt*)p2
+-(double) metric:(OAWptPt *)p1 p2:(OAWptPt *)p2
 {
     CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:p1.position.latitude longitude:p1.position.longitude];
     CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:p2.position.latitude longitude:p2.position.longitude];
@@ -36,7 +36,7 @@
 
 @implementation OATimeSplit
 
--(double) metric:(OALocationMark *)p1 p2:(OALocationMark *)p2
+-(double)metric:(OAWptPt *)p1 p2:(OAWptPt *)p2
 {
     if(p1.time != 0 && p2.time != 0) {
         return abs((p2.time - p1.time));
@@ -107,7 +107,7 @@
     return _endPointInd - _startPointInd + 2;
 }
 
--(OALocationMark *) get:(int)j
+-(OAWptPt *)get:(int)j
 {
     int ind = j + _startPointInd;
     if(j == 0) {
@@ -126,7 +126,7 @@
 }
 
 
--(OAGpxWpt *) approx:(OAGpxTrkPt *)w1 w2:(OAGpxTrkPt *)w2 cf:(double)cf
+-(OAWptPt *) approx:(OAWptPt *)w1 w2:(OAWptPt *)w2 cf:(double)cf
 {
     long time = [self valueLong:w1.time vl2:w2.time none:0 cf:cf];
     double speed = [self valueDbl:w1.speed vl2:w2.speed none:0 cf:cf];
@@ -135,7 +135,7 @@
     double lat = [self valueDbl:w1.position.latitude vl2:w2.position.latitude none:-360 cf:cf];
     double lon = [self valueDbl:w1.position.longitude vl2:w2.position.longitude none:-360 cf:cf];
     
-    OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+    OAWptPt *wpt = [[OAWptPt alloc] init];
     wpt.position = CLLocationCoordinate2DMake(lat, lon);
     wpt.time = time;
     wpt.elevation = ele;
@@ -306,7 +306,7 @@
         _points += numberOfPoints;
         for (NSInteger j = 0; j < numberOfPoints; j++)
         {
-            OAGpxWpt *point = (OAGpxWpt *) [s get:j];
+            OAWptPt *point = [s get:j];
             if (j == 0 && self.locationStart == nil)
                 _locationStart = point;
             if (j == numberOfPoints - 1)
@@ -459,8 +459,8 @@
             // float[1] calculations
             double distance = 0, bearing = 0;
             if (j > 0) {
-                OAGpxWpt *prev = (OAGpxWpt *)[s get:j - 1];
-                
+                OAWptPt *prev = [s get:j - 1];
+
                 // Old complete summation approach for elevation gain/loss
                 //if (!Double.isNaN(point.ele) && !Double.isNaN(prev.ele)) {
                 //    double diff = point.ele - prev.ele;
@@ -607,9 +607,9 @@
     double secondaryMetricEnd = 0;
     OASplitSegment *sp = [[OASplitSegment alloc] initWithSplitSegment:segment pointInd:0 cf:0];
     double total = 0;
-    OALocationMark *prev = nil;
+    OAWptPt *prev = nil;
     for (int k = 0; k < segment.points.count; k++) {
-        OALocationMark *point = [segment.points objectAtIndex:k];
+        OAWptPt *point = [segment.points objectAtIndex:k];
         if (k > 0) {
             double currentSegment = 0;
             if (!(segment.generalSegment && !joinSegments && point.firstPoint))

@@ -158,9 +158,9 @@
     self.useIntermediatePointsRTE = builder.useIntermediatePointsRTE;
     self.connectRoutePoints = builder.connectRoutePoints;
     builder.calculateOsmAndRoute = NO; // Disabled temporary builder.calculateOsmAndRoute;
-    if (file.locationMarks.count > 0)
+    if (file.points.count > 0)
     {
-        self.wpt = [NSArray arrayWithArray:file.locationMarks];
+        self.wpt = [NSArray arrayWithArray:file.points];
     }
     NSInteger selectedSegment = builder.selectedSegment;
     if ([OSMAND_ROUTER_V2 isEqualToString:file.creator])
@@ -220,7 +220,7 @@
         {
             for (OAGpxRte *rte in file.routes)
             {
-                for (OAGpxRtePt *pt in rte.points)
+                for (OAWptPt *pt in rte.points)
                 {
                     CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.elevation horizontalAccuracy:pt.horizontalDilutionOfPrecision verticalAccuracy:pt.verticalDilutionOfPrecision course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
                     
@@ -348,7 +348,7 @@
     if (selectedSegment != -1 && segments.count > selectedSegment)
     {
         OAGpxTrkSeg *segment = segments[selectedSegment];
-        for (OAGpxTrkPt *p in segment.points)
+        for (OAWptPt *p in segment.points)
         {
             [points addObject:[self createLocation:p]];
         }
@@ -371,7 +371,7 @@
     if (selectedSegment != -1 && segments.count > selectedSegment)
     {
         OAGpxTrkSeg *segment = segments[selectedSegment];
-        for (OAGpxTrkPt *wptPt in segment.points)
+        for (OAWptPt *wptPt in segment.points)
         {
             [points addObject:[self createLocation:wptPt]];
         }
@@ -388,7 +388,7 @@
     for (NSInteger i = 0; i < segments.count; i++)
     {
         OAGpxTrkSeg *segment = segments[i];
-        for (OAGpxTrkPt *wptPt in segment.points)
+        for (OAWptPt *wptPt in segment.points)
         {
             [points addObject:[self createLocation:wptPt]];
         }
@@ -400,7 +400,7 @@
     }
 }
 
-+ (CLLocation *) createLocation:(OAGpxTrkPt *)pt
++ (CLLocation *) createLocation:(OAWptPt *)pt
 {
     CLLocation *loc = [[CLLocation alloc] initWithCoordinate:pt.position altitude:isnan(pt.elevation) ? 0. : pt.elevation horizontalAccuracy:isnan(pt.horizontalDilutionOfPrecision) ? 0. : pt.horizontalDilutionOfPrecision verticalAccuracy:0. course:0. speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
     return loc;
@@ -411,7 +411,7 @@
     NSMutableArray<OARouteDirectionInfo *> *directions = nil;
     if (!osmandRouter)
     {
-        for (OAGpxWpt *pt in gpxFile.locationMarks)
+        for (OAWptPt *pt in gpxFile.points)
         {
             CLLocation *loc = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.position.latitude, pt.position.longitude) altitude:pt.elevation horizontalAccuracy:pt.horizontalDilutionOfPrecision verticalAccuracy:pt.verticalDilutionOfPrecision course:0 speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
             
@@ -440,7 +440,7 @@
         directions = [NSMutableArray array];
         for (int i = 0; i < route.points.count; i++)
         {
-            OAGpxRtePt *item = route.points[i];
+            OAWptPt *item = route.points[i];
             try
             {
                 NSString *stime = [OARouteProvider getExtensionValue:item key:@"time"];
@@ -1200,13 +1200,12 @@
     {
         NSMutableArray<CLLocation *> *gpxRouteLocations = [NSMutableArray new];
         std::vector<std::shared_ptr<RouteSegmentResult>> gpxRoute;
-        OAGpxRtePt *firstGpxPoint = gpxParams.routePoints.firstObject;
+        OAWptPt *firstGpxPoint = gpxParams.routePoints.firstObject;
         CLLocation *start = [[CLLocation alloc] initWithLatitude:firstGpxPoint.getLatitude longitude:firstGpxPoint.getLongitude];
         
         for (NSInteger i = 1; i < gpxParams.routePoints.count; i++)
         {
-            OAGpxRtePt *gpxPoint = gpxParams.routePoints[i];
-            OAGpxTrkPt *trackPoint = [[OAGpxTrkPt alloc] initWithRtePt:gpxPoint];
+            OAWptPt *trackPoint = gpxParams.routePoints[i];
             OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:trackPoint.getProfileType def:OAApplicationMode.DEFAULT];
             CLLocation *end = [[CLLocation alloc] initWithLatitude:trackPoint.getLatitude longitude:trackPoint.getLongitude];
             

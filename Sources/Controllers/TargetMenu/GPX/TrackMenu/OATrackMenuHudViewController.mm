@@ -511,17 +511,17 @@
             self.gpx.gpxFilePath = newFilePath;
             [[OAGPXDatabase sharedDb] save];
 
-            OAGpxMetadata *metadata;
+            OAMetadata *metadata;
             if (self.doc.metadata)
             {
-                metadata = (OAGpxMetadata *) self.doc.metadata;
+                metadata = self.doc.metadata;
             }
             else
             {
-                metadata = [[OAGpxMetadata alloc] init];
+                metadata = [[OAMetadata alloc] init];
                 long time = 0;
-                if (self.doc.locationMarks.count > 0)
-                    time = self.doc.locationMarks[0].time;
+                if (self.doc.points.count > 0)
+                    time = self.doc.points[0].time;
                 if (self.doc.tracks.count > 0)
                 {
                     OAGpxTrk *track = self.doc.tracks[0];
@@ -531,7 +531,7 @@
                         OAGpxTrkSeg *seg = track.segments[0];
                         if (seg.points.count > 0)
                          {
-                            OAGpxTrkPt *p = seg.points[0];
+                            OAWptPt *p = seg.points[0];
                             if (time > p.time)
                                 time = p.time;
                         }
@@ -616,7 +616,7 @@
     if ([self.doc hasWptPt])
     {
         NSMutableArray<OAGpxWptItem *> *withoutGroup = [NSMutableArray array];
-        for (OAGpxWpt *gpxWpt in self.doc.locationMarks)
+        for (OAWptPt *gpxWpt in self.doc.points)
         {
             OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
             if (gpxWpt.type.length == 0)
@@ -642,12 +642,10 @@
     if ([self.doc hasRtePt])
     {
         NSMutableArray<OAGpxWptItem *> *rtePtsGroup = [NSMutableArray array];
-        NSArray<OAGpxRtePt *> *rtePts = [self.doc getRoutePoints];
-        for (OAGpxRtePt *rtePt in rtePts)
+        NSArray<OAWptPt *> *rtePts = [self.doc getRoutePoints];
+        for (OAWptPt *rtePt in rtePts)
         {
-            OAGpxWpt *gpxWpt = [[OAGpxWpt alloc] init];
-            [gpxWpt fillWithTrkPt:[[OAGpxTrkPt alloc] initWithRtePt:rtePt]];
-            [rtePtsGroup addObject:[OAGpxWptItem withGpxWpt:gpxWpt]];
+            [rtePtsGroup addObject:[OAGpxWptItem withGpxWpt:rtePt]];
         }
 
         if (rtePtsGroup.count > 0)
@@ -808,7 +806,7 @@
             withMode:(EOARouteStatisticsMode)mode
 {
     [self hide:YES duration:.2 onComplete:^{
-        [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
+        [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:_mutableDoc ? _mutableDoc : self.doc
                                                                 analysis:analysis
                                                         menuControlState:[self getCurrentStateForAnalyze:mode]];
     }];
@@ -1189,8 +1187,8 @@
     {
         float pos;
         double totalDistance = 0;
-        OAGpxTrkPt *previousPoint = nil;
-        for (OAGpxTrkPt *currentPoint in segment.points)
+        OAWptPt *previousPoint = nil;
+        for (OAWptPt *currentPoint in segment.points)
         {
            if (currentPoint.position.latitude == pinLocation.latitude
                    && currentPoint.position.longitude == pinLocation.longitude)
@@ -1986,16 +1984,42 @@
         }
         if (cell)
         {
-            NSInteger segmentsCount = cell.segmentControl.numberOfSegments;
-            if ([cellData.values.allKeys containsObject:@"tab_2_string_value"] && segmentsCount < 3)
-                [cell.segmentControl insertSegmentWithTitle:cellData.values[@"tab_2_string_value"] atIndex:2 animated:NO];
+            NSInteger segmentsCount = 0;
+            for (NSString *key in cellData.values.allKeys)
+            {
+                if ([key hasPrefix:@"tab_"])
+                    segmentsCount++;
+            }
 
             [cell.segmentControl setTitle:cellData.values[@"tab_0_string_value"] forSegmentAtIndex:0];
-
-            if ([cellData.values.allKeys containsObject:@"tab_1_string_value"])
-                [cell.segmentControl setTitle:cellData.values[@"tab_1_string_value"] forSegmentAtIndex:1];
+            if (segmentsCount == 3)
+            {
+                if (cell.segmentControl.numberOfSegments < 2)
+                    [cell.segmentControl insertSegmentWithTitle:cellData.values[@"tab_1_string_value"] atIndex:1 animated:NO];
+                else
+                    [cell.segmentControl setTitle:cellData.values[@"tab_1_string_value"] forSegmentAtIndex:1];
+                if (cell.segmentControl.numberOfSegments < 3)
+                    [cell.segmentControl insertSegmentWithTitle:cellData.values[@"tab_2_string_value"] atIndex:2 animated:NO];
+                else
+                    [cell.segmentControl setTitle:cellData.values[@"tab_2_string_value"] forSegmentAtIndex:2];
+            }
+            else if (segmentsCount == 2)
+            {
+                NSString *value = cellData.values[[cellData.values.allKeys containsObject:@"tab_2_string_value"] ? @"tab_2_string_value" : @"tab_1_string_value"];
+                if (cell.segmentControl.numberOfSegments < 2)
+                    [cell.segmentControl insertSegmentWithTitle:value atIndex:1 animated:NO];
+                else
+                    [cell.segmentControl setTitle:value forSegmentAtIndex:1];
+                if (cell.segmentControl.numberOfSegments == 3)
+                    [cell.segmentControl removeSegmentAtIndex:2 animated:NO];
+            }
             else
-                [cell.segmentControl removeSegmentAtIndex:1 animated:NO];
+            {
+                if (cell.segmentControl.numberOfSegments > 2)
+                    [cell.segmentControl removeSegmentAtIndex:2 animated:NO];
+                if (cell.segmentControl.numberOfSegments > 1)
+                    [cell.segmentControl removeSegmentAtIndex:1 animated:NO];
+            }
 
             cell.segmentControl.tag = tag;
             [cell.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];

@@ -510,7 +510,7 @@
         } else if ([key isEqualToString:@"splitInterval"]) {
             gpx.splitInterval = [value doubleValue];
         } else if ([key isEqualToString:@"locationStart"]) {
-            OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+            OAWptPt *wpt = [[OAWptPt alloc] init];
             wpt.position = CLLocationCoordinate2DMake([value[@"position_lat"] doubleValue], [value[@"position_lon"] doubleValue]) ;
             wpt.name = value[@"name"];
             wpt.desc = value[@"desc"];
@@ -521,7 +521,7 @@
             wpt.speed = [value[@"speed"] doubleValue];
             gpx.locationStart = wpt;
         } else if ([key isEqualToString:@"locationEnd"]) {
-            OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+            OAWptPt *wpt = [[OAWptPt alloc] init];
             wpt.position = CLLocationCoordinate2DMake([value[@"position_lat"] doubleValue], [value[@"position_lon"] doubleValue]) ;
             wpt.name = value[@"name"];
             wpt.desc = value[@"desc"];

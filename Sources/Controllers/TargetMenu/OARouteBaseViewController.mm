@@ -388,7 +388,7 @@
             float startTime = startPos * 1000;
             float endTime = endPos * 1000;
             OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segment];
-            for (OAGpxTrkPt *p in segment.points)
+            for (OAWptPt *p in segment.points)
             {
                 if (p.time - analysis.startTime >= startTime && p.time - analysis.startTime <= endTime)
                 {
@@ -416,10 +416,10 @@
             double previousSplitDistance = 0;
             for (NSInteger i = 0; i < segment.points.count; i++)
             {
-                OAGpxTrkPt *currentPoint = segment.points[i];
+                OAWptPt *currentPoint = segment.points[i];
                 if (i != 0)
                 {
-                    OAGpxTrkPt *previousPoint = segment.points[i - 1];
+                    OAWptPt *previousPoint = segment.points[i - 1];
                     if (currentPoint.distance < previousPoint.distance)
                         previousSplitDistance += previousPoint.distance;
                 }

@@ -569,8 +569,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         gpxFile.routes = [NSMutableArray new];
     if (!gpxFile.tracks)
         gpxFile.tracks = [NSMutableArray new];
-    if (!gpxFile.locationMarks)
-        gpxFile.locationMarks = [NSMutableArray new];
+    if (!gpxFile.points)
+        gpxFile.points = [NSMutableArray new];
     
     return gpxFile;
 }
@@ -615,11 +615,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         if (!self.isUndoMode)
         {
-            NSArray<OAGpxRtePt *> *points = gpxData.gpxFile.getRoutePoints;
+            NSArray<OAWptPt *> *points = gpxData.gpxFile.getRoutePoints;
             if (points.count > 0)
             {
-                OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] initWithRtePt:points.lastObject];
-                OAApplicationMode *snapToRoadAppMode = [OAApplicationMode valueOfStringKey:pt.getProfileType def:nil];
+                OAApplicationMode *snapToRoadAppMode = [OAApplicationMode valueOfStringKey:points.lastObject.getProfileType def:nil];
                 if (snapToRoadAppMode)
                     [self setAppMode:snapToRoadAppMode];
             }
@@ -725,7 +724,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     double lowestDistance = [self getLowestDistance:mapView];
     for (NSInteger i = 0; i < _editingContext.getPointsCount; i++)
     {
-        OAGpxTrkPt *pt = _editingContext.getPoints[i];
+        OAWptPt *pt = _editingContext.getPoints[i];
         const auto latLon = OsmAnd::LatLon(pt.getLatitude, pt.getLongitude);
         const auto point = OsmAnd::Utilities::convertLatLonTo31(latLon);
         
@@ -1266,7 +1265,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     cell.textView.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), indexPath.row + 1];
     
-    OAGpxTrkPt *point1 = _editingContext.getPoints[indexPath.row];
+    OAWptPt *point1 = _editingContext.getPoints[indexPath.row];
     CLLocation *location1 = [[CLLocation alloc] initWithLatitude:point1.getLatitude longitude:point1.getLongitude];
     if (indexPath.row == 0)
     {
@@ -1283,7 +1282,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     else
     {
-        OAGpxTrkPt *point2 = indexPath.row == 0 && _editingContext.getPointsCount > 1 ? _editingContext.getPoints[indexPath.row + 1] : _editingContext.getPoints[indexPath.row - 1];
+        OAWptPt *point2 = indexPath.row == 0 && _editingContext.getPointsCount > 1 ? _editingContext.getPoints[indexPath.row + 1] : _editingContext.getPoints[indexPath.row - 1];
         CLLocation *location2 = [[CLLocation alloc] initWithLatitude:point2.getLatitude longitude:point2.getLongitude];
         double azimuth = [location1 bearingTo:location2];
         cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@", [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:location2]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
@@ -1396,7 +1395,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) enterMovingMode:(NSInteger)pointPosition
 {
-    OAGpxTrkPt *pt = _editingContext.getPoints[pointPosition];
+    OAWptPt *pt = _editingContext.getPoints[pointPosition];
     _editingContext.originalPointToMove = pt;
     [_layer enterMovingPointMode];
     [self onPointsListChanged];
@@ -1475,7 +1474,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)onRightButtonPressed
 {
-    OAGpxTrkPt *newPoint = [_layer getMovedPointToApply];
+    OAWptPt *newPoint = [_layer getMovedPointToApply];
     if (_hudMode == EOAHudModeMovePoint)
     {
         [_editingContext.commandManager execute:[[OAMovePointCommand alloc] initWithLayer:_layer
@@ -1522,7 +1521,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     if (cancelled)
     {
-        OAGpxTrkPt *pt = _editingContext.originalPointToMove;
+        OAWptPt *pt = _editingContext.originalPointToMove;
         [_editingContext addPoint:pt];
     }
     _editingContext.selectedPointPosition = -1;
@@ -1706,7 +1705,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (appMode == OAApplicationMode.DEFAULT)
         appMode = nil;
     
-    NSArray<OAGpxTrkPt *> *points = _editingContext.getPoints;
+    NSArray<OAWptPt *> *points = _editingContext.getPoints;
     if (points.count > 0)
     {
         if (points.count == 1)
@@ -1742,10 +1741,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                 } else {
                     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
                     [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
-                    NSMutableArray<OAGpxRtePt *> *pointsRte = [NSMutableArray new];
-                    for (OAGpxTrkPt *trkPt in points)
-                        [pointsRte addObject:[[OAGpxRtePt alloc] initWithTrkPt:trkPt]];
-                    [gpx addRoutePoints:pointsRte addRoute:NO];
+                    [gpx addRoutePoints:points addRoute:NO];
                     [self onCloseButtonPressed];
                     [targetPointsHelper clearAllPoints:NO];
                     OAGPX *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
@@ -1790,7 +1786,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) reverseRouteSelected
 {
-    NSArray<OAGpxTrkPt *> *points = _editingContext.getPoints;
+    NSArray<OAWptPt *> *points = _editingContext.getPoints;
     if (points.count > 1)
     {
         [_editingContext.commandManager execute:[[OAReversePointsCommand alloc] initWithLayer:_layer]];
@@ -1909,7 +1905,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self dismiss];
 }
 
-- (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations pointsList:(NSArray<NSArray<OAGpxTrkPt *> *> *)pointsList mode:(OAApplicationMode *)mode
+- (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations pointsList:(NSArray<NSArray<OAWptPt *> *> *)pointsList mode:(OAApplicationMode *)mode
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		if (_layer)

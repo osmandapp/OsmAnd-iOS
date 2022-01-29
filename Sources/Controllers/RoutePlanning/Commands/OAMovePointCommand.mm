@@ -13,12 +13,12 @@
 
 @implementation OAMovePointCommand
 {
-    OAGpxTrkPt *_oldPoint;
-    OAGpxTrkPt *_newPoint;
+    OAWptPt *_oldPoint;
+    OAWptPt *_newPoint;
     NSInteger _position;
 }
 
-- (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer oldPoint:(OAGpxTrkPt *)oldPoint newPoint:(OAGpxTrkPt *)newPoint position:(NSInteger)position
+- (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer oldPoint:(OAWptPt *)oldPoint newPoint:(OAWptPt *)newPoint position:(NSInteger)position
 {
     self = [super initWithLayer:measurementLayer];
     if (self) {

@@ -120,7 +120,7 @@
     [doc setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
     for (OAHistoryItem *historyItem in historyItems)
     {
-        OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+        OAWptPt *wpt = [[OAWptPt alloc] init];
         wpt.position = CLLocationCoordinate2DMake(historyItem.latitude, historyItem.longitude);
         wpt.name = historyItem.name;
 
@@ -148,7 +148,7 @@
     OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
     if (gpxFile)
     {
-        for (OAGpxWpt *wpt in gpxFile.locationMarks)
+        for (OAWptPt *wpt in gpxFile.points)
         {
             OAHistoryItem *historyItem = [[OAHistoryItem alloc] init];
             historyItem.name = wpt.name;

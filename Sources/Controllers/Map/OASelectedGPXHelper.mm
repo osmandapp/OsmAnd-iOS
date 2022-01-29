@@ -99,12 +99,12 @@
     return loading;
 }
 
-- (OAGPXDocument *)getSelectedGpx:(OAGpxWpt *)gpxWpt
+- (OAGPXDocument *)getSelectedGpx:(OAWptPt *)gpxWpt
 {
     for (auto it = _activeGpx.begin(); it != _activeGpx.end(); ++it)
     {
         OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:it.key().toNSString()];
-        if ([[gpxDoc locationMarks] containsObject:gpxWpt])
+        if ([[gpxDoc points] containsObject:gpxWpt])
             return gpxDoc;
     }
     return nil;

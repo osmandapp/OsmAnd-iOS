@@ -148,11 +148,11 @@
             if (newGpx)
             {
                 NSArray<OAGpxTrk *> *gpxTracks = gpx.tracks;
-                NSArray<OAGpxWpt *> *gpxPoints = gpx.locationMarks;
+                NSArray<OAWptPt *> *gpxPoints = gpx.points;
                 NSArray<OAGpxRte *> *gpxRoutes = gpx.routes;
                 gpx = newGpx;
-                NSArray<NSArray<OAGpxRtePt *> *> *routePoints = [_editingCtx getRoutePoints];
-                for (NSArray<OAGpxRtePt *> *points in routePoints)
+                NSArray<NSArray<OAWptPt *> *> *routePoints = [_editingCtx getRoutePoints];
+                for (NSArray<OAWptPt *> *points in routePoints)
                 {
                     [gpx addRoutePoints:points addRoute:YES];
                 }

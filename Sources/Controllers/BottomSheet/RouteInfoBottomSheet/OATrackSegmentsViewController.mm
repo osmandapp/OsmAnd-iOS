@@ -36,7 +36,7 @@
 
 @implementation OATrackSegmentsViewController
 {
-    OAGpxTrkPt *_point;
+    OAWptPt *_point;
     NSArray<NSDictionary *> *_data;
     
     OAGPXDocument *_gpx;

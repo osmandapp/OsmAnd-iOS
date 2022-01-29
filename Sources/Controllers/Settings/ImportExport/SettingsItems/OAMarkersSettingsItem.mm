@@ -164,7 +164,7 @@
    OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
     if (gpxFile)
     {
-        for (OAGpxWpt *wpt in gpxFile.locationMarks)
+        for (OAWptPt *wpt in gpxFile.points)
         {
             OADestination *dest = [[OADestination alloc] initWithDesc:wpt.name latitude:wpt.getLatitude longitude:wpt.getLongitude];
             int color = [wpt getColor:0];

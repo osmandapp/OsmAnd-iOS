@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 };
 
 @class OAGPXTrackAnalysis;
-@class OAGpxWpt, OAGPXDocument;
+@class OAWptPt, OAGPXDocument;
 
 @interface OAGPX : NSObject
 
@@ -67,8 +67,8 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 @property (nonatomic) NSSet<NSString *> *hiddenGroups;
 
 @property (nonatomic) double   metricEnd;
-@property (nonatomic) OAGpxWpt *locationStart;
-@property (nonatomic) OAGpxWpt *locationEnd;
+@property (nonatomic) OAWptPt *locationStart;
+@property (nonatomic) OAWptPt *locationEnd;
 
 - (NSString *)getNiceTitle;
 

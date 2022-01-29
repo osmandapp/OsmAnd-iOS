@@ -32,7 +32,7 @@
 @property (nonatomic) NSObject *object;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::Amenity> amenity;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::IFavoriteLocation> favorite;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::GeoInfoDocument::LocationMark> wpt;
+@property (nonatomic, assign) std::shared_ptr<const OsmAnd::GeoInfoDocument::WptPt> wpt;
 
 @property (nonatomic) EOAObjectType objectType;
 @property (nonatomic) NSString *resourceId;

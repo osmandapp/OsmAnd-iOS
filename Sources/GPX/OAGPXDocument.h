@@ -23,7 +23,7 @@
 @interface OAGPXDocument : OAGpxExtensions
 
 @property (nonatomic) OAMetadata* metadata;
-@property (nonatomic) NSArray<OAGpxWpt *> *locationMarks;
+@property (nonatomic) NSArray<OAWptPt *> *points;
 @property (nonatomic) NSArray<OAGpxTrk *> *tracks;
 @property (nonatomic) NSArray<OAGpxRte *> *routes;
 
@@ -57,7 +57,7 @@
 
 - (BOOL) isEmpty;
 - (void) addGeneralTrack;
-- (OALocationMark *) findPointToShow;
+- (OAWptPt *) findPointToShow;
 - (BOOL) hasRtePt;
 - (BOOL) hasWptPt;
 - (BOOL) hasTrkPt;
@@ -70,20 +70,19 @@
 - (NSArray*) splitByTime:(int)seconds joinSegments:(BOOL)joinSegments;
 - (NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit joinSegments:(BOOL)joinSegments;
 
-- (NSArray<OAGpxRtePt *> *) getRoutePoints;
-- (NSArray<OAGpxRtePt *> *) getRoutePoints:(NSInteger)routeIndex;
+- (NSArray<OAWptPt *> *) getRoutePoints;
+- (NSArray<OAWptPt *> *) getRoutePoints:(NSInteger)routeIndex;
 - (OAApplicationMode *) getRouteProfile;
 
-
-+ (OAGpxWpt *)fetchWpt:(const std::shared_ptr<const OsmAnd::GpxDocument::GpxWpt>)mark;
-+ (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::GpxWpt>)wpt usingWpt:(OAGpxWpt *)w;
-+ (void)fillMetadata:(std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata>)meta usingMetadata:(OAGpxMetadata *)m;
++ (OAWptPt *)fetchWpt:(std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt>)mark;
++ (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt>)wpt usingWpt:(OAWptPt *)w;
++ (void)fillMetadata:(std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata>)meta usingMetadata:(OAMetadata *)m;
 + (void)fillTrack:(std::shared_ptr<OsmAnd::GpxDocument::GpxTrk>)trk usingTrack:(OAGpxTrk *)t;
 + (void)fillRoute:(std::shared_ptr<OsmAnd::GpxDocument::GpxRte>)rte usingRoute:(OAGpxRte *)r;
 
 + (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray;
-+ (void) fillExtension:(const std::shared_ptr<OsmAnd::GpxDocument::GpxExtension>&)extension ext:(OAGpxExtension *)e;
-+ (void) fillExtensions:(const std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions>&)extensions ext:(OAGpxExtensions *)ext;
++ (void) fillExtension:(const std::shared_ptr<OsmAnd::Extensions::Extension>&)extension ext:(OAGpxExtension *)e;
++ (void) fillExtensions:(const std::shared_ptr<OsmAnd::Extensions>&)extensions ext:(OAGpxExtensions *)ext;
 
 - (void)initBounds;
 - (void)processBounds:(CLLocationCoordinate2D)coord;

@@ -153,6 +153,7 @@
                     }
                 }
                 [reader readFromFile:tmpFileName error:&err];
+                [item applyAdditionalParams:tmpFileName];
             }
             
             if (err)

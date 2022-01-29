@@ -33,7 +33,6 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
 #import "OAGpxWptItem.h"
-#import "OAGpxRoutePoint.h"
 #import "OADestination.h"
 #import "OAPluginPopupViewController.h"
 #import "OAIAPHelper.h"
@@ -2280,7 +2279,7 @@
     
     BOOL found = NO;
     
-    for (OAGpxWpt *wptItem in helper.currentTrack.locationMarks)
+    for (OAWptPt *wptItem in helper.currentTrack.points)
     {
         if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
         {
@@ -2296,7 +2295,7 @@
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         const auto& doc = it.value();
-        for (auto& loc : doc->locationMarks)
+        for (auto& loc : doc->points)
         {
             if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
             {
@@ -2314,7 +2313,7 @@
     {
         const auto& doc = _gpxDocsTemp.first();
         
-        for (auto& loc : doc->locationMarks)
+        for (auto& loc : doc->points)
         {
             if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
             {
@@ -2342,7 +2341,7 @@
     NSMutableSet *groupSet = [NSMutableSet set];
     QSet<QString> groups;
     
-    for (OAGpxWpt *wptItem in helper.currentTrack.locationMarks)
+    for (OAWptPt *wptItem in helper.currentTrack.points)
     {
         if ([[[OASavingTrackHelper sharedInstance] getCurrentGPX].hiddenGroups containsObject:wptItem.type])
             continue;
@@ -2381,7 +2380,7 @@
                 stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
                                           withString:@""];
         OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
-        for (auto locIt = doc->locationMarks.begin(); locIt != doc->locationMarks.end(); ++locIt)
+        for (auto locIt = doc->points.begin(); locIt != doc->points.end(); ++locIt)
         {
             auto loc = *locIt;
             if ([gpx.hiddenGroups containsObject:loc->type.toNSString()])
@@ -2392,10 +2391,10 @@
 
             if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
             {
-                OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&loc;
-                const std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w = _wpt->shared_ptr();
+                OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt>*)&loc;
+                const std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> w = _wpt->shared_ptr();
 
-                OAGpxWpt *wptItem = [OAGPXDocument fetchWpt:w];
+                OAWptPt *wptItem = [OAGPXDocument fetchWpt:w];
                 wptItem.wpt = w;
                 
                 self.foundWpt = wptItem;
@@ -2431,7 +2430,7 @@
                 stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
                                           withString:@""];
         OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
-        for (auto& loc : geoDoc->locationMarks)
+        for (auto& loc : geoDoc->points)
         {
             if ([gpx.hiddenGroups containsObject:loc->type.toNSString()])
                 continue;
@@ -2441,10 +2440,10 @@
             
             if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
             {
-                OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&loc;
-                const std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w = _wpt->shared_ptr();
+                OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt>*)&loc;
+                const std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> w = _wpt->shared_ptr();
                 
-                OAGpxWpt *wptItem = [OAGPXDocument fetchWpt:w];
+                OAWptPt *wptItem = [OAGPXDocument fetchWpt:w];
                 wptItem.wpt = w;
                 
                 self.foundWpt = wptItem;
@@ -2501,21 +2500,21 @@
                 auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
                 auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
                 
-                if (!gpx->locationMarks.removeOne(_foundWpt.wpt))
-                    for (int i = 0; i < gpx->locationMarks.count(); i++)
+                if (!gpx->points.removeOne(_foundWpt.wpt))
+                    for (int i = 0; i < gpx->points.count(); i++)
                     {
-                        const auto& w = gpx->locationMarks[i];
+                        const auto& w = gpx->points[i];
                         if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:_foundWpt.wpt->position.latitude] &&
                             [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:_foundWpt.wpt->position.longitude])
                         {
-                            gpx->locationMarks.removeAt(i);
+                            gpx->points.removeAt(i);
                             break;
                         }
                     }
                 
                 gpx->saveTo(QString::fromNSString(self.foundWptDocPath));
                 
-                [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
+                [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->points.count()];
                 [[OAGPXDatabase sharedDb] save];
                 
                 // update map
@@ -2558,10 +2557,10 @@
             {
                 const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(it.value());
                 
-                for (const auto& loc : doc->locationMarks)
+                for (const auto& loc : doc->points)
                 {
-                    OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&loc;
-                    const std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w = _wpt->shared_ptr();
+                    OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt>*)&loc;
+                    const std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> w = _wpt->shared_ptr();
 
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:self.foundWpt.position.latitude] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:self.foundWpt.position.longitude])
@@ -2585,7 +2584,7 @@
     return NO;
 }
 
-- (BOOL) addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName
+- (BOOL) addNewWpt:(OAWptPt *)wpt gpxFileName:(NSString *)gpxFileName
 {
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
     if (!gpxFileName)
@@ -2595,7 +2594,7 @@
         self.foundWptDocPath = nil;
         
         NSMutableSet *groups = [NSMutableSet set];
-        for (OAGpxWpt *wptItem in helper.currentTrack.locationMarks)
+        for (OAWptPt *wptItem in helper.currentTrack.points)
         {
             if (wptItem.type.length > 0)
                 [groups addObject:wptItem.type];
@@ -2619,22 +2618,22 @@
                 auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
                 auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
                 
-                std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> p;
-                p.reset(new OsmAnd::GpxDocument::GpxWpt());
+                std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> p;
+                p.reset(new OsmAnd::GpxDocument::GpxWptPt());
                 [OAGPXDocument fillWpt:p usingWpt:wpt];
                 
-                gpx->locationMarks.append(p);
+                gpx->points.append(p);
                 gpx->saveTo(QString::fromNSString(gpxFileName));
                 
                 wpt.wpt = p;
                 self.foundWpt = wpt;
                 self.foundWptDocPath = gpxFileName;
                 
-                [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
+                [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->points.count()];
                 [[OAGPXDatabase sharedDb] save];
                 
                 NSMutableSet *groups = [NSMutableSet set];
-                for (auto& loc : gpx->locationMarks)
+                for (auto& loc : gpx->points)
                 {
                     if (!loc->type.isEmpty())
                         [groups addObject:loc->type.toNSString()];
@@ -2656,22 +2655,22 @@
             auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsTemp.first());
             auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
             
-            std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> p;
-            p.reset(new OsmAnd::GpxDocument::GpxWpt());
+            std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> p;
+            p.reset(new OsmAnd::GpxDocument::GpxWptPt());
             [OAGPXDocument fillWpt:p usingWpt:wpt];
             
-            gpx->locationMarks.append(p);
+            gpx->points.append(p);
             gpx->saveTo(QString::fromNSString(gpxFileName));
             
             wpt.wpt = p;
             self.foundWpt = wpt;
             self.foundWptDocPath = gpxFileName;
             
-            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
+            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->points.count()];
             [[OAGPXDatabase sharedDb] save];
             
             NSMutableSet *groups = [NSMutableSet set];
-            for (auto& loc : gpx->locationMarks)
+            for (auto& loc : gpx->points)
             {
                 if (!loc->type.isEmpty())
                     [groups addObject:loc->type.toNSString()];
@@ -2686,12 +2685,12 @@
     return YES;
 }
 
-- (NSArray<OAGpxWpt *> *) getLocationMarksOf:(NSString *)gpxFileName
+- (NSArray<OAWptPt *> *)getPointsOf:(NSString *)gpxFileName
 {
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
     if (!gpxFileName)
     {
-        return helper.currentTrack.locationMarks;
+        return helper.currentTrack.points;
     }
     else
     {
@@ -2704,7 +2703,7 @@
                 auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
                 auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
                 OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(gpx)];
-                return gpxDoc.locationMarks;
+                return gpxDoc.points;
             }
         }
         if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
@@ -2712,7 +2711,7 @@
             auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsTemp.first());
             auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
             OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(gpx)];
-            return gpxDoc.locationMarks;
+            return gpxDoc.points;
         }
     }
     return nil;
@@ -2734,10 +2733,10 @@
          
             for (OAGpxWptItem *item in items)
             {
-                for (const auto& loc : doc->locationMarks)
+                for (const auto& loc : doc->points)
                 {
-                    OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&loc;
-                    const std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w = _wpt->shared_ptr();
+                    OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt>*)&loc;
+                    const std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> w = _wpt->shared_ptr();
                     
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
@@ -2770,10 +2769,10 @@
         
         for (OAGpxWptItem *item in items)
         {
-            for (const auto& loc : doc->locationMarks)
+            for (const auto& loc : doc->points)
             {
-                OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&loc;
-                const std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w = _wpt->shared_ptr();
+                OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt>*)&loc;
+                const std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> w = _wpt->shared_ptr();
                 
                 if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
                     [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
@@ -2801,7 +2800,7 @@
     return found;
 }
 
-- (BOOL)updateMetadata:(OAGpxMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath
+- (BOOL)updateMetadata:(OAMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath
 {
     if (!metadata)
         return NO;
@@ -2877,13 +2876,13 @@
             
             for (OAGpxWptItem *item in items)
             {
-                for (int i = 0; i < gpx->locationMarks.count(); i++)
+                for (int i = 0; i < gpx->points.count(); i++)
                 {
-                    const auto& w = gpx->locationMarks[i];
+                    const auto& w = gpx->points[i];
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
                     {
-                        gpx->locationMarks.removeAt(i);
+                        gpx->points.removeAt(i);
                         found = YES;
                         break;
                     }
@@ -2894,7 +2893,7 @@
             {
                 gpx->saveTo(QString::fromNSString(docPath));
                 
-                [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
+                [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:gpx->points.count()];
                 [[OAGPXDatabase sharedDb] save];
                 
                 // update map
@@ -2914,13 +2913,13 @@
         
         for (OAGpxWptItem *item in items)
         {
-            for (int i = 0; i < gpx->locationMarks.count(); i++)
+            for (int i = 0; i < gpx->points.count(); i++)
             {
-                const auto& w = gpx->locationMarks[i];
+                const auto& w = gpx->points[i];
                 if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
                     [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
                 {
-                    gpx->locationMarks.removeAt(i);
+                    gpx->points.removeAt(i);
                     found = YES;
                     break;
                 }
@@ -2931,7 +2930,7 @@
         {
             gpx->saveTo(QString::fromNSString(docPath));
             
-            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
+            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:gpx->points.count()];
             [[OAGPXDatabase sharedDb] save];
             
             // update map

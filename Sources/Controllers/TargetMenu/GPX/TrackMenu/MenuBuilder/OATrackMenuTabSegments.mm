@@ -179,8 +179,19 @@
             NSInteger selectedIndex = [tabsCellData.values[@"selected_index_int_value"] integerValue];
             if (selectedIndex != NSNotFound)
             {
-                mode = selectedIndex == 0 ? EOARouteStatisticsModeAltitudeSpeed
-                        : selectedIndex == 1 ? EOARouteStatisticsModeAltitudeSlope : EOARouteStatisticsModeSpeed;
+                if (selectedIndex == 0)
+                {
+                    mode = EOARouteStatisticsModeAltitudeSpeed;
+                }
+                else if (tabsCellData.values.count > selectedIndex)
+                {
+                    NSString *value = tabsCellData.values[[NSString stringWithFormat:@"tab_%li_string_value", selectedIndex]];
+                    mode = [value isEqualToString:OALocalizedString(@"map_widget_altitude")]
+                            ? EOARouteStatisticsModeAltitudeSlope
+                            : [value isEqualToString:OALocalizedString(@"gpx_speed")]
+                                    ? EOARouteStatisticsModeSpeed
+                                    : EOARouteStatisticsModeAltitudeSpeed;
+                }
 
                 if (chartCellData.updateData)
                     chartCellData.updateData();
@@ -228,7 +239,7 @@
         if (analysis.hasElevationData)
             values[@"tab_1_string_value"] = OALocalizedString(@"map_widget_altitude");
         if (analysis.isSpeedSpecified)
-            values[@"tab_2_string_value"] = OALocalizedString(@"gpx_speed");
+            values[analysis.hasElevationData ? @"tab_2_string_value" : @"tab_1_string_value"] = OALocalizedString(@"gpx_speed");
         values[@"row_to_update_int_value"] = @([segmentCells indexOfObject:statisticsCellData]);
         values[@"selected_index_int_value"] = @0;
         [tabsCellData setData:@{ kTableValues: values }];

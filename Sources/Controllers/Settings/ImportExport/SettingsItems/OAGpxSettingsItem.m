@@ -96,51 +96,33 @@
     if (self.subtype != EOASettingsItemFileSubtypeUnknown)
         json[@"subtype"] = [OAFileSettingsItemFileSubtype getSubtypeName:self.subtype];
     if (_appearanceInfo)
-    {
         [_appearanceInfo toJson:json];
-    }
 }
 
 - (OASettingsItemWriter *) getWriter
 {
     return [[OAFileSettingsItemWriter alloc] initWithItem:self];
 }
- 
- /*
-    @Override
-    public void applyAdditionalParams() {
-        if (appearanceInfo != null) {
-            GpxDataItem dataItem = app.getGpxDbHelper().getItem(savedFile, new GpxDataItemCallback() {
-                @Override
-                public boolean isCancelled() {
-                    return false;
-                }
 
-                @Override
-                public void onGpxDataItemReady(GpxDataItem item) {
-                    updateGpxParams(item);
-                }
-            });
-            if (dataItem != null) {
-                updateGpxParams(dataItem);
-            }
-        }
-    }
- */
+- (void)applyAdditionalParams:(NSString *)filePath
+{
+    if (_appearanceInfo)
+        [self updateGpxParams:filePath];
+}
 
- /*
-    private void updateGpxParams(@NonNull GPXDatabase.GpxDataItem dataItem) {
-        GpxDbHelper gpxDbHelper = app.getGpxDbHelper();
-        GpxSplitType splitType = GpxSplitType.getSplitTypeByTypeId(appearanceInfo.splitType);
-        gpxDbHelper.updateColor(dataItem, appearanceInfo.color);
-        gpxDbHelper.updateWidth(dataItem, appearanceInfo.width);
-        gpxDbHelper.updateShowArrows(dataItem, appearanceInfo.showArrows);
-        gpxDbHelper.updateShowStartFinish(dataItem, appearanceInfo.showStartFinish);
-        gpxDbHelper.updateSplit(dataItem, splitType, appearanceInfo.splitInterval);
-        gpxDbHelper.updateGradientScaleType(dataItem, appearanceInfo.scaleType);
-    }
- */
- 
+- (void)updateGpxParams:(NSString *)filePath
+{
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
+    gpx.color = _appearanceInfo.color;
+    gpx.coloringType = _appearanceInfo.coloringType;
+    gpx.width = _appearanceInfo.width;
+    gpx.showArrows = _appearanceInfo.showArrows;
+    gpx.showStartFinish = _appearanceInfo.showStartFinish;
+    gpx.splitType = _appearanceInfo.splitType;
+    gpx.splitInterval = _appearanceInfo.splitInterval;
+    [[OAGPXDatabase sharedDb] save];
+}
+
  /*
     private void createGpxAppearanceInfo() {
         GpxDataItem dataItem = app.getGpxDbHelper().getItem(file, new GpxDataItemCallback() {
@@ -163,7 +145,8 @@
 
 - (void) createGpxAppearanceInfo
 {
-    //OAGPX *dataItem = [OAGPXDatabase.sharedDb getGPXItem:gpx.fileName];
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
+    _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:gpx];
 }
 
 

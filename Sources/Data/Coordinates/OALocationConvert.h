@@ -14,6 +14,7 @@
 #define FORMAT_SECONDS 2
 #define FORMAT_UTM 3
 #define FORMAT_OLC 4
+#define FORMAT_MGRS 5
 
 @interface OALocationConvert : NSObject
 
@@ -24,6 +25,7 @@
 
 + (NSString *) getUTMCoordinateString:(double)lat lon:(double)lon;
 + (NSString *) getLocationOlcName:(double) lat lon:(double)lon;
++ (NSString *) getMgrsCoordinateString:(double)lat lon:(double)lon;
 
 @end
 

@@ -92,6 +92,14 @@
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_OLC_FORMAT]
     }];
+    
+    [_data addObject:@{
+        @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+        @"title" : [OAPointDescription formatToHumanString:MAP_GEO_MGRS_FORMAT],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MGRS]],
+        @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_MGRS_FORMAT]
+    }];
+
 }
 
 - (void) viewDidLoad

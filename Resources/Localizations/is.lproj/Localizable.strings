@@ -2176,6 +2176,7 @@
 "coords_format_descr_quick_search" = "Þú getur breytt sniði hnita fyrir notkunarsniðið í almennum stillingum";
 "download_suggestion" = "Sæktu nákvæma %@ kortið til að skoða þetta svæði";
 "navigate_point_format_UTM" = "UTM";
+"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_format_unknown" = "Óþekkt snið";
 "navigate_point_olc_short" = "OLC";
 "invalid_format" = "Ógilt snið";

@@ -801,16 +801,19 @@
 "navigate_point_format_DMS" = "DDD MM SS.SS";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "navigate_point_format_UTM" = "UTM";
+"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_format_unknown" = "Unknown format";
 "navigate_point_northing" = "Northing";
 "navigate_point_easting" = "Easting";
 "navigate_point_zone" = "Zone";
 "navigate_point_olc" = "Open Location Code";
 "navigate_point_olc_short" = "OLC";
+"navigate_point_mgrs" = "MGRS";
 "approximate_file_size" = "Approximate file size: %@";
 
 "coordinates_example" = "Example";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
+"mgrs_description" = "OsmAnd uses MGRS format which is identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
 
 "sett_lang_local" = "Local";

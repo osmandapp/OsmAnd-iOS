@@ -2179,6 +2179,7 @@
 "shared_string_interval" = "Intervallu";
 "gpx_selection_segment_title" = "Segmentos";
 "navigate_point_format_UTM" = "UTM";
+"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_format_unknown" = "Formadu disconnotu";
 "navigate_point_olc_short" = "OLC";
 "invalid_format" = "Formadu non vàlidu";

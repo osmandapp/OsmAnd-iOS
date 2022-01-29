@@ -2184,6 +2184,7 @@
 "navigate_point_olc_short" = "OLC";
 "shared_string_hide_all" = "Скрыть все";
 "navigate_point_format_UTM" = "UTM";
+"navigate_point_format_MGRS" = "MGRS";
 "lang_al" = "Албанский";
 "lang_als" = "Албанский (тоскский)";
 "lang_an" = "Арагонский";

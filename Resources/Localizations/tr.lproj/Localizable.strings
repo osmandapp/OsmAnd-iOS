@@ -2169,6 +2169,7 @@
 "shared_string_custom" = "Özel";
 "gpx_selection_segment_title" = "Bölümler";
 "navigate_point_format_UTM" = "UTM";
+"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_format_unknown" = "Bilinmeyen biçim";
 "invalid_format" = "Geçersiz biçim";
 "gpx_join_gaps_descr" = "Bölümler arasındaki boşluklar birbirine bağlanacaktır.";

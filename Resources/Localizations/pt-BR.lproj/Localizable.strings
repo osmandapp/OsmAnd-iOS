@@ -2160,6 +2160,7 @@
 "track_show_start_finish_icons" = "Mostrarícones de início e fim";
 "activity" = "Atividade";
 "navigate_point_format_UTM" = "UTM";
+"navigate_point_format_MGRS" = "MGRS";
 "coords_format_descr_quick_search" = "Pode alterar o formato das coordenadas para o perfil nas configurações gerais";
 "navigate_point_olc_short" = "OLC";
 "gpx_split_interval" = "Intervalo de divisão";

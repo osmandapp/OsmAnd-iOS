@@ -1920,6 +1920,7 @@
 "street_level_imagery" = "Imatges de carrieras";
 "map_settings_line_width" = "Graissa de la linha";
 "navigate_point_format_UTM" = "UTM";
+"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_format_unknown" = "Format inconegut";
 "quick_action_coordinates_widget_descr" = "Clicatz lo boton per visualizar/ amagar la vinheta de Coordenadas.";
 "distance_moving" = "Distància corregida";

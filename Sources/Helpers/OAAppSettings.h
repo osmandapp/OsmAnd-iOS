@@ -566,6 +566,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 #define MAP_GEO_FORMAT_SECONDS 2
 #define MAP_GEO_UTM_FORMAT 3
 #define MAP_GEO_OLC_FORMAT 4
+#define MAP_GEO_MGRS_FORMAT 5
 
 #define ROTATE_MAP_NONE 0
 #define ROTATE_MAP_BEARING 1

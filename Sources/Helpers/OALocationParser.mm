@@ -11,6 +11,7 @@
 #import "OsmAnd_Maps-Swift.h"
 
 #include <GeographicLib/GeoCoords.hpp>
+#include <GeographicLib/MGRS.hpp>
 
 #define SEPARATOR @"+"
 #define SEPARATOR_POSITION 8
@@ -95,6 +96,35 @@
 
 + (CLLocation *) parseLocation:(NSString *)s
 {
+    // detect MGRS
+    //get rid of all the whitespaces
+    NSArray<NSString *> *mgrsSplit = [s componentsSeparatedByString:@" "];
+    NSMutableString *mgrsStr = [NSMutableString stringWithString:@""];
+    for (NSString *i in mgrsSplit)
+        [mgrsStr appendString:i];
+    
+    if ([self.class isValidMgrsString:mgrsStr])
+    {
+        try
+        {
+            int zone;
+            bool northp;
+            double x;
+            double y;
+            int prec;
+            GeographicLib::MGRS::Reverse([mgrsStr UTF8String], zone, northp, x, y, prec, false);
+            
+            GeographicLib::GeoCoords geoCoords(zone, northp, x, y);
+            return [self validateAndCreateLatitude:geoCoords.Latitude() longitude:geoCoords.Longitude()];
+        }
+        catch(GeographicLib::GeographicErr err)
+        {
+            //input was not a valid MGRS string
+            //do nothing and proceed with standard parsing
+        }
+    }
+    
+    
     s = [s trim];
     BOOL valid = [self.class isValidLocPhrase:s];
     if (!valid)
@@ -116,6 +146,7 @@
     if (d.count == 0)
         return nil;
 
+    
     // detect UTM
     if (all.count == 4 && d.count == 3 && [all[1] isKindOfClass:[NSString class]])
     {
@@ -133,6 +164,7 @@
             }
         }
     }
+
     
     if (all.count == 3 && d.count == 2 && [all[1] isKindOfClass:[NSString class]])
     {
@@ -359,6 +391,22 @@
             }
         }
     }
+}
+
++ (BOOL) isValidMgrsString:(NSString *)s
+{
+    if (s.length < 3
+        || !([[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[s characterAtIndex:0]]
+             || [s characterAtIndex:0] == 'A' || [s characterAtIndex:0] == 'a'
+             || [s characterAtIndex:0] == 'B' || [s characterAtIndex:0] == 'b'
+             || [s characterAtIndex:0] == 'Y' || [s characterAtIndex:0] == 'y'
+             || [s characterAtIndex:0] == 'Z' || [s characterAtIndex:0] == 'z'
+             )
+        )
+    {
+        return false;
+    }
+    return true;
 }
 
 + (BOOL) isValidLocPhrase:(NSString *)s

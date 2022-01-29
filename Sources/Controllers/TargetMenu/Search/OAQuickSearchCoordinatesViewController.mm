@@ -66,7 +66,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     EOAQuickSearchCoordinatesTextFieldNorthing,
     EOAQuickSearchCoordinatesTextFieldEasting,
     EOAQuickSearchCoordinatesTextFieldZone,
-    EOAQuickSearchCoordinatesTextFieldOlc
+    EOAQuickSearchCoordinatesTextFieldOlc,
+    EOAQuickSearchCoordinatesTextFieldMgrs
 };
 
 
@@ -95,6 +96,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     NSString *_eastingStr;
     NSString *_zoneStr;
     NSString *_olcStr;
+    NSString *_mgrsStr;
     NSString *_formatStr;
     
     CLLocation *_searchLocation;
@@ -248,6 +250,15 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldZone),
         }];
     }
+    else if (_currentFormat == MAP_GEO_MGRS_FORMAT)
+    {
+        [result addObject:@{
+            @"type" : [OACoodinateSearchCell getCellIdentifier],
+            @"title" : OALocalizedString(@"navigate_point_mgrs"),
+            @"value" : _mgrsStr,
+            @"tag" : @(EOAQuickSearchCoordinatesTextFieldMgrs),
+        }];
+    }
     else
     {
         [result addObject:@{
@@ -346,6 +357,12 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                _northingStr = @"";
                _eastingStr = @"";
            }
+           else if (prevFormat == MAP_GEO_MGRS_FORMAT)
+           {
+               _zoneStr = _mgrsStr;
+               _northingStr = @"";
+               _eastingStr = @"";
+           }
            else
            {
                _zoneStr = _latStr;
@@ -363,9 +380,32 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
            {
                _olcStr = _zoneStr;
            }
+           else if (prevFormat == MAP_GEO_MGRS_FORMAT)
+           {
+               _olcStr = _mgrsStr;
+           }
            else
            {
                _olcStr = _latStr;
+           }
+       }
+       else if (_currentFormat == MAP_GEO_MGRS_FORMAT)
+       {
+           if (latLon)
+           {
+               _mgrsStr = [OALocationConvert getMgrsCoordinateString:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
+           }
+           else if (prevFormat == MAP_GEO_UTM_FORMAT)
+           {
+               _mgrsStr = _zoneStr;
+           }
+           else if (prevFormat == MAP_GEO_OLC_FORMAT)
+           {
+               _mgrsStr = _olcStr;
+           }
+           else
+           {
+               _mgrsStr = _latStr;
            }
        }
        else
@@ -383,6 +423,11 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
            else if (prevFormat == MAP_GEO_OLC_FORMAT)
            {
                _latStr = _olcStr;
+               _lonStr = @"";
+           }
+           else if (prevFormat == MAP_GEO_MGRS_FORMAT)
+           {
+               _latStr = _mgrsStr;
                _lonStr = @"";
            }
        }
@@ -424,6 +469,11 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     {
         if ([self isValidValueInField:EOAQuickSearchCoordinatesTextFieldOlc])
             loc = [self parseOlcCode:_olcStr];
+    }
+    else if (_currentFormat == MAP_GEO_MGRS_FORMAT)
+    {
+        if ([self isValidValueInField:EOAQuickSearchCoordinatesTextFieldMgrs])
+            loc = [self parseOlcCode:_mgrsStr];
     }
     else
     {
@@ -522,6 +572,12 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     else if (field == EOAQuickSearchCoordinatesTextFieldOlc)
     {
         NSString *value = _olcStr.lowerCase;
+        if (value.length == 0)
+            return NO;
+    }
+    else if (field == EOAQuickSearchCoordinatesTextFieldMgrs)
+    {
+        NSString *value = _mgrsStr.lowerCase;
         if (value.length == 0)
             return NO;
     }
@@ -864,7 +920,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         if (cell)
         {
             NSInteger tag = [item[@"tag"] integerValue];
-            if (tag == EOAQuickSearchCoordinatesTextFieldOlc)
+            if (tag == EOAQuickSearchCoordinatesTextFieldOlc || tag == EOAQuickSearchCoordinatesTextFieldMgrs)
                 cell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             else
                 cell.textField.keyboardType = UIKeyboardTypeASCIICapableNumberPad;
@@ -1045,6 +1101,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         _lonStr = text;
     else if (tag == EOAQuickSearchCoordinatesTextFieldOlc)
         _olcStr = text;
+    else if (tag == EOAQuickSearchCoordinatesTextFieldMgrs)
+        _mgrsStr = text;
     else if (tag == EOAQuickSearchCoordinatesTextFieldNorthing)
         _northingStr = text;
     else if (tag == EOAQuickSearchCoordinatesTextFieldEasting)
@@ -1127,6 +1185,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             hintList = @[@"-", @".", @":"];
         else if (tag == EOAQuickSearchCoordinatesTextFieldOlc)
             hintList = @[@"+", @"C", @"F", @"G", @"H", @"J", @"M", @"P", @"Q", @"R", @"V", @"W", @"X"];
+        else if (tag == EOAQuickSearchCoordinatesTextFieldMgrs)
+            hintList = @[];
         else if (tag == EOAQuickSearchCoordinatesTextFieldNorthing)
             hintList = @[];
         else if (tag == EOAQuickSearchCoordinatesTextFieldEasting)

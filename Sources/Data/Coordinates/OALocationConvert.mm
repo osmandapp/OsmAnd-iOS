@@ -155,8 +155,14 @@
 
 + (NSString *) getUTMCoordinateString:(double)lat lon:(double)lon
 {
-    GeographicLib::GeoCoords pnt(lat, lon);
-    return [NSString stringWithFormat:@"%d%c %.0f %.0f", pnt.Zone(), toupper(pnt.Hemisphere()), pnt.Easting(), pnt.Northing()];
+    try{
+        GeographicLib::GeoCoords pnt(lat, lon);
+        return [NSString stringWithFormat:@"%d%c %.0f %.0f", pnt.Zone(), toupper(pnt.Hemisphere()), pnt.Easting(), pnt.Northing()];
+    }
+    catch(GeographicLib::GeographicErr err)
+    {
+         return @"Error. Wrong coordinates data.";
+    }
 }
 
 + (NSString *) getLocationOlcName:(double) lat lon:(double)lon

@@ -2320,3 +2320,6 @@
 "lang_zhyue" = "Cantonês";
 "shared_string_hide_all" = "Ocultar tudo";
 "lang_vo" = "Volapuque";
+"grey_color_undefined" = "As partes sem dados são mostradas em cinza.";
+"white_color_undefined" = "As partes sem dados são mostradas em branco.";
+"points_delete_multiple" = "Excluir %d ponto(s)?";

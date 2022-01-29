@@ -173,9 +173,10 @@ struct RouteDataBundle;
 @property (nonatomic) double horizontalDilutionOfPrecision;
 @property (nonatomic) double verticalDilutionOfPrecision;
 
-- (NSString *) getIcon;
-- (NSString *) getBackgroundIcon;
-- (NSString *) getAddress;
+- (NSString *)getIcon;
+- (void)setIcon:(NSString *)iconName;
+- (NSString *)getBackgroundIcon;
+- (NSString *)getAddress;
 
 - (NSString *) getProfileType;
 - (void) setProfileType:(NSString *)profileType;

@@ -14,5 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (weak, nonatomic) IBOutlet UIImageView *arrowIconView;
 @property (weak, nonatomic) IBOutlet WKWebView *webView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *webViewLeftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *webViewRightConstraint;
 
 @end

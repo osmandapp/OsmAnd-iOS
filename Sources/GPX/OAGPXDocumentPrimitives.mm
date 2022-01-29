@@ -455,6 +455,11 @@
     return value ? value : @"special_star";
 }
 
+- (void)setIcon:(NSString *)iconName
+{
+    [self setExtension:ICON_NAME_EXTENSION value:iconName];
+}
+
 - (NSString *)getBackgroundIcon
 {
     NSString *value = [self getExtensionByKey:BACKGROUND_TYPE_EXTENSION].value;
@@ -595,7 +600,7 @@
         return NO;
     if (self.type && ![self.type isEqualToString:wptPt.type])
         return NO;
-    
+
     return YES;
 }
 

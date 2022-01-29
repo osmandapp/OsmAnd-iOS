@@ -39,6 +39,7 @@
 #import "OATrackMenuHudViewController.h"
 #import "OAAppSettings.h"
 #import "OAPOI.h"
+#import "OrderedDictionary.h"
 
 #include "Localization.h"
 #import "OAGPXDocument.h"
@@ -81,13 +82,14 @@
     EOAEditPointType _editPointType;
     OAFavoriteItem *_favorite;
     OAGpxWptItem *_waypoint;
-    OAPOI *_poi;
     
     OABasePointEditingHandler *_pointHandler;
     
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSArray<NSNumber *> *_colors;
-    NSDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
+    MutableOrderedDictionary<NSString *, NSArray<NSString *> *> *_iconCategories;
+    NSArray<NSString *> *_currentCategoryIcons;
+    
     NSArray *_poiCategories;
     NSArray<NSString *> *_lastUsedIcons;
     NSArray<NSString *> *_backgroundIcons;
@@ -173,16 +175,15 @@
         _isUnsaved = YES;
         _app = [OsmAndApp instance];
         _targetMenuState = targetMenuState;
-        _poi = poi;
 
         if (_editPointType == EOAEditPointTypeFavorite)
         {
-            _pointHandler = [[OAFavoriteEditingHandler alloc] initWithLocation:location title:formattedTitle address:customParam];
+            _pointHandler = [[OAFavoriteEditingHandler alloc] initWithLocation:location title:formattedTitle address:customParam poi:poi];
             self.address = customParam ? customParam : @"";
         }
         else if (_editPointType == EOAEditPointTypeWaypoint)
         {
-            _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle gpxFileName:customParam];
+            _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle gpxFileName:customParam poi:poi];
             self.gpxFileName = customParam ? customParam : @"";
             self.address = ((OAGpxWptEditingHandler *)_pointHandler).getAddress;
         }
@@ -281,64 +282,17 @@
     _groupColors = [NSArray arrayWithArray:colors];
 }
 
-- (NSString *) getPreselectedIconName
-{
-    if (_favorite)
-    {
-        return [_favorite getIcon];
-    }
-    else if (_waypoint)
-    {
-        return _waypoint.point.getIcon;
-    }
-    else if (_poi)
-    {
-        NSString *iconName = [_poi.iconName lastPathComponent];
-        if (iconName)
-        {
-            iconName = [iconName stringByReplacingOccurrencesOfString:@"mx_" withString:@""];
-            if ([[OAFavoritesHelper getFlatIconNamesList] containsObject:iconName])
-                return iconName;
-        }
-    }
-    return nil;
-}
 
 - (void)setupIcons
 {
-    NSString *preselectedIconName = [self getPreselectedIconName];
-
-    _poiIcons = [OAFavoritesHelper getCategirizedIconNames];
-    if (_lastUsedIcons && _lastUsedIcons.count > 0)
-    {
-        NSMutableDictionary<NSString *, NSArray<NSString *> *> *poiIconsMutable = _poiIcons.mutableCopy;
-        poiIconsMutable[kLastUsedIconsKey] = _lastUsedIcons;
-        _poiIcons = poiIconsMutable.copy;
-
-        if (!preselectedIconName)
-            preselectedIconName = _lastUsedIcons[0];
-    }
-
+    [self createIconSelector];
+    NSString *preselectedIconName = [_pointHandler getIcon];
     if (!preselectedIconName)
-        preselectedIconName = kDefaultIcon;
-
-    for (NSString *categoryName in _poiIcons.allKeys)
-    {
-        NSArray<NSString *> *icons = _poiIcons[categoryName];
-        if (icons)
-        {
-            int index = (int)[icons indexOfObject:preselectedIconName];
-            if (index != -1)
-            {
-                _selectedIconName = preselectedIconName;
-                _selectedIconCategoryName = categoryName;
-            }
-        }
-    }
-
-    NSArray *categories = _poiIcons.allKeys;
+        preselectedIconName = [self getDefaultIconName];
+    _selectedIconName = preselectedIconName;
+    
     NSMutableArray *categoriesData = [NSMutableArray new];
-    for (NSString *category in categories)
+    for (NSString *category in _iconCategories)
     {
         if ([category isEqualToString:kLastUsedIconsKey])
         {
@@ -358,9 +312,7 @@
         }
     }
 
-    _poiCategories = [categoriesData sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
-        return [[obj1[@"title"] lowerCase] compare:[obj2[@"title"] lowerCase]];
-    }];
+    _poiCategories = categoriesData;
 
     if (!_selectedIconName || _selectedIconName.length == 0)
         _selectedIconName = kDefaultIcon;
@@ -382,12 +334,67 @@
         _selectedBackgroundIndex = 0;
 }
 
+- (NSString *)getPreselectedIconName
+{
+    return (!_pointHandler || !_isNewItemAdding) ? nil : [_pointHandler getIcon];;
+}
+
+- (NSString *)getInitCategory
+{
+    for (int j = 0; j < [_iconCategories allKeys].count; j ++)
+    {
+        NSArray<NSString *> *iconsArray = _iconCategories[ [_iconCategories allKeys][j] ];
+        for (int i = 0; i < iconsArray.count; i ++)
+        {
+            if ([iconsArray[i] isEqualToString:[_pointHandler getIcon]])
+                return [_iconCategories allKeys][j];
+        }
+    }
+    return [_iconCategories allKeys][0];
+}
+
+- (void) createIconSelector
+{
+    _iconCategories = [MutableOrderedDictionary dictionary];
+    
+    // update last used icons
+    if (_lastUsedIcons && _lastUsedIcons.count > 0)
+    {
+        _iconCategories[kLastUsedIconsKey] = _lastUsedIcons;
+    }
+
+    OrderedDictionary<NSString *, NSArray<NSString *> *> *categories = [self loadOrderedJSON];
+    if (categories)
+    {
+        for (int i = 0; i < [categories allKeys].count; i++)
+        {
+            NSString *name = [categories allKeys][i];
+            NSArray *icons = categories[name];
+            NSString *translatedName = OALocalizedString(name);
+            _iconCategories[translatedName] = icons;
+        }
+    }
+    
+    _selectedIconCategoryName = [self getInitCategory];
+    [self createIconForCategory];
+}
+
 - (void) initLastUsedIcons
 {
     _lastUsedIcons = @[];
     NSArray<NSString *> *fromPref = [OAAppSettings.sharedManager.lastUsedFavIcons get];
     if (fromPref && fromPref.count > 0)
         _lastUsedIcons = fromPref;
+}
+
+- (NSString *)getDefaultIconName
+{
+    NSString *preselectedIconName = [self getPreselectedIconName];
+    if (preselectedIconName && preselectedIconName.length > 0)
+        return preselectedIconName;
+    else if (_lastUsedIcons && _lastUsedIcons.count > 0)
+        return _lastUsedIcons[0];
+    return kDefaultIcon;
 }
 
 - (void) addLastUsedIcon:(NSString *)iconName
@@ -400,6 +407,69 @@
     [mutableLastUsedIcons insertObject:iconName atIndex:0];
     _lastUsedIcons = mutableLastUsedIcons.copy;
     [OAAppSettings.sharedManager.lastUsedFavIcons set:_lastUsedIcons];
+}
+
+- (void)createIconForCategory
+{
+    [self createIconList];
+}
+
+- (void)createIconList
+{
+    NSMutableArray *iconNameList = [NSMutableArray array];
+    [iconNameList addObjectsFromArray:_iconCategories[_selectedIconCategoryName]];
+    
+    NSString *preselectedIconName = [self getPreselectedIconName];
+    if (preselectedIconName && preselectedIconName.length > 0)
+    {
+        [iconNameList removeObject:preselectedIconName];
+        [iconNameList insertObject:preselectedIconName atIndex:0];
+    }
+    
+    _currentCategoryIcons = [NSArray arrayWithArray:iconNameList];
+}
+
+- (OrderedDictionary<NSString *, NSArray<NSString *> *> *) loadOrderedJSON
+{
+    
+    NSString* path = [[NSBundle mainBundle] pathForResource:@"poi_categories" ofType:@"json"];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    NSString* jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSDictionary *unorderedJson = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+    
+    if (unorderedJson)
+    {
+        NSMutableDictionary<NSString *, NSNumber *> *categoriesOrder = [NSMutableDictionary dictionary];
+        NSDictionary *unorderedCategories = unorderedJson[@"categories"];
+        NSArray *unorderedCategoryNames = unorderedCategories.allKeys;
+        if (unorderedCategories)
+        {
+            for (NSString *categoryName in unorderedCategoryNames)
+            {
+                NSNumber *indexInJsonSrting = [NSNumber numberWithInt:[jsonString indexOf:[NSString stringWithFormat:@"\"%@\"", categoryName]]];
+                categoriesOrder[categoryName] = indexInJsonSrting;
+            }
+            
+            NSArray *orderedCategoryNames = [categoriesOrder keysSortedByValueUsingSelector:@selector(compare:)];
+    
+            MutableOrderedDictionary *orderedJson = [MutableOrderedDictionary new];
+            for (NSString *categoryName in orderedCategoryNames)
+            {
+                NSDictionary *iconsDictionary = unorderedCategories[categoryName];
+                if (iconsDictionary)
+                {
+                    NSArray *iconsArray = iconsDictionary[@"icons"];
+                    if (iconsArray)
+                    {
+                        orderedJson[categoryName] = iconsArray;
+                    }
+                }
+            }
+            
+            return orderedJson;
+        }
+    }
+    return nil;
 }
 
 - (void)setupColors
@@ -494,7 +564,7 @@
         @"selectedCategoryName" : _selectedIconCategoryName,
         @"categotyData" : _poiCategories,
         @"selectedIconName" : _selectedIconName,
-        @"poiData" : _poiIcons,
+        @"poiData" : _currentCategoryIcons,
         @"key" : kIconsKey
     }];
     _poiIconRowIndex = section.count - 1;
@@ -1020,7 +1090,7 @@
      else if ([type isEqualToString:[OAPoiTableViewCell getCellIdentifier]])
      {
          OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *)cell;
-         [poiCell updateContentOffset];
+         [poiCell updateContentOffsetForce:NO];
      }
  }
 
@@ -1040,7 +1110,7 @@
  
     int offset = section == 0 ? 32 : 16;
     [vw setYOffset:offset];
-    
+    [vw setXOffset:20];
     return vw;
 }
 
@@ -1221,7 +1291,10 @@
 - (void) onPoiCategorySelected:(NSString *)category index:(NSInteger)index
 {
     _selectedIconCategoryName = category;
+    [self createIconList];
     [self generateData];
+    OAPoiTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex]];
+    [cell updateIconsList:_currentCategoryIcons];
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAPOI.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -42,6 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSDictionary *)checkDuplicates:(NSString *)name group:(NSString *)group;
 
 - (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint;
+
++ (NSString *) getPoiIconName:(id)object;
 
 @end
 

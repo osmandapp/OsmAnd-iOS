@@ -299,6 +299,44 @@
     return res.string;
 }
 
+- (NSString *) regexReplacePattern:(NSString *)pattern newString:(NSString *)newString
+{
+    NSMutableString *result = [NSMutableString stringWithString:self];
+    NSRange searchedRange = NSMakeRange(0, [self length]);
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSString *modifiedString = [regex stringByReplacingMatchesInString:result options:0 range:searchedRange withTemplate:newString];
+    return modifiedString;
+}
+
+- (NSArray<NSString *> *) regexSplitInStringByPattern:(NSString *)pattern
+{
+    NSRegularExpressionOptions regexOptions = NSRegularExpressionCaseInsensitive;
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:regexOptions error:&error];
+
+    NSRange searchedRange = NSMakeRange(0, [self length]);
+    NSArray *matches = [regex matchesInString:self options:0 range:searchedRange];
+    if (matches.count == 0)
+        return @[self];
+    
+    NSMutableArray *results = [NSMutableArray array];
+    NSInteger phraseStartIndex = 0;
+    
+    for (NSTextCheckingResult *match in matches) {
+        NSRange separatorRange = [match range];
+        NSString *phrase = [self substringWithRange:NSMakeRange(phraseStartIndex, separatorRange.location - phraseStartIndex)];
+        if (phrase.length > 0)
+            [results addObject:phrase];
+        phraseStartIndex = separatorRange.location + separatorRange.length;
+    }
+    
+    NSString *lastPhrase = [self substringFromIndex:phraseStartIndex];
+    if (lastPhrase.length > 0)
+        [results addObject:lastPhrase];
+  
+    return [NSArray arrayWithArray:results];
+}
+
 @end
 
 @implementation UIView (utils)

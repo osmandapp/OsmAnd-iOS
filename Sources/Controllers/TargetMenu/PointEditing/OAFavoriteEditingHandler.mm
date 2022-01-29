@@ -22,6 +22,7 @@
 {
     OAFavoriteItem *_favorite;
     OsmAndAppInstance _app;
+    NSString *_iconName;
 }
 
 - (instancetype) initWithItem:(OAFavoriteItem *)favorite
@@ -30,12 +31,13 @@
     if (self)
     {
         _favorite = favorite;
+        _iconName = [favorite getIcon];
         [self commonInit];
     }
     return self;
 }
 
-- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation
+- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation poi:(OAPOI *)poi
 {
     self = [super init];
     if (self)
@@ -56,6 +58,12 @@
         QString description;
         QString icon;
         QString background;
+        
+        NSString *poiIconName = [self.class getPoiIconName:poi];
+        if (poiIconName && poiIconName.length > 0)
+            icon = QString::fromNSString(poiIconName);
+        
+        _iconName = poiIconName;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *groupName;
@@ -115,7 +123,7 @@
 
 - (NSString *)getIcon
 {
-    return _favorite.getIcon;
+    return _iconName;
 }
 
 - (NSString *)getBackgroundIcon

@@ -364,11 +364,11 @@
         metadata.desc = gpxDocument->metadata->description.toNSString();
         metadata.time = gpxDocument->metadata->timestamp.toTime_t();
         metadata.links = [self.class fetchLinks:gpxDocument->metadata->links];
-
-        [self fetchExtensions:gpxDocument];
-
+        [metadata fetchExtensions:gpxDocument->metadata];
         self.metadata = metadata;
     }
+
+    [self fetchExtensions:gpxDocument];
 
     // Location Marks
     if (!gpxDocument->points.isEmpty())
@@ -619,7 +619,7 @@
 
         if (s.name)
             trkseg->name = QString::fromNSString(s.name);
-        
+
         for (OAWptPt *p in s.points)
         {
             trkpt.reset(new OsmAnd::GpxDocument::GpxWptPt());

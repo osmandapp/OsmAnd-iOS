@@ -55,6 +55,9 @@
 #import "OAMapLayers.h"
 #import "OATrackMenuUIBuilder.h"
 #import "QuadRect.h"
+#import "OAImageDescTableViewCell.h"
+#import "OAEditDescriptionViewController.h"
+#import "OAWikiArticleHelper.h"
 
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
@@ -63,6 +66,8 @@
 
 #define kInfoCreatedOnCell 0
 #define kActionMoveCell 1
+
+#define kGpxDescriptionImageHeight 149
 
 @implementation OATrackMenuViewControllerState
 
@@ -79,7 +84,7 @@
 
 @end
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, ChartViewDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, ChartViewDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -122,6 +127,13 @@
     BOOL _isHeaderBlurred;
     BOOL _isTabSelecting;
     BOOL _wasFirstOpening;
+    
+    BOOL _isImageDownloadFinished;
+    BOOL _isImageDownloadSucceed;
+    UIImage *_cachedImage;
+    NSString *_cachedImageURL;
+    BOOL _isViewVisible;
+    OAEditDescriptionViewController *_editDescController;
 }
 
 @dynamic isShown, backButton, statusBarBackgroundView, contentContainer;
@@ -205,6 +217,12 @@
     [self updateGroupsButton];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    _isViewVisible = NO;
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -269,6 +287,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     _exportController = nil;
+    _isViewVisible = YES;
 }
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -389,6 +408,51 @@
 - (void)generateData
 {
     _tableData = [_uiBuilder generateSectionsData];
+    [self fetchDecriptionImageIfNeeded];
+}
+
+- (void)fetchDecriptionImageIfNeeded
+{
+    for (int i = 0; i < _tableData.sections.count; i++)
+    {
+        OAGPXTableSectionData *section = _tableData.sections[i];
+        for (int j = 0; j < section.cells.count; j++)
+        {
+            OAGPXTableCellData *cellData = section.cells[j];
+            if ([cellData.type isEqualToString:[OAImageDescTableViewCell getCellIdentifier]])
+            {
+                NSString *url = cellData.values[@"img"];
+                if (!_cachedImage || ![url isEqualToString:_cachedImageURL])
+                {
+                    _isImageDownloadFinished = NO;
+                    _cachedImage = nil;
+                    _cachedImageURL = url;
+
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString: url]];
+                        UIImage *image = [UIImage imageWithData:data];
+                        _isImageDownloadFinished = YES;
+                        _isImageDownloadSucceed = image != nil;
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (!_isViewVisible)
+                            {
+                                _cachedImage = image;
+                                NSIndexPath *imageCellIndex = [NSIndexPath indexPathForRow:j inSection:i];
+                                [self.tableView reloadRowsAtIndexPaths:@[imageCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                            }
+                        });
+                    });
+                }
+                else
+                {
+                    NSIndexPath *imageCellIndex = [NSIndexPath indexPathForRow:j inSection:i];
+                    [self.tableView reloadRowsAtIndexPaths:@[imageCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
+                break;
+            }
+        }
+    }
 }
 
 - (BOOL)isTabSelecting
@@ -1302,7 +1366,18 @@
     {
         case EOATrackMenuHudOverviewTab:
         {
-            _description = self.doc.metadata.desc;
+            if (self.doc.metadata.desc && self.doc.metadata.desc.length > 0)
+            {
+                _description = self.doc.metadata.desc;
+            }
+            else if (self.doc.metadata.extraData)
+            {
+                for (OAGpxExtension *e in ((OAGpxExtensions *)self.doc.metadata.extraData).extensions)
+                {
+                    if ([e.name isEqualToString:@"desc"])
+                        _description = e.value;
+                }
+            }
             break;
         }
         case EOATrackMenuHudSegmentsTab:
@@ -1324,6 +1399,30 @@
         }
     }
     return _description;
+}
+
+- (NSString *)getMetadataImageLink
+{
+    NSArray *links = self.doc.metadata.links;
+    if (links && links.count > 0)
+    {
+        for (NSString *link in links)
+        {
+            if (link.length > 0)
+            {
+                NSString *lowerCaseLink = [link lowerCase];
+                if ([lowerCaseLink containsString:@".jpg"] ||
+                    [lowerCaseLink containsString:@".jpeg"] ||
+                    [lowerCaseLink containsString:@".png"] ||
+                    [lowerCaseLink containsString:@".bmp"] ||
+                    [lowerCaseLink containsString:@".webp"])
+                {
+                    return link;
+                }
+            }
+        }
+    }
+    return nil;
 }
 
 - (BOOL)changeTrackVisible
@@ -1431,9 +1530,16 @@
 
 - (void)openDescription
 {
-    OATrackMenuDescriptionViewController *descriptionViewController =
-            [[OATrackMenuDescriptionViewController alloc] initWithGpxDoc:self.doc gpx:self.gpx];
-    [self.navigationController pushViewController:descriptionViewController animated:YES];
+    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:_description isNew:NO isEditing:NO readOnly:NO];
+    _editDescController.delegate = self;
+    [self.navigationController pushViewController:_editDescController animated:YES];
+}
+
+- (void)openDescriptionEditor
+{
+    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:_description isNew:NO isEditing:YES readOnly:NO];
+    _editDescController.delegate = self;
+    [self.navigationController pushViewController:_editDescController animated:YES];
 }
 
 - (void)openDuplicateTrack
@@ -2125,6 +2231,48 @@
         }
         outCell = cell;
     }
+    else if ([cellData.type isEqualToString:[OAImageDescTableViewCell getCellIdentifier]])
+    {
+        OAImageDescTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAImageDescTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageDescTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAImageDescTableViewCell *)[nib objectAtIndex:0];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
+        cell.iconView.contentMode = UIViewContentModeScaleAspectFill;
+        cell.descView.hidden = YES;
+        cell.imageBottomToLabelConstraint.priority = 1;
+        cell.imageBottomConstraint.priority = 1000;
+        cell.imageBottomConstraint.constant = 0;
+
+        if (!_isImageDownloadFinished)
+        {
+            cell.activityIndicatorView.hidden = NO;
+            [cell.activityIndicatorView startAnimating];
+            cell.iconView.image = nil;
+            cell.iconViewHeight.constant = 40;
+        }
+        else
+        {
+            cell.activityIndicatorView.hidden = YES;
+            [cell.activityIndicatorView stopAnimating];
+            if (_isImageDownloadSucceed)
+            {
+                cell.iconView.image = _cachedImage;
+                cell.imageTopConstraint.constant = 16;
+                cell.iconViewHeight.constant = kGpxDescriptionImageHeight;
+            }
+            else
+            {
+                cell.iconView.image = nil;
+                cell.imageTopConstraint.constant = 1;
+                cell.iconViewHeight.constant = 1;
+            }
+        }
+        outCell =  cell;
+    }
 
     if ([outCell needsUpdateConstraints])
         [outCell updateConstraints];
@@ -2319,6 +2467,18 @@
         [self fitSelectedPointsGroupOnMap:index];
         [_headerView.groupsCollectionView reloadData];
     }
+}
+
+#pragma mark - OAEditDescriptionViewControllerDelegate
+
+- (void) descriptionChanged
+{
+    self.doc.metadata.desc = _editDescController.desc;
+    [self.doc saveTo:self.doc.path];
+    _description = [self generateDescription];
+    [_headerView setDescription];
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 @end

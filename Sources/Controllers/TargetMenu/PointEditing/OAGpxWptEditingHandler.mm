@@ -26,6 +26,7 @@
     OAGPXDocument *_gpxDocument;
     NSString *_newGroupTitle;
     UIColor *_newGroupColor;
+    NSString *_iconName;
 }
 
 - (instancetype)initWithItem:(OAGpxWptItem *)gpxWpt
@@ -35,13 +36,14 @@
     {
         _gpxWpt = gpxWpt;
         _gpxFileName = _gpxWpt.docPath;
+        _iconName = _gpxWpt.point.getIcon;
 
         [self commonInit];
     }
     return self;
 }
 
-- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedLocation gpxFileName:(NSString*)gpxFileName
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedLocation gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi
 {
     self = [super init];
     if (self)
@@ -59,8 +61,13 @@
         p.time = (long)[[NSDate date] timeIntervalSince1970];
         [p setColor:[OAUtilities colorToNumber:color]];
         p.desc = @"";
+        
+        _iconName = nil;
+        NSString *poiIconName = [self.class getPoiIconName:poi];
+        if (poiIconName && poiIconName.length > 0)
+            _iconName = poiIconName;
 
-        [p setExtension:ICON_NAME_EXTENSION value:@"special_star"];
+        [p setExtension:ICON_NAME_EXTENSION value:_iconName];
         [p setExtension:BACKGROUND_TYPE_EXTENSION value:@"circle"];
         [p setExtension:ADDRESS_EXTENSION value:@""];
 
@@ -161,7 +168,7 @@
 
 - (NSString *)getIcon
 {
-    return [_gpxWpt.point getIcon];
+    return _iconName;
 }
 
 - (NSString *)getBackgroundIcon

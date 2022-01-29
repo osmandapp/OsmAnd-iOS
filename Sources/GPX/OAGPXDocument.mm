@@ -364,7 +364,9 @@
         metadata.desc = gpxDocument->metadata->description.toNSString();
         metadata.time = gpxDocument->metadata->timestamp.toTime_t();
         metadata.links = [self.class fetchLinks:gpxDocument->metadata->links];
-        [metadata fetchExtensions:gpxDocument->metadata];
+        
+        OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata> *_metadata = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata>*)&gpxDocument->metadata;
+        [metadata fetchExtensions:_metadata->shared_ptr()];
         self.metadata = metadata;
     }
 

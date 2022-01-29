@@ -1370,9 +1370,9 @@
             {
                 _description = self.doc.metadata.desc;
             }
-            else if (self.doc.metadata.extraData)
+            else
             {
-                for (OAGpxExtension *e in ((OAGpxExtensions *)self.doc.metadata.extraData).extensions)
+                for (OAGpxExtension *e in self.doc.metadata.extensions)
                 {
                     if ([e.name isEqualToString:@"desc"])
                         _description = e.value;
@@ -1406,18 +1406,18 @@
     NSArray *links = self.doc.metadata.links;
     if (links && links.count > 0)
     {
-        for (NSString *link in links)
+        for (OAGpxLink *link in links)
         {
-            if (link.length > 0)
+            if (link.url)
             {
-                NSString *lowerCaseLink = [link lowerCase];
+                NSString *lowerCaseLink = [link.url.absoluteString lowerCase];
                 if ([lowerCaseLink containsString:@".jpg"] ||
                     [lowerCaseLink containsString:@".jpeg"] ||
                     [lowerCaseLink containsString:@".png"] ||
                     [lowerCaseLink containsString:@".bmp"] ||
                     [lowerCaseLink containsString:@".webp"])
                 {
-                    return link;
+                    return link.url.absoluteString;
                 }
             }
         }

@@ -124,7 +124,6 @@
         }
     }
     
-    
     s = [s trim];
     BOOL valid = [self.class isValidLocPhrase:s];
     if (!valid)
@@ -146,7 +145,6 @@
     if (d.count == 0)
         return nil;
 
-    
     // detect UTM
     if (all.count == 4 && d.count == 3 && [all[1] isKindOfClass:[NSString class]])
     {
@@ -164,7 +162,6 @@
             }
         }
     }
-
     
     if (all.count == 3 && d.count == 2 && [all[1] isKindOfClass:[NSString class]])
     {

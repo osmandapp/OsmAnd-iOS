@@ -30,7 +30,6 @@
 #define FORMAT_OLC 4
 #define FORMAT_MGRS 5
 
-
 #define DELIM @":"
 #define DELIMITER_DEGREES @"°"
 #define DELIMITER_MINUTES @"′"

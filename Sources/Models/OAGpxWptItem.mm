@@ -88,17 +88,15 @@
     NSString *backgrounfIconName = [@"bg_point_" stringByAppendingString:_point.getBackgroundIcon];
     UIImage *backgroundImg = [UIImage imageNamed:backgrounfIconName];
     backgroundImg = [OAUtilities tintImageWithColor:backgroundImg color:_point.getColor];
-    
+
     NSString *iconName = [@"mx_" stringByAppendingString:_point.getIcon];
-    UIImage *iconImg = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
+    UIImage *iconImgOrig = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
+    UIImage *iconImg = [UIImage imageWithCGImage:iconImgOrig.CGImage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
     iconImg = [OAUtilities tintImageWithColor:iconImg color:UIColor.whiteColor];
- 
-    CGFloat scaledIconSize = backgroundImg.size.width * backgroundImg.scale;
-    backgroundImg  = [OAUtilities resizeImage:backgroundImg newSize:CGSizeMake(scaledIconSize, scaledIconSize)];
-    CGFloat centredIconOffset = (backgroundImg.size.width - iconImg.size.width) / 2;
-    
-    UIGraphicsBeginImageContext(backgroundImg.size);
-    [backgroundImg drawInRect:CGRectMake(0, 0, backgroundImg.size.width, backgroundImg.size.height)];
+
+    CGFloat centredIconOffset = (backgroundImg.size.width - iconImg.size.width) / 2.0;
+    UIGraphicsBeginImageContextWithOptions(backgroundImg.size, NO, [UIScreen mainScreen].scale);
+    [backgroundImg drawInRect:CGRectMake(0.0, 0.0, backgroundImg.size.width, backgroundImg.size.height)];
     [iconImg drawInRect:CGRectMake(centredIconOffset, centredIconOffset, iconImg.size.width, iconImg.size.height)];
     resultImg = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

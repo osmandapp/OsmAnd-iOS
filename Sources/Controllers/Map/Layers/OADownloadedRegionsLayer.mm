@@ -108,7 +108,7 @@
                 if (resource && resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
                 {
                     if ([region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)]
-                        && !resource->id.isNull() && [resource->id.toNSString() hasPrefix:region.downloadsIdPrefix])
+                        && !resource->id.isNull() && [resource->id.toNSString() hasPrefix:region.downloadsIdPrefix] && self.app.resourcesManager->checkIfObjectDownloaded( QString::fromNSString(region.downloadsIdPrefix)))
                     {
                         [mapRegions addObject:region];
                         [toRemove addObjectsFromArray:region.subregions];

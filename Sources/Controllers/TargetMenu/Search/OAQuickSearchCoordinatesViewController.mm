@@ -42,6 +42,7 @@
 #import <OsmAndCore/Utilities.h>
 
 #include <GeographicLib/GeoCoords.hpp>
+#include <GeographicLib/MGRS.hpp>
 
 #define kSearchCityLimit 100
 #define defaultNavBarHeight 58
@@ -473,7 +474,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     else if (_currentFormat == MAP_GEO_MGRS_FORMAT)
     {
         if ([self isValidValueInField:EOAQuickSearchCoordinatesTextFieldMgrs])
-            loc = [self parseOlcCode:_mgrsStr];
+            loc = [self parseMgrsString:_mgrsStr];
     }
     else
     {
@@ -631,6 +632,68 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     if (zone <= 'A' || zone == 'B' || zone == 'Y' || zone >= 'Z' || zone == 'I' || zone == 'O')
         return nil;
     return zone >= 'N' ? @"N" : @"S";
+}
+
+- (CLLocation *) parseMgrsString:(NSString *)mgrsString
+{
+    CLLocation *loc = nil;
+    //get rid of all the whitespaces
+    NSArray<NSString *> *mgrsSplit = [mgrsString componentsSeparatedByString:@" "];
+    NSMutableString *mgrsStr = [NSMutableString stringWithString:@""];
+    for (NSString *i in mgrsSplit)
+        [mgrsStr appendString:i];
+    
+    if (mgrsStr.length > 2
+           && ([[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[mgrsStr characterAtIndex:0]]
+                || [mgrsStr characterAtIndex:0] == 'A' || [mgrsStr characterAtIndex:0] == 'a'
+                || [mgrsStr characterAtIndex:0] == 'B' || [mgrsStr characterAtIndex:0] == 'b'
+                || [mgrsStr characterAtIndex:0] == 'Y' || [mgrsStr characterAtIndex:0] == 'y'
+                || [mgrsStr characterAtIndex:0] == 'Z' || [mgrsStr characterAtIndex:0] == 'z'
+                )
+           )
+    {
+        try
+        {
+            int zone;
+            bool northp;
+            double x;
+            double y;
+            int prec;
+            GeographicLib::MGRS::Reverse([mgrsStr UTF8String], zone, northp, x, y, prec, false);
+            
+            GeographicLib::GeoCoords mgrsPoint(zone, northp, x, y);
+            loc = [[CLLocation alloc] initWithLatitude:mgrsPoint.Latitude() longitude:mgrsPoint.Longitude()];
+        }
+        catch(GeographicLib::GeographicErr err)
+        {
+            //input was not a valid MGRS string
+            //loc stays nil
+        }
+    }
+    else
+    {
+        //mgrsString is already known invalid
+        //loc stays nil
+    }
+    return loc;
+    
+    
+}
+
++ (BOOL) isValidMgrsString:(NSString *)s
+{
+    if (s.length < 3
+        || !([[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[s characterAtIndex:0]]
+             || [s characterAtIndex:0] == 'A' || [s characterAtIndex:0] == 'a'
+             || [s characterAtIndex:0] == 'B' || [s characterAtIndex:0] == 'b'
+             || [s characterAtIndex:0] == 'Y' || [s characterAtIndex:0] == 'y'
+             || [s characterAtIndex:0] == 'Z' || [s characterAtIndex:0] == 'z'
+             )
+        )
+    {
+        return false;
+    }
+    return true;
 }
 
 - (CLLocation *) parseOlcCode:(NSString *)olcText

@@ -2032,7 +2032,6 @@
 // Shared Strings
 "shared_string_custom" = "Egendefinert";
 "navigate_point_format_UTM" = "UTM";
-"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_format_unknown" = "Ukjent format";
 "toggle_coordinates" = "Vis/skjul koordinat-miniprogram";
 "approximate_file_size" = "Anslått filstørrelse: %@";

@@ -2147,7 +2147,6 @@
 "navigate_point_olc" = "Ouvrir un code d\'emplacement";
 "regions" = "Régions";
 "navigate_point_format_UTM" = "UTM";
-"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_olc_short" = "OLC";
 "route_line_color_elevation_description" = "La ligne de l'itinéraire sera colorée en fonction du profil d'élévation de l'itinéraire.";
 "attribute" = "Propriétés";

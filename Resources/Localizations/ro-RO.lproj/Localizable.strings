@@ -2135,7 +2135,6 @@
 "gpx_selection_segment_title" = "Segmente";
 "invalid_format" = "Format nevalabil";
 "navigate_point_format_UTM" = "UTM";
-"navigate_point_format_MGRS" = "MGRS";
 "gpx_dir_arrows" = "Săgeți direcționale";
 "shared_string_interval" = "Intervalul";
 "navigate_point_olc_short" = "OLC";

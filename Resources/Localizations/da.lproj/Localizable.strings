@@ -2164,7 +2164,6 @@
 "gpx_selection_segment_title" = "Segmenter";
 "distance_moving" = "Afstand korrigeret";
 "navigate_point_format_UTM" = "UTM";
-"navigate_point_format_MGRS" = "MGRS";
 "selected_of" = "Valgt - %d/%d";
 "import_profile_descr" = "For at importere en profil skal du trykke på den ønskede fil (*.osf) i en hvilken som helst applikation og vælge \"Kopier til OsmAnd Maps\"";
 "reset_profile_action_descr" = "Nulstil alle profilindstillinger til installationsstandard. Hvis du trykker på Nulstil, slettes alle dine ændringer. Denne handling kan ikke fortrydes.";

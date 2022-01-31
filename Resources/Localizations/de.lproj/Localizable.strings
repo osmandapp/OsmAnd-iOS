@@ -2161,7 +2161,6 @@
 "duplicate_track" = "Track duplizieren";
 "shared_string_width" = "Breite";
 "navigate_point_format_UTM" = "UTM";
-"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_format_unknown" = "Unbekanntes Format";
 "navigate_point_olc_short" = "OLC";
 "read_full_description" = "Vollständige Beschreibung lesen";

@@ -2141,7 +2141,6 @@
 "shared_string_interval" = "Interval";
 "gpx_selection_segment_title" = "Úseky";
 "navigate_point_format_UTM" = "UTM";
-"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_format_unknown" = "Neznámý formát";
 "navigate_point_olc_short" = "OLC";
 "contour_lines_hillshades_slope" = "Vrstevnice, stínování svahů, sklon svahů";

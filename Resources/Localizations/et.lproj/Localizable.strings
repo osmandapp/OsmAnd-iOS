@@ -2148,7 +2148,6 @@
 "shared_string_interval" = "Välp";
 "gpx_selection_segment_title" = "Lõigud";
 "navigate_point_format_UTM" = "UTM";
-"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_format_unknown" = "Tundmatu vorming";
 "navigate_point_olc_short" = "OLC";
 "invalid_format" = "Vigane vorming";

@@ -2169,7 +2169,6 @@
 "shared_string_width" = "Ширина";
 "shared_string_interval" = "Інтервал";
 "navigate_point_format_UTM" = "UTM";
-"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_format_unknown" = "Невідомий формат";
 "navigate_point_olc_short" = "OLC";
 "invalid_format" = "Неприпустимий формат";

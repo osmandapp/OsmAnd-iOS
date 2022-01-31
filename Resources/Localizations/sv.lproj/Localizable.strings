@@ -754,7 +754,6 @@
 "navigate_point_format_DMS" = "DDD MM SS.SS";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "navigate_point_format_UTM" = "UTM";
-"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_format_unknown" = "Unknown format";
 "navigate_point_northing" = "Nordlig (y-koord.)";
 "navigate_point_easting" = "Östlig (x-koord.)";

@@ -170,26 +170,24 @@
     CGFloat screenWidth = DeviceScreenWidth;
     CGFloat btnHeight = _quickActionFloatingButton.frame.size.height;
     CGFloat btnWidth = _quickActionFloatingButton.frame.size.width;
-    CGFloat maxRightMargin = screenWidth - btnWidth;
-    CGFloat maxBottomMargin = screenHeight - btnHeight;
+    CGFloat maxRightMargin = screenWidth - btnWidth - 2 * OAUtilities.getLeftMargin;
+    CGFloat maxBottomMargin = screenHeight - btnHeight - OAUtilities.getBottomMargin;
     
     CGFloat defaultX;
     CGFloat defaultY;
     BOOL isLandscape = [OAUtilities isLandscape];
     if (isLandscape)
     {
-        defaultX = _mapHudController.mapModeButton.frame.origin.x - btnWidth - kHudButtonsOffset;
-        defaultY = _mapHudController.mapModeButton.frame.origin.y;
+        defaultX = maxRightMargin - 2 * btnWidth - 2 * kHudButtonsOffset;
+        defaultY = maxBottomMargin;
     }
     else
     {
-        defaultX = _mapHudController.zoomButtonsView.frame.origin.x;
-        defaultY = _mapHudController.zoomButtonsView.frame.origin.y - btnHeight - kHudButtonsOffset;
+        defaultX = maxRightMargin - kHudButtonsOffset;
+        defaultY = maxBottomMargin - 2 * btnWidth - 2 * kHudButtonsOffset;
     }
     
     CGFloat x, y;
-    CGFloat w = _quickActionFloatingButton.frame.size.width;
-    CGFloat h = _quickActionFloatingButton.frame.size.height;
     if (isLandscape)
     {
         x = [_settings.quickActionLandscapeX get];
@@ -219,7 +217,7 @@
         y = maxBottomMargin;
     }
     
-    _quickActionFloatingButton.frame = CGRectMake(x, y, w, h);
+    _quickActionFloatingButton.frame = CGRectMake(x, y, btnWidth, btnHeight);
 }
 
 - (void)viewWillLayoutSubviews

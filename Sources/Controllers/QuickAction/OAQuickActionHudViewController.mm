@@ -166,10 +166,30 @@
 // Android counterpart: setQuickActionButtonMargin()
 - (void) setQuickActionButtonPosition
 {
+    CGFloat screenHeight = DeviceScreenHeight;
+    CGFloat screenWidth = DeviceScreenWidth;
+    CGFloat btnHeight = _quickActionFloatingButton.frame.size.height;
+    CGFloat btnWidth = _quickActionFloatingButton.frame.size.width;
+    CGFloat maxRightMargin = screenWidth - btnWidth;
+    CGFloat maxBottomMargin = screenHeight - btnHeight;
+    
+    CGFloat defaultX;
+    CGFloat defaultY;
+    BOOL isLandscape = [OAUtilities isLandscape];
+    if (isLandscape)
+    {
+        defaultX = _mapHudController.mapModeButton.frame.origin.x - btnWidth - kHudButtonsOffset;
+        defaultY = _mapHudController.mapModeButton.frame.origin.y;
+    }
+    else
+    {
+        defaultX = _mapHudController.zoomButtonsView.frame.origin.x;
+        defaultY = _mapHudController.zoomButtonsView.frame.origin.y - btnHeight - kHudButtonsOffset;
+    }
+    
     CGFloat x, y;
     CGFloat w = _quickActionFloatingButton.frame.size.width;
     CGFloat h = _quickActionFloatingButton.frame.size.height;
-    BOOL isLandscape = [OAUtilities isLandscape];
     if (isLandscape)
     {
         x = [_settings.quickActionLandscapeX get];
@@ -180,19 +200,25 @@
         x = [_settings.quickActionPortraitX get];
         y = [_settings.quickActionPortraitY get];
     }
-    if (x == 0. && y == 0.)
+    
+    // check limits
+    if (x <= 0)
     {
-        if (isLandscape)
-        {
-            x = _mapHudController.mapModeButton.frame.origin.x - w - kHudButtonsOffset;
-            y = _mapHudController.mapModeButton.frame.origin.y;
-        }
-        else
-        {
-            x = _mapHudController.zoomButtonsView.frame.origin.x;
-            y = _mapHudController.zoomButtonsView.frame.origin.y - h - kHudButtonsOffset;
-        }
+        x = defaultX;
     }
+    else if (x > maxRightMargin)
+    {
+        x = maxRightMargin;
+    }
+    if (y <= 0)
+    {
+        y = defaultY;
+    }
+    else if (y >= maxBottomMargin)
+    {
+        y = maxBottomMargin;
+    }
+    
     _quickActionFloatingButton.frame = CGRectMake(x, y, w, h);
 }
 

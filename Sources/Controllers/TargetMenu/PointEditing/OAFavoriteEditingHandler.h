@@ -17,7 +17,7 @@ struct CLLocationCoordinate2D;
 @interface OAFavoriteEditingHandler : OABasePointEditingHandler
 
 - (instancetype) initWithItem:(OAFavoriteItem *)favorite;
-- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation;
+- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation poi:(OAPOI *)poi;
 
 - (OAFavoriteItem *) getFavoriteItem;
 

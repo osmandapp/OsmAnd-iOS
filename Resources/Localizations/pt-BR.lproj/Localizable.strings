@@ -2310,3 +2310,16 @@
 "lang_ne" = "Nepali";
 "lang_uz" = "Usbeque";
 "lang_uk" = "Ucraniano";
+"lang_zhminnan" = "Min do Sul";
+"lang_war" = "Samarenho";
+"lang_yo" = "Iorubá";
+"lang_zh" = "Chinês";
+"lang_zh_cn" = "Chinês simplificado";
+"lang_zh_hk" = "Chinês (Hong Kong)";
+"lang_zh_tw" = "Chinês tradicional";
+"lang_zhyue" = "Cantonês";
+"shared_string_hide_all" = "Ocultar tudo";
+"lang_vo" = "Volapuque";
+"grey_color_undefined" = "As partes sem dados são mostradas em cinza.";
+"white_color_undefined" = "As partes sem dados são mostradas em branco.";
+"points_delete_multiple" = "Excluir %d ponto(s)?";

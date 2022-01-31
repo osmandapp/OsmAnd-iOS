@@ -13,6 +13,7 @@
 #import "Localization.h"
 #import "OAOsmAndFormatter.h"
 #import "OAGPXTrackAnalysis.h"
+#import "OAWikiArticleHelper.h"
 
 #define kTitleHeightMax 44.
 #define kTitleHeightMin 30.
@@ -420,6 +421,7 @@
 - (void)setDescription
 {
     NSString *description = self.trackMenuDelegate ? [self.trackMenuDelegate generateDescription] : @"";
+    description = [OAWikiArticleHelper getFirstParagraph:description];
     BOOL hasDescription = description && description.length > 0;
 
     [self.descriptionView setText:description];

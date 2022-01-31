@@ -73,6 +73,7 @@
 {
     NSArray<NSString *> *_categoryNames;
     NSArray<NSString *> *_categoryTitles;
+    BOOL _shouldSkipScrolling;
 }
 
 - (void)awakeFromNib
@@ -90,7 +91,7 @@
     [self.categoriesCollectionView registerNib:[UINib nibWithNibName:[OAFoldersCollectionViewCell getCellIdentifier] bundle:nil] forCellWithReuseIdentifier:[OAFoldersCollectionViewCell getCellIdentifier]];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     
-    layout.sectionInset = UIEdgeInsetsMake(0, kCategoriesCellsSpacing, 0, 8);
+    layout.sectionInset = UIEdgeInsetsMake(0, 2*kCategoriesCellsSpacing, 0, 2*kCategoriesCellsSpacing);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     [self.categoriesCollectionView setCollectionViewLayout:layout];
     [self.categoriesCollectionView setShowsHorizontalScrollIndicator:NO];
@@ -110,6 +111,7 @@
     self.contentView.frame = CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, fullHeight);
     [self.contentView layoutIfNeeded];
     self.collectionViewHeight.constant = self.collectionView.contentSize.height;
+    [self updateContentOffsetForce:YES];
     return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }
 
@@ -139,9 +141,15 @@
 
 #pragma mark - Scroll offset calculations
 
-- (void) updateContentOffset
+- (void) updateContentOffsetForce:(BOOL)forceUpdade;
 {
-    if (![_state containsValueForIndex:_cellIndex])
+    if (_shouldSkipScrolling)
+    {
+        _shouldSkipScrolling = NO;
+        return;
+    }
+        
+    if (![_state containsValueForIndex:_cellIndex] || forceUpdade)
     {
         NSInteger selectedIndex = [_categoryNames indexOfObject:_currentCategory];
         CGPoint initialOffset = [self calculateOffset:selectedIndex];
@@ -169,7 +177,7 @@
 {
     CGPoint selectedOffset = [self calculateOffsetToSelectedIndex:index labels:_categoryTitles];
     CGPoint fullLength = [self calculateOffsetToSelectedIndex:_categoryNames.count labels:_categoryTitles];
-    CGFloat maxOffset = fullLength.x - DeviceScreenWidth + kCategoriesCellsSpacing;
+    CGFloat maxOffset = fullLength.x - DeviceScreenWidth + 3*kCategoriesCellsSpacing;
     if (selectedOffset.x > maxOffset)
         selectedOffset.x = maxOffset;
 
@@ -212,7 +220,7 @@
     if (collectionView.tag == kCategoryCellIndex)
         return _categoryDataArray.count;
     else
-        return _poiData[_currentCategory].count;
+        return _poiData.count;
 }
 
 - (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -266,13 +274,13 @@
         OAPoiCollectionViewCell* cell = nil;
         cell = (OAPoiCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAPoiCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
         UIImage *img = nil;
-        NSString *imgName = _poiData[_currentCategory][indexPath.row];
+        NSString *imgName = _poiData[indexPath.row];
         img = [OAUtilities applyScaleFactorToImage:[UIImage imageNamed:[OAUtilities drawablePath:imgName]]];
         
         cell.iconImageView.image = [[OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:imgName]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.iconImageView.tintColor = UIColorFromRGB(color_icon_inactive);
         
-        if ([_poiData[_currentCategory][indexPath.row] isEqualToString:_currentIcon])
+        if ([_poiData[indexPath.row] isEqualToString:_currentIcon])
         {
             cell.backView.layer.borderWidth = 2;
             cell.backView.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
@@ -314,17 +322,17 @@
         NSDictionary *item = _categoryDataArray[indexPath.row];
         _currentCategory = item[@"categoryName"];
         [self.categoriesCollectionView reloadData];
-        [self.collectionView reloadData];
-
+        
+        _shouldSkipScrolling = YES;
         if (self.delegate)
-            [self.delegate onPoiCategorySelected:item[@"categoryName"] index:indexPath.row];
+            [self.delegate onPoiCategorySelected:_categoryDataArray[indexPath.row][@"categoryName"] index:indexPath.row];
     }
     else
     {
-        _currentIcon = _poiData[_currentCategory][indexPath.row];
+        _currentIcon = _poiData[indexPath.row];
         [self.collectionView reloadData];
         if (self.delegate)
-            [self.delegate onPoiSelected: _poiData[_currentCategory][indexPath.row]];
+            [self.delegate onPoiSelected: _poiData[indexPath.row]];
     }
 }
 
@@ -338,6 +346,13 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [self saveOffset];
+}
+
+
+- (void) updateIconsList:(NSArray<NSString *> *)icons
+{
+    _poiData = icons;
+    [self.collectionView reloadData];
 }
 
 @end

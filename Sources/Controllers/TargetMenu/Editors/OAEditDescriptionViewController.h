@@ -25,13 +25,12 @@
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
 
-@property (weak, nonatomic) IBOutlet UITextView *textView;
-@property (weak, nonatomic) IBOutlet WKWebView *webView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (weak, nonatomic) id delegate;
 
 @property (nonatomic, copy) NSString *desc;
 
--(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew readOnly:(BOOL)readOnly;
+-(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew isEditing:(BOOL)isEditing readOnly:(BOOL)readOnly;
 
 @end

@@ -1249,7 +1249,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         else if (tag == EOAQuickSearchCoordinatesTextFieldOlc)
             hintList = @[@"+", @"C", @"F", @"G", @"H", @"J", @"M", @"P", @"Q", @"R", @"V", @"W", @"X"];
         else if (tag == EOAQuickSearchCoordinatesTextFieldMgrs)
-            hintList = @[];
+            hintList = @[@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"J", @"K", @"L", @"M", @"N", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z"];
         else if (tag == EOAQuickSearchCoordinatesTextFieldNorthing)
             hintList = @[];
         else if (tag == EOAQuickSearchCoordinatesTextFieldEasting)

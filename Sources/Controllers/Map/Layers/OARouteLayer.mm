@@ -254,13 +254,6 @@
     }];
 }
 
-- (OsmAnd::FColorARGB) argbFromUIColor:(UIColor *)color
-{
-    CGFloat red, green, blue, alpha;
-    [color getRed:&red green:&green blue:&blue alpha:&alpha];
-    return OsmAnd::ColorARGB(alpha * 255, red * 255, green * 255, blue * 255);
-}
-
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points addToExisting:(BOOL)addToExisting
 {
     [self drawRouteSegment:points
@@ -313,7 +306,7 @@
             if (CGColorGetAlpha(color.CGColor) == 0.)
                 color = [color colorWithAlphaComponent:1.];
 
-            OsmAnd::ColorARGB lineColor = [self argbFromUIColor:color];
+            OsmAnd::ColorARGB lineColor = [color toFColorARGB];
 
             NSNumber *colorVal = [self getParamFromAttr:@"color"];
             BOOL hasStyleColor = (colorVal && colorVal.intValue != -1 && colorVal.intValue == _routeLineColor)

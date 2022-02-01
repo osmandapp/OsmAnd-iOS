@@ -33,7 +33,7 @@ struct RouteSegmentResult;
 
 - (void)calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors
                       attrName:(NSString *)attrName
-                 segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>>)segs
-                     segments:(NSArray<OAGpxTrkSeg *> *)segments;
+                 segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)segs
+                     locations:(NSArray<CLLocation *> *)locations;
 
 @end

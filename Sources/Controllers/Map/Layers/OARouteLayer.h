@@ -8,9 +8,6 @@
 
 #import "OABaseVectorLinesLayer.h"
 
-#define kCustomRouteWidthMin 1
-#define kCustomRouteWidthMax 36
-
 @class OATrackChartPoints, OAPreviewRouteLineInfo;
 
 @interface OARouteLayer : OABaseVectorLinesLayer
@@ -22,5 +19,8 @@
 
 - (OAPreviewRouteLineInfo *) getPreviewRouteLineInfo;
 - (void) setPreviewRouteLineInfo:(OAPreviewRouteLineInfo *)previewInfo;
+
+- (NSInteger)getCustomRouteWidthMin;
+- (NSInteger)getCustomRouteWidthMax;
 
 @end

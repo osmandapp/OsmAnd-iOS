@@ -38,6 +38,8 @@
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 
+#define kOutlineWidth 10
+
 @interface OAGPXLayer ()
 
 @property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
@@ -177,11 +179,20 @@
                 {
                     colorizationScheme = COLORIZATION_SOLID;
                     OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:doc];
-                    const auto segs = [routeImporter importRoute];
+                    auto segs = [routeImporter importRoute];
+                    NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
+                    for (OAGpxTrkSeg *seg in [doc getNonEmptyTrkSegments:YES])
+                    {
+                        for (OAGpxTrkPt *point in seg.points)
+                        {
+                            [locations addObject:[[CLLocation alloc] initWithLatitude:point.position.latitude
+                                                                            longitude:point.position.longitude]];
+                        }
+                    }
                     [self calculateSegmentsColor:colors
                                         attrName:gpx.coloringType
                                    segmentResult:segs
-                                        segments:[doc getNonEmptyTrkSegments:YES]];
+                                       locations:locations];
                 }
             }
 
@@ -250,8 +261,8 @@
             outlineBuilder.setBaseOrder(baseOrder--)
                 .setIsHidden(points.size() == 0)
                 .setLineId(lineId + 1000)
-                .setLineWidth(lineWidth + 10)
-                .setOutlineWidth(10)
+                .setLineWidth(lineWidth + kOutlineWidth)
+                .setOutlineWidth(kOutlineWidth)
                 .setPoints(points)
                 .setFillColor(kOutlineColor)
                 .setApproximationEnabled(false);

@@ -357,7 +357,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomFooterView.class
-forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+        forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -748,13 +748,14 @@ forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifie
             [widthSliderEmptySpaceCellData setData:@{ kTableValues: @{ @"float_value": [self isCustomWidthMode] ? @6. : @19. } }];
         };
 
-        __block NSInteger customWidthValue = kCustomRouteWidthMin;
+        OARouteLayer *routeLayer = _mapPanelViewController.mapViewController.mapLayers.routeMapLayer;
+        __block NSInteger customWidthValue = [routeLayer getCustomRouteWidthMin];
         if (_previewRouteLineInfo.width && [NSCharacterSet.decimalDigitCharacterSet
                 isSupersetOfSet:[NSCharacterSet characterSetWithCharactersInString:_previewRouteLineInfo.width]])
             customWidthValue = _previewRouteLineInfo.width.integerValue;
 
         NSMutableArray<NSString *> *customWidthValues = [NSMutableArray array];
-        for (NSInteger i = kCustomRouteWidthMin; i <= kCustomRouteWidthMax; i++)
+        for (NSInteger i = [routeLayer getCustomRouteWidthMin]; i <= [routeLayer getCustomRouteWidthMax]; i++)
         {
             [customWidthValues addObject:[NSString stringWithFormat:@"%li", i]];
         }

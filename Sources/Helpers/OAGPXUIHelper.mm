@@ -16,6 +16,8 @@
 #import "Localization.h"
 #import "OAOsmAndFormatter.h"
 
+#define SECOND_IN_MILLIS 1000L
+
 @implementation OAGpxFileInfo
 
 - (instancetype) initWithFileName:(NSString *)fileName lastModified:(long)lastModified fileSize:(long)fileSize
@@ -35,26 +37,37 @@
 
 + (OAGPXDocument *) makeGpxFromRoute:(OARouteCalculationResult *)route
 {
-    double lastHeight = RouteDataObject::HEIGHT_UNDEFINED;
     OAGPXDocument *gpx = [[OAGPXDocument alloc] init];
-    NSArray<CLLocation *> *locations = route.getRouteLocations;
+    NSArray<CLLocation *> *locations = [route getRouteLocations];
+    OAGpxTrk *track = [[OAGpxTrk alloc] init];
+    OAGpxTrkSeg *seg = [[OAGpxTrkSeg alloc] init];
+    seg.points = [self makePointsFromLocations:locations gpx:gpx];
+    track.segments = @[seg];
+    gpx.tracks = @[track];
+    return gpx;
+}
+
++ (NSArray<OAGpxTrkPt *> *)makePointsFromLocations:(NSArray<CLLocation *> *)locations gpx:(OAGPXDocument *)gpx
+{
+    NSMutableArray<OAGpxTrkPt *> *pts = [NSMutableArray new];
     if (locations)
     {
-        OAGpxTrk *track = [[OAGpxTrk alloc] init];
-        OAGpxTrkSeg *seg = [[OAGpxTrkSeg alloc] init];
-        NSMutableArray<OAGpxTrkPt *> *segPoints = [NSMutableArray new];
+        double lastHeight = RouteDataObject::HEIGHT_UNDEFINED;
+        double lastValidHeight = NAN;
         for (CLLocation *l in locations)
         {
             OAGpxTrkPt *point = [[OAGpxTrkPt alloc] init];
             [point setPosition:l.coordinate];
             if (l.altitude != 0)
             {
-                gpx.hasAltitude = YES;
+                if (gpx)
+                    gpx.hasAltitude = YES;
                 CLLocationDistance h = l.altitude;
                 point.elevation = h;
-                if (lastHeight == RouteDataObject::HEIGHT_UNDEFINED && seg.points.count > 0)
+                lastValidHeight = h;
+                if (lastHeight == RouteDataObject::HEIGHT_UNDEFINED && pts.count > 0)
                 {
-                    for (OAGpxTrkPt *pt in seg.points)
+                    for (OAGpxTrkPt *pt in pts)
                     {
                         if (pt.elevation == NAN)
                             pt.elevation = h;
@@ -62,13 +75,43 @@
                 }
                 lastHeight = h;
             }
-            [segPoints addObject:point];
+            else
+            {
+                lastHeight = RouteDataObject::HEIGHT_UNDEFINED;
+            }
+            if (pts.count == 0)
+            {
+                point.time = (long) [[NSDate date] timeIntervalSince1970];
+            }
+            else
+            {
+                OAGpxTrkPt *prevPoint = pts[pts.count - 1];
+                if (l.speed != 0)
+                {
+                    point.speed = l.speed;
+                    double dist = getDistance(prevPoint.position.latitude,
+                            prevPoint.position.longitude,
+                            point.position.latitude,
+                            point.position.longitude);
+                    point.time = prevPoint.time + (long) (dist / point.speed) * SECOND_IN_MILLIS;
+                } else {
+                    point.time = prevPoint.time;
+                }
+            }
+            [pts addObject:point];
         }
-        seg.points = segPoints;
-        track.segments = @[seg];
-        gpx.tracks = @[track];
+        if (!isnan(lastValidHeight) && lastHeight == RouteDataObject::HEIGHT_UNDEFINED)
+        {
+            for (OAGpxTrkPt *point in [pts reverseObjectEnumerator])
+            {
+                if (!isnan(point.elevation))
+                    break;
+
+                point.elevation = lastValidHeight;
+            }
+        }
     }
-    return gpx;
+    return pts;
 }
 
 + (NSString *) getDescription:(OAGPX *)gpx

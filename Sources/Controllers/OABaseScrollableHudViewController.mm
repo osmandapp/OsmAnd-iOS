@@ -40,7 +40,7 @@
 
 - (CGFloat)getStatusBarHeight
 {
-    return [self hasCustomStatusBar] ? _statusBarBackgroundView.frame.size.height : [OAUtilities getStatusBarHeight]; //override
+    return [self hasCustomStatusBar] ? _statusBarBackgroundView.frame.size.height : [OAUtilities getStatusBarHeight];
 }
 
 - (instancetype) init

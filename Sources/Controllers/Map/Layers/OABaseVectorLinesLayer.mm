@@ -240,18 +240,9 @@
 
 - (void) calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors
                        attrName:(NSString *)attrName
-                  segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>>)segs
-                      segments:(NSArray<OAGpxTrkSeg *> *)segments
+                  segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)segs
+                      locations:(NSArray<CLLocation *> *)locations
 {
-    NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
-    for (OAGpxTrkSeg *seg in segments)
-    {
-        for (OAGpxTrkPt *trkPt in seg.points)
-        {
-            [locations addObject:[[CLLocation alloc] initWithLatitude:trkPt.position.latitude
-                                                            longitude:trkPt.position.longitude]];
-        }
-    }
     const auto& env = [OsmAndApp instance].defaultRenderer;
     OARouteStatisticsComputer *statsComputer = [[OARouteStatisticsComputer alloc] initWithPresentationEnvironment:env];
     int firstSegmentLocationIdx = [self getIdxOfFirstSegmentLocation:locations routeSegments:segs];

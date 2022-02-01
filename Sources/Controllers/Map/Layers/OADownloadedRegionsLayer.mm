@@ -105,10 +105,10 @@
         {
             for (const auto& resource : localResources)
             {
-                if (resource && resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed  && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                if (resource && resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
                 {
-                    if ([region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)] && !resource->id.isNull() && [resource->id.toNSString() hasPrefix:region.downloadsIdPrefix]
-                        )
+                    if ([region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)]
+                        && !resource->id.isNull() && [resource->id.toNSString() hasPrefix:region.downloadsIdPrefix])
                     {
                         [mapRegions addObject:region];
                         [toRemove addObjectsFromArray:region.subregions];

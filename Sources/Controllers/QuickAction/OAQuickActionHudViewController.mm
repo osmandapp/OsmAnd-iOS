@@ -207,14 +207,14 @@
     CGFloat maxBottomMargin = screenHeight - btnHeight - OAUtilities.getBottomMargin;
     
     // check limits
-    if (x < 0)
+    if (x <= 0)
         x = defaultX;
     else if (x > maxRightMargin)
         x = maxRightMargin;
 
-    if (y < OAUtilities.getTopMargin)
+    if (y <= OAUtilities.getTopMargin)
         y = defaultY;
-    else if (y >= maxBottomMargin)
+    else if (y > maxBottomMargin)
         y = maxBottomMargin;
     
     _quickActionFloatingButton.frame = CGRectMake(x, y, btnWidth, btnHeight);
@@ -233,9 +233,9 @@
     CGSize bigButtonSize = _quickActionFloatingButton.frame.size;
     CGFloat halfBigButtonWidth = bigButtonSize.width / 2;
     CGFloat halfSmallButtonWidth = kHudQuickActionButtonHeight / 2;
-    CGFloat leftSafeMargin = halfSmallButtonWidth;
+    CGFloat leftSafeMargin = halfSmallButtonWidth + 1;
     CGFloat rightSafeMargin = DeviceScreenWidth - 2 * OAUtilities.getLeftMargin - halfSmallButtonWidth;
-    CGFloat topSafeMargin = OAUtilities.getStatusBarHeight + halfSmallButtonWidth;
+    CGFloat topSafeMargin = OAUtilities.getStatusBarHeight + halfSmallButtonWidth + 1;
     CGFloat bottomSafeMargin = DeviceScreenHeight - OAUtilities.getBottomMargin - halfSmallButtonWidth;
     
     CGFloat x = newPosition.x;

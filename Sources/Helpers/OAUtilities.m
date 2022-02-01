@@ -557,6 +557,20 @@
     return [NSString stringWithFormat:@"%@/drawable-%@/%@", [resId hasPrefix:@"mx_"] ? @"poi-icons-png" : @"map-icons-png", [OAUtilities drawablePostfix], resId];
 }
 
++ (UIImage *) getMxIcon:(NSString *)iconName
+{
+    NSString *fullIconName = iconName;
+    if (![fullIconName hasPrefix:@"mx_"])
+        fullIconName = [@"mx_" stringByAppendingString:iconName];
+
+    UIImage *iconImgOrig = [UIImage imageNamed:[self drawablePath:fullIconName]];
+    if (iconImgOrig)
+    {
+        return [UIImage imageWithCGImage:iconImgOrig.CGImage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+    }
+    return nil;
+}
+
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners
 {
     [self.class setMaskTo:view byRoundingCorners:corners radius:10.];
@@ -1123,15 +1137,6 @@
                                  }
                          }];
     
-}
-
-+ (UIImage *) getMxIcon:(NSString *)name
-{
-    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", name]]];
-    if (img)
-        return [OAUtilities applyScaleFactorToImage:img];
-    else
-        return nil;
 }
 
 + (UIImage *) getTintableImage:(UIImage *)image

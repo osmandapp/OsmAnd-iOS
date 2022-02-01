@@ -681,9 +681,7 @@ static BOOL _favoritesLoaded = NO;
     UIImage *backgroundImg = [UIImage imageNamed:backgrounfIconName];
     backgroundImg = [OAUtilities tintImageWithColor:backgroundImg color:color];
 
-    NSString *iconName = [@"mx_" stringByAppendingString:icon];
-    UIImage *iconImgOrig = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
-    UIImage *iconImg = [UIImage imageWithCGImage:iconImgOrig.CGImage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+    UIImage *iconImg = [OAUtilities getMxIcon:[@"mx_" stringByAppendingString:icon]];
     iconImg = [OAUtilities tintImageWithColor:iconImg color:UIColor.whiteColor];
 
     CGFloat centredIconOffset = (backgroundImg.size.width - iconImg.size.width) / 2.0;

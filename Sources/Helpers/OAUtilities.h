@@ -125,11 +125,11 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSArray<NSString *> *) arrayOfMeterValues:(NSArray<NSNumber *> *) values;
 + (NSArray<NSString *> *) arrayOfSpeedValues:(NSArray<NSNumber *> *) values;
 
-+ (UIImage *) getMxIcon:(NSString *)name;
 + (UIImage *) resizeImage:(UIImage *)image newSize:(CGSize)newSize;
 + (UIImage *) applyScaleFactorToImage:(UIImage *)image;
 + (NSString *) drawablePostfix;
 + (NSString *) drawablePath:(NSString *)resId;
++ (UIImage *) getMxIcon:(NSString *)iconName;
 + (void) layoutComplexButton:(UIButton*)button;
 
 + (UIImage *) imageWithColor:(UIColor *)color;

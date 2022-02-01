@@ -61,6 +61,8 @@
 + (void) addParkingReminderToCalendar;
 + (void) removeParkingReminderFromCalendar;
 
++ (UIImage *) getCompositeIcon:(NSString *)icon backgroundIcon:(NSString *)backgroundIcon color:(UIColor *)color;
+
 @end
 
 @interface OAFavoriteGroup : NSObject

@@ -9,6 +9,7 @@
 #import "OAGpxWptItem.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
+#import "OAFavoritesHelper.h"
 
 @implementation OAGpxWptItem
 
@@ -84,24 +85,7 @@
 
 - (UIImage *) getCompositeIcon
 {
-    UIImage *resultImg;
-    NSString *backgrounfIconName = [@"bg_point_" stringByAppendingString:_point.getBackgroundIcon];
-    UIImage *backgroundImg = [UIImage imageNamed:backgrounfIconName];
-    backgroundImg = [OAUtilities tintImageWithColor:backgroundImg color:_point.getColor];
-
-    NSString *iconName = [@"mx_" stringByAppendingString:_point.getIcon];
-    UIImage *iconImgOrig = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
-    UIImage *iconImg = [UIImage imageWithCGImage:iconImgOrig.CGImage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
-    iconImg = [OAUtilities tintImageWithColor:iconImg color:UIColor.whiteColor];
-
-    CGFloat centredIconOffset = (backgroundImg.size.width - iconImg.size.width) / 2.0;
-    UIGraphicsBeginImageContextWithOptions(backgroundImg.size, NO, [UIScreen mainScreen].scale);
-    [backgroundImg drawInRect:CGRectMake(0.0, 0.0, backgroundImg.size.width, backgroundImg.size.height)];
-    [iconImg drawInRect:CGRectMake(centredIconOffset, centredIconOffset, iconImg.size.width, iconImg.size.height)];
-    resultImg = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return resultImg;
+    return [OAFavoritesHelper getCompositeIcon:_point.getIcon backgroundIcon:_point.getBackgroundIcon color:_point.getColor];
 }
 
 @end

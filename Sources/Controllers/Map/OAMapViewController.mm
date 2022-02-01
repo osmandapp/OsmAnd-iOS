@@ -1537,6 +1537,8 @@
         {
             if (!_recTrackShowing)
                 [self showRecGpxTrack:YES];
+
+            [self refreshRecordingTrack];
         }
         else
         {
@@ -1919,7 +1921,9 @@
         [_selectedGpxHelper buildGpxList];
         if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
             [self initRendererWithGpxTracks];
-        
+        if ([[OASavingTrackHelper sharedInstance].currentTrack getDocument])
+            [self initRendererWithRecordingGpxTrack];
+
         [self hideProgressHUD];
         [_mapSourceUpdatedObservable notifyEvent];
     }
@@ -2200,10 +2204,8 @@
                 
                 _gpxDocsRec.clear();
                 _gpxDocsRec << doc;
-                
-                QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > gpxDocs;
-                gpxDocs[QString::fromNSString(helper.currentTrack.path)] = doc;
-                [_mapLayers.gpxRecMapLayer updateGpxTrack:gpxDocs];
+
+                [[_app updateRecTrackOnMapObservable] notifyEvent];
             }
         }];
     }
@@ -2480,12 +2482,14 @@
     if (!self.foundWptDocPath)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        
+
         [helper deleteWpt:self.foundWpt];
-        
+
         // update map
-        [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self initRendererWithRecordingGpxTrack];
+        });
+
         [self hideContextPinMarker];
         
         return YES;
@@ -2540,11 +2544,13 @@
     if (!self.foundWptDocPath)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        
+
         [helper saveWpt:self.foundWpt];
-        
+
         // update map
-        [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self initRendererWithRecordingGpxTrack];
+        });
 
         return YES;
     }
@@ -2602,9 +2608,11 @@
         }
         
         self.foundWptGroups = [groups allObjects];
-        
+
         // update map
-        [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self initRendererWithRecordingGpxTrack];
+        });
 
         return YES;
     }
@@ -2618,71 +2626,71 @@
             {
                 auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
                 auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
-                
+
                 std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> p;
                 p.reset(new OsmAnd::GpxDocument::GpxWpt());
                 [OAGPXDocument fillWpt:p usingWpt:wpt];
-                
+
                 gpx->locationMarks.append(p);
                 gpx->saveTo(QString::fromNSString(gpxFileName));
-                
+
                 wpt.wpt = p;
                 self.foundWpt = wpt;
                 self.foundWptDocPath = gpxFileName;
-                
+
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
                 [[OAGPXDatabase sharedDb] save];
-                
+
                 NSMutableSet *groups = [NSMutableSet set];
                 for (auto& loc : gpx->locationMarks)
                 {
                     if (!loc->type.isEmpty())
                         [groups addObject:loc->type.toNSString()];
                 }
-                
+
                 self.foundWptGroups = [groups allObjects];
 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self initRendererWithGpxTracks];
                 });
-                
+
                 return YES;
             }
         }
-        
+
         if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
         {
             auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsTemp.first());
             auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
-            
+
             std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> p;
             p.reset(new OsmAnd::GpxDocument::GpxWpt());
             [OAGPXDocument fillWpt:p usingWpt:wpt];
-            
+
             gpx->locationMarks.append(p);
             gpx->saveTo(QString::fromNSString(gpxFileName));
-            
+
             wpt.wpt = p;
             self.foundWpt = wpt;
             self.foundWptDocPath = gpxFileName;
-            
+
             [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
             [[OAGPXDatabase sharedDb] save];
-            
+
             NSMutableSet *groups = [NSMutableSet set];
             for (auto& loc : gpx->locationMarks)
             {
                 if (!loc->type.isEmpty())
                     [groups addObject:loc->type.toNSString()];
             }
-            
+
             self.foundWptGroups = [groups allObjects];
-            
+
             return YES;
         }
     }
-    
+
     return YES;
 }
 
@@ -2738,7 +2746,7 @@
                 {
                     OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&loc;
                     const std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w = _wpt->shared_ptr();
-                    
+
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
                     {
@@ -2748,33 +2756,33 @@
                     }
                 }
             }
-            
+
             if (found)
             {
                 doc->saveTo(QString::fromNSString(docPath));
-                
+
                 // update map
                 if (updateMap)
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self initRendererWithGpxTracks];
                     });
             }
-            
+
             return found;
         }
     }
-    
+
     if (!_gpxDocsTemp.isEmpty())
     {
         const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(_gpxDocsTemp.first());
-        
+
         for (OAGpxWptItem *item in items)
         {
             for (const auto& loc : doc->locationMarks)
             {
                 OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&loc;
                 const std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w = _wpt->shared_ptr();
-                
+
                 if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
                     [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
                 {
@@ -2784,20 +2792,20 @@
                 }
             }
         }
-        
+
         if (found)
         {
             doc->saveTo(QString::fromNSString(docPath));
-            
+
             // update map
             if (updateMap)
                 dispatch_async(dispatch_get_main_queue(), ^{
                     //[self showTempGpxTrack:docPath];
                 });
-            
+
         }
     }
-    
+
     return found;
 }
 
@@ -2805,7 +2813,7 @@
 {
     if (!metadata)
         return NO;
-    
+
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
@@ -2814,35 +2822,35 @@
         {
             auto docGeoInfo = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
             auto doc = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(docGeoInfo);
-            
+
             OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata> *_meta = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata>*)&doc->metadata;
             std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> m = _meta->shared_ptr();
-            
+
             if (m == nullptr)
             {
                 m.reset(new OsmAnd::GpxDocument::GpxMetadata());
                 doc->metadata = m;
             }
-            
+
             [OAGPXDocument fillMetadata:m usingMetadata:metadata];
 
             _selectedGpxHelper.activeGpx.remove(QString::fromNSString(oldPath));
             _selectedGpxHelper.activeGpx[QString::fromNSString(docPath)] = doc;
-            
+
             doc->saveTo(QString::fromNSString(docPath));
-            
+
             return YES;
         }
     }
-    
+
     if (!_gpxDocsTemp.isEmpty())
     {
         auto docGeoInfo = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsTemp.first());
         auto doc = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(docGeoInfo);
-        
+
         OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata> *_meta = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata>*)&doc->metadata;
         std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> m = _meta->shared_ptr();
-        
+
         if (m == nullptr)
         {
             m.reset(new OsmAnd::GpxDocument::GpxMetadata());
@@ -2850,12 +2858,12 @@
         }
 
         [OAGPXDocument fillMetadata:m usingMetadata:metadata];
-        
+
         doc->saveTo(QString::fromNSString(docPath));
-        
+
         return YES;
     }
-    
+
     return NO;
 }
 
@@ -2865,7 +2873,7 @@
         return NO;
 
     BOOL found = NO;
-    
+
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
@@ -2874,7 +2882,7 @@
         {
             auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
             auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
-            
+
             for (OAGpxWptItem *item in items)
             {
                 for (int i = 0; i < gpx->locationMarks.count(); i++)
@@ -2889,19 +2897,19 @@
                     }
                 }
             }
-            
+
             if (found)
             {
                 gpx->saveTo(QString::fromNSString(docPath));
-                
+
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
                 [[OAGPXDatabase sharedDb] save];
-                
+
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self initRendererWithGpxTracks];
                 });
-                
+
                 return YES;
             }
         }
@@ -2911,7 +2919,7 @@
     {
         auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsTemp.first());
         auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
-        
+
         for (OAGpxWptItem *item in items)
         {
             for (int i = 0; i < gpx->locationMarks.count(); i++)
@@ -2926,23 +2934,23 @@
                 }
             }
         }
-        
+
         if (found)
         {
             gpx->saveTo(QString::fromNSString(docPath));
-            
+
             [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
             [[OAGPXDatabase sharedDb] save];
-            
+
             // update map
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self initRendererWithGpxTracks];
             });
-            
+
             return YES;
         }
     }
-    
+
     return NO;
 }
 
@@ -2959,8 +2967,22 @@
         }
         if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
             docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
-        
+
         [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
+    }
+}
+
+- (void)initRendererWithRecordingGpxTrack
+{
+    OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+    auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>([helper.currentTrack getDocument]);
+    if (doc)
+    {
+        const auto gpx = std::dynamic_pointer_cast<OsmAnd::GeoInfoDocument>(doc);
+        QHash<QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
+        const auto path = QString::fromNSString(helper.currentTrack.path);
+        docs.insert(path, gpx);
+        [_mapLayers.gpxRecMapLayer refreshGpxTracks:docs];
     }
 }
 
@@ -2971,6 +2993,15 @@
         [_mapLayers.gpxMapLayer resetLayer];
         if (![_selectedGpxHelper buildGpxList])
             [self initRendererWithGpxTracks];
+    }
+}
+
+- (void)refreshRecordingTrack
+{
+    @synchronized(_rendererSync)
+    {
+        [_mapLayers.gpxMapLayer resetLayer];
+        [self initRendererWithRecordingGpxTrack];
     }
 }
 

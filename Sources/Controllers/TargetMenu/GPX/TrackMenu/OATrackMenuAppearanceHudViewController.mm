@@ -23,6 +23,7 @@
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDatabase.h"
+#import "OAGPXDocument.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAColoringType.h"
@@ -257,7 +258,16 @@
     }];
     directionCellData.onSwitch = ^(BOOL toggle) {
         self.gpx.showArrows = toggle;
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+        if (self.isCurrentTrack)
+        {
+            [self.doc setShowArrows:self.gpx.showArrows];
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        }
+        else
+        {
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        }
     };
     directionCellData.isOn = ^() { return self.gpx.showArrows; };
 
@@ -268,7 +278,16 @@
     }];
     startFinishCellData.onSwitch = ^(BOOL toggle) {
         self.gpx.showStartFinish = toggle;
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+        if (self.isCurrentTrack)
+        {
+            [self.doc setShowStartFinish:self.gpx.showStartFinish];
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        }
+        else
+        {
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        }
     };
     startFinishCellData.isOn = ^() { return self.gpx.showStartFinish; };
 
@@ -460,7 +479,15 @@
             _selectedWidth = [_appearanceCollection getAvailableWidth][[value intValue]];
             self.gpx.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;
 
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+            if (self.isCurrentTrack)
+            {
+                [self.doc setWidth:self.gpx.width];
+                [[_app updateRecTrackOnMapObservable] notifyEvent];
+            }
+            else
+            {
+                [[_app updateGpxTracksOnMapObservable] notifyEvent];
+            }
         }
     };
 
@@ -535,7 +562,16 @@
                         _selectedSplit.customValue = _selectedSplit.titles[indexOfValue];
                 }
 
-                [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                if (self.isCurrentTrack)
+                {
+                    [self.doc setSplitInterval:self.gpx.splitInterval];
+                    [self.doc setSplitType:[OAGPXDatabase splitTypeNameByValue:self.gpx.splitType]];
+                    [[_app updateRecTrackOnMapObservable] notifyEvent];
+                }
+                else
+                {
+                    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                }
             }
         }
     };
@@ -571,7 +607,11 @@
     }];
     joinGapsCellData.onSwitch = ^(BOOL toggle) {
         self.gpx.joinSegments = toggle;
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+        if (self.isCurrentTrack)
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        else
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
     };
     joinGapsCellData.isOn = ^() { return self.gpx.joinSegments; };
 
@@ -589,9 +629,25 @@
             kCellToggle: @YES
     }];
     resetCellData.onButtonPressed = ^() {
+        if (self.isCurrentTrack)
+        {
+            [self.doc setWidth:_oldWidth];
+            [self.doc setShowArrows:_oldShowArrows];
+            [self.doc setShowStartFinish:_oldShowStartFinish];
+            [self.doc setSplitInterval:_oldSplitInterval];
+            [self.doc setSplitType:[OAGPXDatabase splitTypeNameByValue:_oldSplitType]];
+            [self.doc setColoringType:_oldColoringType];
+            [self.doc setColor:_oldColor];
+        }
+
         [self.gpx resetAppearanceToOriginal];
         [self updateAllValues];
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+        if (self.isCurrentTrack)
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        else
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
         [self generateData];
         [UIView transitionWithView:self.tableView
                           duration:0.35f
@@ -704,7 +760,15 @@
             if (![_selectedWidth.customValue isEqualToString:selectedValue])
                 self.gpx.width = _selectedWidth.customValue = selectedValue;
 
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+            if (self.isCurrentTrack)
+            {
+                [self.doc setWidth:self.gpx.width];
+                [[_app updateRecTrackOnMapObservable] notifyEvent];
+            }
+            else
+            {
+                [[_app updateGpxTracksOnMapObservable] notifyEvent];
+            }
         }
     };
 
@@ -746,7 +810,16 @@
                     _selectedSplit.customValue = customValue;
                     self.gpx.splitInterval = _selectedSplit.values[[value intValue]].doubleValue;
                 }
-                [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+                if (self.isCurrentTrack)
+                {
+                    [self.doc setSplitInterval:self.gpx.splitInterval];
+                    [[_app updateRecTrackOnMapObservable] notifyEvent];
+                }
+                else
+                {
+                    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                }
             }
         };
     }
@@ -810,19 +883,43 @@
             self.gpx.coloringType = _oldColoringType;
             self.gpx.splitType = _oldSplitType;
             self.gpx.splitInterval = _oldSplitInterval;
+            if (self.isCurrentTrack)
+            {
+                [self.doc setWidth:_oldWidth];
+                [self.doc setShowArrows:_oldShowArrows];
+                [self.doc setShowStartFinish:_oldShowStartFinish];
+                [self.doc setSplitInterval:_oldSplitInterval];
+                [self.doc setSplitType:[OAGPXDatabase splitTypeNameByValue:_oldSplitType]];
+                [self.doc setColoringType:_oldColoringType];
+                [self.doc setColor:_oldColor];
+            }
             [self.mapPanelViewController openTargetViewWithGPX:self.gpx
                                                   trackHudMode:EOATrackMenuHudMode
                                                          state:_reopeningTrackMenuState];
         }
 
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        if (self.isCurrentTrack)
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        else
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }];
 }
 
 - (IBAction)onDoneButtonPressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
+
         [[OAGPXDatabase sharedDb] save];
+        if (self.isCurrentTrack)
+        {
+            [self.doc setWidth:self.gpx.width];
+            [self.doc setShowArrows:self.gpx.showArrows];
+            [self.doc setShowStartFinish:self.gpx.showStartFinish];
+            [self.doc setSplitInterval:self.gpx.splitInterval];
+            [self.doc setSplitType:[OAGPXDatabase splitTypeNameByValue:self.gpx.splitType]];
+            [self.doc setColoringType:self.gpx.coloringType];
+            [self.doc setColor:self.gpx.color];
+        }
         if (_reopeningTrackMenuState)
         {
             [self.mapPanelViewController openTargetViewWithGPX:self.gpx
@@ -1255,7 +1352,15 @@
     _selectedItem = _availableColoringTypes[index];
     self.gpx.coloringType = _selectedItem.coloringType == OAColoringType.ATTRIBUTE ? _selectedItem.attrName : _selectedItem.coloringType.name;
 
-    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    if (self.isCurrentTrack)
+    {
+        [self.doc setColoringType:self.gpx.coloringType];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+    else
+    {
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
 
     _tableData[kColorsSection].updateData();
     [UIView transitionWithView:self.tableView
@@ -1275,7 +1380,15 @@
     _selectedColor = [_appearanceCollection getColorForValue:_availableColors[tag].intValue];
     self.gpx.color = _selectedColor.colorValue;
 
-    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    if (self.isCurrentTrack)
+    {
+        [self.doc setColor:self.gpx.color];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+    else
+    {
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
 
     _tableData[kColorsSection].cells[kColorGridOrDescriptionCell].updateData();
     [UIView setAnimationsEnabled:NO];

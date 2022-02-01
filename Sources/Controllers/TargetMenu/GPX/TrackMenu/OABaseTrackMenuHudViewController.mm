@@ -173,7 +173,9 @@
     _analysis = [_doc getGeneralTrack] && [_doc getGeneralSegment]
             ? [OAGPXTrackAnalysis segment:0 seg:_doc.generalSegment] : [_doc getAnalysis:0];
 
-    _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
+    _isShown = _isCurrentTrack
+            ? [_settings.mapSettingShowRecordingTrack get]
+            : [[_settings.mapSettingVisibleGpx get] containsObject:_gpx.gpxFilePath];
 }
 
 - (void)commonInit

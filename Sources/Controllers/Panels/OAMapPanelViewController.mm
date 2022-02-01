@@ -3784,9 +3784,10 @@ typedef enum
     [self.targetMenuView updateTargetPointType:OATargetWpt];
     [self.targetMenuView applyTargetObjectChanges];
 
-    if (!gpxFileName && ![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+    if (!gpxFileName || gpxFileName.length == 0)
     {
-        [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
+        if (![[OAAppSettings sharedManager].mapSettingShowRecordingTrack get])
+            [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
         [[_app updateRecTrackOnMapObservable] notifyEvent];
     }
 }

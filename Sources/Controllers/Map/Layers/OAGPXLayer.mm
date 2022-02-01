@@ -17,6 +17,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocument.h"
+#import "OAGPXMutableDocument.h"
 #import "OAGpxWptItem.h"
 #import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
@@ -152,12 +153,18 @@
         int lineId = 1;
         for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
         {
-            if (it.key().isNull() || !it.value())
+            BOOL isCurrentTrack = it.key().isNull();
+            OAGPX *gpx;
+
+            if (!it.value())
                 continue;
-            
+            else if (isCurrentTrack)
+                gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+            else
+                gpx = [self getGpxItem:it.key()];
+
             BOOL routePoints = NO;
             
-            OAGPX *gpx = [self getGpxItem:it.key()];
             QList<OsmAnd::FColorARGB> colors;
             int colorizationScheme = COLORIZATION_NONE;
             if (gpx.coloringType.length > 0)
@@ -165,8 +172,16 @@
                 NSString *path = [self.app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
                 QString qPath = QString::fromNSString(path);
                 auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[qPath]);
-                OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
-                doc.path = path;
+                OAGPXDocument *doc;
+                if (isCurrentTrack)
+                {
+                    doc = [OASavingTrackHelper sharedInstance].currentTrack;
+                }
+                else
+                {
+                    doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
+                    doc.path = path;
+                }
 
                 OAColoringType *type = [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType];
                 if ([type isGradient])
@@ -320,10 +335,18 @@
             
             if (!it.value()->locationMarks.empty())
             {
-                NSString *gpxFilePath = [it.key().toNSString()
-                        stringByReplacingOccurrencesOfString:[self.app.gpxPath stringByAppendingString:@"/"]
-                                                  withString:@""];
-                OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+                OAGPX *gpx;
+                if (it.key().isNull())
+                {
+                    gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+                }
+                else
+                {
+                    NSString *gpxFilePath = [it.key().toNSString()
+                            stringByReplacingOccurrencesOfString:[self.app.gpxPath stringByAppendingString:@"/"]
+                                                      withString:@""];
+                    gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+                }
                 for (const auto& waypoint : it.value()->locationMarks)
                 {
                     if (![gpx.hiddenGroups containsObject:waypoint->type.toNSString()])
@@ -394,12 +417,27 @@
     double textSize = [OAAppSettings.sharedManager.textSize get];
     textSize = textSize < 1. ? 1. : textSize;
     int r = [self getDefaultRadiusPoi] * textSize;
-    const auto activeGpx = OASelectedGPXHelper.instance.activeGpx;
+    auto activeGpx = OASelectedGPXHelper.instance.activeGpx;
+
+    auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>([[OASavingTrackHelper sharedInstance].currentTrack getDocument]);
+    if (doc)
+        activeGpx.insert("", doc);
+
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
-        auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
-        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
-        NSArray<OAGpxTrkPt *> *points = [self findPointsNearSegments:[doc getPointsToDisplay] radius:r point:point];
+        BOOL isCurrentTrack = doc != nullptr && it.value() == doc;
+        OAGPXDocument *gpxDoc;
+        OAGPX *gpx;
+        if (isCurrentTrack)
+        {
+            gpxDoc = [OASavingTrackHelper sharedInstance].currentTrack;
+        }
+        else
+        {
+            auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
+            gpxDoc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
+        }
+        NSArray<OAGpxTrkPt *> *points = [self findPointsNearSegments:[gpxDoc getPointsToDisplay] radius:r point:point];
         if (points != nil)
         {
             CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
@@ -408,8 +446,15 @@
                                                                                                 longitude:points.firstObject.position.longitude]
                                                           toLocation:[[CLLocation alloc] initWithLatitude:points.lastObject.position.latitude
                                                                                                 longitude:points.lastObject.position.longitude]];
-            NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
-            OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+            if (isCurrentTrack)
+            {
+                gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+            }
+            else
+            {
+                NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
+                gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+            }
             OATargetPoint *targetPoint = [self getTargetPoint:gpx];
             targetPoint.location = selectedGpxPoint.coordinate;
             if (targetPoint && ![res containsObject:targetPoint])
@@ -630,7 +675,7 @@
             OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
             [helper updatePointCoordinates:item.point newLocation:position];
             item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
-            [self.app.trackRecordingObservable notifyEventWithKey:@(YES)];
+            [self.app.updateRecTrackOnMapObservable notifyEventWithKey:@(YES)];
         }
     }
 }

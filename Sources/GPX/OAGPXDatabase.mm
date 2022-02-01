@@ -14,6 +14,7 @@
 #import "OAGPXDocument.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OASavingTrackHelper.h"
 
 #define kDbName @"gpx.db"
 
@@ -70,7 +71,9 @@
 
 - (void)resetAppearanceToOriginal
 {
-    OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpxFilePath]];
+    OAGPXDocument *document = [_gpxTitle isEqualToString:OALocalizedString(@"track_recording_name")]
+            ? (OAGPXDocument *) [OASavingTrackHelper sharedInstance].currentTrack
+            : [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpxFilePath]];
     if (document)
     {
         _splitType = [OAGPXDatabase splitTypeByName:[document getSplitType]];

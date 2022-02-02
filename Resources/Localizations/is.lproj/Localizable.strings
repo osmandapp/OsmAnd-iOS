@@ -2325,3 +2325,5 @@
 "rendering_value_walkingRoutesOSMC_description" = "Lita leiðir eftir stökum staðbundnum litum (ef til staðar í OpenStreetMap) og tákni í gönguleiðaflokkun.";
 "shared_string_hide_all" = "Fela allt";
 "points_delete_multiple" = "Eyða %d punkt(um)?";
+"add_description" = "Bæta við lýsingu";
+"context_menu_edit_descr" = "Breyta lýsingu";

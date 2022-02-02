@@ -2324,3 +2324,5 @@
 "white_color_undefined" = "Dele uden data er hvide.";
 "shared_string_hide_all" = "Skjul alle";
 "points_delete_multiple" = "Slet %d punkt(er)?";
+"context_menu_edit_descr" = "Rediger beskrivelse";
+"add_description" = "Tilføj beskrivelse";

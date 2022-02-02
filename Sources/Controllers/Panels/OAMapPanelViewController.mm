@@ -84,6 +84,7 @@
 #import "OAHistoryItem.h"
 #import "OAGPXEditWptViewController.h"
 #import "OAPOI.h"
+#import "OATransportStop.h"
 #import "OAPOILocationType.h"
 #import "OAAnalyticsHelper.h"
 #import "OATargetMultiView.h"
@@ -124,6 +125,7 @@
 #import "OAPOIUIFilter.h"
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OAMapRulerView.h"
+#import "OAPOIHelper.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -1660,15 +1662,27 @@ typedef enum
                                fromName:targetPoint.pointDescription checkDisplayedGpx:NO];
 }
 
+- (OAPOI *) getTargetPointPoi
+{
+    OAPOI *poi = nil;
+    if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAPOI.class])
+    {
+        poi = self.targetMenuView.targetPoint.targetObj;
+    }
+    else if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OATransportStop.class])
+    {
+        OATransportStop *transportStop = self.targetMenuView.targetPoint.targetObj;
+        poi = transportStop.poi;
+    }
+    return poi;
+}
+
 - (void) targetPointAddFavorite
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     
-    OAPOI *poi = nil;
-    if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAPOI.class])
-        poi = self.targetMenuView.targetPoint.targetObj;
-    
+    OAPOI *poi = [self getTargetPointPoi];
     OAEditPointViewController *controller =
             [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
                                                           title:self.targetMenuView.targetPoint.title
@@ -1866,16 +1880,13 @@ typedef enum
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     
-    OAPOI *poi = nil;
-    if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAPOI.class])
-        poi = self.targetMenuView.targetPoint.targetObj;
-    
+    OAPOI *poi = [self getTargetPointPoi];
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location
                                                                                           title:title
                                                                                     customParam:gpxFileName
                                                                                       pointType:EOAEditPointTypeWaypoint
                                                                                 targetMenuState:_activeViewControllerState
-                                                                                            poi:poi];
+                                                                            poi:poi];
     controller.gpxWptDelegate = self;
     [self presentViewController:controller animated:YES completion:nil];
 }

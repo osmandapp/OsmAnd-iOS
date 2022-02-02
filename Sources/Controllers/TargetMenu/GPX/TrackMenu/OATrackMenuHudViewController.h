@@ -63,6 +63,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (NSString *)getGpxFileSize;
 - (NSString *)getCreatedOn;
 - (NSString *)generateDescription;
+- (NSString *)getMetadataImageLink;
 - (BOOL)changeTrackVisible;
 - (BOOL)isTrackVisible;
 - (BOOL)currentTrack;
@@ -73,6 +74,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (void)openExport;
 - (void)openNavigation;
 - (void)openDescription;
+- (void)openDescriptionEditor;
 - (void)openDuplicateTrack;
 - (void)openMoveTrack;
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem;

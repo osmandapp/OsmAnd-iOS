@@ -28,8 +28,6 @@
 static NSMutableArray<OAFavoriteItem *> *_cachedFavoritePoints;
 static NSMutableArray<OAFavoriteGroup *> *_favoriteGroups;
 static NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
-static NSDictionary<NSString *, NSArray<NSString *> *> *_poiIcons;
-static NSArray<NSString *> *_flatPoiIcons;
 static NSArray<NSString *> *_flatBackgroundIcons;
 static NSArray<NSString *> *_flatBackgroundContourIcons;
 static BOOL _favoritesLoaded = NO;
@@ -544,50 +542,6 @@ static BOOL _favoritesLoaded = NO;
     return [NSString stringWithString:tempString];
 }
 
-+ (void) setupIcons
-{
-    NSString* path = [[NSBundle mainBundle] pathForResource:@"poi_categories" ofType:@"json"];
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-
-    NSMutableDictionary<NSString *, NSArray<NSString *> *> *tempIcons  = [NSMutableDictionary new];
-    NSMutableArray<NSString *> *tempFlatIcons  = [NSMutableArray new];
-    _flatPoiIcons = [NSMutableArray new];
-    
-    if (json)
-    {
-        NSDictionary *categories = json[@"categories"];
-        if (categories)
-        {
-            for (NSString *categoryName in categories.allKeys)
-            {
-                NSArray<NSString *> *icons = categories[categoryName][@"icons"];
-                if (icons)
-                {
-                    tempIcons[categoryName] = icons;
-                    [tempFlatIcons addObjectsFromArray:icons];
-                }
-            }
-        }
-    }
-    _poiIcons = [NSDictionary dictionaryWithDictionary:tempIcons];
-    _flatPoiIcons = [NSArray arrayWithArray:tempFlatIcons];
-}
-
-+ (NSDictionary<NSString *, NSArray<NSString *> *> *) getCategirizedIconNames
-{
-    if (!_poiIcons)
-        [self setupIcons];
-    return _poiIcons;
-}
-
-+ (NSArray<NSString *> *) getFlatIconNamesList
-{
-    if (!_flatPoiIcons)
-        [self setupIcons];
-    return _flatPoiIcons;
-}
-
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList
 {
     if (!_flatBackgroundIcons)
@@ -672,6 +626,28 @@ static BOOL _favoritesLoaded = NO;
                 [plugin setEventIdentifier:nil];
         }
     }
+}
+
++ (UIImage *) getCompositeIcon:(NSString *)icon backgroundIcon:(NSString *)backgroundIcon color:(UIColor *)color
+{
+    UIImage *resultImg;
+    NSString *backgrounfIconName = [@"bg_point_" stringByAppendingString:backgroundIcon];
+    UIImage *backgroundImg = [UIImage imageNamed:backgrounfIconName];
+    backgroundImg = [OAUtilities tintImageWithColor:backgroundImg color:color];
+
+    NSString *iconName = [@"mx_" stringByAppendingString:icon];
+    UIImage *iconImgOrig = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
+    UIImage *iconImg = [UIImage imageWithCGImage:iconImgOrig.CGImage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+    iconImg = [OAUtilities tintImageWithColor:iconImg color:UIColor.whiteColor];
+
+    CGFloat centredIconOffset = (backgroundImg.size.width - iconImg.size.width) / 2.0;
+    UIGraphicsBeginImageContextWithOptions(backgroundImg.size, NO, [UIScreen mainScreen].scale);
+    [backgroundImg drawInRect:CGRectMake(0.0, 0.0, backgroundImg.size.width, backgroundImg.size.height)];
+    [iconImg drawInRect:CGRectMake(centredIconOffset, centredIconOffset, iconImg.size.width, iconImg.size.height)];
+    resultImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return resultImg;
 }
 
 @end

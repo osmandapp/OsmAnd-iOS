@@ -157,9 +157,7 @@
         case WPT:
         {
             OAGpxWpt *wpt = (OAGpxWpt *)searchResult.object;
-            UIColor *color = [UIColor colorFromString:wpt.color];
-            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-            return favCol.iconName;
+            return [wpt getIcon];
         }
 
         default:

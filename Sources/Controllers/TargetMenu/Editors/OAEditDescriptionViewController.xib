@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,51 +14,59 @@
                 <outlet property="backButton" destination="EDL-gI-21F" id="oFm-JC-MUg"/>
                 <outlet property="editButton" destination="WgZ-GH-nzP" id="grr-8N-1IS"/>
                 <outlet property="saveButton" destination="0Wp-EJ-fmY" id="oIW-y1-Bkt"/>
-                <outlet property="textView" destination="pU1-t6-Zhz" id="EBA-fD-7Dy"/>
+                <outlet property="tableView" destination="AUI-Xp-W80" id="DLe-1U-OJA"/>
                 <outlet property="titleView" destination="dZU-FH-XyG" id="pyy-EZ-3X6"/>
                 <outlet property="toolbarView" destination="afD-ec-0rL" id="Xi2-Qv-V7H"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
-                <outlet property="webView" destination="3LE-mR-y59" id="jp8-2g-F8X"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="afD-ec-0rL">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="64"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="afD-ec-0rL">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Description" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dZU-FH-XyG">
-                            <rect key="frame" x="129" y="29" width="156" height="24"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dZU-FH-XyG">
+                            <rect key="frame" x="161" y="53" width="92" height="24"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="24" id="t9k-4D-ETw"/>
+                            </constraints>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EDL-gI-21F">
-                            <rect key="frame" x="8" y="20" width="44" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EDL-gI-21F">
+                            <rect key="frame" x="20" y="44" width="67" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="bJ5-aC-Jq6"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <state key="normal" image="ic_navbar_chevron.png"/>
+                            <state key="normal" title="Back" image="ic_navbar_chevron.png"/>
                             <connections>
                                 <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="yEB-RM-UsA"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Wp-EJ-fmY">
-                            <rect key="frame" x="334" y="20" width="80" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Wp-EJ-fmY">
+                            <rect key="frame" x="356" y="44" width="38" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="v0c-9a-UBP"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <state key="normal" title="Save"/>
                             <connections>
                                 <action selector="saveClicked:" destination="-1" eventType="touchUpInside" id="F7l-Kq-9PL"/>
                             </connections>
                         </button>
-                        <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WgZ-GH-nzP" userLabel="Edit">
-                            <rect key="frame" x="366" y="20" width="44" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WgZ-GH-nzP" userLabel="Edit">
+                            <rect key="frame" x="350" y="44" width="44" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="44" id="Q2s-ri-DK6"/>
+                                <constraint firstAttribute="height" constant="44" id="UKs-e5-1ki"/>
+                            </constraints>
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <state key="normal" image="icon_edit.png"/>
                             <connections>
@@ -65,31 +75,42 @@
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="0Wp-EJ-fmY" secondAttribute="bottom" id="1kB-L9-TR9"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="WgZ-GH-nzP" secondAttribute="trailing" id="9Pm-g3-cDA"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="0Wp-EJ-fmY" secondAttribute="trailing" id="NSF-mj-s9P"/>
+                        <constraint firstItem="EDL-gI-21F" firstAttribute="leading" secondItem="afD-ec-0rL" secondAttribute="leadingMargin" id="e8f-VA-vgS"/>
+                        <constraint firstItem="EDL-gI-21F" firstAttribute="bottom" secondItem="afD-ec-0rL" secondAttribute="bottom" id="fv2-Mx-G5J"/>
+                        <constraint firstItem="dZU-FH-XyG" firstAttribute="centerX" secondItem="afD-ec-0rL" secondAttribute="centerX" id="p1k-5D-zfi"/>
+                        <constraint firstAttribute="bottom" secondItem="WgZ-GH-nzP" secondAttribute="bottom" id="xFH-a9-IWj"/>
+                        <constraint firstAttribute="bottom" secondItem="dZU-FH-XyG" secondAttribute="bottom" constant="11" id="zvY-aM-zzY"/>
+                    </constraints>
                 </view>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pU1-t6-Zhz">
-                    <rect key="frame" x="0.0" y="64" width="320" height="416"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                </textView>
-                <wkWebView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3LE-mR-y59">
-                    <rect key="frame" x="0.0" y="64" width="320" height="416"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <wkWebViewConfiguration key="configuration">
-                        <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
-                        <wkPreferences key="preferences"/>
-                    </wkWebViewConfiguration>
-                </wkWebView>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AUI-Xp-W80">
+                    <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </tableView>
             </subviews>
-            <color key="backgroundColor" red="0.93609845638275146" green="0.93607044219970703" blue="0.93608629703521729" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <viewLayoutGuide key="safeArea" id="90n-Yy-Nq3"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="afD-ec-0rL" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="8Lu-oa-mT3"/>
+                <constraint firstItem="afD-ec-0rL" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="CHI-fd-J91"/>
+                <constraint firstItem="afD-ec-0rL" firstAttribute="bottom" secondItem="90n-Yy-Nq3" secondAttribute="top" constant="44" id="Gp0-6x-SUU"/>
+                <constraint firstAttribute="trailing" secondItem="AUI-Xp-W80" secondAttribute="trailing" id="Isk-Nv-lyR"/>
+                <constraint firstItem="AUI-Xp-W80" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="KMh-5x-FYc"/>
+                <constraint firstItem="afD-ec-0rL" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="SER-ur-xX6"/>
+                <constraint firstItem="AUI-Xp-W80" firstAttribute="top" secondItem="afD-ec-0rL" secondAttribute="bottom" id="ctv-HT-grO"/>
+                <constraint firstAttribute="bottom" secondItem="AUI-Xp-W80" secondAttribute="bottom" id="tkj-DM-oOe"/>
+            </constraints>
             <point key="canvasLocation" x="311.59420289855075" y="194.19642857142856"/>
         </view>
     </objects>
     <resources>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
         <image name="icon_edit.png" width="23.5" height="23"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

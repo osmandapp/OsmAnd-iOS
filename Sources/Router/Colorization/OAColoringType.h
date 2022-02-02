@@ -37,6 +37,7 @@
 
 - (BOOL) isCustomColor;
 - (BOOL) isTrackSolid;
+- (BOOL) isSolidSingleColor;
 - (BOOL) isGradient;
 - (BOOL) isRouteInfoAttribute;
 

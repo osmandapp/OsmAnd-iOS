@@ -65,7 +65,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., -DBL_MAX, 0., 0.);
     self.tableView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
     
     [self setupView];

@@ -41,14 +41,6 @@
     NSArray<CLLocation *> *locations = [route getRouteLocations];
     OAGpxTrk *track = [[OAGpxTrk alloc] init];
     OAGpxTrkSeg *seg = [[OAGpxTrkSeg alloc] init];
-    seg.points = [self makePointsFromLocations:locations gpx:gpx];
-    track.segments = @[seg];
-    gpx.tracks = @[track];
-    return gpx;
-}
-
-+ (NSArray<OAGpxTrkPt *> *)makePointsFromLocations:(NSArray<CLLocation *> *)locations gpx:(OAGPXDocument *)gpx
-{
     NSMutableArray<OAGpxTrkPt *> *pts = [NSMutableArray new];
     if (locations)
     {
@@ -111,7 +103,10 @@
             }
         }
     }
-    return pts;
+    seg.points = pts;
+    track.segments = @[seg];
+    gpx.tracks = @[track];
+    return gpx;
 }
 
 + (NSString *) getDescription:(OAGPX *)gpx

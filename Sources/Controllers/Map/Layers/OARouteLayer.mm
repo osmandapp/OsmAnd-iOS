@@ -76,6 +76,12 @@
     OAColoringType *_routeColoringType;
     NSString *_routeInfoAttribute;
     OAGPXAppearanceCollection *_appearanceCollection;
+
+    OARouteCalculationResult *_route;
+    int _colorizationScheme;
+    QList<OsmAnd::FColorARGB> _colors;
+    OAColoringType *_prevRouteColoringType;
+    NSString *_prevRouteInfoAttribute;
 }
 
 - (NSString *) layerId
@@ -126,6 +132,7 @@
 
     _lineWidth = kDefaultWidthMultiplier * 3;
     _routeColoringType = OAColoringType.DEFAULT;
+    _colorizationScheme = COLORIZATION_NONE;
 
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
@@ -347,7 +354,10 @@
         }
         else
         {
-            lines[0]->setPoints(points);
+            for (auto &line : lines)
+            {
+                line->setPoints(points);
+            }
         }
         [self buildActionArrows];
     }];
@@ -717,6 +727,8 @@
 - (void) refreshRoute
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    _prevRouteColoringType = _routeColoringType;
+    _prevRouteInfoAttribute = _routeInfoAttribute;
     [self updateRouteColoringType];
     [self updateRouteColors:isNight];
 
@@ -726,6 +738,7 @@
         NSInteger currentRoute = _transportHelper.currentRoute;
         const auto routes = [_transportHelper getRoutes];
         const auto route = currentRoute != -1 && routes.size() > currentRoute ? routes[currentRoute] : nullptr;
+        _route = nil;
         if (route != nullptr)
         {
             CLLocation *start = _transportHelper.startLocation;
@@ -759,76 +772,73 @@
         if (currentRoute < 0)
             currentRoute = 0;
 
-        OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
-        NSArray<CLLocation *> *locations = [route getRouteLocations];
-        NSArray<OAGpxTrkPt *> *trkPoints = [OAGPXUIHelper makePointsFromLocations:locations gpx:nil];
-        OARouteColorizationHelper *colorizationHelper = [[OARouteColorizationHelper alloc] initWithPoints:trkPoints
-                type:[[_routeColoringType toGradientScaleType] toColorizationType]];
-        QList<OsmAnd::FColorARGB> colors;
-        int colorizationScheme = COLORIZATION_NONE;
-
-        if ([_routeColoringType isGradient])
+        NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
+        if ([_routeColoringType isGradient]
+                && (_route != route || _prevRouteColoringType != _routeColoringType || _colorizationScheme != COLORIZATION_GRADIENT))
         {
-            colorizationScheme = COLORIZATION_GRADIENT;
-            colors = colorizationHelper ? [colorizationHelper getResult] : QList<OsmAnd::FColorARGB>();
+            OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
+            OARouteColorizationHelper *colorizationHelper =
+                    [[OARouteColorizationHelper alloc] initWithGpxFile:gpx
+                            analysis:[gpx getAnalysis:0]
+                                                                  type:[[_routeColoringType toGradientScaleType] toColorizationType]
+                                                       maxProfileSpeed:0
+                    ];
+            _colorizationScheme = COLORIZATION_GRADIENT;
+            _colors = colorizationHelper ? [colorizationHelper getResult] : QList<OsmAnd::FColorARGB>();
+            _route = route;
         }
-        else if (_routeColoringType == OAColoringType.ATTRIBUTE)
+        else if ([_routeColoringType isRouteInfoAttribute]
+                && (_route != route || ![_prevRouteInfoAttribute isEqualToString:_routeInfoAttribute] || _colorizationScheme != COLORIZATION_SOLID))
         {
-            colorizationScheme = COLORIZATION_SOLID;
-            auto segs = _routingHelper.getRoute.getOriginalRoute;
-            [self calculateSegmentsColor:colors
+            _colorizationScheme = COLORIZATION_SOLID;
+            _colors.clear();
+            auto segs = route.getOriginalRoute;
+            [self calculateSegmentsColor:_colors
                                 attrName:_routeInfoAttribute
                            segmentResult:segs
-                                locations:locations];
+                               locations:locations];
+            _route = route;
+        }
+        else if ([_routeColoringType isSolidSingleColor]
+                && (_route != route || _colorizationScheme != COLORIZATION_NONE || _colors.count() > 0))
+        {
+            _colorizationScheme = COLORIZATION_NONE;
+            _colors.clear();
+            _route = route;
         }
 
-        int segStartIndex = 0;
         QVector<OsmAnd::PointI> points;
-        QList<OsmAnd::FColorARGB> segmentColors;
-        for (OAGpxTrk *track in gpx.tracks)
+        for (int i = currentRoute; i < locations.count; i++)
         {
-            for (OAGpxTrkSeg *segment in track.segments)
-            {
-                for (OAGpxTrkPt *pt in segment.points)
-                {
-                    const OsmAnd::LatLon latLon(pt.position.latitude, pt.position.longitude);
-                    points.push_back(OsmAnd::Utilities::convertLatLonTo31(latLon));
-                }
-                if (points.size() > 1 && !colors.isEmpty() && segStartIndex < colors.size() && segStartIndex + points.size() - 1 < colors.size())
-                    segmentColors = colors.mid(segStartIndex, points.size());
-
-                segStartIndex += points.size() - 1;
-            }
-            if (!segmentColors.isEmpty())
-            {
-                [self drawRouteSegment:points
-                         addToExisting:NO
-                                colors:segmentColors
-                    colorizationScheme:colorizationScheme];
-                points.clear();
-                segmentColors.clear();
-            }
+            CLLocation *location = locations[i];
+            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
         }
-
-        if (colorizationScheme == COLORIZATION_NONE)
+        if (_colorizationScheme == COLORIZATION_NONE)
         {
-            points.clear();
-            CLLocation* lastProj = [_routingHelper getLastProjection];
-            if (lastProj)
-                points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lastProj.coordinate.latitude, lastProj.coordinate.longitude)));
-
-            NSArray<CLLocation *> *immutableLocations = [route getImmutableAllLocations];
-            for (int i = currentRoute; i < immutableLocations.count; i++)
-            {
-                CLLocation *location = immutableLocations[i];
-                points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
-            }
-
             if (!points.isEmpty())
                 [self drawRouteSegment:points addToExisting:NO];
             else
                 [self.mapViewController runWithRenderSync:^{ [self resetLayer]; }];
         }
+        else
+        {
+            int segStartIndex = 0;
+            QList<OsmAnd::FColorARGB> segmentColors;
+            if (points.size() > 1 && !_colors.isEmpty() && segStartIndex < _colors.size() && segStartIndex + points.size() - 1 < _colors.size())
+                segmentColors = _colors.mid(segStartIndex, points.size());
+
+            segStartIndex += points.size() - 1;
+
+            if (!segmentColors.isEmpty())
+            {
+                [self drawRouteSegment:points
+                         addToExisting:NO
+                                colors:segmentColors
+                    colorizationScheme:_colorizationScheme];
+                segmentColors.clear();
+            }
+        }
+        points.clear();
     }
     else
     {

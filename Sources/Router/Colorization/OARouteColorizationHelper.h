@@ -15,16 +15,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAGPXDocument, OAGPXTrackAnalysis, OAGpxTrkPt, OARouteCalculationResult;
+@class OAGPXDocument, OAGPXTrackAnalysis;
 
 @interface OARouteColorizationHelper : NSObject
 
-- (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile
-                        analysis:(OAGPXTrackAnalysis *)analysis
-                            type:(EOAColorizationType)type
-                 maxProfileSpeed:(float)maxProfileSpeed;
-
-- (instancetype) initWithPoints:(NSArray<OAGpxTrkPt *> *)points type:(EOAColorizationType)type;
+- (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile analysis:(OAGPXTrackAnalysis *)analysis type:(EOAColorizationType)type maxProfileSpeed:(float)maxProfileSpeed;
 
 - (QList<OsmAnd::FColorARGB>) getResult;
 

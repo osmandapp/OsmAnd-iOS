@@ -262,7 +262,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     _previewRouteLineInfo = [self createPreviewRouteLineInfo];
 
-    OAColoringType *currentType = [OAColoringType getRouteColoringTypeByName:_previewRouteLineInfo.coloringType.name];
     NSMutableArray<OARouteAppearanceType *> *types = [NSMutableArray array];
     for (OAColoringType *coloringType in [OAColoringType getRouteColoringTypes])
     {
@@ -279,7 +278,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                                                                         bottomDescription:bottomDescription
                                                                                  isActive:isAvailable];
 
-        if (currentType == coloringType)
+        if (_previewRouteLineInfo.coloringType == coloringType)
             _selectedType = type;
 
         if (coloringType != OAColoringType.DEFAULT)
@@ -302,7 +301,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                                                                                  isActive:isAvailable];
         [types addObject:type];
 
-        if (currentType == OAColoringType.ATTRIBUTE && [_previewRouteLineInfo.coloringType.name isEqualToString:attribute])
+        if ([_previewRouteLineInfo.coloringType isRouteInfoAttribute]
+                && [_previewRouteLineInfo.routeInfoAttribute isEqualToString:attribute])
             _selectedType = type;
     }
 

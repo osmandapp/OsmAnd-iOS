@@ -10,12 +10,10 @@
 #import "OAGPXDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXTrackAnalysis.h"
-#import "OARouteCalculationResult.h"
 
 #import <CoreLocation/CoreLocation.h>
 
 #include <OsmAndCore/Utilities.h>
-#include <binaryRead.h>
 
 #define SLOPE_MIN_VALUE -0.25 // 25%
 #define SLOPE_MAX_VALUE 1.0 // 100%
@@ -73,10 +71,7 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
     }
 }
 
-- (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile
-                        analysis:(OAGPXTrackAnalysis *)analysis
-                            type:(EOAColorizationType)type
-                 maxProfileSpeed:(float)maxProfileSpeed
+- (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile analysis:(OAGPXTrackAnalysis *)analysis type:(EOAColorizationType)type maxProfileSpeed:(float)maxProfileSpeed
 {
     if (!gpxFile.hasTrkPt)
     {
@@ -87,83 +82,50 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
     if (self)
     {
         _colorizationType = type;
+
+        NSMutableArray<NSNumber *> *latList = [NSMutableArray array];
+        NSMutableArray<NSNumber *> *lonList = [NSMutableArray array];
+        NSMutableArray<NSNumber *> *values = [NSMutableArray array];
+        NSInteger wptIdx = 0;
+
         if (!analysis)
         {
             // TODO: sync with android
 //            gpxFile.path.length == 0 ? [gpxFile getAnalysis:[NSDate date].timeIntervalSince1970] : [gpxFile getAnalysis:gpxFile.modifiedTime]
             analysis = [gpxFile getAnalysis:0];
         }
-
-        NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray array];
-
         for (OAGpxTrk *trk in gpxFile.tracks)
         {
             for (OAGpxTrkSeg *seg in trk.segments)
             {
                 if (seg.generalSegment || seg.points.count < 2)
                     continue;
-                
+
                 for (OAGpxTrkPt *pt in seg.points)
                 {
-                    [points addObject:pt];
+                    [latList addObject:@(pt.getLatitude)];
+                    [lonList addObject:@(pt.getLongitude)];
+                    if (type == EOAColorizationTypeSpeed)
+                        [values addObject:@(analysis.speedData[wptIdx].speed)];
+                    else
+                        [values addObject:@(analysis.elevationData[wptIdx].elevation)];
+                    wptIdx++;
                 }
             }
         }
+        _latitudes = latList;
+        _longitudes = lonList;
 
-        [self commonInit:analysis points:points maxProfileSpeed:maxProfileSpeed];
-    }
-    return self;
-}
-
-- (instancetype)initWithPoints:(NSArray<OAGpxTrkPt *> *)points type:(EOAColorizationType)type
-{
-    self = [super init];
-    if (self)
-    {
-        _colorizationType = type;
-
-        OAGPXTrackAnalysis *analysis = [[OAGPXTrackAnalysis alloc] init];
-        analysis.wptPoints = (int) points.count;
-        analysis.totalTracks ++;
-        OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
-        segment.points = points;
-        [analysis prepareInformation:0 splitSegments:@[[[OASplitSegment alloc] initWithTrackSegment:segment]]];
-
-        [self commonInit:analysis points:points maxProfileSpeed:0];
-    }
-    return self;
-}
-
-- (void)commonInit:(OAGPXTrackAnalysis *)analysis
-            points:(NSArray<OAGpxTrkPt *> *)points
-   maxProfileSpeed:(float)maxProfileSpeed
-{
-    NSMutableArray<NSNumber *> *latList = [NSMutableArray array];
-    NSMutableArray<NSNumber *> *lonList = [NSMutableArray array];
-    NSMutableArray<NSNumber *> *values = [NSMutableArray array];
-    NSInteger wptIdx = 0;
-
-    for (OAGpxTrkPt *pt in points)
-    {
-        [latList addObject:@(pt.getLatitude)];
-        [lonList addObject:@(pt.getLongitude)];
-        if (_colorizationType == EOAColorizationTypeSpeed)
-            [values addObject:@(analysis.speedData[wptIdx].speed)];
+        if (type == EOAColorizationTypeSlope)
+            _values = [self calculateSlopesByElevations:values];
         else
-            [values addObject:@(analysis.elevationData[wptIdx].elevation)];
-        wptIdx++;
+            _values = values;
+
+        [self calculateMinMaxValue:analysis maxProfileSpeed:maxProfileSpeed];
+        [self checkPalette];
+        [self sortPalette];
     }
-    _latitudes = latList;
-    _longitudes = lonList;
-
-    if (_colorizationType == EOAColorizationTypeSlope)
-        _values = [self calculateSlopesByElevations:values];
-    else
-        _values = values;
-
-    [self calculateMinMaxValue:analysis maxProfileSpeed:maxProfileSpeed];
-    [self checkPalette];
-    [self sortPalette];
+    return self;
 }
 
 /**

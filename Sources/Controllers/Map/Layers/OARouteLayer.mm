@@ -739,6 +739,7 @@
         const auto routes = [_transportHelper getRoutes];
         const auto route = currentRoute != -1 && routes.size() > currentRoute ? routes[currentRoute] : nullptr;
         _route = nil;
+        _colors.clear();
         if (route != nullptr)
         {
             CLLocation *start = _transportHelper.startLocation;

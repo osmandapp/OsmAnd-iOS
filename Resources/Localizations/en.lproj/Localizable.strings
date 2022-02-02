@@ -760,6 +760,15 @@
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
+"map_settings_weather" = "Weather";
+"map_settings_weather_temp" = "Temperature";
+"map_settings_weather_pressure" = "Pressure";
+"map_settings_weather_wind" = "Wind";
+"map_settings_weather_cloud" = "Cloud";
+"map_settings_weather_precip" = "Precipitation";
+"map_settings_clear_geo_cache" = "Clear geo tiles";
+"map_settings_clear_raster_cache" = "Clear raster tiles";
+
 "settings_app_theme" = "Application theme";
 "app_theme_light" = "Light";
 "do_not_rotate" = "Do not rotate";
@@ -2449,6 +2458,8 @@
 "rendering_value_walkingRoutesScopeOSMC_description" = "Color by network affiliation.";
 "rendering_value_walkingRoutesOSMC_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and hiking shield symbol.";
 "routes_color_by_type" = "Color routes by…";
+
+"q_clear_weather_cache" = "Do you want to clear weather cache?";
 
 // Release Notes
 // instruction:

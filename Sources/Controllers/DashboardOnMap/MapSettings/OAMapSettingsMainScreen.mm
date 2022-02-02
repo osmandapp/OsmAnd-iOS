@@ -324,6 +324,13 @@ static BOOL _isRoutesGroupOpen = NO;
             @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
             @"key": @"underlay_layer"
     }];
+    [overlayUnderlaySectionData addObject:@{
+            @"name": OALocalizedString(@"map_settings_weather"),
+            @"image": @"ic_custom_overlay_map",
+            @"has_options": @YES,
+            @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
+            @"key": @"weather_layer"
+    }];
 
     [data addObject:@{
             @"group_name": OALocalizedString(@"map_settings_overunder"),
@@ -492,6 +499,8 @@ static BOOL _isRoutesGroupOpen = NO;
         return _app.data.overlayMapSource != nil;
     else if ([key isEqualToString:@"underlay_layer"])
         return _app.data.underlayMapSource != nil;
+    else if ([key isEqualToString:@"weather_layer"])
+        return _app.data.weather;
 
     if ([key hasPrefix:@"routes_"])
     {
@@ -787,6 +796,8 @@ static BOOL _isRoutesGroupOpen = NO;
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
     else if ([item[@"key"] isEqualToString:@"map_language"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenLanguage];
+    else if ([item[@"key"] isEqualToString:@"weather_layer"])
+        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWeather];
 
     if ([item[@"key"] hasPrefix:@"routes_"])
     {
@@ -858,6 +869,8 @@ static BOOL _isRoutesGroupOpen = NO;
         [self overlayChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"underlay_layer"])
         [self underlayChanged:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"weather_layer"])
+        [self weatherChanged:switchView.isOn];
 
     [tblView beginUpdates];
     [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -961,6 +974,11 @@ static BOOL _isRoutesGroupOpen = NO;
         [_styleSettings save:hidePolygonsParameter];
         _app.data.underlayMapSource = nil;
     }
+}
+
+- (void)weatherChanged:(BOOL)isOn
+{
+    _app.data.weather = isOn;
 }
 
 - (void)installMapLayerFor:(id)param

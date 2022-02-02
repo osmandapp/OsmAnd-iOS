@@ -963,6 +963,12 @@
 		8A1CF1E1227ED4A70083A04E /* warnings_tunnel_us@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1D9227ED4A60083A04E /* warnings_tunnel_us@2x.png */; };
 		8A1CF1E3227ED4A70083A04E /* warnings_tunnel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1DA227ED4A60083A04E /* warnings_tunnel@2x.png */; };
 		8A1CF1E5227ED4A70083A04E /* warnings_tunnel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1DB227ED4A70083A04E /* warnings_tunnel@3x.png */; };
+		8A4D03E327A6DF2300B8A778 /* wind_color.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8A4D03DE27A6DF2200B8A778 /* wind_color.txt */; };
+		8A4D03E427A6DF2300B8A778 /* precip_color.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8A4D03DF27A6DF2200B8A778 /* precip_color.txt */; };
+		8A4D03E527A6DF2300B8A778 /* temperature_color.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8A4D03E027A6DF2200B8A778 /* temperature_color.txt */; };
+		8A4D03E627A6DF2300B8A778 /* pressure_color.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8A4D03E127A6DF2200B8A778 /* pressure_color.txt */; };
+		8A4D03E727A6DF2300B8A778 /* cloud_color.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8A4D03E227A6DF2300B8A778 /* cloud_color.txt */; };
+		8A4D03EA27A6DF6E00B8A778 /* proj.db in Resources */ = {isa = PBXBuildFile; fileRef = 8A4D03E927A6DF6E00B8A778 /* proj.db */; };
 		8A5A002827735D76002227DD /* libharfbuzz_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A5A002727735D76002227DD /* libharfbuzz_static.a */; };
 		8A6CBCA821CE25F0004033C7 /* ic_live_purchased@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A6CBC9821CE25EE004033C7 /* ic_live_purchased@3x.png */; };
 		8A6CBCAA21CE25F0004033C7 /* img_logo_38dp_sea_depth@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A6CBC9921CE25EE004033C7 /* img_logo_38dp_sea_depth@3x.png */; };
@@ -1007,6 +1013,7 @@
 		8A836B5A227B43DF005EE20E /* widget_intermediate_time_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B54227B43DF005EE20E /* widget_intermediate_time_night@2x.png */; };
 		8A836B5B227B43DF005EE20E /* widget_intermediate_time_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B55227B43DF005EE20E /* widget_intermediate_time_day@3x.png */; };
 		8A836B5C227B43DF005EE20E /* widget_intermediate_time_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B56227B43DF005EE20E /* widget_intermediate_time_day@2x.png */; };
+		8A90CEDB27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A90CEDA27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm */; };
 		8AAFE753278DE23700F6504E /* libsqlite_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AAFE752278DE23700F6504E /* libsqlite_static.a */; };
 		8AB2BBC523ACBAEB00D2AD03 /* desert.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */; };
 		8AE0194624505C8B00DA5C33 /* img_empty_state_terrain@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE0193024505C8500DA5C33 /* img_empty_state_terrain@3x.png */; };
@@ -1024,6 +1031,7 @@
 		8AE0197024505C8B00DA5C33 /* ic_custom_parking@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE0194524505C8B00DA5C33 /* ic_custom_parking@3x.png */; };
 		8AE1C8B221D6224B00434F07 /* ic_action_message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE1C8AE21D6224A00434F07 /* ic_action_message@2x.png */; };
 		8AE1C8B421D6224B00434F07 /* ic_action_message@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE1C8AF21D6224A00434F07 /* ic_action_message@3x.png */; };
+		8AE943B327A28BE900961319 /* OAWeatherRasterLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE943B227A28BE900961319 /* OAWeatherRasterLayer.mm */; };
 		8AF348772779D88100A64824 /* libproj_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF348762779D88100A64824 /* libproj_static.a */; };
 		8AFC2BBF24334A4E0095BA9F /* map_location_car_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2B8924334A4D0095BA9F /* map_location_car_center@3x.png */; };
 		8AFC2BC124334A4E0095BA9F /* map_navigation_nautical_bottom@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2B8A24334A4D0095BA9F /* map_navigation_nautical_bottom@3x.png */; };
@@ -3934,6 +3942,12 @@
 		8A23E6F121C05F680060DE70 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A38B5E72192CCBD00D21059 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
+		8A4D03DE27A6DF2200B8A778 /* wind_color.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = wind_color.txt; path = ../resources/weather/wind_color.txt; sourceTree = "<group>"; };
+		8A4D03DF27A6DF2200B8A778 /* precip_color.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = precip_color.txt; path = ../resources/weather/precip_color.txt; sourceTree = "<group>"; };
+		8A4D03E027A6DF2200B8A778 /* temperature_color.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = temperature_color.txt; path = ../resources/weather/temperature_color.txt; sourceTree = "<group>"; };
+		8A4D03E127A6DF2200B8A778 /* pressure_color.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = pressure_color.txt; path = ../resources/weather/pressure_color.txt; sourceTree = "<group>"; };
+		8A4D03E227A6DF2300B8A778 /* cloud_color.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = cloud_color.txt; path = ../resources/weather/cloud_color.txt; sourceTree = "<group>"; };
+		8A4D03E927A6DF6E00B8A778 /* proj.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = proj.db; path = ../resources/proj/proj.db; sourceTree = "<group>"; };
 		8A4D82C623C1CD85003DC887 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A55FDAB22C2791F004B27B1 /* ro-RO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ro-RO"; path = "ro-RO.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		8A5A002727735D76002227DD /* libharfbuzz_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libharfbuzz_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3982,6 +3996,8 @@
 		8A836B54227B43DF005EE20E /* widget_intermediate_time_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_intermediate_time_night@2x.png"; sourceTree = "<group>"; };
 		8A836B55227B43DF005EE20E /* widget_intermediate_time_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_intermediate_time_day@3x.png"; sourceTree = "<group>"; };
 		8A836B56227B43DF005EE20E /* widget_intermediate_time_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_intermediate_time_day@2x.png"; sourceTree = "<group>"; };
+		8A90CED927A7C2310001C84D /* OAMapSettingsWeatherScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsWeatherScreen.h; sourceTree = "<group>"; };
+		8A90CEDA27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsWeatherScreen.mm; sourceTree = "<group>"; };
 		8AAFE752278DE23700F6504E /* libsqlite_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libsqlite_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = desert.render.xml; path = ../resources/rendering_styles/desert.render.xml; sourceTree = "<group>"; };
 		8AE0193024505C8500DA5C33 /* img_empty_state_terrain@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_empty_state_terrain@3x.png"; path = "Resources/Icons/img_empty_state_terrain@3x.png"; sourceTree = "<group>"; };
@@ -4000,6 +4016,8 @@
 		8AE0197224505D4400DA5C33 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8AE1C8AE21D6224A00434F07 /* ic_action_message@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_message@2x.png"; path = "Resources/Icons/ic_action_message@2x.png"; sourceTree = "<group>"; };
 		8AE1C8AF21D6224A00434F07 /* ic_action_message@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_message@3x.png"; path = "Resources/Icons/ic_action_message@3x.png"; sourceTree = "<group>"; };
+		8AE943B127A28BE900961319 /* OAWeatherRasterLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWeatherRasterLayer.h; sourceTree = "<group>"; };
+		8AE943B227A28BE900961319 /* OAWeatherRasterLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherRasterLayer.mm; sourceTree = "<group>"; };
 		8AF348762779D88100A64824 /* libproj_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libproj_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AFC2B8924334A4D0095BA9F /* map_location_car_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_car_center@3x.png"; sourceTree = "<group>"; };
 		8AFC2B8A24334A4D0095BA9F /* map_navigation_nautical_bottom@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_navigation_nautical_bottom@3x.png"; sourceTree = "<group>"; };
@@ -8272,6 +8290,26 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
+		8A4D03DD27A6DEED00B8A778 /* weather */ = {
+			isa = PBXGroup;
+			children = (
+				8A4D03E227A6DF2300B8A778 /* cloud_color.txt */,
+				8A4D03DF27A6DF2200B8A778 /* precip_color.txt */,
+				8A4D03E127A6DF2200B8A778 /* pressure_color.txt */,
+				8A4D03E027A6DF2200B8A778 /* temperature_color.txt */,
+				8A4D03DE27A6DF2200B8A778 /* wind_color.txt */,
+			);
+			name = weather;
+			sourceTree = "<group>";
+		};
+		8A4D03E827A6DF3700B8A778 /* proj */ = {
+			isa = PBXGroup;
+			children = (
+				8A4D03E927A6DF6E00B8A778 /* proj.db */,
+			);
+			name = proj;
+			sourceTree = "<group>";
+		};
 		8A755A3621CBF92400E42699 /* ChoosePlan */ = {
 			isa = PBXGroup;
 			children = (
@@ -8482,6 +8520,7 @@
 		BB27270819CB38E5007C5613 /* misc */ = {
 			isa = PBXGroup;
 			children = (
+				8A4D03E827A6DF3700B8A778 /* proj */,
 				BB27270919CB38F8007C5613 /* icu4c */,
 			);
 			name = misc;
@@ -8498,6 +8537,7 @@
 		BB451D8918D70AE4005FBE09 /* Embedded */ = {
 			isa = PBXGroup;
 			children = (
+				8A4D03DD27A6DEED00B8A778 /* weather */,
 				DA5CA677211ECCB500E2B79B /* style */,
 				DA5A857E26C5692100F274C7 /* article_style.css */,
 				DAC58858210898FB008B7763 /* voice */,
@@ -10880,6 +10920,8 @@
 				DA5A7ED126C563A400F274C7 /* OAUnderlayMapLayer.mm */,
 				DA66ACBE26D91C5700D43299 /* OABaseVectorLinesLayer.h */,
 				DA66ACBF26D91C5800D43299 /* OABaseVectorLinesLayer.mm */,
+				8AE943B127A28BE900961319 /* OAWeatherRasterLayer.h */,
+				8AE943B227A28BE900961319 /* OAWeatherRasterLayer.mm */,
 			);
 			path = Layers;
 			sourceTree = "<group>";
@@ -11310,6 +11352,8 @@
 				DA5A800C26C563A500F274C7 /* OAWikipediaLanguagesViewController.xib */,
 				DA5A800A26C563A500F274C7 /* OAMapSettingsWikipediaScreen.h */,
 				DA5A7FF426C563A500F274C7 /* OAMapSettingsWikipediaScreen.mm */,
+				8A90CED927A7C2310001C84D /* OAMapSettingsWeatherScreen.h */,
+				8A90CEDA27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm */,
 			);
 			path = MapSettings;
 			sourceTree = "<group>";
@@ -12354,6 +12398,7 @@
 				8431E78F1B383A190063C9AF /* ic_average_speed@3x.png in Resources */,
 				DA22DC5E25C05F130070FFCA /* ic_custom_split_before@2x.png in Resources */,
 				DA5A827226C563A700F274C7 /* OAFilledButtonCell.xib in Resources */,
+				8A4D03EA27A6DF6E00B8A778 /* proj.db in Resources */,
 				DA52CE1524AE087F00CC309D /* ic_custom_contrast@3x.png in Resources */,
 				0A8DDB0F271772A300FDE034 /* OADeleteWaypointsViewController.xib in Resources */,
 				DAE08345253F0CFD009B5A11 /* ic_custom_redo@2x.png in Resources */,
@@ -12747,6 +12792,7 @@
 				DAF345B322F4482C009E2EB6 /* ic_custom_arrow_back@3x.png in Resources */,
 				DA52CDEF24AE087F00CC309D /* ic_custom_navigation_type_direct_to@2x.png in Resources */,
 				DA52CE0D24AE087F00CC309D /* ic_custom_ruler@2x.png in Resources */,
+				8A4D03E627A6DF2300B8A778 /* pressure_color.txt in Resources */,
 				843394BB1FF54A19006205A5 /* list_warnings_traffic_calming_us@2x.png in Resources */,
 				8476E2CA1F6C1EEC00EC274F /* map_pedestrian_location_lost@3x.png in Resources */,
 				DABF818B228BDE9300651A91 /* map_mapillary_location_view_angle@3x.png in Resources */,
@@ -12968,6 +13014,7 @@
 				DAF345C522F4482C009E2EB6 /* ic_custom_moon@2x.png in Resources */,
 				32A001A126131FEA00ABE0D2 /* ic_custom_clipboard@3x.png in Resources */,
 				32B50AD926BBE3C7002E6C92 /* ic_custom_map_location_free@2x.png in Resources */,
+				8A4D03E327A6DF2300B8A778 /* wind_color.txt in Resources */,
 				8476E2761F6C1EEC00EC274F /* map_car_bearing_night@3x.png in Resources */,
 				1509D52325E90F5600905CBC /* ic_action_ruler_line@3x.png in Resources */,
 				32A001722610B43700ABE0D2 /* widget_coordinates_latitude_north_day@2x.png in Resources */,
@@ -13423,6 +13470,7 @@
 				DA13A03D2345FA0100C1A1A8 /* ic_custom_forbid_private_access@2x.png in Resources */,
 				0CBDD095245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_3@2x.png in Resources */,
 				8A7A4C9D210A036E00EC1B06 /* map_transport_stop_bg@3x.png in Resources */,
+				8A4D03E727A6DF2300B8A778 /* cloud_color.txt in Resources */,
 				32A001712610B43700ABE0D2 /* widget_coordinates_latitude_south_night@3x.png in Resources */,
 				DA8A925525DE78B000F5320A /* map_turn_forward@2x.png in Resources */,
 				DA13410E243DC5A80039D214 /* ic_action_skiing@2x.png in Resources */,
@@ -13802,6 +13850,7 @@
 				DAF3458B22F4482C009E2EB6 /* ic_custom_sunset@3x.png in Resources */,
 				DA0C641B21245B6600B2A350 /* fa_tts.js in Resources */,
 				15BDDEA724DAF3D400079C83 /* ic_custom_remove_outlined@3x.png in Resources */,
+				8A4D03E427A6DF2300B8A778 /* precip_color.txt in Resources */,
 				DA5A823B26C563A700F274C7 /* OAOsmEditingSettingsViewController.xib in Resources */,
 				DA6471A522CF5433008F937F /* ic_custom_wikipedia@3x.png in Resources */,
 				841222511B39CC5200F80F9E /* map_car_bearing@3x.png in Resources */,
@@ -13814,6 +13863,7 @@
 				8AFC2BE524334A4E0095BA9F /* map_location_bicycle_center@3x.png in Resources */,
 				DA22DC4E25C05F130070FFCA /* ic_custom_split_after@2x.png in Resources */,
 				DA1BC11A233F9B01004DAF78 /* ic_custom_point_to_point@3x.png in Resources */,
+				8A4D03E527A6DF2300B8A778 /* temperature_color.txt in Resources */,
 				84DD06791FA21B070050E450 /* ic_action_widget_collapse@2x.png in Resources */,
 				15B4E49A24AB3FD700119365 /* list_warnings_speed_camera@2x.png in Resources */,
 				323BD9042628850400D255ED /* ic_bg_point_circle_center_small@2x.png in Resources */,
@@ -14161,6 +14211,7 @@
 				DA5A832126C563A800F274C7 /* OAShapesTableViewCell.m in Sources */,
 				DA5A836826C563A800F274C7 /* OARouteAvoidTransportSettingsViewController.mm in Sources */,
 				DA5A836626C563A800F274C7 /* OARouteStatistics.m in Sources */,
+				8A90CEDB27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm in Sources */,
 				DA5A830126C563A800F274C7 /* OAIconsTableViewCell.m in Sources */,
 				DA5A813F26C563A700F274C7 /* OAWay.m in Sources */,
 				DA5A83EF26C563A800F274C7 /* OAQuickSearchHeaderListItem.mm in Sources */,
@@ -14518,6 +14569,7 @@
 				DA5A822926C563A700F274C7 /* OASettingsItemWriter.m in Sources */,
 				DA5A83B626C563A800F274C7 /* OAActionAddCategoryViewController.mm in Sources */,
 				DA5A819726C563A700F274C7 /* OANavResumePauseAction.mm in Sources */,
+				8AE943B327A28BE900961319 /* OAWeatherRasterLayer.mm in Sources */,
 				DA5A813B26C563A700F274C7 /* OAOsmMapUtils.mm in Sources */,
 				DA5A822826C563A700F274C7 /* OASettingsItemReader.m in Sources */,
 				DA5A856026C563A900F274C7 /* OARTargetPoint.mm in Sources */,

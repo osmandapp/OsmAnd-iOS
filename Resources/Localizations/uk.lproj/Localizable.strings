@@ -2333,3 +2333,12 @@
 "points_delete_multiple" = "Вилучити %d точку(и)?";
 "context_menu_edit_descr" = "Змінити опис";
 "add_description" = "Додати опис";
+"map_settings_weather_pressure" = "Тиск";
+"map_settings_clear_raster_cache" = "Очистити растрові плитки";
+"map_settings_weather" = "Погода";
+"map_settings_weather_temp" = "Температура";
+"map_settings_weather_cloud" = "Хмари";
+"map_settings_weather_wind" = "Вітер";
+"map_settings_weather_precip" = "Опади";
+"map_settings_clear_geo_cache" = "Очистити геоплитки";
+"q_clear_weather_cache" = "Очистити кеш погоди?";

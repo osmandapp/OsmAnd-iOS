@@ -77,7 +77,7 @@
             }
             else
             {
-                OAGpxTrkPt *prevPoint = pts[pts.count - 1];
+                OAWptPt *prevPoint = pts[pts.count - 1];
                 if (l.speed != 0)
                 {
                     point.speed = l.speed;
@@ -94,7 +94,7 @@
         }
         if (!isnan(lastValidHeight) && lastHeight == RouteDataObject::HEIGHT_UNDEFINED)
         {
-            for (OAGpxTrkPt *point in [pts reverseObjectEnumerator])
+            for (OAWptPt *point in [pts reverseObjectEnumerator])
             {
                 if (!isnan(point.elevation))
                     break;

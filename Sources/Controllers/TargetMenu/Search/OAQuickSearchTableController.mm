@@ -604,7 +604,7 @@
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
-                    OAGpxWpt *wpt = (OAGpxWpt *)res.object;
+                    OAWptPt *wpt = (OAWptPt *) res.object;
                     OAGpxWptItem *wptItem = [OAGpxWptItem withGpxWpt:wpt];
                     cell.titleIcon.image = [wptItem getCompositeIcon];
                     [self setCellDistanceDirection:cell item:item];

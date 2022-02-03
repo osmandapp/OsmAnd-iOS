@@ -193,7 +193,7 @@
                     NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
                     for (OAGpxTrkSeg *seg in [doc getNonEmptyTrkSegments:YES])
                     {
-                        for (OAGpxTrkPt *point in seg.points)
+                        for (OAWptPt *point in seg.points)
                         {
                             [locations addObject:[[CLLocation alloc] initWithLatitude:point.position.latitude
                                                                             longitude:point.position.longitude]];

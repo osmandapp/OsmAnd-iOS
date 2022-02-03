@@ -28,6 +28,7 @@
 #define FORMAT_SECONDS 2
 #define FORMAT_UTM 3
 #define FORMAT_OLC 4
+#define FORMAT_MGRS 5
 
 #define DELIM @":"
 #define DELIMITER_DEGREES @"°"

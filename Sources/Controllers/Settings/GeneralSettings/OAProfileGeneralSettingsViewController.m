@@ -152,6 +152,9 @@
         case MAP_GEO_OLC_FORMAT:
             geoFormatValue = @"OLC";
             break;
+        case MAP_GEO_MGRS_FORMAT:
+            geoFormatValue = @"MGRS";
+            break;
         default:
             geoFormatValue = OALocalizedString(@"navigate_point_format_D");
             break;

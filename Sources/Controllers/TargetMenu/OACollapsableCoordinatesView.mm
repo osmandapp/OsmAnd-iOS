@@ -77,6 +77,8 @@
             coord = [NSString stringWithFormat:@"UTM: %@", _coordinates[format]];
         else if (format.integerValue == FORMAT_OLC)
             coord = [NSString stringWithFormat:@"OLC: %@", _coordinates[format]];
+        else if (format.integerValue == FORMAT_MGRS)
+            coord = [NSString stringWithFormat:@"MGRS: %@", _coordinates[format]];
         else
             coord = _coordinates[format];
         

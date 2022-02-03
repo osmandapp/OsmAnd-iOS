@@ -2330,3 +2330,12 @@
 "points_delete_multiple" = "%d nokta silinsin mi?";
 "context_menu_edit_descr" = "Açıklamayı düzenle";
 "add_description" = "Açıklama ekle";
+"map_settings_clear_geo_cache" = "Coğrafi döşemeleri temizle";
+"q_clear_weather_cache" = "Hava durumu önbelleğini temizlemek istiyor musunuz?";
+"map_settings_weather_precip" = "Yağış";
+"map_settings_clear_raster_cache" = "Raster döşemeleri temizle";
+"map_settings_weather" = "Hava";
+"map_settings_weather_temp" = "Sıcaklık";
+"map_settings_weather_pressure" = "Basınç";
+"map_settings_weather_cloud" = "Bulut";
+"map_settings_weather_wind" = "Rüzgar";

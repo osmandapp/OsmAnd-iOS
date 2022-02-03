@@ -35,6 +35,7 @@
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
+#define kWeather @"weather"
 #define kWeatherTemp @"weather_temp"
 #define kWeatherTempAlpha @"weather_temp_alpha"
 #define kWeatherPressure @"weather_pressure"
@@ -63,7 +64,6 @@
     OAAppSettings *_settings;
 
     NSArray *_data;
-    BOOL _isEnabled;
 
     NSInteger _buttonsSectionIndex;
     NSInteger _clearGeoCacheButtonIndex;
@@ -108,16 +108,10 @@
 
 - (void) commonInit
 {
-    [self setupInitialState];
 }
 
 - (void) deinit
 {
-}
-
-- (void) setupInitialState
-{
-    _isEnabled = _app.data.weather;
 }
 
 - (void) calculateCacheSize
@@ -155,8 +149,11 @@
 
 - (void) setupView
 {
+    BOOL enabled = _app.data.weather;
     NSArray* mainSwitch = @[@{
         @"type" : kCellTypeIconSwitch,
+        @"name"  : kWeather,
+        @"value" : @(enabled)
     }];
 
     NSArray* datePicker = @[@{
@@ -212,22 +209,28 @@
         }];
     
     NSMutableArray *data = [NSMutableArray array];
-    
+    _buttonsSectionIndex = -1;
+    _clearGeoCacheButtonIndex = -1;
+    _clearRasterCacheButtonIndex = -1;
+
     [data addObject:mainSwitch];
-    [data addObject:datePicker];
-    [data addObject:weatherLayers];
-    
-    [data addObject:buttons];
-    for (int i = 0; i < buttons.count; i++)
+    if (enabled)
     {
-        NSDictionary *item = buttons[i];
-        if ([item[@"name"] isEqualToString:kClearGeoCacheButton])
-            _clearGeoCacheButtonIndex = i;
-        else if ([item[@"name"] isEqualToString:kClearRasterCacheButton])
-            _clearRasterCacheButtonIndex = i;
+        [data addObject:datePicker];
+        [data addObject:weatherLayers];
+        
+        [data addObject:buttons];
+        for (int i = 0; i < buttons.count; i++)
+        {
+            NSDictionary *item = buttons[i];
+            if ([item[@"name"] isEqualToString:kClearGeoCacheButton])
+                _clearGeoCacheButtonIndex = i;
+            else if ([item[@"name"] isEqualToString:kClearRasterCacheButton])
+                _clearRasterCacheButtonIndex = i;
+        }
+        _buttonsSectionIndex = data.count - 1;
     }
-    _buttonsSectionIndex = data.count - 1;
-    
+
     _data = data;
     
     tblView.estimatedRowHeight = kEstimatedRowHeight;
@@ -247,7 +250,7 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _isEnabled ? _data.count : 1;
+    return _data.count;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -288,13 +291,14 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADateTimePickerTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OADateTimePickerTableViewCell *)[nib objectAtIndex:0];
+
+            NSDate *currentDate = [NSDate date];
+            cell.dateTimePicker.minimumDate = [currentDate dateByAddingTimeInterval:(NSTimeInterval)(-60 * 60 * 32)];
+            cell.dateTimePicker.maximumDate = [currentDate dateByAddingTimeInterval:(NSTimeInterval)(60 * 60 * 32)];;
+            cell.dateTimePicker.minuteInterval = 30;
+            cell.dateTimePicker.datePickerMode = UIDatePickerModeDateAndTime;
         }
-        NSDate *currentDate = [NSDate date];
-        cell.dateTimePicker.datePickerMode = UIDatePickerModeDateAndTime;
         cell.dateTimePicker.date = OARootViewController.instance.mapPanel.mapViewController.mapLayers.weatherDate;
-        cell.dateTimePicker.minimumDate = [currentDate dateByAddingTimeInterval:(NSTimeInterval)(-60 * 60 * 32)];
-        cell.dateTimePicker.maximumDate = [currentDate dateByAddingTimeInterval:(NSTimeInterval)(60 * 60 * 32)];;
-        cell.dateTimePicker.minuteInterval = 30;
         [cell.dateTimePicker removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
         [cell.dateTimePicker addTarget:self action:@selector(dateTimePickerChanged:) forControlEvents:UIControlEventValueChanged];
         
@@ -312,13 +316,14 @@
         }
         if (cell)
         {
-            cell.textView.text = _isEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
-            NSString *imgName = _isEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
+            BOOL enabled = [item[@"value"] boolValue];
+            cell.textView.text = enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+            NSString *imgName = enabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
             cell.imgView.image = [UIImage templateImageNamed:imgName];
-            cell.imgView.tintColor = _isEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+            cell.imgView.tintColor = enabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
             
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView setOn:_isEnabled];
+            [cell.switchView setOn:enabled];
             [cell.switchView addTarget:self action:@selector(turnWeatherOnOff:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
@@ -403,11 +408,11 @@
     UISwitch *switchView = (UISwitch *)sender;
     if (switchView)
     {
-        _isEnabled = switchView.isOn;
         if (switchView.isOn)
         {
             _app.data.weather = YES;
             [tblView beginUpdates];
+            [self setupView];
             [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
             [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
             [tblView endUpdates];
@@ -417,6 +422,7 @@
             _app.data.weather = NO;
             [tblView beginUpdates];
             [tblView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
+            [self setupView];
             [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
             [tblView endUpdates];
         }

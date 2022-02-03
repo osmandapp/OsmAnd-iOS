@@ -2337,3 +2337,12 @@
 "white_color_undefined" = "Delar utan uppgifter är vita.";
 "context_menu_edit_descr" = "Redigera beskrivning";
 "add_description" = "Lägg till beskrivning";
+"map_settings_weather_temp" = "Temperatur";
+"map_settings_weather_wind" = "Vind";
+"map_settings_clear_geo_cache" = "Rensa geobrickor";
+"map_settings_clear_raster_cache" = "Rensa rasterbrickor";
+"map_settings_weather" = "Väder";
+"q_clear_weather_cache" = "Vill du rensa vädret i cacheminnet?";
+"map_settings_weather_pressure" = "Tryck";
+"map_settings_weather_cloud" = "Moln";
+"map_settings_weather_precip" = "Nederbörd";

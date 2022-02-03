@@ -1921,7 +1921,7 @@
 "point_num" = "Точка %d";
 "shared_string_rendering_style" = "Стиль отрисовки";
 "shared_string_routing" = "Маршрутизация";
-"selected_profiles" = "%dиз %d";
+"selected_profiles" = "%d из %d";
 "shared_string_deselect_all" = "Отменить выбор";
 "move_point_descr" = "Переместите карту, чтобы изменить положение этой точки.";
 

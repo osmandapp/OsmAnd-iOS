@@ -827,7 +827,7 @@
     
     if (_widgetsView)
     {
-        CGFloat widgetsOffset = _downloadMapWidget.isVisible ? _downloadMapWidget.shadowOffset : 2.0;
+        CGFloat widgetsOffset = 2.0;
         _widgetsView.frame = CGRectMake(widgetsOffset, y + 2.0, DeviceScreenWidth - OAUtilities.getLeftMargin * 2 - widgetsOffset * 2, 10.0);
     }
     if (_downloadView)

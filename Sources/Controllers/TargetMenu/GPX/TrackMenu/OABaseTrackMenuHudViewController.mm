@@ -10,6 +10,7 @@
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
+#import "OAMapRulerView.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAGPXDatabase.h"
@@ -321,14 +322,21 @@
     return mapView.viewportYScale != _cachedYViewPort && mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE;
 }
 
-- (void)changeMapRulerPosition
+- (void)changeMapRulerPosition:(CGFloat)height
 {
-    CGFloat bottomMargin = [self isLandscape] ? 0 : (-[self getViewHeight] + [OAUtilities getBottomMargin] - 20.);
     CGFloat leftMargin = [self isLandscape]
             ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 20.
             : [OAUtilities getLeftMargin] + 20.;
-    [_mapPanelViewController targetSetMapRulerPosition:bottomMargin
+    [_mapPanelViewController targetSetMapRulerPosition:[self isLandscape] ? 0. : -(height - [OAUtilities getBottomMargin] + 20.)
                                                   left:leftMargin];
+}
+
+- (void)changeHud:(CGFloat)height
+{
+    [_mapPanelViewController targetSetBottomControlsVisible:YES
+                                                 menuHeight:[self isLandscape] ? 0 : height - [OAUtilities getBottomMargin]
+                                                   animated:YES];
+    [self changeMapRulerPosition:height];
 }
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem
@@ -367,20 +375,22 @@
 
 #pragma mark - OADraggableViewActions
 
-- (void)onViewHeightChanged:(CGFloat)height
+- (void)onViewStateChanged:(CGFloat)height
 {
     if (![self isTabSelecting] && [self adjustCentering])
     {
-        [_mapPanelViewController targetSetBottomControlsVisible:YES
-                                                     menuHeight:[self isLandscape] ? 0 : height - [OAUtilities getBottomMargin]
-                                                       animated:YES];
+        [self changeHud:height];
         if ((self.currentState != EOADraggableMenuStateFullScreen && ![self isLandscape]) || [self isLandscape])
         {
-            [self changeMapRulerPosition];
             [self adjustMapViewPort];
             [_mapPanelViewController targetGoToGPX];
         }
     }
+}
+
+- (void)onViewHeightChanged:(CGFloat)height
+{
+    [self changeHud:height];
 }
 
 @end

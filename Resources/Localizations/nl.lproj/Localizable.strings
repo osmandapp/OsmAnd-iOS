@@ -1636,3 +1636,5 @@
 "srtm_download_single_help_message" = "Selecteer a.u.b. het benodigde formaat. Je zal het bestand opnieuw moeten downloaden om het formaat te wijzigen.";
 "contour_lines_hillshades_slope" = "Hoogtelijnen, reliëfschaduwen en hellingen";
 "search_more" = "Zoek meer…";
+"lang_pnb" = "Punjabi";
+"lang_zh_hk" = "Chinees (Hong Kong)";

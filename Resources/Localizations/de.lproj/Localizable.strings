@@ -2335,3 +2335,5 @@
 "grey_color_undefined" = "Bereiche ohne Daten werden grau dargestellt.";
 "shared_string_hide_all" = "Alle ausblenden";
 "points_delete_multiple" = "%d Punkt(e) löschen?";
+"context_menu_edit_descr" = "Beschreibung bearbeiten";
+"add_description" = "Beschreibung hinzufügen";

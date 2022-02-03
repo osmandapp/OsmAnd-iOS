@@ -2328,3 +2328,5 @@
 "white_color_undefined" = "Veri içermeyen parçalar beyazdır.";
 "shared_string_hide_all" = "Tümünü gizle";
 "points_delete_multiple" = "%d nokta silinsin mi?";
+"context_menu_edit_descr" = "Açıklamayı düzenle";
+"add_description" = "Açıklama ekle";

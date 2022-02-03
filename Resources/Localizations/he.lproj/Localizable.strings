@@ -2335,3 +2335,5 @@
 "units_min_short" = "ד";
 "shared_string_hide_all" = "להסתיר הכול";
 "points_delete_multiple" = "למחוק %d נקודות?";
+"context_menu_edit_descr" = "עריכת תיאור";
+"add_description" = "הוספת תיאור";

@@ -17,6 +17,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
-- (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode;
+- (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey;
 
 @end

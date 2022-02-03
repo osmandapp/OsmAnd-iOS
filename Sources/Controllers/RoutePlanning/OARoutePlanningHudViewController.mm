@@ -1195,7 +1195,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 #pragma mark - OADraggableViewActions
 
-- (void)onViewHeightChanged:(CGFloat)height
+- (void)onViewStateChanged:(CGFloat)height
 {
     [self changeCenterOffset:height];
     

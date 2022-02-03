@@ -166,6 +166,12 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name)
         
         resourceDir = @"";
     }
+    else if (name == QLatin1String("misc/proj/proj.db"))
+    {
+        resourceName = @"proj";
+        resourceType = @"db";
+        resourceDir = nil;
+    }
     else
     {
         OALog(@"Unrecognized resource name '%@'", name.toNSString());

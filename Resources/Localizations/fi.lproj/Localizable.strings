@@ -2166,3 +2166,5 @@
 "explore_wikipedia_offline" = "Tutustu Wikipediaan offline-tilassa.";
 "navigate_point_zone" = "Vyöhyke";
 "navigate_point_northing" = "Pohjoiseen";
+"shared_string_hide_all" = "Piilota kaikki";
+"reset_to_original" = "Palauta alkuperäiseen";

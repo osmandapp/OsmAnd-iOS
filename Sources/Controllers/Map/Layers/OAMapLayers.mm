@@ -25,6 +25,7 @@
     self = [super init];
     if (self)
     {
+        _weatherDate = [NSDate date];
         _mapViewController = mapViewController;
         _mapView = mapViewController.mapView;
         _layers = [NSMapTable strongToStrongObjectsMapTable];
@@ -94,6 +95,17 @@
     _downloadedRegionsLayer = [[OADownloadedRegionsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-10000];
     [self addLayer:_downloadedRegionsLayer];
 
+    _weatherTempLayer = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:20 weatherBand:WEATHER_BAND_TEMPERATURE date:_weatherDate];
+    [self addLayer:_weatherTempLayer];
+    _weatherPressureLayer = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:25 weatherBand:WEATHER_BAND_PRESSURE date:_weatherDate];
+    [self addLayer:_weatherPressureLayer];
+    _weatherWindLayer = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:30 weatherBand:WEATHER_BAND_WIND_SPEED date:_weatherDate];
+    [self addLayer:_weatherWindLayer];
+    _weatherCloudLayer = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:35 weatherBand:WEATHER_BAND_CLOUD date:_weatherDate];
+    [self addLayer:_weatherCloudLayer];
+    _weatherPrecipitationLayer = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:40 weatherBand:WEATHER_BAND_PRECIPITATION date:_weatherDate];
+    [self addLayer:_weatherPrecipitationLayer];
+
     [OAPlugin createLayers];
 }
 
@@ -126,6 +138,17 @@
         [layer updateLayer];
     
     [OAPlugin refreshLayers];
+}
+
+- (void) updateWeatherDate:(NSDate *)date
+{
+    _weatherDate = date;
+    
+    [_weatherTempLayer updateDate:date];
+    [_weatherPressureLayer updateDate:date];
+    [_weatherWindLayer updateDate:date];
+    [_weatherCloudLayer updateDate:date];
+    [_weatherPrecipitationLayer updateDate:date];
 }
 
 - (void) addLayer:(OAMapLayer *)layer

@@ -65,13 +65,15 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenType _screenToOpen;
     UIView *_cpyProfileViewUnderlay;
     NSString *_importedFileName;
+    NSString *_targetScreenKey;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)mode
+- (instancetype) initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey
 {
     self = [super init];
     if (self) {
         _appMode = mode;
+        _targetScreenKey = targetScreenKey;
 //        [self generateData];
     }
     return self;
@@ -109,7 +111,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"title" : OALocalizedString(@"routing_settings_2"),
             @"descr" : OALocalizedString(@"routing_settings_descr"),
             @"img" : @"left_menu_icon_navigation",
-            @"key" : @"nav_settings"
+            @"key" : kNavigationSettings
         }];
     }
     [profileSettings addObject:@{
@@ -228,6 +230,12 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [self generateData];
     [self applyLocalization];
     [self.tableView reloadData];
+    
+    if (_targetScreenKey)
+    {
+        [self openTargetSettingsScreen:_targetScreenKey];
+        _targetScreenKey = nil;
+    }
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -332,6 +340,62 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [self setupTableHeaderView];
         [self.tableView reloadData];
     } completion:nil];
+}
+
+- (void)openTargetSettingsScreen:(NSString *)targetScreenKey
+{
+    if ([targetScreenKey isEqualToString:@"configure_map"])
+    {
+        [self setCurrentModeActive:EOADashboardScreenTypeMap];
+        [self.navigationController popToViewController:OARootViewController.instance animated:NO];
+    }
+    else if ([targetScreenKey isEqualToString:@"configure_screen"])
+    {
+        [self setCurrentModeActive:EOADashboardScreenTypeScreen];
+        [self.navigationController popToViewController:OARootViewController.instance animated:NO];
+    }
+//    else if ([key isEqualToString:@"ui_customization"])
+//    {
+//
+//    }
+    else if ([targetScreenKey isEqualToString:@"copy_profile"])
+    {
+        OACopyProfileBottomSheetViewControler *bottomSheet = [[OACopyProfileBottomSheetViewControler alloc] initWithMode:_appMode];
+        bottomSheet.delegate = self;
+        [bottomSheet presentInViewController:self];
+    }
+    else if ([targetScreenKey isEqualToString:@"reset_to_default"])
+    {
+        OAPluginResetBottomSheetViewController *screen = [[OAPluginResetBottomSheetViewController alloc] initWithParam:_appMode];
+        screen.delegate = self;
+        [screen show];
+    }
+    else if ([targetScreenKey isEqualToString:@"delete_profile"])
+    {
+        OADeleteProfileBottomSheetViewController *bottomSheet = [[OADeleteProfileBottomSheetViewController alloc] initWithMode:_appMode];
+        bottomSheet.delegate = self;
+        [self addUnderlay];
+        [bottomSheet show];
+    }
+    else
+    {
+        UIViewController *settingsScreen = nil;
+        if ([targetScreenKey isEqualToString:kGeneralSettings])
+            settingsScreen = [[OAProfileGeneralSettingsViewController alloc] initWithAppMode:_appMode];
+        else if ([targetScreenKey isEqualToString:kNavigationSettings])
+            settingsScreen = [[OAProfileNavigationSettingsViewController alloc] initWithAppMode:_appMode];
+        else if ([targetScreenKey isEqualToString:kProfileAppearanceSettings])
+            settingsScreen = [[OAProfileAppearanceViewController alloc] initWithProfile:_appMode];
+        else if ([targetScreenKey isEqualToString:kExportProfileSettings])
+            settingsScreen = [[OAExportItemsViewController alloc] initWithAppMode:_appMode];
+        else if ([targetScreenKey isEqualToString:kTrackRecordingSettings])
+            settingsScreen = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:_appMode];
+        else if ([targetScreenKey isEqualToString:kOsmEditsSettings])
+            settingsScreen = [[OAOsmEditingSettingsViewController alloc] init];
+
+        if (settingsScreen)
+            [self.navigationController pushViewController:settingsScreen animated:YES];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -479,69 +543,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *key = item[@"key"];
-    if ([key isEqualToString:@"general_settings"])
-    {
-        OAProfileGeneralSettingsViewController* settingsViewController = [[OAProfileGeneralSettingsViewController alloc] initWithAppMode:_appMode];
-        [self.navigationController pushViewController:settingsViewController animated:YES];
-    }
-    else if ([key isEqualToString:@"nav_settings"])
-    {
-        OAProfileNavigationSettingsViewController* settingsViewController = [[OAProfileNavigationSettingsViewController alloc] initWithAppMode:_appMode];
-        [self.navigationController pushViewController:settingsViewController animated:YES];
-    }
-    else if ([key isEqualToString:@"configure_map"])
-    {
-        [self setCurrentModeActive:EOADashboardScreenTypeMap];
-        [self.navigationController popToViewController:OARootViewController.instance animated:NO];
-    }
-    else if ([key isEqualToString:@"configure_screen"])
-    {
-        [self setCurrentModeActive:EOADashboardScreenTypeScreen];
-        [self.navigationController popToViewController:OARootViewController.instance animated:NO];
-    }
-    else if ([key isEqualToString:@"profile_appearance"])
-    {
-        OAProfileAppearanceViewController *profileAppearance = [[OAProfileAppearanceViewController alloc] initWithProfile:_appMode];
-        [self.navigationController pushViewController:profileAppearance animated:YES];
-    }
-//    else if ([key isEqualToString:@"ui_customization"])
-//    {
-//
-//    }
-    else if ([key isEqualToString:@"export_profile"])
-    {
-        OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] initWithAppMode:_appMode];
-        [self.navigationController pushViewController:exportController animated:YES];
-    }
-    else if ([key isEqualToString:@"copy_profile"])
-    {
-        OACopyProfileBottomSheetViewControler *bottomSheet = [[OACopyProfileBottomSheetViewControler alloc] initWithMode:_appMode];
-        bottomSheet.delegate = self;
-        [bottomSheet presentInViewController:self];
-    }
-    else if ([key isEqualToString:@"reset_to_default"])
-    {
-        OAPluginResetBottomSheetViewController *screen = [[OAPluginResetBottomSheetViewController alloc] initWithParam:_appMode];
-        screen.delegate = self;
-        [screen show];
-    }
-    else if ([key isEqualToString:@"delete_profile"])
-    {
-        OADeleteProfileBottomSheetViewController *bottomSheet = [[OADeleteProfileBottomSheetViewController alloc] initWithMode:_appMode];
-        bottomSheet.delegate = self;
-        [self addUnderlay];
-        [bottomSheet show];
-    }
-    else if ([key isEqualToString:@"trip_rec"])
-    {
-        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:_appMode];
-        [self.navigationController pushViewController:settingsViewController animated:YES];
-    }
-    else if ([key isEqualToString:@"osm_edits"])
-    {
-        OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
-        [self.navigationController pushViewController:settingsViewController animated:YES];
-    }
+    [self openTargetSettingsScreen:key];
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

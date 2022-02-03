@@ -369,6 +369,13 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
             r = @"0, 0";
         [result appendString:r];
     }
+    else if (outputFormat == FORMAT_MGRS)
+    {
+        NSString *r = [OALocationConvert getMgrsCoordinateString:lat lon:lon];
+        if (!r)
+            r = @"0, 0";
+        [result appendString:r];
+    }
     return [NSString stringWithString:result];
 }
 

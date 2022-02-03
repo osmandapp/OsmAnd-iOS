@@ -600,11 +600,13 @@
                 if (cell)
                 {
                     [cell.titleView setText:[item getName]];
-                    cell.titleIcon.image = [UIImage imageNamed:[OAQuickSearchListItem getIconName:res]];
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
+                    OAGpxWpt *wpt = (OAGpxWpt *)res.object;
+                    OAGpxWptItem *wptItem = [OAGpxWptItem withGpxWpt:wpt];
+                    cell.titleIcon.image = [wptItem getCompositeIcon];
                     [self setCellDistanceDirection:cell item:item];
                 }
                 return cell;

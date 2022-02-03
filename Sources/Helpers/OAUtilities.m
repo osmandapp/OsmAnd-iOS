@@ -1178,11 +1178,16 @@
 
 + (UIImage *) getMxIcon:(NSString *)name
 {
-    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", name]]];
-    if (img)
-        return [OAUtilities applyScaleFactorToImage:img];
-    else
-        return nil;
+    NSString *fullIconName = name;
+    if (![fullIconName hasPrefix:@"mx_"])
+        fullIconName = [@"mx_" stringByAppendingString:name];
+
+    UIImage *iconImgOrig = [UIImage imageNamed:[self drawablePath:fullIconName]];
+    if (iconImgOrig)
+    {
+        return [UIImage imageWithCGImage:iconImgOrig.CGImage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+    }
+    return nil;
 }
 
 + (UIImage *) getTintableImage:(UIImage *)image

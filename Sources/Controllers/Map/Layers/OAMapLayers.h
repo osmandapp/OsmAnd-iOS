@@ -29,6 +29,7 @@
 #import "OATerrainMapLayer.h"
 #import "OAOverlayMapLayer.h"
 #import "OAUnderlayMapLayer.h"
+#import "OAWeatherRasterLayer.h"
 
 @class OAMapViewController;
 
@@ -48,6 +49,13 @@
 @property (nonatomic, readonly) OAMapillaryLayer *mapillaryLayer;
 @property (nonatomic, readonly) OARulerByTapControlLayer *rulerByTapControlLayer;
 
+@property (nonatomic) NSDate *weatherDate;
+@property (nonatomic, readonly) OAWeatherRasterLayer *weatherTempLayer;
+@property (nonatomic, readonly) OAWeatherRasterLayer *weatherPressureLayer;
+@property (nonatomic, readonly) OAWeatherRasterLayer *weatherWindLayer;
+@property (nonatomic, readonly) OAWeatherRasterLayer *weatherCloudLayer;
+@property (nonatomic, readonly) OAWeatherRasterLayer *weatherPrecipitationLayer;
+
 // Raster map layers
 @property (nonatomic, readonly) OATerrainMapLayer *terrainMapLayer;
 @property (nonatomic, readonly) OAOverlayMapLayer *overlayMapLayer;
@@ -66,6 +74,8 @@
 
 - (void) resetLayers;
 - (void) updateLayers;
+
+- (void) updateWeatherDate:(NSDate *)date;
 
 - (void) showLayer:(NSString *)layerId;
 - (void) hideLayer:(NSString *)layerId;

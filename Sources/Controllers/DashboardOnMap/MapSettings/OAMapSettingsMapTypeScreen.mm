@@ -291,6 +291,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if (indexPath.section == kOfflineSourcesSection)
                 [_app.data setPrevOfflineSource:source.mapSource];
 
+            [_settings.renderer set:source.mapSource.name];
+
             if (self.delegate)
                 [self.delegate refreshMenu];
 

@@ -35,6 +35,30 @@
 @property (readonly) OAObservable* underlayAlphaChangeObservable;
 @property (readonly) OAObservable* mapLayersConfigurationChangeObservable;
 
+@property (nonatomic) BOOL weather;
+@property (nonatomic) BOOL weatherTemp;
+@property (nonatomic) double weatherTempAlpha;
+@property (nonatomic) BOOL weatherPressure;
+@property (nonatomic) double weatherPressureAlpha;
+@property (nonatomic) BOOL weatherWind;
+@property (nonatomic) double weatherWindAlpha;
+@property (nonatomic) BOOL weatherCloud;
+@property (nonatomic) double weatherCloudAlpha;
+@property (nonatomic) BOOL weatherPrecip;
+@property (nonatomic) double weatherPrecipAlpha;
+
+@property (readonly) OAObservable* weatherChangeObservable;
+@property (readonly) OAObservable* weatherTempChangeObservable;
+@property (readonly) OAObservable* weatherTempAlphaChangeObservable;
+@property (readonly) OAObservable* weatherPressureChangeObservable;
+@property (readonly) OAObservable* weatherPressureAlphaChangeObservable;
+@property (readonly) OAObservable* weatherWindChangeObservable;
+@property (readonly) OAObservable* weatherWindAlphaChangeObservable;
+@property (readonly) OAObservable* weatherCloudChangeObservable;
+@property (readonly) OAObservable* weatherCloudAlphaChangeObservable;
+@property (readonly) OAObservable* weatherPrecipChangeObservable;
+@property (readonly) OAObservable* weatherPrecipAlphaChangeObservable;
+
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 
 @property (nonatomic) EOATerrainType terrainType;

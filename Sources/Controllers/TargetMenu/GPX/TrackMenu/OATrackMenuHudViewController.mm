@@ -2426,20 +2426,19 @@
             CGPoint p = scrollView.contentOffset;
             p.y += _headerView.frame.size.height;
             NSIndexPath *ip = [self.tableView indexPathForRowAtPoint:p];
+            if (ip && ip.section > 0)
+            {
+                p.y += [self tableView:self.tableView heightForHeaderInSection:ip.section];
+                ip = [self.tableView indexPathForRowAtPoint:p];
+            }
             if (ip)
             {
-                if (ip.section != 0)
-                    p.y += [self tableView:self.tableView heightForHeaderInSection:ip.section];
-                ip = [self.tableView indexPathForRowAtPoint:p];
-                if (ip)
+                [_headerView setSelectedIndexGroupsCollection:ip.section];
+                if (ip.section < _waypointSortedGroupNames.count)
                 {
-                    [_headerView setSelectedIndexGroupsCollection:ip.section];
-                    if (ip.section < _waypointSortedGroupNames.count)
-                    {
-                            [_headerView.groupsCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:ip.section inSection:0]
-                                                                 atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                                                         animated:YES];
-                    }
+                    [_headerView.groupsCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:ip.section inSection:0]
+                                                             atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                                                     animated:YES];
                 }
             }
         }

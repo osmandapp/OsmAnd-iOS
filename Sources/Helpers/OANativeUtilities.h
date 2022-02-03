@@ -15,11 +15,19 @@
 
 #include <SkImage.h>
 
+#include <OsmAndCore/Color.h>
+
 #include <OsmAndCore/CommonTypes.h>
 
 #import <Foundation/Foundation.h>
 
 #import "OACommonTypes.h"
+
+@interface UIColor (nsColorNative)
+
+- (OsmAnd::FColorARGB) toFColorARGB;
+
+@end
 
 @interface NSDate (nsDateNative)
 

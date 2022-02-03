@@ -42,11 +42,16 @@
     CGFloat ratio = self.iconView.image.size.height / self.iconView.image.size.width;
     CGFloat newIconHeight = (self.frame.size.width - 2 * 16 - OAUtilities.getLeftMargin) * ratio;
     BOOL hasExtraDesc = !self.extraDescView.hidden;
+    BOOL hasDesc = !self.descView.hidden;
 
     self.iconViewHeight.constant = newIconHeight;
+    self.extraDescLeadingConstraint.active = !hasDesc;
     self.descExtraTrailingConstraint.active = hasExtraDesc;
     self.descNoExtraTrailingConstraint.active = !hasExtraDesc;
     self.extraDescEqualDescWidth.active = hasExtraDesc;
+    self.iconNoDescBottomConstraint.active = !hasDesc && !hasExtraDesc;
+    self.iconDescBottomConstraint.active = hasDesc;
+    self.iconExtraDescBottomConstraint.active = hasExtraDesc;
 
     [super updateConstraints];
 }
@@ -59,13 +64,23 @@
         CGFloat ratio = self.iconView.image.size.height / self.iconView.image.size.width;
         CGFloat newIconHeight = (self.frame.size.width - 2 * 16 - OAUtilities.getLeftMargin) * ratio;
         BOOL hasExtraDesc = !self.extraDescView.hidden;
+        BOOL hasDesc = !self.descView.hidden;
 
         res |= self.iconViewHeight.constant != newIconHeight;
+        res |= self.extraDescLeadingConstraint.active != !hasDesc;
         res |= self.descExtraTrailingConstraint.active != hasExtraDesc;
         res |= self.descNoExtraTrailingConstraint.active != !hasExtraDesc;
         res |= self.extraDescEqualDescWidth.active != hasExtraDesc;
+        res |= self.iconNoDescBottomConstraint.active != (!hasDesc && !hasExtraDesc);
+        res |= self.iconDescBottomConstraint.active != hasDesc;
+        res |= self.iconExtraDescBottomConstraint.active != hasExtraDesc;
     }
     return res;
+}
+
+- (void)showDesc:(BOOL)show
+{
+    self.descView.hidden = !show;
 }
 
 - (void)showExtraDesc:(BOOL)show

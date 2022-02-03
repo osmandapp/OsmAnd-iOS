@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAApplicationMode.h"
 #import "OAColorizationType.h"
+#import "OAColoringType.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
@@ -537,6 +538,17 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @end
 
+@interface OACommonColoringType : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(OAColoringType *)defValue;
+
+- (OAColoringType *) get;
+- (OAColoringType *) get:(OAApplicationMode *)mode;
+- (void) set:(OAColoringType *)coordinateInputFormats;
+- (void) set:(OAColoringType *)coordinateInputFormats mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OAAppSettings : NSObject
 
 + (OAAppSettings *)sharedManager;
@@ -746,6 +758,12 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonDouble *speedLimitExceedKmh;
 @property (nonatomic) OACommonDouble *switchMapDirectionToCompass;
 @property (nonatomic) OACommonDouble *routeRecalculationDistance;
+@property (nonatomic) OACommonInteger *customRouteColorDay;
+@property (nonatomic) OACommonInteger *customRouteColorNight;
+@property (nonatomic) OACommonColoringType *routeColoringType;
+@property (nonatomic) OACommonString *routeInfoAttribute;
+@property (nonatomic) OACommonString *routeLineWidth;
+@property (nonatomic) OACommonBoolean *routeShowTurnArrows;
 
 @property (nonatomic) OACommonBoolean *showScreenAlerts;
 @property (nonatomic) OACommonBoolean *showRoutingAlarms;

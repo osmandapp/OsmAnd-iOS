@@ -82,13 +82,13 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
     if (self)
     {
         _colorizationType = type;
-        
+
         NSMutableArray<NSNumber *> *latList = [NSMutableArray array];
         NSMutableArray<NSNumber *> *lonList = [NSMutableArray array];
         NSMutableArray<NSNumber *> *values = [NSMutableArray array];
         NSInteger wptIdx = 0;
-        
-        if (analysis)
+
+        if (!analysis)
         {
             // TODO: sync with android
 //            gpxFile.path.length == 0 ? [gpxFile getAnalysis:[NSDate date].timeIntervalSince1970] : [gpxFile getAnalysis:gpxFile.modifiedTime]
@@ -100,7 +100,7 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
             {
                 if (seg.generalSegment || seg.points.count < 2)
                     continue;
-                
+
                 for (OAGpxTrkPt *pt in seg.points)
                 {
                     [latList addObject:@(pt.getLatitude)];
@@ -115,12 +115,12 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
         }
         _latitudes = latList;
         _longitudes = lonList;
-        
+
         if (type == EOAColorizationTypeSlope)
             _values = [self calculateSlopesByElevations:values];
         else
             _values = values;
-        
+
         [self calculateMinMaxValue:analysis maxProfileSpeed:maxProfileSpeed];
         [self checkPalette];
         [self sortPalette];

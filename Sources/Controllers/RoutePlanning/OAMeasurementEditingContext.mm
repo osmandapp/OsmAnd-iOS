@@ -19,6 +19,7 @@
 #import "OARouteCalculationParams.h"
 #import "OARouteExporter.h"
 #import "OAGpxRouteApproximation.h"
+#import "OANativeUtilities.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -1259,13 +1260,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     if (_appMode == DEFAULT_APP_MODE)
         return OsmAnd::ColorARGB(0xff, 0xff, 0x88, 0x00);
     else
-    {
-        UIColor *profileColor = UIColorFromRGB(_appMode.getIconColor);
-        
-        CGFloat red, green, blue, alpha;
-        [profileColor getRed:&red green:&green blue:&blue alpha:&alpha];
-        return OsmAnd::ColorARGB(alpha * 255, red * 255, green * 255, blue * 255);
-    }
+        return [UIColorFromRGB(_appMode.getIconColor) toFColorARGB];
 }
 
 @end

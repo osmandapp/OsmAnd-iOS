@@ -50,7 +50,8 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetDownloadMapSource,
     OATargetRoutePlanning,
     OATargetMapDownload,
-    OATargetNewMovableWpt
+    OATargetNewMovableWpt,
+    OATargetRouteLineAppearance
 };
 
 @interface OATargetPoint : NSObject

@@ -29,6 +29,7 @@
 #import "OASelectedGPXHelper.h"
 #import "QuadRect.h"
 #import "OAMapUtils.h"
+#import "OARouteImporter.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -37,9 +38,7 @@
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 
-#define COLORIZATION_NONE 0
-#define COLORIZATION_GRADIENT 1
-#define COLORIZATION_SOLID 2
+#define kOutlineWidth 10
 
 @interface OAGPXLayer ()
 
@@ -179,7 +178,21 @@
                 else if (type == OAColoringType.ATTRIBUTE)
                 {
                     colorizationScheme = COLORIZATION_SOLID;
-                    [self calculateSegmentsColor:colors attrName:gpx.coloringType gpx:doc];
+                    OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:doc];
+                    auto segs = [routeImporter importRoute];
+                    NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
+                    for (OAGpxTrkSeg *seg in [doc getNonEmptyTrkSegments:YES])
+                    {
+                        for (OAGpxTrkPt *point in seg.points)
+                        {
+                            [locations addObject:[[CLLocation alloc] initWithLatitude:point.position.latitude
+                                                                            longitude:point.position.longitude]];
+                        }
+                    }
+                    [self calculateSegmentsColor:colors
+                                        attrName:gpx.coloringType
+                                   segmentResult:segs
+                                       locations:locations];
                 }
             }
 
@@ -244,16 +257,14 @@
         // Add outline for colorized lines
         if (!colors.isEmpty())
         {
-            const auto outlineColor = OsmAnd::ColorARGB(150, 0, 0, 0);
-            
             OsmAnd::VectorLineBuilder outlineBuilder;
             outlineBuilder.setBaseOrder(baseOrder--)
                 .setIsHidden(points.size() == 0)
                 .setLineId(lineId + 1000)
-                .setLineWidth(lineWidth + 10)
-                .setOutlineWidth(10)
+                .setLineWidth(lineWidth + kOutlineWidth)
+                .setOutlineWidth(kOutlineWidth)
                 .setPoints(points)
-                .setFillColor(outlineColor)
+                .setFillColor(kOutlineColor)
                 .setApproximationEnabled(false);
             
             outlineBuilder.buildAndAddToCollection(_linesCollection);
@@ -370,7 +381,7 @@
             }
         }
     }
-    return lineWidth * 3;
+    return lineWidth * kWidthCorrectionValue;
 }
 
 - (int) getDefaultRadiusPoi

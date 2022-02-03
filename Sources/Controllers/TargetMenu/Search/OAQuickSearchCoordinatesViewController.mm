@@ -691,9 +691,9 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
              )
         )
     {
-        return false;
+        return NO;
     }
-    return true;
+    return YES;
 }
 
 - (CLLocation *) parseOlcCode:(NSString *)olcText

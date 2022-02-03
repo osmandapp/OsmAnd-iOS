@@ -163,7 +163,7 @@ struct RouteDataBundle;
 @property (nonatomic) CLLocationCoordinate2D position;
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *desc;
-@property (nonatomic) double elevation;
+@property (nonatomic) CLLocationDistance elevation;
 @property (nonatomic) long time;
 @property (nonatomic) NSString *comment;
 @property (nonatomic) NSString *type;

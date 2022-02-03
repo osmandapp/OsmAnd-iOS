@@ -264,7 +264,7 @@ colorizationScheme:(int)colorizationScheme
         CGFloat lineWidth = [self getLineWidth:gpx.width];
 
         // Add outline for colorized lines
-        if (!colors.isEmpty() && colorizationScheme != 0)
+        if (!colors.isEmpty() && colorizationScheme != COLORIZATION_NONE)
         {
             const auto outlineColor = OsmAnd::ColorARGB(150, 0, 0, 0);
             
@@ -288,7 +288,7 @@ colorizationScheme:(int)colorizationScheme
         }
         else
         {
-            if (!colors.isEmpty() && colorizationScheme == 0)
+            if (!colors.isEmpty() && colorizationScheme == COLORIZATION_NONE)
                 colorARGB = colors[0];
             else
                 colorARGB = [self argbFromUIColor:UIColorFromRGB(kDefaultTrackColor)];
@@ -302,7 +302,7 @@ colorizationScheme:(int)colorizationScheme
             .setPoints(points)
             .setFillColor(colorARGB);
 
-        if (!colors.empty() && colorizationScheme != 0)
+        if (!colors.empty() && colorizationScheme != COLORIZATION_NONE)
         {
             builder.setColorizationMapping(colors)
                 .setColorizationScheme(colorizationScheme);

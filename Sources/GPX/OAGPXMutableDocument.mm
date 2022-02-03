@@ -57,28 +57,6 @@
     }
 }
 
-- (void)fetchTrkSeg
-{
-    if (document == nullptr)
-        return;
-
-    if (!document->tracks.isEmpty())
-    {
-        for (const auto &t: document->tracks)
-        {
-            OAGpxTrk *track = self.tracks[document->tracks.indexOf(t)];
-            OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrk> *_t = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrk> *) &t;
-            track.trk = _t->shared_ptr();
-
-            for (const auto &s: t->segments)
-            {
-                OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrkSeg> *_s = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrkSeg> *) &s;
-                track.segments[t->segments.indexOf(s)].trkseg = _s->shared_ptr();
-            }
-        }
-    }
-}
-
 - (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument
 {
     return document;

@@ -808,7 +808,6 @@
 "navigate_point_zone" = "Zone";
 "navigate_point_olc" = "Open Location Code";
 "navigate_point_olc_short" = "OLC";
-"navigate_point_mgrs" = "MGRS";
 "approximate_file_size" = "Approximate file size: %@";
 
 "coordinates_example" = "Example";

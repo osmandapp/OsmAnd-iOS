@@ -381,7 +381,7 @@
             }
         }
     }
-    return lineWidth * 3;
+    return lineWidth * kWidthCorrectionValue;
 }
 
 - (int) getDefaultRadiusPoi

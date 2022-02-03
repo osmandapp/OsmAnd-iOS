@@ -130,7 +130,7 @@
     [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
     [self.mapView addKeyedSymbolsProvider:_transportRouteMarkers];
 
-    _lineWidth = kDefaultWidthMultiplier * 3;
+    _lineWidth = kDefaultWidthMultiplier * kWidthCorrectionValue;
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
 
@@ -320,9 +320,9 @@
                    .setLineWidth(_lineWidth)
                    .setPoints(points);
 
-            UIColor *color = UIColorFromARGB(_routeLineColor);
-            if (CGColorGetAlpha(color.CGColor) == 0.)
-                color = [color colorWithAlphaComponent:1.];
+            UIColor *color = _routeLineColor == kDefaultRouteLineDayColor || _routeLineColor == kDefaultRouteLineNightColor
+                    ? UIColorFromARGB(_routeLineColor)
+                    : UIColorFromRGB(_routeLineColor);
 
             OsmAnd::ColorARGB lineColor = [color toFColorARGB];
 
@@ -498,7 +498,7 @@
             }
         }
     }
-    return resultValue * 3;
+    return resultValue * kWidthCorrectionValue;
 }
 
 - (OsmAnd::AreaI) calculateBounds:(NSArray<CLLocation *> *)pts

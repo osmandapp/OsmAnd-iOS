@@ -19,6 +19,7 @@
 #define COLORIZATION_SOLID 2
 
 #define kOutlineColor OsmAnd::ColorARGB(150, 0, 0, 0)
+#define kWidthCorrectionValue 4
 
 @class OAGPXDocument, OAGpxTrkSeg;
 

@@ -2327,3 +2327,12 @@
 "points_delete_multiple" = "Eyða %d punkt(um)?";
 "add_description" = "Bæta við lýsingu";
 "context_menu_edit_descr" = "Breyta lýsingu";
+"map_settings_weather" = "Veður";
+"map_settings_weather_temp" = "Hitastig";
+"map_settings_weather_pressure" = "Þrýstingur";
+"map_settings_weather_wind" = "Vindur";
+"map_settings_weather_cloud" = "Ský";
+"map_settings_weather_precip" = "Úrkoma";
+"map_settings_clear_geo_cache" = "Hreinsa landupplýsingaflísar";
+"q_clear_weather_cache" = "Viltu hreinsa úr veðurskyndiminni?";
+"map_settings_clear_raster_cache" = "Hreinsa rastaflísar";

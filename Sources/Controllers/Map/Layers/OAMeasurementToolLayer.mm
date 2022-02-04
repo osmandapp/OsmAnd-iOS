@@ -25,7 +25,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/GeoInfoDocument.h>
+#include <OsmAndCore/GpxDocument.h>
 #include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/VectorLinesCollection.h>
@@ -388,8 +388,8 @@
 
 - (void) drawBeforeAfterPath
 {
-    NSArray<OAGpxTrkSeg *> *before = _editingCtx.getBeforeSegments;
-    NSArray<OAGpxTrkSeg *> *after = _editingCtx.getAfterSegments;
+    NSArray<OATrkSegment *> *before = _editingCtx.getBeforeSegments;
+    NSArray<OATrkSegment *> *after = _editingCtx.getAfterSegments;
     const auto& center = self.mapViewController.mapView.target31;
     if (center == _cachedCenter)
         return;
@@ -401,7 +401,7 @@
         BOOL hasGapBefore = NO;
         if (before.count > 0)
         {
-            OAGpxTrkSeg *segment = before.lastObject;
+            OATrkSegment *segment = before.lastObject;
             if (segment.points.count > 0)
             {
                 hasPointsBefore = YES;
@@ -416,7 +416,7 @@
         }
         if (after.count > 0)
         {
-            OAGpxTrkSeg *segment = after.firstObject;
+            OATrkSegment *segment = after.firstObject;
             if (segment.points.count > 0)
             {
                 if (!hasPointsBefore)
@@ -446,10 +446,10 @@
 
 - (void) drawRouteSegments
 {
-    NSArray<OAGpxTrkSeg *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
-    NSArray<OAGpxTrkSeg *> *afterSegs = _editingCtx.getAfterTrkSegmentLine;
+    NSArray<OATrkSegment *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
+    NSArray<OATrkSegment *> *afterSegs = _editingCtx.getAfterTrkSegmentLine;
     int lineId = 100;
-    for (OAGpxTrkSeg *seg in beforeSegs)
+    for (OATrkSegment *seg in beforeSegs)
     {
         QVector<OsmAnd::PointI> beforePoints;
         for (OAWptPt *pt in seg.points)
@@ -459,7 +459,7 @@
         [self drawLines:beforePoints collection:_collection lineId:lineId++];
     }
     
-    for (OAGpxTrkSeg *seg in afterSegs)
+    for (OATrkSegment *seg in afterSegs)
     {
         QVector<OsmAnd::PointI> afterPoints;
         for (OAWptPt *pt in seg.points)

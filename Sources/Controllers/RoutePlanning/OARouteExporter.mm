@@ -39,7 +39,7 @@
 {
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
     gpx.creator = OSMAND_ROUTER_V2;
-    OAGpxTrk *track = [[OAGpxTrk alloc] init];
+    OATrack *track = [[OATrack alloc] init];
     track.name = _name;
     track.segments = @[[self generateRouteSegment]];
     [gpx addTrack:track];
@@ -53,14 +53,14 @@
     return gpx;
 }
 
-+ (OAGPXMutableDocument *) exportRoute:(NSString *)name trkSegments:(NSArray<OAGpxTrkSeg *> *)trkSegments points:(NSArray<OAWptPt *> *)points
++ (OAGPXMutableDocument *)exportRoute:(NSString *)name trkSegments:(NSArray<OATrkSegment *> *)trkSegments points:(NSArray<OAWptPt *> *)points
 {
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
     gpx.creator = OSMAND_ROUTER_V2;
-    OAGpxTrk *track = [[OAGpxTrk alloc] init];
+    OATrack *track = [[OATrack alloc] init];
     track.name = name;
     [gpx addTrack:track];
-    for (OAGpxTrkSeg *seg in trkSegments)
+    for (OATrkSegment *seg in trkSegments)
         [gpx addTrackSegment:seg track:track];
     if (points != nil)
     {
@@ -72,7 +72,7 @@
     return gpx;
 }
 
-- (OAGpxTrkSeg *) generateRouteSegment
+- (OATrkSegment *) generateRouteSegment
 {
     std::shared_ptr<RouteDataResources> resources = std::make_shared<RouteDataResources>([self coordinatesToLocationVector:_locations]);
     std::vector<std::shared_ptr<RouteDataBundle>> routeItems;
@@ -99,7 +99,7 @@
         typeList.push_back(typeBundle);
     }
     
-    OAGpxTrkSeg *trkSegment = [[OAGpxTrkSeg alloc] init];
+    OATrkSegment *trkSegment = [[OATrkSegment alloc] init];
     trkSegment.points = @[];
     if (_locations == nil || _locations.count == 0)
         return trkSegment;

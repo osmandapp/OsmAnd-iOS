@@ -70,7 +70,7 @@
     for (NSInteger index = 0; index < segments.count; index++)
     {
         NSDictionary *segmentDict = segments[[NSString stringWithFormat:@"segment_%li", index]];
-        OAGpxTrkSeg *segment = segmentDict[@"segment"];
+        OATrkSegment *segment = segmentDict[@"segment"];
         OAGPXTrackAnalysis *analysis = segmentDict[@"analysis"];
         __block EOARouteStatisticsMode mode = EOARouteStatisticsModeAltitudeSpeed;
 
@@ -298,14 +298,14 @@
 }
 
 - (NSDictionary<NSString *, NSDictionary *> *)getStatisticsDataForAnalysis:(OAGPXTrackAnalysis *)analysis
-                                                                   segment:(OAGpxTrkSeg *)segment
+                                                                   segment:(OATrkSegment *)segment
                                                                       mode:(EOARouteStatisticsMode)mode
 {
     NSMutableDictionary *titles = [NSMutableDictionary dictionary];
     NSMutableDictionary *icons = [NSMutableDictionary dictionary];
     NSMutableDictionary *descriptions = [NSMutableDictionary dictionary];
 
-    OAGpxTrk *track = self.trackMenuDelegate ? [self.trackMenuDelegate getTrack:segment] : nil;
+    OATrack *track = self.trackMenuDelegate ? [self.trackMenuDelegate getTrack:segment] : nil;
     BOOL joinSegments = self.trackMenuDelegate && [self.trackMenuDelegate isJoinSegments];
     switch (mode)
     {
@@ -443,7 +443,7 @@
 
     if (_routeLineChartHelper)
     {
-        OAGpxTrkSeg *segment = cellData.values[@"segment_value"];
+        OATrkSegment *segment = cellData.values[@"segment_value"];
         [_routeLineChartHelper refreshHighlightOnMap:NO
                                        lineChartView:(LineChartView *) chartView
                                     trackChartPoints:cellData.values[@"points_value"]
@@ -530,7 +530,7 @@
 
             if (_routeLineChartHelper)
             {
-                OAGpxTrkSeg *segment = cellData.values[@"segment_value"];
+                OATrkSegment *segment = cellData.values[@"segment_value"];
                 [_routeLineChartHelper refreshHighlightOnMap:YES
                                                lineChartView:lineChartView
                                             trackChartPoints:cellData.values[@"points_value"]

@@ -64,15 +64,15 @@
 
 - (void) updateDocAndMetadata
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> metadata;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
+    std::shared_ptr<OsmAnd::GpxDocument::Metadata> metadata;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
 
     document->version = QString::fromNSString(self.version);
     document->creator = QString::fromNSString(self.creator);
     
     [self fillExtensions:document];
 
-    metadata.reset(new OsmAnd::GpxDocument::GpxMetadata());
+    metadata.reset(new OsmAnd::GpxDocument::Metadata());
     if (self.metadata)
     {
         metadata->name = QString::fromNSString(self.metadata.name);
@@ -95,10 +95,10 @@
 
 - (void) addWpt:(OAWptPt *)w
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> wpt;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
 
-    wpt.reset(new OsmAnd::GpxDocument::GpxWptPt());
+    wpt.reset(new OsmAnd::GpxDocument::WptPt());
     wpt->position.latitude = w.position.latitude;
     wpt->position.longitude = w.position.longitude;
     wpt->name = QString::fromNSString(w.name);
@@ -172,7 +172,7 @@
 {
     if (self.routes.count == 0 || addRoute)
     {
-        OAGpxRte *route = [[OAGpxRte alloc] init];
+        OARoute *route = [[OARoute alloc] init];
         [self addRoute:route];
     }
     for (OAWptPt *pt in points)
@@ -181,29 +181,29 @@
 //    self.modifiedTime = System.currentTimeMillis();
 }
 
-- (void) addRoutes:(NSArray<OAGpxRte *> *)routes
+- (void) addRoutes:(NSArray<OARoute *> *)routes
 {
-    [routes enumerateObjectsUsingBlock:^(OAGpxRte * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [routes enumerateObjectsUsingBlock:^(OARoute * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [self addRoute:obj];
     }];
 }
 
-- (void) addRoute:(OAGpxRte *)r
+- (void) addRoute:(OARoute *)r
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxRte> rte;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> rtept;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
+    std::shared_ptr<OsmAnd::GpxDocument::Route> rte;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> rtept;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
 
     if (!r.points)
         r.points = [NSMutableArray new];
     
-    rte.reset(new OsmAnd::GpxDocument::GpxRte());
+    rte.reset(new OsmAnd::GpxDocument::Route());
     rte->name = QString::fromNSString(r.name);
     rte->description = QString::fromNSString(r.desc);
 
     for (OAWptPt *p in r.points)
     {
-        rtept.reset(new OsmAnd::GpxDocument::GpxWptPt());
+        rtept.reset(new OsmAnd::GpxDocument::WptPt());
         rtept->position.latitude = p.position.latitude;
         rtept->position.longitude = p.position.longitude;
         rtept->name = QString::fromNSString(p.name);
@@ -243,12 +243,12 @@
     [self.routes addObject:r];
 }
 
-- (void) addRoutePoint:(OAWptPt *)p route:(OAGpxRte *)route
+- (void) addRoutePoint:(OAWptPt *)p route:(OARoute *)route
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> rtept;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> rtept;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
 
-    rtept.reset(new OsmAnd::GpxDocument::GpxWptPt());
+    rtept.reset(new OsmAnd::GpxDocument::WptPt());
     rtept->position.latitude = p.position.latitude;
     rtept->position.longitude = p.position.longitude;
     rtept->name = QString::fromNSString(p.name);
@@ -281,34 +281,34 @@
     [((NSMutableArray *)route.points) addObject:p];
 }
 
-- (void) addTracks:(NSArray<OAGpxTrk *> *)tracks
+- (void) addTracks:(NSArray<OATrack *> *)tracks
 {
-    [tracks enumerateObjectsUsingBlock:^(OAGpxTrk * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [tracks enumerateObjectsUsingBlock:^(OATrack * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [self addTrack:obj];
     }];
 }
 
-- (void) addTrack:(OAGpxTrk *)t
+- (void) addTrack:(OATrack *)t
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrk> trk;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> trkpt;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrkSeg> trkseg;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
+    std::shared_ptr<OsmAnd::GpxDocument::Track> trk;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> trkpt;
+    std::shared_ptr<OsmAnd::GpxDocument::TrkSegment> trkseg;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
 
     if (!t.segments)
         t.segments = [NSMutableArray array];
     
-    trk.reset(new OsmAnd::GpxDocument::GpxTrk());
+    trk.reset(new OsmAnd::GpxDocument::Track());
     trk->name = QString::fromNSString(t.name);
     trk->description = QString::fromNSString(t.desc);
 
-    for (OAGpxTrkSeg *s in t.segments)
+    for (OATrkSegment *s in t.segments)
     {
-        trkseg.reset(new OsmAnd::GpxDocument::GpxTrkSeg());
+        trkseg.reset(new OsmAnd::GpxDocument::TrkSegment());
         
         for (OAWptPt *p in s.points)
         {
-            trkpt.reset(new OsmAnd::GpxDocument::GpxWptPt());
+            trkpt.reset(new OsmAnd::GpxDocument::WptPt());
             trkpt->position.latitude = p.position.latitude;
             trkpt->position.longitude = p.position.longitude;
             trkpt->name = QString::fromNSString(p.name);
@@ -355,20 +355,20 @@
     [self.tracks addObject:t];
 }
 
-- (void) addTrackSegment:(OAGpxTrkSeg *)s track:(OAGpxTrk *)track
+- (void)addTrackSegment:(OATrkSegment *)s track:(OATrack *)track
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> trkpt;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrkSeg> trkseg;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> trkpt;
+    std::shared_ptr<OsmAnd::GpxDocument::TrkSegment> trkseg;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
 
     if (!s.points)
         s.points = [NSMutableArray array];
     
-    trkseg.reset(new OsmAnd::GpxDocument::GpxTrkSeg());
+    trkseg.reset(new OsmAnd::GpxDocument::TrkSegment());
     
     for (OAWptPt *p in s.points)
     {
-        trkpt.reset(new OsmAnd::GpxDocument::GpxWptPt());
+        trkpt.reset(new OsmAnd::GpxDocument::WptPt());
         trkpt->position.latitude = p.position.latitude;
         trkpt->position.longitude = p.position.longitude;
         trkpt->name = QString::fromNSString(p.name);
@@ -408,17 +408,17 @@
     [((NSMutableArray *)track.segments) addObject:s];
 }
 
-- (BOOL)removeTrackSegment:(OAGpxTrkSeg *)segment
+- (BOOL)removeTrackSegment:(OATrkSegment *)segment
 {
     [self removeGeneralTrackIfExists];
 
-    for (OAGpxTrk *track in self.tracks)
+    for (OATrack *track in self.tracks)
     {
-        for (OAGpxTrkSeg *trackSeg in track.segments)
+        for (OATrkSegment *trackSeg in track.segments)
         {
             if (trackSeg == segment || trackSeg.trkseg == segment.trkseg)
             {
-                if (track.trk->segments.removeOne(std::dynamic_pointer_cast<OsmAnd::GeoInfoDocument::TrackSegment>(trackSeg.trkseg)))
+                if (track.trk->segments.removeOne(std::dynamic_pointer_cast<OsmAnd::GpxDocument::TrkSegment>(trackSeg.trkseg)))
                 {
                     [self addGeneralTrack];
                     _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
@@ -442,12 +442,12 @@
     }
 }
 
-- (void) addTrackPoint:(OAWptPt *)p segment:(OAGpxTrkSeg *)segment
+- (void) addTrackPoint:(OAWptPt *)p segment:(OATrkSegment *)segment
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> trkpt;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> trkpt;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
 
-    trkpt.reset(new OsmAnd::GpxDocument::GpxWptPt());
+    trkpt.reset(new OsmAnd::GpxDocument::WptPt());
     trkpt->position.latitude = p.position.latitude;
     trkpt->position.longitude = p.position.longitude;
     trkpt->name = QString::fromNSString(p.name);

@@ -106,7 +106,7 @@
      ];
     
     NSInteger idx = 1;
-    for (OAGpxTrkSeg *seg in [_gpx getNonEmptyTrkSegments:NO])
+    for (OATrkSegment *seg in [_gpx getNonEmptyTrkSegments:NO])
     {
         long segmentTime = [OAGPXUIHelper getSegmentTime:seg];
         double segmentDist = [OAGPXUIHelper getSegmentDistance:seg];

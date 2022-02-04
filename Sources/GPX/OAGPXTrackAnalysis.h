@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAGpxTrkSeg;
+@class OATrkSegment;
 @class OAWptPt;
 
 @interface OASplitMetric : NSObject
@@ -26,7 +26,7 @@
 
 @interface OASplitSegment : NSObject
 
-@property (nonatomic) OAGpxTrkSeg *segment;
+@property (nonatomic) OATrkSegment *segment;
 @property (nonatomic, readonly) double startCoeff;
 @property (nonatomic, readonly) int startPointInd;
 @property (nonatomic, readonly) double endCoeff;
@@ -34,8 +34,8 @@
 @property (nonatomic) double metricEnd;
 @property (nonatomic) double secondaryMetricEnd;
 
-- (instancetype)initWithTrackSegment:(OAGpxTrkSeg *)s;
-- (instancetype)initWithSplitSegment:(OAGpxTrkSeg *)s pointInd:(int)pointInd cf:(double)cf;
+- (instancetype)initWithTrackSegment:(OATrkSegment *)s;
+- (instancetype)initWithSplitSegment:(OATrkSegment *)s pointInd:(int)pointInd cf:(double)cf;
 
 -(int) getNumberOfPoints;
 
@@ -117,14 +117,14 @@
 
 - (BOOL) isColorizationTypeAvailable:(NSInteger)colorizationType;
 
-+(OAGPXTrackAnalysis *) segment:(long)filetimestamp seg:(OAGpxTrkSeg *)seg;
++(OAGPXTrackAnalysis *) segment:(long)filetimestamp seg:(OATrkSegment *)seg;
 -(void) prepareInformation:(long)fileStamp  splitSegments:(NSArray *)splitSegments;
 
 +(void) splitSegment:(OASplitMetric*)metric
      secondaryMetric:(OASplitMetric *)secondaryMetric
          metricLimit:(double)metricLimit
        splitSegments:(NSMutableArray*)splitSegments
-             segment:(OAGpxTrkSeg*)segment
+             segment:(OATrkSegment*)segment
         joinSegments:(BOOL)joinSegments;
 +(NSArray*) convert:(NSArray*)splitSegments;
 

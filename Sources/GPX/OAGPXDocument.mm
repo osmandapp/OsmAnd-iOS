@@ -25,7 +25,7 @@
     double right;
     double bottom;
 
-    NSArray<OAGpxTrkSeg *> *_processedPointsToDisplay;
+    NSArray<OATrkSegment *> *_processedPointsToDisplay;
     BOOL _routePoints;
 }
 
@@ -66,7 +66,7 @@
     return _generalTrack != nil;
 }
 
-+ (NSString *)getSegmentTitle:(OAGpxTrkSeg *)segment segmentIdx:(NSInteger)segmentIdx
++ (NSString *)getSegmentTitle:(OATrkSegment *)segment segmentIdx:(NSInteger)segmentIdx
 {
     NSString *segmentName = !segment.name || segment.name.length == 0
             ? [NSString stringWithFormat:@"%li", segmentIdx + 1]
@@ -75,7 +75,7 @@
     return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), segmentString, segmentName];
 }
 
-+ (NSString *)getTrackTitle:(OAGPXDocument *)gpxFile track:(OAGpxTrk *)track
++ (NSString *)getTrackTitle:(OAGPXDocument *)gpxFile track:(OATrack *)track
 {
     NSString *trackName;
     if (!track.name || track.name.length == 0)
@@ -92,7 +92,7 @@
     return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), trackString, trackName];
 }
 
-+ (NSString *)buildTrackSegmentName:(OAGPXDocument *)gpxFile track:(OAGpxTrk *)track segment:(OAGpxTrkSeg *)segment
++ (NSString *)buildTrackSegmentName:(OAGPXDocument *)gpxFile track:(OATrack *)track segment:(OATrkSegment *)segment
 {
     NSString *trackTitle = [self getTrackTitle:gpxFile track:track];
     NSString *segmentTitle = [self getSegmentTitle:segment segmentIdx:[track.segments indexOfObject:segment]];
@@ -266,16 +266,16 @@
     e.value = strValue;
 }
 
-+ (NSArray *)fetchLinks:(QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::Link>>)links
++ (NSArray *)fetchLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>)links
 {
     if (!links.isEmpty()) {
-        NSMutableArray<OAGpxLink *> *gpxLinks = [NSMutableArray array];
+        NSMutableArray<OALink *> *gpxLinks = [NSMutableArray array];
         for (const auto& l : links)
         {
-            OsmAnd::Ref<OsmAnd::GpxDocument::GpxLink> *_l = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxLink>*)&l;
-            const std::shared_ptr<const OsmAnd::GpxDocument::GpxLink> link = _l->shared_ptr();
+            OsmAnd::Ref<OsmAnd::GpxDocument::Link> *_l = (OsmAnd::Ref<OsmAnd::GpxDocument::Link>*)&l;
+            const std::shared_ptr<const OsmAnd::GpxDocument::Link> link = _l->shared_ptr();
 
-            OAGpxLink *gpxLink = [[OAGpxLink alloc] init];
+            OALink *gpxLink = [[OALink alloc] init];
             gpxLink.text = link->text.toNSString();
             gpxLink.url = link->url.toNSURL();
             [gpxLinks addObject:gpxLink];
@@ -322,7 +322,7 @@
     self.bounds = bounds;
 }
 
-+ (OAWptPt *)fetchWpt:(std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt>)mark
++ (OAWptPt *)fetchWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)mark
 {
     OAWptPt *wptPt = [[OAWptPt alloc] init];
     wptPt.position = CLLocationCoordinate2DMake(mark->position.latitude, mark->position.longitude);
@@ -365,7 +365,7 @@
         metadata.time = gpxDocument->metadata->timestamp.toTime_t();
         metadata.links = [self.class fetchLinks:gpxDocument->metadata->links];
         
-        OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata> *_metadata = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata>*)&gpxDocument->metadata;
+        OsmAnd::Ref<OsmAnd::GpxDocument::Metadata> *_metadata = (OsmAnd::Ref<OsmAnd::GpxDocument::Metadata>*)&gpxDocument->metadata;
         [metadata fetchExtensions:_metadata->shared_ptr()];
         self.metadata = metadata;
     }
@@ -375,13 +375,13 @@
     // Location Marks
     if (!gpxDocument->points.isEmpty())
     {
-        const QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::WptPt>> marks = gpxDocument->points;
+        const QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>> marks = gpxDocument->points;
 
         NSMutableArray<OAWptPt *> *_marks = [NSMutableArray array];
         for (const auto& m : marks)
         {
-            OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt> *_m = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt>*)&m;
-            const std::shared_ptr<const OsmAnd::GpxDocument::GpxWptPt> mark = _m->shared_ptr();
+            OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_m = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&m;
+            const std::shared_ptr<const OsmAnd::GpxDocument::WptPt> mark = _m->shared_ptr();
             
             OAWptPt *_mark = [self.class fetchWpt:_m->shared_ptr()];
             [self processBounds:_mark.position];
@@ -394,25 +394,25 @@
     // Tracks
     if (!gpxDocument->tracks.isEmpty())
     {
-        QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::Track>> trcks = gpxDocument->tracks;
-        NSMutableArray<OAGpxTrk *> *_trcks = [NSMutableArray array];
+        QList<OsmAnd::Ref<OsmAnd::GpxDocument::Track>> trcks = gpxDocument->tracks;
+        NSMutableArray<OATrack *> *_trcks = [NSMutableArray array];
         for (const auto& t : trcks)
         {
-            OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrk> *_t = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrk>*)&t;
-            const std::shared_ptr<const OsmAnd::GpxDocument::GpxTrk> track = _t->shared_ptr();
+            OsmAnd::Ref<OsmAnd::GpxDocument::Track> *_t = (OsmAnd::Ref<OsmAnd::GpxDocument::Track>*)&t;
+            const std::shared_ptr<const OsmAnd::GpxDocument::Track> track = _t->shared_ptr();
 
-            OAGpxTrk *_track = [[OAGpxTrk alloc] init];
+            OATrack *_track = [[OATrack alloc] init];
             
             _track.name = track->name.toNSString();
             _track.desc = track->description.toNSString();
             if (!track->segments.isEmpty())
             {
-                NSMutableArray<OAGpxTrkSeg *> *seg = [NSMutableArray array];
+                NSMutableArray<OATrkSegment *> *seg = [NSMutableArray array];
                 
                 for (const auto& s : track->segments)
                 {
-                    OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrkSeg> *_s = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrkSeg> *) &s;
-                    OAGpxTrkSeg *_seg = [[OAGpxTrkSeg alloc] init];
+                    OsmAnd::Ref<OsmAnd::GpxDocument::TrkSegment> *_s = (OsmAnd::Ref<OsmAnd::GpxDocument::TrkSegment> *) &s;
+                    OATrkSegment *_seg = [[OATrkSegment alloc] init];
 
                     if (!s->points.isEmpty())
                     {
@@ -420,8 +420,8 @@
                         
                         for (const auto& pt : s->points)
                         {
-                            OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt> *_pt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt>*)&pt;
-                            const std::shared_ptr<const OsmAnd::GpxDocument::GpxWptPt> p = _pt->shared_ptr();
+                            OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_pt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&pt;
+                            const std::shared_ptr<const OsmAnd::GpxDocument::WptPt> p = _pt->shared_ptr();
 
                             OAWptPt *_p = [[OAWptPt alloc] init];
                             
@@ -465,14 +465,14 @@
     
     // Routes
     if (!gpxDocument->routes.isEmpty()) {
-        QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::Route>> rts = gpxDocument->routes;
-        NSMutableArray<OAGpxRte *> *_rts = [NSMutableArray array];
+        QList<OsmAnd::Ref<OsmAnd::GpxDocument::Route>> rts = gpxDocument->routes;
+        NSMutableArray<OARoute *> *_rts = [NSMutableArray array];
         for (const auto& r : rts)
         {
-            OsmAnd::Ref<OsmAnd::GpxDocument::GpxRte> *_r = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxRte>*)&r;
-            const std::shared_ptr<const OsmAnd::GpxDocument::GpxRte> route = _r->shared_ptr();
+            OsmAnd::Ref<OsmAnd::GpxDocument::Route> *_r = (OsmAnd::Ref<OsmAnd::GpxDocument::Route>*)&r;
+            const std::shared_ptr<const OsmAnd::GpxDocument::Route> route = _r->shared_ptr();
 
-            OAGpxRte *_route = [[OAGpxRte alloc] init];
+            OARoute *_route = [[OARoute alloc] init];
             
             _route.name = route->name.toNSString();
             _route.desc = route->description.toNSString();
@@ -482,8 +482,8 @@
                 
                 for (const auto& pt : route->points)
                 {
-                    OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt> *_pt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWptPt>*)&pt;
-                    const std::shared_ptr<const OsmAnd::GpxDocument::GpxWptPt> p = _pt->shared_ptr();
+                    OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_pt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&pt;
+                    const std::shared_ptr<const OsmAnd::GpxDocument::WptPt> p = _pt->shared_ptr();
 
                     OAWptPt *_p = [[OAWptPt alloc] init];
                     
@@ -533,12 +533,12 @@
 
 + (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    for (OAGpxLink *l in linkArray)
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
+    for (OALink *l in linkArray)
     {
         if (l.url)
         {
-            link.reset(new OsmAnd::GpxDocument::GpxLink());
+            link.reset(new OsmAnd::GpxDocument::Link());
             link->url = QUrl::fromNSURL(l.url);
             if (l.text)
                 link->text = QString::fromNSString(l.text);
@@ -548,7 +548,7 @@
     }
 }
 
-+ (void)fillMetadata:(std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata>)meta usingMetadata:(OAMetadata *)m
++ (void)fillMetadata:(std::shared_ptr<OsmAnd::GpxDocument::Metadata>)meta usingMetadata:(OAMetadata *)m
 {
     meta->name = QString::fromNSString(m.name);
     meta->description = QString::fromNSString(m.desc);
@@ -559,7 +559,7 @@
     [m fillExtensions:meta];
 }
 
-+ (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt>)wpt usingWpt:(OAWptPt *)w
++ (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)wpt usingWpt:(OAWptPt *)w
 {
     wpt->position.latitude = w.position.latitude;
     wpt->position.longitude = w.position.longitude;
@@ -605,26 +605,26 @@
     [extensions fillExtensions:wpt];
 }
 
-+ (void)fillTrack:(std::shared_ptr<OsmAnd::GpxDocument::GpxTrk>)trk usingTrack:(OAGpxTrk *)t
++ (void)fillTrack:(std::shared_ptr<OsmAnd::GpxDocument::Track>)trk usingTrack:(OATrack *)t
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> trkpt;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrkSeg> trkseg;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> trkpt;
+    std::shared_ptr<OsmAnd::GpxDocument::TrkSegment> trkseg;
 
     if (t.name)
         trk->name = QString::fromNSString(t.name);
     if (t.desc)
         trk->description = QString::fromNSString(t.desc);
 
-    for (OAGpxTrkSeg *s in t.segments)
+    for (OATrkSegment *s in t.segments)
     {
-        trkseg.reset(new OsmAnd::GpxDocument::GpxTrkSeg());
+        trkseg.reset(new OsmAnd::GpxDocument::TrkSegment());
 
         if (s.name)
             trkseg->name = QString::fromNSString(s.name);
 
         for (OAWptPt *p in s.points)
         {
-            trkpt.reset(new OsmAnd::GpxDocument::GpxWptPt());
+            trkpt.reset(new OsmAnd::GpxDocument::WptPt());
             [self fillWpt:trkpt usingWpt:p];
             trkseg->points.append(trkpt);
             trkpt = nullptr;
@@ -640,9 +640,9 @@
     [t fillExtensions:trk];
 }
 
-+ (void)fillRoute:(std::shared_ptr<OsmAnd::GpxDocument::GpxRte>)rte usingRoute:(OAGpxRte *)r
++ (void)fillRoute:(std::shared_ptr<OsmAnd::GpxDocument::Route>)rte usingRoute:(OARoute *)r
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> rtept;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> rtept;
 
     if (r.name)
         rte->name = QString::fromNSString(r.name);
@@ -651,7 +651,7 @@
 
     for (OAWptPt *p in r.points)
     {
-        rtept.reset(new OsmAnd::GpxDocument::GpxWptPt());
+        rtept.reset(new OsmAnd::GpxDocument::WptPt());
         [self fillWpt:rtept usingWpt:p];
         rte->points.append(rtept);
         rtept = nullptr;
@@ -663,16 +663,16 @@
 - (BOOL) saveTo:(NSString *)filename
 {
     std::shared_ptr<OsmAnd::GpxDocument> document;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> metadata;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxWptPt> wpt;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrk> trk;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxRte> rte;
+    std::shared_ptr<OsmAnd::GpxDocument::Metadata> metadata;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
+    std::shared_ptr<OsmAnd::GpxDocument::Track> trk;
+    std::shared_ptr<OsmAnd::GpxDocument::Route> rte;
 
     document.reset(new OsmAnd::GpxDocument());
     document->version = QString::fromNSString(self.version);
     document->creator = QString::fromNSString(self.creator);
 
-    metadata.reset(new OsmAnd::GpxDocument::GpxMetadata());
+    metadata.reset(new OsmAnd::GpxDocument::Metadata());
     if (self.metadata)
         [self.class fillMetadata:metadata usingMetadata:self.metadata];
 
@@ -684,26 +684,26 @@
 
     for (OAWptPt *w in self.points)
     {
-        wpt.reset(new OsmAnd::GpxDocument::GpxWptPt());
+        wpt.reset(new OsmAnd::GpxDocument::WptPt());
         [self.class fillWpt:wpt usingWpt:w];
         document->points.append(wpt);
         wpt = nullptr;
     }
 
-    for (OAGpxTrk *t in self.tracks)
+    for (OATrack *t in self.tracks)
     {
         if (!t.generalTrack)
         {
-            trk.reset(new OsmAnd::GpxDocument::GpxTrk());
+            trk.reset(new OsmAnd::GpxDocument::Track());
             [self.class fillTrack:trk usingTrack:t];
             document->tracks.append(trk);
             trk = nullptr;
         }
     }
 
-    for (OAGpxRte *r in self.routes)
+    for (OARoute *r in self.routes)
     {
-        rte.reset(new OsmAnd::GpxDocument::GpxRte());
+        rte.reset(new OsmAnd::GpxDocument::Route());
         [self.class fillRoute:rte usingRoute:r];
         document->routes.append(rte);
         rte = nullptr;
@@ -721,14 +721,14 @@
 
 - (OAWptPt *) findPointToShow
 {
-    for (OAGpxTrk *t in self.tracks) {
-        for (OAGpxTrkSeg *s in t.segments) {
+    for (OATrack *t in self.tracks) {
+        for (OATrkSegment *s in t.segments) {
             if (s.points.count > 0) {
                 return [s.points firstObject];
             }
         }
     }
-    for (OAGpxRte *r in self.routes) {
+    for (OARoute *r in self.routes) {
         if (r.points.count > 0) {
             return [r.points firstObject];
         }
@@ -741,10 +741,10 @@
 
 - (BOOL) isEmpty
 {
-    for (OAGpxTrk *t in self.tracks)
+    for (OATrack *t in self.tracks)
         if (t.segments != nil)
         {
-            for (OAGpxTrkSeg *s in t.segments)
+            for (OATrkSegment *s in t.segments)
             {
                 BOOL tracksEmpty = (s.points.count == 0);
                 if (!tracksEmpty)
@@ -757,17 +757,17 @@
 
 - (void) addGeneralTrack
 {
-    OAGpxTrk *generalTrack = [self getGeneralTrack];
+    OATrack *generalTrack = [self getGeneralTrack];
     if (generalTrack && ![_tracks containsObject:generalTrack])
         _tracks = [@[generalTrack] arrayByAddingObjectsFromArray:_tracks];
 }
 
--(OAGpxTrk *) getGeneralTrack
+-(OATrack *) getGeneralTrack
 {
-    OAGpxTrkSeg *generalSegment = [self getGeneralSegment];
+    OATrkSegment *generalSegment = [self getGeneralSegment];
     if (!_generalTrack && _generalSegment)
     {
-        OAGpxTrk *track = [[OAGpxTrk alloc] init];
+        OATrack *track = [[OATrack alloc] init];
         track.segments = @[generalSegment];
         _generalTrack = track;
         track.generalTrack = YES;
@@ -775,7 +775,7 @@
     return _generalTrack;
 }
 
-- (OAGpxTrkSeg *) getGeneralSegment
+- (OATrkSegment *) getGeneralSegment
 {
     if (!_generalSegment && [self getNonEmptySegmentsCount] > 1)
         [self buildGeneralSegment];
@@ -785,10 +785,10 @@
 
 - (void) buildGeneralSegment
 {
-    OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
-    for (OAGpxTrk *track in _tracks)
+    OATrkSegment *segment = [[OATrkSegment alloc] init];
+    for (OATrack *track in _tracks)
     {
-        for (OAGpxTrkSeg *s in track.segments)
+        for (OATrkSegment *s in track.segments)
         {
             if (s.points.count > 0)
             {
@@ -813,9 +813,9 @@
 - (NSInteger)getNonEmptyTracksCount
 {
     NSInteger count = 0;
-    for (OAGpxTrk *track in _tracks)
+    for (OATrack *track in _tracks)
     {
-        for (OAGpxTrkSeg *segment in track.segments)
+        for (OATrkSegment *segment in track.segments)
         {
             if (segment.points.count > 0)
             {
@@ -830,9 +830,9 @@
 - (NSInteger) getNonEmptySegmentsCount
 {
     int count = 0;
-    for (OAGpxTrk *t in _tracks)
+    for (OATrack *t in _tracks)
     {
-        for (OAGpxTrkSeg *s in t.segments)
+        for (OATrkSegment *s in t.segments)
         {
             if (s.points.count > 0)
                 count++;
@@ -847,9 +847,9 @@
     OAGPXTrackAnalysis *g = [[OAGPXTrackAnalysis alloc] init];
     g.wptPoints = (int) self.points.count;
     NSMutableArray *splitSegments = [NSMutableArray array];
-    for (OAGpxTrk *subtrack in self.tracks)
+    for (OATrack *subtrack in self.tracks)
     {
-        for (OAGpxTrkSeg *segment in subtrack.segments)
+        for (OATrkSegment *segment in subtrack.segments)
         {
             if (!segment.generalSegment)
             {
@@ -877,8 +877,8 @@
 -(NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit joinSegments:(BOOL)joinSegments
 {
     NSMutableArray *splitSegments = [NSMutableArray array];
-    for (OAGpxTrk *subtrack in self.tracks) {
-        for (OAGpxTrkSeg *segment in subtrack.segments) {
+    for (OATrack *subtrack in self.tracks) {
+        for (OATrkSegment *segment in subtrack.segments) {
             [OAGPXTrackAnalysis splitSegment:metric secondaryMetric:secondaryMetric metricLimit:metricLimit splitSegments:splitSegments segment:segment joinSegments:joinSegments];
         }
     }
@@ -887,7 +887,7 @@
 
 - (BOOL) hasRtePt
 {
-    for (OAGpxRte *r in _routes)
+    for (OARoute *r in _routes)
         if (r.points.count > 0)
             return YES;
 
@@ -901,8 +901,8 @@
 
 - (BOOL) hasTrkPt
 {
-    for (OAGpxTrk *t in _tracks)
-        for (OAGpxTrkSeg *ts in t.segments)
+    for (OATrack *t in _tracks)
+        for (OATrkSegment *ts in t.segments)
             if (ts.points.count > 0)
                 return YES;
 
@@ -921,12 +921,12 @@
     return 0.;
 }
 
-- (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly
+- (NSArray<OATrkSegment *> *)getNonEmptyTrkSegments:(BOOL)routesOnly
 {
-    NSMutableArray<OAGpxTrkSeg *> *segments = [NSMutableArray new];
-    for (OAGpxTrk *t in _tracks)
+    NSMutableArray<OATrkSegment *> *segments = [NSMutableArray new];
+    for (OATrack *t in _tracks)
     {
-        for (OAGpxTrkSeg *s in t.segments)
+        for (OATrkSegment *s in t.segments)
         {
             if (!s.generalSegment && s.points.count > 0 && (!routesOnly || s.hasRoute))
                 [segments addObject:s];
@@ -935,7 +935,7 @@
     return segments;
 }
 
-- (NSArray<OAGpxTrkSeg *> *) getPointsToDisplay
+- (NSArray<OATrkSegment *> *) getPointsToDisplay
 {
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.path]];
 //    if (filteredSelectedGpxFile != null) {
@@ -947,17 +947,17 @@
         return _processedPointsToDisplay;
 }
 
-- (NSArray<OAGpxTrkSeg *> *) proccessPoints
+- (NSArray<OATrkSegment *> *) proccessPoints
 {
-    NSMutableArray<OAGpxTrkSeg *> *tpoints = [NSMutableArray array];
-    for (OAGpxTrk *t in _tracks)
+    NSMutableArray<OATrkSegment *> *tpoints = [NSMutableArray array];
+    for (OATrack *t in _tracks)
     {
         int trackColor = [t getColor:kDefaultTrackColor];
-        for (OAGpxTrkSeg *ts in t.segments)
+        for (OATrkSegment *ts in t.segments)
         {
             if (!ts.generalSegment && ts.points.count > 0)
             {
-                OAGpxTrkSeg *sgmt = [OAGpxTrkSeg new];
+                OATrkSegment *sgmt = [OATrkSegment new];
                 [tpoints addObject:sgmt];
                 sgmt.points = ts.points;
                 [sgmt setColor:trackColor];
@@ -967,17 +967,17 @@
     return tpoints;
 }
 
-- (NSArray<OAGpxTrkSeg *> *) processRoutePoints
+- (NSArray<OATrkSegment *> *) processRoutePoints
 {
-    NSMutableArray<OAGpxTrkSeg *> *tpoints = [NSMutableArray  array];
+    NSMutableArray<OATrkSegment *> *tpoints = [NSMutableArray  array];
     if (_routes.count > 0)
     {
-        for (OAGpxRte *r in _routes)
+        for (OARoute *r in _routes)
         {
             int routeColor = [r getColor:kDefaultTrackColor];
             if (r.points.count > 0)
             {
-                OAGpxTrkSeg *sgmt = [OAGpxTrkSeg new];
+                OATrkSegment *sgmt = [OATrkSegment new];
                 [tpoints addObject:sgmt];
                 NSMutableArray<OAWptPt *> *rtes = [NSMutableArray array];
                 for (OAWptPt *point in r.points)
@@ -1020,7 +1020,7 @@
     NSMutableArray<OAWptPt *> *points = [NSMutableArray new];
     for (NSInteger i = 0; i < _routes.count; i++)
     {
-        OAGpxRte *rt = _routes[i];
+        OARoute *rt = _routes[i];
         [points addObjectsFromArray:rt.points];
     }
     return points;
@@ -1031,7 +1031,7 @@
     NSMutableArray<OAWptPt *> *points = [NSMutableArray new];
     if (_routes.count > routeIndex)
     {
-        OAGpxRte *rt = _routes[routeIndex];
+        OARoute *rt = _routes[routeIndex];
         [points addObjectsFromArray:rt.points];
     }
     return points;

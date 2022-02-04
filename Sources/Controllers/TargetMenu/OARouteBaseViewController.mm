@@ -156,7 +156,7 @@
              trackChartPoints:(OATrackChartPoints *)trackChartPoints
                      analysis:(OAGPXTrackAnalysis *)analysis
 {
-    OAGpxTrkSeg *segment = [self getTrackSegment:lineChartView analysis:analysis];
+    OATrkSegment *segment = [self getTrackSegment:lineChartView analysis:analysis];
     [self refreshHighlightOnMap:forceFit
                   lineChartView:lineChartView
                trackChartPoints:trackChartPoints
@@ -166,7 +166,7 @@
 - (void)refreshHighlightOnMap:(BOOL)forceFit
                 lineChartView:(LineChartView *)lineChartView
              trackChartPoints:(OATrackChartPoints *)trackChartPoints
-                      segment:(OAGpxTrkSeg *)segment
+                      segment:(OATrkSegment *)segment
 {
     if (!_gpxDoc)
         return;
@@ -227,13 +227,13 @@
 - (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView
                                         analysis:(OAGPXTrackAnalysis *)analysis
 {
-    OAGpxTrkSeg *segment = [self getTrackSegment:lineChartView analysis:analysis];
+    OATrkSegment *segment = [self getTrackSegment:lineChartView analysis:analysis];
     return [self generateTrackChartPoints:lineChartView startPoint:kCLLocationCoordinate2DInvalid segment:segment];
 }
 
 - (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView
                                       startPoint:(CLLocationCoordinate2D)startPoint
-                                        segment:(OAGpxTrkSeg *)segment
+                                        segment:(OATrkSegment *)segment
 {
     OATrackChartPoints *trackChartPoints = [[OATrackChartPoints alloc] init];
     trackChartPoints.segmentColor = -1;
@@ -248,7 +248,7 @@
 
 - (NSArray<CLLocation *> *)getXAxisPoints:(OATrackChartPoints *)points
                             lineChartView:(LineChartView *)lineChartView
-                                 segment:(OAGpxTrkSeg *)segment
+                                 segment:(OATrkSegment *)segment
 {
     if (!points.axisPointsInvalidated)
         return points.xAxisPoints;
@@ -276,11 +276,11 @@
     return result;
 }
 
-+ (OAGpxTrkSeg *)getSegmentForAnalysis:(OAGPXDocument *)gpxDoc analysis:(OAGPXTrackAnalysis *)analysis
++ (OATrkSegment *)getSegmentForAnalysis:(OAGPXDocument *)gpxDoc analysis:(OAGPXTrackAnalysis *)analysis
 {
-    for (OAGpxTrk *track in gpxDoc.tracks)
+    for (OATrack *track in gpxDoc.tracks)
     {
-        for (OAGpxTrkSeg *segment in track.segments)
+        for (OATrkSegment *segment in track.segments)
         {
             NSInteger size = segment.points.count;
             if (size > 0 && [segment.points.firstObject isEqual:analysis.locationStart]
@@ -291,9 +291,9 @@
     return nil;
 }
 
-- (OAGpxTrkSeg *)getTrackSegment:(LineChartView *)chart analysis:(OAGPXTrackAnalysis *)analysis
+- (OATrkSegment *)getTrackSegment:(LineChartView *)chart analysis:(OAGPXTrackAnalysis *)analysis
 {
-    OAGpxTrkSeg *segment;
+    OATrkSegment *segment;
     LineChartData *lineData = chart.lineData;
     NSArray<id <IChartDataSet>> *ds = lineData ? lineData.dataSets : [NSArray array];
 
@@ -305,7 +305,7 @@
 
 - (OsmAnd::LatLon)getLocationAtPos:(double)position
                      lineChartView:(LineChartView *)lineChartView
-                           segment:(OAGpxTrkSeg *)segment
+                           segment:(OATrkSegment *)segment
 {
     OsmAnd::LatLon latLon;
     LineChartData *data = lineChartView.lineData;
@@ -341,7 +341,7 @@
 - (void)fitTrackOnMap:(OsmAnd::LatLon)location
              forceFit:(BOOL)forceFit
         lineChartView:(LineChartView *)lineChartView
-             segment:(OAGpxTrkSeg *)segment
+             segment:(OATrkSegment *)segment
 {
     OABBox rect = [self getRect:lineChartView segment:segment];
     OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
@@ -368,7 +368,7 @@
 }
 
 - (OABBox)getRect:(LineChartView *)lineChartView
-         segment:(OAGpxTrkSeg *)segment
+         segment:(OATrkSegment *)segment
 {
     OABBox bbox;
 

@@ -37,7 +37,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     UIColor *_groupColor;
 
     OAGPXTrackAnalysis *_analysis;
-    OAGpxTrkSeg *_segment;
+    OATrkSegment *_segment;
 }
 
 - (instancetype)initWithWaypointsGroupName:(NSString *)groupName
@@ -53,7 +53,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     return self;
 }
 
-- (instancetype)initWithSegment:(OAGpxTrkSeg *)segment analysis:(OAGPXTrackAnalysis *)analysis
+- (instancetype)initWithSegment:(OATrkSegment *)segment analysis:(OAGPXTrackAnalysis *)analysis
 
 {
     self = [super init];

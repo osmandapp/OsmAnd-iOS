@@ -20,7 +20,6 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/GeoInfoDocument.h>
 #include <OsmAndCore/GpxDocument.h>
 #include "Localization.h"
 #include "OARootViewController.h"

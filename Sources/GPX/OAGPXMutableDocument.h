@@ -11,8 +11,8 @@
 @interface OAGPXMutableDocument : OAGPXDocument
 
 @property (nonatomic) NSMutableArray<OAWptPt *> *points;
-@property (nonatomic) NSMutableArray<OAGpxTrk *> *tracks;
-@property (nonatomic) NSMutableArray<OAGpxRte *> *routes;
+@property (nonatomic) NSMutableArray<OATrack *> *tracks;
+@property (nonatomic) NSMutableArray<OARoute *> *routes;
 
 @property (nonatomic) long modifiedTime;
 
@@ -22,13 +22,13 @@
 
 - (void) updateDocAndMetadata;
 - (void) addWpt:(OAWptPt *)w;
-- (void) addTrack:(OAGpxTrk *)t;
-- (void) addTracks:(NSArray<OAGpxTrk *> *)tracks;
-- (void) addTrackSegment:(OAGpxTrkSeg *)s track:(OAGpxTrk *)track;
-- (BOOL) removeTrackSegment:(OAGpxTrkSeg *)segment;
-- (void) addTrackPoint:(OAWptPt *)p segment:(OAGpxTrkSeg *)segment;
+- (void) addTrack:(OATrack *)t;
+- (void) addTracks:(NSArray<OATrack *> *)tracks;
+- (void)addTrackSegment:(OATrkSegment *)s track:(OATrack *)track;
+- (BOOL) removeTrackSegment:(OATrkSegment *)segment;
+- (void) addTrackPoint:(OAWptPt *)p segment:(OATrkSegment *)segment;
 - (void) addRoutePoints:(NSArray<OAWptPt *> *)points addRoute:(BOOL)addRoute;
-- (void) addRoutes:(NSArray<OAGpxRte *> *)routes;
+- (void) addRoutes:(NSArray<OARoute *> *)routes;
 
 - (void)deleteWpt:(OAWptPt *)w;
 - (void)deleteAllWpts;

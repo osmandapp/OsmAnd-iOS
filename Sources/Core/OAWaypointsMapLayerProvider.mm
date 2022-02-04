@@ -22,7 +22,7 @@
 #include <SkColorFilter.h>
 #include <SkCGUtils.h>
 
-OAWaypointsMapLayerProvider::OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::WptPt>>& wptPtPoints_,
+OAWaypointsMapLayerProvider::OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>>& wptPtPoints_,
                                                          const int baseOrder_,
                                                          const QList<OsmAnd::PointI>& hiddenPoints_,
                                                          const bool showCaptions_,
@@ -57,7 +57,7 @@ sk_sp<SkImage> OAWaypointsMapLayerProvider::getImageBitmap(const int index, bool
     return getBitmapByWaypoint(wptPt, isFullSize);
 }
 
-sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GeoInfoDocument::WptPt> &point, bool isFullSize)
+sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &point, bool isFullSize)
 {
     UIColor* color = nil;
     NSString *shapeName = nil;
@@ -108,7 +108,7 @@ sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Re
     return bitmap;
 }
 
-sk_sp<SkImage> OAWaypointsMapLayerProvider::createCompositeBitmap(const OsmAnd::Ref<OsmAnd::GeoInfoDocument::WptPt> &point, bool isFullSize) const
+sk_sp<SkImage> OAWaypointsMapLayerProvider::createCompositeBitmap(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &point, bool isFullSize) const
 {
     UIColor* color = nil;
     NSString *shapeName = nil;

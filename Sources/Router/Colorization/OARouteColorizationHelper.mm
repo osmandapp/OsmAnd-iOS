@@ -94,9 +94,9 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
 //            gpxFile.path.length == 0 ? [gpxFile getAnalysis:[NSDate date].timeIntervalSince1970] : [gpxFile getAnalysis:gpxFile.modifiedTime]
             analysis = [gpxFile getAnalysis:0];
         }
-        for (OAGpxTrk *trk in gpxFile.tracks)
+        for (OATrack *trk in gpxFile.tracks)
         {
-            for (OAGpxTrkSeg *seg in trk.segments)
+            for (OATrkSegment *seg in trk.segments)
             {
                 if (seg.generalSegment || seg.points.count < 2)
                     continue;

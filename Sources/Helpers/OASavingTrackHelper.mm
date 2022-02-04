@@ -478,8 +478,8 @@
                 long previousTime = 0;
                 long previousInterval = 0;
 
-                OAGpxTrkSeg *segment;
-                OAGpxTrk *track;
+                OATrkSegment *segment;
+                OATrack *track;
                 OAGPXMutableDocument *gpx;
 
                 while (sqlite3_step(statement) == SQLITE_ROW)
@@ -504,7 +504,7 @@
                     else if (track && [OAAppSettings sharedManager].autoSplitRecording.get && currentInterval < 2 * 60 * 60)
                     {
                         // 2 hour - same track
-                        segment = [[OAGpxTrkSeg alloc] init];
+                        segment = [[OATrkSegment alloc] init];
                         segment.points = [NSMutableArray array];
                         
                         [gpx addTrackSegment:segment track:track];
@@ -515,10 +515,10 @@
                     else
                     {
                         // check if date the same - new track otherwise new file
-                        track = [[OAGpxTrk alloc] init];
+                        track = [[OATrack alloc] init];
                         track.segments = [NSMutableArray array];
 
-                        segment = [[OAGpxTrkSeg alloc] init];
+                        segment = [[OATrkSegment alloc] init];
                         segment.points = [NSMutableArray array];
                         
                         NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:pt.time]];
@@ -658,18 +658,18 @@
 
 - (void) addTrackPoint:(OAWptPt *)pt newSegment:(BOOL)newSegment time:(long)time
 {
-        OAGpxTrk *track = [currentTrack.tracks firstObject];
+        OATrack *track = [currentTrack.tracks firstObject];
         BOOL segmentAdded = NO;
         if (track.segments.count == 0 || newSegment)
         {
-            OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
+            OATrkSegment *segment = [[OATrkSegment alloc] init];
             segment.points = [NSMutableArray array];
             [currentTrack addTrackSegment:segment track:track];
             segmentAdded = YES;
         }
         if (pt != nil)
         {
-            OAGpxTrkSeg *lt = [track.segments lastObject];
+            OATrkSegment *lt = [track.segments lastObject];
             [currentTrack addTrackPoint:pt segment:lt];
         }
         if (segmentAdded)
@@ -900,7 +900,7 @@
 - (void) prepareCurrentTrackForRecording
 {
     if (currentTrack.tracks.count == 0)
-        [currentTrack addTrack:[[OAGpxTrk alloc] init]];
+        [currentTrack addTrack:[[OATrack alloc] init]];
 }
 
 - (BOOL) saveIfNeeded

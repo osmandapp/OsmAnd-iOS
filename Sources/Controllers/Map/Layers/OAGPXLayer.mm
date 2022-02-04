@@ -11,9 +11,7 @@
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
-#import "OAUtilities.h"
 #import "OADefaultFavorite.h"
-#import "OATargetPoint.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocument.h"
@@ -23,19 +21,13 @@
 #import "OAWaypointsMapLayerProvider.h"
 #import "OAFavoritesLayer.h"
 #import "OARouteColorizationHelper.h"
-#import "OAColoringType.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAGpxAdditionalIconsProvider.h"
-#import "OASelectedGPXHelper.h"
 #import "QuadRect.h"
 #import "OAMapUtils.h"
 #import "OARouteImporter.h"
 
-#include <OsmAndCore/Ref.h>
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
-#include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 
 #define kOutlineWidth 10
@@ -55,6 +47,7 @@
 
     NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, id> *> *_cachedTracks;
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedColors;
+    NSMutableDictionary<NSString *, NSNumber *> *_cachedTrackWidth;
 }
 
 - (NSString *) layerId
@@ -74,6 +67,7 @@
     [self.mapView addKeyedSymbolsProvider:_linesCollection];
 
     _cachedTracks = [NSMutableDictionary dictionary];
+    _cachedTrackWidth = [NSMutableDictionary dictionary];
 }
 
 - (void) resetLayer
@@ -108,7 +102,7 @@
     return YES;
 }
 
-- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs
+- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs
 {
     [self resetLayer];
 
@@ -148,7 +142,7 @@
     return color;
 }
 
-- (UIColor *) getWptColor:(OsmAnd::Ref<OsmAnd::Extensions>)extensions
+- (UIColor *) getWptColor:(OsmAnd::Ref<OsmAnd::GpxExtensions>)extensions
 {
     if (extensions)
     {
@@ -174,7 +168,7 @@
 
             OAGPX *gpx;
             OAGPXDocument *doc;
-            auto doc_ = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
+            auto doc_ = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
 
             NSString *filePath = key.toNSString();
             NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[filePath];
@@ -223,7 +217,7 @@
                 OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:doc];
                 auto segs = [routeImporter importRoute];
                 NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
-                for (OAGpxTrkSeg *seg in [doc getNonEmptyTrkSegments:YES])
+                for (OATrkSegment *seg in [doc getNonEmptyTrkSegments:YES])
                 {
                     for (OAWptPt *point in seg.points)
                     {
@@ -268,7 +262,7 @@
                         else if ([cachedTrack[@"colorization_scheme"] intValue] == COLORIZATION_NONE && segmentColors.isEmpty() && gpx.color == 0)
                         {
                             int trackIndex = doc_->tracks.indexOf(track);
-                            OAGpxTrk *gpxTrack = doc.tracks[trackIndex];
+                            OATrack *gpxTrack = doc.tracks[trackIndex];
                             const auto colorARGB = [UIColorFromARGB([gpxTrack getColor:kDefaultTrackColor]) toFColorARGB];
                             segmentColors.push_back(colorARGB);
                         }
@@ -315,7 +309,16 @@ colorizationScheme:(int)colorizationScheme
 {
     if (points.size() > 1)
     {
-        CGFloat lineWidth = [self getLineWidth:gpx.width];
+        CGFloat lineWidth;
+        if ([_cachedTrackWidth.allKeys containsObject:gpx.width])
+        {
+            lineWidth = _cachedTrackWidth[gpx.width].floatValue;
+        }
+        else
+        {
+            lineWidth = [self getLineWidth:gpx.width];
+            _cachedTrackWidth[gpx.width] = @(lineWidth);
+        }
 
         // Add outline for colorized lines
         if (!colors.isEmpty() && colorizationScheme != COLORIZATION_NONE)
@@ -397,8 +400,8 @@ colorizationScheme:(int)colorizationScheme
 
     if (!_gpxDocs.empty())
     {
-        QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::WptPt>> points;
-        QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >::iterator it;
+        QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>> points;
+        QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >::iterator it;
         for (it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
         {
             if (!it.value())
@@ -483,19 +486,14 @@ colorizationScheme:(int)colorizationScheme
     const auto activeGpx = OASelectedGPXHelper.instance.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
-        OAGPXDocument *doc;
+        OAGPXDocument *document;
         NSString *filePath = it.key().toNSString();
         if ([_cachedTracks.allKeys containsObject:filePath])
-        {
-            doc = _cachedTracks[filePath][@"doc"];
-        }
+            document = _cachedTracks[filePath][@"doc"];
         else
-        {
-            auto doc_ = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
-            doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc_)];
-        }
+            document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
 
-        NSArray<OAWptPt *> *points = [self findPointsNearSegments:[doc getPointsToDisplay] radius:r point:point];
+        NSArray<OAWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplay] radius:r point:point];
         if (points != nil)
         {
             CLLocation *selectedGpxPoint = [OAMapUtils getProjection:[[CLLocation alloc] initWithLatitude:point.latitude
@@ -516,13 +514,13 @@ colorizationScheme:(int)colorizationScheme
     }
 }
 
-- (NSArray<OAWptPt *> *) findPointsNearSegments:(NSArray<OAGpxTrkSeg *> *)segments radius:(int)radius point:(CLLocationCoordinate2D)point
+- (NSArray<OAWptPt *> *)findPointsNearSegments:(NSArray<OATrkSegment *> *)segments radius:(int)radius point:(CLLocationCoordinate2D)point
 {
     const auto screenBbox = self.mapView.getVisibleBBox31;
     const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(screenBbox.topLeft);
     const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(screenBbox.bottomRight);
     QuadRect *screenRect = [[QuadRect alloc] initWithLeft:topLeft.longitude top:topLeft.latitude right:bottomRight.longitude bottom:bottomRight.latitude];
-    for (OAGpxTrkSeg *segment in segments)
+    for (OATrkSegment *segment in segments)
     {
         QuadRect *trackBounds = [self.class calculateBounds:segment.points];
         if ([QuadRect intersects:screenRect b:trackBounds])
@@ -714,11 +712,11 @@ colorizationScheme:(int)colorizationScheme
             item.point.position = position;
             item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
             const auto activeGpx = [OASelectedGPXHelper instance].activeGpx;
-            const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(activeGpx[QString::fromNSString(item.docPath)]);
+            const auto& doc = activeGpx[QString::fromNSString(item.docPath)];
             if (doc != nullptr)
             {
                 doc->saveTo(QString::fromNSString(item.docPath));
-                QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
+                QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
                 docs[QString::fromNSString(item.docPath)] = doc;
                 [self refreshGpxTracks:docs];
             }

@@ -406,9 +406,7 @@
             {
                 if (searchResult.wpt)
                 {
-                    auto wptPt = std::const_pointer_cast<OsmAnd::GeoInfoDocument::WptPt>(searchResult.wpt);
-                    auto gpxWptPt = std::dynamic_pointer_cast<OsmAnd::GpxDocument::GpxWptPt>(wptPt);
-                    OAWptPt *wpt = [OAGPXDocument fetchWpt:gpxWptPt];
+                    OAWptPt *wpt = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(searchResult.wpt)];
                     OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
                     wptItem.point = wpt;
 

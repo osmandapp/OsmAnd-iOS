@@ -76,7 +76,7 @@
 
 @implementation OASplitSegment
 
-- (instancetype)initWithTrackSegment:(OAGpxTrkSeg *)s
+- (instancetype)initWithTrackSegment:(OATrkSegment *)s
 {
     self = [super init];
     if (self) {
@@ -89,7 +89,7 @@
     return self;
 }
 
-- (instancetype)initWithSplitSegment:(OAGpxTrkSeg *)s pointInd:(int)pointInd cf:(double)cf
+- (instancetype)initWithSplitSegment:(OATrkSegment *)s pointInd:(int)pointInd cf:(double)cf
 {
     self = [super init];
     if (self) {
@@ -258,7 +258,7 @@
     return _avgSpeed > 0.0;
 }
 
-+(OAGPXTrackAnalysis *) segment:(long)fileTimestamp seg:(OAGpxTrkSeg *)seg
++(OAGPXTrackAnalysis *) segment:(long)fileTimestamp seg:(OATrkSegment *)seg
 {
     OAGPXTrackAnalysis *obj = [[OAGPXTrackAnalysis alloc] init];
     [obj prepareInformation:fileTimestamp splitSegments:@[[[OASplitSegment alloc] initWithTrackSegment:seg]]];
@@ -600,7 +600,7 @@
      secondaryMetric:(OASplitMetric *)secondaryMetric
          metricLimit:(double)metricLimit
        splitSegments:(NSMutableArray*)splitSegments
-             segment:(OAGpxTrkSeg*)segment
+             segment:(OATrkSegment*)segment
         joinSegments:(BOOL)joinSegments
 {
     double currentMetricEnd = metricLimit;

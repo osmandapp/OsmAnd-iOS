@@ -218,7 +218,7 @@
         }
         if (points.count == 0)
         {
-            for (OAGpxRte *rte in file.routes)
+            for (OARoute *rte in file.routes)
             {
                 for (OAWptPt *pt in rte.points)
                 {
@@ -344,10 +344,10 @@
                                                         segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
                                                          selectedSegment:(NSInteger)selectedSegment
 {
-    NSArray<OAGpxTrkSeg *> *segments = [gpxFile getNonEmptyTrkSegments:NO];
+    NSArray<OATrkSegment *> *segments = [gpxFile getNonEmptyTrkSegments:NO];
     if (selectedSegment != -1 && segments.count > selectedSegment)
     {
-        OAGpxTrkSeg *segment = segments[selectedSegment];
+        OATrkSegment *segment = segments[selectedSegment];
         for (OAWptPt *p in segment.points)
         {
             [points addObject:[self createLocation:p]];
@@ -367,10 +367,10 @@
                     segmentEndPoints:(NSMutableArray<CLLocation *> *)segmentEndPoints
                      selectedSegment:(NSInteger)selectedSegment
 {
-    NSArray<OAGpxTrkSeg *> *segments = [gpxFile getNonEmptyTrkSegments:NO];
+    NSArray<OATrkSegment *> *segments = [gpxFile getNonEmptyTrkSegments:NO];
     if (selectedSegment != -1 && segments.count > selectedSegment)
     {
-        OAGpxTrkSeg *segment = segments[selectedSegment];
+        OATrkSegment *segment = segments[selectedSegment];
         for (OAWptPt *wptPt in segment.points)
         {
             [points addObject:[self createLocation:wptPt]];
@@ -382,12 +382,12 @@
     }
 }
 
-+ (void) collectPointsFromSegments:(NSArray<OAGpxTrkSeg *> *)segments points:(NSMutableArray<CLLocation *> *)points segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
++ (void)collectPointsFromSegments:(NSArray<OATrkSegment *> *)segments points:(NSMutableArray<CLLocation *> *)points segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
 {
     CLLocation *lastPoint = nil;
     for (NSInteger i = 0; i < segments.count; i++)
     {
-        OAGpxTrkSeg *segment = segments[i];
+        OATrkSegment *segment = segments[i];
         for (OAWptPt *wptPt in segment.points)
         {
             [points addObject:[self createLocation:wptPt]];

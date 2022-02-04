@@ -8,11 +8,9 @@
 
 #import "OARouteLayer.h"
 #import "OARootViewController.h"
-#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
 #import "OARouteCalculationResult.h"
-#import "OAUtilities.h"
 #import "OANativeUtilities.h"
 #import "OARouteStatisticsHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -26,19 +24,12 @@
 #import "OARouteColorizationHelper.h"
 #import "OAGPXDocument.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/GeoInfoDocument.h>
-#include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
-#include <OsmAndCore/Map/VectorLinesCollection.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SkiaUtilities.h>
 #include <SkCGUtils.h>
-
-#include <transportRouteResultSegment.h>
 
 #define kTurnArrowsColoringByAttr 0xffffffff
 #define kOutlineId 1001
@@ -82,6 +73,7 @@
     QList<OsmAnd::FColorARGB> _colors;
     OAColoringType *_prevRouteColoringType;
     NSString *_prevRouteInfoAttribute;
+    NSMutableDictionary<NSString *, NSNumber *> *_cachedRouteLineWidth;
 }
 
 - (NSString *) layerId
@@ -133,6 +125,7 @@
     _lineWidth = kDefaultWidthMultiplier * kWidthCorrectionValue;
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
+    _cachedRouteLineWidth = [NSMutableDictionary dictionary];
 
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
@@ -457,7 +450,24 @@
             ? _previewRouteLineInfo.width
             : [[OAAppSettings sharedManager].routeLineWidth get:[_routingHelper getAppMode]];
 
-    CGFloat width = widthKey ? [self getWidthByKey:widthKey] : [self getParamFromAttr:@"strokeWidth"].floatValue;
+    CGFloat width;
+    if (widthKey)
+    {
+        if ([_cachedRouteLineWidth.allKeys containsObject:widthKey])
+        {
+            width = _cachedRouteLineWidth[widthKey].floatValue;
+        }
+        else
+        {
+            width = [self getWidthByKey:widthKey];
+            _cachedRouteLineWidth[widthKey] = @(width);
+        }
+    }
+    else
+    {
+        width = [self getParamFromAttr:@"strokeWidth"].floatValue;
+    }
+
     return width;
 }
 

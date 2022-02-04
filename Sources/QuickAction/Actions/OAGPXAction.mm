@@ -102,7 +102,7 @@ static OAQuickActionType *TYPE;
     p.position = CLLocationCoordinate2DMake(lat, lon);
     p.type = groupName;
     p.time = (long)[[NSDate date] timeIntervalSince1970];
-    p.wpt = std::make_shared<OsmAnd::GpxDocument::GpxWptPt>();
+    p.wpt = std::make_shared<OsmAnd::GpxDocument::WptPt>();
     wpt.point = p;
     wpt.color = color;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;

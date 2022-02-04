@@ -17,7 +17,7 @@
 @interface OAGpxLoader : NSObject
 
 @property (nonatomic) QString path;
-@property (nonatomic) std::shared_ptr<const OsmAnd::GeoInfoDocument> document;
+@property (nonatomic) std::shared_ptr<const OsmAnd::GpxDocument> document;
 
 @end
 

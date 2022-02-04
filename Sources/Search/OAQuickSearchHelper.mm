@@ -112,11 +112,11 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
 
 @implementation OASearchWptAPI
 {
-    QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>> _geoDocList;
+    QList<std::shared_ptr<const OsmAnd::GpxDocument>> _geoDocList;
     NSArray *_paths;
 }
 
-- (void) setWptData:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>&)geoDocList paths:(NSArray *)paths
+- (void) setWptData:(QList<std::shared_ptr<const OsmAnd::GpxDocument>>&)geoDocList paths:(NSArray *)paths
 {
     _geoDocList.append(geoDocList);
     _paths = [NSArray arrayWithArray:paths];
@@ -158,9 +158,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
             sr.localeName = point->name.toNSString();
             sr.wpt = point;
 
-            auto wptPt = std::const_pointer_cast<OsmAnd::GeoInfoDocument::WptPt>(sr.wpt);
-            auto gpxWptPt = std::dynamic_pointer_cast<OsmAnd::GpxDocument::GpxWptPt>(wptPt);
-            sr.object = [OAGPXDocument fetchWpt:gpxWptPt];
+            sr.object = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(sr.wpt)];
             sr.priority = SEARCH_WPT_OBJECT_PRIORITY;
             sr.objectType = WPT;
             sr.location = [[CLLocation alloc] initWithLatitude:point->position.latitude longitude:point->position.longitude];

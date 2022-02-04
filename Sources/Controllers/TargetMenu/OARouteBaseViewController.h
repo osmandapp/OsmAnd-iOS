@@ -18,7 +18,7 @@
 @class OATrackChartPoints;
 @class OAGPXTrackAnalysis;
 @class OARouteStatisticsModeCell;
-@class OAGpxTrkSeg;
+@class OATrkSegment;
 
 typedef void(^OARouteLineChartCenterMapOnBBox)(OABBox rect);
 typedef void(^OARouteLineChartAdjustViewPort)();
@@ -45,14 +45,14 @@ typedef void(^OARouteLineChartAdjustViewPort)();
 - (void)refreshHighlightOnMap:(BOOL)forceFit
                 lineChartView:(LineChartView *)lineChartView
              trackChartPoints:(OATrackChartPoints *)trackChartPoints
-                     segment:(OAGpxTrkSeg *)segment;
+                     segment:(OATrkSegment *)segment;
 
 - (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView
                                         analysis:(OAGPXTrackAnalysis *)analysis;
 
 - (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView
                                       startPoint:(CLLocationCoordinate2D)startPoint
-                                        segment:(OAGpxTrkSeg *)segment;
+                                        segment:(OATrkSegment *)segment;
 
 @end
 

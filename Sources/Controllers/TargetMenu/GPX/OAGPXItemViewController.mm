@@ -1546,11 +1546,11 @@
                     }
                     if (self.doc.tracks.count > 0)
                     {
-                        OAGpxTrk *track = self.doc.tracks[0];
+                        OATrack *track = self.doc.tracks[0];
                         track.name = newName;
                         if (track.segments.count > 0)
                         {
-                            OAGpxTrkSeg *seg = track.segments[0];
+                            OATrkSegment *seg = track.segments[0];
                             if (seg.points.count > 0)
                             {
                                 OAWptPt *p = seg.points[0];

@@ -588,11 +588,11 @@
                     time = self.doc.points[0].time;
                 if (self.doc.tracks.count > 0)
                 {
-                    OAGpxTrk *track = self.doc.tracks[0];
+                    OATrack *track = self.doc.tracks[0];
                     track.name = newName;
                     if (track.segments.count > 0)
                     {
-                        OAGpxTrkSeg *seg = track.segments[0];
+                        OATrkSegment *seg = track.segments[0];
                         if (seg.points.count > 0)
                          {
                             OAWptPt *p = seg.points[0];
@@ -880,11 +880,11 @@
 {
     _mutableDoc = self.isCurrentTrack ? self.savingHelper.currentTrack : [[OAGPXMutableDocument alloc] initWithGpxFile:
             [(_app ? _app : [OsmAndApp instance]).gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]];
-    NSArray<OAGpxTrkSeg *> *segmentsArray = [_mutableDoc && [_mutableDoc getGeneralSegment] ? @[_mutableDoc.generalSegment] : @[]
+    NSArray<OATrkSegment *> *segmentsArray = [_mutableDoc && [_mutableDoc getGeneralSegment] ? @[_mutableDoc.generalSegment] : @[]
             arrayByAddingObjectsFromArray:[_mutableDoc getNonEmptyTrkSegments:NO]];
 
     NSMutableDictionary<NSString *, NSDictionary *> *segments = [NSMutableDictionary dictionary];
-    for (OAGpxTrkSeg *segment in segmentsArray)
+    for (OATrkSegment *segment in segmentsArray)
     {
         OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segment];
         segments[[NSString stringWithFormat:@"segment_%lu", segments.count]] = @{
@@ -909,7 +909,7 @@
     }];
 }
 
-- (void)deleteAndSaveSegment:(OAGpxTrkSeg *)segment
+- (void)deleteAndSaveSegment:(OATrkSegment *)segment
 {
     if (segment && _mutableDoc)
     {
@@ -959,7 +959,7 @@
     }
 }
 
-- (void)openEditSegmentScreen:(OAGpxTrkSeg *)segment
+- (void)openEditSegmentScreen:(OATrkSegment *)segment
                      analysis:(OAGPXTrackAnalysis *)analysis
 {
     OAEditWaypointsGroupBottomSheetViewController *editWaypointsBottomSheet =
@@ -1233,7 +1233,7 @@
 }
 
 - (void)updateChartHighlightValue:(LineChartView *)chart
-                          segment:(OAGpxTrkSeg *)segment
+                          segment:(OATrkSegment *)segment
 {
     CLLocationCoordinate2D pinLocation = [self getPinLocation];
     LineChartData *lineData = chart.lineData;
@@ -1308,9 +1308,9 @@
     return _routeLineChartHelper;
 }
 
-- (OAGpxTrk *)getTrack:(OAGpxTrkSeg *)segment
+- (OATrack *)getTrack:(OATrkSegment *)segment
 {
-    for (OAGpxTrk *trk in _mutableDoc.tracks)
+    for (OATrack *trk in _mutableDoc.tracks)
     {
         if ([trk.segments containsObject:segment])
             return trk;
@@ -1318,9 +1318,9 @@
     return nil;
 }
 
-- (NSString *)getTrackSegmentTitle:(OAGpxTrkSeg *)segment
+- (NSString *)getTrackSegmentTitle:(OATrkSegment *)segment
 {
-    OAGpxTrk *track = [self getTrack:segment];
+    OATrack *track = [self getTrack:segment];
     if (track)
         return [OAGPXDocument buildTrackSegmentName:self.doc track:track segment:segment];
 
@@ -1361,13 +1361,17 @@
             {
                 _description = self.doc.metadata.desc;
             }
-            else
+            else if (self.doc.metadata.extensions.count > 0)
             {
                 for (OAGpxExtension *e in self.doc.metadata.extensions)
                 {
                     if ([e.name isEqualToString:@"desc"])
                         _description = e.value;
                 }
+            }
+            else
+            {
+                _description = @"";
             }
             break;
         }
@@ -1397,9 +1401,9 @@
     NSArray *links = self.doc.metadata.links;
     if (links && links.count > 0)
     {
-        for (OAGpxLink *link in links)
+        for (OALink *link in links)
         {
-            if (link.url)
+            if (link.url && link.url.absoluteString && link.url.absoluteString.length > 0)
             {
                 NSString *lowerCaseLink = [link.url.absoluteString lowerCase];
                 if ([lowerCaseLink containsString:@".jpg"] ||

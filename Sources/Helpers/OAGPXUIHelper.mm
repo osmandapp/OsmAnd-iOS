@@ -39,8 +39,8 @@
 {
     OAGPXDocument *gpx = [[OAGPXDocument alloc] init];
     NSArray<CLLocation *> *locations = [route getRouteLocations];
-    OAGpxTrk *track = [[OAGpxTrk alloc] init];
-    OAGpxTrkSeg *seg = [[OAGpxTrkSeg alloc] init];
+    OATrack *track = [[OATrack alloc] init];
+    OATrkSegment *seg = [[OATrkSegment alloc] init];
     NSMutableArray<OAWptPt *> *pts = [NSMutableArray new];
     if (locations)
     {
@@ -116,7 +116,7 @@
     return [NSString stringWithFormat:@"%@ • %@", dist, wpts];
 }
 
-+ (long) getSegmentTime:(OAGpxTrkSeg *)segment
++ (long) getSegmentTime:(OATrkSegment *)segment
 {
     long startTime = LONG_MAX;
     long endTime = LONG_MIN;
@@ -132,7 +132,7 @@
     return endTime - startTime;
 }
 
-+ (double) getSegmentDistance:(OAGpxTrkSeg *)segment
++ (double) getSegmentDistance:(OATrkSegment *)segment
 {
     double distance = 0;
     OAWptPt *prevPoint = nil;
@@ -261,7 +261,7 @@
         [gpxFile setColoringType:gpxItem.coloringType];
 }
 
-+ (OsmAnd::LatLon)getSegmentPointByTime:(OAGpxTrkSeg *)segment
++ (OsmAnd::LatLon)getSegmentPointByTime:(OATrkSegment *)segment
                                 gpxFile:(OAGPXDocument *)gpxFile
                                    time:(double)time
                         preciseLocation:(BOOL)preciseLocation
@@ -276,12 +276,12 @@
     }
 
     long passedSegmentsTime = 0;
-    for (OAGpxTrk *track in gpxFile.tracks)
+    for (OATrack *track in gpxFile.tracks)
     {
         if (track.generalTrack)
             continue;
 
-        for (OAGpxTrkSeg *seg in track.segments)
+        for (OATrkSegment *seg in track.segments)
         {
             OsmAnd::LatLon latLon = [self
                     getSegmentPointByTime:seg
@@ -302,7 +302,7 @@
     return OsmAnd::LatLon(0, 0);
 }
 
-+ (OsmAnd::LatLon)getSegmentPointByTime:(OAGpxTrkSeg *)segment
++ (OsmAnd::LatLon)getSegmentPointByTime:(OATrkSegment *)segment
                             timeToPoint:(float)timeToPoint
                      passedSegmentsTime:(long)passedSegmentsTime
                         preciseLocation:(BOOL)preciseLocation
@@ -326,7 +326,7 @@
     return OsmAnd::LatLon(0, 0);
 }
 
-+ (OsmAnd::LatLon)getSegmentPointByDistance:(OAGpxTrkSeg *)segment
++ (OsmAnd::LatLon)getSegmentPointByDistance:(OATrkSegment *)segment
                                     gpxFile:(OAGPXDocument *)gpxFile
                             distanceToPoint:(double)distanceToPoint
                             preciseLocation:(BOOL)preciseLocation
@@ -364,12 +364,12 @@
 
     double passedSegmentsPointsDistance = 0;
     OAWptPt *prevPoint = nil;
-    for (OAGpxTrk *track in gpxFile.tracks)
+    for (OATrack *track in gpxFile.tracks)
     {
         if (track.generalTrack)
             continue;
 
-        for (OAGpxTrkSeg *seg in track.segments)
+        for (OATrkSegment *seg in track.segments)
         {
             if (!seg.points || seg.points.count == 0)
                 continue;

@@ -555,24 +555,23 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (OAGPXMutableDocument *) getGpxFile:(NSString *)gpxFileName
 {
-    OAGPXMutableDocument *gpxFile = nil;
+    OAGPXMutableDocument *mutableDocument = nil;
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFileName];
-    const auto selectedFileConst = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName.lastPathComponent)]);
-    const auto selectedFile = std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFileConst);
+    const auto &selectedFile = selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName.lastPathComponent)];
     if (selectedFile != nullptr)
-        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxDocument:selectedFile];
+        mutableDocument = [[OAGPXMutableDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFile)];
     else
-        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]];
+        mutableDocument = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]];
     
-    if (!gpxFile.routes)
-        gpxFile.routes = [NSMutableArray new];
-    if (!gpxFile.tracks)
-        gpxFile.tracks = [NSMutableArray new];
-    if (!gpxFile.points)
-        gpxFile.points = [NSMutableArray new];
+    if (!mutableDocument.routes)
+        mutableDocument.routes = [NSMutableArray new];
+    if (!mutableDocument.tracks)
+        mutableDocument.tracks = [NSMutableArray new];
+    if (!mutableDocument.points)
+        mutableDocument.points = [NSMutableArray new];
     
-    return gpxFile;
+    return mutableDocument;
 }
 
 - (void) addNewGpxData:(OAGPXMutableDocument *)gpxFile

@@ -31,7 +31,7 @@
 #include <OsmAndCore/Data/Street.h>
 #include <OsmAndCore/Data/StreetGroup.h>
 #include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/GeoInfoDocument.h>
+#include <OsmAndCore/GpxDocument.h>
 
 @implementation OAQuickSearchListItem
 {

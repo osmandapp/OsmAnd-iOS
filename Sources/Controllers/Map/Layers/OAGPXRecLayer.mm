@@ -40,7 +40,7 @@
     return kGpxRecLayerId;
 }
 
-- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs
+- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs
 {
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
     const auto& doc = [helper.currentTrack getDocument];
@@ -58,7 +58,7 @@
     }
 }
 
-- (void) updateGpxTrack:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs
+- (void) updateGpxTrack:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs
 {
     if (!gpxDocs.empty())
     {

@@ -45,9 +45,7 @@
 
 - (void) acquireColor
 {
-    int color = [self.point getColor:0];
-    if (color != 0)
-        self.color = UIColorFromRGBA(color);
+    self.color = [self.point getColor];
 }
 
 - (BOOL) isEqual:(id)o

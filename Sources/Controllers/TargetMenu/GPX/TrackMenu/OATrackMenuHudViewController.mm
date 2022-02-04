@@ -1005,16 +1005,7 @@
     if (groupName && groupName.length > 0 && [self getWaypointsCount:groupName] > 0)
     {
         OAGpxWptItem *waypoint = _waypointGroups[groupName].firstObject;
-        if (waypoint.color)
-        {
-            groupColor = waypoint.color;
-        }
-        else
-        {
-            int color = [waypoint.point getColor:0];
-            if (color != 0)
-                groupColor = UIColorFromRGBA(color);
-        }
+        groupColor = waypoint.color ? waypoint.color : [waypoint.point getColor];
     }
     if (!groupColor)
         groupColor = [OADefaultFavorite getDefaultColor];

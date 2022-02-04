@@ -168,8 +168,8 @@
         {
             OADestination *dest = [[OADestination alloc] initWithDesc:wpt.name latitude:wpt.getLatitude longitude:wpt.getLongitude];
             int color = [wpt getColor:0];
-            dest.color = UIColorFromRGBA(color);
-            dest.markerResourceName = [self getResourceName:[UIColorFromRGBA(color).toHexString upperCase]];
+            dest.color = color != 0 ? UIColorFromRGBA(color) : UIColorFromRGB(marker_pin_color_blue);
+            dest.markerResourceName = [self getResourceName:[dest.color.toHexString upperCase]];
 
             for (OAGpxExtension *e in wpt.extensions)
             {

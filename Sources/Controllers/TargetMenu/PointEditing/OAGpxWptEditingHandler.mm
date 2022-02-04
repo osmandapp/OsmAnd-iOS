@@ -89,7 +89,7 @@
 
 - (UIColor *)getColor
 {
-    return _gpxWpt.color ? _gpxWpt.color : UIColorFromRGBA([_gpxWpt.point getColor:0]);
+    return _gpxWpt.color ? _gpxWpt.color : [_gpxWpt.point getColor];
 }
 
 - (NSString *)getGroupTitle

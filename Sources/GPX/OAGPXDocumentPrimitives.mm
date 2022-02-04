@@ -10,6 +10,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
+#import "OADefaultFavorite.h"
 
 #include <routeSegmentResult.h>
 #include <routeDataBundle.h>
@@ -554,9 +555,10 @@
     return self.position.longitude;
 }
 
-- (UIColor *) getColor
+- (UIColor *)getColor
 {
-    return nil;
+    int color = [self getColor:0];
+    return color != 0 ? UIColorFromRGBA(color) : [OADefaultFavorite getDefaultColor];
 }
 
 - (OAPointDescription *) getPointDescription

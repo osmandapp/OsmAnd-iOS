@@ -897,21 +897,22 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     }
 
     // Obtain fresh location and heading
-    CLLocation* newLocation = _app.locationServices.lastKnownLocation;
-    if (!newLocation)
-        return;
-    
-    CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
-    CLLocationDirection newDirection =
-    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-    ? newLocation.course
-    : newHeading;
-    
-    const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                      newLocation.coordinate.latitude,
-                                                      _searchLocation.coordinate.longitude, _searchLocation.coordinate.latitude);
+    CLLocation* newLocation = _app.locationServices.lastKnownLocation ? _app.locationServices.lastKnownLocation : [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+    double distance = NAN;
+    CLLocationDirection newDirection = 0;
+    if (newLocation)
+    {
+        CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+        newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+            ? newLocation.course
+            : newHeading;
         
-    _distanceString = [OAOsmAndFormatter getFormattedDistance:distance];
+        distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                          newLocation.coordinate.latitude,
+                                                          _searchLocation.coordinate.longitude, _searchLocation.coordinate.latitude);
+    }
+
+    _distanceString = isnan(distance) ? @"" : [OAOsmAndFormatter getFormattedDistance:distance];
     CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.coordinate.latitude longitude:_searchLocation.coordinate.longitude]];
     double direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
     _direction = [NSNumber numberWithDouble:direction];

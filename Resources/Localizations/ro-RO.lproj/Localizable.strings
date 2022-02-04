@@ -2304,3 +2304,14 @@
 "lang_war" = "Limba Waray";
 "shared_string_hide_all" = "Ascunde toate";
 "points_delete_multiple" = "Ștergeți %d punct(e)?";
+"context_menu_edit_descr" = "Modificați descrierea";
+"map_settings_weather_temp" = "Temperatura";
+"map_settings_weather_wind" = "Vânt";
+"map_settings_weather_cloud" = "Nori";
+"map_settings_weather_precip" = "Precipitații";
+"map_settings_clear_raster_cache" = "Ștergeți plăcile raster";
+"q_clear_weather_cache" = "Doriți să ștergeți memoria cache a vremii?";
+"map_settings_weather_pressure" = "Presiune";
+"map_settings_clear_geo_cache" = "Plăci geo clare";
+"map_settings_weather" = "Vremea";
+"add_description" = "Adăugați o descriere";

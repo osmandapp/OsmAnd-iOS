@@ -1355,18 +1355,18 @@
     NSArray *links = self.doc.metadata.links;
     if (links && links.count > 0)
     {
-        for (NSString *link in links)
+        for (OAGpxLink *link in links)
         {
-            if (link.length > 0)
+            if (link.url.absoluteString && link.url.absoluteString.length > 0)
             {
-                NSString *lowerCaseLink = [link lowerCase];
+                NSString *lowerCaseLink = [link.url.absoluteString lowerCase];
                 if ([lowerCaseLink containsString:@".jpg"] ||
                     [lowerCaseLink containsString:@".jpeg"] ||
                     [lowerCaseLink containsString:@".png"] ||
                     [lowerCaseLink containsString:@".bmp"] ||
                     [lowerCaseLink containsString:@".webp"])
                 {
-                    return link;
+                    return link.url.absoluteString;
                 }
             }
         }

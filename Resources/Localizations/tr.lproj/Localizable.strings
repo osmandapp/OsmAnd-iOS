@@ -2339,3 +2339,17 @@
 "map_settings_weather_pressure" = "Basınç";
 "map_settings_weather_cloud" = "Bulut";
 "map_settings_weather_wind" = "Rüzgar";
+"route_line_use_map_style_width" = "Harita tarzı (%@) öntanımlı genişliğini kullan.";
+"turn_arrows_descr" = "Güzergah hattında dönüş oklarının gösterilip gösterilmeyeceğini denetleyin.";
+"shared_string_max_height" = "Azami yükseklik";
+"routeInfo_roadClass_description" = "Yol sınıflandırmasına göre güzergah veya yol hattını renklendir.";
+"customize_route_line" = "Güzergah hattını özelleştir";
+"route_line_use_map_style_color" = "Harita tarzı (%@) öntanımlı rengini kullan.";
+"navigate_point_format_MGRS" = "MGRS";
+"turn_arrows" = "Dönüş Okları";
+"shared_string_min_height" = "Asgari yükseklik";
+"mgrs_description" = "OsmAnd, UTM NATO ile aynı olan MGRS biçimini kullanmaktadır.";
+"routeInfo_surface_description" = "Yol/patika fiziksel yüzey bilgisi sağla.";
+"routeInfo_smoothness_description" = "Tekerlekli araçlar için, özellikle yüzey düzgünlüğü/düzlüğü ile ilgili olarak, yol/patika manevra kabiliyeti sınıflandırması.";
+"routeInfo_winter_ice_road_description" = "Kış yolu sınıflandırmasına göre güzergah veya yol hattını renklendir.";
+"routeInfo_tracktype_description" = "Yüzey bileşimine göre güzergah veya yol hattını renklendir. Genellikle, yol ağı büyük ölçüde asfaltsız olduğunda uygulanır.";

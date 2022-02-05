@@ -1615,7 +1615,7 @@
 "units_and_formats" = "Unidades y formatos";
 "base_profile_descr_public_transport" = "Tipos de transporte público";
 "default_speed_dialog_msg" = "Estima el tiempo de llegada para los tipos de caminos desconocidos, y limita la velocidad para todos los caminos (puede afectar a la ruta)";
-"width_limit_description" = "Proporciona la anchura de tu vehículo, algunas restricciones de ruta pueden aplicarse para vehículos anchos.";
+"width_limit_description" = "Proporciona el ancho del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos anchos.";
 "height_limit_description" = "Proporciona la altura del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos altos.";
 "weight_limit_description" = "Proporciona el peso de tu vehículo, algunas restricciones de ruta pueden aplicarse para vehículos pesados.";
 "routing_attr_length_name" = "Límite de longitud";
@@ -2094,3 +2094,4 @@
 "lang_sc" = "Sardo";
 "grey_color_undefined" = "Los tramos sin datos son grises.";
 "lang_ro" = "Rumano";
+"lang_zh_hk" = "Chino (Hong Kong)";

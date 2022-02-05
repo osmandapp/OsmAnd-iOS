@@ -2317,3 +2317,12 @@
 "points_delete_multiple" = "Smazat %d bodů?";
 "context_menu_edit_descr" = "Upravit popis";
 "add_description" = "Přidat popis";
+"map_settings_weather" = "Počasí";
+"map_settings_weather_pressure" = "Tlak";
+"map_settings_weather_wind" = "Vítr";
+"map_settings_weather_cloud" = "Oblačnost";
+"map_settings_weather_precip" = "Srážky";
+"map_settings_clear_geo_cache" = "Smazat geo dlaždice";
+"map_settings_clear_raster_cache" = "Smazat rastrové dlaždice";
+"q_clear_weather_cache" = "Chcete smazat údaje o počasí z paměti?";
+"map_settings_weather_temp" = "Teplota";

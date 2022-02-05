@@ -2326,3 +2326,12 @@
 "points_delete_multiple" = "Slet %d punkt(er)?";
 "context_menu_edit_descr" = "Rediger beskrivelse";
 "add_description" = "Tilføj beskrivelse";
+"map_settings_weather" = "Vejr";
+"map_settings_weather_pressure" = "Lufttryk";
+"map_settings_weather_cloud" = "Sky";
+"map_settings_weather_precip" = "Nedbør";
+"map_settings_weather_wind" = "Vind";
+"map_settings_clear_raster_cache" = "Ryd rasterfliser";
+"q_clear_weather_cache" = "Ønsker du at rydde vejr-mellemlageret?";
+"map_settings_clear_geo_cache" = "Ryd geofliser";
+"map_settings_weather_temp" = "Temperatur";

@@ -2335,3 +2335,17 @@
 "q_clear_weather_cache" = "Ønsker du at rydde vejr-mellemlageret?";
 "map_settings_clear_geo_cache" = "Ryd geofliser";
 "map_settings_weather_temp" = "Temperatur";
+"customize_route_line" = "Tilpas rutelinje";
+"route_line_use_map_style_color" = "Brug standardfarven for kortstilart (%@).";
+"shared_string_max_height" = "Maks. højde";
+"routeInfo_surface_description" = "Giv oplysninger om veje/gangstiers fysiske overflade.";
+"navigate_point_format_MGRS" = "MGRS";
+"mgrs_description" = "OsmAnd anvender MGRS-format, som er identisk med UTM NATO.";
+"shared_string_min_height" = "Min. højde";
+"routeInfo_smoothness_description" = "Klassificering af vej- og gangstiers fremkommelighed for hjulkøretøjer, navnligt med hensyn til overfladens regelmæssighed/fladhed.";
+"routeInfo_winter_ice_road_description" = "Farvelæg ruten eller sporlinjen efter dens vintervejklassificering.";
+"routeInfo_tracktype_description" = "Farvelæg ruten eller sporlinjen i henhold overfladesammensætning. Anvendes typisk, når vejnettet er overvejende ikke-asfalteret.";
+"route_line_use_map_style_width" = "Brug standardbredde for kortstilart (%@).";
+"turn_arrows" = "Svingpile";
+"turn_arrows_descr" = "Kontroller synligheden af svingpilene på rutelinjen.";
+"routeInfo_roadClass_description" = "Farvelæg ruten eller sporlinjen i henhold til vejklassificering.";

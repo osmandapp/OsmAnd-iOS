@@ -31,7 +31,7 @@
 #include <OsmAndCore/Data/Street.h>
 #include <OsmAndCore/Data/StreetGroup.h>
 #include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/GeoInfoDocument.h>
+#include <OsmAndCore/GpxDocument.h>
 
 @implementation OAQuickSearchListItem
 {
@@ -156,7 +156,7 @@
         }
         case WPT:
         {
-            OAGpxWpt *wpt = (OAGpxWpt *)searchResult.object;
+            OAWptPt *wpt = (OAWptPt *) searchResult.object;
             return [wpt getIcon];
         }
 

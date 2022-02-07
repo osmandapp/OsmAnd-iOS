@@ -1122,7 +1122,7 @@
 "split_before" = "Sadalīt pirms";
 "split_after" = "Sadalīt pēc";
 "follow_track" = "Follow track";
-"track" = "Treks";
+"shared_string_gpx_track" = "Treks";
 "select_another_track" = "Select another track";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Attach to the roads";

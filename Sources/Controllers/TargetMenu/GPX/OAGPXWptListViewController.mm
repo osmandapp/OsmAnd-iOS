@@ -45,14 +45,14 @@
     NSArray *_unsortedHeaderViews;
 }
 
-- (id)initWithLocationMarks:(NSArray *)locationMarks
+- (id)initWithPoints:(NSArray *)points
 {
     self = [super init];
     if (self)
     {
         _app = [OsmAndApp instance];
         
-        [self setPoints:locationMarks];
+        [self setPoints:points];
         
         isDecelerating = NO;
         _sortingType = EPointsSortingTypeGrouped;
@@ -61,10 +61,11 @@
     return self;
 }
 
-- (void)setPoints:(NSArray *)locationMarks
+- (void)setPoints:(NSArray *)points
 {
     NSMutableArray *arr = [NSMutableArray array];
-    for (OAGpxWpt *p in locationMarks) {
+    for (OAWptPt *p in points)
+    {
         OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
         item.point = p;
         [arr addObject:item];

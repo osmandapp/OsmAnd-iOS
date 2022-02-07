@@ -39,16 +39,16 @@
 {
     OAGPXDocument *gpx = [[OAGPXDocument alloc] init];
     NSArray<CLLocation *> *locations = [route getRouteLocations];
-    OAGpxTrk *track = [[OAGpxTrk alloc] init];
-    OAGpxTrkSeg *seg = [[OAGpxTrkSeg alloc] init];
-    NSMutableArray<OAGpxTrkPt *> *pts = [NSMutableArray new];
+    OATrack *track = [[OATrack alloc] init];
+    OATrkSegment *seg = [[OATrkSegment alloc] init];
+    NSMutableArray<OAWptPt *> *pts = [NSMutableArray new];
     if (locations)
     {
         double lastHeight = RouteDataObject::HEIGHT_UNDEFINED;
         double lastValidHeight = NAN;
         for (CLLocation *l in locations)
         {
-            OAGpxTrkPt *point = [[OAGpxTrkPt alloc] init];
+            OAWptPt *point = [[OAWptPt alloc] init];
             [point setPosition:l.coordinate];
             if (l.altitude != 0)
             {
@@ -59,7 +59,7 @@
                 lastValidHeight = h;
                 if (lastHeight == RouteDataObject::HEIGHT_UNDEFINED && pts.count > 0)
                 {
-                    for (OAGpxTrkPt *pt in pts)
+                    for (OAWptPt *pt in pts)
                     {
                         if (pt.elevation == NAN)
                             pt.elevation = h;
@@ -77,7 +77,7 @@
             }
             else
             {
-                OAGpxTrkPt *prevPoint = pts[pts.count - 1];
+                OAWptPt *prevPoint = pts[pts.count - 1];
                 if (l.speed != 0)
                 {
                     point.speed = l.speed;
@@ -94,7 +94,7 @@
         }
         if (!isnan(lastValidHeight) && lastHeight == RouteDataObject::HEIGHT_UNDEFINED)
         {
-            for (OAGpxTrkPt *point in [pts reverseObjectEnumerator])
+            for (OAWptPt *point in [pts reverseObjectEnumerator])
             {
                 if (!isnan(point.elevation))
                     break;
@@ -116,13 +116,13 @@
     return [NSString stringWithFormat:@"%@ • %@", dist, wpts];
 }
 
-+ (long) getSegmentTime:(OAGpxTrkSeg *)segment
++ (long) getSegmentTime:(OATrkSegment *)segment
 {
     long startTime = LONG_MAX;
     long endTime = LONG_MIN;
     for (NSInteger i = 0; i < segment.points.count; i++)
     {
-        OAGpxTrkPt *point = segment.points[i];
+        OAWptPt *point = segment.points[i];
         long time = point.time;
         if (time != 0) {
             startTime = MIN(startTime, time);
@@ -132,13 +132,13 @@
     return endTime - startTime;
 }
 
-+ (double) getSegmentDistance:(OAGpxTrkSeg *)segment
++ (double) getSegmentDistance:(OATrkSegment *)segment
 {
     double distance = 0;
-    OAGpxTrkPt *prevPoint = nil;
+    OAWptPt *prevPoint = nil;
     for (NSInteger i = 0; i < segment.points.count; i++)
     {
-        OAGpxTrkPt *point = segment.points[i];
+        OAWptPt *point = segment.points[i];
         if (prevPoint != nil)
             distance += getDistance(prevPoint.getLatitude, prevPoint.getLongitude, point.getLatitude, point.getLongitude);
         prevPoint = point;
@@ -259,6 +259,168 @@
     
     if (gpxItem.coloringType && gpxItem.coloringType.length > 0)
         [gpxFile setColoringType:gpxItem.coloringType];
+}
+
++ (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment
+                                        gpxFile:(OAGPXDocument *)gpxFile
+                                           time:(double)time
+                                preciseLocation:(BOOL)preciseLocation
+                                   joinSegments:(BOOL)joinSegments
+{
+    if (!segment.generalSegment || joinSegments)
+    {
+        return [self getSegmentPointByTime:segment
+                               timeToPoint:time
+                        passedSegmentsTime:0
+                           preciseLocation:preciseLocation];
+    }
+
+    long passedSegmentsTime = 0;
+    for (OATrack *track in gpxFile.tracks)
+    {
+        if (track.generalTrack)
+            continue;
+
+        for (OATrkSegment *seg in track.segments)
+        {
+            CLLocationCoordinate2D latLon = [self getSegmentPointByTime:seg
+                                                            timeToPoint:time
+                                                     passedSegmentsTime:passedSegmentsTime
+                                                        preciseLocation:preciseLocation];
+
+            if (CLLocationCoordinate2DIsValid(latLon))
+                return latLon;
+
+            long segmentStartTime = !seg.points || seg.points.count == 0 ? 0 : seg.points.firstObject.time;
+            long segmentEndTime = !seg.points || seg.points.count == 0 ?
+                    0 : seg.points[seg.points.count - 1].time;
+            passedSegmentsTime += segmentEndTime - segmentStartTime;
+        }
+    }
+
+    return kCLLocationCoordinate2DInvalid;
+}
+
++ (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment
+                                    timeToPoint:(double)timeToPoint
+                             passedSegmentsTime:(long)passedSegmentsTime
+                                preciseLocation:(BOOL)preciseLocation
+{
+    OAWptPt *previousPoint = nil;
+    long segmentStartTime = segment.points.firstObject.time;
+    for (OAWptPt *currentPoint in segment.points)
+    {
+        long totalPassedTime = passedSegmentsTime + currentPoint.time - segmentStartTime;
+        if (totalPassedTime >= timeToPoint)
+        {
+            return preciseLocation && previousPoint
+                    ? [self getIntermediatePointByTime:totalPassedTime
+                                           timeToPoint:timeToPoint
+                                             prevPoint:previousPoint
+                                             currPoint:currentPoint]
+                    : CLLocationCoordinate2DMake(currentPoint.position.latitude, currentPoint.position.longitude);
+        }
+        previousPoint = currentPoint;
+    }
+    return kCLLocationCoordinate2DInvalid;
+}
+
++ (CLLocationCoordinate2D)getSegmentPointByDistance:(OATrkSegment *)segment
+                                            gpxFile:(OAGPXDocument *)gpxFile
+                                    distanceToPoint:(double)distanceToPoint
+                                    preciseLocation:(BOOL)preciseLocation
+                                       joinSegments:(BOOL)joinSegments
+{
+    double passedDistance = 0;
+
+    if (!segment.generalSegment || joinSegments)
+    {
+        OAWptPt *prevPoint = nil;
+        for (int i = 0; i < segment.points.count; i++)
+        {
+            OAWptPt *currPoint = segment.points[i];
+            if (prevPoint)
+            {
+                passedDistance += getDistance(
+                        prevPoint.position.latitude,
+                        prevPoint.position.longitude,
+                        currPoint.position.latitude,
+                        currPoint.position.longitude
+                );
+            }
+            if (currPoint.distance >= distanceToPoint || ABS(passedDistance - distanceToPoint) < 0.1)
+            {
+                return preciseLocation && prevPoint && currPoint.distance >= distanceToPoint
+                        ? [self getIntermediatePointByDistance:passedDistance
+                                               distanceToPoint:distanceToPoint
+                                                     currPoint:currPoint
+                                                     prevPoint:prevPoint]
+                        : CLLocationCoordinate2DMake(currPoint.position.latitude, currPoint.position.longitude);
+            }
+            prevPoint = currPoint;
+        }
+    }
+
+    double passedSegmentsPointsDistance = 0;
+    OAWptPt *prevPoint = nil;
+    for (OATrack *track in gpxFile.tracks)
+    {
+        if (track.generalTrack)
+            continue;
+
+        for (OATrkSegment *seg in track.segments)
+        {
+            if (!seg.points || seg.points.count == 0)
+                continue;
+
+            for (OAWptPt *currPoint in seg.points)
+            {
+                if (prevPoint)
+                {
+                    passedDistance += getDistance(prevPoint.position.latitude, prevPoint.position.longitude,
+                            currPoint.position.latitude, currPoint.position.longitude);
+                }
+
+                if (passedSegmentsPointsDistance + currPoint.distance >= distanceToPoint
+                        || ABS(passedDistance - distanceToPoint) < 0.1)
+                {
+                    return preciseLocation && prevPoint
+                            && currPoint.distance + passedSegmentsPointsDistance >= distanceToPoint
+                            ? [self getIntermediatePointByDistance:passedDistance
+                                                   distanceToPoint:distanceToPoint
+                                                         currPoint:currPoint
+                                                         prevPoint:prevPoint]
+                            : CLLocationCoordinate2DMake(currPoint.position.latitude, currPoint.position.longitude);
+                }
+                prevPoint = currPoint;
+            }
+            prevPoint = nil;
+            passedSegmentsPointsDistance += seg.points[seg.points.count - 1].distance;
+        }
+    }
+    return kCLLocationCoordinate2DInvalid;
+}
+
++ (CLLocationCoordinate2D)getIntermediatePointByTime:(double)passedTime
+                                 timeToPoint:(double)timeToPoint
+                                   prevPoint:(OAWptPt *)prevPoint
+                                   currPoint:(OAWptPt *)currPoint
+{
+    double percent = 1 - (passedTime - timeToPoint) / (currPoint.time - prevPoint.time);
+    double dLat = (currPoint.position.latitude - prevPoint.position.latitude) * percent;
+    double dLon = (currPoint.position.longitude - prevPoint.position.longitude) * percent;
+    return CLLocationCoordinate2DMake(prevPoint.position.latitude + dLat, prevPoint.position.longitude + dLon);
+}
+
++ (CLLocationCoordinate2D)getIntermediatePointByDistance:(double)passedDistance
+                                         distanceToPoint:(double)distanceToPoint
+                                               currPoint:(OAWptPt *)currPoint
+                                               prevPoint:(OAWptPt *)prevPoint
+{
+    double percent = 1 - (passedDistance - distanceToPoint) / (currPoint.distance - prevPoint.distance);
+    double dLat = (currPoint.position.latitude - prevPoint.position.latitude) * percent;
+    double dLon = (currPoint.position.longitude - prevPoint.position.longitude) * percent;
+    return CLLocationCoordinate2DMake(prevPoint.position.latitude + dLat, prevPoint.position.longitude + dLon);
 }
 
 @end

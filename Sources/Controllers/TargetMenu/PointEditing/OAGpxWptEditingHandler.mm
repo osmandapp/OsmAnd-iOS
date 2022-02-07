@@ -54,12 +54,12 @@
         UIColor* color = favCol.color;
 
         OAGpxWptItem* wpt = [[OAGpxWptItem alloc] init];
-        OAGpxWpt* p = [[OAGpxWpt alloc] init];
+        OAWptPt* p = [[OAWptPt alloc] init];
         p.name = formattedLocation;
         CLLocationCoordinate2D loc = location;
         p.position = loc;
         p.time = (long)[[NSDate date] timeIntervalSince1970];
-        p.color = color.toHexString;
+        [p setColor:[OAUtilities colorToNumber:color]];
         p.desc = @"";
         
         _iconName = nil;
@@ -89,7 +89,7 @@
 
 - (UIColor *)getColor
 {
-    return _gpxWpt.color ? _gpxWpt.color : [UIColor colorFromString:_gpxWpt.point.color];
+    return _gpxWpt.color ? _gpxWpt.color : [_gpxWpt.point getColor];
 }
 
 - (NSString *)getGroupTitle
@@ -184,7 +184,7 @@
 - (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
 {
     _gpxWpt.point.type = groupName;
-    _gpxWpt.point.color = color.toHexString;
+    [_gpxWpt.point setColor:[OAUtilities colorToNumber:color]];
     _gpxWpt.color = color;
 
     if (![_gpxWpt.groups containsObject:groupName] && groupName.length > 0)

@@ -21,7 +21,7 @@
 #define kOutlineColor OsmAnd::ColorARGB(150, 0, 0, 0)
 #define kWidthCorrectionValue 4
 
-@class OAGPXDocument, OAGpxTrkSeg;
+@class OAGPXDocument, OATrkSegment;
 
 struct RouteSegmentResult;
 

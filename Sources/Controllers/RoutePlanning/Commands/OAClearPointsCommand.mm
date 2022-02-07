@@ -14,8 +14,8 @@
 
 @implementation OAClearPointsCommand
 {
-    NSArray<OAGpxTrkPt *> *_points;
-    NSMutableDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *_roadSegmentData;
+    NSArray<OAWptPt *> *_points;
+    NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *_roadSegmentData;
     EOAClearPointsMode _clearMode;
     NSInteger _pointPosition;
 }

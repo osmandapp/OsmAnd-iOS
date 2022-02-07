@@ -20,14 +20,14 @@
 
 @implementation OAPointOptionsBottomSheetViewController
 {
-    OAGpxTrkPt *_point;
+    OAWptPt *_point;
     NSInteger _pointIndex;
     NSArray<NSArray<NSDictionary *> *> *_data;
     
     OAMeasurementEditingContext *_editingCtx;
 }
 
-- (instancetype) initWithPoint:(OAGpxTrkPt *)point index:(NSInteger)pointIndex editingContext:(OAMeasurementEditingContext *)editingContext
+- (instancetype) initWithPoint:(OAWptPt *)point index:(NSInteger)pointIndex editingContext:(OAMeasurementEditingContext *)editingContext
 {
     self = [super init];
     if (self) {

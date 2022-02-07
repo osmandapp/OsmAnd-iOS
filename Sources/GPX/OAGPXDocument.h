@@ -14,22 +14,20 @@
 #include <QList>
 #include <QHash>
 #include <QStack>
-#include <OsmAndCore/GeoInfoDocument.h>
 #include <OsmAndCore/GpxDocument.h>
 
 @class OAGPXTrackAnalysis;
 @class OASplitMetric, QuadRect, OAApplicationMode;
 
-@interface OAGPXDocument : NSObject
+@interface OAGPXDocument : OAGpxExtensions
 
 @property (nonatomic) OAMetadata* metadata;
-@property (nonatomic) NSArray<OAGpxWpt *> *locationMarks;
-@property (nonatomic) NSArray<OAGpxTrk *> *tracks;
-@property (nonatomic) NSArray<OAGpxRte *> *routes;
-@property (nonatomic) OAExtraData *extraData;
+@property (nonatomic) NSArray<OAWptPt *> *points;
+@property (nonatomic) NSArray<OATrack *> *tracks;
+@property (nonatomic) NSArray<OARoute *> *routes;
 
-@property (nonatomic) NSArray<OAGpxRouteSegment *> *routeSegments;
-@property (nonatomic) NSArray<OAGpxRouteType *> *routeTypes;
+@property (nonatomic) NSArray<OARouteSegment *> *routeSegments;
+@property (nonatomic) NSArray<OARouteType *> *routeTypes;
 
 @property (nonatomic) OAGpxBounds bounds;
 
@@ -40,8 +38,8 @@
 
 @property (nonatomic, copy) NSString *path;
 
-@property (nonatomic) OAGpxTrk *generalTrack;
-@property (nonatomic) OAGpxTrkSeg *generalSegment;
+@property (nonatomic) OATrack *generalTrack;
+@property (nonatomic) OATrkSegment *generalSegment;
 
 - (id)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument;
 - (id)initWithGpxFile:(NSString *)filename;
@@ -54,11 +52,11 @@
 - (BOOL) isCloudmadeRouteFile;
 
 - (void) processPoints;
-- (NSArray<OAGpxTrkSeg *> *) getPointsToDisplay;
+- (NSArray<OATrkSegment *> *) getPointsToDisplay;
 
 - (BOOL) isEmpty;
 - (void) addGeneralTrack;
-- (OALocationMark *) findPointToShow;
+- (OAWptPt *) findPointToShow;
 - (BOOL) hasRtePt;
 - (BOOL) hasWptPt;
 - (BOOL) hasTrkPt;
@@ -71,20 +69,19 @@
 - (NSArray*) splitByTime:(int)seconds joinSegments:(BOOL)joinSegments;
 - (NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit joinSegments:(BOOL)joinSegments;
 
-- (NSArray<OAGpxRtePt *> *) getRoutePoints;
-- (NSArray<OAGpxRtePt *> *) getRoutePoints:(NSInteger)routeIndex;
+- (NSArray<OAWptPt *> *) getRoutePoints;
+- (NSArray<OAWptPt *> *) getRoutePoints:(NSInteger)routeIndex;
 - (OAApplicationMode *) getRouteProfile;
 
-
-+ (OAGpxWpt *)fetchWpt:(const std::shared_ptr<const OsmAnd::GpxDocument::GpxWpt>)mark;
-+ (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::GpxWpt>)wpt usingWpt:(OAGpxWpt *)w;
-+ (void)fillMetadata:(std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata>)meta usingMetadata:(OAGpxMetadata *)m;
-+ (void)fillTrack:(std::shared_ptr<OsmAnd::GpxDocument::GpxTrk>)trk usingTrack:(OAGpxTrk *)t;
-+ (void)fillRoute:(std::shared_ptr<OsmAnd::GpxDocument::GpxRte>)rte usingRoute:(OAGpxRte *)r;
++ (OAWptPt *)fetchWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)mark;
++ (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)wpt usingWpt:(OAWptPt *)w;
++ (void)fillMetadata:(std::shared_ptr<OsmAnd::GpxDocument::Metadata>)meta usingMetadata:(OAMetadata *)m;
++ (void)fillTrack:(std::shared_ptr<OsmAnd::GpxDocument::Track>)trk usingTrack:(OATrack *)t;
++ (void)fillRoute:(std::shared_ptr<OsmAnd::GpxDocument::Route>)rte usingRoute:(OARoute *)r;
 
 + (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray;
-+ (void) fillExtension:(const std::shared_ptr<OsmAnd::GpxDocument::GpxExtension>&)extension ext:(OAGpxExtension *)e;
-+ (void) fillExtensions:(const std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions>&)extensions ext:(OAGpxExtensions *)ext;
++ (void) fillExtension:(const std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension>&)extension ext:(OAGpxExtension *)e;
++ (void) fillExtensions:(const std::shared_ptr<OsmAnd::GpxExtensions>&)extensions ext:(OAGpxExtensions *)ext;
 
 - (void)initBounds;
 - (void)processBounds:(CLLocationCoordinate2D)coord;
@@ -92,9 +89,9 @@
 
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions;
 
-- (int) getColor:(int)defColor;
-- (void) setColor:(int)value;
-
++ (NSString *)buildTrackSegmentName:(OAGPXDocument *)gpxFile
+                              track:(OATrack *)track
+                            segment:(OATrkSegment *)segment;
 - (NSString *) getColoringType;
 - (NSString *) getGradientScaleType;
 - (void) setColoringType:(NSString *)coloringType;
@@ -110,9 +107,9 @@
 - (BOOL) isShowStartFinish;
 - (void) setShowStartFinish:(BOOL)showStartFinish;
 
-- (OAGpxTrk *) getGeneralTrack;
-- (OAGpxTrkSeg *) getGeneralSegment;
-- (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly;
+- (OATrack *) getGeneralTrack;
+- (OATrkSegment *) getGeneralSegment;
+- (NSArray<OATrkSegment *> *)getNonEmptyTrkSegments:(BOOL)routesOnly;
 - (NSInteger) getNonEmptySegmentsCount;
 
 - (NSArray<NSString *> *)getWaypointCategories:(BOOL)withDefaultCategory;

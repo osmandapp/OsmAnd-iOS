@@ -1921,7 +1921,7 @@
 "shared_string_gpx_points" = "Пункты";
 "select_group" = "Абраць групу";
 "extra_maps" = "Дадатковыя мапы";
-"track" = "Грунтовая дарога";
+"shared_string_gpx_track" = "Грунтовая дарога";
 "shared_string_disable" = "Выключыць";
 "icon" = "Значок";
 "search_preogress" = "Пошук…";

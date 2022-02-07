@@ -492,16 +492,14 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self.favorite->setCalendarEvent(calendarEvent);
 }
 
-- (OAGpxWpt *) toWpt
+- (OAWptPt *) toWpt
 {
-    OAGpxWpt *pt = [[OAGpxWpt alloc] init];
+    OAWptPt *pt = [[OAWptPt alloc] init];
     pt.position = CLLocationCoordinate2DMake(self.getLatitude, self.getLongitude);
     if (self.getAltitude > 0)
         pt.elevation = self.getAltitude;
     pt.time = self.getTimestamp ? self.getTimestamp.timeIntervalSince1970 : 0;
-    if (!pt.extraData)
-        pt.extraData = [[OAGpxExtensions alloc] init];
-    NSMutableArray<OAGpxExtension *> *exts = [NSMutableArray arrayWithArray:((OAGpxExtensions *)pt.extraData).extensions];
+    NSMutableArray<OAGpxExtension *> *exts = [pt.extensions mutableCopy];
     if (!self.isVisible)
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
@@ -539,7 +537,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     }
     if (self.getColor)
     {
-        [pt setColor:self.getColor.toHexString];
+        [pt setColor:[OAUtilities colorToNumber:self.getColor]];
     }
     if (self.getCalendarEvent)
     {
@@ -548,7 +546,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         e.value = @"true";
         [exts addObject:e];
     }
-    ((OAGpxExtensions *)pt.extraData).extensions = exts;
+    pt.extensions = exts;
     pt.name = self.getName;
     pt.desc = self.getDescription;
     if (self.getCategory.length > 0)

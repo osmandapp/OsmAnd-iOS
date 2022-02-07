@@ -148,6 +148,8 @@
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _mapViewController = _mapPanelViewController.mapViewController;
         [self updateGpxData];
+        if (!_analysis)
+            [self updateAnalysis];
         [self commonInit];
     }
     return self;
@@ -171,10 +173,16 @@
     _doc = _isCurrentTrack ? (OAGPXDocument *) _savingHelper.currentTrack
             : [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
 
-    _analysis = [_doc getGeneralTrack] && [_doc getGeneralSegment]
-            ? [OAGPXTrackAnalysis segment:0 seg:_doc.generalSegment] : [_doc getAnalysis:0];
-
     _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
+}
+
+- (void)updateAnalysis
+{
+    if (_doc)
+    {
+        _analysis = [_doc getGeneralTrack] && [_doc getGeneralSegment]
+                ? [OAGPXTrackAnalysis segment:0 seg:_doc.generalSegment] : [_doc getAnalysis:0];
+    }
 }
 
 - (void)commonInit

@@ -10,15 +10,460 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
+#import "OADefaultFavorite.h"
 
 #include <routeSegmentResult.h>
 #include <routeDataBundle.h>
 #include <routeDataResources.h>
+#include <OsmAndCore/QKeyValueIterator.h>
 
-#define DEFAULT_ICON_NAME @"special_star"
-#define PROFILE_TYPE_EXTENSION @"profile"
-#define GAP_PROFILE_TYPE @"gap"
-#define TRKPT_INDEX_EXTENSION @"trkpt_idx"
+@implementation OAGPXColor
+
++ (instancetype)withType:(EOAGPXColor)type name:(NSString *)name color:(int)color
+{
+    OAGPXColor *obj = [[OAGPXColor alloc] init];
+    if (obj)
+    {
+        obj.type = type;
+        obj.name = name;
+        obj.color = color;
+    }
+    return obj;
+}
+
++ (NSArray<OAGPXColor *> *)values
+{
+    return @[
+            [OAGPXColor withType:BLACK name:@"BLACK" color:0xFF000000],
+            [OAGPXColor withType:DARKGRAY name:@"DARKGRAY" color:0xFF444444],
+            [OAGPXColor withType:GRAY name:@"GRAY" color:0xFF888888],
+            [OAGPXColor withType:LIGHTGRAY name:@"LIGHTGRAY" color:0xFFCCCCCC],
+            [OAGPXColor withType:WHITE name:@"WHITE" color:0xFFFFFFFF],
+            [OAGPXColor withType:RED name:@"RED" color:0xFFFF0000],
+            [OAGPXColor withType:GREEN name:@"GREEN" color:0xFF00FF00],
+            [OAGPXColor withType:DARKGREEN name:@"DARKGREEN" color:0xFF006400],
+            [OAGPXColor withType:BLUE name:@"BLUE" color:0xFF0000FF],
+            [OAGPXColor withType:YELLOW name:@"YELLOW" color:0xFFFFFF00],
+            [OAGPXColor withType:CYAN name:@"CYAN" color:0xFF00FFFF],
+            [OAGPXColor withType:MAGENTA name:@"MAGENTA" color:0xFFFF00FF],
+            [OAGPXColor withType:AQUA name:@"AQUA" color:0xFF00FFFF],
+            [OAGPXColor withType:FUCHSIA name:@"FUCHSIA" color:0xFFFF00FF],
+            [OAGPXColor withType:DARKGREY name:@"DARKGREY" color:0xFF444444],
+            [OAGPXColor withType:GREY name:@"GREY" color:0xFF888888],
+            [OAGPXColor withType:LIGHTGREY name:@"LIGHTGREY" color:0xFFCCCCCC],
+            [OAGPXColor withType:LIME name:@"LIME" color:0xFF00FF00],
+            [OAGPXColor withType:MAROON name:@"MAROON" color:0xFF800000],
+            [OAGPXColor withType:NAVY name:@"NAVY" color:0xFF000080],
+            [OAGPXColor withType:OLIVE name:@"OLIVE" color:0xFF808000],
+            [OAGPXColor withType:PURPLE name:@"PURPLE" color:0xFF800080],
+            [OAGPXColor withType:SILVER name:@"SILVER" color:0xFFC0C0C0],
+            [OAGPXColor withType:TEAL name:@"TEAL" color:0xFF008080]
+    ];
+}
+
++ (OAGPXColor *)getColorFromName:(NSString *)name
+{
+    for (OAGPXColor *c in [self values])
+    {
+        if ([c.name caseInsensitiveCompare:name] == NSOrderedSame)
+            return c;
+    }
+    return nil;
+}
+
+@end
+
+@implementation OAGpxExtension
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _name = @"";
+        _value = @"";
+        _attributes = @{};
+        _subextensions = @[];
+    }
+    return self;
+}
+
+@end
+
+@implementation OAGpxExtensions
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _extensions = @[];
+    }
+    return self;
+}
+
+- (NSArray<OAGpxExtension *> *)extensions
+{
+    if (!_extensions)
+        _extensions = @[];
+
+    return _extensions;
+}
+
+- (void)copyExtensions:(OAGpxExtensions *)e
+{
+    if (e && e.extensions.count > 0)
+        _extensions = [_extensions arrayByAddingObjectsFromArray:e.extensions];
+}
+
+- (OAGpxExtension *)getExtensionByKey:(NSString *)key
+{
+    for (OAGpxExtension *e in self.extensions)
+    {
+        if ([e.name isEqualToString:key])
+            return e;
+    }
+    return nil;
+}
+
+- (void)addExtension:(OAGpxExtension *)e
+{
+    if (![self.extensions containsObject:e])
+        self.extensions = [self.extensions arrayByAddingObject:e];
+}
+
+- (void)removeExtension:(OAGpxExtension *)e
+{
+    NSMutableArray<OAGpxExtension *> *extensions = [self.extensions mutableCopy];
+    [extensions removeObject:e];
+
+    self.extensions = extensions;
+}
+
+- (void)setExtension:(NSString *)key value:(NSString *)value
+{
+    OAGpxExtension *e = [self getExtensionByKey:key];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = key;
+        e.value = value;
+        if (![self.extensions containsObject:e])
+            self.extensions = [self.extensions arrayByAddingObject:e];
+    }
+    else
+    {
+        e.value = value;
+    }
+}
+
+- (NSArray<OAGpxExtension *> *)fetchExtension:(QList<OsmAnd::Ref<OsmAnd::GpxExtensions::GpxExtension>>)extensions
+{
+    if (!extensions.isEmpty())
+    {
+        NSMutableArray<OAGpxExtension *> *extensionsArray = [NSMutableArray array];
+        for (const auto &ext: extensions)
+        {
+            OAGpxExtension *e = [[OAGpxExtension alloc] init];
+            e.name = ext->name.toNSString().lowerCase;
+            e.value = ext->value.toNSString();
+            if (!ext->attributes.isEmpty())
+            {
+                NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                for (const auto &entry: OsmAnd::rangeOf(OsmAnd::constOf(ext->attributes)))
+                {
+                    dict[entry.key().toNSString()] = entry.value().toNSString();
+                }
+                e.attributes = dict;
+            }
+            e.subextensions = [self fetchExtension:ext->subextensions];
+            [extensionsArray addObject:e];
+        }
+        return extensionsArray;
+    }
+    return @[];
+}
+
+- (void)fetchExtensions:(std::shared_ptr<OsmAnd::GpxExtensions>)extensions
+{
+    self.value = extensions->value.toNSString();
+    if (!extensions->attributes.isEmpty()) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        for (const auto &entry: OsmAnd::rangeOf(OsmAnd::constOf(extensions->attributes))) {
+            [dict setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
+        }
+        self.attributes = dict;
+    }
+
+    self.extensions = [self fetchExtension:extensions->extensions];
+}
+
+- (void)fillExtension:(const std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension>&)extension ext:(OAGpxExtension *)e
+{
+    extension->name = QString::fromNSString(e.name);
+    extension->value = QString::fromNSString(e.value);
+    for (NSString *key in e.attributes.allKeys)
+    {
+        extension->attributes[QString::fromNSString(key)] = QString::fromNSString(e.attributes[key]);
+    }
+    for (OAGpxExtension *es in e.subextensions)
+    {
+        std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> subextension(new OsmAnd::GpxExtensions::GpxExtension());
+        [self fillExtension:subextension ext:es];
+        extension->subextensions.push_back(subextension);
+        subextension = nullptr;
+    }
+}
+
+- (void)fillExtensions:(const std::shared_ptr<OsmAnd::GpxExtensions>&)extensions
+{
+    for (OAGpxExtension *e in self.extensions)
+    {
+        std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> extension(new OsmAnd::GpxExtensions::GpxExtension());
+        [self fillExtension:extension ext:e];
+        extensions->extensions.push_back(extension);
+        extension = nullptr;
+    }
+}
+
+- (int) getColor:(int)defColor
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"color"];
+    if (!e)
+        e = [self getExtensionByKey:@"colour"];
+    if (!e)
+        e = [self getExtensionByKey:@"displaycolor"];
+    if (!e)
+        e = [self getExtensionByKey:@"displaycolour"];
+
+    return [self parseColor:e.value defColor:defColor];
+}
+
+- (void) setColor:(int)value
+{
+    NSString *hexString = [NSString stringWithFormat:@"#%0X", value];
+    OAGpxExtension *e = [self getExtensionByKey:@"color"];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = @"color";
+        e.value = hexString;
+        [self addExtension:e];
+        return;
+    }
+    e.value = hexString;
+}
+
+- (int) parseColor:(NSString *)colorString defColor:(int)defColor
+{
+    if (colorString.length > 0)
+    {
+        if ([colorString hasPrefix:@"#"])
+        {
+            return [OAUtilities colorToNumberFromString:colorString];
+        }
+        else
+        {
+            OAGPXColor *gpxColor = [OAGPXColor getColorFromName:colorString];
+            if (gpxColor)
+                return gpxColor.color;
+        }
+    }
+    return defColor;
+}
+
+@end
+
+@implementation OALink
+@end
+
+@implementation OAMetadata
+@end
+
+@implementation OAWptPt
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        self.elevation = NAN;
+        self.speed = 0;
+        self.horizontalDilutionOfPrecision = NAN;
+        self.verticalDilutionOfPrecision = NAN;
+        self.distance = 0.0;
+    }
+    return self;
+}
+
+- (NSString *)getIcon
+{
+    NSString *value = [self getExtensionByKey:ICON_NAME_EXTENSION].value;
+    return value ? value : @"special_star";
+}
+
+- (void)setIcon:(NSString *)iconName
+{
+    [self setExtension:ICON_NAME_EXTENSION value:iconName];
+}
+
+- (NSString *)getBackgroundIcon
+{
+    NSString *value = [self getExtensionByKey:BACKGROUND_TYPE_EXTENSION].value;
+    return value ? value : @"circle";
+}
+
+- (NSString *)getAddress
+{
+    NSString *value = [self getExtensionByKey:ADDRESS_EXTENSION].value;
+    return value ? value : @"";
+}
+
+- (NSString *) getProfileType
+{
+    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
+    if (e)
+        return e.value;
+    return nil;
+}
+
+- (void) setProfileType:(NSString *)profileType
+{
+    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = PROFILE_TYPE_EXTENSION;
+        e.value = profileType;
+        [self addExtension:e];
+        return;
+    }
+    e.value = profileType;
+}
+
+- (void) removeProfileType
+{
+    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
+    if (e)
+    {
+        NSMutableArray *extensions = [self.extensions mutableCopy];
+        [extensions removeObject:e];
+
+        self.extensions = extensions;
+    }
+}
+
+- (BOOL) hasProfile
+{
+    NSString *profileType = self.getProfileType;
+    return profileType != nil && ![GAP_PROFILE_TYPE isEqualToString:profileType];
+}
+
+- (NSInteger) getTrkPtIndex
+{
+    OAGpxExtension *e = [self getExtensionByKey:TRKPT_INDEX_EXTENSION];
+    return e ? e.value.integerValue : -1;
+}
+
+- (void) setTrkPtIndex:(NSInteger)index
+{
+    OAGpxExtension *e = [self getExtensionByKey:TRKPT_INDEX_EXTENSION];
+    NSString *stringValue = [NSString stringWithFormat:@"%ld", index];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = TRKPT_INDEX_EXTENSION;
+        e.value = stringValue;
+        [self addExtension:e];
+        return;
+    }
+    e.value = stringValue;
+}
+
+- (BOOL) isGap
+{
+    NSString *profileType = [self getProfileType];
+    return [GAP_PROFILE_TYPE isEqualToString:profileType];
+}
+
+- (void)setGap
+{
+    [self setProfileType:GAP_PROFILE_TYPE];
+}
+
+- (double) getLatitude
+{
+    return self.position.latitude;
+}
+
+- (double) getLongitude
+{
+    return self.position.longitude;
+}
+
+- (UIColor *)getColor
+{
+    int color = [self getColor:0];
+    return color != 0 ? UIColorFromRGBA(color) : [OADefaultFavorite getDefaultColor];
+}
+
+- (OAPointDescription *) getPointDescription
+{
+    return [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:self.name];
+}
+
+- (BOOL) isVisible
+{
+    return YES;
+}
+
+- (BOOL) isEqual:(id)o
+{
+    if (self == o)
+        return YES;
+    if (!o || ![self isKindOfClass:[o class]])
+        return NO;
+
+    OAWptPt *wptPt = (OAWptPt *) o;
+    if (!self.name && wptPt.name)
+        return NO;
+    if (self.name && ![self.name isEqualToString:wptPt.name])
+        return NO;
+
+    if (![OAUtilities isCoordEqual:self.position.latitude
+                            srcLon:self.position.longitude
+                           destLat:wptPt.position.latitude
+                           destLon:wptPt.position.longitude])
+        return NO;
+
+    if (!self.desc && wptPt.desc)
+        return NO;
+    if (self.desc && ![self.desc isEqualToString:wptPt.desc])
+        return NO;
+
+    if (self.time != wptPt.time)
+        return NO;
+
+    if (!self.type && wptPt.type)
+        return NO;
+    if (self.type && ![self.type isEqualToString:wptPt.type])
+        return NO;
+
+    return YES;
+}
+
+- (NSUInteger) hash
+{
+    NSUInteger result = self.time;
+    result = 31 * result + [@(self.position.latitude) hash];
+    result = 31 * result + [@(self.position.longitude) hash];
+    result = 31 * result + (self.name ? [self.name hash] : 0);
+    result = 31 * result + (self.desc ? [self.desc hash] : 0);
+    result = 31 * result + (self.type ? [self.type hash] : 0);
+    return result;
+}
+
+@end
 
 @implementation OARouteSegment
 
@@ -73,7 +518,7 @@
 
 - (std::shared_ptr<RouteDataBundle>) toStringBundle
 {
-	auto bundle = std::make_shared<RouteDataBundle>();
+    auto bundle = std::make_shared<RouteDataBundle>();
     [self addToBundleIfNotNull:"id" value:_identifier bundle:bundle];
     [self addToBundleIfNotNull:"length" value:_length bundle:bundle];
     [self addToBundleIfNotNull:"segmentTime" value:_segmentTime bundle:bundle];
@@ -147,7 +592,7 @@
 
 - (std::shared_ptr<RouteDataBundle>) toStringBundle
 {
-	auto bundle = std::make_shared<RouteDataBundle>();
+    auto bundle = std::make_shared<RouteDataBundle>();
     if (_tag)
         bundle->put("t", _tag.UTF8String);
     if (_value)
@@ -158,460 +603,14 @@
 - (NSDictionary<NSString *,NSString *> *)toDictionary
 {
     return @{
-        @"t" : _tag,
-        @"v" : _value
+            @"t" : _tag,
+            @"v" : _value
     };
 }
 
 @end
 
-@implementation OAMetadata
-@end
-@implementation OALink
-@end
-@implementation OAGpxExtension
-@end
-@implementation OAGpxExtensions
-
-- (NSArray<OAGpxExtension *> *)extensions
-{
-    if (!_extensions)
-        _extensions = @[];
-    return _extensions;
-}
-
-- (void) copyExtensions:(OAGpxExtensions *)e
-{
-    _extensions = e.extensions;
-}
-
-@end
-@implementation OARoute
-@end
-@implementation OARoutePoint
-@end
-@implementation OATrack
-@end
-@implementation OATrackPoint
-@end
-@implementation OATrackSegment
-@end
-
-@implementation OALocationMark
-
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        self.elevation = NAN;
-    }
-    return self;
-}
-
-- (BOOL) isEqual:(id)o
-{
-    if (self == o)
-        return YES;
-    if (!o || ![self isKindOfClass:[o class]])
-        return NO;
-    
-    OALocationMark *locationMark = (OALocationMark *) o;
-    if (!self.name && locationMark.name)
-        return NO;
-    if (self.name && ![self.name isEqualToString:locationMark.name])
-        return NO;
-
-    if (![OAUtilities isCoordEqual:self.position.latitude srcLon:self.position.longitude destLat:locationMark.position.latitude destLon:locationMark.position.longitude])
-        return NO;
-
-    if (!self.desc && locationMark.desc)
-        return NO;
-    if (self.desc && ![self.desc isEqualToString:locationMark.desc])
-        return NO;
-
-    if (self.time != locationMark.time)
-        return NO;
-
-    if (!self.type && locationMark.type)
-        return NO;
-    if (self.type && ![self.type isEqualToString:locationMark.type])
-        return NO;
-    
-    return YES;
-}
-
-- (NSUInteger) hash
-{
-    NSUInteger result = self.time;
-    result = 31 * result + [@(self.position.latitude) hash];
-    result = 31 * result + [@(self.position.longitude) hash];
-    result = 31 * result + (self.name ? [self.name hash] : 0);
-    result = 31 * result + (self.desc ? [self.desc hash] : 0);
-    result = 31 * result + (self.type ? [self.type hash] : 0);
-    return result;
-}
-
-- (double) getLatitude
-{
-    return self.position.latitude;
-}
-
-- (double) getLongitude
-{
-    return self.position.longitude;
-}
-
-- (UIColor *) getColor
-{
-    return nil;
-}
-
-- (OAPointDescription *) getPointDescription
-{
-    return [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:self.name];
-}
-
-- (BOOL) isVisible
-{
-    return YES;
-}
-
-@end
-
-@implementation OAExtraData
-@end
-
-@implementation OAGpxWpt
-
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        self.satellitesUsedForFixCalculation = -1;
-        self.dgpsStationId = -1;
-        self.speed = NAN;
-        self.magneticVariation = NAN;
-        self.geoidHeight = NAN;
-        self.elevation = NAN;
-        self.fixType = Unknown;
-        self.horizontalDilutionOfPrecision = NAN;
-        self.verticalDilutionOfPrecision = NAN;
-        self.positionDilutionOfPrecision = NAN;
-        self.ageOfGpsData = NAN;
-        self.distance = 0.0;
-    }
-    return self;
-}
-
-- (void) fillWithWpt:(OAGpxWpt *)gpxWpt
-{
-    self.wpt = gpxWpt.wpt;
-    
-    self.position = gpxWpt.position;
-    self.color = gpxWpt.color;
-    self.name = gpxWpt.name;
-    self.desc = gpxWpt.desc;
-    self.elevation = gpxWpt.elevation;
-    self.time = gpxWpt.time;
-    self.comment = gpxWpt.comment;
-    self.type = gpxWpt.type;
-    
-    self.magneticVariation = gpxWpt.magneticVariation;
-    self.geoidHeight = gpxWpt.geoidHeight;
-    self.source = gpxWpt.source;
-    self.symbol = gpxWpt.symbol;
-    self.fixType = gpxWpt.fixType;
-    self.satellitesUsedForFixCalculation = gpxWpt.satellitesUsedForFixCalculation;
-    self.horizontalDilutionOfPrecision = gpxWpt.horizontalDilutionOfPrecision;
-    self.verticalDilutionOfPrecision = gpxWpt.verticalDilutionOfPrecision;
-    self.positionDilutionOfPrecision = gpxWpt.positionDilutionOfPrecision;
-    self.ageOfGpsData = gpxWpt.ageOfGpsData;
-    self.dgpsStationId = gpxWpt.dgpsStationId;
-    self.distance = gpxWpt.distance;
-    
-    self.links = gpxWpt.links;
-    self.extraData = gpxWpt.extraData;
-}
-
-- (void) fillWithTrkPt:(OAGpxTrkPt *)gpxWpt
-{
-    self.position = gpxWpt.position;
-    self.name = gpxWpt.name;
-    self.desc = gpxWpt.desc;
-    self.elevation = gpxWpt.elevation;
-    self.time = gpxWpt.time;
-    self.comment = gpxWpt.comment;
-    self.type = gpxWpt.type;
-    
-    self.magneticVariation = gpxWpt.magneticVariation;
-    self.geoidHeight = gpxWpt.geoidHeight;
-    self.source = gpxWpt.source;
-    self.symbol = gpxWpt.symbol;
-    self.fixType = gpxWpt.fixType;
-    self.satellitesUsedForFixCalculation = gpxWpt.satellitesUsedForFixCalculation;
-    self.horizontalDilutionOfPrecision = gpxWpt.horizontalDilutionOfPrecision;
-    self.verticalDilutionOfPrecision = gpxWpt.verticalDilutionOfPrecision;
-    self.positionDilutionOfPrecision = gpxWpt.positionDilutionOfPrecision;
-    self.ageOfGpsData = gpxWpt.ageOfGpsData;
-    self.dgpsStationId = gpxWpt.dgpsStationId;
-    self.distance = gpxWpt.distance;
-    
-    self.links = gpxWpt.links;
-    self.extraData = gpxWpt.extraData;
-}
-
-- (UIColor *) getColor
-{
-    return [UIColor colorFromString:self.color];
-}
-
-- (NSString *)getIcon
-{
-    NSString *value = [self getExtensionByKey:ICON_NAME_EXTENSION].value;
-    return value ? value : @"special_star";
-}
-
-- (void)setIcon:(NSString *)iconName
-{
-    [self setExtension:ICON_NAME_EXTENSION value:iconName];
-}
-
-- (NSString *)getBackgroundIcon
-{
-    NSString *value = [self getExtensionByKey:BACKGROUND_TYPE_EXTENSION].value;
-    return value ? value : @"circle";
-}
-
-- (NSString *)getAddress
-{
-    NSString *value = [self getExtensionByKey:ADDRESS_EXTENSION].value;
-    return value ? value : @"";
-}
-
-- (OAGpxExtension *)getExtensionByKey:(NSString *)key
-{
-    for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
-    {
-        if ([e.name isEqualToString:key])
-            return e;
-    }
-    return nil;
-}
-
-- (void)setExtension:(NSString *)key value:(NSString *)value
-{
-    if (!self.extraData)
-        self.extraData = [[OAGpxExtensions alloc] init];
-    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
-    OAGpxExtension *e = [self getExtensionByKey:key];
-    if (!e)
-    {
-        e = [[OAGpxExtension alloc] init];
-        e.name = key;
-        e.value = value;
-        if (![exts containsObject:e])
-            ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];
-    }
-    else
-    {
-        e.value = value;
-    }
-}
-
-@end
-
-@implementation OAGpxTrk
-@end
-
-@implementation OAGpxTrkPt
-
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        self.satellitesUsedForFixCalculation = -1;
-        self.dgpsStationId = -1;
-        self.speed = NAN;
-        self.magneticVariation = NAN;
-        self.geoidHeight = NAN;
-        self.fixType = Unknown;
-        self.horizontalDilutionOfPrecision = NAN;
-        self.verticalDilutionOfPrecision = NAN;
-        self.positionDilutionOfPrecision = NAN;
-        self.ageOfGpsData = NAN;
-    }
-    return self;
-}
-
-- (instancetype)initWithPoint:(OAGpxTrkPt *)point
-{
-    self = [super init];
-    if (self)
-    {
-        self.trkpt = point.trkpt;
-        self.satellitesUsedForFixCalculation = point.satellitesUsedForFixCalculation;
-        self.dgpsStationId = point.dgpsStationId;
-        self.speed = point.speed;
-        self.magneticVariation = point.magneticVariation;
-        self.geoidHeight = point.geoidHeight;
-        self.fixType = point.fixType;
-        self.horizontalDilutionOfPrecision = point.horizontalDilutionOfPrecision;
-        self.verticalDilutionOfPrecision = point.verticalDilutionOfPrecision;
-        self.positionDilutionOfPrecision = point.positionDilutionOfPrecision;
-        self.ageOfGpsData = point.ageOfGpsData;
-        self.source = point.source;
-        self.symbol = point.symbol;
-        self.position = point.position;
-        self.firstPoint = point.firstPoint;
-        self.lastPoint = point.lastPoint;
-        self.name = point.name;
-        self.desc = point.desc;
-        self.elevation = point.elevation;
-        self.time = point.time;
-        self.comment = point.comment;
-        self.type = point.type;
-        self.links = point.links;
-        self.distance = point.distance;
-    }
-    return self;
-}
-
-- (instancetype) initWithRtePt:(OAGpxRtePt *)point
-{
-    self = [super init];
-    if (self) {
-        self.ageOfGpsData = point.ageOfGpsData;
-        self.dgpsStationId = point.dgpsStationId;
-        self.fixType = point.fixType;
-        self.geoidHeight = point.geoidHeight;
-        self.horizontalDilutionOfPrecision = point.horizontalDilutionOfPrecision;
-        self.magneticVariation = point.magneticVariation;
-        self.positionDilutionOfPrecision = point.positionDilutionOfPrecision;
-        self.satellitesUsedForFixCalculation = point.satellitesUsedForFixCalculation;
-        self.source = point.source;
-        self.speed = point.speed;
-        self.symbol = point.symbol;
-        self.verticalDilutionOfPrecision = point.verticalDilutionOfPrecision;
-        
-        self.firstPoint = point.firstPoint;
-        self.lastPoint = point.lastPoint;
-        self.position = point.position;
-        self.name = point.name;
-        self.desc = point.desc;
-        self.elevation = point.elevation;
-        self.time = point.time;
-        self.comment = point.comment;
-        self.type = point.type;
-        self.links = point.links;
-        self.extraData = point.extraData;
-        self.distance = point.distance;
-    }
-    return self;
-}
-
-- (OAGpxExtension *)getExtensionByKey:(NSString *)key
-{
-    for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
-    {
-        if ([e.name isEqualToString:key])
-            return e;
-    }
-    return nil;
-}
-
-- (NSString *) getProfileType
-{
-    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
-    if (e)
-        return e.value;
-    return nil;
-}
-
-- (void) addExtension:(OAGpxExtension *)e
-{
-    if (!self.extraData)
-        self.extraData = [[OAGpxExtensions alloc] init];
-    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
-    if (![exts containsObject:e])
-        ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];
-}
-
-- (void) setProfileType:(NSString *)profileType
-{
-    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
-    if (!e)
-    {
-        e = [[OAGpxExtension alloc] init];
-        e.name = PROFILE_TYPE_EXTENSION;
-        e.value = profileType;
-        [self addExtension:e];
-        return;
-    }
-    e.value = profileType;
-}
-
-- (void) removeProfileType
-{
-    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
-    if (e)
-    {
-        NSMutableArray *arr = [NSMutableArray arrayWithArray:((OAGpxExtensions *)self.extraData).extensions];
-        [arr removeObject:e];
-        ((OAGpxExtensions *)self.extraData).extensions = arr;
-    }
-}
-
-- (BOOL) hasProfile
-{
-    NSString *profileType = self.getProfileType;
-    return profileType != nil && ![GAP_PROFILE_TYPE isEqualToString:profileType];
-}
-
-- (NSInteger) getTrkPtIndex
-{
-    OAGpxExtension *e = [self getExtensionByKey:TRKPT_INDEX_EXTENSION];
-    if (e)
-        return e ? e.value.integerValue : -1;
-    return -1;
-}
-
-- (void) setTrkPtIndex:(NSInteger)index
-{
-    OAGpxExtension *e = [self getExtensionByKey:TRKPT_INDEX_EXTENSION];
-    NSString *stringValue = [NSString stringWithFormat:@"%ld", index];
-    if (!e)
-    {
-        e = [[OAGpxExtension alloc] init];
-        e.name = TRKPT_INDEX_EXTENSION;
-        e.value = stringValue;
-        [self addExtension:e];
-        return;
-    }
-    e.value = stringValue;
-}
-
-- (BOOL) isGap
-{
-    NSString *profileType = [self getProfileType];
-    return [GAP_PROFILE_TYPE isEqualToString:profileType];
-}
-
-- (void)setGap
-{
-    [self setProfileType:GAP_PROFILE_TYPE];
-}
-
-- (void) copyExtensions:(OAGpxTrkPt *)pt
-{
-    self.extraData = pt.extraData;
-}
-
-@end
-
-@implementation OAGpxTrkSeg
+@implementation OATrkSegment
 
 - (instancetype)init
 {
@@ -647,7 +646,7 @@
 
 - (void) fillRouteDetails
 {
-    for (OAGpxExtension *ext in ((OAGpxExtensions *) self.extraData).extensions)
+    for (OAGpxExtension *ext in self.extensions)
     {
         if ([ext.name isEqualToString:@"route"])
         {
@@ -702,177 +701,10 @@
     }
 }
 
-- (void) addExtension:(OAGpxExtension *)e
-{
-    if (!self.extraData)
-        self.extraData = [[OAGpxExtensions alloc] init];
-    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
-    if (![exts containsObject:e])
-        ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];
-}
-
 @end
 
-@implementation OAGpxRte
-@end
-@implementation OAGpxRtePt
-
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        self.satellitesUsedForFixCalculation = -1;
-        self.dgpsStationId = -1;
-        self.speed = NAN;
-        self.magneticVariation = NAN;
-        self.geoidHeight = NAN;
-        self.fixType = Unknown;
-        self.horizontalDilutionOfPrecision = NAN;
-        self.verticalDilutionOfPrecision = NAN;
-        self.positionDilutionOfPrecision = NAN;
-        self.ageOfGpsData = NAN;
-        self.time = 0;
-    }
-    return self;
-}
-
-- (instancetype) initWithTrkPt:(OAGpxTrkPt *)point
-{
-    self = [super init];
-    if (self) {
-        self.ageOfGpsData = point.ageOfGpsData;
-        self.dgpsStationId = point.dgpsStationId;
-        self.fixType = point.fixType;
-        self.geoidHeight = point.geoidHeight;
-        self.horizontalDilutionOfPrecision = point.horizontalDilutionOfPrecision;
-        self.magneticVariation = point.magneticVariation;
-        self.positionDilutionOfPrecision = point.positionDilutionOfPrecision;
-        self.satellitesUsedForFixCalculation = point.satellitesUsedForFixCalculation;
-        self.source = point.source;
-        self.speed = point.speed;
-        self.symbol = point.symbol;
-        self.verticalDilutionOfPrecision = point.verticalDilutionOfPrecision;
-        
-        self.firstPoint = point.firstPoint;
-        self.lastPoint = point.lastPoint;
-        self.position = point.position;
-        self.name = point.name;
-        self.desc = point.desc;
-        self.elevation = point.elevation;
-        self.time = point.time;
-        self.comment = point.comment;
-        self.type = point.type;
-        self.links = point.links;
-        self.extraData = point.extraData;
-        self.distance = point.distance;
-    }
-    return self;
-}
-
-- (OAGpxExtension *)getExtensionByKey:(NSString *)key
-{
-    for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
-    {
-        if ([e.name isEqualToString:key])
-            return e;
-    }
-    return nil;
-}
-
-- (NSString *) getProfileType
-{
-    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
-    if (e)
-        return e.value;
-    return nil;
-}
-
-@end
-@implementation OAGpxLink
-@end
-@implementation OAGpxMetadata
+@implementation OATrack
 @end
 
-@implementation OAGpxRouteSegment
-
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        _ID = @"";
-        _length = @"";
-        _segmentTime = @"";
-        _speed = @"";
-        _turnType = @"";
-        _turnAngle = @"";
-        _types = @"";
-        _pointTypes = @"";
-        _names = @"";
-    }
-    return self;
-}
-
-+ (OAGpxRouteSegment *) fromStringBundle:(NSDictionary<NSString *, NSString *> *)bundle
-{
-    OAGpxRouteSegment *s = [[OAGpxRouteSegment alloc] init];
-    s.ID = bundle[@"id"];
-    s.length = bundle[@"length"];
-    s.segmentTime = bundle[@"segmentTime"];
-    s.speed = bundle[@"speed"];
-    s.turnType = bundle[@"turnType"];
-    s.turnAngle = bundle[@"turnAngle"];
-    s.types = bundle[@"types"];
-    s.pointTypes = bundle[@"pointTypes"];
-    s.names = bundle[@"names"];
-    return s;
-}
-
-- (NSDictionary<NSString *, NSString *> *) toStringBundle
-{
-    NSMutableDictionary *bundle = [NSMutableDictionary new];
-    bundle[@"id"] = _ID;
-    bundle[@"length"] = _length;
-    bundle[@"segmentTime"] = _segmentTime;
-    bundle[@"speed"] = _speed;
-    bundle[@"turnType"] = _turnType;
-    bundle[@"turnAngle"] = _turnAngle;
-    bundle[@"types"] = _types;
-    bundle[@"pointTypes"] = _pointTypes;
-    bundle[@"names"] = _names;
-    return bundle;
-}
-
-@end
-
-@implementation OAGpxRouteType
-
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        _tag = @"";
-        _value = @"";
-    }
-    return self;
-}
-
-+ (OAGpxRouteType *) fromStringBundle:(NSDictionary<NSString *, NSString *> *)bundle
-{
-    OAGpxRouteType *t = [[OAGpxRouteType alloc] init];
-    t.tag = bundle[@"t"];
-    t.value = bundle[@"v"];
-    return t;
-}
-
-- (NSDictionary<NSString *, NSString *> *) toStringBundle
-{
-    NSMutableDictionary *bundle = [NSMutableDictionary new];
-    bundle[@"t"] = _tag;
-    bundle[@"v"] = _value;
-    return bundle;
-}
-
+@implementation OARoute
 @end

@@ -1825,7 +1825,7 @@
 "copied_to_clipboard" = "Copiato negli appunti";
 "street_level_imagery" = "Immagini stradali";
 "markers_history" = "Cronologia dei marcatori";
-"track" = "Carrareccia";
+"shared_string_gpx_track" = "Carrareccia";
 "split_after" = "Spezza dopo";
 "shared_string_others" = "Ancora";
 "select_group" = "Seleziona il gruppo";

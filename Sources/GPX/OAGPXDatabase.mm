@@ -48,11 +48,6 @@
     self.hiddenGroups = self.hiddenGroups ? [self.hiddenGroups setByAddingObject:groupName] : [NSSet setWithObject:groupName];
 }
 
-- (NSInteger)color
-{
-    return _color != 0 ? _color : kDefaultTrackColor;
-}
-
 - (NSString *)width
 {
     return _width ? _width : @"";
@@ -75,7 +70,7 @@
     {
         _splitType = [OAGPXDatabase splitTypeByName:[document getSplitType]];
         _splitInterval = [document getSplitInterval];
-        _color = [document getColor:kDefaultTrackColor];
+        _color = [document getColor:0];
         _coloringType = [document getColoringType];
         _width = [document getWidth:nil];
         _showArrows = [document isShowArrows];
@@ -191,7 +186,7 @@
     
     gpx.splitType = [self.class splitTypeByName:document.getSplitType];
     gpx.splitInterval = [document getSplitInterval];
-    gpx.color = [document getColor:kDefaultTrackColor];
+    gpx.color = [document getColor:0];
     gpx.coloringType = [document getColoringType];
     gpx.width = [document getWidth:nil];
     gpx.showArrows = [document isShowArrows];
@@ -515,7 +510,7 @@
         } else if ([key isEqualToString:@"splitInterval"]) {
             gpx.splitInterval = [value doubleValue];
         } else if ([key isEqualToString:@"locationStart"]) {
-            OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+            OAWptPt *wpt = [[OAWptPt alloc] init];
             wpt.position = CLLocationCoordinate2DMake([value[@"position_lat"] doubleValue], [value[@"position_lon"] doubleValue]) ;
             wpt.name = value[@"name"];
             wpt.desc = value[@"desc"];
@@ -526,7 +521,7 @@
             wpt.speed = [value[@"speed"] doubleValue];
             gpx.locationStart = wpt;
         } else if ([key isEqualToString:@"locationEnd"]) {
-            OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+            OAWptPt *wpt = [[OAWptPt alloc] init];
             wpt.position = CLLocationCoordinate2DMake([value[@"position_lat"] doubleValue], [value[@"position_lon"] doubleValue]) ;
             wpt.name = value[@"name"];
             wpt.desc = value[@"desc"];

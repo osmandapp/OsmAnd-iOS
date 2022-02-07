@@ -1062,7 +1062,7 @@
 "split_before" = "לפצל לפני";
 "split_after" = "לפצל אחרי";
 "follow_track" = "מעקב אחר מסלול";
-"track" = "מסלול";
+"shared_string_gpx_track" = "מסלול";
 "select_another_track" = "בחירת מסלול אחר";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "הצמדה לדרכים";

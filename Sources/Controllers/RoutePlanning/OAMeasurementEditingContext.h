@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
     EOAAddPointModeAfter
 };
 
-@class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OAGpxRtePt, OAGpxTrkSeg, OARoadSegmentData, OAGPXMutableDocument, OAGpxRouteApproximation;
+@class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAWptPt, OATrkSegment, OARoadSegmentData, OAGPXMutableDocument, OAGpxRouteApproximation;
 
 @protocol OASnapToRoadProgressDelegate
 
@@ -45,7 +45,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 @property (nonatomic) OAApplicationMode *appMode;
 @property (nonatomic) NSInteger selectedPointPosition;
 
-@property (nonatomic) OAGpxTrkPt *originalPointToMove;
+@property (nonatomic) OAWptPt *originalPointToMove;
 
 @property (nonatomic) BOOL inAddPointMode;
 @property (nonatomic) BOOL inApproximationMode;
@@ -58,37 +58,37 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 @property (nonatomic) EOAAddPointMode addPointMode;
 @property (nonatomic, assign) BOOL approximationMode;
 
-@property (nonatomic) NSMutableDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *roadSegmentData;
+@property (nonatomic) NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *roadSegmentData;
 
-- (NSArray<OAGpxTrkPt *> *) getAllPoints;
-- (NSArray<OAGpxTrkPt *> *) getPoints;
-- (NSArray<NSArray<OAGpxTrkPt *> *> *) getPointsSegments:(BOOL)plain route:(BOOL)route;
-- (NSArray<OAGpxTrkPt *> *) getBeforePoints;
-- (NSArray<OAGpxTrkPt *> *) getAfterPoints;
+- (NSArray<OAWptPt *> *) getAllPoints;
+- (NSArray<OAWptPt *> *) getPoints;
+- (NSArray<NSArray<OAWptPt *> *> *) getPointsSegments:(BOOL)plain route:(BOOL)route;
+- (NSArray<OAWptPt *> *) getBeforePoints;
+- (NSArray<OAWptPt *> *) getAfterPoints;
 - (NSInteger) getPointsCount;
 - (void) clearPoints;
 - (void) clearSnappedToRoadPoints;
 
-- (OAGpxTrkPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad;
-- (void) addPoint:(NSInteger)position pt:(OAGpxTrkPt *)pt;
-- (void) addPoints:(NSArray<OAGpxTrkPt *> *)points;
+- (OAWptPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad;
+- (void) addPoint:(NSInteger)position pt:(OAWptPt *)pt;
+- (void) addPoints:(NSArray<OAWptPt *> *)points;
 - (void) addPoints;
-- (void) setPoints:(NSArray<OAGpxTrkPt *> *)points;
+- (void) setPoints:(NSArray<OAWptPt *> *)points;
 
-- (NSArray<OAGpxTrkSeg *> *) getBeforeTrkSegmentLine;
-- (NSArray<OAGpxTrkSeg *> *) getAfterTrkSegmentLine;
+- (NSArray<OATrkSegment *> *) getBeforeTrkSegmentLine;
+- (NSArray<OATrkSegment *> *) getAfterTrkSegmentLine;
 
-- (NSArray<OAGpxTrkSeg *> *) getBeforeSegments;
-- (NSArray<OAGpxTrkSeg *> *) getAfterSegments;
+- (NSArray<OATrkSegment *> *) getBeforeSegments;
+- (NSArray<OATrkSegment *> *) getAfterSegments;
 
 - (OAApplicationMode *) getBeforeSelectedPointAppMode;
 - (OAApplicationMode *) getSelectedPointAppMode;
 
-- (void) addPoint:(OAGpxTrkPt *)pt;
-- (void) addPoint:(OAGpxTrkPt *)pt mode:(EOAAddPointMode)mode;
-- (void) addPoint:(NSInteger)position point:(OAGpxTrkPt *)pt mode:(EOAAddPointMode)mode;
+- (void) addPoint:(OAWptPt *)pt;
+- (void) addPoint:(OAWptPt *)pt mode:(EOAAddPointMode)mode;
+- (void) addPoint:(NSInteger)position point:(OAWptPt *)pt mode:(EOAAddPointMode)mode;
 
-- (NSArray<OAGpxTrkPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OAGpxTrkPt *> *)originalPoints mode:(OAApplicationMode *)mode;
+- (NSArray<OAWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OAWptPt *> *)originalPoints mode:(OAApplicationMode *)mode;
 
 - (double) getRouteDistance;
 - (BOOL) isNewData;
@@ -117,7 +117,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (OsmAnd::ColorARGB) getLineColor;
 
 - (OAGPXMutableDocument *) exportGpx:(NSString *)gpxName;
-- (NSArray<NSArray<OAGpxRtePt *> *> *) getRoutePoints;
+- (NSArray<NSArray<OAWptPt *> *> *) getRoutePoints;
 
 - (void) scheduleRouteCalculateIfNotEmpty;
 

@@ -164,13 +164,14 @@
    OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
     if (gpxFile)
     {
-        for (OAGpxWpt *wpt in gpxFile.locationMarks)
+        for (OAWptPt *wpt in gpxFile.points)
         {
             OADestination *dest = [[OADestination alloc] initWithDesc:wpt.name latitude:wpt.getLatitude longitude:wpt.getLongitude];
-            dest.color = [UIColor colorFromString:wpt.color];
-            dest.markerResourceName = [self getResourceName:[wpt.color upperCase]];
+            int color = [wpt getColor:0];
+            dest.color = color != 0 ? UIColorFromRGBA(color) : UIColorFromRGB(marker_pin_color_blue);
+            dest.markerResourceName = [self getResourceName:[dest.color.toHexString upperCase]];
 
-            for (OAGpxExtension *e in ((OAGpxExtensions *) wpt.extraData).extensions)
+            for (OAGpxExtension *e in wpt.extensions)
             {
                 if ([e.name isEqualToString:@"creation_date"])
                 {

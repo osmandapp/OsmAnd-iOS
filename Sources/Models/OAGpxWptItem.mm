@@ -13,7 +13,7 @@
 
 @implementation OAGpxWptItem
 
-+ (instancetype)withGpxWpt:(OAGpxWpt *)gpxWpt
++ (instancetype)withGpxWpt:(OAWptPt *)gpxWpt
 {
     OAGpxWptItem *gpxWptItem = [[OAGpxWptItem alloc] init];
     if (gpxWptItem)
@@ -23,7 +23,7 @@
     return gpxWptItem;
 }
 
-- (void) setPoint:(OAGpxWpt *)point
+- (void) setPoint:(OAWptPt *)point
 {
     _point = point;
     [self acquireColor];
@@ -40,13 +40,12 @@
     if (!self.point)
         return;
     
-    self.point.color = [OAUtilities colorToString:self.color];
+    [self.point setColor:[OAUtilities colorToNumber:self.color]];
 }
 
 - (void) acquireColor
 {
-    if (self.point.color.length > 0)
-        self.color = [UIColor colorFromString:self.point.color];
+    self.color = [self.point getColor];
 }
 
 - (BOOL) isEqual:(id)o

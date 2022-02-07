@@ -109,6 +109,7 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 - (instancetype)initWithGpx:(OAGPX *)gpx;
 
 - (void)updateGpxData;
+- (void)updateAnalysis;
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem
                                    firstAttribute:(NSLayoutAttribute)firstAttribute

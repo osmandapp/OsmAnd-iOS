@@ -14,9 +14,9 @@
 
 @implementation OAReversePointsCommand
 {
-    NSArray<OAGpxTrkPt *> *_oldPoints;
-    NSArray<OAGpxTrkPt *> *_newPoints;
-    NSMutableDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
+    NSArray<OAWptPt *> *_oldPoints;
+    NSArray<OAWptPt *> *_newPoints;
+    NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
     OAApplicationMode *_oldMode;
 }
 
@@ -34,26 +34,25 @@
     OAMeasurementEditingContext *editingCtx = self.getEditingCtx;
     _oldPoints = [NSArray arrayWithArray:editingCtx.getPoints];
     _oldRoadSegmentData = editingCtx.roadSegmentData;
-    NSMutableArray<OAGpxTrkPt *> *newPoints = [[NSMutableArray alloc] initWithCapacity:_oldPoints.count];
+    NSMutableArray<OAWptPt *> *newPoints = [[NSMutableArray alloc] initWithCapacity:_oldPoints.count];
     
     for (NSInteger i = (NSInteger) _oldPoints.count - 1; i >= 0; i--)
     {
-        OAGpxTrkPt *point = _oldPoints[i];
-        OAGpxTrkPt *prevPoint = i > 0 ? _oldPoints[i - 1] : nil;
-        OAGpxTrkPt *newPoint = [[OAGpxTrkPt alloc] initWithPoint:point];
-        [newPoint copyExtensions:point];
+        OAWptPt *point = _oldPoints[i];
+        OAWptPt *prevPoint = i > 0 ? _oldPoints[i - 1] : nil;
+        [point copyExtensions:point];
         if (prevPoint != nil)
         {
             NSString *profileType = prevPoint.getProfileType;
             if (profileType != nil)
             {
-                [newPoint setProfileType:profileType];
+                [point setProfileType:profileType];
             } else
             {
-                [newPoint removeProfileType];
+                [point removeProfileType];
             }
         }
-        [newPoints addObject:newPoint];
+        [newPoints addObject:point];
     }
     _newPoints = [NSArray arrayWithArray:newPoints];
     [self executeCommand];
@@ -68,7 +67,7 @@
     [editingCtx addPoints:_newPoints];
     if (_newPoints.count > 0)
     {
-        OAGpxTrkPt *lastPoint = _newPoints.lastObject;
+        OAWptPt *lastPoint = _newPoints.lastObject;
         editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
     }
     [editingCtx updateSegmentsForSnap];

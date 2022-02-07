@@ -1122,7 +1122,7 @@
 "split_before" = "Podeli pre";
 "split_after" = "Posle podeli";
 "follow_track" = "Sledi stazu";
-"track" = "Putanja";
+"shared_string_gpx_track" = "Putanja";
 "select_another_track" = "Izaberite drugu stazu";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Pričvrstite na puteve";

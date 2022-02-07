@@ -1062,7 +1062,7 @@
 "split_before" = "Подели пре";
 "split_after" = "После подели";
 "follow_track" = "Следи стазу";
-"track" = "Стаза";
+"shared_string_gpx_track" = "Стаза";
 "select_another_track" = "Изаберите другу стазу";
 "select_track_to_follow" = "Одаберите путању за праћење";
 "attach_to_the_roads" = "Причврстите на путеве";

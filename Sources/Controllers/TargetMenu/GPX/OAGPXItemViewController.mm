@@ -497,7 +497,7 @@
 
     UILabel *badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 50.0)];
     badgeLabel.font = [UIFont systemFontOfSize:11.0];
-    badgeLabel.text = [NSString stringWithFormat:@"%d", (int) self.doc.locationMarks.count];
+    badgeLabel.text = [NSString stringWithFormat:@"%d", (int) self.doc.points.count];
     badgeLabel.textColor = UIColorFromRGB(0xFF8F00);
     badgeLabel.textAlignment = NSTextAlignmentCenter;
     [badgeLabel sizeToFit];
@@ -516,7 +516,7 @@
 
 - (void)resetSortModeIfNeeded
 {
-    if (self.doc.locationMarks.count == 0)
+    if (self.doc.points.count == 0)
     {
         _sortingType = EPointsSortingTypeGrouped;
         if (_waypointsController)
@@ -589,7 +589,7 @@
 
             if (!_waypointsController)
             {
-                _waypointsController = [[OAGPXWptListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
+                _waypointsController = [[OAGPXWptListViewController alloc] initWithPoints:self.doc.points];
                 _waypointsController.delegate = self;
                 _waypointsController.sortingType = _sortingType;
                 [_waypointsController updateSortButton:self.buttonSort];
@@ -634,7 +634,7 @@
     else
         [self.buttonEdit setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
 
-    NSInteger wptCount = self.doc.locationMarks.count;
+    NSInteger wptCount = self.doc.points.count;
     self.buttonSort.enabled = wptCount;
     self.buttonEdit.enabled = wptCount;
 }
@@ -642,7 +642,7 @@
 - (NSArray *)readGroups
 {
     NSMutableSet *groups = [NSMutableSet set];
-    for (OAGpxWpt *wptItem in self.doc.locationMarks)
+    for (OAWptPt *wptItem in self.doc.points)
     {
         if (wptItem.type.length > 0)
             [groups addObject:wptItem.type];
@@ -798,7 +798,7 @@
                                      [self loadDoc];
                                  }
 
-                                 [_waypointsController setPoints:self.doc.locationMarks];
+                                 [_waypointsController setPoints:self.doc.points];
                                  [_waypointsController generateData];
                                  [self addBadge];
                                  [self resetSortModeIfNeeded];
@@ -1531,29 +1531,29 @@
                 self.gpx.gpxFilePath = newFilePath;
                 [[OAGPXDatabase sharedDb] save];
 
-                OAGpxMetadata *metadata;
+                OAMetadata *metadata;
                 if (self.doc.metadata)
                 {
-                    metadata = (OAGpxMetadata *)self.doc.metadata;
+                    metadata = self.doc.metadata;
                 }
                 else
                 {
-                    metadata = [[OAGpxMetadata alloc] init];
+                    metadata = [[OAMetadata alloc] init];
                     long time = 0;
-                    if (self.doc.locationMarks.count > 0)
+                    if (self.doc.points.count > 0)
                     {
-                        time = ((OAGpxWpt *)self.doc.locationMarks[0]).time;
+                        time = self.doc.points[0].time;
                     }
                     if (self.doc.tracks.count > 0)
                     {
-                        OAGpxTrk *track = self.doc.tracks[0];
+                        OATrack *track = self.doc.tracks[0];
                         track.name = newName;
                         if (track.segments.count > 0)
                         {
-                            OAGpxTrkSeg *seg = track.segments[0];
+                            OATrkSegment *seg = track.segments[0];
                             if (seg.points.count > 0)
                             {
-                                OAGpxTrkPt *p = seg.points[0];
+                                OAWptPt *p = seg.points[0];
                                 if (time > p.time)
                                     time = p.time;
                             }

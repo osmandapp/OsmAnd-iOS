@@ -41,7 +41,7 @@
 
 @implementation OAFollowTrackBottomSheetViewController
 {
-    OAGpxTrkPt *_point;
+    OAWptPt *_point;
     NSArray<NSArray<NSDictionary *> *> *_data;
     
     OAGPXDocument *_gpx;
@@ -146,7 +146,7 @@
         fileName = _gpx.tracks.firstObject.name;
     
     if (fileName == nil || fileName.length == 0)
-        fileName = OALocalizedString(@"track");
+        fileName = OALocalizedString(@"shared_string_gpx_track");
     
     OAGPXRouteParamsBuilder *params = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
@@ -163,7 +163,7 @@
     NSString *time = gpxData ? [OAOsmAndFormatter getFormattedTimeInterval:gpxData.timeSpan shortFormat:YES] : @"";
     if (isSegment)
     {
-        OAGpxTrkSeg *seg = params.selectedSegment < _gpx.getNonEmptySegmentsCount ? [_gpx getNonEmptyTrkSegments:NO][params.selectedSegment] : nil;
+        OATrkSegment *seg = params.selectedSegment < _gpx.getNonEmptySegmentsCount ? [_gpx getNonEmptyTrkSegments:NO][params.selectedSegment] : nil;
         if (seg)
         {
             distance = [OAOsmAndFormatter getFormattedDistance:[OAGPXUIHelper getSegmentDistance:seg]];

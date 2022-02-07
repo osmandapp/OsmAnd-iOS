@@ -17,7 +17,7 @@
 @interface OAGpxLoader : NSObject
 
 @property (nonatomic) QString path;
-@property (nonatomic) std::shared_ptr<const OsmAnd::GeoInfoDocument> document;
+@property (nonatomic) std::shared_ptr<const OsmAnd::GpxDocument> document;
 
 @end
 
@@ -99,12 +99,12 @@
     return loading;
 }
 
-- (OAGPXDocument *)getSelectedGpx:(OAGpxWpt *)gpxWpt
+- (OAGPXDocument *)getSelectedGpx:(OAWptPt *)gpxWpt
 {
     for (auto it = _activeGpx.begin(); it != _activeGpx.end(); ++it)
     {
         OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:it.key().toNSString()];
-        if ([[gpxDoc locationMarks] containsObject:gpxWpt])
+        if ([[gpxDoc points] containsObject:gpxWpt])
             return gpxDoc;
     }
     return nil;

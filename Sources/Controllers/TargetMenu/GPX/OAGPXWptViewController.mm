@@ -16,12 +16,10 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
 #import "OAMapViewController.h"
-#import "OAGpxRoutePoint.h"
 #import "OACollapsableWaypointsView.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/GeoInfoDocument.h>
 #include <OsmAndCore/GpxDocument.h>
 #include "Localization.h"
 #include "OARootViewController.h"
@@ -85,7 +83,7 @@
             groupName = [userDefaults stringForKey:kWptDefaultGroupKey];
         
         OAGpxWptItem* wpt = [[OAGpxWptItem alloc] init];
-        OAGpxWpt* p = [[OAGpxWpt alloc] init];
+        OAWptPt* p = [[OAWptPt alloc] init];
         p.name = formattedLocation;
         p.position = location;
         p.type = groupName;

@@ -15,10 +15,10 @@
 
 @implementation OAChangeRouteModeCommand
 {
-    NSMutableArray<OAGpxTrkPt *> *_oldPoints;
-    NSMutableArray<OAGpxTrkPt *> *_newPoints;
-    NSMutableDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
-    NSMutableDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *_newRoadSegmentData;
+    NSMutableArray<OAWptPt *> *_oldPoints;
+    NSMutableArray<OAWptPt *> *_newPoints;
+    NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
+    NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *_newRoadSegmentData;
     OAApplicationMode *_oldMode;
     OAApplicationMode *_newMode;
     EOAChangeRouteType _changeRouteType;
@@ -47,12 +47,7 @@
     _newRoadSegmentData = [NSMutableDictionary dictionaryWithDictionary:_oldRoadSegmentData];;
     if (_oldPoints.count > 0)
     {
-        for (OAGpxTrkPt *pt in _oldPoints)
-        {
-            OAGpxTrkPt *point = [[OAGpxTrkPt alloc] initWithPoint:pt];
-            [point copyExtensions:pt];
-            [_newPoints addObject:point];
-        }
+        [_newPoints addObjectsFromArray:_oldPoints];
         switch (_changeRouteType)
         {
             case EOAChangeRouteLastSegment:
@@ -64,7 +59,7 @@
             }
             case EOAChangeRouteWhole:
             {
-                for (OAGpxTrkPt *pt in _newPoints)
+                for (OAWptPt *pt in _newPoints)
                 {
                     [self updateProfileType:pt];
                 }
@@ -135,10 +130,10 @@
     return CHANGE_ROUTE_MODE;
 }
 
-- (NSArray<OAGpxTrkPt *> *) getPairAt:(NSInteger)pointIndex
+- (NSArray<OAWptPt *> *) getPairAt:(NSInteger)pointIndex
 {
-    OAGpxTrkPt *first = pointIndex >= 0 && pointIndex < _newPoints.count ? _newPoints[pointIndex] : nil;
-    OAGpxTrkPt *second = pointIndex >= 0 && pointIndex < _newPoints.count - 1 ? _newPoints[pointIndex + 1] : nil;
+    OAWptPt *first = pointIndex >= 0 && pointIndex < _newPoints.count ? _newPoints[pointIndex] : nil;
+    OAWptPt *second = pointIndex >= 0 && pointIndex < _newPoints.count - 1 ? _newPoints[pointIndex + 1] : nil;
     return @[first, second];
 }
 
@@ -153,7 +148,7 @@
     }
     else
     {
-        OAGpxTrkPt *lastPoint = _newPoints[_newPoints.count - 1];
+        OAWptPt *lastPoint = _newPoints[_newPoints.count - 1];
         editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
     }
     if (_newRoadSegmentData != nil)
@@ -162,7 +157,7 @@
     [self refreshMap];
 }
 
-- (void) updateProfileType:(OAGpxTrkPt *)pt
+- (void) updateProfileType:(OAWptPt *)pt
 {
     if (!pt.isGap)
     {

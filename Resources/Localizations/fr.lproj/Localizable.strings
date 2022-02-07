@@ -1841,7 +1841,7 @@
 "start_of_track" = "Début de la trace";
 "reverse_track_dir" = "Inverser le sens de la trace";
 "select_another_track" = "Sélectionner une autre trace";
-"track" = "Trace";
+"shared_string_gpx_track" = "Trace";
 "follow_track" = "Suivre la trace";
 "gpx_already_exsists" = "Un fichier avec ce nom existe déjà";
 "empty_filename" = "Le nom du fichier ne peut être vide";

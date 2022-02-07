@@ -93,7 +93,7 @@
         if (gpx.metadata != nil)
         {
             gpx.metadata = [[OAMetadata alloc] init];
-            gpx.metadata.extraData = _gpxFile.metadata.extraData;
+            gpx.metadata.extensions = _gpxFile.metadata.extensions;
         }
 //        if (!gpx.showCurrentTrack) {
 //            res = GPXUtilities.writeGpxFile(outFile, gpx);
@@ -122,22 +122,22 @@
 {
     if (_measurementLayer != nil)
     {
-        NSArray<OAGpxTrkSeg *> *before = _editingCtx.getBeforeTrkSegmentLine;
-        NSArray<OAGpxTrkSeg *> *after = _editingCtx.getAfterTrkSegmentLine;
+        NSArray<OATrkSegment *> *before = _editingCtx.getBeforeTrkSegmentLine;
+        NSArray<OATrkSegment *> *after = _editingCtx.getAfterTrkSegmentLine;
         if (_simplified)
         {
-            OAGpxTrk *track = [[OAGpxTrk alloc] init];
+            OATrack *track = [[OATrack alloc] init];
             track.name = trackName;
             [gpx addTrack:track];
-            for (OAGpxTrkSeg *s in before)
+            for (OATrkSegment *s in before)
             {
-                OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
+                OATrkSegment *segment = [[OATrkSegment alloc] init];
                 segment.points = s.points;
                 [gpx addTrackSegment:segment track:track];
             }
-            for (OAGpxTrkSeg *s in after)
+            for (OATrkSegment *s in after)
             {
-                OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
+                OATrkSegment *segment = [[OATrkSegment alloc] init];
                 segment.points = s.points;
                 [gpx addTrackSegment:segment track:track];
             }
@@ -147,12 +147,12 @@
             OAGPXMutableDocument *newGpx = [_editingCtx exportGpx:trackName];
             if (newGpx)
             {
-                NSArray<OAGpxTrk *> *gpxTracks = gpx.tracks;
-                NSArray<OAGpxWpt *> *gpxPoints = gpx.locationMarks;
-                NSArray<OAGpxRte *> *gpxRoutes = gpx.routes;
+                NSArray<OATrack *> *gpxTracks = gpx.tracks;
+                NSArray<OAWptPt *> *gpxPoints = gpx.points;
+                NSArray<OARoute *> *gpxRoutes = gpx.routes;
                 gpx = newGpx;
-                NSArray<NSArray<OAGpxRtePt *> *> *routePoints = [_editingCtx getRoutePoints];
-                for (NSArray<OAGpxRtePt *> *points in routePoints)
+                NSArray<NSArray<OAWptPt *> *> *routePoints = [_editingCtx getRoutePoints];
+                for (NSArray<OAWptPt *> *points in routePoints)
                 {
                     [gpx addRoutePoints:points addRoute:YES];
                 }

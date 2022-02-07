@@ -22,7 +22,7 @@
 #include <SkColorFilter.h>
 #include <SkCGUtils.h>
 
-OAWaypointsMapLayerProvider::OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>>& locationMarks_,
+OAWaypointsMapLayerProvider::OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>>& wptPtPoints_,
                                                          const int baseOrder_,
                                                          const QList<OsmAnd::PointI>& hiddenPoints_,
                                                          const bool showCaptions_,
@@ -31,10 +31,10 @@ OAWaypointsMapLayerProvider::OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref
                                                          const float referenceTileSizeOnScreenInPixels_)
 
 : IOAMapTiledCollectionProvider(baseOrder_, hiddenPoints_, showCaptions_, captionStyle_, captionTopSpace_, referenceTileSizeOnScreenInPixels_)
-, _locationMarks(locationMarks_)
+, _wptPtPoints(wptPtPoints_)
 {
-    for (const auto& locationMark : _locationMarks)
-        _locationMarkPoints.push_back(OsmAnd::Utilities::convertLatLonTo31(locationMark->position));
+    for (const auto& point : _wptPtPoints)
+        _points.push_back(OsmAnd::Utilities::convertLatLonTo31(point->position));
 }
 
 OAWaypointsMapLayerProvider::~OAWaypointsMapLayerProvider()
@@ -43,29 +43,29 @@ OAWaypointsMapLayerProvider::~OAWaypointsMapLayerProvider()
 
 OsmAnd::PointI OAWaypointsMapLayerProvider::getPoint31(const int index) const
 {
-    return _locationMarkPoints[index];
+    return _points[index];
 }
 
 int OAWaypointsMapLayerProvider::getPointsCount() const
 {
-    return _locationMarks.size();
+    return _wptPtPoints.size();
 }
 
 sk_sp<SkImage> OAWaypointsMapLayerProvider::getImageBitmap(const int index, bool isFullSize /*= true*/)
 {
-    const auto locationMark = _locationMarks[index];
-    return getBitmapByWaypoint(locationMark, isFullSize);
+    const auto wptPt = _wptPtPoints[index];
+    return getBitmapByWaypoint(wptPt, isFullSize);
 }
 
-sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark> &locationMark, bool isFullSize)
+sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &point, bool isFullSize)
 {
     UIColor* color = nil;
     NSString *shapeName = nil;
     NSString *iconName = nil;
     NSString *size = isFullSize ? @"fill" : @"small";
-    if (locationMark->extraData)
+    const auto& values = point->getValues();
+    if (!values.isEmpty())
     {
-        const auto& values = locationMark->extraData->getValues();
         const auto& it = values.find(QStringLiteral("color"));
         if (it != values.end())
             color = [UIColor colorFromString:it.value().toString().toNSString()];
@@ -98,7 +98,7 @@ sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Re
     sk_sp<SkImage> bitmap;
     if (bitmapIt == _iconsCache.end())
     {
-        bitmap = createCompositeBitmap(locationMark, isFullSize);
+        bitmap = createCompositeBitmap(point, isFullSize);
         _iconsCache[iconId] = bitmap;
     }
     else
@@ -108,14 +108,14 @@ sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Re
     return bitmap;
 }
 
-sk_sp<SkImage> OAWaypointsMapLayerProvider::createCompositeBitmap(const OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark> &locationMark, bool isFullSize) const
+sk_sp<SkImage> OAWaypointsMapLayerProvider::createCompositeBitmap(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &point, bool isFullSize) const
 {
     UIColor* color = nil;
     NSString *shapeName = nil;
     NSString *iconName = nil;
-    if (locationMark->extraData)
+    const auto& values = point->getValues();
+    if (!values.isEmpty())
     {
-        const auto& values = locationMark->extraData->getValues();
         const auto& it = values.find(QStringLiteral("color"));
         if (it != values.end())
             color = [UIColor colorFromString:it.value().toString().toNSString()];
@@ -203,7 +203,7 @@ QString OAWaypointsMapLayerProvider::backgroundImageNameByType(const QString& ty
 
 QString OAWaypointsMapLayerProvider::getCaption(const int index) const
 {
-    return _locationMarks[index]->name;
+    return _wptPtPoints[index]->name;
 }
 
 OsmAnd::ZoomLevel OAWaypointsMapLayerProvider::getMinZoom() const

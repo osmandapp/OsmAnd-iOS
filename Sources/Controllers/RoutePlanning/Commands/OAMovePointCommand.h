@@ -10,11 +10,11 @@
 
 #import "OAMeasurementModeCommand.h"
 
-@class OAMeasurementToolLayer, OAGpxTrkPt;
+@class OAMeasurementToolLayer, OAWptPt;
 
 @interface OAMovePointCommand : OAMeasurementModeCommand
 
-- (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer oldPoint:(OAGpxTrkPt *)oldPoint newPoint:(OAGpxTrkPt *)newPoint position:(NSInteger)position;
+- (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer oldPoint:(OAWptPt *)oldPoint newPoint:(OAWptPt *)newPoint position:(NSInteger)position;
 
 @end
 

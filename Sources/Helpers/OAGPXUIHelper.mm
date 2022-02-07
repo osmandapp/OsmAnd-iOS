@@ -263,7 +263,7 @@
 
 + (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment
                                         gpxFile:(OAGPXDocument *)gpxFile
-                                           time:(float)time
+                                           time:(double)time
                                 preciseLocation:(BOOL)preciseLocation
                                    joinSegments:(BOOL)joinSegments
 {
@@ -302,7 +302,7 @@
 }
 
 + (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment
-                                    timeToPoint:(float)timeToPoint
+                                    timeToPoint:(double)timeToPoint
                              passedSegmentsTime:(long)passedSegmentsTime
                                 preciseLocation:(BOOL)preciseLocation
 {
@@ -327,7 +327,7 @@
 
 + (CLLocationCoordinate2D)getSegmentPointByDistance:(OATrkSegment *)segment
                                             gpxFile:(OAGPXDocument *)gpxFile
-                                    distanceToPoint:(float)distanceToPoint
+                                    distanceToPoint:(double)distanceToPoint
                                     preciseLocation:(BOOL)preciseLocation
                                        joinSegments:(BOOL)joinSegments
 {

@@ -247,10 +247,10 @@
     double maxXValue = lineData ? lineData.xMax : -1;
     if (entries.count >= 2 && lineData)
     {
-        float interval = entries[1].floatValue - entries[0].floatValue;
+        double interval = entries[1].doubleValue - entries[0].doubleValue;
         if (interval > 0)
         {
-            float currentPointEntry = interval;
+            double currentPointEntry = interval;
             while (currentPointEntry < maxXValue)
             {
                 CLLocationCoordinate2D location = [self getLocationAtPos:currentPointEntry
@@ -293,7 +293,7 @@
     return segment;
 }
 
-- (CLLocationCoordinate2D)getLocationAtPos:(float)position
+- (CLLocationCoordinate2D)getLocationAtPos:(double)position
                              lineChartView:(LineChartView *)lineChartView
                                    segment:(OATrkSegment *)segment
 {
@@ -307,7 +307,7 @@
         id<IChartDataSet> dataSet = dataSets.firstObject;
         if ([GpxUIHelper getDataSetAxisTypeWithDataSet:dataSet] == GPXDataSetAxisTypeTIME)
         {
-            float time = position * 1000;
+            double time = position * 1000;
             return [OAGPXUIHelper getSegmentPointByTime:segment
                                                 gpxFile:_gpxDoc
                                                    time:time
@@ -316,7 +316,7 @@
         }
         else
         {
-            float distance = [dataSet getDivX] * position;
+            double distance = [dataSet getDivX] * position;
             return [OAGPXUIHelper getSegmentPointByDistance:segment
                                                     gpxFile:_gpxDoc
                                             distanceToPoint:distance
@@ -332,28 +332,25 @@
         lineChartView:(LineChartView *)lineChartView
               segment:(OATrkSegment *)segment
 {
-    if (CLLocationCoordinate2DIsValid(location))
+    OABBox rect = [self getRect:lineChartView segment:segment];
+    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    if (rect.left != 0 && rect.right != 0)
     {
-        OABBox rect = [self getRect:lineChartView segment:segment];
-        OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-        if (rect.left != 0 && rect.right != 0)
+        auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
+        CGPoint mapPoint;
+        [mapViewController.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
+
+        if (forceFit && _centerMapOnBBox)
         {
-            auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
-            CGPoint mapPoint;
-            [mapViewController.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
+            _centerMapOnBBox(rect);
+        }
+        else if (CLLocationCoordinate2DIsValid(location) && !CGRectContainsPoint(_screenBBox, mapPoint))
+        {
+            if (!_isLandscape && _adjustViewPort)
+                _adjustViewPort();
 
-            if (forceFit && _centerMapOnBBox)
-            {
-                _centerMapOnBBox(rect);
-            }
-            else if (location.latitude != 0 && location.longitude != 0 && !CGRectContainsPoint(_screenBBox, mapPoint))
-            {
-                if (!_isLandscape && _adjustViewPort)
-                    _adjustViewPort();
-
-                Point31 pos = [OANativeUtilities convertFromPointI:point];
-                [mapViewController goToPosition:pos animated:YES];
-            }
+            Point31 pos = [OANativeUtilities convertFromPointI:point];
+            [mapViewController goToPosition:pos animated:YES];
         }
     }
 }

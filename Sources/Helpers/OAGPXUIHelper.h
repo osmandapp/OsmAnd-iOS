@@ -38,13 +38,13 @@
 
 + (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment
                                         gpxFile:(OAGPXDocument *)gpxFile
-                                           time:(float)time
+                                           time:(double)time
                                 preciseLocation:(BOOL)preciseLocation
                                    joinSegments:(BOOL)joinSegments;
 
 + (CLLocationCoordinate2D)getSegmentPointByDistance:(OATrkSegment *)segment
                                             gpxFile:(OAGPXDocument *)gpxFile
-                                    distanceToPoint:(float)distanceToPoint
+                                    distanceToPoint:(double)distanceToPoint
                                     preciseLocation:(BOOL)preciseLocation
                                        joinSegments:(BOOL)joinSegments;
 

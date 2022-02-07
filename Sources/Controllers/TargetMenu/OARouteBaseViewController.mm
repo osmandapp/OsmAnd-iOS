@@ -9,31 +9,21 @@
 #import "OARouteBaseViewController.h"
 #import "Localization.h"
 #import "OARootViewController.h"
-#import "OASizes.h"
 #import "OAColors.h"
-#import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
-#import "OsmAndApp.h"
 #import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
 #import "OAMapLayers.h"
-#import "OARouteLayer.h"
 #import "OARouteStatisticsHelper.h"
-#import "OARouteCalculationResult.h"
-#import "OsmAnd_Maps-Swift.h"
-#import "Localization.h"
-#import "OARouteStatistics.h"
-#import "OATargetPointsHelper.h"
 #import "OAMapRendererView.h"
-#import "OARouteInfoLegendItemView.h"
 #import "OARouteStatisticsModeCell.h"
-#import "OAFilledButtonCell.h"
 #import "OATransportRoutingHelper.h"
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDatabase.h"
 
+#import "OsmAnd_Maps-Swift.h"
 #import <Charts/Charts-Swift.h>
 
 @implementation OARouteLineChartHelper
@@ -172,7 +162,7 @@
         return;
 
     NSArray<ChartHighlight *> *highlights = lineChartView.highlighted;
-    OsmAnd::LatLon location;
+    CLLocationCoordinate2D location = kCLLocationCoordinate2DInvalid;
     OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     [mapViewController.mapLayers.routeMapLayer showCurrentStatisticsLocation:trackChartPoints];
 
@@ -207,11 +197,9 @@
         }
         location = [self getLocationAtPos:highlightPosition
                             lineChartView:lineChartView
-                                 segment:segment];
-        if (location.latitude != 0 && location.longitude != 0)
-        {
+                                  segment:segment];
+        if (CLLocationCoordinate2DIsValid(location))
             trackChartPoints.highlightedPoint = location;
-        }
     }
 
     trackChartPoints.axisPointsInvalidated = forceFit;
@@ -221,7 +209,7 @@
     [self fitTrackOnMap:location
                forceFit:forceFit
           lineChartView:lineChartView
-               segment:segment];
+                segment:segment];
 }
 
 - (OATrackChartPoints *)generateTrackChartPoints:(LineChartView *)lineChartView
@@ -241,14 +229,14 @@
     trackChartPoints.axisPointsInvalidated = YES;
     trackChartPoints.xAxisPoints = [self getXAxisPoints:trackChartPoints lineChartView:lineChartView segment:segment];
     if (CLLocationCoordinate2DIsValid(startPoint))
-        trackChartPoints.highlightedPoint = OsmAnd::LatLon(startPoint.latitude, startPoint.longitude);
+        trackChartPoints.highlightedPoint = startPoint;
 
     return trackChartPoints;
 }
 
 - (NSArray<CLLocation *> *)getXAxisPoints:(OATrackChartPoints *)points
                             lineChartView:(LineChartView *)lineChartView
-                                 segment:(OATrkSegment *)segment
+                                  segment:(OATrkSegment *)segment
 {
     if (!points.axisPointsInvalidated)
         return points.xAxisPoints;
@@ -259,16 +247,18 @@
     double maxXValue = lineData ? lineData.xMax : -1;
     if (entries.count >= 2 && lineData)
     {
-        double interval = entries[1].doubleValue - entries[0].doubleValue;
+        float interval = entries[1].floatValue - entries[0].floatValue;
         if (interval > 0)
         {
-            double currentPointEntry = interval;
+            float currentPointEntry = interval;
             while (currentPointEntry < maxXValue)
             {
-                OsmAnd::LatLon location = [self getLocationAtPos:currentPointEntry
-                                                   lineChartView:lineChartView
-                                                        segment:segment];
-                [result addObject:[[CLLocation alloc] initWithLatitude:location.latitude longitude:location.longitude]];
+                CLLocationCoordinate2D location = [self getLocationAtPos:currentPointEntry
+                                                           lineChartView:lineChartView
+                                                                 segment:segment];
+                if (CLLocationCoordinate2DIsValid(location))
+                    [result addObject:[[CLLocation alloc] initWithLatitude:location.latitude longitude:location.longitude]];
+
                 currentPointEntry += interval;
             }
         }
@@ -303,11 +293,10 @@
     return segment;
 }
 
-- (OsmAnd::LatLon)getLocationAtPos:(double)position
-                     lineChartView:(LineChartView *)lineChartView
-                           segment:(OATrkSegment *)segment
+- (CLLocationCoordinate2D)getLocationAtPos:(float)position
+                             lineChartView:(LineChartView *)lineChartView
+                                   segment:(OATrkSegment *)segment
 {
-    OsmAnd::LatLon latLon;
     LineChartData *data = lineChartView.lineData;
     NSArray<id<IChartDataSet>> *dataSets = data ? data.dataSets : nil;
 
@@ -320,55 +309,57 @@
         {
             float time = position * 1000;
             return [OAGPXUIHelper getSegmentPointByTime:segment
-                                             gpxFile:_gpxDoc
-                                                time:time
-                                     preciseLocation:NO
-                                        joinSegments:joinSegments];
+                                                gpxFile:_gpxDoc
+                                                   time:time
+                                        preciseLocation:NO
+                                           joinSegments:joinSegments];
         }
         else
         {
             float distance = [dataSet getDivX] * position;
             return [OAGPXUIHelper getSegmentPointByDistance:segment
-                                                 gpxFile:_gpxDoc
-                                         distanceToPoint:distance
-                                         preciseLocation:NO
-                                            joinSegments:joinSegments];
+                                                    gpxFile:_gpxDoc
+                                            distanceToPoint:distance
+                                            preciseLocation:NO
+                                               joinSegments:joinSegments];
         }
     }
-    return latLon;
+    return kCLLocationCoordinate2DInvalid;
 }
 
-- (void)fitTrackOnMap:(OsmAnd::LatLon)location
+- (void)fitTrackOnMap:(CLLocationCoordinate2D)location
              forceFit:(BOOL)forceFit
         lineChartView:(LineChartView *)lineChartView
-             segment:(OATrkSegment *)segment
+              segment:(OATrkSegment *)segment
 {
-    OABBox rect = [self getRect:lineChartView segment:segment];
-    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    if (rect.left != 0 && rect.right != 0)
+    if (CLLocationCoordinate2DIsValid(location))
     {
-        auto point = OsmAnd::Utilities::convertLatLonTo31(location);
-        CGPoint mapPoint;
-        [mapViewController.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
-
-        if (forceFit && _centerMapOnBBox)
+        OABBox rect = [self getRect:lineChartView segment:segment];
+        OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+        if (rect.left != 0 && rect.right != 0)
         {
-            _centerMapOnBBox(rect);
-        }
-        else if (location.latitude != 0 && location.longitude != 0
-                && !CGRectContainsPoint(_screenBBox, mapPoint))
-        {
-            if (!_isLandscape && _adjustViewPort)
-                _adjustViewPort();
+            auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
+            CGPoint mapPoint;
+            [mapViewController.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
 
-            Point31 pos = [OANativeUtilities convertFromPointI:point];
-            [mapViewController goToPosition:pos animated:YES];
+            if (forceFit && _centerMapOnBBox)
+            {
+                _centerMapOnBBox(rect);
+            }
+            else if (location.latitude != 0 && location.longitude != 0 && !CGRectContainsPoint(_screenBBox, mapPoint))
+            {
+                if (!_isLandscape && _adjustViewPort)
+                    _adjustViewPort();
+
+                Point31 pos = [OANativeUtilities convertFromPointI:point];
+                [mapViewController goToPosition:pos animated:YES];
+            }
         }
     }
 }
 
 - (OABBox)getRect:(LineChartView *)lineChartView
-         segment:(OATrkSegment *)segment
+          segment:(OATrkSegment *)segment
 {
     OABBox bbox;
 

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <OsmAndCore/Utilities.h>
+#import <CoreLocation/CoreLocation.h>
 
 @class OAGPXDocument, OATrkSegment;
 @class OARouteCalculationResult;
@@ -36,17 +36,17 @@
 
 + (void) addAppearanceToGpx:(OAGPXDocument *)gpxFile gpxItem:(OAGPX *)gpxItem;
 
-+ (OsmAnd::LatLon)getSegmentPointByTime:(OATrkSegment *)segment
-                                gpxFile:(OAGPXDocument *)gpxFile
-                                   time:(double)time
-                        preciseLocation:(BOOL)preciseLocation
-                           joinSegments:(BOOL)joinSegments;
++ (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment
+                                        gpxFile:(OAGPXDocument *)gpxFile
+                                           time:(float)time
+                                preciseLocation:(BOOL)preciseLocation
+                                   joinSegments:(BOOL)joinSegments;
 
-+ (OsmAnd::LatLon)getSegmentPointByDistance:(OATrkSegment *)segment
-                                    gpxFile:(OAGPXDocument *)gpxFile
-                            distanceToPoint:(double)distanceToPoint
-                            preciseLocation:(BOOL)preciseLocation
-                               joinSegments:(BOOL)joinSegments;
++ (CLLocationCoordinate2D)getSegmentPointByDistance:(OATrkSegment *)segment
+                                            gpxFile:(OAGPXDocument *)gpxFile
+                                    distanceToPoint:(float)distanceToPoint
+                                    preciseLocation:(BOOL)preciseLocation
+                                       joinSegments:(BOOL)joinSegments;
 
 @end
 

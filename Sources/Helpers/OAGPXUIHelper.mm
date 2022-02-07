@@ -261,11 +261,11 @@
         [gpxFile setColoringType:gpxItem.coloringType];
 }
 
-+ (OsmAnd::LatLon)getSegmentPointByTime:(OATrkSegment *)segment
-                                gpxFile:(OAGPXDocument *)gpxFile
-                                   time:(double)time
-                        preciseLocation:(BOOL)preciseLocation
-                           joinSegments:(BOOL)joinSegments
++ (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment
+                                        gpxFile:(OAGPXDocument *)gpxFile
+                                           time:(float)time
+                                preciseLocation:(BOOL)preciseLocation
+                                   joinSegments:(BOOL)joinSegments
 {
     if (!segment.generalSegment || joinSegments)
     {
@@ -283,13 +283,12 @@
 
         for (OATrkSegment *seg in track.segments)
         {
-            OsmAnd::LatLon latLon = [self
-                    getSegmentPointByTime:seg
-                              timeToPoint:time
-                       passedSegmentsTime:passedSegmentsTime
-                          preciseLocation:preciseLocation];
+            CLLocationCoordinate2D latLon = [self getSegmentPointByTime:seg
+                                                            timeToPoint:time
+                                                     passedSegmentsTime:passedSegmentsTime
+                                                        preciseLocation:preciseLocation];
 
-            if (latLon.latitude != 0 && latLon.longitude != 0)
+            if (CLLocationCoordinate2DIsValid(latLon))
                 return latLon;
 
             long segmentStartTime = !seg.points || seg.points.count == 0 ? 0 : seg.points.firstObject.time;
@@ -299,13 +298,13 @@
         }
     }
 
-    return OsmAnd::LatLon(0, 0);
+    return kCLLocationCoordinate2DInvalid;
 }
 
-+ (OsmAnd::LatLon)getSegmentPointByTime:(OATrkSegment *)segment
-                            timeToPoint:(float)timeToPoint
-                     passedSegmentsTime:(long)passedSegmentsTime
-                        preciseLocation:(BOOL)preciseLocation
++ (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment
+                                    timeToPoint:(float)timeToPoint
+                             passedSegmentsTime:(long)passedSegmentsTime
+                                preciseLocation:(BOOL)preciseLocation
 {
     OAWptPt *previousPoint = nil;
     long segmentStartTime = segment.points.firstObject.time;
@@ -319,18 +318,18 @@
                                            timeToPoint:timeToPoint
                                              prevPoint:previousPoint
                                              currPoint:currentPoint]
-                    : OsmAnd::LatLon(currentPoint.position.latitude, currentPoint.position.longitude);
+                    : CLLocationCoordinate2DMake(currentPoint.position.latitude, currentPoint.position.longitude);
         }
         previousPoint = currentPoint;
     }
-    return OsmAnd::LatLon(0, 0);
+    return kCLLocationCoordinate2DInvalid;
 }
 
-+ (OsmAnd::LatLon)getSegmentPointByDistance:(OATrkSegment *)segment
-                                    gpxFile:(OAGPXDocument *)gpxFile
-                            distanceToPoint:(double)distanceToPoint
-                            preciseLocation:(BOOL)preciseLocation
-                               joinSegments:(BOOL)joinSegments
++ (CLLocationCoordinate2D)getSegmentPointByDistance:(OATrkSegment *)segment
+                                            gpxFile:(OAGPXDocument *)gpxFile
+                                    distanceToPoint:(float)distanceToPoint
+                                    preciseLocation:(BOOL)preciseLocation
+                                       joinSegments:(BOOL)joinSegments
 {
     double passedDistance = 0;
 
@@ -356,7 +355,7 @@
                                                distanceToPoint:distanceToPoint
                                                      currPoint:currPoint
                                                      prevPoint:prevPoint]
-                        : OsmAnd::LatLon(currPoint.position.latitude, currPoint.position.longitude);
+                        : CLLocationCoordinate2DMake(currPoint.position.latitude, currPoint.position.longitude);
             }
             prevPoint = currPoint;
         }
@@ -388,10 +387,10 @@
                     return preciseLocation && prevPoint
                             && currPoint.distance + passedSegmentsPointsDistance >= distanceToPoint
                             ? [self getIntermediatePointByDistance:passedDistance
-                                                         distanceToPoint:distanceToPoint
-                                                               currPoint:currPoint
-                                                               prevPoint:prevPoint]
-                            : OsmAnd::LatLon(currPoint.position.latitude, currPoint.position.longitude);
+                                                   distanceToPoint:distanceToPoint
+                                                         currPoint:currPoint
+                                                         prevPoint:prevPoint]
+                            : CLLocationCoordinate2DMake(currPoint.position.latitude, currPoint.position.longitude);
                 }
                 prevPoint = currPoint;
             }
@@ -399,10 +398,10 @@
             passedSegmentsPointsDistance += seg.points[seg.points.count - 1].distance;
         }
     }
-    return OsmAnd::LatLon(0, 0);
+    return kCLLocationCoordinate2DInvalid;
 }
 
-+ (OsmAnd::LatLon)getIntermediatePointByTime:(double)passedTime
++ (CLLocationCoordinate2D)getIntermediatePointByTime:(double)passedTime
                                  timeToPoint:(double)timeToPoint
                                    prevPoint:(OAWptPt *)prevPoint
                                    currPoint:(OAWptPt *)currPoint
@@ -410,22 +409,18 @@
     double percent = 1 - (passedTime - timeToPoint) / (currPoint.time - prevPoint.time);
     double dLat = (currPoint.position.latitude - prevPoint.position.latitude) * percent;
     double dLon = (currPoint.position.longitude - prevPoint.position.longitude) * percent;
-
-    OsmAnd::LatLon latLon(prevPoint.position.latitude + dLat, prevPoint.position.longitude + dLon);
-    return latLon;
+    return CLLocationCoordinate2DMake(prevPoint.position.latitude + dLat, prevPoint.position.longitude + dLon);
 }
 
-+ (OsmAnd::LatLon)getIntermediatePointByDistance:(double)passedDistance
-                                 distanceToPoint:(double)distanceToPoint
-                                       currPoint:(OAWptPt *)currPoint
-                                       prevPoint:(OAWptPt *)prevPoint
++ (CLLocationCoordinate2D)getIntermediatePointByDistance:(double)passedDistance
+                                         distanceToPoint:(double)distanceToPoint
+                                               currPoint:(OAWptPt *)currPoint
+                                               prevPoint:(OAWptPt *)prevPoint
 {
     double percent = 1 - (passedDistance - distanceToPoint) / (currPoint.distance - prevPoint.distance);
     double dLat = (currPoint.position.latitude - prevPoint.position.latitude) * percent;
     double dLon = (currPoint.position.longitude - prevPoint.position.longitude) * percent;
-
-    OsmAnd::LatLon latLon(prevPoint.position.latitude + dLat, prevPoint.position.longitude + dLon);
-    return latLon;
+    return CLLocationCoordinate2DMake(prevPoint.position.latitude + dLat, prevPoint.position.longitude + dLon);
 }
 
 @end

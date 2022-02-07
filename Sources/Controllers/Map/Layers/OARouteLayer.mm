@@ -875,11 +875,12 @@
     }
 }
 
-- (void) showCurrentStatisticsLocation:(OATrackChartPoints *) trackPoints
+- (void) showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints
 {
-    if (_locationMarker && trackPoints.highlightedPoint.latitude != 0 && trackPoints.highlightedPoint.longitude != 0)
+    if (_locationMarker && CLLocationCoordinate2DIsValid(trackPoints.highlightedPoint))
     {
-        _locationMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(trackPoints.highlightedPoint));
+        _locationMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(
+                OsmAnd::LatLon(trackPoints.highlightedPoint.latitude, trackPoints.highlightedPoint.longitude)));
         _locationMarker->setIsHidden(false);
     }
     OsmAnd::MapMarkerBuilder xAxisMarkerBuilder;

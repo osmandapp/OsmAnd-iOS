@@ -536,6 +536,7 @@
 "shared_string_min_height" = "Min. height";
 "shared_string_max_height" = "Max. height";
 "shared_string_gpx_track" = "Track";
+"shared_string_open_street_map" = "OpenStreetMap";
 
 "restart" = "Restart";
 

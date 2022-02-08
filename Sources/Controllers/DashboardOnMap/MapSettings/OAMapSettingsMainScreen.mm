@@ -37,6 +37,9 @@
 #define kTransportCategory @"transport"
 #define kRoutesCategory @"routes"
 
+#define kUIHiddenCategory @"ui_hidden"
+#define kOSMAssistantCategory @"osm_assistant"
+
 #define kMaxCountRoutesWithoutGroup 5
 
 @interface OAMapSettingsMainScreen () <OAAppModeCellDelegate, OAMapTypeDelegate>
@@ -51,14 +54,19 @@
 
     OAMapStyleSettings *_styleSettings;
     NSArray<OAMapStyleParameter *> *_filteredTopLevelParams;
+    NSArray<NSString *> *_allCategories;
+
     NSArray<OAMapStyleParameter *> *_routesParameters;
     NSArray<NSString *> *_routesWithoutGroup;
     NSArray<NSString *> *_routesWithGroup;
+
+    NSArray<OAMapStyleParameter *> *_osmParameters;
 
     OAAppModeCell *_appModeCell;
 }
 
 static BOOL _isRoutesGroupOpen = NO;
+static BOOL _isOSMGroupOpen = NO;
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
@@ -78,6 +86,13 @@ static BOOL _isRoutesGroupOpen = NO;
 
         vwController = viewController;
         tblView = tableView;
+
+        _filteredTopLevelParams = [NSArray array];
+        _allCategories = [NSArray array];
+        _routesParameters = [NSArray array];
+        _routesWithoutGroup = [NSArray array];
+        _routesWithGroup = [NSArray array];
+        _osmParameters = [NSArray array];
     }
     return self;
 }
@@ -130,6 +145,7 @@ static BOOL _isRoutesGroupOpen = NO;
     }];
 
     if (!hasWiki || (!_iapHelper.wiki.disabled))
+    {
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"product_title_wiki"),
                 @"image": hasWiki ? @"ic_custom_wikipedia" : @"ic_custom_wikipedia_download_colored",
@@ -137,24 +153,10 @@ static BOOL _isRoutesGroupOpen = NO;
                 @"type": hasWiki ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
                 @"key": @"wikipedia_layer"
         }];
-
-    if ([_iapHelper.osmEditing isActive])
-    {
-        [showSectionData addObject:@{
-                @"name": OALocalizedString(@"osm_edits_offline_layer"),
-                @"image": @"ic_action_openstreetmap_logo",
-                @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
-                @"key": @"osm_edits_offline_layer"
-        }];
-        [showSectionData addObject:@{
-                @"name": OALocalizedString(@"osm_notes_online_layer"),
-                @"image": @"ic_action_osm_note",
-                @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
-                @"key": @"osm_notes_online_layer"
-        }];
     }
 
     if ([_iapHelper.mapillary isActive])
+    {
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"street_level_imagery"),
                 @"image": @"ic_custom_mapillary_symbol",
@@ -162,8 +164,10 @@ static BOOL _isRoutesGroupOpen = NO;
                 @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
                 @"key": @"mapillary_layer"
         }];
+    }
 
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
+    {
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"tracks"),
                 @"value": @"",
@@ -171,11 +175,58 @@ static BOOL _isRoutesGroupOpen = NO;
                 @"type": [OAIconTitleValueCell getCellIdentifier],
                 @"key": @"tracks"
         }];
+    }
 
     [data addObject:@{
             @"group_name": OALocalizedString(@"map_settings_show"),
             @"cells": showSectionData
     }];
+
+    if ([_iapHelper.osmEditing isActive])
+    {
+        OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
+        group.groupName = OALocalizedString(@"shared_string_open_street_map");
+        group.type = [OACustomSelectionCollapsableCell getCellIdentifier];
+        group.isOpen = _isOSMGroupOpen;
+
+        NSMutableArray<NSDictionary *> *osmCells = [NSMutableArray array];
+
+        [group.groupItems addObject:@{
+                @"name": OALocalizedString(@"osm_edits_offline_layer"),
+                @"image": @"ic_action_openstreetmap_logo",
+                @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
+                @"key": @"osm_edits_offline_layer"
+        }];
+        [group.groupItems addObject:@{
+                @"name": OALocalizedString(@"osm_notes_online_layer"),
+                @"image": @"ic_action_osm_note",
+                @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
+                @"key": @"osm_notes_online_layer"
+        }];
+        [self generateOSMData];
+        if (_osmParameters.count > 0)
+        {
+            for (OAMapStyleParameter *osmParameter in _osmParameters)
+            {
+                [group.groupItems addObject:@{
+                        @"name": osmParameter.title,
+                        @"has_empty_icon": @YES,
+                        @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
+                        @"key": [NSString stringWithFormat:@"osm_%@", osmParameter.name]
+                }];
+            }
+        }
+        [osmCells addObject:@{
+                @"group": group,
+                @"type": NSStringFromClass([group class]),
+                @"key": @"collapsed_osm"
+        }];
+
+        [data addObject:@{
+                @"group_name": @"",
+                @"cells": osmCells
+        }];
+    }
 
     [self generateRoutesData];
     if (_routesParameters.count > 0)
@@ -262,7 +313,8 @@ static BOOL _isRoutesGroupOpen = NO;
                 @"key": @"text_size"
         }];
 
-        for (NSString *cName in [self getAllCategories])
+        [self generateAllCategories];
+        for (NSString *cName in _allCategories)
         {
             BOOL isTransport = [[cName lowercaseString] isEqualToString:kTransportCategory];
             [mapStyleSectionData addObject:@{
@@ -287,6 +339,7 @@ static BOOL _isRoutesGroupOpen = NO;
         }
 
         if (hasSRTM && (!_iapHelper.srtm.disabled))
+        {
             [mapStyleSectionData addObject:@{
                     @"name": OALocalizedString(@"product_title_srtm"),
                     @"image": @"ic_custom_contour_lines",
@@ -294,6 +347,7 @@ static BOOL _isRoutesGroupOpen = NO;
                     @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
                     @"key": @"contour_lines_layer"
             }];
+        }
 
         [data addObject:@{
                 @"group_name": OALocalizedString(@"map_settings_style"),
@@ -303,6 +357,7 @@ static BOOL _isRoutesGroupOpen = NO;
 
     NSMutableArray *overlayUnderlaySectionData = [NSMutableArray array];
     if (!hasSRTM || (!_iapHelper.srtm.disabled))
+    {
         [overlayUnderlaySectionData addObject:@{
                 @"name": OALocalizedString(@"shared_string_terrain"),
                 @"image": hasSRTM ? @"ic_custom_hillshade" : @"ic_custom_contour_lines_colored",
@@ -310,6 +365,7 @@ static BOOL _isRoutesGroupOpen = NO;
                 @"type": hasSRTM ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
                 @"key": @"terrain_layer"
         }];
+    }
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_over"),
             @"image": @"ic_custom_overlay_map",
@@ -359,6 +415,11 @@ static BOOL _isRoutesGroupOpen = NO;
                     completion: nil];
 }
 
+- (void)generateOSMData
+{
+    _osmParameters = [_styleSettings getParameters:kOSMAssistantCategory];
+}
+
 - (void)generateRoutesData
 {
     const auto resource = _app.resourcesManager->getResource(QString::fromNSString(_app.data.lastMapSource.resourceId)
@@ -393,6 +454,19 @@ static BOOL _isRoutesGroupOpen = NO;
     }
 }
 
+- (void)generateAllCategories
+{
+    NSMutableArray<NSString *> *res = [NSMutableArray array];
+    for (NSString *cName in [_styleSettings getAllCategories])
+    {
+        if (![[cName lowercaseString] isEqualToString:kUIHiddenCategory]
+                && ![[cName lowercaseString] isEqualToString:kRoutesCategory]
+                && ![[cName lowercaseString] isEqualToString:kOSMAssistantCategory])
+            [res addObject:cName];
+    }
+    _allCategories = res;
+}
+
 - (NSString *)getMapLangValueStr
 {
     NSString *prefLangId = _settings.settingPrefMapLanguage.get;
@@ -412,17 +486,6 @@ static BOOL _isRoutesGroupOpen = NO;
         default:
             return @"";
     }
-}
-
-- (NSArray *)getAllCategories
-{
-    NSMutableArray *res = [NSMutableArray array];
-    for (NSString *cName in [_styleSettings getAllCategories])
-    {
-        if (![[cName lowercaseString] isEqualToString:@"ui_hidden"] && ![[cName lowercaseString] isEqualToString:kRoutesCategory])
-            [res addObject:cName];
-    }
-    return res;
 }
 
 - (NSString *)getPercentString:(double)value
@@ -482,9 +545,9 @@ static BOOL _isRoutesGroupOpen = NO;
     else if ([key isEqualToString:@"wikipedia_layer"])
         return _app.data.wikipedia;
     else if ([key isEqualToString:@"osm_edits_offline_layer"])
-        return [_settings.mapSettingShowOfflineEdits get];
+        return [_settings.showOSMEdits get];
     else if ([key isEqualToString:@"osm_notes_online_layer"])
-        return [_settings.mapSettingShowOnlineNotes get];
+        return [_settings.showOSMBugs get];
     else if ([key isEqualToString:@"mapillary_layer"])
         return _app.data.mapillary;
     else if ([key isEqualToString:@"tracks"])
@@ -502,10 +565,15 @@ static BOOL _isRoutesGroupOpen = NO;
     else if ([key isEqualToString:@"weather_layer"])
         return _app.data.weather;
 
-    if ([key hasPrefix:@"routes_"])
+    if ([key hasPrefix:@"routes_"] && _routesParameters.count > index)
     {
         NSString *routesValue = _routesParameters[index].value;
         return routesValue.length > 0 ? [key hasSuffix:HIKING_ROUTES_OSMC_ATTR] ? ![routesValue isEqualToString:@"disabled"] : [routesValue isEqualToString:@"true"] : NO;
+    }
+    else if ([key hasPrefix:@"osm_"] && _osmParameters.count > index - 3)
+    {
+        NSString *osmValue = _osmParameters[index - 3].value;
+        return osmValue.length > 0 ? [osmValue isEqualToString:@"true"] : NO;
     }
 
     return YES;
@@ -519,6 +587,20 @@ static BOOL _isRoutesGroupOpen = NO;
 - (BOOL)isCollapsableRoutesGroup:(NSString *)groupName
 {
     return [groupName isEqualToString:OALocalizedString(@"rendering_category_routes")];
+}
+
+- (BOOL)isCollapsableOsmGroup:(NSArray *)cells
+{
+    if (cells.count > 0)
+    {
+        NSDictionary *group = cells.firstObject;
+        if ([group.allKeys containsObject:@"group"])
+        {
+            OATableCollapsableGroup *osmGroup = group[@"group"];
+            return [osmGroup.groupName isEqualToString:OALocalizedString(@"shared_string_open_street_map")];
+        }
+    }
+    return NO;
 }
 
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
@@ -536,6 +618,11 @@ static BOOL _isRoutesGroupOpen = NO;
             return group.groupItems[indexPath.row - _routesWithoutGroup.count];
         }
     }
+    else if ([self isCollapsableOsmGroup:cells])
+    {
+        OATableCollapsableGroup *group = cells.firstObject[@"group"];
+        return _isOSMGroupOpen && indexPath.row > 0 ? group.groupItems[indexPath.row - 1] : cells.firstObject;
+    }
 
     return cells[indexPath.row];
 }
@@ -551,10 +638,12 @@ static BOOL _isRoutesGroupOpen = NO;
 
 - (void)openCloseGroup:(NSIndexPath *)indexPath
 {
-    if ([self hasCollapsableRoutesGroup] && [self isCollapsableRoutesGroup:tableData[indexPath.section][@"group_name"]])
+    BOOL isRoutesGroup = [self hasCollapsableRoutesGroup] && [self isCollapsableRoutesGroup:tableData[indexPath.section][@"group_name"]];
+    BOOL isOsmGroup = [self isCollapsableOsmGroup:tableData[indexPath.section][@"cells"]];
+    OATableCollapsableGroup *group = [self getItem:indexPath][@"group"];
+    if (group.groupItems.count > 0)
     {
-        OATableCollapsableGroup *group = [self getItem:indexPath][@"group"];
-        if (group.groupItems.count > 0)
+        if (isRoutesGroup)
         {
             _isRoutesGroupOpen = group.isOpen = !group.isOpen;
             group.groupName = OALocalizedString(_isRoutesGroupOpen ? @"shared_string_collapse" : @"shared_string_show_all");
@@ -585,15 +674,38 @@ static BOOL _isRoutesGroupOpen = NO;
                                                                  inSection:indexPath.section]]
                            withRowAnimation:UITableViewRowAnimationNone];
             [UIView setAnimationsEnabled:YES];
-
-            if (_isRoutesGroupOpen
-                    && [tblView indexPathForCell:[tblView visibleCells].lastObject].section <= indexPath.section)
+        }
+        else if (isOsmGroup)
+        {
+            _isOSMGroupOpen = group.isOpen = !group.isOpen;
+            NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
+            for (NSInteger i = 0; i < group.groupItems.count; i++)
             {
-                [tblView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_routesWithoutGroup.count
-                                                                   inSection:indexPath.section]
-                               atScrollPosition:UITableViewScrollPositionMiddle
-                                       animated:YES];
+                [indexPaths addObject:[NSIndexPath indexPathForRow:i + 1 inSection:indexPath.section]];
             }
+            [tblView beginUpdates];
+            if (_isOSMGroupOpen)
+            {
+                [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]]
+                               withRowAnimation:UITableViewRowAnimationNone];
+                [tblView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+            }
+            else
+            {
+                [tblView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+                [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]]
+                               withRowAnimation:UITableViewRowAnimationNone];
+            }
+            [tblView endUpdates];
+        }
+
+        if ((isRoutesGroup && _isRoutesGroupOpen) || (isOsmGroup && _isOSMGroupOpen)
+                && [tblView indexPathForCell:[tblView visibleCells].lastObject].section <= indexPath.section)
+        {
+            [tblView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:isRoutesGroup ? _routesWithoutGroup.count : 0
+                                                               inSection:indexPath.section]
+                           atScrollPosition:UITableViewScrollPositionMiddle
+                                   animated:YES];
         }
     }
 }
@@ -629,6 +741,8 @@ static BOOL _isRoutesGroupOpen = NO;
 {
     if ([self hasCollapsableRoutesGroup] && [self isCollapsableRoutesGroup:tableData[section][@"group_name"]])
         return 1 + (_isRoutesGroupOpen ? _routesParameters.count : _routesWithoutGroup.count);
+    else if ([self isCollapsableOsmGroup:tableData[section][@"cells"]])
+        return _isOSMGroupOpen ? 1 + ((OATableCollapsableGroup *) ((NSArray *) tableData[section][@"cells"]).firstObject[@"group"]).groupItems.count : 1;
 
     return ((NSArray *) tableData[section][@"cells"]).count;
 }
@@ -638,9 +752,10 @@ static BOOL _isRoutesGroupOpen = NO;
     NSDictionary *item = [self getItem:indexPath];
     BOOL isOn = [self isEnabled:item[@"key"] index:indexPath.row];
     BOOL hasOptions = [item[@"has_options"] boolValue];
-    BOOL isGroup = [self hasCollapsableRoutesGroup] && [self isCollapsableRoutesGroup:tableData[indexPath.section][@"group_name"]];
-    BOOL isLastIndex = indexPath.row == (!isGroup
-            ? [self tableView:self.tblView numberOfRowsInSection:indexPath.section] - 1
+    BOOL isRoutesGroup = [self hasCollapsableRoutesGroup] && [self isCollapsableRoutesGroup:tableData[indexPath.section][@"group_name"]];
+    BOOL isOSMGroup = [self isCollapsableOsmGroup:tableData[indexPath.section][@"cells"]];
+    BOOL isLastIndex = indexPath.row == (!isRoutesGroup
+            ? isOSMGroup ? 0 : [self tableView:self.tblView numberOfRowsInSection:indexPath.section] - 1
             : ((_isRoutesGroupOpen ? _routesParameters.count : _routesWithoutGroup.count) - 1));
 
     UITableViewCell *outCell = nil;
@@ -691,8 +806,18 @@ static BOOL _isRoutesGroupOpen = NO;
             cell.switchView.on = isOn;
             cell.dividerView.hidden = !hasOptions;
             cell.textView.text = item[@"name"];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"image"]];
-            cell.iconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+            if (item[@"has_empty_icon"])
+            {
+                UIImage *circleIcon = [OAUtilities imageWithColor:isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray)];
+                circleIcon = [OAUtilities resizeImage:circleIcon newSize:CGSizeMake(24., 24.)];
+                circleIcon = [OAUtilities makeRoundedImage:circleIcon radius:12.];
+                cell.iconView.image = circleIcon;
+            }
+            else
+            {
+                cell.iconView.image = [UIImage templateImageNamed:item[@"image"]];
+                cell.iconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+            }
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -727,7 +852,7 @@ static BOOL _isRoutesGroupOpen = NO;
         }
         outCell = cell;
     }
-    else if (isGroup)
+    else if (isRoutesGroup || isOSMGroup)
     {
         OATableCollapsableGroup *group = item[@"group"];
         OACustomSelectionCollapsableCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionCollapsableCell getCellIdentifier]];

@@ -766,11 +766,15 @@
     if ([self hasGroupItems])
     {
         OsmAndResourceType key = [OAResourceType toResourceType:type isGroup:YES];
-        [self.groupItem removeItem:key subregion:subregion];
+        NSArray<OAResourceItem *> *items = [self.groupItem getItems:key];
+        if (items && items.count == 0)
+        {
+            [self.groupItem removeItem:key subregion:subregion];
 
-        NSArray<OAResourceItem *> *newItems = [OAResourcesUIHelper requestMapDownloadInfo:@[subregion] resourceTypes:@[type] isGroup:YES];
-        [self.groupItem addItems:newItems key:key];
-        [self.groupItem sort];
+            NSArray<OAResourceItem *> *newItems = [OAResourcesUIHelper requestMapDownloadInfo:@[subregion] resourceTypes:@[type] isGroup:YES];
+            [self.groupItem addItems:newItems key:key];
+            [self.groupItem sort];
+        }
     }
     else
     {

@@ -1110,7 +1110,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell = (OAIconTextDividerSwitchCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.dividerView.hidden = YES;
-            cell.iconView.image = nil;
+            [cell showIcon:NO];
         }
         if (cell)
         {
@@ -1326,31 +1326,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [cell.sliderView addTarget:self
                                 action:@selector(sliderChanged:)
                       forControlEvents:UIControlEventTouchUpInside];
-        }
-        outCell = cell;
-    }
-    else if ([cellData.type isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
-    {
-        OAIconTextDividerSwitchCell *cell =
-                [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier]
-                                                         owner:self options:nil];
-            cell = (OAIconTextDividerSwitchCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
-            cell.dividerView.hidden = YES;
-            cell.iconView.image = nil;
-        }
-        if (cell)
-        {
-            cell.switchView.on = cellData.isOn ? cellData.isOn() : NO;
-            cell.textView.text = cellData.title;
-
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         }
         outCell = cell;
     }

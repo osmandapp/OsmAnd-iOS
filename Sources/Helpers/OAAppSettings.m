@@ -37,11 +37,10 @@
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingShowPoiLabelKey @"mapSettingShowPoiLabelKey"
+#define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
+#define mapSettingShowOnlineNotesKey @"mapSettingShowOnlineNotesKey"
 #define layerTransparencySeekbarModeKey @"layerTransparencySeekbarModeKey"
 #define mapSettingVisibleGpxKey @"selected_gpx"
-
-#define showOSMBugsKey @"mapSettingShowOnlineNotesKey"
-#define showOSMEditsKey @"mapSettingShowOfflineEditsKey"
 
 #define billingUserIdKey @"billingUserIdKey"
 #define billingUserNameKey @"billingUserNameKey"
@@ -3007,8 +3006,7 @@
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
-@synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowPoiLabel=_mapSettingShowPoiLabel, mapSettingTrackRecording=_mapSettingTrackRecording;
-@synthesize showOSMBugs=_showOSMBugs, showOSMEdits=_showOSMEdits;
+@synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowPoiLabel=_mapSettingShowPoiLabel, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits, mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, mapSettingTrackRecording=_mapSettingTrackRecording;
 
 + (OAAppSettings*) sharedManager
 {
@@ -3123,15 +3121,15 @@
         // Map Settings
         _mapSettingShowFavorites = [OACommonBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
         _mapSettingShowPoiLabel = [OACommonBoolean withKey:mapSettingShowPoiLabelKey defValue:NO];
+        _mapSettingShowOfflineEdits = [OACommonBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
+        _mapSettingShowOnlineNotes = [OACommonBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
         _layerTransparencySeekbarMode = [OACommonInteger withKey:layerTransparencySeekbarModeKey defValue:LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDEFINED];
+
         [_profilePreferences setObject:_mapSettingShowFavorites forKey:@"show_favorites"];
         [_profilePreferences setObject:_mapSettingShowPoiLabel forKey:@"show_poi_label"];
+        [_profilePreferences setObject:_mapSettingShowOfflineEdits forKey:@"show_osm_edits"];
+        [_profilePreferences setObject:_mapSettingShowOnlineNotes forKey:@"show_osm_bugs"];
         [_profilePreferences setObject:_layerTransparencySeekbarMode forKey:@"layer_transparency_seekbar_mode"];
-
-        _showOSMBugs = [OACommonBoolean withKey:showOSMBugsKey defValue:NO];
-        _showOSMEdits = [OACommonBoolean withKey:showOSMEditsKey defValue:YES];
-        [_profilePreferences setObject:_showOSMBugs forKey:@"show_osm_bugs"];
-        [_profilePreferences setObject:_showOSMEdits forKey:@"show_osm_edits"];
 
         _mapSettingVisibleGpx = [[[OACommonStringList withKey:mapSettingVisibleGpxKey defValue:@[]] makeGlobal] makeShared];
         [_globalPreferences setObject:_mapSettingVisibleGpx forKey:@"selected_gpx"];
@@ -4028,12 +4026,12 @@
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
-- (void) setShowOfflineEdits:(BOOL)showOSMEdits
+- (void) setShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits
 {
-    [_showOSMEdits set:showOSMEdits];
+    [_mapSettingShowOfflineEdits set:mapSettingShowOfflineEdits];
 
     OsmAndAppInstance app = [OsmAndApp instance];
-    if ([_showOSMEdits get])
+    if ([_mapSettingShowOfflineEdits get])
     {
         if (![app.data.mapLayersConfiguration isLayerVisible:kOsmEditsLayerId])
         {
@@ -4051,12 +4049,12 @@
     }
 }
 
-- (void) setShowOnlineNotes:(BOOL)showOSMBugs
+- (void) setShowOnlineNotes:(BOOL)mapSettingShowOnlineNotes
 {
-    [_showOSMBugs set:showOSMBugs];
+    [_mapSettingShowOnlineNotes set:mapSettingShowOnlineNotes];
 
     OsmAndAppInstance app = [OsmAndApp instance];
-    if ([_showOSMBugs get])
+    if ([_mapSettingShowOnlineNotes get])
     {
         if (![app.data.mapLayersConfiguration isLayerVisible:kOsmBugsLayerId])
         {

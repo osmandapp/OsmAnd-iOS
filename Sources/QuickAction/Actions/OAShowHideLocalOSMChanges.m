@@ -22,12 +22,12 @@ static OAQuickActionType *TYPE;
 - (void)execute
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setShowOfflineEdits:![settings.showOSMEdits get]];
+    [settings setShowOfflineEdits:![settings.mapSettingShowOfflineEdits get]];
 }
 
 - (BOOL)isActionWithSlash
 {
-    return [[OAAppSettings sharedManager].showOSMEdits get];
+    return [[OAAppSettings sharedManager].mapSettingShowOfflineEdits get];
 }
 
 - (NSString *)getActionText

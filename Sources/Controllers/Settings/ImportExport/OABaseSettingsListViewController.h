@@ -14,12 +14,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAExportSettingsType, OAExportSettingsCategory, OASettingsCategoryItems, OATableCollapsableGroup;
 
+typedef NS_ENUM(NSInteger, EOATableCollapsableGroup)
+{
+    EOATableCollapsableGroupMapSettingsRoutes = 0,
+    EOATableCollapsableGroupMapSettingsOSM
+};
+
 @interface OATableCollapsableGroup : NSObject
 
-    @property NSString* type;
-    @property BOOL isOpen;
-    @property NSString* groupName;
-    @property NSMutableArray* groupItems;
+@property NSString *type;
+@property BOOL isOpen;
+@property NSString *groupName;
+@property NSMutableArray *groupItems;
+@property EOATableCollapsableGroup groupType;
 
 @end
 

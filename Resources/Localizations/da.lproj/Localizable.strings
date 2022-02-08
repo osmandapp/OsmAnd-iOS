@@ -2349,3 +2349,4 @@
 "turn_arrows" = "Svingpile";
 "turn_arrows_descr" = "Kontroller synligheden af svingpilene på rutelinjen.";
 "routeInfo_roadClass_description" = "Farvelæg ruten eller sporlinjen i henhold til vejklassificering.";
+"ltr_or_rtl_combine_via_dash" = "%@ - %@";

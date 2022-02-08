@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class CLLocation, OAGpxTrkPt;
+@class CLLocation, OAWptPt;
 
 @interface OALocationsHolder : NSObject <NSCopying>
 
@@ -25,10 +25,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (double) getLongitude:(NSInteger)index;
 
 - (std::vector<std::pair<double, double>>) getLatLonList;
-- (NSArray<OAGpxTrkPt *> *)getWptPtList;
+- (NSArray<OAWptPt *> *)getWptPtList;
 - (NSArray<CLLocation *> *) getLocationsList;
 
-- (OAGpxTrkPt *) getWptPt:(NSInteger)index;
+- (OAWptPt *) getWptPt:(NSInteger)index;
 - (CLLocation *) getLocation:(NSInteger)index;
 
 @end

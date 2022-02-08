@@ -8,10 +8,17 @@
 
 #import "OABaseBigTitleSettingsViewController.h"
 
+#define kGeneralSettings @"general_settings"
+#define kNavigationSettings @"nav_settings"
+#define kProfileAppearanceSettings @"profile_appearance"
+#define kExportProfileSettings @"export_profile"
+#define kTrackRecordingSettings @"trip_rec"
+#define kOsmEditsSettings @"osm_edits"
+
 @class OAApplicationMode;
 
 @interface OAConfigureProfileViewController : OABaseBigTitleSettingsViewController
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)mode;
+- (instancetype) initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey;
 
 @end

@@ -41,6 +41,18 @@
 #define kWikipediaLanguagesKey @"wikipediaLanguages"
 #define kWikipediaGlobalKey @"wikipediaGlobal"
 
+#define kWeatherKey @"weather"
+#define kWeatherTempKey @"weatherTemp"
+#define kWeatherTempAlphaKey @"weatherTempAlpha"
+#define kWeatherPressureKey @"weatherPressure"
+#define kWeatherPressureAlphaKey @"weatherPressureAlpha"
+#define kWeatherWindKey @"weatherWind"
+#define kWeatherWindAlphaKey @"weatherWindAlpha"
+#define kWeatherCloudKey @"weatherCloud"
+#define kWeatherCloudAlphaKey @"weatherCloudAlpha"
+#define kWeatherPrecipKey @"weatherPrecip"
+#define kWeatherPrecipAlphaKey @"weatherPrecipAlpha"
+
 @implementation OAAppData
 {
     NSObject* _lock;
@@ -68,6 +80,18 @@
     OACommonBoolean *_mapillaryProfile;
     OACommonBoolean *_wikipediaGlobalProfile;
     OACommonStringList *_wikipediaLanguagesProfile;
+
+    OACommonBoolean *_weatherProfile;
+    OACommonBoolean *_weatherTempProfile;
+    OACommonDouble *_weatherTempAlphaProfile;
+    OACommonBoolean *_weatherPressureProfile;
+    OACommonDouble *_weatherPressureAlphaProfile;
+    OACommonBoolean *_weatherWindProfile;
+    OACommonDouble *_weatherWindAlphaProfile;
+    OACommonBoolean *_weatherCloudProfile;
+    OACommonDouble *_weatherCloudAlphaProfile;
+    OACommonBoolean *_weatherPrecipProfile;
+    OACommonDouble *_weatherPrecipAlphaProfile;
 
     NSMapTable<NSString *, OACommonPreference *> *_registeredPreferences;
 }
@@ -201,6 +225,30 @@
     _wikipediaGlobalProfile = [OACommonBoolean withKey:kWikipediaGlobalKey defValue:NO];
     _wikipediaLanguagesProfile = [OACommonStringList withKey:kWikipediaLanguagesKey defValue:@[]];
 
+    _weatherProfile = [OACommonBoolean withKey:kWeatherKey defValue:NO];
+    _weatherTempProfile = [OACommonBoolean withKey:kWeatherTempKey defValue:NO];
+    _weatherTempAlphaProfile = [OACommonDouble withKey:kWeatherTempAlphaKey defValue:0.5];
+    _weatherPressureProfile = [OACommonBoolean withKey:kWeatherPressureKey defValue:NO];
+    _weatherPressureAlphaProfile = [OACommonDouble withKey:kWeatherPressureAlphaKey defValue:0.6];
+    _weatherWindProfile = [OACommonBoolean withKey:kWeatherWindKey defValue:NO];
+    _weatherWindAlphaProfile = [OACommonDouble withKey:kWeatherWindAlphaKey defValue:0.6];
+    _weatherCloudProfile = [OACommonBoolean withKey:kWeatherCloudKey defValue:NO];
+    _weatherCloudAlphaProfile = [OACommonDouble withKey:kWeatherCloudAlphaKey defValue:0.5];
+    _weatherPrecipProfile = [OACommonBoolean withKey:kWeatherPrecipKey defValue:NO];
+    _weatherPrecipAlphaProfile = [OACommonDouble withKey:kWeatherPrecipAlphaKey defValue:0.7];
+
+    _weatherChangeObservable = [[OAObservable alloc] init];
+    _weatherTempChangeObservable = [[OAObservable alloc] init];
+    _weatherPressureChangeObservable = [[OAObservable alloc] init];
+    _weatherWindChangeObservable = [[OAObservable alloc] init];
+    _weatherCloudChangeObservable = [[OAObservable alloc] init];
+    _weatherPrecipChangeObservable = [[OAObservable alloc] init];
+    _weatherTempAlphaChangeObservable = [[OAObservable alloc] init];
+    _weatherPressureAlphaChangeObservable = [[OAObservable alloc] init];
+    _weatherWindAlphaChangeObservable = [[OAObservable alloc] init];
+    _weatherCloudAlphaChangeObservable = [[OAObservable alloc] init];
+    _weatherPrecipAlphaChangeObservable = [[OAObservable alloc] init];
+    
     _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
     [_registeredPreferences setObject:_overlayMapSourceProfile forKey:@"map_overlay_previous"];
     [_registeredPreferences setObject:_underlayMapSourceProfile forKey:@"map_underlay_previous"];
@@ -217,6 +265,18 @@
     [_registeredPreferences setObject:_terrainTypeProfile forKey:@"terrain_mode"];
     [_registeredPreferences setObject:_wikipediaGlobalProfile forKey:@"global_wikipedia_poi_enabled"];
     [_registeredPreferences setObject:_wikipediaLanguagesProfile forKey:@"wikipedia_poi_enabled_languages"];
+
+    [_registeredPreferences setObject:_weatherProfile forKey:@"show_weather"];
+    [_registeredPreferences setObject:_weatherTempProfile forKey:@"show_weather_temp"];
+    [_registeredPreferences setObject:_weatherTempAlphaProfile forKey:@"weather_temp_transparency"];
+    [_registeredPreferences setObject:_weatherPressureProfile forKey:@"show_weather_pressure"];
+    [_registeredPreferences setObject:_weatherPressureAlphaProfile forKey:@"weather_pressure_transparency"];
+    [_registeredPreferences setObject:_weatherWindProfile forKey:@"show_weather_wind"];
+    [_registeredPreferences setObject:_weatherWindAlphaProfile forKey:@"weather_wind_transparency"];
+    [_registeredPreferences setObject:_weatherCloudProfile forKey:@"show_weather_cloud"];
+    [_registeredPreferences setObject:_weatherCloudAlphaProfile forKey:@"weather_cloud_transparency"];
+    [_registeredPreferences setObject:_weatherPrecipProfile forKey:@"show_weather_precip"];
+    [_registeredPreferences setObject:_weatherPrecipAlphaProfile forKey:@"weather_precip_transparency"];
 }
 
 - (void) dealloc
@@ -365,6 +425,205 @@
 @synthesize mapLayerChangeObservable = _mapLayerChangeObservable;
 @synthesize mapillaryChangeObservable = _mapillaryChangeObservable;
 @synthesize wikipediaChangeObservable = _wikipediaChangeObservable;
+
+@synthesize weatherChangeObservable = _weatherChangeObservable;
+@synthesize weatherTempChangeObservable = _weatherTempChangeObservable;
+@synthesize weatherTempAlphaChangeObservable = _weatherTempAlphaChangeObservable;
+@synthesize weatherPressureChangeObservable = _weatherPressureChangeObservable;
+@synthesize weatherPressureAlphaChangeObservable = _weatherPressureAlphaChangeObservable;
+@synthesize weatherWindChangeObservable = _weatherWindChangeObservable;
+@synthesize weatherWindAlphaChangeObservable = _weatherWindAlphaChangeObservable;
+@synthesize weatherCloudChangeObservable = _weatherCloudChangeObservable;
+@synthesize weatherCloudAlphaChangeObservable = _weatherCloudAlphaChangeObservable;
+@synthesize weatherPrecipChangeObservable = _weatherPrecipChangeObservable;
+@synthesize weatherPrecipAlphaChangeObservable = _weatherPrecipAlphaChangeObservable;
+
+- (BOOL) weather
+{
+    @synchronized(_lock)
+    {
+        return [_weatherProfile get];
+    }
+}
+
+- (void) setWeather:(BOOL)weather
+{
+    @synchronized(_lock)
+    {
+        [_weatherProfile set:weather];
+        [_weatherChangeObservable notifyEventWithKey:self andValue:@(self.weather)];
+    }
+}
+
+- (BOOL) weatherTemp
+{
+    @synchronized(_lock)
+    {
+        return [_weatherTempProfile get];
+    }
+}
+
+- (void) setWeatherTemp:(BOOL)weatherTemp
+{
+    @synchronized(_lock)
+    {
+        [_weatherTempProfile set:weatherTemp];
+        [_weatherTempChangeObservable notifyEventWithKey:self andValue:@(self.weatherTemp)];
+    }
+}
+
+- (double) weatherTempAlpha
+{
+    @synchronized (_lock)
+    {
+        return [_weatherTempAlphaProfile get];
+    }
+}
+
+- (void) setWeatherTempAlpha:(double)weatherTempAlpha
+{
+    @synchronized(_lock)
+    {
+        [_weatherTempAlphaProfile set:weatherTempAlpha];
+        [_weatherTempAlphaChangeObservable notifyEventWithKey:self andValue:@(self.weatherTempAlpha)];
+    }
+}
+
+- (BOOL) weatherPressure
+{
+    @synchronized(_lock)
+    {
+        return [_weatherPressureProfile get];
+    }
+}
+
+- (void) setWeatherPressure:(BOOL)weatherPressure
+{
+    @synchronized(_lock)
+    {
+        [_weatherPressureProfile set:weatherPressure];
+        [_weatherPressureChangeObservable notifyEventWithKey:self andValue:@(self.weatherPressure)];
+    }
+}
+
+- (double) weatherPressureAlpha
+{
+    @synchronized (_lock)
+    {
+        return [_weatherPressureAlphaProfile get];
+    }
+}
+
+- (void) setWeatherPressureAlpha:(double)weatherPressureAlpha
+{
+    @synchronized(_lock)
+    {
+        [_weatherPressureAlphaProfile set:weatherPressureAlpha];
+        [_weatherPressureAlphaChangeObservable notifyEventWithKey:self andValue:@(self.weatherPressureAlpha)];
+    }
+}
+
+- (BOOL) weatherWind
+{
+    @synchronized(_lock)
+    {
+        return [_weatherWindProfile get];
+    }
+}
+
+- (void) setWeatherWind:(BOOL)weatherWind
+{
+    @synchronized(_lock)
+    {
+        [_weatherWindProfile set:weatherWind];
+        [_weatherWindChangeObservable notifyEventWithKey:self andValue:@(self.weatherWind)];
+    }
+}
+
+- (double) weatherWindAlpha
+{
+    @synchronized (_lock)
+    {
+        return [_weatherWindAlphaProfile get];
+    }
+}
+
+- (void) setWeatherWindAlpha:(double)weatherWindAlpha
+{
+    @synchronized(_lock)
+    {
+        [_weatherWindAlphaProfile set:weatherWindAlpha];
+        [_weatherWindAlphaChangeObservable notifyEventWithKey:self andValue:@(self.weatherWindAlpha)];
+    }
+}
+
+- (BOOL) weatherCloud
+{
+    @synchronized(_lock)
+    {
+        return [_weatherCloudProfile get];
+    }
+}
+
+- (void) setWeatherCloud:(BOOL)weatherCloud
+{
+    @synchronized(_lock)
+    {
+        [_weatherCloudProfile set:weatherCloud];
+        [_weatherCloudChangeObservable notifyEventWithKey:self andValue:@(self.weatherCloud)];
+    }
+}
+
+- (double) weatherCloudAlpha
+{
+    @synchronized (_lock)
+    {
+        return [_weatherCloudAlphaProfile get];
+    }
+}
+
+- (void) setWeatherCloudAlpha:(double)weatherCloudAlpha
+{
+    @synchronized(_lock)
+    {
+        [_weatherCloudAlphaProfile set:weatherCloudAlpha];
+        [_weatherCloudAlphaChangeObservable notifyEventWithKey:self andValue:@(self.weatherCloudAlpha)];
+    }
+}
+
+- (BOOL) weatherPrecip
+{
+    @synchronized(_lock)
+    {
+        return [_weatherPrecipProfile get];
+    }
+}
+
+- (void) setWeatherPrecip:(BOOL)weatherPrecip
+{
+    @synchronized(_lock)
+    {
+        [_weatherPrecipProfile set:weatherPrecip];
+        [_weatherPrecipChangeObservable notifyEventWithKey:self andValue:@(self.weatherPrecip)];
+    }
+}
+
+- (double) weatherPrecipAlpha
+{
+    @synchronized (_lock)
+    {
+        return [_weatherPrecipAlphaProfile get];
+    }
+}
+
+- (void) setWeatherPrecipAlpha:(double)weatherPrecipAlpha
+{
+    @synchronized(_lock)
+    {
+        [_weatherPrecipAlphaProfile set:weatherPrecipAlpha];
+        [_weatherPrecipAlphaChangeObservable notifyEventWithKey:self andValue:@(self.weatherPrecipAlpha)];
+    }
+}
 
 - (OAMapSource*) overlayMapSource
 {
@@ -944,6 +1203,18 @@
     [_mapillaryProfile set:[_mapillaryProfile get:sourceMode] mode:targetMode];
     [_wikipediaGlobalProfile set:[_wikipediaGlobalProfile get:sourceMode] mode:targetMode];
     [_wikipediaLanguagesProfile set:[_wikipediaLanguagesProfile get:sourceMode] mode:targetMode];
+
+    [_weatherProfile set:[_weatherProfile get:sourceMode] mode:targetMode];
+    [_weatherTempProfile set:[_weatherTempProfile get:sourceMode] mode:targetMode];
+    [_weatherTempAlphaProfile set:[_weatherTempAlphaProfile get:sourceMode] mode:targetMode];
+    [_weatherPressureProfile set:[_weatherPressureProfile get:sourceMode] mode:targetMode];
+    [_weatherPressureAlphaProfile set:[_weatherPressureAlphaProfile get:sourceMode] mode:targetMode];
+    [_weatherWindProfile set:[_weatherWindProfile get:sourceMode] mode:targetMode];
+    [_weatherWindAlphaProfile set:[_weatherWindAlphaProfile get:sourceMode] mode:targetMode];
+    [_weatherCloudProfile set:[_weatherCloudProfile get:sourceMode] mode:targetMode];
+    [_weatherCloudAlphaProfile set:[_weatherCloudAlphaProfile get:sourceMode] mode:targetMode];
+    [_weatherPrecipProfile set:[_weatherPrecipProfile get:sourceMode] mode:targetMode];
+    [_weatherPrecipAlphaProfile set:[_weatherPrecipAlphaProfile get:sourceMode] mode:targetMode];
 }
 
 @end

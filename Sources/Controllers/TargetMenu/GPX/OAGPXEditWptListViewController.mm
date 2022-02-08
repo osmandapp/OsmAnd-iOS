@@ -43,14 +43,14 @@
     BOOL _localEditing;
 }
 
-- (id)initWithLocationMarks:(NSArray *)locationMarks
+- (id)initWithPoints:(NSArray *)points
 {
     self = [super init];
     if (self)
     {
         _app = [OsmAndApp instance];
         
-        [self setPoints:locationMarks];
+        [self setPoints:points];
         
         isDecelerating = NO;
         isMoving = NO;
@@ -68,10 +68,10 @@
     _headerView.delegate = self;
 }
 
-- (void)setPoints:(NSArray *)locationMarks
+- (void)setPoints:(NSArray *)points
 {
     NSMutableArray *arr = [NSMutableArray array];
-    for (OAGpxWpt *p in locationMarks)
+    for (OAWptPt *p in points)
     {
         OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
         item.point = p;

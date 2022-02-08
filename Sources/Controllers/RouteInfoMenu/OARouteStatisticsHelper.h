@@ -7,14 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
+
 #include "binaryRead.h"
 #include "routeSegmentResult.h"
 
 #include <vector>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
-#include <OsmAndCore/Utilities.h>
-
-#import <CoreLocation/CoreLocation.h>
 
 #define ROUTE_INFO_PREFIX @"routeInfo_"
 
@@ -26,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OATrackChartPoints : NSObject
 
 @property (nonatomic) NSArray<CLLocation *> *xAxisPoints;
-@property (nonatomic) OsmAnd::LatLon highlightedPoint;
+@property (nonatomic) CLLocationCoordinate2D highlightedPoint;
 @property (nonatomic) NSInteger segmentColor;
 @property (nonatomic) OAGPXDocument *gpx;
 @property (nonatomic) BOOL axisPointsInvalidated;

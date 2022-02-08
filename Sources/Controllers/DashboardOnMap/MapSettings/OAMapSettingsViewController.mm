@@ -7,6 +7,7 @@
 //
 
 #import "OAMapSettingsViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
 #import "OAAutoObserverProxy.h"
 #import "OANativeUtilities.h"
@@ -33,7 +34,7 @@
 #import "OAMapSettingsWikipediaScreen.h"
 #import "OAMapSettingsRoutesScreen.h"
 #import "OAMapStyleSettings.h"
-#import <CoreLocation/CoreLocation.h>
+#import "OAMapSettingsWeatherScreen.h"
 
 #include <QtMath>
 #include <QStandardPaths>
@@ -171,6 +172,10 @@
         case EMapSettingsScreenRoutes:
             if (!self.screenObj)
                 self.screenObj = [[OAMapSettingsRoutesScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
+            break;
+        case EMapSettingsScreenWeather:
+            if (!self.screenObj)
+                self.screenObj = [[OAMapSettingsWeatherScreen alloc] initWithTable:self.tableView viewController:self];
             break;
         default:
             break;

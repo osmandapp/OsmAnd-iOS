@@ -21,12 +21,12 @@
 
 @implementation OAApplyGpxApproximationCommand
 {
-    NSArray<OAGpxTrkPt *> *_points;
-    NSDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *_roadSegmentData;
-    NSMutableArray<NSArray<OAGpxTrkPt *> *> *_segmentPointsList;
+    NSArray<OAWptPt *> *_points;
+    NSDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *_roadSegmentData;
+    NSMutableArray<NSArray<OAWptPt *> *> *_segmentPointsList;
 }
 
-- (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer approximations:(NSArray<OAGpxRouteApproximation *> *)approximations segmentPointsList:(NSArray<NSArray<OAGpxTrkPt *> *> *)segmentPointsList appMode:(OAApplicationMode *)appMode
+- (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer approximations:(NSArray<OAGpxRouteApproximation *> *)approximations segmentPointsList:(NSArray<NSArray<OAWptPt *> *> *)segmentPointsList appMode:(OAApplicationMode *)appMode
 {
     self = [super initWithLayer:measurementLayer];
     if (self) {
@@ -76,7 +76,7 @@
     [ctx addPoints:_points];
     _segmentPointsList = [NSMutableArray arrayWithCapacity:_originalSegmentPointsList.count];
     // Populate with empty data
-    NSArray<OAGpxTrkPt *> *emptyArr = [NSArray array];
+    NSArray<OAWptPt *> *emptyArr = [NSArray array];
     for (NSInteger i = 0; i < _originalSegmentPointsList.count; i++)
         [_segmentPointsList addObject:emptyArr];
     [self refreshMap];
@@ -96,8 +96,8 @@
     for (NSInteger i = 0; i < _approximations.count; i++)
     {
         OAGpxRouteApproximation *approximation = _approximations[i];
-        NSArray<OAGpxTrkPt *> *segmentPoints = _segmentPointsList[i];
-        NSArray<OAGpxTrkPt *> *newSegmentPoints = [ctx setPoints:approximation originalPoints:segmentPoints mode:_mode];
+        NSArray<OAWptPt *> *segmentPoints = _segmentPointsList[i];
+        NSArray<OAWptPt *> *newSegmentPoints = [ctx setPoints:approximation originalPoints:segmentPoints mode:_mode];
         if (newSegmentPoints != nil)
             _segmentPointsList[i] = newSegmentPoints;
     }

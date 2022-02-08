@@ -153,6 +153,12 @@
 #define showIntermediateArrivalTimeKey @"showIntermediateArrivalTime"
 #define showRelativeBearingKey @"showRelativeBearing"
 #define routeRecalculationDistanceKey @"routeRecalculationDistance"
+#define customRouteColorDayKey @"customRouteColorDay"
+#define customRouteColorNightKey @"customRouteColorNight"
+#define routeColoringTypeKey @"routeColoringType"
+#define routeInfoAttributeKey @"routeInfoAttribute"
+#define routeLineWidthKey @"routeLineWidth"
+#define routeShowTurnArrowsKey @"routeShowTurnArrows"
 #define showCompassControlRulerKey @"showCompassRuler"
 #define showCoordinatesWidgetKey @"showCoordinatesWidget"
 
@@ -2904,6 +2910,91 @@
 
 @end
 
+@implementation OACommonColoringType
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(OAColoringType *)defValue
+{
+    OACommonColoringType *obj = [[OACommonColoringType alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = [[OAColoringType getRouteColoringTypes] indexOfObject:defValue];
+    }
+    return obj;
+}
+
+- (OAColoringType *) get
+{
+    return [OAColoringType getRouteColoringTypes][[super get:self.appMode]];
+}
+
+- (void) set:(OAColoringType *)coloringType
+{
+    [super set:[[OAColoringType getRouteColoringTypes] indexOfObject:coloringType]];
+}
+
+- (OAColoringType *) get:(OAApplicationMode *)mode
+{
+    return [OAColoringType getRouteColoringTypes][[super get:mode]];
+}
+
+- (void) set:(OAColoringType *)coloringType mode:(OAApplicationMode *)mode
+{
+    [super set:[[OAColoringType getRouteColoringTypes] indexOfObject:coloringType] mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"default"])
+        return [self set:OAColoringType.DEFAULT mode:mode];
+    else if ([strValue isEqualToString:@"custom_color"])
+        return [self set:OAColoringType.CUSTOM_COLOR mode:mode];
+    else if ([strValue isEqualToString:@"solid"])
+        return [self set:OAColoringType.TRACK_SOLID mode:mode];
+    else if ([strValue isEqualToString:@"speed"])
+        return [self set:OAColoringType.SPEED mode:mode];
+    else if ([strValue isEqualToString:@"altitude"])
+        return [self set:OAColoringType.ALTITUDE mode:mode];
+    else if ([strValue isEqualToString:@"slope"])
+        return [self set:OAColoringType.SLOPE mode:mode];
+    else if ([strValue isEqualToString:@"attribute"])
+        return [self set:OAColoringType.ATTRIBUTE mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    OAColoringType *type = [OAColoringType getRouteColoringTypes][[super get:mode]];
+
+    if ([type isEqual:OAColoringType.CUSTOM_COLOR])
+        return @"custom_color";
+    else if ([type isEqual:OAColoringType.TRACK_SOLID])
+        return @"solid";
+    else if ([type isEqual:OAColoringType.SPEED])
+        return @"speed";
+    else if ([type isEqual:OAColoringType.ALTITUDE])
+        return @"altitude";
+    else if ([type isEqual:OAColoringType.SLOPE])
+        return @"slope";
+    else if ([type isEqual:OAColoringType.ATTRIBUTE])
+        return @"attribute";
+
+    return @"default";
+}
+
+- (void) resetToDefault
+{
+    NSInteger defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOACoordinateInputFormats)((NSNumber *)pDefault).intValue;
+
+    [self set:[OAColoringType getRouteColoringTypes][defaultValue]];
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
@@ -3330,6 +3421,24 @@
 
         _routeRecalculationDistance = [OACommonDouble withKey:routeRecalculationDistanceKey defValue:0.];
         [_profilePreferences setObject:_routeRecalculationDistance forKey:@"routing_recalc_distance"];
+
+        _customRouteColorDay = [OACommonInteger withKey:customRouteColorDayKey defValue:[OAUtilities colorToNumber:UIColorFromARGB(kDefaultRouteLineDayColor)]];
+        [_profilePreferences setObject:_customRouteColorDay forKey:@"route_line_color"];
+
+        _customRouteColorNight = [OACommonInteger withKey:customRouteColorNightKey defValue:[OAUtilities colorToNumber:UIColorFromARGB(kDefaultRouteLineNightColor)]];
+        [_profilePreferences setObject:_customRouteColorNight forKey:@"route_line_color_night"];
+
+        _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT];
+        [_profilePreferences setObject:_routeColoringType forKey:@"route_line_coloring_type"];
+
+        _routeInfoAttribute = [OACommonString withKey:routeInfoAttributeKey defValue:nil];
+        [_profilePreferences setObject:_routeInfoAttribute forKey:@"route_info_attribute"];
+
+        _routeLineWidth = [OACommonString withKey:routeLineWidthKey defValue:nil];
+        [_profilePreferences setObject:_routeLineWidth forKey:@"route_line_width"];
+
+        _routeShowTurnArrows = [OACommonBoolean withKey:routeShowTurnArrowsKey defValue:YES];
+        [_profilePreferences setObject:_routeShowTurnArrows forKey:@"route_show_turn_arrows"];
 
         _showTrafficWarnings = [OACommonBoolean withKey:showTrafficWarningsKey defValue:NO];
         [_showTrafficWarnings setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];

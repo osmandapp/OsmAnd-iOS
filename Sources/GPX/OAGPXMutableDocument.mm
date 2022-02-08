@@ -15,15 +15,15 @@
     std::shared_ptr<OsmAnd::GpxDocument> document;
 }
 
-@dynamic locationMarks, tracks, routes;
+@dynamic points, tracks, routes;
 
 - (instancetype)init
 {
     self = [super init];
     if (self)
     {
-        self.metadata = [[OAGpxMetadata alloc] init];
-        self.locationMarks = [NSMutableArray array];
+        self.metadata = [[OAMetadata alloc] init];
+        self.points = [NSMutableArray array];
         self.tracks = [NSMutableArray array];
         self.routes = [NSMutableArray array];
         
@@ -57,28 +57,6 @@
     }
 }
 
-- (void)fetchTrkSeg
-{
-    if (document == nullptr)
-        return;
-
-    if (!document->tracks.isEmpty())
-    {
-        for (const auto &t: document->tracks)
-        {
-            OAGpxTrk *track = self.tracks[document->tracks.indexOf(t)];
-            OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrk> *_t = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrk> *) &t;
-            track.trk = _t->shared_ptr();
-
-            for (const auto &s: t->segments)
-            {
-                OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrkSeg> *_s = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrkSeg> *) &s;
-                track.segments[t->segments.indexOf(s)].trkseg = _s->shared_ptr();
-            }
-        }
-    }
-}
-
 - (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument
 {
     return document;
@@ -86,20 +64,15 @@
 
 - (void) updateDocAndMetadata
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> metadata;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
-    
+    std::shared_ptr<OsmAnd::GpxDocument::Metadata> metadata;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
+
     document->version = QString::fromNSString(self.version);
     document->creator = QString::fromNSString(self.creator);
     
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (self.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)self.extraData];
-    document->extraData = extensions;
-    extensions = nullptr;
-    
-    metadata.reset(new OsmAnd::GpxDocument::GpxMetadata());
+    [self fillExtensions:document];
+
+    metadata.reset(new OsmAnd::GpxDocument::Metadata());
     if (self.metadata)
     {
         metadata->name = QString::fromNSString(self.metadata.name);
@@ -107,61 +80,43 @@
         
         [self.class fillLinks:metadata->links linkArray:self.metadata.links];
         
-        extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        if (self.metadata.extraData)
-            [self.class fillExtensions:extensions ext:(OAGpxExtensions *)self.metadata.extraData];
-        metadata->extraData = extensions;
-        extensions = nullptr;
+        [self.metadata fillExtensions:metadata];
     }
     document->metadata = metadata;
     metadata = nullptr;
-    
 }
 
-- (void) addWpts:(NSArray<OAGpxWpt *> *)wpts
+- (void) addWpts:(NSArray<OAWptPt *> *)wpts
 {
-    [wpts enumerateObjectsUsingBlock:^(OAGpxWpt * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [wpts enumerateObjectsUsingBlock:^(OAWptPt * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [self addWpt:obj];
     }];
 }
 
-- (void) addWpt:(OAGpxWpt *)w
+- (void) addWpt:(OAWptPt *)w
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> wpt;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
 
-    wpt.reset(new OsmAnd::GpxDocument::GpxWpt());
+    wpt.reset(new OsmAnd::GpxDocument::WptPt());
     wpt->position.latitude = w.position.latitude;
     wpt->position.longitude = w.position.longitude;
     wpt->name = QString::fromNSString(w.name);
     wpt->description = QString::fromNSString(w.desc);
     wpt->elevation = w.elevation;
     wpt->timestamp = w.time != 0 ? QDateTime::fromTime_t(w.time).toUTC() : QDateTime();
-    wpt->magneticVariation = w.magneticVariation;
-    wpt->geoidHeight = w.geoidHeight;
     wpt->comment = QString::fromNSString(w.comment);
-    wpt->source = QString::fromNSString(w.source);
-    wpt->symbol = QString::fromNSString(w.symbol);
     wpt->type = QString::fromNSString(w.type);
-    wpt->fixType = (OsmAnd::GpxDocument::GpxFixType)w.fixType;
-    wpt->satellitesUsedForFixCalculation = w.satellitesUsedForFixCalculation;
     wpt->horizontalDilutionOfPrecision = w.horizontalDilutionOfPrecision;
     wpt->verticalDilutionOfPrecision = w.verticalDilutionOfPrecision;
-    wpt->positionDilutionOfPrecision = w.positionDilutionOfPrecision;
-    wpt->ageOfGpsData = w.ageOfGpsData;
-    wpt->dgpsStationId = w.dgpsStationId;
     
     [self.class fillLinks:wpt->links linkArray:w.links];
     
     NSMutableArray *extArray = [NSMutableArray array];
-    if (w.extraData)
+    for (OAGpxExtension *e in w.extensions)
     {
-        OAGpxExtensions *exts = (OAGpxExtensions *)w.extraData;
-        if (exts.extensions)
-            for (OAGpxExtension *e in exts.extensions)
-                if (![e.name isEqualToString:@"speed"] && ![e.name isEqualToString:@"color"])
-                    [extArray addObject:e];
+        if (![e.name isEqualToString:@"speed"] && ![e.name isEqualToString:@"color"])
+            [extArray addObject:e];
     }
     
     if (w.speed >= 0)
@@ -171,44 +126,36 @@
         e.value = [NSString stringWithFormat:@"%.3f", w.speed];
         [extArray addObject:e];
     }
-    if (w.color.length > 0)
+    int color = [w getColor:0];
+    if (color != 0)
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"color";
-        e.value = w.color;
+        e.value = UIColorFromRGBA(color).toHexString;
         [extArray addObject:e];
     }
     
-    if (extArray.count > 0)
-    {
-        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
-        ext.extensions = [NSArray arrayWithArray:extArray];
-        w.extraData = ext;
-    }
+    w.extensions = extArray;
 
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (w.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)w.extraData];
-    wpt->extraData = extensions;
-    extensions = nullptr;
-    
+    [w fillExtensions:wpt];
+
     w.wpt = wpt;
-    document->locationMarks.append(wpt);
+    document->points.append(wpt);
     wpt = nullptr;
 
     [self processBounds:w.position];
     
-    [self.locationMarks addObject:w];
+    [self.points addObject:w];
 }
 
-- (void)deleteWpt:(OAGpxWpt *)w
+- (void)deleteWpt:(OAWptPt *)w
 {
-    for (OAGpxWpt *wpt in self.locationMarks)
+    for (OAWptPt *wpt in self.points)
     {
         if (wpt == w || wpt.time == w.time)
         {
-            [self.locationMarks removeObject:wpt];
-            document->locationMarks.removeOne(wpt.wpt);
+            [self.points removeObject:wpt];
+            document->points.removeOne(wpt.wpt);
             w.wpt = nullptr;
             break;
         }
@@ -217,106 +164,78 @@
 
 - (void)deleteAllWpts
 {
-    [self.locationMarks removeAllObjects];
-    document->locationMarks.clear();
+    [self.points removeAllObjects];
+    document->points.clear();
 }
 
-- (void) addRoutePoints:(NSArray<OAGpxRtePt *> *)points addRoute:(BOOL)addRoute
+- (void) addRoutePoints:(NSArray<OAWptPt *> *)points addRoute:(BOOL)addRoute
 {
     if (self.routes.count == 0 || addRoute)
     {
-        OAGpxRte *route = [[OAGpxRte alloc] init];
+        OARoute *route = [[OARoute alloc] init];
         [self addRoute:route];
     }
-    for (OAGpxRtePt *pt in points)
+    for (OAWptPt *pt in points)
         [self addRoutePoint:pt route:self.routes.lastObject];
     
 //    self.modifiedTime = System.currentTimeMillis();
 }
 
-- (void) addRoutes:(NSArray<OAGpxRte *> *)routes
+- (void) addRoutes:(NSArray<OARoute *> *)routes
 {
-    [routes enumerateObjectsUsingBlock:^(OAGpxRte * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [routes enumerateObjectsUsingBlock:^(OARoute * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [self addRoute:obj];
     }];
 }
 
-- (void) addRoute:(OAGpxRte *)r
+- (void) addRoute:(OARoute *)r
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxRte> rte;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxRtePt> rtept;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
-    
+    std::shared_ptr<OsmAnd::GpxDocument::Route> rte;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> rtept;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
+
     if (!r.points)
         r.points = [NSMutableArray new];
     
-    rte.reset(new OsmAnd::GpxDocument::GpxRte());
+    rte.reset(new OsmAnd::GpxDocument::Route());
     rte->name = QString::fromNSString(r.name);
     rte->description = QString::fromNSString(r.desc);
-    rte->comment = QString::fromNSString(r.comment);
-    rte->source = QString::fromNSString(r.source);
-    rte->type = QString::fromNSString(r.type);
-    rte->slotNumber = r.slotNumber;
-    
-    for (OAGpxRtePt *p in r.points)
+
+    for (OAWptPt *p in r.points)
     {
-        rtept.reset(new OsmAnd::GpxDocument::GpxRtePt());
+        rtept.reset(new OsmAnd::GpxDocument::WptPt());
         rtept->position.latitude = p.position.latitude;
         rtept->position.longitude = p.position.longitude;
         rtept->name = QString::fromNSString(p.name);
         rtept->description = QString::fromNSString(p.desc);
         rtept->elevation = p.elevation;
         rtept->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
-        rtept->magneticVariation = p.magneticVariation;
-        rtept->geoidHeight = p.geoidHeight;
         rtept->comment = QString::fromNSString(p.comment);
-        rtept->source = QString::fromNSString(p.source);
-        rtept->symbol = QString::fromNSString(p.symbol);
         rtept->type = QString::fromNSString(p.type);
-        rtept->fixType = (OsmAnd::GpxDocument::GpxFixType)p.fixType;
-        rtept->satellitesUsedForFixCalculation = p.satellitesUsedForFixCalculation;
         rtept->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
         rtept->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
-        rtept->positionDilutionOfPrecision = p.positionDilutionOfPrecision;
-        rtept->ageOfGpsData = p.ageOfGpsData;
-        rtept->dgpsStationId = p.dgpsStationId;
         
         [self.class fillLinks:rtept->links linkArray:p.links];
         
         if (!isnan(p.speed))
         {
-            OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
             OAGpxExtension *e = [[OAGpxExtension alloc] init];
             e.name = @"speed";
             e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-            ext.extensions = @[e];
-            p.extraData = ext;
+            p.extensions = @[e];
         }
 
-        extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        if (p.extraData)
-            [self.class fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
-        rtept->extraData = extensions;
-        extensions = nullptr;
+        [p fillExtensions:rtept];
         
-        p.rtept = rtept;
+        p.wpt = rtept;
         rte->points.append(rtept);
         rtept = nullptr;
         
         [self processBounds:p.position];
     }
     
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (r.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)r.extraData];
-    rte->extraData = extensions;
-    extensions = nullptr;
-    
-    
-    [self.class fillLinks:rte->links linkArray:r.links];
-    
-    
+    [r fillExtensions:rte];
+
     r.rte = rte;
     document->routes.append(rte);
     rte = nullptr;
@@ -324,52 +243,36 @@
     [self.routes addObject:r];
 }
 
-- (void) addRoutePoint:(OAGpxRtePt *)p route:(OAGpxRte *)route
+- (void) addRoutePoint:(OAWptPt *)p route:(OARoute *)route
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxRtePt> rtept;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
-    
-    rtept.reset(new OsmAnd::GpxDocument::GpxRtePt());
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> rtept;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
+
+    rtept.reset(new OsmAnd::GpxDocument::WptPt());
     rtept->position.latitude = p.position.latitude;
     rtept->position.longitude = p.position.longitude;
     rtept->name = QString::fromNSString(p.name);
     rtept->description = QString::fromNSString(p.desc);
     rtept->elevation = p.elevation;
     rtept->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime();
-    rtept->magneticVariation = p.magneticVariation;
-    rtept->geoidHeight = p.geoidHeight;
     rtept->comment = QString::fromNSString(p.comment);
-    rtept->source = QString::fromNSString(p.source);
-    rtept->symbol = QString::fromNSString(p.symbol);
     rtept->type = QString::fromNSString(p.type);
-    rtept->fixType = (OsmAnd::GpxDocument::GpxFixType)p.fixType;
-    rtept->satellitesUsedForFixCalculation = p.satellitesUsedForFixCalculation;
     rtept->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
     rtept->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
-    rtept->positionDilutionOfPrecision = p.positionDilutionOfPrecision;
-    rtept->ageOfGpsData = p.ageOfGpsData;
-    rtept->dgpsStationId = p.dgpsStationId;
     
     [self.class fillLinks:rtept->links linkArray:p.links];
     
     if (!isnan(p.speed))
     {
-        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"speed";
         e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-        ext.extensions = @[e];
-        p.extraData = ext;
+        p.extensions = @[e];
     }
     
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (p.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
-    rtept->extraData = extensions;
-    extensions = nullptr;
-    
-    p.rtept = rtept;
+    [p fillExtensions:rtept];
+
+    p.wpt = rtept;
     route.rte->points.append(rtept);
     rtept = nullptr;
     
@@ -378,103 +281,73 @@
     [((NSMutableArray *)route.points) addObject:p];
 }
 
-- (void) addTracks:(NSArray<OAGpxTrk *> *)tracks
+- (void) addTracks:(NSArray<OATrack *> *)tracks
 {
-    [tracks enumerateObjectsUsingBlock:^(OAGpxTrk * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [tracks enumerateObjectsUsingBlock:^(OATrack * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [self addTrack:obj];
     }];
 }
 
-- (void) addTrack:(OAGpxTrk *)t
+- (void) addTrack:(OATrack *)t
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrk> trk;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrkPt> trkpt;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrkSeg> trkseg;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
+    std::shared_ptr<OsmAnd::GpxDocument::Track> trk;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> trkpt;
+    std::shared_ptr<OsmAnd::GpxDocument::TrkSegment> trkseg;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
 
     if (!t.segments)
         t.segments = [NSMutableArray array];
     
-    trk.reset(new OsmAnd::GpxDocument::GpxTrk());
+    trk.reset(new OsmAnd::GpxDocument::Track());
     trk->name = QString::fromNSString(t.name);
     trk->description = QString::fromNSString(t.desc);
-    trk->comment = QString::fromNSString(t.comment);
-    trk->source = QString::fromNSString(t.source);
-    trk->type = QString::fromNSString(t.type);
-    trk->slotNumber = t.slotNumber;
-    
-    for (OAGpxTrkSeg *s in t.segments)
+
+    for (OATrkSegment *s in t.segments)
     {
-        trkseg.reset(new OsmAnd::GpxDocument::GpxTrkSeg());
+        trkseg.reset(new OsmAnd::GpxDocument::TrkSegment());
         
-        for (OAGpxTrkPt *p in s.points)
+        for (OAWptPt *p in s.points)
         {
-            trkpt.reset(new OsmAnd::GpxDocument::GpxTrkPt());
+            trkpt.reset(new OsmAnd::GpxDocument::WptPt());
             trkpt->position.latitude = p.position.latitude;
             trkpt->position.longitude = p.position.longitude;
             trkpt->name = QString::fromNSString(p.name);
             trkpt->description = QString::fromNSString(p.desc);
             trkpt->elevation = p.elevation;
             trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
-            trkpt->magneticVariation = p.magneticVariation;
-            trkpt->geoidHeight = p.geoidHeight;
             trkpt->comment = QString::fromNSString(p.comment);
-            trkpt->source = QString::fromNSString(p.source);
-            trkpt->symbol = QString::fromNSString(p.symbol);
             trkpt->type = QString::fromNSString(p.type);
-            trkpt->fixType = (OsmAnd::GpxDocument::GpxFixType)p.fixType;
-            trkpt->satellitesUsedForFixCalculation = p.satellitesUsedForFixCalculation;
             trkpt->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
             trkpt->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
-            trkpt->positionDilutionOfPrecision = p.positionDilutionOfPrecision;
-            trkpt->ageOfGpsData = p.ageOfGpsData;
-            trkpt->dgpsStationId = p.dgpsStationId;
             
             [self.class fillLinks:trkpt->links linkArray:p.links];
             
             if (!isnan(p.speed))
             {
-                OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
                 OAGpxExtension *e = [[OAGpxExtension alloc] init];
                 e.name = @"speed";
                 e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-                ext.extensions = @[e];
-                p.extraData = ext;
+                p.extensions = @[e];
             }
 
-            extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-            if (p.extraData)
-                [self.class fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
-            trkpt->extraData = extensions;
-            extensions = nullptr;
-            
-            p.trkpt = trkpt;
+            [p fillExtensions:trkpt];
+
+            p.wpt = trkpt;
             trkseg->points.append(trkpt);
             trkpt = nullptr;
             
             [self processBounds:p.position];
         }
         
-        extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        if (s.extraData)
-            [self.class fillExtensions:extensions ext:(OAGpxExtensions *)s.extraData];
-        trkseg->extraData = extensions;
-        extensions = nullptr;
-        
+        [s fillExtensions:trkseg];
+
         s.trkseg = trkseg;
         trk->segments.append(trkseg);
         trkseg = nullptr;
     }
-    
-    [self.class fillLinks:trk->links linkArray:t.links];
-    
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (t.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)t.extraData];
-    trk->extraData = extensions;
-    extensions = nullptr;
-    
+
+    [t fillExtensions:trk];
+
     t.trk = trk;
     document->tracks.append(trk);
     trk = nullptr;
@@ -482,72 +355,52 @@
     [self.tracks addObject:t];
 }
 
-- (void) addTrackSegment:(OAGpxTrkSeg *)s track:(OAGpxTrk *)track
+- (void)addTrackSegment:(OATrkSegment *)s track:(OATrack *)track
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrkPt> trkpt;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrkSeg> trkseg;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
-    
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> trkpt;
+    std::shared_ptr<OsmAnd::GpxDocument::TrkSegment> trkseg;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
+
     if (!s.points)
         s.points = [NSMutableArray array];
     
-    trkseg.reset(new OsmAnd::GpxDocument::GpxTrkSeg());
+    trkseg.reset(new OsmAnd::GpxDocument::TrkSegment());
     
-    for (OAGpxTrkPt *p in s.points)
+    for (OAWptPt *p in s.points)
     {
-        trkpt.reset(new OsmAnd::GpxDocument::GpxTrkPt());
+        trkpt.reset(new OsmAnd::GpxDocument::WptPt());
         trkpt->position.latitude = p.position.latitude;
         trkpt->position.longitude = p.position.longitude;
         trkpt->name = QString::fromNSString(p.name);
         trkpt->description = QString::fromNSString(p.desc);
         trkpt->elevation = p.elevation;
         trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
-        trkpt->magneticVariation = p.magneticVariation;
-        trkpt->geoidHeight = p.geoidHeight;
         trkpt->comment = QString::fromNSString(p.comment);
-        trkpt->source = QString::fromNSString(p.source);
-        trkpt->symbol = QString::fromNSString(p.symbol);
         trkpt->type = QString::fromNSString(p.type);
-        trkpt->fixType = (OsmAnd::GpxDocument::GpxFixType)p.fixType;
-        trkpt->satellitesUsedForFixCalculation = p.satellitesUsedForFixCalculation;
         trkpt->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
         trkpt->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
-        trkpt->positionDilutionOfPrecision = p.positionDilutionOfPrecision;
-        trkpt->ageOfGpsData = p.ageOfGpsData;
-        trkpt->dgpsStationId = p.dgpsStationId;
         
         [self.class fillLinks:trkpt->links linkArray:p.links];
         
         if (!isnan(p.speed))
         {
-            OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
             OAGpxExtension *e = [[OAGpxExtension alloc] init];
             e.name = @"speed";
             e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-            ext.extensions = @[e];
-            p.extraData = ext;
+            p.extensions = @[e];
         }
 
-        extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        if (p.extraData)
-            [self.class fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
-        trkpt->extraData = extensions;
-        extensions = nullptr;
-        
-        p.trkpt = trkpt;
+        [p fillExtensions:trkpt];
+
+        p.wpt = trkpt;
         trkseg->points.append(trkpt);
         trkpt = nullptr;
 
         [self processBounds:p.position];
     }
     
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (s.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)s.extraData];
-    trkseg->extraData = extensions;
-    extensions = nullptr;
-    
+    [s fillExtensions:trkseg];
+
     s.trkseg = trkseg;
     track.trk->segments.append(trkseg);
     trkseg = nullptr;
@@ -555,17 +408,17 @@
     [((NSMutableArray *)track.segments) addObject:s];
 }
 
-- (BOOL)removeTrackSegment:(OAGpxTrkSeg *)segment
+- (BOOL)removeTrackSegment:(OATrkSegment *)segment
 {
     [self removeGeneralTrackIfExists];
 
-    for (OAGpxTrk *track in self.tracks)
+    for (OATrack *track in self.tracks)
     {
-        for (OAGpxTrkSeg *trackSeg in track.segments)
+        for (OATrkSegment *trackSeg in track.segments)
         {
             if (trackSeg == segment || trackSeg.trkseg == segment.trkseg)
             {
-                if (track.trk->segments.removeOne(std::dynamic_pointer_cast<OsmAnd::GeoInfoDocument::TrackSegment>(trackSeg.trkseg)))
+                if (track.trk->segments.removeOne(std::dynamic_pointer_cast<OsmAnd::GpxDocument::TrkSegment>(trackSeg.trkseg)))
                 {
                     [self addGeneralTrack];
                     _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
@@ -589,52 +442,36 @@
     }
 }
 
-- (void) addTrackPoint:(OAGpxTrkPt *)p segment:(OAGpxTrkSeg *)segment
+- (void) addTrackPoint:(OAWptPt *)p segment:(OATrkSegment *)segment
 {
-    std::shared_ptr<OsmAnd::GpxDocument::GpxTrkPt> trkpt;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxLink> link;
-    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
-    
-    trkpt.reset(new OsmAnd::GpxDocument::GpxTrkPt());
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> trkpt;
+    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
+
+    trkpt.reset(new OsmAnd::GpxDocument::WptPt());
     trkpt->position.latitude = p.position.latitude;
     trkpt->position.longitude = p.position.longitude;
     trkpt->name = QString::fromNSString(p.name);
     trkpt->description = QString::fromNSString(p.desc);
     trkpt->elevation = p.elevation;
     trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime();
-    trkpt->magneticVariation = p.magneticVariation;
-    trkpt->geoidHeight = p.geoidHeight;
     trkpt->comment = QString::fromNSString(p.comment);
-    trkpt->source = QString::fromNSString(p.source);
-    trkpt->symbol = QString::fromNSString(p.symbol);
     trkpt->type = QString::fromNSString(p.type);
-    trkpt->fixType = (OsmAnd::GpxDocument::GpxFixType)p.fixType;
-    trkpt->satellitesUsedForFixCalculation = p.satellitesUsedForFixCalculation;
     trkpt->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
     trkpt->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
-    trkpt->positionDilutionOfPrecision = p.positionDilutionOfPrecision;
-    trkpt->ageOfGpsData = p.ageOfGpsData;
-    trkpt->dgpsStationId = p.dgpsStationId;
     
     [self.class fillLinks:trkpt->links linkArray:p.links];
     
     if (!isnan(p.speed))
     {
-        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"speed";
         e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-        ext.extensions = @[e];
-        p.extraData = ext;
+        p.extensions = @[e];
     }
     
-    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-    if (p.extraData)
-        [self.class fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
-    trkpt->extraData = extensions;
-    extensions = nullptr;
-    
-    p.trkpt = trkpt;
+    [p fillExtensions:trkpt];
+
+    p.wpt = trkpt;
     segment.trkseg->points.append(trkpt);
     trkpt = nullptr;
     

@@ -177,7 +177,7 @@
         OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
         if ([mapVC findWpt:point])
         {
-            OAGpxWpt *wpt = mapVC.foundWpt;
+            OAWptPt *wpt = mapVC.foundWpt;
             NSArray *foundWptGroups = mapVC.foundWptGroups;
             NSString *foundWptDocPath = mapVC.foundWptDocPath;
             
@@ -406,8 +406,7 @@
             {
                 if (searchResult.wpt)
                 {
-                    const auto& gpxWpt = std::dynamic_pointer_cast<const OsmAnd::GpxDocument::GpxWpt>(searchResult.wpt);
-                    OAGpxWpt *wpt = [OAGPXDocument fetchWpt:gpxWpt];
+                    OAWptPt *wpt = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(searchResult.wpt)];
                     OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
                     wptItem.point = wpt;
 
@@ -599,11 +598,13 @@
                 if (cell)
                 {
                     [cell.titleView setText:[item getName]];
-                    cell.titleIcon.image = [UIImage imageNamed:[OAQuickSearchListItem getIconName:res]];
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
+                    OAWptPt *wpt = (OAWptPt *) res.object;
+                    OAGpxWptItem *wptItem = [OAGpxWptItem withGpxWpt:wpt];
+                    cell.titleIcon.image = [wptItem getCompositeIcon];
                     [self setCellDistanceDirection:cell item:item];
                 }
                 return cell;

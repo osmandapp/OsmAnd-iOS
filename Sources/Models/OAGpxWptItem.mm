@@ -9,10 +9,11 @@
 #import "OAGpxWptItem.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
+#import "OAFavoritesHelper.h"
 
 @implementation OAGpxWptItem
 
-+ (instancetype)withGpxWpt:(OAGpxWpt *)gpxWpt
++ (instancetype)withGpxWpt:(OAWptPt *)gpxWpt
 {
     OAGpxWptItem *gpxWptItem = [[OAGpxWptItem alloc] init];
     if (gpxWptItem)
@@ -22,7 +23,7 @@
     return gpxWptItem;
 }
 
-- (void) setPoint:(OAGpxWpt *)point
+- (void) setPoint:(OAWptPt *)point
 {
     _point = point;
     [self acquireColor];
@@ -39,13 +40,12 @@
     if (!self.point)
         return;
     
-    self.point.color = [OAUtilities colorToString:self.color];
+    [self.point setColor:[OAUtilities colorToNumber:self.color]];
 }
 
 - (void) acquireColor
 {
-    if (self.point.color.length > 0)
-        self.color = [UIColor colorFromString:self.point.color];
+    self.color = [self.point getColor];
 }
 
 - (BOOL) isEqual:(id)o
@@ -84,26 +84,7 @@
 
 - (UIImage *) getCompositeIcon
 {
-    UIImage *resultImg;
-    NSString *backgrounfIconName = [@"bg_point_" stringByAppendingString:_point.getBackgroundIcon];
-    UIImage *backgroundImg = [UIImage imageNamed:backgrounfIconName];
-    backgroundImg = [OAUtilities tintImageWithColor:backgroundImg color:_point.getColor];
-    
-    NSString *iconName = [@"mx_" stringByAppendingString:_point.getIcon];
-    UIImage *iconImg = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
-    iconImg = [OAUtilities tintImageWithColor:iconImg color:UIColor.whiteColor];
- 
-    CGFloat scaledIconSize = backgroundImg.size.width * backgroundImg.scale;
-    backgroundImg  = [OAUtilities resizeImage:backgroundImg newSize:CGSizeMake(scaledIconSize, scaledIconSize)];
-    CGFloat centredIconOffset = (backgroundImg.size.width - iconImg.size.width) / 2;
-    
-    UIGraphicsBeginImageContext(backgroundImg.size);
-    [backgroundImg drawInRect:CGRectMake(0, 0, backgroundImg.size.width, backgroundImg.size.height)];
-    [iconImg drawInRect:CGRectMake(centredIconOffset, centredIconOffset, iconImg.size.width, iconImg.size.height)];
-    resultImg = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return resultImg;
+    return [OAFavoritesHelper getCompositeIcon:_point.getIcon backgroundIcon:_point.getBackgroundIcon color:_point.getColor];
 }
 
 @end

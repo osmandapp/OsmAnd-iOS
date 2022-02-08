@@ -122,7 +122,7 @@
 
     NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *_waypointGroups;
     NSArray<NSString *> *_waypointSortedGroupNames;
-    NSArray<OAGpxTrkSeg *> *_segments;
+    NSDictionary<NSString *, NSDictionary *> *_segments;
 
     BOOL _isHeaderBlurred;
     BOOL _isTabSelecting;
@@ -137,6 +137,8 @@
 }
 
 @dynamic isShown, backButton, statusBarBackgroundView, contentContainer;
+
+@synthesize analysis = _analysis;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
 {
@@ -376,7 +378,7 @@
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., 20., 0., 20.);
-        [_headerView generateGpxBlockStatistics:self.analysis
+        [_headerView generateGpxBlockStatistics:_analysis
                                     withoutGaps:!self.gpx.joinSegments && (self.isCurrentTrack
                                             ? (self.doc.tracks.count == 0 || self.doc.tracks.firstObject.generalTrack)
                                             : (self.doc.tracks.count > 0 && self.doc.tracks.firstObject.generalTrack))];
@@ -573,27 +575,27 @@
             self.gpx.gpxFilePath = newFilePath;
             [[OAGPXDatabase sharedDb] save];
 
-            OAGpxMetadata *metadata;
+            OAMetadata *metadata;
             if (self.doc.metadata)
             {
-                metadata = (OAGpxMetadata *) self.doc.metadata;
+                metadata = self.doc.metadata;
             }
             else
             {
-                metadata = [[OAGpxMetadata alloc] init];
+                metadata = [[OAMetadata alloc] init];
                 long time = 0;
-                if (self.doc.locationMarks.count > 0)
-                    time = self.doc.locationMarks[0].time;
+                if (self.doc.points.count > 0)
+                    time = self.doc.points[0].time;
                 if (self.doc.tracks.count > 0)
                 {
-                    OAGpxTrk *track = self.doc.tracks[0];
+                    OATrack *track = self.doc.tracks[0];
                     track.name = newName;
                     if (track.segments.count > 0)
                     {
-                        OAGpxTrkSeg *seg = track.segments[0];
+                        OATrkSegment *seg = track.segments[0];
                         if (seg.points.count > 0)
                          {
-                            OAGpxTrkPt *p = seg.points[0];
+                            OAWptPt *p = seg.points[0];
                             if (time > p.time)
                                 time = p.time;
                         }
@@ -659,13 +661,26 @@
     [self updateWaypointSortedGroups];
 }
 
+- (void)updateAnalysis
+{
+    if (_mutableDoc)
+    {
+        _analysis = [_mutableDoc getGeneralTrack] && [_mutableDoc getGeneralSegment]
+                ? [OAGPXTrackAnalysis segment:0 seg:_mutableDoc.generalSegment] : [_mutableDoc getAnalysis:0];
+    }
+    else
+    {
+        [super updateAnalysis];
+    }
+}
+
 - (void)updateWaypointsData
 {
     NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *waypointGroups = [NSMutableDictionary dictionary];
     if ([self.doc hasWptPt])
     {
         NSMutableArray<OAGpxWptItem *> *withoutGroup = [NSMutableArray array];
-        for (OAGpxWpt *gpxWpt in self.doc.locationMarks)
+        for (OAWptPt *gpxWpt in self.doc.points)
         {
             OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
             if (gpxWpt.type.length == 0)
@@ -691,12 +706,10 @@
     if ([self.doc hasRtePt])
     {
         NSMutableArray<OAGpxWptItem *> *rtePtsGroup = [NSMutableArray array];
-        NSArray<OAGpxRtePt *> *rtePts = [self.doc getRoutePoints];
-        for (OAGpxRtePt *rtePt in rtePts)
+        NSArray<OAWptPt *> *rtePts = [self.doc getRoutePoints];
+        for (OAWptPt *rtePt in rtePts)
         {
-            OAGpxWpt *gpxWpt = [[OAGpxWpt alloc] init];
-            [gpxWpt fillWithTrkPt:[[OAGpxTrkPt alloc] initWithRtePt:rtePt]];
-            [rtePtsGroup addObject:[OAGpxWptItem withGpxWpt:gpxWpt]];
+            [rtePtsGroup addObject:[OAGpxWptItem withGpxWpt:rtePt]];
         }
 
         if (rtePtsGroup.count > 0)
@@ -849,7 +862,7 @@
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType
 {
-    [self openAnalysis:self.analysis
+    [self openAnalysis:_analysis
               withMode:modeType];
 }
 
@@ -857,18 +870,32 @@
             withMode:(EOARouteStatisticsMode)mode
 {
     [self hide:YES duration:.2 onComplete:^{
-        [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
+        [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:_mutableDoc ? _mutableDoc : self.doc
                                                                 analysis:analysis
                                                         menuControlState:[self getCurrentStateForAnalyze:mode]];
     }];
 }
 
-- (NSArray<OAGpxTrkSeg *> *)updateSegmentsData
+- (NSDictionary<NSString *, NSDictionary *> *)updateSegmentsData
 {
     _mutableDoc = self.isCurrentTrack ? self.savingHelper.currentTrack : [[OAGPXMutableDocument alloc] initWithGpxFile:
             [(_app ? _app : [OsmAndApp instance]).gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]];
-    _segments = [_mutableDoc && [_mutableDoc getGeneralSegment] ? @[_mutableDoc.generalSegment] : @[]
+    NSArray<OATrkSegment *> *segmentsArray = [_mutableDoc && [_mutableDoc getGeneralSegment] ? @[_mutableDoc.generalSegment] : @[]
             arrayByAddingObjectsFromArray:[_mutableDoc getNonEmptyTrkSegments:NO]];
+
+    NSMutableDictionary<NSString *, NSDictionary *> *segments = [NSMutableDictionary dictionary];
+    for (OATrkSegment *segment in segmentsArray)
+    {
+        OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segment];
+        segments[[NSString stringWithFormat:@"segment_%lu", segments.count]] = @{
+                @"segment" : segment,
+                @"analysis": analysis
+        };
+    }
+    _segments = segments;
+
+    [self updateAnalysis];
+
     return _segments;
 }
 
@@ -882,7 +909,7 @@
     }];
 }
 
-- (void)deleteAndSaveSegment:(OAGpxTrkSeg *)segment
+- (void)deleteAndSaveSegment:(OATrkSegment *)segment
 {
     if (segment && _mutableDoc)
     {
@@ -891,7 +918,14 @@
 
         if (_segments)
         {
-            NSInteger segmentIndex = [_segments indexOfObject:segment];
+            NSInteger segmentIndex = 0;
+            for (NSDictionary *segmentDict in _segments.allValues)
+            {
+                if (segmentDict[@"segment"] == segment)
+                    break;
+                segmentIndex++;
+            }
+
             if ([_mutableDoc removeTrackSegment:segment])
             {
                 [_mutableDoc saveTo:_mutableDoc.path];
@@ -925,7 +959,7 @@
     }
 }
 
-- (void)openEditSegmentScreen:(OAGpxTrkSeg *)segment
+- (void)openEditSegmentScreen:(OATrkSegment *)segment
                      analysis:(OAGPXTrackAnalysis *)analysis
 {
     OAEditWaypointsGroupBottomSheetViewController *editWaypointsBottomSheet =
@@ -971,8 +1005,7 @@
     if (groupName && groupName.length > 0 && [self getWaypointsCount:groupName] > 0)
     {
         OAGpxWptItem *waypoint = _waypointGroups[groupName].firstObject;
-        groupColor = waypoint.color ? waypoint.color
-                : waypoint.point.color ? [UIColor colorFromString:waypoint.point.color] : nil;
+        groupColor = waypoint.color ? waypoint.color : [waypoint.point getColor];
     }
     if (!groupColor)
         groupColor = [OADefaultFavorite getDefaultColor];
@@ -1200,7 +1233,7 @@
 }
 
 - (void)updateChartHighlightValue:(LineChartView *)chart
-                          segment:(OAGpxTrkSeg *)segment
+                          segment:(OATrkSegment *)segment
 {
     CLLocationCoordinate2D pinLocation = [self getPinLocation];
     LineChartData *lineData = chart.lineData;
@@ -1209,8 +1242,8 @@
     {
         float pos;
         double totalDistance = 0;
-        OAGpxTrkPt *previousPoint = nil;
-        for (OAGpxTrkPt *currentPoint in segment.points)
+        OAWptPt *previousPoint = nil;
+        for (OAWptPt *currentPoint in segment.points)
         {
            if (currentPoint.position.latitude == pinLocation.latitude
                    && currentPoint.position.longitude == pinLocation.longitude)
@@ -1253,7 +1286,7 @@
 {
     if (!_routeLineChartHelper)
     {
-        _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc
+        _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:_mutableDoc
                                                                centerMapOnBBox:^(OABBox rect) {
             [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
                                               bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
@@ -1275,13 +1308,22 @@
     return _routeLineChartHelper;
 }
 
-- (OAGpxTrk *)getTrack:(OAGpxTrkSeg *)segment
+- (OATrack *)getTrack:(OATrkSegment *)segment
 {
-    for (OAGpxTrk *trk in _mutableDoc.tracks)
+    for (OATrack *trk in _mutableDoc.tracks)
     {
         if ([trk.segments containsObject:segment])
             return trk;
     }
+    return nil;
+}
+
+- (NSString *)getTrackSegmentTitle:(OATrkSegment *)segment
+{
+    OATrack *track = [self getTrack:segment];
+    if (track)
+        return [OAGPXDocument buildTrackSegmentName:self.doc track:track segment:segment];
+
     return nil;
 }
 
@@ -1319,9 +1361,9 @@
             {
                 _description = self.doc.metadata.desc;
             }
-            else if (self.doc.metadata.extraData)
+            else if (self.doc.metadata.extensions.count > 0)
             {
-                for (OAGpxExtension *e in ((OAGpxExtensions *)self.doc.metadata.extraData).extensions)
+                for (OAGpxExtension *e in self.doc.metadata.extensions)
                 {
                     if ([e.name isEqualToString:@"desc"])
                         _description = e.value;
@@ -1337,7 +1379,7 @@
         {
             _description = [NSString stringWithFormat:@"%@: %li",
                     OALocalizedString(@"gpx_selection_segment_title"),
-                    _mutableDoc && [_segments containsObject:_mutableDoc.generalSegment] ? _segments.count - 1 : _segments.count];
+                    _mutableDoc && _mutableDoc.generalSegment ? _segments.count - 1 : _segments.count];
             break;
         }
         case EOATrackMenuHudPointsTab:
@@ -1359,18 +1401,18 @@
     NSArray *links = self.doc.metadata.links;
     if (links && links.count > 0)
     {
-        for (NSString *link in links)
+        for (OALink *link in links)
         {
-            if (link.length > 0)
+            if (link.url && link.url.absoluteString && link.url.absoluteString.length > 0)
             {
-                NSString *lowerCaseLink = [link lowerCase];
+                NSString *lowerCaseLink = [link.url.absoluteString lowerCase];
                 if ([lowerCaseLink containsString:@".jpg"] ||
                     [lowerCaseLink containsString:@".jpeg"] ||
                     [lowerCaseLink containsString:@".png"] ||
                     [lowerCaseLink containsString:@".bmp"] ||
                     [lowerCaseLink containsString:@".webp"])
                 {
-                    return link;
+                    return link.url.absoluteString;
                 }
             }
         }
@@ -2053,12 +2095,43 @@
         }
         if (cell)
         {
-            NSInteger segmentsCount = cell.segmentControl.numberOfSegments;
-            if ([cellData.values.allKeys containsObject:@"tab_2_string_value"] && segmentsCount < 3)
-                [cell.segmentControl insertSegmentWithTitle:cellData.values[@"tab_2_string_value"] atIndex:2 animated:NO];
+            NSInteger segmentsCount = 0;
+            for (NSString *key in cellData.values.allKeys)
+            {
+                if ([key hasPrefix:@"tab_"])
+                    segmentsCount++;
+            }
 
             [cell.segmentControl setTitle:cellData.values[@"tab_0_string_value"] forSegmentAtIndex:0];
-            [cell.segmentControl setTitle:cellData.values[@"tab_1_string_value"] forSegmentAtIndex:1];
+            if (segmentsCount == 3)
+            {
+                if (cell.segmentControl.numberOfSegments < 2)
+                    [cell.segmentControl insertSegmentWithTitle:cellData.values[@"tab_1_string_value"] atIndex:1 animated:NO];
+                else
+                    [cell.segmentControl setTitle:cellData.values[@"tab_1_string_value"] forSegmentAtIndex:1];
+                if (cell.segmentControl.numberOfSegments < 3)
+                    [cell.segmentControl insertSegmentWithTitle:cellData.values[@"tab_2_string_value"] atIndex:2 animated:NO];
+                else
+                    [cell.segmentControl setTitle:cellData.values[@"tab_2_string_value"] forSegmentAtIndex:2];
+            }
+            else if (segmentsCount == 2)
+            {
+                NSString *value = cellData.values[[cellData.values.allKeys containsObject:@"tab_2_string_value"] ? @"tab_2_string_value" : @"tab_1_string_value"];
+                if (cell.segmentControl.numberOfSegments < 2)
+                    [cell.segmentControl insertSegmentWithTitle:value atIndex:1 animated:NO];
+                else
+                    [cell.segmentControl setTitle:value forSegmentAtIndex:1];
+                if (cell.segmentControl.numberOfSegments == 3)
+                    [cell.segmentControl removeSegmentAtIndex:2 animated:NO];
+            }
+            else
+            {
+                if (cell.segmentControl.numberOfSegments > 2)
+                    [cell.segmentControl removeSegmentAtIndex:2 animated:NO];
+                if (cell.segmentControl.numberOfSegments > 1)
+                    [cell.segmentControl removeSegmentAtIndex:1 animated:NO];
+            }
+
             cell.segmentControl.tag = tag;
             [cell.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
@@ -2358,20 +2431,19 @@
             CGPoint p = scrollView.contentOffset;
             p.y += _headerView.frame.size.height;
             NSIndexPath *ip = [self.tableView indexPathForRowAtPoint:p];
+            if (ip && ip.section > 0)
+            {
+                p.y += [self tableView:self.tableView heightForHeaderInSection:ip.section];
+                ip = [self.tableView indexPathForRowAtPoint:p];
+            }
             if (ip)
             {
-                if (ip.section != 0)
-                    p.y += [self tableView:self.tableView heightForHeaderInSection:ip.section];
-                ip = [self.tableView indexPathForRowAtPoint:p];
-                if (ip)
+                [_headerView setSelectedIndexGroupsCollection:ip.section];
+                if (ip.section < _waypointSortedGroupNames.count)
                 {
-                    [_headerView setSelectedIndexGroupsCollection:ip.section];
-                    if (ip.section < _waypointSortedGroupNames.count)
-                    {
-                            [_headerView.groupsCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:ip.section inSection:0]
-                                                                 atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                                                         animated:YES];
-                    }
+                    [_headerView.groupsCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:ip.section inSection:0]
+                                                             atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                                                     animated:YES];
                 }
             }
         }

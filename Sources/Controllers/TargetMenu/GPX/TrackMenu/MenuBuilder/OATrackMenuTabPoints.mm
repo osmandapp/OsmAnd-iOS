@@ -46,7 +46,7 @@
     return [OABaseTrackMenuTabItem getUnselectedIcon:@"ic_custom_folder_points"];
 }
 
-- (QuadRect *)updateQR:(QuadRect *)q p:(OAGpxWpt *)p defLat:(CGFloat)defLat defLon:(CGFloat)defLon
+- (QuadRect *)updateQR:(QuadRect *)q p:(OAWptPt *)p defLat:(CGFloat)defLat defLon:(CGFloat)defLon
 {
     if (q.left == defLon && q.top == defLat &&
             q.right == defLon && q.bottom == defLat)
@@ -211,7 +211,7 @@
                 if (!currentWaypoints || currentWaypoints.count == 0)
                     return pointsRect;
 
-                OAGpxWpt *p = currentWaypoints.firstObject.point;
+                OAWptPt *p = currentWaypoints.firstObject.point;
                 pointsRect = [[QuadRect alloc] initWithLeft:p.position.longitude
                                                         top:p.position.latitude
                                                       right:p.position.longitude

@@ -427,6 +427,12 @@ typedef enum
     [self showScrollableHudViewController:controller];
 }
 
+- (void)showRouteLineAppearanceViewController:(OABaseScrollableHudViewController *)controller
+{
+    _activeTargetType = OATargetRouteLineAppearance;
+    [self showScrollableHudViewController:controller];
+}
+
 - (void) refreshToolbar
 {
     [_destinationViewController refreshView];
@@ -754,7 +760,8 @@ typedef enum
         
         if (_targetAppMode && _reopenSettings)
         {
-            OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] initWithTargetAppMode:_targetAppMode];
+            OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] initWithTargetAppMode:_targetAppMode
+                                                                                                   targetScreenKey:nil];
             [OARootViewController.instance.navigationController pushViewController:settingsVC animated:NO];
         }
         _targetAppMode = nil;
@@ -770,12 +777,12 @@ typedef enum
 
 - (void) closeRouteInfo
 {
-    [self closeRouteInfo:nil];
+    [self closeRouteInfo:YES onComplete:nil];
 }
 
-- (void) closeRouteInfo:(void (^)(void))onComplete
+- (void) closeRouteInfo:(BOOL)topControlsVisibility onComplete:(void (^)(void))onComplete
 {
-    [self closeRouteInfoWithTopControlsVisibility:YES bottomsControlHeight:@0 onComplete:onComplete];
+    [self closeRouteInfoWithTopControlsVisibility:topControlsVisibility bottomsControlHeight:@0 onComplete:onComplete];
 }
 
 - (void) closeRouteInfoWithTopControlsVisibility:(BOOL)topControlsVisibility bottomsControlHeight:(NSNumber *)bottomsControlHeight onComplete:(void (^)(void))onComplete
@@ -1233,7 +1240,8 @@ typedef enum
     || _activeTargetType == OATargetRouteDetailsGraph
     || _activeTargetType == OATargetRouteDetails
     || _activeTargetType == OATargetRoutePlanning
-    || _activeTargetType == OATargetGPX;
+    || _activeTargetType == OATargetGPX
+    || _activeTargetType == OATargetRouteLineAppearance;
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState

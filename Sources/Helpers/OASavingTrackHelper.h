@@ -11,7 +11,7 @@
 
 @class OAGPXMutableDocument;
 @class OAGPX;
-@class OAGpxWpt;
+@class OAWptPt;
 
 @interface OASavingTrackHelper : NSObject
 
@@ -35,11 +35,11 @@
 
 - (BOOL) saveIfNeeded;
 
-- (void)addWpt:(OAGpxWpt *)wpt;
-- (void)deleteWpt:(OAGpxWpt *)wpt;
+- (void)addWpt:(OAWptPt *)wpt;
+- (void)deleteWpt:(OAWptPt *)wpt;
 - (void)deleteAllWpts;
-- (void)saveWpt:(OAGpxWpt *)wpt;
-- (void)updatePointCoordinates:(OAGpxWpt *)wpt newLocation:(CLLocationCoordinate2D)newLocation;
+- (void)saveWpt:(OAWptPt *)wpt;
+- (void)updatePointCoordinates:(OAWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation;
 
 - (BOOL) getIsRecording;
 

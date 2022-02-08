@@ -1970,7 +1970,7 @@
 "reverse_track_dir" = "Зворотний напрямок треку";
 "attach_to_the_roads" = "Прикріпити до доріг";
 "select_another_track" = "Обрати інший трек";
-"track" = "Трек";
+"shared_string_gpx_track" = "Трек";
 "follow_track" = "Навігація за треком";
 "split_after" = "Розділити після";
 "split_before" = "Розділити перед";
@@ -2331,3 +2331,14 @@
 "grey_color_undefined" = "Частки без даних – сірі.";
 "shared_string_hide_all" = "Приховати все";
 "points_delete_multiple" = "Вилучити %d точку(и)?";
+"context_menu_edit_descr" = "Змінити опис";
+"add_description" = "Додати опис";
+"map_settings_weather_pressure" = "Тиск";
+"map_settings_clear_raster_cache" = "Очистити растрові плитки";
+"map_settings_weather" = "Погода";
+"map_settings_weather_temp" = "Температура";
+"map_settings_weather_cloud" = "Хмари";
+"map_settings_weather_wind" = "Вітер";
+"map_settings_weather_precip" = "Опади";
+"map_settings_clear_geo_cache" = "Очистити геоплитки";
+"q_clear_weather_cache" = "Очистити кеш погоди?";

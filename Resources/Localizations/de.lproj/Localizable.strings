@@ -1971,7 +1971,7 @@
 "nearest_point" = "Nächstgelegener Punkt";
 "start_of_track" = "Startpunkt des Tracks";
 "point_to_navigate" = "Navigation";
-"track" = "Wirtschaftsweg";
+"shared_string_gpx_track" = "Wirtschaftsweg";
 "reverse_track_dir" = "Trackrichtung umkehren";
 "attach_to_the_roads" = "Auf Straßen einrasten";
 "select_another_track" = "Anderen Track wählen";
@@ -2335,3 +2335,5 @@
 "grey_color_undefined" = "Bereiche ohne Daten werden grau dargestellt.";
 "shared_string_hide_all" = "Alle ausblenden";
 "points_delete_multiple" = "%d Punkt(e) löschen?";
+"context_menu_edit_descr" = "Beschreibung bearbeiten";
+"add_description" = "Beschreibung hinzufügen";

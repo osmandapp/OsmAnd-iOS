@@ -1921,7 +1921,7 @@
 "point_num" = "Точка %d";
 "shared_string_rendering_style" = "Стиль отрисовки";
 "shared_string_routing" = "Маршрутизация";
-"selected_profiles" = "%dиз %d";
+"selected_profiles" = "%d из %d";
 "shared_string_deselect_all" = "Отменить выбор";
 "move_point_descr" = "Переместите карту, чтобы изменить положение этой точки.";
 
@@ -2013,7 +2013,7 @@
 "special" = "Специальные";
 "start_of_track" = "Начало трека";
 "split_after" = "Разделить после";
-"track" = "Трек";
+"shared_string_gpx_track" = "Трек";
 "some_of" = "%dиз %d";
 "rearrange_categories" = "Упорядочить категории";
 "join_segments" = "Объединить сегменты";

@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAGpxWpt;
+@class OAWptPt;
 
 @interface OAGpxWptItem : NSObject
 
-+ (instancetype)withGpxWpt:(OAGpxWpt *)gpxWpt;
++ (instancetype)withGpxWpt:(OAWptPt *)gpxWpt;
 
-@property (nonatomic) OAGpxWpt *point;
+@property (nonatomic) OAWptPt *point;
 @property (nonatomic) UIColor *color;
 @property (nonatomic) NSArray *groups;
 

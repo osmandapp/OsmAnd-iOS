@@ -1122,7 +1122,7 @@
 "split_before" = "Zatitu aurretik";
 "split_after" = "Zatitu ondoren";
 "follow_track" = "Jarraitu lorratza";
-"track" = "Pista";
+"shared_string_gpx_track" = "Pista";
 "select_another_track" = "Aukeratu beste lorratz bat";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Erantsi errepideetara";

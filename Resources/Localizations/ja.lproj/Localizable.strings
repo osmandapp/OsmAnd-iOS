@@ -1921,7 +1921,7 @@
 "point_to_navigate" = "案内する";
 "select_another_track" = "別の経路を選択";
 "select_track_to_follow" = "たどる経路の選択";
-"track" = "農業用道路、林道";
+"shared_string_gpx_track" = "農業用道路、林道";
 "follow_track" = "経路をたどる";
 "split_after" = "この後で分割";
 "split_before" = "この前で分割";

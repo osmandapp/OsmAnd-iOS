@@ -12,7 +12,7 @@
 
 #define EXTENSION_HIDDEN @"hidden"
 
-@class OAGpxWpt;
+@class OAWptPt;
 
 @interface OASpecialPointType : NSObject
 
@@ -90,7 +90,7 @@
 
 + (NSString *) toStringDate:(NSDate *)date;
 
-- (OAGpxWpt *) toWpt;
+- (OAWptPt *) toWpt;
 
 - (UIImage *) getCompositeIcon;
 

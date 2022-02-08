@@ -1912,7 +1912,7 @@
 "open_saved_track" = "Åben gemt spor";
 "fav_points_not_exist" = "Der eksisterer ingen Favoritpunkter";
 "nearest_point" = "Nærmeste punkt";
-"track" = "Spor";
+"shared_string_gpx_track" = "Spor";
 "street_level_imagery" = "Billeder på gadeniveau";
 "show_compass_ruler" = "Vis kompas lineal";
 "res_standard" = "Standard kort";
@@ -2324,3 +2324,14 @@
 "white_color_undefined" = "Dele uden data er hvide.";
 "shared_string_hide_all" = "Skjul alle";
 "points_delete_multiple" = "Slet %d punkt(er)?";
+"context_menu_edit_descr" = "Rediger beskrivelse";
+"add_description" = "Tilføj beskrivelse";
+"map_settings_weather" = "Vejr";
+"map_settings_weather_pressure" = "Lufttryk";
+"map_settings_weather_cloud" = "Sky";
+"map_settings_weather_precip" = "Nedbør";
+"map_settings_weather_wind" = "Vind";
+"map_settings_clear_raster_cache" = "Ryd rasterfliser";
+"q_clear_weather_cache" = "Ønsker du at rydde vejr-mellemlageret?";
+"map_settings_clear_geo_cache" = "Ryd geofliser";
+"map_settings_weather_temp" = "Temperatur";

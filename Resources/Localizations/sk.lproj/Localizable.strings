@@ -1764,7 +1764,7 @@
 "special" = "Špeciálne";
 "icon" = "Ikona";
 "split_before" = "Rozdeliť predtým";
-"track" = "Poľná cesta";
+"shared_string_gpx_track" = "Poľná cesta";
 "reverse_track_dir" = "Obrátiť smer stopy";
 "shared_string_others" = "Iné";
 "default_color" = "Predvolená farba";

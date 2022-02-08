@@ -17,7 +17,6 @@
 #import "OAPointDescription.h"
 
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/GeoInfoPresenter.h>
 #include <OsmAndCore/Map/MapPrimitiviser.h>
 #include <OsmAndCore/Map/MapPrimitivesProvider.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>

@@ -325,10 +325,10 @@
     lastTimeUpdated = 0;
     lastPoint = kCLLocationCoordinate2DInvalid;
     
-    [currentTrack getDocument]->locationMarks.clear();
+    [currentTrack getDocument]->points.clear();
     [currentTrack getDocument]->tracks.clear();
     
-    [currentTrack.locationMarks removeAllObjects];
+    [currentTrack.points removeAllObjects];
     [currentTrack.tracks removeAllObjects];
     [currentTrack initBounds];
     currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
@@ -351,7 +351,7 @@
             OAGPXMutableDocument *doc = data[f];
             if (![doc isEmpty])
             {
-                OALocationMark *pt = [doc findPointToShow];
+                OAWptPt *pt = [doc findPointToShow];
                 
                 NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
                 [simpleFormat setDateFormat:@"HH-mm_EEE"];
@@ -421,7 +421,7 @@
             {
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
-                    OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+                    OAWptPt *wpt = [[OAWptPt alloc] init];
                     double lat = sqlite3_column_double(statement, 0);
                     double lon = sqlite3_column_double(statement, 1);
                     wpt.position = CLLocationCoordinate2DMake(lat, lon);
@@ -430,7 +430,7 @@
                         wpt.name = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
                     
                     if (sqlite3_column_text(statement, 4) != nil)
-                        wpt.color = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)];
+                        [wpt setColor:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)].intValue];
                     if (sqlite3_column_text(statement, 5) != nil)
                         wpt.type = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)];
                     if (sqlite3_column_text(statement, 6) != nil)
@@ -478,13 +478,13 @@
                 long previousTime = 0;
                 long previousInterval = 0;
 
-                OAGpxTrkSeg *segment;
-                OAGpxTrk *track;
+                OATrkSegment *segment;
+                OATrack *track;
                 OAGPXMutableDocument *gpx;
 
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
-                    OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] init];
+                    OAWptPt *pt = [[OAWptPt alloc] init];
                     double lat = sqlite3_column_double(statement, 0);
                     double lon = sqlite3_column_double(statement, 1);
                     pt.position = CLLocationCoordinate2DMake(lat, lon);
@@ -504,7 +504,7 @@
                     else if (track && [OAAppSettings sharedManager].autoSplitRecording.get && currentInterval < 2 * 60 * 60)
                     {
                         // 2 hour - same track
-                        segment = [[OAGpxTrkSeg alloc] init];
+                        segment = [[OATrkSegment alloc] init];
                         segment.points = [NSMutableArray array];
                         
                         [gpx addTrackSegment:segment track:track];
@@ -515,10 +515,10 @@
                     else
                     {
                         // check if date the same - new track otherwise new file
-                        track = [[OAGpxTrk alloc] init];
+                        track = [[OATrack alloc] init];
                         track.segments = [NSMutableArray array];
 
-                        segment = [[OAGpxTrkSeg alloc] init];
+                        segment = [[OATrkSegment alloc] init];
                         segment.points = [NSMutableArray array];
                         
                         NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:pt.time]];
@@ -646,7 +646,7 @@
     
     lastTimeUpdated = time;
     
-    OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] init];
+    OAWptPt *pt = [[OAWptPt alloc] init];
     pt.position = CLLocationCoordinate2DMake(lat, lon);
     pt.time = time;
     pt.elevation = alt;
@@ -656,20 +656,20 @@
     [self addTrackPoint:pt newSegment:newSegment time:time];
 }
 
-- (void) addTrackPoint:(OAGpxTrkPt *)pt newSegment:(BOOL)newSegment time:(long)time
+- (void) addTrackPoint:(OAWptPt *)pt newSegment:(BOOL)newSegment time:(long)time
 {
-        OAGpxTrk *track = [currentTrack.tracks firstObject];
+        OATrack *track = [currentTrack.tracks firstObject];
         BOOL segmentAdded = NO;
         if (track.segments.count == 0 || newSegment)
         {
-            OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
+            OATrkSegment *segment = [[OATrkSegment alloc] init];
             segment.points = [NSMutableArray array];
             [currentTrack addTrackSegment:segment track:track];
             segmentAdded = YES;
         }
         if (pt != nil)
         {
-            OAGpxTrkSeg *lt = [track.segments lastObject];
+            OATrkSegment *lt = [track.segments lastObject];
             [currentTrack addTrackPoint:pt segment:lt];
         }
         if (segmentAdded)
@@ -677,16 +677,20 @@
         currentTrack.modifiedTime = time;
     }
     
-- (void)addWpt:(OAGpxWpt *)wpt
+- (void)addWpt:(OAWptPt *)wpt
 {
     [currentTrack addWpt:wpt];
     currentTrack.modifiedTime = wpt.time;
     
     points++;
-    
-    NSString *color = (wpt.color ? wpt.color : @"");
-    
-    [self doAddPointsLat:wpt.position.latitude lon:wpt.position.longitude time:wpt.time desc:wpt.desc name:wpt.name color:color group:wpt.type];
+
+    [self doAddPointsLat:wpt.position.latitude
+                     lon:wpt.position.longitude
+                    time:wpt.time
+                    desc:wpt.desc
+                    name:wpt.name
+                   color:UIColorFromRGBA([wpt getColor:0]).toHexString
+                   group:wpt.type];
 }
 
 - (void) doUpdateTrackLat:(double)lat lon:(double)lon alt:(double)alt speed:(double)speed hdop:(double)hdop time:(long)time
@@ -738,7 +742,7 @@
     });
 }
 
-- (void) updatePointCoordinates:(OAGpxWpt *)wpt newLocation:(CLLocationCoordinate2D)newLocation
+- (void) updatePointCoordinates:(OAWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation
 {
     dispatch_async(dbQueue, ^{
         sqlite3_stmt    *statement;
@@ -757,7 +761,7 @@
             sqlite3_bind_double(statement, 2, newLocation.longitude);
             sqlite3_bind_text(statement, 3, [(wpt.desc ? wpt.desc : @"") UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(statement, 4, [(wpt.name ? wpt.name : @"") UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 5, [(wpt.color ? wpt.color : @"") UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 5, [UIColorFromRGBA([wpt getColor:0]).toHexString UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(statement, 6, [(wpt.type ? wpt.type : @"") UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_int64(statement, 7, wpt.time);
             
@@ -846,7 +850,7 @@
     });
 }
 
-- (void)deleteWpt:(OAGpxWpt *)wpt
+- (void)deleteWpt:(OAWptPt *)wpt
 {
     [currentTrack deleteWpt:wpt];
     
@@ -864,18 +868,22 @@
     [self doDeleteAllPoints];
 }
 
-- (void)saveWpt:(OAGpxWpt *)wpt
+- (void)saveWpt:(OAWptPt *)wpt
 {
-    NSString *color = (wpt.color ? wpt.color : @"");
-    
-    [self doUpdatePointsLat:wpt.position.latitude lon:wpt.position.longitude time:wpt.time desc:wpt.desc name:wpt.name color:color group:wpt.type];
+    [self doUpdatePointsLat:wpt.position.latitude
+                        lon:wpt.position.longitude
+                       time:wpt.time
+                       desc:wpt.desc
+                       name:wpt.name
+                      color:UIColorFromRGBA([wpt getColor:0]).toHexString
+                      group:wpt.type];
 }
 
 - (void) loadGpxFromDatabase
 {
     dispatch_sync(syncQueue, ^{
         
-        [currentTrack.locationMarks removeAllObjects];
+        [currentTrack.points removeAllObjects];
         [currentTrack.tracks removeAllObjects];
         [self collectRecordedData:YES];
         [currentTrack applyBounds];
@@ -892,7 +900,7 @@
 - (void) prepareCurrentTrackForRecording
 {
     if (currentTrack.tracks.count == 0)
-        [currentTrack addTrack:[[OAGpxTrk alloc] init]];
+        [currentTrack addTrack:[[OATrack alloc] init]];
 }
 
 - (BOOL) saveIfNeeded

@@ -8,14 +8,14 @@
 
 #import "OABaseBottomSheetViewController.h"
 
-@class OAGpxTrkSeg, OAGPXTrackAnalysis;
+@class OATrkSegment, OAGPXTrackAnalysis;
 
 @protocol OATrackMenuViewControllerDelegate;
 
 @interface OAEditWaypointsGroupBottomSheetViewController : OABaseBottomSheetViewController
 
 - (instancetype)initWithWaypointsGroupName:(NSString *)groupName;
-- (instancetype)initWithSegment:(OAGpxTrkSeg *)segment analysis:(OAGPXTrackAnalysis *)analysis;
+- (instancetype)initWithSegment:(OATrkSegment *)segment analysis:(OAGPXTrackAnalysis *)analysis;
 
 @property (weak, nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 

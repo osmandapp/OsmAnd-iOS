@@ -492,16 +492,14 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self.favorite->setCalendarEvent(calendarEvent);
 }
 
-- (OAGpxWpt *) toWpt
+- (OAWptPt *) toWpt
 {
-    OAGpxWpt *pt = [[OAGpxWpt alloc] init];
+    OAWptPt *pt = [[OAWptPt alloc] init];
     pt.position = CLLocationCoordinate2DMake(self.getLatitude, self.getLongitude);
     if (self.getAltitude > 0)
         pt.elevation = self.getAltitude;
     pt.time = self.getTimestamp ? self.getTimestamp.timeIntervalSince1970 : 0;
-    if (!pt.extraData)
-        pt.extraData = [[OAGpxExtensions alloc] init];
-    NSMutableArray<OAGpxExtension *> *exts = [NSMutableArray arrayWithArray:((OAGpxExtensions *)pt.extraData).extensions];
+    NSMutableArray<OAGpxExtension *> *exts = [pt.extensions mutableCopy];
     if (!self.isVisible)
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
@@ -539,7 +537,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     }
     if (self.getColor)
     {
-        [pt setColor:self.getColor.toHexString];
+        [pt setColor:[OAUtilities colorToNumber:self.getColor]];
     }
     if (self.getCalendarEvent)
     {
@@ -548,7 +546,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         e.value = @"true";
         [exts addObject:e];
     }
-    ((OAGpxExtensions *)pt.extraData).extensions = exts;
+    pt.extensions = exts;
     pt.name = self.getName;
     pt.desc = self.getDescription;
     if (self.getCategory.length > 0)
@@ -575,26 +573,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (UIImage *) getCompositeIcon
 {
-    UIImage *resultImg;
-    NSString *backgrounfIconName = [@"bg_point_" stringByAppendingString:[self getBackgroundIcon]];
-    UIImage *backgroundImg = [UIImage imageNamed:backgrounfIconName];
-    backgroundImg = [OAUtilities tintImageWithColor:backgroundImg color:[self getColor]];
-    
-    NSString *iconName = [@"mx_" stringByAppendingString:[self getIcon]];
-    UIImage *iconImg = [UIImage imageNamed:[OAUtilities drawablePath:iconName]];
-    iconImg = [OAUtilities tintImageWithColor:iconImg color:UIColor.whiteColor];
- 
-    CGFloat scaledIconSize = backgroundImg.size.width * backgroundImg.scale;
-    backgroundImg  = [OAUtilities resizeImage:backgroundImg newSize:CGSizeMake(scaledIconSize, scaledIconSize)];
-    CGFloat centredIconOffset = (backgroundImg.size.width - iconImg.size.width) / 2;
-    
-    UIGraphicsBeginImageContext(backgroundImg.size);
-    [backgroundImg drawInRect:CGRectMake(0, 0, backgroundImg.size.width, backgroundImg.size.height)];
-    [iconImg drawInRect:CGRectMake(centredIconOffset, centredIconOffset, iconImg.size.width, iconImg.size.height)];
-    resultImg = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return resultImg;
+    return [OAFavoritesHelper getCompositeIcon:[self getIcon] backgroundIcon:[self getBackgroundIcon] color:[self getColor]];
 }
 
 @end

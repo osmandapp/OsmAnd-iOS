@@ -19,7 +19,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/CommonTypes.h>
-#include <OsmAndCore/GeoInfoDocument.h>
+#include <OsmAndCore/GpxDocument.h>
 
 class OAWaypointsMapLayerProvider
     : public std::enable_shared_from_this<OAWaypointsMapLayerProvider>
@@ -27,16 +27,16 @@ class OAWaypointsMapLayerProvider
 {
 public:
 private:
-    QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>> _locationMarks;
-    QList<OsmAnd::PointI> _locationMarkPoints;
+    QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>> _wptPtPoints;
+    QList<OsmAnd::PointI> _points;
     QHash<QString, sk_sp<SkImage>> _iconsCache;
-    sk_sp<SkImage> getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark> &locationMark, bool isFullSize);
-    sk_sp<SkImage> createCompositeBitmap(const OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark> &locationMark, bool isFullSize) const;
+    sk_sp<SkImage> getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &point, bool isFullSize);
+    sk_sp<SkImage> createCompositeBitmap(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &point, bool isFullSize) const;
     QString backgroundImageNameByType(const QString& type) const;
     UIImage* getIcon(NSString* iconName, NSString* defaultIconName) const;
 protected:
 public:
-    OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>>& locationMarks,
+    OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>>& wptPtPoints_,
                                 const int baseOrder,
                                 const QList<OsmAnd::PointI>& hiddenPoints,
                                 const bool showCaptions,

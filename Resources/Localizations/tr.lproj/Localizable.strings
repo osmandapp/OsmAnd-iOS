@@ -2353,3 +2353,4 @@
 "routeInfo_smoothness_description" = "Tekerlekli araçlar için, özellikle yüzey düzgünlüğü/düzlüğü ile ilgili olarak, yol/patika manevra kabiliyeti sınıflandırması.";
 "routeInfo_winter_ice_road_description" = "Kış yolu sınıflandırmasına göre güzergah veya yol hattını renklendir.";
 "routeInfo_tracktype_description" = "Yüzey bileşimine göre güzergah veya yol hattını renklendir. Genellikle, yol ağı büyük ölçüde asfaltsız olduğunda uygulanır.";
+"ltr_or_rtl_combine_via_dash" = "%@ - %@";

@@ -43,15 +43,16 @@ static OAApplicationMode *_TRUCK;
 static OAApplicationMode *_MOTORCYCLE;
 static OAApplicationMode *_BOAT;
 static OAApplicationMode *_SKI;
+static OAApplicationMode *_HORSE;
 
 + (void)initRegVisibility
 {
-    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI, _TRUCK, _MOTORCYCLE];
+    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI, _TRUCK, _MOTORCYCLE, _HORSE];
     
     NSArray<OAApplicationMode *> *all = nil;
     NSArray<OAApplicationMode *> *none = @[];
     
-    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI, _TRUCK, _MOTORCYCLE];
+    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI, _TRUCK, _MOTORCYCLE, _HORSE];
     NSArray<OAApplicationMode *> *navigationSet2 = @[_PEDESTRIAN, _PUBLIC_TRANSPORT, _AIRCRAFT];
     
     // left
@@ -67,7 +68,7 @@ static OAApplicationMode *_SKI;
     [self regWidgetVisibility:@"distance" am:all];
     [self regWidgetVisibility:@"time" am:all];
     [self regWidgetVisibility:@"intermediate_time" am:all];
-    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _AIRCRAFT, _TRUCK, _MOTORCYCLE]];
+    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _AIRCRAFT, _TRUCK, _MOTORCYCLE, _HORSE]];
     [self regWidgetVisibility:@"max_speed" am:@[_CAR, _TRUCK, _MOTORCYCLE]];
     [self regWidgetVisibility:@"altitude" am:@[_PEDESTRIAN, _BICYCLE]];
     [self regWidgetVisibility:@"gps_info" am:none];
@@ -135,6 +136,10 @@ static OAApplicationMode *_SKI;
     _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_skiing") stringKey:@"ski"];
     _SKI.descr = OALocalizedString(@"app_mode_skiing");
     [_values addObject:_SKI];
+    
+    _HORSE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"horseback_riding") stringKey:@"horse"];
+    _HORSE.descr = OALocalizedString(@"horseback_riding");
+    [_values addObject:_HORSE];
 }
 
 + (OAApplicationMode *) DEFAULT
@@ -185,6 +190,11 @@ static OAApplicationMode *_SKI;
 + (OAApplicationMode *) SKI
 {
     return _SKI;
+}
+
++ (OAApplicationMode *) HORSE
+{
+    return _HORSE;
 }
 
 + (OAApplicationMode *) buildApplicationModeByKey:(NSString *)key
@@ -573,6 +583,8 @@ static OAApplicationMode *_SKI;
         if ([settings.appModeOrder get:_MOTORCYCLE] != defaultValue)
             [_MOTORCYCLE setOrder:_PEDESTRIAN.getOrder + 1];
     }
+    if ([settings.appModeOrder get:_SKI] != defaultValue && [settings.appModeOrder get:_HORSE] != defaultValue)
+        [_HORSE setOrder:_SKI.getOrder + 1];
 }
 
 + (void) initCustomModes

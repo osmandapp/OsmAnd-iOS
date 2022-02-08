@@ -3215,6 +3215,7 @@
         [_routingProfile setModeDefaultValue:@"boat" mode:OAApplicationMode.BOAT];
         [_routingProfile setModeDefaultValue:@"STRAIGHT_LINE_MODE" mode:OAApplicationMode.AIRCRAFT];
         [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
+        [_routingProfile setModeDefaultValue:@"horsebackriding" mode:OAApplicationMode.HORSE];
         [_profilePreferences setObject:_routingProfile forKey:@"routing_profile"];
 
         _profileIconName = [OACommonString withKey:profileIconNameKey defValue:@"ic_world_globe_dark"];
@@ -3228,6 +3229,7 @@
         [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
         [_profileIconName setModeDefaultValue:@"ic_action_truck" mode:OAApplicationMode.TRUCK];
         [_profileIconName setModeDefaultValue:@"ic_action_motorcycle_dark" mode:OAApplicationMode.MOTORCYCLE];
+        [_profileIconName setModeDefaultValue:@"ic_action_horse" mode:OAApplicationMode.HORSE];
         
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
         _userProfileName = [OACommonString withKey:userProfileNameKey defValue:@""];
@@ -3251,6 +3253,7 @@
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_DEFAULT) mode:OAApplicationMode.BOAT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
+        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.HORSE];
         [_profilePreferences setObject:_locationIcon forKey:@"location_icon"];
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
@@ -3263,6 +3266,7 @@
         [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.BOAT];
         [_defaultSpeed setModeDefaultValue:@200.0 mode:OAApplicationMode.AIRCRAFT];
         [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.SKI];
+        [_defaultSpeed setModeDefaultValue:@1.66 mode:OAApplicationMode.HORSE];
         [_profilePreferences setObject:_defaultSpeed forKey:@"default_speed"];
 
         _minSpeed = [OACommonDouble withKey:minSpeedKey defValue:0.];

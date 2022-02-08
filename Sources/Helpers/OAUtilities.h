@@ -135,6 +135,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (void) layoutComplexButton:(UIButton*)button;
 
 + (UIImage *) imageWithColor:(UIColor *)color;
++ (UIImage *) makeRoundedImage:(UIImage *)color radius:(CGFloat)radius;
 
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners;
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners radius:(CGFloat)radius;

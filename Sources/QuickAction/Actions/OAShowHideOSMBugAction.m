@@ -22,12 +22,12 @@ static OAQuickActionType *TYPE;
 - (void)execute
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setShowOnlineNotes:![settings.mapSettingShowOnlineNotes get]];
+    [settings setShowOnlineNotes:![settings.showOSMBugs get]];
 }
 
 - (BOOL)isActionWithSlash
 {
-    return [[OAAppSettings sharedManager].mapSettingShowOnlineNotes get];
+    return [[OAAppSettings sharedManager].showOSMBugs get];
 }
 
 - (NSString *)getActionText

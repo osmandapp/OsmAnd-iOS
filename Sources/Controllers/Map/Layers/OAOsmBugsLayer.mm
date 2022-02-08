@@ -57,7 +57,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     [super initLayer];
     
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
-                                    Visibility:[_plugin isEnabled] && [[OAAppSettings sharedManager].mapSettingShowOnlineNotes get]];
+                                    Visibility:[_plugin isEnabled] && [[OAAppSettings sharedManager].showOSMBugs get]];
     
     _notesMapProvider.reset(new OAOsmNotesMapLayerProvider());
     [self.mapView addTiledSymbolsProvider:_notesMapProvider];
@@ -77,7 +77,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
 - (BOOL) isVisible
 {
-    return [_plugin isEnabled] && [[OAAppSettings sharedManager].mapSettingShowOnlineNotes get];
+    return [_plugin isEnabled] && [[OAAppSettings sharedManager].showOSMBugs get];
 }
 
 - (void) show

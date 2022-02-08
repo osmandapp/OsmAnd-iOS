@@ -73,7 +73,7 @@
                                                        withHandler:@selector(onEditsCollectionChanged)
                                                        andObserve:self.app.osmEditsChangeObservable];
     
-    BOOL shouldShow = [_plugin isEnabled] && [[OAAppSettings sharedManager].mapSettingShowOfflineEdits get];
+    BOOL shouldShow = [_plugin isEnabled] && [[OAAppSettings sharedManager].showOSMEdits get];
     
     [self refreshOsmEditsCollection];
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
@@ -82,7 +82,7 @@
 
 - (BOOL)isVisible
 {
-    return [_plugin isEnabled] && [[OAAppSettings sharedManager].mapSettingShowOfflineEdits get];
+    return [_plugin isEnabled] && [[OAAppSettings sharedManager].showOSMEdits get];
 }
 
 - (BOOL) updateLayer
@@ -162,7 +162,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self hide];
         [self refreshOsmEditsCollection];
-        if ([[OAAppSettings sharedManager].mapSettingShowOfflineEdits get])
+        if ([[OAAppSettings sharedManager].showOSMEdits get])
             [self show];
     });
 }
@@ -227,7 +227,7 @@
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
-    if (![[OAAppSettings sharedManager].mapSettingShowOfflineEdits get])
+    if (![[OAAppSettings sharedManager].showOSMEdits get])
         return;
     for (const auto& edit : _osmEditsCollection->getMarkers())
     {

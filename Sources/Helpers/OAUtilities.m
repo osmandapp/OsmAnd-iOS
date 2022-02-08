@@ -565,6 +565,23 @@
     }
 }
 
++ (UIImage *) makeRoundedImage:(UIImage *)image radius:(CGFloat)radius
+{
+    CALayer *imageLayer = [CALayer layer];
+    imageLayer.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+    imageLayer.contents = (id) image.CGImage;
+
+    imageLayer.masksToBounds = YES;
+    imageLayer.cornerRadius = radius;
+
+    UIGraphicsBeginImageContext(image.size);
+    [imageLayer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *roundedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return roundedImage;
+}
+
 + (void) clearTmpDirectory
 {
     NSArray* tmpDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:NULL];

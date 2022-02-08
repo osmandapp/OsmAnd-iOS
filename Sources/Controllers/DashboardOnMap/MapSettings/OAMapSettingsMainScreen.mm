@@ -304,11 +304,11 @@ static BOOL _isRoutesGroupOpen = NO;
     NSMutableArray *overlayUnderlaySectionData = [NSMutableArray array];
     if (!hasSRTM || (!_iapHelper.srtm.disabled))
         [overlayUnderlaySectionData addObject:@{
-            @"name": OALocalizedString(@"shared_string_terrain"),
-            @"image": hasSRTM ? @"ic_custom_hillshade" : @"ic_custom_contour_lines_colored",
-            hasSRTM ? @"has_options" : @"desc": hasSRTM ? @YES : OALocalizedString(@"contour_lines_hillshades_slope"),
-            @"type": hasSRTM ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
-            @"key": @"terrain_layer"
+                @"name": OALocalizedString(@"shared_string_terrain"),
+                @"image": hasSRTM ? @"ic_custom_hillshade" : @"ic_custom_contour_lines_colored",
+                hasSRTM ? @"has_options" : @"desc": hasSRTM ? @YES : OALocalizedString(@"contour_lines_hillshades_slope"),
+                @"type": hasSRTM ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
+                @"key": @"terrain_layer"
         }];
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_over"),
@@ -741,10 +741,12 @@ static BOOL _isRoutesGroupOpen = NO;
         if (cell)
         {
             cell.textView.text = group.groupName;
-            cell.textView.textColor = UIColorFromRGB(color_primary_purple);
+            if (indexPath.row > 0)
+                cell.textView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.image = [UIImage templateImageNamed:_isRoutesGroupOpen ? @"ic_custom_arrow_up" : @"ic_custom_arrow_down"];
-            if (!_isRoutesGroupOpen && [cell isDirectionRTL])
+            cell.iconView.image = [UIImage templateImageNamed:
+                    (isRoutesGroup && _isRoutesGroupOpen) || (isOSMGroup && _isOSMGroupOpen) ? @"ic_custom_arrow_up" : @"ic_custom_arrow_down"];
+            if ((!_isRoutesGroupOpen || !_isOSMGroupOpen) && [cell isDirectionRTL])
                 cell.iconView.image = cell.iconView.image.imageFlippedForRightToLeftLayoutDirection;
 
             cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
@@ -765,12 +767,13 @@ static BOOL _isRoutesGroupOpen = NO;
     return [self heightForHeader:section];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSDictionary *item = [self getItem:indexPath];
     OAMapSettingsViewController *mapSettingsViewController;
     BOOL isPromoButton = [item[@"type"] isEqualToString:[OAPromoButtonCell getCellIdentifier]];
 
-    if ([item[@"key"] isEqualToString:@"collapsed_routes"])
+    if ([item[@"key"] hasPrefix:@"collapsed_"])
         [self openCloseGroup:indexPath];
     else if ([item[@"key"] isEqualToString:@"poi_layer"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenPOI];
@@ -824,7 +827,7 @@ static BOOL _isRoutesGroupOpen = NO;
     }
     else if ([item[@"key"] hasPrefix:@"category_"])
     {
-        for (NSString *cName in [self getAllCategories])
+        for (NSString *cName in _allCategories)
         {
             if ([item[@"key"] isEqualToString:[NSString stringWithFormat:@"category_%@", cName]])
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:cName];
@@ -858,7 +861,9 @@ static BOOL _isRoutesGroupOpen = NO;
     else if ([item[@"key"] isEqualToString:@"mapillary_layer"])
         [self mapillaryChanged:switchView.isOn];
     else if ([item[@"key"] hasPrefix:@"routes_"])
-        [self mapSettingSwitchChanged:switchView.isOn index:indexPath.row];
+        [self groupItemSwitchChanged:switchView.isOn indexPath:indexPath];
+    else if ([item[@"key"] hasPrefix:@"osm_"])
+        [self groupItemSwitchChanged:switchView.isOn indexPath:indexPath];
     else if ([item[@"key"] isEqualToString:@"category_transport"])
         [self transportChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"contour_lines_layer"])
@@ -888,9 +893,12 @@ static BOOL _isRoutesGroupOpen = NO;
     }
 }
 
-- (void)mapSettingSwitchChanged:(BOOL)isOn index:(NSInteger)index
+- (void)groupItemSwitchChanged:(BOOL)isOn indexPath:(NSIndexPath *)indexPath
 {
-    OAMapStyleParameter *parameter = _routesParameters[index];
+    BOOL isRoutesGroup = [self isCollapsableRoutesGroup:tableData[indexPath.section][@"group_name"]];
+    BOOL isOsmGroup = [self isCollapsableOsmGroup:tableData[indexPath.section][@"cells"]];
+    OAMapStyleParameter *parameter = isRoutesGroup ? _routesParameters[indexPath.row]
+            : isOsmGroup ? _osmParameters[indexPath.row - 3] : nil;
     if (parameter)
     {
         parameter.value = isOn ? @"true" : @"false";

@@ -620,14 +620,15 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonBoolean *mapSettingShowFavorites;
 @property (nonatomic) OACommonBoolean *mapSettingShowPoiLabel;
-@property (nonatomic) OACommonBoolean *mapSettingShowOfflineEdits;
-@property (nonatomic) OACommonBoolean *mapSettingShowOnlineNotes;
 @property (nonatomic) OACommonStringList *mapSettingVisibleGpx;
 @property (nonatomic) OACommonInteger *layerTransparencySeekbarMode; // 0 - overlay, 1 - underlay, 2 - off, 3 - undefined, 4 - overlay&underlay
 - (BOOL) getOverlayOpacitySliderVisibility;
 - (BOOL) getUnderlayOpacitySliderVisibility;
 - (void) setOverlayOpacitySliderVisibility:(BOOL)visibility;
 - (void) setUnderlayOpacitySliderVisibility:(BOOL)visibility;
+
+@property (nonatomic) OACommonBoolean *showOSMBugs;
+@property (nonatomic) OACommonBoolean *showOSMEdits;
 
 @property (nonatomic) OACommonString *billingUserId;
 @property (nonatomic) OACommonString *billingUserName;
@@ -852,8 +853,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
 - (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;
 
-- (void) setShowOnlineNotes:(BOOL)mapSettingShowOnlineNotes;
-- (void) setShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits;
+- (void) setShowOnlineNotes:(BOOL)showOSMBugs;
+- (void) setShowOfflineEdits:(BOOL)showOSMEdits;
+
 - (void) setShowFavorites:(BOOL)mapSettingShowFavorites;
 - (void) setShowPoiLabel:(BOOL)mapSettingShowPoiLabel;
 

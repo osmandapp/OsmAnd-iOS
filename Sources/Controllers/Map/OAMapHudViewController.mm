@@ -41,6 +41,7 @@
 
 #define kButtonWidth 50.0
 #define kButtonOffset 16.0
+#define kWidgetsOffset 2.0
 
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
@@ -826,10 +827,7 @@
     [self updateButtonsLayoutY:y];
     
     if (_widgetsView)
-    {
-        CGFloat widgetsOffset = 2.0;
-        _widgetsView.frame = CGRectMake(widgetsOffset, y + 2.0, DeviceScreenWidth - OAUtilities.getLeftMargin * 2 - widgetsOffset * 2, 10.0);
-    }
+        _widgetsView.frame = CGRectMake(kWidgetsOffset, y + 2.0, DeviceScreenWidth - OAUtilities.getLeftMargin * 2 - kWidgetsOffset * 2, 10.0);
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];
     if (_routingProgressView)

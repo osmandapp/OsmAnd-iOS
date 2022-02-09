@@ -505,9 +505,9 @@
 
 #pragma mark - OAColorsTableViewCellDelegate
 
-- (void)colorChanged:(NSIndexPath *)indexPath
+- (void)colorChanged:(NSInteger)tag
 {
-    _selectedColor = [OADefaultFavorite builtinColors][indexPath.row];
+    _selectedColor = [OADefaultFavorite builtinColors][tag];
     self.doneButton.enabled = ![_selectedColor.color isEqual:_groupColor];
 
     _tableData[0].updateData();

@@ -173,7 +173,9 @@
     _doc = _isCurrentTrack ? (OAGPXDocument *) _savingHelper.currentTrack
             : [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
 
-    _isShown = [_settings.mapSettingVisibleGpx.get containsObject:_gpx.gpxFilePath];
+    _isShown = _isCurrentTrack
+            ? [_settings.mapSettingShowRecordingTrack get]
+            : [[_settings.mapSettingVisibleGpx get] containsObject:_gpx.gpxFilePath];
 }
 
 - (void)updateAnalysis

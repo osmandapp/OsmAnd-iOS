@@ -933,7 +933,7 @@
                 [self updateGpxData];
 
                 if (self.isCurrentTrack)
-                    [[_app trackRecordingObservable] notifyEvent];
+                    [[_app updateRecTrackOnMapObservable] notifyEvent];
                 else
                     [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
@@ -1043,7 +1043,7 @@
 
     [self updateGroupsButton];
     if (self.isCurrentTrack)
-        [[_app trackRecordingObservable] notifyEvent];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
     else
         [[_app updateGpxTracksOnMapObservable] notifyEvent];
 }
@@ -1066,7 +1066,7 @@
         {
             [savingHelper deleteWpt:waypoint.point];
         }
-        [[_app trackRecordingObservable] notifyEvent];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
     }
     else
     {
@@ -1161,7 +1161,7 @@
     }
     else if (newGroupColor)
     {
-        [[_app trackRecordingObservable] notifyEvent];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
     }
 
     if (newGroupName)
@@ -1423,9 +1423,29 @@
 - (BOOL)changeTrackVisible
 {
     if (self.isShown)
-        [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
+    {
+        if (self.isCurrentTrack)
+        {
+            [self.settings.mapSettingShowRecordingTrack set:NO];
+            [self.mapViewController hideRecGpxTrack];
+        }
+        else
+        {
+            [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
+        }
+    }
     else
-        [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
+    {
+        if (self.isCurrentTrack)
+        {
+            [self.settings.mapSettingShowRecordingTrack set:YES];
+            [self.mapViewController showRecGpxTrack:YES];
+        }
+        else
+        {
+            [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
+        }
+    }
 
     return self.isShown = !self.isShown;
 }

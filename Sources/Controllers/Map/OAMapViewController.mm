@@ -1531,7 +1531,7 @@
             return;
         }
 
-        if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
+        if ([[OAAppSettings sharedManager].mapSettingShowRecordingTrack get])
         {
             if (!_recTrackShowing)
                 [self showRecGpxTrack:YES];
@@ -1919,7 +1919,7 @@
         [_selectedGpxHelper buildGpxList];
         if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
             [self initRendererWithGpxTracks];
-        
+
         [self hideProgressHUD];
         [_mapSourceUpdatedObservable notifyEvent];
     }
@@ -2200,10 +2200,10 @@
                 
                 _gpxDocsRec.clear();
                 _gpxDocsRec << doc;
-                
+
                 QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > gpxDocs;
-                gpxDocs[QString::fromNSString(helper.currentTrack.path)] = doc;
-                [_mapLayers.gpxRecMapLayer updateGpxTrack:gpxDocs];
+                gpxDocs[QString::fromNSString(kCurrentTrack)] = doc;
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs];
             }
         }];
     }
@@ -2483,8 +2483,8 @@
         [helper deleteWpt:self.foundWpt];
         
         // update map
-        [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
-        
+        [[_app updateRecTrackOnMapObservable] notifyEventWithKey:@(YES)];
+
         [self hideContextPinMarker];
         
         return YES;
@@ -2540,9 +2540,9 @@
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
         
         [helper saveWpt:self.foundWpt];
-        
+
         // update map
-        [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
+        [[_app updateRecTrackOnMapObservable] notifyEventWithKey:@(YES)];
 
         return YES;
     }
@@ -2600,9 +2600,9 @@
         }
         
         self.foundWptGroups = [groups allObjects];
-        
+
         // update map
-        [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
+        [[_app updateRecTrackOnMapObservable] notifyEventWithKey:@(YES)];
 
         return YES;
     }
@@ -2651,24 +2651,23 @@
         if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
         {
             auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
-            auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
-            
+
             std::shared_ptr<OsmAnd::GpxDocument::WptPt> p;
             p.reset(new OsmAnd::GpxDocument::WptPt());
             [OAGPXDocument fillWpt:p usingWpt:wpt];
             
-            gpx->points.append(p);
-            gpx->saveTo(QString::fromNSString(gpxFileName));
+            doc->points.append(p);
+            doc->saveTo(QString::fromNSString(gpxFileName));
             
             wpt.wpt = p;
             self.foundWpt = wpt;
             self.foundWptDocPath = gpxFileName;
             
-            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->points.count()];
+            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
             [[OAGPXDatabase sharedDb] save];
             
             NSMutableSet *groups = [NSMutableSet set];
-            for (auto& loc : gpx->points)
+            for (auto& loc : doc->points)
             {
                 if (!loc->type.isEmpty())
                     [groups addObject:loc->type.toNSString()];
@@ -2829,7 +2828,6 @@
     if (!_gpxDocsTemp.isEmpty())
     {
         auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
-        
         OsmAnd::Ref<OsmAnd::GpxDocument::Metadata> *_meta = (OsmAnd::Ref<OsmAnd::GpxDocument::Metadata>*)&doc->metadata;
         std::shared_ptr<OsmAnd::GpxDocument::Metadata> m = _meta->shared_ptr();
         
@@ -2882,7 +2880,7 @@
             if (found)
             {
                 doc->saveTo(QString::fromNSString(docPath));
-                
+
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
                 [[OAGPXDatabase sharedDb] save];
                 
@@ -2918,7 +2916,7 @@
         if (found)
         {
             doc->saveTo(QString::fromNSString(docPath));
-            
+
             [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
             [[OAGPXDatabase sharedDb] save];
             
@@ -2947,7 +2945,7 @@
         }
         if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
             docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
-        
+
         [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
     }
 }

@@ -88,6 +88,13 @@
         
         currentTrack = [[OAGPXMutableDocument alloc] init];
 
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        [currentTrack setWidth:[settings.currentTrackWidth get]];
+        [currentTrack setShowArrows:[settings.currentTrackShowArrows get]];
+        [currentTrack setShowStartFinish:[settings.currentTrackShowStartFinish get]];
+        [currentTrack setColor:[settings.currentTrackColor get]];
+        [currentTrack setColoringType:[settings.currentTrackColoringType get].name];
+
         if (![self saveIfNeeded])
             [self loadGpxFromDatabase];
         
@@ -368,6 +375,13 @@
             NSString *directory = [fout stringByDeletingLastPathComponent];
             if (![fileManager fileExistsAtPath:directory])
                 [fileManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:nil];
+
+            OAAppSettings *settings = [OAAppSettings sharedManager];
+            [doc setWidth:[settings.currentTrackWidth get]];
+            [doc setShowArrows:[settings.currentTrackShowArrows get]];
+            [doc setShowStartFinish:[settings.currentTrackShowStartFinish get]];
+            [doc setColor:[settings.currentTrackColor get]];
+            [doc setColoringType:[settings.currentTrackColoringType get].name];
 
             [doc saveTo:fout];
             

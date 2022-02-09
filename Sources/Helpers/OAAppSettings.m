@@ -313,7 +313,7 @@
 #define lastUpdatesCardRefreshKey @"lastUpdatesCardRefresh"
 
 #define currentTrackColorKey @"currentTrackColor"
-#define currentTrackColorizationKey @"currentTrackColorization"
+#define currentTrackColoringTypeKey @"currentTrackColoringType"
 #define currentTrackSpeedGradientPaletteKey @"currentTrackSpeedGradientPalette"
 #define currentTrackAltitudeGradientPaletteKey @"currentTrackAltitudeGradientPalette"
 #define currentTrackSlopeGradientPaletteKey @"currentTrackSlopeGradientPalette"
@@ -2911,6 +2911,9 @@
 @end
 
 @implementation OACommonColoringType
+{
+    NSArray<OAColoringType *> *_values;
+}
 
 @dynamic defValue;
 
@@ -2920,29 +2923,47 @@
     if (obj)
     {
         obj.key = key;
-        obj.defValue = [[OAColoringType getRouteColoringTypes] indexOfObject:defValue];
+        obj.defValue = 0;
+        obj.values = [NSArray array];
+    }
+    return obj;
+}
+
++ (instancetype) withKey:(NSString *)key defValue:(OAColoringType *)defValue values:(NSArray<OAColoringType *> *)values
+{
+    OACommonColoringType *obj = [[OACommonColoringType alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        NSUInteger indexOfValue = [values indexOfObject:defValue];
+        obj.defValue = indexOfValue != NSNotFound ? indexOfValue : 0;
+        obj.values = values;
     }
     return obj;
 }
 
 - (OAColoringType *) get
 {
-    return [OAColoringType getRouteColoringTypes][[super get:self.appMode]];
+    NSInteger indexOfValue = [super get:self.appMode];
+    return self.values.count > indexOfValue ? self.values[indexOfValue] : self.values.firstObject;
 }
 
 - (void) set:(OAColoringType *)coloringType
 {
-    [super set:[[OAColoringType getRouteColoringTypes] indexOfObject:coloringType]];
+    NSUInteger indexOfValue = [self.values indexOfObject:coloringType];
+    [super setValue:@(indexOfValue != NSNotFound ? indexOfValue : 0) mode:self.appMode];
 }
 
 - (OAColoringType *) get:(OAApplicationMode *)mode
 {
-    return [OAColoringType getRouteColoringTypes][[super get:mode]];
+    NSInteger indexOfValue = [super get:mode];
+    return self.values.count > indexOfValue ? self.values[indexOfValue] : self.values.firstObject;
 }
 
 - (void) set:(OAColoringType *)coloringType mode:(OAApplicationMode *)mode
 {
-    [super set:[[OAColoringType getRouteColoringTypes] indexOfObject:coloringType] mode:mode];
+    NSUInteger indexOfValue = [self.values indexOfObject:coloringType];
+    [super set:indexOfValue != NSNotFound ? indexOfValue : 0 mode:mode];
 }
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
@@ -2985,12 +3006,7 @@
 
 - (void) resetToDefault
 {
-    NSInteger defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOACoordinateInputFormats)((NSNumber *)pDefault).intValue;
-
-    [self set:[OAColoringType getRouteColoringTypes][defaultValue]];
+    [self set:self.values.count > self.defValue ? self.values[self.defValue] : self.values.firstObject];
 }
 
 @end
@@ -3432,7 +3448,7 @@
         _customRouteColorNight = [OACommonInteger withKey:customRouteColorNightKey defValue:[OAUtilities colorToNumber:UIColorFromARGB(kDefaultRouteLineNightColor)]];
         [_profilePreferences setObject:_customRouteColorNight forKey:@"route_line_color_night"];
 
-        _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT];
+        _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT values:[OAColoringType getRouteColoringTypes]];
         [_profilePreferences setObject:_routeColoringType forKey:@"route_line_coloring_type"];
 
         _routeInfoAttribute = [OACommonString withKey:routeInfoAttributeKey defValue:nil];
@@ -3730,7 +3746,7 @@
         [_globalPreferences setObject:_lastUpdatesCardRefresh forKey:@"last_updates_card_refresh"];
 
         _currentTrackColor = [[[OACommonInteger withKey:currentTrackColorKey defValue:0] makeGlobal] makeShared];
-        _currentTrackColorization = [[[OACommonGradientScaleType withKey:currentTrackColorizationKey defValue:EOAGradientScaleTypeNone] makeGlobal] makeShared];
+        _currentTrackColoringType = [[[OACommonColoringType withKey:currentTrackColoringTypeKey defValue:OAColoringType.TRACK_SOLID values:[OAColoringType getTrackColoringTypes]] makeGlobal] makeShared];
         _currentTrackSpeedGradientPalette = [[[OACommonString withKey:currentTrackSpeedGradientPaletteKey defValue:nil] makeGlobal] makeShared];
         _currentTrackAltitudeGradientPalette = [[[OACommonString withKey:currentTrackAltitudeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
         _currentTrackSlopeGradientPalette = [[[OACommonString withKey:currentTrackSlopeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
@@ -3741,7 +3757,7 @@
         _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_currentTrackColor forKey:@"current_track_color"];
-        [_globalPreferences setObject:_currentTrackColorization forKey:@"current_track_colorization"];
+        [_globalPreferences setObject:_currentTrackColoringType forKey:@"current_track_coloring_type"];
         [_globalPreferences setObject:_currentTrackSpeedGradientPalette forKey:@"current_track_speed_gradient_palette"];
         [_globalPreferences setObject:_currentTrackAltitudeGradientPalette forKey:@"current_track_altitude_gradient_palette"];
         [_globalPreferences setObject:_currentTrackSlopeGradientPalette forKey:@"current_track_slope_gradient_palette"];

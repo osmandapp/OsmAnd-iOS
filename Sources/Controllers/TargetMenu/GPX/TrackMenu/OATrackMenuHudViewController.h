@@ -11,7 +11,7 @@
 #import "OAMapPanelViewController.h"
 
 @class LineChartView;
-@class OAGpxTrk, OAGpxTrkSeg, OARouteLineChartHelper;
+@class OATrack, OATrkSegment, OARouteLineChartHelper;
 
 typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 {
@@ -29,10 +29,10 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
             withMode:(EOARouteStatisticsMode)mode;
 
-- (NSArray<OAGpxTrkSeg *> *)updateSegmentsData;
+- (NSDictionary<NSString *, NSDictionary *> *)updateSegmentsData;
 - (void)editSegment;
-- (void)deleteAndSaveSegment:(OAGpxTrkSeg *)segment;
-- (void)openEditSegmentScreen:(OAGpxTrkSeg *)segment
+- (void)deleteAndSaveSegment:(OATrkSegment *)segment;
+- (void)openEditSegmentScreen:(OATrkSegment *)segment
                      analysis:(OAGPXTrackAnalysis *)analysis;
 
 - (void)refreshLocationServices;
@@ -56,9 +56,10 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (BOOL)isRteGroup:(NSString *)groupName;
 
 - (void)updateChartHighlightValue:(LineChartView *)chart
-                          segment:(OAGpxTrkSeg *)segment;
+                          segment:(OATrkSegment *)segment;
 - (OARouteLineChartHelper *)getLineChartHelper;
-- (OAGpxTrk *)getTrack:(OAGpxTrkSeg *)segment;
+- (OATrack *)getTrack:(OATrkSegment *)segment;
+- (NSString *)getTrackSegmentTitle:(OATrkSegment *)segment;
 - (NSString *)getDirName;
 - (NSString *)getGpxFileSize;
 - (NSString *)getCreatedOn;

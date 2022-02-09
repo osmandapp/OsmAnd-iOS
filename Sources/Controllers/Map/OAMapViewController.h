@@ -50,8 +50,8 @@
 #define BOTTOM_CONSTANT 1
 
 @class OAGPX;
-@class OAGpxWpt;
-@class OAGpxMetadata;
+@class OAWptPt;
+@class OAMetadata;
 @class OAPOIUIFilter;
 @class OASearchWptAPI;
 @class OAMapRendererView;
@@ -73,7 +73,7 @@
 @property (readonly) OAObservable* mapObservable;
 @property (readonly) OAObservable* mapSourceUpdatedObservable;
 
-@property (nonatomic) OAGpxWpt *foundWpt;
+@property (nonatomic) OAWptPt *foundWpt;
 @property (nonatomic) NSArray *foundWptGroups;
 @property (nonatomic) NSString *foundWptDocPath;
 
@@ -105,8 +105,8 @@
 - (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly;
 - (BOOL) deleteFoundWpt;
 - (BOOL) saveFoundWpt;
-- (BOOL) addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName;
-- (NSArray<OAGpxWpt *> *) getLocationMarksOf:(NSString *)gpxFileName;
+- (BOOL) addNewWpt:(OAWptPt *)wpt gpxFileName:(NSString *)gpxFileName;
+- (NSArray<OAWptPt *> *)getPointsOf:(NSString *)gpxFileName;
 
 - (BOOL) canZoomIn;
 - (void) animatedZoomIn;
@@ -154,7 +154,7 @@
 
 - (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
-- (BOOL) updateMetadata:(OAGpxMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
+- (BOOL) updateMetadata:(OAMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
 
 - (void) setWptData:(OASearchWptAPI *)wptApi;
 
@@ -167,6 +167,7 @@
 - (NSDictionary<NSString *, NSArray<NSNumber *> *> *) getGpxWidth;
 - (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(NSDictionary<NSString *, NSString*> *) additionalSettings;
 
+- (void) showProgressHUD;
 - (void) showProgressHUDWithMessage:(NSString *)message;
 - (void) hideProgressHUD;
 

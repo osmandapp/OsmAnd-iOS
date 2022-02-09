@@ -8,7 +8,7 @@
 
 #import "OASymbolMapLayer.h"
 
-@class OAMeasurementEditingContext, OAGpxTrkPt;
+@class OAMeasurementEditingContext, OAWptPt;
 
 @protocol OAMeasurementLayerDelegate <NSObject>
 
@@ -25,13 +25,13 @@
 
 @property (nonatomic) CLLocation *pressPointLocation;
 
-- (OAGpxTrkPt *) addCenterPoint:(BOOL)addPointBefore;
-- (OAGpxTrkPt *) addPoint:(BOOL)addPointBefore;
+- (OAWptPt *) addCenterPoint:(BOOL)addPointBefore;
+- (OAWptPt *) addPoint:(BOOL)addPointBefore;
 
 - (void) enterMovingPointMode;
 - (void) exitMovingMode;
 
-- (OAGpxTrkPt *) getMovedPointToApply;
+- (OAWptPt *) getMovedPointToApply;
 
 - (void) onMapPointSelected:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress;
 

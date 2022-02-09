@@ -14,7 +14,6 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/LatLon.h>
-#include <OsmAndCore/GeoInfoDocument.h>
 #include <OsmAndCore/GpxDocument.h>
 #import <OsmAndCore/TextRasterizer.h>
 
@@ -57,7 +56,7 @@ OAGpxAdditionalIconsProvider::OAGpxAdditionalIconsProvider()
         OAGPX *gpx = [gpxDb getGPXItem:path];
         if (gpx.showStartFinish)
         {
-            const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(it.value());
+            const auto& doc = it.value();
             if (!doc)
                 continue;
             const auto& tracks = doc->tracks;
@@ -92,20 +91,18 @@ OAGpxAdditionalIconsProvider::OAGpxAdditionalIconsProvider()
         {
             QWriteLocker scopedLocker(&_lock);
             
-            auto docConst = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(it.value());
-            auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(docConst);
-            OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxDocument:doc];
+            OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
             NSArray<OAGPXTrackAnalysis *> *splitData = nil;
             BOOL splitByTime = NO;
             BOOL splitByDistance = NO;
             switch (gpx.splitType) {
                 case EOAGpxSplitTypeDistance: {
-                    splitData = [gpxDoc splitByDistance:gpx.splitInterval joinSegments:gpx.joinSegments];
+                    splitData = [document splitByDistance:gpx.splitInterval joinSegments:gpx.joinSegments];
                     splitByDistance = YES;
                     break;
                 }
                 case EOAGpxSplitTypeTime: {
-                    splitData = [gpxDoc splitByTime:gpx.splitInterval joinSegments:gpx.joinSegments];
+                    splitData = [document splitByTime:gpx.splitInterval joinSegments:gpx.joinSegments];
                     splitByTime = YES;
                     break;
                 }
@@ -121,7 +118,7 @@ OAGpxAdditionalIconsProvider::OAGpxAdditionalIconsProvider()
                 {
                     OAGPXTrackAnalysis *seg = splitData[i];
                     double metricStartValue = splitData[i - 1].metricEnd;
-                    OAGpxWpt *pt = seg.locationStart;
+                    OAWptPt *pt = seg.locationStart;
                     if (pt)
                     {
                         const auto pos31 = Utilities::convertLatLonTo31(LatLon(pt.getLatitude, pt.getLongitude));

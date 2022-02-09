@@ -330,6 +330,11 @@
 "use_points_as_intermediates" = "Calculate route between points";
 "calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
 "routing_settings_2" = "Navigation settings";
+"customize_route_line" = "Customize route line";
+"route_line_use_map_style_color" = "Use map style (%@) default color.";
+"route_line_use_map_style_width" = "Use map style (%@) default width.";
+"turn_arrows" = "Turn Arrows";
+"turn_arrows_descr" = "Control the visibility of the turn arrows on the route line.";
 "gpx_navigation" = "Follow track";
 "impassable_road" = "Avoid roads";
 "road_speeds" = "Road speeds";
@@ -528,6 +533,10 @@
 "shared_string_none" = "None";
 "shared_string_hide_all" = "Hide all";
 "shared_string_show_all" = "Show all";
+"shared_string_min_height" = "Min. height";
+"shared_string_max_height" = "Max. height";
+"shared_string_gpx_track" = "Track";
+"shared_string_open_street_map" = "OpenStreetMap";
 
 "restart" = "Restart";
 
@@ -760,6 +769,15 @@
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
+"map_settings_weather" = "Weather";
+"map_settings_weather_temp" = "Temperature";
+"map_settings_weather_pressure" = "Pressure";
+"map_settings_weather_wind" = "Wind";
+"map_settings_weather_cloud" = "Cloud";
+"map_settings_weather_precip" = "Precipitation";
+"map_settings_clear_geo_cache" = "Clear geo tiles";
+"map_settings_clear_raster_cache" = "Clear raster tiles";
+
 "settings_app_theme" = "Application theme";
 "app_theme_light" = "Light";
 "do_not_rotate" = "Do not rotate";
@@ -801,6 +819,7 @@
 "navigate_point_format_DMS" = "DDD MM SS.SS";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "navigate_point_format_UTM" = "UTM";
+"navigate_point_format_MGRS" = "MGRS";
 "navigate_point_format_unknown" = "Unknown format";
 "navigate_point_northing" = "Northing";
 "navigate_point_easting" = "Easting";
@@ -811,6 +830,7 @@
 
 "coordinates_example" = "Example";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
+"mgrs_description" = "OsmAnd uses MGRS format which is identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
 
 "sett_lang_local" = "Local";
@@ -995,6 +1015,7 @@
 
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_dash" = "%@ - %@";
 
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
 
@@ -1125,7 +1146,6 @@
 "split_before" = "Split before";
 "split_after" = "Split after";
 "follow_track" = "Follow track";
-"track" = "Track";
 "select_another_track" = "Select another track";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Attach to the roads";
@@ -2139,6 +2159,7 @@
 "rendering_attr_smoothness_bad_name" = "Bad";
 "routing_attr_allow_expert_description" = "Extremely difficult routes, with dangerous obstacles and surroundings.";
 "routeInfo_surface_name" = "Surface";
+"routeInfo_surface_description" = "Provide road/footpath physical surface info.";
 "rendering_attr_showMtbRoutes_name" = "Mountain bike routes";
 "rendering_attr_tracktype_grade5_name" = "Soft";
 "routing_attr_avoid_share_taxi_description" = "Avoids share taxi";
@@ -2193,6 +2214,7 @@
 "rendering_attr_hideOverground_name" = "Overground objects";
 "rendering_attr_hideProposed_name" = "Proposed objects";
 "routeInfo_smoothness_name" = "Smoothness";
+"routeInfo_smoothness_description" = "Road/footpath maneuverability classification for wheeled vehicles, in particular regarding surface regularity/flatness.";
 "rendering_attr_highway_class_road_name" = "Road";
 "rendering_value_translucent_green_name" = "Translucent green";
 "rendering_value_translucent_yellow_name" = "Translucent yellow";
@@ -2236,6 +2258,7 @@
 "routing_attr_allow_motorway_name" = "Use motorways";
 "rendering_value_black_name" = "Black";
 "routeInfo_winter_ice_road_name" = "Winter and ice roads";
+"routeInfo_winter_ice_road_description" = "Color the route or track line by its winter road classification.";
 "rendering_attr_hideBuildings_name" = "Buildings";
 "routing_attr_max_num_changes_description" = "Specify upper limit of changes";
 "rendering_attr_winter_road_name" = "Winter road";
@@ -2304,6 +2327,7 @@
 "rendering_value_red_name" = "Red";
 "routing_attr_allow_private_name" = "Allow private access";
 "routeInfo_tracktype_name" = "Surface firmness";
+"routeInfo_tracktype_description" = "Color the route or track line by its surface composition. Typically apply when the road network is largely unpaved.";
 "rendering_attr_highway_class_path_name" = "Path";
 "rendering_value_white_name" = "White";
 "rendering_value_blue_name" = "Blue";
@@ -2369,6 +2393,7 @@
 "rendering_value_thin_name" = "Thin";
 "rendering_attr_whiteWaterSports_name" = "Whitewater sports";
 "routeInfo_roadClass_name" = "Road type";
+"routeInfo_roadClass_description" = "Color the route or track line by road classification.";
 "routing_attr_allow_skating_only_description" = "Routes groomed for freestyle or skating only without classic tracks.";
 "rendering_attr_piste_type_nordic_name" = "Nordic";
 "rendering_attr_trainLightrailRoutes_name" = "Train routes";
@@ -2398,6 +2423,14 @@
 "routing_attr_allow_motorway_description" = "Allows motorways.";
 "rendering_attr_hmRendered_name" = "Show more map detail";
 "rendering_attr_roadColors_name" = "Road color scheme";
+"routing_attr_allow_gate_name" ="Allow gate usage";
+"routing_attr_allow_gate_description" = "Allow usage of gates";
+"routing_attr_only_permitted_streets_description" = "Only use streets which are expressly permitted";
+"routing_attr_only_permitted_streets_name" = "Expressly permitted streets";
+"routing_attr_only_permitted_ways_description" = "Only use ways (tracks, paths, etc.) which are expressly permitted";
+"routing_attr_only_permitted_ways_name" = "Expressly permitted ways";
+"routing_attr_prefer_horse_routes_description" = "Prefer horse routes";
+"routing_attr_prefer_horse_routes_name" = "Prefer horse routes";
 "weight_limit_description" = "Provide your vehicle weight, some route restrictions may apply for heavy vehicles.";
 "height_limit_description" = "Provide your vehicle height, some route restrictions may apply for high vehicles.";
 "lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
@@ -2432,6 +2465,7 @@
 "app_mode_horse" = "Horse";
 "app_mode_helicopter" = "Helicopter";
 "app_mode_skiing" = "Skiing";
+"horseback_riding" = "Horseback riding";
 "app_mode_personal_transporter" = "Personal transporter";
 "app_mode_monowheel" = "Monowheel";
 "app_mode_scooter" = "Scooter";
@@ -2451,6 +2485,8 @@
 "rendering_value_walkingRoutesScopeOSMC_description" = "Color by network affiliation.";
 "rendering_value_walkingRoutesOSMC_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and hiking shield symbol.";
 "routes_color_by_type" = "Color routes by…";
+
+"q_clear_weather_cache" = "Do you want to clear weather cache?";
 
 // Release Notes
 // instruction:

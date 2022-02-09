@@ -9,10 +9,21 @@
 #import "OASymbolMapLayer.h"
 
 #include <OsmAndCore/Map/VectorLinesCollection.h>
-
 #include <SkImage.h>
+#include <vector>
 
-@class OAGPXDocument;
+#define kDefaultWidthMultiplier 7
+
+#define COLORIZATION_NONE 0
+#define COLORIZATION_GRADIENT 1
+#define COLORIZATION_SOLID 2
+
+#define kOutlineColor OsmAnd::ColorARGB(150, 0, 0, 0)
+#define kWidthCorrectionValue 4
+
+@class OAGPXDocument, OATrkSegment;
+
+struct RouteSegmentResult;
 
 @interface OABaseVectorLinesLayer : OASymbolMapLayer
 
@@ -21,6 +32,9 @@
 - (sk_sp<SkImage>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName;
 - (sk_sp<SkImage>) specialBitmapWithColor:(OsmAnd::ColorARGB)color;
 
-- (void) calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors attrName:(NSString *)attrName gpx:(OAGPXDocument *)gpx;
+- (void)calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors
+                      attrName:(NSString *)attrName
+                 segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)segs
+                     locations:(NSArray<CLLocation *> *)locations;
 
 @end

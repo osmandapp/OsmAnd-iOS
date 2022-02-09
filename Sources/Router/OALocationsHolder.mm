@@ -24,7 +24,7 @@
 @implementation OALocationsHolder
 {
 	NSArray<CLLocation *> *_locationList;
-	NSArray<OAGpxTrkPt *> *_wptPtList;
+	NSArray<OAWptPt *> *_wptPtList;
 }
 
 - (instancetype) initWithLocations:(NSArray *)locations
@@ -56,7 +56,7 @@
 	if (locations.count > 0)
 	{
 		id locationObj = locations.firstObject;
-		if ([locationObj isKindOfClass:OAGpxTrkPt.class])
+		if ([locationObj isKindOfClass:OAWptPt.class])
 			return LOCATION_TYPE_WPTPT;
 		else if ([locationObj isKindOfClass:CLLocation.class])
 			return LOCATION_TYPE_LOCATION;
@@ -141,7 +141,7 @@
 	}
 	else if (_locationType == LOCATION_TYPE_WPTPT)
 	{
-		for (OAGpxTrkPt *wpt in _wptPtList)
+		for (OAWptPt *wpt in _wptPtList)
 		{
 			res.push_back({wpt.getLatitude, wpt.getLongitude});
 		}
@@ -149,7 +149,7 @@
 	return res;
 }
 
-- (NSArray<OAGpxTrkPt *> *)getWptPtList
+- (NSArray<OAWptPt *> *)getWptPtList
 {
 	if (_locationType == LOCATION_TYPE_WPTPT)
 		return _wptPtList;
@@ -170,7 +170,7 @@
 	return std::pair<double, double>([self getLatitude:index], [self getLongitude:index]);
 }
 
-- (OAGpxTrkPt *) getWptPt:(NSInteger)index
+- (OAWptPt *) getWptPt:(NSInteger)index
 {
 	if (_locationType == LOCATION_TYPE_WPTPT)
 	{
@@ -178,7 +178,7 @@
 	}
 	else
 	{
-		OAGpxTrkPt *wptPt = [[OAGpxTrkPt alloc] init];
+		OAWptPt *wptPt = [[OAWptPt alloc] init];
 		wptPt.position = CLLocationCoordinate2DMake([self getLatitude:index], [self getLongitude:index]);
 		return wptPt;
 	}

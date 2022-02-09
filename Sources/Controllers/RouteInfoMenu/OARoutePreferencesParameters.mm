@@ -848,4 +848,32 @@
 
 @end
 
+@implementation OACustomizeRouteLineRoutingParameter
 
+- (NSString *) getText
+{
+    return OALocalizedString(@"customize_route_line");
+}
+
+- (UIImage *) getIcon
+{
+    return [UIImage imageNamed:@"ic_custom_appearance"];
+}
+
+- (NSString *) getCellType
+{
+    return [OAIconTitleValueCell getCellIdentifier];
+}
+
+- (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate)
+        [self.delegate openRouteLineAppearance];
+}
+
+- (UIColor *)getTintColor
+{
+    return UIColorFromRGB(color_chart_orange);
+}
+
+@end

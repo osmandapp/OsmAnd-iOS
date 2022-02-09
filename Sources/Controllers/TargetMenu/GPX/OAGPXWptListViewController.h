@@ -47,7 +47,7 @@ typedef enum
 
 @property (weak, nonatomic) id<OAGPXWptListViewControllerDelegate> delegate;
 
-- (id)initWithLocationMarks:(NSArray *)locationMarks;
-- (void)setPoints:(NSArray *)locationMarks;
+- (id)initWithPoints:(NSArray *)points;
+- (void)setPoints:(NSArray *)points;
 
 @end

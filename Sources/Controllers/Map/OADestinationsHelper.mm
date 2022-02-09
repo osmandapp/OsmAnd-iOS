@@ -9,7 +9,6 @@
 #import "OADestinationsHelper.h"
 #import "OsmAndApp.h"
 #import "OADestination.h"
-#import "OAGpxRouteWptItem.h"
 #import "OAUtilities.h"
 #import "OALog.h"
 #import "Localization.h"
@@ -311,12 +310,11 @@
                      [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
     for (OADestination *marker in markers)
     {
-        OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+        OAWptPt *wpt = [[OAWptPt alloc] init];
         wpt.position = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
         wpt.name = marker.desc;
-        wpt.color = marker.color.toHexString;
+        [wpt setColor:[OAUtilities colorToNumber:marker.color]];
 
-        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"creation_date";
 
@@ -324,8 +322,7 @@
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
         e.value = [dateFormatter stringFromDate:marker.creationDate];;
 
-        ext.extensions = @[e];
-        wpt.extraData = ext;
+        wpt.extensions = @[e];
 
 //        if (completeBackup)
 //        {

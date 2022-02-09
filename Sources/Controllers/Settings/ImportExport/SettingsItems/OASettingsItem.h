@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) shouldReadOnCollecting;
 - (BOOL) exists;
 - (void) apply;
+- (void) applyAdditionalParams:(NSString *)filePath;
 - (BOOL) applyFileName:(NSString *)fileName;
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error;
 - (NSDictionary *) getSettingsJson;

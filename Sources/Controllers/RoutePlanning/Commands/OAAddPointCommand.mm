@@ -14,7 +14,7 @@
 @implementation OAAddPointCommand
 {
     NSInteger _position;
-    OAGpxTrkPt *_point;
+    OAWptPt *_point;
     NSString *_prevPointProfile;
     BOOL _center;
     BOOL _addPointBefore;
@@ -43,7 +43,7 @@
     OAMeasurementEditingContext *ctx = self.getEditingCtx;
     if (latLon != nil)
     {
-        _point = [[OAGpxTrkPt alloc] init];
+        _point = [[OAWptPt alloc] init];
         [_point setPosition:latLon.coordinate];
     }
     _center = center;
@@ -55,10 +55,10 @@
 {
     OAMeasurementEditingContext *ctx = self.getEditingCtx;
     _addPointBefore = ctx.addPointMode == EOAAddPointModeBefore;
-    NSArray<OAGpxTrkPt *> *points = ctx.getPoints;
+    NSArray<OAWptPt *> *points = ctx.getPoints;
     if (points.count > 0)
     {
-        OAGpxTrkPt *prevPt = points.lastObject;
+        OAWptPt *prevPt = points.lastObject;
         _prevPointProfile = prevPt.getProfileType;
     }
     if (_point)
@@ -82,7 +82,7 @@
 {
     OAMeasurementEditingContext *ctx = self.getEditingCtx;
     if (_position > 0) {
-        OAGpxTrkPt *prevPt = ctx.getPoints[_position - 1];
+        OAWptPt *prevPt = ctx.getPoints[_position - 1];
         if (_prevPointProfile != nil)
         {
             [prevPt setProfileType:_prevPointProfile];

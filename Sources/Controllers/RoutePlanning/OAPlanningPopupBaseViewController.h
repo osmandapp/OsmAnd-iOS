@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAPlanningPopupBaseViewController, OAGpxRouteApproximation, OAGpxTrkPt, OAApplicationMode, OAMeasurementEditingContext;
+@class OAPlanningPopupBaseViewController, OAGpxRouteApproximation, OAWptPt, OAApplicationMode, OAMeasurementEditingContext;
 
 @protocol OAPlanningPopupDelegate <NSObject>
 
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) onContinueSnapApproximation:(OAPlanningPopupBaseViewController *)approximationController;
 
 - (void)onApplyGpxApproximation;
-- (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations pointsList:(NSArray<NSArray<OAGpxTrkPt *> *> *)pointsList mode:(OAApplicationMode *)mode;
+- (void)onGpxApproximationDone:(NSArray<OAGpxRouteApproximation *> *)gpxApproximations pointsList:(NSArray<NSArray<OAWptPt *> *> *)pointsList mode:(OAApplicationMode *)mode;
 
 - (OAMeasurementEditingContext *) getCurrentEditingContext;
 

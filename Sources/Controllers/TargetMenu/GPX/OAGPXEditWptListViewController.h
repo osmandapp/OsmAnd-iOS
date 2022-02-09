@@ -35,8 +35,8 @@
 
 @property NSTimeInterval lastUpdate;
 
-- (id)initWithLocationMarks:(NSArray *)locationMarks;
-- (void)setPoints:(NSArray *)locationMarks;
+- (id)initWithPoints:(NSArray *)points;
+- (void)setPoints:(NSArray *)points;
 - (void)setLocalEditing:(BOOL)localEditing;
 
 @end

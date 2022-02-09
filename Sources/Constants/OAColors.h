@@ -199,4 +199,10 @@
 
 #define unselected_tab_icon 0x898198
 
+#define kDefaultRouteLineDayColor 0x882a4bd1
+#define kDefaultRouteLineNightColor 0xffffdf3d
+
+#define kDefaultTurnArrowsDayColor 0xffffde5b
+#define kDefaultTurnArrowsNightColor 0xff41a6d9
+
 #endif /* OAColors_h */

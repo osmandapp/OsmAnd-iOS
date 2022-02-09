@@ -87,7 +87,7 @@
     }
     else if (_type == LPW_WAYPOINTS)
     {
-        OAGpxWpt *wpt = (OAGpxWpt *) _point;
+        OAWptPt *wpt = (OAWptPt *) _point;
         OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
         [wptItem setPoint:wpt];
         return wptItem.getCompositeIcon;

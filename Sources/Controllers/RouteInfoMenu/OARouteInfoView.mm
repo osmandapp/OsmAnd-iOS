@@ -935,7 +935,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     BOOL isPublicTransport = [_routingHelper isPublicTransportMode];
     if ([_pointsHelper getPointToNavigate] || isPublicTransport)
     {
-        [[OARootViewController instance].mapPanel closeRouteInfo:^{
+        [[OARootViewController instance].mapPanel closeRouteInfo:YES
+                                                      onComplete:^{
             if (!isPublicTransport)
                 [[OARootViewController instance].mapPanel startNavigation];
         }];
@@ -1338,7 +1339,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                     fileName = gpx.tracks.firstObject.name;
                 
                 if (fileName.length == 0)
-                    fileName = OALocalizedString(@"track");
+                    fileName = OALocalizedString(@"shared_string_gpx_track");
                 
                 if (gpx.getNonEmptySegmentsCount > 1 && gpxParams != nil && gpxParams.selectedSegment != -1)
                 {

@@ -8,8 +8,10 @@
 
 #import "OAIconTextDividerSwitchCell.h"
 
-
 @implementation OAIconTextDividerSwitchCell
+{
+    BOOL _showIcon;
+}
 
 - (void)awakeFromNib
 {
@@ -20,10 +22,8 @@
 
 - (void)updateConstraints
 {
-    BOOL hasImage = self.iconView.image != nil;
-
-    self.textLeftConstraint.active = hasImage;
-    self.textLeftConstraintNoImage.active = !hasImage;
+    self.textLeftConstraint.active = _showIcon;
+    self.textLeftConstraintNoImage.active = !_showIcon;
     self.textRightConstraint.active = !self.dividerView.hidden;
     self.textRightConstraintNoDivider.active = self.dividerView.hidden;
 
@@ -35,14 +35,17 @@
     BOOL res = [super needsUpdateConstraints];
     if (!res)
     {
-        BOOL hasImage = self.iconView.image != nil;
-
-        res = res || self.textLeftConstraint.active != hasImage;
-        res = res || self.textLeftConstraintNoImage.active != !hasImage;
+        res = res || self.textLeftConstraint.active != _showIcon;
+        res = res || self.textLeftConstraintNoImage.active != !_showIcon;
         res = res || self.textRightConstraint.active != !self.dividerView.hidden;
         res = res || self.textRightConstraintNoDivider.active != self.dividerView.hidden;
     }
     return res;
+}
+
+- (void)showIcon:(BOOL)show
+{
+    _showIcon = show;
 }
 
 @end

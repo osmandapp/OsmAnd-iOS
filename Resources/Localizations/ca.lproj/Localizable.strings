@@ -1981,7 +1981,7 @@
 "none_point_error" = "Afegiu un punt si més no.";
 "address_search" = "Cerca d\'adreces";
 "some_of" = "%d de %d";
-"track" = "Pista";
+"shared_string_gpx_track" = "Pista";
 "symbols" = "Símbols";
 "units_nm" = "NM";
 "group_name" = "Nom del grup";

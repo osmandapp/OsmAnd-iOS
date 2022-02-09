@@ -7,12 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAColorizationType.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
-
-#import "OAColorizationType.h"
-
 #include <OsmAndCore/Color.h>
 
 NS_ASSUME_NONNULL_BEGIN

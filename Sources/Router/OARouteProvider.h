@@ -53,7 +53,7 @@ struct PrecalculatedRouteDirection;
 
 @end
 
-@class OALocationMark, OARouteDirectionInfo, OARouteCalculationParams, OAGpxRtePt;
+@class OAWptPt, OARouteDirectionInfo, OARouteCalculationParams;
 
 struct RouteSegmentResult;
 
@@ -70,7 +70,7 @@ struct RouteSegmentResult;
 @property (nonatomic) NSArray<id<OALocationPoint>> *wpt;
 @property (nonatomic, readonly) NSArray<CLLocation *> *segmentEndPoints;
 @property (nonatomic) std::vector<std::shared_ptr<RouteSegmentResult>> route;
-@property (nonatomic, readonly) NSArray<OAGpxRtePt *> *routePoints;
+@property (nonatomic, readonly) NSArray<OAWptPt *> *routePoints;
     
 @property (nonatomic) BOOL addMissingTurns;
     

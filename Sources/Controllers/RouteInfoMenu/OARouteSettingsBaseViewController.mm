@@ -34,10 +34,10 @@
 #import "OAUtilities.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAFollowTrackBottomSheetViewController.h"
-
+#import "OARouteLineAppearanceHudViewController.h"
 #include <generalRouter.h>
 
-@interface OARouteSettingsBaseViewController () <OARoutePreferencesParametersDelegate, OASettingsDataDelegate>
+@interface OARouteSettingsBaseViewController () <OARoutePreferencesParametersDelegate, OASettingsDataDelegate, OARouteLineAppearanceViewControllerDelegate>
 
 @end
 
@@ -261,11 +261,15 @@
         [model setObject:[NSArray arrayWithArray:list] forKey:@(section++)];
         [list removeAllObjects];
     }
-    
+
     OAOtherSettingsRoutingParameter *otherSettingsRoutingParameter = [[OAOtherSettingsRoutingParameter alloc] initWithAppMode:am];
     otherSettingsRoutingParameter.delegate = self;
     [list addObject:otherSettingsRoutingParameter];
-    
+
+    OACustomizeRouteLineRoutingParameter *customizeRouteLineRoutingParameter = [[OACustomizeRouteLineRoutingParameter alloc] initWithAppMode:am];
+    customizeRouteLineRoutingParameter.delegate = self;
+    [list addObject:customizeRouteLineRoutingParameter];
+
     if (!isPublicTransport)
     {
         OASimulationRoutingParameter *simulationRoutingParameter = [[OASimulationRoutingParameter alloc] initWithAppMode:am];
@@ -342,6 +346,17 @@
     [self presentViewController:settingsViewController animated:YES completion:nil];
 }
 
+- (void) openRouteLineAppearance
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        [OARootViewController.instance.mapPanel closeRouteInfo:NO onComplete:^{
+            OARouteLineAppearanceHudViewController *routeLineAppearanceHudViewController = [[OARouteLineAppearanceHudViewController alloc] initWithAppMode:[_routingHelper getAppMode]];
+            routeLineAppearanceHudViewController.delegate = self;
+            [OARootViewController.instance.mapPanel showRouteLineAppearanceViewController:routeLineAppearanceHudViewController];
+        }];
+    }];
+}
+
 - (void) showTripSettingsScreen
 {
     [self dismissViewControllerAnimated:YES completion:^{
@@ -387,6 +402,13 @@
     [self generateData];
     [self setupView];
     [self.tableView reloadData];
+}
+
+#pragma mark - OARouteLineAppearanceViewControllerDelegate
+
+-(void) onCloseAppearance
+{
+    [OARootViewController.instance.mapPanel showRouteInfo:NO];
 }
 
 @end

@@ -397,6 +397,26 @@
     }
     [self applyExcludedFromBackup:ocbfPathLib];
     
+    // Copy proj.db to Library/Application Support/proj
+    NSString *projDbPathBundle = [[NSBundle mainBundle] pathForResource:@"proj" ofType:@"db"];
+    NSString *projDbPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj/proj.db"];
+    [[NSFileManager defaultManager] removeItemAtPath:projDbPathLib error:nil];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:projDbPathLib])
+    {
+        NSError *errorDir = nil;
+        [[NSFileManager defaultManager] createDirectoryAtPath:[NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj"]
+                                  withIntermediateDirectories:YES attributes:nil error:&errorDir];
+        if (errorDir)
+            NSLog(@"Error creating dir for proj: %@", [errorDir localizedDescription]);
+
+        NSError *error = nil;
+        [[NSFileManager defaultManager] copyItemAtPath:projDbPathBundle toPath:projDbPathLib error:&error];
+        if (error)
+            NSLog(@"Error copying file: %@ to %@ - %@", projDbPathBundle, projDbPathLib, [error localizedDescription]);
+
+    }
+    [self applyExcludedFromBackup:projDbPathLib];
+    
     // Sync favorites filename with android version
     NSString *oldfFavoritesFilename = _documentsDir.filePath(QLatin1String("Favorites.gpx")).toNSString();
     _favoritesFilename = _documentsDir.filePath(QLatin1String("favourites.gpx")).toNSString();

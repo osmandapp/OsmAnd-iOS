@@ -187,6 +187,16 @@
                     [_latImageView setImage:[UIImage imageNamed:nightMode ? @"widget_coordinates_utm_night" : @"widget_coordinates_utm_day"]];
                     _latTextView.text = [OALocationConvert getLocationOlcName:lat lon:lon];
                 }
+                else if (format == MAP_GEO_MGRS_FORMAT)
+                {
+                    _latTextView.hidden = NO;
+                    _lonTextView.hidden = YES;
+                    _latImageView.hidden = NO;
+                    _lonImageView.hidden = YES;
+                    _verticalSeparator.hidden = YES;
+                    [_latImageView setImage:[UIImage imageNamed:nightMode ? @"widget_coordinates_utm_night" : @"widget_coordinates_utm_day"]];
+                    _latTextView.text = [OALocationConvert getMgrsCoordinateString:lat lon:lon];
+                }
                 else
                 {
                     _latTextView.hidden = NO;

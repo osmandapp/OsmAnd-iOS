@@ -23,9 +23,9 @@
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDatabase.h"
+#import "OAGPXDocument.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXAppearanceCollection.h"
-#import "OAColoringType.h"
 #import "OARouteStatisticsHelper.h"
 
 #define kColorsSection 1
@@ -240,11 +240,6 @@
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_done")
                                                     attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
                                forState:UIControlStateNormal];
-
-    CGRect toolBarFrame = self.toolBarView.frame;
-    toolBarFrame.origin.y = self.scrollableView.frame.size.height;
-    toolBarFrame.size.height = 0.;
-    self.toolBarView.frame = toolBarFrame;
 }
 
 - (void)generateData
@@ -257,7 +252,16 @@
     }];
     directionCellData.onSwitch = ^(BOOL toggle) {
         self.gpx.showArrows = toggle;
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+        if (self.isCurrentTrack)
+        {
+            [self.doc setShowArrows:self.gpx.showArrows];
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        }
+        else
+        {
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        }
     };
     directionCellData.isOn = ^() { return self.gpx.showArrows; };
 
@@ -268,7 +272,16 @@
     }];
     startFinishCellData.onSwitch = ^(BOOL toggle) {
         self.gpx.showStartFinish = toggle;
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+        if (self.isCurrentTrack)
+        {
+            [self.doc setShowStartFinish:self.gpx.showStartFinish];
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        }
+        else
+        {
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        }
     };
     startFinishCellData.isOn = ^() { return self.gpx.showStartFinish; };
 
@@ -460,7 +473,15 @@
             _selectedWidth = [_appearanceCollection getAvailableWidth][[value intValue]];
             self.gpx.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;
 
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+            if (self.isCurrentTrack)
+            {
+                [self.doc setWidth:self.gpx.width];
+                [[_app updateRecTrackOnMapObservable] notifyEvent];
+            }
+            else
+            {
+                [[_app updateGpxTracksOnMapObservable] notifyEvent];
+            }
         }
     };
 
@@ -535,7 +556,16 @@
                         _selectedSplit.customValue = _selectedSplit.titles[indexOfValue];
                 }
 
-                [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                if (self.isCurrentTrack)
+                {
+                    [self.doc setSplitInterval:self.gpx.splitInterval];
+                    [self.doc setSplitType:[OAGPXDatabase splitTypeNameByValue:self.gpx.splitType]];
+                    [[_app updateRecTrackOnMapObservable] notifyEvent];
+                }
+                else
+                {
+                    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                }
             }
         }
     };
@@ -571,7 +601,11 @@
     }];
     joinGapsCellData.onSwitch = ^(BOOL toggle) {
         self.gpx.joinSegments = toggle;
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+        if (self.isCurrentTrack)
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        else
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
     };
     joinGapsCellData.isOn = ^() { return self.gpx.joinSegments; };
 
@@ -589,9 +623,29 @@
             kCellToggle: @YES
     }];
     resetCellData.onButtonPressed = ^() {
+        if (self.isCurrentTrack)
+        {
+            [self.settings.currentTrackWidth resetToDefault];
+            [self.settings.currentTrackShowArrows resetToDefault];
+            [self.settings.currentTrackShowStartFinish resetToDefault];
+            [self.settings.currentTrackColoringType resetToDefault];
+            [self.settings.currentTrackColor resetToDefault];
+
+            [self.doc setWidth:[self.settings.currentTrackWidth get]];
+            [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];
+            [self.doc setShowStartFinish:[self.settings.currentTrackShowStartFinish get]];
+            [self.doc setColoringType:[self.settings.currentTrackColoringType get].name];
+            [self.doc setColor:[self.settings.currentTrackColor get]];
+        }
+
         [self.gpx resetAppearanceToOriginal];
         [self updateAllValues];
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+        if (self.isCurrentTrack)
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        else
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
         [self generateData];
         [UIView transitionWithView:self.tableView
                           duration:0.35f
@@ -704,7 +758,15 @@
             if (![_selectedWidth.customValue isEqualToString:selectedValue])
                 self.gpx.width = _selectedWidth.customValue = selectedValue;
 
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+            if (self.isCurrentTrack)
+            {
+                [self.doc setWidth:self.gpx.width];
+                [[_app updateRecTrackOnMapObservable] notifyEvent];
+            }
+            else
+            {
+                [[_app updateGpxTracksOnMapObservable] notifyEvent];
+            }
         }
     };
 
@@ -746,7 +808,16 @@
                     _selectedSplit.customValue = customValue;
                     self.gpx.splitInterval = _selectedSplit.values[[value intValue]].doubleValue;
                 }
-                [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+                if (self.isCurrentTrack)
+                {
+                    [self.doc setSplitInterval:self.gpx.splitInterval];
+                    [[_app updateRecTrackOnMapObservable] notifyEvent];
+                }
+                else
+                {
+                    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+                }
             }
         };
     }
@@ -810,19 +881,55 @@
             self.gpx.coloringType = _oldColoringType;
             self.gpx.splitType = _oldSplitType;
             self.gpx.splitInterval = _oldSplitInterval;
+            if (self.isCurrentTrack)
+            {
+                [self.settings.currentTrackWidth set:_oldWidth];
+                [self.settings.currentTrackShowArrows set:_oldShowArrows];
+                [self.settings.currentTrackShowStartFinish set:_oldShowStartFinish];
+                [self.settings.currentTrackColoringType set:_oldColoringType.length > 0
+                        ? [OAColoringType getNonNullTrackColoringTypeByName:_oldColoringType]
+                        : OAColoringType.TRACK_SOLID];
+                [self.settings.currentTrackColor set:_oldColor];
+
+                [self.doc setWidth:_oldWidth];
+                [self.doc setShowArrows:_oldShowArrows];
+                [self.doc setShowStartFinish:_oldShowStartFinish];
+                [self.doc setColoringType:_oldColoringType];
+                [self.doc setColor:_oldColor];
+            }
             [self.mapPanelViewController openTargetViewWithGPX:self.gpx
                                                   trackHudMode:EOATrackMenuHudMode
                                                          state:_reopeningTrackMenuState];
         }
 
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        if (self.isCurrentTrack)
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        else
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }];
 }
 
 - (IBAction)onDoneButtonPressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
+
         [[OAGPXDatabase sharedDb] save];
+        if (self.isCurrentTrack)
+        {
+            [self.settings.currentTrackWidth set:self.gpx.width];
+            [self.settings.currentTrackShowArrows set:self.gpx.showArrows];
+            [self.settings.currentTrackShowStartFinish set:self.gpx.showStartFinish];
+            [self.settings.currentTrackColoringType set:self.gpx.coloringType.length > 0
+                    ? [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType]
+                    : OAColoringType.TRACK_SOLID];
+            [self.settings.currentTrackColor set:self.gpx.color];
+
+            [self.doc setWidth:self.gpx.width];
+            [self.doc setShowArrows:self.gpx.showArrows];
+            [self.doc setShowStartFinish:self.gpx.showStartFinish];
+            [self.doc setColoringType:self.gpx.coloringType];
+            [self.doc setColor:self.gpx.color];
+        }
         if (_reopeningTrackMenuState)
         {
             [self.mapPanelViewController openTargetViewWithGPX:self.gpx
@@ -891,7 +998,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
             cell.dividerView.hidden = YES;
-            cell.iconView.image = nil;
+            [cell showIcon:NO];
         }
         if (cell)
         {
@@ -1255,9 +1362,20 @@
     _selectedItem = _availableColoringTypes[index];
     self.gpx.coloringType = _selectedItem.coloringType == OAColoringType.ATTRIBUTE ? _selectedItem.attrName : _selectedItem.coloringType.name;
 
-    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    if (self.isCurrentTrack)
+    {
+        [self.doc setColoringType:self.gpx.coloringType];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+    else
+    {
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
 
-    _tableData[kColorsSection].updateData();
+    OAGPXTableSectionData *section = _tableData[kColorsSection];
+    if (section.updateData)
+        section.updateData();
+
     [UIView transitionWithView:self.tableView
                       duration:0.35f
                        options:UIViewAnimationOptionTransitionCrossDissolve
@@ -1275,13 +1393,32 @@
     _selectedColor = [_appearanceCollection getColorForValue:_availableColors[tag].intValue];
     self.gpx.color = _selectedColor.colorValue;
 
-    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    if (self.isCurrentTrack)
+    {
+        [self.doc setColor:self.gpx.color];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+    else
+    {
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
 
-    _tableData[kColorsSection].cells[kColorGridOrDescriptionCell].updateData();
-    [UIView setAnimationsEnabled:NO];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection]]
-                          withRowAnimation:UITableViewRowAnimationNone];
-    [UIView setAnimationsEnabled:YES];
+    if (_tableData.count > kColorsSection)
+    {
+        OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
+        if (colorSection.cells.count - 1 >= kColorGridOrDescriptionCell)
+        {
+            OAGPXTableCellData *colorGridCell = colorSection.cells[kColorGridOrDescriptionCell];
+            if (colorGridCell.updateData)
+                colorGridCell.updateData();
+
+            [UIView setAnimationsEnabled:NO];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kColorGridOrDescriptionCell
+                                                                        inSection:kColorsSection]]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+            [UIView setAnimationsEnabled:YES];
+        }
+    }
 }
 
 @end

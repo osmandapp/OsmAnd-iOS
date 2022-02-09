@@ -1062,7 +1062,7 @@
 "split_before" = "לפצל לפני";
 "split_after" = "לפצל אחרי";
 "follow_track" = "מעקב אחר מסלול";
-"track" = "מסלול";
+"shared_string_gpx_track" = "מסלול";
 "select_another_track" = "בחירת מסלול אחר";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "הצמדה לדרכים";
@@ -2335,3 +2335,15 @@
 "units_min_short" = "ד";
 "shared_string_hide_all" = "להסתיר הכול";
 "points_delete_multiple" = "למחוק %d נקודות?";
+"context_menu_edit_descr" = "עריכת תיאור";
+"add_description" = "הוספת תיאור";
+"map_settings_weather_temp" = "טמפרטורה";
+"map_settings_weather_wind" = "רוח";
+"map_settings_weather_precip" = "משקעים";
+"map_settings_clear_geo_cache" = "פינוי אריחים גאוגרפיים";
+"map_settings_clear_raster_cache" = "פינוי אריחים מעובדים";
+"q_clear_weather_cache" = "לפנות את מטמון מזג האוויר?";
+"map_settings_weather_cloud" = "ענן";
+"map_settings_weather" = "מזג אוויר";
+"map_settings_weather_pressure" = "לחץ אוויר";
+"customize_route_line" = "התאמת קו המסלול";

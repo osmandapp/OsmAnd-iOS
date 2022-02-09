@@ -97,12 +97,12 @@ static OAQuickActionType *TYPE;
     }
     
     OAGpxWptItem* wpt = [[OAGpxWptItem alloc] init];
-    OAGpxWpt* p = [[OAGpxWpt alloc] init];
+    OAWptPt* p = [[OAWptPt alloc] init];
     p.name = title;
     p.position = CLLocationCoordinate2DMake(lat, lon);
     p.type = groupName;
     p.time = (long)[[NSDate date] timeIntervalSince1970];
-    p.wpt = std::make_shared<OsmAnd::GpxDocument::GpxWpt>();
+    p.wpt = std::make_shared<OsmAnd::GpxDocument::WptPt>();
     wpt.point = p;
     wpt.color = color;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;

@@ -10,9 +10,9 @@
 
 @interface OAGPXMutableDocument : OAGPXDocument
 
-@property (nonatomic) NSMutableArray<OAGpxWpt *> *locationMarks;
-@property (nonatomic) NSMutableArray<OAGpxTrk *> *tracks;
-@property (nonatomic) NSMutableArray<OAGpxRte *> *routes;
+@property (nonatomic) NSMutableArray<OAWptPt *> *points;
+@property (nonatomic) NSMutableArray<OATrack *> *tracks;
+@property (nonatomic) NSMutableArray<OARoute *> *routes;
 
 @property (nonatomic) long modifiedTime;
 
@@ -21,18 +21,18 @@
 - (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument;
 
 - (void) updateDocAndMetadata;
-- (void) addWpt:(OAGpxWpt *)w;
-- (void) addTrack:(OAGpxTrk *)t;
-- (void) addTracks:(NSArray<OAGpxTrk *> *)tracks;
-- (void) addTrackSegment:(OAGpxTrkSeg *)s track:(OAGpxTrk *)track;
-- (BOOL) removeTrackSegment:(OAGpxTrkSeg *)segment;
-- (void) addTrackPoint:(OAGpxTrkPt *)p segment:(OAGpxTrkSeg *)segment;
-- (void) addRoutePoints:(NSArray<OAGpxRtePt *> *)points addRoute:(BOOL)addRoute;
-- (void) addRoutes:(NSArray<OAGpxRte *> *)routes;
+- (void) addWpt:(OAWptPt *)w;
+- (void) addTrack:(OATrack *)t;
+- (void) addTracks:(NSArray<OATrack *> *)tracks;
+- (void)addTrackSegment:(OATrkSegment *)s track:(OATrack *)track;
+- (BOOL) removeTrackSegment:(OATrkSegment *)segment;
+- (void) addTrackPoint:(OAWptPt *)p segment:(OATrkSegment *)segment;
+- (void) addRoutePoints:(NSArray<OAWptPt *> *)points addRoute:(BOOL)addRoute;
+- (void) addRoutes:(NSArray<OARoute *> *)routes;
 
-- (void)deleteWpt:(OAGpxWpt *)w;
+- (void)deleteWpt:(OAWptPt *)w;
 - (void)deleteAllWpts;
-- (void) addWpts:(NSArray<OAGpxWpt *> *)wpts;
+- (void) addWpts:(NSArray<OAWptPt *> *)wpts;
 
 - (BOOL) saveTo:(NSString *)filename;
 

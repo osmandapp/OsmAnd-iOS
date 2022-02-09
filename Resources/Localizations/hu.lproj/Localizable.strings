@@ -1526,7 +1526,7 @@
 "osmand_live_title" = "OsmAnd Live";
 "copied_to_clipboard" = "Vágólapra másolva";
 "res_standard" = "Normál térkép";
-"track" = "Nyomvonal";
+"shared_string_gpx_track" = "Nyomvonal";
 "octagon" = "Nyolcszög";
 "plan_route_last_modified" = "Utolsó módosítás";
 "new_plugin_added" = "Új bővítmény hozzáadva";

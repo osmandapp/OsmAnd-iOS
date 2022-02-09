@@ -14,9 +14,10 @@
 @property (nonatomic) NSString *width;
 //public GradientScaleType scaleType;
 @property (nonatomic) NSInteger color;
+@property (nonatomic) NSString *coloringType;
 @property (nonatomic) NSInteger gradientSpeedColor;
 @property (nonatomic) NSInteger gradientSlopeColor;
-@property (nonatomic) NSInteger splitType;
+@property (nonatomic) EOAGpxSplitType splitType;
 @property (nonatomic) CGFloat splitInterval;
 @property (nonatomic) BOOL showArrows;
 @property (nonatomic) BOOL showStartFinish;

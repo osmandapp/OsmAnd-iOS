@@ -1436,7 +1436,7 @@
 "res_standard" = "Standardna karta";
 "join_segments" = "Segmenty zwjazać";
 "units_nm" = "nmi";
-"track" = "Čara";
+"shared_string_gpx_track" = "Čara";
 "shared_string_others" = "Druhe";
 "visible" = "Widźomne";
 "group_name" = "Mjeno skupiny";

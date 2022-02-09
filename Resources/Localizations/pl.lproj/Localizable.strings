@@ -2042,7 +2042,7 @@
 "service" = "Usługi";
 "start_of_track" = "Początek trasy";
 "replace_favorite_confirmation" = "Zastąpić ulubiony punkt %@?";
-"track" = "Trasa";
+"shared_string_gpx_track" = "Trasa";
 "square" = "Kwadrat";
 "special" = "Specjalny";
 "transport" = "Transport publiczny";

@@ -998,7 +998,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
             cell.dividerView.hidden = YES;
-            cell.iconView.image = nil;
+            [cell showIcon:NO];
         }
         if (cell)
         {

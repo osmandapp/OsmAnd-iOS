@@ -536,6 +536,7 @@
 "shared_string_min_height" = "Min. height";
 "shared_string_max_height" = "Max. height";
 "shared_string_gpx_track" = "Track";
+"shared_string_open_street_map" = "OpenStreetMap";
 
 "restart" = "Restart";
 
@@ -2422,6 +2423,14 @@
 "routing_attr_allow_motorway_description" = "Allows motorways.";
 "rendering_attr_hmRendered_name" = "Show more map detail";
 "rendering_attr_roadColors_name" = "Road color scheme";
+"routing_attr_allow_gate_name" ="Allow gate usage";
+"routing_attr_allow_gate_description" = "Allow usage of gates";
+"routing_attr_only_permitted_streets_description" = "Only use streets which are expressly permitted";
+"routing_attr_only_permitted_streets_name" = "Expressly permitted streets";
+"routing_attr_only_permitted_ways_description" = "Only use ways (tracks, paths, etc.) which are expressly permitted";
+"routing_attr_only_permitted_ways_name" = "Expressly permitted ways";
+"routing_attr_prefer_horse_routes_description" = "Prefer horse routes";
+"routing_attr_prefer_horse_routes_name" = "Prefer horse routes";
 "weight_limit_description" = "Provide your vehicle weight, some route restrictions may apply for heavy vehicles.";
 "height_limit_description" = "Provide your vehicle height, some route restrictions may apply for high vehicles.";
 "lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
@@ -2456,6 +2465,7 @@
 "app_mode_horse" = "Horse";
 "app_mode_helicopter" = "Helicopter";
 "app_mode_skiing" = "Skiing";
+"horseback_riding" = "Horseback riding";
 "app_mode_personal_transporter" = "Personal transporter";
 "app_mode_monowheel" = "Monowheel";
 "app_mode_scooter" = "Scooter";

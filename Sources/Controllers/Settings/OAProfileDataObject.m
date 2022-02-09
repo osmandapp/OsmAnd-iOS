@@ -86,6 +86,8 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
             return @"PUBLIC_TRANSPORT";
         case EOARoutingProfilesResourceBoat:
             return @"BOAT";
+        case EOARoutingProfilesResourceHorsebackriding:
+            return @"HORSEBACKRIDING";
         case EOARoutingProfilesResourceGeocoding:
             return @"GEOCODING";
         default:
@@ -114,6 +116,8 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
             return @"ic_action_bus_dark";
         case EOARoutingProfilesResourceBoat:
             return @"ic_action_sail_boat_dark";
+        case EOARoutingProfilesResourceHorsebackriding:
+            return @"ic_action_horse";
         case EOARoutingProfilesResourceGeocoding:
             return @"ic_custom_online";
         default:
@@ -142,6 +146,8 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
             return OALocalizedString(@"m_style_pulic_transport");
         case EOARoutingProfilesResourceBoat:
             return OALocalizedString(@"app_mode_boat");
+        case EOARoutingProfilesResourceHorsebackriding:
+            return OALocalizedString(@"horseback_riding");
         case EOARoutingProfilesResourceGeocoding:
             return OALocalizedString(@"nav_type_geocoding");
         default:
@@ -169,6 +175,8 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
         return EOARoutingProfilesResourcePublicTransport;
     else if ([key isEqualToString: @"BOAT"])
         return EOARoutingProfilesResourceBoat;
+    else if ([key isEqualToString: @"HORSEBACKRIDING"])
+        return EOARoutingProfilesResourceHorsebackriding;
     else if ([key isEqualToString: @"GEOCODING"])
         return EOARoutingProfilesResourceGeocoding;
     else

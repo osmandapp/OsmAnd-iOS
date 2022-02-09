@@ -396,6 +396,7 @@
             cell.switchView.on = isOn;
             cell.textView.text = cellData.title;
 
+            [cell showIcon:cellData.leftIcon != nil];
             cell.iconView.image = cellData.leftIcon;
             cell.iconView.tintColor = UIColorFromRGB(cellData.tintColor);
 

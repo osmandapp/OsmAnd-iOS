@@ -26,7 +26,6 @@
 #import "OAGPXDocument.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXAppearanceCollection.h"
-#import "OAColoringType.h"
 #import "OARouteStatisticsHelper.h"
 
 #define kColorsSection 1
@@ -626,13 +625,17 @@
     resetCellData.onButtonPressed = ^() {
         if (self.isCurrentTrack)
         {
-            [self.doc setWidth:_oldWidth];
-            [self.doc setShowArrows:_oldShowArrows];
-            [self.doc setShowStartFinish:_oldShowStartFinish];
-            [self.doc setSplitInterval:_oldSplitInterval];
-            [self.doc setSplitType:[OAGPXDatabase splitTypeNameByValue:_oldSplitType]];
-            [self.doc setColoringType:_oldColoringType];
-            [self.doc setColor:_oldColor];
+            [self.settings.currentTrackWidth resetToDefault];
+            [self.settings.currentTrackShowArrows resetToDefault];
+            [self.settings.currentTrackShowStartFinish resetToDefault];
+            [self.settings.currentTrackColoringType resetToDefault];
+            [self.settings.currentTrackColor resetToDefault];
+
+            [self.doc setWidth:[self.settings.currentTrackWidth get]];
+            [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];
+            [self.doc setShowStartFinish:[self.settings.currentTrackShowStartFinish get]];
+            [self.doc setColoringType:[self.settings.currentTrackColoringType get].name];
+            [self.doc setColor:[self.settings.currentTrackColor get]];
         }
 
         [self.gpx resetAppearanceToOriginal];
@@ -880,11 +883,17 @@
             self.gpx.splitInterval = _oldSplitInterval;
             if (self.isCurrentTrack)
             {
+                [self.settings.currentTrackWidth set:_oldWidth];
+                [self.settings.currentTrackShowArrows set:_oldShowArrows];
+                [self.settings.currentTrackShowStartFinish set:_oldShowStartFinish];
+                [self.settings.currentTrackColoringType set:_oldColoringType.length > 0
+                        ? [OAColoringType getNonNullTrackColoringTypeByName:_oldColoringType]
+                        : OAColoringType.TRACK_SOLID];
+                [self.settings.currentTrackColor set:_oldColor];
+
                 [self.doc setWidth:_oldWidth];
                 [self.doc setShowArrows:_oldShowArrows];
                 [self.doc setShowStartFinish:_oldShowStartFinish];
-                [self.doc setSplitInterval:_oldSplitInterval];
-                [self.doc setSplitType:[OAGPXDatabase splitTypeNameByValue:_oldSplitType]];
                 [self.doc setColoringType:_oldColoringType];
                 [self.doc setColor:_oldColor];
             }
@@ -907,11 +916,17 @@
         [[OAGPXDatabase sharedDb] save];
         if (self.isCurrentTrack)
         {
+            [self.settings.currentTrackWidth set:self.gpx.width];
+            [self.settings.currentTrackShowArrows set:self.gpx.showArrows];
+            [self.settings.currentTrackShowStartFinish set:self.gpx.showStartFinish];
+            [self.settings.currentTrackColoringType set:self.gpx.coloringType.length > 0
+                    ? [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType]
+                    : OAColoringType.TRACK_SOLID];
+            [self.settings.currentTrackColor set:self.gpx.color];
+
             [self.doc setWidth:self.gpx.width];
             [self.doc setShowArrows:self.gpx.showArrows];
             [self.doc setShowStartFinish:self.gpx.showStartFinish];
-            [self.doc setSplitInterval:self.gpx.splitInterval];
-            [self.doc setSplitType:[OAGPXDatabase splitTypeNameByValue:self.gpx.splitType]];
             [self.doc setColoringType:self.gpx.coloringType];
             [self.doc setColor:self.gpx.color];
         }

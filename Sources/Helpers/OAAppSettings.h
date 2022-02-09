@@ -540,7 +540,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @interface OACommonColoringType : OACommonInteger
 
+@property (nonatomic) NSArray<OAColoringType *> *values;
+
 + (instancetype) withKey:(NSString *)key defValue:(OAColoringType *)defValue;
++ (instancetype) withKey:(NSString *)key defValue:(OAColoringType *)defValue values:(NSArray<OAColoringType *> *)values;
 
 - (OAColoringType *) get;
 - (OAColoringType *) get:(OAApplicationMode *)mode;
@@ -964,7 +967,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonLong *lastUpdatesCardRefresh;
 
 @property (nonatomic) OACommonInteger *currentTrackColor;
-@property (nonatomic) OACommonGradientScaleType *currentTrackColorization;
+@property (nonatomic) OACommonColoringType *currentTrackColoringType;
 @property (nonatomic) OACommonString *currentTrackSpeedGradientPalette;
 @property (nonatomic) OACommonString *currentTrackAltitudeGradientPalette;
 @property (nonatomic) OACommonString *currentTrackSlopeGradientPalette;

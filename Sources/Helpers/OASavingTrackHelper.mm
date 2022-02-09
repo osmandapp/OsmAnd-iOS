@@ -88,6 +88,13 @@
         
         currentTrack = [[OAGPXMutableDocument alloc] init];
 
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        [currentTrack setWidth:[settings.currentTrackWidth get]];
+        [currentTrack setShowArrows:[settings.currentTrackShowArrows get]];
+        [currentTrack setShowStartFinish:[settings.currentTrackShowStartFinish get]];
+        [currentTrack setColor:[settings.currentTrackColor get]];
+        [currentTrack setColoringType:[settings.currentTrackColoringType get].name];
+
         if (![self saveIfNeeded])
             [self loadGpxFromDatabase];
         

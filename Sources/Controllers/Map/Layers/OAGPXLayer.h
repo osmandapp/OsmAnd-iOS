@@ -13,6 +13,8 @@
 #include <OsmAndCore/Map/VectorLinesCollection.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 
+#define kCurrentTrack @"current_track"
+
 @interface OAGPXLayer : OABaseVectorLinesLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
 @property (nonatomic) QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > gpxDocs;

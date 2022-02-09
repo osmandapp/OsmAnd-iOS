@@ -1425,16 +1425,26 @@
     if (self.isShown)
     {
         if (self.isCurrentTrack)
+        {
+            [self.settings.mapSettingShowRecordingTrack set:NO];
             [self.mapViewController hideRecGpxTrack];
+        }
         else
+        {
             [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
+        }
     }
     else
     {
         if (self.isCurrentTrack)
+        {
+            [self.settings.mapSettingShowRecordingTrack set:YES];
             [self.mapViewController showRecGpxTrack:YES];
+        }
         else
+        {
             [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
+        }
     }
 
     return self.isShown = !self.isShown;

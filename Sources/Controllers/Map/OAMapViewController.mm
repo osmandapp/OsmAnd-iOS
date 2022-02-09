@@ -1531,7 +1531,7 @@
             return;
         }
 
-        if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
+        if ([[OAAppSettings sharedManager].mapSettingShowRecordingTrack get])
         {
             if (!_recTrackShowing)
                 [self showRecGpxTrack:YES];
@@ -2960,14 +2960,10 @@
 
 - (void)initRendererWithRecordingGpxTrack
 {
-    OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-    auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>([helper.currentTrack getDocument]);
-    if (doc)
+    if (_gpxDocsRec.size() > 0)
     {
-        const auto gpx = std::dynamic_pointer_cast<OsmAnd::GeoInfoDocument>(doc);
-        QHash<QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
-        const auto path = QString::fromNSString(helper.currentTrack.path);
-        docs.insert(path, gpx);
+        QHash<QString, std::shared_ptr<const OsmAnd::GpxDocument>> docs;
+        docs.insert(QString::fromNSString(kCurrentTrack), _gpxDocsRec.first());
         [_mapLayers.gpxRecMapLayer refreshGpxTracks:docs];
     }
 }
@@ -2986,7 +2982,7 @@
 {
     @synchronized(_rendererSync)
     {
-        [_mapLayers.gpxMapLayer resetLayer];
+        [_mapLayers.gpxRecMapLayer resetLayer];
         [self initRendererWithRecordingGpxTrack];
     }
 }

@@ -32,7 +32,6 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 
 #define kOutlineWidth 10
-#define kCurrentTrack @"current_track"
 
 @interface OAGPXLayer ()
 
@@ -168,19 +167,20 @@
             if (!it.value())
                 continue;
 
-            BOOL isCurrentTrack = key.isNull();
+            BOOL isCurrentTrack = [key.toNSString() isEqualToString:kCurrentTrack];
             OAGPX *gpx;
             OAGPXDocument *doc;
             auto doc_ = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
 
             NSString *filePath = key.toNSString();
-            NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[isCurrentTrack ? kCurrentTrack : filePath];
-            if (!cachedTrack)
+            NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[filePath];
+            if (!cachedTrack || isCurrentTrack)
             {
                 if (isCurrentTrack)
                     gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
                 else
                     gpx = [self getGpxItem:key];
+
                 if (isCurrentTrack)
                 {
                     doc = [OASavingTrackHelper sharedInstance].currentTrack;
@@ -196,7 +196,7 @@
                 cachedTrack[@"doc"] = doc;
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-                _cachedTracks[isCurrentTrack ? kCurrentTrack : filePath] = cachedTrack;
+                _cachedTracks[filePath] = cachedTrack;
                 _cachedColors[key] = QList<OsmAnd::FColorARGB>();
             }
             else
@@ -422,7 +422,7 @@ colorizationScheme:(int)colorizationScheme
             
             if (!it.value()->points.empty())
             {
-                NSString *filePath = it.key().isNull() ? kCurrentTrack : it.key().toNSString();
+                NSString *filePath = it.key().toNSString();
                 OAGPX *gpx = [_cachedTracks.allKeys containsObject:filePath]
                         ? _cachedTracks[filePath][@"gpx"]
                         : it.key().isNull()
@@ -502,7 +502,7 @@ colorizationScheme:(int)colorizationScheme
 
     auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>([[OASavingTrackHelper sharedInstance].currentTrack getDocument]);
     if (doc)
-        activeGpx.insert("", doc);
+        activeGpx.insert(QString::fromNSString(kCurrentTrack), doc);
 
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {

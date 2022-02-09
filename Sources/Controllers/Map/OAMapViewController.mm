@@ -1535,8 +1535,6 @@
         {
             if (!_recTrackShowing)
                 [self showRecGpxTrack:YES];
-
-            [self refreshRecordingTrack];
         }
         else
         {
@@ -1921,8 +1919,6 @@
         [_selectedGpxHelper buildGpxList];
         if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
             [self initRendererWithGpxTracks];
-        if ([[OASavingTrackHelper sharedInstance].currentTrack getDocument])
-            [self initRendererWithRecordingGpxTrack];
 
         [self hideProgressHUD];
         [_mapSourceUpdatedObservable notifyEvent];
@@ -2205,7 +2201,9 @@
                 _gpxDocsRec.clear();
                 _gpxDocsRec << doc;
 
-                [[_app updateRecTrackOnMapObservable] notifyEvent];
+                QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > gpxDocs;
+                gpxDocs[QString::fromNSString(kCurrentTrack)] = doc;
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs];
             }
         }];
     }
@@ -2485,9 +2483,7 @@
         [helper deleteWpt:self.foundWpt];
         
         // update map
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self initRendererWithRecordingGpxTrack];
-        });
+        [[_app updateRecTrackOnMapObservable] notifyEventWithKey:@(YES)];
 
         [self hideContextPinMarker];
         
@@ -2544,11 +2540,9 @@
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
         
         [helper saveWpt:self.foundWpt];
-        
+
         // update map
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self initRendererWithRecordingGpxTrack];
-        });
+        [[_app updateRecTrackOnMapObservable] notifyEventWithKey:@(YES)];
 
         return YES;
     }
@@ -2606,11 +2600,9 @@
         }
         
         self.foundWptGroups = [groups allObjects];
-        
+
         // update map
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self initRendererWithRecordingGpxTrack];
-        });
+        [[_app updateRecTrackOnMapObservable] notifyEventWithKey:@(YES)];
 
         return YES;
     }
@@ -2958,16 +2950,6 @@
     }
 }
 
-- (void)initRendererWithRecordingGpxTrack
-{
-    if (_gpxDocsRec.size() > 0)
-    {
-        QHash<QString, std::shared_ptr<const OsmAnd::GpxDocument>> docs;
-        docs.insert(QString::fromNSString(kCurrentTrack), _gpxDocsRec.first());
-        [_mapLayers.gpxRecMapLayer refreshGpxTracks:docs];
-    }
-}
-
 - (void) refreshGpxTracks
 {
     @synchronized(_rendererSync)
@@ -2975,15 +2957,6 @@
         [_mapLayers.gpxMapLayer resetLayer];
         if (![_selectedGpxHelper buildGpxList])
             [self initRendererWithGpxTracks];
-    }
-}
-
-- (void)refreshRecordingTrack
-{
-    @synchronized(_rendererSync)
-    {
-        [_mapLayers.gpxRecMapLayer resetLayer];
-        [self initRendererWithRecordingGpxTrack];
     }
 }
 

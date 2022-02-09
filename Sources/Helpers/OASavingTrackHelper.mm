@@ -376,6 +376,13 @@
             if (![fileManager fileExistsAtPath:directory])
                 [fileManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:nil];
 
+            OAAppSettings *settings = [OAAppSettings sharedManager];
+            [doc setWidth:[settings.currentTrackWidth get]];
+            [doc setShowArrows:[settings.currentTrackShowArrows get]];
+            [doc setShowStartFinish:[settings.currentTrackShowStartFinish get]];
+            [doc setColor:[settings.currentTrackColor get]];
+            [doc setColoringType:[settings.currentTrackColoringType get].name];
+
             [doc saveTo:fout];
             
             NSString *gpxFilePath = [OAUtilities getGpxShortPath:fout];

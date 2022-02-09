@@ -187,7 +187,7 @@
                 }
                 else
                 {
-                    doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc_)];
+                    doc = [[OAGPXDocument alloc] initWithGpxDocument:doc_];
                     doc.path = [self.app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
                 }
 

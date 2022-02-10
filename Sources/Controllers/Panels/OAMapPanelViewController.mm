@@ -132,6 +132,7 @@
 #define deinit _(deinit)
 
 #define kMaxRoadDistanceInMeters 1000
+#define kMaxZoom 22.0f
 
 typedef enum
 {
@@ -529,8 +530,8 @@ typedef enum
 
     if (isnan(zoom))
         zoom = renderView.zoom;
-    if (zoom > 22.0f)
-        zoom = 22.0f;
+    if (zoom > kMaxZoom)
+        zoom = kMaxZoom;
     
     [_mapViewController goToPosition:destinationPoint
                              andZoom:zoom
@@ -569,8 +570,8 @@ typedef enum
         CGFloat zoom = renderView.zoom - newZoom;
         if (isnan(zoom))
             zoom = renderView.zoom;
-        if (zoom > 22.0f)
-            zoom = 22.0f;
+        if (zoom > kMaxZoom)
+            zoom = kMaxZoom;
         
         [_mapViewController goToPosition:center
                                  andZoom:zoom
@@ -601,8 +602,8 @@ typedef enum
     CGFloat zoom = renderView.zoom - newZoom;
     if (isnan(zoom))
         zoom = renderView.zoom;
-    if (zoom > 22.0f)
-        zoom = 22.0f;
+    if (zoom > kMaxZoom)
+        zoom = kMaxZoom;
     
     return zoom;
 }
@@ -660,8 +661,8 @@ typedef enum
         CGFloat zoom = renderView.zoom - newZoom;
         if (isnan(zoom))
             zoom = renderView.zoom;
-        if (zoom > 22.0f)
-            zoom = 22.0f;
+        if (zoom > kMaxZoom)
+            zoom = kMaxZoom;
         
         [_mapViewController goToPosition:center
                                  andZoom:zoom
@@ -3097,6 +3098,7 @@ typedef enum
     [self displayAreaOnMap:topLeft
                bottomRight:bottomRight
                       zoom:zoom
+                   maxZoom:0.
                 screenBBox:screenBBox
                bottomInset:bottomInset
                  leftInset:leftInset
@@ -3107,6 +3109,7 @@ typedef enum
 - (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft
              bottomRight:(CLLocationCoordinate2D)bottomRight
                     zoom:(float)zoom
+                 maxZoom:(float)maxZoom
               screenBBox:(CGSize)screenBBox
              bottomInset:(float)bottomInset
                leftInset:(float)leftInset
@@ -3118,6 +3121,14 @@ typedef enum
     bounds.bottomRight = bottomRight;
     bounds.center.latitude = bottomRight.latitude / 2.0 + topLeft.latitude / 2.0;
     bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
+
+    if (maxZoom > 0 && zoom <= 0)
+    {
+        zoom = [self getZoomForBounds:bounds mapSize:screenBBox];
+        if (zoom >= maxZoom)
+            zoom = maxZoom;
+    }
+
     [self displayAreaOnMap:bounds
                       zoom:zoom
                 screenBBox:screenBBox

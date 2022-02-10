@@ -156,14 +156,15 @@
                 leftInset:(float)leftInset
                  animated:(BOOL)animated;
 
-- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft
-              bottomRight:(CLLocationCoordinate2D)bottomRight
-                     zoom:(float)zoom
-               screenBBox:(CGSize)screenBBox
-              bottomInset:(float)bottomInset
-                leftInset:(float)leftInset
-                 topInset:(float)topInset
-                 animated:(BOOL)animated;
+- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft
+             bottomRight:(CLLocationCoordinate2D)bottomRight
+                    zoom:(float)zoom
+                 maxZoom:(float)maxZoom
+              screenBBox:(CGSize)screenBBox
+             bottomInset:(float)bottomInset
+               leftInset:(float)leftInset
+                topInset:(float)topInset
+                animated:(BOOL)animated;
 
 - (void) applyTargetPoint:(OATargetPoint *)targetPoint;
 

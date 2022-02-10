@@ -270,13 +270,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         NSString *topDescription = [coloringType isGradient] ? OALocalizedString(@"route_line_color_elevation_description") : @"";
         NSString *bottomDescription = [coloringType isGradient] ? OALocalizedString(@"grey_color_undefined") : @"";
-        BOOL isAvailable = [coloringType isAvailableForDrawingRoute:[_routingHelper getRoute] attributeName:nil];
         OARouteAppearanceType *type = [[OARouteAppearanceType alloc] initWithColoringType:coloringType
                                                                                     title:coloringType.title
                                                                                  attrName:nil
                                                                            topDescription:topDescription
                                                                         bottomDescription:bottomDescription
-                                                                                 isActive:isAvailable];
+                                                                                 isActive:YES];
 
         if (_previewRouteLineInfo.coloringType == coloringType)
             _selectedType = type;
@@ -291,14 +290,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         NSString *title = OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]);
         NSString *topDescription = OALocalizedString([NSString stringWithFormat:@"%@_description", attribute]);
         NSString *bottomDescription = OALocalizedString(@"white_color_undefined");
-        BOOL isAvailable = [OAColoringType.ATTRIBUTE isAvailableForDrawingRoute:[_routingHelper getRoute]
-                                                                  attributeName:attribute];
         OARouteAppearanceType *type = [[OARouteAppearanceType alloc] initWithColoringType:OAColoringType.ATTRIBUTE
                                                                                     title:title
                                                                                  attrName:attribute
                                                                            topDescription:topDescription
                                                                         bottomDescription:bottomDescription
-                                                                                 isActive:isAvailable];
+                                                                                 isActive:YES];
         [types addObject:type];
 
         if ([_previewRouteLineInfo.coloringType isRouteInfoAttribute]

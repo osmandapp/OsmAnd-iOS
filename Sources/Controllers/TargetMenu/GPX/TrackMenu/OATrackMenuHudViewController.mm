@@ -444,11 +444,6 @@
                         });
                     });
                 }
-                else
-                {
-                    NSIndexPath *imageCellIndex = [NSIndexPath indexPathForRow:j inSection:i];
-                    [self.tableView reloadRowsAtIndexPaths:@[imageCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
-                }
                 break;
             }
         }

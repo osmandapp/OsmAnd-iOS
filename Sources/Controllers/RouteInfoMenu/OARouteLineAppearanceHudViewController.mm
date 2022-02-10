@@ -378,6 +378,20 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [self goExpanded];
         self.backButtonContainerView.hidden = !landscape;
         self.applyButtonContainerView.hidden = !landscape;
+
+        NSMutableArray *indexPaths = [NSMutableArray array];
+        for (NSInteger i = 0; i < _tableData.sections.count; i++)
+        {
+            OAGPXTableSectionData *sectionData = _tableData.sections[i];
+            for (NSInteger j = 0; j < sectionData.cells.count; j++)
+            {
+                OAGPXTableCellData *cellData = sectionData.cells[j];
+                if ([cellData.key hasSuffix:@"_map_style"])
+                    [indexPaths addObject:[NSIndexPath indexPathForRow:j inSection:i]];
+            }
+        }
+        if (indexPaths.count > 0)
+            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
     } completion:nil];
 }
 

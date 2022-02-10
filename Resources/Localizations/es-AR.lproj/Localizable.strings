@@ -2360,3 +2360,4 @@
 "mgrs_description" = "OsmAnd utiliza el formato MGRS que es idéntico al UTM de la OTAN.";
 "routeInfo_smoothness_description" = "Clasificación con respecto a la usabilidad física de un camino para vehículos con ruedas, particularmente con respecto a la regularidad y planitud de la superficie.";
 "routeInfo_tracktype_description" = "Colorea la ruta o el trazado de la vía por su composición superficial. Suele aplicarse cuando la red de caminos está en gran parte sin pavimentar.";
+"ltr_or_rtl_combine_via_dash" = "%@ - %@";

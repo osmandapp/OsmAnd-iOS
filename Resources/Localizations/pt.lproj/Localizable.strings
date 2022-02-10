@@ -2348,3 +2348,4 @@
 "routeInfo_surface_description" = "Fornecer informações sobre a superfície da estrada/caminho.";
 "routeInfo_smoothness_description" = "Classificação de manobrabilidade da estrada/caminho para veículos de rodas, em particular no que diz respeito à regularidade/lisura da superfície.";
 "routeInfo_tracktype_description" = "Colorir a rota ou linha da pista pela sua composição da superfície. Normalmente aplica-se quando a rede de estradas não é predominantemente pavimentada.";
+"ltr_or_rtl_combine_via_dash" = "%@ - %@";

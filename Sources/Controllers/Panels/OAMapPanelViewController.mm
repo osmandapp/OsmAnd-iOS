@@ -1204,6 +1204,10 @@ typedef enum
     if (self.isNewContextMenuDisabled)
         return;
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
+    
+    if (_activeTargetType == OATargetRouteIntermediateSelection)
+        targetPoints = @[targetPoints[0]];
+        
     for (OATargetPoint *targetPoint in targetPoints)
     {
         if ([self processTargetPoint:targetPoint])

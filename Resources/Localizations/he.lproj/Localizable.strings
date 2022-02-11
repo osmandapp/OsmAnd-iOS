@@ -760,7 +760,7 @@
 "navigate_point_zone" = "אזור";
 "navigate_point_olc" = "קוד מיקום פתוח";
 "navigate_point_olc_short" = "OLC";
-"approximate_file_size" = "Approximate file size: %@";
+"approximate_file_size" = "גודל קובץ משוערך: %@";
 "coordinates_example" = "דוגמה";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
@@ -2347,3 +2347,11 @@
 "map_settings_weather" = "מזג אוויר";
 "map_settings_weather_pressure" = "לחץ אוויר";
 "customize_route_line" = "התאמת קו המסלול";
+"navigate_point_format_MGRS" = "MGRS";
+"shared_string_open_street_map" = "OpenStreetMap";
+"route_line_use_map_style_color" = "להשתמש בצבע ברירת המחדל של סגנון המפה (%@).";
+"route_line_use_map_style_width" = "להשתמש ברוחב ברירת המחדל של סגנון המפה (%@).";
+"turn_arrows" = "חצי פנייה";
+"turn_arrows_descr" = "שליטה האם יוצגו חצי פנייה על קו המסלול.";
+"shared_string_min_height" = "גובה מזערי";
+"shared_string_max_height" = "גובה מרבי";

@@ -2327,3 +2327,7 @@
 "white_color_undefined" = "الأجزاء بدون بيانات بيضاء.";
 "shared_string_hide_all" = "أخف الكل";
 "points_delete_multiple" = "حذف %d نقطة؟";
+"customize_route_line" = "تخصيص خط المسار";
+"route_line_use_map_style_color" = "استخدم نمط الخريطة (%@) اللون الافتراضي.";
+"route_line_use_map_style_width" = "استخدم نمط الخريطة (%@) العرض الافتراضي.";
+"turn_arrows" = "أسهم الانعطاف";

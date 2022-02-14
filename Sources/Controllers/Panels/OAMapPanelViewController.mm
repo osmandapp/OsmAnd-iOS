@@ -1204,9 +1204,6 @@ typedef enum
     if (self.isNewContextMenuDisabled)
         return;
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
-    
-    if (_activeTargetType == OATargetRouteIntermediateSelection)
-        targetPoints = @[targetPoints[0]];
         
     for (OATargetPoint *targetPoint in targetPoints)
     {
@@ -1220,7 +1217,18 @@ typedef enum
     }
     else if (validPoints.count == 1)
     {
-        [self showContextMenu:validPoints[0]];
+        if (_activeTargetType == OATargetRouteIntermediateSelection)
+        {
+            [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:validPoints[0].location.latitude longitude:validPoints[0].location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:validPoints[0].pointDescription];
+            if (self.targetMenuView.superview)
+                [self hideTargetPointMenu];
+            [[[OARootViewController instance] mapPanel] showRouteInfo];
+            return;
+        }
+        else
+        {
+            [self showContextMenu:validPoints[0]];
+        }
     }
     else
     {
@@ -1355,6 +1363,10 @@ typedef enum
             else if (_activeTargetType == OATargetWorkSelection)
             {
                 [[OATargetPointsHelper sharedInstance] setWorkPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] description:pointDescription];
+            }
+            else if (_activeTargetType == OATargetRouteIntermediateSelection && !isNone)
+            {
+                return YES;
             }
             else
             {
@@ -2178,6 +2190,7 @@ typedef enum
     if ([self.view.subviews containsObject:self.targetMultiMenuView])
         [self.targetMultiMenuView removeFromSuperview];
     
+    [self.targetMultiMenuView setActiveTargetType:_activeTargetType];
     [self.targetMultiMenuView setTargetPoints:points];
     
     [self.view addSubview:self.targetMultiMenuView];

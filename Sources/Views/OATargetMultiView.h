@@ -7,13 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@class OATargetPoint;
+#import "OATargetPoint.h"
 
 @interface OATargetMultiView : UIView
 
 @property (nonatomic) NSArray<OATargetPoint *> *targetPoints;
-
+@property (nonatomic) OATargetPointType activeTargetType;
 - (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete;
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
 

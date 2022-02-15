@@ -387,6 +387,10 @@
 "ending_point_too_far" = "Ending point too far from nearest road.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
 "arrived_at_destination" = "You have arrived";
+"route_preferred_terrain_any" = "The terrain profile is not taken into account when choosing a route.";
+"route_preferred_terrain_flat" = "Routes with a flat relief profile. The length may increase.";
+"route_preferred_terrain_less_hilly" = "Shorter, less hilly routes.";
+"route_preferred_terrain_hilly" = "Routes with a hilly relief profile.";
 
 "towards" = "toward";
 "route_roundabout" = "Roundabout: take %d exit and go";
@@ -531,6 +535,7 @@
 "shared_string_max_height" = "Max. height";
 "shared_string_gpx_track" = "Track";
 "shared_string_open_street_map" = "OpenStreetMap";
+"shared_string_any" = "Any";
 "shared_string_sec" = "sec";
 
 "restart" = "Restart";
@@ -2396,6 +2401,7 @@
 "routing_attr_height_name" = "Height limit";
 "rendering_attr_piste_type_connection_name" = "Connection";
 "routing_attr_relief_smoothness_factor_name" = "Select elevation fluctuation";
+"preferred_terrain" = "Preferred terrain";
 "routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
 "rendering_value_darkyellow_name" = "Dark yellow";
 "routing_attr_prefer_unpaved_name" = "Prefer unpaved roads";

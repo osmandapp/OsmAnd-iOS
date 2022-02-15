@@ -8,15 +8,10 @@
 
 #import "OARouteSettingsParameterController.h"
 #import "OARoutePreferencesParameters.h"
-#import "OsmAndApp.h"
-#import "OAAppSettings.h"
-#import "Localization.h"
-#import "OAFavoriteItem.h"
-#import "OADefaultFavorite.h"
-#import "OAColors.h"
 #import "OARoutingHelper.h"
-#import "OAUtilities.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OAIconTextTableViewCell.h"
+#import "OATableViewCustomFooterView.h"
+#import "OAColors.h"
 
 @interface OARouteSettingsParameterController ()
 
@@ -25,6 +20,7 @@
 @implementation OARouteSettingsParameterController
 {
     OALocalRoutingParameterGroup *_group;
+    NSInteger _indexSelected;
 }
 
 - (instancetype) initWithParameterGroup:(OALocalRoutingParameterGroup *) group
@@ -49,6 +45,8 @@
     [self.tableView setDelegate:self];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
     self.tableView.contentInset = UIEdgeInsetsMake(10., 0., 0., 0.);
+    [self.tableView registerClass:OATableViewCustomFooterView.class
+        forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
 }
 
 - (void) didReceiveMemoryWarning
@@ -96,11 +94,6 @@
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 0.001;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.001;
@@ -110,22 +103,39 @@
 {
     OALocalRoutingParameter *param = _group.getRoutingParameters[indexPath.row];
     NSString *text = [param getText];
-    
-    OASettingsTitleTableViewCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+    UIImage *icon = [[param getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIColor *color = [param getTintColor];
+
+    OAIconTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OAIconTextTableViewCell *) nib[0];
     }
     
     if (cell)
     {
         [cell.textView setText:text];
+        [cell showImage:icon != nil];
+        cell.iconView.image = icon;
         if (_group.getSelected == param)
-            [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+        {
+            _indexSelected = indexPath.row;
+            [cell.arrowIconView setImage:color
+                    ? [UIImage templateImageNamed:@"menu_cell_selected"]
+                    : [UIImage imageNamed:@"menu_cell_selected"]];
+
+            if (color)
+                cell.iconView.tintColor = color;
+        }
         else
-            [cell.iconView setImage:nil];
+        {
+            cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
+            [cell.arrowIconView setImage:nil];
+        }
+
+        if (color)
+            cell.arrowIconView.tintColor = color;
     }
     
     return cell;
@@ -136,13 +146,49 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    OALocalRoutingParameter *useElevation;
+    if (_group.getRoutingParameters.count > 0
+            && ([[NSString stringWithUTF8String:_group.getRoutingParameters.firstObject.routingParameter.id.c_str()] isEqualToString:kRouteParamIdHeightObstacles]))
+        useElevation = _group.getRoutingParameters.firstObject;
+    BOOL anySelected = NO;
+
     for (NSInteger i = 0; i < _group.getRoutingParameters.count; i++)
     {
         OALocalRoutingParameter *param = _group.getRoutingParameters[i];
-        [param setSelected:i == indexPath.row];
+        if (i == indexPath.row && param == useElevation)
+            anySelected = YES;
+
+        [param setSelected:i == indexPath.row && !anySelected];
     }
+    if (useElevation)
+        [useElevation setSelected:!anySelected];
     [self.routingHelper recalculateRouteDueToSettingsChange];
     [tableView reloadData];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    OALocalRoutingParameter *param = _group.getRoutingParameters[_indexSelected];
+    NSString *footer = [param getDescription];
+    return [OATableViewCustomFooterView getHeight:footer ? footer : @"" width:self.tableView.bounds.size.width];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    OALocalRoutingParameter *param = _group.getRoutingParameters[_indexSelected];
+    NSString *footer = [param getDescription];
+    if (!footer || footer.length == 0)
+        return nil;
+
+    OATableViewCustomFooterView *vw =
+            [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    UIFont *textFont = [UIFont systemFontOfSize:13];
+    NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
+            NSFontAttributeName: textFont,
+            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
+    }];
+    vw.label.attributedText = textStr;
+    return vw;
 }
 
 @end

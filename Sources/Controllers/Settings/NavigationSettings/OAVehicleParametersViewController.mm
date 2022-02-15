@@ -20,6 +20,7 @@
 #import "OADefaultSpeedViewController.h"
 #import "OARouteSettingsBaseViewController.h"
 #import "OARouteProvider.h"
+#import "OARoutePreferencesParameters.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -90,7 +91,8 @@
         for (const auto& p : parameters)
         {
             NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
-            if (![param hasPrefix:@"avoid_"] && ![param hasPrefix:@"prefer_"] &&![param isEqualToString:@"short_way"] && "driving_style" != p.group)
+            NSString *group = [NSString stringWithUTF8String:p.group.c_str()];
+            if (![param hasPrefix:@"avoid_"] && ![param hasPrefix:@"prefer_"] && ![param isEqualToString:kRouteParamIdShortWay] && ![group isEqualToString:kRouteParamGroupDrivingStyle])
                 _otherParameters.push_back(p);
         }
         for (const auto& p : _otherParameters)

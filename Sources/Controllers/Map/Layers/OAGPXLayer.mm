@@ -31,8 +31,6 @@
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 
-#define kOutlineWidth 10
-
 @interface OAGPXLayer ()
 
 @property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;

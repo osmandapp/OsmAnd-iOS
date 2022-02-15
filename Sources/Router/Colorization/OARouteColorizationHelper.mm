@@ -89,11 +89,8 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
         NSInteger wptIdx = 0;
 
         if (!analysis)
-        {
-            // TODO: sync with android
-//            gpxFile.path.length == 0 ? [gpxFile getAnalysis:[NSDate date].timeIntervalSince1970] : [gpxFile getAnalysis:gpxFile.modifiedTime]
-            analysis = [gpxFile getAnalysis:0];
-        }
+            analysis = !gpxFile.path || gpxFile.path.length == 0 ? [gpxFile getAnalysis:(long) [NSDate date].timeIntervalSince1970] : [gpxFile getAnalysis:0];
+
         for (OATrack *trk in gpxFile.tracks)
         {
             for (OATrkSegment *seg in trk.segments)
@@ -113,6 +110,9 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
                 }
             }
         }
+        if (values.count < 2)
+            return nil;
+
         _latitudes = latList;
         _longitudes = lonList;
 

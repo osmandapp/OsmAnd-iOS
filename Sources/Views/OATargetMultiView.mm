@@ -10,6 +10,7 @@
 #import "OATargetPoint.h"
 #import "OATargetPointViewCell.h"
 #import "OARootViewController.h"
+#import "OATargetPointsHelper.h"
 
 #define kInfoViewLanscapeWidth 320.0
 #define kOATargetPointViewCellHeight 60.0
@@ -92,13 +93,28 @@
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATargetPoint *targetPoint = self.targetPoints[indexPath.row];
-    [[[OARootViewController instance] mapPanel] showContextMenu:targetPoint];
+    if (_activeTargetType == OATargetRouteIntermediateSelection)
+    {
+        [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:targetPoint.pointDescription];
+        [self hide:YES duration:0.2 onComplete:^{
+            [[[OARootViewController instance] mapPanel] showRouteInfo];
+        }];
+    }
+    else
+    {
+        [[[OARootViewController instance] mapPanel] showContextMenu:targetPoint];
+    }
 }
 
 -(void) setTargetPoints:(NSArray<OATargetPoint *> *)targetPoints
 {
     _targetPoints = targetPoints;
     [self.tableView reloadData];
+}
+
+-(void) setActiveTargetType:(OATargetPointType)activeTargetType
+{
+    _activeTargetType = activeTargetType;
 }
 
 - (BOOL) isLandscapeSupported

@@ -1203,6 +1203,26 @@ typedef enum
 {
     if (self.isNewContextMenuDisabled)
         return;
+    
+    if (_activeTargetType == OATargetRouteIntermediateSelection)
+    {
+        if (targetPoints.count > 1)
+        {
+            for (OATargetPoint *targetPoint in targetPoints)
+                [self applyTargetPointController:targetPoint];
+            [self showMultiContextMenu:targetPoints];
+            return;
+        }
+        else if (targetPoints.count == 1 && targetPoints[0].type != OATargetNone)
+        {
+            [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoints[0].location.latitude longitude:targetPoints[0].location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:targetPoints[0].pointDescription];
+            if (self.targetMenuView.superview)
+                [self hideTargetPointMenu];
+            [[[OARootViewController instance] mapPanel] showRouteInfo];
+            return;
+        }
+    }
+    
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
         
     for (OATargetPoint *targetPoint in targetPoints)
@@ -1217,18 +1237,7 @@ typedef enum
     }
     else if (validPoints.count == 1)
     {
-        if (_activeTargetType == OATargetRouteIntermediateSelection)
-        {
-            [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:validPoints[0].location.latitude longitude:validPoints[0].location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:validPoints[0].pointDescription];
-            if (self.targetMenuView.superview)
-                [self hideTargetPointMenu];
-            [[[OARootViewController instance] mapPanel] showRouteInfo];
-            return;
-        }
-        else
-        {
-            [self showContextMenu:validPoints[0]];
-        }
+        [self showContextMenu:validPoints[0]];
     }
     else
     {
@@ -1363,10 +1372,6 @@ typedef enum
             else if (_activeTargetType == OATargetWorkSelection)
             {
                 [[OATargetPointsHelper sharedInstance] setWorkPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] description:pointDescription];
-            }
-            else if (_activeTargetType == OATargetRouteIntermediateSelection && !isNone)
-            {
-                return YES;
             }
             else
             {

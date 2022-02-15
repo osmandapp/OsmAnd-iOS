@@ -96,8 +96,9 @@
     if (_activeTargetType == OATargetRouteIntermediateSelection)
     {
         [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:targetPoint.pointDescription];
-        [self hide:YES duration:0.2 onComplete:nil];
-        [[[OARootViewController instance] mapPanel] showRouteInfo];
+        [self hide:YES duration:0.2 onComplete:^{
+            [[[OARootViewController instance] mapPanel] showRouteInfo];
+        }];
     }
     else
     {

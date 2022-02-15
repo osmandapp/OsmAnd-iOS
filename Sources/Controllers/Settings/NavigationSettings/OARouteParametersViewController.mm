@@ -18,13 +18,9 @@
 #import "OAAppSettings.h"
 #import "OARouteSettingsBaseViewController.h"
 #import "OARouteParameterValuesViewController.h"
-#import "OARouteProvider.h"
 #import "OARoutingHelper.h"
-#import "OARoutePreferencesParameters.h"
-#import "OARouteSettingsParameterController.h"
 #import "OARoadSpeedsViewController.h"
 #import "OAOsmAndFormatter.h"
-
 #import "Localization.h"
 #import "OAColors.h"
 
@@ -77,14 +73,14 @@
     }
 }
 
-- (void)addParameterGroupRow:(OALocalRoutingParameterGroup *)group parametersArr:(NSMutableArray *)parametersArr iconName:(NSString *)iconName
+- (void)addParameterGroupRow:(OALocalRoutingParameterGroup *)group parametersArr:(NSMutableArray *)parametersArr
 {
     if (group && group.getText && group.getValue)
     {
         [parametersArr addObject:@{
             @"type" : [OAIconTitleValueCell getCellIdentifier],
             @"title" : [group getText],
-            @"icon" : iconName,
+            @"icon" : [group getIcon],
             @"value" : [group getValue],
             @"param" : group,
             @"key" : @"paramGroup"
@@ -111,7 +107,7 @@
         @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"recalculate_route"),
         @"value" : descr,
-        @"icon" : @"ic_custom_minimal_distance",
+        @"icon" : [UIImage imageNamed:@"ic_custom_minimal_distance"],
         @"key" : @"recalculateRoute",
     }];
     
@@ -132,23 +128,27 @@
         for (const auto& p : parameters)
         {
             NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
+            NSString *group = [NSString stringWithUTF8String:p.group.c_str()];
             if ([param hasPrefix:@"avoid_"])
                 _avoidParameters.push_back(p);
             else if ([param hasPrefix:@"prefer_"])
                 _preferParameters.push_back(p);
-            else if ("relief_smoothness_factor" == p.group)
+            else if ([group isEqualToString:kRouteParamGroupReliefSmoothnessFactor])
                 _reliefFactorParameters.push_back(p);
-            else if ("driving_style" == p.group)
+            else if ([param isEqualToString:kRouteParamIdHeightObstacles])
+                _reliefFactorParameters.insert(_reliefFactorParameters.begin(), p);
+            else if ([group isEqualToString:kRouteParamGroupDrivingStyle])
                 _drivingStyleParameters.push_back(p);
             else if ("weight" != p.id && "height" != p.id && "length" != p.id && "width" != p.id)
                 _otherParameters.push_back(p);
         }
         if (_drivingStyleParameters.size() > 0)
         {
-            OALocalRoutingParameterGroup *group = [[OALocalRoutingParameterGroup alloc] initWithAppMode:self.appMode groupName:@"driving_style"];
+            OALocalRoutingParameterGroup *group = [[OALocalRoutingParameterGroup alloc] initWithAppMode:self.appMode
+                                                                                              groupName:kRouteParamGroupDrivingStyle];
             group.delegate = self;
             [self populateGroup:group params:_drivingStyleParameters];
-            [self addParameterGroupRow:group parametersArr:parametersArr iconName:@"ic_profile_bicycle"];
+            [self addParameterGroupRow:group parametersArr:parametersArr];
         }
         if (_avoidParameters.size() > 0)
         {
@@ -162,10 +162,11 @@
         }
         if (_reliefFactorParameters.size() > 0)
         {
-            OALocalRoutingParameterGroup *group = [[OALocalRoutingParameterGroup alloc] initWithAppMode:self.appMode groupName:@"relief_smoothness_factor"];
+            OALocalRoutingParameterGroup *group = [[OALocalRoutingParameterGroup alloc] initWithAppMode:self.appMode
+                                                                                              groupName:kRouteParamGroupReliefSmoothnessFactor];
             group.delegate = self;
             [self populateGroup:group params:_reliefFactorParameters];
-            [self addParameterGroupRow:group parametersArr:parametersArr iconName:@"ic_custom_elevation"];
+            [self addParameterGroupRow:group parametersArr:parametersArr];
         }
         NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
         for (NSInteger i = 0; i < _otherParameters.size(); i++)
@@ -209,7 +210,6 @@
                 [parametersArr addObject:@{
                     @"type" : [OAIconTitleValueCell getCellIdentifier],
                     @"title" : [NSString stringWithUTF8String:p.name.c_str()],
-                    @"icon" : @"",
                     @"value" : value,
                     @"ind" : @(i),
                     @"key" : @"multiValuePref"
@@ -223,7 +223,7 @@
                 [parametersArr addObject:@{
                     @"type" : [OAIconTitleValueCell getCellIdentifier],
                     @"title" : [p getText],
-                    @"icon" : [self getParameterIcon:[NSString stringWithUTF8String:p.routingParameter.id.c_str()] isSelected:[p isSelected]],
+                    @"icon" : [UIImage imageNamed:[self getParameterIcon:[NSString stringWithUTF8String:p.routingParameter.id.c_str()] isSelected:[p isSelected]]],
                     @"value" : [p getValue],
                     @"param" : p,
                     @"key" : @"paramGroup"
@@ -296,13 +296,13 @@
 
 - (NSString *) getParameterIcon:(NSString *)parameterName isSelected:(BOOL)isSelected
 {
-    if ([parameterName isEqualToString:@"short_way"])
+    if ([parameterName isEqualToString:kRouteParamIdShortWay])
         return @"ic_custom_fuel";
-    else if ([parameterName isEqualToString:@"allow_private"])
+    else if ([parameterName isEqualToString:kRouteParamIdAllowPrivate])
         return isSelected ? @"ic_custom_allow_private_access" : @"ic_custom_forbid_private_access";
-    else if ([parameterName isEqualToString:@"allow_motorway"])
+    else if ([parameterName isEqualToString:kRouteParamIdAllowMotorway])
         return isSelected ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";
-    else if ([parameterName isEqualToString:@"height_obstacles"])
+    else if ([parameterName isEqualToString:kRouteParamIdHeightObstacles])
         return @"ic_custom_ascent";
     return @"ic_custom_alert";
 }
@@ -350,7 +350,7 @@
         }
         if (cell)
         {
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.leftIconView.tintColor = UIColorFromRGB(_iconColor);
             if ([item[@"key"] isEqualToString:@"recalculateRoute"])
             {

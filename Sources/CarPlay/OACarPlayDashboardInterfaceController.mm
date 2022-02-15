@@ -24,12 +24,12 @@
 #import "OACommonTypes.h"
 #import "OAOsmAndFormatter.h"
 
-#define unitsKm OALocalizedString(@"units_km")
-#define unitsM OALocalizedString(@"units_m")
-#define unitsMi OALocalizedString(@"units_mi")
-#define unitsYd OALocalizedString(@"units_yd")
-#define unitsFt OALocalizedString(@"units_ft")
-#define unitsNm OALocalizedString(@"units_nm")
+#define unitsKm OALocalizedString(@"km")
+#define unitsM OALocalizedString(@"m")
+#define unitsMi OALocalizedString(@"mile")
+#define unitsYd OALocalizedString(@"yard")
+#define unitsFt OALocalizedString(@"foot")
+#define unitsNm OALocalizedString(@"nm")
 
 typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     EOACarPlayButtonTypeDismiss = 0,

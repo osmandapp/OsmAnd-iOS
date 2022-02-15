@@ -261,16 +261,16 @@
 "cannot_add_marker_desc" = "Odstráňte aspoň jeden smer a skúste znova";
 "cannot_add_destination" = "Smer sa nedá pridať";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "hod";
-"units_min" = "min";
-"units_sec" = "sek.";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "hod";
+"int_min" = "min";
+"shared_string_sec" = "sek.";
 // Map
 "map_inst_det_map_q" = "Nainštalujte podrobné mapy, aby ste získali viac informácií o vašich miestach.";
 "map_remind" = "Pripomenúť neskôr";
@@ -312,8 +312,6 @@
 "region_south_america" = "Južná Amerika";
 // Help
 "help_quiz" = "Kvíz";
-"units_minutes_short" = "min";
-"units_seconds_short" = "sek.";
 "cannot_access_calendar" = "Nemôžem získať prístup do kalendára";
 "reminder_not_set_text" = "Pripomenutie nebolo nastavené, pretože nemáte povolenie prístupu ku kalendáru";
 //inapps
@@ -1186,7 +1184,7 @@
 "key_hint_deselect" = "Zrušiť výber";
 "region_nautical" = "Námorné mapy";
 "quick_action_add_overlay" = "Pridať prekrytie";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "quick_action_add_poi_category" = "Pridať kategóriu";
 "map_sources" = "Zdroje mapy";
 "add_map_source" = "Pridať zdroj mapy";
@@ -1647,7 +1645,7 @@
 "reverse_route" = "Otočiť trasu";
 "special_routing" = "Špeciálna navigácia";
 "min_speed" = "Min. rýchlosť";
-"units_t" = "t";
+"metric_ton" = "t";
 "quick_action_remove_next_destination_descr" = "Vymaže nasledujúci cieľ vašej trasy. Ak je to posledný cieľ, navigácia sa zastaví.";
 "map_settings_legend" = "Legenda";
 "total" = "Spolu";
@@ -1727,7 +1725,6 @@
 "map_during_navigation" = "Mapa počas navigácie";
 "markers_history" = "História značiek";
 "coordinates" = "Súradnice";
-"units_nm" = "nmi";
 "favorite_places_category" = "Miesta";
 "square" = "Štvorec";
 "group_name" = "Názov skupiny";
@@ -1785,7 +1782,6 @@
 "download_map_dialog" = "Okno sťahovania máp";
 "gpxup_identifiable" = "Identifikovateľná";
 "welmode_download_maps" = "Stiahnuť mapy";
-"m" = "m";
 "shared_strings_all_regions" = "Všetky oblasti";
 "navigate_point_zone" = "Zóna";
 "travel_routes" = "Cestovné trasy";
@@ -1818,7 +1814,6 @@
 "routes_color_by_type" = "Vyfarbiť trasy podľa…";
 "suggested_maps" = "Navrhované mapy";
 "route_between_points_warning_desc" = "Ďalej, pre použitie tejto možnosti pripojte vašu stopu k najbližšej povolenej ceste s niektorým vaším navigačným profilom.";
-"foot" = "ft";
 "navigate_point_olc" = "Otvorený kód pre polohu (OLC)";
 "some_articles_may_not_available_in_lang" = "Niektoré články Wikipedia nemusia byť dostupné vo vašom jazyku.";
 "lang_pnb" = "Pandžábsky";

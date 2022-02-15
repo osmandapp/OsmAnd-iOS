@@ -588,7 +588,7 @@ import Charts.Swift
         } else {
             divX = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
         }
-        let mainUnitY: String = useFeet ? NSLocalizedString("units_ft", comment: "") : NSLocalizedString("units_m", comment: "")
+        let mainUnitY: String = useFeet ? NSLocalizedString("foot", comment: "") : NSLocalizedString("m", comment: "")
         
         var yAxis: YAxis
         if (useRightAxis) {
@@ -806,13 +806,13 @@ import Charts.Swift
         var mainUnitStr: String
         var mainUnitInMeters: Double
         if mc == EOAMetricsConstant.KILOMETERS_AND_METERS {
-            mainUnitStr = NSLocalizedString("units_km", comment: "")
+            mainUnitStr = NSLocalizedString("km", comment: "")
             mainUnitInMeters = GpxUIHelper.METERS_IN_KILOMETER
         } else if mc == EOAMetricsConstant.NAUTICAL_MILES {
             mainUnitStr = NSLocalizedString("nm", comment: "")
             mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_NAUTICALMILE
         } else {
-            mainUnitStr = NSLocalizedString("units_mi", comment: "")
+            mainUnitStr = NSLocalizedString("mile", comment: "")
             mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_MILE
         }
         if (meters > 9.99 * mainUnitInMeters) {
@@ -837,16 +837,16 @@ import Charts.Swift
             granularity = 1;
             if (mc == EOAMetricsConstant.KILOMETERS_AND_METERS || mc == EOAMetricsConstant.MILES_AND_METERS) {
                 divX = 1;
-                mainUnitStr = NSLocalizedString("units_m", comment: "")
+                mainUnitStr = NSLocalizedString("m", comment: "")
             } else if (mc == EOAMetricsConstant.MILES_AND_FEET) {
                 divX = Double(1.0 / GpxUIHelper.FEET_IN_ONE_METER)
-                mainUnitStr = NSLocalizedString("units_ft", comment: "")
+                mainUnitStr = NSLocalizedString("foot", comment: "")
             } else if (mc == EOAMetricsConstant.MILES_AND_YARDS) {
                 divX = Double(1.0 / GpxUIHelper.YARDS_IN_ONE_METER)
-                mainUnitStr = NSLocalizedString("units_yd", comment: "")
+                mainUnitStr = NSLocalizedString("yard", comment: "")
             } else {
                 divX = 1.0;
-                mainUnitStr = NSLocalizedString("units_m", comment: "")
+                mainUnitStr = NSLocalizedString("m", comment: "")
             }
         }
         

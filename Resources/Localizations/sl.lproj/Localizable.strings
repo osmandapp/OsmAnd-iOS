@@ -253,16 +253,16 @@
 "more" = "Več ...";
 "time_limited" = "Časovno omejeno";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "sek";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "sek";
 "map_remind" = "Opomni kasneje";
 // Import
 "import_title" = "Uvozi podatke";
@@ -292,8 +292,6 @@
 "region_north_america" = "Severna Amerika";
 "region_russia" = "Rusija";
 "region_south_america" = "Južna Amerika";
-"units_minutes_short" = "min";
-"units_seconds_short" = "sek";
 "cannot_access_calendar" = "Dostop do koledarja ni mogoč";
 //inapps
 "product_title_nautical" = "Navtični zemljevid";
@@ -868,7 +866,7 @@
 "blue" = "Modra";
 "toggle_nav" = "Začni/Končaj navigacijo";
 "prev_route" = "Predhodna pot";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "translucent_purple" = "Prosojna vijolična";
 "show_contour_lines" = "Izriši izohipse";
 "gpx_slope" = "Naklon";
@@ -1337,7 +1335,7 @@
 "select_icon" = "Izbor ikone";
 "position_icon_while_moving" = "Izbor navigacijske ikone";
 "nav_type_geocoding" = "Geokodiranje";
-"units_t" = "t";
+"metric_ton" = "t";
 "m_style_pulic_transport" = "Javni potniški promet";
 "enter_profile_name" = "Ime profila";
 "profile_type_custom_string" = "Profil po meri";
@@ -1395,7 +1393,6 @@
 "map_during_navigation" = "Zemljevid med navigacijo";
 "shared_string_gpx_track" = "Sled";
 "copied_to_clipboard" = "Vsebina je kopirana v odložišče";
-"units_nm" = "nmi";
 "shared_string_enable" = "Omogoči";
 "split_before" = "Razdeli pred";
 "replace_favorite_confirmation" = "Ali ste prepričani, da želite zamenjati priljubljeno točko %@?";
@@ -1414,13 +1411,11 @@
 "dialogs_and_notifications" = "Pogovorna okna in opozorila";
 "product_desc_ext_mapillary" = "Spletne fotografije ulic za vsakogar. Odkrijte mesta, sodelujte in zajemite svet.";
 "navigate_point_zone" = "Območje";
-"foot" = "ft";
 "navigate_point_northing" = "Koordinata v smeri proti severu";
 "shared_string_navigation" = "Navigacija";
 "gpxup_trackable" = "Sledljivo";
 "default" = "Privzeto";
 "welmode_download_maps" = "Prejmi zemljevide";
-"m" = "m";
 "gpxup_public" = "Javno";
 "navigate_point_olc" = "Odpri kodo območja";
 "added_profiles" = "Dodani profili";

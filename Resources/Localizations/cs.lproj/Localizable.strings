@@ -512,16 +512,16 @@
 "cannot_add_marker_desc" = "Odstraňte aspoň jeden směr a zkuste to znovu";
 "cannot_add_destination" = "Směr nelze přidat";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "sek.";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "sek.";
 // Map
 "map_inst_det_map_q" = "Nainstalujte si detailní přehledovou mapu, abyste získali více informací o svých místech.";
 "map_remind" = "Připomenout později";
@@ -570,8 +570,6 @@
 "rendering_category_transport" = "Doprava";
 "rendering_category_others" = "Ostatní vlastnosti mapy";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "sek.";
 "cannot_access_calendar" = "Nelze získat přistup do kalendáře";
 "reminder_not_set_text" = "Připomenutí nebylo nastaveno, protože nemáte povolený přístup ke kalendáři";
 //inapps
@@ -1049,7 +1047,7 @@
 "orange" = "Oranžová";
 "day_mode" = "Denní režim";
 "key_hint_select" = "Vybrat";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "osm_target_deleted" = "Smazaný OSM POI";
 "translucent_yellow" = "Průsvitná žlutá";
 "osm_alert_button_ok" = "Vytvořit poznámku";
@@ -1501,7 +1499,7 @@
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "shared_string_finish" = "Dokončit";
 "help_purchases" = "Nákupy v OsmAnd";
-"units_t" = "t";
+"metric_ton" = "t";
 "special_routing" = "Speciální navigace";
 "base_profile_descr_aircraft" = "Letadlo, plachtění";
 "nav_type_straight_line" = "Rovná čára";
@@ -1943,8 +1941,7 @@
 "help_what_is_new" = "Co je nového";
 "help_legend_descr" = "Průvodce mapovými symboly";
 "help_travel" = "Cestování (Wikipedie & Wikivoyage)";
-"units_sec_short" = "s";
-"units_nm" = "nmi";
+"shared_string_second_short" = "s";
 "modify_poi" = "Upravit informace o bodu zájmu";
 "edit_osm_note" = "Upravit OSM poznámku";
 "unsupported_action_descr" = "Tato rychlá akce není zatím podporována. Podpora může být přidána v některé z příštích verzí aplikace.";
@@ -2124,8 +2121,6 @@
 "product_desc_openplacereviews" = "Posílejte fotky, recenze a odkazy veřejných míst";
 "product_desc_ext_mapillary" = "On-line fotografie z ulic pro každého. Objevte místa, spolupracujte, zachyťte svět.";
 "product_desc_mapillary" = "Online fotky ulic pro každého";
-"m" = "m";
-"foot" = "ft";
 "shared_string_feet" = "stopy";
 "srtm_download_list_help_message" = "OsmAnd poskytuje data vrstevnic v metrech a stopách. Pro změnu formátu budete muset soubor znovu stáhnout.";
 "srtm_download_single_help_message" = "Zvolte prosím variantu. Pro změnu formátu budete muset soubor znovu stáhnout.";

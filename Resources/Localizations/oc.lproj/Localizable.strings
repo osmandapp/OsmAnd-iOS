@@ -862,18 +862,18 @@
 "cannot_add_marker_desc" = "Suprimir au mens una adreiça e tornatz assajar";
 "cannot_add_destination" = "L'adreiça se pòt pas averar";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "seg";
-"units_min_short" = "m";
-"units_sec_short" = "s";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "seg";
+"shared_string_minute_short" = "m";
+"shared_string_second_short" = "s";
 // Help
 "help_first_steps" = "Premiers pas";
 "help_first_use" = "Premiera utilizacion";
@@ -966,8 +966,6 @@
 "rendering_category_transport" = "Transpòrt collectiu";
 "rendering_category_others" = "Autreis atributs de la mapa";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "cannot_access_calendar" = "Impossible d'accedir au Calendier";
 "reminder_not_set_text" = "Lo sauvamemòria automatic es pas estat definit perque l'accès au Calendier li es pas consentit";
 //inapps
@@ -1343,7 +1341,7 @@
 "save_changes" = "Sauvagardar lei cambiaments";
 "min_speed" = "Velocitat minimala";
 "public_transport_empty_warning_descr" = "Assajatz de modificar lei paramètres.";
-"units_t" = "t";
+"metric_ton" = "t";
 "base_profile_descr_aircraft" = "Avion, Planador";
 "nav_type_straight_line" = "Endrechiera";
 "select_icon" = "Chausissètz l'icòna";
@@ -2106,7 +2104,6 @@
 "upload_to_openstreetmap" = "Telecargar vèrs OpenStreetMap";
 "shared_string_meters" = "mètres";
 "shared_string_feet" = "pès";
-"foot" = "ft";
 "visible_categories" = "Categorias visiblas";
 "parked_at" = "Aparcat a";
 "rearrange_categories" = "Reorganizar lei categorias";
@@ -2117,7 +2114,6 @@
 // Menu
 "menu" = "Menut";
 "shared_string_loading" = "A se telecargar…";
-"m" = "m";
 "create_custom_categories_list_promo" = "Podètz filtrar de categorias personalizadas, amagar lei categorias que trobatz pas necessàrias e modificar l'òrdre de la lista. Lei categorias personalizadas se pòdon importar emai exportar amb de lei perfius.";
 "add_custom_category" = "Ajustar una categoria personalizada";
 "search_poi_types_descr" = "Podètz combinar lei menas de PDI de divèrsei categorias.";

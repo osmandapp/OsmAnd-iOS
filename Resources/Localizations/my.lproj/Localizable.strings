@@ -477,16 +477,16 @@
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "sec";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "sec";
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
 "map_remind" = "Remind me later";
@@ -535,8 +535,6 @@
 "rendering_category_transport" = "Transport";
 "rendering_category_others" = "Other map attributes";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
@@ -904,5 +902,4 @@
 "hide_compass_ruler" = "သံလိုက်အိမ်မြှောင်ကိုဖြောက်လိုက်";
 "map_during_navigation" = "လမ်းညွှန်နေစဉ်မြေပုံ";
 "searching_gps" = "GPSရှာဖွေခြင်း";
-"units_nm" = "nmi";
 "shared_string_wifi_only" = "Wi-Fiပေါ်မှသာ";

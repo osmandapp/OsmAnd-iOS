@@ -512,16 +512,16 @@
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mijl";
-"units_yd" = "yard";
-"units_ft" = "voet";
-"units_kmh" = "km/u";
-"units_mph" = "mpu";
-"units_hour" = "u";
-"units_min" = "min";
-"units_sec" = "sec";
+"km" = "km";
+"m" = "m";
+"mile" = "mijl";
+"yard" = "yard";
+"foot" = "voet";
+"km_h" = "km/u";
+"mile_per_hour" = "mpu";
+"int_hour" = "u";
+"int_min" = "min";
+"shared_string_sec" = "sec";
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
 "map_remind" = "Remind me later";
@@ -570,8 +570,6 @@
 "rendering_category_transport" = "Openbaar Vervoer";
 "rendering_category_others" = "Overige kaart attributen";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
@@ -948,7 +946,7 @@
 "speak_tunnels" = "Tunnels";
 "translucent_lightblue" = "Doorschijnend lichtblauw";
 "mapil_add_photos" = "Foto\'s toevoegen";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "add_map_marker" = "Markeervlaggetje toevoegen";
 "osmand_live_last_live_update" = "Laatste controle: %@";
 "translucent_green" = "Doorschijnend groen";
@@ -1517,7 +1515,7 @@
 "nav_type_geocoding" = "Geocoderen";
 "personal_category_name" = "Persoonlijk";
 "select_icon" = "Selecteer icoon";
-"units_t" = "t";
+"metric_ton" = "t";
 "special_routing" = "Speciale routering";
 "maximum_speed" = "Maximumsnelheid";
 "res_pseudo_mercator" = "Pseudo-Mercatorprojectie";
@@ -1549,7 +1547,6 @@
 "search_preogress" = "Bezig met zoeken…";
 "reverse_track_dir" = "Keer richting van GPX-track om";
 "res_standard" = "Normale kaarten";
-"units_nm" = "nmi";
 "plan_route_last_modified" = "Laatst gewijzigd";
 "searching_gps" = "GPS zoeken";
 "osmand_live_title" = "OsmAnd Live";
@@ -1598,7 +1595,6 @@
 "shared_string_wifi_only" = "Alleen met Wifi";
 "srtm_download_list_help_message" = "OsmAnd biedt gegevens van contourlijnen in meters en voet aan. Je zal het bestand opnieuw moeten downloaden om het formaat te wijzigen.";
 "shared_string_all_languages" = "Alle talen";
-"m" = "m";
 "navigate_point_easting" = "Oostwaarde";
 "added_profiles" = "Profielen toegevoegd";
 "context_menu_item_edit_waypoint" = "GPX-routepunt bewerken";
@@ -1618,7 +1614,6 @@
 "gpxup_private" = "Privé";
 "shared_string_navigation" = "Navigatie";
 "dialogs_and_notifications" = "Dialogen en meldingen";
-"foot" = "voet";
 "threshold_distance" = "Drempelafstand";
 "shared_strings_all_regions" = "Alle regio\'s";
 "restart" = "Herstart";

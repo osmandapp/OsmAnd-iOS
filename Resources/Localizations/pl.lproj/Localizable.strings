@@ -271,12 +271,15 @@
 "pickup_car" = "Odbierz samochód z parkingu";
 "parking_time_limited" = "Czas parkowania ograniczony do";
 // Units
-"units_km" = "km";
-"units_yd" = "yd";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "h";
-"units_min" = "min";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "stopy";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "h";
+"int_min" = "min";
 "map_remind" = "Przypomnij mi później";
 "map_no_address" = "Adres nie jest znany";
 // Import
@@ -345,10 +348,6 @@
 "time_left" = "pozostało";
 "time_overdue" = "czas przekroczony";
 "cannot_add_marker" = "Nie można dodać Parkingu";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_ft" = "stopy";
-"units_minutes_short" = "min";
 "product_title_track_recording" = "Nagrywanie trasy";
 "product_title_wiki" = "Wikipedia";
 "product_title_srtm" = "Poziomice";
@@ -636,11 +635,10 @@
 "parking_marker" = "Miejsce parkowania";
 "pickup_car_at" = "Odbierz samochód z parkingu o";
 "add_notification_calendar" = "Dodaj powiadomienie do Kalendarza";
-"units_sec" = "sek";
+"shared_string_sec" = "sek";
 // Map
 "map_inst_det_map_q" = "Zainstaluj mapę szczegółową, by dostać więcej informacji o twojej lokalizacji.";
 "import_choose_type" = "Proszę wybrać elementy do zaimportowania";
-"units_seconds_short" = "sek";
 "reminder_not_set_text" = "Przypomnienie nie zostało ustawione, ponieważ nie masz praw dostępu do kalendarza";
 "do_not_send_anonymous_data_desc" = "Nie zbieramy danych o lokalizacji, tylko wykorzystanie aplikacji i statystyki pobierania map.";
 "product_title_skimap" = "Mapa tras narciarskich";
@@ -1249,8 +1247,8 @@
 "no_active_route" = "Brak aktywnej trasy";
 "selected_roads" = "Wybrane trasy";
 "shared_string_clear_all" = "Wyczyść wszystko";
-"units_min_short" = "m";
-"units_sec_short" = "s";
+"shared_string_minute_short" = "m";
+"shared_string_second_short" = "s";
 "select_route_intermediate" = "Wybierz punkt pośredni";
 "select_home" = "Wybierz punkt domu";
 "select_work_point" = "Wybierz punkt pracy";
@@ -1830,7 +1828,7 @@
 "help_osmand_live" = "Subskrypcja - OsmAnd Live";
 "help_purchases" = "Zakupy w OsmAnd";
 "help_nav_profiles" = "Profile nawigacji";
-"units_t" = "t";
+"metric_ton" = "t";
 "public_transport_hide" = "Ukryj transport publiczny";
 "public_transport_show" = "Pokaż transport publiczny";
 "configure_map_descr" = "Wygląd mapy";
@@ -1915,7 +1913,6 @@
 "delete_custom_categories" = "Usuń niestandardową kategorię";
 "add_custom_category" = "Dodaj niestandardową kategorię";
 "search_preogress" = "Szukanie…";
-"units_nm" = "Mm";
 "unsupported_action_title" = "Nieobsługiwana czynność (%@)";
 "hide_coordinates" = "Ukryj współrzędne";
 "show_coordinates" = "Pokaż współrzędne";
@@ -2159,7 +2156,6 @@
 "search_more" = "Wyszukaj więcej…";
 "routes_color_by_type" = "Kolor trasy według…";
 "download_map_dialog" = "Dialog pobierania map";
-"m" = "m";
 "dialogs_and_notifications" = "Dialogi i powiadomienia";
 "gpxup_trackable" = "Z opcją śledzenia";
 "app_restart_required" = "Wymagane ponowne uruchomienie aplikacji w celu zastosowania niektórych ustawień.";
@@ -2180,7 +2176,6 @@
 "service" = "Usługi";
 "shared_strings_all_regions" = "Wszystkie regiony";
 "suggested_maps_descr" = "Wtyczka wymaga wymienionych map.";
-"foot" = "stopy";
 "shared_string_all_languages" = "Wszystkie języki";
 "rendering_value_walkingRoutesOSMC_description" = "Przypisz kolor trasom na podstawie ich indywidualnie przypisanego lokalnie koloru (jeśli dostępny w OpenStreetMap) i symbolu odznaki turystycznej.";
 "explore_wikipedia_offline" = "Przeglądaj Wikipedię w trybie offline.";

@@ -214,16 +214,16 @@
 "cannot_add_marker_desc" = "Legalább egy irányt távolítson el és próbálja újra";
 "cannot_add_destination" = "Nem adható hozzá irány";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mérföld";
-"units_yd" = "yard";
-"units_ft" = "láb";
-"units_kmh" = "km/h";
-"units_mph" = "mérföld/óra";
-"units_hour" = "ó";
-"units_min" = "perc";
-"units_sec" = "mp.";
+"km" = "km";
+"m" = "m";
+"mile" = "mérföld";
+"yard" = "yard";
+"foot" = "láb";
+"km_h" = "km/h";
+"mile_per_hour" = "mérföld/óra";
+"int_hour" = "ó";
+"int_min" = "perc";
+"shared_string_sec" = "mp.";
 // Map
 "map_inst_det_map_q" = "Telepítse a részletes áttekintő térképet, hogy több információt szerezzen a helyeiről.";
 "map_remind" = "Emlékeztetés később";
@@ -272,8 +272,6 @@
 "rendering_category_transport" = "Tömegközlekedés";
 "rendering_category_others" = "Egyéb térképtulajdonságok";
 // Rendering attributes
-"units_minutes_short" = "perc";
-"units_seconds_short" = "mp.";
 "cannot_access_calendar" = "Nem lehet hozzáférni a naptárhoz";
 "reminder_not_set_text" = "Az emlékeztető nem lett beállítva, mivel nem engedélyezte a naptárhoz való hozzáférést";
 //inapps
@@ -902,7 +900,7 @@
 "add_poi" = "Érdekes pont (POI) hozzáadása";
 "sett_ext_input" = "Külső beviteli eszköz";
 "key_hint_deselect" = "Kijelölés megszüntetése";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "gpx_slope" = "Lejtés";
 "work_pt" = "Munkahely";
 "osmand_live_donation_switch_title" = "Adomány az OpenStreetMap közösségnek";
@@ -1402,7 +1400,7 @@
 "num_stops" = "megállók";
 "profile_type_user_string" = "Felhasználói profil";
 "route_recalculation_descr" = "Azútvonal újraszámításra kerül, amennyiben az útvonal és a jelenlegi helyzet közötti távolság nagyobb, mint a kiválasztott érték.";
-"units_t" = "t";
+"metric_ton" = "t";
 "position_icon_while_moving" = "Pozíció ikon haladás közben";
 "logging_min_speed" = "Legkisebb sebesség";
 "nav_type_direct_to" = "Légvonalban";
@@ -1518,7 +1516,6 @@
 "favorite_friends_category" = "Barátok";
 "fav_points_not_exist" = "Még nincsenek Kedvenc pontok";
 "plan_route_select_folder" = "Mappa kijelölése";
-"units_nm" = "tengeri mérföld";
 "search_history" = "Keresési előzmények";
 "markers_history" = "Jelölők előzményei";
 "favorite_places_category" = "Helyek";
@@ -1590,11 +1587,9 @@
 "last_intermediate_dest_description" = "Hozzáadja az útvonal utolsó megállóját";
 "first_intermediate_dest_description" = "Hozzáadja az útvonal első megállóját";
 "allow_3d_descr" = "Engedélyezze ezt a beállítást, hogy a térképet 2,5D perspektívában láthassa";
-"m" = "m";
 "suggested_maps_descr" = "A bővítményhez szükség van ezekre a térképekre.";
 "welmode_download_maps" = "Térképek letöltése";
 "navigate_point_northing" = "Északi";
-"foot" = "láb";
 "routes_color_by_type" = "Útvonalak színezése…";
 "added_profiles" = "Hozzáadott profilok";
 "search_more" = "További keresés…";

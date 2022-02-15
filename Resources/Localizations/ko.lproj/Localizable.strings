@@ -594,7 +594,7 @@
 "towards" = "쪽으로";
 "modify_poi_short" = "POI수정";
 "routing_attr_no_new_routing_description" = "v1.9에서 도입된 라우팅 룰을 사용하지 마십시오";
-"units_min" = "분";
+"int_min" = "분";
 "pink" = "분홍";
 "shared_string_street" = "거리";
 "opening_changeset" = "변경사항 여는중…";
@@ -639,7 +639,7 @@
 "osm_editing_contact_info" = "연락처 정보";
 "rendering_attr_pisteGrooming_name" = "Piste grooming (손질)";
 "lang_pl" = "폴란드어";
-"units_mph" = "mph";
+"mile_per_hour" = "mph";
 "route_head" = "전방";
 "rendering_value_lightblue_name" = "연한 파랑";
 "osm_note_comment" = "설명";
@@ -694,7 +694,7 @@
 "use_points_as_intermediates" = "포인트 사이의 경로를 계산";
 "fast_route_mode" = "가장 빠른 경로";
 "map_widget_right" = "오른쪽 패널";
-"units_kmh" = "km/h";
+"km_h" = "km/h";
 "lang_nl" = "네델란드어";
 "rendering_value_default_name" = "기본";
 "shared_string_distance" = "거리";
@@ -726,7 +726,7 @@
 "rendering_value_boldOutline_name" = "큰 선";
 "gpx_deactivated" = "비활성화";
 "offline_vector_maps" = "오프라인 벡터 맵";
-"units_hour" = "h";
+"int_hour" = "h";
 "transport" = "대중교통";
 "lang_al" = "알바니아어";
 "layer_amenity_label" = "포인트 이름";
@@ -770,14 +770,12 @@
 "city_type_city" = "도시";
 "sort_by_name" = "이름으로 정렬";
 "lang_eo" = "에스페란토어";
-"units_nm" = "nm";
 "app_mode_boat" = "배";
 "lang_pt_br" = "포르투갈어 (브라질)";
 "product_title_russia" = "유럽/아시아 - 러시아";
 "lang_gl" = "갈리시아어";
 "rendering_value_blue_name" = "파랑";
 "map_widget_time" = "가야할 시간";
-"foot" = "피트";
 "map_widget_next_turn_small" = "다음 턴(작은 아이콘)";
 "lang_sw" = "스와힐리어";
 "res_updates" = "업데이트";
@@ -799,7 +797,7 @@
 "rendering_attr_hideAccess_name" = "접근 제한 숨기기";
 "rendering_value_browse_map_name" = "지도 보기";
 "product_title_antarctica" = "남극 대륙";
-"units_ft" = "피트";
+"foot" = "피트";
 "lang_el" = "그리스어";
 "rendering_attr_buildings15zoom_name" = "줌 레벨 15에 있는 건물 표시";
 "app_theme_light" = "밝은";
@@ -809,14 +807,14 @@
 "osm_working_days" = "영업일";
 "lang_os" = "오세티아어";
 "navigate_point_zone" = "존(지역)";
-"units_mi" = "마일";
+"mile" = "마일";
 "menu_help" = "도움말";
 "product_desc_ext_wikivoyage" = "\'탐색\' → \'옵션\'에서 항상 사용 가능.";
 "translucent_lightgreen" = "반투명 가벼운 녹색";
 "app_mode_motorcycle" = "모터사이클";
 "lang_sq" = "알바니아어";
 "choose_audio_stream" = "음성 안내 출력";
-"units_yd" = "야드";
+"yard" = "야드";
 "lang_ht" = "아이티어";
 "res_standard" = "일반 지도";
 "osm_alert_message" = "메세지";
@@ -839,7 +837,6 @@
 "lang_vi" = "베트남어";
 "nothanks" = "필요없음";
 "rendering_attr_trainLightrailRoutes_name" = "기차 노선";
-"units_minutes_short" = "분";
 "open_osm_note" = "OSM노트 열기";
 "lang_bg" = "불가리아어";
 "poi_filter_by_name" = "이름으로 검색";
@@ -914,7 +911,7 @@
 "osmand_live_title" = "OsmAnd 라이브";
 "shared_string_all" = "모두";
 "osm_note" = "OSM노트";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "routing_attr_avoid_shuttle_train_name" = "셔틀 열차 피하기";
 "rendering_value_germanRoadAtlas_name" = "독일 도로 지도";
 "sett_settings" = "설정";
@@ -937,7 +934,6 @@
 "search_preogress" = "검색 중…";
 "rendering_attr_noAdminboundaries_description" = "지역 경계 표시를 억제 (관리자 레벨 5-9 )";
 "rendering_attr_noAdminboundaries_name" = "경계 숨기기";
-"units_m" = "m";
 "rendering_category_transport" = "교통";
 "region_russia" = "유럽/아시아 - 러시아";
 "create_poi_short" = "POI생성";
@@ -996,7 +992,7 @@
 "profile_appearance" = "프로필 모양";
 "shared_string_ellipsis" = "…";
 "rendering_value_disabled_name" = "사용 안 함";
-"units_km" = "km";
+"km" = "km";
 "rendering_attr_hikingRoutesOSMC_name" = "하이킹 심볼 오버레이";
 "osm_website" = "웹사이트";
 "routing_attr_prefer_motorway_name" = "전용도로 선호";

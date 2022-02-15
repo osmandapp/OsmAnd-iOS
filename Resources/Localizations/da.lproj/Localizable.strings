@@ -78,7 +78,6 @@
 "purchases" = "Køb";
 "download" = "Hent";
 "nothanks" = "Nej tak";
-"units_seconds_short" = "sek";
 //inapps
 "product_title_nautical" = "Søkort";
 "product_desc_nautical" = "Søkort over hele verden";
@@ -139,7 +138,6 @@
 "rendering_category_transport" = "Transport";
 "rendering_category_others" = "Andre kortattributter";
 // Rendering attributes
-"units_minutes_short" = "min";
 "reminder_not_set_text" = "Påmindelsen blev ikke sat, da der ikke er adgang til kalenderen";
 "shared_string_buy_for" = "for";
 "fav_import" = "Importer";
@@ -185,14 +183,15 @@
 "time_left" = "tilbage";
 "time_overdue" = "Udløbet";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mil";
-"units_ft" = "fod";
-"units_kmh" = "km/t";
-"units_hour" = "t";
-"units_min" = "min";
-"units_sec" = "sek";
+"km" = "km";
+"m" = "m";
+"mile" = "mil";
+"yard" = "yd";
+"foot" = "fod";
+"km_h" = "km/t";
+"int_hour" = "t";
+"int_min" = "min";
+"shared_string_sec" = "sek";
 "map_remind" = "Påmind senere";
 "import_favorite" = "Favorit";
 "import_failed" = "Importen mislykkedes";
@@ -203,7 +202,7 @@
 "ctx_mnu_add_fav" = "Tilføj favorit";
 "ctx_mnu_share" = "Del";
 "ctx_mnu_direction" = "Kortmarkør";
-"units_mph" = "mph";
+"mile_per_hour" = "mph";
 // Menu
 "menu_my_places" = "Foretrukne";
 "res_unknown" = "Ukendt";
@@ -288,7 +287,6 @@
 "cannot_add_marker" = "Kan ikke tilføje parkering";
 "cannot_add_marker_desc" = "Fjern i det mindste en retning, og prøv igen";
 "cannot_add_destination" = "Kan ikke tilføje retning";
-"units_yd" = "yd";
 // Map
 "map_inst_det_map_q" = "Installer detaljerede oversigtskort for at få flere oplysninger om placering.";
 "map_no_address" = "Adressen kendes endnu ikke";
@@ -1253,8 +1251,8 @@
 "no_active_route" = "Ingen aktiv rute";
 "selected_roads" = "Udvalgte veje";
 "shared_string_clear_all" = "Slet alle";
-"units_min_short" = "m";
-"units_sec_short" = "s";
+"shared_string_minute_short" = "m";
+"shared_string_second_short" = "s";
 "select_route_intermediate" = "Vælg et mellemliggende punkt";
 "select_home" = "Vælg hjemmeplacering";
 "select_work_point" = "Vælg arbejdssted";
@@ -1885,7 +1883,7 @@
 "reverse_route" = "Omvendt rute";
 "quick_action_switch_profile_descr" = "Denne genvejsknap skifter mellem valgte profiler.";
 "maximum_speed" = "Maksimal hastighed";
-"units_t" = "t";
+"metric_ton" = "t";
 "create_profile_descr" = "Basér den brugerdefinerede profil på en af standard app-profilerne, dette definerer den grundlæggende opsætning som standard synlighed for moduler og enheder for hastighed og distance. Dette er standard app-profilerne, sammen med eksempler på brugerdefinerede profiler kan de udvides til:";
 "shared_string_max" = "Maks";
 "whole_track" = "Hele sporet";
@@ -1937,7 +1935,6 @@
 "shared_string_others" = "Andre";
 "start_of_track" = "Starten af sporet";
 "extra_maps" = "Ekstra kort";
-"units_nm" = "sømil";
 "transport" = "Transport";
 "group_name" = "Gruppenavn";
 "simplified_track" = "Forenklet spor";
@@ -2013,9 +2010,7 @@
 "gpxup_identifiable" = "Identificerbar";
 "suggested_maps_descr" = "Disse kort er nødvendige for udvidelsen";
 "welmode_download_maps" = "Administrer kort";
-"foot" = "fod";
 "product_title_mapillary" = "Mapillary";
-"m" = "m";
 "shared_string_navigation" = "Navigation";
 "app_restart_required" = "App-genstart kræves for at anvende nogle indstillinger.";
 "navigate_point_easting" = "Østlig";

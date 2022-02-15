@@ -59,7 +59,7 @@
             [dataArr addObject:
              @{
                @"name" : speedLimitsKm[i],
-               @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsKm[i].intValue, OALocalizedString(@"units_kmh")],
+               @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsKm[i].intValue, OALocalizedString(@"km_h")],
                @"isSelected" : @(index == i),
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier]
              }];
@@ -72,7 +72,7 @@
             [dataArr addObject:
              @{
                @"name" : speedLimitsKm[i],
-               @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsMiles[i].intValue, OALocalizedString(@"units_mph")],
+               @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsMiles[i].intValue, OALocalizedString(@"mile_per_hour")],
                @"isSelected" : @(index == i),
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier]
              }];

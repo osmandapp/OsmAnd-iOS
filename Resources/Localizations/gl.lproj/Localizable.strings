@@ -534,16 +534,16 @@
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "id";
-"units_ft" = "pés";
-"units_kmh" = "km/h";
-"units_mph" = "mi/h";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "seg";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "id";
+"foot" = "pés";
+"km_h" = "km/h";
+"mile_per_hour" = "mi/h";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "seg";
 // Help
 "help_first_steps" = "First steps";
 "help_first_use" = "Primeiro emprego";
@@ -613,8 +613,6 @@
 "rendering_category_transport" = "Transporte";
 "rendering_category_others" = "Outros atributos do mapa";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
@@ -879,7 +877,7 @@
 "in_app_purchase_desc" = "Pagamento só unha vez";
 "osmand_live_hourly" = "Cada hora";
 "osm_editing_lost_changes_title" = "Saír sen gardar?";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "create_items" = "Crear elementos";
 "add_intermediate" = "Engadir punto intermedio";
 "osm_target_deleted" = "PDI do OSM eliminado";
@@ -1389,7 +1387,7 @@
 "base_profile_descr_car" = "Automóbil, camión, motocicleta";
 "vessel_width_limit_description" = "Estabelecer o largo da embarcación para evitar pontes estreitas";
 "shared_string_import_complete" = "Importación completada";
-"units_t" = "t";
+"metric_ton" = "t";
 "base_profile_descr_boat" = "Embarcación, remo, vela";
 "weight_limit_description" = "Fornece o peso do teu vehículo, algunhas restricións de ruta poden ser aplicadas a vehículos pesados.";
 "shared_string_copy" = "Copiar";
@@ -1555,7 +1553,6 @@
 "custom_osmand_plugin_name" = "Plugin personalizado do OsmAnd";
 "plan_route_change_folder" = "Mudar cartafol";
 "shared_string_others" = "Outros";
-"units_nm" = "nmi";
 "rearrange_categories" = "Reorganizar categorías";
 "osmand_settings" = "Axustes do OsmAnd";
 "markers_history" = "Historial de marcaxes";
@@ -1582,7 +1579,6 @@
 "split_before" = "Dividir antes";
 "select_group" = "Escoller grupo";
 "gpxup_trackable" = "Seguíbel";
-"m" = "m";
 "default" = "Predeterminado";
 "context_menu_item_edit_waypoint" = "Editar punto de pasaxe GPX";
 "navigate_point_zone" = "Zona";
@@ -1609,7 +1605,6 @@
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "navigate_point_northing" = "Ó norte";
 "route_between_points_warning_desc" = "Deseguido, axusta a pistaá estrada permitida máis preto cun perfil de navegación.";
-"foot" = "pés";
 "no_waypoints_found" = "Non se atoparon puntos de pasaxe";
 "shared_string_all_languages" = "Todas as linguas";
 "added_profiles" = "Perfís engadidos";

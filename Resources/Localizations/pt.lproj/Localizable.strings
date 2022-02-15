@@ -216,16 +216,16 @@
 "cannot_add_marker_desc" = "Remova pelo menos uma direção e tente novamente";
 "cannot_add_destination" = "Não é possível adicionar a direção";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_kmh" = "km/h";
-"units_mph" = "mi/h";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "seg";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"km_h" = "km/h";
+"mile_per_hour" = "mi/h";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "seg";
 // Map
 "map_inst_det_map_q" = "Instale a visão geral do mapa detalhado para obter mais informações sobre os locais.";
 "map_remind" = "Lembre-me mais tarde";
@@ -269,8 +269,6 @@
 "help_quiz" = "Questionário";
 "rendering_category_others" = "Outros atributos do mapa";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "cannot_access_calendar" = "Não é possível aceder o calendário";
 "reminder_not_set_text" = "O lembrete não foi definido, uma vez que não é permitido acesso ao calendário";
 //inapps
@@ -1252,7 +1250,7 @@
 "shared_string_clear_all" = "Limpar tudo";
 "no_active_route" = "Nenhuma rota ativa";
 "selected_roads" = "Estradas selecionadas";
-"units_sec_short" = "s";
+"shared_string_second_short" = "s";
 "select_route_intermediate" = "Selecionar um ponto intermédio";
 "select_home" = "Selecionar o ponto inicial";
 "select_work_point" = "Selecionar o ponto de trabalho";
@@ -1724,7 +1722,7 @@
 "avoid_routes_and_road" = "Evitar determinados tipos de rotas e estradas";
 "select_icon" = "Selecionar ícone";
 "product_title_antarctica" = "Antártida";
-"units_t" = "t";
+"metric_ton" = "t";
 "position_icon_while_moving" = "Ícone de posição durante a movimentação";
 "m_style_pulic_transport" = "Transporte público";
 "nav_type_geocoding" = "Geocodificação";
@@ -2040,7 +2038,6 @@
 "allow_3d" = "Permitir visualização 2.5D";
 "max_speed" = "Velocidade máxima";
 "ui_customization" = "Personalização da interface";
-"units_nm" = "mn";
 "attach_to_the_roads" = "Fixar às estradas";
 "follow_track" = "Seguir o trilho";
 "select_another_track" = "Selecionar outro trilho";
@@ -2128,7 +2125,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Atribuir uma cor a rotas de acordo com o tipo de rede do nó (internacional, regional, local).";
 "walking_route_osmc_description" = "Atribua uma cor às rotas de acordo com a sua cor local individual (se existir no OpenStreetMap) e tipo (internacional, regional, local).";
 "travel_routes" = "Rotas de viagem";
-"foot" = "ft";
 "shared_string_feet" = "pés";
 "srtm_download_list_help_message" = "O OsmAnd fornece dados de curvas de nível em metros e pés. Terá de descarregar novamente o ficheiro para alterar o formato.";
 "srtm_download_single_help_message" = "Selecione o formato. Terá de descarregar novamente o ficheiro para alterar o formato.";
@@ -2144,7 +2140,7 @@
 "navigate_point_easting" = "Este";
 "navigate_point_zone" = "Zona";
 "navigate_point_northing" = "Norte";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "reset_to_original" = "Repor o original";
 "route_line_color_elevation_description" = "A linha da rota será colorida dependendo do perfil de elevação da rota.";
 "nautical" = "Náutico";
@@ -2158,7 +2154,6 @@
 "shared_string_interval" = "Intervalo";
 "gpx_selection_segment_title" = "Segmentos";
 "invalid_format" = "Formato inválido";
-"m" = "m";
 "track_show_start_finish_icons" = "Mostrar ícones de início e fim";
 "activity" = "Atividade";
 "navigate_point_format_UTM" = "UTM";

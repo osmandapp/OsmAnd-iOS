@@ -433,7 +433,6 @@
 "si_min_km" = "Minutes per kilometer";
 "si_min_m" = "Minutes per mile";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "nmi";
 "nm_h" = "nmi/h";
 "min_mile" = "min/m";
 "min_km" = "min/km";
@@ -1241,8 +1240,6 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "meters";
 "shared_string_feet" = "feet";
-"foot" = "ft";
-"m" = "m";
 
 // Menu
 "menu" = "Menu";
@@ -1539,22 +1536,22 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_nm" = "nmi";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"nm" = "nmi";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
 
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "sec";
-"units_min_short" = "m";
-"units_sec_short" = "s";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "sec";
+"shared_string_minute_short" = "m";
+"shared_string_second_short" = "s";
 
-"units_t" = "t";
+"metric_ton" = "t";
 
 // Help
 "help_first_steps" = "First steps";
@@ -1672,9 +1669,6 @@
 "rendering_category_others" = "Other map attributes";
 
 // Rendering attributes
-
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
 
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";

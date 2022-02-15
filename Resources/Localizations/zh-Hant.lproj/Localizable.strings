@@ -216,16 +216,16 @@
 "cannot_add_marker_desc" = "請至少移除一個指引，然後重試";
 "cannot_add_destination" = "不能增加指引";
 // Units
-"units_km" = "公里";
-"units_m" = "公尺";
-"units_mi" = "哩";
-"units_yd" = "碼";
-"units_ft" = "呎";
-"units_kmh" = "公里/小時";
-"units_mph" = "哩/小時";
-"units_hour" = "時";
-"units_min" = "分";
-"units_sec" = "秒";
+"km" = "公里";
+"m" = "公尺";
+"mile" = "哩";
+"yard" = "碼";
+"foot" = "呎";
+"km_h" = "公里/小時";
+"mile_per_hour" = "哩/小時";
+"int_hour" = "時";
+"int_min" = "分";
+"shared_string_sec" = "秒";
 "map_remind" = "稍後提醒我";
 "map_no_address" = "還不知道地址";
 // Import
@@ -265,8 +265,6 @@
 "region_south_america" = "南美洲";
 // Help
 "help_quiz" = "測驗";
-"units_minutes_short" = "分";
-"units_seconds_short" = "秒";
 "cannot_access_calendar" = "無法存取日曆";
 // Map
 "map_inst_det_map_q" = "安裝詳細的地圖概覽，從您的位置中獲得週圍更多的詳細資訊。";
@@ -1077,7 +1075,7 @@
 "gpx_descent" = "下坡";
 "osm_note_action_field_descr" = "此訊息會包含在註解欄。";
 "add_parking_place" = "增加停車地點";
-"units_min_short" = "公尺";
+"shared_string_minute_short" = "公尺";
 "show_contour_lines" = "顯示等高線";
 "add_map_marker" = "增加地圖標記";
 "mapillary" = "Mapillary";
@@ -1562,7 +1560,7 @@
 "osm_note_comment_title" = "評論 OSM 註記";
 "ui_customization_descr" = "抽屜項目，情境選單";
 "quick_action_showhide_mapillary_title" = "顯示／隱藏 Mapillary";
-"units_t" = "公噸";
+"metric_ton" = "公噸";
 "next_seg" = "下一段";
 "res_source_sqlite" = "SQLiteDB檔案";
 "tones" = "色調";
@@ -1618,7 +1616,6 @@
 "hide_compass_ruler" = "隱藏指南針與尺規";
 "shared_string_disable" = "停用";
 "join_segments" = "新增線段";
-"units_nm" = "浬";
 "segnet_num" = "線段 %d";
 "circle" = "圓形";
 "shared_string_gpx_points" = "點";
@@ -1665,12 +1662,10 @@
 "added_profiles" = "已新增設定檔";
 "product_title_mapillary" = "Mapillary";
 "navigate_point_olc" = "打開位置編碼(OLC)";
-"foot" = "呎";
 "rendering_value_walkingRoutesOSMCNodes_description" = "根據其節點網路類型（國際、區域、當地）為路線著色。";
 "some_articles_may_not_available_in_lang" = "某些維基百科的文章可能無法以您的語言提供。";
 "shared_string_wifi_only" = "只有在 Wi-Fi";
 "shared_string_feet" = "英呎";
-"m" = "公尺";
 "rendering_value_walkingRoutesScopeOSMC_description" = "按網路關係分配著色。";
 "threshold_distance" = "門檻距離";
 "shared_string_navigation" = "導航";

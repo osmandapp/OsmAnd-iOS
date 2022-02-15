@@ -235,16 +235,16 @@
 "cannot_add_marker_desc" = "Pro piaghere boga a su mancu una diretzione e torra a proare";
 "cannot_add_destination" = "Impossìbile annanghere una diretzione";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "seg";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "seg";
 // Map
 "map_inst_det_map_q" = "Installa sa mapa generale a sa minuda pro tènnere prus informatziones chi pertocant sas positziones tuas.";
 "map_remind" = "Ammentami·lu torra prus a tardu";
@@ -286,8 +286,6 @@
 "region_south_america" = "Sud Amèrica";
 // Help
 "help_quiz" = "Cuiz (Quiz)";
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "cannot_access_calendar" = "Impossìbile atzèdere a su Calendàriu";
 "reminder_not_set_text" = "Su promemòria no est istadu impostadu proite no est istadu possìbile atzedere a su Calendàriu";
 //inapps
@@ -1252,7 +1250,7 @@
 "no_active_route" = "Peruna àndala ativa";
 "selected_roads" = "Caminos ischertados";
 "shared_string_clear_all" = "Iscantzella totu";
-"units_sec_short" = "s";
+"shared_string_second_short" = "s";
 "shared_string_on" = "Allutu";
 "shared_string_off" = "Istudadu";
 "select_route_intermediate" = "Ischerta unu puntu de coladòrgiu";
@@ -1841,7 +1839,7 @@
 "trip_rec_actions_descr" = "Podes agatare totu sas rastas registradas tuas in %@";
 "logging_accuracy" = "Pretzisione de registratzione";
 "shared_string_account_add" = "Annanghe unu contu";
-"units_t" = "t";
+"metric_ton" = "t";
 "recalculate_wrong_dir" = "Torra a carculare s'àndala in casu de diretzione furriada";
 "repeat_after" = "Repite a pustis de";
 "profile_alert_delete_msg" = "Ses seguru de chèrrere iscantzellare su profilu \"%@\"?";
@@ -1965,7 +1963,6 @@
 "key_hint_recenter_map" = "Torra a tzentrare sa mapa";
 "shared_z_a" = "Z - A";
 "shared_a_z" = "A - Z";
-"units_nm" = "nmi";
 "select_application_profile" = "Ischerta su profilu de s'aplicatzione";
 "change_application_profile" = "Càmbia su profilu de s'aplicatzione";
 "quick_action_showhide_mapillary_descr" = "Incarchende custu butone as a ammustrare o cuare s'istratu de Mapillary in sa mapa.";
@@ -2155,7 +2152,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Colora sasàndalas in base a sa casta de nodu de retza issoro (internatzionale, regionale, locale).";
 "walking_route_osmc_description" = "Colora sasàndalas in base a sos colores locales individuales issoro (si bi sunt in OpenStreetMap) e a sa casta issoro (internatzionales, regionales, locales).";
 "travel_routes" = "Àndalas de biàgiu";
-"foot" = "ft";
 "shared_string_feet" = "pees";
 "srtm_download_list_help_message" = "OsmAnd frunit datos de sas curvas de livellu in metros e in pees. As a dèpere torrare a iscarrigare su documentu pro mudare su formadu.";
 "srtm_download_single_help_message" = "Pro praghere ischerta sa variante. As a dèpere torrare a iscarrigare su documentu pro mudare su formadu.";
@@ -2240,7 +2236,6 @@
 "lang_jv" = "Giavanesu";
 "lang_hr" = "Croatu";
 "lang_uz" = "Uzbecu";
-"m" = "m";
 "lang_pl" = "Polacu";
 "lang_ku" = "Kurdu";
 "lang_ja" = "Giapponesu";
@@ -2322,7 +2317,7 @@
 "lang_be_by" = "Bielorussu (caràteres latinos)";
 "lang_war" = "Waray";
 "lang_my" = "Birmanu";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "lang_ka" = "Georgianu";
 "lang_fr" = "Frantzesu";
 "lang_mk" = "Matzèdone";

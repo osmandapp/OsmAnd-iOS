@@ -406,7 +406,6 @@
 "si_min_km" = "דקות לקילומטר";
 "si_min_m" = "דקות למייל";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "מייל ימי";
 "nm_h" = "nmi/h";
 "min_mile" = "דק׳/מ׳";
 "min_km" = "דק׳/ק״מ";
@@ -1181,8 +1180,6 @@
 "srtm_download_list_help_message" = "OsmAndמספק נתוני קווי מתאר במטרים וברגל. יהיה עליך להוריד את הקובץ מחדש כדי לשנות את התצורה.";
 "shared_string_meters" = "מטרים";
 "shared_string_feet" = "רגל";
-"foot" = "רגל";
-"m" = "מ׳";
 
 // Menu
 "menu" = "תפריט";
@@ -1476,18 +1473,19 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"units_km" = "ק״מ";
-"units_mi" = "מייל";
-"units_yd" = "יארד";
-"units_ft" = "רגל";
-"units_nm" = "מייל ימי";
-"units_kmh" = "קמ״ש";
-"units_mph" = "מייל לשעה";
-"units_hour" = "שע׳";
-"units_min" = "דק׳";
-"units_sec" = "שנ׳";
-"units_sec_short" = "s";
-"units_t" = "ט׳";
+"km" = "ק״מ";
+"m" = "מ׳";
+"mile" = "מייל";
+"yard" = "יארד";
+"foot" = "רגל";
+"nm" = "מייל ימי";
+"km_h" = "קמ״ש";
+"mile_per_hour" = "מייל לשעה";
+"int_hour" = "שע׳";
+"int_min" = "דק׳";
+"shared_string_sec" = "שנ׳";
+"shared_string_second_short" = "s";
+"metric_ton" = "ט׳";
 
 // Help
 "help_first_steps" = "First steps";
@@ -1606,8 +1604,6 @@
 
 // Rendering attributes
 
-"units_minutes_short" = "דק׳";
-"units_seconds_short" = "שנ׳";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
@@ -2330,9 +2326,8 @@
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "grey_color_undefined" = "חלקים ללא נתונים הם אפורים.";
 "connect_rp" = "חיבור נקודות מסלול";
-"units_m" = "מ׳";
 "white_color_undefined" = "חלקים ללא נתונים הם לבנים.";
-"units_min_short" = "ד";
+"shared_string_minute_short" = "ד";
 "shared_string_hide_all" = "להסתיר הכול";
 "points_delete_multiple" = "למחוק %d נקודות?";
 "context_menu_edit_descr" = "עריכת תיאור";

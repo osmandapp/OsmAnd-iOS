@@ -180,13 +180,13 @@
 "menu_feedback" = "Feedback";
 "menu_about" = "Informazioni";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_kmh" = "km/h";
-"units_mph" = "mi/h";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"km_h" = "km/h";
+"mile_per_hour" = "mi/h";
 // Map
 "map_inst_det_map_q" = "Installa la mappa panoramica dettagliata per avere maggiori informazioni sulle tue posizioni.";
 "map_remind" = "Ricorda in seguito";
@@ -232,8 +232,6 @@
 "shared_string_add" = "Aggiungi";
 "shared_string_and" = "e";
 "shared_string_edit" = "Modifica";
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
 "cannot_access_calendar" = "Impossibile accedere al Calendario";
 "reminder_not_set_text" = "Il promemoria non è stato impostato poiché non ti è consentito l'accesso al Calendario";
 //inapps
@@ -287,9 +285,9 @@
 "time_left" = "rimasto";
 "time_overdue" = "obsoleto";
 "cannot_add_marker" = "Impossibile aggiungere Parcheggio";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "sec";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "sec";
 "product_title_skimap" = "Mappe sciistiche";
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Scaricamenti illimitati delle mappe per l'Africa";
@@ -877,7 +875,7 @@
 "osm_alert_message" = "Messaggio";
 "home_pt" = "Casa";
 "shared_string_in_name" = "in %@";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "osm_note_reopen" = "Riapre";
 "sett_ext_input" = "Dispositivi di input esterni";
 "osm_editing_lost_changes_title" = "Uscire senza salvare?";
@@ -1498,7 +1496,7 @@
 "avoid_by_type" = "Evita per tipo";
 "parking_place" = "Parcheggio";
 "add_start" = "Aggiungi luogo di partenza";
-"units_sec_short" = "s";
+"shared_string_second_short" = "s";
 "sett_deg180" = "180 gradi";
 "sett_deg360" = "360 gradi";
 "map_settings_install_maps" = "Scegli le mappa da installare o aggiornare";
@@ -1779,7 +1777,7 @@
 "res_slope" = "Pendenza";
 "help_nav_profiles" = "Profili di navigazione";
 "quick_action_remove_next_destination_descr" = "Elimina la destinazione successiva nel percorso. Se questaè la destinazione finale, la navigazione si fermerà.";
-"units_t" = "t";
+"metric_ton" = "t";
 "total" = "Totale";
 "height_limit_description" = "Indica l\'altezza del veicolo, alcune restrizioni stradali potrebbero essere applicate per veicoli alti.";
 "menu" = "Menu";
@@ -1820,7 +1818,6 @@
 "split_before" = "Spezza";
 "favorite_friends_category" = "Amici";
 "fav_points_not_exist" = "Non esiste alcun preferito";
-"units_nm" = "nmi";
 "res_standard" = "Mappe standard";
 "copied_to_clipboard" = "Copiato negli appunti";
 "street_level_imagery" = "Immagini stradali";
@@ -1882,7 +1879,6 @@
 "route_between_points_warning_desc" = "Poi approssima la traccia alle strade più vicine permesse da uno dei tuoi profili di navigazione per utilizzare questa opzione.";
 "last_used" = "Ultimo utilizzato";
 "explore_wikipedia_offline" = "Esplora Wikipedia offline.";
-"foot" = "ft";
 "suggested_maps_descr" = "Queste mappe sono richieste per il plugin.";
 "default" = "Predefinito";
 "app_restart_required" = "Il riavvio dell\'appè richiesto per applicare alcune impostazioni.";
@@ -1893,7 +1889,6 @@
 "navigate_point_easting" = "In direzione Est";
 "threshold_distance" = "Soglia distanza";
 "shared_string_turn_off" = "Spegni";
-"m" = "m";
 "shared_string_feet" = "piedi";
 "suggested_maps" = "Mappe suggerite";
 "lang_pnb" = "Punjabi";

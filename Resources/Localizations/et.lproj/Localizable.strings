@@ -882,17 +882,17 @@
 "cannot_add_marker_desc" = "Palun eemalda vähemalt üks suund ja proovi uuesti";
 "cannot_add_destination" = "Suunda ei saa lisada";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "jalga";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "t";
-"units_min" = "min";
-"units_sec" = "sek";
-"units_sec_short" = "s";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "jalga";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "t";
+"int_min" = "min";
+"shared_string_sec" = "sek";
+"shared_string_second_short" = "s";
 // Help
 "help_first_steps" = "Esimesed sammud";
 "help_first_use" = "Esmakasutamine";
@@ -988,8 +988,6 @@
 "rendering_category_transport" = "Transport";
 "rendering_category_others" = "Teised kaardi atribuudid";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "sek";
 "cannot_access_calendar" = "Kalendrile ei pääse juurde";
 "reminder_not_set_text" = "Meeldetuletust ei seatud, sest kalendrile juurdepääs ei ole lubatud";
 //inapps
@@ -1814,7 +1812,7 @@
 "enable_hillshade" = "Maastikuandmete kuvamiseks luba see seadistus";
 "enable_contour_lines" = "Kõrgusjoonete kuvamiseks kaardil luba see seadistus";
 "osm_editing_access_descr" = "Sa võid näha kõiki kohalikus nutiseadmes tehtud muudatusi ja märkusi %@ vaates. Juba üleslaaditud andmeid OsmAnd enam ei kuva.";
-"units_t" = "t";
+"metric_ton" = "t";
 "map_settings_hide_polygons_desc" = "See valik mõjutab vaid OsmAnd'i võrguvabade vektorkaartide kuvamist";
 "map_settings_zoom_level_description" = "Määra väikseim ja suurim suumi tase kihi kuvamisel";
 "use_of_downloaded_map" = "Nüüd saad seda kaarti kasutadavõrgu ühenduseta režiimis põhikaardi allikana või ülekattena või aluskihina";
@@ -1946,7 +1944,6 @@
 "shared_z_a" = "Ü - A";
 "shared_a_z" = "A - Ü";
 "search_preogress" = "Otsimine…";
-"units_nm" = "M";
 "unsupported_action_descr" = "See kiirtegevus ei ole hetkel toetatud. Selle saab parandada rakenduse uutes versioonides.";
 "unsupported_action_title" = "Tegevuse tugi puudub (%@)";
 "unsupported_action" = "Tegevuse tugi puudub";
@@ -2118,7 +2115,6 @@
 "product_desc_mapillary" = "Tänavatasemel fotod veebis kõigile";
 "product_title_mapillary" = "Mapillary";
 "population_num" = "Rahvaarv";
-"foot" = "jalga";
 "shared_string_feet" = "jalad";
 "srtm_download_single_help_message" = "Palun vali vajalik formaat. Formaadi muutmiseks tuleb fail uuesti alla laadida.";
 "srtm_unit_format" = "Kontuurjoonte ühiku formaat";
@@ -2151,11 +2147,10 @@
 "navigate_point_format_unknown" = "Tundmatu vorming";
 "navigate_point_olc_short" = "OLC";
 "invalid_format" = "Vigane vorming";
-"m" = "m";
 "read_full_description" = "Loe täielikku kirjeldust";
 "gpx_dir_arrows" = "Suunanooled";
 "gpx_split_interval" = "Jagamise vahemik";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "gpx_split_interval_descr" = "Vali välp, mille alusel kuvatakse rajal aja- või vahemaamärgid.";
 "gpx_join_gaps" = "Ühenda lüngad";
 "track_show_start_finish_icons" = "Näita alguse ja lõpu ikoone";

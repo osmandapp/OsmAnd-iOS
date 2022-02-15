@@ -238,16 +238,16 @@
 "cannot_add_marker_desc" = "Fjarlægðu a.m.k. eina leiðarlýsingu og prófaðu aftur";
 "cannot_add_destination" = "Get ekki bætt við leiðarlýsingu";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_kmh" = "km/klst";
-"units_mph" = "mi/klst";
-"units_hour" = "klst";
-"units_min" = "mín";
-"units_sec" = "sek";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"km_h" = "km/klst";
+"mile_per_hour" = "mi/klst";
+"int_hour" = "klst";
+"int_min" = "mín";
+"shared_string_sec" = "sek";
 // Map
 "map_inst_det_map_q" = "Settu upp nákvæmt yfirlitskort til að sjá meira af upplýsingum um staðsetningarnar þínar.";
 "map_remind" = "Áminna mig síðar";
@@ -296,8 +296,6 @@
 "rendering_category_transport" = "Samgöngur";
 "rendering_category_others" = "Önnur eigindi korts";
 // Rendering attributes
-"units_minutes_short" = "mín";
-"units_seconds_short" = "sek";
 "cannot_access_calendar" = "Mistókst að fá aðgang að dagatali";
 "reminder_not_set_text" = "Ekki var hægt að stilla áminninguna því aðgangi að dagatalinu er hafnað";
 //inapps
@@ -1250,7 +1248,7 @@
 "no_active_route" = "Engin virk leið";
 "selected_roads" = "Valdir vegir";
 "shared_string_clear_all" = "Hreinsa allt";
-"units_sec_short" = "s";
+"shared_string_second_short" = "s";
 "select_route_intermediate" = "Veldu millipunkt";
 "select_home" = "Veldu heimapunkt";
 "select_work_point" = "Veldu vinnupunkt";
@@ -1846,7 +1844,7 @@
 "reset_profile_action_descr" = "Endurstilla allar sniðstillingar á upphaflegar sjálfgefnar stillingar. Ef ýtt er á 'Endurstilla' verður öllum breytingum þínum hent, þetta er ekki hægt að afturkalla.";
 "import_profile_descr" = "Til að flytja inn leiðsagnarsnið, skaltu ýta á viðeigandi skrá (*.osf) í einhverju forriti og velja 'Afrita í OsmAnd-kort' aðgerðina";
 "help_nav_profiles" = "Leiðsagnarsnið";
-"units_t" = "t";
+"metric_ton" = "t";
 "nothing_found_empty" = "Ekkert fannst";
 "shared_string_next" = "Næsta";
 "move_point" = "Færa punkt";
@@ -1957,7 +1955,6 @@
 "key_hint_recenter_map" = "Endurmiðja kort";
 "shared_z_a" = "Ö-A";
 "shared_a_z" = "A-Ö";
-"units_nm" = "sml";
 "select_application_profile" = "Veldu forritssnið";
 "change_application_profile" = "Skipta um forritssnið";
 "quick_action_showhide_mapillary_descr" = "Ef ýtt er á þennan aðgerðahnapp mun það birta eða fela Mapillary-lagið á kortinu.";
@@ -2129,7 +2126,6 @@
 "routes_color_by_type" = "Lita leiðir eftir…";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Litur fer eftir leiðakerfi.";
 "travel_routes" = "Ferðaleiðir";
-"foot" = "ft";
 "shared_string_feet" = "fet";
 "srtm_download_list_help_message" = "OsmAnd býður upp á hæðalínugögn í metrum og fetum. Þú þarft að sækja skrána aftur til að breyta sniðinu.";
 "srtm_download_single_help_message" = "Veldu rétt snið eininga. Þú þarft að sækja skrána aftur til að breyta sniðinu.";
@@ -2170,8 +2166,7 @@
 "delete_waypoints" = "Eyða ferilpunktum";
 "nautical" = "Sjókort";
 "gpx_split_interval" = "Skipta millibili";
-"units_min_short" = "m";
-"m" = "m";
+"shared_string_minute_short" = "m";
 "parked_at" = "Lagt við";
 "coords_format_descr_quick_search" = "Þú getur breytt sniði hnita fyrir notkunarsniðið í almennum stillingum";
 "download_suggestion" = "Sæktu nákvæma %@ kortið til að skoða þetta svæði";

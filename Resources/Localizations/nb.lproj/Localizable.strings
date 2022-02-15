@@ -862,18 +862,18 @@
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_kmh" = "km/t";
-"units_mph" = "mph";
-"units_hour" = "t";
-"units_min" = "min";
-"units_sec" = "sek";
-"units_min_short" = "m";
-"units_sec_short" = "S";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"km_h" = "km/t";
+"mile_per_hour" = "mph";
+"int_hour" = "t";
+"int_min" = "min";
+"shared_string_sec" = "sek";
+"shared_string_minute_short" = "m";
+"shared_string_second_short" = "S";
 // Help
 "help_first_steps" = "First steps";
 "help_first_use" = "Første bruk";
@@ -966,8 +966,6 @@
 "rendering_category_transport" = "Transport";
 "rendering_category_others" = "Andre kartattributter";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "sek";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
@@ -1784,7 +1782,7 @@
 "position_icon_while_moving" = "Posisjonsikon under bevegelse";
 "quick_action_mapillary_show" = "Vis Mapillary";
 "import_duplicates_title" = "Noen elementer finnes allerede";
-"units_t" = "t";
+"metric_ton" = "t";
 "layer_amenity_label" = "Punktpåskrifter (interessepunkter, favoritter)";
 "announce" = "Kunngjør";
 
@@ -1901,7 +1899,6 @@
 "select_group" = "Velg gruppe";
 "extra_maps" = "Ekstra kart";
 "octagon" = "Oktogon";
-"units_nm" = "nmi";
 "new_plugin_added" = "Nytt programtillegg lagt til";
 "shared_string_gpx_points" = "Punkter";
 "group_name" = "Gruppenavn";
@@ -1991,14 +1988,12 @@
 "contour_lines_hillshades_slope" = "Koter, relieffskygger, bakkehelning";
 "travel_routes" = "Reiseruter";
 "added_profiles" = "Tillagte profiler";
-"foot" = "ft";
 "route_between_points_warning_desc" = "Deretter juster ditt spor til nærmeste tillatte vei med en av navigeringsprofilene for å bruke dette alternativet.";
 "navigate_point_olc" = "Open Location Code (OLC)";
 "shared_string_feet" = "fot";
 "download_map_dialog" = "Kartnedlastingsdialog";
 "shared_string_navigation" = "Navigering";
 "added_profiles_descr" = "Profiler lagt til av programtillegg";
-"m" = "m";
 "no_waypoints_found" = "Fant ingen rutepunkter";
 "navigate_point_easting" = "Østverdi";
 "walking_route_osmc_description" = "Fargelegg ruter i henhold til deres individuelle lokale farge (hvis den forefinnes i OpenStreetMap) og type (internasjonal, regional, lokal).";

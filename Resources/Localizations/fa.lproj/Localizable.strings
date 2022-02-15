@@ -477,16 +477,16 @@
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "س";
-"units_min" = "min";
-"units_sec" = "sec";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "س";
+"int_min" = "min";
+"shared_string_sec" = "sec";
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
 "map_remind" = "Remind me later";
@@ -535,8 +535,6 @@
 "rendering_category_transport" = "حمل‌ونقل";
 "rendering_category_others" = "خصوصیات دیگر نقشه";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
@@ -933,7 +931,7 @@
 "quick_action_start_stop_nav_descr" = "این دکمه را لمس کنید تا ناوبری را شروع کنید یا پایان دهید.";
 "osm_edits_advanced" = "دشوار";
 "add_action" = "افزودن کنش";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "osmand_live_weekly" = "هفتگی";
 "osm_live_cancel_subscription" = "لغو اشتراک";
 "coordinates_example" = "مثال";
@@ -1401,7 +1399,7 @@
 "two" = "دو";
 "importing_from" = "درون‌برد داده از %@";
 "shared_string_profiles" = "پروفایل‌ها";
-"units_t" = "تن";
+"metric_ton" = "تن";
 "shared_string_deselect_all" = "پاک‌کردن همهٔ انتخاب‌ها";
 "help_osmand_live" = "اشتراک - OsmAnd Live";
 "select_distance_for_recalculation" = "فاصله‌ای که با گذشتن از آن، مسیریابی مجدد انجام شود چقدر باشد.";
@@ -1573,7 +1571,6 @@
 "fav_points_not_exist" = "هیچ نقطهٔ موردعلاقه‌ای وجود ندارد";
 "service" = "خدمات";
 "favorite_friends_category" = "دوستان";
-"units_nm" = "nmi";
 "shared_string_import" = "درون‌برد";
 "coordinates_widget" = "ابزارک مختصات";
 "mapil_usernames" = "نام‌های کاربری";
@@ -1646,7 +1643,7 @@
 "shared_string_maximum" = "بیشترین";
 "gpx_analyze" = "آنالیز";
 "calculating_progress" = "محاسبه...";
-"units_sec_short" = "s";
+"shared_string_second_short" = "s";
 "sort_by" = "مرتب‌سازی";
 "quick_action_dialog" = "گفتگو";
 "reddit" = "ردیت";
@@ -1684,14 +1681,12 @@
 "added_profiles_descr" = "پروفایل‌هایی که افزونه افزوده";
 "shared_string_feet" = "پا";
 "contour_lines_hillshades_slope" = "خطوط میزان، سایه‌روشن‌ها، شیب";
-"m" = "m";
 "wiki_menu_download_descr" = "برای مشاهدهٔ نقاط ویکی‌پدیا روی نقشه باید نقشهٔ دیگری را نیز دانلود کنید.";
 "download_map_dialog" = "کادر دانلود نقشه";
 "navigate_point_olc" = "کدِ مکانی باز (OLC)";
 "last_used" = "آخرین استفاده‌شده";
 "shared_string_turn_off" = "خاموش";
 "gpxup_identifiable" = "قابل‌شناسایی";
-"foot" = "ft";
 "welmode_download_maps" = "دانلود نقشه‌ها";
 "rendering_value_walkingRoutesOSMCNodes_description" = "مسیرها را بر اساس نوع شبکهٔ گره آن‌ها (بین‌المللی، منطقه‌ای، محلی) رنگ‌آمیزی کن.";
 "some_articles_may_not_available_in_lang" = "ممکن است برخی مقاله‌های ویکی‌پدیا به زبان شما در دسترس نباشد.";

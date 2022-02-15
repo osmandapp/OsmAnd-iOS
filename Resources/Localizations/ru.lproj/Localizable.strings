@@ -164,13 +164,13 @@
 "menu_feedback" = "Опрос";
 "menu_about" = "О программе";
 // Units
-"units_km" = "км";
-"units_m" = "м";
-"units_mi" = "миля";
-"units_yd" = "ярд";
-"units_ft" = "фут";
-"units_kmh" = "км/ч";
-"units_mph" = "миль/ч";
+"km" = "км";
+"m" = "м";
+"mile" = "миля";
+"yard" = "ярд";
+"foot" = "фут";
+"km_h" = "км/ч";
+"mile_per_hour" = "миль/ч";
 "map_download" = "Загрузить";
 "map_nothanks" = "Нет, спасибо";
 "map_download_now" = "Загрузить карту сейчас";
@@ -260,8 +260,6 @@
 "track_continue_rec_q" = "Продолжить запись?";
 "rec_interval" = "Интервал записи";
 "rec_interval_minimum" = "Минимум";
-"units_minutes_short" = "мин";
-"units_seconds_short" = "с";
 "track_start_rec" = "Начать запись трека";
 "track_rec_addon_q" = "Активируйте дополнение \"Запись треков\" для записи ваших путешествий";
 "track_interval_remember" = "Запомнить мой выбор";
@@ -283,9 +281,9 @@
 "cannot_add_marker" = "Нельзя добавить парковку";
 "cannot_add_marker_desc" = "Уберите одно из направлений и повторите попытку";
 "cannot_add_destination" = "Нельзя добавить направление";
-"units_hour" = "ч";
-"units_min" = "мин";
-"units_sec" = "с";
+"int_hour" = "ч";
+"int_min" = "мин";
+"shared_string_sec" = "с";
 "cannot_access_calendar" = "Ошибка доступа к календарю";
 "reminder_not_set_text" = "Нельзя установить напоминание, т.к. не разрешён доступ к календарю";
 "shared_string_buy" = "Купить";
@@ -797,8 +795,8 @@
 "translucent_red" = "Полупрозрачный красный";
 // Rendering attributes
 "reddit" = "Reddit";
-"units_min_short" = "м";
-"units_sec_short" = "с";
+"shared_string_minute_short" = "м";
+"shared_string_second_short" = "с";
 "shared_string_password" = "Пароль";
 "by_name" = "По имени";
 "shared_string_on" = "Вкл.";
@@ -1861,7 +1859,7 @@
 "width_limit_description" = "Укажите ширину автомобиля, для широких транспортных средств могут применяться ограничения на маршруте.";
 "weight_limit_description" = "Укажите вес автомобиля, для тяжёлых транспортных средств могут применяться ограничения на маршруте.";
 "profile_type_base_string" = "Базовый профиль";
-"units_t" = "т";
+"metric_ton" = "т";
 "recalculate_wrong_dir" = "Пересчитать маршрут в случае обратного направления";
 "repeat_after" = "Повторить после";
 "profile_alert_delete_msg" = "Вы действительно хотите удалить профиль \"%@\"?";
@@ -1978,7 +1976,6 @@
 "shared_z_a" = "Я - А";
 "shared_a_z" = "А - Я";
 "search_preogress" = "Поиск…";
-"units_nm" = "мор. миля";
 "map_widget_distance_by_tap" = "Расстояние по нажатию";
 "simplified_track_description" = "Будет сохранена только линия маршрута, без путевых точек.";
 "open_saved_track" = "Открыть сохранённый трек";
@@ -2128,7 +2125,6 @@
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "contour_lines_hillshades_slope" = "Контурные линии, затенение рельефа (отмывка), уклоны";
 "last_used" = "Последний используемый";
-"m" = "м";
 "suggested_maps_descr" = "Эти карты необходимо использовать с плагином.";
 "added_profiles_descr" = "Профили, добавленные плагином";
 "navigate_point_olc" = "Открытый код местоположения (OLC)";
@@ -2136,7 +2132,6 @@
 "navigate_point_easting" = "Восточной долготы";
 "navigate_point_northing" = "Северной широты";
 "welmode_download_maps" = "Загрузка карт";
-"foot" = "фут";
 "download_map_dialog" = "Диалог загрузки карты";
 "dialogs_and_notifications" = "Диалоги и уведомления";
 "explore_wikipedia_offline" = "Читайте Википедию офлайн.";

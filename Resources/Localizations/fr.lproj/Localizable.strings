@@ -141,16 +141,16 @@
 "more" = "Plus";
 "add_notification_calendar" = "Ajouter la notification au calendrier";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "pieds";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "sec";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "pieds";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "sec";
 "map_remind" = "Me le rappeler ultérieurement";
 "import_failed" = "L'importation a échoué";
 "import_cannot" = "Le fichier spécifié ne peut pas être importé";
@@ -176,8 +176,6 @@
 "region_north_america" = "Amérique du Nord";
 "region_russia" = "Europe/Asie - Russie";
 "region_south_america" = "Amérique du Sud";
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
 "cannot_access_calendar" = "Impossible d'accéder à calendrier";
 "reminder_not_set_text" = "Le rappel n'a pas été établi car vous n'êtes pas autorisé à accéder au calendrier";
 //inapps
@@ -1503,7 +1501,7 @@
 "product_desc_africa_short" = "Cartes de l'Afrique";
 // World Regions
 "region_antarctica" = "Antarctique";
-"units_sec_short" = "s";
+"shared_string_second_short" = "s";
 "toggle_hillshade" = "Afficher/masquer le relief";
 "toggle_contour_lines" = "Afficher/masquer les courbes de niveau";
 "hide_hillshade" = "Masquer l'ombrage du relief";
@@ -1788,7 +1786,7 @@
 "next_seg" = "Segment suivant";
 "total" = "Total";
 "app_profiles" = "Profils de l\'appli";
-"units_t" = "t";
+"metric_ton" = "t";
 "create_profile_descr" = "Basez votre profil personnel sur l\'un des profils par défaut pour définir les unités de vitesse, de distance ou la visibilité des widgets. Voici les profils par défaut de l\'application ainsi que des exemples de profils personnalisés :";
 "listed_exist" = "Les %@ listés existent déjà dans OsmAnd.";
 "quick_action_mapillary_show" = "Afficher Mapillary";
@@ -2073,7 +2071,6 @@
 "track_is_saved" = "%@\nenregistré !";
 "ios_release_3_90" = "- Introduction d'une fonction \"Planifier un itinéraire\" pour planifier de futurs voyages avec la possibilité de créer des segments de parcours en utilisant différents types de navigation\n- Ajout d'une option permettant d'activer une boussole sur l'outil \"Règle de rayon\"\n- Ajout de l'option \"Superposition des étiquettes de PI\" qui permet d'afficher les noms des favoris, des points de repère et des marqueurs sur la carte\n- Ajout de nouvelles actions rapides pour la visibilité des courbes de niveau et du relief sur la carte, la modification d'un profil d'application, la suppression d'un point intermédiaire le plus proche\n- Correction des problèmes liés à la catégorie de recherche Wikipédia manquante\n- Importation de paramètres : correction de bugs, ajout du support pour tous les types de données disponibles dans OsmAnd\n- Edition d'OpenStreetMap : correction du sélecteur de temps et de l'impossibilité de modifier le commentaire de l'ensemble des modifications\n";
 "ios_release_3_80" = "- Introduction de \"profils d'application\" avec des paramètres indépendants\n- Nouvelle disposition des paramètres par profils et types : navigation, général, carte et écran\n- Possibilité d'importer ou d'exporter les paramètres des profils\n- Ajout de sources de données pour les photos en ligne\n- Ajout de la possibilité de télécharger des cartes en ligne dans la mémoire cache\n- Algorithmes de \"recherche\" améliorés\n";
-"units_nm" = "mn";
 "approximate_file_size" = "Taille approximative du fichier : %@";
 "gpxup_private" = "Privée";
 "gpxup_public" = "publique";
@@ -2103,7 +2100,6 @@
 "select_wikipedia_article_langs" = "Sélectionnez la langue dans laquelle les articles Wikipédia s'afficheront sur la carte. Vous pourrez changer pour toutes les langues disponibles en lisant l'article.";
 "shared_string_all_languages" = "Toutes les langues";
 "board_at" = "Embarquement à";
-"foot" = "pieds";
 "download_suggestion" = "Pour voir les détails de cette zone, téléchargez la carte %@";
 "download_map_dialog" = "Fenêtre de téléchargement de carte";
 "shared_string_turn_off" = "Eteindre";
@@ -2189,8 +2185,7 @@
 "shared_string_time_moving" = "Durée de déplacement";
 "industrial" = "Industrie";
 "education" = "Éducation";
-"m" = "m";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "route_points" = "Point de passage";
 "connect_rp" = "Relier les points de passage";
 "lang_af" = "Afrikaans";

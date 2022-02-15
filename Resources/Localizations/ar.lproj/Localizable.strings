@@ -512,16 +512,16 @@
 "cannot_add_marker_desc" = "الرجاء إزالة اتجاه واحد على الأقل وإعادة المحاولة";
 "cannot_add_destination" = "لا يمكن إضافة اتجاه";
 // Units
-"units_km" = "كم";
-"units_m" = "م";
-"units_mi" = "ميل";
-"units_yd" = "ياردة";
-"units_ft" = "قدم";
-"units_kmh" = "كم/س";
-"units_mph" = "ميل ساعة";
-"units_hour" = "س";
-"units_min" = "د";
-"units_sec" = "ثانية";
+"km" = "كم";
+"m" = "م";
+"mile" = "ميل";
+"yard" = "ياردة";
+"foot" = "قدم";
+"km_h" = "كم/س";
+"mile_per_hour" = "ميل ساعة";
+"int_hour" = "س";
+"int_min" = "د";
+"shared_string_sec" = "ثانية";
 // Map
 "map_inst_det_map_q" = "قم بتثبيت نظرة عامة مفصلة على الخريطة للحصول على مزيد من المعلومات حول مواقعك.";
 "map_remind" = "ذكرني لاحقا";
@@ -570,8 +570,6 @@
 "rendering_category_transport" = "وسائل المواصلات";
 "rendering_category_others" = "سمات أخرى للخريطة";
 // Rendering attributes
-"units_minutes_short" = "د";
-"units_seconds_short" = "ثانية";
 "cannot_access_calendar" = "لا يمكن الوصول إلى التقويم";
 "reminder_not_set_text" = "لم يتم تعيين التذكير لأنه لا يُسمح لك بالوصول إلى التقويم";
 //inapps
@@ -1248,8 +1246,8 @@
 "no_active_route" = "لا يوجد مسار نشط";
 "selected_roads" = "طرق مختارة";
 "shared_string_clear_all" = "مسح الكل";
-"units_min_short" = "م";
-"units_sec_short" = "ثانية";
+"shared_string_minute_short" = "م";
+"shared_string_second_short" = "ثانية";
 "select_route_intermediate" = "اختر نقطة وسيطة";
 "select_home" = "حدد نقطة المنزل";
 "select_work_point" = "حدد نقطة العمل";
@@ -1833,7 +1831,7 @@
 "plugin_settings_reset" = "إعادة ضبط الملحقات للافتراضي";
 "trip_rec_actions_descr" = "يمكنك العثور على جميع المسارات المسجلة في % @";
 "logging_accuracy" = "دقة التسجيل";
-"units_t" = "t";
+"metric_ton" = "t";
 "recalculate_wrong_dir" = "إعادة حساب المسار في حالة الانحراف";
 "repeat_after" = "إعادة بعد";
 "profile_alert_delete_msg" = "هل أنت متأكد أنك تريد حذف ملف تعريف \"٪ @\" بالكامل؟";
@@ -1958,7 +1956,6 @@
 "key_hint_recenter_map" = "إعادة توسيط الخريطة";
 "shared_z_a" = "Z - A";
 "shared_a_z" = "A - Z";
-"units_nm" = "ميل بحري";
 "select_application_profile" = "اختر وضع الملاحة";
 "change_application_profile" = "تغيير ملف تعريف التطبيق";
 "quick_action_showhide_mapillary_descr" = "النقر على زر الإجراء هذا يظهر أو يخفي طبقة مابيلاري على الخريطة.";
@@ -2133,8 +2130,6 @@
 "rendering_value_walkingRoutesScopeOSMC_description" = "تلوين وفق الانتماء للشبكة.";
 "rendering_value_walkingRoutesOSMCNodes_description" = "لون الطرق وفقا لنوع نقطة التشابك الخاصة بهم (دولية، إقليمية، محلية).";
 "walking_route_osmc_description" = "لون الطرق وفقا للونها المحلي الفردي (إذا كانت موجودة على OpenStreetMap) والنوع حسب (دولي، إقليمي، محلي).";
-"m" = "م";
-"foot" = "قدم";
 "shared_string_feet" = "قدم";
 "srtm_download_list_help_message" = "OsmAndيوفر بيانات الخطوط الكنتورية بالأمتار والقدم. ستحتاج إلى إعادة تنزيل الملف لتغيير التنسيق.";
 "srtm_download_single_help_message" = "الرجاء تحديد التنسيق المطلوب. ستحتاج إلى إعادة تنزيل الملف لتغيير التنسيق.";

@@ -516,9 +516,9 @@
     switch (sc)
     {
         case KILOMETERS_PER_HOUR:
-            return OALocalizedString(@"units_kmh");
+            return OALocalizedString(@"km_h");
         case MILES_PER_HOUR:
-            return OALocalizedString(@"units_mph");
+            return OALocalizedString(@"mile_per_hour");
         case METERS_PER_SECOND:
             return OALocalizedString(@"m_s");
         case MINUTES_PER_MILE:
@@ -4286,9 +4286,9 @@
     if (value == 0)
         res = OALocalizedString(@"rec_interval_minimum");
     else if (value > 90)
-        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"units_minutes_short")];
+        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"int_min")];
     else
-        res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"units_seconds_short")];
+        res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"shared_string_sec")];
     return res;
 }
 

@@ -433,7 +433,6 @@
 "si_min_km" = "Minutes per kilometer";
 "si_min_m" = "Minutes per mile";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "nmi";
 "nm_h" = "nmi/h";
 "min_mile" = "min/m";
 "min_km" = "min/km";
@@ -1241,8 +1240,6 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "meters";
 "shared_string_feet" = "feet";
-"foot" = "फूट";
-"m" = "मी";
 
 // Menu
 "menu" = "Menu";
@@ -1539,20 +1536,21 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"units_km" = "किमी";
-"units_mi" = "मैल";
-"units_yd" = "यार्ड";
-"units_ft" = "फूट";
-"units_nm" = "nmi";
-"units_kmh" = "किमी/तास";
-"units_mph" = "मैल/तास";
+"km" = "किमी";
+"m" = "मी";
+"mile" = "मैल";
+"yard" = "यार्ड";
+"foot" = "फूट";
+"nm" = "nmi";
+"km_h" = "किमी/तास";
+"mile_per_hour" = "मैल/तास";
 
-"units_hour" = "ता";
-"units_min" = "मि";
-"units_sec" = "sec";
-"units_sec_short" = "s";
+"int_hour" = "ता";
+"int_min" = "मि";
+"shared_string_sec" = "sec";
+"shared_string_second_short" = "s";
 
-"units_t" = "t";
+"metric_ton" = "t";
 
 // Help
 "help_first_steps" = "First steps";
@@ -1670,9 +1668,6 @@
 "rendering_category_others" = "Other map attributes";
 
 // Rendering attributes
-
-"units_minutes_short" = "मि";
-"units_seconds_short" = "sec";
 
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";

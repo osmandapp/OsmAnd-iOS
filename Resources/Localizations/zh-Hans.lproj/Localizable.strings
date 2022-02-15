@@ -252,16 +252,16 @@
 "cannot_add_marker_desc" = "";
 "cannot_add_destination" = "";
 // Units
-"units_km" = "千米";
-"units_m" = "米";
-"units_mi" = "英里";
-"units_yd" = "码";
-"units_ft" = "脚";
-"units_kmh" = "千米/时";
-"units_mph" = "英里";
-"units_hour" = "时";
-"units_min" = "分";
-"units_sec" = "秒";
+"km" = "千米";
+"m" = "米";
+"mile" = "英里";
+"yard" = "码";
+"foot" = "脚";
+"km_h" = "千米/时";
+"mile_per_hour" = "英里";
+"int_hour" = "时";
+"int_min" = "分";
+"shared_string_sec" = "秒";
 // Map
 "map_inst_det_map_q" = "";
 "map_remind" = "";
@@ -310,8 +310,6 @@
 "rendering_category_transport" = "公共交通";
 "rendering_category_others" = "其他地图属性";
 // Rendering attributes
-"units_minutes_short" = "分";
-"units_seconds_short" = "秒";
 "cannot_access_calendar" = "无法访问日历";
 "reminder_not_set_text" = "";
 //inapps
@@ -956,7 +954,7 @@
 "quick_action_start_stop_nav_descr" = "点击该按钮以开始或结束导航。";
 "create_items" = "创建项目";
 "tile_cache" = "区片缓存";
-"units_min_short" = "米";
+"shared_string_minute_short" = "米";
 "shared_string_category" = "类别";
 "osm_alert_message" = "消息";
 "key_hint_deselect" = "取消选中";
@@ -1305,7 +1303,7 @@
 "reset_to_default" = "重置为默认值";
 "num_stops" = "站点";
 "appearance_on_map" = "在地图上的外观";
-"units_t" = "吨";
+"metric_ton" = "吨";
 "position_icon_while_moving" = "移动时定位图标";
 "quick_action_map_source_title" = "地图来源";
 "nav_type_direct_to" = "点对点";
@@ -1475,7 +1473,6 @@
 "help_purchases" = "OsmAnd购买";
 "shared_string_enable" = "启用";
 "shared_string_import" = "导入";
-"units_nm" = "浬";
 "shared_string_disable" = "禁用";
 "plan_route_last_modified" = "上次修改";
 "sport" = "运动";
@@ -1526,7 +1523,6 @@
 "shared_string_all_languages" = "所有语言";
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "gpxup_private" = "私人";
-"m" = "米";
 "wiki_menu_download_descr" = "需要其他地图才能在地图上查看维基百科兴趣点。";
 "gpxup_identifiable" = "可辨认";
 "restart" = "重新启动";
@@ -1552,7 +1548,6 @@
 "configure_screen_descr" = "选择页面选项";
 "route_between_points_warning_desc" = "接下来，用你的一个导航配置文件将你的轨迹拍到最近的允许道路上，以使用这个选项。";
 "some_articles_may_not_available_in_lang" = "某些Wikipedia条目可能无法以您的语言提供。";
-"foot" = "脚";
 "threshold_distance" = "起始距离";
 "last_used" = "上次使用";
 "navigate_point_northing" = "北距";

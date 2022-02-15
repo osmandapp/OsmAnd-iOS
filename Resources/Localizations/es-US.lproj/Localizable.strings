@@ -406,7 +406,6 @@
 "si_min_km" = "Minutos por kilómetro";
 "si_min_m" = "Minutos por milla";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "nmi";
 "nm_h" = "nmi/h";
 "min_mile" = "min/m";
 "min_km" = "min/km";
@@ -1181,8 +1180,6 @@
 "srtm_download_list_help_message" = "OsmAnd proporciona datos de curvas de nivel en metros y pies. Deberás volver a descargar el archivo para cambiar el formato.";
 "shared_string_meters" = "metros";
 "shared_string_feet" = "pies";
-"foot" = "ft";
-"m" = "m";
 
 // Menu
 "menu" = "Menú";
@@ -1476,18 +1473,19 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"units_km" = "km";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_nm" = "nmi";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "seg";
-"units_sec_short" = "s";
-"units_t" = "ton";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"nm" = "nmi";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "seg";
+"shared_string_second_short" = "s";
+"metric_ton" = "ton";
 
 // Help
 "help_first_steps" = "First steps";
@@ -1606,8 +1604,6 @@
 
 // Rendering attributes
 
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
@@ -2331,7 +2327,6 @@
 "shared_string_hide_all" = "Ocultar todo";
 "connect_rp" = "Conectar puntos de ruta";
 "points_delete_multiple" = "¿Borrar %d punto(s)?";
-"units_m" = "m";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "grey_color_undefined" = "Los tramos sin datos son grises.";
 "white_color_undefined" = "Los tramos sin datos son blancos.";

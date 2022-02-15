@@ -81,9 +81,9 @@
     NSString *mapOrientationValue = nil;
     NSInteger mapOrientation = [_settings.switchMapDirectionToCompass get:self.appMode];
     if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
-        mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"units_kmh")];
+        mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"km_h")];
     else
-        mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"units_mph")];
+        mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"mile_per_hour")];
 
     NSMutableArray *dataArr = [NSMutableArray arrayWithObjects:@{
                                     @"type" : [OASettingsTableViewCell getCellIdentifier],

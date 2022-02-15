@@ -406,7 +406,6 @@
 "si_min_km" = "Minutoj en kilometro";
 "si_min_m" = "Minutoj en mejlo";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "nmi";
 "nm_h" = "nmi/h";
 "min_mile" = "min/m";
 "min_km" = "min/km";
@@ -1181,8 +1180,6 @@
 "srtm_download_list_help_message" = "OsmAnd liveras nivelkurbojn en metroj kaj en futoj. Ve devos reelŝuti la dosieron por ŝanĝi la formon.";
 "shared_string_meters" = "metroj";
 "shared_string_feet" = "futoj";
-"foot" = "ft";
-"m" = "m";
 
 // Menu
 "menu" = "Menuo";
@@ -1476,18 +1473,19 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"units_km" = "km";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_nm" = "nmi";
-"units_kmh" = "km/h";
-"units_mph" = "mi/h";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "s";
-"units_sec_short" = "s";
-"units_t" = "Mg";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"nm" = "nmi";
+"km_h" = "km/h";
+"mile_per_hour" = "mi/h";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "s";
+"shared_string_second_short" = "s";
+"metric_ton" = "Mg";
 
 // Help
 "help_first_steps" = "First steps";
@@ -1606,8 +1604,6 @@
 
 // Rendering attributes
 
-"units_minutes_short" = "min";
-"units_seconds_short" = "s";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 

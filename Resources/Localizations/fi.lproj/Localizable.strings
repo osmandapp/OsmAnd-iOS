@@ -398,7 +398,6 @@
 "si_min_km" = "Minuutteja kilometrille";
 "si_min_m" = "Minuutteja mailille";
 "si_nm_h" = "Meripeninkulmaa tunnissa (solmua)";
-"nm" = "mpk";
 "nm_h" = "mpk/t";
 "min_mile" = "min/m";
 "min_km" = "min/km";
@@ -1287,19 +1286,19 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_nm" = "mpk";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "sek";
-"units_sec_short" = "s";
-"units_t" = "tn";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"nm" = "mpk";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "sek";
+"shared_string_second_short" = "s";
+"metric_ton" = "tn";
 
 // Help
 "help_first_steps" = "Ensimmäiset askeleet";
@@ -1418,8 +1417,6 @@
 
 // Rendering attributes
 
-"units_minutes_short" = "min";
-"units_seconds_short" = "sek";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
@@ -2143,7 +2140,6 @@
 "product_title_mapillary" = "Mapillary";
 "map_widget_parking" = "Pysäköintipaikka";
 "population_num" = "Väkiluku: %@";
-"foot" = "ft";
 "srtm_download_single_help_message" = "Valitse tarvittava muoto. Sinun on ladattava tiedosto uudelleen muodon muuttamiseksi.";
 "welmode_download_maps" = "Lataa karttoja";
 "select_profile" = "Valitse profiili";

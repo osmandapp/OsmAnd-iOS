@@ -117,8 +117,8 @@
 "arrival_distance_factor_normally" = "Κανονικά";
 "quick_action_no_overlay" = "Χωρίς επικάλυψη";
 "osm_note_upload_anonymously" = "Ανώνυμο ανέβασμα";
-"units_m" = "μ";
-"units_kmh" = "χλμ/ω";
+"m" = "μ";
+"km_h" = "χλμ/ω";
 "shared_string_later" = "Αργότερα";
 "route_roundabout_short" = "Πάρτε την %d έξοδο και πηγαίνετε";
 "route_kl" = "Μείνετε αριστερά και προχωρήστε";
@@ -169,7 +169,7 @@
 "shared_string_cancel" = "Άκυρο";
 "apply_filters" = "Εφαρμογή φίλτρων";
 "track_new_segment" = "Έναρξη νέου τμήματος";
-"units_mi" = "μλ";
+"mile" = "μλ";
 "res_updates" = "Ενημερώσεις";
 "location_not_found" = "Η τοποθεσία δεν βρέθηκε";
 "poi_clear" = "Καθαρισμός";
@@ -215,7 +215,7 @@
 "auto_follow_location_enabled" = "Αυτο-κεντράρισμα χάρτη σε χρήση.";
 "years_5" = "Έτη";
 "shared_string_select_on_map" = "Επιλέξτε στον χάρτη";
-"units_km" = "χλμ";
+"km" = "χλμ";
 "gpx_waypoint" = "Σημείο διαδρομής";
 "show_pedestrian_warnings" = "Διαβάσεις πεζών";
 "nearby_search" = "Αναζήτηση στη γύρω περιοχή";
@@ -279,7 +279,6 @@
 "change_map_underlay" = "Αλλαγή υποστρώματος χάρτη";
 "today" = "Σήμερα";
 "gpx_average_speed" = "Μέση ταχύτητα";
-"units_minutes_short" = "λεπτά";
 "quick_action_add_overlay" = "Προσθήκη επιστρώματος";
 "shared_string_time_of_day" = "Ώρα της ημέρας";
 "mapillary_get_title" = "Βελτίωση κάλυψης φωτογραφίας με Mapillary";
@@ -317,7 +316,7 @@
 "gpx_slope" = "Κλίση";
 "unlock_all_features" = "Ξεκλείδωμα όλων των χαρακτηριστικών του OsmAnd";
 "add_first_inermediate" = "Πρόσθεσε ενδιάμεση στάση";
-"units_min_short" = "μ";
+"shared_string_minute_short" = "μ";
 "show_tunnels" = "Σήραγγες";
 "not_selected" = "Μη επιλεγμένο";
 "shared_string_never" = "Ποτέ";
@@ -334,7 +333,7 @@
 "sett_show" = "Εμφάνιση";
 "quick_action_no_underlay" = "Χωρίς υπόστρωμα";
 "pink" = "Ροζ";
-"units_min" = "λεπτά";
+"int_min" = "λεπτά";
 "purple" = "Μοβ";
 "shared_string_ellipsis" = "…";
 "quick_action_tags" = "Ετικέτες";
@@ -387,9 +386,9 @@
 "osmand_live_weekly" = "Εβδομαδιαία";
 "download_map" = "Λήψη χάρτη";
 "osm_website" = "Ιστότοπος";
-"units_ft" = "πδ";
+"foot" = "πδ";
 "days_2_4" = "Ημέρες";
-"units_hour" = "ω";
+"int_hour" = "ω";
 "shared_string_upload" = "Ανέβασμα";
 "col_blue" = "Μπλε";
 "driving_region_us" = "ΗΠΑ";
@@ -565,7 +564,7 @@
 "poi_opening_hours" = "Ώρες λειτουργίας";
 "unlimited_downloads" = "Απεριόριστες λήψεις";
 "osm_edits_advanced" = "Προχωρημένο";
-"units_mph" = "μαω";
+"mile_per_hour" = "μαω";
 "gpx_avg_altitude" = "Μέσο υψόμετρο";
 "simulate_navigation" = "Προσομοίωση πλοήγησης";
 "transport_stop" = "Σταμάτημα";
@@ -580,7 +579,7 @@
 "gpx_finish" = "Τερματισμός";
 "destination_point" = "Προορισμός %@";
 "gpx_start" = "Έναρξη";
-"units_yd" = "γδ";
+"yard" = "γδ";
 "route_kr" = "Μείνετε δεξιά και προχωρήστε";
 "yesterday" = "Χθές";
 "enter_name" = "Εισαγωγή ονόματος";
@@ -1139,7 +1138,7 @@
 "shared_string_max" = "Μέγιστο";
 "personal_category_name" = "Προσωπικό";
 "res_zoom_levels" = "Επίπεδα εστίασης";
-"units_t" = "τόνος";
+"metric_ton" = "τόνος";
 "one" = "Ένα";
 "announce_gpx_waypoints" = "Σημεία διαδρομής ίχνους";
 "quick_action_mapillary_show" = "Εμφάνιση Mapillary";
@@ -1164,7 +1163,6 @@
 "none_point_error" = "Παρακαλώ προσθέστε τουλάχιστον ένα σημείο.";
 "visible" = "Ορατό";
 "rearrange_categories" = "Αναδιάταξη κατηγοριών";
-"units_nm" = "ναυτικό μίλι";
 "copied_to_clipboard" = "Αντιγράφτηκε στο πρόχειρο";
 "add_custom_category" = "Προσθήκη προσαρμοσμένης κατηγορίας";
 "tracks" = "Ίχνη";
@@ -1217,7 +1215,6 @@
 "shared_string_all_languages" = "Όλες οι γλώσσες";
 "default" = "Προεπιλογή";
 "navigate_point_zone" = "Ζώνη";
-"m" = "μ";
 "no_waypoints_found" = "Δεν βρέθηκαν σημεία διαδρομής";
 "dialogs_and_notifications" = "Ερωτήματα και ειδοποιήσεις";
 "gpxup_identifiable" = "Αναγνωρίσιμες";
@@ -1232,7 +1229,6 @@
 "suggested_maps_descr" = "Αυτοί οι χάρτες απαιτούνται για το πρόσθετο.";
 "added_profiles_descr" = "Οι κατατομές (προφίλ) που προστέθηκαν από το πρόσθετο";
 "product_desc_ext_mapillary" = "Διαδικτυακές φωτογραφίες δρόμου για όλους. Ανακαλύψτε θέσεις, συνεργαστείτε, αποτυπώστε τον κόσμο.";
-"foot" = "πδ";
 "route_between_points_warning_desc" = "Για να χρησιμοποιήσετε αυτήν την επιλογή το OsmAnd χρειάζεται να προσκολλήσει το ίχνος σας στους δρόμους του χάρτη.
 \n
 \nΣτο επόμενο βήμα θα χρειαστείτε να επιλέξετε κατατομή (προφίλ) πλοήγησης για να εντοπίσετε τους επιτρεπόμενους δρόμους και την απόσταση κατωφλίου για να προσεγγίσετε το ίχνος σας με τους δρόμους.";

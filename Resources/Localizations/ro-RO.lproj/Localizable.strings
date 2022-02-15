@@ -20,7 +20,6 @@
 "years_5" = "Ani";
 "price_free" = "Gratuit";
 "months_3" = "Trei luni";
-"units_minutes_short" = "min";
 "traffic_warning_railways" = "Trecere de cale ferată";
 "speak_title" = "Anunță…";
 "shared_string_reload" = "Reâncarcă";
@@ -86,7 +85,7 @@
 "gpx_finish" = "Sfârşit";
 "arrival_distance_factor_early" = "Devreme";
 "speed_limit_exceed" = "Toleranță limită de viteză";
-"units_m" = "m";
+"m" = "m";
 "track_new_segment" = "Începeți un segment nou";
 "auto_zoom_close" = "Prea apropiat";
 "help_versions" = "Versiuni";
@@ -113,7 +112,7 @@
 "red" = "Roșu";
 "quick_action_tags" = "Tag-uri";
 "mapillary" = "Mapillary";
-"units_kmh" = "km/h";
+"km_h" = "km/h";
 "map_markers_other" = "Alți marcatori";
 "search_radius_proximity" = "În imediata apropiere a";
 "map_widget_max_speed" = "Limita de viteză";
@@ -138,7 +137,7 @@
 "route_tsll" = "Virați ușor la stânga și continuați";
 "cancel_route" = "Renunță la rută";
 "select_street" = "Selectează strada";
-"units_min" = "min";
+"int_min" = "min";
 "longitude" = "Longitudine";
 "shared_string_is_open_24_7" = "Deschis 24/7";
 "speak_street_names" = "numele Străzilor (TTS)";
@@ -235,7 +234,7 @@
 "osm_live_subscription" = "Abonament OsmAnd Live";
 "col_purple" = "Violet";
 "shared_string_distance" = "Distanță";
-"units_mi" = "mi";
+"mile" = "mi";
 "local_names" = "Nume locale";
 "osm_notes_online_layer" = "Bug hartă OSM";
 "work_pt" = "Serviciu";
@@ -274,18 +273,18 @@
 "speak_pedestrian" = "Treceri pietonale";
 "actions" = "Acțiuni";
 "map_settings_online" = "Hărți online";
-"units_mph" = "mph";
+"mile_per_hour" = "mph";
 "osm_note" = "Notă OSM";
 "layer_map_appearance" = "Configurare ecran";
 "menu_my_places" = "Locurile mele";
-"units_km" = "km";
+"km" = "km";
 "routing_settings" = "Navigare (funcție de profil)";
 "animate_routing_route_not_calculated" = "Vă rog mai întâi calculați ruta";
 "search_poi_category_hint" = "Caută pentru toate punctele de interes";
 "filter_poi_hint" = "Filtrează după nume";
 "shared_string_edit" = "Editează";
 "city_type_village" = "Sat";
-"units_hour" = "h";
+"int_hour" = "h";
 "auto_zoom_map" = "Auto zoom hartă";
 "sett_settings" = "Setări";
 "route_tl" = "Virați la stânga și continuați";
@@ -375,7 +374,7 @@
 "gpx_descent" = "Coborâre";
 "select_map_marker" = "Selectați marcajul pe hartă";
 "online_map" = "Hartă online";
-"units_ft" = "picior";
+"foot" = "picior";
 "shared_string_save" = "Salvați";
 "col_green" = "Verde";
 "shared_string_category" = "Categorie";
@@ -422,7 +421,7 @@
 "looking_up_address" = "Adresa căutată";
 "shared_string_clear_all" = "Curăță tot";
 "osm_editing_offline" = "Editare offline";
-"units_yd" = "yd";
+"yard" = "yd";
 "map_settings_night" = "Noaptea";
 "region_others" = "Alte hărți";
 "poi_filter_closest_poi" = "Cel mai apropiat POI";
@@ -924,7 +923,7 @@
 "profile_prefs_reset_successful" = "Toate setările de profil sunt restabilite la valorile implicite";
 "tones" = "tone";
 "shared_string_nothing_selected" = "Nimic selectat";
-"units_t" = "t";
+"metric_ton" = "t";
 "personal_category_name" = "Personal";
 "position_icon_at_rest" = "Poziționare icoană în timpul repausului";
 "coordinates" = "Coordonate";
@@ -942,7 +941,6 @@
 "track_save_descr" = "Salvează traseul curent ca fișier GPX acum.";
 "gpx_curr_new_track" = "Pista curentă";
 "shared_string_gpx_track" = "Track(pistă)";
-"units_nm" = "nmi ( nautic miles)";
 "plan_route_open_existing_track" = "Deschideți o rută existentă";
 "displayed_trips" = "Trasee afișate";
 "searching_gps" = "Căutare GPS";
@@ -1758,7 +1756,6 @@
 "product_title_nautical" = "Harta nautică";
 "reminder_not_set_text" = "Memento-ul nu a fost setat deoarece nu vi se permite accesul la Calendar";
 "cannot_access_calendar" = "Nu se poate accesa Calendarul";
-"units_seconds_short" = "secundă";
 
 // Help
 "help_quiz" = "Chestionar";
@@ -1810,8 +1807,8 @@
 
 // Help
 "help_first_steps" = "Primii pași";
-"units_sec_short" = "s";
-"units_sec" = "secundă";
+"shared_string_second_short" = "s";
+"shared_string_sec" = "secundă";
 "cannot_add_destination" = "Nu se poate adăuga Direcția";
 "cannot_add_marker_desc" = "Vă rugăm să eliminați cel puțin o direcție și să încercați din nou";
 "cannot_add_marker" = "Nu se poate adăuga Parcare";
@@ -2108,7 +2105,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Colorează rutele în funcție de tipul de rețea de noduri (internațională, regională, locală).";
 "walking_route_osmc_description" = "Colorați rutele în funcție de culoarea locală individuală (dacă este prezentă pe OpenStreetMap) și de tipul lor (internațional, regional, local).";
 "travel_routes" = "Rute de călătorie";
-"foot" = "picior";
 "shared_string_feet" = "picioare";
 "shared_string_meters" = "metri";
 "srtm_download_list_help_message" = "OsmAnd oferă date despre curbele de nivel în metri și picioare. Va trebui să descărcați din nou fișierul pentru a schimba formatul.";
@@ -2169,8 +2165,7 @@
 "parked_at" = "Parcat la";
 "industrial" = "Industrială";
 "education" = "Educație";
-"m" = "m";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "route_points" = "Puncte de traseu";
 "connect_rp" = "Conectarea punctelor de rută";
 "lang_al" = "Albaneză";

@@ -406,7 +406,6 @@
 "si_min_km" = "Minuta po kilometru";
 "si_min_m" = "Minuta po milji";
 "si_nm_h" = "Nautičke milje na sat (čvorovi)";
-"nm" = "nmi";
 "nm_h" = "nmi/h";
 "min_mile" = "min/m";
 "min_km" = "min/km";
@@ -1181,8 +1180,6 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "meters";
 "shared_string_feet" = "feet";
-"foot" = "stopa";
-"m" = "m";
 
 // Menu
 "menu" = "izbornik";
@@ -1476,18 +1473,19 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"units_km" = "km";
-"units_mi" = "mi";
-"units_yd" = "yd";
-"units_ft" = "ft";
-"units_nm" = "nmi";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "sec";
-"units_sec_short" = "s";
-"units_t" = "t";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "stopa";
+"nm" = "nmi";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "sec";
+"shared_string_second_short" = "s";
+"metric_ton" = "t";
 
 // Help
 "help_first_steps" = "First steps";
@@ -1606,8 +1604,6 @@
 
 // Rendering attributes
 
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
@@ -2329,9 +2325,8 @@
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "connect_rp" = "Poveži topke rute";
-"units_m" = "m";
 "shared_string_hide_all" = "Sakrij sve";
 "points_delete_multiple" = "Izbrisati %d točku(e)?";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "grey_color_undefined" = "Dijelovi bez podataka su sivi.";
 "white_color_undefined" = "Dijelovi bez podataka su bijeli.";

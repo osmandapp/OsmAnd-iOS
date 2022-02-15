@@ -875,18 +875,18 @@
 "cannot_add_marker_desc" = "少なくとも1つ以上案内すべき場所を削除して、再試行してみてください";
 "cannot_add_destination" = "案内を追加できませんでした";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_yd" = "ヤード";
-"units_ft" = "ft";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
-"units_hour" = "時間";
-"units_min" = "分";
-"units_sec" = "秒";
-"units_min_short" = "m";
-"units_sec_short" = "s";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "ヤード";
+"foot" = "ft";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
+"int_hour" = "時間";
+"int_min" = "分";
+"shared_string_sec" = "秒";
+"shared_string_minute_short" = "m";
+"shared_string_second_short" = "s";
 // Help
 "help_first_steps" = "ファーストステップ";
 "help_first_use" = "使用方法の簡易説明";
@@ -979,8 +979,6 @@
 "rendering_category_transport" = "交通機関の追加描写";
 "rendering_category_others" = "その他のマップ属性";
 // Rendering attributes
-"units_minutes_short" = "分";
-"units_seconds_short" = "秒";
 "cannot_access_calendar" = "カレンダーにアクセスできません";
 "reminder_not_set_text" = "カレンダーへのアクセスが許可されていないため、リマインダーは設定できませんでした";
 //inapps
@@ -1735,7 +1733,7 @@
 "menu" = "メニュー";
 "after_tapping_done" = "『完了』をタップすると、削除したプロファイルは完全に失われます。";
 "all_application_profiles" = "すべてのアプリケーションプロファイル";
-"units_t" = "トン";
+"metric_ton" = "トン";
 "email_example_hint" = "user@example.com";
 "send_anonymous_data_desc" = "OsmAndのマップダウンロード統計情報を送信します。私たちは位置情報や個人情報の収集はしていません。";
 "default_profile_descr" = "アプリケーションの起動時に使用するプロファイルを選択します。";
@@ -2040,7 +2038,6 @@
 "res_standard" = "標準マップ";
 "vk" = "VKontakte(SNS)";
 "help_what_is_new" = "新着情報";
-"units_nm" = "海里";
 "unsupported_action_descr" = "このクイックアクションは現在サポートされていません。アプリ新しいバージョンで対応予定です。";
 "unsupported_action_title" = "サポートされていないアクション(%@)";
 "unsupported_action" = "サポートされていないアクション";
@@ -2101,7 +2098,6 @@
 "suggested_maps_descr" = "これらのマップはプラグインを使用する場合に必要です";
 "product_desc_ext_mapillary" = "情報共有のための路上写真です(要オンライン)。新たな場所の発見に、協力しあい、この世界を写真で保存しましょう。";
 "welmode_download_maps" = "マップダウンロード";
-"foot" = "ft";
 "threshold_distance" = "限界距離";
 "no_waypoints_found" = "経由地点が見つかりませんでした";
 "restart" = "再起動";
@@ -2114,5 +2110,4 @@
 "dialogs_and_notifications" = "ダイアログと通知";
 "gpxup_identifiable" = "識別可能";
 "default" = "標準";
-"m" = "m";
 "product_title_mapillary" = "Mapillary";

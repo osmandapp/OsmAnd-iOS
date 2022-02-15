@@ -135,11 +135,13 @@
 "other_options" = "Weitere Optionen";
 "more" = "Mehr";
 // Units
-"units_km" = "km";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_kmh" = "km/h";
-"units_mph" = "mph";
+"km" = "km";
+"m" = "m";
+"mile" = "mi";
+"yard" = "yd";
+"foot" = "ft";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
 "map_remind" = "Später erinnern";
 "map_no_address" = "Adresse ist bisher nicht bekannt";
 // Import
@@ -173,8 +175,6 @@
 "region_south_america" = "Südamerika";
 // Help
 "help_quiz" = "Rätsel";
-"units_minutes_short" = "min";
-"units_seconds_short" = "Sek";
 "import_export" = "Import/Export";
 "gpx_start" = "Start";
 "track_recording_name" = "Momentane Track-Aufzeichnung";
@@ -219,8 +219,6 @@
 "time_limited" = "Zeitlich begrenzt";
 "pickup_car_at" = "Das Auto abholen um";
 "add_notification_calendar" = "Benachrichtigung zum Kalender hinzufügen";
-"units_yd" = "yd";
-"units_ft" = "ft";
 // Map
 "map_inst_det_map_q" = "Installiere detaillierte Übersichtskarte um mehr Informationen zu deinem Ort zu bekommen.";
 "import_choose_type" = "Bitte auswählen was importieren";
@@ -241,9 +239,9 @@
 "parking_time_limited" = "Parkzeit begrenzt auf";
 "time_left" = "verbleibend";
 "time_overdue" = "überfällig";
-"units_hour" = "h";
-"units_min" = "min";
-"units_sec" = "Sek";
+"int_hour" = "h";
+"int_min" = "min";
+"shared_string_sec" = "Sek";
 "cannot_access_calendar" = "Kalender nicht aufrufbar";
 "reminder_not_set_text" = "Die Erinnerung wurde nicht gesetzt, da kein Zugangsrecht zum Kalender besteht";
 "product_title_parking" = "Park-Position";
@@ -1255,7 +1253,7 @@
 "no_active_route" = "Keine aktive Route";
 "selected_roads" = "Ausgewählte Straßen";
 "shared_string_clear_all" = "Alle löschen";
-"units_sec_short" = "s";
+"shared_string_second_short" = "s";
 "select_route_intermediate" = "Zwischenpunkt auswählen";
 "select_home" = "Heimatort auswählen";
 "select_work_point" = "Arbeitsort auswählen";
@@ -1835,7 +1833,7 @@
 "profile_alert_delete_title" = "Profil löschen";
 "shared_string_required" = "Benötigt";
 "email_example_hint" = "benutzer@beispiel.com";
-"units_t" = "t";
+"metric_ton" = "t";
 "osm_editing_access_descr" = "Sie können alle Ihre lokalen Bearbeitungen und Notizen in %@ anzeigen. Bereits hochgeladene Punkte werden nicht in OsmAnd aufgelistet.";
 "osm_editing_settings_descr" = "Die Einstellungen dieses Plugins sind global und gelten für alle Profile.";
 // Menu
@@ -1964,7 +1962,6 @@
 "key_hint_recenter_map" = "Karte wieder zentrieren";
 "shared_z_a" = "Z - A";
 "shared_a_z" = "A - Z";
-"units_nm" = "sm";
 "select_application_profile" = "App-Profil auswählen";
 "change_application_profile" = "App-Profil ändern";
 "quick_action_showhide_mapillary_descr" = "Eine Umschaltfläche zum Ein- oder Ausblenden des Mapillary-Layers auf der Karte.";
@@ -2144,7 +2141,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Einfärbung von Routen nach dem Typ ihres Knotennetzes (international, regional, lokal).";
 "walking_route_osmc_description" = "Einfärbung von Routen nach ihrer individuellen lokalen Farbe (falls in OpenStreetMap vorhanden) und ihrem Typ (international, regional, lokal).";
 "travel_routes" = "Reiserouten";
-"foot" = "ft";
 "shared_string_feet" = "Fuß";
 "srtm_download_list_help_message" = "OsmAnd liefert Höhenlinien-Daten in Metern und Fuß. Sie müssen die Datei erneut herunterladen, um das Format zu ändern.";
 "download_map_dialog" = "Dialog zum Herunterladen der Karte";
@@ -2157,7 +2153,6 @@
 "navigate_point_zone" = "Zone";
 "navigate_point_northing" = "Nord-/Hochwert";
 "regions" = "Regionen";
-"m" = "m";
 "duplicate_track" = "Track duplizieren";
 "shared_string_width" = "Breite";
 "navigate_point_format_UTM" = "UTM";
@@ -2190,7 +2185,7 @@
 "edit_track" = "Track editieren";
 "activity" = "Aktivität";
 "nautical" = "Nautisch";
-"units_min_short" = "m";
+"shared_string_minute_short" = "m";
 "delete_group_confirm_short" = "Gruppe löschen?";
 "delete_group_confirm" = "Sind Sie sicher, dass Sie die Gruppe \"%@\" löschen wollen?";
 "delete_waypoints" = "Wegpunkte löschen";

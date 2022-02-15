@@ -25,6 +25,7 @@
 #import "OARouteExporter.h"
 #import "OATransportRoutingHelper.h"
 #import "OAGpxRouteApproximation.h"
+#import "OACurrentStreetName.h"
 
 #import <Reachability.h>
 #import <OsmAndCore/Utilities.h>
@@ -577,6 +578,11 @@ static BOOL _isDeviatedFromRoute = false;
     return [_route getCurrentSegmentResult];
 }
 
+- (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult
+{
+    return [_route getNextStreetSegmentResult];
+}
+
 
 /**
  * Wrong movement direction is considered when between
@@ -1105,50 +1111,12 @@ static BOOL _isDeviatedFromRoute = false;
     return [self setCurrentLocation:currentLocation returnUpdatedLocation:returnUpdatedLocation previousRoute:_route targetPointsChanged:false];
 }
 
-- (NSString *) getCurrentName:(std::vector<std::shared_ptr<TurnType>>&)next
+- (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)next
 {
-    @synchronized (self)
-    {
-        OANextDirectionInfo *n = [self getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:true];
-        CLLocation *l = _lastFixedLocation;
-        float speed = 0;
-        if (l && l.speed >=0)
-            speed = l.speed;
-        
-        if (n.distanceTo > 0  && n.directionInfo && !n.directionInfo.turnType->isSkipToSpeak() &&
-            [_voiceRouter isDistanceLess:speed dist:n.distanceTo etalon:_voiceRouter.PREPARE_DISTANCE * 0.75f])
-        {
-            NSString *nm = n.directionInfo.streetName;
-            NSString *rf = n.directionInfo.ref;
-            NSString *dn = n.directionInfo.destinationName;
-            if (!next.empty())
-                next[0] = n.directionInfo.turnType;
-            
-            return [self.class formatStreetName:nm ref:rf destination:dn towards:@"»"];
-        }
-        auto rs = [_route getCurrentSegmentResult];
-        if (rs)
-        {
-            NSString *name = [self getRouteSegmentStreetName:rs];
-            if (name.length > 0)
-                return name;
-        }
-        rs = [_route getNextStreetSegmentResult];
-        if (rs)
-        {
-            NSString *name = [self getRouteSegmentStreetName:rs];
-            if (name.length > 0)
-            {
-                if (!next.empty())
-                    next[0] = TurnType::ptrValueOf(TurnType::C, false);
-
-                return name;
-            }
-        }
-        return nil;
+    @synchronized (self) {
+        return [OACurrentStreetName getCurrentName:next];
     }
 }
-
 
 - (NSString *) getRouteSegmentStreetName:(std::shared_ptr<RouteSegmentResult>)rs
 {

@@ -8,6 +8,7 @@
 
 #import "OATopTextView.h"
 #import "OsmAndApp.h"
+#import "OACurrentStreetName.h"
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OALocationServices.h"
@@ -27,12 +28,19 @@
 #import "OAPointDescription.h"
 #import "OALocationPointWrapper.h"
 #import "OAOsmAndFormatter.h"
+#import "OARouteCalculationResult.h"
+#import "OARoutingHelperUtils.h"
+
 #include <binaryRead.h>
+
 @interface OATopTextView ()
 
 @property (weak, nonatomic) IBOutlet UIView *turnView;
 @property (weak, nonatomic) IBOutlet UILabel *addressText;
 @property (weak, nonatomic) IBOutlet UILabel *addressTextShadow;
+@property (weak, nonatomic) IBOutlet UIView *exitRefTextContainer;
+@property (weak, nonatomic) IBOutlet UILabel *exitRefText;
+@property (weak, nonatomic) IBOutlet UIImageView *shieldIcon;
 
 @property (weak, nonatomic) IBOutlet UIView *waypointInfoBar;
 @property (weak, nonatomic) IBOutlet UIImageView *waypointImage;
@@ -58,6 +66,8 @@
     OATurnDrawable *_turnDrawable;
     UIImageView *_imageView;
     BOOL _showMarker;
+    
+    OANextDirectionInfo *_calc1;
     
     UIFont *_textFont;
     UIFont *_textWaypointFont;
@@ -125,6 +135,7 @@
     _waypointHelper = [OAWaypointHelper sharedInstance];
     _trackingUtilities = [OAMapViewTrackingUtilities instance];
     _currentPositionHelper = [OACurrentPositionHelper instance];
+    _calc1 = [[OANextDirectionInfo alloc] init];
 
     CGFloat radius = 3.0;
     self.backgroundColor = [UIColor whiteColor];
@@ -177,7 +188,17 @@
 {
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
+    BOOL showShield = _shieldIcon.image && !_shieldIcon.hidden;
+    CGRect shieldFrame = _shieldIcon.frame;
+    if (showShield)
+    {
+        shieldFrame.size = _shieldIcon.image.size;
+        _shieldIcon.frame = shieldFrame;
+    }
+    
     CGFloat margin = _turnView.subviews.count > 0 ? 4 + _turnView.bounds.size.width + 2 : 2;
+    margin += _exitRefTextContainer.hidden ? 0 : _exitRefTextContainer.frame.size.width + 2;
+    margin += showShield && _shieldIcon.image ? shieldFrame.size.width + 2 : 0;
     CGFloat maxTextWidth = w - margin * 2;
     CGSize size = [OAUtilities calculateTextBounds:_addressText.text width:maxTextWidth height:h font:_textFont];
     if (size.width > maxTextWidth)
@@ -187,6 +208,12 @@
     _addressText.frame = CGRectMake(w / 2 - size.width / 2, 0, w - x - 4, h);
     _addressTextShadow.frame = _addressText.frame;
     _turnView.center = CGPointMake(_addressText.frame.origin.x - 2 - _turnView.bounds.size.width / 2, h / 2);
+    
+    if (showShield)
+        _shieldIcon.center = CGPointMake(_turnView.frame.origin.x - 2 - _shieldIcon.bounds.size.width / 2, h / 2);
+    
+    if (!_exitRefTextContainer.hidden)
+        _exitRefTextContainer.center = CGPointMake(_shieldIcon.frame.origin.x - 2 - _exitRefTextContainer.bounds.size.width / 2, h / 2);
     
     _waypointText.frame = CGRectMake(96, 0, w - 176, h);
     _waypointTextShadow.frame = _waypointText.frame;
@@ -417,28 +444,17 @@
 
 - (BOOL) updateInfo
 {
-    NSString *text = nil;
-    std::vector<std::shared_ptr<TurnType>> type(1);
-    BOOL showNextTurn = false;
-    BOOL showMarker = _showMarker;
+    OACurrentStreetName *streetName = nil;
+    BOOL showClosestWaypointFirstInAddress = YES;
     if ([_routingHelper isRouteCalculated] && ![OARoutingHelper isDeviatedFromRoute])
     {
         if ([_routingHelper isFollowingMode])
         {
             if ([_settings.showStreetName get])
             {
-                text = [_routingHelper getCurrentName:type];
-                if (!text)
-                {
-                    text = @"";
-                }
-                else
-                {
-                    if (type[0] == nullptr)
-                        _showMarker = YES;
-                    else
-                        _turnDrawable.clr = UIColorFromRGB(color_nav_arrow);
-                }
+                OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
+                streetName = [_routingHelper getCurrentName:nextDirInfo];
+                _turnDrawable.clr = UIColorFromRGB(color_nav_arrow);
             }
         }
         else
@@ -446,27 +462,17 @@
             int di = [OARouteInfoView getDirectionInfo];
             if (di >= 0 && [OARouteInfoView isVisible] && di < [_routingHelper getRouteDirections].count)
             {
-                showNextTurn = YES;
-                OARouteDirectionInfo *next = [_routingHelper getRouteDirections][di];
-                type[0] = next.turnType;
+                showClosestWaypointFirstInAddress = NO;
+                streetName = [_routingHelper getCurrentName:[_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES]];
                 _turnDrawable.clr = UIColorFromRGB(color_nav_arrow_distant);
-                text = [OARoutingHelper formatStreetName:next.streetName ref:next.ref destination:next.destinationName towards:@"»"];
-                //                        if (next.distance > 0) {
-                //                            text += " " + OsmAndFormatter.getFormattedDistance(next.distance, map.getMyApplication());
-                //                        }
-                if (!text)
-                    text = @"";
-            }
-            else
-            {
-                text = nil;
             }
         }
     }
     else if ([_trackingUtilities isMapLinkedToLocation] && [_settings.showStreetName get])
     {
+        streetName = [[OACurrentStreetName alloc] init];
         CLLocation *lastKnownLocation = _locationProvider.lastKnownLocation;
-        std::shared_ptr<RouteDataObject> road = nullptr;
+        std::shared_ptr<RouteDataObject> road;
         if (lastKnownLocation)
         {
             road = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
@@ -479,26 +485,19 @@
                 string rRefName = road->getRef(lang, transliterate, road->bearingVsRouteDirection(lastKnownLocation.course));
                 string rDestinationName = road->getDestinationName(lang, transliterate, true);
                 
-                NSString *streetName = [NSString stringWithUTF8String:rStreetName.c_str()];
+                NSString *strtName = [NSString stringWithUTF8String:rStreetName.c_str()];
                 NSString *refName = [NSString stringWithUTF8String:rRefName.c_str()];
                 NSString *destinationName = [NSString stringWithUTF8String:rDestinationName.c_str()];
 
-                text = [OARoutingHelper formatStreetName:streetName ref:refName destination:destinationName towards:@"»"];
+                streetName.text = [OARoutingHelperUtils formatStreetName:strtName ref:refName destination:destinationName towards:@"»"];
             }
-        }
-        if (!text)
-        {
-            text = @"";
-        }
-        else
-        {
-            if (text.length > 0 && road)
+            if (streetName.text.length > 0 && road)
             {
                 double dist = [OACurrentPositionHelper getOrthogonalDistance:road loc:lastKnownLocation];
                 if (dist < 50)
-                    showMarker = YES;
+                    streetName.showMarker = YES;
                 else
-                    text = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"shared_string_near"), text];
+                    streetName.text = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"shared_string_near"), streetName.text];
             }
         }
     }
@@ -506,14 +505,16 @@
     {
         [self updateVisibility:NO];
     }
-    else if (!showNextTurn && [self updateWaypoint])
+    else if (showClosestWaypointFirstInAddress && [self updateWaypoint])
     {
         [self updateVisibility:YES];
         [self updateVisibility:_turnView visible:NO];
         [self updateVisibility:_addressText visible:NO];
         [self updateVisibility:_addressTextShadow visible:NO];
+        [self updateVisibility:_shieldIcon visible:NO];
+        [self updateVisibility:_exitRefTextContainer visible:NO];
     }
-    else if (!text)
+    else if (!streetName)
     {
         [self updateVisibility:NO];
     }
@@ -521,9 +522,11 @@
     {
         [self updateVisibility:YES];
         [self updateVisibility:_waypointInfoBar visible:NO];
-        [self updateVisibility:_turnView visible:YES];
         [self updateVisibility:_addressText visible:YES];
         [self updateVisibility:_addressTextShadow visible:_shadowRadius > 0];
+        
+        if (streetName.shieldObject && !streetName.shieldObject->namesIds.empty())
+        
         BOOL update = [_turnDrawable setTurnType:type[0]] || showMarker != _showMarker;
         _showMarker = showMarker;
         if (update)
@@ -551,6 +554,112 @@
         }
     }
     return NO;
+}
+
+- (BOOL) setRoadShield:(UIImageView *)view object:(std::shared_ptr<RouteDataObject> &)object
+{
+    NSMutableString *additional = [NSMutableString string];
+    for (NSInteger i = 0; i < object->namesIds.size(); i++)
+    {
+        NSString *key = [NSString stringWithUTF8String:object->region->quickGetEncodingRule(object->namesIds[i].first).getTag().c_str()];
+        NSString *val = [NSString stringWithUTF8String:object->names[object->namesIds[i].first].c_str()];
+        if (![key hasSuffix:@"_ref"] && ![key hasPrefix:@"route_road"])
+            [additional appendFormat:@"%@=%@;", key, val];
+    }
+    for (NSInteger i = 0; i < object->namesIds.size(); i++)
+    {
+        NSString *key = [NSString stringWithUTF8String:object->region->quickGetEncodingRule(object->namesIds[i].first).getTag().c_str()];
+        NSString *val = [NSString stringWithUTF8String:object->names[object->namesIds[i].first].c_str()];
+        if ([key hasPrefix:@"route_road"] && [key hasSuffix:@"_ref"])
+        {
+            BOOL visible = [self setRoadShield:view object:object nameTag:key name:val additional:additional];
+            if (visible)
+                return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL) setRoadShield:(UIImageView *)view object:(std::shared_ptr<RouteDataObject> &)object nameTag:(NSString *)nameTag name:(NSString *)name additional:(NSMutableString *)additional
+{
+    const auto& tps = object->types;
+//    RenderingRulesStorage storage = app.getRendererRegistry().getCurrentSelectedRenderer();
+    BOOL nightMode = OAAppSettings.sharedManager.nightMode;
+//    RenderingRuleSearchRequest rreq = map.getMyApplication().getResourceManager()
+//        .getRenderer().getSearchRequestWithAppliedCustomRules(storage, nightMode);
+    
+    for (int i : tps) {
+        const auto& tp = object->region->quickGetEncodingRule(i);
+        if (tp.getTag() == "highway" || tp.getTag() == "route")
+        {
+            rreq.setInitialTagValueZoom(tp.getTag(), tp.getValue(), 13, null);
+        }
+        else
+        {
+            [additional appendFormat:@"%s=%s;", tp.getTag().c_str(), tp.getValue().c_str()];
+        }
+    }
+    
+    rreq.setIntFilter(rreq.ALL.R_TEXT_LENGTH, name.length());
+    rreq.setStringFilter(rreq.ALL.R_NAME_TAG, nameTag);
+    rreq.setStringFilter(rreq.ALL.R_ADDITIONAL, additional.toString());
+    rreq.search(RenderingRulesStorage.TEXT_RULES);
+    
+    OsmandRenderer.RenderingContext rc = new OsmandRenderer.RenderingContext(context);
+    
+    TextRenderer textRenderer = new TextRenderer(context);
+    TextRenderer.TextDrawInfo text = new TextRenderer.TextDrawInfo(name);
+    
+    
+    Paint p = textRenderer.getPaintText();
+    p.setTypeface(Typeface.create("Droid Serif", Typeface.BOLD));
+    
+    int shieldRes = -1;
+    
+    if (rreq.isSpecified(rreq.ALL.R_TEXT_SHIELD)) {
+        text.setShieldResIcon(rreq.getStringPropertyValue(rreq.ALL.R_TEXT_SHIELD));
+        shieldRes = app.getResources().getIdentifier("h_" + text.getShieldResIcon(),
+                                                     "drawable", app.getPackageName());
+    }
+    
+    if (rreq.isSpecified(rreq.ALL.R_TEXT_COLOR)) {
+        p.setColor(rreq.getIntPropertyValue(rreq.ALL.R_TEXT_COLOR));
+    }
+    
+    if (rreq.isSpecified(rreq.ALL.R_TEXT_SIZE)) {
+        float ts = rreq.getFloatPropertyValue(rreq.ALL.R_TEXT_SIZE);
+        textRenderer.getPaintText().setTextSize(
+                                                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, ts,
+                                                                          app.getResources().getDisplayMetrics()));
+    }
+    
+    if (shieldRes != -1) {
+        Drawable shield = AppCompatResources.getDrawable(view.getContext(), shieldRes);
+        if (shield == null) {
+            return false;
+        }
+        float xSize = shield.getIntrinsicWidth();
+        float ySize = shield.getIntrinsicHeight();
+        float xyRatio = xSize / ySize;
+        //setting view propotions (height is fixed by toolbar size - 48dp);
+        int viewHeightPx = AndroidUtils.dpToPx(context, 48);
+        int viewWidthPx = (int) (viewHeightPx * xyRatio);
+        
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        params.width = viewWidthPx;
+        view.setLayoutParams(params);
+        
+        //creating bitmap according to size of resource
+        Bitmap bitmap = Bitmap.createBitmap((int) xSize, (int) ySize, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        text.fillProperties(rc, rreq, xSize / 2f, ySize / 2f - p.getFontMetrics().ascent / 2f);
+        textRenderer.drawShieldIcon(rc, canvas, text, text.getShieldResIcon());
+        textRenderer.drawWrappedText(canvas, text, 20f);
+        
+        view.setImageBitmap(bitmap);
+        return true;
+    }
+    return false;
 }
 
 - (void) onTopTextViewClicked:(id)sender

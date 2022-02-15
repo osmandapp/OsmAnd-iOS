@@ -1203,32 +1203,19 @@ typedef enum
 {
     if (self.isNewContextMenuDisabled)
         return;
-    
-    if (_activeTargetType == OATargetRouteIntermediateSelection)
-    {
-        if (targetPoints.count > 1)
-        {
-            for (OATargetPoint *targetPoint in targetPoints)
-                [self applyTargetPointController:targetPoint];
-            [self showMultiContextMenu:targetPoints];
-            return;
-        }
-        else if (targetPoints.count == 1 && targetPoints[0].type != OATargetNone)
-        {
-            [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoints[0].location.latitude longitude:targetPoints[0].location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:targetPoints[0].pointDescription];
-            if (self.targetMenuView.superview)
-                [self hideTargetPointMenu];
-            [[[OARootViewController instance] mapPanel] showRouteInfo];
-            return;
-        }
-    }
-    
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
         
-    for (OATargetPoint *targetPoint in targetPoints)
+    if (_activeTargetType == OATargetRouteIntermediateSelection && targetPoints.count > 1)
     {
-        if ([self processTargetPoint:targetPoint])
-            [validPoints addObject:targetPoint];
+        [validPoints addObjectsFromArray:targetPoints];
+    }
+    else
+    {
+        for (OATargetPoint *targetPoint in targetPoints)
+        {
+            if ([self processTargetPoint:targetPoint])
+                [validPoints addObject:targetPoint];
+        }
     }
     
     if (validPoints.count == 0)

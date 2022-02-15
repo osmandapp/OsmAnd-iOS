@@ -420,7 +420,7 @@
     [iconNameList addObjectsFromArray:_iconCategories[_selectedIconCategoryName]];
     
     NSString *preselectedIconName = [self getPreselectedIconName];
-    if (preselectedIconName && preselectedIconName.length > 0)
+    if (preselectedIconName && preselectedIconName.length > 0 && [_selectedIconCategoryName isEqualToString:kLastUsedIconsKey])
     {
         [iconNameList removeObject:preselectedIconName];
         [iconNameList insertObject:preselectedIconName atIndex:0];

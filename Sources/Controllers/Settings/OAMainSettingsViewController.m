@@ -39,14 +39,16 @@
     OAAutoObserverProxy* _appModeChangedObservable;
     
     OAApplicationMode *_targetAppMode;
+    NSString *_targetScreenKey;
 }
 
-- (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode
+- (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey
 {
     self = [super init];
     if (self)
     {
         _targetAppMode = mode;
+        _targetScreenKey = targetScreenKey;
     }
     return self;
 }
@@ -71,13 +73,6 @@
     _appModeChangedObservable = [[OAAutoObserverProxy alloc] initWith:self
                                                           withHandler:@selector(onAvailableAppModesChanged)
                                                            andObserve:OsmAndApp.instance.data.applicationModeChangedObservable];
-    
-    if (_targetAppMode)
-    {
-        OAConfigureProfileViewController *profileConf = [[OAConfigureProfileViewController alloc] initWithAppMode:_targetAppMode];
-        [self.navigationController pushViewController:profileConf animated:YES];
-        _targetAppMode = nil;
-    }
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -88,6 +83,15 @@
     self.settingsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.settingsTableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
     [self setupView];
+
+    if (_targetAppMode)
+    {
+        OAConfigureProfileViewController *profileConf = [[OAConfigureProfileViewController alloc] initWithAppMode:_targetAppMode
+                                                                                                  targetScreenKey:_targetScreenKey];
+        [self.navigationController pushViewController:profileConf animated:YES];
+        _targetAppMode = nil;
+        _targetScreenKey = nil;
+    }
 }
 
 - (void)dealloc
@@ -356,7 +360,8 @@
     else if ([name isEqualToString:@"profile_val"] || [name isEqualToString:@"current_profile"])
     {
         OAApplicationMode *mode = item[@"app_mode"];
-        OAConfigureProfileViewController *profileConf = [[OAConfigureProfileViewController alloc] initWithAppMode:mode];
+        OAConfigureProfileViewController *profileConf = [[OAConfigureProfileViewController alloc] initWithAppMode:mode
+                                                                                                  targetScreenKey:nil];
         [self.navigationController pushViewController:profileConf animated:YES];
     }
     else if ([name isEqualToString:@"add_profile"])

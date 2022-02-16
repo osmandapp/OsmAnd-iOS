@@ -153,6 +153,12 @@
 #define showIntermediateArrivalTimeKey @"showIntermediateArrivalTime"
 #define showRelativeBearingKey @"showRelativeBearing"
 #define routeRecalculationDistanceKey @"routeRecalculationDistance"
+#define customRouteColorDayKey @"customRouteColorDay"
+#define customRouteColorNightKey @"customRouteColorNight"
+#define routeColoringTypeKey @"routeColoringType"
+#define routeInfoAttributeKey @"routeInfoAttribute"
+#define routeLineWidthKey @"routeLineWidth"
+#define routeShowTurnArrowsKey @"routeShowTurnArrows"
 #define showCompassControlRulerKey @"showCompassRuler"
 #define showCoordinatesWidgetKey @"showCoordinatesWidget"
 
@@ -307,7 +313,7 @@
 #define lastUpdatesCardRefreshKey @"lastUpdatesCardRefresh"
 
 #define currentTrackColorKey @"currentTrackColor"
-#define currentTrackColorizationKey @"currentTrackColorization"
+#define currentTrackColoringTypeKey @"currentTrackColoringType"
 #define currentTrackSpeedGradientPaletteKey @"currentTrackSpeedGradientPalette"
 #define currentTrackAltitudeGradientPaletteKey @"currentTrackAltitudeGradientPalette"
 #define currentTrackSlopeGradientPaletteKey @"currentTrackSlopeGradientPalette"
@@ -2904,6 +2910,107 @@
 
 @end
 
+@implementation OACommonColoringType
+{
+    NSArray<OAColoringType *> *_values;
+}
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(OAColoringType *)defValue
+{
+    OACommonColoringType *obj = [[OACommonColoringType alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = 0;
+        obj.values = [NSArray array];
+    }
+    return obj;
+}
+
++ (instancetype) withKey:(NSString *)key defValue:(OAColoringType *)defValue values:(NSArray<OAColoringType *> *)values
+{
+    OACommonColoringType *obj = [[OACommonColoringType alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        NSUInteger indexOfValue = [values indexOfObject:defValue];
+        obj.defValue = indexOfValue != NSNotFound ? indexOfValue : 0;
+        obj.values = values;
+    }
+    return obj;
+}
+
+- (OAColoringType *) get
+{
+    NSInteger indexOfValue = [super get:self.appMode];
+    return self.values.count > indexOfValue ? self.values[indexOfValue] : self.values.firstObject;
+}
+
+- (void) set:(OAColoringType *)coloringType
+{
+    NSUInteger indexOfValue = [self.values indexOfObject:coloringType];
+    [super setValue:@(indexOfValue != NSNotFound ? indexOfValue : 0) mode:self.appMode];
+}
+
+- (OAColoringType *) get:(OAApplicationMode *)mode
+{
+    NSInteger indexOfValue = [super get:mode];
+    return self.values.count > indexOfValue ? self.values[indexOfValue] : self.values.firstObject;
+}
+
+- (void) set:(OAColoringType *)coloringType mode:(OAApplicationMode *)mode
+{
+    NSUInteger indexOfValue = [self.values indexOfObject:coloringType];
+    [super set:indexOfValue != NSNotFound ? indexOfValue : 0 mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"default"])
+        return [self set:OAColoringType.DEFAULT mode:mode];
+    else if ([strValue isEqualToString:@"custom_color"])
+        return [self set:OAColoringType.CUSTOM_COLOR mode:mode];
+    else if ([strValue isEqualToString:@"solid"])
+        return [self set:OAColoringType.TRACK_SOLID mode:mode];
+    else if ([strValue isEqualToString:@"speed"])
+        return [self set:OAColoringType.SPEED mode:mode];
+    else if ([strValue isEqualToString:@"altitude"])
+        return [self set:OAColoringType.ALTITUDE mode:mode];
+    else if ([strValue isEqualToString:@"slope"])
+        return [self set:OAColoringType.SLOPE mode:mode];
+    else if ([strValue isEqualToString:@"attribute"])
+        return [self set:OAColoringType.ATTRIBUTE mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    OAColoringType *type = [OAColoringType getRouteColoringTypes][[super get:mode]];
+
+    if ([type isEqual:OAColoringType.CUSTOM_COLOR])
+        return @"custom_color";
+    else if ([type isEqual:OAColoringType.TRACK_SOLID])
+        return @"solid";
+    else if ([type isEqual:OAColoringType.SPEED])
+        return @"speed";
+    else if ([type isEqual:OAColoringType.ALTITUDE])
+        return @"altitude";
+    else if ([type isEqual:OAColoringType.SLOPE])
+        return @"slope";
+    else if ([type isEqual:OAColoringType.ATTRIBUTE])
+        return @"attribute";
+
+    return @"default";
+}
+
+- (void) resetToDefault
+{
+    [self set:self.values.count > self.defValue ? self.values[self.defValue] : self.values.firstObject];
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
@@ -3124,6 +3231,7 @@
         [_routingProfile setModeDefaultValue:@"boat" mode:OAApplicationMode.BOAT];
         [_routingProfile setModeDefaultValue:@"STRAIGHT_LINE_MODE" mode:OAApplicationMode.AIRCRAFT];
         [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
+        [_routingProfile setModeDefaultValue:@"horsebackriding" mode:OAApplicationMode.HORSE];
         [_profilePreferences setObject:_routingProfile forKey:@"routing_profile"];
 
         _profileIconName = [OACommonString withKey:profileIconNameKey defValue:@"ic_world_globe_dark"];
@@ -3137,6 +3245,7 @@
         [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
         [_profileIconName setModeDefaultValue:@"ic_action_truck" mode:OAApplicationMode.TRUCK];
         [_profileIconName setModeDefaultValue:@"ic_action_motorcycle_dark" mode:OAApplicationMode.MOTORCYCLE];
+        [_profileIconName setModeDefaultValue:@"ic_action_horse" mode:OAApplicationMode.HORSE];
         
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
         _userProfileName = [OACommonString withKey:userProfileNameKey defValue:@""];
@@ -3160,6 +3269,7 @@
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_DEFAULT) mode:OAApplicationMode.BOAT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
+        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.HORSE];
         [_profilePreferences setObject:_locationIcon forKey:@"location_icon"];
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
@@ -3172,6 +3282,7 @@
         [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.BOAT];
         [_defaultSpeed setModeDefaultValue:@200.0 mode:OAApplicationMode.AIRCRAFT];
         [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.SKI];
+        [_defaultSpeed setModeDefaultValue:@1.66 mode:OAApplicationMode.HORSE];
         [_profilePreferences setObject:_defaultSpeed forKey:@"default_speed"];
 
         _minSpeed = [OACommonDouble withKey:minSpeedKey defValue:0.];
@@ -3330,6 +3441,24 @@
 
         _routeRecalculationDistance = [OACommonDouble withKey:routeRecalculationDistanceKey defValue:0.];
         [_profilePreferences setObject:_routeRecalculationDistance forKey:@"routing_recalc_distance"];
+
+        _customRouteColorDay = [OACommonInteger withKey:customRouteColorDayKey defValue:[OAUtilities colorToNumber:UIColorFromARGB(kDefaultRouteLineDayColor)]];
+        [_profilePreferences setObject:_customRouteColorDay forKey:@"route_line_color"];
+
+        _customRouteColorNight = [OACommonInteger withKey:customRouteColorNightKey defValue:[OAUtilities colorToNumber:UIColorFromARGB(kDefaultRouteLineNightColor)]];
+        [_profilePreferences setObject:_customRouteColorNight forKey:@"route_line_color_night"];
+
+        _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT values:[OAColoringType getRouteColoringTypes]];
+        [_profilePreferences setObject:_routeColoringType forKey:@"route_line_coloring_type"];
+
+        _routeInfoAttribute = [OACommonString withKey:routeInfoAttributeKey defValue:nil];
+        [_profilePreferences setObject:_routeInfoAttribute forKey:@"route_info_attribute"];
+
+        _routeLineWidth = [OACommonString withKey:routeLineWidthKey defValue:nil];
+        [_profilePreferences setObject:_routeLineWidth forKey:@"route_line_width"];
+
+        _routeShowTurnArrows = [OACommonBoolean withKey:routeShowTurnArrowsKey defValue:YES];
+        [_profilePreferences setObject:_routeShowTurnArrows forKey:@"route_show_turn_arrows"];
 
         _showTrafficWarnings = [OACommonBoolean withKey:showTrafficWarningsKey defValue:NO];
         [_showTrafficWarnings setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
@@ -3617,7 +3746,7 @@
         [_globalPreferences setObject:_lastUpdatesCardRefresh forKey:@"last_updates_card_refresh"];
 
         _currentTrackColor = [[[OACommonInteger withKey:currentTrackColorKey defValue:0] makeGlobal] makeShared];
-        _currentTrackColorization = [[[OACommonGradientScaleType withKey:currentTrackColorizationKey defValue:EOAGradientScaleTypeNone] makeGlobal] makeShared];
+        _currentTrackColoringType = [[[OACommonColoringType withKey:currentTrackColoringTypeKey defValue:OAColoringType.TRACK_SOLID values:[OAColoringType getTrackColoringTypes]] makeGlobal] makeShared];
         _currentTrackSpeedGradientPalette = [[[OACommonString withKey:currentTrackSpeedGradientPaletteKey defValue:nil] makeGlobal] makeShared];
         _currentTrackAltitudeGradientPalette = [[[OACommonString withKey:currentTrackAltitudeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
         _currentTrackSlopeGradientPalette = [[[OACommonString withKey:currentTrackSlopeGradientPaletteKey defValue:nil] makeGlobal] makeShared];
@@ -3628,7 +3757,7 @@
         _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_currentTrackColor forKey:@"current_track_color"];
-        [_globalPreferences setObject:_currentTrackColorization forKey:@"current_track_colorization"];
+        [_globalPreferences setObject:_currentTrackColoringType forKey:@"current_track_coloring_type"];
         [_globalPreferences setObject:_currentTrackSpeedGradientPalette forKey:@"current_track_speed_gradient_palette"];
         [_globalPreferences setObject:_currentTrackAltitudeGradientPalette forKey:@"current_track_altitude_gradient_palette"];
         [_globalPreferences setObject:_currentTrackSlopeGradientPalette forKey:@"current_track_slope_gradient_palette"];

@@ -1965,7 +1965,7 @@
 "start_of_track" = "بداية المسار";
 "point_to_navigate" = "تنقل إلى";
 "reverse_track_dir" = "عكس اتجاه المسار";
-"track" = "مسار";
+"shared_string_gpx_track" = "مسار";
 "split_after" = "تقسيم بعد";
 "split_before" = "تقسيم قبل";
 "gpx_already_exsists" = "يوجد ملف بهذا الاسم";
@@ -2327,3 +2327,7 @@
 "white_color_undefined" = "الأجزاء بدون بيانات بيضاء.";
 "shared_string_hide_all" = "أخف الكل";
 "points_delete_multiple" = "حذف %d نقطة؟";
+"customize_route_line" = "تخصيص خط المسار";
+"route_line_use_map_style_color" = "استخدم نمط الخريطة (%@) اللون الافتراضي.";
+"route_line_use_map_style_width" = "استخدم نمط الخريطة (%@) العرض الافتراضي.";
+"turn_arrows" = "أسهم الانعطاف";

@@ -626,6 +626,8 @@
             NSString *imgName = item[@"img"];
             if (imgName)
                 img = [OAUtilities getMxIcon:imgName];
+            if (!img)
+                img = [OAUtilities getMxIcon:@"user_defined"];
             
             cell.textView.text = item[@"title"];
             NSString *desc = item[@"descr"];

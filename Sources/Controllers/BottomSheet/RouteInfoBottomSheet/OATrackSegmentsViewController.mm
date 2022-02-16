@@ -36,7 +36,7 @@
 
 @implementation OATrackSegmentsViewController
 {
-    OAGpxTrkPt *_point;
+    OAWptPt *_point;
     NSArray<NSDictionary *> *_data;
     
     OAGPXDocument *_gpx;
@@ -82,7 +82,7 @@
         fileName = _gpx.tracks.firstObject.name;
     
     if (fileName == nil || fileName.length == 0)
-        fileName = OALocalizedString(@"track");
+        fileName = OALocalizedString(@"shared_string_gpx_track");
     return fileName;
 }
 
@@ -106,7 +106,7 @@
      ];
     
     NSInteger idx = 1;
-    for (OAGpxTrkSeg *seg in [_gpx getNonEmptyTrkSegments:NO])
+    for (OATrkSegment *seg in [_gpx getNonEmptyTrkSegments:NO])
     {
         long segmentTime = [OAGPXUIHelper getSegmentTime:seg];
         double segmentDist = [OAGPXUIHelper getSegmentDistance:seg];

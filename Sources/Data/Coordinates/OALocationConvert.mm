@@ -155,8 +155,14 @@
 
 + (NSString *) getUTMCoordinateString:(double)lat lon:(double)lon
 {
-    GeographicLib::GeoCoords pnt(lat, lon);
-    return [NSString stringWithFormat:@"%d%c %.0f %.0f", pnt.Zone(), toupper(pnt.Hemisphere()), pnt.Easting(), pnt.Northing()];
+    try{
+        GeographicLib::GeoCoords pnt(lat, lon);
+        return [NSString stringWithFormat:@"%d%c %.0f %.0f", pnt.Zone(), toupper(pnt.Hemisphere()), pnt.Easting(), pnt.Northing()];
+    }
+    catch(GeographicLib::GeographicErr err)
+    {
+         return @"Error. Wrong coordinates data.";
+    }
 }
 
 + (NSString *) getLocationOlcName:(double) lat lon:(double)lon
@@ -164,6 +170,42 @@
     return [OLCConverter encodeLatitude:lat longitude:lon];
 }
 
++ (NSString *) getMgrsCoordinateString:(double)lat lon:(double)lon
+{
+    NSString *mgrsStr;
+    try{
+        GeographicLib::GeoCoords pnt(lat, lon);
+        mgrsStr = [NSString stringWithCString:pnt.MGRSRepresentation(0).c_str() encoding:[NSString defaultCStringEncoding]];
+        if (mgrsStr.length>0)
+            mgrsStr = [self beautifyMgrsCoordinateString:mgrsStr];
+    }
+    catch(GeographicLib::GeographicErr err)
+    {
+        mgrsStr = @"Error. Wrong coordinates data.";
+    }
+    
+    return mgrsStr;
+}
+
++ (NSString *) beautifyMgrsCoordinateString: (NSString*) rawString
+{
+
+    bool isPolar = ![[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[rawString characterAtIndex:0]];
+    NSMutableString *mu = [NSMutableString stringWithString:rawString];
+
+    if (isPolar)
+    {
+        [mu insertString:@" " atIndex:((rawString.length-3)/2)+3];
+        [mu insertString:@" " atIndex:3];
+        [mu insertString:@" " atIndex:1];
+    }
+    else {
+        [mu insertString:@" " atIndex:((rawString.length-5)/2)+5];
+        [mu insertString:@" " atIndex:5];
+        [mu insertString:@" " atIndex:3];
+    }
+    return [NSString stringWithString:mu];
+}
 
 + (NSString *) convertLatitude:(double) latitude outputType:(NSInteger)outType addCardinalDirection:(BOOL)addCardinalDirection
 {

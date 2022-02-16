@@ -142,9 +142,14 @@
             CLLocation *location = _app.locationServices.lastKnownLocation;
             [pointsHelper clearAllIntermediatePoints:NO];
             if (!location || [location distanceFromLocation:startLoc] <= START_TRACK_POINT_MY_LOCATION_RADIUS_METERS)
+            {
                 [pointsHelper clearStartPoint:NO];
+            }
             else
+            {
                 [pointsHelper setStartPoint:startLoc.copy updateRoute:NO name:nil];
+                [params setPassWholeRoute:YES];
+            }
             
             [pointsHelper navigateToPoint:finishLoc.copy updateRoute:NO intermediate:-1];
         }
@@ -153,22 +158,20 @@
 
 - (OAGPXDocument *) getGpxDocumentByGpx:(OAGPX *)gpx
 {
-    OAGPXDocument* doc = nil;
+    OAGPXDocument* document = nil;
     const auto& gpxMap = [OASelectedGPXHelper instance].activeGpx;
-    NSString * path;
-    path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+    NSString * path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
     QString qPath = QString::fromNSString(path);
     if (gpxMap.contains(qPath))
     {
-        auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(gpxMap[qPath]);
-        doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
-        doc.path = path;
+        document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(gpxMap[qPath])];
+        document.path = path;
     }
     else
     {
-        doc = [[OAGPXDocument alloc] initWithGpxFile:path];
+        document = [[OAGPXDocument alloc] initWithGpxFile:path];
     }
-    return doc;
+    return document;
 }
 
 - (void) setGPXRouteParams:(OAGPX *)result
@@ -176,7 +179,6 @@
     OAGPXDocument* doc = [self getGpxDocumentByGpx:result];
     [self setGPXRouteParamsWithDocument:doc path:doc.path];
 }
-
 
 - (OAApplicationMode *) getRouteMode
 {

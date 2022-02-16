@@ -180,14 +180,14 @@
 - (NSString *) toHexString
 {
     const CGFloat *components = CGColorGetComponents(self.CGColor);
-    
+
     CGFloat r = components[0];
     CGFloat g = components[1];
     CGFloat b = components[2];
     return [NSString stringWithFormat:@"#%02lX%02lX%02lX",
-                 lroundf(r * 255),
-                 lroundf(g * 255),
-                 lroundf(b * 255)];
+                                      lroundf(r * 255),
+                                      lroundf(g * 255),
+                                      lroundf(b * 255)];
 }
 
 + (UIColor *) colorFromString:(NSString *)string
@@ -1165,11 +1165,16 @@
 
 + (UIImage *) getMxIcon:(NSString *)name
 {
-    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", name]]];
-    if (img)
-        return [OAUtilities applyScaleFactorToImage:img];
-    else
-        return nil;
+    NSString *fullIconName = name;
+    if (![fullIconName hasPrefix:@"mx_"])
+        fullIconName = [@"mx_" stringByAppendingString:name];
+
+    UIImage *iconImgOrig = [UIImage imageNamed:[self drawablePath:fullIconName]];
+    if (iconImgOrig)
+    {
+        return [UIImage imageWithCGImage:iconImgOrig.CGImage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+    }
+    return nil;
 }
 
 + (UIImage *) getTintableImage:(UIImage *)image

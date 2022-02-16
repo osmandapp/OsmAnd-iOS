@@ -1590,7 +1590,7 @@
 "address_search" = "地址查尋";
 "rearrange_categories" = "重新排列分類";
 "service" = "服務";
-"track" = "軌跡";
+"shared_string_gpx_track" = "軌跡";
 "markers_history" = "標記歷史";
 "displayed_trips" = "顯示軌跡";
 "attach_to_the_roads" = "依附於道路";

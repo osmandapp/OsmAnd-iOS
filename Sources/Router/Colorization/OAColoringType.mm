@@ -220,7 +220,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     std::vector<std::shared_ptr<RouteSegmentResult>> routeSegments;
     for (NSInteger i = 0; i < [gpxFile getNonEmptyTrkSegments:NO].count; i++)
     {
-        OAGpxTrkSeg *segment = [gpxFile getNonEmptyTrkSegments:NO][i];
+        OATrkSegment *segment = [gpxFile getNonEmptyTrkSegments:NO][i];
         if (segment.hasRoute)
         {
             const auto rt = [OARouteProvider parseOsmAndGPXRoute:[NSMutableArray array] gpxFile:gpxFile segmentEndpoints:[NSMutableArray array] selectedSegment:i];

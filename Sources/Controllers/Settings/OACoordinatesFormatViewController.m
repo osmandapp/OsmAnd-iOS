@@ -100,6 +100,14 @@
        @"url" : @"https://en.wikipedia.org/wiki/Open_Location_Code",
        @"icon" : @"ic_custom_direction_compass",
        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+    },
+    @{
+        @"name" : @"mgrs_format",
+        @"title" : OALocalizedString(@"MGRS"),
+        @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_MGRS_FORMAT),
+        @"description" : [NSString stringWithFormat:@"%@: %@\n%@\n%@\n", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MGRS], OALocalizedString(@"mgrs_description"), OALocalizedString(@"shared_string_read_more")],
+        @"url" : @"https://en.wikipedia.org/wiki/Military_Grid_Reference_System",
+        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     }];
 }
 
@@ -203,6 +211,8 @@
         [_settings.settingGeoFormat set:MAP_GEO_UTM_FORMAT mode:self.appMode];
     else if ([name isEqualToString:@"olc_format"])
         [_settings.settingGeoFormat set:MAP_GEO_OLC_FORMAT mode:self.appMode];
+    else if ([name isEqualToString:@"mgrs_format"])
+        [_settings.settingGeoFormat set:MAP_GEO_MGRS_FORMAT mode:self.appMode];
 }
 
 @end

@@ -584,7 +584,7 @@
 "select_group" = "Fren agraw";
 "favorite_friends_category" = "Imdukal";
 "circle" = "Tawinest";
-"track" = "Piste";
+"shared_string_gpx_track" = "Piste";
 "service" = "Ameẓlu";
 "ctx_mnu_direction" = "marker";
 "square" = "Amkuẓ";

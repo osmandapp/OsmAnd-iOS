@@ -18,6 +18,16 @@
 #define speak_favorites_id 107
 #define connect_route_points_id 108
 
+#define kRouteParamGroupDrivingStyle @"driving_style"
+#define kRouteParamGroupReliefSmoothnessFactor @"relief_smoothness_factor"
+#define kRouteParamIdReliefSmoothnessFactorPlain @"relief_smoothness_factor_plains"
+#define kRouteParamIdReliefSmoothnessFactorMorePlain @"relief_smoothness_factor_more_plains"
+#define kRouteParamIdReliefSmoothnessFactorHills @"relief_smoothness_factor_hills"
+#define kRouteParamIdHeightObstacles @"height_obstacles"
+#define kRouteParamIdShortWay @"short_way"
+#define kRouteParamIdAllowPrivate @"allow_private"
+#define kRouteParamIdAllowMotorway @"allow_motorway"
+
 @class OAApplicationMode, OARoutingHelper, OAAppSettings;
 @class OALocalRoutingParameterGroup;
 
@@ -28,6 +38,7 @@ struct RoutingParameter;
 @required
 - (void) updateParameters;
 - (void) openNavigationSettings;
+- (void) openRouteLineAppearance;
 - (void) showParameterGroupScreen:(OALocalRoutingParameterGroup *)group;
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
 - (void) showAvoidRoadsScreen;
@@ -113,4 +124,7 @@ struct RoutingParameter;
 @end
 
 @interface OAOtherSettingsRoutingParameter : OALocalRoutingParameter
+@end
+
+@interface OACustomizeRouteLineRoutingParameter : OALocalRoutingParameter
 @end

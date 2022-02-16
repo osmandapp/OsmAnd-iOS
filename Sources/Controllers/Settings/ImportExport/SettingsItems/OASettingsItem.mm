@@ -96,6 +96,11 @@
     // non implemented
 }
 
+- (void) applyAdditionalParams:(NSString *)filePath
+{
+    // non implemented
+}
+
 - (NSDictionary *) getSettingsJson
 {
     // override

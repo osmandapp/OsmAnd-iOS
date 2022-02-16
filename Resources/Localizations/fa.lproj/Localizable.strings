@@ -1551,7 +1551,7 @@
 "custom_osmand_plugin_name" = "افزونهٔ سفارشی OsmAnd";
 "visible" = "نمایان";
 "split_before" = "تقطیع از اینجا به قبل";
-"track" = "رد";
+"shared_string_gpx_track" = "رد";
 "res_standard" = "نقشهٔ استاندارد";
 "symbols" = "نمادها";
 "displayed_trips" = "ردهای نمایان";

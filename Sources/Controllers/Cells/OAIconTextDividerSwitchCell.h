@@ -20,4 +20,6 @@
 @property (nonatomic) IBOutlet NSLayoutConstraint *textRightConstraint;
 @property (nonatomic) IBOutlet NSLayoutConstraint *textRightConstraintNoDivider;
 
+- (void)showIcon:(BOOL)show;
+
 @end

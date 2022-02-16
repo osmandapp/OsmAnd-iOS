@@ -1442,11 +1442,11 @@ static BOOL _isDeviatedFromRoute = false;
 - (OAGPXDocument *) generateGPXFileWithRoute:(OARouteCalculationResult *)route name:(NSString *)name
 {
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
-    NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray array];
+    NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
     NSArray<OARTargetPoint *> *ps = targets.getIntermediatePointsWithTarget;
     for (NSInteger k = 0; k < ps.count; k++)
     {
-        OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] init];
+        OAWptPt *pt = [[OAWptPt alloc] init];
         pt.position = CLLocationCoordinate2DMake(ps[k].getLatitude, ps[k].getLongitude);
         if (k < ps.count)
         {

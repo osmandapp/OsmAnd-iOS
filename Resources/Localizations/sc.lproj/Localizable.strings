@@ -1975,7 +1975,7 @@
 "reverse_track_dir" = "Fùrria sa diretzione de sa rasta";
 "attach_to_the_roads" = "Bloca in sos caminos";
 "select_another_track" = "Ischerta un\'àtera rasta";
-"track" = "Rasta";
+"shared_string_gpx_track" = "Rasta";
 "follow_track" = "Sighi sa rasta";
 "split_after" = "Iscroba a pustis de";
 "split_before" = "Iscroba in antis de";
@@ -2350,3 +2350,14 @@
 "white_color_undefined" = "Sas partes chene datos sunt biancas.";
 "connect_rp" = "Collega sos puntos de s'àndala";
 "points_delete_multiple" = "Iscantzellare %d puntu(os)?";
+"context_menu_edit_descr" = "Modìfica sa descritzione";
+"add_description" = "Annanghe una descritzione";
+"map_settings_weather_temp" = "Temperadura";
+"map_settings_weather_pressure" = "Pressione";
+"map_settings_weather_cloud" = "Nue";
+"map_settings_weather_precip" = "Pretzipitatzione";
+"map_settings_clear_geo_cache" = "Isbòida sos tasseddos geogràficos";
+"map_settings_clear_raster_cache" = "Isbòida sos tasseddos raster";
+"q_clear_weather_cache" = "Boles isboidare sa memòria temporànea de su mèteu?";
+"map_settings_weather" = "Mèteu";
+"map_settings_weather_wind" = "Bentu";

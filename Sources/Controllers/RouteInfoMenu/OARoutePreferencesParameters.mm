@@ -11,17 +11,10 @@
 #import "Localization.h"
 #import "OARoutingHelper.h"
 #import "OAVoiceRouter.h"
-#import "OAAppSettings.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
-#import "OAFileNameTranslationHelper.h"
 #import "OASelectedGPXHelper.h"
-#import "OAGPXDatabase.h"
-#import "PXAlertView.h"
-#import "OAMapActions.h"
-#import "OAUtilities.h"
 #import "OARouteProvider.h"
-#import "OAAbstractCommandPlayer.h"
 #import "OAColors.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAGPXDocument.h"
@@ -29,8 +22,6 @@
 #import "OAIconTitleValueCell.h"
 #import "OASettingSwitchCell.h"
 #import "OASwitchTableViewCell.h"
-
-#include <generalRouter.h>
 
 @implementation OALocalRoutingParameter
 {
@@ -67,7 +58,12 @@
 
 - (NSString *) getText
 {
-    NSString *key = [NSString stringWithFormat:@"routing_attr_%@_name", [NSString stringWithUTF8String:_routingParameter.id.c_str()]];
+    NSString *key;
+    NSString *id = [NSString stringWithUTF8String:_routingParameter.id.c_str()];
+    if ([id isEqualToString:kRouteParamIdHeightObstacles])
+        key = @"shared_string_any";
+    else
+        key = [NSString stringWithFormat:@"routing_attr_%@_name", id];
     NSString *res = OALocalizedString(key);
     if ([res isEqualToString:key])
         res = [NSString stringWithUTF8String:_routingParameter.name.c_str()];
@@ -103,7 +99,7 @@
 
 - (BOOL) isChecked
 {
-    if (self.routingParameter.id == "short_way")
+    if (([[NSString stringWithUTF8String:self.routingParameter.id.c_str()] isEqualToString:kRouteParamIdShortWay]))
         return ![self.settings.fastRouteMode get:[self.routingHelper getAppMode]];
     else
         return [self isSelected];
@@ -116,12 +112,32 @@
 
 - (NSString *) getDescription
 {
-    return nil;
+    NSString *id = [NSString stringWithUTF8String:_routingParameter.id.c_str()];
+    NSString *description;
+    if ([id isEqualToString:kRouteParamIdHeightObstacles])
+        description = @"route_preferred_terrain_any";
+    else if ([id isEqualToString:kRouteParamIdReliefSmoothnessFactorPlain])
+        description = @"route_preferred_terrain_less_hilly";
+    else if ([id isEqualToString:kRouteParamIdReliefSmoothnessFactorMorePlain])
+        description = @"route_preferred_terrain_flat";
+    else if ([id isEqualToString:kRouteParamIdReliefSmoothnessFactorHills])
+        description = @"route_preferred_terrain_hilly";
+    return description ? OALocalizedString(description) : @"";
 }
 
 - (UIImage *) getIcon
 {
-    return nil;
+    NSString *id = [NSString stringWithUTF8String:_routingParameter.id.c_str()];
+    NSString *name;
+    if ([id isEqualToString:kRouteParamIdHeightObstacles])
+        name = @"ic_custom_terrain_any";
+    else if ([id isEqualToString:kRouteParamIdReliefSmoothnessFactorPlain])
+        name = @"ic_custom_terrain_less_hilly";
+    else if ([id isEqualToString:kRouteParamIdReliefSmoothnessFactorMorePlain])
+        name = @"ic_custom_terrain_flat";
+    else if ([id isEqualToString:kRouteParamIdReliefSmoothnessFactorHills])
+        name = @"ic_custom_terrain_hilly";
+    return name ? [UIImage imageNamed:name] : nil;
 }
 
 - (NSString *) getCellType
@@ -140,7 +156,7 @@
 
 - (void)applyNewParameterValue:(BOOL)isChecked
 {
-    if (self.routingParameter.id == "short_way")
+    if ([[NSString stringWithUTF8String:self.routingParameter.id.c_str()] isEqualToString:kRouteParamIdShortWay])
         [self.settings.fastRouteMode set:!isChecked mode:[self.routingHelper getAppMode]];
     
     [self setSelected:isChecked];
@@ -258,7 +274,7 @@
 
 - (UIColor *) getTintColor
 {
-    return UIColorFromRGB(color_tint_gray);
+    return UIColorFromRGB(color_primary_purple);
 }
 
 @end
@@ -272,15 +288,16 @@
 
 - (UIImage *)getIcon
 {
+    NSString *id = [NSString stringWithUTF8String:self.routingParameter.id.c_str()];
     BOOL isChecked = self.isChecked;
     NSString *name = @"ic_custom_trip";
-    if (self.routingParameter.id == "short_way")
+    if ([id isEqualToString:kRouteParamIdShortWay])
         name = @"ic_custom_fuel";
-    else if (self.routingParameter.id == "allow_private")
+    else if ([id isEqualToString:kRouteParamIdAllowPrivate])
         name = isChecked ? @"ic_custom_allow_private_access" : @"ic_custom_forbid_private_access";
-    else if (self.routingParameter.id == "allow_motorway")
+    else if ([id isEqualToString:kRouteParamIdAllowMotorway])
         name = isChecked ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";
-    else if (self.routingParameter.id == "height_obstacles")
+    else if ([id isEqualToString:kRouteParamIdHeightObstacles])
         name = @"ic_custom_ascent";
     
     return [UIImage imageNamed:name];
@@ -377,7 +394,11 @@
 
 - (NSString *) getText
 {
-    NSString *key = [NSString stringWithFormat:@"routing_attr_%@_name", _groupName];
+    NSString *key;
+    if ([_groupName isEqualToString:kRouteParamGroupReliefSmoothnessFactor])
+        key = @"preferred_terrain";
+    else
+        key = [NSString stringWithFormat:@"routing_attr_%@_name", _groupName];
     NSString *res = OALocalizedString(key);
     if ([res isEqualToString:key])
         res = [[_groupName stringByReplacingOccurrencesOfString:@"_" withString:@" "] capitalizedStringWithLocale:[NSLocale currentLocale]];
@@ -410,11 +431,15 @@
 
 - (OALocalRoutingParameter *) getSelected
 {
+    OALocalRoutingParameter *useElevation;
     for (OALocalRoutingParameter *p in _routingParameters)
-        if ([p isSelected])
+    {
+        if ([[NSString stringWithUTF8String:p.routingParameter.id.c_str()] isEqualToString:kRouteParamIdHeightObstacles])
+            useElevation = p;
+        else if ([p isSelected])
             return p;
-    
-    return nil;
+    }
+    return useElevation;
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -425,9 +450,12 @@
 
 - (UIImage *)getIcon
 {
-    if ([_groupName isEqualToString:@"driving_style"])
-        return [UIImage imageNamed:@"ic_profile_bicycle"];
-    return nil;
+    NSString *name;
+    if ([_groupName isEqualToString:kRouteParamGroupDrivingStyle])
+        name = @"ic_profile_bicycle";
+    else if ([_groupName isEqualToString:kRouteParamGroupReliefSmoothnessFactor])
+        name = @"ic_custom_terrain_any";
+    return name ? [UIImage imageNamed:name] : nil;
 }
 
 - (UIColor *)getTintColor
@@ -848,4 +876,32 @@
 
 @end
 
+@implementation OACustomizeRouteLineRoutingParameter
 
+- (NSString *) getText
+{
+    return OALocalizedString(@"customize_route_line");
+}
+
+- (UIImage *) getIcon
+{
+    return [UIImage imageNamed:@"ic_custom_appearance"];
+}
+
+- (NSString *) getCellType
+{
+    return [OAIconTitleValueCell getCellIdentifier];
+}
+
+- (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate)
+        [self.delegate openRouteLineAppearance];
+}
+
+- (UIColor *)getTintColor
+{
+    return UIColorFromRGB(color_chart_orange);
+}
+
+@end

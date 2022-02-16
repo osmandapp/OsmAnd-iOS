@@ -1384,7 +1384,7 @@
 "routing_attr_allow_motorway_description" = "Tillater motorveier.";
 "routing_attr_height_obstacles_description" = "Ta hensyn til terrenghøyde (data fra SRTM, ASTER og EU-DEM).";
 "rendering_attr_undefined_name" = "Udefinert";
-"routing_attr_avoid_bus_description" = "Unngår buss og trolleybuss";
+"routing_attr_avoid_bus_description" = "Unngår busser og trolleybusser";
 "rendering_value_purple_name" = "Lilla";
 "rendering_value_pink_name" = "Rosa";
 "rendering_attr_contourDensity_description" = "Kotetetthet";
@@ -1816,7 +1816,7 @@
 "point_to_navigate" = "Naviger til";
 "attach_to_the_roads" = "Følg veier";
 "select_another_track" = "Velg et annet spor";
-"track" = "Turvei";
+"shared_string_gpx_track" = "Turvei";
 "follow_track" = "Følg spor";
 "split_before" = "Del før";
 "split_after" = "Del etter";
@@ -1974,7 +1974,7 @@
 "road_speeds_descr" = "Disse parameterne kan ha innvirkning på ruteberegning.";
 "send_anonymous_data_desc" = "Send til OsmAnd-kartnedlastingsstatistkkk. Posisjonsdata eller personlig data samles ikke inn.";
 "default_profile_descr" = "Velg en profil å bruke for programstart.";
-"search_more" = "Søk mer …";
+"search_more" = "Søk mer…";
 "allow_3d_descr" = "Skru på dette for å vise kartet i 2,5D-perspektiv";
 "gpx_upload_private_visibility_descr" = "«Privat» betyr at sporet ikke vises i noen offentlige oppføringer, men sporingspunkter fra dem i ukronologisk rekkefølge er tilgjengelig gjennom det offentlige GPS-API-et uten tidsstempler.";
 "gpx_upload_identifiable_visibility_descr" = "«Identifiserbart» betyr at sporet vises offentlig i dine GPS-spor og i offentlige GPS-sporingsoppføringer. Altså vil andre kunne laste ned rå sporingsdata og tilknytte den til brukernavnet ditt. Sporingspunktsdata med offentlige tidsstempel fra GPS-API-et servert via sporingspunkts-API-et vil vise til din opprinnelige sporingsside.";

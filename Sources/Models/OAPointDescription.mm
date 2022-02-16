@@ -176,6 +176,7 @@
     [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_SECONDS] forKey:@(FORMAT_SECONDS)];
     [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM] forKey:@(FORMAT_UTM)];
     [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC] forKey:@(FORMAT_OLC)];
+    [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MGRS] forKey:@(FORMAT_MGRS)];
     
     float zoom = [OARootViewController instance].mapPanel.mapViewController.getMapZoom;
     NSString *url = [NSString stringWithFormat:@"https://osmand.net/go?lat=%f&lon=%f&z=%f", lat, lon, zoom];
@@ -187,6 +188,8 @@
         [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM] forKey:@(POINT_LOCATION_LIST_HEADER)];
     else if (f == MAP_GEO_OLC_FORMAT)
         [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC] forKey:@(POINT_LOCATION_LIST_HEADER)];
+    else if (f == MAP_GEO_MGRS_FORMAT)
+        [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MGRS] forKey:@(POINT_LOCATION_LIST_HEADER)];
     else if (f == FORMAT_DEGREES)
         [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES] forKey:@(POINT_LOCATION_LIST_HEADER)];
     else if (f == FORMAT_MINUTES)
@@ -209,6 +212,8 @@
             return @"UTM";
         case MAP_GEO_OLC_FORMAT:
             return @"OLC";
+        case MAP_GEO_MGRS_FORMAT:
+            return @"MGRS";
         default:
             return @"Unknown format";
     }

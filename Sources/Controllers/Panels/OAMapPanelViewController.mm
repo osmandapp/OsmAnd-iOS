@@ -427,6 +427,12 @@ typedef enum
     [self showScrollableHudViewController:controller];
 }
 
+- (void)showRouteLineAppearanceViewController:(OABaseScrollableHudViewController *)controller
+{
+    _activeTargetType = OATargetRouteLineAppearance;
+    [self showScrollableHudViewController:controller];
+}
+
 - (void) refreshToolbar
 {
     [_destinationViewController refreshView];
@@ -754,7 +760,8 @@ typedef enum
         
         if (_targetAppMode && _reopenSettings)
         {
-            OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] initWithTargetAppMode:_targetAppMode];
+            OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] initWithTargetAppMode:_targetAppMode
+                                                                                                   targetScreenKey:nil];
             [OARootViewController.instance.navigationController pushViewController:settingsVC animated:NO];
         }
         _targetAppMode = nil;
@@ -770,12 +777,12 @@ typedef enum
 
 - (void) closeRouteInfo
 {
-    [self closeRouteInfo:nil];
+    [self closeRouteInfo:YES onComplete:nil];
 }
 
-- (void) closeRouteInfo:(void (^)(void))onComplete
+- (void) closeRouteInfo:(BOOL)topControlsVisibility onComplete:(void (^)(void))onComplete
 {
-    [self closeRouteInfoWithTopControlsVisibility:YES bottomsControlHeight:@0 onComplete:onComplete];
+    [self closeRouteInfoWithTopControlsVisibility:topControlsVisibility bottomsControlHeight:@0 onComplete:onComplete];
 }
 
 - (void) closeRouteInfoWithTopControlsVisibility:(BOOL)topControlsVisibility bottomsControlHeight:(NSNumber *)bottomsControlHeight onComplete:(void (^)(void))onComplete
@@ -1197,10 +1204,18 @@ typedef enum
     if (self.isNewContextMenuDisabled)
         return;
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
-    for (OATargetPoint *targetPoint in targetPoints)
+        
+    if (_activeTargetType == OATargetRouteIntermediateSelection && targetPoints.count > 1)
     {
-        if ([self processTargetPoint:targetPoint])
-            [validPoints addObject:targetPoint];
+        [validPoints addObjectsFromArray:targetPoints];
+    }
+    else
+    {
+        for (OATargetPoint *targetPoint in targetPoints)
+        {
+            if ([self processTargetPoint:targetPoint])
+                [validPoints addObject:targetPoint];
+        }
     }
     
     if (validPoints.count == 0)
@@ -1233,7 +1248,8 @@ typedef enum
     || _activeTargetType == OATargetRouteDetailsGraph
     || _activeTargetType == OATargetRouteDetails
     || _activeTargetType == OATargetRoutePlanning
-    || _activeTargetType == OATargetGPX;
+    || _activeTargetType == OATargetGPX
+    || _activeTargetType == OATargetRouteLineAppearance;
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
@@ -2166,6 +2182,7 @@ typedef enum
     if ([self.view.subviews containsObject:self.targetMultiMenuView])
         [self.targetMultiMenuView removeFromSuperview];
     
+    [self.targetMultiMenuView setActiveTargetType:_activeTargetType];
     [self.targetMultiMenuView setTargetPoints:points];
     
     [self.view addSubview:self.targetMultiMenuView];
@@ -3784,9 +3801,10 @@ typedef enum
     [self.targetMenuView updateTargetPointType:OATargetWpt];
     [self.targetMenuView applyTargetObjectChanges];
 
-    if (!gpxFileName && ![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+    if (!gpxFileName || gpxFileName.length == 0)
     {
-        [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
+        if (![[OAAppSettings sharedManager].mapSettingShowRecordingTrack get])
+            [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
         [[_app updateRecTrackOnMapObservable] notifyEvent];
     }
 }

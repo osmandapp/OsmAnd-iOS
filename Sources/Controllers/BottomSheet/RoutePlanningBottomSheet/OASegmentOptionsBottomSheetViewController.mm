@@ -159,13 +159,13 @@
 {
     OAMeasurementEditingContext *editingCtx = OARootViewController.instance.mapPanel.mapViewController.mapLayers.routePlanningLayer.editingCtx;
     NSInteger pos = editingCtx.selectedPointPosition;
-    NSArray<OAGpxTrkPt *> *points = editingCtx.getPoints;
+    NSArray<OAWptPt *> *points = editingCtx.getPoints;
     
     double dist = 0;
     if (dialogMode == EOARouteBetweenPointsDialogModeSingle)
     {
-        OAGpxTrkPt *selectedPoint = points[pos];
-        OAGpxTrkPt *second = points[before ? pos - 1 : pos + 1];
+        OAWptPt *selectedPoint = points[pos];
+        OAWptPt *second = points[before ? pos - 1 : pos + 1];
         dist += getDistance(selectedPoint.getLatitude, selectedPoint.getLongitude, second.getLatitude, second.getLongitude);
     }
     else
@@ -183,8 +183,8 @@
         }
         for (NSInteger i = startIdx; i <= endIdx; i++)
         {
-            OAGpxTrkPt *first = points[i - 1];
-            OAGpxTrkPt *second = points[i];
+            OAWptPt *first = points[i - 1];
+            OAWptPt *second = points[i];
             dist += getDistance(first.getLatitude, first.getLongitude, second.getLatitude, second.getLongitude);
         }
     }

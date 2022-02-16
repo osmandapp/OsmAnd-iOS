@@ -1175,7 +1175,7 @@
 "group_name" = "Όνομα ομάδας";
 "shared_string_import" = "Εισαγωγή";
 "fav_points_not_exist" = "Δεν υπάρχουν αγαπημένα σημεία";
-"track" = "Αγροτική Οδός";
+"shared_string_gpx_track" = "Αγροτική Οδός";
 "track_save_descr" = "Αποθήκευση τρέχοντος ίχνους ως αρχείου GPX τώρα.";
 "emergency" = "Επείγοντα";
 "select_group" = "Επιλογή ομάδας";

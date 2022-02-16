@@ -148,11 +148,11 @@
 "map_widget_next_next_turn" = "Second next turn";
 "always_center_position_on_map" = "Display position always in center";
 "map_widget_appearance_rem" = "Remaining elements";
-"map_widget_compass" = "Compass";
+"map_widget_compass" = "Kompas";
 "map_widget_intermediate_distance" = "Intermediate destination";
-"map_widget_distance" = "Destination";
+"map_widget_distance" = "Destinasi";
 "monitoring_control_start" = "REC";
-"map_widget_altitude" = "Altitude";
+"map_widget_altitude" = "Ketinggian";
 "map_widget_battery" = "Level baterei";
 "map_widget_plain_time" = "Waktu sekarang";
 "map_widget_max_speed" = "Speed limit";
@@ -182,7 +182,7 @@
 "show_traffic_warnings" = "Traffic warnings";
 "show_pedestrian_warnings" = "Pedestrian crosswalks";
 "show_cameras" = "Speed cameras";
-"show_lanes" = "Lanes";
+"show_lanes" = "Jalur";
 "speak_street_names" = "Nama jalan (TTS)";
 "speak_speed_limit" = "Batas kecepatan";
 "speak_cameras" = "Speed cameras";
@@ -241,7 +241,7 @@
 "nav_type_ski" = "Ski";
 "nav_type_geocoding" = "Geocoding";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
-"avoid_in_routing_title" = "Avoid…";
+"avoid_in_routing_title" = "Hindari…";
 "avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Utamakan…";
 "prefer_in_routing_descr" = "Utamakan jalan raya";
@@ -293,7 +293,7 @@
 "recording_preferences_descr" = "Track recording preferences";
 "routing_settings" = "Navigasi";
 "shared_string_navigation" = "Navigation";
-"get_directions" = "Directions";
+"get_directions" = "Arahan";
 "app_mode_bus" = "Bis";
 "app_mode_train" = "Kereta Api";
 "app_mode_truck" = "Truk";
@@ -360,7 +360,7 @@
 "ending_point_too_far" = "Ending point too far from nearest road.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
 "arrived_at_destination" = "Anda telah tiba.";
-"towards" = "toward";
+"towards" = "menuju";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Ambil %d keluar dan pergi";
 "route_kl" = "Tetap di kiri dan jalan";
@@ -372,7 +372,7 @@
 "route_tshl" = "Turn sharply left and go";
 "route_tsll" = "Turn slightly left and go";
 "route_tu" = "Putar balik dan jalan";
-"route_head" = "Head";
+"route_head" = "Kepala";
 "looking_up_address" = "Looking up address";
 "no_address_found" = "No address determined";
 "traffic_warning_speed_limit" = "Batas kecepatan";
@@ -396,7 +396,7 @@
 "left_side_navigation" = "Left-hand driving";
 "right_side_navigation" = "Right-hand driving";
 "si_mi_feet" = "Miles/feet";
-"si_mi_yard" = "Miles/yards";
+"si_mi_yard" = "Mil/yard";
 "si_mi_meters" = "Mil/Meter";
 "si_km_m" = "Kilometer/meter";
 "si_nm" = "Nautical miles";
@@ -523,7 +523,7 @@
 "fav_name" = "Nama";
 "fav_group" = "Group";
 "groups" = "Grup-grup";
-"favorite" = "Favorite";
+"favorite" = "Favorit";
 "poi_overlay" = "POI Overlay";
 "poi_type" = "Jenis POI";
 "my_favorites" = "My Favorites";
@@ -567,7 +567,7 @@
 "default_color" = "Warna bawaan";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 "favorite_friends_category" = "Teman-teman";
-"favorite_places_category" = "Places";
+"favorite_places_category" = "Tempat";
 "shared_string_others" = "Lainnya";
 
 // Shapes
@@ -648,10 +648,10 @@
 "record_trip" = "Record your track";
 "poi_clear" = "Clear";
 "poi_list" = "Daftar POI";
-"gpxup_public" = "Public";
-"gpxup_identifiable" = "Identifiable";
-"gpxup_trackable" = "Trackable";
-"gpxup_private" = "Private";
+"gpxup_public" = "Publik";
+"gpxup_identifiable" = "Dapat diidentifikasi";
+"gpxup_trackable" = "Dapat dilacak";
+"gpxup_private" = "Privat";
 "gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
 "gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
 "gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
@@ -1062,7 +1062,7 @@
 "split_before" = "Split before";
 "split_after" = "Split after";
 "follow_track" = "Follow track";
-"track" = "Trek";
+"shared_string_gpx_track" = "Trek";
 "select_another_track" = "Select another track";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Attach to the roads";
@@ -1896,7 +1896,7 @@
 "shared_a_z" = "A - Z";
 "shared_z_a" = "Z - A";
 "city_type_suburb" = "Pinggiran kota";
-"city_type_hamlet" = "Kampung";
+"city_type_hamlet" = "Dukuh";
 "city_type_village" = "Desa";
 "city_type_town" = "Kota kecil";
 "city_type_city" = "Kota besar";
@@ -2203,7 +2203,7 @@
 "rendering_attr_contourColorScheme_description" = "Skema warna garis kontur";
 "rendering_value_boldOutline_name" = "Bold outline";
 "routing_attr_avoid_toll_description" = "Menghindari jalan tol";
-"rendering_attr_noPolygons_name" = "Tidak ada poligon";
+"rendering_attr_noPolygons_name" = "Poligon";
 "rendering_attr_piste_difficulty_easy_name" = "Mudah";
 "routing_attr_weight_description" = "Specify permitted vehicle weight limit on routes.";
 "rendering_attr_surface_salt_name" = "Garam";
@@ -2284,7 +2284,7 @@
 "special" = "Spesial";
 "sport" = "Olahraga";
 "symbols" = "Simbol";
-"transport" = "Transport";
+"transport" = "Transportasi";
 "travel" = "Perjalanan";
 "nautical" = "Nautical";
 "industrial" = "Industrial";

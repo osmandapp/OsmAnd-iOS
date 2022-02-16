@@ -16,6 +16,17 @@
 #include <SkCGUtils.h>
 #include <SkCanvas.h>
 
+@implementation UIColor (nsColorNative)
+
+- (OsmAnd::FColorARGB) toFColorARGB
+{
+    CGFloat red, green, blue, alpha;
+    [self getRed:&red green:&green blue:&blue alpha:&alpha];
+    return OsmAnd::ColorARGB(alpha * 255, red * 255, green * 255, blue * 255);
+}
+
+@end
+
 @implementation NSDate (nsDateNative)
 
 - (std::tm) toTm

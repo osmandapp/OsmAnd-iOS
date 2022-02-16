@@ -1376,7 +1376,7 @@
 "app_profiles" = "Perfius de l\'aplicacion";
 "none_point_error" = "Ajustar un ponch aumens.";
 "service" = "Via de servici";
-"track" = "Pista, draia, carraira";
+"shared_string_gpx_track" = "Pista, draia, carraira";
 "hide_compass_ruler" = "Escondre la règla de la bossòla";
 "shared_string_disable" = "Desactivar";
 "searching_gps" = "Recèrca GPS en trin";

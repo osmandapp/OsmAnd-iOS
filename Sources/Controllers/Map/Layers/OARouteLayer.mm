@@ -8,11 +8,9 @@
 
 #import "OARouteLayer.h"
 #import "OARootViewController.h"
-#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
 #import "OARouteCalculationResult.h"
-#import "OAUtilities.h"
 #import "OANativeUtilities.h"
 #import "OARouteStatisticsHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -20,20 +18,21 @@
 #import "OARouteDirectionInfo.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
+#import "OAPreviewRouteLineInfo.h"
+#import "OAGPXAppearanceCollection.h"
+#import "OAGPXUIHelper.h"
+#import "OARouteColorizationHelper.h"
+#import "OAGPXDocument.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/GeoInfoDocument.h>
-#include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
-#include <OsmAndCore/Map/VectorLinesCollection.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SkiaUtilities.h>
 #include <SkCGUtils.h>
 
-#include <transportRouteResultSegment.h>
+#define kTurnArrowsColoringByAttr 0xffffffff
+#define kOutlineId 1001
 
 @implementation OARouteLayer
 {
@@ -59,6 +58,21 @@
     NSDictionary<NSString *, NSNumber *> *_routeAttributes;
 
     BOOL _initDone;
+
+    CGFloat _lineWidth;
+    OAPreviewRouteLineInfo *_previewRouteLineInfo;
+    NSInteger _routeLineColor;
+    NSInteger _customTurnArrowsColor;
+    OAColoringType *_routeColoringType;
+    NSString *_routeInfoAttribute;
+    OAGPXAppearanceCollection *_appearanceCollection;
+
+    OARouteCalculationResult *_route;
+    int _colorizationScheme;
+    QList<OsmAnd::FColorARGB> _colors;
+    OAColoringType *_prevRouteColoringType;
+    NSString *_prevRouteInfoAttribute;
+    NSMutableDictionary<NSString *, NSNumber *> *_cachedRouteLineWidth;
 }
 
 - (NSString *) layerId
@@ -106,7 +120,12 @@
     [self.mapView addKeyedSymbolsProvider:_currentGraphPosition];
     [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
     [self.mapView addKeyedSymbolsProvider:_transportRouteMarkers];
-    
+
+    _lineWidth = kDefaultWidthMultiplier * kWidthCorrectionValue;
+    _routeColoringType = OAColoringType.DEFAULT;
+    _colorizationScheme = COLORIZATION_NONE;
+    _cachedRouteLineWidth = [NSMutableDictionary dictionary];
+
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:self.mapViewController.zoomObservable];
@@ -135,8 +154,22 @@
 {
     [super updateLayer];
 
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _appearanceCollection = [[OAGPXAppearanceCollection alloc] init];
+    });
+
     [self refreshRoute];
     return YES;
+}
+
+- (NSInteger)getCustomRouteWidthMin
+{
+    return 1;
+}
+
+- (NSInteger)getCustomRouteWidthMax
+{
+    return 36;
 }
 
 - (void)drawRouteMarkers:(const std::shared_ptr<TransportRouteResultSegment> &)routeSegment
@@ -233,7 +266,17 @@
 
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points addToExisting:(BOOL)addToExisting
 {
+    [self drawRouteSegment:points
+             addToExisting:addToExisting
+                    colors:{}
+        colorizationScheme:COLORIZATION_NONE
+    ];
+}
+
+- (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points addToExisting:(BOOL)addToExisting colors:(const QList<OsmAnd::FColorARGB> &)colors colorizationScheme:(int)colorizationScheme
+{
     [self.mapViewController runWithRenderSync:^{
+        _lineWidth = [self getLineWidth];
         const auto& lines = _collection->getLines();
         if (lines.empty() || addToExisting)
         {
@@ -243,34 +286,58 @@
                 [self.mapView removeKeyedSymbolsProvider:_collection];
                 _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
             }
-            
+
             int baseOrder = self.baseOrder;
-            BOOL isNight = [OAAppSettings sharedManager].nightMode;
-            
-            NSDictionary<NSString *, NSNumber *> *result = _routeAttributes;
-            if (!result)
-                result = [self.mapViewController getLineRenderingAttributes:@"route"];
-            NSNumber *colorVal = [result valueForKey:@"color"];
-            BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
-            OsmAnd::ColorARGB lineColor = hasStyleColor ? OsmAnd::ColorARGB(colorVal.intValue) : isNight ?
-            OsmAnd::ColorARGB(0xff, 0xff, 0xdf, 0x3d) : OsmAnd::ColorARGB(0x88, 0x2a, 0x4b, 0xd1);
-            
+
+            // Add outline for colorized lines
+            if (!colors.isEmpty())
+            {
+                OsmAnd::VectorLineBuilder outlineBuilder;
+                outlineBuilder.setBaseOrder(baseOrder--)
+                              .setIsHidden(points.size() < 2)
+                              .setLineId(kOutlineId)
+                              .setLineWidth(_lineWidth + kOutlineWidth)
+                              .setOutlineWidth(kOutlineWidth)
+                              .setPoints(points)
+                              .setFillColor(kOutlineColor)
+                              .setApproximationEnabled(false);
+
+                outlineBuilder.buildAndAddToCollection(_collection);
+            }
+
             OsmAnd::VectorLineBuilder builder;
             builder.setBaseOrder(baseOrder--)
-            .setIsHidden(points.size() == 0)
-            .setLineId(1)
-            .setLineWidth(60.)
-            .setPoints(points);
-            
-            UIColor *color = UIColorFromARGB(lineColor.argb);
+                   .setIsHidden(points.size() < 2)
+                   .setLineId(1)
+                   .setLineWidth(_lineWidth)
+                   .setPoints(points);
+
+            UIColor *color = _routeLineColor == kDefaultRouteLineDayColor || _routeLineColor == kDefaultRouteLineNightColor
+                    ? UIColorFromARGB(_routeLineColor)
+                    : UIColorFromRGB(_routeLineColor);
+
+            OsmAnd::ColorARGB lineColor = [color toFColorARGB];
+
+            NSNumber *colorVal = [self getParamFromAttr:@"color"];
+            BOOL hasStyleColor = (colorVal && colorVal.intValue != -1 && colorVal.intValue == _routeLineColor)
+                    || _routeLineColor == kDefaultRouteLineDayColor
+                    || _routeLineColor == kDefaultRouteLineNightColor;
+
             builder.setFillColor(lineColor)
-            .setPathIcon([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color fileName:@"map_direction_arrow"])
-            .setSpecialPathIcon([self specialBitmapWithColor:lineColor])
-            .setShouldShowArrows(true)
-            .setScreenScale(UIScreen.mainScreen.scale);
-            
+                   .setPathIcon([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
+                                            fileName:@"map_direction_arrow"])
+                   .setSpecialPathIcon([self specialBitmapWithColor:lineColor])
+                   .setShouldShowArrows(true)
+                   .setScreenScale(UIScreen.mainScreen.scale);
+
+            if (!colors.empty())
+            {
+                builder.setColorizationMapping(colors)
+                       .setColorizationScheme(colorizationScheme);
+            }
+
             builder.buildAndAddToCollection(_collection);
-            
+
             if (isFirstLine)
             {
                 [self.mapView addKeyedSymbolsProvider:_collection];
@@ -279,10 +346,170 @@
         }
         else
         {
-            lines[0]->setPoints(points);
+            for (auto &line : lines)
+            {
+                line->setPoints(points);
+                if (!colors.empty() && line->getOutlineWidth() == 0.)
+                    line->setColorizationMapping(colors);
+            }
         }
         [self buildActionArrows];
     }];
+}
+
+- (NSNumber *)getParamFromAttr:(NSString *)param
+{
+    _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
+    return _routeAttributes[param];
+}
+
+- (NSInteger)getDefaultColor:(BOOL)forTurnArrows
+{
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    NSNumber *colorVal = [self getParamFromAttr:forTurnArrows ? @"color_3" : @"color"];
+    BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
+    return hasStyleColor
+            ? colorVal.intValue
+            : isNight
+                    ? forTurnArrows ? kDefaultTurnArrowsNightColor : kDefaultRouteLineNightColor
+                    : forTurnArrows ? kDefaultTurnArrowsDayColor : kDefaultRouteLineDayColor;
+}
+
+- (OAPreviewRouteLineInfo *)getPreviewRouteLineInfo
+{
+    return _previewRouteLineInfo;
+}
+
+- (void)setPreviewRouteLineInfo:(OAPreviewRouteLineInfo *)previewInfo
+{
+    _previewRouteLineInfo = previewInfo;
+}
+
+- (void)updateTurnArrowsColor
+{
+    if ([_routeColoringType isGradient]
+            && [_routeColoringType isAvailableForDrawingRoute:[_routingHelper getRoute]
+                                                attributeName:_previewRouteLineInfo.routeInfoAttribute])
+        _customTurnArrowsColor = kTurnArrowsColoringByAttr;
+    else
+        _customTurnArrowsColor = [self getDefaultColor:YES];
+}
+
+- (void)updateRouteColors:(BOOL)night
+{
+    if ([_routeColoringType isCustomColor])
+        [self updateCustomColor:night];
+    else
+        _routeLineColor = [self getDefaultColor:NO];
+
+    [self updateTurnArrowsColor];
+}
+
+- (void)updateCustomColor:(BOOL)night
+{
+    NSInteger customColor;
+    if (_previewRouteLineInfo)
+    {
+        customColor = [_previewRouteLineInfo getCustomColor:night];
+    }
+    else
+    {
+        OACommonInteger *colorPreference = night
+                ? [OAAppSettings sharedManager].customRouteColorNight
+                : [OAAppSettings sharedManager].customRouteColorDay;
+        customColor = [colorPreference get:[_routingHelper getAppMode]];
+    }
+    _routeLineColor = customColor;
+}
+
+- (void)updateRouteColoringType
+{
+    if (_previewRouteLineInfo)
+    {
+        _routeColoringType = _previewRouteLineInfo.coloringType;
+        _routeInfoAttribute = _previewRouteLineInfo.routeInfoAttribute;
+    }
+    else
+    {
+        OAApplicationMode *mode = [_routingHelper getAppMode];
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        _routeColoringType = [settings.routeColoringType get:mode];
+        _routeInfoAttribute = [settings.routeInfoAttribute get:mode];
+    }
+}
+
+- (BOOL)shouldShowTurnArrows
+{
+    return _previewRouteLineInfo
+            ? _previewRouteLineInfo.showTurnArrows
+            : [[OAAppSettings sharedManager].routeShowTurnArrows get:[_routingHelper getAppMode]];
+}
+
+- (CGFloat)getLineWidth
+{
+    NSString *widthKey = _previewRouteLineInfo
+            ? _previewRouteLineInfo.width
+            : [[OAAppSettings sharedManager].routeLineWidth get:[_routingHelper getAppMode]];
+
+    CGFloat width;
+    if (widthKey)
+    {
+        if ([_cachedRouteLineWidth.allKeys containsObject:widthKey])
+        {
+            width = _cachedRouteLineWidth[widthKey].floatValue;
+        }
+        else
+        {
+            width = [self getWidthByKey:widthKey];
+            _cachedRouteLineWidth[widthKey] = @(width);
+        }
+    }
+    else
+    {
+        width = [self getParamFromAttr:@"strokeWidth"].floatValue;
+    }
+
+    return width;
+}
+
+- (CGFloat)getWidthByKey:(NSString *)widthKey
+{
+    CGFloat resultValue = kDefaultWidthMultiplier;
+    if (widthKey && widthKey.length > 0)
+    {
+        if ([NSCharacterSet.decimalDigitCharacterSet isSupersetOfSet:
+                [NSCharacterSet characterSetWithCharactersInString:widthKey]])
+        {
+            resultValue = widthKey.integerValue;
+        }
+        else
+        {
+            if (_appearanceCollection)
+            {
+                OAGPXTrackWidth *trackWidth = [_appearanceCollection getWidthForValue:widthKey];
+                if (trackWidth)
+                {
+                    if ([trackWidth isCustom])
+                    {
+                        resultValue = trackWidth.customValue.floatValue > [self getCustomRouteWidthMax]
+                                ? [self getCustomRouteWidthMin]
+                                : trackWidth.customValue.floatValue;
+                    }
+                    else
+                    {
+                        double width = DBL_MIN;
+                        NSArray<NSArray<NSNumber *> *> *allValues = trackWidth.allValues;
+                        for (NSArray<NSNumber *> *values in allValues)
+                        {
+                            width = fmax(values[2].intValue, width);
+                        }
+                        resultValue = width;
+                    }
+                }
+            }
+        }
+    }
+    return resultValue * kWidthCorrectionValue;
 }
 
 - (OsmAnd::AreaI) calculateBounds:(NSArray<CLLocation *> *)pts
@@ -310,69 +537,62 @@
 
 - (void) buildActionArrows
 {
-    [self.mapViewController runWithRenderSync:^{
-        const auto zoom = self.mapView.zoomLevel;
-        
-        if (_collection->getLines().isEmpty() || zoom <= OsmAnd::ZoomLevel14)
-        {
-            [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
-            _actionLinesCollection->removeAllLines();
-            return;
-        }
-        else
-        {
-            NSDictionary<NSString *, NSNumber *> *result = _routeAttributes;
-            if (!result)
-                result = [self.mapViewController getLineRenderingAttributes:@"route"];
-            NSNumber *colorVal = [result valueForKey:@"color_3"];
-            BOOL hasStyleColor = colorVal && colorVal.intValue != -1;
-            BOOL isNight = [OAAppSettings sharedManager].nightMode;
-            OsmAnd::ColorARGB lineColor = hasStyleColor ? OsmAnd::ColorARGB(colorVal.intValue) : isNight ?
-            OsmAnd::ColorARGB(0xff41a6d9) : OsmAnd::ColorARGB(0xffffde5b);
-            
-            int baseOrder = self.baseOrder - 1000;
-            NSArray<NSArray<CLLocation *> *> *actionPoints = [self calculateActionPoints];
-            if (actionPoints.count > 0)
+    if ([self shouldShowTurnArrows])
+    {
+        [self.mapViewController runWithRenderSync:^{
+            const auto zoom = self.mapView.zoomLevel;
+
+            if (_collection->getLines().isEmpty() || zoom <= OsmAnd::ZoomLevel14) {
+                [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
+                _actionLinesCollection->removeAllLines();
+                return;
+            }
+            else
             {
-                int lineIdx = 0;
-                int initialLinesCount = _actionLinesCollection->getLines().count();
-                for (NSArray<CLLocation *> *line in actionPoints)
+                int baseOrder = self.baseOrder - 1000;
+                NSArray<NSArray<CLLocation *> *> *actionPoints = [self calculateActionPoints];
+                if (actionPoints.count > 0)
                 {
-                    QVector<OsmAnd::PointI> points;
-                    for (CLLocation *point in line)
+                    int lineIdx = 0;
+                    int initialLinesCount = _actionLinesCollection->getLines().count();
+                    for (NSArray<CLLocation *> *line in actionPoints)
                     {
-                        points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.coordinate.latitude, point.coordinate.longitude)));
+                        QVector<OsmAnd::PointI> points;
+                        for (CLLocation *point in line)
+                        {
+                            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.coordinate.latitude, point.coordinate.longitude)));
+                        }
+                        if (lineIdx < initialLinesCount)
+                        {
+                            auto line = _actionLinesCollection->getLines()[lineIdx];
+                            line->setPoints(points);
+                            line->setIsHidden(false);
+                            lineIdx++;
+                        }
+                        else
+                        {
+                            OsmAnd::VectorLineBuilder builder;
+                            builder.setBaseOrder(baseOrder--)
+                                    .setIsHidden(false)
+                                    .setLineId(_actionLinesCollection->getLines().size())
+                                    .setLineWidth(_lineWidth * 0.4)
+                                    .setPoints(points)
+                                    .setEndCapStyle(OsmAnd::LineEndCapStyle::ARROW)
+                                    .setFillColor(OsmAnd::ColorARGB(_customTurnArrowsColor));
+                            builder.buildAndAddToCollection(_actionLinesCollection);
+                        }
                     }
-                    if (lineIdx < initialLinesCount)
+                    QList<std::shared_ptr<OsmAnd::VectorLine> > toDelete;
+                    while (lineIdx < initialLinesCount)
                     {
-                        auto line = _actionLinesCollection->getLines()[lineIdx];
-                        line->setPoints(points);
-                        line->setIsHidden(false);
+                        _actionLinesCollection->getLines()[lineIdx]->setIsHidden(true);
                         lineIdx++;
                     }
-                    else
-                    {
-                        OsmAnd::VectorLineBuilder builder;
-                        builder.setBaseOrder(baseOrder--)
-                            .setIsHidden(false)
-                            .setLineId(_actionLinesCollection->getLines().size())
-                            .setLineWidth(25.) // change this to dynamic width in the future
-                            .setPoints(points)
-                            .setEndCapStyle(OsmAnd::LineEndCapStyle::ARROW)
-                            .setFillColor(lineColor);
-                        builder.buildAndAddToCollection(_actionLinesCollection);
-                    }
-                }
-                QList< std::shared_ptr<OsmAnd::VectorLine> > toDelete;
-                while (lineIdx < initialLinesCount)
-                {
-                    _actionLinesCollection->getLines()[lineIdx]->setIsHidden(true);
-                    lineIdx++;
                 }
             }
-        }
-        [self.mapView addKeyedSymbolsProvider:_actionLinesCollection];
-    }];
+            [self.mapView addKeyedSymbolsProvider:_actionLinesCollection];
+        }];
+    }
 }
 
 - (NSArray<NSArray<CLLocation *> *> *) calculateActionPoints
@@ -517,12 +737,20 @@
 
 - (void) refreshRoute
 {
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    _prevRouteColoringType = _routeColoringType;
+    _prevRouteInfoAttribute = _routeInfoAttribute;
+    [self updateRouteColoringType];
+    [self updateRouteColors:isNight];
+
     OARouteCalculationResult *route = [_routingHelper getRoute];
     if ([_routingHelper isPublicTransportMode])
     {
         NSInteger currentRoute = _transportHelper.currentRoute;
         const auto routes = [_transportHelper getRoutes];
         const auto route = currentRoute != -1 && routes.size() > currentRoute ? routes[currentRoute] : nullptr;
+        _route = nil;
+        _colors.clear();
         if (route != nullptr)
         {
             CLLocation *start = _transportHelper.startLocation;
@@ -552,32 +780,81 @@
     }
     else if ([_routingHelper getFinalLocation] && route && [route isCalculated])
     {
-        NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
         int currentRoute = route.currentRoute;
         if (currentRoute < 0)
             currentRoute = 0;
 
-        QVector<OsmAnd::PointI> points;
-        CLLocation* lastProj = [_routingHelper getLastProjection];
-        if (lastProj)
-            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lastProj.coordinate.latitude, lastProj.coordinate.longitude)));
+        OAColoringType *routeColoringType = _routeColoringType;
+        if ([routeColoringType isGradient] && ![routeColoringType isAvailableForDrawingRoute:route attributeName:nil])
+            routeColoringType = OAColoringType.DEFAULT;
+        else if ([routeColoringType isRouteInfoAttribute] && ![routeColoringType isAvailableForDrawingRoute:route attributeName:_routeInfoAttribute])
+            routeColoringType = OAColoringType.DEFAULT;
 
+        NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
+        if ([routeColoringType isGradient]
+                && (_route != route || _prevRouteColoringType != routeColoringType || _colorizationScheme != COLORIZATION_GRADIENT))
+        {
+            OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
+            OARouteColorizationHelper *colorizationHelper =
+                    [[OARouteColorizationHelper alloc] initWithGpxFile:gpx
+                                                              analysis:[gpx getAnalysis:0]
+                                                                  type:[[routeColoringType toGradientScaleType] toColorizationType]
+                                                       maxProfileSpeed:0
+                    ];
+            _colorizationScheme = COLORIZATION_GRADIENT;
+            _colors = colorizationHelper ? [colorizationHelper getResult] : QList<OsmAnd::FColorARGB>();
+            _route = route;
+        }
+        else if ([routeColoringType isRouteInfoAttribute]
+                && (_route != route || ![_prevRouteInfoAttribute isEqualToString:_routeInfoAttribute] || _colorizationScheme != COLORIZATION_SOLID))
+        {
+            _colorizationScheme = COLORIZATION_SOLID;
+            _colors.clear();
+            auto segs = route.getOriginalRoute;
+            [self calculateSegmentsColor:_colors
+                                attrName:_routeInfoAttribute
+                           segmentResult:segs
+                               locations:locations];
+            _route = route;
+        }
+        else if ([routeColoringType isSolidSingleColor]
+                && (_route != route || _colorizationScheme != COLORIZATION_NONE || _colors.count() > 0))
+        {
+            _colorizationScheme = COLORIZATION_NONE;
+            _colors.clear();
+            _route = route;
+        }
+
+        QVector<OsmAnd::PointI> points;
         for (int i = currentRoute; i < locations.count; i++)
         {
-            CLLocation *p = locations[i];
-            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(p.coordinate.latitude, p.coordinate.longitude)));
+            CLLocation *location = locations[i];
+            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
         }
-        
-        if (points.size() > 1)
+        if (_colorizationScheme == COLORIZATION_NONE)
         {
-            [self drawRouteSegment:points addToExisting:NO];
+            if (!points.isEmpty())
+                [self drawRouteSegment:points addToExisting:NO];
+            else
+                [self.mapViewController runWithRenderSync:^{ [self resetLayer]; }];
         }
         else
         {
-            [self.mapViewController runWithRenderSync:^{
-                [self resetLayer];
-            }];
+            int segStartIndex = _colors.count() - points.count();
+            QList<OsmAnd::FColorARGB> segmentColors;
+            if (points.size() > 1 && !_colors.isEmpty() && segStartIndex < _colors.size() && segStartIndex + points.size() - 1 < _colors.size())
+                segmentColors = _colors.mid(segStartIndex, points.size());
+
+            if (!segmentColors.isEmpty())
+            {
+                [self drawRouteSegment:points
+                         addToExisting:NO
+                                colors:segmentColors
+                    colorizationScheme:_colorizationScheme];
+                segmentColors.clear();
+            }
         }
+        points.clear();
     }
     else
     {
@@ -586,7 +863,7 @@
         }];
     }
 }
-                 
+
 - (void) addWalkRoute:(SHARED_PTR<TransportRouteResultSegment>) s1 s2:(SHARED_PTR<TransportRouteResultSegment>)s2 start:(CLLocation *)start end:(CLLocation *)end
 {
     OARouteCalculationResult *res = [_transportHelper.walkingRouteSegments objectForKey:@[[[OATransportRouteResultSegment alloc] initWithSegment:s1], [[OATransportRouteResultSegment alloc] initWithSegment:s2]]];
@@ -603,11 +880,12 @@
     }
 }
 
-- (void) showCurrentStatisticsLocation:(OATrackChartPoints *) trackPoints
+- (void) showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints
 {
-    if (_locationMarker && trackPoints.highlightedPoint.latitude != 0 && trackPoints.highlightedPoint.longitude != 0)
+    if (_locationMarker && CLLocationCoordinate2DIsValid(trackPoints.highlightedPoint))
     {
-        _locationMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(trackPoints.highlightedPoint));
+        _locationMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(
+                OsmAnd::LatLon(trackPoints.highlightedPoint.latitude, trackPoints.highlightedPoint.longitude)));
         _locationMarker->setIsHidden(false);
     }
     OsmAnd::MapMarkerBuilder xAxisMarkerBuilder;

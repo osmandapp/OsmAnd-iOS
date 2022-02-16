@@ -383,7 +383,7 @@
     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(destination.latitude, destination.longitude)));
     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currLoc.coordinate.latitude, currLoc.coordinate.longitude)));
 
-    const auto color = [self argbFromUIColor:destination.color];
+    const auto color = [destination.color toFColorARGB];
     const auto& line = [self getLine:lineId];
     const auto& outline = [self getLine:outlineId];
 
@@ -445,13 +445,6 @@
             return *it;
     }
     return nullptr;
-}
-
-- (OsmAnd::FColorARGB) argbFromUIColor:(UIColor *)color
-{
-    CGFloat red, green, blue, alpha;
-    [color getRed:&red green:&green blue:&blue alpha:&alpha];
-    return OsmAnd::ColorARGB(alpha * 255, red * 255, green * 255, blue * 255);
 }
 
 #pragma mark - OAStateChangedListener

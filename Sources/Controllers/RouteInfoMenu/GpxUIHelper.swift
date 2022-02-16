@@ -38,12 +38,23 @@ import Charts.Swift
     }
 }
 
-public enum GPXDataSetAxisType: String {
-    case DISTANCE = "shared_string_distance"
-    case TIME = "shared_string_time"
-    case TIMEOFDAY = "shared_string_time_of_day"
-    
-    var icon: String {
+@objc public enum GPXDataSetAxisType: Int {
+    case DISTANCE = 0
+    case TIME = 1
+    case TIMEOFDAY = 2
+
+    public func getName() -> String {
+        switch self {
+        case .DISTANCE:
+            return NSLocalizedString("shared_string_distance", comment: "");
+        case .TIME:
+            return NSLocalizedString("shared_string_time", comment: "");
+        case .TIMEOFDAY:
+            return NSLocalizedString("shared_string_time_of_day", comment: "");
+        }
+    }
+
+    public func getImageName() -> String {
         switch self {
         case .DISTANCE:
             return ""
@@ -52,10 +63,6 @@ public enum GPXDataSetAxisType: String {
         case .TIMEOFDAY:
             return ""
         }
-    }
-    
-    func getLocalizedName() -> String {
-        return NSLocalizedString(self.rawValue, comment: "")
     }
 }
 
@@ -210,6 +217,12 @@ public enum GPXDataSetAxisType: String {
     {
         let orderedDataSet: OrderedLineDataSet? = dataSet as? OrderedLineDataSet
         return orderedDataSet?.divX ?? 0
+    }
+
+    @objc static public func getDataSetAxisType(dataSet: IChartDataSet) -> GPXDataSetAxisType
+    {
+        let orderedDataSet: OrderedLineDataSet? = dataSet as? OrderedLineDataSet
+        return orderedDataSet?.getDataSetAxisType() ?? GPXDataSetAxisType.DISTANCE
     }
 
     private class GPXChartMarker: MarkerView {

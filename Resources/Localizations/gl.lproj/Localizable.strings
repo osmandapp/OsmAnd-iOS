@@ -1574,7 +1574,7 @@
 "join_segments" = "Unir segmentos";
 "special" = "Especial";
 "travel" = "Viaxe";
-"track" = "Pista";
+"shared_string_gpx_track" = "Pista";
 "address_search" = "Procura polo enderezo";
 "coordinates" = "Coordenadas";
 "shared_string_gpx_points" = "Puntos";

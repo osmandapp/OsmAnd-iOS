@@ -14,23 +14,28 @@
 #import "OAAutoObserverProxy.h"
 #import "OARootViewController.h"
 #import "OAWebClient.h"
+#import "OAWeatherHelper.h"
 
+#include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/WeatherRasterLayerProvider.h>
 
 @implementation OAWeatherRasterLayer
 {
-    std::shared_ptr<OsmAnd::IMapLayerProvider> _provider;
+    std::shared_ptr<OsmAnd::WeatherTileResourcesManager> _resourcesManager;
+    std::shared_ptr<OsmAnd::WeatherRasterLayerProvider> _provider;
+
+    OAWeatherHelper *_weatherHelper;
     OAAutoObserverProxy* _weatherChangeObserver;
-    OAAutoObserverProxy* _layerChangeObserver;
-    OAAutoObserverProxy* _alphaChangeObserver;
+    NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
+    NSMutableArray<OAAutoObserverProxy *> *_alphaChangeObservers;
 }
 
-- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController layerIndex:(int)layerIndex weatherBand:(EOAWeatherBand)weatherBand date:(NSDate *)date
+- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController layerIndex:(int)layerIndex weatherLayer:(EOAWeatherLayer)weatherLayer date:(NSDate *)date
 {
     self = [super initWithMapViewController:mapViewController layerIndex:layerIndex];
     if (self)
     {
-        _weatherBand = weatherBand;
+        _weatherLayer = weatherLayer;
         _date = date;
     }
     return self;
@@ -38,57 +43,24 @@
 
 - (NSString *) layerId
 {
-    return [NSString stringWithFormat:@"%@_%d", kWeatherRasterMapLayerId, self.layerIndex];
+    return [NSString stringWithFormat:@"%@_%d", kWeatherRasterMapLayerId, (int)_weatherLayer];
 }
 
 - (void) initLayer
 {
+    _resourcesManager = self.app.resourcesManager->getWeatherResourcesManager();
+    _weatherHelper = [OAWeatherHelper sharedInstance];
+    
     _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onWeatherChanged)
                                                         andObserve:self.app.data.weatherChangeObservable];
-    switch (_weatherBand) {
-        case WEATHER_BAND_TEMPERATURE:
-            _layerChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onWeatherLayerChanged)
-                                                              andObserve:self.app.data.weatherTempChangeObservable];
-            _alphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onWeaherLayerAlphaChanged)
-                                                              andObserve:self.app.data.weatherTempAlphaChangeObservable];
-            break;
-        case WEATHER_BAND_PRESSURE:
-            _layerChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onWeatherLayerChanged)
-                                                              andObserve:self.app.data.weatherPressureChangeObservable];
-            _alphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onWeaherLayerAlphaChanged)
-                                                              andObserve:self.app.data.weatherPressureAlphaChangeObservable];
-            break;
-        case WEATHER_BAND_WIND_SPEED:
-            _layerChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onWeatherLayerChanged)
-                                                              andObserve:self.app.data.weatherWindChangeObservable];
-            _alphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onWeaherLayerAlphaChanged)
-                                                              andObserve:self.app.data.weatherWindAlphaChangeObservable];
-            break;
-        case WEATHER_BAND_CLOUD:
-            _layerChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onWeatherLayerChanged)
-                                                              andObserve:self.app.data.weatherCloudChangeObservable];
-            _alphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onWeaherLayerAlphaChanged)
-                                                              andObserve:self.app.data.weatherCloudAlphaChangeObservable];
-            break;
-        case WEATHER_BAND_PRECIPITATION:
-            _layerChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onWeatherLayerChanged)
-                                                              andObserve:self.app.data.weatherPrecipChangeObservable];
-            _alphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onWeaherLayerAlphaChanged)
-                                                              andObserve:self.app.data.weatherPrecipAlphaChangeObservable];
-            break;
-        case WEATHER_BAND_UNDEFINED:
-            break;
+    _layerChangeObservers = [NSMutableArray array];
+    _alphaChangeObservers = [NSMutableArray array];
+    
+    for (OAWeatherBand *band in [[OAWeatherHelper sharedInstance] bands])
+    {
+        [_layerChangeObservers addObject:[band createSwitchObserver:self handler:@selector(onWeatherLayerChanged)]];
+        [_alphaChangeObservers addObject:[band createAlphaObserver:self handler:@selector(onWeatherLayerAlphaChanged)]];
     }
 }
 
@@ -99,16 +71,14 @@
         [_weatherChangeObserver detach];
         _weatherChangeObserver = nil;
     }
-    if (_layerChangeObserver)
-    {
-        [_layerChangeObserver detach];
-        _layerChangeObserver = nil;
-    }
-    if (_alphaChangeObserver)
-    {
-        [_alphaChangeObserver detach];
-        _alphaChangeObserver = nil;
-    }
+    for (OAAutoObserverProxy *observer in _layerChangeObservers)
+        [observer detach];
+
+    for (OAAutoObserverProxy *observer in _alphaChangeObservers)
+        [observer detach];
+    
+    [_layerChangeObservers removeAllObjects];
+    [_alphaChangeObservers removeAllObjects];
 }
 
 - (void) resetLayer
@@ -117,72 +87,50 @@
     [self.mapView resetProviderFor:self.layerIndex];
 }
 
-- (void) updateDate:(NSDate *)date
-{
-    _date = date;
-
-    [self.mapViewController runWithRenderSync:^{
-        [self updateLayer];
-    }];
-}
-
-- (NSString *) getColorFilePath
-{
-    switch (_weatherBand)
-    {
-        case WEATHER_BAND_CLOUD:
-            return [[NSBundle mainBundle] pathForResource:@"cloud_color" ofType:@"txt"];
-        case WEATHER_BAND_TEMPERATURE:
-            return [[NSBundle mainBundle] pathForResource:@"temperature_color" ofType:@"txt"];
-        case WEATHER_BAND_PRESSURE:
-            return [[NSBundle mainBundle] pathForResource:@"pressure_color" ofType:@"txt"];
-        case WEATHER_BAND_WIND_SPEED:
-            return [[NSBundle mainBundle] pathForResource:@"wind_color" ofType:@"txt"];
-        case WEATHER_BAND_PRECIPITATION:
-            return [[NSBundle mainBundle] pathForResource:@"precip_color" ofType:@"txt"];
-        case WEATHER_BAND_UNDEFINED:
-            return nil;
-    }
-    return nil;
-}
-
 - (BOOL) updateLayer
 {
     [super updateLayer];
 
     [self updateOpacitySliderVisibility];
     
-    if (!self.app.data.weather || ![self isLayerVisible])
+    QList<OsmAnd::BandIndex> bands = [_weatherHelper getVisibleBands];
+    if (!self.app.data.weather || bands.empty())
         return NO;
     
-    NSString *colorFilePath = [self getColorFilePath];
-    if (colorFilePath && [[NSFileManager defaultManager] fileExistsAtPath:colorFilePath] && _weatherBand != WEATHER_BAND_UNDEFINED)
-    {
-        [self showProgressHUD];
-                        
-        const auto dateTime = QDateTime::fromNSDate(_date).toUTC();
-        _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(
-            dateTime,
-            _weatherBand,
-            QString::fromNSString(colorFilePath),
-            256,
-            self.displayDensityFactor,
-            QString::fromNSString(self.app.cachePath),
-            QString::fromNSString([NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj"]),
-            std::make_shared<const OAWebClient>()
-        );
-        //[self.mapView setProvider:_provider forLayer:0];
-        [self.mapView setProvider:_provider forLayer:self.layerIndex];
-
-        OsmAnd::MapLayerConfiguration config;
-        config.setOpacityFactor([self getLayerOpacity]);
-        [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-
-        [self hideProgressHUD];
-        
-        return YES;
+    //[self showProgressHUD];
+          
+    const auto dateTime = QDateTime::fromNSDate(_date).toUTC();
+    OsmAnd::WeatherLayer layer;
+    switch (_weatherLayer) {
+        case WEATHER_LAYER_LOW:
+            layer = OsmAnd::WeatherLayer::Low;
+            break;
+        case WEATHER_LAYER_HIGH:
+            layer = OsmAnd::WeatherLayer::High;
+            break;
+        default:
+            layer = OsmAnd::WeatherLayer::Low;
+            break;
     }
-    return NO;
+    if (true)//!_provider)
+    {
+        _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, dateTime, bands);
+        [self.mapView setProvider:_provider forLayer:self.layerIndex];
+        
+        OsmAnd::MapLayerConfiguration config;
+        config.setOpacityFactor(1.0f);
+        [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+    }
+    else
+    {
+        _provider->setDateTime(dateTime);
+        _provider->setBands(bands);
+        [self.mapView invalidateFrame];
+    }
+
+    //[self hideProgressHUD];
+    
+    return YES;
 }
 
 - (void) onWeatherChanged
@@ -190,60 +138,43 @@
     [self updateWeatherLayer];
 }
 
-- (void) onWeatherLayerChanged
+- (void) updateDate:(NSDate *)date
 {
-    [self updateWeatherLayer];
-}
+    _date = date;
 
-- (void) onWeaherLayerAlphaChanged
-{
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.mapViewController runWithRenderSync:^{
-            OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor([self getLayerOpacity]);
-            [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+            [self updateWeatherLayer];
         }];
     });
 }
 
-- (BOOL) isLayerVisible
+- (void) onWeatherLayerChanged
 {
-    switch (_weatherBand)
-    {
-        case WEATHER_BAND_CLOUD:
-            return self.app.data.weatherCloud;
-        case WEATHER_BAND_TEMPERATURE:
-            return self.app.data.weatherTemp;
-        case WEATHER_BAND_PRESSURE:
-            return self.app.data.weatherPressure;
-        case WEATHER_BAND_WIND_SPEED:
-            return self.app.data.weatherWind;
-        case WEATHER_BAND_PRECIPITATION:
-            return self.app.data.weatherPrecip;
-        case WEATHER_BAND_UNDEFINED:
-            return NO;
-    }
-    return NO;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.mapViewController runWithRenderSync:^{
+            [self updateWeatherLayer];
+        }];
+    });
 }
 
-- (double) getLayerOpacity
+- (void) onWeatherLayerAlphaChanged
 {
-    switch (_weatherBand)
-    {
-        case WEATHER_BAND_CLOUD:
-            return self.app.data.weatherCloudAlpha;
-        case WEATHER_BAND_TEMPERATURE:
-            return self.app.data.weatherTempAlpha;
-        case WEATHER_BAND_PRESSURE:
-            return self.app.data.weatherPressureAlpha;
-        case WEATHER_BAND_WIND_SPEED:
-            return self.app.data.weatherWindAlpha;
-        case WEATHER_BAND_PRECIPITATION:
-            return self.app.data.weatherPrecipAlpha;
-        case WEATHER_BAND_UNDEFINED:
-            return 0.0;
-    }
-    return 0.0;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.mapViewController runWithRenderSync:^{
+            _resourcesManager->setBandOpacityMap([_weatherHelper getBandOpacityMap]);
+            [self updateWeatherLayer];
+        }];
+    });
+/*
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.mapViewController runWithRenderSync:^{
+            OsmAnd::MapLayerConfiguration config;
+            config.setOpacityFactor([value floatValue]);
+            [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+        }];
+    });
+ */
 }
 
 - (void) updateWeatherLayer

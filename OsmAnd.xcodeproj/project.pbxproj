@@ -1009,6 +1009,8 @@
 		8A7A4CA1210A036E00EC1B06 /* map_transport_stop_bus@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A7A4C99210A036D00EC1B06 /* map_transport_stop_bus@3x.png */; };
 		8A7A4CA3210A036E00EC1B06 /* map_transport_stop_bus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A7A4C9A210A036D00EC1B06 /* map_transport_stop_bus@2x.png */; };
 		8A7A4CA7210A036E00EC1B06 /* map_transport_stop_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A7A4C9C210A036E00EC1B06 /* map_transport_stop_bg@2x.png */; };
+		8A7DF79A27B9147B0005BF39 /* OAWeatherHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A7DF79927B9147B0005BF39 /* OAWeatherHelper.mm */; };
+		8A7DF79D27B94A2D0005BF39 /* OAWeatherBand.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A7DF79C27B94A2D0005BF39 /* OAWeatherBand.m */; };
 		8A836B4F227B333B005EE20E /* ic_action_intermediate_destination_time@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B4C227B333A005EE20E /* ic_action_intermediate_destination_time@2x.png */; };
 		8A836B51227B333B005EE20E /* ic_action_intermediate_destination_time@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B4E227B333A005EE20E /* ic_action_intermediate_destination_time@3x.png */; };
 		8A836B58227B43DF005EE20E /* widget_intermediate_time_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B52227B43DE005EE20E /* widget_intermediate_time_night@3x.png */; };
@@ -3994,6 +3996,10 @@
 		8A7A4C99210A036D00EC1B06 /* map_transport_stop_bus@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_transport_stop_bus@3x.png"; path = "Resources/Icons/map_transport_stop_bus@3x.png"; sourceTree = "<group>"; };
 		8A7A4C9A210A036D00EC1B06 /* map_transport_stop_bus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_transport_stop_bus@2x.png"; path = "Resources/Icons/map_transport_stop_bus@2x.png"; sourceTree = "<group>"; };
 		8A7A4C9C210A036E00EC1B06 /* map_transport_stop_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_transport_stop_bg@2x.png"; path = "Resources/Icons/map_transport_stop_bg@2x.png"; sourceTree = "<group>"; };
+		8A7DF79827B9147B0005BF39 /* OAWeatherHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWeatherHelper.h; sourceTree = "<group>"; };
+		8A7DF79927B9147B0005BF39 /* OAWeatherHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherHelper.mm; sourceTree = "<group>"; };
+		8A7DF79B27B94A2D0005BF39 /* OAWeatherBand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWeatherBand.h; sourceTree = "<group>"; };
+		8A7DF79C27B94A2D0005BF39 /* OAWeatherBand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWeatherBand.m; sourceTree = "<group>"; };
 		8A836B4C227B333A005EE20E /* ic_action_intermediate_destination_time@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_intermediate_destination_time@2x.png"; sourceTree = "<group>"; };
 		8A836B4E227B333A005EE20E /* ic_action_intermediate_destination_time@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_intermediate_destination_time@3x.png"; sourceTree = "<group>"; };
 		8A836B52227B43DE005EE20E /* widget_intermediate_time_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_intermediate_time_night@3x.png"; sourceTree = "<group>"; };
@@ -11424,6 +11430,8 @@
 				DA5A803526C563A500F274C7 /* OAMapViewState.m */,
 				DA5A803F26C563A500F274C7 /* OATargetPoint.h */,
 				DA5A803626C563A500F274C7 /* OATargetPoint.m */,
+				8A7DF79B27B94A2D0005BF39 /* OAWeatherBand.h */,
+				8A7DF79C27B94A2D0005BF39 /* OAWeatherBand.m */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -11629,6 +11637,8 @@
 				DA5A809026C563A500F274C7 /* SunriseSunset.h */,
 				DA5A80C326C563A600F274C7 /* SunriseSunset.m */,
 				DA5A80C526C563A600F274C7 /* UIColor+RGB.swift */,
+				8A7DF79827B9147B0005BF39 /* OAWeatherHelper.h */,
+				8A7DF79927B9147B0005BF39 /* OAWeatherHelper.mm */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -14198,6 +14208,7 @@
 				DA5A84B526C563A900F274C7 /* OAAddDestinationBottomSheetViewController.mm in Sources */,
 				DA5A824526C563A700F274C7 /* OAVehicleParametersViewController.mm in Sources */,
 				DA5A853026C563A900F274C7 /* OAOsmAndLiveHelper.mm in Sources */,
+				8A7DF79D27B94A2D0005BF39 /* OAWeatherBand.m in Sources */,
 				DA5A81E026C563A700F274C7 /* OAGPXMutableDocument.mm in Sources */,
 				DA5A817626C563A700F274C7 /* OAPointDescription.mm in Sources */,
 				DA5A833D26C563A800F274C7 /* OAPublicTransportPointCell.m in Sources */,
@@ -14853,6 +14864,7 @@
 				DA5A833C26C563A800F274C7 /* OACustomSelectionButtonCell.m in Sources */,
 				DA5A836A26C563A800F274C7 /* OARouteStatisticsHelper.mm in Sources */,
 				DA5A815026C563A700F274C7 /* OACarPlayAddressSearchController.mm in Sources */,
+				8A7DF79A27B9147B0005BF39 /* OAWeatherHelper.mm in Sources */,
 				DA5A818726C563A700F274C7 /* OAShowHideTransportLinesAction.mm in Sources */,
 				DA5A81B126C563A700F274C7 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				DA5A837626C563A800F274C7 /* OARouteAvoidSettingsViewController.mm in Sources */,

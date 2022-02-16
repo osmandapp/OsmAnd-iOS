@@ -1205,10 +1205,18 @@ typedef enum
     if (self.isNewContextMenuDisabled)
         return;
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
-    for (OATargetPoint *targetPoint in targetPoints)
+        
+    if (_activeTargetType == OATargetRouteIntermediateSelection && targetPoints.count > 1)
     {
-        if ([self processTargetPoint:targetPoint])
-            [validPoints addObject:targetPoint];
+        [validPoints addObjectsFromArray:targetPoints];
+    }
+    else
+    {
+        for (OATargetPoint *targetPoint in targetPoints)
+        {
+            if ([self processTargetPoint:targetPoint])
+                [validPoints addObject:targetPoint];
+        }
     }
     
     if (validPoints.count == 0)
@@ -2175,6 +2183,7 @@ typedef enum
     if ([self.view.subviews containsObject:self.targetMultiMenuView])
         [self.targetMultiMenuView removeFromSuperview];
     
+    [self.targetMultiMenuView setActiveTargetType:_activeTargetType];
     [self.targetMultiMenuView setTargetPoints:points];
     
     [self.view addSubview:self.targetMultiMenuView];

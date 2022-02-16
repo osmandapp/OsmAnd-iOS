@@ -18,6 +18,7 @@
 #import "OAReverseGeocoder.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
+#import "OARoutePreferencesParameters.h"
 
 @implementation OATargetPointsHelper
 {
@@ -594,7 +595,7 @@
     
     CLLocation *current = [_routingHelper getLastProjection];
     double dist = 400000;
-    if ([[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]] && [[_settings getCustomRoutingBooleanProperty:@"height_obstacles" defaultValue:false] get:[_routingHelper getAppMode]])
+    if ([[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]] && [[_settings getCustomRoutingBooleanProperty:kRouteParamIdHeightObstacles defaultValue:false] get:[_routingHelper getAppMode]])
     {
         dist = 50000;
     }

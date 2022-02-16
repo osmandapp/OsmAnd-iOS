@@ -2354,3 +2354,13 @@
 "routeInfo_winter_ice_road_description" = "Kış yolu sınıflandırmasına göre güzergah veya yol hattını renklendir.";
 "routeInfo_tracktype_description" = "Yüzey bileşimine göre güzergah veya yol hattını renklendir. Genellikle, yol ağı büyük ölçüde asfaltsız olduğunda uygulanır.";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
+"routing_attr_allow_gate_description" = "Kapıların kullanımına izin verin";
+"routing_attr_only_permitted_streets_name" = "Açıkça izin verilen sokaklar";
+"routing_attr_prefer_horse_routes_name" = "At güzergahlarını tercih et";
+"shared_string_open_street_map" = "OpenStreetMap";
+"routing_attr_allow_gate_name" = "Kapı kullanımına izin ver";
+"routing_attr_prefer_horse_routes_description" = "At güzergahlarını tercih edin";
+"routing_attr_only_permitted_ways_description" = "Yalnızca açıkça izin verilen yolları (izler, patikalar vb.) kullanın";
+"routing_attr_only_permitted_streets_description" = "Yalnızca açıkça izin verilen sokakları kullanın";
+"routing_attr_only_permitted_ways_name" = "Açıkça izin verilen yollar";
+"horseback_riding" = "At binme";

@@ -12,30 +12,15 @@
 #import "OARouteAvoidTransportSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OANavigationLanguageViewController.h"
-#import "OAAppSettings.h"
 #import "Localization.h"
-#import "OAFavoriteItem.h"
-#import "OADefaultFavorite.h"
 #import "OAColors.h"
-#import "OADestinationItem.h"
-#import "OADestinationsHelper.h"
 #import "OARoutingHelper.h"
-#import "OAVoiceRouter.h"
-#import "OAFileNameTranslationHelper.h"
 #import "OARouteProvider.h"
 #import "OAGPXDocument.h"
-#import "OATargetPointsHelper.h"
-#import "OARTargetPoint.h"
-#import "OABaseSettingsViewController.h"
 #import "OARootViewController.h"
-#import "OASelectedGPXHelper.h"
-#import "OAGPXDatabase.h"
-#import "OAMapActions.h"
-#import "OAUtilities.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAFollowTrackBottomSheetViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
-#include <generalRouter.h>
 
 @interface OARouteSettingsBaseViewController () <OARoutePreferencesParametersDelegate, OASettingsDataDelegate, OARouteLineAppearanceViewControllerDelegate>
 
@@ -110,12 +95,21 @@
         return list;
     
     auto& params = rm->getParametersList();
+    vector<RoutingParameter> reliefFactorParameters;
     for (auto& r : params)
     {
         if (r.type == RoutingParameterType::BOOLEAN)
         {
-            if ("relief_smoothness_factor" == r.group)
+            if ([[NSString stringWithUTF8String:r.group.c_str()] isEqualToString:kRouteParamGroupReliefSmoothnessFactor])
+            {
+                reliefFactorParameters.push_back(r);
                 continue;
+            }
+            else if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamIdHeightObstacles])
+            {
+                reliefFactorParameters.insert(reliefFactorParameters.begin(), r);
+                continue;
+            }
             
             if (!r.group.empty())
             {
@@ -138,6 +132,18 @@
         }
     }
 
+    if (reliefFactorParameters.size() > 0)
+    {
+        OALocalRoutingParameterGroup *group = [[OALocalRoutingParameterGroup alloc] initWithAppMode:[self.routingHelper getAppMode]
+                                                                                          groupName:kRouteParamGroupReliefSmoothnessFactor];
+        group.delegate = self;
+        for (const auto& p : reliefFactorParameters)
+        {
+            [group addRoutingParameter:p];
+        }
+        [list addObject:group];
+    }
+
     return list;
 }
 
@@ -154,7 +160,7 @@
     {
         if (r.type == RoutingParameterType::BOOLEAN)
         {
-            if ("relief_smoothness_factor" == r.group)
+            if ([[NSString stringWithUTF8String:r.group.c_str()] isEqualToString:kRouteParamGroupReliefSmoothnessFactor])
                 continue;
             
             if (r.group.empty() && [[NSString stringWithUTF8String:r.id.c_str()] containsString:@"avoid"])

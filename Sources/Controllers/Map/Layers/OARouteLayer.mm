@@ -33,7 +33,6 @@
 
 #define kTurnArrowsColoringByAttr 0xffffffff
 #define kOutlineId 1001
-#define kOutlineWidth 10
 
 @implementation OARouteLayer
 {
@@ -350,6 +349,8 @@
             for (auto &line : lines)
             {
                 line->setPoints(points);
+                if (!colors.empty() && line->getOutlineWidth() == 0.)
+                    line->setColorizationMapping(colors);
             }
         }
         [self buildActionArrows];
@@ -783,22 +784,28 @@
         if (currentRoute < 0)
             currentRoute = 0;
 
+        OAColoringType *routeColoringType = _routeColoringType;
+        if ([routeColoringType isGradient] && ![routeColoringType isAvailableForDrawingRoute:route attributeName:nil])
+            routeColoringType = OAColoringType.DEFAULT;
+        else if ([routeColoringType isRouteInfoAttribute] && ![routeColoringType isAvailableForDrawingRoute:route attributeName:_routeInfoAttribute])
+            routeColoringType = OAColoringType.DEFAULT;
+
         NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
-        if ([_routeColoringType isGradient]
-                && (_route != route || _prevRouteColoringType != _routeColoringType || _colorizationScheme != COLORIZATION_GRADIENT))
+        if ([routeColoringType isGradient]
+                && (_route != route || _prevRouteColoringType != routeColoringType || _colorizationScheme != COLORIZATION_GRADIENT))
         {
             OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
             OARouteColorizationHelper *colorizationHelper =
                     [[OARouteColorizationHelper alloc] initWithGpxFile:gpx
-                            analysis:[gpx getAnalysis:0]
-                                                                  type:[[_routeColoringType toGradientScaleType] toColorizationType]
+                                                              analysis:[gpx getAnalysis:0]
+                                                                  type:[[routeColoringType toGradientScaleType] toColorizationType]
                                                        maxProfileSpeed:0
                     ];
             _colorizationScheme = COLORIZATION_GRADIENT;
             _colors = colorizationHelper ? [colorizationHelper getResult] : QList<OsmAnd::FColorARGB>();
             _route = route;
         }
-        else if ([_routeColoringType isRouteInfoAttribute]
+        else if ([routeColoringType isRouteInfoAttribute]
                 && (_route != route || ![_prevRouteInfoAttribute isEqualToString:_routeInfoAttribute] || _colorizationScheme != COLORIZATION_SOLID))
         {
             _colorizationScheme = COLORIZATION_SOLID;
@@ -810,7 +817,7 @@
                                locations:locations];
             _route = route;
         }
-        else if ([_routeColoringType isSolidSingleColor]
+        else if ([routeColoringType isSolidSingleColor]
                 && (_route != route || _colorizationScheme != COLORIZATION_NONE || _colors.count() > 0))
         {
             _colorizationScheme = COLORIZATION_NONE;
@@ -833,12 +840,10 @@
         }
         else
         {
-            int segStartIndex = 0;
+            int segStartIndex = _colors.count() - points.count();
             QList<OsmAnd::FColorARGB> segmentColors;
             if (points.size() > 1 && !_colors.isEmpty() && segStartIndex < _colors.size() && segStartIndex + points.size() - 1 < _colors.size())
                 segmentColors = _colors.mid(segStartIndex, points.size());
-
-            segStartIndex += points.size() - 1;
 
             if (!segmentColors.isEmpty())
             {

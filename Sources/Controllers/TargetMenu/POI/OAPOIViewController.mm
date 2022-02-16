@@ -32,7 +32,6 @@
 #include <OsmAndCore/Data/TransportStop.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/ObfDataInterface.h>
-#include "qlocale.h"
 
 static const NSInteger AMENITY_ID_RIGHT_SHIFT = 1;
 static const NSInteger NON_AMENITY_ID_RIGHT_SHIFT = 7;
@@ -166,19 +165,6 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                 [str appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
 
             NSString *time = [NSString stringWithUTF8String:info->getInfo().c_str()];
-
-            NSRegularExpression *regularExpressionAMPM = [NSRegularExpression regularExpressionWithPattern:@"\\d{1,2}:\\d{1,2} (A|P)M"
-                                                                                                   options:0
-                                                                                                     error:nil];
-            NSTextCheckingResult *matchAMPM = [regularExpressionAMPM firstMatchInString:time
-                                                                                options:0
-                                                                                  range:NSMakeRange(0, [time length])];
-            if (matchAMPM)
-            {
-                QLocale locale = QLocale();
-                time = [time stringByReplacingOccurrencesOfString:@"AM" withString:locale.amText().toNSString()];
-                time = [time stringByReplacingOccurrencesOfString:@"PM" withString:locale.pmText().toNSString()];
-            }
 
             NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", time]];
             NSTextAttachment *attachment = [[NSTextAttachment alloc] init];

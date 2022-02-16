@@ -208,7 +208,7 @@
 
 // Route info
 
-"int_seconds" = "წამი";
+"units_seconds" = "წამი";
 "shared_string_never" = "არასდროს";
 "shared_setting_always_ask" = "ყოველთვის მკითხე";
 "general_settings_2" = "ძირითადი პარამეტრები";
@@ -406,10 +406,10 @@
 "si_min_km" = "წუთი კილომეტრში";
 "si_min_m" = "წუთი მილში";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "წთ/მილი";
-"min_km" = "წთ/კმ";
-"m_s" = "მ/წმ";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "წთ/მილი";
+"units_min_km" = "წთ/კმ";
+"units_m_s" = "მ/წმ";
 "tones" = "ტონა";
 "nothing_found" = "Nothing found: %@";
 "nothing_found_empty" = "ვერაფერი ვიპოვეთ :(";
@@ -1473,19 +1473,19 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "კმ";
-"m" = "მ";
-"mile" = "მილი";
-"yard" = "იარდი";
-"foot" = "ფტ";
-"nm" = "ნმ";
-"km_h" = "კმ/ს";
-"mile_per_hour" = "მილი/წმ";
-"int_hour" = "h";
-"int_min" = "წთ";
-"shared_string_sec" = "sec";
-"shared_string_second_short" = "s";
-"metric_ton" = "ტ";
+"units_km" = "კმ";
+"units_m" = "მ";
+"units_mi" = "მილი";
+"units_yd" = "იარდი";
+"units_ft" = "ფტ";
+"units_nm" = "ნმ";
+"units_km_h" = "კმ/ს";
+"units_mph" = "მილი/წმ";
+"units_hour" = "h";
+"units_min" = "წთ";
+"units_sec" = "sec";
+"units_sec_short" = "s";
+"units_t" = "ტ";
 
 // Help
 "help_first_steps" = "First steps";
@@ -2324,5 +2324,5 @@
 "ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
-"shared_string_minute_short" = "მ";
+"units_min_short" = "მ";
 "shared_string_hide_all" = "ყველას დამალვა";

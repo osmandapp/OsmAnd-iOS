@@ -216,16 +216,16 @@
 "cannot_add_marker_desc" = "Remova pelo menos uma direção e tente novamente";
 "cannot_add_destination" = "Não é possível adicionar a direção";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mi/h";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "seg";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mi/h";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "seg";
 // Map
 "map_inst_det_map_q" = "Instale a visão geral do mapa detalhado para obter mais informações sobre os locais.";
 "map_remind" = "Lembre-me mais tarde";
@@ -379,7 +379,7 @@
 "default_speed_system" = "Unidade de velocidade";
 "interrupt_music" = "Pausar a música";
 "arrived_at_intermediate_point" = "Chegou ao seu destino intermédio";
-"nm" = "mn";
+"units_nm" = "mn";
 "search_another_country" = "Selecionar outra região";
 "skip_map_downloading" = "Ignorar o descarregamento de mapas";
 "shared_string_previous" = "Anterior";
@@ -462,7 +462,7 @@
 "show_lanes" = "Mostrar faixas de rodagem";
 "speak_pedestrian" = "Passadeiras";
 "speak_tunnels" = "Túneis";
-"int_seconds" = "segundos";
+"units_seconds" = "segundos";
 "shared_string_never" = "Nunca";
 "shared_setting_always_ask" = "Perguntar sempre";
 "general_settings_2" = "Configurações gerais";
@@ -557,9 +557,9 @@
 "si_m_s" = "Metros por segundo";
 "si_min_km" = "Minutos por quilómetro";
 "si_min_m" = "Minutos por milha";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "search_poi_category_hint" = "Digite para pesquisar em tudo";
 // Shared Strings
 "shared_string_apply" = "Aplicar";
@@ -807,7 +807,7 @@
 "driving_region_uk" = "Reino Unido, Índia e similares";
 "left_side_navigation" = "Circulação pela esquerda";
 "si_nm_h" = "Milhas náuticas por hora (nós)";
-"nm_h" = "mn/h";
+"units_nm_h" = "mn/h";
 "shared_string_in_name" = "em %@";
 "shared_string_modify" = "Alterar";
 "shared_string_of" = "de";
@@ -1250,7 +1250,7 @@
 "shared_string_clear_all" = "Limpar tudo";
 "no_active_route" = "Nenhuma rota ativa";
 "selected_roads" = "Estradas selecionadas";
-"shared_string_second_short" = "s";
+"units_sec_short" = "s";
 "select_route_intermediate" = "Selecionar um ponto intermédio";
 "select_home" = "Selecionar o ponto inicial";
 "select_work_point" = "Selecionar o ponto de trabalho";
@@ -1722,7 +1722,7 @@
 "avoid_routes_and_road" = "Evitar determinados tipos de rotas e estradas";
 "select_icon" = "Selecionar ícone";
 "product_title_antarctica" = "Antártida";
-"metric_ton" = "t";
+"units_t" = "t";
 "position_icon_while_moving" = "Ícone de posição durante a movimentação";
 "m_style_pulic_transport" = "Transporte público";
 "nav_type_geocoding" = "Geocodificação";
@@ -2140,7 +2140,7 @@
 "navigate_point_easting" = "Este";
 "navigate_point_zone" = "Zona";
 "navigate_point_northing" = "Norte";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "reset_to_original" = "Repor o original";
 "route_line_color_elevation_description" = "A linha da rota será colorida dependendo do perfil de elevação da rota.";
 "nautical" = "Náutico";

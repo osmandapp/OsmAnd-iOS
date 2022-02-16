@@ -164,13 +164,13 @@
 "menu_feedback" = "Опрос";
 "menu_about" = "О программе";
 // Units
-"km" = "км";
-"m" = "м";
-"mile" = "миля";
-"yard" = "ярд";
-"foot" = "фут";
-"km_h" = "км/ч";
-"mile_per_hour" = "миль/ч";
+"units_km" = "км";
+"units_m" = "м";
+"units_mi" = "миля";
+"units_yd" = "ярд";
+"units_ft" = "фут";
+"units_km_h" = "км/ч";
+"units_mph" = "миль/ч";
 "map_download" = "Загрузить";
 "map_nothanks" = "Нет, спасибо";
 "map_download_now" = "Загрузить карту сейчас";
@@ -281,9 +281,9 @@
 "cannot_add_marker" = "Нельзя добавить парковку";
 "cannot_add_marker_desc" = "Уберите одно из направлений и повторите попытку";
 "cannot_add_destination" = "Нельзя добавить направление";
-"int_hour" = "ч";
-"int_min" = "мин";
-"shared_string_sec" = "с";
+"units_hour" = "ч";
+"units_min" = "мин";
+"units_sec" = "с";
 "cannot_access_calendar" = "Ошибка доступа к календарю";
 "reminder_not_set_text" = "Нельзя установить напоминание, т.к. не разрешён доступ к календарю";
 "shared_string_buy" = "Купить";
@@ -515,11 +515,11 @@
 "si_kmh" = "Километров в час";
 "si_mph" = "Миль в час";
 "si_m_s" = "Метров в секунду";
-"nm" = "мор. миля";
-"nm_h" = "nmi/ч";
-"min_mile" = "мин/м";
-"min_km" = "мин/км";
-"m_s" = "м/с";
+"units_nm" = "мор. миля";
+"units_nm_h" = "nmi/ч";
+"units_min_mi" = "мин/м";
+"units_min_km" = "мин/км";
+"units_m_s" = "м/с";
 "select_city" = "Выберите город";
 "select_postcode" = "Выберите почтовый код";
 "coords_search" = "Поиск по координатам";
@@ -734,7 +734,7 @@
 "show_traffic_warnings" = "Ограничения скорости";
 "show_lanes" = "Полосы движения";
 "configure_map" = "Настройки карты";
-"int_seconds" = "с";
+"units_seconds" = "с";
 "settings_preset" = "Профиль по умолчанию";
 "shared_string_info" = "Информация";
 "day_off_label" = "вых.";
@@ -795,8 +795,8 @@
 "translucent_red" = "Полупрозрачный красный";
 // Rendering attributes
 "reddit" = "Reddit";
-"shared_string_minute_short" = "м";
-"shared_string_second_short" = "с";
+"units_min_short" = "м";
+"units_sec_short" = "с";
 "shared_string_password" = "Пароль";
 "by_name" = "По имени";
 "shared_string_on" = "Вкл.";
@@ -1859,7 +1859,7 @@
 "width_limit_description" = "Укажите ширину автомобиля, для широких транспортных средств могут применяться ограничения на маршруте.";
 "weight_limit_description" = "Укажите вес автомобиля, для тяжёлых транспортных средств могут применяться ограничения на маршруте.";
 "profile_type_base_string" = "Базовый профиль";
-"metric_ton" = "т";
+"units_t" = "т";
 "recalculate_wrong_dir" = "Пересчитать маршрут в случае обратного направления";
 "repeat_after" = "Повторить после";
 "profile_alert_delete_msg" = "Вы действительно хотите удалить профиль \"%@\"?";

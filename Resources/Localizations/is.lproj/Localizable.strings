@@ -238,16 +238,16 @@
 "cannot_add_marker_desc" = "Fjarlægðu a.m.k. eina leiðarlýsingu og prófaðu aftur";
 "cannot_add_destination" = "Get ekki bætt við leiðarlýsingu";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/klst";
-"mile_per_hour" = "mi/klst";
-"int_hour" = "klst";
-"int_min" = "mín";
-"shared_string_sec" = "sek";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/klst";
+"units_mph" = "mi/klst";
+"units_hour" = "klst";
+"units_min" = "mín";
+"units_sec" = "sek";
 // Map
 "map_inst_det_map_q" = "Settu upp nákvæmt yfirlitskort til að sjá meira af upplýsingum um staðsetningarnar þínar.";
 "map_remind" = "Áminna mig síðar";
@@ -502,7 +502,7 @@
 "shared_string_in_name" = "í %@";
 "right_side_navigation" = "Ekið á hægri akrein";
 "si_mi_meters" = "Mílur/metrar";
-"nm" = "sml";
+"units_nm" = "sml";
 "si_nm" = "Sjómílur";
 "si_kmh" = "Kílómetrar á klukkustund";
 "si_mph" = "Mílur á klukkustund";
@@ -510,10 +510,10 @@
 "si_min_km" = "Mínútur á kílómetra";
 "si_min_m" = "Mínútur á mílu";
 "si_nm_h" = "Sjómílur á klukkustund (hnútar)";
-"nm_h" = "hnútar";
-"min_mile" = "mín/ml";
-"min_km" = "mín/km";
-"m_s" = "m/sek";
+"units_nm_h" = "hnútar";
+"units_min_mi" = "mín/ml";
+"units_min_km" = "mín/km";
+"units_m_s" = "m/sek";
 "driving_region" = "Aksturssvæði";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "Bandaríkin";
@@ -589,7 +589,7 @@
 "speak_favorites" = "Eftirlæti í næsta nágrenni";
 "speak_poi" = "Nálægur merkisstaður";
 "speak_pedestrian" = "Gangbrautir";
-"int_seconds" = "sekúndur";
+"units_seconds" = "sekúndur";
 "shared_string_never" = "Aldrei";
 "general_settings_2" = "Almennar stillingar";
 "general_settings_descr" = "Þema forrits, einingar, landssvæði";
@@ -1248,7 +1248,7 @@
 "no_active_route" = "Engin virk leið";
 "selected_roads" = "Valdir vegir";
 "shared_string_clear_all" = "Hreinsa allt";
-"shared_string_second_short" = "s";
+"units_sec_short" = "s";
 "select_route_intermediate" = "Veldu millipunkt";
 "select_home" = "Veldu heimapunkt";
 "select_work_point" = "Veldu vinnupunkt";
@@ -1844,7 +1844,7 @@
 "reset_profile_action_descr" = "Endurstilla allar sniðstillingar á upphaflegar sjálfgefnar stillingar. Ef ýtt er á 'Endurstilla' verður öllum breytingum þínum hent, þetta er ekki hægt að afturkalla.";
 "import_profile_descr" = "Til að flytja inn leiðsagnarsnið, skaltu ýta á viðeigandi skrá (*.osf) í einhverju forriti og velja 'Afrita í OsmAnd-kort' aðgerðina";
 "help_nav_profiles" = "Leiðsagnarsnið";
-"metric_ton" = "t";
+"units_t" = "t";
 "nothing_found_empty" = "Ekkert fannst";
 "shared_string_next" = "Næsta";
 "move_point" = "Færa punkt";
@@ -2166,7 +2166,7 @@
 "delete_waypoints" = "Eyða ferilpunktum";
 "nautical" = "Sjókort";
 "gpx_split_interval" = "Skipta millibili";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "parked_at" = "Lagt við";
 "coords_format_descr_quick_search" = "Þú getur breytt sniði hnita fyrir notkunarsniðið í almennum stillingum";
 "download_suggestion" = "Sæktu nákvæma %@ kortið til að skoða þetta svæði";

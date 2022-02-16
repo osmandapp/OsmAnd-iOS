@@ -236,15 +236,15 @@
 "cannot_add_destination" = "Impossìbile annanghere una diretzione";
 // Units
 "km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "seg";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "seg";
 // Map
 "map_inst_det_map_q" = "Installa sa mapa generale a sa minuda pro tènnere prus informatziones chi pertocant sas positziones tuas.";
 "map_remind" = "Ammentami·lu torra prus a tardu";
@@ -518,11 +518,11 @@
 "si_min_km" = "Minutos a su chilòmetru";
 "si_min_m" = "Minutos a su mìlliu";
 "si_nm_h" = "Mìllias nàuticas a s'ora (knots)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "towards" = "cara a";
 "route_roundabout" = "Rutunda: piga sa %1$d essida e sighi";
 "route_roundabout_short" = "Piga sa %d essida e sighi";
@@ -628,7 +628,7 @@
 "speak_favorites" = "Preferidos a curtzu";
 "speak_poi" = "PDI a curtzu";
 "speak_pedestrian" = "Atraessamentos pedonales";
-"int_seconds" = "segundos";
+"units_seconds" = "segundos";
 "shared_string_never" = "Mai";
 "general_settings_2" = "Impostatziones generales";
 "general_settings_descr" = "Tema de s'aplicatzione, unidades, regione";
@@ -1250,7 +1250,7 @@
 "no_active_route" = "Peruna àndala ativa";
 "selected_roads" = "Caminos ischertados";
 "shared_string_clear_all" = "Iscantzella totu";
-"shared_string_second_short" = "s";
+"units_sec_short" = "s";
 "shared_string_on" = "Allutu";
 "shared_string_off" = "Istudadu";
 "select_route_intermediate" = "Ischerta unu puntu de coladòrgiu";
@@ -1839,7 +1839,7 @@
 "trip_rec_actions_descr" = "Podes agatare totu sas rastas registradas tuas in %@";
 "logging_accuracy" = "Pretzisione de registratzione";
 "shared_string_account_add" = "Annanghe unu contu";
-"metric_ton" = "t";
+"units_t" = "t";
 "recalculate_wrong_dir" = "Torra a carculare s'àndala in casu de diretzione furriada";
 "repeat_after" = "Repite a pustis de";
 "profile_alert_delete_msg" = "Ses seguru de chèrrere iscantzellare su profilu \"%@\"?";
@@ -2317,7 +2317,7 @@
 "lang_be_by" = "Bielorussu (caràteres latinos)";
 "lang_war" = "Waray";
 "lang_my" = "Birmanu";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "lang_ka" = "Georgianu";
 "lang_fr" = "Frantzesu";
 "lang_mk" = "Matzèdone";

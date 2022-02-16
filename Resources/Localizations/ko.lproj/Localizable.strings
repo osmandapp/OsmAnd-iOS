@@ -301,7 +301,7 @@
 "choose_how_display_distance" = "활성 마커까지의 거리를 표시하는 방법 선택";
 "appearance_on_map" = "지도에 나타난 모양";
 "arrows_direction_to_markers" = "화면 외부에 있는 경우 화살표는 활성 마커의 방향을 보여준다. 방향 선은 활성 마커에 선을 그린다.";
-"int_seconds" = "몇 초";
+"units_seconds" = "몇 초";
 "prefer_in_routing_descr" = "전용도로 선호";
 "nav_type_title" = "네비시작";
 "voice_announces" = "음성 프롬프트";
@@ -594,7 +594,7 @@
 "towards" = "쪽으로";
 "modify_poi_short" = "POI수정";
 "routing_attr_no_new_routing_description" = "v1.9에서 도입된 라우팅 룰을 사용하지 마십시오";
-"int_min" = "분";
+"units_min" = "분";
 "pink" = "분홍";
 "shared_string_street" = "거리";
 "opening_changeset" = "변경사항 여는중…";
@@ -622,7 +622,7 @@
 "m_style_bicycle" = "사이클링";
 "shared_string_is_open" = "열기";
 "rendering_value_orange_name" = "오렌지";
-"m" = "m";
+"units_m" = "m";
 "education" = "교육";
 "rendering_attr_lessDetailed_name" = "덜 상세";
 "nothing_found_empty" = "아무것도 찾지 못했습니다";
@@ -639,7 +639,7 @@
 "osm_editing_contact_info" = "연락처 정보";
 "rendering_attr_pisteGrooming_name" = "Piste grooming (손질)";
 "lang_pl" = "폴란드어";
-"mile_per_hour" = "mph";
+"units_mph" = "mph";
 "route_head" = "전방";
 "rendering_value_lightblue_name" = "연한 파랑";
 "osm_note_comment" = "설명";
@@ -694,7 +694,7 @@
 "use_points_as_intermediates" = "포인트 사이의 경로를 계산";
 "fast_route_mode" = "가장 빠른 경로";
 "map_widget_right" = "오른쪽 패널";
-"km_h" = "km/h";
+"units_km_h" = "km/h";
 "lang_nl" = "네델란드어";
 "rendering_value_default_name" = "기본";
 "shared_string_distance" = "거리";
@@ -726,7 +726,7 @@
 "rendering_value_boldOutline_name" = "큰 선";
 "gpx_deactivated" = "비활성화";
 "offline_vector_maps" = "오프라인 벡터 맵";
-"int_hour" = "h";
+"units_hour" = "h";
 "transport" = "대중교통";
 "lang_al" = "알바니아어";
 "layer_amenity_label" = "포인트 이름";
@@ -797,7 +797,7 @@
 "rendering_attr_hideAccess_name" = "접근 제한 숨기기";
 "rendering_value_browse_map_name" = "지도 보기";
 "product_title_antarctica" = "남극 대륙";
-"foot" = "피트";
+"units_ft" = "피트";
 "lang_el" = "그리스어";
 "rendering_attr_buildings15zoom_name" = "줌 레벨 15에 있는 건물 표시";
 "app_theme_light" = "밝은";
@@ -807,14 +807,14 @@
 "osm_working_days" = "영업일";
 "lang_os" = "오세티아어";
 "navigate_point_zone" = "존(지역)";
-"mile" = "마일";
+"units_mi" = "마일";
 "menu_help" = "도움말";
 "product_desc_ext_wikivoyage" = "\'탐색\' → \'옵션\'에서 항상 사용 가능.";
 "translucent_lightgreen" = "반투명 가벼운 녹색";
 "app_mode_motorcycle" = "모터사이클";
 "lang_sq" = "알바니아어";
 "choose_audio_stream" = "음성 안내 출력";
-"yard" = "야드";
+"units_yd" = "야드";
 "lang_ht" = "아이티어";
 "res_standard" = "일반 지도";
 "osm_alert_message" = "메세지";
@@ -823,7 +823,7 @@
 "rendering_value_red_name" = "빨강";
 "nearby_search" = "가까운 주변 검색";
 "map_widget_plain_time" = "현재 시간";
-"nm" = "nm";
+"units_nm" = "nm";
 "route_points" = "루트 포인트";
 "m_style_pulic_transport" = "대중 교통";
 "translucent_purple" = "반투명 보라색";
@@ -866,7 +866,7 @@
 "gpx_option_from_start_point" = "전체 경로를 따라 이동";
 "col_orange" = "오렌지";
 "shared_string_or" = "또는";
-"min_km" = "분/km";
+"units_min_km" = "분/km";
 "map_settings_day" = "주간";
 "rendering_attr_noPolygons_description" = "투명 지도에서 모든 면적 기능 만들기";
 "menu_my_places" = "저장소";
@@ -887,7 +887,7 @@
 "closing_changeset" = "변경사항 닫는중…";
 "translucent_orange" = "반투명 오렌지";
 "lang_lv" = "라트비아어";
-"m_s" = "m/s";
+"units_m_s" = "m/s";
 "rendering_value_translucent_lightblue_name" = "반투명 밝은 파란색";
 "purchase_get" = "가져오기";
 "lang_zh_tw" = "중국어 번체";
@@ -911,7 +911,7 @@
 "osmand_live_title" = "OsmAnd 라이브";
 "shared_string_all" = "모두";
 "osm_note" = "OSM노트";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "routing_attr_avoid_shuttle_train_name" = "셔틀 열차 피하기";
 "rendering_value_germanRoadAtlas_name" = "독일 도로 지도";
 "sett_settings" = "설정";
@@ -945,7 +945,7 @@
 "rendering_attr_roadStyle_name" = "도로 스타일";
 "arrival_distance_factor_normally" = "일반";
 "select_all" = "모두 선택";
-"min_mile" = "분/m";
+"units_min_mi" = "분/m";
 "routing_attr_height_name" = "높이 제한";
 "lang_hu" = "헝가리어";
 "lang_ml" = "말라얄람어";
@@ -992,7 +992,7 @@
 "profile_appearance" = "프로필 모양";
 "shared_string_ellipsis" = "…";
 "rendering_value_disabled_name" = "사용 안 함";
-"km" = "km";
+"units_km" = "km";
 "rendering_attr_hikingRoutesOSMC_name" = "하이킹 심볼 오버레이";
 "osm_website" = "웹사이트";
 "routing_attr_prefer_motorway_name" = "전용도로 선호";

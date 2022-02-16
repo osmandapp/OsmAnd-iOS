@@ -59,7 +59,7 @@
         if (val.intValue == 0)
             [array addObject:OALocalizedString(@"shared_string_never")];
         else
-            [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"int_seconds")]];
+            [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"units_seconds")]];
     }
     autoFollowRouteEntries = [NSArray arrayWithArray:array];
     int selectedValue = [_settings.autoFollowRoute get:self.appMode];

@@ -228,7 +228,7 @@
 
 // Route info
 
-"int_seconds" = "վայրկյան";
+"units_seconds" = "վայրկյան";
 "shared_string_never" = "Երբեք";
 "shared_setting_always_ask" = "Միշտ հարցնել";
 "general_settings_2" = "Ընդհանուր կարգավորումները";
@@ -433,10 +433,10 @@
 "si_min_km" = "Րոպե կիլոմետր";
 "si_min_m" = "Րոպե մղոն";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "րոպե/մ";
-"min_km" = "րոպե/կմ";
-"m_s" = "մ/վ";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "րոպե/մ";
+"units_min_km" = "րոպե/կմ";
+"units_m_s" = "մ/վ";
 "tones" = "տոնն";
 
 "nothing_found" = "Nothing found: %@";
@@ -1536,21 +1536,21 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "կմ";
-"m" = "մ";
-"mile" = "մղ";
-"yard" = "յարդ";
-"foot" = "ֆուտ";
-"nm" = "նմ";
-"km_h" = "կմ/ժ";
-"mile_per_hour" = "մղ/ժ";
+"units_km" = "կմ";
+"units_m" = "մ";
+"units_mi" = "մղ";
+"units_yd" = "յարդ";
+"units_ft" = "ֆուտ";
+"units_nm" = "նմ";
+"units_km_h" = "կմ/ժ";
+"units_mph" = "մղ/ժ";
 
-"int_hour" = "ժամ";
-"int_min" = "րոպե";
-"shared_string_sec" = "sec";
-"shared_string_second_short" = "s";
+"units_hour" = "ժամ";
+"units_min" = "րոպե";
+"units_sec" = "sec";
+"units_sec_short" = "s";
 
-"metric_ton" = "t";
+"units_t" = "t";
 
 // Help
 "help_first_steps" = "First steps";

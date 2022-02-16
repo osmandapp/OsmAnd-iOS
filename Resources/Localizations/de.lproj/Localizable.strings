@@ -135,13 +135,13 @@
 "other_options" = "Weitere Optionen";
 "more" = "Mehr";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
 "map_remind" = "Später erinnern";
 "map_no_address" = "Adresse ist bisher nicht bekannt";
 // Import
@@ -239,9 +239,9 @@
 "parking_time_limited" = "Parkzeit begrenzt auf";
 "time_left" = "verbleibend";
 "time_overdue" = "überfällig";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "Sek";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "Sek";
 "cannot_access_calendar" = "Kalender nicht aufrufbar";
 "reminder_not_set_text" = "Die Erinnerung wurde nicht gesetzt, da kein Zugangsrecht zum Kalender besteht";
 "product_title_parking" = "Park-Position";
@@ -518,15 +518,15 @@
 "si_min_km" = "Minuten pro Kilometer";
 "si_min_m" = "Minuten pro Meile";
 "si_nm_h" = "Seemeilen pro Stunde (Knoten)";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "looking_up_address" = "Adresse wird gesucht";
 "traffic_warning_hazard" = "Gefährdung";
 "traffic_warning_railways" = "Bahnübergang";
 "traffic_warning_pedestrian" = "Fußgängerübergang";
-"nm" = "sm";
-"nm_h" = "kn/h";
+"units_nm" = "sm";
+"units_nm_h" = "kn/h";
 "traffic_warning_speed_limit" = "Tempolimit";
 "traffic_warning_border_control" = "Grenzkontrolle";
 "traffic_warning_payment" = "Mautstelle";
@@ -630,7 +630,7 @@
 "speak_favorites" = "Nahegelegene Favoriten";
 "speak_poi" = "Nahegelegene POI";
 "speak_pedestrian" = "Fußgängerübergänge";
-"int_seconds" = "Sekunden";
+"units_seconds" = "Sekunden";
 "shared_string_never" = "Niemals";
 "general_settings_2" = "Allgemeine Einstellungen";
 "general_settings_descr" = "App-Design, Einheiten, Region";
@@ -1253,7 +1253,7 @@
 "no_active_route" = "Keine aktive Route";
 "selected_roads" = "Ausgewählte Straßen";
 "shared_string_clear_all" = "Alle löschen";
-"shared_string_second_short" = "s";
+"units_sec_short" = "s";
 "select_route_intermediate" = "Zwischenpunkt auswählen";
 "select_home" = "Heimatort auswählen";
 "select_work_point" = "Arbeitsort auswählen";
@@ -1833,7 +1833,7 @@
 "profile_alert_delete_title" = "Profil löschen";
 "shared_string_required" = "Benötigt";
 "email_example_hint" = "benutzer@beispiel.com";
-"metric_ton" = "t";
+"units_t" = "t";
 "osm_editing_access_descr" = "Sie können alle Ihre lokalen Bearbeitungen und Notizen in %@ anzeigen. Bereits hochgeladene Punkte werden nicht in OsmAnd aufgelistet.";
 "osm_editing_settings_descr" = "Die Einstellungen dieses Plugins sind global und gelten für alle Profile.";
 // Menu
@@ -2185,7 +2185,7 @@
 "edit_track" = "Track editieren";
 "activity" = "Aktivität";
 "nautical" = "Nautisch";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "delete_group_confirm_short" = "Gruppe löschen?";
 "delete_group_confirm" = "Sind Sie sicher, dass Sie die Gruppe \"%@\" löschen wollen?";
 "delete_waypoints" = "Wegpunkte löschen";

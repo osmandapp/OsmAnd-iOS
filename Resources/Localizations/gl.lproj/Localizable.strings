@@ -121,7 +121,7 @@
 "speak_poi" = "Puntos de interese (PDI) pretos";
 "speak_pedestrian" = "Pasos de peóns";
 "speak_tunnels" = "Túneles";
-"int_seconds" = "segundos";
+"units_seconds" = "segundos";
 "shared_string_never" = "Endexamais";
 "shared_setting_always_ask" = "Preguntar sempre";
 "general_settings_2" = "Axustes xerais";
@@ -269,11 +269,11 @@
 "si_min_km" = "Minutos por quilómetro";
 "si_min_m" = "Minutos por milla";
 "si_nm_h" = "Millas náuticas por hora (nós)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/mi";
-"min_km" = "min/km";
-"m_s" = "m/seg";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/mi";
+"units_min_km" = "min/km";
+"units_m_s" = "m/seg";
 "nothing_found" = "Nothing found :(";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Escoller rúa";
@@ -534,16 +534,16 @@
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "id";
-"foot" = "pés";
-"km_h" = "km/h";
-"mile_per_hour" = "mi/h";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "seg";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "id";
+"units_ft" = "pés";
+"units_km_h" = "km/h";
+"units_mph" = "mi/h";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "seg";
 // Help
 "help_first_steps" = "First steps";
 "help_first_use" = "Primeiro emprego";
@@ -877,7 +877,7 @@
 "in_app_purchase_desc" = "Pagamento só unha vez";
 "osmand_live_hourly" = "Cada hora";
 "osm_editing_lost_changes_title" = "Saír sen gardar?";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "create_items" = "Crear elementos";
 "add_intermediate" = "Engadir punto intermedio";
 "osm_target_deleted" = "PDI do OSM eliminado";
@@ -1387,7 +1387,7 @@
 "base_profile_descr_car" = "Automóbil, camión, motocicleta";
 "vessel_width_limit_description" = "Estabelecer o largo da embarcación para evitar pontes estreitas";
 "shared_string_import_complete" = "Importación completada";
-"metric_ton" = "t";
+"units_t" = "t";
 "base_profile_descr_boat" = "Embarcación, remo, vela";
 "weight_limit_description" = "Fornece o peso do teu vehículo, algunhas restricións de ruta poden ser aplicadas a vehículos pesados.";
 "shared_string_copy" = "Copiar";

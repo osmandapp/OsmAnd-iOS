@@ -158,7 +158,7 @@
 "speak_pedestrian" = "Passatges pedoniers";
 "speak_tunnels" = "Galariás";
 "show_tunnels" = "Galariás";
-"int_seconds" = "segon";
+"units_seconds" = "segon";
 "shared_string_never" = "Jamai";
 "shared_setting_always_ask" = "Se demanda confirmacion";
 "general_settings_2" = "Paramètres generaus";
@@ -319,11 +319,11 @@
 "si_min_km" = "Minutas au quilomètre";
 "si_min_m" = "Minutes per mile";
 "si_nm_h" = "Milas nautics a l'ora (Nos)";
-"nm" = "MN";
-"nm_h" = "nos";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "MN";
+"units_nm_h" = "nos";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "Nothing found :(";
 "nothing_found_descr" = "Modificar o relargar la recèrca";
 "select_street" = "Chausir la carriera";
@@ -862,18 +862,18 @@
 "cannot_add_marker_desc" = "Suprimir au mens una adreiça e tornatz assajar";
 "cannot_add_destination" = "L'adreiça se pòt pas averar";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "seg";
-"shared_string_minute_short" = "m";
-"shared_string_second_short" = "s";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "seg";
+"units_min_short" = "m";
+"units_sec_short" = "s";
 // Help
 "help_first_steps" = "Premiers pas";
 "help_first_use" = "Premiera utilizacion";
@@ -1341,7 +1341,7 @@
 "save_changes" = "Sauvagardar lei cambiaments";
 "min_speed" = "Velocitat minimala";
 "public_transport_empty_warning_descr" = "Assajatz de modificar lei paramètres.";
-"metric_ton" = "t";
+"units_t" = "t";
 "base_profile_descr_aircraft" = "Avion, Planador";
 "nav_type_straight_line" = "Endrechiera";
 "select_icon" = "Chausissètz l'icòna";

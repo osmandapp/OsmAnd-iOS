@@ -252,16 +252,16 @@
 "cannot_add_marker_desc" = "";
 "cannot_add_destination" = "";
 // Units
-"km" = "千米";
-"m" = "米";
-"mile" = "英里";
-"yard" = "码";
-"foot" = "脚";
-"km_h" = "千米/时";
-"mile_per_hour" = "英里";
-"int_hour" = "时";
-"int_min" = "分";
-"shared_string_sec" = "秒";
+"units_km" = "千米";
+"units_m" = "米";
+"units_mi" = "英里";
+"units_yd" = "码";
+"units_ft" = "脚";
+"units_km_h" = "千米/时";
+"units_mph" = "英里";
+"units_hour" = "时";
+"units_min" = "分";
+"units_sec" = "秒";
 // Map
 "map_inst_det_map_q" = "";
 "map_remind" = "";
@@ -533,7 +533,7 @@
 "app_mode_motorcycle" = "摩托车";
 "app_mode_boat" = "小船";
 "app_mode_aircraft" = "飞机";
-"int_seconds" = "秒";
+"units_seconds" = "秒";
 "shared_string_never" = "总不";
 "general_settings_2" = "常规设置";
 "shared_string_road" = "道路";
@@ -559,7 +559,7 @@
 "make_as_start_point" = "标记该点为起始点";
 "poi" = "兴趣点";
 "will_open_on" = "开始营业于";
-"m_s" = "米/秒";
+"units_m_s" = "米/秒";
 // Shared Strings
 "shared_string_apply" = "应用";
 "transport_routes" = "线路";
@@ -908,7 +908,7 @@
 "shared_string_filter" = "過濾器";
 "osm_editing_lost_changes_descr" = "任何未保存的更改将会丢失。要继续吗？";
 "osm_alert_button_ok" = "创建注记";
-"min_km" = "分/千米";
+"units_min_km" = "分/千米";
 "help_install_and_troubleshoot" = "安装和疑难解答";
 "shared_string_io_error" = "I/O错误";
 "help_other_header" = "其它";
@@ -950,11 +950,11 @@
 "mapil_pano_only" = "仅显示 360° 图像";
 "fav_add_group" = "添加组";
 "quick_actions_show_dialog" = "显示一个临时的对话框";
-"nm" = "浬";
+"units_nm" = "浬";
 "quick_action_start_stop_nav_descr" = "点击该按钮以开始或结束导航。";
 "create_items" = "创建项目";
 "tile_cache" = "区片缓存";
-"shared_string_minute_short" = "米";
+"units_min_short" = "米";
 "shared_string_category" = "类别";
 "osm_alert_message" = "消息";
 "key_hint_deselect" = "取消选中";
@@ -962,7 +962,7 @@
 "osm_edits_basic" = "基本";
 "quick_action_no_underlay" = "无衬底层";
 "osm_edit_without_name" = "没有名称";
-"min_mile" = "分钟每米";
+"units_min_mi" = "分钟每米";
 "res_url" = "URL";
 "res_elliptic_mercator" = "椭圆墨卡托";
 "hide_notes" = "隐藏 OSM 笔记";
@@ -1303,7 +1303,7 @@
 "reset_to_default" = "重置为默认值";
 "num_stops" = "站点";
 "appearance_on_map" = "在地图上的外观";
-"metric_ton" = "吨";
+"units_t" = "吨";
 "position_icon_while_moving" = "移动时定位图标";
 "quick_action_map_source_title" = "地图来源";
 "nav_type_direct_to" = "点对点";

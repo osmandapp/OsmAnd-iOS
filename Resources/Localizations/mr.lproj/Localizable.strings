@@ -228,7 +228,7 @@
 
 // Route info
 
-"int_seconds" = "सेकंद";
+"units_seconds" = "सेकंद";
 "shared_string_never" = "Never";
 "shared_setting_always_ask" = "Always ask";
 "general_settings_2" = "General settings";
@@ -433,10 +433,10 @@
 "si_min_km" = "Minutes per kilometer";
 "si_min_m" = "Minutes per mile";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "tones";
 
 "nothing_found" = "Nothing found: %@";
@@ -1536,21 +1536,21 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "किमी";
-"m" = "मी";
-"mile" = "मैल";
-"yard" = "यार्ड";
-"foot" = "फूट";
-"nm" = "nmi";
-"km_h" = "किमी/तास";
-"mile_per_hour" = "मैल/तास";
+"units_km" = "किमी";
+"units_m" = "मी";
+"units_mi" = "मैल";
+"units_yd" = "यार्ड";
+"units_ft" = "फूट";
+"units_nm" = "nmi";
+"units_km_h" = "किमी/तास";
+"units_mph" = "मैल/तास";
 
-"int_hour" = "ता";
-"int_min" = "मि";
-"shared_string_sec" = "sec";
-"shared_string_second_short" = "s";
+"units_hour" = "ता";
+"units_min" = "मि";
+"units_sec" = "sec";
+"units_sec_short" = "s";
 
-"metric_ton" = "t";
+"units_t" = "t";
 
 // Help
 "help_first_steps" = "First steps";

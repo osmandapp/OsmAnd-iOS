@@ -208,7 +208,7 @@
 
 // Route info
 
-"int_seconds" = "segundos";
+"units_seconds" = "segundos";
 "shared_string_never" = "Nunca";
 "shared_setting_always_ask" = "Preguntar siempre";
 "general_settings_2" = "Ajustes generales";
@@ -406,10 +406,10 @@
 "si_min_km" = "Minutos por kilómetro";
 "si_min_m" = "Minutos por milla";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "toneladas";
 "nothing_found" = "Nothing found: %@";
 "nothing_found_empty" = "Nada encontrado";
@@ -1473,19 +1473,19 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"nm" = "nmi";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "seg";
-"shared_string_second_short" = "s";
-"metric_ton" = "ton";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_nm" = "nmi";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "seg";
+"units_sec_short" = "s";
+"units_t" = "ton";
 
 // Help
 "help_first_steps" = "First steps";
@@ -2326,7 +2326,7 @@
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "white_color_undefined" = "Los tramos sin datos son blancos.";
 "connect_rp" = "Conectar puntos de ruta";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "grey_color_undefined" = "Los tramos sin datos son grises.";
 "shared_string_hide_all" = "Ocultar todo";
 "points_delete_multiple" = "¿Borrar %d punto(s)?";

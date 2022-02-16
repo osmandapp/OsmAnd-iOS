@@ -108,7 +108,7 @@
 "speak_favorites" = "نقاط مفضلة مجاورة";
 "speak_poi" = "نقاط الاهتمام القريبة";
 "speak_pedestrian" = "ممرات الراجلين";
-"int_seconds" = "ث";
+"units_seconds" = "ث";
 "shared_string_never" = "أبداً";
 "general_settings_2" = "إعدادات عامة";
 "general_settings_descr" = "ثيم التطبيق ، وحدات ، المنطقة";
@@ -253,11 +253,11 @@
 "si_min_km" = "دقيقة/كم";
 "si_min_m" = "دقيقة/ميل";
 "si_nm_h" = "أميال بحرية في الساعة (عقدة)";
-"nm" = "ميل بحري";
-"nm_h" = "ميل بحري/في الساعة";
-"min_mile" = "د/م";
-"min_km" = "د/كم";
-"m_s" = "م/ث";
+"units_nm" = "ميل بحري";
+"units_nm_h" = "ميل بحري/في الساعة";
+"units_min_mi" = "د/م";
+"units_min_km" = "د/كم";
+"units_m_s" = "م/ث";
 "nothing_found" = "لايمكن العثور على : %@";
 "nothing_found_descr" = "قم بتعديل استعلام البحث أو قم بزيادة نصف قطر البحث";
 "select_street" = "اختر شارع";
@@ -512,16 +512,16 @@
 "cannot_add_marker_desc" = "الرجاء إزالة اتجاه واحد على الأقل وإعادة المحاولة";
 "cannot_add_destination" = "لا يمكن إضافة اتجاه";
 // Units
-"km" = "كم";
-"m" = "م";
-"mile" = "ميل";
-"yard" = "ياردة";
-"foot" = "قدم";
-"km_h" = "كم/س";
-"mile_per_hour" = "ميل ساعة";
-"int_hour" = "س";
-"int_min" = "د";
-"shared_string_sec" = "ثانية";
+"units_km" = "كم";
+"units_m" = "م";
+"units_mi" = "ميل";
+"units_yd" = "ياردة";
+"units_ft" = "قدم";
+"units_km_h" = "كم/س";
+"units_mph" = "ميل ساعة";
+"units_hour" = "س";
+"units_min" = "د";
+"units_sec" = "ثانية";
 // Map
 "map_inst_det_map_q" = "قم بتثبيت نظرة عامة مفصلة على الخريطة للحصول على مزيد من المعلومات حول مواقعك.";
 "map_remind" = "ذكرني لاحقا";
@@ -1246,8 +1246,8 @@
 "no_active_route" = "لا يوجد مسار نشط";
 "selected_roads" = "طرق مختارة";
 "shared_string_clear_all" = "مسح الكل";
-"shared_string_minute_short" = "م";
-"shared_string_second_short" = "ثانية";
+"units_min_short" = "م";
+"units_sec_short" = "ثانية";
 "select_route_intermediate" = "اختر نقطة وسيطة";
 "select_home" = "حدد نقطة المنزل";
 "select_work_point" = "حدد نقطة العمل";
@@ -1831,7 +1831,7 @@
 "plugin_settings_reset" = "إعادة ضبط الملحقات للافتراضي";
 "trip_rec_actions_descr" = "يمكنك العثور على جميع المسارات المسجلة في % @";
 "logging_accuracy" = "دقة التسجيل";
-"metric_ton" = "t";
+"units_t" = "t";
 "recalculate_wrong_dir" = "إعادة حساب المسار في حالة الانحراف";
 "repeat_after" = "إعادة بعد";
 "profile_alert_delete_msg" = "هل أنت متأكد أنك تريد حذف ملف تعريف \"٪ @\" بالكامل؟";

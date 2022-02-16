@@ -160,7 +160,7 @@
 "speak_tunnels" = "Tunnelid";
 "show_tunnels" = "Tunnelid";
 // Route info
-"int_seconds" = "sekundit";
+"units_seconds" = "sekundit";
 "shared_string_never" = "Mitte kunagi";
 "shared_setting_always_ask" = "Küsi alati";
 "general_settings_2" = "Üldseaded";
@@ -321,11 +321,11 @@
 "si_min_km" = "Minutit kilomeetri kohta";
 "si_min_m" = "Minutit miili kohta";
 "si_nm_h" = "Meremiili tunnis (sõlme)";
-"nm" = "M";
-"nm_h" = "sõlme";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "M";
+"units_nm_h" = "sõlme";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "Ei leidnud midagi : %@";
 "nothing_found_descr" = "Muuda otsingupäringut või suurenda otsinguraadiust";
 "select_street" = "Vali tänav";
@@ -882,17 +882,17 @@
 "cannot_add_marker_desc" = "Palun eemalda vähemalt üks suund ja proovi uuesti";
 "cannot_add_destination" = "Suunda ei saa lisada";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "jalga";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "t";
-"int_min" = "min";
-"shared_string_sec" = "sek";
-"shared_string_second_short" = "s";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "jalga";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "t";
+"units_min" = "min";
+"units_sec" = "sek";
+"units_sec_short" = "s";
 // Help
 "help_first_steps" = "Esimesed sammud";
 "help_first_use" = "Esmakasutamine";
@@ -1812,7 +1812,7 @@
 "enable_hillshade" = "Maastikuandmete kuvamiseks luba see seadistus";
 "enable_contour_lines" = "Kõrgusjoonete kuvamiseks kaardil luba see seadistus";
 "osm_editing_access_descr" = "Sa võid näha kõiki kohalikus nutiseadmes tehtud muudatusi ja märkusi %@ vaates. Juba üleslaaditud andmeid OsmAnd enam ei kuva.";
-"metric_ton" = "t";
+"units_t" = "t";
 "map_settings_hide_polygons_desc" = "See valik mõjutab vaid OsmAnd'i võrguvabade vektorkaartide kuvamist";
 "map_settings_zoom_level_description" = "Määra väikseim ja suurim suumi tase kihi kuvamisel";
 "use_of_downloaded_map" = "Nüüd saad seda kaarti kasutadavõrgu ühenduseta režiimis põhikaardi allikana või ülekattena või aluskihina";
@@ -2150,7 +2150,7 @@
 "read_full_description" = "Loe täielikku kirjeldust";
 "gpx_dir_arrows" = "Suunanooled";
 "gpx_split_interval" = "Jagamise vahemik";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "gpx_split_interval_descr" = "Vali välp, mille alusel kuvatakse rajal aja- või vahemaamärgid.";
 "gpx_join_gaps" = "Ühenda lüngad";
 "track_show_start_finish_icons" = "Näita alguse ja lõpu ikoone";

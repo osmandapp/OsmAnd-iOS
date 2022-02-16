@@ -50,7 +50,7 @@
     NSMutableArray *array = [NSMutableArray array];
     for (NSNumber *val in _keepInformingValues)
     {
-        [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"int_min")]];
+        [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"units_min")]];
     }
     _keepInformingEntries = [NSArray arrayWithArray:array];
     

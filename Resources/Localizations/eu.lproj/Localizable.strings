@@ -228,7 +228,7 @@
 
 // Route info
 
-"int_seconds" = "segundo";
+"units_seconds" = "segundo";
 "shared_string_never" = "Inoiz ez";
 "shared_setting_always_ask" = "Galdetu beti";
 "general_settings_2" = "Ezarpen orokorrak";
@@ -433,10 +433,10 @@
 "si_min_km" = "Minutu kilometroko";
 "si_min_m" = "Minutu miliaro";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "tonuak";
 
 "nothing_found" = "Nothing found: %@";
@@ -1536,21 +1536,21 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "oin";
-"nm" = "mn";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "oin";
+"units_nm" = "mn";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
 
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "sec";
-"shared_string_second_short" = "s";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "sec";
+"units_sec_short" = "s";
 
-"metric_ton" = "t";
+"units_t" = "t";
 
 // Help
 "help_first_steps" = "First steps";
@@ -2483,4 +2483,4 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";

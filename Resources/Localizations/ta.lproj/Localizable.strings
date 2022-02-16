@@ -229,7 +229,7 @@
 
 // Route info
 
-"int_seconds" = "seconds";
+"units_seconds" = "seconds";
 "shared_string_never" = "ஒருபோதும்";
 "shared_setting_always_ask" = "எப்போதும் கேள்
 \n";
@@ -435,10 +435,10 @@
 "si_min_km" = "Minutes per kilometer";
 "si_min_m" = "Minutes per mile";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "tones";
 
 "nothing_found" = "Nothing found: %@";
@@ -1539,21 +1539,21 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "கி.மீ.";
-"m" = "மீ";
-"mile" = "மைல்";
-"yard" = "யார்டு";
-"foot" = "அடி";
-"nm" = "nmi";
-"km_h" = "கிமீ / மணி";
-"mile_per_hour" = "மைல்";
+"units_km" = "கி.மீ.";
+"units_m" = "மீ";
+"units_mi" = "மைல்";
+"units_yd" = "யார்டு";
+"units_ft" = "அடி";
+"units_nm" = "nmi";
+"units_km_h" = "கிமீ / மணி";
+"units_mph" = "மைல்";
 
-"int_hour" = "மணிநேரம்";
-"int_min" = "மணிதுளி";
-"shared_string_sec" = "sec";
-"shared_string_second_short" = "s";
+"units_hour" = "மணிநேரம்";
+"units_min" = "மணிதுளி";
+"units_sec" = "sec";
+"units_sec_short" = "s";
 
-"metric_ton" = "t";
+"units_t" = "t";
 
 // Help
 "help_first_steps" = "First steps";

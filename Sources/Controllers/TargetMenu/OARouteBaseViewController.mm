@@ -561,7 +561,7 @@
     if (hours > 0)
     {
         NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", hours] attributes:numericAttributes];
-        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"int_hour") attributes:alphabeticAttributes];
+        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"units_hour") attributes:alphabeticAttributes];
         [time appendAttributedString:val];
         [time appendAttributedString:space];
         [time appendAttributedString:units];
@@ -571,7 +571,7 @@
         if (time.length > 0)
             [time appendAttributedString:space];
         NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", minutes] attributes:numericAttributes];
-        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_minute_short") attributes:alphabeticAttributes];
+        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"units_min_short") attributes:alphabeticAttributes];
         [time appendAttributedString:val];
         [time appendAttributedString:space];
         [time appendAttributedString:units];
@@ -581,7 +581,7 @@
         if (time.length > 0)
             [time appendAttributedString:space];
         NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", seconds] attributes:numericAttributes];
-        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_second_short") attributes:alphabeticAttributes];
+        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"units_sec_short") attributes:alphabeticAttributes];
         [time appendAttributedString:val];
         [time appendAttributedString:space];
         [time appendAttributedString:units];

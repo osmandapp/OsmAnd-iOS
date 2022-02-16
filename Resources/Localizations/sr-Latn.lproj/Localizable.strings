@@ -228,7 +228,7 @@
 
 // Route info
 
-"int_seconds" = "sekunde";
+"units_seconds" = "sekunde";
 "shared_string_never" = "Nikad";
 "shared_setting_always_ask" = "Uvek pitaj";
 "general_settings_2" = "Opšte postavke";
@@ -433,10 +433,10 @@
 "si_min_km" = "Minuta po kilometru";
 "si_min_m" = "Minuta po milji";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "tona";
 
 "nothing_found" = "Nothing found: %@";
@@ -1536,21 +1536,21 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"nm" = "nmi";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_nm" = "nmi";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
 
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "sek";
-"shared_string_second_short" = "s";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "sek";
+"units_sec_short" = "s";
 
-"metric_ton" = "t";
+"units_t" = "t";
 
 // Help
 "help_first_steps" = "First steps";

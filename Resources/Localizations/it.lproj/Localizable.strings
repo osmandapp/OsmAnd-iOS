@@ -180,13 +180,13 @@
 "menu_feedback" = "Feedback";
 "menu_about" = "Informazioni";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mi/h";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mi/h";
 // Map
 "map_inst_det_map_q" = "Installa la mappa panoramica dettagliata per avere maggiori informazioni sulle tue posizioni.";
 "map_remind" = "Ricorda in seguito";
@@ -285,9 +285,9 @@
 "time_left" = "rimasto";
 "time_overdue" = "obsoleto";
 "cannot_add_marker" = "Impossibile aggiungere Parcheggio";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "sec";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "sec";
 "product_title_skimap" = "Mappe sciistiche";
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Scaricamenti illimitati delle mappe per l'Africa";
@@ -482,9 +482,9 @@
 "si_min_km" = "Minuti al chilometro";
 "si_min_m" = "Minuti al miglio";
 "si_nm_h" = "Miglia nautiche all'ora (nodi)";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "Nessun risultato: %@";
 "select_street" = "Seleziona la strada";
 "select_city" = "Seleziona la città";
@@ -550,7 +550,7 @@
 "shared_string_address" = "Indirizzi";
 "map_widget_battery" = "Livello della batteria";
 "map_orientation_change_in_accordance_with_speed" = "Soglia di orientamento della mappa";
-"nm" = "nmi";
+"units_nm" = "nmi";
 "show_traffic_warnings" = "Avvisi di traffico";
 "snap_to_road" = "Blocca sulle strade";
 "coords_format_descr" = "Formato delle coordinate geografiche.";
@@ -584,7 +584,7 @@
 "sort_by_name" = "Ordina per nome";
 "use_displayed_track_for_navigation" = "Vuoi usare il percorso visualizzato per la navigazione?";
 "route_descr_select_destination" = "Scegli la destinazione";
-"nm_h" = "kn";
+"units_nm_h" = "kn";
 "switch_start_finish" = "Inverti punti di partenza e destinazione";
 "clear_all_intermediates" = "Cancella tutti i punti intermedi";
 "shared_string_options" = "Opzioni";
@@ -633,7 +633,7 @@
 "speak_speed_limit" = "Limiti di velocità";
 "speak_cameras" = "Autovelox";
 "speak_traffic_warnings" = "Avvisi di traffico";
-"int_seconds" = "secondi";
+"units_seconds" = "secondi";
 "auto_zoom_none" = "No zoom automatico";
 "keep_informing_never" = "Solo manualmente (tap sulla freccia)";
 "arrival_distance_factor_normally" = "Normale";
@@ -875,7 +875,7 @@
 "osm_alert_message" = "Messaggio";
 "home_pt" = "Casa";
 "shared_string_in_name" = "in %@";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "osm_note_reopen" = "Riapre";
 "sett_ext_input" = "Dispositivi di input esterni";
 "osm_editing_lost_changes_title" = "Uscire senza salvare?";
@@ -1496,7 +1496,7 @@
 "avoid_by_type" = "Evita per tipo";
 "parking_place" = "Parcheggio";
 "add_start" = "Aggiungi luogo di partenza";
-"shared_string_second_short" = "s";
+"units_sec_short" = "s";
 "sett_deg180" = "180 gradi";
 "sett_deg360" = "360 gradi";
 "map_settings_install_maps" = "Scegli le mappa da installare o aggiornare";
@@ -1777,7 +1777,7 @@
 "res_slope" = "Pendenza";
 "help_nav_profiles" = "Profili di navigazione";
 "quick_action_remove_next_destination_descr" = "Elimina la destinazione successiva nel percorso. Se questaè la destinazione finale, la navigazione si fermerà.";
-"metric_ton" = "t";
+"units_t" = "t";
 "total" = "Totale";
 "height_limit_description" = "Indica l\'altezza del veicolo, alcune restrizioni stradali potrebbero essere applicate per veicoli alti.";
 "menu" = "Menu";

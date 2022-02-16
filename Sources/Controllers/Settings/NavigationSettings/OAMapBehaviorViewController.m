@@ -66,7 +66,7 @@
     if (autoCenter == 0)
         autoCenterValue = OALocalizedString(@"shared_string_never");
     else
-        autoCenterValue = [NSString stringWithFormat:@"%lu %@", (unsigned long)autoCenter, OALocalizedString(@"int_seconds")];
+        autoCenterValue = [NSString stringWithFormat:@"%lu %@", (unsigned long)autoCenter, OALocalizedString(@"units_seconds")];
     
     NSString *autoZoomValue = nil;
     if (![_settings.autoZoomMap get:self.appMode])
@@ -81,9 +81,9 @@
     NSString *mapOrientationValue = nil;
     NSInteger mapOrientation = [_settings.switchMapDirectionToCompass get:self.appMode];
     if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
-        mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"km_h")];
+        mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"units_km_h")];
     else
-        mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"mile_per_hour")];
+        mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"units_mph")];
 
     NSMutableArray *dataArr = [NSMutableArray arrayWithObjects:@{
                                     @"type" : [OASettingsTableViewCell getCellIdentifier],

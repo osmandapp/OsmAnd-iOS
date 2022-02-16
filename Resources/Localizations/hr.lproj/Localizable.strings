@@ -208,7 +208,7 @@
 
 // Route info
 
-"int_seconds" = "sekundi";
+"units_seconds" = "sekundi";
 "shared_string_never" = "Nikad";
 "shared_setting_always_ask" = "Uvijek pitaj";
 "general_settings_2" = "Opće postavke";
@@ -406,10 +406,10 @@
 "si_min_km" = "Minuta po kilometru";
 "si_min_m" = "Minuta po milji";
 "si_nm_h" = "Nautičke milje na sat (čvorovi)";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "tones";
 "nothing_found" = "Nothing found: %@";
 "nothing_found_empty" = "Nije pronađeno ništa";
@@ -1473,19 +1473,19 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "stopa";
-"nm" = "nmi";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "sec";
-"shared_string_second_short" = "s";
-"metric_ton" = "t";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "stopa";
+"units_nm" = "nmi";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "sec";
+"units_sec_short" = "s";
+"units_t" = "t";
 
 // Help
 "help_first_steps" = "First steps";
@@ -2327,6 +2327,6 @@
 "connect_rp" = "Poveži topke rute";
 "shared_string_hide_all" = "Sakrij sve";
 "points_delete_multiple" = "Izbrisati %d točku(e)?";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "grey_color_undefined" = "Dijelovi bez podataka su sivi.";
 "white_color_undefined" = "Dijelovi bez podataka su bijeli.";

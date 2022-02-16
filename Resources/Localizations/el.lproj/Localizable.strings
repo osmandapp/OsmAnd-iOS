@@ -117,8 +117,8 @@
 "arrival_distance_factor_normally" = "Κανονικά";
 "quick_action_no_overlay" = "Χωρίς επικάλυψη";
 "osm_note_upload_anonymously" = "Ανώνυμο ανέβασμα";
-"m" = "μ";
-"km_h" = "χλμ/ω";
+"units_m" = "μ";
+"units_km_h" = "χλμ/ω";
 "shared_string_later" = "Αργότερα";
 "route_roundabout_short" = "Πάρτε την %d έξοδο και πηγαίνετε";
 "route_kl" = "Μείνετε αριστερά και προχωρήστε";
@@ -169,12 +169,12 @@
 "shared_string_cancel" = "Άκυρο";
 "apply_filters" = "Εφαρμογή φίλτρων";
 "track_new_segment" = "Έναρξη νέου τμήματος";
-"mile" = "μλ";
+"units_mi" = "μλ";
 "res_updates" = "Ενημερώσεις";
 "location_not_found" = "Η τοποθεσία δεν βρέθηκε";
 "poi_clear" = "Καθαρισμός";
 "app_mode_truck" = "Φορτηγό";
-"nm" = "ναυτικό μίλι";
+"units_nm" = "ναυτικό μίλι";
 "prefer_in_routing_title" = "Να προτιμώνται…";
 "get_directions" = "Οδηγίες";
 "osm_note_action_field_descr" = "Αυτό το μήνυμα περιλαμβάνεται στο πεδίο σχολίων.";
@@ -211,11 +211,11 @@
 "night_mode" = "Κατάσταση νύχτας";
 "traffic_warning_payment" = "Διόδια";
 "osm_editing_offline" = "Επεξεργασία χωρίς διαδίκτυο";
-"int_seconds" = "δευτερόλεπτα";
+"units_seconds" = "δευτερόλεπτα";
 "auto_follow_location_enabled" = "Αυτο-κεντράρισμα χάρτη σε χρήση.";
 "years_5" = "Έτη";
 "shared_string_select_on_map" = "Επιλέξτε στον χάρτη";
-"km" = "χλμ";
+"units_km" = "χλμ";
 "gpx_waypoint" = "Σημείο διαδρομής";
 "show_pedestrian_warnings" = "Διαβάσεις πεζών";
 "nearby_search" = "Αναζήτηση στη γύρω περιοχή";
@@ -272,7 +272,7 @@
 "city_type_city" = "Πόλη";
 "gpx_speed" = "Ταχύτητα";
 "plugins" = "Πρόσθετα";
-"m_s" = "μέτρα/δευτερόλεπτο";
+"units_m_s" = "μέτρα/δευτερόλεπτο";
 "access_intermediate_arrival_time" = "Χρόνος άφιξης που μεσολάβησε";
 "shared_string_back" = "Προηγούμενο";
 "weeks_2_4" = "Εβδομάδες";
@@ -316,7 +316,7 @@
 "gpx_slope" = "Κλίση";
 "unlock_all_features" = "Ξεκλείδωμα όλων των χαρακτηριστικών του OsmAnd";
 "add_first_inermediate" = "Πρόσθεσε ενδιάμεση στάση";
-"shared_string_minute_short" = "μ";
+"units_min_short" = "μ";
 "show_tunnels" = "Σήραγγες";
 "not_selected" = "Μη επιλεγμένο";
 "shared_string_never" = "Ποτέ";
@@ -333,7 +333,7 @@
 "sett_show" = "Εμφάνιση";
 "quick_action_no_underlay" = "Χωρίς υπόστρωμα";
 "pink" = "Ροζ";
-"int_min" = "λεπτά";
+"units_min" = "λεπτά";
 "purple" = "Μοβ";
 "shared_string_ellipsis" = "…";
 "quick_action_tags" = "Ετικέτες";
@@ -347,7 +347,7 @@
 "green" = "Πράσινο";
 "road_blocked" = "Κλειστός δρόμος";
 "osm_alert_title" = "Υποβολή";
-"min_mile" = "λεπτά/μίλι";
+"units_min_mi" = "λεπτά/μίλι";
 "shared_string_is_open" = "Άνοιγμα";
 "day_night_info" = "Πληρ. Ημέρας/Νύχτας";
 "city_type_neighbourhood" = "Γειτονιά";
@@ -386,9 +386,9 @@
 "osmand_live_weekly" = "Εβδομαδιαία";
 "download_map" = "Λήψη χάρτη";
 "osm_website" = "Ιστότοπος";
-"foot" = "πδ";
+"units_ft" = "πδ";
 "days_2_4" = "Ημέρες";
-"int_hour" = "ω";
+"units_hour" = "ω";
 "shared_string_upload" = "Ανέβασμα";
 "col_blue" = "Μπλε";
 "driving_region_us" = "ΗΠΑ";
@@ -541,7 +541,7 @@
 "gpx_option_reverse_route" = "Αντιστροφή κατεύθυνσης GPX";
 "product_title_southamerica" = "Νότια Αμερική";
 "mapil_add_photos" = "Προσθήκη φωτογραφιών";
-"min_km" = "λεπτά/χιλιόμετρο";
+"units_min_km" = "λεπτά/χιλιόμετρο";
 "shared_string_current" = "Τρέχον";
 "shared_string_in_name" = "σε %@";
 "wiki_around" = "Πλησιέστερα άρθρα της βικιπαίδειας";
@@ -564,7 +564,7 @@
 "poi_opening_hours" = "Ώρες λειτουργίας";
 "unlimited_downloads" = "Απεριόριστες λήψεις";
 "osm_edits_advanced" = "Προχωρημένο";
-"mile_per_hour" = "μαω";
+"units_mph" = "μαω";
 "gpx_avg_altitude" = "Μέσο υψόμετρο";
 "simulate_navigation" = "Προσομοίωση πλοήγησης";
 "transport_stop" = "Σταμάτημα";
@@ -579,7 +579,7 @@
 "gpx_finish" = "Τερματισμός";
 "destination_point" = "Προορισμός %@";
 "gpx_start" = "Έναρξη";
-"yard" = "γδ";
+"units_yd" = "γδ";
 "route_kr" = "Μείνετε δεξιά και προχωρήστε";
 "yesterday" = "Χθές";
 "enter_name" = "Εισαγωγή ονόματος";
@@ -1138,7 +1138,7 @@
 "shared_string_max" = "Μέγιστο";
 "personal_category_name" = "Προσωπικό";
 "res_zoom_levels" = "Επίπεδα εστίασης";
-"metric_ton" = "τόνος";
+"units_t" = "τόνος";
 "one" = "Ένα";
 "announce_gpx_waypoints" = "Σημεία διαδρομής ίχνους";
 "quick_action_mapillary_show" = "Εμφάνιση Mapillary";

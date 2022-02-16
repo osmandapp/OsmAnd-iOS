@@ -536,7 +536,6 @@
 "shared_string_gpx_track" = "Track";
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_any" = "Any";
-"shared_string_sec" = "sec";
 
 "restart" = "Restart";
 
@@ -1561,26 +1560,28 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"nm" = "nmi";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
-"metric_ton" = "t";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_nm" = "nmi";
 
-"int_hour" = "h";
-"int_seconds" = "seconds";
-"int_min" = "min.";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 
-"shared_string_minute_short" = "m";
-"shared_string_second_short" = "s";
+"units_t" = "t";
+
+"units_hour" = "h";
+"units_min" = "min.";
+"units_min_short" = "m";
+"units_sec" = "sec";
+"units_sec_short" = "s";
+"units_seconds" = "seconds";
 
 // Help
 "help_first_steps" = "First steps";

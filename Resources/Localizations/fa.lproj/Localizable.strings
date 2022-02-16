@@ -74,7 +74,7 @@
 "speak_favorites" = "نقاط برگزیدهٔ اطراف";
 "speak_poi" = "نقاط توجه نزدیک از نوع";
 "speak_pedestrian" = "گذرگاه‌های پیاده";
-"int_seconds" = "ثانیه";
+"units_seconds" = "ثانیه";
 "shared_string_never" = "هرگز";
 "general_settings_2" = "تنظیمات سراسری";
 "general_settings_descr" = "Configure display and common settings for the application";
@@ -219,11 +219,11 @@
 "si_min_km" = "دقیقه بر کیلومتر";
 "si_min_m" = "دقیقه بر مایل";
 "si_nm_h" = "مایل دریایی بر ساعت (نات)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "چیزی پیدا نشد :(";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "انتخاب خیابان";
@@ -477,16 +477,16 @@
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "س";
-"int_min" = "min";
-"shared_string_sec" = "sec";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "س";
+"units_min" = "min";
+"units_sec" = "sec";
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
 "map_remind" = "Remind me later";
@@ -931,7 +931,7 @@
 "quick_action_start_stop_nav_descr" = "این دکمه را لمس کنید تا ناوبری را شروع کنید یا پایان دهید.";
 "osm_edits_advanced" = "دشوار";
 "add_action" = "افزودن کنش";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "osmand_live_weekly" = "هفتگی";
 "osm_live_cancel_subscription" = "لغو اشتراک";
 "coordinates_example" = "مثال";
@@ -1399,7 +1399,7 @@
 "two" = "دو";
 "importing_from" = "درون‌برد داده از %@";
 "shared_string_profiles" = "پروفایل‌ها";
-"metric_ton" = "تن";
+"units_t" = "تن";
 "shared_string_deselect_all" = "پاک‌کردن همهٔ انتخاب‌ها";
 "help_osmand_live" = "اشتراک - OsmAnd Live";
 "select_distance_for_recalculation" = "فاصله‌ای که با گذشتن از آن، مسیریابی مجدد انجام شود چقدر باشد.";
@@ -1643,7 +1643,7 @@
 "shared_string_maximum" = "بیشترین";
 "gpx_analyze" = "آنالیز";
 "calculating_progress" = "محاسبه...";
-"shared_string_second_short" = "s";
+"units_sec_short" = "s";
 "sort_by" = "مرتب‌سازی";
 "quick_action_dialog" = "گفتگو";
 "reddit" = "ردیت";

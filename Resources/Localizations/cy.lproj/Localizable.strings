@@ -228,7 +228,7 @@
 
 // Route info
 
-"int_seconds" = "seconds";
+"units_seconds" = "seconds";
 "shared_string_never" = "Never";
 "shared_setting_always_ask" = "Always ask";
 "general_settings_2" = "Gosodiadau cyffredinol";
@@ -433,10 +433,10 @@
 "si_min_km" = "Minutes per kilometer";
 "si_min_m" = "Minutes per mile";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "tones";
 
 "nothing_found" = "Nothing found: %@";
@@ -1536,21 +1536,21 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"nm" = "nmi";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_nm" = "nmi";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
 
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "sec";
-"shared_string_second_short" = "s";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "sec";
+"units_sec_short" = "s";
 
-"metric_ton" = "t";
+"units_t" = "t";
 
 // Help
 "help_first_steps" = "First steps";

@@ -19,12 +19,12 @@
 "shared_string_show_all" = "Sken akk";
 "red" = "Azeggaɣ";
 "map_settings_transp" = "Afrawan";
-"min_km" = "tasint";
+"units_min_km" = "tasint";
 "col_orange" = "Ačinawi";
 "route_head" = "Edfar";
 "modify_poi_short" = "Beddel";
 "shared_string_dismiss" = "Aggi";
-"km_h" = "h";
+"units_km_h" = "h";
 "rendering_value_black_name" = "Aberkan";
 "looking_up_address" = "Anadiɣef tansa";
 "shared_string_filter" = "Imzizdig";
@@ -37,7 +37,7 @@
 "time_overdue" = "Amiḍan-ik ɣer-s akka tura tafaturt ur yettwaxelṣen ara. Xelleṣ tifaturin yeqqimen.";
 "si_nm" = "Miles iwlalen";
 "years_5" = "Iseggasen";
-"mile_per_hour" = "m/tasint";
+"units_mph" = "m/tasint";
 "product_title_africa" = "Tafriqt";
 "favorites" = "Imenyafen";
 "rendering_category_transport" = "Amesni";
@@ -89,7 +89,7 @@
 "rendering_value_high_name" = "Haut";
 "gpx_deactivated" = "Tamahilt-agi tensa akka tura.";
 "rendering_value_blue_name" = "Azegzaw";
-"m_s" = "m/s";
+"units_m_s" = "m/s";
 "osmand_live_weekly" = "Yal imalas";
 "rendering_value_default_name" = "Lexṣas";
 "rendering_value_red_name" = "Azeggaɣ";
@@ -121,7 +121,7 @@
 "shared_string_go" = "Ddu";
 "coords_search" = "Asemmezdi n unadi";
 "rendering_category_details" = "Talqayt";
-"min_mile" = "tasint";
+"units_min_mi" = "tasint";
 "shared_string_add" = "Rnu";
 "shared_string_reset" = "Ales awennez";
 "region_south_america" = "Marikan n Unẓul";
@@ -158,7 +158,7 @@
 "driving_region_us" = "Iwanaken-Yeddukklen-N-Temrikt";
 "latitude" = "Turrut";
 "osm_alert_title" = "Wennet";
-"m" = "m";
+"units_m" = "m";
 "general_settings_2" = "Iɣewwaren imuta";
 "select_all" = "Fren kulec";
 "driving_region_automatic" = "Awurman";
@@ -183,7 +183,7 @@
 "shared_string_no" = "Ala";
 "region_europe" = "Turuft";
 "osmand_live_donations" = "Tiwsiwin";
-"int_min" = "tas";
+"units_min" = "tas";
 "fav_rename" = "Snifel isem";
 "lightblue" = "Azegzaw afessas";
 "product_title_northamerica" = "Marikan n Ugafa";
@@ -205,7 +205,7 @@
 "rendering_value_browse_map_name" = "Snirem";
 "map_markers" = "Ticraḍ n tkarḍa";
 "fav_name" = "Isem";
-"int_seconds" = "Tasinin";
+"units_seconds" = "Tasinin";
 "res_world_region" = "azul-i-medden-meṛṛa";
 "delete_filter" = "Kkes imzizdig";
 "unit_of_length" = "Tayunin n teɣzef";
@@ -294,7 +294,7 @@
 "shared_string_filters" = "Imzizdigen";
 "configure_map" = "Swel…";
 "rendering_attr_surface_stone_name" = "Ablaḍ";
-"km" = "km";
+"units_km" = "km";
 "save_filter" = "Imsizdeg";
 "route_tl" = "Brenɣer tama tazelmaṭ t edfraḍ";
 "map_settings_text_size" = "Tiddi n waḍris";
@@ -335,7 +335,7 @@
 "fav_add_group" = "Rnu agraw";
 "months_2_4" = "Ayyuren";
 "subcategories" = "Adutaggayin";
-"int_hour" = "s";
+"units_hour" = "s";
 "quick_action_add_poi_category" = "Rnu taggayt tamaynutt";
 "rendering_attr_surface_metal_name" = "Métal";
 "gpx_slope" = "Taseksert";
@@ -381,7 +381,7 @@
 "transport_routes" = "Iberdan";
 "poi_clear" = "Sfeḍ";
 "fav_color" = "Ini";
-"yard" = "yd";
+"units_yd" = "yd";
 "map_sources" = "Iɣbula";
 "app_mode_pedestrian" = "Amsebrid";
 "description" = "Asnummel";
@@ -436,7 +436,7 @@
 "rendering_value_orange_name" = "Ačinawi";
 "shared_string_export" = "Sifeḍ";
 "transport_nearby_routes" = "Deg";
-"mile" = "Maori";
+"units_mi" = "Maori";
 "rendering_attr_tracktype_grade5_name" = "Fessus";
 "get_free_trial_title" = "Bdu asekyed-ik baṭel n %d %@.";
 "get_discount_title" = "Awi %d %@ at %d%% n usenɣes.";
@@ -448,7 +448,7 @@
 "weeks_short" = "mls";
 "week_short" = "mls";
 "day_short" = "S";
-"nm_h" = "nmi/h";
+"units_nm_h" = "nmi/h";
 "shared_string_password" = "Awal-ik uffir n OSM";
 "by_name" = "S yisem";
 "si_mi_meters" = "Amayel / Amitr";
@@ -458,7 +458,7 @@
 "si_nm_h" = "Amayel n waman deg usrag (tikerras)";
 "si_min_m" = "Tisdatin deg umayl";
 "si_min_km" = "Tisdatin deg ukilumitr";
-"nm" = "nmi";
+"units_nm" = "nmi";
 "routing_attr_length_name" = "Talast n teɣzef";
 "driving_region" = "Tamnaḍt n tenhaṛt";
 "unit_of_length_descr" = "Snifel tayunin n teɣzef.";
@@ -516,7 +516,7 @@
 "help_osmand_live" = "Ajerred - OsmAnd Srid";
 "help_nav_profiles" = "Imuɣna n tunigin";
 "shared_string_next" = "Ar zdat";
-"foot" = "ft";
+"units_ft" = "ft";
 "select_color" = "Fren ini";
 "new_profile" = "Nouveau profil";
 "shared_string_poi_types" = "Tiwsiyin";
@@ -565,7 +565,7 @@
 "help_purchases" = "Tiɣin deg OsmAnd";
 "product_title_antarctica" = "Antartique";
 "select_icon" = "Fren tignit n usmel";
-"metric_ton" = "Am";
+"units_t" = "Am";
 "enter_profile_name" = "Sekcem isem amaynut n umaɣnu";
 "profile_type_custom_string" = "Amaɣnu Gaia udmawan…";
 "profile_alert_delete_title" = "Kkes amaɣnu";

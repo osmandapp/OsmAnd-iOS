@@ -228,7 +228,7 @@
 
 // Route info
 
-"int_seconds" = "sekundės";
+"units_seconds" = "sekundės";
 "shared_string_never" = "Niekada";
 "shared_setting_always_ask" = "Visada klausti";
 "general_settings_2" = "Pagrindiniai nutatymai";
@@ -433,10 +433,10 @@
 "si_min_km" = "Minutės vienam kilometrui";
 "si_min_m" = "Minutės per mylią";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "tones";
 
 "nothing_found" = "Nothing found: %@";
@@ -1536,21 +1536,21 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "my";
-"yard" = "jardai";
-"foot" = "pėd";
-"nm" = "jm";
-"km_h" = "km/h";
-"mile_per_hour" = "my/h";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "my";
+"units_yd" = "jardai";
+"units_ft" = "pėd";
+"units_nm" = "jm";
+"units_km_h" = "km/h";
+"units_mph" = "my/h";
 
-"int_hour" = "val";
-"int_min" = "min";
-"shared_string_sec" = "sec";
-"shared_string_second_short" = "s";
+"units_hour" = "val";
+"units_min" = "min";
+"units_sec" = "sec";
+"units_sec_short" = "s";
 
-"metric_ton" = "t";
+"units_t" = "t";
 
 // Help
 "help_first_steps" = "First steps";

@@ -229,16 +229,16 @@
 "cannot_add_marker_desc" = "Lütfen en az bir yönde kaldırın ve yeniden deneyin";
 "cannot_add_destination" = "Yön ekleyemezsiniz";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "sa";
-"int_min" = "dk";
-"shared_string_sec" = "sn";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "sa";
+"units_min" = "dk";
+"units_sec" = "sn";
 // Map
 "map_inst_det_map_q" = "Konumlarınız hakkında daha fazla bilgi almak için ayrıntılı genel bakış haritasını yükleyin.";
 "map_remind" = "Daha sonra anımsat";
@@ -496,10 +496,10 @@
 "si_min_km" = "Dakika/kilometre";
 "si_min_m" = "Dakika/mil";
 "si_nm_h" = "Deniz mili/saat (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "coords_format" = "Koordinat biçimi";
 "shared_string_info" = "Bilgi";
 "simulate_routing" = "Konumunuzu simüle et";
@@ -549,7 +549,7 @@
 "speak_favorites" = "Yakındaki Sık Kıllanılanlar";
 "speak_poi" = "Yakınlardaki POI";
 "speak_pedestrian" = "Yaya geçitleri";
-"int_seconds" = "saniyeler";
+"units_seconds" = "saniyeler";
 "shared_string_never" = "Hiçbir zaman";
 "general_settings_2" = "Genel ayarlar";
 "general_settings_descr" = "Uygulama teması, birimler, bölge";
@@ -1264,7 +1264,7 @@
 "parking_place" = "Park yeri";
 "add_start" = "Başlangıç noktası ekle";
 "selected_roads" = "Seçilen yollar";
-"shared_string_second_short" = "s";
+"units_sec_short" = "s";
 "select_home" = "Ev noktasını seç";
 "select_work_point" = "İş noktasını seç";
 "displayed_trips" = "Görüntülenen izlenen yollar";
@@ -1830,7 +1830,7 @@
 "plugin_settings_reset" = "Eklenti ayarlarını öntanımlılara sıfırla";
 "trip_rec_actions_descr" = "Kaydedilen tüm yollarınızı %@ içinde bulabilirsiniz";
 "logging_accuracy" = "Kayıt tutma doğruluğu";
-"metric_ton" = "t";
+"units_t" = "t";
 "recalculate_wrong_dir" = "Ters yön durumunda güzergahı yeniden hesapla";
 "repeat_after" = "Sonra tekrar et";
 "copy_from_other_profile_descr" = "Tüm ayarları herhangi bir profilden seçilen profile kopyalayabilirsiniz: ";
@@ -1955,7 +1955,7 @@
 "key_hint_recenter_map" = "Haritayı Yeniden Ortala";
 "shared_z_a" = "Z - A";
 "shared_a_z" = "A - Z";
-"nm" = "nmi";
+"units_nm" = "nmi";
 "select_application_profile" = "Uygulama profili seç";
 "change_application_profile" = "Uygulama profilini değiştir";
 "quick_action_showhide_mapillary_descr" = "Bu eylem düğmesine dokunmak harita üzerinde Mapillary katmanını gösterir veya gizler.";
@@ -2184,7 +2184,7 @@
 "distance_moving" = "Düzeltilmiş uzaklık";
 "navigate_point_olc_short" = "OLC";
 "delete_waypoints" = "Ara noktaları sil";
-"shared_string_minute_short" = "dak";
+"units_min_short" = "dak";
 "gpx_join_gaps" = "Boşlukları birleştir";
 "analyze_on_map" = "Harita üzerinde analiz et";
 "duplicate_track" = "Yolu çoğalt";

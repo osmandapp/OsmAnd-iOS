@@ -132,12 +132,12 @@
 "cannot_add_marker" = "Нельга дадаць паркоўку";
 "cannot_add_destination" = "Нельга дадаць кірунак";
 // Units
-"km" = "км";
-"m" = "м";
-"mile" = "міл";
-"yard" = "ярд";
-"foot" = "фут";
-"int_hour" = "г";
+"units_km" = "км";
+"units_m" = "м";
+"units_mi" = "міл";
+"units_yd" = "ярд";
+"units_ft" = "фут";
+"units_hour" = "г";
 // Map
 "map_inst_det_map_q" = "Усталюйце падрабязную мапу, каб атрымаць больш падрабязную інфармацыю пра сваё месцазнаходжанне.";
 // Alerts
@@ -252,9 +252,9 @@
 "add_notification_calendar" = "Напамін у календары";
 "parking_time_limited" = "Час паркоўкі абмежаваны";
 "cannot_add_marker_desc" = "Прыбярыце адзін з кірункаў і паўтарыце спробу";
-"km_h" = "км/г";
-"mile_per_hour" = "м/г";
-"shared_string_sec" = "сек.";
+"units_km_h" = "км/г";
+"units_mph" = "м/г";
+"units_sec" = "сек.";
 "map_remind" = "Нагадаць пазней";
 "map_no_address" = "Адрас невядомы";
 // Import
@@ -309,7 +309,7 @@
 "res_details" = "Падрабязнасці";
 "time_left" = "засталося";
 "time_overdue" = "Састарэлі";
-"int_min" = "хв";
+"units_min" = "хв";
 "col_orange" = "Аранжавы";
 "col_blue" = "Сіні";
 "fav_select" = "Калі ласка, абярыце ўлюбёныя";
@@ -448,7 +448,7 @@
 "shared_string_of" = "з";
 "right_side_navigation" = "Правабаковы рух";
 "si_mi_meters" = "Мілі/метры";
-"nm" = "м.мілі";
+"units_nm" = "м.мілі";
 "si_nm" = "Марскія мілі";
 "si_kmh" = "Кіламетраў за гадзіну";
 "si_mph" = "Міляў за гадзіну";
@@ -456,10 +456,10 @@
 "si_min_km" = "Хвілін на кіламетар";
 "si_min_m" = "Хвілін на мілю";
 "si_nm_h" = "Марскіх міль за гадзіну (вузлоў)";
-"nm_h" = "м.міль/г";
-"min_mile" = "хв/м";
-"min_km" = "хв/км";
-"m_s" = "м/с";
+"units_nm_h" = "м.міль/г";
+"units_min_mi" = "хв/м";
+"units_min_km" = "хв/км";
+"units_m_s" = "м/с";
 "driving_region" = "Рэгіён кіравання";
 "driving_region_japan" = "Японія";
 "driving_region_us" = "ЗША";
@@ -603,7 +603,7 @@
 "speak_favorites" = "Улюбёныя паблізу";
 "speak_poi" = "Навакольныя POI";
 "speak_pedestrian" = "Пешаходныя пераходы";
-"int_seconds" = "секунд";
+"units_seconds" = "секунд";
 "shared_string_never" = "Ніколі";
 "general_settings_2" = "Агульныя налады";
 "general_settings_descr" = "Тэма праграмы, адзінкі вымярэння, рэгіён";
@@ -841,7 +841,7 @@
 "add_map_source" = "Дадаць крыніцу мапы";
 "translucent_blue" = "Празрысты сіні";
 "open_osm_note" = "Дадаць нататку OSM";
-"shared_string_minute_short" = "м";
+"units_min_short" = "м";
 "red" = "Чырвоны";
 "purple" = "Фіялетавы";
 "osm_editing_contact_info" = "Кантакты";
@@ -1810,8 +1810,8 @@
 "help_first_use_descr" = "Як спампаваць мапы, вызначыць асноўныя налады";
 // Help
 "help_first_steps" = "Першыя крокі";
-"metric_ton" = "Т";
-"shared_string_second_short" = "с";
+"units_t" = "Т";
+"units_sec_short" = "с";
 "modify_poi" = "Рэдагаваць інфармацыю пра POI";
 "edit_osm_note" = "Рэдагаваць нататку OSM";
 "public_transport_hide" = "Схаваць грамадскі транспарт";

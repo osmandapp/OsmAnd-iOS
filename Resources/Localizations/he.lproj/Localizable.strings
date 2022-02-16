@@ -208,7 +208,7 @@
 
 // Route info
 
-"int_seconds" = "שניות";
+"units_seconds" = "שניות";
 "shared_string_never" = "לעולם לא";
 "shared_setting_always_ask" = "לשאול תמיד";
 "general_settings_2" = "הגדרות כלליות";
@@ -406,10 +406,10 @@
 "si_min_km" = "דקות לקילומטר";
 "si_min_m" = "דקות למייל";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "דק׳/מ׳";
-"min_km" = "דק׳/ק״מ";
-"m_s" = "מ/שנ׳";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "דק׳/מ׳";
+"units_min_km" = "דק׳/ק״מ";
+"units_m_s" = "מ/שנ׳";
 "tones" = "טונות";
 "nothing_found" = "Nothing found: %@";
 "nothing_found_empty" = "לא נמצא כלום";
@@ -1473,19 +1473,19 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "ק״מ";
-"m" = "מ׳";
-"mile" = "מייל";
-"yard" = "יארד";
-"foot" = "רגל";
-"nm" = "מייל ימי";
-"km_h" = "קמ״ש";
-"mile_per_hour" = "מייל לשעה";
-"int_hour" = "שע׳";
-"int_min" = "דק׳";
-"shared_string_sec" = "שנ׳";
-"shared_string_second_short" = "s";
-"metric_ton" = "ט׳";
+"units_km" = "ק״מ";
+"units_m" = "מ׳";
+"units_mi" = "מייל";
+"units_yd" = "יארד";
+"units_ft" = "רגל";
+"units_nm" = "מייל ימי";
+"units_km_h" = "קמ״ש";
+"units_mph" = "מייל לשעה";
+"units_hour" = "שע׳";
+"units_min" = "דק׳";
+"units_sec" = "שנ׳";
+"units_sec_short" = "s";
+"units_t" = "ט׳";
 
 // Help
 "help_first_steps" = "First steps";
@@ -2327,7 +2327,7 @@
 "grey_color_undefined" = "חלקים ללא נתונים הם אפורים.";
 "connect_rp" = "חיבור נקודות מסלול";
 "white_color_undefined" = "חלקים ללא נתונים הם לבנים.";
-"shared_string_minute_short" = "ד";
+"units_min_short" = "ד";
 "shared_string_hide_all" = "להסתיר הכול";
 "points_delete_multiple" = "למחוק %d נקודות?";
 "context_menu_edit_descr" = "עריכת תיאור";

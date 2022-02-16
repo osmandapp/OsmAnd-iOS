@@ -191,16 +191,16 @@
 "cannot_add_marker_desc" = "Esborreu com a mínim una adreça i torneu-ho a intentar";
 "cannot_add_destination" = "No es pot afegir l'adreça";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "seg";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "seg";
 "map_remind" = "Recorda-m'ho més tard";
 "map_no_address" = "L'adreça encara no es coneix";
 // Import
@@ -526,11 +526,11 @@
 "si_min_km" = "Minuts per kilòmetre";
 "si_min_m" = "Minuts per milla";
 "si_nm_h" = "Milles nàutiques per hora (nusos)";
-"nm" = "NM";
-"nm_h" = "nusos";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "NM";
+"units_nm_h" = "nusos";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "towards" = "cap a";
 "route_roundabout" = "Rotonda: preneu la %1$d sortida i continueu";
 "route_roundabout_short" = "Agafeu la %d sortida i continueu";
@@ -634,7 +634,7 @@
 "speak_favorites" = "Preferits propers";
 "speak_poi" = "PDI propers";
 "speak_pedestrian" = "Passos de zebra";
-"int_seconds" = "segons";
+"units_seconds" = "segons";
 "shared_string_never" = "Mai";
 "general_settings_2" = "Paràmetres generals";
 "general_settings_descr" = "Tema de la aplicació, unitats, regió";
@@ -1262,8 +1262,8 @@
 "show_edits" = "Mostra edicions properes";
 "hide_edits" = "Amaga edicions properes";
 "quick_action_edit_list" = "Edita la llista d’accions";
-"shared_string_minute_short" = "m";
-"shared_string_second_short" = "s";
+"units_min_short" = "m";
+"units_sec_short" = "s";
 "map_settings_install_more" = "Instal·la més...";
 "tile_data" = "Dades de tessel·la";
 "online_map" = "Mapa en línia";
@@ -1845,7 +1845,7 @@
 "import_profile_descr" = "Per importar un perfil, premeu necessàriament un arxiu (*.osf) a qualsevol aplicació i seleccioneu \"Copia a OsmAnd\"";
 "profile_prefs_reset_successful" = "Totes les configuracions dels perfils s\'han restablert per defecte.";
 "help_nav_profiles" = "Perfils de navegació";
-"metric_ton" = "t";
+"units_t" = "t";
 "reset_profile_action_descr" = "Reinicialitza la configuració de tots els perfils als valors inicials d'instal·lació. Si toqueu Restableix, es descartaran tots els canvis i no es podrà desfer aquesta acció.";
 "gpx_parse_error" = "No s'ha generat correctament el fitxer GPX. Indiqueu-ho a l'equip de suport per continuar investigant.";
 "nothing_found_empty" = "No s\'ha trobat res";

@@ -310,18 +310,18 @@
     
     NSMutableString *time = [NSMutableString string];
     if (hours > 0)
-        [time appendFormat:@"%d %@", hours, OALocalizedString(@"int_hour")];
+        [time appendFormat:@"%d %@", hours, OALocalizedString(@"units_hour")];
     if (minutes > 0)
     {
         if (time.length > 0)
             [time appendString:@" "];
-        [time appendFormat:@"%d %@", minutes, OALocalizedString(@"int_min")];
+        [time appendFormat:@"%d %@", minutes, OALocalizedString(@"units_min")];
     }
     if (minutes == 0 && hours == 0)
     {
         if (time.length > 0)
             [time appendString:@" "];
-        [time appendFormat:@"%d %@", seconds, OALocalizedString(@"shared_string_sec")];
+        [time appendFormat:@"%d %@", seconds, OALocalizedString(@"units_sec")];
     }
     
     if (timeInterval > 0.0)

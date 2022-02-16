@@ -239,16 +239,16 @@
 "cannot_add_marker_desc" = "請至少移除一個指引，然後重試";
 "cannot_add_destination" = "不能增加指引";
 // Units
-"km" = "公里";
-"m" = "公尺";
-"mile" = "哩";
-"yard" = "碼";
-"foot" = "呎";
-"km_h" = "公里/時";
-"mile_per_hour" = "哩/時";
-"int_hour" = "小時";
-"int_min" = "分";
-"shared_string_sec" = "秒";
+"units_km" = "公里";
+"units_m" = "公尺";
+"units_mi" = "哩";
+"units_yd" = "碼";
+"units_ft" = "呎";
+"units_km_h" = "公里/時";
+"units_mph" = "哩/時";
+"units_hour" = "小時";
+"units_min" = "分";
+"units_sec" = "秒";
 "map_remind" = "稍後提醒我";
 "map_no_address" = "還不知道地址";
 // Import

@@ -261,16 +261,16 @@
 "cannot_add_marker_desc" = "Odstráňte aspoň jeden smer a skúste znova";
 "cannot_add_destination" = "Smer sa nedá pridať";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "hod";
-"int_min" = "min";
-"shared_string_sec" = "sek.";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "hod";
+"units_min" = "min";
+"units_sec" = "sek.";
 // Map
 "map_inst_det_map_q" = "Nainštalujte podrobné mapy, aby ste získali viac informácií o vašich miestach.";
 "map_remind" = "Pripomenúť neskôr";
@@ -524,11 +524,11 @@
 "si_min_km" = "Minúty za kilometer";
 "si_min_m" = "Minúty za míľu";
 "si_nm_h" = "Námorné míle za hodinu (uzly)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "destination_point" = "Cieľ %@";
 "intermediate_point" = "Prechodný bod %@";
 "arrived_at_intermediate_point" = "Dorazili ste k Vášmu prechodnému bodu";
@@ -613,7 +613,7 @@
 "speak_favorites" = "Blízke Obľúbené body";
 "speak_poi" = "Blízke body záujmu";
 "speak_pedestrian" = "Priechody pre chodcov";
-"int_seconds" = "sekúnd";
+"units_seconds" = "sekúnd";
 "shared_string_never" = "Nikdy";
 "general_settings_2" = "Všeobecné nastavenia";
 "general_settings_descr" = "Vzhľad aplikácie, jednotky, oblasť";
@@ -1184,7 +1184,7 @@
 "key_hint_deselect" = "Zrušiť výber";
 "region_nautical" = "Námorné mapy";
 "quick_action_add_overlay" = "Pridať prekrytie";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "quick_action_add_poi_category" = "Pridať kategóriu";
 "map_sources" = "Zdroje mapy";
 "add_map_source" = "Pridať zdroj mapy";
@@ -1645,7 +1645,7 @@
 "reverse_route" = "Otočiť trasu";
 "special_routing" = "Špeciálna navigácia";
 "min_speed" = "Min. rýchlosť";
-"metric_ton" = "t";
+"units_t" = "t";
 "quick_action_remove_next_destination_descr" = "Vymaže nasledujúci cieľ vašej trasy. Ak je to posledný cieľ, navigácia sa zastaví.";
 "map_settings_legend" = "Legenda";
 "total" = "Spolu";

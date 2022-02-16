@@ -158,7 +158,7 @@
 "speak_pedestrian" = "横断歩道";
 "speak_tunnels" = "トンネル";
 "show_tunnels" = "トンネル";
-"int_seconds" = "秒";
+"units_seconds" = "秒";
 "shared_string_never" = "しない";
 "shared_setting_always_ask" = "常に尋ねる";
 "general_settings_2" = "全般設定";
@@ -319,11 +319,11 @@
 "si_min_km" = "分/キロメートル";
 "si_min_m" = "分/マイル";
 "si_nm_h" = "海里毎時(ノット)";
-"nm" = "海里";
-"nm_h" = "ノット";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "海里";
+"units_nm_h" = "ノット";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "見つかりませんでした: %@";
 "nothing_found_descr" = "検索ワードを変更するか、検索範囲を広げてください";
 "select_street" = "道路名を選択";
@@ -875,18 +875,18 @@
 "cannot_add_marker_desc" = "少なくとも1つ以上案内すべき場所を削除して、再試行してみてください";
 "cannot_add_destination" = "案内を追加できませんでした";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "ヤード";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "時間";
-"int_min" = "分";
-"shared_string_sec" = "秒";
-"shared_string_minute_short" = "m";
-"shared_string_second_short" = "s";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "ヤード";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "時間";
+"units_min" = "分";
+"units_sec" = "秒";
+"units_min_short" = "m";
+"units_sec_short" = "s";
 // Help
 "help_first_steps" = "ファーストステップ";
 "help_first_use" = "使用方法の簡易説明";
@@ -1733,7 +1733,7 @@
 "menu" = "メニュー";
 "after_tapping_done" = "『完了』をタップすると、削除したプロファイルは完全に失われます。";
 "all_application_profiles" = "すべてのアプリケーションプロファイル";
-"metric_ton" = "トン";
+"units_t" = "トン";
 "email_example_hint" = "user@example.com";
 "send_anonymous_data_desc" = "OsmAndのマップダウンロード統計情報を送信します。私たちは位置情報や個人情報の収集はしていません。";
 "default_profile_descr" = "アプリケーションの起動時に使用するプロファイルを選択します。";

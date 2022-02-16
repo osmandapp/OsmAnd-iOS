@@ -59,7 +59,7 @@
 "voice_provider" = "Vocea pentru ghidare";
 "pause_resume_nav" = "Pauză/reluare navigație";
 "shared_string_and" = "și";
-"int_seconds" = "secunde";
+"units_seconds" = "secunde";
 "product_title_northamerica" = "America de Nord";
 "fav_replace" = "Înlocuiește";
 "categories" = "Categorii";
@@ -85,7 +85,7 @@
 "gpx_finish" = "Sfârşit";
 "arrival_distance_factor_early" = "Devreme";
 "speed_limit_exceed" = "Toleranță limită de viteză";
-"m" = "m";
+"units_m" = "m";
 "track_new_segment" = "Începeți un segment nou";
 "auto_zoom_close" = "Prea apropiat";
 "help_versions" = "Versiuni";
@@ -112,7 +112,7 @@
 "red" = "Roșu";
 "quick_action_tags" = "Tag-uri";
 "mapillary" = "Mapillary";
-"km_h" = "km/h";
+"units_km_h" = "km/h";
 "map_markers_other" = "Alți marcatori";
 "search_radius_proximity" = "În imediata apropiere a";
 "map_widget_max_speed" = "Limita de viteză";
@@ -137,7 +137,7 @@
 "route_tsll" = "Virați ușor la stânga și continuați";
 "cancel_route" = "Renunță la rută";
 "select_street" = "Selectează strada";
-"int_min" = "min";
+"units_min" = "min";
 "longitude" = "Longitudine";
 "shared_string_is_open_24_7" = "Deschis 24/7";
 "speak_street_names" = "numele Străzilor (TTS)";
@@ -159,7 +159,7 @@
 "shared_string_select" = "Selectați";
 "shared_string_buy" = "Cumpărați";
 "driving_region_us" = "Statele Unite";
-"min_mile" = "min/m";
+"units_min_mi" = "min/m";
 "map_widget_altitude" = "Altitudine";
 "hide_contour_lines" = "Ascunde conturul liniilor";
 "mapillary_get_title" = "Înbunătățiți acoperirea foto cu Mapillary";
@@ -234,7 +234,7 @@
 "osm_live_subscription" = "Abonament OsmAnd Live";
 "col_purple" = "Violet";
 "shared_string_distance" = "Distanță";
-"mile" = "mi";
+"units_mi" = "mi";
 "local_names" = "Nume locale";
 "osm_notes_online_layer" = "Bug hartă OSM";
 "work_pt" = "Serviciu";
@@ -273,18 +273,18 @@
 "speak_pedestrian" = "Treceri pietonale";
 "actions" = "Acțiuni";
 "map_settings_online" = "Hărți online";
-"mile_per_hour" = "mph";
+"units_mph" = "mph";
 "osm_note" = "Notă OSM";
 "layer_map_appearance" = "Configurare ecran";
 "menu_my_places" = "Locurile mele";
-"km" = "km";
+"units_km" = "km";
 "routing_settings" = "Navigare (funcție de profil)";
 "animate_routing_route_not_calculated" = "Vă rog mai întâi calculați ruta";
 "search_poi_category_hint" = "Caută pentru toate punctele de interes";
 "filter_poi_hint" = "Filtrează după nume";
 "shared_string_edit" = "Editează";
 "city_type_village" = "Sat";
-"int_hour" = "h";
+"units_hour" = "h";
 "auto_zoom_map" = "Auto zoom hartă";
 "sett_settings" = "Setări";
 "route_tl" = "Virați la stânga și continuați";
@@ -296,7 +296,7 @@
 "app_mode_train" = "Tren";
 "si_m_s" = "Metri pe secundă";
 "osm_live_ask_for_purchase" = "Vă rugăm să achiziționați mai întâi abonamentul OsmAnd Live";
-"m_s" = "m/s";
+"units_m_s" = "m/s";
 "my_places" = "Locurile mele";
 "map_widget_distance" = "Distanța până la destinație";
 "app_mode_truck" = "Camion";
@@ -329,7 +329,7 @@
 "map_widget_battery" = "Nivel baterie";
 "product_title_wiki" = "Wikipedia";
 "shared_string_add" = "Adăugați";
-"min_km" = "min/km";
+"units_min_km" = "min/km";
 "groups" = "Grupuri";
 "si_mi_yard" = "Mile/iarzi";
 "region_south_america" = "America de Sud";
@@ -374,7 +374,7 @@
 "gpx_descent" = "Coborâre";
 "select_map_marker" = "Selectați marcajul pe hartă";
 "online_map" = "Hartă online";
-"foot" = "picior";
+"units_ft" = "picior";
 "shared_string_save" = "Salvați";
 "col_green" = "Verde";
 "shared_string_category" = "Categorie";
@@ -421,11 +421,11 @@
 "looking_up_address" = "Adresa căutată";
 "shared_string_clear_all" = "Curăță tot";
 "osm_editing_offline" = "Editare offline";
-"yard" = "yd";
+"units_yd" = "yd";
 "map_settings_night" = "Noaptea";
 "region_others" = "Alte hărți";
 "poi_filter_closest_poi" = "Cel mai apropiat POI";
-"nm" = "nmi ( nautic miles)";
+"units_nm" = "nmi ( nautic miles)";
 "traffic_warning_pedestrian" = "Trecere de pietoni";
 "shared_string_yes" = "Da";
 "configure_map" = "Configuraţi harta";
@@ -923,7 +923,7 @@
 "profile_prefs_reset_successful" = "Toate setările de profil sunt restabilite la valorile implicite";
 "tones" = "tone";
 "shared_string_nothing_selected" = "Nimic selectat";
-"metric_ton" = "t";
+"units_t" = "t";
 "personal_category_name" = "Personal";
 "position_icon_at_rest" = "Poziționare icoană în timpul repausului";
 "coordinates" = "Coordonate";
@@ -1473,7 +1473,7 @@
 "type_city_town" = "Scrieți orașul sau localitatea";
 "nothing_found_descr" = "Modificați interogarea de căutare sau măriți raza de căutare";
 "nothing_found" = "Nu s-a găsit nimic: %@";
-"nm_h" = "nmi/h ( nautic miles/oră)";
+"units_nm_h" = "nmi/h ( nautic miles/oră)";
 "si_nm_h" = "Mile nautice pe oră (nod)";
 "right_side_navigation" = "Traficul pe dreapta";
 "left_side_navigation" = "Trafic pe stânga";
@@ -1807,8 +1807,8 @@
 
 // Help
 "help_first_steps" = "Primii pași";
-"shared_string_second_short" = "s";
-"shared_string_sec" = "secundă";
+"units_sec_short" = "s";
+"units_sec" = "secundă";
 "cannot_add_destination" = "Nu se poate adăuga Direcția";
 "cannot_add_marker_desc" = "Vă rugăm să eliminați cel puțin o direcție și să încercați din nou";
 "cannot_add_marker" = "Nu se poate adăuga Parcare";
@@ -2165,7 +2165,7 @@
 "parked_at" = "Parcat la";
 "industrial" = "Industrială";
 "education" = "Educație";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "route_points" = "Puncte de traseu";
 "connect_rp" = "Conectarea punctelor de rută";
 "lang_al" = "Albaneză";

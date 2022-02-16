@@ -183,15 +183,15 @@
 "time_left" = "tilbage";
 "time_overdue" = "Udløbet";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mil";
-"yard" = "yd";
-"foot" = "fod";
-"km_h" = "km/t";
-"int_hour" = "t";
-"int_min" = "min";
-"shared_string_sec" = "sek";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mil";
+"units_yd" = "yd";
+"units_ft" = "fod";
+"units_km_h" = "km/t";
+"units_hour" = "t";
+"units_min" = "min";
+"units_sec" = "sek";
 "map_remind" = "Påmind senere";
 "import_favorite" = "Favorit";
 "import_failed" = "Importen mislykkedes";
@@ -202,7 +202,7 @@
 "ctx_mnu_add_fav" = "Tilføj favorit";
 "ctx_mnu_share" = "Del";
 "ctx_mnu_direction" = "Kortmarkør";
-"mile_per_hour" = "mph";
+"units_mph" = "mph";
 // Menu
 "menu_my_places" = "Foretrukne";
 "res_unknown" = "Ukendt";
@@ -526,11 +526,11 @@
 "si_min_km" = "Minutter pr. kilometer";
 "si_min_m" = "Minutter pr. mil";
 "si_nm_h" = "Sømil i timen (knob)";
-"nm" = "sømil";
-"nm_h" = "sømil/t";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "sømil";
+"units_nm_h" = "sømil/t";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "towards" = "Imod";
 "route_roundabout" = "Rundkørsel: tag afkørsel %d";
 "route_roundabout_short" = "Tag %d afkørsel og forsæt";
@@ -634,7 +634,7 @@
 "speak_favorites" = "Favoritter i nærheden";
 "speak_poi" = "Interessepunkt (IP) i nærheden";
 "speak_pedestrian" = "Fodgængerovergange";
-"int_seconds" = "sekunder";
+"units_seconds" = "sekunder";
 "shared_string_never" = "Aldrig";
 "general_settings_2" = "Generelle indstillinger";
 "general_settings_descr" = "App-tema, enheder, region";
@@ -1251,8 +1251,8 @@
 "no_active_route" = "Ingen aktiv rute";
 "selected_roads" = "Udvalgte veje";
 "shared_string_clear_all" = "Slet alle";
-"shared_string_minute_short" = "m";
-"shared_string_second_short" = "s";
+"units_min_short" = "m";
+"units_sec_short" = "s";
 "select_route_intermediate" = "Vælg et mellemliggende punkt";
 "select_home" = "Vælg hjemmeplacering";
 "select_work_point" = "Vælg arbejdssted";
@@ -1883,7 +1883,7 @@
 "reverse_route" = "Omvendt rute";
 "quick_action_switch_profile_descr" = "Denne genvejsknap skifter mellem valgte profiler.";
 "maximum_speed" = "Maksimal hastighed";
-"metric_ton" = "t";
+"units_t" = "t";
 "create_profile_descr" = "Basér den brugerdefinerede profil på en af standard app-profilerne, dette definerer den grundlæggende opsætning som standard synlighed for moduler og enheder for hastighed og distance. Dette er standard app-profilerne, sammen med eksempler på brugerdefinerede profiler kan de udvides til:";
 "shared_string_max" = "Maks";
 "whole_track" = "Hele sporet";

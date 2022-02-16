@@ -214,16 +214,16 @@
 "cannot_add_marker_desc" = "Legalább egy irányt távolítson el és próbálja újra";
 "cannot_add_destination" = "Nem adható hozzá irány";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mérföld";
-"yard" = "yard";
-"foot" = "láb";
-"km_h" = "km/h";
-"mile_per_hour" = "mérföld/óra";
-"int_hour" = "ó";
-"int_min" = "perc";
-"shared_string_sec" = "mp.";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mérföld";
+"units_yd" = "yard";
+"units_ft" = "láb";
+"units_km_h" = "km/h";
+"units_mph" = "mérföld/óra";
+"units_hour" = "ó";
+"units_min" = "perc";
+"units_sec" = "mp.";
 // Map
 "map_inst_det_map_q" = "Telepítse a részletes áttekintő térképet, hogy több információt szerezzen a helyeiről.";
 "map_remind" = "Emlékeztetés később";
@@ -542,11 +542,11 @@
 "si_min_km" = "Perc per kilométer";
 "si_min_m" = "Perc per mérföld";
 "si_nm_h" = "Tengeri mérföld per óra (csomó)";
-"nm" = "tengeri mérföld";
-"nm_h" = "tengeri mérföld/óra";
-"min_mile" = "perc/mérföld";
-"min_km" = "perc/km";
-"m_s" = "m/s";
+"units_nm" = "tengeri mérföld";
+"units_nm_h" = "tengeri mérföld/óra";
+"units_min_mi" = "perc/mérföld";
+"units_min_km" = "perc/km";
+"units_m_s" = "m/s";
 "nothing_found" = "Nincs találat: %@";
 "select_street" = "Utca kijelölése";
 "shared_string_in_name" = "itt: %@";
@@ -641,7 +641,7 @@
 "shared_string_sound" = "Hang";
 "show_traffic_warnings" = "Forgalmi figyelmeztetések";
 "speak_favorites" = "Közeli Kedvencek";
-"int_seconds" = "másodperc";
+"units_seconds" = "másodperc";
 "fast_route_mode" = "Leggyorsabbútvonal";
 "choose_auto_follow_route" = "Automatikus követés ideje";
 "keep_informing" = "Navigációs utasítások ismétlése";
@@ -900,7 +900,7 @@
 "add_poi" = "Érdekes pont (POI) hozzáadása";
 "sett_ext_input" = "Külső beviteli eszköz";
 "key_hint_deselect" = "Kijelölés megszüntetése";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "gpx_slope" = "Lejtés";
 "work_pt" = "Munkahely";
 "osmand_live_donation_switch_title" = "Adomány az OpenStreetMap közösségnek";
@@ -1400,7 +1400,7 @@
 "num_stops" = "megállók";
 "profile_type_user_string" = "Felhasználói profil";
 "route_recalculation_descr" = "Azútvonal újraszámításra kerül, amennyiben az útvonal és a jelenlegi helyzet közötti távolság nagyobb, mint a kiválasztott érték.";
-"metric_ton" = "t";
+"units_t" = "t";
 "position_icon_while_moving" = "Pozíció ikon haladás közben";
 "logging_min_speed" = "Legkisebb sebesség";
 "nav_type_direct_to" = "Légvonalban";

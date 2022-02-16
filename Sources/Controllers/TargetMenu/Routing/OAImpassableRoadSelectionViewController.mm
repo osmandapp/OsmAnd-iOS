@@ -101,7 +101,7 @@
         OsmAndAppInstance app = [OsmAndApp instance];
         if (![self.routingHelper isRouteCalculated])
         {
-            NSString *emptyEle = [NSString stringWithFormat:@"0 %@", OALocalizedString(@"m")];
+            NSString *emptyEle = [NSString stringWithFormat:@"0 %@", OALocalizedString(@"units_m")];
             _routeInfoLabel.text = OALocalizedString(@"no_active_route");
             _elevationLabel.text = emptyEle;
             _descentLabel.text = emptyEle;

@@ -271,15 +271,15 @@
 "pickup_car" = "Odbierz samochód z parkingu";
 "parking_time_limited" = "Czas parkowania ograniczony do";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "stopy";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "h";
-"int_min" = "min";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "stopy";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "h";
+"units_min" = "min";
 "map_remind" = "Przypomnij mi później";
 "map_no_address" = "Adres nie jest znany";
 // Import
@@ -497,11 +497,11 @@
 "si_min_km" = "Minuty na kilometr";
 "si_min_m" = "Minuty na milę";
 "si_nm_h" = "Mile morskie na godzinę (węzły)";
-"nm" = "Mm";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "Mm";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "map_orientation_change_in_accordance_with_speed" = "Próg zmiany orientacji mapy";
 "map_orientation_change_in_accordance_with_speed_descr" = "Wybiera prędkość, poniżej której orientacja mapy zmieni się z „względem kierunku ruchu” na „względem kompasu”";
 "shared_string_topbar" = "Górny pasek";
@@ -577,7 +577,7 @@
 "speak_favorites" = "Najbliższe ulubione miejsca";
 "speak_poi" = "Pobliskie użyteczne miejsca";
 "speak_pedestrian" = "Przejścia dla pieszych";
-"int_seconds" = "sekund";
+"units_seconds" = "sekund";
 "shared_string_never" = "Nigdy";
 "general_settings_2" = "Ustawienia globalne";
 "general_settings_descr" = "Motyw aplikacji, jednostki, region";
@@ -635,7 +635,7 @@
 "parking_marker" = "Miejsce parkowania";
 "pickup_car_at" = "Odbierz samochód z parkingu o";
 "add_notification_calendar" = "Dodaj powiadomienie do Kalendarza";
-"shared_string_sec" = "sek";
+"units_sec" = "sek";
 // Map
 "map_inst_det_map_q" = "Zainstaluj mapę szczegółową, by dostać więcej informacji o twojej lokalizacji.";
 "import_choose_type" = "Proszę wybrać elementy do zaimportowania";
@@ -1247,8 +1247,8 @@
 "no_active_route" = "Brak aktywnej trasy";
 "selected_roads" = "Wybrane trasy";
 "shared_string_clear_all" = "Wyczyść wszystko";
-"shared_string_minute_short" = "m";
-"shared_string_second_short" = "s";
+"units_min_short" = "m";
+"units_sec_short" = "s";
 "select_route_intermediate" = "Wybierz punkt pośredni";
 "select_home" = "Wybierz punkt domu";
 "select_work_point" = "Wybierz punkt pracy";
@@ -1828,7 +1828,7 @@
 "help_osmand_live" = "Subskrypcja - OsmAnd Live";
 "help_purchases" = "Zakupy w OsmAnd";
 "help_nav_profiles" = "Profile nawigacji";
-"metric_ton" = "t";
+"units_t" = "t";
 "public_transport_hide" = "Ukryj transport publiczny";
 "public_transport_show" = "Pokaż transport publiczny";
 "configure_map_descr" = "Wygląd mapy";

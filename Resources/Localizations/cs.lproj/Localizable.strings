@@ -108,7 +108,7 @@
 "speak_favorites" = "Blízké Oblíbené body";
 "speak_poi" = "Blízké body zájmu POI";
 "speak_pedestrian" = "Přechody pro chodce";
-"int_seconds" = "sekund";
+"units_seconds" = "sekund";
 "shared_string_never" = "Nikdy";
 "general_settings_2" = "Všeobecná nastavení";
 "general_settings_descr" = "Vzhled aplikace, jednotky, oblast";
@@ -253,11 +253,11 @@
 "si_min_km" = "Minut na kilometr";
 "si_min_m" = "Minut na míli";
 "si_nm_h" = "Námořní míle za hodinu (uzly)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "Nic nenalezeno: %@";
 "nothing_found_descr" = "Změňte vyhledávací dotaz nebo zvětšete okruh hledání";
 "select_street" = "Vyberte ulici";
@@ -512,16 +512,16 @@
 "cannot_add_marker_desc" = "Odstraňte aspoň jeden směr a zkuste to znovu";
 "cannot_add_destination" = "Směr nelze přidat";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "sek.";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "sek.";
 // Map
 "map_inst_det_map_q" = "Nainstalujte si detailní přehledovou mapu, abyste získali více informací o svých místech.";
 "map_remind" = "Připomenout později";
@@ -1047,7 +1047,7 @@
 "orange" = "Oranžová";
 "day_mode" = "Denní režim";
 "key_hint_select" = "Vybrat";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "osm_target_deleted" = "Smazaný OSM POI";
 "translucent_yellow" = "Průsvitná žlutá";
 "osm_alert_button_ok" = "Vytvořit poznámku";
@@ -1499,7 +1499,7 @@
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "shared_string_finish" = "Dokončit";
 "help_purchases" = "Nákupy v OsmAnd";
-"metric_ton" = "t";
+"units_t" = "t";
 "special_routing" = "Speciální navigace";
 "base_profile_descr_aircraft" = "Letadlo, plachtění";
 "nav_type_straight_line" = "Rovná čára";
@@ -1941,7 +1941,7 @@
 "help_what_is_new" = "Co je nového";
 "help_legend_descr" = "Průvodce mapovými symboly";
 "help_travel" = "Cestování (Wikipedie & Wikivoyage)";
-"shared_string_second_short" = "s";
+"units_sec_short" = "s";
 "modify_poi" = "Upravit informace o bodu zájmu";
 "edit_osm_note" = "Upravit OSM poznámku";
 "unsupported_action_descr" = "Tato rychlá akce není zatím podporována. Podpora může být přidána v některé z příštích verzí aplikace.";

@@ -97,15 +97,15 @@
 "col_green" = "Kesk";
 "ctx_mnu_direction" = "Alî";
 "ctx_mnu_share" = "Parve bike";
-"mile_per_hour" = "mph";
-"int_hour" = "st";
-"int_min" = "dq";
-"km_h" = "km/h";
-"foot" = "ft";
-"yard" = "yd";
-"m" = "m";
+"units_mph" = "mph";
+"units_hour" = "st";
+"units_min" = "dq";
+"units_km_h" = "km/h";
+"units_ft" = "ft";
+"units_yd" = "yd";
+"units_m" = "m";
 // Units
-"km" = "km";
+"units_km" = "km";
 "time_left" = "çep";
 "menu_about" = "Derbar";
 "gpx_group_select" = "Kome hilbijêre";

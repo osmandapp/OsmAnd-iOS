@@ -208,7 +208,7 @@
 
 // Route info
 
-"int_seconds" = "sekundoj";
+"units_seconds" = "sekundoj";
 "shared_string_never" = "Neniam";
 "shared_setting_always_ask" = "Demandiĉiam";
 "general_settings_2" = "Ĝeneralaj agordoj";
@@ -406,10 +406,10 @@
 "si_min_km" = "Minutoj en kilometro";
 "si_min_m" = "Minutoj en mejlo";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "tunoj";
 "nothing_found" = "Nothing found: %@";
 "nothing_found_empty" = "Trovis nenion";
@@ -1473,19 +1473,19 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"nm" = "nmi";
-"km_h" = "km/h";
-"mile_per_hour" = "mi/h";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "s";
-"shared_string_second_short" = "s";
-"metric_ton" = "Mg";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_nm" = "nmi";
+"units_km_h" = "km/h";
+"units_mph" = "mi/h";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "s";
+"units_sec_short" = "s";
+"units_t" = "Mg";
 
 // Help
 "help_first_steps" = "First steps";

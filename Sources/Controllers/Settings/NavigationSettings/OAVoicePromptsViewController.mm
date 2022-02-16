@@ -143,13 +143,13 @@
     NSString *value = nil;
     if ([_settings.metricSystem get] == KILOMETERS_AND_METERS)
     {
-        value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"km_h")];
+        value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"units_km_h")];
     }
     else
     {
         NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceedKmh get:self.appMode])];
         if (index != NSNotFound)
-            value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"mile_per_hour")];
+            value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"units_mph")];
     }
     [thirdSection addObject:@{
         @"type" : [OASettingsTableViewCell getCellIdentifier],
@@ -193,7 +193,7 @@
     if ([_settings.keepInforming get:self.appMode] == 0)
         val = OALocalizedString(@"only_manually");
     else
-        val = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"int_min")];
+        val = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"units_min")];
     
     [fifthSection addObject:@{
         @"type" : [OASettingsTableViewCell getCellIdentifier],

@@ -173,13 +173,13 @@
 "menu_feedback" = "Encuesta";
 "menu_about" = "Acerca de";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
 // Map
 "map_inst_det_map_q" = "Instale el mapa detallado general para más información sobre sus ubicaciones.";
 "map_remind" = "Recordarme luego";
@@ -262,9 +262,9 @@
 "cannot_add_marker" = "No se pudo añadir el aparcamiento";
 "cannot_add_marker_desc" = "Quite al menos una dirección e intente de nuevo";
 "cannot_add_destination" = "No se pudo añadir la dirección";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "seg";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "seg";
 "cannot_access_calendar" = "No se pudo acceder al calendario";
 "reminder_not_set_text" = "No se estableció recordatorio, porque no se permite el acceso al calendario";
 "show_info" = "Mostrar información";
@@ -554,11 +554,11 @@
 "si_min_km" = "Minutos por kilómetro";
 "si_min_m" = "Minutos por milla";
 "si_nm_h" = "Millas náuticas por hora (nudos)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "starting_point_too_far" = "Punto de inicio demasiado lejos del camino más cercano.";
 "ending_point_too_far" = "Punto final demasiado lejos del camino más cercano.";
 "intermediate_point_too_far" = "Destino intermedio, %d demasiado lejos del camino más cercano.";
@@ -623,7 +623,7 @@
 "speak_favorites" = "Favoritos cercanos";
 "speak_poi" = "PDI cercanos";
 "speak_pedestrian" = "Pasos de peatones";
-"int_seconds" = "segundos";
+"units_seconds" = "segundos";
 "shared_string_never" = "Nunca";
 "general_settings_2" = "Ajustes generales";
 "general_settings_descr" = "Tema de aplicación, unidades y región";
@@ -1256,8 +1256,8 @@
 "select_avoid_descr" = "Marca los caminos a evitar durante la navegación. Puedes marcar una carretera en el mapa o elegir un tipo de la siguiente lista.";
 "no_active_route" = "Sin ruta activa";
 "selected_roads" = "Caminos marcados";
-"shared_string_minute_short" = "m";
-"shared_string_second_short" = "s";
+"units_min_short" = "m";
+"units_sec_short" = "s";
 "select_route_intermediate" = "Marcar un punto intermedio";
 "select_home" = "Marcar punto de inicio";
 "select_work_point" = "Marcar punto de trabajo";
@@ -1774,7 +1774,7 @@
 "route_betw_points" = "Ruta entre puntos";
 "res_pseudo_mercator" = "Proyección de pseudo-Mercator";
 "quick_action_mapillary_hide" = "Ocultar Mapillary";
-"metric_ton" = "ton";
+"units_t" = "ton";
 "num_stops" = "paradas";
 "configure_map_descr" = "Apariencia del mapa";
 "help_mapillary" = "OsmAnd + Mapillary";

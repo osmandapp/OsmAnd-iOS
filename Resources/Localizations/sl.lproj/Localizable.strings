@@ -253,16 +253,16 @@
 "more" = "Več ...";
 "time_limited" = "Časovno omejeno";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "ft";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "sek";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "sek";
 "map_remind" = "Opomni kasneje";
 // Import
 "import_title" = "Uvozi podatke";
@@ -316,11 +316,11 @@
 "si_min_km" = "Minute na kilometer";
 "si_min_m" = "Minute na miljo";
 "si_nm_h" = "Navtične milje na uro (vozli)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "sett_arr" = "Puščice zemljevida";
 "res_search_world" = "Poišči po svetu";
 "res_worldwide" = "Po svetu";
@@ -469,7 +469,7 @@
 "speak_favorites" = "Bližnje priljubljene točke";
 "speak_poi" = "Bližnje točke POI";
 "speak_pedestrian" = "Prehodi za pešce";
-"int_seconds" = "sek";
+"units_seconds" = "sek";
 "shared_string_never" = "Nikoli";
 "general_settings_2" = "Splošne nastavitve";
 "general_settings_descr" = "Prilagajanje splošnih nastavitev programa";
@@ -866,7 +866,7 @@
 "blue" = "Modra";
 "toggle_nav" = "Začni/Končaj navigacijo";
 "prev_route" = "Predhodna pot";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "translucent_purple" = "Prosojna vijolična";
 "show_contour_lines" = "Izriši izohipse";
 "gpx_slope" = "Naklon";
@@ -1335,7 +1335,7 @@
 "select_icon" = "Izbor ikone";
 "position_icon_while_moving" = "Izbor navigacijske ikone";
 "nav_type_geocoding" = "Geokodiranje";
-"metric_ton" = "t";
+"units_t" = "t";
 "m_style_pulic_transport" = "Javni potniški promet";
 "enter_profile_name" = "Ime profila";
 "profile_type_custom_string" = "Profil po meri";

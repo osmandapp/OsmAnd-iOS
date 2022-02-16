@@ -228,7 +228,7 @@
 
 // Route info
 
-"int_seconds" = "сек";
+"units_seconds" = "сек";
 "shared_string_never" = "Никога";
 "shared_setting_always_ask" = "Винаги питай";
 "general_settings_2" = "Общи настройки";
@@ -433,10 +433,10 @@
 "si_min_km" = "Минути на километър";
 "si_min_m" = "Минути на миля";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "мин/м";
-"min_km" = "мин/км";
-"m_s" = "м/сек";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "мин/м";
+"units_min_km" = "мин/км";
+"units_m_s" = "м/сек";
 "tones" = "tones";
 
 "nothing_found" = "Nothing found: %@";
@@ -1536,21 +1536,21 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "км";
-"m" = "м";
-"mile" = "мили";
-"yard" = "ярда";
-"foot" = "фута";
-"nm" = "мор. мили";
-"km_h" = "км/ч";
-"mile_per_hour" = "мили/час";
+"units_km" = "км";
+"units_m" = "м";
+"units_mi" = "мили";
+"units_yd" = "ярда";
+"units_ft" = "фута";
+"units_nm" = "мор. мили";
+"units_km_h" = "км/ч";
+"units_mph" = "мили/час";
 
-"int_hour" = "ч";
-"int_min" = "мин";
-"shared_string_sec" = "sec";
-"shared_string_second_short" = "s";
+"units_hour" = "ч";
+"units_min" = "мин";
+"units_sec" = "sec";
+"units_sec_short" = "s";
 
-"metric_ton" = "t";
+"units_t" = "t";
 
 // Help
 "help_first_steps" = "First steps";

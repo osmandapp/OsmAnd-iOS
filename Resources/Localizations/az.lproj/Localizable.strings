@@ -208,7 +208,7 @@
 
 // Route info
 
-"int_seconds" = "saniyə";
+"units_seconds" = "saniyə";
 "shared_string_never" = "Heç vaxt";
 "shared_setting_always_ask" = "Hər dəfə soruş";
 "general_settings_2" = "Əsas parametrlər";
@@ -406,10 +406,10 @@
 "si_min_km" = "Kilometrdə dəqiqə";
 "si_min_m" = "Mildə dəqiqə";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm_h" = "nmi/h";
-"min_mile" = "dəq/mil";
-"min_km" = "dəq/km";
-"m_s" = "m/san";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "dəq/mil";
+"units_min_km" = "dəq/km";
+"units_m_s" = "m/san";
 "tones" = "ton";
 "nothing_found" = "Nothing found: %@";
 "nothing_found_empty" = "Heç nə tapılmadı";
@@ -1473,19 +1473,19 @@
 "cannot_add_destination" = "Cannot add Direction";
 
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mil";
-"yard" = "yd";
-"foot" = "ft";
-"nm" = "nmi";
-"km_h" = "km/s";
-"mile_per_hour" = "mil/s";
-"int_hour" = "s";
-"int_min" = "dəq";
-"shared_string_sec" = "san";
-"shared_string_second_short" = "s";
-"metric_ton" = "t";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mil";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_nm" = "nmi";
+"units_km_h" = "km/s";
+"units_mph" = "mil/s";
+"units_hour" = "s";
+"units_min" = "dəq";
+"units_sec" = "san";
+"units_sec_short" = "s";
+"units_t" = "t";
 
 // Help
 "help_first_steps" = "First steps";

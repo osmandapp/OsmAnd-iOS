@@ -141,16 +141,16 @@
 "more" = "Plus";
 "add_notification_calendar" = "Ajouter la notification au calendrier";
 // Units
-"km" = "km";
-"m" = "m";
-"mile" = "mi";
-"yard" = "yd";
-"foot" = "pieds";
-"km_h" = "km/h";
-"mile_per_hour" = "mph";
-"int_hour" = "h";
-"int_min" = "min";
-"shared_string_sec" = "sec";
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "pieds";
+"units_km_h" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "sec";
 "map_remind" = "Me le rappeler ultérieurement";
 "import_failed" = "L'importation a échoué";
 "import_cannot" = "Le fichier spécifié ne peut pas être importé";
@@ -461,7 +461,7 @@
 "product_desc_ext_track_recording" = "Enregistrez vos traces et sauvegardez les manuellement en utilisant le plugin d’enregistrement de traces OsmAnd. Exportez votre trace avec un fichier gpx, partagez le ou bien utilisez le pour contribuer au projet OpenStreeMap. Un outil pratique pour les coureurs, randonneurs ou toute personne intéressée par l’enregistrement de ses traces.";
 "right_side_navigation" = "Conduite à droite";
 "si_mi_meters" = "Miles / Mètres";
-"nm" = "mn";
+"units_nm" = "mn";
 "si_nm" = "Miles nautiques";
 "si_kmh" = "Kilomètres par heure";
 "si_mph" = "Miles par heure";
@@ -469,10 +469,10 @@
 "si_min_km" = "Minutes par kilomètre";
 "si_min_m" = "Minutes par mile";
 "si_nm_h" = "Miles nautiques par heure (nœuds)";
-"nm_h" = "nœuds";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nœuds";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "driving_region" = "Région de conduite";
 "driving_region_japan" = "Japon";
 "driving_region_us" = "États-Unis";
@@ -570,7 +570,7 @@
 "speak_favorites" = "Favoris à proximité";
 "speak_poi" = "POI à proximité";
 "speak_pedestrian" = "Passages piétons";
-"int_seconds" = "secondes";
+"units_seconds" = "secondes";
 "shared_string_never" = "Jamais";
 "general_settings_2" = "Paramètres généraux";
 "general_settings_descr" = "Thème de l'appli, unités, région";
@@ -1501,7 +1501,7 @@
 "product_desc_africa_short" = "Cartes de l'Afrique";
 // World Regions
 "region_antarctica" = "Antarctique";
-"shared_string_second_short" = "s";
+"units_sec_short" = "s";
 "toggle_hillshade" = "Afficher/masquer le relief";
 "toggle_contour_lines" = "Afficher/masquer les courbes de niveau";
 "hide_hillshade" = "Masquer l'ombrage du relief";
@@ -1786,7 +1786,7 @@
 "next_seg" = "Segment suivant";
 "total" = "Total";
 "app_profiles" = "Profils de l\'appli";
-"metric_ton" = "t";
+"units_t" = "t";
 "create_profile_descr" = "Basez votre profil personnel sur l\'un des profils par défaut pour définir les unités de vitesse, de distance ou la visibilité des widgets. Voici les profils par défaut de l\'application ainsi que des exemples de profils personnalisés :";
 "listed_exist" = "Les %@ listés existent déjà dans OsmAnd.";
 "quick_action_mapillary_show" = "Afficher Mapillary";
@@ -2185,7 +2185,7 @@
 "shared_string_time_moving" = "Durée de déplacement";
 "industrial" = "Industrie";
 "education" = "Éducation";
-"shared_string_minute_short" = "m";
+"units_min_short" = "m";
 "route_points" = "Point de passage";
 "connect_rp" = "Relier les points de passage";
 "lang_af" = "Afrikaans";

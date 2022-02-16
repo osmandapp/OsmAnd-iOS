@@ -1826,7 +1826,7 @@
                 }
                 onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
                 _rasterMapProvider = onlineMapTileProvider;
-                //[_mapView setProvider:_rasterMapProvider forLayer:0];
+                [_mapView setProvider:_rasterMapProvider forLayer:0];
             }
             else
             {

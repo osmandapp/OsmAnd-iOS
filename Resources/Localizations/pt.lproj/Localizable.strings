@@ -2348,3 +2348,14 @@
 "routeInfo_surface_description" = "Fornecer informações sobre a superfície da estrada/caminho.";
 "routeInfo_smoothness_description" = "Classificação de manobrabilidade da estrada/caminho para veículos de rodas, em particular no que diz respeito à regularidade/lisura da superfície.";
 "routeInfo_tracktype_description" = "Colorir a rota ou linha da pista pela sua composição da superfície. Normalmente aplica-se quando a rede de estradas não é predominantemente pavimentada.";
+"ltr_or_rtl_combine_via_dash" = "%@ - %@";
+"routing_attr_allow_gate_name" = "Permitir utilização de portões";
+"routing_attr_allow_gate_description" = "Permitir utilização de portões";
+"routing_attr_only_permitted_streets_description" = "Usar apenas ruas com permissão de utilização assinalada";
+"routing_attr_only_permitted_streets_name" = "Ruas com permissão expressa";
+"routing_attr_only_permitted_ways_name" = "Vias com permissão expressa";
+"routing_attr_prefer_horse_routes_description" = "Preferir percursos que podem ser utilizador a cavalo";
+"routing_attr_prefer_horse_routes_name" = "Preferir percursos a cavalo";
+"horseback_riding" = "Equitação";
+"shared_string_open_street_map" = "OpenStreetMap";
+"routing_attr_only_permitted_ways_description" = "Usar apenas vias (trilhos, caminhos) com utilização permitida assinalada";

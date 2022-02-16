@@ -77,7 +77,10 @@
     {
         metadata->name = QString::fromNSString(self.metadata.name);
         metadata->description = QString::fromNSString(self.metadata.desc);
-        
+
+        OAWptPt *pt = [self findPointToShow];
+        metadata->timestamp = pt != nil && pt.time > 0 ? QDateTime::fromTime_t(pt.time).toUTC() : QDateTime().toUTC();
+
         [self.class fillLinks:metadata->links linkArray:self.metadata.links];
         
         [self.metadata fillExtensions:metadata];
@@ -104,7 +107,7 @@
     wpt->name = QString::fromNSString(w.name);
     wpt->description = QString::fromNSString(w.desc);
     wpt->elevation = w.elevation;
-    wpt->timestamp = w.time != 0 ? QDateTime::fromTime_t(w.time).toUTC() : QDateTime();
+    wpt->timestamp = w.time != 0 ? QDateTime::fromTime_t(w.time).toUTC() : QDateTime().toUTC();
     wpt->comment = QString::fromNSString(w.comment);
     wpt->type = QString::fromNSString(w.type);
     wpt->horizontalDilutionOfPrecision = w.horizontalDilutionOfPrecision;
@@ -209,7 +212,7 @@
         rtept->name = QString::fromNSString(p.name);
         rtept->description = QString::fromNSString(p.desc);
         rtept->elevation = p.elevation;
-        rtept->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
+        rtept->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime().toUTC();
         rtept->comment = QString::fromNSString(p.comment);
         rtept->type = QString::fromNSString(p.type);
         rtept->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
@@ -254,7 +257,7 @@
     rtept->name = QString::fromNSString(p.name);
     rtept->description = QString::fromNSString(p.desc);
     rtept->elevation = p.elevation;
-    rtept->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime();
+    rtept->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime().toUTC();
     rtept->comment = QString::fromNSString(p.comment);
     rtept->type = QString::fromNSString(p.type);
     rtept->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
@@ -314,7 +317,7 @@
             trkpt->name = QString::fromNSString(p.name);
             trkpt->description = QString::fromNSString(p.desc);
             trkpt->elevation = p.elevation;
-            trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
+            trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime().toUTC();
             trkpt->comment = QString::fromNSString(p.comment);
             trkpt->type = QString::fromNSString(p.type);
             trkpt->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
@@ -374,7 +377,7 @@
         trkpt->name = QString::fromNSString(p.name);
         trkpt->description = QString::fromNSString(p.desc);
         trkpt->elevation = p.elevation;
-        trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
+        trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime().toUTC();
         trkpt->comment = QString::fromNSString(p.comment);
         trkpt->type = QString::fromNSString(p.type);
         trkpt->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
@@ -453,7 +456,7 @@
     trkpt->name = QString::fromNSString(p.name);
     trkpt->description = QString::fromNSString(p.desc);
     trkpt->elevation = p.elevation;
-    trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime();
+    trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime().toUTC();
     trkpt->comment = QString::fromNSString(p.comment);
     trkpt->type = QString::fromNSString(p.type);
     trkpt->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;

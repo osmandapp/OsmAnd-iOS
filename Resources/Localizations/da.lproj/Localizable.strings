@@ -2349,3 +2349,14 @@
 "turn_arrows" = "Svingpile";
 "turn_arrows_descr" = "Kontroller synligheden af svingpilene på rutelinjen.";
 "routeInfo_roadClass_description" = "Farvelæg ruten eller sporlinjen i henhold til vejklassificering.";
+"ltr_or_rtl_combine_via_dash" = "%@ - %@";
+"routing_attr_allow_gate_name" = "Tillad brug af porte";
+"routing_attr_allow_gate_description" = "Tillad brug af porte";
+"routing_attr_only_permitted_streets_description" = "Brug kun gader, som er udtrykkeligt tilladte";
+"routing_attr_only_permitted_streets_name" = "Udtrykkeligt tilladte gader";
+"routing_attr_only_permitted_ways_description" = "Brug kun veje (spor, stier osv.), som er udtrykkeligt tilladte";
+"routing_attr_only_permitted_ways_name" = "Udtrykkeligt tilladte veje";
+"routing_attr_prefer_horse_routes_description" = "Foretræk hesteruter";
+"routing_attr_prefer_horse_routes_name" = "Foretræk hesteveje";
+"horseback_riding" = "Ridning";
+"shared_string_open_street_map" = "OpenStreetMap";

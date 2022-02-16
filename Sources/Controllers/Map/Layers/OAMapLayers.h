@@ -50,11 +50,8 @@
 @property (nonatomic, readonly) OARulerByTapControlLayer *rulerByTapControlLayer;
 
 @property (nonatomic) NSDate *weatherDate;
-@property (nonatomic, readonly) OAWeatherRasterLayer *weatherTempLayer;
-@property (nonatomic, readonly) OAWeatherRasterLayer *weatherPressureLayer;
-@property (nonatomic, readonly) OAWeatherRasterLayer *weatherWindLayer;
-@property (nonatomic, readonly) OAWeatherRasterLayer *weatherCloudLayer;
-@property (nonatomic, readonly) OAWeatherRasterLayer *weatherPrecipitationLayer;
+@property (nonatomic, readonly) OAWeatherRasterLayer *weatherLayerLow;
+@property (nonatomic, readonly) OAWeatherRasterLayer *weatherLayerHigh;
 
 // Raster map layers
 @property (nonatomic, readonly) OATerrainMapLayer *terrainMapLayer;

@@ -142,9 +142,14 @@
             CLLocation *location = _app.locationServices.lastKnownLocation;
             [pointsHelper clearAllIntermediatePoints:NO];
             if (!location || [location distanceFromLocation:startLoc] <= START_TRACK_POINT_MY_LOCATION_RADIUS_METERS)
+            {
                 [pointsHelper clearStartPoint:NO];
+            }
             else
+            {
                 [pointsHelper setStartPoint:startLoc.copy updateRoute:NO name:nil];
+                [params setPassWholeRoute:YES];
+            }
             
             [pointsHelper navigateToPoint:finishLoc.copy updateRoute:NO intermediate:-1];
         }

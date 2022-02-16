@@ -8,22 +8,18 @@
 
 #import "OARasterMapLayer.h"
 
-typedef NS_ENUM(NSInteger, EOAWeatherBand)
+typedef NS_ENUM(NSInteger, EOAWeatherLayer)
 {
-    WEATHER_BAND_UNDEFINED = 0,
-    WEATHER_BAND_CLOUD = 1,
-    WEATHER_BAND_TEMPERATURE = 2,
-    WEATHER_BAND_PRESSURE = 3,
-    WEATHER_BAND_WIND_SPEED = 4,
-    WEATHER_BAND_PRECIPITATION = 5
+    WEATHER_LAYER_LOW = 0,
+    WEATHER_LAYER_HIGH = 1
 };
 
 @interface OAWeatherRasterLayer : OARasterMapLayer
 
-@property (nonatomic, readonly) EOAWeatherBand weatherBand;
+@property (nonatomic, readonly) EOAWeatherLayer weatherLayer;
 @property (nonatomic, readonly) NSDate *date;
 
-- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController layerIndex:(int)layerIndex weatherBand:(EOAWeatherBand)weatherBand date:(NSDate *)date;
+- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController layerIndex:(int)layerIndex weatherLayer:(EOAWeatherLayer)weatherLayer date:(NSDate *)date;
 
 - (void) updateDate:(NSDate *)date;
 

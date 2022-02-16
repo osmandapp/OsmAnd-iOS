@@ -65,7 +65,7 @@
     _gpxRecMapLayer = [[OAGPXRecLayer alloc] initWithMapViewController:_mapViewController baseOrder:-110000];
     [self addLayer:_gpxRecMapLayer];
 
-    _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController baseOrder:-150000];
+    _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController baseOrder:1500];
     [self addLayer:_routeMapLayer];
     
     _routePlanningLayer = [[OAMeasurementToolLayer alloc] initWithMapViewController:_mapViewController baseOrder:-160000];
@@ -95,16 +95,10 @@
     _downloadedRegionsLayer = [[OADownloadedRegionsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-10000];
     [self addLayer:_downloadedRegionsLayer];
 
-    _weatherTempLayer = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:20 weatherBand:WEATHER_BAND_TEMPERATURE date:_weatherDate];
-    [self addLayer:_weatherTempLayer];
-    _weatherPressureLayer = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:25 weatherBand:WEATHER_BAND_PRESSURE date:_weatherDate];
-    [self addLayer:_weatherPressureLayer];
-    _weatherWindLayer = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:30 weatherBand:WEATHER_BAND_WIND_SPEED date:_weatherDate];
-    [self addLayer:_weatherWindLayer];
-    _weatherCloudLayer = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:35 weatherBand:WEATHER_BAND_CLOUD date:_weatherDate];
-    [self addLayer:_weatherCloudLayer];
-    _weatherPrecipitationLayer = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:40 weatherBand:WEATHER_BAND_PRECIPITATION date:_weatherDate];
-    [self addLayer:_weatherPrecipitationLayer];
+    _weatherLayerLow = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:20 weatherLayer:WEATHER_LAYER_LOW date:_weatherDate];
+    [self addLayer:_weatherLayerLow];
+    _weatherLayerHigh = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:25 weatherLayer:WEATHER_LAYER_HIGH date:_weatherDate];
+    [self addLayer:_weatherLayerHigh];
 
     [OAPlugin createLayers];
 }
@@ -143,12 +137,8 @@
 - (void) updateWeatherDate:(NSDate *)date
 {
     _weatherDate = date;
-    
-    [_weatherTempLayer updateDate:date];
-    [_weatherPressureLayer updateDate:date];
-    [_weatherWindLayer updateDate:date];
-    [_weatherCloudLayer updateDate:date];
-    [_weatherPrecipitationLayer updateDate:date];
+    [_weatherLayerLow updateDate:date];
+    [_weatherLayerHigh updateDate:date];
 }
 
 - (void) addLayer:(OAMapLayer *)layer

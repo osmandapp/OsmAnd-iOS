@@ -365,7 +365,7 @@
         metadata.time = gpxDocument->metadata->timestamp.toTime_t();
         metadata.links = [self.class fetchLinks:gpxDocument->metadata->links];
         
-        OsmAnd::Ref<OsmAnd::GpxDocument::Metadata> *_metadata = (OsmAnd::Ref<OsmAnd::GpxDocument::Metadata>*)&gpxDocument->metadata;
+        OsmAnd::Ref<OsmAnd::GpxDocument::Metadata> *_metadata = &gpxDocument->metadata;
         [metadata fetchExtensions:_metadata->shared_ptr()];
         self.metadata = metadata;
     }
@@ -552,7 +552,7 @@
 {
     meta->name = QString::fromNSString(m.name);
     meta->description = QString::fromNSString(m.desc);
-    meta->timestamp = m.time > 0 ? QDateTime::fromTime_t(m.time) : QDateTime();
+    meta->timestamp = m.time > 0 ? QDateTime::fromTime_t(m.time).toUTC() : QDateTime().toUTC();
     
     [self fillLinks:meta->links linkArray:m.links];
     
@@ -567,7 +567,7 @@
     if (!isnan(w.elevation))
         wpt->elevation = w.elevation;
 
-    wpt->timestamp = w.time > 0 ? QDateTime::fromTime_t(w.time) : QDateTime();
+    wpt->timestamp = w.time > 0 ? QDateTime::fromTime_t(w.time).toUTC() : QDateTime().toUTC();
 
     if (w.name)
         wpt->name = QString::fromNSString(w.name);

@@ -2477,7 +2477,7 @@
                                 animated:NO];
         [self fitSelectedPointsGroupOnMap:index];
         [_headerView.groupsCollectionView reloadData];
-        [self.mapPanelViewController.hudViewController updateMapRulerData];
+        [self.mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
     }
 }
 

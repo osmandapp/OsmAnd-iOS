@@ -361,7 +361,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     [super viewDidAppear:animated];
     [_mapPanelViewController.hudViewController hideTopControls];
-    [_mapPanelViewController.hudViewController updateMapRulerData];
+    [_mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
     [self changeHud:[self getViewHeight]];
 }
 

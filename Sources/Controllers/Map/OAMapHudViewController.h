@@ -60,6 +60,7 @@
 - (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left;
 - (void) resetToDefaultRulerLayout;
 - (void) updateMapRulerData;
+- (void) updateMapRulerDataWithDelay;
 
 - (void) setToolbar:(OAToolbarViewController *)toolbarController;
 - (void) updateToolbarLayout:(BOOL)animated;

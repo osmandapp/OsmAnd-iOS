@@ -2360,3 +2360,9 @@
 "routing_attr_prefer_horse_routes_name" = "Foretræk hesteveje";
 "horseback_riding" = "Ridning";
 "shared_string_open_street_map" = "OpenStreetMap";
+"preferred_terrain" = "Foretrukket terræn";
+"route_preferred_terrain_less_hilly" = "Kortere, mindre kuperede ruter.";
+"route_preferred_terrain_hilly" = "Ruter med en kuperet reliefprofil.";
+"route_preferred_terrain_any" = "Der tages ikke hensyn til terrænprofilen, når der vælges en rute.";
+"shared_string_any" = "Enhver";
+"route_preferred_terrain_flat" = "Ruter med en flad reliefprofil. Længden øges muligvis.";

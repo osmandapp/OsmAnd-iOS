@@ -34,6 +34,7 @@
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
+#include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
 #define kWeather @"weather"
 #define kWeatherTemp @"weather_temp"
@@ -159,7 +160,39 @@
     NSArray* datePicker = @[@{
         @"type" : kCellTypeDateTimePicker,
     }];
-
+    
+    NSArray *weatherLayerAlphas = @[
+        @{
+            @"type"  : kCellTypeTitleSlider,
+            @"name"  : kWeatherTempAlpha,
+            @"title" : OALocalizedString(@"map_settings_weather_temp"),
+            @"value" : @(_app.data.weatherTempAlpha)
+        },
+        @{
+            @"type"  : kCellTypeTitleSlider,
+            @"name"  : kWeatherPressureAlpha,
+            @"title" : OALocalizedString(@"map_settings_weather_pressure"),
+            @"value" : @(_app.data.weatherPressureAlpha)
+        },
+        @{
+            @"type"  : kCellTypeTitleSlider,
+            @"name"  : kWeatherWindAlpha,
+            @"title" : OALocalizedString(@"map_settings_weather_wind"),
+            @"value" : @(_app.data.weatherWindAlpha)
+        },
+        @{
+            @"type"  : kCellTypeTitleSlider,
+            @"name"  : kWeatherCloudAlpha,
+            @"title" : OALocalizedString(@"map_settings_weather_cloud"),
+            @"value" : @(_app.data.weatherCloudAlpha)
+        },
+        @{
+            @"type"  : kCellTypeTitleSlider,
+            @"name"  : kWeatherPrecipAlpha,
+            @"title" : OALocalizedString(@"map_settings_weather_precip"),
+            @"value" : @(_app.data.weatherPrecipAlpha)
+        }];
+    
     NSArray *weatherLayers = @[
         @{
             @"type"  : kCellTypeSwitch,
@@ -217,6 +250,7 @@
     if (enabled)
     {
         [data addObject:datePicker];
+        [data addObject:weatherLayerAlphas];
         [data addObject:weatherLayers];
         
         [data addObject:buttons];
@@ -509,23 +543,10 @@
     OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
     [mapVC showProgressHUD];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSFileManager *fm = [NSFileManager defaultManager];
-        NSArray *cacheFilePaths = [fm contentsOfDirectoryAtPath:_app.cachePath error:nil];
-        for (NSString *filePath in cacheFilePaths)
-        {
-            if (geoCache)
-            {
-                if ([filePath hasSuffix:@".tiff.db"]) {
-                    [fm removeItemAtPath:[_app.cachePath stringByAppendingPathComponent:filePath] error:nil];
-                }
-            }
-            else
-            {
-                if ([filePath hasSuffix:@".raster.db"]) {
-                    [fm removeItemAtPath:[_app.cachePath stringByAppendingPathComponent:filePath] error:nil];
-                }
-            }
-        }
+        const auto weatherResourcesManager = _app.resourcesManager->getWeatherResourcesManager();
+        if (weatherResourcesManager)
+            weatherResourcesManager->clearDbCache(geoCache, !geoCache);
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [mapVC hideProgressHUD];
             [self calculateCacheSize];

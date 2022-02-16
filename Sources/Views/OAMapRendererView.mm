@@ -154,6 +154,11 @@
     _renderer->setMapLayerProvider(layer, provider);
 }
 
+- (void)setProviderForced:(std::shared_ptr<OsmAnd::IMapLayerProvider>)provider forLayer:(unsigned int)layer
+{
+    _renderer->setMapLayerProvider(layer, provider, true);
+}
+
 - (void)resetProviderFor:(unsigned int)layer
 {
     _renderer->resetMapLayerProvider(layer);

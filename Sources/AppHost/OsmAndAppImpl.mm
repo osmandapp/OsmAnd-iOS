@@ -39,10 +39,12 @@
 #import "OAAvoidSpecificRoads.h"
 #import "OAIndexConstants.h"
 #import "OALocationConvert.h"
+#import "OAWeatherHelper.h"
 
 #include <algorithm>
 
 #include <QList>
+#include <QHash>
 
 #include <OsmAndCore.h>
 #import "OAAppSettings.h"
@@ -61,6 +63,8 @@
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
+#include <OsmAndCore/Map/GeoCommonTypes.h>
+
 #include <openingHoursParser.h>
 
 #define MILS_IN_DEGREE 17.777778f
@@ -317,6 +321,8 @@
                                                              [_resourcesRepositoryUpdatedObservable notifyEventWithKey:self];
                                                          });
 
+    [self instantiateWeatherResourcesManager];
+    
     // Check for NSURLIsExcludedFromBackupKey and setup if needed
     const auto& localResources = _resourcesManager->getLocalResources();
     for (const auto& resource : localResources)
@@ -514,6 +520,22 @@
     [self askReview];
     
     return YES;
+}
+
+- (void) instantiateWeatherResourcesManager
+{
+    OAWeatherHelper *weatherHelper = [OAWeatherHelper sharedInstance];
+    QHash<OsmAnd::BandIndex, float> bandOpacityMap = [weatherHelper getBandOpacityMap];
+    QHash<OsmAnd::BandIndex, QString> bandColorProfilePaths = [weatherHelper getBandColorProfilePaths];
+    _resourcesManager->instantiateWeatherResourcesManager(
+        bandOpacityMap,
+        bandColorProfilePaths,
+        QString::fromNSString(_cachePath),
+        QString::fromNSString([NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj"]),
+        256,
+        [UIScreen mainScreen].scale,
+        _webClient
+    );
 }
 
 - (std::shared_ptr<OsmAnd::MapPresentationEnvironment>)defaultRenderer

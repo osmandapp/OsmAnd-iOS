@@ -17,6 +17,7 @@
 #import "OAWikipediaPlugin.h"
 #import "OAPlugin.h"
 #import "OAIAPHelper.h"
+#import "OAWeatherBand.h"
 
 #include <objc/runtime.h>
 
@@ -468,7 +469,7 @@
     @synchronized(_lock)
     {
         [_weatherTempProfile set:weatherTemp];
-        [_weatherTempChangeObservable notifyEventWithKey:self andValue:@(self.weatherTemp)];
+        [_weatherTempChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:@(self.weatherTemp)];
     }
 }
 
@@ -485,7 +486,7 @@
     @synchronized(_lock)
     {
         [_weatherTempAlphaProfile set:weatherTempAlpha];
-        [_weatherTempAlphaChangeObservable notifyEventWithKey:self andValue:@(self.weatherTempAlpha)];
+        [_weatherTempAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:@(self.weatherTempAlpha)];
     }
 }
 
@@ -502,7 +503,7 @@
     @synchronized(_lock)
     {
         [_weatherPressureProfile set:weatherPressure];
-        [_weatherPressureChangeObservable notifyEventWithKey:self andValue:@(self.weatherPressure)];
+        [_weatherPressureChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRESSURE) andValue:@(self.weatherPressure)];
     }
 }
 
@@ -519,7 +520,7 @@
     @synchronized(_lock)
     {
         [_weatherPressureAlphaProfile set:weatherPressureAlpha];
-        [_weatherPressureAlphaChangeObservable notifyEventWithKey:self andValue:@(self.weatherPressureAlpha)];
+        [_weatherPressureAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRESSURE) andValue:@(self.weatherPressureAlpha)];
     }
 }
 
@@ -536,7 +537,7 @@
     @synchronized(_lock)
     {
         [_weatherWindProfile set:weatherWind];
-        [_weatherWindChangeObservable notifyEventWithKey:self andValue:@(self.weatherWind)];
+        [_weatherWindChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_SPEED) andValue:@(self.weatherWind)];
     }
 }
 
@@ -553,7 +554,7 @@
     @synchronized(_lock)
     {
         [_weatherWindAlphaProfile set:weatherWindAlpha];
-        [_weatherWindAlphaChangeObservable notifyEventWithKey:self andValue:@(self.weatherWindAlpha)];
+        [_weatherWindAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_SPEED) andValue:@(self.weatherWindAlpha)];
     }
 }
 
@@ -570,7 +571,7 @@
     @synchronized(_lock)
     {
         [_weatherCloudProfile set:weatherCloud];
-        [_weatherCloudChangeObservable notifyEventWithKey:self andValue:@(self.weatherCloud)];
+        [_weatherCloudChangeObservable notifyEventWithKey:@(WEATHER_BAND_CLOUD) andValue:@(self.weatherCloud)];
     }
 }
 
@@ -587,7 +588,7 @@
     @synchronized(_lock)
     {
         [_weatherCloudAlphaProfile set:weatherCloudAlpha];
-        [_weatherCloudAlphaChangeObservable notifyEventWithKey:self andValue:@(self.weatherCloudAlpha)];
+        [_weatherCloudAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_CLOUD) andValue:@(self.weatherCloudAlpha)];
     }
 }
 
@@ -604,7 +605,7 @@
     @synchronized(_lock)
     {
         [_weatherPrecipProfile set:weatherPrecip];
-        [_weatherPrecipChangeObservable notifyEventWithKey:self andValue:@(self.weatherPrecip)];
+        [_weatherPrecipChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRECIPITATION) andValue:@(self.weatherPrecip)];
     }
 }
 
@@ -621,7 +622,7 @@
     @synchronized(_lock)
     {
         [_weatherPrecipAlphaProfile set:weatherPrecipAlpha];
-        [_weatherPrecipAlphaChangeObservable notifyEventWithKey:self andValue:@(self.weatherPrecipAlpha)];
+        [_weatherPrecipAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRECIPITATION) andValue:@(self.weatherPrecipAlpha)];
     }
 }
 

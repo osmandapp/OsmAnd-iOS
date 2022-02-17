@@ -208,10 +208,23 @@
     }
     for (OAGpxExtension *es in e.subextensions)
     {
-        std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> subextension(new OsmAnd::GpxExtensions::GpxExtension());
-        [self fillExtension:subextension ext:es];
-        extension->subextensions.push_back(subextension);
-        subextension = nullptr;
+        BOOL exist = NO;
+        for (auto _es : extension->subextensions)
+        {
+            if (_es->name == QString::fromNSString(es.name))
+            {
+                exist = YES;
+                [self fillExtension:_es ext:es];
+                break;
+            }
+        }
+        if (!exist)
+        {
+            std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> subextension(new OsmAnd::GpxExtensions::GpxExtension());
+            [self fillExtension:subextension ext:es];
+            extension->subextensions.push_back(subextension);
+            subextension = nullptr;
+        }
     }
 }
 
@@ -219,10 +232,23 @@
 {
     for (OAGpxExtension *e in self.extensions)
     {
-        std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> extension(new OsmAnd::GpxExtensions::GpxExtension());
-        [self fillExtension:extension ext:e];
-        extensions->extensions.push_back(extension);
-        extension = nullptr;
+        BOOL exist = NO;
+        for (auto _e : extensions->extensions)
+        {
+            if (_e->name == QString::fromNSString(e.name))
+            {
+                exist = YES;
+                [self fillExtension:_e ext:e];
+                break;
+            }
+        }
+        if (!exist)
+        {
+            std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> extension(new OsmAnd::GpxExtensions::GpxExtension());
+            [self fillExtension:extension ext:e];
+            extensions->extensions.push_back(extension);
+            extension = nullptr;
+        }
     }
 }
 
@@ -299,7 +325,7 @@
 - (NSString *)getIcon
 {
     NSString *value = [self getExtensionByKey:ICON_NAME_EXTENSION].value;
-    return value ? value : @"special_star";
+    return value ? value : DEFAULT_ICON_NAME;
 }
 
 - (void)setIcon:(NSString *)iconName
@@ -311,6 +337,11 @@
 {
     NSString *value = [self getExtensionByKey:BACKGROUND_TYPE_EXTENSION].value;
     return value ? value : @"circle";
+}
+
+- (void)setBackgroundIcon:(NSString *)backgroundIconName
+{
+    [self setExtension:BACKGROUND_TYPE_EXTENSION value:backgroundIconName];
 }
 
 - (NSString *)getAddress

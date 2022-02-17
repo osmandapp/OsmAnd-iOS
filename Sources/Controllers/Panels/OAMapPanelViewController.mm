@@ -3805,7 +3805,7 @@ typedef enum
     {
         if (![[OAAppSettings sharedManager].mapSettingShowRecordingTrack get])
             [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
+        [_mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
     }
 }
 

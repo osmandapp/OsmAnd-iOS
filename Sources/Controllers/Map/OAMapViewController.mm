@@ -2483,7 +2483,9 @@
         [helper deleteWpt:self.foundWpt];
         
         // update map
-        [[_app updateRecTrackOnMapObservable] notifyEventWithKey:@(YES)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        });
 
         [self hideContextPinMarker];
         
@@ -2518,7 +2520,7 @@
                 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self initRendererWithGpxTracks];
+                    [_mapLayers.gpxMapLayer refreshGpxWaypoints];
                 });
                 
                 [self hideContextPinMarker];
@@ -2542,7 +2544,9 @@
         [helper saveWpt:self.foundWpt];
 
         // update map
-        [[_app updateRecTrackOnMapObservable] notifyEventWithKey:@(YES)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        });
 
         return YES;
     }
@@ -2573,7 +2577,7 @@
                 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self initRendererWithGpxTracks];
+                    [_mapLayers.gpxMapLayer refreshGpxWaypoints];
                 });
                 
                 return YES;
@@ -2585,9 +2589,10 @@
 
 - (BOOL) addNewWpt:(OAWptPt *)wpt gpxFileName:(NSString *)gpxFileName
 {
-    OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
     if (!gpxFileName)
     {
+        OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+
         [helper addWpt:wpt];
         self.foundWpt = wpt;
         self.foundWptDocPath = nil;
@@ -2602,7 +2607,9 @@
         self.foundWptGroups = [groups allObjects];
 
         // update map
-        [[_app updateRecTrackOnMapObservable] notifyEventWithKey:@(YES)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        });
 
         return YES;
     }
@@ -2641,7 +2648,7 @@
 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self initRendererWithGpxTracks];
+                    [_mapLayers.gpxMapLayer refreshGpxWaypoints];
                 });
                 
                 return YES;
@@ -2747,9 +2754,11 @@
                 
                 // update map
                 if (updateMap)
+                {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [self initRendererWithGpxTracks];
+                        [_mapLayers.gpxMapLayer refreshGpxWaypoints];
                     });
+                }
             }
             
             return found;
@@ -2851,6 +2860,18 @@
 {
     if (items.count == 0)
         return NO;
+
+    if (!docPath)
+    {
+        OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+        for (OAGpxWptItem *item in items)
+        {
+            [helper deleteWpt:item.point];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        });
+    }
 
     BOOL found = NO;
     

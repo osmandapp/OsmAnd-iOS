@@ -67,8 +67,8 @@
         if (poiIconName && poiIconName.length > 0)
             _iconName = poiIconName;
 
-        [p setExtension:ICON_NAME_EXTENSION value:_iconName];
-        [p setExtension:BACKGROUND_TYPE_EXTENSION value:@"circle"];
+        [p setIcon:_iconName];
+        [p setBackgroundIcon:@"circle"];
         [p setExtension:ADDRESS_EXTENSION value:@""];
 
         wpt.color = color;
@@ -214,8 +214,8 @@
     [_gpxWpt.point setName:data.name];
     [_gpxWpt.point setDesc:data.descr];
     [self setGroup:data.category color:data.color save:NO];
-    [_gpxWpt.point setExtension:ICON_NAME_EXTENSION value:data.icon];
-    [_gpxWpt.point setExtension:BACKGROUND_TYPE_EXTENSION value:data.backgroundIcon];
+    [_gpxWpt.point setIcon:data.icon];
+    [_gpxWpt.point setBackgroundIcon:data.backgroundIcon];
     [_gpxWpt.point setExtension:ADDRESS_EXTENSION value:data.address];
 
     if (newPoint)

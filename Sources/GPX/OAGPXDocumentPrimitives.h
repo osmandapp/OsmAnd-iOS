@@ -141,6 +141,7 @@ struct RouteDataBundle;
 - (NSString *)getIcon;
 - (void)setIcon:(NSString *)iconName;
 - (NSString *)getBackgroundIcon;
+- (void)setBackgroundIcon:(NSString *)backgroundIconName;
 - (NSString *)getAddress;
 
 - (NSString *) getProfileType;

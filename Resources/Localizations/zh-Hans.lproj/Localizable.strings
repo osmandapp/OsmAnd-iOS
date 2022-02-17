@@ -1550,7 +1550,7 @@
 "default" = "默认";
 "product_title_mapillary" = "Mapillary";
 "configure_screen_descr" = "选择页面选项";
-"route_between_points_warning_desc" = "接下来，用你的一个导航配置文件将你的轨迹拍到最近的允许道路上，以使用这个选项。";
+"route_between_points_warning_desc" = "接下来，用你的一个导航配置文件将你的轨迹贴合到最近的允许道路上，以使用这个选项。";
 "some_articles_may_not_available_in_lang" = "某些Wikipedia条目可能无法以您的语言提供。";
 "foot" = "脚";
 "threshold_distance" = "起始距离";

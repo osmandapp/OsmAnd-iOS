@@ -2366,3 +2366,14 @@
 "turn_arrows" = "Abbiegepfeile";
 "shared_string_min_height" = "Mindesthöhe";
 "shared_string_max_height" = "Maximale Höhe";
+"route_preferred_terrain_any" = "Das Geländeprofil wird bei der Routenwahl nicht berücksichtigt.";
+"route_preferred_terrain_less_hilly" = "Kürzere, weniger hügelige Strecken.";
+"route_preferred_terrain_hilly" = "Strecken mit einem hügeligen Geländeprofil.";
+"route_preferred_terrain_flat" = "Strecken mit einem flachen Geländeprofil. Die Länge kann zunehmen.";
+"preferred_terrain" = "Bevorzugtes Gelände";
+"shared_string_any" = "Alles";
+"map_settings_clear_geo_cache" = "Zwischengespeicherte Geokacheln löschen";
+"map_settings_clear_raster_cache" = "Zwischengespeicherte Rasterkacheln löschen";
+"route_line_use_map_style_color" = "Standardfarbe des Kartenstils (%@) verwenden.";
+"route_line_use_map_style_width" = "Standardbreite des Kartenstils (%@) verwenden.";
+"turn_arrows_descr" = "Steuern Sie die Sichtbarkeit der Abbiegepfeile auf der Routenlinie.";

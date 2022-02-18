@@ -2331,3 +2331,5 @@
 "route_line_use_map_style_color" = "استخدم نمط الخريطة (%@) اللون الافتراضي.";
 "route_line_use_map_style_width" = "استخدم نمط الخريطة (%@) العرض الافتراضي.";
 "turn_arrows" = "أسهم الانعطاف";
+"route_preferred_terrain_any" = "لا يتم اعتبار خصائص التضاريس عند اختيار طريق.";
+"turn_arrows_descr" = "التحكم في رؤية أسهم الانعطاف على خط الطريق.";

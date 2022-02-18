@@ -231,7 +231,7 @@
 "impassable_road" = "Avoid roads";
 "impassable_road_desc" = "Velg veier du vil unngå under navigering.";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
-"interrupt_music" = "Sett musikk på pause";
+"interrupt_music" = "Stopp musikk midlertidig";
 "shared_string_do_not_use" = "Do not use";
 "shared_string_sound" = "Lyd";
 "select_route_start_on_map" = "Select start point of the route";

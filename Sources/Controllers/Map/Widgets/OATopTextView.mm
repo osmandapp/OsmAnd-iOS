@@ -30,6 +30,14 @@
 #import "OAOsmAndFormatter.h"
 #import "OARouteCalculationResult.h"
 #import "OARoutingHelperUtils.h"
+#import "OAMapPresentationEnvironment.h"
+#import "OANativeUtilities.h"
+
+#include <OsmAndCore/Map/MapPresentationEnvironment.h>
+#include <OsmAndCore/Map/MapStyleEvaluator.h>
+#include <OsmAndCore/Map/MapStyleEvaluationResult.h>
+#include <OsmAndCore/Map/MapStyleBuiltinValueDefinitions.h>
+#include <OsmAndCore/TextRasterizer.h>
 
 #include <binaryRead.h>
 
@@ -68,6 +76,9 @@
     BOOL _showMarker;
     
     OANextDirectionInfo *_calc1;
+    
+    std::shared_ptr<const OsmAnd::TextRasterizer> _textRasterizer;
+    OACurrentStreetName *_prevStreetName;
     
     UIFont *_textFont;
     UIFont *_textWaypointFont;
@@ -136,6 +147,8 @@
     _trackingUtilities = [OAMapViewTrackingUtilities instance];
     _currentPositionHelper = [OACurrentPositionHelper instance];
     _calc1 = [[OANextDirectionInfo alloc] init];
+    
+    _textRasterizer = OsmAnd::TextRasterizer::getDefault();
 
     CGFloat radius = 3.0;
     self.backgroundColor = [UIColor whiteColor];
@@ -147,10 +160,10 @@
     self.layer.shadowRadius = 2.0;
     self.layer.shadowOffset = CGSizeMake(0.0, 0.0);
 
-    _regularFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:23];
-    _boldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:23];
-    _regularWaypointFont = [UIFont fontWithName:@"AvenirNext-Medium" size:17];
-    _boldWaypointFont = [UIFont fontWithName:@"AvenirNext-DemiBold" size:17];
+    _regularFont = [UIFont systemFontOfSize:23 weight:UIFontWeightSemibold];
+    _boldFont = [UIFont systemFontOfSize:23 weight:UIFontWeightBold];
+    _regularWaypointFont = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+    _boldWaypointFont = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
     _textFont = _regularFont;
     _textWaypointFont = _regularWaypointFont;
     _textColor = [UIColor blackColor];
@@ -163,6 +176,8 @@
     _imageView.contentMode = UIViewContentModeCenter;
     _imageView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_action_start_navigation"] color:UIColorFromRGB(color_myloc_distance)];
     _imageView.frame = _turnView.bounds;
+    
+    _exitRefTextContainer.layer.cornerRadius = 6.;
     
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -188,17 +203,32 @@
 {
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
-    BOOL showShield = _shieldIcon.image && !_shieldIcon.hidden;
+    BOOL showShield = _shieldIcon.image && !_shieldIcon.isHidden;
+    BOOL showTurn = !_turnView.isHidden && _turnView.subviews.count > 0;
+    BOOL showExit = !_exitRefTextContainer.isHidden && _exitRefText.text.length > 0;
     CGRect shieldFrame = _shieldIcon.frame;
     if (showShield)
     {
         shieldFrame.size = _shieldIcon.image.size;
+        CGFloat height = h - 4;
+        CGFloat scaleFactor = height / shieldFrame.size.height;
+        shieldFrame.size = CGSizeMake(shieldFrame.size.width * scaleFactor, height);
         _shieldIcon.frame = shieldFrame;
+    }
+    CGRect exitRefFrame = _exitRefTextContainer.frame;
+    if (showExit)
+    {
+        CGSize size = [OAUtilities calculateTextBounds:_exitRefText.text width:w font:[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]];
+        CGRect textFrame = CGRectMake(3., 3., size.width, h - 10);
+        _exitRefText.frame = textFrame;
+        exitRefFrame.size = CGSizeMake(size.width + 6., h - 4);
+        _exitRefTextContainer.frame = exitRefFrame;
     }
     
     CGFloat margin = _turnView.subviews.count > 0 ? 4 + _turnView.bounds.size.width + 2 : 2;
     margin += _exitRefTextContainer.hidden ? 0 : _exitRefTextContainer.frame.size.width + 2;
-    margin += showShield && _shieldIcon.image ? shieldFrame.size.width + 2 : 0;
+    margin += showShield ? shieldFrame.size.width + 2 : 0;
+    margin += showExit ? exitRefFrame.size.width + 2 : 0;
     CGFloat maxTextWidth = w - margin * 2;
     CGSize size = [OAUtilities calculateTextBounds:_addressText.text width:maxTextWidth height:h font:_textFont];
     if (size.width > maxTextWidth)
@@ -207,16 +237,31 @@
     CGFloat x = w / 2 - size.width / 2;
     _addressText.frame = CGRectMake(w / 2 - size.width / 2, 0, w - x - 4, h);
     _addressTextShadow.frame = _addressText.frame;
-    _turnView.center = CGPointMake(_addressText.frame.origin.x - 2 - _turnView.bounds.size.width / 2, h / 2);
     
+    CGFloat prevX = _addressText.frame.origin.x;
     if (showShield)
-        _shieldIcon.center = CGPointMake(_turnView.frame.origin.x - 2 - _shieldIcon.bounds.size.width / 2, h / 2);
-    
-    if (!_exitRefTextContainer.hidden)
-        _exitRefTextContainer.center = CGPointMake(_shieldIcon.frame.origin.x - 2 - _exitRefTextContainer.bounds.size.width / 2, h / 2);
+    {
+        [self applyCorrectPositionToView:_shieldIcon prevX:prevX];
+        prevX = _shieldIcon.frame.origin.x;
+    }
+    if (showTurn)
+    {
+        [self applyCorrectPositionToView:_turnView prevX:prevX];
+        prevX = _turnView.frame.origin.x;
+    }
+    if (showExit)
+    {
+        [self applyCorrectPositionToView:_exitRefTextContainer prevX:prevX];
+    }
     
     _waypointText.frame = CGRectMake(96, 0, w - 176, h);
     _waypointTextShadow.frame = _waypointText.frame;
+}
+
+- (void) applyCorrectPositionToView:(UIView *)view prevX:(CGFloat)prevX
+{
+    CGFloat h = self.bounds.size.height;
+    view.center = CGPointMake(prevX - 2 - view.bounds.size.width / 2, h / 2);
 }
 
 - (BOOL)isTopText
@@ -422,7 +467,7 @@
         {
             UIColor *color = UIColorFromRGB(color_osmand_orange);
             [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
-            UIFont *font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:12];
+            UIFont *font = [UIFont systemFontOfSize:12 weight:UIFontWeightSemibold];
             if (font)
                 [descAttrStr addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, descAttrStr.length)];
         }
@@ -520,23 +565,44 @@
     }
     else
     {
+        if ([streetName isEqual:_prevStreetName])
+            return YES;
+        
         [self updateVisibility:YES];
         [self updateVisibility:_waypointInfoBar visible:NO];
         [self updateVisibility:_addressText visible:YES];
         [self updateVisibility:_addressTextShadow visible:_shadowRadius > 0];
+        _prevStreetName = streetName;
         
-        if (streetName.shieldObject && !streetName.shieldObject->namesIds.empty())
-        
-        BOOL update = [_turnDrawable setTurnType:type[0]] || showMarker != _showMarker;
-        _showMarker = showMarker;
-        if (update)
+        if (streetName.shieldObject && !streetName.shieldObject->namesIds.empty() && [self setRoadShield:_shieldIcon object:streetName.shieldObject])
         {
-            if (type[0] != nullptr)
+            _shieldIcon.hidden = NO;
+            int idx = [streetName.text indexOf:@"»"];
+            if (idx > 0)
+                streetName.text = [streetName.text substringToIndex:idx];
+        }
+        else
+        {
+            _shieldIcon.hidden = YES;
+        }
+        if (streetName.exitRef.length > 0)
+        {
+            _exitRefText.text = streetName.exitRef;
+            _exitRefTextContainer.hidden = NO;
+        }
+        else
+        {
+            _exitRefTextContainer.hidden = YES;
+        }
+        if ([_turnDrawable setTurnType:streetName.turnType] || streetName.showMarker != _showMarker)
+        {
+            _showMarker = streetName.showMarker;
+            if (streetName.turnType)
             {
                 [_imageView removeFromSuperview];
                 [_turnView addSubview:_turnDrawable];
             }
-            else if (showMarker)
+            else if (_showMarker)
             {
                 [_turnDrawable removeFromSuperview];
                 [_turnView addSubview:_imageView];
@@ -547,16 +613,21 @@
                 [_imageView removeFromSuperview];
             }
         }
-        if (![text isEqualToString:_addressText.text])
+        if (streetName.text.length == 0)
         {
-            [self refreshLabel:text];
+            _addressTextShadow.text = @"";
+            _addressText.text = @"";
+        }
+        else if (![streetName.text isEqualToString:_addressText.text])
+        {
+            [self refreshLabel:streetName.text];
             return YES;
         }
     }
     return NO;
 }
 
-- (BOOL) setRoadShield:(UIImageView *)view object:(std::shared_ptr<RouteDataObject> &)object
+- (BOOL) setRoadShield:(UIImageView *)view object:(std::shared_ptr<RouteDataObject>)object
 {
     NSMutableString *additional = [NSMutableString string];
     for (NSInteger i = 0; i < object->namesIds.size(); i++)
@@ -583,16 +654,22 @@
 - (BOOL) setRoadShield:(UIImageView *)view object:(std::shared_ptr<RouteDataObject> &)object nameTag:(NSString *)nameTag name:(NSString *)name additional:(NSMutableString *)additional
 {
     const auto& tps = object->types;
-//    RenderingRulesStorage storage = app.getRendererRegistry().getCurrentSelectedRenderer();
-    BOOL nightMode = OAAppSettings.sharedManager.nightMode;
-//    RenderingRuleSearchRequest rreq = map.getMyApplication().getResourceManager()
-//        .getRenderer().getSearchRequestWithAppliedCustomRules(storage, nightMode);
+    OAMapPresentationEnvironment *mapPres = OARootViewController.instance.mapPanel.mapViewController.mapPresentationEnv;
+    const auto& env = mapPres.mapPresentationEnvironment;
+    if (!env)
+        return NO;
+    OsmAnd::MapStyleEvaluator textEvaluator(env->mapStyle, env->displayDensityFactor);
+    env->applyTo(textEvaluator);
+    OsmAnd::MapStyleEvaluationResult evaluationResult(env->mapStyle->getValueDefinitionsCount());
     
     for (int i : tps) {
         const auto& tp = object->region->quickGetEncodingRule(i);
         if (tp.getTag() == "highway" || tp.getTag() == "route")
         {
-            rreq.setInitialTagValueZoom(tp.getTag(), tp.getValue(), 13, null);
+            textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MINZOOM, 13);
+            textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MAXZOOM, 13);
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_TAG, QString::fromStdString(tp.getTag()));
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_VALUE, QString::fromStdString(tp.getValue()));
         }
         else
         {
@@ -600,66 +677,63 @@
         }
     }
     
-    rreq.setIntFilter(rreq.ALL.R_TEXT_LENGTH, name.length());
-    rreq.setStringFilter(rreq.ALL.R_NAME_TAG, nameTag);
-    rreq.setStringFilter(rreq.ALL.R_ADDITIONAL, additional.toString());
-    rreq.search(RenderingRulesStorage.TEXT_RULES);
+    int roadNumber = [[[nameTag stringByReplacingOccurrencesOfString:@"route_road_" withString:@""]
+                       stringByReplacingOccurrencesOfString:@"_ref" withString:@""] intValue];
     
-    OsmandRenderer.RenderingContext rc = new OsmandRenderer.RenderingContext(context);
+    if (roadNumber == 0)
+        return NO;
     
-    TextRenderer textRenderer = new TextRenderer(context);
-    TextRenderer.TextDrawInfo text = new TextRenderer.TextDrawInfo(name);
-    
-    
-    Paint p = textRenderer.getPaintText();
-    p.setTypeface(Typeface.create("Droid Serif", Typeface.BOLD));
-    
-    int shieldRes = -1;
-    
-    if (rreq.isSpecified(rreq.ALL.R_TEXT_SHIELD)) {
-        text.setShieldResIcon(rreq.getStringPropertyValue(rreq.ALL.R_TEXT_SHIELD));
-        shieldRes = app.getResources().getIdentifier("h_" + text.getShieldResIcon(),
-                                                     "drawable", app.getPackageName());
-    }
-    
-    if (rreq.isSpecified(rreq.ALL.R_TEXT_COLOR)) {
-        p.setColor(rreq.getIntPropertyValue(rreq.ALL.R_TEXT_COLOR));
-    }
-    
-    if (rreq.isSpecified(rreq.ALL.R_TEXT_SIZE)) {
-        float ts = rreq.getFloatPropertyValue(rreq.ALL.R_TEXT_SIZE);
-        textRenderer.getPaintText().setTextSize(
-                                                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, ts,
-                                                                          app.getResources().getDisplayMetrics()));
-    }
-    
-    if (shieldRes != -1) {
-        Drawable shield = AppCompatResources.getDrawable(view.getContext(), shieldRes);
-        if (shield == null) {
-            return false;
+    textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_TEXT_LENGTH, (unsigned int) name.length);
+    textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_NAME_TAG, QString::fromNSString(nameTag));
+    auto mapObj = std::make_shared<OsmAnd::MapObject>();
+    auto additionals = std::make_shared<OsmAnd::MapObject::AttributeMapping>();
+    uint32_t idx = 0;
+    for (NSString *str : [additional componentsSeparatedByString:@";"])
+    {
+        NSArray<NSString *> *tagValue = [str componentsSeparatedByString:@"="];
+        if (tagValue.count == 2)
+        {
+            mapObj->additionalAttributeIds.push_back(idx);
+            additionals->registerMapping(idx++, QString::fromNSString(tagValue.firstObject), QString::fromNSString(tagValue.lastObject));
         }
-        float xSize = shield.getIntrinsicWidth();
-        float ySize = shield.getIntrinsicHeight();
-        float xyRatio = xSize / ySize;
-        //setting view propotions (height is fixed by toolbar size - 48dp);
-        int viewHeightPx = AndroidUtils.dpToPx(context, 48);
-        int viewWidthPx = (int) (viewHeightPx * xyRatio);
-        
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-        params.width = viewWidthPx;
-        view.setLayoutParams(params);
-        
-        //creating bitmap according to size of resource
-        Bitmap bitmap = Bitmap.createBitmap((int) xSize, (int) ySize, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        text.fillProperties(rc, rreq, xSize / 2f, ySize / 2f - p.getFontMetrics().ascent / 2f);
-        textRenderer.drawShieldIcon(rc, canvas, text, text.getShieldResIcon());
-        textRenderer.drawWrappedText(canvas, text, 20f);
-        
-        view.setImageBitmap(bitmap);
-        return true;
     }
-    return false;
+    mapObj->attributeMapping = additionals;
+    
+    textEvaluator.evaluate(mapObj, OsmAnd::MapStyleRulesetType::Text, &evaluationResult);
+    
+    OsmAnd::TextRasterizer::Style textStyle;
+    textStyle.setBold(true);
+    
+    QString shieldName;
+    evaluationResult.getStringValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SHIELD, shieldName);
+    if (!shieldName.isNull() && !shieldName.isEmpty())
+    {
+        sk_sp<const SkImage> shield;
+        env->obtainTextShield(shieldName, shield);
+
+        if (shield)
+            textStyle.setBackgroundImage(shield);
+    }
+    
+    int textColor = -1;
+    evaluationResult.getIntegerValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_COLOR, textColor);
+    if (textColor != -1)
+        textStyle.setColor(OsmAnd::ColorARGB(textColor));
+    
+    float textSize = -1;
+    evaluationResult.getFloatValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SIZE, textSize);
+    if (textSize != -1)
+        textStyle.setSize(textSize);
+    
+    
+    const auto textImage = _textRasterizer->rasterize(QString::fromNSString(name), textStyle);
+    if (textImage)
+    {
+        view.image = [OANativeUtilities skImageToUIImage:textImage];
+        return YES;
+    }
+
+    return NO;
 }
 
 - (void) onTopTextViewClicked:(id)sender

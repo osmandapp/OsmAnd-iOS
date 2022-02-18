@@ -51,6 +51,7 @@
 #import "OAColors.h"
 #import "OASubscriptionCancelViewController.h"
 #import "OARouteStatistics.h"
+#import "OAMapPresentationEnvironment.h"
 
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -3124,6 +3125,11 @@
     {
         [_mapLayers.routeMapLayer resetLayer];
     }
+}
+
+- (OAMapPresentationEnvironment *)mapPresentationEnv
+{
+    return [[OAMapPresentationEnvironment alloc] initWithEnvironment:_mapPresentationEnvironment];
 }
 
 

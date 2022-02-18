@@ -104,6 +104,14 @@
          ));
 }
 
++ (UIImage *) skImageToUIImage:(const sk_sp<SkImage> &)image
+{
+    SkBitmap bmp;
+    image.get()->asLegacyBitmap(&bmp);
+    CGImageRef img = SkCreateCGImageRef(bmp);
+    return [[UIImage alloc] initWithCGImage:img];
+}
+
 + (NSMutableArray*) QListOfStringsToNSMutableArray:(const QList<QString>&)list
 {
     NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity:list.size()];

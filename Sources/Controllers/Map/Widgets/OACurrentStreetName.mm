@@ -105,4 +105,35 @@
     return streetName;
 }
 
+- (BOOL)isEqual:(id)object
+{
+    if (self == object)
+        return YES;
+    if (!object || ![object isKindOfClass:self.class])
+        return NO;
+    
+    OACurrentStreetName *otherName = (OACurrentStreetName *) object;
+    if (![self.text isEqualToString:otherName.text])
+        return NO;
+    if (self.turnType && otherName.turnType && self.turnType->getValue() != otherName.turnType->getValue())
+        return NO;
+    if (self.showMarker != otherName.showMarker)
+        return NO;
+    if (self.shieldObject != otherName.shieldObject)
+        return NO;
+    if (self.exitRef && otherName.exitRef && ![self.exitRef isEqualToString:otherName.exitRef])
+        return NO;
+    return YES;
+}
+
+- (NSUInteger) hash
+{
+    NSUInteger result = [self.text hash];
+    result = 31 * result + (self.turnType ? self.turnType->getValue() : 0.);
+    result = 31 * result + (self.showMarker ? 1 : 0);
+    result = 31 * result + self.shieldObject->id;
+    result = 31 * result + [self.exitRef hash];
+    return result;
+}
+
 @end

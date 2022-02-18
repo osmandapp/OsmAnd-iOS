@@ -124,8 +124,8 @@
     self.layer.shadowRadius = 2.0;
     self.layer.shadowOffset = CGSizeMake(0.0, 0.0);
     
-    _regularFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:18];
-    _boldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:18];
+    _regularFont = [UIFont systemFontOfSize:18 weight:UIFontWeightSemibold];
+    _boldFont = [UIFont systemFontOfSize:18 weight:UIFontWeightBold];
     _textFont = _regularFont;
     _textColor = [UIColor blackColor];
     _textShadowColor = nil;

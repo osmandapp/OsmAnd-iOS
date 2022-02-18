@@ -1343,6 +1343,7 @@
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
 		DA357C4D22A636CC00A1F82D /* ic_custom_coordinates@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4A22A636CB00A1F82D /* ic_custom_coordinates@3x.png */; };
 		DA357C5122A636CC00A1F82D /* ic_custom_coordinates@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */; };
+		DA377DE027BBBB19004B4EBD /* OAMapPresentationEnvironment.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA377DDF27BBBB19004B4EBD /* OAMapPresentationEnvironment.mm */; };
 		DA45DA54230EE0590083DFA2 /* img_mapstyle_offroad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA45DA39230EE0510083DFA2 /* img_mapstyle_offroad@2x.png */; };
 		DA45DA56230EE0590083DFA2 /* img_mapstyle_skimap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA45DA3A230EE0520083DFA2 /* img_mapstyle_skimap@2x.png */; };
 		DA45DA5A230EE0590083DFA2 /* img_mapstyle_nautical@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA45DA3C230EE0530083DFA2 /* img_mapstyle_nautical@3x.png */; };
@@ -4385,6 +4386,8 @@
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		DA357C4A22A636CB00A1F82D /* ic_custom_coordinates@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates@3x.png"; path = "Resources/Icons/ic_custom_coordinates@3x.png"; sourceTree = "<group>"; };
 		DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates@2x.png"; path = "Resources/Icons/ic_custom_coordinates@2x.png"; sourceTree = "<group>"; };
+		DA377DDE27BBBB19004B4EBD /* OAMapPresentationEnvironment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapPresentationEnvironment.h; sourceTree = "<group>"; };
+		DA377DDF27BBBB19004B4EBD /* OAMapPresentationEnvironment.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapPresentationEnvironment.mm; sourceTree = "<group>"; };
 		DA45DA39230EE0510083DFA2 /* img_mapstyle_offroad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_mapstyle_offroad@2x.png"; path = "Resources/Icons/img_mapstyle_offroad@2x.png"; sourceTree = "<group>"; };
 		DA45DA3A230EE0520083DFA2 /* img_mapstyle_skimap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_mapstyle_skimap@2x.png"; path = "Resources/Icons/img_mapstyle_skimap@2x.png"; sourceTree = "<group>"; };
 		DA45DA3C230EE0530083DFA2 /* img_mapstyle_nautical@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_mapstyle_nautical@3x.png"; path = "Resources/Icons/img_mapstyle_nautical@3x.png"; sourceTree = "<group>"; };
@@ -10901,6 +10904,8 @@
 				DA5A7F1126C563A400F274C7 /* OAToolbarViewController.mm */,
 				DA5A7F0026C563A400F274C7 /* OAToolbarViewController.xib */,
 				DA5A7F1526C563A400F274C7 /* Widgets */,
+				DA377DDE27BBBB19004B4EBD /* OAMapPresentationEnvironment.h */,
+				DA377DDF27BBBB19004B4EBD /* OAMapPresentationEnvironment.mm */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -14908,6 +14913,7 @@
 				DA5A846B26C563A900F274C7 /* OAToolbarViewController.mm in Sources */,
 				DA5A854F26C563A900F274C7 /* OpenLocationCodeObjCBridge.swift in Sources */,
 				DA5A832426C563A800F274C7 /* OATextViewSimpleCell.m in Sources */,
+				DA377DE027BBBB19004B4EBD /* OAMapPresentationEnvironment.mm in Sources */,
 				DABC7F1F27B65C36005C76E2 /* OACurrentStreetName.mm in Sources */,
 				DA5A83A926C563A800F274C7 /* OABasicEditingViewController.mm in Sources */,
 				DA5A852F26C563A900F274C7 /* OpenLocationCode.swift in Sources */,

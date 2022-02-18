@@ -111,7 +111,7 @@
     SkBitmap bmp;
     image->asLegacyBitmap(&bmp);
     CGImageRef img = SkCreateCGImageRef(bmp);
-    return [[UIImage alloc] initWithCGImage:img];
+    return img != nil ? [[UIImage alloc] initWithCGImage:img] : nil;
 }
 
 + (NSMutableArray*) QListOfStringsToNSMutableArray:(const QList<QString>&)list

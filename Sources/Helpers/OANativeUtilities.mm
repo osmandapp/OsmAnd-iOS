@@ -106,9 +106,9 @@
 
 + (UIImage *) skImageToUIImage:(const sk_sp<SkImage> &)image
 {
-    SkBitmap bmp;
     if (!image)
         return nil;
+    SkBitmap bmp;
     image->asLegacyBitmap(&bmp);
     CGImageRef img = SkCreateCGImageRef(bmp);
     return [[UIImage alloc] initWithCGImage:img];

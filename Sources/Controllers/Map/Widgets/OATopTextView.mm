@@ -677,12 +677,6 @@
         }
     }
     
-    int roadNumber = [[[nameTag stringByReplacingOccurrencesOfString:@"route_road_" withString:@""]
-                       stringByReplacingOccurrencesOfString:@"_ref" withString:@""] intValue];
-    
-    if (roadNumber == 0)
-        return NO;
-    
     textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_TEXT_LENGTH, (unsigned int) name.length);
     textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_NAME_TAG, QString::fromNSString(nameTag));
     auto mapObj = std::make_shared<OsmAnd::MapObject>();

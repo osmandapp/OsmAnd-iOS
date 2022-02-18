@@ -5,6 +5,8 @@
 //  Created by Paul on 11.02.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
+// OsmAnd/OsmAnd/src/net/osmand/plus/routing/CurrentStreetName.java
+// git revision 1a8946454169a3aa6eb8e7c6e9a9ea7aa7e13b9f
 
 #import <Foundation/Foundation.h>
 

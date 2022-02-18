@@ -50,7 +50,7 @@
         if (!img)
             img = [OATargetInfoViewController getIcon:@"mx_public_transport"];
         
-        CGFloat imgSize = [[UIScreen mainScreen] scale] * 8.0;
+        CGFloat imgSize = 16;
         img = [OAUtilities resizeImage:img newSize:{ imgSize, imgSize }];
         img = [OAUtilities getTintableImage:img];
 
@@ -121,7 +121,8 @@
     CGFloat viewHeight = 0;
     for (UIButton *btn in _buttons)
     {
-        CGFloat h = [btn.currentAttributedTitle boundingRectWithSize:{width - kMarginLeft - kMarginRight, 10000} options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height;
+        CGFloat labelWidth = width - [OAUtilities getLeftMargin] - kMarginLeft - kMarginRight;
+        CGFloat h = [btn.currentAttributedTitle boundingRectWithSize:{labelWidth, 10000} options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height;
         CGFloat btnH = h + kMarginTop * 2;
         btn.contentEdgeInsets = UIEdgeInsetsMake(kMarginTop, kMarginRight + [OAUtilities getLeftMargin], kMarginTop, kMarginRight);
 

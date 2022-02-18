@@ -2364,3 +2364,9 @@
 "routing_attr_only_permitted_streets_description" = "Yalnızca açıkça izin verilen sokakları kullanın";
 "routing_attr_only_permitted_ways_name" = "Açıkça izin verilen yollar";
 "horseback_riding" = "At binme";
+"route_preferred_terrain_any" = "Güzergah seçerken arazi profili dikkate alınmıyor.";
+"route_preferred_terrain_flat" = "Düz bir kabartma profiline sahip güzergahlar. Uzunluk artabilir.";
+"route_preferred_terrain_less_hilly" = "Daha kısa, daha az engebeli güzergahlar.";
+"route_preferred_terrain_hilly" = "Tepelik bir kabartma profiline sahip güzergahlar.";
+"shared_string_any" = "Herhangi";
+"preferred_terrain" = "Tercih edilen arazi";

@@ -2044,3 +2044,8 @@
 "shared_string_overview" = "Oversikt";
 "activity" = "Aktivitet";
 "change_object_posiotion" = "Endre objektets posisjon";
+"routeInfo_winter_ice_road_description" = "Fargelegg rute eller sporlinje etter vinterveiklassifisering.";
+"routeInfo_surface_description" = "Angi informasjon om fysisk overflate for veier/gangstier.";
+"routeInfo_smoothness_description" = "Klassifisering av manøvrerbarhet på vei/gangvei for kjøretøy med hjul, spesielt når det gjelder overflateregelmessighet/planhet.";
+"routeInfo_tracktype_description" = "Fargelegg rute eller sporlinje etter overflatesammensetning. Brukes typisk når veinettet stort sett er uten fast dekke.";
+"reset_to_original" = "Tilbakestill til original";

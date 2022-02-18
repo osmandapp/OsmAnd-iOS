@@ -2367,3 +2367,9 @@
 "shared_string_open_street_map" = "OpenStreetMap";
 "horseback_riding" = "Верхова їзда";
 "routing_attr_prefer_horse_routes_description" = "Надавати перевагу кінним маршрутам";
+"route_preferred_terrain_flat" = "Маршрути обчислюються для рівнинних рельєфів. Довжина може збільшуватися.";
+"shared_string_any" = "Усі";
+"route_preferred_terrain_less_hilly" = "Коротші, менш горбисті маршрути.";
+"preferred_terrain" = "Бажаний рельєф";
+"route_preferred_terrain_any" = "Рельєф не враховується при виборі маршруту.";
+"route_preferred_terrain_hilly" = "Маршрути з горбистим рельєфом.";

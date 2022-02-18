@@ -56,6 +56,7 @@ struct CLLocationCoordinate2D;
 
 - (std::shared_ptr<OsmAnd::IMapLayerProvider>)providerFor:(unsigned int)layer;
 - (void)setProvider:(std::shared_ptr<OsmAnd::IMapLayerProvider>)provider forLayer:(unsigned int)layer;
+- (void)setProviderForced:(std::shared_ptr<OsmAnd::IMapLayerProvider>)provider forLayer:(unsigned int)layer;
 - (void)resetProviderFor:(unsigned int)layer;
 
 - (void)setTextureFilteringQuality:(OsmAnd::TextureFilteringQuality)quality;

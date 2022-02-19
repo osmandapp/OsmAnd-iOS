@@ -337,7 +337,7 @@
         if (!isnan(_lastHeading))
             return _lastHeading;
         else
-            return 0;
+            return -1.0;
     }
 }
 

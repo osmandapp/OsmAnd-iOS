@@ -137,6 +137,7 @@ struct RouteDataBundle;
 @property (nonatomic) double speed;
 @property (nonatomic) double horizontalDilutionOfPrecision;
 @property (nonatomic) double verticalDilutionOfPrecision;
+@property (nonatomic) double heading;
 
 - (NSString *)getIcon;
 - (void)setIcon:(NSString *)iconName;

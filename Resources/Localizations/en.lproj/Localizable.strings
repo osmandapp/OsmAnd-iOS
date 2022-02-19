@@ -154,6 +154,8 @@
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
 "plugin_settings_reset" = "Reset plugin settings to default";
+"save_heading" = "Include heading";
+"save_heading_descr" = "Save heading information for each recorded point";
 
 "map_widget_magnetic_bearing" = "Magnetic bearing";
 "map_widget_bearing" = "Relative bearing";

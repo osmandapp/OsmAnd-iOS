@@ -201,6 +201,7 @@
 #define saveTrackPrecisionKey @"saveTrackPrecision"
 #define saveTrackMinSpeedKey @"saveTrackMinSpeed"
 #define autoSplitRecordingKey @"autoSplitRecording"
+#define saveHeadingToGpxKey @"saveHeadingToGpx"
 
 #define rulerModeKey @"rulerMode"
 #define showDistanceRulerKey @"showDistanceRuler"
@@ -3158,12 +3159,14 @@
         // TODO: redesign alert as in android to show/hide recorded trip on map
         _mapSettingShowRecordingTrack = [[[OACommonBoolean withKey:mapSettingShowRecordingTrackKey defValue:YES] makeGlobal] makeShared];
         _mapSettingShowTripRecordingStartDialog = [[[OACommonBoolean withKey:mapSettingShowTripRecordingStartDialogKey defValue:YES] makeGlobal] makeShared];
+        _saveHeadingToGpx = [OACommonBoolean withKey:saveHeadingToGpxKey defValue:NO];
 
         [_globalPreferences setObject:_mapSettingSaveGlobalTrackToGpx forKey:@"save_global_track_to_gpx"];
         [_profilePreferences setObject:_mapSettingSaveTrackIntervalGlobal forKey:@"save_global_track_interval"];
         [_profilePreferences setObject:_mapSettingSaveTrackIntervalApproved forKey:@"save_global_track_remember"];
         [_globalPreferences setObject:_mapSettingShowRecordingTrack forKey:@"show_saved_track_remember"];
         [_globalPreferences setObject:_mapSettingShowTripRecordingStartDialog forKey:@"show_trip_recording_start_dialog"];
+        [_globalPreferences setObject:_saveHeadingToGpx forKey:@"save_heading_to_gpx"];
 
         _selectedPoiFilters = [OACommonString withKey:selectedPoiFiltersKey defValue:@""];
         [_profilePreferences setObject:_selectedPoiFilters forKey:@"selected_poi_filter_for_map"];

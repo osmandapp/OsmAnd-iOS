@@ -266,7 +266,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "hod";
 "units_min" = "min";
@@ -312,8 +312,6 @@
 "region_south_america" = "Južná Amerika";
 // Help
 "help_quiz" = "Kvíz";
-"units_minutes_short" = "min";
-"units_seconds_short" = "sek.";
 "cannot_access_calendar" = "Nemôžem získať prístup do kalendára";
 "reminder_not_set_text" = "Pripomenutie nebolo nastavené, pretože nemáte povolenie prístupu ku kalendáru";
 //inapps
@@ -526,11 +524,11 @@
 "si_min_km" = "Minúty za kilometer";
 "si_min_m" = "Minúty za míľu";
 "si_nm_h" = "Námorné míle za hodinu (uzly)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "destination_point" = "Cieľ %@";
 "intermediate_point" = "Prechodný bod %@";
 "arrived_at_intermediate_point" = "Dorazili ste k Vášmu prechodnému bodu";
@@ -615,7 +613,7 @@
 "speak_favorites" = "Blízke Obľúbené body";
 "speak_poi" = "Blízke body záujmu";
 "speak_pedestrian" = "Priechody pre chodcov";
-"int_seconds" = "sekúnd";
+"units_seconds" = "sekúnd";
 "shared_string_never" = "Nikdy";
 "general_settings_2" = "Všeobecné nastavenia";
 "general_settings_descr" = "Vzhľad aplikácie, jednotky, oblasť";
@@ -1727,7 +1725,6 @@
 "map_during_navigation" = "Mapa počas navigácie";
 "markers_history" = "História značiek";
 "coordinates" = "Súradnice";
-"units_nm" = "nmi";
 "favorite_places_category" = "Miesta";
 "square" = "Štvorec";
 "group_name" = "Názov skupiny";
@@ -1785,7 +1782,6 @@
 "download_map_dialog" = "Okno sťahovania máp";
 "gpxup_identifiable" = "Identifikovateľná";
 "welmode_download_maps" = "Stiahnuť mapy";
-"m" = "m";
 "shared_strings_all_regions" = "Všetky oblasti";
 "navigate_point_zone" = "Zóna";
 "travel_routes" = "Cestovné trasy";
@@ -1818,7 +1814,6 @@
 "routes_color_by_type" = "Vyfarbiť trasy podľa…";
 "suggested_maps" = "Navrhované mapy";
 "route_between_points_warning_desc" = "Ďalej, pre použitie tejto možnosti pripojte vašu stopu k najbližšej povolenej ceste s niektorým vaším navigačným profilom.";
-"foot" = "ft";
 "navigate_point_olc" = "Otvorený kód pre polohu (OLC)";
 "some_articles_may_not_available_in_lang" = "Niektoré články Wikipedia nemusia byť dostupné vo vašom jazyku.";
 "lang_pnb" = "Pandžábsky";

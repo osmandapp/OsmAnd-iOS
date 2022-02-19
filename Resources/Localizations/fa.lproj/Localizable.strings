@@ -74,7 +74,7 @@
 "speak_favorites" = "نقاط برگزیدهٔ اطراف";
 "speak_poi" = "نقاط توجه نزدیک از نوع";
 "speak_pedestrian" = "گذرگاه‌های پیاده";
-"int_seconds" = "ثانیه";
+"units_seconds" = "ثانیه";
 "shared_string_never" = "هرگز";
 "general_settings_2" = "تنظیمات سراسری";
 "general_settings_descr" = "Configure display and common settings for the application";
@@ -219,11 +219,11 @@
 "si_min_km" = "دقیقه بر کیلومتر";
 "si_min_m" = "دقیقه بر مایل";
 "si_nm_h" = "مایل دریایی بر ساعت (نات)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "چیزی پیدا نشد :(";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "انتخاب خیابان";
@@ -482,7 +482,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "س";
 "units_min" = "min";
@@ -535,8 +535,6 @@
 "rendering_category_transport" = "حمل‌ونقل";
 "rendering_category_others" = "خصوصیات دیگر نقشه";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
@@ -1573,7 +1571,6 @@
 "fav_points_not_exist" = "هیچ نقطهٔ موردعلاقه‌ای وجود ندارد";
 "service" = "خدمات";
 "favorite_friends_category" = "دوستان";
-"units_nm" = "nmi";
 "shared_string_import" = "درون‌برد";
 "coordinates_widget" = "ابزارک مختصات";
 "mapil_usernames" = "نام‌های کاربری";
@@ -1684,14 +1681,12 @@
 "added_profiles_descr" = "پروفایل‌هایی که افزونه افزوده";
 "shared_string_feet" = "پا";
 "contour_lines_hillshades_slope" = "خطوط میزان، سایه‌روشن‌ها، شیب";
-"m" = "m";
 "wiki_menu_download_descr" = "برای مشاهدهٔ نقاط ویکی‌پدیا روی نقشه باید نقشهٔ دیگری را نیز دانلود کنید.";
 "download_map_dialog" = "کادر دانلود نقشه";
 "navigate_point_olc" = "کدِ مکانی باز (OLC)";
 "last_used" = "آخرین استفاده‌شده";
 "shared_string_turn_off" = "خاموش";
 "gpxup_identifiable" = "قابل‌شناسایی";
-"foot" = "ft";
 "welmode_download_maps" = "دانلود نقشه‌ها";
 "rendering_value_walkingRoutesOSMCNodes_description" = "مسیرها را بر اساس نوع شبکهٔ گره آن‌ها (بین‌المللی، منطقه‌ای، محلی) رنگ‌آمیزی کن.";
 "some_articles_may_not_available_in_lang" = "ممکن است برخی مقاله‌های ویکی‌پدیا به زبان شما در دسترس نباشد.";

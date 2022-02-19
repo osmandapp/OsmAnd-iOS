@@ -158,7 +158,7 @@
 "speak_pedestrian" = "Passatges pedoniers";
 "speak_tunnels" = "Galariás";
 "show_tunnels" = "Galariás";
-"int_seconds" = "segon";
+"units_seconds" = "segon";
 "shared_string_never" = "Jamai";
 "shared_setting_always_ask" = "Se demanda confirmacion";
 "general_settings_2" = "Paramètres generaus";
@@ -319,11 +319,11 @@
 "si_min_km" = "Minutas au quilomètre";
 "si_min_m" = "Minutes per mile";
 "si_nm_h" = "Milas nautics a l'ora (Nos)";
-"nm" = "MN";
-"nm_h" = "nos";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "MN";
+"units_nm_h" = "nos";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "Nothing found :(";
 "nothing_found_descr" = "Modificar o relargar la recèrca";
 "select_street" = "Chausir la carriera";
@@ -867,7 +867,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
 "units_min" = "min";
@@ -966,8 +966,6 @@
 "rendering_category_transport" = "Transpòrt collectiu";
 "rendering_category_others" = "Autreis atributs de la mapa";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "cannot_access_calendar" = "Impossible d'accedir au Calendier";
 "reminder_not_set_text" = "Lo sauvamemòria automatic es pas estat definit perque l'accès au Calendier li es pas consentit";
 //inapps
@@ -2106,7 +2104,6 @@
 "upload_to_openstreetmap" = "Telecargar vèrs OpenStreetMap";
 "shared_string_meters" = "mètres";
 "shared_string_feet" = "pès";
-"foot" = "ft";
 "visible_categories" = "Categorias visiblas";
 "parked_at" = "Aparcat a";
 "rearrange_categories" = "Reorganizar lei categorias";
@@ -2117,7 +2114,6 @@
 // Menu
 "menu" = "Menut";
 "shared_string_loading" = "A se telecargar…";
-"m" = "m";
 "create_custom_categories_list_promo" = "Podètz filtrar de categorias personalizadas, amagar lei categorias que trobatz pas necessàrias e modificar l'òrdre de la lista. Lei categorias personalizadas se pòdon importar emai exportar amb de lei perfius.";
 "add_custom_category" = "Ajustar una categoria personalizada";
 "search_poi_types_descr" = "Podètz combinar lei menas de PDI de divèrsei categorias.";

@@ -36,6 +36,7 @@
 #define TRACK_COL_ALTITUDE @"altitude"
 #define TRACK_COL_SPEED @"speed"
 #define TRACK_COL_HDOP @"hdop"
+#define TRACK_COL_HEADING @"heading"
 
 #define POINT_NAME @"point"
 #define POINT_COL_DATE @"date"
@@ -155,7 +156,7 @@
             if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
             {
                 char *errMsg;
-                const char *sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ double, %@ double, %@ double, %@ double, %@ double, %@ double)", TRACK_NAME, TRACK_COL_LAT, TRACK_COL_LON, TRACK_COL_ALTITUDE, TRACK_COL_SPEED, TRACK_COL_HDOP, TRACK_COL_DATE] UTF8String];
+                const char *sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ double, %@ double, %@ double, %@ double, %@ double, %@ double, %@ double)", TRACK_NAME, TRACK_COL_LAT, TRACK_COL_LON, TRACK_COL_ALTITUDE, TRACK_COL_SPEED, TRACK_COL_HDOP, TRACK_COL_DATE, TRACK_COL_HEADING] UTF8String];
                 
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
@@ -214,6 +215,14 @@
                 if (errMsg != NULL) sqlite3_free(errMsg);
 
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", POINT_NAME, POINT_COL_BACKGROUND] UTF8String];
+                if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
+                {
+                    //Failed to add column. Already exists;
+                }
+                if (errMsg != NULL) sqlite3_free(errMsg);
+
+
+                sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ double", TRACK_NAME, TRACK_COL_HEADING] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
                     //Failed to add column. Already exists;
@@ -469,7 +478,7 @@
                         [wpt setIcon:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)]];
                     if (sqlite3_column_text(statement, 8) != nil)
                         [wpt setBackgroundIcon:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)]];
-                    
+
                     NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:wpt.time]];
                     
                     if (fillCurrentTrack)
@@ -505,7 +514,7 @@
         
         if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
         {
-            NSString *querySQL = [NSString stringWithFormat:@"SELECT %@, %@, %@, %@, %@, %@ FROM %@ ORDER BY %@ ASC", TRACK_COL_LAT, TRACK_COL_LON, TRACK_COL_ALTITUDE, TRACK_COL_SPEED, TRACK_COL_HDOP, TRACK_COL_DATE, TRACK_NAME, TRACK_COL_DATE];
+            NSString *querySQL = [NSString stringWithFormat:@"SELECT %@, %@, %@, %@, %@, %@, %@ FROM %@ ORDER BY %@ ASC", TRACK_COL_LAT, TRACK_COL_LON, TRACK_COL_ALTITUDE, TRACK_COL_SPEED, TRACK_COL_HDOP, TRACK_COL_DATE, TRACK_COL_HEADING, TRACK_NAME, TRACK_COL_DATE];
             const char *query_stmt = [querySQL UTF8String];
             if (sqlite3_prepare_v2(tracksDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
             {
@@ -524,8 +533,11 @@
                     pt.position = CLLocationCoordinate2DMake(lat, lon);
                     pt.elevation = sqlite3_column_double(statement, 2);
                     pt.speed = sqlite3_column_double(statement, 3);
-                    pt.horizontalDilutionOfPrecision = sqlite3_column_double(statement, 4);
+                    double hdop = sqlite3_column_double(statement, 4);
+                    pt.horizontalDilutionOfPrecision = hdop == 0 ? NAN : hdop;
                     pt.time = (long)sqlite3_column_double(statement, 5);
+                    double heading = sqlite3_column_double(statement, 6);
+                    pt.heading = heading == kTrackNoHeading ? NAN : heading;
 
                     long currentInterval = labs(pt.time - previousTime);
                     BOOL newInterval = (lat == 0.0 && lon == 0.0);
@@ -594,7 +606,7 @@
             lastTimeUpdated = 0;
             lastPoint = kCLLocationCoordinate2DInvalid;
             long time = (long)[[NSDate date] timeIntervalSince1970];
-            [self doUpdateTrackLat:0.0 lon:0.0 alt:0.0 speed:0.0 hdop:0.0 time:time];
+            [self doUpdateTrackLat:0.0 lon:0.0 alt:0.0 speed:0.0 hdop:0.0 time:time heading:NAN];
             [self addTrackPoint:nil newSegment:YES time:time];
         }
     });
@@ -611,6 +623,12 @@
             BOOL record = NO;
             
             OAAppSettings *settings = [OAAppSettings sharedManager];
+            double heading = _app.locationServices.lastKnownHeading;
+            if (heading != kTrackNoHeading && settings.saveHeadingToGpx.get)
+                heading = OsmAnd::Utilities::normalizedAngleDegrees(heading);
+            else
+                heading = kTrackNoHeading;
+
             if ([settings.saveTrackToGPX get]
                 && locationTime - lastTimeUpdated > [settings.mapSettingSaveTrackInterval get]
                 && [[OARoutingHelper sharedInstance] isFollowingMode])
@@ -641,7 +659,7 @@
             
             if (record)
             {
-                [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:location.horizontalAccuracy time:[location.timestamp timeIntervalSince1970]];
+                [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:location.horizontalAccuracy time:[location.timestamp timeIntervalSince1970] heading:heading];
                 
                 [[_app trackRecordingObservable] notifyEvent];
             }
@@ -661,9 +679,9 @@
     return NO;
 }
 
-- (void) insertDataLat:(double)lat  lon:(double)lon alt:(double)alt speed:(double)speed hdop:(double)hdop time:(long)time
+- (void) insertDataLat:(double)lat lon:(double)lon alt:(double)alt speed:(double)speed hdop:(double)hdop time:(long)time heading:(double)heading
 {
-    [self doUpdateTrackLat:lat lon:lon alt:alt speed:speed hdop:hdop time:time];
+    [self doUpdateTrackLat:lat lon:lon alt:alt speed:speed hdop:hdop time:time heading:heading];
     
     BOOL newSegment = NO;
     if ((lastPoint.latitude == 0.0 && lastPoint.longitude == 0.0) || (time - lastTimeUpdated) > 180)
@@ -686,30 +704,31 @@
     pt.elevation = alt;
     pt.speed = speed;
     pt.horizontalDilutionOfPrecision = hdop;
+    pt.heading = heading;
 
     [self addTrackPoint:pt newSegment:newSegment time:time];
 }
 
 - (void) addTrackPoint:(OAWptPt *)pt newSegment:(BOOL)newSegment time:(long)time
 {
-        OATrack *track = [currentTrack.tracks firstObject];
-        BOOL segmentAdded = NO;
-        if (track.segments.count == 0 || newSegment)
-        {
-            OATrkSegment *segment = [[OATrkSegment alloc] init];
-            segment.points = [NSMutableArray array];
-            [currentTrack addTrackSegment:segment track:track];
-            segmentAdded = YES;
-        }
-        if (pt != nil)
-        {
-            OATrkSegment *lt = [track.segments lastObject];
-            [currentTrack addTrackPoint:pt segment:lt];
-        }
-        if (segmentAdded)
-            [currentTrack processPoints];
-        currentTrack.modifiedTime = time;
+    OATrack *track = [currentTrack.tracks firstObject];
+    BOOL segmentAdded = NO;
+    if (track.segments.count == 0 || newSegment)
+    {
+        OATrkSegment *segment = [[OATrkSegment alloc] init];
+        segment.points = [NSMutableArray array];
+        [currentTrack addTrackSegment:segment track:track];
+        segmentAdded = YES;
     }
+    if (pt != nil)
+    {
+        OATrkSegment *lt = [track.segments lastObject];
+        [currentTrack addTrackPoint:pt segment:lt];
+    }
+    if (segmentAdded)
+        [currentTrack processPoints];
+    currentTrack.modifiedTime = time;
+}
     
 - (void)addWpt:(OAWptPt *)wpt
 {
@@ -729,7 +748,7 @@
               background:[wpt getBackgroundIcon]];
 }
 
-- (void) doUpdateTrackLat:(double)lat lon:(double)lon alt:(double)alt speed:(double)speed hdop:(double)hdop time:(long)time
+- (void) doUpdateTrackLat:(double)lat lon:(double)lon alt:(double)alt speed:(double)speed hdop:(double)hdop time:(long)time heading:(double)heading
 {
     dispatch_async(dbQueue, ^{
         sqlite3_stmt    *statement;
@@ -738,7 +757,7 @@
         
         if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
         {
-            NSString *query = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@, %@, %@, %@) VALUES (%f, %f, %f, %f, %f, %ld)", TRACK_NAME, TRACK_COL_LAT, TRACK_COL_LON, TRACK_COL_ALTITUDE, TRACK_COL_SPEED, TRACK_COL_HDOP, TRACK_COL_DATE, lat, lon, alt, speed, hdop, time];
+            NSString *query = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@, %@, %@, %@, %@) VALUES (%f, %f, %f, %f, %f, %ld, %f)", TRACK_NAME, TRACK_COL_LAT, TRACK_COL_LON, TRACK_COL_ALTITUDE, TRACK_COL_SPEED, TRACK_COL_HDOP, TRACK_COL_DATE, TRACK_COL_HEADING, lat, lon, alt, speed, hdop, time, heading];
             
             const char *update_stmt = [query UTF8String];
             

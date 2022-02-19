@@ -86,19 +86,10 @@
     std::shared_ptr<OsmAnd::IWebClient> _webClient;
 
     OAAutoObserverProxy* _downloadsManagerActiveTasksCollectionChangeObserver;
-    
-    NSString *_unitsKm;
-    NSString *_unitsm;
-    NSString *_unitsMi;
-    NSString *_unitsYd;
-    NSString *_unitsFt;
-    NSString *_unitsNm;
-    NSString *_unitsKmh;
-    NSString *_unitsMph;
-    
+
     BOOL _firstLaunch;
     UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
-    
+
     BOOL _carPlayActive;
 }
 
@@ -155,17 +146,7 @@
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
 
         [self buildFolders];
-        
-        // Init units localization
-        _unitsKm = OALocalizedString(@"units_km");
-        _unitsm = OALocalizedString(@"units_m");
-        _unitsMi = OALocalizedString(@"units_mi");
-        _unitsYd = OALocalizedString(@"units_yd");
-        _unitsFt = OALocalizedString(@"units_ft");
-        _unitsNm = OALocalizedString(@"units_nm");
-        _unitsKmh = OALocalizedString(@"units_kmh");
-        _unitsMph = OALocalizedString(@"units_mph");
-        
+
         [self initOpeningHoursParser];
 
         // First of all, initialize user defaults

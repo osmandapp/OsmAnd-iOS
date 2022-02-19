@@ -943,7 +943,7 @@
 {
     BOOL kilometers = [[OAAppSettings sharedManager].metricSystem get] == KILOMETERS_AND_METERS;
     value = kilometers ? value : round(value / 0.3048f);
-    NSString *distUnitsFormat = [@"%g " stringByAppendingString:kilometers ? OALocalizedString(@"units_kmh") : OALocalizedString(@"units_mph")];
+    NSString *distUnitsFormat = [@"%g " stringByAppendingString:kilometers ? OALocalizedString(@"units_km_h") : OALocalizedString(@"units_mph")];
     return value == 0.f ? OALocalizedString(@"not_selected") : value == 0.000001f ? @">0" : [NSString stringWithFormat:distUnitsFormat, value];
 }
 
@@ -1898,6 +1898,11 @@ static const double d180PI = 180.0 / M_PI_2;
     /* Stats in bytes */
     natural_t mem_free = vm_stat.free_count * pagesize;
     return mem_free;
+}
+
++ (NSString *) getLocalizedString:(NSString *)key
+{
+    return OALocalizedString(key);
 }
 
 @end

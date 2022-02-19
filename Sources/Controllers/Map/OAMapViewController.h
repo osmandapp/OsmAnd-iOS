@@ -57,6 +57,7 @@
 @class OAMapRendererView;
 @class OAMapLayers;
 @class OAWorldRegion;
+@class OAMapPresentationEnvironment;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -93,6 +94,8 @@
 @property(readonly) BOOL rotatingByGesture;
 
 @property (atomic, readonly) BOOL mapViewLoaded;
+
+@property (readonly) OAMapPresentationEnvironment *mapPresentationEnv;
 
 - (CLLocation *) getMapLocation;
 - (float) getMapZoom;

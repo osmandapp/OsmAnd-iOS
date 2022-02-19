@@ -118,7 +118,7 @@
 "quick_action_no_overlay" = "Χωρίς επικάλυψη";
 "osm_note_upload_anonymously" = "Ανώνυμο ανέβασμα";
 "units_m" = "μ";
-"units_kmh" = "χλμ/ω";
+"units_km_h" = "χλμ/ω";
 "shared_string_later" = "Αργότερα";
 "route_roundabout_short" = "Πάρτε την %d έξοδο και πηγαίνετε";
 "route_kl" = "Μείνετε αριστερά και προχωρήστε";
@@ -174,7 +174,7 @@
 "location_not_found" = "Η τοποθεσία δεν βρέθηκε";
 "poi_clear" = "Καθαρισμός";
 "app_mode_truck" = "Φορτηγό";
-"nm" = "ναυτικό μίλι";
+"units_nm" = "ναυτικό μίλι";
 "prefer_in_routing_title" = "Να προτιμώνται…";
 "get_directions" = "Οδηγίες";
 "osm_note_action_field_descr" = "Αυτό το μήνυμα περιλαμβάνεται στο πεδίο σχολίων.";
@@ -211,7 +211,7 @@
 "night_mode" = "Κατάσταση νύχτας";
 "traffic_warning_payment" = "Διόδια";
 "osm_editing_offline" = "Επεξεργασία χωρίς διαδίκτυο";
-"int_seconds" = "δευτερόλεπτα";
+"units_seconds" = "δευτερόλεπτα";
 "auto_follow_location_enabled" = "Αυτο-κεντράρισμα χάρτη σε χρήση.";
 "years_5" = "Έτη";
 "shared_string_select_on_map" = "Επιλέξτε στον χάρτη";
@@ -272,14 +272,13 @@
 "city_type_city" = "Πόλη";
 "gpx_speed" = "Ταχύτητα";
 "plugins" = "Πρόσθετα";
-"m_s" = "μέτρα/δευτερόλεπτο";
+"units_m_s" = "μέτρα/δευτερόλεπτο";
 "access_intermediate_arrival_time" = "Χρόνος άφιξης που μεσολάβησε";
 "shared_string_back" = "Προηγούμενο";
 "weeks_2_4" = "Εβδομάδες";
 "change_map_underlay" = "Αλλαγή υποστρώματος χάρτη";
 "today" = "Σήμερα";
 "gpx_average_speed" = "Μέση ταχύτητα";
-"units_minutes_short" = "λεπτά";
 "quick_action_add_overlay" = "Προσθήκη επιστρώματος";
 "shared_string_time_of_day" = "Ώρα της ημέρας";
 "mapillary_get_title" = "Βελτίωση κάλυψης φωτογραφίας με Mapillary";
@@ -348,7 +347,7 @@
 "green" = "Πράσινο";
 "road_blocked" = "Κλειστός δρόμος";
 "osm_alert_title" = "Υποβολή";
-"min_mile" = "λεπτά/μίλι";
+"units_min_mi" = "λεπτά/μίλι";
 "shared_string_is_open" = "Άνοιγμα";
 "day_night_info" = "Πληρ. Ημέρας/Νύχτας";
 "city_type_neighbourhood" = "Γειτονιά";
@@ -542,7 +541,7 @@
 "gpx_option_reverse_route" = "Αντιστροφή κατεύθυνσης GPX";
 "product_title_southamerica" = "Νότια Αμερική";
 "mapil_add_photos" = "Προσθήκη φωτογραφιών";
-"min_km" = "λεπτά/χιλιόμετρο";
+"units_min_km" = "λεπτά/χιλιόμετρο";
 "shared_string_current" = "Τρέχον";
 "shared_string_in_name" = "σε %@";
 "wiki_around" = "Πλησιέστερα άρθρα της βικιπαίδειας";
@@ -1164,7 +1163,6 @@
 "none_point_error" = "Παρακαλώ προσθέστε τουλάχιστον ένα σημείο.";
 "visible" = "Ορατό";
 "rearrange_categories" = "Αναδιάταξη κατηγοριών";
-"units_nm" = "ναυτικό μίλι";
 "copied_to_clipboard" = "Αντιγράφτηκε στο πρόχειρο";
 "add_custom_category" = "Προσθήκη προσαρμοσμένης κατηγορίας";
 "tracks" = "Ίχνη";
@@ -1217,7 +1215,6 @@
 "shared_string_all_languages" = "Όλες οι γλώσσες";
 "default" = "Προεπιλογή";
 "navigate_point_zone" = "Ζώνη";
-"m" = "μ";
 "no_waypoints_found" = "Δεν βρέθηκαν σημεία διαδρομής";
 "dialogs_and_notifications" = "Ερωτήματα και ειδοποιήσεις";
 "gpxup_identifiable" = "Αναγνωρίσιμες";
@@ -1232,7 +1229,6 @@
 "suggested_maps_descr" = "Αυτοί οι χάρτες απαιτούνται για το πρόσθετο.";
 "added_profiles_descr" = "Οι κατατομές (προφίλ) που προστέθηκαν από το πρόσθετο";
 "product_desc_ext_mapillary" = "Διαδικτυακές φωτογραφίες δρόμου για όλους. Ανακαλύψτε θέσεις, συνεργαστείτε, αποτυπώστε τον κόσμο.";
-"foot" = "πδ";
 "route_between_points_warning_desc" = "Για να χρησιμοποιήσετε αυτήν την επιλογή το OsmAnd χρειάζεται να προσκολλήσει το ίχνος σας στους δρόμους του χάρτη.
 \n
 \nΣτο επόμενο βήμα θα χρειαστείτε να επιλέξετε κατατομή (προφίλ) πλοήγησης για να εντοπίσετε τους επιτρεπόμενους δρόμους και την απόσταση κατωφλίου για να προσεγγίσετε το ίχνος σας με τους δρόμους.";

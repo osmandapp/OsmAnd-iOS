@@ -317,6 +317,7 @@
         self.speed = 0;
         self.horizontalDilutionOfPrecision = NAN;
         self.verticalDilutionOfPrecision = NAN;
+        self.heading = NAN;
         self.distance = 0.0;
     }
     return self;
@@ -474,6 +475,9 @@
 
     if (self.time != wptPt.time)
         return NO;
+    
+    if (self.heading != wptPt.heading)
+        return NO;
 
     if (!self.type && wptPt.type)
         return NO;
@@ -491,6 +495,7 @@
     result = 31 * result + (self.name ? [self.name hash] : 0);
     result = 31 * result + (self.desc ? [self.desc hash] : 0);
     result = 31 * result + (self.type ? [self.type hash] : 0);
+    result = 31 * result + [@(self.heading) hash];
     return result;
 }
 

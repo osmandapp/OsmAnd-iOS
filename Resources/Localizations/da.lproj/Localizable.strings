@@ -78,7 +78,6 @@
 "purchases" = "Køb";
 "download" = "Hent";
 "nothanks" = "Nej tak";
-"units_seconds_short" = "sek";
 //inapps
 "product_title_nautical" = "Søkort";
 "product_desc_nautical" = "Søkort over hele verden";
@@ -139,7 +138,6 @@
 "rendering_category_transport" = "Transport";
 "rendering_category_others" = "Andre kortattributter";
 // Rendering attributes
-"units_minutes_short" = "min";
 "reminder_not_set_text" = "Påmindelsen blev ikke sat, da der ikke er adgang til kalenderen";
 "shared_string_buy_for" = "for";
 "fav_import" = "Importer";
@@ -188,8 +186,9 @@
 "units_km" = "km";
 "units_m" = "m";
 "units_mi" = "mil";
+"units_yd" = "yd";
 "units_ft" = "fod";
-"units_kmh" = "km/t";
+"units_km_h" = "km/t";
 "units_hour" = "t";
 "units_min" = "min";
 "units_sec" = "sek";
@@ -288,7 +287,6 @@
 "cannot_add_marker" = "Kan ikke tilføje parkering";
 "cannot_add_marker_desc" = "Fjern i det mindste en retning, og prøv igen";
 "cannot_add_destination" = "Kan ikke tilføje retning";
-"units_yd" = "yd";
 // Map
 "map_inst_det_map_q" = "Installer detaljerede oversigtskort for at få flere oplysninger om placering.";
 "map_no_address" = "Adressen kendes endnu ikke";
@@ -528,11 +526,11 @@
 "si_min_km" = "Minutter pr. kilometer";
 "si_min_m" = "Minutter pr. mil";
 "si_nm_h" = "Sømil i timen (knob)";
-"nm" = "sømil";
-"nm_h" = "sømil/t";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "sømil";
+"units_nm_h" = "sømil/t";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "towards" = "Imod";
 "route_roundabout" = "Rundkørsel: tag afkørsel %d";
 "route_roundabout_short" = "Tag %d afkørsel og forsæt";
@@ -636,7 +634,7 @@
 "speak_favorites" = "Favoritter i nærheden";
 "speak_poi" = "Interessepunkt (IP) i nærheden";
 "speak_pedestrian" = "Fodgængerovergange";
-"int_seconds" = "sekunder";
+"units_seconds" = "sekunder";
 "shared_string_never" = "Aldrig";
 "general_settings_2" = "Generelle indstillinger";
 "general_settings_descr" = "App-tema, enheder, region";
@@ -1937,7 +1935,6 @@
 "shared_string_others" = "Andre";
 "start_of_track" = "Starten af sporet";
 "extra_maps" = "Ekstra kort";
-"units_nm" = "sømil";
 "transport" = "Transport";
 "group_name" = "Gruppenavn";
 "simplified_track" = "Forenklet spor";
@@ -2013,9 +2010,7 @@
 "gpxup_identifiable" = "Identificerbar";
 "suggested_maps_descr" = "Disse kort er nødvendige for udvidelsen";
 "welmode_download_maps" = "Administrer kort";
-"foot" = "fod";
 "product_title_mapillary" = "Mapillary";
-"m" = "m";
 "shared_string_navigation" = "Navigation";
 "app_restart_required" = "App-genstart kræves for at anvende nogle indstillinger.";
 "navigate_point_easting" = "Østlig";

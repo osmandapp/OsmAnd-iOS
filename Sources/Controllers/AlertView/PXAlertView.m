@@ -139,7 +139,7 @@ static const CGFloat AlertViewVerticalMargin = 20;
                 self.titleLabel.textAlignment = NSTextAlignmentRight;
             else
                 self.titleLabel.textAlignment = NSTextAlignmentLeft;
-            self.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Bold" size:13.0];
+            self.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightBold];
             self.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
             self.titleLabel.numberOfLines = 0;
             [self.alertView addSubview:self.titleLabel];
@@ -187,7 +187,7 @@ static const CGFloat AlertViewVerticalMargin = 20;
             self.messageLabel.backgroundColor = [UIColor clearColor];
             self.messageLabel.textColor = [UIColor whiteColor];
             self.messageLabel.textAlignment = NSTextAlignmentCenter;
-            self.messageLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13.0];
+            self.messageLabel.font = [UIFont systemFontOfSize:13.0];
             self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
             self.messageLabel.numberOfLines = 0;
             self.messageLabel.frame = [self adjustLabelFrameHeight:self.messageLabel];
@@ -403,9 +403,9 @@ static const CGFloat AlertViewVerticalMargin = 20;
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.backgroundColor = [UIColor clearColor];
     if (cmdButton)
-        button.titleLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:13.0];
+        button.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightSemibold];
     else
-        button.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:15.0];
+        button.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium];
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
     button.titleEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -967,7 +967,7 @@ static const CGFloat AlertViewVerticalMargin = 20;
         UILabel *descLabel = [[UILabel alloc] initWithFrame:f];
         descLabel.userInteractionEnabled = NO;
         descLabel.backgroundColor = [UIColor clearColor];
-        descLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:15.0];
+        descLabel.font = [UIFont systemFontOfSize:15.0];
         descLabel.textColor = [UIColor grayColor];
         descLabel.textAlignment = NSTextAlignmentRight;
         descLabel.text = desc;

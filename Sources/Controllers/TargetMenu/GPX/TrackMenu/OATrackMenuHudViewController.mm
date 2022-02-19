@@ -186,6 +186,10 @@
 {
     _app = [OsmAndApp instance];
     _routeLineChartHelper = [self getLineChartHelper];
+
+    if (!self.isShown)
+        [self changeTrackVisible];
+
     _uiBuilder = [[OATrackMenuUIBuilder alloc] initWithSelectedTab:_selectedTab];
     _uiBuilder.trackMenuDelegate = self;
 }
@@ -193,14 +197,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     if ([self openedFromMap])
         [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-
-    if (!self.isShown)
-        [self changeTrackVisible];
 
     [self startLocationServices];
 

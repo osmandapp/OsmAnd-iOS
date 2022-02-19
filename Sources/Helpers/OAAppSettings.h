@@ -662,6 +662,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonDouble *saveTrackPrecision;
 @property (nonatomic) OACommonDouble *saveTrackMinSpeed;
 @property (nonatomic) OACommonBoolean *autoSplitRecording;
+@property (nonatomic) OACommonBoolean *saveHeadingToGpx;
 
 
 @property (assign, nonatomic) BOOL mapSettingTrackRecording;

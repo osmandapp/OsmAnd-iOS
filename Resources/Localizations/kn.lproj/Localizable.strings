@@ -228,7 +228,7 @@
 
 // Route info
 
-"int_seconds" = "seconds";
+"units_seconds" = "seconds";
 "shared_string_never" = "Never";
 "shared_setting_always_ask" = "Always ask";
 "general_settings_2" = "ಸಾಮಾನ್ಯ ಉಪಕರಣೆಗಳು";
@@ -433,11 +433,10 @@
 "si_min_km" = "Minutes per kilometer";
 "si_min_m" = "Minutes per mile";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "tones";
 
 "nothing_found" = "Nothing found: %@";
@@ -1241,8 +1240,6 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "meters";
 "shared_string_feet" = "feet";
-"foot" = "ft";
-"m" = "m";
 
 // Menu
 "menu" = "Menu";
@@ -1540,11 +1537,12 @@
 
 // Units
 "units_km" = "km";
+"units_m" = "m";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
 "units_nm" = "nmi";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 
 "units_hour" = "ಗಂಟೆ";
@@ -1670,9 +1668,6 @@
 "rendering_category_others" = "ಇತರೆ ನಕ್ಷೆ ಗುಣವಿಶೇಷಗಳು";
 
 // Rendering attributes
-
-"units_minutes_short" = "ನಿಮಿಷ";
-"units_seconds_short" = "sec";
 
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";

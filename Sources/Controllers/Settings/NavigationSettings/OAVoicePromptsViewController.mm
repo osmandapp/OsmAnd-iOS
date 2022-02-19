@@ -143,7 +143,7 @@
     NSString *value = nil;
     if ([_settings.metricSystem get] == KILOMETERS_AND_METERS)
     {
-        value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"units_kmh")];
+        value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"units_km_h")];
     }
     else
     {

@@ -427,7 +427,7 @@
         case MILES_AND_YARDS:
             return @"mi-y";
         case NAUTICAL_MILES:
-            return @"nm";
+            return @"units_nm";
 
         default:
             return @"";
@@ -517,17 +517,17 @@
     switch (sc)
     {
         case KILOMETERS_PER_HOUR:
-            return OALocalizedString(@"units_kmh");
+            return OALocalizedString(@"units_km_h");
         case MILES_PER_HOUR:
             return OALocalizedString(@"units_mph");
         case METERS_PER_SECOND:
-            return OALocalizedString(@"m_s");
+            return OALocalizedString(@"units_m_s");
         case MINUTES_PER_MILE:
-            return OALocalizedString(@"min_mile");
+            return OALocalizedString(@"units_min_mi");
         case MINUTES_PER_KILOMETER:
-            return OALocalizedString(@"min_km");
+            return OALocalizedString(@"units_min_km");
         case NAUTICALMILES_PER_HOUR:
-            return OALocalizedString(@"nm_h");
+            return OALocalizedString(@"units_nm_h");
 
         default:
             return nil;
@@ -4289,9 +4289,9 @@
     if (value == 0)
         res = OALocalizedString(@"rec_interval_minimum");
     else if (value > 90)
-        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"units_minutes_short")];
+        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"units_min")];
     else
-        res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"units_seconds_short")];
+        res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"units_sec")];
     return res;
 }
 

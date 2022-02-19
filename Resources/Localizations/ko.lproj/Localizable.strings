@@ -301,7 +301,7 @@
 "choose_how_display_distance" = "활성 마커까지의 거리를 표시하는 방법 선택";
 "appearance_on_map" = "지도에 나타난 모양";
 "arrows_direction_to_markers" = "화면 외부에 있는 경우 화살표는 활성 마커의 방향을 보여준다. 방향 선은 활성 마커에 선을 그린다.";
-"int_seconds" = "몇 초";
+"units_seconds" = "몇 초";
 "prefer_in_routing_descr" = "전용도로 선호";
 "nav_type_title" = "네비시작";
 "voice_announces" = "음성 프롬프트";
@@ -622,7 +622,7 @@
 "m_style_bicycle" = "사이클링";
 "shared_string_is_open" = "열기";
 "rendering_value_orange_name" = "오렌지";
-"m" = "m";
+"units_m" = "m";
 "education" = "교육";
 "rendering_attr_lessDetailed_name" = "덜 상세";
 "nothing_found_empty" = "아무것도 찾지 못했습니다";
@@ -694,7 +694,7 @@
 "use_points_as_intermediates" = "포인트 사이의 경로를 계산";
 "fast_route_mode" = "가장 빠른 경로";
 "map_widget_right" = "오른쪽 패널";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "lang_nl" = "네델란드어";
 "rendering_value_default_name" = "기본";
 "shared_string_distance" = "거리";
@@ -770,14 +770,12 @@
 "city_type_city" = "도시";
 "sort_by_name" = "이름으로 정렬";
 "lang_eo" = "에스페란토어";
-"units_nm" = "nm";
 "app_mode_boat" = "배";
 "lang_pt_br" = "포르투갈어 (브라질)";
 "product_title_russia" = "유럽/아시아 - 러시아";
 "lang_gl" = "갈리시아어";
 "rendering_value_blue_name" = "파랑";
 "map_widget_time" = "가야할 시간";
-"foot" = "피트";
 "map_widget_next_turn_small" = "다음 턴(작은 아이콘)";
 "lang_sw" = "스와힐리어";
 "res_updates" = "업데이트";
@@ -825,7 +823,7 @@
 "rendering_value_red_name" = "빨강";
 "nearby_search" = "가까운 주변 검색";
 "map_widget_plain_time" = "현재 시간";
-"nm" = "nm";
+"units_nm" = "nm";
 "route_points" = "루트 포인트";
 "m_style_pulic_transport" = "대중 교통";
 "translucent_purple" = "반투명 보라색";
@@ -839,7 +837,6 @@
 "lang_vi" = "베트남어";
 "nothanks" = "필요없음";
 "rendering_attr_trainLightrailRoutes_name" = "기차 노선";
-"units_minutes_short" = "분";
 "open_osm_note" = "OSM노트 열기";
 "lang_bg" = "불가리아어";
 "poi_filter_by_name" = "이름으로 검색";
@@ -869,7 +866,7 @@
 "gpx_option_from_start_point" = "전체 경로를 따라 이동";
 "col_orange" = "오렌지";
 "shared_string_or" = "또는";
-"min_km" = "분/km";
+"units_min_km" = "분/km";
 "map_settings_day" = "주간";
 "rendering_attr_noPolygons_description" = "투명 지도에서 모든 면적 기능 만들기";
 "menu_my_places" = "저장소";
@@ -890,7 +887,7 @@
 "closing_changeset" = "변경사항 닫는중…";
 "translucent_orange" = "반투명 오렌지";
 "lang_lv" = "라트비아어";
-"m_s" = "m/s";
+"units_m_s" = "m/s";
 "rendering_value_translucent_lightblue_name" = "반투명 밝은 파란색";
 "purchase_get" = "가져오기";
 "lang_zh_tw" = "중국어 번체";
@@ -937,7 +934,6 @@
 "search_preogress" = "검색 중…";
 "rendering_attr_noAdminboundaries_description" = "지역 경계 표시를 억제 (관리자 레벨 5-9 )";
 "rendering_attr_noAdminboundaries_name" = "경계 숨기기";
-"units_m" = "m";
 "rendering_category_transport" = "교통";
 "region_russia" = "유럽/아시아 - 러시아";
 "create_poi_short" = "POI생성";
@@ -949,7 +945,7 @@
 "rendering_attr_roadStyle_name" = "도로 스타일";
 "arrival_distance_factor_normally" = "일반";
 "select_all" = "모두 선택";
-"min_mile" = "분/m";
+"units_min_mi" = "분/m";
 "routing_attr_height_name" = "높이 제한";
 "lang_hu" = "헝가리어";
 "lang_ml" = "말라얄람어";

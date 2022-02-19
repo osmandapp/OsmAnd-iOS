@@ -83,8 +83,6 @@
 "product_title_africa" = "Afrîka";
 //inapps
 "product_title_nautical" = "Nexşa behrê";
-"units_seconds_short" = "s";
-"units_minutes_short" = "dq";
 "rendering_category_details" = "Berfireh";
 // Rendering categories
 "rendering_category_hide" = "Veşêre";
@@ -102,7 +100,7 @@
 "units_mph" = "mph";
 "units_hour" = "st";
 "units_min" = "dq";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_ft" = "ft";
 "units_yd" = "yd";
 "units_m" = "m";

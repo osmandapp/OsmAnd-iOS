@@ -185,7 +185,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mi/h";
 // Map
 "map_inst_det_map_q" = "Installa la mappa panoramica dettagliata per avere maggiori informazioni sulle tue posizioni.";
@@ -232,8 +232,6 @@
 "shared_string_add" = "Aggiungi";
 "shared_string_and" = "e";
 "shared_string_edit" = "Modifica";
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
 "cannot_access_calendar" = "Impossibile accedere al Calendario";
 "reminder_not_set_text" = "Il promemoria non è stato impostato poiché non ti è consentito l'accesso al Calendario";
 //inapps
@@ -484,9 +482,9 @@
 "si_min_km" = "Minuti al chilometro";
 "si_min_m" = "Minuti al miglio";
 "si_nm_h" = "Miglia nautiche all'ora (nodi)";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "Nessun risultato: %@";
 "select_street" = "Seleziona la strada";
 "select_city" = "Seleziona la città";
@@ -552,7 +550,7 @@
 "shared_string_address" = "Indirizzi";
 "map_widget_battery" = "Livello della batteria";
 "map_orientation_change_in_accordance_with_speed" = "Soglia di orientamento della mappa";
-"nm" = "nmi";
+"units_nm" = "nmi";
 "show_traffic_warnings" = "Avvisi di traffico";
 "snap_to_road" = "Blocca sulle strade";
 "coords_format_descr" = "Formato delle coordinate geografiche.";
@@ -586,7 +584,7 @@
 "sort_by_name" = "Ordina per nome";
 "use_displayed_track_for_navigation" = "Vuoi usare il percorso visualizzato per la navigazione?";
 "route_descr_select_destination" = "Scegli la destinazione";
-"nm_h" = "kn";
+"units_nm_h" = "kn";
 "switch_start_finish" = "Inverti punti di partenza e destinazione";
 "clear_all_intermediates" = "Cancella tutti i punti intermedi";
 "shared_string_options" = "Opzioni";
@@ -635,7 +633,7 @@
 "speak_speed_limit" = "Limiti di velocità";
 "speak_cameras" = "Autovelox";
 "speak_traffic_warnings" = "Avvisi di traffico";
-"int_seconds" = "secondi";
+"units_seconds" = "secondi";
 "auto_zoom_none" = "No zoom automatico";
 "keep_informing_never" = "Solo manualmente (tap sulla freccia)";
 "arrival_distance_factor_normally" = "Normale";
@@ -1820,7 +1818,6 @@
 "split_before" = "Spezza";
 "favorite_friends_category" = "Amici";
 "fav_points_not_exist" = "Non esiste alcun preferito";
-"units_nm" = "nmi";
 "res_standard" = "Mappe standard";
 "copied_to_clipboard" = "Copiato negli appunti";
 "street_level_imagery" = "Immagini stradali";
@@ -1882,7 +1879,6 @@
 "route_between_points_warning_desc" = "Poi approssima la traccia alle strade più vicine permesse da uno dei tuoi profili di navigazione per utilizzare questa opzione.";
 "last_used" = "Ultimo utilizzato";
 "explore_wikipedia_offline" = "Esplora Wikipedia offline.";
-"foot" = "ft";
 "suggested_maps_descr" = "Queste mappe sono richieste per il plugin.";
 "default" = "Predefinito";
 "app_restart_required" = "Il riavvio dell\'appè richiesto per applicare alcune impostazioni.";
@@ -1893,7 +1889,6 @@
 "navigate_point_easting" = "In direzione Est";
 "threshold_distance" = "Soglia distanza";
 "shared_string_turn_off" = "Spegni";
-"m" = "m";
 "shared_string_feet" = "piedi";
 "suggested_maps" = "Mappe suggerite";
 "lang_pnb" = "Punjabi";

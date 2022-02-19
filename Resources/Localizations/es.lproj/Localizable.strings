@@ -178,7 +178,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 // Map
 "map_inst_det_map_q" = "Instale el mapa detallado general para más información sobre sus ubicaciones.";
@@ -238,8 +238,6 @@
 "track_continue_rec_q" = "¿Quieres seguir grabando?";
 "rec_interval" = "Intervalo de registro";
 "rec_interval_minimum" = "Mínimo";
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "track_start_rec" = "Iniciar la grabación de la traza";
 "track_rec_addon_q" = "Activa el complemento de «Grabación de traza» para registrar y guardar sus trazas";
 "track_interval_remember" = "Recordar mi elección";
@@ -556,11 +554,11 @@
 "si_min_km" = "Minutos por kilómetro";
 "si_min_m" = "Minutos por milla";
 "si_nm_h" = "Millas náuticas por hora (nudos)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "starting_point_too_far" = "Punto de inicio demasiado lejos del camino más cercano.";
 "ending_point_too_far" = "Punto final demasiado lejos del camino más cercano.";
 "intermediate_point_too_far" = "Destino intermedio, %d demasiado lejos del camino más cercano.";
@@ -625,7 +623,7 @@
 "speak_favorites" = "Favoritos cercanos";
 "speak_poi" = "PDI cercanos";
 "speak_pedestrian" = "Pasos de peatones";
-"int_seconds" = "segundos";
+"units_seconds" = "segundos";
 "shared_string_never" = "Nunca";
 "general_settings_2" = "Ajustes generales";
 "general_settings_descr" = "Tema de aplicación, unidades y región";
@@ -1957,7 +1955,6 @@
 "unsupported_action_descr" = "Esta rápida acción no está admitida por ahora. Esto se puede solucionarse en nuevas versiones de la aplicación.";
 "unsupported_action" = "Acción no admitida";
 "units_of_speed" = "Unidades de velocidad";
-"units_nm" = "nmi";
 "ui_customization" = "Personalización de interfaz";
 "trip_name" = "Nombre de la traza";
 "trip_hint" = "Ingresa el nombre de la traza";
@@ -2053,7 +2050,6 @@
 "navigate_point_easting" = "Al este";
 "navigate_point_northing" = "Al norte";
 "shared_string_wifi_only" = "Sólo con Wi-Fi";
-"foot" = "ft";
 "download_map_dialog" = "Diálogo de descarga del mapa";
 "context_menu_item_edit_waypoint" = "Editar punto GPX";
 "shared_string_all_languages" = "Todos los idiomas";
@@ -2079,7 +2075,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Colorea las rutas en función del tipo de red de nodos (internacional, regional, local).";
 "threshold_distance" = "Distancia umbral";
 "product_title_mapillary" = "Mapillary";
-"m" = "m";
 "added_profiles" = "Perfiles añadidos";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Color por afiliación de red.";
 "dialogs_and_notifications" = "Diálogos y notificaciones";

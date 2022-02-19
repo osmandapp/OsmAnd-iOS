@@ -257,7 +257,7 @@
 "units_mi" = "英里";
 "units_yd" = "码";
 "units_ft" = "脚";
-"units_kmh" = "千米/时";
+"units_km_h" = "千米/时";
 "units_mph" = "英里";
 "units_hour" = "时";
 "units_min" = "分";
@@ -310,8 +310,6 @@
 "rendering_category_transport" = "公共交通";
 "rendering_category_others" = "其他地图属性";
 // Rendering attributes
-"units_minutes_short" = "分";
-"units_seconds_short" = "秒";
 "cannot_access_calendar" = "无法访问日历";
 "reminder_not_set_text" = "";
 //inapps
@@ -535,7 +533,7 @@
 "app_mode_motorcycle" = "摩托车";
 "app_mode_boat" = "小船";
 "app_mode_aircraft" = "飞机";
-"int_seconds" = "秒";
+"units_seconds" = "秒";
 "shared_string_never" = "总不";
 "general_settings_2" = "常规设置";
 "shared_string_road" = "道路";
@@ -561,7 +559,7 @@
 "make_as_start_point" = "标记该点为起始点";
 "poi" = "兴趣点";
 "will_open_on" = "开始营业于";
-"m_s" = "米/秒";
+"units_m_s" = "米/秒";
 // Shared Strings
 "shared_string_apply" = "应用";
 "transport_routes" = "线路";
@@ -910,7 +908,7 @@
 "shared_string_filter" = "過濾器";
 "osm_editing_lost_changes_descr" = "任何未保存的更改将会丢失。要继续吗？";
 "osm_alert_button_ok" = "创建注记";
-"min_km" = "分/千米";
+"units_min_km" = "分/千米";
 "help_install_and_troubleshoot" = "安装和疑难解答";
 "shared_string_io_error" = "I/O错误";
 "help_other_header" = "其它";
@@ -952,7 +950,7 @@
 "mapil_pano_only" = "仅显示 360° 图像";
 "fav_add_group" = "添加组";
 "quick_actions_show_dialog" = "显示一个临时的对话框";
-"nm" = "浬";
+"units_nm" = "浬";
 "quick_action_start_stop_nav_descr" = "点击该按钮以开始或结束导航。";
 "create_items" = "创建项目";
 "tile_cache" = "区片缓存";
@@ -964,7 +962,7 @@
 "osm_edits_basic" = "基本";
 "quick_action_no_underlay" = "无衬底层";
 "osm_edit_without_name" = "没有名称";
-"min_mile" = "分钟每米";
+"units_min_mi" = "分钟每米";
 "res_url" = "URL";
 "res_elliptic_mercator" = "椭圆墨卡托";
 "hide_notes" = "隐藏 OSM 笔记";
@@ -1475,7 +1473,6 @@
 "help_purchases" = "OsmAnd购买";
 "shared_string_enable" = "启用";
 "shared_string_import" = "导入";
-"units_nm" = "浬";
 "shared_string_disable" = "禁用";
 "plan_route_last_modified" = "上次修改";
 "sport" = "运动";
@@ -1526,7 +1523,6 @@
 "shared_string_all_languages" = "所有语言";
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "gpxup_private" = "私人";
-"m" = "米";
 "wiki_menu_download_descr" = "需要其他地图才能在地图上查看维基百科兴趣点。";
 "gpxup_identifiable" = "可辨认";
 "restart" = "重新启动";
@@ -1552,7 +1548,6 @@
 "configure_screen_descr" = "选择页面选项";
 "route_between_points_warning_desc" = "接下来，用你的一个导航配置文件将你的轨迹贴合到最近的允许道路上，以使用这个选项。";
 "some_articles_may_not_available_in_lang" = "某些Wikipedia条目可能无法以您的语言提供。";
-"foot" = "脚";
 "threshold_distance" = "起始距离";
 "last_used" = "上次使用";
 "navigate_point_northing" = "北距";

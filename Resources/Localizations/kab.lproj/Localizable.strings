@@ -19,12 +19,12 @@
 "shared_string_show_all" = "Sken akk";
 "red" = "Azeggaɣ";
 "map_settings_transp" = "Afrawan";
-"min_km" = "tasint";
+"units_min_km" = "tasint";
 "col_orange" = "Ačinawi";
 "route_head" = "Edfar";
 "modify_poi_short" = "Beddel";
 "shared_string_dismiss" = "Aggi";
-"units_kmh" = "h";
+"units_km_h" = "h";
 "rendering_value_black_name" = "Aberkan";
 "looking_up_address" = "Anadiɣef tansa";
 "shared_string_filter" = "Imzizdig";
@@ -55,7 +55,6 @@
 "col_red" = "Azeggaɣ";
 "days_2_4" = "Ussan";
 "shared_string_on" = "Yermed";
-"units_minutes_short" = "tas";
 "map_settings_map" = "Takarḍa";
 "sett_arr_loc" = "Adig";
 "rendering_value_purple_name" = "Amidadi";
@@ -90,7 +89,7 @@
 "rendering_value_high_name" = "Haut";
 "gpx_deactivated" = "Tamahilt-agi tensa akka tura.";
 "rendering_value_blue_name" = "Azegzaw";
-"m_s" = "m/s";
+"units_m_s" = "m/s";
 "osmand_live_weekly" = "Yal imalas";
 "rendering_value_default_name" = "Lexṣas";
 "rendering_value_red_name" = "Azeggaɣ";
@@ -122,7 +121,7 @@
 "shared_string_go" = "Ddu";
 "coords_search" = "Asemmezdi n unadi";
 "rendering_category_details" = "Talqayt";
-"min_mile" = "tasint";
+"units_min_mi" = "tasint";
 "shared_string_add" = "Rnu";
 "shared_string_reset" = "Ales awennez";
 "region_south_america" = "Marikan n Unẓul";
@@ -206,7 +205,7 @@
 "rendering_value_browse_map_name" = "Snirem";
 "map_markers" = "Ticraḍ n tkarḍa";
 "fav_name" = "Isem";
-"int_seconds" = "Tasinin";
+"units_seconds" = "Tasinin";
 "res_world_region" = "azul-i-medden-meṛṛa";
 "delete_filter" = "Kkes imzizdig";
 "unit_of_length" = "Tayunin n teɣzef";
@@ -449,7 +448,7 @@
 "weeks_short" = "mls";
 "week_short" = "mls";
 "day_short" = "S";
-"nm_h" = "nmi/h";
+"units_nm_h" = "nmi/h";
 "shared_string_password" = "Awal-ik uffir n OSM";
 "by_name" = "S yisem";
 "si_mi_meters" = "Amayel / Amitr";
@@ -459,7 +458,7 @@
 "si_nm_h" = "Amayel n waman deg usrag (tikerras)";
 "si_min_m" = "Tisdatin deg umayl";
 "si_min_km" = "Tisdatin deg ukilumitr";
-"nm" = "nmi";
+"units_nm" = "nmi";
 "routing_attr_length_name" = "Talast n teɣzef";
 "driving_region" = "Tamnaḍt n tenhaṛt";
 "unit_of_length_descr" = "Snifel tayunin n teɣzef.";
@@ -597,7 +596,6 @@
 "download_tab_local" = "Adigan";
 "coordinates" = "Tisidag";
 "search_preogress" = "Anadi…";
-"units_nm" = "nmi";
 "custom_osmand_plugin_name" = "Azegrir OsmAnd udmawan";
 "visible" = "Uman";
 "address_search" = "Anadiɣef tansa";
@@ -625,7 +623,6 @@
 "navigate_point_olc" = "Ldi adeg…";
 "gpxup_public" = "Azayez";
 "welmode_download_maps" = "Sider";
-"foot" = "ft";
 "shared_string_time_span" = "Akud";
 "gpx_split_interval_none_descr" = "Fren iɣewwaṛen n unegzum i tebɣiḍ: s wakud neɣ s umeccaq.";
 "education" = "Asegmi";

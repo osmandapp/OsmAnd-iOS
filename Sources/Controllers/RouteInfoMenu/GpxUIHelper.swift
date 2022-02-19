@@ -18,11 +18,11 @@ import Charts.Swift
     public func getName() -> String {
         switch self {
             case .ALTITUDE:
-                return NSLocalizedString("map_widget_altitude", comment: "");
+                return OAUtilities.getLocalizedString("map_widget_altitude");
             case .SPEED:
-                return NSLocalizedString("gpx_speed", comment: "");
+                return OAUtilities.getLocalizedString("gpx_speed");
             case .SLOPE:
-                return NSLocalizedString("gpx_slope", comment: "");
+                return OAUtilities.getLocalizedString("gpx_slope");
         }
     }
     
@@ -46,11 +46,11 @@ import Charts.Swift
     public func getName() -> String {
         switch self {
         case .DISTANCE:
-            return NSLocalizedString("shared_string_distance", comment: "");
+            return OAUtilities.getLocalizedString("shared_string_distance");
         case .TIME:
-            return NSLocalizedString("shared_string_time", comment: "");
+            return OAUtilities.getLocalizedString("shared_string_time");
         case .TIMEOFDAY:
-            return NSLocalizedString("shared_string_time_of_day", comment: "");
+            return OAUtilities.getLocalizedString("shared_string_time_of_day");
         }
     }
 
@@ -588,8 +588,8 @@ import Charts.Swift
         } else {
             divX = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
         }
-        let mainUnitY: String = useFeet ? NSLocalizedString("units_ft", comment: "") : NSLocalizedString("units_m", comment: "")
-        
+        let mainUnitY: String = OAUtilities.getLocalizedString(useFeet ? "units_ft" : "units_m")
+
         var yAxis: YAxis
         if (useRightAxis) {
             yAxis = chartView.rightAxis;
@@ -806,13 +806,13 @@ import Charts.Swift
         var mainUnitStr: String
         var mainUnitInMeters: Double
         if mc == EOAMetricsConstant.KILOMETERS_AND_METERS {
-            mainUnitStr = NSLocalizedString("units_km", comment: "")
+            mainUnitStr = OAUtilities.getLocalizedString("units_km")
             mainUnitInMeters = GpxUIHelper.METERS_IN_KILOMETER
         } else if mc == EOAMetricsConstant.NAUTICAL_MILES {
-            mainUnitStr = NSLocalizedString("nm", comment: "")
+            mainUnitStr = OAUtilities.getLocalizedString("units_nm")
             mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_NAUTICALMILE
         } else {
-            mainUnitStr = NSLocalizedString("units_mi", comment: "")
+            mainUnitStr = OAUtilities.getLocalizedString("units_mi")
             mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_MILE
         }
         if (meters > 9.99 * mainUnitInMeters) {
@@ -837,16 +837,16 @@ import Charts.Swift
             granularity = 1;
             if (mc == EOAMetricsConstant.KILOMETERS_AND_METERS || mc == EOAMetricsConstant.MILES_AND_METERS) {
                 divX = 1;
-                mainUnitStr = NSLocalizedString("units_m", comment: "")
+                mainUnitStr = OAUtilities.getLocalizedString("units_m")
             } else if (mc == EOAMetricsConstant.MILES_AND_FEET) {
                 divX = Double(1.0 / GpxUIHelper.FEET_IN_ONE_METER)
-                mainUnitStr = NSLocalizedString("units_ft", comment: "")
+                mainUnitStr = OAUtilities.getLocalizedString("units_ft")
             } else if (mc == EOAMetricsConstant.MILES_AND_YARDS) {
                 divX = Double(1.0 / GpxUIHelper.YARDS_IN_ONE_METER)
-                mainUnitStr = NSLocalizedString("units_yd", comment: "")
+                mainUnitStr = OAUtilities.getLocalizedString("units_yd")
             } else {
                 divX = 1.0;
-                mainUnitStr = NSLocalizedString("units_m", comment: "")
+                mainUnitStr = OAUtilities.getLocalizedString("units_m")
             }
         }
         

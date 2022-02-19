@@ -160,7 +160,7 @@
 "speak_tunnels" = "Tunnelid";
 "show_tunnels" = "Tunnelid";
 // Route info
-"int_seconds" = "sekundit";
+"units_seconds" = "sekundit";
 "shared_string_never" = "Mitte kunagi";
 "shared_setting_always_ask" = "Küsi alati";
 "general_settings_2" = "Üldseaded";
@@ -321,11 +321,11 @@
 "si_min_km" = "Minutit kilomeetri kohta";
 "si_min_m" = "Minutit miili kohta";
 "si_nm_h" = "Meremiili tunnis (sõlme)";
-"nm" = "M";
-"nm_h" = "sõlme";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "M";
+"units_nm_h" = "sõlme";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "Ei leidnud midagi : %@";
 "nothing_found_descr" = "Muuda otsingupäringut või suurenda otsinguraadiust";
 "select_street" = "Vali tänav";
@@ -887,7 +887,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "jalga";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "t";
 "units_min" = "min";
@@ -988,8 +988,6 @@
 "rendering_category_transport" = "Transport";
 "rendering_category_others" = "Teised kaardi atribuudid";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "sek";
 "cannot_access_calendar" = "Kalendrile ei pääse juurde";
 "reminder_not_set_text" = "Meeldetuletust ei seatud, sest kalendrile juurdepääs ei ole lubatud";
 //inapps
@@ -1946,7 +1944,6 @@
 "shared_z_a" = "Ü - A";
 "shared_a_z" = "A - Ü";
 "search_preogress" = "Otsimine…";
-"units_nm" = "M";
 "unsupported_action_descr" = "See kiirtegevus ei ole hetkel toetatud. Selle saab parandada rakenduse uutes versioonides.";
 "unsupported_action_title" = "Tegevuse tugi puudub (%@)";
 "unsupported_action" = "Tegevuse tugi puudub";
@@ -2118,7 +2115,6 @@
 "product_desc_mapillary" = "Tänavatasemel fotod veebis kõigile";
 "product_title_mapillary" = "Mapillary";
 "population_num" = "Rahvaarv";
-"foot" = "jalga";
 "shared_string_feet" = "jalad";
 "srtm_download_single_help_message" = "Palun vali vajalik formaat. Formaadi muutmiseks tuleb fail uuesti alla laadida.";
 "srtm_unit_format" = "Kontuurjoonte ühiku formaat";
@@ -2151,7 +2147,6 @@
 "navigate_point_format_unknown" = "Tundmatu vorming";
 "navigate_point_olc_short" = "OLC";
 "invalid_format" = "Vigane vorming";
-"m" = "m";
 "read_full_description" = "Loe täielikku kirjeldust";
 "gpx_dir_arrows" = "Suunanooled";
 "gpx_split_interval" = "Jagamise vahemik";

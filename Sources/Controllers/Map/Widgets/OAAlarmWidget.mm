@@ -8,19 +8,16 @@
 
 #import "OAAlarmWidget.h"
 #import "OsmAndApp.h"
-#import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OAMapViewTrackingUtilities.h"
-#import "OALocationServices.h"
-#import "OAUtilities.h"
-#import "OATextInfoWidget.h"
 #import "OAWaypointHelper.h"
 #import "OAAlarmInfo.h"
 #import "OACurrentPositionHelper.h"
 #import "OAOsmAndFormatter.h"
 
-#include <CommonCollections.h>
-#include <binaryRead.h>
+@implementation OAAlarmWidgetInfo
+
+@end
 
 @interface OAAlarmWidget ()
 
@@ -41,8 +38,9 @@
     OACurrentPositionHelper *_currentPositionHelper;
     
     NSString *_imgId;
-    NSString *_textString;
-    NSString *_bottomTextString;
+    NSString *_cachedText;
+    NSString *_cachedBottomText;
+    OADrivingRegion *_cachedRegion;
 }
 
 - (instancetype) init
@@ -100,140 +98,80 @@
 
 - (BOOL) updateInfo
 {
+//    BOOL showRoutingAlarms = [_settings.showRoutingAlarms get];
     BOOL trafficWarnings = [_settings.showTrafficWarnings get];
     BOOL cams = [_settings.showCameras get];
-    BOOL peds = [_settings.showPedestrian get];
-    BOOL tunnels = [_settings.showTunnels get];
-    BOOL visible = false;
-    if (([_rh isFollowingMode] || [_trackingUtilities isMapLinkedToLocation]) && (trafficWarnings || cams))
+    BOOL browseMap = [_settings.applicationMode get] == OAApplicationMode.DEFAULT;
+    BOOL visible = NO;
+    if (([_rh isFollowingMode] || [_trackingUtilities isMapLinkedToLocation] && !browseMap)
+            /*&& showRoutingAlarms*/ && (trafficWarnings || cams))
     {
         OAAlarmInfo *alarm;
-        if([_rh isFollowingMode] && ![OARoutingHelper isDeviatedFromRoute] && ![_rh getCurrentGPXRoute])
+        if ([_rh isFollowingMode] && ![OARoutingHelper isDeviatedFromRoute]
+                && (![_rh getCurrentGPXRoute]) || [_rh isCurrentGPXRouteV2])
         {
             alarm = [_wh getMostImportantAlarm:[_settings.speedSystem get] showCameras:cams];
         }
         else
         {
-            CLLocation *loc = _app.locationServices.lastKnownLocation;
-            const auto ro = [_currentPositionHelper getLastKnownRouteSegment:loc];
+            const auto ro = [_currentPositionHelper getLastKnownRouteSegment:_locationProvider.lastKnownLocation];
+            CLLocation *loc = _locationProvider.lastKnownLocation;
             if (loc && ro)
             {
-                alarm = [_wh calculateMostImportantAlarm:ro loc:loc mc:[_settings.metricSystem get] sc:[_settings.speedSystem get] showCameras:cams];
+                alarm = [_wh calculateMostImportantAlarm:ro
+                                                     loc:loc
+                                                      mc:[_settings.metricSystem get]
+                                                      sc:[_settings.speedSystem get]
+                                             showCameras:cams];
             }
         }
+        OAAlarmWidgetInfo *info;
         if (alarm)
         {
-            BOOL americanSigns = [OADrivingRegion isAmericanSigns:[_settings.drivingRegion get]];
-
-            NSString  *locImgId = @"warnings_limit";
-            NSString *text = @"";
-            NSString *bottomText = @"";
-            if (alarm.type == AIT_SPEED_LIMIT)
+            info = [self createWidgetInfo:alarm];
+            if (info)
             {
-                if (americanSigns)
+                visible = YES;
+                if (![info.locImgId isEqualToString:_imgId])
                 {
-                    locImgId = @"warnings_speed_limit_us";
-                    //else case is done by drawing red ring
+                    _imgId = info.locImgId;
+                    [_imageView setImage:[UIImage imageNamed:info.locImgId]];
                 }
-                text = @(alarm.intValue).stringValue;
-            }
-            else if (alarm.type == AIT_SPEED_CAMERA)
-            {
-                locImgId = @"warnings_speed_camera";
-            }
-            else if (alarm.type == AIT_BORDER_CONTROL)
-            {
-                locImgId = @"warnings_border_control";
-            }
-            else if (alarm.type == AIT_HAZARD)
-            {
-                if (americanSigns)
-                    locImgId = @"warnings_hazard_us";
-                else
-                    locImgId = @"warnings_hazard";
-            }
-            else if (alarm.type == AIT_TOLL_BOOTH)
-            {
-                //image done by drawing red ring
-                text = @"$";
-            }
-            else if (alarm.type == AIT_TRAFFIC_CALMING)
-            {
-                if (americanSigns)
-                    locImgId = @"warnings_traffic_calming_us";
-                else
-                    locImgId = @"warnings_traffic_calming";
-            }
-            else if (alarm.type == AIT_STOP)
-            {
-                locImgId = @"warnings_stop";
-            }
-            else if(alarm.type == AIT_RAILWAY)
-            {
-                if (americanSigns)
-                    locImgId = @"warnings_railways_us";
-                else
-                    locImgId = @"warnings_railways";
-            }
-            else if (alarm.type == AIT_PEDESTRIAN)
-            {
-                if (americanSigns)
-                    locImgId = @"warnings_pedestrian_us";
-                else
-                    locImgId = @"warnings_pedestrian";
-            }
-            else if (alarm.type == AIT_TUNNEL)
-            {
-                if (americanSigns)
-                    locImgId = @"warnings_tunnel_us";
-                else
-                    locImgId = @"warnings_tunnel";
+                if (![self stringEquals:info.text b:_cachedText] || _cachedRegion != info.region)
+                {
+                    _cachedText = info.text;
+                    _cachedRegion = info.region;
+                    [_textView setText:_cachedText];
 
-                bottomText = [OAOsmAndFormatter getFormattedAlarmInfoDistance:alarm.floatValue];
-            }
-            else
-            {
-                text = nil;
-                bottomText = nil;
-            }
-            visible = (text &&  text.length > 0) || (locImgId.length > 0);
-            if (visible)
-            {
-                if (alarm.type == AIT_SPEED_CAMERA)
-                    visible = cams;
-                else if (alarm.type == AIT_PEDESTRIAN)
-                    visible = peds;
-                else if (alarm.type == AIT_TUNNEL)
-                    visible = tunnels;
-                else
-                    visible = trafficWarnings;
-            }
-            if (visible)
-            {
-                if (![locImgId isEqualToString:_imgId])
-                {
-                    _imgId = locImgId;
-                    [_imageView setImage:[UIImage imageNamed:locImgId]];
-                }
-                if (![self stringEquals:text b:_textString])
-                {
-                    _textString = text;
-                    _textView.text = _textString;
                     CGRect f = _textView.frame;
-                    f.origin.y = alarm.type == AIT_SPEED_LIMIT && americanSigns ? 10 : 0;
+                    if (alarm.type == AIT_SPEED_LIMIT && info.americanType && !info.isCanadianRegion)
+                        f.origin.y = alarm.type == 10;
+                    else
+                        f.origin.y = alarm.type == 0;
                     _textView.frame = f;
                 }
-                if (![bottomText isEqualToString:_bottomTextString])
+                if (![self stringEquals:info.bottomText b:_cachedBottomText] || _cachedRegion != info.region)
                 {
-                    _bottomTextString = bottomText;
-                    _bottomTextView.text = _bottomTextString;
-                    _bottomTextView.textColor = americanSigns ? UIColor.blackColor : UIColor.whiteColor;
+                    _cachedBottomText = info.bottomText;
+                    _cachedRegion = info.region;
+                    _bottomTextView.text = _cachedBottomText;
+                    /*if (alarm.type == AIT_SPEED_LIMIT && info.isCanadianRegion)
+                    {
+                        int bottomPadding = res.getDimensionPixelSize(R.dimen.map_button_margin);
+                        widgetBottomText.setPadding(0, 0, 0, bottomPadding);
+                        widgetBottomText.setTextSize(COMPLEX_UNIT_PX, res.getDimensionPixelSize(R.dimen.map_alarm_bottom_si_text_size));
+                    } else {
+                        widgetBottomText.setPadding(0, 0, 0, 0);
+                        widgetBottomText.setTextSize(COMPLEX_UNIT_PX, res.getDimensionPixelSize(R.dimen.map_alarm_bottom_text_size));
+                    }*/
+                    [_bottomTextView setTextColor:info.americanType ? UIColor.blackColor : UIColor.whiteColor];
                 }
             }
         }
     }
+
     [self updateVisibility:visible];
-    return true;
+    return YES;
 }
 
 - (BOOL) stringEquals:(NSString *)a b:(NSString *)b
@@ -255,6 +193,120 @@
         return YES;
     }
     return NO;
+}
+
+- (OAAlarmWidgetInfo *)createWidgetInfo:(OAAlarmInfo *)alarm
+{
+    EOADrivingRegion region = [_settings.drivingRegion get];
+    BOOL trafficWarnings = [_settings.showTrafficWarnings get];
+    BOOL cams = [_settings.showCameras get];
+    BOOL peds = [_settings.showPedestrian get];
+    BOOL tunnels = [_settings.showTunnels get];
+    BOOL americanType = [OADrivingRegion isAmericanSigns:region];
+
+    NSString *locImgId = @"warnings_limit";
+    NSString *text = @"";
+    NSString *bottomText = @"";
+    BOOL isCanadianRegion = region == DR_CANADA;
+    if (alarm.type == AIT_SPEED_LIMIT)
+    {
+        if (isCanadianRegion)
+        {
+            locImgId = @"warnings_speed_limit_us";
+            bottomText = [OASpeedConstant toShortString:[_settings.speedSystem get]];
+        }
+        else if (americanType)
+        {
+            locImgId = @"warnings_speed_limit_us";
+            //else case is done by drawing red ring
+        }
+        text = @(alarm.intValue).stringValue;
+    }
+    else if (alarm.type == AIT_SPEED_CAMERA)
+    {
+        locImgId = @"warnings_speed_camera";
+    }
+    else if (alarm.type == AIT_BORDER_CONTROL)
+    {
+        locImgId = @"warnings_border_control";
+    }
+    else if (alarm.type == AIT_HAZARD)
+    {
+        if (americanType)
+            locImgId = @"warnings_hazard_us";
+        else
+            locImgId = @"warnings_hazard";
+    }
+    else if (alarm.type == AIT_TOLL_BOOTH)
+    {
+        //image done by drawing red ring
+        text = @"$";
+    }
+    else if (alarm.type == AIT_TRAFFIC_CALMING)
+    {
+        if (americanType)
+            locImgId = @"warnings_traffic_calming_us";
+        else
+            locImgId = @"warnings_traffic_calming";
+    }
+    else if (alarm.type == AIT_STOP)
+    {
+        locImgId = @"warnings_stop";
+    }
+    else if (alarm.type == AIT_RAILWAY)
+    {
+        /*if (isCanadianRegion)
+            locImgId = @"warnings_railways_ca";
+        else*/ if (americanType)
+            locImgId = @"warnings_railways_us";
+        else
+            locImgId = @"warnings_railways";
+    }
+    else if (alarm.type == AIT_PEDESTRIAN)
+    {
+        if (americanType)
+            locImgId = @"warnings_pedestrian_us";
+        else
+            locImgId = @"warnings_pedestrian";
+    }
+    else if (alarm.type == AIT_TUNNEL)
+    {
+        if (americanType)
+            locImgId = @"warnings_tunnel_us";
+        else
+            locImgId = @"warnings_tunnel";
+        bottomText = [OAOsmAndFormatter getFormattedAlarmInfoDistance:alarm.floatValue];
+    }
+    else
+    {
+        text = nil;
+        bottomText = nil;
+    }
+    BOOL visible;
+    if (alarm.type == AIT_SPEED_CAMERA)
+        visible = cams;
+    else if (alarm.type == AIT_PEDESTRIAN)
+        visible = peds;
+    else if (alarm.type == AIT_TUNNEL)
+        visible = tunnels;
+    else
+        visible = trafficWarnings;
+    if (visible)
+    {
+        OAAlarmWidgetInfo *info = [OAAlarmWidgetInfo new];
+        info.alarm = alarm;
+        info.americanType = americanType;
+        info.isCanadianRegion = isCanadianRegion;
+        info.locImgId = locImgId;
+        info.text = text;
+        info.bottomText = bottomText;
+        info.region = [OADrivingRegion withRegion:region];
+        return info;
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 @end

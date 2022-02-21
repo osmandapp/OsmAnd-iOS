@@ -1496,4 +1496,9 @@ static BOOL _isDeviatedFromRoute = false;
     return POSITION_TOLERANCE;
 }
 
+- (BOOL) isCurrentGPXRouteV2
+{
+    return _currentGPXRoute != nil && [_currentGPXRoute.file.creator isEqualToString:OSMAND_ROUTER_V2];
+}
+
 @end

@@ -122,4 +122,6 @@ struct RouteSegmentResult;
 + (double) getDefaultAllowedDeviation:(OAApplicationMode *)mode posTolerance:(double)posTolerance;
 + (double) getPosTolerance:(double)accuracy;
 
+- (BOOL) isCurrentGPXRouteV2;
+
 @end

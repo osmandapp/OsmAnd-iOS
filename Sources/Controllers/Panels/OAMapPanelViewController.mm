@@ -3107,7 +3107,26 @@ typedef enum
     [self displayAreaOnMap:topLeft
                bottomRight:bottomRight
                       zoom:zoom
-                   maxZoom:0.
+                screenBBox:screenBBox
+               bottomInset:bottomInset
+                 leftInset:leftInset
+                  topInset:topInset
+                  animated:animated];
+}
+
+- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft
+             bottomRight:(CLLocationCoordinate2D)bottomRight
+                    zoom:(float)zoom
+              screenBBox:(CGSize)screenBBox
+             bottomInset:(float)bottomInset
+               leftInset:(float)leftInset
+                topInset:(float)topInset
+                animated:(BOOL)animated
+{
+    [self displayAreaOnMap:topLeft
+               bottomRight:bottomRight
+                      zoom:zoom
+                   maxZoom:kMaxZoom
                 screenBBox:screenBBox
                bottomInset:bottomInset
                  leftInset:leftInset
@@ -3132,11 +3151,7 @@ typedef enum
     bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
 
     if (maxZoom > 0 && zoom <= 0)
-    {
-        zoom = [self getZoomForBounds:bounds mapSize:screenBBox];
-        if (zoom >= maxZoom)
-            zoom = maxZoom;
-    }
+        zoom = MIN([self getZoomForBounds:bounds mapSize:screenBBox], maxZoom);
 
     [self displayAreaOnMap:bounds
                       zoom:zoom

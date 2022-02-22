@@ -202,7 +202,6 @@
     [[OARootViewController instance].mapPanel displayAreaOnMap:topLeft
                                                    bottomRight:bottomRight
                                                           zoom:0.
-                                                       maxZoom:0.
                                                     screenBBox:screenBBox
                                                    bottomInset:0.
                                                      leftInset:0.

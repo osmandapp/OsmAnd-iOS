@@ -489,19 +489,19 @@
     return self;
 }
 
-- (instancetype) initWithGpxExtension:(OAGpxExtension *)ext
+- (instancetype) initWithRteSegment:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteSegment> &)seg
 {
     self = [super init];
     if (self) {
-        _identifier = ext.attributes[@"id"];
-        _length = ext.attributes[@"length"];
-        _segmentTime = ext.attributes[@"segmentTime"];
-        _speed = ext.attributes[@"speed"];
-        _turnType = ext.attributes[@"turnType"];
-        _turnAngle = ext.attributes[@"turnAngle"];
-        _types = ext.attributes[@"types"];
-        _pointTypes = ext.attributes[@"pointTypes"];
-        _names = ext.attributes[@"names"];
+        _identifier = seg->id.toNSString();
+        _length = seg->length.toNSString();
+        _segmentTime = seg->segmentTime.toNSString();
+        _speed = seg->speed.toNSString();
+        _turnType = seg->turnType.toNSString();
+        _turnAngle = seg->turnAngle.toNSString();
+        _types = seg->types.toNSString();
+        _pointTypes = seg->pointTypes.toNSString();
+        _names = seg->names.toNSString();
     }
     return self;
 }
@@ -577,12 +577,12 @@
     return self;
 }
 
-- (instancetype) initWithGpxExtension:(OAGpxExtension *)ext
+- (instancetype) initWithRteType:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteType> &)type
 {
     self = [super init];
     if (self) {
-        _tag = ext.attributes[@"t"];
-        _value = ext.attributes[@"v"];
+        _tag = type->tag.toNSString();
+        _value = type->value.toNSString();
     }
     return self;
 }
@@ -651,23 +651,15 @@
 
 - (void) fillRouteDetails
 {
-    for (OAGpxExtension *ext in self.extensions)
+    if (self.trkseg)
     {
-        if ([ext.name isEqualToString:@"route"])
+        for (auto& rteSeg : self.trkseg->routeSegments)
         {
-            _routeSegments = [NSMutableArray new];
-            for (OAGpxExtension *subext in ext.subextensions)
-            {
-                [_routeSegments addObject:[[OARouteSegment alloc] initWithGpxExtension:subext]];
-            }
+            [_routeSegments addObject:[[OARouteSegment alloc] initWithRteSegment:rteSeg]];
         }
-        if ([ext.name isEqualToString:@"types"])
+        for (auto& rteType : self.trkseg->routeTypes)
         {
-            _routeTypes = [NSMutableArray new];
-            for (OAGpxExtension *subext in ext.subextensions)
-            {
-                [_routeTypes addObject:[[OARouteType alloc] initWithGpxExtension:subext]];
-            }
+            [_routeTypes addObject:[[OARouteType alloc] initWithRteType:rteType]];
         }
     }
 }

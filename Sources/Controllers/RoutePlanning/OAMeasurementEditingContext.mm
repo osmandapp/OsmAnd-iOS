@@ -777,12 +777,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     OAGPXDocument *gpxFile = gpxData.gpxFile;
     if (gpxFile.hasRtePt && !gpxFile.hasTrkPt)
     {
-        NSMutableArray<OAWptPt *> *trkPts = [NSMutableArray array];
-        for (OAWptPt *pt in gpxFile.getRoutePoints)
-        {
-            [trkPts addObject:pt];
-        }
-        [self addPoints:trkPts];
+        [self addPoints:gpxFile.getRoutePoints];
         return;
     }
     NSArray<OATrkSegment *> *segments = [gpxData.gpxFile getNonEmptyTrkSegments:NO];

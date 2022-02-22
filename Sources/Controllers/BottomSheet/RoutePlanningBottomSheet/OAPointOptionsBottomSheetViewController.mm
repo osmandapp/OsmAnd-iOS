@@ -8,11 +8,15 @@
 
 #import "OAPointOptionsBottomSheetViewController.h"
 #import "OATitleIconRoundCell.h"
+#import "OATitleDescriptionIconRoundCell.h"
 #import "Localization.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
 #import "OAMapLayers.h"
+#import "OARoadSegmentData.h"
+#import "OAMapUtils.h"
+#import "OAOsmAndFormatter.h"
 
 @interface OAPointOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -85,15 +89,17 @@
     
     [data addObject:@[
         @{
-            @"type" : [OATitleIconRoundCell getCellIdentifier],
+            @"type" : [OATitleDescriptionIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"trim_before"),
+            @"desc" : [self getDescription:YES],
             @"img" : @"ic_custom_trim_before",
             @"key" : @"trim_before",
             @"value" : @(EOAClearPointsModeBefore)
         },
         @{
-            @"type" : [OATitleIconRoundCell getCellIdentifier],
+            @"type" : [OATitleDescriptionIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"trim_after"),
+            @"desc" : [self getDescription:NO],
             @"img" : @"ic_custom_trim_after",
             @"key" : @"trim_after",
             @"value" : @(EOAClearPointsModeAfter)
@@ -236,6 +242,73 @@
         [self.delegate onClearSelection];
 }
 
+- (NSString *) getDescription:(BOOL)before
+{
+    NSMutableString *description = [NSMutableString string];
+    NSInteger pos = _editingCtx.selectedPointPosition;
+    NSArray<OAWptPt *> *points = [_editingCtx getPoints];
+    OAWptPt *pt = points[pos];
+    NSString *pointDesc = pt.desc;
+    if (pointDesc && pointDesc.length > 0)
+    {
+        [description appendString:pointDesc];
+    }
+    else if (pos < 1 && before)
+    {
+        [description appendString:OALocalizedString(@"start_point")];
+    }
+    else
+    {
+        double distance = [self getTrimmedDistance:_editingCtx before:before];
+        [description appendString:[OAOsmAndFormatter getFormattedDistance:distance]];
+    }
+    double elevation = pt.elevation;
+    if (!isnan(elevation))
+    {
+        NSString *altString = [OALocalizedString(@"altitude") substringWithRange:NSMakeRange(0, 1)];
+        [description appendString:[NSString stringWithFormat:@"  %@: ", altString]];
+        [description appendString:[OAOsmAndFormatter getFormattedAlt:elevation]];
+    }
+    double speed = pt.speed;
+    if (speed != 0)
+    {
+        NSString *speedString = [OALocalizedString(@"map_widget_speed") substringWithRange:NSMakeRange(0, 1)];
+        [description appendString:[NSString stringWithFormat:@"  %@: ", speedString]];
+        [description appendString:[OAOsmAndFormatter getFormattedSpeed:speed]];
+    }
+    return [NSString stringWithString:description];
+}
+
+- (double) getTrimmedDistance:(OAMeasurementEditingContext *)editingCtx before:(BOOL)before
+{
+    NSArray<OAWptPt *> *points = [editingCtx getPoints];
+    NSMutableDictionary<NSArray<OAWptPt *> *, OARoadSegmentData *> *roadSegmentData = editingCtx.roadSegmentData;
+    NSInteger pointIndex = editingCtx.selectedPointPosition;
+    double dist = 0;
+    NSInteger startIdx;
+    NSInteger endIdx;
+    if (before)
+    {
+        startIdx = 1;
+        endIdx = pointIndex;
+    }
+    else
+    {
+        startIdx = pointIndex + 1;
+        endIdx = points.count - 1;
+    }
+    for (NSInteger i = startIdx; i <= endIdx; i++)
+    {
+        OAWptPt *first = points[i - 1];
+        OAWptPt *second = points[i];
+        NSArray<OAWptPt *> *pair = @[first, second];
+        OARoadSegmentData *segment = roadSegmentData[pair];
+        BOOL routeSegmentBuilt = segment && segment.distance > 0;
+        dist += routeSegmentBuilt ? segment.distance : [OAMapUtils getDistance:first.position second:second.position];
+    }
+    return dist;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -273,6 +346,41 @@
                 cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
             }
         }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
+    {
+        OATitleDescriptionIconRoundCell* cell = nil;
+        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionIconRoundCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescriptionIconRoundCell getCellIdentifier] owner:self options:nil];
+            cell = (OATitleDescriptionIconRoundCell *)[nib objectAtIndex:0];
+            cell.backgroundColor = UIColor.clearColor;
+        }
+        if (cell)
+        {
+            [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
+            cell.titleView.text = item[@"title"];
+            cell.descrView.text = item[@"desc"];
+            
+            UIColor *tintColor = item[@"custom_color"];
+            if (tintColor)
+            {
+                cell.iconColorNormal = tintColor;
+                cell.textColorNormal = tintColor;
+                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
+            }
+            else
+            {
+                BOOL isActiveCell =  [self isActiveCell:indexPath];
+                cell.iconColorNormal = isActiveCell ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+                cell.textColorNormal = isActiveCell ? [UIColor blackColor] : [UIColor lightGrayColor];
+                cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
+                cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
+            }
+        }
+        [cell layoutIfNeeded];
         return cell;
     }
     return nil;
@@ -373,6 +481,10 @@
     if ([item[@"type"] isEqualToString:[OATitleIconRoundCell getCellIdentifier]])
     {
         return [OATitleIconRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+    }
+    else if ([item[@"type"] isEqualToString:[OATitleDescriptionIconRoundCell getCellIdentifier]])
+    {
+        return [OATitleDescriptionIconRoundCell getHeight:item[@"title"] descr:item[@"desc"] cellWidth:tableView.bounds.size.width];
     }
     return UITableViewAutomaticDimension;
 }

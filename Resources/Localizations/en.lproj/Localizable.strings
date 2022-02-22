@@ -68,6 +68,10 @@
 "add_as_last_destination_point" = "Add as last intermediate destination";
 "last_intermediate_dest_description" = "Adds the last stop along the route";
 
+"start_point" = "Start";
+"altitude" = "Altitude";
+"map_widget_speed" = "Speed";
+
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "Search";
 "address_search" = "Address search";

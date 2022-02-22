@@ -140,7 +140,7 @@
 
 - (OAGPX *) buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
 {
-    return [self buildGpxItem:fileName path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds document:document];
+    return [self buildGpxItem:fileName.lastPathComponent path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds document:document];
 }
 
 - (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document

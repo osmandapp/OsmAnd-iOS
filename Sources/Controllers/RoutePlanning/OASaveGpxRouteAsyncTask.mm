@@ -112,8 +112,19 @@
 - (void) saveGpxToDatabase
 {
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-    NSString *gpxFilePath = [OAUtilities getGpxShortPath:_outFile];;
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:_outFile];
+    OAGPX *oldGpx = [gpxDb getGPXItem:gpxFilePath];
     OAGPX *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile];
+    if (oldGpx)
+    {
+        gpx.showArrows = oldGpx.showArrows;
+        gpx.showStartFinish = oldGpx.showStartFinish;
+        gpx.color = oldGpx.color;
+        gpx.coloringType = oldGpx.coloringType;
+        gpx.width = oldGpx.width;
+        gpx.splitType = oldGpx.splitType;
+        gpx.splitInterval = oldGpx.splitInterval;
+    }
     [gpxDb replaceGpxItem:gpx];
     [gpxDb save];
 }

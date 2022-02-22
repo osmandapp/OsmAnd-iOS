@@ -89,7 +89,7 @@
     
     width -= 2 * kHorizontalMargin;
     CGFloat headerHeight = self.headerView.frame.size.height;
-    NSString *description = [NSString stringWithFormat:OALocalizedString(@"delete_tracks_bottom_sheet_description"), self.deletingTracksCount];
+    NSString *description = [OALocalizedString(@"delete_tracks_bottom_sheet_description_regular_part") stringByAppendingString:[NSString stringWithFormat:OALocalizedString(@"delete_tracks_bottom_sheet_description_bold_part"), self.deletingTracksCount]];;
     CGFloat textHeight = [OAUtilities calculateTextBounds:description width:width font:[UIFont systemFontOfSize:17.]].height + kLabelVerticalMargin * 2;
     CGFloat contentHeight = textHeight + 1 * kButtonHeight + 1 * kButtonsVerticalMargin;
     CGFloat buttonsHeight = [self buttonsViewHeight];
@@ -107,7 +107,8 @@
     
     [_data addObject: @{
         @"type" : [OATextLineViewCell getCellIdentifier],
-        @"title" : [NSString stringWithFormat:OALocalizedString(@"delete_tracks_bottom_sheet_description"), self.deletingTracksCount],
+        @"title_regular_part" : OALocalizedString(@"delete_tracks_bottom_sheet_description_regular_part"),
+        @"title_bold_part" : [NSString stringWithFormat:OALocalizedString(@"delete_tracks_bottom_sheet_description_bold_part"), self.deletingTracksCount],
     }];
 
     [_data addObject: @{
@@ -163,12 +164,10 @@
         if (cell)
         {
             cell.backgroundColor = UIColor.clearColor;
-            NSString *originalText = item[@"title"];
-            int startIndex = [originalText indexOf:@"{"];
-            int endIndex = [originalText indexOf:@"}"];
-            NSString *boldText = [originalText substringWithRange:NSMakeRange(startIndex + 1, endIndex - startIndex - 1)];
-            originalText = [originalText stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"{%@}", boldText] withString:boldText];
-            cell.textView.attributedText = [OAUtilities getStringWithBoldPart:originalText mainString:originalText boldString:boldText lineSpacing:0 fontSize:17];
+            NSString *regularPart = item[@"title_regular_part"];
+            NSString *boldPart = item[@"title_bold_part"];
+            NSString *fullDescription = [regularPart stringByAppendingString:boldPart];
+            cell.textView.attributedText = [OAUtilities getStringWithBoldPart:fullDescription mainString:fullDescription boldString:boldPart lineSpacing:0 fontSize:17];
         }
         return cell;
     }

@@ -1276,8 +1276,8 @@
 "select_tracks" = "Select tracks";
 "selected_tracks_count" = "Tracks - %d";
 
-// text in braces will be bold:   "regular text {bold text} "
-"delete_tracks_bottom_sheet_description" = "Are you sure you want to delete {%d tracks?}";
+"delete_tracks_bottom_sheet_description_regular_part" = "Are you sure you want to delete ";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d tracks?";
 "delete_tracks_bottom_sheet_title" = "Delete tracks?";
 
 // OSM Editing actions

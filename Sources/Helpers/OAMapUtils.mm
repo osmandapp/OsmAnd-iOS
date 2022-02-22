@@ -10,6 +10,9 @@
 #import "OAPOI.h"
 #import "QuadRect.h"
 
+#include <CommonCollections.h>
+#include <commonOsmAndCore.h>
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
@@ -65,7 +68,8 @@
 
 + (double) getOrthogonalDistance:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation
 {
-    return [[self.class getProjection:location fromLocation:fromLocation toLocation:toLocation] distanceFromLocation:location];
+    CLLocation *l = [self getProjection:location fromLocation:fromLocation toLocation:toLocation];
+    return getDistance(l.coordinate.latitude, l.coordinate.longitude, location.coordinate.latitude, location.coordinate.longitude);
 }
 
 + (BOOL) rightSide:(double)lat lon:(double)lon aLat:(double)aLat aLon:(double)aLon bLat:(double)bLat bLon:(double)bLon

@@ -172,7 +172,7 @@ struct RouteDataBundle;
 - (std::shared_ptr<RouteDataBundle>) toStringBundle;
 
 - (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
-- (instancetype) initWithGpxExtension:(OAGpxExtension *)ext;
+- (instancetype) initWithRteSegment:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteSegment> &)seg;
 
 - (NSDictionary<NSString *, NSString *> *) toDictionary;
 
@@ -187,7 +187,7 @@ struct RouteDataBundle;
 - (std::shared_ptr<RouteDataBundle>) toStringBundle;
 
 - (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
-- (instancetype) initWithGpxExtension:(OAGpxExtension *)ext;
+- (instancetype) initWithRteType:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteType> &)type;
 
 - (NSDictionary<NSString *, NSString *> *) toDictionary;
 

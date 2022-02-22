@@ -446,11 +446,9 @@
                         }
                         _seg.points = pts;
                     }
-
-                    [_seg fetchExtensions:_s->shared_ptr()];
-
-                    [_seg fillRouteDetails];
                     _seg.trkseg = _s->shared_ptr();
+                    [_seg fetchExtensions:_s->shared_ptr()];
+                    [_seg fillRouteDetails];
                     [seg addObject:_seg];
                 }
                 

@@ -169,7 +169,7 @@
 "units_mi" = "миля";
 "units_yd" = "ярд";
 "units_ft" = "фут";
-"units_kmh" = "км/ч";
+"units_km_h" = "км/ч";
 "units_mph" = "миль/ч";
 "map_download" = "Загрузить";
 "map_nothanks" = "Нет, спасибо";
@@ -260,8 +260,6 @@
 "track_continue_rec_q" = "Продолжить запись?";
 "rec_interval" = "Интервал записи";
 "rec_interval_minimum" = "Минимум";
-"units_minutes_short" = "мин";
-"units_seconds_short" = "с";
 "track_start_rec" = "Начать запись трека";
 "track_rec_addon_q" = "Активируйте дополнение \"Запись треков\" для записи ваших путешествий";
 "track_interval_remember" = "Запомнить мой выбор";
@@ -517,11 +515,11 @@
 "si_kmh" = "Километров в час";
 "si_mph" = "Миль в час";
 "si_m_s" = "Метров в секунду";
-"nm" = "мор. миля";
-"nm_h" = "nmi/ч";
-"min_mile" = "мин/м";
-"min_km" = "мин/км";
-"m_s" = "м/с";
+"units_nm" = "мор. миля";
+"units_nm_h" = "nmi/ч";
+"units_min_mi" = "мин/м";
+"units_min_km" = "мин/км";
+"units_m_s" = "м/с";
 "select_city" = "Выберите город";
 "select_postcode" = "Выберите почтовый код";
 "coords_search" = "Поиск по координатам";
@@ -736,7 +734,7 @@
 "show_traffic_warnings" = "Ограничения скорости";
 "show_lanes" = "Полосы движения";
 "configure_map" = "Настройки карты";
-"int_seconds" = "с";
+"units_seconds" = "с";
 "settings_preset" = "Профиль по умолчанию";
 "shared_string_info" = "Информация";
 "day_off_label" = "вых.";
@@ -1978,7 +1976,6 @@
 "shared_z_a" = "Я - А";
 "shared_a_z" = "А - Я";
 "search_preogress" = "Поиск…";
-"units_nm" = "мор. миля";
 "map_widget_distance_by_tap" = "Расстояние по нажатию";
 "simplified_track_description" = "Будет сохранена только линия маршрута, без путевых точек.";
 "open_saved_track" = "Открыть сохранённый трек";
@@ -2128,7 +2125,6 @@
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "contour_lines_hillshades_slope" = "Контурные линии, затенение рельефа (отмывка), уклоны";
 "last_used" = "Последний используемый";
-"m" = "м";
 "suggested_maps_descr" = "Эти карты необходимо использовать с плагином.";
 "added_profiles_descr" = "Профили, добавленные плагином";
 "navigate_point_olc" = "Открытый код местоположения (OLC)";
@@ -2136,7 +2132,6 @@
 "navigate_point_easting" = "Восточной долготы";
 "navigate_point_northing" = "Северной широты";
 "welmode_download_maps" = "Загрузка карт";
-"foot" = "фут";
 "download_map_dialog" = "Диалог загрузки карты";
 "dialogs_and_notifications" = "Диалоги и уведомления";
 "explore_wikipedia_offline" = "Читайте Википедию офлайн.";

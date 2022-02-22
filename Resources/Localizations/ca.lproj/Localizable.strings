@@ -143,8 +143,6 @@
 "download" = "Baixa";
 "nothanks" = "No, gràcies";
 "download_tab_local" = "Local";
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "download_now" = "Baixa el mapa ara";
 "res_banner_no_free_maps_title" = "No teniu cap mapa gratuït!";
 "res_catalog_upd" = "Actualització del catàleg";
@@ -198,7 +196,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
 "units_min" = "min";
@@ -528,11 +526,11 @@
 "si_min_km" = "Minuts per kilòmetre";
 "si_min_m" = "Minuts per milla";
 "si_nm_h" = "Milles nàutiques per hora (nusos)";
-"nm" = "NM";
-"nm_h" = "nusos";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "NM";
+"units_nm_h" = "nusos";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "towards" = "cap a";
 "route_roundabout" = "Rotonda: preneu la %1$d sortida i continueu";
 "route_roundabout_short" = "Agafeu la %d sortida i continueu";
@@ -636,7 +634,7 @@
 "speak_favorites" = "Preferits propers";
 "speak_poi" = "PDI propers";
 "speak_pedestrian" = "Passos de zebra";
-"int_seconds" = "segons";
+"units_seconds" = "segons";
 "shared_string_never" = "Mai";
 "general_settings_2" = "Paràmetres generals";
 "general_settings_descr" = "Tema de la aplicació, unitats, regió";
@@ -1983,7 +1981,6 @@
 "some_of" = "%d de %d";
 "shared_string_gpx_track" = "Pista";
 "symbols" = "Símbols";
-"units_nm" = "NM";
 "group_name" = "Nom del grup";
 "special" = "Especial";
 "split_after" = "Separa després";
@@ -2040,9 +2037,7 @@
 "some_articles_may_not_available_in_lang" = "Alguns articles de la Viquipèdia podrien no estar disponibles en el vostre idioma.";
 "shared_string_navigation" = "Navegació";
 "added_profiles_descr" = "El connector ha afegit els perfils";
-"m" = "m";
 "navigate_point_northing" = "Ordenada";
 "navigate_point_zone" = "Àrea";
 "last_used" = "Darrera utilització";
-"foot" = "ft";
 "threshold_distance" = "Llindar de distància";

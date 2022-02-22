@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+#define kTrackNoHeading -1.0
+
 @class OAGPXMutableDocument;
 @class OAGPX;
 @class OAWptPt;

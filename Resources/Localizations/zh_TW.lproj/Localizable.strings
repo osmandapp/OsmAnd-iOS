@@ -244,7 +244,7 @@
 "units_mi" = "哩";
 "units_yd" = "碼";
 "units_ft" = "呎";
-"units_kmh" = "公里/時";
+"units_km_h" = "公里/時";
 "units_mph" = "哩/時";
 "units_hour" = "小時";
 "units_min" = "分";
@@ -288,8 +288,6 @@
 "region_south_america" = "南美洲";
 // Help
 "help_quiz" = "測驗";
-"units_minutes_short" = "分";
-"units_seconds_short" = "秒";
 "cannot_access_calendar" = "無法存取日曆";
 // Map
 "map_inst_det_map_q" = "安裝詳細的地圖概覽，從您的位置中獲得週圍更多的詳細資訊。";

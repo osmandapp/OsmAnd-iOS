@@ -228,7 +228,7 @@
 
 // Route info
 
-"int_seconds" = "վայրկյան";
+"units_seconds" = "վայրկյան";
 "shared_string_never" = "Երբեք";
 "shared_setting_always_ask" = "Միշտ հարցնել";
 "general_settings_2" = "Ընդհանուր կարգավորումները";
@@ -433,11 +433,10 @@
 "si_min_km" = "Րոպե կիլոմետր";
 "si_min_m" = "Րոպե մղոն";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "նմ";
-"nm_h" = "nmi/h";
-"min_mile" = "րոպե/մ";
-"min_km" = "րոպե/կմ";
-"m_s" = "մ/վ";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "րոպե/մ";
+"units_min_km" = "րոպե/կմ";
+"units_m_s" = "մ/վ";
 "tones" = "տոնն";
 
 "nothing_found" = "Nothing found: %@";
@@ -1241,8 +1240,6 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "մետրեր";
 "shared_string_feet" = "feet";
-"foot" = "ֆուտ";
-"m" = "մ";
 
 // Menu
 "menu" = "Menu";
@@ -1540,11 +1537,12 @@
 
 // Units
 "units_km" = "կմ";
+"units_m" = "մ";
 "units_mi" = "մղ";
 "units_yd" = "յարդ";
 "units_ft" = "ֆուտ";
 "units_nm" = "նմ";
-"units_kmh" = "կմ/ժ";
+"units_km_h" = "կմ/ժ";
 "units_mph" = "մղ/ժ";
 
 "units_hour" = "ժամ";
@@ -1670,9 +1668,6 @@
 "rendering_category_others" = "Քարտեզի այլ հատկանիշները";
 
 // Rendering attributes
-
-"units_minutes_short" = "րոպե";
-"units_seconds_short" = "sec";
 
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";

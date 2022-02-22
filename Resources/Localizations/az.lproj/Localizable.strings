@@ -208,7 +208,7 @@
 
 // Route info
 
-"int_seconds" = "saniyə";
+"units_seconds" = "saniyə";
 "shared_string_never" = "Heç vaxt";
 "shared_setting_always_ask" = "Hər dəfə soruş";
 "general_settings_2" = "Əsas parametrlər";
@@ -406,11 +406,10 @@
 "si_min_km" = "Kilometrdə dəqiqə";
 "si_min_m" = "Mildə dəqiqə";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "dəq/mil";
-"min_km" = "dəq/km";
-"m_s" = "m/san";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "dəq/mil";
+"units_min_km" = "dəq/km";
+"units_m_s" = "m/san";
 "tones" = "ton";
 "nothing_found" = "Nothing found: %@";
 "nothing_found_empty" = "Heç nə tapılmadı";
@@ -1181,8 +1180,6 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "metr";
 "shared_string_feet" = "fut";
-"foot" = "ft";
-"m" = "m";
 
 // Menu
 "menu" = "Menyu";
@@ -1477,11 +1474,12 @@
 
 // Units
 "units_km" = "km";
+"units_m" = "m";
 "units_mi" = "mil";
 "units_yd" = "yd";
 "units_ft" = "ft";
 "units_nm" = "nmi";
-"units_kmh" = "km/s";
+"units_km_h" = "km/s";
 "units_mph" = "mil/s";
 "units_hour" = "s";
 "units_min" = "dəq";
@@ -1606,8 +1604,6 @@
 
 // Rendering attributes
 
-"units_minutes_short" = "dəq";
-"units_seconds_short" = "san";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 

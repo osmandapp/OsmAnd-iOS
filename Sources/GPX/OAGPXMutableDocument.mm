@@ -112,6 +112,8 @@
     wpt->type = QString::fromNSString(w.type);
     wpt->horizontalDilutionOfPrecision = w.horizontalDilutionOfPrecision;
     wpt->verticalDilutionOfPrecision = w.verticalDilutionOfPrecision;
+    wpt->heading = w.heading;
+    wpt->speed = w.speed;
     
     [self.class fillLinks:wpt->links linkArray:w.links];
     
@@ -122,13 +124,6 @@
             [extArray addObject:e];
     }
     
-    if (w.speed >= 0)
-    {
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = @"speed";
-        e.value = [NSString stringWithFormat:@"%.3f", w.speed];
-        [extArray addObject:e];
-    }
     int color = [w getColor:0];
     if (color != 0)
     {
@@ -217,16 +212,10 @@
         rtept->type = QString::fromNSString(p.type);
         rtept->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
         rtept->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
+        rtept->heading = p.heading;
+        rtept->speed = p.speed;
         
         [self.class fillLinks:rtept->links linkArray:p.links];
-        
-        if (!isnan(p.speed))
-        {
-            OAGpxExtension *e = [[OAGpxExtension alloc] init];
-            e.name = @"speed";
-            e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-            p.extensions = @[e];
-        }
 
         [p fillExtensions:rtept];
         
@@ -262,16 +251,10 @@
     rtept->type = QString::fromNSString(p.type);
     rtept->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
     rtept->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
+    rtept->heading = p.heading;
+    rtept->speed = p.speed;
     
     [self.class fillLinks:rtept->links linkArray:p.links];
-    
-    if (!isnan(p.speed))
-    {
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = @"speed";
-        e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-        p.extensions = @[e];
-    }
     
     [p fillExtensions:rtept];
 
@@ -322,16 +305,10 @@
             trkpt->type = QString::fromNSString(p.type);
             trkpt->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
             trkpt->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
+            trkpt->heading = p.heading;
+            trkpt->speed = p.speed;
             
             [self.class fillLinks:trkpt->links linkArray:p.links];
-            
-            if (!isnan(p.speed))
-            {
-                OAGpxExtension *e = [[OAGpxExtension alloc] init];
-                e.name = @"speed";
-                e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-                p.extensions = @[e];
-            }
 
             [p fillExtensions:trkpt];
 
@@ -382,16 +359,10 @@
         trkpt->type = QString::fromNSString(p.type);
         trkpt->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
         trkpt->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
+        trkpt->heading = p.heading;
+        trkpt->speed = p.speed;
         
         [self.class fillLinks:trkpt->links linkArray:p.links];
-        
-        if (!isnan(p.speed))
-        {
-            OAGpxExtension *e = [[OAGpxExtension alloc] init];
-            e.name = @"speed";
-            e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-            p.extensions = @[e];
-        }
 
         [p fillExtensions:trkpt];
 
@@ -461,16 +432,10 @@
     trkpt->type = QString::fromNSString(p.type);
     trkpt->horizontalDilutionOfPrecision = p.horizontalDilutionOfPrecision;
     trkpt->verticalDilutionOfPrecision = p.verticalDilutionOfPrecision;
+    trkpt->heading = p.heading;
+    trkpt->speed = p.speed;
     
     [self.class fillLinks:trkpt->links linkArray:p.links];
-    
-    if (!isnan(p.speed))
-    {
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = @"speed";
-        e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-        p.extensions = @[e];
-    }
     
     [p fillExtensions:trkpt];
 

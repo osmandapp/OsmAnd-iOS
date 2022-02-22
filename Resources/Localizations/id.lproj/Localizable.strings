@@ -208,7 +208,7 @@
 
 // Route info
 
-"int_seconds" = "detik";
+"units_seconds" = "detik";
 "shared_string_never" = "Tidak pernah";
 "shared_setting_always_ask" = "Always ask";
 "general_settings_2" = "Pengaturan umum";
@@ -406,11 +406,10 @@
 "si_min_km" = "Menit per kilometer";
 "si_min_m" = "Minutes per mile";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "men/m";
-"min_km" = "men/km";
-"m_s" = "m/d";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "men/m";
+"units_min_km" = "men/km";
+"units_m_s" = "m/d";
 "tones" = "tones";
 "nothing_found" = "Nothing found: %@";
 "nothing_found_empty" = "Tidak ada yang ditemukan";
@@ -1181,8 +1180,6 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "meter";
 "shared_string_feet" = "kaki";
-"foot" = "kaki";
-"m" = "m";
 
 // Menu
 "menu" = "Menu";
@@ -1477,11 +1474,12 @@
 
 // Units
 "units_km" = "km";
+"units_m" = "m";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "kaki";
 "units_nm" = "nmi";
-"units_kmh" = "km/j";
+"units_km_h" = "km/j";
 "units_mph" = "mph";
 "units_hour" = "j";
 "units_min" = "men";
@@ -1606,8 +1604,6 @@
 
 // Rendering attributes
 
-"units_minutes_short" = "men";
-"units_seconds_short" = "det";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 

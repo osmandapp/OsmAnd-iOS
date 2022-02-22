@@ -121,7 +121,7 @@
 "speak_poi" = "Puntos de interese (PDI) pretos";
 "speak_pedestrian" = "Pasos de peóns";
 "speak_tunnels" = "Túneles";
-"int_seconds" = "segundos";
+"units_seconds" = "segundos";
 "shared_string_never" = "Endexamais";
 "shared_setting_always_ask" = "Preguntar sempre";
 "general_settings_2" = "Axustes xerais";
@@ -269,11 +269,11 @@
 "si_min_km" = "Minutos por quilómetro";
 "si_min_m" = "Minutos por milla";
 "si_nm_h" = "Millas náuticas por hora (nós)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/mi";
-"min_km" = "min/km";
-"m_s" = "m/seg";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/mi";
+"units_min_km" = "min/km";
+"units_m_s" = "m/seg";
 "nothing_found" = "Nothing found :(";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Escoller rúa";
@@ -539,7 +539,7 @@
 "units_mi" = "mi";
 "units_yd" = "id";
 "units_ft" = "pés";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mi/h";
 "units_hour" = "h";
 "units_min" = "min";
@@ -613,8 +613,6 @@
 "rendering_category_transport" = "Transporte";
 "rendering_category_others" = "Outros atributos do mapa";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
@@ -1555,7 +1553,6 @@
 "custom_osmand_plugin_name" = "Plugin personalizado do OsmAnd";
 "plan_route_change_folder" = "Mudar cartafol";
 "shared_string_others" = "Outros";
-"units_nm" = "nmi";
 "rearrange_categories" = "Reorganizar categorías";
 "osmand_settings" = "Axustes do OsmAnd";
 "markers_history" = "Historial de marcaxes";
@@ -1582,7 +1579,6 @@
 "split_before" = "Dividir antes";
 "select_group" = "Escoller grupo";
 "gpxup_trackable" = "Seguíbel";
-"m" = "m";
 "default" = "Predeterminado";
 "context_menu_item_edit_waypoint" = "Editar punto de pasaxe GPX";
 "navigate_point_zone" = "Zona";
@@ -1609,7 +1605,6 @@
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "navigate_point_northing" = "Ó norte";
 "route_between_points_warning_desc" = "Deseguido, axusta a pistaá estrada permitida máis preto cun perfil de navegación.";
-"foot" = "pés";
 "no_waypoints_found" = "Non se atoparon puntos de pasaxe";
 "shared_string_all_languages" = "Todas as linguas";
 "added_profiles" = "Perfís engadidos";

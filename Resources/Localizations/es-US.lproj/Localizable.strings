@@ -208,7 +208,7 @@
 
 // Route info
 
-"int_seconds" = "segundos";
+"units_seconds" = "segundos";
 "shared_string_never" = "Nunca";
 "shared_setting_always_ask" = "Preguntar siempre";
 "general_settings_2" = "Ajustes generales";
@@ -406,11 +406,10 @@
 "si_min_km" = "Minutos por kilómetro";
 "si_min_m" = "Minutos por milla";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "toneladas";
 "nothing_found" = "Nothing found: %@";
 "nothing_found_empty" = "Nada encontrado";
@@ -1181,8 +1180,6 @@
 "srtm_download_list_help_message" = "OsmAnd proporciona datos de curvas de nivel en metros y pies. Deberás volver a descargar el archivo para cambiar el formato.";
 "shared_string_meters" = "metros";
 "shared_string_feet" = "pies";
-"foot" = "ft";
-"m" = "m";
 
 // Menu
 "menu" = "Menú";
@@ -1477,11 +1474,12 @@
 
 // Units
 "units_km" = "km";
+"units_m" = "m";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
 "units_nm" = "nmi";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
 "units_min" = "min";
@@ -1606,8 +1604,6 @@
 
 // Rendering attributes
 
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
@@ -2331,7 +2327,6 @@
 "shared_string_hide_all" = "Ocultar todo";
 "connect_rp" = "Conectar puntos de ruta";
 "points_delete_multiple" = "¿Borrar %d punto(s)?";
-"units_m" = "m";
 "units_min_short" = "m";
 "grey_color_undefined" = "Los tramos sin datos son grises.";
 "white_color_undefined" = "Los tramos sin datos son blancos.";

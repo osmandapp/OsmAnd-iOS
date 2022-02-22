@@ -283,7 +283,7 @@
 "units_mi" = "мл";
 "units_yd" = "ярд";
 "units_ft" = "фут";
-"units_kmh" = "км/г";
+"units_km_h" = "км/г";
 "units_mph" = "мл/г";
 "units_hour" = "г";
 "units_min" = "хв";
@@ -329,8 +329,6 @@
 "region_south_america" = "Південна Америка";
 // Help
 "help_quiz" = "Опитування";
-"units_minutes_short" = "хв";
-"units_seconds_short" = "с";
 "cannot_access_calendar" = "Помилка доступу до календаря";
 "reminder_not_set_text" = "Не вдається встановити нагадування, тому що не дозволено доступ до календаря";
 //inapps
@@ -526,11 +524,11 @@
 "si_min_km" = "Хвилин за кілометр";
 "si_min_m" = "Хвилин за милю";
 "si_nm_h" = "Морських миль на годину (вузол)";
-"nm" = "nmi";
-"nm_h" = "вузлів";
-"min_mile" = "хв/м";
-"min_km" = "хв/км";
-"m_s" = "м/с";
+"units_nm" = "nmi";
+"units_nm_h" = "вузлів";
+"units_min_mi" = "хв/м";
+"units_min_km" = "хв/км";
+"units_m_s" = "м/с";
 "towards" = "до";
 "route_roundabout_short" = "Поверніть у %d з’їзд";
 "route_kl" = "Тримайтесь ліворуч";
@@ -634,7 +632,7 @@
 "speak_favorites" = "Довколишні закладки";
 "speak_poi" = "Точки інтересу поруч";
 "speak_pedestrian" = "Пішохідні переходи";
-"int_seconds" = "сек";
+"units_seconds" = "сек";
 "shared_string_never" = "Ніколи";
 "general_settings_2" = "Загальні налаштування";
 "general_settings_descr" = "Тема застосунку, одиниці вимірювання, регіон";
@@ -1960,7 +1958,6 @@
 "key_hint_recenter_map" = "Повторно центрувати мапу";
 "shared_z_a" = "Я - А";
 "shared_a_z" = "А - Я";
-"units_nm" = "nmi";
 "select_application_profile" = "Вибрати профіль застосунку";
 "change_application_profile" = "Змінити профіль застосунку";
 "quick_action_showhide_mapillary_descr" = "Кнопка показує чи ховає шар Mapillary на мапі.";
@@ -2132,8 +2129,6 @@
 "welmode_download_maps" = "Завантаження мап";
 "shared_strings_all_regions" = "Усі регіони";
 "srtm_download_single_help_message" = "Виберіть потрібний формат. Щоб змінити його, потрібно повторно завантажувати файл.";
-"m" = "м";
-"foot" = "фут";
 "routes_color_by_type" = "Забарвлення маршрутів від…";
 "rendering_value_walkingRoutesOSMC_description" = "Забарвлення маршрутів згідно з їхнім індивідуальним місцевим кольором (якщо він присутній в OpenStreetMap) і символом на туристичному маршруті.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Забарвлення згідно з належністю до мережі.";
@@ -2367,3 +2362,9 @@
 "shared_string_open_street_map" = "OpenStreetMap";
 "horseback_riding" = "Верхова їзда";
 "routing_attr_prefer_horse_routes_description" = "Надавати перевагу кінним маршрутам";
+"route_preferred_terrain_flat" = "Маршрути обчислюються для рівнинних рельєфів. Довжина може збільшуватися.";
+"shared_string_any" = "Усі";
+"route_preferred_terrain_less_hilly" = "Коротші, менш горбисті маршрути.";
+"preferred_terrain" = "Бажаний рельєф";
+"route_preferred_terrain_any" = "Рельєф не враховується при виборі маршруту.";
+"route_preferred_terrain_hilly" = "Маршрути з горбистим рельєфом.";

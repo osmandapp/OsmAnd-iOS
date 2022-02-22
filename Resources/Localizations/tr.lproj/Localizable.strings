@@ -234,7 +234,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "sa";
 "units_min" = "dk";
@@ -288,8 +288,6 @@
 "rendering_category_transport" = "Ulaşım";
 "rendering_category_others" = "Diğer harita özellikleri";
 // Rendering attributes
-"units_minutes_short" = "dk";
-"units_seconds_short" = "sn";
 "cannot_access_calendar" = "Takvim erişemiyor";
 "reminder_not_set_text" = "Takvimin erişimi izin verilmez çünkü hatırlatma set değildi";
 //inapps
@@ -498,11 +496,10 @@
 "si_min_km" = "Dakika/kilometre";
 "si_min_m" = "Dakika/mil";
 "si_nm_h" = "Deniz mili/saat (knot)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "coords_format" = "Koordinat biçimi";
 "shared_string_info" = "Bilgi";
 "simulate_routing" = "Konumunuzu simüle et";
@@ -552,7 +549,7 @@
 "speak_favorites" = "Yakındaki Sık Kıllanılanlar";
 "speak_poi" = "Yakınlardaki POI";
 "speak_pedestrian" = "Yaya geçitleri";
-"int_seconds" = "saniyeler";
+"units_seconds" = "saniyeler";
 "shared_string_never" = "Hiçbir zaman";
 "general_settings_2" = "Genel ayarlar";
 "general_settings_descr" = "Uygulama teması, birimler, bölge";
@@ -2134,7 +2131,6 @@
 "dialogs_and_notifications" = "İletişim kutuları ve bildirimler";
 "routes_color_by_type" = "Güzergah renklendirme ölçütü…";
 "walking_route_osmc_description" = "Güzergahları kendi yerel renklerine (OpenStreetMap\'te varsa) ve türlerine (uluslararası, bölgesel, yerel) göre renklendir.";
-"foot" = "ft";
 "shared_string_feet" = "fit";
 "srtm_download_list_help_message" = "OsmAnd, metre ve fit cinsinden eş yükselti eğrileri verileri sağlar. Biçimi değiştirmek için dosyayı yeniden indirmeniz gerekecek.";
 "srtm_download_single_help_message" = "Lütfen gerekli biçimi seçin. Biçimi değiştirmek için dosyayı yeniden indirmeniz gerekecek.";
@@ -2187,7 +2183,6 @@
 "regions" = "Bölgeler";
 "distance_moving" = "Düzeltilmiş uzaklık";
 "navigate_point_olc_short" = "OLC";
-"m" = "m";
 "delete_waypoints" = "Ara noktaları sil";
 "units_min_short" = "dak";
 "gpx_join_gaps" = "Boşlukları birleştir";
@@ -2364,3 +2359,9 @@
 "routing_attr_only_permitted_streets_description" = "Yalnızca açıkça izin verilen sokakları kullanın";
 "routing_attr_only_permitted_ways_name" = "Açıkça izin verilen yollar";
 "horseback_riding" = "At binme";
+"route_preferred_terrain_any" = "Güzergah seçerken arazi profili dikkate alınmıyor.";
+"route_preferred_terrain_flat" = "Düz bir kabartma profiline sahip güzergahlar. Uzunluk artabilir.";
+"route_preferred_terrain_less_hilly" = "Daha kısa, daha az engebeli güzergahlar.";
+"route_preferred_terrain_hilly" = "Tepelik bir kabartma profiline sahip güzergahlar.";
+"shared_string_any" = "Herhangi";
+"preferred_terrain" = "Tercih edilen arazi";

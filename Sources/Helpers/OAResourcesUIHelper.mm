@@ -292,7 +292,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (NSString *)getSRTMFormatShort:(BOOL)isSRTMF
 {
-    return isSRTMF ? OALocalizedString(@"foot") : OALocalizedString(@"m");
+    return isSRTMF ? OALocalizedString(@"units_ft") : OALocalizedString(@"units_m");
 }
 
 + (NSString *)getSRTMFormatLong:(BOOL)isSRTMF

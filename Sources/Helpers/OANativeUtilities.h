@@ -46,6 +46,7 @@
 + (Point31) convertFromPointI:(OsmAnd::PointI)input;
 + (OsmAnd::PointI) convertFromPoint31:(Point31)input;
 + (sk_sp<SkImage>) skImageFromCGImage:(CGImageRef) image;
++ (UIImage *) skImageToUIImage:(const sk_sp<SkImage> &)image;
 
 + (QHash<QString, QString>) dictionaryToQHash:(NSDictionary<NSString *, NSString*> *)dictionary;
 

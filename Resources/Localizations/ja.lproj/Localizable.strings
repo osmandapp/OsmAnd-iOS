@@ -158,7 +158,7 @@
 "speak_pedestrian" = "横断歩道";
 "speak_tunnels" = "トンネル";
 "show_tunnels" = "トンネル";
-"int_seconds" = "秒";
+"units_seconds" = "秒";
 "shared_string_never" = "しない";
 "shared_setting_always_ask" = "常に尋ねる";
 "general_settings_2" = "全般設定";
@@ -319,11 +319,11 @@
 "si_min_km" = "分/キロメートル";
 "si_min_m" = "分/マイル";
 "si_nm_h" = "海里毎時(ノット)";
-"nm" = "海里";
-"nm_h" = "ノット";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "海里";
+"units_nm_h" = "ノット";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "見つかりませんでした: %@";
 "nothing_found_descr" = "検索ワードを変更するか、検索範囲を広げてください";
 "select_street" = "道路名を選択";
@@ -880,7 +880,7 @@
 "units_mi" = "mi";
 "units_yd" = "ヤード";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "時間";
 "units_min" = "分";
@@ -979,8 +979,6 @@
 "rendering_category_transport" = "交通機関の追加描写";
 "rendering_category_others" = "その他のマップ属性";
 // Rendering attributes
-"units_minutes_short" = "分";
-"units_seconds_short" = "秒";
 "cannot_access_calendar" = "カレンダーにアクセスできません";
 "reminder_not_set_text" = "カレンダーへのアクセスが許可されていないため、リマインダーは設定できませんでした";
 //inapps
@@ -2040,7 +2038,6 @@
 "res_standard" = "標準マップ";
 "vk" = "VKontakte(SNS)";
 "help_what_is_new" = "新着情報";
-"units_nm" = "海里";
 "unsupported_action_descr" = "このクイックアクションは現在サポートされていません。アプリ新しいバージョンで対応予定です。";
 "unsupported_action_title" = "サポートされていないアクション(%@)";
 "unsupported_action" = "サポートされていないアクション";
@@ -2101,7 +2098,6 @@
 "suggested_maps_descr" = "これらのマップはプラグインを使用する場合に必要です";
 "product_desc_ext_mapillary" = "情報共有のための路上写真です(要オンライン)。新たな場所の発見に、協力しあい、この世界を写真で保存しましょう。";
 "welmode_download_maps" = "マップダウンロード";
-"foot" = "ft";
 "threshold_distance" = "限界距離";
 "no_waypoints_found" = "経由地点が見つかりませんでした";
 "restart" = "再起動";
@@ -2114,5 +2110,4 @@
 "dialogs_and_notifications" = "ダイアログと通知";
 "gpxup_identifiable" = "識別可能";
 "default" = "標準";
-"m" = "m";
 "product_title_mapillary" = "Mapillary";

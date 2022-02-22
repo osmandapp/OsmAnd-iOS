@@ -120,7 +120,7 @@
             break;
         case MINUTES_PER_KILOMETER:
             _ratio = 3600. / METERS_IN_KILOMETER;
-            _units = OALocalizedString(@"units_kmh");
+            _units = OALocalizedString(@"units_km_h");
             break;
         case NAUTICALMILES_PER_HOUR:
             _ratio = 3600. / METERS_IN_ONE_NAUTICALMILE;

@@ -229,7 +229,7 @@
 
 // Route info
 
-"int_seconds" = "seconds";
+"units_seconds" = "seconds";
 "shared_string_never" = "ஒருபோதும்";
 "shared_setting_always_ask" = "எப்போதும் கேள்
 \n";
@@ -435,11 +435,10 @@
 "si_min_km" = "Minutes per kilometer";
 "si_min_m" = "Minutes per mile";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "tones";
 
 "nothing_found" = "Nothing found: %@";
@@ -1244,8 +1243,6 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "meters";
 "shared_string_feet" = "feet";
-"foot" = "அடி";
-"m" = "மீ";
 
 // Menu
 "menu" = "Menu";
@@ -1543,11 +1540,12 @@
 
 // Units
 "units_km" = "கி.மீ.";
+"units_m" = "மீ";
 "units_mi" = "மைல்";
 "units_yd" = "யார்டு";
 "units_ft" = "அடி";
 "units_nm" = "nmi";
-"units_kmh" = "கிமீ / மணி";
+"units_km_h" = "கிமீ / மணி";
 "units_mph" = "மைல்";
 
 "units_hour" = "மணிநேரம்";
@@ -1673,9 +1671,6 @@
 "rendering_category_others" = "மற்ற வரைபடம் பண்புக்கூறுகள்";
 
 // Rendering attributes
-
-"units_minutes_short" = "மணிதுளி";
-"units_seconds_short" = "sec";
 
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";

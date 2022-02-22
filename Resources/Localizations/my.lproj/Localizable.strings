@@ -74,7 +74,7 @@
 "speak_favorites" = "Nearby Favorites";
 "speak_poi" = "Nearby POI";
 "speak_pedestrian" = "Pedestrian crosswalks";
-"int_seconds" = "seconds";
+"units_seconds" = "seconds";
 "shared_string_never" = "Never";
 "general_settings_2" = "General settings";
 "general_settings_descr" = "Configure display and common settings for the application";
@@ -219,11 +219,11 @@
 "si_min_km" = "တစ်မိနစ်မှာ ကီလိုမီတာနှုန်း";
 "si_min_m" = "တစ်မိနစ်မှာမိုင်";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "မိနစ် / မီတာ";
-"min_km" = "မိနစ် / ကီလိုမီတာ";
-"m_s" = "မီတာ / စက္ကန့်";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "မိနစ် / မီတာ";
+"units_min_km" = "မိနစ် / ကီလိုမီတာ";
+"units_m_s" = "မီတာ / စက္ကန့်";
 "nothing_found" = "Nothing found :(";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "လမ်းရွေးပါ";
@@ -482,7 +482,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
 "units_min" = "min";
@@ -535,8 +535,6 @@
 "rendering_category_transport" = "Transport";
 "rendering_category_others" = "Other map attributes";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
@@ -904,5 +902,4 @@
 "hide_compass_ruler" = "သံလိုက်အိမ်မြှောင်ကိုဖြောက်လိုက်";
 "map_during_navigation" = "လမ်းညွှန်နေစဉ်မြေပုံ";
 "searching_gps" = "GPSရှာဖွေခြင်း";
-"units_nm" = "nmi";
 "shared_string_wifi_only" = "Wi-Fiပေါ်မှသာ";

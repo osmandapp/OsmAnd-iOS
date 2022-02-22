@@ -22,6 +22,8 @@
 
 #include <OsmAndCore/Utilities.h>
 
+#define kTransportIconWidth 16.0
+
 @implementation OACollapsableTransportStopRoutesView
 {
     NSArray<UIButton *> *_buttons;
@@ -50,8 +52,7 @@
         if (!img)
             img = [OATargetInfoViewController getIcon:@"mx_public_transport"];
         
-        CGFloat imgSize = 16;
-        img = [OAUtilities resizeImage:img newSize:{ imgSize, imgSize }];
+        img = [OAUtilities resizeImage:img newSize:{ kTransportIconWidth, kTransportIconWidth }];
         img = [OAUtilities getTintableImage:img];
 
         NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:text attributes:nil];

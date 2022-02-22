@@ -1,12 +1,12 @@
 //
-//  OAExitRoutePlanningBottomSheetViewController.m
+//  OAGPXListDeletingBottomSheet.m
 //  OsmAnd Maps
 //
-//  Created by Anna Bibyk on 19.01.2021.
-//  Copyright © 2021 OsmAnd. All rights reserved.
+//  Created by nnngrach on 15.02.2022.
+//  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OAExitRoutePlanningBottomSheetViewController.h"
+#import "OAGPXListDeletingBottomSheet.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -17,19 +17,19 @@
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
 #define kLabelVerticalMargin 16.
 #define kButtonHeight 42.
-#define kButtonsVerticalMargin 32.
+#define kButtonsVerticalMargin 16.
 #define kHorizontalMargin 20.
 
-@interface OAExitRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAGPXListDeletingBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UILabel *messageView;
 @property (weak, nonatomic) IBOutlet UIButton *exitButton;
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 
 @end
 
-@implementation OAExitRoutePlanningBottomSheetViewController
+@implementation OAGPXListDeletingBottomSheetViewController
 {
     NSMutableArray<NSDictionary *> *_data;
 }
@@ -54,20 +54,26 @@
     self.buttonsSectionDividerView.backgroundColor = UIColor.clearColor;;
 
     [self.rightButton removeFromSuperview];
-    [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
+    self.closeButton.hidden = YES;
+    self.headerDividerView.hidden = YES;
+    [self hideSliderView];
+    
+    self.leftIconView.tintColor = UIColorFromRGB(color_support_red);
+    [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_remove_outlined.png"]];
     
     self.exitButton.layer.cornerRadius = 9.;
-    self.saveButton.layer.cornerRadius = 9.;
+    self.deleteButton.layer.cornerRadius = 9.;
     self.cancelButton.layer.cornerRadius = 9.;
+    
+    self.titleView.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
     
     self.isFullScreenAvailable = NO;
 }
 
 - (void) applyLocalization
 {
-    self.titleView.text = OALocalizedString(@"osm_editing_lost_changes_title");
-    [self.exitButton setTitle:OALocalizedString(@"shared_string_exit") forState:UIControlStateNormal];
-    [self.saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+    self.titleView.text = OALocalizedString(@"delete_tracks_bottom_sheet_title");
+    [self.deleteButton setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
@@ -83,8 +89,9 @@
     
     width -= 2 * kHorizontalMargin;
     CGFloat headerHeight = self.headerView.frame.size.height;
-    CGFloat textHeight = [OAUtilities calculateTextBounds:OALocalizedString(@"plan_route_exit_message") width:width font:[UIFont systemFontOfSize:15.]].height + kLabelVerticalMargin * 2;
-    CGFloat contentHeight = textHeight + 2 * kButtonHeight + 2 * kButtonsVerticalMargin;
+    NSString *description = [OALocalizedString(@"delete_tracks_bottom_sheet_description_regular_part") stringByAppendingString:[NSString stringWithFormat:OALocalizedString(@"delete_tracks_bottom_sheet_description_bold_part"), self.deletingTracksCount]];;
+    CGFloat textHeight = [OAUtilities calculateTextBounds:description width:width font:[UIFont systemFontOfSize:17.]].height + kLabelVerticalMargin * 2;
+    CGFloat contentHeight = textHeight + 1 * kButtonHeight + 1 * kButtonsVerticalMargin;
     CGFloat buttonsHeight = [self buttonsViewHeight];
     return headerHeight + contentHeight + buttonsHeight;
 }
@@ -100,23 +107,16 @@
     
     [_data addObject: @{
         @"type" : [OATextLineViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"plan_route_exit_message"),
-    }];
-    
-    [_data addObject: @{
-        @"type" : [OAFilledButtonCell getCellIdentifier],
-        @"title" : OALocalizedString(@"shared_string_exit"),
-        @"buttonColor" : UIColorFromRGB(color_route_button_inactive),
-        @"textColor" : UIColorFromRGB(color_primary_purple),
-        @"action": @"exitButtonPressed"
+        @"title_regular_part" : OALocalizedString(@"delete_tracks_bottom_sheet_description_regular_part"),
+        @"title_bold_part" : [NSString stringWithFormat:OALocalizedString(@"delete_tracks_bottom_sheet_description_bold_part"), self.deletingTracksCount],
     }];
 
     [_data addObject: @{
         @"type" : [OAFilledButtonCell getCellIdentifier],
-        @"title" : OALocalizedString(@"shared_string_save"),
-        @"buttonColor" : UIColorFromRGB(color_primary_purple),
+        @"title" : OALocalizedString(@"shared_string_delete"),
+        @"buttonColor" : UIColorFromRGB(color_support_red),
         @"textColor" : UIColor.whiteColor,
-        @"action": @"saveButtonPressed"
+        @"action": @"deleteButtonPressed"
     }];
 }
 
@@ -127,18 +127,11 @@
 
 #pragma mark - Actions
 
-- (void) exitButtonPressed
+- (void) deleteButtonPressed
 {
     [self hide:YES];
     if (_delegate)
-        [_delegate onExitRoutePlanningPressed];
-}
-
-- (void) saveButtonPressed
-{
-    [self hide:YES];
-    if (_delegate)
-        [_delegate onSaveResultPressed];
+        [_delegate onDeleteConfirmed];
 }
 
 #pragma mark - UITableViewDataSource
@@ -171,8 +164,10 @@
         if (cell)
         {
             cell.backgroundColor = UIColor.clearColor;
-            [cell.textView setTextColor:[UIColor blackColor]];
-            [cell.textView setText:item[@"title"]];
+            NSString *regularPart = item[@"title_regular_part"];
+            NSString *boldPart = item[@"title_bold_part"];
+            NSString *fullDescription = [regularPart stringByAppendingString:boldPart];
+            cell.textView.attributedText = [OAUtilities getStringWithBoldPart:fullDescription mainString:fullDescription boldString:boldPart lineSpacing:0 fontSize:17];
         }
         return cell;
     }

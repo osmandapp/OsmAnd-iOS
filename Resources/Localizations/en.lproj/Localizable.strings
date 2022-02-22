@@ -1277,6 +1277,13 @@
 "menu_feedback" = "Feedback";
 "menu_help" = "Help";
 
+"select_tracks" = "Select tracks";
+"selected_tracks_count" = "Tracks - %d";
+
+"delete_tracks_bottom_sheet_description_regular_part" = "Are you sure you want to delete ";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d tracks?";
+"delete_tracks_bottom_sheet_title" = "Delete tracks?";
+
 // OSM Editing actions
 "opening_changeset" = "Opening changeset…";
 "closing_changeset" = "Closing changeset…";

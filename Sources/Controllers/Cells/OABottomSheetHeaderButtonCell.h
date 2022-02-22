@@ -10,4 +10,6 @@
 
 @interface OABottomSheetHeaderButtonCell : OABottomSheetHeaderDescrButtonCell
 
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
+
 @end

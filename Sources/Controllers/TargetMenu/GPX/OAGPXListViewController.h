@@ -10,18 +10,23 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 #import "OAImportGPXBottomSheetViewController.h"
+#import "OAGPXListDeletingBottomSheet.h"
 
-@interface OAGPXListViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, OAGPXImportDelegate>
+@interface OAGPXListViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, OAGPXImportDelegate, OAGPXListDeletingBottomSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *gpxTableView;
 
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UIButton *selectAllButton;
+@property (weak, nonatomic) IBOutlet UIButton *doneButton;
+@property (weak, nonatomic) IBOutlet UIButton *selectionModeButton;
 
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UIButton *checkButton;
-@property (weak, nonatomic) IBOutlet UIButton *mapButton;
+@property (weak, nonatomic) IBOutlet UIView *editToolbarView;
+@property (weak, nonatomic) IBOutlet UIButton *exportButton;
+@property (weak, nonatomic) IBOutlet UIButton *showOnMapButton;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
 - (instancetype)initWithActiveTrips;
 - (instancetype)initWithAllTrips;

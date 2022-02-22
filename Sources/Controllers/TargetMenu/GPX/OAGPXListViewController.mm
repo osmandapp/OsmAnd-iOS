@@ -46,6 +46,7 @@
 #import <MBProgressHUD.h>
 
 #import "OATrackIntervalDialogView.h"
+#import "OAExportItemsViewController.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 
@@ -75,6 +76,7 @@
     @property NSMutableArray *groupItems;
     @property NSString *groupIcon;
     @property BOOL isMenu;
+    @property BOOL isSelectable;
     @property NSString *header;
 @end
 
@@ -119,6 +121,7 @@
     NSMutableArray<OAGPX *> *_selectedItems;
     NSMutableArray<OAGpxInfo *> *_gpxList;
     NSMutableDictionary<NSString *, NSArray<OAGpxInfo *> *> *_gpxFolders;
+    int _displayingTracksCount;
     
     CALayer *_horizontalLine;
     
@@ -491,8 +494,31 @@ static UIViewController *parentController;
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"menu_my_trips");
-    [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [self updateHeaderLabels];
+}
+
+- (void) updateHeaderLabels
+{
+    [_selectAllButton setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+    
+    if (_editActive)
+    {
+        if (_selectedItems.count > 0)
+        {
+            _titleView.text = [NSString stringWithFormat:OALocalizedString(@"selected_tracks_count"), _selectedItems.count];
+            if (_selectedItems.count == _displayingTracksCount)
+                [_selectAllButton setTitle:OALocalizedString(@"shared_string_deselect_all") forState:UIControlStateNormal];
+        }
+        else
+        {
+            _titleView.text = OALocalizedString(@"select_tracks");
+        }
+    }
+    else
+    {
+        _titleView.text = OALocalizedString(@"menu_my_trips");
+    }
 }
 
 - (void) viewDidLoad
@@ -505,15 +531,28 @@ static UIViewController *parentController;
     
     _editActive = NO;
 
-    self.mapButton.frame = self.checkButton.frame;
+    self.selectionModeButton.frame = self.doneButton.frame;
     CGRect frame = self.backButton.frame;
     frame.size.width =  kMaxCancelButtonWidth;
-    self.cancelButton.frame = frame;
+    self.selectAllButton.frame = frame;
     [self setupView];
     
     _selectedIndexPaths = [[NSMutableArray alloc] init];
     _selectedItems = [[NSMutableArray alloc] init];
     _gpxFolders = [NSMutableDictionary dictionary];
+    
+    _editToolbarView.hidden = YES;
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    self.editToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
+    [self.editToolbarView.layer addSublayer:_horizontalLine];
+    
+    _exportButton.tintColor = UIColorFromRGB(color_primary_purple);
+    _showOnMapButton.tintColor = UIColorFromRGB(color_primary_purple);
+    _deleteButton.tintColor = UIColorFromRGB(color_primary_purple);
+    [_exportButton setImage:[UIImage templateImageNamed:@"ic_custom_export.png"] forState:UIControlStateNormal];
+    [_showOnMapButton setImage:[UIImage templateImageNamed:@"ic_custom_map_pin.png"] forState:UIControlStateNormal];
+    [_deleteButton setImage:[UIImage templateImageNamed:@"ic_custom_remove.png"] forState:UIControlStateNormal];
     
     [self updateButtons];
 }
@@ -523,6 +562,7 @@ static UIViewController *parentController;
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
     [self updateButtons];
+    [self layoutBottomView];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -545,12 +585,22 @@ static UIViewController *parentController;
     _trackRecordingObserver = nil;
 }
 
+-(UIView *) getBottomView
+{
+    return _editActive ? _editToolbarView : nil;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return favoritesToolBarHeight;
+}
+
 - (void) updateButtons
 {
     self.backButton.hidden = _editActive;
-    self.cancelButton.hidden = !_editActive;
-    self.mapButton.hidden = _editActive;
-    self.checkButton.hidden = !_editActive;
+    self.selectAllButton.hidden = !_editActive;
+    self.selectionModeButton.hidden = _editActive;
+    self.doneButton.hidden = !_editActive;
 }
 
 - (void) onTrackRecordingChanged
@@ -597,6 +647,7 @@ static UIViewController *parentController;
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
     _visible = _settings.mapSettingVisibleGpx.get;
     self.gpxList = [NSMutableArray arrayWithArray:db.gpxList];
+    _displayingTracksCount = 0;
     
     OAGpxTableGroup *trackRecordingGroup = [[OAGpxTableGroup alloc] init];
     trackRecordingGroup.isMenu = YES;
@@ -663,6 +714,7 @@ static UIViewController *parentController;
         tracksGroup.groupName = [OALocalizedString(key) capitalizedString];
         tracksGroup.groupIcon = @"ic_custom_folder";
         tracksGroup.isMenu = NO;
+        tracksGroup.isSelectable = YES;
         tracksGroup.type = kGPXGroupHeaderRow;
         tracksGroup.header = @"";
         for (OAGpxInfo *track in _gpxFolders[key])
@@ -680,6 +732,7 @@ static UIViewController *parentController;
                 @"wpt" : [NSString stringWithFormat:@"%d", track.gpx.wptPoints],
                 @"key" : @"track_group"
             }];
+            _displayingTracksCount++;
         }
         tracksGroup.isOpen = NO;
         if (tracksGroup.groupItems.count > 0)
@@ -771,60 +824,76 @@ static UIViewController *parentController;
     }];
 }
 
-- (IBAction) mapButtonClick:(id)sender
+- (void) layoutBottomView
 {
+    if (_editActive)
+    {
+        self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
+    }
+    else
+    {
+        self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - self.tabBarController.tabBar.frame.size.height, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
+        _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+    }
+    [self applySafeAreaMargins];
+}
+
+- (IBAction) selectionModeButtonClick:(id)sender
+{
+    _editActive = YES;
+    _editToolbarView.hidden = NO;
+    [UIView animateWithDuration:.3 animations:^{
+        [self layoutBottomView];
+    } completion:^(BOOL finished) {
+        [self.tabBarController.tabBar setHidden:YES];
+    }];
+    
     [self.gpxTableView setEditing:YES animated:YES];
     [self.gpxTableView reloadData];
-    [self updateButtons];
-    
-    _editActive = YES;
+    [self updateHeaderLabels];
     [self updateButtons];
     [self updateRecButtonsAnimated];
 }
 
-- (IBAction) checkButtonClick:(id)sender
+- (IBAction) doneButtonClick:(id)sender
 {
-    NSMutableArray<OAGPX *> *gpxArrHide = [NSMutableArray arrayWithArray:self.gpxList];
-    NSMutableArray<OAGPX *> *gpxArrNew = [NSMutableArray array];
-    NSMutableArray<NSString *> *gpxFilesHide = [NSMutableArray array];
-    NSMutableArray<NSString *> *gpxFilesNew = [NSMutableArray array];
-    
-    BOOL currentTripSelected = [self.gpxTableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:0]];
-    
-    for (OAGPX *gpx in _selectedItems)
-    {
-        [gpxArrHide removeObject:gpx];
-        [gpxArrNew addObject:gpx];
-    }
-    for (OAGPX *gpx in gpxArrHide)
-        [gpxFilesHide addObject:gpx.gpxFilePath];
-    for (OAGPX *gpx in gpxArrNew)
-        [gpxFilesNew addObject:gpx.gpxFilePath];
-
-    [_settings.mapSettingShowRecordingTrack set:currentTripSelected];
-    [_settings hideGpx:gpxFilesHide];
-    [_settings showGpx:gpxFilesNew];
-    
-    self.gpxList = gpxArrNew;
-    [_settings updateGpx:gpxFilesNew];
-    
-    [self.gpxTableView setEditing:NO animated:NO];
     _editActive = NO;
+    [UIView animateWithDuration:.3 animations:^{
+        [self.tabBarController.tabBar setHidden:NO];
+        [self layoutBottomView];
+    } completion:^(BOOL finished) {
+        _editToolbarView.hidden = YES;
+    }];
+    
+    [self.gpxTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
     [_selectedIndexPaths removeAllObjects];
+    [self updateHeaderLabels];
     [self updateButtons];
-    
-    [self generateData];
     [self updateRecButtonsAnimated];
-    [self.gpxTableView reloadData];
 }
 
-- (IBAction) cancelButtonClick:(id)sender
+- (IBAction) selectAllButtonClick:(id)sender
 {
-    [self.gpxTableView setEditing:NO animated:YES];
-    _editActive = NO;
-    [self updateButtons];
-    [self updateRecButtonsAnimated];
+    BOOL shouldDeselect = _selectedItems.count == _displayingTracksCount;
+    if (!shouldDeselect)
+    {
+        [_selectedItems removeAllObjects];
+        [_selectedIndexPaths removeAllObjects];
+    }
+    
+    for (int i = 0; i < _data.count; i++)
+    {
+        OAGpxTableGroup *group = _data[i];
+        if (group.isSelectable)
+        {
+            if (shouldDeselect)
+                [self deselectAllGroup:i];
+            else
+                [self selectAllGroup:i];
+        }
+    }
+    [self updateHeaderLabels];
 }
 
 - (void) onImportClicked
@@ -990,6 +1059,69 @@ static UIViewController *parentController;
     return NO;
 }
 
+- (IBAction) exportButtonClicked:(id)sender
+{
+    if (_selectedItems.count > 0)
+    {
+        NSMutableArray<NSString *> *paths = [NSMutableArray array];
+        for (OAGPX *gpx in _selectedItems)
+            [paths addObject:[_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]];
+        
+        OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] initWithTracks:[NSArray arrayWithArray:paths]];
+        [self.navigationController pushViewController:exportController animated:YES];
+        [self doneButtonClick:nil];
+    }
+}
+
+- (IBAction) showOnMapButtonClicked:(id)sender
+{
+    if (_selectedItems.count > 0)
+    {
+        NSMutableArray<OAGPX *> *gpxArrHide = [NSMutableArray arrayWithArray:self.gpxList];
+        NSMutableArray<OAGPX *> *gpxArrNew = [NSMutableArray array];
+        NSMutableArray<NSString *> *gpxFilesHide = [NSMutableArray array];
+        NSMutableArray<NSString *> *gpxFilesNew = [NSMutableArray array];
+        
+        for (OAGPX *gpx in _selectedItems)
+        {
+            [gpxArrHide removeObject:gpx];
+            [gpxArrNew addObject:gpx];
+        }
+        for (OAGPX *gpx in gpxArrHide)
+            [gpxFilesHide addObject:gpx.gpxFilePath];
+        for (OAGPX *gpx in gpxArrNew)
+            [gpxFilesNew addObject:gpx.gpxFilePath];
+        
+        [_settings hideGpx:gpxFilesHide];
+        [_settings showGpx:gpxFilesNew];
+        
+        self.gpxList = gpxArrNew;
+        [_settings updateGpx:gpxFilesNew];
+        
+        [self.gpxTableView setEditing:NO animated:NO];
+        _editActive = NO;
+        [_selectedItems removeAllObjects];
+        [_selectedIndexPaths removeAllObjects];
+        [self updateButtons];
+        
+        [self generateData];
+        [self updateRecButtonsAnimated];
+        [self.gpxTableView reloadData];
+        
+        [self doneButtonClick:nil];
+    }
+}
+
+- (IBAction) deleteButtonClicked:(id)sender
+{
+    if (_selectedItems.count > 0)
+    {
+        OAGPXListDeletingBottomSheetViewController *bottomSheet = [[OAGPXListDeletingBottomSheetViewController alloc] init];
+        bottomSheet.deletingTracksCount = _selectedItems.count;
+        bottomSheet.delegate = self;
+        [bottomSheet presentInViewController:self];
+    }
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -1180,7 +1312,7 @@ static UIViewController *parentController;
                     cell.distanceLabel.text = groupItem[@"distance"];
                     cell.timeLabel.text = groupItem[@"time"];
                     cell.wptLabel.text = groupItem[@"wpt"];
-                    [cell setRightButtonVisibility:YES];
+                    [cell setRightButtonVisibility:!_editActive];
                     [cell.editButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"] forState:UIControlStateNormal];
                     cell.editButton.tintColor = UIColorFromRGB(color_tint_gray);
                     cell.leftIconImageView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
@@ -1198,9 +1330,7 @@ static UIViewController *parentController;
     OAGpxTableGroup *groupData = [_data objectAtIndex:indexPath.section];
     if (groupData.isMenu)
     {
-        NSDictionary *menuItem = groupData.groupItems[indexPath.row];
-        NSString *menuCellType = menuItem[@"key"];
-        return  [menuCellType isEqualToString:@"track_recording"] && [_iapHelper.trackRecording isActive];
+        return NO;
     }
     else
         return YES;
@@ -1222,6 +1352,8 @@ static UIViewController *parentController;
         [self deselectAllGroup:indexPath.section];
     else
         [self selectDeselectGroupItem:indexPath select:NO];
+    
+    [self updateHeaderLabels];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1280,6 +1412,7 @@ static UIViewController *parentController;
         else
             [self selectDeselectGroupItem:indexPath select:YES];
     }
+    [self updateHeaderLabels];
 }
 
 #pragma mark - Group header methods
@@ -1473,6 +1606,17 @@ static UIViewController *parentController;
     [[OARootViewController instance].navigationController pushViewController:parentController animated:NO];
     
     parentController = nil;
+}
+
+#pragma mark - OAGPXListDeletingBottomSheetDelegate
+
+- (void)onDeleteConfirmed {
+    for (OAGPX *gpx in _selectedItems)
+    {
+        [_settings hideGpx:@[gpx.gpxFilePath] update:YES];
+        [[OAGPXDatabase sharedDb] removeGpxItem:gpx.gpxFilePath];
+    }
+    [self reloadData];
 }
 
 @end

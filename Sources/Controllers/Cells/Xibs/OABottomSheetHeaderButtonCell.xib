@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -76,6 +76,7 @@
             <connections>
                 <outlet property="closeButton" destination="kCa-db-nBd" id="aD3-bX-heF"/>
                 <outlet property="iconView" destination="9Uu-OT-AHV" id="UYW-IY-Ugb"/>
+                <outlet property="separatorView" destination="Ah2-FI-gpg" id="lBy-ZM-nd5"/>
                 <outlet property="sliderView" destination="a9L-gE-DfK" id="VW1-Hl-Uc6"/>
                 <outlet property="titleView" destination="ryS-ae-NqK" id="7IO-Wz-BtP"/>
             </connections>

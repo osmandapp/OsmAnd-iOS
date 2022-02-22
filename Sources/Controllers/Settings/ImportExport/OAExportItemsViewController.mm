@@ -17,6 +17,7 @@
 #import "OATableViewCustomHeaderView.h"
 
 #define kDefaultArchiveName @"Export"
+#define kMyPlacesSectionIndex 1
 
 @implementation OAExportItemsViewController
 {
@@ -30,6 +31,7 @@
     long _itemsSize;
     NSString *_fileSize;
     NSString *_headerLabel;
+    BOOL _shouldOpenMyPlacesOnInit;
 }
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)appMode
@@ -38,6 +40,17 @@
     if (self)
     {
         _appMode = appMode;
+    }
+    return self;
+}
+
+- (instancetype)initWithTracks:(NSArray<NSString *> *)tracks
+{
+    self = [super init];
+    if (self)
+    {
+        self.selectedItemsMap[OAExportSettingsType.TRACKS] = tracks;
+        _shouldOpenMyPlacesOnInit = YES;
     }
     return self;
 }
@@ -87,6 +100,16 @@
     [self generateData];
     [self updateSelectedProfile];
     [self updateControls];
+}
+
+- (void) generateData
+{
+    [super generateData];
+    if (_shouldOpenMyPlacesOnInit)
+    {
+        self.data[kMyPlacesSectionIndex].isOpen = YES;
+        _shouldOpenMyPlacesOnInit = NO;
+    }
 }
 
 - (NSString *)descriptionText

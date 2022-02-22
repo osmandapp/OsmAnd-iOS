@@ -22,10 +22,10 @@
 
 @interface OAGPXListDeletingBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (strong, nonatomic) IBOutlet UILabel *messageView;
-@property (strong, nonatomic) IBOutlet UIButton *exitButton;
-@property (strong, nonatomic) IBOutlet UIButton *deleteButton;
-@property (strong, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UILabel *messageView;
+@property (weak, nonatomic) IBOutlet UIButton *exitButton;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 
 @end
 
@@ -191,6 +191,7 @@
             cell.button.layer.cornerRadius = 9.;
             cell.topMarginConstraint.constant = 0;
             cell.bottomMarginConstraint.constant = 0;
+            cell.heightConstraint.constant = 42;
             
             [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.button addTarget:self action:NSSelectorFromString(item[@"action"]) forControlEvents:UIControlEventTouchUpInside];
@@ -211,14 +212,6 @@
         return kButtonsVerticalMargin;
     else
         return kLabelVerticalMargin;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 0)
-        return UITableViewAutomaticDimension;
-    else
-        return 42;
 }
 
 @end

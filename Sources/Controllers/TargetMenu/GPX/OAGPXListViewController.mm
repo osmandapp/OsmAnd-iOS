@@ -1063,11 +1063,11 @@ static UIViewController *parentController;
 {
     if (_selectedItems.count > 0)
     {
-        NSMutableArray<NSString *> *pathes = [NSMutableArray array];
+        NSMutableArray<NSString *> *paths = [NSMutableArray array];
         for (OAGPX *gpx in _selectedItems)
-            [pathes addObject:[_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]];
+            [paths addObject:[_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]];
         
-        OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] initWithTracks:[NSArray arrayWithArray:pathes]];
+        OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] initWithTracks:[NSArray arrayWithArray:paths]];
         [self.navigationController pushViewController:exportController animated:YES];
         [self doneButtonClick:nil];
     }

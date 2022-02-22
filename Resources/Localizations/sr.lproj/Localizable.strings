@@ -2366,3 +2366,9 @@
 "shared_string_open_street_map" = "ОпенСтритМап";
 "routing_attr_only_permitted_streets_name" = "Изричито дозвољене улице";
 "routing_attr_only_permitted_ways_description" = "Користите само путеве (траке, стазе, итд.) који су изричито дозвољени";
+"route_preferred_terrain_flat" = "Руте са равним рељефним профилом. Дужина се може повећати.";
+"route_preferred_terrain_any" = "Профил терена се не узима у обзир при избору руте.";
+"shared_string_any" = "Било који";
+"route_preferred_terrain_less_hilly" = "Краће, мање брдовите руте.";
+"preferred_terrain" = "Преферирани терен";
+"route_preferred_terrain_hilly" = "Руте са брдовитим профилом рељефа.";

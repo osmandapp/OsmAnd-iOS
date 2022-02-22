@@ -22,6 +22,8 @@
 
 #include <OsmAndCore/Utilities.h>
 
+#define kTransportIconWidth 16.0
+
 @implementation OACollapsableTransportStopRoutesView
 {
     NSArray<UIButton *> *_buttons;
@@ -50,8 +52,7 @@
         if (!img)
             img = [OATargetInfoViewController getIcon:@"mx_public_transport"];
         
-        CGFloat imgSize = [[UIScreen mainScreen] scale] * 8.0;
-        img = [OAUtilities resizeImage:img newSize:{ imgSize, imgSize }];
+        img = [OAUtilities resizeImage:img newSize:{ kTransportIconWidth, kTransportIconWidth }];
         img = [OAUtilities getTintableImage:img];
 
         NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:text attributes:nil];
@@ -121,7 +122,8 @@
     CGFloat viewHeight = 0;
     for (UIButton *btn in _buttons)
     {
-        CGFloat h = [btn.currentAttributedTitle boundingRectWithSize:{width - kMarginLeft - kMarginRight, 10000} options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height;
+        CGFloat labelWidth = width - [OAUtilities getLeftMargin] - kMarginLeft - kMarginRight;
+        CGFloat h = [btn.currentAttributedTitle boundingRectWithSize:{labelWidth, 10000} options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height;
         CGFloat btnH = h + kMarginTop * 2;
         btn.contentEdgeInsets = UIEdgeInsetsMake(kMarginTop, kMarginRight + [OAUtilities getLeftMargin], kMarginTop, kMarginRight);
 

@@ -258,7 +258,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
 "units_min" = "min";
@@ -292,8 +292,6 @@
 "region_north_america" = "Severna Amerika";
 "region_russia" = "Rusija";
 "region_south_america" = "Južna Amerika";
-"units_minutes_short" = "min";
-"units_seconds_short" = "sek";
 "cannot_access_calendar" = "Dostop do koledarja ni mogoč";
 //inapps
 "product_title_nautical" = "Navtični zemljevid";
@@ -318,11 +316,11 @@
 "si_min_km" = "Minute na kilometer";
 "si_min_m" = "Minute na miljo";
 "si_nm_h" = "Navtične milje na uro (vozli)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "sett_arr" = "Puščice zemljevida";
 "res_search_world" = "Poišči po svetu";
 "res_worldwide" = "Po svetu";
@@ -471,7 +469,7 @@
 "speak_favorites" = "Bližnje priljubljene točke";
 "speak_poi" = "Bližnje točke POI";
 "speak_pedestrian" = "Prehodi za pešce";
-"int_seconds" = "sek";
+"units_seconds" = "sek";
 "shared_string_never" = "Nikoli";
 "general_settings_2" = "Splošne nastavitve";
 "general_settings_descr" = "Prilagajanje splošnih nastavitev programa";
@@ -1395,7 +1393,6 @@
 "map_during_navigation" = "Zemljevid med navigacijo";
 "shared_string_gpx_track" = "Sled";
 "copied_to_clipboard" = "Vsebina je kopirana v odložišče";
-"units_nm" = "nmi";
 "shared_string_enable" = "Omogoči";
 "split_before" = "Razdeli pred";
 "replace_favorite_confirmation" = "Ali ste prepričani, da želite zamenjati priljubljeno točko %@?";
@@ -1414,13 +1411,11 @@
 "dialogs_and_notifications" = "Pogovorna okna in opozorila";
 "product_desc_ext_mapillary" = "Spletne fotografije ulic za vsakogar. Odkrijte mesta, sodelujte in zajemite svet.";
 "navigate_point_zone" = "Območje";
-"foot" = "ft";
 "navigate_point_northing" = "Koordinata v smeri proti severu";
 "shared_string_navigation" = "Navigacija";
 "gpxup_trackable" = "Sledljivo";
 "default" = "Privzeto";
 "welmode_download_maps" = "Prejmi zemljevide";
-"m" = "m";
 "gpxup_public" = "Javno";
 "navigate_point_olc" = "Odpri kodo območja";
 "added_profiles" = "Dodani profili";

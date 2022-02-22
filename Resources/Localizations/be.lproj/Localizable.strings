@@ -252,7 +252,7 @@
 "add_notification_calendar" = "Напамін у календары";
 "parking_time_limited" = "Час паркоўкі абмежаваны";
 "cannot_add_marker_desc" = "Прыбярыце адзін з кірункаў і паўтарыце спробу";
-"units_kmh" = "км/г";
+"units_km_h" = "км/г";
 "units_mph" = "м/г";
 "units_sec" = "сек.";
 "map_remind" = "Нагадаць пазней";
@@ -274,7 +274,6 @@
 "loc_access_denied_desc" = "Доступ да службы геалакацыі забаронены";
 // Colors
 "col_purple" = "Фіялетавы";
-"units_seconds_short" = "сек.";
 "cannot_access_calendar" = "Памылка доступу да календара";
 "reminder_not_set_text" = "Нельга стварыць напамін, бо доступ да календара забаронены";
 //inapps
@@ -313,7 +312,6 @@
 "units_min" = "хв";
 "col_orange" = "Аранжавы";
 "col_blue" = "Сіні";
-"units_minutes_short" = "хв";
 "fav_select" = "Калі ласка, абярыце ўлюбёныя";
 "intro_welcome" = "Вітаем у\nOsmAnd";
 "enter_description" = "Увесці апісанне";
@@ -450,7 +448,7 @@
 "shared_string_of" = "з";
 "right_side_navigation" = "Правабаковы рух";
 "si_mi_meters" = "Мілі/метры";
-"nm" = "м.мілі";
+"units_nm" = "м.мілі";
 "si_nm" = "Марскія мілі";
 "si_kmh" = "Кіламетраў за гадзіну";
 "si_mph" = "Міляў за гадзіну";
@@ -458,10 +456,10 @@
 "si_min_km" = "Хвілін на кіламетар";
 "si_min_m" = "Хвілін на мілю";
 "si_nm_h" = "Марскіх міль за гадзіну (вузлоў)";
-"nm_h" = "м.міль/г";
-"min_mile" = "хв/м";
-"min_km" = "хв/км";
-"m_s" = "м/с";
+"units_nm_h" = "м.міль/г";
+"units_min_mi" = "хв/м";
+"units_min_km" = "хв/км";
+"units_m_s" = "м/с";
 "driving_region" = "Рэгіён кіравання";
 "driving_region_japan" = "Японія";
 "driving_region_us" = "ЗША";
@@ -605,7 +603,7 @@
 "speak_favorites" = "Улюбёныя паблізу";
 "speak_poi" = "Навакольныя POI";
 "speak_pedestrian" = "Пешаходныя пераходы";
-"int_seconds" = "секунд";
+"units_seconds" = "секунд";
 "shared_string_never" = "Ніколі";
 "general_settings_2" = "Агульныя налады";
 "general_settings_descr" = "Тэма праграмы, адзінкі вымярэння, рэгіён";
@@ -1954,7 +1952,6 @@
 "markers_history" = "Гісторыя адзнак";
 "service" = "Паслугі";
 "add_custom_category" = "Дадаць адвольную катэгорыю";
-"units_nm" = "м.мілі";
 "shared_string_others" = "Іншае";
 "special" = "Адмысловыя";
 "rearrange_categories" = "Перапарадкаваць катэгорыі";
@@ -1965,7 +1962,6 @@
 "suggested_maps_descr" = "Гэтыя мапы патрабуюцца для убудовы.";
 "last_used" = "Апошні раз выкарыстоўвалася";
 "download_map_dialog" = "Дыялог спампоўвання мапы";
-"m" = "м";
 "some_articles_may_not_available_in_lang" = "Некаторых артыкулаў Вікіпедыі можа не быць на вашай мове.";
 "route_between_points_warning_desc" = "Пасля вам патрэбна абраць профіль навігацыі для вызначэння маршруту з улікам параметраў і абмежаванняў гэтага профілю.";
 "suggested_maps" = "Прапанаваныя мапы";
@@ -1983,7 +1979,6 @@
 "no_waypoints_found" = "Пунктаў шляху не знойдзена";
 "shared_string_wifi_only" = "Толькі праз Wi-Fi";
 "welmode_download_maps" = "Спампаваць мапы";
-"foot" = "фут";
 "product_title_mapillary" = "Mapillary";
 "gpxup_private" = "Прыватны";
 "wiki_menu_download_descr" = "Для прагляду POI Вікіпедыі на мапе патрабуюцца дадатковыя мапы.";

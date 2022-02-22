@@ -108,7 +108,7 @@
 "speak_favorites" = "Blízké Oblíbené body";
 "speak_poi" = "Blízké body zájmu POI";
 "speak_pedestrian" = "Přechody pro chodce";
-"int_seconds" = "sekund";
+"units_seconds" = "sekund";
 "shared_string_never" = "Nikdy";
 "general_settings_2" = "Všeobecná nastavení";
 "general_settings_descr" = "Vzhled aplikace, jednotky, oblast";
@@ -253,11 +253,11 @@
 "si_min_km" = "Minut na kilometr";
 "si_min_m" = "Minut na míli";
 "si_nm_h" = "Námořní míle za hodinu (uzly)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "Nic nenalezeno: %@";
 "nothing_found_descr" = "Změňte vyhledávací dotaz nebo zvětšete okruh hledání";
 "select_street" = "Vyberte ulici";
@@ -517,7 +517,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
 "units_min" = "min";
@@ -570,8 +570,6 @@
 "rendering_category_transport" = "Doprava";
 "rendering_category_others" = "Ostatní vlastnosti mapy";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "sek.";
 "cannot_access_calendar" = "Nelze získat přistup do kalendáře";
 "reminder_not_set_text" = "Připomenutí nebylo nastaveno, protože nemáte povolený přístup ke kalendáři";
 //inapps
@@ -1944,7 +1942,6 @@
 "help_legend_descr" = "Průvodce mapovými symboly";
 "help_travel" = "Cestování (Wikipedie & Wikivoyage)";
 "units_sec_short" = "s";
-"units_nm" = "nmi";
 "modify_poi" = "Upravit informace o bodu zájmu";
 "edit_osm_note" = "Upravit OSM poznámku";
 "unsupported_action_descr" = "Tato rychlá akce není zatím podporována. Podpora může být přidána v některé z příštích verzí aplikace.";
@@ -2124,8 +2121,6 @@
 "product_desc_openplacereviews" = "Posílejte fotky, recenze a odkazy veřejných míst";
 "product_desc_ext_mapillary" = "On-line fotografie z ulic pro každého. Objevte místa, spolupracujte, zachyťte svět.";
 "product_desc_mapillary" = "Online fotky ulic pro každého";
-"m" = "m";
-"foot" = "ft";
 "shared_string_feet" = "stopy";
 "srtm_download_list_help_message" = "OsmAnd poskytuje data vrstevnic v metrech a stopách. Pro změnu formátu budete muset soubor znovu stáhnout.";
 "srtm_download_single_help_message" = "Zvolte prosím variantu. Pro změnu formátu budete muset soubor znovu stáhnout.";

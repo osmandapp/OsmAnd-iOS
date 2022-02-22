@@ -108,7 +108,7 @@
 "speak_favorites" = "نقاط مفضلة مجاورة";
 "speak_poi" = "نقاط الاهتمام القريبة";
 "speak_pedestrian" = "ممرات الراجلين";
-"int_seconds" = "ث";
+"units_seconds" = "ث";
 "shared_string_never" = "أبداً";
 "general_settings_2" = "إعدادات عامة";
 "general_settings_descr" = "ثيم التطبيق ، وحدات ، المنطقة";
@@ -253,11 +253,11 @@
 "si_min_km" = "دقيقة/كم";
 "si_min_m" = "دقيقة/ميل";
 "si_nm_h" = "أميال بحرية في الساعة (عقدة)";
-"nm" = "ميل بحري";
-"nm_h" = "ميل بحري/في الساعة";
-"min_mile" = "د/م";
-"min_km" = "د/كم";
-"m_s" = "م/ث";
+"units_nm" = "ميل بحري";
+"units_nm_h" = "ميل بحري/في الساعة";
+"units_min_mi" = "د/م";
+"units_min_km" = "د/كم";
+"units_m_s" = "م/ث";
 "nothing_found" = "لايمكن العثور على : %@";
 "nothing_found_descr" = "قم بتعديل استعلام البحث أو قم بزيادة نصف قطر البحث";
 "select_street" = "اختر شارع";
@@ -517,7 +517,7 @@
 "units_mi" = "ميل";
 "units_yd" = "ياردة";
 "units_ft" = "قدم";
-"units_kmh" = "كم/س";
+"units_km_h" = "كم/س";
 "units_mph" = "ميل ساعة";
 "units_hour" = "س";
 "units_min" = "د";
@@ -570,8 +570,6 @@
 "rendering_category_transport" = "وسائل المواصلات";
 "rendering_category_others" = "سمات أخرى للخريطة";
 // Rendering attributes
-"units_minutes_short" = "د";
-"units_seconds_short" = "ثانية";
 "cannot_access_calendar" = "لا يمكن الوصول إلى التقويم";
 "reminder_not_set_text" = "لم يتم تعيين التذكير لأنه لا يُسمح لك بالوصول إلى التقويم";
 //inapps
@@ -1958,7 +1956,6 @@
 "key_hint_recenter_map" = "إعادة توسيط الخريطة";
 "shared_z_a" = "Z - A";
 "shared_a_z" = "A - Z";
-"units_nm" = "ميل بحري";
 "select_application_profile" = "اختر وضع الملاحة";
 "change_application_profile" = "تغيير ملف تعريف التطبيق";
 "quick_action_showhide_mapillary_descr" = "النقر على زر الإجراء هذا يظهر أو يخفي طبقة مابيلاري على الخريطة.";
@@ -2133,8 +2130,6 @@
 "rendering_value_walkingRoutesScopeOSMC_description" = "تلوين وفق الانتماء للشبكة.";
 "rendering_value_walkingRoutesOSMCNodes_description" = "لون الطرق وفقا لنوع نقطة التشابك الخاصة بهم (دولية، إقليمية، محلية).";
 "walking_route_osmc_description" = "لون الطرق وفقا للونها المحلي الفردي (إذا كانت موجودة على OpenStreetMap) والنوع حسب (دولي، إقليمي، محلي).";
-"m" = "م";
-"foot" = "قدم";
 "shared_string_feet" = "قدم";
 "srtm_download_list_help_message" = "OsmAndيوفر بيانات الخطوط الكنتورية بالأمتار والقدم. ستحتاج إلى إعادة تنزيل الملف لتغيير التنسيق.";
 "srtm_download_single_help_message" = "الرجاء تحديد التنسيق المطلوب. ستحتاج إلى إعادة تنزيل الملف لتغيير التنسيق.";

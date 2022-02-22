@@ -49,7 +49,7 @@
             [dataArr addObject:
              @{
                @"name" : speedLimitsKm[i],
-               @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsKm[i].intValue, OALocalizedString(@"units_kmh")],
+               @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsKm[i].intValue, OALocalizedString(@"units_km_h")],
                @"isSelected" : @(index == i),
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];

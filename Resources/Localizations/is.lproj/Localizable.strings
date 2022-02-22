@@ -243,7 +243,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/klst";
+"units_km_h" = "km/klst";
 "units_mph" = "mi/klst";
 "units_hour" = "klst";
 "units_min" = "mín";
@@ -296,8 +296,6 @@
 "rendering_category_transport" = "Samgöngur";
 "rendering_category_others" = "Önnur eigindi korts";
 // Rendering attributes
-"units_minutes_short" = "mín";
-"units_seconds_short" = "sek";
 "cannot_access_calendar" = "Mistókst að fá aðgang að dagatali";
 "reminder_not_set_text" = "Ekki var hægt að stilla áminninguna því aðgangi að dagatalinu er hafnað";
 //inapps
@@ -504,7 +502,7 @@
 "shared_string_in_name" = "í %@";
 "right_side_navigation" = "Ekið á hægri akrein";
 "si_mi_meters" = "Mílur/metrar";
-"nm" = "sml";
+"units_nm" = "sml";
 "si_nm" = "Sjómílur";
 "si_kmh" = "Kílómetrar á klukkustund";
 "si_mph" = "Mílur á klukkustund";
@@ -512,10 +510,10 @@
 "si_min_km" = "Mínútur á kílómetra";
 "si_min_m" = "Mínútur á mílu";
 "si_nm_h" = "Sjómílur á klukkustund (hnútar)";
-"nm_h" = "hnútar";
-"min_mile" = "mín/ml";
-"min_km" = "mín/km";
-"m_s" = "m/sek";
+"units_nm_h" = "hnútar";
+"units_min_mi" = "mín/ml";
+"units_min_km" = "mín/km";
+"units_m_s" = "m/sek";
 "driving_region" = "Aksturssvæði";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "Bandaríkin";
@@ -591,7 +589,7 @@
 "speak_favorites" = "Eftirlæti í næsta nágrenni";
 "speak_poi" = "Nálægur merkisstaður";
 "speak_pedestrian" = "Gangbrautir";
-"int_seconds" = "sekúndur";
+"units_seconds" = "sekúndur";
 "shared_string_never" = "Aldrei";
 "general_settings_2" = "Almennar stillingar";
 "general_settings_descr" = "Þema forrits, einingar, landssvæði";
@@ -1957,7 +1955,6 @@
 "key_hint_recenter_map" = "Endurmiðja kort";
 "shared_z_a" = "Ö-A";
 "shared_a_z" = "A-Ö";
-"units_nm" = "sml";
 "select_application_profile" = "Veldu forritssnið";
 "change_application_profile" = "Skipta um forritssnið";
 "quick_action_showhide_mapillary_descr" = "Ef ýtt er á þennan aðgerðahnapp mun það birta eða fela Mapillary-lagið á kortinu.";
@@ -2129,7 +2126,6 @@
 "routes_color_by_type" = "Lita leiðir eftir…";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Litur fer eftir leiðakerfi.";
 "travel_routes" = "Ferðaleiðir";
-"foot" = "ft";
 "shared_string_feet" = "fet";
 "srtm_download_list_help_message" = "OsmAnd býður upp á hæðalínugögn í metrum og fetum. Þú þarft að sækja skrána aftur til að breyta sniðinu.";
 "srtm_download_single_help_message" = "Veldu rétt snið eininga. Þú þarft að sækja skrána aftur til að breyta sniðinu.";
@@ -2171,7 +2167,6 @@
 "nautical" = "Sjókort";
 "gpx_split_interval" = "Skipta millibili";
 "units_min_short" = "m";
-"m" = "m";
 "parked_at" = "Lagt við";
 "coords_format_descr_quick_search" = "Þú getur breytt sniði hnita fyrir notkunarsniðið í almennum stillingum";
 "download_suggestion" = "Sæktu nákvæma %@ kortið til að skoða þetta svæði";

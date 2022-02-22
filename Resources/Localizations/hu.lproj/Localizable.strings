@@ -219,7 +219,7 @@
 "units_mi" = "mérföld";
 "units_yd" = "yard";
 "units_ft" = "láb";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mérföld/óra";
 "units_hour" = "ó";
 "units_min" = "perc";
@@ -272,8 +272,6 @@
 "rendering_category_transport" = "Tömegközlekedés";
 "rendering_category_others" = "Egyéb térképtulajdonságok";
 // Rendering attributes
-"units_minutes_short" = "perc";
-"units_seconds_short" = "mp.";
 "cannot_access_calendar" = "Nem lehet hozzáférni a naptárhoz";
 "reminder_not_set_text" = "Az emlékeztető nem lett beállítva, mivel nem engedélyezte a naptárhoz való hozzáférést";
 //inapps
@@ -544,11 +542,11 @@
 "si_min_km" = "perc/km";
 "si_min_m" = "Perc/mérföld";
 "si_nm_h" = "Tengeri mérföld per óra (csomó)";
-"nm" = "tengeri mérföld";
-"nm_h" = "tengeri mérföld/óra";
-"min_mile" = "perc/mérföld";
-"min_km" = "perc/km";
-"m_s" = "m/s";
+"units_nm" = "tengeri mérföld";
+"units_nm_h" = "tengeri mérföld/óra";
+"units_min_mi" = "perc/mérföld";
+"units_min_km" = "perc/km";
+"units_m_s" = "m/s";
 "nothing_found" = "Nincs találat: %@";
 "select_street" = "Utca kijelölése";
 "shared_string_in_name" = "itt: %@";
@@ -643,7 +641,7 @@
 "shared_string_sound" = "Hang";
 "show_traffic_warnings" = "Forgalmi figyelmeztetések";
 "speak_favorites" = "Közeli Kedvencek";
-"int_seconds" = "másodperc";
+"units_seconds" = "másodperc";
 "fast_route_mode" = "Leggyorsabbútvonal";
 "choose_auto_follow_route" = "Automatikus követés ideje";
 "keep_informing" = "Navigációs utasítások ismétlése";
@@ -1518,7 +1516,6 @@
 "favorite_friends_category" = "Barátok";
 "fav_points_not_exist" = "Még nincsenek Kedvenc pontok";
 "plan_route_select_folder" = "Mappa kijelölése";
-"units_nm" = "tengeri mérföld";
 "search_history" = "Keresési előzmények";
 "markers_history" = "Jelölők előzményei";
 "favorite_places_category" = "Helyek";
@@ -1590,11 +1587,9 @@
 "last_intermediate_dest_description" = "Hozzáadja az útvonal utolsó megállóját";
 "first_intermediate_dest_description" = "Hozzáadja az útvonal első megállóját";
 "allow_3d_descr" = "Engedélyezze ezt a beállítást, hogy a térképet 2,5D perspektívában láthassa";
-"m" = "m";
 "suggested_maps_descr" = "A bővítményhez szükség van ezekre a térképekre.";
 "welmode_download_maps" = "Térképek letöltése";
 "navigate_point_northing" = "Északi";
-"foot" = "láb";
 "routes_color_by_type" = "Útvonalak színezése…";
 "added_profiles" = "Hozzáadott profilok";
 "search_more" = "További keresés…";

@@ -108,7 +108,7 @@
 "speak_favorites" = "Favorieten in de buurt";
 "speak_poi" = "Dichtbij POI";
 "speak_pedestrian" = "Zebrapaden";
-"int_seconds" = "seconden";
+"units_seconds" = "seconden";
 "shared_string_never" = "Nooit";
 "general_settings_2" = "Algemene instellingen";
 "general_settings_descr" = "Configure display and common settings for the application";
@@ -253,11 +253,11 @@
 "si_min_km" = "Minuten per kilometer";
 "si_min_m" = "Minuten per mijl";
 "si_nm_h" = "Nautische mijlen per uur (knopen)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "nothing_found" = "Nothing found :(";
 "nothing_found_descr" = "Wijzig de zoekterm of vergroot het zoekgebied.";
 "select_street" = "Selecteer een straat";
@@ -517,7 +517,7 @@
 "units_mi" = "mijl";
 "units_yd" = "yard";
 "units_ft" = "voet";
-"units_kmh" = "km/u";
+"units_km_h" = "km/u";
 "units_mph" = "mpu";
 "units_hour" = "u";
 "units_min" = "min";
@@ -570,8 +570,6 @@
 "rendering_category_transport" = "Openbaar Vervoer";
 "rendering_category_others" = "Overige kaart attributen";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
@@ -1549,7 +1547,6 @@
 "search_preogress" = "Bezig met zoeken…";
 "reverse_track_dir" = "Keer richting van GPX-track om";
 "res_standard" = "Normale kaarten";
-"units_nm" = "nmi";
 "plan_route_last_modified" = "Laatst gewijzigd";
 "searching_gps" = "GPS zoeken";
 "osmand_live_title" = "OsmAnd Live";
@@ -1598,7 +1595,6 @@
 "shared_string_wifi_only" = "Alleen met Wifi";
 "srtm_download_list_help_message" = "OsmAnd biedt gegevens van contourlijnen in meters en voet aan. Je zal het bestand opnieuw moeten downloaden om het formaat te wijzigen.";
 "shared_string_all_languages" = "Alle talen";
-"m" = "m";
 "navigate_point_easting" = "Oostwaarde";
 "added_profiles" = "Profielen toegevoegd";
 "context_menu_item_edit_waypoint" = "GPX-routepunt bewerken";
@@ -1618,7 +1614,6 @@
 "gpxup_private" = "Privé";
 "shared_string_navigation" = "Navigatie";
 "dialogs_and_notifications" = "Dialogen en meldingen";
-"foot" = "voet";
 "threshold_distance" = "Drempelafstand";
 "shared_strings_all_regions" = "Alle regio\'s";
 "restart" = "Herstart";

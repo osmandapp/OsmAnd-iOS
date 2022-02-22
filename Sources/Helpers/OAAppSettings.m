@@ -201,6 +201,7 @@
 #define saveTrackPrecisionKey @"saveTrackPrecision"
 #define saveTrackMinSpeedKey @"saveTrackMinSpeed"
 #define autoSplitRecordingKey @"autoSplitRecording"
+#define saveHeadingToGpxKey @"saveHeadingToGpx"
 
 #define rulerModeKey @"rulerMode"
 #define showDistanceRulerKey @"showDistanceRuler"
@@ -426,7 +427,7 @@
         case MILES_AND_YARDS:
             return @"mi-y";
         case NAUTICAL_MILES:
-            return @"nm";
+            return @"units_nm";
 
         default:
             return @"";
@@ -516,17 +517,17 @@
     switch (sc)
     {
         case KILOMETERS_PER_HOUR:
-            return OALocalizedString(@"units_kmh");
+            return OALocalizedString(@"units_km_h");
         case MILES_PER_HOUR:
             return OALocalizedString(@"units_mph");
         case METERS_PER_SECOND:
-            return OALocalizedString(@"m_s");
+            return OALocalizedString(@"units_m_s");
         case MINUTES_PER_MILE:
-            return OALocalizedString(@"min_mile");
+            return OALocalizedString(@"units_min_mi");
         case MINUTES_PER_KILOMETER:
-            return OALocalizedString(@"min_km");
+            return OALocalizedString(@"units_min_km");
         case NAUTICALMILES_PER_HOUR:
-            return OALocalizedString(@"nm_h");
+            return OALocalizedString(@"units_nm_h");
 
         default:
             return nil;
@@ -3158,12 +3159,14 @@
         // TODO: redesign alert as in android to show/hide recorded trip on map
         _mapSettingShowRecordingTrack = [[[OACommonBoolean withKey:mapSettingShowRecordingTrackKey defValue:YES] makeGlobal] makeShared];
         _mapSettingShowTripRecordingStartDialog = [[[OACommonBoolean withKey:mapSettingShowTripRecordingStartDialogKey defValue:YES] makeGlobal] makeShared];
+        _saveHeadingToGpx = [OACommonBoolean withKey:saveHeadingToGpxKey defValue:NO];
 
         [_globalPreferences setObject:_mapSettingSaveGlobalTrackToGpx forKey:@"save_global_track_to_gpx"];
         [_profilePreferences setObject:_mapSettingSaveTrackIntervalGlobal forKey:@"save_global_track_interval"];
         [_profilePreferences setObject:_mapSettingSaveTrackIntervalApproved forKey:@"save_global_track_remember"];
         [_globalPreferences setObject:_mapSettingShowRecordingTrack forKey:@"show_saved_track_remember"];
         [_globalPreferences setObject:_mapSettingShowTripRecordingStartDialog forKey:@"show_trip_recording_start_dialog"];
+        [_globalPreferences setObject:_saveHeadingToGpx forKey:@"save_heading_to_gpx"];
 
         _selectedPoiFilters = [OACommonString withKey:selectedPoiFiltersKey defValue:@""];
         [_profilePreferences setObject:_selectedPoiFilters forKey:@"selected_poi_filter_for_map"];
@@ -4286,9 +4289,9 @@
     if (value == 0)
         res = OALocalizedString(@"rec_interval_minimum");
     else if (value > 90)
-        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"units_minutes_short")];
+        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"units_min")];
     else
-        res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"units_seconds_short")];
+        res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"units_sec")];
     return res;
 }
 

@@ -146,7 +146,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "pieds";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
 "units_min" = "min";
@@ -176,8 +176,6 @@
 "region_north_america" = "Amérique du Nord";
 "region_russia" = "Europe/Asie - Russie";
 "region_south_america" = "Amérique du Sud";
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
 "cannot_access_calendar" = "Impossible d'accéder à calendrier";
 "reminder_not_set_text" = "Le rappel n'a pas été établi car vous n'êtes pas autorisé à accéder au calendrier";
 //inapps
@@ -463,7 +461,7 @@
 "product_desc_ext_track_recording" = "Enregistrez vos traces et sauvegardez les manuellement en utilisant le plugin d’enregistrement de traces OsmAnd. Exportez votre trace avec un fichier gpx, partagez le ou bien utilisez le pour contribuer au projet OpenStreeMap. Un outil pratique pour les coureurs, randonneurs ou toute personne intéressée par l’enregistrement de ses traces.";
 "right_side_navigation" = "Conduite à droite";
 "si_mi_meters" = "Miles / Mètres";
-"nm" = "mn";
+"units_nm" = "mn";
 "si_nm" = "Miles nautiques";
 "si_kmh" = "Kilomètres par heure";
 "si_mph" = "Miles par heure";
@@ -471,10 +469,10 @@
 "si_min_km" = "Minutes par kilomètre";
 "si_min_m" = "Minutes par mile";
 "si_nm_h" = "Miles nautiques par heure (nœuds)";
-"nm_h" = "nœuds";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nœuds";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "driving_region" = "Région de conduite";
 "driving_region_japan" = "Japon";
 "driving_region_us" = "États-Unis";
@@ -572,7 +570,7 @@
 "speak_favorites" = "Favoris à proximité";
 "speak_poi" = "POI à proximité";
 "speak_pedestrian" = "Passages piétons";
-"int_seconds" = "secondes";
+"units_seconds" = "secondes";
 "shared_string_never" = "Jamais";
 "general_settings_2" = "Paramètres généraux";
 "general_settings_descr" = "Thème de l'appli, unités, région";
@@ -2073,7 +2071,6 @@
 "track_is_saved" = "%@\nenregistré !";
 "ios_release_3_90" = "- Introduction d'une fonction \"Planifier un itinéraire\" pour planifier de futurs voyages avec la possibilité de créer des segments de parcours en utilisant différents types de navigation\n- Ajout d'une option permettant d'activer une boussole sur l'outil \"Règle de rayon\"\n- Ajout de l'option \"Superposition des étiquettes de PI\" qui permet d'afficher les noms des favoris, des points de repère et des marqueurs sur la carte\n- Ajout de nouvelles actions rapides pour la visibilité des courbes de niveau et du relief sur la carte, la modification d'un profil d'application, la suppression d'un point intermédiaire le plus proche\n- Correction des problèmes liés à la catégorie de recherche Wikipédia manquante\n- Importation de paramètres : correction de bugs, ajout du support pour tous les types de données disponibles dans OsmAnd\n- Edition d'OpenStreetMap : correction du sélecteur de temps et de l'impossibilité de modifier le commentaire de l'ensemble des modifications\n";
 "ios_release_3_80" = "- Introduction de \"profils d'application\" avec des paramètres indépendants\n- Nouvelle disposition des paramètres par profils et types : navigation, général, carte et écran\n- Possibilité d'importer ou d'exporter les paramètres des profils\n- Ajout de sources de données pour les photos en ligne\n- Ajout de la possibilité de télécharger des cartes en ligne dans la mémoire cache\n- Algorithmes de \"recherche\" améliorés\n";
-"units_nm" = "mn";
 "approximate_file_size" = "Taille approximative du fichier : %@";
 "gpxup_private" = "Privée";
 "gpxup_public" = "publique";
@@ -2103,7 +2100,6 @@
 "select_wikipedia_article_langs" = "Sélectionnez la langue dans laquelle les articles Wikipédia s'afficheront sur la carte. Vous pourrez changer pour toutes les langues disponibles en lisant l'article.";
 "shared_string_all_languages" = "Toutes les langues";
 "board_at" = "Embarquement à";
-"foot" = "pieds";
 "download_suggestion" = "Pour voir les détails de cette zone, téléchargez la carte %@";
 "download_map_dialog" = "Fenêtre de téléchargement de carte";
 "shared_string_turn_off" = "Eteindre";
@@ -2189,7 +2185,6 @@
 "shared_string_time_moving" = "Durée de déplacement";
 "industrial" = "Industrie";
 "education" = "Éducation";
-"m" = "m";
 "units_min_short" = "m";
 "route_points" = "Point de passage";
 "connect_rp" = "Relier les points de passage";

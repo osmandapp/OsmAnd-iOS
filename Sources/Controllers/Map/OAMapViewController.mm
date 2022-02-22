@@ -112,6 +112,7 @@
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
+#define kGestureZoomCoef 10.0f
 
 @interface OAMapViewController () <OAMapRendererDelegate, OARouteInformationListener>
 
@@ -838,18 +839,16 @@
     [_mapView convert:centerPoint toLocation:&centerLocationBefore];
     
     // Change zoom
-    CGFloat scale, gestureScale;
-    if (pinchRecognizer)
-    {
-        scale = 1.0f - pinchRecognizer.scale;
-    }
-    else
-    {
-        gestureScale = ([panGestutreRecognizer locationInView:recognizer.view].y * _mapView.contentScaleFactor) / (_initialZoomTapPointY * _mapView.contentScaleFactor);
-        scale = -(1.0f - gestureScale);
-    }
-    gestureScale = pinchRecognizer ? pinchRecognizer.scale : gestureScale;
-    scale = gestureScale < 1.0f ? scale * (10.0f / _mapView.contentScaleFactor) : scale;
+    CGFloat gestureScale = pinchRecognizer
+        ? pinchRecognizer.scale
+        : ([panGestutreRecognizer locationInView:recognizer.view].y * _mapView.contentScaleFactor) / (_initialZoomTapPointY * _mapView.contentScaleFactor);
+    CGFloat scale = 1 - gestureScale;
+
+    if (gestureScale < 1 || (scale < 0 && !pinchRecognizer))
+        scale = scale * ((!pinchRecognizer ? kGestureZoomCoef * (scale < 0 ? .7 : .8) : kGestureZoomCoef) / _mapView.contentScaleFactor);
+    if (!pinchRecognizer)
+        scale = -scale;
+
     _mapView.zoom = _initialZoomLevelDuringGesture - scale;
     if (_mapView.zoom > _mapView.maxZoom)
         _mapView.zoom = _mapView.maxZoom;

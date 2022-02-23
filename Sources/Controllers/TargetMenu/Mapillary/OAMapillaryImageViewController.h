@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
+#define MAPILLARY_VIEWER_URL_TEMPLATE @"https://osmand.net/api/mapillary/photo-viewer?photo_id="
 #define kDefaultMapillaryZoomOnShow 17.0f
 
 @class OAMapillaryImage;

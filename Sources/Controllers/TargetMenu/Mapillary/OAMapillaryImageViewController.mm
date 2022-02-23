@@ -26,8 +26,6 @@
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 
-#define MAPILLARY_VIEWER_URL_TEMPLATE @"https://osmand.net/api/mapillary/photo-viewer?photo_id="
-
 @interface OAMapillaryImageViewController () <WKScriptMessageHandler, WKNavigationDelegate>
 
 @end

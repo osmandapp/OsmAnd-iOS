@@ -8,11 +8,26 @@
 
 #import "OAMapillaryImageCard.h"
 #import "OAMapPanelViewController.h"
-#import "OATargetPoint.h"
 #import "OAMapillaryImage.h"
 #import "OAMapLayers.h"
 
+@interface OAMapillaryImageCard ()
+
+@property (nonatomic) BOOL is360;
+
+@end
+
 @implementation OAMapillaryImageCard
+
+- (id) initWithData:(NSDictionary *)data
+{
+    self = [super initWithData:data];
+    if (self)
+    {
+        _is360 = [data[@"is360"] boolValue];
+    }
+    return self;
+}
 
 - (void) onCardPressed:(OAMapPanelViewController *) mapPanel
 {

@@ -6,14 +6,8 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import <CocoaSecurity.h>
 #import "OAImageCard.h"
 #import "OAImageCardCell.h"
-#import "OACollapsableCardsView.h"
-#import "OAMapillaryImageCard.h"
-#import "OAMapillaryContributeCard.h"
-#import "OAUrlImageCard.h"
-#import "OAWikiImageCard.h"
 
 @interface OAImageCard ()
 

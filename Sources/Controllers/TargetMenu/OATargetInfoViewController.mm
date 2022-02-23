@@ -8,7 +8,6 @@
 
 #import "OATargetInfoViewController.h"
 #import "OsmAndApp.h"
-#import "OAUtilities.h"
 #import "OATargetInfoViewCell.h"
 #import "OATargetInfoCollapsableViewCell.h"
 #import "OATargetInfoCollapsableCoordinatesViewCell.h"
@@ -26,23 +25,21 @@
 #import "OAMapillaryContributeCard.h"
 #import "OAUrlImageCard.h"
 #import "Reachability.h"
-#import "OAAppSettings.h"
 #import "OAPointDescription.h"
 #import "OACollapsableCoordinatesView.h"
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
 #import "OAWikiArticleHelper.h"
 #import "OAColors.h"
-#import "CocoaSecurity.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAMapUtils.h"
 #import "OAWikiImageHelper.h"
 #import "OAIPFSImageCard.h"
 #import "OAWikiImageCard.h"
 #import "OAWikipediaPlugin.h"
-#import "OAPlugin.h"
 #import "OAOsmAndFormatter.h"
 #import "OAButtonRightIconCell.h"
+#import "OAMapillaryOsmTagHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -498,19 +495,31 @@
     [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:_nearbyImagesRowInfo];
 }
 
-- (OAAbstractCard *)getCard:(NSDictionary *) feature
+- (void)getCard:(NSDictionary *)feature
+     onComplete:(void (^)(OAAbstractCard *card))onComplete
 {
     NSString *type = feature[@"type"];
-    
+
     BOOL isMaplillaryEnabled = !OAIAPHelper.sharedInstance.mapillary.disabled;
-    
+
     if ([TYPE_MAPILLARY_PHOTO isEqualToString:type] && isMaplillaryEnabled)
-        return [[OAMapillaryImageCard alloc] initWithData:feature];
+    {
+        [OAMapillaryOsmTagHelper downloadImageByKey:feature[@"key"]
+                                   onDataDownloaded:^(NSDictionary *result) {
+            if (result && onComplete)
+                onComplete([[OAMapillaryImageCard alloc] initWithData:result]);
+        }];
+    }
     else if ([TYPE_MAPILLARY_CONTRIBUTE isEqualToString:type] && isMaplillaryEnabled)
-        return [[OAMapillaryContributeCard alloc] init];
+    {
+        if (onComplete)
+            onComplete([[OAMapillaryContributeCard alloc] init]);
+    }
     else if ([TYPE_URL_PHOTO isEqualToString:type])
-        return [[OAUrlImageCard alloc] initWithData:feature];
-    return nil;
+    {
+        if (onComplete)
+            onComplete([[OAUrlImageCard alloc] initWithData:feature]);
+    }
 }
 
 - (void)addOpenPlaceCards:(NSString *)openPlaceTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
@@ -576,10 +585,10 @@
     if (mapillaryTagContent)
         urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&osm_mapillary_key=%@", mapillaryTagContent]];
 
+    NSInteger cardsCount = cards.count;
     NSURL *urlObj = [[NSURL alloc] initWithString:[[urlString stringByReplacingOccurrencesOfString:@" "  withString:@"_"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSMutableArray<OAAbstractCard *> *resultCards = [NSMutableArray array];
         if (((NSHTTPURLResponse *)response).statusCode == 200)
         {
             if (data && !error)
@@ -589,19 +598,36 @@
                 NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:safeCharsData options:NSJSONReadingAllowFragments error:&error];
                 if (jsonDict)
                 {
-                    for (NSDictionary *dict in jsonDict[@"features"])
+                    NSArray<NSDictionary *> *features = jsonDict[@"features"];
+                    if (features.count == 0)
                     {
-                        OAAbstractCard *card = [self getCard:dict];
-                        if (card)
-                            [resultCards addObject:card];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
+                        });
+                    }
+                    else
+                    {
+                        for (NSDictionary *dict in features)
+                        {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self getCard:dict onComplete:^(OAAbstractCard *card) {
+                                    if (card)
+                                    {
+                                        [cards addObject:card];
+                                        if (cards.count == features.count + cardsCount)
+                                        {
+                                            dispatch_sync(dispatch_get_main_queue(), ^{
+                                                [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
+                                            });
+                                        }
+                                    }
+                                }];
+                            });
+                        }
                     }
                 }
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [cards addObjectsFromArray:resultCards];
-            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
-        });
     }] resume];
 }
 

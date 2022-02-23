@@ -240,7 +240,7 @@
 "time_left" = "verbleibend";
 "time_overdue" = "überfällig";
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "min.";
 "units_sec" = "Sek";
 "cannot_access_calendar" = "Kalender nicht aufrufbar";
 "reminder_not_set_text" = "Die Erinnerung wurde nicht gesetzt, da kein Zugangsrecht zum Kalender besteht";
@@ -2372,3 +2372,8 @@
 "route_line_use_map_style_color" = "Standardfarbe des Kartenstils (%@) verwenden.";
 "route_line_use_map_style_width" = "Standardbreite des Kartenstils (%@) verwenden.";
 "turn_arrows_descr" = "Steuern Sie die Sichtbarkeit der Abbiegepfeile auf der Routenlinie.";
+"start_point" = "Start";
+"altitude" = "Höhe";
+"save_heading" = "Richtung einbeziehen";
+"save_heading_descr" = "Richtung zu jedem Trackpunkt während der Aufnahme speichern";
+"map_widget_speed" = "Geschwindigkeit";

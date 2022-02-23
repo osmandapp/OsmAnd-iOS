@@ -720,9 +720,9 @@
 "map_widget_altitude" = "Magasság";
 "map_widget_intermediate_distance" = "Köztes célpont";
 "map_widget_compass" = "Iránytű";
-"map_widget_next_turn" = "Következő lekanyarodás";
-"map_widget_next_turn_small" = "Következő lekanyarodás (kicsi)";
-"map_widget_next_next_turn" = "Második lekanyarodás";
+"map_widget_next_turn" = "Következő kanyarodás";
+"map_widget_next_turn_small" = "Következő kanyarodás (kicsi)";
+"map_widget_next_next_turn" = "Második kanyarodás";
 "map_widget_transparent" = "Átlátszó widgetek";
 "settings_preset_descr" = "Az egyes felhasználási profilok megjegyzik a térképnézetet és a navigációs beállításokat. Alapértelmezett profilját itt adhatja meg.";
 "rotate_map_to_bearing" = "Térkép forgatása";
@@ -1654,3 +1654,5 @@
 "shared_string_open_street_map" = "OpenStreetMap";
 "customize_route_line" = "Útvonaljelző-csík testreszabása";
 "routeInfo_tracktype_description" = "Útvonal vagy nyomvonal színezése a felületi összetétele alapján. Alkalmazása a főleg burkolatlan utakból álló úthálózat esetében jellemző.";
+"number_of_tiles" = "Csempék száma";
+"move_map_to_select_area" = "Mozgassa a térképet a kívánt terület kiválasztásához.";

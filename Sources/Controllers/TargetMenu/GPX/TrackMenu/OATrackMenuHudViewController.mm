@@ -58,6 +58,7 @@
 #import "OAImageDescTableViewCell.h"
 #import "OAEditDescriptionViewController.h"
 #import "OAWikiArticleHelper.h"
+#import "OAMapHudViewController.h"
 
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
@@ -811,6 +812,7 @@
             [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(pointsRect.top, pointsRect.left)
                                               bottomRight:CLLocationCoordinate2DMake(pointsRect.bottom, pointsRect.right)
                                                      zoom:0.
+                                                  maxZoom:18.
                                                screenBBox:screenBBox
                                               bottomInset:0.
                                                 leftInset:0.
@@ -2469,6 +2471,7 @@
                                 animated:NO];
         [self fitSelectedPointsGroupOnMap:index];
         [_headerView.groupsCollectionView reloadData];
+        [self.mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
     }
 }
 

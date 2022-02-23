@@ -271,14 +271,8 @@
         [self.zoomButtonsView setHidden: YES];
         [self hideBottomControls:0 animated:NO];
     }
-    
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        if ([self.rulerLabel hasNoData])
-        {
-            [self updateMapRulerData];
-        }
-    });
+
+    [self updateMapRulerDataWithDelay];
     
     if (self.toolbarViewController)
         [self.toolbarViewController onViewDidAppear:self.mapHudType];
@@ -345,6 +339,14 @@
 - (void)updateMapRulerData
 {
     [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+}
+
+- (void)updateMapRulerDataWithDelay
+{
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self updateMapRulerData];
+    });
 }
 
 - (BOOL) shouldShowCompass

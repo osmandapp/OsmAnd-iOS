@@ -361,12 +361,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     [super viewDidAppear:animated];
     [_mapPanelViewController.hudViewController hideTopControls];
-    [_mapPanelViewController targetSetBottomControlsVisible:YES
-                                                 menuHeight:[self isLandscape]
-                                                         ? 0
-                                                         : [self getViewHeight] - [OAUtilities getBottomMargin] + 4
-                                                   animated:YES];
-    [_mapPanelViewController.hudViewController updateMapRulerData];
+    [_mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
+    [self changeHud:[self getViewHeight]];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

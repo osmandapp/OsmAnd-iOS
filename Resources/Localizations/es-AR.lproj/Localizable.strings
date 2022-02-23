@@ -352,7 +352,7 @@
 "error_calculating_route" = "Error calculando la ruta";
 "route_calc_progress" = "Calculando: %d%%";
 "internet_connection_required_for_online_route" = "La navegación en línea, no funciona sin conexión a Internet.";
-"empty_route_calculated" = "Error: La ruta calculada está vacía.";
+"empty_route_calculated" = "Error: La ruta calculada está vacía";
 "destination_point" = "Destino %@";
 "intermediate_point" = "Destino intermedio«%@»";
 "arrived_at_intermediate_point" = "Destino intermedio alcanzado";
@@ -413,7 +413,7 @@
 "tones" = "toneladas";
 "nothing_found" = "Nada encontrado: %@";
 "nothing_found_empty" = "Nada encontrado";
-"nothing_found_descr" = "Cambiar la búsqueda o aumentar su radio.";
+"nothing_found_descr" = "Cambiar la búsqueda o aumentar su radio";
 "select_street" = "Elegir la calle";
 "shared_string_in_name" = "en %@";
 "select_city" = "Elegir la ciudad o pueblo";
@@ -1482,7 +1482,7 @@
 "units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "min.";
 "units_sec" = "seg";
 "units_sec_short" = "s";
 "units_t" = "ton";
@@ -2372,3 +2372,8 @@
 "preferred_terrain" = "Terreno preferido";
 "route_preferred_terrain_flat" = "Rutas con perfil de relieve plano. La longitud puede aumentar.";
 "route_preferred_terrain_hilly" = "Rutas con perfil de relieve montañoso.";
+"start_point" = "Iniciar";
+"map_widget_speed" = "Velocidad";
+"save_heading_descr" = "Guarda el rumbo para cada punto de la traza durante la grabación";
+"altitude" = "Altitud";
+"save_heading" = "Incluir rumbo";

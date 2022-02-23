@@ -243,7 +243,7 @@
 "units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "min.";
 "units_sec" = "seg";
 // Map
 "map_inst_det_map_q" = "Installa sa mapa generale a sa minuda pro tènnere prus informatziones chi pertocant sas positziones tuas.";
@@ -2356,3 +2356,42 @@
 "q_clear_weather_cache" = "Boles isboidare sa memòria temporànea de su mèteu?";
 "map_settings_weather" = "Mèteu";
 "map_settings_weather_wind" = "Bentu";
+"routeInfo_winter_ice_road_description" = "Colora s'àndala o sa lìnia de sa rasta sighende sa classificatzione de su caminu ierrile suo.";
+"preferred_terrain" = "Terrinu preferidu";
+"routing_attr_allow_gate_name" = "Permite s'impreu de cantzellos";
+"routing_attr_allow_gate_description" = "Permite s'impreu de cantzellos";
+"routing_attr_only_permitted_streets_name" = "Carreras autorizadas a manera espressa";
+"routing_attr_only_permitted_ways_description" = "Imprea petzi caminos (pistas, àndalas etz.) chi sunt autorizados a manera espressa";
+"routeInfo_surface_description" = "Fruni informatziones in subra de sa superfìtzie fìsica de sos caminos e de sas camineras pro andare a pee.";
+"routeInfo_smoothness_description" = "Classificatzione de s'usabilidade fìsica de unu caminu pro veìculos a rodas, mescamente pro su chi pertocat a sa regularidade e a sa pranaridade de sas superfìtzies.";
+"routeInfo_tracktype_description" = "Colora s'àndala o sa una lìnia de rasta sighende sa cumpositzione de sa superfìtzie sua. Aplicada de sòlitu cando sa retza de caminos est pro su prus non pamentada.";
+"routeInfo_roadClass_description" = "Colora s'àndala o sa lìnia de sa rasta sighende sa classificatzione de su caminu.";
+"shared_string_open_street_map" = "OpenStreetMap";
+"navigate_point_format_MGRS" = "MGRS";
+"mgrs_description" = "OsmAnd impreat su formadu MGRS chi est idènticu a su UTM NATO.";
+"start_point" = "Incumintza";
+"altitude" = "Artària";
+"map_widget_speed" = "Lestresa";
+"save_heading" = "Include sa diretzione";
+"save_heading_descr" = "Sarva sa diretzione pro cada puntu cando ses registrende";
+"route_preferred_terrain_hilly" = "Àndalas cun unu profilu de rilievos cun montigros.";
+"route_preferred_terrain_flat" = "Àndalas cun unu profilu de rilievos pranu. Sa longària diat pòdere crèschere.";
+"route_preferred_terrain_any" = "Su profilu de su terrinu non benit pigadu in cunsideru durante s'issèberu de un'àndala.";
+"routing_attr_only_permitted_streets_description" = "Imprea petzi carreras chi sunt autorizadas a manera espressa";
+"route_preferred_terrain_less_hilly" = "Àndalas prus curtzas e cun prus pagu montigros.";
+"shared_string_min_height" = "Artària mìn.";
+"shared_string_max_height" = "Artària màss.";
+"routing_attr_prefer_horse_routes_description" = "Preferi sas àndalas pro andare a caddu";
+"shared_string_any" = "Totus";
+"ltr_or_rtl_combine_via_dash" = "%@ - %@";
+"routing_attr_only_permitted_ways_name" = "Caminos autorizados a manera espressa";
+"routing_attr_prefer_horse_routes_name" = "Preferi sas àndalas a caddu";
+"horseback_riding" = "Ecuitatzione";
+
+// Units
+"units_km" = "km";
+"customize_route_line" = "Personaliza sa lìnia de s'àndala";
+"route_line_use_map_style_color" = "Imprea su colore predefinidu de s'istile de sa mapa (%@).";
+"route_line_use_map_style_width" = "Imprea sa largària predefinida de s'istile de sa mapa (%@).";
+"turn_arrows" = "Fritzas de bortada";
+"turn_arrows_descr" = "Controlla sa visibilidade de sas fritzas de bortada in sa lìnia de s'àndala.";

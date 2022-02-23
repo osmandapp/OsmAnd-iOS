@@ -237,7 +237,7 @@
 "units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "sa";
-"units_min" = "dk";
+"units_min" = "dk.";
 "units_sec" = "sn";
 // Map
 "map_inst_det_map_q" = "Konumlarınız hakkında daha fazla bilgi almak için ayrıntılı genel bakış haritasını yükleyin.";
@@ -2365,3 +2365,8 @@
 "route_preferred_terrain_hilly" = "Tepelik bir kabartma profiline sahip güzergahlar.";
 "shared_string_any" = "Herhangi";
 "preferred_terrain" = "Tercih edilen arazi";
+"save_heading_descr" = "Kaydedilen her nokta için yön bilgilerini kaydet";
+"altitude" = "Rakım";
+"save_heading" = "Yönü dahil et";
+"start_point" = "Başlangıç";
+"map_widget_speed" = "Hız";

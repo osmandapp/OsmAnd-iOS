@@ -224,7 +224,7 @@
 "units_km_h" = "km/h";
 "units_mph" = "mi/h";
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "min.";
 "units_sec" = "seg";
 // Map
 "map_inst_det_map_q" = "Instale a visão geral do mapa detalhado para obter mais informações sobre os locais.";
@@ -2354,3 +2354,14 @@
 "horseback_riding" = "Equitação";
 "shared_string_open_street_map" = "OpenStreetMap";
 "routing_attr_only_permitted_ways_description" = "Usar apenas vias (trilhos, caminhos) com utilização permitida assinalada";
+"start_point" = "Início";
+"altitude" = "Altitude";
+"save_heading" = "Incluir a direção";
+"save_heading_descr" = "Guardar a direção em cada ponto do trilho";
+"route_preferred_terrain_less_hilly" = "Rotas mais curtas e menos montanhosas.";
+"route_preferred_terrain_hilly" = "Rotas com um perfil de relevo montanhoso.";
+"shared_string_any" = "Qualquer uma";
+"map_widget_speed" = "Velocidade";
+"route_preferred_terrain_any" = "O perfil do terreno não é considerado ao escolher uma rota.";
+"route_preferred_terrain_flat" = "Rotas com um perfil de relevo plano. O comprimento pode aumentar.";
+"preferred_terrain" = "Terreno preferido";

@@ -55,7 +55,6 @@
 #define kDeleteKey @"kDeleteKey"
 #define kLastUsedIconsKey @"kLastUsedIconsKey"
 
-#define kDefaultIcon @"special_star"
 #define kVerticalMargin 8.
 #define kSideMargin 20.
 #define kEmptyTextCellHeight 48.
@@ -194,7 +193,7 @@
         self.groupColor = [_pointHandler getColor];
 
         _selectedIconCategoryName = @"special";
-        _selectedIconName = kDefaultIcon;
+        _selectedIconName = DEFAULT_ICON_NAME;
         _selectedColorIndex = 0;
         _selectedBackgroundIndex = 0;
 
@@ -315,7 +314,7 @@
     _poiCategories = categoriesData;
 
     if (!_selectedIconName || _selectedIconName.length == 0)
-        _selectedIconName = kDefaultIcon;
+        _selectedIconName = DEFAULT_ICON_NAME;
 
     if (!_selectedIconCategoryName || _selectedIconCategoryName.length == 0)
         _selectedIconCategoryName = @"special";
@@ -394,7 +393,7 @@
         return preselectedIconName;
     else if (_lastUsedIcons && _lastUsedIcons.count > 0)
         return _lastUsedIcons[0];
-    return kDefaultIcon;
+    return DEFAULT_ICON_NAME;
 }
 
 - (void) addLastUsedIcon:(NSString *)iconName

@@ -1012,21 +1012,20 @@
 
 - (BOOL)isWaypointsGroupVisible:(NSString *)groupName
 {
-    return ![self.gpx.hiddenGroups containsObject:groupName];
+    return ![self.gpx.hiddenGroups containsObject:[self isDefaultGroup:groupName] ? @"" : groupName];
 }
 
 - (void)setWaypointsGroupVisible:(NSString *)groupName show:(BOOL)show
 {
     if (show)
-        [self.gpx removeHiddenGroups:groupName];
+        [self.gpx removeHiddenGroups:[self isDefaultGroup:groupName] ? @"" : groupName];
     else
-        [self.gpx addHiddenGroups:groupName];
+        [self.gpx addHiddenGroups:[self isDefaultGroup:groupName] ? @"" : groupName];
     [[OAGPXDatabase sharedDb] save];
 
     if (_selectedTab == EOATrackMenuHudPointsTab)
     {
-        groupName = [self checkGroupName:groupName];
-        NSInteger groupIndex = [_waypointSortedGroupNames indexOfObject:groupName];
+        NSInteger groupIndex = [_waypointSortedGroupNames indexOfObject:[self checkGroupName:groupName]];
         if (groupIndex != NSNotFound)
         {
             OAGPXTableSectionData *groupSectionData = _tableData.sections[groupIndex];
@@ -1039,10 +1038,13 @@
     }
 
     [self updateGroupsButton];
-    if (self.isCurrentTrack)
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
-    else
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.isCurrentTrack)
+            [self.mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        else
+            [self.mapViewController.mapLayers.gpxMapLayer refreshGpxWaypoints];
+    });
 }
 
 - (void)deleteWaypointsGroup:(NSString *)groupName
@@ -1057,19 +1059,8 @@
             [waypointsIdxToDelete addObject:@([_waypointGroups[groupName] indexOfObject:waypoint])];
     }
 
-    if (self.isCurrentTrack)
-    {
-        for (OAGpxWptItem *waypoint in waypointsToDelete)
-        {
-            [savingHelper deleteWpt:waypoint.point];
-        }
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
-    }
-    else
-    {
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
-        [self.mapViewController deleteWpts:waypointsToDelete docPath:path];
-    }
+    NSString *path = !self.isCurrentTrack ? [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath] : nil;
+    [self.mapViewController deleteWpts:waypointsToDelete docPath:path];
 
     NSDictionary *dataToUpdate = @{
             @"delete_group_name_index": @([_waypointSortedGroupNames indexOfObject:groupName]),
@@ -1153,12 +1144,13 @@
     if (!self.isCurrentTrack)
     {
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
-        [self.mapViewController updateWpts:waypoints docPath:path updateMap:NO];
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        [self.mapViewController updateWpts:waypoints docPath:path updateMap:YES];
     }
     else if (newGroupColor)
     {
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        });
     }
 
     if (newGroupName)

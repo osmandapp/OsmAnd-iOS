@@ -190,7 +190,7 @@
 "units_ft" = "fod";
 "units_km_h" = "km/t";
 "units_hour" = "t";
-"units_min" = "min";
+"units_min" = "min.";
 "units_sec" = "sek";
 "map_remind" = "Påmind senere";
 "import_favorite" = "Favorit";
@@ -2366,3 +2366,8 @@
 "save_heading" = "Inkluder kurs";
 "save_heading_descr" = "Gem kursinformation for hvert registreret punkt";
 "map_widget_speed" = "Hastighed";
+"select_tracks" = "Vælg spor";
+"selected_tracks_count" = "Spor - %d";
+"delete_tracks_bottom_sheet_description_regular_part" = "Er du sikker på, at du ønsker at slette ";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d spor?";
+"delete_tracks_bottom_sheet_title" = "Slet spor?";

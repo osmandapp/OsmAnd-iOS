@@ -1788,8 +1788,8 @@
 "online_sources" = "Onlinekilder";
 "select_online_source" = "Vælg kilde";
 "preview_of_selected_zoom_levels" = "Eksempel på valgte zoomniveauer";
-"number_of_tiles" = "Antal fliser";
-"move_map_to_select_area" = "Flyt kortet for at vælge det nødvendige område.";
+"number_of_tiles" = "Antal kortfliser";
+"move_map_to_select_area" = "Flyt kort for at vælge det ønskede område.";
 "shared_string_copy" = "Kopier";
 "shared_string_meters" = "meter";
 "tones" = "toner";
@@ -2361,3 +2361,8 @@
 "route_preferred_terrain_any" = "Der tages ikke hensyn til terrænprofilen, når der vælges en rute.";
 "shared_string_any" = "Enhver";
 "route_preferred_terrain_flat" = "Ruter med en flad reliefprofil. Længden øges muligvis.";
+"start_point" = "Start";
+"altitude" = "Højde";
+"save_heading" = "Inkluder kurs";
+"save_heading_descr" = "Gem kursinformation for hvert registreret punkt";
+"map_widget_speed" = "Hastighed";

@@ -502,8 +502,8 @@
 "update_map" = "עדכון המפה";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
-"move_map_to_select_area" = "Move map to select needed area.";
-"number_of_tiles" = "Number of tiles";
+"move_map_to_select_area" = "יש לזוז ברחבי המפה כדי לבחור את האזור הנחוץ.";
+"number_of_tiles" = "מספר האריחים";
 "download_size" = "Download size";
 "preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
 "select_online_source" = "Select source";
@@ -2350,3 +2350,9 @@
 "turn_arrows_descr" = "שליטה האם יוצגו חצי פנייה על קו המסלול.";
 "shared_string_min_height" = "גובה מזערי";
 "shared_string_max_height" = "גובה מרבי";
+"start_point" = "התחלה";
+"altitude" = "גובה";
+"map_widget_speed" = "מהירות";
+"save_heading" = "כולל כותרת";
+"save_heading_descr" = "לשמור את פרטי הכותרת בכל נקודה שתועדה";
+"route_preferred_terrain_any" = "פרופיל תוואי השטח לא נלקח בחשבון בבחירת מסלול.";

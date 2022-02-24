@@ -1996,7 +1996,7 @@
 "preview_of_selected_zoom_levels" = "Vista prévia dos níveis de ampliação selecionados";
 "download_size" = "Tamanho do descarregamento";
 "number_of_tiles" = "Número de mosaicos";
-"move_map_to_select_area" = "Mover o mapa para selecionar a área necessária.";
+"move_map_to_select_area" = "Mova o mapa para selecionar a área necessária.";
 "shared_string_maximum" = "Máximo";
 "shared_string_clear_cache" = "Limpar cache";
 "poi_categories" = "Categorias de POI";
@@ -2365,3 +2365,8 @@
 "route_preferred_terrain_any" = "O perfil do terreno não é considerado ao escolher uma rota.";
 "route_preferred_terrain_flat" = "Rotas com um perfil de relevo plano. O comprimento pode aumentar.";
 "preferred_terrain" = "Terreno preferido";
+"delete_tracks_bottom_sheet_description_regular_part" = "Quer mesmo eliminar ";
+"select_tracks" = "Selecionar trilhos";
+"selected_tracks_count" = "Trilhos - %d";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d trilhos?";
+"delete_tracks_bottom_sheet_title" = "Eliminar os trilhos?";

@@ -1655,4 +1655,4 @@
 "customize_route_line" = "Útvonaljelző-csík testreszabása";
 "routeInfo_tracktype_description" = "Útvonal vagy nyomvonal színezése a felületi összetétele alapján. Alkalmazása a főleg burkolatlan utakból álló úthálózat esetében jellemző.";
 "number_of_tiles" = "Csempék száma";
-"move_map_to_select_area" = "Mozgassa a térképet a kívánt terület kiválasztásához.";
+"move_map_to_select_area" = "Mozgassa a térképet a kívánt terület kijelöléséhez.";

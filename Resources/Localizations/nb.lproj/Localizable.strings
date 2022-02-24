@@ -1636,7 +1636,7 @@
 "preview_of_selected_zoom_levels" = "Oversikt over valgte forstørrelsesnivå";
 "download_size" = "Nedlastningsstørrelse";
 "number_of_tiles" = "Antall kartfliser";
-"move_map_to_select_area" = "Flytt kartet for å velge området du trenger.";
+"move_map_to_select_area" = "Flytt kartet for å velge ønsket område.";
 "update_map" = "Oppdater kart";
 "shared_string_exit" = "Avslutt";
 "shared_string_meters" = "meter";

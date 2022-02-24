@@ -2373,3 +2373,8 @@
 "map_widget_speed" = "Швидкість";
 "save_heading_descr" = "Зберігати напрямок для кожної точки треку під час запису";
 "save_heading" = "Додавати напрямок";
+"selected_tracks_count" = "Треків - %d";
+"select_tracks" = "Вибрати треки";
+"delete_tracks_bottom_sheet_description_regular_part" = "Ви впевнені, що хочете видалити ";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d треків?";
+"delete_tracks_bottom_sheet_title" = "Видалити треки?";

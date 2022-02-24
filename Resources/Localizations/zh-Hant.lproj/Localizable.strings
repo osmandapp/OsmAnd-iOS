@@ -1866,3 +1866,5 @@
 "road_max_speed_descr" = "設定導航時所有道路的最高旅行速限，建議速限高於最高速限則降低道路優先性。";
 "direction_lines" = "方向線";
 "specify_number_of_dir_indicators" = "指定方向指數的數字，會影響所有以下的設定。";
+"number_of_tiles" = "圖磚數";
+"move_map_to_select_area" = "移動地圖以選取所需區域。";

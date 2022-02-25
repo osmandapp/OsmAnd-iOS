@@ -2377,3 +2377,7 @@
 "save_heading" = "Richtung einbeziehen";
 "save_heading_descr" = "Richtung zu jedem Trackpunkt während der Aufnahme speichern";
 "map_widget_speed" = "Geschwindigkeit";
+"select_tracks" = "Tracks auswählen";
+"selected_tracks_count" = "Tracks - %d";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d Tracks?";
+"delete_tracks_bottom_sheet_title" = "Tracks löschen?";

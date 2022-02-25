@@ -2377,3 +2377,8 @@
 "save_heading_descr" = "Guarda el rumbo para cada punto de la traza durante la grabación";
 "altitude" = "Altitud";
 "save_heading" = "Incluir rumbo";
+"delete_tracks_bottom_sheet_description_regular_part" = "¿Quieres borrar ";
+"select_tracks" = "Marcar trazas";
+"selected_tracks_count" = "Trazas - %d";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d trazas?";
+"delete_tracks_bottom_sheet_title" = "¿Borrar trazas?";

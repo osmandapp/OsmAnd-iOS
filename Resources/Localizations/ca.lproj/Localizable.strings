@@ -1715,7 +1715,7 @@
 "toggle_public_transport" = "Mostra/amaga el transport públic";
 "public_transport_menu" = "Transport";
 "number_of_tiles" = "Nombre de tessel·les";
-"move_map_to_select_area" = "Desplaça el mapa per seleccionar l'àrea necessària.";
+"move_map_to_select_area" = "Moveu el mapa per a seleccionar l'àrea requerida.";
 "update_map" = "Actualitza el mapa";
 "shared_string_exit" = "Surt";
 "shared_string_meters" = "metres";

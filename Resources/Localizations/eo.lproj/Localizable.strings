@@ -502,8 +502,8 @@
 "update_map" = "Ĝisdatigi mapon";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
-"move_map_to_select_area" = "Move map to select needed area.";
-"number_of_tiles" = "Number of tiles";
+"move_map_to_select_area" = "Movu la mapon por elekti deziratan areon.";
+"number_of_tiles" = "Nombro da kaheloj";
 "download_size" = "Download size";
 "preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
 "select_online_source" = "Select source";

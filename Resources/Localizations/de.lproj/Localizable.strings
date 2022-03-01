@@ -1318,7 +1318,7 @@
 "rendering_attr_hmRendered_description" = "Erhöht den dargestellten Detailgrad der Karte.";
 "rendering_attr_appMode_name" = "Darstellungsmodus";
 "rendering_attr_piste_difficulty_undefined_name" = "Undefiniert";
-"routing_attr_freeride_policy_description" = "Freerides und Strecken abseits der Piste sind inoffizielle Routen und Passagen. Typischerweise unpräpariert, nicht gewartet und abends nicht kontrolliert. Betreten auf eigene Gefahr.";
+"routing_attr_freeride_policy_description" = "Freerides und Strecken abseits der Piste sind inoffizielle Routen und Passagen. Typischerweise ungepflegt, nicht gewartet und abends nicht kontrolliert. Betreten auf eigene Gefahr.";
 "rendering_attr_roadStyle_name" = "Straßendarstellung";
 "routing_attr_piste_type_sled_name" = "Schlitten";
 "routing_attr_relief_smoothness_factor_plains_name" = "Weniger bergig";
@@ -1385,7 +1385,7 @@
 "rendering_attr_currentTrackColor_name" = "GPX-Farbe";
 "routeInfo_tracktype_name" = "Oberflächenfestigkeit";
 "rendering_value_darkyellow_name" = "Dunkelgelb";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Routennetzwerk Zugehörigkeit";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Netzwerkzugehörigkeit";
 "routing_attr_relief_smoothness_factor_hills_name" = "Bergig";
 "rendering_value_white_name" = "Weiß";
 "rendering_attr_shareTaxiRoutes_name" = "Sammeltaxi-Linien";
@@ -1788,7 +1788,7 @@
 "voice_announces" = "Sprachansagen";
 "max_speed" = "Max. Geschwindigkeit";
 "min_speed" = "Min. Geschwindigkeit";
-"default_speed" = "Std. Geschwindigkeit";
+"default_speed" = "Standardgeschwindigkeit";
 "routing_attr_length_name" = "Längenbegrenzung";
 "default_profile_descr" = "Wählen Sie ein Profil, das beim Start der Anwendung verwendet wird.";
 "tones" = "Tonnen";

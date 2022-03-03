@@ -2318,3 +2318,17 @@
 "grey_color_undefined" = "As partes sem dados são mostradas em cinza.";
 "white_color_undefined" = "As partes sem dados são mostradas em branco.";
 "points_delete_multiple" = "Excluir %d ponto(s)?";
+"route_preferred_terrain_flat" = "Rotas com um perfil de relevo plano. O trajeto pode ser mais longo.";
+"route_preferred_terrain_less_hilly" = "Rotas menores, menos montanhosas.";
+"shared_string_open_street_map" = "OpenStreetMap";
+"start_point" = "Começar";
+"altitude" = "Altitude";
+"map_widget_speed" = "Velocidade";
+"shared_string_min_height" = "Altura mín.";
+"route_preferred_terrain_hilly" = "Rotas com um perfil de terreno montanhoso.";
+"route_preferred_terrain_any" = "O perfil do terreno não é levado em consideração ao escolher uma rota";
+"shared_string_any" = "Qualquer";
+"shared_string_max_height" = "Altura máx.";
+"customize_route_line" = "Customizar linha da rota";
+"route_line_use_map_style_color" = "Usar a cor padrão do estilo de mapa (%@).";
+"route_line_use_map_style_width" = "Usar largura padrão do estilo de mapa (%@).";

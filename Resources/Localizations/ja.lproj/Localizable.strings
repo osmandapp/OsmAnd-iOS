@@ -335,7 +335,7 @@
 "coords_search" = "座標検索";
 "nearest_cities" = "最寄りの市町村名";
 "type_address" = "住所を入力";
-"search_poi_category_hint" = "入力ワードで全体検索";
+"search_poi_category_hint" = "検索語句";
 // Shared Strings
 "shared_string_apply" = "決定";
 "shared_string_select" = "選択";
@@ -1282,7 +1282,7 @@
 "routing_attr_max_num_changes_name" = "乗り換え数";
 "routing_attr_avoid_ferries_description" = "移動手段にフェリーを使用しません";
 "routing_attr_relief_smoothness_factor_plains_name" = "丘陵の少ない地形";
-"rendering_value_walkingRoutesScopeOSMC_name" = "所属ネットワークに応じたカラー変更";
+"rendering_value_walkingRoutesScopeOSMC_name" = "ネットワーク系列";
 "rendering_value_brown_name" = "ブラウン";
 "rendering_value_walkingRoutesOSMCNodes_name" = "ノードネットワーク";
 "rendering_attr_depthContours_description" = "等深線や深度を表示します。";
@@ -1517,7 +1517,7 @@
 "rendering_attr_surface_ice_name" = "氷";
 "rendering_attr_roadColors_description" = "道路の配色を選択します:";
 "rendering_attr_subwayMode_name" = "地下鉄路線";
-"rendering_attr_hikingRoutesOSMC_name" = "ハイキングシンボルをオーバーレイ表示";
+"rendering_attr_hikingRoutesOSMC_name" = "ハイキングルート";
 "routing_attr_piste_type_nordic_description" = "ノルディックスキーやクロスカントリースキー用コースやそれらに用いられる小道などです。";
 "routing_attr_avoid_motorway_name" = "高速道路を使わない";
 "rendering_attr_showAccess_name" = "通行制限と料金所を表示";
@@ -1531,7 +1531,7 @@
 "rendering_attr_alpineHiking_name" = "アルペンハイキングスケール(SAC)";
 "rendering_attr_surface_grass_name" = "草、芝";
 "rendering_attr_OSMMapperAssistant_name" = "OSMマッパーアシスタント";
-"rendering_value_walkingRoutesOSMC_name" = "OSMCのハイキングシンボルカラー";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_highway_class_track_grade3_name" = "グレード3";
 "rendering_attr_surface_paving_stones_name" = "タイル舗装";
 "routing_attr_avoid_shuttle_train_name" = "カートレインを使わない";
@@ -1821,7 +1821,7 @@
 "shared_string_finish" = "完了";
 "ui_customization_descr" = "ドロワー＆コンテキストメニューの表示項目";
 "keep_both" = "両方を維持する";
-"layer_amenity_label" = "施設の名称";
+"layer_amenity_label" = "地点のラベル (POIやお気に入り)";
 "add_point" = "座標の追加";
 "quick_action_showhide_mapillary_title" = "Mapillaryの表示切替";
 "profile_prefs_reset_successful" = "すべてのプロファイル設定を初期状態に戻しました。";
@@ -1858,7 +1858,7 @@
 "select_online_source" = "ソースを選択";
 "preview_of_selected_zoom_levels" = "選択されたズームレベルでプレビュー";
 "number_of_tiles" = "タイルの数";
-"move_map_to_select_area" = "マップを動かして目的のエリアを選択します。";
+"move_map_to_select_area" = "マップを移動して、必要なエリアを選択します。";
 "poi_categories" = "POIのカテゴリー";
 "route_calc_progress" = "ルート計算中: %d%%";
 "road_speeds" = "法定速度";
@@ -2070,13 +2070,11 @@
 "custom_osmand_plugin_name" = "OsmAndプラグインのカスタマイズ";
 "extra_maps" = "追加マップ";
 "search_more" = "さらに検索…";
-"gpx_upload_public_visibility_descr" = "\"公開\"とはトレース内容がGPSトレースと公的GPSトレースリストに公開され、タイムスタンプが生の形式で公開トレースリストに表示されることを意味します。 APIを介して提供されるデータは、トレースページを参照しません。トレースポイントのタイムスタンプは、公的GPS APIからは利用できません。また、トレースポイントは時系列で並べられていません。";
-"gpx_upload_trackable_visibility_descr" = "\"追跡可能\"は、トレース状況が公開リストに表示されないことを意味しますが、タイムスタンプ付きで処理済みの(直接関連付けされない)経路ポイントは、公的GPS APIからのダウンロードを介して行われます。";
+"gpx_upload_public_visibility_descr" = "\"パブリック\"とはトレース内容がGPSトレースと公的GPSトレースリストに公開され、タイムスタンプが生の形式で公開トレースリストに表示されることを意味します。 APIを介して提供されるデータは、トレースページを参照しません。トレースポイントのタイムスタンプは、パブリックなGPS APIからは利用できません。また、トレースポイントは時系列で並べられていません。";
+"gpx_upload_trackable_visibility_descr" = "\"追跡可能\"は、トレース状況が公開リストに表示されないことを意味しますが、タイムスタンプ付きで処理済みの経路ポイント(直接関連付けされないもの)は、パブリックなGPS APIからのダウンロードを通じて表示されます。";
 "gpx_upload_identifiable_visibility_descr" = "\"識別可能\"は、経路がGPS経路およびパブリックGPS経路リストに表示されることを示唆しています。他のユーザーは現在の経路をダウンロードして、ユーザー名とリンクできます。経路ポイント APIを介して配信されるデータは、元の経路追跡ページを参照します。経路ポイントのタイムスタンプは、公的GPS APIを通じて入手できます。";
 "gpx_upload_private_visibility_descr" = "\"プライベート\"は、経路が公開リストに表示されないことを示唆しています。経路ポイントはタイムスタンプなしで公的GPS APIを介して引き続き利用できますが、時系列で並べられることはありません。";
-"route_between_points_warning_desc" = "このオプションを使用するには、OsmAndで経路をマップ上の道路にスナップする必要があります。
-\n
-\n次にナビゲーションプロファイルを選択して、利用予定の道路(一般道、高速道路)と、道路を追跡するおおよその距離を検出する必要があります。";
+"route_between_points_warning_desc" = "このオプションを使用するには、OsmAndで経路をマップ上の道路にスナップする必要があります。\n\n次にナビゲーションプロファイルを選択して、利用予定の道路(一般道、高速道路)と、道路を追跡するおおよその距離を検出する必要があります。";
 "some_articles_may_not_available_in_lang" = "一部のウィキペディア記事は、ご使用の言語で利用できない場合があります。";
 "last_used" = "最後に利用";
 "suggested_maps" = "推奨マップ";
@@ -2111,3 +2109,18 @@
 "gpxup_identifiable" = "識別可能";
 "default" = "標準";
 "product_title_mapillary" = "Mapillary";
+"contour_lines_hillshades_slope" = "等高線、陰影起伏、勾配";
+"routeInfo_smoothness_description" = "特に表面の規則性/平坦性の観点での、車輪の付いたあらゆる乗り物においてそれぞれの通行が認められる歩道および車道の操縦性分類です。";
+"routeInfo_tracktype_description" = "ルートまたは経路の線でその路面構成に応じて色付けします。通常、道路網がほとんど舗装されていない場合に適用されます。";
+"grey_color_undefined" = "データのない部分は灰色で表示されます。";
+"shared_string_open_street_map" = "OpenStreetMap";
+"shared_string_hide_all" = "全て非表示";
+"attribute" = "属性";
+"explore_wikipedia_offline" = "Wikipediaをオフラインで参照します。";
+"rendering_value_walkingRoutesOSMC_description" = "個々のローカルカラー(OpenStreetMapで使われている物)と、ハイキングシールドシンボルに従ってルートに色付けします。";
+"rendering_value_walkingRoutesScopeOSMC_description" = "ルートネットワークに応じた色付けします。";
+"routes_color_by_type" = "カラールートは以下に準ず…";
+"turn_arrows" = "方向転換の矢印";
+"routeInfo_winter_ice_road_description" = "冬の道路分類によってルートまたは経路の線に色を付けます。";
+"travel_routes" = "旅行ルート";
+"rendering_value_walkingRoutesOSMCNodes_description" = "ノードネットワークのタイプ(国際、地域、ローカル)に応じてルートに色付けします。";

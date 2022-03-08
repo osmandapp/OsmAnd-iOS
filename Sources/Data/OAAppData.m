@@ -10,16 +10,10 @@
 #import "OAHistoryHelper.h"
 #import "OAPointDescription.h"
 #import "OAAutoObserverProxy.h"
-#import "OsmAndApp.h"
-#import "OAAppSettings.h"
 #import "OrderedDictionary.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
-#import "OAPlugin.h"
-#import "OAIAPHelper.h"
 #import "OAWeatherBand.h"
-
-#include <objc/runtime.h>
 
 #define kLastMapSourceKey @"lastMapSource"
 #define kOverlaySourceKey @"overlayMapSource"
@@ -360,6 +354,7 @@
             }
             [_lastMapSourceProfile set:[lastMapSource copy] mode:mode];
         }
+		[_lastMapSourceChangeObservable notifyEventWithKey:self andValue:[_lastMapSourceProfile get:mode]];
     }
 }
 

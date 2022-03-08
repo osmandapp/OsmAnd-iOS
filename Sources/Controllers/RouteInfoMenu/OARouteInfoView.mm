@@ -1081,7 +1081,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (onComplete)
             onComplete();
     }
-    _appModeView.selectedMode = [_routingHelper getAppMode];
+    OAApplicationMode *am = [_routingHelper getAppMode];
+    _appModeView.selectedMode = am;
+	if ([[OAAppSettings sharedManager].applicationMode get] != am)
+        [self appModeChanged:am];
 }
 
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -1185,13 +1188,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) appModeChanged:(OAApplicationMode *)next
 {
-    OAApplicationMode *am = [_routingHelper getAppMode];
-    OAApplicationMode *appMode = [OAAppSettings sharedManager].applicationMode.get;
-    if ([_routingHelper isFollowingMode] && appMode == am)
-        [[OAAppSettings sharedManager].applicationMode set:next];
-    
     _hasEmptyTransportRoute = NO;
     [_routingHelper setAppMode:next];
+    [[OAAppSettings sharedManager] setApplicationModePref:next markAsLastUsed:NO];
     [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
     if ([_routingHelper isRouteBeingCalculated] || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
         [_tableView reloadData];

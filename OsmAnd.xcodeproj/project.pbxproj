@@ -1598,7 +1598,7 @@
 		DA5A81E926C563A700F274C7 /* OAHistoryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AC826C563A100F274C7 /* OAHistoryHelper.m */; };
 		DA5A81EA26C563A700F274C7 /* OAHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AC926C563A100F274C7 /* OAHistoryItem.m */; };
 		DA5A81EB26C563A700F274C7 /* OAHistoryDB.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ACA26C563A100F274C7 /* OAHistoryDB.m */; };
-		DA5A81EC26C563A700F274C7 /* OARendererRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ACF26C563A100F274C7 /* OARendererRegistry.m */; };
+		DA5A81EC26C563A700F274C7 /* OARendererRegistry.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ACF26C563A100F274C7 /* OARendererRegistry.mm */; };
 		DA5A81ED26C563A700F274C7 /* OAProfileIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD326C563A100F274C7 /* OAProfileIcon.m */; };
 		DA5A81EE26C563A700F274C7 /* OANavigationIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD526C563A100F274C7 /* OANavigationIcon.m */; };
 		DA5A81EF26C563A700F274C7 /* OAProfileDataUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD626C563A100F274C7 /* OAProfileDataUtils.mm */; };
@@ -2445,7 +2445,6 @@
 		DA5A854726C563A900F274C7 /* OANetworkUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80CB26C563A600F274C7 /* OANetworkUtilities.m */; };
 		DA5A854826C563A900F274C7 /* OADebugSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80CC26C563A600F274C7 /* OADebugSettings.mm */; };
 		DA5A854926C563A900F274C7 /* OAJsonHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80CD26C563A600F274C7 /* OAJsonHelper.m */; };
-		DA5A854A26C563A900F274C7 /* OAMapStyleTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80CE26C563A600F274C7 /* OAMapStyleTitles.m */; };
 		DA5A854B26C563A900F274C7 /* OASettingsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80D426C563A600F274C7 /* OASettingsHelper.mm */; };
 		DA5A854C26C563A900F274C7 /* OAWikiArticleHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80D626C563A600F274C7 /* OAWikiArticleHelper.mm */; };
 		DA5A854D26C563A900F274C7 /* OAMapTileDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80D826C563A600F274C7 /* OAMapTileDownloader.mm */; };
@@ -4866,7 +4865,7 @@
 		DA5A7ACA26C563A100F274C7 /* OAHistoryDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAHistoryDB.m; sourceTree = "<group>"; };
 		DA5A7ACB26C563A100F274C7 /* OAHistoryHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryHelper.h; sourceTree = "<group>"; };
 		DA5A7ACD26C563A100F274C7 /* FFCircularProgressView+isSpinning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FFCircularProgressView+isSpinning.h"; sourceTree = "<group>"; };
-		DA5A7ACF26C563A100F274C7 /* OARendererRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARendererRegistry.m; sourceTree = "<group>"; };
+		DA5A7ACF26C563A100F274C7 /* OARendererRegistry.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARendererRegistry.mm; sourceTree = "<group>"; };
 		DA5A7AD026C563A100F274C7 /* OARendererRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARendererRegistry.h; sourceTree = "<group>"; };
 		DA5A7AD226C563A100F274C7 /* OALocationIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALocationIcon.h; sourceTree = "<group>"; };
 		DA5A7AD326C563A100F274C7 /* OAProfileIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileIcon.m; sourceTree = "<group>"; };
@@ -6254,7 +6253,6 @@
 		DA5A809D26C563A500F274C7 /* OASaveGpxToTripsActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASaveGpxToTripsActivity.m; sourceTree = "<group>"; };
 		DA5A809E26C563A500F274C7 /* OrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderedDictionary.m; sourceTree = "<group>"; };
 		DA5A809F26C563A500F274C7 /* OAWikiArticleHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiArticleHelper.h; sourceTree = "<group>"; };
-		DA5A80A026C563A500F274C7 /* OAMapStyleTitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapStyleTitles.h; sourceTree = "<group>"; };
 		DA5A80A126C563A500F274C7 /* OAJsonHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAJsonHelper.h; sourceTree = "<group>"; };
 		DA5A80A226C563A500F274C7 /* OpenLocationCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenLocationCode.swift; sourceTree = "<group>"; };
 		DA5A80A326C563A500F274C7 /* OAOsmAndLiveHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmAndLiveHelper.mm; sourceTree = "<group>"; };
@@ -6300,7 +6298,6 @@
 		DA5A80CB26C563A600F274C7 /* OANetworkUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANetworkUtilities.m; sourceTree = "<group>"; };
 		DA5A80CC26C563A600F274C7 /* OADebugSettings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADebugSettings.mm; sourceTree = "<group>"; };
 		DA5A80CD26C563A600F274C7 /* OAJsonHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAJsonHelper.m; sourceTree = "<group>"; };
-		DA5A80CE26C563A600F274C7 /* OAMapStyleTitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapStyleTitles.m; sourceTree = "<group>"; };
 		DA5A80CF26C563A600F274C7 /* OrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderedDictionary.h; sourceTree = "<group>"; };
 		DA5A80D026C563A600F274C7 /* OASaveGpxToTripsActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASaveGpxToTripsActivity.h; sourceTree = "<group>"; };
 		DA5A80D126C563A600F274C7 /* OAFavoritesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFavoritesHelper.h; sourceTree = "<group>"; };
@@ -9551,7 +9548,7 @@
 			isa = PBXGroup;
 			children = (
 				DA5A7AD026C563A100F274C7 /* OARendererRegistry.h */,
-				DA5A7ACF26C563A100F274C7 /* OARendererRegistry.m */,
+				DA5A7ACF26C563A100F274C7 /* OARendererRegistry.mm */,
 			);
 			path = Rendering;
 			sourceTree = "<group>";
@@ -11648,8 +11645,6 @@
 				DA5A80E326C563A600F274C7 /* OAKml2Gpx.m */,
 				DA5A80B726C563A600F274C7 /* OALocationParser.h */,
 				DA5A809826C563A500F274C7 /* OALocationParser.mm */,
-				DA5A80A026C563A500F274C7 /* OAMapStyleTitles.h */,
-				DA5A80CE26C563A600F274C7 /* OAMapStyleTitles.m */,
 				DA5A80AA26C563A600F274C7 /* OAMapTileDownloader.h */,
 				DA5A80D826C563A600F274C7 /* OAMapTileDownloader.mm */,
 				DA5A80AB26C563A600F274C7 /* OAMapUtils.h */,
@@ -14516,7 +14511,7 @@
 				DA5A83B426C563A800F274C7 /* OAOsmEditsListViewController.mm in Sources */,
 				DA5A81AF26C563A700F274C7 /* OASearchCoreFactory.mm in Sources */,
 				DA5A849626C563A900F274C7 /* InitialRoutePlanningBottomSheetViewController.mm in Sources */,
-				DA5A81EC26C563A700F274C7 /* OARendererRegistry.m in Sources */,
+				DA5A81EC26C563A700F274C7 /* OARendererRegistry.mm in Sources */,
 				DA5A81C526C563A700F274C7 /* OANameStringMatcher.m in Sources */,
 				DA5A840326C563A800F274C7 /* OAAddressTableViewController.mm in Sources */,
 				3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */,
@@ -14675,7 +14670,6 @@
 				DA5A81EB26C563A700F274C7 /* OAHistoryDB.m in Sources */,
 				DA5A846526C563A900F274C7 /* OADownloadedRegionsLayer.mm in Sources */,
 				DA5A834226C563A800F274C7 /* OAMapillaryContributeCell.mm in Sources */,
-				DA5A854A26C563A900F274C7 /* OAMapStyleTitles.m in Sources */,
 				DA5A854D26C563A900F274C7 /* OAMapTileDownloader.mm in Sources */,
 				DA5A836B26C563A800F274C7 /* OADestinationItemsListViewController.mm in Sources */,
 				DA5A81B026C563A700F274C7 /* OADownloadsManager.m in Sources */,

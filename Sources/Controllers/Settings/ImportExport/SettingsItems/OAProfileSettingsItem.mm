@@ -10,12 +10,13 @@
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
-#import "OAMapStyleTitles.h"
+#import "OARendererRegistry.h"
 #import "OAMapStyleSettings.h"
 #import "OARouteProvider.h"
 #import "OARoutingHelper.h"
 #import "OAVoiceRouter.h"
 #import "OrderedDictionary.h"
+#import "OAIndexConstants.h"
 
 @implementation OAProfileSettingsItem
 {
@@ -81,23 +82,23 @@
 
 - (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs
 {
-    NSString *renderer = [OAAppSettings.sharedManager.renderer get:_appMode];
-    NSString *resName = [OAProfileSettingsItem getRendererByName:renderer];
-    NSString *ext = @".render.xml";
-    renderer = OAMapStyleTitles.getMapStyleTitles[resName];
-    BOOL isTouringView = [resName hasPrefix:@"Touring"];
-    if (!renderer && isTouringView)
-        renderer = OAMapStyleTitles.getMapStyleTitles[@"Touring-view_(more-contrast-and-details).render"];
-    else if (!renderer && [resName isEqualToString:@"offroad"])
-        renderer = OAMapStyleTitles.getMapStyleTitles[@"Offroad by ZLZK"];
-    
-    if (!renderer)
+    OsmAndAppInstance app = [OsmAndApp instance];
+    OAAppData *appData = app.data;
+    NSString *renderer = [[OAAppSettings sharedManager].renderer get:_appMode];
+    if ([renderer isEqualToString:@"OsmAnd (online tiles)"])
         return;
-    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:_appMode.variantKey];
-    OAAppData *data = OsmAndApp.instance.data;
+    NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
+
+    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:mapStyleInfo[@"id"]
+                                                                        mapPresetName:_appMode.variantKey];
     // if the last map source was offline set it to the selected source
-    if ([[data getLastMapSource:_appMode].resourceId hasSuffix:ext])
-        [data setLastMapSource:[[OAMapSource alloc] initWithResource:[resName.lowerCase stringByAppendingString:ext] andVariant:_appMode.variantKey name:renderer] mode:_appMode];
+    if ([[appData getLastMapSource:_appMode].resourceId hasSuffix:RENDERER_INDEX_EXT])
+    {
+        [appData setLastMapSource:[[OAMapSource alloc] initWithResource:[[mapStyleInfo[@"id"] lowercaseString] stringByAppendingString:RENDERER_INDEX_EXT]
+                                                             andVariant:_appMode.variantKey
+                                                                   name:mapStyleInfo[@"title"]]
+                             mode:_appMode];
+    }
     [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         if ([key isEqualToString:@"displayed_transport_settings"])
         {
@@ -137,28 +138,6 @@
             }
         }
     }];
-}
-
-+ (NSString *) getRendererByName:(NSString *)rendererName
-{
-    if ([rendererName isEqualToString:@"OsmAnd"])
-        return @"default";
-    else if ([rendererName isEqualToString:@"Touring view (contrast and details)"])
-        return @"Touring-view_(more-contrast-and-details)";
-    else if (![rendererName isEqualToString:@"LightRS"] && ![rendererName isEqualToString:@"UniRS"])
-        return [rendererName lowerCase];
-    
-    return rendererName;
-}
-
-+ (NSString *) getRendererStringValue:(NSString *)renderer
-{
-    if ([renderer hasPrefix:@"Touring"])
-        return @"Touring view (contrast and details)";
-    else if (OAMapStyleTitles.getMapStyleTitles[renderer])
-        return OAMapStyleTitles.getMapStyleTitles[renderer];
-    else
-        return renderer;
 }
 
 - (void)readPreferenceFromJson:(NSString *)key value:(NSString *)value
@@ -367,11 +346,8 @@
     }
     res[@"displayed_transport_settings"] = enabledTransport;
     
-    NSString *renderer = nil;
     for (OAMapStyleParameter *param in [styleSettings getAllParameters])
     {
-        if (!renderer)
-            renderer = param.mapStyleName;
         res[[@"nrenderer_" stringByAppendingString:param.name]] = param.value;
     }
     
@@ -394,10 +370,9 @@
             }
         }
     }
-    if (renderer)
-    {
-        res[@"renderer"] = [OAProfileSettingsItem getRendererStringValue:renderer];
-    }
+    NSString *renderer = [[OAAppSettings sharedManager].renderer get:_appMode];
+    NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
+    res[@"renderer"] = mapStyleInfo[@"title"];
     return res;
 }
 

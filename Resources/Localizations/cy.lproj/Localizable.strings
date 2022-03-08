@@ -427,7 +427,7 @@
 "poi_categories" = "POI categories";
 "search_history" = "Search history";
 "track_coloring_solid" = "Solid";
-"attribute" = "Attribute";
+"attribute" = "Priodoledd";
 
 // Shared Strings
 "shared_string_custom" = "Custom";
@@ -1849,7 +1849,7 @@
 "wiki_sheet_title" = "How to open Wikipedia articles?";
 "download_wiki_data" = "Download Wikipedia data for %@";
 "open_wiki_online" = "Open article online";
-"explore_wikipedia_offline" = "Explore Wikipedia offline.";
+"explore_wikipedia_offline" = "Pori Wikipedia all-lein.";
 "online_webpage_warning" = "Page only available online. Open in web browser?";
 "custom_search" = "Custom search";
 "add_custom_category" = "Ychwanegu eich categori eich hun";
@@ -2310,7 +2310,7 @@
 "desert" = "Desert";
 "travel_routes" = "Llwybrau teithio";
 "walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
-"rendering_value_walkingRoutesOSMCNodes_description" = "Color routes according to their node network type (international, regional, local).";
+"rendering_value_walkingRoutesOSMCNodes_description" = "";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Color by network affiliation.";
 "rendering_value_walkingRoutesOSMC_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and hiking shield symbol.";
 "routes_color_by_type" = "Lliwio llwybrau yn ôl…";

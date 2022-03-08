@@ -32,5 +32,8 @@
                         showOnMap:(BOOL)showOnMap
                   simplifiedTrack:(BOOL)simplifiedTrack
                         duplicate:(BOOL)duplicate;
+- (instancetype) initWithFileName:(NSString *)fileName
+                         filePath:(NSString *)filePath
+                          tmpPath:(NSString *)tmpPath;
 
 @end

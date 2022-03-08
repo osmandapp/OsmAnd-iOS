@@ -21,6 +21,9 @@
 #import "OASelectTrackFolderViewController.h"
 #import "OAAddTrackFolderViewController.h"
 #import "OACollectionViewCellState.h"
+#import "OAGPXDocument.h"
+
+#define kGpxFileExtension @"gpx"
 
 @interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, OAFolderCardsCellDelegate, OAAddTrackFolderDelegate>
 
@@ -34,10 +37,12 @@
     NSString *_fileName;
     NSString *_sourceFileName;
     NSString *_filePath;
+    NSString *_tmpPath;
     NSString *_selectedFolderName;
     NSArray<NSString *> *_allFolders;
     BOOL _showSimplifiedButton;
     BOOL _rightButtonEnabled;
+    BOOL _exportingFromNavigation;
     
     BOOL _duplicate;
     BOOL _simplifiedTrack;
@@ -57,7 +62,6 @@
     self = [super init];
     if (self)
     {
-        _settings = [OAAppSettings sharedManager];
         _fileName = fileName;
         _filePath = filePath;
         _sourceFileName = fileName;
@@ -65,6 +69,31 @@
         _showOnMap = showOnMap;
         _duplicate = duplicate;
 
+        _exportingFromNavigation = NO;
+        _rightButtonEnabled = YES;
+        _simplifiedTrack = NO;
+        
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype) initWithFileName:(NSString *)fileName
+                         filePath:(NSString *)filePath
+                          tmpPath:(NSString *)tmpPath
+{
+    self = [super init];
+    if (self)
+    {
+        _fileName = fileName;
+        _filePath = filePath;
+        _sourceFileName = fileName;
+        _tmpPath = tmpPath;
+        _showSimplifiedButton = NO;
+        _showOnMap = YES;
+        _duplicate = NO;
+
+        _exportingFromNavigation = YES;
         _rightButtonEnabled = YES;
         _simplifiedTrack = NO;
         
@@ -119,6 +148,7 @@
 
 - (void) commonInit
 {
+    _settings = [OAAppSettings sharedManager];
     [self updateAllFoldersList];
     _selectedFolderName = [self getDisplayingFolderName:_filePath];
     _selectedFolderIndex = (int)[_allFolders indexOfObject:_selectedFolderName];
@@ -265,6 +295,31 @@
                                   showOnMap:_showOnMap
                             simplifiedTrack:_simplifiedTrack
                                   openTrack:YES];
+        }
+        
+        if (_exportingFromNavigation)
+        {
+            OsmAndAppInstance app = OsmAndApp.instance;
+            NSString *shortPath = [savingPath stringByAppendingPathExtension:kGpxFileExtension];
+            NSString *trackName = [savingPath lastPathComponent];
+            NSString *gpxPath = [app.gpxPath stringByAppendingPathComponent:shortPath];
+            
+            BOOL success = [NSFileManager.defaultManager moveItemAtPath:_tmpPath toPath:gpxPath error:nil];
+            
+            if (success)
+            {
+                OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
+                OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:gpxPath];
+                [gpxDatabase addGpxItem:shortPath
+                                  title:trackName
+                                   desc:gpxDoc.metadata.desc
+                                 bounds:gpxDoc.bounds
+                               document:gpxDoc];
+                [gpxDatabase save];
+                
+                if (_showOnMap)
+                    [_settings showGpx:@[shortPath]];
+            }
         }
     }
 }

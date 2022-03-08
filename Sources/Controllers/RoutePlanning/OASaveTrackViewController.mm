@@ -70,8 +70,6 @@
         _duplicate = duplicate;
 
         _exportingFromNavigation = NO;
-        _rightButtonEnabled = YES;
-        _simplifiedTrack = NO;
         
         [self commonInit];
     }
@@ -94,8 +92,6 @@
         _duplicate = NO;
 
         _exportingFromNavigation = YES;
-        _rightButtonEnabled = YES;
-        _simplifiedTrack = NO;
         
         [self commonInit];
     }
@@ -149,6 +145,9 @@
 - (void) commonInit
 {
     _settings = [OAAppSettings sharedManager];
+    _rightButtonEnabled = YES;
+    _simplifiedTrack = NO;
+    
     [self updateAllFoldersList];
     _selectedFolderName = [self getDisplayingFolderName:_filePath];
     _selectedFolderIndex = (int)[_allFolders indexOfObject:_selectedFolderName];

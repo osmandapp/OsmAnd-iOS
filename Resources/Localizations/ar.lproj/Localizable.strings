@@ -520,7 +520,7 @@
 "units_km_h" = "كم/س";
 "units_mph" = "ميل ساعة";
 "units_hour" = "س";
-"units_min" = "د";
+"units_min" = "د.";
 "units_sec" = "ثانية";
 // Map
 "map_inst_det_map_q" = "قم بتثبيت نظرة عامة مفصلة على الخريطة للحصول على مزيد من المعلومات حول مواقعك.";
@@ -2347,3 +2347,14 @@
 "map_settings_clear_raster_cache" = "مسح البلاط النقطي";
 "shared_string_min_height" = "أدنى ارتفاع";
 "shared_string_max_height" = "أقصى ارتفاع";
+"start_point" = "ابدأ";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d المسارات؟";
+"route_preferred_terrain_flat" = "طرق ذات ملف تعريف مسطح للإغاثة. قد يزيد الطول.";
+"delete_tracks_bottom_sheet_title" = "حذف المسارات؟";
+"selected_tracks_count" = "المسارات - %d";
+"delete_tracks_bottom_sheet_description_regular_part" = "هل أنت متأكد من أنك تريد الحذف ";
+"altitude" = "الارتفاع";
+"map_widget_speed" = "سرعة";
+"save_heading_descr" = "حفظ معلومات العنوان لكل نقطة مسجلة";
+"select_tracks" = "حدد المسارات";
+"routeInfo_winter_ice_road_description" = "قم بتلوين المسار أو خط المسار حسب تصنيف الطريق الشتوي.";

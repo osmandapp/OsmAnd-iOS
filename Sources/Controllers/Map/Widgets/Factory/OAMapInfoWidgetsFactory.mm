@@ -136,6 +136,8 @@
     __weak OATextInfoWidget *weatherControlWeak = weatherControl;
     __weak OAMapInfoWidgetsFactory *selfWeak = self;
     NSMutableArray *cachedValue = @[@(0)].mutableCopy;
+    OsmAnd::PointI __block cachedTarget31 = OsmAnd::PointI(0, 0);
+    OsmAnd::ZoomLevel __block cachedZoom = OsmAnd::ZoomLevel::InvalidZoomLevel;
     weatherControl.updateInfoFunction = ^BOOL{
         
         BOOL enabled = _app.data.weather;
@@ -151,10 +153,19 @@
         
         OAMapViewController *mapCtrl = [OARootViewController instance].mapPanel.mapViewController;
                                         
+        OsmAnd::PointI target31 = mapCtrl.mapView.target31;
+        OsmAnd::ZoomLevel zoom = mapCtrl.mapView.zoomLevel;
+        
+        if (cachedTarget31 == target31 && cachedZoom == zoom)
+            return false;
+
+        cachedTarget31 = target31;
+        cachedZoom = zoom;
+
         OsmAnd::WeatherTileResourcesManager::ValueRequest _request;
         _request.dataTime = QDateTime::fromNSDate(mapCtrl.mapLayers.weatherDate).toUTC();
-        _request.point31 = mapCtrl.mapView.target31;
-        _request.zoom = mapCtrl.mapView.zoomLevel;
+        _request.point31 = target31;
+        _request.zoom = zoom;
         _request.band = (OsmAnd::BandIndex)band;
 
         OsmAnd::WeatherTileResourcesManager::ObtainValueAsyncCallback _callback =

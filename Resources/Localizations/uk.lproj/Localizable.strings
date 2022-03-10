@@ -2378,3 +2378,7 @@
 "delete_tracks_bottom_sheet_description_regular_part" = "Ви впевнені, що хочете видалити ";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d треків?";
 "delete_tracks_bottom_sheet_title" = "Видалити треки?";
+"routing_attr_avoid_low_emission_zone_description" = "Уникнення зон з низьким рівнем викидів";
+"routing_attr_avoid_tunnels_name" = "Без тунелів";
+"routing_attr_avoid_tunnels_description" = "Уникати тунелів";
+"routing_attr_avoid_low_emission_zone_name" = "Без зон з низьким рівнем викидів";

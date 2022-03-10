@@ -427,7 +427,7 @@
 "poi_categories" = "POI categories";
 "search_history" = "Bilaketa-historia";
 "track_coloring_solid" = "Solidoa";
-"attribute" = "Attribute";
+"attribute" = "Atributua";
 
 // Shared Strings
 "shared_string_custom" = "Pertsonalizatua";
@@ -1849,7 +1849,7 @@
 "wiki_sheet_title" = "Nola ireki Wikipedia artikuluak?";
 "download_wiki_data" = "Download Wikipedia data for %@";
 "open_wiki_online" = "Ireki artikulua linean";
-"explore_wikipedia_offline" = "Explore Wikipedia offline.";
+"explore_wikipedia_offline" = "Arakatu Wikipedia lineaz kanpo.";
 "online_webpage_warning" = "Orria sarean besterik ez dago eskuragarri. Web nabigatzaile batean ireki nahi duzu?";
 "custom_search" = "Bilaketa pertsonalizatua";
 "add_custom_category" = "Gehitu kategoria pertsonalizatua";
@@ -2312,8 +2312,8 @@
 "walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Esleitu kolorea ibilbideei nodo sare motaren arabera (nazioartekoa, eskualdekoa, tokikoa)";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Sareko kidetzaren araberako kolorea eman";
-"rendering_value_walkingRoutesOSMC_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and hiking shield symbol.";
-"routes_color_by_type" = "Color routes by…";
+"rendering_value_walkingRoutesOSMC_description" = "Koloreztatu ibilbideak tokiko kolore indibidualaren arabera (OpenStreetMap-en badago) eta mendizaleen ezkutuaren ikurraren arabera.";
+"routes_color_by_type" = "Koloreztatu ibilbideak honen arabera…";
 
 // Release Notes
 // instruction:
@@ -2326,3 +2326,16 @@
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "units_min_short" = "m";
 "shared_string_open_street_map" = "OpenStreetMap";
+"routeInfo_tracktype_description" = "Margotu ibilbidea edo pista gainazaleko konposizioaren arabera. Normalean errepide sarea asfaltatu gabe dagoenean aplikatzen da.";
+"routing_attr_only_permitted_streets_name" = "Berariaz baimenduta dauden kaleak";
+"routing_attr_prefer_horse_routes_name" = "Nahiago zaldi ibilbideak";
+"routeInfo_smoothness_description" = "Gurpildun ibilgailuen errepide/bideen maniobragarritasunaren sailkapena, batez ere gainazaleko erregulartasunari/lautasunari dagokionez.";
+"routeInfo_winter_ice_road_description" = "Margotu ibilbidea edo pista neguko errepideen sailkapenaren arabera.";
+"routing_attr_prefer_horse_routes_description" = "Nahiago zaldi ibilbideak";
+"routing_attr_allow_gate_name" = "Baimendu atea erabiltzea";
+"routing_attr_allow_gate_description" = "Baimendu ateak erabiltzea";
+"routing_attr_only_permitted_streets_description" = "Erabili berariaz baimenduta dauden kaleak soilik";
+"routing_attr_only_permitted_ways_name" = "Berariaz baimendutako bideak";
+"routing_attr_only_permitted_ways_description" = "Erabili soilik berariaz baimenduta dauden bideak (bide-zidorrak, bideak, etab.)";
+"horseback_riding" = "Zaldi-ibilaldiak";
+"grey_color_undefined" = "Daturik gabeko zatiak grisak dira.";

@@ -1086,7 +1086,8 @@
         if (self.downloadMapWidget)
             self.downloadMapWidget.alpha = alphaEx;
 
-        [self updateControlsLayout:[self getHudTopOffset]];
+        if (!onlyMapSettingsAndSearch)
+            [self updateControlsLayout:[self getHudTopOffset]];
 
     } completion:^(BOOL finished) {
         

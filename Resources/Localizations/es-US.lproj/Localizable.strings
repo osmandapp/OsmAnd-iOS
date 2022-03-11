@@ -502,8 +502,8 @@
 "update_map" = "Actualizar mapa";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
-"move_map_to_select_area" = "Move map to select needed area.";
-"number_of_tiles" = "Number of tiles";
+"move_map_to_select_area" = "Mover el mapa para elegir el área necesaria.";
+"number_of_tiles" = "Número de teselas";
 "download_size" = "Download size";
 "preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
 "select_online_source" = "Select source";

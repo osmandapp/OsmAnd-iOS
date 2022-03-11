@@ -348,6 +348,7 @@
 - (void) openNavigationSettings
 {
     OAProfileNavigationSettingsViewController *settingsViewController = [[OAProfileNavigationSettingsViewController alloc] initWithAppMode:[[OARoutingHelper sharedInstance] getAppMode]];
+    settingsViewController.openFromRouteInfo = YES;
     settingsViewController.delegate = self;
     [self presentViewController:settingsViewController animated:YES completion:nil];
 }
@@ -409,6 +410,13 @@
     [self generateData];
     [self setupView];
     [self.tableView reloadData];
+}
+
+- (void)closeSettingsScreenWithRouteInfo
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        [[OARootViewController instance].mapPanel closeRouteInfo];
+    }];
 }
 
 #pragma mark - OARouteLineAppearanceViewControllerDelegate

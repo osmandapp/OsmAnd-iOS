@@ -28,6 +28,8 @@
 
 static NSMapTable<NSString *, NSMutableSet<OAApplicationMode *> *> *_widgetsVisibilityMap;
 static NSMapTable<NSString *, NSMutableSet<OAApplicationMode *> *> *_widgetsAvailabilityMap;
+
+static NSMutableArray<OAApplicationMode *> *_defaultValues;
 static NSMutableArray<OAApplicationMode *> *_values;
 static NSMutableArray<OAApplicationMode *> *_cachedFilteredValues;
 static OAAutoObserverProxy* _listener;
@@ -95,51 +97,58 @@ static OAApplicationMode *_HORSE;
     _widgetsVisibilityMap = [NSMapTable strongToStrongObjectsMapTable];
     _widgetsAvailabilityMap = [NSMapTable strongToStrongObjectsMapTable];
     _values = [NSMutableArray array];
+    _defaultValues = [NSMutableArray array];
     _cachedFilteredValues = [NSMutableArray array];
     
     _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"rendering_value_browse_map_name") stringKey:@"default"];
     _DEFAULT.descr = OALocalizedString(@"profile_type_base_string");
-    [_values addObject:_DEFAULT];
+    [_DEFAULT reg];
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
     _CAR.descr = OALocalizedString(@"base_profile_descr_car");
-    [_values addObject:_CAR];
+    [_CAR reg];
     
     _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
     _BICYCLE.descr = OALocalizedString(@"base_profile_descr_bicycle");
-    [_values addObject:_BICYCLE];
+    [_BICYCLE reg];
     
     _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
     _PEDESTRIAN.descr = OALocalizedString(@"base_profile_descr_pedestrian");
-    [_values addObject:_PEDESTRIAN];
+    [_PEDESTRIAN reg];
     
     _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
     _PUBLIC_TRANSPORT.descr = OALocalizedString(@"base_profile_descr_public_transport");
-    [_values addObject:_PUBLIC_TRANSPORT];
+    [_PUBLIC_TRANSPORT reg];
     
     _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
     _AIRCRAFT.descr = OALocalizedString(@"base_profile_descr_aircraft");
-    [_values addObject:_AIRCRAFT];
+    [_AIRCRAFT reg];
     
     _TRUCK = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_truck") stringKey:@"truck"];
     _TRUCK.descr = OALocalizedString(@"app_mode_truck");
-    [_values addObject:_TRUCK];
+    [_TRUCK reg];
     
     _MOTORCYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_motorcycle") stringKey:@"motorcycle"];
     _MOTORCYCLE.descr = OALocalizedString(@"app_mode_motorcycle");
-    [_values addObject:_MOTORCYCLE];
+    [_MOTORCYCLE reg];
     
     _BOAT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_boat") stringKey:@"boat"];
     _BOAT.descr = OALocalizedString(@"base_profile_descr_boat");
-    [_values addObject:_BOAT];
+    [_BOAT reg];
     
     _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_skiing") stringKey:@"ski"];
     _SKI.descr = OALocalizedString(@"app_mode_skiing");
-    [_values addObject:_SKI];
+    [_SKI reg];
     
     _HORSE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"horseback_riding") stringKey:@"horse"];
     _HORSE.descr = OALocalizedString(@"horseback_riding");
-    [_values addObject:_HORSE];
+    [_HORSE reg];
+}
+
+- (void) reg
+{
+    [_values addObject:self];
+    [_defaultValues addObject:self];
 }
 
 + (OAApplicationMode *) DEFAULT
@@ -331,7 +340,12 @@ static OAApplicationMode *_HORSE;
 
 - (BOOL) isCustomProfile
 {
-    return _parent != nil;
+    for (OAApplicationMode *mode in _defaultValues)
+    {
+        if ([mode.stringKey isEqualToString:self.stringKey])
+            return NO;
+    }
+    return YES;
 }
 
 - (OAApplicationMode *) getParent
@@ -608,6 +622,9 @@ static OAApplicationMode *_HORSE;
 + (void) reorderAppModes
 {
     [_values sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
+        return [self compareModes:obj1 obj2:obj2];
+    }];
+    [_defaultValues sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
         return [self compareModes:obj1 obj2:obj2];
     }];
     [_cachedFilteredValues sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {

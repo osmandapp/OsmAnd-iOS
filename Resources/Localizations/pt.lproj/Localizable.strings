@@ -2370,3 +2370,7 @@
 "selected_tracks_count" = "Trilhos - %d";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d trilhos?";
 "delete_tracks_bottom_sheet_title" = "Eliminar os trilhos?";
+"routing_attr_avoid_low_emission_zone_description" = "Evita zonas de baixas emissões poluentes";
+"routing_attr_avoid_tunnels_name" = "Evitar túneis";
+"routing_attr_avoid_tunnels_description" = "Evita túneis";
+"routing_attr_avoid_low_emission_zone_name" = "Evitar zonas de baixas emissões poluentes";

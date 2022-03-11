@@ -2417,7 +2417,7 @@
 		DA5A852A26C563A900F274C7 /* OALocationParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A809826C563A500F274C7 /* OALocationParser.mm */; };
 		DA5A852B26C563A900F274C7 /* OAWaypointUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A809926C563A500F274C7 /* OAWaypointUIHelper.mm */; };
 		DA5A852C26C563A900F274C7 /* OAOcbfHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A809B26C563A500F274C7 /* OAOcbfHelper.m */; };
-		DA5A852D26C563A900F274C7 /* OASaveGpxToTripsActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A809D26C563A500F274C7 /* OASaveGpxToTripsActivity.m */; };
+		DA5A852D26C563A900F274C7 /* OASaveGpxToTripsActivity.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A809D26C563A500F274C7 /* OASaveGpxToTripsActivity.mm */; };
 		DA5A852E26C563A900F274C7 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A809E26C563A500F274C7 /* OrderedDictionary.m */; };
 		DA5A852F26C563A900F274C7 /* OpenLocationCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A226C563A500F274C7 /* OpenLocationCode.swift */; };
 		DA5A853026C563A900F274C7 /* OAOsmAndLiveHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A326C563A500F274C7 /* OAOsmAndLiveHelper.mm */; };
@@ -6254,7 +6254,7 @@
 		DA5A809A26C563A500F274C7 /* OAWaypointUIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWaypointUIHelper.h; sourceTree = "<group>"; };
 		DA5A809B26C563A500F274C7 /* OAOcbfHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOcbfHelper.m; sourceTree = "<group>"; };
 		DA5A809C26C563A500F274C7 /* OAReverseGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAReverseGeocoder.h; sourceTree = "<group>"; };
-		DA5A809D26C563A500F274C7 /* OASaveGpxToTripsActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASaveGpxToTripsActivity.m; sourceTree = "<group>"; };
+		DA5A809D26C563A500F274C7 /* OASaveGpxToTripsActivity.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASaveGpxToTripsActivity.mm; sourceTree = "<group>"; };
 		DA5A809E26C563A500F274C7 /* OrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderedDictionary.m; sourceTree = "<group>"; };
 		DA5A809F26C563A500F274C7 /* OAWikiArticleHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiArticleHelper.h; sourceTree = "<group>"; };
 		DA5A80A026C563A500F274C7 /* OAMapStyleTitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapStyleTitles.h; sourceTree = "<group>"; };
@@ -11676,7 +11676,7 @@
 				DA5A809C26C563A500F274C7 /* OAReverseGeocoder.h */,
 				DA5A80B826C563A600F274C7 /* OAReverseGeocoder.mm */,
 				DA5A80D026C563A600F274C7 /* OASaveGpxToTripsActivity.h */,
-				DA5A809D26C563A500F274C7 /* OASaveGpxToTripsActivity.m */,
+				DA5A809D26C563A500F274C7 /* OASaveGpxToTripsActivity.mm */,
 				DA5A80E226C563A600F274C7 /* OASavingTrackHelper.h */,
 				DA5A80C926C563A600F274C7 /* OASavingTrackHelper.mm */,
 				DA5A80B626C563A600F274C7 /* OASettingsExporter.h */,
@@ -14324,7 +14324,7 @@
 				DA5A812326C563A700F274C7 /* OATransportStop.mm in Sources */,
 				DA5A816A26C563A700F274C7 /* OAImageCard.m in Sources */,
 				DA5A84BF26C563A900F274C7 /* OAPointOptionsBottomSheetViewController.mm in Sources */,
-				DA5A852D26C563A900F274C7 /* OASaveGpxToTripsActivity.m in Sources */,
+				DA5A852D26C563A900F274C7 /* OASaveGpxToTripsActivity.mm in Sources */,
 				DA5A854326C563A900F274C7 /* OANativeUtilities.mm in Sources */,
 				DA5A812F26C563A700F274C7 /* OAOsmNotesMapLayerProvider.mm in Sources */,
 				DA5A817D26C563A700F274C7 /* OAMapSourceAction.mm in Sources */,

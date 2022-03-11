@@ -1482,7 +1482,7 @@
 "units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "мин.";
 "units_sec" = "сек";
 "units_sec_short" = "s";
 "units_t" = "t";
@@ -2372,3 +2372,13 @@
 "route_preferred_terrain_less_hilly" = "Краће, мање брдовите руте.";
 "preferred_terrain" = "Преферирани терен";
 "route_preferred_terrain_hilly" = "Руте са брдовитим профилом рељефа.";
+"start_point" = "Почетак";
+"altitude" = "Висина";
+"map_widget_speed" = "Брзина";
+"save_heading" = "Урачунај правац";
+"save_heading_descr" = "Сачувајте информације о правцу за сваку снимљену тачку";
+"select_tracks" = "Изаберите путање";
+"selected_tracks_count" = "Путање - %d";
+"delete_tracks_bottom_sheet_description_regular_part" = "Да ли сте сигурни да желите да избришете ";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d путања?";
+"delete_tracks_bottom_sheet_title" = "Избрисати путање?";

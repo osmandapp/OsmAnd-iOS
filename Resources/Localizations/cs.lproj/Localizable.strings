@@ -2357,3 +2357,8 @@
 "turn_arrows_descr" = "Nastavte viditelnost šipek pro odbočení na linii trasy.";
 "shared_string_min_height" = "Min. výška";
 "shared_string_max_height" = "Max. výška";
+"select_tracks" = "Vyberte stopy";
+"selected_tracks_count" = "Stopy - %d";
+"delete_tracks_bottom_sheet_description_regular_part" = "Opravdu chcete smazat ";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d stop?";
+"delete_tracks_bottom_sheet_title" = "Smazat stopy?";

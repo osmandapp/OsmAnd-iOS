@@ -2242,6 +2242,10 @@
 "rendering_attr_contourDensity_name" = "Contour line density";
 "routing_attr_avoid_motorway_description" = "Avoids motorways";
 "routing_attr_avoid_motorway_name" = "No motorways";
+"routing_attr_avoid_low_emission_zone_name" = "No low emission zones";
+"routing_attr_avoid_low_emission_zone_description" = "Avoids low emission zones";
+"routing_attr_avoid_tunnels_name" = "No tunnels";
+"routing_attr_avoid_tunnels_description" = "Avoids tunnels";
 "rendering_attr_hideWoodScrubs_name" = "Wood and scrubs";
 "rendering_attr_surface_wood_name" = "Wood";
 "rendering_attr_smoothness_horrible_name" = "Horrible";

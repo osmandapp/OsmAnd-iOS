@@ -50,6 +50,7 @@ typedef NS_ENUM(NSUInteger, EOAScrollableMenuHudMode)
 - (CGFloat) getViewHeight;
 - (CGFloat) getLandscapeViewWidth;
 - (CGFloat) getToolbarHeight;
+- (CGFloat) getNavbarHeight;
 
 - (void) doAdditionalLayout;
 - (void) updateLayoutCurrentState;

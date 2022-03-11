@@ -298,7 +298,7 @@
     if (_actionsView.hidden || !_actionsView.superview)
         return;
     
-        [_mapHudController showTopControls];
+        [_mapHudController showTopControls:NO];
     
     [UIView animateWithDuration:.3 animations:^{
         _quickActionPin.hidden = YES;
@@ -306,7 +306,7 @@
         [self restoreMapViewPort];
     } completion:^(BOOL finished) {
         [_actionsView removeFromSuperview];
-        [_mapHudController showTopControls];
+        [_mapHudController showTopControls:NO];
     }];
     _isActionsViewVisible = NO;
     [self updateColors:NO];

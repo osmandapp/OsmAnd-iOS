@@ -9,18 +9,13 @@
 #import "OAMapHudViewController.h"
 #import "OAAppSettings.h"
 #import "OAMapRulerView.h"
-#import "OAIAPHelper.h"
-#import "OAMapStyleSettings.h"
 #import "OAMapInfoController.h"
-#import "Localization.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAColors.h"
 #import "OATopCoordinatesWidget.h"
 #import "OADownloadMapWidget.h"
-
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
-
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapViewController.h"
@@ -28,16 +23,9 @@
 #import "OAOverlayUnderlayView.h"
 #import "OAToolbarViewController.h"
 #import "OAQuickActionHudViewController.h"
-#import "OANativeUtilities.h"
-#import "OAUtilities.h"
-
 #import "OADownloadProgressView.h"
-#import "OADownloadTask.h"
 #import "OARoutingProgressView.h"
-
 #import "OAMapWidgetRegistry.h"
-
-#include <OsmAndCore/Utilities.h>
 
 #define kButtonWidth 50.0
 #define kButtonOffset 16.0
@@ -1078,15 +1066,15 @@
         self.downloadMapWidget.alpha = alphaEx;
 }
 
-- (void) showTopControls
+- (void) showTopControls:(BOOL)onlyMapSettingsAndSearch
 {
-    CGFloat alphaEx = self.contextMenuMode ? 0.0 : 1.0;
+    CGFloat alphaEx = onlyMapSettingsAndSearch || self.contextMenuMode ? 0.0 : 1.0;
 
     [UIView animateWithDuration:.3 animations:^{
         
-        _statusBarView.alpha = 1.0;
+        _statusBarView.alpha = onlyMapSettingsAndSearch ? 0.0 : 1.0;
         _mapSettingsButton.alpha = 1.0;
-        _compassBox.alpha = ([self shouldShowCompass] ? 1.0 : 0.0);
+        _compassBox.alpha = ([self shouldShowCompass] && !onlyMapSettingsAndSearch ? 1.0 : 0.0);
         _searchButton.alpha = 1.0;
         
         _downloadView.alpha = alphaEx;
@@ -1102,7 +1090,7 @@
 
     } completion:^(BOOL finished) {
         
-        _statusBarView.userInteractionEnabled = YES;
+        _statusBarView.userInteractionEnabled = !onlyMapSettingsAndSearch;
         _mapSettingsButton.userInteractionEnabled = YES;
         _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
         _searchButton.userInteractionEnabled = YES;
@@ -1289,7 +1277,7 @@
         self.contextMenuMode = NO;
         self.mapModeButtonType = EOAMapModeButtonRegular;
         [self updateMapModeButton];
-        [self showTopControls];
+        [self showTopControls:NO];
         
         [UIView animateWithDuration:.3 animations:^{
             _optionsMenuButton.alpha = 1.0;

@@ -393,7 +393,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             if (self.delegate)
                 [self.delegate closeBottomSheet];
             [self dismissViewControllerAnimated:YES completion:nil];
-            [[OARootViewController instance].mapPanel showPlanRouteViewController:
+            [[OARootViewController instance].mapPanel showScrollableHudViewController:
                     [[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
             break;
         }

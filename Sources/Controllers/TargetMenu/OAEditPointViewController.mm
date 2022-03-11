@@ -937,6 +937,14 @@
         textField.userInteractionEnabled = isEditable;
         textField.textColor = isEditable ? UIColor.blackColor : UIColor.darkGrayColor;
         
+        if (@available(iOS 13.0, *))
+        {
+        }
+        else
+        {
+            resultCell.fieldLabel.hidden = YES;
+        }
+        
         return resultCell;
     }
     else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
@@ -1245,6 +1253,37 @@
     }
     [self generateData];
     [self.tableView endUpdates];
+    [self handleTextFieldBugIfNeeded];
+}
+
+- (void) handleTextFieldBugIfNeeded
+{
+    if (@available(iOS 13.0, *))
+    {
+    }
+    else
+    {
+        OATextInputFloatingCellWithIcon *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        if (cell)
+        {
+            cell.textField.text = self.name;
+            cell.fieldLabel.hidden = YES;
+        }
+        
+        cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+        if (cell)
+        {
+            cell.textField.text = self.desc;
+            cell.fieldLabel.hidden = YES;
+        }
+        
+        cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+        if (cell)
+        {
+            cell.textField.text = self.address;
+            cell.fieldLabel.hidden = YES;
+        }
+    }
 }
 
 -(void)textViewDidChange:(UITextView *)textView

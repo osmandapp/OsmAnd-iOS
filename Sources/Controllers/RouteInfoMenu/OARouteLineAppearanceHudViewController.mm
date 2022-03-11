@@ -10,8 +10,10 @@
 #import "OABaseTrackMenuHudViewController.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAPreviewRouteLineLayer.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
+#import "OAMapRendererView.h"
 #import "OASlider.h"
 #import "OADividerCell.h"
 #import "OAIconTextDividerSwitchCell.h"
@@ -23,6 +25,7 @@
 #import "OATextLineViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OsmAndApp.h"
+#import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import "Localization.h"
 #import "OARoutingHelper.h"
@@ -34,6 +37,8 @@
 
 #define kColorDayMode OALocalizedString(@"map_settings_day")
 #define kColorNightMode OALocalizedString(@"map_settings_night")
+
+#define kAppearanceLineMargin 20.
 
 @interface OARouteAppearanceType : NSObject
 
@@ -225,6 +230,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
     NSInteger _sectionColors;
     NSInteger _cellColorGrid;
+    
+    OAAutoObserverProxy *_dayNightModeObserver;
 }
 
 @dynamic statusBarBackgroundView, contentContainer;
@@ -247,6 +254,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     _settings = [OAAppSettings sharedManager];
     _routingHelper = [OARoutingHelper sharedInstance];
     _mapPanelViewController = [OARootViewController instance].mapPanel;
+    
+    _dayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                      withHandler:@selector(onDayNightModeChanged)
+                                                       andObserve:_app.dayNightModeObservable];
 
     [self setOldValues];
     [self updateAllValues];
@@ -362,7 +373,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     [super viewDidAppear:animated];
     [_mapPanelViewController.hudViewController hideTopControls];
     [_mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
-    [self changeHud:[self getViewHeight]];
+    [self refreshPreviewLayer];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -388,7 +399,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         }
         if (indexPaths.count > 0)
             [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-    } completion:nil];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self refreshPreviewLayer];
+    }];
 }
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -971,23 +984,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     self.applyButtonContainerView.hidden = ![self isLandscape];
 }
 
-- (void)changeMapRulerPosition:(CGFloat)height
-{
-    CGFloat leftMargin = [self isLandscape]
-            ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 20.
-            : [OAUtilities getLeftMargin] + 20.;
-    [_mapPanelViewController targetSetMapRulerPosition:[self isLandscape] ? 0. : -(height - [OAUtilities getBottomMargin] + 20.)
-                                                  left:leftMargin];
-}
-
-- (void)changeHud:(CGFloat)height
-{
-    [_mapPanelViewController targetSetBottomControlsVisible:YES
-                                                 menuHeight:[self isLandscape] ? 0 : height - [OAUtilities getBottomMargin]
-                                                   animated:YES];
-    [self changeMapRulerPosition:height];
-}
-
 - (OAPreviewRouteLineInfo *)createPreviewRouteLineInfo
 {
     NSInteger colorDay = [_settings.customRouteColorDay get:_appMode];
@@ -1016,14 +1012,50 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     return _selectedType.coloringType == OAColoringType.ALTITUDE;
 }
 
+- (void)refreshPreviewLayer
+{
+    OAPreviewRouteLineLayer *previewLayer = _mapPanelViewController.mapViewController.mapLayers.routePreviewLayer;
+    CGFloat scale = UIScreen.mainScreen.scale;
+    OsmAnd::PointI topLeft, bottomRight;
+    if (OAUtilities.isLandscapeIpadAware)
+    {
+        CGPoint tL = self.scrollableView.frame.origin;
+        tL.x = CGRectGetMaxX(self.scrollableView.frame) * scale;
+        tL.y = (CGRectGetMaxY(self.applyButton.frame) + kAppearanceLineMargin) * scale;
+        CGPoint bR = self.view.frame.origin;
+        bR.x = CGRectGetMaxX(self.view.frame) * scale;
+        bR.y = (CGRectGetMaxY(self.view.frame) - OAUtilities.getBottomMargin - kAppearanceLineMargin) * scale;
+        [_mapPanelViewController.mapViewController.mapView convert:tL toLocation:&topLeft];
+        [_mapPanelViewController.mapViewController.mapView convert:bR toLocation:&bottomRight];
+    }
+    else
+    {
+        CGPoint tL = self.statusBarBackgroundView.frame.origin;
+        tL.y = (CGRectGetMaxY(self.statusBarBackgroundView.frame) + kAppearanceLineMargin) * scale;
+        tL.x = tL.x * scale;
+        CGPoint bR = self.scrollableView.frame.origin;
+        bR.x = CGRectGetMaxX(self.scrollableView.frame) * scale;
+        bR.y = (bR.y - kAppearanceLineMargin) * scale;
+        [_mapPanelViewController.mapViewController.mapView convert:tL toLocation:&topLeft];
+        [_mapPanelViewController.mapViewController.mapView convert:bR toLocation:&bottomRight];
+    }
+    
+    OsmAnd::AreaI area(topLeft, bottomRight);
+    [previewLayer refreshRoute:area];
+}
+
 - (void)updateRouteLayer:(OAPreviewRouteLineInfo *)previewInfo
 {
+    OAPreviewRouteLineLayer *previewLayer = _mapPanelViewController.mapViewController.mapLayers.routePreviewLayer;
     OARouteLayer *routeLayer = _mapPanelViewController.mapViewController.mapLayers.routeMapLayer;
     [routeLayer setPreviewRouteLineInfo:previewInfo];
+    [previewLayer setPreviewRouteLineInfo:previewInfo];
     [_mapPanelViewController.mapViewController runWithRenderSync:^{
         [routeLayer resetLayer];
+        [previewLayer resetLayer];
     }];
     [routeLayer refreshRoute];
+    [self refreshPreviewLayer];
 }
 
 - (IBAction)onBackButtonPressed:(id)sender
@@ -1033,6 +1065,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         [[OADayNightHelper instance] forceUpdate];
 
         [self updateRouteLayer:_oldPreviewRouteLineInfo];
+        [_mapPanelViewController.mapViewController.mapLayers.routePreviewLayer resetLayer];
 
         if (self.delegate)
             [self.delegate onCloseAppearance];
@@ -1062,12 +1095,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)onViewStateChanged:(CGFloat)height
 {
-    [self changeHud:height];
 }
 
 - (void)onViewHeightChanged:(CGFloat)height
 {
-    [self changeHud:height];
 }
 
 #pragma mark - UITableViewDataSource
@@ -1557,6 +1588,13 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [UIView setAnimationsEnabled:YES];
         }
     }
+}
+
+- (void) onDayNightModeChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self refreshPreviewLayer];
+    });
 }
 
 @end

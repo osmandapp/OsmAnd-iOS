@@ -19,6 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OARouteColorizationHelper : NSObject
 
++ (NSArray<NSNumber *> *)COLORS;
++ (NSArray<NSNumber *> *)SLOPE_COLORS;
+
++ (OsmAnd::FColorARGB) getIntermediateColor:(int)minPaletteColor maxPaletteColor:(int)maxPaletteColor percent:(double)percent;
+
 - (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile analysis:(OAGPXTrackAnalysis *)analysis type:(EOAColorizationType)type maxProfileSpeed:(float)maxProfileSpeed;
 
 - (QList<OsmAnd::FColorARGB>) getResult;

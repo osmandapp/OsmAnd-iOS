@@ -483,4 +483,14 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
     return (value >> 24) & 0xff;
 }
 
++ (NSArray<NSNumber *> *)COLORS
+{
+    return colors;
+}
+
++ (NSArray<NSNumber *> *)SLOPE_COLORS
+{
+    return slopeColors;
+}
+
 @end

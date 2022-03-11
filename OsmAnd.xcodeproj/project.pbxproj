@@ -1350,6 +1350,7 @@
 		DA357C4D22A636CC00A1F82D /* ic_custom_coordinates@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4A22A636CB00A1F82D /* ic_custom_coordinates@3x.png */; };
 		DA357C5122A636CC00A1F82D /* ic_custom_coordinates@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */; };
 		DA377DE027BBBB19004B4EBD /* OAMapPresentationEnvironment.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA377DDF27BBBB19004B4EBD /* OAMapPresentationEnvironment.mm */; };
+		DA3FBFED27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3FBFEB27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm */; };
 		DA45DA54230EE0590083DFA2 /* img_mapstyle_offroad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA45DA39230EE0510083DFA2 /* img_mapstyle_offroad@2x.png */; };
 		DA45DA56230EE0590083DFA2 /* img_mapstyle_skimap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA45DA3A230EE0520083DFA2 /* img_mapstyle_skimap@2x.png */; };
 		DA45DA5A230EE0590083DFA2 /* img_mapstyle_nautical@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA45DA3C230EE0530083DFA2 /* img_mapstyle_nautical@3x.png */; };
@@ -4404,6 +4405,8 @@
 		DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates@2x.png"; path = "Resources/Icons/ic_custom_coordinates@2x.png"; sourceTree = "<group>"; };
 		DA377DDE27BBBB19004B4EBD /* OAMapPresentationEnvironment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapPresentationEnvironment.h; sourceTree = "<group>"; };
 		DA377DDF27BBBB19004B4EBD /* OAMapPresentationEnvironment.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapPresentationEnvironment.mm; sourceTree = "<group>"; };
+		DA3FBFEB27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPreviewRouteLineLayer.mm; sourceTree = "<group>"; };
+		DA3FBFEC27D60DB000D25E86 /* OAPreviewRouteLineLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPreviewRouteLineLayer.h; sourceTree = "<group>"; };
 		DA45DA39230EE0510083DFA2 /* img_mapstyle_offroad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_mapstyle_offroad@2x.png"; path = "Resources/Icons/img_mapstyle_offroad@2x.png"; sourceTree = "<group>"; };
 		DA45DA3A230EE0520083DFA2 /* img_mapstyle_skimap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_mapstyle_skimap@2x.png"; path = "Resources/Icons/img_mapstyle_skimap@2x.png"; sourceTree = "<group>"; };
 		DA45DA3C230EE0530083DFA2 /* img_mapstyle_nautical@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_mapstyle_nautical@3x.png"; path = "Resources/Icons/img_mapstyle_nautical@3x.png"; sourceTree = "<group>"; };
@@ -10975,6 +10978,8 @@
 				DA5A7ED226C563A400F274C7 /* OAPOILayer.mm */,
 				DA5A7EF526C563A400F274C7 /* OARasterMapLayer.h */,
 				DA5A7EED26C563A400F274C7 /* OARasterMapLayer.mm */,
+				DA3FBFEC27D60DB000D25E86 /* OAPreviewRouteLineLayer.h */,
+				DA3FBFEB27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm */,
 				DA5A7EFC26C563A400F274C7 /* OARouteLayer.h */,
 				DA5A7ED926C563A400F274C7 /* OARouteLayer.mm */,
 				DA5A7ED026C563A400F274C7 /* OARoutePointsLayer.h */,
@@ -14714,6 +14719,7 @@
 				DA5A831326C563A800F274C7 /* OATimeTableViewCell.m in Sources */,
 				DA5A836526C563A800F274C7 /* OAAppModeView.mm in Sources */,
 				DA5A84D926C563A900F274C7 /* OAMapSettingsViewController.mm in Sources */,
+				DA3FBFED27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm in Sources */,
 				DA5A840126C563A800F274C7 /* OAQuickSearchButtonListItem.mm in Sources */,
 				DA5A854426C563A900F274C7 /* OADownloadsItem.mm in Sources */,
 				DA5A842E26C563A800F274C7 /* OARouteTargetViewController.mm in Sources */,

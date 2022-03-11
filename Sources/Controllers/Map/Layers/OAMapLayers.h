@@ -23,6 +23,7 @@
 #import "OAOsmEditsLayer.h"
 #import "OAOsmBugsLayer.h"
 #import "OAMapillaryLayer.h"
+#import "OAPreviewRouteLineLayer.h"
 #import "OADownloadedRegionsLayer.h"
 #import "OARulerByTapControlLayer.h"
 
@@ -60,6 +61,7 @@
 @property (nonatomic, readonly) OAGPXLayer *gpxMapLayer;
 @property (nonatomic, readonly) OAGPXRecLayer *gpxRecMapLayer;
 @property (nonatomic, readonly) OARouteLayer *routeMapLayer;
+@property (nonatomic, readonly) OAPreviewRouteLineLayer *routePreviewLayer;
 @property (nonatomic, readonly) OAMeasurementToolLayer *routePlanningLayer;
 @property (nonatomic, readonly) OADownloadedRegionsLayer *downloadedRegionsLayer;
 

@@ -24,6 +24,7 @@
 #define kGpxLayerId @"gpx_map"
 #define kGpxRecLayerId @"gpx_rec_map"
 #define kRouteLayerId @"route_map"
+#define kRouteAppearanceLayerId @"route_map_appearance"
 #define kRoutePointsLayerId @"route_map_points"
 #define kImpassableRoadsLayerId @"impassable_map_roads"
 #define kTransportLayerId @"transport_map"

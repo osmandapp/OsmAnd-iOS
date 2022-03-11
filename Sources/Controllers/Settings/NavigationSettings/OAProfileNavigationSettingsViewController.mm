@@ -21,7 +21,6 @@
 #import "OAProfileDataObject.h"
 #import "OsmAndApp.h"
 #import "OAProfileDataUtils.h"
-#import "OASettingsHelper.h"
 #import "OARootViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
 #import "OAMainSettingsViewController.h"
@@ -44,7 +43,6 @@
     OsmAndAppInstance _app;
     
     NSDictionary<NSString *, OARoutingProfileDataObject *> *_routingProfileDataObjects;
-    BOOL _showAppModeDialog; // to delete
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -55,7 +53,6 @@
         _settings = OAAppSettings.sharedManager;
         _app = [OsmAndApp instance];
         [self generateData];
-        _showAppModeDialog = NO;
     }
     return self;
 }
@@ -214,7 +211,17 @@
     NSString *itemKey = item[@"key"];
     if ([itemKey isEqualToString:@"routeLineAppearance"])
     {
-        [self.navigationController popToViewController:OARootViewController.instance animated:YES];
+        if (self.openFromRouteInfo)
+        {
+            [self dismissViewControllerAnimated:YES completion:^{
+                if (self.delegate)
+                    [self.delegate closeSettingsScreenWithRouteInfo];
+            }];
+        }
+        else
+        {
+            [self.navigationController popToViewController:OARootViewController.instance animated:YES];
+        }
         OARouteLineAppearanceHudViewController *routeLineAppearanceHudViewController = [[OARouteLineAppearanceHudViewController alloc] initWithAppMode:self.appMode];
         routeLineAppearanceHudViewController.delegate = self;
         [OARootViewController.instance.mapPanel showRouteLineAppearanceViewController:routeLineAppearanceHudViewController];
@@ -286,11 +293,19 @@
 
 #pragma mark - OARouteLineAppearanceViewControllerDelegate
 
--(void) onCloseAppearance
+- (void)onCloseAppearance
 {
-    OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] initWithTargetAppMode:self.appMode
-                                                                                           targetScreenKey:kNavigationSettings];
-    [OARootViewController.instance.navigationController pushViewController:settingsVC animated:NO];
+    if (self.openFromRouteInfo)
+    {
+        [[OARootViewController instance].mapPanel showRouteInfo];
+        [[OARootViewController instance].mapPanel showRoutePreferences];
+    }
+    else
+    {
+        OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] initWithTargetAppMode:self.appMode
+                                                                                               targetScreenKey:kNavigationSettings];
+        [OARootViewController.instance.navigationController pushViewController:settingsVC animated:NO];
+    }
 }
 
 @end

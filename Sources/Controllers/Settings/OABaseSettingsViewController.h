@@ -12,6 +12,8 @@
 @protocol OASettingsDataDelegate <NSObject>
 
 - (void) onSettingsChanged;
+- (void) closeSettingsScreenWithRouteInfo;
+- (void) openNavigationSettings;
 
 @end
 

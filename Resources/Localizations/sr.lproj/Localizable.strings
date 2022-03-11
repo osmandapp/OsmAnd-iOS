@@ -2382,3 +2382,7 @@
 "delete_tracks_bottom_sheet_description_regular_part" = "Да ли сте сигурни да желите да избришете ";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d путања?";
 "delete_tracks_bottom_sheet_title" = "Избрисати путање?";
+"routing_attr_avoid_low_emission_zone_name" = "Нема зона ниске емисије";
+"routing_attr_avoid_low_emission_zone_description" = "Избегава зоне ниске емисије";
+"routing_attr_avoid_tunnels_name" = "Нема тунела";
+"routing_attr_avoid_tunnels_description" = "Избегава тунеле";

@@ -343,10 +343,14 @@
         OACommonPreference *setting = [settings getPreferenceByKey:key];
         if (setting)
         {
-            if ([setting.key isEqualToString:@"voice_provider"])
-                res[key] = [[setting toStringValue:self.appMode] stringByAppendingString:@"-tts"];
-            else
-                res[key] = [setting toStringValue:self.appMode];
+            NSString *stringValue = [setting toStringValue:self.appMode];
+            if (stringValue)
+            {
+                if ([setting.key isEqualToString:@"voice_provider"])
+                    res[key] = [stringValue stringByAppendingString:@"-tts"];
+                else
+                    res[key] = stringValue;
+            }
         }
     }
     

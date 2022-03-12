@@ -384,7 +384,7 @@
 "traffic_warning" = "Traffic warning";
 "traffic_warning_railways" = "Railroad crossing";
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
-"traffic_warning_hazard" = "Hazard";
+"traffic_warning_hazard" = "Peryg";
 "traffic_warning_tunnel" = "Tunnel ahead";
 "announce" = "Announce";
 "driving_region_japan" = "Japan";
@@ -493,7 +493,7 @@
 "shared_strings_all_regions" = "All regions";
 "regions" = "Rhanbarthau";
 "shared_string_width" = "Lled";
-"shared_string_interval" = "Interval";
+"shared_string_interval" = "Cyfnod";
 "shared_string_none" = "Dim";
 "restart" = "Ailgychwyn";
 "offline_maps" = "Offline Maps";
@@ -1177,7 +1177,7 @@
 "welmode_download_maps" = "Download maps";
 "srtm_unit_format" = "Contour lines unit format";
 "srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
-"srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
+"srtm_download_list_help_message" = "Mae OsmAnd yn cynnig data cyfuchlinellau mewn metrau a throedfeddi. Bydd rhaid ail-lawrlwytho'r ffeil i newid y fformat.";
 "shared_string_meters" = "metr";
 "shared_string_feet" = "troedfedd";
 
@@ -1987,7 +1987,7 @@
 "routing_attr_avoid_ferries_description" = "Avoids ferries";
 "rendering_attr_contourWidth_description" = "Contour line width";
 "routing_attr_driving_style_name" = "Driving style";
-"rendering_attr_surface_pebblestone_name" = "Pebblestone";
+"rendering_attr_surface_pebblestone_name" = "Caregos";
 "rendering_value_lightblue_name" = "Glas golau";
 "rendering_value_americanRoadAtlas_name" = "American road atlas";
 "rendering_value_fine_name" = "Manwl";
@@ -2139,7 +2139,7 @@
 "rendering_attr_surface_sand_name" = "Tywod";
 "routing_attr_no_new_routing_description" = "Do not use routing rules introduced in v1.9.";
 "routing_attr_prefer_motorway_name" = "Prefer motorways";
-"rendering_attr_surface_cobblestone_name" = "Cobblestone";
+"rendering_attr_surface_cobblestone_name" = "Cobbls";
 "rendering_attr_highway_class_state_road_name" = "State road";
 "routing_attr_avoid_sett_name" = "Dim wynebau cobls";
 "rendering_value_translucent_lightblue_name" = "Translucent light blue";
@@ -2176,7 +2176,7 @@
 "routing_attr_allow_advanced_name" = "Allow advanced routes";
 "rendering_attr_surface_grass_paver_name" = "Grass paver";
 "rendering_attr_hideAccess_name" = "Access restrictions";
-"rendering_value__name" = "Default";
+"rendering_value__name" = "Rhagosodedig";
 "rendering_attr_smoothness_very_horrible_name" = "Gwarthus";
 "routing_attr_allow_intermediate_name" = "Allow intermediate routes";
 "rendering_attr_trolleybusRoutes_name" = "Trolleybus routes";
@@ -2253,7 +2253,7 @@
 "rendering_attr_hideIcons_name" = "POI icons";
 "rendering_attr_roadColors_description" = "Dewiswch gynllun lliwiau ffyrdd:";
 "rendering_value_browse_map_name" = "Pori\'r map";
-"rendering_attr_surface_asphalt_name" = "Asphalt";
+"rendering_attr_surface_asphalt_name" = "Asffelt";
 "rendering_value_translucent_orange_name" = "Translucent orange";
 "rendering_attr_depthContours_description" = "Show depth contours and points.";
 "rendering_value_thick_name" = "Trwychus";

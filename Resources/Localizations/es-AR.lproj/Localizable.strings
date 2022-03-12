@@ -2382,3 +2382,7 @@
 "selected_tracks_count" = "Trazas - %d";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d trazas?";
 "delete_tracks_bottom_sheet_title" = "¿Borrar trazas?";
+"routing_attr_avoid_low_emission_zone_description" = "Evita las zonas de baja emisión o zonas urbanas de atmósfera protegida";
+"routing_attr_avoid_tunnels_name" = "Evitar túneles";
+"routing_attr_avoid_tunnels_description" = "Evita los túneles";
+"routing_attr_avoid_low_emission_zone_name" = "Evitar zonas de baja emisión";

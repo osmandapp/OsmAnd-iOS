@@ -1309,7 +1309,7 @@
 "rendering_attr_busRoutes_name" = "Busruter";
 "rendering_attr_coloredBuildings_name" = "Farvekod bygninger efter type";
 "routing_attr_difficulty_preference_description" = "Foretræk ruter af denne vanskelighed, selv om ruteføring over sværere eller lettere pister stadig er mulig, hvis de er kortere.";
-"rendering_attr_showLez_name" = "Vis Miljøzoner";
+"rendering_attr_showLez_name" = "Vis miljøzoner";
 "rendering_attr_tramTrainRoutes_name" = "Tog- og sporvognsruter";
 "rendering_attr_contourDensity_description" = "Tæthed på højdekurver";
 "routing_attr_avoid_borders_name" = "Ingen grænseovergange";
@@ -2371,3 +2371,7 @@
 "delete_tracks_bottom_sheet_description_regular_part" = "Er du sikker på, at du ønsker at slette ";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d spor?";
 "delete_tracks_bottom_sheet_title" = "Slet spor?";
+"routing_attr_avoid_tunnels_name" = "Ingen tunneler";
+"routing_attr_avoid_tunnels_description" = "Undgår tunneler";
+"routing_attr_avoid_low_emission_zone_name" = "Ingen miljøzoner";
+"routing_attr_avoid_low_emission_zone_description" = "Undgå miljøzoner";

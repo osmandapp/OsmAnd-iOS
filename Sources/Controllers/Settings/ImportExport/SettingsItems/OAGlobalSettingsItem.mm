@@ -75,7 +75,11 @@
     {
         OACommonPreference *setting = [globalPreferences objectForKey:key];
         if (setting.shared)
-            json[key] = [setting toStringValue:nil];
+        {
+            NSString *stringValue = [setting toStringValue:nil];
+            if (stringValue)
+                json[key] = stringValue;
+        }
     }
     return json;
 }

@@ -68,6 +68,9 @@
     _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController baseOrder:-150000];
     [self addLayer:_routeMapLayer];
     
+    _routePreviewLayer = [[OAPreviewRouteLineLayer alloc] initWithMapViewController:_mapViewController baseOrder:-120000];
+    [self addLayer:_routePreviewLayer];
+    
     _routePlanningLayer = [[OAMeasurementToolLayer alloc] initWithMapViewController:_mapViewController baseOrder:-160000];
     [self addLayer:_routePlanningLayer];
 

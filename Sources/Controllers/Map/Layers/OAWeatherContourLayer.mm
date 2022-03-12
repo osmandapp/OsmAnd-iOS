@@ -87,6 +87,17 @@
     if (!self.app.data.weather || bands.empty())
         return NO;
     
+    // TODO: WIP - temp band only for now
+    if (bands.contains(WEATHER_BAND_TEMPERATURE))
+    {
+        bands = QList<OsmAnd::BandIndex>();
+        bands << WEATHER_BAND_TEMPERATURE;
+    }
+    else
+    {
+        return NO;
+    }
+    
     //[self showProgressHUD];
           
     const auto dateTime = QDateTime::fromNSDate(_date).toUTC();

@@ -30,6 +30,7 @@
 #import "OAOverlayMapLayer.h"
 #import "OAUnderlayMapLayer.h"
 #import "OAWeatherRasterLayer.h"
+#import "OAWeatherContourLayer.h"
 
 @class OAMapViewController;
 
@@ -52,6 +53,7 @@
 @property (nonatomic) NSDate *weatherDate;
 @property (nonatomic, readonly) OAWeatherRasterLayer *weatherLayerLow;
 @property (nonatomic, readonly) OAWeatherRasterLayer *weatherLayerHigh;
+@property (nonatomic, readonly) OAWeatherContourLayer *weatherContourLayer;
 
 // Raster map layers
 @property (nonatomic, readonly) OATerrainMapLayer *terrainMapLayer;

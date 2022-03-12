@@ -100,6 +100,9 @@
     _weatherLayerHigh = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:25 weatherLayer:WEATHER_LAYER_HIGH date:_weatherDate];
     [self addLayer:_weatherLayerHigh];
 
+    _weatherContourLayer = [[OAWeatherContourLayer alloc] initWithMapViewController:_mapViewController layerIndex:30 date:_weatherDate];
+    [self addLayer:_weatherContourLayer];
+    
     [OAPlugin createLayers];
 }
 
@@ -139,6 +142,7 @@
     _weatherDate = date;
     [_weatherLayerLow updateDate:date];
     [_weatherLayerHigh updateDate:date];
+    [_weatherContourLayer updateDate:date];
 }
 
 - (void) addLayer:(OAMapLayer *)layer

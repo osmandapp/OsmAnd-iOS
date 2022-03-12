@@ -977,6 +977,7 @@
 		8A1CF1E1227ED4A70083A04E /* warnings_tunnel_us@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1D9227ED4A60083A04E /* warnings_tunnel_us@2x.png */; };
 		8A1CF1E3227ED4A70083A04E /* warnings_tunnel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1DA227ED4A60083A04E /* warnings_tunnel@2x.png */; };
 		8A1CF1E5227ED4A70083A04E /* warnings_tunnel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1DB227ED4A70083A04E /* warnings_tunnel@3x.png */; };
+		8A3BE84F27DBB2AC00C5DFE2 /* OAWeatherContourLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A3BE84E27DBB2AC00C5DFE2 /* OAWeatherContourLayer.mm */; };
 		8A4D03E327A6DF2300B8A778 /* wind_color.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8A4D03DE27A6DF2200B8A778 /* wind_color.txt */; };
 		8A4D03E427A6DF2300B8A778 /* precip_color.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8A4D03DF27A6DF2200B8A778 /* precip_color.txt */; };
 		8A4D03E527A6DF2300B8A778 /* temperature_color.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8A4D03E027A6DF2200B8A778 /* temperature_color.txt */; };
@@ -3976,6 +3977,8 @@
 		8A23E6F021C05E340060DE70 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A23E6F121C05F680060DE70 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A38B5E72192CCBD00D21059 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8A3BE84D27DBB2AC00C5DFE2 /* OAWeatherContourLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherContourLayer.h; sourceTree = "<group>"; };
+		8A3BE84E27DBB2AC00C5DFE2 /* OAWeatherContourLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherContourLayer.mm; sourceTree = "<group>"; };
 		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
 		8A4D03DE27A6DF2200B8A778 /* wind_color.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = wind_color.txt; path = ../resources/weather/wind_color.txt; sourceTree = "<group>"; };
 		8A4D03DF27A6DF2200B8A778 /* precip_color.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = precip_color.txt; path = ../resources/weather/precip_color.txt; sourceTree = "<group>"; };
@@ -10991,6 +10994,8 @@
 				DA5A7ED126C563A400F274C7 /* OAUnderlayMapLayer.mm */,
 				DA66ACBE26D91C5700D43299 /* OABaseVectorLinesLayer.h */,
 				DA66ACBF26D91C5800D43299 /* OABaseVectorLinesLayer.mm */,
+				8A3BE84D27DBB2AC00C5DFE2 /* OAWeatherContourLayer.h */,
+				8A3BE84E27DBB2AC00C5DFE2 /* OAWeatherContourLayer.mm */,
 				8AE943B127A28BE900961319 /* OAWeatherRasterLayer.h */,
 				8AE943B227A28BE900961319 /* OAWeatherRasterLayer.mm */,
 			);
@@ -14144,13 +14149,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
-				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -14180,6 +14184,7 @@
 				DA5A830926C563A800F274C7 /* OAIconBackgroundCollectionViewCell.m in Sources */,
 				DA5A822A26C563A700F274C7 /* OAQuickActionsSettingsItemReader.m in Sources */,
 				DA5A831D26C563A800F274C7 /* OACollectionViewCell.mm in Sources */,
+				8A3BE84F27DBB2AC00C5DFE2 /* OAWeatherContourLayer.mm in Sources */,
 				DA5A845C26C563A900F274C7 /* OAGPXLayer.mm in Sources */,
 				DA5A835126C563A800F274C7 /* OAPointHeaderTableViewCell.m in Sources */,
 				DA5A824926C563A700F274C7 /* OAAutoCenterMapViewController.m in Sources */,

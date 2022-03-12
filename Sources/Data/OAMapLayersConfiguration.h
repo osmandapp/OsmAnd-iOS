@@ -18,6 +18,7 @@
 #define kMapillaryVectorLayerId @"mapillary_vector"
 
 #define kWeatherRasterMapLayerId @"weather_raster_map"
+#define kWeatherContourMapLayerId @"weather_contour_map"
 #define kTerrainMapLayerId @"terrain_map"
 #define kOverlayMapLayerId @"overlay_map"
 #define kUnderlayMapLayerId @"underlay_map"

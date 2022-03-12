@@ -1085,6 +1085,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         [[OADayNightHelper instance] forceUpdate];
 
         [self updateRouteLayer:_previewRouteLineInfo];
+        [_mapPanelViewController.mapViewController.mapLayers.routePreviewLayer resetLayer];
 
         if (self.delegate)
             [self.delegate onCloseAppearance];

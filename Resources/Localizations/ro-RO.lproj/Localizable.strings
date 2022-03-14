@@ -2351,3 +2351,7 @@
 "selected_tracks_count" = "Piese - %d";
 "delete_tracks_bottom_sheet_description_regular_part" = "Ești sigur că vrei să ștergi ";
 "preferred_terrain" = "Teren preferat";
+"routing_attr_avoid_low_emission_zone_name" = "Nu există zone cu emisii scăzute";
+"routing_attr_avoid_low_emission_zone_description" = "Evită zonele cu emisii scăzute";
+"routing_attr_avoid_tunnels_name" = "Fără tuneluri";
+"routing_attr_avoid_tunnels_description" = "Evită tunelurile";

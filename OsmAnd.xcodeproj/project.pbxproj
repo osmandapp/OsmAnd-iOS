@@ -14154,13 +14154,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
-				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -15343,7 +15342,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.2.0;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -15400,7 +15399,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.2.0;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

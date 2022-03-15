@@ -18,7 +18,6 @@
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
 #import "OAIAPHelper.h"
-#import "OAGPXItemViewController.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
 #import "OADestinationCardsViewController.h"
@@ -68,8 +67,6 @@
 #import "Localization.h"
 #import "OAAppSettings.h"
 #import "OASavingTrackHelper.h"
-#import "PXAlertView.h"
-#import "OATrackIntervalDialogView.h"
 #import "OAParkingViewController.h"
 #import "OAFavoriteViewController.h"
 #import "OAPOIViewController.h"
@@ -104,6 +101,7 @@
 #import "OASearchUICore.h"
 #import "OASearchPhrase.h"
 #import "OAQuickSearchHelper.h"
+#import "OAAlertBottomSheetViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -1864,23 +1862,20 @@ typedef enum
             for (int i = 0; i < names.count; i++)
                 [images addObject:@"icon_info"];
             
-            [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_select_track")
-                                    message:nil
-                                cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                otherTitles:names
-                                  otherDesc:nil
-                                otherImages:images
-                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                     if (!cancelled)
-                                     {
-                                         NSInteger trackId = buttonIndex;
-                                         NSString *gpxFileName = paths[trackId];
-                                         if (gpxFileName.length == 0)
-                                             gpxFileName = nil;
-                                         
-                                         [self targetPointAddWaypoint:gpxFileName];
-                                     }
-                                 }];
+            [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"gpx_select_track")
+                                                       titleIcon:@"ic_custom_route"
+                                                     cancelTitle:OALocalizedString(@"shared_string_cancel")
+                                           selectableItemsTitles:names
+                                           selectableItemsImages:nil
+                                              selectColpletition:^(NSInteger selectedIndex) {
+                
+                                                     NSInteger trackId = selectedIndex;
+                                                     NSString *gpxFileName = paths[trackId];
+                                                     if (gpxFileName.length == 0)
+                                                         gpxFileName = nil;
+            
+                                                     [self targetPointAddWaypoint:gpxFileName];
+            }];
         }
         
     }

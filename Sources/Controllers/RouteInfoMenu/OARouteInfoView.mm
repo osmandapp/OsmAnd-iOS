@@ -18,7 +18,6 @@
 #import "OAPointDescription.h"
 #import "Localization.h"
 #import "OARootViewController.h"
-#import "PXAlertView.h"
 #import "OsmAndApp.h"
 #import "OACommonTypes.h"
 #import "OAApplicationMode.h"

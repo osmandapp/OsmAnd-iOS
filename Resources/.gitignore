@@ -1,8 +1,0 @@
-# Ignore all shipped resources (since they are downloadable)
-/Shipped
-
-# Ignore all rasterized resources
-#/Rasterized
-
-# Ignore XSB resources (since they are copied from the core project)
-/XSB

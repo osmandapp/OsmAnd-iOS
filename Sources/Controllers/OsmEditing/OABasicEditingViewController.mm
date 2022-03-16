@@ -77,30 +77,30 @@ static const NSInteger _contactInfoSectionCount = 5;
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
     
     MDCMultilineTextField *textField = resultCell.inputField;
-    [textField.underline removeFromSuperview];
-    textField.placeholder = hint;
-    [textField.textView setText:text];
-    textField.textView.delegate = self;
+//    [textField.underline removeFromSuperview];
+//    textField.placeholder = hint;
+//    [textField.textView setText:text];
+//    textField.textView.delegate = self;
     textField.layoutDelegate = self;
-    textField.textView.tag = tag;
-    textField.clearButton.tag = tag;
-    [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-    [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    textField.font = [UIFont systemFontOfSize:17.0];
-    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateHighlighted];
-    if (!_floatingTextFieldControllers)
-        _floatingTextFieldControllers = [NSMutableArray new];
-    if (isFloating)
-    {
-        MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
-        fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
-        fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
-        fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
-        [_floatingTextFieldControllers addObject:fieldController];
-        
-    }
+//    textField.textView.tag = tag;
+//    textField.clearButton.tag = tag;
+//    [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+//    [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+//    textField.font = [UIFont systemFontOfSize:17.0];
+//    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+//    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
+//    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateHighlighted];
+//    if (!_floatingTextFieldControllers)
+//        _floatingTextFieldControllers = [NSMutableArray new];
+//    if (isFloating)
+//    {
+//        MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
+//        fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+//        fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
+//        fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
+//        [_floatingTextFieldControllers addObject:fieldController];
+//        
+//    }
     return resultCell;
 }
 

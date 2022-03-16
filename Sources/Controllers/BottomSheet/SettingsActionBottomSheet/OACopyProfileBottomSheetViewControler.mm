@@ -9,19 +9,15 @@
 #import "OACopyProfileBottomSheetViewControler.h"
 #import "OAAppSettings.h"
 #import "OAIconTitleIconRoundCell.h"
-#import "OAUtilities.h"
-#import "OASettingsHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OARouteProvider.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
 #import "OsmAndApp.h"
-#import "OAAppData.h"
-
 #import "Localization.h"
 #import "OAColors.h"
-#import "OASizes.h"
+#import "OARendererRegistry.h"
 
 @interface OACopyProfileBottomSheetViewControler()
 
@@ -150,23 +146,11 @@
     }
 }
 
-- (NSString *) getRendererByName:(NSString *)rendererName
-{
-    if ([rendererName isEqualToString:@"OsmAnd"])
-        return @"default";
-    else if ([rendererName isEqualToString:@"Touring view (contrast and details)"])
-        return @"Touring-view_(more-contrast-and-details)";
-    else if (![rendererName isEqualToString:@"LightRS"] && ![rendererName isEqualToString:@"UniRS"])
-        return [rendererName lowerCase];
-    
-    return rendererName;
-}
-
 - (OAMapStyleSettings *) getMapStyleSettingsForMode:(OAApplicationMode *)am
 {
     NSString *renderer = [OAAppSettings.sharedManager.renderer get:am];
-    NSString *resName = [self getRendererByName:renderer];
-    return [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:am.variantKey];
+    NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
+    return [[OAMapStyleSettings alloc] initWithStyleName:mapStyleInfo[@"id"] mapPresetName:am.variantKey];
 }
 
 - (void) copyMapWidgetRegistryPreference

@@ -10,16 +10,12 @@
 #import "OAActionConfigurationViewController.h"
 #import "Localization.h"
 #import "OABottomSheetHeaderCell.h"
-#import "OAUtilities.h"
 #import "OAColors.h"
-#import "OAMapPanelViewController.h"
 #import "OARootViewController.h"
-#import "OASizes.h"
-#import "OAAppSettings.h"
 #import "OASwitchableAction.h"
 #import "OAMenuSimpleCell.h"
-#import "OAMapSource.h"
 #import "OAMapStyleAction.h"
+#import "OAIndexConstants.h"
 
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
@@ -86,7 +82,7 @@
                     @"type" : [OAMenuSimpleCell getCellIdentifier],
                     @"title" : param,
                     @"source" : source,
-                    @"img" : [NSString stringWithFormat:@"img_mapstyle_%@", [source.resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]]
+                    @"img" : [NSString stringWithFormat:@"img_mapstyle_%@", [source.resourceId stringByReplacingOccurrencesOfString:RENDERER_INDEX_EXT withString:@""]]
                 }];
             }
         }

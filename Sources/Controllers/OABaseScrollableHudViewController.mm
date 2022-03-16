@@ -263,6 +263,11 @@
     return 60.; // override
 }
 
+- (CGFloat) getNavbarHeight
+{
+    return 0;
+}
+
 - (CGFloat) getLandscapeYOffset
 {
     return self.additionalLandscapeOffset;

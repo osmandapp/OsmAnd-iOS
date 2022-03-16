@@ -7,14 +7,11 @@
 //
 
 #import "OAMapPanelViewController.h"
-
 #import "OsmAndApp.h"
 #import "UIViewController+OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapillaryImageViewController.h"
 #import "OARouteDetailsGraphViewController.h"
-#import "OARouteDetailsViewController.h"
-#import "OAMapViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
 #import "OAIAPHelper.h"
@@ -53,9 +50,6 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAFavoritesHelper.h"
 #import "OADownloadMapWidget.h"
-
-#import <EventKit/EventKit.h>
-
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "OADestinationViewController.h"
@@ -91,39 +85,23 @@
 #import "OAStreet.h"
 #import "OAStreetIntersection.h"
 #import "OACity.h"
-#import "OATargetTurnViewController.h"
 #import "OAConfigureMenuViewController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAMapLayers.h"
-#import "OAFavoritesLayer.h"
-#import "OAImpassableRoadsLayer.h"
 #import "OACarPlayActiveViewController.h"
 #import "OASearchUICore.h"
 #import "OASearchPhrase.h"
 #import "OAQuickSearchHelper.h"
 #import "OAAlertBottomSheetViewController.h"
-
 #import <UIAlertView+Blocks.h>
-#import <UIAlertView-Blocks/RIButtonItem.h>
-
-#include <OsmAndCore.h>
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Data/Road.h>
-#include <OsmAndCore/CachingRoadLocator.h>
-#include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/IFavoriteLocationsCollection.h>
-#include <OsmAndCore/ICU.h>
-
-#import "OASizes.h"
-#import "OADirectionAppearanceViewController.h"
-#import "OAHistoryViewController.h"
 #import "OAEditPointViewController.h"
-#import "OAGPXDocument.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAPOIUIFilter.h"
 #import "OATrackMenuAppearanceHudViewController.h"
-#import "OAMapRulerView.h"
-#import "OAPOIHelper.h"
+#import "OARouteLineAppearanceHudViewController.h"
+
+#include <OsmAndCore/CachingRoadLocator.h>
+#include <OsmAndCore/Data/Road.h>
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -196,6 +174,8 @@ typedef enum
     OAApplicationMode *_targetAppMode;
     
     OACarPlayActiveViewController *_carPlayActiveController;
+
+    BOOL _isNewContextMenuStillEnabled;
 }
 
 - (instancetype) init
@@ -314,7 +294,8 @@ typedef enum
 
 - (void) viewWillLayoutSubviews
 {
-    if ([self contextMenuMode] && ![self.targetMenuView needsManualContextMode])
+    if (([self contextMenuMode] && ![self.targetMenuView needsManualContextMode]) || (_scrollableHudViewController
+            && [_scrollableHudViewController getNavbarHeight] > 0))
     {
         [self doUpdateContextMenuToolbarLayout];
     }
@@ -338,7 +319,9 @@ typedef enum
 
 - (void) doUpdateContextMenuToolbarLayout
 {
-    CGFloat contextMenuToolbarHeight = [self.targetMenuView toolbarHeight];
+    CGFloat contextMenuToolbarHeight = _scrollableHudViewController
+            ? [_scrollableHudViewController getNavbarHeight]
+            : [self.targetMenuView toolbarHeight];
     [self.hudViewController updateContextMenuToolbarLayout:contextMenuToolbarHeight animated:YES];
 }
 
@@ -403,6 +386,12 @@ typedef enum
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller
 {
     self.sidePanelController.recognizesPanGesture = NO;
+
+    if ([controller isKindOfClass:OARoutePlanningHudViewController.class])
+        _activeTargetType = OATargetRoutePlanning;
+    else if ([controller isKindOfClass:OARouteLineAppearanceHudViewController.class])
+        _activeTargetType = OATargetRouteLineAppearance;
+
     [self setupScrollableHud:controller];
 }
 
@@ -771,6 +760,12 @@ typedef enum
         [self.targetMenuView quickShow];
 
         self.sidePanelController.recognizesPanGesture = NO; //YES;
+
+        if (_prevScrollableHudViewController)
+        {
+             [self showScrollableHudViewController:_prevScrollableHudViewController];
+            _prevScrollableHudViewController = nil;
+        }
     }
 }
 
@@ -849,7 +844,13 @@ typedef enum
     _reopenSettings = _targetAppMode != nil;
     
     [self removeGestureRecognizers];
-    
+
+    if (_scrollableHudViewController)
+    {
+        _prevScrollableHudViewController = _scrollableHudViewController;
+        [self hideScrollableHudViewController];
+    }
+
     _dashboard = [[OAMapSettingsViewController alloc] init];
     [_dashboard show:self parentViewController:nil animated:YES];
     
@@ -1120,6 +1121,9 @@ typedef enum
     navController.automaticallyAdjustsScrollViewInsets = NO;
     navController.edgesForExtendedLayout = UIRectEdgeNone;
 
+    if (_scrollableHudViewController && [_scrollableHudViewController isKindOfClass:OARoutePlanningHudViewController.class])
+        _isNewContextMenuStillEnabled = YES;
+
     [self presentViewController:navController animated:YES completion:nil];
 }
 
@@ -1246,7 +1250,7 @@ typedef enum
     return _activeTargetType == OATargetImpassableRoadSelection
     || _activeTargetType == OATargetRouteDetailsGraph
     || _activeTargetType == OATargetRouteDetails
-    || _activeTargetType == OATargetRoutePlanning
+    || (_activeTargetType == OATargetRoutePlanning && !_isNewContextMenuStillEnabled)
     || _activeTargetType == OATargetGPX
     || _activeTargetType == OATargetRouteLineAppearance;
 }
@@ -1255,6 +1259,7 @@ typedef enum
 {
     if (self.isNewContextMenuDisabled)
         return;
+    _isNewContextMenuStillEnabled = NO;
     
     if (targetPoint.type == OATargetMapillaryImage)
     {
@@ -1485,9 +1490,9 @@ typedef enum
         [_mapViewController simulateContextMenuPress:gesture];
 }
 
-- (void) showTopControls
+- (void) showTopControls:(BOOL)onlyMapSettingsAndSearch
 {
-    [self.hudViewController showTopControls];
+    [self.hudViewController showTopControls:onlyMapSettingsAndSearch];
     
     _topControlsVisible = YES;
 }
@@ -1501,14 +1506,18 @@ typedef enum
 
 - (void) setTopControlsVisible:(BOOL)visible
 {
-    [self setTopControlsVisible:visible customStatusBarStyle:UIStatusBarStyleLightContent];
+    [self setTopControlsVisible:visible
+       onlyMapSettingsAndSearch:NO
+           customStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
-- (void) setTopControlsVisible:(BOOL)visible customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle
+- (void) setTopControlsVisible:(BOOL)visible
+      onlyMapSettingsAndSearch:(BOOL)onlyMapSettingsAndSearch
+          customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle
 {
     if (visible)
     {
-        [self showTopControls];
+        [self showTopControls:onlyMapSettingsAndSearch];
         _customStatusBarStyleNeeded = NO;
         [self setNeedsStatusBarAppearanceUpdate];
     }
@@ -1959,9 +1968,9 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [self showPlanRouteViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc]
-                                                                                    initWithLatitude:_targetLatitude
-                                                                                           longitude:_targetLongitude]]];
+    [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc]
+                                                                                        initWithLatitude:_targetLatitude
+                                                                                               longitude:_targetLongitude]]];
 }
 
 - (void) targetGoToPoint
@@ -2006,6 +2015,12 @@ typedef enum
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete
 {
     [self hideMultiMenuIfNeeded];
+
+    if (_scrollableHudViewController)
+    {
+        _prevScrollableHudViewController = _scrollableHudViewController;
+        [self hideScrollableHudViewController];
+    }
 
     if (_activeTargetActive)
     {
@@ -2297,10 +2312,16 @@ typedef enum
             onComplete();
         
         [_hudViewController.quickActionController updateViewVisibility];
-        
+
+        if (_prevScrollableHudViewController)
+        {
+            [self showScrollableHudViewController:_prevScrollableHudViewController];
+            _prevScrollableHudViewController = nil;
+        }
+
     }];
     
-    [self showTopControls];
+    [self showTopControls:NO];
     _customStatusBarStyleNeeded = NO;
     [self setNeedsStatusBarAppearanceUpdate];
 
@@ -2351,7 +2372,7 @@ typedef enum
         [_hudViewController.quickActionController updateViewVisibility];
     }];
     
-    [self showTopControls];
+    [self showTopControls:NO];
     _customStatusBarStyleNeeded = NO;
     [self setNeedsStatusBarAppearanceUpdate];
     
@@ -3287,6 +3308,8 @@ typedef enum
 {
     [_toolbars removeObject:toolbarController];
     [self updateToolbar];
+    if ((_scrollableHudViewController && [_scrollableHudViewController getNavbarHeight] > 0))
+        [self doUpdateContextMenuToolbarLayout];
 }
 
 - (void)showPoiToolbar:(OAPOIUIFilter *)filter latitude:(double)latitude longitude:(double)longitude

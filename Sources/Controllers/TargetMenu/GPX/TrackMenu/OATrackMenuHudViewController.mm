@@ -902,7 +902,7 @@
 {
     [self hide:YES duration:.2 onComplete:^{
         [self.mapViewController hideContextPinMarker];
-        [self.mapPanelViewController showPlanRouteViewController:[
+        [self.mapPanelViewController showScrollableHudViewController:[
                 [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
                                                           targetMenuState:[self getCurrentState]]];
     }];
@@ -1320,7 +1320,7 @@
 
 - (NSString *)getDirName
 {
-    NSString *dirName = [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString;
+    NSString *dirName = self.gpx.gpxFolderName.capitalizedString;
     return dirName.length > 0 ? dirName : OALocalizedString(@"tracks");
 }
 
@@ -1498,7 +1498,7 @@
     else
     {
         _exportFileName = self.gpx.gpxFileName;
-        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:self.gpx.gpxFilePath.lastPathComponent];
+        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:self.gpx.gpxFileName];
         [OAGPXUIHelper addAppearanceToGpx:self.doc gpxItem:self.gpx];
         [self.doc saveTo:_exportFilePath];
     }
@@ -1672,7 +1672,7 @@
         _exportController = nil;
 
         OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc]
-                initWithFileName:self.gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension
+                initWithFileName:self.gpx.gpxFileName
                         filePath:self.gpx.gpxFilePath
                        showOnMap:YES
                  simplifiedTrack:YES

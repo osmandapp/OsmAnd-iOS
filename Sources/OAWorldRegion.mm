@@ -763,9 +763,9 @@
 
 - (void)updateGroupItems:(OAWorldRegion *)subregion type:(NSNumber *)type
 {
-    if ([self hasGroupItems])
+    OsmAndResourceType key = [OAResourceType toResourceType:type isGroup:YES];
+    if ([self hasGroupItems] && ![self.resourceTypes containsObject:[OAResourceType toValue:key]])
     {
-        OsmAndResourceType key = [OAResourceType toResourceType:type isGroup:YES];
         [self.groupItem removeItem:key subregion:subregion];
 
         NSArray<OAResourceItem *> *newItems = [OAResourcesUIHelper requestMapDownloadInfo:@[subregion] resourceTypes:@[type] isGroup:YES];

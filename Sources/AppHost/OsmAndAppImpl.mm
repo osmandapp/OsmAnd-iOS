@@ -40,6 +40,7 @@
 #import "OAIndexConstants.h"
 #import "OALocationConvert.h"
 #import "OAWeatherHelper.h"
+#import "OAGPXDatabase.h"
 
 #include <algorithm>
 
@@ -71,6 +72,7 @@
 
 #define VERSION_3_10 3.10
 #define VERSION_3_14 3.14
+#define VERSION_4_2 4.2
 
 #define kAppData @"app_data"
 
@@ -362,6 +364,11 @@
         if (prevVersion < VERSION_3_14)
         {
             [OAAppSettings.sharedManager.availableApplicationModes set:@"car,bicycle,pedestrian,public_transport,"];
+        }
+        if (prevVersion < VERSION_4_2)
+        {
+            [OAGPXDatabase.sharedDb save];
+            [OAGPXDatabase.sharedDb load];
         }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;

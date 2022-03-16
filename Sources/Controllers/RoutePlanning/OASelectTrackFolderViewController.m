@@ -36,7 +36,7 @@
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
-        _selectedFolderName = [[gpx.gpxFilePath  stringByDeletingLastPathComponent] lastPathComponent];
+        _selectedFolderName = gpx.gpxFolderName;
         if ([_selectedFolderName isEqualToString:@""])
             _selectedFolderName = OALocalizedString(@"tracks");
         [self reloadData];

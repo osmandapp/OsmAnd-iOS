@@ -1032,7 +1032,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    [mapPanel setTopControlsVisible:NO customStatusBarStyle:isNight ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
+    [mapPanel setTopControlsVisible:NO
+           onlyMapSettingsAndSearch:NO
+               customStatusBarStyle:isNight ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
     [mapPanel setBottomControlsVisible:NO menuHeight:0 animated:YES];
 
     _switched = [mapPanel switchToRoutePlanningLayout];

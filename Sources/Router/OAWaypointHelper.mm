@@ -484,11 +484,20 @@
             {
                 if (inf.type == AIT_TUNNEL && inf.lastLocationIndex != -1 && currentRoute > inf.locationIndex && currentRoute < inf.lastLocationIndex)
                     inf.floatValue = [_route getDistanceToPoint:inf.lastLocationIndex];
-                
-                int d = [_route getDistanceToPoint:inf.locationIndex];
+
+                OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+                CLLocation *lastKnownLocation = [routingHelper getLastProjection];
+
+                int d = (int) MAX(0.0, getDistance(lastKnownLocation.coordinate.latitude,
+                                                   lastKnownLocation.coordinate.longitude,
+                                                   [inf getLatitude],
+                                                   [inf getLongitude]) - lp[kIterator].deviationDistance);
+                if (inf.locationIndex == currentRoute && d > 10)
+                    return nil;
+
                 if (d > LONG_ANNOUNCE_RADIUS)
                     break;
-                
+
                 float time = speed > 0 ? d / speed : INT_MAX;
                 int vl = [inf updateDistanceAndGetPriority:time distance:d];
                 if (vl < value && (showCameras || inf.type != AIT_SPEED_CAMERA))

@@ -10,28 +10,18 @@
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
-#import "OAUtilities.h"
 #import "OADestination.h"
 #import "OAAutoObserverProxy.h"
 #import "OATargetPointsHelper.h"
-#import "OARTargetPoint.h"
 #import "OAStateChangedListener.h"
 #import "OATargetPoint.h"
 #import "OADestinationsHelper.h"
 #import "OADestinationsLineWidget.h"
-#import "OARootViewController.h"
-#import "OAMapInfoController.h"
-#import "OAMapHudViewController.h"
 #import "OAReverseGeocoder.h"
 #import "OAPointDescription.h"
-#import "OAAppSettings.h"
 #import "OAMapLayers.h"
 
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
-#include <OsmAndCore/Map/VectorLinesCollection.h>
-#include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 
 #define firstLineId 11
@@ -387,16 +377,18 @@
     const auto& line = [self getLine:lineId];
     const auto& outline = [self getLine:outlineId];
 
-    double strokeWidth = _destinationLayerWidget.getStrokeWidth * 5.;
+    double strokeWidth = [_destinationLayerWidget getStrokeWidth];
     std::vector<double> outlinePattern;
-    outlinePattern.push_back(95);
-    outlinePattern.push_back(35);
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    double mapDensity = [settings.mapDensity get:[settings.applicationMode get]];
+    outlinePattern.push_back(95 / mapDensity);
+    outlinePattern.push_back(35 / mapDensity);
     OsmAnd::FColorARGB outlineColor = OsmAnd::FColorARGB(1.0, 1.0, 1.0, 1.0);
 
     std::vector<double> inlinePattern;
     inlinePattern.push_back(-strokeWidth);
-    inlinePattern.push_back(95 - strokeWidth * 1.5);
-    inlinePattern.push_back(35 + strokeWidth * 1.5);
+    inlinePattern.push_back(95 / mapDensity - strokeWidth * 1.5);
+    inlinePattern.push_back(35 / mapDensity + strokeWidth * 1.5);
 
     if (line == nullptr || outline == nullptr)
     {
@@ -423,7 +415,7 @@
     else
     {
         outline->setIsHidden(false);
-        outline->setLineWidth(strokeWidth * 2);
+        outline->setLineWidth(strokeWidth * 1.5);
         outline->setLineDash(outlinePattern);
         outline->setPoints(points);
         outline->setFillColor(outlineColor);

@@ -296,12 +296,13 @@
         }
     }
 }
-    
+
 - (double) getStrokeWidth
 {
-    double scaleFactor = [_settings.mapDensity get:_settings.applicationMode.get];
+    double mapDensity = [_settings.mapDensity get:_settings.applicationMode.get];
     float strokeWidth = _lineAttrs[@"strokeWidth"] != nil ? _lineAttrs[@"strokeWidth"].floatValue : 6.0;
-    return scaleFactor < 1.0 ? 1.0 : 2 * strokeWidth / [[UIScreen mainScreen] scale] / scaleFactor;
+    strokeWidth *= 5;
+    return mapDensity != 1 ? (strokeWidth / mapDensity) / mapDensity : strokeWidth;
 }
 
 - (UIImage *) getArrowImage:(UIImage*) fgImage inImage:(UIImage*) bgImage withShadow:(UIImage*)shadow

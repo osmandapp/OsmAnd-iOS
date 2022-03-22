@@ -17,7 +17,7 @@
 
 #define settingAppModeKey @"settingAppModeKey"
 
-#define mapDensityKey @"mapDensity"
+#define mapDensityKey @"iconScale"
 #define textSizeKey @"textSize"
 
 #define kBillingUserDonationNone @"none"

@@ -320,15 +320,19 @@ colorizationScheme:(int)colorizationScheme
 {
     if (points.size() > 1)
     {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        double mapDensity = [settings.mapDensity get:[settings.applicationMode get]];
+
+        NSString *key = [NSString stringWithFormat:@"%@_%lf", gpx.width, mapDensity];
         CGFloat lineWidth;
-        if ([_cachedTrackWidth.allKeys containsObject:gpx.width])
+        if ([_cachedTrackWidth.allKeys containsObject:key])
         {
-            lineWidth = _cachedTrackWidth[gpx.width].floatValue;
+            lineWidth = _cachedTrackWidth[key].floatValue;
         }
         else
         {
             lineWidth = [self getLineWidth:gpx.width];
-            _cachedTrackWidth[gpx.width] = @(lineWidth);
+            _cachedTrackWidth[key] = @(lineWidth);
         }
 
         // Add outline for colorized lines
@@ -379,9 +383,10 @@ colorizationScheme:(int)colorizationScheme
             // Use black arrows for gradient colorization
             UIColor *color = gpx.coloringType.length != 0 && ![gpx.coloringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB(gpx.color);
             builder.setPathIcon([self bitmapForColor:color fileName:@"map_direction_arrow"])
-                .setSpecialPathIcon([self specialBitmapWithColor:colorARGB])
-                .setShouldShowArrows(true)
-                .setScreenScale(UIScreen.mainScreen.scale);
+                    .setSpecialPathIcon([self specialBitmapWithColor:colorARGB])
+                    .setShouldShowArrows(true)
+                    .setScreenScale(UIScreen.mainScreen.scale)
+                    .setIconScale(1 / mapDensity);
         }
         
         builder.buildAndAddToCollection(_linesCollection);
@@ -472,7 +477,10 @@ colorizationScheme:(int)colorizationScheme
             }
         }
     }
-    return lineWidth * kWidthCorrectionValue;
+
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    double mapDensity = [settings.mapDensity get:[settings.applicationMode get]];
+    return (lineWidth * kWidthCorrectionValue) / mapDensity;
 }
 
 - (int) getDefaultRadiusPoi

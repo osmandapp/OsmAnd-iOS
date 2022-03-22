@@ -29,6 +29,7 @@
 
 #define DRAW_TIME 2
 #define LABEL_OFFSET 15
+#define kDefaultLineWidth 5.0
 
 @protocol OALineDrawingDelegate <NSObject>
 
@@ -154,17 +155,18 @@
     QVector<OsmAnd::PointI> points;
     points.push_back(from);
     points.push_back(to);
-    
-    double strokeWidth = 5.;
+
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    double mapDensity = [settings.mapDensity get:[settings.applicationMode get]];
     std::vector<double> inlinePattern;
-    inlinePattern.push_back(75);
-    inlinePattern.push_back(45);
-    
+    inlinePattern.push_back(75 / mapDensity);
+    inlinePattern.push_back(45 / mapDensity);
+
     OsmAnd::VectorLineBuilder inlineBuilder;
     inlineBuilder.setBaseOrder(self.mapViewController.mapLayers.myPositionLayer.baseOrder + lineId)
     .setIsHidden(false)
     .setLineId(lineId + 1)
-    .setLineWidth(strokeWidth * self.displayDensityFactor)
+    .setLineWidth((kDefaultLineWidth * self.displayDensityFactor) / mapDensity)
     .setLineDash(inlinePattern)
     .setPoints(points)
     .setFillColor(color);

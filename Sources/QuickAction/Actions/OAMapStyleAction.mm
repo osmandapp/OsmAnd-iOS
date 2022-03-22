@@ -9,20 +9,16 @@
 #import "OAMapStyleAction.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
-#import "OAMapSource.h"
-#import "Localization.h"
 #import "OAIAPHelper.h"
-#import "OAApplicationMode.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
-#import "OAMapStyleTitles.h"
+#import "OARendererRegistry.h"
 #import "OAQuickActionType.h"
 #import "OAButtonCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
+#import "OAIndexConstants.h"
 
-#include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
-#include <OsmAndCore/ResourcesManager.h>
 
 #define KEY_STYLES @"styles"
 
@@ -42,7 +38,6 @@ static OAQuickActionType *TYPE;
 
 - (void)commonInit
 {
-    NSDictionary *stylesTitlesOffline = [OAMapStyleTitles getMapStyleTitles];
     NSMutableDictionary<NSString *, OAMapSource *> *sourceMapping = [NSMutableDictionary new];
     
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -57,25 +52,28 @@ static OAQuickActionType *TYPE;
     for(const auto& resource : mapStyles)
     {
         const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
-        
-        NSString* resourceId = resource->id.toNSString();
-        
+
+        NSString *resourceId = resource->id.toNSString();
+        NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:mapStyle->title.toNSString()];
+
         OAMapSource *mapSource = [app.data lastMapSourceByResourceId:resourceId];
-        if (mapSource == nil)
-            mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:mode.variantKey];
-        
-        NSString *caption = mapStyle->title.toNSString();
-        if ([caption isEqualToString:@"Ski-map"] && ![iapHelper.skiMap isActive])
+        if (!mapSource)
+        {
+            mapSource = [[OAMapSource alloc] initWithResource:[[mapStyleInfo[@"id"] lowercaseString] stringByAppendingString:RENDERER_INDEX_EXT]
+                                                   andVariant:mode.variantKey
+                                                         name:mapStyleInfo[@"title"]];
+        }
+        else if (![mapSource.name isEqualToString:mapStyleInfo[@"title"]])
+        {
+            mapSource.name = mapStyleInfo[@"title"];
+        }
+
+        if ([mapStyleInfo[@"title"] isEqualToString:WINTER_SKI_RENDER] && ![iapHelper.skiMap isActive])
             continue;
-        if ([caption isEqualToString:@"nautical"] && ![iapHelper.nautical isActive])
+        if ([mapStyleInfo[@"title"] isEqualToString:NAUTICAL_RENDER] && ![iapHelper.nautical isActive])
             continue;
-        
-        NSString *newCaption = [stylesTitlesOffline objectForKey:caption];
-        if (newCaption)
-            caption = newCaption;
-        
-        mapSource.name = caption;
-        [sourceMapping setObject:mapSource forKey:mapSource.name];
+
+        sourceMapping[mapSource.name] = mapSource;
     }
     _offlineMapSources = [NSDictionary dictionaryWithDictionary:sourceMapping];
 }
@@ -189,7 +187,7 @@ static OAQuickActionType *TYPE;
     NSMutableArray *arr = [NSMutableArray new];
     for (NSString *source in sources)
     {
-        NSString *imgName = [NSString stringWithFormat:@"img_mapstyle_%@", [_offlineMapSources[source].resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]];
+        NSString *imgName = [NSString stringWithFormat:@"img_mapstyle_%@", [_offlineMapSources[source].resourceId stringByReplacingOccurrencesOfString:RENDERER_INDEX_EXT withString:@""]];
         
         [arr addObject:@{
                          @"type" : [OATitleDescrDraggableCell getCellIdentifier],

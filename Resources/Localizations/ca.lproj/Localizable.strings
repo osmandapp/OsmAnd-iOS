@@ -2041,3 +2041,5 @@
 "navigate_point_zone" = "Àrea";
 "last_used" = "Darrera utilització";
 "threshold_distance" = "Llindar de distància";
+"shared_string_open_street_map" = "OpenStreetMap";
+"shared_string_interval" = "Interval";

@@ -965,11 +965,11 @@
 "position_icon_while_moving" = "Position icon while moving";
 "will_be_show_while_moving" = "It will be show while moving";
 "base_profile_descr_car" = "Mobil, truk, motor";
-"base_profile_descr_bicycle" = "Sepeda Gunung, Sepeda Kumbang, Kuda";
-"base_profile_descr_pedestrian" = "Berjalan, Naik Gunung, Berlari";
-"base_profile_descr_public_transport" = "Semua tipe Angkutan Publik";
-"base_profile_descr_boat" = "Kapal, Mendayung, Berlayar";
-"base_profile_descr_aircraft" = "Pesawat, Paralayang";
+"base_profile_descr_bicycle" = "Sepeda gunung, motor bebek, kuda";
+"base_profile_descr_pedestrian" = "Berjalan, naik gunung, berlari";
+"base_profile_descr_public_transport" = "Tipe angkutan publik";
+"base_profile_descr_boat" = "Kapal, mendayung, berlayar";
+"base_profile_descr_aircraft" = "Pesawat, meluncur";
 "rearrange_profiles" = "Rearrange profiles";
 "rearrange_profile_descr" = "Default OsmAnd profiles cannot be deleted, but you can disable them on the previous screen or drag them to the bottom of the list.";
 "all_application_profiles" = "All application profiles";
@@ -2035,7 +2035,7 @@
 "rendering_attr_contourDensity_description" = "Kerapatan garis kontur";
 "rendering_attr_currentTrackWidth_name" = "GPX width";
 "rendering_attr_horseRoutes_name" = "Horse routes";
-"routing_attr_avoid_ferry_description" = "Hindari feri";
+"routing_attr_avoid_ferry_description" = "Menghindari feri";
 "rendering_attr_highway_class_track_grade2_name" = "Grade 2";
 "rendering_attr_shareTaxiRoutes_name" = "Share taxi routes";
 "routing_attr_relief_smoothness_factor_hills_name" = "Berbukit";
@@ -2050,7 +2050,7 @@
 "rendering_attr_surfaceIntegrity_name" = "Integritas permukaan jalan";
 "routing_attr_allow_intermediate_description" = "More difficult routes with steeper sections. Generally some obstacles that should be avoided.";
 "rendering_attr_coloredBuildings_name" = "Color-code buildings by type";
-"rendering_attr_piste_difficulty_advanced_name" = "Sukar";
+"rendering_attr_piste_difficulty_advanced_name" = "Tingkat lanjut";
 "routeInfo_road_types_name" = "Tipe jalan";
 "rendering_attr_showRoadMaps_description" = "Choose when to display roads-only maps:";
 "rendering_value_translucent_blue_name" = "Translucent blue";
@@ -2194,7 +2194,7 @@
 "rendering_attr_piste_difficulty_expert_name" = "Ahli";
 "rendering_attr_buildings15zoom_name" = "Buildings on zoom 15";
 "rendering_attr_tracktype_grade1_name" = "Padat (beraspal)";
-"routing_attr_avoid_train_description" = "Hindari kereta api";
+"routing_attr_avoid_train_description" = "Menghindari kereta api";
 "routing_attr_avoid_shuttle_train_name" = "No shuttle train";
 "rendering_attr_contourColorScheme_description" = "Skema warna garis kontur";
 "rendering_value_boldOutline_name" = "Bold outline";
@@ -2229,7 +2229,7 @@
 "rendering_value_medium_name" = "Medium";
 "rendering_attr_piste_type_snow_park_name" = "Terrain park";
 "rendering_attr_highway_class_footway_name" = "Footway";
-"routing_attr_avoid_tram_description" = "Hindari trem";
+"routing_attr_avoid_tram_description" = "Menghindari trem";
 "rendering_value_default13_name" = "Default (13)";
 "rendering_value_thin_name" = "Tipis";
 "rendering_attr_whiteWaterSports_name" = "Whitewater sports";
@@ -2257,9 +2257,9 @@
 "rendering_value_translucent_orange_name" = "Translucent orange";
 "rendering_attr_depthContours_description" = "Tampilkan kontur dan titik kedalaman.";
 "rendering_value_thick_name" = "Tebal";
-"routing_attr_avoid_ferry_name" = "Hindari feri";
+"routing_attr_avoid_ferry_name" = "Tidak ada feri";
 "routing_attr_width_name" = "Width limit";
-"routing_attr_avoid_train_name" = "Hindari kereta api";
+"routing_attr_avoid_train_name" = "Tidak ada kereta api";
 "routing_attr_allow_motorway_description" = "Mengizinkan jalan bebas hambatan.";
 "rendering_attr_hmRendered_name" = "Tampilkan peta lebih lengkap";
 "rendering_attr_roadColors_name" = "Road color scheme";

@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 #define DEFAULT_RENDER @"OsmAnd"
 #define DEFAULT_RENDER_FILE_PATH @"default.render.xml"
 #define TOURING_VIEW @"Touring view (contrast and details)"
@@ -23,10 +21,15 @@ NS_ASSUME_NONNULL_BEGIN
 #define DESERT_RENDER @"Desert"
 #define SNOWMOBILE_RENDER @"Snowmobile"
 
+@class OAApplicationMode;
+
 @interface OARendererRegistry : NSObject
 
-+ (NSArray<NSString *> *) getExternalRenderers;
++ (NSDictionary<NSString *, NSString *> *)getInternalRenderers;
++ (NSDictionary<NSString *, NSString *> *)getExternalRenderers;
+
++ (NSArray<NSString *> *)getPathExternalRenderers;
+
++ (NSDictionary *)getMapStyleInfo:(NSString *)renderer;
 
 @end
-
-NS_ASSUME_NONNULL_END

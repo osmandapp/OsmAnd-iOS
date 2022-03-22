@@ -31,6 +31,7 @@
 @property (nonatomic, strong, readonly) OAMapViewController* mapViewController;
 @property (nonatomic, strong, readonly) OAMapHudViewController* hudViewController;
 @property (nonatomic, readonly) OABaseScrollableHudViewController* scrollableHudViewController;
+@property (nonatomic, readonly) OABaseScrollableHudViewController* prevScrollableHudViewController;
 @property (nonatomic, readonly) OAMapActions *mapActions;
 @property (nonatomic, readonly) OAMapWidgetRegistry *mapWidgetRegistry;
 @property (nonatomic, readonly) UIView *shadeView;
@@ -101,7 +102,9 @@
 
 - (BOOL) isTopControlsVisible;
 - (void) setTopControlsVisible:(BOOL)visible;
-- (void) setTopControlsVisible:(BOOL)visible customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle;
+- (void) setTopControlsVisible:(BOOL)visible
+      onlyMapSettingsAndSearch:(BOOL)onlyMapSettingsAndSearch
+          customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle;
 - (void) updateToolbar;
 - (void) updateOverlayUnderlayView;
 - (BOOL) isOverlayUnderlayViewVisible;

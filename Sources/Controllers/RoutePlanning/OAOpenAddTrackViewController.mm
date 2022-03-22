@@ -217,8 +217,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             selectedFolderName = @"";
         
         return [data filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAGPX *object, NSDictionary *bindings) {
-            NSString *folderName = object.gpxFilePath.stringByDeletingLastPathComponent;
-            return [folderName isEqualToString:selectedFolderName];
+            return [object.gpxFolderName isEqualToString:selectedFolderName];
         }]];
     }
 }
@@ -393,7 +392,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             if (self.delegate)
                 [self.delegate closeBottomSheet];
             [self dismissViewControllerAnimated:YES completion:nil];
-            [[OARootViewController instance].mapPanel showPlanRouteViewController:
+            [[OARootViewController instance].mapPanel showScrollableHudViewController:
                     [[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
             break;
         }

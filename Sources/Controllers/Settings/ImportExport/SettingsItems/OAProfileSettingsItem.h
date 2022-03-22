@@ -15,8 +15,6 @@
 @property (nonatomic, readonly) OAApplicationMode *appMode;
 @property (nonatomic, readonly) OAApplicationModeBean *modeBean;
 
-+ (NSString *) getRendererByName:(NSString *)rendererName;
-+ (NSString *) getRendererStringValue:(NSString *)renderer;
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
 
 @end

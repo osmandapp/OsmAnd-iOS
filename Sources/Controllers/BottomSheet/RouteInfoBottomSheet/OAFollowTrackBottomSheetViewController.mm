@@ -280,7 +280,7 @@
         editingContext.selectedSegment = OAAppSettings.sharedManager.gpxRouteSegment.get;
         [self dismissViewControllerAnimated:NO completion:^{
             [[OARootViewController instance].mapPanel closeRouteInfo];
-            [[OARootViewController instance].mapPanel showPlanRouteViewController:
+            [[OARootViewController instance].mapPanel showScrollableHudViewController:
                     [[OARoutePlanningHudViewController alloc] initWithEditingContext:editingContext
                                                                      followTrackMode:YES
                                                                      showSnapWarning:showSnapWarning]];

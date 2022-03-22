@@ -2357,4 +2357,5 @@
 "map_widget_speed" = "سرعة";
 "save_heading_descr" = "حفظ معلومات العنوان لكل نقطة مسجلة";
 "select_tracks" = "حدد المسارات";
-"routeInfo_winter_ice_road_description" = "قم بتلوين المسار أو خط المسار حسب تصنيف الطريق الشتوي.";
+"routeInfo_winter_ice_road_description" = "قم بتلوين المسار أو خط المسار حسب تصنيف طرقاته الشتوية.";
+"save_heading" = "تضمين العنوان";

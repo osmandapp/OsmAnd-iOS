@@ -352,9 +352,7 @@
         width = [self getParamFromAttr:@"strokeWidth"].floatValue;
         if (mapDensity == 1)
             width *= 2;
-        else if (mapDensity < 1)
-            width = (2 / (mapDensity / width) / (mapDensity * 2));
-        else if (mapDensity > 1)
+        else
             width = (2 / (mapDensity / width) / mapDensity);
     }
 

@@ -100,6 +100,7 @@
 @synthesize documentsPath = _documentsPath;
 @synthesize documentsDir = _documentsDir;
 @synthesize gpxPath = _gpxPath;
+@synthesize inboxPath = _inboxPath;
 @synthesize cachePath = _cachePath;
 
 @synthesize initialURLMapState = _initialURLMapState;
@@ -144,6 +145,7 @@
         _documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         _documentsDir = QDir(QString::fromNSString(_documentsPath));
         _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
+        _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
 
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
 

@@ -348,6 +348,10 @@
 		3240977B27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */; };
 		3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */; };
 		3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */; };
+		3242E5F927E90EFE00F83673 /* OACloudAccountBaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3242E5F827E90DB700F83673 /* OACloudAccountBaseViewController.xib */; };
+		3242E5FC27E9EBF600F83673 /* OACloudAccountLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3242E5FB27E9EBF600F83673 /* OACloudAccountLoginViewController.m */; };
+		3242E5FF27EA79BC00F83673 /* OACloudAccountCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3242E5FE27EA79BC00F83673 /* OACloudAccountCreateViewController.m */; };
+		3242E60227EA837F00F83673 /* OACloudAccountVerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3242E60127EA837F00F83673 /* OACloudAccountVerificationViewController.m */; };
 		325A27372796CE6E0053F8BF /* ic_navbar_pencil@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325A27352796CE6D0053F8BF /* ic_navbar_pencil@3x.png */; };
 		325A27382796CE6E0053F8BF /* ic_navbar_pencil@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325A27362796CE6D0053F8BF /* ic_navbar_pencil@2x.png */; };
 		325B69FD26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */; };
@@ -408,6 +412,7 @@
 		32C91E5D25A86A5700FA6470 /* ic_custom_compass_widget@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */; };
 		32C91E5F25A86A5700FA6470 /* ic_custom_compass_widget@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */; };
 		32C91E6525A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */; };
+		32D1305927E3B33F00C0400C /* OACloudAccountBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D1305827E3B33F00C0400C /* OACloudAccountBaseViewController.m */; };
 		32E2A6E027206ACF00F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BE2507804400266047 /* ic_custom_logo_wikimedia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */; };
@@ -3314,6 +3319,13 @@
 		3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAGPXListDeletingBottomSheet.m; sourceTree = "<group>"; };
 		3242A46D26CB0F05001CA174 /* OACollapsableNearestPoiTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableNearestPoiTypeView.h; sourceTree = "<group>"; };
 		3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableNearestPoiTypeView.mm; sourceTree = "<group>"; };
+		3242E5F827E90DB700F83673 /* OACloudAccountBaseViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACloudAccountBaseViewController.xib; sourceTree = "<group>"; };
+		3242E5FA27E9EBE100F83673 /* OACloudAccountLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACloudAccountLoginViewController.h; sourceTree = "<group>"; };
+		3242E5FB27E9EBF600F83673 /* OACloudAccountLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACloudAccountLoginViewController.m; sourceTree = "<group>"; };
+		3242E5FD27EA79A300F83673 /* OACloudAccountCreateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACloudAccountCreateViewController.h; sourceTree = "<group>"; };
+		3242E5FE27EA79BC00F83673 /* OACloudAccountCreateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACloudAccountCreateViewController.m; sourceTree = "<group>"; };
+		3242E60027EA837100F83673 /* OACloudAccountVerificationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACloudAccountVerificationViewController.h; sourceTree = "<group>"; };
+		3242E60127EA837F00F83673 /* OACloudAccountVerificationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACloudAccountVerificationViewController.m; sourceTree = "<group>"; };
 		325A27352796CE6D0053F8BF /* ic_navbar_pencil@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_navbar_pencil@3x.png"; sourceTree = "<group>"; };
 		325A27362796CE6D0053F8BF /* ic_navbar_pencil@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_navbar_pencil@2x.png"; sourceTree = "<group>"; };
 		325B69FB26D828DC00D8B67C /* OAQuickSearchCoordinatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinatesViewController.h; sourceTree = "<group>"; };
@@ -3378,6 +3390,8 @@
 		32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@3x.png"; sourceTree = "<group>"; };
 		32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@2x.png"; sourceTree = "<group>"; };
 		32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget_hide@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget_hide@2x.png"; sourceTree = "<group>"; };
+		32D1305727E3B32B00C0400C /* OACloudAccountBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACloudAccountBaseViewController.h; sourceTree = "<group>"; };
+		32D1305827E3B33F00C0400C /* OACloudAccountBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACloudAccountBaseViewController.m; sourceTree = "<group>"; };
 		32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuickSearchCoordinateFormatsViewController.xib; sourceTree = "<group>"; };
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
@@ -6947,6 +6961,15 @@
 		32C21CC227E22A7300DE4266 /* Cloud */ = {
 			isa = PBXGroup;
 			children = (
+				3242E5F827E90DB700F83673 /* OACloudAccountBaseViewController.xib */,
+				32D1305727E3B32B00C0400C /* OACloudAccountBaseViewController.h */,
+				32D1305827E3B33F00C0400C /* OACloudAccountBaseViewController.m */,
+				3242E5FA27E9EBE100F83673 /* OACloudAccountLoginViewController.h */,
+				3242E5FB27E9EBF600F83673 /* OACloudAccountLoginViewController.m */,
+				3242E5FD27EA79A300F83673 /* OACloudAccountCreateViewController.h */,
+				3242E5FE27EA79BC00F83673 /* OACloudAccountCreateViewController.m */,
+				3242E60027EA837100F83673 /* OACloudAccountVerificationViewController.h */,
+				3242E60127EA837F00F83673 /* OACloudAccountVerificationViewController.m */,
 			);
 			path = Cloud;
 			sourceTree = "<group>";
@@ -12772,6 +12795,7 @@
 				8476E2B61F6C1EEC00EC274F /* map_intermediate_point@2x.png in Resources */,
 				8476E24A1F6C1EEC00EC274F /* map_bicycle_bearing_night@2x.png in Resources */,
 				8A6CBCC221CE25F0004033C7 /* ic_live_purchased@2x.png in Resources */,
+				3242E5F927E90EFE00F83673 /* OACloudAccountBaseViewController.xib in Resources */,
 				323BD9012628850400D255ED /* ic_bg_point_circle_bottom_small@2x.png in Resources */,
 				8AE1C8B421D6224B00434F07 /* ic_action_message@3x.png in Resources */,
 				DA5A829726C563A700F274C7 /* OATimeTableViewCell.xib in Resources */,
@@ -14339,6 +14363,7 @@
 				DA5A82F626C563A800F274C7 /* OALabelCollectionViewCell.m in Sources */,
 				DA5A849526C563A900F274C7 /* OARoutePlanningHudViewController.mm in Sources */,
 				DA5A849C26C563A900F274C7 /* OAMeasurementModeCommand.mm in Sources */,
+				32D1305927E3B33F00C0400C /* OACloudAccountBaseViewController.m in Sources */,
 				DA5A84C726C563A900F274C7 /* OAOsmEditActionsViewController.mm in Sources */,
 				DA5A81A626C563A700F274C7 /* OASearchCoreAPI.mm in Sources */,
 				DA5A855126C563A900F274C7 /* NSData+CRC32.m in Sources */,
@@ -14716,6 +14741,7 @@
 				DA5A836426C563A800F274C7 /* OACompoundViewController.m in Sources */,
 				DA5A83F626C563A800F274C7 /* OASelectSubcategoryViewController.mm in Sources */,
 				DA5A842A26C563A800F274C7 /* OAImpassableRoadSelectionViewController.mm in Sources */,
+				3242E60227EA837F00F83673 /* OACloudAccountVerificationViewController.m in Sources */,
 				DA5A856426C563A900F274C7 /* OAGpxApproximator.mm in Sources */,
 				DA5A814026C563A700F274C7 /* OAOsmBaseStorage.m in Sources */,
 				DA5A837026C563A800F274C7 /* OARoutingTargetCell.m in Sources */,
@@ -14970,6 +14996,7 @@
 				DA5A83A926C563A800F274C7 /* OABasicEditingViewController.mm in Sources */,
 				DA5A852F26C563A900F274C7 /* OpenLocationCode.swift in Sources */,
 				DA5A850026C563A900F274C7 /* OARangeSlider.m in Sources */,
+				3242E5FC27E9EBF600F83673 /* OACloudAccountLoginViewController.m in Sources */,
 				DA5A84CA26C563A900F274C7 /* OADeleteProfileBottomSheetViewController.m in Sources */,
 				DA5A833326C563A800F274C7 /* OABottomSheetHeaderIconCell.m in Sources */,
 				DA5A856D26C563A900F274C7 /* OATargetPointsHelper.mm in Sources */,
@@ -14979,6 +15006,7 @@
 				DA5A84DB26C563A900F274C7 /* OAMapSettingsMainScreen.mm in Sources */,
 				DA5A83DF26C563A800F274C7 /* OAEditGroupViewController.m in Sources */,
 				DA5A855226C563A900F274C7 /* OAMapUtils.mm in Sources */,
+				3242E5FF27EA79BC00F83673 /* OACloudAccountCreateViewController.m in Sources */,
 				DA5A843726C563A800F274C7 /* OATrsansportRouteDetailsViewController.mm in Sources */,
 				DA5A81C426C563A700F274C7 /* OAAutoObserverProxy.m in Sources */,
 				DA5A84DD26C563A900F274C7 /* OAMapSettingsGpxScreen.mm in Sources */,

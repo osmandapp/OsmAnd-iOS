@@ -119,7 +119,7 @@
             
             [data addObject: @{
                 @"type" : [OAFilledButtonCell getCellIdentifier],
-                @"title" : OALocalizedString(@"register_opr_create_new_account"),
+                @"title" : OALocalizedString(@"user_login"),
                 @"buttonColor" : UIColorFromRGB(color_bottom_sheet_secondary),
                 @"textColor" : UIColorFromRGB(color_primary_purple),
                 @"action": @"loginButtonPressed",

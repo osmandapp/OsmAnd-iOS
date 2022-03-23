@@ -462,7 +462,7 @@
                                     .setLineId(_actionLinesCollection->getLines().size())
                                     .setLineWidth(_lineWidth * 0.4)
                                     .setPoints(points)
-                                    .setEndCapStyle(OsmAnd::LineEndCapStyle::ARROW)
+                                    .setEndCapStyle(OsmAnd::VectorLine::EndCapStyle::ARROW)
                                     .setFillColor(OsmAnd::ColorARGB(_customTurnArrowsColor));
                             builder.buildAndAddToCollection(_actionLinesCollection);
                         }

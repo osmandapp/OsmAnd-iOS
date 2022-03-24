@@ -11,7 +11,7 @@
 #import "OALocationServices.h"
 #import "OARoutingHelper.h"
 #import "Localization.h"
-#import "PXAlertView.h"
+#import "OAAlertBottomSheetViewController.h"
 #import "OAMapUtils.h"
 
 @implementation OALocationSimulation
@@ -44,7 +44,10 @@
         NSArray<CLLocation *> *currentRoute = [[OARoutingHelper sharedInstance] getCurrentCalculatedRoute];
         if (!currentRoute || currentRoute.count == 0)
         {
-            [PXAlertView showAlertWithTitle:OALocalizedString(@"route_simulation") message:OALocalizedString(@"animate_routing_route_not_calculated")];
+            [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"route_simulation")
+                                                       titleIcon:@"ic_custom_alert"
+                                                         message:OALocalizedString(@"animate_routing_route_not_calculated")
+                                                     cancelTitle:OALocalizedString(@"shared_string_cancel")];
         }
         else
         {

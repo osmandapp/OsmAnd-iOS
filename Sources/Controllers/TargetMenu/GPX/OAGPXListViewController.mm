@@ -7,7 +7,6 @@
 //
 
 #import "OAGPXListViewController.h"
-#import "OAGPXItemViewController.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAMapViewController.h"
 #import "OAMenuSimpleCellNoIcon.h"
@@ -39,13 +38,13 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 #import "OAUtilities.h"
-#import "PXAlertView.h"
+#import "OAAlertBottomSheetViewController.h"
+#import "OARecordSettingsBottomSheetViewController.h"
 #import "OAPluginsViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAImportGPXBottomSheetViewController.h"
 #import <MBProgressHUD.h>
 
-#import "OATrackIntervalDialogView.h"
 #import "OAExportItemsViewController.h"
 
 #include <OsmAndCore/ArchiveReader.h>
@@ -926,31 +925,22 @@ static UIViewController *parentController;
     {
         if (![_settings.mapSettingSaveTrackIntervalApproved get] && ![_savingHelper hasData])
         {
-            OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 176.0)];
+            OARecordSettingsBottomSheetViewController *bottomSheet = [[OARecordSettingsBottomSheetViewController alloc] initWithCompletitionBlock:^(int recordingInterval, BOOL rememberChoice, BOOL showOnMap) {
+                
+                
+                [_settings.mapSettingSaveTrackIntervalGlobal set:[_settings.trackIntervalArray[recordingInterval] intValue]];
+                if (rememberChoice)
+                    [_settings.mapSettingSaveTrackIntervalApproved set:YES];
+
+                [_settings.mapSettingShowRecordingTrack set:showOnMap];
+
+                _settings.mapSettingTrackRecording = YES;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateRecImg];
+                });
+            }];
             
-            [PXAlertView showAlertWithTitle:OALocalizedString(@"track_start_rec")
-                                    message:nil
-                                cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                 otherTitle:OALocalizedString(@"shared_string_ok")
-                                  otherDesc:nil
-                                 otherImage:nil
-                                contentView:view
-                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                     
-                                     if (!cancelled)
-                                     {
-                                         [_settings.mapSettingSaveTrackIntervalGlobal set:[_settings.trackIntervalArray[[view getInterval]] intValue]];
-                                         if (view.swRemember.isOn)
-                                             [_settings.mapSettingSaveTrackIntervalApproved set:YES];
-
-                                         [_settings.mapSettingShowRecordingTrack set:view.swShowOnMap.isOn];
-
-                                         _settings.mapSettingTrackRecording = YES;
-                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                             [self updateRecImg];
-                                         });
-                                     }
-                                 }];
+            [bottomSheet presentInViewController:OARootViewController.instance];
         }
         else
         {
@@ -991,17 +981,14 @@ static UIViewController *parentController;
 
     if ([_savingHelper hasDataToSave] && _savingHelper.distance < 10.0)
     {
-        [PXAlertView showAlertWithTitle:OALocalizedString(@"track_save_short_q")
-                                message:nil
-                            cancelTitle:OALocalizedString(@"shared_string_no")
-                             otherTitle:OALocalizedString(@"shared_string_yes")
-                              otherDesc:nil
-                             otherImage:nil
-                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                 if (!cancelled) {
-                                     [self doSaveTrack];
-                                 }
-                             }];
+        [OAAlertBottomSheetViewController showAlertWithTitle:nil
+                                                   titleIcon:nil
+                                                     message:OALocalizedString(@"track_save_short_q")
+                                                 cancelTitle:OALocalizedString(@"shared_string_no")
+                                                   doneTitle:OALocalizedString(@"shared_string_yes")
+                                            doneColpletition:^{
+                                                [self doSaveTrack];
+                                            }];
     }
     else
     {
@@ -1024,20 +1011,17 @@ static UIViewController *parentController;
     
     if (wasRecording)
     {
-        [PXAlertView showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
-                                message:nil
-                            cancelTitle:OALocalizedString(@"shared_string_no")
-                             otherTitle:OALocalizedString(@"shared_string_yes")
-                              otherDesc:nil
-                             otherImage:nil
-                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                 if (!cancelled) {
-                                     _settings.mapSettingTrackRecording = YES;
-                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                         [self updateRecImg];
-                                     });
-                                 }
-                             }];
+        [OAAlertBottomSheetViewController showAlertWithTitle:nil
+                                                   titleIcon:nil
+                                                     message:OALocalizedString(@"track_continue_rec_q")
+                                                 cancelTitle:OALocalizedString(@"shared_string_no")
+                                                   doneTitle:OALocalizedString(@"shared_string_yes")
+                                            doneColpletition:^{
+                                                _settings.mapSettingTrackRecording = YES;
+                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                    [self updateRecImg];
+                                                });
+                                            }];
     }
     [self reloadData];
 }

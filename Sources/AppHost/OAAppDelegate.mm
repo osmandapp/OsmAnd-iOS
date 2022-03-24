@@ -281,24 +281,7 @@
 
 - (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    NSString *scheme = [[url scheme] lowercaseString];
-
-    if ([scheme isEqualToString:@"file"])
-    {
-        if (_rootViewController)
-            return [_rootViewController handleIncomingURL:url];
-        
-        loadedURL = url;
-    }
-    else if ([scheme isEqualToString:@"osmandmaps"])
-    {
-        if (_rootViewController)
-            return [self handleIncomingURL:url];
-        
-        loadedURL = url;
-    }
-    
-    return NO;
+    return [self openURL:url];
 }
 
 - (void) applicationWillResignActive:(UIApplication *)application
@@ -413,6 +396,33 @@
         window.rootViewController = nil;
         _carPlayMapController = nil;
     }];
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
+{
+    return [self openURL:url];
+}
+
+- (BOOL)openURL:(NSURL *)url
+{
+    NSString *scheme = [[url scheme] lowercaseString];
+
+    if ([scheme isEqualToString:@"file"])
+    {
+        if (_rootViewController)
+            return [_rootViewController handleIncomingURL:url];
+
+        loadedURL = url;
+    }
+    else if ([scheme isEqualToString:@"osmandmaps"])
+    {
+        if (_rootViewController)
+            return [self handleIncomingURL:url];
+
+        loadedURL = url;
+    }
+
+    return NO;
 }
 
 @end

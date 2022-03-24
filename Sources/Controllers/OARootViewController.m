@@ -363,10 +363,9 @@ typedef enum : NSUInteger {
 - (BOOL) handleIncomingURL:(NSURL *)url_
 {
     NSURL *url = url_;
-    
+
     NSString *path = url.path;
     NSString *fileName = [url.path lastPathComponent];
-    NSString *ext = [[path pathExtension] lowercaseString];
 
     if ([fileName hasSuffix:@".wpt.chart"] || [fileName hasSuffix:@".3d.chart"])
     {
@@ -375,17 +374,21 @@ typedef enum : NSUInteger {
         NSString *newPath = [NSTemporaryDirectory() stringByAppendingString:newFileName];
         if ([[NSFileManager defaultManager] fileExistsAtPath:newPath])
             [[NSFileManager defaultManager] removeItemAtPath:newPath error:nil];
-        
-        [[NSFileManager defaultManager] moveItemAtPath:path toPath:newPath error:nil];
+
+        if ([path hasPrefix:[OsmAndApp instance].inboxPath])
+            [[NSFileManager defaultManager] moveItemAtPath:path toPath:newPath error:nil];
+        else
+            [[NSFileManager defaultManager] copyItemAtPath:path toPath:newPath error:nil];
+
         url = [NSURL fileURLWithPath:newPath];
     }
 
     path = url.path;
     fileName = [url.path lastPathComponent];
-    ext = [[path pathExtension] lowercaseString];
-    
+    NSString *ext = [[path pathExtension] lowercaseString];
+
     [[self mapPanel] onHandleIncomingURL:ext];
-    
+
     if ([ext isEqualToString:@"sqlitedb"])
     {
         NSString *newFileName = [[OAMapCreatorHelper sharedInstance] getNewNameIfExists:fileName];

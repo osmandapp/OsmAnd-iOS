@@ -651,7 +651,8 @@
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
     }
-    [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
+    if ([_file hasPrefix:_app.inboxPath])
+        [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
 }
 
 - (void)onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items {

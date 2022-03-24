@@ -26,10 +26,22 @@ typedef NS_ENUM(NSInteger, EOAWeatherBand)
 @property (nonatomic, readonly) EOAWeatherBand bandIndex;
 
 + (instancetype) withWeatherBand:(EOAWeatherBand)bandIndex;
++ (NSString *) getDefaultBandUnit:(EOAWeatherBand)bandIndex;
++ (NSString *) getInternalBandUnit:(EOAWeatherBand)bandIndex;
 
 - (BOOL) isBandVisible;
+- (NSString *) getBandUnit;
+- (BOOL) setBandUnit:(NSString *)unit;
+- (NSString *) getBandGeneralUnitFormat;
+- (NSString *) getBandPreciseUnitFormat;
+- (NSString *) getDefaultBandUnit;
+- (NSString *) getInternalBandUnit;
+- (NSArray<NSString *> *) getAvailableBandUnits;
 - (double) getBandOpacity;
 - (NSString *) getColorFilePath;
+- (NSString *) getContourStyleName;
+- (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) getContourLevels;
+- (NSDictionary<NSNumber *, NSArray<NSString *> *> *) getContourTypes;
 
 - (OAAutoObserverProxy *) createSwitchObserver:(id)owner handler:(SEL)handler;
 - (OAAutoObserverProxy *) createAlphaObserver:(id)owner handler:(SEL)handler;

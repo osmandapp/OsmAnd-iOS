@@ -782,6 +782,7 @@
 "map_settings_weather_precip" = "Precipitation";
 "map_settings_clear_geo_cache" = "Clear geo tiles";
 "map_settings_clear_raster_cache" = "Clear raster tiles";
+"map_settings_weather_isolines" = "Isolines";
 
 "settings_app_theme" = "Application theme";
 "app_theme_light" = "Light";

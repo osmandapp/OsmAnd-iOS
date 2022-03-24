@@ -37,26 +37,36 @@
 
 @property (nonatomic) BOOL weather;
 @property (nonatomic) BOOL weatherTemp;
+@property (nonatomic) NSString *weatherTempUnit;
 @property (nonatomic) double weatherTempAlpha;
 @property (nonatomic) BOOL weatherPressure;
+@property (nonatomic) NSString *weatherPressureUnit;
 @property (nonatomic) double weatherPressureAlpha;
 @property (nonatomic) BOOL weatherWind;
+@property (nonatomic) NSString *weatherWindUnit;
 @property (nonatomic) double weatherWindAlpha;
 @property (nonatomic) BOOL weatherCloud;
+@property (nonatomic) NSString *weatherCloudUnit;
 @property (nonatomic) double weatherCloudAlpha;
 @property (nonatomic) BOOL weatherPrecip;
+@property (nonatomic) NSString *weatherPrecipUnit;
 @property (nonatomic) double weatherPrecipAlpha;
 
 @property (readonly) OAObservable* weatherChangeObservable;
 @property (readonly) OAObservable* weatherTempChangeObservable;
+@property (readonly) OAObservable* weatherTempUnitChangeObservable;
 @property (readonly) OAObservable* weatherTempAlphaChangeObservable;
 @property (readonly) OAObservable* weatherPressureChangeObservable;
+@property (readonly) OAObservable* weatherPressureUnitChangeObservable;
 @property (readonly) OAObservable* weatherPressureAlphaChangeObservable;
 @property (readonly) OAObservable* weatherWindChangeObservable;
+@property (readonly) OAObservable* weatherWindUnitChangeObservable;
 @property (readonly) OAObservable* weatherWindAlphaChangeObservable;
 @property (readonly) OAObservable* weatherCloudChangeObservable;
+@property (readonly) OAObservable* weatherCloudUnitChangeObservable;
 @property (readonly) OAObservable* weatherCloudAlphaChangeObservable;
 @property (readonly) OAObservable* weatherPrecipChangeObservable;
+@property (readonly) OAObservable* weatherPrecipUnitChangeObservable;
 @property (readonly) OAObservable* weatherPrecipAlphaChangeObservable;
 
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;

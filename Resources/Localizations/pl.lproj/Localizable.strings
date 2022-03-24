@@ -1691,7 +1691,7 @@
 "preview_of_selected_zoom_levels" = "Podgląd wybranego powiększenia";
 "download_size" = "Rozmiar pobierania";
 "number_of_tiles" = "Liczbę kafelków";
-"move_map_to_select_area" = "Przesuń mapę do potrzebnego terenu.";
+"move_map_to_select_area" = "Przesuń mapę, aby wybrać żądany obszar.";
 "announce" = "Zapowiedź";
 "update_map" = "Uaktualnij mapę";
 "shared_string_meters" = "metry";

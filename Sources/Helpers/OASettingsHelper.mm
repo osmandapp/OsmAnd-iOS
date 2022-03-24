@@ -333,7 +333,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *resourcesItems = [MutableOrderedDictionary new];
     
-    NSArray<NSString *> *mapStyleFiles = [OARendererRegistry getExternalRenderers];
+    NSArray<NSString *> *mapStyleFiles = [OARendererRegistry getPathExternalRenderers];
     if (mapStyleFiles.count > 0)
         resourcesItems[OAExportSettingsType.CUSTOM_RENDER_STYLE] = mapStyleFiles;
     NSFileManager *fileManager = NSFileManager.defaultManager;

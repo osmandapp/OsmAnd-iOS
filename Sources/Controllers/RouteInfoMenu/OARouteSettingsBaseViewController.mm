@@ -357,9 +357,10 @@
 {
     [self dismissViewControllerAnimated:YES completion:^{
         [OARootViewController.instance.mapPanel closeRouteInfo:NO onComplete:^{
-            OARouteLineAppearanceHudViewController *routeLineAppearanceHudViewController = [[OARouteLineAppearanceHudViewController alloc] initWithAppMode:[_routingHelper getAppMode]];
+            OARouteLineAppearanceHudViewController *routeLineAppearanceHudViewController =
+                    [[OARouteLineAppearanceHudViewController alloc] initWithAppMode:[_routingHelper getAppMode]];
             routeLineAppearanceHudViewController.delegate = self;
-            [OARootViewController.instance.mapPanel showRouteLineAppearanceViewController:routeLineAppearanceHudViewController];
+            [OARootViewController.instance.mapPanel showScrollableHudViewController:routeLineAppearanceHudViewController];
         }];
     }];
 }

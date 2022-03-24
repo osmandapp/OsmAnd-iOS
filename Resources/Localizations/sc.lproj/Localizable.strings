@@ -2395,3 +2395,12 @@
 "route_line_use_map_style_width" = "Imprea sa largària predefinida de s'istile de sa mapa (%@).";
 "turn_arrows" = "Fritzas de bortada";
 "turn_arrows_descr" = "Controlla sa visibilidade de sas fritzas de bortada in sa lìnia de s'àndala.";
+"routing_attr_avoid_low_emission_zone_name" = "Peruna zona a emissiones bassas";
+"routing_attr_avoid_low_emission_zone_description" = "Istransit sas zonas a emissiones bassas";
+"routing_attr_avoid_tunnels_name" = "Peruna galleria";
+"routing_attr_avoid_tunnels_description" = "Istransit sas gallerias";
+"select_tracks" = "Ischerta rastas";
+"selected_tracks_count" = "Rastas - %d";
+"delete_tracks_bottom_sheet_description_regular_part" = "Ses seguru de chèrrere iscantzellare ";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d rastas?";
+"delete_tracks_bottom_sheet_title" = "Iscantzellare sas rastas?";

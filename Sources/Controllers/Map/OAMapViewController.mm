@@ -849,7 +849,7 @@
     CGFloat scale = 1 - gestureScale;
 
     if (gestureScale < 1 || (scale < 0 && !pinchRecognizer))
-        scale = scale * ((!pinchRecognizer ? kGestureZoomCoef * (scale < 0 ? .7 : .8) : kGestureZoomCoef) / _mapView.contentScaleFactor);
+        scale = scale * (kGestureZoomCoef / _mapView.contentScaleFactor);
     if (!pinchRecognizer)
         scale = -scale;
 

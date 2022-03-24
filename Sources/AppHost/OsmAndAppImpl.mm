@@ -40,6 +40,7 @@
 #import "OAIndexConstants.h"
 #import "OALocationConvert.h"
 #import "OAWeatherHelper.h"
+#import "OAGPXDatabase.h"
 
 #include <algorithm>
 
@@ -71,6 +72,7 @@
 
 #define VERSION_3_10 3.10
 #define VERSION_3_14 3.14
+#define VERSION_4_2 4.2
 
 #define kAppData @"app_data"
 
@@ -98,6 +100,7 @@
 @synthesize documentsPath = _documentsPath;
 @synthesize documentsDir = _documentsDir;
 @synthesize gpxPath = _gpxPath;
+@synthesize inboxPath = _inboxPath;
 @synthesize cachePath = _cachePath;
 
 @synthesize initialURLMapState = _initialURLMapState;
@@ -142,6 +145,7 @@
         _documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         _documentsDir = QDir(QString::fromNSString(_documentsPath));
         _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
+        _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
 
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
 
@@ -362,6 +366,11 @@
         if (prevVersion < VERSION_3_14)
         {
             [OAAppSettings.sharedManager.availableApplicationModes set:@"car,bicycle,pedestrian,public_transport,"];
+        }
+        if (prevVersion < VERSION_4_2)
+        {
+            [OAGPXDatabase.sharedDb save];
+            [OAGPXDatabase.sharedDb load];
         }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;

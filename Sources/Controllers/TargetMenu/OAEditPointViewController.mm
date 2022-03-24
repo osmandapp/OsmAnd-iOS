@@ -13,7 +13,7 @@
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
 #import "OATitleRightIconCell.h"
-#import "OATextInputFloatingCellWithIcon.h"
+#import "OATextInputFloatingCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OAShapesTableViewCell.h"
@@ -116,6 +116,11 @@
     OACollectionViewCellState *_scrollCellsState;
     NSString *_renamedPointAlertMessage;
     OATargetMenuViewControllerState *_targetMenuState;
+    
+    OATextInputFloatingCell *_nameTextField;
+    OATextInputFloatingCell *_descTextField;
+    OATextInputFloatingCell *_addressTextField;
+    NSMutableArray *_floatingTextFieldControllers;
 }
 
 - (instancetype)initWithFavorite:(OAFavoriteItem *)favorite
@@ -217,6 +222,11 @@
     _colorRowIndex = -1;
     _shapeRowIndex = -1;
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
+    
+    _floatingTextFieldControllers = [NSMutableArray array];
+    _nameTextField = [self getInputCellWithHint:OALocalizedString(@"fav_name") text:(self.name ? self.name : @"") tag:0 isEditable:![_pointHandler isSpecialPoint]];
+    _descTextField = [self getInputCellWithHint:OALocalizedString(@"description") text:(self.desc ? self.desc : @"") tag:1 isEditable:YES];
+    _addressTextField = [self getInputCellWithHint:OALocalizedString(@"shared_string_address") text:(self.address ? self.address : @"") tag:2 isEditable:YES];
 
     [self initLastUsedIcons];
     [self setupGroups];
@@ -507,25 +517,19 @@
     NSMutableArray *section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"name_and_descr"),
-        @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
-        @"title" : self.name ? self.name : @"",
-        @"hint" : OALocalizedString(@"fav_name"),
-        @"isEditable" : @(![_pointHandler isSpecialPoint]),
-        @"key" : kNameKey
+        @"type" : [OATextInputFloatingCell getCellIdentifier],
+        @"key" : kNameKey,
+        @"cell" : _nameTextField
     }];
     [section addObject:@{
-        @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
-        @"title" : self.desc ? self.desc : @"",
-        @"hint" : OALocalizedString(@"description"),
-        @"isEditable" : @YES,
-        @"key" : kDescKey
+        @"type" : [OATextInputFloatingCell getCellIdentifier],
+        @"key" : kDescKey,
+        @"cell" : _descTextField
     }];
     [section addObject:@{
-        @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
-        @"title" : self.address ? self.address : @"",
-        @"hint" : OALocalizedString(@"shared_string_address"),
-        @"isEditable" : @YES,
-        @"key" : kAddressKey
+        @"type" : [OATextInputFloatingCell getCellIdentifier],
+        @"key" : kAddressKey,
+        @"cell" : _addressTextField
     }];
     [data addObject:[NSArray arrayWithArray:section]];
 
@@ -612,6 +616,36 @@
     [data addObject:[NSArray arrayWithArray:section]];
 
     _data = [NSArray arrayWithArray:data];
+}
+
+- (OATextInputFloatingCell *) getInputCellWithHint:(NSString *)hint text:(NSString *)text tag:(NSInteger)tag isEditable:(BOOL)isEditable
+{
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCell getCellIdentifier] owner:self options:nil];
+    OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
+    
+    MDCMultilineTextField *textField = resultCell.inputField;
+    [textField.underline removeFromSuperview];
+    textField.placeholder = hint;
+    [textField.textView setText:text];
+    textField.textView.delegate = self;
+    textField.layoutDelegate = self;
+    textField.textView.tag = tag;
+    textField.clearButton.tag = tag;
+    [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateHighlighted];
+
+    if (!_floatingTextFieldControllers)
+        _floatingTextFieldControllers = [NSMutableArray new];
+    MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
+    fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+    fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
+    fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
+    [_floatingTextFieldControllers addObject:fieldController];
+    return resultCell;
 }
 
 - (void)viewDidLoad
@@ -828,10 +862,10 @@
 -(void) clearButtonPressed:(UIButton *)sender
 {
     NSIndexPath *indexPath = [self indexPathForCellContainingView:sender inTableView:self.tableView];
-    OATextInputFloatingCellWithIcon *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    OATextInputFloatingCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     [self.tableView beginUpdates];
     
-    cell.textField.text = @"";
+    cell.inputField.text = @"";
     
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *key = item[@"key"];
@@ -841,10 +875,6 @@
         self.desc = @"";
     else if ([key isEqualToString:kAddressKey])
         self.address = @"";
-
-    cell.fieldLabel.hidden = YES;
-    cell.textFieldTopConstraint.constant = 0;
-    cell.textFieldBottomConstraint.constant = 0;
     
     [self generateData];
     [self.tableView endUpdates];
@@ -886,58 +916,9 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
+    if ([cellType isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
-        OATextInputFloatingCellWithIcon *resultCell = [self.tableView dequeueReusableCellWithIdentifier:[OATextInputFloatingCellWithIcon getCellIdentifier]];
-        if (resultCell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputFloatingCellWithIcon getCellIdentifier] owner:self options:nil];
-            resultCell = nib[0];
-            resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        resultCell.fieldLabel.text = item[@"hint"];
-        MDCMultilineTextField *textField = resultCell.textField;
-        textField.underline.hidden = YES;
-        textField.textView.autocorrectionType = UITextAutocorrectionTypeNo;
-        textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        textField.placeholder = @"";
-        [textField.textView setText:item[@"title"]];
-        
-        textField.textView.delegate = self;
-        textField.layoutDelegate = self;
-        [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-        [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        
-        textField.font = [UIFont systemFontOfSize:17.0];
-        textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-        [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
-        [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
-        resultCell.buttonView.hidden = YES;
-        resultCell.fieldLabelLeadingConstraint.constant = 0;
-        resultCell.textFieldLeadingConstraint.constant = 0;
-        
-        textField.placeholder = item[@"hint"];
-        resultCell.separatorInset = UIEdgeInsetsZero;
-        
-        if (((NSString *)item[@"title"]).length == 0)
-        {
-            resultCell.fieldLabel.hidden = YES;
-            resultCell.textFieldTopConstraint.constant = 0;
-            resultCell.textFieldBottomConstraint.constant = 0;
-        }
-        else
-        {
-            resultCell.fieldLabel.hidden = NO;
-            resultCell.textFieldTopConstraint.constant = kTextCellTopMargin;
-            resultCell.textFieldBottomConstraint.constant = kTextCellBottomMargin;
-        }
-        
-        BOOL isEditable = [item[@"isEditable"] boolValue];
-        textField.enabled = isEditable;
-        textField.userInteractionEnabled = isEditable;
-        textField.textColor = isEditable ? UIColor.blackColor : UIColor.darkGrayColor;
-        
-        return resultCell;
+        return item[@"cell"];
     }
     else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
@@ -1180,29 +1161,10 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
+    if ([cellType isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
-        NSString *key = item[@"key"];
-        NSString *text;
-        if ([key isEqualToString:kNameKey])
-            text = self.name;
-        else if ([key isEqualToString:kDescKey])
-            text = self.desc;
-        else if ([key isEqualToString:kAddressKey])
-            text = self.address;
-        
-        if (text.length == 0)
-            return kEmptyTextCellHeight;
-        else
-        {
-            CGFloat cellSideMargin = kSideMargin;
-            CGFloat labelWidth = [OAUtilities calculateScreenWidth] - 2 * cellSideMargin - 2 * [OAUtilities getLeftMargin];
-            if ([key isEqualToString:_editingTextFieldKey])
-                labelWidth -= kSideMargin;
-            
-            CGSize textBounds = [OAUtilities calculateTextBounds:text width:labelWidth font:[UIFont systemFontOfSize:17]];
-            return textBounds.height + kTextCellTopMargin + kTextCellBottomMargin + kVerticalMargin;
-        }
+        OATextInputFloatingCell *cell = item[@"cell"];
+        return MAX(cell.inputField.intrinsicContentSize.height, 60.0);
     }
     return UITableViewAutomaticDimension;
 }
@@ -1228,23 +1190,7 @@
         self.desc = textView.text;
     else if ([key isEqualToString:kAddressKey])
         self.address = textView.text;
-    
-    [self.tableView beginUpdates];
-    OATextInputFloatingCellWithIcon *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    if (textView.text.length == 0)
-    {
-        cell.fieldLabel.hidden = YES;
-        cell.textFieldTopConstraint.constant = 0;
-        cell.textFieldBottomConstraint.constant = 0;
-    }
-    else
-    {
-        cell.fieldLabel.hidden = NO;
-        cell.textFieldTopConstraint.constant = kTextCellTopMargin;
-        cell.textFieldBottomConstraint.constant = kTextCellBottomMargin;
-    }
     [self generateData];
-    [self.tableView endUpdates];
 }
 
 -(void)textViewDidChange:(UITextView *)textView

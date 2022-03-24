@@ -91,25 +91,15 @@
     archiveWriter.createArchive(&ok, filePath, stringList, QString::fromNSString(_tmpFilesDir));
     if (!ok)
     {
-        NSLog(@"Archive creation failed: %@", file);
+        NSString *message = [NSString stringWithFormat:@"Archive creation failed: %@", file];
+        NSLog(@"%@", message);
+        NSMutableDictionary* details = [NSMutableDictionary dictionary];
+        [details setValue:message forKey:NSLocalizedDescriptionKey];
+        *error = [NSError errorWithDomain:@"SettingsExporter" code:0 userInfo:details];
     }
     else
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            OARootViewController *rootVC = [OARootViewController instance];
-            
-            UIActivityViewController *activityViewController =
-            [[UIActivityViewController alloc] initWithActivityItems:@[[NSURL fileURLWithPath:file]]
-                                              applicationActivities:nil];
-            
-            activityViewController.popoverPresentationController.sourceView = rootVC.view;
-            activityViewController.popoverPresentationController.sourceRect = CGRectMake(CGRectGetMidX(rootVC.view.bounds), CGRectGetMidY(rootVC.view.bounds), 0., 0.);
-            activityViewController.popoverPresentationController.permittedArrowDirections = 0;
-            
-            [rootVC presentViewController:activityViewController
-                                 animated:YES
-                               completion:nil];
-        });
+        error = nil;
     }
     
     [fileManager removeItemAtPath:_tmpFilesDir error:nil];
@@ -202,9 +192,9 @@
 - (void) execute
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self doInBackground];
+        BOOL success = [self doInBackground];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self onPostExecute:YES];
+            [self onPostExecute:success];
         });
     });
 }

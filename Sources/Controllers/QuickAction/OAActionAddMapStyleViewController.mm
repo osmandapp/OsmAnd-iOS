@@ -7,20 +7,14 @@
 //
 
 #import "OAActionAddMapStyleViewController.h"
-#import "OAActionConfigurationViewController.h"
 #import "Localization.h"
 #import "OAMenuSimpleCell.h"
-#import "OASizes.h"
 #import "OsmAndApp.h"
 #import "OAIAPHelper.h"
-#import "OAMapSource.h"
-#import "OAApplicationMode.h"
-#import "OAAppSettings.h"
-#import "OAMapStyleTitles.h"
+#import "OARendererRegistry.h"
 #import "OAResourcesUIHelper.h"
+#import "OAIndexConstants.h"
 
-
-#include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 
 @interface OAActionAddMapStyleViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
@@ -72,7 +66,6 @@
 
 -(void) commonInit
 {
-    NSDictionary *stylesTitlesOffline = [OAMapStyleTitles getMapStyleTitles];
     NSMutableArray *offlineMapSources = [NSMutableArray new];
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
     const auto localResources = [OsmAndApp instance].resourcesManager->getLocalResources();
@@ -86,31 +79,33 @@
     for(const auto& resource : mapStylesResources)
     {
         const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
-        
+
         NSString* resourceId = resource->id.toNSString();
-        
+        NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:mapStyle->title.toNSString()];
+
         OAMapStyleResourceItem* item = [[OAMapStyleResourceItem alloc] init];
         item.mapSource = [[OsmAndApp instance].data lastMapSourceByResourceId:resourceId];
-        if (item.mapSource == nil)
-            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:mode.variantKey];
-        
-        NSString *caption = mapStyle->title.toNSString();
+        if (!item.mapSource)
+        {
+            item.mapSource = [[OAMapSource alloc] initWithResource:[[mapStyleInfo[@"id"] lowercaseString] stringByAppendingString:RENDERER_INDEX_EXT]
+                                                        andVariant:mode.variantKey
+                                                              name:mapStyleInfo[@"title"]];
+        }
+        else if (![item.mapSource.name isEqualToString:mapStyleInfo[@"title"]])
+        {
+            item.mapSource.name = mapStyleInfo[@"title"];
+        }
+
         OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
-        if ([caption isEqualToString:@"Ski-map"] && ![iapHelper.skiMap isActive])
+        if ([mapStyleInfo[@"title"] isEqualToString:WINTER_SKI_RENDER] && ![iapHelper.skiMap isActive])
             continue;
-        if ([caption isEqualToString:@"nautical"] && ![iapHelper.nautical isActive])
+        if ([mapStyleInfo[@"title"] isEqualToString:NAUTICAL_RENDER] && ![iapHelper.nautical isActive])
             continue;
-        
-        NSString *newCaption = [stylesTitlesOffline objectForKey:caption];
-        if (newCaption)
-            caption = newCaption;
-        
-        item.mapSource.name = caption;
-        
+
+        item.resourceType = OsmAndResourceType::MapStyle;
         item.resource = resource;
         item.mapStyle = mapStyle;
-        
-        item.sortIndex = [OAMapStyleTitles getSortIndexForTitle:item.mapStyle->title.toNSString()];
+        item.sortIndex = [mapStyleInfo[@"sort_index"] intValue];
         
         [offlineMapSources addObject:item];
     }
@@ -144,7 +139,7 @@
     for (NSIndexPath *path in selectedItems)
     {
         OAMapStyleResourceItem* style = [self getItem:path];
-        NSString *imgName = [NSString stringWithFormat:@"img_mapstyle_%@", [style.mapSource.resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]];
+        NSString *imgName = [NSString stringWithFormat:@"img_mapstyle_%@", [style.mapSource.resourceId stringByReplacingOccurrencesOfString:RENDERER_INDEX_EXT withString:@""]];
         [arr addObject:@{@"name" : style.mapSource.name, @"img" : imgName ? imgName : @"ic_custom_show_on_map"}];
     }
     
@@ -176,7 +171,7 @@
     if (cell)
     {
         UIImage *img = nil;
-        NSString *imgName = [NSString stringWithFormat:@"img_mapstyle_%@", [item.mapSource.resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]];
+        NSString *imgName = [NSString stringWithFormat:@"img_mapstyle_%@", [item.mapSource.resourceId stringByReplacingOccurrencesOfString:RENDERER_INDEX_EXT withString:@""]];
         if (imgName)
             img = [UIImage imageNamed:imgName];
         

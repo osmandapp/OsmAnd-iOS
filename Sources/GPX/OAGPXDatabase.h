@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 @interface OAGPX : NSObject
 
 @property (nonatomic) NSString *gpxFileName;
+@property (nonatomic) NSString *gpxFolderName;
 @property (nonatomic) NSString *gpxFilePath;
 @property (nonatomic) NSString *gpxTitle;
 @property (nonatomic) NSString *gpxDescription;

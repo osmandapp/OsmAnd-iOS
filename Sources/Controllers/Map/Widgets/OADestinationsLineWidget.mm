@@ -8,21 +8,16 @@
 
 #import "OADestinationsLineWidget.h"
 #import "OsmAndApp.h"
-#import "OAAppSettings.h"
 #import "OARootViewController.h"
 #import "OAMapRendererView.h"
-#import "OAUtilities.h"
 #import "OAMapUtils.h"
 #import "OADestinationLineDelegate.h"
 #import "OADestinationsLayer.h"
 #import "OADestinationsHelper.h"
-#import "OAMapViewController.h"
 #import "OAMapLayers.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
 
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 
 #define kLabelOffset 15
@@ -30,19 +25,17 @@
 #define kShadowRadius 22
 #define kArrowFrame @"map_marker_direction_arrow_p1_light"
 #define kArrowShadow @"map_marker_direction_arrow_p3_shadow"
+#define kWidthCorrectionValue 10
 
 @implementation OADestinationsLineWidget
 {
     OsmAndAppInstance _app;
-    OALocationServices *_locationProvider;
     OAAppSettings *_settings;
     OAMapViewController *_mapViewController;
-    OAMapPanelViewController *_mapPanel;
 
     NSMutableArray<OADestination *> *_destinationsArray;
     CALayer *_destinationLineSublayer;
-    NSString *_arrowColor;
-    
+
     OADestinationLineDelegate *_destinationLineDelegate;
     NSInteger _indexToMove;
     BOOL _isMoving;
@@ -69,8 +62,7 @@
     _app = [OsmAndApp instance];
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     _destinationsArray = [[NSMutableArray alloc] init];
-    _mapPanel = [OARootViewController instance].mapPanel;
-    
+
     [self updateAttributes];
     _markerColors = @{ UIColorFromRGB(marker_pin_color_orange) : @"map_marker_direction_arrow_p2_color_pin_1",
                        UIColorFromRGB(marker_pin_color_teal) : @"map_marker_direction_arrow_p2_color_pin_2",
@@ -299,10 +291,9 @@
 
 - (double) getStrokeWidth
 {
-    double mapDensity = [_settings.mapDensity get:_settings.applicationMode.get];
-    float strokeWidth = _lineAttrs[@"strokeWidth"] != nil ? _lineAttrs[@"strokeWidth"].floatValue : 6.0;
-    strokeWidth *= 5;
-    return mapDensity != 1 ? (strokeWidth / mapDensity) / mapDensity : strokeWidth;
+    double mapDensity = [_settings.mapDensity get];
+    float strokeWidth = _lineAttrs[@"strokeWidth"] != nil ? _lineAttrs[@"strokeWidth"].floatValue : 6;
+    return strokeWidth * kWidthCorrectionValue / [[UIScreen mainScreen] scale] / mapDensity;
 }
 
 - (UIImage *) getArrowImage:(UIImage*) fgImage inImage:(UIImage*) bgImage withShadow:(UIImage*)shadow

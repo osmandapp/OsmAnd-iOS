@@ -111,8 +111,7 @@
         return;
     }
 
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    double mapDensity = [settings.mapDensity get:[settings.applicationMode get]];
+    double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
     OsmAnd::ColorARGB lineColor = _editingCtx.getLineColor;
     std::vector<double> linePattern;
     linePattern.push_back(80 / mapDensity);
@@ -128,7 +127,7 @@
         builder.setBaseOrder(self.baseOrder)
         .setIsHidden(false)
         .setLineId(lineId)
-        .setLineWidth(kDefaultLineWidth / mapDensity)
+        .setLineWidth(kDefaultLineWidth)
         .setLineDash(linePattern)
         .setFillColor(lineColor);
         

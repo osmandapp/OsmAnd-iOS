@@ -373,23 +373,21 @@
     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(destination.latitude, destination.longitude)));
     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currLoc.coordinate.latitude, currLoc.coordinate.longitude)));
 
-    const auto color = [destination.color toFColorARGB];
-    const auto& line = [self getLine:lineId];
-    const auto& outline = [self getLine:outlineId];
-
-    double strokeWidth = [_destinationLayerWidget getStrokeWidth];
+    double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
     std::vector<double> outlinePattern;
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    double mapDensity = [settings.mapDensity get:[settings.applicationMode get]];
     outlinePattern.push_back(95 / mapDensity);
     outlinePattern.push_back(35 / mapDensity);
-    OsmAnd::FColorARGB outlineColor = OsmAnd::FColorARGB(1.0, 1.0, 1.0, 1.0);
 
+    double strokeWidth = [_destinationLayerWidget getStrokeWidth];
     std::vector<double> inlinePattern;
-    inlinePattern.push_back(-strokeWidth);
-    inlinePattern.push_back(95 / mapDensity - strokeWidth * 1.5);
-    inlinePattern.push_back(35 / mapDensity + strokeWidth * 1.5);
+    inlinePattern.push_back(-strokeWidth / mapDensity);
+    inlinePattern.push_back((95 - strokeWidth * 1.5) / mapDensity);
+    inlinePattern.push_back((35 + strokeWidth * 1.5) / mapDensity);
 
+    const auto color = [destination.color toFColorARGB];
+    const auto outlineColor = OsmAnd::FColorARGB(1.0, 1.0, 1.0, 1.0);
+    const auto& line = [self getLine:lineId];
+    const auto& outline = [self getLine:outlineId];
     if (line == nullptr || outline == nullptr)
     {
         OsmAnd::VectorLineBuilder outlineBuilder;

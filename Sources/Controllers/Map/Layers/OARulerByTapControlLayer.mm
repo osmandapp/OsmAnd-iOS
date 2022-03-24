@@ -156,8 +156,7 @@
     points.push_back(from);
     points.push_back(to);
 
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    double mapDensity = [settings.mapDensity get:[settings.applicationMode get]];
+    double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
     std::vector<double> inlinePattern;
     inlinePattern.push_back(75 / mapDensity);
     inlinePattern.push_back(45 / mapDensity);
@@ -166,7 +165,7 @@
     inlineBuilder.setBaseOrder(self.mapViewController.mapLayers.myPositionLayer.baseOrder + lineId)
     .setIsHidden(false)
     .setLineId(lineId + 1)
-    .setLineWidth((kDefaultLineWidth * self.displayDensityFactor) / mapDensity)
+    .setLineWidth(kDefaultLineWidth * self.displayDensityFactor)
     .setLineDash(inlinePattern)
     .setPoints(points)
     .setFillColor(color);

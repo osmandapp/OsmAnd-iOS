@@ -1652,8 +1652,8 @@
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         const auto screenTileSize = 256 * self.displayDensityFactor;
-        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode.get]);
-        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode.get]);
+        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get]);
+        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get]);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
         // Set reference tile size on the screen
@@ -1745,7 +1745,7 @@
             else if (settings.settingMapLanguageShowLocal &&
                      settings.settingMapLanguageTranslit.get)
                 langId = @"en";
-            double mapDensity = [settings.mapDensity get:settings.applicationMode.get];
+            double mapDensity = [settings.mapDensity get];
             [_mapView setVisualZoomShift:mapDensity];
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,

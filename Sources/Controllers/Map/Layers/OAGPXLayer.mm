@@ -320,19 +320,15 @@ colorizationScheme:(int)colorizationScheme
 {
     if (points.size() > 1)
     {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        double mapDensity = [settings.mapDensity get:[settings.applicationMode get]];
-
-        NSString *key = [NSString stringWithFormat:@"%@_%lf", gpx.width, mapDensity];
         CGFloat lineWidth;
-        if ([_cachedTrackWidth.allKeys containsObject:key])
+        if ([_cachedTrackWidth.allKeys containsObject:gpx.width])
         {
-            lineWidth = _cachedTrackWidth[key].floatValue;
+            lineWidth = _cachedTrackWidth[gpx.width].floatValue;
         }
         else
         {
             lineWidth = [self getLineWidth:gpx.width];
-            _cachedTrackWidth[key] = @(lineWidth);
+            _cachedTrackWidth[gpx.width] = @(lineWidth);
         }
 
         // Add outline for colorized lines
@@ -385,8 +381,7 @@ colorizationScheme:(int)colorizationScheme
             builder.setPathIcon([self bitmapForColor:color fileName:@"map_direction_arrow"])
                     .setSpecialPathIcon([self specialBitmapWithColor:colorARGB])
                     .setShouldShowArrows(true)
-                    .setScreenScale(UIScreen.mainScreen.scale)
-                    .setIconScale(1 / mapDensity);
+                    .setScreenScale(UIScreen.mainScreen.scale);
         }
         
         builder.buildAndAddToCollection(_linesCollection);
@@ -478,9 +473,7 @@ colorizationScheme:(int)colorizationScheme
         }
     }
 
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    double mapDensity = [settings.mapDensity get:[settings.applicationMode get]];
-    return (lineWidth * kWidthCorrectionValue) / mapDensity;
+    return lineWidth * kWidthCorrectionValue;
 }
 
 - (int) getDefaultRadiusPoi

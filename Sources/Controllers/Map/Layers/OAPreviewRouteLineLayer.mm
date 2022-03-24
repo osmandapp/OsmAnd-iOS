@@ -202,14 +202,12 @@
                     || _routeLineColor == kDefaultRouteLineDayColor
                     || _routeLineColor == kDefaultRouteLineNightColor;
 
-            double mapDensity = [[OAAppSettings sharedManager].mapDensity get:[_routingHelper getAppMode]];
             builder.setFillColor(lineColor)
                     .setPathIcon([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
                                              fileName:@"map_direction_arrow"])
                     .setSpecialPathIcon([self specialBitmapWithColor:lineColor])
                     .setShouldShowArrows(true)
-                    .setScreenScale(UIScreen.mainScreen.scale)
-                    .setIconScale(1 / mapDensity);
+                    .setScreenScale(UIScreen.mainScreen.scale);
 
             if (!colors.empty())
             {
@@ -332,28 +330,24 @@
             ? _previewRouteLineInfo.width
             : [[OAAppSettings sharedManager].routeLineWidth get:[_routingHelper getAppMode]];
 
-    double mapDensity = [[OAAppSettings sharedManager].mapDensity get:[_routingHelper getAppMode]];
     CGFloat width;
     if (widthKey)
     {
-        NSString *key = [NSString stringWithFormat:@"%@_%lf", widthKey, mapDensity];
-        if ([_cachedRouteLineWidth.allKeys containsObject:key])
+        if ([_cachedRouteLineWidth.allKeys containsObject:widthKey])
         {
-            width = _cachedRouteLineWidth[key].floatValue;
+            width = _cachedRouteLineWidth[widthKey].floatValue;
         }
         else
         {
             width = [self getWidthByKey:widthKey];
-            _cachedRouteLineWidth[key] = @(width);
+            _cachedRouteLineWidth[widthKey] = @(width);
         }
     }
     else
     {
         width = [self getParamFromAttr:@"strokeWidth"].floatValue;
-        if (mapDensity == 1)
-            width *= 2;
-        else
-            width = (2 / (mapDensity / width) / mapDensity);
+        double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
+        width = 2 / (mapDensity / (width - UIScreen.mainScreen.scale));
     }
 
     return width;
@@ -396,8 +390,7 @@
             }
         }
     }
-    double mapDensity = [[OAAppSettings sharedManager].mapDensity get:[_routingHelper getAppMode]];
-    return (resultValue * kWidthCorrectionValue) / mapDensity;
+    return resultValue * kWidthCorrectionValue;
 }
 
 - (OsmAnd::AreaI) calculateBounds:(NSArray<CLLocation *> *)pts

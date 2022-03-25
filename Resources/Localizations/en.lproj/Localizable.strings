@@ -2240,6 +2240,10 @@
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Show node network cycle routes";
 "rendering_attr_hideText_name" = "Text";
 "rendering_attr_contourDensity_name" = "Contour line density";
+"rendering_attr_showRunningRoutes_name" = "Running routes";
+"rendering_attr_showRunningRoutes_description" = "Show running routes";
+"rendering_attr_showFitnessTrails_name" = "Fitness trails";
+"rendering_attr_showFitnessTrails_description" = "Show fitness trails";
 "routing_attr_avoid_motorway_description" = "Avoids motorways";
 "routing_attr_avoid_motorway_name" = "No motorways";
 "routing_attr_avoid_low_emission_zone_name" = "No low emission zones";

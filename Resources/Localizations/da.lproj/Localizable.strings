@@ -2375,3 +2375,6 @@
 "routing_attr_avoid_tunnels_description" = "Undgår tunneler";
 "routing_attr_avoid_low_emission_zone_name" = "Ingen miljøzoner";
 "routing_attr_avoid_low_emission_zone_description" = "Undgå miljøzoner";
+"gpx_import_already_exists_short" = "Den angivne sporfil findes allerede på listen.";
+"map_settings_weather_isolines" = "Isolinjer";
+"obf_import_already_exists_short" = "Fil med dette navn findes allerede.";

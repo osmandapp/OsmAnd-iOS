@@ -2382,3 +2382,6 @@
 "routing_attr_avoid_tunnels_name" = "Без тунелів";
 "routing_attr_avoid_tunnels_description" = "Уникати тунелів";
 "routing_attr_avoid_low_emission_zone_name" = "Без зон з низьким рівнем викидів";
+"obf_import_already_exists_short" = "Файл із такою назвою вже існує.";
+"gpx_import_already_exists_short" = "Указаний файл треку вже існує у списку.";
+"map_settings_weather_isolines" = "Ізолінії";

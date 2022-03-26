@@ -333,7 +333,7 @@
 "sett_show" = "Εμφάνιση";
 "quick_action_no_underlay" = "Χωρίς υπόστρωμα";
 "pink" = "Ροζ";
-"units_min" = "λεπτά";
+"units_min" = "λεπτά,";
 "purple" = "Μοβ";
 "shared_string_ellipsis" = "…";
 "quick_action_tags" = "Ετικέτες";
@@ -654,10 +654,10 @@
 "rendering_attr_highway_class_track_grade5_name" = "Βαθμίδα 5";
 "rendering_value_blue_name" = "Μπλε";
 "rendering_attr_hideText_name" = "Κείμενο";
-"rendering_value_walkingRoutesOSMC_name" = "Χρώμα ανάλογα με τα σύμβολα πεζοπορίας OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "routing_attr_avoid_shuttle_train_description" = "Απέφυγε χρήση τρένου κλειστής διαδρομής";
 "rendering_attr_highway_class_track_name" = "Αγροτική Οδός";
-"rendering_attr_showMtbRoutes_name" = "Εμφάνιση μονοπατιών ποδηλασίας βουνού";
+"rendering_attr_showMtbRoutes_name" = "Διαδρομές ποδηλασίας βουνού";
 "rendering_attr_highway_class_service_name" = "Εξυπηρέτησης";
 "rendering_attr_surface_salt_name" = "Αλάτι";
 "rendering_attr_surface_sett_name" = "Πλακόστρωση";
@@ -666,7 +666,7 @@
 "routing_attr_no_new_routing_description" = "Να μην χρησιμοποιηθούν οι κανόνες δρομολόγησης που εισήχθησαν στην έκδοση 1.9.";
 "routing_attr_avoid_ferry_name" = "Χωρίς πορθμεία";
 "rendering_value_defaultTranslucentCyan_name" = "Προεπιλογή (ημιδιαφανές κυανό)";
-"rendering_attr_hikingRoutesOSMC_name" = "Επίστρωμα συμβόλων πεζοπορίας";
+"rendering_attr_hikingRoutesOSMC_name" = "Διαδρομές πεζοπορίας";
 "rendering_attr_depthContours_name" = "Ναυτικές ισοβαθείς καμπύλες";
 "rendering_value_pedestrian_name" = "Πεζοπόρος";
 "rendering_attr_moreDetailed_name" = "Περισσότερες λεπτομέρειες";
@@ -687,7 +687,7 @@
 "routeInfo_tracktype_name" = "Στερεότητα επιφανείας";
 "rendering_value_darkyellow_name" = "Σκούρο κίτρινο";
 "rendering_attr_currentTrackColor_name" = "χρώμα GPX";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Χρώμα ανάλογα με τη σχέση του δικτύου";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Σχέση δικτύου";
 "routing_attr_relief_smoothness_factor_hills_name" = "Λοφώδης";
 "rendering_value_white_name" = "Λευκό";
 "rendering_attr_shareTaxiRoutes_name" = "Διαδρομές αγοραίου";
@@ -769,7 +769,7 @@
 "rendering_attr_surface_stone_name" = "Πέτρα";
 "rendering_value_germanRoadAtlas_name" = "Γερμανικός άτλαντας δρόμων";
 "rendering_attr_ice_road_name" = "Παγωμένος δρόμος";
-"rendering_attr_showCycleRoutes_name" = "Εμφάνιση διαδρομών ποδηλάτων";
+"rendering_attr_showCycleRoutes_name" = "Διαδρομές ποδηλάτων";
 "rendering_attr_highway_class_steps_name" = "Σκάλες";
 "rendering_value_purple_name" = "Μοβ";
 "routing_attr_avoid_subway_name" = "Χωρίς μετρό";
@@ -1155,7 +1155,6 @@
 "osmand_live_server_date" = "Τελευταία ενημέρωση διακομιστή: %@";
 "osmand_live_reports" = "Αναφορές";
 "sort_by" = "Ταξινόμηση";
-
 "address_search" = "Αναζήτηση διεύθυνσης";
 "track_save" = "Αποθήκευση τρέχοντος ίχνους";
 "favorite_friends_category" = "Φίλοι";
@@ -1229,9 +1228,7 @@
 "suggested_maps_descr" = "Αυτοί οι χάρτες απαιτούνται για το πρόσθετο.";
 "added_profiles_descr" = "Οι κατατομές (προφίλ) που προστέθηκαν από το πρόσθετο";
 "product_desc_ext_mapillary" = "Διαδικτυακές φωτογραφίες δρόμου για όλους. Ανακαλύψτε θέσεις, συνεργαστείτε, αποτυπώστε τον κόσμο.";
-"route_between_points_warning_desc" = "Για να χρησιμοποιήσετε αυτήν την επιλογή το OsmAnd χρειάζεται να προσκολλήσει το ίχνος σας στους δρόμους του χάρτη.
-\n
-\nΣτο επόμενο βήμα θα χρειαστείτε να επιλέξετε κατατομή (προφίλ) πλοήγησης για να εντοπίσετε τους επιτρεπόμενους δρόμους και την απόσταση κατωφλίου για να προσεγγίσετε το ίχνος σας με τους δρόμους.";
+"route_between_points_warning_desc" = "Στη συνέχεια, μεταφέρετε το ίχνος σας στον πλησιέστερο επιτρεπόμενο δρόμο με ένα από τα προφίλ πλοήγησής σας για να χρησιμοποιήσετε αυτήν την επιλογή.";
 "gpxup_private" = "Ιδιωτικό";
 "context_menu_item_edit_waypoint" = "Επεξεργασία σημείου διαδρομής GPX";
 "threshold_distance" = "Απόσταση κατωφλίου";
@@ -1239,3 +1236,43 @@
 "shared_string_navigation" = "Πλοήγηση";
 "shared_string_turn_off" = "Απενεργοποίηση";
 "suggested_maps" = "Προτεινόμενοι χάρτες";
+"gpx_route_time" = "Χρόνος διαδρομής";
+"turn_on_plugin" = "Ενεργοποιήση πρόσθετου";
+"routing_attr_avoid_low_emission_zone_name" = "Αποφυγή ζωνών χαμηλής εκπομπής ρύπων";
+"routing_attr_avoid_low_emission_zone_description" = "Αποφεύγει τις ζώνες χαμηλής εκπομπής ρύπων";
+"routing_attr_avoid_tunnels_name" = "Καθόλου σήραγγες";
+"routing_attr_avoid_tunnels_description" = "Αποφεύγει τις σήραγγες";
+"sqlitedb_import_already_exists" = "Το καθορισμένο sqlitedb αρχείο υπάρχει ήδη. Παρακαλώ επιλέξτε ενέργεια.";
+"sett_lang_trans" = "Μεταγραμματισμός";
+"gpx_navigation" = "Ακολούθα το ίχνος";
+"nothing_found" = "Δεν βρέθηκε τίποτα: %@";
+"gpx_points" = "Σημεία";
+"gpx_export_title" = "Εξαγωγή ίχνους";
+"gpx_max_speed" = "Μέγιστη ταχύτητα";
+"not_available_profile_name" = "Υπάρχει ήδη προφίλ με αυτο το όνομα.";
+"est_travel_time" = "Εκτιμώμενος χρόνος ταξιδιού";
+"show_region_on_map_desc" = "Ο χάρτης %@ ελήφθη. Πηγαίντε στον χάρτη για να αρχίσετε να τον χρησιμοποιείτε.";
+"gpx_edit_mode" = "Λειτουργία επεξεργασίας";
+"delete_tracks_bottom_sheet_title" = "Διαγραφή ιχνών;";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d ίχνη;";
+"restore_all_purchases" = "Επαναφορά όλων των αγορών";
+"calculating_progress" = "Υπολογισμός...";
+"plugin_popup_nautical_title" = "Λήψη ναυτικών χαρτών";
+"obf_import_already_exists" = "Υπάρχει ήδη αρχείο με αυτό το όνομα. Παρακαλώ επιλέξτε μια ενέργεια.";
+"show_region_on_map_go" = "Πηγαίντε στον χάρτη";
+"number_of_tiles" = "Αριθμός πλακιδίων";
+"gpx_import_already_exists_short" = "Το συγκεκριμένο αρχείο ίχνους υπάρχει ήδη στη λίστα.";
+"gpx_no_tracks" = "Δεν υπάρχουν ίχνη";
+"gpx_dir_arrows" = "Βέλη κατεύθυνσης";
+"obf_import_already_exists_short" = "Υπάρχει ήδη αρχείο με αυτό το όνομα.";
+"go_to_downloads" = "Πηγαίντε στις λήψεις";
+"no_internet_avail" = "Δεν υπάρχει διαθέσιμο διαδίκτυο";
+"no_statistics" = "Δεν υπάρχουν στατιστικά";
+"plugin_popup_osm_editing_title" = "Ενεργοποιήση επεξεργασίας OpenStreetMap";
+"plugin_popup_srtm_title" = "Λήψη ισοϋψών καμπυλών";
+"gpx_cancel_route_q" = "Θέλετε να ακυρώσετε αυτήν τη διαδρομή;";
+"gpx_rename_q" = "Μετονομασία ίχνους";
+"no_other_translations" = "Δεν υπάρχουν άλλες μεταφράσεις";
+"no_internet_avail_desc_first" = "Παρακαλώ ενεργοποιήστε τη σύνδεση στο Διαδίκτυο για λήψη της λίστας των χαρτών";
+"gpx_distance_points" = "Απόσταση (σημεία)";
+"months_short" = "Μήνς";

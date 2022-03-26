@@ -1905,4 +1905,26 @@ static const double d180PI = 180.0 / M_PI_2;
     return OALocalizedString(key);
 }
 
++ (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    BOOL isDir = NO;
+    [fileManager fileExistsAtPath:filePath isDirectory:&isDir];
+    if (isDir)
+    {
+        NSArray *files = [fileManager contentsOfDirectoryAtPath:filePath error:nil];
+        if (files.count > 0)
+        {
+            for (NSString *subfolderFile in files)
+            {
+                [self collectDirFiles:subfolderFile list:list];
+            }
+        }
+    }
+    else if (filePath)
+    {
+        [list addObject:filePath];
+    }
+}
+
 @end

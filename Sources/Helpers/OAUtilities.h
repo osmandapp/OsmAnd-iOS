@@ -231,5 +231,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (natural_t) get_free_memory;
 
 + (NSString *) getLocalizedString:(NSString *)key;
++ (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list;
 
 @end

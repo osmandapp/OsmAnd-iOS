@@ -1002,4 +1002,20 @@
         [[OAAppSettings sharedManager].drivingRegion set:drg.region];
 }
 
+- (NSString *) getUserIosId
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSString *userIosId = settings.userIosId.get;
+    if (userIosId.length > 0)
+        return userIosId;
+    userIosId = UIDevice.currentDevice.identifierForVendor.UUIDString;
+    // TODO: check what is received in UUID
+    if (userIosId == nil /*|| userIosId.length < 16 || [userIosId isEqualToString:@"0000000000000000"]*/)
+    {
+        userIosId = [[NSUUID UUID] UUIDString];
+    }
+    [settings.userIosId set:userIosId];
+    return userIosId;
+}
+
 @end

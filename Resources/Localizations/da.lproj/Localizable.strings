@@ -2378,3 +2378,7 @@
 "gpx_import_already_exists_short" = "Den angivne sporfil findes allerede på listen.";
 "map_settings_weather_isolines" = "Isolinjer";
 "obf_import_already_exists_short" = "Fil med dette navn findes allerede.";
+"rendering_attr_showRunningRoutes_description" = "Vis løberuter";
+"rendering_attr_showFitnessTrails_name" = "Fitnessbaner";
+"rendering_attr_showRunningRoutes_name" = "Løberuter";
+"rendering_attr_showFitnessTrails_description" = "Vis fitnessbaner";

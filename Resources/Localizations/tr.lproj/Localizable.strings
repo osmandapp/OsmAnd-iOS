@@ -2382,3 +2382,7 @@
 "gpx_import_already_exists_short" = "Belirtilen yol dosyası listede zaten var.";
 "obf_import_already_exists_short" = "Bu ada sahip dosya zaten var.";
 "map_settings_weather_isolines" = "Eş değer eğrileri";
+"rendering_attr_showRunningRoutes_name" = "Koşu güzergahları";
+"rendering_attr_showRunningRoutes_description" = "Koşu güzergahlarını göster";
+"rendering_attr_showFitnessTrails_name" = "Fitness parkurları";
+"rendering_attr_showFitnessTrails_description" = "Fitness parkurlarını göster";

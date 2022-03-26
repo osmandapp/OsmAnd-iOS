@@ -1243,7 +1243,7 @@
 "routing_attr_avoid_tunnels_name" = "Καθόλου σήραγγες";
 "routing_attr_avoid_tunnels_description" = "Αποφεύγει τις σήραγγες";
 "sqlitedb_import_already_exists" = "Το καθορισμένο sqlitedb αρχείο υπάρχει ήδη. Παρακαλώ επιλέξτε ενέργεια.";
-"sett_lang_trans" = "μεταγραφή";
+"sett_lang_trans" = "Μεταγραμματισμός";
 "gpx_navigation" = "Ακολούθα το ίχνος";
 "nothing_found" = "Δεν βρέθηκε τίποτα: %@";
 "gpx_points" = "Σημεία";

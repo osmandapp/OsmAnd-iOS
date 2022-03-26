@@ -7,7 +7,7 @@
 //
 
 #import "OAUtilities.h"
-#import "PXAlertView.h"
+#import "OAAlertBottomSheetViewController.h"
 #import "Localization.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
@@ -1142,25 +1142,22 @@
     for (int i = 0; i <parsedPhones.count; i++)
         [images addObject:@"ic_phone_number"];
     
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"make_call")
-                            message:nil
-                        cancelTitle:OALocalizedString(@"shared_string_cancel")
-                        otherTitles:parsedPhones
-                          otherDesc:nil
-                        otherImages:images
-                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                             if (!cancelled)
-                                 for (int i = 0; i < parsedPhones.count; i++)
-                                 {
-                                     if (buttonIndex == i)
-                                     {
-                                         NSString *p = parsedPhones[i];
-                                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:p]]];
-                                         break;
-                                     }
-                                 }
-                         }];
-    
+    [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"make_call")
+                                               titleIcon:@"ic_custom_info"
+                                             cancelTitle:OALocalizedString(@"shared_string_cancel")
+                                   selectableItemsTitles:parsedPhones
+                                   selectableItemsImages:images
+                                      selectColpletition:^(NSInteger selectedIndex) {
+                                            for (int i = 0; i < parsedPhones.count; i++)
+                                            {
+                                                if (selectedIndex == i)
+                                                {
+                                                    NSString *p = parsedPhones[i];
+                                                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:p]]];
+                                                    break;
+                                                }
+                                            }
+    }];
 }
 
 + (UIImage *) getMxIcon:(NSString *)name

@@ -5,6 +5,8 @@
 //  Created by Alexey Kulish on 11/01/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+//  OsmAnd-java/src/net/osmand/search/core/SearchPhrase.java
+//  git revision 5bcaa01259c937fa29741117b23f89776a1098c6
 
 #import "OASearchPhrase.h"
 #import "OASearchWord.h"
@@ -360,7 +362,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         }];
         for (NSString *s in searchWords)
         {
-            if (s.length > 0 && !isdigit([s characterAtIndex:0]) && ![OALocationParser isValidOLC:s])
+            if (s.length > 0 && ![OALocationParser isValidOLC:s])
             {
                 _mainUnknownWordToSearch = s.trim;
                 if ([_mainUnknownWordToSearch hasSuffix:@"."])

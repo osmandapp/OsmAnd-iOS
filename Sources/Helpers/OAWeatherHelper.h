@@ -16,10 +16,12 @@
 #include <QString>
 #include <QHash>
 #include <QList>
+#include <QStringList>
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Map/GeoCommonTypes.h>
+#include <OsmAndCore/Map/GeoBandSettings.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,8 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAWeatherHelper *) sharedInstance;
 
 - (QList<OsmAnd::BandIndex>) getVisibleBands;
-- (QHash<OsmAnd::BandIndex, float>) getBandOpacityMap;
-- (QHash<OsmAnd::BandIndex, QString>) getBandColorProfilePaths;
+- (QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>>) getBandSettings;
 
 @end
 

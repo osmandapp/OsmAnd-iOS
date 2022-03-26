@@ -51,7 +51,9 @@
 #import "OAColors.h"
 #import "OASubscriptionCancelViewController.h"
 #import "OARouteStatistics.h"
+#import "OAMapRendererEnvironment.h"
 #import "OAMapPresentationEnvironment.h"
+#import "OAWeatherHelper.h"
 
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -73,6 +75,7 @@
 
 #include <QtMath>
 #include <QStandardPaths>
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -96,6 +99,7 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/TileSqliteDatabasesCollection.h>
 #include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
+#include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
@@ -160,9 +164,9 @@
     std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
     std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProvider;
 
-    OACurrentPositionHelper *_currentPositionHelper;
-    
     std::shared_ptr<OsmAnd::ObfDataInterface> _obfsDataInterface;
+
+    OACurrentPositionHelper *_currentPositionHelper;
 
     OAAutoObserverProxy* _dayNightModeObserver;
     OAAutoObserverProxy* _mapSettingsChangeObserver;
@@ -1802,13 +1806,14 @@
                     _mapPresentationEnvironment->setSettings(newSettings);
             }
         
-          _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
-            [_mapView setProvider:_rasterMapProvider
-                        forLayer:0];
+            _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
+            [_mapView setProvider:_rasterMapProvider forLayer:0];
 
             _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
                                                                                    rasterTileSize));
             [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
+            
+            _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
         }
         else if (resourceType == OsmAndResourceType::OnlineTileSources || mapCreatorFilePath)
         {
@@ -1910,7 +1915,6 @@
             return;
         }
 
-        
         [_mapLayers updateLayers];
 
         if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
@@ -3145,6 +3149,16 @@
     {
         [_mapLayers.routeMapLayer resetLayer];
     }
+}
+
+- (OAMapRendererEnvironment *)mapRendererEnv
+{
+    return [[OAMapRendererEnvironment alloc] initWithObjects:_obfMapObjectsProvider
+                                  mapPresentationEnvironment:_mapPresentationEnvironment
+                                             mapPrimitiviser:_mapPrimitiviser
+                                       mapPrimitivesProvider:_mapPrimitivesProvider
+                                   mapObjectsSymbolsProvider:_mapObjectsSymbolsProvider
+                                           obfsDataInterface:_obfsDataInterface];
 }
 
 - (OAMapPresentationEnvironment *)mapPresentationEnv

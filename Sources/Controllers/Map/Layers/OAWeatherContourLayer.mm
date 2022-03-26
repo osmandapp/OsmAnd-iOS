@@ -15,16 +15,31 @@
 #import "OARootViewController.h"
 #import "OAWebClient.h"
 #import "OAWeatherHelper.h"
+#import "OAMapRendererEnvironment.h"
+#import "OAMapStyleSettings.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
-#include <OsmAndCore/Map/WeatherContourLayerProvider.h>
+#include <OsmAndCore/Map/GeoTileObjectsProvider.h>
+#include <OsmAndCore/Map/IMapLayerProvider.h>
+#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
+#include <OsmAndCore/Map/MapPrimitivesProvider.h>
+#include <OsmAndCore/Map/MapPrimitiviser.h>
+#include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
+
+#define kTempContourLines @"weatherTempContours"
+#define kPressureContourLines @"weatherPressureContours"
 
 @implementation OAWeatherContourLayer
 {
     std::shared_ptr<OsmAnd::WeatherTileResourcesManager> _resourcesManager;
-    std::shared_ptr<OsmAnd::WeatherContourLayerProvider> _provider;
-
+    std::shared_ptr<OsmAnd::MapPrimitiviser> _primitiviser;
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProvider;
+    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProvider;
+    std::shared_ptr<OsmAnd::GeoTileObjectsProvider> _geoTileObjectsProvider;
+    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
+    
     OAWeatherHelper *_weatherHelper;
+    OAMapStyleSettings *_styleSettings;
     OAAutoObserverProxy* _weatherChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
 }
@@ -48,6 +63,7 @@
 {
     _resourcesManager = self.app.resourcesManager->getWeatherResourcesManager();
     _weatherHelper = [OAWeatherHelper sharedInstance];
+    _styleSettings = [OAMapStyleSettings sharedInstance];
     
     _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onWeatherChanged)
@@ -55,9 +71,7 @@
     _layerChangeObservers = [NSMutableArray array];
     
     for (OAWeatherBand *band in [[OAWeatherHelper sharedInstance] bands])
-    {
         [_layerChangeObservers addObject:[band createSwitchObserver:self handler:@selector(onWeatherLayerChanged)]];
-    }
 }
 
 - (void) deinitLayer
@@ -75,51 +89,67 @@
 
 - (void) resetLayer
 {
-    _provider.reset();
-    [self.mapView resetProviderFor:self.layerIndex];
+    [self deinitProviders];
 }
 
 - (BOOL) updateLayer
 {
     [super updateLayer];
     
-    QList<OsmAnd::BandIndex> bands = [_weatherHelper getVisibleBands];
-    if (!self.app.data.weather || bands.empty())
+    OsmAnd::BandIndex band = WEATHER_BAND_UNDEFINED;
+    OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:kTempContourLines];
+    OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:kPressureContourLines];
+    if ([tempContourLinesParam.value isEqualToString:@"true"])
+        band = WEATHER_BAND_TEMPERATURE;
+    else if ([pressureContourLinesParam.value isEqualToString:@"true"])
+        band = WEATHER_BAND_PRESSURE;
+
+    if (!self.app.data.weather || band == WEATHER_BAND_UNDEFINED)
         return NO;
-    
-    // TODO: WIP - temp band only for now
-    if (bands.contains(WEATHER_BAND_TEMPERATURE))
-    {
-        bands = QList<OsmAnd::BandIndex>();
-        bands << WEATHER_BAND_TEMPERATURE;
-    }
-    else
-    {
-        return NO;
-    }
     
     //[self showProgressHUD];
           
     const auto dateTime = QDateTime::fromNSDate(_date).toUTC();
-    if (true)//!_provider)
-    {
-        _provider = std::make_shared<OsmAnd::WeatherContourLayerProvider>(_resourcesManager, dateTime, bands);
-        [self.mapView setProvider:_provider forLayer:self.layerIndex];
-        
-        OsmAnd::MapLayerConfiguration config;
-        config.setOpacityFactor(1.0f);
-        [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-    }
-    else
-    {
-        _provider->setDateTime(dateTime);
-        _provider->setBands(bands);
-        [self.mapView invalidateFrame];
-    }
+    [self initProviders:dateTime band:band];
 
     //[self hideProgressHUD];
     
     return YES;
+}
+
+- (void) initProviders:(QDateTime)dateTime band:(OsmAnd::BandIndex)band
+{
+    [self deinitProviders];
+    
+    OAMapRendererEnvironment *env = self.mapViewController.mapRendererEnv;
+    
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    int cacheSize = (screenSize.width * 2 / _resourcesManager->getTileSize()) * (screenSize.height * 2 / _resourcesManager->getTileSize());
+    int rasterTileSize = (int) (_resourcesManager->getTileSize() * _resourcesManager->getDensityFactor());
+    _geoTileObjectsProvider = std::make_shared<OsmAnd::GeoTileObjectsProvider>(_resourcesManager, dateTime, band, cacheSize);
+    _mapPrimitivesProvider = std::make_shared<OsmAnd::MapPrimitivesProvider>(
+        _geoTileObjectsProvider,
+        env.mapPrimitiviser,
+        rasterTileSize);
+    
+    _mapObjectsSymbolsProvider = std::make_shared<OsmAnd::MapObjectsSymbolsProvider>(
+        _mapPrimitivesProvider,
+        rasterTileSize);
+    self.mapView.renderer->addSymbolsProvider(_mapObjectsSymbolsProvider);
+    
+    _rasterMapProvider = std::make_shared<OsmAnd::MapRasterLayerProvider_Software>(_mapPrimitivesProvider, false);
+    self.mapView.renderer->setMapLayerProvider(self.layerIndex, _rasterMapProvider);
+}
+
+- (void) deinitProviders
+{
+    self.mapView.renderer->resetMapLayerProvider(self.layerIndex);
+    if (_mapObjectsSymbolsProvider)
+        self.mapView.renderer->removeSymbolsProvider(_mapObjectsSymbolsProvider);
+    
+    _mapObjectsSymbolsProvider = nullptr;
+    _mapPrimitivesProvider = nullptr;
+    _geoTileObjectsProvider = nullptr;
 }
 
 - (void) onWeatherChanged
@@ -152,11 +182,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.mapViewController runWithRenderSync:^{
             if (![self updateLayer])
-            {
-                //[self.mapView resetProviderFor:0];
-                [self.mapView resetProviderFor:self.layerIndex];
-                _provider.reset();
-            }
+                [self deinitProviders];
         }];
     });
 }

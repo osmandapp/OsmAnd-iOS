@@ -8,10 +8,8 @@
 
 #import "OAWeatherBand.h"
 #import "OsmAndApp.h"
-#import "OARootViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OAMapPresentationEnvironment.h"
-#import "OAMapRendererView.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/CommonTypes.h>
@@ -357,14 +355,14 @@ static NSString *kPrecipContourStyleName;
     return nil;
 }
 
-- (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) getContourLevels
+- (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) getContourLevels:(OAMapPresentationEnvironment *)mapPresentationEnvironment
 {
-    return [self getContourValuesType:CONTOUR_VALUE_LEVELS];
+    return [self getContourValuesType:CONTOUR_VALUE_LEVELS mapPresentationEnvironment:mapPresentationEnvironment];
 }
 
-- (NSDictionary<NSNumber *, NSArray<NSString *> *> *) getContourTypes
+- (NSDictionary<NSNumber *, NSArray<NSString *> *> *) getContourTypes:(OAMapPresentationEnvironment *)mapPresentationEnvironment
 {
-    NSDictionary<NSNumber *, NSArray<NSNumber *> *> *contourTypeValues = [self getContourValuesType:CONTOUR_VALUE_TYPES];
+    NSDictionary<NSNumber *, NSArray<NSNumber *> *> *contourTypeValues = [self getContourValuesType:CONTOUR_VALUE_TYPES mapPresentationEnvironment:mapPresentationEnvironment];
     NSMutableDictionary<NSNumber *, NSArray<NSString *> *> *contourTypes = [NSMutableDictionary dictionary];
     NSString *unit = [self getBandUnit];
     [contourTypeValues enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull zoomNum, NSArray<NSNumber *> * _Nonnull values, BOOL * _Nonnull stop)
@@ -378,11 +376,12 @@ static NSString *kPrecipContourStyleName;
     return contourTypes;
 }
 
-- (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) getContourValuesType:(EOAContourValueType)valueType
+- (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) getContourValuesType:(EOAContourValueType)valueType mapPresentationEnvironment:(OAMapPresentationEnvironment *)mapPresentationEnvironment
 {
-    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
-    OAMapPresentationEnvironment *mapPresentationEnv = mapViewController.mapPresentationEnv;
-    const auto& env = mapPresentationEnv.mapPresentationEnvironment;
+    if (!mapPresentationEnvironment)
+        return @{};
+
+    const auto& env = mapPresentationEnvironment.mapPresentationEnvironment;
     if (!env)
         return @{};
 

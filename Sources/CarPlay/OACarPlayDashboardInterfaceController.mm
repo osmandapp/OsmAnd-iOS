@@ -90,13 +90,21 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 - (void) present
 {
     // Dismiss any previous navigation
-    [self stopNavigation];
+    
+    [[OARootViewController instance].mapPanel closeRouteInfo];
     
     _mapTemplate = [[CPMapTemplate alloc] init];
     _mapTemplate.mapDelegate = self;
     [self enterBrowsingState];
     
     [self.interfaceController setRootTemplate:_mapTemplate animated:YES];
+    
+    OARouteCalculationResult *route = [_routingHelper getRoute];
+    CLLocation * start = _routingHelper.getLastFixedLocation;
+    if (route && start && _routingHelper.isRouteCalculated)
+    {
+        [_routingHelper setNewRoute:nil res:route start:start];
+    }
 }
 
 - (void) enterBrowsingState

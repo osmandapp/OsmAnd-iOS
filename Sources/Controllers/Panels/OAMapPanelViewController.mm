@@ -3825,6 +3825,8 @@ typedef enum
         if (onComplete)
             onComplete();
     }];
+    if (_routingHelper.isFollowingMode)
+        [self startNavigation];
 }
 
 #pragma mark - OAGpxWptEditingHandlerDelegate

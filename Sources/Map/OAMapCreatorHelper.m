@@ -8,6 +8,7 @@
 
 #import "OAMapCreatorHelper.h"
 #import "OALog.h"
+#import "OsmAndApp.h"
 
 @implementation OAMapCreatorHelper
 
@@ -88,7 +89,7 @@
 
     NSString *path = [self.filesDir stringByAppendingPathComponent:fileName];
     NSError *error;
-    [[NSFileManager defaultManager] moveItemAtPath:filePath toPath:path error:&error];
+    [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:path error:&error];
     if (error)
     {
         OALog(@"Failed installation MapCreator db file: %@", filePath);
@@ -99,8 +100,10 @@
         [tmp setObject:path forKey:fileName];
         _files = [NSDictionary dictionaryWithDictionary:tmp];
     }
-    
-    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+
+    if ([filePath hasPrefix:[OsmAndApp instance].inboxPath])
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+
     [self applyExcludedFromBackup:path];
     
     if (error)

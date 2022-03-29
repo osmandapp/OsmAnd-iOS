@@ -28,6 +28,7 @@
 @property(nonatomic, readonly) NSString* documentsPath;
 @property(nonatomic, readonly) NSString* cachePath;
 @property(nonatomic, readonly) NSString* gpxPath;
+@property(nonatomic, readonly) NSString* inboxPath;
 
 @property(readonly) OAAppData* data;
 @property(readonly) OAWorldRegion* worldRegion;

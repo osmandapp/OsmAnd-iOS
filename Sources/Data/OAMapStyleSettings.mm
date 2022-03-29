@@ -141,6 +141,10 @@
 - (void)buildParameters:(NSString *)styleName
 {
     const auto& resolvedMapStyle = [OsmAndApp instance].resourcesManager->mapStylesCollection->getResolvedStyleByName(QString::fromNSString(styleName));
+
+    if (resolvedMapStyle == nullptr)
+        return;
+
     const auto& parameters = resolvedMapStyle->getParameters();
     
     NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary dictionary];

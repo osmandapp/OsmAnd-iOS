@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchResult.java
-//  git revision 46b2782a7d94c8e4968ef488956dd4d96925be95
+//  git revision 5bcaa01259c937fa29741117b23f89776a1098c6
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
@@ -68,7 +68,8 @@
 - (double) getSumPhraseMatchWeight;
 - (int) getDepth;
 - (OASearchResult *)setNewParentSearchResult:(OASearchResult *)parentSearchResult;
-- (BOOL) allWordsMatched:(NSMutableArray<NSString *> *)localResultNames searchPhraseNames:(NSMutableArray<NSString *> *)searchPhraseNames;
+- (BOOL) allWordsMatched:(NSString *)name;
+- (BOOL) checkOtherNames;
 - (NSMutableArray<NSString *> *) getSearchPhraseNames;
 
 - (NSString *) toString;

@@ -2404,3 +2404,10 @@
 "delete_tracks_bottom_sheet_description_regular_part" = "Ses seguru de chèrrere iscantzellare ";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d rastas?";
 "delete_tracks_bottom_sheet_title" = "Iscantzellare sas rastas?";
+"gpx_import_already_exists_short" = "Su documentu de rasta dislindadu esistit giai in sa lista.";
+"rendering_attr_showRunningRoutes_name" = "Àndalas de cursa";
+"rendering_attr_showRunningRoutes_description" = "Ammustra sas àndalas de cursa";
+"rendering_attr_showFitnessTrails_name" = "Camineras de allenamentu";
+"rendering_attr_showFitnessTrails_description" = "Ammustra sas camineras de allenamentu";
+"map_settings_weather_isolines" = "Isolìnias";
+"obf_import_already_exists_short" = "Esistit giai unu documentu cun custu nùmene.";

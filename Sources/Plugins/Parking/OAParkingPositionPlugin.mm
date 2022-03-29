@@ -17,7 +17,6 @@
 #import "OAMapInfoController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
-#import "PXAlertView.h"
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
 #import "OARoutingHelper.h"

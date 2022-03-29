@@ -27,6 +27,7 @@
 #import "QuadRect.h"
 #import "OAMapUtils.h"
 #import "OARouteImporter.h"
+#import "OAAppVersionDependentConstants.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -739,7 +740,7 @@ colorizationScheme:(int)colorizationScheme
             const auto& doc = activeGpx[QString::fromNSString(item.docPath)];
             if (doc != nullptr)
             {
-                doc->saveTo(QString::fromNSString(item.docPath));
+                doc->saveTo(QString::fromNSString(item.docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
                 docs[QString::fromNSString(item.docPath)] = doc;
                 [self refreshGpxTracks:docs];

@@ -64,6 +64,7 @@
 
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
+#import "OAAppVersionDependentConstants.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
@@ -2518,7 +2519,7 @@
                         }
                     }
                 
-                doc->saveTo(QString::fromNSString(self.foundWptDocPath));
+                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
                 [[OAGPXDatabase sharedDb] save];
@@ -2578,7 +2579,7 @@
                     }
                 }
                 
-                doc->saveTo(QString::fromNSString(self.foundWptDocPath));
+                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -2633,7 +2634,7 @@
                 [OAGPXDocument fillWpt:p usingWpt:wpt];
                 
                 doc->points.append(p);
-                doc->saveTo(QString::fromNSString(gpxFileName));
+                doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
                 wpt.wpt = p;
                 self.foundWpt = wpt;
@@ -2669,7 +2670,7 @@
             [OAGPXDocument fillWpt:p usingWpt:wpt];
             
             doc->points.append(p);
-            doc->saveTo(QString::fromNSString(gpxFileName));
+            doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
             
             wpt.wpt = p;
             self.foundWpt = wpt;
@@ -2755,7 +2756,7 @@
             
             if (found)
             {
-                doc->saveTo(QString::fromNSString(docPath));
+                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
                 // update map
                 if (updateMap)
@@ -2793,7 +2794,7 @@
         
         if (found)
         {
-            doc->saveTo(QString::fromNSString(docPath));
+            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
             
             // update map
             if (updateMap)
@@ -2833,7 +2834,7 @@
             _selectedGpxHelper.activeGpx.remove(QString::fromNSString(oldPath));
             _selectedGpxHelper.activeGpx[QString::fromNSString(docPath)] = doc;
             
-            doc->saveTo(QString::fromNSString(docPath));
+            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
             
             return YES;
         }
@@ -2853,7 +2854,7 @@
 
         [OAGPXDocument fillMetadata:m usingMetadata:metadata];
         
-        doc->saveTo(QString::fromNSString(docPath));
+        doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
         
         return YES;
     }
@@ -2905,7 +2906,7 @@
             
             if (found)
             {
-                doc->saveTo(QString::fromNSString(docPath));
+                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
 
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
                 [[OAGPXDatabase sharedDb] save];
@@ -2941,7 +2942,7 @@
         
         if (found)
         {
-            doc->saveTo(QString::fromNSString(docPath));
+            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
 
             [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
             [[OAGPXDatabase sharedDb] save];

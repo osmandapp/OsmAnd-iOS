@@ -21,8 +21,11 @@
 @property (weak, nonatomic) IBOutlet UIView *headerDividerView;
 @property (weak, nonatomic) IBOutlet UIView *buttonsSectionDividerView;
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tileLeftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tileLeftNoIconConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsViewLeftConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsViewRightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *headerViewCollapsedHeight;
 
 - (void) presentInViewController:(UIViewController *)viewController;
 - (void) presentInViewController:(UIViewController *)viewController animated:(BOOL)animated;

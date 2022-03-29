@@ -270,8 +270,8 @@
     [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
 }
 
-- (void)zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag {
-    _selectedValue = [_keepInformingEntries indexOfObject:zoom];
+- (void)customPickerValueChanged:(NSString *)value tag:(NSInteger)pickerTag {
+    _selectedValue = [_keepInformingEntries indexOfObject:value];
     _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
     [_settings.keepInforming set:_keepInformingValues[_selectedValue].intValue mode:self.appMode];
     [self setupView];

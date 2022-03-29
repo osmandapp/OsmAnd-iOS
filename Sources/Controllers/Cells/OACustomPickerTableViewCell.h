@@ -10,7 +10,7 @@
 
 @protocol OACustomPickerTableViewCellDelegate <NSObject>
 
-- (void)zoomChanged:(NSString *)zoom tag: (NSInteger)pickerTag;
+- (void)customPickerValueChanged:(NSString *)value tag:(NSInteger)pickerTag;
 
 @end
 

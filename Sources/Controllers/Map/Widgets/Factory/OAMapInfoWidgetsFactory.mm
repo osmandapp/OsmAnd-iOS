@@ -20,6 +20,7 @@
 #import "OAMapLayers.h"
 #import "OAMapInfoController.h"
 #import "OAOsmAndFormatter.h"
+#import "OAWeatherBand.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/GeoCommonTypes.h>
@@ -135,7 +136,8 @@
     OATextInfoWidget *weatherControl = [[OATextInfoWidget alloc] init];
     __weak OATextInfoWidget *weatherControlWeak = weatherControl;
     __weak OAMapInfoWidgetsFactory *selfWeak = self;
-    NSMutableArray *cachedValue = @[@(0)].mutableCopy;
+    NSNumber *undefined = @(-10000);
+    NSMutableArray *cachedValue = @[undefined].mutableCopy;
     OsmAnd::PointI __block cachedTarget31 = OsmAnd::PointI(0, 0);
     OsmAnd::ZoomLevel __block cachedZoom = OsmAnd::ZoomLevel::InvalidZoomLevel;
     weatherControl.updateInfoFunction = ^BOOL{
@@ -143,7 +145,7 @@
         BOOL enabled = _app.data.weather;
         if (!enabled)
         {
-            if (![cachedValue[0] isEqual:@(0)])
+            if (cachedValue[0] != undefined)
                 [weatherControlWeak setText:nil subtext:nil];
             
             [selfWeak setMapCenterMarkerVisibility:NO];
@@ -169,7 +171,7 @@
         _request.band = (OsmAnd::BandIndex)band;
 
         OsmAnd::WeatherTileResourcesManager::ObtainValueAsyncCallback _callback =
-            [selfWeak, cachedValue, band, weatherControlWeak]
+            [selfWeak, cachedValue, band, undefined, weatherControlWeak]
             (const bool succeeded,
                 const double value,
                 const std::shared_ptr<OsmAnd::Metric>& metric)
@@ -180,33 +182,16 @@
                         if (![cachedValue[0] isEqual:@(value)])
                         {
                             cachedValue[0] = @(value);
-                            switch (band)
-                            {
-                                case WEATHER_BAND_CLOUD:
-                                    [weatherControlWeak setText:[NSString stringWithFormat:@"%d", (int)value /* % */] subtext:@"%"];
-                                    break;
-                                case WEATHER_BAND_TEMPERATURE:
-                                    [weatherControlWeak setText:[NSString stringWithFormat:@"%.1f", value /* C */] subtext:@"C"];
-                                    break;
-                                case WEATHER_BAND_PRESSURE:
-                                    [weatherControlWeak setText:[NSString stringWithFormat:@"%d", (int)(value / 100.0 /* Pa to hPa */)] subtext:@"hPa"];
-                                    break;
-                                case WEATHER_BAND_WIND_SPEED:
-                                    [weatherControlWeak setText:[NSString stringWithFormat:@"%d", (int)value /* m/s */] subtext:@"m/s"];
-                                    break;
-                                case WEATHER_BAND_PRECIPITATION:
-                                    [weatherControlWeak setText:[NSString stringWithFormat:@"%.1f", value * 3600.0 /* mm per hour */] subtext:@"mm"];
-                                    break;
-                                case WEATHER_BAND_UNDEFINED:
-                                    [weatherControlWeak setText:nil subtext:nil];
-                                    break;
-                            }
+                            const auto bandValue = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getConvertedBandValue(band, value);
+                            const auto bandValueStr = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getFormattedBandValue(band, bandValue, true);
+                            NSString *bandUnit = [[OAWeatherBand withWeatherBand:band] getBandUnit];
+                            [weatherControlWeak setText:bandValueStr.toNSString() subtext:bandUnit];
                             [selfWeak setMapCenterMarkerVisibility:YES];
                         }
                     }
-                    else if (![cachedValue[0] isEqual:@(0)])
+                    else if (cachedValue[0] != undefined)
                     {
-                        cachedValue[0] = @(0);
+                        cachedValue[0] = undefined;
                         [weatherControlWeak setText:nil subtext:nil];
                         [selfWeak setMapCenterMarkerVisibility:NO];
                     }

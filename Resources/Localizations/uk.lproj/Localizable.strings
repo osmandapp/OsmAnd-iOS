@@ -2382,3 +2382,10 @@
 "routing_attr_avoid_tunnels_name" = "Без тунелів";
 "routing_attr_avoid_tunnels_description" = "Уникати тунелів";
 "routing_attr_avoid_low_emission_zone_name" = "Без зон з низьким рівнем викидів";
+"obf_import_already_exists_short" = "Файл із такою назвою вже існує.";
+"gpx_import_already_exists_short" = "Указаний файл треку вже існує у списку.";
+"map_settings_weather_isolines" = "Ізолінії";
+"rendering_attr_showRunningRoutes_name" = "Бігові маршрути";
+"rendering_attr_showRunningRoutes_description" = "Показати бігові маршрути";
+"rendering_attr_showFitnessTrails_name" = "Фітнес-стежки";
+"rendering_attr_showFitnessTrails_description" = "Показати фітнес-стежки";

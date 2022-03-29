@@ -54,6 +54,8 @@ struct CLLocationCoordinate2D;
 
 @interface OAMapRendererView : UIView <OAMapRendererViewProtocol>
 
+@property (nonatomic, readonly, assign) std::shared_ptr<OsmAnd::IMapRenderer> renderer;
+
 - (std::shared_ptr<OsmAnd::IMapLayerProvider>)providerFor:(unsigned int)layer;
 - (void)setProvider:(std::shared_ptr<OsmAnd::IMapLayerProvider>)provider forLayer:(unsigned int)layer;
 - (void)setProviderForced:(std::shared_ptr<OsmAnd::IMapLayerProvider>)provider forLayer:(unsigned int)layer;

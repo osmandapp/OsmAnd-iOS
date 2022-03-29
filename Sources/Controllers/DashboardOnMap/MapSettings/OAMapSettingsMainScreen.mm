@@ -535,6 +535,10 @@
         return @"ic_action_skiing";
     else if([paramName isEqualToString:TRAVEL_ROUTES])
         return @"mm_routes";
+    else if([paramName isEqualToString:SHOW_FITNESS_TRAILS_ATTR])
+        return @"mx_sport_athletics";
+    else if([paramName isEqualToString:SHOW_RUNNING_ROUTES_ATTR])
+        return @"mx_running";
     else if([paramName isEqualToString:kRoadStyleCategory])
         return @"ic_custom_road_style";
     else if([paramName isEqualToString:kDetailsCategory])
@@ -841,7 +845,13 @@
             else
             {
                 cell.iconView.backgroundColor = UIColor.clearColor;
-                cell.iconView.image = [UIImage templateImageNamed:item[@"image"]];
+                NSString *iconName = item[@"image"];
+                UIImage *icon;
+                if ([iconName hasPrefix:@"mx_"])
+                    icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                else
+                    icon = [UIImage templateImageNamed:item[@"image"]];
+                cell.iconView.image = icon;
                 cell.iconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
             }
 

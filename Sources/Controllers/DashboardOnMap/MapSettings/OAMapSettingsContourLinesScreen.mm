@@ -903,15 +903,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - OACustomPickerTableViewCellDelegate
 
-- (void) zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
+- (void) customPickerValueChanged:(NSString *)value tag:(NSInteger)pickerTag
 {
     OAMapStyleParameter *parameter = [_styleSettings getParameter:kContourLinesZoomLevel];
-    if (parameter.value != zoom)
+    if (parameter.value != value)
     {
-        _minZoom = zoom;
-        parameter.value = zoom;
+        _minZoom = value;
+        parameter.value = value;
         [_styleSettings save:parameter];
-        [[OAAppSettings sharedManager].contourLinesZoom set:zoom];
+        [[OAAppSettings sharedManager].contourLinesZoom set:value];
         [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
     }
 }

@@ -87,6 +87,7 @@
     int _themeId;
     
     NSArray<OABaseWidgetView *> *_widgetsToUpdate;
+    NSTimer *_framePreparedTimer;
 }
 
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
@@ -143,26 +144,32 @@
     });
 }
 
+- (void) execOnDraw
+{
+    _lastUpdateTime = CACurrentMediaTime();
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self onDraw];
+    });
+}
+
 - (void) onMapRendererFramePrepared
 {
-    NSTimeInterval currentTime = CACurrentMediaTime();
-    if (currentTime - _lastUpdateTime > 1)
-    {
-        _lastUpdateTime = currentTime;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self onDraw];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_framePreparedTimer)
+            [_framePreparedTimer invalidate];
+        
+        _framePreparedTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(execOnDraw) userInfo:nil repeats:NO];
+    });
+    if (CACurrentMediaTime() - _lastUpdateTime > 1.0)
+        [self execOnDraw];
+
     // Render the ruler more often
     [self updateRuler];
 }
 
 - (void) onRightWidgetSuperviewLayout
 {
-    _lastUpdateTime = CACurrentMediaTime();
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self onDraw];
-    });
+    [self execOnDraw];
 }
 
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode

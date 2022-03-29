@@ -11,7 +11,6 @@
 #import "OAMapRendererView.h"
 #import "OADefaultFavorite.h"
 #import "Localization.h"
-#import "PXAlertView.h"
 #import "OAUtilities.h"
 #import "OADestination.h"
 #import "OADestinationCell.h"

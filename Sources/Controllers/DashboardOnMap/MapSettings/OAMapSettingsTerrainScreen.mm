@@ -844,15 +844,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (void)zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
+- (void)customPickerValueChanged:(NSString *)value tag:(NSInteger)pickerTag
 {
-    NSInteger value = [zoom integerValue];
+    NSInteger intValue = [value integerValue];
     EOATerrainType type = _app.data.terrainType;
     if (pickerTag == 1)
     {
-        if (value <= [self getMaxZoom])
+        if (intValue <= [self getMaxZoom])
         {
-            [self setMinZoom:value];
+            [self setMinZoom:intValue];
             if (type == EOATerrainTypeHillshade)
             {
                 _app.data.hillshadeMinZoom = [self getMinZoom];
@@ -870,9 +870,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if (pickerTag == 2)
     {
-        if (value >= [self getMinZoom])
+        if (intValue >= [self getMinZoom])
         {
-            [self setMaxZoom:value];
+            [self setMaxZoom:intValue];
             if (type == EOATerrainTypeHillshade)
             {
                 _app.data.hillshadeMaxZoom = [self getMaxZoom];

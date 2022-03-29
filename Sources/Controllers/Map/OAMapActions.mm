@@ -11,7 +11,7 @@
 #import "OsmAndApp.h"
 #import "OASelectedGPXHelper.h"
 #import "OAGPXDatabase.h"
-#import "PXAlertView.h"
+#import "OAAlertBottomSheetViewController.h"
 #import "Localization.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
@@ -232,18 +232,14 @@
 
 - (void) stopNavigationActionConfirm
 {
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"cancel_route")
-                            message:OALocalizedString(@"stop_routing_confirm")
-                        cancelTitle:OALocalizedString(@"shared_string_no")
-                         otherTitle:OALocalizedString(@"shared_string_yes")
-                          otherDesc:nil
-                         otherImage:nil
-                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                             if (!cancelled)
-                             {
-                                 [self stopNavigationWithoutConfirm];
-                             }
-                         }];
+    [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"cancel_route")
+                                               titleIcon:@"ic_custom_alert"
+                                                 message:OALocalizedString(@"stop_routing_confirm")
+                                             cancelTitle:OALocalizedString(@"shared_string_no")
+                                               doneTitle:OALocalizedString(@"shared_string_yes")
+                                        doneColpletition:^{
+                                            [self stopNavigationWithoutConfirm];
+                                        }];
 }
 
 - (void) navigate:(OATargetPoint *)targetPoint

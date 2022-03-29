@@ -24,15 +24,15 @@
     {
         self.labelWithIconConstraint.active = NO;
         self.labelNoIconConstraint.active = NO;
-        self.leftIconConstraint.priority = 1;
-        self.centerAlignIconConstraint.priority = 1000;
+        self.leftIconConstraint.active = NO;
+        self.centerAlignIconConstraint.active = YES;
     }
     else
     {
         self.labelWithIconConstraint.active = hasImage;
         self.labelNoIconConstraint.active = !hasImage;
-        self.centerAlignIconConstraint.priority = 1;
-        self.leftIconConstraint.priority = 1000;
+        self.leftIconConstraint.active = YES;
+        self.centerAlignIconConstraint.active = NO;
     }
 
     [super updateConstraints];

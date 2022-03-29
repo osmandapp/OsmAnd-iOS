@@ -7,7 +7,6 @@
 //
 
 #import "OAGPXListViewController.h"
-#import "OAGPXItemViewController.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAMapViewController.h"
 #import "OAMenuSimpleCellNoIcon.h"
@@ -39,13 +38,13 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 #import "OAUtilities.h"
-#import "PXAlertView.h"
+#import "OAAlertBottomSheetViewController.h"
+#import "OARecordSettingsBottomSheetViewController.h"
 #import "OAPluginsViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAImportGPXBottomSheetViewController.h"
 #import <MBProgressHUD.h>
 
-#import "OATrackIntervalDialogView.h"
 #import "OAExportItemsViewController.h"
 
 #include <OsmAndCore/ArchiveReader.h>
@@ -221,7 +220,8 @@ static UIViewController *parentController;
             [alert addAction:[UIAlertAction actionWithTitle:otherButtonTitles[i] style:UIAlertActionStyleDefault handler:i == 0 ? createCopyHandler : overwriteHandler]];
         }
         [alert addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
+            if ([_importUrl.path hasPrefix:_app.inboxPath])
+                [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
         }]];
         [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
     });
@@ -247,7 +247,8 @@ static UIViewController *parentController;
     }
     else
     {
-        [fileManager removeItemAtPath:_importUrl.path error:nil];
+        if ([_importUrl.path hasPrefix:_app.inboxPath])
+            [fileManager removeItemAtPath:_importUrl.path error:nil];
         _importUrl = nil;
     }
     [fileManager removeItemAtPath:tmpKmzPath error:nil];
@@ -262,14 +263,15 @@ static UIViewController *parentController;
         NSString *gpxStr = [OAKml2Gpx toGpx:data];
         if (gpxStr)
         {
-            NSURL *rootUrl = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-            NSString *finalFilePath = [[rootUrl.path stringByAppendingPathComponent:[_importUrl.lastPathComponent stringByDeletingPathExtension]] stringByAppendingPathExtension:GPX_EXT];
+            NSString *finalFilePath = [[_app.inboxPath stringByAppendingPathComponent:[_importUrl.lastPathComponent stringByDeletingPathExtension]] stringByAppendingPathExtension:GPX_EXT];
             NSError *err;
             [gpxStr writeToFile:finalFilePath atomically:YES encoding:NSUTF8StringEncoding error:&err];
             if (err)
                 NSLog(@"Error creating gpx file");
-            
-            [fileManager removeItemAtPath:_importUrl.path error:nil];
+
+            if ([_importUrl.path hasPrefix:_app.inboxPath])
+                [fileManager removeItemAtPath:_importUrl.path error:nil];
+
             _importUrl = [NSURL fileURLWithPath:finalFilePath];
         }
     }
@@ -300,7 +302,15 @@ static UIViewController *parentController;
     {
         if (exists)
         {
-            if (showAlerts)
+            NSString *gpxFilePath = [_importUrl.path stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"] withString:@""];
+            if ([[OAGPXDatabase sharedDb] containsGPXItem:gpxFilePath])
+            {
+                [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
+                                 message:OALocalizedString(@"gpx_import_already_exists_short")
+                       cancelButtonTitle:OALocalizedString(@"shared_string_ok")
+                       otherButtonTitles:@[]];
+            }
+            else if (showAlerts)
             {
                 [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
                                  message:OALocalizedString(@"gpx_import_already_exists")
@@ -377,28 +387,37 @@ static UIViewController *parentController;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:_importGpxPath])
         [fileManager createDirectoryAtPath:_importGpxPath withIntermediateDirectories:YES attributes:nil error:nil];
-    if (_newGpxName) {
-        [fileManager moveItemAtPath:_importUrl.path toPath:[_importGpxPath stringByAppendingPathComponent:_newGpxName] error:nil];
-    } else {
-        [fileManager moveItemAtPath:_importUrl.path toPath:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]] error:nil];
+    if (_newGpxName)
+    {
+        [fileManager copyItemAtPath:_importUrl.path toPath:[_importGpxPath stringByAppendingPathComponent:_newGpxName] error:nil];
     }
-    
-    if (_newGpxName) {
+    else
+    {
+        [fileManager copyItemAtPath:_importUrl.path
+                             toPath:[_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]]
+                              error:nil];
+    }
+
+    if (_newGpxName)
+    {
         NSString *storingPathInFolder = [kImportFolderName stringByAppendingPathComponent:_newGpxName];
         item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
-    } else {
+    }
+    else
+    {
         NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
         NSString *storingPathInFolder = [kImportFolderName stringByAppendingPathComponent:name];
         item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
     }
     [[OAGPXDatabase sharedDb] save];
-    if (![_importUrl.path hasPrefix:_app.gpxPath])
+
+    if ([_importUrl.path hasPrefix:_app.inboxPath])
         [fileManager removeItemAtPath:_importUrl.path error:nil];
-    
+
     _doc = nil;
     _importUrl = nil;
     _newGpxName = nil;
-    
+
     if (doRefresh) {
         [self generateData];
         [self setupView];
@@ -926,31 +945,22 @@ static UIViewController *parentController;
     {
         if (![_settings.mapSettingSaveTrackIntervalApproved get] && ![_savingHelper hasData])
         {
-            OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 176.0)];
+            OARecordSettingsBottomSheetViewController *bottomSheet = [[OARecordSettingsBottomSheetViewController alloc] initWithCompletitionBlock:^(int recordingInterval, BOOL rememberChoice, BOOL showOnMap) {
+                
+                
+                [_settings.mapSettingSaveTrackIntervalGlobal set:[_settings.trackIntervalArray[recordingInterval] intValue]];
+                if (rememberChoice)
+                    [_settings.mapSettingSaveTrackIntervalApproved set:YES];
+
+                [_settings.mapSettingShowRecordingTrack set:showOnMap];
+
+                _settings.mapSettingTrackRecording = YES;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateRecImg];
+                });
+            }];
             
-            [PXAlertView showAlertWithTitle:OALocalizedString(@"track_start_rec")
-                                    message:nil
-                                cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                 otherTitle:OALocalizedString(@"shared_string_ok")
-                                  otherDesc:nil
-                                 otherImage:nil
-                                contentView:view
-                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                     
-                                     if (!cancelled)
-                                     {
-                                         [_settings.mapSettingSaveTrackIntervalGlobal set:[_settings.trackIntervalArray[[view getInterval]] intValue]];
-                                         if (view.swRemember.isOn)
-                                             [_settings.mapSettingSaveTrackIntervalApproved set:YES];
-
-                                         [_settings.mapSettingShowRecordingTrack set:view.swShowOnMap.isOn];
-
-                                         _settings.mapSettingTrackRecording = YES;
-                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                             [self updateRecImg];
-                                         });
-                                     }
-                                 }];
+            [bottomSheet presentInViewController:OARootViewController.instance];
         }
         else
         {
@@ -991,17 +1001,14 @@ static UIViewController *parentController;
 
     if ([_savingHelper hasDataToSave] && _savingHelper.distance < 10.0)
     {
-        [PXAlertView showAlertWithTitle:OALocalizedString(@"track_save_short_q")
-                                message:nil
-                            cancelTitle:OALocalizedString(@"shared_string_no")
-                             otherTitle:OALocalizedString(@"shared_string_yes")
-                              otherDesc:nil
-                             otherImage:nil
-                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                 if (!cancelled) {
-                                     [self doSaveTrack];
-                                 }
-                             }];
+        [OAAlertBottomSheetViewController showAlertWithTitle:nil
+                                                   titleIcon:nil
+                                                     message:OALocalizedString(@"track_save_short_q")
+                                                 cancelTitle:OALocalizedString(@"shared_string_no")
+                                                   doneTitle:OALocalizedString(@"shared_string_yes")
+                                            doneColpletition:^{
+                                                [self doSaveTrack];
+                                            }];
     }
     else
     {
@@ -1024,20 +1031,17 @@ static UIViewController *parentController;
     
     if (wasRecording)
     {
-        [PXAlertView showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
-                                message:nil
-                            cancelTitle:OALocalizedString(@"shared_string_no")
-                             otherTitle:OALocalizedString(@"shared_string_yes")
-                              otherDesc:nil
-                             otherImage:nil
-                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                 if (!cancelled) {
-                                     _settings.mapSettingTrackRecording = YES;
-                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                         [self updateRecImg];
-                                     });
-                                 }
-                             }];
+        [OAAlertBottomSheetViewController showAlertWithTitle:nil
+                                                   titleIcon:nil
+                                                     message:OALocalizedString(@"track_continue_rec_q")
+                                                 cancelTitle:OALocalizedString(@"shared_string_no")
+                                                   doneTitle:OALocalizedString(@"shared_string_yes")
+                                            doneColpletition:^{
+                                                _settings.mapSettingTrackRecording = YES;
+                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                    [self updateRecImg];
+                                                });
+                                            }];
     }
     [self reloadData];
 }

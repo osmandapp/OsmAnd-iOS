@@ -151,7 +151,7 @@
 "osm_live_cancel_subscription" = "Ακύρωση συνδρομής";
 "shared_string_address" = "Διεύθυνση";
 "shared_string_road" = "Δρόμος";
-"fast_route_mode_descr" = "Ενεργοποίησε για υπολογισμό ταχύτερης διαδρομής ή απενεργοποίησε για διαδρομή με οικονομία καυσίμων.";
+"fast_route_mode_descr" = "Ενεργοποίησε για υπολογισμό ταχύτερης διαδρομής ή απενεργοποίησε για διαδρομή με οικονομία καυσίμων";
 "gpx_waypoints" = "Σημεία διαδρομής";
 "col_purple" = "Μοβ";
 "shared_setting_always_ask" = "Πάντα ερώτηση";
@@ -160,7 +160,7 @@
 "year" = "Έτος";
 "add_work" = "Προσθήκη εργασίας";
 "route_tsll" = "Στρίψτε ελαφρώς αριστερά και προχωρήστε";
-"wake_on_voice_descr" = "Ενεργοποίση της οθόνης της συσκευής (εάν είναι ανενεργή) όταν πλησιάζετε μια στροφή.";
+"wake_on_voice_descr" = "Ενεργοποίση της οθόνης της συσκευής (εάν είναι ανενεργή) όταν πλησιάζετε μια στροφή";
 "shared_string_previous" = "Προηγούμενο";
 "track_recording_name" = "Τρέχουσα καταγραφή ίχνους";
 "filter_poi_hint" = "Φιλτράρισμα κατά όνομα";
@@ -220,7 +220,7 @@
 "show_pedestrian_warnings" = "Διαβάσεις πεζών";
 "nearby_search" = "Αναζήτηση στη γύρω περιοχή";
 "help_versions" = "Εκδόσεις";
-"prefer_in_routing_descr" = "Να προτιμώνται αυτοκινητόδρομοι.";
+"prefer_in_routing_descr" = "Να προτιμώνται αυτοκινητόδρομοι";
 "gpx_deactivated" = "Απενεργοποιημένο";
 "key_hint_deselect" = "Αποεπιλογή";
 "map_underlays" = "Υποστρώματα χάρτη";
@@ -333,7 +333,7 @@
 "sett_show" = "Εμφάνιση";
 "quick_action_no_underlay" = "Χωρίς υπόστρωμα";
 "pink" = "Ροζ";
-"units_min" = "λεπτά";
+"units_min" = "λεπτά,";
 "purple" = "Μοβ";
 "shared_string_ellipsis" = "…";
 "quick_action_tags" = "Ετικέτες";
@@ -442,7 +442,7 @@
 "map_settings_show" = "Εμφάνιση στον χάρτη";
 "day" = "Ημέρα";
 "poi_type" = "Τύπος ΣΕ";
-"unknown_location" = "Η Θέση δεν είναι ακόμα γνωστή.";
+"unknown_location" = "Η θέση δεν είναι ακόμα γνωστή";
 "shared_string_buy" = "Αγορά";
 "shared_string_on" = "Ενεργό";
 "loading_poi_obj" = "Φόρτωση ΣΕ…";
@@ -506,7 +506,7 @@
 "snap_to_road_descr" = "Προσανατολισμός στους δρόμους κατά τη διάρκεια της πλοήγησης";
 "snap_to_road" = "Προσανατολισμός στο δρόμο";
 "shared_string_street" = "Οδός";
-"default_speed_system_descr" = "Ορισμός μονάδας ταχύτητας.";
+"default_speed_system_descr" = "Ορισμός μονάδας ταχύτητας";
 "translucent_red" = "Ημιδιαφανές κόκκινο";
 "fav_color" = "Χρώμα";
 "osm_str_name" = "Όνομα οδού";
@@ -528,7 +528,7 @@
 "select_map_marker" = "Επιλέξτε έναν δείκτη χάρτη";
 "auto_zoom_map" = "Αυτόματη εστίαση χάρτη";
 "try_again" = "Ξαναδοκιμάστε";
-"relief_smoothness_factor_descr" = "Προτιμώμενο έδαφος: επίπεδο ή λοφώδες.";
+"relief_smoothness_factor_descr" = "Προτιμώμενο έδαφος: επίπεδο ή λοφώδες";
 "shared_string_apply" = "Εφαρμογή";
 "first_usage_wizard_desc" = "Αφήστε το OsmAnd να προσδιορίσει την τοποθεσία σας και να προτείνει χάρτες για λήψη για αυτήν την περιοχή.";
 "shared_string_remove" = "Αφαίρεση";
@@ -594,7 +594,7 @@
 "map_styles" = "Τύποι χάρτη";
 "shared_string_widgets" = "Γραφικά στοιχεία";
 "speak_poi" = "ΣΕ σε κοντινή απόσταση";
-"keep_informing_descr" = "Επανάληψη οδηγιών πλοήγησης σε τακτά χρονικά διαστήματα.";
+"keep_informing_descr" = "Επανάληψη οδηγιών πλοήγησης σε τακτά χρονικά διαστήματα";
 "shared_string_my_location" = "Η θέση μου";
 "clear_all_intermediates" = "Καθαρισμός όλων των ενδιάμεσων σημείων";
 "col_red" = "Κόκκινο";
@@ -606,7 +606,7 @@
 "select_street" = "Επιλέξτε οδό";
 "orange" = "Πορτοκαλί";
 "city_type_suburb" = "Προάστιο";
-"impassable_road_desc" = "Επιλέξτε τους δρόμους που θέλετε να αποφύγετε κατά την πλοήγηση.";
+"impassable_road_desc" = "Επιλέξτε τους δρόμους που θέλετε να αποφύγετε κατά την πλοήγηση";
 "help_trip_planning" = "Προγραμματισμός ταξιδιού";
 "fav_add_group" = "Προσθήκη ομάδας";
 "fav_replace" = "Αντικατάσταση";
@@ -654,10 +654,10 @@
 "rendering_attr_highway_class_track_grade5_name" = "Βαθμίδα 5";
 "rendering_value_blue_name" = "Μπλε";
 "rendering_attr_hideText_name" = "Κείμενο";
-"rendering_value_walkingRoutesOSMC_name" = "Χρώμα ανάλογα με τα σύμβολα πεζοπορίας OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "routing_attr_avoid_shuttle_train_description" = "Απέφυγε χρήση τρένου κλειστής διαδρομής";
 "rendering_attr_highway_class_track_name" = "Αγροτική Οδός";
-"rendering_attr_showMtbRoutes_name" = "Εμφάνιση μονοπατιών ποδηλασίας βουνού";
+"rendering_attr_showMtbRoutes_name" = "Διαδρομές ποδηλασίας βουνού";
 "rendering_attr_highway_class_service_name" = "Εξυπηρέτησης";
 "rendering_attr_surface_salt_name" = "Αλάτι";
 "rendering_attr_surface_sett_name" = "Πλακόστρωση";
@@ -666,7 +666,7 @@
 "routing_attr_no_new_routing_description" = "Να μην χρησιμοποιηθούν οι κανόνες δρομολόγησης που εισήχθησαν στην έκδοση 1.9.";
 "routing_attr_avoid_ferry_name" = "Χωρίς πορθμεία";
 "rendering_value_defaultTranslucentCyan_name" = "Προεπιλογή (ημιδιαφανές κυανό)";
-"rendering_attr_hikingRoutesOSMC_name" = "Επίστρωμα συμβόλων πεζοπορίας";
+"rendering_attr_hikingRoutesOSMC_name" = "Διαδρομές πεζοπορίας";
 "rendering_attr_depthContours_name" = "Ναυτικές ισοβαθείς καμπύλες";
 "rendering_value_pedestrian_name" = "Πεζοπόρος";
 "rendering_attr_moreDetailed_name" = "Περισσότερες λεπτομέρειες";
@@ -687,7 +687,7 @@
 "routeInfo_tracktype_name" = "Στερεότητα επιφανείας";
 "rendering_value_darkyellow_name" = "Σκούρο κίτρινο";
 "rendering_attr_currentTrackColor_name" = "χρώμα GPX";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Χρώμα ανάλογα με τη σχέση του δικτύου";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Σχέση δικτύου";
 "routing_attr_relief_smoothness_factor_hills_name" = "Λοφώδης";
 "rendering_value_white_name" = "Λευκό";
 "rendering_attr_shareTaxiRoutes_name" = "Διαδρομές αγοραίου";
@@ -769,7 +769,7 @@
 "rendering_attr_surface_stone_name" = "Πέτρα";
 "rendering_value_germanRoadAtlas_name" = "Γερμανικός άτλαντας δρόμων";
 "rendering_attr_ice_road_name" = "Παγωμένος δρόμος";
-"rendering_attr_showCycleRoutes_name" = "Εμφάνιση διαδρομών ποδηλάτων";
+"rendering_attr_showCycleRoutes_name" = "Διαδρομές ποδηλάτων";
 "rendering_attr_highway_class_steps_name" = "Σκάλες";
 "rendering_value_purple_name" = "Μοβ";
 "routing_attr_avoid_subway_name" = "Χωρίς μετρό";
@@ -1026,7 +1026,7 @@
 "help_osmand_live" = "Συνδρομή - OsmAnd Live";
 "shared_string_terrain" = "Έδαφος";
 "total" = "Σύνολο";
-"arrived_at_destination" = "Φτάσατε.";
+"arrived_at_destination" = "Φτάσατε";
 "search_activity" = "Αναζήτηση";
 "gpx_parse_error" = "Το GPX OsmAnd δεν είναι σωστά σχηματισμένο, επικοινωνήστε με την ομάδα υποστήριξης για παραπέρα διερεύνηση.";
 "res_source_sqlite" = "Αρχείο SQLiteDB";
@@ -1068,7 +1068,7 @@
 "configure_profile" = "Ρυθμίστε το προφίλ";
 "avoid_road" = "Αποφυγή δρόμου";
 "public_transport_empty_warning_descr" = "Δοκιμάστε να αλλάξετε τις ρυθμίσεις.";
-"vessel_width_limit_description" = "Ορίστε πλάτος σκάφους για αποφυγή στενών γεφυρών";
+"vessel_width_limit_description" = "Ορίστε πλάτος σκάφους για αποφυγή στενών γεφυρών.";
 "help_purchases" = "Αγορές OsmAnd";
 "selected_profile" = "Επιλεγμένη κατατομή (προφίλ)";
 "replace_all_desc" = "Τα τρέχοντα αντικείμενα θα αντικατασταθούν με αντικείμενα από το αρχείο";
@@ -1092,7 +1092,7 @@
 "select_distance_for_recalculation" = "Επιλέξτε την απόσταση μετά την οποία η διαδρομή θα επανυπολογιστεί.";
 "shared_string_finish" = "Τερματισμός";
 "route_recalculation_descr" = "Η διαδρομή θα επανυπολογιστεί εάν η απόσταση από τη διαδρομή στην τρέχουσα θέση είναι μεγαλύτερη από την επιλεγμένη τιμή.";
-"import_complete_description" = "Εισήχθησαν όλα τα δεδομένα από το %@, μπορείτε να χρησιμοποιήσετε τα παρακάτω πλήκτρα για να ανοίξετε το απαιτούμενο τμήμα της εφαρμογής για να το διαχειριστείτε.";
+"import_complete_description" = "Εισήχθησαν όλα τα δεδομένα από το %@, μπορείτε να χρησιμοποιήσετε τα παρακάτω πλήκτρα για να ανοίξετε το απαιτούμενο τμήμα της εφαρμογής για να το διαχειριστείτε";
 "region_antarctica" = "Ανταρκτική";
 "ui_customization_descr" = "Στοιχεία σχεδιαστή, μενού περιβάλλοντος";
 "base_profile_descr_aircraft" = "Αεροπλάνο, ανεμοπορία";
@@ -1106,7 +1106,7 @@
 "public_transport_menu" = "Μεταφορές";
 "exit_at" = "Έξοδος στο";
 "quick_action_map_source_title" = "Πάροχοι χάρτη";
-"profile_prefs_reset_successful" = "Όλες οι ρυθμίσεις κατατομών (προφίλ) επαναφέρθηκαν στην προεπιλογή.";
+"profile_prefs_reset_successful" = "Όλες οι ρυθμίσεις κατατομών (προφίλ) επαναφέρθηκαν στην προεπιλογή";
 "shared_string_quick_actions" = "Ταχείες ενέργειες";
 "reset_to_default" = "Επαναφορά προεπιλογών";
 "select_icon" = "Επιλογή εικονιδίου";
@@ -1155,7 +1155,6 @@
 "osmand_live_server_date" = "Τελευταία ενημέρωση διακομιστή: %@";
 "osmand_live_reports" = "Αναφορές";
 "sort_by" = "Ταξινόμηση";
-
 "address_search" = "Αναζήτηση διεύθυνσης";
 "track_save" = "Αποθήκευση τρέχοντος ίχνους";
 "favorite_friends_category" = "Φίλοι";
@@ -1226,12 +1225,10 @@
 "some_articles_may_not_available_in_lang" = "Μερικά άρθρα της Wikipedia μπορεί να μην είναι διαθέσιμα στη γλώσσα σας.";
 "added_profiles" = "Κατατομές (προφίλ) που προστέθηκαν";
 "navigate_point_easting" = "προς Ανατολάς";
-"suggested_maps_descr" = "Αυτοί οι χάρτες απαιτούνται για το πρόσθετο.";
+"suggested_maps_descr" = "Αυτοί οι χάρτες απαιτούνται για το πρόσθετο";
 "added_profiles_descr" = "Οι κατατομές (προφίλ) που προστέθηκαν από το πρόσθετο";
 "product_desc_ext_mapillary" = "Διαδικτυακές φωτογραφίες δρόμου για όλους. Ανακαλύψτε θέσεις, συνεργαστείτε, αποτυπώστε τον κόσμο.";
-"route_between_points_warning_desc" = "Για να χρησιμοποιήσετε αυτήν την επιλογή το OsmAnd χρειάζεται να προσκολλήσει το ίχνος σας στους δρόμους του χάρτη.
-\n
-\nΣτο επόμενο βήμα θα χρειαστείτε να επιλέξετε κατατομή (προφίλ) πλοήγησης για να εντοπίσετε τους επιτρεπόμενους δρόμους και την απόσταση κατωφλίου για να προσεγγίσετε το ίχνος σας με τους δρόμους.";
+"route_between_points_warning_desc" = "Στη συνέχεια, μεταφέρετε το ίχνος σας στον πλησιέστερο επιτρεπόμενο δρόμο με ένα από τα προφίλ πλοήγησής σας για να χρησιμοποιήσετε αυτήν την επιλογή.";
 "gpxup_private" = "Ιδιωτικό";
 "context_menu_item_edit_waypoint" = "Επεξεργασία σημείου διαδρομής GPX";
 "threshold_distance" = "Απόσταση κατωφλίου";
@@ -1239,3 +1236,45 @@
 "shared_string_navigation" = "Πλοήγηση";
 "shared_string_turn_off" = "Απενεργοποίηση";
 "suggested_maps" = "Προτεινόμενοι χάρτες";
+"gpx_route_time" = "Χρόνος διαδρομής";
+"turn_on_plugin" = "Ενεργοποιήση πρόσθετου";
+"routing_attr_avoid_low_emission_zone_name" = "Αποφυγή ζωνών χαμηλής εκπομπής ρύπων";
+"routing_attr_avoid_low_emission_zone_description" = "Αποφεύγει τις ζώνες χαμηλής εκπομπής ρύπων";
+"routing_attr_avoid_tunnels_name" = "Καθόλου σήραγγες";
+"routing_attr_avoid_tunnels_description" = "Αποφεύγει τις σήραγγες";
+"sqlitedb_import_already_exists" = "Το καθορισμένο sqlitedb αρχείο υπάρχει ήδη. Παρακαλώ επιλέξτε ενέργεια.";
+"sett_lang_trans" = "Μεταγραμματισμός";
+"gpx_navigation" = "Ακολούθα το ίχνος";
+"nothing_found" = "Δεν βρέθηκε τίποτα: %@";
+"gpx_points" = "Σημεία";
+"gpx_export_title" = "Εξαγωγή ίχνους";
+"gpx_max_speed" = "Μέγιστη ταχύτητα";
+"not_available_profile_name" = "Υπάρχει ήδη προφίλ με αυτο το όνομα.";
+"est_travel_time" = "Εκτιμώμενος χρόνος ταξιδιού";
+"show_region_on_map_desc" = "Ο χάρτης %@ ελήφθη. Πηγαίντε στον χάρτη για να αρχίσετε να τον χρησιμοποιείτε.";
+"gpx_edit_mode" = "Λειτουργία επεξεργασίας";
+"delete_tracks_bottom_sheet_title" = "Διαγραφή ιχνών;";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d ίχνη;";
+"restore_all_purchases" = "Επαναφορά όλων των αγορών";
+"calculating_progress" = "Υπολογισμός...";
+"plugin_popup_nautical_title" = "Λήψη ναυτικών χαρτών";
+"obf_import_already_exists" = "Υπάρχει ήδη αρχείο με αυτό το όνομα. Παρακαλώ επιλέξτε μια ενέργεια.";
+"show_region_on_map_go" = "Πηγαίντε στον χάρτη";
+"number_of_tiles" = "Αριθμός πλακιδίων";
+"gpx_import_already_exists_short" = "Το συγκεκριμένο αρχείο ίχνους υπάρχει ήδη στη λίστα.";
+"gpx_no_tracks" = "Δεν υπάρχουν ίχνη";
+"gpx_dir_arrows" = "Βέλη κατεύθυνσης";
+"obf_import_already_exists_short" = "Υπάρχει ήδη αρχείο με αυτό το όνομα.";
+"go_to_downloads" = "Πηγαίντε στις λήψεις";
+"no_internet_avail" = "Δεν υπάρχει διαθέσιμο διαδίκτυο";
+"no_statistics" = "Δεν υπάρχουν στατιστικά";
+"plugin_popup_osm_editing_title" = "Ενεργοποιήση επεξεργασίας OpenStreetMap";
+"plugin_popup_srtm_title" = "Λήψη ισοϋψών καμπυλών";
+"gpx_cancel_route_q" = "Θέλετε να ακυρώσετε αυτήν τη διαδρομή;";
+"gpx_rename_q" = "Μετονομασία ίχνους";
+"no_other_translations" = "Δεν υπάρχουν άλλες μεταφράσεις";
+"no_internet_avail_desc_first" = "Παρακαλώ ενεργοποιήστε τη σύνδεση στο Διαδίκτυο για λήψη της λίστας των χαρτών";
+"gpx_distance_points" = "Απόσταση (σημεία)";
+"months_short" = "Μήνς";
+"lang_pnb" = "Πουντζάμπι";
+"lang_zh_hk" = "Κινέζικα (Χονγκ Κονγκ)";

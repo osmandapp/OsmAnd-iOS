@@ -29,7 +29,6 @@
 #import "OADestination.h"
 #import "OAFavoriteItem.h"
 #import "OADestinationItem.h"
-#import "PXAlertView.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 

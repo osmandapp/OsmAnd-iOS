@@ -162,7 +162,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.mapViewController runWithRenderSync:^{
-            _resourcesManager->setBandOpacityMap([_weatherHelper getBandOpacityMap]);
+            _resourcesManager->setBandSettings([_weatherHelper getBandSettings]);
             [self updateWeatherLayer];
         }];
     });

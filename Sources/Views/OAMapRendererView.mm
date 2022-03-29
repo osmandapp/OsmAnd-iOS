@@ -47,7 +47,6 @@
     
     OsmAnd::PointI _viewSize;
     
-    std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
     std::shared_ptr<OsmAnd::MapAnimator> _animator;
     
     CGRect prevBounds;

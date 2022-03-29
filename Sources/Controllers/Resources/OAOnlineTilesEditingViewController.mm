@@ -963,12 +963,12 @@
 
 #pragma mark - OACustomPickerTableViewCellDelegate
 
-- (void)zoomChanged:(NSString *)zoom tag: (NSInteger)pickerTag
+- (void)customPickerValueChanged:(NSString *)value tag: (NSInteger)pickerTag
 {
     if (pickerTag == 1)
-        _minZoom = [zoom intValue];
+        _minZoom = [value intValue];
     else if (pickerTag == 2)
-        _maxZoom = [zoom intValue];
+        _maxZoom = [value intValue];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
 }
 

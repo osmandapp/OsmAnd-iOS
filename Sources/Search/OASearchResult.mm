@@ -5,6 +5,8 @@
 //  Created by Alexey Kulish on 11/01/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+//  OsmAnd-java/src/net/osmand/search/core/SearchResult.java
+//  git revision 5bcaa01259c937fa29741117b23f89776a1098c6
 
 #import "OASearchResult.h"
 #import "OASearchPhrase.h"
@@ -46,21 +48,11 @@
 - (double) getSumPhraseMatchWeight
 {
     // if result is a complete match in the search we prioritize it higher
-    NSMutableArray<NSString *> *searchPhraseNames = [self getSearchPhraseNames];
-    BOOL allWordsMatched = [self allWordsMatched:[OASearchPhrase splitWords:_localeName ws:[NSMutableArray array]] searchPhraseNames: searchPhraseNames];
-    if (_otherNames != nil && !allWordsMatched)
-    {
-        for (NSString *otherName : _otherNames)
-        {
-            allWordsMatched = [self allWordsMatched:[OASearchPhrase splitWords:otherName ws:[NSMutableArray array]] searchPhraseNames: searchPhraseNames];
-            if (allWordsMatched)
-                break;
-        }
-    }
+    BOOL allWordsMatched = [self allWordsMatched:_localeName] || [self checkOtherNames];
     if (_objectType == POI_TYPE)
         allWordsMatched = NO;
     
-    double res = allWordsMatched ? [OAObjectType getTypeWeight:_objectType] * 10 : [OAObjectType getTypeWeight: UNDEFINED];
+    double res = allWordsMatched ? [OAObjectType getTypeWeight:_objectType] * 10 : [OAObjectType getTypeWeight:_objectType];
     
     if ([_requiredSearchPhrase getUnselectedPoiType])
         // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
@@ -72,8 +64,23 @@
     return res;
 }
 
-- (BOOL) allWordsMatched:(NSMutableArray<NSString *> *)localResultNames searchPhraseNames:(NSMutableArray<NSString *> *)searchPhraseNames
+- (BOOL) checkOtherNames
 {
+    if (_otherNames != nil) {
+        for (NSString *otherName : _otherNames)
+        {
+            if ([self allWordsMatched:otherName])
+                return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL) allWordsMatched:(NSString *)name
+{
+    NSMutableArray<NSString *> * localResultNames = [OASearchPhrase splitWords:_localeName ws:[NSMutableArray array]];
+    NSMutableArray<NSString *> * searchPhraseNames = [self getSearchPhraseNames];
+    
     if ([searchPhraseNames count] == 0)
         return NO;
     int idxMatchedWord = -1;

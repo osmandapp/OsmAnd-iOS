@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 @class OARemoteFile, OALocalFile, OABackupError, OABackupInfo;
 
 @protocol OAOnDeleteFilesListener <NSObject>
@@ -37,19 +35,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@protocol OnUpdateSubscriptionListener <NSObject>
+@protocol OAOnUpdateSubscriptionListener <NSObject>
 
 - (void) onUpdateSubscription:(NSInteger)status message:(NSString *)message error:(NSString *)error;
 
 @end
 
-@protocol OnDownloadFileListListener <NSObject>
+@protocol OAOnDownloadFileListListener <NSObject>
 
 - (void) onDownloadFileList:(NSInteger)status message:(NSString *)message remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles;
 
 @end
 
-@protocol OnCollectLocalFilesListener <NSObject>
+@protocol OAOnCollectLocalFilesListener <NSObject>
 
 - (void) onFileCollected:(OALocalFile *)localFile;
     
@@ -57,13 +55,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@protocol OnGenerateBackupInfoListener <NSObject>
+@protocol OAOnGenerateBackupInfoListener <NSObject>
 
 - (void) onBackupInfoGenerated:(OABackupInfo *)backupInfo error:(NSString *)error;
 
 @end
 
-@protocol OnUploadFileListener <NSObject>
+@protocol OAOnUploadFileListener <NSObject>
 
 - (void) onFileUploadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work;
     
@@ -75,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@protocol OnDownloadFileListener <NSObject>
+@protocol OAOnDownloadFileListener <NSObject>
 
 - (void) onFileDownloadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work;
     
@@ -101,4 +99,3 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-NS_ASSUME_NONNULL_END

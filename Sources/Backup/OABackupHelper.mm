@@ -17,11 +17,17 @@
 #import "OABackupInfo.h"
 #import "OALocalFile.h"
 #import "OARemoteFile.h"
+#import "OABackupListeners.h"
+#import "OAIAPHelper.h"
+#import "OANetworkUtilities.h"
+#import "OABackupError.h"
 
 #import "OARegisterUserCommand.h"
 #import "OARegisterDeviceCommand.h"
 
 #import <RegexKitLite.h>
+
+#define kUpdateIdOperation @"Update order id"
 
 static NSString *INFO_EXT = @".info";
 
@@ -280,5 +286,102 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 {
     [_executor addOperation:[[OARegisterDeviceCommand alloc] initWithToken:token]];
 }
+
+- (void) checkSubscriptions:(id<OAOnUpdateSubscriptionListener>)listener
+{
+    BOOL subscriptionActive = NO;
+    OAIAPHelper *purchaseHelper = OAIAPHelper.sharedInstance;
+    
+//        OperationLog operationLog = new OperationLog("checkSubscriptions", DEBUG);
+//        String error = "";
+//        try {
+//            subscriptionActive = purchaseHelper.checkBackupSubscriptions();
+//        } catch (Exception e) {
+//            error = e.getMessage();
+//        }
+//        operationLog.finishOperation(subscriptionActive + " " + error);
+    if (subscriptionActive)
+    {
+        if (listener)
+            [listener onUpdateSubscription:STATUS_SUCCESS message:@"Subscriptions have been checked successfully" error:nil];
+    }
+    else
+    {
+        [self updateOrderId:listener];
+    }
+}
+
+- (void) updateOrderId:(id<OAOnUpdateSubscriptionListener>)listener
+{
+    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+    params[@"email"] = [self getEmail];
+    
+    NSString *orderId = [self getOrderId];
+    if (orderId.length == 0)
+    {
+        if (listener)
+        {
+            NSString *message = @"Order id is empty";
+            NSString *error = [NSString stringWithFormat:@"{\"error\":{\"errorCode\":%d,\"message\":\"%@\"}}", STATUS_NO_ORDER_ID_ERROR, message];
+            [listener onUpdateSubscription:STATUS_NO_ORDER_ID_ERROR message:message error:error];
+        }
+        return;
+    }
+    else
+    {
+        params[@"orderid"] = orderId;
+    }
+    NSString *iosId = [self getIosId];
+    if (iosId.length > 0)
+        params[@"deviceid"] = iosId;
+//    OperationLog operationLog = new OperationLog("updateOrderId", DEBUG);
+    [OANetworkUtilities sendRequestWithUrl:UPDATE_ORDER_ID_URL params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        int status;
+        NSString *message;
+        NSString *err;
+        NSString *result = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"";
+        if (((NSHTTPURLResponse *)response).statusCode != 200)
+        {
+            err = [NSString stringWithFormat:@"%@ failed: %@", kUpdateIdOperation, result];
+            OABackupError *backupError = [[OABackupError alloc] initWithError:err];
+            message = [NSString stringWithFormat:@"Update order id error: %@", backupError.toString];
+            status = STATUS_SERVER_ERROR;
+        }
+        else if (result.length > 0)
+        {
+            NSError *jsonParsingError = nil;
+            NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
+            if (!jsonParsingError)
+            {
+                if (resultJson[@"status"] && [@"ok" isEqualToString:resultJson[@"status"]])
+                {
+                    message = @"Order id have been updated successfully";
+                    status = STATUS_SUCCESS;
+                }
+                else
+                {
+                    message = @"Update order id error: unknown";
+                    status = STATUS_SERVER_ERROR;
+                }
+            }
+            else
+            {
+                message = @"Update order id error: json parsing";
+                status = STATUS_PARSE_JSON_ERROR;
+            }
+            
+        }
+        else
+        {
+            message = @"Update order id error: empty response";
+            status = STATUS_EMPTY_RESPONSE_ERROR;
+        }
+        if (listener)
+            [listener onUpdateSubscription:status message:message error:err];
+//        operationLog.finishOperation(status + " " + message);
+    }];
+}
+
+
 
 @end

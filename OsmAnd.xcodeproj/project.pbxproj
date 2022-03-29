@@ -1146,6 +1146,7 @@
 		DA03184222DF0E50008FC564 /* ic_custom_boat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */; };
 		DA03184422DF0E50008FC564 /* ic_custom_boat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */; };
 		DA08A0D2227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
+		DA0C2BDD27EF4B3800B7CC4F /* OAPrepareBackupTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */; };
 		DA0C641821245B4500B2A350 /* et_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641721245B4400B2A350 /* et_tts.js */; };
 		DA0C641B21245B6600B2A350 /* fa_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641A21245B6600B2A350 /* fa_tts.js */; };
 		DA0C641E21245B8F00B2A350 /* hi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641D21245B8F00B2A350 /* hi_tts.js */; };
@@ -4208,6 +4209,8 @@
 		DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_boat@2x.png"; path = "Resources/Icons/ic_custom_boat@2x.png"; sourceTree = "<group>"; };
 		DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_boat@3x.png"; path = "Resources/Icons/ic_custom_boat@3x.png"; sourceTree = "<group>"; };
 		DA08A0D1227096DA000A53BA /* offroad.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = offroad.render.xml; path = ../resources/rendering_styles/offroad.render.xml; sourceTree = "<group>"; };
+		DA0C2BDB27EF4B3800B7CC4F /* OAPrepareBackupTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPrepareBackupTask.h; sourceTree = "<group>"; };
+		DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPrepareBackupTask.m; sourceTree = "<group>"; };
 		DA0C641721245B4400B2A350 /* et_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = et_tts.js; path = ../resources/voice/et/et_tts.js; sourceTree = "<group>"; };
 		DA0C641A21245B6600B2A350 /* fa_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fa_tts.js; path = ../resources/voice/fa/fa_tts.js; sourceTree = "<group>"; };
 		DA0C641D21245B8F00B2A350 /* hi_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hi_tts.js; path = ../resources/voice/hi/hi_tts.js; sourceTree = "<group>"; };
@@ -12032,6 +12035,8 @@
 				DAA9F45027ECA5F6002BB1A8 /* OABackupError.m */,
 				DAA9F45227ECADF8002BB1A8 /* OABackupListeners.h */,
 				DAA9F45327ECADF8002BB1A8 /* OABackupListeners.m */,
+				DA0C2BDB27EF4B3800B7CC4F /* OAPrepareBackupTask.h */,
+				DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */,
 			);
 			path = Backup;
 			sourceTree = "<group>";
@@ -14392,6 +14397,7 @@
 				DA5A812F26C563A700F274C7 /* OAOsmNotesMapLayerProvider.mm in Sources */,
 				DA5A817D26C563A700F274C7 /* OAMapSourceAction.mm in Sources */,
 				DA5A82F626C563A800F274C7 /* OALabelCollectionViewCell.m in Sources */,
+				DA0C2BDD27EF4B3800B7CC4F /* OAPrepareBackupTask.m in Sources */,
 				DA5A849526C563A900F274C7 /* OARoutePlanningHudViewController.mm in Sources */,
 				DA5A849C26C563A900F274C7 /* OAMeasurementModeCommand.mm in Sources */,
 				DA5A84C726C563A900F274C7 /* OAOsmEditActionsViewController.mm in Sources */,
@@ -15407,7 +15413,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.2.0;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -15464,7 +15470,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.2.0;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

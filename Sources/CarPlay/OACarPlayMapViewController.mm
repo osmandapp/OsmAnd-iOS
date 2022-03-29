@@ -66,7 +66,7 @@
     {
         BOOL leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get]];
 
-        _mapVc.mapView.viewportXScale = leftSide ? 1.0 : 1.0 + widthOffset;
+        _mapVc.mapView.viewportXScale = leftSide ? widthOffset : 1.0 + widthOffset;
         _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
         
         _cachedWidthOffset = widthOffset;

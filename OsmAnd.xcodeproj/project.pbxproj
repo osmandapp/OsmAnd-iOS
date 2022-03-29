@@ -6982,6 +6982,13 @@
 			path = GPXListDeletingBottomSheet;
 			sourceTree = "<group>";
 		};
+		32C21CC227E22A7300DE4266 /* Cloud */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cloud;
+			sourceTree = "<group>";
+		};
 		3AC639A61A1CF54F001D5E57 /* IntroImages */ = {
 			isa = PBXGroup;
 			children = (
@@ -9637,7 +9644,11 @@
 		DA5A7ADE26C563A100F274C7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
 				B247453027E35B1D00C18C3F /* Cloud */,
+=======
+				32C21CC227E22A7300DE4266 /* Cloud */,
+>>>>>>> 4c5fad09d57ec8d3b3cb179dd0b5331f3ba7a4ba
 				DA5A7FE626C563A500F274C7 /* AlertView */,
 				DA5A7F9526C563A500F274C7 /* BottomSheet */,
 				DA5A7BAA26C563A100F274C7 /* Cells */,

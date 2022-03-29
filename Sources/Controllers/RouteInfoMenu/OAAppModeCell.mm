@@ -123,13 +123,17 @@
 
 - (void) updateSelection
 {
-    for (UIButton *btn in _modeButtons)
+    NSInteger modeIndex = [self getAppModeIndex:_selectedMode];
+    if (modeIndex != NSNotFound && _modeButtons.count > modeIndex)
     {
-        NSInteger modeIndex = [self getAppModeIndex:_selectedMode];
-        if (modeIndex != NSNotFound)
+        NSArray<OAApplicationMode *> * appModes = [OAApplicationMode values];
+        for (UIButton *btn in _modeButtons)
         {
-            btn.tintColor = UIColorFromRGB(OAApplicationMode.values[modeIndex].getIconColor);
-            btn.backgroundColor = modeIndex == btn.tag ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
+            if (appModes.count > btn.tag)
+            {
+                btn.tintColor = UIColorFromRGB([appModes[btn.tag] getIconColor]);
+                btn.backgroundColor = modeIndex == btn.tag ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
+            }
         }
     }
 }

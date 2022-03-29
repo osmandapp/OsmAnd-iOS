@@ -12,6 +12,11 @@
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 
+#define kContourLines @"contourLines"
+#define kTempContourLines @"weatherTempContours"
+#define kPressureContourLines @"weatherPressureContours"
+
+
 @implementation OAMapSettingsCategoryScreen
 {
     OsmAndAppInstance _app;
@@ -69,17 +74,9 @@
 
     if ([categoryName isEqual:@"details"])
     {
-        NSMutableArray<OAMapStyleParameter *> *withoutContoursLines;
-        withoutContoursLines = [[_styleSettings getParameters:categoryName] mutableCopy];
-        int i = 0;
-        for (OAMapStyleParameter *p in withoutContoursLines)
-        {
-            if ([p.name isEqual:@"contourLines"])
-                break;
-            i++;
-        }
-        [withoutContoursLines removeObjectAtIndex:(i)];
-        _parameters = [NSArray arrayWithArray:withoutContoursLines];
+        _parameters = [[_styleSettings getParameters:categoryName] filteredArrayUsingPredicate:
+                       [NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)",
+                        kContourLines, kTempContourLines, kPressureContourLines]];
     }
     else
     {

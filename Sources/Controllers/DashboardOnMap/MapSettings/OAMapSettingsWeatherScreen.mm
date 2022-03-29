@@ -25,8 +25,12 @@
 #import "OAAutoObserverProxy.h"
 #import "OAResourcesUIHelper.h"
 #import "OADateTimePickerTableViewCell.h"
-
+#import "OAMapStyleSettings.h"
 #import "OAMapLayers.h"
+#import "OACustomPickerTableViewCell.h"
+#import "OATimeTableViewCell.h"
+#import "OAWeatherBand.h"
+#import "OAWeatherHelper.h"
 
 #include <QSet>
 
@@ -39,33 +43,79 @@
 #define kWeather @"weather"
 #define kWeatherTemp @"weather_temp"
 #define kWeatherTempAlpha @"weather_temp_alpha"
+#define kWeatherTempUnit @"weather_temp_unit"
 #define kWeatherPressure @"weather_pressure"
 #define kWeatherPressureAlpha @"weather_pressure_alpha"
+#define kWeatherPressureUnit @"weather_pressure_unit"
 #define kWeatherWind @"weather_wind"
 #define kWeatherWindAlpha @"weather_wind_alpha"
+#define kWeatherWindUnit @"weather_wind_unit"
 #define kWeatherCloud @"weather_cloud"
 #define kWeatherCloudAlpha @"weather_cloud_alpha"
+#define kWeatherCloudUnit @"weather_cloud_unit"
 #define kWeatherPrecip @"weather_precip"
 #define kWeatherPrecipAlpha @"weather_precip_alpha"
+#define kWeatherPrecipUnit @"weather_precip_unit"
+
+#define kWeatherAlphas @"weather_alphas"
+#define kWeatherContourLines @"weather_contour_lines"
+#define kWeatherTempUnits @"weather_temp_units"
+#define kWeatherPressureUnits @"weather_pressure_units"
+#define kWeatherWindUnits @"weather_wind_units"
+#define kWeatherCloudUnits @"weather_cloud_units"
+#define kWeatherPrecipUnits @"weather_precip_units"
 
 #define kClearGeoCacheButton @"clear_geo_cache_button"
 #define kClearRasterCacheButton @"clear_reaster1_cache_button"
 
 #define kCellTypeTitleSlider @"title_slider_cell"
 #define kCellTypeSwitch @"switch_cell"
+#define kCellTypeValue @"valueCell"
 #define kCellTypeButton @"button_cell"
 #define kCellTypeIconSwitch @"icon_switch_cell"
 #define kCellTypeMap @"icon_text_desc_button_cell"
 #define kCellTypeDateTimePicker @"date_time_picker_cell"
+#define kCellTypeValuePicker @"value_picker_cell"
 
+#define kContourLines @"contourLines"
+#define kTempContourLines @"weatherTempContours"
+#define kPressureContourLines @"weatherPressureContours"
+
+#define kContourLinesTag 1000
+#define kWeatherTempUnitTag 1001
+#define kWeatherPressureUnitTag 1002
+#define kWeatherWindUnitTag 1003
+#define kWeatherCloudUnitTag 1004
+#define kWeatherPrecipUnitTag 1005
+
+@interface OAMapSettingsWeatherScreen() <OACustomPickerTableViewCellDelegate>
+
+@end
 
 @implementation OAMapSettingsWeatherScreen
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
-
+    OAMapStyleSettings *_styleSettings;
+    
     NSArray *_data;
 
+    BOOL _showTempUnits;
+    BOOL _showPressureUnits;
+    BOOL _showWindUnits;
+    BOOL _showCloudUnits;
+    BOOL _showPrecipUnits;
+    NSInteger _tempUnitsRowIndex;
+    NSInteger _pressureUnitsRowIndex;
+    NSInteger _windUnitsRowIndex;
+    NSInteger _cloudUnitsRowIndex;
+    NSInteger _precipUnitsRowIndex;
+    NSInteger _unitsSectionIndex;
+    BOOL _showAlphas;
+    NSInteger _alphasSectionIndex;
+    BOOL _showContourLinesPicker;
+    NSArray<NSString *> *_countourLinesPickerValues;
+    NSInteger _countourLinesSectionIndex;
     NSInteger _buttonsSectionIndex;
     NSInteger _clearGeoCacheButtonIndex;
     NSInteger _clearRasterCacheButtonIndex;
@@ -83,6 +133,7 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
+        _styleSettings = [OAMapStyleSettings sharedInstance];
         
         title = OALocalizedString(@"map_settings_weather");
         settingsScreen = EMapSettingsScreenWeather;
@@ -90,6 +141,27 @@
         vwController = viewController;
         tblView = tableView;
         
+        _showTempUnits = NO;
+        _showPressureUnits = NO;
+        _showWindUnits = NO;
+        _showCloudUnits = NO;
+        _showPrecipUnits = NO;
+        _tempUnitsRowIndex = -1;
+        _pressureUnitsRowIndex = -1;
+        _windUnitsRowIndex = -1;
+        _cloudUnitsRowIndex = -1;
+        _precipUnitsRowIndex = -1;
+        _unitsSectionIndex = -1;
+        
+        _showAlphas = NO;
+        _alphasSectionIndex = -1;
+
+        _showContourLinesPicker = NO;
+        _countourLinesPickerValues = @[OALocalizedString(@"shared_string_none"),
+                                       OALocalizedString(@"map_settings_weather_temp"),
+                                       OALocalizedString(@"map_settings_weather_pressure")];
+
+        _countourLinesSectionIndex = -1;
         _buttonsSectionIndex = -1;
         _clearGeoCacheButtonIndex = -1;
         _clearRasterCacheButtonIndex = -1;
@@ -163,35 +235,47 @@
     
     NSArray *weatherLayerAlphas = @[
         @{
-            @"type"  : kCellTypeTitleSlider,
-            @"name"  : kWeatherTempAlpha,
-            @"title" : OALocalizedString(@"map_settings_weather_temp"),
-            @"value" : @(_app.data.weatherTempAlpha)
-        },
-        @{
-            @"type"  : kCellTypeTitleSlider,
-            @"name"  : kWeatherPressureAlpha,
-            @"title" : OALocalizedString(@"map_settings_weather_pressure"),
-            @"value" : @(_app.data.weatherPressureAlpha)
-        },
-        @{
-            @"type"  : kCellTypeTitleSlider,
-            @"name"  : kWeatherWindAlpha,
-            @"title" : OALocalizedString(@"map_settings_weather_wind"),
-            @"value" : @(_app.data.weatherWindAlpha)
-        },
-        @{
-            @"type"  : kCellTypeTitleSlider,
-            @"name"  : kWeatherCloudAlpha,
-            @"title" : OALocalizedString(@"map_settings_weather_cloud"),
-            @"value" : @(_app.data.weatherCloudAlpha)
-        },
-        @{
-            @"type"  : kCellTypeTitleSlider,
-            @"name"  : kWeatherPrecipAlpha,
-            @"title" : OALocalizedString(@"map_settings_weather_precip"),
-            @"value" : @(_app.data.weatherPrecipAlpha)
+            @"type"  : kCellTypeValue,
+            @"name"  : kWeatherAlphas,
+            @"title" : @"Layers transparency",
+            @"value" : _showAlphas ? @"Hide" : @"Show"
         }];
+    
+    if (_showAlphas)
+    {
+        weatherLayerAlphas = [weatherLayerAlphas arrayByAddingObjectsFromArray:@[
+            @{
+                @"type"  : kCellTypeTitleSlider,
+                @"name"  : kWeatherTempAlpha,
+                @"title" : OALocalizedString(@"map_settings_weather_temp"),
+                @"value" : @(_app.data.weatherTempAlpha)
+            },
+            @{
+                @"type"  : kCellTypeTitleSlider,
+                @"name"  : kWeatherPressureAlpha,
+                @"title" : OALocalizedString(@"map_settings_weather_pressure"),
+                @"value" : @(_app.data.weatherPressureAlpha)
+            },
+            @{
+                @"type"  : kCellTypeTitleSlider,
+                @"name"  : kWeatherWindAlpha,
+                @"title" : OALocalizedString(@"map_settings_weather_wind"),
+                @"value" : @(_app.data.weatherWindAlpha)
+            },
+            @{
+                @"type"  : kCellTypeTitleSlider,
+                @"name"  : kWeatherCloudAlpha,
+                @"title" : OALocalizedString(@"map_settings_weather_cloud"),
+                @"value" : @(_app.data.weatherCloudAlpha)
+            },
+            @{
+                @"type"  : kCellTypeTitleSlider,
+                @"name"  : kWeatherPrecipAlpha,
+                @"title" : OALocalizedString(@"map_settings_weather_precip"),
+                @"value" : @(_app.data.weatherPrecipAlpha)
+            }]
+        ];
+    }
     
     NSArray *weatherLayers = @[
         @{
@@ -225,6 +309,33 @@
             @"value" : @(_app.data.weatherPrecip)
         }];
 
+    NSString *selectedContourLinesName = OALocalizedString(@"shared_string_none");
+    OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:kTempContourLines];
+    OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:kPressureContourLines];
+    if ([tempContourLinesParam.value isEqualToString:@"true"])
+        selectedContourLinesName = OALocalizedString(@"map_settings_weather_temp");
+    else if ([pressureContourLinesParam.value isEqualToString:@"true"])
+        selectedContourLinesName = OALocalizedString(@"map_settings_weather_pressure");
+
+    NSArray *contourLines = @[
+        @{
+            @"type"  : kCellTypeValue,
+            @"name"  : kWeatherContourLines,
+            @"title" : OALocalizedString(@"map_settings_weather_isolines"),
+            @"value" : selectedContourLinesName
+        }];
+    
+    if (_showContourLinesPicker)
+    {
+        contourLines = [contourLines arrayByAddingObject:
+            @{
+                @"type" : kCellTypeValuePicker,
+                @"name" : kContourLines,
+                @"tag" : @(kContourLinesTag),
+                @"value" : _countourLinesPickerValues
+            }];
+    }
+    
     NSArray *buttons = @[
         @{
             @"type"  : kCellTypeButton,
@@ -241,7 +352,112 @@
                         [NSByteCountFormatter stringFromByteCount:_rasterDbSize countStyle:NSByteCountFormatterCountStyleFile]],
         }];
     
+    OAWeatherBand *tempBand = [OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE];
+    OAWeatherBand *pressureBand = [OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE];
+    OAWeatherBand *windBand = [OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED];
+    OAWeatherBand *cloudBand = [OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD];
+    OAWeatherBand *precipBand = [OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION];
+
+    NSArray *weatherTempUnits = @[
+        @{
+            @"type"  : kCellTypeValue,
+            @"name"  : kWeatherTempUnits,
+            @"title" : OALocalizedString(@"map_settings_weather_temp"),
+            @"value" : [tempBand getBandUnit]
+        }];
+    if (_showTempUnits)
+    {
+        weatherTempUnits = [weatherTempUnits arrayByAddingObject:
+            @{
+                @"type" : kCellTypeValuePicker,
+                @"name" : kWeatherTempUnit,
+                @"tag" : @(kWeatherTempUnitTag),
+                @"value" : [tempBand getAvailableBandUnits],
+                @"selected" : [tempBand getBandUnit]
+            }];
+    }
+    NSArray *weatherPressureUnits = @[
+        @{
+            @"type"  : kCellTypeValue,
+            @"name"  : kWeatherPressureUnits,
+            @"title" : OALocalizedString(@"map_settings_weather_pressure"),
+            @"value" : [pressureBand getBandUnit],
+        }];
+    if (_showPressureUnits)
+    {
+        weatherPressureUnits = [weatherPressureUnits arrayByAddingObject:
+            @{
+                @"type" : kCellTypeValuePicker,
+                @"name" : kWeatherPressureUnit,
+                @"tag" : @(kWeatherPressureUnitTag),
+                @"value" : [pressureBand getAvailableBandUnits],
+                @"selected" : [pressureBand getBandUnit]
+            }];
+    }
+    NSArray *weatherWindUnits = @[
+        @{
+            @"type"  : kCellTypeValue,
+            @"name"  : kWeatherWindUnits,
+            @"title" : OALocalizedString(@"map_settings_weather_wind"),
+            @"value" : [windBand getBandUnit]
+        }];
+    if (_showWindUnits)
+    {
+        weatherWindUnits = [weatherWindUnits arrayByAddingObject:
+            @{
+                @"type" : kCellTypeValuePicker,
+                @"name" : kWeatherWindUnit,
+                @"tag" : @(kWeatherWindUnitTag),
+                @"value" : [windBand getAvailableBandUnits],
+                @"selected" : [windBand getBandUnit]
+            }];
+    }
+    NSArray *weatherCloudUnits = @[
+        @{
+            @"type"  : kCellTypeValue,
+            @"name"  : kWeatherCloudUnits,
+            @"title" : OALocalizedString(@"map_settings_weather_cloud"),
+            @"value" : [cloudBand getBandUnit]
+        }];
+    if (_showCloudUnits)
+    {
+        weatherCloudUnits = [weatherCloudUnits arrayByAddingObject:
+            @{
+                @"type" : kCellTypeValuePicker,
+                @"name" : kWeatherCloudUnit,
+                @"tag" : @(kWeatherCloudUnitTag),
+                @"value" : [cloudBand getAvailableBandUnits],
+                @"selected" : [cloudBand getBandUnit]
+            }];
+    }
+    NSArray *weatherPrecipUnits = @[
+        @{
+            @"type"  : kCellTypeValue,
+            @"name"  : kWeatherPrecipUnits,
+            @"title" : OALocalizedString(@"map_settings_weather_precip"),
+            @"value" : [precipBand getBandUnit]
+        }];
+    if (_showPrecipUnits)
+    {
+        weatherPrecipUnits = [weatherPrecipUnits arrayByAddingObject:
+            @{
+                @"type" : kCellTypeValuePicker,
+                @"name" : kWeatherPrecipUnit,
+                @"tag" : @(kWeatherPrecipUnitTag),
+                @"value" : [precipBand getAvailableBandUnits],
+                @"selected" : [precipBand getBandUnit]
+            }];
+    }
+    
     NSMutableArray *data = [NSMutableArray array];
+    _alphasSectionIndex = -1;
+    _countourLinesSectionIndex = -1;
+    _tempUnitsRowIndex = -1;
+    _pressureUnitsRowIndex = -1;
+    _windUnitsRowIndex = -1;
+    _cloudUnitsRowIndex = -1;
+    _precipUnitsRowIndex = -1;
+    _unitsSectionIndex = -1;
     _buttonsSectionIndex = -1;
     _clearGeoCacheButtonIndex = -1;
     _clearRasterCacheButtonIndex = -1;
@@ -251,7 +467,25 @@
     {
         [data addObject:datePicker];
         [data addObject:weatherLayerAlphas];
+        _alphasSectionIndex = data.count - 1;
         [data addObject:weatherLayers];
+        [data addObject:contourLines];
+        _countourLinesSectionIndex = data.count - 1;
+        
+        NSMutableArray *unitsArr = [NSMutableArray array];
+        _tempUnitsRowIndex = unitsArr.count;
+        [unitsArr addObjectsFromArray:weatherTempUnits];
+        _pressureUnitsRowIndex = unitsArr.count;
+        [unitsArr addObjectsFromArray:weatherPressureUnits];
+        _windUnitsRowIndex = unitsArr.count;
+        [unitsArr addObjectsFromArray:weatherWindUnits];
+        _cloudUnitsRowIndex = unitsArr.count;
+        [unitsArr addObjectsFromArray:weatherCloudUnits];
+        _precipUnitsRowIndex = unitsArr.count;
+        [unitsArr addObjectsFromArray:weatherPrecipUnits];
+
+        [data addObject:unitsArr];
+        _unitsSectionIndex = data.count - 1;
         
         [data addObject:buttons];
         for (int i = 0; i < buttons.count; i++)
@@ -402,6 +636,56 @@
         }
         return cell;
     }
+    else if ([item[@"type"] isEqualToString:kCellTypeValue])
+    {
+        OATimeTableViewCell* cell;
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            cell.lbTime.textColor = UIColorFromRGB(color_text_footer);
+        }
+        cell.lbTitle.text = item[@"title"];
+        cell.lbTime.text = item[@"value"];
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeValuePicker])
+    {
+        OACustomPickerTableViewCell* cell;
+        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomPickerTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if ([item[@"name"] isEqualToString:kContourLines])
+        {
+            NSString *selectedContourLinesName = OALocalizedString(@"shared_string_none");
+            OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:kTempContourLines];
+            OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:kPressureContourLines];
+            if ([tempContourLinesParam.value isEqualToString:@"true"])
+                selectedContourLinesName = OALocalizedString(@"map_settings_weather_temp");
+            else if ([pressureContourLinesParam.value isEqualToString:@"true"])
+                selectedContourLinesName = OALocalizedString(@"map_settings_weather_pressure");
+            
+            cell.dataArray = item[@"value"];
+            NSInteger index = [cell.dataArray indexOfObject:selectedContourLinesName];
+            if (index != NSNotFound)
+                [cell.picker selectRow:index inComponent:0 animated:NO];
+        }
+        else
+        {
+            cell.dataArray = item[@"value"];
+            NSInteger index = [cell.dataArray indexOfObject:item[@"selected"]];
+            if (index != NSNotFound)
+                [cell.picker selectRow:index inComponent:0 animated:NO];
+        }
+        cell.picker.tag = ((NSNumber *)item[@"tag"]).intValue;
+        cell.delegate = self;
+        return cell;
+    }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])
     {
         OAButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
@@ -426,7 +710,140 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == _countourLinesSectionIndex || indexPath.section == _alphasSectionIndex || indexPath.section == _unitsSectionIndex)
+        return indexPath;
+    
     return nil;
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self onItemClicked:indexPath];
+    [tblView deselectRowAtIndexPath:indexPath animated:NO];
+}
+
+- (void) onItemClicked:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:kCellTypeValue])
+    {
+        if ([item[@"name"] isEqualToString:kWeatherAlphas])
+        {
+            _showAlphas = !_showAlphas;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tblView beginUpdates];
+                [self setupView];
+                [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+                NSMutableArray<NSIndexPath*> *indexPaths = [NSMutableArray array];
+                for (int i = 1; i <= 5; i++)
+                    [indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row + i inSection:indexPath.section]];
+                
+                if (_showAlphas)
+                    [self.tblView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+                else
+                    [self.tblView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+
+                [self.tblView endUpdates];
+            });
+        }
+        else if ([item[@"name"] isEqualToString:kWeatherContourLines])
+        {
+            _showContourLinesPicker = !_showContourLinesPicker;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tblView beginUpdates];
+                [self setupView];
+                NSArray<NSIndexPath*> *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]];
+                if (_showContourLinesPicker)
+                    [self.tblView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+                else
+                    [self.tblView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+
+                [self.tblView endUpdates];
+            });
+        }
+        else if ([item[@"name"] isEqualToString:kWeatherTempUnits])
+        {
+            _showTempUnits = !_showTempUnits;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tblView beginUpdates];
+                [self setupView];
+                NSArray<NSIndexPath*> *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]];
+                if (_showTempUnits)
+                    [self.tblView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+                else
+                    [self.tblView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+
+                [self.tblView endUpdates];
+            });
+        }
+        else if ([item[@"name"] isEqualToString:kWeatherPressureUnits])
+        {
+            _showPressureUnits = !_showPressureUnits;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tblView beginUpdates];
+                [self setupView];
+                NSArray<NSIndexPath*> *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]];
+                if (_showPressureUnits)
+                    [self.tblView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+                else
+                    [self.tblView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+
+                [self.tblView endUpdates];
+            });
+        }
+        else if ([item[@"name"] isEqualToString:kWeatherWindUnits])
+        {
+            _showWindUnits = !_showWindUnits;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tblView beginUpdates];
+                [self setupView];
+                NSArray<NSIndexPath*> *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]];
+                if (_showWindUnits)
+                    [self.tblView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+                else
+                    [self.tblView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+
+                [self.tblView endUpdates];
+            });
+        }
+        else if ([item[@"name"] isEqualToString:kWeatherCloudUnits])
+        {
+            _showCloudUnits = !_showCloudUnits;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tblView beginUpdates];
+                [self setupView];
+                NSArray<NSIndexPath*> *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]];
+                if (_showCloudUnits)
+                    [self.tblView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+                else
+                    [self.tblView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+
+                [self.tblView endUpdates];
+            });
+        }
+        else if ([item[@"name"] isEqualToString:kWeatherPrecipUnits])
+        {
+            _showPrecipUnits = !_showPrecipUnits;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tblView beginUpdates];
+                [self setupView];
+                NSArray<NSIndexPath*> *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]];
+                if (_showPrecipUnits)
+                    [self.tblView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+                else
+                    [self.tblView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+
+                [self.tblView endUpdates];
+            });
+        }
+    }
 }
 
 - (void) dateTimePickerChanged:(id)sender
@@ -434,7 +851,6 @@
     UIDatePicker *picker = (UIDatePicker *)sender;
     if (picker)
         [OARootViewController.instance.mapPanel.mapViewController.mapLayers updateWeatherDate:picker.date];
-
 }
 
 - (void) turnWeatherOnOff:(id)sender
@@ -506,6 +922,100 @@
         [tblView beginUpdates];
         [self setupView];
         [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [tblView endUpdates];
+    }
+}
+
+#pragma mark - OACustomPickerTableViewCellDelegate
+
+- (void) customPickerValueChanged:(NSString *)value tag:(NSInteger)pickerTag
+{
+    NSInteger row = -1;
+    NSInteger section = -1;
+    BOOL forceUpdateSettings = NO;
+    if (pickerTag == kContourLinesTag)
+    {
+        row = 0;
+        section = _countourLinesSectionIndex;
+        
+        OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:kTempContourLines];
+        OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:kPressureContourLines];
+        if ([OALocalizedString(@"map_settings_weather_temp") isEqualToString:value])
+        {
+            tempContourLinesParam.value = @"true";
+            [_styleSettings save:tempContourLinesParam];
+            pressureContourLinesParam.value = @"false";
+            [_styleSettings save:pressureContourLinesParam];
+        }
+        else if ([OALocalizedString(@"map_settings_weather_pressure") isEqualToString:value])
+        {
+            tempContourLinesParam.value = @"false";
+            [_styleSettings save:tempContourLinesParam];
+            pressureContourLinesParam.value = @"true";
+            [_styleSettings save:pressureContourLinesParam];
+        }
+        else
+        {
+            tempContourLinesParam.value = @"false";
+            [_styleSettings save:tempContourLinesParam];
+            pressureContourLinesParam.value = @"false";
+            [_styleSettings save:pressureContourLinesParam];
+        }
+    }
+    else if (pickerTag == kWeatherTempUnitTag)
+    {
+        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE] setBandUnit:value])
+        {
+            forceUpdateSettings = YES;
+            row = _tempUnitsRowIndex;
+            section = _unitsSectionIndex;
+        }
+    }
+    else if (pickerTag == kWeatherPressureUnitTag)
+    {
+        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE] setBandUnit:value])
+        {
+            forceUpdateSettings = YES;
+            row = _pressureUnitsRowIndex;
+            section = _unitsSectionIndex;
+        }
+    }
+    else if (pickerTag == kWeatherWindUnitTag)
+    {
+        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED] setBandUnit:value])
+        {
+            forceUpdateSettings = YES;
+            row = _windUnitsRowIndex;
+            section = _unitsSectionIndex;
+        }
+    }
+    else if (pickerTag == kWeatherCloudUnitTag)
+    {
+        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD] setBandUnit:value])
+        {
+            forceUpdateSettings = YES;
+            row = _cloudUnitsRowIndex;
+            section = _unitsSectionIndex;
+        }
+    }
+    else if (pickerTag == kWeatherPrecipUnitTag)
+    {
+        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION] setBandUnit:value])
+        {
+            forceUpdateSettings = YES;
+            row = _precipUnitsRowIndex;
+            section = _unitsSectionIndex;
+        }
+    }
+
+    if (forceUpdateSettings)
+        _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
+
+    if (row != -1 && section != -1)
+    {
+        [tblView beginUpdates];
+        [self setupView];
+        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:section]] withRowAnimation:UITableViewRowAnimationFade];
         [tblView endUpdates];
     }
 }

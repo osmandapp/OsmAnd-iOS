@@ -125,7 +125,7 @@
 "res_banner_free_maps_title" = "Vous avez %d cartes gratuites !";
 "res_search_world" = "Rechercher dans le monde entier";
 "res_world_map" = "Carte du monde";
-"res_updates" = "Misesà jour";
+"res_updates" = "Mises à jour";
 "res_updates_avail" = "Mises à jour disponibles";
 "res_maps_inst" = "carte(s)";
 "res_deleting" = "Suppression…";
@@ -2366,3 +2366,12 @@
 "route_preferred_terrain_any" = "Le profil du terrain n'est pas pris en compte lors du choix de l'itinéraire.";
 "altitude" = "Altitude";
 "preferred_terrain" = "Terrain préféré";
+"routing_attr_avoid_low_emission_zone_name" = "Pas de zones à faibles émissions";
+"routing_attr_avoid_low_emission_zone_description" = "Éviter les zones à faibles émissions";
+"routing_attr_avoid_tunnels_name" = "Pas de tunnel";
+"routing_attr_avoid_tunnels_description" = "Évite les tunnels";
+"select_tracks" = "Sélectionner les traces";
+"selected_tracks_count" = "Traces - %d";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d traces ?";
+"delete_tracks_bottom_sheet_description_regular_part" = "Êtes-vous sûr de vouloir supprimer ";
+"delete_tracks_bottom_sheet_title" = "Supprimer les traces ?";

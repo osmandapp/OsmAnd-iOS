@@ -5,6 +5,8 @@
 //  Created by Alexey Kulish on 11/01/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+//  OsmAnd-java/src/net/osmand/search/core/SearchCoreFactory.java
+//  git revision 5bcaa01259c937fa29741117b23f89776a1098c6
 
 #import "OASearchCoreFactory.h"
 #import "OASearchPhrase.h"
@@ -538,9 +540,6 @@
                                           
                                           if (address->nativeName.startsWith("<"))
                                               return NO;
-                                          
-                                          if (![[phrase getUnknownWordToSearchBuildingNameMatcher] matches:[OASearchCoreFactory stripBraces:sr.localeName]])
-                                              sr.priorityDistance = 5;
                                           
                                           const auto& street = std::dynamic_pointer_cast<const OsmAnd::Street>(address);
                                           sr.object = [[OAStreet alloc] initWithStreet:street];

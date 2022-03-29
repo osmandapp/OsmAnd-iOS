@@ -53,7 +53,8 @@
     {
         // Try to import favorites
         favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(url.path));
-        [[NSFileManager defaultManager] removeItemAtPath:url.path error:nil];
+        if ([url.path hasPrefix:app.inboxPath])
+            [[NSFileManager defaultManager] removeItemAtPath:url.path error:nil];
         if (favoritesCollection)
             _handled = YES;
         

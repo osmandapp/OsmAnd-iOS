@@ -49,6 +49,9 @@
     self.doneButton.hidden = NO;
     self.doneButton.enabled = NO;
     _newGroupName = @"";
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void) setupColors
@@ -210,6 +213,35 @@
     _selectedColor = [OADefaultFavorite builtinColors][tag];
     [self generateData];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark - Keyboard Notifications
+
+- (void) keyboardWillShow:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    NSValue *keyboardBoundsValue = userInfo[UIKeyboardFrameEndUserInfoKey];
+    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
+
+    CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    UIEdgeInsets insets = [[self tableView] contentInset];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
+        [[self view] layoutIfNeeded];
+    } completion:nil];
+}
+
+- (void) keyboardWillHide:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    UIEdgeInsets insets = [[self tableView] contentInset];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
+        [[self view] layoutIfNeeded];
+    } completion:nil];
 }
 
 @end

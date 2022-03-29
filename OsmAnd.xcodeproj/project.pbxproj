@@ -348,10 +348,6 @@
 		3240977B27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */; };
 		3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */; };
 		3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */; };
-		3242E5F927E90EFE00F83673 /* OACloudAccountBaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3242E5F827E90DB700F83673 /* OACloudAccountBaseViewController.xib */; };
-		3242E5FC27E9EBF600F83673 /* OACloudAccountLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3242E5FB27E9EBF600F83673 /* OACloudAccountLoginViewController.m */; };
-		3242E5FF27EA79BC00F83673 /* OACloudAccountCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3242E5FE27EA79BC00F83673 /* OACloudAccountCreateViewController.m */; };
-		3242E60227EA837F00F83673 /* OACloudAccountVerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3242E60127EA837F00F83673 /* OACloudAccountVerificationViewController.m */; };
 		325A27372796CE6E0053F8BF /* ic_navbar_pencil@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325A27352796CE6D0053F8BF /* ic_navbar_pencil@3x.png */; };
 		325A27382796CE6E0053F8BF /* ic_navbar_pencil@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325A27362796CE6D0053F8BF /* ic_navbar_pencil@2x.png */; };
 		325B69FD26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */; };
@@ -415,7 +411,15 @@
 		32C91E5D25A86A5700FA6470 /* ic_custom_compass_widget@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */; };
 		32C91E5F25A86A5700FA6470 /* ic_custom_compass_widget@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */; };
 		32C91E6525A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */; };
-		32D1305927E3B33F00C0400C /* OACloudAccountBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D1305827E3B33F00C0400C /* OACloudAccountBaseViewController.m */; };
+		32D253AD27F336C100324717 /* OACloudAccountVerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A027F336BF00324717 /* OACloudAccountVerificationViewController.m */; };
+		32D253AE27F336C100324717 /* OACloudBackupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32D253A127F336BF00324717 /* OACloudBackupViewController.xib */; };
+		32D253AF27F336C100324717 /* OABaseCloudBackupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A227F336BF00324717 /* OABaseCloudBackupViewController.m */; };
+		32D253B027F336C200324717 /* OACloudAccountCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A327F336BF00324717 /* OACloudAccountCreateViewController.m */; };
+		32D253B127F336C200324717 /* OACloudAccountBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A427F336C000324717 /* OACloudAccountBaseViewController.m */; };
+		32D253B227F336C200324717 /* OACloudBackupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A527F336C000324717 /* OACloudBackupViewController.m */; };
+		32D253B327F336C200324717 /* OACloudAccountLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A927F336C100324717 /* OACloudAccountLoginViewController.m */; };
+		32D253B427F336C200324717 /* OACloudIntroductionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253AB27F336C100324717 /* OACloudIntroductionViewController.m */; };
+		32D253B527F336C200324717 /* OACloudAccountBaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32D253AC27F336C100324717 /* OACloudAccountBaseViewController.xib */; };
 		32E2A6E027206ACF00F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BE2507804400266047 /* ic_custom_logo_wikimedia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */; };
@@ -1124,16 +1128,12 @@
 		B0D61F02E8A3B7B2733E2C18 /* OATrackMenuHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D617376B44864C22144EAE /* OATrackMenuHudViewController.mm */; };
 		B247452E27E34B3600C18C3F /* ic_custom_restore@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B247452C27E34B3500C18C3F /* ic_custom_restore@3x.png */; };
 		B247452F27E34B3600C18C3F /* ic_custom_restore@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B247452D27E34B3500C18C3F /* ic_custom_restore@2x.png */; };
-		B247453527E35BB000C18C3F /* OACloudIntroductionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B247453427E35BB000C18C3F /* OACloudIntroductionViewController.m */; };
 		B247453827E35E9B00C18C3F /* OACloudIntroductionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B247453727E35E9B00C18C3F /* OACloudIntroductionHeaderView.m */; };
 		B247453E27E3A8D000C18C3F /* OACloudIntroductionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B247453D27E3A8D000C18C3F /* OACloudIntroductionHeaderView.xib */; };
 		B247454127E3AFE400C18C3F /* ic_custom_cloud_upload_colored_day_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B247453F27E3AFE200C18C3F /* ic_custom_cloud_upload_colored_day_big@3x.png */; };
 		B247454227E3AFE400C18C3F /* ic_custom_cloud_upload_colored_day_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B247454027E3AFE300C18C3F /* ic_custom_cloud_upload_colored_day_big@2x.png */; };
-		B247454527E4805A00C18C3F /* OABaseCloudBackupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B247454427E4805A00C18C3F /* OABaseCloudBackupViewController.m */; };
 		B247454827E4A8E300C18C3F /* ic_custom_read_from_file@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B247454627E4A8E200C18C3F /* ic_custom_read_from_file@3x.png */; };
 		B247454927E4A8E300C18C3F /* ic_custom_read_from_file@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B247454727E4A8E300C18C3F /* ic_custom_read_from_file@2x.png */; };
-		B247454D27E6381700C18C3F /* OACloudBackupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B247454B27E6381700C18C3F /* OACloudBackupViewController.m */; };
-		B247454E27E6381700C18C3F /* OACloudBackupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B247454C27E6381700C18C3F /* OACloudBackupViewController.xib */; };
 		B247455227E6424000C18C3F /* OALargeImageTitleDescrTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B247455027E6424000C18C3F /* OALargeImageTitleDescrTableViewCell.m */; };
 		B247455327E6424000C18C3F /* OALargeImageTitleDescrTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B247455127E6424000C18C3F /* OALargeImageTitleDescrTableViewCell.xib */; };
 		B247455727E6470A00C18C3F /* OATwoFilledButtonsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B247455527E6470900C18C3F /* OATwoFilledButtonsTableViewCell.m */; };
@@ -3332,13 +3332,6 @@
 		3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAGPXListDeletingBottomSheet.m; sourceTree = "<group>"; };
 		3242A46D26CB0F05001CA174 /* OACollapsableNearestPoiTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableNearestPoiTypeView.h; sourceTree = "<group>"; };
 		3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableNearestPoiTypeView.mm; sourceTree = "<group>"; };
-		3242E5F827E90DB700F83673 /* OACloudAccountBaseViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACloudAccountBaseViewController.xib; sourceTree = "<group>"; };
-		3242E5FA27E9EBE100F83673 /* OACloudAccountLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACloudAccountLoginViewController.h; sourceTree = "<group>"; };
-		3242E5FB27E9EBF600F83673 /* OACloudAccountLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACloudAccountLoginViewController.m; sourceTree = "<group>"; };
-		3242E5FD27EA79A300F83673 /* OACloudAccountCreateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACloudAccountCreateViewController.h; sourceTree = "<group>"; };
-		3242E5FE27EA79BC00F83673 /* OACloudAccountCreateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACloudAccountCreateViewController.m; sourceTree = "<group>"; };
-		3242E60027EA837100F83673 /* OACloudAccountVerificationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACloudAccountVerificationViewController.h; sourceTree = "<group>"; };
-		3242E60127EA837F00F83673 /* OACloudAccountVerificationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACloudAccountVerificationViewController.m; sourceTree = "<group>"; };
 		325A27352796CE6D0053F8BF /* ic_navbar_pencil@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_navbar_pencil@3x.png"; sourceTree = "<group>"; };
 		325A27362796CE6D0053F8BF /* ic_navbar_pencil@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_navbar_pencil@2x.png"; sourceTree = "<group>"; };
 		325B69FB26D828DC00D8B67C /* OAQuickSearchCoordinatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinatesViewController.h; sourceTree = "<group>"; };
@@ -3408,8 +3401,22 @@
 		32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@3x.png"; sourceTree = "<group>"; };
 		32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@2x.png"; sourceTree = "<group>"; };
 		32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget_hide@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget_hide@2x.png"; sourceTree = "<group>"; };
-		32D1305727E3B32B00C0400C /* OACloudAccountBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACloudAccountBaseViewController.h; sourceTree = "<group>"; };
-		32D1305827E3B33F00C0400C /* OACloudAccountBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACloudAccountBaseViewController.m; sourceTree = "<group>"; };
+		32D2539D27F336BE00324717 /* OACloudBackupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudBackupViewController.h; sourceTree = "<group>"; };
+		32D2539E27F336BF00324717 /* OACloudAccountLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudAccountLoginViewController.h; sourceTree = "<group>"; };
+		32D2539F27F336BF00324717 /* OACloudAccountVerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudAccountVerificationViewController.h; sourceTree = "<group>"; };
+		32D253A027F336BF00324717 /* OACloudAccountVerificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACloudAccountVerificationViewController.m; sourceTree = "<group>"; };
+		32D253A127F336BF00324717 /* OACloudBackupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OACloudBackupViewController.xib; sourceTree = "<group>"; };
+		32D253A227F336BF00324717 /* OABaseCloudBackupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OABaseCloudBackupViewController.m; sourceTree = "<group>"; };
+		32D253A327F336BF00324717 /* OACloudAccountCreateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACloudAccountCreateViewController.m; sourceTree = "<group>"; };
+		32D253A427F336C000324717 /* OACloudAccountBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACloudAccountBaseViewController.m; sourceTree = "<group>"; };
+		32D253A527F336C000324717 /* OACloudBackupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACloudBackupViewController.m; sourceTree = "<group>"; };
+		32D253A627F336C000324717 /* OACloudAccountBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudAccountBaseViewController.h; sourceTree = "<group>"; };
+		32D253A727F336C000324717 /* OABaseCloudBackupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABaseCloudBackupViewController.h; sourceTree = "<group>"; };
+		32D253A827F336C000324717 /* OACloudIntroductionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudIntroductionViewController.h; sourceTree = "<group>"; };
+		32D253A927F336C100324717 /* OACloudAccountLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACloudAccountLoginViewController.m; sourceTree = "<group>"; };
+		32D253AA27F336C100324717 /* OACloudAccountCreateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudAccountCreateViewController.h; sourceTree = "<group>"; };
+		32D253AB27F336C100324717 /* OACloudIntroductionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACloudIntroductionViewController.m; sourceTree = "<group>"; };
+		32D253AC27F336C100324717 /* OACloudAccountBaseViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OACloudAccountBaseViewController.xib; sourceTree = "<group>"; };
 		32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuickSearchCoordinateFormatsViewController.xib; sourceTree = "<group>"; };
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
@@ -4184,20 +4191,13 @@
 		B0D61F813CB80B52D99BAFD1 /* OATrackMenuDescriptionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATrackMenuDescriptionViewController.mm; sourceTree = "<group>"; };
 		B247452C27E34B3500C18C3F /* ic_custom_restore@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_restore@3x.png"; path = "Resources/Icons/ic_custom_restore@3x.png"; sourceTree = "<group>"; };
 		B247452D27E34B3500C18C3F /* ic_custom_restore@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_restore@2x.png"; path = "Resources/Icons/ic_custom_restore@2x.png"; sourceTree = "<group>"; };
-		B247453327E35BB000C18C3F /* OACloudIntroductionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACloudIntroductionViewController.h; sourceTree = "<group>"; };
-		B247453427E35BB000C18C3F /* OACloudIntroductionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACloudIntroductionViewController.m; sourceTree = "<group>"; };
 		B247453627E35E9B00C18C3F /* OACloudIntroductionHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACloudIntroductionHeaderView.h; sourceTree = "<group>"; };
 		B247453727E35E9B00C18C3F /* OACloudIntroductionHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACloudIntroductionHeaderView.m; sourceTree = "<group>"; };
 		B247453D27E3A8D000C18C3F /* OACloudIntroductionHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACloudIntroductionHeaderView.xib; sourceTree = "<group>"; };
 		B247453F27E3AFE200C18C3F /* ic_custom_cloud_upload_colored_day_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_upload_colored_day_big@3x.png"; path = "Resources/Icons/ic_custom_cloud_upload_colored_day_big@3x.png"; sourceTree = "<group>"; };
 		B247454027E3AFE300C18C3F /* ic_custom_cloud_upload_colored_day_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_upload_colored_day_big@2x.png"; path = "Resources/Icons/ic_custom_cloud_upload_colored_day_big@2x.png"; sourceTree = "<group>"; };
-		B247454327E4805A00C18C3F /* OABaseCloudBackupViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseCloudBackupViewController.h; sourceTree = "<group>"; };
-		B247454427E4805A00C18C3F /* OABaseCloudBackupViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseCloudBackupViewController.m; sourceTree = "<group>"; };
 		B247454627E4A8E200C18C3F /* ic_custom_read_from_file@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_read_from_file@3x.png"; path = "Resources/Icons/ic_custom_read_from_file@3x.png"; sourceTree = "<group>"; };
 		B247454727E4A8E300C18C3F /* ic_custom_read_from_file@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_read_from_file@2x.png"; path = "Resources/Icons/ic_custom_read_from_file@2x.png"; sourceTree = "<group>"; };
-		B247454A27E6381600C18C3F /* OACloudBackupViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACloudBackupViewController.h; sourceTree = "<group>"; };
-		B247454B27E6381700C18C3F /* OACloudBackupViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACloudBackupViewController.m; sourceTree = "<group>"; };
-		B247454C27E6381700C18C3F /* OACloudBackupViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACloudBackupViewController.xib; sourceTree = "<group>"; };
 		B247454F27E6424000C18C3F /* OALargeImageTitleDescrTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OALargeImageTitleDescrTableViewCell.h; sourceTree = "<group>"; };
 		B247455027E6424000C18C3F /* OALargeImageTitleDescrTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OALargeImageTitleDescrTableViewCell.m; sourceTree = "<group>"; };
 		B247455127E6424000C18C3F /* OALargeImageTitleDescrTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OALargeImageTitleDescrTableViewCell.xib; sourceTree = "<group>"; };
@@ -6991,15 +6991,6 @@
 		32C21CB427E0A62200DE4266 /* RecordSettingsBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
-				3242E5F827E90DB700F83673 /* OACloudAccountBaseViewController.xib */,
-				32D1305727E3B32B00C0400C /* OACloudAccountBaseViewController.h */,
-				32D1305827E3B33F00C0400C /* OACloudAccountBaseViewController.m */,
-				3242E5FA27E9EBE100F83673 /* OACloudAccountLoginViewController.h */,
-				3242E5FB27E9EBF600F83673 /* OACloudAccountLoginViewController.m */,
-				3242E5FD27EA79A300F83673 /* OACloudAccountCreateViewController.h */,
-				3242E5FE27EA79BC00F83673 /* OACloudAccountCreateViewController.m */,
-				3242E60027EA837100F83673 /* OACloudAccountVerificationViewController.h */,
-				3242E60127EA837F00F83673 /* OACloudAccountVerificationViewController.m */,
 				32C21CB527E0A65300DE4266 /* OARecordSettingsBottomSheetViewController.h */,
 				32C21CB627E0A66A00DE4266 /* OARecordSettingsBottomSheetViewController.m */,
 			);
@@ -8551,13 +8542,22 @@
 		B247453027E35B1D00C18C3F /* Cloud */ = {
 			isa = PBXGroup;
 			children = (
-				B247453327E35BB000C18C3F /* OACloudIntroductionViewController.h */,
-				B247453427E35BB000C18C3F /* OACloudIntroductionViewController.m */,
-				B247454327E4805A00C18C3F /* OABaseCloudBackupViewController.h */,
-				B247454427E4805A00C18C3F /* OABaseCloudBackupViewController.m */,
-				B247454A27E6381600C18C3F /* OACloudBackupViewController.h */,
-				B247454B27E6381700C18C3F /* OACloudBackupViewController.m */,
-				B247454C27E6381700C18C3F /* OACloudBackupViewController.xib */,
+				32D253A727F336C000324717 /* OABaseCloudBackupViewController.h */,
+				32D253A227F336BF00324717 /* OABaseCloudBackupViewController.m */,
+				32D253A627F336C000324717 /* OACloudAccountBaseViewController.h */,
+				32D253A427F336C000324717 /* OACloudAccountBaseViewController.m */,
+				32D253AC27F336C100324717 /* OACloudAccountBaseViewController.xib */,
+				32D253AA27F336C100324717 /* OACloudAccountCreateViewController.h */,
+				32D253A327F336BF00324717 /* OACloudAccountCreateViewController.m */,
+				32D2539E27F336BF00324717 /* OACloudAccountLoginViewController.h */,
+				32D253A927F336C100324717 /* OACloudAccountLoginViewController.m */,
+				32D2539F27F336BF00324717 /* OACloudAccountVerificationViewController.h */,
+				32D253A027F336BF00324717 /* OACloudAccountVerificationViewController.m */,
+				32D2539D27F336BE00324717 /* OACloudBackupViewController.h */,
+				32D253A527F336C000324717 /* OACloudBackupViewController.m */,
+				32D253A127F336BF00324717 /* OACloudBackupViewController.xib */,
+				32D253A827F336C000324717 /* OACloudIntroductionViewController.h */,
+				32D253AB27F336C100324717 /* OACloudIntroductionViewController.m */,
 			);
 			path = Cloud;
 			sourceTree = "<group>";
@@ -12860,7 +12860,6 @@
 				8476E2B61F6C1EEC00EC274F /* map_intermediate_point@2x.png in Resources */,
 				8476E24A1F6C1EEC00EC274F /* map_bicycle_bearing_night@2x.png in Resources */,
 				8A6CBCC221CE25F0004033C7 /* ic_live_purchased@2x.png in Resources */,
-				3242E5F927E90EFE00F83673 /* OACloudAccountBaseViewController.xib in Resources */,
 				323BD9012628850400D255ED /* ic_bg_point_circle_bottom_small@2x.png in Resources */,
 				8AE1C8B421D6224B00434F07 /* ic_action_message@3x.png in Resources */,
 				DA5A829726C563A700F274C7 /* OATimeTableViewCell.xib in Resources */,
@@ -13579,6 +13578,7 @@
 				3205EC3D26E6B96E0090B491 /* ic_custom_map_pin@2x.png in Resources */,
 				323BD8F72628850400D255ED /* ic_bg_point_comment_bottom@2x.png in Resources */,
 				DA86AF7626454AC600627B66 /* left_menu_icon_plugins@2x.png in Resources */,
+				32D253B527F336C200324717 /* OACloudAccountBaseViewController.xib in Resources */,
 				0AC13D2B271602F000142BFD /* OAAddWaypointViewController.xib in Resources */,
 				DA1341A6243DC5A80039D214 /* ic_action_campervan@3x.png in Resources */,
 				DA5A851D26C563A900F274C7 /* OADistanceControl.xib in Resources */,
@@ -13736,7 +13736,6 @@
 				0A6B69D326725D1F00778353 /* ic_custom_road_works@2x.png in Resources */,
 				DA2DC41523B2116300F40D1D /* ic_custom_arrow_up@3x.png in Resources */,
 				8441CB3A1B1370580033AC95 /* change_item_color@3x.png in Resources */,
-				B247454E27E6381700C18C3F /* OACloudBackupViewController.xib in Resources */,
 				DA13419E243DC5A80039D214 /* map_action_utv@2x.png in Resources */,
 				DA5A81A026C563A700F274C7 /* OADownloadMapProgressViewController.xib in Resources */,
 				0CBDD0A5245038EC00C94BC2 /* map_marker_direction_arrow_p1_light@2x.png in Resources */,
@@ -14025,6 +14024,7 @@
 				848F559A1FBB609900CEFB4B /* ic_action_bearing@2x.png in Resources */,
 				DA5A827B26C563A700F274C7 /* OATargetInfoCollapsableViewCell.xib in Resources */,
 				158DE48F25AEF31B007C1B57 /* ic_destination_pin_6@3x.png in Resources */,
+				32D253AE27F336C100324717 /* OACloudBackupViewController.xib in Resources */,
 				DA8A928725DE8B4A00F5320A /* ic_carplay_map_markers@2x.png in Resources */,
 				DA2DC41B23B2116300F40D1D /* ic_custom_arrow_down@3x.png in Resources */,
 				0AC29CFB26E763E600A78C53 /* ic_custom_wikipedia_download_colored@3x.png in Resources */,
@@ -14344,6 +14344,7 @@
 				DAC849B426CF967C00018091 /* OADownloadMapWidget.mm in Sources */,
 				DA5A822C26C563A700F274C7 /* OAImportExportSettingsConverter.m in Sources */,
 				DA5A845626C563A900F274C7 /* OARulerByTapControlLayer.mm in Sources */,
+				32D253B127F336C200324717 /* OACloudAccountBaseViewController.m in Sources */,
 				DA5A81A726C563A700F274C7 /* OAObjectType.m in Sources */,
 				DA5A840F26C563A800F274C7 /* OABasePointEditingHandler.m in Sources */,
 				DA5A832B26C563A800F274C7 /* OADirectionTableViewCell.m in Sources */,
@@ -14435,7 +14436,6 @@
 				DA5A82F626C563A800F274C7 /* OALabelCollectionViewCell.m in Sources */,
 				DA5A849526C563A900F274C7 /* OARoutePlanningHudViewController.mm in Sources */,
 				DA5A849C26C563A900F274C7 /* OAMeasurementModeCommand.mm in Sources */,
-				32D1305927E3B33F00C0400C /* OACloudAccountBaseViewController.m in Sources */,
 				DA5A84C726C563A900F274C7 /* OAOsmEditActionsViewController.mm in Sources */,
 				DA5A81A626C563A700F274C7 /* OASearchCoreAPI.mm in Sources */,
 				DA5A855126C563A900F274C7 /* NSData+CRC32.m in Sources */,
@@ -14497,6 +14497,7 @@
 				DA5A857026C563A900F274C7 /* OARouteCalculationParams.mm in Sources */,
 				DA5A816D26C563A700F274C7 /* OsmAndAppImpl.mm in Sources */,
 				DA5A856F26C563A900F274C7 /* OAAlarmInfo.mm in Sources */,
+				32D253B327F336C200324717 /* OACloudAccountLoginViewController.m in Sources */,
 				DA5A83CD26C563A800F274C7 /* OATransportRouteController.mm in Sources */,
 				DA5A81C326C563A700F274C7 /* OAPOILocationType.mm in Sources */,
 				DA5A818D26C563A700F274C7 /* OAShowHideCoordinatesAction.mm in Sources */,
@@ -14601,6 +14602,7 @@
 				DA5A83E726C563A800F274C7 /* OAWikiWebViewController.m in Sources */,
 				DA5A81E226C563A700F274C7 /* OAGPXDocument.mm in Sources */,
 				DA5A815E26C563A700F274C7 /* OAMonitoringPlugin.mm in Sources */,
+				32D253AD27F336C100324717 /* OACloudAccountVerificationViewController.m in Sources */,
 				DA5A81CB26C563A700F274C7 /* OASQLiteTileSource.mm in Sources */,
 				DA5A820A26C563A700F274C7 /* OAProfileGeneralSettingsParametersViewController.m in Sources */,
 				DA5A81BD26C563A700F274C7 /* OAPOIFiltersHelper.mm in Sources */,
@@ -14649,7 +14651,6 @@
 				DA5A842F26C563A800F274C7 /* OATargetTurnViewController.m in Sources */,
 				DA5A856926C563A900F274C7 /* OARouteProvider.mm in Sources */,
 				DA5A848F26C563A900F274C7 /* OABaseTableViewController.m in Sources */,
-				B247454D27E6381700C18C3F /* OACloudBackupViewController.m in Sources */,
 				DA5A832926C563A800F274C7 /* OAInputCellWithTitle.m in Sources */,
 				DA5A849326C563A900F274C7 /* OAGpxApproximationViewController.mm in Sources */,
 				32C21CB727E0A66B00DE4266 /* OARecordSettingsBottomSheetViewController.m in Sources */,
@@ -14713,7 +14714,7 @@
 				DA5A825A26C563A700F274C7 /* OABaseSettingsViewController.m in Sources */,
 				DA5A854626C563A900F274C7 /* OASavingTrackHelper.mm in Sources */,
 				DA5A817426C563A700F274C7 /* OAGpxWptItem.mm in Sources */,
-				B247454527E4805A00C18C3F /* OABaseCloudBackupViewController.m in Sources */,
+				32D253AF27F336C100324717 /* OABaseCloudBackupViewController.m in Sources */,
 				DA5A81C026C563A700F274C7 /* OASearchByNameFilter.mm in Sources */,
 				DA5A834C26C563A800F274C7 /* OAWebViewCell.m in Sources */,
 				DA5A847726C563A900F274C7 /* OALanesControl.mm in Sources */,
@@ -14733,6 +14734,7 @@
 				DA5A854926C563A900F274C7 /* OAJsonHelper.m in Sources */,
 				DA5A818226C563A700F274C7 /* OAMapStyleAction.mm in Sources */,
 				DA5A843126C563A800F274C7 /* OARouteTargetSelectionViewController.m in Sources */,
+				32D253B027F336C200324717 /* OACloudAccountCreateViewController.m in Sources */,
 				DA5A84D626C563A900F274C7 /* OAMapSettingsWikipediaScreen.mm in Sources */,
 				DA5A824226C563A700F274C7 /* OAMainSettingsViewController.m in Sources */,
 				32C21CB127DFC18E00DE4266 /* OAAlertBottomSheetViewController.mm in Sources */,
@@ -14785,12 +14787,12 @@
 				DA5A830B26C563A800F274C7 /* OAIconTitleValueCell.m in Sources */,
 				DA5A816C26C563A700F274C7 /* OAAbstractCard.m in Sources */,
 				DA5A81EB26C563A700F274C7 /* OAHistoryDB.m in Sources */,
+				32D253B227F336C200324717 /* OACloudBackupViewController.m in Sources */,
 				DA5A846526C563A900F274C7 /* OADownloadedRegionsLayer.mm in Sources */,
 				DA5A834226C563A800F274C7 /* OAMapillaryContributeCell.mm in Sources */,
 				DA5A854D26C563A900F274C7 /* OAMapTileDownloader.mm in Sources */,
 				DA5A836B26C563A800F274C7 /* OADestinationItemsListViewController.mm in Sources */,
 				DA5A81B026C563A700F274C7 /* OADownloadsManager.m in Sources */,
-				B247453527E35BB000C18C3F /* OACloudIntroductionViewController.m in Sources */,
 				DA5A84D326C563A900F274C7 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
 				DA5A813126C563A700F274C7 /* OAWebClient.mm in Sources */,
 				DA5A833926C563A800F274C7 /* OAFoldersCell.m in Sources */,
@@ -14816,7 +14818,6 @@
 				DA5A836426C563A800F274C7 /* OACompoundViewController.m in Sources */,
 				DA5A83F626C563A800F274C7 /* OASelectSubcategoryViewController.mm in Sources */,
 				DA5A842A26C563A800F274C7 /* OAImpassableRoadSelectionViewController.mm in Sources */,
-				3242E60227EA837F00F83673 /* OACloudAccountVerificationViewController.m in Sources */,
 				DA5A856426C563A900F274C7 /* OAGpxApproximator.mm in Sources */,
 				DA5A814026C563A700F274C7 /* OAOsmBaseStorage.m in Sources */,
 				DA5A837026C563A800F274C7 /* OARoutingTargetCell.m in Sources */,
@@ -14826,6 +14827,7 @@
 				DA5A84CB26C563A900F274C7 /* OACopyProfileBottomSheetViewControler.mm in Sources */,
 				DA5A831326C563A800F274C7 /* OATimeTableViewCell.m in Sources */,
 				DA5A836526C563A800F274C7 /* OAAppModeView.mm in Sources */,
+				32D253B427F336C200324717 /* OACloudIntroductionViewController.m in Sources */,
 				DA5A84D926C563A900F274C7 /* OAMapSettingsViewController.mm in Sources */,
 				DA3FBFED27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm in Sources */,
 				DA5A840126C563A800F274C7 /* OAQuickSearchButtonListItem.mm in Sources */,
@@ -15072,7 +15074,6 @@
 				DA5A83A926C563A800F274C7 /* OABasicEditingViewController.mm in Sources */,
 				DA5A852F26C563A900F274C7 /* OpenLocationCode.swift in Sources */,
 				DA5A850026C563A900F274C7 /* OARangeSlider.m in Sources */,
-				3242E5FC27E9EBF600F83673 /* OACloudAccountLoginViewController.m in Sources */,
 				DA5A84CA26C563A900F274C7 /* OADeleteProfileBottomSheetViewController.m in Sources */,
 				DA5A833326C563A800F274C7 /* OABottomSheetHeaderIconCell.m in Sources */,
 				DA5A856D26C563A900F274C7 /* OATargetPointsHelper.mm in Sources */,
@@ -15082,7 +15083,6 @@
 				DA5A84DB26C563A900F274C7 /* OAMapSettingsMainScreen.mm in Sources */,
 				DA5A83DF26C563A800F274C7 /* OAEditGroupViewController.m in Sources */,
 				DA5A855226C563A900F274C7 /* OAMapUtils.mm in Sources */,
-				3242E5FF27EA79BC00F83673 /* OACloudAccountCreateViewController.m in Sources */,
 				DA5A843726C563A800F274C7 /* OATrsansportRouteDetailsViewController.mm in Sources */,
 				DA5A81C426C563A700F274C7 /* OAAutoObserverProxy.m in Sources */,
 				DA5A84DD26C563A900F274C7 /* OAMapSettingsGpxScreen.mm in Sources */,
@@ -15448,7 +15448,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.2.0;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -15505,7 +15505,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.2.0;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

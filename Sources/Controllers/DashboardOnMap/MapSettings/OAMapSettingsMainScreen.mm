@@ -313,7 +313,7 @@
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_settings_map_magnifier"),
-                @"value": [self getPercentString:[_settings.mapDensity get:_settings.applicationMode.get]],
+                @"value": [self getPercentString:[_settings.mapDensity get]],
                 @"image": @"ic_custom_magnifier",
                 @"type": [OAIconTitleValueCell getCellIdentifier],
                 @"key": @"map_magnifier"

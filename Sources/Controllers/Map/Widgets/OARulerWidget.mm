@@ -180,7 +180,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _rulerCircleAltAttrs = [_mapViewController getLineRenderingAttributes:@"rulerCircleAlt"];
  
     BOOL hasAttributes = _rulerCircleAttrs && _rulerCircleAltAttrs && [_rulerCircleAttrs count] != 0 && [_rulerCircleAltAttrs count] != 0;
-    double scaleFactor = [_settings.mapDensity get:_settings.applicationMode.get];
+    double scaleFactor = [_settings.mapDensity get];
     
     NSNumber *circleColorAttr = hasAttributes ? (_cachedRulerMode == RULER_MODE_DARK ? [_rulerCircleAttrs valueForKey:@"color"] : [_rulerCircleAltAttrs valueForKey:@"color"]) :
                 nil;

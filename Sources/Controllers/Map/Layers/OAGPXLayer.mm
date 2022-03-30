@@ -472,6 +472,7 @@ colorizationScheme:(int)colorizationScheme
             }
         }
     }
+
     return lineWidth * kWidthCorrectionValue;
 }
 

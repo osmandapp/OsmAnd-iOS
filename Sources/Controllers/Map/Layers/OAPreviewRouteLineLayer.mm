@@ -12,25 +12,19 @@
 #import "OARoutingHelper.h"
 #import "OARouteCalculationResult.h"
 #import "OANativeUtilities.h"
-#import "OARouteStatisticsHelper.h"
-#import "OATransportRoutingHelper.h"
-#import "OATransportStopType.h"
 #import "OARouteDirectionInfo.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import "OAPreviewRouteLineInfo.h"
 #import "OAGPXAppearanceCollection.h"
-#import "OAGPXUIHelper.h"
 #import "OARouteColorizationHelper.h"
 #import "OAMapPresentationEnvironment.h"
-#import "OAGPXDocument.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SkiaUtilities.h>
-#include <SkCGUtils.h>
 
 #define kTurnArrowsColoringByAttr 0xffffffff
 #define kOutlineId 1001
@@ -352,6 +346,8 @@
     else
     {
         width = [self getParamFromAttr:@"strokeWidth"].floatValue;
+        double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
+        width = 2 / (mapDensity / (width - UIScreen.mainScreen.scale));
     }
 
     return width;

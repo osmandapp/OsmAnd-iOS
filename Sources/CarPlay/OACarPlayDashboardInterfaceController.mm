@@ -103,7 +103,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     CLLocation * start = _routingHelper.getLastFixedLocation;
     if (route && start && _routingHelper.isRouteCalculated)
     {
-        [_routingHelper setNewRoute:nil res:route start:start];
+        [self enterRoutePreviewMode];
     }
 }
 

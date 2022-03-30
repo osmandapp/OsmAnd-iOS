@@ -290,7 +290,7 @@
                                                                        titleIcon:@"ic_custom_route"
                                                                          message:nil
                                                                      cancelTitle:OALocalizedString(@"shared_string_no")
-                                                                       doneTitle:OALocalizedString(@"shared_string_no")
+                                                                       doneTitle:OALocalizedString(@"shared_string_yes")
                                                                 doneColpletition:^{
                                 
                                     _settings.mapSettingTrackRecording = NO;

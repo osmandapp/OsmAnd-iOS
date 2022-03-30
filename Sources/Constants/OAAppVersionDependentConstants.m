@@ -10,11 +10,6 @@
 
 @implementation OAAppVersionDependentConstants
 
-+ (NSString *) getShortAppVersion
-{
-    return [self getShortAppVersionWithSeparator:@"_"];
-}
-
 + (NSString *) getShortAppVersionWithSeparator:(NSString *)separator
 {
     NSString *fullVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -28,6 +23,19 @@
     {
         return [NSString stringWithFormat:@"3%@80", separator];
     }
+}
+
+//4_2
++ (NSString *) getShortAppVersion
+{
+    return [self getShortAppVersionWithSeparator:@"_"];
+}
+
++ (NSString *)getAppVersionWithBundle
+{
+    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *bundleVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    return [NSString stringWithFormat:@"OsmAnd Maps %@ (%@)", appVersion, bundleVersion];
 }
 
 @end

@@ -203,11 +203,11 @@
                     || _routeLineColor == kDefaultRouteLineNightColor;
 
             builder.setFillColor(lineColor)
-                    .setPathIcon([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
-                                             fileName:@"map_direction_arrow"])
-                    .setSpecialPathIcon([self specialBitmapWithColor:lineColor])
-                    .setShouldShowArrows(true)
-                    .setScreenScale(UIScreen.mainScreen.scale);
+                   .setPathIcon([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
+                                            fileName:@"map_direction_arrow"])
+                   .setSpecialPathIcon([self specialBitmapWithColor:lineColor])
+                   .setShouldShowArrows(true)
+                   .setScreenScale(UIScreen.mainScreen.scale);
 
             if (!colors.empty())
             {

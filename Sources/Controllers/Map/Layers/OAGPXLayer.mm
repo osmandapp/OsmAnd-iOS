@@ -379,9 +379,9 @@ colorizationScheme:(int)colorizationScheme
             // Use black arrows for gradient colorization
             UIColor *color = gpx.coloringType.length != 0 && ![gpx.coloringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB(gpx.color);
             builder.setPathIcon([self bitmapForColor:color fileName:@"map_direction_arrow"])
-                    .setSpecialPathIcon([self specialBitmapWithColor:colorARGB])
-                    .setShouldShowArrows(true)
-                    .setScreenScale(UIScreen.mainScreen.scale);
+                .setSpecialPathIcon([self specialBitmapWithColor:colorARGB])
+                .setShouldShowArrows(true)
+                .setScreenScale(UIScreen.mainScreen.scale);
         }
         
         builder.buildAndAddToCollection(_linesCollection);

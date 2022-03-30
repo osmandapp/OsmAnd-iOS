@@ -26,6 +26,10 @@
 #import "OARootViewController.h"
 #import "OAAnalyticsHelper.h"
 
+#import "OACloudAccountLoginViewController.h"
+#import "OACloudAccountCreateViewController.h"
+#import "OACloudAccountVerificationViewController.h"
+
 @interface OAOptionsPanelBlackViewController () <UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -320,6 +324,14 @@
 
 - (IBAction) helpButtonClicked:(id)sender
 {
+//    OACloudAccountLoginViewController *vc = [[OACloudAccountLoginViewController alloc] init];
+//    OACloudAccountCreateViewController *vc = [[OACloudAccountCreateViewController alloc] init];
+    OACloudAccountVerificationViewController *vc = [[OACloudAccountVerificationViewController alloc] initWithEmail:@"qwe@rty.com"];
+    [self.navigationController pushViewController:vc animated:YES];
+    return;
+    
+    
+    
     [OAAnalyticsHelper logEvent:@"help_open"];
 
     // Data is powered by OpenStreetMap ODbL, &#169; http://www.openstreetmap.org/copyright

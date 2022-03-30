@@ -20,11 +20,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *footerTitleLabel;
 
-@property (nonatomic) NSString *headerText;
-@property (nonatomic) NSString *inputedText;
-
+- (void) setHeaderTitle:(NSString *)title;
+- (NSString *) getTextFieldValue;
 - (BOOL) isValidInputedValue:(NSString *)value;
-- (void) reloadCellsWithoutInputField;
-- (void) reloadAllCells;
 
 @end

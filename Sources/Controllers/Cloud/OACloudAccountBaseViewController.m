@@ -26,7 +26,8 @@
 @implementation OACloudAccountBaseViewController
 {
     NSArray<NSDictionary *> *_data;
-    NSInteger _dataCachedCount;
+    NSString *_inputedText;
+    NSString *_headerText;
     NSString *_footerFullText;
     NSString *_footerColoredText;
 }
@@ -49,7 +50,6 @@
     [self setupTableFooterView];
     [self applyLocalization];
     [self generateData];
-    _dataCachedCount = [self getData].count;
     [self.tableView reloadData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -109,12 +109,23 @@
 
 #pragma mark - Data section
 
+- (void) setHeaderTitle:(NSString *)title
+{
+    _headerText = title;
+    self.titleLabel.text = title;
+}
+
+- (NSString *) getTextFieldValue
+{
+    return _inputedText;
+}
+
 - (void) applyLocalization
 {
-    self.titleLabel.text = OALocalizedString(@"user_login");
-    _headerText = OALocalizedString(@"user_login");
+    //override
     _footerFullText = OALocalizedString(@"login_footer_full_text");
     _footerColoredText = OALocalizedString(@"login_footer_email_part");
+    [self setHeaderTitle:OALocalizedString(@"user_login")];
 }
 
 - (void) generateData
@@ -305,39 +316,6 @@
     return UITableViewAutomaticDimension;
 }
 
-- (void) reloadCellsWithoutInputField
-{
-    [self.tableView beginUpdates];
-    NSInteger cellsAdded = [self getData].count - _dataCachedCount;
-    
-    if (cellsAdded != 0)
-    {
-        for (int i = 0; i < ABS(cellsAdded); i++)
-        {
-            if (cellsAdded > 0)
-                [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(_dataCachedCount - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-            else
-                [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(_dataCachedCount - 1 - i) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
-    }
-    
-    for (int i = 0; i < [self getData].count; i++)
-    {
-        NSDictionary *item = [self getData][i];
-        if (![item[@"type"] isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    }
-    
-    _dataCachedCount = [self getData].count;
-    [self.tableView endUpdates];
-}
-
-- (void) reloadAllCells
-{
-    [self.tableView reloadData];
-    _dataCachedCount = [self getData].count;
-}
-
 #pragma mark - UITextFieldDelegate
 
 - (BOOL) textFieldShouldReturn:(UITextField *)sender
@@ -350,8 +328,6 @@
 - (void) textViewDidChange:(UITextField *)textField
 {
     _inputedText = textField.text;
-    [self generateData];
-    [self reloadCellsWithoutInputField];
 }
 
 - (BOOL) textFieldShouldClear:(UITextField *)textField

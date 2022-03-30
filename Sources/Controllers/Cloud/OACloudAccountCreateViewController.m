@@ -18,15 +18,14 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"register_opr_create_new_account");
-    self.headerText = OALocalizedString(@"register_opr_create_new_account");
+    [self setHeaderTitle:OALocalizedString(@"register_opr_create_new_account")];
 }
 
 - (void) generateData
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray new];
     
-    BOOL isTextFieldValidData = [self isValidInputedValue:self.inputedText];
+    BOOL isTextFieldValidData = [self isValidInputedValue:[self getTextFieldValue]];
     BOOL isIntialLaunch = YES;
     BOOL isEmailValid = YES;
     BOOL isEmailRegistred = YES;
@@ -43,7 +42,7 @@
     [data addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
     [data addObject:@{
         @"type" : [OAInputCellWithTitle getCellIdentifier],
-        @"title" : self.inputedText,
+        @"title" : [self getTextFieldValue],
         @"placeholder" : OALocalizedString(@"shared_string_email")
     }];
     [data addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];

@@ -30,15 +30,14 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"verification");
-    self.headerText = OALocalizedString(@"verification");
+    [self setHeaderTitle:OALocalizedString(@"verification")];
 }
 
 - (void) generateData
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray new];
     
-    BOOL isTextFieldValidData = [self isValidInputedValue:self.inputedText];
+    BOOL isTextFieldValidData = [self isValidInputedValue:[self getTextFieldValue]];
     BOOL isUnfolded = YES;
     
     [data addObject:@{
@@ -54,7 +53,7 @@
     [data addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
     [data addObject:@{
         @"type" : [OAInputCellWithTitle getCellIdentifier],
-        @"title" : self.inputedText,
+        @"title" : [self getTextFieldValue],
         @"placeholder" : OALocalizedString(@"verification_code_placeholder")
     }];
     [data addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
@@ -127,7 +126,12 @@
 {
     _isUnfoldPressed = !_isUnfoldPressed;
     [self generateData];
-    [self reloadAllCells];
+    [self.tableView beginUpdates];
+    if (_isUnfoldPressed)
+        [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:5 inSection:0], [NSIndexPath indexPathForRow:6 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    else
+        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:5 inSection:0], [NSIndexPath indexPathForRow:6 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView endUpdates];
 }
 
 - (void) continueButtonPressed

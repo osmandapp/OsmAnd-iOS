@@ -10,6 +10,7 @@
 
 @implementation OACloudAccountVerificationViewController
 {
+    NSArray<NSDictionary *> *_data;
     NSString *_email;
     BOOL _isUnfoldPressed;
 }
@@ -112,7 +113,12 @@
         }];
     }
     
-    self.data = data;
+    _data = data;
+}
+
+- (NSArray<NSDictionary *> *) getData
+{
+    return _data;
 }
 
 #pragma mark - Actions

@@ -20,7 +20,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *footerTitleLabel;
 
-@property (nonatomic) NSArray<NSDictionary *> *data;
 @property (nonatomic) NSString *headerText;
 @property (nonatomic) NSString *inputedText;
 

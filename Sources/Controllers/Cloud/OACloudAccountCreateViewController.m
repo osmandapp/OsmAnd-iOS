@@ -9,6 +9,9 @@
 #import "OACloudAccountCreateViewController.h"
 
 @implementation OACloudAccountCreateViewController
+{
+    NSArray<NSDictionary *> *_data;
+}
 
 #pragma mark - Data section
 
@@ -137,7 +140,12 @@
         }
     }
     
-    self.data = data;
+    _data = data;
+}
+
+- (NSArray<NSDictionary *> *) getData
+{
+    return _data;
 }
 
 #pragma mark - Actions

@@ -25,6 +25,7 @@
 
 @implementation OACloudAccountBaseViewController
 {
+    NSArray<NSDictionary *> *_data;
     NSInteger _dataCachedCount;
     NSString *_footerFullText;
     NSString *_footerColoredText;
@@ -48,7 +49,7 @@
     [self setupTableFooterView];
     [self applyLocalization];
     [self generateData];
-    _dataCachedCount = _data.count;
+    _dataCachedCount = [self getData].count;
     [self.tableView reloadData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -122,6 +123,12 @@
     _data = [NSMutableArray new];
 }
 
+- (NSArray<NSDictionary *> *) getData
+{
+    //override
+    return _data;
+}
+
 #pragma mark - Actions
 
 - (void) textFieldDoneButtonPressed
@@ -153,12 +160,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.count;
+    return [self getData].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.row];
+    NSDictionary *item = [self getData][indexPath.row];
     if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         OADescrTitleCell* cell;
@@ -290,7 +297,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.row];
+    NSDictionary *item = [self getData][indexPath.row];
     if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
         return 1.0 / [UIScreen mainScreen].scale;
@@ -301,7 +308,7 @@
 - (void) reloadCellsWithoutInputField
 {
     [self.tableView beginUpdates];
-    NSInteger cellsAdded = _data.count - _dataCachedCount;
+    NSInteger cellsAdded = [self getData].count - _dataCachedCount;
     
     if (cellsAdded != 0)
     {
@@ -314,21 +321,21 @@
         }
     }
     
-    for (int i = 0; i < _data.count; i++)
+    for (int i = 0; i < [self getData].count; i++)
     {
-        NSDictionary *item = _data[i];
+        NSDictionary *item = [self getData][i];
         if (![item[@"type"] isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     }
     
-    _dataCachedCount = _data.count;
+    _dataCachedCount = [self getData].count;
     [self.tableView endUpdates];
 }
 
 - (void) reloadAllCells
 {
     [self.tableView reloadData];
-    _dataCachedCount = _data.count;
+    _dataCachedCount = [self getData].count;
 }
 
 #pragma mark - UITextFieldDelegate

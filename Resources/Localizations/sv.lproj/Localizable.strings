@@ -2341,3 +2341,5 @@
 "map_settings_weather_pressure" = "Tryck";
 "map_settings_weather_cloud" = "Moln";
 "map_settings_weather_precip" = "Nederbörd";
+"start_point" = "Start";
+"map_widget_speed" = "Hastighet";

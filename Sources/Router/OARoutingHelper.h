@@ -122,6 +122,4 @@ struct RouteSegmentResult;
 + (double) getDefaultAllowedDeviation:(OAApplicationMode *)mode posTolerance:(double)posTolerance;
 + (double) getPosTolerance:(double)accuracy;
 
-- (void) setNewRoute:(OARouteCalculationResult *)prevRoute res:(OARouteCalculationResult *)res start:(CLLocation *)start;
-
 @end

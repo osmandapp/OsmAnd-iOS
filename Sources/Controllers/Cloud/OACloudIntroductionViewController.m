@@ -9,6 +9,7 @@
 #import "OACloudIntroductionViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OASizes.h"
 #import "OACloudIntroductionHeaderView.h"
 #import "OATitleRightIconCell.h"
 
@@ -75,6 +76,14 @@
 - (UIColor *)navBarBackgroundColor
 {
     return UIColor.whiteColor;
+}
+
+- (void)onScrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView.contentOffset.y <= -defaultNavBarHeight)
+    {
+        scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, -defaultNavBarHeight);
+    }
 }
 
 // MARK: UITableViewDataSource

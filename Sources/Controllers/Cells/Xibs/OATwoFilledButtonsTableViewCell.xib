@@ -52,7 +52,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="7A2-Fh-kdM" firstAttribute="top" secondItem="low-tq-Pg9" secondAttribute="bottom" constant="16" id="FeD-gT-II9"/>
-                    <constraint firstAttribute="bottom" secondItem="7A2-Fh-kdM" secondAttribute="bottom" constant="20" id="JWV-fX-MLZ"/>
+                    <constraint firstAttribute="bottom" secondItem="7A2-Fh-kdM" secondAttribute="bottom" priority="999" constant="20" id="JWV-fX-MLZ"/>
                     <constraint firstItem="low-tq-Pg9" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="9" id="LSA-eN-Fb8"/>
                     <constraint firstItem="7A2-Fh-kdM" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="WZO-br-1ID"/>
                     <constraint firstItem="7A2-Fh-kdM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="ZK6-4v-6Kl"/>

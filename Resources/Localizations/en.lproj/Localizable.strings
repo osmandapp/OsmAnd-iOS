@@ -2523,6 +2523,20 @@
 "backup_into_file" = "Backup into file";
 "restore_from_file" = "Restore from file";
 
+"cloud_no_online_backup" = "You don’t have any online backup yet";
+"cloud_no_online_backup_descr" = "Set up an automatic backup so you don't have to worry about lost data.";
+"cloud_set_up_backup" = "Set up backup";
+"cloud_welcome_back" = "Welcome back!";
+"cloud_restore_now" = "Restore now";
+"cloud_backup" = "Backup";
+"cloud_last_backup" = "Last backup";
+"cloud_backup_now" = "Backup now";
+"cloud_make_backup" = "Make a backup";
+"cloud_make_backup_descr" = "There are many changes on this device, please make a backup of this data so as not to lose it.";
+"cloud_conflicts" = "Conflicts";
+"cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";
+"cloud_view_conflicts" = "View conflicts";
+
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md

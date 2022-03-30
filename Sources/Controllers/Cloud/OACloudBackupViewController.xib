@@ -11,11 +11,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OACloudBackupViewController">
             <connections>
-                <outlet property="backButton" destination="TtN-jQ-nSq" id="ccd-73-Tdl"/>
+                <outlet property="backImgButton" destination="TtN-jQ-nSq" id="ccd-73-Tdl"/>
+                <outlet property="navBarBackgroundView" destination="XW6-Nu-3kL" id="JaV-Op-uAA"/>
                 <outlet property="navBarTitle" destination="3tr-0m-ekB" id="fNl-Od-oHY"/>
-                <outlet property="navBarView" destination="XW6-Nu-3kL" id="JaV-Op-uAA"/>
                 <outlet property="settingsButton" destination="6aJ-b4-XIo" id="lLy-bE-O3V"/>
-                <outlet property="tableView" destination="E9i-dX-nUN" id="g6F-PT-p4u"/>
+                <outlet property="tblView" destination="E9i-dX-nUN" id="WGd-MH-6DF"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

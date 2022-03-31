@@ -134,7 +134,7 @@
 - (NSArray<NSDictionary *> *) getData
 {
     //override
-    return @[];
+    return nil;
 }
 
 #pragma mark - Actions

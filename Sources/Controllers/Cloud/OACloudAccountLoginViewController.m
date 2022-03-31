@@ -15,10 +15,9 @@
 
 #pragma mark - Data section
 
-- (void) applyLocalization
+- (NSString *) getTableHeaderTitle
 {
-    [super applyLocalization];
-    [self setHeaderTitle:OALocalizedString(@"user_login")];
+    return OALocalizedString(@"user_login");
 }
 
 - (void) generateData

@@ -21,13 +21,14 @@
 
 @interface OACloudAccountBaseViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MFMailComposeViewControllerDelegate>
 
+@property (weak, nonatomic) IBOutlet UILabel *footerTitleLabel;
+
 @end
 
 @implementation OACloudAccountBaseViewController
 {
     NSArray<NSDictionary *> *_data;
     NSString *_inputedText;
-    NSString *_headerText;
     NSString *_footerFullText;
     NSString *_footerColoredText;
 }
@@ -90,7 +91,7 @@
 
 - (void) setupTableHeaderView
 {
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerText font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold] textColor:UIColor.blackColor lineSpacing:0 isTitle:YES];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderTitle] font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold] textColor:UIColor.blackColor lineSpacing:0 isTitle:YES];
 }
 
 - (void) setupTableFooterView
@@ -109,10 +110,9 @@
 
 #pragma mark - Data section
 
-- (void) setHeaderTitle:(NSString *)title
+- (NSString *) getTableHeaderTitle
 {
-    _headerText = title;
-    self.titleLabel.text = title;
+    return OALocalizedString(@"user_login");
 }
 
 - (NSString *) getTextFieldValue
@@ -122,10 +122,9 @@
 
 - (void) applyLocalization
 {
-    //override
     _footerFullText = OALocalizedString(@"login_footer_full_text");
     _footerColoredText = OALocalizedString(@"login_footer_email_part");
-    [self setHeaderTitle:OALocalizedString(@"user_login")];
+    self.titleLabel.text = [self getTableHeaderTitle];
 }
 
 - (void) generateData

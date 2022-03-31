@@ -18,9 +18,6 @@
 
 @interface OACloudAccountBaseViewController : OABaseBigTitleSettingsViewController
 
-@property (weak, nonatomic) IBOutlet UILabel *footerTitleLabel;
-
-- (void) setHeaderTitle:(NSString *)title;
 - (NSString *) getTextFieldValue;
 - (BOOL) isValidInputedValue:(NSString *)value;
 

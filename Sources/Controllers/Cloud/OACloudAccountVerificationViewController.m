@@ -36,7 +36,7 @@
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray new];
     
-    BOOL isTextFieldValidData = [self isValidInputedValue:[self getTextFieldValue]];
+    BOOL isTextFieldValidData = [self isValidInputValue:[self getTextFieldValue]];
     BOOL isUnfolded = YES;
     
     [data addObject:@{
@@ -146,7 +146,7 @@
     [self continueButtonPressed];
 }
 
-- (BOOL) isValidInputedValue:(NSString *)value
+- (BOOL) isValidInputValue:(NSString *)value
 {
     return value.length > 0;
 }

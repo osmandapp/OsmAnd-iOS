@@ -19,6 +19,6 @@
 @interface OACloudAccountBaseViewController : OABaseBigTitleSettingsViewController
 
 - (NSString *) getTextFieldValue;
-- (BOOL) isValidInputedValue:(NSString *)value;
+- (BOOL) isValidInputValue:(NSString *)value;
 
 @end

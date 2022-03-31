@@ -27,8 +27,7 @@
 
 @implementation OACloudAccountBaseViewController
 {
-    NSArray<NSDictionary *> *_data;
-    NSString *_inputedText;
+    NSString *_inputText;
     NSString *_footerFullText;
     NSString *_footerColoredText;
 }
@@ -37,7 +36,7 @@
 {
     self = [super initWithNibName:@"OACloudAccountBaseViewController" bundle:nil];
     if (self) {
-        _inputedText = @"";
+        _inputText = @"";
         [self generateData];
     }
     return self;
@@ -117,7 +116,7 @@
 
 - (NSString *) getTextFieldValue
 {
-    return _inputedText;
+    return _inputText;
 }
 
 - (void) applyLocalization
@@ -130,13 +129,12 @@
 - (void) generateData
 {
     //override
-    _data = [NSMutableArray new];
 }
 
 - (NSArray<NSDictionary *> *) getData
 {
     //override
-    return _data;
+    return @[];
 }
 
 #pragma mark - Actions
@@ -156,7 +154,7 @@
     [self sendEmail];
 }
 
-- (BOOL) isValidInputedValue:(NSString *)value
+- (BOOL) isValidInputValue:(NSString *)value
 {
     return value.length > 0 && [value isValidEmail];
 }
@@ -326,7 +324,7 @@
 
 - (void) textViewDidChange:(UITextField *)textField
 {
-    _inputedText = textField.text;
+    _inputText = textField.text;
 }
 
 - (BOOL) textFieldShouldClear:(UITextField *)textField

@@ -24,7 +24,7 @@
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray new];
     
-    BOOL isTextFieldValidData = [self isValidInputedValue:[self getTextFieldValue]];
+    BOOL isTextFieldValidData = [self isValidInputValue:[self getTextFieldValue]];
     BOOL isIntialLaunch = YES;
     BOOL isEmailValid = YES;
     BOOL isEmailRegistred = YES;

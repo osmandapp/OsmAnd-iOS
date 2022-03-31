@@ -2521,7 +2521,7 @@
 "verify_email_address_descr" = "Verification code sent to %@. Please enter it in the field below.";
 "verification_code_placeholder" = "Code";
 "verification_code_missing" = "I didn't receive a verification code";
-"verification_code_missing_description" = "Can take 10 minutes. Use the button below if it isn't in your spam folder.";
+"verification_code_missing_description" = "It can take up to 10 minutes. Use the button below if it isn't in your spam folder.";
 "resend_verification_code" = "Resend";
 
 "travel_routes" = "Travel routes";

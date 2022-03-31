@@ -389,11 +389,12 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     switch (_screenType) {
         case EOAOpenExistingTrack:
         {
-            if (self.delegate)
-                [self.delegate closeBottomSheet];
             [self dismissViewControllerAnimated:YES completion:nil];
-            [[OARootViewController instance].mapPanel showScrollableHudViewController:
-                    [[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
+            if (self.delegate && track)
+            {
+                [self.delegate closeBottomSheet];
+                [self.delegate onFileSelected:track.gpxFilePath];
+            }
             break;
         }
         case EOAAddToATrack:

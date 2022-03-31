@@ -286,6 +286,7 @@
 
 - (void)onFileSelected:(NSString *)gpxFilePath
 {
+    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:gpxFilePath]];
 }
 
 @end

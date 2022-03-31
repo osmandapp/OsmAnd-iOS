@@ -28,6 +28,7 @@
 #import "OAConfigureProfileViewController.h"
 #import "OAExportItemsViewController.h"
 #import "OACloudIntroductionViewController.h"
+#import "OACloudBackupViewController.h"
 
 #define kAppModesSection 2
 
@@ -355,9 +356,13 @@
     }
     else if ([name isEqualToString:@"backup_restore"])
     {
-        // TODO: open correct VC: not logged in/ not purchased - OACloudIntroductionViewController; else -
-        OACloudIntroductionViewController *cloudIntroVC = [[OACloudIntroductionViewController alloc] init];
-        [self.navigationController pushViewController:cloudIntroVC animated:YES];
+        // TODO: open correct VC: not logged in/ not purchased - OACloudIntroductionViewController; else - OACloudBackupViewController
+        UIViewController *vc;
+        if (YES/*logged in & purchased*/)
+            vc = [[OACloudBackupViewController alloc] init];
+        else
+            vc = [[OACloudIntroductionViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
     }
     else if ([name isEqualToString:@"purchases"])
     {

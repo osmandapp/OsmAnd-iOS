@@ -130,6 +130,7 @@
 #define color_chart_orange 0xff8800
 #define color_chart_red 0xff0000
 #define color_support_red 0xff470d
+#define color_support_green 0x14cc9e
 
 #define color_route_button_inactive 0xE0DDE3
 
@@ -186,6 +187,7 @@
 #define markers_header_light_blue 0x044b7f
 #define markers_header_dark_blue 0x03416e
 #define nav_bar_night 0x222526
+#define nav_bar_day 0xff8800
 #define text_primary_night 0xE6E6E6
 #define text_secondary_night 0x727075
 #define color_button_active_night 0x203BE9

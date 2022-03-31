@@ -109,6 +109,10 @@
     return UIColorFromRGB(color_bottom_sheet_background);
 }
 
+- (void)onScrollViewDidScroll:(UIScrollView *)scrollView
+{
+}
+
 #pragma mark - UIScrollViewDelegate
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
@@ -131,6 +135,7 @@
             _navBarBackgroundView.alpha = 0;
         }];
     }
+    [self onScrollViewDidScroll:scrollView];
 }
 
 @end

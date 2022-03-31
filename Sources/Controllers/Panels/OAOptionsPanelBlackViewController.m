@@ -26,6 +26,10 @@
 #import "OARootViewController.h"
 #import "OAAnalyticsHelper.h"
 
+#import "OACloudAccountLoginViewController.h"
+#import "OACloudAccountCreateViewController.h"
+#import "OACloudAccountVerificationViewController.h"
+
 @interface OAOptionsPanelBlackViewController () <UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;

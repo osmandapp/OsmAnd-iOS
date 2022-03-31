@@ -1658,16 +1658,19 @@ static const double d180PI = 180.0 / M_PI_2;
     UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 12 - OAUtilities.getLeftMargin - iconFrameSize, tableHeaderView.frame.size.height / 2 - iconFrameSize / 2, iconFrameSize, iconFrameSize)];
     imageContainer.backgroundColor = UIColor.whiteColor;
     
-    UIImageView *imageView = [[UIImageView alloc] init];
-    imageView.frame = CGRectMake(2, 2, 30, 30);
-    imageView.contentMode = UIViewContentModeCenter;
-    [imageView setTintColor:tintColor];
-    [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-    
-    [imageContainer insertSubview:imageView atIndex:0];
-    imageContainer.layer.cornerRadius = iconFrameSize / 2;
-    
-    [tableHeaderView addSubview:imageContainer];
+    if (icon)
+    {
+        UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.frame = CGRectMake(2, 2, 30, 30);
+        imageView.contentMode = UIViewContentModeCenter;
+        [imageView setTintColor:tintColor];
+        [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        
+        [imageContainer insertSubview:imageView atIndex:0];
+        imageContainer.layer.cornerRadius = iconFrameSize / 2;
+        
+        [tableHeaderView addSubview:imageContainer];
+    }
     
     return tableHeaderView;
 }

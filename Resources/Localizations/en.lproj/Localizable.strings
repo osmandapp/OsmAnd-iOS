@@ -794,6 +794,7 @@
 "units_and_formats" = "Units & formats";
 "device_settings" = "Device settings";
 "osmand_settings" = "OsmAnd settings";
+"backup_and_restore" = "Backup & Restore";
 "global_settings_descr" = "Affect the entire application.";
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
@@ -2243,6 +2244,10 @@
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Show node network cycle routes";
 "rendering_attr_hideText_name" = "Text";
 "rendering_attr_contourDensity_name" = "Contour line density";
+"rendering_attr_showRunningRoutes_name" = "Running routes";
+"rendering_attr_showRunningRoutes_description" = "Show running routes";
+"rendering_attr_showFitnessTrails_name" = "Fitness trails";
+"rendering_attr_showFitnessTrails_description" = "Show fitness trails";
 "routing_attr_avoid_motorway_description" = "Avoids motorways";
 "routing_attr_avoid_motorway_name" = "No motorways";
 "routing_attr_avoid_low_emission_zone_name" = "No low emission zones";
@@ -2508,6 +2513,15 @@
 "routes_color_by_type" = "Color routes by…";
 
 "q_clear_weather_cache" = "Do you want to clear weather cache?";
+
+"osmand_cloud" = "OsmAnd Cloud";
+"cloud_description" = "Never lose your data. Back up and restore all info easily.";
+"cloud_create_account" = "Create account";
+"cloud_existing_account" = "I already have an account";
+"local_backup" = "Local Backup";
+"local_backup_descr" = "Backup or restore data from a local file.";
+"backup_into_file" = "Backup into file";
+"restore_from_file" = "Restore from file";
 
 // Release Notes
 // instruction:

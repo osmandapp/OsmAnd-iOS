@@ -48,7 +48,6 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 @implementation OABackupHelper
 {
     NSOperationQueue *_executor;
-//    private final BackupExecutor executor;
     
 //    private PrepareBackupTask prepareBackupTask;
 //        private PrepareBackupResult backup = new PrepareBackupResult();

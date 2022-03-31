@@ -205,4 +205,6 @@
 #define kDefaultTurnArrowsDayColor 0xffffde5b
 #define kDefaultTurnArrowsNightColor 0xff41a6d9
 
+#define color_purple_border 0x106c19ff
+
 #endif /* OAColors_h */

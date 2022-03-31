@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OAWeatherBand.h"
+#import "OAMapPresentationEnvironment.h"
 
 #include <OsmAndCore/stdlib_common.h>
 #include <functional>
@@ -28,8 +29,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OAWeatherHelper : NSObject
 
 @property (nonatomic, readonly) NSArray<OAWeatherBand *> *bands;
+@property (nonatomic, readonly) OAMapPresentationEnvironment *mapPresentationEnvironment;
 
 + (OAWeatherHelper *) sharedInstance;
+
+- (void) updateMapPresentationEnvironment:(OAMapPresentationEnvironment *)mapPresentationEnvironment;
 
 - (QList<OsmAnd::BandIndex>) getVisibleBands;
 - (QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>>) getBandSettings;

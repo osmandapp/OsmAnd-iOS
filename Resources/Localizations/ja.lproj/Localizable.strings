@@ -242,7 +242,7 @@
 "sort_by_distance" = "距離で並べ替え";
 "sort_by_name" = "名前で並び替え";
 "by_name" = "名前で";
-"by_dist" = "By distance";
+"by_dist" = "距離";
 "sort_by" = "並び替え";
 "map_markers_other" = "その他マーカー";
 "directions_other" = "その他案内地点";
@@ -1919,7 +1919,7 @@
 "point_to_navigate" = "案内する";
 "select_another_track" = "別の経路を選択";
 "select_track_to_follow" = "たどる経路の選択";
-"shared_string_gpx_track" = "農業用道路、林道";
+"shared_string_gpx_track" = "経路";
 "follow_track" = "経路をたどる";
 "split_after" = "この後で分割";
 "split_before" = "この前で分割";
@@ -1936,7 +1936,7 @@
 "track_is_saved" = "%@\nセーブされました！";
 "plan_route_create_new_route" = "新しいルートの作成";
 "open_saved_track" = "保存された経路を開く";
-"simplified_track_description" = "ルートの線のみが保存され、経由地点はは削除されます。";
+"simplified_track_description" = "ルートの線のみが保存され、経由地点は削除されます。";
 "simplified_track" = "簡略化された経路";
 "join_segments" = "セグメントの接続";
 "prev_segs_recalc_descr" = "全ての先行セグメントは、選択したプロファイルを使用して再計算されます";
@@ -2124,3 +2124,34 @@
 "routeInfo_winter_ice_road_description" = "冬の道路分類によってルートまたは経路の線に色を付けます。";
 "travel_routes" = "旅行ルート";
 "rendering_value_walkingRoutesOSMCNodes_description" = "ノードネットワークのタイプ(国際、地域、ローカル)に応じてルートに色付けします。";
+"distance_moving" = "距離補正済み";
+"edit_track" = "経路の編集";
+"gpx_split_interval_descr" = "距離または時間のマーカーが経路に表示される間隔を選択します。";
+"reset_to_original" = "初期値へリセット";
+"nautical" = "航海";
+"start_point" = "開始";
+"map_widget_speed" = "速度";
+"carplay_profile" = "CarPlayプロファイル";
+"carplay_profile_descr" = "CarPlay接続時に使用されるプロファイルです。";
+
+// Shared Strings
+"shared_string_custom" = "カスタム";
+"shared_string_width" = "幅";
+"shared_string_interval" = "間隔";
+"gpx_selection_segment_title" = "セグメント";
+"gpx_split_interval_none_descr" = "時間または距離で、必要な分割オプションを選択します。";
+"track_show_start_finish_icons" = "出発地点と目的地アイコンを表示";
+"points_delete_multiple" = "%d個の地点を削除しますか？";
+"shared_string_end_time" = "終了時刻";
+"shared_string_time_moving" = "移動時間";
+"approximate_file_size" = "おおよそのファイルサイズ: %@";
+"duplicate_track" = "経路を複製";
+"industrial" = "産業・工業";
+"dialogs_and_notifications_descr" = "ポップアップ、ダイアログ、通知の制御";
+"education" = "教育";
+"analyze_on_map" = "分析をマップ上で閲覧";
+"gpx_split_interval" = "区間を分割";
+"shared_string_start_time" = "開始時刻";
+"shared_string_time_span" = "期間";
+"delete_waypoints" = "経由地点を削除";
+"shared_string_overview" = "概要";

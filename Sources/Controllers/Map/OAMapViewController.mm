@@ -1673,6 +1673,7 @@
         _mapPrimitivesProvider.reset();
         _mapPresentationEnvironment.reset();
         _mapPrimitiviser.reset();
+        [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:nil];
 
         if (_mapObjectsSymbolsProvider)
             [_mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProvider];
@@ -1757,7 +1758,7 @@
                                                                                      [settings.textSize get:settings.applicationMode.get],
                                                                                      QString::fromNSString(langId),
                                                                                      langPreferences));
-            
+            [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:self.mapPresentationEnv];
             
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
             _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,

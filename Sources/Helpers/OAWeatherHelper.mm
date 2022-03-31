@@ -41,6 +41,11 @@
     return self;
 }
 
+- (void) updateMapPresentationEnvironment:(OAMapPresentationEnvironment *)mapPresentationEnvironment
+{
+    _mapPresentationEnvironment = mapPresentationEnvironment;
+}
+
 - (QList<OsmAnd::BandIndex>) getVisibleBands
 {
     QList<OsmAnd::BandIndex> res;
@@ -58,7 +63,7 @@
     {
         auto contourStyleName = QString::fromNSString([band getContourStyleName]);
         
-        NSDictionary<NSNumber *, NSArray<NSNumber *> *> *contourLevels = [band getContourLevels];
+        NSDictionary<NSNumber *, NSArray<NSNumber *> *> *contourLevels = [band getContourLevels:self.mapPresentationEnvironment];
         QHash<OsmAnd::ZoomLevel, QList<double>> contourLevelsMap;
         for (NSNumber * zoomNum in contourLevels.allKeys)
         {
@@ -69,7 +74,7 @@
             
             contourLevelsMap.insert((OsmAnd::ZoomLevel)zoomNum.intValue, levels);
         }
-        NSDictionary<NSNumber *, NSArray<NSString *> *> *contourTypes = [band getContourTypes];
+        NSDictionary<NSNumber *, NSArray<NSString *> *> *contourTypes = [band getContourTypes:self.mapPresentationEnvironment];
         QHash<OsmAnd::ZoomLevel, QStringList> contourTypesMap;
         for (NSNumber * zoomNum in contourTypes.allKeys)
         {

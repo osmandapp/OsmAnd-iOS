@@ -610,7 +610,7 @@
 "si_nm_h" = "Морских миль в час (узел)";
 "search_poi_category_hint" = "Напечатайте для поиска";
 "shared_string_is_open" = "Открыто";
-"open_from" = "Открыто с";
+"open_from" = "Откроется в";
 "open_till" = "Открыто до";
 "will_close_at" = "Закроется в";
 "will_open_at" = "Откроется в";

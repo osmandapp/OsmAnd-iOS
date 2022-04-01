@@ -1348,7 +1348,7 @@
 "routing_attr_allow_motorway_description" = "Autoriser les trajets sur autoroute.";
 "routing_attr_prefer_unpaved_name" = "Privilégier les routes non revêtues";
 "routing_attr_piste_type_downhill_description" = "Pistes de ski et accès aux remontées mécaniques.";
-"rendering_value_walkingRoutesOSMCNodes_name" = "Nœud de réseaux";
+"rendering_value_walkingRoutesOSMCNodes_name" = "Réseaux de noeuds";
 "rendering_attr_subwayMode_name" = "Lignes de métro";
 "rendering_attr_hikingRoutesOSMC_description" = "Rendu des itinéraires de randonnée d\'après OSMC.";
 "routing_attr_width_name" = "Limite de largeur";

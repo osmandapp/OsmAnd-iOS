@@ -185,7 +185,17 @@
                             const auto bandValue = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getConvertedBandValue(band, value);
                             const auto bandValueStr = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getFormattedBandValue(band, bandValue, true);
                             NSString *bandUnit = [[OAWeatherBand withWeatherBand:band] getBandUnit];
-                            [weatherControlWeak setText:bandValueStr.toNSString() subtext:bandUnit];
+                            
+                            BOOL unitsWithBigFont = band == WEATHER_BAND_TEMPERATURE;
+                            if (unitsWithBigFont)
+                            {
+                                NSString *fullText = [NSString stringWithFormat:@"%@ %@", bandValueStr.toNSString(), bandUnit];
+                                [weatherControlWeak setText:fullText subtext:nil];
+                            }
+                            else
+                            {
+                                [weatherControlWeak setText:bandValueStr.toNSString() subtext:bandUnit];
+                            }
                             [selfWeak setMapCenterMarkerVisibility:YES];
                         }
                     }

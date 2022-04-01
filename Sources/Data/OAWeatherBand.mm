@@ -68,7 +68,7 @@ static NSString *kPrecipContourStyleName;
 
 + (void) initialize
 {
-    kTempUnits = @[@"C", @"F"];
+    kTempUnits = @[@"°C", @"°F"];
     kPressureUnits = @[@"hPa", @"mmHg", @"inHg"];
     kCloudUnits = @[@"%"];
     kWindSpeedUnits = @[@"m/s", @"km/h", @"mph", @"kt"];
@@ -76,8 +76,8 @@ static NSString *kPrecipContourStyleName;
 
     kGeneralUnitFormats = @{
         @"%" : @"%d",
-        @"C" : @"%d",
-        @"F" : @"%d",
+        @"°C" : @"%d",
+        @"°F" : @"%d",
         @"hPa" : @"%d",
         @"mmHg" : @"%d",
         @"inHg" : @"%d",
@@ -91,8 +91,8 @@ static NSString *kPrecipContourStyleName;
 
     kPreciseUnitFormats = @{
         @"%" : @"%d",
-        @"C" : @"%.1f",
-        @"F" : @"%d",
+        @"°C" : @"%.1f",
+        @"°F" : @"%d",
         @"hPa" : @"%d",
         @"mmHg" : @"%d",
         @"inHg" : @"%.1f",
@@ -109,13 +109,13 @@ static NSString *kPrecipContourStyleName;
     kWindSpeedUnits = @[@"m/s", @"km/h", @"mph", @"kt"];
     kPrecipUnits = @[@"mm", @"in"];
 
-    kDefaultTempUnit = @"C";
+    kDefaultTempUnit = @"°C";
     kDefaultPressureUnit = @"mmHg";
     kDefaultCloudUnit = @"%";
     kDefaultWindSpeedUnit = @"m/s";
     kDefaultPrecipUnit = @"mm";
 
-    kInternalTempUnit = @"C";
+    kInternalTempUnit = @"°C";
     kInternalPressureUnit = @"Pa";
     kInternalCloudUnit = @"%";
     kInternalWindSpeedUnit = @"m/s";

@@ -467,6 +467,8 @@
     else
     {
         width = [self getParamFromAttr:@"strokeWidth"].floatValue;
+        double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
+        width = 2 / (mapDensity / (width - UIScreen.mainScreen.scale));
     }
 
     return width;

@@ -185,7 +185,17 @@
                             const auto bandValue = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getConvertedBandValue(band, value);
                             const auto bandValueStr = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getFormattedBandValue(band, bandValue, true);
                             NSString *bandUnit = [[OAWeatherBand withWeatherBand:band] getBandUnit];
-                            [weatherControlWeak setText:bandValueStr.toNSString() subtext:bandUnit];
+                            
+                            BOOL unitsWithBigFont = band == WEATHER_BAND_TEMPERATURE;
+                            if (unitsWithBigFont)
+                            {
+                                NSString *fullText = [NSString stringWithFormat:@"%@ %@", bandValueStr.toNSString(), bandUnit];
+                                [weatherControlWeak setText:fullText subtext:nil];
+                            }
+                            else
+                            {
+                                [weatherControlWeak setText:bandValueStr.toNSString() subtext:bandUnit];
+                            }
                             [selfWeak setMapCenterMarkerVisibility:YES];
                         }
                     }
@@ -204,7 +214,35 @@
     };
     
     [weatherControl setText:nil subtext:nil];
-    [weatherControl setIcons:@"widget_altitude_day" widgetNightIcon:@"widget_altitude_night"];
+    NSString *iconNameDay;
+    NSString *iconNameNight;
+    if (band == WEATHER_BAND_TEMPERATURE)
+    {
+        iconNameDay = @"widget_weather_temperature_day";
+        iconNameNight = @"widget_weather_temperature_night";
+    }
+    else if (band == WEATHER_BAND_PRESSURE)
+    {
+        iconNameDay = @"widget_weather_air_pressure_day";
+        iconNameNight = @"widget_weather_air_pressure_night";
+    }
+    else if (band == WEATHER_BAND_WIND_SPEED)
+    {
+        iconNameDay = @"widget_weather_wind_day";
+        iconNameNight = @"widget_weather_wind_night";
+    }
+    else if (band == WEATHER_BAND_CLOUD)
+    {
+        iconNameDay = @"widget_weather_clouds_day";
+        iconNameNight = @"widget_weather_clouds_night";
+    }
+    else if (band == WEATHER_BAND_PRECIPITATION)
+    {
+        iconNameDay = @"widget_weather_precipitation_day";
+        iconNameNight = @"widget_weather_precipitation_night";
+    }
+    
+    [weatherControl setIcons:iconNameDay widgetNightIcon:iconNameNight];
     return weatherControl;
 }
 

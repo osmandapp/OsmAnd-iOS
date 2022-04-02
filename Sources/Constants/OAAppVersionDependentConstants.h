@@ -14,5 +14,6 @@
 
 + (NSString *) getShortAppVersion;
 + (NSString *) getShortAppVersionWithSeparator:(NSString *)separator;
++ (NSString *)getAppVersionWithBundle;
 
 @end

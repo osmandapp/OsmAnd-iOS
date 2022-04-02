@@ -19,6 +19,7 @@
 #import "OAColors.h"
 #import "OAAutoObserverProxy.h"
 #import "OAPurchasesViewController.h"
+#import "OABackupHelper.h"
 
 #import "OACreateProfileViewController.h"
 #import "OARearrangeProfilesViewController.h"
@@ -119,7 +120,7 @@
         @{
             @"name" : @"backup_restore",
             @"title" : OALocalizedString(@"backup_and_restore"),
-            @"value" : @"Placeholder", // TODO: insert value
+            @"value" : @"", // TODO: insert value
             @"description" : OALocalizedString(@"global_settings_descr"),
             @"img" : @"ic_custom_restore",
             @"type" : [OAIconTitleValueCell getCellIdentifier]
@@ -356,9 +357,8 @@
     }
     else if ([name isEqualToString:@"backup_restore"])
     {
-        // TODO: open correct VC: not logged in/ not purchased - OACloudIntroductionViewController; else - OACloudBackupViewController
         UIViewController *vc;
-        if (YES/*logged in & purchased*/)
+        if (OABackupHelper.sharedInstance.isRegistered)
             vc = [[OACloudBackupViewController alloc] init];
         else
             vc = [[OACloudIntroductionViewController alloc] init];

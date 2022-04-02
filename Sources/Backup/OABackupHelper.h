@@ -53,6 +53,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *) getEmail;
 - (BOOL) isRegistered;
 
+- (void) registerUser:(NSString *)email promoCode:(NSString *)promoCode login:(BOOL)login;
+- (void) registerDevice:(NSString *)token;
+
++ (BOOL) isTokenValid:(NSString *)token;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -41,10 +41,10 @@
     params[@"email"] = backupHelper.getEmail;
     NSString *orderId = backupHelper.getOrderId;
     if (orderId)
-        params[@"orderId"] = orderId;
+        params[@"orderid"] = orderId;
     NSString *deviceId = backupHelper.getIosId;
     if (deviceId.length > 0)
-        params[@"deviceId"] = deviceId;
+        params[@"deviceid"] = deviceId;
     params[@"token"] = _token;
     [OANetworkUtilities sendRequestWithUrl:OABackupHelper.DEVICE_REGISTER_URL params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         int status;
@@ -61,8 +61,7 @@
         
         if (responseCode != 200 && err.length > 0)
         {
-            NSString *errorText = [NSString stringWithFormat:@"%@ failed: %@", kUserOperation, err];
-            backupError = [[OABackupError alloc] initWithError:errorText];
+            backupError = [[OABackupError alloc] initWithError:err];
             message = [NSString stringWithFormat:@"Device registration error: %@", backupError.toString];
             status = STATUS_SERVER_ERROR;
         }
@@ -73,8 +72,8 @@
             NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
             if (!jsonParsingError)
             {
-                [settings.backupDeviceId set:resultJson[@"id"]];
-                [settings.backupUserId set:resultJson[@"userid"]];
+                [settings.backupDeviceId set:[resultJson[@"id"] stringValue]];
+                [settings.backupUserId set:[resultJson[@"userid"] stringValue]];
                 [settings.backupNativeDeviceId set:resultJson[@"deviceid"]];
                 [settings.backupAccessToken set:resultJson[@"accesstoken"]];
                 [settings.backupAccessTokenUpdateTime set:resultJson[@"udpatetime"]];

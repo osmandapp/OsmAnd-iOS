@@ -657,15 +657,15 @@
     [self registerSideWidget:ruler widgetState:[[OACompassRulerWidgetState alloc] init] key:@"radius_ruler" left:NO priorityOrder:43];
 
     OATextInfoWidget *weatherTemp = [mic createWeatherControl:WEATHER_BAND_TEMPERATURE];
-    [self registerSideWidget:weatherTemp imageId:@"ic_action_altitude" message:OALocalizedString(@"map_settings_weather_temp") key:@"weather_temp" left:false priorityOrder:120];
+    [self registerSideWidget:weatherTemp imageId:@"ic_custom_thermometer" message:OALocalizedString(@"map_settings_weather_temp") key:@"weather_temp" left:false priorityOrder:120];
     OATextInfoWidget *weatherPressure = [mic createWeatherControl:WEATHER_BAND_PRESSURE];
-    [self registerSideWidget:weatherPressure imageId:@"ic_action_altitude" message:OALocalizedString(@"map_settings_weather_pressure") key:@"weather_pressure" left:false priorityOrder:121];
+    [self registerSideWidget:weatherPressure imageId:@"ic_custom_air_pressure" message:OALocalizedString(@"map_settings_weather_pressure") key:@"weather_pressure" left:false priorityOrder:121];
     OATextInfoWidget *weatherSpeed = [mic createWeatherControl:WEATHER_BAND_WIND_SPEED];
-    [self registerSideWidget:weatherSpeed imageId:@"ic_action_altitude" message:OALocalizedString(@"map_settings_weather_wind") key:@"weather_wind" left:false priorityOrder:122];
+    [self registerSideWidget:weatherSpeed imageId:@"ic_custom_wind" message:OALocalizedString(@"map_settings_weather_wind") key:@"weather_wind" left:false priorityOrder:122];
     OATextInfoWidget *weatherCloud = [mic createWeatherControl:WEATHER_BAND_CLOUD];
-    [self registerSideWidget:weatherCloud imageId:@"ic_action_altitude" message:OALocalizedString(@"map_settings_weather_cloud") key:@"weather_cloud" left:false priorityOrder:123];
+    [self registerSideWidget:weatherCloud imageId:@"ic_custom_clouds" message:OALocalizedString(@"map_settings_weather_cloud") key:@"weather_cloud" left:false priorityOrder:123];
     OATextInfoWidget *weatherPrecip = [mic createWeatherControl:WEATHER_BAND_PRECIPITATION];
-    [self registerSideWidget:weatherPrecip imageId:@"ic_action_altitude" message:OALocalizedString(@"map_settings_weather_precip") key:@"weather_precip" left:false priorityOrder:124];
+    [self registerSideWidget:weatherPrecip imageId:@"ic_custom_precipitation" message:OALocalizedString(@"map_settings_weather_precip") key:@"weather_precip" left:false priorityOrder:124];
 }
 
 - (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts

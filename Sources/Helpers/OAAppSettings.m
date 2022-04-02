@@ -9,14 +9,10 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
-#import "OAUtilities.h"
 #import "OADayNightHelper.h"
 #import "OAColors.h"
-#import "OANavigationIcon.h"
-#import "OALocationIcon.h"
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
-#import "OAImportExportSettingsConverter.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -3638,7 +3634,7 @@
         [_profilePreferences setObject:_distanceIndication forKey:@"map_markers_mode"];
         _arrowsOnMap = [OACommonBoolean withKey:mapArrowsOnMapKey defValue:NO];
         [_profilePreferences setObject:_arrowsOnMap forKey:@"show_arrows_to_first_markers"];
-        _directionLines = [OACommonBoolean withKey:mapDirectionLinesKey defValue:NO];
+        _directionLines = [OACommonBoolean withKey:mapDirectionLinesKey defValue:YES];
         [_profilePreferences setObject:_directionLines forKey:@"show_lines_to_first_markers"];
 
         // global

@@ -1007,11 +1007,11 @@
     NSString *userIosId = settings.userIosId.get;
     if (userIosId.length > 0)
         return userIosId;
-    userIosId = UIDevice.currentDevice.identifierForVendor.UUIDString;
+    userIosId = [UIDevice.currentDevice.identifierForVendor.UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
     // TODO: check what is received in UUID
     if (userIosId == nil /*|| userIosId.length < 16 || [userIosId isEqualToString:@"0000000000000000"]*/)
     {
-        userIosId = [[NSUUID UUID] UUIDString];
+        userIosId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
     }
     [settings.userIosId set:userIosId];
     return userIosId;

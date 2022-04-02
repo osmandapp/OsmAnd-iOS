@@ -14,6 +14,7 @@
 #import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OAMapUtils.h"
+#import "OAAppVersionDependentConstants.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -709,7 +710,7 @@
 
     [self fillExtensions:document];
 
-    return document->saveTo(QString::fromNSString(filename));
+    return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
 }
 
 - (BOOL) isCloudmadeRouteFile

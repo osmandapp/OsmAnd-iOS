@@ -46,9 +46,9 @@
     params[@"login"] = _login ? @"true" : @"false";
     NSString *orderId = _promoCode.length == 0 ? backupHelper.getOrderId : _promoCode;
     if (orderId && orderId.length > 0)
-        params[@"orderId"] = orderId;
+        params[@"orderid"] = orderId;
     NSString *deviceId = OsmAndApp.instance.getUserIosId;
-    params[@"deviceId"] = deviceId;
+    params[@"deviceid"] = deviceId;
     [OANetworkUtilities sendRequestWithUrl:OABackupHelper.USER_REGISTER_URL params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         int status;
         NSString *message;
@@ -56,8 +56,7 @@
         NSString *result = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"";
         if (((NSHTTPURLResponse *)response).statusCode != 200)
         {
-            NSString *err = [NSString stringWithFormat:@"%@ failed: %@", kUserOperation, result];
-            backupError = [[OABackupError alloc] initWithError:err];
+            backupError = [[OABackupError alloc] initWithError:result];
             message = [NSString stringWithFormat:@"User registration error: %@\nEmail=%@\nOrderId=%@\nDeviceId=%@", backupError.toString, _email, orderId, deviceId];
             status = STATUS_SERVER_ERROR;
         }

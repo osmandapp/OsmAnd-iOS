@@ -15,6 +15,7 @@
 #import "OAFilledButtonCell.h"
 #import "OADividerCell.h"
 #import "OAUtilities.h"
+#import "OAAppSettings.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -45,12 +46,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self setNeedsStatusBarAppearanceUpdate];
-    [self setupTableHeaderView];
-    [self setupTableFooterView];
-    [self applyLocalization];
-    [self generateData];
-    [self.tableView reloadData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -66,6 +61,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setupTableHeaderView];
+    [self setupTableFooterView];
+    [self applyLocalization];
+    _inputText = [OAAppSettings.sharedManager.backupUserEmail get];
+    [self generateData];
+    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -131,10 +132,14 @@
     //override
 }
 
-- (NSArray<NSDictionary *> *) getData
+- (NSArray<NSArray<NSDictionary *> *> *) getData
 {
-    //override
-    return nil;
+    return nil; //override
+}
+
+- (NSDictionary *) getItem:(NSIndexPath *)indexPath
+{
+    return [self getData][indexPath.section][indexPath.row];
 }
 
 #pragma mark - Actions
@@ -156,24 +161,24 @@
 
 - (BOOL) isValidInputValue:(NSString *)value
 {
-    return value.length > 0 && [value isValidEmail];
+    return value.length > 0;
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return [self getData].count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self getData].count;
+    return [self getData][section].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getData][indexPath.row];
+    NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         OADescrTitleCell* cell;
@@ -305,13 +310,24 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getData][indexPath.row];
+    NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
         return 1.0 / [UIScreen mainScreen].scale;
     }
     return UITableViewAutomaticDimension;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.001;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.001;
+}
+
 
 #pragma mark - UITextFieldDelegate
 
@@ -325,6 +341,11 @@
 - (void) textViewDidChange:(UITextField *)textField
 {
     _inputText = textField.text;
+    [self generateData];
+    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+    for (NSInteger i = 1; i < self.tableView.numberOfSections; i++)
+        [indexSet addIndex:i];
+    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (BOOL) textFieldShouldClear:(UITextField *)textField

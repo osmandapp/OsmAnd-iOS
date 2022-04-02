@@ -33,7 +33,7 @@ static NSString *INFO_EXT = @".info";
 
 static NSString *SERVER_URL = @"https://osmand.net";
 
-static NSString *USER_REGISTER_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/device-register"];
+static NSString *USER_REGISTER_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/user-register"];
 static NSString *DEVICE_REGISTER_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/device-register"];
 static NSString *UPDATE_ORDER_ID_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/user-update-orderid"];
 static NSString *UPLOAD_FILE_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/upload-file"];
@@ -175,6 +175,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         _app = [OsmAndApp instance];
         _executor = [[NSOperationQueue alloc] init];
         _settings = [OAAppSettings sharedManager];
+        _backupListeners = [[OABackupListeners alloc] init];
     }
     return self;
 }
@@ -288,8 +289,9 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 - (void) checkSubscriptions:(id<OAOnUpdateSubscriptionListener>)listener
 {
-    BOOL subscriptionActive = NO;
     OAIAPHelper *purchaseHelper = OAIAPHelper.sharedInstance;
+    BOOL subscriptionActive = purchaseHelper.subscribedToLiveUpdates;
+    
     
 //        OperationLog operationLog = new OperationLog("checkSubscriptions", DEBUG);
 //        String error = "";
@@ -341,8 +343,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         NSString *result = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"";
         if (((NSHTTPURLResponse *)response).statusCode != 200)
         {
-            err = [NSString stringWithFormat:@"%@ failed: %@", kUpdateIdOperation, result];
-            OABackupError *backupError = [[OABackupError alloc] initWithError:err];
+            OABackupError *backupError = [[OABackupError alloc] initWithError:result];
             message = [NSString stringWithFormat:@"Update order id error: %@", backupError.toString];
             status = STATUS_SERVER_ERROR;
         }

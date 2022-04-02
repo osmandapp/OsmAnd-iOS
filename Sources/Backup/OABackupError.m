@@ -29,7 +29,7 @@
     NSMutableDictionary *resultError = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&err];
     if (err)
         return;
-    if (resultError[@"error"])
+    if (resultError[@"error"] && [resultError[@"error"] isKindOfClass:NSDictionary.class])
     {
         NSDictionary *errorObj = resultError[@"error"];
         _code = [errorObj[@"errorCode"] integerValue];

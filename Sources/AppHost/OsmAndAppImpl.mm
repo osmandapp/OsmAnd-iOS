@@ -1008,8 +1008,7 @@
     if (userIosId.length > 0)
         return userIosId;
     userIosId = [UIDevice.currentDevice.identifierForVendor.UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    // TODO: check what is received in UUID
-    if (userIosId == nil /*|| userIosId.length < 16 || [userIosId isEqualToString:@"0000000000000000"]*/)
+    if (userIosId == nil)
     {
         userIosId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
     }

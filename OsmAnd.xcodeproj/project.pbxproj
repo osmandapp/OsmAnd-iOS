@@ -348,8 +348,6 @@
 		3240977B27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */; };
 		3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */; };
 		3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */; };
-		325A27372796CE6E0053F8BF /* ic_navbar_pencil@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325A27352796CE6D0053F8BF /* ic_navbar_pencil@3x.png */; };
-		325A27382796CE6E0053F8BF /* ic_navbar_pencil@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325A27362796CE6D0053F8BF /* ic_navbar_pencil@2x.png */; };
 		325B69FD26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */; };
 		325B6A0126D8FEAE00D8B67C /* OACoodinateSearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 325B6A0026D8FEAE00D8B67C /* OACoodinateSearchCell.m */; };
 		325B6A0226D9009800D8B67C /* OACoodinateSearchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 325B69FE26D8FE4500D8B67C /* OACoodinateSearchCell.xib */; };
@@ -362,6 +360,54 @@
 		326B4FB4257FD0FC00ABAB1D /* ic_action_motorboat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FB0257FD0FB00ABAB1D /* ic_action_motorboat@3x.png */; };
 		326B4FBF257FD11400ABAB1D /* ic_action_light_aircraft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBB257FD11300ABAB1D /* ic_action_light_aircraft@2x.png */; };
 		326B4FC1257FD11400ABAB1D /* ic_action_light_aircraft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */; };
+		3296B47B27F8790800108AF7 /* widget_weather_temperature_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B44B27F878FD00108AF7 /* widget_weather_temperature_night@3x.png */; };
+		3296B47C27F8790800108AF7 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B44C27F878FE00108AF7 /* ic_navbar_overflow_menu_stroke@2x.png */; };
+		3296B47D27F8790800108AF7 /* ic_custom_wind@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B44D27F878FE00108AF7 /* ic_custom_wind@3x.png */; };
+		3296B47E27F8790800108AF7 /* widget_weather_precipitation_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B44E27F878FE00108AF7 /* widget_weather_precipitation_day@3x.png */; };
+		3296B47F27F8790800108AF7 /* ic_custom_thermometer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B44F27F878FE00108AF7 /* ic_custom_thermometer@2x.png */; };
+		3296B48027F8790800108AF7 /* widget_weather_clouds_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45027F878FE00108AF7 /* widget_weather_clouds_day@3x.png */; };
+		3296B48127F8790800108AF7 /* ic_custom_terrain_any@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45127F878FF00108AF7 /* ic_custom_terrain_any@2x.png */; };
+		3296B48227F8790800108AF7 /* widget_weather_air_pressure_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45227F878FF00108AF7 /* widget_weather_air_pressure_day@2x.png */; };
+		3296B48327F8790800108AF7 /* ic_custom_terrain_hilly@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45327F878FF00108AF7 /* ic_custom_terrain_hilly@2x.png */; };
+		3296B48427F8790800108AF7 /* widget_weather_precipitation_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45427F878FF00108AF7 /* widget_weather_precipitation_day@2x.png */; };
+		3296B48527F8790800108AF7 /* widget_weather_umbrella_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45527F878FF00108AF7 /* widget_weather_umbrella_day@2x.png */; };
+		3296B48627F8790800108AF7 /* ic_navbar_pencil@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45627F8790000108AF7 /* ic_navbar_pencil@3x.png */; };
+		3296B48727F8790800108AF7 /* widget_weather_umbrella_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45727F8790000108AF7 /* widget_weather_umbrella_night@2x.png */; };
+		3296B48827F8790800108AF7 /* widget_weather_umbrella_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45827F8790000108AF7 /* widget_weather_umbrella_night@3x.png */; };
+		3296B48927F8790800108AF7 /* widget_weather_air_pressure_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45927F8790000108AF7 /* widget_weather_air_pressure_day@3x.png */; };
+		3296B48A27F8790800108AF7 /* ic_custom_wind@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45A27F8790100108AF7 /* ic_custom_wind@2x.png */; };
+		3296B48B27F8790800108AF7 /* ic_custom_terrain_less_hilly@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45B27F8790100108AF7 /* ic_custom_terrain_less_hilly@2x.png */; };
+		3296B48C27F8790800108AF7 /* widget_weather_air_pressure_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45C27F8790100108AF7 /* widget_weather_air_pressure_night@2x.png */; };
+		3296B48D27F8790800108AF7 /* ic_custom_clouds@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45D27F8790100108AF7 /* ic_custom_clouds@3x.png */; };
+		3296B48E27F8790800108AF7 /* ic_custom_terrain_hilly@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45E27F8790100108AF7 /* ic_custom_terrain_hilly@3x.png */; };
+		3296B48F27F8790800108AF7 /* widget_weather_precipitation_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B45F27F8790200108AF7 /* widget_weather_precipitation_night@2x.png */; };
+		3296B49027F8790800108AF7 /* widget_weather_air_pressure_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46027F8790200108AF7 /* widget_weather_air_pressure_night@3x.png */; };
+		3296B49127F8790800108AF7 /* ic_custom_air_pressure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46127F8790200108AF7 /* ic_custom_air_pressure@2x.png */; };
+		3296B49227F8790800108AF7 /* widget_weather_wind_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46227F8790200108AF7 /* widget_weather_wind_day@2x.png */; };
+		3296B49327F8790800108AF7 /* ic_navbar_pencil@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46327F8790200108AF7 /* ic_navbar_pencil@2x.png */; };
+		3296B49427F8790800108AF7 /* ic_custom_umbrella@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46427F8790300108AF7 /* ic_custom_umbrella@3x.png */; };
+		3296B49527F8790800108AF7 /* ic_custom_air_pressure@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46527F8790300108AF7 /* ic_custom_air_pressure@3x.png */; };
+		3296B49627F8790800108AF7 /* widget_weather_temperature_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46627F8790300108AF7 /* widget_weather_temperature_day@2x.png */; };
+		3296B49727F8790800108AF7 /* widget_weather_temperature_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46727F8790300108AF7 /* widget_weather_temperature_night@2x.png */; };
+		3296B49827F8790800108AF7 /* widget_weather_clouds_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46827F8790300108AF7 /* widget_weather_clouds_night@2x.png */; };
+		3296B49927F8790800108AF7 /* widget_weather_precipitation_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46927F8790400108AF7 /* widget_weather_precipitation_night@3x.png */; };
+		3296B49A27F8790800108AF7 /* widget_weather_temperature_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46A27F8790400108AF7 /* widget_weather_temperature_day@3x.png */; };
+		3296B49B27F8790800108AF7 /* widget_weather_umbrella_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46B27F8790400108AF7 /* widget_weather_umbrella_day@3x.png */; };
+		3296B49C27F8790800108AF7 /* widget_weather_clouds_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46C27F8790400108AF7 /* widget_weather_clouds_day@2x.png */; };
+		3296B49D27F8790800108AF7 /* widget_weather_wind_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46D27F8790400108AF7 /* widget_weather_wind_day@3x.png */; };
+		3296B49E27F8790800108AF7 /* ic_custom_terrain_any@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46E27F8790500108AF7 /* ic_custom_terrain_any@3x.png */; };
+		3296B49F27F8790800108AF7 /* ic_custom_precipitation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B46F27F8790500108AF7 /* ic_custom_precipitation@2x.png */; };
+		3296B4A027F8790800108AF7 /* widget_weather_wind_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47027F8790500108AF7 /* widget_weather_wind_night@2x.png */; };
+		3296B4A127F8790800108AF7 /* ic_custom_thermometer@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47127F8790500108AF7 /* ic_custom_thermometer@3x.png */; };
+		3296B4A227F8790800108AF7 /* ic_custom_terrain_flat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47227F8790500108AF7 /* ic_custom_terrain_flat@2x.png */; };
+		3296B4A327F8790800108AF7 /* ic_custom_terrain_flat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47327F8790600108AF7 /* ic_custom_terrain_flat@3x.png */; };
+		3296B4A427F8790800108AF7 /* ic_custom_terrain_less_hilly@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47427F8790600108AF7 /* ic_custom_terrain_less_hilly@3x.png */; };
+		3296B4A527F8790800108AF7 /* widget_weather_wind_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47527F8790600108AF7 /* widget_weather_wind_night@3x.png */; };
+		3296B4A627F8790800108AF7 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47627F8790700108AF7 /* ic_navbar_overflow_menu_stroke@3x.png */; };
+		3296B4A727F8790800108AF7 /* ic_custom_umbrella@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47727F8790700108AF7 /* ic_custom_umbrella@2x.png */; };
+		3296B4A827F8790800108AF7 /* widget_weather_clouds_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47827F8790700108AF7 /* widget_weather_clouds_night@3x.png */; };
+		3296B4A927F8790800108AF7 /* ic_custom_precipitation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47927F8790700108AF7 /* ic_custom_precipitation@3x.png */; };
+		3296B4AA27F8790800108AF7 /* ic_custom_clouds@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B47A27F8790700108AF7 /* ic_custom_clouds@2x.png */; };
 		32A001662610B43700ABE0D2 /* widget_coordinates_longitude_west_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A001482610B42F00ABE0D2 /* widget_coordinates_longitude_west_night@2x.png */; };
 		32A001682610B43700ABE0D2 /* widget_coordinates_latitude_south_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0014A2610B43000ABE0D2 /* widget_coordinates_latitude_south_day@2x.png */; };
 		32A0016A2610B43700ABE0D2 /* widget_coordinates_utm_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0014C2610B43000ABE0D2 /* widget_coordinates_utm_day@3x.png */; };
@@ -411,42 +457,6 @@
 		32C91E5D25A86A5700FA6470 /* ic_custom_compass_widget@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */; };
 		32C91E5F25A86A5700FA6470 /* ic_custom_compass_widget@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */; };
 		32C91E6525A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */; };
-		32D253C727F5868A00324717 /* ic_custom_precipitation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253BB27F5868400324717 /* ic_custom_precipitation@2x.png */; };
-		32D253C827F5868A00324717 /* ic_custom_clouds@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253BC27F5868500324717 /* ic_custom_clouds@2x.png */; };
-		32D253C927F5868A00324717 /* ic_custom_clouds@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253BD27F5868500324717 /* ic_custom_clouds@3x.png */; };
-		32D253CA27F5868A00324717 /* ic_custom_air_pressure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253BE27F5868600324717 /* ic_custom_air_pressure@2x.png */; };
-		32D253CB27F5868A00324717 /* ic_custom_precipitation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253BF27F5868600324717 /* ic_custom_precipitation@3x.png */; };
-		32D253CC27F5868A00324717 /* ic_custom_thermometer@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253C027F5868700324717 /* ic_custom_thermometer@3x.png */; };
-		32D253CD27F5868A00324717 /* ic_custom_thermometer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253C127F5868700324717 /* ic_custom_thermometer@2x.png */; };
-		32D253CE27F5868A00324717 /* ic_custom_umbrella@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253C227F5868800324717 /* ic_custom_umbrella@2x.png */; };
-		32D253CF27F5868A00324717 /* ic_custom_umbrella@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253C327F5868800324717 /* ic_custom_umbrella@3x.png */; };
-		32D253D027F5868A00324717 /* ic_custom_air_pressure@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253C427F5868900324717 /* ic_custom_air_pressure@3x.png */; };
-		32D253D127F5868A00324717 /* ic_custom_wind@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253C527F5868900324717 /* ic_custom_wind@2x.png */; };
-		32D253D227F5868A00324717 /* ic_custom_wind@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253C627F5868A00324717 /* ic_custom_wind@3x.png */; };
-		32D253EB27F58BDC00324717 /* widget_weather_clouds_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253D327F58BD500324717 /* widget_weather_clouds_night@2x.png */; };
-		32D253EC27F58BDC00324717 /* widget_weather_umbrella_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253D427F58BD600324717 /* widget_weather_umbrella_day@2x.png */; };
-		32D253ED27F58BDC00324717 /* widget_weather_precipitation_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253D527F58BD600324717 /* widget_weather_precipitation_night@2x.png */; };
-		32D253EE27F58BDC00324717 /* widget_weather_temperature_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253D627F58BD600324717 /* widget_weather_temperature_day@2x.png */; };
-		32D253EF27F58BDC00324717 /* widget_weather_wind_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253D727F58BD600324717 /* widget_weather_wind_day@2x.png */; };
-		32D253F027F58BDC00324717 /* widget_weather_precipitation_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253D827F58BD700324717 /* widget_weather_precipitation_day@2x.png */; };
-		32D253F127F58BDC00324717 /* widget_weather_umbrella_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253D927F58BD700324717 /* widget_weather_umbrella_day@3x.png */; };
-		32D253F227F58BDC00324717 /* widget_weather_wind_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253DA27F58BD700324717 /* widget_weather_wind_night@2x.png */; };
-		32D253F327F58BDC00324717 /* widget_weather_umbrella_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253DB27F58BD700324717 /* widget_weather_umbrella_night@2x.png */; };
-		32D253F427F58BDC00324717 /* widget_weather_wind_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253DC27F58BD700324717 /* widget_weather_wind_night@3x.png */; };
-		32D253F527F58BDC00324717 /* widget_weather_temperature_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253DD27F58BD800324717 /* widget_weather_temperature_night@3x.png */; };
-		32D253F627F58BDC00324717 /* widget_weather_air_pressure_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253DE27F58BD800324717 /* widget_weather_air_pressure_day@2x.png */; };
-		32D253F727F58BDC00324717 /* widget_weather_wind_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253DF27F58BD900324717 /* widget_weather_wind_day@3x.png */; };
-		32D253F827F58BDC00324717 /* widget_weather_precipitation_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253E027F58BD900324717 /* widget_weather_precipitation_night@3x.png */; };
-		32D253F927F58BDC00324717 /* widget_weather_clouds_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253E127F58BD900324717 /* widget_weather_clouds_day@3x.png */; };
-		32D253FA27F58BDC00324717 /* widget_weather_temperature_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253E227F58BDA00324717 /* widget_weather_temperature_day@3x.png */; };
-		32D253FB27F58BDC00324717 /* widget_weather_umbrella_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253E327F58BDA00324717 /* widget_weather_umbrella_night@3x.png */; };
-		32D253FC27F58BDC00324717 /* widget_weather_clouds_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253E427F58BDA00324717 /* widget_weather_clouds_day@2x.png */; };
-		32D253FD27F58BDC00324717 /* widget_weather_air_pressure_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253E527F58BDA00324717 /* widget_weather_air_pressure_night@2x.png */; };
-		32D253FE27F58BDC00324717 /* widget_weather_air_pressure_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253E627F58BDB00324717 /* widget_weather_air_pressure_night@3x.png */; };
-		32D253FF27F58BDC00324717 /* widget_weather_precipitation_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253E727F58BDB00324717 /* widget_weather_precipitation_day@3x.png */; };
-		32D2540027F58BDC00324717 /* widget_weather_clouds_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253E827F58BDB00324717 /* widget_weather_clouds_night@3x.png */; };
-		32D2540127F58BDC00324717 /* widget_weather_air_pressure_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253E927F58BDB00324717 /* widget_weather_air_pressure_day@3x.png */; };
-		32D2540227F58BDC00324717 /* widget_weather_temperature_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D253EA27F58BDC00324717 /* widget_weather_temperature_night@2x.png */; };
 		32E2A6E027206ACF00F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BE2507804400266047 /* ic_custom_logo_wikimedia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */; };
@@ -3347,8 +3357,6 @@
 		3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAGPXListDeletingBottomSheet.m; sourceTree = "<group>"; };
 		3242A46D26CB0F05001CA174 /* OACollapsableNearestPoiTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableNearestPoiTypeView.h; sourceTree = "<group>"; };
 		3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableNearestPoiTypeView.mm; sourceTree = "<group>"; };
-		325A27352796CE6D0053F8BF /* ic_navbar_pencil@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_navbar_pencil@3x.png"; sourceTree = "<group>"; };
-		325A27362796CE6D0053F8BF /* ic_navbar_pencil@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_navbar_pencil@2x.png"; sourceTree = "<group>"; };
 		325B69FB26D828DC00D8B67C /* OAQuickSearchCoordinatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinatesViewController.h; sourceTree = "<group>"; };
 		325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchCoordinatesViewController.mm; sourceTree = "<group>"; };
 		325B69FE26D8FE4500D8B67C /* OACoodinateSearchCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACoodinateSearchCell.xib; sourceTree = "<group>"; };
@@ -3364,6 +3372,54 @@
 		326B4FB0257FD0FB00ABAB1D /* ic_action_motorboat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_motorboat@3x.png"; path = "Resources/Icons/Profile/ic_action_motorboat@3x.png"; sourceTree = "<group>"; };
 		326B4FBB257FD11300ABAB1D /* ic_action_light_aircraft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_light_aircraft@2x.png"; path = "Resources/Icons/Profile/ic_action_light_aircraft@2x.png"; sourceTree = "<group>"; };
 		326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_light_aircraft@3x.png"; path = "Resources/Icons/Profile/ic_action_light_aircraft@3x.png"; sourceTree = "<group>"; };
+		3296B44B27F878FD00108AF7 /* widget_weather_temperature_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_temperature_night@3x.png"; path = "Resources/Icons/widget_weather_temperature_night@3x.png"; sourceTree = "<group>"; };
+		3296B44C27F878FE00108AF7 /* ic_navbar_overflow_menu_stroke@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@2x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@2x.png"; sourceTree = "<group>"; };
+		3296B44D27F878FE00108AF7 /* ic_custom_wind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@3x.png"; path = "Resources/Icons/ic_custom_wind@3x.png"; sourceTree = "<group>"; };
+		3296B44E27F878FE00108AF7 /* widget_weather_precipitation_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_precipitation_day@3x.png"; path = "Resources/Icons/widget_weather_precipitation_day@3x.png"; sourceTree = "<group>"; };
+		3296B44F27F878FE00108AF7 /* ic_custom_thermometer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_thermometer@2x.png"; path = "Resources/Icons/ic_custom_thermometer@2x.png"; sourceTree = "<group>"; };
+		3296B45027F878FE00108AF7 /* widget_weather_clouds_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_clouds_day@3x.png"; path = "Resources/Icons/widget_weather_clouds_day@3x.png"; sourceTree = "<group>"; };
+		3296B45127F878FF00108AF7 /* ic_custom_terrain_any@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_any@2x.png"; path = "Resources/Icons/ic_custom_terrain_any@2x.png"; sourceTree = "<group>"; };
+		3296B45227F878FF00108AF7 /* widget_weather_air_pressure_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_air_pressure_day@2x.png"; path = "Resources/Icons/widget_weather_air_pressure_day@2x.png"; sourceTree = "<group>"; };
+		3296B45327F878FF00108AF7 /* ic_custom_terrain_hilly@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_hilly@2x.png"; path = "Resources/Icons/ic_custom_terrain_hilly@2x.png"; sourceTree = "<group>"; };
+		3296B45427F878FF00108AF7 /* widget_weather_precipitation_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_precipitation_day@2x.png"; path = "Resources/Icons/widget_weather_precipitation_day@2x.png"; sourceTree = "<group>"; };
+		3296B45527F878FF00108AF7 /* widget_weather_umbrella_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_umbrella_day@2x.png"; path = "Resources/Icons/widget_weather_umbrella_day@2x.png"; sourceTree = "<group>"; };
+		3296B45627F8790000108AF7 /* ic_navbar_pencil@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_pencil@3x.png"; path = "Resources/Icons/ic_navbar_pencil@3x.png"; sourceTree = "<group>"; };
+		3296B45727F8790000108AF7 /* widget_weather_umbrella_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_umbrella_night@2x.png"; path = "Resources/Icons/widget_weather_umbrella_night@2x.png"; sourceTree = "<group>"; };
+		3296B45827F8790000108AF7 /* widget_weather_umbrella_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_umbrella_night@3x.png"; path = "Resources/Icons/widget_weather_umbrella_night@3x.png"; sourceTree = "<group>"; };
+		3296B45927F8790000108AF7 /* widget_weather_air_pressure_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_air_pressure_day@3x.png"; path = "Resources/Icons/widget_weather_air_pressure_day@3x.png"; sourceTree = "<group>"; };
+		3296B45A27F8790100108AF7 /* ic_custom_wind@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@2x.png"; path = "Resources/Icons/ic_custom_wind@2x.png"; sourceTree = "<group>"; };
+		3296B45B27F8790100108AF7 /* ic_custom_terrain_less_hilly@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_less_hilly@2x.png"; path = "Resources/Icons/ic_custom_terrain_less_hilly@2x.png"; sourceTree = "<group>"; };
+		3296B45C27F8790100108AF7 /* widget_weather_air_pressure_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_air_pressure_night@2x.png"; path = "Resources/Icons/widget_weather_air_pressure_night@2x.png"; sourceTree = "<group>"; };
+		3296B45D27F8790100108AF7 /* ic_custom_clouds@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clouds@3x.png"; path = "Resources/Icons/ic_custom_clouds@3x.png"; sourceTree = "<group>"; };
+		3296B45E27F8790100108AF7 /* ic_custom_terrain_hilly@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_hilly@3x.png"; path = "Resources/Icons/ic_custom_terrain_hilly@3x.png"; sourceTree = "<group>"; };
+		3296B45F27F8790200108AF7 /* widget_weather_precipitation_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_precipitation_night@2x.png"; path = "Resources/Icons/widget_weather_precipitation_night@2x.png"; sourceTree = "<group>"; };
+		3296B46027F8790200108AF7 /* widget_weather_air_pressure_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_air_pressure_night@3x.png"; path = "Resources/Icons/widget_weather_air_pressure_night@3x.png"; sourceTree = "<group>"; };
+		3296B46127F8790200108AF7 /* ic_custom_air_pressure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_air_pressure@2x.png"; path = "Resources/Icons/ic_custom_air_pressure@2x.png"; sourceTree = "<group>"; };
+		3296B46227F8790200108AF7 /* widget_weather_wind_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_wind_day@2x.png"; path = "Resources/Icons/widget_weather_wind_day@2x.png"; sourceTree = "<group>"; };
+		3296B46327F8790200108AF7 /* ic_navbar_pencil@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_pencil@2x.png"; path = "Resources/Icons/ic_navbar_pencil@2x.png"; sourceTree = "<group>"; };
+		3296B46427F8790300108AF7 /* ic_custom_umbrella@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_umbrella@3x.png"; path = "Resources/Icons/ic_custom_umbrella@3x.png"; sourceTree = "<group>"; };
+		3296B46527F8790300108AF7 /* ic_custom_air_pressure@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_air_pressure@3x.png"; path = "Resources/Icons/ic_custom_air_pressure@3x.png"; sourceTree = "<group>"; };
+		3296B46627F8790300108AF7 /* widget_weather_temperature_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_temperature_day@2x.png"; path = "Resources/Icons/widget_weather_temperature_day@2x.png"; sourceTree = "<group>"; };
+		3296B46727F8790300108AF7 /* widget_weather_temperature_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_temperature_night@2x.png"; path = "Resources/Icons/widget_weather_temperature_night@2x.png"; sourceTree = "<group>"; };
+		3296B46827F8790300108AF7 /* widget_weather_clouds_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_clouds_night@2x.png"; path = "Resources/Icons/widget_weather_clouds_night@2x.png"; sourceTree = "<group>"; };
+		3296B46927F8790400108AF7 /* widget_weather_precipitation_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_precipitation_night@3x.png"; path = "Resources/Icons/widget_weather_precipitation_night@3x.png"; sourceTree = "<group>"; };
+		3296B46A27F8790400108AF7 /* widget_weather_temperature_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_temperature_day@3x.png"; path = "Resources/Icons/widget_weather_temperature_day@3x.png"; sourceTree = "<group>"; };
+		3296B46B27F8790400108AF7 /* widget_weather_umbrella_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_umbrella_day@3x.png"; path = "Resources/Icons/widget_weather_umbrella_day@3x.png"; sourceTree = "<group>"; };
+		3296B46C27F8790400108AF7 /* widget_weather_clouds_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_clouds_day@2x.png"; path = "Resources/Icons/widget_weather_clouds_day@2x.png"; sourceTree = "<group>"; };
+		3296B46D27F8790400108AF7 /* widget_weather_wind_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_wind_day@3x.png"; path = "Resources/Icons/widget_weather_wind_day@3x.png"; sourceTree = "<group>"; };
+		3296B46E27F8790500108AF7 /* ic_custom_terrain_any@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_any@3x.png"; path = "Resources/Icons/ic_custom_terrain_any@3x.png"; sourceTree = "<group>"; };
+		3296B46F27F8790500108AF7 /* ic_custom_precipitation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_precipitation@2x.png"; path = "Resources/Icons/ic_custom_precipitation@2x.png"; sourceTree = "<group>"; };
+		3296B47027F8790500108AF7 /* widget_weather_wind_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_wind_night@2x.png"; path = "Resources/Icons/widget_weather_wind_night@2x.png"; sourceTree = "<group>"; };
+		3296B47127F8790500108AF7 /* ic_custom_thermometer@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_thermometer@3x.png"; path = "Resources/Icons/ic_custom_thermometer@3x.png"; sourceTree = "<group>"; };
+		3296B47227F8790500108AF7 /* ic_custom_terrain_flat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_flat@2x.png"; path = "Resources/Icons/ic_custom_terrain_flat@2x.png"; sourceTree = "<group>"; };
+		3296B47327F8790600108AF7 /* ic_custom_terrain_flat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_flat@3x.png"; path = "Resources/Icons/ic_custom_terrain_flat@3x.png"; sourceTree = "<group>"; };
+		3296B47427F8790600108AF7 /* ic_custom_terrain_less_hilly@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_less_hilly@3x.png"; path = "Resources/Icons/ic_custom_terrain_less_hilly@3x.png"; sourceTree = "<group>"; };
+		3296B47527F8790600108AF7 /* widget_weather_wind_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_wind_night@3x.png"; path = "Resources/Icons/widget_weather_wind_night@3x.png"; sourceTree = "<group>"; };
+		3296B47627F8790700108AF7 /* ic_navbar_overflow_menu_stroke@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@3x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@3x.png"; sourceTree = "<group>"; };
+		3296B47727F8790700108AF7 /* ic_custom_umbrella@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_umbrella@2x.png"; path = "Resources/Icons/ic_custom_umbrella@2x.png"; sourceTree = "<group>"; };
+		3296B47827F8790700108AF7 /* widget_weather_clouds_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_clouds_night@3x.png"; path = "Resources/Icons/widget_weather_clouds_night@3x.png"; sourceTree = "<group>"; };
+		3296B47927F8790700108AF7 /* ic_custom_precipitation@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_precipitation@3x.png"; path = "Resources/Icons/ic_custom_precipitation@3x.png"; sourceTree = "<group>"; };
+		3296B47A27F8790700108AF7 /* ic_custom_clouds@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clouds@2x.png"; path = "Resources/Icons/ic_custom_clouds@2x.png"; sourceTree = "<group>"; };
 		32A001482610B42F00ABE0D2 /* widget_coordinates_longitude_west_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_longitude_west_night@2x.png"; path = "Resources/Icons/Widgets/widget_coordinates_longitude_west_night@2x.png"; sourceTree = "<group>"; };
 		32A0014A2610B43000ABE0D2 /* widget_coordinates_latitude_south_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_latitude_south_day@2x.png"; path = "Resources/Icons/Widgets/widget_coordinates_latitude_south_day@2x.png"; sourceTree = "<group>"; };
 		32A0014C2610B43000ABE0D2 /* widget_coordinates_utm_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_utm_day@3x.png"; path = "Resources/Icons/Widgets/widget_coordinates_utm_day@3x.png"; sourceTree = "<group>"; };
@@ -3416,42 +3472,6 @@
 		32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@3x.png"; sourceTree = "<group>"; };
 		32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@2x.png"; sourceTree = "<group>"; };
 		32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget_hide@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget_hide@2x.png"; sourceTree = "<group>"; };
-		32D253BB27F5868400324717 /* ic_custom_precipitation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_precipitation@2x.png"; sourceTree = "<group>"; };
-		32D253BC27F5868500324717 /* ic_custom_clouds@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_clouds@2x.png"; sourceTree = "<group>"; };
-		32D253BD27F5868500324717 /* ic_custom_clouds@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_clouds@3x.png"; sourceTree = "<group>"; };
-		32D253BE27F5868600324717 /* ic_custom_air_pressure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_air_pressure@2x.png"; sourceTree = "<group>"; };
-		32D253BF27F5868600324717 /* ic_custom_precipitation@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_precipitation@3x.png"; sourceTree = "<group>"; };
-		32D253C027F5868700324717 /* ic_custom_thermometer@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_thermometer@3x.png"; sourceTree = "<group>"; };
-		32D253C127F5868700324717 /* ic_custom_thermometer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_thermometer@2x.png"; sourceTree = "<group>"; };
-		32D253C227F5868800324717 /* ic_custom_umbrella@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_umbrella@2x.png"; sourceTree = "<group>"; };
-		32D253C327F5868800324717 /* ic_custom_umbrella@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_umbrella@3x.png"; sourceTree = "<group>"; };
-		32D253C427F5868900324717 /* ic_custom_air_pressure@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_air_pressure@3x.png"; sourceTree = "<group>"; };
-		32D253C527F5868900324717 /* ic_custom_wind@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_wind@2x.png"; sourceTree = "<group>"; };
-		32D253C627F5868A00324717 /* ic_custom_wind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_wind@3x.png"; sourceTree = "<group>"; };
-		32D253D327F58BD500324717 /* widget_weather_clouds_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_clouds_night@2x.png"; sourceTree = "<group>"; };
-		32D253D427F58BD600324717 /* widget_weather_umbrella_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_umbrella_day@2x.png"; sourceTree = "<group>"; };
-		32D253D527F58BD600324717 /* widget_weather_precipitation_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_precipitation_night@2x.png"; sourceTree = "<group>"; };
-		32D253D627F58BD600324717 /* widget_weather_temperature_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_temperature_day@2x.png"; sourceTree = "<group>"; };
-		32D253D727F58BD600324717 /* widget_weather_wind_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_wind_day@2x.png"; sourceTree = "<group>"; };
-		32D253D827F58BD700324717 /* widget_weather_precipitation_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_precipitation_day@2x.png"; sourceTree = "<group>"; };
-		32D253D927F58BD700324717 /* widget_weather_umbrella_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_umbrella_day@3x.png"; sourceTree = "<group>"; };
-		32D253DA27F58BD700324717 /* widget_weather_wind_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_wind_night@2x.png"; sourceTree = "<group>"; };
-		32D253DB27F58BD700324717 /* widget_weather_umbrella_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_umbrella_night@2x.png"; sourceTree = "<group>"; };
-		32D253DC27F58BD700324717 /* widget_weather_wind_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_wind_night@3x.png"; sourceTree = "<group>"; };
-		32D253DD27F58BD800324717 /* widget_weather_temperature_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_temperature_night@3x.png"; sourceTree = "<group>"; };
-		32D253DE27F58BD800324717 /* widget_weather_air_pressure_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_air_pressure_day@2x.png"; sourceTree = "<group>"; };
-		32D253DF27F58BD900324717 /* widget_weather_wind_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_wind_day@3x.png"; sourceTree = "<group>"; };
-		32D253E027F58BD900324717 /* widget_weather_precipitation_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_precipitation_night@3x.png"; sourceTree = "<group>"; };
-		32D253E127F58BD900324717 /* widget_weather_clouds_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_clouds_day@3x.png"; sourceTree = "<group>"; };
-		32D253E227F58BDA00324717 /* widget_weather_temperature_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_temperature_day@3x.png"; sourceTree = "<group>"; };
-		32D253E327F58BDA00324717 /* widget_weather_umbrella_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_umbrella_night@3x.png"; sourceTree = "<group>"; };
-		32D253E427F58BDA00324717 /* widget_weather_clouds_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_clouds_day@2x.png"; sourceTree = "<group>"; };
-		32D253E527F58BDA00324717 /* widget_weather_air_pressure_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_air_pressure_night@2x.png"; sourceTree = "<group>"; };
-		32D253E627F58BDB00324717 /* widget_weather_air_pressure_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_air_pressure_night@3x.png"; sourceTree = "<group>"; };
-		32D253E727F58BDB00324717 /* widget_weather_precipitation_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_precipitation_day@3x.png"; sourceTree = "<group>"; };
-		32D253E827F58BDB00324717 /* widget_weather_clouds_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_clouds_night@3x.png"; sourceTree = "<group>"; };
-		32D253E927F58BDB00324717 /* widget_weather_air_pressure_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_air_pressure_day@3x.png"; sourceTree = "<group>"; };
-		32D253EA27F58BDC00324717 /* widget_weather_temperature_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_weather_temperature_night@2x.png"; sourceTree = "<group>"; };
 		32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuickSearchCoordinateFormatsViewController.xib; sourceTree = "<group>"; };
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
@@ -7058,46 +7078,56 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				32D253DE27F58BD800324717 /* widget_weather_air_pressure_day@2x.png */,
-				32D253E927F58BDB00324717 /* widget_weather_air_pressure_day@3x.png */,
-				32D253E527F58BDA00324717 /* widget_weather_air_pressure_night@2x.png */,
-				32D253E627F58BDB00324717 /* widget_weather_air_pressure_night@3x.png */,
-				32D253E427F58BDA00324717 /* widget_weather_clouds_day@2x.png */,
-				32D253E127F58BD900324717 /* widget_weather_clouds_day@3x.png */,
-				32D253D327F58BD500324717 /* widget_weather_clouds_night@2x.png */,
-				32D253E827F58BDB00324717 /* widget_weather_clouds_night@3x.png */,
-				32D253D827F58BD700324717 /* widget_weather_precipitation_day@2x.png */,
-				32D253E727F58BDB00324717 /* widget_weather_precipitation_day@3x.png */,
-				32D253D527F58BD600324717 /* widget_weather_precipitation_night@2x.png */,
-				32D253E027F58BD900324717 /* widget_weather_precipitation_night@3x.png */,
-				32D253D627F58BD600324717 /* widget_weather_temperature_day@2x.png */,
-				32D253E227F58BDA00324717 /* widget_weather_temperature_day@3x.png */,
-				32D253EA27F58BDC00324717 /* widget_weather_temperature_night@2x.png */,
-				32D253DD27F58BD800324717 /* widget_weather_temperature_night@3x.png */,
-				32D253D427F58BD600324717 /* widget_weather_umbrella_day@2x.png */,
-				32D253D927F58BD700324717 /* widget_weather_umbrella_day@3x.png */,
-				32D253DB27F58BD700324717 /* widget_weather_umbrella_night@2x.png */,
-				32D253E327F58BDA00324717 /* widget_weather_umbrella_night@3x.png */,
-				32D253D727F58BD600324717 /* widget_weather_wind_day@2x.png */,
-				32D253DF27F58BD900324717 /* widget_weather_wind_day@3x.png */,
-				32D253DA27F58BD700324717 /* widget_weather_wind_night@2x.png */,
-				32D253DC27F58BD700324717 /* widget_weather_wind_night@3x.png */,
-				32D253BE27F5868600324717 /* ic_custom_air_pressure@2x.png */,
-				32D253C427F5868900324717 /* ic_custom_air_pressure@3x.png */,
-				32D253BC27F5868500324717 /* ic_custom_clouds@2x.png */,
-				32D253BD27F5868500324717 /* ic_custom_clouds@3x.png */,
-				32D253BB27F5868400324717 /* ic_custom_precipitation@2x.png */,
-				32D253BF27F5868600324717 /* ic_custom_precipitation@3x.png */,
-				32D253C127F5868700324717 /* ic_custom_thermometer@2x.png */,
-				32D253C027F5868700324717 /* ic_custom_thermometer@3x.png */,
-				32D253C227F5868800324717 /* ic_custom_umbrella@2x.png */,
-				32D253C327F5868800324717 /* ic_custom_umbrella@3x.png */,
-				32D253C527F5868900324717 /* ic_custom_wind@2x.png */,
-				32D253C627F5868A00324717 /* ic_custom_wind@3x.png */,
+				3296B46127F8790200108AF7 /* ic_custom_air_pressure@2x.png */,
+				3296B46527F8790300108AF7 /* ic_custom_air_pressure@3x.png */,
+				3296B47A27F8790700108AF7 /* ic_custom_clouds@2x.png */,
+				3296B45D27F8790100108AF7 /* ic_custom_clouds@3x.png */,
+				3296B46F27F8790500108AF7 /* ic_custom_precipitation@2x.png */,
+				3296B47927F8790700108AF7 /* ic_custom_precipitation@3x.png */,
+				3296B45127F878FF00108AF7 /* ic_custom_terrain_any@2x.png */,
+				3296B46E27F8790500108AF7 /* ic_custom_terrain_any@3x.png */,
+				3296B47227F8790500108AF7 /* ic_custom_terrain_flat@2x.png */,
+				3296B47327F8790600108AF7 /* ic_custom_terrain_flat@3x.png */,
+				3296B45327F878FF00108AF7 /* ic_custom_terrain_hilly@2x.png */,
+				3296B45E27F8790100108AF7 /* ic_custom_terrain_hilly@3x.png */,
+				3296B45B27F8790100108AF7 /* ic_custom_terrain_less_hilly@2x.png */,
+				3296B47427F8790600108AF7 /* ic_custom_terrain_less_hilly@3x.png */,
+				3296B44F27F878FE00108AF7 /* ic_custom_thermometer@2x.png */,
+				3296B47127F8790500108AF7 /* ic_custom_thermometer@3x.png */,
+				3296B47727F8790700108AF7 /* ic_custom_umbrella@2x.png */,
+				3296B46427F8790300108AF7 /* ic_custom_umbrella@3x.png */,
+				3296B45A27F8790100108AF7 /* ic_custom_wind@2x.png */,
+				3296B44D27F878FE00108AF7 /* ic_custom_wind@3x.png */,
 				3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */,
 				3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */,
-				325A27362796CE6D0053F8BF /* ic_navbar_pencil@2x.png */,
-				325A27352796CE6D0053F8BF /* ic_navbar_pencil@3x.png */,
+				3296B44C27F878FE00108AF7 /* ic_navbar_overflow_menu_stroke@2x.png */,
+				3296B47627F8790700108AF7 /* ic_navbar_overflow_menu_stroke@3x.png */,
+				3296B46327F8790200108AF7 /* ic_navbar_pencil@2x.png */,
+				3296B45627F8790000108AF7 /* ic_navbar_pencil@3x.png */,
+				3296B45227F878FF00108AF7 /* widget_weather_air_pressure_day@2x.png */,
+				3296B45927F8790000108AF7 /* widget_weather_air_pressure_day@3x.png */,
+				3296B45C27F8790100108AF7 /* widget_weather_air_pressure_night@2x.png */,
+				3296B46027F8790200108AF7 /* widget_weather_air_pressure_night@3x.png */,
+				3296B46C27F8790400108AF7 /* widget_weather_clouds_day@2x.png */,
+				3296B45027F878FE00108AF7 /* widget_weather_clouds_day@3x.png */,
+				3296B46827F8790300108AF7 /* widget_weather_clouds_night@2x.png */,
+				3296B47827F8790700108AF7 /* widget_weather_clouds_night@3x.png */,
+				3296B45427F878FF00108AF7 /* widget_weather_precipitation_day@2x.png */,
+				3296B44E27F878FE00108AF7 /* widget_weather_precipitation_day@3x.png */,
+				3296B45F27F8790200108AF7 /* widget_weather_precipitation_night@2x.png */,
+				3296B46927F8790400108AF7 /* widget_weather_precipitation_night@3x.png */,
+				3296B46627F8790300108AF7 /* widget_weather_temperature_day@2x.png */,
+				3296B46A27F8790400108AF7 /* widget_weather_temperature_day@3x.png */,
+				3296B46727F8790300108AF7 /* widget_weather_temperature_night@2x.png */,
+				3296B44B27F878FD00108AF7 /* widget_weather_temperature_night@3x.png */,
+				3296B45527F878FF00108AF7 /* widget_weather_umbrella_day@2x.png */,
+				3296B46B27F8790400108AF7 /* widget_weather_umbrella_day@3x.png */,
+				3296B45727F8790000108AF7 /* widget_weather_umbrella_night@2x.png */,
+				3296B45827F8790000108AF7 /* widget_weather_umbrella_night@3x.png */,
+				3296B46227F8790200108AF7 /* widget_weather_wind_day@2x.png */,
+				3296B46D27F8790400108AF7 /* widget_weather_wind_day@3x.png */,
+				3296B47027F8790500108AF7 /* widget_weather_wind_night@2x.png */,
+				3296B47527F8790600108AF7 /* widget_weather_wind_night@3x.png */,
 				DA80D99D2716CC1700445DAF /* map_track_point_finish@2x.png */,
 				DA80D99E2716CC1700445DAF /* map_track_point_finish@3x.png */,
 				DA80D99C2716CC1600445DAF /* map_track_point_start_finish@2x.png */,
@@ -12269,6 +12299,7 @@
 				8433947B1FF4FA38006205A5 /* ding.aiff in Resources */,
 				32309A632698D1F7005751F5 /* ic_custom_direction_bearing_night@2x.png in Resources */,
 				3AFEEE3F1A0E34FD00900A47 /* left_menu_icon_settings@2x.png in Resources */,
+				3296B48E27F8790800108AF7 /* ic_custom_terrain_hilly@3x.png in Resources */,
 				845E05FC1B5956E800DFC2A7 /* ic_arrow_close@2x.png in Resources */,
 				32A0017A2610B43700ABE0D2 /* widget_coordinates_longitude_west_day@2x.png in Resources */,
 				DA6F7C99216602F7006F14E3 /* ic_action_directions_from@3x.png in Resources */,
@@ -12295,13 +12326,12 @@
 				8441CB641B1370580033AC95 /* selection_unchecked@2x.png in Resources */,
 				DAA4EDE9240E85B800F16073 /* ic_custom_download@3x.png in Resources */,
 				DA5A852326C563A900F274C7 /* OAIntermediateDistanceControl.xib in Resources */,
+				3296B4A427F8790800108AF7 /* ic_custom_terrain_less_hilly@3x.png in Resources */,
 				DAFE4D3522169B4D009731CA /* map_osm_edit@3x.png in Resources */,
-				32D253D227F5868A00324717 /* ic_custom_wind@3x.png in Resources */,
 				8454DA2A1B2F172C00E5A5C5 /* menu_direction_icon_2@2x.png in Resources */,
 				323BD8ED2628850400D255ED /* ic_bg_point_comment_bottom@3x.png in Resources */,
 				DA8A928525DE8B4A00F5320A /* ic_carplay_map_markers@3x.png in Resources */,
 				DA1340B2243DC5A70039D214 /* ic_action_skiing@3x.png in Resources */,
-				32D253F527F58BDC00324717 /* widget_weather_temperature_night@3x.png in Resources */,
 				DA1340D4243DC5A80039D214 /* ic_action_trekking_dark@3x.png in Resources */,
 				DAB048F621CB729100275456 /* ic_action_plus@3x.png in Resources */,
 				32A7EE0F261BBF5D00F7A697 /* bg_point_circle_contour@2x.png in Resources */,
@@ -12363,7 +12393,6 @@
 				DA5A851326C563A900F274C7 /* LaunchScreen.xib in Resources */,
 				DA8A925E25DE78B000F5320A /* map_turn_left@3x.png in Resources */,
 				843E5D111AB341E000BE14BE /* left_menu_icon_map@3x.png in Resources */,
-				32D253EC27F58BDC00324717 /* widget_weather_umbrella_day@2x.png in Resources */,
 				8AFC2BF124334A4E0095BA9F /* map_navigation_default_top@3x.png in Resources */,
 				DA03184422DF0E50008FC564 /* ic_custom_boat@3x.png in Resources */,
 				DA5A827C26C563A700F274C7 /* OAFolderCardCollectionViewCell.xib in Resources */,
@@ -12375,7 +12404,6 @@
 				333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */,
 				0A7C7F37270395ED00F779E4 /* ic_small_time_moving@2x.png in Resources */,
 				0A9BCF17272AF7C5002F1EA6 /* OAQuadItemsWithTitleDescIconCell.xib in Resources */,
-				32D253C727F5868A00324717 /* ic_custom_precipitation@2x.png in Resources */,
 				DA80D9A72716CC1800445DAF /* map_track_point_start@3x.png in Resources */,
 				DA45DA7C230EE05A0083DFA2 /* img_mapstyle_mapnik@2x.png in Resources */,
 				DAECEF1422D62AB70044EC36 /* ic_navbar_chevron@3x.png in Resources */,
@@ -12397,6 +12425,7 @@
 				0A0EAC0A26E619600044E82C /* ic_custom_road_style@3x.png in Resources */,
 				84B6E0862073CF55002CA15B /* ic_action_route_last_intermediate@3x.png in Resources */,
 				84E442191AF8A07500F87542 /* track_recording_stop@2x.png in Resources */,
+				3296B4A027F8790800108AF7 /* widget_weather_wind_night@2x.png in Resources */,
 				8AFC2BCD24334A4E0095BA9F /* map_navigation_nautical_bottom@2x.png in Resources */,
 				DAE08319253F0953009B5A11 /* ic_custom_settings@2x.png in Resources */,
 				DA5A851426C563A900F274C7 /* OARulerWidget.xib in Resources */,
@@ -12412,12 +12441,13 @@
 				DA5A82E026C563A800F274C7 /* OAIconTitleIconRoundCell.xib in Resources */,
 				842431FD1AEFDD1900925821 /* ic_action_rec_stop@2x.png in Resources */,
 				DA1994B3224CDAF200B25BB0 /* ic_custom_delete@2x.png in Resources */,
-				32D253F627F58BDC00324717 /* widget_weather_air_pressure_day@2x.png in Resources */,
 				8477772C1FAA260E00CA8C1F /* widget_speed_night@3x.png in Resources */,
+				3296B4A327F8790800108AF7 /* ic_custom_terrain_flat@3x.png in Resources */,
 				DA8A928025DE8B4A00F5320A /* ic_carplay_search@2x.png in Resources */,
 				DA7FA55E2695DCFB0044F05A /* fi_tts.js in Resources */,
 				DA5A83A326C563A800F274C7 /* OAPoiTypeSelectionViewController.xib in Resources */,
 				DAC849B626CF97EE00018091 /* OADownloadMapWidget.xib in Resources */,
+				3296B48727F8790800108AF7 /* widget_weather_umbrella_night@2x.png in Resources */,
 				8AFC2C0D24334A4E0095BA9F /* map_location_default_top@3x.png in Resources */,
 				DA5A82D926C563A800F274C7 /* OATextViewTableViewCell.xib in Resources */,
 				32A001802610B43700ABE0D2 /* widget_coordinates_longitude_east_day@3x.png in Resources */,
@@ -12457,7 +12487,6 @@
 				156E91D8244AF37E00B181BA /* ic_custom_direction_widget_one@2x.png in Resources */,
 				DA68B3A2233B81DB00F5ACCC /* ic_custom_intermediate@2x.png in Resources */,
 				845E05BF1B55129100DFC2A7 /* ic_destination_pin_1_small@3x.png in Resources */,
-				32D253F927F58BDC00324717 /* widget_weather_clouds_day@3x.png in Resources */,
 				841222571B39CC5200F80F9E /* map_pedestrian_bearing@2x.png in Resources */,
 				DA68B3A4233B81DB00F5ACCC /* ic_custom_work@3x.png in Resources */,
 				DAF3456322F4482B009E2EB6 /* ic_custom_text_field_name@3x.png in Resources */,
@@ -12471,8 +12500,10 @@
 				8433947F1FF4FA38006205A5 /* inclination_left.aiff in Resources */,
 				DA23424E23477F33003911B8 /* ic_custom_route@2x.png in Resources */,
 				15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */,
+				3296B49E27F8790800108AF7 /* ic_custom_terrain_any@3x.png in Resources */,
 				0CF5858B2440745F0081238D /* ic_custom_direction_widget_one@2x.png in Resources */,
 				0AD1F3AA26CC034900EE4DFD /* ic_custom_multi_download@3x.png in Resources */,
+				3296B49727F8790800108AF7 /* widget_weather_temperature_night@2x.png in Resources */,
 				0A3EE213275E9F9B00C8B772 /* ic_custom_folder_visible@2x.png in Resources */,
 				8441CB371B1370580033AC95 /* change_item_color@2x.png in Resources */,
 				8454DA211B2F16D700E5A5C5 /* ic_coordinates@3x.png in Resources */,
@@ -12487,7 +12518,6 @@
 				32A0017E2610B43700ABE0D2 /* widget_coordinates_latitude_north_night@3x.png in Resources */,
 				843394C11FF54A19006205A5 /* list_warnings_pedestrian@2x.png in Resources */,
 				15C428D424A76EE500B21005 /* img_help_height_limit_day@3x.png in Resources */,
-				32D253F027F58BDC00324717 /* widget_weather_precipitation_day@2x.png in Resources */,
 				847F8FC71EDFF7AF00CF5EA5 /* ic_action_marker@2x.png in Resources */,
 				157F3CDD24A1FC5D000A66F0 /* ic_custom_delete_disable@3x.png in Resources */,
 				847F8FCA1EDFF7AF00CF5EA5 /* ic_action_postcode@2x.png in Resources */,
@@ -12520,6 +12550,7 @@
 				DA32845126CBC0460036BA73 /* ic_custom_pause@2x.png in Resources */,
 				84686AC91E09740500DA09BC /* ic_search_filter@3x.png in Resources */,
 				323BD8F32628850400D255ED /* ic_bg_point_circle_top_small@3x.png in Resources */,
+				3296B48127F8790800108AF7 /* ic_custom_terrain_any@2x.png in Resources */,
 				845E06C41B5FF17400DFC2A7 /* ic_plugin_wikipedia@3x.png in Resources */,
 				8474247C1E4C4655001C1F35 /* ic_action_gift@3x.png in Resources */,
 				DA5A851926C563A900F274C7 /* OATopTextView.xib in Resources */,
@@ -12531,6 +12562,7 @@
 				DA68B3A8233B81DB00F5ACCC /* ic_custom_fuel@2x.png in Resources */,
 				8AFC2BFD24334A4E0095BA9F /* map_navigation_default_center@3x.png in Resources */,
 				DA357C5122A636CC00A1F82D /* ic_custom_coordinates@2x.png in Resources */,
+				3296B49927F8790800108AF7 /* widget_weather_precipitation_night@3x.png in Resources */,
 				DA83602723449C6B003374B5 /* ic_custom_sound_off@2x.png in Resources */,
 				32C21CB327E08EFD00DE4266 /* OAAlertBottomSheetViewController.xib in Resources */,
 				DA134156243DC5A80039D214 /* ic_action_shuttle_bus@2x.png in Resources */,
@@ -12575,13 +12607,14 @@
 				3AFEEE541A0E34FD00900A47 /* menu_share_icon@2x.png in Resources */,
 				8476E29E1F6C1EEC00EC274F /* map_default_location_night@2x.png in Resources */,
 				8463101E1A8E8951005B39F2 /* Images.xcassets in Resources */,
+				3296B48527F8790800108AF7 /* widget_weather_umbrella_day@2x.png in Resources */,
 				DA5A841126C563A800F274C7 /* OATargetAddressViewController.xib in Resources */,
 				847777361FAA260E00CA8C1F /* widget_intermediate_night@2x-12.png in Resources */,
 				DA835FFE23438512003374B5 /* ic_small_arrow_down@2x.png in Resources */,
 				0CF5854A244072EC0081238D /* widget_marker_night@3x.png in Resources */,
+				3296B48F27F8790800108AF7 /* widget_weather_precipitation_night@2x.png in Resources */,
 				DAAE21E62269D6010006E016 /* ic_custom_my_places@3x.png in Resources */,
 				DA5A82A726C563A700F274C7 /* OAGPXRecTableViewCell.xib in Resources */,
-				32D253C827F5868A00324717 /* ic_custom_clouds@2x.png in Resources */,
 				8A6CBCA821CE25F0004033C7 /* ic_live_purchased@3x.png in Resources */,
 				0A8E4506270A12720016826E /* img_track_gradient_speed.png in Resources */,
 				DA6676D52450660800EF476D /* ic_action_bus@3x.png in Resources */,
@@ -12627,7 +12660,6 @@
 				0CF585952440745F0081238D /* ic_custom_direction_widget_one@3x.png in Resources */,
 				8441CB551B1370580033AC95 /* move_items@3x.png in Resources */,
 				DAC588662108996C008B7763 /* nl_tts.js in Resources */,
-				32D253CC27F5868A00324717 /* ic_custom_thermometer@3x.png in Resources */,
 				0A82ABA92694D68000ED1F01 /* ic_custom_logo_openplacereviews@2x.png in Resources */,
 				DA13A0372345FA0100C1A1A8 /* ic_custom_altitude@2x.png in Resources */,
 				DA5A826A26C563A700F274C7 /* OAImagesCollectionViewCell.xib in Resources */,
@@ -12636,6 +12668,7 @@
 				780AB02D242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */,
 				8AFC2C2124334A4E0095BA9F /* map_location_default_center@3x.png in Resources */,
 				DA5A82C026C563A800F274C7 /* OAIconButtonCell.xib in Resources */,
+				3296B49B27F8790800108AF7 /* widget_weather_umbrella_day@3x.png in Resources */,
 				DA71B7EC214B9F4A00FE8B7E /* ski-plugin.html in Resources */,
 				84E442071AF8A07500F87542 /* parking_position@2x.png in Resources */,
 				DA5A851726C563A900F274C7 /* OARoutingProgressView.xib in Resources */,
@@ -12646,6 +12679,7 @@
 				DA8A925225DE78B000F5320A /* map_turn_roundabout_left@2x.png in Resources */,
 				DA5A82A026C563A700F274C7 /* OAPublicTransportCollapsableCell.xib in Resources */,
 				8476E2D41F6C1EEC00EC274F /* map_pedestrian_location_view_angle_night@2x.png in Resources */,
+				3296B49D27F8790800108AF7 /* widget_weather_wind_day@3x.png in Resources */,
 				8AFC2BC124334A4E0095BA9F /* map_navigation_nautical_bottom@3x.png in Resources */,
 				846F43211FE5209B00AFEA8E /* img_splash_osmand_logo.png in Resources */,
 				842432061AEFDD1900925821 /* ic_action_save@2x.png in Resources */,
@@ -12659,7 +12693,6 @@
 				DA5A82CC26C563A800F274C7 /* OASegmentSliderTableViewCell.xib in Resources */,
 				32A7EE15261BBF6C00F7A697 /* bg_point_octagon_contour@3x.png in Resources */,
 				DA71B7F2214B9F4A00FE8B7E /* find-something-on-map.html in Resources */,
-				32D253FE27F58BDC00324717 /* widget_weather_air_pressure_night@3x.png in Resources */,
 				DA8DB8D7218DA7DD00EBF914 /* ic_ruler_center@3x.png in Resources */,
 				1571CE1824ADEDF500083F92 /* ic_custom_direction_movement@3x.png in Resources */,
 				DA1341BC243DC5A90039D214 /* map_action_pedestrian_dark@2x.png in Resources */,
@@ -12706,6 +12739,7 @@
 				DA5A82B626C563A800F274C7 /* OAWebViewCell.xib in Resources */,
 				158A381B257E65CD0038056A /* img_text_openstreetmap@2x.png in Resources */,
 				15B4E4B024AB401C00119365 /* ic_custom_length_limit@2x.png in Resources */,
+				3296B49827F8790800108AF7 /* widget_weather_clouds_night@2x.png in Resources */,
 				84E442101AF8A07500F87542 /* track_new_segement@2x.png in Resources */,
 				8476E2D61F6C1EEC00EC274F /* map_pedestrian_location_view_angle_night@3x.png in Resources */,
 				DA8EE7F8246D446400069A6D /* ic_custom_no_route@3x.png in Resources */,
@@ -12741,7 +12775,6 @@
 				8476E2641F6C1EEC00EC274F /* map_bicycle_location_view_angle_night@3x.png in Resources */,
 				3AFEEE4E1A0E34FD00900A47 /* menu_direction_icon@2x.png in Resources */,
 				DA86371721A5A0AD0064A85F /* nb_tts.js in Resources */,
-				32D253ED27F58BDC00324717 /* widget_weather_precipitation_night@2x.png in Resources */,
 				84EC52B31F8BF26600AFC252 /* ic_action_time@2x.png in Resources */,
 				15B4E4A524AB400500119365 /* ic_custom_height_limit@2x.png in Resources */,
 				DA5A82CD26C563A800F274C7 /* OADownloadInfoTableViewCell.xib in Resources */,
@@ -12788,6 +12821,7 @@
 				DA134208243DC5A90039D214 /* map_action_subway@3x.png in Resources */,
 				8476E24C1F6C1EEC00EC274F /* map_bicycle_bearing_night@3x.png in Resources */,
 				0CBDD0B1245038ED00C94BC2 /* map_marker_direction_arrow_p2_color_pin_4@3x.png in Resources */,
+				3296B49427F8790800108AF7 /* ic_custom_umbrella@3x.png in Resources */,
 				1571CE1F24ADEE0F00083F92 /* ic_custom_direction_compass@2x.png in Resources */,
 				84EC52A21F8BF26600AFC252 /* ic_action_intermediate@3x.png in Resources */,
 				DA52CDF124AE087F00CC309D /* ic_custom_direction_compass@2x.png in Resources */,
@@ -12806,6 +12840,7 @@
 				8AE0196824505C8B00DA5C33 /* ic_action_bus@3x.png in Resources */,
 				DA1340B8243DC5A70039D214 /* map_action_camper@2x.png in Resources */,
 				84DD067B1FA21B070050E450 /* ic_action_widget_collapse@3x.png in Resources */,
+				3296B48D27F8790800108AF7 /* ic_custom_clouds@3x.png in Resources */,
 				DA5A83AB26C563A800F274C7 /* OABasicEditingViewController.xib in Resources */,
 				8476E2581F6C1EEC00EC274F /* map_bicycle_location_lost@3x.png in Resources */,
 				8410D070207F48200049DEB2 /* ic_flat_list_dark@2x.png in Resources */,
@@ -12814,7 +12849,6 @@
 				DA8A925625DE78B000F5320A /* map_turn_slight_left@2x.png in Resources */,
 				DA5F6A0D245844A100C7DF71 /* map_public_transport_stop_shield@2x.png in Resources */,
 				849E81751AFA5D6700549953 /* btn_map_type_icon_bike@2x.png in Resources */,
-				32D253FF27F58BDC00324717 /* widget_weather_precipitation_day@3x.png in Resources */,
 				DA6B074424ED65200062AA98 /* ic_custom_reverse_direction@2x.png in Resources */,
 				848F559C1FBB609900CEFB4B /* widget_bearing_day@2x.png in Resources */,
 				8477773B1FAA260E00CA8C1F /* widget_parking_night@3x.png in Resources */,
@@ -12843,11 +12877,11 @@
 				8AFC2BE124334A4E0095BA9F /* map_navigation_default_bottom@3x.png in Resources */,
 				0CBDD097245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_5@2x.png in Resources */,
 				15BDDE7924D954EC00079C83 /* ic_custom_display_position_bottom@3x.png in Resources */,
+				3296B49C27F8790800108AF7 /* widget_weather_clouds_day@2x.png in Resources */,
 				DABA3DED22686E72005BB777 /* ic_custom_upload@2x.png in Resources */,
 				DA5F6A11245844A100C7DF71 /* map_public_transport_transfer@3x.png in Resources */,
 				8AE0195A24505C8B00DA5C33 /* ic_custom_arrow_right@2x.png in Resources */,
 				DA6471AF22CF5433008F937F /* ic_custom_contour_lines@3x.png in Resources */,
-				32D2540227F58BDC00324717 /* widget_weather_temperature_night@2x.png in Resources */,
 				DA5A842726C563A800F274C7 /* OAImpassableRoadViewController.xib in Resources */,
 				DAF2F814254825BA00967935 /* map_plan_route_point_movable@2x.png in Resources */,
 				DA5A844126C563A900F274C7 /* OAMapillaryImageViewController.xib in Resources */,
@@ -12859,10 +12893,12 @@
 				0CBDD09F245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_5@3x.png in Resources */,
 				DA1341F4243DC5A90039D214 /* ic_action_horse@3x.png in Resources */,
 				DA5A82C626C563A800F274C7 /* OAWaypointCell.xib in Resources */,
+				3296B4A827F8790800108AF7 /* widget_weather_clouds_night@3x.png in Resources */,
 				84EE2DE21AFD149F007C9A94 /* map_banner@3x.png in Resources */,
 				DA52CE0524AE087F00CC309D /* img_help_height_limit_day@3x.png in Resources */,
 				DAE0834B253F0CFD009B5A11 /* ic_custom_undo@3x.png in Resources */,
 				323BD8E62628850400D255ED /* ic_bg_point_octagon_center@2x.png in Resources */,
+				3296B49327F8790800108AF7 /* ic_navbar_pencil@2x.png in Resources */,
 				326B4FAB257FD02F00ABAB1D /* ic_action_kayak@3x.png in Resources */,
 				DA6BF95A24DBF21B00F7DC7B /* ic_custom_export@2x.png in Resources */,
 				844E07D61E42319700EFC525 /* ic_action_building@2x.png in Resources */,
@@ -12891,7 +12927,6 @@
 				8AE1C8B421D6224B00434F07 /* ic_action_message@3x.png in Resources */,
 				DA5A829726C563A700F274C7 /* OATimeTableViewCell.xib in Resources */,
 				DA45DA6E230EE05A0083DFA2 /* img_mapstyle_unirs@2x.png in Resources */,
-				32D253FD27F58BDC00324717 /* widget_weather_air_pressure_night@2x.png in Resources */,
 				8477772D1FAA260E00CA8C1F /* widget_parking_day@3x.png in Resources */,
 				DA134202243DC5A90039D214 /* map_action_horse@2x.png in Resources */,
 				846F03631E12948500DB4772 /* ic_action_additional_option@2x.png in Resources */,
@@ -12909,6 +12944,7 @@
 				0A8D1A1726FBA1750042444C /* ic_small_ascent@3x.png in Resources */,
 				158A381E257E65CD0038056A /* img_text_openstreetmap@3x.png in Resources */,
 				DA5A82C926C563A800F274C7 /* OALabelCollectionViewCell.xib in Resources */,
+				3296B48C27F8790800108AF7 /* widget_weather_air_pressure_night@2x.png in Resources */,
 				DA9A2C2D26FCB50600BEC681 /* map_direction_arrow_small@3x.png in Resources */,
 				0AA3BB8F26EB540100A9885D /* ic_custom_overview@3x.png in Resources */,
 				0AC13D282715C44B00142BFD /* ic_custom_add_gpx_waypoint@2x.png in Resources */,
@@ -12921,7 +12957,6 @@
 				DA134170243DC5A80039D214 /* ic_action_openstreetmap_logo@2x.png in Resources */,
 				DA5A84EA26C563A900F274C7 /* OADashboardViewController.xib in Resources */,
 				15BDDE9624DAF38F00079C83 /* ic_custom_export@3x.png in Resources */,
-				32D253D127F5868A00324717 /* ic_custom_wind@2x.png in Resources */,
 				0CBDD0B5245038ED00C94BC2 /* map_marker_direction_arrow_p1_light@3x.png in Resources */,
 				15BDDEA224DAF3BE00079C83 /* ic_custom_reset@3x.png in Resources */,
 				843394B31FF54A19006205A5 /* list_warnings_railways@2x.png in Resources */,
@@ -12949,7 +12984,6 @@
 				DA5A82E226C563A800F274C7 /* OADescrTitleCell.xib in Resources */,
 				84F3A8CE1B4DA93100D16EBC /* ic_map_pin_small@3x.png in Resources */,
 				DAF345BB22F4482C009E2EB6 /* ic_custom_quick_action@3x.png in Resources */,
-				32D253EF27F58BDC00324717 /* widget_weather_wind_day@2x.png in Resources */,
 				DA5A839126C563A800F274C7 /* OAOnlineTilesEditingViewController.xib in Resources */,
 				8476E26A1F6C1EEC00EC274F /* map_bicycle_location_view_angle@3x.png in Resources */,
 				0A8D1A2626FBA4460042444C /* OATrackMenuDescriptionViewController.xib in Resources */,
@@ -12986,7 +13020,6 @@
 				DA134138243DC5A80039D214 /* map_action_aircraft@3x.png in Resources */,
 				84C102911FBDC10800D3E5EE /* warnings_limit@2x.png in Resources */,
 				842432091AEFDD1900925821 /* ic_action_save@3x.png in Resources */,
-				325A27372796CE6E0053F8BF /* ic_navbar_pencil@3x.png in Resources */,
 				323BD8FF2628850400D255ED /* ic_bg_point_octagon_top_small@2x.png in Resources */,
 				848F55931FBB609900CEFB4B /* ic_action_relative_bearing@2x.png in Resources */,
 				84F3A8EF1B4DA93100D16EBC /* ic_trip_directions@2x.png in Resources */,
@@ -13067,6 +13100,7 @@
 				8A6CBCC021CE25F0004033C7 /* img_logo_38dp_osmand@2x.png in Resources */,
 				8AFC2BCB24334A4E0095BA9F /* map_location_bicycle_top@2x.png in Resources */,
 				84C102881FBDC10800D3E5EE /* warnings_pedestrian@3x.png in Resources */,
+				3296B47F27F8790800108AF7 /* ic_custom_thermometer@2x.png in Resources */,
 				DA5A836E26C563A800F274C7 /* OARoutingTargetCell.xib in Resources */,
 				8AFC2BD924334A4E0095BA9F /* map_location_bicycle_center@2x.png in Resources */,
 				845E07281B60E72300DFC2A7 /* ic_checkmark_small_enable@3x.png in Resources */,
@@ -13094,6 +13128,7 @@
 				DA1340CA243DC5A70039D214 /* map_action_skiing@3x.png in Resources */,
 				DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */,
 				DA9C6237221C46590087E140 /* ic_custom_trip@2x.png in Resources */,
+				3296B47E27F8790800108AF7 /* widget_weather_precipitation_day@3x.png in Resources */,
 				157F3CF024A23A94000A66F0 /* ic_custom_undo_button@3x.png in Resources */,
 				8476E2B01F6C1EEC00EC274F /* map_default_location@2x.png in Resources */,
 				DAF3454722F4482B009E2EB6 /* ic_custom_compound_action_background@2x.png in Resources */,
@@ -13111,7 +13146,6 @@
 				DA5A841326C563A800F274C7 /* OAGPXEditWptViewController.xib in Resources */,
 				843E5D831AB341E000BE14BE /* menu_cell_selected@3x.png in Resources */,
 				DA1340C8243DC5A70039D214 /* map_action_bus_dark@3x.png in Resources */,
-				32D2540127F58BDC00324717 /* widget_weather_air_pressure_day@3x.png in Resources */,
 				DA5A83D026C563A800F274C7 /* OATransportRouteController.xib in Resources */,
 				84F4641E1B664D3B00C1D96F /* ic_popup_no_internet@2x.png in Resources */,
 				DA1340D6243DC5A80039D214 /* map_action_scooter@3x.png in Resources */,
@@ -13155,7 +13189,6 @@
 				8A7672172281A4EF0098DE84 /* list_warnings_tunnel@3x.png in Resources */,
 				8A7A4CA7210A036E00EC1B06 /* map_transport_stop_bg@2x.png in Resources */,
 				845E06BB1B5FF17400DFC2A7 /* ic_plugin_tracrecording@3x.png in Resources */,
-				32D253FC27F58BDC00324717 /* widget_weather_clouds_day@2x.png in Resources */,
 				8466964A207CD7E000BA971B /* ic_action_sort_reverse_order@3x.png in Resources */,
 				8431E7951B383A190063C9AF /* ic_operator@2x.png in Resources */,
 				DA65834422BBB6FA0095B03D /* ic_custom_success@2x.png in Resources */,
@@ -13177,6 +13210,7 @@
 				DA1341C0243DC5A90039D214 /* ic_action_bicycle_dark@3x.png in Resources */,
 				DA32846726CBF76B0036BA73 /* img_plugin_wikipedia.jpg in Resources */,
 				DAE08335253F0953009B5A11 /* ic_custom_save_to_file@2x.png in Resources */,
+				3296B48627F8790800108AF7 /* ic_navbar_pencil@3x.png in Resources */,
 				DA5A828526C563A700F274C7 /* OAInputCellWithTitle.xib in Resources */,
 				84EC52B21F8BF26600AFC252 /* ic_action_target@3x.png in Resources */,
 				DAA8890B241BCD2A0057722C /* ic_small_arrow_forward@3x.png in Resources */,
@@ -13220,8 +13254,6 @@
 				8476E28C1F6C1EEC00EC274F /* map_car_location_view_angle_night@2x.png in Resources */,
 				84C41DF51AB8600D0089EABB /* ic_destination_pin_2@2x.png in Resources */,
 				847AF5751F8A3D4900FC7F90 /* widget_speed_day@3x.png in Resources */,
-				32D253CE27F5868A00324717 /* ic_custom_umbrella@2x.png in Resources */,
-				32D253F727F58BDC00324717 /* widget_weather_wind_day@3x.png in Resources */,
 				DA5A851F26C563A900F274C7 /* OAAlarmWidget.xib in Resources */,
 				84C41DFE1AB8600D0089EABB /* ic_destination_pin_3@2x.png in Resources */,
 				841C47461AF91B800039B3BF /* destination_map_center@3x.png in Resources */,
@@ -13239,7 +13271,6 @@
 				32A001A126131FEA00ABE0D2 /* ic_custom_clipboard@3x.png in Resources */,
 				32B50AD926BBE3C7002E6C92 /* ic_custom_map_location_free@2x.png in Resources */,
 				8A4D03E327A6DF2300B8A778 /* wind_color.txt in Resources */,
-				32D253CF27F5868A00324717 /* ic_custom_umbrella@3x.png in Resources */,
 				8476E2761F6C1EEC00EC274F /* map_car_bearing_night@3x.png in Resources */,
 				1509D52325E90F5600905CBC /* ic_action_ruler_line@3x.png in Resources */,
 				32A001722610B43700ABE0D2 /* widget_coordinates_latitude_north_day@2x.png in Resources */,
@@ -13284,7 +13315,6 @@
 				157F3CD324A1F36D000A66F0 /* ic_custom_import@2x.png in Resources */,
 				DA6BF94A24DBF21B00F7DC7B /* ic_custom_copy@2x.png in Resources */,
 				DA13420E243DC5A90039D214 /* map_action_snowmobile@3x.png in Resources */,
-				32D253CD27F5868A00324717 /* ic_custom_thermometer@2x.png in Resources */,
 				843394B11FF54A19006205A5 /* list_warnings_railways_us@2x.png in Resources */,
 				DA5A851626C563A900F274C7 /* OAOverlayUnderlayView.xib in Resources */,
 				DA5A836726C563A800F274C7 /* OARoutingSettingsCell.xib in Resources */,
@@ -13388,7 +13418,6 @@
 				84EC52BA1F8BF26600AFC252 /* ic_action_altitude@3x.png in Resources */,
 				DAF3458F22F4482C009E2EB6 /* ic_custom_compound_action_play@2x.png in Resources */,
 				DA5A81F926C563A700F274C7 /* OAChoosePlanViewController.xib in Resources */,
-				32D253F827F58BDC00324717 /* widget_weather_precipitation_night@3x.png in Resources */,
 				0AD6B8D1273BF0C900D68E0B /* ic_custom_location_marker@3x.png in Resources */,
 				0A0EAC0926E619600044E82C /* ic_custom_road_style@2x.png in Resources */,
 				DA52CDF924AE087F00CC309D /* img_help_length_limit_day@3x.png in Resources */,
@@ -13412,11 +13441,13 @@
 				8441CB5B1B1370580033AC95 /* selection_checked@2x.png in Resources */,
 				DA134122243DC5A80039D214 /* ic_action_shuttle_bus@3x.png in Resources */,
 				DA5A83F226C563A800F274C7 /* OASearchToolbarViewController.xib in Resources */,
+				3296B48327F8790800108AF7 /* ic_custom_terrain_hilly@2x.png in Resources */,
 				DA6BF95824DBF21B00F7DC7B /* ic_custom_remove_outlined@2x.png in Resources */,
 				DA5A82DA26C563A800F274C7 /* OAShapesCollectionViewCell.xib in Resources */,
 				DA0C642121245BA800B2A350 /* hr_tts.js in Resources */,
 				844E07F21E44D8E900EFC525 /* ic_action_world_globe@3x.png in Resources */,
 				32309A6B2698D218005751F5 /* ic_custom_direction_north_night@2x.png in Resources */,
+				3296B48227F8790800108AF7 /* widget_weather_air_pressure_day@2x.png in Resources */,
 				DA52CDFB24AE087F00CC309D /* ic_custom_navigation_type_direct_to@3x.png in Resources */,
 				DAF3456722F4482B009E2EB6 /* ic_custom_sun@3x.png in Resources */,
 				847AF5A41F8A3D4A00FC7F90 /* widget_time_day@3x.png in Resources */,
@@ -13443,6 +13474,7 @@
 				844E07E01E4231C200EFC525 /* ic_action_street_name@3x.png in Resources */,
 				DAB854D3230586CC002566A6 /* ic_custom_underlay_map@2x.png in Resources */,
 				844E07D71E42319700EFC525 /* ic_action_building@3x.png in Resources */,
+				3296B49F27F8790800108AF7 /* ic_custom_precipitation@2x.png in Resources */,
 				8476E2BE1F6C1EEC00EC274F /* map_pedestrian_bearing_night@3x.png in Resources */,
 				845E062C1B5956E800DFC2A7 /* ic_destination_pin_5@3x.png in Resources */,
 				DAC588692108997F008B7763 /* ru_tts.js in Resources */,
@@ -13501,13 +13533,11 @@
 				84C41DEC1AB8600D0089EABB /* ic_destination_pin_1@2x.png in Resources */,
 				8A755A7D21CBF92400E42699 /* ic_live_wikivoyage@3x.png in Resources */,
 				0CF585912440745F0081238D /* ic_custom_direction_topbar_two@3x.png in Resources */,
-				32D253CB27F5868A00324717 /* ic_custom_precipitation@3x.png in Resources */,
 				DA6BF95424DBF21B00F7DC7B /* ic_custom_reset@3x.png in Resources */,
 				DA68B3C7233B81E700F5ACCC /* ic_profile_bus@3x.png in Resources */,
 				8A836B4F227B333B005EE20E /* ic_action_intermediate_destination_time@2x.png in Resources */,
 				DAF3458D22F4482C009E2EB6 /* ic_custom_sun@2x.png in Resources */,
 				32B50ABD26BBDA0D002E6C92 /* ic_custom_shop_bag@2x.png in Resources */,
-				32D253F327F58BDC00324717 /* widget_weather_umbrella_night@2x.png in Resources */,
 				DA5A823F26C563A700F274C7 /* OAGlobalSettingsViewController.xib in Resources */,
 				848F55961FBB609900CEFB4B /* widget_bearing_night@3x.png in Resources */,
 				151558BE24A34C510081BB8E /* img_settings_sreen_route_parameters@3x.png in Resources */,
@@ -13522,7 +13552,6 @@
 				DA1340C6243DC5A70039D214 /* map_action_sail_boat_dark@3x.png in Resources */,
 				844D203C1E364F7600AC5626 /* icudt52l.dat in Resources */,
 				840C9FB81CF353C800F2F991 /* ic_coordinates_location@3x.png in Resources */,
-				325A27382796CE6E0053F8BF /* ic_navbar_pencil@2x.png in Resources */,
 				DAF345A922F4482C009E2EB6 /* ic_custom_arrow_forward@2x.png in Resources */,
 				DA5A823326C563A700F274C7 /* OAExportItemsSelectionViewController.xib in Resources */,
 				DAFE4D3922169B4D009731CA /* map_osm_edit@2x.png in Resources */,
@@ -13621,6 +13650,7 @@
 				DA5A82C326C563A800F274C7 /* OARangeSliderCell.xib in Resources */,
 				DA1BC12C233F9B01004DAF78 /* ic_custom_sort_door_to_door@3x.png in Resources */,
 				8412222A1B395D2C00F80F9E /* ic_travel_time@2x.png in Resources */,
+				3296B49527F8790800108AF7 /* ic_custom_air_pressure@3x.png in Resources */,
 				DA5A857B26C5687A00F274C7 /* OAPluginsViewController.xib in Resources */,
 				843394A71FF54A19006205A5 /* list_stop@2x.png in Resources */,
 				0CEF2C1624B717CC00BAAC4B /* ic_action_inline_skates@3x.png in Resources */,
@@ -13630,7 +13660,6 @@
 				847777291FAA260E00CA8C1F /* widget_monitoring_rec_small_night@2x.png in Resources */,
 				0CF585892440745F0081238D /* ic_custom_direction_topbar_one@3x.png in Resources */,
 				84EC52B01F8BF26600AFC252 /* ic_action_intermediate@2x.png in Resources */,
-				32D253F227F58BDC00324717 /* widget_weather_wind_night@2x.png in Resources */,
 				845E07251B60E72300DFC2A7 /* ic_checkmark_small_enable@2x.png in Resources */,
 				323BD90A2628850400D255ED /* ic_bg_point_square_center@3x.png in Resources */,
 				DA83600623438512003374B5 /* ic_small_arrow_down@3x.png in Resources */,
@@ -13728,6 +13757,7 @@
 				0AA3BB9126EB540100A9885D /* ic_custom_appearance@2x.png in Resources */,
 				842432001AEFDD1900925821 /* ic_action_rec_stop@3x.png in Resources */,
 				DA879FD8227C23C5007E7817 /* hu-formal_tts.js in Resources */,
+				3296B4AA27F8790800108AF7 /* ic_custom_clouds@2x.png in Resources */,
 				DA5A837326C563A800F274C7 /* OARouteSettingsBaseViewController.xib in Resources */,
 				84EE2DD91AFD149F007C9A94 /* img_purchase_banner_portrait@3x.png in Resources */,
 				DA65834622BBB6FA0095B03D /* ic_custom_failure@3x.png in Resources */,
@@ -13748,15 +13778,16 @@
 				DA5A829F26C563A700F274C7 /* OASettingsCheckmarkCell.xib in Resources */,
 				DA134180243DC5A80039D214 /* map_action_offroad@3x.png in Resources */,
 				DA8A926025DE78B000F5320A /* map_turn_keep_right@2x.png in Resources */,
-				32D253FA27F58BDC00324717 /* widget_weather_temperature_day@3x.png in Resources */,
 				DA5A821226C563A700F274C7 /* OABaseSettingsWithBottomButtonsViewController.xib in Resources */,
 				32388EE326E6AFAF0021F829 /* OAQuickSearchResultTableViewCell.xib in Resources */,
+				3296B48B27F8790800108AF7 /* ic_custom_terrain_less_hilly@2x.png in Resources */,
 				8415030A1DEED6AE007FAC50 /* ic_refresh@2x.png in Resources */,
 				0A7DAF97270C404B0059238B /* ic_custom_upload_to_openstreetmap@3x.png in Resources */,
 				BB27270119CB38D7007C5613 /* fonts in Resources */,
 				DA5A83F826C563A800F274C7 /* OAHistoryTableViewController.xib in Resources */,
 				DA5A857F26C5692200F274C7 /* article_style.css in Resources */,
 				DAF7A4FE21786BED00FB94FD /* widget_ruler_circle_hide_day@2x.png in Resources */,
+				3296B4A727F8790800108AF7 /* ic_custom_umbrella@2x.png in Resources */,
 				1565BAFC256C6CFC003C6278 /* ic_control_knob@3x.png in Resources */,
 				DAA4EDED240E85B800F16073 /* ic_custom_online@2x.png in Resources */,
 				DA5A82AE26C563A700F274C7 /* OATitleTwoIconsRoundCell.xib in Resources */,
@@ -13772,6 +13803,7 @@
 				0A6B69D326725D1F00778353 /* ic_custom_road_works@2x.png in Resources */,
 				DA2DC41523B2116300F40D1D /* ic_custom_arrow_up@3x.png in Resources */,
 				8441CB3A1B1370580033AC95 /* change_item_color@3x.png in Resources */,
+				3296B49227F8790800108AF7 /* widget_weather_wind_day@2x.png in Resources */,
 				DA13419E243DC5A80039D214 /* map_action_utv@2x.png in Resources */,
 				DA5A81A026C563A700F274C7 /* OADownloadMapProgressViewController.xib in Resources */,
 				0CBDD0A5245038EC00C94BC2 /* map_marker_direction_arrow_p1_light@2x.png in Resources */,
@@ -13786,7 +13818,6 @@
 				0A8D1A0E26FBA1750042444C /* ic_small_profile_straight_line@2x.png in Resources */,
 				845E06B81B5FF17400DFC2A7 /* ic_plugin_tracrecording@2x.png in Resources */,
 				848F55941FBB609900CEFB4B /* widget_relative_bearing_day@3x.png in Resources */,
-				32D253F427F58BDC00324717 /* widget_weather_wind_night@3x.png in Resources */,
 				15C428DC24A76F0500B21005 /* img_help_vessel_height_day@3x.png in Resources */,
 				DA1341A2243DC5A80039D214 /* ic_action_monowheel@3x.png in Resources */,
 				15CD7E9E25B1C19900BCB36A /* ic_small_distance@3x.png in Resources */,
@@ -13809,6 +13840,7 @@
 				DA5A83EE26C563A800F274C7 /* OASelectSubcategoryViewController.xib in Resources */,
 				DA134178243DC5A80039D214 /* ic_action_ufo@3x.png in Resources */,
 				8A755A6121CBF92400E42699 /* ic_live_srtm@2x.png in Resources */,
+				3296B4A927F8790800108AF7 /* ic_custom_precipitation@3x.png in Resources */,
 				DA2F09212217FF75006C7F05 /* ic_plugin_osm_edit@3x.png in Resources */,
 				841A11211DEC454F009558D3 /* osmand_logo.png in Resources */,
 				DA8EE80E247013E600069A6D /* ruler.html in Resources */,
@@ -13840,6 +13872,7 @@
 				323BD8EC2628850400D255ED /* ic_bg_point_square_center_small@2x.png in Resources */,
 				8A7A4CA1210A036E00EC1B06 /* map_transport_stop_bus@3x.png in Resources */,
 				8480E6AC1F7BF8FC009A0FDE /* left_menu_icon_navigation@3x.png in Resources */,
+				3296B48027F8790800108AF7 /* widget_weather_clouds_day@3x.png in Resources */,
 				8AFC2C1D24334A4E0095BA9F /* map_navigation_nautical_center@2x.png in Resources */,
 				DA68B3E5233B822F00F5ACCC /* ic_profile_bicycle@3x.png in Resources */,
 				8A836B5A227B43DF005EE20E /* widget_intermediate_time_night@2x.png in Resources */,
@@ -13872,6 +13905,7 @@
 				DA65833E22BBB6FA0095B03D /* ic_custom_failure@2x.png in Resources */,
 				DA5A826426C563A700F274C7 /* OABottomSheetHeaderButtonCell.xib in Resources */,
 				DA1340F2243DC5A80039D214 /* map_action_ski_touring@2x.png in Resources */,
+				3296B4A527F8790800108AF7 /* widget_weather_wind_night@3x.png in Resources */,
 				DA5A81FC26C563A700F274C7 /* OAOsmLiveFeaturesCardView.xib in Resources */,
 				DA13414E243DC5A80039D214 /* ic_action_helicopter@3x.png in Resources */,
 				323BD8FD2628850400D255ED /* ic_bg_point_octagon_top@3x.png in Resources */,
@@ -13937,19 +13971,18 @@
 				DA84E85621D77EEA006954D0 /* ic_action_close_banner@3x.png in Resources */,
 				0AA3BB9526EB540100A9885D /* ic_custom_appearance@3x.png in Resources */,
 				0AB314F3271EFC43007C34A3 /* OAPointWithRegionTableViewCell.xib in Resources */,
-				32D253D027F5868A00324717 /* ic_custom_air_pressure@3x.png in Resources */,
 				8476E2981F6C1EEC00EC274F /* map_car_location@2x.png in Resources */,
 				84E4420A1AF8A07500F87542 /* parking_position@3x.png in Resources */,
 				84C102741FBDC10800D3E5EE /* warnings_toll_bridge@2x.png in Resources */,
 				84E442251AF8A07500F87542 /* track_save@3x.png in Resources */,
 				849E819C1AFA5D6700549953 /* btn_map_type_icon_view@3x.png in Resources */,
 				DA9A2C2C26FCB50600BEC681 /* map_direction_arrow_small@2x.png in Resources */,
+				3296B4A227F8790800108AF7 /* ic_custom_terrain_flat@2x.png in Resources */,
 				847777511FAA260E00CA8C1F /* widget_max_speed_night@2x.png in Resources */,
 				DA5A82A226C563A700F274C7 /* OADeleteButtonTableViewCell.xib in Resources */,
 				460679FB27708A980076740B /* OARouteLineAppearanceHudViewController.xib in Resources */,
 				843394A11FF54A19006205A5 /* list_warnings_pedestrian@3x.png in Resources */,
 				DA5A829626C563A700F274C7 /* OARouteInfoCell.xib in Resources */,
-				32D253C927F5868A00324717 /* ic_custom_clouds@3x.png in Resources */,
 				8466963C207CD7DF00BA971B /* ic_action_sort_reverse_order@2x.png in Resources */,
 				DAF3459922F4482C009E2EB6 /* ic_custom_compound_action_hide_top@3x.png in Resources */,
 				DA8A926425DE78B000F5320A /* map_turn_sharp_right@2x.png in Resources */,
@@ -13969,6 +14002,7 @@
 				0A0EAC1326E6B4E60044E82C /* OAPromoButtonCell.xib in Resources */,
 				8476E2E01F6C1EEC00EC274F /* map_pedestrian_location@2x.png in Resources */,
 				8A755A7121CBF92400E42699 /* ic_live_monthly_updates@3x.png in Resources */,
+				3296B49027F8790800108AF7 /* widget_weather_air_pressure_night@3x.png in Resources */,
 				DA8A928425DE8B4A00F5320A /* ic_carplay_tracks@2x.png in Resources */,
 				3AC639F51A220A96001D5E57 /* icon_edit@2x.png in Resources */,
 				158A381F257E65CD0038056A /* img_logo_osmand_120pt.png in Resources */,
@@ -13978,6 +14012,7 @@
 				8AFC2BBF24334A4E0095BA9F /* map_location_car_center@3x.png in Resources */,
 				DA45DA66230EE05A0083DFA2 /* img_mapstyle_default@3x.png in Resources */,
 				845E07341B616E4700DFC2A7 /* ic_restore_purchase@3x.png in Resources */,
+				3296B48827F8790800108AF7 /* widget_weather_umbrella_night@3x.png in Resources */,
 				8AFC2C0924334A4E0095BA9F /* map_navigation_car_top@2x.png in Resources */,
 				15BDDE7824D954EC00079C83 /* ic_custom_display_position_center@2x.png in Resources */,
 				15CD7E9725B1C17900BCB36A /* ic_custom_folder_outlined@2x.png in Resources */,
@@ -13987,9 +14022,11 @@
 				0CEF2C1824B717CC00BAAC4B /* ic_action_enduro_motorcycle@3x.png in Resources */,
 				8477774F1FAA260E00CA8C1F /* widget_target_night@2x.png in Resources */,
 				849E81A51AFA5D6700549953 /* btn_map_type_icon_view_selected@3x.png in Resources */,
+				3296B47C27F8790800108AF7 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */,
 				845E06201B5956E800DFC2A7 /* ic_destination_pin_5_small@2x.png in Resources */,
 				DA5A82A926C563A700F274C7 /* OAMapillaryContributeCell.xib in Resources */,
 				15B4E48E24AB3F8600119365 /* ic_custom_minimal_distance@3x.png in Resources */,
+				3296B48927F8790800108AF7 /* widget_weather_air_pressure_day@3x.png in Resources */,
 				84DE41642001258F00F022F9 /* map_pin_avoid_road@3x.png in Resources */,
 				DA5A84FA26C563A900F274C7 /* OARouteInfoLegendItemView.xib in Resources */,
 				DA9C623D221C46590087E140 /* ic_custom_trip@3x.png in Resources */,
@@ -14005,6 +14042,8 @@
 				DA5A82AB26C563A700F274C7 /* OAFoldersCell.xib in Resources */,
 				DA86AF7526454AC600627B66 /* left_menu_icon_plugins@3x.png in Resources */,
 				84342E0A1CFD872E00EF04ED /* left_menu_icon_waypoints@3x.png in Resources */,
+				3296B49627F8790800108AF7 /* widget_weather_temperature_day@2x.png in Resources */,
+				3296B48427F8790800108AF7 /* widget_weather_precipitation_day@2x.png in Resources */,
 				8432579A1A9DAE4100A7964E /* ic_arrow_down@3x.png in Resources */,
 				3266C96326B150D6007A9187 /* ic_custom_openplacereview_logo@3x.png in Resources */,
 				847777451FAA260E00CA8C1F /* widget_time_night@3x.png in Resources */,
@@ -14019,6 +14058,7 @@
 				DA6D078E255173C5004FE017 /* ic_custom_trim_after@2x.png in Resources */,
 				DA32846626CBF76B0036BA73 /* img_plugin_contourlines.jpg in Resources */,
 				0CEF2C3724B7237800BAAC4B /* ic_action_go_cart@2x.png in Resources */,
+				3296B4A627F8790800108AF7 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */,
 				DA134114243DC5A80039D214 /* map_action_motorcycle@3x.png in Resources */,
 				DA8A925B25DE78B000F5320A /* map_turn_slight_right@2x.png in Resources */,
 				DA5F21EE229551A300B0D7B6 /* ic_custom_hide@2x.png in Resources */,
@@ -14076,6 +14116,8 @@
 				DA5A84E126C563A900F274C7 /* OAWikipediaLanguagesViewController.xib in Resources */,
 				843257A31A9DAE4100A7964E /* ic_arrow_up@3x.png in Resources */,
 				8476E25C1F6C1EEC00EC274F /* map_bicycle_location_night@2x.png in Resources */,
+				3296B47D27F8790800108AF7 /* ic_custom_wind@3x.png in Resources */,
+				3296B49127F8790800108AF7 /* ic_custom_air_pressure@2x.png in Resources */,
 				DA84E84B21D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png in Resources */,
 				156E91D9244AF37E00B181BA /* ic_custom_direction_widget_one@3x.png in Resources */,
 				15BDDEA824DAF3D400079C83 /* ic_custom_remove_outlined@2x.png in Resources */,
@@ -14084,7 +14126,6 @@
 				32BD81AC259B5C9B00A54BB5 /* ic_custom_manage_profiles@2x.png in Resources */,
 				15BDDE9A24DAF3A800079C83 /* ic_custom_copy@3x.png in Resources */,
 				DAF3457322F4482C009E2EB6 /* ic_custom_sound@3x.png in Resources */,
-				32D253F127F58BDC00324717 /* widget_weather_umbrella_day@3x.png in Resources */,
 				158DE49A25AEF32F007C1B57 /* ic_destination_pin_7@3x.png in Resources */,
 				8441CB5E1B1370580033AC95 /* selection_checked@3x.png in Resources */,
 				DAF3458B22F4482C009E2EB6 /* ic_custom_sunset@3x.png in Resources */,
@@ -14100,6 +14141,7 @@
 				847AF58E1F8A3D4900FC7F90 /* widget_battery_charging_day@3x.png in Resources */,
 				84BE7D4C1CF759E2001D8D78 /* map_small_group@2x.png in Resources */,
 				DA2F09112217FF75006C7F05 /* ic_action_add_osm_note@3x.png in Resources */,
+				3296B47B27F8790800108AF7 /* widget_weather_temperature_night@3x.png in Resources */,
 				8AFC2BE524334A4E0095BA9F /* map_location_bicycle_center@3x.png in Resources */,
 				DA22DC4E25C05F130070FFCA /* ic_custom_split_after@2x.png in Resources */,
 				DA1BC11A233F9B01004DAF78 /* ic_custom_point_to_point@3x.png in Resources */,
@@ -14111,7 +14153,6 @@
 				3AFEEE571A0E34FD00900A47 /* menu_star_icon@2x.png in Resources */,
 				DA68B3EB233B822F00F5ACCC /* ic_profile_browsemap@3x.png in Resources */,
 				849E818A1AFA5D6700549953 /* btn_map_type_icon_car@3x.png in Resources */,
-				32D253EB27F58BDC00324717 /* widget_weather_clouds_night@2x.png in Resources */,
 				0A2571A226F253620079774F /* OATrackMenuHeaderView.xib in Resources */,
 				0CBDD0A7245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_4@2x.png in Resources */,
 				843394C91FF54A19006205A5 /* list_warnings_traffic_calming@2x.png in Resources */,
@@ -14154,12 +14195,12 @@
 				DA13420C243DC5A90039D214 /* ic_action_sail_boat_dark@2x.png in Resources */,
 				84C41E521AB8600D0089EABB /* position_track_map_mode_button@3x.png in Resources */,
 				84E442221AF8A07500F87542 /* track_save@2x.png in Resources */,
+				3296B48A27F8790800108AF7 /* ic_custom_wind@2x.png in Resources */,
 				8A755A7B21CBF92400E42699 /* ic_live_osmand_logo@2x.png in Resources */,
 				8410D06E207F48200049DEB2 /* ic_tree_list_dark@2x.png in Resources */,
 				DAF3455D22F4482B009E2EB6 /* ic_custom_compound_action_pause@3x.png in Resources */,
 				DA134154243DC5A80039D214 /* ic_action_personal_transporter@2x.png in Resources */,
 				8476E2A41F6C1EEC00EC274F /* map_default_location_view_angle_night@2x.png in Resources */,
-				32D253EE27F58BDC00324717 /* widget_weather_temperature_day@2x.png in Resources */,
 				DA2F09132217FF75006C7F05 /* ic_plugin_osm_edit@2x.png in Resources */,
 				8476E1E71F6AA01000EC274F /* ic_list_startpoint@2x.png in Resources */,
 				DA5A82B926C563A800F274C7 /* OAPointTableViewCell.xib in Resources */,
@@ -14179,7 +14220,6 @@
 				323BD8E92628850400D255ED /* ic_bg_point_square_bottom_small@2x.png in Resources */,
 				DA5A82BE26C563A800F274C7 /* OATextInputFloatingCell.xib in Resources */,
 				843E5D051AB341E000BE14BE /* icon_star_fill@3x.png in Resources */,
-				32D253CA27F5868A00324717 /* ic_custom_air_pressure@2x.png in Resources */,
 				0A8D1A1226FBA1750042444C /* ic_small_altitude@2x.png in Resources */,
 				DA83603123449C6B003374B5 /* ic_custom_slider@2x.png in Resources */,
 				32A0017C2610B43700ABE0D2 /* widget_coordinates_longitude_west_night@3x.png in Resources */,
@@ -14193,6 +14233,7 @@
 				846F431F1FE5209B00AFEA8E /* img_splash_osmand_logo@3x.png in Resources */,
 				848A14D91B223A4C00A31AE7 /* bg_title@3x.png in Resources */,
 				8AFC2C1124334A4E0095BA9F /* map_location_car_bottom@3x.png in Resources */,
+				3296B49A27F8790800108AF7 /* widget_weather_temperature_day@3x.png in Resources */,
 				DA5A851B26C563A900F274C7 /* OATargetPointView.xib in Resources */,
 				0A7DAF96270C404B0059238B /* ic_custom_upload_to_openstreetmap@2x.png in Resources */,
 				0CEF2C2024B717CC00BAAC4B /* ic_action_inline_skates@2x.png in Resources */,
@@ -14219,6 +14260,7 @@
 				847AF5961F8A3D4900FC7F90 /* widget_battery_day@2x.png in Resources */,
 				845E06941B5FF17400DFC2A7 /* ic_plugin_contourlines@2x.png in Resources */,
 				32A001662610B43700ABE0D2 /* widget_coordinates_longitude_west_night@2x.png in Resources */,
+				3296B4A127F8790800108AF7 /* ic_custom_thermometer@3x.png in Resources */,
 				32B50ADA26BBE3C7002E6C92 /* ic_custom_drawer@3x.png in Resources */,
 				158DE49E25AEF32F007C1B57 /* ic_destination_pin_7_small@2x.png in Resources */,
 				3240977A27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */,
@@ -14227,9 +14269,7 @@
 				DA5A843F26C563A800F274C7 /* OAEditPointViewController.xib in Resources */,
 				8AFC2BF924334A4E0095BA9F /* map_location_bicycle_bottom@3x.png in Resources */,
 				8AFC2C0124334A4E0095BA9F /* map_navigation_car_center@2x.png in Resources */,
-				32D2540027F58BDC00324717 /* widget_weather_clouds_night@3x.png in Resources */,
 				847777481FAA260E00CA8C1F /* widget_altitude_night@3x.png in Resources */,
-				32D253FB27F58BDC00324717 /* widget_weather_umbrella_night@3x.png in Resources */,
 				DA1341E6243DC5A90039D214 /* ic_action_horse@2x.png in Resources */,
 				8AE0194C24505C8B00DA5C33 /* ic_custom_offline@3x.png in Resources */,
 				8480E6A91F7BF8FC009A0FDE /* left_menu_icon_resources@3x.png in Resources */,

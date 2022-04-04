@@ -44,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_OsmEditing @"net.osmand.maps.inapp.addon.osm_editing"
 #define kInAppId_Addon_Mapillary @"net.osmand.maps.inapp.addon.mapillary"
 #define kInAppId_Addon_OpenPlaceReview @"net.osmand.maps.inapp.addon.openplacereviews"
+#define kInAppId_Addon_Weather @"net.osmand.maps.inapp.addon.weather"
 
 // Addons default prices (EUR)
 #define kInApp_Addon_SkiMap_Default_Price 0.0
@@ -281,6 +282,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @interface OAOpenPlaceReviewsProduct : OAProduct
 @end
 
+@interface OAWeatherProduct : OAProduct
+@end
+
 // Map regions
 
 @interface OAAllWorldProduct : OAProduct
@@ -325,6 +329,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) OAProduct *osmEditing;
 @property (nonatomic, readonly) OAProduct *mapillary;
 @property (nonatomic, readonly) OAProduct *openPlaceReviews;
+@property (nonatomic, readonly) OAProduct *weather;
 
 @property (nonatomic, readonly) OAProduct *allWorld;
 @property (nonatomic, readonly) OAProduct *russia;

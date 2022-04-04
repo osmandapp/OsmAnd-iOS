@@ -2330,7 +2330,7 @@
 "add_description" = "Додати опис";
 "map_settings_weather_pressure" = "Тиск";
 "map_settings_clear_raster_cache" = "Очистити растрові плитки";
-"map_settings_weather" = "Погода";
+"product_title_weather" = "Погода";
 "map_settings_weather_temp" = "Температура";
 "map_settings_weather_cloud" = "Хмари";
 "map_settings_weather_wind" = "Вітер";

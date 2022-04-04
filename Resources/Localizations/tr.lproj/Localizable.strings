@@ -2329,7 +2329,7 @@
 "q_clear_weather_cache" = "Hava durumu önbelleğini temizlemek istiyor musunuz?";
 "map_settings_weather_precip" = "Yağış";
 "map_settings_clear_raster_cache" = "Raster döşemeleri temizle";
-"map_settings_weather" = "Hava";
+"product_title_weather" = "Hava";
 "map_settings_weather_temp" = "Sıcaklık";
 "map_settings_weather_pressure" = "Basınç";
 "map_settings_weather_cloud" = "Bulut";

@@ -2312,7 +2312,7 @@
 "points_delete_multiple" = "Smazat %d bodů?";
 "context_menu_edit_descr" = "Upravit popis";
 "add_description" = "Přidat popis";
-"map_settings_weather" = "Počasí";
+"product_title_weather" = "Počasí";
 "map_settings_weather_pressure" = "Tlak";
 "map_settings_weather_wind" = "Vítr";
 "map_settings_weather_cloud" = "Oblačnost";

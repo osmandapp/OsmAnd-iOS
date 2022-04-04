@@ -8,11 +8,7 @@
 
 #import "OAMapInfoWidgetsFactory.h"
 #import "OsmAndApp.h"
-#import "OAAppSettings.h"
-#import "Localization.h"
 #import "OATextInfoWidget.h"
-#import "OAUtilities.h"
-#import "OARulerWidget.h"
 #import "OARootViewController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAMapHudViewController.h"
@@ -20,10 +16,8 @@
 #import "OAMapLayers.h"
 #import "OAMapInfoController.h"
 #import "OAOsmAndFormatter.h"
-#import "OAWeatherBand.h"
+#import "OAIAPHelper.h"
 
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/GeoCommonTypes.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
 
@@ -141,8 +135,9 @@
     OsmAnd::PointI __block cachedTarget31 = OsmAnd::PointI(0, 0);
     OsmAnd::ZoomLevel __block cachedZoom = OsmAnd::ZoomLevel::InvalidZoomLevel;
     weatherControl.updateInfoFunction = ^BOOL{
-        
-        BOOL enabled = _app.data.weather;
+
+        OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+        BOOL enabled = _app.data.weather && [iapHelper.weather isPurchased] && !iapHelper.weather.disabled;
         if (!enabled)
         {
             if (cachedValue[0] != undefined)
@@ -184,7 +179,7 @@
                             cachedValue[0] = @(value);
                             const auto bandValue = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getConvertedBandValue(band, value);
                             const auto bandValueStr = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getFormattedBandValue(band, bandValue, true);
-                            NSString *bandUnit = [[OAWeatherBand withWeatherBand:band] getBandUnit];
+                            NSString *bandUnit = [[OAWeatherBand withWeatherBand:band] getBandUnit].symbol;
                             [weatherControlWeak setText:bandValueStr.toNSString() subtext:bandUnit];
                             [selfWeak setMapCenterMarkerVisibility:YES];
                         }

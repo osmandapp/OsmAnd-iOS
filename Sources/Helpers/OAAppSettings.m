@@ -3008,6 +3008,95 @@
 
 @end
 
+@interface OACommonUnit ()
+
+@property (nonatomic) NSUnit *defValue;
+
+@end
+
+@implementation OACommonUnit
+
++ (instancetype) withKey:(NSString *)key defValue:(NSUnit *)defValue
+{
+    OACommonUnit *obj = [[OACommonUnit alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (NSUnit *) get
+{
+    return [self get:self.appMode];
+}
+
+- (NSUnit *) get:(OAApplicationMode *)mode
+{
+    NSObject *value = [self getValue:mode];
+    return value ? (NSUnit *) value : self.defValue;
+}
+
+- (NSObject *) getValue:(OAApplicationMode *)mode
+{
+    NSObject *cachedValue = self.global ? self.cachedValue : [self.cachedValues objectForKey:mode];
+    if (!cachedValue)
+    {
+        NSString *key = [self getKey:mode];
+        cachedValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+
+        if ([cachedValue isKindOfClass:NSData.class])
+            cachedValue = [NSKeyedUnarchiver unarchivedObjectOfClass:NSUnit.class fromData:cachedValue error:nil];
+
+        if (self.global)
+            self.cachedValue = cachedValue;
+        else
+            [self.cachedValues setObject:cachedValue forKey:mode];
+    }
+    if (!cachedValue)
+    {
+        cachedValue = [self getProfileDefaultValue:mode];
+    }
+    return cachedValue;
+}
+
+- (void) set:(NSUnit *)unit
+{
+    [self set:unit mode:self.appMode];
+}
+
+- (void) set:(NSUnit *)unit mode:(OAApplicationMode *)mode
+{
+    [self setValue:unit mode:mode];
+}
+
+- (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode
+{
+    NSUnit *unit = (NSUnit *) value;
+
+    if (self.global)
+        self.cachedValue = unit;
+    else
+        [self.cachedValues setObject:unit forKey:mode];
+
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:unit requiringSecureCoding:NO error:nil];
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:[self getKey:mode]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    [self set:[NSUnit unitFromString:strValue] mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self get:mode].symbol;
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;

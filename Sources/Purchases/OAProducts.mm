@@ -571,7 +571,11 @@
 
 - (BOOL) isAlreadyPurchased
 {
+#ifdef DEBUG
+    return YES;
+#else
     return [[NSUserDefaults standardUserDefaults] boolForKey:self.productIdentifier];
+#endif
 }
 
 - (BOOL) isLiveUpdatesPurchased
@@ -1463,6 +1467,26 @@
 
 @end
 
+@implementation OAWeatherProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_Weather];
+    return self;
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_custom_umbrella";
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_weather.jpg";
+}
+
+@end
+
 @implementation OAAllWorldProduct
 
 - (instancetype) init
@@ -1624,6 +1648,7 @@
 @property (nonatomic) OAProduct *osmEditing;
 @property (nonatomic) OAProduct *mapillary;
 @property (nonatomic) OAProduct *openPlaceReviews;
+@property (nonatomic) OAProduct *weather;
 
 @property (nonatomic) OAProduct *allWorld;
 @property (nonatomic) OAProduct *russia;
@@ -1667,7 +1692,8 @@
         self.osmEditing = [[OAOsmEditingProduct alloc] init];
         self.mapillary = [[OAMapillaryProduct alloc] init];
         self.openPlaceReviews = [[OAOpenPlaceReviewsProduct alloc] init];
-        
+        self.weather = [[OAWeatherProduct alloc] init];
+
         self.allWorld = [[OAAllWorldProduct alloc] init];
         self.russia = [[OARussiaProduct alloc] init];
         self.antarctica = [[OAAntarcticaProduct alloc] init];
@@ -1687,8 +1713,9 @@
                              self.srtm,
                              self.osmEditing,
                              self.mapillary,
-                             self.openPlaceReviews];
-        
+                             self.openPlaceReviews,
+                             self.weather];
+
         self.inAppMaps = @[self.allWorld,
                            self.russia,
                            self.africa,

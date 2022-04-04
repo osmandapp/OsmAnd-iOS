@@ -11,49 +11,30 @@
 #import "Localization.h"
 #import "OASwitchTableViewCell.h"
 #import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
-#import "OAMapCreatorHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OASettingSwitchCell.h"
 #import "OATitleSliderTableViewCell.h"
-#import "OAIconTextDescButtonCell.h"
 #import "OAButtonCell.h"
 #import "OAColors.h"
-#import "OALocalResourceInformationViewController.h"
-#import "OAOnlineTilesEditingViewController.h"
-#import "OAMapCreatorHelper.h"
-#import "OAAutoObserverProxy.h"
-#import "OAResourcesUIHelper.h"
 #import "OADateTimePickerTableViewCell.h"
-#import "OAMapStyleSettings.h"
 #import "OAMapLayers.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OATimeTableViewCell.h"
 #import "OAWeatherBand.h"
 #import "OAWeatherHelper.h"
+#import "OAWeatherPlugin.h"
 
-#include <QSet>
-
-#include <OsmAndCore/Map/IMapStylesCollection.h>
-#include <OsmAndCore/Map/UnresolvedMapStyle.h>
-#include <OsmAndCore/Map/IOnlineTileSources.h>
-#include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
 #define kWeather @"weather"
-#define kWeatherTemp @"weather_temp"
 #define kWeatherTempAlpha @"weather_temp_alpha"
 #define kWeatherTempUnit @"weather_temp_unit"
-#define kWeatherPressure @"weather_pressure"
 #define kWeatherPressureAlpha @"weather_pressure_alpha"
 #define kWeatherPressureUnit @"weather_pressure_unit"
-#define kWeatherWind @"weather_wind"
 #define kWeatherWindAlpha @"weather_wind_alpha"
 #define kWeatherWindUnit @"weather_wind_unit"
-#define kWeatherCloud @"weather_cloud"
 #define kWeatherCloudAlpha @"weather_cloud_alpha"
 #define kWeatherCloudUnit @"weather_cloud_unit"
-#define kWeatherPrecip @"weather_precip"
 #define kWeatherPrecipAlpha @"weather_precip_alpha"
 #define kWeatherPrecipUnit @"weather_precip_unit"
 
@@ -135,7 +116,7 @@
         _settings = [OAAppSettings sharedManager];
         _styleSettings = [OAMapStyleSettings sharedInstance];
         
-        title = OALocalizedString(@"map_settings_weather");
+        title = OALocalizedString(@"product_title_weather");
         settingsScreen = EMapSettingsScreenWeather;
         
         vwController = viewController;
@@ -363,17 +344,22 @@
             @"type"  : kCellTypeValue,
             @"name"  : kWeatherTempUnits,
             @"title" : OALocalizedString(@"map_settings_weather_temp"),
-            @"value" : [tempBand getBandUnit]
+            @"value" : [tempBand getBandUnit].symbol
         }];
     if (_showTempUnits)
     {
+        NSMutableArray<NSString *> *value = [NSMutableArray array];
+        for (NSUnit *unit in [tempBand getAvailableBandUnits])
+        {
+            [value addObject:unit.symbol];
+        }
         weatherTempUnits = [weatherTempUnits arrayByAddingObject:
             @{
                 @"type" : kCellTypeValuePicker,
                 @"name" : kWeatherTempUnit,
                 @"tag" : @(kWeatherTempUnitTag),
-                @"value" : [tempBand getAvailableBandUnits],
-                @"selected" : [tempBand getBandUnit]
+                @"value" : value,
+                @"selected" : [tempBand getBandUnit].symbol
             }];
     }
     NSArray *weatherPressureUnits = @[
@@ -381,17 +367,22 @@
             @"type"  : kCellTypeValue,
             @"name"  : kWeatherPressureUnits,
             @"title" : OALocalizedString(@"map_settings_weather_pressure"),
-            @"value" : [pressureBand getBandUnit],
+            @"value" : [pressureBand getBandUnit].symbol
         }];
     if (_showPressureUnits)
     {
+        NSMutableArray<NSString *> *value = [NSMutableArray array];
+        for (NSUnit *unit in [pressureBand getAvailableBandUnits])
+        {
+            [value addObject:unit.symbol];
+        }
         weatherPressureUnits = [weatherPressureUnits arrayByAddingObject:
             @{
                 @"type" : kCellTypeValuePicker,
                 @"name" : kWeatherPressureUnit,
                 @"tag" : @(kWeatherPressureUnitTag),
-                @"value" : [pressureBand getAvailableBandUnits],
-                @"selected" : [pressureBand getBandUnit]
+                @"value" : value,
+                @"selected" : [pressureBand getBandUnit].symbol
             }];
     }
     NSArray *weatherWindUnits = @[
@@ -399,17 +390,22 @@
             @"type"  : kCellTypeValue,
             @"name"  : kWeatherWindUnits,
             @"title" : OALocalizedString(@"map_settings_weather_wind"),
-            @"value" : [windBand getBandUnit]
+            @"value" : [windBand getBandUnit].symbol
         }];
     if (_showWindUnits)
     {
+        NSMutableArray<NSString *> *value = [NSMutableArray array];
+        for (NSUnit *unit in [windBand getAvailableBandUnits])
+        {
+            [value addObject:unit.symbol];
+        }
         weatherWindUnits = [weatherWindUnits arrayByAddingObject:
             @{
                 @"type" : kCellTypeValuePicker,
                 @"name" : kWeatherWindUnit,
                 @"tag" : @(kWeatherWindUnitTag),
-                @"value" : [windBand getAvailableBandUnits],
-                @"selected" : [windBand getBandUnit]
+                @"value" : value,
+                @"selected" : [windBand getBandUnit].symbol
             }];
     }
     NSArray *weatherCloudUnits = @[
@@ -417,17 +413,22 @@
             @"type"  : kCellTypeValue,
             @"name"  : kWeatherCloudUnits,
             @"title" : OALocalizedString(@"map_settings_weather_cloud"),
-            @"value" : [cloudBand getBandUnit]
+            @"value" : [cloudBand getBandUnit].symbol
         }];
     if (_showCloudUnits)
     {
+        NSMutableArray<NSString *> *value = [NSMutableArray array];
+        for (NSUnit *unit in [cloudBand getAvailableBandUnits])
+        {
+            [value addObject:unit.symbol];
+        }
         weatherCloudUnits = [weatherCloudUnits arrayByAddingObject:
             @{
                 @"type" : kCellTypeValuePicker,
                 @"name" : kWeatherCloudUnit,
                 @"tag" : @(kWeatherCloudUnitTag),
-                @"value" : [cloudBand getAvailableBandUnits],
-                @"selected" : [cloudBand getBandUnit]
+                @"value" : value,
+                @"selected" : [cloudBand getBandUnit].symbol
             }];
     }
     NSArray *weatherPrecipUnits = @[
@@ -435,17 +436,22 @@
             @"type"  : kCellTypeValue,
             @"name"  : kWeatherPrecipUnits,
             @"title" : OALocalizedString(@"map_settings_weather_precip"),
-            @"value" : [precipBand getBandUnit]
+            @"value" : [precipBand getBandUnit].symbol
         }];
     if (_showPrecipUnits)
     {
+        NSMutableArray<NSString *> *value = [NSMutableArray array];
+        for (NSUnit *unit in [precipBand getAvailableBandUnits])
+        {
+            [value addObject:unit.symbol];
+        }
         weatherPrecipUnits = [weatherPrecipUnits arrayByAddingObject:
             @{
                 @"type" : kCellTypeValuePicker,
                 @"name" : kWeatherPrecipUnit,
                 @"tag" : @(kWeatherPrecipUnitTag),
-                @"value" : [precipBand getAvailableBandUnits],
-                @"selected" : [precipBand getBandUnit]
+                @"value" : value,
+                @"selected" : [precipBand getBandUnit].symbol
             }];
     }
     
@@ -858,9 +864,9 @@
     UISwitch *switchView = (UISwitch *)sender;
     if (switchView)
     {
+        [(OAWeatherPlugin *) [OAPlugin getPlugin:OAWeatherPlugin.class] weatherChanged:switchView.isOn];
         if (switchView.isOn)
         {
-            _app.data.weather = YES;
             [tblView beginUpdates];
             [self setupView];
             [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
@@ -869,7 +875,6 @@
         }
         else
         {
-            _app.data.weather = NO;
             [tblView beginUpdates];
             [tblView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
             [self setupView];
@@ -940,14 +945,14 @@
         
         OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:kTempContourLines];
         OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:kPressureContourLines];
-        if ([OALocalizedString(@"map_settings_weather_temp") isEqualToString:value])
+        if ([[[OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE] getMeasurementName] isEqualToString:value])
         {
             tempContourLinesParam.value = @"true";
             [_styleSettings save:tempContourLinesParam];
             pressureContourLinesParam.value = @"false";
             [_styleSettings save:pressureContourLinesParam];
         }
-        else if ([OALocalizedString(@"map_settings_weather_pressure") isEqualToString:value])
+        else if ([[[OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE] getMeasurementName] isEqualToString:value])
         {
             tempContourLinesParam.value = @"false";
             [_styleSettings save:tempContourLinesParam];
@@ -964,7 +969,7 @@
     }
     else if (pickerTag == kWeatherTempUnitTag)
     {
-        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE] setBandUnit:value])
+        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE] setBandUnit:[NSUnit unitFromString:value]])
         {
             forceUpdateSettings = YES;
             row = _tempUnitsRowIndex;
@@ -973,7 +978,7 @@
     }
     else if (pickerTag == kWeatherPressureUnitTag)
     {
-        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE] setBandUnit:value])
+        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE] setBandUnit:[NSUnit unitFromString:value]])
         {
             forceUpdateSettings = YES;
             row = _pressureUnitsRowIndex;
@@ -982,7 +987,7 @@
     }
     else if (pickerTag == kWeatherWindUnitTag)
     {
-        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED] setBandUnit:value])
+        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED] setBandUnit:[NSUnit unitFromString:value]])
         {
             forceUpdateSettings = YES;
             row = _windUnitsRowIndex;
@@ -991,7 +996,7 @@
     }
     else if (pickerTag == kWeatherCloudUnitTag)
     {
-        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD] setBandUnit:value])
+        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD] setBandUnit:[NSUnit unitFromString:value]])
         {
             forceUpdateSettings = YES;
             row = _cloudUnitsRowIndex;
@@ -1000,7 +1005,7 @@
     }
     else if (pickerTag == kWeatherPrecipUnitTag)
     {
-        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION] setBandUnit:value])
+        if ([[OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION] setBandUnit:[NSUnit unitFromString:value]])
         {
             forceUpdateSettings = YES;
             row = _precipUnitsRowIndex;

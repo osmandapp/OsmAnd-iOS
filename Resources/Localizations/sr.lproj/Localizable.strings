@@ -2337,7 +2337,7 @@
 "map_settings_weather_precip" = "Падавине";
 "q_clear_weather_cache" = "Да ли желите да обришете кеш меморију за време?";
 "map_settings_weather_temp" = "Температура";
-"map_settings_weather" = "Време";
+"product_title_weather" = "Време";
 "map_settings_weather_pressure" = "Притисак";
 "map_settings_clear_geo_cache" = "Очисти гео плочице";
 "map_settings_clear_raster_cache" = "Очисти растерске плочице";

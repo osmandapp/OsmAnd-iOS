@@ -9,13 +9,10 @@
 #import "OAConfigureMenuMainScreen.h"
 #import "OAConfigureMenuViewController.h"
 #import "Localization.h"
-#import "OsmAndApp.h"
-#import "OAAppSettings.h"
 #import "OAAppModeCell.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
-#import "OAUtilities.h"
 #import "OASettingSwitchCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OAMapHudViewController.h"
@@ -24,6 +21,8 @@
 #import "OADirectionAppearanceViewController.h"
 #import "OAColors.h"
 #import "OAMapLayers.h"
+#import "OAIAPHelper.h"
+#import "OAWeatherPlugin.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -165,7 +164,11 @@
     {
         if (![mode isWidgetAvailable:r.key])
             continue;
-        
+
+        OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+        if ([[OAWeatherPlugin getWeatherSettingKeys] containsObject:r.key] && (![iapHelper.weather isPurchased] || iapHelper.weather.disabled))
+            continue;
+
         BOOL selected = [r visibleCollapsed:mode] || [r visible:mode];
         NSString *collapsedStr = OALocalizedString(@"shared_string_collapse");
         

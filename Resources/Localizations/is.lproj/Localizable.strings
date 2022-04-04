@@ -2322,7 +2322,7 @@
 "points_delete_multiple" = "Eyða %d punkt(um)?";
 "add_description" = "Bæta við lýsingu";
 "context_menu_edit_descr" = "Breyta lýsingu";
-"map_settings_weather" = "Veður";
+"product_title_weather" = "Veður";
 "map_settings_weather_temp" = "Hitastig";
 "map_settings_weather_pressure" = "Þrýstingur";
 "map_settings_weather_wind" = "Vindur";

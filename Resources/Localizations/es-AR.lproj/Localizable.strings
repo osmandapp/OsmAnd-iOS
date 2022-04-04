@@ -2338,7 +2338,7 @@
 "map_settings_weather_precip" = "Precipitación";
 "map_settings_clear_geo_cache" = "Vaciar teselas geográficas";
 "map_settings_clear_raster_cache" = "Vaciar teselas ráster";
-"map_settings_weather" = "Clima";
+"product_title_weather" = "Clima";
 "map_settings_weather_pressure" = "Presión";
 "map_settings_weather_temp" = "Temperatura";
 "customize_route_line" = "Personalizar línea de ruta";

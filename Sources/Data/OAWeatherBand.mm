@@ -107,7 +107,7 @@ static NSString *kPrecipContourStyleName;
     kDefaultPressureUnit = [NSUnitPressure current];
     kDefaultPrecipUnit = [NSUnitLength current];
 
-    kInternalTempUnit = @"C";
+    kInternalTempUnit = @"°C";
     kInternalPressureUnit = @"Pa";
     kInternalCloudUnit = @"%";
     kInternalWindSpeedUnit = @"m/s";

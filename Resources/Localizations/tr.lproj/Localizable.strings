@@ -1372,7 +1372,7 @@
 "rendering_attr_winter_road_name" = "Kış yolu";
 "rendering_value_germanRoadAtlas_name" = "Alman yol atlası";
 "rendering_value_translucent_orange_name" = "Yarı saydam turuncu";
-"rendering_attr_trolleybusRoutes_name" = "Troleybüs rotaları";
+"rendering_attr_trolleybusRoutes_name" = "Troleybüs yolları";
 "rendering_value__name" = "Öntanımlı";
 "rendering_attr_publicTransportMode_name" = "Otobüs, troleybüs, mekik yolları";
 "rendering_value_translucent_yellow_name" = "Yarı saydam sarı";
@@ -1482,7 +1482,7 @@
 "rendering_attr_highway_class_steps_name" = "Basamak";
 "rendering_attr_depthContours_name" = "Deniz derinlik eğrileri";
 "rendering_attr_buildings15zoom_name" = "Binalarüzerinde yakınlaştırma 15";
-"rendering_attr_subwayMode_name" = "Metro rotaları";
+"rendering_attr_subwayMode_name" = "Metro yolları";
 "rendering_attr_OSMMapperAssistant_name" = "OSM haritalama yardımcısı";
 "routing_attr_avoid_borders_description" = "Ulusal sınırları geçmekten kaçınır";
 "rendering_attr_moreDetailed_name" = "Daha fazla bilgi";
@@ -1527,7 +1527,7 @@
 "rendering_attr_piste_type_sleigh_name" = "Atlı kızak";
 "rendering_attr_currentTrackColor_description" = "GPX renk";
 "routing_attr_avoid_train_description" = "Trenlerden kaçınır";
-"rendering_attr_busRoutes_name" = "Otobüs rotaları";
+"rendering_attr_busRoutes_name" = "Otobüs yolları";
 "routing_attr_avoid_motorway_name" = "Otoyol yok";
 "rendering_attr_coloredBuildings_name" = "Binalar türüne göre renk kodu";
 "routing_attr_short_way_description" = "Yakıt tasarruflu yolu kullan (çoğunlukla daha kısadır).";

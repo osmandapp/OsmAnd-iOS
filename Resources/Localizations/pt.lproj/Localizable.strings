@@ -2374,3 +2374,10 @@
 "routing_attr_avoid_tunnels_name" = "Evitar túneis";
 "routing_attr_avoid_tunnels_description" = "Evita túneis";
 "routing_attr_avoid_low_emission_zone_name" = "Evitar zonas de baixas emissões poluentes";
+"map_settings_weather_isolines" = "Isolinhas";
+"obf_import_already_exists_short" = "Já existe um ficheiro com este nome.";
+"rendering_attr_showFitnessTrails_description" = "Mostrar trilhos de fitness";
+"gpx_import_already_exists_short" = "O ficheiro do trilho especificado já existe na lista.";
+"rendering_attr_showRunningRoutes_name" = "Rotas para correr";
+"rendering_attr_showRunningRoutes_description" = "Mostrar rotas para correr";
+"rendering_attr_showFitnessTrails_name" = "Trilhos de fitness";

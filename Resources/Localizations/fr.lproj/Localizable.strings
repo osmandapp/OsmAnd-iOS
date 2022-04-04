@@ -1234,7 +1234,7 @@
 "rendering_value_fine_name" = "Bien";
 "rendering_attr_surface_mud_name" = "Boue";
 "routing_attr_avoid_ice_roads_fords_name" = "Éviter les routes sur glace, les fjords";
-"rendering_value_walkingRoutesOSMC_name" = "Couleur des itinéraires selon OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_alpineHiking_name" = "Difficulté des sentiers de randonnée (CAS)";
 "rendering_attr_hideOverground_name" = "Objets au sol";
 "rendering_attr_hmRendered_description" = "Augmenter le niveau de détail affiché.";
@@ -1297,7 +1297,7 @@
 "routing_attr_allow_classic_only_description" = "Pistes de ski de fond (inclus les pistes tracées par le passage des skieurs).";
 "rendering_value_americanRoadAtlas_name" = "Atlas des routes américaines";
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Couleur de l’itinéraire selon l’affiliation au réseau";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Affiliation au réseau";
 "rendering_attr_surface_fine_gravel_name" = "Gravier fin";
 "rendering_attr_hmRendered_name" = "Afficher plus de détail";
 "rendering_value_medium_name" = "Moyen";
@@ -1348,7 +1348,7 @@
 "routing_attr_allow_motorway_description" = "Autoriser les trajets sur autoroute.";
 "routing_attr_prefer_unpaved_name" = "Privilégier les routes non revêtues";
 "routing_attr_piste_type_downhill_description" = "Pistes de ski et accès aux remontées mécaniques.";
-"rendering_value_walkingRoutesOSMCNodes_name" = "Nœud de réseaux";
+"rendering_value_walkingRoutesOSMCNodes_name" = "Réseaux de noeuds";
 "rendering_attr_subwayMode_name" = "Lignes de métro";
 "rendering_attr_hikingRoutesOSMC_description" = "Rendu des itinéraires de randonnée d\'après OSMC.";
 "routing_attr_width_name" = "Limite de largeur";
@@ -2375,3 +2375,10 @@
 "delete_tracks_bottom_sheet_description_bold_part" = "%d traces ?";
 "delete_tracks_bottom_sheet_description_regular_part" = "Êtes-vous sûr de vouloir supprimer ";
 "delete_tracks_bottom_sheet_title" = "Supprimer les traces ?";
+"map_settings_weather_isolines" = "Isolines";
+"rendering_attr_showFitnessTrails_description" = "Afficher les parcours de santé";
+"gpx_import_already_exists_short" = "La trace spécifié existe déjà dans la liste.";
+"obf_import_already_exists_short" = "Un fichier avec ce nom existe déjà.";
+"rendering_attr_showRunningRoutes_name" = "Itinéraires de course à pied";
+"rendering_attr_showRunningRoutes_description" = "Afficher les itinéraires de course à pied";
+"rendering_attr_showFitnessTrails_name" = "Parcours de santé";

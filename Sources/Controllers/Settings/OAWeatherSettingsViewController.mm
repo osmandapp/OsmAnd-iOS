@@ -101,11 +101,14 @@
             cell.textView.text = [band getMeasurementName];
             cell.leftIconView.image = [UIImage templateImageNamed:[band getIcon]];
 
+            NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+            formatter.locale = NSLocale.autoupdatingCurrentLocale;
+
             NSUnit *unit = [band getBandUnit];
             if (band.bandIndex == WEATHER_BAND_TEMPERATURE)
-                cell.descriptionView.text = unit.name != nil ? unit.name : unit.symbol;
+                cell.descriptionView.text = unit.name != nil ? unit.name : [formatter stringFromUnit:unit];
             else
-                cell.descriptionView.text = unit.symbol;
+                cell.descriptionView.text = [formatter stringFromUnit:unit];
         }
         outCell = cell;
     }

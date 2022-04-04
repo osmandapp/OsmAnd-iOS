@@ -481,29 +481,44 @@
 
 + (NSUnit *) unitFromString:(NSString *)unitStr
 {
-    if ([unitStr isEqualToString:@"%"])
+    NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
+
+    if ([unitStr isEqualToString:NSUnitCloud.percent.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitCloud.percent]])
         return NSUnitCloud.percent;
-    if ([unitStr isEqualToString:@"°C"])
+    if ([unitStr isEqualToString:NSUnitTemperature.celsius.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitTemperature.celsius]])
         return NSUnitTemperature.celsius;
-    if ([unitStr isEqualToString:@"°F"])
+    if ([unitStr isEqualToString:NSUnitTemperature.fahrenheit.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitTemperature.fahrenheit]])
         return NSUnitTemperature.fahrenheit;
-    if ([unitStr isEqualToString:@"hPa"])
+    if ([unitStr isEqualToString:NSUnitPressure.hectopascals.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitPressure.hectopascals]])
         return NSUnitPressure.hectopascals;
-    if ([unitStr isEqualToString:@"mmHg"])
+    if ([unitStr isEqualToString:NSUnitPressure.millimetersOfMercury.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitPressure.millimetersOfMercury]])
         return NSUnitPressure.millimetersOfMercury;
-    if ([unitStr isEqualToString:@"inHg"])
+    if ([unitStr isEqualToString:NSUnitPressure.inchesOfMercury.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitPressure.inchesOfMercury]])
         return NSUnitPressure.inchesOfMercury;
-    if ([unitStr isEqualToString:@"m/s"])
+    if ([unitStr isEqualToString:NSUnitSpeed.metersPerSecond.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitSpeed.metersPerSecond]])
         return NSUnitSpeed.metersPerSecond;
-    if ([unitStr isEqualToString:@"km/h"])
+    if ([unitStr isEqualToString:NSUnitSpeed.kilometersPerHour.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitSpeed.kilometersPerHour]])
         return NSUnitSpeed.kilometersPerHour;
-    if ([unitStr isEqualToString:@"mph"])
+    if ([unitStr isEqualToString:NSUnitSpeed.milesPerHour.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitSpeed.milesPerHour]])
         return NSUnitSpeed.milesPerHour;
-    if ([unitStr isEqualToString:@"kt"])
+    if ([unitStr isEqualToString:NSUnitSpeed.knots.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitSpeed.knots]])
         return NSUnitSpeed.knots;
-    if ([unitStr isEqualToString:@"mm"])
+    if ([unitStr isEqualToString:NSUnitLength.millimeters.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitLength.millimeters]])
         return NSUnitLength.millimeters;
-    if ([unitStr isEqualToString:@"in"])
+    if ([unitStr isEqualToString:NSUnitLength.inches.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitLength.inches]])
         return NSUnitLength.inches;
 
     return nil;
@@ -526,15 +541,12 @@
 + (NSUnitTemperature *)current
 {
     NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
-    formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_GB"];
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
     formatter.unitStyle = NSFormattingUnitStyleMedium;
     NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitTemperature.celsius]];
-    NSString *symbol = [formatted stringByReplacingOccurrencesOfString:@"0 " withString:@""];
-    symbol = [formatted stringByReplacingOccurrencesOfString:@"0" withString:@""];
-    if ([symbol isEqualToString:NSUnitTemperature.fahrenheit.symbol])
-        return NSUnitTemperature.fahrenheit;
-    else
-        return NSUnitTemperature.celsius;
+    NSString *symbol = [formatted substringFromIndex:2];
+    NSUnitTemperature *unit = (NSUnitTemperature *) [NSUnit unitFromString:symbol];
+    return unit ? unit : NSUnitTemperature.celsius;
 }
 
 - (NSString *)name
@@ -553,17 +565,11 @@
 + (NSUnitSpeed *)current
 {
     NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
-    formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_GB"];
-    NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitSpeed.kilometersPerHour]];
-    NSString *symbol = [formatted stringByReplacingOccurrencesOfString:@"0 " withString:@""];
-    if ([symbol isEqualToString:NSUnitSpeed.knots.symbol])
-        return NSUnitSpeed.knots;
-    if ([symbol isEqualToString:NSUnitSpeed.kilometersPerHour.symbol])
-        return NSUnitSpeed.kilometersPerHour;
-    if ([symbol isEqualToString:NSUnitSpeed.milesPerHour.symbol])
-        return NSUnitSpeed.milesPerHour;
-    else
-        return NSUnitSpeed.metersPerSecond;
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
+    NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitSpeed.metersPerSecond]];
+    NSString *symbol = [formatted substringFromIndex:2];
+    NSUnitSpeed *unit = (NSUnitSpeed *) [NSUnit unitFromString:symbol];
+    return unit ? unit : NSUnitSpeed.metersPerSecond;
 }
 
 - (NSString *)name
@@ -586,15 +592,11 @@
 + (NSUnitPressure *)current
 {
     NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
-    formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_GB"];
-    NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitPressure.hectopascals]];
-    NSString *symbol = [formatted stringByReplacingOccurrencesOfString:@"0 " withString:@""];
-    if ([symbol isEqualToString:NSUnitPressure.hectopascals.symbol])
-        return NSUnitPressure.hectopascals;
-    if ([symbol isEqualToString:NSUnitPressure.inchesOfMercury.symbol])
-        return NSUnitPressure.inchesOfMercury;
-    else
-        return NSUnitPressure.millimetersOfMercury;
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
+    NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitPressure.millimetersOfMercury]];
+    NSString *symbol = [formatted substringFromIndex:2];
+    NSUnitPressure *unit = (NSUnitPressure *) [NSUnit unitFromString:symbol];
+    return unit ? unit : NSUnitPressure.millimetersOfMercury;
 }
 
 - (NSString *)name
@@ -615,13 +617,11 @@
 + (NSUnitLength *)current
 {
     NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
-    formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_GB"];
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
     NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitLength.millimeters]];
-    NSString *symbol = [formatted stringByReplacingOccurrencesOfString:@"0 " withString:@""];
-    if ([symbol isEqualToString:NSUnitLength.inches.symbol])
-        return NSUnitLength.inches;
-    else
-        return NSUnitLength.millimeters;
+    NSString *symbol = [formatted substringFromIndex:2];
+    NSUnitLength *unit = (NSUnitLength *) [NSUnit unitFromString:symbol];
+    return unit ? unit : NSUnitLength.millimeters;
 }
 
 - (NSString *)name

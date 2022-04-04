@@ -332,7 +332,10 @@
                         OALocalizedString(@"map_settings_clear_raster_cache"),
                         [NSByteCountFormatter stringFromByteCount:_rasterDbSize countStyle:NSByteCountFormatterCountStyleFile]],
         }];
-    
+
+    NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
+
     OAWeatherBand *tempBand = [OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE];
     OAWeatherBand *pressureBand = [OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE];
     OAWeatherBand *windBand = [OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED];
@@ -344,14 +347,14 @@
             @"type"  : kCellTypeValue,
             @"name"  : kWeatherTempUnits,
             @"title" : OALocalizedString(@"map_settings_weather_temp"),
-            @"value" : [tempBand getBandUnit].symbol
+            @"value" : [formatter stringFromUnit:[tempBand getBandUnit]]
         }];
     if (_showTempUnits)
     {
         NSMutableArray<NSString *> *value = [NSMutableArray array];
         for (NSUnit *unit in [tempBand getAvailableBandUnits])
         {
-            [value addObject:unit.symbol];
+            [value addObject:[formatter stringFromUnit:unit]];
         }
         weatherTempUnits = [weatherTempUnits arrayByAddingObject:
             @{
@@ -359,7 +362,7 @@
                 @"name" : kWeatherTempUnit,
                 @"tag" : @(kWeatherTempUnitTag),
                 @"value" : value,
-                @"selected" : [tempBand getBandUnit].symbol
+                @"selected" : [formatter stringFromUnit:[tempBand getBandUnit]]
             }];
     }
     NSArray *weatherPressureUnits = @[
@@ -367,14 +370,14 @@
             @"type"  : kCellTypeValue,
             @"name"  : kWeatherPressureUnits,
             @"title" : OALocalizedString(@"map_settings_weather_pressure"),
-            @"value" : [pressureBand getBandUnit].symbol
+            @"value" : [formatter stringFromUnit:[pressureBand getBandUnit]]
         }];
     if (_showPressureUnits)
     {
         NSMutableArray<NSString *> *value = [NSMutableArray array];
         for (NSUnit *unit in [pressureBand getAvailableBandUnits])
         {
-            [value addObject:unit.symbol];
+            [value addObject:[formatter stringFromUnit:unit]];
         }
         weatherPressureUnits = [weatherPressureUnits arrayByAddingObject:
             @{
@@ -382,7 +385,7 @@
                 @"name" : kWeatherPressureUnit,
                 @"tag" : @(kWeatherPressureUnitTag),
                 @"value" : value,
-                @"selected" : [pressureBand getBandUnit].symbol
+                @"selected" : [formatter stringFromUnit:[pressureBand getBandUnit]]
             }];
     }
     NSArray *weatherWindUnits = @[
@@ -390,14 +393,14 @@
             @"type"  : kCellTypeValue,
             @"name"  : kWeatherWindUnits,
             @"title" : OALocalizedString(@"map_settings_weather_wind"),
-            @"value" : [windBand getBandUnit].symbol
+            @"value" : [formatter stringFromUnit:[windBand getBandUnit]]
         }];
     if (_showWindUnits)
     {
         NSMutableArray<NSString *> *value = [NSMutableArray array];
         for (NSUnit *unit in [windBand getAvailableBandUnits])
         {
-            [value addObject:unit.symbol];
+            [value addObject:[formatter stringFromUnit:unit]];
         }
         weatherWindUnits = [weatherWindUnits arrayByAddingObject:
             @{
@@ -405,7 +408,7 @@
                 @"name" : kWeatherWindUnit,
                 @"tag" : @(kWeatherWindUnitTag),
                 @"value" : value,
-                @"selected" : [windBand getBandUnit].symbol
+                @"selected" : [formatter stringFromUnit:[windBand getBandUnit]]
             }];
     }
     NSArray *weatherCloudUnits = @[
@@ -413,14 +416,14 @@
             @"type"  : kCellTypeValue,
             @"name"  : kWeatherCloudUnits,
             @"title" : OALocalizedString(@"map_settings_weather_cloud"),
-            @"value" : [cloudBand getBandUnit].symbol
+            @"value" : [formatter stringFromUnit:[cloudBand getBandUnit]]
         }];
     if (_showCloudUnits)
     {
         NSMutableArray<NSString *> *value = [NSMutableArray array];
         for (NSUnit *unit in [cloudBand getAvailableBandUnits])
         {
-            [value addObject:unit.symbol];
+            [value addObject:[formatter stringFromUnit:unit]];
         }
         weatherCloudUnits = [weatherCloudUnits arrayByAddingObject:
             @{
@@ -428,7 +431,7 @@
                 @"name" : kWeatherCloudUnit,
                 @"tag" : @(kWeatherCloudUnitTag),
                 @"value" : value,
-                @"selected" : [cloudBand getBandUnit].symbol
+                @"selected" : [formatter stringFromUnit:[cloudBand getBandUnit]]
             }];
     }
     NSArray *weatherPrecipUnits = @[
@@ -436,14 +439,14 @@
             @"type"  : kCellTypeValue,
             @"name"  : kWeatherPrecipUnits,
             @"title" : OALocalizedString(@"map_settings_weather_precip"),
-            @"value" : [precipBand getBandUnit].symbol
+            @"value" : [formatter stringFromUnit:[precipBand getBandUnit]]
         }];
     if (_showPrecipUnits)
     {
         NSMutableArray<NSString *> *value = [NSMutableArray array];
         for (NSUnit *unit in [precipBand getAvailableBandUnits])
         {
-            [value addObject:unit.symbol];
+            [value addObject:[formatter stringFromUnit:unit]];
         }
         weatherPrecipUnits = [weatherPrecipUnits arrayByAddingObject:
             @{
@@ -451,7 +454,7 @@
                 @"name" : kWeatherPrecipUnit,
                 @"tag" : @(kWeatherPrecipUnitTag),
                 @"value" : value,
-                @"selected" : [precipBand getBandUnit].symbol
+                @"selected" : [formatter stringFromUnit:[precipBand getBandUnit]]
             }];
     }
     

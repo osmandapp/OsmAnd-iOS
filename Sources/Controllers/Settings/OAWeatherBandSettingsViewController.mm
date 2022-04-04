@@ -83,9 +83,12 @@
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray array];
 
+    NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
+
     NSUnit *unitDefault = [_band getDefaultBandUnit];
     NSString *nameDefault = OALocalizedString(@"device_settings");
-    NSString *unitDefaultStr = [NSString stringWithFormat:@" (%@)", unitDefault.symbol];
+    NSString *unitDefaultStr = [NSString stringWithFormat:@" (%@)", [formatter stringFromUnit:unitDefault]];
 
     [data addObject:@{
             @"unit": unitDefault,
@@ -98,8 +101,8 @@
     for (NSInteger i = 0; i < units.count; i++)
     {
         NSUnit *unit = units[i];
-        NSString *name = unit.name != nil ? unit.name : unit.symbol;
-        NSString *unitStr = unit.name != nil ? [NSString stringWithFormat:@" (%@)", unit.symbol] : nil;
+        NSString *name = unit.name != nil ? unit.name : [formatter stringFromUnit:unit];
+        NSString *unitStr = unit.name != nil ? [NSString stringWithFormat:@" (%@)", [formatter stringFromUnit:unit]] : nil;
 
         [data addObject:@{
                 @"unit": unit,

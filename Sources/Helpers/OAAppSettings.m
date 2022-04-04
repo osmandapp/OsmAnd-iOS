@@ -3046,6 +3046,9 @@
         NSString *key = [self getKey:mode];
         cachedValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
 
+        if ([cachedValue isKindOfClass:NSString.class])
+            cachedValue = [NSUnit unitFromString:cachedValue];
+
         if ([cachedValue isKindOfClass:NSData.class])
             cachedValue = [NSKeyedUnarchiver unarchivedObjectOfClass:NSUnit.class fromData:cachedValue error:nil];
 
@@ -3054,6 +3057,11 @@
         else
             [self.cachedValues setObject:cachedValue forKey:mode];
     }
+    else if ([cachedValue isKindOfClass:NSString.class])
+    {
+        cachedValue = [NSUnit unitFromString:cachedValue];
+    }
+
     if (!cachedValue)
     {
         cachedValue = [self getProfileDefaultValue:mode];
@@ -3083,6 +3091,14 @@
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:unit requiringSecureCoding:NO error:nil];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:[self getKey:mode]];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+}
+
+- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
+{
+    NSObject *value = [super getProfileDefaultValue:mode];
+    if ([value isKindOfClass:NSString.class])
+        value = [NSUnit unitFromString:value];
+    return value;
 }
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode

@@ -179,7 +179,11 @@
                             cachedValue[0] = @(value);
                             const auto bandValue = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getConvertedBandValue(band, value);
                             const auto bandValueStr = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getFormattedBandValue(band, bandValue, true);
-                            NSString *bandUnit = [[OAWeatherBand withWeatherBand:band] getBandUnit].symbol;
+
+                            NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+                            formatter.locale = NSLocale.autoupdatingCurrentLocale;
+
+                            NSString *bandUnit = [formatter stringFromUnit:[[OAWeatherBand withWeatherBand:band] getBandUnit]];
 
                             BOOL unitsWithBigFont = band == WEATHER_BAND_TEMPERATURE;
                             if (unitsWithBigFont)

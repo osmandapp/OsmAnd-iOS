@@ -794,6 +794,7 @@
 "units_and_formats" = "Units & formats";
 "device_settings" = "Device settings";
 "osmand_settings" = "OsmAnd settings";
+"backup_and_restore" = "Backup & Restore";
 "global_settings_descr" = "Affect the entire application.";
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
@@ -2504,6 +2505,25 @@
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
 
+"user_login" = "Login";
+"osmand_cloud_login_descr" = "Please enter the e-mail address you registred with. A one-time password for the next step will be sent to it.";
+"login_footer_full_text" = "Need help? Please contact us at \nsupport@osmand.net";
+"login_footer_email_part" = "support@osmand.net";
+"cloud_email_not_registered" = "This e-mail address is not registered for OsmAnd Cloud";
+"cloud_email_already_registered" = "This e-mail address is already registered.";
+"login_error_email_invalid" = "Please enter a valid e-mail address";
+"login_help_email_title" = "OsmAnd iOS Cloud";
+
+"register_opr_create_new_account" = "Create new account";
+"osmand_cloud_create_account_descr" = "Please enter your e-mail address, a verification code will be sent there, and all your data will be linked to it.";
+
+"verification" = "Verification";
+"verify_email_address_descr" = "Verification code sent to %@. Please enter it in the field below.";
+"verification_code_placeholder" = "Code";
+"verification_code_missing" = "I didn't receive a verification code";
+"verification_code_missing_description" = "It can take up to 10 minutes. Use the button below if it isn't in your spam folder.";
+"resend_verification_code" = "Resend";
+
 "travel_routes" = "Travel routes";
 "walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Color routes according to their node network type (international, regional, local).";
@@ -2512,6 +2532,29 @@
 "routes_color_by_type" = "Color routes by…";
 
 "q_clear_weather_cache" = "Do you want to clear weather cache?";
+
+"osmand_cloud" = "OsmAnd Cloud";
+"cloud_description" = "Never lose your data. Back up and restore all info easily.";
+"cloud_create_account" = "Create account";
+"cloud_existing_account" = "I already have an account";
+"local_backup" = "Local Backup";
+"local_backup_descr" = "Backup or restore data from a local file.";
+"backup_into_file" = "Backup into file";
+"restore_from_file" = "Restore from file";
+
+"cloud_no_online_backup" = "You don’t have any online backup yet";
+"cloud_no_online_backup_descr" = "Set up an automatic backup so you don't have to worry about lost data.";
+"cloud_set_up_backup" = "Set up backup";
+"cloud_welcome_back" = "Welcome back!";
+"cloud_restore_now" = "Restore now";
+"cloud_backup" = "Backup";
+"cloud_last_backup" = "Last backup";
+"cloud_backup_now" = "Backup now";
+"cloud_make_backup" = "Make a backup";
+"cloud_make_backup_descr" = "There are many changes on this device, please make a backup of this data so as not to lose it.";
+"cloud_conflicts" = "Conflicts";
+"cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";
+"cloud_view_conflicts" = "View conflicts";
 
 // Release Notes
 // instruction:

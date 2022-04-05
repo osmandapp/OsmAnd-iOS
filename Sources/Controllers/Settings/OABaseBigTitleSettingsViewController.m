@@ -72,7 +72,7 @@
     {
         UIView *res = [[UIView alloc] init];
         res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        res.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        res.backgroundColor = [self navBarBackgroundColor];
         res.alpha = 0;
         return res;
     }
@@ -104,6 +104,15 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (UIColor *)navBarBackgroundColor
+{
+    return UIColorFromRGB(color_bottom_sheet_background);
+}
+
+- (void)onScrollViewDidScroll:(UIScrollView *)scrollView
+{
+}
+
 #pragma mark - UIScrollViewDelegate
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
@@ -122,10 +131,11 @@
     {
         [UIView animateWithDuration:.2 animations:^{
             _titleLabel.hidden = YES;
-            _navBarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+            _navBarView.backgroundColor = [self navBarBackgroundColor];
             _navBarBackgroundView.alpha = 0;
         }];
     }
+    [self onScrollViewDidScroll:scrollView];
 }
 
 @end

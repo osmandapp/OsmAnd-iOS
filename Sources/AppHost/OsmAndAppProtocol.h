@@ -102,6 +102,8 @@
 
 - (void) loadRoutingFiles;
 
+- (NSString *) getUserIosId;
+
 // Tests only
 - (BOOL) installTestResource:(NSString *)filePath;
 - (BOOL) removeTestResource:(NSString *)filePath;

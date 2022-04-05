@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
     EOASettingsItemFileSubtypeGpx,
     EOASettingsItemFileSubtypeVoice,
     EOASettingsItemFileSubtypeTravel,
+//    EOASettingsItemFileSubtypeMultimediaFile,
     EOASettingsItemFileSubtypesCount
 };
 

@@ -294,6 +294,14 @@
 #define backupAccessTokenKey @"backupAccessToken"
 #define backupAccessTokenUpdateTimeKey @"backupAccessTokenUpdateTime"
 
+#define backupPromocodeKey @"backupPromocode"
+#define backupPromocodeActiveKey @"backupPromocodeActive"
+#define backupPromocodeStartTimeKey @"backupPromocodeStartTime"
+#define backupPromocodeExpireTimeKey @"backupPromocodeExpireTime"
+#define backupPromocodeStateKey @"backupPromocodeState"
+
+#define userIosIdKey @"userIosId"
+
 #define favoritesLastUploadedTimeKey @"favoritesLastUploadedTime"
 #define backupLastUploadedTimeKey @"backupLastUploadedTime"
 
@@ -3674,6 +3682,10 @@
         [_globalPreferences setObject:_useLastApplicationModeByDefault forKey:@"use_last_application_mode_by_default"];
         [_globalPreferences setObject:_lastUsedApplicationMode forKey:@"last_used_application_mode"];
         [_globalPreferences setObject:_lastRouteApplicationMode forKey:@"last_route_application_mode_backup_string"];
+        
+        // TODO: not sure we need to override this setting with import/export
+        _userIosId = [[[OACommonString withKey:userIosIdKey defValue:@""] makeGlobal] makeShared];
+//        [_globalPreferences setObject:_userIosId forKey:@"user_android_id"];
 
         _onlineRoutingEngines = [[OACommonString withKey:onlineRoutingEnginesKey defValue:nil] makeGlobal];
         [_globalPreferences setObject:_onlineRoutingEngines forKey:@"online_routing_engines"];
@@ -3715,6 +3727,18 @@
         [_globalPreferences setObject:_backupNativeDeviceId forKey:@"backup_native_device_id"];
         [_globalPreferences setObject:_backupAccessToken forKey:@"backup_access_token"];
         [_globalPreferences setObject:_backupAccessTokenUpdateTime forKey:@"backup_access_token_update_time"];
+        
+        _backupPromocode = [[OACommonString withKey:backupPromocodeKey defValue:@""] makeGlobal];
+        _backupPromocodeActive = [[OACommonBoolean withKey:backupPromocodeActiveKey defValue:NO] makeGlobal];
+        _backupPromocodeStartTime = [[OACommonLong withKey:backupPromocodeStartTimeKey defValue:0] makeGlobal];
+        _backupPromocodeExpireTime = [[OACommonLong withKey:backupPromocodeExpireTimeKey defValue:0] makeGlobal];
+        _backupPromocodeState = [[OACommonInteger withKey:backupPromocodeStateKey defValue:0] makeGlobal];
+        
+        [_globalPreferences setObject:_backupPromocode forKey:@"backup_promocode"];
+        [_globalPreferences setObject:_backupPromocodeActive forKey:@"backup_promocode_active"];
+        [_globalPreferences setObject:_backupPromocodeStartTime forKey:@"promo_website_start_time"];
+        [_globalPreferences setObject:_backupPromocodeExpireTime forKey:@"promo_website_expire_time"];
+        [_globalPreferences setObject:_backupPromocodeState forKey:@"promo_website_state"];
 
         _favoritesLastUploadedTime = [[OACommonLong withKey:favoritesLastUploadedTimeKey defValue:0] makeGlobal];
         _backupLastUploadedTime = [[OACommonLong withKey:backupLastUploadedTimeKey defValue:0] makeGlobal];

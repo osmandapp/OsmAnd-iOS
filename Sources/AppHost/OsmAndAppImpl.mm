@@ -147,6 +147,16 @@
         _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
         _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
 
+        NSError *error;
+        NSArray *inboxFiles = [NSFileManager.defaultManager contentsOfDirectoryAtPath:_inboxPath error:&error];
+        if (!error)
+        {
+            for (NSString *inboxFile in inboxFiles)
+            {
+                [NSFileManager.defaultManager removeItemAtPath:[_inboxPath stringByAppendingPathComponent:inboxFile] error:nil];
+            }
+        }
+
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
 
         [self buildFolders];

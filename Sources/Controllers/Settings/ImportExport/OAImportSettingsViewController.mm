@@ -9,15 +9,10 @@
 #import "OAImportSettingsViewController.h"
 #import "OAImportDuplicatesViewController.h"
 #import "OAImportCompleteViewController.h"
-#import "OAAppSettings.h"
 #import "OASettingsImporter.h"
 #import "OsmAndApp.h"
-#import "OASettingsCategoryItems.h"
-#import "OAExportSettingsCategory.h"
 #import "OAProgressTitleCell.h"
-
 #import "Localization.h"
-#import "OAColors.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 
@@ -175,8 +170,7 @@
 
 - (IBAction) backButtonPressed:(id)sender
 {
-    if ([_file hasPrefix:[OsmAndApp instance].inboxPath])
-        [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
+    [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -190,8 +184,7 @@
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
     }
-    if ([_file hasPrefix:[OsmAndApp instance].inboxPath])
-        [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
+    [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
 }
 
 - (void) onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items

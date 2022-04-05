@@ -111,6 +111,9 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 @interface OAUtilities : NSObject
 
++ (BOOL) getAccessToFile:(NSString *)filePath;
++ (void) denyAccessToFile:(NSString *)filePath removeFromInbox:(BOOL)remove;
+
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion;
 + (BOOL) iosVersionIsExactly:(NSString*)testVersion;
 

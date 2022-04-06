@@ -2386,3 +2386,10 @@
 "routing_attr_avoid_low_emission_zone_description" = "Избегава зоне ниске емисије";
 "routing_attr_avoid_tunnels_name" = "Нема тунела";
 "routing_attr_avoid_tunnels_description" = "Избегава тунеле";
+"map_settings_weather_isolines" = "Изолиније";
+"obf_import_already_exists_short" = "Датотека са овим именом већ постоји.";
+"gpx_import_already_exists_short" = "Наведена датотека путање већ постоји на листи.";
+"rendering_attr_showRunningRoutes_name" = "Активне руте";
+"rendering_attr_showRunningRoutes_description" = "Приказ активних рута";
+"rendering_attr_showFitnessTrails_name" = "Фитнес стазе";
+"rendering_attr_showFitnessTrails_description" = "Приказ стаза за фитнес";

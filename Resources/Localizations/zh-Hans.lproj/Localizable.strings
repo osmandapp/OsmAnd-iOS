@@ -1707,3 +1707,8 @@
 "shared_string_feet" = "英尺";
 "search_more" = "搜索更多…";
 "srtm_download_list_help_message" = "OsmAnd 提供以米和英尺为单位的等高线数据。您需要重新下载文件以更改格式。";
+"shared_string_nothing_selected" = "未选择任何内容";
+"keep_both" = "保留两者";
+"move_map_to_select_area" = "移动地图以选择所需的区域。";
+"shared_string_quick_actions" = "快捷动作";
+"replace_all_desc" = "当前项目将被文件中的项目取代";

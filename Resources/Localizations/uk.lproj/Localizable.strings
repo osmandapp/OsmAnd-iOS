@@ -2389,3 +2389,14 @@
 "rendering_attr_showRunningRoutes_description" = "Показати бігові маршрути";
 "rendering_attr_showFitnessTrails_name" = "Фітнес-стежки";
 "rendering_attr_showFitnessTrails_description" = "Показати фітнес-стежки";
+"backup_and_restore" = "Резервне копіювання та відновлення";
+"product_desc_weather" = "24-годинний прогноз і 7-денний прогноз кожні 3 години";
+"measurement_units" = "Одиниці вимірювання";
+"weather_temp_unit_c" = "За цельсієм";
+"weather_pressure_unit_mmhg" = "Міліметри рт. ст.";
+"weather_pressure_unit_inhg" = "Дюйми рт. ст.";
+"plugin_popup_weather_title" = "Увімкнути погоду";
+"plugin_popup_weather_ask" = "Будь ласка, увімкніть плагін погоди";
+"weather_temp_unit_f" = "За фаренгейтом";
+"product_desc_ext_weather" = "Плагін погоди надає\n- 5 шарів... 24-годинний прогноз і 7-денний прогноз кожні 3 години\n- віджети на основі розташування\n- ізолінії температури/тиску\nДані про погоду надає GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
+"weather_pressure_unit_hpa" = "Гектопаскалі";

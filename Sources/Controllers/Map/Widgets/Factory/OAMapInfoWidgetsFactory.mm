@@ -136,8 +136,7 @@
     OsmAnd::ZoomLevel __block cachedZoom = OsmAnd::ZoomLevel::InvalidZoomLevel;
     weatherControl.updateInfoFunction = ^BOOL{
 
-        OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
-        BOOL enabled = _app.data.weather && [iapHelper.weather isPurchased] && !iapHelper.weather.disabled;
+        BOOL enabled = _app.data.weather;
         if (!enabled)
         {
             if (cachedValue[0] != undefined)

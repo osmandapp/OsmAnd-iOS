@@ -41,27 +41,7 @@
 - (void)applyLocalization
 {
     [super applyLocalization];
-    switch (_band.bandIndex)
-    {
-        case WEATHER_BAND_TEMPERATURE:
-            self.titleLabel.text = OALocalizedString(@"map_settings_weather_temp");
-            break;
-        case WEATHER_BAND_PRESSURE:
-            self.titleLabel.text = OALocalizedString(@"map_settings_weather_pressure");
-            break;
-        case WEATHER_BAND_WIND_SPEED:
-            self.titleLabel.text = OALocalizedString(@"map_settings_weather_wind");
-            break;
-        case WEATHER_BAND_CLOUD:
-            self.titleLabel.text = OALocalizedString(@"map_settings_weather_cloud");
-            break;
-        case WEATHER_BAND_PRECIPITATION:
-            self.titleLabel.text = OALocalizedString(@"map_settings_weather_precip");
-            break;
-        default:
-            self.titleLabel.text = OALocalizedString(@"product_title_weather");
-            break;
-    }
+    self.titleLabel.text = [_band getMeasurementName];
 }
 
 - (void)viewDidLoad

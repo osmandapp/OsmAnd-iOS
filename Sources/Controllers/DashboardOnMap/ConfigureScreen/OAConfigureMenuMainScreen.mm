@@ -165,10 +165,6 @@
         if (![mode isWidgetAvailable:r.key])
             continue;
 
-        OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
-        if ([[OAWeatherPlugin getWeatherSettingKeys] containsObject:r.key] && (![iapHelper.weather isPurchased] || iapHelper.weather.disabled))
-            continue;
-
         BOOL selected = [r visibleCollapsed:mode] || [r visible:mode];
         NSString *collapsedStr = OALocalizedString(@"shared_string_collapse");
         

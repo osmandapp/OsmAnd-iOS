@@ -486,7 +486,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 {
     if (filePath)
     {
-        if (TARGET_OS_IPHONE && ![filePath containsString:[OsmAndApp instance].inboxPath])
+        if (![filePath containsString:[OsmAndApp instance].inboxPath])
         {
             if (!_accessingSecurityScopedResource)
                 _accessingSecurityScopedResource = [NSMutableArray array];
@@ -518,7 +518,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         {
             [NSFileManager.defaultManager removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:TEMP_DIR] error:nil];
         }
-        else if (TARGET_OS_IPHONE)
+        else
         {
             NSURL *url = [NSURL fileURLWithPath:filePath];
             if (url)

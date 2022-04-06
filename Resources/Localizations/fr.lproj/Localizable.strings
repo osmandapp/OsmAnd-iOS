@@ -2335,7 +2335,7 @@
 "route_line_use_map_style_color" = "Utilisez la couleur par défaut du style de carte (%@).";
 "shared_string_min_height" = "Hauteur min.";
 "shared_string_max_height" = "Hauteur max.";
-"map_settings_weather" = "Météo";
+"product_title_weather" = "Météo";
 "map_settings_weather_temp" = "Température";
 "map_settings_weather_pressure" = "Pression";
 "map_settings_weather_wind" = "Vent";

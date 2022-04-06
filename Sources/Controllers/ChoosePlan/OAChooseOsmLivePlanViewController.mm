@@ -65,6 +65,7 @@
                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
                              [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
                              [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
+                             [[OAFeature alloc] initWithFeature:EOAFeatureWeather],
                              [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
     
     _iapHelper = [OAIAPHelper sharedInstance];

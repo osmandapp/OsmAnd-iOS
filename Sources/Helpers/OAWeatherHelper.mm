@@ -87,7 +87,7 @@
         }
 
         auto settings = std::make_shared<const OsmAnd::GeoBandSettings>(
-            QString::fromNSString([band getBandUnit]),
+            QString::fromNSString([band getBandUnit].symbol),
             QString::fromNSString([band getBandGeneralUnitFormat]),
             QString::fromNSString([band getBandPreciseUnitFormat]),
             QString::fromNSString([band getInternalBandUnit]),

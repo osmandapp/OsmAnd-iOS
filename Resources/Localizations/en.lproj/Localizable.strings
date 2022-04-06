@@ -775,7 +775,7 @@
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
-"map_settings_weather" = "Weather";
+"product_title_weather" = "Weather";
 "map_settings_weather_temp" = "Temperature";
 "map_settings_weather_pressure" = "Pressure";
 "map_settings_weather_wind" = "Wind";
@@ -1928,6 +1928,29 @@
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "plugin_popup_osm_editing_title" = "Turn on OpenStreetMap Editing";
 "plugin_popup_osm_editing_ask" = "Please enable OpenStreetMap Editing plugin to add and manage map edits and notes";
+"plugin_popup_weather_title" = "Turn on Weather";
+"plugin_popup_weather_ask" = "Please enable Weather plugin";
+"product_desc_weather" = "24h hourly forecast & 7 days forecast each 3 hours";
+"product_desc_ext_weather" = "Weather plugin provides\n- 5 layers...  24h hourly forecast & 7 days forecast each 3 hours\n- location-based widgets\n- temperature / pressure isolines\nWeather data is provided by GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
+
+"measurement_units" = "Measurement units";
+
+"weather_temp_unit_c" = "Celsius";
+"weather_temp_unit_f" = "Fahrenheit";
+
+"weather_pressure_unit_hpa" = "Hectopascals";
+"weather_pressure_unit_mmhg" = "Millimeters of mercury";
+"weather_pressure_unit_inhg" = "Inches of mercury";
+
+"weather_wind_unit_m_s" = "Meters/Second";
+"weather_wind_unit_km_per_hour" = "Kilometers per hour";
+"weather_wind_unit_mi_per_hour" = "Miles per hour";
+"weather_wind_unit_knots" = "Knots";
+
+"weather_precip_unit_mm" = "Millimeters";
+"weather_precip_unit_in" = "Inches";
+
+"weather_cloud_data_description" = "Weather data will be downloaded for viewed are each time.";
 
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";

@@ -14,6 +14,7 @@
 #define kExportProfileSettings @"export_profile"
 #define kTrackRecordingSettings @"trip_rec"
 #define kOsmEditsSettings @"osm_edits"
+#define kWeatherSettings @"weather"
 
 @class OAApplicationMode;
 

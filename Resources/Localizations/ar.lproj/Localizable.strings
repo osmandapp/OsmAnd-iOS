@@ -2337,7 +2337,7 @@
 "map_settings_weather_temp" = "درجة الحرارة";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "shared_string_any" = "أي";
-"map_settings_weather" = "الطقس";
+"product_title_weather" = "الطقس";
 "context_menu_edit_descr" = "تعديل الوصف";
 "add_description" = "إضافة وصف";
 "map_settings_weather_wind" = "الرياح";

@@ -151,6 +151,11 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     return _products.srtm;
 }
 
+- (OAProduct *) weather
+{
+    return _products.weather;
+}
+
 - (OAProduct *) allWorld
 {
     return _products.allWorld;

@@ -2354,7 +2354,7 @@
 "map_settings_clear_geo_cache" = "Isbòida sos tasseddos geogràficos";
 "map_settings_clear_raster_cache" = "Isbòida sos tasseddos raster";
 "q_clear_weather_cache" = "Boles isboidare sa memòria temporànea de su mèteu?";
-"map_settings_weather" = "Mèteu";
+"product_title_weather" = "Mèteu";
 "map_settings_weather_wind" = "Bentu";
 "routeInfo_winter_ice_road_description" = "Colora s'àndala o sa lìnia de sa rasta sighende sa classificatzione de su caminu ierrile suo.";
 "preferred_terrain" = "Terrinu preferidu";

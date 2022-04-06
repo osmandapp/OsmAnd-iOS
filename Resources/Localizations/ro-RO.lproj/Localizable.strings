@@ -2308,7 +2308,7 @@
 "q_clear_weather_cache" = "Doriți să ștergeți memoria cache a vremii?";
 "map_settings_weather_pressure" = "Presiune";
 "map_settings_clear_geo_cache" = "Plăci geo clare";
-"map_settings_weather" = "Vremea";
+"product_title_weather" = "Vremea";
 "add_description" = "Adăugați o descriere";
 "navigate_point_format_MGRS" = "MGRS";
 "mgrs_description" = "OsmAnd utilizează formatul MGRS, care este identic cu UTM NATO.";

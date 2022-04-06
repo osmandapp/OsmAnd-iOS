@@ -2339,7 +2339,7 @@
 "map_settings_clear_raster_cache" = "פינוי אריחים מעובדים";
 "q_clear_weather_cache" = "לפנות את מטמון מזג האוויר?";
 "map_settings_weather_cloud" = "ענן";
-"map_settings_weather" = "מזג אוויר";
+"product_title_weather" = "מזג אוויר";
 "map_settings_weather_pressure" = "לחץ אוויר";
 "customize_route_line" = "התאמת קו המסלול";
 "navigate_point_format_MGRS" = "MGRS";

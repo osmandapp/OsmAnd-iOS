@@ -7,23 +7,16 @@
 //
 
 #import "OAWeatherContourLayer.h"
-
-#import "OAMapCreatorHelper.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
-#import "OARootViewController.h"
-#import "OAWebClient.h"
 #import "OAWeatherHelper.h"
 #import "OAMapRendererEnvironment.h"
 #import "OAMapStyleSettings.h"
+#import "OAIAPHelper.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/GeoTileObjectsProvider.h>
-#include <OsmAndCore/Map/IMapLayerProvider.h>
-#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
-#include <OsmAndCore/Map/MapPrimitivesProvider.h>
-#include <OsmAndCore/Map/MapPrimitiviser.h>
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 
 #define kTempContourLines @"weatherTempContours"
@@ -95,26 +88,30 @@
 - (BOOL) updateLayer
 {
     [super updateLayer];
-    
-    OsmAnd::BandIndex band = WEATHER_BAND_UNDEFINED;
-    OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:kTempContourLines];
-    OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:kPressureContourLines];
-    if ([tempContourLinesParam.value isEqualToString:@"true"])
-        band = WEATHER_BAND_TEMPERATURE;
-    else if ([pressureContourLinesParam.value isEqualToString:@"true"])
-        band = WEATHER_BAND_PRESSURE;
 
-    if (!self.app.data.weather || band == WEATHER_BAND_UNDEFINED)
-        return NO;
-    
-    //[self showProgressHUD];
-          
-    const auto dateTime = QDateTime::fromNSDate(_date).toUTC();
-    [self initProviders:dateTime band:band];
+    if ([[OAIAPHelper sharedInstance].weather isActive])
+    {
+        OsmAnd::BandIndex band = WEATHER_BAND_UNDEFINED;
+        OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:kTempContourLines];
+        OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:kPressureContourLines];
+        if ([tempContourLinesParam.value isEqualToString:@"true"])
+            band = WEATHER_BAND_TEMPERATURE;
+        else if ([pressureContourLinesParam.value isEqualToString:@"true"])
+            band = WEATHER_BAND_PRESSURE;
 
-    //[self hideProgressHUD];
-    
-    return YES;
+        if (!self.app.data.weather || band == WEATHER_BAND_UNDEFINED)
+            return NO;
+
+        //[self showProgressHUD];
+
+        const auto dateTime = QDateTime::fromNSDate(_date).toUTC();
+        [self initProviders:dateTime band:band];
+
+        //[self hideProgressHUD];
+
+        return YES;
+    }
+    return NO;
 }
 
 - (void) initProviders:(QDateTime)dateTime band:(OsmAnd::BandIndex)band

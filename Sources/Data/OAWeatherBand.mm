@@ -8,14 +8,11 @@
 
 #import "OAWeatherBand.h"
 #import "OsmAndApp.h"
-#import "OAMapStyleSettings.h"
 #import "OAMapPresentationEnvironment.h"
+#import "Localization.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Map/WeatherDataConverter.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
-#include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/MapStyleEvaluator.h>
 #include <OsmAndCore/Map/MapStyleEvaluationResult.h>
 #include <OsmAndCore/Map/MapStyleBuiltinValueDefinitions.h>
@@ -33,20 +30,20 @@ typedef NS_ENUM(NSInteger, EOAContourValueType)
 
 @end
 
-static NSArray *kTempUnits;
-static NSArray *kPressureUnits;
-static NSArray *kCloudUnits;
-static NSArray *kWindSpeedUnits;
-static NSArray *kPrecipUnits;
+static NSArray<NSUnit *> *kTempUnits;
+static NSArray<NSUnit *> *kPressureUnits;
+static NSArray<NSUnit *> *kCloudUnits;
+static NSArray<NSUnit *> *kWindSpeedUnits;
+static NSArray<NSUnit *> *kPrecipUnits;
 
 static NSDictionary<NSString *, NSString *> *kGeneralUnitFormats;
 static NSDictionary<NSString *, NSString *> *kPreciseUnitFormats;
 
-static NSString *kDefaultTempUnit;
-static NSString *kDefaultPressureUnit;
-static NSString *kDefaultCloudUnit;
-static NSString *kDefaultWindSpeedUnit;
-static NSString *kDefaultPrecipUnit;
+static NSUnitTemperature *kDefaultTempUnit;
+static NSUnitPressure *kDefaultPressureUnit;
+static NSUnitCloud *kDefaultCloudUnit;
+static NSUnitSpeed *kDefaultWindSpeedUnit;
+static NSUnitLength *kDefaultPrecipUnit;
 
 static NSString *kInternalTempUnit;
 static NSString *kInternalPressureUnit;
@@ -68,52 +65,47 @@ static NSString *kPrecipContourStyleName;
 
 + (void) initialize
 {
-    kTempUnits = @[@"°C", @"°F"];
-    kPressureUnits = @[@"hPa", @"mmHg", @"inHg"];
-    kCloudUnits = @[@"%"];
-    kWindSpeedUnits = @[@"m/s", @"km/h", @"mph", @"kt"];
-    kPrecipUnits = @[@"mm", @"in"];
+    kTempUnits = @[NSUnitTemperature.celsius, NSUnitTemperature.fahrenheit];
+    kPressureUnits = @[NSUnitPressure.hectopascals, NSUnitPressure.millimetersOfMercury, NSUnitPressure.inchesOfMercury];
+    kCloudUnits = @[NSUnitCloud.percent];
+    kWindSpeedUnits = @[NSUnitSpeed.metersPerSecond, NSUnitSpeed.kilometersPerHour, NSUnitSpeed.milesPerHour, NSUnitSpeed.knots];
+    kPrecipUnits = @[NSUnitLength.millimeters, NSUnitLength.inches];
 
     kGeneralUnitFormats = @{
-        @"%" : @"%d",
-        @"°C" : @"%d",
-        @"°F" : @"%d",
-        @"hPa" : @"%d",
-        @"mmHg" : @"%d",
-        @"inHg" : @"%d",
-        @"m/s" : @"%d",
-        @"km/h" : @"%d",
-        @"mph" : @"%d",
-        @"kt" : @"%d",
-        @"mm" : @"%d",
-        @"in" : @"%d"
+        NSUnitCloud.percent.symbol: @"%d",
+        NSUnitTemperature.celsius.symbol: @"%d",
+        NSUnitTemperature.fahrenheit.symbol: @"%d",
+        NSUnitPressure.hectopascals.symbol: @"%d",
+        NSUnitPressure.millimetersOfMercury.symbol: @"%d",
+        NSUnitPressure.inchesOfMercury.symbol: @"%d",
+        NSUnitSpeed.metersPerSecond.symbol: @"%d",
+        NSUnitSpeed.kilometersPerHour.symbol: @"%d",
+        NSUnitSpeed.milesPerHour.symbol: @"%d",
+        NSUnitSpeed.knots.symbol: @"%d",
+        NSUnitLength.millimeters.symbol: @"%d",
+        NSUnitLength.inches.symbol: @"%d"
     };
 
     kPreciseUnitFormats = @{
-        @"%" : @"%d",
-        @"°C" : @"%.1f",
-        @"°F" : @"%d",
-        @"hPa" : @"%d",
-        @"mmHg" : @"%d",
-        @"inHg" : @"%.1f",
-        @"m/s" : @"%d",
-        @"km/h" : @"%d",
-        @"mph" : @"%d",
-        @"kt" : @"%d",
-        @"mm" : @"%.1f",
-        @"in" : @"%.1f"
+        NSUnitCloud.percent.symbol: @"%d",
+        NSUnitTemperature.celsius.symbol: @"%.1f",
+        NSUnitTemperature.fahrenheit.symbol: @"%d",
+        NSUnitPressure.hectopascals.symbol: @"%d",
+        NSUnitPressure.millimetersOfMercury.symbol: @"%d",
+        NSUnitPressure.inchesOfMercury.symbol: @"%.1f",
+        NSUnitSpeed.metersPerSecond.symbol: @"%d",
+        NSUnitSpeed.kilometersPerHour.symbol: @"%d",
+        NSUnitSpeed.milesPerHour.symbol: @"%d",
+        NSUnitSpeed.knots.symbol: @"%d",
+        NSUnitLength.millimeters.symbol: @"%.1f",
+        NSUnitLength.inches.symbol: @"%.1f"
     };
-    
-    kPressureUnits = @[@"hPa", @"mmHg", @"inHg"];
-    kCloudUnits = @[@"%"];
-    kWindSpeedUnits = @[@"m/s", @"km/h", @"mph", @"kt"];
-    kPrecipUnits = @[@"mm", @"in"];
 
-    kDefaultTempUnit = @"°C";
-    kDefaultPressureUnit = @"mmHg";
-    kDefaultCloudUnit = @"%";
-    kDefaultWindSpeedUnit = @"m/s";
-    kDefaultPrecipUnit = @"mm";
+    kDefaultCloudUnit = [NSUnitCloud current];
+    kDefaultTempUnit = [NSUnitTemperature current];
+    kDefaultWindSpeedUnit = [NSUnitSpeed current];
+    kDefaultPressureUnit = [NSUnitPressure current];
+    kDefaultPrecipUnit = [NSUnitLength current];
 
     kInternalTempUnit = @"°C";
     kInternalPressureUnit = @"Pa";
@@ -167,7 +159,7 @@ static NSString *kPrecipContourStyleName;
     return NO;
 }
 
-- (NSString *) getBandUnit
+- (NSUnit *) getBandUnit
 {
     switch (self.bandIndex)
     {
@@ -187,27 +179,27 @@ static NSString *kPrecipContourStyleName;
     return nil;
 }
 
-- (BOOL) setBandUnit:(NSString *)unit
+- (BOOL) setBandUnit:(NSUnit *)unit
 {
     if (![[self getAvailableBandUnits] containsObject:unit])
         return NO;
-    
+
     switch (self.bandIndex)
     {
         case WEATHER_BAND_CLOUD:
-            _app.data.weatherCloudUnit = unit;
+            _app.data.weatherCloudUnit = (NSUnitCloud *) unit;
             break;
         case WEATHER_BAND_TEMPERATURE:
-            _app.data.weatherTempUnit = unit;
+            _app.data.weatherTempUnit = (NSUnitTemperature *) unit;
             break;
         case WEATHER_BAND_PRESSURE:
-            _app.data.weatherPressureUnit = unit;
+            _app.data.weatherPressureUnit = (NSUnitPressure *) unit;
             break;
         case WEATHER_BAND_WIND_SPEED:
-            _app.data.weatherWindUnit = unit;
+            _app.data.weatherWindUnit = (NSUnitSpeed *) unit;
             break;
         case WEATHER_BAND_PRECIPITATION:
-            _app.data.weatherPrecipUnit = unit;
+            _app.data.weatherPrecipUnit = (NSUnitLength *) unit;
             break;
         case WEATHER_BAND_UNDEFINED:
             break;
@@ -215,17 +207,101 @@ static NSString *kPrecipContourStyleName;
     return YES;
 }
 
+- (BOOL) isBandUnitAuto
+{
+    switch (self.bandIndex)
+    {
+        case WEATHER_BAND_CLOUD:
+            return _app.data.weatherCloudUnitAuto;
+        case WEATHER_BAND_TEMPERATURE:
+            return _app.data.weatherTempUnitAuto;
+        case WEATHER_BAND_PRESSURE:
+            return _app.data.weatherPressureUnitAuto;
+        case WEATHER_BAND_WIND_SPEED:
+            return _app.data.weatherWindUnitAuto;
+        case WEATHER_BAND_PRECIPITATION:
+            return _app.data.weatherPrecipUnitAuto;
+        case WEATHER_BAND_UNDEFINED:
+            return nil;
+    }
+    return nil;
+}
+
+- (void) setBandUnitAuto:(BOOL)unitAuto
+{
+    switch (self.bandIndex)
+    {
+        case WEATHER_BAND_CLOUD:
+            _app.data.weatherCloudUnitAuto = unitAuto;
+            break;
+        case WEATHER_BAND_TEMPERATURE:
+            _app.data.weatherTempUnitAuto = unitAuto;
+            break;
+        case WEATHER_BAND_PRESSURE:
+            _app.data.weatherPressureUnitAuto = unitAuto;
+            break;
+        case WEATHER_BAND_WIND_SPEED:
+            _app.data.weatherWindUnitAuto = unitAuto;
+            break;
+        case WEATHER_BAND_PRECIPITATION:
+            _app.data.weatherPrecipUnitAuto = unitAuto;
+            break;
+        case WEATHER_BAND_UNDEFINED:
+            break;
+    }
+}
+
+- (NSString *)getIcon
+{
+    switch (self.bandIndex)
+    {
+        case WEATHER_BAND_CLOUD:
+            return @"ic_custom_clouds";
+        case WEATHER_BAND_TEMPERATURE:
+            return @"ic_custom_thermometer";
+        case WEATHER_BAND_PRESSURE:
+            return @"ic_custom_air_pressure";
+        case WEATHER_BAND_WIND_SPEED:
+            return @"ic_custom_wind";
+        case WEATHER_BAND_PRECIPITATION:
+            return @"ic_custom_precipitation";
+        case WEATHER_BAND_UNDEFINED:
+            return nil;
+    }
+    return nil;
+}
+
+- (NSString *)getMeasurementName
+{
+    switch (self.bandIndex)
+    {
+        case WEATHER_BAND_CLOUD:
+            return OALocalizedString(@"map_settings_weather_cloud");
+        case WEATHER_BAND_TEMPERATURE:
+            return OALocalizedString(@"map_settings_weather_temp");
+        case WEATHER_BAND_PRESSURE:
+            return OALocalizedString(@"map_settings_weather_pressure");
+        case WEATHER_BAND_WIND_SPEED:
+            return OALocalizedString(@"map_settings_weather_wind");
+        case WEATHER_BAND_PRECIPITATION:
+            return OALocalizedString(@"map_settings_weather_precip");
+        case WEATHER_BAND_UNDEFINED:
+            return nil;
+    }
+    return nil;
+}
+
 - (NSString *) getBandGeneralUnitFormat
 {
-    return kGeneralUnitFormats[[self getBandUnit]];
+    return kGeneralUnitFormats[[self getBandUnit].symbol];
 }
 
 - (NSString *) getBandPreciseUnitFormat
 {
-    return kPreciseUnitFormats[[self getBandUnit]];
+    return kPreciseUnitFormats[[self getBandUnit].symbol];
 }
 
-+ (NSString *) getDefaultBandUnit:(EOAWeatherBand)bandIndex
++ (NSUnit *) getDefaultBandUnit:(EOAWeatherBand)bandIndex
 {
     switch (bandIndex)
     {
@@ -265,7 +341,7 @@ static NSString *kPrecipContourStyleName;
     return nil;
 }
 
-- (NSString *) getDefaultBandUnit
+- (NSUnit *) getDefaultBandUnit
 {
     return [self.class getDefaultBandUnit:self.bandIndex];
 }
@@ -275,7 +351,7 @@ static NSString *kPrecipContourStyleName;
     return [self.class getInternalBandUnit:self.bandIndex];
 }
 
-- (NSArray<NSString *> *) getAvailableBandUnits
+- (NSArray<NSUnit *> *) getAvailableBandUnits
 {
     switch (self.bandIndex)
     {
@@ -364,7 +440,7 @@ static NSString *kPrecipContourStyleName;
 {
     NSDictionary<NSNumber *, NSArray<NSNumber *> *> *contourTypeValues = [self getContourValuesType:CONTOUR_VALUE_TYPES mapPresentationEnvironment:mapPresentationEnvironment];
     NSMutableDictionary<NSNumber *, NSArray<NSString *> *> *contourTypes = [NSMutableDictionary dictionary];
-    NSString *unit = [self getBandUnit];
+    NSString *unit = [self getBandUnit].symbol;
     [contourTypeValues enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull zoomNum, NSArray<NSNumber *> * _Nonnull values, BOOL * _Nonnull stop)
     {
         NSMutableArray<NSString *> *types = [NSMutableArray array];
@@ -414,7 +490,7 @@ static NSString *kPrecipContourStyleName;
         return @{};
     
     NSMutableDictionary *map = [NSMutableDictionary dictionary];
-    NSString *unit = [self getBandUnit];
+    NSString *unit = [self getBandUnit].symbol;
     NSString *interalUnit = [self getInternalBandUnit];
     auto zoom = minZoom;
     while (zoom <= maxZoom)

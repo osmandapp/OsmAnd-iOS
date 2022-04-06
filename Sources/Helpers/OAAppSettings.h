@@ -347,6 +347,17 @@ typedef NS_ENUM(NSInteger, EOACoordinateInputFormats)
 
 @end
 
+@interface OACommonUnit : OACommonPreference
+
++ (instancetype) withKey:(NSString *)key defValue:(NSUnit *)defValue;
+
+- (NSUnit *) get;
+- (void) set:(NSUnit *)string;
+- (NSUnit *) get:(OAApplicationMode *)mode;
+- (void) set:(NSUnit *)string mode:(OAApplicationMode *)mode;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOATerrainType)
 {
     EOATerrainTypeDisabled = 0,

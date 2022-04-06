@@ -477,6 +477,189 @@
 
 @end
 
+@implementation NSUnit (util)
+
++ (NSUnit *) unitFromString:(NSString *)unitStr
+{
+    NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
+
+    if ([unitStr isEqualToString:NSUnitCloud.percent.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitCloud.percent]])
+        return NSUnitCloud.percent;
+    if ([unitStr isEqualToString:NSUnitTemperature.celsius.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitTemperature.celsius]])
+        return NSUnitTemperature.celsius;
+    if ([unitStr isEqualToString:NSUnitTemperature.fahrenheit.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitTemperature.fahrenheit]])
+        return NSUnitTemperature.fahrenheit;
+    if ([unitStr isEqualToString:NSUnitPressure.hectopascals.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitPressure.hectopascals]])
+        return NSUnitPressure.hectopascals;
+    if ([unitStr isEqualToString:NSUnitPressure.millimetersOfMercury.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitPressure.millimetersOfMercury]])
+        return NSUnitPressure.millimetersOfMercury;
+    if ([unitStr isEqualToString:NSUnitPressure.inchesOfMercury.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitPressure.inchesOfMercury]])
+        return NSUnitPressure.inchesOfMercury;
+    if ([unitStr isEqualToString:NSUnitSpeed.metersPerSecond.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitSpeed.metersPerSecond]])
+        return NSUnitSpeed.metersPerSecond;
+    if ([unitStr isEqualToString:NSUnitSpeed.kilometersPerHour.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitSpeed.kilometersPerHour]])
+        return NSUnitSpeed.kilometersPerHour;
+    if ([unitStr isEqualToString:NSUnitSpeed.milesPerHour.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitSpeed.milesPerHour]])
+        return NSUnitSpeed.milesPerHour;
+    if ([unitStr isEqualToString:NSUnitSpeed.knots.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitSpeed.knots]])
+        return NSUnitSpeed.knots;
+    if ([unitStr isEqualToString:NSUnitLength.millimeters.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitLength.millimeters]])
+        return NSUnitLength.millimeters;
+    if ([unitStr isEqualToString:NSUnitLength.inches.symbol]
+            || [unitStr isEqualToString:[formatter stringFromUnit:NSUnitLength.inches]])
+        return NSUnitLength.inches;
+
+    return nil;
+}
+
++ (NSUnit *) current
+{
+    return nil;
+}
+
+- (NSString *) name
+{
+    return nil;
+}
+
+@end
+
+@implementation NSUnitTemperature (util)
+
++ (NSUnitTemperature *)current
+{
+    NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
+    formatter.unitStyle = NSFormattingUnitStyleMedium;
+    NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitTemperature.celsius]];
+    NSString *symbol = [formatted substringFromIndex:2];
+    NSUnitTemperature *unit = (NSUnitTemperature *) [NSUnit unitFromString:symbol];
+    return unit ? unit : NSUnitTemperature.celsius;
+}
+
+- (NSString *)name
+{
+    if (self == NSUnitTemperature.celsius)
+        return OALocalizedString(@"weather_temp_unit_c");
+    else if (self == NSUnitTemperature.fahrenheit)
+        return OALocalizedString(@"weather_temp_unit_f");
+    return nil;
+}
+
+@end
+
+@implementation NSUnitSpeed (util)
+
++ (NSUnitSpeed *)current
+{
+    NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
+    NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitSpeed.metersPerSecond]];
+    NSString *symbol = [formatted substringFromIndex:2];
+    NSUnitSpeed *unit = (NSUnitSpeed *) [NSUnit unitFromString:symbol];
+    return unit ? unit : NSUnitSpeed.metersPerSecond;
+}
+
+- (NSString *)name
+{
+    if (self == NSUnitSpeed.metersPerSecond)
+        return OALocalizedString(@"weather_wind_unit_m_s");
+    else if (self == NSUnitSpeed.kilometersPerHour)
+        return OALocalizedString(@"weather_wind_unit_km_per_hour");
+    else if (self == NSUnitSpeed.milesPerHour)
+        return OALocalizedString(@"weather_wind_unit_mi_per_hour");
+    else if (self == NSUnitSpeed.knots)
+        return OALocalizedString(@"weather_wind_unit_knots");
+    return nil;
+}
+
+@end
+
+@implementation NSUnitPressure (util)
+
++ (NSUnitPressure *)current
+{
+    NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
+    NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitPressure.millimetersOfMercury]];
+    NSString *symbol = [formatted substringFromIndex:2];
+    NSUnitPressure *unit = (NSUnitPressure *) [NSUnit unitFromString:symbol];
+    return unit ? unit : NSUnitPressure.millimetersOfMercury;
+}
+
+- (NSString *)name
+{
+    if (self == NSUnitPressure.hectopascals)
+        return OALocalizedString(@"weather_pressure_unit_hpa");
+    else if (self == NSUnitPressure.millimetersOfMercury)
+        return OALocalizedString(@"weather_pressure_unit_mmhg");
+    else if (self == NSUnitPressure.inchesOfMercury)
+        return OALocalizedString(@"weather_pressure_unit_inhg");
+    return nil;
+}
+
+@end
+
+@implementation NSUnitLength (util)
+
++ (NSUnitLength *)current
+{
+    NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
+    NSString *formatted = [formatter stringFromMeasurement:[[NSMeasurement alloc] initWithDoubleValue:0 unit:NSUnitLength.millimeters]];
+    NSString *symbol = [formatted substringFromIndex:2];
+    NSUnitLength *unit = (NSUnitLength *) [NSUnit unitFromString:symbol];
+    return unit ? unit : NSUnitLength.millimeters;
+}
+
+- (NSString *)name
+{
+    if (self == NSUnitLength.millimeters)
+        return OALocalizedString(@"weather_precip_unit_mm");
+    else if (self == NSUnitLength.inches)
+        return OALocalizedString(@"weather_precip_unit_in");
+    return nil;
+}
+
+@end
+
+static NSUnitCloud * _percent;
+
+@implementation NSUnitCloud
+
+@dynamic percent;
+
++ (NSUnitCloud *)percent
+{
+    if (!_percent)
+        _percent = [[NSUnitCloud alloc] initWithSymbol:@"%"];
+    return _percent;
+}
+
++ (NSUnitCloud *)current
+{
+    return _percent;
+}
+
+- (NSString *)name
+{
+    return nil;
+}
+
+@end
+
 @implementation OAUtilities
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion

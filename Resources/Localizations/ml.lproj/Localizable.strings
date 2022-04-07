@@ -228,7 +228,7 @@
 
 // Route info
 
-"int_seconds" = "സെക്കന്റുകള്‍";
+"units_seconds" = "സെക്കന്റുകള്‍";
 "shared_string_never" = "ഒരിയ്ക്കലുമില്ല";
 "shared_setting_always_ask" = "എല്ലായ്പ്പോഴും ചോദിക്കുക";
 "general_settings_2" = "പൊതുവായ സജ്ജീകരണങ്ങള്‍";
@@ -433,11 +433,10 @@
 "si_min_km" = "മിനുട്ട്/കിലോമീറ്റര്‍";
 "si_min_m" = "മിനുട്ട്/മൈല്‍";
 "si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "നോ. മൈല്‍";
-"nm_h" = "nmi/h";
-"min_mile" = "മിനു/മൈല്‍";
-"min_km" = "മിനു/കിമി";
-"m_s" = "മീ/സെ.";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "മിനു/മൈല്‍";
+"units_min_km" = "മിനു/കിമി";
+"units_m_s" = "മീ/സെ.";
 "tones" = "tones";
 
 "nothing_found" = "Nothing found: %@";
@@ -1241,8 +1240,6 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "meters";
 "shared_string_feet" = "feet";
-"foot" = "അടി";
-"m" = "മീ.";
 
 // Menu
 "menu" = "Menu";
@@ -1540,11 +1537,12 @@
 
 // Units
 "units_km" = "കി.മീ.";
+"units_m" = "മീ.";
 "units_mi" = "മൈ.";
 "units_yd" = "യാര്‍ഡ്";
 "units_ft" = "അടി";
 "units_nm" = "നോ. മൈല്‍";
-"units_kmh" = "കി.മീ/മണി.";
+"units_km_h" = "കി.മീ/മണി.";
 "units_mph" = "മൈല്‍/മണി.";
 
 "units_hour" = "മ.";
@@ -1670,9 +1668,6 @@
 "rendering_category_others" = "മറ്റു ഭൂപട സവിശേഷതകള്‍";
 
 // Rendering attributes
-
-"units_minutes_short" = "മി.";
-"units_seconds_short" = "sec";
 
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";

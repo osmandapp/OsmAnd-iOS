@@ -221,7 +221,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
 "units_min" = "min";
@@ -269,8 +269,6 @@
 "help_quiz" = "Questionário";
 "rendering_category_others" = "Outros atributos do mapa";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "cannot_access_calendar" = "Não é possível aceder o calendário";
 "reminder_not_set_text" = "O lembrete não foi definido, uma vez que não é permitido acesso ao calendário";
 //inapps
@@ -381,7 +379,7 @@
 "default_speed_system" = "Unidade de velocidade";
 "interrupt_music" = "Pausar música";
 "arrived_at_intermediate_point" = "Chegou ao seu destino intermédio";
-"nm" = "mn";
+"units_nm" = "mn";
 "search_another_country" = "Selecione outra região";
 "skip_map_downloading" = "Pular download de mapas";
 "shared_string_previous" = "Anterior";
@@ -464,7 +462,7 @@
 "show_lanes" = "Faixas de rolamento";
 "speak_pedestrian" = "Faixas de pedestre";
 "speak_tunnels" = "Túneis";
-"int_seconds" = "segundos";
+"units_seconds" = "segundos";
 "shared_string_never" = "Nunca";
 "shared_setting_always_ask" = "Sempre perguntar";
 "general_settings_2" = "Configurações gerais";
@@ -559,9 +557,9 @@
 "si_m_s" = "Metros por segundo";
 "si_min_km" = "Minutos por quilômetro";
 "si_min_m" = "Minutos por milha";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "search_poi_category_hint" = "Digite para pesquisar";
 // Shared Strings
 "shared_string_apply" = "Aplicar";
@@ -809,7 +807,7 @@
 "driving_region_uk" = "Reino Unido, Índia e similares";
 "left_side_navigation" = "Circulação pela esquerda";
 "si_nm_h" = "Milhas náuticas por hora (nós)";
-"nm_h" = "mn/h";
+"units_nm_h" = "mn/h";
 "shared_string_in_name" = "em %@";
 "shared_string_modify" = "Alterar";
 "shared_string_of" = "de";
@@ -2040,7 +2038,6 @@
 "allow_3d" = "Permitir visualização 2.5D";
 "max_speed" = "Velocidade máxima";
 "ui_customization" = "Personalização da interface";
-"units_nm" = "mn";
 "attach_to_the_roads" = "Anexaràs estradas";
 "follow_track" = "Seguir a trilha";
 "select_another_track" = "Selecionar outra trilha";
@@ -2128,7 +2125,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Rotas de cores de acordo com seu tipo de rede de nó (internacional, regional, local).";
 "walking_route_osmc_description" = "Atribua uma cor às rotas de acordo com a sua cor local individual (se existir no OpenStreetMap) e tipo (internacional, regional, local).";
 "travel_routes" = "Rotas de viagem";
-"foot" = "ft";
 "shared_string_feet" = "pés";
 "srtm_download_list_help_message" = "OsmAnd fornece dados de linhas de contorno em metros e pés. Você precisará baixar novamente o arquivo para alterar o formato.";
 "srtm_download_single_help_message" = "Selecione o formato. Terá de descarregar novamente o ficheiro para alterar o formato.";
@@ -2189,7 +2185,6 @@
 "education" = "Educação";
 "industrial" = "Industrial";
 "units_min_short" = "m";
-"m" = "m";
 "route_points" = "Pontos da rota";
 "connect_rp" = "Conectar pontos de rota";
 "lang_af" = "Africâner";
@@ -2323,3 +2318,17 @@
 "grey_color_undefined" = "As partes sem dados são mostradas em cinza.";
 "white_color_undefined" = "As partes sem dados são mostradas em branco.";
 "points_delete_multiple" = "Excluir %d ponto(s)?";
+"route_preferred_terrain_flat" = "Rotas com um perfil de relevo plano. O trajeto pode ser mais longo.";
+"route_preferred_terrain_less_hilly" = "Rotas menores, menos montanhosas.";
+"shared_string_open_street_map" = "OpenStreetMap";
+"start_point" = "Começar";
+"altitude" = "Altitude";
+"map_widget_speed" = "Velocidade";
+"shared_string_min_height" = "Altura mín.";
+"route_preferred_terrain_hilly" = "Rotas com um perfil de terreno montanhoso.";
+"route_preferred_terrain_any" = "O perfil do terreno não é levado em consideração ao escolher uma rota";
+"shared_string_any" = "Qualquer";
+"shared_string_max_height" = "Altura máx.";
+"customize_route_line" = "Customizar linha da rota";
+"route_line_use_map_style_color" = "Usar a cor padrão do estilo de mapa (%@).";
+"route_line_use_map_style_width" = "Usar largura padrão do estilo de mapa (%@).";

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAWeatherBand.h"
 
 @class OATextInfoWidget;
 
@@ -14,5 +15,6 @@
 
 - (OATextInfoWidget *) createAltitudeControl;
 - (OATextInfoWidget *) createRulerControl;
+- (OATextInfoWidget *) createWeatherControl:(EOAWeatherBand)band;
 
 @end

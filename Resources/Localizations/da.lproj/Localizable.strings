@@ -78,7 +78,6 @@
 "purchases" = "Køb";
 "download" = "Hent";
 "nothanks" = "Nej tak";
-"units_seconds_short" = "sek";
 //inapps
 "product_title_nautical" = "Søkort";
 "product_desc_nautical" = "Søkort over hele verden";
@@ -139,7 +138,6 @@
 "rendering_category_transport" = "Transport";
 "rendering_category_others" = "Andre kortattributter";
 // Rendering attributes
-"units_minutes_short" = "min";
 "reminder_not_set_text" = "Påmindelsen blev ikke sat, da der ikke er adgang til kalenderen";
 "shared_string_buy_for" = "for";
 "fav_import" = "Importer";
@@ -188,10 +186,11 @@
 "units_km" = "km";
 "units_m" = "m";
 "units_mi" = "mil";
+"units_yd" = "yd";
 "units_ft" = "fod";
-"units_kmh" = "km/t";
+"units_km_h" = "km/t";
 "units_hour" = "t";
-"units_min" = "min";
+"units_min" = "min.";
 "units_sec" = "sek";
 "map_remind" = "Påmind senere";
 "import_favorite" = "Favorit";
@@ -288,7 +287,6 @@
 "cannot_add_marker" = "Kan ikke tilføje parkering";
 "cannot_add_marker_desc" = "Fjern i det mindste en retning, og prøv igen";
 "cannot_add_destination" = "Kan ikke tilføje retning";
-"units_yd" = "yd";
 // Map
 "map_inst_det_map_q" = "Installer detaljerede oversigtskort for at få flere oplysninger om placering.";
 "map_no_address" = "Adressen kendes endnu ikke";
@@ -528,11 +526,11 @@
 "si_min_km" = "Minutter pr. kilometer";
 "si_min_m" = "Minutter pr. mil";
 "si_nm_h" = "Sømil i timen (knob)";
-"nm" = "sømil";
-"nm_h" = "sømil/t";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "sømil";
+"units_nm_h" = "sømil/t";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "towards" = "Imod";
 "route_roundabout" = "Rundkørsel: tag afkørsel %d";
 "route_roundabout_short" = "Tag %d afkørsel og forsæt";
@@ -636,7 +634,7 @@
 "speak_favorites" = "Favoritter i nærheden";
 "speak_poi" = "Interessepunkt (IP) i nærheden";
 "speak_pedestrian" = "Fodgængerovergange";
-"int_seconds" = "sekunder";
+"units_seconds" = "sekunder";
 "shared_string_never" = "Aldrig";
 "general_settings_2" = "Generelle indstillinger";
 "general_settings_descr" = "App-tema, enheder, region";
@@ -1311,7 +1309,7 @@
 "rendering_attr_busRoutes_name" = "Busruter";
 "rendering_attr_coloredBuildings_name" = "Farvekod bygninger efter type";
 "routing_attr_difficulty_preference_description" = "Foretræk ruter af denne vanskelighed, selv om ruteføring over sværere eller lettere pister stadig er mulig, hvis de er kortere.";
-"rendering_attr_showLez_name" = "Vis Miljøzoner";
+"rendering_attr_showLez_name" = "Vis miljøzoner";
 "rendering_attr_tramTrainRoutes_name" = "Tog- og sporvognsruter";
 "rendering_attr_contourDensity_description" = "Tæthed på højdekurver";
 "routing_attr_avoid_borders_name" = "Ingen grænseovergange";
@@ -1790,8 +1788,8 @@
 "online_sources" = "Onlinekilder";
 "select_online_source" = "Vælg kilde";
 "preview_of_selected_zoom_levels" = "Eksempel på valgte zoomniveauer";
-"number_of_tiles" = "Antal fliser";
-"move_map_to_select_area" = "Flyt kortet for at vælge det nødvendige område.";
+"number_of_tiles" = "Antal kortfliser";
+"move_map_to_select_area" = "Flyt kort for at vælge det ønskede område.";
 "shared_string_copy" = "Kopier";
 "shared_string_meters" = "meter";
 "tones" = "toner";
@@ -1937,7 +1935,6 @@
 "shared_string_others" = "Andre";
 "start_of_track" = "Starten af sporet";
 "extra_maps" = "Ekstra kort";
-"units_nm" = "sømil";
 "transport" = "Transport";
 "group_name" = "Gruppenavn";
 "simplified_track" = "Forenklet spor";
@@ -2013,9 +2010,7 @@
 "gpxup_identifiable" = "Identificerbar";
 "suggested_maps_descr" = "Disse kort er nødvendige for udvidelsen";
 "welmode_download_maps" = "Administrer kort";
-"foot" = "fod";
 "product_title_mapillary" = "Mapillary";
-"m" = "m";
 "shared_string_navigation" = "Navigation";
 "app_restart_required" = "App-genstart kræves for at anvende nogle indstillinger.";
 "navigate_point_easting" = "Østlig";
@@ -2326,7 +2321,7 @@
 "points_delete_multiple" = "Slet %d punkt(er)?";
 "context_menu_edit_descr" = "Rediger beskrivelse";
 "add_description" = "Tilføj beskrivelse";
-"map_settings_weather" = "Vejr";
+"product_title_weather" = "Vejr";
 "map_settings_weather_pressure" = "Lufttryk";
 "map_settings_weather_cloud" = "Sky";
 "map_settings_weather_precip" = "Nedbør";
@@ -2360,3 +2355,30 @@
 "routing_attr_prefer_horse_routes_name" = "Foretræk hesteveje";
 "horseback_riding" = "Ridning";
 "shared_string_open_street_map" = "OpenStreetMap";
+"preferred_terrain" = "Foretrukket terræn";
+"route_preferred_terrain_less_hilly" = "Kortere, mindre kuperede ruter.";
+"route_preferred_terrain_hilly" = "Ruter med en kuperet reliefprofil.";
+"route_preferred_terrain_any" = "Der tages ikke hensyn til terrænprofilen, når der vælges en rute.";
+"shared_string_any" = "Enhver";
+"route_preferred_terrain_flat" = "Ruter med en flad reliefprofil. Længden øges muligvis.";
+"start_point" = "Start";
+"altitude" = "Højde";
+"save_heading" = "Inkluder kurs";
+"save_heading_descr" = "Gem kursinformation for hvert registreret punkt";
+"map_widget_speed" = "Hastighed";
+"select_tracks" = "Vælg spor";
+"selected_tracks_count" = "Spor - %d";
+"delete_tracks_bottom_sheet_description_regular_part" = "Er du sikker på, at du ønsker at slette ";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d spor?";
+"delete_tracks_bottom_sheet_title" = "Slet spor?";
+"routing_attr_avoid_tunnels_name" = "Ingen tunneler";
+"routing_attr_avoid_tunnels_description" = "Undgår tunneler";
+"routing_attr_avoid_low_emission_zone_name" = "Ingen miljøzoner";
+"routing_attr_avoid_low_emission_zone_description" = "Undgå miljøzoner";
+"gpx_import_already_exists_short" = "Den angivne sporfil findes allerede på listen.";
+"map_settings_weather_isolines" = "Isolinjer";
+"obf_import_already_exists_short" = "Fil med dette navn findes allerede.";
+"rendering_attr_showRunningRoutes_description" = "Vis løberuter";
+"rendering_attr_showFitnessTrails_name" = "Fitnessbaner";
+"rendering_attr_showRunningRoutes_name" = "Løberuter";
+"rendering_attr_showFitnessTrails_description" = "Vis fitnessbaner";

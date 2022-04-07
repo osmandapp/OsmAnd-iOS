@@ -26,6 +26,7 @@
 #import "OAPOIHelper.h"
 #import "OAMapSettingsMapTypeScreen.h"
 #import "OAColors.h"
+#import "OAWeatherPlugin.h"
 
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
@@ -114,6 +115,7 @@
     NSMutableArray *data = [NSMutableArray array];
     BOOL hasWiki = [_iapHelper.wiki isPurchased];
     BOOL hasSRTM = [_iapHelper.srtm isPurchased];
+    BOOL hasWeather = [_iapHelper.weather isPurchased];
 
     [data addObject:@{
             @"group_name": @"",
@@ -145,7 +147,7 @@
             @"key": @"layer_amenity_label"
     }];
 
-    if (!hasWiki || (!_iapHelper.wiki.disabled))
+    if (!hasWiki || !_iapHelper.wiki.disabled)
     {
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"product_title_wiki"),
@@ -313,7 +315,7 @@
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_settings_map_magnifier"),
-                @"value": [self getPercentString:[_settings.mapDensity get:_settings.applicationMode.get]],
+                @"value": [self getPercentString:[_settings.mapDensity get]],
                 @"image": @"ic_custom_magnifier",
                 @"type": [OAIconTitleValueCell getCellIdentifier],
                 @"key": @"map_magnifier"
@@ -351,7 +353,7 @@
             }];
         }
 
-        if (hasSRTM && (!_iapHelper.srtm.disabled))
+        if (hasSRTM && !_iapHelper.srtm.disabled)
         {
             [mapStyleSectionData addObject:@{
                     @"name": OALocalizedString(@"product_title_srtm"),
@@ -369,7 +371,7 @@
     }
 
     NSMutableArray *overlayUnderlaySectionData = [NSMutableArray array];
-    if (!hasSRTM || (!_iapHelper.srtm.disabled))
+    if (!hasSRTM || !_iapHelper.srtm.disabled)
     {
         [overlayUnderlaySectionData addObject:@{
                 @"name": OALocalizedString(@"shared_string_terrain"),
@@ -393,13 +395,17 @@
             @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
             @"key": @"underlay_layer"
     }];
-    [overlayUnderlaySectionData addObject:@{
-            @"name": OALocalizedString(@"map_settings_weather"),
-            @"image": @"ic_custom_overlay_map",
-            @"has_options": @YES,
-            @"type": [OAIconTextDividerSwitchCell getCellIdentifier],
-            @"key": @"weather_layer"
-    }];
+
+    if (!hasWeather || !_iapHelper.weather.disabled)
+    {
+        [overlayUnderlaySectionData addObject:@{
+                @"name": OALocalizedString(@"product_title_weather"),
+                @"image": @"ic_custom_umbrella",
+                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"product_title_weather"),
+                @"type": hasWeather ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
+                @"key": @"weather_layer"
+        }];
+    }
 
     [data addObject:@{
             @"group_name": OALocalizedString(@"map_settings_overunder"),
@@ -535,6 +541,10 @@
         return @"ic_action_skiing";
     else if([paramName isEqualToString:TRAVEL_ROUTES])
         return @"mm_routes";
+    else if([paramName isEqualToString:SHOW_FITNESS_TRAILS_ATTR])
+        return @"mx_sport_athletics";
+    else if([paramName isEqualToString:SHOW_RUNNING_ROUTES_ATTR])
+        return @"mx_running";
     else if([paramName isEqualToString:kRoadStyleCategory])
         return @"ic_custom_road_style";
     else if([paramName isEqualToString:kDetailsCategory])
@@ -841,7 +851,13 @@
             else
             {
                 cell.iconView.backgroundColor = UIColor.clearColor;
-                cell.iconView.image = [UIImage templateImageNamed:item[@"image"]];
+                NSString *iconName = item[@"image"];
+                UIImage *icon;
+                if ([iconName hasPrefix:@"mx_"])
+                    icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                else
+                    icon = [UIImage templateImageNamed:item[@"image"]];
+                cell.iconView.image = icon;
                 cell.iconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
             }
 
@@ -948,7 +964,7 @@
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
     else if ([item[@"key"] isEqualToString:@"map_language"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenLanguage];
-    else if ([item[@"key"] isEqualToString:@"weather_layer"])
+    else if ([item[@"key"] isEqualToString:@"weather_layer"] && !isPromoButton)
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWeather];
 
     if ([item[@"key"] hasPrefix:@"routes_"])
@@ -1139,7 +1155,7 @@
 
 - (void)weatherChanged:(BOOL)isOn
 {
-    _app.data.weather = isOn;
+    [(OAWeatherPlugin *) [OAPlugin getPlugin:OAWeatherPlugin.class] weatherChanged:isOn];
 }
 
 - (void)installMapLayerFor:(id)param
@@ -1170,6 +1186,8 @@
         product = _iapHelper.wiki;
     else if ([item[@"key"] isEqualToString:@"terrain_layer"])
         product = _iapHelper.srtm;
+    else if ([item[@"key"] isEqualToString:@"weather_layer"])
+        product = _iapHelper.weather;
 
     [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:[OARootViewController instance].navigationController];
     return NO;

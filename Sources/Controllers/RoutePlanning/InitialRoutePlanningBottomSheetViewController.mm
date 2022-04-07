@@ -247,7 +247,7 @@
     if ([key isEqualToString:@"create_new_route"])
     {
         [self hide:YES];
-        [[OARootViewController instance].mapPanel showPlanRouteViewController:[[OARoutePlanningHudViewController alloc] init]];
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] init]];
         return;
     }
     else if ([key isEqualToString:@"open_track"])
@@ -261,7 +261,7 @@
     {
         OAGPX* track = item[@"track"];
         [self hide:YES];
-        [[OARootViewController instance].mapPanel showPlanRouteViewController:
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:
                 [[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
         return;
     }
@@ -286,6 +286,7 @@
 
 - (void)onFileSelected:(NSString *)gpxFilePath
 {
+    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:gpxFilePath]];
 }
 
 @end

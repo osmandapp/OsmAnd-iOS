@@ -58,6 +58,7 @@
 #import "OAImageDescTableViewCell.h"
 #import "OAEditDescriptionViewController.h"
 #import "OAWikiArticleHelper.h"
+#import "OAMapHudViewController.h"
 
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
@@ -186,6 +187,10 @@
 {
     _app = [OsmAndApp instance];
     _routeLineChartHelper = [self getLineChartHelper];
+
+    if (!self.isShown)
+        [self changeTrackVisible];
+
     _uiBuilder = [[OATrackMenuUIBuilder alloc] initWithSelectedTab:_selectedTab];
     _uiBuilder.trackMenuDelegate = self;
 }
@@ -193,14 +198,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     if ([self openedFromMap])
         [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-
-    if (!self.isShown)
-        [self changeTrackVisible];
 
     [self startLocationServices];
 
@@ -809,6 +812,7 @@
             [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(pointsRect.top, pointsRect.left)
                                               bottomRight:CLLocationCoordinate2DMake(pointsRect.bottom, pointsRect.right)
                                                      zoom:0.
+                                                  maxZoom:18.
                                                screenBBox:screenBBox
                                               bottomInset:0.
                                                 leftInset:0.
@@ -898,7 +902,7 @@
 {
     [self hide:YES duration:.2 onComplete:^{
         [self.mapViewController hideContextPinMarker];
-        [self.mapPanelViewController showPlanRouteViewController:[
+        [self.mapPanelViewController showScrollableHudViewController:[
                 [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
                                                           targetMenuState:[self getCurrentState]]];
     }];
@@ -1010,21 +1014,20 @@
 
 - (BOOL)isWaypointsGroupVisible:(NSString *)groupName
 {
-    return ![self.gpx.hiddenGroups containsObject:groupName];
+    return ![self.gpx.hiddenGroups containsObject:[self isDefaultGroup:groupName] ? @"" : groupName];
 }
 
 - (void)setWaypointsGroupVisible:(NSString *)groupName show:(BOOL)show
 {
     if (show)
-        [self.gpx removeHiddenGroups:groupName];
+        [self.gpx removeHiddenGroups:[self isDefaultGroup:groupName] ? @"" : groupName];
     else
-        [self.gpx addHiddenGroups:groupName];
+        [self.gpx addHiddenGroups:[self isDefaultGroup:groupName] ? @"" : groupName];
     [[OAGPXDatabase sharedDb] save];
 
     if (_selectedTab == EOATrackMenuHudPointsTab)
     {
-        groupName = [self checkGroupName:groupName];
-        NSInteger groupIndex = [_waypointSortedGroupNames indexOfObject:groupName];
+        NSInteger groupIndex = [_waypointSortedGroupNames indexOfObject:[self checkGroupName:groupName]];
         if (groupIndex != NSNotFound)
         {
             OAGPXTableSectionData *groupSectionData = _tableData.sections[groupIndex];
@@ -1037,10 +1040,13 @@
     }
 
     [self updateGroupsButton];
-    if (self.isCurrentTrack)
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
-    else
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.isCurrentTrack)
+            [self.mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        else
+            [self.mapViewController.mapLayers.gpxMapLayer refreshGpxWaypoints];
+    });
 }
 
 - (void)deleteWaypointsGroup:(NSString *)groupName
@@ -1055,19 +1061,8 @@
             [waypointsIdxToDelete addObject:@([_waypointGroups[groupName] indexOfObject:waypoint])];
     }
 
-    if (self.isCurrentTrack)
-    {
-        for (OAGpxWptItem *waypoint in waypointsToDelete)
-        {
-            [savingHelper deleteWpt:waypoint.point];
-        }
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
-    }
-    else
-    {
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
-        [self.mapViewController deleteWpts:waypointsToDelete docPath:path];
-    }
+    NSString *path = !self.isCurrentTrack ? [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath] : nil;
+    [self.mapViewController deleteWpts:waypointsToDelete docPath:path];
 
     NSDictionary *dataToUpdate = @{
             @"delete_group_name_index": @([_waypointSortedGroupNames indexOfObject:groupName]),
@@ -1151,12 +1146,13 @@
     if (!self.isCurrentTrack)
     {
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
-        [self.mapViewController updateWpts:waypoints docPath:path updateMap:NO];
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        [self.mapViewController updateWpts:waypoints docPath:path updateMap:YES];
     }
     else if (newGroupColor)
     {
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        });
     }
 
     if (newGroupName)
@@ -1324,7 +1320,7 @@
 
 - (NSString *)getDirName
 {
-    NSString *dirName = [[OAGPXDatabase sharedDb] getFileDir:self.gpx.gpxFilePath].capitalizedString;
+    NSString *dirName = self.gpx.gpxFolderName.capitalizedString;
     return dirName.length > 0 ? dirName : OALocalizedString(@"tracks");
 }
 
@@ -1502,7 +1498,7 @@
     else
     {
         _exportFileName = self.gpx.gpxFileName;
-        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:self.gpx.gpxFilePath.lastPathComponent];
+        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:self.gpx.gpxFileName];
         [OAGPXUIHelper addAppearanceToGpx:self.doc gpxItem:self.gpx];
         [self.doc saveTo:_exportFilePath];
     }
@@ -1676,7 +1672,7 @@
         _exportController = nil;
 
         OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc]
-                initWithFileName:self.gpx.gpxFilePath.lastPathComponent.stringByDeletingPathExtension
+                initWithFileName:self.gpx.gpxFileName
                         filePath:self.gpx.gpxFilePath
                        showOnMap:YES
                  simplifiedTrack:YES
@@ -2475,6 +2471,7 @@
                                 animated:NO];
         [self fitSelectedPointsGroupOnMap:index];
         [_headerView.groupsCollectionView reloadData];
+        [self.mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
     }
 }
 

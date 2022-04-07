@@ -146,7 +146,8 @@
 - (void) createGpxAppearanceInfo
 {
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
-    _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:gpx];
+    if (gpx)
+        _appearanceInfo = [[OAGpxAppearanceInfo alloc] initWithItem:gpx];
 }
 
 

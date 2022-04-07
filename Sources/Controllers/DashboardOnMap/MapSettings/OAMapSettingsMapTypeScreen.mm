@@ -8,24 +8,18 @@
 
 #import "OAMapSettingsMapTypeScreen.h"
 #import "OAMapSettingsViewController.h"
-#import "OAMapStyleSettings.h"
-#import "OAMapStyleTitles.h"
-#import "OAMapCreatorHelper.h"
-#include "Localization.h"
+#import "OARendererRegistry.h"
+#import "Localization.h"
 #import "Reachability.h"
 #import "OAResourcesUIHelper.h"
-
-#include <QSet>
+#import "OAIAPHelper.h"
+#import "OAIndexConstants.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
-#include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
-#import "OAIAPHelper.h"
-
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
-
 
 @implementation OAMapSettingsMapTypeScreen
 {
@@ -34,7 +28,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     NSMutableArray* _offlineMapSources;
     NSArray* _onlineMapSources;
-    NSDictionary *stylesTitlesOffline;
 }
 
 #define kOfflineSourcesSection 0
@@ -94,7 +87,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [_offlineMapSources removeAllObjects];
     _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:YES];
     
-    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > mapStylesResources;
     
     const auto localResources = _app.resourcesManager->getLocalResources();
     for(const auto& localResource : localResources)
@@ -109,31 +102,34 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     for(const auto& resource : mapStylesResources)
     {
         const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
-        
-        NSString* resourceId = resource->id.toNSString();
-        
-        OAMapStyleResourceItem* item = [[OAMapStyleResourceItem alloc] init];
+
+        NSString *resourceId = resource->id.toNSString();
+        NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:mapStyle->title.toNSString()];
+
+        OAMapStyleResourceItem *item = [[OAMapStyleResourceItem alloc] init];
         item.mapSource = [_app.data lastMapSourceByResourceId:resourceId];
-        if (item.mapSource == nil)
-            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:mode.variantKey];
-        
-        NSString *caption = mapStyle->title.toNSString();
+        if (!item.mapSource)
+        {
+            item.mapSource = [[OAMapSource alloc] initWithResource:[[mapStyleInfo[@"id"] lowercaseString] stringByAppendingString:RENDERER_INDEX_EXT]
+                                                        andVariant:mode.variantKey
+                                                              name:mapStyleInfo[@"title"]];
+        }
+		else if (![item.mapSource.name isEqualToString:mapStyleInfo[@"title"]])
+		{
+			item.mapSource.name = mapStyleInfo[@"title"];
+		}
+
         OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
-        if ([caption isEqualToString:@"Ski-map"] && ![iapHelper.skiMap isActive])
+        if ([mapStyleInfo[@"title"] isEqualToString:WINTER_SKI_RENDER] && ![iapHelper.skiMap isActive])
             continue;
-        if ([caption isEqualToString:@"nautical"] && ![iapHelper.nautical isActive])
+        if ([mapStyleInfo[@"title"] isEqualToString:NAUTICAL_RENDER] && ![iapHelper.nautical isActive])
             continue;
-        
-        NSString *newCaption = [stylesTitlesOffline objectForKey:caption];
-        if (newCaption)
-            caption = newCaption;
-        
-        item.mapSource.name = caption;
+
         item.resourceType = OsmAndResourceType::MapStyle;
         item.resource = resource;
         item.mapStyle = mapStyle;
+        item.sortIndex = [mapStyleInfo[@"sort_index"] intValue];
 
-        item.sortIndex = [OAMapStyleTitles getSortIndexForTitle:item.mapStyle->title.toNSString()];
         [_offlineMapSources addObject:item];
     }
 
@@ -151,8 +147,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) initData
 {
-    stylesTitlesOffline = [OAMapStyleTitles getMapStyleTitles];
-    
 }
 
 - (void) onLocalResourcesChanged
@@ -224,6 +218,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             OAMapStyleResourceItem* item = (OAMapStyleResourceItem*)someItem;
             
             caption = item.mapSource.name;
+            if ([caption isEqualToString:TOURING_VIEW])
+                caption = @"Touring view";
             description = nil;
         }
         else if ([someItem isKindOfClass:OAOnlineTilesResourceItem.class])

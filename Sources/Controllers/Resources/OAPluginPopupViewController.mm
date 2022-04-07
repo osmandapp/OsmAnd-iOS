@@ -359,6 +359,18 @@ static NSMutableArray *activePopups;
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
+    else if ([kInAppId_Addon_Weather isEqualToString:productIdentifier])
+    {
+        needShow = YES;
+        product = helper.weather;
+
+        title = OALocalizedString(@"plugin_popup_weather_title");
+        descText = OALocalizedString(@"plugin_popup_weather_ask");
+        okButtonName = OALocalizedString(@"plugins");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+
+        [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
+    }
     
     if (needShow)
     {

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAExportSettingsCategory;
+@class OAExportSettingsCategory, OASettingsItem, OARemoteFile;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -35,6 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAExportSettingsType *) VOICE;
 + (OAExportSettingsType *) ONLINE_ROUTING_ENGINES;
 
++ (OAExportSettingsType *) getExportSettingsTypeForItem:(OASettingsItem *)item;
++ (OAExportSettingsType *) getExportSettingsTypeForRemoteFile:(OARemoteFile *)remoteFile;
+
+@property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSString *title;
 @property (nonatomic, readonly) UIImage *icon;
 

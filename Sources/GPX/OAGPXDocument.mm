@@ -14,6 +14,7 @@
 #import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OAMapUtils.h"
+#import "OAAppVersionDependentConstants.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -336,6 +337,7 @@
     wptPt.verticalDilutionOfPrecision = mark->verticalDilutionOfPrecision;
     wptPt.links = [self.class fetchLinks:mark->links];
     wptPt.speed = mark->speed;
+    wptPt.heading = mark->heading;
 
     [wptPt fetchExtensions:mark];
     for (OAGpxExtension *e in wptPt.extensions)
@@ -436,6 +438,7 @@
                             _p.horizontalDilutionOfPrecision = p->horizontalDilutionOfPrecision;
                             _p.verticalDilutionOfPrecision = p->verticalDilutionOfPrecision;
                             _p.speed = p->speed;
+                            _p.heading = p->heading;
 
                             [_p fetchExtensions:_pt->shared_ptr()];
 
@@ -444,11 +447,9 @@
                         }
                         _seg.points = pts;
                     }
-
-                    [_seg fetchExtensions:_s->shared_ptr()];
-
-                    [_seg fillRouteDetails];
                     _seg.trkseg = _s->shared_ptr();
+                    [_seg fetchExtensions:_s->shared_ptr()];
+                    [_seg fillRouteDetails];
                     [seg addObject:_seg];
                 }
                 
@@ -498,6 +499,7 @@
                     _p.horizontalDilutionOfPrecision = p->horizontalDilutionOfPrecision;
                     _p.verticalDilutionOfPrecision = p->verticalDilutionOfPrecision;
                     _p.speed = p->speed;
+                    _p.heading = p->heading;
 
                     [_p fetchExtensions:_pt->shared_ptr()];
 
@@ -584,6 +586,10 @@
         wpt->horizontalDilutionOfPrecision = w.horizontalDilutionOfPrecision;
     if (!isnan(w.verticalDilutionOfPrecision))
         wpt->verticalDilutionOfPrecision = w.verticalDilutionOfPrecision;
+    if (!isnan(w.heading))
+        wpt->heading = w.heading;
+    if (w.speed > 0)
+        wpt->speed = w.speed;
 
     OAGpxExtensions *extensions = [[OAGpxExtensions alloc] init];
     NSMutableArray<OAGpxExtension *> *extArray = [w.extensions mutableCopy];
@@ -592,13 +598,6 @@
     {
         OAGpxExtension *profileExtension = [w getExtensionByKey:PROFILE_TYPE_EXTENSION];
         [extArray removeObject:profileExtension];
-    }
-    if (w.speed > 0)
-    {
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = @"speed";
-        e.value = [NSString stringWithFormat:@"%.3f", w.speed];
-        [extArray addObject:e];
     }
 
     extensions.extensions = extArray;
@@ -711,7 +710,7 @@
 
     [self fillExtensions:document];
 
-    return document->saveTo(QString::fromNSString(filename));
+    return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
 }
 
 - (BOOL) isCloudmadeRouteFile

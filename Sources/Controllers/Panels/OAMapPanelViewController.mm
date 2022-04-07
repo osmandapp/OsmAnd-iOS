@@ -7,18 +7,14 @@
 //
 
 #import "OAMapPanelViewController.h"
-
 #import "OsmAndApp.h"
 #import "UIViewController+OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapillaryImageViewController.h"
 #import "OARouteDetailsGraphViewController.h"
-#import "OARouteDetailsViewController.h"
-#import "OAMapViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
 #import "OAIAPHelper.h"
-#import "OAGPXItemViewController.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
 #import "OADestinationCardsViewController.h"
@@ -54,9 +50,6 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAFavoritesHelper.h"
 #import "OADownloadMapWidget.h"
-
-#import <EventKit/EventKit.h>
-
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "OADestinationViewController.h"
@@ -68,8 +61,6 @@
 #import "Localization.h"
 #import "OAAppSettings.h"
 #import "OASavingTrackHelper.h"
-#import "PXAlertView.h"
-#import "OATrackIntervalDialogView.h"
 #import "OAParkingViewController.h"
 #import "OAFavoriteViewController.h"
 #import "OAPOIViewController.h"
@@ -94,44 +85,30 @@
 #import "OAStreet.h"
 #import "OAStreetIntersection.h"
 #import "OACity.h"
-#import "OATargetTurnViewController.h"
 #import "OAConfigureMenuViewController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAMapLayers.h"
-#import "OAFavoritesLayer.h"
-#import "OAImpassableRoadsLayer.h"
 #import "OACarPlayActiveViewController.h"
 #import "OASearchUICore.h"
 #import "OASearchPhrase.h"
 #import "OAQuickSearchHelper.h"
-
 #import <UIAlertView+Blocks.h>
-#import <UIAlertView-Blocks/RIButtonItem.h>
-
-#include <OsmAndCore.h>
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Data/Road.h>
-#include <OsmAndCore/CachingRoadLocator.h>
-#include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/IFavoriteLocationsCollection.h>
-#include <OsmAndCore/ICU.h>
-
-#import "OASizes.h"
-#import "OADirectionAppearanceViewController.h"
-#import "OAHistoryViewController.h"
 #import "OAEditPointViewController.h"
-#import "OAGPXDocument.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAPOIUIFilter.h"
 #import "OATrackMenuAppearanceHudViewController.h"
-#import "OAMapRulerView.h"
-#import "OAPOIHelper.h"
+#import "OARouteLineAppearanceHudViewController.h"
+#import "OAOpenAddTrackViewController.h"
+
+#include <OsmAndCore/CachingRoadLocator.h>
+#include <OsmAndCore/Data/Road.h>
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
 #define kMaxRoadDistanceInMeters 1000
+#define kMaxZoom 22.0f
 
 typedef enum
 {
@@ -140,7 +117,7 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener, OAGpxWptEditingHandlerDelegate>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener, OAGpxWptEditingHandlerDelegate, OAOpenAddTrackDelegate>
 
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
@@ -197,6 +174,8 @@ typedef enum
     OAApplicationMode *_targetAppMode;
     
     OACarPlayActiveViewController *_carPlayActiveController;
+
+    BOOL _isNewContextMenuStillEnabled;
 }
 
 - (instancetype) init
@@ -315,7 +294,8 @@ typedef enum
 
 - (void) viewWillLayoutSubviews
 {
-    if ([self contextMenuMode] && ![self.targetMenuView needsManualContextMode])
+    if (([self contextMenuMode] && ![self.targetMenuView needsManualContextMode]) || (_scrollableHudViewController
+            && [_scrollableHudViewController getNavbarHeight] > 0))
     {
         [self doUpdateContextMenuToolbarLayout];
     }
@@ -339,7 +319,9 @@ typedef enum
 
 - (void) doUpdateContextMenuToolbarLayout
 {
-    CGFloat contextMenuToolbarHeight = [self.targetMenuView toolbarHeight];
+    CGFloat contextMenuToolbarHeight = _scrollableHudViewController
+            ? [_scrollableHudViewController getNavbarHeight]
+            : [self.targetMenuView toolbarHeight];
     [self.hudViewController updateContextMenuToolbarLayout:contextMenuToolbarHeight animated:YES];
 }
 
@@ -404,6 +386,12 @@ typedef enum
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller
 {
     self.sidePanelController.recognizesPanGesture = NO;
+
+    if ([controller isKindOfClass:OARoutePlanningHudViewController.class])
+        _activeTargetType = OATargetRoutePlanning;
+    else if ([controller isKindOfClass:OARouteLineAppearanceHudViewController.class])
+        _activeTargetType = OATargetRouteLineAppearance;
+
     [self setupScrollableHud:controller];
 }
 
@@ -529,8 +517,8 @@ typedef enum
 
     if (isnan(zoom))
         zoom = renderView.zoom;
-    if (zoom > 22.0f)
-        zoom = 22.0f;
+    if (zoom > kMaxZoom)
+        zoom = kMaxZoom;
     
     [_mapViewController goToPosition:destinationPoint
                              andZoom:zoom
@@ -569,8 +557,8 @@ typedef enum
         CGFloat zoom = renderView.zoom - newZoom;
         if (isnan(zoom))
             zoom = renderView.zoom;
-        if (zoom > 22.0f)
-            zoom = 22.0f;
+        if (zoom > kMaxZoom)
+            zoom = kMaxZoom;
         
         [_mapViewController goToPosition:center
                                  andZoom:zoom
@@ -601,8 +589,8 @@ typedef enum
     CGFloat zoom = renderView.zoom - newZoom;
     if (isnan(zoom))
         zoom = renderView.zoom;
-    if (zoom > 22.0f)
-        zoom = 22.0f;
+    if (zoom > kMaxZoom)
+        zoom = kMaxZoom;
     
     return zoom;
 }
@@ -660,8 +648,8 @@ typedef enum
         CGFloat zoom = renderView.zoom - newZoom;
         if (isnan(zoom))
             zoom = renderView.zoom;
-        if (zoom > 22.0f)
-            zoom = 22.0f;
+        if (zoom > kMaxZoom)
+            zoom = kMaxZoom;
         
         [_mapViewController goToPosition:center
                                  andZoom:zoom
@@ -772,6 +760,12 @@ typedef enum
         [self.targetMenuView quickShow];
 
         self.sidePanelController.recognizesPanGesture = NO; //YES;
+
+        if (_prevScrollableHudViewController)
+        {
+             [self showScrollableHudViewController:_prevScrollableHudViewController];
+            _prevScrollableHudViewController = nil;
+        }
     }
 }
 
@@ -850,7 +844,13 @@ typedef enum
     _reopenSettings = _targetAppMode != nil;
     
     [self removeGestureRecognizers];
-    
+
+    if (_scrollableHudViewController)
+    {
+        _prevScrollableHudViewController = _scrollableHudViewController;
+        [self hideScrollableHudViewController];
+    }
+
     _dashboard = [[OAMapSettingsViewController alloc] init];
     [_dashboard show:self parentViewController:nil animated:YES];
     
@@ -1121,6 +1121,9 @@ typedef enum
     navController.automaticallyAdjustsScrollViewInsets = NO;
     navController.edgesForExtendedLayout = UIRectEdgeNone;
 
+    if (_scrollableHudViewController && [_scrollableHudViewController isKindOfClass:OARoutePlanningHudViewController.class])
+        _isNewContextMenuStillEnabled = YES;
+
     [self presentViewController:navController animated:YES completion:nil];
 }
 
@@ -1247,7 +1250,7 @@ typedef enum
     return _activeTargetType == OATargetImpassableRoadSelection
     || _activeTargetType == OATargetRouteDetailsGraph
     || _activeTargetType == OATargetRouteDetails
-    || _activeTargetType == OATargetRoutePlanning
+    || (_activeTargetType == OATargetRoutePlanning && !_isNewContextMenuStillEnabled)
     || _activeTargetType == OATargetGPX
     || _activeTargetType == OATargetRouteLineAppearance;
 }
@@ -1256,6 +1259,7 @@ typedef enum
 {
     if (self.isNewContextMenuDisabled)
         return;
+    _isNewContextMenuStillEnabled = NO;
     
     if (targetPoint.type == OATargetMapillaryImage)
     {
@@ -1486,9 +1490,9 @@ typedef enum
         [_mapViewController simulateContextMenuPress:gesture];
 }
 
-- (void) showTopControls
+- (void) showTopControls:(BOOL)onlyMapSettingsAndSearch
 {
-    [self.hudViewController showTopControls];
+    [self.hudViewController showTopControls:onlyMapSettingsAndSearch];
     
     _topControlsVisible = YES;
 }
@@ -1502,14 +1506,18 @@ typedef enum
 
 - (void) setTopControlsVisible:(BOOL)visible
 {
-    [self setTopControlsVisible:visible customStatusBarStyle:UIStatusBarStyleLightContent];
+    [self setTopControlsVisible:visible
+       onlyMapSettingsAndSearch:NO
+           customStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
-- (void) setTopControlsVisible:(BOOL)visible customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle
+- (void) setTopControlsVisible:(BOOL)visible
+      onlyMapSettingsAndSearch:(BOOL)onlyMapSettingsAndSearch
+          customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle
 {
     if (visible)
     {
-        [self showTopControls];
+        [self showTopControls:onlyMapSettingsAndSearch];
         _customStatusBarStyleNeeded = NO;
         [self setNeedsStatusBarAppearanceUpdate];
     }
@@ -1836,52 +1844,9 @@ typedef enum
             }
             return;
         }
-        
-        [names insertObject:OALocalizedString(@"gpx_curr_new_track") atIndex:0];
-        [paths insertObject:@"" atIndex:0];
-        
-        if (names.count > 5)
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_select_track") cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")] otherButtonItems: nil];
-            
-            for (int i = 0; i < names.count; i++)
-            {
-                NSString *name = names[i];
-                [alert addButtonItem:[RIButtonItem itemWithLabel:name action:^{
-                    NSString *gpxFileName = paths[i];
-                    if (gpxFileName.length == 0)
-                        gpxFileName = nil;
-                    
-                    [self targetPointAddWaypoint:gpxFileName];
-                }]];
-            }
-            [alert show];
-        }
-        else
-        {
-            NSMutableArray *images = [NSMutableArray array];
-            for (int i = 0; i < names.count; i++)
-                [images addObject:@"icon_info"];
-            
-            [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_select_track")
-                                    message:nil
-                                cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                otherTitles:names
-                                  otherDesc:nil
-                                otherImages:images
-                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                     if (!cancelled)
-                                     {
-                                         NSInteger trackId = buttonIndex;
-                                         NSString *gpxFileName = paths[trackId];
-                                         if (gpxFileName.length == 0)
-                                             gpxFileName = nil;
-                                         
-                                         [self targetPointAddWaypoint:gpxFileName];
-                                     }
-                                 }];
-        }
-        
+        OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAOpenExistingTrack];
+        saveTrackViewController.delegate = self;
+        [self presentViewController:saveTrackViewController animated:YES completion:nil];
     }
     else
     {
@@ -1963,9 +1928,9 @@ typedef enum
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [self showPlanRouteViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc]
-                                                                                    initWithLatitude:_targetLatitude
-                                                                                           longitude:_targetLongitude]]];
+    [self showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:[[CLLocation alloc]
+                                                                                        initWithLatitude:_targetLatitude
+                                                                                               longitude:_targetLongitude]]];
 }
 
 - (void) targetGoToPoint
@@ -2010,6 +1975,12 @@ typedef enum
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete
 {
     [self hideMultiMenuIfNeeded];
+
+    if (_scrollableHudViewController)
+    {
+        _prevScrollableHudViewController = _scrollableHudViewController;
+        [self hideScrollableHudViewController];
+    }
 
     if (_activeTargetActive)
     {
@@ -2301,10 +2272,16 @@ typedef enum
             onComplete();
         
         [_hudViewController.quickActionController updateViewVisibility];
-        
+
+        if (_prevScrollableHudViewController)
+        {
+            [self showScrollableHudViewController:_prevScrollableHudViewController];
+            _prevScrollableHudViewController = nil;
+        }
+
     }];
     
-    [self showTopControls];
+    [self showTopControls:NO];
     _customStatusBarStyleNeeded = NO;
     [self setNeedsStatusBarAppearanceUpdate];
 
@@ -2355,7 +2332,7 @@ typedef enum
         [_hudViewController.quickActionController updateViewVisibility];
     }];
     
-    [self showTopControls];
+    [self showTopControls:NO];
     _customStatusBarStyleNeeded = NO;
     [self setNeedsStatusBarAppearanceUpdate];
     
@@ -3122,11 +3099,36 @@ typedef enum
                 topInset:(float)topInset
                 animated:(BOOL)animated
 {
+    [self displayAreaOnMap:topLeft
+               bottomRight:bottomRight
+                      zoom:zoom
+                   maxZoom:kMaxZoom
+                screenBBox:screenBBox
+               bottomInset:bottomInset
+                 leftInset:leftInset
+                  topInset:topInset
+                  animated:animated];
+}
+
+- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft
+             bottomRight:(CLLocationCoordinate2D)bottomRight
+                    zoom:(float)zoom
+                 maxZoom:(float)maxZoom
+              screenBBox:(CGSize)screenBBox
+             bottomInset:(float)bottomInset
+               leftInset:(float)leftInset
+                topInset:(float)topInset
+                animated:(BOOL)animated
+{
     OAGpxBounds bounds;
     bounds.topLeft = topLeft;
     bounds.bottomRight = bottomRight;
     bounds.center.latitude = bottomRight.latitude / 2.0 + topLeft.latitude / 2.0;
     bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
+
+    if (maxZoom > 0 && zoom <= 0)
+        zoom = MIN([self getZoomForBounds:bounds mapSize:screenBBox], maxZoom);
+
     [self displayAreaOnMap:bounds
                       zoom:zoom
                 screenBBox:screenBBox
@@ -3266,6 +3268,8 @@ typedef enum
 {
     [_toolbars removeObject:toolbarController];
     [self updateToolbar];
+    if ((_scrollableHudViewController && [_scrollableHudViewController getNavbarHeight] > 0))
+        [self doUpdateContextMenuToolbarLayout];
 }
 
 - (void)showPoiToolbar:(OAPOIUIFilter *)filter latitude:(double)latitude longitude:(double)longitude
@@ -3781,6 +3785,8 @@ typedef enum
         if (onComplete)
             onComplete();
     }];
+    if (_routingHelper.isFollowingMode)
+        [self startNavigation];
 }
 
 #pragma mark - OAGpxWptEditingHandlerDelegate
@@ -3805,7 +3811,7 @@ typedef enum
     {
         if (![[OAAppSettings sharedManager].mapSettingShowRecordingTrack get])
             [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
+        [_mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
     }
 }
 
@@ -3826,6 +3832,21 @@ typedef enum
     {
         [OAGPXDocument fillWpt:gpxWptItem.point.wpt usingWpt:gpxWptItem.point];
         [_mapViewController saveFoundWpt];
+    }
+}
+
+#pragma mark - OAOpenAddTrackDelegate
+
+- (void)closeBottomSheet
+{
+}
+
+- (void)onFileSelected:(NSString *)gpxFileName
+{
+    if (gpxFileName && gpxFileName.length > 0)
+    {
+        NSString *fullPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFileName];
+        [self targetPointAddWaypoint:fullPath];
     }
 }
 

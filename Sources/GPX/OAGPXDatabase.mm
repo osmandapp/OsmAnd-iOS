@@ -140,7 +140,7 @@
 
 - (OAGPX *) buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
 {
-    return [self buildGpxItem:fileName path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds document:document];
+    return [self buildGpxItem:fileName.lastPathComponent path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds document:document];
 }
 
 - (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
@@ -151,6 +151,7 @@
     NSString *pathToRemove = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
     gpx.bounds = bounds;
     gpx.gpxFileName = fileName;
+    gpx.gpxFolderName = [[filepath stringByReplacingOccurrencesOfString:pathToRemove withString:@""] stringByDeletingLastPathComponent];
     gpx.gpxFilePath = [filepath stringByReplacingOccurrencesOfString:pathToRemove withString:@""];
     title = [title length] != 0 ? title : nil;
     if (title)
@@ -240,7 +241,7 @@
 {
     for (OAGPX *item in gpxList)
     {
-        if ([[item.gpxFilePath lastPathComponent] isEqualToString:fileName])
+        if ([item.gpxFileName isEqualToString:fileName])
         {
             return item;
         }
@@ -284,7 +285,7 @@
 {
     for (OAGPX *item in gpxList)
     {
-        if ([[item.gpxFilePath lastPathComponent] isEqualToString:fileName])
+        if ([item.gpxFileName isEqualToString:fileName])
         {
             return YES;
         }
@@ -330,6 +331,7 @@
             item.gpxFilePath = newFilePath;
             item.gpxFileName = [item.gpxFilePath lastPathComponent];
             item.gpxTitle = [item.gpxFileName stringByDeletingPathExtension];
+            item.gpxFolderName = [newFilePath stringByDeletingLastPathComponent];
             return YES;
         }
     }
@@ -371,6 +373,7 @@
     NSMutableDictionary *d = [NSMutableDictionary dictionary];
 
     [d setObject:gpx.gpxFileName forKey:@"gpxFileName"];
+    [d setObject:gpx.gpxFolderName ? gpx.gpxFolderName : [gpx.gpxFilePath stringByDeletingLastPathComponent] forKey:@"gpxFolderName"];
     [d setObject:gpx.gpxFilePath ? gpx.gpxFilePath : gpx.gpxTitle forKey:@"gpxFilePath"];
     [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
     [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
@@ -466,6 +469,8 @@
             gpx.gpxFileName = value;
         } else if ([key isEqualToString:@"gpxTitle"]) {
             gpx.gpxTitle = value;
+        } else if ([key isEqualToString:@"gpxFolderName"]) {
+            gpx.gpxFolderName = value;
         } else if ([key isEqualToString:@"gpxFilePath"]) {
             gpx.gpxFilePath = value;
         } else if ([key isEqualToString:@"gpxDescription"]) {

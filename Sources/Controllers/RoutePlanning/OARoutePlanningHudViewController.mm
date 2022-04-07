@@ -9,8 +9,6 @@
 #import "OARoutePlanningHudViewController.h"
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
-#import "OAMapViewController.h"
 #import "OAMapActions.h"
 #import "OARoutingHelper.h"
 #import "OAMapRendererView.h"
@@ -52,10 +50,7 @@
 #import "OASaveTrackViewController.h"
 #import "OAOpenAddTrackViewController.h"
 #import "OASavingTrackHelper.h"
-#import "QuadRect.h"
 #import "OASnapTrackWarningViewController.h"
-#import "OAGpxApproximationViewController.h"
-#import "OAHudButton.h"
 #import "OAMapHudViewController.h"
 #import "OAOsmAndFormatter.h"
 #import "OATrackMenuHudViewController.h"
@@ -262,8 +257,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self.tableView setEditing:YES];
     [self show:YES state:EOADraggableMenuStateInitial onComplete:nil];
 //    BOOL isNight = [OAAppSettings sharedManager].nightMode;
-    [_mapPanel setTopControlsVisible:NO customStatusBarStyle:UIStatusBarStyleLightContent];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:self.getViewHeight animated:YES];
     _centerImageView.image = [UIImage imageNamed:@"ic_ruler_center.png"];
     [self changeCenterOffset:[self getViewHeight]];
     
@@ -310,6 +303,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 	[super viewDidAppear:animated];
 	if (_showSnapWarning)
 		[self enterApproximationMode];
+
+    [_mapPanel setTopControlsVisible:YES
+            onlyMapSettingsAndSearch:YES
+                customStatusBarStyle:UIStatusBarStyleLightContent];
+    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self getViewHeight] animated:YES];
 }
 
 - (void) doAdditionalLayout
@@ -405,6 +403,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         return OAUtilities.getBottomMargin > 0 ? 48 : 60;
     else
         return OAUtilities.getBottomMargin > 0 ? 44 : 48;
+}
+
+- (CGFloat) getNavbarHeight
+{
+    return _navbarView.frame.origin.y + _navbarView.frame.size.height;
 }
 
 - (BOOL)useGestureRecognizer

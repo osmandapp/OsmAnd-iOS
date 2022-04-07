@@ -21,7 +21,7 @@ static NSString * const _unitsMi = OALocalizedString(@"units_mi");
 static NSString * const _unitsYd = OALocalizedString(@"units_yd");
 static NSString * const _unitsFt = OALocalizedString(@"units_ft");
 static NSString * const _unitsNm = OALocalizedString(@"units_nm");
-static NSString * const _unitsKmh = OALocalizedString(@"units_kmh");
+static NSString * const _unitsKmh = OALocalizedString(@"units_km_h");
 static NSString * const _unitsMph = OALocalizedString(@"units_mph");
 
 + (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
@@ -226,10 +226,17 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
 + (NSString *) getFormattedAlt:(double) alt
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    if ([settings.metricSystem get] == KILOMETERS_AND_METERS) {
-        return [NSString stringWithFormat:@"%d %@", ((int) (alt + 0.5)), _unitsm];
-    } else {
-        return [NSString stringWithFormat:@"%d %@", ((int) (alt * FOOTS_IN_ONE_METER + 0.5)), _unitsFt];
+    EOAMetricsConstant mc = [settings.metricSystem get];
+    BOOL useFeet = mc == MILES_AND_FEET || mc == MILES_AND_YARDS;
+    if (useFeet)
+    {
+        int feet = (int) (alt * FEET_IN_ONE_METER + 0.5);
+        return [NSString stringWithFormat:@"%d %@", feet, _unitsFt];
+    }
+    else
+    {
+        int meters = (int) (alt + 0.5);
+        return [NSString stringWithFormat:@"%d %@", meters, _unitsm];
     }
 }
 

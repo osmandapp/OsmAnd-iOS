@@ -20,7 +20,6 @@
 "years_5" = "Ani";
 "price_free" = "Gratuit";
 "months_3" = "Trei luni";
-"units_minutes_short" = "min";
 "traffic_warning_railways" = "Trecere de cale ferată";
 "speak_title" = "Anunță…";
 "shared_string_reload" = "Reâncarcă";
@@ -60,7 +59,7 @@
 "voice_provider" = "Vocea pentru ghidare";
 "pause_resume_nav" = "Pauză/reluare navigație";
 "shared_string_and" = "și";
-"int_seconds" = "secunde";
+"units_seconds" = "secunde";
 "product_title_northamerica" = "America de Nord";
 "fav_replace" = "Înlocuiește";
 "categories" = "Categorii";
@@ -113,7 +112,7 @@
 "red" = "Roșu";
 "quick_action_tags" = "Tag-uri";
 "mapillary" = "Mapillary";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "map_markers_other" = "Alți marcatori";
 "search_radius_proximity" = "În imediata apropiere a";
 "map_widget_max_speed" = "Limita de viteză";
@@ -138,7 +137,7 @@
 "route_tsll" = "Virați ușor la stânga și continuați";
 "cancel_route" = "Renunță la rută";
 "select_street" = "Selectează strada";
-"units_min" = "min";
+"units_min" = "min.";
 "longitude" = "Longitudine";
 "shared_string_is_open_24_7" = "Deschis 24/7";
 "speak_street_names" = "numele Străzilor (TTS)";
@@ -160,7 +159,7 @@
 "shared_string_select" = "Selectați";
 "shared_string_buy" = "Cumpărați";
 "driving_region_us" = "Statele Unite";
-"min_mile" = "min/m";
+"units_min_mi" = "min/m";
 "map_widget_altitude" = "Altitudine";
 "hide_contour_lines" = "Ascunde conturul liniilor";
 "mapillary_get_title" = "Înbunătățiți acoperirea foto cu Mapillary";
@@ -297,7 +296,7 @@
 "app_mode_train" = "Tren";
 "si_m_s" = "Metri pe secundă";
 "osm_live_ask_for_purchase" = "Vă rugăm să achiziționați mai întâi abonamentul OsmAnd Live";
-"m_s" = "m/s";
+"units_m_s" = "m/s";
 "my_places" = "Locurile mele";
 "map_widget_distance" = "Distanța până la destinație";
 "app_mode_truck" = "Camion";
@@ -330,7 +329,7 @@
 "map_widget_battery" = "Nivel baterie";
 "product_title_wiki" = "Wikipedia";
 "shared_string_add" = "Adăugați";
-"min_km" = "min/km";
+"units_min_km" = "min/km";
 "groups" = "Grupuri";
 "si_mi_yard" = "Mile/iarzi";
 "region_south_america" = "America de Sud";
@@ -426,7 +425,7 @@
 "map_settings_night" = "Noaptea";
 "region_others" = "Alte hărți";
 "poi_filter_closest_poi" = "Cel mai apropiat POI";
-"nm" = "nmi ( nautic miles)";
+"units_nm" = "nmi ( nautic miles)";
 "traffic_warning_pedestrian" = "Trecere de pietoni";
 "shared_string_yes" = "Da";
 "configure_map" = "Configuraţi harta";
@@ -942,7 +941,6 @@
 "track_save_descr" = "Salvează traseul curent ca fișier GPX acum.";
 "gpx_curr_new_track" = "Pista curentă";
 "shared_string_gpx_track" = "Track(pistă)";
-"units_nm" = "nmi ( nautic miles)";
 "plan_route_open_existing_track" = "Deschideți o rută existentă";
 "displayed_trips" = "Trasee afișate";
 "searching_gps" = "Căutare GPS";
@@ -1475,7 +1473,7 @@
 "type_city_town" = "Scrieți orașul sau localitatea";
 "nothing_found_descr" = "Modificați interogarea de căutare sau măriți raza de căutare";
 "nothing_found" = "Nu s-a găsit nimic: %@";
-"nm_h" = "nmi/h ( nautic miles/oră)";
+"units_nm_h" = "nmi/h ( nautic miles/oră)";
 "si_nm_h" = "Mile nautice pe oră (nod)";
 "right_side_navigation" = "Traficul pe dreapta";
 "left_side_navigation" = "Trafic pe stânga";
@@ -1758,7 +1756,6 @@
 "product_title_nautical" = "Harta nautică";
 "reminder_not_set_text" = "Memento-ul nu a fost setat deoarece nu vi se permite accesul la Calendar";
 "cannot_access_calendar" = "Nu se poate accesa Calendarul";
-"units_seconds_short" = "secundă";
 
 // Help
 "help_quiz" = "Chestionar";
@@ -2108,7 +2105,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Colorează rutele în funcție de tipul de rețea de noduri (internațională, regională, locală).";
 "walking_route_osmc_description" = "Colorați rutele în funcție de culoarea locală individuală (dacă este prezentă pe OpenStreetMap) și de tipul lor (internațional, regional, local).";
 "travel_routes" = "Rute de călătorie";
-"foot" = "picior";
 "shared_string_feet" = "picioare";
 "shared_string_meters" = "metri";
 "srtm_download_list_help_message" = "OsmAnd oferă date despre curbele de nivel în metri și picioare. Va trebui să descărcați din nou fișierul pentru a schimba formatul.";
@@ -2169,7 +2165,6 @@
 "parked_at" = "Parcat la";
 "industrial" = "Industrială";
 "education" = "Educație";
-"m" = "m";
 "units_min_short" = "m";
 "route_points" = "Puncte de traseu";
 "connect_rp" = "Conectarea punctelor de rută";
@@ -2313,7 +2308,7 @@
 "q_clear_weather_cache" = "Doriți să ștergeți memoria cache a vremii?";
 "map_settings_weather_pressure" = "Presiune";
 "map_settings_clear_geo_cache" = "Plăci geo clare";
-"map_settings_weather" = "Vremea";
+"product_title_weather" = "Vremea";
 "add_description" = "Adăugați o descriere";
 "navigate_point_format_MGRS" = "MGRS";
 "mgrs_description" = "OsmAnd utilizează formatul MGRS, care este identic cu UTM NATO.";
@@ -2340,3 +2335,23 @@
 "route_line_use_map_style_width" = "Utilizați lățimea implicită a stilului de hartă (%@).";
 "shared_string_min_height" = "Înălțime minimă";
 "shared_string_max_height" = "Înălțime maximă";
+"start_point" = "Începeți";
+"altitude" = "Altitudine";
+"map_widget_speed" = "Viteză";
+"route_preferred_terrain_any" = "Profilul terenului nu este luat în considerare atunci când se alege un traseu.";
+"route_preferred_terrain_flat" = "Traseele cu un profil de relief plat. Lungimea poate crește.";
+"route_preferred_terrain_less_hilly" = "Trasee mai scurte, mai puțin accidentate.";
+"route_preferred_terrain_hilly" = "Traseele cu un profil de relief accidentat.";
+"shared_string_any" = "Orice";
+"save_heading" = "Includeți titlul";
+"save_heading_descr" = "Salvarea informațiilor privind direcția pentru fiecare punct înregistrat";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d piese?";
+"delete_tracks_bottom_sheet_title" = "Ștergeți pistele?";
+"select_tracks" = "Selectați piesele";
+"selected_tracks_count" = "Piese - %d";
+"delete_tracks_bottom_sheet_description_regular_part" = "Ești sigur că vrei să ștergi ";
+"preferred_terrain" = "Teren preferat";
+"routing_attr_avoid_low_emission_zone_name" = "Nu există zone cu emisii scăzute";
+"routing_attr_avoid_low_emission_zone_description" = "Evită zonele cu emisii scăzute";
+"routing_attr_avoid_tunnels_name" = "Fără tuneluri";
+"routing_attr_avoid_tunnels_description" = "Evită tunelurile";

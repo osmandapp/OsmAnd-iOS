@@ -13,7 +13,6 @@
 #import "OATextViewResizingCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OASaveTrackBottomSheetViewController.h"
-#import "OAGPXDatabase.h"
 #import "OAMapLayers.h"
 #import "OAMapRendererView.h"
 #import "OASettingsTableViewCell.h"
@@ -241,6 +240,9 @@
 
 - (IBAction)cancelButtonPressed:(id)sender
 {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(onSaveTrackCancelled)])
+        [self.delegate onSaveTrackCancelled];
+    
     [self dismissViewController];
 }
 

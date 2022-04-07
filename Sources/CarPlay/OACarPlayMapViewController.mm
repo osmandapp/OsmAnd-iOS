@@ -10,13 +10,8 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewTrackingUtilities.h"
-
-#import <CarPlay/CarPlay.h>
-
-#include <QtMath>
 
 #define kViewportXNonShifted 1.0
 
@@ -69,7 +64,9 @@
     
     if (widthOffset != _cachedWidthOffset && heightOffset != _cachedHeightOffset && widthOffset != 0 && heightOffset != 0)
     {
-        _mapVc.mapView.viewportXScale = 1.0 + widthOffset;
+        BOOL leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get]];
+
+        _mapVc.mapView.viewportXScale = leftSide ? widthOffset : 1.0 + widthOffset;
         _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
         
         _cachedWidthOffset = widthOffset;
@@ -211,7 +208,8 @@
 
 - (void) enterNavigationMode
 {
-    _mapVc.mapView.viewportXScale = 1.5;
+    BOOL leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get]];
+    _mapVc.mapView.viewportXScale = leftSide ? 0.5 : 1.5;
 }
 
 - (void) exitNavigationMode

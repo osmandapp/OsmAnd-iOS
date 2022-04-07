@@ -32,7 +32,7 @@
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="UO2-Ho-oc9" userLabel="root" customClass="OAUserInteractionPassThroughView">
+        <view opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="UO2-Ho-oc9" userLabel="root" customClass="UIIView">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>

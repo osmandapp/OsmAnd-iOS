@@ -83,7 +83,7 @@
 
 - (BOOL) applyFileName:(NSString *)fileName
 {
-    return self.fileName ? ([fileName hasSuffix:self.fileName] || [fileName hasPrefix:[self.fileName stringByAppendingString:@"/"]] || [fileName isEqualToString:self.fileName]) : NO;
+    return self.fileName ? ([fileName hasSuffix:self.fileName] || [fileName hasPrefix:[self.fileName stringByAppendingString:@"/"]] || [fileName compare:self.fileName] == NSOrderedSame) : NO;
 }
 
 - (BOOL) exists

@@ -8,6 +8,7 @@
 
 #import "OATopTextView.h"
 #import "OsmAndApp.h"
+#import "OACurrentStreetName.h"
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OALocationServices.h"
@@ -27,12 +28,27 @@
 #import "OAPointDescription.h"
 #import "OALocationPointWrapper.h"
 #import "OAOsmAndFormatter.h"
+#import "OARouteCalculationResult.h"
+#import "OARoutingHelperUtils.h"
+#import "OAMapPresentationEnvironment.h"
+#import "OANativeUtilities.h"
+
+#include <OsmAndCore/Map/MapPresentationEnvironment.h>
+#include <OsmAndCore/Map/MapStyleEvaluator.h>
+#include <OsmAndCore/Map/MapStyleEvaluationResult.h>
+#include <OsmAndCore/Map/MapStyleBuiltinValueDefinitions.h>
+#include <OsmAndCore/TextRasterizer.h>
+
 #include <binaryRead.h>
+
 @interface OATopTextView ()
 
 @property (weak, nonatomic) IBOutlet UIView *turnView;
 @property (weak, nonatomic) IBOutlet UILabel *addressText;
 @property (weak, nonatomic) IBOutlet UILabel *addressTextShadow;
+@property (weak, nonatomic) IBOutlet UIView *exitRefTextContainer;
+@property (weak, nonatomic) IBOutlet UILabel *exitRefText;
+@property (weak, nonatomic) IBOutlet UIImageView *shieldIcon;
 
 @property (weak, nonatomic) IBOutlet UIView *waypointInfoBar;
 @property (weak, nonatomic) IBOutlet UIImageView *waypointImage;
@@ -58,6 +74,11 @@
     OATurnDrawable *_turnDrawable;
     UIImageView *_imageView;
     BOOL _showMarker;
+    
+    OANextDirectionInfo *_calc1;
+    
+    std::shared_ptr<const OsmAnd::TextRasterizer> _textRasterizer;
+    OACurrentStreetName *_prevStreetName;
     
     UIFont *_textFont;
     UIFont *_textWaypointFont;
@@ -125,6 +146,9 @@
     _waypointHelper = [OAWaypointHelper sharedInstance];
     _trackingUtilities = [OAMapViewTrackingUtilities instance];
     _currentPositionHelper = [OACurrentPositionHelper instance];
+    _calc1 = [[OANextDirectionInfo alloc] init];
+    
+    _textRasterizer = OsmAnd::TextRasterizer::getDefault();
 
     CGFloat radius = 3.0;
     self.backgroundColor = [UIColor whiteColor];
@@ -136,10 +160,10 @@
     self.layer.shadowRadius = 2.0;
     self.layer.shadowOffset = CGSizeMake(0.0, 0.0);
 
-    _regularFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:23];
-    _boldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:23];
-    _regularWaypointFont = [UIFont fontWithName:@"AvenirNext-Medium" size:17];
-    _boldWaypointFont = [UIFont fontWithName:@"AvenirNext-DemiBold" size:17];
+    _regularFont = [UIFont systemFontOfSize:23 weight:UIFontWeightSemibold];
+    _boldFont = [UIFont systemFontOfSize:23 weight:UIFontWeightBold];
+    _regularWaypointFont = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+    _boldWaypointFont = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
     _textFont = _regularFont;
     _textWaypointFont = _regularWaypointFont;
     _textColor = [UIColor blackColor];
@@ -152,6 +176,8 @@
     _imageView.contentMode = UIViewContentModeCenter;
     _imageView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_action_start_navigation"] color:UIColorFromRGB(color_myloc_distance)];
     _imageView.frame = _turnView.bounds;
+    
+    _exitRefTextContainer.layer.cornerRadius = 6.;
     
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -177,7 +203,32 @@
 {
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
+    BOOL showShield = _shieldIcon.image && !_shieldIcon.isHidden;
+    BOOL showTurn = !_turnView.isHidden && _turnView.subviews.count > 0;
+    BOOL showExit = !_exitRefTextContainer.isHidden && _exitRefText.text.length > 0;
+    CGRect shieldFrame = _shieldIcon.frame;
+    if (showShield)
+    {
+        shieldFrame.size = _shieldIcon.image.size;
+        CGFloat height = h - 4;
+        CGFloat scaleFactor = height / shieldFrame.size.height;
+        shieldFrame.size = CGSizeMake(shieldFrame.size.width * scaleFactor, height);
+        _shieldIcon.frame = shieldFrame;
+    }
+    CGRect exitRefFrame = _exitRefTextContainer.frame;
+    if (showExit)
+    {
+        CGSize size = [OAUtilities calculateTextBounds:_exitRefText.text width:w font:[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]];
+        CGRect textFrame = CGRectMake(3., 3., size.width, h - 10);
+        _exitRefText.frame = textFrame;
+        exitRefFrame.size = CGSizeMake(size.width + 6., h - 4);
+        _exitRefTextContainer.frame = exitRefFrame;
+    }
+    
     CGFloat margin = _turnView.subviews.count > 0 ? 4 + _turnView.bounds.size.width + 2 : 2;
+    margin += _exitRefTextContainer.hidden ? 0 : _exitRefTextContainer.frame.size.width + 2;
+    margin += showShield ? shieldFrame.size.width + 2 : 0;
+    margin += showExit ? exitRefFrame.size.width + 2 : 0;
     CGFloat maxTextWidth = w - margin * 2;
     CGSize size = [OAUtilities calculateTextBounds:_addressText.text width:maxTextWidth height:h font:_textFont];
     if (size.width > maxTextWidth)
@@ -186,10 +237,31 @@
     CGFloat x = w / 2 - size.width / 2;
     _addressText.frame = CGRectMake(w / 2 - size.width / 2, 0, w - x - 4, h);
     _addressTextShadow.frame = _addressText.frame;
-    _turnView.center = CGPointMake(_addressText.frame.origin.x - 2 - _turnView.bounds.size.width / 2, h / 2);
+    
+    CGFloat prevX = _addressText.frame.origin.x;
+    if (showShield)
+    {
+        [self applyCorrectPositionToView:_shieldIcon prevX:prevX];
+        prevX = _shieldIcon.frame.origin.x;
+    }
+    if (showTurn)
+    {
+        [self applyCorrectPositionToView:_turnView prevX:prevX];
+        prevX = _turnView.frame.origin.x;
+    }
+    if (showExit)
+    {
+        [self applyCorrectPositionToView:_exitRefTextContainer prevX:prevX];
+    }
     
     _waypointText.frame = CGRectMake(96, 0, w - 176, h);
     _waypointTextShadow.frame = _waypointText.frame;
+}
+
+- (void) applyCorrectPositionToView:(UIView *)view prevX:(CGFloat)prevX
+{
+    CGFloat h = self.bounds.size.height;
+    view.center = CGPointMake(prevX - 2 - view.bounds.size.width / 2, h / 2);
 }
 
 - (BOOL)isTopText
@@ -395,7 +467,7 @@
         {
             UIColor *color = UIColorFromRGB(color_osmand_orange);
             [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
-            UIFont *font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:12];
+            UIFont *font = [UIFont systemFontOfSize:12 weight:UIFontWeightSemibold];
             if (font)
                 [descAttrStr addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, descAttrStr.length)];
         }
@@ -417,28 +489,17 @@
 
 - (BOOL) updateInfo
 {
-    NSString *text = nil;
-    std::vector<std::shared_ptr<TurnType>> type(1);
-    BOOL showNextTurn = false;
-    BOOL showMarker = _showMarker;
+    OACurrentStreetName *streetName = nil;
+    BOOL showClosestWaypointFirstInAddress = YES;
     if ([_routingHelper isRouteCalculated] && ![OARoutingHelper isDeviatedFromRoute])
     {
         if ([_routingHelper isFollowingMode])
         {
             if ([_settings.showStreetName get])
             {
-                text = [_routingHelper getCurrentName:type];
-                if (!text)
-                {
-                    text = @"";
-                }
-                else
-                {
-                    if (type[0] == nullptr)
-                        _showMarker = YES;
-                    else
-                        _turnDrawable.clr = UIColorFromRGB(color_nav_arrow);
-                }
+                OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
+                streetName = [_routingHelper getCurrentName:nextDirInfo];
+                _turnDrawable.clr = UIColorFromRGB(color_nav_arrow);
             }
         }
         else
@@ -446,27 +507,17 @@
             int di = [OARouteInfoView getDirectionInfo];
             if (di >= 0 && [OARouteInfoView isVisible] && di < [_routingHelper getRouteDirections].count)
             {
-                showNextTurn = YES;
-                OARouteDirectionInfo *next = [_routingHelper getRouteDirections][di];
-                type[0] = next.turnType;
+                showClosestWaypointFirstInAddress = NO;
+                streetName = [_routingHelper getCurrentName:[_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES]];
                 _turnDrawable.clr = UIColorFromRGB(color_nav_arrow_distant);
-                text = [OARoutingHelper formatStreetName:next.streetName ref:next.ref destination:next.destinationName towards:@"»"];
-                //                        if (next.distance > 0) {
-                //                            text += " " + OsmAndFormatter.getFormattedDistance(next.distance, map.getMyApplication());
-                //                        }
-                if (!text)
-                    text = @"";
-            }
-            else
-            {
-                text = nil;
             }
         }
     }
     else if ([_trackingUtilities isMapLinkedToLocation] && [_settings.showStreetName get])
     {
+        streetName = [[OACurrentStreetName alloc] init];
         CLLocation *lastKnownLocation = _locationProvider.lastKnownLocation;
-        std::shared_ptr<RouteDataObject> road = nullptr;
+        std::shared_ptr<RouteDataObject> road;
         if (lastKnownLocation)
         {
             road = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
@@ -479,26 +530,19 @@
                 string rRefName = road->getRef(lang, transliterate, road->bearingVsRouteDirection(lastKnownLocation.course));
                 string rDestinationName = road->getDestinationName(lang, transliterate, true);
                 
-                NSString *streetName = [NSString stringWithUTF8String:rStreetName.c_str()];
+                NSString *strtName = [NSString stringWithUTF8String:rStreetName.c_str()];
                 NSString *refName = [NSString stringWithUTF8String:rRefName.c_str()];
                 NSString *destinationName = [NSString stringWithUTF8String:rDestinationName.c_str()];
 
-                text = [OARoutingHelper formatStreetName:streetName ref:refName destination:destinationName towards:@"»"];
+                streetName.text = [OARoutingHelperUtils formatStreetName:strtName ref:refName destination:destinationName towards:@"»"];
             }
-        }
-        if (!text)
-        {
-            text = @"";
-        }
-        else
-        {
-            if (text.length > 0 && road)
+            if (streetName.text.length > 0 && road)
             {
                 double dist = [OACurrentPositionHelper getOrthogonalDistance:road loc:lastKnownLocation];
                 if (dist < 50)
-                    showMarker = YES;
+                    streetName.showMarker = YES;
                 else
-                    text = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"shared_string_near"), text];
+                    streetName.text = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"shared_string_near"), streetName.text];
             }
         }
     }
@@ -506,34 +550,59 @@
     {
         [self updateVisibility:NO];
     }
-    else if (!showNextTurn && [self updateWaypoint])
+    else if (showClosestWaypointFirstInAddress && [self updateWaypoint])
     {
         [self updateVisibility:YES];
         [self updateVisibility:_turnView visible:NO];
         [self updateVisibility:_addressText visible:NO];
         [self updateVisibility:_addressTextShadow visible:NO];
+        [self updateVisibility:_shieldIcon visible:NO];
+        [self updateVisibility:_exitRefTextContainer visible:NO];
     }
-    else if (!text)
+    else if (!streetName)
     {
         [self updateVisibility:NO];
     }
     else
     {
+        if ([streetName isEqual:_prevStreetName])
+            return YES;
+        
         [self updateVisibility:YES];
         [self updateVisibility:_waypointInfoBar visible:NO];
-        [self updateVisibility:_turnView visible:YES];
         [self updateVisibility:_addressText visible:YES];
         [self updateVisibility:_addressTextShadow visible:_shadowRadius > 0];
-        BOOL update = [_turnDrawable setTurnType:type[0]] || showMarker != _showMarker;
-        _showMarker = showMarker;
-        if (update)
+        _prevStreetName = streetName;
+        
+        if (streetName.shieldObject && !streetName.shieldObject->namesIds.empty() && [self setRoadShield:_shieldIcon object:streetName.shieldObject])
         {
-            if (type[0] != nullptr)
+            _shieldIcon.hidden = NO;
+            int idx = [streetName.text indexOf:@"»"];
+            if (idx > 0)
+                streetName.text = [streetName.text substringToIndex:idx];
+        }
+        else
+        {
+            _shieldIcon.hidden = YES;
+        }
+        if (streetName.exitRef.length > 0)
+        {
+            _exitRefText.text = streetName.exitRef;
+            _exitRefTextContainer.hidden = NO;
+        }
+        else
+        {
+            _exitRefTextContainer.hidden = YES;
+        }
+        if ([_turnDrawable setTurnType:streetName.turnType] || streetName.showMarker != _showMarker)
+        {
+            _showMarker = streetName.showMarker;
+            if (streetName.turnType)
             {
                 [_imageView removeFromSuperview];
                 [_turnView addSubview:_turnDrawable];
             }
-            else if (showMarker)
+            else if (_showMarker)
             {
                 [_turnDrawable removeFromSuperview];
                 [_turnView addSubview:_imageView];
@@ -544,12 +613,120 @@
                 [_imageView removeFromSuperview];
             }
         }
-        if (![text isEqualToString:_addressText.text])
+        if (streetName.text.length == 0)
         {
-            [self refreshLabel:text];
+            _addressTextShadow.text = @"";
+            _addressText.text = @"";
+        }
+        else if (![streetName.text isEqualToString:_addressText.text])
+        {
+            [self refreshLabel:streetName.text];
             return YES;
         }
     }
+    return NO;
+}
+
+- (BOOL) setRoadShield:(UIImageView *)view object:(std::shared_ptr<RouteDataObject>)object
+{
+    NSMutableString *additional = [NSMutableString string];
+    for (NSInteger i = 0; i < object->namesIds.size(); i++)
+    {
+        NSString *key = [NSString stringWithUTF8String:object->region->quickGetEncodingRule(object->namesIds[i].first).getTag().c_str()];
+        NSString *val = [NSString stringWithUTF8String:object->names[object->namesIds[i].first].c_str()];
+        if (![key hasSuffix:@"_ref"] && ![key hasPrefix:@"route_road"])
+            [additional appendFormat:@"%@=%@;", key, val];
+    }
+    for (NSInteger i = 0; i < object->namesIds.size(); i++)
+    {
+        NSString *key = [NSString stringWithUTF8String:object->region->quickGetEncodingRule(object->namesIds[i].first).getTag().c_str()];
+        NSString *val = [NSString stringWithUTF8String:object->names[object->namesIds[i].first].c_str()];
+        if ([key hasPrefix:@"route_road"] && [key hasSuffix:@"_ref"])
+        {
+            BOOL visible = [self setRoadShield:view object:object nameTag:key name:val additional:additional];
+            if (visible)
+                return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL) setRoadShield:(UIImageView *)view object:(std::shared_ptr<RouteDataObject> &)object nameTag:(NSString *)nameTag name:(NSString *)name additional:(NSMutableString *)additional
+{
+    const auto& tps = object->types;
+    OAMapPresentationEnvironment *mapPres = OARootViewController.instance.mapPanel.mapViewController.mapPresentationEnv;
+    const auto& env = mapPres.mapPresentationEnvironment;
+    if (!env)
+        return NO;
+    OsmAnd::MapStyleEvaluator textEvaluator(env->mapStyle, env->displayDensityFactor);
+    env->applyTo(textEvaluator);
+    OsmAnd::MapStyleEvaluationResult evaluationResult(env->mapStyle->getValueDefinitionsCount());
+    
+    for (int i : tps) {
+        const auto& tp = object->region->quickGetEncodingRule(i);
+        if (tp.getTag() == "highway" || tp.getTag() == "route")
+        {
+            textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MINZOOM, 13);
+            textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MAXZOOM, 13);
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_TAG, QString::fromStdString(tp.getTag()));
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_VALUE, QString::fromStdString(tp.getValue()));
+        }
+        else
+        {
+            [additional appendFormat:@"%s=%s;", tp.getTag().c_str(), tp.getValue().c_str()];
+        }
+    }
+    
+    textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_TEXT_LENGTH, (unsigned int) name.length);
+    textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_NAME_TAG, QString::fromNSString(nameTag));
+    auto mapObj = std::make_shared<OsmAnd::MapObject>();
+    auto additionals = std::make_shared<OsmAnd::MapObject::AttributeMapping>();
+    uint32_t idx = 0;
+    for (NSString *str : [additional componentsSeparatedByString:@";"])
+    {
+        NSArray<NSString *> *tagValue = [str componentsSeparatedByString:@"="];
+        if (tagValue.count == 2)
+        {
+            mapObj->additionalAttributeIds.push_back(idx);
+            additionals->registerMapping(idx++, QString::fromNSString(tagValue.firstObject), QString::fromNSString(tagValue.lastObject));
+        }
+    }
+    mapObj->attributeMapping = additionals;
+    
+    textEvaluator.evaluate(mapObj, OsmAnd::MapStyleRulesetType::Text, &evaluationResult);
+    
+    OsmAnd::TextRasterizer::Style textStyle;
+    textStyle.setBold(true);
+    
+    QString shieldName;
+    evaluationResult.getStringValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SHIELD, shieldName);
+    if (!shieldName.isNull() && !shieldName.isEmpty())
+    {
+        sk_sp<const SkImage> shield;
+        env->obtainTextShield(shieldName, shield);
+
+        if (shield)
+            textStyle.setBackgroundImage(shield);
+    }
+    
+    int textColor = -1;
+    evaluationResult.getIntegerValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_COLOR, textColor);
+    if (textColor != -1)
+        textStyle.setColor(OsmAnd::ColorARGB(textColor));
+    
+    float textSize = -1;
+    evaluationResult.getFloatValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SIZE, textSize);
+    if (textSize != -1)
+        textStyle.setSize(textSize);
+    
+    
+    const auto textImage = _textRasterizer->rasterize(QString::fromNSString(name), textStyle);
+    if (textImage)
+    {
+        view.image = [OANativeUtilities skImageToUIImage:textImage];
+        return YES;
+    }
+
     return NO;
 }
 

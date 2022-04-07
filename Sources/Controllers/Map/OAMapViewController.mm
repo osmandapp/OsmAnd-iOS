@@ -51,6 +51,9 @@
 #import "OAColors.h"
 #import "OASubscriptionCancelViewController.h"
 #import "OARouteStatistics.h"
+#import "OAMapRendererEnvironment.h"
+#import "OAMapPresentationEnvironment.h"
+#import "OAWeatherHelper.h"
 
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -61,6 +64,7 @@
 
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
+#import "OAAppVersionDependentConstants.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
@@ -72,6 +76,7 @@
 
 #include <QtMath>
 #include <QStandardPaths>
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -95,6 +100,7 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/TileSqliteDatabasesCollection.h>
 #include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
+#include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
@@ -111,6 +117,7 @@
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
+#define kGestureZoomCoef 10.0f
 
 @interface OAMapViewController () <OAMapRendererDelegate, OARouteInformationListener>
 
@@ -158,9 +165,9 @@
     std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
     std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProvider;
 
-    OACurrentPositionHelper *_currentPositionHelper;
-    
     std::shared_ptr<OsmAnd::ObfDataInterface> _obfsDataInterface;
+
+    OACurrentPositionHelper *_currentPositionHelper;
 
     OAAutoObserverProxy* _dayNightModeObserver;
     OAAutoObserverProxy* _mapSettingsChangeObserver;
@@ -837,18 +844,16 @@
     [_mapView convert:centerPoint toLocation:&centerLocationBefore];
     
     // Change zoom
-    CGFloat scale, gestureScale;
-    if (pinchRecognizer)
-    {
-        scale = 1.0f - pinchRecognizer.scale;
-    }
-    else
-    {
-        gestureScale = ([panGestutreRecognizer locationInView:recognizer.view].y * _mapView.contentScaleFactor) / (_initialZoomTapPointY * _mapView.contentScaleFactor);
-        scale = -(1.0f - gestureScale);
-    }
-    gestureScale = pinchRecognizer ? pinchRecognizer.scale : gestureScale;
-    scale = gestureScale < 1.0f ? scale * (10.0f / _mapView.contentScaleFactor) : scale;
+    CGFloat gestureScale = pinchRecognizer
+        ? pinchRecognizer.scale
+        : ([panGestutreRecognizer locationInView:recognizer.view].y * _mapView.contentScaleFactor) / (_initialZoomTapPointY * _mapView.contentScaleFactor);
+    CGFloat scale = 1 - gestureScale;
+
+    if (gestureScale < 1 || (scale < 0 && !pinchRecognizer))
+        scale = scale * (kGestureZoomCoef / _mapView.contentScaleFactor);
+    if (!pinchRecognizer)
+        scale = -scale;
+
     _mapView.zoom = _initialZoomLevelDuringGesture - scale;
     if (_mapView.zoom > _mapView.maxZoom)
         _mapView.zoom = _mapView.maxZoom;
@@ -1652,8 +1657,8 @@
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         const auto screenTileSize = 256 * self.displayDensityFactor;
-        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode.get]);
-        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode.get]);
+        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get]);
+        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get]);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
         // Set reference tile size on the screen
@@ -1669,6 +1674,7 @@
         _mapPrimitivesProvider.reset();
         _mapPresentationEnvironment.reset();
         _mapPrimitiviser.reset();
+        [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:nil];
 
         if (_mapObjectsSymbolsProvider)
             [_mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProvider];
@@ -1745,7 +1751,7 @@
             else if (settings.settingMapLanguageShowLocal &&
                      settings.settingMapLanguageTranslit.get)
                 langId = @"en";
-            double mapDensity = [settings.mapDensity get:settings.applicationMode.get];
+            double mapDensity = [settings.mapDensity get];
             [_mapView setVisualZoomShift:mapDensity];
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
@@ -1753,7 +1759,7 @@
                                                                                      [settings.textSize get:settings.applicationMode.get],
                                                                                      QString::fromNSString(langId),
                                                                                      langPreferences));
-            
+            [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:self.mapPresentationEnv];
             
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
             _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,
@@ -1802,13 +1808,14 @@
                     _mapPresentationEnvironment->setSettings(newSettings);
             }
         
-          _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
-            [_mapView setProvider:_rasterMapProvider
-                        forLayer:0];
+            _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
+            [_mapView setProvider:_rasterMapProvider forLayer:0];
 
             _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
                                                                                    rasterTileSize));
             [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
+            
+            _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
         }
         else if (resourceType == OsmAndResourceType::OnlineTileSources || mapCreatorFilePath)
         {
@@ -1910,7 +1917,6 @@
             return;
         }
 
-        
         [_mapLayers updateLayers];
 
         if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
@@ -2483,7 +2489,9 @@
         [helper deleteWpt:self.foundWpt];
         
         // update map
-        [[_app updateRecTrackOnMapObservable] notifyEventWithKey:@(YES)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        });
 
         [self hideContextPinMarker];
         
@@ -2511,14 +2519,14 @@
                         }
                     }
                 
-                doc->saveTo(QString::fromNSString(self.foundWptDocPath));
+                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
                 [[OAGPXDatabase sharedDb] save];
                 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self initRendererWithGpxTracks];
+                    [_mapLayers.gpxMapLayer refreshGpxWaypoints];
                 });
                 
                 [self hideContextPinMarker];
@@ -2542,7 +2550,9 @@
         [helper saveWpt:self.foundWpt];
 
         // update map
-        [[_app updateRecTrackOnMapObservable] notifyEventWithKey:@(YES)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        });
 
         return YES;
     }
@@ -2569,11 +2579,11 @@
                     }
                 }
                 
-                doc->saveTo(QString::fromNSString(self.foundWptDocPath));
+                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self initRendererWithGpxTracks];
+                    [_mapLayers.gpxMapLayer refreshGpxWaypoints];
                 });
                 
                 return YES;
@@ -2585,9 +2595,10 @@
 
 - (BOOL) addNewWpt:(OAWptPt *)wpt gpxFileName:(NSString *)gpxFileName
 {
-    OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
     if (!gpxFileName)
     {
+        OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+
         [helper addWpt:wpt];
         self.foundWpt = wpt;
         self.foundWptDocPath = nil;
@@ -2602,7 +2613,9 @@
         self.foundWptGroups = [groups allObjects];
 
         // update map
-        [[_app updateRecTrackOnMapObservable] notifyEventWithKey:@(YES)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        });
 
         return YES;
     }
@@ -2621,7 +2634,7 @@
                 [OAGPXDocument fillWpt:p usingWpt:wpt];
                 
                 doc->points.append(p);
-                doc->saveTo(QString::fromNSString(gpxFileName));
+                doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
                 wpt.wpt = p;
                 self.foundWpt = wpt;
@@ -2641,7 +2654,7 @@
 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self initRendererWithGpxTracks];
+                    [_mapLayers.gpxMapLayer refreshGpxWaypoints];
                 });
                 
                 return YES;
@@ -2657,7 +2670,7 @@
             [OAGPXDocument fillWpt:p usingWpt:wpt];
             
             doc->points.append(p);
-            doc->saveTo(QString::fromNSString(gpxFileName));
+            doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
             
             wpt.wpt = p;
             self.foundWpt = wpt;
@@ -2743,13 +2756,15 @@
             
             if (found)
             {
-                doc->saveTo(QString::fromNSString(docPath));
+                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
                 // update map
                 if (updateMap)
+                {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [self initRendererWithGpxTracks];
+                        [_mapLayers.gpxMapLayer refreshGpxWaypoints];
                     });
+                }
             }
             
             return found;
@@ -2779,7 +2794,7 @@
         
         if (found)
         {
-            doc->saveTo(QString::fromNSString(docPath));
+            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
             
             // update map
             if (updateMap)
@@ -2819,7 +2834,7 @@
             _selectedGpxHelper.activeGpx.remove(QString::fromNSString(oldPath));
             _selectedGpxHelper.activeGpx[QString::fromNSString(docPath)] = doc;
             
-            doc->saveTo(QString::fromNSString(docPath));
+            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
             
             return YES;
         }
@@ -2839,7 +2854,7 @@
 
         [OAGPXDocument fillMetadata:m usingMetadata:metadata];
         
-        doc->saveTo(QString::fromNSString(docPath));
+        doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
         
         return YES;
     }
@@ -2851,6 +2866,18 @@
 {
     if (items.count == 0)
         return NO;
+
+    if (!docPath)
+    {
+        OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+        for (OAGpxWptItem *item in items)
+        {
+            [helper deleteWpt:item.point];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        });
+    }
 
     BOOL found = NO;
     
@@ -2879,7 +2906,7 @@
             
             if (found)
             {
-                doc->saveTo(QString::fromNSString(docPath));
+                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
 
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
                 [[OAGPXDatabase sharedDb] save];
@@ -2915,7 +2942,7 @@
         
         if (found)
         {
-            doc->saveTo(QString::fromNSString(docPath));
+            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
 
             [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
             [[OAGPXDatabase sharedDb] save];
@@ -3124,6 +3151,21 @@
     {
         [_mapLayers.routeMapLayer resetLayer];
     }
+}
+
+- (OAMapRendererEnvironment *)mapRendererEnv
+{
+    return [[OAMapRendererEnvironment alloc] initWithObjects:_obfMapObjectsProvider
+                                  mapPresentationEnvironment:_mapPresentationEnvironment
+                                             mapPrimitiviser:_mapPrimitiviser
+                                       mapPrimitivesProvider:_mapPrimitivesProvider
+                                   mapObjectsSymbolsProvider:_mapObjectsSymbolsProvider
+                                           obfsDataInterface:_obfsDataInterface];
+}
+
+- (OAMapPresentationEnvironment *)mapPresentationEnv
+{
+    return [[OAMapPresentationEnvironment alloc] initWithEnvironment:_mapPresentationEnvironment];
 }
 
 

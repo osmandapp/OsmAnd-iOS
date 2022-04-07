@@ -15,6 +15,9 @@
           simplifiedTrack:(BOOL)simplifiedTrack
                 openTrack:(BOOL)openTrack;
 
+@optional
+- (void) onSaveTrackCancelled;
+
 @end
 
 @interface OASaveTrackViewController : OACompoundViewController

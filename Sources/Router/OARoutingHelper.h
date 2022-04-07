@@ -35,7 +35,7 @@
 
 @end
 
-@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OALocationsHolder, OAGpxRouteApproximation, OAGPXDocument, OAObservable;
+@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OALocationsHolder, OAGpxRouteApproximation, OAGPXDocument, OAObservable, OACurrentStreetName;
 
 struct GpxPoint;
 struct GpxRouteApproximation;
@@ -69,7 +69,7 @@ struct RouteSegmentResult;
 - (OANextDirectionInfo *) getNextRouteDirectionInfo:(OANextDirectionInfo *)info toSpeak:(BOOL)toSpeak;
 - (OANextDirectionInfo *) getNextRouteDirectionInfoAfter:(OANextDirectionInfo *)previous to:(OANextDirectionInfo *)to toSpeak:(BOOL)toSpeak;
 - (float) getCurrentMaxSpeed;
-- (NSString *) getCurrentName:(std::vector<std::shared_ptr<TurnType>>&)next;
+- (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)next;
 - (OABBox) getBBox;
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart;
@@ -98,6 +98,7 @@ struct RouteSegmentResult;
 - (void) recalculateRouteDueToSettingsChange;
 - (void) notifyIfRouteIsCalculated;
 - (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult;
+- (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult;
 - (BOOL) isPublicTransportMode;
 
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress;

@@ -169,7 +169,7 @@
 "units_mi" = "миля";
 "units_yd" = "ярд";
 "units_ft" = "фут";
-"units_kmh" = "км/ч";
+"units_km_h" = "км/ч";
 "units_mph" = "миль/ч";
 "map_download" = "Загрузить";
 "map_nothanks" = "Нет, спасибо";
@@ -260,8 +260,6 @@
 "track_continue_rec_q" = "Продолжить запись?";
 "rec_interval" = "Интервал записи";
 "rec_interval_minimum" = "Минимум";
-"units_minutes_short" = "мин";
-"units_seconds_short" = "с";
 "track_start_rec" = "Начать запись трека";
 "track_rec_addon_q" = "Активируйте дополнение \"Запись треков\" для записи ваших путешествий";
 "track_interval_remember" = "Запомнить мой выбор";
@@ -517,11 +515,11 @@
 "si_kmh" = "Километров в час";
 "si_mph" = "Миль в час";
 "si_m_s" = "Метров в секунду";
-"nm" = "мор. миля";
-"nm_h" = "nmi/ч";
-"min_mile" = "мин/м";
-"min_km" = "мин/км";
-"m_s" = "м/с";
+"units_nm" = "мор. миля";
+"units_nm_h" = "nmi/ч";
+"units_min_mi" = "мин/м";
+"units_min_km" = "мин/км";
+"units_m_s" = "м/с";
 "select_city" = "Выберите город";
 "select_postcode" = "Выберите почтовый код";
 "coords_search" = "Поиск по координатам";
@@ -612,7 +610,7 @@
 "si_nm_h" = "Морских миль в час (узел)";
 "search_poi_category_hint" = "Напечатайте для поиска";
 "shared_string_is_open" = "Открыто";
-"open_from" = "Открыто с";
+"open_from" = "Откроется в";
 "open_till" = "Открыто до";
 "will_close_at" = "Закроется в";
 "will_open_at" = "Откроется в";
@@ -755,7 +753,7 @@
 "show_traffic_warnings" = "Ограничения скорости";
 "show_lanes" = "Полосы движения";
 "configure_map" = "Настройки карты";
-"int_seconds" = "с";
+"units_seconds" = "с";
 "settings_preset" = "Профиль по умолчанию";
 "shared_string_info" = "Информация";
 "day_off_label" = "вых.";
@@ -1410,7 +1408,7 @@
 "routing_attr_freeride_policy_description" = "Фрирайды и внетрассовые маршруты — это неофициальные неподготовленные трассы. Обычно неухоженные, неразмеченные и неосвещённые вечером. Вход на свой страх и риск.";
 "rendering_attr_surface_sett_name" = "Брусчатка";
 "rendering_attr_highway_class_track_grade4_name" = "Класс 4";
-"routing_attr_relief_smoothness_factor_hills_name" = "Гористый";
+"routing_attr_relief_smoothness_factor_hills_name" = "Холмистый";
 "rendering_attr_showMtbRoutes_name" = "Маршруты для горных велосипедов";
 "rendering_attr_piste_type_hike_name" = "Хайк";
 "rendering_attr_surface_snow_name" = "Снег";
@@ -1425,7 +1423,7 @@
 "rendering_attr_pisteGrooming_name" = "Тип лыжной трассы";
 "rendering_value_americanRoadAtlas_name" = "Атлас дорог Америки";
 "rendering_attr_highway_class_street_name" = "Улица";
-"routing_attr_relief_smoothness_factor_more_plains_name" = "Ровный";
+"routing_attr_relief_smoothness_factor_more_plains_name" = "Равнинный";
 "rendering_attr_horseRoutes_name" = "Конные маршруты";
 "rendering_attr_surface_gravel_name" = "Гравий";
 "routeInfo_piste_type_name" = "Тип горнолыжной трассы";
@@ -1508,7 +1506,7 @@
 "rendering_attr_winter_road_name" = "Автозимник";
 "rendering_attr_roadColors_description" = "Выберите цветовую схему дорог:";
 "routing_attr_allow_classic_only_name" = "Разрешить только классические маршруты";
-"routing_attr_relief_smoothness_factor_plains_name" = "Сглаженный";
+"routing_attr_relief_smoothness_factor_plains_name" = "Слабохолмистый";
 "rendering_attr_surface_grass_name" = "Трава";
 "rendering_attr_highway_class_cycleway_name" = "Велодорожка";
 "rendering_attr_highway_class_track_grade5_name" = "Класс 5";
@@ -1794,7 +1792,7 @@
 "select_online_source" = "Выбор источника";
 "preview_of_selected_zoom_levels" = "Предпросмотр выбранных уровней масштабирования";
 "download_size" = "Размер загрузки";
-"move_map_to_select_area" = "Переместите карту, чтобы выбрать нужную область.";
+"move_map_to_select_area" = "Переместите карту, чтобы выбрать необходимую область.";
 "update_map" = "Обновить карту";
 "number_of_tiles" = "Количество тайлов";
 "quick_action_transport_descr" = "Нажмите на это действие, чтобы показать или скрыть маршруты/остановки общественного транспорта на карте.";
@@ -1997,7 +1995,6 @@
 "shared_z_a" = "Я - А";
 "shared_a_z" = "А - Я";
 "search_preogress" = "Поиск…";
-"units_nm" = "мор. миля";
 "map_widget_distance_by_tap" = "Расстояние по нажатию";
 "simplified_track_description" = "Будет сохранена только линия маршрута, без путевых точек.";
 "open_saved_track" = "Открыть сохранённый трек";
@@ -2147,7 +2144,6 @@
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "contour_lines_hillshades_slope" = "Контурные линии, затенение рельефа (отмывка), уклоны";
 "last_used" = "Последний используемый";
-"m" = "м";
 "suggested_maps_descr" = "Эти карты необходимо использовать с плагином.";
 "added_profiles_descr" = "Профили, добавленные плагином";
 "navigate_point_olc" = "Открытый код местоположения (OLC)";
@@ -2155,7 +2151,6 @@
 "navigate_point_easting" = "Восточной долготы";
 "navigate_point_northing" = "Северной широты";
 "welmode_download_maps" = "Загрузка карт";
-"foot" = "фут";
 "download_map_dialog" = "Диалог загрузки карты";
 "dialogs_and_notifications" = "Диалоги и уведомления";
 "explore_wikipedia_offline" = "Читайте Википедию офлайн.";

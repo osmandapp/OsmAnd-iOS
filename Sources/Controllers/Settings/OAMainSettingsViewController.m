@@ -19,6 +19,7 @@
 #import "OAColors.h"
 #import "OAAutoObserverProxy.h"
 #import "OAPurchasesViewController.h"
+#import "OABackupHelper.h"
 
 #import "OACreateProfileViewController.h"
 #import "OARearrangeProfilesViewController.h"
@@ -27,6 +28,8 @@
 #import "OAGlobalSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
 #import "OAExportItemsViewController.h"
+#import "OACloudIntroductionViewController.h"
+#import "OACloudBackupViewController.h"
 
 #define kAppModesSection 2
 
@@ -115,6 +118,14 @@
             @"type" : [OAIconTitleValueCell getCellIdentifier]
         },
         @{
+            @"name" : @"backup_restore",
+            @"title" : OALocalizedString(@"backup_and_restore"),
+            @"value" : @"", // TODO: insert value
+            @"description" : OALocalizedString(@"global_settings_descr"),
+            @"img" : @"ic_custom_restore",
+            @"type" : [OAIconTitleValueCell getCellIdentifier]
+        },
+        @{
             @"name" : @"purchases",
             @"title" : OALocalizedString(@"purchases"),
             @"description" : OALocalizedString(@"global_settings_descr"),
@@ -148,13 +159,6 @@
         @"img" : @"ic_custom_add",
         @"type" : [OATitleRightIconCell getCellIdentifier],
         @"name" : @"add_profile"
-    }];
-    
-    [profilesSection addObject:@{
-        @"title" : OALocalizedString(@"shared_string_export"),
-        @"img" : @"ic_custom_export",
-        @"type" : [OATitleRightIconCell getCellIdentifier],
-        @"name" : @"export_settings"
     }];
 
     [profilesSection addObject:@{
@@ -351,6 +355,15 @@
         OAGlobalSettingsViewController* globalSettingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOAGlobalSettingsMain];
         [self.navigationController pushViewController:globalSettingsViewController animated:YES];
     }
+    else if ([name isEqualToString:@"backup_restore"])
+    {
+        UIViewController *vc;
+        if (OABackupHelper.sharedInstance.isRegistered)
+            vc = [[OACloudBackupViewController alloc] init];
+        else
+            vc = [[OACloudIntroductionViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
     else if ([name isEqualToString:@"purchases"])
     {
         OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
@@ -368,11 +381,6 @@
     {
         OACreateProfileViewController* createProfileViewController = [[OACreateProfileViewController alloc] init];
         [self.navigationController pushViewController:createProfileViewController animated:YES];
-    }
-    else if ([name isEqualToString:@"export_settings"])
-    {
-        OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] init];
-        [self.navigationController pushViewController:exportController animated:YES];
     }
     else if ([name isEqualToString:@"edit_profiles"])
     {

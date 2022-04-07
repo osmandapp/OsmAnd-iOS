@@ -17,6 +17,8 @@ static NSString * const WHITE_WATER_SPORTS_ATTR = @"whiteWaterSports";
 static NSString * const HIKING_ROUTES_OSMC_ATTR = @"hikingRoutesOSMC";
 static NSString * const CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkRoutes";
 static NSString * const TRAVEL_ROUTES = @"travel_routes";
+static NSString * const SHOW_FITNESS_TRAILS_ATTR = @"showFitnessTrails";
+static NSString * const SHOW_RUNNING_ROUTES_ATTR = @"showRunningRoutes";
 
 static NSString * const CURRENT_TRACK_COLOR_ATTR = @"currentTrackColor";
 static NSString * const CURRENT_TRACK_WIDTH_ATTR = @"currentTrackWidth";

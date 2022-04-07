@@ -175,7 +175,8 @@
 
 - (IBAction) backButtonPressed:(id)sender
 {
-    [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
+    if ([_file hasPrefix:[OsmAndApp instance].inboxPath])
+        [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -189,7 +190,8 @@
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
     }
-    [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
+    if ([_file hasPrefix:[OsmAndApp instance].inboxPath])
+        [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
 }
 
 - (void) onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items

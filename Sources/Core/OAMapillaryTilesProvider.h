@@ -32,6 +32,8 @@
 #include <OsmAndCore/Map/ImageMapLayerProvider.h>
 #include <OsmAndCore/IWebClient.h>
 
+#define MAPILLARY_ACCESS_TOKEN @"MLY|4444816185556934|29475a355616c979409a5adc377a00fa"
+
 class SkCanvas;
 class SkPaint;
 

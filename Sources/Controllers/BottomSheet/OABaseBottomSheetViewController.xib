@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,6 +26,8 @@
                 <outlet property="sliderView" destination="Nec-3O-1tg" id="UNv-sw-B9F"/>
                 <outlet property="statusBarBackgroundView" destination="t3j-XO-sdM" id="2n9-97-oTF"/>
                 <outlet property="tableView" destination="hAJ-kw-6N6" id="T7i-2M-lRg"/>
+                <outlet property="tileLeftConstraint" destination="RRh-Xv-UK0" id="UvZ-DJ-zzG"/>
+                <outlet property="tileLeftNoIconConstraint" destination="jIk-iI-RlB" id="n02-xH-5OM"/>
                 <outlet property="titleView" destination="liQ-aq-IKF" id="p04-YV-xuk"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -93,6 +95,7 @@
                                                 <constraint firstAttribute="bottom" secondItem="zUj-mw-mBr" secondAttribute="bottom" priority="999" constant="13.5" id="Nlm-1S-JqO"/>
                                                 <constraint firstAttribute="bottom" secondItem="liQ-aq-IKF" secondAttribute="bottom" priority="999" constant="17" id="Ptt-aA-WBx"/>
                                                 <constraint firstItem="liQ-aq-IKF" firstAttribute="leading" secondItem="YEg-ba-U1g" secondAttribute="trailing" priority="999" constant="16" id="RRh-Xv-UK0"/>
+                                                <constraint firstItem="liQ-aq-IKF" firstAttribute="leading" secondItem="jZK-Dd-dDt" secondAttribute="leading" priority="1" constant="20" id="jIk-iI-RlB"/>
                                                 <constraint firstItem="zUj-mw-mBr" firstAttribute="leading" secondItem="liQ-aq-IKF" secondAttribute="trailing" priority="999" constant="16" id="lez-au-y7s"/>
                                                 <constraint firstAttribute="bottom" secondItem="YEg-ba-U1g" secondAttribute="bottom" priority="999" constant="13" id="qNr-HP-1Sm"/>
                                                 <constraint firstItem="liQ-aq-IKF" firstAttribute="top" secondItem="jZK-Dd-dDt" secondAttribute="top" priority="999" constant="9" id="vgv-bt-pAI"/>

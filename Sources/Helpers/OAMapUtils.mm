@@ -311,4 +311,14 @@
     return dx ? atan(dy/dx) : (dy < 0 ? M_PI_2 : -M_PI_2);
 }
 
++(double) getDistance:(CLLocationCoordinate2D)first second:(CLLocationCoordinate2D)second
+{
+    return OsmAnd::Utilities::distance(first.longitude, first.latitude, second.longitude, second.latitude);
+}
+
++(double) getDistance:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2
+{
+    return OsmAnd::Utilities::distance(lon1, lat1, lon2, lat2);
+}
+
 @end

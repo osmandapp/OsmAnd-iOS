@@ -9,14 +9,10 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
-#import "OAUtilities.h"
 #import "OADayNightHelper.h"
 #import "OAColors.h"
-#import "OANavigationIcon.h"
-#import "OALocationIcon.h"
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
-#import "OAImportExportSettingsConverter.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -201,6 +197,7 @@
 #define saveTrackPrecisionKey @"saveTrackPrecision"
 #define saveTrackMinSpeedKey @"saveTrackMinSpeed"
 #define autoSplitRecordingKey @"autoSplitRecording"
+#define saveHeadingToGpxKey @"saveHeadingToGpx"
 
 #define rulerModeKey @"rulerMode"
 #define showDistanceRulerKey @"showDistanceRuler"
@@ -296,6 +293,14 @@
 #define backupNativeDeviceIdKey @"backupNativeDeviceId"
 #define backupAccessTokenKey @"backupAccessToken"
 #define backupAccessTokenUpdateTimeKey @"backupAccessTokenUpdateTime"
+
+#define backupPromocodeKey @"backupPromocode"
+#define backupPromocodeActiveKey @"backupPromocodeActive"
+#define backupPromocodeStartTimeKey @"backupPromocodeStartTime"
+#define backupPromocodeExpireTimeKey @"backupPromocodeExpireTime"
+#define backupPromocodeStateKey @"backupPromocodeState"
+
+#define userIosIdKey @"userIosId"
 
 #define favoritesLastUploadedTimeKey @"favoritesLastUploadedTime"
 #define backupLastUploadedTimeKey @"backupLastUploadedTime"
@@ -426,7 +431,7 @@
         case MILES_AND_YARDS:
             return @"mi-y";
         case NAUTICAL_MILES:
-            return @"nm";
+            return @"units_nm";
 
         default:
             return @"";
@@ -516,17 +521,17 @@
     switch (sc)
     {
         case KILOMETERS_PER_HOUR:
-            return OALocalizedString(@"units_kmh");
+            return OALocalizedString(@"units_km_h");
         case MILES_PER_HOUR:
             return OALocalizedString(@"units_mph");
         case METERS_PER_SECOND:
-            return OALocalizedString(@"m_s");
+            return OALocalizedString(@"units_m_s");
         case MINUTES_PER_MILE:
-            return OALocalizedString(@"min_mile");
+            return OALocalizedString(@"units_min_mi");
         case MINUTES_PER_KILOMETER:
-            return OALocalizedString(@"min_km");
+            return OALocalizedString(@"units_min_km");
         case NAUTICALMILES_PER_HOUR:
-            return OALocalizedString(@"nm_h");
+            return OALocalizedString(@"units_nm_h");
 
         default:
             return nil;
@@ -3011,6 +3016,111 @@
 
 @end
 
+@interface OACommonUnit ()
+
+@property (nonatomic) NSUnit *defValue;
+
+@end
+
+@implementation OACommonUnit
+
++ (instancetype) withKey:(NSString *)key defValue:(NSUnit *)defValue
+{
+    OACommonUnit *obj = [[OACommonUnit alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (NSUnit *) get
+{
+    return [self get:self.appMode];
+}
+
+- (NSUnit *) get:(OAApplicationMode *)mode
+{
+    NSObject *value = [self getValue:mode];
+    return value ? (NSUnit *) value : self.defValue;
+}
+
+- (NSObject *) getValue:(OAApplicationMode *)mode
+{
+    NSObject *cachedValue = self.global ? self.cachedValue : [self.cachedValues objectForKey:mode];
+    if (!cachedValue)
+    {
+        NSString *key = [self getKey:mode];
+        cachedValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+
+        if ([cachedValue isKindOfClass:NSString.class])
+            cachedValue = [NSUnit unitFromString:cachedValue];
+
+        if ([cachedValue isKindOfClass:NSData.class])
+            cachedValue = [NSKeyedUnarchiver unarchivedObjectOfClass:NSUnit.class fromData:cachedValue error:nil];
+
+        if (self.global)
+            self.cachedValue = cachedValue;
+        else
+            [self.cachedValues setObject:cachedValue forKey:mode];
+    }
+    else if ([cachedValue isKindOfClass:NSString.class])
+    {
+        cachedValue = [NSUnit unitFromString:cachedValue];
+    }
+
+    if (!cachedValue)
+    {
+        cachedValue = [self getProfileDefaultValue:mode];
+    }
+    return cachedValue;
+}
+
+- (void) set:(NSUnit *)unit
+{
+    [self set:unit mode:self.appMode];
+}
+
+- (void) set:(NSUnit *)unit mode:(OAApplicationMode *)mode
+{
+    [self setValue:unit mode:mode];
+}
+
+- (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode
+{
+    NSUnit *unit = (NSUnit *) value;
+
+    if (self.global)
+        self.cachedValue = unit;
+    else
+        [self.cachedValues setObject:unit forKey:mode];
+
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:unit requiringSecureCoding:NO error:nil];
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:[self getKey:mode]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+}
+
+- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
+{
+    NSObject *value = [super getProfileDefaultValue:mode];
+    if ([value isKindOfClass:NSString.class])
+        value = [NSUnit unitFromString:value];
+    return value;
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    [self set:[NSUnit unitFromString:strValue] mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self get:mode].symbol;
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
@@ -3158,12 +3268,14 @@
         // TODO: redesign alert as in android to show/hide recorded trip on map
         _mapSettingShowRecordingTrack = [[[OACommonBoolean withKey:mapSettingShowRecordingTrackKey defValue:YES] makeGlobal] makeShared];
         _mapSettingShowTripRecordingStartDialog = [[[OACommonBoolean withKey:mapSettingShowTripRecordingStartDialogKey defValue:YES] makeGlobal] makeShared];
+        _saveHeadingToGpx = [OACommonBoolean withKey:saveHeadingToGpxKey defValue:NO];
 
         [_globalPreferences setObject:_mapSettingSaveGlobalTrackToGpx forKey:@"save_global_track_to_gpx"];
         [_profilePreferences setObject:_mapSettingSaveTrackIntervalGlobal forKey:@"save_global_track_interval"];
         [_profilePreferences setObject:_mapSettingSaveTrackIntervalApproved forKey:@"save_global_track_remember"];
         [_globalPreferences setObject:_mapSettingShowRecordingTrack forKey:@"show_saved_track_remember"];
         [_globalPreferences setObject:_mapSettingShowTripRecordingStartDialog forKey:@"show_trip_recording_start_dialog"];
+        [_globalPreferences setObject:_saveHeadingToGpx forKey:@"save_heading_to_gpx"];
 
         _selectedPoiFilters = [OACommonString withKey:selectedPoiFiltersKey defValue:@""];
         [_profilePreferences setObject:_selectedPoiFilters forKey:@"selected_poi_filter_for_map"];
@@ -3627,7 +3739,7 @@
         [_profilePreferences setObject:_distanceIndication forKey:@"map_markers_mode"];
         _arrowsOnMap = [OACommonBoolean withKey:mapArrowsOnMapKey defValue:NO];
         [_profilePreferences setObject:_arrowsOnMap forKey:@"show_arrows_to_first_markers"];
-        _directionLines = [OACommonBoolean withKey:mapDirectionLinesKey defValue:NO];
+        _directionLines = [OACommonBoolean withKey:mapDirectionLinesKey defValue:YES];
         [_profilePreferences setObject:_directionLines forKey:@"show_lines_to_first_markers"];
 
         // global
@@ -3675,6 +3787,10 @@
         [_globalPreferences setObject:_useLastApplicationModeByDefault forKey:@"use_last_application_mode_by_default"];
         [_globalPreferences setObject:_lastUsedApplicationMode forKey:@"last_used_application_mode"];
         [_globalPreferences setObject:_lastRouteApplicationMode forKey:@"last_route_application_mode_backup_string"];
+        
+        // TODO: not sure we need to override this setting with import/export
+        _userIosId = [[[OACommonString withKey:userIosIdKey defValue:@""] makeGlobal] makeShared];
+//        [_globalPreferences setObject:_userIosId forKey:@"user_android_id"];
 
         _onlineRoutingEngines = [[OACommonString withKey:onlineRoutingEnginesKey defValue:nil] makeGlobal];
         [_globalPreferences setObject:_onlineRoutingEngines forKey:@"online_routing_engines"];
@@ -3716,6 +3832,18 @@
         [_globalPreferences setObject:_backupNativeDeviceId forKey:@"backup_native_device_id"];
         [_globalPreferences setObject:_backupAccessToken forKey:@"backup_access_token"];
         [_globalPreferences setObject:_backupAccessTokenUpdateTime forKey:@"backup_access_token_update_time"];
+        
+        _backupPromocode = [[OACommonString withKey:backupPromocodeKey defValue:@""] makeGlobal];
+        _backupPromocodeActive = [[OACommonBoolean withKey:backupPromocodeActiveKey defValue:NO] makeGlobal];
+        _backupPromocodeStartTime = [[OACommonLong withKey:backupPromocodeStartTimeKey defValue:0] makeGlobal];
+        _backupPromocodeExpireTime = [[OACommonLong withKey:backupPromocodeExpireTimeKey defValue:0] makeGlobal];
+        _backupPromocodeState = [[OACommonInteger withKey:backupPromocodeStateKey defValue:0] makeGlobal];
+        
+        [_globalPreferences setObject:_backupPromocode forKey:@"backup_promocode"];
+        [_globalPreferences setObject:_backupPromocodeActive forKey:@"backup_promocode_active"];
+        [_globalPreferences setObject:_backupPromocodeStartTime forKey:@"promo_website_start_time"];
+        [_globalPreferences setObject:_backupPromocodeExpireTime forKey:@"promo_website_expire_time"];
+        [_globalPreferences setObject:_backupPromocodeState forKey:@"promo_website_state"];
 
         _favoritesLastUploadedTime = [[OACommonLong withKey:favoritesLastUploadedTimeKey defValue:0] makeGlobal];
         _backupLastUploadedTime = [[OACommonLong withKey:backupLastUploadedTimeKey defValue:0] makeGlobal];
@@ -4286,9 +4414,9 @@
     if (value == 0)
         res = OALocalizedString(@"rec_interval_minimum");
     else if (value > 90)
-        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"units_minutes_short")];
+        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"units_min")];
     else
-        res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"units_seconds_short")];
+        res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"units_sec")];
     return res;
 }
 

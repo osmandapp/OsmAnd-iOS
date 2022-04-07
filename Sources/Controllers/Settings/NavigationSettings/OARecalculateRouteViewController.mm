@@ -307,9 +307,9 @@
     [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
 }
 
-- (void) zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
+- (void) customPickerValueChanged:(NSString *)value tag:(NSInteger)pickerTag
 {
-    _selectedValue = [_valueSummaries indexOfObject:zoom];
+    _selectedValue = [_valueSummaries indexOfObject:value];
     _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
     _defaultValue = nil;
     [_settings.routeRecalculationDistance set:_possibleDistanceValues[_selectedValue].doubleValue mode:self.appMode];

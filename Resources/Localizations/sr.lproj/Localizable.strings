@@ -208,7 +208,7 @@
 
 // Route info
 
-"int_seconds" = "секунде";
+"units_seconds" = "секунде";
 "shared_string_never" = "Никад";
 "shared_setting_always_ask" = "Увек питај";
 "general_settings_2" = "Опште поставке";
@@ -406,11 +406,10 @@
 "si_min_km" = "Минута по километру";
 "si_min_m" = "Минута по миљи";
 "si_nm_h" = "Наутичких миља на сат (чворови)";
-"nm" = "нми";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "tones" = "тона";
 "nothing_found" = "Ништа није пронађено: %@";
 "nothing_found_empty" = "Ништа није пронађено";
@@ -1181,8 +1180,6 @@
 "srtm_download_list_help_message" = "OsmAndпружа податке о изохипсама у метрима и стопама. Мораћете поново да преузмете фајл да промените формат.";
 "shared_string_meters" = "метара";
 "shared_string_feet" = "стопе";
-"foot" = "ft";
-"m" = "m";
 
 // Menu
 "menu" = "Мени";
@@ -1477,14 +1474,15 @@
 
 // Units
 "units_km" = "km";
+"units_m" = "m";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
 "units_nm" = "нми";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "мин.";
 "units_sec" = "сек";
 "units_sec_short" = "s";
 "units_t" = "t";
@@ -1606,8 +1604,6 @@
 
 // Rendering attributes
 
-"units_minutes_short" = "min";
-"units_seconds_short" = "сек";
 "cannot_access_calendar" = "Није могуће приступити Календару";
 "reminder_not_set_text" = "Подсетник није постављен јер вам није дозвољен приступ Календару";
 
@@ -2333,7 +2329,6 @@
 "connect_rp" = "Повежи тачке руте";
 "shared_string_hide_all" = "Сакриј све";
 "points_delete_multiple" = "Обрисати %d тачку(е)?";
-"units_m" = "m";
 "white_color_undefined" = "Делови без података су бели.";
 "context_menu_edit_descr" = "Измени опис";
 "add_description" = "Додај опис";
@@ -2342,7 +2337,7 @@
 "map_settings_weather_precip" = "Падавине";
 "q_clear_weather_cache" = "Да ли желите да обришете кеш меморију за време?";
 "map_settings_weather_temp" = "Температура";
-"map_settings_weather" = "Време";
+"product_title_weather" = "Време";
 "map_settings_weather_pressure" = "Притисак";
 "map_settings_clear_geo_cache" = "Очисти гео плочице";
 "map_settings_clear_raster_cache" = "Очисти растерске плочице";
@@ -2371,3 +2366,30 @@
 "shared_string_open_street_map" = "ОпенСтритМап";
 "routing_attr_only_permitted_streets_name" = "Изричито дозвољене улице";
 "routing_attr_only_permitted_ways_description" = "Користите само путеве (траке, стазе, итд.) који су изричито дозвољени";
+"route_preferred_terrain_flat" = "Руте са равним рељефним профилом. Дужина се може повећати.";
+"route_preferred_terrain_any" = "Профил терена се не узима у обзир при избору руте.";
+"shared_string_any" = "Било који";
+"route_preferred_terrain_less_hilly" = "Краће, мање брдовите руте.";
+"preferred_terrain" = "Преферирани терен";
+"route_preferred_terrain_hilly" = "Руте са брдовитим профилом рељефа.";
+"start_point" = "Почетак";
+"altitude" = "Висина";
+"map_widget_speed" = "Брзина";
+"save_heading" = "Урачунај правац";
+"save_heading_descr" = "Сачувајте информације о правцу за сваку снимљену тачку";
+"select_tracks" = "Изаберите путање";
+"selected_tracks_count" = "Путање - %d";
+"delete_tracks_bottom_sheet_description_regular_part" = "Да ли сте сигурни да желите да избришете ";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d путања?";
+"delete_tracks_bottom_sheet_title" = "Избрисати путање?";
+"routing_attr_avoid_low_emission_zone_name" = "Нема зона ниске емисије";
+"routing_attr_avoid_low_emission_zone_description" = "Избегава зоне ниске емисије";
+"routing_attr_avoid_tunnels_name" = "Нема тунела";
+"routing_attr_avoid_tunnels_description" = "Избегава тунеле";
+"map_settings_weather_isolines" = "Изолиније";
+"obf_import_already_exists_short" = "Датотека са овим именом већ постоји.";
+"gpx_import_already_exists_short" = "Наведена датотека путање већ постоји на листи.";
+"rendering_attr_showRunningRoutes_name" = "Активне руте";
+"rendering_attr_showRunningRoutes_description" = "Приказ активних рута";
+"rendering_attr_showFitnessTrails_name" = "Фитнес стазе";
+"rendering_attr_showFitnessTrails_description" = "Приказ стаза за фитнес";

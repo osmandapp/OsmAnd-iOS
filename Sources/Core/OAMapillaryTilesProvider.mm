@@ -32,14 +32,13 @@
 
 #define EXTENT 4096.0
 #define LINE_WIDTH 3.0f
-#define MAPILLARY_ACCESS_TOKEN "MLY|4444816185556934|29475a355616c979409a5adc377a00fa"
 
 #define MAX_SEQUENCE_LAYER_ZOOM 13
 
 OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFactor /* = 1.0f*/, const unsigned long long physicalMemory /*= 0*/)
 : _vectorName(QStringLiteral("mapillary_vector"))
 , _vectorPathSuffix(QString(_vectorName).replace(QRegExp(QLatin1String("\\W+")), QLatin1String("_")))
-, _vectorUrlPattern(QStringLiteral("https://tiles.mapillary.com/maps/vtp/mly1_public/2/${osm_zoom}/${osm_x}/${osm_y}/?access_token=") + MAPILLARY_ACCESS_TOKEN)
+, _vectorUrlPattern(QStringLiteral("https://tiles.mapillary.com/maps/vtp/mly1_public/2/${osm_zoom}/${osm_x}/${osm_y}/?access_token=") + QString::fromNSString(MAPILLARY_ACCESS_TOKEN))
 , _vectorZoomLevel(OsmAnd::ZoomLevel14)
 , _webClient(std::shared_ptr<const OsmAnd::IWebClient>(new OAWebClient()))
 , _networkAccessAllowed(true)

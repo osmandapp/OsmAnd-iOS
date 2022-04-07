@@ -27,6 +27,7 @@
 #import "QuadRect.h"
 #import "OAMapUtils.h"
 #import "OARouteImporter.h"
+#import "OAAppVersionDependentConstants.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -472,6 +473,7 @@ colorizationScheme:(int)colorizationScheme
             }
         }
     }
+
     return lineWidth * kWidthCorrectionValue;
 }
 
@@ -739,7 +741,7 @@ colorizationScheme:(int)colorizationScheme
             const auto& doc = activeGpx[QString::fromNSString(item.docPath)];
             if (doc != nullptr)
             {
-                doc->saveTo(QString::fromNSString(item.docPath));
+                doc->saveTo(QString::fromNSString(item.docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
                 docs[QString::fromNSString(item.docPath)] = doc;
                 [self refreshGpxTracks:docs];
@@ -766,7 +768,7 @@ colorizationScheme:(int)colorizationScheme
         return [OAFavoritesLayer getImageWithColor:point.color background:point.point.getBackgroundIcon icon:[@"mx_" stringByAppendingString:point.point.getIcon]];
     }
     OAFavoriteColor *def = [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject];
-    return [OAFavoritesLayer getImageWithColor:def.color background:@"circle" icon:[@"mx_" stringByAppendingString:@"special_star"]];
+    return [OAFavoritesLayer getImageWithColor:def.color background:@"circle" icon:[@"mx_" stringByAppendingString:DEFAULT_ICON_NAME]];
 }
 
 - (void) setPointVisibility:(id)object hidden:(BOOL)hidden

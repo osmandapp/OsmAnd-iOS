@@ -27,15 +27,17 @@
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
 #import "OAProfileAppearanceViewController.h"
 #import "OACopyProfileBottomSheetViewControler.h"
 #import "OADeleteProfileBottomSheetViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 #import "OAMapWidgetRegistry.h"
 #import "OASettingsItem.h"
-#import "OAProfileSettingsItem.h"
+#import "OARendererRegistry.h"
 #import "OAExportItemsViewController.h"
+#import "OAIndexConstants.h"
+#import "OAWeatherPlugin.h"
+#import "OAWeatherSettingsViewController.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"
@@ -157,7 +159,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : tripRec.getName,
             @"img" : @"ic_custom_trip",
-            @"key" : @"trip_rec"
+            @"key" : kTrackRecordingSettings
         }];
     }
     
@@ -168,7 +170,17 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : osmEdit.getName,
             @"img" : @"ic_custom_osm_edits",
-            @"key" : @"osm_edits"
+            @"key" : kOsmEditsSettings
+        }];
+    }
+    OAPlugin *weather = [OAPlugin getEnabledPlugin:OAWeatherPlugin.class];
+    if (weather)
+    {
+        [plugins addObject:@{
+            @"type" : [OAIconTextDescCell getCellIdentifier],
+            @"title" : weather.getName,
+            @"img" : @"ic_custom_umbrella",
+            @"key" : kWeatherSettings
         }];
     }
     
@@ -392,6 +404,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             settingsScreen = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:_appMode];
         else if ([targetScreenKey isEqualToString:kOsmEditsSettings])
             settingsScreen = [[OAOsmEditingSettingsViewController alloc] init];
+        else if ([targetScreenKey isEqualToString:kWeatherSettings])
+            settingsScreen = [[OAWeatherSettingsViewController alloc] init];
 
         if (settingsScreen)
             [self.navigationController pushViewController:settingsScreen animated:YES];
@@ -584,17 +598,17 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         if (appMode.isCustomProfile)
         {
             [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
-            NSString *fileName = [self getBackupFileForCustomMode: appMode.stringKey];
+            NSString *fileName = [self getBackupFileForCustomMode:appMode.stringKey];
             if ([[NSFileManager defaultManager] fileExistsAtPath:fileName])
                 [self restoreCustomModeFromFile:fileName];
         }
         else
         {
             [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
-            [self resetMapStylesForBaseProfile:appMode];
             [self showAlertMessage:OALocalizedString(OALocalizedString(@"profile_prefs_reset_successful"))];
             [self updateCopiedOrResetPrefs];
         }
+        [self resetMapStylesForProfile:appMode];
     }
 }
 
@@ -604,12 +618,18 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [OASettingsHelper.sharedInstance collectSettings:filePath latestChanges:@"" version:1 delegate:self];
 }
 
-- (void) resetMapStylesForBaseProfile:(OAApplicationMode *)appMode
+- (void) resetMapStylesForProfile:(OAApplicationMode *)appMode
 {
     NSString *renderer = [OAAppSettings.sharedManager.renderer get:appMode];
-    NSString *resName = [OAProfileSettingsItem getRendererByName:renderer];
-    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:appMode.variantKey];
-    [styleSettings resetMapStyleForAppMode:appMode.variantKey];
+    NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
+	OAMapSource *source = [[OAMapSource alloc] initWithResource:[[mapStyleInfo[@"id"] lowercaseString] stringByAppendingString:RENDERER_INDEX_EXT]
+													 andVariant:appMode.variantKey
+														   name:mapStyleInfo[@"title"]];
+	[[OsmAndApp instance].data setLastMapSource:source mode:appMode];
+
+	OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:mapStyleInfo[@"id"]
+																		mapPresetName:appMode.variantKey];
+	[styleSettings resetMapStyleForAppMode:appMode.variantKey];
 }
 
 

@@ -11,14 +11,12 @@
 #import "OASettingsImporter.h"
 #import "OASettingsExporter.h"
 #import "OASettingsItemType.h"
-#import "OAExportSettingsType.h"
 #import "OARootViewController.h"
 #import "OAIndexConstants.h"
 #import "OAPluginSettingsItem.h"
 #import "OARendererRegistry.h"
 #import "Localization.h"
 #import "OAImportSettingsViewController.h"
-#import "OAExportSettingsType.h"
 #import "OAExportSettingsCategory.h"
 #import "OASettingsCategoryItems.h"
 #import "OrderedDictionary.h"
@@ -333,7 +331,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *resourcesItems = [MutableOrderedDictionary new];
     
-    NSArray<NSString *> *mapStyleFiles = [OARendererRegistry getExternalRenderers];
+    NSArray<NSString *> *mapStyleFiles = [OARendererRegistry getPathExternalRenderers];
     if (mapStyleFiles.count > 0)
         resourcesItems[OAExportSettingsType.CUSTOM_RENDER_STYLE] = mapStyleFiles;
     NSFileManager *fileManager = NSFileManager.defaultManager;

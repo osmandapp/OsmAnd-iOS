@@ -12,7 +12,7 @@
 #import "OARoutingHelper.h"
 #import "OsmAndApp.h"
 #import "OAStateChangedListener.h"
-#import "PXAlertView.h"
+#import "OAAlertBottomSheetViewController.h"
 #import "OAUtilities.h"
 #import "Localization.h"
 #import "OAPointDescription.h"
@@ -113,7 +113,10 @@
             }
             else
             {
-                [PXAlertView showAlertWithTitle:OALocalizedString(@"impassable_road") message:OALocalizedString(@"error_avoid_specific_road")];
+                [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"impassable_road")
+                                                           titleIcon:@"ic_custom_alert"
+                                                             message:OALocalizedString(@"error_avoid_specific_road")
+                                                         cancelTitle:OALocalizedString(@"shared_string_ok")];
             }
         });
 

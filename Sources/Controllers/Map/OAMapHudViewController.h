@@ -60,6 +60,7 @@
 - (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left;
 - (void) resetToDefaultRulerLayout;
 - (void) updateMapRulerData;
+- (void) updateMapRulerDataWithDelay;
 
 - (void) setToolbar:(OAToolbarViewController *)toolbarController;
 - (void) updateToolbarLayout:(BOOL)animated;
@@ -74,7 +75,7 @@
 - (void) updateOverlayUnderlayView;
 
 - (void) setTopControlsAlpha:(CGFloat)alpha;
-- (void) showTopControls;
+- (void) showTopControls:(BOOL)onlyMapSettingsAndSearch;
 - (void) hideTopControls;
 - (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated;
 - (void) hideBottomControls:(CGFloat)menuHeight animated:(BOOL)animated;

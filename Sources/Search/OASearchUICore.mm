@@ -5,6 +5,8 @@
 //  Created by Alexey Kulish on 11/01/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+//  OsmAnd-java/src/net/osmand/search/core/SearchUICore.java
+//  git revision 5bcaa01259c937fa29741117b23f89776a1098c6
 
 #import "OASearchUICore.h"
 
@@ -25,6 +27,7 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ICU.h>
 
+static const int SEARCH_PRIORITY_COEF = 10;
 static const double TIMEOUT_BETWEEN_CHARS = 0.7;  // seconds
 static const double TIMEOUT_BEFORE_SEARCH = 0.05; // seconds
 static const double TIMEOUT_BEFORE_FILTER = 0.02; // seconds
@@ -118,6 +121,18 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
         {
             // here we check how much each sub search result matches the phrase
             // also we sort it by type house -> street/poi -> city/postcode/village/other
+            
+            OASearchPhrase *ph = o1.requiredSearchPhrase;
+            double o1PhraseWeight = o1.unknownPhraseMatchWeight;
+            double o2PhraseWeight = o2.unknownPhraseMatchWeight;
+            if (o1PhraseWeight == o2PhraseWeight && o1PhraseWeight / SEARCH_PRIORITY_COEF > 1)
+            {
+                if (!![[ph getUnknownWordToSearchBuildingNameMatcher] matches:o1.localeName])
+                    o1PhraseWeight--;
+                if (![[ph getUnknownWordToSearchBuildingNameMatcher] matches:o2.localeName])
+                    o2PhraseWeight--;
+            }
+            
             if (o1.unknownPhraseMatchWeight != o2.unknownPhraseMatchWeight)
             {
                 return [OAUtilities compareDouble:o2.unknownPhraseMatchWeight y:o1.unknownPhraseMatchWeight];

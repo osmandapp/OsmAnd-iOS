@@ -146,13 +146,13 @@
             }
             case EOASettingsItemFileSubtypeRoutingConfig:
             {
-                if ([name hasSuffix:@".xml"] && ![name hasSuffix:@".render.xml"])
+                if ([name hasSuffix:@".xml"] && ![name hasSuffix:RENDERER_INDEX_EXT])
                     return subtype;
                 break;
             }
             case EOASettingsItemFileSubtypeRenderingStyle:
             {
-                if ([name hasSuffix:@".render.xml"])
+                if ([name hasSuffix:RENDERER_INDEX_EXT])
                     return subtype;
                 break;
             }

@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OAExportItemsViewController : OABaseSettingsListViewController
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
+- (instancetype) initWithTracks:(NSArray<NSString *> *)tracks;
 
 @end
 

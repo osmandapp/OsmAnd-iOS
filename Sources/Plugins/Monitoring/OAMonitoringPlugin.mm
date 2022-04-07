@@ -20,10 +20,11 @@
 #import "Localization.h"
 #import "OASavingTrackHelper.h"
 #import "OAUtilities.h"
-#import "PXAlertView.h"
-#import "OATrackIntervalDialogView.h"
 #import "OAMapViewController.h"
 #import "OAOsmAndFormatter.h"
+#import "OAAlertBottomSheetViewController.h"
+#import "OARecordSettingsBottomSheetViewController.h"
+#import "OARootViewController.h"
 
 #define PLUGIN_ID kInAppId_Addon_TrackRecording
 
@@ -257,169 +258,142 @@
     BOOL recOn = _settings.mapSettingTrackRecording;
     if (recOn)
     {
-        [PXAlertView showAlertWithTitle:OALocalizedString(@"track_recording")
-                                message:nil
-                            cancelTitle:OALocalizedString(@"shared_string_cancel")
-                            otherTitles:@[ OALocalizedString(@"track_stop_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"track_new_segment"), OALocalizedString(@"track_save") ]
-                              otherDesc:nil
-                            otherImages:@[@"track_recording_stop.png", @"icon_info.png", @"track_new_segement.png" , @"track_save.png"]
-                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                 if (!cancelled)
-                                 {
-                                     switch (buttonIndex)
-                                     {
-                                         case 0:
-                                         {
-                                             _settings.mapSettingTrackRecording = NO;
-                                             break;
-                                         }
-                                         case 1:
-                                         {
-                                             [[self getMapPanelViewController] openTargetViewWithGPX:nil];
-                                             break;
-                                         }
-                                         case 2:
-                                         {
-                                             [_recHelper startNewSegment];
-                                             break;
-                                         }
-                                         case 3:
-                                         {
-                                             if ([_recHelper hasDataToSave] && _recHelper.distance < 10.0)
-                                             {
-                                                 [PXAlertView showAlertWithTitle:OALocalizedString(@"track_save_short_q")
+        [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_recording")
+                                                   titleIcon:@"ic_custom_route"
+                                                 cancelTitle:OALocalizedString(@"shared_string_cancel")
+                                       selectableItemsTitles:@[ OALocalizedString(@"track_stop_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"track_new_segment"), OALocalizedString(@"track_save") ]
+                                       selectableItemsImages:@[@"track_recording_stop.png", @"icon_info.png", @"track_new_segement.png" , @"track_save.png"]
+                                          selectColpletition:^(NSInteger selectedIndex) {
+            
+                switch (selectedIndex)
+                {
+                    case 0:
+                    {
+                        _settings.mapSettingTrackRecording = NO;
+                        break;
+                    }
+                    case 1:
+                    {
+                        [[self getMapPanelViewController] openTargetViewWithGPX:nil];
+                        break;
+                    }
+                    case 2:
+                    {
+                        [_recHelper startNewSegment];
+                        break;
+                    }
+                    case 3:
+                    {
+                        if ([_recHelper hasDataToSave] && _recHelper.distance < 10.0)
+                        {
+                            [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_save_short_q")
+                                                                       titleIcon:@"ic_custom_route"
                                                                          message:nil
                                                                      cancelTitle:OALocalizedString(@"shared_string_no")
-                                                                      otherTitle:OALocalizedString(@"shared_string_yes")
-                                                                       otherDesc:nil
-                                                                      otherImage:nil
-                                                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                                                          if (!cancelled) {
-                                                                              _settings.mapSettingTrackRecording = NO;
-                                                                              [self saveTrack:YES];
-                                                                              [_monitoringControl updateInfo];
-                                                                          }
-                                                                      }];
-                                             }
-                                             else
-                                             {
-                                                 _settings.mapSettingTrackRecording = NO;
-                                                 [self saveTrack:YES];
-                                             }
-                                             break;
-                                         }
-                                         default:
-                                             break;
-                                     }
-                                     [_monitoringControl updateInfo];
-                                 }
-                             }];
-        
+                                                                       doneTitle:OALocalizedString(@"shared_string_yes")
+                                                                doneColpletition:^{
+                                
+                                    _settings.mapSettingTrackRecording = NO;
+                                    [self saveTrack:YES];
+                                    [_monitoringControl updateInfo];
+                            }];
+                        }
+                        else
+                        {
+                            _settings.mapSettingTrackRecording = NO;
+                            [self saveTrack:YES];
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                [_monitoringControl updateInfo];
+        }];
     }
     else
     {
         if ([_recHelper hasData])
         {
-            [PXAlertView showAlertWithTitle:OALocalizedString(@"track_recording")
-                                    message:nil
-                                cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                otherTitles:@[OALocalizedString(@"track_continue_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"track_clear"), OALocalizedString(@"track_save")]
-                                  otherDesc:nil
-                                otherImages:@[@"ic_action_rec_start.png", @"icon_info.png", @"track_clear_data.png", @"track_save.png"]
-                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                     if (!cancelled) {
-                                         switch (buttonIndex) {
-                                             case 0:
-                                             {
-                                                 [_recHelper startNewSegment];
-                                                 _settings.mapSettingTrackRecording = YES;
-                                                 break;
-                                             }
-                                             case 1:
-                                             {
-                                                 [[self getMapPanelViewController] openTargetViewWithGPX:nil];
-                                                 break;
-                                             }
-                                             case 2:
-                                             {
-                                                 [PXAlertView showAlertWithTitle:OALocalizedString(@"track_clear_q")
-                                                                         message:nil
+            [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_recording")
+                                                       titleIcon:@"ic_custom_route"
+                                                     cancelTitle:nil
+                                           selectableItemsTitles:@[OALocalizedString(@"track_continue_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"track_clear"), OALocalizedString(@"track_save")]
+                                           selectableItemsImages:@[@"ic_action_rec_start.png", @"icon_info.png", @"track_clear_data.png", @"track_save.png"]
+                                              selectColpletition:^(NSInteger selectedIndex) {
+                
+                switch (selectedIndex) {
+                    case 0:
+                    {
+                        [_recHelper startNewSegment];
+                        _settings.mapSettingTrackRecording = YES;
+                        break;
+                    }
+                    case 1:
+                    {
+                        [[self getMapPanelViewController] openTargetViewWithGPX:nil];
+                        break;
+                    }
+                    case 2:
+                    {
+                        [OAAlertBottomSheetViewController showAlertWithTitle:nil
+                                                                   titleIcon:nil
+                                                                     message:OALocalizedString(@"track_clear_q")
+                                                                 cancelTitle:OALocalizedString(@"shared_string_no")
+                                                                   doneTitle:OALocalizedString(@"shared_string_yes")
+                                                            doneColpletition:^{
+                            [_recHelper clearData];
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [[self getMapViewController] hideContextPinMarker];
+                                [[self getMapViewController] hideRecGpxTrack];
+                                [_monitoringControl updateInfo];
+                            });
+                        }];
+                        break;
+                    }
+                    case 3:
+                    {
+                        if ([_recHelper hasDataToSave] && _recHelper.distance < 10.0)
+                        {
+                            [OAAlertBottomSheetViewController showAlertWithTitle:nil
+                                                                       titleIcon:nil
+                                                                         message:OALocalizedString(@"track_save_short_q")
                                                                      cancelTitle:OALocalizedString(@"shared_string_no")
-                                                                      otherTitle:OALocalizedString(@"shared_string_yes")
-                                                                       otherDesc:nil
-                                                                      otherImage:nil
-                                                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                                                          if (!cancelled)
-                                                                          {
-                                                                              [_recHelper clearData];
-                                                                              dispatch_async(dispatch_get_main_queue(), ^{
-                                                                                  [[self getMapViewController] hideContextPinMarker];
-                                                                                  [[self getMapViewController] hideRecGpxTrack];
-                                                                                  [_monitoringControl updateInfo];
-                                                                              });
-                                                                          }
-                                                                      }];
-                                                 break;
-                                             }
-                                             case 3:
-                                             {
-                                                 if ([_recHelper hasDataToSave] && _recHelper.distance < 10.0)
-                                                 {
-                                                     [PXAlertView showAlertWithTitle:OALocalizedString(@"track_save_short_q")
-                                                                             message:nil
-                                                                         cancelTitle:OALocalizedString(@"shared_string_no")
-                                                                          otherTitle:OALocalizedString(@"shared_string_yes")
-                                                                           otherDesc:nil
-                                                                          otherImage:nil
-                                                                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                                                              if (!cancelled)
-                                                                              {
-                                                                                  [self saveTrack:NO];
-                                                                                  [_monitoringControl updateInfo];
-                                                                              }
-                                                                          }];
-                                                 }
-                                                 else
-                                                 {
-                                                     [self saveTrack:NO];
-                                                 }
-                                                 break;
-                                             }
-                                                 
-                                             default:
-                                                 break;
-                                         }
-                                         [_monitoringControl updateInfo];
-                                     }
-                                 }];
+                                                                       doneTitle:OALocalizedString(@"shared_string_yes")
+                                                                doneColpletition:^{
+                                [self saveTrack:NO];
+                                [_monitoringControl updateInfo];
+                            }];
+                        }
+                        else
+                        {
+                            [self saveTrack:NO];
+                        }
+                        break;
+                    }
+                        
+                    default:
+                        break;
+                }
+                [_monitoringControl updateInfo];
+            }];
         }
         else
         {
             if (![_settings.mapSettingSaveTrackIntervalApproved get])
             {
-                OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 176.0)];
-                
-                [PXAlertView showAlertWithTitle:OALocalizedString(@"track_start_rec")
-                                        message:nil
-                                    cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                     otherTitle:OALocalizedString(@"shared_string_ok")
-                                      otherDesc:nil
-                                     otherImage:nil
-                                    contentView:view
-                                     completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                         
-                                         if (!cancelled)
-                                         {
-                                             [_settings.mapSettingSaveTrackIntervalGlobal set:[_settings.trackIntervalArray[[view getInterval]] intValue]];
-                                             if (view.swRemember.isOn)
-                                                 [_settings.mapSettingSaveTrackIntervalApproved set:YES];
+                OARecordSettingsBottomSheetViewController *bottomSheet = [[OARecordSettingsBottomSheetViewController alloc] initWithCompletitionBlock:^(int recordingInterval, BOOL rememberChoice, BOOL showOnMap) {
+                    
+                    [_settings.mapSettingSaveTrackIntervalGlobal set:[_settings.trackIntervalArray[recordingInterval] intValue]];
+                    if (rememberChoice)
+                        [_settings.mapSettingSaveTrackIntervalApproved set:YES];
 
-                                             [_settings.mapSettingShowRecordingTrack set:view.swShowOnMap.isOn];
-                                             
-                                             _settings.mapSettingTrackRecording = YES;
-                                         }
-                                         [_monitoringControl updateInfo];
-                                     }];
+                    [_settings.mapSettingShowRecordingTrack set:showOnMap];
+                    _settings.mapSettingTrackRecording = YES;
+                    [_monitoringControl updateInfo];
+                }];
+                
+                [bottomSheet presentInViewController:OARootViewController.instance];
             }
             else
             {
@@ -447,17 +421,14 @@
     
     if (askForRec)
     {
-        [PXAlertView showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
-                                message:nil
-                            cancelTitle:OALocalizedString(@"shared_string_no")
-                             otherTitle:OALocalizedString(@"shared_string_yes")
-                              otherDesc:nil
-                             otherImage:nil
-                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                 if (!cancelled) {
-                                     _settings.mapSettingTrackRecording = YES;
-                                 }
-                             }];
+        [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
+                                                   titleIcon:@"ic_custom_route"
+                                                     message:nil
+                                                 cancelTitle:OALocalizedString(@"shared_string_no")
+                                                   doneTitle:OALocalizedString(@"shared_string_yes")
+                                            doneColpletition:^{
+            _settings.mapSettingTrackRecording = YES;
+        }];
     }
 }
 

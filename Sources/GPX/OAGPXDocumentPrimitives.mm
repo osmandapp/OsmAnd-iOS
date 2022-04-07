@@ -208,10 +208,23 @@
     }
     for (OAGpxExtension *es in e.subextensions)
     {
-        std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> subextension(new OsmAnd::GpxExtensions::GpxExtension());
-        [self fillExtension:subextension ext:es];
-        extension->subextensions.push_back(subextension);
-        subextension = nullptr;
+        BOOL exist = NO;
+        for (auto &_es : extension->subextensions)
+        {
+            if (_es->name == QString::fromNSString(es.name))
+            {
+                exist = YES;
+                [self fillExtension:_es ext:es];
+                break;
+            }
+        }
+        if (!exist)
+        {
+            std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> subextension(new OsmAnd::GpxExtensions::GpxExtension());
+            [self fillExtension:subextension ext:es];
+            extension->subextensions.push_back(subextension);
+            subextension.reset();
+        }
     }
 }
 
@@ -219,10 +232,23 @@
 {
     for (OAGpxExtension *e in self.extensions)
     {
-        std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> extension(new OsmAnd::GpxExtensions::GpxExtension());
-        [self fillExtension:extension ext:e];
-        extensions->extensions.push_back(extension);
-        extension = nullptr;
+        BOOL exist = NO;
+        for (auto &_e : extensions->extensions)
+        {
+            if (_e->name == QString::fromNSString(e.name))
+            {
+                exist = YES;
+                [self fillExtension:_e ext:e];
+                break;
+            }
+        }
+        if (!exist)
+        {
+            std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> extension(new OsmAnd::GpxExtensions::GpxExtension());
+            [self fillExtension:extension ext:e];
+            extensions->extensions.push_back(extension);
+            extension.reset();
+        }
     }
 }
 
@@ -291,6 +317,7 @@
         self.speed = 0;
         self.horizontalDilutionOfPrecision = NAN;
         self.verticalDilutionOfPrecision = NAN;
+        self.heading = NAN;
         self.distance = 0.0;
     }
     return self;
@@ -299,7 +326,7 @@
 - (NSString *)getIcon
 {
     NSString *value = [self getExtensionByKey:ICON_NAME_EXTENSION].value;
-    return value ? value : @"special_star";
+    return value ? value : DEFAULT_ICON_NAME;
 }
 
 - (void)setIcon:(NSString *)iconName
@@ -311,6 +338,11 @@
 {
     NSString *value = [self getExtensionByKey:BACKGROUND_TYPE_EXTENSION].value;
     return value ? value : @"circle";
+}
+
+- (void)setBackgroundIcon:(NSString *)backgroundIconName
+{
+    [self setExtension:BACKGROUND_TYPE_EXTENSION value:backgroundIconName];
 }
 
 - (NSString *)getAddress
@@ -443,6 +475,9 @@
 
     if (self.time != wptPt.time)
         return NO;
+    
+    if (self.heading != wptPt.heading)
+        return NO;
 
     if (!self.type && wptPt.type)
         return NO;
@@ -460,6 +495,7 @@
     result = 31 * result + (self.name ? [self.name hash] : 0);
     result = 31 * result + (self.desc ? [self.desc hash] : 0);
     result = 31 * result + (self.type ? [self.type hash] : 0);
+    result = 31 * result + [@(self.heading) hash];
     return result;
 }
 
@@ -484,19 +520,19 @@
     return self;
 }
 
-- (instancetype) initWithGpxExtension:(OAGpxExtension *)ext
+- (instancetype) initWithRteSegment:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteSegment> &)seg
 {
     self = [super init];
     if (self) {
-        _identifier = ext.attributes[@"id"];
-        _length = ext.attributes[@"length"];
-        _segmentTime = ext.attributes[@"segmentTime"];
-        _speed = ext.attributes[@"speed"];
-        _turnType = ext.attributes[@"turnType"];
-        _turnAngle = ext.attributes[@"turnAngle"];
-        _types = ext.attributes[@"types"];
-        _pointTypes = ext.attributes[@"pointTypes"];
-        _names = ext.attributes[@"names"];
+        _identifier = seg->id.toNSString();
+        _length = seg->length.toNSString();
+        _segmentTime = seg->segmentTime.toNSString();
+        _speed = seg->speed.toNSString();
+        _turnType = seg->turnType.toNSString();
+        _turnAngle = seg->turnAngle.toNSString();
+        _types = seg->types.toNSString();
+        _pointTypes = seg->pointTypes.toNSString();
+        _names = seg->names.toNSString();
     }
     return self;
 }
@@ -572,12 +608,12 @@
     return self;
 }
 
-- (instancetype) initWithGpxExtension:(OAGpxExtension *)ext
+- (instancetype) initWithRteType:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteType> &)type
 {
     self = [super init];
     if (self) {
-        _tag = ext.attributes[@"t"];
-        _value = ext.attributes[@"v"];
+        _tag = type->tag.toNSString();
+        _value = type->value.toNSString();
     }
     return self;
 }
@@ -646,23 +682,15 @@
 
 - (void) fillRouteDetails
 {
-    for (OAGpxExtension *ext in self.extensions)
+    if (self.trkseg)
     {
-        if ([ext.name isEqualToString:@"route"])
+        for (auto& rteSeg : self.trkseg->routeSegments)
         {
-            _routeSegments = [NSMutableArray new];
-            for (OAGpxExtension *subext in ext.subextensions)
-            {
-                [_routeSegments addObject:[[OARouteSegment alloc] initWithGpxExtension:subext]];
-            }
+            [_routeSegments addObject:[[OARouteSegment alloc] initWithRteSegment:rteSeg]];
         }
-        if ([ext.name isEqualToString:@"types"])
+        for (auto& rteType : self.trkseg->routeTypes)
         {
-            _routeTypes = [NSMutableArray new];
-            for (OAGpxExtension *subext in ext.subextensions)
-            {
-                [_routeTypes addObject:[[OARouteType alloc] initWithGpxExtension:subext]];
-            }
+            [_routeTypes addObject:[[OARouteType alloc] initWithRteType:rteType]];
         }
     }
 }

@@ -26,8 +26,10 @@
 - (instancetype) initWithParameterGroup:(OALocalRoutingParameterGroup *) group
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _group = group;
+        _indexSelected = [[_group getRoutingParameters] indexOfObject:[_group getSelected]];
     }
     return self;
 }
@@ -74,6 +76,24 @@
 
 - (void)doneButtonPressed
 {
+    OALocalRoutingParameter *useElevation;
+    if (_group.getRoutingParameters.count > 0
+            && ([[NSString stringWithUTF8String:_group.getRoutingParameters.firstObject.routingParameter.id.c_str()] isEqualToString:kRouteParamIdHeightObstacles]))
+        useElevation = _group.getRoutingParameters.firstObject;
+    BOOL anySelected = NO;
+
+    for (NSInteger i = 0; i < _group.getRoutingParameters.count; i++)
+    {
+        OALocalRoutingParameter *param = _group.getRoutingParameters[i];
+        if (i == _indexSelected && param == useElevation)
+            anySelected = YES;
+
+        [param setSelected:i == _indexSelected && !anySelected];
+    }
+    if (useElevation)
+        [useElevation setSelected:!anySelected];
+    [self.routingHelper recalculateRouteDueToSettingsChange];
+
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -118,9 +138,8 @@
         [cell.textView setText:text];
         [cell showImage:icon != nil];
         cell.iconView.image = icon;
-        if (_group.getSelected == param)
+        if (indexPath.row == _indexSelected)
         {
-            _indexSelected = indexPath.row;
             [cell.arrowIconView setImage:color
                     ? [UIImage templateImageNamed:@"menu_cell_selected"]
                     : [UIImage imageNamed:@"menu_cell_selected"]];
@@ -146,24 +165,9 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    OALocalRoutingParameter *useElevation;
-    if (_group.getRoutingParameters.count > 0
-            && ([[NSString stringWithUTF8String:_group.getRoutingParameters.firstObject.routingParameter.id.c_str()] isEqualToString:kRouteParamIdHeightObstacles]))
-        useElevation = _group.getRoutingParameters.firstObject;
-    BOOL anySelected = NO;
-
-    for (NSInteger i = 0; i < _group.getRoutingParameters.count; i++)
-    {
-        OALocalRoutingParameter *param = _group.getRoutingParameters[i];
-        if (i == indexPath.row && param == useElevation)
-            anySelected = YES;
-
-        [param setSelected:i == indexPath.row && !anySelected];
-    }
-    if (useElevation)
-        [useElevation setSelected:!anySelected];
-    [self.routingHelper recalculateRouteDueToSettingsChange];
-    [tableView reloadData];
+    _indexSelected = indexPath.row;
+    [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+             withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

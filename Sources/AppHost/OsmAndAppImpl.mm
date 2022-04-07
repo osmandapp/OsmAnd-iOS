@@ -40,6 +40,7 @@
 #import "OAIndexConstants.h"
 #import "OALocationConvert.h"
 #import "OAWeatherHelper.h"
+#import "OAGPXDatabase.h"
 
 #include <algorithm>
 
@@ -71,6 +72,7 @@
 
 #define VERSION_3_10 3.10
 #define VERSION_3_14 3.14
+#define VERSION_4_2 4.2
 
 #define kAppData @"app_data"
 
@@ -86,19 +88,10 @@
     std::shared_ptr<OsmAnd::IWebClient> _webClient;
 
     OAAutoObserverProxy* _downloadsManagerActiveTasksCollectionChangeObserver;
-    
-    NSString *_unitsKm;
-    NSString *_unitsm;
-    NSString *_unitsMi;
-    NSString *_unitsYd;
-    NSString *_unitsFt;
-    NSString *_unitsNm;
-    NSString *_unitsKmh;
-    NSString *_unitsMph;
-    
+
     BOOL _firstLaunch;
     UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
-    
+
     BOOL _carPlayActive;
 }
 
@@ -107,6 +100,7 @@
 @synthesize documentsPath = _documentsPath;
 @synthesize documentsDir = _documentsDir;
 @synthesize gpxPath = _gpxPath;
+@synthesize inboxPath = _inboxPath;
 @synthesize cachePath = _cachePath;
 
 @synthesize initialURLMapState = _initialURLMapState;
@@ -151,21 +145,12 @@
         _documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         _documentsDir = QDir(QString::fromNSString(_documentsPath));
         _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
+        _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
 
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
 
         [self buildFolders];
-        
-        // Init units localization
-        _unitsKm = OALocalizedString(@"units_km");
-        _unitsm = OALocalizedString(@"units_m");
-        _unitsMi = OALocalizedString(@"units_mi");
-        _unitsYd = OALocalizedString(@"units_yd");
-        _unitsFt = OALocalizedString(@"units_ft");
-        _unitsNm = OALocalizedString(@"units_nm");
-        _unitsKmh = OALocalizedString(@"units_kmh");
-        _unitsMph = OALocalizedString(@"units_mph");
-        
+
         [self initOpeningHoursParser];
 
         // First of all, initialize user defaults
@@ -409,6 +394,11 @@
         {
             [OAAppSettings.sharedManager.availableApplicationModes set:@"car,bicycle,pedestrian,public_transport,"];
         }
+        if (prevVersion < VERSION_4_2)
+        {
+            [OAGPXDatabase.sharedDb save];
+            [OAGPXDatabase.sharedDb load];
+        }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }
@@ -570,12 +560,9 @@
 
 - (void) instantiateWeatherResourcesManager
 {
-    OAWeatherHelper *weatherHelper = [OAWeatherHelper sharedInstance];
-    QHash<OsmAnd::BandIndex, float> bandOpacityMap = [weatherHelper getBandOpacityMap];
-    QHash<OsmAnd::BandIndex, QString> bandColorProfilePaths = [weatherHelper getBandColorProfilePaths];
+    QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>> bandSettings; // init later
     _resourcesManager->instantiateWeatherResourcesManager(
-        bandOpacityMap,
-        bandColorProfilePaths,
+        bandSettings,
         QString::fromNSString(_cachePath),
         QString::fromNSString([NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj"]),
         256,
@@ -1039,6 +1026,21 @@
     
     if (drg)
         [[OAAppSettings sharedManager].drivingRegion set:drg.region];
+}
+
+- (NSString *) getUserIosId
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSString *userIosId = settings.userIosId.get;
+    if (userIosId.length > 0)
+        return userIosId;
+    userIosId = [UIDevice.currentDevice.identifierForVendor.UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    if (userIosId == nil)
+    {
+        userIosId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    }
+    [settings.userIosId set:userIosId];
+    return userIosId;
 }
 
 @end

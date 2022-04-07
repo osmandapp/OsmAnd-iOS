@@ -235,15 +235,15 @@
 "cannot_add_marker_desc" = "Pro piaghere boga a su mancu una diretzione e torra a proare";
 "cannot_add_destination" = "Impossìbile annanghere una diretzione";
 // Units
-"units_km" = "km";
+"km" = "km";
 "units_m" = "m";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "min.";
 "units_sec" = "seg";
 // Map
 "map_inst_det_map_q" = "Installa sa mapa generale a sa minuda pro tènnere prus informatziones chi pertocant sas positziones tuas.";
@@ -286,8 +286,6 @@
 "region_south_america" = "Sud Amèrica";
 // Help
 "help_quiz" = "Cuiz (Quiz)";
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "cannot_access_calendar" = "Impossìbile atzèdere a su Calendàriu";
 "reminder_not_set_text" = "Su promemòria no est istadu impostadu proite no est istadu possìbile atzedere a su Calendàriu";
 //inapps
@@ -520,11 +518,11 @@
 "si_min_km" = "Minutos a su chilòmetru";
 "si_min_m" = "Minutos a su mìlliu";
 "si_nm_h" = "Mìllias nàuticas a s'ora (knots)";
-"nm" = "nmi";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "nmi";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "towards" = "cara a";
 "route_roundabout" = "Rutunda: piga sa %1$d essida e sighi";
 "route_roundabout_short" = "Piga sa %d essida e sighi";
@@ -630,7 +628,7 @@
 "speak_favorites" = "Preferidos a curtzu";
 "speak_poi" = "PDI a curtzu";
 "speak_pedestrian" = "Atraessamentos pedonales";
-"int_seconds" = "segundos";
+"units_seconds" = "segundos";
 "shared_string_never" = "Mai";
 "general_settings_2" = "Impostatziones generales";
 "general_settings_descr" = "Tema de s'aplicatzione, unidades, regione";
@@ -1965,7 +1963,6 @@
 "key_hint_recenter_map" = "Torra a tzentrare sa mapa";
 "shared_z_a" = "Z - A";
 "shared_a_z" = "A - Z";
-"units_nm" = "nmi";
 "select_application_profile" = "Ischerta su profilu de s'aplicatzione";
 "change_application_profile" = "Càmbia su profilu de s'aplicatzione";
 "quick_action_showhide_mapillary_descr" = "Incarchende custu butone as a ammustrare o cuare s'istratu de Mapillary in sa mapa.";
@@ -2155,7 +2152,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Colora sasàndalas in base a sa casta de nodu de retza issoro (internatzionale, regionale, locale).";
 "walking_route_osmc_description" = "Colora sasàndalas in base a sos colores locales individuales issoro (si bi sunt in OpenStreetMap) e a sa casta issoro (internatzionales, regionales, locales).";
 "travel_routes" = "Àndalas de biàgiu";
-"foot" = "ft";
 "shared_string_feet" = "pees";
 "srtm_download_list_help_message" = "OsmAnd frunit datos de sas curvas de livellu in metros e in pees. As a dèpere torrare a iscarrigare su documentu pro mudare su formadu.";
 "srtm_download_single_help_message" = "Pro praghere ischerta sa variante. As a dèpere torrare a iscarrigare su documentu pro mudare su formadu.";
@@ -2240,7 +2236,6 @@
 "lang_jv" = "Giavanesu";
 "lang_hr" = "Croatu";
 "lang_uz" = "Uzbecu";
-"m" = "m";
 "lang_pl" = "Polacu";
 "lang_ku" = "Kurdu";
 "lang_ja" = "Giapponesu";
@@ -2359,5 +2354,60 @@
 "map_settings_clear_geo_cache" = "Isbòida sos tasseddos geogràficos";
 "map_settings_clear_raster_cache" = "Isbòida sos tasseddos raster";
 "q_clear_weather_cache" = "Boles isboidare sa memòria temporànea de su mèteu?";
-"map_settings_weather" = "Mèteu";
+"product_title_weather" = "Mèteu";
 "map_settings_weather_wind" = "Bentu";
+"routeInfo_winter_ice_road_description" = "Colora s'àndala o sa lìnia de sa rasta sighende sa classificatzione de su caminu ierrile suo.";
+"preferred_terrain" = "Terrinu preferidu";
+"routing_attr_allow_gate_name" = "Permite s'impreu de cantzellos";
+"routing_attr_allow_gate_description" = "Permite s'impreu de cantzellos";
+"routing_attr_only_permitted_streets_name" = "Carreras autorizadas a manera espressa";
+"routing_attr_only_permitted_ways_description" = "Imprea petzi caminos (pistas, àndalas etz.) chi sunt autorizados a manera espressa";
+"routeInfo_surface_description" = "Fruni informatziones in subra de sa superfìtzie fìsica de sos caminos e de sas camineras pro andare a pee.";
+"routeInfo_smoothness_description" = "Classificatzione de s'usabilidade fìsica de unu caminu pro veìculos a rodas, mescamente pro su chi pertocat a sa regularidade e a sa pranaridade de sas superfìtzies.";
+"routeInfo_tracktype_description" = "Colora s'àndala o sa una lìnia de rasta sighende sa cumpositzione de sa superfìtzie sua. Aplicada de sòlitu cando sa retza de caminos est pro su prus non pamentada.";
+"routeInfo_roadClass_description" = "Colora s'àndala o sa lìnia de sa rasta sighende sa classificatzione de su caminu.";
+"shared_string_open_street_map" = "OpenStreetMap";
+"navigate_point_format_MGRS" = "MGRS";
+"mgrs_description" = "OsmAnd impreat su formadu MGRS chi est idènticu a su UTM NATO.";
+"start_point" = "Incumintza";
+"altitude" = "Artària";
+"map_widget_speed" = "Lestresa";
+"save_heading" = "Include sa diretzione";
+"save_heading_descr" = "Sarva sa diretzione pro cada puntu cando ses registrende";
+"route_preferred_terrain_hilly" = "Àndalas cun unu profilu de rilievos cun montigros.";
+"route_preferred_terrain_flat" = "Àndalas cun unu profilu de rilievos pranu. Sa longària diat pòdere crèschere.";
+"route_preferred_terrain_any" = "Su profilu de su terrinu non benit pigadu in cunsideru durante s'issèberu de un'àndala.";
+"routing_attr_only_permitted_streets_description" = "Imprea petzi carreras chi sunt autorizadas a manera espressa";
+"route_preferred_terrain_less_hilly" = "Àndalas prus curtzas e cun prus pagu montigros.";
+"shared_string_min_height" = "Artària mìn.";
+"shared_string_max_height" = "Artària màss.";
+"routing_attr_prefer_horse_routes_description" = "Preferi sas àndalas pro andare a caddu";
+"shared_string_any" = "Totus";
+"ltr_or_rtl_combine_via_dash" = "%@ - %@";
+"routing_attr_only_permitted_ways_name" = "Caminos autorizados a manera espressa";
+"routing_attr_prefer_horse_routes_name" = "Preferi sas àndalas a caddu";
+"horseback_riding" = "Ecuitatzione";
+
+// Units
+"units_km" = "km";
+"customize_route_line" = "Personaliza sa lìnia de s'àndala";
+"route_line_use_map_style_color" = "Imprea su colore predefinidu de s'istile de sa mapa (%@).";
+"route_line_use_map_style_width" = "Imprea sa largària predefinida de s'istile de sa mapa (%@).";
+"turn_arrows" = "Fritzas de bortada";
+"turn_arrows_descr" = "Controlla sa visibilidade de sas fritzas de bortada in sa lìnia de s'àndala.";
+"routing_attr_avoid_low_emission_zone_name" = "Peruna zona a emissiones bassas";
+"routing_attr_avoid_low_emission_zone_description" = "Istransit sas zonas a emissiones bassas";
+"routing_attr_avoid_tunnels_name" = "Peruna galleria";
+"routing_attr_avoid_tunnels_description" = "Istransit sas gallerias";
+"select_tracks" = "Ischerta rastas";
+"selected_tracks_count" = "Rastas - %d";
+"delete_tracks_bottom_sheet_description_regular_part" = "Ses seguru de chèrrere iscantzellare ";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d rastas?";
+"delete_tracks_bottom_sheet_title" = "Iscantzellare sas rastas?";
+"gpx_import_already_exists_short" = "Su documentu de rasta dislindadu esistit giai in sa lista.";
+"rendering_attr_showRunningRoutes_name" = "Àndalas de cursa";
+"rendering_attr_showRunningRoutes_description" = "Ammustra sas àndalas de cursa";
+"rendering_attr_showFitnessTrails_name" = "Camineras de allenamentu";
+"rendering_attr_showFitnessTrails_description" = "Ammustra sas camineras de allenamentu";
+"map_settings_weather_isolines" = "Isolìnias";
+"obf_import_already_exists_short" = "Esistit giai unu documentu cun custu nùmene.";

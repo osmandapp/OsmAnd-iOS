@@ -17,6 +17,7 @@
 #import "OATableViewCustomHeaderView.h"
 
 #define kDefaultArchiveName @"Export"
+#define kMyPlacesSectionIndex 1
 
 @implementation OAExportItemsViewController
 {
@@ -30,6 +31,7 @@
     long _itemsSize;
     NSString *_fileSize;
     NSString *_headerLabel;
+    BOOL _shouldOpenMyPlacesOnInit;
 }
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)appMode
@@ -38,6 +40,17 @@
     if (self)
     {
         _appMode = appMode;
+    }
+    return self;
+}
+
+- (instancetype)initWithTracks:(NSArray<NSString *> *)tracks
+{
+    self = [super init];
+    if (self)
+    {
+        self.selectedItemsMap[OAExportSettingsType.TRACKS] = tracks;
+        _shouldOpenMyPlacesOnInit = YES;
     }
     return self;
 }
@@ -87,6 +100,16 @@
     [self generateData];
     [self updateSelectedProfile];
     [self updateControls];
+}
+
+- (void) generateData
+{
+    [super generateData];
+    if (_shouldOpenMyPlacesOnInit)
+    {
+        self.data[kMyPlacesSectionIndex].isOpen = YES;
+        _shouldOpenMyPlacesOnInit = NO;
+    }
 }
 
 - (NSString *)descriptionText
@@ -241,6 +264,25 @@
 
 - (void)onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed {
     [self.navigationController popViewControllerAnimated:YES];
+    
+    if (succeed)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OARootViewController *rootVC = [OARootViewController instance];
+            
+            UIActivityViewController *activityViewController =
+            [[UIActivityViewController alloc] initWithActivityItems:@[[NSURL fileURLWithPath:file]]
+                                              applicationActivities:nil];
+            
+            activityViewController.popoverPresentationController.sourceView = rootVC.view;
+            activityViewController.popoverPresentationController.sourceRect = CGRectMake(CGRectGetMidX(rootVC.view.bounds), CGRectGetMidY(rootVC.view.bounds), 0., 0.);
+            activityViewController.popoverPresentationController.permittedArrowDirections = 0;
+            
+            [rootVC presentViewController:activityViewController
+                                 animated:YES
+                               completion:nil];
+        });
+    }
 }
 
 @end

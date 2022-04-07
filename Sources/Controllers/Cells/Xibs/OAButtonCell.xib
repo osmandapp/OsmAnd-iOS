@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -47,6 +47,7 @@
             <inset key="separatorInset" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
                 <outlet property="button" destination="hcA-mw-eMe" id="APy-Of-RYs"/>
+                <outlet property="buttonHeight" destination="Ebz-hm-bCX" id="jiZ-ip-vrg"/>
                 <outlet property="buttonLeadingNoIcon" destination="oX8-lo-f6f" id="tDp-7T-up8"/>
                 <outlet property="buttonLeadingToIcon" destination="DS3-5P-oBS" id="tuH-vq-XZ0"/>
                 <outlet property="iconView" destination="cci-Fd-2dH" id="Vso-68-mnK"/>

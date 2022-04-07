@@ -143,7 +143,7 @@
 "device_memory" = "Pamięć urządzenia";
 "free_memory" = "Wolne %@";
 "gpx_waypoint" = "Punkt trasy";
-"gpx_start" = "Rozpocznij";
+"gpx_start" = "Start";
 "gpx_finish" = "Koniec trasy";
 "gpx_max_speed" = "Prędkość maksymalna";
 "gpx_speed" = "Prędkość";
@@ -272,8 +272,11 @@
 "parking_time_limited" = "Czas parkowania ograniczony do";
 // Units
 "units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
 "units_yd" = "yd";
-"units_kmh" = "km/h";
+"units_ft" = "stopy";
+"units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
 "units_min" = "min";
@@ -345,10 +348,6 @@
 "time_left" = "pozostało";
 "time_overdue" = "czas przekroczony";
 "cannot_add_marker" = "Nie można dodać Parkingu";
-"units_m" = "m";
-"units_mi" = "mi";
-"units_ft" = "stopy";
-"units_minutes_short" = "min";
 "product_title_track_recording" = "Nagrywanie trasy";
 "product_title_wiki" = "Wikipedia";
 "product_title_srtm" = "Poziomice";
@@ -498,11 +497,11 @@
 "si_min_km" = "Minuty na kilometr";
 "si_min_m" = "Minuty na milę";
 "si_nm_h" = "Mile morskie na godzinę (węzły)";
-"nm" = "Mm";
-"nm_h" = "nmi/h";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_nm" = "Mm";
+"units_nm_h" = "nmi/h";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "map_orientation_change_in_accordance_with_speed" = "Próg zmiany orientacji mapy";
 "map_orientation_change_in_accordance_with_speed_descr" = "Wybiera prędkość, poniżej której orientacja mapy zmieni się z „względem kierunku ruchu” na „względem kompasu”";
 "shared_string_topbar" = "Górny pasek";
@@ -578,7 +577,7 @@
 "speak_favorites" = "Najbliższe ulubione miejsca";
 "speak_poi" = "Pobliskie użyteczne miejsca";
 "speak_pedestrian" = "Przejścia dla pieszych";
-"int_seconds" = "sekund";
+"units_seconds" = "sekund";
 "shared_string_never" = "Nigdy";
 "general_settings_2" = "Ustawienia globalne";
 "general_settings_descr" = "Motyw aplikacji, jednostki, region";
@@ -640,7 +639,6 @@
 // Map
 "map_inst_det_map_q" = "Zainstaluj mapę szczegółową, by dostać więcej informacji o twojej lokalizacji.";
 "import_choose_type" = "Proszę wybrać elementy do zaimportowania";
-"units_seconds_short" = "sek";
 "reminder_not_set_text" = "Przypomnienie nie zostało ustawione, ponieważ nie masz praw dostępu do kalendarza";
 "do_not_send_anonymous_data_desc" = "Nie zbieramy danych o lokalizacji, tylko wykorzystanie aplikacji i statystyki pobierania map.";
 "product_title_skimap" = "Mapa tras narciarskich";
@@ -1693,7 +1691,7 @@
 "preview_of_selected_zoom_levels" = "Podgląd wybranego powiększenia";
 "download_size" = "Rozmiar pobierania";
 "number_of_tiles" = "Liczbę kafelków";
-"move_map_to_select_area" = "Przesuń mapę do potrzebnego terenu.";
+"move_map_to_select_area" = "Przesuń mapę, aby wybrać żądany obszar.";
 "announce" = "Zapowiedź";
 "update_map" = "Uaktualnij mapę";
 "shared_string_meters" = "metry";
@@ -1915,7 +1913,6 @@
 "delete_custom_categories" = "Usuń niestandardową kategorię";
 "add_custom_category" = "Dodaj niestandardową kategorię";
 "search_preogress" = "Szukanie…";
-"units_nm" = "Mm";
 "unsupported_action_title" = "Nieobsługiwana czynność (%@)";
 "hide_coordinates" = "Ukryj współrzędne";
 "show_coordinates" = "Pokaż współrzędne";
@@ -2159,7 +2156,6 @@
 "search_more" = "Wyszukaj więcej…";
 "routes_color_by_type" = "Kolor trasy według…";
 "download_map_dialog" = "Dialog pobierania map";
-"m" = "m";
 "dialogs_and_notifications" = "Dialogi i powiadomienia";
 "gpxup_trackable" = "Z opcją śledzenia";
 "app_restart_required" = "Wymagane ponowne uruchomienie aplikacji w celu zastosowania niektórych ustawień.";
@@ -2180,7 +2176,6 @@
 "service" = "Usługi";
 "shared_strings_all_regions" = "Wszystkie regiony";
 "suggested_maps_descr" = "Wtyczka wymaga wymienionych map.";
-"foot" = "stopy";
 "shared_string_all_languages" = "Wszystkie języki";
 "rendering_value_walkingRoutesOSMC_description" = "Przypisz kolor trasom na podstawie ich indywidualnie przypisanego lokalnie koloru (jeśli dostępny w OpenStreetMap) i symbolu odznaki turystycznej.";
 "explore_wikipedia_offline" = "Przeglądaj Wikipedię w trybie offline.";

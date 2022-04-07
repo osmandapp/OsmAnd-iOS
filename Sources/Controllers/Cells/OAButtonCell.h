@@ -14,7 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonLeadingToIcon;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonLeadingNoIcon;
-
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonHeight;
 -(void)showImage:(BOOL)show;
 
 @end

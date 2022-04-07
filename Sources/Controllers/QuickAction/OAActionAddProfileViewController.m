@@ -7,16 +7,9 @@
 //
 
 #import "OAActionAddProfileViewController.h"
-#import "OAActionConfigurationViewController.h"
 #import "Localization.h"
 #import "OAMenuSimpleCell.h"
-#import "OASizes.h"
 #import "OsmAndApp.h"
-#import "OAIAPHelper.h"
-#import "OAMapSource.h"
-#import "OAApplicationMode.h"
-#import "OAAppSettings.h"
-#import "OAMapStyleTitles.h"
 #import "OAProfileDataObject.h"
 #import "OAProfileDataUtils.h"
 

@@ -219,7 +219,7 @@
 "units_mi" = "mérföld";
 "units_yd" = "yard";
 "units_ft" = "láb";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mérföld/óra";
 "units_hour" = "ó";
 "units_min" = "perc";
@@ -272,8 +272,6 @@
 "rendering_category_transport" = "Tömegközlekedés";
 "rendering_category_others" = "Egyéb térképtulajdonságok";
 // Rendering attributes
-"units_minutes_short" = "perc";
-"units_seconds_short" = "mp.";
 "cannot_access_calendar" = "Nem lehet hozzáférni a naptárhoz";
 "reminder_not_set_text" = "Az emlékeztető nem lett beállítva, mivel nem engedélyezte a naptárhoz való hozzáférést";
 //inapps
@@ -502,14 +500,14 @@
 "towards" = "erre:";
 "route_roundabout" = "Körforgalom: %d. kijárat, majd menj";
 "route_roundabout_short" = "Hajts ki a(z) %d kijáraton és menj";
-"route_kl" = "Tarts balraés menj";
-"route_kr" = "Tarts jobbraés menj";
-"route_tr" = "Fordulj jobbraés menj";
-"route_tshr" = "Forduljélesen jobbra és menj";
-"route_tslr" = "Fordulj enyhén jobbra és menj";
-"route_tl" = "Fordulj balraés menj";
-"route_tshl" = "Forduljélesen balra és menj";
-"route_tsll" = "Fordulj enyhén balra és menj";
+"route_kl" = "Tartson balra és haladjon tovább itt";
+"route_kr" = "Tartson jobbra és haladjon tovább itt";
+"route_tr" = "Forduljon jobbra és haladjon tovább itt";
+"route_tshr" = "Forduljon élesen jobbra és haladjon tovább itt";
+"route_tslr" = "Forduljon enyhén jobbra és haladjon tovább itt";
+"route_tl" = "Forduljon balra és haladjon tovább itt";
+"route_tshl" = "Forduljon élesen balra és haladjon tovább itt";
+"route_tsll" = "Forduljon enyhén balra és haladjon tovább itt";
 "route_tu" = "Forduljon meg, és menjen tovább";
 "route_head" = "Előre";
 "looking_up_address" = "Cím keresése";
@@ -524,7 +522,7 @@
 "traffic_warning_railways" = "Vasúti átjáró";
 "traffic_warning_pedestrian" = "Gyalogosátkelő";
 "traffic_warning_hazard" = "Veszély";
-"driving_region" = "Vezetési terület";
+"driving_region" = "Vezetési régió";
 "driving_region_japan" = "Japán";
 "driving_region_us" = "USA";
 "driving_region_canada" = "Kanada";
@@ -538,17 +536,17 @@
 "si_mi_meters" = "Mérföld/méter";
 "si_km_m" = "Kilométer/méter";
 "si_nm" = "Tengeri mérföld";
-"si_kmh" = "Kilométer per óra";
-"si_mph" = "Mérföld per óra";
-"si_m_s" = "Méter per másodperc";
-"si_min_km" = "Perc per kilométer";
-"si_min_m" = "Perc per mérföld";
+"si_kmh" = "km/h";
+"si_mph" = "Mérföld/h";
+"si_m_s" = "m/s";
+"si_min_km" = "perc/km";
+"si_min_m" = "Perc/mérföld";
 "si_nm_h" = "Tengeri mérföld per óra (csomó)";
-"nm" = "tengeri mérföld";
-"nm_h" = "tengeri mérföld/óra";
-"min_mile" = "perc/mérföld";
-"min_km" = "perc/km";
-"m_s" = "m/s";
+"units_nm" = "tengeri mérföld";
+"units_nm_h" = "tengeri mérföld/óra";
+"units_min_mi" = "perc/mérföld";
+"units_min_km" = "perc/km";
+"units_m_s" = "m/s";
 "nothing_found" = "Nincs találat: %@";
 "select_street" = "Utca kijelölése";
 "shared_string_in_name" = "itt: %@";
@@ -559,9 +557,9 @@
 "coords_search" = "Koordináta keresés";
 "nearest_cities" = "Közeli települések";
 "type_address" = "Cím megadása";
-"search_poi_category_hint" = "Gépelj az összes kereséséhez";
+"search_poi_category_hint" = "Gépeljen az összes kereséséhez";
 "map_orientation_change_in_accordance_with_speed_descr" = "Válassza ki, mekkora sebességnél váltson a térkép forgatása „Mozgás iránya”-ról „Iránytű”-re";
-"map_orientation_change_in_accordance_with_speed" = "Térkép tájolásának küszöbértéke";
+"map_orientation_change_in_accordance_with_speed" = "Térképforgatást kiváltó küszöbérték";
 "unit_of_length_descr" = "Hosszmértékegység megváltoztatása.";
 "coords_format_descr" = "Földrajzi koordináták formátuma.";
 "save_global_track_interval_descr" = "Válasszon naplózási időközt az általános útrögzítéshez (a térképen lévő GPX naplózó felületi elemen keresztül engedélyezve).";
@@ -575,7 +573,7 @@
 "map_widget_left" = "Bal oldali panel";
 "confirm_usage_speed_cameras" = "Néhány országban (Németország, Franciaország, Olaszország és még néhány) tilos a traffipax figyelmeztetés használata! Az OsmAnd nem vállal felelősséget a helyi szabályok megsértéséért. Koppints az Igen gombra, ha jogosult vagy a funkció használatára.";
 "speak_speed_limit" = "Sebességkorlátozás";
-"keep_informing_never" = "Csak kézzel (koppintás a nyílra)";
+"keep_informing_never" = "Csak kérve (koppintás a nyílra)";
 "app_mode_aircraft" = "Repülőgép";
 "targets" = "Célpontok";
 "search_radius_proximity" = "Ezen belül";
@@ -610,8 +608,8 @@
 "shared_string_search" = "Keresés";
 "save_global_track_interval" = "Általános naplózási intervallum";
 "map_widget_magnetic_bearing" = "Mágneses irány";
-"map_widget_bearing" = "Relatív irány";
-"map_widget_appearance_rem" = "Hátralévő elemek";
+"map_widget_bearing" = "Relatív irányszög";
+"map_widget_appearance_rem" = "További elemek";
 "map_widget_battery" = "Akkumulátor töltöttsége";
 "shared_string_collapse" = "Összecsukás";
 "shared_string_topbar" = "Felső sáv";
@@ -643,7 +641,7 @@
 "shared_string_sound" = "Hang";
 "show_traffic_warnings" = "Forgalmi figyelmeztetések";
 "speak_favorites" = "Közeli Kedvencek";
-"int_seconds" = "másodperc";
+"units_seconds" = "másodperc";
 "fast_route_mode" = "Leggyorsabbútvonal";
 "choose_auto_follow_route" = "Automatikus követés ideje";
 "keep_informing" = "Navigációs utasítások ismétlése";
@@ -700,15 +698,15 @@
 "routing_settings" = "Navigáció";
 "show_cameras" = "Traffipaxok";
 "show_lanes" = "Sávok";
-"speak_street_names" = "Utcanevek (TTS)";
-"speak_cameras" = "Traffipax";
+"speak_street_names" = "Utcanevek (csak TTS)";
+"speak_cameras" = "Traffipaxok";
 "speak_traffic_warnings" = "Forgalmi figyelmeztetések";
 "auto_zoom_none" = "Nincs automatikus nagyítás";
 "auto_zoom_close" = "Közelre";
 "auto_zoom_far" = "Közepes távolságra";
 "auto_zoom_farthest" = "Nagy távolságra";
 "arrival_distance_factor_early" = "Korán";
-"arrival_distance_factor_normally" = "Rendesen";
+"arrival_distance_factor_normally" = "Szokásos";
 "arrival_distance_factor_late" = "Későn";
 "arrival_distance_factor_at_last" = "Az utolsó métereken";
 "snap_to_road" = "Úthoz illesztés";
@@ -722,9 +720,9 @@
 "map_widget_altitude" = "Magasság";
 "map_widget_intermediate_distance" = "Köztes célpont";
 "map_widget_compass" = "Iránytű";
-"map_widget_next_turn" = "Következő kereszteződés";
-"map_widget_next_turn_small" = "Következő kereszteződés (kicsi)";
-"map_widget_next_next_turn" = "Következő utáni kereszteződés";
+"map_widget_next_turn" = "Következő kanyarodás";
+"map_widget_next_turn_small" = "Következő kanyarodás (kicsi)";
+"map_widget_next_next_turn" = "Második kanyarodás";
 "map_widget_transparent" = "Átlátszó widgetek";
 "settings_preset_descr" = "Az egyes felhasználási profilok megjegyzik a térképnézetet és a navigációs beállításokat. Alapértelmezett profilját itt adhatja meg.";
 "rotate_map_to_bearing" = "Térkép forgatása";
@@ -763,9 +761,9 @@
 "mapillary_image" = "Mapillary-fénykép";
 "shared_string_reset" = "Visszaállítás";
 "shared_string_reload" = "Újratöltés";
-"day" = "napra";
-"days_2_4" = "napra";
-"days_5" = "napra";
+"day" = "nappal";
+"days_2_4" = "nap";
+"days_5" = "nap";
 "week" = "hétre";
 "weeks_2_4" = "hétre";
 "weeks_5" = "hétre";
@@ -1065,7 +1063,7 @@
 "rendering_value_translucent_green_name" = "Átlátszó zöld";
 "rendering_attr_surface_grass_name" = "Fű";
 "rendering_attr_tracktype_grade1_name" = "Szilárd (burkolt)";
-"routing_attr_allow_private_description" = "Magánterület használatának engedélyezése.";
+"routing_attr_allow_private_description" = "Magánterületen való áthaladás engedélyezése.";
 "routing_attr_weight_description" = "Adja meg azútvonalakon a járművekre vonatkozó súlykorlátozást.";
 "rendering_attr_showRoadMaps_description" = "Válassza ki, mikor jelenjenek meg a csak-út térképek:";
 "routing_attr_piste_type_downhill_name" = "Alpesi sí/lesiklás";
@@ -1090,7 +1088,7 @@
 "rendering_attr_hmRendered_name" = "Több térképrészlet megjelenítése";
 "rendering_value_medium_w_name" = "Közepes";
 "rendering_attr_coloredBuildings_name" = "Épületek színezése típus szerint";
-"routeInfo_steepness_name" = "Lejtés";
+"routeInfo_steepness_name" = "Meredekség";
 "routing_attr_piste_type_skitour_name" = "Sítúrázás";
 "rendering_attr_highway_class_state_road_name" = "Főút";
 "rendering_value_purple_name" = "Lila";
@@ -1133,7 +1131,7 @@
 "rendering_attr_alpineHiking_description" = "Ösvények megjelenítése az SAC nehézségi skála szerint.";
 "rendering_attr_highway_class_footway_name" = "Gyalogút";
 "rendering_value_germanRoadAtlas_name" = "Német autós atlasz";
-"routeInfo_smoothness_name" = "Simaság";
+"routeInfo_smoothness_name" = "Útminőség";
 "rendering_attr_hideNonVehicleHighways_name" = "Gyalogutak";
 "routing_attr_allow_classic_only_name" = "Csak klasszikusútvonalak engedélyezése";
 "rendering_attr_hikingRoutesOSMC_name" = "Turistautak";
@@ -1323,7 +1321,7 @@
 "configure_profile" = "Profil testreszabása";
 "profile_type_base_string" = "Alapprofil";
 "export_profile" = "Profil exportálása";
-"default_speed_dialog_msg" = "Azérkezési időt becsüli ismeretlen úttípus esetén, valamint korlátozza a sebességet valamennyi úttípusnál (az útvonalat befolyásolhatja)";
+"default_speed_dialog_msg" = "Az érkezési idő becsléséhez ismeretlen úttípus esetén, valamint korlátozza a sebességet valamennyi úttípusnál (ez befolyásolhatja az útvonaltervezést is)";
 "selected_profile" = "Kiválasztott profil";
 "profile_appearance" = "Profil megjelenése";
 "profile_type_custom_string" = "Egyéni profil";
@@ -1497,7 +1495,7 @@
 "special" = "Különleges";
 "emergency" = "Vészhelyzet";
 "extra_maps" = "Egyéb térképek";
-"add_custom_category" = "Egyedi kategória hozzáadása";
+"add_custom_category" = "Egyéni kategória hozzáadása";
 "shared_string_disable" = "Letiltás";
 "split_before" = "Elvágás előtte";
 "shared_string_import" = "Importálás";
@@ -1518,7 +1516,6 @@
 "favorite_friends_category" = "Barátok";
 "fav_points_not_exist" = "Még nincsenek Kedvenc pontok";
 "plan_route_select_folder" = "Mappa kijelölése";
-"units_nm" = "tengeri mérföld";
 "search_history" = "Keresési előzmények";
 "markers_history" = "Jelölők előzményei";
 "favorite_places_category" = "Helyek";
@@ -1590,11 +1587,9 @@
 "last_intermediate_dest_description" = "Hozzáadja az útvonal utolsó megállóját";
 "first_intermediate_dest_description" = "Hozzáadja az útvonal első megállóját";
 "allow_3d_descr" = "Engedélyezze ezt a beállítást, hogy a térképet 2,5D perspektívában láthassa";
-"m" = "m";
 "suggested_maps_descr" = "A bővítményhez szükség van ezekre a térképekre.";
 "welmode_download_maps" = "Térképek letöltése";
 "navigate_point_northing" = "Északi";
-"foot" = "láb";
 "routes_color_by_type" = "Útvonalak színezése…";
 "added_profiles" = "Hozzáadott profilok";
 "search_more" = "További keresés…";
@@ -1605,7 +1600,7 @@
 "srtm_download_list_help_message" = "Az OsmAnd méterben és lábban adja meg a szintvonalak magasságát. A mértékegység módosításához újra le kell töltenie a fájlt.";
 "shared_string_feet" = "láb";
 "product_title_openplacereviews" = "OpenPlaceReviews";
-"contour_lines_hillshades_slope" = "Szintvonalak, domborzat, lejtés";
+"contour_lines_hillshades_slope" = "Szintvonalak, domborzat, lejtviszony";
 "product_desc_ext_mapillary" = "Online utcaszintű fényképek mindenkinek. Fedezzen fel helyeket, dolgozzon együtt másokkal, örökítse meg a világot.";
 "navigate_point_olc" = "Open Location Code (OLC)";
 "route_between_points_warning_desc" = "Ezután a beállítás használatához igazítsa a nyomvonalat a legközelebbi úthoz az egyik navigációs profil segítségével.";
@@ -1652,3 +1647,12 @@
 "speak_descr" = "Utcanevek, forgalmi figyelmeztetések (stoptáblák, fekvőrendőrök), sebességmérő kamerák, sebességhatárok bemondásának beállítása";
 "lang_pnb" = "pandzsábi";
 "lang_zh_hk" = "kínai (Hong Kong)";
+"routeInfo_winter_ice_road_description" = "Útvonal vagy nyomvonal színezése a téli használatra való besorolása szerint.";
+
+// Shared Strings
+"shared_string_custom" = "Egyéni";
+"shared_string_open_street_map" = "OpenStreetMap";
+"customize_route_line" = "Útvonaljelző-csík testreszabása";
+"routeInfo_tracktype_description" = "Útvonal vagy nyomvonal színezése a felületi összetétele alapján. Alkalmazása a főleg burkolatlan utakból álló úthálózat esetében jellemző.";
+"number_of_tiles" = "Csempék száma";
+"move_map_to_select_area" = "Mozgassa a térképet a kívánt terület kijelöléséhez.";

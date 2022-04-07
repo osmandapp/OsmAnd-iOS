@@ -108,7 +108,7 @@
 "speak_favorites" = "نقاط مفضلة مجاورة";
 "speak_poi" = "نقاط الاهتمام القريبة";
 "speak_pedestrian" = "ممرات الراجلين";
-"int_seconds" = "ث";
+"units_seconds" = "ث";
 "shared_string_never" = "أبداً";
 "general_settings_2" = "إعدادات عامة";
 "general_settings_descr" = "ثيم التطبيق ، وحدات ، المنطقة";
@@ -253,11 +253,11 @@
 "si_min_km" = "دقيقة/كم";
 "si_min_m" = "دقيقة/ميل";
 "si_nm_h" = "أميال بحرية في الساعة (عقدة)";
-"nm" = "ميل بحري";
-"nm_h" = "ميل بحري/في الساعة";
-"min_mile" = "د/م";
-"min_km" = "د/كم";
-"m_s" = "م/ث";
+"units_nm" = "ميل بحري";
+"units_nm_h" = "ميل بحري/في الساعة";
+"units_min_mi" = "د/م";
+"units_min_km" = "د/كم";
+"units_m_s" = "م/ث";
 "nothing_found" = "لايمكن العثور على : %@";
 "nothing_found_descr" = "قم بتعديل استعلام البحث أو قم بزيادة نصف قطر البحث";
 "select_street" = "اختر شارع";
@@ -517,10 +517,10 @@
 "units_mi" = "ميل";
 "units_yd" = "ياردة";
 "units_ft" = "قدم";
-"units_kmh" = "كم/س";
+"units_km_h" = "كم/س";
 "units_mph" = "ميل ساعة";
 "units_hour" = "س";
-"units_min" = "د";
+"units_min" = "د.";
 "units_sec" = "ثانية";
 // Map
 "map_inst_det_map_q" = "قم بتثبيت نظرة عامة مفصلة على الخريطة للحصول على مزيد من المعلومات حول مواقعك.";
@@ -570,8 +570,6 @@
 "rendering_category_transport" = "وسائل المواصلات";
 "rendering_category_others" = "سمات أخرى للخريطة";
 // Rendering attributes
-"units_minutes_short" = "د";
-"units_seconds_short" = "ثانية";
 "cannot_access_calendar" = "لا يمكن الوصول إلى التقويم";
 "reminder_not_set_text" = "لم يتم تعيين التذكير لأنه لا يُسمح لك بالوصول إلى التقويم";
 //inapps
@@ -1752,8 +1750,8 @@
 "select_online_source" = "حدد المصدر";
 "preview_of_selected_zoom_levels" = "معاينة مستويات التكبير";
 "download_size" = "حجم التحميل";
-"number_of_tiles" = "عدد الطبقات";
-"move_map_to_select_area" = "نقل الخريطة لتحديد المساحة المطلوبة.";
+"number_of_tiles" = "عدد المربعات";
+"move_map_to_select_area" = "حرك الخريطة لتحديد المنطقة المطلوبة.";
 "update_map" = "تحديث الخريطة";
 "change_map_behavior" = "تغيير الخريطة أثناء التنقل";
 "map_during_navigation" = "خريطة أثناء التنقل";
@@ -1958,7 +1956,6 @@
 "key_hint_recenter_map" = "إعادة توسيط الخريطة";
 "shared_z_a" = "Z - A";
 "shared_a_z" = "A - Z";
-"units_nm" = "ميل بحري";
 "select_application_profile" = "اختر وضع الملاحة";
 "change_application_profile" = "تغيير ملف تعريف التطبيق";
 "quick_action_showhide_mapillary_descr" = "النقر على زر الإجراء هذا يظهر أو يخفي طبقة مابيلاري على الخريطة.";
@@ -2133,8 +2130,6 @@
 "rendering_value_walkingRoutesScopeOSMC_description" = "تلوين وفق الانتماء للشبكة.";
 "rendering_value_walkingRoutesOSMCNodes_description" = "لون الطرق وفقا لنوع نقطة التشابك الخاصة بهم (دولية، إقليمية، محلية).";
 "walking_route_osmc_description" = "لون الطرق وفقا للونها المحلي الفردي (إذا كانت موجودة على OpenStreetMap) والنوع حسب (دولي، إقليمي، محلي).";
-"m" = "م";
-"foot" = "قدم";
 "shared_string_feet" = "قدم";
 "srtm_download_list_help_message" = "OsmAndيوفر بيانات الخطوط الكنتورية بالأمتار والقدم. ستحتاج إلى إعادة تنزيل الملف لتغيير التنسيق.";
 "srtm_download_single_help_message" = "الرجاء تحديد التنسيق المطلوب. ستحتاج إلى إعادة تنزيل الملف لتغيير التنسيق.";
@@ -2331,3 +2326,36 @@
 "route_line_use_map_style_color" = "استخدم نمط الخريطة (%@) اللون الافتراضي.";
 "route_line_use_map_style_width" = "استخدم نمط الخريطة (%@) العرض الافتراضي.";
 "turn_arrows" = "أسهم الانعطاف";
+"route_preferred_terrain_any" = "لا يتم اعتبار خصائص التضاريس عند اختيار طريق.";
+"turn_arrows_descr" = "التحكم في رؤية أسهم الانعطاف على خط الطريق.";
+"route_preferred_terrain_less_hilly" = "مسارات أقصر وأقل انحدارا.";
+"map_settings_weather_pressure" = "الضغط";
+"navigate_point_format_MGRS" = "النظام المرجعي للشبكة العسكرية";
+"mgrs_description" = "OsmAnd يستخدم تنسيق MGRS الذي يتطابق مع UTM NATO.";
+"routeInfo_surface_description" = "توفير معلومات السطح المادي للطريق/ممر المشاة.";
+"shared_string_open_street_map" = "خريطة الشارع المفتوح";
+"map_settings_weather_temp" = "درجة الحرارة";
+"ltr_or_rtl_combine_via_dash" = "%@ - %@";
+"shared_string_any" = "أي";
+"product_title_weather" = "الطقس";
+"context_menu_edit_descr" = "تعديل الوصف";
+"add_description" = "إضافة وصف";
+"map_settings_weather_wind" = "الرياح";
+"map_settings_weather_cloud" = "السحاب";
+"map_settings_weather_precip" = "الهطول";
+"map_settings_clear_geo_cache" = "مسح البلاط الجغرافي";
+"map_settings_clear_raster_cache" = "مسح البلاط النقطي";
+"shared_string_min_height" = "أدنى ارتفاع";
+"shared_string_max_height" = "أقصى ارتفاع";
+"start_point" = "ابدأ";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d المسارات؟";
+"route_preferred_terrain_flat" = "طرق ذات ملف تعريف مسطح للإغاثة. قد يزيد الطول.";
+"delete_tracks_bottom_sheet_title" = "حذف المسارات؟";
+"selected_tracks_count" = "المسارات - %d";
+"delete_tracks_bottom_sheet_description_regular_part" = "هل أنت متأكد من أنك تريد الحذف ";
+"altitude" = "الارتفاع";
+"map_widget_speed" = "سرعة";
+"save_heading_descr" = "حفظ معلومات العنوان لكل نقطة مسجلة";
+"select_tracks" = "حدد المسارات";
+"routeInfo_winter_ice_road_description" = "قم بتلوين المسار أو خط المسار حسب تصنيف طرقاته الشتوية.";
+"save_heading" = "تضمين العنوان";

@@ -7,25 +7,13 @@
 //
 
 #import "OAMeasurementToolLayer.h"
-#import "OAMapLayersConfiguration.h"
 #import "OARootViewController.h"
-#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
-#import "OARouteCalculationResult.h"
-#import "OAUtilities.h"
 #import "OANativeUtilities.h"
-#import "OAColors.h"
-#import "OAAutoObserverProxy.h"
-#import "OANativeUtilities.h"
-
 #import "OAGPXDocument.h"
-#import "OAGPXDocumentPrimitives.h"
 #import "OAMeasurementEditingContext.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/GpxDocument.h>
 #include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/VectorLinesCollection.h>
@@ -33,10 +21,10 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SkiaUtilities.h>
-#include <SkCGUtils.h>
 
 #define MIN_POINTS_PERCENTILE 5
 #define START_ZOOM 8
+#define kDefaultLineWidth 16.0
 
 @implementation OAMeasurementToolLayer
 {
@@ -122,11 +110,12 @@
         
         return;
     }
-    
+
+    double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
     OsmAnd::ColorARGB lineColor = _editingCtx.getLineColor;
     std::vector<double> linePattern;
-    linePattern.push_back(80);
-    linePattern.push_back(40);
+    linePattern.push_back(80 / mapDensity);
+    linePattern.push_back(40 / mapDensity);
     if (line)
     {
         line->setFillColor(lineColor);
@@ -138,7 +127,7 @@
         builder.setBaseOrder(self.baseOrder)
         .setIsHidden(false)
         .setLineId(lineId)
-        .setLineWidth(16)
+        .setLineWidth(kDefaultLineWidth)
         .setLineDash(linePattern)
         .setFillColor(lineColor);
         

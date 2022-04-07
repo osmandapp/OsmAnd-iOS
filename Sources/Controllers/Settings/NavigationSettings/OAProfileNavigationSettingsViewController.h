@@ -13,4 +13,6 @@
 
 @interface OAProfileNavigationSettingsViewController : OABaseSettingsViewController
 
+@property (assign, nonatomic) BOOL openFromRouteInfo;
+
 @end

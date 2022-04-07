@@ -221,10 +221,10 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
-"units_kmh" = "km/h";
+"units_km_h" = "km/h";
 "units_mph" = "mi/h";
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "min.";
 "units_sec" = "seg";
 // Map
 "map_inst_det_map_q" = "Instale a visão geral do mapa detalhado para obter mais informações sobre os locais.";
@@ -269,8 +269,6 @@
 "help_quiz" = "Questionário";
 "rendering_category_others" = "Outros atributos do mapa";
 // Rendering attributes
-"units_minutes_short" = "min";
-"units_seconds_short" = "seg";
 "cannot_access_calendar" = "Não é possível aceder o calendário";
 "reminder_not_set_text" = "O lembrete não foi definido, uma vez que não é permitido acesso ao calendário";
 //inapps
@@ -381,7 +379,7 @@
 "default_speed_system" = "Unidade de velocidade";
 "interrupt_music" = "Pausar a música";
 "arrived_at_intermediate_point" = "Chegou ao seu destino intermédio";
-"nm" = "mn";
+"units_nm" = "mn";
 "search_another_country" = "Selecionar outra região";
 "skip_map_downloading" = "Ignorar o descarregamento de mapas";
 "shared_string_previous" = "Anterior";
@@ -464,7 +462,7 @@
 "show_lanes" = "Mostrar faixas de rodagem";
 "speak_pedestrian" = "Passadeiras";
 "speak_tunnels" = "Túneis";
-"int_seconds" = "segundos";
+"units_seconds" = "segundos";
 "shared_string_never" = "Nunca";
 "shared_setting_always_ask" = "Perguntar sempre";
 "general_settings_2" = "Configurações gerais";
@@ -559,9 +557,9 @@
 "si_m_s" = "Metros por segundo";
 "si_min_km" = "Minutos por quilómetro";
 "si_min_m" = "Minutos por milha";
-"min_mile" = "min/m";
-"min_km" = "min/km";
-"m_s" = "m/s";
+"units_min_mi" = "min/m";
+"units_min_km" = "min/km";
+"units_m_s" = "m/s";
 "search_poi_category_hint" = "Digite para pesquisar em tudo";
 // Shared Strings
 "shared_string_apply" = "Aplicar";
@@ -809,7 +807,7 @@
 "driving_region_uk" = "Reino Unido, Índia e similares";
 "left_side_navigation" = "Circulação pela esquerda";
 "si_nm_h" = "Milhas náuticas por hora (nós)";
-"nm_h" = "mn/h";
+"units_nm_h" = "mn/h";
 "shared_string_in_name" = "em %@";
 "shared_string_modify" = "Alterar";
 "shared_string_of" = "de";
@@ -1998,7 +1996,7 @@
 "preview_of_selected_zoom_levels" = "Vista prévia dos níveis de ampliação selecionados";
 "download_size" = "Tamanho do descarregamento";
 "number_of_tiles" = "Número de mosaicos";
-"move_map_to_select_area" = "Mover o mapa para selecionar a área necessária.";
+"move_map_to_select_area" = "Mova o mapa para selecionar a área necessária.";
 "shared_string_maximum" = "Máximo";
 "shared_string_clear_cache" = "Limpar cache";
 "poi_categories" = "Categorias de POI";
@@ -2040,7 +2038,6 @@
 "allow_3d" = "Permitir visualização 2.5D";
 "max_speed" = "Velocidade máxima";
 "ui_customization" = "Personalização da interface";
-"units_nm" = "mn";
 "attach_to_the_roads" = "Fixar às estradas";
 "follow_track" = "Seguir o trilho";
 "select_another_track" = "Selecionar outro trilho";
@@ -2128,7 +2125,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Atribuir uma cor a rotas de acordo com o tipo de rede do nó (internacional, regional, local).";
 "walking_route_osmc_description" = "Atribua uma cor às rotas de acordo com a sua cor local individual (se existir no OpenStreetMap) e tipo (internacional, regional, local).";
 "travel_routes" = "Rotas de viagem";
-"foot" = "ft";
 "shared_string_feet" = "pés";
 "srtm_download_list_help_message" = "O OsmAnd fornece dados de curvas de nível em metros e pés. Terá de descarregar novamente o ficheiro para alterar o formato.";
 "srtm_download_single_help_message" = "Selecione o formato. Terá de descarregar novamente o ficheiro para alterar o formato.";
@@ -2158,7 +2154,6 @@
 "shared_string_interval" = "Intervalo";
 "gpx_selection_segment_title" = "Segmentos";
 "invalid_format" = "Formato inválido";
-"m" = "m";
 "track_show_start_finish_icons" = "Mostrar ícones de início e fim";
 "activity" = "Atividade";
 "navigate_point_format_UTM" = "UTM";
@@ -2340,7 +2335,7 @@
 "route_line_use_map_style_color" = "Usar a cor padrão do estilo de mapa (%@).";
 "shared_string_min_height" = "Altura mínima";
 "shared_string_max_height" = "Altura máxima";
-"map_settings_weather" = "Meteorologia";
+"product_title_weather" = "Meteorologia";
 "map_settings_weather_pressure" = "Pressão";
 "map_settings_weather_cloud" = "Nuvens";
 "navigate_point_format_MGRS" = "MGRS";
@@ -2359,3 +2354,30 @@
 "horseback_riding" = "Equitação";
 "shared_string_open_street_map" = "OpenStreetMap";
 "routing_attr_only_permitted_ways_description" = "Usar apenas vias (trilhos, caminhos) com utilização permitida assinalada";
+"start_point" = "Início";
+"altitude" = "Altitude";
+"save_heading" = "Incluir a direção";
+"save_heading_descr" = "Guardar a direção em cada ponto do trilho";
+"route_preferred_terrain_less_hilly" = "Rotas mais curtas e menos montanhosas.";
+"route_preferred_terrain_hilly" = "Rotas com um perfil de relevo montanhoso.";
+"shared_string_any" = "Qualquer uma";
+"map_widget_speed" = "Velocidade";
+"route_preferred_terrain_any" = "O perfil do terreno não é considerado ao escolher uma rota.";
+"route_preferred_terrain_flat" = "Rotas com um perfil de relevo plano. O comprimento pode aumentar.";
+"preferred_terrain" = "Terreno preferido";
+"delete_tracks_bottom_sheet_description_regular_part" = "Quer mesmo eliminar ";
+"select_tracks" = "Selecionar trilhos";
+"selected_tracks_count" = "Trilhos - %d";
+"delete_tracks_bottom_sheet_description_bold_part" = "%d trilhos?";
+"delete_tracks_bottom_sheet_title" = "Eliminar os trilhos?";
+"routing_attr_avoid_low_emission_zone_description" = "Evita zonas de baixas emissões poluentes";
+"routing_attr_avoid_tunnels_name" = "Evitar túneis";
+"routing_attr_avoid_tunnels_description" = "Evita túneis";
+"routing_attr_avoid_low_emission_zone_name" = "Evitar zonas de baixas emissões poluentes";
+"map_settings_weather_isolines" = "Isolinhas";
+"obf_import_already_exists_short" = "Já existe um ficheiro com este nome.";
+"rendering_attr_showFitnessTrails_description" = "Mostrar trilhos de fitness";
+"gpx_import_already_exists_short" = "O ficheiro do trilho especificado já existe na lista.";
+"rendering_attr_showRunningRoutes_name" = "Rotas para correr";
+"rendering_attr_showRunningRoutes_description" = "Mostrar rotas para correr";
+"rendering_attr_showFitnessTrails_name" = "Trilhos de fitness";

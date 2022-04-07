@@ -224,6 +224,32 @@
     OpeningHoursParser::setAdditionalString("open_till", [OALocalizedString(@"open_till") UTF8String]);
     OpeningHoursParser::setAdditionalString("will_open_tomorrow_at", [OALocalizedString(@"will_open_tomorrow_at") UTF8String]);
     OpeningHoursParser::setAdditionalString("will_open_on", [OALocalizedString(@"will_open_on") UTF8String]);
+    
+    OpeningHoursParser::setLocalizedDaysOfWeek( std::vector<std::string>{
+        [OALocalizedString(@"sunday_short") UTF8String],
+        [OALocalizedString(@"monday_short") UTF8String],
+        [OALocalizedString(@"tuesday_short") UTF8String],
+        [OALocalizedString(@"wednesday_short") UTF8String],
+        [OALocalizedString(@"thursday_short") UTF8String],
+        [OALocalizedString(@"friday_short") UTF8String],
+        [OALocalizedString(@"saturday_short") UTF8String]
+    });
+    
+    OpeningHoursParser::setLocalizedMounths( std::vector<std::string>{
+        [OALocalizedString(@"january_short") UTF8String],
+        [OALocalizedString(@"february_short") UTF8String],
+        [OALocalizedString(@"march_short") UTF8String],
+        [OALocalizedString(@"april_short") UTF8String],
+        [OALocalizedString(@"may_short") UTF8String],
+        [OALocalizedString(@"june_short") UTF8String],
+        [OALocalizedString(@"july_short") UTF8String],
+        [OALocalizedString(@"august_short") UTF8String],
+        [OALocalizedString(@"september_short") UTF8String],
+        [OALocalizedString(@"october_short") UTF8String],
+        [OALocalizedString(@"november_short") UTF8String],
+        [OALocalizedString(@"saturday_short") UTF8String],
+        [OALocalizedString(@"december_short") UTF8String]
+    });
 }
 
 - (BOOL) initialize

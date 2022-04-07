@@ -74,7 +74,7 @@
         _invertedY = source->invertedYTile;
         _referer = @"";
         _timesupported = source->expirationTimeMillis > 0;
-        _expire = source->expirationTimeMillis;
+        _expire = source->expirationTimeMillis / 60000;
         _inversiveZoom = NO;
         _ext = source->ext.toNSString();
         _tileSize = source->tileSize;
@@ -176,7 +176,7 @@
     result->urlToLoad = QString::fromNSString(_url);
     result->minZoom = OsmAnd::ZoomLevel(_minZoom);
     result->maxZoom = OsmAnd::ZoomLevel(_maxZoom);
-    result->expirationTimeMillis = _expire;
+    result->expirationTimeMillis = _expire * 60000;
     result->ellipticYTile = _ellipsoid;
     //result->priority = _tileSource->priority;
     result->tileSize = _tileSize;

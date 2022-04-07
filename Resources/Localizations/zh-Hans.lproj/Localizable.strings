@@ -1325,7 +1325,7 @@
 "search_activity" = "搜索";
 "shared_string_finish" = "完成";
 "position_icon_at_rest" = "静止位置图标";
-"shared_string_routing" = "路线";
+"shared_string_routing" = "路径规划";
 "save_new_track" = "保存为新的轨迹";
 "quick_action_mapillary_hide" = "隐藏Mapillary";
 "region_antarctica" = "南极洲";
@@ -1712,3 +1712,6 @@
 "move_map_to_select_area" = "移动地图以选择所需的区域。";
 "shared_string_quick_actions" = "快捷动作";
 "replace_all_desc" = "当前项目将被文件中的项目取代";
+"import_duplicates_title" = "有些项目已经存在";
+"import_duplicates_description" = "OsmAnd 已经具有与导入的元素同名的元素。\n\n选择一个操作。";
+"add_custom_category" = "添加自定义类别";

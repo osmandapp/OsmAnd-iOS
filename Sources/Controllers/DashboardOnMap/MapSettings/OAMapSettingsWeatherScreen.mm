@@ -18,6 +18,8 @@
 #import "OATitleSliderTableViewCell.h"
 #import "OAIconTextDescButtonCell.h"
 #import "OAButtonCell.h"
+#import "OAIconTitleValueCell.h"
+#import "OAWeatherLayerSettingsViewController.h"
 #import "OAColors.h"
 #import "OALocalResourceInformationViewController.h"
 #import "OAOnlineTilesEditingViewController.h"
@@ -69,12 +71,13 @@
 #define kClearRasterCacheButton @"clear_reaster1_cache_button"
 
 #define kCellTypeTitleSlider @"title_slider_cell"
-#define kCellTypeSwitch @"switch_cell"
+//#define kCellTypeSwitch @"switch_cell"
 #define kCellTypeValue @"valueCell"
+#define kCellTypeIconTitleValue @"icon_title_value_cell"
 #define kCellTypeButton @"button_cell"
 #define kCellTypeIconSwitch @"icon_switch_cell"
 #define kCellTypeMap @"icon_text_desc_button_cell"
-#define kCellTypeDateTimePicker @"date_time_picker_cell"
+//#define kCellTypeDateTimePicker @"date_time_picker_cell"
 #define kCellTypeValuePicker @"value_picker_cell"
 
 #define kContourLines @"contourLines"
@@ -229,84 +232,89 @@
         @"value" : @(enabled)
     }];
 
-    NSArray* datePicker = @[@{
-        @"type" : kCellTypeDateTimePicker,
-    }];
+//    NSArray* datePicker = @[@{
+//        @"type" : kCellTypeDateTimePicker,
+//    }];
     
-    NSArray *weatherLayerAlphas = @[
-        @{
-            @"type"  : kCellTypeValue,
-            @"name"  : kWeatherAlphas,
-            @"title" : @"Layers transparency",
-            @"value" : _showAlphas ? @"Hide" : @"Show"
-        }];
-    
-    if (_showAlphas)
-    {
-        weatherLayerAlphas = [weatherLayerAlphas arrayByAddingObjectsFromArray:@[
-            @{
-                @"type"  : kCellTypeTitleSlider,
-                @"name"  : kWeatherTempAlpha,
-                @"title" : OALocalizedString(@"map_settings_weather_temp"),
-                @"value" : @(_app.data.weatherTempAlpha)
-            },
-            @{
-                @"type"  : kCellTypeTitleSlider,
-                @"name"  : kWeatherPressureAlpha,
-                @"title" : OALocalizedString(@"map_settings_weather_pressure"),
-                @"value" : @(_app.data.weatherPressureAlpha)
-            },
-            @{
-                @"type"  : kCellTypeTitleSlider,
-                @"name"  : kWeatherWindAlpha,
-                @"title" : OALocalizedString(@"map_settings_weather_wind"),
-                @"value" : @(_app.data.weatherWindAlpha)
-            },
-            @{
-                @"type"  : kCellTypeTitleSlider,
-                @"name"  : kWeatherCloudAlpha,
-                @"title" : OALocalizedString(@"map_settings_weather_cloud"),
-                @"value" : @(_app.data.weatherCloudAlpha)
-            },
-            @{
-                @"type"  : kCellTypeTitleSlider,
-                @"name"  : kWeatherPrecipAlpha,
-                @"title" : OALocalizedString(@"map_settings_weather_precip"),
-                @"value" : @(_app.data.weatherPrecipAlpha)
-            }]
-        ];
-    }
+//    NSArray *weatherLayerAlphas = @[
+//        @{
+//            @"type"  : kCellTypeValue,
+//            @"name"  : kWeatherAlphas,
+//            @"title" : @"Layers transparency",
+//            @"value" : _showAlphas ? @"Hide" : @"Show"
+//        }];
+//
+//    if (_showAlphas)
+//    {
+//        weatherLayerAlphas = [weatherLayerAlphas arrayByAddingObjectsFromArray:@[
+//            @{
+//                @"type"  : kCellTypeTitleSlider,
+//                @"name"  : kWeatherTempAlpha,
+//                @"title" : OALocalizedString(@"map_settings_weather_temp"),
+//                @"value" : @(_app.data.weatherTempAlpha)
+//            },
+//            @{
+//                @"type"  : kCellTypeTitleSlider,
+//                @"name"  : kWeatherPressureAlpha,
+//                @"title" : OALocalizedString(@"map_settings_weather_pressure"),
+//                @"value" : @(_app.data.weatherPressureAlpha)
+//            },
+//            @{
+//                @"type"  : kCellTypeTitleSlider,
+//                @"name"  : kWeatherWindAlpha,
+//                @"title" : OALocalizedString(@"map_settings_weather_wind"),
+//                @"value" : @(_app.data.weatherWindAlpha)
+//            },
+//            @{
+//                @"type"  : kCellTypeTitleSlider,
+//                @"name"  : kWeatherCloudAlpha,
+//                @"title" : OALocalizedString(@"map_settings_weather_cloud"),
+//                @"value" : @(_app.data.weatherCloudAlpha)
+//            },
+//            @{
+//                @"type"  : kCellTypeTitleSlider,
+//                @"name"  : kWeatherPrecipAlpha,
+//                @"title" : OALocalizedString(@"map_settings_weather_precip"),
+//                @"value" : @(_app.data.weatherPrecipAlpha)
+//            }]
+//        ];
+//    }
     
     NSArray *weatherLayers = @[
         @{
-            @"type"  : kCellTypeSwitch,
+            @"type"  : kCellTypeIconTitleValue,
             @"name"  : kWeatherTemp,
             @"title" : OALocalizedString(@"map_settings_weather_temp"),
-            @"value" : @(_app.data.weatherTemp)
+            @"value" : @(_app.data.weatherTemp),
+            @"image" : @"ic_custom_thermometer"
         },
         @{
-            @"type"  : kCellTypeSwitch,
+            @"type"  : kCellTypeIconTitleValue,
             @"name"  : kWeatherPressure,
             @"title" : OALocalizedString(@"map_settings_weather_pressure"),
-            @"value" : @(_app.data.weatherPressure)
+            @"value" : @(_app.data.weatherPressure),
+            @"image" : @"ic_custom_air_pressure"
         },
         @{
-            @"type"  : kCellTypeSwitch,
+            @"type"  : kCellTypeIconTitleValue,
             @"name"  : kWeatherWind,
             @"title" : OALocalizedString(@"map_settings_weather_wind"),
-            @"value" : @(_app.data.weatherWind)
+            @"value" : @(_app.data.weatherWind),
+            @"image" : @"ic_custom_wind"
         },
         @{
-            @"type"  : kCellTypeSwitch,
+            @"type"  : kCellTypeIconTitleValue,
             @"name"  : kWeatherCloud,
             @"title" : OALocalizedString(@"map_settings_weather_cloud"),
-            @"value" : @(_app.data.weatherCloud)
+            @"value" : @(_app.data.weatherCloud),
+            @"image" : @"ic_custom_clouds"
         },
         @{
-            @"type"  : kCellTypeSwitch,
+            @"type"  : kCellTypeIconTitleValue,
             @"name"  : kWeatherPrecip,
             @"title" : OALocalizedString(@"map_settings_weather_precip"),
-            @"value" : @(_app.data.weatherPrecip)
+            @"value" : @(_app.data.weatherPrecip),
+            @"image" : @"ic_custom_precipitation"
         }];
 
     NSString *selectedContourLinesName = OALocalizedString(@"shared_string_none");
@@ -319,10 +327,11 @@
 
     NSArray *contourLines = @[
         @{
-            @"type"  : kCellTypeValue,
+            @"type"  : kCellTypeIconTitleValue,
             @"name"  : kWeatherContourLines,
             @"title" : OALocalizedString(@"map_settings_weather_isolines"),
-            @"value" : selectedContourLinesName
+            @"value" : selectedContourLinesName,
+            @"image" : @"ic_custom_contour_lines"
         }];
     
     if (_showContourLinesPicker)
@@ -465,8 +474,8 @@
     [data addObject:mainSwitch];
     if (enabled)
     {
-        [data addObject:datePicker];
-        [data addObject:weatherLayerAlphas];
+//        [data addObject:datePicker];
+//        [data addObject:weatherLayerAlphas];
         _alphasSectionIndex = data.count - 1;
         [data addObject:weatherLayers];
         [data addObject:contourLines];
@@ -551,28 +560,28 @@
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item =  [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeDateTimePicker])
-    {
-        OADateTimePickerTableViewCell* cell;
-        cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OADateTimePickerTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADateTimePickerTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OADateTimePickerTableViewCell *)[nib objectAtIndex:0];
-
-            NSDate *currentDate = [NSDate date];
-            cell.dateTimePicker.minimumDate = [currentDate dateByAddingTimeInterval:(NSTimeInterval)(-60 * 60 * 32)];
-            cell.dateTimePicker.maximumDate = [currentDate dateByAddingTimeInterval:(NSTimeInterval)(60 * 60 * 32)];;
-            cell.dateTimePicker.minuteInterval = 30;
-            cell.dateTimePicker.datePickerMode = UIDatePickerModeDateAndTime;
-        }
-        cell.dateTimePicker.date = OARootViewController.instance.mapPanel.mapViewController.mapLayers.weatherDate;
-        [cell.dateTimePicker removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-        [cell.dateTimePicker addTarget:self action:@selector(dateTimePickerChanged:) forControlEvents:UIControlEventValueChanged];
-        
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:kCellTypeIconSwitch])
+//    if ([item[@"type"] isEqualToString:kCellTypeDateTimePicker])
+//    {
+//        OADateTimePickerTableViewCell* cell;
+//        cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OADateTimePickerTableViewCell getCellIdentifier]];
+//        if (cell == nil)
+//        {
+//            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADateTimePickerTableViewCell getCellIdentifier] owner:self options:nil];
+//            cell = (OADateTimePickerTableViewCell *)[nib objectAtIndex:0];
+//
+//            NSDate *currentDate = [NSDate date];
+//            cell.dateTimePicker.minimumDate = [currentDate dateByAddingTimeInterval:(NSTimeInterval)(-60 * 60 * 32)];
+//            cell.dateTimePicker.maximumDate = [currentDate dateByAddingTimeInterval:(NSTimeInterval)(60 * 60 * 32)];;
+//            cell.dateTimePicker.minuteInterval = 30;
+//            cell.dateTimePicker.datePickerMode = UIDatePickerModeDateAndTime;
+//        }
+//        cell.dateTimePicker.date = OARootViewController.instance.mapPanel.mapViewController.mapLayers.weatherDate;
+//        [cell.dateTimePicker removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+//        [cell.dateTimePicker addTarget:self action:@selector(dateTimePickerChanged:) forControlEvents:UIControlEventValueChanged];
+//
+//        return cell;
+//    }
+    if ([item[@"type"] isEqualToString:kCellTypeIconSwitch])
     {
         OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
         if (!cell)
@@ -586,7 +595,7 @@
         {
             BOOL enabled = [item[@"value"] boolValue];
             cell.textView.text = enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
-            NSString *imgName = enabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
+            NSString *imgName = enabled ? @"ic_custom_umbrella.png" : @"ic_custom_hide.png";
             cell.imgView.image = [UIImage templateImageNamed:imgName];
             cell.imgView.tintColor = enabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
             
@@ -596,22 +605,37 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
+    else if ([item[@"type"] isEqualToString:kCellTypeIconTitleValue])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OAIconTitleValueCell* cell = nil;
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.switchView.on = [item[@"value"] boolValue];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(onWeatherLayerSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+            NSString *valueText;
+            BOOL iconEnabled;
+            if ([item[@"name"] isEqualToString:kWeatherContourLines])
+            {
+                valueText = item[@"value"];
+                iconEnabled = ![valueText isEqualToString:OALocalizedString(@"shared_string_none")];
+            }
+            else
+            {
+                BOOL isOn = [item[@"value"] boolValue];
+                valueText = isOn ? OALocalizedString(@"shared_string_on") : OALocalizedString(@"shared_string_off");
+                iconEnabled = isOn;
+            }
+            cell.descriptionView.text = valueText;
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
+            cell.leftIconView.tintColor = iconEnabled ? UIColorFromRGB(nav_bar_day) : UIColorFromRGB(color_tint_gray);
+//            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+//            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+//            [cell.switchView addTarget:self action:@selector(onWeatherLayerSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
@@ -708,13 +732,13 @@
     return nil;
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == _countourLinesSectionIndex || indexPath.section == _alphasSectionIndex || indexPath.section == _unitsSectionIndex)
-        return indexPath;
-    
-    return nil;
-}
+//- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (indexPath.section == _countourLinesSectionIndex || indexPath.section == _alphasSectionIndex || indexPath.section == _unitsSectionIndex)
+//        return indexPath;
+//
+//    return nil;
+//}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -722,9 +746,31 @@
     [tblView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
+- (EOAWeatherLayerType)getWeatherLayerType:(NSString *)type
+{
+    if ([type isEqualToString:kWeatherTemp])
+        return EOAWeatherLayerTypeTemperature;
+    else if ([type isEqualToString:kWeatherPressure])
+        return EOAWeatherLayerTypePresssure;
+    else if ([type isEqualToString:kWeatherWind])
+        return EOAWeatherLayerTypeWind;
+    else if ([type isEqualToString:kWeatherCloud])
+        return EOAWeatherLayerTypeCloud;
+    else if ([type isEqualToString:kWeatherPrecip])
+        return EOAWeatherLayerTypePrecipitation;
+    else
+        return EOAWeatherLayerTypeIsolines;
+}
+
 - (void) onItemClicked:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:kCellTypeIconTitleValue])
+    {
+        [vwController hide:YES animated:YES];
+        OAWeatherLayerSettingsViewController *vc = [[OAWeatherLayerSettingsViewController alloc] initWithLayerType:[self getWeatherLayerType:item[@"name"]]];
+        [OARootViewController.instance.mapPanel showScrollableHudViewController:vc];
+    }
     if ([item[@"type"] isEqualToString:kCellTypeValue])
     {
         if ([item[@"name"] isEqualToString:kWeatherAlphas])

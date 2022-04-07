@@ -785,6 +785,13 @@
 "map_settings_clear_raster_cache" = "Clear raster tiles";
 "map_settings_weather_isolines" = "Isolines";
 
+"weather_temp_enable_descr" = "Enable to view temperature layer on the map.";
+"weather_pressure_enable_descr" = "Enable to view pressure layer on the map.";
+"weather_wind_enable_descr" = "Enable to view wind layer on the map.";
+"weather_cloud_enable_descr" = "Enable to view cloud layer on the map.";
+"weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
+"weather_isolines_enable_descr" = "Enable to view isolines layer on the map.";
+
 "settings_app_theme" = "Application theme";
 "app_theme_light" = "Light";
 "do_not_rotate" = "Do not rotate";

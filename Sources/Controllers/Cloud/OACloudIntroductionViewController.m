@@ -12,6 +12,10 @@
 #import "OASizes.h"
 #import "OACloudIntroductionHeaderView.h"
 #import "OATitleRightIconCell.h"
+#import "OAIAPHelper.h"
+#import "OACloudAccountCreateViewController.h"
+#import "OACloudAccountLoginViewController.h"
+#import "OAChoosePlanHelper.h"
 
 @interface OACloudIntroductionViewController () <UITableViewDelegate, UITableViewDataSource, OACloudIntroductionDelegate>
 
@@ -65,12 +69,12 @@
 - (void)setUpTableHeaderView
 {
     _headerView = [[OACloudIntroductionHeaderView alloc] init];
-    // TODO: customize title based on backend
     NSString *topButtonTitle = OALocalizedString(@"cloud_create_account");
     [_headerView setUpViewWithTitle:OALocalizedString(@"osmand_cloud") description:OALocalizedString(@"cloud_description") image:[UIImage imageNamed:@"ic_custom_cloud_upload_colored_day_big"] topButtonTitle:topButtonTitle bottomButtonTitle:OALocalizedString(@"cloud_existing_account")];
     CGRect frame = _headerView.frame;
     frame.size.height = [_headerView calculateViewHeight];
     _headerView.frame = frame;
+    _headerView.delegate = self;
 }
 
 - (UIColor *)navBarBackgroundColor
@@ -150,12 +154,22 @@
 
 - (void)getOrRegisterButtonPressed
 {
-    // TODO: if purchased - register, else - purchase screen
+    OAIAPHelper *iapHelper = OAIAPHelper.sharedInstance;
+    if ([iapHelper subscribedToLiveUpdates])
+    {
+        OACloudAccountCreateViewController *vc = [[OACloudAccountCreateViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else
+    {
+        [OAChoosePlanHelper showChoosePlanScreenWithProduct:iapHelper.monthlyLiveUpdates navController:self.navigationController];
+    }
 }
 
 - (void)logInButtonPressed
 {
-    
+    OACloudAccountLoginViewController *vc = [[OACloudAccountLoginViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

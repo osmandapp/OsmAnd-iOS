@@ -294,6 +294,14 @@
 #define backupAccessTokenKey @"backupAccessToken"
 #define backupAccessTokenUpdateTimeKey @"backupAccessTokenUpdateTime"
 
+#define backupPromocodeKey @"backupPromocode"
+#define backupPromocodeActiveKey @"backupPromocodeActive"
+#define backupPromocodeStartTimeKey @"backupPromocodeStartTime"
+#define backupPromocodeExpireTimeKey @"backupPromocodeExpireTime"
+#define backupPromocodeStateKey @"backupPromocodeState"
+
+#define userIosIdKey @"userIosId"
+
 #define favoritesLastUploadedTimeKey @"favoritesLastUploadedTime"
 #define backupLastUploadedTimeKey @"backupLastUploadedTime"
 
@@ -3008,6 +3016,111 @@
 
 @end
 
+@interface OACommonUnit ()
+
+@property (nonatomic) NSUnit *defValue;
+
+@end
+
+@implementation OACommonUnit
+
++ (instancetype) withKey:(NSString *)key defValue:(NSUnit *)defValue
+{
+    OACommonUnit *obj = [[OACommonUnit alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (NSUnit *) get
+{
+    return [self get:self.appMode];
+}
+
+- (NSUnit *) get:(OAApplicationMode *)mode
+{
+    NSObject *value = [self getValue:mode];
+    return value ? (NSUnit *) value : self.defValue;
+}
+
+- (NSObject *) getValue:(OAApplicationMode *)mode
+{
+    NSObject *cachedValue = self.global ? self.cachedValue : [self.cachedValues objectForKey:mode];
+    if (!cachedValue)
+    {
+        NSString *key = [self getKey:mode];
+        cachedValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+
+        if ([cachedValue isKindOfClass:NSString.class])
+            cachedValue = [NSUnit unitFromString:cachedValue];
+
+        if ([cachedValue isKindOfClass:NSData.class])
+            cachedValue = [NSKeyedUnarchiver unarchivedObjectOfClass:NSUnit.class fromData:cachedValue error:nil];
+
+        if (self.global)
+            self.cachedValue = cachedValue;
+        else
+            [self.cachedValues setObject:cachedValue forKey:mode];
+    }
+    else if ([cachedValue isKindOfClass:NSString.class])
+    {
+        cachedValue = [NSUnit unitFromString:cachedValue];
+    }
+
+    if (!cachedValue)
+    {
+        cachedValue = [self getProfileDefaultValue:mode];
+    }
+    return cachedValue;
+}
+
+- (void) set:(NSUnit *)unit
+{
+    [self set:unit mode:self.appMode];
+}
+
+- (void) set:(NSUnit *)unit mode:(OAApplicationMode *)mode
+{
+    [self setValue:unit mode:mode];
+}
+
+- (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode
+{
+    NSUnit *unit = (NSUnit *) value;
+
+    if (self.global)
+        self.cachedValue = unit;
+    else
+        [self.cachedValues setObject:unit forKey:mode];
+
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:unit requiringSecureCoding:NO error:nil];
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:[self getKey:mode]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+}
+
+- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
+{
+    NSObject *value = [super getProfileDefaultValue:mode];
+    if ([value isKindOfClass:NSString.class])
+        value = [NSUnit unitFromString:value];
+    return value;
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    [self set:[NSUnit unitFromString:strValue] mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self get:mode].symbol;
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
@@ -3674,6 +3787,10 @@
         [_globalPreferences setObject:_useLastApplicationModeByDefault forKey:@"use_last_application_mode_by_default"];
         [_globalPreferences setObject:_lastUsedApplicationMode forKey:@"last_used_application_mode"];
         [_globalPreferences setObject:_lastRouteApplicationMode forKey:@"last_route_application_mode_backup_string"];
+        
+        // TODO: not sure we need to override this setting with import/export
+        _userIosId = [[[OACommonString withKey:userIosIdKey defValue:@""] makeGlobal] makeShared];
+//        [_globalPreferences setObject:_userIosId forKey:@"user_android_id"];
 
         _onlineRoutingEngines = [[OACommonString withKey:onlineRoutingEnginesKey defValue:nil] makeGlobal];
         [_globalPreferences setObject:_onlineRoutingEngines forKey:@"online_routing_engines"];
@@ -3715,6 +3832,18 @@
         [_globalPreferences setObject:_backupNativeDeviceId forKey:@"backup_native_device_id"];
         [_globalPreferences setObject:_backupAccessToken forKey:@"backup_access_token"];
         [_globalPreferences setObject:_backupAccessTokenUpdateTime forKey:@"backup_access_token_update_time"];
+        
+        _backupPromocode = [[OACommonString withKey:backupPromocodeKey defValue:@""] makeGlobal];
+        _backupPromocodeActive = [[OACommonBoolean withKey:backupPromocodeActiveKey defValue:NO] makeGlobal];
+        _backupPromocodeStartTime = [[OACommonLong withKey:backupPromocodeStartTimeKey defValue:0] makeGlobal];
+        _backupPromocodeExpireTime = [[OACommonLong withKey:backupPromocodeExpireTimeKey defValue:0] makeGlobal];
+        _backupPromocodeState = [[OACommonInteger withKey:backupPromocodeStateKey defValue:0] makeGlobal];
+        
+        [_globalPreferences setObject:_backupPromocode forKey:@"backup_promocode"];
+        [_globalPreferences setObject:_backupPromocodeActive forKey:@"backup_promocode_active"];
+        [_globalPreferences setObject:_backupPromocodeStartTime forKey:@"promo_website_start_time"];
+        [_globalPreferences setObject:_backupPromocodeExpireTime forKey:@"promo_website_expire_time"];
+        [_globalPreferences setObject:_backupPromocodeState forKey:@"promo_website_state"];
 
         _favoritesLastUploadedTime = [[OACommonLong withKey:favoritesLastUploadedTimeKey defValue:0] makeGlobal];
         _backupLastUploadedTime = [[OACommonLong withKey:backupLastUploadedTimeKey defValue:0] makeGlobal];

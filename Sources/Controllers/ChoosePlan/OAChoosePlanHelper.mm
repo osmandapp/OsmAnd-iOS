@@ -37,7 +37,7 @@
 
 + (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController purchasing:(BOOL)purchasing
 {
-    if (!product || [product isKindOfClass:[OASubscription class]])
+    if (!product || [product isKindOfClass:[OASubscription class]] || [product isKindOfClass:[OAWeatherProduct class]])
         [OAChoosePlanHelper showImpl:[[OAChooseOsmLivePlanViewController alloc] init] navController:navController purchasing:purchasing product:product];
     else if ([product isEqual:[OAChoosePlanAllMapsViewController getPlanTypeProduct]])
         [OAChoosePlanHelper showImpl:[[OAChoosePlanAllMapsViewController alloc] init] navController:navController purchasing:purchasing product:product];

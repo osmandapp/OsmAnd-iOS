@@ -2282,3 +2282,4 @@
 "lang_ro" = "ルーマニア語";
 "lang_zh_cn" = "中国語 (簡体字)";
 "lang_zh_hk" = "中国語 (香港)";
+"routing_attr_avoid_low_emission_zone_description" = "低排出ゾーン(CO2排出量の多い車両に課税するエリア)を通らないようにします";

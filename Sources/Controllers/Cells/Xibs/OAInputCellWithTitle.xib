@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,13 +17,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aCK-RD-b5T">
-                        <rect key="frame" x="16" y="12" width="42" height="25"/>
+                        <rect key="frame" x="20" y="12" width="42" height="25"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.64313725490196072" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jj4-nm-1ad">
-                        <rect key="frame" x="66" y="0.0" width="332" height="48"/>
+                        <rect key="frame" x="70" y="0.0" width="324" height="48"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="48" id="9B1-4P-umu"/>
                         </constraints>
@@ -36,9 +36,9 @@
                     <constraint firstItem="jj4-nm-1ad" firstAttribute="leading" secondItem="aCK-RD-b5T" secondAttribute="trailing" constant="8" id="5HQ-QW-TEt"/>
                     <constraint firstItem="jj4-nm-1ad" firstAttribute="top" secondItem="i5B-aP-0Hr" secondAttribute="top" id="Aca-wu-EFg"/>
                     <constraint firstAttribute="bottom" secondItem="jj4-nm-1ad" secondAttribute="bottom" id="RAg-8R-qn5"/>
-                    <constraint firstAttribute="trailing" secondItem="jj4-nm-1ad" secondAttribute="trailing" constant="16" id="Z4A-gO-kXp"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="jj4-nm-1ad" secondAttribute="trailing" id="Z4A-gO-kXp"/>
                     <constraint firstItem="aCK-RD-b5T" firstAttribute="top" secondItem="i5B-aP-0Hr" secondAttribute="top" constant="12" id="ZwW-Sc-Jpx"/>
-                    <constraint firstItem="aCK-RD-b5T" firstAttribute="leading" secondItem="i5B-aP-0Hr" secondAttribute="leading" constant="16" id="rye-gG-cZX"/>
+                    <constraint firstItem="aCK-RD-b5T" firstAttribute="leading" secondItem="i5B-aP-0Hr" secondAttribute="leadingMargin" id="rye-gG-cZX"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

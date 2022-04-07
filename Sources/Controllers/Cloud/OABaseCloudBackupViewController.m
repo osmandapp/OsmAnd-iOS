@@ -9,6 +9,7 @@
 #import "OABaseCloudBackupViewController.h"
 #import "Localization.h"
 #import "OASettingsHelper.h"
+
 #import "OATitleRightIconCell.h"
 #import "OAExportItemsViewController.h"
 
@@ -25,6 +26,7 @@
     
     self.backButton.hidden = YES;
     self.backImageButton.hidden = NO;
+
 }
 
 - (void)applyLocalization

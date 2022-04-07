@@ -2335,7 +2335,7 @@
 "route_line_use_map_style_color" = "Usar a cor padrão do estilo de mapa (%@).";
 "shared_string_min_height" = "Altura mínima";
 "shared_string_max_height" = "Altura máxima";
-"map_settings_weather" = "Meteorologia";
+"product_title_weather" = "Meteorologia";
 "map_settings_weather_pressure" = "Pressão";
 "map_settings_weather_cloud" = "Nuvens";
 "navigate_point_format_MGRS" = "MGRS";

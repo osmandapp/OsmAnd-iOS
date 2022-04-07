@@ -109,6 +109,47 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 @end
 
+@interface NSUnit (util)
+
++ (NSUnit *) unitFromString:(NSString *)unitStr;
+
++ (NSUnit *) current;
+- (NSString *) name;
+
+@end
+
+@interface NSUnitTemperature (util)
+
++ (NSUnitTemperature *) current;
+
+@end
+
+@interface NSUnitSpeed (util)
+
++ (NSUnitSpeed *) current;
+
+@end
+
+@interface NSUnitPressure (util)
+
++ (NSUnitPressure *) current;
+
+@end
+
+@interface NSUnitLength (util)
+
++ (NSUnitLength *) current;
+
+@end
+
+@interface NSUnitCloud : NSUnit
+
+@property (class, readonly, copy) NSUnitCloud *percent;
+
++ (NSUnitCloud *) current;
+
+@end
+
 @interface OAUtilities : NSObject
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion;
@@ -231,5 +272,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (natural_t) get_free_memory;
 
 + (NSString *) getLocalizedString:(NSString *)key;
++ (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list;
 
 @end

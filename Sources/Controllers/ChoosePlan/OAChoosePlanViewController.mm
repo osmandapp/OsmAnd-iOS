@@ -57,6 +57,8 @@
             return OALocalizedString(@"wikipedia_offline");
         case EOAFeatureContourLinesHillshadeMaps:
             return OALocalizedString(@"contour_lines_hillshade_maps");
+        case EOAFeatureWeather:
+            return OALocalizedString(@"product_title_weather");
         case EOAFeatureSeaDepthMaps:
             return OALocalizedString(@"index_item_depth_contours_osmand_ext");
         case EOAFeatureDonationToOSM:
@@ -130,6 +132,8 @@
             return [UIImage imageNamed:@"ic_live_osmand_logo"];
         case EOAFeatureTripRecording:
             return [UIImage imageNamed:@"ic_live_osmand_logo"];
+        case EOAFeatureWeather:
+            return [UIImage imageNamed:@"ic_custom_umbrella"];
         default:
             return nil;
     }
@@ -182,6 +186,8 @@
             return [helper.parking isPurchased];
         case EOAFeatureTripRecording:
             return [helper.trackRecording isPurchased];
+        case EOAFeatureWeather:
+            return [helper.weather isPurchased];
         default:
             return NO;
     }
@@ -249,6 +255,8 @@
             return helper.parking;
         case EOAFeatureTripRecording:
             return helper.trackRecording;
+        case EOAFeatureWeather:
+            return helper.weather;
         default:
             return nil;
     }

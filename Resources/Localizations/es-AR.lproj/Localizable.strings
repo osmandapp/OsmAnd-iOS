@@ -23,16 +23,16 @@
 "price_free" = "Gratis";
 "get_discount_title" = "Obtén %d %@ a %d%% de descuento.";
 "get_free_trial_title" = "Iniciar prueba gratuita de %d %@.";
-"get_discount_short_descr" = "%@ para %d %@, luego %@";
-"get_discount_first_part" = "%@ durante los primeros %@";
+"get_discount_short_descr" = "%@ por %d %@, luego %@";
+"get_discount_first_part" = "%@ durante el primer %@";
 "get_discount_first_few_parts" = "%@ durante los primeros %@";
-"get_discount_second_part" = "Luego %@";
+"get_discount_second_part" = "luego %@";
 "mapillary_image" = "Imagen de Mapillary";
 "shared_string_milliradians" = "Mil angular";
 "angular_units" = "Unidades de medición angular";
-"angular_units_descr" = "Cambiar las unidades de medición del acimut.";
+"angular_units_descr" = "Cambia las unidades de medida del acimut.";
 "allow_3d" = "Permitir vista 2.5D";
-"allow_3d_descr" = "Activar esta opción para poder ver el mapa en la perspectiva 2.5D";
+"allow_3d_descr" = "Activa esta opción para ver el mapa en la perspectiva 2.5D";
 "access_intermediate_arrival_time" = "Hora de llegada intermedia";
 "map_widget_intermediate_time" = "Tiempo intermedio";
 "shared_string_previous" = "Anterior";
@@ -604,7 +604,7 @@
 "tracks_on_map" = "Trazas mostradas";
 "gpx_export_title" = "Exportar traza";
 "gpx_export_select_track" = "Elige la traza a exportar";
-"gpx_import_desc" = "Para importar tus archivos GPX (formato común de datos GPS) desde Dropbox, correo electrónico o cualquier otro repositorio usa la opción «Copiar a OsmAnd Maps».";
+"gpx_import_desc" = "Para importar tus archivos GPX (formato común de datos GPS) desde Dropbox, correo electrónico o cualquier otro repositorio usa la opción «Copiar a OsmAnd Maps»";
 "import_from_docs" = "Importar desde documentos";
 "import_from_files" = "Importar desde archivos";
 "gpx_no_tracks" = "No existen trazas";
@@ -1901,7 +1901,7 @@
 "postcode" = "Código postal";
 "show_something_on_map" = "Mostrar«%@» en el mapa";
 "search_POI_level_btn" = "Increase search radius";
-"shared_string_street" = "Calle";
+"shared_string_street" = "Calle residencial";
 "shared_string_building" = "Edificio";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Dirección";
@@ -2006,7 +2006,7 @@
 "routeInfo_surface_name" = "Superficie";
 "rendering_attr_showMtbRoutes_name" = "Rutas para bicicleta de montaña";
 "rendering_attr_tracktype_grade5_name" = "Suave (con rodaduras apenas visibles entre la vegetación)";
-"routing_attr_avoid_share_taxi_description" = "Evitar taxis colectivos";
+"routing_attr_avoid_share_taxi_description" = "Evitar taxis compartidos";
 "routing_attr_width_description" = "Especifica el límite de anchura permitida del vehículo en rutas.";
 "rendering_attr_showSurfaceGrade_name" = "Calidad de los caminos";
 "rendering_attr_currentTrackColor_name" = "Color del GPX";
@@ -2037,7 +2037,7 @@
 "rendering_attr_horseRoutes_name" = "Rutas a caballo";
 "routing_attr_avoid_ferry_description" = "Evitar ferris o transbordadores";
 "rendering_attr_highway_class_track_grade2_name" = "Grado 2";
-"rendering_attr_shareTaxiRoutes_name" = "Rutas de taxi colectivos";
+"rendering_attr_shareTaxiRoutes_name" = "Rutas de taxi compartidos";
 "routing_attr_relief_smoothness_factor_hills_name" = "Empinado";
 "rendering_attr_contourWidth_name" = "Anchura de la curva de nivel";
 "routing_attr_piste_type_sled_description" = "Pendientes para uso de trineos.";
@@ -2207,7 +2207,7 @@
 "routing_attr_allow_private_description" = "Permite acceder aáreas privadas.";
 "rendering_attr_alpineHiking_description" = "Dibujar senderos según la escala SAC.";
 "rendering_attr_highway_class_bridleway_name" = "Camino ecuestre";
-"routing_attr_avoid_share_taxi_name" = "Sin taxis colectivos";
+"routing_attr_avoid_share_taxi_name" = "Sin taxis compartidos";
 "rendering_attr_pisteRoutes_name" = "Pistas de esquí";
 "rendering_attr_piste_type_sled_name" = "Trineo";
 "rendering_attr_noPolygons_description" = "Hacer todas las funciones del terreno transparentes en el mapa.";
@@ -2338,7 +2338,7 @@
 "map_settings_weather_precip" = "Precipitación";
 "map_settings_clear_geo_cache" = "Vaciar teselas geográficas";
 "map_settings_clear_raster_cache" = "Vaciar teselas ráster";
-"map_settings_weather" = "Clima";
+"product_title_weather" = "Clima";
 "map_settings_weather_pressure" = "Presión";
 "map_settings_weather_temp" = "Temperatura";
 "customize_route_line" = "Personalizar línea de ruta";
@@ -2359,8 +2359,8 @@
 "shared_string_open_street_map" = "OpenStreetMap";
 "routing_attr_allow_gate_name" = "Permitir usar puertas";
 "routing_attr_only_permitted_streets_name" = "Calles expresamente autorizadas";
-"routing_attr_prefer_horse_routes_description" = "Preferir las rutas a caballo";
-"routing_attr_prefer_horse_routes_name" = "Preferir rutas a caballo";
+"routing_attr_prefer_horse_routes_description" = "Preferir las rutas ecuestres";
+"routing_attr_prefer_horse_routes_name" = "Preferir rutas ecuestres";
 "routing_attr_only_permitted_ways_name" = "Vías expresamente autorizadas";
 "routing_attr_allow_gate_description" = "Permitir el uso de puertas";
 "routing_attr_only_permitted_streets_description" = "Usar sólo las calles que estén expresamente autorizadas";

@@ -2339,7 +2339,7 @@
 "mgrs_description" = "OsmAnd verwendet das MGRS-Format, das mit UTM NATO identisch ist.";
 "q_clear_weather_cache" = "Möchten Sie den Wettercache löschen?";
 "shared_string_open_street_map" = "OpenStreetMap";
-"map_settings_weather" = "Wetter";
+"product_title_weather" = "Wetter";
 "map_settings_weather_temp" = "Temperatur";
 "navigate_point_format_MGRS" = "MGRS";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
@@ -2386,3 +2386,10 @@
 "routing_attr_avoid_tunnels_name" = "Tunnel vermeiden";
 "routing_attr_avoid_tunnels_description" = "Vermeidet Tunnel";
 "delete_tracks_bottom_sheet_description_regular_part" = "Bist du sicher, dass du löschen möchtest? ";
+"obf_import_already_exists_short" = "Datei mit diesem Namen existiert bereits.";
+"gpx_import_already_exists_short" = "Die angegebene Trackdatei existiert bereits in der Liste.";
+"map_settings_weather_isolines" = "Isolinien";
+"rendering_attr_showRunningRoutes_name" = "Laufrouten";
+"rendering_attr_showRunningRoutes_description" = "Laufrouten anzeigen";
+"rendering_attr_showFitnessTrails_name" = "Fitness Parcours";
+"rendering_attr_showFitnessTrails_description" = "Fitness Parcours anzeigen";

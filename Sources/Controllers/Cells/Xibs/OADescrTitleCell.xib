@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -47,9 +47,11 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="bottomConstraint" destination="Xj4-zR-SmF" id="ZzN-a0-Xuo"/>
                 <outlet property="descriptionView" destination="52n-KR-cXz" id="Ps6-Ue-4v0"/>
                 <outlet property="textView" destination="TXV-2C-Pg2" id="VPY-eo-ru6"/>
                 <outlet property="textViewZeroHeightConstraint" destination="Zea-FB-SQO" id="L0r-on-JSd"/>
+                <outlet property="topConstraint" destination="lX1-X3-2Sg" id="1zr-5H-mBm"/>
             </connections>
             <point key="canvasLocation" x="-34" y="124"/>
         </tableViewCell>

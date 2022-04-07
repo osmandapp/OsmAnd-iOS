@@ -2321,7 +2321,7 @@
 "points_delete_multiple" = "Slet %d punkt(er)?";
 "context_menu_edit_descr" = "Rediger beskrivelse";
 "add_description" = "Tilføj beskrivelse";
-"map_settings_weather" = "Vejr";
+"product_title_weather" = "Vejr";
 "map_settings_weather_pressure" = "Lufttryk";
 "map_settings_weather_cloud" = "Sky";
 "map_settings_weather_precip" = "Nedbør";

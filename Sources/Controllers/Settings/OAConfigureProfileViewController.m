@@ -36,6 +36,8 @@
 #import "OARendererRegistry.h"
 #import "OAExportItemsViewController.h"
 #import "OAIndexConstants.h"
+#import "OAWeatherPlugin.h"
+#import "OAWeatherSettingsViewController.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"
@@ -157,7 +159,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : tripRec.getName,
             @"img" : @"ic_custom_trip",
-            @"key" : @"trip_rec"
+            @"key" : kTrackRecordingSettings
         }];
     }
     
@@ -168,7 +170,17 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : osmEdit.getName,
             @"img" : @"ic_custom_osm_edits",
-            @"key" : @"osm_edits"
+            @"key" : kOsmEditsSettings
+        }];
+    }
+    OAPlugin *weather = [OAPlugin getEnabledPlugin:OAWeatherPlugin.class];
+    if (weather)
+    {
+        [plugins addObject:@{
+            @"type" : [OAIconTextDescCell getCellIdentifier],
+            @"title" : weather.getName,
+            @"img" : @"ic_custom_umbrella",
+            @"key" : kWeatherSettings
         }];
     }
     
@@ -392,6 +404,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             settingsScreen = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:_appMode];
         else if ([targetScreenKey isEqualToString:kOsmEditsSettings])
             settingsScreen = [[OAOsmEditingSettingsViewController alloc] init];
+        else if ([targetScreenKey isEqualToString:kWeatherSettings])
+            settingsScreen = [[OAWeatherSettingsViewController alloc] init];
 
         if (settingsScreen)
             [self.navigationController pushViewController:settingsScreen animated:YES];

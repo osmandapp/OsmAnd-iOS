@@ -268,6 +268,7 @@
 		3205EC3D26E6B96E0090B491 /* ic_custom_map_pin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3205EC3B26E6B96E0090B491 /* ic_custom_map_pin@2x.png */; };
 		3205EC3E26E6B96E0090B491 /* ic_custom_map_pin@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3205EC3C26E6B96E0090B491 /* ic_custom_map_pin@3x.png */; };
 		3205EC4026E807E80090B491 /* OAQuickSearchCoordinatesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3205EC3F26E8079E0090B491 /* OAQuickSearchCoordinatesViewController.xib */; };
+		321126FF2800710800ED8D52 /* OAExternalTimeFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */; };
 		3219704B25FA0C6100C3FED6 /* poi_categories.json in Resources */ = {isa = PBXBuildFile; fileRef = 3219704A25FA0C6100C3FED6 /* poi_categories.json */; };
 		3219705825FA0DCE00C3FED6 /* bg_point_square@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705025FA0DCC00C3FED6 /* bg_point_square@2x.png */; };
 		3219705925FA0DCE00C3FED6 /* ic_custom_replace@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705125FA0DCC00C3FED6 /* ic_custom_replace@2x.png */; };
@@ -3309,6 +3310,8 @@
 		3205EC3B26E6B96E0090B491 /* ic_custom_map_pin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_pin@2x.png"; path = "Resources/Icons/ic_custom_map_pin@2x.png"; sourceTree = "<group>"; };
 		3205EC3C26E6B96E0090B491 /* ic_custom_map_pin@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_pin@3x.png"; path = "Resources/Icons/ic_custom_map_pin@3x.png"; sourceTree = "<group>"; };
 		3205EC3F26E8079E0090B491 /* OAQuickSearchCoordinatesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuickSearchCoordinatesViewController.xib; sourceTree = "<group>"; };
+		321126FD280070F500ED8D52 /* OAExternalTimeFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAExternalTimeFormatter.h; sourceTree = "<group>"; };
+		321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalTimeFormatter.mm; sourceTree = "<group>"; };
 		3211355E2753FB500050242B /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3211355F2753FC4D0050242B /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/Localizable.strings; sourceTree = "<group>"; };
 		321135602753FDA90050242B /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -7248,42 +7251,6 @@
 				B247453F27E3AFE200C18C3F /* ic_custom_cloud_upload_colored_day_big@3x.png */,
 				B247452D27E34B3500C18C3F /* ic_custom_restore@2x.png */,
 				B247452C27E34B3500C18C3F /* ic_custom_restore@3x.png */,
-				32D253DE27F58BD800324717 /* widget_weather_air_pressure_day@2x.png */,
-				32D253E927F58BDB00324717 /* widget_weather_air_pressure_day@3x.png */,
-				32D253E527F58BDA00324717 /* widget_weather_air_pressure_night@2x.png */,
-				32D253E627F58BDB00324717 /* widget_weather_air_pressure_night@3x.png */,
-				32D253E427F58BDA00324717 /* widget_weather_clouds_day@2x.png */,
-				32D253E127F58BD900324717 /* widget_weather_clouds_day@3x.png */,
-				32D253D327F58BD500324717 /* widget_weather_clouds_night@2x.png */,
-				32D253E827F58BDB00324717 /* widget_weather_clouds_night@3x.png */,
-				32D253D827F58BD700324717 /* widget_weather_precipitation_day@2x.png */,
-				32D253E727F58BDB00324717 /* widget_weather_precipitation_day@3x.png */,
-				32D253D527F58BD600324717 /* widget_weather_precipitation_night@2x.png */,
-				32D253E027F58BD900324717 /* widget_weather_precipitation_night@3x.png */,
-				32D253D627F58BD600324717 /* widget_weather_temperature_day@2x.png */,
-				32D253E227F58BDA00324717 /* widget_weather_temperature_day@3x.png */,
-				32D253EA27F58BDC00324717 /* widget_weather_temperature_night@2x.png */,
-				32D253DD27F58BD800324717 /* widget_weather_temperature_night@3x.png */,
-				32D253D427F58BD600324717 /* widget_weather_umbrella_day@2x.png */,
-				32D253D927F58BD700324717 /* widget_weather_umbrella_day@3x.png */,
-				32D253DB27F58BD700324717 /* widget_weather_umbrella_night@2x.png */,
-				32D253E327F58BDA00324717 /* widget_weather_umbrella_night@3x.png */,
-				32D253D727F58BD600324717 /* widget_weather_wind_day@2x.png */,
-				32D253DF27F58BD900324717 /* widget_weather_wind_day@3x.png */,
-				32D253DA27F58BD700324717 /* widget_weather_wind_night@2x.png */,
-				32D253DC27F58BD700324717 /* widget_weather_wind_night@3x.png */,
-				32D253BE27F5868600324717 /* ic_custom_air_pressure@2x.png */,
-				32D253C427F5868900324717 /* ic_custom_air_pressure@3x.png */,
-				32D253BC27F5868500324717 /* ic_custom_clouds@2x.png */,
-				32D253BD27F5868500324717 /* ic_custom_clouds@3x.png */,
-				32D253BB27F5868400324717 /* ic_custom_precipitation@2x.png */,
-				32D253BF27F5868600324717 /* ic_custom_precipitation@3x.png */,
-				32D253C127F5868700324717 /* ic_custom_thermometer@2x.png */,
-				32D253C027F5868700324717 /* ic_custom_thermometer@3x.png */,
-				32D253C227F5868800324717 /* ic_custom_umbrella@2x.png */,
-				32D253C327F5868800324717 /* ic_custom_umbrella@3x.png */,
-				32D253C527F5868900324717 /* ic_custom_wind@2x.png */,
-				32D253C627F5868A00324717 /* ic_custom_wind@3x.png */,
 				3296B46127F8790200108AF7 /* ic_custom_air_pressure@2x.png */,
 				3296B46527F8790300108AF7 /* ic_custom_air_pressure@3x.png */,
 				3296B47A27F8790700108AF7 /* ic_custom_clouds@2x.png */,
@@ -12109,6 +12076,8 @@
 				DA5A80C526C563A600F274C7 /* UIColor+RGB.swift */,
 				8A7DF79827B9147B0005BF39 /* OAWeatherHelper.h */,
 				8A7DF79927B9147B0005BF39 /* OAWeatherHelper.mm */,
+				321126FD280070F500ED8D52 /* OAExternalTimeFormatter.h */,
+				321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -15024,6 +14993,7 @@
 				DA5A848126C563A900F274C7 /* OADistanceToMapMarkerControl.mm in Sources */,
 				DA5A83E726C563A800F274C7 /* OAWikiWebViewController.m in Sources */,
 				DA5A81E226C563A700F274C7 /* OAGPXDocument.mm in Sources */,
+				321126FF2800710800ED8D52 /* OAExternalTimeFormatter.mm in Sources */,
 				DA5A815E26C563A700F274C7 /* OAMonitoringPlugin.mm in Sources */,
 				32D253AD27F336C100324717 /* OACloudAccountVerificationViewController.m in Sources */,
 				DA5A81CB26C563A700F274C7 /* OASQLiteTileSource.mm in Sources */,
@@ -15881,7 +15851,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.2.0;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -15938,7 +15908,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.2.0;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

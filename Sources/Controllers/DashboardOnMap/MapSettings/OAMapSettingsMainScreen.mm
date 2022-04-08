@@ -35,7 +35,6 @@
 #define kRoadStyleCategory @"roadStyle"
 #define kDetailsCategory @"details"
 #define kHideCategory @"hide"
-#define kTransportCategory @"transport"
 #define kRoutesCategory @"routes"
 
 #define kUIHiddenCategory @"ui_hidden"
@@ -331,7 +330,7 @@
         [self generateAllCategories];
         for (NSString *cName in _allCategories)
         {
-            BOOL isTransport = [[cName lowercaseString] isEqualToString:kTransportCategory];
+            BOOL isTransport = [[cName lowercaseString] isEqualToString:TRANSPORT_CATEGORY];
             [mapStyleSectionData addObject:@{
                     @"name": [_styleSettings getCategoryTitle:cName],
                     @"image": [self getImageForParameterOrCategory:cName],
@@ -551,7 +550,7 @@
         return @"ic_custom_overlay_map";
     else if([paramName isEqualToString:kHideCategory])
         return @"ic_custom_hide";
-    else if([paramName isEqualToString:kTransportCategory])
+    else if([paramName isEqualToString:TRANSPORT_CATEGORY])
         return @"ic_custom_transport_bus";
 
     return @"";
@@ -576,7 +575,7 @@
     else if ([key isEqualToString:@"tracks"])
         return _settings.mapSettingVisibleGpx.get.count > 0;
     else if ([key isEqualToString:@"category_transport"])
-        return [_styleSettings isCategoryEnabled:kTransportCategory];
+        return ![_styleSettings isCategoryDisabled:TRANSPORT_CATEGORY];
     else if ([key isEqualToString:@"contour_lines_layer"])
         return ![[_styleSettings getParameter:@"contourLines"].value isEqualToString:@"disabled"];
     else if ([key isEqualToString:@"terrain_layer"])
@@ -1077,10 +1076,10 @@
 
 - (void)transportChanged:(BOOL)isOn
 {
-    [_styleSettings setCategoryEnabled:isOn categoryName:kTransportCategory];
-    if (isOn && ![_styleSettings isCategoryEnabled:kTransportCategory])
+    [_styleSettings setCategoryEnabled:isOn categoryName:TRANSPORT_CATEGORY];
+    if (isOn && ![_styleSettings isCategoryEnabled:TRANSPORT_CATEGORY])
     {
-        OAMapSettingsViewController *transportSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:kTransportCategory];
+        OAMapSettingsViewController *transportSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:TRANSPORT_CATEGORY];
         [transportSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     }
 }

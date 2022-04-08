@@ -8,14 +8,12 @@
 
 #import "OAMapStyleSettings.h"
 #import "OsmAndApp.h"
-#import "OALog.h"
 #import "Localization.h"
 #import "OAMapCreatorHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
-#include <OsmAndCore/QKeyValueIterator.h>
 
 @implementation OAMapStyleParameter
 
@@ -161,17 +159,19 @@
             [name isEqualToString:@"engine_v1"])
             continue;
 
-        NSString *attrLocKey = [NSString stringWithFormat:@"rendering_attr_%@_name", name];
-        NSString *attrLocText = OALocalizedString(attrLocKey);
-        if ([attrLocKey isEqualToString:attrLocText])
-            attrLocText = p->getTitle().toNSString();
 
         OAMapStyleParameter *param = [[OAMapStyleParameter alloc] init];
         param.mapStyleName = self.mapStyleName;
         param.mapPresetName = self.mapPresetName;
         param.name = name;
-        param.title = attrLocText;
         param.category = p->getCategory().toNSString();
+
+        BOOL isTransport = [param.category isEqualToString:TRANSPORT_CATEGORY];
+        NSString *attrLocKey = [NSString stringWithFormat:@"rendering_attr_%@_name", name];
+        NSString *attrLocText = OALocalizedString(attrLocKey);
+        if ([attrLocKey isEqualToString:attrLocText])
+            attrLocText = p->getTitle().toNSString();
+        param.title = isTransport ? [self getTransportName:param.name] : attrLocText;
 
         if (param.category.length > 0)
         {
@@ -249,6 +249,32 @@
 
     self.parameters = params;
     self.categories = categories;
+}
+
+- (NSString *)getTransportName:(NSString *)name
+{
+    if ([name isEqualToString:@"transportStops"])
+        return OALocalizedString(@"rendering_attr_transportStops_name");
+    else if ([name isEqualToString:@"showBusRoutes"])
+        return OALocalizedString(@"rendering_attr_busRoutes_name");
+    else if ([name isEqualToString:@"showTrolleybusRoutes"])
+        return OALocalizedString(@"rendering_attr_trolleybusRoutes_name");
+    else if ([name isEqualToString:@"subwayMode"])
+        return OALocalizedString(@"rendering_attr_subwayMode_name");
+    else if ([name isEqualToString:@"showShareTaxiRoutes"])
+        return OALocalizedString(@"rendering_attr_shareTaxiRoutes_name");
+    else if ([name isEqualToString:@"showTramRoutes"])
+        return OALocalizedString(@"rendering_attr_tramRoutes_name");
+    else if ([name isEqualToString:@"showTrainRoutes"])
+        return OALocalizedString(@"rendering_attr_trainLightrailRoutes_name");
+    else if ([name isEqualToString:@"showLightRailRoutes"])
+        return OALocalizedString(@"rendering_attr_lightRailRoutes_name");
+    else if ([name isEqualToString:@"showFunicularRoutes"])
+        return OALocalizedString(@"rendering_attr_funicularRoutes_name");
+    else if ([name isEqualToString:@"showMonorailRoutes"])
+        return OALocalizedString(@"rendering_attr_monorailRoutes_name");
+    else
+        return nil;
 }
 
 -(NSArray<OAMapStyleParameter *> *) getAllParameters

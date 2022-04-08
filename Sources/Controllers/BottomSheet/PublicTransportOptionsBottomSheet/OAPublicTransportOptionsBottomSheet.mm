@@ -6,7 +6,6 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "OAPublicTransportOptionsBottomSheet.h"
 #import "OABottomSheetHeaderIconCell.h"
 #import "OASettingSwitchCell.h"
@@ -62,7 +61,7 @@
         }];
     
     
-    NSArray* params = [_styleSettings getParameters:@"transport"];
+    NSArray* params = [_styleSettings getParameters:TRANSPORT_CATEGORY];
     
     for (OAMapStyleParameter *param in params)
     {

@@ -146,7 +146,6 @@
         _documentsDir = QDir(QString::fromNSString(_documentsPath));
         _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
         _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
-
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
 
         [self buildFolders];
@@ -371,6 +370,16 @@
         {
             [OAGPXDatabase.sharedDb save];
             [OAGPXDatabase.sharedDb load];
+
+            NSError *error;
+            NSArray *inboxFiles = [NSFileManager.defaultManager contentsOfDirectoryAtPath:_inboxPath error:&error];
+            if (!error)
+            {
+                for (NSString *inboxFile in inboxFiles)
+                {
+                    [NSFileManager.defaultManager removeItemAtPath:[_inboxPath stringByAppendingPathComponent:inboxFile] error:nil];
+                }
+            }
         }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;

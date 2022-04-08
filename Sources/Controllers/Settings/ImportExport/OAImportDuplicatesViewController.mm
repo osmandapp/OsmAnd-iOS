@@ -12,29 +12,20 @@
 #import "OAColors.h"
 #import "OAResourcesUIHelper.h"
 #import "OASettingsImporter.h"
-#import "OAApplicationMode.h"
-#import "OAQuickActionRegistry.h"
-#import "OAQuickActionType.h"
 #import "OAQuickAction.h"
-#import "OAMapSource.h"
-#import "OASQLiteTileSource.h"
 #import "OAPOIUIFilter.h"
 #import "OAAvoidRoadInfo.h"
 #import "OAProfileDataObject.h"
 #import "OAMenuSimpleCell.h"
 #import "OAMenuSimpleCellNoIcon.h"
 #import "OAActivityViewWithTitleCell.h"
-#import "OAMapSource.h"
 #import "OAIndexConstants.h"
 #import "OAFileSettingsItem.h"
-#import "OASettingsItem.h"
-#import "OASettingsHelper.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoritesSettingsItem.h"
 #import "OAOsmNotePoint.h"
 #import "OAOpenStreetMapPoint.h"
-#import "OAMarkersSettingsItem.h"
 #import "OADestination.h"
 #import "OATileSource.h"
 #import "OAPOIHelper.h"
@@ -651,8 +642,7 @@
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
     }
-    if ([_file hasPrefix:_app.inboxPath])
-        [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
+    [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
 }
 
 - (void)onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items {

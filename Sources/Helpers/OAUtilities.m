@@ -17,6 +17,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
 #import <UIKit/UIDevice.h>
+#import "OAIndexConstants.h"
 
 #import <mach/mach.h>
 #import <mach/mach_host.h>
@@ -661,6 +662,57 @@ static NSUnitCloud * _percent;
 @end
 
 @implementation OAUtilities
+
+static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
+
++ (BOOL) getAccessToFile:(NSString *)filePath
+{
+    if (filePath)
+    {
+        if (![filePath containsString:[OsmAndApp instance].inboxPath])
+        {
+            if (!_accessingSecurityScopedResource)
+                _accessingSecurityScopedResource = [NSMutableArray array];
+
+            BOOL access = NO;
+            NSURL *url = [NSURL fileURLWithPath:filePath];
+            if (url)
+            {
+                access = [url startAccessingSecurityScopedResource];
+                if (access)
+                    [_accessingSecurityScopedResource addObject:filePath];
+            }
+            return access;
+        }
+        return YES;
+    }
+    return NO;
+}
+
++ (void) denyAccessToFile:(NSString *)filePath removeFromInbox:(BOOL)remove
+{
+    if (filePath)
+    {
+        if (remove && [filePath containsString:[OsmAndApp instance].inboxPath])
+        {
+            [NSFileManager.defaultManager removeItemAtPath:filePath error:nil];
+        }
+        else if (remove && [filePath containsString:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:TEMP_DIR]])
+        {
+            [NSFileManager.defaultManager removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:TEMP_DIR] error:nil];
+        }
+        else
+        {
+            NSURL *url = [NSURL fileURLWithPath:filePath];
+            if (url)
+            {
+                [url stopAccessingSecurityScopedResource];
+                if (_accessingSecurityScopedResource)
+                    [_accessingSecurityScopedResource removeObject:filePath];
+            }
+        }
+    }
+}
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion
 {

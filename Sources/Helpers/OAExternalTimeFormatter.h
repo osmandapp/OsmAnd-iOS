@@ -14,5 +14,7 @@
 
 + (BOOL) isCurrentRegionWithAmpmOnLeft;
 + (std::function<std::string (int, int, bool)> ) getExternalTimeFormatterCallback;
++ (std::vector<std::string>) getLocalizedWeekdays;
++ (std::vector<std::string>) getLocalizedMonths;
 
 @end

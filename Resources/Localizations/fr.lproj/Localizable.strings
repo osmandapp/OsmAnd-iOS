@@ -2106,10 +2106,10 @@
 "dialogs_and_notifications_descr" = "Contrôle des fenêtres pop-up, des boîtes de dialogue et des notifications";
 "dialogs_and_notifications" = "Écrans et notifications";
 "ios_release_4_0" = "- Nouveau ! L'écran \"Ajouter un favori\" avec des options pour sélectionner l'icône personnalisée, la couleur et la forme.\n- Ajout d'un nouveau \"widget de coordonnées\" avec les coordonnées de l'emplacement actuel\n- Ajout de la possibilité d'importer des plugins personnalisés définis par l'utilisateur\n- La fonctionnalité d'importation et d'exportation a été considérablement étendue.\n- La distance par tapotement a été déplacée de la règle Radius vers une option distincte.\n- L'application CarPlay se fige lorsque l'écran de l'iPhone est éteint.\n- L'écran des plugins a été déplacé du menu Cartes et Ressources au menu principal.\n- Ajout de la localisation en finnois\n- Correction de l'interface utilisateur en orientation paysage pour l'écran \"Planifier un itinéraire\".\n- Ajout de la prise en charge des fichiers de routage et de rendu personnalisés\n- Correction des performances de la ligne de direction des marqueurs\n - Correction du problème d'importation de fichiers GPX avec des extensions en majuscules.\n- Correction d'un problème avec le menu \"Suivre la piste\".\n- Correction de l'importation des fichiers OBF\n";
-"routes_color_by_type" = "Couleur des itinéraires selon…";
-"rendering_value_walkingRoutesOSMC_description" = "Couleur des itinéraires en fonction de leurs couleur locale (si elle est connue d’OpenStreetMap) et du marquage des chemins de randonnée.";
-"rendering_value_walkingRoutesScopeOSMC_description" = "Couleur selon l\'affiliation au réseau.";
-"rendering_value_walkingRoutesOSMCNodes_description" = "Couleur des itinéraires en fonction du type de réseau (international, régional, local).";
+"routes_color_by_type" = "Colorer les itinéraires selon…";
+"rendering_value_walkingRoutesOSMC_description" = "Colorer les itinéraires selon leur couleur locale (si elle est connue d’OpenStreetMap) et du marquage des chemins de randonnée.";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Colorer selon l'affiliation au réseau.";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Colorer les itinéraires selon le type de réseau (international, régional, local).";
 "walking_route_osmc_description" = "Couleur des itinéraires en fonction de leurs définitions locale (si elle est connue d’OpenStreetMap) et du type d\'itinéraire (international, régional, local).";
 "travel_routes" = "Itinéraires de voyage";
 "added_profiles_descr" = "Profils ajoutés par extension";

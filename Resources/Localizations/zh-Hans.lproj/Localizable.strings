@@ -1061,7 +1061,7 @@
 "routing_attr_height_name" = "高度限制";
 "rendering_attr_roadColors_name" = "道路颜色主题";
 "rendering_attr_surface_salt_name" = "盐地";
-"rendering_attr_highway_class_track_name" = "轨道";
+"rendering_attr_highway_class_track_name" = "轨迹";
 "rendering_value_germanRoadAtlas_name" = "德国道路地图";
 "rendering_attr_alpineHiking_description" = "依据 SAC 分级计算路径。";
 "routing_attr_avoid_ferry_description" = "避免轮渡";
@@ -1715,3 +1715,13 @@
 "import_duplicates_title" = "有些项目已经存在";
 "import_duplicates_description" = "OsmAnd 已经具有与导入的元素同名的元素。\n\n选择一个操作。";
 "add_custom_category" = "添加自定义类别";
+"rendering_attr_showFitnessTrails_name" = "健身步道";
+"rendering_attr_showFitnessTrails_description" = "显示健身步道";
+"routeInfo_tracktype_description" = "根据表面成分给路线或轨迹线上色。通常适用于道路网络大部分未铺设的情况。";
+"save_heading" = "包括航向";
+"selected_profile" = "选定的配置文件";
+"join_segments" = "加入分段";
+"routeInfo_roadClass_description" = "按道路分类给路线或轨迹线上色。";
+"number_of_tiles" = "磁贴数量";
+"rendering_attr_showRunningRoutes_name" = "跑步路线";
+"rendering_attr_showRunningRoutes_description" = "显示跑步路线";

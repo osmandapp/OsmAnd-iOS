@@ -61,7 +61,15 @@ std::string formattingCallback (int hours, int minutes, bool appendAmPM) {
     std::vector<std::string> weekdays;
     for (int i = 0; i < 7; i++)
     {
-        weekdays.push_back([self.class getTranslatesWeekday:i].UTF8String);
+        NSDate *date = [NSDate date];
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSDateComponents *components = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
+        components.weekday = i;
+        date = [calendar dateFromComponents:components];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+        [formatter setDateFormat:@"EEE"];
+        NSString *localizedWeek = [formatter stringFromDate:date];
+        weekdays.push_back(localizedWeek.UTF8String);
     }
     return weekdays;
 }
@@ -71,33 +79,17 @@ std::string formattingCallback (int hours, int minutes, bool appendAmPM) {
     std::vector<std::string> months;
     for (int i = 0; i < 12; i++)
     {
-        months.push_back([self.class getTranslatesMonth:i].UTF8String);
+        NSDate *date = [NSDate date];
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSDateComponents *components = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
+        components.weekday = i;
+        date = [calendar dateFromComponents:components];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+        [formatter setDateFormat:@"EEE"];
+        NSString *localizedMonth = [formatter stringFromDate:date];
+        months.push_back(localizedMonth.UTF8String);
     }
     return months;
-}
-
-+ (NSString *) getTranslatesWeekday:(int)number
-{
-    NSDate *date = [NSDate date];
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
-    components.weekday = number;
-    date = [calendar dateFromComponents:components];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"EEE"];
-    return [formatter stringFromDate:date];
-}
-
-+ (NSString *) getTranslatesMonth:(int)number
-{
-    NSDate *date = [NSDate date];
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
-    components.month = number;
-    date = [calendar dateFromComponents:components];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"MMM"];
-    return [formatter stringFromDate:date];
 }
 
 @end

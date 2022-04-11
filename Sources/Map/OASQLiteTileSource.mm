@@ -149,8 +149,8 @@
         }
         else
         {
-            _timeSupported = _db->hasTimeColumn();
-            meta.setTimeColumn(_timeSupported ? QStringLiteral("yes") : QStringLiteral("no"));
+//            _timeSupported = _db->hasTimeColumn();
+//            meta.setTimeColumn(_timeSupported ? QStringLiteral("yes") : QStringLiteral("no"));
             metaChanged = YES;
         }
 

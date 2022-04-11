@@ -149,7 +149,7 @@
         }
         else
         {
-            _timeSupported = _db->hasTimeColumn();
+            _timeSupported = _db->hasTileTimeColumn();
             meta.setTimeColumn(_timeSupported ? QStringLiteral("yes") : QStringLiteral("no"));
             metaChanged = YES;
         }
@@ -470,6 +470,16 @@
     delete db;
 
     return title.length > 0 ? title : [[[filePath lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+}
+
+- (NSString *) getFilePath
+{
+    return _filePath;
+}
+
+- (void) enableTileTimeSupportIfNeeded
+{
+    _db->enableTileTimeSupportIfNeeded();
 }
 
 @end

@@ -493,9 +493,25 @@
                 [self updateSqliteSource];
             }
         }
+        
+        [self refreshSqlitedbCachedValuesIfNeeded];
+        [_sqliteSource enableTileTimeSupportIfNeeded];
+        
         _baseController.dataInvalidated = YES;
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+
+- (void) refreshSqlitedbCachedValuesIfNeeded
+{
+    NSString *dbFilePath = [_sqliteSource getFilePath];
+    NSString *currentOverlayPath = _app.data.overlayMapSource.resourceId;
+    NSString *currentUnderlayPath = _app.data.overlayMapSource.resourceId;
+    
+    if ([dbFilePath hasSuffix:currentOverlayPath])
+        [_app.data.overlayMapSourceChangeObservable notifyEvent];
+    if ([dbFilePath hasSuffix:currentUnderlayPath])
+        [_app.data.underlayMapSourceChangeObservable notifyEvent];
 }
 
 - (void) updateSqliteSource

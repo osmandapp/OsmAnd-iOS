@@ -2434,3 +2434,4 @@
 "cloud_make_backup_descr" = "Existem muitas alterações neste dispositivo, faça primeiro uma cópia de segurança destes dados para não os perder.";
 "cloud_conflicts_descr" = "Alguns ficheiros não puderam ser enviados para o servidor porque este tem uma versão mais recente.";
 "cloud_view_conflicts" = "Ver conflitos";
+"weather_cloud_data_description" = "Os dados meteorológicos serão descarregados cada vez que forem vistos.";

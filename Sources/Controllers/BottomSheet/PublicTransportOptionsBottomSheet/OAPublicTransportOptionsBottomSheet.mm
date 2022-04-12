@@ -168,7 +168,7 @@ typedef void(^OAPublicTransportOptionsCellDataOnSwitch)(BOOL is, NSIndexPath *in
                 else
                     icon = [UIImage templateImageNamed:item[@"icon"]];
                 cell.iconView.image = icon;
-                cell.iconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+                cell.iconView.tintColor = isOn ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
             }
 
             [cell.textView setText:item[@"title"]];

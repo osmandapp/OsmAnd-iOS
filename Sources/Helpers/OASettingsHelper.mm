@@ -861,7 +861,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         if (pluginIndependentItems.count > 0)
         {
             if (_importDataVC)
-                [_importDataVC onItemsCollected:items];
+                [_importDataVC onItemsCollected:pluginIndependentItems file:[_importTask getFile]];
         }
         else if (pluginSettingsItems.count > 0)
         {

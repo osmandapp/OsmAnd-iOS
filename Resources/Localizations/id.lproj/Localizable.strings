@@ -27,7 +27,7 @@
 "get_discount_first_part" = "%@ for first %@";
 "get_discount_first_few_parts" = "%@ for first %@";
 "get_discount_second_part" = "then %@";
-"mapillary_image" = "Citra mapil";
+"mapillary_image" = "Gambar Mapillary";
 "shared_string_milliradians" = "Miliradian";
 "angular_units" = "Angular measurement units";
 "angular_units_descr" = "Change azimuth measurement units.";
@@ -35,8 +35,8 @@
 "allow_3d_descr" = "Enable this option to be able to view the map in the 2.5D perspective";
 "access_intermediate_arrival_time" = "Intermediate arrival time";
 "map_widget_intermediate_time" = "Intermediate time";
-"shared_string_previous" = "Previous";
-"shared_string_next" = "Next";
+"shared_string_previous" = "Sebelumnya";
+"shared_string_next" = "Berikutnya";
 "route_stops_before" = "%d stops before";
 "transport_routes" = "Rute-rute";
 "transport_nearby_routes_within" = "Nearby routes within";
@@ -52,18 +52,18 @@
 "replace_destination_point" = "Replace the destination";
 "shared_string_current" = "Current";
 "make_as_start_point" = "Make this the start point";
-"keep_and_add_destination_point" = "Add as subsequent destination";
+"keep_and_add_destination_point" = "Tambahkan sebagai destinasi perantara selanjutnya";
 "subsequent_dest_description" = "Move destination up, and create destination";
-"add_as_first_destination_point" = "Add as first intermediate destination";
+"add_as_first_destination_point" = "Tambahkan sebagai destinasi perantara pertama";
 "first_intermediate_dest_description" = "Adds the first stop on the route";
-"add_as_last_destination_point" = "Add as last intermediate destination";
+"add_as_last_destination_point" = "Tambahkan sebagai destinasi perantara terakhir";
 "last_intermediate_dest_description" = "Adds the last stop along the route";
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "Cari";
 "address_search" = "Mencari alamat";
 "search_radius" = "Search radius";
 "targets" = "Destinations";
-"search_radius_proximity" = "Within";
+"search_radius_proximity" = "Dalam";
 "poi" = "POI";
 "search_more" = "Cari lebih banyak…";
 "day_off_label" = "off";
@@ -200,7 +200,7 @@
 "distance_indication" = "Indikasi jarak";
 "arrows_on_map" = "Arrows on the map";
 "direction_lines" = "Direction lines";
-"active_markers" = "Active markers";
+"active_markers" = "Penanda aktif";
 "specify_number_of_dir_indicators" = "Specify number of direction indicators, it affects all settings below.";
 "choose_how_display_distance" = "Choose how to display the distance to active markers";
 "appearance_on_map" = "Tampilan pada peta";
@@ -451,7 +451,7 @@
 "shared_string_delete" = "Hapus";
 "shared_string_upload" = "Upload";
 "shared_string_remove" = "Remove";
-"shared_string_dismiss" = "Dismiss";
+"shared_string_dismiss" = "Abaikan";
 "shared_string_add" = "Tambahkan";
 "shared_string_buy" = "Beli";
 "shared_string_buy_for" = "for";
@@ -478,7 +478,7 @@
 "shared_string_reset" = "Setel ulang";
 "shared_string_read_more" = "Read more";
 "shared_string_on" = "Hidup";
-"shared_string_off" = "Off";
+"shared_string_off" = "Mati";
 "shared_string_clear_cache" = "Clear cache";
 "shared_string_maximum" = "Maximum";
 "shared_string_warning" = "Warning";
@@ -502,8 +502,8 @@
 "update_map" = "Perbarui peta";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
-"move_map_to_select_area" = "Move map to select needed area.";
-"number_of_tiles" = "Number of tiles";
+"move_map_to_select_area" = "Gerakkan peta untuk memilih area yang dibutuhkan.";
+"number_of_tiles" = "Jumlah ubin";
 "download_size" = "Download size";
 "preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
 "select_online_source" = "Select source";
@@ -548,7 +548,7 @@
 "fav_replace" = "Replace";
 "fav_replace_all" = "Ganti semua";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
-"fav_points_not_exist" = "No Favorite points exist";
+"fav_points_not_exist" = "Tidak ada titik Favorit yang ada";
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
 "fav_select" = "Please select favorites";
@@ -626,7 +626,7 @@
 "gpx_descent" = "Descent";
 "gpx_updown" = "Up/Down";
 "gpx_uphills_total" = "Uphills total";
-"distance_moving" = "Jarak benar";
+"distance_moving" = "Jarak dibenarkan";
 "track_recording" = "Track recording";
 "track_recording_name" = "Currently recording track";
 "track_stop_rec" = "Stop recording";
@@ -754,8 +754,8 @@
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "Unknown format";
-"navigate_point_northing" = "Northing";
-"navigate_point_easting" = "Easting";
+"navigate_point_northing" = "Ke utara";
+"navigate_point_easting" = "Ke timur";
 "navigate_point_zone" = "Zona";
 "navigate_point_olc" = "Open Location Code";
 "navigate_point_olc_short" = "OLC";
@@ -785,12 +785,12 @@
 "lang_bpy" = "Bishnupriya";
 "lang_br" = "Breton";
 "lang_bs" = "Bahasa Bosnia";
-"lang_ca" = "Catalan";
+"lang_ca" = "Katalan";
 "lang_ce" = "Chechen";
 "lang_ceb" = "Cebuano";
 "lang_cs" = "Bahasa Ceko";
 "lang_cv" = "Chuvash";
-"lang_cy" = "Welsh";
+"lang_cy" = "Wales";
 "lang_da" = "Bahasa Denmark";
 "lang_de" = "Bahasa Jerman";
 "lang_de_casual" = "Bahasa Jerman (santai)";
@@ -811,7 +811,7 @@
 "lang_gl" = "Galician";
 "lang_gn_py" = "Guaraní";
 "lang_gu" = "Gujarati";
-"lang_he" = "Hebrew";
+"lang_he" = "Ibrani";
 "lang_hi" = "Hindi";
 "lang_hr" = "Bahasa Kroasia";
 "lang_hsb" = "Sorbian (Upper)";
@@ -822,7 +822,7 @@
 "lang_id" = "Bahasa Indonesia";
 "lang_is" = "Icelandic";
 "lang_it" = "Bahasa Italia";
-"lang_iw" = "Hebrew";
+"lang_iw" = "Ibrani";
 "lang_ja" = "Bahasa Jepang";
 "lang_jv" = "Javanese";
 "lang_ka" = "Bahasa Georgia";
@@ -836,7 +836,7 @@
 "lang_lb" = "Luxembourgish";
 "lang_lmo" = "Lombard";
 "lang_lo" = "Lao";
-"lang_lt" = "Lithuanian";
+"lang_lt" = "Lithuania";
 "lang_lv" = "Bahasa Latvia";
 "lang_mg" = "Malagasy";
 "lang_min" = "Minangkabau";
@@ -882,7 +882,7 @@
 "lang_tl" = "Tagalog";
 "lang_tr" = "Bahasa Turki";
 "lang_tt" = "Tatar";
-"lang_uk" = "Ukrainian";
+"lang_uk" = "Ukraina";
 "lang_ur" = "Urdu";
 "lang_uz" = "Uzbek";
 "lang_vi" = "Bahasa Vietnam";
@@ -1189,9 +1189,9 @@
 "menu_help" = "Bantuan";
 
 // OSM Editing actions
-"opening_changeset" = "Opening changeset…";
-"closing_changeset" = "Closing changeset…";
-"commiting_node" = "Committing node…";
+"opening_changeset" = "Membuka perubahan…";
+"closing_changeset" = "Menutup perubahan…";
+"commiting_node" = "Mengkomit node…";
 "loading_poi_obj" = "Memuat POI…";
 "shared_string_loading" = "Loading…";
 "osm_upload_failed_title" = "Upload failed";
@@ -1343,7 +1343,7 @@
 "replace_destination" = "Ubah destinasi";
 "add_destination" = "Add destination";
 "add_start" = "Add starting point";
-"add_intermediate" = "Add intermediate point";
+"add_intermediate" = "Tambahkan titik perantara";
 "add_home" = "Tambah lokasi rumah";
 "add_work" = "Tambah lokasi kantor";
 "home_pt" = "Rumah";
@@ -1599,7 +1599,7 @@
 "rendering_category_hide" = "Sembunyikan";
 "rendering_category_routes" = "Rute-rute";
 "rendering_category_details" = "Keterangan";
-"rendering_category_transport" = "Transport";
+"rendering_category_transport" = "Transportasi";
 "rendering_category_others" = "Atribut-atribut peta lainnya";
 
 // Rendering attributes
@@ -1660,7 +1660,7 @@
 "product_title_wiki" = "Wiki";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"shared_string_all_languages" = "All languages";
+"shared_string_all_languages" = "Semua bahasa";
 "select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "wiki_menu_download_descr" = "Additional maps are needed to view Wikipedia POIs on the map.";
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
@@ -1830,7 +1830,7 @@
 "first_usage_wizard_desc" = "Biarkan OsmAnd menentukan lokasi Anda dan menyarankan peta untuk diunduh di wilayah tersebut.";
 "suggested_maps" = "Peta yang disarankan";
 "suggested_maps_descr" = "These maps are required for the plugin";
-"added_profiles" = "Added profiles";
+"added_profiles" = "Profil ditambahkan";
 "added_profiles_descr" = "Profiles added by plugin";
 "location_not_found" = "Lokasi tidak ditemukan";
 "search_my_location" = "Search my location";
@@ -1938,7 +1938,7 @@
 "purchase_dialog_travel_description" = "Beli salah satu berikut ini untuk mendapatkan fitur panduan perjalanan luring:";
 "free_version_message" = "You can download or update %d maps";
 "get_osmand_live" = "Get OsmAnd Live to unlock all features:";
-"osm_live_subscription" = "Berlangganan OSM Live";
+"osm_live_subscription" = "Langganan OSM Live";
 "osm_live_cancel_subscription" = "Batalkan langganan";
 "wikivoyage_offline" = "Wikivoyage luring";
 "unlimited_downloads" = "Unduhan tidak terbatas";
@@ -1956,7 +1956,7 @@
 "subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
 "osm_live_subscribe_btn" = "Berlangganan";
 "shared_string_email_address" = "E-mail address";
-"osm_live_enter_email" = "Harap masukkan alamat surel yang benar";
+"osm_live_enter_email" = "Mohon masukkan alamat e-mail yang valid";
 "osm_live_enter_user_name" = "Please enter public name";
 "shared_string_unexpected_error" = "Kesalahan tak terduga";
 "osm_live_payment_desc" = "You can manage and cancel your subscriptions in your App Store account settings after purchase";
@@ -1964,9 +1964,9 @@
 "osm_live_unlock_updates" = "Unlock hourly map updates";
 "osm_live_banner_descr" = "Subscribe to OsmAnd Live and get unlimited <b>hourly</b> map updates and <b>all features</b> included from %@";
 "osm_live_get_title" = "Get OsmAnd Live";
-"osm_live_ask_for_purchase" = "Harap beli berlangganan OSM Live terlebih dahulu";
+"osm_live_ask_for_purchase" = "Mohon beli sebuah langganan ke OsmAnd Live terlebih dahulu";
 "shared_string_io_error" = "Kesalahan I/O";
-"osm_live_hide_user_name" = "Jangan tampilkan nama saya dilaporan";
+"osm_live_hide_user_name" = "Jangan tampilkan nama saya di laporan";
 "subscriptions_public_info" = "Payment will be charged to your iTunes Account at confirmation of purchase. The subscription will automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period. Your account will be charged according to your plan for renewal within 24 hours prior to the end of the current period. You can manage or turn off auto-renew in your Account Settings after purchase. If you purchase a subscription during a free trial period, the unused portion of this period will be forfeited.";
 "terms_of_use" = "Terms of use";
 "privacy_policy" = "Privacy policy";
@@ -2158,7 +2158,7 @@
 "rendering_attr_hideUnderground_name" = "Underground objects";
 "rendering_value_dark_brown_name" = "Cokelat Tua";
 "routeInfo_piste_type_name" = "Piste type";
-"routing_attr_driving_style_safety_name" = "Utamakan byways";
+"routing_attr_driving_style_safety_name" = "Utamakan jalan pintas.";
 "rendering_attr_surface_paving_stones_name" = "Paving stones";
 "rendering_attr_depthContours_name" = "Kontur kedalaman laut";
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
@@ -2172,7 +2172,7 @@
 "rendering_attr_highway_class_path_name" = "Path";
 "rendering_value_white_name" = "Putih";
 "rendering_value_blue_name" = "Biru";
-"routing_attr_avoid_ice_roads_fords_description" = "Hindari jalan beku dan arungan sungai.";
+"routing_attr_avoid_ice_roads_fords_description" = "Menghindari jalan beku dan arungan sungai.";
 "routing_attr_allow_advanced_name" = "Allow advanced routes";
 "rendering_attr_surface_grass_paver_name" = "Grass paver";
 "rendering_attr_hideAccess_name" = "Access restrictions";
@@ -2230,7 +2230,7 @@
 "rendering_attr_piste_type_snow_park_name" = "Terrain park";
 "rendering_attr_highway_class_footway_name" = "Footway";
 "routing_attr_avoid_tram_description" = "Menghindari trem";
-"rendering_value_default13_name" = "Default (13)";
+"rendering_value_default13_name" = "Standar (13)";
 "rendering_value_thin_name" = "Tipis";
 "rendering_attr_whiteWaterSports_name" = "Whitewater sports";
 "routeInfo_roadClass_name" = "Jenis jalanan";
@@ -2251,7 +2251,7 @@
 "rendering_attr_highway_class_motorway_name" = "Jalur lambat";
 "rendering_value_brown_name" = "Brown";
 "rendering_attr_hideIcons_name" = "POI icons";
-"rendering_attr_roadColors_description" = "Select a road color scheme:";
+"rendering_attr_roadColors_description" = "Pilih sebuah skema warna jalan:";
 "rendering_value_browse_map_name" = "Jelajahi peta";
 "rendering_attr_surface_asphalt_name" = "Aspal";
 "rendering_value_translucent_orange_name" = "Translucent orange";
@@ -2324,3 +2324,13 @@
 "ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"add_description" = "Tambahkan deskripsi";
+"rendering_attr_showFitnessTrails_name" = "Jejak kebugaran";
+"shared_string_hide_all" = "Sembunyikan semua";
+"shared_string_max_height" = "Tinggi maks.";
+"shared_string_min_height" = "Tinggi min.";
+"shared_string_open_street_map" = "OpenStreetMap";
+"turn_arrows" = "Panah Putar";
+"rendering_attr_showRunningRoutes_name" = "Rute yang berjalan";
+"rendering_attr_showRunningRoutes_description" = "Tampilkan rute yang berjalan";
+"rendering_attr_showFitnessTrails_description" = "Tampilkan jejak kebugaran";

@@ -1600,7 +1600,7 @@
 "srtm_download_list_help_message" = "Az OsmAnd méterben és lábban adja meg a szintvonalak magasságát. A mértékegység módosításához újra le kell töltenie a fájlt.";
 "shared_string_feet" = "láb";
 "product_title_openplacereviews" = "OpenPlaceReviews";
-"contour_lines_hillshades_slope" = "Szintvonalak, domborzat, lejtviszony";
+"contour_lines_hillshades_slope" = "Szintvonalak, domborzat, lejtés";
 "product_desc_ext_mapillary" = "Online utcaszintű fényképek mindenkinek. Fedezzen fel helyeket, dolgozzon együtt másokkal, örökítse meg a világot.";
 "navigate_point_olc" = "Open Location Code (OLC)";
 "route_between_points_warning_desc" = "Ezután a beállítás használatához igazítsa a nyomvonalat a legközelebbi úthoz az egyik navigációs profil segítségével.";
@@ -1653,6 +1653,6 @@
 "shared_string_custom" = "Egyéni";
 "shared_string_open_street_map" = "OpenStreetMap";
 "customize_route_line" = "Útvonaljelző-csík testreszabása";
-"routeInfo_tracktype_description" = "Útvonal vagy nyomvonal színezése a felületi összetétele alapján. Alkalmazása a főleg burkolatlan utakból álló úthálózat esetében jellemző.";
+"routeInfo_tracktype_description" = "Útvonal vagy nyomvonal színezése a felület összetétele alapján. Főleg burkolatlan utakból álló hálózatnál célszerű alkalmazni.";
 "number_of_tiles" = "Csempék száma";
 "move_map_to_select_area" = "Mozgassa a térképet a kívánt terület kijelöléséhez.";

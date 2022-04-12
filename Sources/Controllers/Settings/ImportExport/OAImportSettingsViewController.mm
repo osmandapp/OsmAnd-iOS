@@ -213,11 +213,11 @@
     }
 }
 
-- (void)onItemsCollected:(NSArray<OASettingsItem *> *)items file:(NSString *)file
+- (void)onItemsCollected:(NSArray<OASettingsItem *> *)items filePath:(NSString *)filePath
 {
     _isNewItems = YES;
     _settingsItems = items;
-    _file = file;
+    _file = filePath;
     _archiveItems = OsmAnd::ArchiveReader(QString::fromNSString(_file)).getItems();
     if (_settingsItems)
     {

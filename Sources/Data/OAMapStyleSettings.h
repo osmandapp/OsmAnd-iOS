@@ -94,4 +94,7 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 
 - (void) resetMapStyleForAppMode:(NSString *)mapPresetName;
 
++ (NSString *)getTransportIconForName:(NSString *)name;
++ (int)getTransportSortIndexForName:(NSString *)name;
+
 @end

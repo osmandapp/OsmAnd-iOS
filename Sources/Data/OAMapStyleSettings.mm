@@ -447,4 +447,54 @@
     return keys;
 }
 
++ (NSString *)getTransportIconForName:(NSString *)name
+{
+    if ([name isEqualToString:TRANSPORT_STOPS_ATTR])
+        return @"mx_public_transport_stop_position";
+    else if ([name isEqualToString:BUS_ROUTES_ATTR])
+        return @"mx_highway_bus_stop";
+    else if ([name isEqualToString:TROLLEYBUS_ROUTES_ATTR])
+        return @"mx_route_trolleybus_ref";
+    else if ([name isEqualToString:SUBWAY_MODE_ATTR])
+        return @"mx_railway_station_subway_map";
+    else if ([name isEqualToString:SHARE_TAXI_ROUTES_ATTR])
+        return @"mx_route_share_taxi_ref";
+    else if ([name isEqualToString:TRAM_ROUTES_ATTR])
+        return @"mx_railway_tram_stop";
+    else if ([name isEqualToString:TRAIN_ROUTES_ATTR])
+        return @"mx_railway_station";
+    else if ([name isEqualToString:LIGHT_RAIL_ROUTES_ATTR])
+        return @"mx_route_light_rail_ref";
+    else if ([name isEqualToString:FUNICULAR_ROUTES])
+        return @"mx_funicular";
+    else if ([name isEqualToString:MONORAIL_ROUTES_ATTR])
+        return @"mx_route_monorail_ref";
+    else
+        return nil;
+}
+
++ (int)getTransportSortIndexForName:(NSString *)name
+{
+    if ([name isEqualToString:BUS_ROUTES_ATTR])
+        return 1;
+    else if ([name isEqualToString:TROLLEYBUS_ROUTES_ATTR])
+        return 2;
+    else if ([name isEqualToString:SUBWAY_MODE_ATTR])
+        return 3;
+    else if ([name isEqualToString:SHARE_TAXI_ROUTES_ATTR])
+        return 4;
+    else if ([name isEqualToString:TRAM_ROUTES_ATTR])
+        return 5;
+    else if ([name isEqualToString:TRAIN_ROUTES_ATTR])
+        return 6;
+    else if ([name isEqualToString:LIGHT_RAIL_ROUTES_ATTR])
+        return 7;
+    else if ([name isEqualToString:FUNICULAR_ROUTES])
+        return 8;
+    else if ([name isEqualToString:MONORAIL_ROUTES_ATTR])
+        return 9;
+    else
+        return 0;
+}
+
 @end

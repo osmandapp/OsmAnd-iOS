@@ -8,13 +8,15 @@
 
 #import "OAPublicTransportOptionsBottomSheet.h"
 #import "OABottomSheetHeaderIconCell.h"
-#import "OASettingSwitchCell.h"
+#import "OAIconTextDividerSwitchCell.h"
 #import "OAMapStyleSettings.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCustomHeaderView.h"
 
 #define kButtonsDividerTag 150
+
+typedef void(^OAPublicTransportOptionsCellDataOnSwitch)(BOOL is, NSIndexPath *indexPath);
 
 @interface OAPublicTransportOptionsBottomSheetScreen ()
 
@@ -22,9 +24,11 @@
 
 @implementation OAPublicTransportOptionsBottomSheetScreen
 {
-    OAMapStyleSettings* _styleSettings;
+    OAMapStyleSettings *_styleSettings;
     OAPublicTransportOptionsBottomSheetViewController *vwController;
-    NSArray* _data;
+
+    NSArray<NSArray *> *_data;
+    NSInteger _transportRoutesSection;
 }
 
 @synthesize tableData, tblView;
@@ -49,54 +53,57 @@
     [self initData];
 }
 
+- (void) initData
+{
+    NSMutableArray *data = [NSMutableArray array];
+
+    [data addObject:@[@{
+            @"type" : [OABottomSheetHeaderIconCell getCellIdentifier],
+            @"title" : OALocalizedString(@"transport"),
+            @"description" : @""
+    }]];
+
+    NSMutableArray *section = [NSMutableArray array];
+    NSArray *parameters = [_styleSettings getParameters:TRANSPORT_CATEGORY];
+    for (OAMapStyleParameter *parameter in parameters)
+    {
+        NSMutableDictionary *cell = [NSMutableDictionary dictionary];
+        cell[@"title"] = parameter.title;
+        cell[@"value"] = @([parameter.storedValue isEqualToString:@"true"]);
+        cell[@"type"] = [OAIconTextDividerSwitchCell getCellIdentifier];
+        cell[@"switch"] = ^(BOOL isOn, NSIndexPath *indexPath) {
+            parameter.value = isOn ? @"true" : @"false";
+            [_styleSettings save:parameter];
+            cell[@"value"] = @(isOn);
+            [self.tblView reloadRowsAtIndexPaths:@[indexPath]
+                                withRowAnimation:UITableViewRowAnimationAutomatic];
+        };
+        cell[@"icon"] = [OAMapStyleSettings getTransportIconForName:parameter.name];
+        cell[@"index"] = @([OAMapStyleSettings getTransportSortIndexForName:parameter.name]);
+
+        if ([parameter.name isEqualToString:@"transportStops"])
+        {
+            [data addObject:@[cell]];
+            continue;
+        }
+
+        [section addObject:cell];
+    }
+
+    _transportRoutesSection = data.count;
+
+    [data addObject:[section sortedArrayUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
+        return [obj1[@"index"] compare:obj2[@"index"]];
+    }]];
+
+    _data = data;
+}
+
 - (void) setupView
 {
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
-    NSMutableArray *arr = [NSMutableArray array];
-    
-    [arr addObject:@{
-        @"type" : [OABottomSheetHeaderIconCell getCellIdentifier],
-        @"title" : OALocalizedString(@"transport"),
-        @"description" : @""
-        }];
-    
-    
-    NSArray* params = [_styleSettings getParameters:TRANSPORT_CATEGORY];
-    
-    for (OAMapStyleParameter *param in params)
-    {
-        if (!param)
-            continue;
-        
-        NSString* imageName = [self getIconNameForStyleName:param.name];
-        
-        [arr addObject:@{
-            @"type" : [OASettingSwitchCell getCellIdentifier],
-            @"name" : param.name,
-            @"title" : param.title,
-            @"value" : param.value,
-            @"img" : imageName,
-            }];
-    }
- 
-    _data = [NSArray arrayWithArray:arr];
-    
     [vwController.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
-}
-
-- (NSString *) getIconNameForStyleName:(NSString *)name
-{
-    NSString* imageName = @"";
-    if ([name isEqualToString:@"tramTrainRoutes"])
-        imageName = @"ic_custom_transport_tram";
-    else if ([name isEqualToString:@"subwayMode"])
-        imageName = @"ic_custom_transport_subway";
-    else if ([name isEqualToString:@"transportStops"])
-        imageName = @"ic_custom_transport_stop";
-    else if ([name isEqualToString:@"publicTransportMode"])
-        imageName = @"ic_custom_transport_bus";
-    
-    return imageName;
+    [self.tblView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
 - (BOOL) cancelButtonPressed
@@ -104,145 +111,139 @@
     return YES;
 }
 
-- (void) initData
-{
-}
-
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return _data.count;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.count;
-}
-
-- (NSDictionary *) getItem:(NSIndexPath *)indexPath
-{
-    return _data[indexPath.row];
+    return _data[section].count;
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.row];
-    
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    UITableViewCell *outCell = nil;
     if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]])
     {
-        OABottomSheetHeaderIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderIconCell getCellIdentifier]];
+        OABottomSheetHeaderIconCell *cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderIconCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OABottomSheetHeaderIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OABottomSheetHeaderIconCell *)[nib objectAtIndex:0];
+            cell = (OABottomSheetHeaderIconCell *) nib[0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.iconView.hidden = YES;
         }
         if (cell)
         {
             cell.titleView.text = item[@"title"];
-            cell.iconView.image = [UIImage imageNamed:item[@"img"]];
-            cell.iconView.hidden = !cell.iconView.image;
         }
-        return cell;
+        outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OAIconTextDividerSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTextDividerSwitchCell *) nib[0];
+            cell.dividerView.hidden = YES;
         }
         
         if (cell)
         {
-            [self updateSettingSwitchCell:cell data:item];
-            
-            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            BOOL isOn = [item[@"value"] boolValue];
+
+            [cell showIcon:YES];
+            NSString *iconName = item[@"icon"];
+            if (iconName)
+            {
+                UIImage *icon;
+                if ([iconName hasPrefix:@"mx_"])
+                    icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                else
+                    icon = [UIImage templateImageNamed:item[@"icon"]];
+                cell.iconView.image = icon;
+                cell.iconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+            }
+
+            [cell.textView setText:item[@"title"]];
+            [cell.switchView setOn:isOn];
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            cell.switchView.on = [item[@"value"] isEqualToString:@"true"];
-            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
         }
-        return cell;
+        outCell = cell;
     }
-    else
-    {
-        return nil;
-    }
+
+    if ([outCell needsUpdateConstraints])
+        [outCell updateConstraints];
+
+    return outCell;
 }
-
-- (void) updateSettingSwitchCell:(OASettingSwitchCell *)cell data:(NSDictionary *)data
-{
-    UIImage *img = nil;
-    NSString *imgName = data[@"img"];
-    NSString *secondaryImgName = data[@"secondaryImg"];
-    if (imgName)
-        img = [UIImage templateImageNamed:imgName];
-    
-    cell.textView.text = data[@"title"];
-    NSString *desc = data[@"description"];
-    cell.descriptionView.text = desc;
-    cell.descriptionView.hidden = desc.length == 0;
-    cell.imgView.image = img;
-    cell.imgView.tintColor = UIColorFromRGB(color_primary_purple);
-    
-    [cell setSecondaryImage:secondaryImgName.length > 0 ? [UIImage imageNamed:data[@"secondaryImg"]] : nil];
-    if ([cell needsUpdateConstraints])
-        [cell setNeedsUpdateConstraints];
-}
-
-
-- (void) onSwitchClick:(id)sender
-{
-    UISwitch *sw = (UISwitch *)sender;
-    int position = (int)sw.tag;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:position inSection:0];
-    NSString *name = [self getItem:indexPath][@"name"];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        OAMapStyleParameter *p = [_styleSettings getParameter:name];
-        if (p)
-        {
-            p.value = sw.on ? @"true" : @"false";
-            [_styleSettings save:p];
-        }
-    });
-}
-
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 0.001;
-}
-
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 32.0;
+    return [self numberOfSectionsInTableView:self.tblView] - 1 == section ? 32.0 : 0.001;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+- (void) tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     view.hidden = YES;
 }
 
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-        return indexPath;
+    if (section == _transportRoutesSection)
+    {
+        return [OATableViewCustomHeaderView getHeight:OALocalizedString(@"transport_routes")
+                                                width:tableView.bounds.size.width
+                                              yOffset:32
+                                                 font:[UIFont systemFontOfSize:13]];
+    }
     else
-        return nil;
+    {
+        return 0.001;
+    }
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (section == _transportRoutesSection)
+    {
+        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+        customHeader.label.text = [OALocalizedString(@"transport_routes") upperCase];
+        customHeader.label.font = [UIFont systemFontOfSize:13];
+        [customHeader setYOffset:32];
+        return customHeader;
+    }
+
+    return nil;
+}
+
+#pragma mark - Selectors
+
+- (void) onSwitchPressed:(id)sender
+{
+    UISwitch *switchView = (UISwitch *)sender;
+    if (switchView)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
+        NSDictionary *item = _data[indexPath.section][indexPath.row];
+        if (item[@"switch"])
+            ((OAPublicTransportOptionsCellDataOnSwitch) item[@"switch"])(switchView.isOn, indexPath);
+    }
 }
 
 @synthesize vwController;
 
 @end
-
 
 
 @interface OAPublicTransportOptionsBottomSheetViewController ()

@@ -2393,3 +2393,13 @@
 "rendering_attr_showRunningRoutes_name" = "Rutter för löpning";
 "rendering_attr_showRunningRoutes_description" = "Visa löprutter";
 "routeInfo_roadClass_description" = "Färglägg rutten eller spårlinjen efter vägklassificering.";
+"backup_and_restore" = "Säkerhetskopiera och återställa";
+"plugin_popup_weather_ask" = "Vänligen aktivera Vädret plugin";
+"product_desc_ext_weather" = "Väderinsticksmodulen ger\n- 5 lager... 24-timmarsprognos & 7-dagarsprognos var 3:e timme\n- platsbaserade widgetar\n- isoliner för temperatur/tryck\nVäderdata tillhandahålls av GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
+"plugin_popup_weather_title" = "Slå på Väder";
+"measurement_units" = "Måttenheter";
+"product_desc_weather" = "24-timmarsprognos & 7-dagarsprognos var 3:e timme";
+"weather_temp_unit_c" = "Celsius";
+"weather_temp_unit_f" = "Fahrenheit";
+"weather_pressure_unit_hpa" = "Hektopascal";
+"weather_pressure_unit_mmhg" = "Millimeter kvicksilver";

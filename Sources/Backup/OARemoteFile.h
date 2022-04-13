@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OASettingsItem;
 
-@interface OARemoteFile : NSObject
+@interface OARemoteFile : NSObject <NSCopying>
 
 @property (nonatomic, readonly, assign) NSInteger userid;
 @property (nonatomic, readonly, assign) long identifier;

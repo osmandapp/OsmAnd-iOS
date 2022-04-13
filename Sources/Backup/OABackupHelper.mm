@@ -17,10 +17,11 @@
 #import "OABackupInfo.h"
 #import "OALocalFile.h"
 #import "OARemoteFile.h"
-#import "OABackupListeners.h"
 #import "OAIAPHelper.h"
 #import "OANetworkUtilities.h"
 #import "OABackupError.h"
+#import "OABackupDbHelper.h"
+#import "OACollectLocalFilesTask.h"
 
 #import "OARegisterUserCommand.h"
 #import "OARegisterDeviceCommand.h"
@@ -54,7 +55,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 //        private final List<OnPrepareBackupListener> prepareBackupListeners = new ArrayList<>();
 //
     
-//    private final BackupDbHelper dbHelper;
+    OABackupDbHelper *_dbHelper;
     
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
@@ -176,6 +177,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         _executor = [[NSOperationQueue alloc] init];
         _settings = [OAAppSettings sharedManager];
         _backupListeners = [[OABackupListeners alloc] init];
+        _dbHelper = OABackupDbHelper.sharedDatabase;
     }
     return self;
 }
@@ -226,12 +228,12 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 - (void) updateFileUploadTime:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)updateTime
 {
-//    dbHelper.updateFileUploadTime(type, fileName, updateTime);
+    [_dbHelper updateFileUploadTime:type name:fileName updateTime:updateTime];
 }
 
 - (void) updateFileMd5Digest:(NSString *)type fileName:(NSString *)fileName md5Hex:(NSString *)md5Hex
 {
-//    dbHelper.updateFileMd5Digest(type, fileName, md5Hex);
+    [_dbHelper updateFileMd5Digest:type name:fileName md5Digest:md5Hex];
 }
 
 - (void) updateBackupUploadTime
@@ -382,6 +384,68 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     }];
 }
 
+- (void) collectLocalFiles:(id<OAOnCollectLocalFilesListener>)listener
+{
+//    OperationLog operationLog = new OperationLog("collectLocalFiles", DEBUG);
+//    operationLog.startOperation();
+    OACollectLocalFilesTask *task = [[OACollectLocalFilesTask alloc] initWithListener:listener];
+    [task execute];
+}
 
+- (void) downloadFileList:(id<OAOnDownloadFileListListener>)listener
+{
+    [self checkRegistered];
+    
+    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+    params[@"deviceid"] = self.getDeviceId;
+    params[@"accessToken"] = self.getAccessToken;
+    params[@"allVersions"] = @"true";
+//    final OperationLog operationLog = new OperationLog("downloadFileList", DEBUG);
+//    operationLog.startOperation();
+    [OANetworkUtilities sendRequestWithUrl:LIST_FILES_URL params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        int status;
+        NSString *message;
+        NSString *result = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"";
+        NSMutableArray<OARemoteFile *> *remoteFiles = [NSMutableArray array];
+        if (((NSHTTPURLResponse *)response).statusCode != 200)
+        {
+            OABackupError *backupError = [[OABackupError alloc] initWithError:result];
+            message = [NSString stringWithFormat:@"Download file list error: %@", backupError.toString];
+            status = STATUS_SERVER_ERROR;
+        }
+        else if (result.length > 0)
+        {
+            NSError *jsonParsingError = nil;
+            NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
+            if (!jsonParsingError)
+            {
+                NSString *totalZipSize = resultJson[@"totalZipSize"];
+                NSString *totalFiles = resultJson[@"totalFiles"];
+                NSString *totalFileVersions = resultJson[@"totalFileVersions"];
+                NSArray *allFiles = resultJson[@"allFiles"];
+                for (NSDictionary *f in allFiles)
+                {
+                    [remoteFiles addObject:[[OARemoteFile alloc] initWithJson:f]];
+                }
+                status = STATUS_SUCCESS;
+                message = [NSString stringWithFormat:@"Total files: %@ Total zip size: %@ Total file versions: %@", totalFiles, [NSByteCountFormatter stringFromByteCount:totalZipSize.integerValue countStyle:NSByteCountFormatterCountStyleFile], totalFileVersions];
+            }
+            else
+            {
+                message = @"Download file list error: json parsing";
+                status = STATUS_PARSE_JSON_ERROR;
+            }
+            
+        }
+        else
+        {
+            message = @"Download file list error: empty response";
+            status = STATUS_EMPTY_RESPONSE_ERROR;
+        }
+        if (listener)
+            [listener onDownloadFileList:status message:message remoteFiles:remoteFiles];
+//        operationLog.finishOperation(status + " " + message);
+    }];
+}
 
 @end

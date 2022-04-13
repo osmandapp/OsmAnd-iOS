@@ -111,4 +111,41 @@
     return [NSString stringWithFormat:@"%@/%@ (%ld) clientTime=%ld updateTime=%ld", _type, _name, _filesize, _clienttimems, _updatetimems];
 }
 
+- (NSDictionary *) toJson
+{
+    NSMutableDictionary *res = [NSMutableDictionary dictionary];
+    if (_userid != 0)
+        res[@"userid"] = @(_userid).stringValue;
+    if (_identifier != 0)
+        res[@"id"] = @(_identifier).stringValue;
+    if (_deviceid != 0)
+        res[@"deviceid"] = @(_deviceid).stringValue;
+    if (_filesize != 0)
+        res[@"filesize"] = @(_filesize).stringValue;
+    if (_type)
+        res[@"type"] = _type;
+    if (_name)
+        res[@"name"] = _name;
+    if (_updatetime)
+    {
+        res[@"updatetimems"] = @(_updatetimems).stringValue;
+    }
+    if (_clienttime)
+    {
+        res[@"clienttimems"] = @(_clienttimems).stringValue;
+    }
+    if (_zipSize > 0)
+        res[@"zipSize"] = @(_zipSize).stringValue;
+    
+    return res;
+}
+
+// MARK: NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    OARemoteFile* clone = [[OARemoteFile alloc] initWithJson:self.toJson];
+    return clone;
+}
+
 @end

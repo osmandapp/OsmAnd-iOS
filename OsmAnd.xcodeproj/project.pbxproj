@@ -1372,6 +1372,7 @@
 		DA1994B1224CDAF200B25BB0 /* ic_custom_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA1994AA224CDAF100B25BB0 /* ic_custom_add@3x.png */; };
 		DA1994B3224CDAF200B25BB0 /* ic_custom_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA1994AB224CDAF100B25BB0 /* ic_custom_delete@2x.png */; };
 		DA1994B5224CDAF200B25BB0 /* ic_custom_delete@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA1994AC224CDAF200B25BB0 /* ic_custom_delete@3x.png */; };
+		DA1A886427FC66DA00A82DF6 /* OABackupDbHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1A886327FC66DA00A82DF6 /* OABackupDbHelper.m */; };
 		DA1BC11A233F9B01004DAF78 /* ic_custom_point_to_point@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA1BC100233F9AFC004DAF78 /* ic_custom_point_to_point@3x.png */; };
 		DA1BC11E233F9B01004DAF78 /* ic_custom_reverse@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA1BC102233F9AFC004DAF78 /* ic_custom_reverse@2x.png */; };
 		DA1BC120233F9B01004DAF78 /* ic_custom_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA1BC103233F9AFC004DAF78 /* ic_custom_search@2x.png */; };
@@ -2750,6 +2751,7 @@
 		DA8A928625DE8B4A00F5320A /* ic_carplay_poi@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927C25DE8B4900F5320A /* ic_carplay_poi@3x.png */; };
 		DA8A928725DE8B4A00F5320A /* ic_carplay_map_markers@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927D25DE8B4900F5320A /* ic_carplay_map_markers@2x.png */; };
 		DA8A928825DE8B4A00F5320A /* ic_carplay_poi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927E25DE8B4A00F5320A /* ic_carplay_poi@2x.png */; };
+		DA8B8D5A27FEFF4100957D12 /* OACollectLocalFilesTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8B8D5927FEFF4100957D12 /* OACollectLocalFilesTask.m */; };
 		DA8DB8D7218DA7DD00EBF914 /* ic_ruler_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8DB8D4218DA7DC00EBF914 /* ic_ruler_center@3x.png */; };
 		DA8DB8DB218DA7DD00EBF914 /* ic_ruler_center@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8DB8D6218DA7DD00EBF914 /* ic_ruler_center@2x.png */; };
 		DA8DB8E0218DA8AA00EBF914 /* ic_ruler_center_light@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8DB8DD218DA8A800EBF914 /* ic_ruler_center_light@3x.png */; };
@@ -2802,6 +2804,9 @@
 		DAA9F45127ECA5F6002BB1A8 /* OABackupError.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA9F45027ECA5F6002BB1A8 /* OABackupError.m */; };
 		DAA9F45427ECADF8002BB1A8 /* OABackupListeners.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA9F45327ECADF8002BB1A8 /* OABackupListeners.m */; };
 		DAAA9DFE214D41F1002173E7 /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = DAAA9DFD214D41EF002173E7 /* about.html */; };
+		DAAC0EBA28006D2500867D35 /* OANetworkSettingsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DAAC0EB928006D2500867D35 /* OANetworkSettingsHelper.m */; };
+		DAAC0EBD2801807200867D35 /* OAImportBackupTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DAAC0EBC2801807200867D35 /* OAImportBackupTask.m */; };
+		DAAC0EC32801885800867D35 /* OABackupImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = DAAC0EC22801885800867D35 /* OABackupImporter.m */; };
 		DAAE21E62269D6010006E016 /* ic_custom_my_places@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAE21E22269D6000006E016 /* ic_custom_my_places@3x.png */; };
 		DAAE21E82269D6010006E016 /* ic_custom_my_places@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAE21E32269D6010006E016 /* ic_custom_my_places@2x.png */; };
 		DAB048F221CB729100275456 /* ic_action_plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB048EF21CB729000275456 /* ic_action_plus@2x.png */; };
@@ -4530,6 +4535,8 @@
 		DA1994AA224CDAF100B25BB0 /* ic_custom_add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_add@3x.png"; path = "Resources/Icons/ic_custom_add@3x.png"; sourceTree = "<group>"; };
 		DA1994AB224CDAF100B25BB0 /* ic_custom_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_delete@2x.png"; path = "Resources/Icons/ic_custom_delete@2x.png"; sourceTree = "<group>"; };
 		DA1994AC224CDAF200B25BB0 /* ic_custom_delete@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_delete@3x.png"; path = "Resources/Icons/ic_custom_delete@3x.png"; sourceTree = "<group>"; };
+		DA1A886227FC66DA00A82DF6 /* OABackupDbHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupDbHelper.h; sourceTree = "<group>"; };
+		DA1A886327FC66DA00A82DF6 /* OABackupDbHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABackupDbHelper.m; sourceTree = "<group>"; };
 		DA1BC100233F9AFC004DAF78 /* ic_custom_point_to_point@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_point_to_point@3x.png"; path = "Resources/Icons/ic_custom_point_to_point@3x.png"; sourceTree = "<group>"; };
 		DA1BC102233F9AFC004DAF78 /* ic_custom_reverse@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_reverse@2x.png"; path = "Resources/Icons/ic_custom_reverse@2x.png"; sourceTree = "<group>"; };
 		DA1BC103233F9AFC004DAF78 /* ic_custom_search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_search@2x.png"; path = "Resources/Icons/ic_custom_search@2x.png"; sourceTree = "<group>"; };
@@ -6756,6 +6763,8 @@
 		DA8A927C25DE8B4900F5320A /* ic_carplay_poi@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_poi@3x.png"; sourceTree = "<group>"; };
 		DA8A927D25DE8B4900F5320A /* ic_carplay_map_markers@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_map_markers@2x.png"; sourceTree = "<group>"; };
 		DA8A927E25DE8B4A00F5320A /* ic_carplay_poi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_poi@2x.png"; sourceTree = "<group>"; };
+		DA8B8D5827FEFF4100957D12 /* OACollectLocalFilesTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollectLocalFilesTask.h; sourceTree = "<group>"; };
+		DA8B8D5927FEFF4100957D12 /* OACollectLocalFilesTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACollectLocalFilesTask.m; sourceTree = "<group>"; };
 		DA8DB8D4218DA7DC00EBF914 /* ic_ruler_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@3x.png"; path = "Resources/Icons/ic_ruler_center@3x.png"; sourceTree = "<group>"; };
 		DA8DB8D6218DA7DD00EBF914 /* ic_ruler_center@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@2x.png"; path = "Resources/Icons/ic_ruler_center@2x.png"; sourceTree = "<group>"; };
 		DA8DB8DD218DA8A800EBF914 /* ic_ruler_center_light@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center_light@3x.png"; path = "Resources/Icons/ic_ruler_center_light@3x.png"; sourceTree = "<group>"; };
@@ -6814,6 +6823,12 @@
 		DAA9F45227ECADF8002BB1A8 /* OABackupListeners.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupListeners.h; sourceTree = "<group>"; };
 		DAA9F45327ECADF8002BB1A8 /* OABackupListeners.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABackupListeners.m; sourceTree = "<group>"; };
 		DAAA9DFD214D41EF002173E7 /* about.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = about.html; path = ../help/website/help/about.html; sourceTree = "<group>"; };
+		DAAC0EB828006D2500867D35 /* OANetworkSettingsHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANetworkSettingsHelper.h; sourceTree = "<group>"; };
+		DAAC0EB928006D2500867D35 /* OANetworkSettingsHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OANetworkSettingsHelper.m; sourceTree = "<group>"; };
+		DAAC0EBB2801807200867D35 /* OAImportBackupTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAImportBackupTask.h; sourceTree = "<group>"; };
+		DAAC0EBC2801807200867D35 /* OAImportBackupTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAImportBackupTask.m; sourceTree = "<group>"; };
+		DAAC0EC12801885800867D35 /* OABackupImporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupImporter.h; sourceTree = "<group>"; };
+		DAAC0EC22801885800867D35 /* OABackupImporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABackupImporter.m; sourceTree = "<group>"; };
 		DAAE21E22269D6000006E016 /* ic_custom_my_places@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_my_places@3x.png"; path = "Resources/Icons/ic_custom_my_places@3x.png"; sourceTree = "<group>"; };
 		DAAE21E32269D6010006E016 /* ic_custom_my_places@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_my_places@2x.png"; path = "Resources/Icons/ic_custom_my_places@2x.png"; sourceTree = "<group>"; };
 		DAB048EF21CB729000275456 /* ic_action_plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_plus@2x.png"; path = "Resources/Icons/ic_action_plus@2x.png"; sourceTree = "<group>"; };
@@ -7213,42 +7228,6 @@
 				B247453F27E3AFE200C18C3F /* ic_custom_cloud_upload_colored_day_big@3x.png */,
 				B247452D27E34B3500C18C3F /* ic_custom_restore@2x.png */,
 				B247452C27E34B3500C18C3F /* ic_custom_restore@3x.png */,
-				32D253DE27F58BD800324717 /* widget_weather_air_pressure_day@2x.png */,
-				32D253E927F58BDB00324717 /* widget_weather_air_pressure_day@3x.png */,
-				32D253E527F58BDA00324717 /* widget_weather_air_pressure_night@2x.png */,
-				32D253E627F58BDB00324717 /* widget_weather_air_pressure_night@3x.png */,
-				32D253E427F58BDA00324717 /* widget_weather_clouds_day@2x.png */,
-				32D253E127F58BD900324717 /* widget_weather_clouds_day@3x.png */,
-				32D253D327F58BD500324717 /* widget_weather_clouds_night@2x.png */,
-				32D253E827F58BDB00324717 /* widget_weather_clouds_night@3x.png */,
-				32D253D827F58BD700324717 /* widget_weather_precipitation_day@2x.png */,
-				32D253E727F58BDB00324717 /* widget_weather_precipitation_day@3x.png */,
-				32D253D527F58BD600324717 /* widget_weather_precipitation_night@2x.png */,
-				32D253E027F58BD900324717 /* widget_weather_precipitation_night@3x.png */,
-				32D253D627F58BD600324717 /* widget_weather_temperature_day@2x.png */,
-				32D253E227F58BDA00324717 /* widget_weather_temperature_day@3x.png */,
-				32D253EA27F58BDC00324717 /* widget_weather_temperature_night@2x.png */,
-				32D253DD27F58BD800324717 /* widget_weather_temperature_night@3x.png */,
-				32D253D427F58BD600324717 /* widget_weather_umbrella_day@2x.png */,
-				32D253D927F58BD700324717 /* widget_weather_umbrella_day@3x.png */,
-				32D253DB27F58BD700324717 /* widget_weather_umbrella_night@2x.png */,
-				32D253E327F58BDA00324717 /* widget_weather_umbrella_night@3x.png */,
-				32D253D727F58BD600324717 /* widget_weather_wind_day@2x.png */,
-				32D253DF27F58BD900324717 /* widget_weather_wind_day@3x.png */,
-				32D253DA27F58BD700324717 /* widget_weather_wind_night@2x.png */,
-				32D253DC27F58BD700324717 /* widget_weather_wind_night@3x.png */,
-				32D253BE27F5868600324717 /* ic_custom_air_pressure@2x.png */,
-				32D253C427F5868900324717 /* ic_custom_air_pressure@3x.png */,
-				32D253BC27F5868500324717 /* ic_custom_clouds@2x.png */,
-				32D253BD27F5868500324717 /* ic_custom_clouds@3x.png */,
-				32D253BB27F5868400324717 /* ic_custom_precipitation@2x.png */,
-				32D253BF27F5868600324717 /* ic_custom_precipitation@3x.png */,
-				32D253C127F5868700324717 /* ic_custom_thermometer@2x.png */,
-				32D253C027F5868700324717 /* ic_custom_thermometer@3x.png */,
-				32D253C227F5868800324717 /* ic_custom_umbrella@2x.png */,
-				32D253C327F5868800324717 /* ic_custom_umbrella@3x.png */,
-				32D253C527F5868900324717 /* ic_custom_wind@2x.png */,
-				32D253C627F5868A00324717 /* ic_custom_wind@3x.png */,
 				3296B46127F8790200108AF7 /* ic_custom_air_pressure@2x.png */,
 				3296B46527F8790300108AF7 /* ic_custom_air_pressure@3x.png */,
 				3296B47A27F8790700108AF7 /* ic_custom_clouds@2x.png */,
@@ -12344,6 +12323,16 @@
 				DAA9F45327ECADF8002BB1A8 /* OABackupListeners.m */,
 				DA0C2BDB27EF4B3800B7CC4F /* OAPrepareBackupTask.h */,
 				DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */,
+				DA1A886227FC66DA00A82DF6 /* OABackupDbHelper.h */,
+				DA1A886327FC66DA00A82DF6 /* OABackupDbHelper.m */,
+				DA8B8D5827FEFF4100957D12 /* OACollectLocalFilesTask.h */,
+				DA8B8D5927FEFF4100957D12 /* OACollectLocalFilesTask.m */,
+				DAAC0EB828006D2500867D35 /* OANetworkSettingsHelper.h */,
+				DAAC0EB928006D2500867D35 /* OANetworkSettingsHelper.m */,
+				DAAC0EBB2801807200867D35 /* OAImportBackupTask.h */,
+				DAAC0EBC2801807200867D35 /* OAImportBackupTask.m */,
+				DAAC0EC12801885800867D35 /* OABackupImporter.h */,
+				DAAC0EC22801885800867D35 /* OABackupImporter.m */,
 			);
 			path = Backup;
 			sourceTree = "<group>";
@@ -14701,6 +14690,7 @@
 				DA5A848026C563A900F274C7 /* OATopTextView.mm in Sources */,
 				DA5A839626C563A800F274C7 /* OAPluginsViewController.mm in Sources */,
 				DA5A816226C563A700F274C7 /* OAAppearance.m in Sources */,
+				DAAC0EBA28006D2500867D35 /* OANetworkSettingsHelper.m in Sources */,
 				DA5A835E26C563A800F274C7 /* OATextViewResizingCell.mm in Sources */,
 				DA5A845E26C563A900F274C7 /* OARoutePointsLayer.mm in Sources */,
 				DA5A852C26C563A900F274C7 /* OAOcbfHelper.m in Sources */,
@@ -14923,6 +14913,7 @@
 				32388EE226E6AF770021F829 /* OAQuickSearchResultTableViewCell.m in Sources */,
 				DA5A850C26C563A900F274C7 /* OASubscribeEmailView.m in Sources */,
 				DA5A819226C563A700F274C7 /* OANavRemoveNextDestination.m in Sources */,
+				DAAC0EBD2801807200867D35 /* OAImportBackupTask.m in Sources */,
 				DA5A830226C563A800F274C7 /* OADeviceScreenTableViewCell.m in Sources */,
 				DA5A82E926C563A800F274C7 /* OAMenuSimpleCell.mm in Sources */,
 				DA5A830326C563A800F274C7 /* OAQuickActionCell.mm in Sources */,
@@ -15283,6 +15274,7 @@
 				DA5A821E26C563A700F274C7 /* OAProfileSettingsItem.mm in Sources */,
 				DA5A831526C563A800F274C7 /* OADeleteButtonTableViewCell.m in Sources */,
 				DA5A853A26C563A900F274C7 /* OAAvoidSpecificRoads.mm in Sources */,
+				DAAC0EC32801885800867D35 /* OABackupImporter.m in Sources */,
 				DA5A81DB26C563A700F274C7 /* OACity.mm in Sources */,
 				DA5A84B726C563A900F274C7 /* OATrackSegmentsViewController.mm in Sources */,
 				DA5A852726C563A900F274C7 /* OAOverlayUnderlayView.m in Sources */,
@@ -15438,6 +15430,7 @@
 				DA5A84DB26C563A900F274C7 /* OAMapSettingsMainScreen.mm in Sources */,
 				DA5A83DF26C563A800F274C7 /* OAEditGroupViewController.m in Sources */,
 				DA5A855226C563A900F274C7 /* OAMapUtils.mm in Sources */,
+				DA8B8D5A27FEFF4100957D12 /* OACollectLocalFilesTask.m in Sources */,
 				DA5A843726C563A800F274C7 /* OATrsansportRouteDetailsViewController.mm in Sources */,
 				DA5A81C426C563A700F274C7 /* OAAutoObserverProxy.m in Sources */,
 				DA5A84DD26C563A900F274C7 /* OAMapSettingsGpxScreen.mm in Sources */,
@@ -15459,6 +15452,7 @@
 				DA5A820E26C563A700F274C7 /* OARearrangeProfilesViewController.m in Sources */,
 				DA5A823626C563A700F274C7 /* OAExportItemsViewController.mm in Sources */,
 				DA5A84E726C563A900F274C7 /* OAWaypointsPOIScreen.mm in Sources */,
+				DA1A886427FC66DA00A82DF6 /* OABackupDbHelper.m in Sources */,
 				DA5A824E26C563A700F274C7 /* OAMapBehaviorViewController.m in Sources */,
 				DA5A83BD26C563A800F274C7 /* OAAddQuickActionViewController.m in Sources */,
 				DA5A821926C563A700F274C7 /* OAQuickActionsSettingsItem.mm in Sources */,
@@ -15803,7 +15797,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.2.0;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -15860,7 +15854,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.2.0;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

@@ -25,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *defaultFileName;
 @property (nonatomic, readonly) NSString *defaultFileExtension;
 
+@property (nonatomic, assign) long localModifiedTime;
+@property (nonatomic, assign) long lastModifiedTime;
+
 @property (nonatomic, readonly) NSMutableArray<NSString *> *warnings;
 @property (nonatomic, assign) BOOL shouldReplace;
 

@@ -14,6 +14,8 @@
 #import "OAFileSettingsItem.h"
 #import "OASettingsItemType.h"
 #import "OAExportSettingsCategory.h"
+#import "OAPlugin.h"
+#import "OAOsmEditingPlugin.h"
 
 static OAExportSettingsType * PROFILE;
 static OAExportSettingsType * GLOBAL;
@@ -142,6 +144,27 @@ static NSArray<OAExportSettingsType *> *allValues;
     }
     
     return allValues;
+}
+
++ (NSArray<OAExportSettingsType *> *)getEnabledTypes
+{
+    NSMutableArray<OAExportSettingsType *> *result = [NSMutableArray arrayWithArray:self.getAllValues];
+    OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+    if (![osmEditingPlugin isEnabled])
+    {
+        [result removeObject:OAExportSettingsType.OSM_EDITS];
+        [result removeObject:OAExportSettingsType.OSM_NOTES];
+    }
+//    AudioVideoNotesPlugin avNotesPlugin = OsmandPlugin.getActivePlugin(AudioVideoNotesPlugin.class);
+//    if (avNotesPlugin == null) {
+//        result.remove(ExportSettingsType.MULTIMEDIA_NOTES);
+//    }
+    return result;
+}
+
++ (BOOL) isTypeEnabled:(OAExportSettingsType *)type
+{
+    return [[self getEnabledTypes] containsObject:type];
 }
 
 - (instancetype)initWithTitle:(NSString *)title name:(NSString *)name icon:(UIImage *)icon

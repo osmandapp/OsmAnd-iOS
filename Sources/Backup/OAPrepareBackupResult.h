@@ -30,6 +30,10 @@ typedef NS_ENUM(NSInteger, EOARemoteFilesType) {
 @property (nonatomic) NSDictionary<NSString *, OALocalFile *> *localFiles;
 @property (nonatomic) NSString *error;
 
+- (void)setLocalFilesFromArray:(NSArray<OALocalFile *> *)localFiles;
+
+- (NSDictionary<NSString *, OARemoteFile *> *) getRemoteFiles:(EOARemoteFilesType)type;
+
 @end
 
 NS_ASSUME_NONNULL_END

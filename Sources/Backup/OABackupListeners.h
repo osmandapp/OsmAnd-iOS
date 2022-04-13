@@ -75,11 +75,11 @@
 
 @protocol OAOnDownloadFileListener <NSObject>
 
-- (void) onFileDownloadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work;
+- (void) onFileDownloadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work itemFileName:(NSString *)itemFileName;
     
-- (void) onFileDownloadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork;
+- (void) onFileDownloadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork itemFileName:(NSString *)itemFileName;
     
-- (void) onFileDownloadDone:(NSString *)type fileName:(NSString *)fileName error:(NSString *)error;
+- (void) onFileDownloadDone:(NSString *)type fileName:(NSString *)fileName error:(NSString *)error itemFileName:(NSString *)itemFileName;
     
 - (BOOL) isDownloadCancelled;
 

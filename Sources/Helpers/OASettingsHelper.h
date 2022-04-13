@@ -26,6 +26,33 @@
 
 @end
 
+@protocol OACollectListener <NSObject>
+
+- (void) onCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items;
+
+@end
+
+@protocol OAImportListener <NSObject>
+
+- (void) onImportItemStarted:(NSString *)type fileName:(NSString *)fileName work:(int)work;
+- (void) onImportItemProgress:(NSString *)type fileName:(NSString *)fileName value:(int)value;
+- (void) onImportItemFinished:(NSString *)type fileName:(NSString *)fileName;
+- (void) onImportFinished:(BOOL)succeed needRestart:(BOOL)needRestart items:(NSArray<OASettingsItem *> *)items;
+
+@end
+
+@protocol OACheckDuplicatesListener <NSObject>
+
+- (void) onDuplicatesChecked:(NSArray *)duplicates items:(NSArray<OASettingsItem *> *)items;
+
+@end
+
+@protocol OAExportProgressListener <NSObject>
+
+- (void) updateProgress:(int)value;
+
+@end
+
 FOUNDATION_EXTERN NSString *const kSettingsHelperErrorDomain;
 
 FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeNoTypeField;
@@ -69,5 +96,7 @@ typedef NS_ENUM(NSInteger, EOAImportType) {
 - (NSArray <OASettingsItem *>*) prepareSettingsItems:(NSArray *)data settingsItems:(NSArray<OASettingsItem *> *)settingsItems doExport:(BOOL)doExport;
 
 - (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *) getSettingsByCategory:(BOOL)addProfiles;
+
+- (NSArray<OASettingsItem *> *) getFilteredSettingsItems:(NSArray<OAExportSettingsType *> *)settingsTypes addProfiles:(BOOL)addProfiles doExport:(BOOL)doExport;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OABackupListeners.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,11 +31,11 @@ NS_ASSUME_NONNULL_BEGIN
 #define SERVER_ERROR_CODE_SUBSCRIPTION_WAS_EXPIRED_OR_NOT_PRESENT 110
 #define SERVER_ERROR_CODE_USER_IS_ALREADY_REGISTERED 111
 
-@class OAExportSettingsType, OACommonBoolean, OAPrepareBackupResult, OABackupListeners;
+@class OAExportSettingsType, OACommonBoolean, OAPrepareBackupResult, OABackupListeners, OASettingsItem, OAFileSettingsItem;
 
 @interface OABackupHelper : NSObject
 
-@property (nonatomic, readonly) OAPrepareBackupResult *backup;
+@property (nonatomic) OAPrepareBackupResult *backup;
 @property (nonatomic, readonly) OABackupListeners *backupListeners;
 
 + (NSString *) INFO_EXT;
@@ -43,6 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *) DEVICE_REGISTER_URL;
 
 + (OABackupHelper *)sharedInstance;
+
++ (NSString *) getItemFileName:(OASettingsItem *)item;
++ (NSString *) getFileItemName:(OAFileSettingsItem *)fileSettingsItem;
 
 - (OACommonBoolean *) getBackupTypePref:(OAExportSettingsType *)type;
 - (OACommonBoolean *) getVersionHistoryTypePref:(OAExportSettingsType *)type;
@@ -55,6 +59,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) registerUser:(NSString *)email promoCode:(NSString *)promoCode login:(BOOL)login;
 - (void) registerDevice:(NSString *)token;
+
+- (void) logout;
+
+- (void) collectLocalFiles:(id<OAOnCollectLocalFilesListener>)listener;
+- (void) downloadFileList:(id<OAOnDownloadFileListListener>)listener;
 
 + (BOOL) isTokenValid:(NSString *)token;
 

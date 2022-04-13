@@ -232,5 +232,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSString *) getLocalizedString:(NSString *)key;
 + (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list;
++ (NSString*) fileMD5:(NSString*)path;
 
 @end

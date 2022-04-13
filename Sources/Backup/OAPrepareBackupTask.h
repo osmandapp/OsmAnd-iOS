@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface OABackupTaskType : NSObject
+@interface OABackupTaskType : NSObject <OAOnPrepareBackupListener>
 
 + (OABackupTaskType *) COLLECT_LOCAL_FILES;
 + (OABackupTaskType *) COLLECT_REMOTE_FILES;

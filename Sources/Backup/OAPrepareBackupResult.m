@@ -78,7 +78,7 @@
     _remoteFiles = remoteFilesMap;
 }
 
-- (void)setLocalFiles:(NSDictionary<NSString *,OALocalFile *> *)localFiles
+- (void)setLocalFilesFromArray:(NSArray<OALocalFile *> *)localFiles
 {
     NSMutableDictionary<NSString *, OALocalFile *> *localFileMap = [NSMutableDictionary dictionary];
     for (OALocalFile *localFile in localFiles)

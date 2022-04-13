@@ -490,6 +490,11 @@
     return [[OAFileSettingsItemWriter alloc] initWithItem:self];
 }
 
+- (BOOL) needMd5Digest
+{
+    return _subtype == EOASettingsItemFileSubtypeVoice || _subtype == EOASettingsItemFileSubtypeVoiceTTS;
+}
+
 @end
 
 #pragma mark - OAFileSettingsItemReader

@@ -450,7 +450,7 @@
         && [_expireTimeMinutes integerValue] <= kMaxExpireMin
         && [_expireTimeMinutes integerValue] >= 0)
     {
-        if ([_expireTimeMinutes isEqualToString:@""])
+        if ([_expireTimeMinutes isEqualToString:@""] || [_expireTimeMinutes integerValue] == 0)
             _expireTimeMillis = -1;
         else
             _expireTimeMillis = [_expireTimeMinutes integerValue] * 60 * 1000;

@@ -73,7 +73,7 @@
         _ellipsoid = source->ellipticYTile;
         _invertedY = source->invertedYTile;
         _referer = @"";
-        _timesupported = source->expirationTimeMillis > -1;
+        _timesupported = source->expirationTimeMillis > 0;
         _expire = source->expirationTimeMillis / 60000;
         _inversiveZoom = NO;
         _ext = source->ext.toNSString();

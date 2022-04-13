@@ -163,7 +163,7 @@
         _expirationTimeMillis = -1;
         if (ok)
         {
-            if (expireminutes > -1)
+            if (expireminutes > 0)
                 _expirationTimeMillis = (long) expireminutes * 60 * 1000;
         }
         else
@@ -375,7 +375,7 @@
 
 - (BOOL) expired:(NSNumber *)time
 {
-    if (_timeSupported && [self getExpirationTimeMillis] > -1 && time)
+    if (_timeSupported && [self getExpirationTimeMillis] > 0 && time)
         return ([[NSDate date] timeIntervalSince1970] * 1000.0) - time.longValue > [self getExpirationTimeMillis];
     
     return NO;

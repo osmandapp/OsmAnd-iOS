@@ -9,8 +9,6 @@
 #import "OAQuickActionRegistry.h"
 #import "OAAppSettings.h"
 #import "OAPlugin.h"
-#import "OAOsmEditingPlugin.h"
-#import "OAParkingPositionPlugin.h"
 #import "OAQuickAction.h"
 #import "OAIAPHelper.h"
 #import "OAMapSourceAction.h"
@@ -22,9 +20,7 @@
 #import "OAMarkerAction.h"
 #import "OAShowHideFavoritesAction.h"
 #import "OAShowHidePoiAction.h"
-#import "OAShowHideOSMBugAction.h"
 #import "OAShowHideGPXTracksAction.h"
-#import "OAShowHideLocalOSMChanges.h"
 #import "OADayNightModeAction.h"
 #import "OANavVoiceAction.h"
 #import "OAShowHideTransportLinesAction.h"
@@ -43,6 +39,11 @@
 #import "OAContourLinesAction.h"
 #import "OATerrainAction.h"
 #import "OAShowHideCoordinatesAction.h"
+#import "OAShowHideTemperatureAction.h"
+#import "OAShowHidePressureAction.h"
+#import "OAShowHideWindAction.h"
+#import "OAShowHideCloudAction.h"
+#import "OAShowHidePrecipitationAction.h"
 
 #define kType @"type"
 #define kName @"name"
@@ -162,6 +163,17 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     [OAPlugin registerQuickActionTypesPlugins:quickActionTypes disabled:NO];
     if ([OAIAPHelper.sharedInstance.srtm isActive])
         [quickActionTypes addObjectsFromArray:@[OAContourLinesAction.TYPE, OATerrainAction.TYPE]];
+
+    if ([[OAIAPHelper sharedInstance].weather isActive])
+    {
+        [quickActionTypes addObjectsFromArray:@[
+                OAShowHideTemperatureAction.TYPE,
+                OAShowHidePressureAction.TYPE,
+                OAShowHideWindAction.TYPE,
+                OAShowHideCloudAction.TYPE,
+                OAShowHidePrecipitationAction.TYPE
+        ]];
+    }
     
     NSMutableDictionary<NSNumber *, OAQuickActionType *> *quickActionTypesInt = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, OAQuickActionType *> *quickActionTypesStr = [NSMutableDictionary new];
@@ -178,6 +190,18 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     [OAPlugin registerQuickActionTypesPlugins:disabledQuickActionTypes disabled:YES];
     if (![OAIAPHelper.sharedInstance.srtm isActive])
         [disabledQuickActionTypes addObjectsFromArray:@[OAContourLinesAction.TYPE, OATerrainAction.TYPE]];
+
+    if (![[OAIAPHelper sharedInstance].weather isActive])
+    {
+        [disabledQuickActionTypes addObjectsFromArray:@[
+                OAShowHideTemperatureAction.TYPE,
+                OAShowHidePressureAction.TYPE,
+                OAShowHideWindAction.TYPE,
+                OAShowHideCloudAction.TYPE,
+                OAShowHidePrecipitationAction.TYPE
+        ]];
+    }
+
     NSMutableDictionary<NSNumber *, OAQuickActionType *> *disabledQuickActionTypesInt = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, OAQuickActionType *> *disabledQuickActionTypesStr = [NSMutableDictionary new];
     for (OAQuickActionType *qt in disabledQuickActionTypes)

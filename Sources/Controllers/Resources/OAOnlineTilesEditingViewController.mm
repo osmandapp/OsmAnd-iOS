@@ -494,24 +494,41 @@
             }
         }
         
-        [self refreshSqlitedbCachedValuesIfNeeded];
-        [_sqliteSource enableTileTimeSupportIfNeeded];
+        [self refresLoadedLayersIfNeeded];
+        if (_sqliteSource != nil && _sourceFormat == EOASourceFormatSQLite)
+            [_sqliteSource enableTileTimeSupportIfNeeded];
         
         _baseController.dataInvalidated = YES;
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
-- (void) refreshSqlitedbCachedValuesIfNeeded
+- (void) refresLoadedLayersIfNeeded
 {
-    NSString *dbFilePath = [_sqliteSource getFilePath];
-    NSString *currentOverlayPath = _app.data.overlayMapSource.resourceId;
-    NSString *currentUnderlayPath = _app.data.overlayMapSource.resourceId;
+    NSString *currentFile;
+    NSString *overlayFile;
+    NSString *underlayFile;
     
-    if ([dbFilePath hasSuffix:currentOverlayPath])
-        [_app.data.overlayMapSourceChangeObservable notifyEvent];
-    if ([dbFilePath hasSuffix:currentUnderlayPath])
-        [_app.data.underlayMapSourceChangeObservable notifyEvent];
+    if (_sourceFormat == EOASourceFormatOnline)
+    {
+        currentFile = _tileSource->name.toNSString();
+        overlayFile = _app.data.overlayMapSource.name;
+        underlayFile = _app.data.underlayMapSource.name;
+    }
+    else
+    {
+        currentFile = [_sqliteSource getFilePath];
+        overlayFile = _app.data.overlayMapSource.resourceId;
+        underlayFile = _app.data.underlayMapSource.resourceId;
+    }
+    
+    if (currentFile)
+    {
+        if ([overlayFile hasSuffix:currentFile])
+            [_app.data.overlayMapSourceChangeObservable notifyEvent];
+        if ([underlayFile hasSuffix:currentFile])
+            [_app.data.underlayMapSourceChangeObservable notifyEvent];
+    }
 }
 
 - (void) updateSqliteSource

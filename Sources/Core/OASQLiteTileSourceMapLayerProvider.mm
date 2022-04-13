@@ -97,7 +97,7 @@ QString OASQLiteTileSourceMapLayerProvider::getUrlToLoad(const OsmAnd::TileId ti
 
 bool OASQLiteTileSourceMapLayerProvider::expired(const int64_t time)
 {
-    if (_ts->isTileTimeSupported() && _expirationTimeMillis > 0)
+    if (_ts->isTileTimeSupported() && _expirationTimeMillis > -1)
         return QDateTime::currentMSecsSinceEpoch() - time > _expirationTimeMillis;
     
     return false;

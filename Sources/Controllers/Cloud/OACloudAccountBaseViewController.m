@@ -38,6 +38,7 @@
     self = [super initWithNibName:@"OACloudAccountBaseViewController" bundle:nil];
     if (self) {
         _inputText = @"";
+        _errorMessage = @"";
         [self generateData];
     }
     return self;
@@ -142,6 +143,14 @@
     return [self getData][indexPath.section][indexPath.row];
 }
 
+- (void) updateScreen
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
+        [self.tableView reloadData];
+    });
+}
+
 #pragma mark - Actions
 
 - (void) textFieldDoneButtonPressed
@@ -161,7 +170,7 @@
 
 - (BOOL) isValidInputValue:(NSString *)value
 {
-    return value.length > 0;
+    return value.length > 0 && self.errorMessage.length == 0;
 }
 
 #pragma mark - UITableViewDataSource
@@ -235,10 +244,14 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"placeholder"];
-            cell.titleLabel.textColor = [UIColor blackColor];
+            cell.titleLabel.textColor = UIColorFromRGB(color_text_footer);
             NSString *text =  item[@"title"];
             cell.inputField.text = text;
             cell.inputField.textContentType = UITextContentTypeEmailAddress;
+            if ([item[@"numbersKeyboard"] boolValue])
+                cell.inputField.keyboardType = UIKeyboardTypePhonePad;
+            else
+                cell.inputField.keyboardType = UIKeyboardTypeEmailAddress;
             cell.inputField.returnKeyType = UIReturnKeyGo;
             cell.inputField.textAlignment = NSTextAlignmentRight;
             cell.inputField.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -338,14 +351,32 @@
     return YES;
 }
 
-- (void) textViewDidChange:(UITextField *)textField
+- (void)updateAllSections
 {
-    _inputText = textField.text;
-    [self generateData];
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     for (NSInteger i = 1; i < self.tableView.numberOfSections; i++)
         [indexSet addIndex:i];
-    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void) textViewDidChange:(UITextField *)textField
+{
+    BOOL needFullReload = (_inputText.length == 0 && textField.text.length > 0) || (_inputText.length > 0 && textField.text.length == 0);
+    _inputText = textField.text;
+    BOOL hadError = _errorMessage.length > 0;
+    self.errorMessage = @"";
+    [self generateData];
+    if (hadError)
+    {
+        [self.tableView performBatchUpdates:^{
+            [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self updateAllSections];
+        } completion:nil];
+    }
+    else if (needFullReload)
+    {
+        [self updateAllSections];
+    }
 }
 
 - (BOOL) textFieldShouldClear:(UITextField *)textField

@@ -8,6 +8,8 @@
 
 #import "OAExternalTimeFormatter.h"
 
+static NSLocale *_usingLocale;
+
 @implementation OAExternalTimeFormatter
 
 + (std::function<std::string (int, int, bool)> ) getExternalTimeFormatterCallback
@@ -19,7 +21,7 @@ std::string formattingCallback (int hours, int minutes, bool appendAmPM) {
     return [OAExternalTimeFormatter formatTime:hours minutes:minutes appendAmPM:appendAmPM].UTF8String;
 }
 
-+ (NSString *) formatTime:(int)hours minutes:(int)minutes  appendAmPM:(BOOL)appendAmPM
++ (NSString *) formatTime:(int)hours minutes:(int)minutes appendAmPM:(BOOL)appendAmPM
 {
     NSDate *date = [NSDate date];
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -30,22 +32,57 @@ std::string formattingCallback (int hours, int minutes, bool appendAmPM) {
     
     if (appendAmPM)
     {
-        return [NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setLocale:_usingLocale];
+        [formatter setDateStyle:NSDateFormatterNoStyle];
+        [formatter setTimeStyle:NSDateFormatterShortStyle];
+        return [formatter stringFromDate:date];
     }
     else
     {
         NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+        [formatter setLocale:_usingLocale];
         [formatter setDateFormat:@"h:mm"];
         return [formatter stringFromDate:date];
     }
 }
+
+
++ (std::function<std::vector<std::vector<std::string>> (std::string)> ) getExternalLocalisationUpdatingCallback
+{
+    return localisationUpdatingCallback;
+}
+
+std::vector<std::vector<std::string>> localisationUpdatingCallback (std::string locale) {
+    NSString* preparedLocale = [NSString stringWithUTF8String:locale.c_str()];
+    return [OAExternalTimeFormatter updateLocalisations:preparedLocale];
+}
+
++ (std::vector<std::vector<std::string>>) updateLocalisations:(NSString *)locale
+{
+    _usingLocale = [NSLocale currentLocale];
+    if (locale && locale.length > 0)
+    {
+        NSLocale *loadedLocale = [NSLocale localeWithLocaleIdentifier:locale];
+        if (loadedLocale)
+            _usingLocale = loadedLocale;
+    }
+    
+    std::vector<std::string> weekdays = [self getLocalizedWeekdays];
+    std::vector<std::string> months = [self getLocalizedMonths];
+    std::string isAmpmOnLeft = [self isCurrentRegionWithAmpmOnLeft] ? "true" : "false";
+    std::vector<std::vector<std::string>> updatedSettings = std::vector<std::vector<std::string>>{weekdays, weekdays, std::vector<std::string>{isAmpmOnLeft}};
+    
+    return updatedSettings;
+}
+
 
 + (BOOL) isCurrentRegionWithAmpmOnLeft
 {
     NSDate *currentDate = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     
-    [formatter setLocale:[NSLocale currentLocale]];
+    [formatter setLocale:_usingLocale];
     [formatter setDateStyle:NSDateFormatterNoStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     NSString *fullFormattedTimeString = [formatter stringFromDate:currentDate];
@@ -59,14 +96,15 @@ std::string formattingCallback (int hours, int minutes, bool appendAmPM) {
 + (std::vector<std::string>) getLocalizedWeekdays
 {
     std::vector<std::string> weekdays;
-    for (int i = 0; i < 7; i++)
+    for (int i = 1; i <= 7; i++)
     {
         NSDate *date = [NSDate date];
         NSCalendar *calendar = [NSCalendar currentCalendar];
-        NSDateComponents *components = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
+        NSDateComponents *components = [calendar components:(NSCalendarUnitWeekOfMonth) fromDate:date];
         components.weekday = i;
         date = [calendar dateFromComponents:components];
         NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+        [formatter setLocale:_usingLocale];
         [formatter setDateFormat:@"EEE"];
         NSString *localizedWeek = [formatter stringFromDate:date];
         weekdays.push_back(localizedWeek.UTF8String);
@@ -77,15 +115,16 @@ std::string formattingCallback (int hours, int minutes, bool appendAmPM) {
 + (std::vector<std::string>) getLocalizedMonths
 {
     std::vector<std::string> months;
-    for (int i = 0; i < 12; i++)
+    for (int i = 1; i <= 12; i++)
     {
         NSDate *date = [NSDate date];
         NSCalendar *calendar = [NSCalendar currentCalendar];
-        NSDateComponents *components = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:date];
-        components.weekday = i;
+        NSDateComponents *components = [calendar components:(NSCalendarUnitMonth) fromDate:date];
+        components.month = i;
         date = [calendar dateFromComponents:components];
         NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-        [formatter setDateFormat:@"EEE"];
+        [formatter setLocale:_usingLocale];
+        [formatter setDateFormat:@"MMM"];
         NSString *localizedMonth = [formatter stringFromDate:date];
         months.push_back(localizedMonth.UTF8String);
     }

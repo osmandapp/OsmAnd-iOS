@@ -13,8 +13,7 @@
 @interface OAExternalTimeFormatter : NSObject
 
 + (BOOL) isCurrentRegionWithAmpmOnLeft;
-+ (std::function<std::string (int, int, bool)> ) getExternalTimeFormatterCallback;
-+ (std::vector<std::string>) getLocalizedWeekdays;
-+ (std::vector<std::string>) getLocalizedMonths;
++ (std::function<std::string (int, int, bool)>) getExternalTimeFormatterCallback;
++ (std::function<std::vector<std::vector<std::string>> (std::string)>) getExternalLocalisationUpdatingCallback;
 
 @end

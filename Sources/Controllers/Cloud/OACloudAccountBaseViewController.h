@@ -18,9 +18,12 @@
 
 @interface OACloudAccountBaseViewController : OABaseBigTitleSettingsViewController
 
-@property (nonatomic , assign) long lastTimeCodeSent;
+@property (nonatomic, assign) long lastTimeCodeSent;
+@property (nonatomic) NSString *errorMessage;
 
 - (NSString *) getTextFieldValue;
 - (BOOL) isValidInputValue:(NSString *)value;
+
+- (void) updateScreen;
 
 @end

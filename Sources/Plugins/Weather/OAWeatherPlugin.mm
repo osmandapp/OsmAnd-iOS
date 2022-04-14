@@ -7,16 +7,18 @@
 //
 
 #import "OAWeatherPlugin.h"
+#import "OARootViewController.h"
+#import "OAMapInfoController.h"
+#import "OATextInfoWidget.h"
+#import "OAMapInfoWidgetsFactory.h"
+#import "OAMapWidgetRegistry.h"
+#import "OAMapWidgetRegInfo.h"
 #import "OAIAPHelper.h"
 #import "OsmAndApp.h"
-#import "OAMapInfoController.h"
-#import "OAMapInfoWidgetsFactory.h"
-#import "OATextInfoWidget.h"
+#import "Localization.h"
 
 #define PLUGIN_ID kInAppId_Addon_Weather
 #define kLastUsedWeatherKey @"lastUsedWeather"
-
-static NSArray<NSString *> * const _weatherSettingKeys = @[kWeatherTemp, kWeatherPressure, kWeatherWind, kWeatherCloud, kWeatherPrecip];
 
 @implementation OAWeatherPlugin
 {
@@ -58,22 +60,28 @@ static NSArray<NSString *> * const _weatherSettingKeys = @[kWeatherTemp, kWeathe
     [[OsmAndApp instance].data setWeather:enabled ? [_lastUsedWeather get] : NO];
 }
 
+- (BOOL)isEnabled
+{
+    return [super isEnabled] && [[OAIAPHelper sharedInstance].weather isActive];
+}
+
 - (void)weatherChanged:(BOOL)isOn
 {
     [_lastUsedWeather set:isOn];
     [[OsmAndApp instance].data setWeather:isOn];
 }
 
-+ (NSArray<NSString *> *)getWeatherSettingKeys
-{
-    return _weatherSettingKeys;
-}
-
 - (void) updateLayers
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        OAMapWidgetRegistry *mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
+        OAMapWidgetRegInfo *weatherToolbarController = [mapWidgetRegistry widgetByKey:@"weather_toolbar"];
+
         if ([self isEnabled])
         {
+            if (!weatherToolbarController)
+                [self registerToolbarWidget];
+
             if (!_weatherTempControl)
                 [self registerWidget:WEATHER_BAND_TEMPERATURE];
 
@@ -88,38 +96,66 @@ static NSArray<NSString *> * const _weatherSettingKeys = @[kWeatherTemp, kWeathe
 
             if (!_weatherPrecipControl)
                 [self registerWidget:WEATHER_BAND_PRECIPITATION];
+
+            OAMapInfoController *mapInfoController = [self getMapInfoController];
+            if (mapInfoController)
+                [mapInfoController recreateControls];
         }
         else
         {
+            if (weatherToolbarController)
+            {
+                [mapWidgetRegistry removeSideWidget:@"weather_toolbar"];
+                [mapWidgetRegistry updateVisibleWidgets];
+            }
+
             OAMapInfoController *mapInfoController = [self getMapInfoController];
-            if (_weatherTempControl)
+            if (mapInfoController)
             {
-                [mapInfoController removeSideWidget:_weatherTempControl];
-                _weatherTempControl = nil;
+                if (_weatherTempControl)
+                {
+                    [mapInfoController removeSideWidget:_weatherTempControl];
+                    _weatherTempControl = nil;
+                }
+                if (_weatherPressureControl)
+                {
+                    [mapInfoController removeSideWidget:_weatherPressureControl];
+                    _weatherPressureControl = nil;
+                }
+                if (_weatherWindSpeedControl)
+                {
+                    [mapInfoController removeSideWidget:_weatherWindSpeedControl];
+                    _weatherWindSpeedControl = nil;
+                }
+                if (_weatherCloudControl)
+                {
+                    [mapInfoController removeSideWidget:_weatherCloudControl];
+                    _weatherCloudControl = nil;
+                }
+                if (_weatherPrecipControl)
+                {
+                    [mapInfoController removeSideWidget:_weatherPrecipControl];
+                    _weatherPrecipControl = nil;
+                }
+                [mapInfoController recreateControls];
             }
-            if (_weatherPressureControl)
-            {
-                [mapInfoController removeSideWidget:_weatherPressureControl];
-                _weatherPressureControl = nil;
-            }
-            if (_weatherWindSpeedControl)
-            {
-                [mapInfoController removeSideWidget:_weatherWindSpeedControl];
-                _weatherWindSpeedControl = nil;
-            }
-            if (_weatherCloudControl)
-            {
-                [mapInfoController removeSideWidget:_weatherCloudControl];
-                _weatherCloudControl = nil;
-            }
-            if (_weatherPrecipControl)
-            {
-                [mapInfoController removeSideWidget:_weatherPrecipControl];
-                _weatherPrecipControl = nil;
-            }
-            [mapInfoController recreateControls];
         }
     });
+}
+
+- (void)registerToolbarWidget
+{
+    OAMapInfoController *mapInfoController = [self getMapInfoController];
+    if (mapInfoController)
+    {
+        [mapInfoController registerSideWidget:nil
+                                      imageId:@"ic_custom_umbrella"
+                                      message:OALocalizedString(@"screen_settings_weather_toolbar")
+                                          key:@"weather_toolbar"
+                                         left:YES
+                                priorityOrder:8];
+        [mapInfoController recreateControls];
+    }
 }
 
 - (void)registerWidget:(EOAWeatherBand)band
@@ -138,7 +174,7 @@ static NSArray<NSString *> * const _weatherSettingKeys = @[kWeatherTemp, kWeathe
                                               imageId:[[OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE] getIcon]
                                               message:[[OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE] getMeasurementName]
                                                   key:kWeatherTemp
-                                                 left:false
+                                                 left:NO
                                         priorityOrder:120];
                 break;
             }
@@ -150,7 +186,7 @@ static NSArray<NSString *> * const _weatherSettingKeys = @[kWeatherTemp, kWeathe
                                               imageId:[[OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE] getIcon]
                                               message:[[OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE] getMeasurementName]
                                                   key:kWeatherPressure
-                                                 left:false
+                                                 left:NO
                                         priorityOrder:121];
                 break;
             }
@@ -162,7 +198,7 @@ static NSArray<NSString *> * const _weatherSettingKeys = @[kWeatherTemp, kWeathe
                                               imageId:[[OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED] getIcon]
                                               message:[[OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED] getMeasurementName]
                                                   key:kWeatherWind
-                                                 left:false
+                                                 left:NO
                                         priorityOrder:122];
                 break;
             }
@@ -174,7 +210,7 @@ static NSArray<NSString *> * const _weatherSettingKeys = @[kWeatherTemp, kWeathe
                                               imageId:[[OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD] getIcon]
                                               message:[[OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD] getMeasurementName]
                                                   key:kWeatherCloud
-                                                 left:false
+                                                 left:NO
                                         priorityOrder:123];
             }
 
@@ -185,7 +221,7 @@ static NSArray<NSString *> * const _weatherSettingKeys = @[kWeatherTemp, kWeathe
                                               imageId:[[OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION] getIcon]
                                               message:[[OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION] getMeasurementName]
                                                   key:kWeatherPrecip
-                                                 left:false
+                                                 left:NO
                                         priorityOrder:124];
                 break;
             }
@@ -193,8 +229,6 @@ static NSArray<NSString *> * const _weatherSettingKeys = @[kWeatherTemp, kWeathe
             default:
                 return;
         }
-
-        [mapInfoController recreateControls];
     }
 }
 

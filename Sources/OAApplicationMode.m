@@ -90,6 +90,9 @@ static OAApplicationMode *_HORSE;
     [self regWidgetVisibility:@"back_to_location" am:all];
     [self regWidgetVisibility:@"monitoring_services" am:none];
     [self regWidgetVisibility:@"bgService" am:none];
+
+    // bottom
+    [self regWidgetVisibility:@"weather_toolbar" am:none];
 }
 
 + (void) initialize

@@ -27,6 +27,8 @@
 @property (weak, nonatomic) IBOutlet OAHudButton *compassButton;
 @property (weak, nonatomic) IBOutlet UIImageView *compassImage;
 
+@property (weak, nonatomic) IBOutlet OAHudButton *weatherToolbarButton;
+
 @property (weak, nonatomic) IBOutlet UIView *widgetsView;
 @property (weak, nonatomic) IBOutlet UIView *leftWidgetsView;
 @property (weak, nonatomic) IBOutlet UIView *rightWidgetsView;

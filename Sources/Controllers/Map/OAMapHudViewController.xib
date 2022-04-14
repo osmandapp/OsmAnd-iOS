@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,6 +21,7 @@
                 <outlet property="searchButton" destination="gMm-Ly-WJo" id="4xn-OZ-rlS"/>
                 <outlet property="statusBarView" destination="lga-DK-9T5" id="i0N-tA-Gsh"/>
                 <outlet property="view" destination="1" id="3"/>
+                <outlet property="weatherToolbarButton" destination="Kft-AO-Hcd" id="8Mb-KG-ple"/>
                 <outlet property="widgetsView" destination="6pw-WI-HAJ" id="vac-Sj-Qjx"/>
                 <outlet property="zoomButtonsView" destination="o72-6U-6Av" id="dzB-hp-3xi"/>
                 <outlet property="zoomInButton" destination="GgY-iA-GiG" id="pBy-3y-5hp"/>
@@ -157,6 +158,17 @@
                         <action selector="onMapModeButtonClicked:" destination="-1" eventType="touchUpInside" id="W5u-0h-muR"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Kft-AO-Hcd" userLabel="weatherToolbarButton" customClass="OAHudButton">
+                    <rect key="frame" x="16" y="538" width="50" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <state key="normal" image="ic_custom_umbrella.png">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="onWeatherToolbarButtonClick:" destination="-1" eventType="touchUpInside" id="BmS-gM-X5V"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <point key="canvasLocation" x="36.956521739130437" y="35.15625"/>
@@ -171,5 +183,6 @@
         <image name="ic_custom_map_zoom_out.png" width="30" height="30"/>
         <image name="ic_custom_navigation.png" width="30" height="30"/>
         <image name="ic_custom_search.png" width="30" height="30"/>
+        <image name="ic_custom_umbrella.png" width="30" height="30"/>
     </resources>
 </document>

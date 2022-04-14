@@ -18,6 +18,4 @@
 
 - (void)weatherChanged:(BOOL)isOn;
 
-+ (NSArray<NSString *> *)getWeatherSettingKeys;
-
 @end

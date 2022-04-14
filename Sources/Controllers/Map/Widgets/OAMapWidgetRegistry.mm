@@ -88,6 +88,19 @@
             [r.widget updateInfo];
 }
 
+- (void) removeSideWidget:(NSString *)key
+{
+    for (OAMapWidgetRegInfo *widget in _leftWidgetSet)
+    {
+        if ([widget.key isEqualToString:key])
+            [_leftWidgetSet removeObject:widget];
+    }
+    for (OAMapWidgetRegInfo *widget in _rightWidgetSet)
+    {
+        if ([widget.key isEqualToString:key])
+            [_rightWidgetSet removeObject:widget];
+    }
+}
 
 - (void) removeSideWidgetInternal:(OATextInfoWidget *)widget
 {

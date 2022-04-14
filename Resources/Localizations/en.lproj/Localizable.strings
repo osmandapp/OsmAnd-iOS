@@ -785,6 +785,8 @@
 "map_settings_clear_raster_cache" = "Clear raster tiles";
 "map_settings_weather_isolines" = "Isolines";
 
+"screen_settings_weather_toolbar" = "Weather toolbar";
+
 "settings_app_theme" = "Application theme";
 "app_theme_light" = "Light";
 "do_not_rotate" = "Do not rotate";

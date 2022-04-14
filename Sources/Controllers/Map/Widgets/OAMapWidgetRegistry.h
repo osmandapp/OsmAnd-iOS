@@ -16,6 +16,7 @@
 - (BOOL) hasCollapsibles:(OAApplicationMode *)mode;
 
 - (void) updateInfo:(OAApplicationMode *)mode expanded:(BOOL)expanded;
+- (void) removeSideWidget:(NSString *)key;
 - (void) removeSideWidgetInternal:(OATextInfoWidget *)widget;
 
 - (OAMapWidgetRegInfo *) registerSideWidgetInternal:(OATextInfoWidget *)widget widgetState:(OAWidgetState *)widgetState key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder;

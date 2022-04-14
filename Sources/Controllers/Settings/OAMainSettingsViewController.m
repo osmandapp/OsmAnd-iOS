@@ -358,9 +358,9 @@
     else if ([name isEqualToString:@"backup_restore"])
     {
         UIViewController *vc;
-//        if (OABackupHelper.sharedInstance.isRegistered)
-//            vc = [[OACloudBackupViewController alloc] init];
-//        else
+        if (OABackupHelper.sharedInstance.isRegistered)
+            vc = [[OACloudBackupViewController alloc] init];
+        else
             vc = [[OACloudIntroductionViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }

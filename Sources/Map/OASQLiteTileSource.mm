@@ -323,6 +323,9 @@
             meta.setMaxZoom(maxZ);
         }
         _db->storeMeta(meta);
+        
+        if (expireTimeMillis != -1)
+            _db->enableTileTimeSupport(false);
     }
 }
 
@@ -437,6 +440,9 @@
         meta.setInvertedY([parameters[@"inverted_y"] intValue]);
         
         res = db->storeMeta(meta);
+        if ([parameters[@"timecolumn"] isEqualToString:@"yes"])
+            db->enableTileTimeSupport(true);
+            
         db->close();
     }
     delete db;
@@ -475,11 +481,6 @@
 - (NSString *) getFilePath
 {
     return _filePath;
-}
-
-- (void) enableTileTimeSupportIfNeeded
-{
-    _db->enableTileTimeSupportIfNeeded();
 }
 
 @end

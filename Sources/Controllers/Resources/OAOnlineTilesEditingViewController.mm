@@ -494,40 +494,42 @@
             }
         }
         
-        [self refresLoadedLayersIfNeeded];
-        if (_sqliteSource != nil && _sourceFormat == EOASourceFormatSQLite)
-            [_sqliteSource enableTileTimeSupportIfNeeded];
+        [self refreshLoadedLayersIfNeeded];
         
         _baseController.dataInvalidated = YES;
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
-- (void) refresLoadedLayersIfNeeded
+- (void) refreshLoadedLayersIfNeeded
 {
     NSString *currentFile;
     NSString *overlayFile;
     NSString *underlayFile;
     
-    if (_sourceFormat == EOASourceFormatOnline)
+    if (_sourceFormat == EOASourceFormatOnline && _tileSource)
     {
-        currentFile = _tileSource->name.toNSString();
-        overlayFile = _app.data.overlayMapSource.name;
-        underlayFile = _app.data.underlayMapSource.name;
+        currentFile = [_tileSource->name.toNSString() lastPathComponent];
+        if (_app.data.overlayMapSource)
+            overlayFile = [_app.data.overlayMapSource.name lastPathComponent];
+        if (_app.data.underlayMapSource)
+            underlayFile = [_app.data.underlayMapSource.name lastPathComponent];
     }
-    else
+    else if (_sourceFormat == EOASourceFormatSQLite && _sqliteSource)
     {
-        currentFile = [_sqliteSource getFilePath];
-        overlayFile = _app.data.overlayMapSource.resourceId;
-        underlayFile = _app.data.underlayMapSource.resourceId;
+        currentFile = [[_sqliteSource getFilePath] lastPathComponent];
+        if (_app.data.overlayMapSource)
+            overlayFile = [_app.data.overlayMapSource.resourceId lastPathComponent];
+        if (_app.data.overlayMapSource)
+            underlayFile = [_app.data.underlayMapSource.resourceId lastPathComponent];
     }
     
     if (currentFile)
     {
-        if ([overlayFile hasSuffix:currentFile])
-            [_app.data.overlayMapSourceChangeObservable notifyEvent];
-        if ([underlayFile hasSuffix:currentFile])
-            [_app.data.underlayMapSourceChangeObservable notifyEvent];
+        if (overlayFile && [overlayFile isEqualToString:currentFile])
+            _app.data.overlayMapSource = _app.data.overlayMapSource;
+        if (underlayFile && [underlayFile isEqualToString:currentFile])
+            _app.data.underlayMapSource = _app.data.underlayMapSource;
     }
 }
 

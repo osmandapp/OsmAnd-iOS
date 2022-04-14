@@ -42,7 +42,6 @@
 - (UIImage *) getImage:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
 - (void) deleteImage:(int)x y:(int)y zoom:(int)zoom;
 - (void) deleteCache:(dispatch_block_t)block;
-- (void) enableTileTimeSupportIfNeeded;
 - (void) deleteImages:(OsmAnd::AreaI)area zoom:(int)zoom;
 - (void) insertImage:(int)x y:(int)y zoom:(int)zoom filePath:(NSString *)filePath;
 - (void) insertImage:(int)x y:(int)y zoom:(int)zoom data:(NSData *)data;

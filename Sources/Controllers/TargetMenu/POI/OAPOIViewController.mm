@@ -152,19 +152,25 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
         NSMutableAttributedString *str = [[NSMutableAttributedString alloc] init];
         UIColor *colorOpen = UIColorFromRGB(color_ctx_menu_amenity_opened_text);
         UIColor *colorClosed = UIColorFromRGB(color_ctx_menu_amenity_closed_text);
-        for (auto info : _openingHoursInfo)
+        for (int i = 0; i < _openingHoursInfo.size(); i ++)
         {
+            auto info = _openingHoursInfo[i];
+
             if (str.length > 0)
                 [str appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
-            
-            NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", [NSString stringWithUTF8String:info->getInfo().c_str()]]];
+
+            NSString *time = [NSString stringWithUTF8String:info->getInfo().c_str()];
+
+            NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", time]];
             NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
-            attachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_travel_time"] color:info->opened ? colorOpen : colorClosed];
+            BOOL opened = info->fallback && i > 0 ? _openingHoursInfo[i - 1]->opened : info->opened;
+            attachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_travel_time"]
+                                                                             color:opened ? colorOpen : colorClosed];
             
             NSAttributedString *strWithImage = [NSAttributedString attributedStringWithAttachment:attachment];
             [s replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:strWithImage];
             [s addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
-            [s addAttribute:NSForegroundColorAttributeName value:info->opened ? colorOpen : colorClosed range:NSMakeRange(0, s.length)];
+            [s addAttribute:NSForegroundColorAttributeName value:opened ? colorOpen : colorClosed range:NSMakeRange(0, s.length)];
             [str appendAttributedString:s];
         }
         
@@ -296,6 +302,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
             auto parser = OpeningHoursParser::parseOpenedHours([value UTF8String]);
             if (parser != nullptr)
             {
+                value = [NSString stringWithUTF8String:parser->toLocalString().c_str()];
                 bool isOpened = parser->isOpened();
                 textColor = isOpened ? UIColorFromRGB(color_place_open) : UIColorFromRGB(color_place_closed);
             }

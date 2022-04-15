@@ -2483,3 +2483,4 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"save_heading" = "ಶೀರ್ಷಿಕೆಯನ್ನು ಸೇರಿಸಿ";

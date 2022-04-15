@@ -150,7 +150,7 @@
 "map_widget_appearance_rem" = "დარჩენილი ელემენტები";
 "map_widget_compass" = "კომპასი";
 "map_widget_intermediate_distance" = "შუალედური დანიშნულების პუნქტი";
-"map_widget_distance" = "მიზანი";
+"map_widget_distance" = "დანიშნულების წერტილი";
 "monitoring_control_start" = "ჩაწერა";
 "map_widget_altitude" = "სიმაღლე";
 "map_widget_battery" = "ელემენტის დონე";
@@ -412,7 +412,7 @@
 "units_m_s" = "მ/წმ";
 "tones" = "ტონა";
 "nothing_found" = "Nothing found: %@";
-"nothing_found_empty" = "ვერაფერი ვიპოვეთ :(";
+"nothing_found_empty" = "არაფერი არ იქნა ნაპოვნი";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "ქუჩის არჩევა";
 "shared_string_in_name" = "%@-ში";
@@ -610,7 +610,7 @@
 "gpx_no_tracks" = "There are no tracks";
 "gpx_export_failed" = "Could not save created route";
 "gpx_remove" = "Remove track?";
-"gpx_stat" = "Statistics";
+"gpx_stat" = "სტატისტიკა";
 "gpx_route" = "გზა";
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
@@ -665,7 +665,7 @@
 
 // Map settings
 "m_style_car" = "მანქანით";
-"m_style_walk" = "ფეხით";
+"m_style_walk" = "სიარული";
 "m_style_bicycle" = "ველოსიპედით";
 "m_style_pulic_transport" = "საზოგადო ტრანსპორტი";
 "map_settings_map" = "რუკა";
@@ -768,7 +768,7 @@
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "სახელების ტრანსლიტერაცია";
-"lang_af" = "Afrikaan";
+"lang_af" = "აფრიკაანსი";
 "lang_al" = "ალბანური";
 "lang_als" = "ალბანური (ტოსკა)";
 "lang_an" = "არაგონიული";
@@ -1145,8 +1145,8 @@
 "res_details" = "დეტალები";
 "res_type" = "ტიპი";
 "res_unknown" = "Unknown";
-"res_size" = "Size";
-"res_created_on" = "Created on";
+"res_size" = "ზომა";
+"res_created_on" = "შექმნილია";
 "res_update_all" = "Update all";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
 "res_updates_avail_q" = "update(s) are available.";
@@ -1251,7 +1251,7 @@
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
 "osm_edits_basic" = "ძირითადი";
-"osm_edits_advanced" = "დამატებით";
+"osm_edits_advanced" = "რთული";
 "osm_edits_all" = "All edits";
 "osm_edits_poi" = "POI edits";
 "osm_edits_notes" = "Notes";
@@ -1482,8 +1482,8 @@
 "units_km_h" = "კმ/ს";
 "units_mph" = "მილი/წმ";
 "units_hour" = "h";
-"units_min" = "წთ";
-"units_sec" = "sec";
+"units_min" = "წთ.";
+"units_sec" = "წმ";
 "units_sec_short" = "s";
 "units_t" = "ტ";
 
@@ -1666,7 +1666,7 @@
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"product_title_srtm" = "კონტურული ხაზების დამატება";
+"product_title_srtm" = "კონტურული ხაზები";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "product_title_wikivoyage" = "მოგზაურთა გიდები";
@@ -1689,7 +1689,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "გზები";
-"res_srtm" = "კონტურული ხაზების დამატება";
+"res_srtm" = "კონტურული ხაზები";
 "res_wiki" = "Wikipedia";
 "res_hillshade" = "ბორცვი";
 "res_slope" = "დაქანება";
@@ -1773,7 +1773,7 @@
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
-"plugins" = "დამატებათა გამმართველი";
+"plugins" = "დამატებები";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -2276,14 +2276,14 @@
 //Icon categories
 "amenity" = "კომფორტი";
 "emergency" = "სასწრაფო დახმარება";
-"service" = "მომსახურება";
+"service" = "სერვისი";
 "special" = "სპეციალური";
 "sport" = "სპორტი";
 "symbols" = "სიმბოლოები";
 "transport" = "ტრანსპორტი";
 "travel" = "მოგზაურობა";
 "nautical" = "საზღვაო";
-"industrial" = "Industrial";
+"industrial" = "საწარმოო";
 "education" = "სასწავლო";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "რუკის დათვალიერება";
@@ -2326,3 +2326,23 @@
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "units_min_short" = "მ";
 "shared_string_hide_all" = "ყველას დამალვა";
+"cloud_set_up_backup" = "მარქაფის გამართვა";
+"cloud_restore_now" = "აღდგენა";
+"backup_error_file_not_available" = "ფაილი მიუწვდომელია";
+"add_description" = "აღწერის დამატება";
+"start_point" = "საწყისი";
+"altitude" = "სიმაღლე ზღვის დონიდან";
+"login_error_email_invalid" = "შეიყვანეთ სწორი ელ-ფოსტა";
+"cloud_existing_account" = "უკვე მაქვს ანგარიში";
+"resend_verification_code" = "გადაგზავნა";
+"cloud_conflicts" = "კონფლიქტები";
+"user_login" = "შესვლა";
+"points_delete_multiple" = "დარწმუნებული ბრძანდებით, რომ აპირებთ წაშალოთ %d წერტილ(ებ)ი?";
+"shared_string_open_street_map" = "OSM";
+"register_opr_create_new_account" = "ახალი ანგარიშის შექმნა";
+"weather_wind_unit_mi_per_hour" = "მილი საათში";
+"navigate_point_format_MGRS" = "MGRS";
+"shared_string_any" = "ნებისმიერი";
+"weather_wind_unit_km_per_hour" = "კილომეტრი საათში";
+"cloud_welcome_back" = "კეთილი იყოს თქვენი დაბრუნება!";
+"turn_arrows" = "მოხვევის ისრები";

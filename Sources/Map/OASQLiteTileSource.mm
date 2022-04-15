@@ -323,6 +323,9 @@
             meta.setMaxZoom(maxZ);
         }
         _db->storeMeta(meta);
+        
+        if (expireTimeMillis != -1)
+            _db->enableTileTimeSupport(false);
     }
 }
 
@@ -437,6 +440,9 @@
         meta.setInvertedY([parameters[@"inverted_y"] intValue]);
         
         res = db->storeMeta(meta);
+        if ([parameters[@"timecolumn"] isEqualToString:@"yes"])
+            db->enableTileTimeSupport(true);
+            
         db->close();
     }
     delete db;
@@ -470,6 +476,11 @@
     delete db;
 
     return title.length > 0 ? title : [[[filePath lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+}
+
+- (NSString *) getFilePath
+{
+    return _filePath;
 }
 
 @end

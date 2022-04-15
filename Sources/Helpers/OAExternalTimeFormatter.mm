@@ -76,6 +76,21 @@ std::vector<std::vector<std::string>> localisationUpdatingCallback (std::string 
     return updatedSettings;
 }
 
++ (BOOL) isCurrentRegionWith12HourTimeFormat
+{
+    NSDate *currentDate = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    [formatter setLocale:_usingLocale];
+    [formatter setDateStyle:NSDateFormatterNoStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    NSString *fullFormattedTimeString = [formatter stringFromDate:currentDate];
+    
+    [formatter setDateFormat:@"a"];
+    NSString *ampmString = [formatter stringFromDate:currentDate];
+    
+    return [fullFormattedTimeString containsString:ampmString];
+}
 
 + (BOOL) isCurrentRegionWithAmpmOnLeft
 {
@@ -129,6 +144,17 @@ std::vector<std::vector<std::string>> localisationUpdatingCallback (std::string 
         months.push_back(localizedMonth.UTF8String);
     }
     return months;
+}
+
++ (void) setLocale:(NSString *)regionId
+{
+    _usingLocale = [NSLocale currentLocale];
+    if (regionId && regionId.length > 0)
+    {
+        NSLocale *loadedLocale = [NSLocale localeWithLocaleIdentifier:regionId];
+        if (loadedLocale)
+            _usingLocale = loadedLocale;
+    }
 }
 
 @end

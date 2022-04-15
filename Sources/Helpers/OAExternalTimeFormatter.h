@@ -12,8 +12,12 @@
 
 @interface OAExternalTimeFormatter : NSObject
 
++ (void) setLocale:(NSString *)regionId;
++ (BOOL) isCurrentRegionWith12HourTimeFormat;
 + (BOOL) isCurrentRegionWithAmpmOnLeft;
 + (std::function<std::string (int, int, bool)>) getExternalTimeFormatterCallback;
 + (std::function<std::vector<std::vector<std::string>> (std::string)>) getExternalLocalisationUpdatingCallback;
++ (std::vector<std::string>) getLocalizedWeekdays;
++ (std::vector<std::string>) getLocalizedMonths;
 
 @end

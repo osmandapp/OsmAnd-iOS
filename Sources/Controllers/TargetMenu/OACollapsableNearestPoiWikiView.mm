@@ -9,18 +9,12 @@
 #import "OACollapsableNearestPoiWikiView.h"
 #import "OAPOI.h"
 #import "OARootViewController.h"
-#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "Localization.h"
 #import "OAMapLayers.h"
-#import "OAPOILayer.h"
 #import "OAPOIUIFilter.h"
-#import "OACommonTypes.h"
-#import "OAUtilities.h"
 #import "OAIAPHelper.h"
-#import "OAWorldRegion.h"
-#import "OsmAndApp.h"
 #import "OAInAppCell.h"
 #import "OAPluginDetailsViewController.h"
 #import "OAManageResourcesViewController.h"
@@ -29,12 +23,12 @@
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/ResourcesManager.h>
-
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
+
+@interface OACollapsableNearestPoiWikiView() <OAButtonDelegate>
+
+@end
 
 @implementation OACollapsableNearestPoiWikiView
 {
@@ -42,7 +36,7 @@
     UILabel *_bannerLabel;
     UIButton *_bannerButton;
 
-    NSArray<UIButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
     double _latitude;
     double _longitude;
     OAPOIUIFilter *_filter;
@@ -174,18 +168,18 @@
             nameLocalized = poi.nameLocalized;
 
         NSString *title = [NSString stringWithFormat:@"%@ (%@)", nameLocalized, [OAOsmAndFormatter getFormattedDistance:distance]];
-        UIButton *btn = [self createButton:title];
+        OAButton *btn = [self createButton:title];
         btn.tag = i++;
         [self addSubview:btn];
         [buttons addObject:btn];
     }
 
-    UIButton *showOnMapButton = [self createButton:OALocalizedString(@"map_settings_show")];
+    OAButton *showOnMapButton = [self createButton:OALocalizedString(@"map_settings_show")];
     showOnMapButton.tag = _buttonShowOnMapIndex = i++;
     [self addSubview:showOnMapButton];
     [buttons addObject:showOnMapButton];
 
-    UIButton *searchMoreButton = [self createButton:OALocalizedString(@"search_more")];
+    OAButton *searchMoreButton = [self createButton:OALocalizedString(@"search_more")];
     searchMoreButton.tag = _buttonSearchMoreIndex = i++;
     [self addSubview:searchMoreButton];
     [buttons addObject:searchMoreButton];
@@ -193,9 +187,9 @@
     _buttons = [NSArray arrayWithArray:buttons];
 }
 
-- (UIButton *)createButton:(NSString *)title
+- (OAButton *)createButton:(NSString *)title
 {
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
@@ -208,6 +202,8 @@
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
     btn.tintColor = UIColorFromRGB(0x1b79f8);
     [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+    btn.delegate = self;
+    [btn addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:btn action:@selector(showMenu:)]];
     return btn;
 }
 
@@ -260,7 +256,7 @@
     }
     
     int i = 0;
-    for (UIButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -279,7 +275,7 @@
 
 - (void) btnPress:(id)sender
 {
-    UIButton *btn = sender;
+    OAButton *btn = sender;
     NSInteger index = btn.tag;
     if (index >= 0 && index < self.nearestItems.count)
     {
@@ -350,6 +346,17 @@
     {
         OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
         [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
+    }
+}
+
+#pragma mark - OAButtonDelegate
+
+- (void)onCopy:(NSInteger)tag
+{
+    if (tag >= 0 && tag < _buttons.count)
+    {
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:_buttons[tag].titleLabel.text];
     }
 }
 

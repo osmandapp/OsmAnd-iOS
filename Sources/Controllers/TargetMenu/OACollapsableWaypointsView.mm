@@ -8,24 +8,15 @@
 
 #import "OACollapsableWaypointsView.h"
 #import "Localization.h"
-#import "OACommonTypes.h"
-#import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
-#import "OALocationConvert.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDocument.h"
-#import "OAGPXDocumentPrimitives.h"
 #import "OAFavoriteItem.h"
 #import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
-#import "OAMapViewController.h"
 #import "OAMapLayers.h"
-#import "OAGPXLayer.h"
-#import "OATargetPoint.h"
 #import "OAGPXDatabase.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXMutableDocument.h"
 
 #define kMaxItemsCount 11
 #define kButtonHeight 32.0
@@ -36,11 +27,15 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     EOAWaypointFavorite
 };
 
+@interface OACollapsableWaypointsView() <OAButtonDelegate>
+
+@end
+
 @implementation OACollapsableWaypointsView
 {
     OsmAndAppInstance _app;
     
-    NSArray<UIButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
     NSArray *_data;
     
     EOAWaypointsType _type;
@@ -89,9 +84,9 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     [self buildViews];
 }
 
-- (UIButton *)createButton:(NSString *)title tag:(NSInteger)tag
+- (OAButton *)createButton:(NSString *)title tag:(NSInteger)tag
 {
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
     
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -106,6 +101,8 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     btn.tag = tag;
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(color_coordinates_background)] forState:UIControlStateHighlighted];
     [btn addTarget:self action:@selector(onButtonTouched:) forControlEvents:UIControlEventTouchDown];
+    btn.delegate = self;
+    [btn addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:btn action:@selector(showMenu:)]];
     return btn;
 }
 
@@ -114,7 +111,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:kMaxItemsCount];
     for (NSInteger i = 0; i < MIN(kMaxItemsCount - 1, _data.count); i++)
     {
-        UIButton * btn = nil;
+        OAButton * btn = nil;
         if (_type == EOAWaypointGPX)
         {
             btn = [self createButton:((OAWptPt *)_data[i]).name tag:i];
@@ -135,7 +132,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     
     if (_data.count > kMaxItemsCount - 1)
     {
-        UIButton *showMore = [self createButton:OALocalizedString(@"shared_string_show_more") tag:kMaxItemsCount];
+        OAButton *showMore = [self createButton:OALocalizedString(@"shared_string_show_more") tag:kMaxItemsCount];
         [self addSubview:showMore];
         [buttons addObject:showMore];
         [showMore addTarget:self action:@selector(onShowMorePressed:) forControlEvents:UIControlEventTouchDown];
@@ -173,7 +170,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
 
 - (void) onButtonTouched:(id) sender
 {
-    UIButton *btn = sender;
+    OAButton *btn = sender;
     [UIView animateWithDuration:0.3 animations:^{
         btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
         btn.layer.borderColor = UIColor.clearColor.CGColor;
@@ -198,7 +195,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     CGFloat viewHeight = 10.;
     
     int i = 0;
-    for (UIButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -217,7 +214,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
 
 - (void) btnPress:(id)sender
 {
-    UIButton *btn = sender;
+    OAButton *btn = sender;
     NSInteger index = btn.tag;
     if (index >= 0 && index < _data.count)
     {
@@ -245,6 +242,17 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
 - (void) adjustHeightForWidth:(CGFloat)width
 {
     [self updateLayout:width];
+}
+
+#pragma mark - OAButtonDelegate
+
+- (void)onCopy:(NSInteger)tag
+{
+    if (tag >= 0 && tag < _buttons.count)
+    {
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:_buttons[tag].titleLabel.text];
+    }
 }
 
 @end

@@ -8,19 +8,22 @@
 
 #import "OACollapsableCoordinatesView.h"
 #import "Localization.h"
-#import "OACommonTypes.h"
-#import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OALocationConvert.h"
 #import "OAPointDescription.h"
+#import "OAButton.h"
 
 #define kButtonHeight 32.0
 #define kDefaultZoomOnShow 16.0f
 
+@interface OACollapsableCoordinatesView() <OAButtonDelegate>
+
+@end
+
 @implementation OACollapsableCoordinatesView
 {
-    NSArray<UIButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
     
     UILabel *_viewLabel;
 }
@@ -71,7 +74,7 @@
     int i = 0;
     for (NSNumber *format in _coordinates.allKeys)
     {
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+        OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
         NSString *coord;
         if (format.integerValue == FORMAT_UTM)
             coord = [NSString stringWithFormat:@"UTM: %@", _coordinates[format]];
@@ -94,7 +97,10 @@
         btn.tintColor = UIColorFromRGB(color_primary_purple);
         btn.tag = i++;
         [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(color_coordinates_background)] forState:UIControlStateHighlighted];
-        [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+        btn.delegate = self;
+        [btn addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:btn action:@selector(showMenu:)]];
+        [btn addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:btn action:@selector(showMenu:)]];
+
         [self addSubview:btn];
         [buttons addObject:btn];
         [btn addTarget:self action:@selector(onButtonTouched:) forControlEvents:UIControlEventTouchDown];
@@ -104,7 +110,7 @@
 
 - (void) onButtonTouched:(id) sender
 {
-    UIButton *btn = sender;
+    OAButton *btn = sender;
     [UIView animateWithDuration:0.3 animations:^{
         btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
         btn.layer.borderColor = UIColor.clearColor.CGColor;
@@ -135,7 +141,7 @@
     y += viewHeight;
     
     int i = 0;
-    for (UIButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -152,19 +158,20 @@
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
 }
 
-- (void) btnPress:(id)sender
-{
-    UIButton *btn = sender;
-    NSInteger index = btn.tag;
-    if (index >= 0 && index < self.coordinates.count)
-    {
-        UIPasteboard *pb = [UIPasteboard generalPasteboard];
-        [pb setString:self.coordinates.allValues[index]];
-    }
-}
 - (void) adjustHeightForWidth:(CGFloat)width
 {
     [self updateLayout:width];
+}
+
+#pragma mark - OAButtonDelegate
+
+- (void)onCopy:(NSInteger)tag
+{
+    if (tag >= 0 && tag < self.coordinates.count)
+    {
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:self.coordinates.allValues[tag]];
+    }
 }
 
 @end

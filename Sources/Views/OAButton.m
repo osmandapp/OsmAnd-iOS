@@ -57,4 +57,39 @@
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
 }
 
+- (BOOL)canBecomeFirstResponder
+{
+    return self.delegate != nil && [self.delegate respondsToSelector:@selector(onCopy:)];
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return (action == @selector(copy:));
+}
+
+- (void)copy:(id)sender
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(onCopy:)])
+        [self.delegate onCopy:self.tag];
+}
+
+- (void)showMenu:(id)sender
+{
+    [self becomeFirstResponder];
+
+    UIMenuController *menuController = UIMenuController.sharedMenuController;
+    if (!menuController.isMenuVisible)
+    {
+        if (@available(iOS 13.0, *))
+        {
+            [menuController showMenuFromView:self rect:self.bounds];
+        }
+        else
+        {
+            [menuController setTargetRect:self.bounds inView:self];
+            [menuController setMenuVisible:YES animated:YES];
+        }
+    }
+}
+
 @end

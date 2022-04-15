@@ -8,10 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol OAButtonDelegate <NSObject>
+
+@optional
+
+- (void) onCopy:(NSInteger)tag;
+
+@end
+
 @interface OAButton : UIButton
 
 @property (nonatomic, assign) BOOL centerVertically;
 @property (nonatomic, assign) BOOL extraSpacing;
+
+@property (nonatomic) id<OAButtonDelegate> delegate;
 
 - (void)applyVerticalLayout;
 

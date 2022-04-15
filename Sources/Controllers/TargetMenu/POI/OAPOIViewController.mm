@@ -9,11 +9,8 @@
 #import "OAPOIViewController.h"
 #import "OsmAndApp.h"
 #import "OAPOI.h"
-#import "OAPOIType.h"
 #import "OAPOIHelper.h"
 #import "OAPOILocationType.h"
-#import "OAUtilities.h"
-#import "OAAppSettings.h"
 #import "OAPOIMyLocationType.h"
 #import "OACollapsableLabelView.h"
 #import "OAColors.h"
@@ -25,11 +22,9 @@
 #import "OACollapsableNearestPoiTypeView.h"
 #import "OAOsmAndFormatter.h"
 #import "OAResourcesUIHelper.h"
+#import "OALabel.h"
 
-#include <openingHoursParser.h>
-#include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Data/TransportStop.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/ObfDataInterface.h>
 

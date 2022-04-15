@@ -8,19 +8,13 @@
 
 #import "OAEditTargetViewController.h"
 #import "OsmAndApp.h"
-#import "OAAppData.h"
-#import "OALog.h"
 #import "OAEditGroupViewController.h"
 #import "OAEditColorViewController.h"
 #import "OAEditDescriptionViewController.h"
 #import "OADefaultFavorite.h"
-#import "OARootViewController.h"
-#import "OAUtilities.h"
 #import "OATargetInfoCollapsableViewCell.h"
 #import "OATargetInfoCollapsableCoordinatesViewCell.h"
 #import "OACollapsableWaypointsView.h"
-#import "OACollapsableView.h"
-#import "OACollapsableCoordinatesView.h"
 #import <UIAlertView+Blocks.h>
 #import "OAColors.h"
 #import "OAColorViewCell.h"
@@ -806,10 +800,7 @@
     return nil;
 }
 
-
-
 #pragma mark - UITableViewDelegate
-
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -882,7 +873,22 @@
     }
 }
 
-#pragma mark
+- (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    return (action == @selector(copy:));
+}
+
+- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (action == @selector(copy:))
+        [[UIPasteboard generalPasteboard] setString:_data[indexPath.row][@"label"]];
+}
+
 #pragma mark - OAEditColorViewControllerDelegate
 
 - (void) colorChanged

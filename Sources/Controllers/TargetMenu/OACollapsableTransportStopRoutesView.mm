@@ -9,24 +9,21 @@
 #import "OACollapsableTransportStopRoutesView.h"
 #import "OATransportStopViewController.h"
 #import "OATransportStopRoute.h"
-#import "OATransportStopType.h"
-#import "OAUtilities.h"
 #import "OAColors.h"
 #import "OARootViewController.h"
-#import "OAMapViewController.h"
-#import "OAMapPanelViewController.h"
 #import "OAMapLayers.h"
-#import "OATransportStopsLayer.h"
 #import "OANativeUtilities.h"
 #import "OATransportRouteController.h"
 
-#include <OsmAndCore/Utilities.h>
-
 #define kTransportIconWidth 16.0
+
+@interface OACollapsableTransportStopRoutesView() <OAButtonDelegate>
+
+@end
 
 @implementation OACollapsableTransportStopRoutesView
 {
-    NSArray<UIButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
 }
 
 - (void) setRoutes:(NSArray<OATransportStopRoute *> *)routes
@@ -95,8 +92,8 @@
         
         UIImage *stopPlate = [OATransportStopViewController createStopPlate:[OATransportStopViewController adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
         stopPlate = [stopPlate imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+
+        OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
         [btn setAttributedTitle:title forState:UIControlStateNormal];
         [btn setImage:stopPlate forState:UIControlStateNormal];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -105,6 +102,8 @@
         btn.imageEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
         btn.titleEdgeInsets = UIEdgeInsetsMake(0, kMarginLeft - kMarginRight - stopPlate.size.width, 0, 0);
         btn.contentEdgeInsets = UIEdgeInsetsMake(kMarginTop, kMarginRight + [OAUtilities getLeftMargin], kMarginTop, kMarginRight);
+        btn.delegate = self;
+        [btn addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:btn action:@selector(showMenu:)]];
 
         btn.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         //btn.layer.borderWidth = 0.5;
@@ -120,7 +119,7 @@
 - (void) updateLayout:(CGFloat)width
 {
     CGFloat viewHeight = 0;
-    for (UIButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         CGFloat labelWidth = width - [OAUtilities getLeftMargin] - kMarginLeft - kMarginRight;
         CGFloat h = [btn.currentAttributedTitle boundingRectWithSize:{labelWidth, 10000} options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height;
@@ -141,7 +140,7 @@
 
 - (IBAction) btnPress:(id)sender
 {
-    UIButton *btn = (UIButton *) sender;
+    OAButton *btn = (OAButton *) sender;
     NSInteger index = btn.tag;
     OATransportStopRoute *r = self.routes[index];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
@@ -157,6 +156,17 @@
     [mapPanel showContextMenuWithPoints:@[targetPoint]];
 
     [OATransportRouteController showToolbar:r];
+}
+
+#pragma mark - OAButtonDelegate
+
+- (void)onCopy:(NSInteger)tag
+{
+    if (tag >= 0 && tag < _buttons.count)
+    {
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:_buttons[tag].titleLabel.attributedText.string];
+    }
 }
 
 @end

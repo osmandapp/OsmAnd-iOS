@@ -166,7 +166,7 @@
 "map_widget_appearance_rem" = "Likę elementai";
 "map_widget_compass" = "Kompasas";
 "map_widget_intermediate_distance" = "Tarpinis tikslas";
-"map_widget_distance" = "Tikslas";
+"map_widget_distance" = "Paskirties punktas";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Aukštis";
 "map_widget_battery" = "Baterijos būklė";
@@ -613,8 +613,8 @@
 "poi_hide" = "Slėpti";
 
 // My Places
-"favorites" = "Mėgiami";
-"tracks" = "Maršrutai";
+"favorites" = "Įsimintos vietos";
+"tracks" = "Keliai";
 "personal_category_name" = "Asmeninis";
 "visible" = "Matomas";
 
@@ -771,7 +771,7 @@
 // Intro
 "intro_skip" = "Praleisti";
 "intro_download" = "Download\nmap";
-"intro_next" = "Kitas";
+"intro_next" = "Toliau";
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global offline maps";
 "intro_placeholder" = "enter the name of your region";
@@ -815,7 +815,7 @@
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Pavadinimų transliteravimas";
 
-"lang_af" = "Afrikaan";
+"lang_af" = "Afrikanų";
 "lang_al" = "Albanų";
 "lang_als" = "Albanų (toskų)";
 "lang_an" = "Aragonese";
@@ -1202,7 +1202,7 @@
 "res_cancel_inst_q" = "You're going to cancel %@ installation.";
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
-"res_details" = "Detalės";
+"res_details" = "Išsami informacija";
 "res_type" = "Tipas";
 "res_unknown" = "Unknown";
 "res_size" = "Size";
@@ -1313,7 +1313,7 @@
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
 "osm_edits_basic" = "Pagrindinis";
-"osm_edits_advanced" = "Pažengęs";
+"osm_edits_advanced" = "Išplėstinis";
 "osm_edits_all" = "All edits";
 "osm_edits_poi" = "POI edits";
 "osm_edits_notes" = "Notes";
@@ -1408,7 +1408,7 @@
 "add_intermediate" = "Pridėti tarpinį tašką";
 "add_home" = "Pridėti namus";
 "add_work" = "Pridėti darbą";
-"home_pt" = "Namo";
+"home_pt" = "Namai";
 "work_pt" = "Darbas";
 "map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Pridėti pirmąjį tarpinį tašką";
@@ -1518,7 +1518,7 @@
 "modify_edit_short" = "Redaguoti LV";
 "open_osm_note" = "Pridėti OSM pastabą";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Patvirtinti";
+"osm_alert_title" = "Užfiksuoti";
 "osm_alert_message" = "Pranešimas";
 "osm_alert_button_ok" = "Sukurti pastabą";
 "modify_poi" = "Modify the POI information";
@@ -1546,7 +1546,7 @@
 "units_mph" = "my/h";
 
 "units_hour" = "val";
-"units_min" = "min";
+"units_min" = "min.";
 "units_sec" = "sec";
 "units_sec_short" = "s";
 
@@ -1748,7 +1748,7 @@
 "product_desc_wikivoyage" = "Atviras pasaulinis kelionių vadovas, kurie kiekvienas gali redaguoti.";
 "product_desc_ext_wikivoyage" = "Maršrutai į pačius įdomiausius objektus planetoje, panaudojant OsmAnd nereikalingas interneto ryšis.";
 
-"product_title_sea_depth_contours" = "Jūrlapiai su gylio kontūrais";
+"product_title_sea_depth_contours" = "Vandenyno gylio kontūrai";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 
 "my_location" = "My Location";
@@ -1854,7 +1854,7 @@
 "parked_at" = "Parked at";
 
 "directions_more_options" = "Kelio nuorodos nuo";
-"nearby_search" = "Ieškoti šalia";
+"nearby_search" = "Ieškoti aplink";
 "change_object_posiotion" = "Change object's position";
 "change_position_descr" = "Move the map to change object's position";
 
@@ -1863,7 +1863,7 @@
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
 
-"plugins" = "Įskiepiai";
+"plugins" = "Įskiepių valdymas";
 "open_map_settings" = "Open Map Settings";
 
 "plugin_popup_ski_title" = "Turn on Ski map style";
@@ -2396,7 +2396,7 @@
 
 //Icon categories
 "amenity" = "Amenity";
-"emergency" = "Nelaimės atveju";
+"emergency" = "Spec. tarnybos";
 "service" = "Paslauga";
 "special" = "Special";
 "sport" = "Sportas";
@@ -2483,3 +2483,23 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"units_min_short" = "m";
+"cloud_welcome_back" = "Sveiki sugrįžę!";
+"altitude" = "Aukštis";
+"backup_error_subscription_was_used" = "Prenumerata arba akcijos kodas, naudojama kitoje paskyroje %@";
+"points_delete_multiple" = "Jūs ketinate trinti %d punktą (- us). Ar tikrai?";
+"cloud_restore_now" = "Atkurti dabar";
+"backup_error_no_valid_subscription" = "Nėra galiojančios prenumeratos";
+"login_error_email_invalid" = "Prašome įvesti galiojantį el. pašto adresą";
+"weather_wind_unit_km_per_hour" = "Kilometrai per valandą";
+"shared_string_any" = "Bet kurią";
+"backup_error_user_is_not_registered" = "Šiuo el. pašto adresu neregistruotas joks naudotojas";
+"backup_error_subscription_was_expired" = "Pasibaigusi prenumerata";
+"register_opr_create_new_account" = "Sukurti naują paskyrą";
+"cloud_existing_account" = "Aš jau turiu paskyrą";
+"backup_error_file_not_available" = "Failas neprieinamas";
+"backup_error_user_is_already_registered" = "Šis el. pašto adresas naudojamas kitoje paskyroje";
+"backup_error_gzip_only_supported_upload" = "Failas turėtų būti siunčiamas .gzip formatu";
+"backup_error_size_is_exceeded" = "Maksimalus OsmAnd Cloud dydis viršytas %@";
+"cloud_set_up_backup" = "Nustatyti atsarginę kopiją";
+"weather_wind_unit_mi_per_hour" = "Mylios per valandą";

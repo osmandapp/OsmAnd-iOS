@@ -7,20 +7,13 @@
 //
 
 #import "OAFavoriteImportViewController.h"
-
 #import "OAPointTableViewCell.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
-#import "OADefaultFavorite.h"
-#import "OATargetInfoViewController.h"
 #import "OAParkingPositionPlugin.h"
-#import "OAPlugin.h"
 #import "OAColors.h"
-
 #import "OsmAndApp.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
@@ -53,8 +46,6 @@
     {
         // Try to import favorites
         favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(url.path));
-        if ([url.path hasPrefix:app.inboxPath])
-            [[NSFileManager defaultManager] removeItemAtPath:url.path error:nil];
         if (favoritesCollection)
             _handled = YES;
         
@@ -252,13 +243,17 @@
         }
         [self.ignoredNames removeAllObjects];
         self.conflictedName = @"";
-        
+
+        [OAUtilities denyAccessToFile:_url.path removeFromInbox:YES];
+
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
 - (IBAction) cancelClicked:(id)sender
 {
+    [OAUtilities denyAccessToFile:_url.path removeFromInbox:YES];
+
     [self.navigationController popViewControllerAnimated:YES];
     //[self.navigationController popToRootViewControllerAnimated:YES];
 }

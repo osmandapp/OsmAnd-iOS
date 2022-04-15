@@ -41,6 +41,7 @@
 #import "OALocationConvert.h"
 #import "OAWeatherHelper.h"
 #import "OAGPXDatabase.h"
+#import "OAExternalTimeFormatter.h"
 
 #include <algorithm>
 
@@ -146,7 +147,6 @@
         _documentsDir = QDir(QString::fromNSString(_documentsPath));
         _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
         _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
-
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
 
         [self buildFolders];
@@ -199,6 +199,13 @@
 
 - (void) initOpeningHoursParser
 {
+    [OAExternalTimeFormatter setLocale:[NSLocale currentLocale].localeIdentifier];
+    OpeningHoursParser::setExternalTimeFormatterCallback([OAExternalTimeFormatter getExternalTimeFormatterCallback]);
+    OpeningHoursParser::setTwelveHourFormattingEnabled([OAExternalTimeFormatter isCurrentRegionWith12HourTimeFormat]);
+    OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
+    OpeningHoursParser::setLocalizedDaysOfWeek([OAExternalTimeFormatter getLocalizedWeekdays]);
+    OpeningHoursParser::setLocalizedMonths([OAExternalTimeFormatter getLocalizedMonths]);
+    
     OpeningHoursParser::setAdditionalString("off", [OALocalizedString(@"day_off_label") UTF8String]);
     OpeningHoursParser::setAdditionalString("is_open", [OALocalizedString(@"time_open") UTF8String]);
     OpeningHoursParser::setAdditionalString("is_open_24_7", [OALocalizedString(@"shared_string_is_open_24_7") UTF8String]);
@@ -208,6 +215,27 @@
     OpeningHoursParser::setAdditionalString("open_till", [OALocalizedString(@"open_till") UTF8String]);
     OpeningHoursParser::setAdditionalString("will_open_tomorrow_at", [OALocalizedString(@"will_open_tomorrow_at") UTF8String]);
     OpeningHoursParser::setAdditionalString("will_open_on", [OALocalizedString(@"will_open_on") UTF8String]);
+    
+    //[self runOpeningHoursParserTests];
+}
+
+- (void) runOpeningHoursParserTests
+{
+    [OAExternalTimeFormatter setLocale:@"en"];
+    OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
+    OpeningHoursParser::runTest();
+    
+    [OAExternalTimeFormatter setLocale:@"en"];
+    OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
+    OpeningHoursParser::runTestAmPmEnglish();
+    
+    [OAExternalTimeFormatter setLocale:@"zh"];
+    OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
+    OpeningHoursParser::runTestAmPmChinese();
+    
+    [OAExternalTimeFormatter setLocale:@"ar"];
+    OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
+    OpeningHoursParser::runTestAmPmArabic();
 }
 
 - (BOOL) initialize
@@ -371,6 +399,16 @@
         {
             [OAGPXDatabase.sharedDb save];
             [OAGPXDatabase.sharedDb load];
+
+            NSError *error;
+            NSArray *inboxFiles = [NSFileManager.defaultManager contentsOfDirectoryAtPath:_inboxPath error:&error];
+            if (!error)
+            {
+                for (NSString *inboxFile in inboxFiles)
+                {
+                    [NSFileManager.defaultManager removeItemAtPath:[_inboxPath stringByAppendingPathComponent:inboxFile] error:nil];
+                }
+            }
         }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;

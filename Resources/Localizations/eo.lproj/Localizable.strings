@@ -508,7 +508,7 @@
 "preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
 "select_online_source" = "Select source";
 "online_sources" = "Online sources";
-"size_of_downloaded_data" = "The big difference between zoom levels can increase the size of the downloaded data.";
+"size_of_downloaded_data" = "Ju pli granda amplekso de skal-niveloj, des pli multe da datumoj necesos elŝuti.";
 "use_of_downloaded_map" = "You can now use this map offline as main map source or as overlay/underlay layer";
 "map_update_warning" = "Do you want to reload tile data from the Internet?";
 
@@ -559,7 +559,7 @@
 "name_and_descr" = "Name & description";
 "select_group" = "Elekti grupon";
 "icon" = "Emblemo";
-"shape" = "Shape";
+"shape" = "Formo";
 "fav_point_dublicate" = "Duplikata nomo deŝatata punkto";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
@@ -582,7 +582,7 @@
 
 // My Places
 "favorites" = "Ŝatataj";
-"tracks" = "Kursoj";
+"tracks" = "Spuroj";
 "personal_category_name" = "Personaj";
 "visible" = "Videbla";
 
@@ -595,7 +595,7 @@
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Punktoj de kurso";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Import tracks";
+"gpx_import_title" = "Enporti spurojn";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -665,9 +665,9 @@
 
 // Map settings
 "m_style_car" = "Aŭto";
-"m_style_walk" = "Irado";
+"m_style_walk" = "Piedirado";
 "m_style_bicycle" = "Biciklo";
-"m_style_pulic_transport" = "Transporto publika";
+"m_style_pulic_transport" = "Publika transporto";
 "map_settings_map" = "Mapo";
 "layer_amenity_label" = "Etikedoj de punktoj (interesejoj,ŝatataj)";
 "map_settings_show" = "Montri sur mapo";
@@ -675,8 +675,8 @@
 "map_mode" = "Map-reĝimo";
 "map_settings_map_magnifier" = "Map-skalado";
 "map_settings_text_size" = "Grando de teksto";
-"map_settings_day" = "tago";
-"map_settings_night" = "Nokta";
+"map_settings_day" = "Taga";
+"map_settings_night" = "Nokte";
 "map_settings_style" = "Map-aspekto";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -768,7 +768,7 @@
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Transliterumi nomojn";
-"lang_af" = "Afrikaan";
+"lang_af" = "Afrikansa";
 "lang_al" = "Albana";
 "lang_als" = "Albana (Toska)";
 "lang_an" = "Aragona";
@@ -1002,7 +1002,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "Elŝuti";
-"nothanks" = "Ne, dankon";
+"nothanks" = "Ne, mi ne volas";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -1049,7 +1049,9 @@
 "plan_route_open_existing_track" = "Malfermi ekzistan spuron";
 "plan_route_last_modified" = "Antaŭe modifita";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
-"route_between_points_warning_desc" = "Por uzi tiunĉi agordon, OsmAnd postulas ĝustigi vian kurson al vojoj sur la mapo.\n\n Sekve vi devos elekti profilon de navigo (por trovi permesatajn vojojn) kaj sojlan distancon (por alproksimigi vian kurson al vojoj).";
+"route_between_points_warning_desc" = "Por uzi tiunĉi agordon, OsmAnd postulas ĝustigi vian kurson al vojoj sur la mapo.
+\n
+\n Sekve vi devos elekti profilon de navigo (por trovi permesatajn vojojn) kaj sojlan distancon (por alproksimigi vian kurson al vojoj).";
 "plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
 "gpx_saved_successfully" = "GPX file saved to %@";
 "none_point_error" = "Bonvolu aldoni almenaŭ unu punkton.";
@@ -1145,8 +1147,8 @@
 "res_details" = "Detaloj";
 "res_type" = "Speco";
 "res_unknown" = "Unknown";
-"res_size" = "Size";
-"res_created_on" = "Created on";
+"res_size" = "Grando";
+"res_created_on" = "Kreita je";
 "res_update_all" = "Update all";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
 "res_updates_avail_q" = "update(s) are available.";
@@ -1205,7 +1207,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osm_note" = "OSM-rimarko";
 "osm_created" = "Created";
-"osm_deleted" = "Forigita(j)";
+"osm_deleted" = "Forigite";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1298,7 +1300,7 @@
 "copied_to_clipboard" = "Enpoŝigita";
 
 // Quick action
-"quick_action_name" = "Rapida ago";
+"quick_action_name" = "Butono de rapida ago";
 "quick_action_no_overlay" = "Neniu surtavolo";
 "quick_action_add_overlay" = "Aldoni surtavolon";
 "quick_action_no_underlay" = "Neniu subtavolo";
@@ -1482,7 +1484,7 @@
 "units_km_h" = "km/h";
 "units_mph" = "mi/h";
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "minutoj";
 "units_sec" = "s";
 "units_sec_short" = "s";
 "units_t" = "Mg";
@@ -1505,7 +1507,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Mapklarigo";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Alia";
+"help_other_header" = "Aliaj";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Instalado kaj problemoj";
 "help_tech_articles" = "Teĥnikaj artikoloj";
@@ -1901,7 +1903,7 @@
 "postcode" = "Poŝtkodo";
 "show_something_on_map" = "Montri na %@ sur la mapo";
 "search_POI_level_btn" = "Increase search radius";
-"shared_string_street" = "Stratoj";
+"shared_string_street" = "Strato";
 "shared_string_building" = "Domo";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Adreso";
@@ -2282,7 +2284,7 @@
 "symbols" = "Simboloj";
 "transport" = "Transporto";
 "travel" = "Vojaĝo";
-"nautical" = "Marnavigada";
+"nautical" = "Mar-navigado";
 "industrial" = "Industrio";
 "education" = "Edukado";
 "settings_item_read_error" = "Could not read %@.";
@@ -2324,3 +2326,74 @@
 "ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"cloud_last_backup" = "Antaŭa sekurkopio";
+"routeInfo_winter_ice_road_description" = "Klasifikas vojojn laŭ ilia veturebleco dum vintro.";
+"cloud_make_backup_descr" = "Estas multajŝanĝoj en tiu ĉi aparato, konsideru fari sekurkopion por ke ne perdu viajn datumojn.";
+"resend_verification_code" = "Resendi";
+"weather_wind_unit_km_per_hour" = "Kilometroj en horo";
+"cloud_backup_now" = "Fari sekurkopion nun";
+"add_description" = "Aldoni priskribon";
+"route_line_use_map_style_color" = "Uzi implicitan koloron de la map‑stilo %@.";
+"shared_string_min_height" = "Minimuma alto";
+"login_error_email_invalid" = "Bonvolu entajpiĝustan retpoŝtadreson";
+"cloud_conflicts" = "Konfliktoj";
+"backup_error_token_is_not_valid" = "Io estas erara pri identigilo de la aparato aŭ ĵetono";
+"routing_attr_allow_gate_description" = "Permesi navigi tra pordegoj";
+"grey_color_undefined" = "Fragmentoj sen datumoj estas grizaj.";
+"cloud_make_backup" = "Fari sekurkopion";
+"backup_error_size_is_exceeded" = "Superis maksimuman grandon por OsmAnd-Nubo: %@";
+"backup_error_file_not_available" = "Dosiero ne disponebla";
+"altitude" = "Altitudo";
+"routing_attr_only_permitted_streets_description" = "Uzi nur stratojn, kiuj estas markitaj kiel permesataj";
+"rendering_attr_showRunningRoutes_name" = "Kuradaj kursoj";
+"backup_error_user_is_not_registered" = "Neniu registrita uzanto kun tiuĉi retpoŝta adreso";
+"routeInfo_surface_description" = "Liveras informojn priŝosea kovro de voj(et)oj.";
+"routing_attr_only_permitted_streets_name" = "Nur certe permesataj stratoj";
+"backup_error_user_is_already_registered" = "Tiuĉi retpoŝta adreso estas uzata de alia konto";
+"backup_error_subscription_was_used" = "Abono aŭ reklamkodo estas uzata de alia konto: %@";
+"backup_error_subscription_was_expired_descr" = "Via abono OsmAnd Pro senvalidiĝis – reaboni ĝin por povi uzi sekurkopion. Vi plue povas restarigi datumojn el la nubo.";
+"register_opr_create_new_account" = "Krei novan konton";
+"points_delete_multiple" = "Ĉu forigi %d punkto(j)n\?";
+"cloud_conflicts_descr" = "Ne povas alŝuti al la servilo kelkajn dosieroj, ĉar pli novaj versioj troviĝas en la servilo.";
+"weather_wind_unit_mi_per_hour" = "Mejloj en horo";
+"backup_error_subscription_was_expired" = "Abono senvalidiĝis";
+"routing_attr_prefer_horse_routes_description" = "Preferiĉevalajn kursojn";
+"horseback_riding" = "Ĉeval-rajdado";
+"cloud_description" = "Neniam perdu viajn datumojn. Facile faru sekurkopiojn kaj restariguĉiujn datumojn.";
+"cloud_existing_account" = "Mi jam havas konton";
+"routing_attr_only_permitted_ways_description" = "Uzi nur vojojn, kiuj estas markitaj kiel permesataj";
+"cloud_email_already_registered" = "Tiuĉi retpoŝta adreso jam estas registrita.";
+"customize_route_line" = "Alĝustigi linion de kurso";
+"osmand_cloud_login_descr" = "Enigu la retpoŝtan adreson, kiun vi uzis por registriĝi. Dum la sekva etapo unufoja pasvorto estos al ĝi sendita.";
+"route_line_use_map_style_width" = "Uzi implicitan larĝon de la map‑stilo %@.";
+"cloud_view_conflicts" = "Montri konfliktojn";
+"routeInfo_smoothness_description" = "Klasifikas vojojn laŭ ilia veturebleco por radveturiloj: glateco kaj krateretoj.";
+"user_login" = "Salutnomo";
+"osmand_cloud" = "OsmAnd-Nubo";
+"cloud_set_up_backup" = "Agordi sekurkopion";
+"restore_from_file" = "Restarigi el dosiero";
+"save_heading" = "Inkluzivi direkton";
+"context_menu_edit_descr" = "Redakti priskribon";
+"shared_string_max_height" = "Maksimuma alto";
+"routeInfo_roadClass_description" = "Linio de spuro aŭ kurso estas kolorigata laŭ speco de vojo.";
+"routeInfo_tracktype_description" = "Linio de spuro aŭ kurso estas kolorigata laŭ pavimo. Uzebla por regionoj kie ŝosea reto konsistas ĉefe el tervojoj.";
+"turn_arrows" = "Sagetoj de turniĝoj";
+"shared_string_any" = "Ia";
+"shared_string_open_street_map" = "OpenStreetMap";
+"cloud_restore_now" = "Restarigi nun";
+"routing_attr_only_permitted_ways_name" = "Nur certe permesataj vojoj";
+"rendering_attr_showFitnessTrails_name" = "Vojetoj de sportiloj";
+"verify_email_address_descr" = "Kontrolkodo sendita al %@, eniguĝin en la kampon sube.";
+"routing_attr_prefer_horse_routes_name" = "Preferiĉevalajn kursojn";
+"shared_string_hide_all" = "Kaŝi ĉiujn";
+"start_point" = "Komenco";
+"navigate_point_format_MGRS" = "MGRS";
+"cloud_welcome_back" = "Bonvenon ree!";
+"units_min_short" = "m";
+"backup_error_token_is_not_valid_or_expired" = "Ĵetono malĝusta aŭ senvalidiĝis";
+"routing_attr_allow_gate_name" = "Permesi pordegojn";
+"cloud_email_not_registered" = "Tiuĉi retpoŝta adreso ne estis registrita en OsmAnd-Nubo";
+"rendering_attr_showRunningRoutes_description" = "Montri vojetojn por kurado";
+"backup_error_gzip_only_supported_upload" = "Dosiero estu en la formo .gzip";
+"backup_error_no_valid_subscription" = "Neniu valida abono";
+"rendering_attr_showFitnessTrails_description" = "Montri“vojetojn de sano”";

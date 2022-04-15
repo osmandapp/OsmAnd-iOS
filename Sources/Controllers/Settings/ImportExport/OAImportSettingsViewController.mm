@@ -9,15 +9,10 @@
 #import "OAImportSettingsViewController.h"
 #import "OAImportDuplicatesViewController.h"
 #import "OAImportCompleteViewController.h"
-#import "OAAppSettings.h"
 #import "OASettingsImporter.h"
 #import "OsmAndApp.h"
-#import "OASettingsCategoryItems.h"
-#import "OAExportSettingsCategory.h"
 #import "OAProgressTitleCell.h"
-
 #import "Localization.h"
-#import "OAColors.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 
@@ -25,6 +20,7 @@
 {
     OASettingsHelper *_settingsHelper;
     NSArray<OASettingsItem *> *_settingsItems;
+    BOOL _isNewItems;
     NSString *_file;
     NSString *_descriptionText;
     NSString *_descriptionBoldText;
@@ -57,7 +53,7 @@
 - (void) setupView
 {
     OAImportAsyncTask *importTask = _settingsHelper.importTask;
-    if (importTask && _settingsItems)
+    if (!_isNewItems && importTask && _settingsItems)
     {
         if (!_file)
         {
@@ -93,7 +89,7 @@
         self.data = @[group];
     }
     
-    EOAImportType importTaskType = [importTask getImportType];
+    EOAImportType importTaskType = _isNewItems ? EOAImportTypeCollect : [importTask getImportType];
     
     if (importTaskType == EOAImportTypeCheckDuplicates)
     {
@@ -105,6 +101,8 @@
     }
     else
         [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
+
+    _isNewItems = NO;
 }
 
 - (void) updateUI:(NSString *)toolbarTitleRes descriptionRes:(NSString *)descriptionRes activityLabel:(NSString *)activityLabel
@@ -175,23 +173,22 @@
 
 - (IBAction) backButtonPressed:(id)sender
 {
-    if ([_file hasPrefix:[OsmAndApp instance].inboxPath])
-        [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
+    [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - OASettingsImportExportDelegate
 
-- (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items {
+- (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items
+{
     if (succeed)
     {
         [self.tableView reloadData];
         OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES] fileName:[_file lastPathComponent]];
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
+        [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
     }
-    if ([_file hasPrefix:[OsmAndApp instance].inboxPath])
-        [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
 }
 
 - (void) onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
@@ -216,9 +213,12 @@
     }
 }
 
-- (void)onItemsCollected:(NSArray<OASettingsItem *> *)items
+- (void)onItemsCollected:(NSArray<OASettingsItem *> *)items filePath:(NSString *)filePath
 {
+    _isNewItems = YES;
     _settingsItems = items;
+    _file = filePath;
+    _archiveItems = OsmAnd::ArchiveReader(QString::fromNSString(_file)).getItems();
     if (_settingsItems)
     {
         [self setupView];

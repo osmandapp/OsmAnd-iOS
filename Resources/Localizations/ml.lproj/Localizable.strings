@@ -614,7 +614,7 @@
 
 // My Places
 "favorites" = "ഇഷ്ടമുളളവ";
-"tracks" = "\"ജിപിഎക്സ്  പാതകള്‍\"";
+"tracks" = "\"എന്റെ  പാതകള്‍\"";
 "personal_category_name" = "Personal";
 "visible" = "ദൃശ്യമായ";
 
@@ -815,7 +815,7 @@
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "ലിപി മാറ്റിയെഴുതിയ പേരുകള്‍";
 
-"lang_af" = "Afrikaan";
+"lang_af" = "ആഫ്രിക്കന്‍ ഭാഷ";
 "lang_al" = "അല്‍ബേനിയന്‍";
 "lang_als" = "അല്‍ബേനിയന്‍(ടോസ്ക്)";
 "lang_an" = "Aragonese";
@@ -1146,7 +1146,7 @@
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "പ്രാദേശികം";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "\"തത്സമയ പരിഷ്കരണങ്ങള്‍ \"";
+"osmand_live_updates" = "\"പരിഷ്കരണങ്ങള്‍ \"";
 "osmand_live_available_maps" = "ലഭ്യമായ ഭൂപടങ്ങള്‍";
 "osmand_live_last_changed" = "Last map change: %@";
 "osmand_live_last_live_update" = "\"അവസാന പരിഷ്ക്കരണം : %@\"";
@@ -2483,3 +2483,10 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"units_min_short" = "മീ.";
+"weather_wind_unit_mi_per_hour" = "മൈല്‍/മണിക്കൂര്‍";
+"weather_wind_unit_km_per_hour" = "കിലോമീറ്റര്‍/മണിക്കൂര്‍";
+"altitude" = "ഉയരം";
+"login_error_email_invalid" = "ദയവായി ഈ-മെയില്‍ വിലാസം തരുക";
+"points_delete_multiple" = "നിങ്ങൾ %d പോയിന്റ് (കൾ) ഇല്ലാതാക്കാൻ പോകുന്നു. ഉറപ്പാണോ\?";
+"shared_string_any" = "ഏതെങ്കിലും";

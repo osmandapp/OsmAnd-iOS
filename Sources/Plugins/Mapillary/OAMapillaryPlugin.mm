@@ -70,35 +70,26 @@
 
 - (void) registerLayers
 {
-    [self createLayers];
     [self registerWidget];
-}
-
-- (void) createLayers
-{
-    _mapillaryControl = [self createMapillaryInfoControl];
 }
 
 - (void) updateLayers
 {
-    [self updateMapLayers];
-}
-
-- (void) updateMapLayers
-{
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!_mapillaryControl)
-            [self createLayers];
-
-        OAMapInfoController *mapInfoController = [self getMapInfoController];
-        if (OAIAPHelper.sharedInstance.mapillary.disabled)
+        if ([self isEnabled])
         {
-            [mapInfoController removeSideWidget:_mapillaryControl];
-            [mapInfoController recreateControls];
+            if (!_mapillaryControl)
+                [self registerWidget];
         }
         else
         {
-            [self registerWidget];
+            if (_mapillaryControl)
+            {
+                OAMapInfoController *mapInfoController = [self getMapInfoController];
+                [mapInfoController removeSideWidget:_mapillaryControl];
+                [mapInfoController recreateControls];
+                _mapillaryControl = nil;
+            }
         }
     });
 }
@@ -113,6 +104,8 @@
     OAMapInfoController *mapInfoController = [self getMapInfoController];
     if (mapInfoController)
     {
+        _mapillaryControl = [self createMapillaryInfoControl];
+        
         [mapInfoController registerSideWidget:_mapillaryControl imageId:@"ic_custom_mapillary_symbol" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:19];
         [mapInfoController recreateControls];
     }

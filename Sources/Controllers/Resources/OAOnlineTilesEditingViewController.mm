@@ -479,6 +479,7 @@
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self clearAndUpdateSource];
+                [self refreshLoadedLayersIfNeeded];
             }]];
             [self presentViewController:alert animated:YES completion:nil];
         }
@@ -492,9 +493,8 @@
             {
                 [self updateSqliteSource];
             }
+            [self refreshLoadedLayersIfNeeded];
         }
-        
-        [self refreshLoadedLayersIfNeeded];
         
         _baseController.dataInvalidated = YES;
         [self.navigationController popViewControllerAnimated:YES];

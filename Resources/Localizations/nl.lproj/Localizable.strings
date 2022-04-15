@@ -1633,3 +1633,5 @@
 "search_more" = "Zoek meer…";
 "lang_pnb" = "Punjabi";
 "lang_zh_hk" = "Chinees (Hong Kong)";
+"shared_string_open_street_map" = "OpenStreetMap";
+"number_of_tiles" = "Aantal titels";

@@ -47,35 +47,6 @@ std::string formattingCallback (int hours, int minutes, bool appendAmPM) {
     }
 }
 
-
-+ (std::function<std::vector<std::vector<std::string>> (std::string)> ) getExternalLocalisationUpdatingCallback
-{
-    return localisationUpdatingCallback;
-}
-
-std::vector<std::vector<std::string>> localisationUpdatingCallback (std::string locale) {
-    NSString* preparedLocale = [NSString stringWithUTF8String:locale.c_str()];
-    return [OAExternalTimeFormatter updateLocalisations:preparedLocale];
-}
-
-+ (std::vector<std::vector<std::string>>) updateLocalisations:(NSString *)locale
-{
-    _usingLocale = [NSLocale currentLocale];
-    if (locale && locale.length > 0)
-    {
-        NSLocale *loadedLocale = [NSLocale localeWithLocaleIdentifier:locale];
-        if (loadedLocale)
-            _usingLocale = loadedLocale;
-    }
-    
-    std::vector<std::string> weekdays = [self getLocalizedWeekdays];
-    std::vector<std::string> months = [self getLocalizedMonths];
-    std::string isAmpmOnLeft = [self isCurrentRegionWithAmpmOnLeft] ? "true" : "false";
-    std::vector<std::vector<std::string>> updatedSettings = std::vector<std::vector<std::string>>{weekdays, weekdays, std::vector<std::string>{isAmpmOnLeft}};
-    
-    return updatedSettings;
-}
-
 + (BOOL) isCurrentRegionWith12HourTimeFormat
 {
     NSDate *currentDate = [NSDate date];

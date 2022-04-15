@@ -135,7 +135,7 @@
         @{
             @"type"  : [OAIconTitleValueCell getCellIdentifier],
             @"name"  : kWeatherContourLines,
-            @"title" : OALocalizedString(@"map_settings_weather_isolines"),
+            @"title" : OALocalizedString(@"map_settings_weather_contours"),
             @"value" : selectedContourLinesName,
             @"image" : @"ic_custom_contour_lines"
         }];

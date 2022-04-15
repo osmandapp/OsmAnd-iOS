@@ -298,12 +298,9 @@
 - (void) onItemClicked:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-//    if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-//    {
-        [vwController hide:YES animated:YES];
-        OAWeatherLayerSettingsViewController *vc = [[OAWeatherLayerSettingsViewController alloc] initWithLayerType:[self getWeatherLayerType:item[@"name"]]];
-        [OARootViewController.instance.mapPanel showScrollableHudViewController:vc];
-//    }
+    [vwController hide:YES animated:YES];
+    OAWeatherLayerSettingsViewController *vc = [[OAWeatherLayerSettingsViewController alloc] initWithLayerType:[self getWeatherLayerType:item[@"name"]]];
+    [OARootViewController.instance.mapPanel showScrollableHudViewController:vc];
 }
 
 - (void) turnWeatherOnOff:(id)sender

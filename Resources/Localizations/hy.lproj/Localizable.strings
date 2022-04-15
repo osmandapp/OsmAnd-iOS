@@ -48,7 +48,7 @@
 "transport_routes" = "Երթուղիներ";
 "transport_nearby_routes_within" = "Մոտակա երթուղիները";
 "transport_nearby_routes" = "Ներսում";
-"transport_stop" = "Կանգառ";
+"transport_stop" = "Կանգնել";
 
 "cancel_navigation" = "Վերջացնել նավիգացիան";
 "start_navigation" = "Start navigation";
@@ -488,7 +488,7 @@
 "shared_string_and" = "և";
 "shared_string_edit" = "Խմբագրել";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Ավելի ուշ";
+"shared_string_later" = "Շարունակել";
 "shared_string_of" = "of";
 "shared_string_all" = "Բոլորը";
 "shared_string_from" = "սկսած";
@@ -613,8 +613,8 @@
 "poi_hide" = "Թաքցնել";
 
 // My Places
-"favorites" = "Սիրված";
-"tracks" = "Տրեկները";
+"favorites" = "Սիրածները";
+"tracks" = "Տրեկեր";
 "personal_category_name" = "Personal";
 "visible" = "Տեսանելի";
 
@@ -718,7 +718,7 @@
 "map_settings_map_magnifier" = "Խոշորացույց";
 "map_settings_text_size" = "Տեքստի չափը";
 "map_settings_day" = "Ցերեկային";
-"map_settings_night" = "Գիշերային";
+"map_settings_night" = "Գիշեր";
 "map_settings_style" = "Քարտեզի ոճը";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -815,7 +815,7 @@
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Transliterateանունները";
 
-"lang_af" = "Afrikaan";
+"lang_af" = "Աֆրիկանս";
 "lang_al" = "Ալբաներեն";
 "lang_als" = "Ալբաներեն (Tosk)";
 "lang_an" = "Արագոնի";
@@ -1146,7 +1146,7 @@
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Տեղական";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Liveթարմացումներ";
+"osmand_live_updates" = "Ավտո-թարմացում";
 "osmand_live_available_maps" = "Հասանելի քարտեզներ";
 "osmand_live_last_changed" = "Last map change: %@";
 "osmand_live_last_live_update" = "Վերջին թարմացումը՝ %@";
@@ -1545,8 +1545,8 @@
 "units_km_h" = "կմ/ժ";
 "units_mph" = "մղ/ժ";
 
-"units_hour" = "ժամ";
-"units_min" = "րոպե";
+"units_hour" = "ժ";
+"units_min" = "րոպ․";
 "units_sec" = "sec";
 "units_sec_short" = "s";
 
@@ -1740,7 +1740,7 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"product_title_srtm" = "Քարտեզ SRTM (բարձունքների գծեր)";
+"product_title_srtm" = "Բարձունքների գծեր";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
@@ -1748,7 +1748,7 @@
 "product_desc_wikivoyage" = "Աշխարհի ուղեցույց, որը կարող է խմբագրել ցանկացած մեկը:";
 "product_desc_ext_wikivoyage" = "Տեսեք ուղեցույցները, OsmAnd-ում աշխարհի ամենահետաքրքիր վայրերը, առանց ինտերնետին միանալու:";
 
-"product_title_sea_depth_contours" = "Ծովային խորքային ուրվագծեր";
+"product_title_sea_depth_contours" = "Ծովային խորքային ուրվագիծը";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 
 "my_location" = "My Location";
@@ -1768,7 +1768,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Ճանապարհներ";
-"res_srtm" = "Քարտեզ SRTM (բարձունքների գծեր)";
+"res_srtm" = "Բարձունքների գծեր";
 "res_wiki" = "Վիքիպեդիա";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Լանջ";
@@ -1850,7 +1850,7 @@
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "shared_string_show_all" = "Ցույց տալ ամբողջը";
-"parking" = "Կայանատեղ";
+"parking" = "Ավտոկայանատեղեր";
 "parked_at" = "Parked at";
 
 "directions_more_options" = "Մեկնման կետ";
@@ -2483,3 +2483,10 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"weather_wind_unit_mi_per_hour" = "Մղոն ժամում";
+"login_error_email_invalid" = "Խնդրում ենք մուտքագրեք ճիշտ e-mail հասցեն";
+"units_min_short" = "մ";
+"points_delete_multiple" = "Համոզված եք, որ ցանկանում եք ջնջել %d կետ(եր)\?";
+"altitude" = "Բարձրություն";
+"shared_string_any" = "Ցանկացած";
+"weather_wind_unit_km_per_hour" = "Կիլոմետր ժամում";

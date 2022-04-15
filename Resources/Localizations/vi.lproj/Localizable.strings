@@ -91,7 +91,7 @@
 "daynight_mode_auto" = "Bình minh/Hoàng hôn";
 "route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "Đã kích hoạt thiết lập tự động bám theo.";
-"unknown_location" = "Vị trí chưa được biết";
+"unknown_location" = "Vị trí chưa được biết.";
 "animate_routing_route_not_calculated" = "Please calculate the route first";
 "settings_preset" = "Chế độ Ứng dụng";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
@@ -126,7 +126,7 @@
 // Track recording settings
 "save_global_track_interval" = "General logging interval";
 "save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
-"logging_interval_navigation" = "Khoảng thời gian lưu Track";
+"logging_interval_navigation" = "Khoảng thời gian ghi nhật ký trong quá trình điều hướng";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
 "logging_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
@@ -240,7 +240,7 @@
 "nav_type_brouter" = "BRouter";
 "nav_type_ski" = "Ski";
 "nav_type_geocoding" = "Geocoding";
-"fast_route_mode_descr" = "Bật/tắt tính năng tìm đường đi nhanh nhất";
+"fast_route_mode_descr" = "Cho phép tính toán tuyến đường nhanh nhất hoặc tắt cho tuyến đường tiết kiệm nhiên liệu.";
 "avoid_in_routing_title" = "Avoid…";
 "avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Prefer…";
@@ -359,7 +359,7 @@
 "starting_point_too_far" = "Starting point too far from nearest road.";
 "ending_point_too_far" = "Ending point too far from nearest road.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
-"arrived_at_destination" = "Bạn đã đến điểm đích";
+"arrived_at_destination" = "Bạn đã đến điểm đích.";
 "towards" = "toward";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Take %d exit and go";
@@ -371,7 +371,7 @@
 "route_tl" = "Rẽ trái và đi";
 "route_tshl" = "Rẽ trái và đi";
 "route_tsll" = "Quẹo trái và đi";
-"route_tu" = "Quay đầu lại và đi thẳng";
+"route_tu" = "Quayđầu lại và đi thẳng";
 "route_head" = "Tiến";
 "looking_up_address" = "Looking up address";
 "no_address_found" = "No address determined";
@@ -582,7 +582,7 @@
 
 // My Places
 "favorites" = "Ưa thích";
-"tracks" = "Tracks";
+"tracks" = "Theo dõi";
 "personal_category_name" = "Personal";
 "visible" = "Visible";
 
@@ -631,9 +631,9 @@
 "track_recording_name" = "Currently recording track";
 "track_stop_rec" = "Stop recording";
 "track_new_segment" = "Start new segment";
-"track_save" = "Lưu track hiện tại";
+"track_save" = "Lưu theo dõi hiện tại";
 "displayed_route_save" = "Save to OsmAnd Tracks";
-"track_save_descr" = "Lưu track hiện tại vào thẻ nhớ SD";
+"track_save_descr" = "Hãy lưu theo dõi hiện tại vào tệp GPX.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
 "rec_interval" = "Logging interval";
@@ -1222,7 +1222,7 @@
 "osm_str_name" = "Street name";
 "osm_building_num" = "Building number";
 "osm_phone" = "Điện thoại";
-"osm_website" = "web site";
+"osm_website" = "Trang web";
 "population_num" = "Population";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
@@ -1482,7 +1482,7 @@
 "units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "phút";
 "units_sec" = "sec";
 "units_sec_short" = "s";
 "units_t" = "t";
@@ -1505,7 +1505,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Map legend";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Mục khác";
+"help_other_header" = "Khác";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Installation and troubleshooting";
 "help_tech_articles" = "Technical articles";
@@ -1766,7 +1766,7 @@
 "parking" = "Parking";
 "parked_at" = "Parked at";
 "directions_more_options" = "Directions from";
-"nearby_search" = "Tìm xung quanh";
+"nearby_search" = "Tìm kiếm gần";
 "change_object_posiotion" = "Change object's position";
 "change_position_descr" = "Move the map to change object's position";
 "est_travel_time" = "Estimate travel time";
@@ -2324,3 +2324,9 @@
 "ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"backup_error_token_is_not_valid_or_expired" = "Token không hợp lệ hoặc đã hết hạn";
+"shared_string_max_height" = "Độ cao tối đa";
+"backup_error_user_is_not_registered" = "Không có người dùng nào đăng ký với địa chỉ e-mail đó";
+"backup_error_no_valid_subscription" = "Không có gói đăng ký hợp lệ nào đang có";
+"shared_string_min_height" = "Độ cao tối thiểu";
+"shared_string_any" = "Bất kỳ";

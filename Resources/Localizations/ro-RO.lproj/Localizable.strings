@@ -2355,3 +2355,6 @@
 "routing_attr_avoid_low_emission_zone_description" = "Evită zonele cu emisii scăzute";
 "routing_attr_avoid_tunnels_name" = "Fără tuneluri";
 "routing_attr_avoid_tunnels_description" = "Evită tunelurile";
+"rendering_attr_showRunningRoutes_name" = "Rute de alergare";
+"rendering_attr_showRunningRoutes_description" = "Arată rutele de alergare";
+"rendering_attr_showFitnessTrails_name" = "Trasee de fitness";

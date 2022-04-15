@@ -1225,7 +1225,7 @@
 		B24745BA27F7465D00C18C3F /* ic_custom_precipitation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B24745B027F7465C00C18C3F /* ic_custom_precipitation@3x.png */; };
 		B24745BB27F7465D00C18C3F /* ic_custom_wind@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B24745B127F7465C00C18C3F /* ic_custom_wind@3x.png */; };
 		B24745BC27F7465D00C18C3F /* ic_custom_clouds@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B24745B227F7465D00C18C3F /* ic_custom_clouds@3x.png */; };
-		B24745C027F862C300C18C3F /* OAWeatherLayerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B24745BE27F862C200C18C3F /* OAWeatherLayerSettingsViewController.m */; };
+		B24745C027F862C300C18C3F /* OAWeatherLayerSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B24745BE27F862C200C18C3F /* OAWeatherLayerSettingsViewController.mm */; };
 		B24745C127F862C300C18C3F /* OAWeatherLayerSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B24745BF27F862C300C18C3F /* OAWeatherLayerSettingsViewController.xib */; };
 		BB2726FA19CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
 		BB27270119CB38D7007C5613 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = BB2726FC19CB38D7007C5613 /* fonts */; };
@@ -4395,7 +4395,7 @@
 		B24745B127F7465C00C18C3F /* ic_custom_wind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@3x.png"; path = "Resources/Icons/ic_custom_wind@3x.png"; sourceTree = "<group>"; };
 		B24745B227F7465D00C18C3F /* ic_custom_clouds@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clouds@3x.png"; path = "Resources/Icons/ic_custom_clouds@3x.png"; sourceTree = "<group>"; };
 		B24745BD27F862C200C18C3F /* OAWeatherLayerSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWeatherLayerSettingsViewController.h; sourceTree = "<group>"; };
-		B24745BE27F862C200C18C3F /* OAWeatherLayerSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWeatherLayerSettingsViewController.m; sourceTree = "<group>"; };
+		B24745BE27F862C200C18C3F /* OAWeatherLayerSettingsViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherLayerSettingsViewController.mm; sourceTree = "<group>"; };
 		B24745BF27F862C300C18C3F /* OAWeatherLayerSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAWeatherLayerSettingsViewController.xib; sourceTree = "<group>"; };
 		BB098CF41793F7FD00423944 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BB098CF61793F7FD00423944 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -7289,42 +7289,6 @@
 				B247453F27E3AFE200C18C3F /* ic_custom_cloud_upload_colored_day_big@3x.png */,
 				B247452D27E34B3500C18C3F /* ic_custom_restore@2x.png */,
 				B247452C27E34B3500C18C3F /* ic_custom_restore@3x.png */,
-				32D253DE27F58BD800324717 /* widget_weather_air_pressure_day@2x.png */,
-				32D253E927F58BDB00324717 /* widget_weather_air_pressure_day@3x.png */,
-				32D253E527F58BDA00324717 /* widget_weather_air_pressure_night@2x.png */,
-				32D253E627F58BDB00324717 /* widget_weather_air_pressure_night@3x.png */,
-				32D253E427F58BDA00324717 /* widget_weather_clouds_day@2x.png */,
-				32D253E127F58BD900324717 /* widget_weather_clouds_day@3x.png */,
-				32D253D327F58BD500324717 /* widget_weather_clouds_night@2x.png */,
-				32D253E827F58BDB00324717 /* widget_weather_clouds_night@3x.png */,
-				32D253D827F58BD700324717 /* widget_weather_precipitation_day@2x.png */,
-				32D253E727F58BDB00324717 /* widget_weather_precipitation_day@3x.png */,
-				32D253D527F58BD600324717 /* widget_weather_precipitation_night@2x.png */,
-				32D253E027F58BD900324717 /* widget_weather_precipitation_night@3x.png */,
-				32D253D627F58BD600324717 /* widget_weather_temperature_day@2x.png */,
-				32D253E227F58BDA00324717 /* widget_weather_temperature_day@3x.png */,
-				32D253EA27F58BDC00324717 /* widget_weather_temperature_night@2x.png */,
-				32D253DD27F58BD800324717 /* widget_weather_temperature_night@3x.png */,
-				32D253D427F58BD600324717 /* widget_weather_umbrella_day@2x.png */,
-				32D253D927F58BD700324717 /* widget_weather_umbrella_day@3x.png */,
-				32D253DB27F58BD700324717 /* widget_weather_umbrella_night@2x.png */,
-				32D253E327F58BDA00324717 /* widget_weather_umbrella_night@3x.png */,
-				32D253D727F58BD600324717 /* widget_weather_wind_day@2x.png */,
-				32D253DF27F58BD900324717 /* widget_weather_wind_day@3x.png */,
-				32D253DA27F58BD700324717 /* widget_weather_wind_night@2x.png */,
-				32D253DC27F58BD700324717 /* widget_weather_wind_night@3x.png */,
-				32D253BE27F5868600324717 /* ic_custom_air_pressure@2x.png */,
-				32D253C427F5868900324717 /* ic_custom_air_pressure@3x.png */,
-				32D253BC27F5868500324717 /* ic_custom_clouds@2x.png */,
-				32D253BD27F5868500324717 /* ic_custom_clouds@3x.png */,
-				32D253BB27F5868400324717 /* ic_custom_precipitation@2x.png */,
-				32D253BF27F5868600324717 /* ic_custom_precipitation@3x.png */,
-				32D253C127F5868700324717 /* ic_custom_thermometer@2x.png */,
-				32D253C027F5868700324717 /* ic_custom_thermometer@3x.png */,
-				32D253C227F5868800324717 /* ic_custom_umbrella@2x.png */,
-				32D253C327F5868800324717 /* ic_custom_umbrella@3x.png */,
-				32D253C527F5868900324717 /* ic_custom_wind@2x.png */,
-				32D253C627F5868A00324717 /* ic_custom_wind@3x.png */,
 				3296B46127F8790200108AF7 /* ic_custom_air_pressure@2x.png */,
 				3296B46527F8790300108AF7 /* ic_custom_air_pressure@3x.png */,
 				3296B47A27F8790700108AF7 /* ic_custom_clouds@2x.png */,
@@ -11880,7 +11844,7 @@
 				8A90CED927A7C2310001C84D /* OAMapSettingsWeatherScreen.h */,
 				8A90CEDA27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm */,
 				B24745BD27F862C200C18C3F /* OAWeatherLayerSettingsViewController.h */,
-				B24745BE27F862C200C18C3F /* OAWeatherLayerSettingsViewController.m */,
+				B24745BE27F862C200C18C3F /* OAWeatherLayerSettingsViewController.mm */,
 				B24745BF27F862C300C18C3F /* OAWeatherLayerSettingsViewController.xib */,
 			);
 			path = MapSettings;
@@ -14728,13 +14692,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
-				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -14990,7 +14953,7 @@
 				DA5A824A26C563A700F274C7 /* OADefaultSpeedViewController.mm in Sources */,
 				DA5A846126C563A900F274C7 /* OAContextMenuLayer.mm in Sources */,
 				DA5A813E26C563A700F274C7 /* OANode.m in Sources */,
-				B24745C027F862C300C18C3F /* OAWeatherLayerSettingsViewController.m in Sources */,
+				B24745C027F862C300C18C3F /* OAWeatherLayerSettingsViewController.mm in Sources */,
 				DA5A83D826C563A800F274C7 /* OAFavoriteViewController.mm in Sources */,
 				DA5A839C26C563A800F274C7 /* OADirectionAppearanceViewController.m in Sources */,
 				DA5A844626C563A900F274C7 /* OABaseScrollableHudViewController.mm in Sources */,
@@ -15939,7 +15902,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.2.0;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -15996,7 +15959,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.2.0;
-				OBJROOT = "$SYMROOT";
+				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

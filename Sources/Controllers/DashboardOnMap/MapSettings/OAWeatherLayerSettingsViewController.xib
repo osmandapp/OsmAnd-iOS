@@ -12,11 +12,12 @@
             <connections>
                 <outlet property="backButton" destination="qkP-x3-4Do" id="rZ9-So-5dk"/>
                 <outlet property="backButtonContainerView" destination="jnh-4L-tHW" id="EWs-HJ-dVo"/>
+                <outlet property="backButtonLeadingConstraint" destination="Zln-CV-EcR" id="c07-DD-oef"/>
                 <outlet property="contentContainer" destination="MS4-i5-G2V" id="6ik-la-bwc"/>
                 <outlet property="doneButton" destination="NCn-9w-B8g" id="OTu-qR-gea"/>
                 <outlet property="doneButtonContainerView" destination="LXh-cR-gHh" id="dCs-zX-Mxw"/>
                 <outlet property="scrollableView" destination="sDq-bx-xFM" id="JSx-ht-26v"/>
-                <outlet property="sliderView" destination="eP3-dk-RgC" id="Bni-r2-QTv"/>
+                <outlet property="sliderView" destination="eP3-dk-RgC" id="gID-dF-2Fa"/>
                 <outlet property="statusBarBackgroundView" destination="fZR-k6-6OL" id="Q96-rh-KsK"/>
                 <outlet property="tableView" destination="d0a-Es-2iQ" id="pvA-DE-y8B"/>
                 <outlet property="toolBarView" destination="egl-9r-P4T" id="g8G-fe-hQJ"/>

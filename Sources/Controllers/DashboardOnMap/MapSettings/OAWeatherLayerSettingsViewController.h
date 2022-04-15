@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherLayerType)
     EOAWeatherLayerTypeWind,
     EOAWeatherLayerTypeCloud,
     EOAWeatherLayerTypePrecipitation,
-    EOAWeatherLayerTypeIsolines
+    EOAWeatherLayerTypeContours
 };
 
 @interface OAWeatherLayerSettingsViewController : OABaseScrollableHudViewController

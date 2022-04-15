@@ -98,7 +98,7 @@ QString OASQLiteTileSourceMapLayerProvider::getUrlToLoad(const OsmAnd::TileId ti
 bool OASQLiteTileSourceMapLayerProvider::expired(const int64_t time)
 {
     if (_ts->isTileTimeSupported() && _expirationTimeMillis > 0)
-        return QDateTime::currentMSecsSinceEpoch() - time > _expirationTimeMillis;
+        return static_cast<int64_t>(QDateTime::currentMSecsSinceEpoch()) - time > _expirationTimeMillis;
     
     return false;
 }
@@ -133,7 +133,7 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
             requestResult.reset();
             return nullptr;
         }
-        _ts->storeTileData(tileId, zoom, downloadResult, QDateTime::currentMSecsSinceEpoch());
+        _ts->storeTileData(tileId, zoom, downloadResult, static_cast<int64_t>(QDateTime::currentMSecsSinceEpoch()));
         requestResult.reset();
         return downloadResult;
     }

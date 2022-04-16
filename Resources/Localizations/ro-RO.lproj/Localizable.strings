@@ -2392,3 +2392,6 @@
 "cloud_conflicts" = "Conflicte";
 "osmand_cloud" = "Cloud-ul OsmAnd";
 "cloud_make_backup_descr" = "Există multe modificări pe acest dispozitiv, vă rugăm să faceți o copie de siguranță a acestor date pentru a nu le pierde.";
+"rendering_attr_showRunningRoutes_name" = "Rute de alergare";
+"rendering_attr_showRunningRoutes_description" = "Arată rutele de alergare";
+"rendering_attr_showFitnessTrails_name" = "Trasee de fitness";

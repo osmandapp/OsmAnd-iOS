@@ -63,7 +63,7 @@
 - (void)onItemSelected:(CPListItem * _Nonnull)item
 {
     NSNumber *indexNum = item.userInfo;
-    if (!indexNum || _searchItems.count == 0 || indexNum.integerValue - 1 > _searchItems.count)
+    if (!indexNum || _searchItems.count == 0 || indexNum.integerValue >= _searchItems.count)
         return;
     
     NSInteger index = indexNum.integerValue;

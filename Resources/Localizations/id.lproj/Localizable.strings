@@ -52,11 +52,11 @@
 "replace_destination_point" = "Replace the destination";
 "shared_string_current" = "Current";
 "make_as_start_point" = "Make this the start point";
-"keep_and_add_destination_point" = "Tambahkan sebagai destinasi perantara selanjutnya";
+"keep_and_add_destination_point" = "Tambahkan sebagai tujuan perantara selanjutnya";
 "subsequent_dest_description" = "Move destination up, and create destination";
-"add_as_first_destination_point" = "Tambahkan sebagai destinasi perantara pertama";
+"add_as_first_destination_point" = "Tambahkan sebagai tujuan perantara pertama";
 "first_intermediate_dest_description" = "Adds the first stop on the route";
-"add_as_last_destination_point" = "Tambahkan sebagai destinasi perantara terakhir";
+"add_as_last_destination_point" = "Tambahkan sebagai tujuan perantara terakhir";
 "last_intermediate_dest_description" = "Adds the last stop along the route";
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "Cari";
@@ -214,7 +214,7 @@
 "general_settings_2" = "Pengaturan umum";
 "general_settings_descr" = "App theme, units, region";
 "routing_settings_descr" = "Configure navigation";
-"auto_zoom_none" = "No auto zoom";
+"auto_zoom_none" = "Tidak ada perbesaran otomatis";
 "auto_zoom_close" = "To close-up";
 "auto_zoom_far" = "To mid-range";
 "auto_zoom_farthest" = "To long-range";
@@ -327,7 +327,7 @@
 "by_name" = "By name";
 "by_dist" = "By distance";
 "sort_by" = "Sort";
-"map_markers_other" = "Other markers";
+"map_markers_other" = "Penanda lainnya";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Belok";
 "stop_routing_confirm" = "Are you sure you want to stop the navigation?";
@@ -365,12 +365,12 @@
 "route_roundabout_short" = "Ambil %d keluar dan pergi";
 "route_kl" = "Tetap di kiri dan jalan";
 "route_kr" = "Keep right and go";
-"route_tr" = "Turn right and go";
+"route_tr" = "Belok kanan dan jalan";
 "route_tshr" = "Turn sharply right and go";
-"route_tslr" = "Turn slightly right and go";
-"route_tl" = "Turn left and go";
+"route_tslr" = "Belok sedikit ke kanan dan jalan";
+"route_tl" = "Belok kiri dan jalan";
 "route_tshl" = "Turn sharply left and go";
-"route_tsll" = "Turn slightly left and go";
+"route_tsll" = "Belok sedikit ke kiri dan jalan";
 "route_tu" = "Putar balik dan jalan";
 "route_head" = "Kepala";
 "looking_up_address" = "Looking up address";
@@ -1823,7 +1823,7 @@
 "go_to_map" = "Go to Map";
 "import_raster_map_success" = "Raster map has been imported. Open Map Settings and activate it via Overlay/Underlay";
 "import_raster_map_failed" = "Raster map import failed";
-"device_memory" = "Device memory";
+"device_memory" = "Memori perangkat";
 "free_memory" = "Free %@";
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "get_started" = "Memulai";
@@ -2158,7 +2158,7 @@
 "rendering_attr_hideUnderground_name" = "Underground objects";
 "rendering_value_dark_brown_name" = "Cokelat Tua";
 "routeInfo_piste_type_name" = "Piste type";
-"routing_attr_driving_style_safety_name" = "Utamakan jalan pintas.";
+"routing_attr_driving_style_safety_name" = "Utamakan jalan pintas";
 "rendering_attr_surface_paving_stones_name" = "Paving stones";
 "rendering_attr_depthContours_name" = "Kontur kedalaman laut";
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
@@ -2266,7 +2266,7 @@
 "weight_limit_description" = "Sediakan berat kendaraan Anda, beberapa pembatasan rute mungkin berlaku untuk kendaraan berat.";
 "height_limit_description" = "Sediakan tinggi kendaraan Anda, beberapa pembatasan rute mungkin berlaku untuk kendaraan yang tinggi.";
 "lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
-"width_limit_description" = "Provide your vehicle width some route restrictions may apply for wide vehicles.";
+"width_limit_description" = "Berikan lebar kendaraan Anda beberapa batasan rute mungkin berlaku untuk kendaraan lebar.";
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";

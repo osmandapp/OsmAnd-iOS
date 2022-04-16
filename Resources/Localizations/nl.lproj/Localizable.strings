@@ -1853,3 +1853,5 @@
 "routing_attr_only_permitted_streets_description" = "Gebruik enkel straten die uitdrukkelijk zijn toegelaten";
 "lang_fy" = "Fries";
 "lang_os" = "Ossetisch";
+"shared_string_open_street_map" = "OpenStreetMap";
+"number_of_tiles" = "Aantal titels";

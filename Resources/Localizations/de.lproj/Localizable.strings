@@ -2115,7 +2115,7 @@
 "available_languages" = "Verfügbare Sprachen";
 "some_articles_may_not_available_in_lang" = "Einige Wikipedia-Artikel sind möglicherweise nicht in Ihrer Sprache verfügbar.";
 "wiki_menu_download_descr" = "Zusätzliche Karten werden benötigt um Wikipedia-POIs auf der Karte anzuzeigen.";
-"select_wikipedia_article_langs" = "Sprachauswahl für Wikipedia-Artikel auf der Karte. Während des Lesens eines Artikels ist ein Wechsel auf jede verfügbare Sprache möglich.";
+"select_wikipedia_article_langs" = "Sprachauswahl für Wikipedia-Artikel auf der Karte. Während des Lesens eines Artikels ist ein Wechsel in jede verfügbare Sprache möglich.";
 "shared_string_all_languages" = "Alle Sprachen";
 "population_num" = "Einwohnerzahl";
 "added_profiles_descr" = "Vom Plugin hinzugefügte Profile";

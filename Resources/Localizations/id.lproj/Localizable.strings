@@ -66,7 +66,7 @@
 "search_radius_proximity" = "Dalam";
 "poi" = "POI";
 "search_more" = "Cari lebih banyak…";
-"day_off_label" = "off";
+"day_off_label" = "mati";
 "open_from" = "Buka dari";
 "open_till" = "Buka sampai";
 "will_close_at" = "Will close at";
@@ -106,7 +106,7 @@
 "coords_format_descr" = "Format untuk koordinat geografis.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
-"rotate_map_to_bearing" = "Map orientation";
+"rotate_map_to_bearing" = "Orientasi peta";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "To compass";
 "rotate_map_bearing_opt" = "To direction of movement";
@@ -226,7 +226,7 @@
 "map_orientation_change_in_accordance_with_speed" = "Ambang orientasi peta";
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "Route parameters";
-"fast_route_mode" = "Fastest route";
+"fast_route_mode" = "Rute tercepat";
 "nav_type_title" = "Jenis navigasi";
 "voice_announces" = "Voice prompts";
 "screen_alerts" = "Screen alerts";
@@ -271,7 +271,7 @@
 "voice_pref_title" = "Suara";
 "voice_provider" = "Voice guidance";
 "voice_provider_descr" = "Select voice guidance for navigation";
-"choose_audio_stream" = "Voice guidance output";
+"choose_audio_stream" = "Output panduan suara";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
 "osm_live_routing" = "Navigasi OsmAnd Live";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
@@ -366,10 +366,10 @@
 "route_kl" = "Tetap di kiri dan jalan";
 "route_kr" = "Keep right and go";
 "route_tr" = "Belok kanan dan jalan";
-"route_tshr" = "Turn sharply right and go";
+"route_tshr" = "Belok tajam ke kanan dan pergi";
 "route_tslr" = "Belok sedikit ke kanan dan jalan";
 "route_tl" = "Belok kiri dan jalan";
-"route_tshl" = "Turn sharply left and go";
+"route_tshl" = "Belok tajam ke kiri dan pergi";
 "route_tsll" = "Belok sedikit ke kiri dan jalan";
 "route_tu" = "Putar balik dan jalan";
 "route_head" = "Kepala";
@@ -395,7 +395,7 @@
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Left-hand driving";
 "right_side_navigation" = "Right-hand driving";
-"si_mi_feet" = "Miles/feet";
+"si_mi_feet" = "Mil/kaki";
 "si_mi_yard" = "Mil/yard";
 "si_mi_meters" = "Mil/Meter";
 "si_km_m" = "Kilometer/meter";
@@ -934,7 +934,7 @@
 "shared_string_importing" = "Importing";
 "importing_from" = "Importing data from %@";
 "shared_string_settings" = "Pengaturan";
-"configure_screen_quick_action" = "Quick action";
+"configure_screen_quick_action" = "Tindakan cepat";
 "search_activity" = "Cari";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
@@ -1853,9 +1853,9 @@
 "online_webpage_warning" = "Halaman hanya tersedia secara daring. Buka di peramban web\?";
 "custom_search" = "Pencarian khusus";
 "add_custom_category" = "Tambahkan kategori kustom";
-"poi_filter_custom_filter" = "Custom filter";
+"poi_filter_custom_filter" = "Saringan kustom";
 "delete_custom_categories" = "Delete custom categories";
-"poi_filter_closest_poi" = "Nearest POIs";
+"poi_filter_closest_poi" = "POI terdekat";
 "shared_string_is_open_24_7" = "Buka 24/7";
 "shared_string_is_open" = "Buka sekarang";
 "poi_filter_by_name" = "Search by name";
@@ -1974,11 +1974,11 @@
 "already_has_inapp" = "You have already subscribed to %@.";
 "inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";
 "rendering_value_high_name" = "Tinggi";
-"routing_attr_difficulty_preference_description" = "Prefer routes of this difficulty, although routing over harder or easier pistes is still possible if shorter.";
+"routing_attr_difficulty_preference_description" = "Lebih suka rute kesulitan ini, meskipun perutean lebih sulit atau lebih mudah piste masih mungkin jika lebih pendek.";
 "routing_attr_height_description" = "Specify vehicle height to be permitted on routes.";
 "touting_specified_vehicle_parameters_descr" = "Specified vehicle parameters may affect routing.";
 "routing_attr_height_obstacles_name" = "Gunakan data ketinggian";
-"routing_attr_avoid_toll_name" = "No toll roads";
+"routing_attr_avoid_toll_name" = "Tidak ada jalan tol";
 "rendering_attr_appMode_description" = "Optimalkan peta untuk";
 "routing_attr_avoid_ice_roads_fords_name" = "No ice roads or fords";
 "rendering_value_germanRoadAtlas_name" = "German road atlas";
@@ -1993,7 +1993,7 @@
 "rendering_value_fine_name" = "Normal";
 "routing_attr_relief_smoothness_factor_plains_name" = "Kurang berbukit";
 "rendering_value_purple_name" = "Ungu";
-"routing_attr_allow_classic_only_name" = "Allow classic only routes";
+"routing_attr_allow_classic_only_name" = "Perbolehkan rute klasik saja";
 "rendering_attr_streetLighting_name" = "Street lighting";
 "rendering_attr_appMode_name" = "Modus render";
 "routing_attr_avoid_subway_description" = "Avoids subways and lightweight rail transport";
@@ -2025,7 +2025,7 @@
 "routeInfo_piste_difficulty_name" = "Piste difficulty";
 "routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter).";
 "rendering_attr_highway_class_track_grade3_name" = "Grade 3";
-"routing_attr_freeride_policy_description" = "\'Freeride\' and \'Off-piste\' are unofficial routes and passages. Typically ungroomed, unmaintained and not checked in the evening. Enter at your own risk.";
+"routing_attr_freeride_policy_description" = "'Freeride' dan 'Off-piste' adalah rute dan jalur tidak resmi. Biasanya tidak terawat, tidak terawat dan tidak diperiksa di sore hari. Masuk sendiri dengan risiko Anda sendiri.";
 "rendering_attr_highway_class_street_name" = "Jalan";
 "rendering_attr_surface_grass_name" = "Rumput";
 "routing_attr_piste_type_skitour_description" = "Routes for ski touring.";
@@ -2044,7 +2044,7 @@
 "rendering_attr_currentTrackWidth_description" = "GPX width";
 "rendering_attr_piste_type_sleigh_name" = "Sleigh";
 "rendering_attr_surface_paved_name" = "Paved";
-"routing_attr_difficulty_preference_name" = "Preferred difficulty";
+"routing_attr_difficulty_preference_name" = "Kesulitan yang diinginkan";
 "routing_attr_avoid_subway_name" = "No subways";
 "rendering_attr_showLez_description" = "Show Low Emission Zones on the map. Does not affect routing.";
 "rendering_attr_surfaceIntegrity_name" = "Integritas permukaan jalan";
@@ -2120,7 +2120,7 @@
 "routing_attr_avoid_ferries_name" = "Larang feri";
 "rendering_attr_highway_class_track_name" = "Track";
 "rendering_attr_tracktype_grade4_name" = "Sebagian besar lembut";
-"rendering_value_disabled_name" = "Disabled";
+"rendering_value_disabled_name" = "Dinonaktifkan";
 "rendering_attr_contourColorScheme_name" = "Skema warna garis kontur";
 "routing_attr_short_way_name" = "Cara hemat bahan bakar";
 "rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
@@ -2372,3 +2372,5 @@
 "resend_verification_code" = "Kirim ulang";
 "cloud_email_already_registered" = "Alamat e-mail ini telah didaftarkan.";
 "osmand_cloud" = "OsmAnd Cloud";
+"grey_color_undefined" = "Bagian tanpa data berwarna abu-abu.";
+"start_point" = "Mulai";

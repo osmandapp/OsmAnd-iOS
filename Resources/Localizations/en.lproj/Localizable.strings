@@ -783,7 +783,15 @@
 "map_settings_weather_precip" = "Precipitation";
 "map_settings_clear_geo_cache" = "Clear geo tiles";
 "map_settings_clear_raster_cache" = "Clear raster tiles";
-"map_settings_weather_isolines" = "Isolines";
+"map_settings_weather_contours" = "Contours";
+"map_settings_weather_layers" = "Layers";
+
+"weather_temp_enable_descr" = "Enable to view temperature layer on the map.";
+"weather_pressure_enable_descr" = "Enable to view pressure layer on the map.";
+"weather_wind_enable_descr" = "Enable to view wind layer on the map.";
+"weather_cloud_enable_descr" = "Enable to view cloud layer on the map.";
+"weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
+"weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
 
 "settings_app_theme" = "Application theme";
 "app_theme_light" = "Light";
@@ -1965,7 +1973,7 @@
 "weather_precip_unit_mm" = "Millimeters";
 "weather_precip_unit_in" = "Inches";
 
-"weather_cloud_data_description" = "Weather data will be downloaded for viewed are each time.";
+"weather_cloud_data_description" = "Weather data will be downloaded for viewed area each time.";
 
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";

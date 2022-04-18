@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (QList<OsmAnd::BandIndex>) getVisibleBands;
 - (QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>>) getBandSettings;
 
+- (void) calculateCacheSize:(void (^)(unsigned long long geoDbSize, unsigned long long rasterDbSize))completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

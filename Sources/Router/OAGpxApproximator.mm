@@ -119,6 +119,9 @@
 {
 	self = [super init];
 	if (self) {
+        if (locationsHolder.size < 2)
+            return nil;
+        
 		_locationsHolder = locationsHolder;
 		_pointApproximation = pointApproximation;
 		_routingHelper = OARoutingHelper.sharedInstance;
@@ -130,12 +133,9 @@
 
 - (void) initEnvironment:(OAApplicationMode *)mode locationsHolder:(OALocationsHolder *)locationsHolder
 {
-	if (locationsHolder.size > 1)
-	{
-		_start = [locationsHolder getLocation:0];
-		_end = [locationsHolder getLocation:_locationsHolder.size - 1];
-		[self prepareEnvironment:mode];
-	}
+    _start = [locationsHolder getLocation:0];
+    _end = [locationsHolder getLocation:_locationsHolder.size - 1];
+    [self prepareEnvironment:mode];
 }
 
 - (void) prepareEnvironment:(OAApplicationMode *)mode

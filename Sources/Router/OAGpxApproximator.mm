@@ -117,18 +117,18 @@
 
 - (instancetype) initWithApplicationMode:(OAApplicationMode *)mode pointApproximation:(double)pointApproximation locationsHolder:(OALocationsHolder *)locationsHolder
 {
-	self = [super init];
-	if (self) {
+    self = [super init];
+    if (self) {
         if (locationsHolder.size < 2)
             return nil;
         
-		_locationsHolder = locationsHolder;
-		_pointApproximation = pointApproximation;
-		_routingHelper = OARoutingHelper.sharedInstance;
-		_mode = mode;
-		[self initEnvironment:mode locationsHolder:locationsHolder];
-	}
-	return self;
+        _locationsHolder = locationsHolder;
+        _pointApproximation = pointApproximation;
+        _routingHelper = OARoutingHelper.sharedInstance;
+        _mode = mode;
+        [self initEnvironment:mode locationsHolder:locationsHolder];
+    }
+    return self;
 }
 
 - (void) initEnvironment:(OAApplicationMode *)mode locationsHolder:(OALocationsHolder *)locationsHolder

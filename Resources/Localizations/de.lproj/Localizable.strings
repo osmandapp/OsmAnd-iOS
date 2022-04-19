@@ -19,18 +19,18 @@
 "fav_no_group" = "Keine Gruppe";
 "fav_remove_q" = "Favorit löschen?";
 "fav_import" = "Import";
-"fav_import_title" = "Import Favorit";
-"fav_export_title" = "Export Favorit";
+"fav_import_title" = "Favorit importieren";
+"fav_export_title" = "Favorit exportieren";
 "fav_select_remove" = "Bitte Favoriten markieren zum löschen";
-"fav_export_select" = "Bitte Favoriten markieren zum exportieren";
+"fav_export_select" = "Bitte Favoriten markieren zum Exportieren";
 "fav_create_group" = "Erstelle neue Gruppe";
-"fav_enter_group_name" = "Gib Gruppenname ein";
-"fav_exists" = "Favorit mit Name \"%@\" existiert bereits";
-"fav_ignore" = "ignorieren";
+"fav_enter_group_name" = "Gib den Gruppennamen ein";
+"fav_exists" = "Favorit mit dem Namen \"%@\" existiert bereits";
+"fav_ignore" = "Ignorieren";
 "fav_rename" = "Umbenennen";
 "fav_replace" = "Ersetzen";
 "fav_replace_all" = "Alle ersetzen";
-"fav_rename_q" = "Umbenennen Favorit";
+"fav_rename_q" = "Favorit umbenennen";
 "fav_enter_new_name" = "Bitte neuen Namen für den Favoriten eingeben";
 // POI
 "poi_insrease_radius" = "Erweitere Suchradius nach";
@@ -188,7 +188,7 @@
 "purchases" = "Käufe";
 // Purchases
 "prch_addons" = "Erweiterungen";
-"prch_items_failed" = "Elemente wurde nicht wieder hergestellt. Bitte versuch es erneut.";
+"prch_items_failed" = "Elemente wurden nicht wieder hergestellt. Bitte versuch es erneut.";
 // Resources
 "res_mapsres" = "Karten & Ressourcen";
 "res_banner_many" = "Es sind %d kostenlose Karten zum herunterladen verfügbar";
@@ -201,13 +201,13 @@
 "res_wmap" = "Weltweite Übersichtskarte";
 "res_dmap" = "detaillierte Übersichtskarte";
 "res_map_of_region" = "Karte der Umgebung";
-"res_update_no_space" = "Für das Update ist zuwenig Speicher vorhanden";
+"res_update_no_space" = "Für das Update ist zu wenig Speicher vorhanden";
 "res_no_space_free" = "ist notwendig. Bitte etwas Speicher freimachen.";
-"res_free_exp" = "Du hast alle freie Downloads verbraucht. Bitte kaufe einen Kontinent zum herunteladen/aktualiseren der Karten.";
+"res_free_exp" = "Du hast alle freien Downloads verbraucht. Bitte kaufe einen Kontinent zum herunteladen/aktualiseren der Karten.";
 "res_cancel_upd_q" = "Du bist dabei, die Aktualisierung von %@ abzubrechen.";
 "res_cancel_inst_q" = "Du bist dabei die Installation %@ abzubrechen.";
 "res_uninst_managed_q" = "Du bist dabei %@ zu deinstallieren. Du kannst es später wieder im Katalog installieren.";
-"res_uninst_unmanaged_q" = "Du bist dabei %@ zu löschen. Es ist nicht vom Katalog, also sei sicher das du bei Bedarf eine Sicherung hast.";
+"res_uninst_unmanaged_q" = "Du bist dabei %@ zu löschen. Es ist nicht vom Katalog, also sei sicher, dass du bei Bedarf eine Sicherung hast.";
 "res_type" = "Typ";
 "res_update_all" = "Alle aktualisieren";
 "res_updates_no_space" = "Nicht genug Speicher zum installieren von %d Aktualisierung(en). Bitte etwas Speicher freimachen.";
@@ -410,7 +410,7 @@
 "sqlitedb_import_title" = "Rasterkarten-Datei importieren";
 // HUD
 "hud_heading" = "Richtung";
-"product_desc_trip_planning" = "Mit diesem Plugin können Sie Strecken planen, Wegpunkte hinzufügen und die Entfernung zu ihrem Ziel messen";
+"product_desc_trip_planning" = "Mit diesem Plugin können Sie Strecken planen, Wegpunkte hinzufügen und die Entfernung zu Ihrem Ziel messen";
 "plugins" = "Erweiterungen";
 "plugin_popup_ski_desc" = "Um den <b>Skikartenstil</b> einzuschalten, gehen Sie bitte zu <b>Karte konfigurieren</b> > <b>Kartendarstellung</b>";
 "plugin_popup_wiki_desc" = "Laden Sie bitte zuerst die Wikipedia-Daten einer Region herunter, um das Wikipedia-Plugin verwenden zu können";
@@ -2006,7 +2006,7 @@
 "add_folder" = "Ordner hinzufügen";
 "select_folder_descr" = "Ordner auswählen oder neuen hinzufügen";
 "plan_route_select_folder" = "Ordner auswählen";
-"plan_route_change_folder" = "Ordnerändern";
+"plan_route_change_folder" = "Ordner ändern";
 "plan_route_folder" = "Ordner";
 "street_level_imagery" = "Bilder auf Straßenebene";
 "map_widget_distance_by_tap" = "Entfernung durch Antippen";

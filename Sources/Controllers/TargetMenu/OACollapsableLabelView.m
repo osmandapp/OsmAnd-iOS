@@ -7,11 +7,7 @@
 //
 
 #import "OACollapsableLabelView.h"
-#import "OALabel.h"
-
-@interface OACollapsableLabelView() <OALabelDelegate>
-
-@end
+#import "OACustomLabel.h"
 
 @implementation OACollapsableLabelView
 
@@ -22,16 +18,14 @@
     {
         UIFont *font = [UIFont systemFontOfSize:15.0];
         CGFloat viewWidth = frame.size.width;
-        _label = [[OALabel alloc] initWithFrame:CGRectMake(kMarginLeft, 12.0, viewWidth - kMarginLeft - kMarginRight, 21.0)];
+        _label = [[OACustomLabel alloc] initWithFrame:CGRectMake(kMarginLeft, 12.0, viewWidth - kMarginLeft - kMarginRight, 21.0)
+                                            tapToCopy:YES
+                                      longPressToCopy:YES];
         _label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _label.font = font;
         _label.textColor = UIColorFromRGB(0x212121);
         _label.numberOfLines = 0;
-        [_label setUserInteractionEnabled:YES];
         [_label bringSubviewToFront:self];
-        _label.delegate = self;
-        [_label addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:_label action:@selector(showMenu:)]];
-        [_label addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:_label action:@selector(showMenu:)]];
         [self addSubview:_label];
     }
     return self;
@@ -43,14 +37,6 @@
     CGFloat viewHeight = MAX(bounds.height, 21.0) + 0.0 + 11.0;
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
     _label.frame = CGRectMake(kMarginLeft, 0.0, width - kMarginLeft - kMarginRight, viewHeight - 0.0 - 11.0);
-}
-
-#pragma mark - OAButtonDelegate
-
-- (void)onCopy
-{
-    UIPasteboard *pb = [UIPasteboard generalPasteboard];
-    [pb setString:_label.text];
 }
 
 @end

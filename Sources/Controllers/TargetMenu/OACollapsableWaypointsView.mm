@@ -27,15 +27,11 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     EOAWaypointFavorite
 };
 
-@interface OACollapsableWaypointsView() <OAButtonDelegate>
-
-@end
-
 @implementation OACollapsableWaypointsView
 {
     OsmAndAppInstance _app;
     
-    NSArray<OAButton *> *_buttons;
+    NSArray<OACustomButton *> *_buttons;
     NSArray *_data;
     
     EOAWaypointsType _type;
@@ -84,10 +80,9 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     [self buildViews];
 }
 
-- (OAButton *)createButton:(NSString *)title tag:(NSInteger)tag
+- (OACustomButton *)createButton:(NSString *)title tag:(NSInteger)tag
 {
-    OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
-    
+    OACustomButton *btn = [[OACustomButton alloc] initBySystemTypeWithTapToCopy:NO longPressToCopy:YES];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
@@ -101,8 +96,6 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     btn.tag = tag;
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(color_coordinates_background)] forState:UIControlStateHighlighted];
     [btn addTarget:self action:@selector(onButtonTouched:) forControlEvents:UIControlEventTouchDown];
-    btn.delegate = self;
-    [btn addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:btn action:@selector(showMenu:)]];
     return btn;
 }
 
@@ -111,7 +104,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:kMaxItemsCount];
     for (NSInteger i = 0; i < MIN(kMaxItemsCount - 1, _data.count); i++)
     {
-        OAButton * btn = nil;
+        OACustomButton * btn = nil;
         if (_type == EOAWaypointGPX)
         {
             btn = [self createButton:((OAWptPt *)_data[i]).name tag:i];
@@ -132,7 +125,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     
     if (_data.count > kMaxItemsCount - 1)
     {
-        OAButton *showMore = [self createButton:OALocalizedString(@"shared_string_show_more") tag:kMaxItemsCount];
+        OACustomButton *showMore = [self createButton:OALocalizedString(@"shared_string_show_more") tag:kMaxItemsCount];
         [self addSubview:showMore];
         [buttons addObject:showMore];
         [showMore addTarget:self action:@selector(onShowMorePressed:) forControlEvents:UIControlEventTouchDown];
@@ -170,7 +163,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
 
 - (void) onButtonTouched:(id) sender
 {
-    OAButton *btn = sender;
+    OACustomButton *btn = sender;
     [UIView animateWithDuration:0.3 animations:^{
         btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
         btn.layer.borderColor = UIColor.clearColor.CGColor;
@@ -195,7 +188,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     CGFloat viewHeight = 10.;
     
     int i = 0;
-    for (OAButton *btn in _buttons)
+    for (OACustomButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -214,7 +207,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
 
 - (void) btnPress:(id)sender
 {
-    OAButton *btn = sender;
+    OACustomButton *btn = sender;
     NSInteger index = btn.tag;
     if (index >= 0 && index < _data.count)
     {
@@ -242,17 +235,6 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
 - (void) adjustHeightForWidth:(CGFloat)width
 {
     [self updateLayout:width];
-}
-
-#pragma mark - OAButtonDelegate
-
-- (void)onCopy:(NSInteger)tag
-{
-    if (tag >= 0 && tag < _buttons.count)
-    {
-        UIPasteboard *pb = [UIPasteboard generalPasteboard];
-        [pb setString:_buttons[tag].titleLabel.text];
-    }
 }
 
 @end

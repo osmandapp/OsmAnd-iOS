@@ -17,13 +17,9 @@
 
 #define kTransportIconWidth 16.0
 
-@interface OACollapsableTransportStopRoutesView() <OAButtonDelegate>
-
-@end
-
 @implementation OACollapsableTransportStopRoutesView
 {
-    NSArray<OAButton *> *_buttons;
+    NSArray<OACustomButton *> *_buttons;
 }
 
 - (void) setRoutes:(NSArray<OATransportStopRoute *> *)routes
@@ -93,7 +89,7 @@
         UIImage *stopPlate = [OATransportStopViewController createStopPlate:[OATransportStopViewController adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
         stopPlate = [stopPlate imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 
-        OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
+        OACustomButton *btn = [[OACustomButton alloc] initBySystemTypeWithTapToCopy:NO longPressToCopy:YES];
         [btn setAttributedTitle:title forState:UIControlStateNormal];
         [btn setImage:stopPlate forState:UIControlStateNormal];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -102,8 +98,6 @@
         btn.imageEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
         btn.titleEdgeInsets = UIEdgeInsetsMake(0, kMarginLeft - kMarginRight - stopPlate.size.width, 0, 0);
         btn.contentEdgeInsets = UIEdgeInsetsMake(kMarginTop, kMarginRight + [OAUtilities getLeftMargin], kMarginTop, kMarginRight);
-        btn.delegate = self;
-        [btn addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:btn action:@selector(showMenu:)]];
 
         btn.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         //btn.layer.borderWidth = 0.5;
@@ -119,7 +113,7 @@
 - (void) updateLayout:(CGFloat)width
 {
     CGFloat viewHeight = 0;
-    for (OAButton *btn in _buttons)
+    for (OACustomButton *btn in _buttons)
     {
         CGFloat labelWidth = width - [OAUtilities getLeftMargin] - kMarginLeft - kMarginRight;
         CGFloat h = [btn.currentAttributedTitle boundingRectWithSize:{labelWidth, 10000} options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height;
@@ -140,7 +134,7 @@
 
 - (IBAction) btnPress:(id)sender
 {
-    OAButton *btn = (OAButton *) sender;
+    OACustomButton *btn = (OACustomButton *) sender;
     NSInteger index = btn.tag;
     OATransportStopRoute *r = self.routes[index];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
@@ -156,17 +150,6 @@
     [mapPanel showContextMenuWithPoints:@[targetPoint]];
 
     [OATransportRouteController showToolbar:r];
-}
-
-#pragma mark - OAButtonDelegate
-
-- (void)onCopy:(NSInteger)tag
-{
-    if (tag >= 0 && tag < _buttons.count)
-    {
-        UIPasteboard *pb = [UIPasteboard generalPasteboard];
-        [pb setString:_buttons[tag].titleLabel.attributedText.string];
-    }
 }
 
 @end

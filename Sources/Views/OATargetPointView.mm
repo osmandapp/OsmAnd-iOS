@@ -69,10 +69,10 @@
 @property (weak, nonatomic) IBOutlet UIView *transportView;
 @property (weak, nonatomic) IBOutlet UILabel *nearbyLabel;
 
-@property (weak, nonatomic) IBOutlet OAButton *buttonFavorite;
-@property (weak, nonatomic) IBOutlet OAButton *buttonShare;
-@property (weak, nonatomic) IBOutlet OAButton *buttonDirection;
-@property (weak, nonatomic) IBOutlet OAButton *buttonMore;
+@property (weak, nonatomic) IBOutlet OACustomButton *buttonFavorite;
+@property (weak, nonatomic) IBOutlet OACustomButton *buttonShare;
+@property (weak, nonatomic) IBOutlet OACustomButton *buttonDirection;
+@property (weak, nonatomic) IBOutlet OACustomButton *buttonMore;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonShadow;
 

@@ -12,18 +12,14 @@
 #import "OAColors.h"
 #import "OALocationConvert.h"
 #import "OAPointDescription.h"
-#import "OAButton.h"
+#import "OACustomButton.h"
 
 #define kButtonHeight 32.0
 #define kDefaultZoomOnShow 16.0f
 
-@interface OACollapsableCoordinatesView() <OAButtonDelegate>
-
-@end
-
 @implementation OACollapsableCoordinatesView
 {
-    NSArray<OAButton *> *_buttons;
+    NSArray<OACustomButton *> *_buttons;
     
     UILabel *_viewLabel;
 }
@@ -74,7 +70,7 @@
     int i = 0;
     for (NSNumber *format in _coordinates.allKeys)
     {
-        OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
+        OACustomButton *btn = [[OACustomButton alloc] initBySystemTypeWithTapToCopy:YES longPressToCopy:YES];
         NSString *coord;
         if (format.integerValue == FORMAT_UTM)
             coord = [NSString stringWithFormat:@"UTM: %@", _coordinates[format]];
@@ -97,9 +93,6 @@
         btn.tintColor = UIColorFromRGB(color_primary_purple);
         btn.tag = i++;
         [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(color_coordinates_background)] forState:UIControlStateHighlighted];
-        btn.delegate = self;
-        [btn addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:btn action:@selector(showMenu:)]];
-        [btn addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:btn action:@selector(showMenu:)]];
 
         [self addSubview:btn];
         [buttons addObject:btn];
@@ -110,7 +103,7 @@
 
 - (void) onButtonTouched:(id) sender
 {
-    OAButton *btn = sender;
+    OACustomButton *btn = sender;
     [UIView animateWithDuration:0.3 animations:^{
         btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
         btn.layer.borderColor = UIColor.clearColor.CGColor;
@@ -141,7 +134,7 @@
     y += viewHeight;
     
     int i = 0;
-    for (OAButton *btn in _buttons)
+    for (OACustomButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -161,17 +154,6 @@
 - (void) adjustHeightForWidth:(CGFloat)width
 {
     [self updateLayout:width];
-}
-
-#pragma mark - OAButtonDelegate
-
-- (void)onCopy:(NSInteger)tag
-{
-    if (tag >= 0 && tag < self.coordinates.count)
-    {
-        UIPasteboard *pb = [UIPasteboard generalPasteboard];
-        [pb setString:self.coordinates.allValues[tag]];
-    }
 }
 
 @end

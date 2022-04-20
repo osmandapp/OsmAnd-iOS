@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "OANavigationController.h"
 #import "OATargetMenuViewController.h"
-#import "OAButton.h"
+#import "OACustomButton.h"
 #import "OATargetPoint.h"
 #import "OAScrollView.h"
 

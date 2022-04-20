@@ -16,14 +16,10 @@
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
 
-@interface OACollapsableNearestPoiTypeView() <OAButtonDelegate>
-
-@end
-
 @implementation OACollapsableNearestPoiTypeView
 {
     NSArray<OAPOIType *> *_poiTypes;
-    NSArray<OAButton *> *_buttons;
+    NSArray<OACustomButton *> *_buttons;
     double _latitude;
     double _longitude;
     BOOL _isPoiAdditional;
@@ -45,7 +41,7 @@
     for (OAPOIType *poiType in _poiTypes)
     {
         NSString *title = poiType.nameLocalized;
-        OAButton *btn = [self createButton:title];
+        OACustomButton *btn = [self createButton:title];
         btn.tag = i++;
         [self addSubview:btn];
         [buttons addObject:btn];
@@ -53,9 +49,9 @@
     _buttons = [NSArray arrayWithArray:buttons];
 }
 
-- (OAButton *)createButton:(NSString *)title
+- (OACustomButton *)createButton:(NSString *)title
 {
-    OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
+    OACustomButton *btn = [[OACustomButton alloc] initBySystemTypeWithTapToCopy:NO longPressToCopy:YES];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
@@ -68,8 +64,6 @@
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
     btn.tintColor = UIColorFromRGB(0x1b79f8);
     [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
-    btn.delegate = self;
-    [btn addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:btn action:@selector(showMenu:)]];
     return btn;
 }
 
@@ -78,7 +72,7 @@
     CGFloat y = 0;
     CGFloat viewHeight = 0;
     int i = 0;
-    for (OAButton *btn in _buttons)
+    for (OACustomButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -97,7 +91,7 @@
 
 - (void) btnPress:(id)sender
 {
-    OAButton *btn = sender;
+    OACustomButton *btn = sender;
     NSInteger index = btn.tag;
     if (index >= 0 && index < _poiTypes.count)
     {
@@ -136,17 +130,6 @@
 - (void) adjustHeightForWidth:(CGFloat)width
 {
     [self updateLayout:width];
-}
-
-#pragma mark - OAButtonDelegate
-
-- (void)onCopy:(NSInteger)tag
-{
-    if (tag >= 0 && tag < _buttons.count)
-    {
-        UIPasteboard *pb = [UIPasteboard generalPasteboard];
-        [pb setString:_buttons[tag].titleLabel.text];
-    }
 }
 
 @end

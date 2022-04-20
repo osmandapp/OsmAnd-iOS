@@ -26,17 +26,13 @@
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
 
-@interface OACollapsableNearestPoiWikiView() <OAButtonDelegate>
-
-@end
-
 @implementation OACollapsableNearestPoiWikiView
 {
     UIView *_bannerView;
     UILabel *_bannerLabel;
     UIButton *_bannerButton;
 
-    NSArray<OAButton *> *_buttons;
+    NSArray<OACustomButton *> *_buttons;
     double _latitude;
     double _longitude;
     OAPOIUIFilter *_filter;
@@ -168,18 +164,22 @@
             nameLocalized = poi.nameLocalized;
 
         NSString *title = [NSString stringWithFormat:@"%@ (%@)", nameLocalized, [OAOsmAndFormatter getFormattedDistance:distance]];
-        OAButton *btn = [self createButton:title];
+        OACustomButton *btn = [self createButton:title tapToCopy:NO longPressToCopy:YES];
         btn.tag = i++;
         [self addSubview:btn];
         [buttons addObject:btn];
     }
 
-    OAButton *showOnMapButton = [self createButton:OALocalizedString(@"map_settings_show")];
+    OACustomButton *showOnMapButton = [self createButton:OALocalizedString(@"map_settings_show")
+                                               tapToCopy:NO
+                                         longPressToCopy:NO];
     showOnMapButton.tag = _buttonShowOnMapIndex = i++;
     [self addSubview:showOnMapButton];
     [buttons addObject:showOnMapButton];
 
-    OAButton *searchMoreButton = [self createButton:OALocalizedString(@"search_more")];
+    OACustomButton *searchMoreButton = [self createButton:OALocalizedString(@"search_more")
+                                                tapToCopy:NO
+                                          longPressToCopy:NO];
     searchMoreButton.tag = _buttonSearchMoreIndex = i++;
     [self addSubview:searchMoreButton];
     [buttons addObject:searchMoreButton];
@@ -187,9 +187,11 @@
     _buttons = [NSArray arrayWithArray:buttons];
 }
 
-- (OAButton *)createButton:(NSString *)title
+- (OACustomButton *)createButton:(NSString *)title
+                       tapToCopy:(BOOL)tapToCopy
+                 longPressToCopy:(BOOL)longPressToCopy
 {
-    OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
+    OACustomButton *btn = [[OACustomButton alloc] initBySystemTypeWithTapToCopy:tapToCopy longPressToCopy:longPressToCopy];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
@@ -202,8 +204,6 @@
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
     btn.tintColor = UIColorFromRGB(0x1b79f8);
     [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
-    btn.delegate = self;
-    [btn addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:btn action:@selector(showMenu:)]];
     return btn;
 }
 
@@ -256,7 +256,7 @@
     }
     
     int i = 0;
-    for (OAButton *btn in _buttons)
+    for (OACustomButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -275,7 +275,7 @@
 
 - (void) btnPress:(id)sender
 {
-    OAButton *btn = sender;
+    OACustomButton *btn = sender;
     NSInteger index = btn.tag;
     if (index >= 0 && index < self.nearestItems.count)
     {
@@ -346,17 +346,6 @@
     {
         OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
         [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
-    }
-}
-
-#pragma mark - OAButtonDelegate
-
-- (void)onCopy:(NSInteger)tag
-{
-    if (tag >= 0 && tag < _buttons.count)
-    {
-        UIPasteboard *pb = [UIPasteboard generalPasteboard];
-        [pb setString:_buttons[tag].titleLabel.text];
     }
 }
 

@@ -1,16 +1,44 @@
 //
-//  OAButton.m
+//  OACustomButton.m
 //  OsmAnd
 //
 //  Created by Alexey Kulish on 01/06/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OAButton.h"
+#import "OACustomButton.h"
 
-@implementation OAButton
+@implementation OACustomButton
+{
+    UITapGestureRecognizer *_tapToCopyRecognizer;
+    UILongPressGestureRecognizer *_longPressToCopyRecognizer;
+}
 
--(void)layoutSubviews
+- (instancetype)initBySystemTypeWithTapToCopy:(BOOL)tapToCopy longPressToCopy:(BOOL)longPressToCopy
+{
+    self = [OACustomButton buttonWithType:UIButtonTypeSystem];
+    if (self)
+    {
+        [self commonInit:tapToCopy longPressToCopy:longPressToCopy];
+    }
+    return self;
+}
+
+- (void)commonInit:(BOOL)tapToCopy longPressToCopy:(BOOL)longPressToCopy
+{
+    if (tapToCopy)
+    {
+        _tapToCopyRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu:)];
+        [self addGestureRecognizer:_tapToCopyRecognizer];
+    }
+    if (longPressToCopy)
+    {
+        _longPressToCopyRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu:)];
+        [self addGestureRecognizer:_longPressToCopyRecognizer];
+    }
+}
+
+- (void)layoutSubviews
 {
     [super layoutSubviews];
     
@@ -59,7 +87,7 @@
 
 - (BOOL)canBecomeFirstResponder
 {
-    return self.delegate != nil && [self.delegate respondsToSelector:@selector(onCopy:)];
+    return _tapToCopyRecognizer != nil || _longPressToCopyRecognizer != nil;
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
@@ -69,8 +97,8 @@
 
 - (void)copy:(id)sender
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(onCopy:)])
-        [self.delegate onCopy:self.tag];
+    UIPasteboard *pb = [UIPasteboard generalPasteboard];
+    [pb setString:self.titleLabel.text];
 }
 
 - (void)showMenu:(id)sender

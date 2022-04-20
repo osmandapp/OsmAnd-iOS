@@ -1,5 +1,5 @@
 //
-//  OAButton.h
+//  OACustomButton.h
 //  OsmAnd
 //
 //  Created by Alexey Kulish on 01/06/15.
@@ -8,20 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol OAButtonDelegate <NSObject>
+@interface OACustomButton : UIButton
 
-@optional
-
-- (void) onCopy:(NSInteger)tag;
-
-@end
-
-@interface OAButton : UIButton
+- (instancetype)initBySystemTypeWithTapToCopy:(BOOL)tapToCopy longPressToCopy:(BOOL)longPressToCopy;
 
 @property (nonatomic, assign) BOOL centerVertically;
 @property (nonatomic, assign) BOOL extraSpacing;
-
-@property (nonatomic) id<OAButtonDelegate> delegate;
 
 - (void)applyVerticalLayout;
 

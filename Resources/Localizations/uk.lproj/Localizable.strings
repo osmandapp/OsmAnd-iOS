@@ -2434,7 +2434,7 @@
 "cloud_email_already_registered" = "Ця адреса е-пошти вже зареєстрована.";
 "local_backup" = "Локальна резервна копія";
 "osmand_cloud_login_descr" = "Введіть адресу е-пошти з якою ви реєструвалися. Одноразовий пароль, необхідний на наступному кроці буде надіслано на неї.";
-"weather_cloud_data_description" = "Дані про погоду будуть завантажуватися для перегляду щоразу.";
+"weather_cloud_data_description" = "Дані про погоду завантажуватимуться для переглянутої зони щоразу.";
 "verification_code_missing" = "Код підтвердження не надійшов";
 "verification_code_missing_description" = "Може тривати 10 хвилин. Скористайтеся кнопкою внизу, якщо її немає в теці зі спамом.";
 "cloud_view_conflicts" = "Переглянути неузгодженості";
@@ -2488,3 +2488,12 @@
 "backup_error_subscription_was_expired" = "Термін дії передплати завершився";
 "backup_error_user_is_not_registered" = "Жоден користувач не зареєстрований з цією адресою е-пошти";
 "backup_error_token_is_not_valid_or_expired" = "Токен недійсний або не чинний";
+"copy_to_map_favorites" = "Копіювати до закладок";
+"map_settings_weather_contours" = "Контури";
+"map_settings_weather_layers" = "Шари";
+"weather_pressure_enable_descr" = "Увімкніть, щоб переглянути шар тиску на мапі.";
+"weather_wind_enable_descr" = "Увімкніть, щоб переглянути шар вітру на мапі.";
+"weather_temp_enable_descr" = "Увімкніть, щоб переглянути температурний шар на мапі.";
+"weather_cloud_enable_descr" = "Увімкніть, щоб переглянути шар хмар на мапі.";
+"weather_precip_enable_descr" = "Увімкніть, щоб переглянути шар опадів на мапі.";
+"weather_contours_enable_descr" = "Увімкніть, щоб переглянути шар ізоліній на мапі.";

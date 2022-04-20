@@ -243,6 +243,7 @@
         if ([self.name hasPrefix:_libPath])
             self.name = [@"/" stringByAppendingString:self.name.lastPathComponent];
         self.name = [self.name stringByReplacingOccurrencesOfString:@"/GPX/" withString:@"/tracks/"];
+        self.fileName = self.name;
         if (error)
         {
             *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];
@@ -365,11 +366,6 @@
 - (EOASettingsItemType) type
 {
     return EOASettingsItemTypeFile;
-}
-
-- (NSString *) fileName
-{
-    return self.name;
 }
 
 - (void) setName:(NSString *)name

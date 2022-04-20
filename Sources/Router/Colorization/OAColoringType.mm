@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARouteCalculationResult.h"
-#import "OAGPXDocument.h"
+#import "OAGPXMutableDocument.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAAppSettings.h"
@@ -186,11 +186,11 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return YES;
 }
 
-- (BOOL) isAvailableForDrawingTrack:(OAGPXDocument *)selectedGpxFile attributeName:(NSString *)attributeName
+- (BOOL) isAvailableForDrawingTrack:(OAGPXMutableDocument *)selectedGpxFile attributeName:(NSString *)attributeName
 {
     if ([self isGradient])
         return [[selectedGpxFile getAnalysis:0] isColorizationTypeAvailable:[[self toGradientScaleType] toColorizationType]];
-    
+
     if ([self isRouteInfoAttribute])
     {
         const auto routeSegments = [self getRouteSegmentsInTrack:selectedGpxFile];

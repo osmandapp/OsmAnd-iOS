@@ -689,10 +689,7 @@ typedef enum
 
 - (void) doMapRestore
 {
-    [_mapViewController hideTempGpxTrack];
-    
     _mapViewController.view.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
-    
     [_mapViewController willMoveToParentViewController:nil];
     
     [self addChildViewController:_mapViewController];
@@ -2633,13 +2630,13 @@ typedef enum
     {
         case EOATrackAppearanceHudMode:
         {
-            trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:targetPoint.targetObj
+            trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item
                                                                                                state:state];
             break;
         }
         default:
         {
-            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj
+            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:item
                                                                                      state:state];
             [_mapViewController showContextPinMarker:targetPoint.location.latitude
                                            longitude:targetPoint.location.longitude

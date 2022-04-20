@@ -391,9 +391,6 @@
     {
         case EOAMapModeButtonTypeShowMap:
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [_mapViewController keepTempGpxTrackVisible];
-            });
             [[OARootViewController instance].mapPanel hideContextMenu];
             return;
         }

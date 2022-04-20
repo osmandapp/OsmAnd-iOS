@@ -10,14 +10,13 @@
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
-#import "OAMapRulerView.h"
-#import "Localization.h"
 #import "OAColors.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXDocument.h"
+#import "OAGPXMutableDocument.h"
 #import "OsmAndApp.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXTrackAnalysis.h"
+#import "OASelectedGPXHelper.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -147,9 +146,7 @@
         _savingHelper = [OASavingTrackHelper sharedInstance];
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _mapViewController = _mapPanelViewController.mapViewController;
-        [self updateGpxData];
-        if (!_analysis)
-            [self updateAnalysis];
+        [self updateGpxData:NO updateDocument:YES];
         [self commonInit];
     }
     return self;
@@ -160,22 +157,47 @@
     return nil; //override
 }
 
-- (void)updateGpxData
+- (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDocument
 {
     _isCurrentTrack = !_gpx || _gpx.gpxFilePath.length == 0 || _gpx.gpxFileName.length == 0;
-    if (_isCurrentTrack)
-    {
-        if (!_gpx)
-        _gpx = [_savingHelper getCurrentGPX];
-
-        _gpx.gpxTitle = OALocalizedString(@"track_recording_name");
-    }
-    _doc = _isCurrentTrack ? (OAGPXDocument *) _savingHelper.currentTrack
-            : [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
 
     _isShown = _isCurrentTrack
             ? [_settings.mapSettingShowRecordingTrack get]
             : [[_settings.mapSettingVisibleGpx get] containsObject:_gpx.gpxFilePath];
+
+    if (!_isShown)
+        [self changeTrackVisible];
+
+    if (updateDocument)
+    {
+        _doc = nil;
+        if (_isCurrentTrack)
+        {
+            _doc = _savingHelper.currentTrack;
+        }
+        else
+        {
+            NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
+            _doc = [[OAGPXMutableDocument alloc] initWithGpxFile:gpxFullPath];
+        }
+    }
+    [self updateAnalysis];
+
+    if (replaceGPX)
+    {
+        if (_isCurrentTrack)
+        {
+            _gpx = [_savingHelper getCurrentGPX];
+        }
+        else if (_doc)
+        {
+            OAGPXDatabase *db = [OAGPXDatabase sharedDb];
+            OAGPX *gpx = [db buildGpxItem:_gpx.gpxFilePath title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
+            [db replaceGpxItem:gpx];
+            [db save];
+            _gpx = gpx;
+        }
+    }
 }
 
 - (void)updateAnalysis
@@ -185,6 +207,40 @@
         _analysis = [_doc getGeneralTrack] && [_doc getGeneralSegment]
                 ? [OAGPXTrackAnalysis segment:0 seg:_doc.generalSegment] : [_doc getAnalysis:0];
     }
+    else
+    {
+        _analysis = nil;
+    }
+}
+
+- (BOOL)changeTrackVisible
+{
+    if (self.isShown)
+    {
+        if (self.isCurrentTrack)
+        {
+            [self.settings.mapSettingShowRecordingTrack set:NO];
+            [self.mapViewController hideRecGpxTrack];
+        }
+        else
+        {
+            [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
+        }
+    }
+    else
+    {
+        if (self.isCurrentTrack)
+        {
+            [self.settings.mapSettingShowRecordingTrack set:YES];
+            [self.mapViewController showRecGpxTrack:YES];
+        }
+        else
+        {
+            [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
+        }
+    }
+
+    return self.isShown = !self.isShown;
 }
 
 - (void)commonInit

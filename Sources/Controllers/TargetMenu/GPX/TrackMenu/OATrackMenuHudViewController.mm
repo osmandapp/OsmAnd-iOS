@@ -45,7 +45,6 @@
 #import "OAGPXUIHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXDocument.h"
 #import "OAGPXMutableDocument.h"
 #import "OAMapActions.h"
 #import "OARouteProvider.h"
@@ -85,7 +84,7 @@
 
 @end
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, ChartViewDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -96,6 +95,9 @@
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *groupsButtonTrailingConstraint;
 
+@property (nonatomic) OAGPX *gpx;
+@property (nonatomic) OAGPXMutableDocument *doc;
+@property (nonatomic) OAGPXTrackAnalysis *analysis;
 @property (nonatomic) BOOL isShown;
 
 @end
@@ -103,7 +105,6 @@
 @implementation OATrackMenuHudViewController
 {
     OsmAndAppInstance _app;
-    OAGPXMutableDocument *_mutableDoc;
     OARouteLineChartHelper *_routeLineChartHelper;
     OATrackMenuUIBuilder *_uiBuilder;
 
@@ -123,7 +124,6 @@
 
     NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *_waypointGroups;
     NSArray<NSString *> *_waypointSortedGroupNames;
-    NSDictionary<NSString *, NSDictionary *> *_segments;
 
     BOOL _isHeaderBlurred;
     BOOL _isTabSelecting;
@@ -137,9 +137,7 @@
     OAEditDescriptionViewController *_editDescController;
 }
 
-@dynamic isShown, backButton, statusBarBackgroundView, contentContainer;
-
-@synthesize analysis = _analysis;
+@dynamic gpx, doc, analysis, isShown, backButton, statusBarBackgroundView, contentContainer;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
 {
@@ -187,10 +185,6 @@
 {
     _app = [OsmAndApp instance];
     _routeLineChartHelper = [self getLineChartHelper];
-
-    if (!self.isShown)
-        [self changeTrackVisible];
-
     _uiBuilder = [[OATrackMenuUIBuilder alloc] initWithSelectedTab:_selectedTab];
     _uiBuilder.trackMenuDelegate = self;
 }
@@ -381,7 +375,7 @@
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         _headerView.statisticsCollectionView.contentInset = UIEdgeInsetsMake(0., 20., 0., 20.);
-        [_headerView generateGpxBlockStatistics:_analysis
+        [_headerView generateGpxBlockStatistics:self.analysis
                                     withoutGaps:!self.gpx.joinSegments && (self.isCurrentTrack
                                             ? (self.doc.tracks.count == 0 || self.doc.tracks.firstObject.generalTrack)
                                             : (self.doc.tracks.count > 0 && self.doc.tracks.firstObject.generalTrack))];
@@ -522,7 +516,7 @@
     }
     else
     {
-        OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:sourcePath];
+        OAGPXMutableDocument *gpxDoc = [[OAGPXMutableDocument alloc] initWithGpxFile:sourcePath];
         [gpxDatabase addGpxItem:[newFolder stringByAppendingPathComponent:newName]
                           title:newName
                            desc:gpxDoc.metadata.desc
@@ -651,25 +645,11 @@
                                                                  andObserve:_app.locationServices.updateObserver];
 }
 
-- (void)updateGpxData
+- (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDoc
 {
-    [super updateGpxData];
-    [self updateSegmentsData];
+    [super updateGpxData:replaceGPX updateDocument:updateDoc];
     [self updateWaypointsData];
     [self updateWaypointSortedGroups];
-}
-
-- (void)updateAnalysis
-{
-    if (_mutableDoc)
-    {
-        _analysis = [_mutableDoc getGeneralTrack] && [_mutableDoc getGeneralSegment]
-                ? [OAGPXTrackAnalysis segment:0 seg:_mutableDoc.generalSegment] : [_mutableDoc getAnalysis:0];
-    }
-    else
-    {
-        [super updateAnalysis];
-    }
 }
 
 - (void)updateWaypointsData
@@ -861,7 +841,7 @@
 
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType
 {
-    [self openAnalysis:_analysis
+    [self openAnalysis:self.analysis
               withMode:modeType];
 }
 
@@ -869,33 +849,31 @@
             withMode:(EOARouteStatisticsMode)mode
 {
     [self hide:YES duration:.2 onComplete:^{
-        [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:_mutableDoc ? _mutableDoc : self.doc
+        [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
                                                                 analysis:analysis
                                                         menuControlState:[self getCurrentStateForAnalyze:mode]];
     }];
 }
 
-- (NSDictionary<NSString *, NSDictionary *> *)updateSegmentsData
+- (NSArray<OATrkSegment *> *)getSegments
 {
-    _mutableDoc = self.isCurrentTrack ? self.savingHelper.currentTrack : [[OAGPXMutableDocument alloc] initWithGpxFile:
-            [(_app ? _app : [OsmAndApp instance]).gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath]];
-    NSArray<OATrkSegment *> *segmentsArray = [_mutableDoc && [_mutableDoc getGeneralSegment] ? @[_mutableDoc.generalSegment] : @[]
-            arrayByAddingObjectsFromArray:[_mutableDoc getNonEmptyTrkSegments:NO]];
+    if (self.doc)
+        return [self.doc getNonEmptyTrkSegments:NO];
 
-    NSMutableDictionary<NSString *, NSDictionary *> *segments = [NSMutableDictionary dictionary];
-    for (OATrkSegment *segment in segmentsArray)
-    {
-        OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segment];
-        segments[[NSString stringWithFormat:@"segment_%lu", segments.count]] = @{
-                @"segment" : segment,
-                @"analysis": analysis
-        };
-    }
-    _segments = segments;
+    return @[];
+}
 
-    [self updateAnalysis];
+- (OAGPXTrackAnalysis *)getGeneralAnalysis
+{
+    if (!self.analysis)
+        [self updateAnalysis];
 
-    return _segments;
+    return self.analysis;
+}
+
+- (OATrkSegment *)getGeneralSegment
+{
+    return [self.doc getGeneralSegment];
 }
 
 - (void)editSegment
@@ -910,51 +888,48 @@
 
 - (void)deleteAndSaveSegment:(OATrkSegment *)segment
 {
-    if (segment && _mutableDoc)
+    if (self.doc && segment && [self.doc removeTrackSegment:segment])
     {
-        if (!_segments)
-            [self updateGpxData];
+        [self.doc saveTo:self.doc.path];
+        [self.doc processPoints];
+        [self updateGpxData:YES updateDocument:NO];
 
-        if (_segments)
+        if (self.isCurrentTrack)
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        else
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+        for (OAGPXTableSectionData *sectionData in _tableData.sections)
         {
-            NSInteger segmentIndex = 0;
-            for (NSDictionary *segmentDict in _segments.allValues)
+            BOOL complete = NO;
+            for (OAGPXTableCellData *cellData in sectionData.cells)
             {
-                if (segmentDict[@"segment"] == segment)
-                    break;
-                segmentIndex++;
-            }
-
-            if ([_mutableDoc removeTrackSegment:segment])
-            {
-                [_mutableDoc saveTo:_mutableDoc.path];
-                [_mutableDoc processPoints];
-                [self updateGpxData];
-
-                if (self.isCurrentTrack)
-                    [[_app updateRecTrackOnMapObservable] notifyEvent];
-                else
-                    [[_app updateGpxTracksOnMapObservable] notifyEvent];
-
-                if (segmentIndex != NSNotFound)
+                if ([cellData.key hasSuffix:[NSString stringWithFormat:@"%p", (__bridge void *) segment]])
                 {
-                    OAGPXTableSectionData *sectionData = _tableData.sections[segmentIndex];
+                    NSInteger sectionIndex = [_tableData.sections indexOfObject:sectionData];
                     [sectionData setData:@{ kTableValues: @{ @"delete_section_bool_value": @YES } }];
                     if (sectionData.updateData)
                         sectionData.updateData();
 
-                    [self.tableView beginUpdates];
-                    [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:segmentIndex]
-                                  withRowAnimation:UITableViewRowAnimationNone];
-                    [self.tableView endUpdates];
+                    if (sectionIndex != NSNotFound)
+                    {
+                        [self.tableView beginUpdates];
+                        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                                      withRowAnimation:UITableViewRowAnimationNone];
+                        [self.tableView endUpdates];
+                    }
 
                     [self.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
+                    complete = YES;
+                    break;
                 }
-
-                if (_headerView)
-                    [_headerView setDescription];
             }
+            if (complete)
+                break;
         }
+
+        if (_headerView)
+            [_headerView setDescription];
     }
 }
 
@@ -1052,7 +1027,6 @@
 - (void)deleteWaypointsGroup:(NSString *)groupName
            selectedWaypoints:(NSArray<OAGpxWptItem *> *)selectedWaypoints
 {
-    OASavingTrackHelper *savingHelper = [OASavingTrackHelper sharedInstance];
     NSMutableArray<NSNumber *> *waypointsIdxToDelete = [NSMutableArray array];
     NSArray<OAGpxWptItem *> *waypointsToDelete = selectedWaypoints ? selectedWaypoints : _waypointGroups[groupName];
     for (OAGpxWptItem *waypoint in _waypointGroups[groupName])
@@ -1063,13 +1037,14 @@
 
     NSString *path = !self.isCurrentTrack ? [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath] : nil;
     [self.mapViewController deleteWpts:waypointsToDelete docPath:path];
+    self.gpx = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.gpxFilePath];
 
     NSDictionary *dataToUpdate = @{
             @"delete_group_name_index": @([_waypointSortedGroupNames indexOfObject:groupName]),
             @"delete_waypoints_idx": waypointsIdxToDelete
     };
 
-    [self updateGpxData];
+    [self updateGpxData:NO updateDocument:NO];
 
     if (_tableData.updateProperty)
         _tableData.updateProperty(dataToUpdate);
@@ -1110,7 +1085,7 @@
 
         if (self.isCurrentTrack)
         {
-            [OAGPXDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
+            [OAGPXMutableDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
             [self.savingHelper saveWpt:waypoint.point];
         }
     }
@@ -1132,7 +1107,7 @@
                 existWaypoint.color = UIColorFromRGB([self getWaypointsGroupColor:groupName]);
                 if (self.isCurrentTrack)
                 {
-                    [OAGPXDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
+                    [OAGPXMutableDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
                     [self.savingHelper saveWpt:existWaypoint.point];
                 }
             }
@@ -1277,7 +1252,7 @@
 {
     if (!_routeLineChartHelper)
     {
-        _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:_mutableDoc
+        _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc
                                                                centerMapOnBBox:^(OABBox rect) {
             [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
                                               bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
@@ -1301,7 +1276,7 @@
 
 - (OATrack *)getTrack:(OATrkSegment *)segment
 {
-    for (OATrack *trk in _mutableDoc.tracks)
+    for (OATrack *trk in self.doc.tracks)
     {
         if ([trk.segments containsObject:segment])
             return trk;
@@ -1313,7 +1288,7 @@
 {
     OATrack *track = [self getTrack:segment];
     if (track)
-        return [OAGPXDocument buildTrackSegmentName:self.doc track:track segment:segment];
+        return [OAGPXMutableDocument buildTrackSegmentName:self.doc track:track segment:segment];
 
     return nil;
 }
@@ -1370,7 +1345,7 @@
         {
             _description = [NSString stringWithFormat:@"%@: %li",
                     OALocalizedString(@"gpx_selection_segment_title"),
-                    _mutableDoc && _mutableDoc.generalSegment ? _segments.count - 1 : _segments.count];
+                    [self getGeneralSegment] ? _tableData.sections.count - 1 : _tableData.sections.count];
             break;
         }
         case EOATrackMenuHudPointsTab:
@@ -1409,36 +1384,6 @@
         }
     }
     return nil;
-}
-
-- (BOOL)changeTrackVisible
-{
-    if (self.isShown)
-    {
-        if (self.isCurrentTrack)
-        {
-            [self.settings.mapSettingShowRecordingTrack set:NO];
-            [self.mapViewController hideRecGpxTrack];
-        }
-        else
-        {
-            [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
-        }
-    }
-    else
-    {
-        if (self.isCurrentTrack)
-        {
-            [self.settings.mapSettingShowRecordingTrack set:YES];
-            [self.mapViewController showRecGpxTrack:YES];
-        }
-        else
-        {
-            [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
-        }
-    }
-
-    return self.isShown = !self.isShown;
 }
 
 - (BOOL)isTrackVisible

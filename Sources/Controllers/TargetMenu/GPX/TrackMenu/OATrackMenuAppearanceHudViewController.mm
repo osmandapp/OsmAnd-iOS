@@ -23,7 +23,7 @@
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXDocument.h"
+#import "OAGpxMutableDocument.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OARouteStatisticsHelper.h"
@@ -217,12 +217,6 @@
     self.tableView.sectionFooterHeight = 0.001;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-
-    if (!self.isShown)
-    {
-        [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
-        self.isShown = YES;
-    }
 }
 
 - (void)applyLocalization

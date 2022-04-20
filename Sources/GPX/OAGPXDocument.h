@@ -80,8 +80,6 @@
 + (void)fillRoute:(std::shared_ptr<OsmAnd::GpxDocument::Route>)rte usingRoute:(OARoute *)r;
 
 + (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray;
-+ (void) fillExtension:(const std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension>&)extension ext:(OAGpxExtension *)e;
-+ (void) fillExtensions:(const std::shared_ptr<OsmAnd::GpxExtensions>&)extensions ext:(OAGpxExtensions *)ext;
 
 - (void)initBounds;
 - (void)processBounds:(CLLocationCoordinate2D)coord;

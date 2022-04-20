@@ -29,7 +29,9 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
             withMode:(EOARouteStatisticsMode)mode;
 
-- (NSDictionary<NSString *, NSDictionary *> *)updateSegmentsData;
+- (OAGPXTrackAnalysis *)getGeneralAnalysis;
+- (OATrkSegment *)getGeneralSegment;
+- (NSArray<OATrkSegment *> *)getSegments;
 - (void)editSegment;
 - (void)deleteAndSaveSegment:(OATrkSegment *)segment;
 - (void)openEditSegmentScreen:(OATrkSegment *)segment

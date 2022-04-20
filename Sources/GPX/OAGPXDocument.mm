@@ -785,23 +785,20 @@
 - (void) buildGeneralSegment
 {
     OATrkSegment *segment = [[OATrkSegment alloc] init];
+    NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
     for (OATrack *track in _tracks)
     {
         for (OATrkSegment *s in track.segments)
         {
             if (s.points.count > 0)
             {
-                NSMutableArray<OAWptPt *> *waypoints = [[NSMutableArray alloc] initWithCapacity:s.points.count];
-                for (OAWptPt *wptPt in s.points)
-                {
-                    [waypoints addObject:wptPt];
-                }
-                waypoints[0].firstPoint = YES;
-                waypoints[waypoints.count - 1].lastPoint = YES;
-                segment.points = segment.points ? [segment.points arrayByAddingObjectsFromArray:waypoints] : waypoints;
+                [points addObjectsFromArray:s.points];
+                points[[points indexOfObject:s.points.firstObject]].firstPoint = YES;
+                points[[points indexOfObject:s.points.lastObject]].lastPoint = YES;
             }
         }
     }
+    segment.points = points;
     if (segment.points.count > 0)
     {
         segment.generalSegment = YES;

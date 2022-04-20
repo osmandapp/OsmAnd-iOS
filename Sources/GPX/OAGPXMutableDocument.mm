@@ -389,17 +389,30 @@
 
     for (OATrack *track in self.tracks)
     {
-        for (OATrkSegment *trackSeg in track.segments)
+        if ([track.segments containsObject:segment] && segment.trkseg != nullptr)
         {
-            if (trackSeg == segment || trackSeg.trkseg == segment.trkseg)
+            BOOL removed = track.trk->segments.removeOne(std::dynamic_pointer_cast<OsmAnd::GpxDocument::TrkSegment>(segment.trkseg));
+            if (removed)
             {
-                if (track.trk->segments.removeOne(std::dynamic_pointer_cast<OsmAnd::GpxDocument::TrkSegment>(trackSeg.trkseg)))
+                if (track.segments.count > 1)
                 {
-                    [self addGeneralTrack];
-                    _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+                    NSMutableArray<OATrkSegment *> *segments = [NSMutableArray array];
+                    for (OATrkSegment *trackSeg in track.segments)
+                    {
+                        if (trackSeg != segment)
+                            [segments addObject:trackSeg];
+                    }
+                    track.segments = segments;
                 }
-                return YES;
+                else
+                {
+                    track.segments = @[];
+                }
+
+                [self addGeneralTrack];
+                _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
             }
+            return removed;
         }
     }
     return NO;

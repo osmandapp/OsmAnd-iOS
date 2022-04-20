@@ -19,10 +19,10 @@
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXTrackAnalysis.h"
+#import "OARouteStatisticsHelper.h"
 
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
-#import "OARouteStatisticsHelper.h"
 
 @interface OATrackMenuTabSegments () <UIGestureRecognizerDelegate, ChartViewDelegate>
 
@@ -62,39 +62,93 @@
 - (void)generateData
 {
     NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
+    NSArray<OATrkSegment *> *segments = @[];
+    if (self.trackMenuDelegate)
+    {
+        segments = [self.trackMenuDelegate getSegments];
 
-    NSDictionary<NSString *, NSDictionary *> *segments = self.trackMenuDelegate ? [self.trackMenuDelegate updateSegmentsData] : [NSDictionary dictionary];
-    if (!_routeLineChartHelper)
-        _routeLineChartHelper = self.trackMenuDelegate ? [self.trackMenuDelegate getLineChartHelper] : nil;
+        if (!_routeLineChartHelper)
+            _routeLineChartHelper = [self.trackMenuDelegate getLineChartHelper];
+    }
+
+    OATrkSegment *generalSegment = self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralSegment] : nil;
+    OAGPXTrackAnalysis *generalAnalysis = self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralAnalysis] : nil;
+    if (generalSegment && generalAnalysis)
+    {
+        [self generateSegmentSectionData:generalSegment
+                                analysis:generalAnalysis
+                                   index:0
+                           tableSections:tableSections];
+    }
 
     for (NSInteger index = 0; index < segments.count; index++)
     {
-        NSDictionary *segmentDict = segments[[NSString stringWithFormat:@"segment_%li", index]];
-        OATrkSegment *segment = segmentDict[@"segment"];
-        OAGPXTrackAnalysis *analysis = segmentDict[@"analysis"];
-        __block EOARouteStatisticsMode mode = EOARouteStatisticsModeAltitudeSpeed;
+        OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segments[index]];
+        [self generateSegmentSectionData:segments[index]
+                                analysis:analysis
+                                   index:generalSegment ? index + 1 : index
+                           tableSections:tableSections];
+    }
 
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
-        OALineChartCell *cell = (OALineChartCell *) nib[0];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.lineChartView.delegate = self;
-        cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
-
-        [GpxUIHelper setupGPXChartWithChartView:cell.lineChartView
-                                   yLabelsCount:4
-                                      topOffset:20
-                                   bottomOffset:4
-                            useGesturesAndScale:YES
-        ];
-
-        if (_routeLineChartHelper)
+    self.tableData = [OAGPXTableData withData: @{ kTableSections: tableSections }];
+    self.tableData.updateData = ^() {
+        for (OAGPXTableSectionData *sectionData in tableSections)
         {
-            [_routeLineChartHelper changeChartMode:mode
-                                             chart:cell.lineChartView
-                                          analysis:analysis
-                                          modeCell:nil];
+            if (sectionData.updateData)
+                sectionData.updateData();
         }
+    };
+}
 
+- (void)generateSegmentSectionData:(OATrkSegment *)segment
+                          analysis:(OAGPXTrackAnalysis *)analysis
+                             index:(NSInteger)index
+                     tableSections:(NSMutableArray<OAGPXTableSectionData *> *)tableSections
+{
+    if (!segment)
+        return;
+
+    __block EOARouteStatisticsMode mode = EOARouteStatisticsModeAltitudeSpeed;
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
+    OALineChartCell *cell = (OALineChartCell *) nib[0];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.lineChartView.delegate = self;
+    cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+
+    [GpxUIHelper setupGPXChartWithChartView:cell.lineChartView
+                               yLabelsCount:4
+                                  topOffset:20
+                               bottomOffset:4
+                        useGesturesAndScale:YES
+    ];
+
+    if (_routeLineChartHelper)
+    {
+        [_routeLineChartHelper changeChartMode:mode
+                                         chart:cell.lineChartView
+                                      analysis:analysis
+                                      modeCell:nil];
+    }
+
+    NSString *segmentTitle = nil;
+    if (self.trackMenuDelegate)
+        segmentTitle = [self.trackMenuDelegate getTrackSegmentTitle:segment];
+    if (!segmentTitle)
+        segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), index];
+
+    OAGPXTableCellData *segmentCellData = index != 0 ? [OAGPXTableCellData withData:@{
+            kCellKey: [NSString stringWithFormat:@"segment_%p", (__bridge void *) segment],
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellTitle: segmentTitle,
+            kCellToggle: @NO
+    }] : nil;
+
+    LineChartData *lineData = cell.lineChartView.lineData;
+    NSInteger entryCount = lineData ? lineData.entryCount : 0;
+
+    OAGPXTableCellData *chartCellData;
+    if (entryCount > 0)
+    {
         for (UIGestureRecognizer *recognizer in cell.lineChartView.gestureRecognizers)
         {
             if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
@@ -106,24 +160,11 @@
             [recognizer addTarget:self action:@selector(onChartGesture:)];
         }
 
-        NSString *segmentTitle = nil;
-        if (self.trackMenuDelegate)
-            segmentTitle = [self.trackMenuDelegate getTrackSegmentTitle:segment];
-        if (!segmentTitle)
-            segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), index];
-
-        OAGPXTableCellData *segmentCellData = index != 0 ? [OAGPXTableCellData withData:@{
-                kCellKey: [NSString stringWithFormat:@"segment_%li", index],
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kCellTitle: segmentTitle,
-                kCellToggle: @NO
-        }] : nil;
-
         CLLocationCoordinate2D startChartPoint = self.trackMenuDelegate && [self.trackMenuDelegate openedFromMap]
                 ? [self.trackMenuDelegate getPinLocation] : kCLLocationCoordinate2DInvalid;
 
-        OAGPXTableCellData *chartCellData = [OAGPXTableCellData withData:@{
-                kCellKey: [NSString stringWithFormat:@"chart_%li", index],
+        chartCellData = [OAGPXTableCellData withData:@{
+                kCellKey: [NSString stringWithFormat:@"chart_%p", (__bridge void *) segment],
                 kCellType: [OALineChartCell getCellIdentifier],
                 kTableValues: @{
                         @"cell_value": cell,
@@ -131,7 +172,7 @@
                         @"points_value": _routeLineChartHelper
                                 ? [_routeLineChartHelper generateTrackChartPoints:cell.lineChartView
                                                                        startPoint:startChartPoint
-                                                                         segment:segment]
+                                                                          segment:segment]
                                 : [[OATrackChartPoints alloc] init],
                         @"additional_actions": ^() {
                             if (_routeLineChartHelper)
@@ -139,7 +180,7 @@
                                 [_routeLineChartHelper refreshHighlightOnMap:NO
                                                                lineChartView:cell.lineChartView
                                                             trackChartPoints:chartCellData.values[@"points_value"]
-                                                                    segment:segment];
+                                                                     segment:segment];
                             }
                             if (self.trackMenuDelegate)
                                 [self.trackMenuDelegate updateChartHighlightValue:cell.lineChartView segment:segment];
@@ -155,129 +196,121 @@
                                               modeCell:nil];
             }
         };
+    }
+    else
+    {
+        cell = nil;
+    }
 
-        OAGPXTableCellData *statisticsCellData = [OAGPXTableCellData withData:@{
-                kCellKey: [NSString stringWithFormat:@"statistics_%li", index],
-                kCellType: [OAQuadItemsWithTitleDescIconCell getCellIdentifier],
+    OAGPXTableCellData *statisticsCellData = [OAGPXTableCellData withData:@{
+            kCellKey: [NSString stringWithFormat:@"statistics_%p", (__bridge void *) segment],
+            kCellType: [OAQuadItemsWithTitleDescIconCell getCellIdentifier],
+            kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:mode],
+            kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
+                    || mode != EOARouteStatisticsModeAltitudeSpeed)
+    }];
+    statisticsCellData.updateData = ^() {
+        [statisticsCellData setData:@{
                 kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:mode],
                 kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
                         || mode != EOARouteStatisticsModeAltitudeSpeed)
         }];
-        statisticsCellData.updateData = ^() {
-            [statisticsCellData setData:@{
-                    kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:mode],
-                    kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
-                            || mode != EOARouteStatisticsModeAltitudeSpeed)
-            }];
-        };
+    };
 
-        OAGPXTableCellData *tabsCellData = [OAGPXTableCellData withData:@{
-                kCellKey: [NSString stringWithFormat:@"tabs_%li", index],
-                kCellType: [OASegmentTableViewCell getCellIdentifier]
-        }];
-        tabsCellData.updateData = ^() {
-            NSInteger selectedIndex = [tabsCellData.values[@"selected_index_int_value"] integerValue];
-            if (selectedIndex != NSNotFound)
-            {
-                if (selectedIndex == 0)
-                {
-                    mode = EOARouteStatisticsModeAltitudeSpeed;
-                }
-                else if (tabsCellData.values.count > selectedIndex)
-                {
-                    NSString *value = tabsCellData.values[[NSString stringWithFormat:@"tab_%li_string_value", selectedIndex]];
-                    mode = [value isEqualToString:OALocalizedString(@"map_widget_altitude")]
-                            ? EOARouteStatisticsModeAltitudeSlope
-                            : [value isEqualToString:OALocalizedString(@"gpx_speed")]
-                                    ? EOARouteStatisticsModeSpeed
-                                    : EOARouteStatisticsModeAltitudeSpeed;
-                }
-
-                if (chartCellData.updateData)
-                    chartCellData.updateData();
-
-                if (statisticsCellData.updateData)
-                    statisticsCellData.updateData();
-            }
-        };
-
-        OAGPXTableCellData *buttonsCellData = [OAGPXTableCellData withData:@{
-                kCellKey: [NSString stringWithFormat:@"buttons_%li", index],
-                kCellType: [OARadiusCellEx getCellIdentifier],
-                kTableValues: @{
-                        @"left_title_string_value": OALocalizedString(@"analyze_on_map"),
-                        @"right_title_string_value": OALocalizedString(@"shared_string_options"),
-                        @"right_icon_string_value": @"ic_custom_overflow_menu",
-                        @"left_on_button_pressed":  ^() {
-                            if (self.trackMenuDelegate)
-                                [self.trackMenuDelegate openAnalysis:analysis withMode:mode];
-                        },
-                        @"right_on_button_pressed": ^() {
-                            if (self.trackMenuDelegate)
-                                [self.trackMenuDelegate openEditSegmentScreen:segment
-                                                                     analysis:analysis];
-                        }
-                },
-                kCellToggle: @(!segment.generalSegment)
-        }];
-
-        NSMutableArray<OAGPXTableCellData *> *segmentCells = [NSMutableArray array];
-        if (segmentCellData != nil)
-            [segmentCells addObject:segmentCellData];
-        [segmentCells addObject:tabsCellData];
-
-        LineChartData *lineData = cell.lineChartView.lineData;
-        NSInteger entryCount = lineData ? lineData.entryCount : 0;
-        if (entryCount > 0)
-            [segmentCells addObject:chartCellData];
-
-        [segmentCells addObject:statisticsCellData];
-        [segmentCells addObject:buttonsCellData];
-
-        NSMutableDictionary *values = [NSMutableDictionary dictionary];
-        values[@"tab_0_string_value"] = OALocalizedString(@"shared_string_overview");
-        if (analysis.hasElevationData)
-            values[@"tab_1_string_value"] = OALocalizedString(@"map_widget_altitude");
-        if (analysis.isSpeedSpecified)
-            values[analysis.hasElevationData ? @"tab_2_string_value" : @"tab_1_string_value"] = OALocalizedString(@"gpx_speed");
-        values[@"row_to_update_int_value"] = @([segmentCells indexOfObject:statisticsCellData]);
-        values[@"selected_index_int_value"] = @0;
-        [tabsCellData setData:@{ kTableValues: values }];
-
-        OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: segmentCells }];
-        [tableSections addObject:segmentSectionData];
-        [segmentSectionData setData:@{
-                kSectionHeaderHeight: tableSections.firstObject == segmentSectionData ? @0.001 : @36.
-        }];
-        segmentSectionData.updateData = ^() {
-            if ([segmentSectionData.values[@"delete_section_bool_value"] boolValue])
-            {
-                NSMutableArray<OAGPXTableSectionData *> *newTableData = [self.tableData.sections mutableCopy];
-                [newTableData removeObject:segmentSectionData];
-                [self.tableData setData:@{ kTableSections: newTableData }];
-            }
-            else
-            {
-                for (OAGPXTableCellData *cellData in segmentSectionData.cells)
-                {
-                    if (cellData.updateData)
-                        cellData.updateData();
-                }
-            }
-        };
-
-        cell.lineChartView.tag =
-                [tableSections indexOfObject:segmentSectionData] << 10 | [segmentCells indexOfObject:chartCellData];
-    }
-
-    self.tableData = [OAGPXTableData withData: @{ kTableSections: tableSections }];
-    self.tableData.updateData = ^() {
-        for (OAGPXTableSectionData *sectionData in tableSections)
+    OAGPXTableCellData *tabsCellData = [OAGPXTableCellData withData:@{
+            kCellKey: [NSString stringWithFormat:@"tabs_%p", (__bridge void *) segment],
+            kCellType: [OASegmentTableViewCell getCellIdentifier]
+    }];
+    tabsCellData.updateData = ^() {
+        NSInteger selectedIndex = [tabsCellData.values[@"selected_index_int_value"] integerValue];
+        if (selectedIndex != NSNotFound)
         {
-            if (sectionData.updateData)
-                sectionData.updateData();
+            if (selectedIndex == 0)
+            {
+                mode = EOARouteStatisticsModeAltitudeSpeed;
+            }
+            else if (tabsCellData.values.count > selectedIndex)
+            {
+                NSString *value = tabsCellData.values[[NSString stringWithFormat:@"tab_%li_string_value", selectedIndex]];
+                mode = [value isEqualToString:OALocalizedString(@"map_widget_altitude")]
+                        ? EOARouteStatisticsModeAltitudeSlope
+                        : [value isEqualToString:OALocalizedString(@"gpx_speed")]
+                                ? EOARouteStatisticsModeSpeed
+                                : EOARouteStatisticsModeAltitudeSpeed;
+            }
+
+            if (chartCellData && chartCellData.updateData)
+                chartCellData.updateData();
+
+            if (statisticsCellData.updateData)
+                statisticsCellData.updateData();
         }
     };
+
+    OAGPXTableCellData *buttonsCellData = [OAGPXTableCellData withData:@{
+            kCellKey: [NSString stringWithFormat:@"buttons_%p", (__bridge void *) segment],
+            kCellType: [OARadiusCellEx getCellIdentifier],
+            kTableValues: @{
+                    @"left_title_string_value": OALocalizedString(@"analyze_on_map"),
+                    @"right_title_string_value": OALocalizedString(@"shared_string_options"),
+                    @"right_icon_string_value": @"ic_custom_overflow_menu",
+                    @"left_on_button_pressed":  ^() {
+                        if (self.trackMenuDelegate)
+                            [self.trackMenuDelegate openAnalysis:analysis withMode:mode];
+                    },
+                    @"right_on_button_pressed": ^() {
+                        if (self.trackMenuDelegate)
+                            [self.trackMenuDelegate openEditSegmentScreen:segment analysis:analysis];
+                    }
+            },
+            kCellToggle: @(!segment.generalSegment)
+    }];
+
+    NSMutableArray<OAGPXTableCellData *> *segmentCells = [NSMutableArray array];
+    if (segmentCellData != nil)
+        [segmentCells addObject:segmentCellData];
+    [segmentCells addObject:tabsCellData];
+
+    if (chartCellData != nil)
+        [segmentCells addObject:chartCellData];
+
+    [segmentCells addObject:statisticsCellData];
+    [segmentCells addObject:buttonsCellData];
+
+    NSMutableDictionary *values = [NSMutableDictionary dictionary];
+    values[@"tab_0_string_value"] = OALocalizedString(@"shared_string_overview");
+    if (analysis.hasElevationData)
+        values[@"tab_1_string_value"] = OALocalizedString(@"map_widget_altitude");
+    if (analysis.isSpeedSpecified)
+        values[analysis.hasElevationData ? @"tab_2_string_value" : @"tab_1_string_value"] = OALocalizedString(@"gpx_speed");
+    values[@"row_to_update_int_value"] = @([segmentCells indexOfObject:statisticsCellData]);
+    values[@"selected_index_int_value"] = @0;
+    [tabsCellData setData:@{ kTableValues: values }];
+
+    OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: segmentCells }];
+    [tableSections addObject:segmentSectionData];
+    [segmentSectionData setData:@{
+            kSectionHeaderHeight: tableSections.firstObject == segmentSectionData ? @0.001 : @36.
+    }];
+    segmentSectionData.updateData = ^() {
+        if ([segmentSectionData.values[@"delete_section_bool_value"] boolValue])
+        {
+            NSMutableArray<OAGPXTableSectionData *> *newTableData = [self.tableData.sections mutableCopy];
+            [newTableData removeObject:segmentSectionData];
+            [self.tableData setData:@{ kTableSections: newTableData }];
+        }
+        else
+        {
+            for (OAGPXTableCellData *cellData in segmentSectionData.cells)
+            {
+                if (cellData.updateData)
+                    cellData.updateData();
+            }
+        }
+    };
+
+    if (cell && chartCellData)
+        cell.lineChartView.tag = [tableSections indexOfObject:segmentSectionData] << 10 | [segmentCells indexOfObject:chartCellData];
 }
 
 - (void)runAdditionalActions

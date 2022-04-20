@@ -37,7 +37,7 @@ typedef BOOL(^OAGPXTableCellDataIsOn)();
 typedef void(^OAGPXTableDataUpdateData)();
 typedef void(^OAGPXTableDataUpdateProperty)(id value);
 
-@class OAGPX, OAGPXDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
+@class OAGPX, OAGPXMutableDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
 
 @interface OAGPXTableCellData : NSObject
 
@@ -95,7 +95,7 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 @interface OABaseTrackMenuHudViewController : OABaseScrollableHudViewController
 
 @property (nonatomic, readonly) OAGPX *gpx;
-@property (nonatomic, readonly) OAGPXDocument *doc;
+@property (nonatomic, readonly) OAGPXMutableDocument *doc;
 @property (nonatomic, readonly) OAGPXTrackAnalysis *analysis;
 @property (nonatomic, readonly) BOOL isCurrentTrack;
 @property (nonatomic, readonly) BOOL isShown;
@@ -108,8 +108,9 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 
 - (instancetype)initWithGpx:(OAGPX *)gpx;
 
-- (void)updateGpxData;
+- (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDocument;
 - (void)updateAnalysis;
+- (BOOL)changeTrackVisible;
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem
                                    firstAttribute:(NSLayoutAttribute)firstAttribute

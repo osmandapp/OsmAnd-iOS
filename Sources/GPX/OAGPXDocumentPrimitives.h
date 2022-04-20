@@ -17,6 +17,7 @@
 #define BACKGROUND_TYPE_EXTENSION @"background"
 #define ADDRESS_EXTENSION @"address"
 #define CALENDAR_EXTENSION @"calendar_event"
+#define VISITED_TIME_EXTENSION @"visited_date"
 #define CREATION_TIME_EXTENSION @"creation_date"
 #define DEFAULT_ICON_NAME @"special_star"
 #define PROFILE_TYPE_EXTENSION @"profile"

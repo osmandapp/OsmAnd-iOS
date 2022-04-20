@@ -644,6 +644,7 @@
 "shared_string_export" = "Export";
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Route points";
+"copy_to_map_favorites" = "Copy to favorites";
 
 "import_export" = "Import/Export";
 

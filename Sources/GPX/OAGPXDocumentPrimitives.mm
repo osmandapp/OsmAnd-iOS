@@ -208,23 +208,10 @@
     }
     for (OAGpxExtension *es in e.subextensions)
     {
-        BOOL exist = NO;
-        for (auto &_es : extension->subextensions)
-        {
-            if (_es->name == QString::fromNSString(es.name))
-            {
-                exist = YES;
-                [self fillExtension:_es ext:es];
-                break;
-            }
-        }
-        if (!exist)
-        {
-            std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> subextension(new OsmAnd::GpxExtensions::GpxExtension());
-            [self fillExtension:subextension ext:es];
-            extension->subextensions.push_back(subextension);
-            subextension.reset();
-        }
+        std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> subextension(new OsmAnd::GpxExtensions::GpxExtension());
+        [self fillExtension:subextension ext:es];
+        extension->subextensions.push_back(subextension);
+        subextension.reset();
     }
 }
 
@@ -232,23 +219,10 @@
 {
     for (OAGpxExtension *e in self.extensions)
     {
-        BOOL exist = NO;
-        for (auto &_e : extensions->extensions)
-        {
-            if (_e->name == QString::fromNSString(e.name))
-            {
-                exist = YES;
-                [self fillExtension:_e ext:e];
-                break;
-            }
-        }
-        if (!exist)
-        {
-            std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> extension(new OsmAnd::GpxExtensions::GpxExtension());
-            [self fillExtension:extension ext:e];
-            extensions->extensions.push_back(extension);
-            extension.reset();
-        }
+        std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> extension(new OsmAnd::GpxExtensions::GpxExtension());
+        [self fillExtension:extension ext:e];
+        extensions->extensions.push_back(extension);
+        extension.reset();
     }
 }
 

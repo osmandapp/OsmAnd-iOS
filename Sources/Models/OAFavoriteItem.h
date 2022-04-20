@@ -91,6 +91,7 @@
 + (NSString *) toStringDate:(NSDate *)date;
 
 - (OAWptPt *) toWpt;
++ (OAFavoriteItem *)fromWpt:(OAWptPt *)pt category:(NSString *)category;
 
 - (UIImage *) getCompositeIcon;
 

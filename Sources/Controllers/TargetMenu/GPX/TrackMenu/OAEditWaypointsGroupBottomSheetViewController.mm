@@ -14,6 +14,9 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OADefaultFavorite.h"
+#import "OAFavoritesHelper.h"
+#import "OAFavoriteItem.h"
+#import "OAGpxWptItem.h"
 
 typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 {
@@ -182,6 +185,24 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         };
 
         [tableSections addObject:[OAGPXTableSectionData withData:@{ kSectionCells: @[renameCellData, changeColorCellData] }]];
+
+        OAGPXTableCellData *copyToFavoritesCellData = [OAGPXTableCellData withData:@{
+                kCellKey: @"copy_to_favorites",
+                kCellType: [OATitleIconRoundCell getCellIdentifier],
+                kCellRightIconName: @"ic_custom_trip_edit",
+                kCellTitle: OALocalizedString(@"copy_to_map_favorites")
+        }];
+        copyToFavoritesCellData.onButtonPressed = ^() {
+            OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
+                    [[OAEditWaypointsGroupOptionsViewController alloc]
+                            initWithScreenType:EOAEditWaypointsGroupCopyToFavoritesScreen
+                                     groupName:_groupName
+                                    groupColor:nil];
+            editWaypointsGroupOptions.delegate = self;
+            [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
+        };
+
+        [tableSections addObject:[OAGPXTableSectionData withData:@{ kSectionCells: @[copyToFavoritesCellData] }]];
     }
     else
     {
@@ -345,6 +366,16 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         _groupColor = color;
 
     [self setLeftIcon];
+}
+
+- (void)copyToFavorites:(NSString *)name
+{
+    NSArray<OAGpxWptItem *> *waypoints = [self.trackMenuDelegate getWaypointsData][_groupName];
+    for (OAGpxWptItem *waypoint in waypoints)
+    {
+        OAFavoriteItem *favoriteItem = [OAFavoriteItem fromWpt:waypoint.point category:name];
+        [OAFavoritesHelper addFavorite:favoriteItem];
+    }
 }
 
 #pragma mark - UITableViewDataSource

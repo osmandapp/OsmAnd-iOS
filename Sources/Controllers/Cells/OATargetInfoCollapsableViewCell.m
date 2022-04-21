@@ -21,6 +21,27 @@
     // Initialization code
 }
 
+- (void)updateConstraints
+{
+    BOOL hasDescription = !self.descrLabel.hidden;
+
+    self.textWithDescriptionConstraint.active = hasDescription;
+
+    [super updateConstraints];
+}
+
+- (BOOL)needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
+    {
+        BOOL hasDescription = !self.descrLabel.hidden;
+
+        res = res || self.textWithDescriptionConstraint.active != hasDescription;
+    }
+    return res;
+}
+
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
@@ -79,6 +100,12 @@
 {
     self.iconView.image = image;
     [self setNeedsLayout];
+}
+
+- (void) setDescription:(NSString *)description
+{
+    self.descrLabel.text = description;
+    self.descrLabel.hidden = !description || description.length == 0;
 }
 
 @end

@@ -699,7 +699,7 @@
 - (BOOL) containsData:(NSString *)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    const auto& localResource = app.resourcesManager->getLocalResource(QString::fromNSString([localResourceId lastPathComponent]));
+    const auto& localResource = app.resourcesManager->getLocalResource(QString::fromNSString([localResourceId lastPathComponent].lowerCase));
     if (localResource)
     {
         const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(localResource->metadata);

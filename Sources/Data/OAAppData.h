@@ -37,27 +37,45 @@
 
 @property (nonatomic) BOOL weather;
 @property (nonatomic) BOOL weatherTemp;
+@property (nonatomic) NSUnitTemperature *weatherTempUnit;
+@property (nonatomic) BOOL weatherTempUnitAuto;
 @property (nonatomic) double weatherTempAlpha;
 @property (nonatomic) BOOL weatherPressure;
+@property (nonatomic) NSUnitPressure *weatherPressureUnit;
+@property (nonatomic) BOOL weatherPressureUnitAuto;
 @property (nonatomic) double weatherPressureAlpha;
 @property (nonatomic) BOOL weatherWind;
+@property (nonatomic) NSUnitSpeed *weatherWindUnit;
+@property (nonatomic) BOOL weatherWindUnitAuto;
 @property (nonatomic) double weatherWindAlpha;
 @property (nonatomic) BOOL weatherCloud;
+@property (nonatomic) NSUnitCloud *weatherCloudUnit;
+@property (nonatomic) BOOL weatherCloudUnitAuto;
 @property (nonatomic) double weatherCloudAlpha;
 @property (nonatomic) BOOL weatherPrecip;
+@property (nonatomic) NSUnitLength *weatherPrecipUnit;
+@property (nonatomic) BOOL weatherPrecipUnitAuto;
 @property (nonatomic) double weatherPrecipAlpha;
 
 @property (readonly) OAObservable* weatherChangeObservable;
 @property (readonly) OAObservable* weatherTempChangeObservable;
+@property (readonly) OAObservable* weatherTempUnitChangeObservable;
 @property (readonly) OAObservable* weatherTempAlphaChangeObservable;
 @property (readonly) OAObservable* weatherPressureChangeObservable;
+@property (readonly) OAObservable* weatherPressureUnitChangeObservable;
 @property (readonly) OAObservable* weatherPressureAlphaChangeObservable;
 @property (readonly) OAObservable* weatherWindChangeObservable;
+@property (readonly) OAObservable* weatherWindUnitChangeObservable;
 @property (readonly) OAObservable* weatherWindAlphaChangeObservable;
 @property (readonly) OAObservable* weatherCloudChangeObservable;
+@property (readonly) OAObservable* weatherCloudUnitChangeObservable;
 @property (readonly) OAObservable* weatherCloudAlphaChangeObservable;
 @property (readonly) OAObservable* weatherPrecipChangeObservable;
+@property (readonly) OAObservable* weatherPrecipUnitChangeObservable;
 @property (readonly) OAObservable* weatherPrecipAlphaChangeObservable;
+
+@property (nonatomic) double contoursAlpha;
+@property (readonly) OAObservable* contoursAlphaChangeObservable;
 
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 

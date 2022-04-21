@@ -681,15 +681,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (void) zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
+- (void) customPickerValueChanged:(NSString *)value tag:(NSInteger)pickerTag
 {
-    int value = [zoom intValue];
+    int intValue = [value intValue];
     NSInteger zoomRow = 0;
     if (pickerTag == kMinZoomPickerRow)
     {
-        if (value <= _maxZoom)
+        if (intValue <= _maxZoom)
         {
-            _minZoom = value;
+            _minZoom = intValue;
         }
         else
         {
@@ -701,9 +701,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if (pickerTag == kMaxZoomPickerRow)
     {
-        if (value >= _minZoom)
+        if (intValue >= _minZoom)
         {
-            _maxZoom = value;
+            _maxZoom = intValue;
         }
         else
         {

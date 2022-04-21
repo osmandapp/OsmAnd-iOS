@@ -48,7 +48,7 @@
 "transport_routes" = "Маршрути";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Спирка";
+"transport_stop" = "Стоп";
 
 "cancel_navigation" = "Спиране на навигацията";
 "start_navigation" = "Start navigation";
@@ -590,7 +590,7 @@
 "name_and_descr" = "Name & description";
 "select_group" = "Изберете група";
 "icon" = "Icon";
-"shape" = "Shape";
+"shape" = "Форма";
 "fav_point_dublicate" = "Дублиране името на запазено място";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
@@ -613,7 +613,7 @@
 "poi_hide" = "Скриване";
 
 // My Places
-"favorites" = "Любими";
+"favorites" = "Предпочитани";
 "tracks" = "Следи";
 "personal_category_name" = "Personal";
 "visible" = "Visible";
@@ -646,7 +646,7 @@
 "gpx_export_failed" = "Could not save created route";
 
 "gpx_remove" = "Remove track?";
-"gpx_stat" = "Statistics";
+"gpx_stat" = "Статистика";
 "gpx_route" = "Маршрут";
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
@@ -706,7 +706,7 @@
 
 // Map settings
 "m_style_car" = "Автомобил";
-"m_style_walk" = "Пешеходец";
+"m_style_walk" = "Ходене";
 "m_style_bicycle" = "Колоездене";
 "m_style_pulic_transport" = "Обществен транспорт";
 
@@ -815,7 +815,7 @@
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Transliterate names";
 
-"lang_af" = "Afrikaan";
+"lang_af" = "Африканс";
 "lang_al" = "Албански";
 "lang_als" = "албански";
 "lang_an" = "Арагонски";
@@ -1146,7 +1146,7 @@
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Местни";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Актуализации онлайн";
+"osmand_live_updates" = "Актуализации на живо";
 "osmand_live_available_maps" = "Достъпни карти";
 "osmand_live_last_changed" = "Last map change: %@";
 "osmand_live_last_live_update" = "Последна актуализация: %@";
@@ -1408,7 +1408,7 @@
 "add_intermediate" = "Add intermediate point";
 "add_home" = "Add home";
 "add_work" = "Add work";
-"home_pt" = "Начало";
+"home_pt" = "Дом";
 "work_pt" = "Work";
 "map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Add first intermediate";
@@ -1518,7 +1518,7 @@
 "modify_edit_short" = "Промяна на OSM редакцията";
 "open_osm_note" = "Отвори OSM бележка";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Изпрати";
+"osm_alert_title" = "Изпращане на данни до OSM";
 "osm_alert_message" = "Съобщение";
 "osm_alert_button_ok" = "Създайте Бележка";
 "modify_poi" = "Modify the POI information";
@@ -1730,7 +1730,7 @@
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
-"product_title_wiki" = "Уикипедия";
+"product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "shared_string_all_languages" = "Всички езици";
@@ -1769,7 +1769,7 @@
 "res_installing" = "Installing…";
 "res_roads" = "Пътища";
 "res_srtm" = "Контури";
-"res_wiki" = "Уикипедия";
+"res_wiki" = "Wikipedia";
 "res_hillshade" = "Оцветяване на релефа";
 "res_slope" = "Slope";
 "res_standard" = "Стандартна карта";
@@ -1854,7 +1854,7 @@
 "parked_at" = "Parked at";
 
 "directions_more_options" = "Упътване от тук";
-"nearby_search" = "Търси близо до това място";
+"nearby_search" = "Търси наблизо";
 "change_object_posiotion" = "Change object's position";
 "change_position_descr" = "Move the map to change object's position";
 
@@ -2483,3 +2483,33 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"backup_error_token_is_not_valid_or_expired" = "Невалиден или изтекъл токен";
+"backup_error_subscription_was_expired" = "Изтекъл абонамент";
+"backup_error_token_is_not_valid" = "Нещо не е наред с предоставения идентификатор на устройство или токен";
+"cloud_welcome_back" = "Добре дошли отново!";
+"units_min_short" = "м";
+"weather_wind_unit_mi_per_hour" = "Мили в час";
+"osmand_cloud_login_descr" = "Моля, въведете имейл адреса, който сте използвали при регистрацията. На следващата стъпка ще ви изпратим необходимата еднократна парола.";
+"backup_error_user_is_not_registered" = "Няма потребител, регистриран с този имейл адрес";
+"add_description" = "Добавете описание";
+"cloud_last_backup" = "Последно архивиране";
+"weather_wind_unit_km_per_hour" = "Км в час";
+"backup_error_gzip_only_supported_upload" = "Файлът трябва да бъде изпратен във формат .gzip";
+"verify_email_address_descr" = "Изпратихме код за проверка на %@, моля, въведете го в полето по-долу.";
+"resend_verification_code" = "Изпращане на кода отново";
+"cloud_email_already_registered" = "Профилът с този имейл вече е регистриран.";
+"cloud_email_not_registered" = "Този имейл не е регистриран в OsmAnd Cloud";
+"backup_error_file_not_available" = "Файлът не е наличен";
+"shared_string_any" = "Всички";
+"login_error_email_invalid" = "Моля, въведете валиден адрес за електронна поща";
+"restore_from_file" = "Възстановяване от файл";
+"rendering_attr_showRunningRoutes_name" = "Маршрути за бягане";
+"backup_error_size_is_exceeded" = "Превишен е максималният размер на OsmAnd Cloud %@";
+"osmand_cloud" = "OsmAnd Cloud";
+"backup_error_no_valid_subscription" = "Няма валиден абонамент";
+"backup_error_subscription_was_used" = "Абонамент или промоция, използвани от друг акаунт %@";
+"cloud_description" = "Никога не губете данните си, архивирайте и възстановявайте цялата информация без проблем.";
+"altitude" = "Надморска височина";
+"backup_error_subscription_was_expired_descr" = "Абонаментът ви за OsmAnd Pro е изтекъл, подновете го, за да създавате резервни копия. Все още можете да възстановявате данни от облака.";
+"backup_error_user_is_already_registered" = "Този имейл адрес се използва от друг акаунт";
+"cloud_restore_now" = "Възстанови сега";

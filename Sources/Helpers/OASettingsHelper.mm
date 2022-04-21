@@ -11,14 +11,12 @@
 #import "OASettingsImporter.h"
 #import "OASettingsExporter.h"
 #import "OASettingsItemType.h"
-#import "OAExportSettingsType.h"
 #import "OARootViewController.h"
 #import "OAIndexConstants.h"
 #import "OAPluginSettingsItem.h"
 #import "OARendererRegistry.h"
 #import "Localization.h"
 #import "OAImportSettingsViewController.h"
-#import "OAExportSettingsType.h"
 #import "OAExportSettingsCategory.h"
 #import "OASettingsCategoryItems.h"
 #import "OrderedDictionary.h"
@@ -789,7 +787,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return settingsToOperate;
 }
 
-- (void) handlePluginImport:(OAPluginSettingsItem *)pluginItem file:(NSString *)file
+- (void) handlePluginImport:(OAPluginSettingsItem *)pluginItem file:(NSString *)file removeFile:(BOOL)removeFile
 {
     OAOnImportComplete onImportComplete = ^(BOOL succeed, NSArray<OASettingsItem *> *items) {
 //        AudioVideoNotesPlugin pluginAudioVideo = OsmandPlugin.getPlugin(AudioVideoNotesPlugin.class);
@@ -817,6 +815,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             [fileManager createDirectoryAtPath:fullPath withIntermediateDirectories:YES attributes:nil error:nil];
         
         [self exportSettings:fullPath fileName:@"items" items:items exportItemFiles:YES extensionsFilter:@"json" delegate:nil];
+
+        if (removeFile)
+            [OAUtilities denyAccessToFile:file removeFromInbox:YES];
     };
     
     NSMutableArray<OASettingsItem *> *pluginItems = [NSMutableArray arrayWithArray:pluginItem.pluginDependentItems];
@@ -858,12 +859,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         for (OAPluginSettingsItem *pluginItem in pluginSettingsItems)
         {
-            [self handlePluginImport:pluginItem file:_importTask.getFile];
+            [self handlePluginImport:pluginItem file:_importTask.getFile removeFile:pluginIndependentItems.count == 0];
         }
         if (pluginIndependentItems.count > 0)
         {
             if (_importDataVC)
-                [_importDataVC onItemsCollected:items];
+                [_importDataVC onItemsCollected:pluginIndependentItems filePath:[_importTask getFile]];
         }
         else if (pluginSettingsItems.count > 0)
         {

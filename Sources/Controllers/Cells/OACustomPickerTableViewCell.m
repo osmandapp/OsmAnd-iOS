@@ -22,6 +22,12 @@
     [super setSelected:selected animated:animated];
 }
 
+- (void)setDataArray:(NSArray<NSString *> *)dataArray
+{
+    _dataArray = dataArray;
+    [self.picker reloadAllComponents];
+}
+
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
     return 1;
@@ -40,7 +46,7 @@
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     if (self.delegate)
-        [self.delegate zoomChanged:self.dataArray[row] tag:pickerView.tag];
+        [self.delegate customPickerValueChanged:self.dataArray[row] tag:pickerView.tag];
 }
 
 @end

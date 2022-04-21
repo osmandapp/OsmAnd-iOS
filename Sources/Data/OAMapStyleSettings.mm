@@ -8,14 +8,12 @@
 
 #import "OAMapStyleSettings.h"
 #import "OsmAndApp.h"
-#import "OALog.h"
 #import "Localization.h"
 #import "OAMapCreatorHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
-#include <OsmAndCore/QKeyValueIterator.h>
 
 @implementation OAMapStyleParameter
 
@@ -141,6 +139,10 @@
 - (void)buildParameters:(NSString *)styleName
 {
     const auto& resolvedMapStyle = [OsmAndApp instance].resourcesManager->mapStylesCollection->getResolvedStyleByName(QString::fromNSString(styleName));
+
+    if (resolvedMapStyle == nullptr)
+        return;
+
     const auto& parameters = resolvedMapStyle->getParameters();
     
     NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary dictionary];
@@ -157,17 +159,19 @@
             [name isEqualToString:@"engine_v1"])
             continue;
 
-        NSString *attrLocKey = [NSString stringWithFormat:@"rendering_attr_%@_name", name];
-        NSString *attrLocText = OALocalizedString(attrLocKey);
-        if ([attrLocKey isEqualToString:attrLocText])
-            attrLocText = p->getTitle().toNSString();
 
         OAMapStyleParameter *param = [[OAMapStyleParameter alloc] init];
         param.mapStyleName = self.mapStyleName;
         param.mapPresetName = self.mapPresetName;
         param.name = name;
-        param.title = attrLocText;
         param.category = p->getCategory().toNSString();
+
+        BOOL isTransport = [param.category isEqualToString:TRANSPORT_CATEGORY];
+        NSString *attrLocKey = [NSString stringWithFormat:@"rendering_attr_%@_name", name];
+        NSString *attrLocText = OALocalizedString(attrLocKey);
+        if ([attrLocKey isEqualToString:attrLocText])
+            attrLocText = p->getTitle().toNSString();
+        param.title = isTransport ? [self getTransportName:param.name] : attrLocText;
 
         if (param.category.length > 0)
         {
@@ -245,6 +249,32 @@
 
     self.parameters = params;
     self.categories = categories;
+}
+
+- (NSString *)getTransportName:(NSString *)name
+{
+    if ([name isEqualToString:@"transportStops"])
+        return OALocalizedString(@"rendering_attr_transportStops_name");
+    else if ([name isEqualToString:@"showBusRoutes"])
+        return OALocalizedString(@"rendering_attr_busRoutes_name");
+    else if ([name isEqualToString:@"showTrolleybusRoutes"])
+        return OALocalizedString(@"rendering_attr_trolleybusRoutes_name");
+    else if ([name isEqualToString:@"subwayMode"])
+        return OALocalizedString(@"rendering_attr_subwayMode_name");
+    else if ([name isEqualToString:@"showShareTaxiRoutes"])
+        return OALocalizedString(@"rendering_attr_shareTaxiRoutes_name");
+    else if ([name isEqualToString:@"showTramRoutes"])
+        return OALocalizedString(@"rendering_attr_tramRoutes_name");
+    else if ([name isEqualToString:@"showTrainRoutes"])
+        return OALocalizedString(@"rendering_attr_trainLightrailRoutes_name");
+    else if ([name isEqualToString:@"showLightRailRoutes"])
+        return OALocalizedString(@"rendering_attr_lightRailRoutes_name");
+    else if ([name isEqualToString:@"showFunicularRoutes"])
+        return OALocalizedString(@"rendering_attr_funicularRoutes_name");
+    else if ([name isEqualToString:@"showMonorailRoutes"])
+        return OALocalizedString(@"rendering_attr_monorailRoutes_name");
+    else
+        return nil;
 }
 
 -(NSArray<OAMapStyleParameter *> *) getAllParameters
@@ -415,6 +445,56 @@
         [keys addObject: mapStyle->name.toNSString()];
     }
     return keys;
+}
+
++ (NSString *)getTransportIconForName:(NSString *)name
+{
+    if ([name isEqualToString:TRANSPORT_STOPS_ATTR])
+        return @"mx_public_transport_stop_position";
+    else if ([name isEqualToString:BUS_ROUTES_ATTR])
+        return @"mx_highway_bus_stop";
+    else if ([name isEqualToString:TROLLEYBUS_ROUTES_ATTR])
+        return @"mx_route_trolleybus_ref";
+    else if ([name isEqualToString:SUBWAY_MODE_ATTR])
+        return @"mx_railway_station_subway_map";
+    else if ([name isEqualToString:SHARE_TAXI_ROUTES_ATTR])
+        return @"mx_route_share_taxi_ref";
+    else if ([name isEqualToString:TRAM_ROUTES_ATTR])
+        return @"mx_railway_tram_stop";
+    else if ([name isEqualToString:TRAIN_ROUTES_ATTR])
+        return @"mx_railway_station";
+    else if ([name isEqualToString:LIGHT_RAIL_ROUTES_ATTR])
+        return @"mx_route_light_rail_ref";
+    else if ([name isEqualToString:FUNICULAR_ROUTES])
+        return @"mx_funicular";
+    else if ([name isEqualToString:MONORAIL_ROUTES_ATTR])
+        return @"mx_route_monorail_ref";
+    else
+        return nil;
+}
+
++ (int)getTransportSortIndexForName:(NSString *)name
+{
+    if ([name isEqualToString:BUS_ROUTES_ATTR])
+        return 1;
+    else if ([name isEqualToString:TROLLEYBUS_ROUTES_ATTR])
+        return 2;
+    else if ([name isEqualToString:SUBWAY_MODE_ATTR])
+        return 3;
+    else if ([name isEqualToString:SHARE_TAXI_ROUTES_ATTR])
+        return 4;
+    else if ([name isEqualToString:TRAM_ROUTES_ATTR])
+        return 5;
+    else if ([name isEqualToString:TRAIN_ROUTES_ATTR])
+        return 6;
+    else if ([name isEqualToString:LIGHT_RAIL_ROUTES_ATTR])
+        return 7;
+    else if ([name isEqualToString:FUNICULAR_ROUTES])
+        return 8;
+    else if ([name isEqualToString:MONORAIL_ROUTES_ATTR])
+        return 9;
+    else
+        return 0;
 }
 
 @end

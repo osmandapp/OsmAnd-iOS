@@ -21,15 +21,33 @@ typedef NS_ENUM(NSInteger, EOAWeatherBand)
     WEATHER_BAND_PRECIPITATION = 5
 };
 
+@class OAMapPresentationEnvironment;
+
 @interface OAWeatherBand : NSObject
 
 @property (nonatomic, readonly) EOAWeatherBand bandIndex;
 
 + (instancetype) withWeatherBand:(EOAWeatherBand)bandIndex;
++ (NSUnit *) getDefaultBandUnit:(EOAWeatherBand)bandIndex;
++ (NSString *) getInternalBandUnit:(EOAWeatherBand)bandIndex;
 
 - (BOOL) isBandVisible;
+- (NSUnit *) getBandUnit;
+- (BOOL) setBandUnit:(NSUnit *)unit;
+- (BOOL) isBandUnitAuto;
+- (void) setBandUnitAuto:(BOOL)unitAuto;
+- (NSString *)getIcon;
+- (NSString *)getMeasurementName;
+- (NSString *) getBandGeneralUnitFormat;
+- (NSString *) getBandPreciseUnitFormat;
+- (NSUnit *) getDefaultBandUnit;
+- (NSString *) getInternalBandUnit;
+- (NSArray<NSUnit *> *) getAvailableBandUnits;
 - (double) getBandOpacity;
 - (NSString *) getColorFilePath;
+- (NSString *) getContourStyleName;
+- (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) getContourLevels:(OAMapPresentationEnvironment *)mapPresentationEnvironment;
+- (NSDictionary<NSNumber *, NSArray<NSString *> *> *) getContourTypes:(OAMapPresentationEnvironment *)mapPresentationEnvironment;
 
 - (OAAutoObserverProxy *) createSwitchObserver:(id)owner handler:(SEL)handler;
 - (OAAutoObserverProxy *) createAlphaObserver:(id)owner handler:(SEL)handler;

@@ -8,7 +8,6 @@
 
 #import "OAPlugin.h"
 #import "OsmAndApp.h"
-#import "OAAppSettings.h"
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
@@ -19,8 +18,6 @@
 #import "OACustomPlugin.h"
 #import "OAPluginInstalledViewController.h"
 #import "OAResourcesBaseViewController.h"
-#import "OARootViewController.h"
-
 #import "OAMonitoringPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmEditingPlugin.h"
@@ -31,6 +28,7 @@
 #import "OAWikipediaPlugin.h"
 #import "OAPOIUIFilter.h"
 #import "OAOpenPlaceReviews.h"
+#import "OAWeatherPlugin.h"
 
 @implementation OAPlugin
 {
@@ -179,8 +177,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 
 - (void) showInstalledScreen
 {
-    OAPluginInstalledViewController *pluginInstalled = [[OAPluginInstalledViewController alloc] initWithPluginId:self.getId];
-    [OARootViewController.instance presentViewController:pluginInstalled animated:YES completion:nil];
+    if ([OAPlugin getPluginById:self.getId])
+    {
+        OAPluginInstalledViewController *pluginInstalled = [[OAPluginInstalledViewController alloc] initWithPluginId:self.getId];
+        [OARootViewController.instance presentViewController:pluginInstalled animated:YES completion:nil];
+    }
 }
 
 /**
@@ -293,6 +294,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
     [allPlugins addObject:[[OAOpenPlaceReviews alloc] init]];
     [allPlugins addObject:[[OAMapillaryPlugin alloc] init]];
+    [allPlugins addObject:[[OAWeatherPlugin alloc] init]];
 
     [self loadCustomPlugins];
     [self enablePluginsByDefault:enabledPlugins];

@@ -347,6 +347,17 @@ typedef NS_ENUM(NSInteger, EOACoordinateInputFormats)
 
 @end
 
+@interface OACommonUnit : OACommonPreference
+
++ (instancetype) withKey:(NSString *)key defValue:(NSUnit *)defValue;
+
+- (NSUnit *) get;
+- (void) set:(NSUnit *)string;
+- (NSUnit *) get:(OAApplicationMode *)mode;
+- (void) set:(NSUnit *)string mode:(OAApplicationMode *)mode;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOATerrainType)
 {
     EOATerrainTypeDisabled = 0,
@@ -944,6 +955,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonBoolean *inappsRead;
 
+// Cloud backup
 @property (nonatomic) OACommonString *backupUserEmail;
 @property (nonatomic) OACommonString *backupUserId;
 @property (nonatomic) OACommonString *backupDeviceId;
@@ -951,8 +963,16 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *backupAccessToken;
 @property (nonatomic) OACommonString *backupAccessTokenUpdateTime;
 
+@property (nonatomic) OACommonString *backupPromocode;
+@property (nonatomic) OACommonBoolean *backupPromocodeActive;
+@property (nonatomic) OACommonLong *backupPromocodeStartTime;
+@property (nonatomic) OACommonLong *backupPromocodeExpireTime;
+@property (nonatomic) OACommonInteger *backupPromocodeState;
+
 @property (nonatomic) OACommonLong *favoritesLastUploadedTime;
 @property (nonatomic) OACommonLong *backupLastUploadedTime;
+
+@property (nonatomic) OACommonString *userIosId;
 
 @property (nonatomic) OACommonString *userOsmBugName;
 

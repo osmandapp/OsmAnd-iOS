@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OAWeatherBand.h"
+#import "OAMapPresentationEnvironment.h"
 
 #include <OsmAndCore/stdlib_common.h>
 #include <functional>
@@ -16,22 +17,28 @@
 #include <QString>
 #include <QHash>
 #include <QList>
+#include <QStringList>
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Map/GeoCommonTypes.h>
+#include <OsmAndCore/Map/GeoBandSettings.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OAWeatherHelper : NSObject
 
 @property (nonatomic, readonly) NSArray<OAWeatherBand *> *bands;
+@property (nonatomic, readonly) OAMapPresentationEnvironment *mapPresentationEnvironment;
 
 + (OAWeatherHelper *) sharedInstance;
 
+- (void) updateMapPresentationEnvironment:(OAMapPresentationEnvironment *)mapPresentationEnvironment;
+
 - (QList<OsmAnd::BandIndex>) getVisibleBands;
-- (QHash<OsmAnd::BandIndex, float>) getBandOpacityMap;
-- (QHash<OsmAnd::BandIndex, QString>) getBandColorProfilePaths;
+- (QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>>) getBandSettings;
+
+- (void) calculateCacheSize:(void (^)(unsigned long long geoDbSize, unsigned long long rasterDbSize))completion;
 
 @end
 

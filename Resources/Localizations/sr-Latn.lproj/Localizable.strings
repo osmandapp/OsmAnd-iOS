@@ -48,7 +48,7 @@
 "transport_routes" = "Putevi";
 "transport_nearby_routes_within" = "Prevoz u blizini";
 "transport_nearby_routes" = "Blizu";
-"transport_stop" = "Stanica";
+"transport_stop" = "Zaustavi";
 
 "cancel_navigation" = "Zaustavi navođenje";
 "start_navigation" = "Start navigation";
@@ -708,7 +708,7 @@
 "m_style_car" = "Vožnja";
 "m_style_walk" = "Pešačenje";
 "m_style_bicycle" = "Bicikla";
-"m_style_pulic_transport" = "Javni saobraćaj";
+"m_style_pulic_transport" = "Javni prevoz";
 
 "map_settings_map" = "Karta";
 "layer_amenity_label" = "Nazivi tačaka od interesa na sloju iznad";
@@ -815,7 +815,7 @@
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Preslovi imena";
 
-"lang_af" = "Afrikaan";
+"lang_af" = "Afrikans";
 "lang_al" = "Albanski";
 "lang_als" = "Albanski (toskijski)";
 "lang_an" = "Aragonski";
@@ -1074,7 +1074,7 @@
 "point_num" = "Point %d";
 "points_count" = "Points:";
 "route_betw_points" = "Ruta između tačaka";
-"save_changes" = "Sačuvaj izmene";
+"save_changes" = "Snimite izmene";
 "save_new_track" = "Sačuvaj kao novu stazu";
 "add_to_track" = "Dodajte stazi";
 "move_point" = "Move point";
@@ -1288,7 +1288,7 @@
 "population_num" = "Population";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"osm_poi_delete_title" = "Obriši tačku od interesa";
+"osm_poi_delete_title" = "Brisanje POI";
 "osm_target_modified" = "Izmenjene OSM tačke od interesa";
 "osm_target_deleted" = "Izbrisane OSM tačke od interesa";
 "osm_target_created" = "OSM tačka od interesa je napravljena";
@@ -1377,7 +1377,7 @@
 "add_map_style" = "Add map style";
 "map_sources" = "Dodaj izvor karte";
 "map_styles" = "Stilovi karte";
-"add_action" = "Dodaj akciju";
+"add_action" = "Dodaj radnju";
 "unsupported_items" = "Unsupported items";
 "create_items" = "Napravi stavke";
 "configure_map" = "Podesi kartu";
@@ -1546,7 +1546,7 @@
 "units_mph" = "mph";
 
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "min.";
 "units_sec" = "sek";
 "units_sec_short" = "s";
 
@@ -1591,7 +1591,7 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "Omiljeno";
+"import_favorite" = "Omiljena";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -2396,8 +2396,8 @@
 
 //Icon categories
 "amenity" = "Ameniti";
-"emergency" = "Prva pomoć";
-"service" = "Pristupni put";
+"emergency" = "Hitna pomoć";
+"service" = "Usluga";
 "special" = "Special";
 "sport" = "Sport";
 "symbols" = "Simboli";
@@ -2483,3 +2483,18 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"user_login" = "Prijavite se";
+"shared_string_any" = "Bilo koji";
+"login_error_email_invalid" = "Molimo unesite ispravnu adresu e-pošte";
+"context_menu_edit_descr" = "Izmeni opis";
+"cloud_existing_account" = "Već imam";
+"save_heading" = "Uključi zaglavlje";
+"units_min_short" = "m";
+"register_opr_create_new_account" = "Napravite novi nalog";
+"add_description" = "Dodaj opis";
+"customize_route_line" = "Prilagodi liniju rute";
+"navigate_point_format_MGRS" = "MGRS";
+"weather_wind_unit_km_per_hour" = "Kilometara na sat";
+"weather_wind_unit_mi_per_hour" = "Milja na sat";
+"points_delete_multiple" = "Da li ste sigurni daželite da izbrišete %d tačku(i)\?";
+"altitude" = "Nadmorska visina";

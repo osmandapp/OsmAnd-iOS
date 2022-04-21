@@ -88,7 +88,7 @@
 
     NSString *path = [self.filesDir stringByAppendingPathComponent:fileName];
     NSError *error;
-    [[NSFileManager defaultManager] moveItemAtPath:filePath toPath:path error:&error];
+    [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:path error:&error];
     if (error)
     {
         OALog(@"Failed installation MapCreator db file: %@", filePath);
@@ -99,8 +99,9 @@
         [tmp setObject:path forKey:fileName];
         _files = [NSDictionary dictionaryWithDictionary:tmp];
     }
-    
-    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+
+    [OAUtilities denyAccessToFile:filePath removeFromInbox:YES];
+
     [self applyExcludedFromBackup:path];
     
     if (error)

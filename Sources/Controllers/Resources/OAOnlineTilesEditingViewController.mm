@@ -450,7 +450,7 @@
         && [_expireTimeMinutes integerValue] <= kMaxExpireMin
         && [_expireTimeMinutes integerValue] >= 0)
     {
-        if ([_expireTimeMinutes isEqualToString:@""])
+        if ([_expireTimeMinutes isEqualToString:@""] || [_expireTimeMinutes integerValue] == 0)
             _expireTimeMillis = -1;
         else
             _expireTimeMillis = [_expireTimeMinutes integerValue] * 60 * 1000;
@@ -479,6 +479,7 @@
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self clearAndUpdateSource];
+                [self refreshLoadedLayersIfNeeded];
             }]];
             [self presentViewController:alert animated:YES completion:nil];
         }
@@ -492,9 +493,43 @@
             {
                 [self updateSqliteSource];
             }
+            [self refreshLoadedLayersIfNeeded];
         }
+        
         _baseController.dataInvalidated = YES;
         [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+- (void) refreshLoadedLayersIfNeeded
+{
+    NSString *currentFile;
+    NSString *overlayFile;
+    NSString *underlayFile;
+    
+    if (_sourceFormat == EOASourceFormatOnline && _tileSource)
+    {
+        currentFile = [_tileSource->name.toNSString() lastPathComponent];
+        if (_app.data.overlayMapSource)
+            overlayFile = [_app.data.overlayMapSource.name lastPathComponent];
+        if (_app.data.underlayMapSource)
+            underlayFile = [_app.data.underlayMapSource.name lastPathComponent];
+    }
+    else if (_sourceFormat == EOASourceFormatSQLite && _sqliteSource)
+    {
+        currentFile = [[_sqliteSource getFilePath] lastPathComponent];
+        if (_app.data.overlayMapSource)
+            overlayFile = [_app.data.overlayMapSource.resourceId lastPathComponent];
+        if (_app.data.overlayMapSource)
+            underlayFile = [_app.data.underlayMapSource.resourceId lastPathComponent];
+    }
+    
+    if (currentFile)
+    {
+        if (overlayFile && [overlayFile isEqualToString:currentFile])
+            _app.data.overlayMapSource = _app.data.overlayMapSource;
+        if (underlayFile && [underlayFile isEqualToString:currentFile])
+            _app.data.underlayMapSource = _app.data.underlayMapSource;
     }
 }
 
@@ -963,12 +998,12 @@
 
 #pragma mark - OACustomPickerTableViewCellDelegate
 
-- (void)zoomChanged:(NSString *)zoom tag: (NSInteger)pickerTag
+- (void)customPickerValueChanged:(NSString *)value tag: (NSInteger)pickerTag
 {
     if (pickerTag == 1)
-        _minZoom = [zoom intValue];
+        _minZoom = [value intValue];
     else if (pickerTag == 2)
-        _maxZoom = [zoom intValue];
+        _maxZoom = [value intValue];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
 }
 

@@ -68,40 +68,65 @@ typedef NS_ENUM(NSInteger, EOAXmlFileType) {
     {
         NSString *newPath = [path.stringByDeletingPathExtension stringByAppendingPathExtension:newExt];
         [fileManager moveItemAtPath:path toPath:newPath error:nil];
+
+        [OAUtilities denyAccessToFile:path removeFromInbox:NO];
+        if (![OAUtilities getAccessToFile:newPath])
+        {
+            [OARootViewController showInfoAlertWithTitle:OALocalizedString(@"import_failed")
+                                                 message:OALocalizedString(@"import_cannot")
+                                            inController:OARootViewController.instance];
+            return;
+        }
+
         [OARootViewController.instance importAsGPX:[NSURL fileURLWithPath:newPath] showAlerts:YES openGpxView:YES];
         return;
     }
     NSString *destPath = self.getDestinationFilePath;
-    switch (_fileType)
+    if ([path isEqualToString:destPath])
     {
-        case EOAXmlFileTypeRendering:
-        case EOAXmlFileTypeRouting:
+        [OAUtilities denyAccessToFile:destPath removeFromInbox:NO];
+
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"obf_import_already_exists_short") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        }]];
+        [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    }
+    else
+    {
+        switch (_fileType)
         {
-            BOOL fileExists = [fileManager fileExistsAtPath:destPath];
-            if (fileExists)
+            case EOAXmlFileTypeRendering:
+            case EOAXmlFileTypeRouting:
             {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"obf_import_already_exists") preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                }]];
-                
-                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"fav_replace") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                BOOL fileExists = [fileManager fileExistsAtPath:destPath];
+                if (fileExists)
+                {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"obf_import_already_exists") preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                        [OAUtilities denyAccessToFile:destPath removeFromInbox:YES];
+                    }]];
+                    
+                    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"fav_replace") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        [self doImport:path destPath:destPath];
+                    }]];
+                    
+                    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"gpx_add_new") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        [self doImport:path destPath:[self getNewPath:destPath]];
+                    }]];
+                    
+                    [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+                }
+                else
+                {
                     [self doImport:path destPath:destPath];
-                }]];
-                
-                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"gpx_add_new") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    [self doImport:path destPath:[self getNewPath:destPath]];
-                }]];
-                
-                [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+                }
+                break;
             }
-            else
+            default:
             {
-                [self doImport:path destPath:destPath];
+                [OAUtilities denyAccessToFile:destPath removeFromInbox:YES];
+                NSLog(@"Could not import: %@", destPath);
             }
-        }
-        default:
-        {
-            NSLog(@"Could not import: %@", destPath);
         }
     }
 }

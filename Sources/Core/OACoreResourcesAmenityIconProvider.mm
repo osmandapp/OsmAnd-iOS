@@ -120,6 +120,6 @@ QString OACoreResourcesAmenityIconProvider::getCaption(
     const std::shared_ptr<const OsmAnd::Amenity>& amenity,
     const OsmAnd::ZoomLevel zoomLevel) const
 {
-    return showCaptions && zoomLevel > OsmAnd::ZoomLevel9 ? amenity->getName(lang, transliterate) : QString::null;
+    return showCaptions && zoomLevel > OsmAnd::ZoomLevel10 ? amenity->getName(lang, transliterate) : QString::null;
 }
 

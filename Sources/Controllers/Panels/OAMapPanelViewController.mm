@@ -15,7 +15,6 @@
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
 #import "OAIAPHelper.h"
-#import "OAGPXItemViewController.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
 #import "OADestinationCardsViewController.h"
@@ -62,8 +61,6 @@
 #import "Localization.h"
 #import "OAAppSettings.h"
 #import "OASavingTrackHelper.h"
-#import "PXAlertView.h"
-#import "OATrackIntervalDialogView.h"
 #import "OAParkingViewController.h"
 #import "OAFavoriteViewController.h"
 #import "OAPOIViewController.h"
@@ -101,6 +98,7 @@
 #import "OAPOIUIFilter.h"
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
+#import "OAOpenAddTrackViewController.h"
 
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
@@ -119,7 +117,7 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener, OAGpxWptEditingHandlerDelegate>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener, OAGpxWptEditingHandlerDelegate, OAOpenAddTrackDelegate>
 
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
@@ -866,14 +864,26 @@ typedef enum
 
 - (void) showMapStylesScreen
 {
-    [OAAnalyticsHelper logEvent:@"configure_map_styles_open"];
+    [self showMapSettingsScreen:EMapSettingsScreenMapType logEvent:@"configure_map_styles_open"];
+}
+
+- (void) showWeatherLayersScreen
+{
+    [self showMapSettingsScreen:EMapSettingsScreenWeather logEvent:nil];
+
+}
+
+- (void)showMapSettingsScreen:(EMapSettingsScreen)screen logEvent:(nullable NSString *)event
+{
+    if (event)
+        [OAAnalyticsHelper logEvent:event];
     
     _targetAppMode = nil;
     _reopenSettings = _targetAppMode != nil;
     
     [self removeGestureRecognizers];
     
-    _dashboard = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType];
+    _dashboard = [[OAMapSettingsViewController alloc] initWithSettingsScreen:screen];
     [_dashboard show:self parentViewController:nil animated:YES];
     
     [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
@@ -1846,52 +1856,9 @@ typedef enum
             }
             return;
         }
-        
-        [names insertObject:OALocalizedString(@"gpx_curr_new_track") atIndex:0];
-        [paths insertObject:@"" atIndex:0];
-        
-        if (names.count > 5)
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_select_track") cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")] otherButtonItems: nil];
-            
-            for (int i = 0; i < names.count; i++)
-            {
-                NSString *name = names[i];
-                [alert addButtonItem:[RIButtonItem itemWithLabel:name action:^{
-                    NSString *gpxFileName = paths[i];
-                    if (gpxFileName.length == 0)
-                        gpxFileName = nil;
-                    
-                    [self targetPointAddWaypoint:gpxFileName];
-                }]];
-            }
-            [alert show];
-        }
-        else
-        {
-            NSMutableArray *images = [NSMutableArray array];
-            for (int i = 0; i < names.count; i++)
-                [images addObject:@"icon_info"];
-            
-            [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_select_track")
-                                    message:nil
-                                cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                otherTitles:names
-                                  otherDesc:nil
-                                otherImages:images
-                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                     if (!cancelled)
-                                     {
-                                         NSInteger trackId = buttonIndex;
-                                         NSString *gpxFileName = paths[trackId];
-                                         if (gpxFileName.length == 0)
-                                             gpxFileName = nil;
-                                         
-                                         [self targetPointAddWaypoint:gpxFileName];
-                                     }
-                                 }];
-        }
-        
+        OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAOpenExistingTrack];
+        saveTrackViewController.delegate = self;
+        [self presentViewController:saveTrackViewController animated:YES completion:nil];
     }
     else
     {
@@ -3830,6 +3797,8 @@ typedef enum
         if (onComplete)
             onComplete();
     }];
+    if (_routingHelper.isFollowingMode)
+        [self startNavigation];
 }
 
 #pragma mark - OAGpxWptEditingHandlerDelegate
@@ -3875,6 +3844,21 @@ typedef enum
     {
         [OAGPXDocument fillWpt:gpxWptItem.point.wpt usingWpt:gpxWptItem.point];
         [_mapViewController saveFoundWpt];
+    }
+}
+
+#pragma mark - OAOpenAddTrackDelegate
+
+- (void)closeBottomSheet
+{
+}
+
+- (void)onFileSelected:(NSString *)gpxFileName
+{
+    if (gpxFileName && gpxFileName.length > 0)
+    {
+        NSString *fullPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFileName];
+        [self targetPointAddWaypoint:fullPath];
     }
 }
 

@@ -51,7 +51,9 @@
 #import "OAColors.h"
 #import "OASubscriptionCancelViewController.h"
 #import "OARouteStatistics.h"
+#import "OAMapRendererEnvironment.h"
 #import "OAMapPresentationEnvironment.h"
+#import "OAWeatherHelper.h"
 
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -62,6 +64,7 @@
 
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
+#import "OAAppVersionDependentConstants.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
@@ -73,6 +76,7 @@
 
 #include <QtMath>
 #include <QStandardPaths>
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -96,6 +100,7 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/TileSqliteDatabasesCollection.h>
 #include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
+#include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
@@ -160,9 +165,9 @@
     std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
     std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProvider;
 
-    OACurrentPositionHelper *_currentPositionHelper;
-    
     std::shared_ptr<OsmAnd::ObfDataInterface> _obfsDataInterface;
+
+    OACurrentPositionHelper *_currentPositionHelper;
 
     OAAutoObserverProxy* _dayNightModeObserver;
     OAAutoObserverProxy* _mapSettingsChangeObserver;
@@ -983,6 +988,88 @@
     [recognizer setTranslation:CGPointZero inView:self.view];
 }
 
+- (void) carPlayMoveGestureDetected:(UIGestureRecognizerState)state
+                    numberOfTouches:(NSInteger)numberOfTouches
+                        translation:(CGPoint)translation
+                           velocity:(CGPoint)screenVelocity
+{
+    // Ignore gesture if we have no view
+    if (!self.mapViewLoaded)
+        return;
+
+    if (state == UIGestureRecognizerStateBegan && numberOfTouches > 0)
+    {
+        // Suspend symbols update
+        while (![_mapView suspendSymbolsUpdate]);
+    }
+    
+    // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
+    translation.x *= _mapView.contentScaleFactor;
+    translation.y *= _mapView.contentScaleFactor;
+
+    // Take into account current azimuth and reproject to map space (points)
+    const float angle = qDegreesToRadians(_mapView.azimuth);
+    const float cosAngle = cosf(angle);
+    const float sinAngle = sinf(angle);
+    CGPoint translationInMapSpace;
+    translationInMapSpace.x = translation.x * cosAngle - translation.y * sinAngle;
+    translationInMapSpace.y = translation.x * sinAngle + translation.y * cosAngle;
+
+    // Taking into account current zoom, get how many 31-coordinates there are in 1 point
+    const uint32_t tileSize31 = (1u << (31 - _mapView.zoomLevel));
+    const double scale31 = static_cast<double>(tileSize31) / _mapView.currentTileSizeOnScreenInPixels;
+
+    // Rescale movement to 31 coordinates
+    OsmAnd::PointI target31 = _mapView.target31;
+    target31.x -= static_cast<int32_t>(round(translationInMapSpace.x * scale31));
+    target31.y -= static_cast<int32_t>(round(translationInMapSpace.y * scale31));
+    _mapView.target31 = target31;
+    
+    if (state == UIGestureRecognizerStateEnded ||
+        state == UIGestureRecognizerStateCancelled)
+    {
+        [self restoreMapArrowsLocation];
+        // Resume symbols update
+        while (![_mapView resumeSymbolsUpdate]);
+        _movingByGesture = NO;
+    }
+    else
+    {
+        _movingByGesture = YES;
+    }
+
+    if (state == UIGestureRecognizerStateEnded)
+    {
+        if (screenVelocity.x > 0)
+            screenVelocity.x = MIN(screenVelocity.x, kTargetMoveVelocityLimit);
+        else
+            screenVelocity.x = MAX(screenVelocity.x, -kTargetMoveVelocityLimit);
+        
+        if (screenVelocity.y > 0)
+            screenVelocity.y = MIN(screenVelocity.y, kTargetMoveVelocityLimit);
+        else
+            screenVelocity.y = MAX(screenVelocity.y, -kTargetMoveVelocityLimit);
+        
+        screenVelocity.x *= _mapView.contentScaleFactor;
+        screenVelocity.y *= _mapView.contentScaleFactor;
+
+        // Take into account current azimuth and reproject to map space (points)
+        CGPoint velocityInMapSpace;
+        velocityInMapSpace.x = screenVelocity.x * cosAngle - screenVelocity.y * sinAngle;
+        velocityInMapSpace.y = screenVelocity.x * sinAngle + screenVelocity.y * cosAngle;
+        
+        // Rescale speed to 31 coordinates
+        OsmAnd::PointD velocity;
+        velocity.x = -velocityInMapSpace.x * scale31;
+        velocity.y = -velocityInMapSpace.y * scale31;
+        
+        _mapView.animator->animateTargetWith(velocity,
+                                            OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31),
+                                            kUserInteractionAnimationKey);
+        _mapView.animator->resume();
+    }
+}
+
 - (void) rotateGestureDetected:(UIRotationGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
@@ -1652,8 +1739,8 @@
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         const auto screenTileSize = 256 * self.displayDensityFactor;
-        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode.get]);
-        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode.get]);
+        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get]);
+        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get]);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
         // Set reference tile size on the screen
@@ -1669,6 +1756,7 @@
         _mapPrimitivesProvider.reset();
         _mapPresentationEnvironment.reset();
         _mapPrimitiviser.reset();
+        [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:nil];
 
         if (_mapObjectsSymbolsProvider)
             [_mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProvider];
@@ -1745,7 +1833,7 @@
             else if (settings.settingMapLanguageShowLocal &&
                      settings.settingMapLanguageTranslit.get)
                 langId = @"en";
-            double mapDensity = [settings.mapDensity get:settings.applicationMode.get];
+            double mapDensity = [settings.mapDensity get];
             [_mapView setVisualZoomShift:mapDensity];
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
@@ -1753,7 +1841,7 @@
                                                                                      [settings.textSize get:settings.applicationMode.get],
                                                                                      QString::fromNSString(langId),
                                                                                      langPreferences));
-            
+            [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:self.mapPresentationEnv];
             
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
             _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,
@@ -1802,13 +1890,14 @@
                     _mapPresentationEnvironment->setSettings(newSettings);
             }
         
-          _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
-            [_mapView setProvider:_rasterMapProvider
-                        forLayer:0];
+            _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
+            [_mapView setProvider:_rasterMapProvider forLayer:0];
 
             _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
                                                                                    rasterTileSize));
             [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
+            
+            _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
         }
         else if (resourceType == OsmAndResourceType::OnlineTileSources || mapCreatorFilePath)
         {
@@ -1910,7 +1999,6 @@
             return;
         }
 
-        
         [_mapLayers updateLayers];
 
         if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
@@ -2513,7 +2601,7 @@
                         }
                     }
                 
-                doc->saveTo(QString::fromNSString(self.foundWptDocPath));
+                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
                 [[OAGPXDatabase sharedDb] save];
@@ -2573,7 +2661,7 @@
                     }
                 }
                 
-                doc->saveTo(QString::fromNSString(self.foundWptDocPath));
+                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -2628,7 +2716,7 @@
                 [OAGPXDocument fillWpt:p usingWpt:wpt];
                 
                 doc->points.append(p);
-                doc->saveTo(QString::fromNSString(gpxFileName));
+                doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
                 wpt.wpt = p;
                 self.foundWpt = wpt;
@@ -2664,7 +2752,7 @@
             [OAGPXDocument fillWpt:p usingWpt:wpt];
             
             doc->points.append(p);
-            doc->saveTo(QString::fromNSString(gpxFileName));
+            doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
             
             wpt.wpt = p;
             self.foundWpt = wpt;
@@ -2750,7 +2838,7 @@
             
             if (found)
             {
-                doc->saveTo(QString::fromNSString(docPath));
+                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
                 // update map
                 if (updateMap)
@@ -2788,7 +2876,7 @@
         
         if (found)
         {
-            doc->saveTo(QString::fromNSString(docPath));
+            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
             
             // update map
             if (updateMap)
@@ -2828,7 +2916,7 @@
             _selectedGpxHelper.activeGpx.remove(QString::fromNSString(oldPath));
             _selectedGpxHelper.activeGpx[QString::fromNSString(docPath)] = doc;
             
-            doc->saveTo(QString::fromNSString(docPath));
+            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
             
             return YES;
         }
@@ -2848,7 +2936,7 @@
 
         [OAGPXDocument fillMetadata:m usingMetadata:metadata];
         
-        doc->saveTo(QString::fromNSString(docPath));
+        doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
         
         return YES;
     }
@@ -2900,7 +2988,7 @@
             
             if (found)
             {
-                doc->saveTo(QString::fromNSString(docPath));
+                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
 
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
                 [[OAGPXDatabase sharedDb] save];
@@ -2936,7 +3024,7 @@
         
         if (found)
         {
-            doc->saveTo(QString::fromNSString(docPath));
+            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
 
             [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
             [[OAGPXDatabase sharedDb] save];
@@ -3145,6 +3233,16 @@
     {
         [_mapLayers.routeMapLayer resetLayer];
     }
+}
+
+- (OAMapRendererEnvironment *)mapRendererEnv
+{
+    return [[OAMapRendererEnvironment alloc] initWithObjects:_obfMapObjectsProvider
+                                  mapPresentationEnvironment:_mapPresentationEnvironment
+                                             mapPrimitiviser:_mapPrimitiviser
+                                       mapPrimitivesProvider:_mapPrimitivesProvider
+                                   mapObjectsSymbolsProvider:_mapObjectsSymbolsProvider
+                                           obfsDataInterface:_obfsDataInterface];
 }
 
 - (OAMapPresentationEnvironment *)mapPresentationEnv

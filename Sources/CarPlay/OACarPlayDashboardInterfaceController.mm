@@ -90,13 +90,21 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 - (void) present
 {
     // Dismiss any previous navigation
-    [self stopNavigation];
+    
+    [[OARootViewController instance].mapPanel closeRouteInfo];
     
     _mapTemplate = [[CPMapTemplate alloc] init];
     _mapTemplate.mapDelegate = self;
     [self enterBrowsingState];
     
     [self.interfaceController setRootTemplate:_mapTemplate animated:YES];
+    
+    OARouteCalculationResult *route = [_routingHelper getRoute];
+    CLLocation * start = _routingHelper.getLastFixedLocation;
+    if (route && start && _routingHelper.isRouteCalculated)
+    {
+        [self enterRoutePreviewMode];
+    }
 }
 
 - (void) enterBrowsingState
@@ -318,6 +326,29 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     _navigationSession = [_mapTemplate startNavigationSessionForTrip:trip];
     [[OARootViewController instance].mapPanel startNavigation];
+}
+
+- (void)mapTemplateDidBeginPanGesture:(CPMapTemplate *)mapTemplate
+{
+    [self postMapGestureAction];
+    [[OARootViewController instance].mapPanel.mapViewController carPlayMoveGestureDetected:UIGestureRecognizerStateBegan numberOfTouches:1 translation:CGPointZero velocity:CGPointZero];
+}
+
+- (void)mapTemplate:(CPMapTemplate *)mapTemplate didUpdatePanGestureWithTranslation:(CGPoint)translation velocity:(CGPoint)velocity
+{
+    [[OARootViewController instance].mapPanel.mapViewController carPlayMoveGestureDetected:UIGestureRecognizerStateChanged numberOfTouches:1 translation:translation velocity:velocity];
+}
+
+- (void)mapTemplate:(CPMapTemplate *)mapTemplate didEndPanGestureWithVelocity:(CGPoint)velocity
+{
+    [[OARootViewController instance].mapPanel.mapViewController carPlayMoveGestureDetected:UIGestureRecognizerStateEnded numberOfTouches:1 translation:CGPointZero velocity:velocity];
+}
+
+- (void) postMapGestureAction
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMapGestureAction
+                                                        object:[OARootViewController instance].mapPanel.mapViewController
+                                                      userInfo:nil];
 }
 
 // MARK: - OARouteInformationListener

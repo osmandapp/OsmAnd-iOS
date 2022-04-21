@@ -41,7 +41,7 @@
 "transport_routes" = "Maršruti";
 "transport_nearby_routes_within" = "Tuvākie iekļaujošie maršruti";
 "transport_nearby_routes" = "Iekļaujošie";
-"transport_stop" = "Pietura";
+"transport_stop" = "Izslēgt";
 "cancel_navigation" = "Apturēt navigāciju";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Kārtot pēc attāluma";
@@ -95,7 +95,7 @@
 "animate_routing_route_not_calculated" = "Lūdzu, vispirms aprēķiniet maršrutu";
 "settings_preset" = "Noklusētais profils";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
-"dialogs_and_notifications" = "Dialogs and notifications";
+"dialogs_and_notifications" = "Dialogi un paziņojumi";
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Izvēlieties noklusēto profilu (iestatījumi tiek saglabāti katrā profilā atsevišķi).";
 "unit_of_length" = "Garuma mērvienības";
@@ -150,7 +150,7 @@
 "map_widget_appearance_rem" = "Pārējie elementi";
 "map_widget_compass" = "Kompass";
 "map_widget_intermediate_distance" = "Starpposmu punkti";
-"map_widget_distance" = "Mērķis";
+"map_widget_distance" = "Galamērķis";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Augstums";
 "map_widget_battery" = "Baterijas līmenis";
@@ -413,7 +413,7 @@
 "units_m_s" = "m/s";
 "tones" = "tones";
 "nothing_found" = "Nothing found: %@";
-"nothing_found_empty" = "Neko neatrada";
+"nothing_found_empty" = "Nekas netika atrasts";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Izvēlieties ielu";
 "shared_string_in_name" = "%@";
@@ -582,7 +582,7 @@
 "poi_hide" = "Paslēpt";
 
 // My Places
-"favorites" = "Izlase";
+"favorites" = "Mana izlase";
 "tracks" = "Treki";
 "personal_category_name" = "Personal";
 "visible" = "Redzams";
@@ -596,7 +596,7 @@
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Maršruta punkti";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Import tracks";
+"gpx_import_title" = "Importēt trekus";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -714,7 +714,7 @@
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 "settings_app_theme" = "Application theme";
-"app_theme_light" = "Gaiši";
+"app_theme_light" = "Gaišs";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
@@ -728,7 +728,7 @@
 // Intro
 "intro_skip" = "Izlaist";
 "intro_download" = "Download\nmap";
-"intro_next" = "Tālāk";
+"intro_next" = "Nākošais";
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global offline maps";
 "intro_placeholder" = "enter the name of your region";
@@ -740,7 +740,7 @@
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
-"sett_show" = "Rādīt";
+"sett_show" = "Parādīt";
 "sett_notshow" = "Don't show";
 "sett_deg180" = "Degrees 180";
 "sett_deg360" = "Degrees 360";
@@ -769,7 +769,7 @@
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Transliterēt vārdus";
-"lang_af" = "Afrikaan";
+"lang_af" = "Āfrikāņu";
 "lang_al" = "Albāņu";
 "lang_als" = "Albāņu (tosku)";
 "lang_an" = "Aragonese";
@@ -984,7 +984,7 @@
 "not_available_profile_name" = "Profile with this name already exists.";
 "profile_type_base_string" = "Bāzes profils";
 "selected_profile" = "Izvēlētais profils";
-"app_profiles" = "Lietotāja režīmi";
+"app_profiles" = "Lietotnes profili";
 "profile_sett_descr" = "Affect selected application profile";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
@@ -1456,7 +1456,7 @@
 "modify_edit_short" = "Rediģēt POI";
 "open_osm_note" = "Atvērt OSM piezīmi";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Apvienot";
+"osm_alert_title" = "Iesniegt";
 "osm_alert_message" = "Ziņa";
 "osm_alert_button_ok" = "Izveidot piezīmi";
 "modify_poi" = "Modify the POI information";
@@ -1482,7 +1482,7 @@
 "units_km_h" = "km/h";
 "units_mph" = "mil/h";
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "min.";
 "units_sec" = "sec";
 "units_sec_short" = "s";
 "units_t" = "t";
@@ -1499,7 +1499,7 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Ceļojuma plānošana";
 "help_nav_profiles" = "Navigation profiles";
-"help_purchases" = "OsmAnd purchases";
+"help_purchases" = "OsmAnd pirkumi";
 "help_osmand_live" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
 "help_mapillary" = "OsmAnd + Mapillary";
@@ -1666,7 +1666,7 @@
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"product_title_srtm" = "Kontūrlīniju spraudnis";
+"product_title_srtm" = "Kontūrlīnijas";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "product_title_wikivoyage" = "Ceļojumu gids";
@@ -1689,7 +1689,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Ceļi";
-"res_srtm" = "Kontūrlīniju spraudnis";
+"res_srtm" = "Kontūrlīnijas";
 "res_wiki" = "Vikipēdija";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Slīpums";
@@ -1773,7 +1773,7 @@
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
-"plugins" = "Spraudņi";
+"plugins" = "Spraudņu pārvaldnieks";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -2266,11 +2266,11 @@
 "weight_limit_description" = "Norādiet transportlīdzekļa svaru, smagākiem transportlīdzekļiem var tik piemēroti maršruta ierobežojumi.";
 "height_limit_description" = "Norādiet transportlīdzekļa augstumu, augstākiem transportlīdzekļiem var tik piemēroti maršruta ierobežojumi.";
 "lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
-"width_limit_description" = "Norādiet transportlīdzekļa platumu, platākiem  transportlīdzekļiem var tikt piemēroti maršruta ierobežojumi.";
+"width_limit_description" = "\"Norādiet transportlīdzekļa platumu, platākiem  transportlīdzekļiem var tikt piemēroti maršruta ierobežojumi.\"";
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
-"default" = "Standarta";
+"default" = "Pēc noklusējuma";
 
 
 //Icon categories
@@ -2325,3 +2325,23 @@
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "units_min_short" = "m";
+"backup_error_file_not_available" = "Fails nav pieejams";
+"register_opr_create_new_account" = "Izveidot jaunu kontu";
+"backup_error_no_valid_subscription" = "Nav derīga abonomenta";
+"altitude" = "Augstums";
+"backup_error_gzip_only_supported_upload" = "Faila sūtīšanai izmantot .gzip formātu";
+"backup_error_user_is_already_registered" = "Šī epasta adrese jau tiek izmantota";
+"points_delete_multiple" = "Jūs izdzēsīsiet %d punktu(us). Vai turpināt?";
+"shared_string_open_street_map" = "OpenStreetMap";
+"backup_error_subscription_was_expired_descr" = "Jūsu OsmAnd Pro abonoments ir beidzies, atjaunojiet to, lai lietotu dublējumkopiju. Datus joprojām variet atjaunot no Cloud.";
+"backup_error_size_is_exceeded" = "Maksimālais OsmAnd Cloud izmērs pārsniegts par %@";
+"cloud_restore_now" = "Atjaunot";
+"cloud_existing_account" = "Man jau ir konts";
+"backup_error_subscription_was_expired" = "Beidzies abonoments";
+"shared_string_any" = "Jebkurš";
+"user_login" = "Lietotājs";
+"backup_error_user_is_not_registered" = "Lietotājs nav reģistrējies ar šādu epasta adresi";
+"weather_wind_unit_km_per_hour" = "Kilometri stundā";
+"cloud_set_up_backup" = "Izveidot dublējumkopiju";
+"weather_wind_unit_mi_per_hour" = "Jūdzes stundā";
+"login_error_email_invalid" = "Lūdzu, ievadiet derīgu epasta adresi";

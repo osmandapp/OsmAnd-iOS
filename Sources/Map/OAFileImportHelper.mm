@@ -48,18 +48,25 @@
         fileName = newFileName;
     else
         fileName = [filePath lastPathComponent];
+
+    NSString *path = [self.documentsDir stringByAppendingPathComponent:fileName];
+    if ([filePath isEqualToString:path])
+    {
+        [OAUtilities denyAccessToFile:filePath removeFromInbox:NO];
+        return YES;
+    }
+
     QString str = QString::fromNSString(fileName);
     QString resourceId = str.toLower().remove(QStringLiteral("_2"));
     if (_app.resourcesManager->isLocalResource(resourceId))
         _app.resourcesManager->uninstallResource(resourceId);
     
-    NSString *path = [self.documentsDir stringByAppendingPathComponent:fileName];
     NSError *error;
-    [_fileManager moveItemAtPath:filePath toPath:path error:&error];
+    [_fileManager copyItemAtPath:filePath toPath:path error:&error];
     if (error)
         OALog(@"Failed to import OBF file: %@", filePath);
-    
-    [_fileManager removeItemAtPath:filePath error:nil];
+
+    [OAUtilities denyAccessToFile:filePath removeFromInbox:YES];
     
     if (error)
     {
@@ -76,7 +83,6 @@
 // Used to import routing.xml and .render.xml
 - (BOOL)importResourceFileFromPath:(NSString *)filePath toPath:(NSString *)destPath
 {
-    NSString *fileName = [filePath lastPathComponent];
     NSString *destDir = destPath.stringByDeletingLastPathComponent;
     
     if ([_fileManager fileExistsAtPath:destPath])
@@ -85,11 +91,11 @@
         [_fileManager createDirectoryAtPath:destDir withIntermediateDirectories:YES attributes:nil error:nil];
     
     NSError *error;
-    [_fileManager moveItemAtPath:filePath toPath:destPath error:&error];
+    [_fileManager copyItemAtPath:filePath toPath:destPath error:&error];
     if (error)
         OALog(@"Failed to import resource: %@", filePath);
-    
-    [_fileManager removeItemAtPath:filePath error:nil];
+
+    [OAUtilities denyAccessToFile:filePath removeFromInbox:YES];
     
     if (error)
     {

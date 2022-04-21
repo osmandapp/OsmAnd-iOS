@@ -57,6 +57,7 @@
 @class OAMapRendererView;
 @class OAMapLayers;
 @class OAWorldRegion;
+@class OAMapRendererEnvironment;
 @class OAMapPresentationEnvironment;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
@@ -95,6 +96,7 @@
 
 @property (atomic, readonly) BOOL mapViewLoaded;
 
+@property (readonly) OAMapRendererEnvironment *mapRendererEnv;
 @property (readonly) OAMapPresentationEnvironment *mapPresentationEnv;
 
 - (CLLocation *) getMapLocation;
@@ -128,6 +130,11 @@
             bottomInset:(CGFloat)bottomInset
              centerBBox:(BOOL)centerBBox
                animated:(BOOL)animated;
+
+- (void) carPlayMoveGestureDetected:(UIGestureRecognizerState)state
+                    numberOfTouches:(NSInteger)numberOfTouches
+                        translation:(CGPoint)translation
+                           velocity:(CGPoint)screenVelocity;
 
 - (float) calculateMapRuler;
 

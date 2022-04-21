@@ -174,10 +174,18 @@
     NSDictionary<NSString *, NSString *> *params = [OAUtilities parseUrlQuery:url];
     if ([url.lastPathComponent isEqualToString:@"add-tile-source"])
     {
-        // https://osmand.net/add-tile-source?name=&url_template=&min_zoom=&max_zoom=
-        OAOnlineTilesEditingViewController *editTileSourceController = [[OAOnlineTilesEditingViewController alloc] initWithUrlParameters:params];
-        [_rootViewController.navigationController pushViewController:editTileSourceController animated:NO];
-        return YES;
+        if (_rootViewController)
+        {
+            // https://osmand.net/add-tile-source?name=&url_template=&min_zoom=&max_zoom=
+            OAOnlineTilesEditingViewController *editTileSourceController = [[OAOnlineTilesEditingViewController alloc] initWithUrlParameters:params];
+            [_rootViewController.navigationController pushViewController:editTileSourceController animated:NO];
+            return YES;
+        }
+        else
+        {
+            loadedURL = url;
+            return NO;
+        }
     }
     else if (params.count != 0)
     {
@@ -281,24 +289,7 @@
 
 - (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    NSString *scheme = [[url scheme] lowercaseString];
-
-    if ([scheme isEqualToString:@"file"])
-    {
-        if (_rootViewController)
-            return [_rootViewController handleIncomingURL:url];
-        
-        loadedURL = url;
-    }
-    else if ([scheme isEqualToString:@"osmandmaps"])
-    {
-        if (_rootViewController)
-            return [self handleIncomingURL:url];
-        
-        loadedURL = url;
-    }
-    
-    return NO;
+    return [self openURL:url];
 }
 
 - (void) applicationWillResignActive:(UIApplication *)application
@@ -413,6 +404,24 @@
         window.rootViewController = nil;
         _carPlayMapController = nil;
     }];
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
+{
+    return [self openURL:url];
+}
+
+- (BOOL)openURL:(NSURL *)url
+{
+    NSString *scheme = [[url scheme] lowercaseString];
+
+    if ([scheme isEqualToString:@"file"] && _rootViewController)
+        return [_rootViewController handleIncomingURL:url];
+    else if ([scheme isEqualToString:@"osmandmaps"])
+        return [self handleIncomingURL:url];
+
+    loadedURL = url;
+    return NO;
 }
 
 @end

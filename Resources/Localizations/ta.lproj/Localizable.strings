@@ -167,7 +167,7 @@
 "map_widget_appearance_rem" = "மீதமுள்ள கூறுகள்";
 "map_widget_compass" = "Compass";
 "map_widget_intermediate_distance" = "Intermediate destination";
-"map_widget_distance" = "Destination";
+"map_widget_distance" = "இலக்கு";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Altitude";
 "map_widget_battery" = "பேட்டரி நிலை";
@@ -613,7 +613,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "மறைக்க";
+"poi_hide" = "மறை";
 
 // My Places
 "favorites" = "பிடித்தவைகள்";
@@ -818,7 +818,7 @@
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "பெயரிடும் பெயர்கள்";
 
-"lang_af" = "Afrikaan";
+"lang_af" = "ஆஃப்ரிகான்ஸ்";
 "lang_al" = "அல்பேனிய";
 "lang_als" = "Albanian (Tosk)";
 "lang_an" = "Aragonese";
@@ -1548,7 +1548,7 @@
 "units_km_h" = "கிமீ / மணி";
 "units_mph" = "மைல்";
 
-"units_hour" = "மணிநேரம்";
+"units_hour" = "மணி";
 "units_min" = "மணிதுளி";
 "units_sec" = "sec";
 "units_sec_short" = "s";
@@ -1743,7 +1743,7 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"product_title_srtm" = "\"எல்லைகோடு  \"";
+"product_title_srtm" = "சமநிலைக்கோடுகள்";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
@@ -1771,7 +1771,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Roads";
-"res_srtm" = "\"எல்லைகோடு  \"";
+"res_srtm" = "சமநிலைக்கோடுகள்";
 "res_wiki" = "விக்கிபீடியா";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Slope";
@@ -2491,3 +2491,6 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"login_error_email_invalid" = "சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்";
+"units_min_short" = "மீ";
+"altitude" = "உயரம்";

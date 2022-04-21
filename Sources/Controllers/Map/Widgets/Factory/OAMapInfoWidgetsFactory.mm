@@ -8,11 +8,7 @@
 
 #import "OAMapInfoWidgetsFactory.h"
 #import "OsmAndApp.h"
-#import "OAAppSettings.h"
-#import "Localization.h"
 #import "OATextInfoWidget.h"
-#import "OAUtilities.h"
-#import "OARulerWidget.h"
 #import "OARootViewController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAMapHudViewController.h"
@@ -20,9 +16,8 @@
 #import "OAMapLayers.h"
 #import "OAMapInfoController.h"
 #import "OAOsmAndFormatter.h"
+#import "OAIAPHelper.h"
 
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/GeoCommonTypes.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
 
@@ -135,15 +130,16 @@
     OATextInfoWidget *weatherControl = [[OATextInfoWidget alloc] init];
     __weak OATextInfoWidget *weatherControlWeak = weatherControl;
     __weak OAMapInfoWidgetsFactory *selfWeak = self;
-    NSMutableArray *cachedValue = @[@(0)].mutableCopy;
+    NSNumber *undefined = @(-10000);
+    NSMutableArray *cachedValue = @[undefined].mutableCopy;
     OsmAnd::PointI __block cachedTarget31 = OsmAnd::PointI(0, 0);
     OsmAnd::ZoomLevel __block cachedZoom = OsmAnd::ZoomLevel::InvalidZoomLevel;
     weatherControl.updateInfoFunction = ^BOOL{
-        
+
         BOOL enabled = _app.data.weather;
         if (!enabled)
         {
-            if (![cachedValue[0] isEqual:@(0)])
+            if (cachedValue[0] != undefined)
                 [weatherControlWeak setText:nil subtext:nil];
             
             [selfWeak setMapCenterMarkerVisibility:NO];
@@ -169,7 +165,7 @@
         _request.band = (OsmAnd::BandIndex)band;
 
         OsmAnd::WeatherTileResourcesManager::ObtainValueAsyncCallback _callback =
-            [selfWeak, cachedValue, band, weatherControlWeak]
+            [selfWeak, cachedValue, band, undefined, weatherControlWeak]
             (const bool succeeded,
                 const double value,
                 const std::shared_ptr<OsmAnd::Metric>& metric)
@@ -180,33 +176,30 @@
                         if (![cachedValue[0] isEqual:@(value)])
                         {
                             cachedValue[0] = @(value);
-                            switch (band)
+                            const auto bandValue = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getConvertedBandValue(band, value);
+                            const auto bandValueStr = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getFormattedBandValue(band, bandValue, true);
+
+                            NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+                            formatter.locale = NSLocale.autoupdatingCurrentLocale;
+
+                            NSString *bandUnit = [formatter stringFromUnit:[[OAWeatherBand withWeatherBand:band] getBandUnit]];
+
+                            BOOL unitsWithBigFont = band == WEATHER_BAND_TEMPERATURE;
+                            if (unitsWithBigFont)
                             {
-                                case WEATHER_BAND_CLOUD:
-                                    [weatherControlWeak setText:[NSString stringWithFormat:@"%d", (int)value /* % */] subtext:@"%"];
-                                    break;
-                                case WEATHER_BAND_TEMPERATURE:
-                                    [weatherControlWeak setText:[NSString stringWithFormat:@"%.1f", value /* C */] subtext:@"C"];
-                                    break;
-                                case WEATHER_BAND_PRESSURE:
-                                    [weatherControlWeak setText:[NSString stringWithFormat:@"%d", (int)(value / 100.0 /* Pa to hPa */)] subtext:@"hPa"];
-                                    break;
-                                case WEATHER_BAND_WIND_SPEED:
-                                    [weatherControlWeak setText:[NSString stringWithFormat:@"%d", (int)value /* m/s */] subtext:@"m/s"];
-                                    break;
-                                case WEATHER_BAND_PRECIPITATION:
-                                    [weatherControlWeak setText:[NSString stringWithFormat:@"%.1f", value * 3600.0 /* mm per hour */] subtext:@"mm"];
-                                    break;
-                                case WEATHER_BAND_UNDEFINED:
-                                    [weatherControlWeak setText:nil subtext:nil];
-                                    break;
+                                NSString *fullText = [NSString stringWithFormat:@"%@ %@", bandValueStr.toNSString(), bandUnit];
+                                [weatherControlWeak setText:fullText subtext:nil];
+                            }
+                            else
+                            {
+                                [weatherControlWeak setText:bandValueStr.toNSString() subtext:bandUnit];
                             }
                             [selfWeak setMapCenterMarkerVisibility:YES];
                         }
                     }
-                    else if (![cachedValue[0] isEqual:@(0)])
+                    else if (cachedValue[0] != undefined)
                     {
-                        cachedValue[0] = @(0);
+                        cachedValue[0] = undefined;
                         [weatherControlWeak setText:nil subtext:nil];
                         [selfWeak setMapCenterMarkerVisibility:NO];
                     }
@@ -219,7 +212,35 @@
     };
     
     [weatherControl setText:nil subtext:nil];
-    [weatherControl setIcons:@"widget_altitude_day" widgetNightIcon:@"widget_altitude_night"];
+    NSString *iconNameDay;
+    NSString *iconNameNight;
+    if (band == WEATHER_BAND_TEMPERATURE)
+    {
+        iconNameDay = @"widget_weather_temperature_day";
+        iconNameNight = @"widget_weather_temperature_night";
+    }
+    else if (band == WEATHER_BAND_PRESSURE)
+    {
+        iconNameDay = @"widget_weather_air_pressure_day";
+        iconNameNight = @"widget_weather_air_pressure_night";
+    }
+    else if (band == WEATHER_BAND_WIND_SPEED)
+    {
+        iconNameDay = @"widget_weather_wind_day";
+        iconNameNight = @"widget_weather_wind_night";
+    }
+    else if (band == WEATHER_BAND_CLOUD)
+    {
+        iconNameDay = @"widget_weather_clouds_day";
+        iconNameNight = @"widget_weather_clouds_night";
+    }
+    else if (band == WEATHER_BAND_PRECIPITATION)
+    {
+        iconNameDay = @"widget_weather_precipitation_day";
+        iconNameNight = @"widget_weather_precipitation_night";
+    }
+
+    [weatherControl setIcons:iconNameDay widgetNightIcon:iconNameNight];
     return weatherControl;
 }
 

@@ -644,11 +644,13 @@
 "shared_string_export" = "Export";
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Route points";
+"copy_to_map_favorites" = "Copy to favorites";
 
 "import_export" = "Import/Export";
 
 "gpx_import_title" = "Import tracks";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
+"gpx_import_already_exists_short" = "The specified track file is already exists in the list.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
@@ -774,7 +776,7 @@
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
-"map_settings_weather" = "Weather";
+"product_title_weather" = "Weather";
 "map_settings_weather_temp" = "Temperature";
 "map_settings_weather_pressure" = "Pressure";
 "map_settings_weather_wind" = "Wind";
@@ -782,6 +784,15 @@
 "map_settings_weather_precip" = "Precipitation";
 "map_settings_clear_geo_cache" = "Clear geo tiles";
 "map_settings_clear_raster_cache" = "Clear raster tiles";
+"map_settings_weather_contours" = "Contours";
+"map_settings_weather_layers" = "Layers";
+
+"weather_temp_enable_descr" = "Enable to view temperature layer on the map.";
+"weather_pressure_enable_descr" = "Enable to view pressure layer on the map.";
+"weather_wind_enable_descr" = "Enable to view wind layer on the map.";
+"weather_cloud_enable_descr" = "Enable to view cloud layer on the map.";
+"weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
+"weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
 
 "settings_app_theme" = "Application theme";
 "app_theme_light" = "Light";
@@ -792,6 +803,7 @@
 "units_and_formats" = "Units & formats";
 "device_settings" = "Device settings";
 "osmand_settings" = "OsmAnd settings";
+"backup_and_restore" = "Backup & Restore";
 "global_settings_descr" = "Affect the entire application.";
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
@@ -1425,6 +1437,21 @@
 "toggle_fav" = "Show/hide favorites";
 "fav_show" = "Show favorites";
 "fav_hide" = "Hide favorites";
+"temperature_show" = "Show temperature";
+"temperature_hide" = "Hide temperature";
+"toggle_temperature" = "Show/hide - Temperature layer";
+"pressure_show" = "Show pressure";
+"pressure_hide" = "Hide pressure";
+"toggle_pressure" = "Show/hide - Pressure layer";
+"wind_show" = "Show wind";
+"wind_hide" = "Hide wind";
+"toggle_wind" = "Show/hide - Wind layer";
+"cloud_show" = "Show cloud";
+"cloud_hide" = "Hide cloud";
+"toggle_cloud" = "Show/hide - Cloud layer";
+"precipitation_show" = "Show precipitation";
+"precipitation_hide" = "Hide precipitation";
+"toggle_precipitation" = "Show/hide - Precipitation layer";
 "toggle_poi" = "Show/hide POI";
 "hide_poi_action" = "Hide POI";
 "add_parking_place" = "Add parking place";
@@ -1925,6 +1952,29 @@
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "plugin_popup_osm_editing_title" = "Turn on OpenStreetMap Editing";
 "plugin_popup_osm_editing_ask" = "Please enable OpenStreetMap Editing plugin to add and manage map edits and notes";
+"plugin_popup_weather_title" = "Turn on Weather";
+"plugin_popup_weather_ask" = "Please enable Weather plugin";
+"product_desc_weather" = "24h hourly forecast & 7 days forecast each 3 hours";
+"product_desc_ext_weather" = "Weather plugin provides\n- 5 layers...  24h hourly forecast & 7 days forecast each 3 hours\n- location-based widgets\n- temperature / pressure isolines\nWeather data is provided by GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
+
+"measurement_units" = "Measurement units";
+
+"weather_temp_unit_c" = "Celsius";
+"weather_temp_unit_f" = "Fahrenheit";
+
+"weather_pressure_unit_hpa" = "Hectopascals";
+"weather_pressure_unit_mmhg" = "Millimeters of mercury";
+"weather_pressure_unit_inhg" = "Inches of mercury";
+
+"weather_wind_unit_m_s" = "Meters/Second";
+"weather_wind_unit_km_per_hour" = "Kilometers per hour";
+"weather_wind_unit_mi_per_hour" = "Miles per hour";
+"weather_wind_unit_knots" = "Knots";
+
+"weather_precip_unit_mm" = "Millimeters";
+"weather_precip_unit_in" = "Inches";
+
+"weather_cloud_data_description" = "Weather data will be downloaded for viewed area each time.";
 
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
@@ -1943,6 +1993,7 @@
 
 "obf_import_title" = "Import offline map file";
 "obf_import_already_exists" = "File with this name already exists. Please select an action.";
+"obf_import_already_exists_short" = "File with this name already exists.";
 "obf_import_success" = "File was successfully imported";
 "obf_import_failed" = "File import failed";
 "res_import_success" = "%@ was successfully imported";
@@ -2207,6 +2258,9 @@
 "routing_attr_avoid_ferry_description" = "Avoids ferries";
 "rendering_attr_highway_class_track_grade2_name" = "Grade 2";
 "rendering_attr_shareTaxiRoutes_name" = "Share taxi routes";
+"rendering_attr_lightRailRoutes_name" = "Light rail routes";
+"rendering_attr_monorailRoutes_name" = "Monorail routes";
+"rendering_attr_funicularRoutes_name" = "Funicular routes";
 "routing_attr_relief_smoothness_factor_hills_name" = "Hilly";
 "rendering_attr_contourWidth_name" = "Contour line width";
 "routing_attr_piste_type_sled_description" = "Slopes for sled usage.";
@@ -2240,6 +2294,10 @@
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Show node network cycle routes";
 "rendering_attr_hideText_name" = "Text";
 "rendering_attr_contourDensity_name" = "Contour line density";
+"rendering_attr_showRunningRoutes_name" = "Running routes";
+"rendering_attr_showRunningRoutes_description" = "Show running routes";
+"rendering_attr_showFitnessTrails_name" = "Fitness trails";
+"rendering_attr_showFitnessTrails_description" = "Show fitness trails";
 "routing_attr_avoid_motorway_description" = "Avoids motorways";
 "routing_attr_avoid_motorway_name" = "No motorways";
 "routing_attr_avoid_low_emission_zone_name" = "No low emission zones";
@@ -2497,6 +2555,38 @@
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
 
+"user_login" = "Login";
+"osmand_cloud_login_descr" = "Please enter the e-mail address you registred with. A one-time password for the next step will be sent to it.";
+"login_footer_full_text" = "Need help? Please contact us at \nsupport@osmand.net";
+"login_footer_email_part" = "support@osmand.net";
+"cloud_email_not_registered" = "This e-mail address is not registered for OsmAnd Cloud";
+"cloud_email_already_registered" = "This e-mail address is already registered.";
+"login_error_email_invalid" = "Please enter a valid e-mail address";
+"login_help_email_title" = "OsmAnd iOS Cloud";
+
+"backup_error_no_valid_subscription" = "No valid subscription present";
+"backup_error_user_is_not_registered" = "No user registered with that e-mail address";
+"backup_error_token_is_not_valid_or_expired" = "Invalid or expired token";
+"backup_error_token_is_not_valid" = "Something is wrong with the provided device ID or token";
+"backup_error_file_not_available" = "File unavailable";
+"backup_error_gzip_only_supported_upload" = "The file should be sent in .gzip format";
+"backup_error_size_is_exceeded" = "Maximum size of OsmAnd Cloud exceeded %@";
+"backup_error_subscription_was_used" = "Subscription or promo used by another account %@";
+"backup_error_subscription_was_expired_descr" = "Your OsmAnd Pro subscription is expired, renew it to use backup. You can still restore data from the Cloud.";
+"backup_error_subscription_was_expired" = "Expired subscription";
+"backup_error_user_is_already_registered" = "This e-mail address is in use on another account";
+"backup_error_invalid_token" = "Token is not valid";
+
+"register_opr_create_new_account" = "Create new account";
+"osmand_cloud_create_account_descr" = "Please enter your e-mail address, a verification code will be sent there, and all your data will be linked to it.";
+
+"verification" = "Verification";
+"verify_email_address_descr" = "Verification code sent to %@. Please enter it in the field below.";
+"verification_code_placeholder" = "Code";
+"verification_code_missing" = "I didn't receive a verification code";
+"verification_code_missing_description" = "It can take up to 10 minutes. Use the button below if it isn't in your spam folder.";
+"resend_verification_code" = "Resend";
+
 "travel_routes" = "Travel routes";
 "walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Color routes according to their node network type (international, regional, local).";
@@ -2505,6 +2595,29 @@
 "routes_color_by_type" = "Color routes by…";
 
 "q_clear_weather_cache" = "Do you want to clear weather cache?";
+
+"osmand_cloud" = "OsmAnd Cloud";
+"cloud_description" = "Never lose your data. Back up and restore all info easily.";
+"cloud_create_account" = "Create account";
+"cloud_existing_account" = "I already have an account";
+"local_backup" = "Local Backup";
+"local_backup_descr" = "Backup or restore data from a local file.";
+"backup_into_file" = "Backup into file";
+"restore_from_file" = "Restore from file";
+
+"cloud_no_online_backup" = "You don’t have any online backup yet";
+"cloud_no_online_backup_descr" = "Set up an automatic backup so you don't have to worry about lost data.";
+"cloud_set_up_backup" = "Set up backup";
+"cloud_welcome_back" = "Welcome back!";
+"cloud_restore_now" = "Restore now";
+"cloud_backup" = "Backup";
+"cloud_last_backup" = "Last backup";
+"cloud_backup_now" = "Backup now";
+"cloud_make_backup" = "Make a backup";
+"cloud_make_backup_descr" = "There are many changes on this device, please make a backup of this data so as not to lose it.";
+"cloud_conflicts" = "Conflicts";
+"cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";
+"cloud_view_conflicts" = "View conflicts";
 
 // Release Notes
 // instruction:

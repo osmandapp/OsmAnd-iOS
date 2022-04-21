@@ -19,6 +19,7 @@ typedef enum : NSUInteger {
     EOAFeatureUnlimitedDownloads,
     EOAFeatureWikipediaOffline,
     EOAFeatureContourLinesHillshadeMaps,
+    EOAFeatureWeather,
     EOAFeatureSeaDepthMaps,
     EOAFeatureDonationToOSM,
     EOAFeatureUnlockAllFeatures,

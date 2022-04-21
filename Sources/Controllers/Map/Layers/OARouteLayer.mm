@@ -467,6 +467,8 @@
     else
     {
         width = [self getParamFromAttr:@"strokeWidth"].floatValue;
+        double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
+        width = 2 / (mapDensity / (width - UIScreen.mainScreen.scale));
     }
 
     return width;
@@ -577,7 +579,7 @@
                                     .setLineId(_actionLinesCollection->getLines().size())
                                     .setLineWidth(_lineWidth * 0.4)
                                     .setPoints(points)
-                                    .setEndCapStyle(OsmAnd::LineEndCapStyle::ARROW)
+                                    .setEndCapStyle(OsmAnd::VectorLine::EndCapStyle::ARROW)
                                     .setFillColor(OsmAnd::ColorARGB(_customTurnArrowsColor));
                             builder.buildAndAddToCollection(_actionLinesCollection);
                         }

@@ -25,7 +25,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *headerViewCollapsedHeight;
 
 @end
 

@@ -21,7 +21,6 @@
 #import "OAParkingViewController.h"
 #import "OAPOIViewController.h"
 #import "OAWikiMenuViewController.h"
-#import "OAGPXItemViewController.h"
 #import "OAGPXEditWptViewController.h"
 #import "OAGPXWptViewController.h"
 #import "OARouteTargetViewController.h"
@@ -55,6 +54,8 @@
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
 #import "OAAddWaypointViewController.h"
+#import "OAObservable.h"
+#import "OAAutoObserverProxy.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

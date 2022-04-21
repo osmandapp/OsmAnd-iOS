@@ -7,32 +7,28 @@
 //
 
 #import "OAWikiWebViewController.h"
+#import "OARootViewController.h"
 #import "Localization.h"
 #import "OAAppSettings.h"
-#import "OAUtilities.h"
 #import "OASizes.h"
 #import "OAPlugin.h"
 #import "OAPOI.h"
 
 NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script.text = \"var coll = document.getElementsByTagName(\'H2\'); var i; for (i = 0; i < coll.length; i++){   coll[i].addEventListener(\'click\', function() { this.classList.toggle(\'active\'); var content = this.nextElementSibling; if (content.style.display === \'block\') { content.style.display = \'none\'; } else { content.style.display = \'block\';}}); } \"; document.head.appendChild(script);";
 
-@interface OAWikiWebViewController () <UIActionSheetDelegate, WKNavigationDelegate>
+@interface OAWikiWebViewController () <WKNavigationDelegate>
 
 @end
 
 @implementation OAWikiWebViewController
 {
     OAPOI *_poi;
-
-    NSArray *_namesSorted;
     NSString *_contentLocale;
+    NSLocale *_currentLocale;
+
     NSURL *_baseUrl;
-    
+
     CALayer *_horizontalLine;
-    
-    NSLocale *_currentLocal;
-    id _localIdentifier;
-    NSLocale *_theLocal;
 }
 
 - (id)initWithPoi:(OAPOI *)poi
@@ -60,9 +56,9 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     // did load
     [super viewDidLoad];
     
-    _currentLocal = [NSLocale autoupdatingCurrentLocale];
-    _localIdentifier = [_currentLocal objectForKey:NSLocaleIdentifier];
-    _theLocal = [NSLocale localeWithLocaleIdentifier:_localIdentifier];
+    NSLocale *currentLocal = [NSLocale autoupdatingCurrentLocale];
+    id localIdentifier = [currentLocal objectForKey:NSLocaleIdentifier];
+    _currentLocale = [NSLocale localeWithLocaleIdentifier:localIdentifier];
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
@@ -164,48 +160,61 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
         [[UIApplication sharedApplication] openURL:_baseUrl];
 }
 
-- (NSString *)getTranslatedLangname:(NSString *)lang
+- (NSString *)getTranslatedLangName:(NSString *)lang
 {
-    return [_theLocal displayNameForKey:NSLocaleIdentifier value:lang];
+    return [_currentLocale displayNameForKey:NSLocaleIdentifier value:lang];
 }
 
 - (IBAction)localeButtonClicked:(id)sender
 {
     if (_poi.localizedContent.allKeys.count <= 1)
     {
-        [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"no_other_translations") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        
+        [OARootViewController showInfoAlertWithTitle:nil
+                                             message:OALocalizedString(@"no_other_translations")
+                                        inController:self];
         return;
     }
-    
-    UIActionSheet *actions = [[UIActionSheet alloc] initWithTitle:OALocalizedString(@"select_language") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") destructiveButtonTitle:nil otherButtonTitles:nil];
-    
-    NSMutableArray *locales = [NSMutableArray array];
-    NSString *nativeStr;
-    for (NSString *loc in _poi.localizedContent.allKeys)
-    {
-        if (loc.length == 0)
-            nativeStr = loc;
-        else
-            [locales addObject:loc];
-    }
-    
+
+    UIAlertController *alert = [UIAlertController
+            alertControllerWithTitle:OALocalizedString(@"select_language")
+                             message:nil
+                      preferredStyle:UIAlertControllerStyleActionSheet];
+
+    NSMutableArray<NSString *> *locales = [_poi.localizedContent.allKeys mutableCopy];
     [locales sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
         return [obj1 compare:obj2];
     }];
-    
-    if (nativeStr)
-        [actions addButtonWithTitle:[[self getTranslatedLangname:@"en"] capitalizedStringWithLocale:[NSLocale currentLocale]]];
 
-    for (NSString *loc in locales)
-        [actions addButtonWithTitle:[[self getTranslatedLangname:loc] capitalizedStringWithLocale:[NSLocale currentLocale]]];
-    
-    if (nativeStr)
-        [locales insertObject:@"" atIndex:0];
-    
-    _namesSorted = [NSArray arrayWithArray:locales];
-    
-    [actions showFromRect:_localeButton.frame inView:_navBar animated:YES];
+    for (NSString *locale in locales)
+    {
+        NSString *translate = [[self getTranslatedLangName:locale.length > 0 ? locale : @"en"]
+                               capitalizedStringWithLocale:[NSLocale currentLocale]];
+        if (translate)
+        {
+            [alert addAction:[UIAlertAction
+                    actionWithTitle:translate
+                              style:UIAlertActionStyleDefault
+                            handler:^(UIAlertAction *action) {
+                                _contentLocale = locale;
+
+                                NSString *locBtnStr = (_contentLocale.length == 0 ? @"EN" : [_contentLocale uppercaseString]);
+                                [_localeButton setTitle:locBtnStr forState:UIControlStateNormal];
+
+                                _titleView.text = (_poi.localizedNames[_contentLocale]
+                                        ? _poi.localizedNames[_contentLocale]
+                                        : @"Wikipedia");
+
+                                [self buildBaseUrl];
+                                NSString *content = [self appendHeadToContent:_poi.localizedContent[_contentLocale]];
+                                if (content)
+                                    [_contentView loadHTMLString:content baseURL:_baseUrl];
+                            }]];
+        }
+    }
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                              style:UIAlertActionStyleCancel
+                                            handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (NSString *) appendHeadToContent:(NSString *) content
@@ -216,27 +225,6 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     }
     NSString *head = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header><head></head><div class=\"main\">%@</div>";
     return [NSString stringWithFormat:head, content];
-}
-
-#pragma mark - UIActionSheetDelegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != actionSheet.cancelButtonIndex)
-    {
-        _contentLocale = _namesSorted[buttonIndex - 1];
-        
-        NSString *content = [self appendHeadToContent:_poi.localizedContent[_contentLocale]];
-        
-        NSString *locBtnStr = (_contentLocale.length == 0 ? @"EN" : [_contentLocale uppercaseString]);
-        [_localeButton setTitle:locBtnStr forState:UIControlStateNormal];
-        
-        _titleView.text = (_poi.localizedNames[_contentLocale] ? _poi.localizedNames[_contentLocale] : @"Wikipedia");
-
-        [self buildBaseUrl];
-        if (content)
-            [_contentView loadHTMLString:content baseURL:_baseUrl];
-    }
 }
 
 #pragma mark - WKNavigationDelegate

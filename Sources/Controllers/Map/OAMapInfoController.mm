@@ -87,6 +87,7 @@
     int _themeId;
     
     NSArray<OABaseWidgetView *> *_widgetsToUpdate;
+    NSTimer *_framePreparedTimer;
 }
 
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
@@ -143,26 +144,32 @@
     });
 }
 
+- (void) execOnDraw
+{
+    _lastUpdateTime = CACurrentMediaTime();
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self onDraw];
+    });
+}
+
 - (void) onMapRendererFramePrepared
 {
-    NSTimeInterval currentTime = CACurrentMediaTime();
-    if (currentTime - _lastUpdateTime > 1)
-    {
-        _lastUpdateTime = currentTime;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self onDraw];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_framePreparedTimer)
+            [_framePreparedTimer invalidate];
+        
+        _framePreparedTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(execOnDraw) userInfo:nil repeats:NO];
+    });
+    if (CACurrentMediaTime() - _lastUpdateTime > 1.0)
+        [self execOnDraw];
+
     // Render the ruler more often
     [self updateRuler];
 }
 
 - (void) onRightWidgetSuperviewLayout
 {
-    _lastUpdateTime = CACurrentMediaTime();
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self onDraw];
-    });
+    [self execOnDraw];
 }
 
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
@@ -648,17 +655,6 @@
     
     OATextInfoWidget *ruler = [mic createRulerControl];
     [self registerSideWidget:ruler widgetState:[[OACompassRulerWidgetState alloc] init] key:@"radius_ruler" left:NO priorityOrder:43];
-
-    OATextInfoWidget *weatherTemp = [mic createWeatherControl:WEATHER_BAND_TEMPERATURE];
-    [self registerSideWidget:weatherTemp imageId:@"ic_action_altitude" message:OALocalizedString(@"map_settings_weather_temp") key:@"weather_temp" left:false priorityOrder:120];
-    OATextInfoWidget *weatherPressure = [mic createWeatherControl:WEATHER_BAND_PRESSURE];
-    [self registerSideWidget:weatherPressure imageId:@"ic_action_altitude" message:OALocalizedString(@"map_settings_weather_pressure") key:@"weather_pressure" left:false priorityOrder:121];
-    OATextInfoWidget *weatherSpeed = [mic createWeatherControl:WEATHER_BAND_WIND_SPEED];
-    [self registerSideWidget:weatherSpeed imageId:@"ic_action_altitude" message:OALocalizedString(@"map_settings_weather_wind") key:@"weather_wind" left:false priorityOrder:122];
-    OATextInfoWidget *weatherCloud = [mic createWeatherControl:WEATHER_BAND_CLOUD];
-    [self registerSideWidget:weatherCloud imageId:@"ic_action_altitude" message:OALocalizedString(@"map_settings_weather_cloud") key:@"weather_cloud" left:false priorityOrder:123];
-    OATextInfoWidget *weatherPrecip = [mic createWeatherControl:WEATHER_BAND_PRECIPITATION];
-    [self registerSideWidget:weatherPrecip imageId:@"ic_action_altitude" message:OALocalizedString(@"map_settings_weather_precip") key:@"weather_precip" left:false priorityOrder:124];
 }
 
 - (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts

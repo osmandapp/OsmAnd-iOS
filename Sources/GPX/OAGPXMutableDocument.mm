@@ -8,6 +8,7 @@
 
 #import "OAGPXMutableDocument.h"
 #import "OAUtilities.h"
+#import "OAAppVersionDependentConstants.h"
 
 
 @implementation OAGPXMutableDocument
@@ -452,7 +453,7 @@
 {
     [self updateDocAndMetadata];
     [self applyBounds];
-    return document->saveTo(QString::fromNSString(filename));
+    return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
 }
 
 @end

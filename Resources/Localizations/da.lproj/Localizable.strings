@@ -2391,7 +2391,7 @@
 "weather_pressure_unit_inhg" = "Tommer kviksølv";
 "weather_wind_unit_m_s" = "Meter/sekund";
 "weather_precip_unit_in" = "Tommer";
-"weather_cloud_data_description" = "Vejrdata vil blive downloadet til visning hver gang.";
+"weather_cloud_data_description" = "Vejrdata vil blive downloadet til vist område hver gang.";
 "user_login" = "Login";
 "login_footer_full_text" = "Har du brug for hjælp? Kontakt os på\nsupport@osmand.net";
 "cloud_email_not_registered" = "Denne e-mailadresse er ikke registreret med OsmAnd Cloud";
@@ -2467,3 +2467,12 @@
 "pressure_show" = "Vis tryk";
 "toggle_pressure" = "Vis/Skjul - Tryklag";
 "backup_error_invalid_token" = "Token er ikke gyldigt";
+"weather_temp_enable_descr" = "Aktiver for at få vist temperaturlag på kortet.";
+"map_settings_weather_layers" = "Lag";
+"copy_to_map_favorites" = "Kopier til favoritter";
+"map_settings_weather_contours" = "Konturer";
+"weather_pressure_enable_descr" = "Aktiver for at få vist lufttryklag på kortet.";
+"weather_wind_enable_descr" = "Aktiver for at få vist vindlag på kortet.";
+"weather_cloud_enable_descr" = "Aktiver for at få vist skylag på kortet.";
+"weather_precip_enable_descr" = "Aktiver for at få vist nedbørslag på kortet.";
+"weather_contours_enable_descr" = "Aktiver for at få vist isolinjelag på kortet.";

@@ -438,7 +438,7 @@
 "shared_string_sound" = "Zvok";
 "sort_by_distance" = "Razvrsti po razdalji";
 "sort_by_name" = "Razvrsti po imenu";
-"map_markers_other" = "Druge označbe";
+"map_markers_other" = "Druge oznake";
 "directions_other" = "Druge smeri";
 "stop_routing_confirm" = "Ali ste prepričani, da želite prekiniti navigacijo?";
 "cancel_route" = "Opusti pot";
@@ -454,7 +454,7 @@
 "map_widget_right" = "Desni pult";
 "map_widget_left" = "Levi pult";
 "layer_map_appearance" = "Nastavite zaslona";
-"map_markers" = "Označbe zemljevida";
+"map_markers" = "Oznake zemljevida";
 "select_gpx" = "Izbor sledi GPX …";
 "confirm_usage_speed_cameras" = "V mnogih državah (na primer v Nemčiji, Franciji, Italiji in drugih) je uporaba kamer za merjenje hitrosti prepovedana z zakonom. Razvijalci programa ne sprejemamo odgovornosti za tako rabo. Potrdite uporabo le, če ste res prepričani v svoje ravnanje.";
 "show_traffic_warnings" = "Opozorila o prometu";
@@ -1547,3 +1547,9 @@
 "lang_eo" = "Esperanto";
 "lang_ar" = "Arabščina";
 "lang_pt_br" = "Portugalščina (Brazilija)";
+"number_of_tiles" = "Število ploščic";
+"rendering_attr_showFitnessTrails_name" = "Fitnes steze";
+"rendering_attr_showFitnessTrails_description" = "Pokaži fitnes steze";
+"rendering_attr_showRunningRoutes_description" = "Pokaži tekaške poti";
+"move_map_to_select_area" = "Premakni zemljevid, za izbor potrebnega območja.";
+"rendering_attr_showRunningRoutes_name" = "Tekaške poti";

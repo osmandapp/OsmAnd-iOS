@@ -3492,7 +3492,7 @@
         [_profilePreferences setObject:_arrivalDistanceFactor forKey:@"arrival_distance_factor"];
         _enableTimeConditionalRouting = [OACommonBoolean withKey:enableTimeConditionalRoutingKey defValue:YES];
         [_profilePreferences setObject:_enableTimeConditionalRouting forKey:@"enable_time_conditional_routing"];
-        _useIntermediatePointsNavigation = [OACommonBoolean withKey:useIntermediatePointsNavigationKey defValue:NO];
+        _useIntermediatePointsNavigation = [[OACommonBoolean withKey:useIntermediatePointsNavigationKey defValue:NO] makeGlobal];
         [_globalPreferences setObject:_useIntermediatePointsNavigation forKey:@"use_intermediate_points_navigation"];
 
         _disableOffrouteRecalc = [OACommonBoolean withKey:disableOffrouteRecalcKey defValue:NO];

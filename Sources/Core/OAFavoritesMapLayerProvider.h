@@ -31,9 +31,7 @@ private:
     QHash<QString, sk_sp<SkImage>> _iconsCache;
     
     sk_sp<SkImage> getBitmapByFavorite(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav, bool isFullSize);
-    sk_sp<SkImage> createCompositeBitmap(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav, bool isFullSize) const;
     QString backgroundImageNameByType(const QString& type) const;
-    UIImage* getIcon(NSString* iconName, NSString* defaultIconName) const;
 protected:
 public:
     OAFavoritesMapLayerProvider(const QList<std::shared_ptr<OsmAnd::IFavoriteLocation>>& favorites,

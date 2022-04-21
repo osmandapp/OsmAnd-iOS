@@ -123,6 +123,14 @@
                      @"cells" : controlsList,
                      } ];
     
+    if (_settings.applicationMode.get != OAApplicationMode.DEFAULT)
+    {
+        [controlsList addObject:@{ @"title" : OALocalizedString(@"osm_str_name"),
+                                   @"key" : @"street_name",
+                                   @"selected" : @([_settings.showStreetName get]),
+                                   @"type" : [OASettingSwitchCell getCellIdentifier]} ];
+    }
+    
     [controlsList addObject:@{ @"title" : OALocalizedString(@"coordinates_widget"),
                                @"img" : @"ic_custom_coordinates",
                                @"key" : @"coordinates_widget",
@@ -220,6 +228,11 @@
         {
             [_settings.showCoordinatesWidget set:visible];
             [[[OsmAndApp instance].data mapLayerChangeObservable] notifyEvent];
+        }
+        else if ([key isEqualToString:@"street_name"])
+        {
+            [_settings.showStreetName set:visible];
+            [[OARootViewController instance].mapPanel recreateControls];
         }
         else if ([key isEqualToString:@"map_widget_distance_by_tap"])
         {

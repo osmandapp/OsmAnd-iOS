@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define kLatestChangesUrl @"https://osmand.net/blog/osmand-ios-4-2-released"
+#define kLatestChangesUrl @"https://docs.osmand.net/blog/osmand-ios-4-2-released/"
 
 @interface OAAppVersionDependentConstants : NSObject
 

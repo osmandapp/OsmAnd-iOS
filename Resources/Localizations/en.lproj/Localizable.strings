@@ -2551,3 +2551,21 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+
+"ios_release_4_2" = "• Route line appearance: added ability to set width and color\n
+• Tracks: added option for deleting several tracks at once\n
+• Track context menu: added scroll bar with waypoint groups\n
+• Map appearance: divided additional routes by type with ability to enable one from each category separately\n
+• Horseback riding: add new navigation type and app profile\n
+• OsmAnd files are now visible in the \"Files\" application\n
+• UX of options \"Use elevation data\" and \"Select elevation fluctuation\"  was improved, they were combined and renamed to \"Preferred terrain\", currently available for \"Bicycle\" and \"Pedestrian\" profiles.\n
+• New option \"Include heading\" for track recording\n
+• Street name widget: now show road shield and exit number during navigation\n
+• New Fitness and running routes on the map\n
+• CarPlay bug fixes, added gestures for touchscreens\n
+• Fixed import of GPX files from OSF package\n
+• Fixed import of custom plugins with included files\n
+• Fixed various crashes in the Route planning mode\n
+• Fixed crashes during Navigation\n";
+
+

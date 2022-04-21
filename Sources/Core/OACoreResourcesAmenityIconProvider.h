@@ -17,6 +17,8 @@ class OACoreResourcesAmenityIconProvider : public OsmAnd::IAmenityIconProvider
 {
 private:
     OsmAnd::TextRasterizer::Style textStyle;
+    
+    QHash<QString, sk_sp<SkImage>> _iconsCache;
 protected:
 public:
     OACoreResourcesAmenityIconProvider(
@@ -26,7 +28,7 @@ public:
         const float textScaleFactor = 1.0f,
         const bool nightMode = false,
         const bool showCaptions = false,
-        const QString lang = QString::null,
+        const QString lang = QString(),
         const bool transliterate = false);
     virtual ~OACoreResourcesAmenityIconProvider();
     
@@ -42,7 +44,7 @@ public:
     virtual sk_sp<SkImage> getIcon(
         const std::shared_ptr<const OsmAnd::Amenity>& amenity,
         const OsmAnd::ZoomLevel zoomLevel,
-        const bool largeIcon = false) const Q_DECL_OVERRIDE;
+        const bool largeIcon = false) Q_DECL_OVERRIDE;
     
     virtual OsmAnd::TextRasterizer::Style getCaptionStyle(
         const std::shared_ptr<const OsmAnd::Amenity>& amenity,

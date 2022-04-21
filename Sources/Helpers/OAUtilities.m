@@ -1060,33 +1060,22 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 {
     @autoreleasepool
     {
-        // begin a new image context, to draw our colored image onto with the right scale
-        UIGraphicsBeginImageContextWithOptions(source.size, NO, [UIScreen mainScreen].scale);
-        
-        // get a reference to that context we created
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        
-        // set the fill color
-        [color setFill];
-        
-        // translate/flip the graphics context (for transforming from CG* coords to UI* coords
-        CGContextTranslateCTM(context, 0, source.size.height);
-        CGContextScaleCTM(context, 1.0, -1.0);
-        
-        CGContextSetBlendMode(context, kCGBlendModeNormal);
-        CGRect rect = CGRectMake(0, 0, source.size.width, source.size.height);
-        CGContextDrawImage(context, rect, source.CGImage);
-        
-        CGContextClipToMask(context, rect, source.CGImage);
-        CGContextAddRect(context, rect);
-        CGContextDrawPath(context,kCGPathFill);
-        
-        // generate a new UIImage from the graphics context we drew onto
-        UIImage *coloredImg = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        //return the color-burned image
-        return coloredImg;
+        CGImageRef maskImage = source.CGImage;
+        CGFloat width = source.scale * source.size.width;
+        CGFloat height = source.scale * source.size.height;
+        CGRect bounds = CGRectMake(0,0,width,height);
+
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        CGContextRef bitmapContext = CGBitmapContextCreate(NULL, width, height, 8, 0, colorSpace, (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
+        CGContextClipToMask(bitmapContext, bounds, maskImage);
+        CGContextSetFillColorWithColor(bitmapContext, color.CGColor);
+        CGContextFillRect(bitmapContext, bounds);
+
+        CGImageRef mainViewContentBitmapContext = CGBitmapContextCreateImage(bitmapContext);
+        CGContextRelease(bitmapContext);
+        CGColorSpaceRelease(colorSpace);
+
+        return [UIImage imageWithCGImage:mainViewContentBitmapContext scale:source.scale orientation:UIImageOrientationUp];
     }
 }
 

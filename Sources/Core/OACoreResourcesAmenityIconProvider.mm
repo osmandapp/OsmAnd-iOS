@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
+#import "OACompoundIconUtils.h"
+
 #include "OACoreResourcesAmenityIconProvider.h"
 
 #include <OsmAndCore/ICoreResourcesProvider.h>
@@ -59,16 +61,11 @@ OACoreResourcesAmenityIconProvider::~OACoreResourcesAmenityIconProvider()
 sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
     const std::shared_ptr<const OsmAnd::Amenity>& amenity,
     const OsmAnd::ZoomLevel zoomLevel,
-    const bool largeIcon /*= false*/) const
+    const bool largeIcon /*= false*/)
 {
     @autoreleasepool
     {
-        
-        if (zoomLevel <= OsmAnd::ZoomLevel13)
-        {
-            auto iconBackground = coreResourcesProvider->getResourceAsImage("map/shields/white_orange_poi_shield.png", displayDensityFactor);
-            return OsmAnd::SkiaUtilities::scaleImage(iconBackground, 0.5f, 0.5f);
-        }
+        bool isSmallIcon = zoomLevel <= OsmAnd::ZoomLevel13;
         
         const auto& decodedCategories = amenity->getDecodedCategories();
         for (const auto& decodedCategory : constOf(decodedCategories))
@@ -81,28 +78,20 @@ sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
             if (!type)
                 continue;
             
-            UIImage *origIcon = [type mapIcon];
-            if (!origIcon)
-                continue;
-            
-            UIImage *tintedIcon = [OAUtilities tintImageWithColor:origIcon color:[UIColor whiteColor]];
-            auto icon = SkMakeImageFromCGImage(tintedIcon.CGImage);
-            if (!icon)
-                continue;
-            
-            auto iconBackground = coreResourcesProvider->getResourceAsImage("map/shields/white_orange_poi_shield.png", displayDensityFactor);
-            if (iconBackground)
+            auto iconId = isSmallIcon ? QStringLiteral("small_ic") : QString::fromNSString(type.name);
+            const auto bitmapIt = _iconsCache.find(iconId);
+            sk_sp<SkImage> bitmap;
+            if (bitmapIt == _iconsCache.end())
             {
-                const QList<sk_sp<const SkImage>> icons({
-                    OsmAnd::SkiaUtilities::scaleImage(iconBackground, symbolsScaleFactor, symbolsScaleFactor),
-                    OsmAnd::SkiaUtilities::scaleImage(icon, symbolsScaleFactor, symbolsScaleFactor)
-                });
-                return OsmAnd::SkiaUtilities::mergeImages(icons);
+                bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_poi_orange) shapeName:@"circle" iconName:type.name isFullSize:!isSmallIcon icon:type.icon];
+                _iconsCache[iconId] = bitmap;
             }
             else
             {
-                return OsmAnd::SkiaUtilities::scaleImage(icon, symbolsScaleFactor, symbolsScaleFactor);
+                bitmap = bitmapIt.value();
             }
+            
+            return bitmap;
         }
         
         return nullptr;

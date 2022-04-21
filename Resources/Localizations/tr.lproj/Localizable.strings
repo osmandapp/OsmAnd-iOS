@@ -2400,7 +2400,7 @@
 "weather_wind_unit_knots" = "Knot";
 "weather_precip_unit_mm" = "Milimetre";
 "weather_precip_unit_in" = "İnç";
-"weather_cloud_data_description" = "Hava durumu verileri her seferinde görüntülenmek üzere indirilecektir.";
+"weather_cloud_data_description" = "Her seferinde görüntülenen alan için hava durumu verileri indirilecektir.";
 "user_login" = "Giriş bilgisi";
 "login_footer_full_text" = "Yardıma mı ihtiyacınız var? Lütfen bize ulaşın: \nsupport@osmand.net";
 "cloud_email_already_registered" = "Bu e-posta adresi zaten kayıtlı.";
@@ -2485,3 +2485,12 @@
 "backup_error_subscription_was_used" = "Abonelik veya tanıtım başka bir hesap tarafından kullanıldı %@";
 "backup_error_subscription_was_expired_descr" = "OsmAnd Pro aboneliğinizin süresi doldu, yedeklemeyi kullanmak için yenileyin. Buluttan verileri hala geri yükleyebilirsiniz.";
 "backup_error_user_is_already_registered" = "Bu e-posta adresi başka bir hesapta kullanılıyor";
+"weather_wind_enable_descr" = "Haritada rüzgar katmanını görüntülemeyi etkinleştirin.";
+"weather_temp_enable_descr" = "Haritada sıcaklık katmanını görüntülemeyi etkinleştirin.";
+"copy_to_map_favorites" = "Sık kullanılanlara kopyala";
+"map_settings_weather_contours" = "Eş çizgiler";
+"weather_pressure_enable_descr" = "Haritada basınç katmanını görüntülemeyi etkinleştirin.";
+"map_settings_weather_layers" = "Katmanlar";
+"weather_cloud_enable_descr" = "Haritada bulut katmanını görüntülemeyi etkinleştirin.";
+"weather_precip_enable_descr" = "Haritada yağış katmanını görüntülemeyi etkinleştirin.";
+"weather_contours_enable_descr" = "Haritada eş değer eğrileri katmanını görüntülemeyi etkinleştirin.";

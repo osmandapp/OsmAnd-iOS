@@ -31,9 +31,7 @@ private:
     QList<OsmAnd::PointI> _points;
     QHash<QString, sk_sp<SkImage>> _iconsCache;
     sk_sp<SkImage> getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &point, bool isFullSize);
-    sk_sp<SkImage> createCompositeBitmap(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &point, bool isFullSize) const;
     QString backgroundImageNameByType(const QString& type) const;
-    UIImage* getIcon(NSString* iconName, NSString* defaultIconName) const;
 protected:
 public:
     OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>>& wptPtPoints_,

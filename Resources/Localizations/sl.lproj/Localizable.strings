@@ -1553,3 +1553,6 @@
 "rendering_attr_showRunningRoutes_description" = "Pokaži tekaške poti";
 "move_map_to_select_area" = "Premakni zemljevid, za izbor potrebnega območja.";
 "rendering_attr_showRunningRoutes_name" = "Tekaške poti";
+"shared_string_hide_all" = "Skrij vse";
+"shared_string_open_street_map" = "OpenStreetMap";
+"turn_arrows" = "Puščice za obračanje";

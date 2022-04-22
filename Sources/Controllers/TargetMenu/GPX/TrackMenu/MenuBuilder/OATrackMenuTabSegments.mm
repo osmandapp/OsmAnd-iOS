@@ -27,6 +27,7 @@
 @interface OATrackMenuTabSegments () <UIGestureRecognizerDelegate, ChartViewDelegate>
 
 @property (nonatomic) OAGPXTableData *tableData;
+@property (nonatomic) BOOL isGeneratedData;
 
 @end
 
@@ -38,6 +39,8 @@
     CGPoint _lastTranslation;
     double _highlightDrawX;
 }
+
+@dynamic tableData, isGeneratedData;
 
 - (void)commonInit
 {
@@ -98,6 +101,8 @@
                 sectionData.updateData();
         }
     };
+
+    self.isGeneratedData = YES;
 }
 
 - (void)generateSegmentSectionData:(OATrkSegment *)segment
@@ -137,7 +142,7 @@
         segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), index];
 
     OAGPXTableCellData *segmentCellData = index != 0 ? [OAGPXTableCellData withData:@{
-            kCellKey: [NSString stringWithFormat:@"segment_%p", (__bridge void *) segment],
+            kTableDataKey: [NSString stringWithFormat:@"segment_%p", (__bridge void *) segment],
             kCellType: [OAIconTitleValueCell getCellIdentifier],
             kCellTitle: segmentTitle,
             kCellToggle: @NO
@@ -164,7 +169,7 @@
                 ? [self.trackMenuDelegate getPinLocation] : kCLLocationCoordinate2DInvalid;
 
         chartCellData = [OAGPXTableCellData withData:@{
-                kCellKey: [NSString stringWithFormat:@"chart_%p", (__bridge void *) segment],
+                kTableDataKey: [NSString stringWithFormat:@"chart_%p", (__bridge void *) segment],
                 kCellType: [OALineChartCell getCellIdentifier],
                 kTableValues: @{
                         @"cell_value": cell,
@@ -203,7 +208,7 @@
     }
 
     OAGPXTableCellData *statisticsCellData = [OAGPXTableCellData withData:@{
-            kCellKey: [NSString stringWithFormat:@"statistics_%p", (__bridge void *) segment],
+            kTableDataKey: [NSString stringWithFormat:@"statistics_%p", (__bridge void *) segment],
             kCellType: [OAQuadItemsWithTitleDescIconCell getCellIdentifier],
             kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:mode],
             kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
@@ -218,7 +223,7 @@
     };
 
     OAGPXTableCellData *tabsCellData = [OAGPXTableCellData withData:@{
-            kCellKey: [NSString stringWithFormat:@"tabs_%p", (__bridge void *) segment],
+            kTableDataKey: [NSString stringWithFormat:@"tabs_%p", (__bridge void *) segment],
             kCellType: [OASegmentTableViewCell getCellIdentifier]
     }];
     tabsCellData.updateData = ^() {
@@ -248,7 +253,7 @@
     };
 
     OAGPXTableCellData *buttonsCellData = [OAGPXTableCellData withData:@{
-            kCellKey: [NSString stringWithFormat:@"buttons_%p", (__bridge void *) segment],
+            kTableDataKey: [NSString stringWithFormat:@"buttons_%p", (__bridge void *) segment],
             kCellType: [OARadiusCellEx getCellIdentifier],
             kTableValues: @{
                     @"left_title_string_value": OALocalizedString(@"analyze_on_map"),
@@ -267,8 +272,10 @@
     }];
 
     NSMutableArray<OAGPXTableCellData *> *segmentCells = [NSMutableArray array];
+
     if (segmentCellData != nil)
         [segmentCells addObject:segmentCellData];
+
     [segmentCells addObject:tabsCellData];
 
     if (chartCellData != nil)
@@ -287,7 +294,10 @@
     values[@"selected_index_int_value"] = @0;
     [tabsCellData setData:@{ kTableValues: values }];
 
-    OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: segmentCells }];
+    OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{
+            kTableDataKey: [NSString stringWithFormat:@"segment_%p_section", (__bridge void *) segment],
+            kSectionCells: segmentCells
+    }];
     [tableSections addObject:segmentSectionData];
     [segmentSectionData setData:@{
             kSectionHeaderHeight: tableSections.firstObject == segmentSectionData ? @0.001 : @36.
@@ -437,9 +447,11 @@
             {
                 OALineChartCell *chartCell = cellData.values[@"cell_value"];
                 if (chartCell)
+                {
                     [chartCell.lineChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix
                                                                             chart:chartCell.lineChartView
                                                                        invalidate:YES];
+                }
             }
         }
     }

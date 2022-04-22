@@ -13,6 +13,8 @@
 
 @interface OABaseTrackMenuTabItem : NSObject
 
+@property (nonatomic, readonly) BOOL isGeneratedData;
+
 @property (nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 
 - (NSString *)getTabTitle;
@@ -22,6 +24,7 @@
 + (UIImage *)getUnselectedIcon:(NSString *)iconName;
 
 - (void)generateData;
+- (void)resetData;
 - (OAGPXTableData *)getTableData;
 - (void)runAdditionalActions;
 

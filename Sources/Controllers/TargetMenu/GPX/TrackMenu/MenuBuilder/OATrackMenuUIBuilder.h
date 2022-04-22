@@ -18,6 +18,7 @@
 - (instancetype)initWithSelectedTab:(EOATrackMenuHudTab)selectedTab;
 
 - (OAGPXTableData *)generateSectionsData;
+- (void)resetDataInTab:(EOATrackMenuHudTab)selectedTab;
 - (OAGPXTableData *)getTableData;
 - (void)updateSelectedTab:(EOATrackMenuHudTab)selectedTab;
 - (void)runAdditionalActions;

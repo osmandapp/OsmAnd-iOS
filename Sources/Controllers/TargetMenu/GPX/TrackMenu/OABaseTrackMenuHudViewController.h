@@ -8,7 +8,6 @@
 
 #import "OABaseScrollableHudViewController.h"
 
-#define kCellKey @"key"
 #define kCellType @"type"
 #define kCellTitle @"title"
 #define kCellDesc @"desc"
@@ -23,6 +22,7 @@
 #define kSectionFooter @"footer"
 #define kSectionFooterHeight @"footer_height"
 
+#define kTableDataKey @"key"
 #define kTableSections @"sections"
 #define kTableValues @"values"
 
@@ -66,6 +66,7 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 
 + (instancetype)withData:(NSDictionary *)data;
 
+@property (nonatomic, readonly) NSString *key;
 @property (nonatomic, readonly) NSMutableArray<OAGPXTableCellData *> *cells;
 @property (nonatomic, readonly) NSString *header;
 @property (nonatomic, readonly) CGFloat headerHeight;
@@ -77,6 +78,7 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 
 - (void)setData:(NSDictionary *)data;
 - (BOOL)containsCell:(NSString *)key;
+- (OAGPXTableCellData *)getCell:(NSString *)key;
 
 @end
 
@@ -89,6 +91,9 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 @property (nonatomic) OAGPXTableDataUpdateProperty updateProperty;
 
 - (void)setData:(NSDictionary *)data;
+
+- (BOOL)containsSection:(NSString *)key;
+- (OAGPXTableSectionData *)getSection:(NSString *)key;
 
 @end
 

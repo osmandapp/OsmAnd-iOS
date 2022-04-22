@@ -110,7 +110,7 @@
     {
         sectionData = [OAGPXTableSectionData withData:@{
                 kSectionCells: @[[OAGPXTableCellData withData:@{
-                        kCellKey: @"new_name",
+                        kTableDataKey: @"new_name",
                         kCellType: [OATextInputCell getCellIdentifier],
                         kCellTitle: _groupName,
                         kCellDesc: OALocalizedString(@"fav_enter_group_name")
@@ -121,7 +121,7 @@
     else if (_screenType == EOAEditWaypointsGroupColorScreen)
     {
         OAGPXTableCellData *cellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_grid",
+                kTableDataKey: @"color_grid",
                 kCellType: [OAColorsTableViewCell getCellIdentifier],
                 kTableValues: @{
                         @"int_value": @([OAUtilities colorToNumber:_selectedColor.color]),
@@ -180,7 +180,7 @@
                     visibleGroupsCount++;
 
                 OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
-                        kCellKey: [@"group_" stringByAppendingString:groupName],
+                        kTableDataKey: [@"group_" stringByAppendingString:groupName],
                         kCellType: [OAIconTextDividerSwitchCell getCellIdentifier],
                         kCellTitle: groupName,
                         kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
@@ -219,7 +219,7 @@
             }
 
             hideShowAllCellData = [OAGPXTableCellData withData:@{
-                    kCellKey: @"hide_show_all",
+                    kTableDataKey: @"hide_show_all",
                     kCellType: [OAIconTitleValueCell getCellIdentifier],
                     kCellTitle: visibleGroupsCount == 0
                             ? OALocalizedString(@"shared_string_show_all")

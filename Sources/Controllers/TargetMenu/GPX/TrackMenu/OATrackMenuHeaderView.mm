@@ -29,7 +29,6 @@
 @implementation OATrackMenuHeaderView
 {
     NSArray<OAGPXTableCellData *> *_statisticsCells;
-    NSArray<NSDictionary *> *_groupsData;
     EOATrackMenuHudTab _selectedTab;
     OsmAndAppInstance _app;
 }
@@ -200,8 +199,7 @@
         [self makeOnlyHeader:YES];
     }
 
-    self.groupsCollectionView.hidden = _selectedTab != EOATrackMenuHudPointsTab
-            || (_selectedTab == EOATrackMenuHudPointsTab && _groupsData.count == 0);
+    self.groupsCollectionView.hidden = _selectedTab != EOATrackMenuHudPointsTab || ![self.groupsCollectionView hasValues];
 
     [self updateFrame:self.frame.size.width];
 
@@ -445,12 +443,9 @@
 
 - (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index
 {
-    BOOL hasData = data && data.count > 0;
-
-    _groupsData = data;
     [self.groupsCollectionView setValues:data withSelectedIndex:index];
     [self.groupsCollectionView reloadData];
-    self.groupsCollectionView.hidden = !hasData;
+    self.groupsCollectionView.hidden = ![self.groupsCollectionView hasValues];
 }
 
 - (CGFloat)getInitialHeight:(CGFloat)additionalHeight

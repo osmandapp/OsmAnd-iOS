@@ -12,6 +12,7 @@
 @interface OABaseTrackMenuTabItem ()
 
 @property (nonatomic) OAGPXTableData *tableData;
+@property (nonatomic) BOOL isGeneratedData;
 
 @end
 
@@ -55,6 +56,11 @@
 - (void)generateData
 {
     self.tableData = [[OAGPXTableData alloc] init]; //override
+}
+
+- (void)resetData
+{
+    _isGeneratedData = NO;
 }
 
 - (OAGPXTableData *)getTableData

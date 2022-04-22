@@ -131,6 +131,13 @@
     return gpx;
 }
 
+- (void)updateCachedGpxItem:(NSString *)filePath
+{
+    NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[filePath];
+    if (cachedTrack)
+        cachedTrack[@"gpx"] = [self getGpxItem:QString::fromNSString(filePath)];
+}
+
 - (OsmAnd::ColorARGB) getTrackColor:(QString)filename
 {
     OAGPX * gpx = [self getGpxItem:filename];

@@ -16,7 +16,6 @@
 #import "OsmAndApp.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXTrackAnalysis.h"
-#import "OASelectedGPXHelper.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -35,8 +34,8 @@
 
 - (void)setData:(NSDictionary *)data
 {
-    if ([data.allKeys containsObject:kCellKey])
-        _key = data[kCellKey];
+    if ([data.allKeys containsObject:kTableDataKey])
+        _key = data[kTableDataKey];
     if ([data.allKeys containsObject:kCellType])
         _type = data[kCellType];
     if ([data.allKeys containsObject:kTableValues])
@@ -71,6 +70,8 @@
 
 - (void)setData:(NSDictionary *)data
 {
+    if ([data.allKeys containsObject:kTableDataKey])
+        _key = data[kTableDataKey];
     if ([data.allKeys containsObject:kSectionCells])
         _cells = data[kSectionCells];
     if ([data.allKeys containsObject:kSectionHeader])
@@ -95,6 +96,17 @@
     return NO;
 }
 
+- (OAGPXTableCellData *)getCell:(NSString *)key
+{
+    for (OAGPXTableCellData *cellData in self.cells)
+    {
+        if ([cellData.key isEqualToString:key])
+            return cellData;
+    }
+
+    return nil;
+}
+
 @end
 
 @implementation OAGPXTableData
@@ -113,6 +125,27 @@
 {
     if ([data.allKeys containsObject:kTableSections])
         _sections = data[kTableSections];
+}
+
+- (BOOL)containsSection:(NSString *)key
+{
+    for (OAGPXTableSectionData *sectionData in self.sections)
+    {
+        if ([sectionData.key isEqualToString:key])
+            return YES;
+    }
+    return NO;
+}
+
+- (OAGPXTableSectionData *)getSection:(NSString *)key
+{
+    for (OAGPXTableSectionData *sectionData in self.sections)
+    {
+        if ([sectionData.key isEqualToString:key])
+            return sectionData;
+    }
+
+    return nil;
 }
 
 @end

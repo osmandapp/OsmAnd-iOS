@@ -66,13 +66,21 @@
     if (_selectedTab < _tabs.count)
     {
         OABaseTrackMenuTabItem *tab = _tabs[_selectedTab];
+
         if (!tab.trackMenuDelegate)
             tab.trackMenuDelegate = self.trackMenuDelegate;
-        [tab generateData];
+
+        if (!tab.isGeneratedData)
+            [tab generateData];
 
         return [tab getTableData];
     }
     return [[OAGPXTableData alloc] init];
+}
+
+- (void)resetDataInTab:(EOATrackMenuHudTab)selectedTab
+{
+    [_tabs[selectedTab] resetData];
 }
 
 - (void)setupTabBar:(OATabBar *)tabBarView

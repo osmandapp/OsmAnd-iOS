@@ -24,7 +24,6 @@
 #import "OASegmentSliderTableViewCell.h"
 #import "OATextLineViewCell.h"
 #import "OAIconTitleValueCell.h"
-#import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -514,7 +513,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         }];
 
         OAGPXTableCellData *colorMapStyleCellData = [OAGPXTableCellData withData:@{
-                kCellKey:@"color_map_style",
+                kTableDataKey: @"color_map_style",
                 kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
                 kCellTitle:OALocalizedString(@"map_settings_style")
         }];
@@ -547,7 +546,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         // custom coloring settings
 
         OAGPXTableCellData *colorTypesEmptySpaceCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_types_empty_space",
+                kTableDataKey: @"color_types_empty_space",
                 kCellType: [OADividerCell getCellIdentifier],
                 kTableValues: @{ @"float_value": @10. }
         }];
@@ -562,7 +561,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         }
 
         OAGPXTableCellData *colorTypesCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_types",
+                kTableDataKey: @"color_types",
                 kCellType: [OAFoldersCell getCellIdentifier],
                 kTableValues: @{
                         @"array_value": lineColoringTypes,
@@ -579,14 +578,14 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         };
 
         OAGPXTableCellData *colorDayNightEmptySpaceCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_day_night_empty_space",
+                kTableDataKey: @"color_day_night_empty_space",
                 kCellType: [OADividerCell getCellIdentifier],
                 kTableValues: @{ @"float_value": @8. }
         }];
 
         NSArray<NSString *> *dayNightValues = @[kColorDayMode, kColorNightMode];
         OAGPXTableCellData *colorDayNightCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_day_night_value",
+                kTableDataKey: @"color_day_night_value",
                 kCellType: [OASegmentedControlCell getCellIdentifier],
                 kTableValues: @{ @"array_value": dayNightValues },
                 kCellToggle: @NO
@@ -606,7 +605,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         };
 
         OAGPXTableCellData *colorGridCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_grid",
+                kTableDataKey: @"color_grid",
                 kCellType: [OAColorsTableViewCell getCellIdentifier],
                 kTableValues: @{
                         @"array_value": _availableColors,
@@ -624,7 +623,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         };
 
         OAGPXTableCellData *topDescriptionCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"top_description",
+                kTableDataKey: @"top_description",
                 kCellType: [OATextLineViewCell getCellIdentifier],
                 kCellTitle: _selectedType.topDescription
         }];
@@ -633,7 +632,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         };
 
         OAGPXTableCellData *bottomDescriptionCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"bottom_description",
+                kTableDataKey: @"bottom_description",
                 kCellType: [OATextLineViewCell getCellIdentifier],
                 kCellTitle: _selectedType.bottomDescription
         }];
@@ -642,7 +641,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         };
 
         OAGPXTableCellData *colorGradientCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_elevation_gradient",
+                kTableDataKey: @"color_elevation_gradient",
                 kCellType: [OAImageTextViewCell getCellIdentifier],
                 kTableValues: @{
                         @"extra_desc": OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_max_height" : @""),
@@ -733,7 +732,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         }];
 
         OAGPXTableCellData *widthMapStyleCellData = [OAGPXTableCellData withData:@{
-                kCellKey:@"width_map_style",
+                kTableDataKey: @"width_map_style",
                 kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
                 kCellTitle:OALocalizedString(@"map_settings_style")
         }];
@@ -747,20 +746,20 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         // custom width settings
         OAGPXTableCellData *widthTypesEmptySpaceCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"width_types_empty_space",
+                kTableDataKey: @"width_types_empty_space",
                 kCellType: [OADividerCell getCellIdentifier],
                 kTableValues: @{ @"float_value": @12. }
         }];
 
         OAGPXTableCellData *widthValueCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"width_value",
+                kTableDataKey: @"width_value",
                 kCellType: [OASegmentedControlCell getCellIdentifier],
                 kTableValues: @{ @"array_value": [OARouteWidthMode getRouteWidthModes] },
                 kCellToggle: @YES
         }];
 
         OAGPXTableCellData *widthSliderEmptySpaceCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"width_slider_empty_space",
+                kTableDataKey: @"width_slider_empty_space",
                 kCellType: [OADividerCell getCellIdentifier],
                 kTableValues: @{ @"float_value": [self isCustomWidthMode] ? @6. : @19. }
         }];
@@ -780,7 +779,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [customWidthValues addObject:[NSString stringWithFormat:@"%li", i]];
         }
         OAGPXTableCellData *customSliderCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"width_custom_slider",
+                kTableDataKey: @"width_custom_slider",
                 kCellType: [OASegmentSliderTableViewCell getCellIdentifier],
                 kTableValues: @{
                         @"custom_string_value": [NSString stringWithFormat:@"%li", customWidthValue],
@@ -876,7 +875,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         // turn arrows section
         OAGPXTableCellData *turnArrowsCellData = [OAGPXTableCellData withData:@{
-                kCellKey:@"turn_arrows",
+                kTableDataKey: @"turn_arrows",
                 kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
                 kCellTitle:OALocalizedString(@"turn_arrows")
         }];
@@ -895,7 +894,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         // actions section
         OAGPXTableCellData *resetCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"reset",
+                kTableDataKey: @"reset",
                 kCellType: [OAIconTitleValueCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"reset_to_original"),
                 kCellRightIconName: @"ic_custom_reset"

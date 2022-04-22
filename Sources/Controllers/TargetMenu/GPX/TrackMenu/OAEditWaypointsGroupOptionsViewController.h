@@ -25,7 +25,7 @@ typedef NS_ENUM(NSUInteger, EOAEditWaypointsGroupScreen)
 - (void)updateWaypointsGroup:(NSString *)groupName color:(UIColor *)color;
 - (void)copyToFavorites:(NSString *)groupName;
 
-- (NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *)getWaypointsData;
+- (NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *)getWaypointsData;
 - (NSArray<NSString *> *)getWaypointSortedGroups;
 - (NSInteger)getWaypointsGroupColor:(NSString *)groupName;
 - (BOOL)isWaypointsGroupVisible:(NSString *)groupName;

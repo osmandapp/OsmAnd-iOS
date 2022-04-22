@@ -123,7 +123,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     if (_mode == EOAEditTrackScreenWaypointsMode)
     {
         OAGPXTableCellData *showOnMapCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"control_show_on_map",
+                kTableDataKey: @"control_show_on_map",
                 kCellType: [OATitleSwitchRoundCell getCellIdentifier],
                 kTableValues: @{ @"bool_value": @(_isShown) },
                 kCellTitle: OALocalizedString(@"map_settings_show")
@@ -153,7 +153,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         [tableSections addObject:controlsSectionData];
 
         OAGPXTableCellData *renameCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"rename",
+                kTableDataKey: @"rename",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellRightIconName: @"ic_custom_edit",
                 kCellTitle: OALocalizedString(@"fav_rename")
@@ -169,7 +169,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         };
 
         OAGPXTableCellData *changeColorCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"change_color",
+                kTableDataKey: @"change_color",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellRightIconName: @"ic_custom_appearance",
                 kCellTitle: OALocalizedString(@"change_color")
@@ -187,7 +187,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         [tableSections addObject:[OAGPXTableSectionData withData:@{ kSectionCells: @[renameCellData, changeColorCellData] }]];
 
         OAGPXTableCellData *copyToFavoritesCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"copy_to_favorites",
+                kTableDataKey: @"copy_to_favorites",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellRightIconName: @"ic_custom_trip_edit",
                 kCellTitle: OALocalizedString(@"copy_to_map_favorites")
@@ -207,7 +207,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     else
     {
         OAGPXTableCellData *analyzeOnMapCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"analyze_on_map",
+                kTableDataKey: @"analyze_on_map",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"analyze_on_map"),
                 kCellRightIconName: @"ic_custom_graph"
@@ -219,7 +219,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         };
 
         OAGPXTableCellData *editCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"edit",
+                kTableDataKey: @"edit",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellRightIconName: @"ic_custom_trip_edit",
                 kCellTitle: OALocalizedString(@"shared_string_edit")
@@ -235,7 +235,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     }
 
     OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"delete",
+            kTableDataKey: @"delete",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"shared_string_delete"),
             kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },

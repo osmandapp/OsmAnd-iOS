@@ -1074,9 +1074,9 @@ static UIViewController *parentController;
     NSDictionary* item = [groupData.groupItems objectAtIndex:dataIndex];
     OAGPX *gpx = item[@"track"];
     if (sw.isOn)
-        [_settings showGpx:@[gpx.gpxFilePath] update:NO];
-    else if ([_settings.mapSettingVisibleGpx.get containsObject:gpx.gpxFilePath])
-        [_settings hideGpx:@[gpx.gpxFilePath] update:NO];
+        [_settings showGpx:@[gpx.gpxFilePath] update:YES];
+    else
+        [_settings hideGpx:@[gpx.gpxFilePath] update:YES];
     [self.gpxTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.gpxTableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [self.gpxTableView numberOfSections] - 1)] withRowAnimation:UITableViewRowAnimationNone];
     return NO;

@@ -240,7 +240,7 @@
 {
     NSMutableArray<OAGPXTableSectionData *> *appearanceSections = [NSMutableArray array];
     OAGPXTableCellData *directionCellData = [OAGPXTableCellData withData:@{
-            kCellKey:@"direction_arrows",
+            kTableDataKey: @"direction_arrows",
             kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
             kCellTitle:OALocalizedString(@"gpx_dir_arrows")
     }];
@@ -260,7 +260,7 @@
     directionCellData.isOn = ^() { return self.gpx.showArrows; };
 
     OAGPXTableCellData *startFinishCellData = [OAGPXTableCellData withData:@{
-            kCellKey:@"start_finish_icons",
+            kTableDataKey: @"start_finish_icons",
             kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
             kCellTitle:OALocalizedString(@"track_show_start_finish_icons")
     }];
@@ -284,7 +284,7 @@
     NSMutableArray<OAGPXTableCellData *> *colorsCells = [NSMutableArray array];
 
     OAGPXTableCellData *colorTitleCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"color_title",
+            kTableDataKey: @"color_title",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
             kTableValues: @{ @"string_value": _selectedItem.title },
             kCellTitle: OALocalizedString(@"fav_color")
@@ -305,7 +305,7 @@
     }
 
     OAGPXTableCellData *colorValuesCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"color_values",
+            kTableDataKey: @"color_values",
             kCellType: [OAFoldersCell getCellIdentifier],
             kTableValues: @{
                 @"array_value": trackColoringTypes,
@@ -333,7 +333,7 @@
 
     OAGPXTableCellData * (^generateDescriptionCellData) (NSString *, NSString *) = ^ (NSString *key, NSString *description) {
         return [OAGPXTableCellData withData:@{
-                kCellKey: key,
+                kTableDataKey: key,
                 kCellType: [OATextLineViewCell getCellIdentifier],
                 kCellTitle: description
         }];
@@ -344,7 +344,7 @@
         if ([_selectedItem.coloringType isTrackSolid])
         {
             gridOrDescriptionCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_grid",
+                    kTableDataKey: @"color_grid",
                 kCellType: [OAColorsTableViewCell getCellIdentifier],
                 kTableValues: @{
                     @"int_value": @(_selectedColor.colorValue),
@@ -425,7 +425,7 @@
 
     NSMutableArray<OAGPXTableCellData *> *widthCells = [NSMutableArray array];
     OAGPXTableCellData *widthTitleCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"width_title",
+            kTableDataKey: @"width_title",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
             kTableValues: @{ @"string_value": _selectedWidth.title },
             kCellTitle: OALocalizedString(@"shared_string_width")
@@ -436,14 +436,14 @@
     [widthCells addObject:widthTitleCellData];
 
     OAGPXTableCellData *widthValueCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"width_value",
+            kTableDataKey: @"width_value",
             kCellType: [OASegmentedControlCell getCellIdentifier],
             kTableValues: @{ @"array_value": [_appearanceCollection getAvailableWidth] },
             kCellToggle: @YES
     }];
     [widthCells addObject:widthValueCellData];
     [widthCells addObject:[OAGPXTableCellData withData:@{
-            kCellKey: @"width_empty_space",
+            kTableDataKey: @"width_empty_space",
             kCellType: [OADividerCell getCellIdentifier],
             kTableValues: @{ @"float_value": @14.0 }
     }]];
@@ -497,7 +497,7 @@
 
     NSMutableArray<OAGPXTableCellData *> *splitCells = [NSMutableArray array];
     OAGPXTableCellData *splitTitleCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"split_title",
+            kTableDataKey: @"split_title",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
             kTableValues: @{ @"string_value": _selectedSplit.title },
             kCellTitle: OALocalizedString(@"gpx_split_interval")
@@ -511,7 +511,7 @@
     __block OAGPXTableCellData *sliderOrDescriptionCellData = [self generateDataForSplitCustomSliderCellData];
 
     OAGPXTableCellData *splitValueCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"split_value",
+            kTableDataKey: @"split_value",
             kCellType: [OASegmentedControlCell getCellIdentifier],
             kTableValues: @{ @"array_value": [_appearanceCollection getAvailableSplitIntervals] },
             kCellToggle: @NO
@@ -589,7 +589,7 @@
     [appearanceSections addObject:splitSectionData];
 
     OAGPXTableCellData *joinGapsCellData = [OAGPXTableCellData withData:@{
-            kCellKey:@"join_gaps",
+            kTableDataKey: @"join_gaps",
             kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
             kCellTitle:OALocalizedString(@"gpx_join_gaps")
     }];
@@ -610,7 +610,7 @@
     }]];
 
     OAGPXTableCellData *resetCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"reset",
+            kTableDataKey: @"reset",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"reset_to_original"),
             kCellRightIconName: @"ic_custom_reset",
@@ -700,7 +700,7 @@
     };
 
     OAGPXTableCellData *colorGradientCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"color_elevation_gradient",
+            kTableDataKey: @"color_elevation_gradient",
             kCellType: [OAImageTextViewCell getCellIdentifier],
             kTableValues: @{
                     @"extra_desc": generateExtraDescription(),
@@ -726,7 +726,7 @@
 - (OAGPXTableCellData *)generateDataForWidthCustomSliderCellData
 {
     OAGPXTableCellData *customSliderCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"width_custom_slider",
+            kTableDataKey: @"width_custom_slider",
             kCellType: [OASegmentSliderTableViewCell getCellIdentifier],
             kTableValues: @{
                     @"custom_string_value": _selectedWidth.customValue,
@@ -773,7 +773,7 @@
     if (_selectedSplit.isCustom)
     {
         sliderOrDescriptionCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"split_custom_slider",
+                kTableDataKey: @"split_custom_slider",
                 kCellType: [OASegmentSliderTableViewCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"shared_string_interval"),
                 kTableValues: @{
@@ -818,7 +818,7 @@
     else
     {
         sliderOrDescriptionCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"split_none_descr",
+                kTableDataKey: @"split_none_descr",
                 kCellType: [OATextLineViewCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"gpx_split_interval_none_descr")
         }];

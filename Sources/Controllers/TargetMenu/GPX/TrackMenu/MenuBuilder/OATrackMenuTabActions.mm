@@ -16,12 +16,13 @@
 @interface OATrackMenuTabActions ()
 
 @property (nonatomic) OAGPXTableData *tableData;
+@property (nonatomic) BOOL isGeneratedData;
 
 @end
 
 @implementation OATrackMenuTabActions
 
-@dynamic tableData;
+@dynamic tableData, isGeneratedData;
 
 - (NSString *)getTabTitle
 {
@@ -42,7 +43,7 @@
 {
     NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
     OAGPXTableCellData *showOnMapCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"control_show_on_map",
+            kTableDataKey: @"control_show_on_map",
             kCellType: [OATitleSwitchRoundCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"map_settings_show")
     }];
@@ -53,7 +54,7 @@
     showOnMapCellData.isOn = ^() { return self.trackMenuDelegate ? [self.trackMenuDelegate isTrackVisible] : NO; };
 
     OAGPXTableCellData *appearanceCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"control_appearance",
+            kTableDataKey: @"control_appearance",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_appearance",
             kCellTitle: OALocalizedString(@"map_settings_appearance")
@@ -64,7 +65,7 @@
     };
 
     OAGPXTableCellData *navigationCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"control_navigation",
+            kTableDataKey: @"control_navigation",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_navigation",
             kCellTitle: OALocalizedString(@"routing_settings")
@@ -80,7 +81,7 @@
     }]];
 
     OAGPXTableCellData *analyzeCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"analyze",
+            kTableDataKey: @"analyze",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_graph",
             kCellTitle: OALocalizedString(@"analyze_on_map")
@@ -96,7 +97,7 @@
     }]];
 
     OAGPXTableCellData *shareCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"share",
+            kTableDataKey: @"share",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_export",
             kCellTitle: OALocalizedString(@"ctx_mnu_share")
@@ -112,7 +113,7 @@
     }]];
 
     OAGPXTableCellData *editCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"edit",
+            kTableDataKey: @"edit",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_trip_edit",
             kCellTitle: OALocalizedString(@"edit_track")
@@ -123,7 +124,7 @@
     };
 
     OAGPXTableCellData *duplicateCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"edit_create_duplicate",
+            kTableDataKey: @"edit_create_duplicate",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_copy",
             kCellTitle: OALocalizedString(@"duplicate_track")
@@ -141,7 +142,7 @@
     NSMutableArray<OAGPXTableCellData *> *changeCells = [NSMutableArray array];
 
     OAGPXTableCellData *renameCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"change_rename",
+            kTableDataKey: @"change_rename",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_edit",
             kCellTitle: OALocalizedString(@"gpx_rename_q")
@@ -154,7 +155,7 @@
     [changeCells addObject:renameCellData];
 
     OAGPXTableCellData *moveCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"change_move",
+            kTableDataKey: @"change_move",
             kCellType: [OATitleDescriptionIconRoundCell getCellIdentifier],
             kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getDirName] : @"",
             kCellRightIconName: @"ic_custom_folder_move",
@@ -170,7 +171,10 @@
 
     [changeCells addObject:moveCellData];
 
-    OAGPXTableSectionData *changeSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: changeCells }];
+    OAGPXTableSectionData *changeSectionData = [OAGPXTableSectionData withData:@{
+            kTableDataKey: @"change_section",
+            kSectionCells: changeCells
+    }];
     [changeSectionData setData:@{ kSectionHeaderHeight: @19. }];
     changeSectionData.updateData = ^() {
         for (OAGPXTableCellData *cellData in changeSectionData.cells)
@@ -183,7 +187,7 @@
     [tableSections addObject:changeSectionData];
 
     OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"delete",
+            kTableDataKey: @"delete",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kTableValues: @{ @"font_value": [UIFont boldSystemFontOfSize:17] },
             kCellRightIconName: @"ic_custom_remove_outlined",
@@ -208,6 +212,8 @@
                 sectionData.updateData();
         }
     };
+
+    self.isGeneratedData = YES;
 }
 
 @end

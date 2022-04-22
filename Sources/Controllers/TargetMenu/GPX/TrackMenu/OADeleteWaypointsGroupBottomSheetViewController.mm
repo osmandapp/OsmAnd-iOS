@@ -78,7 +78,7 @@
 - (void)generateData
 {
     OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"delete",
+            kTableDataKey: @"delete",
             kCellType: [OAFilledButtonCell getCellIdentifier],
             kTableValues: @{ @"title_color_value_integer": @color_icon_color_night },
             kCellTitle: OALocalizedString(@"shared_string_delete"),
@@ -98,7 +98,7 @@
     _tableData = @[
             [OAGPXTableSectionData withData:@{
                     kSectionCells: @[[OAGPXTableCellData withData:@{
-                            kCellKey: @"confirm",
+                            kTableDataKey: @"confirm",
                             kCellType: [OATextLineViewCell getCellIdentifier],
                             kCellTitle: [NSString stringWithFormat:OALocalizedString(@"delete_group_confirm"), _groupName]
                     }]]

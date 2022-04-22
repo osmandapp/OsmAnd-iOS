@@ -129,3 +129,23 @@
 +(NSArray*) convert:(NSArray*)splitSegments;
 
 @end
+
+@interface OAElevationDiffsCalculator : NSObject
+
+@property (nonatomic) double CALCULATED_GPX_WINDOW_LENGTH;
+@property (nonatomic) double windowLength;
+@property (nonatomic) int startIndex;
+@property (nonatomic) int numberOfPoints;
+@property (nonatomic) double diffElevationUp;
+@property (nonatomic) double diffElevationDown;
+
+- (instancetype)init:(int)startIndex numberOfPoints:(int)numberOfPoints s:(OASplitSegment *)s;
+- (instancetype)initWithWindowLength:(double)windowLength startIndex:(int)startIndex numberOfPoints:(int)numberOfPoints;
+
+-(OAWptPt *) getPoint:(int)index s:(OASplitSegment *)s;
+-(double) getDiffElevationUp;
+-(double) getDiffElevationDown;
+-(void) calculateElevationDiffs:(OASplitSegment *)s;
+-(double) calcAvg:(double)eleSumm pointsCount:(int)pointsCount eleAvg:(double)eleAvg;
+
+@end

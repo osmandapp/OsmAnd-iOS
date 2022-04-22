@@ -269,6 +269,7 @@
 {
     long startTimeOfSingleSegment = 0;
     long endTimeOfSingleSegment = 0;
+    int count = 0;
     
     float distanceOfSingleSegment = 0;
     float distanceMovingOfSingleSegment = 0;
@@ -281,25 +282,12 @@
     double totalSpeedSum = 0;
     _points = 0;
     
-    double channelThresMin = 10; // Minimum oscillation amplitude considered as relevant or as above noise for accumulated Ascent/Descent analysis
-    double channelThres = channelThresMin; // Actual oscillation amplitude considered as above noise (dynamic channel adjustment, accomodates depedency on current VDOP/getAccuracy if desired)
-    double channelBase;
-    double channelTop;
-    double channelBottom;
-    BOOL climb = NO;
-    
     NSMutableArray<OAElevation *> *elevationData = [NSMutableArray new];
     NSMutableArray<OASpeed *> *speedData = [NSMutableArray new];
     
     for (OASplitSegment *s in splitSegments)
     {
         int numberOfPoints = s.getNumberOfPoints;
-        
-        channelBase = 99999;
-        channelTop = channelBase;
-        channelBottom = channelBase;
-        //channelThres = channelThresMin; //only for dynamic channel adjustment
-        
         float segmentDistance = 0.;
         _metricEnd += s.metricEnd;
         _secondaryMetricEnd += s.secondaryMetricEnd;
@@ -371,93 +359,10 @@
             if (speed > 0)
                 _hasSpeedInTrack = YES;
             
-            // Trend channel analysis for elevation gain/loss, Hardy 2015-09-22, LPF filtering added 2017-10-26:
-            // - Detect the consecutive elevation trend channels: Only use the net elevation changes of each trend channel (i.e. between the turnarounds) to accumulate the Ascent/Descent values.
-            // - Perform the channel evaluation on Low Pass Filter (LPF) smoothed ele data instead of on the raw ele data
-            // Parameters:
-            // - channelThresMin (in meters): defines the channel turnaround detection, i.e. oscillations smaller than this are ignored as irrelevant or noise.
-            // - smoothWindow (number of points): is the LPF window
-            // NOW REMOVED, as no relevant examples found: Dynamic channel adjustment: To suppress unreliable measurement points, could relax the turnaround detection from the constant channelThresMin to channelThres which is e.g. based on the maximum VDOP of any point which contributed to the current trend. (Good assumption is VDOP=2*HDOP, which accounts for invisibility of lower hemisphere satellites.)
-            
-            // LPF smooting of ele data, usually smooth over odd number of values like 5
-            NSInteger smoothWindow = 5;
-            double eleSmoothed = NAN;
-            NSInteger j2 = 0;
-            for (NSInteger j1 = - smoothWindow + 1; j1 <= 0; j1++)
-            {
-                if ((j + j1 >= 0) && !isnan([s get:j + j1].elevation))
-                {
-                    j2++;
-                    if (!isnan(eleSmoothed))
-                        eleSmoothed = eleSmoothed + [s get:j + j1].elevation;
-                    else
-                        eleSmoothed = [s get:j + j1].elevation;
-                }
-            }
-            if (!isnan(eleSmoothed))
-                eleSmoothed = eleSmoothed / j2;
-            
-            if (!isnan(eleSmoothed))
-            {
-                // Init channel
-                if (channelBase == 99999)
-                {
-                    channelBase = eleSmoothed;
-                    channelTop = channelBase;
-                    channelBottom = channelBase;
-                    //channelThres = channelThresMin; //only for dynamic channel adjustment
-                }
-                // Channel maintenance
-                if (eleSmoothed > channelTop)
-                {
-                    channelTop = eleSmoothed;
-                    //if (!Double.isNaN(point.hdop)) {
-                    //    channelThres = Math.max(channelThres, 2.0 * point.hdop); //only for dynamic channel adjustment
-                    //}
-                }
-                else if (eleSmoothed < channelBottom)
-                {
-                    channelBottom = eleSmoothed;
-                    //if (!Double.isNaN(point.hdop)) {
-                    //    channelThres = Math.max(channelThres, 2.0 * point.hdop); //only for dynamic channel adjustment
-                    //}
-                }
-                // Turnaround (breakout) detection
-                if ((eleSmoothed <= (channelTop - channelThres)) && (climb == YES))
-                {
-                    if ((channelTop - channelBase) >= channelThres)
-                        _diffElevationUp += channelTop - channelBase;
-
-                    channelBase = channelTop;
-                    channelBottom = eleSmoothed;
-                    climb = false;
-                    //channelThres = channelThresMin; //only for dynamic channel adjustment
-                }
-                else if ((eleSmoothed >= (channelBottom + channelThres)) && (climb == NO))
-                {
-                    if ((channelBase - channelBottom) >= channelThres)
-                        _diffElevationDown += channelBase - channelBottom;
-
-                    channelBase = channelBottom;
-                    channelTop = eleSmoothed;
-                    climb = true;
-                    //channelThres = channelThresMin; //only for dynamic channel adjustment
-                }
-                // End detection without breakout
-                if (j == (numberOfPoints - 1))
-                {
-                    if ((channelTop - channelBase) >= channelThres)
-                    {
-                        _diffElevationUp += channelTop - channelBase;
-                    }
-                    if ((channelBase - channelBottom) >= channelThres)
-                    {
-                        _diffElevationDown += channelBase - channelBottom;
-                    }
-                }
-            }
             // float[1] calculations
             double distance = 0, bearing = 0;
+            
+            
             if (j > 0) {
                 OAWptPt *prev = [s get:j - 1];
 
@@ -478,9 +383,7 @@
                 _totalDistance += distance;
                 segmentDistance += distance;
                 point.distance = segmentDistance;
-                long timeDiffMillis = MAX(0, point.time - prev.time);
-                timeDiff = (NSInteger) (timeDiffMillis / 1000);
-                
+                timeDiff = MAX(0, point.time - prev.time);
                 //Last resort: Derive speed values from displacement if track does not originally contain speed
                 if (!_hasSpeedInTrack && speed == 0 && timeDiff > 0)
                     speed = distance / timeDiff;
@@ -489,13 +392,13 @@
                 //   speed > 0  uses GPS chipset's motion detection
                 //   calculations[0] > minDisplacment * time  is heuristic needed because tracks may be filtered at recording time, so points at rest may not be present in file at all
                 BOOL timeSpecified = point.time != 0 && prev.time != 0;
-                if (speed > 0 && timeSpecified && distance > timeDiffMillis / 10000)
+                if (speed > 0 && timeSpecified && distance > timeDiff / 10.)
                 {
-                    _timeMoving += timeDiffMillis;
+                    _timeMoving += timeDiff;
                     _totalDistanceMoving += distance;
                     if (s.segment.generalSegment && !point.firstPoint)
                     {
-                        timeMovingOfSingleSegment += timeDiffMillis;
+                        timeMovingOfSingleSegment += timeDiff;
                         distanceMovingOfSingleSegment += distance;
                     }
                 }
@@ -556,6 +459,10 @@
                 }
             }
         }
+        OAElevationDiffsCalculator *elevationDiffsCalc = [[OAElevationDiffsCalculator alloc] init:0 numberOfPoints:numberOfPoints s:s];
+        [elevationDiffsCalc calculateElevationDiffs:s];
+        _diffElevationUp += elevationDiffsCalc.diffElevationUp;
+        _diffElevationDown += elevationDiffsCalc.diffElevationDown;
     }
     if (_totalDistance < 0) {
         _hasElevationData = NO;
@@ -653,5 +560,119 @@
     return ls;
 }
 
+
+@end
+
+@implementation OAElevationDiffsCalculator
+
+double CALCULATED_GPX_WINDOW_LENGTH = 10.;
+double windowLength;
+
+-(OAWptPt *) getPoint:(int)index s:(OASplitSegment *)s
+{
+    return [s get:index];
+};
+
+- (instancetype)init:(int)startIndex numberOfPoints:(int)numberOfPoints s:s
+{
+    self = [super init];
+    if (self) {
+        _startIndex = startIndex;
+        _numberOfPoints = numberOfPoints;
+        OAWptPt * lastPoint = [self getPoint:(startIndex + numberOfPoints - 1) s:s];
+        _windowLength = lastPoint.time == 0 ? CALCULATED_GPX_WINDOW_LENGTH : MAX(20., lastPoint.distance / numberOfPoints * 4);
+    }
+    return self;
+}
+- (instancetype)initWithWindowLength:(double)windowLength startIndex:(int)startIndex numberOfPoints:(int)numberOfPoints
+{
+    self = [super init];
+    if (self) {
+        _startIndex = startIndex;
+        _numberOfPoints = numberOfPoints;
+        _windowLength = windowLength;
+    }
+    return self;
+}
+
+-(double) getDiffElevationUp
+{
+    return _diffElevationUp;
+};
+-(double) getDiffElevationDown
+{
+    return _diffElevationDown;
+};
+
+-(double) calcAvg:(double)eleSumm pointsCount:(int)pointsCount eleAvg:(double)eleAvg
+{
+    double avg = eleSumm / pointsCount;
+    if (!isnan(eleAvg))
+    {
+        double diff = avg - eleAvg;
+        if (diff > 0)
+            _diffElevationUp += diff;
+        else
+            _diffElevationDown -= diff;
+    }
+    return avg;
+}
+
+-(void) calculateElevationDiffs:(OASplitSegment *) s
+{
+    OAWptPt * initialPoint = [self getPoint:_startIndex s:s];
+    
+    double eleSumm = initialPoint.elevation;
+    double prevEle = initialPoint.elevation;
+    int pointsCount = isnan(eleSumm) ? 0 : 1;
+    double eleAvg = NAN;
+    double nextWindowPos = initialPoint.distance + windowLength;
+    int pointIndex = _startIndex + 1;
+    
+    while (pointIndex < _numberOfPoints + _startIndex)
+    {
+        OAWptPt * point = [self getPoint:pointIndex s:s];
+        if (point.distance > nextWindowPos)
+        {
+            eleAvg = [self calcAvg:eleSumm pointsCount:pointsCount eleAvg:eleAvg];
+            if (!isnan(point.elevation))
+            {
+                eleSumm = point.elevation;
+                prevEle = point.elevation;
+                pointsCount = 1;
+            }
+            else if (!isnan(prevEle))
+            {
+                eleSumm = prevEle;
+                pointsCount = 1;
+            }
+            else
+            {
+                eleSumm = NAN;
+                pointsCount = 0;
+            }
+            while (nextWindowPos < point.distance)
+                nextWindowPos += [self windowLength];
+        }
+        else
+        {
+            if (!isnan(point.elevation))
+            {
+                eleSumm += point.elevation;
+                prevEle = point.elevation;
+                pointsCount++;
+            }
+            else if (!isnan(prevEle))
+            {
+                eleSumm += prevEle;
+                pointsCount++;
+            }
+        }
+        pointIndex++;
+    }
+    if (pointsCount > 1)
+        [self calcAvg:eleSumm pointsCount:pointsCount eleAvg:eleAvg];
+    _diffElevationUp = round(_diffElevationUp + 0.3);
+};
 
 @end

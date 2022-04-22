@@ -2407,7 +2407,7 @@
 "weather_wind_unit_knots" = "Nudos";
 "weather_precip_unit_mm" = "Milímetros";
 "weather_precip_unit_in" = "Pulgadas";
-"weather_cloud_data_description" = "Los datos meteorológicos serán descargados para verlos cada vez.";
+"weather_cloud_data_description" = "Los datos meteorológicos serán descargados cada vez para la área visualizada.";
 "login_footer_full_text" = "¿Necesitas ayuda? Contáctanos en\nsupport@osmand.net";
 "login_footer_email_part" = "support@osmand.net";
 "login_error_email_invalid" = "Ingresa un correo electrónico válido";
@@ -2477,3 +2477,14 @@
 "backup_error_file_not_available" = "Archivo no disponible";
 "backup_error_no_valid_subscription" = "No hay ninguna suscripción válida";
 "backup_error_subscription_was_used" = "Suscripción o promoción usada en otra cuenta %@";
+"copy_to_map_favorites" = "Copiar a favoritos";
+"weather_precip_enable_descr" = "Permite ver la capa de precipitaciones en el mapa.";
+"weather_contours_enable_descr" = "Permite ver la capa de isolíneas en el mapa.";
+"ios_release_4_2" = "• Aspecto de las líneas de ruta: se ha añadido la posibilidad de definir el ancho y el color\n• Trazas: se ha añadido la opción de borrar varias trazas a la vez\n• Menú contextual de trazas: se ha añadido una barra de desplazamiento con grupos de puntos de ruta\n• Aspecto del mapa: se han dividido las rutas adicionales por tipo con la posibilidad de activar por separado una de cada categoría\n• Rutas a caballo: se ha añadido un nuevo tipo de navegación y perfil de la aplicación\n• Los archivos de OsmAnd ahora son visibles en desde el gestor de archivos\n• Se ha mejorado la interfaz de las opciones «Usar datos de elevación» y «Elegir fluctuación de elevación», se han combinado y se han renombrado como «Terreno preferido», actualmente disponibles para los perfiles «Bicicleta» y «Peatón».\n• Se ha añadido la opción «Incluir cabecera» para la grabación de trazas\n• Widget del nombre de la calle: ahora muestra el escudo del camino y el número de salida durante la navegación\n• Nuevas rutas de ejercicios «fitness» y «running» en el mapa\n• Corrección de errores de CarPlay, se han añadido gestos para pantallas táctiles\n• Se ha corregido la importación de archivos GPX desde el paquete OSF\n• Se ha corregido la importación de complementos personalizados con archivos incluidos\n• Se ha corregido varios fallos en el modo de planificación de rutas\n• Se ha corregido fallos durante la navegación\n";
+"map_settings_weather_layers" = "Capas";
+"weather_temp_enable_descr" = "Permite ver la capa de temperatura en el mapa.";
+"map_settings_weather_contours" = "Contornos";
+"weather_pressure_enable_descr" = "Permite ver la capa de presión en el mapa.";
+"weather_wind_enable_descr" = "Permite ver la capa de viento en el mapa.";
+"weather_cloud_enable_descr" = "Permite ver la capa de nubes en el mapa.";
+"backup_error_invalid_token" = "Clave («Token») inválida";

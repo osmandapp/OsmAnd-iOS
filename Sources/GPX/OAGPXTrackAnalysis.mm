@@ -269,7 +269,6 @@
 {
     long startTimeOfSingleSegment = 0;
     long endTimeOfSingleSegment = 0;
-    int count = 0;
     
     float distanceOfSingleSegment = 0;
     float distanceMovingOfSingleSegment = 0;
@@ -278,7 +277,7 @@
     float totalElevation = 0;
     NSInteger elevationPoints = 0;
     NSInteger speedCount = 0;
-    NSInteger timeDiff = 0;
+    NSInteger timeDiffSec = 0;
     double totalSpeedSum = 0;
     _points = 0;
     
@@ -362,7 +361,6 @@
             // float[1] calculations
             double distance = 0, bearing = 0;
             
-            
             if (j > 0) {
                 OAWptPt *prev = [s get:j - 1];
 
@@ -383,22 +381,22 @@
                 _totalDistance += distance;
                 segmentDistance += distance;
                 point.distance = segmentDistance;
-                timeDiff = MAX(0, point.time - prev.time);
+                timeDiffSec = MAX(0, point.time - prev.time);
                 //Last resort: Derive speed values from displacement if track does not originally contain speed
-                if (!_hasSpeedInTrack && speed == 0 && timeDiff > 0)
-                    speed = distance / timeDiff;
+                if (!_hasSpeedInTrack && speed == 0 && timeDiffSec > 0)
+                    speed = distance / timeDiffSec;
                 
                 // Motion detection:
                 //   speed > 0  uses GPS chipset's motion detection
                 //   calculations[0] > minDisplacment * time  is heuristic needed because tracks may be filtered at recording time, so points at rest may not be present in file at all
                 BOOL timeSpecified = point.time != 0 && prev.time != 0;
-                if (speed > 0 && timeSpecified && distance > timeDiff / 10.)
+                if (speed > 0 && timeSpecified && distance > timeDiffSec / 10.)
                 {
-                    _timeMoving += timeDiff;
+                    _timeMoving += timeDiffSec;
                     _totalDistanceMoving += distance;
                     if (s.segment.generalSegment && !point.firstPoint)
                     {
-                        timeMovingOfSingleSegment += timeDiff;
+                        timeMovingOfSingleSegment += timeDiffSec;
                         distanceMovingOfSingleSegment += distance;
                     }
                 }
@@ -410,7 +408,7 @@
                 //    }
             }
             
-            elevation1.time = timeDiff;
+            elevation1.time = timeDiffSec;
             elevation1.distance = (j > 0) ? distance : 0;
             [elevationData addObject:elevation1];
             if (!_hasElevationData && !isnan(elevation1.elevation) && _totalDistance > 0)
@@ -426,7 +424,7 @@
             
             OASpeed *speed1 = [[OASpeed alloc] init];
             speed1.speed = speed;
-            speed1.time = timeDiff;
+            speed1.time = timeDiffSec;
             speed1.distance = elevation1.distance;
             [speedData addObject:speed1];
             if (!_hasSpeedData && speed1.speed > 0 && _totalDistance > 0)

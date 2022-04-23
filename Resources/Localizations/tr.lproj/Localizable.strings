@@ -2494,3 +2494,5 @@
 "weather_cloud_enable_descr" = "Haritada bulut katmanını görüntülemeyi etkinleştirin.";
 "weather_precip_enable_descr" = "Haritada yağış katmanını görüntülemeyi etkinleştirin.";
 "weather_contours_enable_descr" = "Haritada eş değer eğrileri katmanını görüntülemeyi etkinleştirin.";
+"routeInfo_horse_scale_name" = "At parkurlarının zorluğu";
+"routeInfo_horse_scale_description" = "Yolları at parkurlarının zorluğuna göre görselleştir";

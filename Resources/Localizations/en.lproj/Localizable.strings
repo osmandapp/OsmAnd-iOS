@@ -2224,6 +2224,8 @@
 "routing_attr_allow_expert_description" = "Extremely difficult routes, with dangerous obstacles and surroundings.";
 "routeInfo_surface_name" = "Surface";
 "routeInfo_surface_description" = "Provide road/footpath physical surface info.";
+"routeInfo_horse_scale_name" = "Difficulty of horse trails";
+"routeInfo_horse_scale_description" = "Render paths according to difficulty of horse trails";
 "rendering_attr_showMtbRoutes_name" = "Mountain bike routes";
 "rendering_attr_tracktype_grade5_name" = "Soft";
 "routing_attr_avoid_share_taxi_description" = "Avoids share taxi";

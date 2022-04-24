@@ -1049,9 +1049,7 @@
 "plan_route_open_existing_track" = "Malfermi ekzistan spuron";
 "plan_route_last_modified" = "Antaŭe modifita";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
-"route_between_points_warning_desc" = "Por uzi tiunĉi agordon, OsmAnd postulas ĝustigi vian kurson al vojoj sur la mapo.
-\n
-\n Sekve vi devos elekti profilon de navigo (por trovi permesatajn vojojn) kaj sojlan distancon (por alproksimigi vian kurson al vojoj).";
+"route_between_points_warning_desc" = "Por uzi tiunĉi agordon, OsmAnd postulas ĝustigi vian kurson al vojoj sur la mapo.\n\n Sekve vi devos elekti profilon de navigo (por trovi permesatajn vojojn) kaj sojlan distancon (por alproksimigi vian kurson al vojoj).";
 "plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
 "gpx_saved_successfully" = "GPX file saved to %@";
 "none_point_error" = "Bonvolu aldoni almenaŭ unu punkton.";
@@ -1976,7 +1974,7 @@
 "already_has_inapp" = "You have already subscribed to %@.";
 "inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";
 "rendering_value_high_name" = "Alta";
-"routing_attr_difficulty_preference_description" = "Preferi skivojojn de tiu malfacilo, sed eblas difini kurson per pli (mal)facilaj skivojoj, se la rezulta kurso estos pli mallonga.";
+"routing_attr_difficulty_preference_description" = "Preferi skivojojn tiu ĉi facilo, sed la aplikaĵo povos difini kurson tra pli (mal)facilaj skivojoj, se la rezulta kurso estos pli mallonga.";
 "routing_attr_height_description" = "Difini permesatan alton de veturilo.";
 "touting_specified_vehicle_parameters_descr" = "Specified vehicle parameters may affect routing.";
 "routing_attr_height_obstacles_name" = "Uzi datumojn pri altitudo";
@@ -2046,7 +2044,7 @@
 "rendering_attr_currentTrackWidth_description" = "Larĝo de GPX-spuro";
 "rendering_attr_piste_type_sleigh_name" = "glitveturado (tirata de hundoj)";
 "rendering_attr_surface_paved_name" = "Firma";
-"routing_attr_difficulty_preference_name" = "Preferata malfacilo";
+"routing_attr_difficulty_preference_name" = "Preferata facilo";
 "routing_attr_avoid_subway_name" = "Sen metrooj";
 "rendering_attr_showLez_description" = "Montri zonojn nur por malalte aer‑malpurigantaj veturiloj. Ne influas al difinado de kurso.";
 "rendering_attr_surfaceIntegrity_name" = "Kohero de vojpavimo";

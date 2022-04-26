@@ -1386,7 +1386,7 @@
 "rendering_value_fine_name" = "Тончайшая";
 "rendering_attr_surface_sand_name" = "Песок";
 "rendering_attr_piste_type_snow_park_name" = "Ландшафтный парк";
-"routing_attr_freeride_policy_description" = "Фрирайды и внетрассовые маршруты — это неофициальные неподготовленные трассы. Обычно неухоженные, неразмеченные и неосвещённые вечером. Вход на свой страх и риск.";
+"routing_attr_freeride_policy_description" = "Фрирайд и внетрассовые маршруты — это неофициальные неподготовленные трассы. Обычно неухоженные, неразмеченные и неосвещённые вечером. Вход на свой страх и риск.";
 "rendering_attr_surface_sett_name" = "Брусчатка";
 "rendering_attr_highway_class_track_grade4_name" = "Класс 4";
 "routing_attr_relief_smoothness_factor_hills_name" = "Холмистый";

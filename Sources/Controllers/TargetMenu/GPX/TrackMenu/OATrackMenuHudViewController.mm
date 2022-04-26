@@ -642,7 +642,7 @@
                                                                  andObserve:_app.locationServices.updateObserver];
 }
 
-- (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDoc
+- (void)updateGpxData
 {
     [super updateGpxData:replaceGPX updateDocument:updateDoc];
     [self updateWaypointsData];
@@ -741,7 +741,7 @@
     if (!newLocation)
         return;
 
-    if (_selectedTab == EOATrackMenuHudOverviewTab)
+    if (_selectedTab == EOATrackMenuHudOverviewTab && CLLocationCoordinate2DIsValid(self.gpx.bounds.center))
     {
         CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
         CLLocationDirection newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
@@ -1790,7 +1790,7 @@
                         }
                         completion: ^(BOOL finished) {
                             _isTabSelecting = NO;
-            
+
                             if (_selectedTab == EOATrackMenuHudOverviewTab || (_selectedTab == EOATrackMenuHudPointsTab && _waypointGroups.count > 0))
                                 [self startLocationServices];
                         }];

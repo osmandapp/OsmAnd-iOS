@@ -231,7 +231,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     NSInteger _sectionColors;
     NSInteger _cellColorGrid;
     
-    OAAutoObserverProxy *_dayNightModeObserver;
+    OAAutoObserverProxy *_mapSourceUpdatedObserver;
 }
 
 @dynamic statusBarBackgroundView, contentContainer;
@@ -255,9 +255,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     _routingHelper = [OARoutingHelper sharedInstance];
     _mapPanelViewController = [OARootViewController instance].mapPanel;
     
-    _dayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                      withHandler:@selector(onDayNightModeChanged)
-                                                       andObserve:_app.dayNightModeObservable];
+    _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onMapSourceUpdated)
+                                                  andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
 
     [self setOldValues];
     [self updateAllValues];
@@ -266,7 +266,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 - (void)setOldValues
 {
     _oldPreviewRouteLineInfo = [_mapPanelViewController.mapViewController.mapLayers.routeMapLayer getPreviewRouteLineInfo];
-    _oldDayNightMode = [_settings.appearanceMode get];
+    _oldDayNightMode = [_settings.appearanceMode get:_appMode];
 }
 
 - (void)updateAllValues
@@ -597,12 +597,11 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                 NSInteger index = [value integerValue];
                 _nightMode = [dayNightValues[index] isEqualToString:kColorNightMode];
                 _selectedDayNightMode = _nightMode ? dayNightValues[1] : dayNightValues[0];
-                [_settings.appearanceMode set:index];
+                [_settings.appearanceMode set:index mode:_appMode];
             }
         };
         colorDayNightCellData.updateData = ^() {
             [[OADayNightHelper instance] forceUpdate];
-            [self updateRouteLayer:_previewRouteLineInfo];
         };
 
         OAGPXTableCellData *colorGridCellData = [OAGPXTableCellData withData:@{
@@ -1053,15 +1052,17 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     [_mapPanelViewController.mapViewController runWithRenderSync:^{
         [routeLayer resetLayer];
         [previewLayer resetLayer];
+        
+        [routeLayer refreshRoute];
+        [self refreshPreviewLayer];
     }];
-    [routeLayer refreshRoute];
-    [self refreshPreviewLayer];
 }
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
-        [_settings.appearanceMode set:_oldDayNightMode];
+        [_mapSourceUpdatedObserver detach];
+        [_settings.appearanceMode set:_oldDayNightMode mode:_appMode];
         [[OADayNightHelper instance] forceUpdate];
 
         [self updateRouteLayer:_oldPreviewRouteLineInfo];
@@ -1081,7 +1082,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         [_settings.routeInfoAttribute set:_previewRouteLineInfo.routeInfoAttribute mode:_appMode];
         [_settings.routeLineWidth set:_previewRouteLineInfo.width mode:_appMode];
         [_settings.routeShowTurnArrows set:_previewRouteLineInfo.showTurnArrows mode:_appMode];
-        [_settings.appearanceMode set:_oldDayNightMode];
+        
+        [_mapSourceUpdatedObserver detach];
+        [_settings.appearanceMode set:_oldDayNightMode mode:_appMode];
         [[OADayNightHelper instance] forceUpdate];
 
         [self updateRouteLayer:_previewRouteLineInfo];
@@ -1196,7 +1199,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             _colorValuesCell = (OAFoldersCell *) nib[0];
             _colorValuesCell.selectionStyle = UITableViewCellSelectionStyleNone;
             _colorValuesCell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
-            _colorValuesCell.collectionView.contentInset = UIEdgeInsetsMake(0., 20. , 0., 20.);
+            _colorValuesCell.collectionView.contentInset = UIEdgeInsetsMake(0., 8. , 0., 20.);
             _colorValuesCell.backgroundColor = UIColor.whiteColor;
             _colorValuesCell.collectionView.backgroundColor = UIColor.whiteColor;
             _colorValuesCell.collectionView.cellIndex = indexPath;
@@ -1591,10 +1594,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }
 }
 
-- (void) onDayNightModeChanged
+- (void) onMapSourceUpdated
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self refreshPreviewLayer];
+        [self updateRouteLayer:_previewRouteLineInfo];
     });
 }
 

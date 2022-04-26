@@ -12,10 +12,8 @@
 #import "Localization.h"
 #import "OAQuickActionRegistry.h"
 #import "OAQuickAction.h"
-#import "MGSwipeButton.h"
 #import "OATitleDescrDraggableCell.h"
 #import "OAMultiselectableHeaderView.h"
-#import "OASizes.h"
 #import "OAColors.h"
 #import "OATableViewCustomHeaderView.h"
 
@@ -24,7 +22,8 @@
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 #define toolbarHeight 64
 
-@interface OAQuickActionListViewController () <UITableViewDelegate, UITableViewDataSource, MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate>
+@interface OAQuickActionListViewController () <UITableViewDelegate, UITableViewDataSource, MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate, OAQuickActionListDelegate>
+
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -178,6 +177,7 @@
 - (IBAction)addActionPressed:(id)sender
 {
     OAAddQuickActionViewController *vc = [[OAAddQuickActionViewController alloc] init];
+    vc.delegate = self;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -186,6 +186,7 @@
 {
     OAQuickAction *item = [self getAction:indexPath];
     OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:item isNew:NO];
+    actionScreen.delegate = self;
     [self.navigationController pushViewController:actionScreen animated:YES];
 }
 
@@ -400,6 +401,14 @@
             [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
     }
     [self.tableView endUpdates];
+}
+
+#pragma mark - OAQuickActionListDelegate
+
+- (void)updateData
+{
+    _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
+    [self.tableView reloadData];
 }
 
 @end

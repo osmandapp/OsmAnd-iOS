@@ -7,10 +7,13 @@
 //
 
 #import "OACompoundViewController.h"
+#import "OAActionConfigurationViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OAAddQuickActionViewController : OACompoundViewController
+
+@property (nonatomic, weak) id<OAQuickActionListDelegate> delegate;
 
 @end
 

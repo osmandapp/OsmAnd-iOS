@@ -10,11 +10,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol OAQuickActionListDelegate
+
+- (void)updateData;
+
+@end
+
 @class OAQuickAction;
 
 @interface OAActionConfigurationViewController : OACompoundViewController
 
 -(instancetype) initWithAction:(OAQuickAction *)action isNew:(BOOL)isNew;
+
+@property (nonatomic, weak) id<OAQuickActionListDelegate> delegate;
 
 @end
 

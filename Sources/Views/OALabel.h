@@ -17,6 +17,6 @@
 
 @interface OALabel : UILabel
 
-@property (nonatomic) id<OALabelDelegate> delegate;
+@property (nonatomic, weak) id<OALabelDelegate> delegate;
 
 @end

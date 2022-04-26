@@ -20,7 +20,7 @@
 @property (nonatomic, assign) BOOL centerVertically;
 @property (nonatomic, assign) BOOL extraSpacing;
 
-@property (nonatomic) id<OAButtonDelegate> delegate;
+@property (nonatomic, weak) id<OAButtonDelegate> delegate;
 
 - (void)applyVerticalLayout;
 

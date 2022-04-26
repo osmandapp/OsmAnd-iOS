@@ -10,8 +10,6 @@
 
 @protocol OACustomLabelDelegate <NSObject>
 
-@optional
-
 - (void)onLabelTapped:(NSInteger)tag;
 - (void)onLabelLongPressed:(NSInteger)tag;
 

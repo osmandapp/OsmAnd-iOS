@@ -34,13 +34,13 @@
 
 - (void)onButtonTapped:(UIGestureRecognizer *)recognizer
 {
-    if (recognizer.state == UIGestureRecognizerStateEnded)
+    if (self.delegate && recognizer.state == UIGestureRecognizerStateEnded)
         [self.delegate onLabelTapped:self.tag];
 }
 
 - (void)onButtonLongPressed:(UIGestureRecognizer *)recognizer
 {
-    if (recognizer.state == UIGestureRecognizerStateEnded)
+    if (self.delegate && recognizer.state == UIGestureRecognizerStateEnded)
         [self.delegate onLabelLongPressed:self.tag];
 }
 

@@ -10,8 +10,6 @@
 
 @protocol OACustomButtonDelegate <NSObject>
 
-@optional
-
 - (void)onButtonTapped:(NSInteger)tag;
 - (void)onButtonLongPressed:(NSInteger)tag;
 

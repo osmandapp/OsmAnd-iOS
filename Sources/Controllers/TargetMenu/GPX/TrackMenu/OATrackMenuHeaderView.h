@@ -50,8 +50,8 @@
 
 @property (nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 
-- (void)updateHeader:(EOATrackMenuHudTab)selectedTab
-        currentTrack:(BOOL)currentTrack
+- (void)updateSelectedTab:(EOATrackMenuHudTab)selectedTab;
+- (void)updateHeader:(BOOL)currentTrack
           shownTrack:(BOOL)shownTrack
                title:(NSString *)title;
 

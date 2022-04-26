@@ -106,13 +106,15 @@
     return res;
 }
 
-- (void)updateHeader:(EOATrackMenuHudTab)selectedTab
-        currentTrack:(BOOL)currentTrack
+- (void)updateSelectedTab:(EOATrackMenuHudTab)selectedTab
+{
+    _selectedTab = selectedTab;
+}
+
+- (void)updateHeader:(BOOL)currentTrack
           shownTrack:(BOOL)shownTrack
                title:(NSString *)title
 {
-    _selectedTab = selectedTab;
-
     self.backgroundColor = _selectedTab != EOATrackMenuHudActionsTab
             ? UIColor.whiteColor : UIColorFromRGB(color_bottom_sheet_background);
 
@@ -419,7 +421,9 @@
 - (void)setDescription
 {
     NSString *description = self.trackMenuDelegate ? [self.trackMenuDelegate generateDescription] : @"";
-    description = [OAWikiArticleHelper getFirstParagraph:description];
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
+        description = [OAWikiArticleHelper getFirstParagraph:description];
+
     BOOL hasDescription = description && description.length > 0;
 
     [self.descriptionView setText:description];

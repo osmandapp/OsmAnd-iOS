@@ -366,6 +366,7 @@
     )];
     _headerView.trackMenuDelegate = self;
     _headerView.sliderView.hidden = [self isLandscape];
+    [_headerView updateSelectedTab:_selectedTab];
     [_headerView setDescription];
 
     if (_selectedTab == EOATrackMenuHudOverviewTab)
@@ -383,8 +384,7 @@
         [_headerView setGroupsCollection:[self generateGroupCollectionData] withSelectedIndex:0];
     }
 
-    [_headerView updateHeader:_selectedTab
-                 currentTrack:self.isCurrentTrack
+    [_headerView updateHeader:self.isCurrentTrack
                    shownTrack:self.isShown
                         title:[self.gpx getNiceTitle]];
 
@@ -1764,9 +1764,6 @@
         [self setupHeaderView];
         [_uiBuilder runAdditionalActions];
 
-        if (_selectedTab == EOATrackMenuHudOverviewTab || _selectedTab == EOATrackMenuHudPointsTab)
-            [self startLocationServices];
-
         BOOL animated = self.currentState != EOADraggableMenuStateFullScreen;
         if (_selectedTab == EOATrackMenuHudActionsTab)
         {
@@ -1793,6 +1790,9 @@
                         }
                         completion: ^(BOOL finished) {
                             _isTabSelecting = NO;
+            
+                            if (_selectedTab == EOATrackMenuHudOverviewTab || (_selectedTab == EOATrackMenuHudPointsTab && _waypointGroups.count > 0))
+                                [self startLocationServices];
                         }];
     }
 }

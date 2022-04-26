@@ -350,7 +350,6 @@
 "add_waypoint" = "Ajouter un point de passage à la trace";
 "add_waypoint_short" = "Ajouter un point de passage";
 "edit_waypoint_short" = "Modifier le point de passage";
-"parking_marker" = "Marquer l'emplacement de stationnement";
 "pickup_car" = "Récupérer la voiture";
 "pickup_car_at" = "Récupérer la voiture à";
 "parking_time_limited" = "Stationnement d\'une durée limitée à";

@@ -100,7 +100,7 @@
     else
         [self.buttonOK setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 
-    self.titleView.text = OALocalizedString(@"parking_marker");
+    self.titleView.text = OALocalizedString(@"map_widget_parking");
 }
 
 - (BOOL)supportsForceClose

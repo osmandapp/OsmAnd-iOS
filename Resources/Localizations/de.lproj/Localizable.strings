@@ -291,7 +291,6 @@
 "prch_nau_q1" = "Bitte schalten Sie den \"Nautischen\" Stil in den Karteneinstellungen ein und installieren Sie die weltweite Basiskarte Seemarken.";
 "prch_nau_q3" = "Du kannst es später installieren über die Karten & Ressourcen.";
 "res_banner_free_maps_title" = "Du hast %d freie Karten!";
-"parking_marker" = "Parkmarkierung";
 "pickup_car" = "Zum Auto gehen";
 "cannot_add_marker" = "Kann den Parkplatz nicht hinzufügen";
 "cannot_add_marker_desc" = "Bitte mindestens eine Richtung entfernen und nochmal versuchen";

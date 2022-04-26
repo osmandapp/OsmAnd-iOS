@@ -1559,7 +1559,7 @@ static const NSInteger _buttonsCount = 4;
 {
     if (_targetPoint.type == OATargetParking)
     {
-        [_addressLabel setText:OALocalizedString(@"parking_marker")];
+        [_addressLabel setText:OALocalizedString(@"map_widget_parking")];
         [self updateAddressLabel];
         OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
         if (plugin)

@@ -863,7 +863,6 @@
 "osm_alert_button_ok" = "注釈の作成";
 "modify_poi" = "POI情報を変更";
 "actions" = "その他";
-"parking_marker" = "駐車位置マーカー";
 "time_limited" = "制限時間";
 "pickup_car" = "駐車車両の回収";
 "pickup_car_at" = "駐車場の制限時間：";

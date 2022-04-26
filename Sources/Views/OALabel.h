@@ -1,5 +1,5 @@
 //
-//  OACustomLabel.h
+//  OALabel.h
 //  OsmAnd
 //
 //  Created by Skalii on 15.04.2022.
@@ -8,15 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol OACustomLabelDelegate <NSObject>
+@protocol OALabelDelegate <NSObject>
 
 - (void)onLabelTapped:(NSInteger)tag;
 - (void)onLabelLongPressed:(NSInteger)tag;
 
 @end
 
-@interface OACustomLabel : UILabel
+@interface OALabel : UILabel
 
-@property (nonatomic) id<OACustomLabelDelegate> delegate;
+@property (nonatomic) id<OALabelDelegate> delegate;
 
 @end

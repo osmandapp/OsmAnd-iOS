@@ -12,18 +12,18 @@
 #import "OAColors.h"
 #import "OALocationConvert.h"
 #import "OAPointDescription.h"
-#import "OACustomButton.h"
+#import "OAButton.h"
 
 #define kButtonHeight 32.0
 #define kDefaultZoomOnShow 16.0f
 
-@interface OACollapsableCoordinatesView () <OACustomButtonDelegate>
+@interface OACollapsableCoordinatesView () <OAButtonDelegate>
 
 @end
 
 @implementation OACollapsableCoordinatesView
 {
-    NSArray<OACustomButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
     NSInteger _selectedButtonIndex;
 
     UILabel *_viewLabel;
@@ -75,7 +75,7 @@
     int i = 0;
     for (NSNumber *format in _coordinates.allKeys)
     {
-        OACustomButton *btn = [OACustomButton buttonWithType:UIButtonTypeSystem];
+        OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
         NSString *coord;
         if (format.integerValue == FORMAT_UTM)
             coord = [NSString stringWithFormat:@"UTM: %@", _coordinates[format]];
@@ -123,7 +123,7 @@
     y += viewHeight;
     
     int i = 0;
-    for (OACustomButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -159,7 +159,7 @@
 {
     if (_buttons.count > _selectedButtonIndex)
     {
-        OACustomButton *button = _buttons[_selectedButtonIndex];
+        OAButton *button = _buttons[_selectedButtonIndex];
         UIPasteboard *pb = [UIPasteboard generalPasteboard];
         [pb setString:button.titleLabel.text];
     }
@@ -170,7 +170,7 @@
     _selectedButtonIndex = index;
     if (_buttons.count > _selectedButtonIndex)
     {
-        OACustomButton *button = _buttons[_selectedButtonIndex];
+        OAButton *button = _buttons[_selectedButtonIndex];
         [self becomeFirstResponder];
         UIMenuController *menuController = UIMenuController.sharedMenuController;
         if (@available(iOS 13.0, *))
@@ -193,7 +193,7 @@
 {
     if (_buttons.count > tag)
     {
-        OACustomButton *button = _buttons[tag];
+        OAButton *button = _buttons[tag];
         [UIView animateWithDuration:0.3 animations:^{
             button.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
             button.layer.borderColor = UIColor.clearColor.CGColor;

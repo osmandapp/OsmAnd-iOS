@@ -16,14 +16,14 @@
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
 
-@interface OACollapsableNearestPoiTypeView () <OACustomButtonDelegate>
+@interface OACollapsableNearestPoiTypeView () <OAButtonDelegate>
 
 @end
 
 @implementation OACollapsableNearestPoiTypeView
 {
     NSArray<OAPOIType *> *_poiTypes;
-    NSArray<OACustomButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
     NSInteger _selectedButtonIndex;
     double _latitude;
     double _longitude;
@@ -46,7 +46,7 @@
     for (OAPOIType *poiType in _poiTypes)
     {
         NSString *title = poiType.nameLocalized;
-        OACustomButton *btn = [self createButton:title];
+        OAButton *btn = [self createButton:title];
         btn.tag = i++;
         [self addSubview:btn];
         [buttons addObject:btn];
@@ -54,9 +54,9 @@
     _buttons = [NSArray arrayWithArray:buttons];
 }
 
-- (OACustomButton *)createButton:(NSString *)title
+- (OAButton *)createButton:(NSString *)title
 {
-    OACustomButton *btn = [OACustomButton buttonWithType:UIButtonTypeSystem];
+    OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
@@ -77,7 +77,7 @@
     CGFloat y = 0;
     CGFloat viewHeight = 0;
     int i = 0;
-    for (OACustomButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -119,7 +119,7 @@
 {
     if (_buttons.count > _selectedButtonIndex)
     {
-        OACustomButton *button = _buttons[_selectedButtonIndex];
+        OAButton *button = _buttons[_selectedButtonIndex];
         UIPasteboard *pb = [UIPasteboard generalPasteboard];
         [pb setString:button.titleLabel.text];
     }
@@ -130,7 +130,7 @@
     _selectedButtonIndex = index;
     if (_buttons.count > _selectedButtonIndex)
     {
-        OACustomButton *button = _buttons[_selectedButtonIndex];
+        OAButton *button = _buttons[_selectedButtonIndex];
         [self becomeFirstResponder];
         UIMenuController *menuController = UIMenuController.sharedMenuController;
         if (@available(iOS 13.0, *))

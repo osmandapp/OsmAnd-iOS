@@ -7,9 +7,9 @@
 //
 
 #import "OACollapsableLabelView.h"
-#import "OACustomLabel.h"
+#import "OALabel.h"
 
-@interface OACollapsableLabelView () <OACustomLabelDelegate>
+@interface OACollapsableLabelView () <OALabelDelegate>
 
 @end
 
@@ -22,7 +22,7 @@
     {
         UIFont *font = [UIFont systemFontOfSize:15.0];
         CGFloat viewWidth = frame.size.width;
-        _label = [[OACustomLabel alloc] initWithFrame:CGRectMake(kMarginLeft, 12.0, viewWidth - kMarginLeft - kMarginRight, 21.0)];
+        _label = [[OALabel alloc] initWithFrame:CGRectMake(kMarginLeft, 12.0, viewWidth - kMarginLeft - kMarginRight, 21.0)];
         _label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _label.font = font;
         _label.textColor = UIColorFromRGB(0x212121);

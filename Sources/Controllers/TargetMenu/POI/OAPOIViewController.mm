@@ -22,7 +22,7 @@
 #import "OACollapsableNearestPoiTypeView.h"
 #import "OAOsmAndFormatter.h"
 #import "OAResourcesUIHelper.h"
-#import "OACustomLabel.h"
+#import "OALabel.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>

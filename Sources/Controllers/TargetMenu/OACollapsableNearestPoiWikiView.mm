@@ -26,7 +26,7 @@
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
 
-@interface OACollapsableNearestPoiWikiView () <OACustomButtonDelegate>
+@interface OACollapsableNearestPoiWikiView () <OAButtonDelegate>
 
 @end
 
@@ -36,7 +36,7 @@
     UILabel *_bannerLabel;
     UIButton *_bannerButton;
 
-    NSArray<OACustomButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
     NSInteger _selectedButtonIndex;
     double _latitude;
     double _longitude;
@@ -169,22 +169,22 @@
             nameLocalized = poi.nameLocalized;
 
         NSString *title = [NSString stringWithFormat:@"%@ (%@)", nameLocalized, [OAOsmAndFormatter getFormattedDistance:distance]];
-        OACustomButton *btn = [self createButton:title tapToCopy:NO longPressToCopy:YES];
+        OAButton *btn = [self createButton:title tapToCopy:NO longPressToCopy:YES];
         btn.tag = i++;
         [self addSubview:btn];
         [buttons addObject:btn];
     }
 
-    OACustomButton *showOnMapButton = [self createButton:OALocalizedString(@"map_settings_show")
-                                               tapToCopy:NO
-                                         longPressToCopy:NO];
+    OAButton *showOnMapButton = [self createButton:OALocalizedString(@"map_settings_show")
+                                         tapToCopy:NO
+                                   longPressToCopy:NO];
     showOnMapButton.tag = _buttonShowOnMapIndex = i++;
     [self addSubview:showOnMapButton];
     [buttons addObject:showOnMapButton];
 
-    OACustomButton *searchMoreButton = [self createButton:OALocalizedString(@"search_more")
-                                                tapToCopy:NO
-                                          longPressToCopy:NO];
+    OAButton *searchMoreButton = [self createButton:OALocalizedString(@"search_more")
+                                          tapToCopy:NO
+                                    longPressToCopy:NO];
     searchMoreButton.tag = _buttonSearchMoreIndex = i++;
     [self addSubview:searchMoreButton];
     [buttons addObject:searchMoreButton];
@@ -192,11 +192,11 @@
     _buttons = [NSArray arrayWithArray:buttons];
 }
 
-- (OACustomButton *)createButton:(NSString *)title
-                       tapToCopy:(BOOL)tapToCopy
-                 longPressToCopy:(BOOL)longPressToCopy
+- (OAButton *)createButton:(NSString *)title
+                 tapToCopy:(BOOL)tapToCopy
+           longPressToCopy:(BOOL)longPressToCopy
 {
-    OACustomButton *btn = [OACustomButton buttonWithType:UIButtonTypeSystem];
+    OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
@@ -261,7 +261,7 @@
     }
     
     int i = 0;
-    for (OACustomButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -340,7 +340,7 @@
 {
     if (_buttons.count > _selectedButtonIndex)
     {
-        OACustomButton *button = _buttons[_selectedButtonIndex];
+        OAButton *button = _buttons[_selectedButtonIndex];
         UIPasteboard *pb = [UIPasteboard generalPasteboard];
         [pb setString:button.titleLabel.text];
     }
@@ -351,7 +351,7 @@
     _selectedButtonIndex = index;
     if (_buttons.count > _selectedButtonIndex)
     {
-        OACustomButton *button = _buttons[_selectedButtonIndex];
+        OAButton *button = _buttons[_selectedButtonIndex];
         [self becomeFirstResponder];
         UIMenuController *menuController = UIMenuController.sharedMenuController;
         if (@available(iOS 13.0, *))

@@ -1,14 +1,14 @@
 //
-//  OACustomButton.mm
+//  OALabel.mm
 //  OsmAnd
 //
 //  Created by Skalii on 15.04.2022.
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OACustomLabel.h"
+#import "OALabel.h"
 
-@implementation OACustomLabel
+@implementation OALabel
 {
     UITapGestureRecognizer *_tapToCopyRecognizer;
     UILongPressGestureRecognizer *_longPressToCopyRecognizer;

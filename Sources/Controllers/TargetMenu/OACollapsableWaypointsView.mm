@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     EOAWaypointFavorite
 };
 
-@interface OACollapsableWaypointsView () <OACustomButtonDelegate>
+@interface OACollapsableWaypointsView () <OAButtonDelegate>
 
 @end
 
@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
 {
     OsmAndAppInstance _app;
     
-    NSArray<OACustomButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
     NSInteger _selectedButtonIndex;
     NSArray *_data;
     
@@ -85,9 +85,9 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     [self buildViews];
 }
 
-- (OACustomButton *)createButton:(NSString *)title tag:(NSInteger)tag
+- (OAButton *)createButton:(NSString *)title tag:(NSInteger)tag
 {
-    OACustomButton *btn = [OACustomButton buttonWithType:UIButtonTypeSystem];
+    OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
@@ -109,7 +109,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:kMaxItemsCount];
     for (NSInteger i = 0; i < MIN(kMaxItemsCount - 1, _data.count); i++)
     {
-        OACustomButton * btn = nil;
+        OAButton * btn = nil;
         if (_type == EOAWaypointGPX)
         {
             btn = [self createButton:((OAWptPt *)_data[i]).name tag:i];
@@ -129,7 +129,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     
     if (_data.count > kMaxItemsCount - 1)
     {
-        OACustomButton *showMore = [self createButton:OALocalizedString(@"shared_string_show_more") tag:kMaxItemsCount];
+        OAButton *showMore = [self createButton:OALocalizedString(@"shared_string_show_more") tag:kMaxItemsCount];
         [self addSubview:showMore];
         [buttons addObject:showMore];
         [showMore addTarget:self action:@selector(onShowMorePressed:) forControlEvents:UIControlEventTouchDown];
@@ -176,7 +176,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     CGFloat viewHeight = 10.;
     
     int i = 0;
-    for (OACustomButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -212,7 +212,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
 {
     if (_buttons.count > _selectedButtonIndex)
     {
-        OACustomButton *button = _buttons[_selectedButtonIndex];
+        OAButton *button = _buttons[_selectedButtonIndex];
         UIPasteboard *pb = [UIPasteboard generalPasteboard];
         [pb setString:button.titleLabel.text];
     }
@@ -223,7 +223,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     _selectedButtonIndex = index;
     if (_buttons.count > _selectedButtonIndex)
     {
-        OACustomButton *button = _buttons[_selectedButtonIndex];
+        OAButton *button = _buttons[_selectedButtonIndex];
         [self becomeFirstResponder];
         UIMenuController *menuController = UIMenuController.sharedMenuController;
         if (@available(iOS 13.0, *))
@@ -246,7 +246,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
 {
     if (_buttons.count > tag)
     {
-        OACustomButton *button = _buttons[tag];
+        OAButton *button = _buttons[tag];
         [UIView animateWithDuration:0.3 animations:^{
             button.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
             button.layer.borderColor = UIColor.clearColor.CGColor;

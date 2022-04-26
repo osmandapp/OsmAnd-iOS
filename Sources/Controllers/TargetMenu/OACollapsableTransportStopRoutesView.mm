@@ -17,13 +17,13 @@
 
 #define kTransportIconWidth 16.0
 
-@interface OACollapsableTransportStopRoutesView () <OACustomButtonDelegate>
+@interface OACollapsableTransportStopRoutesView () <OAButtonDelegate>
 
 @end
 
 @implementation OACollapsableTransportStopRoutesView
 {
-    NSArray<OACustomButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
     NSInteger _selectedButtonIndex;
 }
 
@@ -94,7 +94,7 @@
         UIImage *stopPlate = [OATransportStopViewController createStopPlate:[OATransportStopViewController adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
         stopPlate = [stopPlate imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 
-        OACustomButton *btn = [OACustomButton buttonWithType:UIButtonTypeSystem];
+        OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
         [btn setAttributedTitle:title forState:UIControlStateNormal];
         [btn setImage:stopPlate forState:UIControlStateNormal];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -118,7 +118,7 @@
 - (void) updateLayout:(CGFloat)width
 {
     CGFloat viewHeight = 0;
-    for (OACustomButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         CGFloat labelWidth = width - [OAUtilities getLeftMargin] - kMarginLeft - kMarginRight;
         CGFloat h = [btn.currentAttributedTitle boundingRectWithSize:{labelWidth, 10000} options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height;
@@ -151,7 +151,7 @@
 {
     if (_buttons.count > _selectedButtonIndex)
     {
-        OACustomButton *button = _buttons[_selectedButtonIndex];
+        OAButton *button = _buttons[_selectedButtonIndex];
         UIPasteboard *pb = [UIPasteboard generalPasteboard];
         [pb setString:button.titleLabel.text];
     }
@@ -162,7 +162,7 @@
     _selectedButtonIndex = index;
     if (_buttons.count > _selectedButtonIndex)
     {
-        OACustomButton *button = _buttons[_selectedButtonIndex];
+        OAButton *button = _buttons[_selectedButtonIndex];
         [self becomeFirstResponder];
         UIMenuController *menuController = UIMenuController.sharedMenuController;
         if (@available(iOS 13.0, *))

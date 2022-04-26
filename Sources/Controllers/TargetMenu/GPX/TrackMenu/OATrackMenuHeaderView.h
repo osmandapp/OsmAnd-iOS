@@ -10,7 +10,7 @@
 #import "OATrackMenuHudViewController.h"
 
 @class OAGPX, OAGPXDocument, OAGPXTrackAnalysis;
-@class OACustomButton, OAFoldersCollectionView;
+@class OAButton, OAFoldersCollectionView;
 
 @protocol OATrackMenuViewControllerDelegate;
 
@@ -37,10 +37,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *regionTextView;
 
 @property (weak, nonatomic) IBOutlet UIStackView *actionButtonsContainerView;
-@property (weak, nonatomic) IBOutlet OACustomButton *showHideButton;
-@property (weak, nonatomic) IBOutlet OACustomButton *appearanceButton;
-@property (weak, nonatomic) IBOutlet OACustomButton *exportButton;
-@property (weak, nonatomic) IBOutlet OACustomButton *navigationButton;
+@property (weak, nonatomic) IBOutlet OAButton *showHideButton;
+@property (weak, nonatomic) IBOutlet OAButton *appearanceButton;
+@property (weak, nonatomic) IBOutlet OAButton *exportButton;
+@property (weak, nonatomic) IBOutlet OAButton *navigationButton;
 
 @property (weak, nonatomic) IBOutlet UIView *bottomDividerView;
 

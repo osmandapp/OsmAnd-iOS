@@ -642,9 +642,9 @@
                                                                  andObserve:_app.locationServices.updateObserver];
 }
 
-- (void)updateGpxData
+- (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDocument
 {
-    [super updateGpxData:replaceGPX updateDocument:updateDoc];
+    [super updateGpxData:replaceGPX updateDocument:updateDocument];
     [self updateWaypointsData];
     [self updateWaypointSortedGroups];
 }
@@ -2116,7 +2116,9 @@
             cell.segmentControl.tag = tag;
             [cell.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
-            cell.segmentControl.selectedSegmentIndex = [cellData.values[@"selected_index_int_value"] intValue];
+
+            NSInteger selectedIndex = [cellData.values[@"selected_index_int_value"] integerValue];
+            cell.segmentControl.selectedSegmentIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
         }
         return cell;
     }
@@ -2385,10 +2387,14 @@
     if (cellData.updateData)
         cellData.updateData();
 
-    [self.tableView reloadRowsAtIndexPaths:@[
-            [NSIndexPath indexPathForRow:[cellData.values[@"row_to_update_int_value"] intValue]
-                               inSection:indexPath.section]]
-                          withRowAnimation:UITableViewRowAnimationNone];
+    NSInteger rowToUpdateIndex = [cellData.values[@"row_to_update_int_value"] integerValue];
+    if (rowToUpdateIndex != NSNotFound)
+    {
+        [self.tableView reloadRowsAtIndexPaths:@[
+                        [NSIndexPath indexPathForRow:rowToUpdateIndex
+                                           inSection:indexPath.section]]
+                              withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 #pragma mark - UIScrollViewDelegate

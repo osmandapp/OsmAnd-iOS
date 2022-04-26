@@ -209,4 +209,7 @@
 
 #define color_purple_border 0x106c19ff
 
+#define color_poi_orange 0xE5FF8800
+#define color_osm_edit 0xE54CAF50
+
 #endif /* OAColors_h */

@@ -1685,7 +1685,7 @@
 "preview_of_selected_zoom_levels" = "Anteprima dei livelli di zoom selezionati";
 "download_size" = "Dimensione del download";
 "number_of_tiles" = "Numero di riquadri";
-"move_map_to_select_area" = "Sposta la mappa per selezionare l'area necessaria.";
+"move_map_to_select_area" = "Muovi la mappa per selezionare l'area desiderata.";
 "update_map" = "Aggiorna mappa";
 "shared_string_max" = "Massimo";
 "shared_string_min" = "Min";
@@ -2113,3 +2113,8 @@
 "lang_ga" = "Irlandese";
 "cloud_welcome_back" = "Bentornato!";
 "lang_ms" = "Malese";
+"map_widget_speed" = "Velocità";
+"rendering_attr_showRunningRoutes_name" = "Itinerari corsa";
+"rendering_attr_showRunningRoutes_description" = "Mostra i percorsi in uso";
+"rendering_attr_showFitnessTrails_name" = "Percorsi fitness";
+"rendering_attr_showFitnessTrails_description" = "Mostra i percorsi fitness";

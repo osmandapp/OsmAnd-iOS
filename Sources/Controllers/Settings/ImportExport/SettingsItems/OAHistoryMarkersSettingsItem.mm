@@ -125,7 +125,7 @@
         wpt.name = historyItem.name;
 
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = @"visited_date";
+        e.name = VISITED_TIME_EXTENSION;
 
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
@@ -158,7 +158,7 @@
 
             for (OAGpxExtension *e in wpt.extensions)
             {
-                if ([e.name isEqualToString:@"visited_date"]) {
+                if ([e.name isEqualToString:VISITED_TIME_EXTENSION]) {
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
                     historyItem.date = [dateFormatter dateFromString:e.value];

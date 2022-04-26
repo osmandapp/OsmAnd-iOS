@@ -864,14 +864,26 @@ typedef enum
 
 - (void) showMapStylesScreen
 {
-    [OAAnalyticsHelper logEvent:@"configure_map_styles_open"];
+    [self showMapSettingsScreen:EMapSettingsScreenMapType logEvent:@"configure_map_styles_open"];
+}
+
+- (void) showWeatherLayersScreen
+{
+    [self showMapSettingsScreen:EMapSettingsScreenWeather logEvent:nil];
+
+}
+
+- (void)showMapSettingsScreen:(EMapSettingsScreen)screen logEvent:(nullable NSString *)event
+{
+    if (event)
+        [OAAnalyticsHelper logEvent:event];
     
     _targetAppMode = nil;
     _reopenSettings = _targetAppMode != nil;
     
     [self removeGestureRecognizers];
     
-    _dashboard = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType];
+    _dashboard = [[OAMapSettingsViewController alloc] initWithSettingsScreen:screen];
     [_dashboard show:self parentViewController:nil animated:YES];
     
     [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];

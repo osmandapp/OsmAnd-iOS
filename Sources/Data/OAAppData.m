@@ -22,6 +22,7 @@
 #define kLastUnderlayKey @"lastUnderlayMapSource"
 #define kOverlayAlphaKey @"overlayAlpha"
 #define kUnderlayAlphaKey @"underlayAlpha"
+#define kContoursAlphaKey @"contoursAlpha"
 #define kMapLayersConfigurationKey @"mapLayersConfiguration"
 
 #define kTerrainTypeKey @"terrainType"
@@ -107,6 +108,8 @@
     OACommonUnit *_weatherPrecipUnitProfile;
     OACommonBoolean *_weatherPrecipUnitAutoProfile;
     OACommonDouble *_weatherPrecipAlphaProfile;
+    
+    OACommonDouble *_contoursAlphaProfile;
 
     NSMapTable<NSString *, OACommonPreference *> *_registeredPreferences;
 }
@@ -199,6 +202,7 @@
     _overlayAlphaChangeObservable = [[OAObservable alloc] init];
     _underlayMapSourceChangeObservable = [[OAObservable alloc] init];
     _underlayAlphaChangeObservable = [[OAObservable alloc] init];
+    _contoursAlphaChangeObservable = [[OAObservable alloc] init];
     _terrainChangeObservable = [[OAObservable alloc] init];
     _terrainResourcesChangeObservable = [[OAObservable alloc] init];
     _terrainAlphaChangeObservable = [[OAObservable alloc] init];
@@ -228,6 +232,7 @@
     _lastUnderlayMapSourceProfile = [OACommonMapSource withKey:kLastUnderlayKey defValue:nil];
     _overlayAlphaProfile = [OACommonDouble withKey:kOverlayAlphaKey defValue:0.5];
     _underlayAlphaProfile = [OACommonDouble withKey:kUnderlayAlphaKey defValue:0.5];
+    _contoursAlphaProfile = [OACommonDouble withKey:kContoursAlphaKey defValue:1.];
     _terrainTypeProfile = [OACommonTerrain withKey:kTerrainTypeKey defValue:EOATerrainTypeDisabled];
     _lastTerrainTypeProfile = [OACommonTerrain withKey:kLastTerrainTypeKey defValue:EOATerrainTypeHillshade];
     _hillshadeAlphaProfile = [OACommonDouble withKey:kHillshadeAlphaKey defValue:0.45];
@@ -284,6 +289,7 @@
     [_registeredPreferences setObject:_underlayMapSourceProfile forKey:@"map_underlay_previous"];
     [_registeredPreferences setObject:_overlayAlphaProfile forKey:@"overlay_transparency"];
     [_registeredPreferences setObject:_underlayAlphaProfile forKey:@"map_transparency"];
+    [_registeredPreferences setObject:_contoursAlphaProfile forKey:@"contours_alpha"];
     [_registeredPreferences setObject:_lastTerrainTypeProfile forKey:@"terrain_mode"];
     [_registeredPreferences setObject:_hillshadeAlphaProfile forKey:@"hillshade_transparency"];
     [_registeredPreferences setObject:_slopeAlphaProfile forKey:@"slope_transparency"];
@@ -334,6 +340,7 @@
         [_mapLayersConfiguration resetConfigutation];
         [_overlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
         [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.underlayAlpha)];
+        [_contoursAlphaChangeObservable notifyEventWithKey:self andValue:@(self.contoursAlpha)];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@YES];
         if (self.terrainType != EOATerrainTypeDisabled)
             [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:self.terrainType == EOATerrainTypeHillshade ? @(self.hillshadeAlpha) : @(self.slopeAlpha)];
@@ -457,6 +464,7 @@
 @synthesize overlayAlphaChangeObservable = _overlayAlphaChangeObservable;
 @synthesize underlayMapSourceChangeObservable = _underlayMapSourceChangeObservable;
 @synthesize underlayAlphaChangeObservable = _underlayAlphaChangeObservable;
+@synthesize contoursAlphaChangeObservable = _contoursAlphaChangeObservable;
 @synthesize destinationsChangeObservable = _destinationsChangeObservable;
 @synthesize destinationAddObservable = _destinationAddObservable;
 @synthesize destinationRemoveObservable = _destinationRemoveObservable;
@@ -1024,6 +1032,23 @@
     }
 }
 
+- (double) contoursAlpha
+{
+    @synchronized (_lock)
+    {
+        return [_contoursAlphaProfile get];
+    }
+}
+
+- (void) setContoursAlpha:(double)contoursAlpha
+{
+    @synchronized(_lock)
+    {
+        [_contoursAlphaProfile set:contoursAlpha];
+        [_contoursAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
+    }
+}
+
 - (NSInteger) hillshadeMinZoom
 {
     @synchronized(_lock)
@@ -1483,6 +1508,7 @@
     [_lastUnderlayMapSourceProfile set:[_lastUnderlayMapSourceProfile get:sourceMode] mode:targetMode];
     [_overlayAlphaProfile set:[_overlayAlphaProfile get:sourceMode] mode:targetMode];
     [_underlayAlphaProfile set:[_underlayAlphaProfile get:sourceMode] mode:targetMode];
+    [_contoursAlphaProfile set:[_contoursAlphaProfile get:sourceMode] mode:targetMode];
     [_terrainTypeProfile set:[_terrainTypeProfile get:sourceMode] mode:targetMode];
     [_lastTerrainTypeProfile set:[_lastTerrainTypeProfile get:sourceMode] mode:targetMode];
     [_hillshadeAlphaProfile set:[_hillshadeAlphaProfile get:sourceMode] mode:targetMode];

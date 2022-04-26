@@ -615,9 +615,7 @@
                                         [cards addObject:card];
                                         if (cards.count == features.count + cardsCount)
                                         {
-                                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                                [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
-                                            });
+                                            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
                                         }
                                     }
                                 }];

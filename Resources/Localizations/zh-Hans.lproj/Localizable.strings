@@ -1229,7 +1229,7 @@
 "rendering_attr_highway_class_track_grade1_name" = "等级 1";
 "app_mode_personal_transporter" = "个人运输工具";
 "new_profile" = "新配置文件";
-"routing_attr_piste_type_skitour_name" = "滑雪旅游";
+"routing_attr_piste_type_skitour_name" = "滑雪游览";
 "base_profile_descr_aircraft" = "飞机、滑翔";
 "map_widget_intermediate_time" = "中转点时间";
 "purchase_dialog_title" = "选择规划";
@@ -1513,7 +1513,7 @@
 "profile_appearance" = "配置外观";
 "configure_profile" = "更改配置";
 "app_restart_required" = "程序需要重新启动以应用某些设置。";
-"routing_attr_allow_intermediate_name" = "允许中转点线路";
+"routing_attr_allow_intermediate_name" = "允许中等难度线路";
 "routes_color_by_type" = "路线着色依据…";
 "rendering_value_walkingRoutesOSMC_description" = "根据路线各自的本地颜色（如果 OpenStreetMap 上存在）和远足盾牌符号为路线着色。";
 "rendering_value_walkingRoutesScopeOSMC_description" = "按网络从属着色。";
@@ -1793,3 +1793,6 @@
 "backup_error_subscription_was_expired" = "订阅已过期";
 "routing_attr_prefer_horse_routes_name" = "偏好马道";
 "routing_attr_only_permitted_streets_description" = "只使用明确允许的街道";
+"routing_attr_allow_advanced_description" = "困难的路线，有危险的障碍物和陡峭的路段。";
+"routing_attr_allow_advanced_name" = "允许高难路线";
+"routing_attr_piste_type_skitour_description" = "滑雪游览线路。";

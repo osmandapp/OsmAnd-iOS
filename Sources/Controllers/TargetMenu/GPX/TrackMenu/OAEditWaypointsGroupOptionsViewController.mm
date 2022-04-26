@@ -77,8 +77,8 @@
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.doneButton.hidden = NO;
-    self.doneButton.enabled = NO;
-    _newGroupName = @"";
+    self.doneButton.enabled = _screenType == EOAEditWaypointsGroupCopyToFavoritesScreen;
+    _newGroupName = _screenType == EOAEditWaypointsGroupCopyToFavoritesScreen ? _groupName : @"";
 }
 
 - (void)applyLocalization
@@ -96,13 +96,17 @@
     {
         self.titleLabel.text = OALocalizedString(@"map_settings_show");
     }
+    else if (_screenType == EOAEditWaypointsGroupCopyToFavoritesScreen)
+    {
+        self.titleLabel.text = OALocalizedString(@"copy_to_map_favorites");
+    }
 }
 
 - (void)generateData
 {
     OAGPXTableSectionData *sectionData = [OAGPXTableSectionData new];
 
-    if (_screenType == EOAEditWaypointsGroupRenameScreen)
+    if (_screenType == EOAEditWaypointsGroupRenameScreen || _screenType == EOAEditWaypointsGroupCopyToFavoritesScreen)
     {
         sectionData = [OAGPXTableSectionData withData:@{
                 kSectionCells: @[[OAGPXTableCellData withData:@{
@@ -280,6 +284,8 @@
                 [self.delegate updateWaypointsGroup:_newGroupName color:nil];
             else if (_screenType == EOAEditWaypointsGroupColorScreen)
                 [self.delegate updateWaypointsGroup:nil color:_selectedColor.color];
+            else if (_screenType == EOAEditWaypointsGroupCopyToFavoritesScreen)
+                [self.delegate copyToFavorites:_newGroupName];
         }
 
         if (_screenType == EOAEditWaypointsGroupVisibleScreen
@@ -441,7 +447,7 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_screenType == EOAEditWaypointsGroupRenameScreen &&
+    if ((_screenType == EOAEditWaypointsGroupRenameScreen || _screenType == EOAEditWaypointsGroupCopyToFavoritesScreen) &&
             [[self getCellData:indexPath].type isEqualToString:[OATextInputCell getCellIdentifier]])
         [((OATextInputCell *) cell).inputField becomeFirstResponder];
 }
@@ -486,7 +492,7 @@
             [newGroupName isEqualToString:OALocalizedString(@"favorites")] ||
             [newGroupName isEqualToString:OALocalizedString(@"personal_category_name")] ||
             [newGroupName isEqualToString:kPersonalCategory] ||
-            [newGroupName isEqualToString:_groupName])
+            (_screenType != EOAEditWaypointsGroupCopyToFavoritesScreen && [newGroupName isEqualToString:_groupName]))
     {
         self.doneButton.enabled = NO;
     }

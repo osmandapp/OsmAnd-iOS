@@ -8,12 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OACustomButton : UIButton
+@protocol OACustomButtonDelegate <NSObject>
 
-- (instancetype)initBySystemTypeWithTapToCopy:(BOOL)tapToCopy longPressToCopy:(BOOL)longPressToCopy;
+@optional
+
+- (void)onButtonTapped:(NSInteger)tag;
+- (void)onButtonLongPressed:(NSInteger)tag;
+
+@end
+
+@interface OACustomButton : UIButton
 
 @property (nonatomic, assign) BOOL centerVertically;
 @property (nonatomic, assign) BOOL extraSpacing;
+
+@property (nonatomic) id<OACustomButtonDelegate> delegate;
 
 - (void)applyVerticalLayout;
 

@@ -9,6 +9,10 @@
 #import "OACollapsableLabelView.h"
 #import "OACustomLabel.h"
 
+@interface OACollapsableLabelView () <OACustomLabelDelegate>
+
+@end
+
 @implementation OACollapsableLabelView
 
 - (instancetype) initWithFrame:(CGRect)frame
@@ -18,14 +22,14 @@
     {
         UIFont *font = [UIFont systemFontOfSize:15.0];
         CGFloat viewWidth = frame.size.width;
-        _label = [[OACustomLabel alloc] initWithFrame:CGRectMake(kMarginLeft, 12.0, viewWidth - kMarginLeft - kMarginRight, 21.0)
-                                            tapToCopy:YES
-                                      longPressToCopy:YES];
+        _label = [[OACustomLabel alloc] initWithFrame:CGRectMake(kMarginLeft, 12.0, viewWidth - kMarginLeft - kMarginRight, 21.0)];
         _label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _label.font = font;
         _label.textColor = UIColorFromRGB(0x212121);
         _label.numberOfLines = 0;
+        [_label setUserInteractionEnabled:YES];
         [_label bringSubviewToFront:self];
+        _label.delegate = self;
         [self addSubview:_label];
     }
     return self;
@@ -37,6 +41,51 @@
     CGFloat viewHeight = MAX(bounds.height, 21.0) + 0.0 + 11.0;
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
     _label.frame = CGRectMake(kMarginLeft, 0.0, width - kMarginLeft - kMarginRight, viewHeight - 0.0 - 11.0);
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+}
+
+- (void)copy:(id)sender
+{
+    UIPasteboard *pb = [UIPasteboard generalPasteboard];
+    [pb setString:_label.text];
+}
+
+- (void)showMenu:(NSInteger)index
+{
+    [self becomeFirstResponder];
+    UIMenuController *menuController = UIMenuController.sharedMenuController;
+    if (@available(iOS 13.0, *))
+    {
+        [menuController hideMenu];
+        [menuController showMenuFromView:_label rect:_label.bounds];
+    }
+    else
+    {
+        [menuController setMenuVisible:NO animated:YES];
+        [menuController setTargetRect:_label.bounds inView:_label];
+        [menuController setMenuVisible:YES animated:YES];
+    }
+}
+
+#pragma mark - OACustomButtonDelegate
+
+- (void)onLabelTapped:(NSInteger)tag
+{
+    [self showMenu:tag];
+}
+
+- (void)onLabelLongPressed:(NSInteger)tag
+{
+    [self showMenu:tag];
 }
 
 @end

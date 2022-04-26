@@ -10,32 +10,26 @@
 
 @implementation OACustomButton
 {
-    UITapGestureRecognizer *_tapToCopyRecognizer;
-    UILongPressGestureRecognizer *_longPressToCopyRecognizer;
+    UITapGestureRecognizer *_tapRecognizer;
+    UILongPressGestureRecognizer *_longPressRecognizer;
 }
 
-- (instancetype)initBySystemTypeWithTapToCopy:(BOOL)tapToCopy longPressToCopy:(BOOL)longPressToCopy
+- (instancetype) initWithFrame:(CGRect)frame
 {
-    self = [OACustomButton buttonWithType:UIButtonTypeSystem];
+    self = [super initWithFrame:frame];
     if (self)
     {
-        [self commonInit:tapToCopy longPressToCopy:longPressToCopy];
+        [self commonInit];
     }
     return self;
 }
 
-- (void)commonInit:(BOOL)tapToCopy longPressToCopy:(BOOL)longPressToCopy
+- (void)commonInit
 {
-    if (tapToCopy)
-    {
-        _tapToCopyRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu:)];
-        [self addGestureRecognizer:_tapToCopyRecognizer];
-    }
-    if (longPressToCopy)
-    {
-        _longPressToCopyRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu:)];
-        [self addGestureRecognizer:_longPressToCopyRecognizer];
-    }
+    _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonTapped:)];
+    [self addGestureRecognizer:_tapRecognizer];
+    _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonLongPressed:)];
+    [self addGestureRecognizer:_longPressRecognizer];
 }
 
 - (void)layoutSubviews
@@ -85,39 +79,16 @@
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
 }
 
-- (BOOL)canBecomeFirstResponder
+- (void)onButtonTapped:(UIGestureRecognizer *)recognizer
 {
-    return _tapToCopyRecognizer != nil || _longPressToCopyRecognizer != nil;
+    if (recognizer.state == UIGestureRecognizerStateEnded)
+        [self.delegate onButtonTapped:self.tag];
 }
 
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+- (void)onButtonLongPressed:(UIGestureRecognizer *)recognizer
 {
-    return (action == @selector(copy:));
-}
-
-- (void)copy:(id)sender
-{
-    UIPasteboard *pb = [UIPasteboard generalPasteboard];
-    [pb setString:self.titleLabel.text];
-}
-
-- (void)showMenu:(id)sender
-{
-    [self becomeFirstResponder];
-
-    UIMenuController *menuController = UIMenuController.sharedMenuController;
-    if (!menuController.isMenuVisible)
-    {
-        if (@available(iOS 13.0, *))
-        {
-            [menuController showMenuFromView:self rect:self.bounds];
-        }
-        else
-        {
-            [menuController setTargetRect:self.bounds inView:self];
-            [menuController setMenuVisible:YES animated:YES];
-        }
-    }
+    if (recognizer.state == UIGestureRecognizerStateEnded)
+        [self.delegate onButtonLongPressed:self.tag];
 }
 
 @end

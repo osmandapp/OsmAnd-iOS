@@ -17,9 +17,14 @@
 
 #define kTransportIconWidth 16.0
 
+@interface OACollapsableTransportStopRoutesView () <OACustomButtonDelegate>
+
+@end
+
 @implementation OACollapsableTransportStopRoutesView
 {
     NSArray<OACustomButton *> *_buttons;
+    NSInteger _selectedButtonIndex;
 }
 
 - (void) setRoutes:(NSArray<OATransportStopRoute *> *)routes
@@ -89,7 +94,7 @@
         UIImage *stopPlate = [OATransportStopViewController createStopPlate:[OATransportStopViewController adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
         stopPlate = [stopPlate imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 
-        OACustomButton *btn = [[OACustomButton alloc] initBySystemTypeWithTapToCopy:NO longPressToCopy:YES];
+        OACustomButton *btn = [OACustomButton buttonWithType:UIButtonTypeSystem];
         [btn setAttributedTitle:title forState:UIControlStateNormal];
         [btn setImage:stopPlate forState:UIControlStateNormal];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -102,7 +107,7 @@
         btn.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         //btn.layer.borderWidth = 0.5;
         btn.tag = k++;
-        [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+        btn.delegate = self;
         btn.frame = {0, 320, 0, 56};
         [self addSubview:btn];
         [buttons addObject:btn];
@@ -132,24 +137,74 @@
     [self updateLayout:width];
 }
 
-- (IBAction) btnPress:(id)sender
+- (BOOL)canBecomeFirstResponder
 {
-    OACustomButton *btn = (OACustomButton *) sender;
-    NSInteger index = btn.tag;
-    OATransportStopRoute *r = self.routes[index];
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    OAMapViewController *mapController = mapPanel.mapViewController;
+    return YES;
+}
 
-    OATargetPoint *targetPoint = [OATransportRouteController getTargetPoint:r];
-    CLLocationCoordinate2D latLon = targetPoint.location;
-        
-    Point31 point31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
-    [mapPanel prepareMapForReuse:point31 zoom:12 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
-    [mapController.mapLayers.transportStopsLayer showStopsOnMap:r];
-    
-    [mapPanel showContextMenuWithPoints:@[targetPoint]];
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+}
 
-    [OATransportRouteController showToolbar:r];
+- (void)copy:(id)sender
+{
+    if (_buttons.count > _selectedButtonIndex)
+    {
+        OACustomButton *button = _buttons[_selectedButtonIndex];
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:button.titleLabel.text];
+    }
+}
+
+- (void)showMenu:(NSInteger)index
+{
+    _selectedButtonIndex = index;
+    if (_buttons.count > _selectedButtonIndex)
+    {
+        OACustomButton *button = _buttons[_selectedButtonIndex];
+        [self becomeFirstResponder];
+        UIMenuController *menuController = UIMenuController.sharedMenuController;
+        if (@available(iOS 13.0, *))
+        {
+            [menuController hideMenu];
+            [menuController showMenuFromView:button rect:button.bounds];
+        }
+        else
+        {
+            [menuController setMenuVisible:NO animated:YES];
+            [menuController setTargetRect:button.bounds inView:button];
+            [menuController setMenuVisible:YES animated:YES];
+        }
+    }
+}
+
+#pragma mark - OACustomButtonDelegate
+
+- (void)onButtonTapped:(NSInteger)tag
+{
+    if (self.routes.count > tag)
+    {
+        OATransportStopRoute *r = self.routes[tag];
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+        OAMapViewController *mapController = mapPanel.mapViewController;
+
+        OATargetPoint *targetPoint = [OATransportRouteController getTargetPoint:r];
+        CLLocationCoordinate2D latLon = targetPoint.location;
+
+        Point31 point31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
+        [mapPanel prepareMapForReuse:point31 zoom:12 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+        [mapController.mapLayers.transportStopsLayer showStopsOnMap:r];
+
+        [mapPanel showContextMenuWithPoints:@[targetPoint]];
+
+        [OATransportRouteController showToolbar:r];
+    }
+}
+
+- (void)onButtonLongPressed:(NSInteger)tag
+{
+    [self showMenu:tag];
 }
 
 @end

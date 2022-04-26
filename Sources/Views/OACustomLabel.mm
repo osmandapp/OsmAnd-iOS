@@ -14,64 +14,34 @@
     UILongPressGestureRecognizer *_longPressToCopyRecognizer;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame tapToCopy:(BOOL)tapToCopy longPressToCopy:(BOOL)longPressToCopy
+- (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self)
     {
-        [self commonInit:tapToCopy longPressToCopy:longPressToCopy];
+        [self commonInit];
     }
     return self;
 }
 
-- (void)commonInit:(BOOL)tapToCopy longPressToCopy:(BOOL)longPressToCopy
+- (void)commonInit
 {
-    [self setUserInteractionEnabled:tapToCopy || longPressToCopy];
-    if (tapToCopy)
-    {
-        _tapToCopyRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu:)];
-        [self addGestureRecognizer:_tapToCopyRecognizer];
-    }
-    if (longPressToCopy)
-    {
-        _longPressToCopyRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu:)];
-        [self addGestureRecognizer:_longPressToCopyRecognizer];
-    }
+    _tapToCopyRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonTapped:)];
+    [self addGestureRecognizer:_tapToCopyRecognizer];
+    _longPressToCopyRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonLongPressed:)];
+    [self addGestureRecognizer:_longPressToCopyRecognizer];
 }
 
-- (BOOL)canBecomeFirstResponder
+- (void)onButtonTapped:(UIGestureRecognizer *)recognizer
 {
-    return _tapToCopyRecognizer != nil || _longPressToCopyRecognizer != nil;
+    if (recognizer.state == UIGestureRecognizerStateEnded)
+        [self.delegate onLabelTapped:self.tag];
 }
 
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+- (void)onButtonLongPressed:(UIGestureRecognizer *)recognizer
 {
-    return (action == @selector(copy:));
-}
-
-- (void)copy:(id)sender
-{
-    UIPasteboard *pb = [UIPasteboard generalPasteboard];
-    [pb setString:self.text];
-}
-
-- (void)showMenu:(id)sender
-{
-    [self becomeFirstResponder];
-
-    UIMenuController *menuController = UIMenuController.sharedMenuController;
-    if (!menuController.isMenuVisible)
-    {
-        if (@available(iOS 13.0, *))
-        {
-            [menuController showMenuFromView:self rect:self.bounds];
-        }
-        else
-        {
-            [menuController setTargetRect:self.bounds inView:self];
-            [menuController setMenuVisible:YES animated:YES];
-        }
-    }
+    if (recognizer.state == UIGestureRecognizerStateEnded)
+        [self.delegate onLabelLongPressed:self.tag];
 }
 
 @end

@@ -26,6 +26,10 @@
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
 
+@interface OACollapsableNearestPoiWikiView () <OACustomButtonDelegate>
+
+@end
+
 @implementation OACollapsableNearestPoiWikiView
 {
     UIView *_bannerView;
@@ -33,6 +37,7 @@
     UIButton *_bannerButton;
 
     NSArray<OACustomButton *> *_buttons;
+    NSInteger _selectedButtonIndex;
     double _latitude;
     double _longitude;
     OAPOIUIFilter *_filter;
@@ -191,7 +196,7 @@
                        tapToCopy:(BOOL)tapToCopy
                  longPressToCopy:(BOOL)longPressToCopy
 {
-    OACustomButton *btn = [[OACustomButton alloc] initBySystemTypeWithTapToCopy:tapToCopy longPressToCopy:longPressToCopy];
+    OACustomButton *btn = [OACustomButton buttonWithType:UIButtonTypeSystem];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
@@ -203,7 +208,7 @@
     btn.layer.borderColor = UIColorFromRGB(0xe6e6e6).CGColor;
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
     btn.tintColor = UIColorFromRGB(0x1b79f8);
-    [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+    btn.delegate = self;
     return btn;
 }
 
@@ -273,34 +278,6 @@
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
 }
 
-- (void) btnPress:(id)sender
-{
-    OACustomButton *btn = sender;
-    NSInteger index = btn.tag;
-    if (index >= 0 && index < self.nearestItems.count)
-    {
-        OAPOI *item = self.nearestItems[index];
-        if (item)
-            [self goToPoint:item];
-    }
-    else
-    {
-        [[OARootViewController instance].mapPanel hideContextMenu];
-        if (index == _buttonShowOnMapIndex)
-        {
-            [[OARootViewController instance].mapPanel showPoiToolbar:_filter latitude:_latitude longitude:_longitude];
-            OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
-            [helper clearSelectedPoiFilters];
-            [helper addSelectedPoiFilter:_filter];
-            [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
-        }
-        else if (index == _buttonSearchMoreIndex)
-        {
-            [[OARootViewController instance].mapPanel openSearch:_filter location:[[CLLocation alloc] initWithLatitude:_latitude longitude:_longitude]];
-        }
-    }
-}
-
 - (void) goToPoint:(OAPOI *)poi
 {
     const OsmAnd::LatLon latLon(poi.latitude, poi.longitude);
@@ -347,6 +324,82 @@
         OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
         [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
     }
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+}
+
+- (void)copy:(id)sender
+{
+    if (_buttons.count > _selectedButtonIndex)
+    {
+        OACustomButton *button = _buttons[_selectedButtonIndex];
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:button.titleLabel.text];
+    }
+}
+
+- (void)showMenu:(NSInteger)index
+{
+    _selectedButtonIndex = index;
+    if (_buttons.count > _selectedButtonIndex)
+    {
+        OACustomButton *button = _buttons[_selectedButtonIndex];
+        [self becomeFirstResponder];
+        UIMenuController *menuController = UIMenuController.sharedMenuController;
+        if (@available(iOS 13.0, *))
+        {
+            [menuController hideMenu];
+            [menuController showMenuFromView:button rect:button.bounds];
+        }
+        else
+        {
+            [menuController setMenuVisible:NO animated:YES];
+            [menuController setTargetRect:button.bounds inView:button];
+            [menuController setMenuVisible:YES animated:YES];
+        }
+    }
+}
+
+#pragma mark - OACustomButtonDelegate
+
+- (void)onButtonTapped:(NSInteger)tag
+{
+    if (self.nearestItems.count > tag)
+    {
+        OAPOI *item = self.nearestItems[tag];
+        if (item)
+            [self goToPoint:item];
+    }
+    else
+    {
+        [[OARootViewController instance].mapPanel hideContextMenu];
+        if (tag == _buttonShowOnMapIndex)
+        {
+            [[OARootViewController instance].mapPanel showPoiToolbar:_filter latitude:_latitude longitude:_longitude];
+            OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+            [helper clearSelectedPoiFilters];
+            [helper addSelectedPoiFilter:_filter];
+            [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
+        }
+        else if (tag == _buttonSearchMoreIndex)
+        {
+            [[OARootViewController instance].mapPanel openSearch:_filter location:[[CLLocation alloc] initWithLatitude:_latitude longitude:_longitude]];
+        }
+    }
+}
+
+- (void)onButtonLongPressed:(NSInteger)tag
+{
+    if (tag != _buttonShowOnMapIndex && tag != _buttonSearchMoreIndex)
+        [self showMenu:tag];
 }
 
 @end

@@ -17,10 +17,15 @@
 #define kButtonHeight 32.0
 #define kDefaultZoomOnShow 16.0f
 
+@interface OACollapsableCoordinatesView () <OACustomButtonDelegate>
+
+@end
+
 @implementation OACollapsableCoordinatesView
 {
     NSArray<OACustomButton *> *_buttons;
-    
+    NSInteger _selectedButtonIndex;
+
     UILabel *_viewLabel;
 }
 
@@ -70,7 +75,7 @@
     int i = 0;
     for (NSNumber *format in _coordinates.allKeys)
     {
-        OACustomButton *btn = [[OACustomButton alloc] initBySystemTypeWithTapToCopy:YES longPressToCopy:YES];
+        OACustomButton *btn = [OACustomButton buttonWithType:UIButtonTypeSystem];
         NSString *coord;
         if (format.integerValue == FORMAT_UTM)
             coord = [NSString stringWithFormat:@"UTM: %@", _coordinates[format]];
@@ -93,28 +98,12 @@
         btn.tintColor = UIColorFromRGB(color_primary_purple);
         btn.tag = i++;
         [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(color_coordinates_background)] forState:UIControlStateHighlighted];
+        btn.delegate = self;
 
         [self addSubview:btn];
         [buttons addObject:btn];
-        [btn addTarget:self action:@selector(onButtonTouched:) forControlEvents:UIControlEventTouchDown];
     }
     _buttons = [NSArray arrayWithArray:buttons];
-}
-
-- (void) onButtonTouched:(id) sender
-{
-    OACustomButton *btn = sender;
-    [UIView animateWithDuration:0.3 animations:^{
-        btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
-        btn.layer.borderColor = UIColor.clearColor.CGColor;
-        btn.tintColor = UIColor.whiteColor;
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.2 animations:^{
-            btn.layer.backgroundColor = UIColor.clearColor.CGColor;
-            btn.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
-            btn.tintColor = UIColorFromRGB(color_primary_purple);
-        }];
-    }];
 }
 
 - (void) updateButton
@@ -154,6 +143,75 @@
 - (void) adjustHeightForWidth:(CGFloat)width
 {
     [self updateLayout:width];
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+}
+
+- (void)copy:(id)sender
+{
+    if (_buttons.count > _selectedButtonIndex)
+    {
+        OACustomButton *button = _buttons[_selectedButtonIndex];
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:button.titleLabel.text];
+    }
+}
+
+- (void)showMenu:(NSInteger)index
+{
+    _selectedButtonIndex = index;
+    if (_buttons.count > _selectedButtonIndex)
+    {
+        OACustomButton *button = _buttons[_selectedButtonIndex];
+        [self becomeFirstResponder];
+        UIMenuController *menuController = UIMenuController.sharedMenuController;
+        if (@available(iOS 13.0, *))
+        {
+            [menuController hideMenu];
+            [menuController showMenuFromView:button rect:button.bounds];
+        }
+        else
+        {
+            [menuController setMenuVisible:NO animated:YES];
+            [menuController setTargetRect:button.bounds inView:button];
+            [menuController setMenuVisible:YES animated:YES];
+        }
+    }
+}
+
+#pragma mark - OACustomButtonDelegate
+
+- (void)onButtonTapped:(NSInteger)tag
+{
+    if (_buttons.count > tag)
+    {
+        OACustomButton *button = _buttons[tag];
+        [UIView animateWithDuration:0.3 animations:^{
+            button.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
+            button.layer.borderColor = UIColor.clearColor.CGColor;
+            button.tintColor = UIColor.whiteColor;
+        }                completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.2 animations:^{
+                button.layer.backgroundColor = UIColor.clearColor.CGColor;
+                button.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
+                button.tintColor = UIColorFromRGB(color_primary_purple);
+                [self showMenu:tag];
+            }];
+        }];
+    }
+}
+
+- (void)onButtonLongPressed:(NSInteger)tag
+{
+    [self showMenu:tag];
 }
 
 @end

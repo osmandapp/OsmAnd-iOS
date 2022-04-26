@@ -16,10 +16,15 @@
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
 
+@interface OACollapsableNearestPoiTypeView () <OACustomButtonDelegate>
+
+@end
+
 @implementation OACollapsableNearestPoiTypeView
 {
     NSArray<OAPOIType *> *_poiTypes;
     NSArray<OACustomButton *> *_buttons;
+    NSInteger _selectedButtonIndex;
     double _latitude;
     double _longitude;
     BOOL _isPoiAdditional;
@@ -51,7 +56,7 @@
 
 - (OACustomButton *)createButton:(NSString *)title
 {
-    OACustomButton *btn = [[OACustomButton alloc] initBySystemTypeWithTapToCopy:NO longPressToCopy:YES];
+    OACustomButton *btn = [OACustomButton buttonWithType:UIButtonTypeSystem];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
@@ -63,7 +68,7 @@
     btn.layer.borderColor = UIColorFromRGB(0xe6e6e6).CGColor;
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
     btn.tintColor = UIColorFromRGB(0x1b79f8);
-    [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+    btn.delegate = self;
     return btn;
 }
 
@@ -89,13 +94,66 @@
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
 }
 
-- (void) btnPress:(id)sender
+- (void) showQuickSearch:(OAPOIUIFilter *)filter
 {
-    OACustomButton *btn = sender;
-    NSInteger index = btn.tag;
-    if (index >= 0 && index < _poiTypes.count)
+    [[OARootViewController instance].mapPanel hideContextMenu];
+    [[OARootViewController instance].mapPanel openSearch:filter location:[[CLLocation alloc] initWithLatitude:_latitude longitude:_longitude]];
+}
+
+- (void) adjustHeightForWidth:(CGFloat)width
+{
+    [self updateLayout:width];
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+}
+
+- (void)copy:(id)sender
+{
+    if (_buttons.count > _selectedButtonIndex)
     {
-        OAPOIType *pointType = _poiTypes[index];
+        OACustomButton *button = _buttons[_selectedButtonIndex];
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:button.titleLabel.text];
+    }
+}
+
+- (void)showMenu:(NSInteger)index
+{
+    _selectedButtonIndex = index;
+    if (_buttons.count > _selectedButtonIndex)
+    {
+        OACustomButton *button = _buttons[_selectedButtonIndex];
+        [self becomeFirstResponder];
+        UIMenuController *menuController = UIMenuController.sharedMenuController;
+        if (@available(iOS 13.0, *))
+        {
+            [menuController hideMenu];
+            [menuController showMenuFromView:button rect:button.bounds];
+        }
+        else
+        {
+            [menuController setMenuVisible:NO animated:YES];
+            [menuController setTargetRect:button.bounds inView:button];
+            [menuController setMenuVisible:YES animated:YES];
+        }
+    }
+}
+
+#pragma mark - OACustomButtonDelegate
+
+- (void)onButtonTapped:(NSInteger)tag
+{
+    if (_poiTypes.count > tag)
+    {
+        OAPOIType *pointType = _poiTypes[tag];
         if (pointType)
         {
             OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:[NSString stringWithFormat:@"%@%@", STD_PREFIX, pointType.name]];
@@ -114,22 +172,16 @@
                     [accept addObject:pointType.name];
                     [filter selectSubTypesToAccept:pointType.category accept:accept];
                 }
-                
+
                 [self showQuickSearch:filter];
             }
         }
     }
 }
 
-- (void) showQuickSearch:(OAPOIUIFilter *)filter
+- (void)onButtonLongPressed:(NSInteger)tag
 {
-    [[OARootViewController instance].mapPanel hideContextMenu];
-    [[OARootViewController instance].mapPanel openSearch:filter location:[[CLLocation alloc] initWithLatitude:_latitude longitude:_longitude]];
-}
-
-- (void) adjustHeightForWidth:(CGFloat)width
-{
-    [self updateLayout:width];
+    [self showMenu:tag];
 }
 
 @end

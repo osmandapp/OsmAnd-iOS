@@ -8,8 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol OACustomLabelDelegate <NSObject>
+
+@optional
+
+- (void)onLabelTapped:(NSInteger)tag;
+- (void)onLabelLongPressed:(NSInteger)tag;
+
+@end
+
 @interface OACustomLabel : UILabel
 
-- (instancetype)initWithFrame:(CGRect)frame tapToCopy:(BOOL)tapToCopy longPressToCopy:(BOOL)longPressToCopy;
+@property (nonatomic) id<OACustomLabelDelegate> delegate;
 
 @end

@@ -205,7 +205,7 @@
 "prch_items_failed" = "аб'екты не былі адноўленыя. Паспрабуйце яшчэ раз.";
 // Resources
 "res_mapsres" = "Мапы і рэсурсы";
-"download_tab_local" = "Мясцовыя";
+"download_tab_local" = "Спампаваныя";
 "res_banner_no_free_maps_title" = "У вас няма бясплатных мапаў!";
 "res_search_world" = "Шукаць па ўсім свеце";
 "res_catalog_upd" = "Абнаўленне каталога";

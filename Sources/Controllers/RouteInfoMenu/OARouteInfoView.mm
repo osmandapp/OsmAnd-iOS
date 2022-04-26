@@ -325,6 +325,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         OAGPXDocument *doc = visibleGpxDocs[i];
         if (gpx && doc)
         {
+            doc.path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
             [section addObject:@{
                 @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
                 @"title" : gpx.getNiceTitle,

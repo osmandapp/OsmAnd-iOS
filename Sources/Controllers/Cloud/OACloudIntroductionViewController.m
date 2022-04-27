@@ -34,7 +34,7 @@
         
     self.backImageButton.tintColor = UIColorFromRGB(color_primary_purple);
     
-    [self setUpTableHeaderView];
+//    [self setUpTableHeaderView];
     [self generateData];
     
     self.tableView.delegate = self;

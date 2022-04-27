@@ -375,11 +375,11 @@
             descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedSpeed:analysis.maxSpeed];
 
             descriptions[@"bottom_left_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:
-                            !joinSegments && track && track.generalTrack ? analysis.timeSpanWithoutGaps : analysis.timeSpan
+                            !joinSegments && track && track.generalTrack ? analysis.timeSpanWithoutGaps : analysis.timeMoving
                                                                                                     shortFormat:YES];
             descriptions[@"bottom_right_description_string_value"] = [OAOsmAndFormatter getFormattedDistance:
                     !joinSegments && track && track.generalTrack
-                            ? analysis.totalDistanceWithoutGaps : analysis.totalDistance];
+                            ? analysis.totalDistanceWithoutGaps : analysis.totalDistanceMoving];
 
             break;
         }

@@ -2397,8 +2397,8 @@
 "backup_and_restore" = "Copia de seguridad y restauración";
 "plugin_popup_weather_title" = "Mostrar el clima";
 "plugin_popup_weather_ask" = "Activar el complemento del clima";
-"product_desc_weather" = "Pronóstico de 24 horas y pronóstico de 7 días cada 3 horas";
-"product_desc_ext_weather" = "El complemento del clima proporciona\n- 5 capas... pronóstico de 24 horas cada hora y de 7 días cada 3 horas\n- widgets basados en la ubicación\n- isolíneas de temperatura y/o presión\nLos datos meteorológicos son proporcionados por GFS «https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast».";
+"product_desc_weather" = "Pronóstico hasta 24 horas cada hora y pronóstico hasta 7 días cada 3 horas";
+"product_desc_ext_weather" = "El complemento del clima proporciona\n- 5 capas... pronóstico hasta 24 horas cada hora y hasta 7 días cada 3 horas\n- widgets basados en la ubicación\n- isolíneas de temperatura y/o presión\nLos datos meteorológicos son proporcionados por GFS «https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast».";
 "measurement_units" = "Unidades de medida";
 "weather_pressure_unit_inhg" = "Pulgadas de mercurio";
 "weather_wind_unit_m_s" = "Metros/Segundo";

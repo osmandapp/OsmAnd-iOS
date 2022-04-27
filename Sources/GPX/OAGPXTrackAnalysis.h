@@ -132,11 +132,11 @@
 
 @interface OAElevationDiffsCalculator : NSObject
 
-@property (nonatomic) double windowLength;
-@property (nonatomic) int startIndex;
-@property (nonatomic) int numberOfPoints;
-@property (nonatomic) double diffElevationUp;
-@property (nonatomic) double diffElevationDown;
+@property (nonatomic, readonly) double windowLength;
+@property (nonatomic, readonly) int startIndex;
+@property (nonatomic, readonly) int numberOfPoints;
+@property (nonatomic, readonly) double diffElevationUp;
+@property (nonatomic, readonly) double diffElevationDown;
 
 - (instancetype)init:(int)startIndex numberOfPoints:(int)numberOfPoints splitSegment:(OASplitSegment *)splitSegment;
 - (instancetype)initWithWindowLength:(double)windowLength startIndex:(int)startIndex numberOfPoints:(int)numberOfPoints;

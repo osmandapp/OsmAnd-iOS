@@ -385,7 +385,7 @@ static const double calculatedGpxWindowLength = 10.;
                 point.distance = segmentDistance;
                 timeDiffSec = MAX(0, point.time - prev.time);
                 //Last resort: Derive speed values from displacement if track does not originally contain speed
-                if (!_hasSpeedInTrack && speed == 0 && timeDiffSec > 0)
+                if (!self.hasSpeedInTrack && speed == 0 && timeDiffSec > 0)
                     speed = distance / timeDiffSec;
                 
                 // Motion detection:
@@ -565,9 +565,6 @@ static const double calculatedGpxWindowLength = 10.;
 
 @implementation OAElevationDiffsCalculator
 
-{
-    double _windowLength;
-}
 
 -(OAWptPt *) getPoint:(int)index splitSegment:(OASplitSegment *)splitSegment
 {
@@ -598,11 +595,11 @@ static const double calculatedGpxWindowLength = 10.;
 
 -(double) getDiffElevationUp
 {
-    return _diffElevationUp;
+    return self.diffElevationUp;
 };
 -(double) getDiffElevationDown
 {
-    return _diffElevationDown;
+    return self.diffElevationDown;
 };
 
 -(double) calcAvg:(double)eleSumm pointsCount:(int)pointsCount eleAvg:(double)eleAvg
@@ -627,10 +624,10 @@ static const double calculatedGpxWindowLength = 10.;
     double prevEle = initialPoint.elevation;
     int pointsCount = isnan(eleSumm) ? 0 : 1;
     double eleAvg = NAN;
-    double nextWindowPos = initialPoint.distance + _windowLength;
-    int pointIndex = _startIndex + 1;
+    double nextWindowPos = initialPoint.distance + self.windowLength;
+    int pointIndex = self.startIndex + 1;
     
-    while (pointIndex < _numberOfPoints + _startIndex)
+    while (pointIndex < self.numberOfPoints + self.startIndex)
     {
         OAWptPt * point = [self getPoint:pointIndex splitSegment:splitSegment];
         if (point.distance > nextWindowPos)
@@ -673,7 +670,7 @@ static const double calculatedGpxWindowLength = 10.;
     }
     if (pointsCount > 1)
         [self calcAvg:eleSumm pointsCount:pointsCount eleAvg:eleAvg];
-    _diffElevationUp = round(_diffElevationUp + 0.3);
+    _diffElevationUp = round(self.diffElevationUp + 0.3);
 };
 
 @end

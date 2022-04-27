@@ -8,24 +8,15 @@
 
 #import "OACollapsableWaypointsView.h"
 #import "Localization.h"
-#import "OACommonTypes.h"
-#import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
-#import "OALocationConvert.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDocument.h"
-#import "OAGPXDocumentPrimitives.h"
 #import "OAFavoriteItem.h"
 #import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
-#import "OAMapViewController.h"
 #import "OAMapLayers.h"
-#import "OAGPXLayer.h"
-#import "OATargetPoint.h"
 #import "OAGPXDatabase.h"
 #import "OASavingTrackHelper.h"
-#import "OAGPXMutableDocument.h"
 
 #define kMaxItemsCount 11
 #define kButtonHeight 32.0
@@ -36,11 +27,16 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     EOAWaypointFavorite
 };
 
+@interface OACollapsableWaypointsView () <OAButtonDelegate>
+
+@end
+
 @implementation OACollapsableWaypointsView
 {
     OsmAndAppInstance _app;
     
-    NSArray<UIButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
+    NSInteger _selectedButtonIndex;
     NSArray *_data;
     
     EOAWaypointsType _type;
@@ -89,10 +85,9 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     [self buildViews];
 }
 
-- (UIButton *)createButton:(NSString *)title tag:(NSInteger)tag
+- (OAButton *)createButton:(NSString *)title tag:(NSInteger)tag
 {
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-    
+    OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
@@ -105,7 +100,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     btn.tintColor = UIColorFromRGB(color_primary_purple);
     btn.tag = tag;
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(color_coordinates_background)] forState:UIControlStateHighlighted];
-    [btn addTarget:self action:@selector(onButtonTouched:) forControlEvents:UIControlEventTouchDown];
+    btn.delegate = self;
     return btn;
 }
 
@@ -114,7 +109,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:kMaxItemsCount];
     for (NSInteger i = 0; i < MIN(kMaxItemsCount - 1, _data.count); i++)
     {
-        UIButton * btn = nil;
+        OAButton * btn = nil;
         if (_type == EOAWaypointGPX)
         {
             btn = [self createButton:((OAWptPt *)_data[i]).name tag:i];
@@ -128,14 +123,13 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
             btn.tintColor = UIColorFromRGB(color_tint_gray);
             btn.userInteractionEnabled = NO;
         }
-        [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
         [buttons addObject:btn];
     }
     
     if (_data.count > kMaxItemsCount - 1)
     {
-        UIButton *showMore = [self createButton:OALocalizedString(@"shared_string_show_more") tag:kMaxItemsCount];
+        OAButton *showMore = [self createButton:OALocalizedString(@"shared_string_show_more") tag:kMaxItemsCount];
         [self addSubview:showMore];
         [buttons addObject:showMore];
         [showMore addTarget:self action:@selector(onShowMorePressed:) forControlEvents:UIControlEventTouchDown];
@@ -171,22 +165,6 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     }
 }
 
-- (void) onButtonTouched:(id) sender
-{
-    UIButton *btn = sender;
-    [UIView animateWithDuration:0.3 animations:^{
-        btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
-        btn.layer.borderColor = UIColor.clearColor.CGColor;
-        btn.tintColor = UIColor.whiteColor;
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.2 animations:^{
-            btn.layer.backgroundColor = UIColor.clearColor.CGColor;
-            btn.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
-            btn.tintColor = UIColorFromRGB(color_primary_purple);
-        }];
-    }];
-}
-
 - (void) updateButton
 {
     
@@ -198,7 +176,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     CGFloat viewHeight = 10.;
     
     int i = 0;
-    for (UIButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -215,36 +193,78 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
 }
 
-- (void) btnPress:(id)sender
-{
-    UIButton *btn = sender;
-    NSInteger index = btn.tag;
-    if (index >= 0 && index < _data.count)
-    {
-        OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
-        if (_type == EOAWaypointGPX)
-        {
-            OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
-            OAWptPt *point = _data[index];
-            item.point = point;
-            item.docPath = _docPath;
-            
-            OATargetPoint *targetPoint = [mapPanel.mapViewController.mapLayers.gpxMapLayer getTargetPoint:item];
-            targetPoint.centerMap = YES;
-            [mapPanel showContextMenu:targetPoint];
-        }
-        else if (_type == EOAWaypointFavorite)
-        {
-            OAFavoriteItem *favorite = _data[index];
-            OATargetPoint *targetPoint = [mapPanel.mapViewController.mapLayers.favoritesLayer getTargetPointCpp:favorite.favorite.get()];
-            targetPoint.centerMap = YES;
-            [mapPanel showContextMenu:targetPoint];
-        }
-    }
-}
 - (void) adjustHeightForWidth:(CGFloat)width
 {
     [self updateLayout:width];
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+}
+
+- (void)copy:(id)sender
+{
+    if (_buttons.count > _selectedButtonIndex)
+    {
+        OAButton *button = _buttons[_selectedButtonIndex];
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:button.titleLabel.text];
+    }
+}
+
+#pragma mark - OACustomButtonDelegate
+
+- (void)onButtonTapped:(NSInteger)tag
+{
+    if (_buttons.count > tag)
+    {
+        OAButton *button = _buttons[tag];
+        [UIView animateWithDuration:0.3 animations:^{
+            button.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
+            button.layer.borderColor = UIColor.clearColor.CGColor;
+            button.tintColor = UIColor.whiteColor;
+        }                completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.2 animations:^{
+                button.layer.backgroundColor = UIColor.clearColor.CGColor;
+                button.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
+                button.tintColor = UIColorFromRGB(color_primary_purple);
+                if (_data.count > tag)
+                {
+                    OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+                    if (_type == EOAWaypointGPX)
+                    {
+                        OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
+                        OAWptPt *point = _data[tag];
+                        item.point = point;
+                        item.docPath = _docPath;
+                        OATargetPoint *targetPoint = [mapPanel.mapViewController.mapLayers.gpxMapLayer getTargetPoint:item];
+                        targetPoint.centerMap = YES;
+                        [mapPanel showContextMenu:targetPoint];
+                    }
+                    else if (_type == EOAWaypointFavorite)
+                    {
+                        OAFavoriteItem *favorite = _data[tag];
+                        OATargetPoint *targetPoint = [mapPanel.mapViewController.mapLayers.favoritesLayer getTargetPointCpp:favorite.favorite.get()];
+                        targetPoint.centerMap = YES;
+                        [mapPanel showContextMenu:targetPoint];
+                    }
+                }
+            }];
+        }];
+    }
+}
+
+- (void)onButtonLongPressed:(NSInteger)tag
+{
+    _selectedButtonIndex = tag;
+    if (_buttons.count > _selectedButtonIndex)
+        [OAUtilities showMenuInView:self fromView:_buttons[_selectedButtonIndex]];
 }
 
 @end

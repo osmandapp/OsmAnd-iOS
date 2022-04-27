@@ -9,20 +9,22 @@
 #import "OACollapsableNearestPoiTypeView.h"
 #import "OAPOI.h"
 #import "OARootViewController.h"
-#import "Localization.h"
 #import "OAPOILayer.h"
 #import "OAPOIUIFilter.h"
-#import "OAUtilities.h"
-#import "OsmAndApp.h"
 #import "OAPOIFiltersHelper.h"
 
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
 
+@interface OACollapsableNearestPoiTypeView () <OAButtonDelegate>
+
+@end
+
 @implementation OACollapsableNearestPoiTypeView
 {
     NSArray<OAPOIType *> *_poiTypes;
-    NSArray<UIButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
+    NSInteger _selectedButtonIndex;
     double _latitude;
     double _longitude;
     BOOL _isPoiAdditional;
@@ -44,7 +46,7 @@
     for (OAPOIType *poiType in _poiTypes)
     {
         NSString *title = poiType.nameLocalized;
-        UIButton *btn = [self createButton:title];
+        OAButton *btn = [self createButton:title];
         btn.tag = i++;
         [self addSubview:btn];
         [buttons addObject:btn];
@@ -52,9 +54,9 @@
     _buttons = [NSArray arrayWithArray:buttons];
 }
 
-- (UIButton *)createButton:(NSString *)title
+- (OAButton *)createButton:(NSString *)title
 {
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
@@ -66,7 +68,7 @@
     btn.layer.borderColor = UIColorFromRGB(0xe6e6e6).CGColor;
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
     btn.tintColor = UIColorFromRGB(0x1b79f8);
-    [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+    btn.delegate = self;
     return btn;
 }
 
@@ -75,7 +77,7 @@
     CGFloat y = 0;
     CGFloat viewHeight = 0;
     int i = 0;
-    for (UIButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -92,13 +94,44 @@
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
 }
 
-- (void) btnPress:(id)sender
+- (void) showQuickSearch:(OAPOIUIFilter *)filter
 {
-    UIButton *btn = sender;
-    NSInteger index = btn.tag;
-    if (index >= 0 && index < _poiTypes.count)
+    [[OARootViewController instance].mapPanel hideContextMenu];
+    [[OARootViewController instance].mapPanel openSearch:filter location:[[CLLocation alloc] initWithLatitude:_latitude longitude:_longitude]];
+}
+
+- (void) adjustHeightForWidth:(CGFloat)width
+{
+    [self updateLayout:width];
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+}
+
+- (void)copy:(id)sender
+{
+    if (_buttons.count > _selectedButtonIndex)
     {
-        OAPOIType *pointType = _poiTypes[index];
+        OAButton *button = _buttons[_selectedButtonIndex];
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:button.titleLabel.text];
+    }
+}
+
+#pragma mark - OACustomButtonDelegate
+
+- (void)onButtonTapped:(NSInteger)tag
+{
+    if (_poiTypes.count > tag)
+    {
+        OAPOIType *pointType = _poiTypes[tag];
         if (pointType)
         {
             OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:[NSString stringWithFormat:@"%@%@", STD_PREFIX, pointType.name]];
@@ -117,22 +150,18 @@
                     [accept addObject:pointType.name];
                     [filter selectSubTypesToAccept:pointType.category accept:accept];
                 }
-                
+
                 [self showQuickSearch:filter];
             }
         }
     }
 }
 
-- (void) showQuickSearch:(OAPOIUIFilter *)filter
+- (void)onButtonLongPressed:(NSInteger)tag
 {
-    [[OARootViewController instance].mapPanel hideContextMenu];
-    [[OARootViewController instance].mapPanel openSearch:filter location:[[CLLocation alloc] initWithLatitude:_latitude longitude:_longitude]];
-}
-
-- (void) adjustHeightForWidth:(CGFloat)width
-{
-    [self updateLayout:width];
+    _selectedButtonIndex = tag;
+    if (_buttons.count > _selectedButtonIndex)
+        [OAUtilities showMenuInView:self fromView:_buttons[_selectedButtonIndex]];
 }
 
 @end

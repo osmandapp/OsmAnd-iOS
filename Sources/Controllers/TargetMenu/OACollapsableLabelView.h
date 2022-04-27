@@ -8,8 +8,10 @@
 
 #import "OACollapsableView.h"
 
+@class OALabel;
+
 @interface OACollapsableLabelView : OACollapsableView
 
-@property (nonatomic, readonly) UILabel *label;
+@property (nonatomic, readonly) OALabel *label;
 
 @end

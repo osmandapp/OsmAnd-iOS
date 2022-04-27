@@ -346,7 +346,6 @@
     view.backgroundColor = UIColorFromRGB(0xffffff);
     self.tableView.backgroundView = view;
     self.tableView.scrollEnabled = NO;
-    [self.tableView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressToCopyText:)]];
     _calculatedWidth = 0;
     [self buildRowsInternal];
 }
@@ -714,26 +713,6 @@
     _nearbyImagesRowInfo = nearbyImagesRowInfo;
 }
 
--(void)handleLongPressToCopyText:(UILongPressGestureRecognizer *)gestureRecognizer
-{
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
-    {
-        CGPoint p = [gestureRecognizer locationInView:self.tableView];
-        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:p];
-        if (indexPath)
-        {
-            OARowInfo *info = _rows[indexPath.row];
-            NSString *textToCopy;
-            if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
-                textToCopy = [OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES];
-            else
-                textToCopy = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
-
-            [[UIPasteboard generalPasteboard] setString:textToCopy];
-        }
-    }
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -977,6 +956,31 @@
             [self.delegate requestFullMode];
         NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    return (action == @selector(copy:));
+}
+
+- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (action == @selector(copy:))
+    {
+        OARowInfo *info = _rows[indexPath.row];
+        NSString *textToCopy;
+        if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
+            textToCopy = [OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES];
+        else
+            textToCopy = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
+
+        [[UIPasteboard generalPasteboard] setString:textToCopy];
     }
 }
 

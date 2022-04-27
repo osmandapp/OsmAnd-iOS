@@ -9,24 +9,22 @@
 #import "OACollapsableTransportStopRoutesView.h"
 #import "OATransportStopViewController.h"
 #import "OATransportStopRoute.h"
-#import "OATransportStopType.h"
-#import "OAUtilities.h"
 #import "OAColors.h"
 #import "OARootViewController.h"
-#import "OAMapViewController.h"
-#import "OAMapPanelViewController.h"
 #import "OAMapLayers.h"
-#import "OATransportStopsLayer.h"
 #import "OANativeUtilities.h"
 #import "OATransportRouteController.h"
 
-#include <OsmAndCore/Utilities.h>
-
 #define kTransportIconWidth 16.0
+
+@interface OACollapsableTransportStopRoutesView () <OAButtonDelegate>
+
+@end
 
 @implementation OACollapsableTransportStopRoutesView
 {
-    NSArray<UIButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
+    NSInteger _selectedButtonIndex;
 }
 
 - (void) setRoutes:(NSArray<OATransportStopRoute *> *)routes
@@ -95,8 +93,8 @@
         
         UIImage *stopPlate = [OATransportStopViewController createStopPlate:[OATransportStopViewController adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
         stopPlate = [stopPlate imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+
+        OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
         [btn setAttributedTitle:title forState:UIControlStateNormal];
         [btn setImage:stopPlate forState:UIControlStateNormal];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -109,7 +107,7 @@
         btn.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         //btn.layer.borderWidth = 0.5;
         btn.tag = k++;
-        [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+        btn.delegate = self;
         btn.frame = {0, 320, 0, 56};
         [self addSubview:btn];
         [buttons addObject:btn];
@@ -120,7 +118,7 @@
 - (void) updateLayout:(CGFloat)width
 {
     CGFloat viewHeight = 0;
-    for (UIButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         CGFloat labelWidth = width - [OAUtilities getLeftMargin] - kMarginLeft - kMarginRight;
         CGFloat h = [btn.currentAttributedTitle boundingRectWithSize:{labelWidth, 10000} options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height;
@@ -139,24 +137,54 @@
     [self updateLayout:width];
 }
 
-- (IBAction) btnPress:(id)sender
+- (BOOL)canBecomeFirstResponder
 {
-    UIButton *btn = (UIButton *) sender;
-    NSInteger index = btn.tag;
-    OATransportStopRoute *r = self.routes[index];
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    OAMapViewController *mapController = mapPanel.mapViewController;
+    return YES;
+}
 
-    OATargetPoint *targetPoint = [OATransportRouteController getTargetPoint:r];
-    CLLocationCoordinate2D latLon = targetPoint.location;
-        
-    Point31 point31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
-    [mapPanel prepareMapForReuse:point31 zoom:12 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
-    [mapController.mapLayers.transportStopsLayer showStopsOnMap:r];
-    
-    [mapPanel showContextMenuWithPoints:@[targetPoint]];
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+}
 
-    [OATransportRouteController showToolbar:r];
+- (void)copy:(id)sender
+{
+    if (_buttons.count > _selectedButtonIndex)
+    {
+        OAButton *button = _buttons[_selectedButtonIndex];
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:button.titleLabel.text];
+    }
+}
+
+#pragma mark - OACustomButtonDelegate
+
+- (void)onButtonTapped:(NSInteger)tag
+{
+    if (self.routes.count > tag)
+    {
+        OATransportStopRoute *r = self.routes[tag];
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+        OAMapViewController *mapController = mapPanel.mapViewController;
+
+        OATargetPoint *targetPoint = [OATransportRouteController getTargetPoint:r];
+        CLLocationCoordinate2D latLon = targetPoint.location;
+
+        Point31 point31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
+        [mapPanel prepareMapForReuse:point31 zoom:12 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+        [mapController.mapLayers.transportStopsLayer showStopsOnMap:r];
+
+        [mapPanel showContextMenuWithPoints:@[targetPoint]];
+
+        [OATransportRouteController showToolbar:r];
+    }
+}
+
+- (void)onButtonLongPressed:(NSInteger)tag
+{
+    _selectedButtonIndex = tag;
+    if (_buttons.count > _selectedButtonIndex)
+        [OAUtilities showMenuInView:self fromView:_buttons[_selectedButtonIndex]];
 }
 
 @end

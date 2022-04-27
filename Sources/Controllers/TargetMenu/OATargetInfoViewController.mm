@@ -616,9 +616,7 @@
                                         [cards addObject:card];
                                         if (cards.count == features.count + cardsCount)
                                         {
-                                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                                [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
-                                            });
+                                            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
                                         }
                                     }
                                 }];
@@ -813,9 +811,13 @@
             cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
             cell.textView.textColor = info.textColor;
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
+            [cell setDescription:nil];
 
             cell.collapsableView = info.collapsableView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
+
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
 
             return cell;
         }

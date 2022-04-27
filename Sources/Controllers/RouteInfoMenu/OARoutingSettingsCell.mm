@@ -93,6 +93,7 @@
 - (IBAction)optionsButtonPressed:(id)sender
 {
     [[OARootViewController instance].mapPanel showRoutePreferences];
+    [self.delegate onOptionsButtonPressed];
 }
 
 - (IBAction)soundButtonPressed:(id)sender

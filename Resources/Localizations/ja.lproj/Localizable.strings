@@ -37,7 +37,7 @@
 "transport_routes" = "ルート";
 "transport_nearby_routes_within" = "近辺のルート";
 "transport_nearby_routes" = "内";
-"transport_stop" = "停止";
+"transport_stop" = "乗り場";
 "cancel_navigation" = "ナビゲーションの停止";
 "start_navigation" = "ナビゲーションの開始";
 "intermediate_items_sort_by_distance" = "移動距離を最短で並べ替え";
@@ -362,7 +362,7 @@
 "shared_string_and" = "と";
 "shared_string_edit" = "編集";
 "shared_string_modify" = "変更する";
-"shared_string_later" = "後で";
+"shared_string_later" = "続ける";
 "shared_string_of" = "of";
 "shared_string_all" = "全て";
 "shared_string_from" = "から";
@@ -482,7 +482,7 @@
 "gpx_slope" = "勾配";
 // Map settings
 "rendering_value_browse_map_name" = "マップの閲覧";
-"m_style_car" = "ドライブ";
+"m_style_car" = "乗用車";
 "m_style_walk" = "徒歩";
 "m_style_bicycle" = "自転車";
 "map_settings_map" = "マップ";
@@ -492,7 +492,7 @@
 "map_settings_map_magnifier" = "マップ表示倍率";
 "map_settings_text_size" = "文字サイズ";
 "map_settings_day" = "昼固定";
-"map_settings_night" = "夜固定";
+"map_settings_night" = "夜";
 "map_settings_style" = "マップスタイル";
 "map_settings_overunder" = "オーバーレイ / アンダーレイ";
 "map_settings_over" = "オーバーレイ";
@@ -509,7 +509,7 @@
 // Intro
 "intro_skip" = "スキップ";
 "intro_download" = "ダウンロード\nマップ";
-"intro_next" = "次";
+"intro_next" = "次へ";
 "intro_welcome" = "ようこそ\nOsmAndへ";
 "intro_promo" = "グローバルオフラインマップ";
 "intro_placeholder" = "居住地域の名前を入力してください";
@@ -558,7 +558,7 @@
 "prch_nau_q3" = "マップ＆リソースにて後からでもインストールできます。";
 "proceed_q" = "続行しますか？";
 "download" = "ダウンロード";
-"nothanks" = "いいえ、結構です";
+"nothanks" = "遠慮します";
 "download_now" = "今すぐマップをダウンロードする";
 "prch_failed" = "\"%@\"の購入に失敗しました";
 "prch_items_failed" = "アイテムの復元がなされませんでした。もう一度やり直してみてください。";
@@ -626,7 +626,7 @@
 "res_type" = "種類";
 "res_unknown" = "不明";
 "res_size" = "サイズ";
-"res_created_on" = "作成日";
+"res_created_on" = "以下で作成する";
 "res_update_all" = "すべて更新";
 "res_updates_no_space" = "%d個の更新をインストールするための十分な空き容量がありません。 %@必要です。空き容量を確保してください。";
 "res_updates_avail_q" = "更新が利用可能です。";
@@ -858,7 +858,7 @@
 "modify_edit_short" = "修正をOSMに反映";
 "open_osm_note" = "OSMでの注釈を開く";
 "edit_osm_note" = "OSMメモの編集";
-"osm_alert_title" = "情報の追加、返信等";
+"osm_alert_title" = "コミット";
 "osm_alert_message" = "メッセージ";
 "osm_alert_button_ok" = "注釈の作成";
 "modify_poi" = "POI情報を変更";
@@ -1181,7 +1181,7 @@
 "edit_filter_delete_dialog_title" = "選択したフィルターを削除しますか？";
 "apply_filters" = "フィルターを適用";
 "filter_poi_hint" = "名前でフィルター";
-"shared_string_category" = "カテゴリー";
+"shared_string_category" = "カテゴリ";
 "poi_category_and_type" = "カテゴリーとPOIの種類";
 "poi_opening_hours" = "営業時間";
 "poi_select_category" = "カテゴリーの選択";
@@ -1853,7 +1853,7 @@
 "select_group_descr" = "グループの選択または新規追加";
 "map_update_warning" = "タイルデータをインターネットから再読み込みしますか？";
 "use_of_downloaded_map" = "このマップをオフラインでメインのマップとして、またオーバーレイ/アンダーレイ表示にも使用できるようになりました";
-"size_of_downloaded_data" = "ズームレベルの差が大きいと、ダウンロードデータのサイズが大きくなるのでご注意下さい。";
+"size_of_downloaded_data" = "ズームレベルが大きく異なると、ダウンロードされるデータサイズが大きくなる可能性があります。";
 "online_sources" = "オンラインソース";
 "select_online_source" = "ソースを選択";
 "preview_of_selected_zoom_levels" = "選択されたズームレベルでプレビュー";
@@ -1893,7 +1893,7 @@
 "fav_point_emoticons_message" = "お気に入りの名を'%@'に変更して、絵文字を含む文字列をファイルに保存します。";
 "fav_point_dublicate_message" = "重複を避けるため、お気に入り名を'%@'に変更しました。";
 "fav_point_dublicate" = "指定したお気に入り名は重複しています";
-"shape" = "形";
+"shape" = "形状";
 "icon" = "アイコン";
 "select_group" = "グループを選択";
 "name_and_descr" = "名前＆説明";
@@ -1936,7 +1936,7 @@
 "track_is_saved" = "%@\nセーブされました！";
 "plan_route_create_new_route" = "新しいルートの作成";
 "open_saved_track" = "保存された経路を開く";
-"simplified_track_description" = "ルートの線のみが保存され、経由地点は削除されます。";
+"simplified_track_description" = "ルートの線のみが保存され、経由地点はは削除されます。";
 "simplified_track" = "簡略化された経路";
 "join_segments" = "セグメントの接続";
 "prev_segs_recalc_descr" = "全ての先行セグメントは、選択したプロファイルを使用して再計算されます";
@@ -2010,10 +2010,10 @@
 "travel" = "旅行";
 "transport" = "交通";
 "symbols" = "記号";
-"service" = "設備・技術";
+"service" = "アクセス道路、特定施設用道路";
 "special" = "特別";
 "sport" = "スポーツ";
-"emergency" = "緊急";
+"emergency" = "救急施設";
 "key_hint_recenter_map" = "マップを中央に再配置";
 "shared_z_a" = "降順(Z～A)";
 "shared_a_z" = "昇順(A～Z)";
@@ -2074,7 +2074,9 @@
 "gpx_upload_trackable_visibility_descr" = "\"追跡可能\"は、トレース状況が公開リストに表示されないことを意味しますが、タイムスタンプ付きで処理済みの経路ポイント(直接関連付けされないもの)は、パブリックなGPS APIからのダウンロードを通じて表示されます。";
 "gpx_upload_identifiable_visibility_descr" = "\"識別可能\"は、経路がGPS経路およびパブリックGPS経路リストに表示されることを示唆しています。他のユーザーは現在の経路をダウンロードして、ユーザー名とリンクできます。経路ポイント APIを介して配信されるデータは、元の経路追跡ページを参照します。経路ポイントのタイムスタンプは、公的GPS APIを通じて入手できます。";
 "gpx_upload_private_visibility_descr" = "\"プライベート\"は、経路が公開リストに表示されないことを示唆しています。経路ポイントはタイムスタンプなしで公的GPS APIを介して引き続き利用できますが、時系列で並べられることはありません。";
-"route_between_points_warning_desc" = "このオプションを使用するには、OsmAndで経路をマップ上の道路にスナップする必要があります。\n\n次にナビゲーションプロファイルを選択して、利用予定の道路(一般道、高速道路)と、道路を追跡するおおよその距離を検出する必要があります。";
+"route_between_points_warning_desc" = "このオプションを使用するには、OsmAndで経路をマップ上の道路にスナップする必要があります。
+\n
+\n次にナビゲーションプロファイルを選択して、利用予定の道路(一般道、高速道路)と、道路を追跡するおおよその距離を検出する必要があります。";
 "some_articles_may_not_available_in_lang" = "一部のウィキペディア記事は、ご使用の言語で利用できない場合があります。";
 "last_used" = "最後に利用";
 "suggested_maps" = "推奨マップ";
@@ -2107,7 +2109,7 @@
 "context_menu_item_edit_waypoint" = "GPX経由地点の編集";
 "dialogs_and_notifications" = "ダイアログと通知";
 "gpxup_identifiable" = "識別可能";
-"default" = "標準";
+"default" = "デフォルト";
 "product_title_mapillary" = "Mapillary";
 "contour_lines_hillshades_slope" = "等高線、陰影起伏、勾配";
 "routeInfo_smoothness_description" = "特に表面の規則性/平坦性の観点での、車輪の付いたあらゆる乗り物においてそれぞれの通行が認められる歩道および車道の操縦性分類です。";
@@ -2152,7 +2154,7 @@
 "analyze_on_map" = "分析をマップ上で閲覧";
 "gpx_split_interval" = "区間を分割";
 "shared_string_start_time" = "開始時刻";
-"shared_string_time_span" = "期間";
+"shared_string_time_span" = "時間間隔";
 "delete_waypoints" = "経由地点を削除";
 "shared_string_overview" = "概要";
 "lang_af" = "アフリカーンス語";
@@ -2189,7 +2191,7 @@
 "lang_uk" = "ウクライナ語";
 "lang_ur" = "ウルドゥー語";
 "lang_uz" = "ウズベク語";
-"lang_vi" = "ベトナム語";
+"lang_vi" = "ベトナム人";
 "lang_vo" = "ボラピューク語";
 "lang_yo" = "ヨルバ語";
 "lang_zh_tw" = "中国語 (繁体字)";
@@ -2200,7 +2202,7 @@
 "lang_bar" = "バイエルン語";
 "lang_jv" = "ジャワ語";
 "lang_ka" = "グルジア語";
-"lang_hsb" = "高地ソルブ語";
+"lang_hsb" = "ソルビア語";
 "lang_ht" = "ハイチ語";
 "lang_hu" = "ハンガリー語";
 "lang_hy" = "アルメニア語";
@@ -2274,7 +2276,7 @@
 "lang_lo" = "ラーオ語";
 "lang_lt" = "リトアニア語";
 "lang_lv" = "ラトビア語";
-"lang_no" = "ノルウェー語 (ブークモール)";
+"lang_no" = "ノルウェー語";
 "lang_nv" = "ナバホ語";
 "lang_pms" = "ピエモンテ語";
 "lang_pt" = "ポルトガル語";
@@ -2283,3 +2285,70 @@
 "lang_zh_cn" = "中国語 (簡体字)";
 "lang_zh_hk" = "中国語 (香港)";
 "routing_attr_avoid_low_emission_zone_description" = "低排出ゾーン(CO2排出量の多い車両に課税するエリア)を通らないようにします";
+"track_coloring_solid" = "通常色";
+"route_points" = "ルート地点";
+"altitude" = "標高";
+"routing_attr_only_permitted_streets_description" = "明示的な許可のある道路のみを使用します";
+"add_description" = "説明を追加";
+"cloud_backup_now" = "今すぐバックアップ";
+"backup_error_no_valid_subscription" = "有効なサブスクリプションがありません";
+"cloud_welcome_back" = "お帰りなさい！";
+"resend_verification_code" = "再送信";
+"user_login" = "ログイン";
+"regions" = "地域";
+"routing_attr_prefer_horse_routes_name" = "乗馬ルートを優先";
+"routeInfo_surface_description" = "道路/歩道の表面や舗装状態に関する情報を提供します。";
+"register_opr_create_new_account" = "新しいアカウントを作成";
+"backup_error_user_is_already_registered" = "このメールアドレスは別のアカウントで使用されています";
+"routing_attr_allow_gate_name" = "ゲートの使用を許可";
+"cloud_view_conflicts" = "競合内容を表示";
+"customize_route_line" = "ルートラインのカスタマイズ";
+"backup_error_subscription_was_expired" = "期限切れのサブスクリプション";
+"shared_string_max_height" = "最大高";
+"cloud_set_up_backup" = "バックアップの設定";
+"cloud_restore_now" = "今すぐ復元";
+"navigate_point_format_MGRS" = "MGRS(Military Grid Reference System)";
+"weather_wind_unit_km_per_hour" = "キロメートル毎時";
+"backup_error_subscription_was_expired_descr" = "OsmAnd Proのサブスクリプション期限が切れているので、データのバックアップを継続利用するのであれば更新してください。引き続きクラウドからデータを復元できるようになります。";
+"cloud_existing_account" = "私はすでにアカウントを持っています";
+"save_heading" = "見出しを含める";
+"login_error_email_invalid" = "有効なメールアドレスを入力してください";
+"cloud_last_backup" = "最終バックアップ";
+"backup_error_token_is_not_valid_or_expired" = "無効または期限切れのトークン";
+"routing_attr_prefer_horse_routes_description" = "馬が通れるルートを優先します";
+"backup_error_size_is_exceeded" = "OsmAnd Cloudの最大サイズが%@を超えました";
+"backup_error_file_not_available" = "ファイルを利用できません";
+"routing_attr_allow_gate_description" = "ゲートの通行を許可します";
+"osmand_cloud" = "OsmAndクラウド";
+"backup_error_user_is_not_registered" = "そのメールアドレスで登録されているユーザーはいません";
+"rendering_attr_showFitnessTrails_description" = "アスレチックコースを表示します";
+"cloud_conflicts_descr" = "新しいバージョンがサーバーに保存されているため、一部のファイルをサーバーにアップロードできませんでした。";
+"routing_attr_only_permitted_ways_description" = "明示的な許可のある小道(わだち、通路など)を使用します";
+"route_line_use_map_style_color" = "マップスタイル(%@)でデフォルトの色を使用します。";
+"cloud_email_not_registered" = "このメールアドレスはOsmAndクラウドに登録されていません";
+"backup_error_token_is_not_valid" = "呈示されたデバイスIDまたはトークンに問題があります";
+"gpx_dir_arrows" = "方向矢印";
+"rendering_attr_showRunningRoutes_description" = "ランニングルートを表示します";
+"restore_from_file" = "ファイルから復元";
+"routeInfo_roadClass_description" = "道路種別によってルートまたは経路のラインに色を付けます。";
+"shared_string_any" = "すべて";
+"horseback_riding" = "乗馬";
+"gpx_join_gaps" = "ギャップを埋める";
+"weather_wind_unit_mi_per_hour" = "マイル毎時";
+"cloud_conflicts" = "競合";
+"context_menu_edit_descr" = "説明の編集";
+"cloud_email_already_registered" = "このメールアドレスはすでに登録されています。";
+"cloud_make_backup_descr" = "この端末には多くの変更があります。現データを失わないようにバックアップを推奨します。";
+"backup_error_gzip_only_supported_upload" = "ファイルは.gzip形式で送信する必要があります";
+"backup_error_subscription_was_used" = "別のアカウントで使用されているサブスクリプションまたはプロモーション%@";
+"cloud_description" = "データを失うことはありません。すべての情報を簡単にバックアップおよび復元できます。";
+"shared_string_min_height" = "最小高";
+"rendering_attr_showRunningRoutes_name" = "ランニングルート";
+"routing_attr_only_permitted_streets_name" = "許可された道路のみ通行";
+"route_line_use_map_style_width" = "マップスタイル(%@)でデフォルトの幅を使用します。";
+"verify_email_address_descr" = "ワンタイムパスワードが%@に送信されました。下部へ入力してください。";
+"cloud_make_backup" = "バックアップの作成";
+"osmand_cloud_login_descr" = "登録したメールアドレスを入力してください。手続きを進めるためのワンタイムパスワードが送信されます。";
+"rendering_attr_showFitnessTrails_name" = "アスレチックコース";
+"routing_attr_only_permitted_ways_name" = "許可された道のみ通行";
+"upload_to_openstreetmap" = "OpenStreetMapにアップロード";

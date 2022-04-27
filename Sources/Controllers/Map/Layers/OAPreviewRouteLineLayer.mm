@@ -115,20 +115,25 @@
 
 - (void) refreshCenterIcon
 {
-    _centerMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
-    
-    OAApplicationMode *appMode = OARoutingHelper.sharedInstance.getAppMode;
-    OANavigationIcon *navIcon = [OANavigationIcon withNavigationIcon:appMode.getNavigationIcon];
-    UIColor *iconColor = UIColorFromRGB(appMode.getIconColor);
-    
-    OsmAnd::MapMarkerBuilder locationMarkerBuilder;
-    locationMarkerBuilder.setIsAccuracyCircleSupported(false);
-    locationMarkerBuilder.setBaseOrder(self.baseOrder - 1000);
-    locationMarkerBuilder.setIsHidden(true);
-    _locationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    locationMarkerBuilder.addOnMapSurfaceIcon(_locationMainIconKey,
-                                                       [OANativeUtilities skImageFromCGImage:[navIcon iconWithColor:iconColor].CGImage]);
-    _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_centerMarkerCollection);
+    if (!_centerMarkerCollection || !_locationMarker)
+    {
+        [self.mapView removeKeyedSymbolsProvider:_centerMarkerCollection];
+        _centerMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+        
+        OAApplicationMode *appMode = OARoutingHelper.sharedInstance.getAppMode;
+        OANavigationIcon *navIcon = [OANavigationIcon withNavigationIcon:appMode.getNavigationIcon];
+        UIColor *iconColor = UIColorFromRGB(appMode.getIconColor);
+        
+        OsmAnd::MapMarkerBuilder locationMarkerBuilder;
+        locationMarkerBuilder.setIsAccuracyCircleSupported(false);
+        locationMarkerBuilder.setBaseOrder(self.baseOrder - 1000);
+        locationMarkerBuilder.setIsHidden(true);
+        _locationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+        locationMarkerBuilder.addOnMapSurfaceIcon(_locationMainIconKey,
+                                                  [OANativeUtilities skImageFromCGImage:[navIcon iconWithColor:iconColor].CGImage]);
+        _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_centerMarkerCollection);
+        [self.mapView addKeyedSymbolsProvider:_centerMarkerCollection];
+    }
     _locationMarker->setOnMapSurfaceIconDirection(_locationMainIconKey, 270.);
 }
 
@@ -618,11 +623,9 @@
 
 - (void) refreshRoute:(OsmAnd::AreaI)area
 {
-    [self.mapView removeKeyedSymbolsProvider:_centerMarkerCollection];
     [self refreshCenterIcon];
     _locationMarker->setPosition(area.center());
     _locationMarker->setIsHidden(false);
-    [self.mapView addKeyedSymbolsProvider:_centerMarkerCollection];
     
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     _prevRouteColoringType = _routeColoringType;

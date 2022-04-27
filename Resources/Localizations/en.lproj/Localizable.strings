@@ -644,6 +644,7 @@
 "shared_string_export" = "Export";
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Route points";
+"copy_to_map_favorites" = "Copy to favorites";
 
 "import_export" = "Import/Export";
 
@@ -783,7 +784,15 @@
 "map_settings_weather_precip" = "Precipitation";
 "map_settings_clear_geo_cache" = "Clear geo tiles";
 "map_settings_clear_raster_cache" = "Clear raster tiles";
-"map_settings_weather_isolines" = "Isolines";
+"map_settings_weather_contours" = "Contours";
+"map_settings_weather_layers" = "Layers";
+
+"weather_temp_enable_descr" = "Enable to view temperature layer on the map.";
+"weather_pressure_enable_descr" = "Enable to view pressure layer on the map.";
+"weather_wind_enable_descr" = "Enable to view wind layer on the map.";
+"weather_cloud_enable_descr" = "Enable to view cloud layer on the map.";
+"weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
+"weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
 
 "settings_app_theme" = "Application theme";
 "app_theme_light" = "Light";
@@ -1965,7 +1974,7 @@
 "weather_precip_unit_mm" = "Millimeters";
 "weather_precip_unit_in" = "Inches";
 
-"weather_cloud_data_description" = "Weather data will be downloaded for viewed are each time.";
+"weather_cloud_data_description" = "Weather data will be downloaded for viewed area each time.";
 
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
@@ -2215,6 +2224,8 @@
 "routing_attr_allow_expert_description" = "Extremely difficult routes, with dangerous obstacles and surroundings.";
 "routeInfo_surface_name" = "Surface";
 "routeInfo_surface_description" = "Provide road/footpath physical surface info.";
+"routeInfo_horse_scale_name" = "Difficulty of horse trails";
+"routeInfo_horse_scale_description" = "Render paths according to difficulty of horse trails";
 "rendering_attr_showMtbRoutes_name" = "Mountain bike routes";
 "rendering_attr_tracktype_grade5_name" = "Soft";
 "routing_attr_avoid_share_taxi_description" = "Avoids share taxi";
@@ -2555,6 +2566,19 @@
 "login_error_email_invalid" = "Please enter a valid e-mail address";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 
+"backup_error_no_valid_subscription" = "No valid subscription present";
+"backup_error_user_is_not_registered" = "No user registered with that e-mail address";
+"backup_error_token_is_not_valid_or_expired" = "Invalid or expired token";
+"backup_error_token_is_not_valid" = "Something is wrong with the provided device ID or token";
+"backup_error_file_not_available" = "File unavailable";
+"backup_error_gzip_only_supported_upload" = "The file should be sent in .gzip format";
+"backup_error_size_is_exceeded" = "Maximum size of OsmAnd Cloud exceeded %@";
+"backup_error_subscription_was_used" = "Subscription or promo used by another account %@";
+"backup_error_subscription_was_expired_descr" = "Your OsmAnd Pro subscription is expired, renew it to use backup. You can still restore data from the Cloud.";
+"backup_error_subscription_was_expired" = "Expired subscription";
+"backup_error_user_is_already_registered" = "This e-mail address is in use on another account";
+"backup_error_invalid_token" = "Token is not valid";
+
 "register_opr_create_new_account" = "Create new account";
 "osmand_cloud_create_account_descr" = "Please enter your e-mail address, a verification code will be sent there, and all your data will be linked to it.";
 
@@ -2642,3 +2666,21 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+
+"ios_release_4_2" = "• Route line appearance: added ability to set width and color\n
+• Tracks: added option for deleting several tracks at once\n
+• Track context menu: added scroll bar with waypoint groups\n
+• Map appearance: divided additional routes by type with ability to enable one from each category separately\n
+• Horseback riding: add new navigation type and app profile\n
+• OsmAnd files are now visible in the \"Files\" application\n
+• UX of options \"Use elevation data\" and \"Select elevation fluctuation\"  was improved, they were combined and renamed to \"Preferred terrain\", currently available for \"Bicycle\" and \"Pedestrian\" profiles.\n
+• New option \"Include heading\" for track recording\n
+• Street name widget: now show road shield and exit number during navigation\n
+• New Fitness and running routes on the map\n
+• CarPlay bug fixes, added gestures for touchscreens\n
+• Fixed import of GPX files from OSF package\n
+• Fixed import of custom plugins with included files\n
+• Fixed various crashes in the Route planning mode\n
+• Fixed crashes during Navigation\n";
+
+

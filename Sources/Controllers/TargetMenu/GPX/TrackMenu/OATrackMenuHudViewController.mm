@@ -752,22 +752,25 @@
 
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
-        OsmAnd::LatLon latLon(self.gpx.bounds.center.latitude, self.gpx.bounds.center.longitude);
-        const auto &trackPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-        const auto trackLon = OsmAnd::Utilities::get31LongitudeX(trackPosition31.x);
-        const auto trackLat = OsmAnd::Utilities::get31LatitudeY(trackPosition31.y);
+        if (CLLocationCoordinate2DIsValid(self.gpx.bounds.center))
+        {
+            OsmAnd::LatLon latLon(self.gpx.bounds.center.latitude, self.gpx.bounds.center.longitude);
+            const auto &trackPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+            const auto trackLon = OsmAnd::Utilities::get31LongitudeX(trackPosition31.x);
+            const auto trackLat = OsmAnd::Utilities::get31LatitudeY(trackPosition31.y);
 
-        const auto distance = OsmAnd::Utilities::distance(
-                newLocation.coordinate.longitude,
-                newLocation.coordinate.latitude,
-                trackLon,
-                trackLat
-        );
-        [_headerView setDirection:[OAOsmAndFormatter getFormattedDistance:distance]];
-        CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[
-                [CLLocation alloc] initWithLatitude:trackLat longitude:trackLon]];
-        _headerView.directionIconView.transform = CGAffineTransformMakeRotation(
-                OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180));
+            const auto distance = OsmAnd::Utilities::distance(
+                    newLocation.coordinate.longitude,
+                    newLocation.coordinate.latitude,
+                    trackLon,
+                    trackLat
+            );
+            [_headerView setDirection:[OAOsmAndFormatter getFormattedDistance:distance]];
+            CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[
+                    [CLLocation alloc] initWithLatitude:trackLat longitude:trackLon]];
+            _headerView.directionIconView.transform = CGAffineTransformMakeRotation(
+                    OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180));
+        }
     }
     else if (_selectedTab == EOATrackMenuHudPointsTab)
     {

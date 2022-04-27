@@ -713,10 +713,8 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithTrkSeg:segment];
     auto routeSegments = [routeImporter importRoute];
     NSArray<OAWptPt *> *routePointsRte = [_gpxData.gpxFile getRoutePoints:segmentInd];
-    NSMutableArray<OAWptPt *> *routePoints = [NSMutableArray new];
+    NSMutableArray<OAWptPt *> *routePoints = [NSMutableArray arrayWithArray:routePointsRte];
     NSArray<OAWptPt *> *points = segment.points;
-    for (OAWptPt *pt in routePointsRte)
-        [routePoints addObject:pt];
     NSInteger prevPointIndex = 0;
     if (routePoints.count == 0 && points.count > 1)
     {

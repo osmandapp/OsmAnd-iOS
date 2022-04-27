@@ -74,6 +74,9 @@
 @property (readonly) OAObservable* weatherPrecipUnitChangeObservable;
 @property (readonly) OAObservable* weatherPrecipAlphaChangeObservable;
 
+@property (nonatomic) double contoursAlpha;
+@property (readonly) OAObservable* contoursAlphaChangeObservable;
+
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 
 @property (nonatomic) EOATerrainType terrainType;

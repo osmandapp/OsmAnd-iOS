@@ -222,9 +222,9 @@ static NSString *kPrecipContourStyleName;
         case WEATHER_BAND_PRECIPITATION:
             return _app.data.weatherPrecipUnitAuto;
         case WEATHER_BAND_UNDEFINED:
-            return nil;
+            return NO;
     }
-    return nil;
+    return NO;
 }
 
 - (void) setBandUnitAuto:(BOOL)unitAuto

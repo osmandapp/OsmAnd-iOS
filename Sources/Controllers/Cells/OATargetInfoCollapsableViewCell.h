@@ -19,7 +19,10 @@
 @property (nonatomic, readonly) BOOL collapsable;
 @property (weak, nonatomic) OACollapsableView *collapsableView;
 
+@property (nonatomic) IBOutlet NSLayoutConstraint *textWithDescriptionConstraint;
+
 - (void) setCollapsed:(BOOL)collapsed rawHeight:(int)rawHeight;
 - (void) setImage:(UIImage *)image;
+- (void) setDescription:(NSString *)description;
 
 @end

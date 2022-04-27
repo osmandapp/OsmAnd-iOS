@@ -14,6 +14,8 @@
 
 #include <OsmAndCore/Utilities.h>
 
+static const double calculatedGpxWindowLength = 10.;
+
 
 @implementation OASplitMetric
 
@@ -457,7 +459,7 @@
                 }
             }
         }
-        OAElevationDiffsCalculator *elevationDiffsCalc = [[OAElevationDiffsCalculator alloc] init:0 numberOfPoints:numberOfPoints s:s];
+        OAElevationDiffsCalculator *elevationDiffsCalc = [[OAElevationDiffsCalculator alloc] init:0 numberOfPoints:numberOfPoints splitSegment:s];
         [elevationDiffsCalc calculateElevationDiffs:s];
         _diffElevationUp += elevationDiffsCalc.diffElevationUp;
         _diffElevationDown += elevationDiffsCalc.diffElevationDown;
@@ -563,22 +565,23 @@
 
 @implementation OAElevationDiffsCalculator
 
-double CALCULATED_GPX_WINDOW_LENGTH = 10.;
-double windowLength;
-
--(OAWptPt *) getPoint:(int)index s:(OASplitSegment *)s
 {
-    return [s get:index];
+    double _windowLength;
+}
+
+-(OAWptPt *) getPoint:(int)index splitSegment:(OASplitSegment *)splitSegment
+{
+    return [splitSegment get:index];
 };
 
-- (instancetype)init:(int)startIndex numberOfPoints:(int)numberOfPoints s:s
+- (instancetype)init:(int)startIndex numberOfPoints:(int)numberOfPoints splitSegment:(OASplitSegment *)splitSegment
 {
     self = [super init];
     if (self) {
         _startIndex = startIndex;
         _numberOfPoints = numberOfPoints;
-        OAWptPt * lastPoint = [self getPoint:(startIndex + numberOfPoints - 1) s:s];
-        _windowLength = lastPoint.time == 0 ? CALCULATED_GPX_WINDOW_LENGTH : MAX(20., lastPoint.distance / numberOfPoints * 4);
+        OAWptPt * lastPoint = [self getPoint:(startIndex + numberOfPoints - 1) splitSegment:splitSegment];
+        _windowLength = lastPoint.time == 0 ? calculatedGpxWindowLength : MAX(20., lastPoint.distance / numberOfPoints * 4);
     }
     return self;
 }
@@ -616,20 +619,20 @@ double windowLength;
     return avg;
 }
 
--(void) calculateElevationDiffs:(OASplitSegment *) s
+-(void) calculateElevationDiffs:(OASplitSegment *) splitSegment
 {
-    OAWptPt * initialPoint = [self getPoint:_startIndex s:s];
+    OAWptPt * initialPoint = [self getPoint:_startIndex splitSegment:splitSegment];
     
     double eleSumm = initialPoint.elevation;
     double prevEle = initialPoint.elevation;
     int pointsCount = isnan(eleSumm) ? 0 : 1;
     double eleAvg = NAN;
-    double nextWindowPos = initialPoint.distance + windowLength;
+    double nextWindowPos = initialPoint.distance + _windowLength;
     int pointIndex = _startIndex + 1;
     
     while (pointIndex < _numberOfPoints + _startIndex)
     {
-        OAWptPt * point = [self getPoint:pointIndex s:s];
+        OAWptPt * point = [self getPoint:pointIndex splitSegment:splitSegment];
         if (point.distance > nextWindowPos)
         {
             eleAvg = [self calcAvg:eleSumm pointsCount:pointsCount eleAvg:eleAvg];

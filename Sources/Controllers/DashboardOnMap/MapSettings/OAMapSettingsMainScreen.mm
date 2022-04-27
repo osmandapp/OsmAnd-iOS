@@ -395,16 +395,17 @@
             @"key": @"underlay_layer"
     }];
 
-    if (!hasWeather || !_iapHelper.weather.disabled)
-    {
-        [overlayUnderlaySectionData addObject:@{
-                @"name": OALocalizedString(@"product_title_weather"),
-                @"image": @"ic_custom_umbrella",
-                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"product_title_weather"),
-                @"type": hasWeather ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
-                @"key": @"weather_layer"
-        }];
-    }
+    // TODO: Show weather settings later
+//    if (!hasWeather || !_iapHelper.weather.disabled)
+//    {
+//        [overlayUnderlaySectionData addObject:@{
+//                @"name": OALocalizedString(@"product_title_weather"),
+//                @"image": @"ic_custom_umbrella",
+//                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"product_title_weather"),
+//                @"type": hasWeather ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
+//                @"key": @"weather_layer"
+//        }];
+//    }
 
     [data addObject:@{
             @"group_name": OALocalizedString(@"map_settings_overunder"),

@@ -637,7 +637,6 @@
 "logging_min_distance_descr" = "Filter: najmanjša razdalja za beleženje nove točke";
 "menu_help" = "Pomoč";
 "actions" = "Dejanja";
-"parking_marker" = "Označba parkirišča";
 "parking_time_limited" = "Parkiranje ječasovno omejeno na";
 "cannot_add_marker" = "Ni mogoče dodati označbe parkiranja";
 // Help

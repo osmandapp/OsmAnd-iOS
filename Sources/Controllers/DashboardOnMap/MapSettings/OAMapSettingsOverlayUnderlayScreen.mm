@@ -410,7 +410,6 @@ static NSInteger kButtonsSection;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
-            [cell.sliderView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
         
@@ -420,7 +419,7 @@ static NSInteger kButtonsSection;
             if (_mapSettingType == EMapSettingOverlay)
                 cell.sliderView.value = _app.data.overlayAlpha;
             else if (_mapSettingType == EMapSettingUnderlay)
-                cell.sliderView.value = _app.data.underlayAlpha;
+                cell.sliderView.value = abs(_app.data.underlayAlpha - 1.);
             cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
             cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
         }
@@ -488,7 +487,7 @@ static NSInteger kButtonsSection;
     if (_mapSettingType == EMapSettingOverlay)
         _app.data.overlayAlpha = slider.value;
     else if (_mapSettingType == EMapSettingUnderlay)
-        _app.data.underlayAlpha = slider.value;
+        _app.data.underlayAlpha = 1. - slider.value;
 }
 
 - (void) turnLayerOnOff:(id)sender

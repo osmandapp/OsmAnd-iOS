@@ -2151,4 +2151,24 @@ static const double d180PI = 180.0 / M_PI_2;
     }
 }
 
++ (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView
+{
+    if ([parentView canBecomeFirstResponder])
+    {
+        [parentView becomeFirstResponder];
+        UIMenuController *menuController = UIMenuController.sharedMenuController;
+        if (@available(iOS 13.0, *))
+        {
+            [menuController hideMenu];
+            [menuController showMenuFromView:targetView rect:targetView.bounds];
+        }
+        else
+        {
+            [menuController setMenuVisible:NO animated:YES];
+            [menuController setTargetRect:targetView.bounds inView:targetView];
+            [menuController setMenuVisible:YES animated:YES];
+        }
+    }
+}
+
 @end

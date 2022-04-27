@@ -59,33 +59,16 @@
     [pb setString:_label.text];
 }
 
-- (void)showMenu:(NSInteger)index
-{
-    [self becomeFirstResponder];
-    UIMenuController *menuController = UIMenuController.sharedMenuController;
-    if (@available(iOS 13.0, *))
-    {
-        [menuController hideMenu];
-        [menuController showMenuFromView:_label rect:_label.bounds];
-    }
-    else
-    {
-        [menuController setMenuVisible:NO animated:YES];
-        [menuController setTargetRect:_label.bounds inView:_label];
-        [menuController setMenuVisible:YES animated:YES];
-    }
-}
-
 #pragma mark - OACustomButtonDelegate
 
 - (void)onLabelTapped:(NSInteger)tag
 {
-    [self showMenu:tag];
+    [OAUtilities showMenuInView:self fromView:_label];
 }
 
 - (void)onLabelLongPressed:(NSInteger)tag
 {
-    [self showMenu:tag];
+    [OAUtilities showMenuInView:self fromView:_label];
 }
 
 @end

@@ -1,5 +1,5 @@
 //
-//  OALabel.mm
+//  OALabel.m
 //  OsmAnd
 //
 //  Created by Skalii on 15.04.2022.

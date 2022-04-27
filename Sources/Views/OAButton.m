@@ -1,5 +1,5 @@
 //
-//  OAButton.mm
+//  OAButton.m
 //  OsmAnd
 //
 //  Created by Alexey Kulish on 01/06/15.

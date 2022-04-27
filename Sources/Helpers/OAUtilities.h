@@ -277,4 +277,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSString *) getLocalizedString:(NSString *)key;
 + (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list;
 
++ (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView;
+
 @end

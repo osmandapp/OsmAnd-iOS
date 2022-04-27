@@ -165,35 +165,14 @@
     }
 }
 
-- (void)showMenu:(NSInteger)index
-{
-    _selectedButtonIndex = index;
-    if (_buttons.count > _selectedButtonIndex)
-    {
-        OAButton *button = _buttons[_selectedButtonIndex];
-        [self becomeFirstResponder];
-        UIMenuController *menuController = UIMenuController.sharedMenuController;
-        if (@available(iOS 13.0, *))
-        {
-            [menuController hideMenu];
-            [menuController showMenuFromView:button rect:button.bounds];
-        }
-        else
-        {
-            [menuController setMenuVisible:NO animated:YES];
-            [menuController setTargetRect:button.bounds inView:button];
-            [menuController setMenuVisible:YES animated:YES];
-        }
-    }
-}
-
 #pragma mark - OACustomButtonDelegate
 
 - (void)onButtonTapped:(NSInteger)tag
 {
-    if (_buttons.count > tag)
+    _selectedButtonIndex = tag;
+    if (_buttons.count > _selectedButtonIndex)
     {
-        OAButton *button = _buttons[tag];
+        OAButton *button = _buttons[_selectedButtonIndex];
         [UIView animateWithDuration:0.3 animations:^{
             button.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
             button.layer.borderColor = UIColor.clearColor.CGColor;
@@ -203,7 +182,7 @@
                 button.layer.backgroundColor = UIColor.clearColor.CGColor;
                 button.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
                 button.tintColor = UIColorFromRGB(color_primary_purple);
-                [self showMenu:tag];
+                [OAUtilities showMenuInView:self fromView:button];
             }];
         }];
     }
@@ -211,7 +190,9 @@
 
 - (void)onButtonLongPressed:(NSInteger)tag
 {
-    [self showMenu:tag];
+    _selectedButtonIndex = tag;
+    if (_buttons.count > _selectedButtonIndex)
+        [OAUtilities showMenuInView:self fromView:_buttons[_selectedButtonIndex]];
 }
 
 @end

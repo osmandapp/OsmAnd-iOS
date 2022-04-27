@@ -157,28 +157,6 @@
     }
 }
 
-- (void)showMenu:(NSInteger)index
-{
-    _selectedButtonIndex = index;
-    if (_buttons.count > _selectedButtonIndex)
-    {
-        OAButton *button = _buttons[_selectedButtonIndex];
-        [self becomeFirstResponder];
-        UIMenuController *menuController = UIMenuController.sharedMenuController;
-        if (@available(iOS 13.0, *))
-        {
-            [menuController hideMenu];
-            [menuController showMenuFromView:button rect:button.bounds];
-        }
-        else
-        {
-            [menuController setMenuVisible:NO animated:YES];
-            [menuController setTargetRect:button.bounds inView:button];
-            [menuController setMenuVisible:YES animated:YES];
-        }
-    }
-}
-
 #pragma mark - OACustomButtonDelegate
 
 - (void)onButtonTapped:(NSInteger)tag
@@ -204,7 +182,9 @@
 
 - (void)onButtonLongPressed:(NSInteger)tag
 {
-    [self showMenu:tag];
+    _selectedButtonIndex = tag;
+    if (_buttons.count > _selectedButtonIndex)
+        [OAUtilities showMenuInView:self fromView:_buttons[_selectedButtonIndex]];
 }
 
 @end

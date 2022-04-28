@@ -15,6 +15,8 @@
 
 @interface OAEditDescriptionViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, WKNavigationDelegate>
 
+@property (nonatomic) NSString *desc;
+
 @end
 
 @implementation OAEditDescriptionViewController
@@ -24,7 +26,6 @@
     BOOL _readOnly;
     BOOL _isEditing;
     NSArray<NSDictionary<NSString *, NSString *> *> *_cellsData;
-    NSString *_textViewContent;
     CGFloat _webViewHeight;
     int _webViewReloadingsCount;
 }
@@ -200,12 +201,8 @@
                                                  name:UIKeyboardWillShowNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
+                                             selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillChangeFrame:)
-                                                 name:UIKeyboardWillChangeFrameNotification object:nil];
     
 }
 
@@ -215,48 +212,39 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-// Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWillShow:(NSNotification*)aNotification
+- (void) keyboardWillShow:(NSNotification *)notification;
 {
-     CGRect keyboardFrame = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-     CGRect convertedFrame = [self.view convertRect:keyboardFrame fromView:self.view.window];
+    NSDictionary *userInfo = [notification userInfo];
+    NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
 
-    _keyboardHeight = convertedFrame.size.height;
-    [self forceUpdateLayout];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    UIEdgeInsets insets = [[self tableView] contentInset];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
+        [[self view] layoutIfNeeded];
+    } completion:nil];
 }
 
-- (void)keyboardWillChangeFrame:(NSNotification*)aNotification
+- (void) keyboardWillHide:(NSNotification *)notification;
 {
-    CGRect keyboardFrame = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    CGRect convertedFrame = [self.view convertRect:keyboardFrame fromView:self.view.window];
-    
-    _keyboardHeight = convertedFrame.size.height;
-    [self forceUpdateLayout];
-}
-
-// Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
-{
-    [self forceUpdateLayout];
-}
-
-- (void)forceUpdateLayout
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:.3 animations:^{
-            [self.view setNeedsLayout];
-        }];
-    });
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    UIEdgeInsets insets = [[self tableView] contentInset];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
+        [[self view] layoutIfNeeded];
+    } completion:nil];
 }
 
 #pragma mark - Actions
 
 - (IBAction)saveClicked:(id)sender
 {
-    self.desc = _textViewContent;
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(descriptionChanged)])
-        [self.delegate descriptionChanged];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(descriptionChanged:)])
+        [self.delegate descriptionChanged:self.desc];
     
     [self backButtonClicked:self];
 }
@@ -375,7 +363,7 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    _textViewContent = textView.text;
+    self.desc = textView.text;
     [_tableView beginUpdates];
     [_tableView endUpdates];
 }

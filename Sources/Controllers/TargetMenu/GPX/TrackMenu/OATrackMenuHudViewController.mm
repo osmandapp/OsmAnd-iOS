@@ -134,7 +134,6 @@
     UIImage *_cachedImage;
     NSString *_cachedImageURL;
     BOOL _isViewVisible;
-    OAEditDescriptionViewController *_editDescController;
 }
 
 @dynamic isShown, backButton, statusBarBackgroundView, contentContainer;
@@ -1539,16 +1538,16 @@
 
 - (void)openDescription
 {
-    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:_description isNew:NO isEditing:NO readOnly:NO];
-    _editDescController.delegate = self;
-    [self.navigationController pushViewController:_editDescController animated:YES];
+    OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:_description isNew:NO isEditing:NO readOnly:NO];
+    editDescController.delegate = self;
+    [self.navigationController pushViewController:editDescController animated:YES];
 }
 
 - (void)openDescriptionEditor
 {
-    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:_description isNew:NO isEditing:YES readOnly:NO];
-    _editDescController.delegate = self;
-    [self.navigationController pushViewController:_editDescController animated:YES];
+    OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:_description isNew:NO isEditing:YES readOnly:NO];
+    editDescController.delegate = self;
+    [self.navigationController pushViewController:editDescController animated:YES];
 }
 
 - (void)openDuplicateTrack
@@ -2480,9 +2479,9 @@
 
 #pragma mark - OAEditDescriptionViewControllerDelegate
 
-- (void) descriptionChanged
+- (void) descriptionChanged:(NSString *)descr
 {
-    self.doc.metadata.desc = _editDescController.desc;
+    self.doc.metadata.desc = descr;
     [self.doc saveTo:self.doc.path];
     _description = [self generateDescription];
     [_headerView setDescription];

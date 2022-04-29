@@ -169,11 +169,11 @@
 
 - (void)dealloc
 {
-    _resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
-    _resourcesManager->repositoryUpdateObservable.detach((__bridge const void*)self);
+    _resourcesManager->localResourcesChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
+    _resourcesManager->repositoryUpdateObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
 
-    _favoritesCollection->collectionChangeObservable.detach((__bridge const void*)self);
-    _favoritesCollection->favoriteLocationChangeObservable.detach((__bridge const void*)self);
+    _favoritesCollection->collectionChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
+    _favoritesCollection->favoriteLocationChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
 }
 
 - (void) buildFolders
@@ -323,16 +323,14 @@
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataDir.absoluteFilePath(QLatin1String("Resources")),
                                                          _documentsDir.absolutePath(),
                                                          QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
-                                                         _worldMiniBasemapFilename != nil
-                                                         ? QString::fromNSString(_worldMiniBasemapFilename)
-                                                         : QString::null,
+                                                         _worldMiniBasemapFilename != nil ? QString::fromNSString(_worldMiniBasemapFilename) : QString(),
                                                          QString::fromNSString(NSTemporaryDirectory()),
                                                          QString::fromNSString(_cachePath),
                                                          QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
                                                          QString::fromNSString(@"http://download.osmand.net"),
                                                          _webClient));
     
-    _resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+    _resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                              [self]
                                                              (const OsmAnd::ResourcesManager* const resourcesManager,
                                                               const QList< QString >& added,
@@ -346,7 +344,7 @@
                                                                  });
                                                              });
     
-    _resourcesManager->repositoryUpdateObservable.attach((__bridge const void*)self,
+    _resourcesManager->repositoryUpdateObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                          [self]
                                                          (const OsmAnd::ResourcesManager* const resourcesManager)
                                                          {
@@ -466,13 +464,13 @@
     _favoriteChangedObservable = [[OAObservable alloc] init];
     _favoritesCollection.reset(new OsmAnd::FavoriteLocationsGpxCollection());
     _favoritesCollection->loadFrom(QString::fromNSString(_favoritesFilename));
-    _favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
+    _favoritesCollection->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                             [self]
                                                             (const OsmAnd::IFavoriteLocationsCollection* const collection)
                                                             {
                                                                 [_favoritesCollectionChangedObservable notifyEventWithKey:self];
                                                             });
-    _favoritesCollection->favoriteLocationChangeObservable.attach((__bridge const void*)self,
+    _favoritesCollection->favoriteLocationChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                   [self]
                                                                   (const OsmAnd::IFavoriteLocationsCollection* const collection,
                                                                    const std::shared_ptr<const OsmAnd::IFavoriteLocation>& favoriteLocation)

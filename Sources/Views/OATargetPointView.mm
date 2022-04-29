@@ -223,14 +223,14 @@ static const NSInteger _buttonsCount = 4;
 
     _nearbyLabel.textColor = UIColorFromARGB(color_secondary_text_light_argb);
     
-    [OsmAndApp instance].favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
+    [OsmAndApp instance].favoritesCollection->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                 [self]
                                                                 (const OsmAnd::IFavoriteLocationsCollection* const collection)
                                                                 {
                                                                     [self onFavoritesCollectionChanged];
                                                                 });
 
-    [OsmAndApp instance].favoritesCollection->favoriteLocationChangeObservable.attach((__bridge const void*)self,
+    [OsmAndApp instance].favoritesCollection->favoriteLocationChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                       [self]
                                                                       (const OsmAnd::IFavoriteLocationsCollection* const collection,
                                                                        const std::shared_ptr<const OsmAnd::IFavoriteLocation> favoriteLocation)

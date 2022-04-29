@@ -46,14 +46,14 @@
     _hiddenPointPos31 = OsmAnd::PointI();
     _showCaptionsCache = self.showCaptions;
     
-    self.app.favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
+    self.app.favoritesCollection->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                 [self]
                                                                 (const OsmAnd::IFavoriteLocationsCollection* const collection)
                                                                 {
                                                                     [self onFavoritesCollectionChanged];
                                                                 });
     
-    self.app.favoritesCollection->favoriteLocationChangeObservable.attach((__bridge const void*)self,
+    self.app.favoritesCollection->favoriteLocationChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                       [self]
                                                                       (const OsmAnd::IFavoriteLocationsCollection* const collection,
                                                                        const std::shared_ptr<const OsmAnd::IFavoriteLocation> favoriteLocation)
@@ -92,8 +92,8 @@
 {
     [super deinitLayer];
     
-    self.app.favoritesCollection->collectionChangeObservable.detach((__bridge const void*)self);
-    self.app.favoritesCollection->favoriteLocationChangeObservable.detach((__bridge const void*)self);
+    self.app.favoritesCollection->collectionChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
+    self.app.favoritesCollection->favoriteLocationChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
 }
 
 - (void) show

@@ -35,7 +35,6 @@
 {
     OAEditColorViewController *_colorController;
     OAEditGroupViewController *_groupController;
-    OAEditDescriptionViewController *_editDescController;
     
     CGFloat _descHeight;
     BOOL _descSingleLine;
@@ -617,9 +616,9 @@
 
 - (void) changeDescriptionClicked
 {
-    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:self.desc isNew:self.newItem isEditing:NO readOnly:YES];
-    _editDescController.delegate = self;
-    [self.navController pushViewController:_editDescController animated:YES];
+    OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:self.desc isNew:self.newItem isEditing:NO readOnly:YES];
+    editDescController.delegate = self;
+    [self.navController pushViewController:editDescController animated:YES];
 }
 
 - (void) editFavName:(id)sender
@@ -920,14 +919,13 @@
     [self.tableView reloadData];
 }
 
-#pragma mark
 #pragma mark - OAEditDescriptionViewControllerDelegate
 
-- (void) descriptionChanged
+- (void) descriptionChanged:(NSString *)descr
 {
     _wasEdited = YES;
     
-    self.desc = _editDescController.desc;
+    self.desc = descr;
     [self setItemDesc:self.desc];
     
     [self setupView];

@@ -23,14 +23,17 @@
 #import "OAFavoritesLayer.h"
 #import "OARouteColorizationHelper.h"
 #import "OAGPXAppearanceCollection.h"
-#import "OAGpxAdditionalIconsProvider.h"
 #import "QuadRect.h"
 #import "OAMapUtils.h"
 #import "OARouteImporter.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OAGpxTrackAnalysis.h"
+#import "OAOsmAndFormatter.h"
 
+#include <OsmAndCore/LatLon.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
+#include <OsmAndCore/Map/GpxAdditionalIconsProvider.h>
 
 @interface OAGPXLayer ()
 
@@ -41,7 +44,7 @@
 @implementation OAGPXLayer
 {
     std::shared_ptr<OAWaypointsMapLayerProvider> _waypointsMapProvider;
-    std::shared_ptr<OAGpxAdditionalIconsProvider> _startFinishProvider;
+    std::shared_ptr<OsmAnd::GpxAdditionalIconsProvider> _startFinishProvider;
     BOOL _showCaptionsCache;
     OsmAnd::PointI _hiddenPointPos31;
 
@@ -397,8 +400,99 @@ colorizationScheme:(int)colorizationScheme
         _startFinishProvider = nullptr;
     }
     
-    _startFinishProvider.reset(new OAGpxAdditionalIconsProvider());
+    QList<OsmAnd::PointI> startFinishPoints;
+    QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> splitLabels;
+    const auto& activeGpx = OASelectedGPXHelper.instance.activeGpx;
+    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
+    {
+        NSString *path = it.key().toNSString();
+        OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
+        path = [[gpxDb getFileDir:path] stringByAppendingPathComponent:path.lastPathComponent];
+        OAGPX *gpx = [gpxDb getGPXItem:path];
+        if (gpx.showStartFinish)
+        {
+            const auto& doc = it.value();
+            if (!doc)
+                continue;
+            const auto& tracks = doc->tracks;
+            OsmAnd::LatLon start, finish;
+            for (const auto& trk : constOf(tracks))
+            {
+                const auto& segments = constOf(trk->segments);
+                for (int i = 0; i < segments.size(); i++)
+                {
+                    const auto& seg = segments[i];
+                    if (gpx.joinSegments)
+                    {
+                        if (i == 0)
+                            start = seg->points.first()->position;
+                        else if (i == segments.size() - 1)
+                            finish = seg->points.last()->position;
+                    }
+                    else
+                    {
+                        startFinishPoints.append({
+                            OsmAnd::Utilities::convertLatLonTo31(seg->points.first()->position),
+                            OsmAnd::Utilities::convertLatLonTo31(seg->points.last()->position)});
+                    }
+                }
+            }
+            if (gpx.joinSegments)
+            {
+                startFinishPoints.append({
+                    OsmAnd::Utilities::convertLatLonTo31(start),
+                    OsmAnd::Utilities::convertLatLonTo31(finish)});
+            }
+        }
+        if (gpx.splitType != EOAGpxSplitTypeNone)
+        {
+            OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
+            NSArray<OAGPXTrackAnalysis *> *splitData = nil;
+            BOOL splitByTime = NO;
+            BOOL splitByDistance = NO;
+            switch (gpx.splitType) {
+                case EOAGpxSplitTypeDistance: {
+                    splitData = [document splitByDistance:gpx.splitInterval joinSegments:gpx.joinSegments];
+                    splitByDistance = YES;
+                    break;
+                }
+                case EOAGpxSplitTypeTime: {
+                    splitData = [document splitByTime:gpx.splitInterval joinSegments:gpx.joinSegments];
+                    splitByTime = YES;
+                    break;
+                }
+                default:
+                    break;
+            }
+            if (splitData && (splitByDistance || splitByTime))
+            {
+                for (NSInteger i = 1; i < splitData.count; i++)
+                {
+                    OAGPXTrackAnalysis *seg = splitData[i];
+                    double metricStartValue = splitData[i - 1].metricEnd;
+                    OAWptPt *pt = seg.locationStart;
+                    if (pt)
+                    {
+                        const auto pos31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude));
+                        QString stringValue;
+                        if (splitByDistance)
+                            stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedDistance:metricStartValue]);
+                        else if (splitByTime)
+                            stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeInterval:metricStartValue shortFormat:YES]);
+
+                        splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, OsmAnd::ColorARGB((uint32_t) gpx.color)));
+                    }
+                }
+            }
+        }
+    }
     
+    _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(
+        -120000, UIScreen.mainScreen.scale, startFinishPoints, splitLabels,
+        [OANativeUtilities skImageFromPngResource:@"map_track_point_start"],
+        [OANativeUtilities skImageFromPngResource:@"map_track_point_finish"],
+        [OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"]));
+        
     [self.mapView addTiledSymbolsProvider:_startFinishProvider];
 }
 

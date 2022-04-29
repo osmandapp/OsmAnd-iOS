@@ -239,7 +239,7 @@
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
 
     /*
-    _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+    _app.resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                  [self]
                                                                  (const OsmAnd::ResourcesManager* const resourcesManager,
                                                                   const QList< QString >& added,
@@ -388,7 +388,7 @@
 
 - (void) deinit
 {
-    _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
+    _app.resourcesManager->localResourcesChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
 
     [_mapLayers destroyLayers];
     

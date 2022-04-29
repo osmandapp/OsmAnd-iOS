@@ -633,11 +633,8 @@ typedef enum : NSUInteger {
 
 - (BOOL) restorePurchasesWithProgress:(BOOL)showProgress
 {
-#ifdef DEBUG
-#else
     if (![_iapHelper productsLoaded])
         return NO;
-#endif
 
     _restoringPurchases = YES;
     if (showProgress)

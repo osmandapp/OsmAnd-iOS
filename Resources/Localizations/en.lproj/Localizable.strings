@@ -542,6 +542,7 @@
 "shared_string_gpx_track" = "Track";
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_any" = "Any";
+"shared_string_capacity" = "Capacity";
 
 "restart" = "Restart";
 
@@ -1601,6 +1602,7 @@
 // Units
 "units_km" = "km";
 "units_m" = "m";
+"units_cubic_m" = "m³";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";

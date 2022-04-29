@@ -9,9 +9,9 @@
 #import "OACollapsableNearestPoiTypeView.h"
 #import "OAPOI.h"
 #import "OARootViewController.h"
-#import "OAPOILayer.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
+#import "OATargetInfoViewController.h"
 
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
@@ -23,19 +23,30 @@
 @implementation OACollapsableNearestPoiTypeView
 {
     NSArray<OAPOIType *> *_poiTypes;
+    OAPOI *_amenity;
     NSArray<OAButton *> *_buttons;
     NSInteger _selectedButtonIndex;
     double _latitude;
     double _longitude;
     BOOL _isPoiAdditional;
+    NSString *_textRow;
+    NSInteger _textRowButtonIndex;
 }
 
-- (void)setData:(NSArray<OAPOIType *> *)poiTypes lat:(double)lat lon:(double)lon isPoiAdditional:(BOOL)isPoiAdditional
+- (void) setData:(NSArray<OAPOIType *> *)poiTypes
+         amenity:(OAPOI *)amenity
+             lat:(double)lat
+             lon:(double)lon
+ isPoiAdditional:(BOOL)isPoiAdditional
+         textRow:(OARowInfo *)textRow
 {
     _poiTypes = poiTypes;
+    _amenity = amenity;
     _latitude = lat;
     _longitude = lon;
     _isPoiAdditional = isPoiAdditional;
+    if (textRow)
+        _textRow = [[textRow.textPrefix stringByAppendingString:@": "] stringByAppendingString:[textRow.text lowercaseString]];
     [self buildViews];
 }
 
@@ -51,7 +62,19 @@
         [self addSubview:btn];
         [buttons addObject:btn];
     }
-    _buttons = [NSArray arrayWithArray:buttons];
+    if (_textRow && _textRow.length > 0)
+    {
+        OAButton *btn = [self createButton:_textRow];
+        btn.tag = _textRowButtonIndex = i;
+        [self addSubview:btn];
+        [buttons addObject:btn];
+    }
+    else
+    {
+        _textRowButtonIndex = -1;
+    }
+
+    _buttons = buttons;
 }
 
 - (OAButton *)createButton:(NSString *)title
@@ -129,30 +152,28 @@
 
 - (void)onButtonTapped:(NSInteger)tag
 {
-    if (_poiTypes.count > tag)
+    if (_poiTypes.count > tag && tag != _textRowButtonIndex && _amenity && _amenity.type && _amenity.type.category)
     {
-        OAPOIType *pointType = _poiTypes[tag];
-        if (pointType)
+        OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:
+                [NSString stringWithFormat:@"%@%@", STD_PREFIX, _amenity.type.category.name]];
+        if (filter)
         {
-            OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:[NSString stringWithFormat:@"%@%@", STD_PREFIX, pointType.name]];
-            if (filter)
+            OAPOIType *pt = _poiTypes[tag];
+            [filter clearFilter];
+            if (_isPoiAdditional)
             {
-                [filter clearFilter];
-                if (_isPoiAdditional)
-                {
-                    [filter setTypeToAccept:pointType.category b:YES];
-                    [filter updateTypesToAccept:pointType];
-                    [filter setFilterByName:[pointType.name stringByReplacingOccurrencesOfString:@"_" withString:@":"].lowerCase];
-                }
-                else
-                {
-                    NSMutableSet<NSString *> *accept = [NSMutableSet new];
-                    [accept addObject:pointType.name];
-                    [filter selectSubTypesToAccept:pointType.category accept:accept];
-                }
-
-                [self showQuickSearch:filter];
+                [filter setTypeToAccept:_amenity.type.category b:YES];
+                [filter updateTypesToAccept:pt];
+                [filter setFilterByName:[pt.name stringByReplacingOccurrencesOfString:@"_" withString:@":"].lowerCase];
             }
+            else
+            {
+                NSMutableSet<NSString *> *accept = [NSMutableSet new];
+                [accept addObject:pt.name];
+                [filter selectSubTypesToAccept:_amenity.type.category accept:accept];
+            }
+
+             [self showQuickSearch:filter];
         }
     }
 }
@@ -160,7 +181,7 @@
 - (void)onButtonLongPressed:(NSInteger)tag
 {
     _selectedButtonIndex = tag;
-    if (_buttons.count > _selectedButtonIndex)
+    if (_buttons.count > _selectedButtonIndex && _selectedButtonIndex != _textRowButtonIndex)
         [OAUtilities showMenuInView:self fromView:_buttons[_selectedButtonIndex]];
 }
 

@@ -997,7 +997,12 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     _restoringPurchases = YES;
     _transactionErrors = 0;
     
+#ifdef DEBUG
+    [_settings.liveUpdatesPurchased set:![_settings.liveUpdatesPurchased get]];
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+#else
     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+#endif
 }
 
 - (BOOL) needValidateReceipt

@@ -29,8 +29,8 @@
 @property(nonatomic) float azimuth;
 @property(nonatomic) float elevationAngle;
 @property(nonatomic) float zoom;
-@property(nonatomic, readonly) float currentTileSizeOnScreenInPixels;
-@property(nonatomic, readonly) float currentTileSizeOnScreenMeters;
+@property(nonatomic, readonly) float tileSizeOnScreenInPixels;
+@property(nonatomic, readonly) float tileSizeOnScreenInMeters;
 @property(readonly) OAObservable* stateObservable;
 
 // Misc properties:

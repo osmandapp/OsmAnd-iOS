@@ -14,6 +14,8 @@
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
+#import <OpenGLES/ES3/gl.h>
+#import <OpenGLES/ES3/glext.h>
 
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore.h>
@@ -40,15 +42,17 @@
     EAGLSharegroup* _glShareGroup;
     EAGLContext* _glRenderContext;
     EAGLContext* _glWorkerContext;
-    GLuint _depthRenderBuffer;
-    GLuint _colorRenderBuffer;
-    GLuint _frameBuffer;
+    EAGLRenderingAPI _glVersion;
+    GLuint _framebufferDepthTexture;
+    GLuint _framebufferColorRenderbuffer;
+    GLuint _framebuffer;
     CADisplayLink* _displayLink;
-    
+
     OsmAnd::PointI _viewSize;
-    
+
+    std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
     std::shared_ptr<OsmAnd::MapAnimator> _animator;
-    
+
     CGRect prevBounds;
 }
 
@@ -72,8 +76,8 @@
     [self deinit];
 }
 
-- (void) awakeFromNib {
-    
+- (void) awakeFromNib
+{
     [self commonInit];
 }
 
@@ -88,20 +92,20 @@
     _glShareGroup = nil;
     _glRenderContext = nil;
     _glWorkerContext = nil;
-    _depthRenderBuffer = 0;
-    _colorRenderBuffer = 0;
-    _frameBuffer = 0;
+    _framebufferDepthTexture = 0;
+    _framebufferColorRenderbuffer = 0;
+    _framebuffer = 0;
     _displayLink = nil;
-    
+
     _viewportXScale = 1.f;
     _viewportYScale = 1.f;
 
     // Create map renderer instance
-    _renderer = OsmAnd::createMapRenderer(OsmAnd::MapRendererClass::AtlasMapRenderer_OpenGLES2);
+    _renderer = OsmAnd::createMapRenderer(OsmAnd::MapRendererClass::AtlasMapRenderer_OpenGLES2plus);
     const auto rendererConfig = std::static_pointer_cast<OsmAnd::AtlasMapRendererConfiguration>(_renderer->getConfiguration());
     rendererConfig->texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
     _renderer->setConfiguration(rendererConfig);
-    
+
     OAObservable* stateObservable = _stateObservable;
     _renderer->stateChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_stateObservable),
         [stateObservable]
@@ -117,7 +121,7 @@
         {
             [framePreparedObservable notifyEvent];
         });
-    
+
     OAObservable* targetChangedObservalbe = _targetChangedObservable;
     _renderer->targetChangedObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_targetChangedObservable),
         [targetChangedObservalbe]
@@ -129,7 +133,7 @@
     // Create animator for that map
     _animator.reset(new OsmAnd::MapAnimator());
     _animator->setMapRenderer(_renderer);
-    
+
     auto debugSettings = [self getMapDebugSettings];
     //debugSettings->disableSymbolsFastCheckByFrustum = true;
     [self setMapDebugSettings:debugSettings];
@@ -325,16 +329,14 @@
     return _renderer->getState().zoomLevel;
 }
 
-- (float)currentTileSizeOnScreenInPixels
+- (float)tileSizeOnScreenInPixels
 {
-    return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getCurrentTileSizeOnScreenInPixels();
+    return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getTileSizeOnScreenInPixels();
 }
 
-
-- (float)currentTileSizeOnScreenInMeters
+- (float)tileSizeOnScreenInMeters
 {
-    return _renderer->getCurrentTileSizeInMeters();
-    
+    return _renderer->getTileSizeInMeters();
 }
 
 - (float)minZoom
@@ -503,38 +505,39 @@
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
     eaglLayer.opaque = YES;
     eaglLayer.drawableProperties = @{
-                                     kEAGLDrawablePropertyRetainedBacking: [NSNumber numberWithBool:YES],
-                                     kEAGLDrawablePropertyColorFormat: kEAGLColorFormatRGBA8
-                                     };
-    
-    // Create OpenGLES 2.0 contexts
-    _glRenderContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    if (!_glRenderContext)
+        kEAGLDrawablePropertyRetainedBacking: [NSNumber numberWithBool:YES],
+        kEAGLDrawablePropertyColorFormat: kEAGLColorFormatRGBA8
+    };
+
+    // Initialize OpenGLES
+    for (auto glVersion : { kEAGLRenderingAPIOpenGLES3, kEAGLRenderingAPIOpenGLES2 })
     {
-        [NSException raise:NSGenericException
-                    format:@"Failed to initialize OpenGLES 2.0 render context 0x%08x", glGetError()];
+        _glRenderContext = [[EAGLContext alloc] initWithAPI:glVersion];
+        if (!_glRenderContext)
+            continue;
+
+        _glShareGroup = [_glRenderContext sharegroup];
+        if (!_glShareGroup)
+            continue;
+
+        _glWorkerContext = [[EAGLContext alloc] initWithAPI:glVersion sharegroup:_glShareGroup];
+        if (!_glWorkerContext)
+            continue;
+
+        _glVersion = glVersion;
+        break;
+    }
+    if (!_glRenderContext || !_glShareGroup || !_glWorkerContext)
+    {
+        [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES2+"];
         return;
     }
-    _glShareGroup = [_glRenderContext sharegroup];
-    if (!_glShareGroup)
-    {
-        [NSException raise:NSGenericException
-                    format:@"Failed to initialize OpenGLES 2.0 render context has no sharegroup 0x%08x", glGetError()];
-        return;
-    }
-    _glWorkerContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2 sharegroup:_glShareGroup];
-    if (!_glWorkerContext)
-    {
-        [NSException raise:NSGenericException
-                    format:@"Failed to initialize OpenGLES 2.0 worker context 0x%08x", glGetError()];
-        return;
-    }
-    
+
     // Set created context as current active
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException
-                    format:@"Failed to set current OpenGLES2 context 0x%08x", glGetError()];
+                    format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
         return;
     }
 
@@ -551,7 +554,7 @@
             if (![EAGLContext setCurrentContext:capturedWorkerContext])
             {
                 [NSException raise:NSGenericException
-                            format:@"Failed to set current OpenGLES2 context in GPU worker thread 0x%08x", glGetError()];
+                            format:@"Failed to set current OpenGLES2+ context in GPU worker thread 0x%08x", glGetError()];
                 return;
             }
         };
@@ -564,13 +567,13 @@
     _renderer->setup(rendererSetup);
 
     // Initialize rendering
-    if (!_renderer->initializeRendering())
+    if (!_renderer->initializeRendering(false))
     {
         [NSException raise:NSGenericException
-                    format:@"Failed to initialize OpenGLES2 map renderer 0x%08x", glGetError()];
+                    format:@"Failed to initialize OpenGLES2+ map renderer 0x%08x", glGetError()];
         return;
     }
-    
+
     // Rendering needs to be resumed/started manually, since render target is not created yet
 }
 
@@ -583,18 +586,18 @@
 
     // Stop rendering (if it was running)
     [self suspendRendering];
-    
+
     // Release map renderer
     if (!_renderer->releaseRendering(gpuContextLost))
     {
         [NSException raise:NSGenericException
-                    format:@"Failed to release OpenGLES2 map renderer 0x%08x", glGetError()];
+                    format:@"Failed to release OpenGLES2+ map renderer 0x%08x", glGetError()];
         return;
     }
-    
+
     // Release render-buffers and framebuffer
     [self releaseRenderAndFrameBuffers];
-    
+
     // Tear down contexts
     if ([EAGLContext currentContext] == _glRenderContext || [EAGLContext currentContext] == _glWorkerContext)
         [EAGLContext setCurrentContext:nil];
@@ -609,9 +612,9 @@
     GLenum result = glGetError();
     if (result == GL_NO_ERROR)
         return result;
-    
+
     OALog(@"OpenGLES error 0x%08x", result);
-    
+
     return result;
 }
 #endif
@@ -620,14 +623,14 @@
 {
     if (CGRectEqualToRect(prevBounds, self.bounds))
         return;
-    
+
     if (!CGRectIsEmpty(self.bounds))
         prevBounds = self.bounds;
-    
+
     // Normalize elevation angle
     [self setElevationAngle:self.elevationAngle];
-    
-    OALog(@"[OAMapRendererView %p] Recreating OpenGLES2 frame and render buffers due to resize", self);
+
+    OALog(@"[OAMapRendererView %p] Recreating OpenGLES2+ frame and render buffers due to resize", self);
 
     // Kill buffers, since window was resized
     [self releaseRenderAndFrameBuffers];
@@ -637,7 +640,7 @@
 {
     if (_viewportXScale == viewportXScale)
         return;
-    
+
     _viewportXScale = viewportXScale;
 
     // Kill buffers, since viewport was resized
@@ -650,7 +653,7 @@
         return;
 
     _viewportYScale = viewportYScale;
-    
+
     // Normalize elevation angle
     [self setElevationAngle:self.elevationAngle];
 
@@ -670,22 +673,22 @@
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException
-                    format:@"Failed to set current OpenGLES2 context 0x%08x", glGetError()];
+                    format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
         return;
     }
-    
+
     // Setup frame-buffer
-    glGenFramebuffers(1, &_frameBuffer);
+    glGenFramebuffers(1, &_framebuffer);
     validateGL();
-    NSAssert(_frameBuffer != 0, @"Failed to allocate frame buffer");
-    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+    NSAssert(_framebuffer != 0, @"Failed to allocate frame buffer");
+    glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
     validateGL();
-    
-    // Setup render buffer (color component)
-    glGenRenderbuffers(1, &_colorRenderBuffer);
+
+    // Setup color component of the frame-buffer
+    glGenRenderbuffers(1, &_framebufferColorRenderbuffer);
     validateGL();
-    NSAssert(_colorRenderBuffer != 0, @"Failed to allocate render buffer (color component)");
-    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+    NSAssert(_framebufferColorRenderbuffer != 0, @"Failed to allocate color component for frame buffer");
+    glBindRenderbuffer(GL_RENDERBUFFER, _framebufferColorRenderbuffer);
     validateGL();
     if (![_glRenderContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer])
     {
@@ -699,20 +702,39 @@
     validateGL();
     OALog(@"[OAMapRendererView %p] View size %dx%d", self, _viewSize.x, _viewSize.y);
 
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _framebufferColorRenderbuffer);
     validateGL();
 
-    // Setup render buffer (depth component)
-    glGenRenderbuffers(1, &_depthRenderBuffer);
+    // Setup depth component of the frame-buffer (as a texture to allow reads from it)
+    // Build the texture that will serve as the depth attachment for the framebuffer.
+    glGenTextures(1, &_framebufferDepthTexture);
     validateGL();
-    NSAssert(_depthRenderBuffer != 0, @"Failed to allocate render buffer (depth component)");
-    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+    NSAssert(_framebufferDepthTexture != 0, @"Failed to allocate depth component for frame buffer");
+    glBindTexture(GL_TEXTURE_2D, _framebufferDepthTexture);
     validateGL();
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, _viewSize.x, _viewSize.y);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     validateGL();
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     validateGL();
-    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    validateGL();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    validateGL();
+    if (_glVersion == kEAGLRenderingAPIOpenGLES3)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, _viewSize.x, _viewSize.y, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
+        validateGL();
+    }
+    else
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, _viewSize.x, _viewSize.y, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
+        validateGL();
+    }
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _framebufferDepthTexture, 0);
+    validateGL();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    validateGL();
+
     // Check that we've initialized our framebuffer fully
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
@@ -730,26 +752,31 @@
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException
-                    format:@"Failed to set current OpenGLES2 context 0x%08x", glGetError()];
+                    format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
         return;
     }
-    
-    if (_frameBuffer != 0)
+
+    if (_renderer->isAttachedToRenderTarget())
     {
-        glDeleteFramebuffers(1, &_frameBuffer);
-        _frameBuffer = 0;
+        _renderer->detachFromRenderTarget();
+    }
+
+    if (_framebuffer != 0)
+    {
+        glDeleteFramebuffers(1, &_framebuffer);
+        _framebuffer = 0;
         validateGL();
     }
-    if (_colorRenderBuffer != 0)
+    if (_framebufferColorRenderbuffer != 0)
     {
-        glDeleteRenderbuffers(1, &_colorRenderBuffer);
-        _colorRenderBuffer = 0;
+        glDeleteRenderbuffers(1, &_framebufferColorRenderbuffer);
+        _framebufferColorRenderbuffer = 0;
         validateGL();
     }
-    if (_depthRenderBuffer != 0)
+    if (_framebufferDepthTexture != 0)
     {
-        glDeleteRenderbuffers(1, &_depthRenderBuffer);
-        _depthRenderBuffer = 0;
+        glDeleteTextures(1, &_framebufferDepthTexture);
+        _framebufferDepthTexture = 0;
         validateGL();
     }
 }
@@ -761,15 +788,15 @@
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException
-                    format:@"Failed to set current OpenGLES2 context 0x%08x", glGetError()];
+                    format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
         return;
     }
-    
+
     // Update animator
     _animator->update(displayLink.duration * displayLink.frameInterval);
-    
+
     // Allocate buffers if they are not yet allocated
-    if (_frameBuffer == 0)
+    if (_framebuffer == 0)
     {
         if (self.bounds.size.width <= 0 || self.bounds.size.height <= 0)
         {
@@ -782,7 +809,7 @@
 
         // Allocate new buffers
         [self allocateRenderAndFrameBuffers];
-        
+
         // Update size of renderer window and viewport
         _renderer->setWindowSize(_viewSize);
         BOOL isYScaleDown = _viewportYScale < 1.0;
@@ -792,25 +819,27 @@
         _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(correctedX, correctedY),
                                              OsmAnd::PointI(_viewSize.x * (isXScaleDown ? 1.0 :_viewportXScale),
                                                             _viewSize.y * (isYScaleDown ? 1.0 :_viewportYScale))));
+
+        _renderer->attachToRenderTarget();
     }
-    
+
     // Process update
     if (!_renderer->update())
     {
         [NSException raise:NSGenericException
-                    format:@"Failed to update OpenGLES2 map renderer 0x%08x", glGetError()];
+                    format:@"Failed to update OpenGLES2+ map renderer 0x%08x", glGetError()];
         return;
     }
-    
+
     // Perform rendering only if frame is marked as invalidated
     bool shouldRenderFrame = false;
     shouldRenderFrame = shouldRenderFrame || _renderer->isFrameInvalidated();
     if (shouldRenderFrame && _renderer->prepareFrame())
     {
         // Activate framebuffer
-        glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
         validateGL();
-    
+
         // Clear buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         validateGL();
@@ -819,28 +848,28 @@
         if (!_renderer->renderFrame())
         {
             [NSException raise:NSGenericException
-                        format:@"Failed to render frame using OpenGLES2 map renderer 0x%08x", glGetError()];
+                        format:@"Failed to render frame using OpenGLES2+ map renderer 0x%08x", glGetError()];
             return;
         }
         validateGL();
-    
+
         //TODO: apply multisampling?
-    
+
         // Erase depthbuffer, since not needed
         const GLenum buffersToDiscard[] =
         {
             GL_DEPTH_ATTACHMENT
         };
-        glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
         validateGL();
         glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, buffersToDiscard);
         validateGL();
-    
+
         // Present results
-        glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, _framebufferColorRenderbuffer);
         validateGL();
         [_glRenderContext presentRenderbuffer:GL_RENDERBUFFER];
-        
+
         if (self.rendererDelegate)
             [self.rendererDelegate frameRendered];
     }
@@ -864,14 +893,14 @@
 {
     if (_displayLink != nil || self.window == nil)
         return FALSE;
-    
+
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException
-                    format:@"Failed to set current OpenGLES2 context 0x%08x", glGetError()];
+                    format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
         return FALSE;
     }
-    
+
     // Setup display link
     _displayLink = [self.window.screen displayLinkWithTarget:self
                                                selector:@selector(render:)];
@@ -880,7 +909,7 @@
 
     // Resume GPU worker
     _renderer->resumeGpuWorker();
-    
+
     OALog(@"[OAMapRendererView %p] Rendering resumed", self);
 
     return TRUE;
@@ -890,21 +919,21 @@
 {
     if (_displayLink == nil)
         return FALSE;
-    
+
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException
-                    format:@"Failed to set current OpenGLES2 context 0x%08x", glGetError()];
+                    format:@"Failed to set current OpenGLES2+ context 0x%08x", glGetError()];
         return FALSE;
     }
-    
+
     // Release display link
     [_displayLink invalidate];
     _displayLink = nil;
 
     // Suspend GPU worker
     _renderer->suspendGpuWorker();
-    
+
     OALog(@"[OAMapRendererView %p] Rendering suspended", self);
 
     return TRUE;
@@ -933,12 +962,12 @@
     int s = (int) [[UIScreen mainScreen] scale];
     const int w = self.frame.size.width;
     const int h = self.frame.size.height;
-    
+
     const NSInteger myDataLength = w * h * 4 * s * s;
     // allocate array and read pixels into it.
     GLubyte *buffer = (GLubyte *) malloc(myDataLength);
-    glReadPixels(0, 0, w * s, h * s, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-    
+    glReadPixels(0, 0, w*s, h*s, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+
     // gl renders "upside down" so swap top to bottom into new array.
     GLubyte *buffer2 = (GLubyte *) malloc(myDataLength);
     for(int y = 0; y < h * s; y++)
@@ -946,7 +975,7 @@
         memcpy(buffer2 + (h * s - 1 - y) * w * 4 * s, buffer + (y * 4 * w * s), w * 4 * s);
     }
     free(buffer); // work with the flipped buffer, so get rid of the original one.
-    
+
     // make data provider with data.
     CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer2, myDataLength,
         [](void * __nullable info, const void * data, size_t size)
@@ -954,7 +983,7 @@
             free((void *) data);
         }
     );
-    
+
     // prep the ingredients
     int bitsPerComponent = 8;
     int bitsPerPixel = 32;
@@ -962,16 +991,16 @@
     CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
     CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
     CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
-    
+
     // make the cgimage
-    CGImageRef imageRef = CGImageCreate(w * s, h * s, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
+    CGImageRef imageRef = CGImageCreate(w*s, h*s, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
+
     // then make the uiimage from that
     UIImage *myImage = [UIImage imageWithCGImage:imageRef scale:s orientation:UIImageOrientationUp];
 
     CGImageRelease(imageRef);
     CGDataProviderRelease(provider);
     CGColorSpaceRelease(colorSpaceRef);
-    
     return myImage;
 }
 

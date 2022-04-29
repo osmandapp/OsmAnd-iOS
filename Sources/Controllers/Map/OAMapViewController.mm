@@ -925,7 +925,7 @@
 
     // Taking into account current zoom, get how many 31-coordinates there are in 1 point
     const uint32_t tileSize31 = (1u << (31 - _mapView.zoomLevel));
-    const double scale31 = static_cast<double>(tileSize31) / _mapView.currentTileSizeOnScreenInPixels;
+    const double scale31 = static_cast<double>(tileSize31) / _mapView.tileSizeOnScreenInPixels;
 
     // Rescale movement to 31 coordinates
     OsmAnd::PointI target31 = _mapView.target31;
@@ -1011,7 +1011,7 @@
 
     // Taking into account current zoom, get how many 31-coordinates there are in 1 point
     const uint32_t tileSize31 = (1u << (31 - _mapView.zoomLevel));
-    const double scale31 = static_cast<double>(tileSize31) / _mapView.currentTileSizeOnScreenInPixels;
+    const double scale31 = static_cast<double>(tileSize31) / _mapView.tileSizeOnScreenInPixels;
 
     // Rescale movement to 31 coordinates
     OsmAnd::PointI target31 = _mapView.target31;

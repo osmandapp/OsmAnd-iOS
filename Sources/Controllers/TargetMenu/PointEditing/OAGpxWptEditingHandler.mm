@@ -217,6 +217,7 @@
     [_gpxWpt.point setIcon:data.icon];
     [_gpxWpt.point setBackgroundIcon:data.backgroundIcon];
     [_gpxWpt.point setExtension:ADDRESS_EXTENSION value:data.address];
+    _gpxWpt.docPath = _gpxFileName;
 
     if (newPoint)
     {

@@ -2115,6 +2115,6 @@
 "lang_ms" = "Malese";
 "map_widget_speed" = "Velocità";
 "rendering_attr_showRunningRoutes_name" = "Itinerari corsa";
-"rendering_attr_showRunningRoutes_description" = "Mostra i percorsi in uso";
+"rendering_attr_showRunningRoutes_description" = "Mostra i percorsi da corsa";
 "rendering_attr_showFitnessTrails_name" = "Percorsi fitness";
 "rendering_attr_showFitnessTrails_description" = "Mostra i percorsi fitness";

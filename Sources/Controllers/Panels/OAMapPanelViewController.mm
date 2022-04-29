@@ -3858,7 +3858,6 @@ typedef enum
     NSString *fullPath = nil;
     if (gpxFileName && gpxFileName.length > 0)
         fullPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFileName];
-//    ((OAGpxWptItem *) _targetMenuView.targetPoint.targetObj).docPath = fullPath;
     [self targetPointAddWaypoint:fullPath];
 }
 

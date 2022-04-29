@@ -102,7 +102,7 @@
     _renderer->setConfiguration(rendererConfig);
     
     OAObservable* stateObservable = _stateObservable;
-    _renderer->stateChangeObservable.attach((__bridge const void*)_stateObservable,
+    _renderer->stateChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_stateObservable),
         [stateObservable]
         (const OsmAnd::IMapRenderer* renderer, const OsmAnd::MapRendererStateChange thisChange, const uint32_t allChanges)
         {
@@ -110,7 +110,7 @@
         });
 
     OAObservable* framePreparedObservable = _framePreparedObservable;
-    _renderer->framePreparedObservable.attach((__bridge const void*)_framePreparedObservable,
+    _renderer->framePreparedObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_framePreparedObservable),
         [framePreparedObservable]
         (const OsmAnd::IMapRenderer* renderer)
         {
@@ -132,8 +132,8 @@
     [self releaseContext];
     
     // Unregister observer
-    _renderer->stateChangeObservable.detach((__bridge const void*)_stateObservable);
-    _renderer->framePreparedObservable.detach((__bridge const void*)_framePreparedObservable);
+    _renderer->stateChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_stateObservable));
+    _renderer->framePreparedObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_framePreparedObservable));
 }
 
 - (void)setTextureFilteringQuality:(OsmAnd::TextureFilteringQuality)quality

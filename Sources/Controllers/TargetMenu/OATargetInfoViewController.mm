@@ -646,6 +646,8 @@
 
         if (nearbyImagesRowInfo)
             [((OACollapsableCardsView *) nearbyImagesRowInfo.collapsableView) setCards:cards];
+        
+        _otherCardsReady = _openPlaceCardsReady = _wikiCardsReady = NO;
     }
 }
 

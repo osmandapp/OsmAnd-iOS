@@ -293,6 +293,10 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
         {
             skip = YES;
         }
+        else if ([key hasPrefix:@"mapillary"])
+        {
+            skip = YES;
+        }
         else if ([key isEqualToString:@"opening_hours"])
         {
             iconId = @"ic_action_time.png";

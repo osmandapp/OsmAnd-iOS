@@ -2718,7 +2718,6 @@
 		DA80D9A52716CC1800445DAF /* map_track_point_start_finish@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA80D99F2716CC1700445DAF /* map_track_point_start_finish@3x.png */; };
 		DA80D9A62716CC1800445DAF /* map_track_point_start@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA80D9A02716CC1800445DAF /* map_track_point_start@2x.png */; };
 		DA80D9A72716CC1800445DAF /* map_track_point_start@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA80D9A12716CC1800445DAF /* map_track_point_start@3x.png */; };
-		DA80D9AA2716D0B400445DAF /* OAGpxAdditionalIconsProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80D9A92716D0B400445DAF /* OAGpxAdditionalIconsProvider.mm */; };
 		DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */; };
 		DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		DA80DAC1251E2CB8008E6267 /* libQt5Xml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DABF251E2CB7008E6267 /* libQt5Xml.a */; };
@@ -6772,8 +6771,6 @@
 		DA80D99F2716CC1700445DAF /* map_track_point_start_finish@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_track_point_start_finish@3x.png"; path = "Resources/Icons/map_track_point_start_finish@3x.png"; sourceTree = "<group>"; };
 		DA80D9A02716CC1800445DAF /* map_track_point_start@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_track_point_start@2x.png"; path = "Resources/Icons/map_track_point_start@2x.png"; sourceTree = "<group>"; };
 		DA80D9A12716CC1800445DAF /* map_track_point_start@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_track_point_start@3x.png"; path = "Resources/Icons/map_track_point_start@3x.png"; sourceTree = "<group>"; };
-		DA80D9A82716D0B400445DAF /* OAGpxAdditionalIconsProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGpxAdditionalIconsProvider.h; sourceTree = "<group>"; };
-		DA80D9A92716D0B400445DAF /* OAGpxAdditionalIconsProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxAdditionalIconsProvider.mm; sourceTree = "<group>"; };
 		DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteResultPreparationTest.mm; sourceTree = "<group>"; };
 		DA80DAB5251E2338008E6267 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		DA80DABF251E2CB7008E6267 /* libQt5Xml.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Xml.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Xml.a"; sourceTree = "<group>"; };
@@ -9312,8 +9309,6 @@
 		DA5A790E26C5639F00F274C7 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				DA80D9A82716D0B400445DAF /* OAGpxAdditionalIconsProvider.h */,
-				DA80D9A92716D0B400445DAF /* OAGpxAdditionalIconsProvider.mm */,
 				DA5A791226C5639F00F274C7 /* CoreResourcesFromBundleProvider.h */,
 				DA5A791126C5639F00F274C7 /* CoreResourcesFromBundleProvider.mm */,
 				DA5A791926C5639F00F274C7 /* IOAMapTiledCollectionProvider.h */,
@@ -14840,7 +14835,6 @@
 				DA5A835E26C563A800F274C7 /* OATextViewResizingCell.mm in Sources */,
 				DA5A845E26C563A900F274C7 /* OARoutePointsLayer.mm in Sources */,
 				DA5A852C26C563A900F274C7 /* OAOcbfHelper.m in Sources */,
-				DA80D9AA2716D0B400445DAF /* OAGpxAdditionalIconsProvider.mm in Sources */,
 				DA5A84CD26C563A900F274C7 /* OAImportGPXBottomSheetViewController.mm in Sources */,
 				DA5A815426C563A700F274C7 /* OACarPlayMapViewController.mm in Sources */,
 				DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */,

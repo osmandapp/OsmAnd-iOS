@@ -1856,7 +1856,7 @@ typedef enum
             }
             return;
         }
-        OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAOpenExistingTrack];
+        OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAOpenExistingTrack showCurrent:YES];
         saveTrackViewController.delegate = self;
         [self presentViewController:saveTrackViewController animated:YES completion:nil];
     }
@@ -3855,11 +3855,11 @@ typedef enum
 
 - (void)onFileSelected:(NSString *)gpxFileName
 {
+    NSString *fullPath = nil;
     if (gpxFileName && gpxFileName.length > 0)
-    {
-        NSString *fullPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFileName];
-        [self targetPointAddWaypoint:fullPath];
-    }
+        fullPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFileName];
+//    ((OAGpxWptItem *) _targetMenuView.targetPoint.targetObj).docPath = fullPath;
+    [self targetPointAddWaypoint:fullPath];
 }
 
 @end

@@ -467,8 +467,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             if (!maneuver || nextTurn.directionInfoInd != _currentDirectionInfo.directionInfoInd)
             {
                 maneuver = [[CPManeuver alloc] init];
-                UIImage *turnImage = [self imageForTurnType:turnType];
-                maneuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:turnImage darkContentImage:turnImage];
+                NSString *lightImageName = [self imageNameForTurnType:turnType];
+                NSString *darkImageName = [lightImageName stringByAppendingString:@"_dark"];
+                UIImage *darkImage = [UIImage imageNamed:darkImageName];
+                UIImage *lightImage = [UIImage imageNamed:lightImageName];
+                maneuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:lightImage darkContentImage:darkImage];
                 
                 maneuver.initialTravelEstimates = estimates;
                 if (nextTurn.directionInfo.streetName)
@@ -485,34 +488,34 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     }
 }
 
-- (UIImage *) imageForTurnType:(std::shared_ptr<TurnType> &)turnType
+- (NSString *) imageNameForTurnType:(std::shared_ptr<TurnType> &)turnType
 {
     if (turnType->getValue() == TurnType::C) {
-        return [UIImage imageNamed:@"map_turn_forward"];
+        return @"map_turn_forward";
     } else if (turnType->getValue() == TurnType::TSLL) {
-        return [UIImage imageNamed:@"map_turn_slight_left"];
+        return @"map_turn_slight_left";
     } else if (turnType->getValue() == TurnType::TL) {
-        return [UIImage imageNamed:@"map_turn_left"];
+        return @"map_turn_left";
     } else if (turnType->getValue() == TurnType::TSHL) {
-        return [UIImage imageNamed:@"map_turn_sharp_left"];
+        return @"map_turn_sharp_left";
     } else if (turnType->getValue() == TurnType::TSLR) {
-        return [UIImage imageNamed:@"map_turn_slight_right"];
+        return @"map_turn_slight_right";
     } else if (turnType->getValue() == TurnType::TR) {
-        return [UIImage imageNamed:@"map_turn_right"];
+        return @"map_turn_right";
     } else if (turnType->getValue() == TurnType::TSHR) {
-        return [UIImage imageNamed:@"map_turn_sharp_right"];
+        return @"map_turn_sharp_right";
     } else if (turnType->getValue() == TurnType::TU) {
-        return [UIImage imageNamed:@"map_turn_uturn"];
+        return @"map_turn_uturn";
     } else if (turnType->getValue() == TurnType::TRU) {
-        return [UIImage imageNamed:@"map_turn_uturn_right"];
+        return @"map_turn_uturn_right";
     } else if (turnType->getValue() == TurnType::KL) {
-        return [UIImage imageNamed:@"map_turn_keep_left"];
+        return @"map_turn_keep_left";
     } else if (turnType->getValue() == TurnType::KR) {
-        return [UIImage imageNamed:@"map_turn_keep_right"];
+        return @"map_turn_keep_right";
     } else if (turnType->getValue() == TurnType::RNDB) {
-        return [UIImage imageNamed:@"map_turn_roundabout"];
+        return @"map_turn_roundabout";
     } else if (turnType->getValue() == TurnType::KR) {
-        return [UIImage imageNamed:@"map_turn_roundablot_left"];
+        return @"map_turn_roundablot_left";
     }
     return nil;
 }

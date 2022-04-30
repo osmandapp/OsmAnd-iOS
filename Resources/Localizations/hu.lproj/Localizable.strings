@@ -1878,3 +1878,4 @@
 "lang_ur" = "urdu";
 "backup_error_subscription_was_expired_descr" = "Az OsmAnd Pro előfizetése lejárt; a biztonsági mentés használatához meg kell újítania. A felhőből továbbra is visszaállíthatja az adatokat.";
 "start_point" = "Start";
+"map_widget_speed" = "Sebesség";

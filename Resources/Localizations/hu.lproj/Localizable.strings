@@ -579,7 +579,7 @@
 "poi" = "POI";
 "day_off_label" = "zárva";
 "open_from" = "Ekkortól nyitva";
-"open_till" = "Nyitva eddig";
+"open_till" = "Nyitva eddig:";
 "will_close_at" = "Ekkor fog bezárni:";
 "will_open_at" = "Ekkor fog kinyitni:";
 "will_open_on" = "Ekkor fog kinyitni:";

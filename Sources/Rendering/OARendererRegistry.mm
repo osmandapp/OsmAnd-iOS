@@ -27,7 +27,7 @@ static NSDictionary<NSString *, NSString *> *stylesTitlesOffline;
                 DEFAULT_RENDER: DEFAULT_RENDER_FILE_PATH,
                 TOURING_VIEW: [NSString stringWithFormat:@"Touring-view_(more-contrast-and-details)%@", RENDERER_INDEX_EXT],
                 TOPO_RENDER: [NSString stringWithFormat:@"topo%@", RENDERER_INDEX_EXT],
-                MAPNIK_RENDER: [NSString stringWithFormat:@"mapnik%@", RENDERER_INDEX_EXT],
+                OSM_CARTO_RENDER: [NSString stringWithFormat:@"osm-carto%@", RENDERER_INDEX_EXT],
                 LIGHTRS_RENDER: [NSString stringWithFormat:@"LightRS%@", RENDERER_INDEX_EXT],
                 UNIRS_RENDER: [NSString stringWithFormat:@"UniRS%@", RENDERER_INDEX_EXT],
                 NAUTICAL_RENDER: [NSString stringWithFormat:@"nautical%@", RENDERER_INDEX_EXT],
@@ -147,7 +147,7 @@ static NSDictionary<NSString *, NSString *> *stylesTitlesOffline;
                 LIGHTRS_RENDER : LIGHTRS_RENDER,
                 TOPO_RENDER : TOPO_RENDER,
                 @"Offroad by ZLZK" : OFFROAD_RENDER,
-                @"Depends-template" : MAPNIK_RENDER,
+                OSM_CARTO_RENDER : OSM_CARTO_RENDER,
                 DESERT_RENDER : DESERT_RENDER,
                 SNOWMOBILE_RENDER : SNOWMOBILE_RENDER
         };

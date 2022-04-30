@@ -1257,7 +1257,6 @@
 "already_has_subscription" = "You have already subscribed to OsmAnd Live and have all the functionality unlocked.";
 "already_has_inapp" = "You have already subscribed to %@.";
 "inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";
-
 "show_contour_lines" = "Wysokostne linije pokazać";
 "gpx_descent" = "Wotstup";
 "gpx_avg_altitude" = "Přerězna wysokosć";
@@ -1424,7 +1423,6 @@
 "select_icon" = "Wubjer symbol";
 "shared_string_deselect_all" = "Wšě wotwolić";
 "app_profiles" = "Profile aplikacije";
-
 "emergency" = "Nuzowy pad";
 "sport" = "Sport";
 "new_plugin_added" = "Nowy plugin přidaty";
@@ -1569,3 +1567,5 @@
 "login_error_email_invalid" = "Prošu zapodajće płaćiwu mejlkowu adresu";
 "lang_fy" = "frizisce";
 "lang_be_by" = "běłorušćina (łaćonsce)";
+"shared_string_import_complete" = "Import dokónčeny";
+"add_description" = "Wopisanje dodać";

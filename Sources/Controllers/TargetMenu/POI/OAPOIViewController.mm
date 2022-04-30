@@ -10,7 +10,6 @@
 #import "OsmAndApp.h"
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
-#import "OAPOILocationType.h"
 #import "OACollapsableLabelView.h"
 #import "OAColors.h"
 #import "OATransportStopType.h"
@@ -31,10 +30,6 @@
 
 #define WIKI_LINK @".wikipedia.org/w"
 
-static const NSInteger AMENITY_ID_RIGHT_SHIFT = 1;
-static const NSInteger NON_AMENITY_ID_RIGHT_SHIFT = 7;
-static const NSInteger WAY_MODULO_REMAINDER = 1;
-
 @interface OAPOIViewController ()
 
 @end
@@ -46,7 +41,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 }
 
 static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
-static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"whatsapp", @"viber"];
+static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsapp", @"viber"];
 
 - (instancetype) init
 {
@@ -346,19 +341,13 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
             vl = [vl stringByReplacingOccurrencesOfString:@"; " withString:@"\n"];
             needLinks = NO;
         }
-        else if ([key isEqualToString:PHONE])
+        else if ([kContactPhoneTags containsObject:key])
         {
             iconId = @"ic_phone_number";
             textColor = UIColorFromRGB(kHyperlinkColor);
             isPhoneNumber = YES;
         }
-        else if ([key isEqualToString:MOBILE])
-        {
-            iconId = @"ic_phone_number";
-            textColor = UIColorFromRGB(kHyperlinkColor);
-            isPhoneNumber = YES;
-        }
-        else if ([key isEqualToString:WEBSITE])
+        else if ([key isEqualToString:WEBSITE] || [kContactUrlTags containsObject:key])
         {
             iconId = @"ic_website";
             textColor = UIColorFromRGB(kHyperlinkColor);
@@ -493,8 +482,6 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                                            icon:[UIImage imageNamed:@"ic_description"]
                                       textPrefix:textPrefix
                                             text:vl
-                                     collapsable:collapsable
-                                 collapsableView:collapsableView
                                        textColor:nil
                                           isText:YES
                                        needLinks:YES
@@ -509,8 +496,6 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                                             icon:icon ? icon : [OATargetInfoViewController getIcon:iconId]
                                       textPrefix:textPrefix
                                             text:vl
-                                     collapsable:collapsable
-                                 collapsableView:collapsableView
                                        textColor:textColor
                                           isText:isText
                                        needLinks:needLinks
@@ -519,7 +504,9 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                                    isPhoneNumber:isPhoneNumber
                                            isUrl:isUrl];
         }
+        row.collapsable = collapsable;
         row.collapsed = YES;
+        row.collapsableView = collapsableView;
 
         if (isDescription)
             [descriptions addObject:row];
@@ -573,8 +560,6 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                                                        icon:icon
                                                  textPrefix:pType.poiAdditionalCategoryLocalized
                                                        text:sb
-                                                collapsable:YES
-                                            collapsableView:collapsableView
                                                   textColor:nil
                                                      isText:NO
                                                   needLinks:NO
@@ -583,6 +568,8 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                                               isPhoneNumber:NO
                                                       isUrl:NO];
             row.collapsed = YES;
+            row.collapsable = YES;
+            row.collapsableView = collapsableView;
             [infoRows addObject:row];
         }
     }];
@@ -610,8 +597,6 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                                                    icon:icon
                                              textPrefix:poiCategory.nameLocalized
                                                    text:sb
-                                            collapsable:YES
-                                        collapsableView:collapsableView
                                               textColor:nil
                                                  isText:NO
                                               needLinks:NO
@@ -620,6 +605,8 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
                                           isPhoneNumber:NO
                                                   isUrl:NO];
         row.collapsed = YES;
+        row.collapsable = YES;
+        row.collapsableView = collapsableView;
         [infoRows addObject:row];
     }
 
@@ -658,26 +645,22 @@ static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"w
         [rows addObject:desc];
     }
 
-    long long objectId = self.poi.obfId;
-    if (osmEditingEnabled && (objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < INT_MAX)))
+    long long id = self.poi.obfId;
+    if (osmEditingEnabled && id > 0 && (id % 2 == 0 || (id >> 1) < INT_MAX))
     {
-        OAPOIType *poiType = self.poi.type;
-        BOOL isAmenity = poiType && ![poiType isKindOfClass:[OAPOILocationType class]];
-
-        long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
-        BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
-        NSString *link = isWay ? @"https://www.openstreetmap.org/way/" : @"https://www.openstreetmap.org/node/";
-        [rows addObject:[[OARowInfo alloc] initWithKey:nil
-                                                  icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
-                                            textPrefix:nil
-                                                  text:[NSString stringWithFormat:@"%@%llu", link, entityId]
-                                             textColor:UIColorFromRGB(kHyperlinkColor)
-                                                isText:YES
-                                             needLinks:NO
-                                                 order:10000
-                                              typeName:nil
-                                         isPhoneNumber:NO
-                                                 isUrl:YES]];
+        NSString *link = [OAOsmEditingPlugin getOsmUrlForId:id shift:1];
+        OARowInfo *row = [[OARowInfo alloc] initWithKey:nil
+                                                   icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
+                                             textPrefix:nil
+                                                   text:link
+                                              textColor:UIColorFromRGB(kHyperlinkColor)
+                                                 isText:YES
+                                              needLinks:YES
+                                                  order:10000
+                                               typeName:nil
+                                          isPhoneNumber:NO
+                                                  isUrl:YES];
+        [rows addObject:row];
     }
 }
 

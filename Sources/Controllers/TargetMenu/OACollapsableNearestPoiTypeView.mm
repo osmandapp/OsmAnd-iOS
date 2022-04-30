@@ -64,8 +64,12 @@
     }
     if (_textRow && _textRow.length > 0)
     {
+        _textRowButtonIndex = i;
         OAButton *btn = [self createButton:_textRow];
-        btn.tag = _textRowButtonIndex = i;
+        btn.tag = _textRowButtonIndex;
+        [btn setBackgroundImage:nil forState:UIControlStateNormal];
+        btn.tintColor = UIColor.blackColor;
+        btn.titleLabel.numberOfLines = 0;
         [self addSubview:btn];
         [buttons addObject:btn];
     }
@@ -107,9 +111,23 @@
             y += kButtonHeight + 10.0;
             viewHeight += 10.0;
         }
-        
-        btn.frame = CGRectMake(kMarginLeft, y, width - kMarginLeft - kMarginRight, kButtonHeight);
-        viewHeight += kButtonHeight;
+
+        CGFloat height = kButtonHeight;
+        if (btn.tag == _textRowButtonIndex)
+        {
+            height = [OAUtilities calculateTextBounds:btn.titleLabel.text
+                                                width:width - kMarginLeft - kMarginRight
+                                                font:btn.titleLabel.font].height;
+            CGFloat lineHeight = ceil(btn.titleLabel.font.lineHeight);
+            if (height > lineHeight)
+            {
+                CGFloat margins = kButtonHeight - lineHeight;
+                height = height + margins;
+            }
+        }
+
+        btn.frame = CGRectMake(kMarginLeft, y, width - kMarginLeft - kMarginRight, height);
+        viewHeight += btn.frame.size.height;
         i++;
     }
     
@@ -181,7 +199,7 @@
 - (void)onButtonLongPressed:(NSInteger)tag
 {
     _selectedButtonIndex = tag;
-    if (_buttons.count > _selectedButtonIndex && _selectedButtonIndex != _textRowButtonIndex)
+    if (_buttons.count > _selectedButtonIndex)
         [OAUtilities showMenuInView:self fromView:_buttons[_selectedButtonIndex]];
 }
 

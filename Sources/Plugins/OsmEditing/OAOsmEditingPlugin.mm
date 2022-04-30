@@ -48,6 +48,7 @@
 #include <OsmAndCore/Utilities.h>
 
 #define PLUGIN_ID kInAppId_Addon_OsmEditing
+#define WAY_MODULO_REMAINDER 1
 
 @interface OAOsmEditingPlugin ()
 
@@ -193,6 +194,18 @@
         category = OALocalizedString(@"osm_note");
     
     return category;
+}
+
++ (NSString *) getOsmUrlForId:(long long)id shift:(int)shift
+{
+    long long originalId = (id >> 1);
+    long long relationShift = 1L << 41;
+    if (originalId > relationShift)
+        return [NSString stringWithFormat:@"https://www.openstreetmap.org/relation/%lli", (originalId & ~relationShift) >> 10];
+    else if (id % 2 == WAY_MODULO_REMAINDER)
+        return [NSString stringWithFormat:@"https://www.openstreetmap.org/way/%lli", (id >> shift)];
+    else
+        return [NSString stringWithFormat:@"https://www.openstreetmap.org/node/%lli", (id >> shift)];
 }
 
 - (NSArray *)getQuickActionTypes

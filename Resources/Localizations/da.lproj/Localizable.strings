@@ -641,7 +641,7 @@
 "auto_zoom_none" = "Ingen automatisk zoom";
 "auto_zoom_close" = "Tæt på";
 "auto_zoom_far" = "Mellemafstand";
-"auto_zoom_farthest" = "Lange afstande";
+"auto_zoom_farthest" = "Lang afstand";
 "keep_informing_never" = "Kun manuelt (tryk på pilen)";
 "arrival_distance_factor_early" = "Tidligt";
 "arrival_distance_factor_normally" = "Normal";
@@ -1283,8 +1283,8 @@
 // Route info
 "gpx_avg_altitude" = "Gennemsnitshøjde";
 "gpx_alt_range" = "Højdeinterval";
-"gpx_ascent" = "Stigning";
-"gpx_descent" = "Fald";
+"gpx_ascent" = "Op ad bakke";
+"gpx_descent" = "Ned ad bakke";
 "stats_select_graph_data" = "Vælg grafdata";
 "region_nautical" = "Søkort";
 "available_map_styles" = "Tilgængelige kortstilarter";
@@ -1907,7 +1907,7 @@
 "emergency" = "Nødsituation";
 "plan_route_open_existing_track" = "Åbn eksisterende spor";
 "open_saved_track" = "Åben gemt spor";
-"fav_points_not_exist" = "Der eksisterer ingen Favoritpunkter";
+"fav_points_not_exist" = "Der findes ingen favoritpunkter";
 "nearest_point" = "Nærmeste punkt";
 "shared_string_gpx_track" = "Spor";
 "street_level_imagery" = "Billeder på gadeniveau";

@@ -41,8 +41,8 @@
 "transport_routes" = "Ibilbideak";
 "transport_nearby_routes_within" = "Inguruko ibilbideak";
 "transport_nearby_routes" = "Erradioa";
-"transport_stop" = "Gelditu";
-"cancel_navigation" = "Nabigazioa gelditu";
+"transport_stop" = "Geltokia";
+"cancel_navigation" = "Gelditu nabigazioa";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Ordenatu door-to-door";
 "switch_start_finish" = "Reverse starting point & destination";
@@ -363,8 +363,8 @@
 "towards" = "honuntz";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Hartu %d. irteera eta jarraitu";
-"route_kl" = "Ezkerrean gelditu";
-"route_kr" = "Eskubian gelditu";
+"route_kl" = "Mantendu ezkerrean eta jarraitu";
+"route_kr" = "Mantendu eskubian eta jarraitu";
 "route_tr" = "Eskuinera biratu";
 "route_tshr" = "Eskuinera nabarmenki biratu";
 "route_tslr" = "Pixka bat eskuinera biratu";

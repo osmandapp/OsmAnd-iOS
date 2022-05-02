@@ -510,6 +510,8 @@
 		46AEDBA227F4AC32006D90E8 /* ic_custom_wind@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDBA027F4AC32006D90E8 /* ic_custom_wind@2x.png */; };
 		46AEDBA327F4AC32006D90E8 /* ic_custom_wind@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDBA127F4AC32006D90E8 /* ic_custom_wind@3x.png */; };
 		46B0E77227F5E88A00D5A075 /* img_plugin_weather.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */; };
+		46BAED9528204DF600090804 /* ic_action_mountain_bike@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */; };
+		46BAED9628204DF600090804 /* ic_action_mountain_bike@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */; };
 		46E0263927B6773F00E554DD /* ic_custom_terrain_any@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263127B6773E00E554DD /* ic_custom_terrain_any@3x.png */; };
 		46E0263A27B6773F00E554DD /* ic_custom_terrain_hilly@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263227B6773E00E554DD /* ic_custom_terrain_hilly@3x.png */; };
 		46E0263B27B6773F00E554DD /* ic_custom_terrain_hilly@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263327B6773E00E554DD /* ic_custom_terrain_hilly@2x.png */; };
@@ -3644,6 +3646,8 @@
 		46AEDBA027F4AC32006D90E8 /* ic_custom_wind@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@2x.png"; path = "Resources/Icons/ic_custom_wind@2x.png"; sourceTree = "<group>"; };
 		46AEDBA127F4AC32006D90E8 /* ic_custom_wind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@3x.png"; path = "Resources/Icons/ic_custom_wind@3x.png"; sourceTree = "<group>"; };
 		46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_weather.jpg; path = Resources/Icons/img_plugin_weather.jpg; sourceTree = "<group>"; };
+		46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_mountain_bike@2x.png"; path = "Resources/Icons/ic_action_mountain_bike@2x.png"; sourceTree = "<group>"; };
+		46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_mountain_bike@3x.png"; path = "Resources/Icons/ic_action_mountain_bike@3x.png"; sourceTree = "<group>"; };
 		46E0263127B6773E00E554DD /* ic_custom_terrain_any@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_any@3x.png"; path = "Resources/Icons/ic_custom_terrain_any@3x.png"; sourceTree = "<group>"; };
 		46E0263227B6773E00E554DD /* ic_custom_terrain_hilly@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_hilly@3x.png"; path = "Resources/Icons/ic_custom_terrain_hilly@3x.png"; sourceTree = "<group>"; };
 		46E0263327B6773E00E554DD /* ic_custom_terrain_hilly@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_hilly@2x.png"; path = "Resources/Icons/ic_custom_terrain_hilly@2x.png"; sourceTree = "<group>"; };
@@ -7564,6 +7568,8 @@
 				DA84E84821D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png */,
 				DAB048EF21CB729000275456 /* ic_action_plus@2x.png */,
 				DAB048F121CB729000275456 /* ic_action_plus@3x.png */,
+				46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */,
+				46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */,
 				46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */,
 				46AEDBA027F4AC32006D90E8 /* ic_custom_wind@2x.png */,
 				46AEDBA127F4AC32006D90E8 /* ic_custom_wind@3x.png */,
@@ -12983,6 +12989,7 @@
 				845E06C41B5FF17400DFC2A7 /* ic_plugin_wikipedia@3x.png in Resources */,
 				8474247C1E4C4655001C1F35 /* ic_action_gift@3x.png in Resources */,
 				DA5A851926C563A900F274C7 /* OATopTextView.xib in Resources */,
+				46BAED9628204DF600090804 /* ic_action_mountain_bike@3x.png in Resources */,
 				DA5F21F4229551A300B0D7B6 /* ic_action_wifi_off@3x.png in Resources */,
 				15BDDE9C24DAF3A800079C83 /* ic_custom_copy@2x.png in Resources */,
 				DA5A827326C563A700F274C7 /* OAPublicTransportRouteShieldCell.xib in Resources */,
@@ -14632,6 +14639,7 @@
 				84BE7D4C1CF759E2001D8D78 /* map_small_group@2x.png in Resources */,
 				DA2F09112217FF75006C7F05 /* ic_action_add_osm_note@3x.png in Resources */,
 				3296B47B27F8790800108AF7 /* widget_weather_temperature_night@3x.png in Resources */,
+				46BAED9528204DF600090804 /* ic_action_mountain_bike@2x.png in Resources */,
 				8AFC2BE524334A4E0095BA9F /* map_location_bicycle_center@3x.png in Resources */,
 				DA22DC4E25C05F130070FFCA /* ic_custom_split_after@2x.png in Resources */,
 				DA1BC11A233F9B01004DAF78 /* ic_custom_point_to_point@3x.png in Resources */,

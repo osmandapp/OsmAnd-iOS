@@ -1280,7 +1280,7 @@
 // Route info
 "gpx_avg_altitude" = "Середня висота";
 "gpx_alt_range" = "Діапазон висот";
-"gpx_ascent" = "Підіймання";
+"gpx_ascent" = "Підйом";
 "gpx_descent" = "Спуск";
 "stats_select_graph_data" = "Вибрати дані графіка";
 "region_nautical" = "Морські мапи";

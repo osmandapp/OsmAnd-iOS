@@ -962,7 +962,7 @@
 "poi_type" = "POI Türü";
 "modify_poi_short" = "POI düzenle";
 "osm_website" = "Web sitesi";
-"gpx_ascent" = "Yükseklikte artış";
+"gpx_ascent" = "Yokuş yukarı";
 "translucent_blue" = "Yarı saydam açık mavi";
 "map_underlays" = "Harita alt katmanları";
 "change_map_overlay" = "Haritaüst katmanını değiştir";
@@ -1000,7 +1000,7 @@
 "add_action" = "Eylem ekle";
 "osm_notes_online_layer" = "OSM Notları (çevrim içi)";
 "directions_more_options" = "Yol tarifi";
-"gpx_descent" = "yükselikte azalma";
+"gpx_descent" = "Yokuş aşağı";
 "quick_action_start_stop_nav_descr" = "Navigasyonu başlatmak ya da sonlandırmak için bu düğmeye tıklayınız.";
 "translucent_lightgreen" = "Yarı saydam açık yeşil";
 "gpx_avg_altitude" = "Ortalama yükseklik";

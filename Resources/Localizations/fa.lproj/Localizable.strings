@@ -1917,3 +1917,4 @@
 "lang_hr" = "کرواتی";
 "backup_error_file_not_available" = "پرونده در دسترس نیست";
 "shared_string_open_street_map" = "اوپن‌استریت‌مپ";
+"routeInfo_tracktype_description" = "مسیر یا خط مسیر را با ترکیب سطح آن رنگ کنید. معمولاً زمانی اعمال می‌شود که شبکه جاده تا حد زیادی آسفالت نشده باشد.";

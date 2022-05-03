@@ -1274,7 +1274,7 @@
 // World Regions
 "region_antarctica" = "القارة القطبية الجنوبية";
 "region_others" = "خرائط أخرى";
-"gpx_descent" = "المنحدرات";
+"gpx_descent" = "منحدر";
 "gpx_avg_altitude" = "متوسط الارتفاع";
 "gpx_ascent" = "مرتفع";
 "download_depth_countours" = "ملامح العمق البحري";

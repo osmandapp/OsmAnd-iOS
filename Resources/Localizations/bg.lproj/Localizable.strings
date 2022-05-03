@@ -331,7 +331,7 @@
 "directions_other" = "Other directions";
 "shared_string_turn" = "Turn";
 "stop_routing_confirm" = "Are you sure you want to stop the navigation?";
-"cancel_route" = "Dismiss route";
+"cancel_route" = "Прекратяване на маршрута";
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Стартиране на навигацията по маршрута?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
@@ -1732,7 +1732,7 @@
 "menu_all_trips" = "All Tracks";
 "public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
 "calc_pedestrian_route" = "Calculate pedestrian route";
-"public_transport_warning_title" = "Public transport navigation is currently in beta testing, expect errors and inaccuracies.";
+"public_transport_warning_title" = "Маршрутизацията с обществен транспорт е в изпитателна фаза, възможни са грешки и неточности.";
 "public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
 "public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
 "public_transport_empty_warning_descr" = "Try changing the settings.";
@@ -1937,7 +1937,7 @@
 "purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
 "free_version_message" = "You can download or update %d maps";
 "get_osmand_live" = "Get OsmAnd Live to unlock all features:";
-"osm_live_subscription" = "OsmAnd Liveабонамент";
+"osm_live_subscription" = "Абонамент за OsmAnd Live";
 "osm_live_cancel_subscription" = "Cancel subscription";
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Unlimited downloads";

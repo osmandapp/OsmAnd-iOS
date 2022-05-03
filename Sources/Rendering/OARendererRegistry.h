@@ -14,7 +14,7 @@
 #define WINTER_SKI_RENDER @"Winter and ski"
 #define NAUTICAL_RENDER @"Nautical"
 #define TOPO_RENDER @"Topo"
-#define MAPNIK_RENDER @"Mapnik"
+#define OSM_CARTO_RENDER @"OSM-carto"
 #define OFFROAD_RENDER @"Offroad"
 #define LIGHTRS_RENDER @"LightRS"
 #define UNIRS_RENDER @"UniRS"

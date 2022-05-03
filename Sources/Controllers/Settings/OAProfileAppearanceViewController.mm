@@ -317,6 +317,7 @@
                @"ic_action_enduro_motorcycle",
                @"ic_action_motor_scooter",
                @"ic_action_bicycle_dark",
+               @"ic_action_mountain_bike",
                @"ic_action_horse",
                @"ic_action_pedestrian_dark",
                @"ic_action_trekking_dark",

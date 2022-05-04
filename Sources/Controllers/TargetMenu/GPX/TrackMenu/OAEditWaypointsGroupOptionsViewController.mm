@@ -109,6 +109,7 @@
     if (_screenType == EOAEditWaypointsGroupRenameScreen || _screenType == EOAEditWaypointsGroupCopyToFavoritesScreen)
     {
         sectionData = [OAGPXTableSectionData withData:@{
+                kTableKey: @"section",
                 kTableSubjects: @[[OAGPXTableCellData withData:@{
                         kTableKey: @"new_name",
                         kCellType: [OATextInputCell getCellIdentifier],
@@ -130,17 +131,9 @@
                 kCellTitle: OALocalizedString(@"fav_color"),
                 kCellDesc: _selectedColor.name
         }];
-        cellData.updateData = ^() {
-            [cellData setData:@{
-                    kTableValues: @{
-                            @"int_value": @([OAUtilities colorToNumber:_selectedColor.color]),
-                            @"array_value": _colors
-                    },
-                    kCellDesc: _selectedColor.name
-            }];
-        };
 
         sectionData = [OAGPXTableSectionData withData:@{
+                kTableKey: @"section",
                 kTableSubjects: @[cellData],
                 kSectionHeader: OALocalizedString(@"default_color"),
                 kSectionFooter: OALocalizedString(@"default_color_descr")
@@ -148,24 +141,31 @@
     }
     else if (_screenType == EOAEditWaypointsGroupVisibleScreen)
     {
-        NSMutableArray<OAGPXTableCellData *> *cellsData = [NSMutableArray array];
         NSArray<NSString *> *groups = self.delegate && [self.delegate respondsToSelector:@selector(getWaypointSortedGroups)]
                 ? [self.delegate getWaypointSortedGroups]
                 : [NSArray array];
-        NSInteger groupsCount = [groups containsObject:OALocalizedString(@"route_points")]
-                ? groups.count - 1
-                : groups.count;
-        if (groups && groupsCount > 0)
-        {
-            __block NSInteger visibleGroupsCount = 0;
-            __block OAGPXTableCellData *hideShowAllCellData = [OAGPXTableCellData new];
 
+        NSMutableArray<OAGPXTableCellData *> *cellsData = [NSMutableArray array];
+        sectionData = [OAGPXTableSectionData withData:@{
+                kTableKey: @"section",
+                kTableSubjects: cellsData,
+                kSectionHeader: OALocalizedString(@"groups"),
+                kTableValues: @{
+                        @"groups_count": @([groups containsObject:OALocalizedString(@"route_points")]
+                                ? groups.count - 1
+                                : groups.count),
+                        @"visible_groups_count": @(0)
+                }
+        }];
+
+        if (groups && [sectionData.values[@"groups_count"] integerValue] > 0)
+        {
             for (NSString *groupName in groups)
             {
                 if (self.delegate && [self.delegate isRteGroup:groupName])
                     continue;
 
-                __block BOOL visible = NO;
+                BOOL visible = NO;
                 NSInteger color = [OAUtilities colorToNumber:[OADefaultFavorite getDefaultColor]];
 
                 if (self.delegate)
@@ -177,94 +177,36 @@
                 }
 
                 if (visible)
-                    visibleGroupsCount++;
+                    sectionData.values[@"visible_groups_count"] = @([sectionData.values[@"visible_groups_count"] integerValue] + 1);
 
                 OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
                         kTableKey: [@"cell_waypoints_group_" stringByAppendingString:groupName],
                         kCellType: [OAIconTextDividerSwitchCell getCellIdentifier],
                         kCellTitle: groupName,
                         kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
-                        kCellTintColor: @(visible ? color : color_footer_icon_gray)
+                        kCellTintColor: @(visible ? color : color_footer_icon_gray),
+                        kTableValues: @{
+                                @"visible": @(visible),
+                                @"color": @(color)
+                        }
                 }];
-                groupCellData.isOn = ^() { return visible; };
-                groupCellData.onSwitch = ^(BOOL toggle) {
-                    if (visible != toggle)
-                    {
-                        if (toggle)
-                            visibleGroupsCount++;
-                        else
-                            visibleGroupsCount--;
-                    }
-                    visible = toggle;
-
-                    if (groupCellData.updateData)
-                        groupCellData.updateData();
-
-                    if (visibleGroupsCount != groupsCount && hideShowAllCellData.updateData)
-                    {
-                        hideShowAllCellData.updateData();
-                        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
-                                              withRowAnimation:UITableViewRowAnimationNone];
-                    }
-                };
-                groupCellData.updateData = ^() {
-                    self.doneButton.enabled = YES;
-                    [groupCellData setData:@{
-                            kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
-                            kCellTintColor: @(visible ? color : color_footer_icon_gray),
-                    }];
-                };
-
                 [cellsData addObject:groupCellData];
             }
 
-            hideShowAllCellData = [OAGPXTableCellData withData:@{
+            OAGPXTableCellData *hideShowAllCellData = [OAGPXTableCellData withData:@{
                     kTableKey: @"hide_show_all",
                     kCellType: [OAIconTitleValueCell getCellIdentifier],
-                    kCellTitle: visibleGroupsCount == 0
+                    kCellTitle: [sectionData.values[@"visible_groups_count"] integerValue] == 0
                             ? OALocalizedString(@"shared_string_show_all")
                             : OALocalizedString(@"shared_string_hide_all"),
                     kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
-                    kCellRightIconName: visibleGroupsCount == 0 ? @"ic_custom_show" : @"ic_custom_hide",
+                    kCellRightIconName: [sectionData.values[@"visible_groups_count"] integerValue] == 0
+                            ? @"ic_custom_show" : @"ic_custom_hide",
                     kCellTintColor: @color_primary_purple
             }];
-            hideShowAllCellData.onButtonPressed = ^{
-                BOOL allHidden = visibleGroupsCount == 0;
-                for (OAGPXTableCellData *cellData in cellsData)
-                {
-                    if (cellData.onSwitch)
-                        cellData.onSwitch(allHidden);
-                }
-                if (hideShowAllCellData.updateData)
-                    hideShowAllCellData.updateData();
-
-                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0]
-                              withRowAnimation:UITableViewRowAnimationNone];
-            };
-            hideShowAllCellData.updateData = ^() {
-                [hideShowAllCellData setData:@{
-                        kCellTitle: visibleGroupsCount == 0
-                                ? OALocalizedString(@"shared_string_show_all")
-                                : OALocalizedString(@"shared_string_hide_all"),
-                        kCellRightIconName: visibleGroupsCount == 0 ? @"ic_custom_show" : @"ic_custom_hide"
-                }];
-            };
-
             [cellsData insertObject:hideShowAllCellData atIndex:0];
-
-            sectionData = [OAGPXTableSectionData withData:@{
-                    kTableSubjects: cellsData,
-                    kSectionHeader: OALocalizedString(@"groups")
-            }];
         }
     }
-    sectionData.updateData = ^() {
-        for (OAGPXTableCellData *cellData in sectionData.subjects)
-        {
-            if (cellData.updateData)
-                cellData.updateData();
-        }
-    };
 
     _tableData = @[sectionData];
 }
@@ -294,21 +236,117 @@
             for (OAGPXTableCellData *cellData in _tableData.firstObject.subjects)
             {
                 if (![cellData.key isEqualToString:@"hide_show_all"])
-                    [self.delegate setWaypointsGroupVisible:cellData.title show:cellData.isOn ? cellData.isOn() : NO];
+                    [self.delegate setWaypointsGroupVisible:cellData.title show:[self isOn:cellData]];
             }
         }
     }
 }
 
-- (NSInteger)waypointGroupsVisibleCount
+- (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {
-    NSInteger count = 0;
-    for (OAGPXTableCellData *cellData in _tableData.firstObject.subjects)
+    if (!tableData)
+        return;
+
+    if ([tableData.key hasPrefix:@"cell_waypoints_group_"])
     {
-        if (![cellData.key isEqualToString:@"hide_show_all"] && cellData.isOn && cellData.isOn())
-            count++;
+        OAGPXTableSectionData *sectionData = _tableData.firstObject;
+        if (sectionData && [tableData.values[@"visible"] boolValue] != toggle)
+        {
+            if (toggle)
+                sectionData.values[@"visible_groups_count"] = @([sectionData.values[@"visible_groups_count"] integerValue] + 1);
+            else
+                sectionData.values[@"visible_groups_count"] = @([sectionData.values[@"visible_groups_count"] integerValue] - 1);
+        }
+        tableData.values[@"visible"] = @(toggle);
+
+        [self updateData:tableData];
+
+        if (sectionData && [sectionData.values[@"visible_groups_count"] integerValue] != [sectionData.values[@"groups_count"] integerValue])
+        {
+            [self updateData:[sectionData getSubject:@"hide_show_all"]];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+        }
     }
-    return count;
+}
+
+- (BOOL)isOn:(OAGPXBaseTableData *)tableData
+{
+    if (!tableData)
+        return NO;
+
+    if ([tableData.key hasPrefix:@"cell_waypoints_group_"])
+    {
+        return [tableData.values[@"visible"] boolValue];
+    }
+
+    return NO;
+}
+
+- (void)updateData:(OAGPXBaseTableData *)tableData
+{
+    if (!tableData)
+        return;
+
+    if ([tableData.key isEqualToString:@"color_grid"])
+    {
+        tableData.values[@"int_value"] = @([OAUtilities colorToNumber:_selectedColor.color]);
+        tableData.values[@"array_value"] = _colors;
+        [tableData setData:@{ kCellDesc: _selectedColor.name }];
+    }
+    else if ([tableData.key isEqualToString:@"section"])
+    {
+        OAGPXTableSectionData *sectionData = (OAGPXTableSectionData *) tableData;
+        for (OAGPXTableCellData *cellData in sectionData.subjects)
+        {
+            [self updateData:cellData];
+        }
+    }
+    else if ([tableData.key hasPrefix:@"cell_waypoints_group_"])
+    {
+        self.doneButton.enabled = YES;
+        [tableData setData:@{
+                kCellLeftIcon: [UIImage templateImageNamed:[tableData.values[@"visible"] boolValue] ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
+                kCellTintColor: @([tableData.values[@"visible"] boolValue] ? [tableData.values[@"color"] integerValue] : color_footer_icon_gray)
+        }];
+    }
+    else if ([tableData.key isEqualToString:@"hide_show_all"])
+    {
+        OAGPXTableSectionData *sectionData = _tableData.firstObject;
+        if (sectionData)
+        {
+            [tableData setData:@{
+                    kCellTitle: [sectionData.values[@"visible_groups_count"] integerValue] == 0
+                            ? OALocalizedString(@"shared_string_show_all")
+                            : OALocalizedString(@"shared_string_hide_all"),
+                    kCellRightIconName: [sectionData.values[@"visible_groups_count"] integerValue] == 0
+                            ? @"ic_custom_show" : @"ic_custom_hide"
+            }];
+        }
+    }
+}
+
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+{
+    if (!tableData)
+        return;
+
+    if ([tableData.key isEqualToString:@"hide_show_all"])
+    {
+        OAGPXTableSectionData *sectionData = _tableData.firstObject;
+        if (sectionData)
+        {
+            BOOL allHidden = [sectionData.values[@"visible_groups_count"] integerValue] == 0;
+            for (OAGPXTableCellData *cellData in sectionData.subjects)
+            {
+                [self onSwitch:allHidden tableData:cellData];
+            }
+            [self updateData:tableData];
+
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:[_tableData indexOfObject:sectionData]]
+                          withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -398,7 +436,7 @@
         }
         if (cell)
         {
-            BOOL isOn = cellData.isOn ? cellData.isOn() : NO;
+            BOOL isOn = [self isOn:cellData];
             cell.switchView.on = isOn;
             cell.textView.text = cellData.title;
 
@@ -455,8 +493,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    if (cellData.onButtonPressed)
-        cellData.onButtonPressed();
+    [self onButtonPressed:cellData];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -468,9 +505,7 @@
     UISwitch *switchView = (UISwitch *) sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-
-    if (cellData.onSwitch)
-        cellData.onSwitch(switchView.isOn);
+    [self onSwitch:switchView.isOn tableData:cellData];
 
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -516,7 +551,7 @@
     _selectedColor = [OADefaultFavorite builtinColors][tag];
     self.doneButton.enabled = ![_selectedColor.color isEqual:_groupColor];
 
-    _tableData[0].updateData();
+    [self updateData:_tableData.firstObject];
     [UIView setAnimationsEnabled:NO];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
                           withRowAnimation:UITableViewRowAnimationNone];

@@ -81,8 +81,6 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparatorTopConstraint;
 
-@property (nonatomic) BOOL isShown;
-
 @end
 
 @implementation OATrackMenuAppearanceHudViewController
@@ -119,8 +117,6 @@
     NSInteger _widthDataSectionIndex;
     NSInteger _splitDataSectionIndex;
 }
-
-@dynamic gpx, isShown;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx state:(OATrackMenuViewControllerState *)state
 {

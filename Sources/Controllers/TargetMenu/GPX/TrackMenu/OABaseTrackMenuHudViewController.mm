@@ -10,7 +10,6 @@
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
-#import "Localization.h"
 #import "OAColors.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXMutableDocument.h"
@@ -59,24 +58,12 @@
     }
 }
 
-/*- (BOOL)hasDelegate:(SEL)sel
-{
-    return self.delegate != nil && [self.delegate respondsToSelector:sel];
-}*/
-
 - (OAGPXBaseTableData *)getSubject:(NSString *)key
 {
     return nil;
 }
 
 @end
-
-/*@interface OAGPXTableCellData ()
-
-@property (nonatomic) NSString *key;
-@property (nonatomic) NSDictionary *values;
-
-@end*/
 
 @implementation OAGPXTableCellData
 
@@ -88,8 +75,6 @@
 
     return cellData;
 }
-
-//@dynamic key, values;
 
 - (void)setData:(NSDictionary *)data
 {
@@ -123,16 +108,7 @@
 
 @end
 
-/*@interface OAGPXTableSectionData ()
-
-@property (nonatomic) NSString *key;
-@property (nonatomic) NSDictionary *values;
-
-@end*/
-
 @implementation OAGPXTableSectionData
-
-//@dynamic key, values;
 
 + (instancetype)withData:(NSDictionary *)data
 {
@@ -169,16 +145,7 @@
 
 @end
 
-/*@interface OAGPXTableSectionData ()
-
-@property (nonatomic) NSString *key;
-@property (nonatomic) NSDictionary *values;
-
-@end*/
-
 @implementation OAGPXTableData
-
-//@dynamic key, values;
 
 + (instancetype)withData:(NSDictionary *)data
 {

@@ -508,21 +508,8 @@
             if (self.trackMenuDelegate)
                 [self.trackMenuDelegate stopLocationServices];
 
-            //TODO new
-//            if (self.trackMenuDelegate)
-//                [self.trackMenuDelegate openDeleteWaypointsScreen:self.tableData];
-
-            //TODO delete
-            NSMutableArray<OAGPXTableSectionData *> *sections = [NSMutableArray array];
-            for (OAGPXTableSectionData *sectionData in self.tableData.subjects)
-            {
-                BOOL isAction = [sectionData.header isEqualToString:OALocalizedString(@"actions")];
-                BOOL isRte = [sectionData.subjects.firstObject.title isEqualToString:OALocalizedString(@"route_points")];
-                if (!isAction && !isRte)
-                    [sections addObject:sectionData];
-            }
             if (self.trackMenuDelegate)
-                [self.trackMenuDelegate openDeleteWaypointsScreen:sections];
+                [self.trackMenuDelegate openDeleteWaypointsScreen:self.tableData];
         }
     }
     else if ([tableData.key hasPrefix:@"add_waypoint"] && self.trackMenuDelegate)

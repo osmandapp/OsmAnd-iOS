@@ -1154,18 +1154,17 @@
 }
 
 - (void)openConfirmDeleteWaypointsScreen:(NSString *)groupName
-//- (void)openDeleteWaypointsScreen:(OAGPXTableData *)tableData
 {
     OADeleteWaypointsGroupBottomSheetViewController *deleteWaypointsGroupBottomSheet =
-            [[OADeleteWaypointsGroupBottomSheetViewController alloc] initWithGroupName:groupName/*tableData*/];
+            [[OADeleteWaypointsGroupBottomSheetViewController alloc] initWithGroupName:groupName];
     deleteWaypointsGroupBottomSheet.trackMenuDelegate = self;
     [deleteWaypointsGroupBottomSheet presentInViewController:self];
 }
 
-- (void)openDeleteWaypointsScreen:(NSArray *)sectionsData
+- (void)openDeleteWaypointsScreen:(OAGPXTableData *)tableData
 {
     OADeleteWaypointsViewController *deleteWaypointsViewController =
-            [[OADeleteWaypointsViewController alloc] initWithSectionsData:sectionsData];
+            [[OADeleteWaypointsViewController alloc] initWithSectionsData:tableData];
     deleteWaypointsViewController.trackMenuDelegate = self;
     [self presentViewController:deleteWaypointsViewController animated:YES completion:nil];
 }
@@ -1600,6 +1599,16 @@
 {
     [self.tableView reloadSections:sections
                   withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)updateData:(OAGPXBaseTableData *)tableData
+{
+    [_uiBuilder updateData:tableData];
+}
+
+- (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData
+{
+    [_uiBuilder updateProperty:value tableData:tableData];
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate

@@ -50,8 +50,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
                 newGroupName:(NSString *)newGroupName
                newGroupColor:(UIColor *)newGroupColor;
 - (void)openConfirmDeleteWaypointsScreen:(NSString *)groupName;
-- (void)openDeleteWaypointsScreen:(NSArray *)sectionsData;
-//- (void)openDeleteWaypointsScreen:(OAGPXTableData *)tableData;
+- (void)openDeleteWaypointsScreen:(OAGPXTableData *)tableData;
 - (void)openWaypointsGroupOptionsScreen:(NSString *)groupName;
 - (void)openNewWaypointScreen;
 - (NSString *)checkGroupName:(NSString *)groupName;
@@ -88,6 +87,8 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (void)stopLocationServices;
 - (BOOL)openedFromMap;
 - (void)reloadSections:(NSIndexSet *)sections;
+- (void)updateData:(OAGPXBaseTableData *)tableData;
+- (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData;
 
 @end
 

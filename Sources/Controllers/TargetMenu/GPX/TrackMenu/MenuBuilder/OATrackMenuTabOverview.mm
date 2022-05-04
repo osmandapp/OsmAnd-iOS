@@ -14,6 +14,7 @@
 #import "OAWikiArticleHelper.h"
 #import "OAImageDescTableViewCell.h"
 
+#define kDescriptionImageCell 0
 #define kInfoCreatedOnCell 0
 
 @interface OATrackMenuTabOverview ()
@@ -26,6 +27,7 @@
 @implementation OATrackMenuTabOverview
 {
     NSString *_description;
+    NSString *_imageURL;
 }
 
 @dynamic tableData, isGeneratedData;
@@ -43,80 +45,33 @@
 - (void)generateData
 {
     NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
-    NSString *imageURL = [self.trackMenuDelegate getMetadataImageLink];
-    _description = self.trackMenuDelegate ? [self.trackMenuDelegate generateDescription] : @"";
-    NSMutableArray<OAGPXTableCellData *> *descriptionCells = [NSMutableArray array];
-    
-    if ((!imageURL || imageURL.length == 0) && _description && _description.length > 0)
-        imageURL = [self findFirstImageURL:_description];
-    if (imageURL)
-    {
-        OAGPXTableCellData *imageCellData = [OAGPXTableCellData withData:@{
-                kTableKey: @"image",
-                kCellType: [OAImageDescTableViewCell getCellIdentifier],
-                kTableValues: @{ @"img": imageURL }
-        }];
-        [descriptionCells addObject:imageCellData];
-    }
 
-    if (!_description || _description.length == 0)
+    NSMutableArray<OAGPXTableCellData *> *descriptionCells = [NSMutableArray array];
+
+    [self generateDescription];
+    [self generateImageURL];
+
+    if (_imageURL && _imageURL.length > 0)
+        [descriptionCells addObject:[self generateImageCellData]];
+
+    if (_description && _description.length > 0)
     {
-        OAGPXTableCellData *addDescriptionCellData = [OAGPXTableCellData withData:@{
-                kTableKey: @"add_description",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
-                kCellTitle: OALocalizedString(@"add_description"),
-                kCellToggle: @YES,
-                kCellTintColor: @color_primary_purple
-        }];
-        [descriptionCells addObject:addDescriptionCellData];
-        
-        OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
-                kTableSubjects: descriptionCells,
-                kSectionHeader: OALocalizedString(@"description"),
-                kSectionHeaderHeight: @56.
-        }];
-        [tableSections addObject:descriptionSectionData];
+        [descriptionCells addObject:[self generateDescriptionCellData]];
+        [descriptionCells addObject:[self generateEditDescriptionCellData]];
+        [descriptionCells addObject:[self generateReadFullDescriptionCellData]];
     }
     else
     {
-        _description = [OAWikiArticleHelper getFirstParagraph:_description];
-
-        OAGPXTableCellData *descriptionCellData = [OAGPXTableCellData withData:@{
-                kTableKey: @"description",
-                kCellType: [OATextViewSimpleCell getCellIdentifier],
-                kTableValues: @{ @"attr_string_value": [self generateDescriptionAttrString] }
-        }];
-        [descriptionCells addObject:descriptionCellData];
-
-        OAGPXTableCellData *editDescriptionCellData = [OAGPXTableCellData withData:@{
-                kTableKey: @"edit_description",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
-                kCellTitle: OALocalizedString(@"context_menu_edit_descr"),
-                kCellToggle: @YES,
-                kCellTintColor: @color_primary_purple
-        }];
-        [descriptionCells addObject:editDescriptionCellData];
-
-        OAGPXTableCellData *readFullDescriptionCellData = [OAGPXTableCellData withData:@{
-                kTableKey: @"read_full_description",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
-                kCellTitle: OALocalizedString(@"read_full_description"),
-                kCellToggle: @YES,
-                kCellTintColor: @color_primary_purple
-        }];
-        [descriptionCells addObject:readFullDescriptionCellData];
-
-        OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
-                kTableKey: @"section_description",
-                kTableSubjects: descriptionCells,
-                kSectionHeader: OALocalizedString(@"description"),
-                kSectionHeaderHeight: @56.
-        }];
-        [tableSections addObject:descriptionSectionData];
+        [descriptionCells addObject:[self generateAddDescriptionCellData]];
     }
+
+    OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
+            kTableKey: @"section_description",
+            kTableSubjects: descriptionCells,
+            kSectionHeader: OALocalizedString(@"description"),
+            kSectionHeaderHeight: @56.
+    }];
+    [tableSections addObject:descriptionSectionData];
 
     NSMutableArray<OAGPXTableCellData *> *infoCells = [NSMutableArray array];
 
@@ -175,7 +130,7 @@
 - (NSAttributedString *)generateDescriptionAttrString
 {
     return [OAUtilities createAttributedString:
-                    [_description componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
+                    [[OAWikiArticleHelper getFirstParagraph:_description] componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
                                           font:[UIFont systemFontOfSize:17]
                                          color:UIColor.blackColor
                                    strokeColor:nil
@@ -191,6 +146,18 @@
 - (NSString *)generateDirName
 {
     return self.trackMenuDelegate ? [self.trackMenuDelegate getDirName] : @"";
+}
+
+- (void)generateDescription
+{
+    _description = self.trackMenuDelegate ? [self.trackMenuDelegate generateDescription] : @"";
+}
+
+- (void)generateImageURL
+{
+    _imageURL = self.trackMenuDelegate ? [self.trackMenuDelegate getMetadataImageLink] : nil;
+    if ((!_imageURL || _imageURL.length == 0) && _description && _description.length > 0)
+        _imageURL = [self findFirstImageURL:_description];
 }
 
 - (OAGPXTableCellData *)generateCreatedOnCellData
@@ -213,6 +180,59 @@
     }];
 }
 
+- (OAGPXTableCellData *)generateImageCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"image",
+            kCellType: [OAImageDescTableViewCell getCellIdentifier],
+            kTableValues: @{ @"img": _imageURL }
+    }];
+}
+- (OAGPXTableCellData *)generateAddDescriptionCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"add_description",
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kCellTitle: OALocalizedString(@"add_description"),
+            kCellToggle: @YES,
+            kCellTintColor: @color_primary_purple
+    }];
+}
+
+- (OAGPXTableCellData *)generateDescriptionCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"description",
+            kCellType: [OATextViewSimpleCell getCellIdentifier],
+            kTableValues: @{ @"attr_string_value": [self generateDescriptionAttrString] }
+    }];
+}
+
+- (OAGPXTableCellData *)generateEditDescriptionCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"edit_description",
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kCellTitle: OALocalizedString(@"context_menu_edit_descr"),
+            kCellToggle: @YES,
+            kCellTintColor: @color_primary_purple
+    }];
+}
+
+- (OAGPXTableCellData *)generateReadFullDescriptionCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"read_full_description",
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kCellTitle: OALocalizedString(@"read_full_description"),
+            kCellToggle: @YES,
+            kCellTintColor: @color_primary_purple
+    }];
+}
+
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {
 }
@@ -231,6 +251,12 @@
     {
         tableData.values[@"attr_string_value"] = [self generateDescriptionAttrString];
     }
+    else if ([tableData.key isEqualToString:@"image"])
+    {
+        [self generateImageURL];
+        if (_imageURL)
+            tableData.values[@"img"] = _imageURL;
+    }
     else if ([tableData.key isEqualToString:@"size"] && self.trackMenuDelegate)
     {
         [tableData setData:@{ kCellDesc: [self.trackMenuDelegate getGpxFileSize] }];
@@ -246,9 +272,65 @@
     else if ([tableData.key isEqualToString:@"section_description"])
     {
         OAGPXTableSectionData *sectionData = (OAGPXTableSectionData *) tableData;
-        for (OAGPXTableCellData *cellData in sectionData.subjects)
+
+        BOOL hasOldDescription = _description && _description.length > 0;
+        [self generateDescription];
+        BOOL hasNewDescription = _description && _description.length > 0;
+
+        BOOL hasOldImageURL = _imageURL && _imageURL.length > 0;
+        [self generateImageURL];
+        BOOL hasNewImageURL = _imageURL && _imageURL.length > 0;
+
+        if (!hasOldImageURL && hasNewImageURL)
         {
-            [self updateData:cellData];
+            [sectionData.subjects insertObject:[self generateImageCellData] atIndex:kDescriptionImageCell];
+        }
+        else if (hasOldImageURL && !hasNewImageURL)
+        {
+            OAGPXTableCellData *imageCellData = [sectionData getSubject:@"image"];
+            if (imageCellData)
+                [sectionData.subjects removeObject:imageCellData];
+        }
+        else
+        {
+            OAGPXTableCellData *imageCellData = [sectionData getSubject:@"image"];
+            if (imageCellData && hasNewImageURL)
+                imageCellData.values[@"img"] = _imageURL;
+        }
+
+        if (!hasOldDescription && hasNewDescription)
+        {
+            OAGPXTableCellData *addDescriptionCellData = [sectionData getSubject:@"add_description"];
+            if (addDescriptionCellData)
+                [sectionData.subjects removeObject:addDescriptionCellData];
+
+            [sectionData.subjects addObject:[self generateDescriptionCellData]];
+            [sectionData.subjects addObject:[self generateEditDescriptionCellData]];
+            [sectionData.subjects addObject:[self generateReadFullDescriptionCellData]];
+        }
+        else if (hasOldDescription && !hasNewDescription)
+        {
+            OAGPXTableCellData *descriptionCellData = [sectionData getSubject:@"description"];
+            if (descriptionCellData)
+                [sectionData.subjects removeObject:descriptionCellData];
+
+            OAGPXTableCellData *editDescriptionCellData = [sectionData getSubject:@"edit_description"];
+            if (editDescriptionCellData)
+                [sectionData.subjects removeObject:editDescriptionCellData];
+
+            OAGPXTableCellData *readFullDescriptionCellData = [sectionData getSubject:@"read_full_description"];
+            if (readFullDescriptionCellData)
+                [sectionData.subjects removeObject:readFullDescriptionCellData];
+
+            [sectionData.subjects addObject:[self generateAddDescriptionCellData]];
+        }
+        else
+        {
+            for (OAGPXTableCellData *cellData in sectionData.subjects)
+            {
+                if (![cellData.key isEqualToString:@"image"])
+                    [self updateData:cellData];
+            }
         }
     }
     else if ([tableData.key isEqualToString:@"section_info"])

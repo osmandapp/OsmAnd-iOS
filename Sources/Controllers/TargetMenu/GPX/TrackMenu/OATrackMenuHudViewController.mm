@@ -107,7 +107,6 @@
     OATrackMenuHeaderView *_headerView;
     OAGPXTableData *_tableData;
 
-    NSString *_description;
     NSString *_exportFileName;
     NSString *_exportFilePath;
 
@@ -413,7 +412,7 @@
     if (sectionData)
     {
         OAGPXTableCellData *cellData = [sectionData getSubject:@"image"];
-        if (cellData && [cellData.type isEqualToString:[OAImageDescTableViewCell getCellIdentifier]])
+        if (cellData)
         {
             NSString *url = cellData.values[@"img"];
             if (!_cachedImage || ![url isEqualToString:_cachedImageURL])
@@ -1317,9 +1316,11 @@
 - (NSString *)getCreatedOn
 {
     if (self.doc.metadata.time <= [[NSDate date] timeIntervalSince1970])
+    {
         return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
                                               dateStyle:NSDateFormatterMediumStyle
                                               timeStyle:NSDateFormatterNoStyle];
+    }
 
     return @"";
 }
@@ -1332,41 +1333,33 @@
         {
             if (self.doc.metadata.desc && self.doc.metadata.desc.length > 0)
             {
-                _description = self.doc.metadata.desc;
-            }
-            else if (self.doc.metadata.extensions.count > 0)
-            {
-                for (OAGpxExtension *e in self.doc.metadata.extensions)
-                {
-                    if ([e.name isEqualToString:@"desc"])
-                        _description = e.value;
-                }
+                return self.doc.metadata.desc;
             }
             else
             {
-                _description = @"";
+                OAGpxExtension *descExtension = [self.doc.metadata getExtensionByKey:@"desc"];
+                if (descExtension)
+                    return descExtension.value;
+
+                break;
             }
-            break;
         }
         case EOATrackMenuHudSegmentsTab:
         {
-            _description = [NSString stringWithFormat:@"%@: %li",
+            return [NSString stringWithFormat:@"%@: %li",
                     OALocalizedString(@"gpx_selection_segment_title"),
-                            [self getGeneralSegment] ? _tableData.subjects.count - 1 : _tableData.subjects.count];
-            break;
+                    [self getGeneralSegment] ? _tableData.subjects.count - 1 : _tableData.subjects.count];
         }
         case EOATrackMenuHudPointsTab:
         {
-            _description = [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"groups"), _waypointGroups.allKeys.count];
-            break;
+            return [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"groups"), _waypointGroups.allKeys.count];
         }
         default:
         {
-            _description = @"";
-            break;
+            return @"";
         }
     }
-    return _description;
+    return @"";
 }
 
 - (NSString *)getMetadataImageLink
@@ -1495,14 +1488,14 @@
 
 - (void)openDescription
 {
-    OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:_description isNew:NO isEditing:NO readOnly:NO];
+    OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:[self generateDescription] isNew:NO isEditing:NO readOnly:NO];
     editDescController.delegate = self;
     [self.navigationController pushViewController:editDescController animated:YES];
 }
 
 - (void)openDescriptionEditor
 {
-    OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:_description isNew:NO isEditing:YES readOnly:NO];
+    OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:[self generateDescription] isNew:NO isEditing:YES readOnly:NO];
     editDescController.delegate = self;
     [self.navigationController pushViewController:editDescController animated:YES];
 }
@@ -2447,8 +2440,13 @@
 - (void) descriptionChanged:(NSString *)descr
 {
     self.doc.metadata.desc = descr;
+    if (!descr || descr.length == 0)
+    {
+        OAGpxExtension *descExtension = [self.doc.metadata getExtensionByKey:@"desc"];
+        if (descExtension)
+            [self.doc.metadata removeExtension:descExtension];
+    }
     [self.doc saveTo:self.doc.path];
-    _description = [self generateDescription];
     if (_headerView)
     {
         [_headerView setDescription];
@@ -2458,6 +2456,7 @@
     if (sectionData)
     {
         [_uiBuilder updateData:sectionData];
+        [self fetchDescriptionImageIfNeeded];
 
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:[_tableData.subjects indexOfObject:sectionData]]
                       withRowAnimation:UITableViewRowAnimationNone];

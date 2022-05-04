@@ -180,7 +180,7 @@
         return NO;
 
     if ([tableData.key isEqualToString:@"control_show_on_map"] && self.trackMenuDelegate)
-        return self.trackMenuDelegate ? [self.trackMenuDelegate isTrackVisible] : NO;
+        return [self.trackMenuDelegate isTrackVisible];
 
     return NO;
 }

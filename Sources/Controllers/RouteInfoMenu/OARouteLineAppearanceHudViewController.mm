@@ -251,6 +251,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    _app.mapMode = OAMapModeFree;
     _settings = [OAAppSettings sharedManager];
     _routingHelper = [OARoutingHelper sharedInstance];
     _mapPanelViewController = [OARootViewController instance].mapPanel;

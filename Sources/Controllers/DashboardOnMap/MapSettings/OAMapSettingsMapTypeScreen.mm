@@ -124,6 +124,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             continue;
         if ([mapStyleInfo[@"title"] isEqualToString:NAUTICAL_RENDER] && ![iapHelper.nautical isActive])
             continue;
+        if ([item.mapSource.resourceId isEqualToString:@"mapnik.render.xml"] && ![_app.data.lastMapSource isEqual:item.mapSource])
+            continue;
 
         item.resourceType = OsmAndResourceType::MapStyle;
         item.resource = resource;
@@ -220,6 +222,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             caption = item.mapSource.name;
             if ([caption isEqualToString:TOURING_VIEW])
                 caption = @"Touring view";
+            else if ([item.mapSource.resourceId isEqualToString:@"mapnik.render.xml"])
+                caption = @"Mapnik";
+
             description = nil;
         }
         else if ([someItem isKindOfClass:OAOnlineTilesResourceItem.class])

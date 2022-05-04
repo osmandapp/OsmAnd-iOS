@@ -180,11 +180,13 @@
             {
                 double difference = (maximumVisibleXValue - minimumVisibleXValue) * 0.1;
                 highlightPosition = minimumVisibleXValue + difference;
+                [lineChartView highlightValueWithX:minimumVisibleXValue + difference dataSetIndex:0 dataIndex:-1];
             }
             else if (highlight.x > maximumVisibleXValue)
             {
                 double difference = (maximumVisibleXValue - minimumVisibleXValue) * 0.1;
                 highlightPosition = maximumVisibleXValue - difference;
+                [lineChartView highlightValueWithX:maximumVisibleXValue - difference dataSetIndex:0 dataIndex:-1];
             }
             else
             {

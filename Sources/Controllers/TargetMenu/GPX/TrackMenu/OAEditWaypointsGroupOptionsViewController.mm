@@ -115,7 +115,7 @@
                         kCellTitle: _groupName,
                         kCellDesc: OALocalizedString(@"fav_enter_group_name")
                 }]],
-                kSectionHeader: OALocalizedString(@"fav_name")
+                kSectionHeader: _screenType == EOAEditWaypointsGroupRenameScreen ? OALocalizedString(@"fav_name") : OALocalizedString(@"group_name")
         }];
     }
     else if (_screenType == EOAEditWaypointsGroupColorScreen)

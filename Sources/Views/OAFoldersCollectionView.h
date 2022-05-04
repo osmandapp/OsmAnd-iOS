@@ -20,7 +20,7 @@
 
 @interface OAFoldersCollectionView : UICollectionView
 
-@property (nonatomic) id<OAFoldersCellDelegate> foldersDelegate;
+@property (nonatomic, weak) id<OAFoldersCellDelegate> foldersDelegate;
 @property (weak, nonatomic) OACollectionViewCellState *state;
 @property (nonatomic) NSIndexPath *cellIndex;
 

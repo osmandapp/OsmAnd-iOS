@@ -278,6 +278,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     _exportController = nil;
     _isViewVisible = YES;
 }
@@ -1257,17 +1258,18 @@
 {
     if (!_routeLineChartHelper)
     {
+        __weak OATrackMenuHudViewController *weakSelf = self;
         _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc
                                                                centerMapOnBBox:^(OABBox rect) {
-            [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
+            [weakSelf.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
                                               bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
                                                      zoom:0
-                                              bottomInset:([self isLandscape] ? 0. : [self getViewHeight])
-                                                leftInset:([self isLandscape] ? [self getLandscapeViewWidth] : 0.)
+                                              bottomInset:([weakSelf isLandscape] ? 0. : [weakSelf getViewHeight])
+                                                leftInset:([weakSelf isLandscape] ? [weakSelf getLandscapeViewWidth] : 0.)
                                                  animated:YES];
                                                                }
                                                                 adjustViewPort:^() {
-                                                                    [self adjustMapViewPort];
+                                                                    [weakSelf adjustMapViewPort];
                                                                 }];
         _routeLineChartHelper.isLandscape = [self isLandscape];
         _routeLineChartHelper.screenBBox = CGRectMake(
@@ -1855,7 +1857,7 @@
         OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle]loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
             cell = (OATextViewSimpleCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

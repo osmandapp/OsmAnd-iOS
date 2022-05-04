@@ -26,6 +26,10 @@
 #define kBlockStatisticsWidthMaxByValue 100.
 #define kBlockStatisticsDivider 13.
 
+@interface OATrackMenuHeaderView () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+
+@end
+
 @implementation OATrackMenuHeaderView
 {
     NSArray<OAGPXTableCellData *> *_statisticsCells;

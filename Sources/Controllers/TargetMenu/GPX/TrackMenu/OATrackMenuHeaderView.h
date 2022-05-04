@@ -14,7 +14,7 @@
 
 @protocol OATrackMenuViewControllerDelegate;
 
-@interface OATrackMenuHeaderView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface OATrackMenuHeaderView : UIView
 
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 

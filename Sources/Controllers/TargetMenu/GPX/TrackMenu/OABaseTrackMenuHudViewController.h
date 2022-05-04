@@ -111,8 +111,8 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 @property (nonatomic, readonly) OAAppSettings *settings;
 @property (nonatomic, readonly) OASavingTrackHelper *savingHelper;
 
-@property (nonatomic, readonly) OAMapPanelViewController *mapPanelViewController;
-@property (nonatomic, readonly) OAMapViewController *mapViewController;
+@property (weak, nonatomic, readonly) OAMapPanelViewController *mapPanelViewController;
+@property (weak, nonatomic, readonly) OAMapViewController *mapViewController;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx;
 

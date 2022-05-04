@@ -128,28 +128,12 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kTableValues: @{ @"bool_value": @(_isShown) },
                 kCellTitle: OALocalizedString(@"map_settings_show")
         }];
-        showOnMapCellData.onSwitch = ^(BOOL toggle) {
-            _isShown = toggle;
-            [self onShowHidePressed:_isShown];
-        };
-        showOnMapCellData.isOn = ^() {
-            return _isShown;
-        };
-        showOnMapCellData.updateData = ^() {
-            [showOnMapCellData setData:@{ kTableValues: @{@"bool_value": @(_isShown) } }];
-        };
-
         [controlCells addObject:showOnMapCellData];
 
-        OAGPXTableSectionData *controlsSectionData = [OAGPXTableSectionData withData:@{ kTableSubjects: controlCells }];
-        controlsSectionData.updateData = ^() {
-            for (OAGPXTableCellData *cellData in controlsSectionData.subjects)
-            {
-                if (cellData.updateData)
-                    cellData.updateData();
-            }
-        };
-
+        OAGPXTableSectionData *controlsSectionData = [OAGPXTableSectionData withData:@{
+                kTableKey: @"section_controls",
+                kTableSubjects: controlCells
+        }];
         [tableSections addObject:controlsSectionData];
 
         OAGPXTableCellData *renameCellData = [OAGPXTableCellData withData:@{
@@ -158,15 +142,6 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kCellRightIconName: @"ic_custom_edit",
                 kCellTitle: OALocalizedString(@"fav_rename")
         }];
-        renameCellData.onButtonPressed = ^() {
-            OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
-                    [[OAEditWaypointsGroupOptionsViewController alloc]
-                            initWithScreenType:EOAEditWaypointsGroupRenameScreen
-                                     groupName:_groupName
-                                    groupColor:nil];
-            editWaypointsGroupOptions.delegate = self;
-            [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
-        };
 
         OAGPXTableCellData *changeColorCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"change_color",
@@ -174,16 +149,6 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kCellRightIconName: @"ic_custom_appearance",
                 kCellTitle: OALocalizedString(@"change_color")
         }];
-        changeColorCellData.onButtonPressed = ^() {
-            OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
-                    [[OAEditWaypointsGroupOptionsViewController alloc]
-                            initWithScreenType:EOAEditWaypointsGroupColorScreen
-                                     groupName:nil
-                                    groupColor:_groupColor];
-            editWaypointsGroupOptions.delegate = self;
-            [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
-        };
-
         [tableSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[renameCellData, changeColorCellData] }]];
 
         OAGPXTableCellData *copyToFavoritesCellData = [OAGPXTableCellData withData:@{
@@ -192,16 +157,6 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kCellRightIconName: @"ic_custom_trip_edit",
                 kCellTitle: OALocalizedString(@"copy_to_map_favorites")
         }];
-        copyToFavoritesCellData.onButtonPressed = ^() {
-            OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
-                    [[OAEditWaypointsGroupOptionsViewController alloc]
-                            initWithScreenType:EOAEditWaypointsGroupCopyToFavoritesScreen
-                                     groupName:_groupName
-                                    groupColor:nil];
-            editWaypointsGroupOptions.delegate = self;
-            [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
-        };
-
         [tableSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[copyToFavoritesCellData] }]];
     }
     else
@@ -212,11 +167,6 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kCellTitle: OALocalizedString(@"analyze_on_map"),
                 kCellRightIconName: @"ic_custom_graph"
         }];
-        analyzeOnMapCellData.onButtonPressed = ^() {
-            if (self.trackMenuDelegate)
-                [self.trackMenuDelegate openAnalysis:_analysis
-                                            withMode:EOARouteStatisticsModeAltitudeSlope];
-        };
 
         OAGPXTableCellData *editCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"edit",
@@ -224,12 +174,6 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kCellRightIconName: @"ic_custom_trip_edit",
                 kCellTitle: OALocalizedString(@"shared_string_edit")
         }];
-        editCellData.onButtonPressed = ^() {
-            [self hide:YES completion:^{
-                if (self.trackMenuDelegate)
-                    [self.trackMenuDelegate editSegment];
-            }];
-        };
 
         [tableSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[analyzeOnMapCellData, editCellData] }]];
     }
@@ -242,22 +186,6 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             kCellRightIconName: @"ic_custom_remove_outlined",
             kCellTintColor: @color_primary_red
     }];
-    deleteCellData.onButtonPressed = ^() {
-        if (_mode == EOAEditTrackScreenWaypointsMode)
-        {
-            [self hide:YES completion:^{
-                if (self.trackMenuDelegate)
-                    [self.trackMenuDelegate openConfirmDeleteWaypointsScreen:_groupName];
-            }];
-        }
-        else
-        {
-            [self hide:YES completion:^{
-                if (self.trackMenuDelegate)
-                    [self.trackMenuDelegate deleteAndSaveSegment:_segment];
-            }];
-        }
-    };
 
     [tableSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[deleteCellData] }]];
 
@@ -331,6 +259,100 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             : [OADefaultFavorite getDefaultColor];
 }
 
+- (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
+{
+    if (!tableData)
+        return;
+
+    if ([tableData.key isEqualToString:@"control_show_on_map"])
+    {
+        _isShown = toggle;
+        [self onShowHidePressed:_isShown];
+    }
+}
+
+- (BOOL)isOn:(OAGPXBaseTableData *)tableData
+{
+    if (!tableData)
+        return NO;
+
+    if ([tableData.key isEqualToString:@"control_show_on_map"])
+        return _isShown;
+
+    return NO;
+}
+
+- (void)updateData:(OAGPXBaseTableData *)tableData
+{
+    if (!tableData)
+        return;
+
+    if ([tableData.key isEqualToString:@"control_show_on_map"])
+    {
+        tableData.values[@"bool_value"] = @(_isShown);
+    }
+    else if ([tableData.key isEqualToString:@"section_controls"])
+    {
+        OAGPXTableSectionData *sectionData = (OAGPXTableSectionData *) tableData;
+        for (OAGPXTableCellData *cellData in sectionData.subjects)
+        {
+            [self updateData:cellData];
+        }
+    }
+}
+
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+{
+    if (!tableData)
+        return;
+
+    if ([tableData.key isEqualToString:@"rename"])
+    {
+        OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
+                [[OAEditWaypointsGroupOptionsViewController alloc]
+                        initWithScreenType:EOAEditWaypointsGroupRenameScreen
+                                 groupName:_groupName
+                                groupColor:nil];
+        editWaypointsGroupOptions.delegate = self;
+        [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
+    }
+    else if ([tableData.key isEqualToString:@"change_color"])
+    {
+        OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
+                [[OAEditWaypointsGroupOptionsViewController alloc]
+                        initWithScreenType:EOAEditWaypointsGroupColorScreen
+                                 groupName:nil
+                                groupColor:_groupColor];
+        editWaypointsGroupOptions.delegate = self;
+        [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
+    }
+    else if ([tableData.key isEqualToString:@"copy_to_favorites"])
+    {
+        OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =
+                [[OAEditWaypointsGroupOptionsViewController alloc]
+                        initWithScreenType:EOAEditWaypointsGroupCopyToFavoritesScreen
+                                 groupName:_groupName
+                                groupColor:nil];
+        editWaypointsGroupOptions.delegate = self;
+        [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
+    }
+    else if ([tableData.key isEqualToString:@"analyze_on_map"] && self.trackMenuDelegate)
+    {
+        [self.trackMenuDelegate openAnalysis:_analysis withMode:EOARouteStatisticsModeAltitudeSlope];
+    }
+    else if ([tableData.key isEqualToString:@"edit"] && self.trackMenuDelegate)
+    {
+        [self hide:YES completion:^{ [self.trackMenuDelegate editSegment]; }];
+    }
+    else if ([tableData.key isEqualToString:@"delete"] && self.trackMenuDelegate)
+    {
+        if (_mode == EOAEditTrackScreenWaypointsMode)
+            [self hide:YES completion:^{ [self.trackMenuDelegate openConfirmDeleteWaypointsScreen:_groupName]; }];
+        else
+            [self hide:YES completion:^{ [self.trackMenuDelegate deleteAndSaveSegment:_segment]; }];
+    }
+}
+
 #pragma mark - UITapGestureRecognizer
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
@@ -347,16 +369,17 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                        color:(UIColor *)color
 {
     if (self.trackMenuDelegate)
+    {
         [self.trackMenuDelegate changeWaypointsGroup:_groupName
                                         newGroupName:name
                                        newGroupColor:color];
+    }
     if (name)
     {
         self.titleView.text = name;
         _groupName = name;
         [self updateShown];
-        if (_tableData.firstObject.subjects.firstObject.updateData)
-            _tableData.firstObject.subjects.firstObject.updateData();
+        [self updateData:_tableData.firstObject.subjects.firstObject];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
                               withRowAnimation:UITableViewRowAnimationNone];
         [self updateColor];
@@ -449,7 +472,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast];
             cell.separatorView.hidden = isLast;
 
-            cell.switchView.on = cellData.isOn ? cellData.isOn() : NO;
+            cell.switchView.on = [self isOn:cellData];
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -485,9 +508,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-
-    if (cellData.onButtonPressed)
-        cellData.onButtonPressed();
+    [self onButtonPressed:cellData];
 }
 
 #pragma mark - Selectors
@@ -497,9 +518,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     UISwitch *switchView = (UISwitch *) sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-
-    if (cellData.onSwitch)
-        cellData.onSwitch(switchView.isOn);
+    [self onSwitch:switchView.isOn tableData:cellData];
 }
 
 - (void)onBackgroundPressed:(UIGestureRecognizer *)recognizer

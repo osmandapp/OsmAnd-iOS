@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
     [OARootViewController.instance.mapPanel.mapActions stopNavigationWithoutConfirm];
     OsmAndAppInstance app = OsmAndApp.instance;
-    if (OAAppSettings.sharedManager.simulateRouting && [app.locationServices.locationSimulation isRouteAnimating])
+    if (OAAppSettings.sharedManager.simulateNavigation && [app.locationServices.locationSimulation isRouteAnimating])
         [app.locationServices.locationSimulation startStopRouteAnimation];
 }
 

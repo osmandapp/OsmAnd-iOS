@@ -295,6 +295,17 @@
     return copy.points;
 }
 
+- (NSArray<OASimulatedLocation *> *)getSimulatedLocations
+{
+    NSMutableArray<OASimulatedLocation *> *locationList = [NSMutableArray array];
+    for (CLLocation *l in [self getPoints])
+    {
+        [locationList addObject:[[OASimulatedLocation alloc] initWithLocation:l]];
+    }
+    
+    return [NSArray arrayWithArray:locationList];
+}
+
 @end
 
 @implementation OARoutingEnvironment

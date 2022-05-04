@@ -189,7 +189,9 @@
 #define gpxRouteSegmentKey @"gpxRouteSegment"
 #define showStartFinishIconsKey @"showStartFinishIcons"
 
-#define simulateRoutingKey @"simulateRouting"
+#define simulateNavigationKey @"simulateNavigation"
+#define simulateNavigationModeKey @"simulateNavigationMode"
+#define simulateNavigationSpeedKey @"simulateNavigationSpeed"
 #define useOsmLiveForRoutingKey @"useOsmLiveForRouting"
 
 #define saveTrackToGPXKey @"saveTrackToGPX"
@@ -1082,6 +1084,88 @@
             return @"°";
         case EOACoordinateInputFormatsDdMmSs:
             return @"′";
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@interface OASimulationMode()
+
+@property (nonatomic) EOASimulationMode mode;
+
+@end
+
+@implementation OASimulationMode
+
++ (instancetype)withMode:(EOASimulationMode)mode
+{
+    OASimulationMode *obj = [[OASimulationMode alloc] init];
+    if (obj)
+    {
+        obj.mode = mode;
+    }
+    return obj;
+}
+
++ (NSArray<OASimulationMode *> *)values
+{
+    return @[[OASimulationMode withMode:EOASimulationModePreview],
+             [OASimulationMode withMode:EOASimulationModeConstant],
+             [OASimulationMode withMode:EOASimulationModeRealistic]];
+}
+
++ (OASimulationMode *)getMode:(NSString *)key
+{
+    for (OASimulationMode *mode in [OASimulationMode values])
+    {
+        if ([[OASimulationMode toKey:mode.mode] isEqualToString:key])
+            return mode;
+    }
+    return nil;
+}
+
++ (NSString *)toKey:(EOASimulationMode)mode
+{
+    switch (mode)
+    {
+        case EOASimulationModePreview:
+            return @"preview_mode";
+        case EOASimulationModeConstant:
+            return @"const_mode";
+        case EOASimulationModeRealistic:
+            return @"real_mode";
+        default:
+            return @"";
+    }
+}
+
++ (NSString *)toTitle:(EOASimulationMode)mode
+{
+    switch (mode)
+    {
+        case EOASimulationModePreview:
+            return @"simulation_preview_mode_title";
+        case EOASimulationModeConstant:
+            return @"simulation_constant_mode_title";
+        case EOASimulationModeRealistic:
+            return @"simulation_real_mode_title";
+        default:
+            return @"";
+    }
+}
+
++ (NSString *)toDescription:(EOASimulationMode)mode
+{
+    switch (mode)
+    {
+        case EOASimulationModePreview:
+            return @"simulation_preview_mode_desc";
+        case EOASimulationModeConstant:
+            return @"simulation_constant_mode_desc";
+        case EOASimulationModeRealistic:
+            return @"simulation_real_mode_desc";
         default:
             return @"";
     }
@@ -3618,7 +3702,9 @@
         [_profilePreferences setObject:_announceWpt forKey:@"announce_wpt"];
         [_profilePreferences setObject:_showScreenAlerts forKey:@"show_routing_alarms"];
 
-        _simulateRouting = [[NSUserDefaults standardUserDefaults] objectForKey:simulateRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:simulateRoutingKey] : NO;
+        _simulateNavigation = [[NSUserDefaults standardUserDefaults] objectForKey:simulateNavigationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:simulateNavigationKey] : NO;
+        _simulateNavigationMode = [[NSUserDefaults standardUserDefaults] objectForKey:simulateNavigationModeKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:simulateNavigationModeKey] : NO;
+        _simulateNavigationSpeed = [[NSUserDefaults standardUserDefaults] objectForKey:simulateNavigationSpeedKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:simulateNavigationSpeedKey] : NO;
 
         _useOsmLiveForRouting = [[NSUserDefaults standardUserDefaults] objectForKey:useOsmLiveForRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useOsmLiveForRoutingKey] : YES;
 
@@ -4461,10 +4547,10 @@
     [[NSUserDefaults standardUserDefaults] setBool:_disableComplexRouting forKey:disableComplexRoutingKey];
 }
 
-- (void) setSimulateRouting:(BOOL)simulateRouting
+- (void) setSimulateNavigation:(BOOL)simulateRouting
 {
-    _simulateRouting = simulateRouting;
-    [[NSUserDefaults standardUserDefaults] setBool:_simulateRouting forKey:simulateRoutingKey];
+    _simulateNavigation = simulateRouting;
+    [[NSUserDefaults standardUserDefaults] setBool:_simulateNavigation forKey:simulateNavigationKey];
     [[[OsmAndApp instance] simulateRoutingObservable] notifyEvent];
 }
 

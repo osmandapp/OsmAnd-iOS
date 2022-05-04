@@ -3662,7 +3662,7 @@ typedef enum
         if (_settings.applicationMode.get != [_routingHelper getAppMode])
             [_settings setApplicationModePref:[_routingHelper getAppMode]];
 
-        if (_settings.simulateRouting && ![_app.locationServices.locationSimulation isRouteAnimating])
+        if (_settings.simulateNavigation && ![_app.locationServices.locationSimulation isRouteAnimating])
             [_app.locationServices.locationSimulation startStopRouteAnimation];
     }
     else
@@ -3687,7 +3687,7 @@ typedef enum
             [self updateRouteButton];
             [self updateToolbar];
             
-            if (_settings.simulateRouting && ![_app.locationServices.locationSimulation isRouteAnimating])
+            if (_settings.simulateNavigation && ![_app.locationServices.locationSimulation isRouteAnimating])
                 [_app.locationServices.locationSimulation startStopRouteAnimation];
         }
     }
@@ -3701,7 +3701,7 @@ typedef enum
     else
         [_mapActions stopNavigationWithoutConfirm];
 
-    if (_settings.simulateRouting && [_app.locationServices.locationSimulation isRouteAnimating])
+    if (_settings.simulateNavigation && [_app.locationServices.locationSimulation isRouteAnimating])
         [_app.locationServices.locationSimulation startStopRouteAnimation];
 }
 

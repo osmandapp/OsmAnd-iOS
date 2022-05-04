@@ -762,12 +762,12 @@
 
 - (BOOL) isSelected
 {
-    return self.settings.simulateRouting;
+    return self.settings.simulateNavigation;
 }
 
 - (void) setSelected:(BOOL)isChecked
 {
-    [self.settings setSimulateRouting:isChecked];
+    [self.settings setSimulateNavigation:isChecked];
     if (self.delegate)
         [self.delegate updateParameters];
 }

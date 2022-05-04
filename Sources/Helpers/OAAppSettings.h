@@ -25,6 +25,8 @@
 #define kReceiptValidationMinPeriod 60.0 * 60.0 * 24.0 * 1.0 // 1 day
 #define kReceiptValidationMaxPeriod 60.0 * 60.0 * 24.0 * 30.0 // 30 days
 
+#define kSimMinSpeed 5 / 3.6f
+
 @class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration;
 
 typedef NS_ENUM(NSInteger, EOARouteService)
@@ -233,6 +235,25 @@ typedef NS_ENUM(NSInteger, EOACoordinateInputFormats)
 + (int) toThirdPartSymbolsCount:(EOACoordinateInputFormats)cif;
 + (NSString *) toFirstSeparator:(EOACoordinateInputFormats)cif;
 + (NSString *) toSecondSeparator:(EOACoordinateInputFormats)cif;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOASimulationMode)
+{
+    EOASimulationModePreview = 0,
+    EOASimulationModeConstant,
+    EOASimulationModeRealistic
+};
+
+@interface OASimulationMode : NSObject
+
+@property (nonatomic, readonly) EOASimulationMode mode;
+
++ (NSArray<OASimulationMode *> *)values;
++ (EOASimulationMode)getMode:(NSString *)key;
++ (NSString *)toKey:(EOASimulationMode)mode;
++ (NSString *)toTitle:(EOASimulationMode)mode;
++ (NSString *)toDescription:(EOASimulationMode)mode;
 
 @end
 
@@ -813,7 +834,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *centerPositionOnMap;
 @property (nonatomic) OACommonBoolean *showDistanceRuler;
 
-@property (assign, nonatomic) BOOL simulateRouting;
+@property (assign, nonatomic) BOOL simulateNavigation;
+@property (nonatomic) NSString *simulateNavigationMode;
+@property (assign, nonatomic) float simulateNavigationSpeed;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
 @property (nonatomic) OACommonRulerWidgetMode *rulerMode;

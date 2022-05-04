@@ -107,13 +107,15 @@
     return res;
 }
 
-- (void)updateHeader:(EOATrackMenuHudTab)selectedTab
-        currentTrack:(BOOL)currentTrack
+- (void)updateSelectedTab:(EOATrackMenuHudTab)selectedTab
+{
+    _selectedTab = selectedTab;
+}
+
+- (void)updateHeader:(BOOL)currentTrack
           shownTrack:(BOOL)shownTrack
                title:(NSString *)title
 {
-    _selectedTab = selectedTab;
-
     self.backgroundColor = _selectedTab != EOATrackMenuHudActionsTab
             ? UIColor.whiteColor : UIColorFromRGB(color_bottom_sheet_background);
 
@@ -200,8 +202,7 @@
         [self makeOnlyHeader:YES];
     }
 
-    self.groupsCollectionView.hidden = _selectedTab != EOATrackMenuHudPointsTab
-            || (_selectedTab == EOATrackMenuHudPointsTab && _groupsData.count == 0);
+    self.groupsCollectionView.hidden = _selectedTab != EOATrackMenuHudPointsTab || ![self.groupsCollectionView hasValues];
 
     [self updateFrame:self.frame.size.width];
 
@@ -421,7 +422,9 @@
 - (void)setDescription
 {
     NSString *description = self.trackMenuDelegate ? [self.trackMenuDelegate generateDescription] : @"";
-    description = [OAWikiArticleHelper getFirstParagraph:description];
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
+        description = [OAWikiArticleHelper getFirstParagraph:description];
+
     BOOL hasDescription = description && description.length > 0;
 
     [self.descriptionView setText:description];
@@ -445,12 +448,9 @@
 
 - (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index
 {
-    BOOL hasData = data && data.count > 0;
-
-    _groupsData = data;
     [self.groupsCollectionView setValues:data withSelectedIndex:index];
     [self.groupsCollectionView reloadData];
-    self.groupsCollectionView.hidden = !hasData;
+    self.groupsCollectionView.hidden = ![self.groupsCollectionView hasValues];
 }
 
 - (CGFloat)getInitialHeight:(CGFloat)additionalHeight

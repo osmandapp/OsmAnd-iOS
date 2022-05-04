@@ -81,6 +81,14 @@
     }
 }
 
+- (void)updateFolderName:(NSString *)newFilePath
+{
+    _gpxFilePath = newFilePath;
+    _gpxFileName = [_gpxFilePath lastPathComponent];
+    _gpxTitle = [_gpxFileName stringByDeletingPathExtension];
+    _gpxFolderName = [newFilePath stringByDeletingLastPathComponent];
+}
+
 @end
 
 
@@ -316,22 +324,6 @@
             NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:item.gpxFilePath];
             OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:path];
             item.bounds = doc.bounds;
-            return YES;
-        }
-    }
-    return NO;
-}
-
--(BOOL)updateGPXFolderName:(NSString *)newFilePath oldFilePath:(NSString *)oldFilePath
-{
-    for (OAGPX *item in gpxList)
-    {
-        if ([item.gpxFilePath isEqualToString:oldFilePath])
-        {
-            item.gpxFilePath = newFilePath;
-            item.gpxFileName = [item.gpxFilePath lastPathComponent];
-            item.gpxTitle = [item.gpxFileName stringByDeletingPathExtension];
-            item.gpxFolderName = [newFilePath stringByDeletingLastPathComponent];
             return YES;
         }
     }

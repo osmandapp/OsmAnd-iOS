@@ -92,7 +92,7 @@
     NSMutableDictionary<NSString *, NSDictionary *> *originalData = [NSMutableDictionary dictionary];
     for (OAGPXTableSectionData *sectionData in _tableData)
     {
-        OAGPXTableCellData *groupCellData = sectionData.cells.firstObject;
+        OAGPXTableCellData *groupCellData = sectionData.subjects.firstObject;
         originalData[groupCellData.key] = @{
                 kCellRightIconName: groupCellData.rightIconName,
                 kCellToggle: @(groupCellData.toggle),
@@ -168,7 +168,7 @@
 {
     for (OAGPXTableSectionData *sectionData in _tableData)
     {
-        OAGPXTableCellData *groupCellData = sectionData.cells.firstObject;
+        OAGPXTableCellData *groupCellData = sectionData.subjects.firstObject;
         [groupCellData setData:@{
                 kCellRightIconName: _originalData[groupCellData.key][kCellRightIconName],
                 kCellToggle: _originalData[groupCellData.key][kCellToggle],
@@ -256,7 +256,7 @@
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
-    return _tableData[indexPath.section].cells[indexPath.row];
+    return _tableData[indexPath.section].subjects[indexPath.row];
 }
 
 - (void)openCloseGroupButtonAction:(id)sender
@@ -295,7 +295,7 @@
     {
         NSString *groupName = waypointSortedGroupNames[i];
         _selectedWaypointGroups[groupName] = [_waypointGroups[groupName] mutableCopy];
-        OAGPXTableCellData *groupCellData = _tableData[i].cells.firstObject;
+        OAGPXTableCellData *groupCellData = _tableData[i].subjects.firstObject;
         if (groupCellData.updateData)
             groupCellData.updateData();
     }
@@ -360,7 +360,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _tableData[section].cells.firstObject.toggle ? _tableData[section].cells.count : 1;
+    return _tableData[section].subjects.firstObject.toggle ? _tableData[section].subjects.count : 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath

@@ -8,7 +8,6 @@
 
 #import "OABaseScrollableHudViewController.h"
 
-#define kCellKey @"key"
 #define kCellType @"type"
 #define kCellTitle @"title"
 #define kCellDesc @"desc"
@@ -17,13 +16,13 @@
 #define kCellToggle @"toggle"
 #define kCellTintColor @"tint_color"
 
-#define kSectionCells @"cells"
 #define kSectionHeader @"header"
 #define kSectionHeaderHeight @"header_height"
 #define kSectionFooter @"footer"
 #define kSectionFooterHeight @"footer_height"
 
-#define kTableSections @"sections"
+#define kTableKey @"key"
+#define kTableSubjects @"subjects"
 #define kTableValues @"values"
 
 typedef NS_ENUM(NSUInteger, EOATrackHudMode)
@@ -37,65 +36,74 @@ typedef BOOL(^OAGPXTableCellDataIsOn)();
 typedef void(^OAGPXTableDataUpdateData)();
 typedef void(^OAGPXTableDataUpdateProperty)(id value);
 
-@class OAGPX, OAGPXDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
+@class OAGPX, OAGPXMutableDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
 
-@interface OAGPXTableCellData : NSObject
-
-+ (instancetype)withData:(NSDictionary *)data;
+@interface OAGPXBaseTableData : NSObject
 
 @property (nonatomic, readonly) NSString *key;
+@property (nonatomic, readonly) NSMutableDictionary<NSString *, id> *values;
+@property (nonatomic, readonly) NSMutableArray<OAGPXBaseTableData *> *subjects;
+
++ (instancetype)withData:(NSDictionary *)data;
+- (void)setData:(NSDictionary *)data;
+- (OAGPXBaseTableData *)getSubject:(NSString *)key;
+
+@end
+
+@interface OAGPXTableCellData : OAGPXBaseTableData
+
 @property (nonatomic, readonly) NSString *type;
-@property (nonatomic, readonly) NSDictionary *values;
 @property (nonatomic, readonly) NSString *title;
 @property (nonatomic, readonly) NSString *desc;
 @property (nonatomic, readonly) UIImage *leftIcon;
 @property (nonatomic, readonly) NSString *rightIconName;
 @property (nonatomic, readonly) BOOL toggle;
 @property (nonatomic, readonly) NSInteger tintColor;
+@property (nonatomic, readonly) NSMutableArray<OAGPXTableCellData *> *subjects;
+
++ (instancetype)withData:(NSDictionary *)data;
+- (OAGPXTableCellData *)getSubject:(NSString *)key;
+
 @property (nonatomic) OAGPXTableCellDataOnSwitch onSwitch;
 @property (nonatomic) OAGPXTableCellDataIsOn isOn;
 @property (nonatomic) OAGPXTableDataUpdateData updateData;
 @property (nonatomic) OAGPXTableDataUpdateData onButtonPressed;
 @property (nonatomic) OAGPXTableDataUpdateProperty updateProperty;
 
-- (void)setData:(NSDictionary *)data;
-
 @end
 
-@interface OAGPXTableSectionData : NSObject
+@interface OAGPXTableSectionData : OAGPXBaseTableData
 
-+ (instancetype)withData:(NSDictionary *)data;
-
-@property (nonatomic, readonly) NSMutableArray<OAGPXTableCellData *> *cells;
 @property (nonatomic, readonly) NSString *header;
 @property (nonatomic, readonly) CGFloat headerHeight;
 @property (nonatomic, readonly) NSString *footer;
 @property (nonatomic, readonly) CGFloat footerHeight;
-@property (nonatomic, readonly) NSDictionary *values;
+@property (nonatomic, readonly) NSMutableArray<OAGPXTableCellData *> *subjects;
+
++ (instancetype)withData:(NSDictionary *)data;
+- (OAGPXTableCellData *)getSubject:(NSString *)key;
+
 @property (nonatomic) OAGPXTableDataUpdateData updateData;
 @property (nonatomic) OAGPXTableDataUpdateProperty updateProperty;
-
-- (void)setData:(NSDictionary *)data;
-- (BOOL)containsCell:(NSString *)key;
 
 @end
 
-@interface OAGPXTableData : NSObject
+@interface OAGPXTableData : OAGPXBaseTableData
+
+@property (nonatomic, readonly) NSMutableArray<OAGPXTableSectionData *> *subjects;
 
 + (instancetype)withData:(NSDictionary *)data;
+- (OAGPXTableSectionData *)getSubject:(NSString *)key;
 
-@property (nonatomic, readonly) NSMutableArray<OAGPXTableSectionData *> *sections;
 @property (nonatomic) OAGPXTableDataUpdateData updateData;
 @property (nonatomic) OAGPXTableDataUpdateProperty updateProperty;
-
-- (void)setData:(NSDictionary *)data;
 
 @end
 
 @interface OABaseTrackMenuHudViewController : OABaseScrollableHudViewController
 
 @property (nonatomic, readonly) OAGPX *gpx;
-@property (nonatomic, readonly) OAGPXDocument *doc;
+@property (nonatomic, readonly) OAGPXMutableDocument *doc;
 @property (nonatomic, readonly) OAGPXTrackAnalysis *analysis;
 @property (nonatomic, readonly) BOOL isCurrentTrack;
 @property (nonatomic, readonly) BOOL isShown;
@@ -108,8 +116,9 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 
 - (instancetype)initWithGpx:(OAGPX *)gpx;
 
-- (void)updateGpxData;
+- (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDocument;
 - (void)updateAnalysis;
+- (BOOL)changeTrackVisible;
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem
                                    firstAttribute:(NSLayoutAttribute)firstAttribute

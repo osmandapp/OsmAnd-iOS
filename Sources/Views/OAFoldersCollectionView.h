@@ -25,6 +25,7 @@
 @property (nonatomic) NSIndexPath *cellIndex;
 
 - (void)setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(NSInteger)index;
+- (BOOL)hasValues;
 - (void)setSelectedIndex:(NSInteger)index;
 - (NSInteger)getSelectedIndex;
 - (void)updateContentOffset;

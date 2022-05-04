@@ -571,6 +571,13 @@ colorizationScheme:(int)colorizationScheme
     return lineWidth * kWidthCorrectionValue;
 }
 
+- (void)updateCachedGpxItem:(NSString *)filePath
+{
+    NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[filePath];
+    if (cachedTrack)
+        cachedTrack[@"gpx"] = [self getGpxItem:QString::fromNSString(filePath)];
+}
+
 - (int) getDefaultRadiusPoi
 {
     int r;

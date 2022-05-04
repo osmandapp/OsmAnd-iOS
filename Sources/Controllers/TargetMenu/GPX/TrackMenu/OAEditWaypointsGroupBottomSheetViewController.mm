@@ -123,7 +123,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     if (_mode == EOAEditTrackScreenWaypointsMode)
     {
         OAGPXTableCellData *showOnMapCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"control_show_on_map",
+                kTableKey: @"control_show_on_map",
                 kCellType: [OATitleSwitchRoundCell getCellIdentifier],
                 kTableValues: @{ @"bool_value": @(_isShown) },
                 kCellTitle: OALocalizedString(@"map_settings_show")
@@ -141,9 +141,9 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
         [controlCells addObject:showOnMapCellData];
 
-        OAGPXTableSectionData *controlsSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: controlCells }];
+        OAGPXTableSectionData *controlsSectionData = [OAGPXTableSectionData withData:@{ kTableSubjects: controlCells }];
         controlsSectionData.updateData = ^() {
-            for (OAGPXTableCellData *cellData in controlsSectionData.cells)
+            for (OAGPXTableCellData *cellData in controlsSectionData.subjects)
             {
                 if (cellData.updateData)
                     cellData.updateData();
@@ -153,7 +153,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         [tableSections addObject:controlsSectionData];
 
         OAGPXTableCellData *renameCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"rename",
+                kTableKey: @"rename",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellRightIconName: @"ic_custom_edit",
                 kCellTitle: OALocalizedString(@"fav_rename")
@@ -169,7 +169,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         };
 
         OAGPXTableCellData *changeColorCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"change_color",
+                kTableKey: @"change_color",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellRightIconName: @"ic_custom_appearance",
                 kCellTitle: OALocalizedString(@"change_color")
@@ -184,10 +184,10 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
         };
 
-        [tableSections addObject:[OAGPXTableSectionData withData:@{ kSectionCells: @[renameCellData, changeColorCellData] }]];
+        [tableSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[renameCellData, changeColorCellData] }]];
 
         OAGPXTableCellData *copyToFavoritesCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"copy_to_favorites",
+                kTableKey: @"copy_to_favorites",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellRightIconName: @"ic_custom_trip_edit",
                 kCellTitle: OALocalizedString(@"copy_to_map_favorites")
@@ -202,12 +202,12 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
         };
 
-        [tableSections addObject:[OAGPXTableSectionData withData:@{ kSectionCells: @[copyToFavoritesCellData] }]];
+        [tableSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[copyToFavoritesCellData] }]];
     }
     else
     {
         OAGPXTableCellData *analyzeOnMapCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"analyze_on_map",
+                kTableKey: @"analyze_on_map",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"analyze_on_map"),
                 kCellRightIconName: @"ic_custom_graph"
@@ -219,7 +219,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         };
 
         OAGPXTableCellData *editCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"edit",
+                kTableKey: @"edit",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellRightIconName: @"ic_custom_trip_edit",
                 kCellTitle: OALocalizedString(@"shared_string_edit")
@@ -231,11 +231,11 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             }];
         };
 
-        [tableSections addObject:[OAGPXTableSectionData withData:@{ kSectionCells: @[analyzeOnMapCellData, editCellData] }]];
+        [tableSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[analyzeOnMapCellData, editCellData] }]];
     }
 
     OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"delete",
+            kTableKey: @"delete",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"shared_string_delete"),
             kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
@@ -259,7 +259,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         }
     };
 
-    [tableSections addObject:[OAGPXTableSectionData withData:@{ kSectionCells: @[deleteCellData] }]];
+    [tableSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[deleteCellData] }]];
 
     _tableData = tableSections;
 }
@@ -285,7 +285,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     NSInteger cellsCount = 0;
     for (NSInteger i = 0; i < sectionsCount; i++)
     {
-        cellsCount += _tableData[i].cells.count;
+        cellsCount += _tableData[i].subjects.count;
     }
 
     return self.headerView.frame.size.height + (sectionsCount - 1) * 20. + 23.
@@ -305,7 +305,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
-    return _tableData[indexPath.section].cells[indexPath.row];
+    return _tableData[indexPath.section].subjects[indexPath.row];
 }
 
 - (void)onShowHidePressed:(BOOL)show
@@ -355,8 +355,8 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         self.titleView.text = name;
         _groupName = name;
         [self updateShown];
-        if (_tableData.firstObject.cells.firstObject.updateData)
-            _tableData.firstObject.cells.firstObject.updateData();
+        if (_tableData.firstObject.subjects.firstObject.updateData)
+            _tableData.firstObject.subjects.firstObject.updateData();
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
                               withRowAnimation:UITableViewRowAnimationNone];
         [self updateColor];
@@ -387,7 +387,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _tableData[section].cells.count;
+    return _tableData[section].subjects.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

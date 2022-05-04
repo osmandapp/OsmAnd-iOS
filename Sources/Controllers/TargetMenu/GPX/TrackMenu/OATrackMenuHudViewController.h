@@ -28,15 +28,17 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (void)openAnalysis:(EOARouteStatisticsMode)modeType;
 - (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
             withMode:(EOARouteStatisticsMode)mode;
+- (OAGPXTrackAnalysis *)getGeneralAnalysis;
 
-- (NSDictionary<NSString *, NSDictionary *> *)updateSegmentsData;
+- (OATrkSegment *)getGeneralSegment;
+- (NSArray<OATrkSegment *> *)getSegments;
 - (void)editSegment;
 - (void)deleteAndSaveSegment:(OATrkSegment *)segment;
 - (void)openEditSegmentScreen:(OATrkSegment *)segment
                      analysis:(OAGPXTrackAnalysis *)analysis;
 
 - (void)refreshLocationServices;
-- (NSDictionary<NSString *, NSArray<OAGpxWptItem *> *> *)getWaypointsData;
+- (NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *)getWaypointsData;
 - (NSArray<NSString *> *)getWaypointSortedGroups;
 - (NSInteger)getWaypointsCount:(NSString *)groupName;
 - (NSInteger)getWaypointsGroupColor:(NSString *)groupName;
@@ -49,6 +51,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
                newGroupColor:(UIColor *)newGroupColor;
 - (void)openConfirmDeleteWaypointsScreen:(NSString *)groupName;
 - (void)openDeleteWaypointsScreen:(NSArray *)sectionsData;
+//- (void)openDeleteWaypointsScreen:(OAGPXTableData *)tableData;
 - (void)openWaypointsGroupOptionsScreen:(NSString *)groupName;
 - (void)openNewWaypointScreen;
 - (NSString *)checkGroupName:(NSString *)groupName;
@@ -84,6 +87,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 
 - (void)stopLocationServices;
 - (BOOL)openedFromMap;
+- (void)reloadSections:(NSIndexSet *)sections;
 
 @end
 

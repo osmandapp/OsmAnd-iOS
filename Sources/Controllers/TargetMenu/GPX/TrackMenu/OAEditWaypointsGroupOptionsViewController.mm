@@ -109,8 +109,8 @@
     if (_screenType == EOAEditWaypointsGroupRenameScreen || _screenType == EOAEditWaypointsGroupCopyToFavoritesScreen)
     {
         sectionData = [OAGPXTableSectionData withData:@{
-                kSectionCells: @[[OAGPXTableCellData withData:@{
-                        kCellKey: @"new_name",
+                kTableSubjects: @[[OAGPXTableCellData withData:@{
+                        kTableKey: @"new_name",
                         kCellType: [OATextInputCell getCellIdentifier],
                         kCellTitle: _groupName,
                         kCellDesc: OALocalizedString(@"fav_enter_group_name")
@@ -121,7 +121,7 @@
     else if (_screenType == EOAEditWaypointsGroupColorScreen)
     {
         OAGPXTableCellData *cellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_grid",
+                kTableKey: @"color_grid",
                 kCellType: [OAColorsTableViewCell getCellIdentifier],
                 kTableValues: @{
                         @"int_value": @([OAUtilities colorToNumber:_selectedColor.color]),
@@ -141,7 +141,7 @@
         };
 
         sectionData = [OAGPXTableSectionData withData:@{
-                kSectionCells: @[cellData],
+                kTableSubjects: @[cellData],
                 kSectionHeader: OALocalizedString(@"default_color"),
                 kSectionFooter: OALocalizedString(@"default_color_descr")
         }];
@@ -180,7 +180,7 @@
                     visibleGroupsCount++;
 
                 OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
-                        kCellKey: [@"group_" stringByAppendingString:groupName],
+                        kTableKey: [@"cell_waypoints_group_" stringByAppendingString:groupName],
                         kCellType: [OAIconTextDividerSwitchCell getCellIdentifier],
                         kCellTitle: groupName,
                         kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
@@ -219,7 +219,7 @@
             }
 
             hideShowAllCellData = [OAGPXTableCellData withData:@{
-                    kCellKey: @"hide_show_all",
+                    kTableKey: @"hide_show_all",
                     kCellType: [OAIconTitleValueCell getCellIdentifier],
                     kCellTitle: visibleGroupsCount == 0
                             ? OALocalizedString(@"shared_string_show_all")
@@ -253,13 +253,13 @@
             [cellsData insertObject:hideShowAllCellData atIndex:0];
 
             sectionData = [OAGPXTableSectionData withData:@{
-                    kSectionCells: cellsData,
+                    kTableSubjects: cellsData,
                     kSectionHeader: OALocalizedString(@"groups")
             }];
         }
     }
     sectionData.updateData = ^() {
-        for (OAGPXTableCellData *cellData in sectionData.cells)
+        for (OAGPXTableCellData *cellData in sectionData.subjects)
         {
             if (cellData.updateData)
                 cellData.updateData();
@@ -271,7 +271,7 @@
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
-    return _tableData[indexPath.section].cells[indexPath.row];
+    return _tableData[indexPath.section].subjects[indexPath.row];
 }
 
 - (void)onDoneButtonPressed
@@ -291,7 +291,7 @@
         if (_screenType == EOAEditWaypointsGroupVisibleScreen
                 && [self.delegate respondsToSelector:@selector(setWaypointsGroupVisible:show:)])
         {
-            for (OAGPXTableCellData *cellData in _tableData.firstObject.cells)
+            for (OAGPXTableCellData *cellData in _tableData.firstObject.subjects)
             {
                 if (![cellData.key isEqualToString:@"hide_show_all"])
                     [self.delegate setWaypointsGroupVisible:cellData.title show:cellData.isOn ? cellData.isOn() : NO];
@@ -303,7 +303,7 @@
 - (NSInteger)waypointGroupsVisibleCount
 {
     NSInteger count = 0;
-    for (OAGPXTableCellData *cellData in _tableData.firstObject.cells)
+    for (OAGPXTableCellData *cellData in _tableData.firstObject.subjects)
     {
         if (![cellData.key isEqualToString:@"hide_show_all"] && cellData.isOn && cellData.isOn())
             count++;
@@ -320,7 +320,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _tableData[section].cells.count;
+    return _tableData[section].subjects.count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

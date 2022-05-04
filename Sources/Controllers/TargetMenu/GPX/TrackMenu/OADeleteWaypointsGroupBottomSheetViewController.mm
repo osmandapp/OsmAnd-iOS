@@ -78,7 +78,7 @@
 - (void)generateData
 {
     OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"delete",
+            kTableKey: @"delete",
             kCellType: [OAFilledButtonCell getCellIdentifier],
             kTableValues: @{ @"title_color_value_integer": @color_icon_color_night },
             kCellTitle: OALocalizedString(@"shared_string_delete"),
@@ -97,13 +97,13 @@
 
     _tableData = @[
             [OAGPXTableSectionData withData:@{
-                    kSectionCells: @[[OAGPXTableCellData withData:@{
-                            kCellKey: @"confirm",
+                    kTableSubjects: @[[OAGPXTableCellData withData:@{
+                            kTableKey: @"confirm",
                             kCellType: [OATextLineViewCell getCellIdentifier],
                             kCellTitle: [NSString stringWithFormat:OALocalizedString(@"delete_group_confirm"), _groupName]
                     }]]
             }],
-            [OAGPXTableSectionData withData:@{ kSectionCells: @[deleteCellData] }]
+            [OAGPXTableSectionData withData:@{ kTableSubjects: @[deleteCellData] }]
     ];
 }
 
@@ -137,7 +137,7 @@
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
-    return _tableData[indexPath.section].cells[indexPath.row];
+    return _tableData[indexPath.section].subjects[indexPath.row];
 }
 
 #pragma mark - UITableViewDataSource
@@ -149,7 +149,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _tableData[section].cells.count;
+    return _tableData[section].subjects.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -16,8 +16,6 @@
 
 #define kButtonsDividerTag 150
 
-typedef void(^OAPublicTransportOptionsCellDataOnSwitch)(BOOL is, NSIndexPath *indexPath);
-
 @interface OAPublicTransportOptionsBottomSheetScreen ()
 
 @end
@@ -27,7 +25,7 @@ typedef void(^OAPublicTransportOptionsCellDataOnSwitch)(BOOL is, NSIndexPath *in
     OAMapStyleSettings *_styleSettings;
     OAPublicTransportOptionsBottomSheetViewController *vwController;
 
-    NSArray<NSArray *> *_data;
+    NSArray<NSArray<NSMutableDictionary *> *> *_data;
     NSInteger _transportRoutesSection;
 }
 
@@ -57,27 +55,21 @@ typedef void(^OAPublicTransportOptionsCellDataOnSwitch)(BOOL is, NSIndexPath *in
 {
     NSMutableArray *data = [NSMutableArray array];
 
-    [data addObject:@[@{
-            @"type" : [OABottomSheetHeaderIconCell getCellIdentifier],
-            @"title" : OALocalizedString(@"transport"),
-            @"description" : @""
-    }]];
+    NSMutableDictionary *headerIconCell = [NSMutableDictionary dictionary];
+    headerIconCell[@"type"] = [OABottomSheetHeaderIconCell getCellIdentifier];
+    headerIconCell[@"title"] = OALocalizedString(@"transport");
+    headerIconCell[@"description"] = @"";
+    [data addObject:@[headerIconCell]];
 
     NSMutableArray *section = [NSMutableArray array];
     NSArray *parameters = [_styleSettings getParameters:TRANSPORT_CATEGORY];
     for (OAMapStyleParameter *parameter in parameters)
     {
         NSMutableDictionary *cell = [NSMutableDictionary dictionary];
+        cell[@"parameter"] = parameter;
         cell[@"title"] = parameter.title;
         cell[@"value"] = @([parameter.storedValue isEqualToString:@"true"]);
         cell[@"type"] = [OAIconTextDividerSwitchCell getCellIdentifier];
-        cell[@"switch"] = ^(BOOL isOn, NSIndexPath *indexPath) {
-            parameter.value = isOn ? @"true" : @"false";
-            [_styleSettings save:parameter];
-            cell[@"value"] = @(isOn);
-            [self.tblView reloadRowsAtIndexPaths:@[indexPath]
-                                withRowAnimation:UITableViewRowAnimationAutomatic];
-        };
         cell[@"icon"] = [OAMapStyleSettings getTransportIconForName:parameter.name];
         cell[@"index"] = @([OAMapStyleSettings getTransportSortIndexForName:parameter.name]);
 
@@ -97,6 +89,16 @@ typedef void(^OAPublicTransportOptionsCellDataOnSwitch)(BOOL is, NSIndexPath *in
     }]];
 
     _data = data;
+}
+
+- (void)onSwitch:(BOOL)toggle cell:(NSMutableDictionary *)cell indexPath:(NSIndexPath *)indexPath
+{
+    OAMapStyleParameter *parameter = cell[@"parameter"];
+    parameter.value = toggle ? @"true" : @"false";
+    [_styleSettings save:parameter];
+    cell[@"value"] = @(toggle);
+    [self.tblView reloadRowsAtIndexPaths:@[indexPath]
+                        withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void) setupView
@@ -235,9 +237,8 @@ typedef void(^OAPublicTransportOptionsCellDataOnSwitch)(BOOL is, NSIndexPath *in
     if (switchView)
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
-        NSDictionary *item = _data[indexPath.section][indexPath.row];
-        if (item[@"switch"])
-            ((OAPublicTransportOptionsCellDataOnSwitch) item[@"switch"])(switchView.isOn, indexPath);
+        NSMutableDictionary *item = _data[indexPath.section][indexPath.row];
+        [self onSwitch:switchView.isOn cell:item indexPath:indexPath];
     }
 }
 

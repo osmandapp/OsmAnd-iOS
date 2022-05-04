@@ -89,7 +89,6 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *groupsButtonTrailingConstraint;
 
 @property (nonatomic) OAGPX *gpx;
-@property (nonatomic) OAGPXMutableDocument *doc;
 @property (nonatomic) OAGPXTrackAnalysis *analysis;
 @property (nonatomic) BOOL isShown;
 
@@ -129,7 +128,7 @@
     BOOL _isViewVisible;
 }
 
-@dynamic gpx, doc, analysis, isShown, backButton, statusBarBackgroundView, contentContainer;
+@dynamic gpx, analysis, isShown, backButton, statusBarBackgroundView, contentContainer;
 
 - (instancetype)initWithGpx:(OAGPX *)gpx
 {
@@ -290,6 +289,7 @@
         [self.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
         if (onComplete)
             onComplete();
+        [_headerView removeFromSuperview];
     }];
 }
 

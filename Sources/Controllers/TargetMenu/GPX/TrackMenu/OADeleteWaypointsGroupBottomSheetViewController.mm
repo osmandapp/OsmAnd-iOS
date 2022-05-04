@@ -84,16 +84,6 @@
             kCellTitle: OALocalizedString(@"shared_string_delete"),
             kCellTintColor: @color_primary_red
     }];
-    deleteCellData.onButtonPressed = ^() {
-        [self hide:YES completion:^{
-            if (self.trackMenuDelegate)
-            {
-                [self.trackMenuDelegate deleteWaypointsGroup:_groupName
-                                           selectedWaypoints:nil];
-                [self.trackMenuDelegate refreshLocationServices];
-            }
-        }];
-    };
 
     _tableData = @[
             [OAGPXTableSectionData withData:@{
@@ -138,6 +128,20 @@
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
     return _tableData[indexPath.section].subjects[indexPath.row];
+}
+
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+{
+    if (!tableData)
+        return;
+
+    if ([tableData.key isEqualToString:@"delete"] && self.trackMenuDelegate)
+    {
+        [self hide:YES completion:^{
+            [self.trackMenuDelegate deleteWaypointsGroup:_groupName selectedWaypoints:nil];
+            [self.trackMenuDelegate refreshLocationServices];
+        }];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -225,9 +229,7 @@
     UIButton *switchView = (UIButton *) sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-
-    if (cellData.onButtonPressed)
-        cellData.onButtonPressed();
+    [self onButtonPressed:cellData];
 }
 
 @end

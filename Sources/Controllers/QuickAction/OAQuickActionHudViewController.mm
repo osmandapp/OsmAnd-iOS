@@ -128,17 +128,7 @@
     [self setupQuickActionBtnVisibility];
 }
 
-- (void) updateViewVisibilityAnimated:(BOOL)isAnimated
-{
-    [self setupQuickActionBtnVisibilityAnimated:isAnimated];
-}
-
 - (void) setupQuickActionBtnVisibility
-{
-    [self setupQuickActionBtnVisibilityAnimated:YES];
-}
-
-- (void) setupQuickActionBtnVisibilityAnimated:(BOOL)isAnimated
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     //    contextMenuLayer.isInChangeMarkerPositionMode() ||
@@ -150,19 +140,10 @@
     
     [UIView animateWithDuration:.25 animations:^{
         _quickActionFloatingButton.alpha = hideQuickButton ? 0 : 1;
-        if (isAnimated)
-        {
-            [self setQuickActionButtonMargin];
-            if (hideQuickButton)
-            {
-                _quickActionFloatingButton.frame = CGRectMake(_quickActionFloatingButton.frame.origin.x + DeviceScreenWidth, _quickActionFloatingButton.frame.origin.y, _quickActionFloatingButton.frame.size.width, _quickActionFloatingButton.frame.size.height);
-            }
-        }
     } completion:^(BOOL finished) {
         _quickActionFloatingButton.userInteractionEnabled = !hideQuickButton;
     }];
 }
-
 
 // Android counterpart: setQuickActionButtonMargin()
 - (void) setQuickActionButtonMargin

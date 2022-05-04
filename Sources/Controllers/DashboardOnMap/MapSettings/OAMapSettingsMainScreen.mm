@@ -281,11 +281,14 @@
         }];
     }
 
+    NSString *mapStyleName = _app.data.lastMapSource.name;
+    if ([_app.data.lastMapSource.resourceId isEqualToString:@"mapnik.render.xml"])
+        mapStyleName = @"Mapnik";
     [data addObject:@{
             @"group_name": OALocalizedString(@"map_settings_type"),
             @"cells": @[@{
                     @"name": OALocalizedString(@"map_settings_type"),
-                    @"value": _app.data.lastMapSource.name,
+                    @"value": mapStyleName,
                     @"image": @"ic_custom_map_style",
                     @"type": [OAIconTitleValueCell getCellIdentifier],
                     @"key": @"map_type"

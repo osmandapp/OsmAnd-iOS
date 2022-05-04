@@ -90,6 +90,7 @@
                                 <constraint firstItem="j7s-w5-BDJ" firstAttribute="top" secondItem="e2q-mJ-Ycy" secondAttribute="bottom" id="8bX-zV-lQ4"/>
                                 <constraint firstItem="e2q-mJ-Ycy" firstAttribute="top" secondItem="BcL-vj-cdz" secondAttribute="top" id="GHy-26-EsZ"/>
                                 <constraint firstItem="j7s-w5-BDJ" firstAttribute="leading" secondItem="BcL-vj-cdz" secondAttribute="leadingMargin" id="J4y-dV-JHH"/>
+                                <constraint firstAttribute="bottom" secondItem="j7s-w5-BDJ" secondAttribute="bottom" id="T9s-Yx-YaV"/>
                                 <constraint firstAttribute="trailing" secondItem="e2q-mJ-Ycy" secondAttribute="trailing" id="Yoa-gl-y47"/>
                                 <constraint firstItem="e2q-mJ-Ycy" firstAttribute="leading" secondItem="BcL-vj-cdz" secondAttribute="leading" id="x8e-XS-mep"/>
                             </constraints>

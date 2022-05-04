@@ -1132,7 +1132,7 @@
 "hide_notes" = "Masquer les notes OSM";
 "res_url" = "Lien";
 "res_elliptic_mercator" = "Mercator elliptique";
-"routing_attr_freeride_policy_description" = "Le freeride et le hors-piste sont des itinéraires non-officiels. Ces itinéraires ne sont généralement ni balisés ni damés et ne sont pas contrôlés en fin de journée. Entrez à vos risques et périls.";
+"routing_attr_freeride_policy_description" = "Le hors-piste (ou 'freeride') emprunte des itinéraires non-officiels. Ces itinéraires ne sont généralement ni balisés ni damés et ne font l’objet d'aucune surveillance. Vous pratiquez cette activité à vos risques et périls.";
 "rendering_value_bold_name" = "Épais";
 "rendering_attr_undefined_name" = "Non défini";
 "rendering_attr_tracktype_grade2_name" = "Compact (non-recouvert)";
@@ -1253,7 +1253,7 @@
 "routeInfo_tracktype_name" = "Dureté de la surface";
 "rendering_attr_showLez_description" = "Afficher les zonesà faible émission sur la carte (n\'influe pas sur le calcul d\'itinéraire).";
 "rendering_attr_noPolygons_name" = "Polygones";
-"rendering_attr_hideWaterPolygons_name" = "Masquer l\'eau";
+"rendering_attr_hideWaterPolygons_name" = "Eau";
 "rendering_attr_contourColorScheme_description" = "Couleurs des courbes de niveau";
 "rendering_attr_highway_class_footway_name" = "Passerelle";
 "rendering_attr_currentTrackWidth_description" = "Largeur GPX";
@@ -1549,7 +1549,7 @@
 "map_settings_appearance" = "Apparence";
 "res_expire_warning" = "Le délai d'expiration doit être un nombre compris entre 0 et 10 000 000";
 "exit_at" = "Sortirà";
-"public_transport_warning_title" = "Les itinéraires en transports publics sont actuellement en phase de test. Des erreurs ou des imprécisions peuvent avoir lieu.";
+"public_transport_warning_title" = "Les itinéraires en transports en commun sont actuellement en phase de test. Des erreurs ou des imprécisions peuvent avoir lieu.";
 "product_title_antarctica" = "Antarctique";
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_osmand_live" = "Abonnement - OsmAnd Live";
@@ -1593,7 +1593,7 @@
 "shared_string_exit" = "Quitter";
 "base_profile_descr_aircraft" = "Avion, parapente";
 "base_profile_descr_boat" = "Bateau, aviron, voile";
-"base_profile_descr_public_transport" = "Types de transports publics";
+"base_profile_descr_public_transport" = "Types de transports en commun";
 "base_profile_descr_pedestrian" = "Marche, randonnée, course à pied";
 "base_profile_descr_bicycle" = "VTT, vélomoteur, cheval";
 "base_profile_descr_car" = "Voiture, camion, moto";
@@ -2072,7 +2072,7 @@
 "ios_release_3_80" = "- Introduction de \"profils d'application\" avec des paramètres indépendants\n- Nouvelle disposition des paramètres par profils et types : navigation, général, carte et écran\n- Possibilité d'importer ou d'exporter les paramètres des profils\n- Ajout de sources de données pour les photos en ligne\n- Ajout de la possibilité de télécharger des cartes en ligne dans la mémoire cache\n- Algorithmes de \"recherche\" améliorés\n";
 "approximate_file_size" = "Taille approximative du fichier : %@";
 "gpxup_private" = "Privée";
-"gpxup_public" = "publique";
+"gpxup_public" = "Publique";
 "shared_string_wifi_only" = "Seulement en Wi-Fi";
 "by_type" = "Par %@";
 "trip_hint" = "Entrez le nom de la trace";

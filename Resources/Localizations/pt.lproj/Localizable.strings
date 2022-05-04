@@ -2474,3 +2474,5 @@
 "backup_error_subscription_was_expired" = "Subscrição expirada";
 "backup_error_user_is_already_registered" = "Este endereço de email está a ser utilizado noutra conta";
 "backup_error_invalid_token" = "O token não é válido";
+"routeInfo_horse_scale_name" = "Dificuldade dos percursos equestres";
+"routeInfo_horse_scale_description" = "Mostrar percursos equestres de acordo com a sua dificuldade";

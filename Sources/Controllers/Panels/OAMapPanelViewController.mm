@@ -404,9 +404,9 @@ typedef enum
         [_scrollableHudViewController removeFromParentViewController];
         _scrollableHudViewController = nil;
     }
-    [_hudViewController.quickActionController updateViewVisibility];
     [self resetActiveTargetMenu];
     [self restoreFromContextMenuMode];
+    [_hudViewController.quickActionController updateViewVisibility];
 }
 
 - (void)showPlanRouteViewController:(OARoutePlanningHudViewController *)controller
@@ -2282,15 +2282,16 @@ typedef enum
         
         if (onComplete)
             onComplete();
-        
-        [_hudViewController.quickActionController updateViewVisibility];
 
         if (_prevScrollableHudViewController)
         {
             [self showScrollableHudViewController:_prevScrollableHudViewController];
             _prevScrollableHudViewController = nil;
         }
-
+        else
+        {
+            [_hudViewController.quickActionController updateViewVisibility];
+        }
     }];
     
     [self showTopControls:NO];

@@ -447,7 +447,7 @@
 "poi_filter_custom_filter" = "Egyéni szűrő";
 "poi_filter_closest_poi" = "Legközelebbi POI-k";
 "shared_string_is_open_24_7" = "Éjjel-nappal nyitva";
-"shared_string_is_open" = "Most nyitva van";
+"shared_string_is_open" = "Nyitva van";
 "poi_filter_by_name" = "Név szerinti keresés";
 "subcategories" = "Alkategóriák";
 "select_all" = "Összes kijelölése";
@@ -496,7 +496,7 @@
 "starting_point_too_far" = "A kezdőpont közelében nem található út.";
 "ending_point_too_far" = "A célpont közelében nem található út.";
 "intermediate_point_too_far" = "%d. köztes célpont közelében nincsen út.";
-"towards" = "erre:";
+"towards" = "erre";
 "route_roundabout" = "Körforgalom: %d. kijárat, majd menj";
 "route_roundabout_short" = "Hajtson ki a(z) %d kijáraton és haladjon itt";
 "route_kl" = "Tartson balraés haladjon tovább itt";
@@ -507,7 +507,7 @@
 "route_tl" = "Forduljon balraés haladjon tovább itt";
 "route_tshl" = "Forduljonélesen balra és haladjon tovább itt";
 "route_tsll" = "Forduljon enyhén balra és haladjon tovább itt";
-"route_tu" = "Forduljon meg,és menjen tovább";
+"route_tu" = "Forduljon meg és menjen tovább";
 "route_head" = "Előre";
 "looking_up_address" = "Cím keresése";
 "no_address_found" = "Ismeretlen cím";
@@ -578,7 +578,7 @@
 "search_radius_proximity" = "Ezen belül";
 "poi" = "POI";
 "day_off_label" = "zárva";
-"open_from" = "Ekkortól nyitva:";
+"open_from" = "Ekkortól nyitva";
 "open_till" = "Nyitva eddig:";
 "will_close_at" = "Ekkor fog bezárni:";
 "will_open_at" = "Ekkor fog kinyitni:";
@@ -661,7 +661,7 @@
 "osm_live_payment_contribute_descr" = "A bevétel egy részét az OpenStreetMap közreműködői kapják.";
 "osm_live_subscribe_btn" = "Előfizetés";
 "shared_string_previous" = "Előző";
-"transport_nearby_routes" = "Ezen belül:";
+"transport_nearby_routes" = "Ezen belül";
 "always_center_position_on_map" = "Pozíció megjelenítése mindig középen";
 "use_points_as_intermediates" = "Útvonal tervezése pontok között";
 "sort_by_distance" = "Rendezés távolság szerint";
@@ -731,7 +731,7 @@
 "add_as_last_destination_point" = "Hozzáadás utolsó köztes célpontként";
 "intermediate_items_sort_by_distance" = "Rendezés háztól-házig";
 "cancel_navigation" = "Navigáció megállítása";
-"transport_nearby_routes_within" = "Közeli útvonalak ezen belül:";
+"transport_nearby_routes_within" = "Közeli útvonalak ezen belül";
 "purchase_dialog_title" = "Csomag kiválasztása";
 "purchase_dialog_travel_description" = "Az offlineútikalauz funkció használatához vásárolja meg az alábbiak egyikét:";
 "osm_live_subscription" = "OsmAnd Live előfizetés";
@@ -760,9 +760,9 @@
 "mapillary_image" = "Mapillary-fénykép";
 "shared_string_reset" = "Visszaállítás";
 "shared_string_reload" = "Újratöltés";
-"day" = "nappal";
-"days_2_4" = "nap";
-"days_5" = "nap";
+"day" = "Nappal";
+"days_2_4" = "Nap";
+"days_5" = "Nap";
 "week" = "hétre";
 "weeks_2_4" = "hétre";
 "weeks_5" = "hétre";
@@ -1113,7 +1113,7 @@
 "routing_attr_avoid_tram_name" = "Villamos nélkül";
 "rendering_attr_streetLighting_name" = "Közvilágítás";
 "rendering_attr_surface_compacted_name" = "Tömörített";
-"routing_attr_freeride_policy_description" = "A 'freeride' és a 'pályán kívüli utak' nem hivatalos útvonalak és átjárók. Általában nem egyengetik el őket, nincsenek karbantartva, este pedig nem ellenőrzik őket. Belépés csak saját felelősségre.";
+"routing_attr_freeride_policy_description" = "A „freeride” és a „pályán kívüli utak” nem hivatalos útvonalak és átjárók. Általában nem egyengetik el őket, nincsenek karbantartva, este pedig nem ellenőrzik őket. Belépés csak saját felelősségre.";
 "rendering_attr_roadStyle_description" = "Útstílus";
 "rendering_attr_contourWidth_description" = "Szintvonalak vastagsága";
 "rendering_value_green_name" = "Zöld";
@@ -1221,7 +1221,7 @@
 "rendering_attr_smoothness_excellent_name" = "Kitűnő";
 "rendering_attr_transportStops_name" = "Tömegközlekedési megállók";
 "rendering_value_high_name" = "Magas";
-"rendering_attr_appMode_description" = "Térkép optimalizálása a következőhöz:";
+"rendering_attr_appMode_description" = "Térkép optimalizálása a következőhöz";
 "rendering_attr_currentTrackWidth_name" = "GPX szélessége";
 "rendering_attr_surface_ice_name" = "Jég";
 "rendering_attr_hideWaterPolygons_description" = "Vízfelületek";
@@ -1301,7 +1301,7 @@
 "app_mode_subway" = "Metró";
 "map_settings_base_transp" = "Alaptérkép átlátszósága";
 "active_markers" = "Aktív jelölők";
-"exit_at" = "Leszállás itt:";
+"exit_at" = "Szálljon le itt";
 "public_transport_warning_title" = "A tömegközlekedési útvonaltervezés jelenleg bétatesztelési fázisban van, hibák és pontatlanságok előfordulhatnak.";
 "base_profile_descr_aircraft" = "Repülés, siklórepülés";
 "base_profile_descr_boat" = "Hajózás, evezés, vitorlázás";
@@ -1599,7 +1599,7 @@
 "srtm_download_list_help_message" = "Az OsmAnd méterben és lábban adja meg a szintvonalak magasságát. A mértékegység módosításához újra le kell töltenie a fájlt.";
 "shared_string_feet" = "láb";
 "product_title_openplacereviews" = "OpenPlaceReviews";
-"contour_lines_hillshades_slope" = "Szintvonalak, domborzat, lejtés";
+"contour_lines_hillshades_slope" = "Szintvonalak, domborzat, lejtő";
 "product_desc_ext_mapillary" = "Online utcaszintű fényképek mindenkinek. Fedezzen fel helyeket, dolgozzon együtt másokkal, örökítse meg a világot.";
 "navigate_point_olc" = "Open Location Code (OLC)";
 "route_between_points_warning_desc" = "Ezután a beállítás használatához igazítsa a nyomvonalat a legközelebbi úthoz az egyik navigációs profil segítségével.";
@@ -1877,3 +1877,4 @@
 "lang_ur" = "urdu";
 "backup_error_subscription_was_expired_descr" = "Az OsmAnd Pro előfizetése lejárt; a biztonsági mentés használatához meg kell újítania. A felhőből továbbra is visszaállíthatja az adatokat.";
 "start_point" = "Start";
+"map_widget_speed" = "Sebesség";

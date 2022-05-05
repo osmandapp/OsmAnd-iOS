@@ -686,10 +686,10 @@
     {
         const auto pt = points[i];
         const auto ppt = points[i - 1];
-        double angleRad = atan2(pt.y - ppt.y, pt.x - ppt.x);
+        double angleRad = atan2(fabs(pt.y - ppt.y), fabs(pt.x - ppt.x));
         double angle = (angleRad * 180. / M_PI) + 90.;
         [angles addObject:@(angle)];
-        double dist = sqrt(abs((pt.y - ppt.y) * (pt.y - ppt.y) + (pt.x - ppt.x) * (pt.x - ppt.x)));
+        double dist = sqrt(fabs((pt.y - ppt.y) * (pt.y - ppt.y) + (pt.x - ppt.x) * (pt.x - ppt.x)));
         [distances addObject:@(dist)];
     }
 }

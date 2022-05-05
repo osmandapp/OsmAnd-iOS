@@ -251,9 +251,6 @@
 
 - (void)updateData:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key hasPrefix:@"waypoint_"] && self.trackMenuDelegate && tableData.values[@"waypoint"])
     {
         OAGPXTableSectionData *sectionData;
@@ -367,9 +364,6 @@
 
 - (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key hasPrefix:@"waypoint_"] && self.trackMenuDelegate && tableData.values[@"waypoint"])
     {
         OAGPXTableCellData *cellData = (OAGPXTableCellData *) tableData;
@@ -383,27 +377,29 @@
             NSDictionary *dataToUpdate = value;
             OAGPXTableCellData *cellData = (OAGPXTableCellData *) tableData;
             OAGPXTableSectionData *sectionData = [self.tableData getSubject:[NSString stringWithFormat:@"section_waypoints_group_%@", cellData.title]];
-
-            if ([dataToUpdate.allKeys containsObject:@"new_group_name"])
+            if (sectionData)
             {
-                [tableData setData:@{ kCellTitle: dataToUpdate[@"new_group_name"] }];
-                [sectionData setData:@{ kTableKey: [NSString stringWithFormat:@"section_waypoints_group_%@", cellData.title] }];
+                if ([dataToUpdate.allKeys containsObject:@"new_group_name"])
+                {
+                    [tableData setData:@{ kCellTitle: dataToUpdate[@"new_group_name"] }];
+                    [sectionData setData:@{ kTableKey: [NSString stringWithFormat:@"section_waypoints_group_%@", cellData.title] }];
 
-                sectionData.values[@"is_hidden"] = @(self.trackMenuDelegate
-                        ? ![self.trackMenuDelegate isWaypointsGroupVisible:
-                                [self.trackMenuDelegate isDefaultGroup:cellData.title] ? @"" : cellData.title]
-                        : NO);
+                    sectionData.values[@"is_hidden"] = @(self.trackMenuDelegate
+                            ? ![self.trackMenuDelegate isWaypointsGroupVisible:
+                                    [self.trackMenuDelegate isDefaultGroup:cellData.title] ? @"" : cellData.title]
+                            : NO);
+                }
+
+                if ([dataToUpdate.allKeys containsObject:@"new_group_color"])
+                {
+                    sectionData.values[@"tint_color"] = [sectionData.values[@"is_hidden"] boolValue]
+                            ? UIColorFromRGB(color_footer_icon_gray) : dataToUpdate[@"new_group_color"];
+                }
+
+                BOOL hasExist = [dataToUpdate.allKeys containsObject:@"exist_group_name_index"];
+                NSInteger existI = [dataToUpdate[@"exist_group_name_index"] integerValue];
+                sectionData.values[@"regenerate_waypoints"] = @(hasExist && existI > 0);
             }
-
-            if ([dataToUpdate.allKeys containsObject:@"new_group_color"])
-            {
-                sectionData.values[@"tint_color"] = [sectionData.values[@"is_hidden"] boolValue]
-                        ? UIColorFromRGB(color_footer_icon_gray) : dataToUpdate[@"new_group_color"];
-            }
-
-            BOOL hasExist = [dataToUpdate.allKeys containsObject:@"exist_group_name_index"];
-            NSInteger existI = [dataToUpdate[@"exist_group_name_index"] integerValue];
-            sectionData.values[@"regenerate_waypoints"] = @(hasExist && existI > 0);
         }
     }
     else if ([tableData.key hasPrefix:@"section_waypoints_group_"])
@@ -484,9 +480,6 @@
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key hasPrefix:@"cell_waypoints_group_"] && self.trackMenuDelegate)
     {
         [self.trackMenuDelegate openWaypointsGroupOptionsScreen:((OAGPXTableCellData *) tableData).title];

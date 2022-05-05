@@ -134,9 +134,6 @@
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key isEqualToString:@"delete"] && self.trackMenuDelegate)
     {
         [self hide:YES completion:^{

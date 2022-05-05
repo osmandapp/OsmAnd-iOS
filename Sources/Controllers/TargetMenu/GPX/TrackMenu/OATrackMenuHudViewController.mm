@@ -1603,6 +1603,8 @@
                   withRowAnimation:UITableViewRowAnimationNone];
 }
 
+#pragma mark - Cell action methods
+
 - (void)updateData:(OAGPXBaseTableData *)tableData
 {
     [_uiBuilder updateData:tableData];

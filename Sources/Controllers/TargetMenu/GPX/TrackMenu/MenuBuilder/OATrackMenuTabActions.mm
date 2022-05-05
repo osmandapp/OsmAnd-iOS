@@ -158,18 +158,12 @@
 
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key isEqualToString:@"control_show_on_map"] && self.trackMenuDelegate)
         [self.trackMenuDelegate changeTrackVisible];
 }
 
 - (BOOL)isOn:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return NO;
-
     if ([tableData.key isEqualToString:@"control_show_on_map"] && self.trackMenuDelegate)
         return [self.trackMenuDelegate isTrackVisible];
 
@@ -178,10 +172,7 @@
 
 - (void)updateData:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
-    else if ([tableData.key isEqualToString:@"change_move"] && self.trackMenuDelegate)
+    if ([tableData.key isEqualToString:@"change_move"] && self.trackMenuDelegate)
     {
         [tableData setData:@{ kCellDesc: [self generateDirName] }];
     }
@@ -209,9 +200,6 @@
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key isEqualToString:@"control_appearance"] && self.trackMenuDelegate)
         [self.trackMenuDelegate openAppearance];
     else if ([tableData.key isEqualToString:@"control_navigation"] && self.trackMenuDelegate)

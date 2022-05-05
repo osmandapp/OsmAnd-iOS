@@ -504,9 +504,6 @@
 
 - (void)updateData:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key hasPrefix:@"chart_"])
     {
         NSString *segmentKey = [tableData.key stringByReplacingOccurrencesOfString:@"chart_" withString:@""];
@@ -544,32 +541,34 @@
     {
         NSString *segmentKey = [tableData.key stringByReplacingOccurrencesOfString:@"tabs_" withString:@""];
         OAGPXTableSectionData *sectionData = [self.tableData getSubject:[@"section_" stringByAppendingString:segmentKey]];
-
-        NSInteger selectedIndex = [tableData.values[@"selected_index_int_value"] integerValue];
-        if (selectedIndex != NSNotFound)
+        if (sectionData)
         {
-            EOARouteStatisticsMode mode;
-            if (tableData.values.count > selectedIndex && selectedIndex != 0)
+            NSInteger selectedIndex = [tableData.values[@"selected_index_int_value"] integerValue];
+            if (selectedIndex != NSNotFound)
             {
-                NSString *value = tableData.values[[NSString stringWithFormat:@"tab_%li_string_value", selectedIndex]];
-                mode = [value isEqualToString:OALocalizedString(@"map_widget_altitude")]
-                        ? EOARouteStatisticsModeAltitudeSlope
-                        : [value isEqualToString:OALocalizedString(@"gpx_speed")]
-                                ? EOARouteStatisticsModeSpeed
-                                : EOARouteStatisticsModeAltitudeSpeed;
-            }
-            else
-            {
-                mode = EOARouteStatisticsModeAltitudeSpeed;
-            }
-            sectionData.values[@"mode_value"] = @(mode);
+                EOARouteStatisticsMode mode;
+                if (tableData.values.count > selectedIndex && selectedIndex != 0)
+                {
+                    NSString *value = tableData.values[[NSString stringWithFormat:@"tab_%li_string_value", selectedIndex]];
+                    mode = [value isEqualToString:OALocalizedString(@"map_widget_altitude")]
+                            ? EOARouteStatisticsModeAltitudeSlope
+                            : [value isEqualToString:OALocalizedString(@"gpx_speed")]
+                                    ? EOARouteStatisticsModeSpeed
+                                    : EOARouteStatisticsModeAltitudeSpeed;
+                }
+                else
+                {
+                    mode = EOARouteStatisticsModeAltitudeSpeed;
+                }
+                sectionData.values[@"mode_value"] = @(mode);
 
-            OAGPXTableCellData *chartData = [sectionData getSubject:[@"chart_" stringByAppendingString:segmentKey]];
-            if (chartData)
-                [self updateData:chartData];
-            OAGPXTableCellData *statisticsData = [sectionData getSubject:[@"statistics_" stringByAppendingString:segmentKey]];
-            if (statisticsData)
-                [self updateData:statisticsData];
+                OAGPXTableCellData *chartData = [sectionData getSubject:[@"chart_" stringByAppendingString:segmentKey]];
+                if (chartData)
+                    [self updateData:chartData];
+                OAGPXTableCellData *statisticsData = [sectionData getSubject:[@"statistics_" stringByAppendingString:segmentKey]];
+                if (statisticsData)
+                    [self updateData:statisticsData];
+            }
         }
     }
     else if ([tableData.key hasPrefix:@"section_"])
@@ -603,9 +602,6 @@
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key hasPrefix:@"segment_buttons_"] && self.trackMenuDelegate)
     {
         NSString *segmentKey = [tableData.key stringByReplacingOccurrencesOfString:@"segment_buttons_" withString:@""];

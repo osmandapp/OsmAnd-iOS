@@ -238,9 +238,6 @@
 
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key hasPrefix:@"cell_waypoints_group_"])
     {
         OAGPXTableSectionData *sectionData = _tableData;
@@ -257,31 +254,27 @@
 
         if (sectionData && [sectionData.values[@"visible_groups_count"] integerValue] != [sectionData.values[@"groups_count"] integerValue])
         {
-            [self updateData:[sectionData getSubject:@"hide_show_all"]];
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
-                                  withRowAnimation:UITableViewRowAnimationNone];
+            OAGPXTableCellData *hideShowAllCellData = [sectionData getSubject:@"hide_show_all"];
+            if (hideShowAllCellData)
+            {
+                [self updateData:hideShowAllCellData];
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
+                                      withRowAnimation:UITableViewRowAnimationNone];
+            }
         }
     }
 }
 
 - (BOOL)isOn:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return NO;
-
     if ([tableData.key hasPrefix:@"cell_waypoints_group_"])
-    {
         return [tableData.values[@"visible"] boolValue];
-    }
 
     return NO;
 }
 
 - (void)updateData:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key isEqualToString:@"color_grid"])
     {
         tableData.values[@"int_value"] = @([OAUtilities colorToNumber:_selectedColor.color]);
@@ -322,9 +315,6 @@
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key isEqualToString:@"hide_show_all"])
     {
         if (_tableData)

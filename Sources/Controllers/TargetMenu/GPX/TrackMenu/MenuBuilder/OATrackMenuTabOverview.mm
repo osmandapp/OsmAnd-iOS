@@ -235,9 +235,6 @@
 
 - (void)updateData:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key isEqualToString:@"description"])
     {
         tableData.values[@"attr_string_value"] = [self generateDescriptionAttrString];
@@ -372,9 +369,6 @@
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key isEqualToString:@"add_description"] && self.trackMenuDelegate)
     {
         [self.trackMenuDelegate openDescriptionEditor];

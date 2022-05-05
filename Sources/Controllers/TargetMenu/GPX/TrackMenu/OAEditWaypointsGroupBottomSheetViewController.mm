@@ -269,9 +269,6 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key isEqualToString:@"control_show_on_map"])
     {
         _isShown = toggle;
@@ -281,9 +278,6 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
 - (BOOL)isOn:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return NO;
-
     if ([tableData.key isEqualToString:@"control_show_on_map"])
         return _isShown;
 
@@ -292,9 +286,6 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
 - (void)updateData:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key isEqualToString:@"control_show_on_map"])
     {
         tableData.values[@"bool_value"] = @(_isShown);
@@ -311,9 +302,6 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData
 {
-    if (!tableData)
-        return;
-
     if ([tableData.key isEqualToString:@"rename"])
     {
         OAEditWaypointsGroupOptionsViewController *editWaypointsGroupOptions =

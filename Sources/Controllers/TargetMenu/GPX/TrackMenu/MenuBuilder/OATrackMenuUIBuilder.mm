@@ -117,6 +117,8 @@
     return tabBarItem;
 }
 
+#pragma mark - Cell action methods
+
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {
     [_tabs[_selectedTab] onSwitch:toggle tableData:tableData];

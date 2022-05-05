@@ -54,6 +54,9 @@
 
 - (BOOL) updateLayer
 {
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    _nightMode = settings.nightMode;
+    
     return NO;
 }
 

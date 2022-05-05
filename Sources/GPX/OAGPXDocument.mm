@@ -792,9 +792,9 @@
         {
             if (s.points.count > 0)
             {
+                s.points.firstObject.firstPoint = YES;
+                s.points.lastObject.lastPoint = YES;
                 [points addObjectsFromArray:s.points];
-                points[[points indexOfObject:s.points.firstObject]].firstPoint = YES;
-                points[[points indexOfObject:s.points.lastObject]].lastPoint = YES;
             }
         }
     }

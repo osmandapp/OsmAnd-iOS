@@ -20,17 +20,21 @@
 @class OARouteStatisticsModeCell;
 @class OATrkSegment;
 
-typedef void(^OARouteLineChartCenterMapOnBBox)(OABBox rect);
-typedef void(^OARouteLineChartAdjustViewPort)();
+@protocol OARouteLineChartHelperDelegate
+
+- (void)centerMapOnBBox:(const OABBox)rect;
+- (void)adjustViewPort:(BOOL)landscape;
+
+@end
 
 @interface OARouteLineChartHelper : NSObject
 
 @property (nonatomic) BOOL isLandscape;
 @property (nonatomic) CGRect screenBBox;
 
-- (instancetype)initWithGpxDoc:(OAGPXDocument *)gpxDoc
-               centerMapOnBBox:(OARouteLineChartCenterMapOnBBox)centerMapOnBBox
-                adjustViewPort:(OARouteLineChartAdjustViewPort)adjustViewPort;
+- (instancetype)initWithGpxDoc:(OAGPXDocument *)gpxDoc;
+
+@property (nonatomic, weak) id<OARouteLineChartHelperDelegate> delegate;
 
 - (void)changeChartMode:(EOARouteStatisticsMode)mode
                   chart:(LineChartView *)chart

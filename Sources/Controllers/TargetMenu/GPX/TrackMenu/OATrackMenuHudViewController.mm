@@ -77,7 +77,7 @@
 
 @end
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, OARouteLineChartHelperDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -814,7 +814,7 @@
                                                  topInset:0.
                                                  animated:YES];
             if (![self isAdjustedMapViewPort])
-                [self adjustMapViewPort];
+                [self adjustViewPort:[self isLandscape]];
         }
     }
 }
@@ -1256,19 +1256,8 @@
 {
     if (!_routeLineChartHelper)
     {
-        __weak OATrackMenuHudViewController *weakSelf = self;
-        _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc
-                                                               centerMapOnBBox:^(OABBox rect) {
-            [weakSelf.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
-                                              bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
-                                                     zoom:0
-                                              bottomInset:([weakSelf isLandscape] ? 0. : [weakSelf getViewHeight])
-                                                leftInset:([weakSelf isLandscape] ? [weakSelf getLandscapeViewWidth] : 0.)
-                                                 animated:YES];
-                                                               }
-                                                                adjustViewPort:^() {
-                                                                    [weakSelf adjustMapViewPort];
-                                                                }];
+        _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc];
+        _routeLineChartHelper.delegate = self;
         _routeLineChartHelper.isLandscape = [self isLandscape];
         _routeLineChartHelper.screenBBox = CGRectMake(
                 [self isLandscape] ? [self getLandscapeViewWidth] : 0.,
@@ -1601,6 +1590,23 @@
 {
     [self.tableView reloadSections:sections
                   withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark - OARouteLineChartHelperDelegate
+
+- (void)centerMapOnBBox:(const OABBox)rect
+{
+    [self.mapPanelViewController displayAreaOnMap:CLLocationCoordinate2DMake(rect.top, rect.left)
+                                      bottomRight:CLLocationCoordinate2DMake(rect.bottom, rect.right)
+                                             zoom:0
+                                      bottomInset:([self isLandscape] ? 0. : [self getViewHeight])
+                                        leftInset:([self isLandscape] ? [self getLandscapeViewWidth] : 0.)
+                                         animated:YES];
+}
+
+- (void)adjustViewPort:(BOOL)landscape
+{
+    [super adjustViewPort:landscape];
 }
 
 #pragma mark - Cell action methods

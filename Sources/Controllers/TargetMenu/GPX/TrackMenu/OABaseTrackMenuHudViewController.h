@@ -114,7 +114,7 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
                                   secondAttribute:(NSLayoutAttribute)secondAttribute
                                          constant:(CGFloat)constant;
 
-- (void)adjustMapViewPort;
+- (void)adjustViewPort:(BOOL)landscape;
 - (BOOL)isAdjustedMapViewPort;
 
 @end

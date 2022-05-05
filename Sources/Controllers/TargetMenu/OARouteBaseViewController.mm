@@ -29,20 +29,14 @@
 @implementation OARouteLineChartHelper
 {
     OAGPXDocument *_gpxDoc;
-    OARouteLineChartCenterMapOnBBox _centerMapOnBBox;
-    OARouteLineChartAdjustViewPort _adjustViewPort;
 }
 
 - (instancetype)initWithGpxDoc:(OAGPXDocument *)gpxDoc
-               centerMapOnBBox:(OARouteLineChartCenterMapOnBBox)centerMapOnBBox
-                adjustViewPort:(OARouteLineChartAdjustViewPort)adjustViewPort
 {
     self = [super init];
     if (self)
     {
         _gpxDoc = gpxDoc;
-        _centerMapOnBBox = centerMapOnBBox;
-        _adjustViewPort = adjustViewPort;
     }
     return self;
 }
@@ -342,14 +336,14 @@
         CGPoint mapPoint;
         [mapViewController.mapView convert:&point toScreen:&mapPoint checkOffScreen:YES];
 
-        if (forceFit && _centerMapOnBBox)
+        if (forceFit && self.delegate)
         {
-            _centerMapOnBBox(rect);
+            [self.delegate centerMapOnBBox:rect];
         }
         else if (CLLocationCoordinate2DIsValid(location) && !CGRectContainsPoint(_screenBBox, mapPoint))
         {
-            if (!_isLandscape && _adjustViewPort)
-                _adjustViewPort();
+            if (!_isLandscape && self.delegate)
+                [self.delegate adjustViewPort:self.isLandscape];
 
             Point31 pos = [OANativeUtilities convertFromPointI:point];
             [mapViewController goToPosition:pos animated:YES];
@@ -445,7 +439,7 @@
 
 @end
 
-@interface OARouteBaseViewController () <OARouteInformationListener>
+@interface OARouteBaseViewController () <OARouteInformationListener, OARouteLineChartHelperDelegate>
 
 @end
 
@@ -471,15 +465,15 @@
 
     _routingHelper = [OARoutingHelper sharedInstance];
     [_routingHelper addListener:self];
-    _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:_gpx
-                                                           centerMapOnBBox:^(OABBox rect) {
-                                                                    [self centerMapOnBBox:rect];
-                                                           }
-                                                            adjustViewPort:^() {
-                                                                    [self adjustViewPort:[self isLandscapeIPadAware]];
-                                                            }];
+    _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:_gpx];
+    _routeLineChartHelper.delegate = self;
     _routeLineChartHelper.isLandscape = [self isLandscapeIPadAware];
     _routeLineChartHelper.screenBBox = [self getScreenBBox];
+}
+
+- (void)onMenuDismissed
+{
+    [_routingHelper removeListener:self];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

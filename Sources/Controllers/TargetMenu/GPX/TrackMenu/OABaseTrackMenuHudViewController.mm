@@ -401,11 +401,11 @@
     self.backButtonContainerView.hidden = ![self isLandscape] && self.currentState == EOADraggableMenuStateFullScreen;
 }
 
-- (void)adjustMapViewPort
+- (void)adjustViewPort:(BOOL)landscape
 {
-    if ([self isLandscape] && _mapViewController.mapView.viewportXScale != VIEWPORT_SHIFTED_SCALE)
+    if (landscape && _mapViewController.mapView.viewportXScale != VIEWPORT_SHIFTED_SCALE)
         _mapViewController.mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
-    else if (![self isLandscape] && _mapViewController.mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
+    else if (!landscape && _mapViewController.mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
         _mapViewController.mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
     if (_mapViewController.mapView.viewportYScale != [self getViewHeight] / DeviceScreenHeight)
         _mapViewController.mapView.viewportYScale = [self getViewHeight] / DeviceScreenHeight;
@@ -484,9 +484,10 @@
     [self changeHud:height];
     if (![self isTabSelecting] && [self adjustCentering])
     {
-        if ((self.currentState != EOADraggableMenuStateFullScreen && ![self isLandscape]) || [self isLandscape])
+        BOOL landscape = [self isLandscape];
+        if ((self.currentState != EOADraggableMenuStateFullScreen && !landscape) || landscape)
         {
-            [self adjustMapViewPort];
+            [self adjustViewPort:landscape];
             [_mapPanelViewController targetGoToGPX];
         }
     }

@@ -95,6 +95,12 @@
     _bottomToolBarDividerView.frame = bottomDividerFrame;
 }
 
+- (void)onMenuDismissed
+{
+    [super onMenuDismissed];
+    [_avoidRoads removeListener:self];
+}
+
 - (void) setupRouteInfo
 {
     dispatch_async(dispatch_get_main_queue(), ^{

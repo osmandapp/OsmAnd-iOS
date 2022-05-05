@@ -423,7 +423,7 @@ static BOOL _isDeviatedFromRoute = false;
             }
         }
         [_listeners removeObjectsInArray:inactiveListeners];
-        
+        [_transportRoutingHelper removeListener:lt];
         return result;
     }
 }

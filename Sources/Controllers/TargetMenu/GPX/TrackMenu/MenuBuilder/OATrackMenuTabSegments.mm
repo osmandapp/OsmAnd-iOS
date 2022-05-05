@@ -27,6 +27,7 @@
 @interface OATrackMenuTabSegments () <UIGestureRecognizerDelegate, ChartViewDelegate>
 
 @property (nonatomic) OAGPXTableData *tableData;
+@property (nonatomic) BOOL isGeneratedData;
 
 @end
 
@@ -38,6 +39,8 @@
     CGPoint _lastTranslation;
     double _highlightDrawX;
 }
+
+@dynamic tableData, isGeneratedData;
 
 - (void)commonInit
 {
@@ -61,40 +64,114 @@
 
 - (void)generateData
 {
-    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
+    self.tableData = [OAGPXTableData withData: @{ kTableKey: @"table_tab_segments" }];
 
-    NSDictionary<NSString *, NSDictionary *> *segments = self.trackMenuDelegate ? [self.trackMenuDelegate updateSegmentsData] : [NSDictionary dictionary];
-    if (!_routeLineChartHelper)
-        _routeLineChartHelper = self.trackMenuDelegate ? [self.trackMenuDelegate getLineChartHelper] : nil;
+    NSArray<OATrkSegment *> *segments = @[];
+    if (self.trackMenuDelegate)
+    {
+        segments = [self.trackMenuDelegate getSegments];
+
+        if (!_routeLineChartHelper)
+            _routeLineChartHelper = [self.trackMenuDelegate getLineChartHelper];
+    }
+
+    OATrkSegment *generalSegment = self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralSegment] : nil;
+    OAGPXTrackAnalysis *generalAnalysis = self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralAnalysis] : nil;
+    if (generalSegment && generalAnalysis)
+    {
+        [self generateSegmentSectionData:generalSegment
+                                analysis:generalAnalysis
+                                   index:0];
+    }
 
     for (NSInteger index = 0; index < segments.count; index++)
     {
-        NSDictionary *segmentDict = segments[[NSString stringWithFormat:@"segment_%li", index]];
-        OATrkSegment *segment = segmentDict[@"segment"];
-        OAGPXTrackAnalysis *analysis = segmentDict[@"analysis"];
-        __block EOARouteStatisticsMode mode = EOARouteStatisticsModeAltitudeSpeed;
+        OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segments[index]];
+        [self generateSegmentSectionData:segments[index]
+                                analysis:analysis
+                                   index:generalSegment ? index + 1 : index];
+    }
 
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
-        OALineChartCell *cell = (OALineChartCell *) nib[0];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.lineChartView.delegate = self;
-        cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
+    self.isGeneratedData = YES;
+}
 
-        [GpxUIHelper setupGPXChartWithChartView:cell.lineChartView
-                                   yLabelsCount:4
-                                      topOffset:20
-                                   bottomOffset:4
-                            useGesturesAndScale:YES
-        ];
+- (void)generateSegmentSectionData:(OATrkSegment *)segment
+                          analysis:(OAGPXTrackAnalysis *)analysis
+                             index:(NSInteger)index
+{
+    if (!segment)
+        return;
 
-        if (_routeLineChartHelper)
-        {
-            [_routeLineChartHelper changeChartMode:mode
-                                             chart:cell.lineChartView
-                                          analysis:analysis
-                                          modeCell:nil];
-        }
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
+    OALineChartCell *cell = (OALineChartCell *) nib[0];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.lineChartView.delegate = self;
+    cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
 
+    [GpxUIHelper setupGPXChartWithChartView:cell.lineChartView
+                               yLabelsCount:4
+                                  topOffset:20
+                               bottomOffset:4
+                        useGesturesAndScale:YES
+    ];
+
+    if (_routeLineChartHelper)
+    {
+        [_routeLineChartHelper changeChartMode:EOARouteStatisticsModeAltitudeSpeed
+                                         chart:cell.lineChartView
+                                      analysis:analysis
+                                      modeCell:nil];
+    }
+
+    CLLocationCoordinate2D startChartPoint = self.trackMenuDelegate && [self.trackMenuDelegate openedFromMap]
+            ? [self.trackMenuDelegate getPinLocation] : kCLLocationCoordinate2DInvalid;
+
+    OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{
+            kTableKey: [NSString stringWithFormat:@"section_%p", (__bridge void *) segment],
+            kTableValues: @{
+                    @"segment_value": segment,
+                    @"analysis_value": analysis,
+                    @"mode_value": @(EOARouteStatisticsModeAltitudeSpeed),
+                    @"points_value": _routeLineChartHelper
+                            ? [_routeLineChartHelper generateTrackChartPoints:cell.lineChartView
+                                                                   startPoint:startChartPoint
+                                                                      segment:segment]
+                            : [[OATrackChartPoints alloc] init]
+            }
+    }];
+    if (cell)
+        segmentSectionData.values[@"cell_value"] = cell;
+    [self.tableData.subjects addObject:segmentSectionData];
+    [segmentSectionData setData:@{ kSectionHeaderHeight: self.tableData.subjects.firstObject == segmentSectionData ? @0.001 : @36. }];
+
+    NSString *segmentTitle = nil;
+    if (self.trackMenuDelegate)
+        segmentTitle = [self.trackMenuDelegate getTrackSegmentTitle:segment];
+    if (!segmentTitle)
+        segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), index];
+
+    OAGPXTableCellData *segmentCellData = index != 0 ? [OAGPXTableCellData withData:@{
+            kTableKey: [NSString stringWithFormat:@"segment_%p", (__bridge void *) segment],
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellTitle: segmentTitle,
+            kCellToggle: @NO
+    }] : nil;
+
+    if (segmentCellData)
+        [segmentSectionData.subjects addObject:segmentCellData];
+
+    OAGPXTableCellData *tabsCellData = [OAGPXTableCellData withData:@{
+            kTableKey: [NSString stringWithFormat:@"tabs_%p", (__bridge void *) segment],
+            kCellType: [OASegmentTableViewCell getCellIdentifier]
+    }];
+    [segmentSectionData.subjects addObject:tabsCellData];
+
+    LineChartData *lineData = cell.lineChartView.lineData;
+    NSInteger entryCount = lineData ? lineData.entryCount : 0;
+
+    OAGPXTableCellData *chartCellData;
+    if (entryCount > 0)
+    {
         for (UIGestureRecognizer *recognizer in cell.lineChartView.gestureRecognizers)
         {
             if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
@@ -106,192 +183,72 @@
             [recognizer addTarget:self action:@selector(onChartGesture:)];
         }
 
-        NSString *segmentTitle = nil;
-        if (self.trackMenuDelegate)
-            segmentTitle = [self.trackMenuDelegate getTrackSegmentTitle:segment];
-        if (!segmentTitle)
-            segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), index];
-
-        OAGPXTableCellData *segmentCellData = index != 0 ? [OAGPXTableCellData withData:@{
-                kCellKey: [NSString stringWithFormat:@"segment_%li", index],
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kCellTitle: segmentTitle,
-                kCellToggle: @NO
-        }] : nil;
-
-        CLLocationCoordinate2D startChartPoint = self.trackMenuDelegate && [self.trackMenuDelegate openedFromMap]
-                ? [self.trackMenuDelegate getPinLocation] : kCLLocationCoordinate2DInvalid;
-
-        OAGPXTableCellData *chartCellData = [OAGPXTableCellData withData:@{
-                kCellKey: [NSString stringWithFormat:@"chart_%li", index],
-                kCellType: [OALineChartCell getCellIdentifier],
-                kTableValues: @{
-                        @"cell_value": cell,
-                        @"segment_value": segment,
-                        @"points_value": _routeLineChartHelper
-                                ? [_routeLineChartHelper generateTrackChartPoints:cell.lineChartView
-                                                                       startPoint:startChartPoint
-                                                                         segment:segment]
-                                : [[OATrackChartPoints alloc] init],
-                        @"additional_actions": ^() {
-                            if (_routeLineChartHelper)
-                            {
-                                [_routeLineChartHelper refreshHighlightOnMap:NO
-                                                               lineChartView:cell.lineChartView
-                                                            trackChartPoints:chartCellData.values[@"points_value"]
-                                                                    segment:segment];
-                            }
-                            if (self.trackMenuDelegate)
-                                [self.trackMenuDelegate updateChartHighlightValue:cell.lineChartView segment:segment];
-                        }
-                }
+        chartCellData = [OAGPXTableCellData withData:@{
+                kTableKey: [NSString stringWithFormat:@"chart_%p", (__bridge void *) segment],
+                kCellType: [OALineChartCell getCellIdentifier]
         }];
-        chartCellData.updateData = ^() {
-            if (_routeLineChartHelper)
-            {
-                [_routeLineChartHelper changeChartMode:mode
-                                                 chart:cell.lineChartView
-                                              analysis:analysis
-                                              modeCell:nil];
-            }
-        };
-
-        OAGPXTableCellData *statisticsCellData = [OAGPXTableCellData withData:@{
-                kCellKey: [NSString stringWithFormat:@"statistics_%li", index],
-                kCellType: [OAQuadItemsWithTitleDescIconCell getCellIdentifier],
-                kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:mode],
-                kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
-                        || mode != EOARouteStatisticsModeAltitudeSpeed)
-        }];
-        statisticsCellData.updateData = ^() {
-            [statisticsCellData setData:@{
-                    kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:mode],
-                    kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
-                            || mode != EOARouteStatisticsModeAltitudeSpeed)
-            }];
-        };
-
-        OAGPXTableCellData *tabsCellData = [OAGPXTableCellData withData:@{
-                kCellKey: [NSString stringWithFormat:@"tabs_%li", index],
-                kCellType: [OASegmentTableViewCell getCellIdentifier]
-        }];
-        tabsCellData.updateData = ^() {
-            NSInteger selectedIndex = [tabsCellData.values[@"selected_index_int_value"] integerValue];
-            if (selectedIndex != NSNotFound)
-            {
-                if (selectedIndex == 0)
-                {
-                    mode = EOARouteStatisticsModeAltitudeSpeed;
-                }
-                else if (tabsCellData.values.count > selectedIndex)
-                {
-                    NSString *value = tabsCellData.values[[NSString stringWithFormat:@"tab_%li_string_value", selectedIndex]];
-                    mode = [value isEqualToString:OALocalizedString(@"map_widget_altitude")]
-                            ? EOARouteStatisticsModeAltitudeSlope
-                            : [value isEqualToString:OALocalizedString(@"gpx_speed")]
-                                    ? EOARouteStatisticsModeSpeed
-                                    : EOARouteStatisticsModeAltitudeSpeed;
-                }
-
-                if (chartCellData.updateData)
-                    chartCellData.updateData();
-
-                if (statisticsCellData.updateData)
-                    statisticsCellData.updateData();
-            }
-        };
-
-        OAGPXTableCellData *buttonsCellData = [OAGPXTableCellData withData:@{
-                kCellKey: [NSString stringWithFormat:@"buttons_%li", index],
-                kCellType: [OARadiusCellEx getCellIdentifier],
-                kTableValues: @{
-                        @"left_title_string_value": OALocalizedString(@"analyze_on_map"),
-                        @"right_title_string_value": OALocalizedString(@"shared_string_options"),
-                        @"right_icon_string_value": @"ic_custom_overflow_menu",
-                        @"left_on_button_pressed":  ^() {
-                            if (self.trackMenuDelegate)
-                                [self.trackMenuDelegate openAnalysis:analysis withMode:mode];
-                        },
-                        @"right_on_button_pressed": ^() {
-                            if (self.trackMenuDelegate)
-                                [self.trackMenuDelegate openEditSegmentScreen:segment
-                                                                     analysis:analysis];
-                        }
-                },
-                kCellToggle: @(!segment.generalSegment)
-        }];
-
-        NSMutableArray<OAGPXTableCellData *> *segmentCells = [NSMutableArray array];
-        if (segmentCellData != nil)
-            [segmentCells addObject:segmentCellData];
-        [segmentCells addObject:tabsCellData];
-
-        LineChartData *lineData = cell.lineChartView.lineData;
-        NSInteger entryCount = lineData ? lineData.entryCount : 0;
-        if (entryCount > 0)
-            [segmentCells addObject:chartCellData];
-
-        [segmentCells addObject:statisticsCellData];
-        [segmentCells addObject:buttonsCellData];
-
-        NSMutableDictionary *values = [NSMutableDictionary dictionary];
-        values[@"tab_0_string_value"] = OALocalizedString(@"shared_string_overview");
-        if (analysis.hasElevationData)
-            values[@"tab_1_string_value"] = OALocalizedString(@"map_widget_altitude");
-        if (analysis.isSpeedSpecified)
-            values[analysis.hasElevationData ? @"tab_2_string_value" : @"tab_1_string_value"] = OALocalizedString(@"gpx_speed");
-        values[@"row_to_update_int_value"] = @([segmentCells indexOfObject:statisticsCellData]);
-        values[@"selected_index_int_value"] = @0;
-        [tabsCellData setData:@{ kTableValues: values }];
-
-        OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{ kSectionCells: segmentCells }];
-        [tableSections addObject:segmentSectionData];
-        [segmentSectionData setData:@{
-                kSectionHeaderHeight: tableSections.firstObject == segmentSectionData ? @0.001 : @36.
-        }];
-        segmentSectionData.updateData = ^() {
-            if ([segmentSectionData.values[@"delete_section_bool_value"] boolValue])
-            {
-                NSMutableArray<OAGPXTableSectionData *> *newTableData = [self.tableData.sections mutableCopy];
-                [newTableData removeObject:segmentSectionData];
-                [self.tableData setData:@{ kTableSections: newTableData }];
-            }
-            else
-            {
-                for (OAGPXTableCellData *cellData in segmentSectionData.cells)
-                {
-                    if (cellData.updateData)
-                        cellData.updateData();
-                }
-            }
-        };
-
-        cell.lineChartView.tag =
-                [tableSections indexOfObject:segmentSectionData] << 10 | [segmentCells indexOfObject:chartCellData];
+    }
+    else
+    {
+        cell = nil;
     }
 
-    self.tableData = [OAGPXTableData withData: @{ kTableSections: tableSections }];
-    self.tableData.updateData = ^() {
-        for (OAGPXTableSectionData *sectionData in tableSections)
-        {
-            if (sectionData.updateData)
-                sectionData.updateData();
-        }
-    };
+    if (chartCellData)
+        [segmentSectionData.subjects addObject:chartCellData];
+
+    OAGPXTableCellData *statisticsCellData = [OAGPXTableCellData withData:@{
+            kTableKey: [NSString stringWithFormat:@"statistics_%p", (__bridge void *) segment],
+            kCellType: [OAQuadItemsWithTitleDescIconCell getCellIdentifier],
+            kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:EOARouteStatisticsModeAltitudeSpeed],
+            kCellToggle: @(analysis.timeSpan > 0)
+    }];
+    [segmentSectionData.subjects addObject:statisticsCellData];
+
+    OAGPXTableCellData *buttonsCellData = [OAGPXTableCellData withData:@{
+            kTableKey: [NSString stringWithFormat:@"segment_buttons_%p", (__bridge void *) segment],
+            kCellType: [OARadiusCellEx getCellIdentifier],
+            kTableValues: @{
+                    @"left_title_string_value": OALocalizedString(@"analyze_on_map"),
+                    @"right_title_string_value": OALocalizedString(@"shared_string_options"),
+                    @"right_icon_string_value": @"ic_custom_overflow_menu"
+            },
+            kCellToggle: @(!segment.generalSegment)
+    }];
+    [segmentSectionData.subjects addObject:buttonsCellData];
+
+    NSMutableDictionary *values = [NSMutableDictionary dictionary];
+    values[@"tab_0_string_value"] = OALocalizedString(@"shared_string_overview");
+    if (analysis.hasElevationData)
+        values[@"tab_1_string_value"] = OALocalizedString(@"map_widget_altitude");
+    if (analysis.isSpeedSpecified)
+        values[analysis.hasElevationData ? @"tab_2_string_value" : @"tab_1_string_value"] = OALocalizedString(@"gpx_speed");
+    values[@"row_to_update_int_value"] = @([segmentSectionData.subjects indexOfObject:statisticsCellData]);
+    values[@"selected_index_int_value"] = @0;
+    [tabsCellData setData:@{ kTableValues: values }];
+
+    if (cell && chartCellData)
+        cell.lineChartView.tag = [self.tableData.subjects indexOfObject:segmentSectionData] << 10 | [segmentSectionData.subjects indexOfObject:chartCellData];
 }
 
 - (void)runAdditionalActions
 {
-    if (self.tableData.sections.count > 0)
+    if (self.tableData.subjects.count > 0)
     {
-        OAGPXTableSectionData *segmentsSectionData = self.tableData.sections.firstObject;
-        for (OAGPXTableCellData *segmentCellData in segmentsSectionData.cells)
+        OAGPXTableSectionData *sectionData = self.tableData.subjects.firstObject;
+        OALineChartCell *cell = ((OALineChartCell *) sectionData.values[@"cell_value"]);
+        if (cell)
         {
-            if ([segmentCellData.type isEqualToString:[OALineChartCell getCellIdentifier]]
-                && [segmentCellData.values.allKeys containsObject:@"additional_actions"])
+            if (_routeLineChartHelper)
             {
-                void (^runAdditionalActions)() = segmentCellData.values[@"additional_actions"];
-                runAdditionalActions();
+                [_routeLineChartHelper refreshHighlightOnMap:NO
+                                               lineChartView:cell.lineChartView
+                                            trackChartPoints:sectionData.values[@"points_value"]
+                                                     segment:sectionData.values[@"segment_value"]];
+            }
+            if (self.trackMenuDelegate)
+            {
+                [self.trackMenuDelegate updateChartHighlightValue:cell.lineChartView
+                                                          segment:sectionData.values[@"segment_value"]];
             }
         }
     }
@@ -396,18 +353,14 @@
 
 - (void)syncVisibleCharts:(LineChartView *)chartView
 {
-    for (OAGPXTableSectionData *sectionData in self.tableData.sections)
+    for (OAGPXTableSectionData *sectionData in self.tableData.subjects)
     {
-        for (OAGPXTableCellData *cellData in sectionData.cells)
+        OALineChartCell *cell = sectionData.values[@"cell_value"];
+        if (cell)
         {
-            if ([cellData.type isEqualToString:[OALineChartCell getCellIdentifier]])
-            {
-                OALineChartCell *chartCell = cellData.values[@"cell_value"];
-                if (chartCell)
-                    [chartCell.lineChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix
-                                                                            chart:chartCell.lineChartView
-                                                                       invalidate:YES];
-            }
+            [cell.lineChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix
+                                                               chart:cell.lineChartView
+                                                          invalidate:YES];
         }
     }
 }
@@ -439,15 +392,14 @@
                  highlight:(ChartHighlight *)highlight
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:chartView.tag & 0x3FF inSection:chartView.tag >> 10];
-    OAGPXTableCellData *cellData = self.tableData.sections[indexPath.section].cells[indexPath.row];
+    OAGPXTableSectionData *sectionData = self.tableData.subjects[indexPath.section];
 
     if (_routeLineChartHelper)
     {
-        OATrkSegment *segment = cellData.values[@"segment_value"];
         [_routeLineChartHelper refreshHighlightOnMap:NO
                                        lineChartView:(LineChartView *) chartView
-                                    trackChartPoints:cellData.values[@"points_value"]
-                                             segment:segment];
+                                    trackChartPoints:sectionData.values[@"points_value"]
+                                             segment:sectionData.values[@"segment_value"]];
     }
 }
 
@@ -526,16 +478,143 @@
         {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lineChartView.tag & 0x3FF
                                                         inSection:lineChartView.tag >> 10];
-            OAGPXTableCellData *cellData = self.tableData.sections[indexPath.section].cells[indexPath.row];
+            OAGPXTableSectionData *sectionData = self.tableData.subjects[indexPath.section];
 
             if (_routeLineChartHelper)
             {
-                OATrkSegment *segment = cellData.values[@"segment_value"];
                 [_routeLineChartHelper refreshHighlightOnMap:YES
                                                lineChartView:lineChartView
-                                            trackChartPoints:cellData.values[@"points_value"]
-                                                    segment:segment];
+                                            trackChartPoints:sectionData.values[@"points_value"]
+                                                    segment:sectionData.values[@"segment_value"]];
             }
+        }
+    }
+}
+
+#pragma mark - Cell action methods
+
+- (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
+{
+}
+
+- (BOOL)isOn:(OAGPXBaseTableData *)tableData
+{
+    return NO;
+}
+
+- (void)updateData:(OAGPXBaseTableData *)tableData
+{
+    if ([tableData.key hasPrefix:@"chart_"])
+    {
+        NSString *segmentKey = [tableData.key stringByReplacingOccurrencesOfString:@"chart_" withString:@""];
+        OAGPXTableSectionData *sectionData = [self.tableData getSubject:[@"section_" stringByAppendingString:segmentKey]];
+        if (sectionData && _routeLineChartHelper)
+        {
+            OALineChartCell *cell = ((OALineChartCell *) sectionData.values[@"cell_value"]);
+            if (cell)
+            {
+                [_routeLineChartHelper changeChartMode:(EOARouteStatisticsMode) [sectionData.values[@"mode_value"] integerValue]
+                                                 chart:cell.lineChartView
+                                              analysis:sectionData.values[@"analysis_value"]
+                                              modeCell:nil];
+            }
+        }
+    }
+    else if ([tableData.key hasPrefix:@"statistics_"])
+    {
+        NSString *segmentKey = [tableData.key stringByReplacingOccurrencesOfString:@"statistics_" withString:@""];
+        OAGPXTableSectionData *sectionData = [self.tableData getSubject:[@"section_" stringByAppendingString:segmentKey]];
+        if (sectionData)
+        {
+            EOARouteStatisticsMode mode = (EOARouteStatisticsMode) [sectionData.values[@"mode_value"] integerValue];
+            OAGPXTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
+            [tableData setData:@{
+                    kTableValues: [self getStatisticsDataForAnalysis:analysis
+                                                             segment:sectionData.values[@"segment_value"]
+                                                                mode:mode],
+                    kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
+                            || mode != EOARouteStatisticsModeAltitudeSpeed)
+            }];
+        }
+    }
+    else if ([tableData.key hasPrefix:@"tabs_"])
+    {
+        NSString *segmentKey = [tableData.key stringByReplacingOccurrencesOfString:@"tabs_" withString:@""];
+        OAGPXTableSectionData *sectionData = [self.tableData getSubject:[@"section_" stringByAppendingString:segmentKey]];
+        if (sectionData)
+        {
+            NSInteger selectedIndex = [tableData.values[@"selected_index_int_value"] integerValue];
+            if (selectedIndex != NSNotFound)
+            {
+                EOARouteStatisticsMode mode;
+                if (tableData.values.count > selectedIndex && selectedIndex != 0)
+                {
+                    NSString *value = tableData.values[[NSString stringWithFormat:@"tab_%li_string_value", selectedIndex]];
+                    mode = [value isEqualToString:OALocalizedString(@"map_widget_altitude")]
+                            ? EOARouteStatisticsModeAltitudeSlope
+                            : [value isEqualToString:OALocalizedString(@"gpx_speed")]
+                                    ? EOARouteStatisticsModeSpeed
+                                    : EOARouteStatisticsModeAltitudeSpeed;
+                }
+                else
+                {
+                    mode = EOARouteStatisticsModeAltitudeSpeed;
+                }
+                sectionData.values[@"mode_value"] = @(mode);
+
+                OAGPXTableCellData *chartData = [sectionData getSubject:[@"chart_" stringByAppendingString:segmentKey]];
+                if (chartData)
+                    [self updateData:chartData];
+                OAGPXTableCellData *statisticsData = [sectionData getSubject:[@"statistics_" stringByAppendingString:segmentKey]];
+                if (statisticsData)
+                    [self updateData:statisticsData];
+            }
+        }
+    }
+    else if ([tableData.key hasPrefix:@"section_"])
+    {
+        OAGPXTableSectionData *sectionData = (OAGPXTableSectionData *) tableData;
+        if ([tableData.values[@"delete_section_bool_value"] boolValue])
+        {
+            [self.tableData.subjects removeObject:sectionData];
+        }
+        else
+        {
+            for (OAGPXTableCellData *cellData in sectionData.subjects)
+            {
+                [self updateData:cellData];
+            }
+        }
+    }
+    else if ([tableData.key hasPrefix:@"table_tab_segments"])
+    {
+        OAGPXTableData *tData = (OAGPXTableData *) tableData;
+        for (OAGPXTableSectionData *sectionData in tData.subjects)
+        {
+            [self updateData:sectionData];
+        }
+    }
+}
+
+- (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData
+{
+}
+
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+{
+    if ([tableData.key hasPrefix:@"segment_buttons_"] && self.trackMenuDelegate)
+    {
+        NSString *segmentKey = [tableData.key stringByReplacingOccurrencesOfString:@"segment_buttons_" withString:@""];
+        OAGPXTableSectionData *sectionData = [self.tableData getSubject:[@"section_" stringByAppendingString:segmentKey]];
+        if (sectionData)
+        {
+            EOARouteStatisticsMode mode = (EOARouteStatisticsMode) [sectionData.values[@"mode_value"] integerValue];
+            OAGPXTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
+            BOOL isLeftButtonSelected = [tableData.values[@"is_left_button_selected"] boolValue];
+            if (isLeftButtonSelected)
+                [self.trackMenuDelegate openAnalysis:analysis withMode:mode];
+            else
+                [self.trackMenuDelegate openEditSegmentScreen:sectionData.values[@"segment_value"] analysis:analysis];
         }
     }
 }

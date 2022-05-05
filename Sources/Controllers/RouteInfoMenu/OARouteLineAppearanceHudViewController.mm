@@ -24,7 +24,6 @@
 #import "OASegmentSliderTableViewCell.h"
 #import "OATextLineViewCell.h"
 #import "OAIconTitleValueCell.h"
-#import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -388,12 +387,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         self.applyButtonContainerView.hidden = !landscape;
 
         NSMutableArray *indexPaths = [NSMutableArray array];
-        for (NSInteger i = 0; i < _tableData.sections.count; i++)
+        for (NSInteger i = 0; i < _tableData.subjects.count; i++)
         {
-            OAGPXTableSectionData *sectionData = _tableData.sections[i];
-            for (NSInteger j = 0; j < sectionData.cells.count; j++)
+            OAGPXTableSectionData *sectionData = _tableData.subjects[i];
+            for (NSInteger j = 0; j < sectionData.subjects.count; j++)
             {
-                OAGPXTableCellData *cellData = sectionData.cells[j];
+                OAGPXTableCellData *cellData = sectionData.subjects[j];
                 if ([cellData.key hasSuffix:@"_map_style"])
                     [indexPaths addObject:[NSIndexPath indexPathForRow:j inSection:i]];
             }
@@ -434,7 +433,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (sectionIndex == 0)
         headerTitle = OALocalizedString(@"fav_color");
 
-    OAGPXTableSectionData *sectionData = _tableData.sections[sectionIndex];
+    OAGPXTableSectionData *sectionData = _tableData.subjects[sectionIndex];
     if (sectionData.header)
         headerTitle = sectionData.header;
 
@@ -499,433 +498,98 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     if (_previewRouteLineInfo)
     {
-        NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
+        _tableData = [OAGPXTableData new];
 
         // color section
-        __block BOOL colorMapStyle = _previewRouteLineInfo.coloringType == OAColoringType.DEFAULT;
-        NSMutableArray<OAGPXTableCellData *> *colorsCells = [NSMutableArray array];
-
         OAGPXTableSectionData *colorsSectionData = [OAGPXTableSectionData withData:@{
-                kSectionCells: colorsCells,
-                kSectionFooter: colorMapStyle
-                        ? [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_color"),
-                                [_settings.renderer get]]
-                        : @"",
-                kSectionFooterHeight: @36.
+                kTableKey: @"section_color",
+                kSectionFooterHeight: @36.,
+                kTableValues: @{ @"color_map_style": @(_previewRouteLineInfo.coloringType == OAColoringType.DEFAULT) }
         }];
+        [colorsSectionData setData:@{
+                kSectionFooter: [colorsSectionData.values[@"color_map_style"] boolValue]
+                        ? [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_color"),
+                                                     [_settings.renderer get]]
+                        : @""
+        }];
+        [_tableData.subjects addObject:colorsSectionData];
 
         OAGPXTableCellData *colorMapStyleCellData = [OAGPXTableCellData withData:@{
-                kCellKey:@"color_map_style",
+                kTableKey:@"cell_color_map_style",
                 kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
                 kCellTitle:OALocalizedString(@"map_settings_style")
         }];
-        colorMapStyleCellData.isOn = ^() { return colorMapStyle; };
-        colorMapStyleCellData.onSwitch = ^(BOOL toggle) {
-            colorMapStyle = toggle;
-            if (colorMapStyle)
-                _selectedType = [self getRouteAppearanceType:OAColoringType.DEFAULT];
-            else if (_selectedType.coloringType == OAColoringType.DEFAULT)
-                _selectedType = [self getRouteAppearanceType:OAColoringType.CUSTOM_COLOR];
-            else
-                _selectedType = [self getRouteAppearanceType:_previewRouteLineInfo.coloringType];
-
-            _previewRouteLineInfo.coloringType = _selectedType.coloringType;
-            [self updateRouteLayer:_previewRouteLineInfo];
-        };
-        colorMapStyleCellData.updateData = ^() {
-            if ([_selectedType.coloringType isCustomColor])
-            {
-                UIColor *customColorDay = UIColorFromRGB([_previewRouteLineInfo getCustomColor:NO]);
-                UIColor *customColorNight = UIColorFromRGB([_previewRouteLineInfo getCustomColor:YES]);
-                UIColor *defaultColorDay = UIColorFromRGB(kDefaultRouteLineDayColor);
-                UIColor *defaultColorNight = UIColorFromRGB(kDefaultRouteLineNightColor);
-                if ([customColorDay isEqual:defaultColorDay] || [customColorNight isEqual:defaultColorNight])
-                    [_previewRouteLineInfo setCustomColor:_availableColors.firstObject.intValue nightMode:_nightMode];
-            }
-        };
-        [colorsCells addObject:colorMapStyleCellData];
+        [colorsSectionData.subjects addObject:colorMapStyleCellData];
 
         // custom coloring settings
+        _sectionColors = [_tableData.subjects indexOfObject:colorsSectionData];
 
-        OAGPXTableCellData *colorTypesEmptySpaceCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_types_empty_space",
-                kCellType: [OADividerCell getCellIdentifier],
-                kTableValues: @{ @"float_value": @10. }
-        }];
-
-        NSMutableArray<NSDictionary *> *lineColoringTypes = [NSMutableArray array];
-        for (OARouteAppearanceType *type in _coloringTypes)
-        {
-            [lineColoringTypes addObject:@{
-                    @"title": type.title,
-                    @"available": @(type.isActive)
-            }];
-        }
-
-        OAGPXTableCellData *colorTypesCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_types",
-                kCellType: [OAFoldersCell getCellIdentifier],
-                kTableValues: @{
-                        @"array_value": lineColoringTypes,
-                        @"selected_integer_value": @([_coloringTypes indexOfObject:_selectedType])
-                }
-        }];
-        colorTypesCellData.updateData = ^() {
-            [colorTypesCellData setData:@{
-                    kTableValues: @{
-                            @"array_value": lineColoringTypes,
-                            @"selected_integer_value": @([_coloringTypes indexOfObject:_selectedType])
-                    }
-            }];
-        };
-
-        OAGPXTableCellData *colorDayNightEmptySpaceCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_day_night_empty_space",
-                kCellType: [OADividerCell getCellIdentifier],
-                kTableValues: @{ @"float_value": @8. }
-        }];
-
-        NSArray<NSString *> *dayNightValues = @[kColorDayMode, kColorNightMode];
-        OAGPXTableCellData *colorDayNightCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_day_night_value",
-                kCellType: [OASegmentedControlCell getCellIdentifier],
-                kTableValues: @{ @"array_value": dayNightValues },
-                kCellToggle: @NO
-        }];
-        colorDayNightCellData.updateProperty = ^(id value) {
-            if ([value isKindOfClass:NSNumber.class])
-            {
-                NSInteger index = [value integerValue];
-                _nightMode = [dayNightValues[index] isEqualToString:kColorNightMode];
-                _selectedDayNightMode = _nightMode ? dayNightValues[1] : dayNightValues[0];
-                [_settings.appearanceMode set:index mode:_appMode];
-            }
-        };
-        colorDayNightCellData.updateData = ^() {
-            [[OADayNightHelper instance] forceUpdate];
-        };
-
-        OAGPXTableCellData *colorGridCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_grid",
-                kCellType: [OAColorsTableViewCell getCellIdentifier],
-                kTableValues: @{
-                        @"array_value": _availableColors,
-                        @"int_value": @([_previewRouteLineInfo getCustomColor:_nightMode])
-                }
-        }];
-
-        colorGridCellData.updateData = ^() {
-            [colorGridCellData setData:@{
-                    kTableValues: @{
-                            @"array_value": _availableColors,
-                            @"int_value": @([_previewRouteLineInfo getCustomColor:_nightMode])
-                    }
-            }];
-        };
-
-        OAGPXTableCellData *topDescriptionCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"top_description",
-                kCellType: [OATextLineViewCell getCellIdentifier],
-                kCellTitle: _selectedType.topDescription
-        }];
-        topDescriptionCellData.updateData = ^() {
-            [topDescriptionCellData setData:@{ kCellTitle: _selectedType.topDescription }];
-        };
-
-        OAGPXTableCellData *bottomDescriptionCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"bottom_description",
-                kCellType: [OATextLineViewCell getCellIdentifier],
-                kCellTitle: _selectedType.bottomDescription
-        }];
-        bottomDescriptionCellData.updateData = ^() {
-            [bottomDescriptionCellData setData:@{ kCellTitle: _selectedType.bottomDescription }];
-        };
-
-        OAGPXTableCellData *colorGradientCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"color_elevation_gradient",
-                kCellType: [OAImageTextViewCell getCellIdentifier],
-                kTableValues: @{
-                        @"extra_desc": OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_max_height" : @""),
-                        @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
-                },
-                kCellDesc: OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_min_height" : @""),
-                kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
-        }];
-        colorGradientCellData.updateData = ^() {
-            [colorGradientCellData setData:@{
-                    kTableValues: @{
-                            @"extra_desc": OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_max_height" : @""),
-                            @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
-                    },
-                    kCellDesc: OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_min_height" : @""),
-                    kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
-            }];
-        };
-
-        void (^clearColorSection) (BOOL) = ^(BOOL withTypes) {
-            if (withTypes)
-                [colorsCells removeObjectsInArray:@[colorTypesEmptySpaceCellData, colorTypesCellData]];
-
-            [colorsCells removeObjectsInArray:@[
-                    colorDayNightEmptySpaceCellData,
-                    colorDayNightCellData,
-                    colorGridCellData,
-                    topDescriptionCellData,
-                    colorGradientCellData,
-                    bottomDescriptionCellData
-            ]];
-        };
-
-        void (^setColorCells) () = ^() {
-            if (!colorMapStyle)
-            {
-                clearColorSection(NO);
-
-                if (![colorsCells containsObject:colorTypesCellData])
-                    [colorsCells addObjectsFromArray:@[colorTypesEmptySpaceCellData, colorTypesCellData]];
-
-                if ([_selectedType.coloringType isCustomColor])
-                    [colorsCells addObjectsFromArray:@[colorDayNightEmptySpaceCellData, colorDayNightCellData, colorGridCellData]];
-                else if ([_selectedType.coloringType isGradient])
-                    [colorsCells addObjectsFromArray:@[topDescriptionCellData, colorGradientCellData, bottomDescriptionCellData]];
-                else if ([_selectedType.coloringType isRouteInfoAttribute])
-                    [colorsCells addObjectsFromArray:@[topDescriptionCellData, bottomDescriptionCellData]];
-            }
-            else
-            {
-                clearColorSection(YES);
-            }
-            _cellColorGrid = [colorsCells indexOfObject:colorGridCellData];
-        };
-
-        colorsSectionData.updateData = ^() {
-            setColorCells();
-
-            for (OAGPXTableCellData *cellData in colorsCells)
-            {
-                if (cellData.updateData)
-                    cellData.updateData();
-            }
-
-            [colorsSectionData setData:@{
-                    kSectionFooter: colorMapStyle
-                            ? [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_color"),
-                                                         [_settings.renderer get]]
-                            : @""
-            }];
-        };
-        [tableSections addObject:colorsSectionData];
-        _sectionColors = [tableSections indexOfObject:colorsSectionData];
-
-        setColorCells();
+        [self setColorCells];
 
         // width section
-        NSMutableArray<OAGPXTableCellData *> *widthCells = [NSMutableArray array];
-
+        OARouteLayer *routeLayer = _mapPanelViewController.mapViewController.mapLayers.routeMapLayer;
         OAGPXTableSectionData *widthSectionData = [OAGPXTableSectionData withData:@{
-                kSectionCells: widthCells,
+                kTableKey: @"section_width",
                 kSectionHeader: OALocalizedString(@"shared_string_width"),
                 kSectionFooter: [self isDefaultWidthMode]
                         ? [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_width"),
                                                      [_settings.renderer get]]
                         : @"",
-                kSectionFooterHeight: @36.
+                kSectionFooterHeight: @36.,
+                kTableValues: @{ @"custom_width_value": @([routeLayer getCustomRouteWidthMin]) }
         }];
+        [_tableData.subjects addObject:widthSectionData];
 
         OAGPXTableCellData *widthMapStyleCellData = [OAGPXTableCellData withData:@{
-                kCellKey:@"width_map_style",
+                kTableKey:@"width_map_style",
                 kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
                 kCellTitle:OALocalizedString(@"map_settings_style")
         }];
-        widthMapStyleCellData.isOn = ^() { return [self isDefaultWidthMode]; };
-        widthMapStyleCellData.onSwitch = ^(BOOL toggle) {
-            _selectedWidthMode = toggle ? OARouteWidthMode.DEFAULT : [OARouteWidthMode getRouteWidthModes].firstObject;
-            _previewRouteLineInfo.width = _selectedWidthMode.widthKey;
-            [self updateRouteLayer:_previewRouteLineInfo];
-        };
-        [widthCells addObject:widthMapStyleCellData];
+        [widthSectionData.subjects addObject:widthMapStyleCellData];
 
         // custom width settings
-        OAGPXTableCellData *widthTypesEmptySpaceCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"width_types_empty_space",
-                kCellType: [OADividerCell getCellIdentifier],
-                kTableValues: @{ @"float_value": @12. }
-        }];
-
-        OAGPXTableCellData *widthValueCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"width_value",
-                kCellType: [OASegmentedControlCell getCellIdentifier],
-                kTableValues: @{ @"array_value": [OARouteWidthMode getRouteWidthModes] },
-                kCellToggle: @YES
-        }];
-
-        OAGPXTableCellData *widthSliderEmptySpaceCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"width_slider_empty_space",
-                kCellType: [OADividerCell getCellIdentifier],
-                kTableValues: @{ @"float_value": [self isCustomWidthMode] ? @6. : @19. }
-        }];
-        widthSliderEmptySpaceCellData.updateData = ^() {
-            [widthSliderEmptySpaceCellData setData:@{ kTableValues: @{ @"float_value": [self isCustomWidthMode] ? @6. : @19. } }];
-        };
-
-        OARouteLayer *routeLayer = _mapPanelViewController.mapViewController.mapLayers.routeMapLayer;
-        __block NSInteger customWidthValue = [routeLayer getCustomRouteWidthMin];
         if (_previewRouteLineInfo.width && [NSCharacterSet.decimalDigitCharacterSet
                 isSupersetOfSet:[NSCharacterSet characterSetWithCharactersInString:_previewRouteLineInfo.width]])
-            customWidthValue = _previewRouteLineInfo.width.integerValue;
+            widthSectionData.values[@"custom_width_value"] = @(_previewRouteLineInfo.width.integerValue);
 
-        NSMutableArray<NSString *> *customWidthValues = [NSMutableArray array];
-        for (NSInteger i = [routeLayer getCustomRouteWidthMin]; i <= [routeLayer getCustomRouteWidthMax]; i++)
-        {
-            [customWidthValues addObject:[NSString stringWithFormat:@"%li", i]];
-        }
-        OAGPXTableCellData *customSliderCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"width_custom_slider",
-                kCellType: [OASegmentSliderTableViewCell getCellIdentifier],
-                kTableValues: @{
-                        @"custom_string_value": [NSString stringWithFormat:@"%li", customWidthValue],
-                        @"array_value": customWidthValues
-                }
-        }];
-        customSliderCellData.updateProperty = ^(id value) {
-            if ([value isKindOfClass:NSNumber.class])
-                customWidthValue = ((NSNumber *) value).integerValue;
-        };
-        customSliderCellData.updateData = ^() {
-            _previewRouteLineInfo.width = [NSString stringWithFormat:@"%li", customWidthValue];
-            [self updateRouteLayer:_previewRouteLineInfo];
-
-            [customSliderCellData setData:@{
-                    kTableValues: @{
-                            @"custom_string_value": [NSString stringWithFormat:@"%li", customWidthValue],
-                            @"array_value": customWidthValues
-                    }
-            }];
-        };
-
-        void (^clearWidthSection) (BOOL) = ^(BOOL withTypes) {
-
-            if (withTypes)
-            {
-                [widthCells removeObjectsInArray:@[
-                        widthTypesEmptySpaceCellData,
-                        widthValueCellData,
-                        widthSliderEmptySpaceCellData
-                ]];
-            }
-
-            [widthCells removeObject:customSliderCellData];
-        };
-
-        void (^setWidthCells) () = ^() {
-            if (![self isDefaultWidthMode])
-            {
-                clearWidthSection(NO);
-
-                if (![widthCells containsObject:widthValueCellData])
-                {
-                    [widthCells addObjectsFromArray:@[
-                            widthTypesEmptySpaceCellData,
-                            widthValueCellData,
-                            widthSliderEmptySpaceCellData
-                    ]];
-                }
-
-                if ([self isCustomWidthMode] && ![widthCells containsObject:customSliderCellData])
-                    [widthCells addObject:customSliderCellData];
-            }
-            else
-            {
-                clearWidthSection(YES);
-            }
-        };
-
-        widthValueCellData.updateProperty = ^(id value) {
-            if ([value isKindOfClass:NSNumber.class])
-            {
-                NSInteger modeIndex = ((NSNumber *) value).integerValue;
-                _selectedWidthMode = [OARouteWidthMode getRouteWidthModes][modeIndex];
-            }
-        };
-        widthValueCellData.updateData = ^() {
-            _previewRouteLineInfo.width = [self isCustomWidthMode]
-                    ? [NSString stringWithFormat:@"%li", customWidthValue]
-                    : _selectedWidthMode.widthKey;
-            [self updateRouteLayer:_previewRouteLineInfo];
-        };
-
-        widthSectionData.updateData = ^() {
-            setWidthCells();
-
-            for (OAGPXTableCellData *cellData in widthCells)
-            {
-                if (cellData.updateData)
-                    cellData.updateData();
-            }
-
-            [widthSectionData setData:@{
-                    kSectionFooter: [self isDefaultWidthMode]
-                            ? [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_width"),
-                                                         [_settings.renderer get]]
-                            : @""
-            }];
-        };
-        [tableSections addObject:widthSectionData];
-
-        setWidthCells();
+        [self setWidthCells];
 
         // turn arrows section
+        OAGPXTableSectionData *turnArrowsSectionData = [OAGPXTableSectionData withData:@{
+                kTableKey: @"section_turn_arrows",
+                kSectionFooter: OALocalizedString(@"turn_arrows_descr"),
+                kSectionFooterHeight: @36.
+        }];
+        [_tableData.subjects addObject:turnArrowsSectionData];
+
         OAGPXTableCellData *turnArrowsCellData = [OAGPXTableCellData withData:@{
-                kCellKey:@"turn_arrows",
+                kTableKey:@"turn_arrows",
                 kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
                 kCellTitle:OALocalizedString(@"turn_arrows")
         }];
-        turnArrowsCellData.onSwitch = ^(BOOL toggle) {
-            _previewRouteLineInfo.showTurnArrows = toggle;
-            [self updateRouteLayer:_previewRouteLineInfo];
-        };
-        turnArrowsCellData.isOn = ^() {
-            return _previewRouteLineInfo.showTurnArrows;
-        };
-        [tableSections addObject:[OAGPXTableSectionData withData:@{
-                kSectionCells: @[turnArrowsCellData],
-                kSectionFooter: OALocalizedString(@"turn_arrows_descr"),
-                kSectionFooterHeight: @36.
-        }]];
+        [turnArrowsSectionData.subjects addObject:turnArrowsCellData];
 
         // actions section
+        OAGPXTableSectionData *resetSectionData = [OAGPXTableSectionData withData:@{
+                kTableKey: @"section_reset",
+                kSectionHeader:OALocalizedString(@"actions"),
+                kSectionFooterHeight: @60.
+        }];
+        [_tableData.subjects addObject:resetSectionData];
+
         OAGPXTableCellData *resetCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"reset",
+                kTableKey: @"reset",
                 kCellType: [OAIconTitleValueCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"reset_to_original"),
                 kCellRightIconName: @"ic_custom_reset"
         }];
-        resetCellData.onButtonPressed = ^() {
-            [self updateAllValues];
-            [self updateRouteLayer:_oldPreviewRouteLineInfo];
-            [self generateData];
-            [UIView transitionWithView:self.tableView
-                              duration:0.35f
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^(void) {
-                                [self.tableView reloadData];
-                            }
-                            completion:nil];
-        };
-
-        [tableSections addObject:[OAGPXTableSectionData withData:@{
-                kSectionCells: @[resetCellData],
-                kSectionHeader:OALocalizedString(@"actions"),
-                kSectionFooterHeight: @60.
-        }]];
-
-        _tableData = [OAGPXTableData withData:@{ kTableSections: tableSections }];
+        [resetSectionData.subjects addObject:resetCellData];
     }
 }
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath
 {
-    return _tableData.sections[indexPath.section].cells[indexPath.row];
+    return _tableData.subjects[indexPath.section].subjects[indexPath.row];
 }
 
 - (BOOL)hasInitialState
@@ -1059,6 +723,428 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }];
 }
 
+- (OAGPXTableCellData *)generateTopDescriptionCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"top_description",
+            kCellType: [OATextLineViewCell getCellIdentifier],
+            kCellTitle: _selectedType.topDescription
+    }];
+}
+
+- (OAGPXTableCellData *)generateBottomDescriptionCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"bottom_description",
+            kCellType: [OATextLineViewCell getCellIdentifier],
+            kCellTitle: _selectedType.bottomDescription
+    }];
+}
+
+- (void)removeCellsFromSection:(OAGPXTableSectionData *)sectionData cellKeys:(NSArray<NSString *> *)cellKeys
+{
+    [sectionData.subjects enumerateObjectsUsingBlock:^(OAGPXTableCellData * _Nonnull cellData, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([cellKeys containsObject:cellData.key])
+            [sectionData.subjects removeObject:cellData];
+    }];
+}
+
+- (void)removeCellFromSection:(OAGPXTableSectionData *)sectionData cellKey:(NSString *)cellKey
+{
+    OAGPXTableCellData *cellData = [sectionData getSubject:cellKey];
+    if (cellData)
+        [sectionData.subjects removeObject:cellData];
+}
+
+- (void)clearColorSection:(BOOL)withTypes
+{
+    OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_color"];
+    if (sectionData)
+    {
+        if (withTypes)
+        {
+            [self removeCellFromSection:sectionData cellKey:@"color_types_empty_space"];
+            [self removeCellFromSection:sectionData cellKey:@"color_types"];
+        }
+
+        [self removeCellFromSection:sectionData cellKey:@"color_day_night_empty_space"];
+        [self removeCellFromSection:sectionData cellKey:@"color_day_night_value"];
+        [self removeCellFromSection:sectionData cellKey:@"color_grid"];
+        [self removeCellFromSection:sectionData cellKey:@"top_description"];
+        [self removeCellFromSection:sectionData cellKey:@"color_elevation_gradient"];
+        [self removeCellFromSection:sectionData cellKey:@"bottom_description"];
+    }
+}
+
+- (void)clearWidthSection:(BOOL)withTypes
+{
+    OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_width"];
+    if (sectionData)
+    {
+        if (withTypes)
+        {
+            [self removeCellFromSection:sectionData cellKey:@"width_types_empty_space"];
+            [self removeCellFromSection:sectionData cellKey:@"width_value"];
+            [self removeCellFromSection:sectionData cellKey:@"width_slider_empty_space"];
+        }
+
+        [self removeCellFromSection:sectionData cellKey:@"width_custom_slider"];
+    }
+}
+
+- (void)setColorCells
+{
+    OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_color"];
+    if (sectionData)
+    {
+        if (![sectionData.values[@"color_map_style"] boolValue])
+        {
+            [self clearColorSection:NO];
+
+            OAGPXTableCellData *colorTypesCellData = [sectionData getSubject:@"color_types"];
+            if (!colorTypesCellData)
+            {
+                [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
+                        kTableKey: @"color_types_empty_space",
+                        kCellType: [OADividerCell getCellIdentifier],
+                        kTableValues: @{ @"float_value": @10. }
+                }]];
+                NSMutableArray<NSDictionary *> *lineColoringTypes = [NSMutableArray array];
+                for (OARouteAppearanceType *type in _coloringTypes)
+                {
+                    [lineColoringTypes addObject:@{
+                            @"title": type.title,
+                            @"available": @(type.isActive)
+                    }];
+                }
+                [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
+                        kTableKey: @"color_types",
+                        kCellType: [OAFoldersCell getCellIdentifier],
+                        kTableValues: @{
+                                @"array_value": lineColoringTypes,
+                                @"selected_integer_value": @([_coloringTypes indexOfObject:_selectedType])
+                        }
+                }]];
+            }
+
+            if ([_selectedType.coloringType isCustomColor])
+            {
+                [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
+                        kTableKey: @"color_day_night_empty_space",
+                        kCellType: [OADividerCell getCellIdentifier],
+                        kTableValues: @{ @"float_value": @8. }
+                }]];
+                [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
+                        kTableKey: @"color_day_night_value",
+                        kCellType: [OASegmentedControlCell getCellIdentifier],
+                        kTableValues: @{ @"array_value": @[kColorDayMode, kColorNightMode] },
+                        kCellToggle: @NO
+                }]];
+                [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
+                        kTableKey: @"color_grid",
+                        kCellType: [OAColorsTableViewCell getCellIdentifier],
+                        kTableValues: @{
+                                @"array_value": _availableColors,
+                                @"int_value": @([_previewRouteLineInfo getCustomColor:_nightMode])
+                        }
+                }]];
+            }
+            else if ([_selectedType.coloringType isGradient])
+            {
+                [sectionData.subjects addObject:[self generateTopDescriptionCellData]];
+                [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
+                        kTableKey: @"color_elevation_gradient",
+                        kCellType: [OAImageTextViewCell getCellIdentifier],
+                        kCellDesc: OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_min_height" : @""),
+                        kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed",
+                        kTableValues: @{
+                                @"extra_desc": OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_max_height" : @""),
+                                @"desc_font_size": @([self isSelectedTypeSlope] ? 15 : 17)
+                        }
+                }]];
+                [sectionData.subjects addObject:[self generateBottomDescriptionCellData]];
+            }
+            else if ([_selectedType.coloringType isRouteInfoAttribute])
+            {
+                [sectionData.subjects addObject:[self generateTopDescriptionCellData]];
+                [sectionData.subjects addObject:[self generateBottomDescriptionCellData]];
+            }
+        }
+        else
+        {
+            [self clearColorSection:YES];
+        }
+        OAGPXTableCellData *colorGridCellData = [sectionData getSubject:@"color_grid"];
+        if (colorGridCellData)
+            _cellColorGrid = [sectionData.subjects indexOfObject:colorGridCellData];
+    }
+}
+
+- (void)setWidthCells
+{
+    OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_width"];
+    if (sectionData)
+    {
+        if (![self isDefaultWidthMode])
+        {
+            [self clearWidthSection:NO];
+
+            OAGPXTableCellData *widthValueCellData = [sectionData getSubject:@"width_value"];
+            if (!widthValueCellData)
+            {
+                [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
+                        kTableKey: @"width_types_empty_space",
+                        kCellType: [OADividerCell getCellIdentifier],
+                        kTableValues: @{ @"float_value": @12. }
+                }]];
+                [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
+                        kTableKey: @"width_value",
+                        kCellType: [OASegmentedControlCell getCellIdentifier],
+                        kTableValues: @{ @"array_value": [OARouteWidthMode getRouteWidthModes] },
+                        kCellToggle: @YES
+                }]];
+                [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
+                        kTableKey: @"width_slider_empty_space",
+                        kCellType: [OADividerCell getCellIdentifier],
+                        kTableValues: @{ @"float_value": [self isCustomWidthMode] ? @6. : @19. }
+                }]];
+            }
+
+            OAGPXTableCellData *widthCustomSliderCellData = [sectionData getSubject:@"width_custom_slider"];
+            if ([self isCustomWidthMode] && !widthCustomSliderCellData)
+            {
+                OARouteLayer *routeLayer = _mapPanelViewController.mapViewController.mapLayers.routeMapLayer;
+                NSMutableArray<NSString *> *customWidthValues = [NSMutableArray array];
+                for (NSInteger i = [routeLayer getCustomRouteWidthMin]; i <= [routeLayer getCustomRouteWidthMax]; i++)
+                {
+                    [customWidthValues addObject:[NSString stringWithFormat:@"%li", i]];
+                }
+
+                [sectionData.subjects addObject:[OAGPXTableCellData withData:@{
+                        kTableKey: @"width_custom_slider",
+                        kCellType: [OASegmentSliderTableViewCell getCellIdentifier],
+                        kTableValues: @{
+                                @"custom_string_value": [NSString stringWithFormat:@"%li",
+                                        [sectionData.values[@"custom_width_value"] integerValue]],
+                                @"array_value": customWidthValues
+                        }
+                }]];
+            }
+        }
+        else
+        {
+            [self clearWidthSection:YES];
+        }
+    }
+}
+
+#pragma mark - Cell action methods
+
+- (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
+{
+    if ([tableData.key isEqualToString:@"cell_color_map_style"])
+    {
+        OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_color"];
+        if (sectionData)
+        {
+            sectionData.values[@"color_map_style"] = @(toggle);
+            if (toggle)
+                _selectedType = [self getRouteAppearanceType:OAColoringType.DEFAULT];
+            else if (_selectedType.coloringType == OAColoringType.DEFAULT)
+                _selectedType = [self getRouteAppearanceType:OAColoringType.CUSTOM_COLOR];
+            else
+                _selectedType = [self getRouteAppearanceType:_previewRouteLineInfo.coloringType];
+
+            _previewRouteLineInfo.coloringType = _selectedType.coloringType;
+            [self updateRouteLayer:_previewRouteLineInfo];
+        }
+    }
+    else if ([tableData.key isEqualToString:@"width_map_style"])
+    {
+        _selectedWidthMode = toggle ? OARouteWidthMode.DEFAULT : [OARouteWidthMode getRouteWidthModes].firstObject;
+        _previewRouteLineInfo.width = _selectedWidthMode.widthKey;
+        [self updateRouteLayer:_previewRouteLineInfo];
+    }
+    else if ([tableData.key isEqualToString:@"turn_arrows"])
+    {
+        _previewRouteLineInfo.showTurnArrows = toggle;
+        [self updateRouteLayer:_previewRouteLineInfo];
+    }
+}
+
+- (BOOL)isOn:(OAGPXBaseTableData *)tableData
+{
+    if ([tableData.key isEqualToString:@"cell_color_map_style"])
+    {
+        OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_color"];
+        if (sectionData)
+            return [sectionData.values[@"color_map_style"] boolValue];
+    }
+    else if ([tableData.key isEqualToString:@"width_map_style"])
+    {
+        return [self isDefaultWidthMode];
+    }
+    else if ([tableData.key isEqualToString:@"turn_arrows"])
+    {
+        return _previewRouteLineInfo.showTurnArrows;
+    }
+
+    return NO;
+}
+
+- (void)updateData:(OAGPXBaseTableData *)tableData
+{
+    if ([tableData.key isEqualToString:@"cell_color_map_style"] && [_selectedType.coloringType isCustomColor])
+    {
+        UIColor *customColorDay = UIColorFromRGB([_previewRouteLineInfo getCustomColor:NO]);
+        UIColor *customColorNight = UIColorFromRGB([_previewRouteLineInfo getCustomColor:YES]);
+        UIColor *defaultColorDay = UIColorFromRGB(kDefaultRouteLineDayColor);
+        UIColor *defaultColorNight = UIColorFromRGB(kDefaultRouteLineNightColor);
+        if ([customColorDay isEqual:defaultColorDay] || [customColorNight isEqual:defaultColorNight])
+            [_previewRouteLineInfo setCustomColor:_availableColors.firstObject.intValue nightMode:_nightMode];
+    }
+    else if ([tableData.key isEqualToString:@"color_types"])
+    {
+        tableData.values[@"selected_integer_value"] = @([_coloringTypes indexOfObject:_selectedType]);
+    }
+    else if ([tableData.key isEqualToString:@"color_day_night_value"])
+    {
+        [[OADayNightHelper instance] forceUpdate];
+    }
+    else if ([tableData.key isEqualToString:@"color_grid"])
+    {
+        tableData.values[@"array_value"] = _availableColors;
+        tableData.values[@"int_value"] = @([_previewRouteLineInfo getCustomColor:_nightMode]);
+    }
+    else if ([tableData.key isEqualToString:@"top_description"])
+    {
+        [tableData setData:@{ kCellTitle: _selectedType.topDescription }];
+    }
+    else if ([tableData.key isEqualToString:@"bottom_description"])
+    {
+        [tableData setData:@{ kCellTitle: _selectedType.bottomDescription }];
+    }
+    else if ([tableData.key isEqualToString:@"color_elevation_gradient"])
+    {
+        tableData.values[@"extra_desc"] = OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_max_height" : @"");
+        tableData.values[@"desc_font_size"] = @([self isSelectedTypeSlope] ? 15 : 17);
+        [tableData setData:@{
+                kCellDesc: OALocalizedString([self isSelectedTypeAltitude] ? @"shared_string_min_height" : @""),
+                kCellRightIconName: [self isSelectedTypeSlope] ? @"img_track_gradient_slope" : @"img_track_gradient_speed"
+        }];
+    }
+    else if ([tableData.key isEqualToString:@"width_slider_empty_space"])
+    {
+        tableData.values[@"float_value"] = @([self isCustomWidthMode] ? 6. : 19.);
+    }
+    else if ([tableData.key isEqualToString:@"width_custom_slider"])
+    {
+        OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_width"];
+        if (sectionData)
+        {
+            _previewRouteLineInfo.width = [NSString stringWithFormat:@"%li", [sectionData.values[@"custom_width_value"] integerValue]];
+            [self updateRouteLayer:_previewRouteLineInfo];
+            tableData.values[@"custom_string_value"] = [NSString stringWithFormat:@"%li", [sectionData.values[@"custom_width_value"] integerValue]];
+        }
+    }
+    else if ([tableData.key isEqualToString:@"width_value"])
+    {
+        OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_width"];
+        if (sectionData)
+        {
+            _previewRouteLineInfo.width = [self isCustomWidthMode]
+                    ? [NSString stringWithFormat:@"%li", [sectionData.values[@"custom_width_value"] integerValue]]
+                    : _selectedWidthMode.widthKey;
+            [self updateRouteLayer:_previewRouteLineInfo];
+        }
+    }
+    else if ([tableData.key isEqualToString:@"section_color"])
+    {
+        OAGPXTableSectionData *sectionData = (OAGPXTableSectionData *) tableData;
+
+        [self setColorCells];
+
+        for (OAGPXTableCellData *cellData in sectionData.subjects)
+        {
+            [self updateData:cellData];
+        }
+
+        [sectionData setData:@{
+                kSectionFooter: [sectionData.values[@"color_map_style"] boolValue]
+                        ? [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_color"),
+                                                     [_settings.renderer get]]
+                        : @""
+        }];
+    }
+    else if ([tableData.key isEqualToString:@"section_width"])
+    {
+        OAGPXTableSectionData *sectionData = (OAGPXTableSectionData *) tableData;
+
+        [self setWidthCells];
+
+        for (OAGPXTableCellData *cellData in sectionData.subjects)
+        {
+            [self updateData:cellData];
+        }
+
+        [sectionData setData:@{
+                kSectionFooter: [self isDefaultWidthMode]
+                        ? [NSString stringWithFormat:OALocalizedString(@"route_line_use_map_style_width"),
+                                                     [_settings.renderer get]]
+                        : @""
+        }];
+    }
+}
+
+- (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData
+{
+    if ([tableData.key isEqualToString:@"color_day_night_value"])
+    {
+        if ([value isKindOfClass:NSNumber.class])
+        {
+            NSInteger index = [value integerValue];
+            NSArray<NSString *> *dayNightValues = tableData.values[@"array_value"];
+            _nightMode = [dayNightValues[index] isEqualToString:kColorNightMode];
+            _selectedDayNightMode = _nightMode ? dayNightValues[1] : dayNightValues[0];
+            [_settings.appearanceMode set:index mode:_appMode];
+        }
+    }
+    else if ([tableData.key isEqualToString:@"width_custom_slider"])
+    {
+        if ([value isKindOfClass:NSNumber.class])
+        {
+            OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_width"];
+            if (sectionData)
+                sectionData.values[@"custom_width_value"] = value;
+        }
+    }
+    else if ([tableData.key isEqualToString:@"width_value"])
+    {
+        if ([value isKindOfClass:NSNumber.class])
+        {
+            NSInteger modeIndex = ((NSNumber *) value).integerValue;
+            _selectedWidthMode = [OARouteWidthMode getRouteWidthModes][modeIndex];
+        }
+    }
+}
+
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+{
+    if ([tableData.key isEqualToString:@"reset"])
+    {
+        [self updateAllValues];
+        [self updateRouteLayer:_oldPreviewRouteLineInfo];
+        [self generateData];
+        [UIView transitionWithView:self.tableView
+                          duration:0.35f
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^(void) {
+                            [self.tableView reloadData];
+                        }
+                        completion:nil];
+    }
+}
+
 - (IBAction)onBackButtonPressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
@@ -1110,17 +1196,17 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _tableData.sections.count;
+    return _tableData.subjects.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _tableData.sections[section].cells.count;
+    return _tableData.subjects[section].subjects.count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return _tableData.sections[section].header;
+    return _tableData.subjects[section].header;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1159,7 +1245,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         {
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
 
-            cell.switchView.on = cellData.isOn ? cellData.isOn() : NO;
+            cell.switchView.on = [self isOn:cellData];
             cell.textView.text = cellData.title;
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -1415,7 +1501,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    OAGPXTableSectionData *sectionData = _tableData.sections[section];
+    OAGPXTableSectionData *sectionData = _tableData.subjects[section];
     return section == 0 || !sectionData.header || sectionData.header.length == 0
             ? 0.001
             : [OAUtilities calculateTextBounds:sectionData.header
@@ -1425,7 +1511,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    OAGPXTableSectionData *sectionData = _tableData.sections[section];
+    OAGPXTableSectionData *sectionData = _tableData.subjects[section];
     CGFloat footerHeight = sectionData.footerHeight > 0 ? sectionData.footerHeight : 0.;
 
     NSString *footer = sectionData.footer;
@@ -1437,7 +1523,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    NSString *footer = _tableData.sections[section].footer;
+    NSString *footer = _tableData.subjects[section].footer;
     if (!footer || footer.length == 0)
         return nil;
 
@@ -1455,9 +1541,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-
-    if (cellData.onButtonPressed)
-        cellData.onButtonPressed();
+    [self onButtonPressed:cellData];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -1472,12 +1556,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
 
         OAGPXTableCellData *cellData = [self getCellData:indexPath];
-        if (cellData.onSwitch)
-            cellData.onSwitch(switchView.isOn);
+        [self onSwitch:switchView.isOn tableData:cellData];
 
-        OAGPXTableSectionData *sectionData = _tableData.sections[indexPath.section];
-        if (sectionData.updateData)
-            sectionData.updateData();
+        OAGPXTableSectionData *sectionData = _tableData.subjects[indexPath.section];
+        [self updateData:sectionData];
 
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
                       withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -1492,12 +1574,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:segment.tag & 0x3FF inSection:segment.tag >> 10];
 
         OAGPXTableCellData *cellData = [self getCellData:indexPath];
-        if (cellData.updateProperty)
-            cellData.updateProperty(@(segment.selectedSegmentIndex));
+        [self updateProperty:@(segment.selectedSegmentIndex) tableData:cellData];
 
-        OAGPXTableSectionData *sectionData = _tableData.sections[indexPath.section];
-        if (sectionData.updateData)
-            sectionData.updateData();
+        OAGPXTableSectionData *sectionData = _tableData.subjects[indexPath.section];
+        [self updateData:sectionData];
 
         [UIView setAnimationsEnabled:NO];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
@@ -1515,11 +1595,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         OASegmentSliderTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         OAGPXTableCellData *cellData = [self getCellData:indexPath];
-        if (cellData.updateProperty)
-            cellData.updateProperty(@(cell.selectedMark + 1));
-
-        if (cellData.updateData)
-            cellData.updateData();
+        [self updateProperty:@(cell.selectedMark + 1) tableData:cellData];
+        [self updateData:cellData];
 
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
@@ -1556,9 +1633,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             : nil;
     [self updateRouteLayer:_previewRouteLineInfo];
 
-    OAGPXTableSectionData *section = _tableData.sections[_sectionColors];
-    if (section.updateData)
-        section.updateData();
+    OAGPXTableSectionData *sectionData = _tableData.subjects[_sectionColors];
+    [self updateData:sectionData];
 
     [UIView transitionWithView:self.tableView
                       duration:0.35f
@@ -1577,14 +1653,13 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     [_previewRouteLineInfo setCustomColor:_availableColors[tag].intValue nightMode:_nightMode];
     [self updateRouteLayer:_previewRouteLineInfo];
 
-    if (_tableData.sections.count >= 1)
+    if (_tableData.subjects.count >= 1)
     {
-        OAGPXTableSectionData *colorSection = _tableData.sections[_sectionColors];
-        if (colorSection.cells.count - 1 >= _cellColorGrid)
+        OAGPXTableSectionData *sectionData = _tableData.subjects[_sectionColors];
+        if (sectionData.subjects.count - 1 >= _cellColorGrid)
         {
-            OAGPXTableCellData *colorGridCell = colorSection.cells[_cellColorGrid];
-            if (colorGridCell.updateData)
-                colorGridCell.updateData();
+            OAGPXTableCellData *cellData = sectionData.subjects[_cellColorGrid];
+            [self updateData:cellData];
 
             [UIView setAnimationsEnabled:NO];
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_cellColorGrid

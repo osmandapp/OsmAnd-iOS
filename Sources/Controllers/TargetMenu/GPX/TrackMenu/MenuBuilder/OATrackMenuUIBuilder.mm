@@ -68,11 +68,18 @@
         OABaseTrackMenuTabItem *tab = _tabs[_selectedTab];
         if (!tab.trackMenuDelegate)
             tab.trackMenuDelegate = self.trackMenuDelegate;
-        [tab generateData];
+
+        if (!tab.isGeneratedData)
+            [tab generateData];
 
         return [tab getTableData];
     }
     return [[OAGPXTableData alloc] init];
+}
+
+- (void)resetDataInTab:(EOATrackMenuHudTab)selectedTab
+{
+    [_tabs[selectedTab] resetData];
 }
 
 - (void)setupTabBar:(OATabBar *)tabBarView
@@ -108,6 +115,33 @@
     } forState:UIControlStateSelected];
 
     return tabBarItem;
+}
+
+#pragma mark - Cell action methods
+
+- (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
+{
+    [_tabs[_selectedTab] onSwitch:toggle tableData:tableData];
+}
+
+- (BOOL)isOn:(OAGPXBaseTableData *)tableData
+{
+    return [_tabs[_selectedTab] isOn:tableData];
+}
+
+- (void)updateData:(OAGPXBaseTableData *)tableData
+{
+    [_tabs[_selectedTab] updateData:tableData];
+}
+
+- (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData
+{
+    [_tabs[_selectedTab] updateProperty:value tableData:tableData];
+}
+
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+{
+    [_tabs[_selectedTab] onButtonPressed:tableData];
 }
 
 @end

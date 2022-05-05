@@ -10,11 +10,9 @@
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
-#import "OAMapRulerView.h"
-#import "Localization.h"
 #import "OAColors.h"
 #import "OAGPXDatabase.h"
-#import "OAGPXDocument.h"
+#import "OAGPXMutableDocument.h"
 #import "OsmAndApp.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXTrackAnalysis.h"
@@ -22,26 +20,68 @@
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 
-@implementation OAGPXTableCellData
+@implementation OAGPXBaseTableData
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _values = [NSMutableDictionary dictionary];
+        _subjects = [NSMutableArray array];
+    }
+    return self;
+}
 
 + (instancetype)withData:(NSDictionary *)data
 {
-    OAGPXTableCellData *cellData = [OAGPXTableCellData new];
-    if (cellData)
-    {
+    OAGPXBaseTableData *cellData = [OAGPXBaseTableData new];
+    if (cellData && data)
         [cellData setData:data];
-    }
+
     return cellData;
 }
 
 - (void)setData:(NSDictionary *)data
 {
-    if ([data.allKeys containsObject:kCellKey])
-        _key = data[kCellKey];
+    if ([data.allKeys containsObject:kTableKey])
+        _key = data[kTableKey];
+    if ([data.allKeys containsObject:kTableValues])
+    {
+        id subjects = data[kTableValues];
+        _values = [subjects isKindOfClass:NSMutableDictionary.class] ? subjects : [NSMutableDictionary dictionaryWithDictionary:subjects];
+    }
+    if ([data.allKeys containsObject:kTableSubjects])
+    {
+        id subjects = data[kTableSubjects];
+        _subjects = [subjects isKindOfClass:NSMutableArray.class] ? subjects : [NSMutableArray arrayWithArray:subjects];
+    }
+}
+
+- (OAGPXBaseTableData *)getSubject:(NSString *)key
+{
+    return nil;
+}
+
+@end
+
+@implementation OAGPXTableCellData
+
++ (instancetype)withData:(NSDictionary *)data
+{
+    OAGPXTableCellData *cellData = [OAGPXTableCellData new];
+    if (cellData && data)
+        [cellData setData:data];
+
+    return cellData;
+}
+
+- (void)setData:(NSDictionary *)data
+{
+    [super setData:data];
+
     if ([data.allKeys containsObject:kCellType])
         _type = data[kCellType];
-    if ([data.allKeys containsObject:kTableValues])
-        _values = data[kTableValues];
     if ([data.allKeys containsObject:kCellTitle])
         _title = data[kCellTitle];
     if ([data.allKeys containsObject:kCellDesc])
@@ -56,24 +96,33 @@
         _tintColor = [data[kCellTintColor] integerValue];
 }
 
+- (OAGPXTableCellData *)getSubject:(NSString *)key
+{
+    for (OAGPXTableCellData *cellData in self.subjects)
+    {
+        if ([cellData.key isEqualToString:key])
+            return cellData;
+    }
+    return nil;
+}
+
 @end
 
 @implementation OAGPXTableSectionData
 
 + (instancetype)withData:(NSDictionary *)data
 {
-    OAGPXTableSectionData *sectionData = [OAGPXTableSectionData new];
-    if (sectionData)
-    {
-        [sectionData setData:data];
-    }
-    return sectionData;
+    OAGPXTableSectionData *cellData = [OAGPXTableSectionData new];
+    if (cellData && data)
+        [cellData setData:data];
+
+    return cellData;
 }
 
 - (void)setData:(NSDictionary *)data
 {
-    if ([data.allKeys containsObject:kSectionCells])
-        _cells = data[kSectionCells];
+    [super setData:data];
+
     if ([data.allKeys containsObject:kSectionHeader])
         _header = data[kSectionHeader];
     if ([data.allKeys containsObject:kSectionHeaderHeight])
@@ -82,18 +131,16 @@
         _footer = data[kSectionFooter];
     if ([data.allKeys containsObject:kSectionFooterHeight])
         _footerHeight = [data[kSectionFooterHeight] floatValue];
-    if ([data.allKeys containsObject:kTableValues])
-        _values = data[kTableValues];
 }
 
-- (BOOL)containsCell:(NSString *)key
+- (OAGPXTableCellData *)getSubject:(NSString *)key
 {
-    for (OAGPXTableCellData *cellData in self.cells)
+    for (OAGPXTableCellData *cellData in self.subjects)
     {
         if ([cellData.key isEqualToString:key])
-            return YES;
+            return cellData;
     }
-    return NO;
+    return nil;
 }
 
 @end
@@ -102,18 +149,21 @@
 
 + (instancetype)withData:(NSDictionary *)data
 {
-    OAGPXTableData *tableData = [OAGPXTableData new];
-    if (tableData)
-    {
-        [tableData setData:data];
-    }
-    return tableData;
+    OAGPXTableData *cellData = [OAGPXTableData new];
+    if (cellData && data)
+        [cellData setData:data];
+
+    return cellData;
 }
 
-- (void)setData:(NSDictionary *)data
+- (OAGPXTableSectionData *)getSubject:(NSString *)key
 {
-    if ([data.allKeys containsObject:kTableSections])
-        _sections = data[kTableSections];
+    for (OAGPXTableSectionData *sectionData in self.subjects)
+    {
+        if ([sectionData.key isEqualToString:key])
+            return sectionData;
+    }
+    return nil;
 }
 
 @end
@@ -147,7 +197,7 @@
         _savingHelper = [OASavingTrackHelper sharedInstance];
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _mapViewController = _mapPanelViewController.mapViewController;
-        [self updateGpxData];
+        [self updateGpxData:NO updateDocument:YES];
         if (!_analysis)
             [self updateAnalysis];
         [self commonInit];
@@ -160,22 +210,41 @@
     return nil; //override
 }
 
-- (void)updateGpxData
+- (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDocument
 {
-    _isCurrentTrack = !_gpx || _gpx.gpxFilePath.length == 0 || _gpx.gpxFileName.length == 0;
-    if (_isCurrentTrack)
+    if (!_isShown)
+        [self changeTrackVisible];
+
+    if (updateDocument)
     {
-        if (!_gpx)
-        _gpx = [_savingHelper getCurrentGPX];
-
-        _gpx.gpxTitle = OALocalizedString(@"track_recording_name");
+        _doc = nil;
+        if (_isCurrentTrack)
+        {
+            _doc = _savingHelper.currentTrack;
+        }
+        else
+        {
+            NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
+            _doc = [[OAGPXMutableDocument alloc] initWithGpxFile:gpxFullPath];
+        }
     }
-    _doc = _isCurrentTrack ? (OAGPXDocument *) _savingHelper.currentTrack
-            : [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]];
+    [self updateAnalysis];
 
-    _isShown = _isCurrentTrack
-            ? [_settings.mapSettingShowRecordingTrack get]
-            : [[_settings.mapSettingVisibleGpx get] containsObject:_gpx.gpxFilePath];
+    if (replaceGPX)
+    {
+        if (_isCurrentTrack)
+        {
+            _gpx = [_savingHelper getCurrentGPX];
+        }
+        else if (_doc)
+        {
+            OAGPXDatabase *db = [OAGPXDatabase sharedDb];
+            OAGPX *gpx = [db buildGpxItem:_gpx.gpxFilePath title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
+            [db replaceGpxItem:gpx];
+            [db save];
+            _gpx = gpx;
+        }
+    }
 }
 
 - (void)updateAnalysis
@@ -185,6 +254,40 @@
         _analysis = [_doc getGeneralTrack] && [_doc getGeneralSegment]
                 ? [OAGPXTrackAnalysis segment:0 seg:_doc.generalSegment] : [_doc getAnalysis:0];
     }
+    else
+    {
+        _analysis = nil;
+    }
+}
+
+- (BOOL)changeTrackVisible
+{
+    if (self.isShown)
+    {
+        if (self.isCurrentTrack)
+        {
+            [self.settings.mapSettingShowRecordingTrack set:NO];
+            [self.mapViewController hideRecGpxTrack];
+        }
+        else
+        {
+            [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
+        }
+    }
+    else
+    {
+        if (self.isCurrentTrack)
+        {
+            [self.settings.mapSettingShowRecordingTrack set:YES];
+            [self.mapViewController showRecGpxTrack:YES];
+        }
+        else
+        {
+            [self.settings showGpx:@[self.gpx.gpxFilePath] update:YES];
+        }
+    }
+
+    return self.isShown = !self.isShown;
 }
 
 - (void)commonInit
@@ -298,11 +401,11 @@
     self.backButtonContainerView.hidden = ![self isLandscape] && self.currentState == EOADraggableMenuStateFullScreen;
 }
 
-- (void)adjustMapViewPort
+- (void)adjustViewPort:(BOOL)landscape
 {
-    if ([self isLandscape] && _mapViewController.mapView.viewportXScale != VIEWPORT_SHIFTED_SCALE)
+    if (landscape && _mapViewController.mapView.viewportXScale != VIEWPORT_SHIFTED_SCALE)
         _mapViewController.mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
-    else if (![self isLandscape] && _mapViewController.mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
+    else if (!landscape && _mapViewController.mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
         _mapViewController.mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
     if (_mapViewController.mapView.viewportYScale != [self getViewHeight] / DeviceScreenHeight)
         _mapViewController.mapView.viewportYScale = [self getViewHeight] / DeviceScreenHeight;
@@ -381,9 +484,10 @@
     [self changeHud:height];
     if (![self isTabSelecting] && [self adjustCentering])
     {
-        if ((self.currentState != EOADraggableMenuStateFullScreen && ![self isLandscape]) || [self isLandscape])
+        BOOL landscape = [self isLandscape];
+        if ((self.currentState != EOADraggableMenuStateFullScreen && !landscape) || landscape)
         {
-            [self adjustMapViewPort];
+            [self adjustViewPort:landscape];
             [_mapPanelViewController targetGoToGPX];
         }
     }

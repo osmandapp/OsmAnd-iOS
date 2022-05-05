@@ -14,7 +14,7 @@
 
 @protocol OATrackMenuViewControllerDelegate;
 
-@interface OATrackMenuHeaderView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface OATrackMenuHeaderView : UIView
 
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 
@@ -48,10 +48,10 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionDirectionConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *regionNoDirectionConstraint;
 
-@property (nonatomic) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
+@property (nonatomic, weak) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 
-- (void)updateHeader:(EOATrackMenuHudTab)selectedTab
-        currentTrack:(BOOL)currentTrack
+- (void)updateSelectedTab:(EOATrackMenuHudTab)selectedTab;
+- (void)updateHeader:(BOOL)currentTrack
           shownTrack:(BOOL)shownTrack
                title:(NSString *)title;
 

@@ -306,6 +306,7 @@
 
 - (void)onMenuDismissed
 {
+    [super onMenuDismissed];
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
 }
 

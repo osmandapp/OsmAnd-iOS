@@ -8,27 +8,29 @@
 
 #import "OATrackMenuTabOverview.h"
 #import "OATextViewSimpleCell.h"
-#import "OATextLineViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "Localization.h"
-#import "OAWebViewCell.h"
 #import "OAColors.h"
 #import "OAWikiArticleHelper.h"
 #import "OAImageDescTableViewCell.h"
 
+#define kDescriptionImageCell 0
 #define kInfoCreatedOnCell 0
 
 @interface OATrackMenuTabOverview ()
 
 @property (nonatomic) OAGPXTableData *tableData;
+@property (nonatomic) BOOL isGeneratedData;
 
 @end
 
 @implementation OATrackMenuTabOverview
 {
-    NSMutableArray *_results;
-    NSMutableString *_parsedString;
+    NSString *_description;
+    NSString *_imageURL;
 }
+
+@dynamic tableData, isGeneratedData;
 
 - (NSString *)getTabTitle
 {
@@ -42,206 +44,56 @@
 
 - (void)generateData
 {
-    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
-    NSString *imageURL = [self.trackMenuDelegate getMetadataImageLink];
-    NSString *description = self.trackMenuDelegate ? [self.trackMenuDelegate generateDescription] : @"";
-    NSMutableArray<OAGPXTableCellData *> *descriptionCells = [NSMutableArray array];
-    
-    if ((!imageURL || imageURL.length == 0) && description && description.length > 0)
-        imageURL = [self findFirstImageURL:description];
-    if (imageURL)
-    {
-        OAGPXTableCellData *imageCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"image",
-                kCellType: [OAImageDescTableViewCell getCellIdentifier],
-                kTableValues: @{ @"img": imageURL }
-        }];
-        [descriptionCells addObject:imageCellData];
-    }
+    self.tableData = [OAGPXTableData withData:@{ kTableKey: @"table_tab_overview" }];
 
-    if (!description || description.length == 0)
+    OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
+            kTableKey: @"section_description",
+            kSectionHeader: OALocalizedString(@"description"),
+            kSectionHeaderHeight: @56.
+    }];
+    [self.tableData.subjects addObject:descriptionSectionData];
+
+    [self generateDescription];
+    [self generateImageURL];
+
+    if (_imageURL && _imageURL.length > 0)
+        [descriptionSectionData.subjects addObject:[self generateImageCellData]];
+
+    if (_description && _description.length > 0)
     {
-        OAGPXTableCellData *addDescriptionCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"add_description",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
-                kCellTitle: OALocalizedString(@"add_description"),
-                kCellToggle: @YES,
-                kCellTintColor: @color_primary_purple
-        }];
-        addDescriptionCellData.onButtonPressed = ^{
-            if (self.trackMenuDelegate)
-                [self.trackMenuDelegate openDescriptionEditor];
-        };
-        [descriptionCells addObject:addDescriptionCellData];
-        
-        OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
-                kSectionCells: descriptionCells,
-                kSectionHeader: OALocalizedString(@"description"),
-                kSectionHeaderHeight: @56.
-        }];
-        [tableSections addObject:descriptionSectionData];
+        [descriptionSectionData.subjects addObject:[self generateDescriptionCellData]];
+        [descriptionSectionData.subjects addObject:[self generateEditDescriptionCellData]];
+        [descriptionSectionData.subjects addObject:[self generateReadFullDescriptionCellData]];
     }
     else
     {
-        description = [OAWikiArticleHelper getFirstParagraph:description];
-        
-        NSAttributedString * (^generateDescriptionAttrString) (void) = ^{
-            return [OAUtilities createAttributedString:
-                            [description componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
-                                                  font:[UIFont systemFontOfSize:17]
-                                                 color:UIColor.blackColor
-                                           strokeColor:nil
-                                           strokeWidth:0
-                                             alignment:NSTextAlignmentNatural];
-        };
-
-        NSAttributedString *descriptionAttr = generateDescriptionAttrString();
-        OAGPXTableCellData *descriptionCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"description",
-                kCellType: [OATextViewSimpleCell getCellIdentifier],
-                kTableValues: @{ @"attr_string_value": descriptionAttr }
-        }];
-        descriptionCellData.updateData = ^() {
-            [descriptionCellData setData:@{ kTableValues: @{ @"attr_string_value": generateDescriptionAttrString() } }];
-        };
-        [descriptionCells addObject:descriptionCellData];
-
-        OAGPXTableCellData *editDescriptionCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"context_menu_edit_descr",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
-                kCellTitle: OALocalizedString(@"context_menu_edit_descr"),
-                kCellToggle: @YES,
-                kCellTintColor: @color_primary_purple
-        }];
-        editDescriptionCellData.onButtonPressed = ^{
-            if (self.trackMenuDelegate)
-                [self.trackMenuDelegate openDescriptionEditor];
-        };
-        
-        OAGPXTableCellData *readFullDescriptionCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"read_full_description",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
-                kCellTitle: OALocalizedString(@"read_full_description"),
-                kCellToggle: @YES,
-                kCellTintColor: @color_primary_purple
-        }];
-        readFullDescriptionCellData.onButtonPressed = ^{
-            if (self.trackMenuDelegate)
-                [self.trackMenuDelegate openDescription];
-        };
-        
-        [descriptionCells addObject:editDescriptionCellData];
-        [descriptionCells addObject:readFullDescriptionCellData];
-
-        OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
-                kSectionCells: descriptionCells,
-                kSectionHeader: OALocalizedString(@"description"),
-                kSectionHeaderHeight: @56.
-        }];
-        descriptionSectionData.updateData = ^() {
-            for (OAGPXTableCellData *cellData in descriptionSectionData.cells)
-            {
-                if (cellData.updateData)
-                    cellData.updateData();
-            }
-        };
-
-        [tableSections addObject:descriptionSectionData];
+        [descriptionSectionData.subjects addObject:[self generateAddDescriptionCellData]];
     }
 
-    NSMutableArray<OAGPXTableCellData *> *infoCells = [NSMutableArray array];
+    OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
+            kTableKey: @"section_info",
+            kSectionHeader: OALocalizedString(@"shared_string_info"),
+            kSectionHeaderHeight: @56.
+    }];
+    [self.tableData.subjects addObject:infoSectionData];
 
     OAGPXTableCellData *sizeCellData = [OAGPXTableCellData withData:@{
-            kCellKey: @"size",
+            kTableKey: @"size",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"res_size"),
             kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getGpxFileSize] : @""
     }];
-    sizeCellData.updateData = ^() {
-        [sizeCellData setData:@{ kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getGpxFileSize] : @"" }];
-    };
+    [infoSectionData.subjects addObject:sizeCellData];
 
-    [infoCells addObject:sizeCellData];
+    OAGPXTableCellData *createdOnCellData = [self generateCreatedOnCellData];
+    if (createdOnCellData.desc && createdOnCellData.desc.length > 0)
+        [infoSectionData.subjects addObject:createdOnCellData];
 
-    NSString * (^generateCreatedOnString) (void) = ^{
-        return self.trackMenuDelegate ? [self.trackMenuDelegate getCreatedOn] : @"";
-    };
-    __block NSString *createdOn = generateCreatedOnString();
-
-    OAGPXTableCellData * (^generateDataForCreatedOnCellData) (void) = ^{
-        OAGPXTableCellData *createdOnCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"created_on",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kCellTitle: OALocalizedString(@"res_created_on"),
-                kCellDesc: createdOn
-        }];
-        createdOnCellData.updateData = ^() {
-            createdOn = generateCreatedOnString();
-            [createdOnCellData setData:@{ kCellDesc: createdOn }];
-        };
-
-        return createdOnCellData;
-    };
-
-    if (createdOn.length > 0)
-        [infoCells addObject:generateDataForCreatedOnCellData()];
-
-    OAGPXTableCellData * (^generateDataForLocationCellData) (void) = ^{
-        OAGPXTableCellData *locationCellData = [OAGPXTableCellData withData:@{
-                kCellKey: @"location",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
-                kCellTitle: OALocalizedString(@"sett_arr_loc"),
-                kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getDirName] : @""
-        }];
-        locationCellData.updateData = ^() {
-            [locationCellData setData:@{ kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getDirName] : @"" }];
-        };
-        return locationCellData;
-    };
-
+    OAGPXTableCellData *locationCellData = [self generateLocationCellData];
     if (self.trackMenuDelegate && ![self.trackMenuDelegate currentTrack])
-        [infoCells addObject:generateDataForLocationCellData()];
+        [infoSectionData.subjects addObject:locationCellData];
 
-    OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
-            kSectionCells: infoCells,
-            kSectionHeader: OALocalizedString(@"shared_string_info"),
-            kSectionHeaderHeight: @56.
-    }];
-    infoSectionData.updateData = ^() {
-        createdOn = generateCreatedOnString();
-        BOOL hasCreatedOn = [infoSectionData containsCell:@"created_on"];
-        if (createdOn.length > 0 && !hasCreatedOn)
-            [infoSectionData.cells insertObject:generateDataForCreatedOnCellData() atIndex:kInfoCreatedOnCell];
-        else if (createdOn.length == 0 && hasCreatedOn)
-            [infoSectionData.cells removeObjectAtIndex:kInfoCreatedOnCell];
-
-        BOOL isCurrentTrack = self.trackMenuDelegate && ![self.trackMenuDelegate currentTrack];
-        BOOL hasLocation = [infoSectionData.cells.lastObject.key isEqualToString:@"location"];
-        if (!isCurrentTrack && !hasLocation)
-            [infoSectionData.cells addObject:generateDataForLocationCellData()];
-        else if (isCurrentTrack && hasLocation)
-            [infoSectionData.cells removeObject:infoSectionData.cells.lastObject];
-
-        for (OAGPXTableCellData *cellData in infoSectionData.cells)
-        {
-            if (cellData.updateData)
-                cellData.updateData();
-        }
-    };
-
-    [tableSections addObject:infoSectionData];
-
-    self.tableData = [OAGPXTableData withData:@{ kTableSections: tableSections }];
-    self.tableData.updateData = ^() {
-        for (OAGPXTableSectionData *sectionData in tableSections)
-        {
-            if (sectionData.updateData)
-                sectionData.updateData();
-        }
-    };
+    self.isGeneratedData = YES;
 }
 
 - (NSString *) findFirstImageURL:(NSString *)htmlText
@@ -263,6 +115,272 @@
         }
     }
     return nil;
+}
+- (NSAttributedString *)generateDescriptionAttrString
+{
+    return [OAUtilities createAttributedString:
+                    [[OAWikiArticleHelper getFirstParagraph:_description] componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
+                                          font:[UIFont systemFontOfSize:17]
+                                         color:UIColor.blackColor
+                                   strokeColor:nil
+                                   strokeWidth:0
+                                     alignment:NSTextAlignmentNatural];
+}
+
+- (NSString *)generateCreatedOnString
+{
+    return self.trackMenuDelegate ? [self.trackMenuDelegate getCreatedOn] : @"";
+}
+
+- (NSString *)generateDirName
+{
+    return self.trackMenuDelegate ? [self.trackMenuDelegate getDirName] : @"";
+}
+
+- (void)generateDescription
+{
+    _description = self.trackMenuDelegate ? [self.trackMenuDelegate generateDescription] : @"";
+}
+
+- (void)generateImageURL
+{
+    _imageURL = self.trackMenuDelegate ? [self.trackMenuDelegate getMetadataImageLink] : nil;
+    if ((!_imageURL || _imageURL.length == 0) && _description && _description.length > 0)
+        _imageURL = [self findFirstImageURL:_description];
+}
+
+- (OAGPXTableCellData *)generateCreatedOnCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"created_on",
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellTitle: OALocalizedString(@"res_created_on"),
+            kCellDesc: [self generateCreatedOnString]
+    }];
+}
+
+- (OAGPXTableCellData *)generateLocationCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"location",
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellTitle: OALocalizedString(@"sett_arr_loc"),
+            kCellDesc: [self generateDirName]
+    }];
+}
+
+- (OAGPXTableCellData *)generateImageCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"image",
+            kCellType: [OAImageDescTableViewCell getCellIdentifier],
+            kTableValues: @{ @"img": _imageURL }
+    }];
+}
+- (OAGPXTableCellData *)generateAddDescriptionCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"add_description",
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kCellTitle: OALocalizedString(@"add_description"),
+            kCellToggle: @YES,
+            kCellTintColor: @color_primary_purple
+    }];
+}
+
+- (OAGPXTableCellData *)generateDescriptionCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"description",
+            kCellType: [OATextViewSimpleCell getCellIdentifier],
+            kTableValues: @{ @"attr_string_value": [self generateDescriptionAttrString] }
+    }];
+}
+
+- (OAGPXTableCellData *)generateEditDescriptionCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"edit_description",
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kCellTitle: OALocalizedString(@"context_menu_edit_descr"),
+            kCellToggle: @YES,
+            kCellTintColor: @color_primary_purple
+    }];
+}
+
+- (OAGPXTableCellData *)generateReadFullDescriptionCellData
+{
+    return [OAGPXTableCellData withData:@{
+            kTableKey: @"read_full_description",
+            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kCellTitle: OALocalizedString(@"read_full_description"),
+            kCellToggle: @YES,
+            kCellTintColor: @color_primary_purple
+    }];
+}
+
+#pragma mark - Cell action methods
+
+- (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
+{
+}
+
+- (BOOL)isOn:(OAGPXBaseTableData *)tableData
+{
+    return NO;
+}
+
+- (void)updateData:(OAGPXBaseTableData *)tableData
+{
+    if ([tableData.key isEqualToString:@"description"])
+    {
+        tableData.values[@"attr_string_value"] = [self generateDescriptionAttrString];
+    }
+    else if ([tableData.key isEqualToString:@"image"])
+    {
+        [self generateImageURL];
+        if (_imageURL)
+            tableData.values[@"img"] = _imageURL;
+    }
+    else if ([tableData.key isEqualToString:@"size"] && self.trackMenuDelegate)
+    {
+        [tableData setData:@{ kCellDesc: [self.trackMenuDelegate getGpxFileSize] }];
+    }
+    else if ([tableData.key isEqualToString:@"created_on"])
+    {
+        [tableData setData:@{ kCellDesc: [self generateCreatedOnString] }];
+    }
+    else if ([tableData.key isEqualToString:@"location"])
+    {
+        [tableData setData:@{ kCellDesc: [self generateDirName] }];
+    }
+    else if ([tableData.key isEqualToString:@"section_description"])
+    {
+        OAGPXTableSectionData *sectionData = (OAGPXTableSectionData *) tableData;
+
+        BOOL hasOldDescription = _description && _description.length > 0;
+        [self generateDescription];
+        BOOL hasNewDescription = _description && _description.length > 0;
+
+        BOOL hasOldImageURL = _imageURL && _imageURL.length > 0;
+        [self generateImageURL];
+        BOOL hasNewImageURL = _imageURL && _imageURL.length > 0;
+
+        if (!hasOldImageURL && hasNewImageURL)
+        {
+            [sectionData.subjects insertObject:[self generateImageCellData] atIndex:kDescriptionImageCell];
+        }
+        else if (hasOldImageURL && !hasNewImageURL)
+        {
+            OAGPXTableCellData *imageCellData = [sectionData getSubject:@"image"];
+            if (imageCellData)
+                [sectionData.subjects removeObject:imageCellData];
+        }
+        else
+        {
+            OAGPXTableCellData *imageCellData = [sectionData getSubject:@"image"];
+            if (imageCellData && hasNewImageURL)
+                imageCellData.values[@"img"] = _imageURL;
+        }
+
+        if (!hasOldDescription && hasNewDescription)
+        {
+            OAGPXTableCellData *addDescriptionCellData = [sectionData getSubject:@"add_description"];
+            if (addDescriptionCellData)
+                [sectionData.subjects removeObject:addDescriptionCellData];
+
+            [sectionData.subjects addObject:[self generateDescriptionCellData]];
+            [sectionData.subjects addObject:[self generateEditDescriptionCellData]];
+            [sectionData.subjects addObject:[self generateReadFullDescriptionCellData]];
+        }
+        else if (hasOldDescription && !hasNewDescription)
+        {
+            OAGPXTableCellData *descriptionCellData = [sectionData getSubject:@"description"];
+            if (descriptionCellData)
+                [sectionData.subjects removeObject:descriptionCellData];
+
+            OAGPXTableCellData *editDescriptionCellData = [sectionData getSubject:@"edit_description"];
+            if (editDescriptionCellData)
+                [sectionData.subjects removeObject:editDescriptionCellData];
+
+            OAGPXTableCellData *readFullDescriptionCellData = [sectionData getSubject:@"read_full_description"];
+            if (readFullDescriptionCellData)
+                [sectionData.subjects removeObject:readFullDescriptionCellData];
+
+            [sectionData.subjects addObject:[self generateAddDescriptionCellData]];
+        }
+        else
+        {
+            for (OAGPXTableCellData *cellData in sectionData.subjects)
+            {
+                if (![cellData.key isEqualToString:@"image"])
+                    [self updateData:cellData];
+            }
+        }
+    }
+    else if ([tableData.key isEqualToString:@"section_info"])
+    {
+        OAGPXTableSectionData *sectionData = (OAGPXTableSectionData *) tableData;
+
+        OAGPXTableCellData *createdOnCellData = [sectionData getSubject:@"created_on"];
+        BOOL hasCreatedOn = createdOnCellData != nil;
+        if (hasCreatedOn)
+            [self updateData:createdOnCellData];
+        else
+            createdOnCellData = [self generateCreatedOnCellData];
+
+        if (createdOnCellData.desc && createdOnCellData.desc.length > 0 && !hasCreatedOn)
+            [sectionData.subjects insertObject:createdOnCellData atIndex:kInfoCreatedOnCell];
+        else if (!createdOnCellData.desc || createdOnCellData.desc.length == 0 && hasCreatedOn)
+            [sectionData.subjects removeObject:createdOnCellData];
+
+        BOOL isCurrentTrack = self.trackMenuDelegate && ![self.trackMenuDelegate currentTrack];
+        OAGPXTableCellData *locationCellData = [sectionData getSubject:@"location"];
+        BOOL hasLocation = locationCellData != nil;
+        if (!hasLocation)
+            locationCellData = [self generateCreatedOnCellData];
+
+        if (!isCurrentTrack && !hasLocation)
+            [sectionData.subjects addObject:locationCellData];
+        else if (isCurrentTrack && hasLocation)
+            [sectionData.subjects removeObject:locationCellData];
+
+        for (OAGPXTableCellData *cellData in sectionData.subjects)
+        {
+            [self updateData:cellData];
+        }
+    }
+    else if ([tableData.key isEqualToString:@"table_tab_overview"])
+    {
+        OAGPXTableData *tData = (OAGPXTableData *) tableData;
+        for (OAGPXTableSectionData *sectionData in tData.subjects)
+        {
+            [self updateData:sectionData];
+        }
+    }
+}
+
+- (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData
+{
+}
+
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+{
+    if ([tableData.key isEqualToString:@"add_description"] && self.trackMenuDelegate)
+    {
+        [self.trackMenuDelegate openDescriptionEditor];
+    }
+    else if ([tableData.key isEqualToString:@"edit_description"] && self.trackMenuDelegate)
+    {
+        [self.trackMenuDelegate openDescriptionEditor];
+    }
+    else if ([tableData.key isEqualToString:@"read_full_description"] && self.trackMenuDelegate)
+    {
+        [self.trackMenuDelegate openDescription];
+    }
 }
 
 @end

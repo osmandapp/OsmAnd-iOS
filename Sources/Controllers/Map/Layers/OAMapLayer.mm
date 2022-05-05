@@ -40,8 +40,7 @@
 
 - (void) initLayer
 {
-    OAAppSettings *settings = OAAppSettings.sharedManager;
-    _nightMode = settings.nightMode;
+    _nightMode = OAAppSettings.sharedManager.nightMode;
 }
 
 - (void) deinitLayer
@@ -54,9 +53,7 @@
 
 - (BOOL) updateLayer
 {
-    OAAppSettings *settings = OAAppSettings.sharedManager;
-    _nightMode = settings.nightMode;
-    
+    _nightMode = OAAppSettings.sharedManager.nightMode;
     return NO;
 }
 

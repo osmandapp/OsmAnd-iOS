@@ -105,16 +105,14 @@
 
 - (void)generateData
 {
-    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
+    self.tableData = [OAGPXTableData withData:@{ kTableKey: @"table_tab_points" }];
 
     if (self.trackMenuDelegate)
     {
         for (NSString *groupName in [self.trackMenuDelegate getWaypointSortedGroups])
         {
-            NSMutableArray<OAGPXTableCellData *> *cells = [NSMutableArray array];
             OAGPXTableSectionData *waypointsSectionData = [OAGPXTableSectionData withData:@{
                     kTableKey: [NSString stringWithFormat:@"section_waypoints_group_%@", groupName],
-                    kTableSubjects: cells,
                     kTableValues: @{
                             @"is_hidden": @(self.trackMenuDelegate
                                     ? ![self.trackMenuDelegate isWaypointsGroupVisible:[self.trackMenuDelegate isDefaultGroup:groupName]
@@ -128,6 +126,7 @@
                     : self.trackMenuDelegate
                             ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:groupName])
                             : [OADefaultFavorite getDefaultColor];
+            [self.tableData.subjects addObject:waypointsSectionData];
 
             OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
                     kTableKey: [NSString stringWithFormat:@"cell_waypoints_group_%@", groupName],
@@ -140,22 +139,27 @@
                     kCellTintColor: @([OAUtilities colorToNumber:waypointsSectionData.values[@"tint_color"]]),
                     kTableValues: @{ @"is_rte": @(self.trackMenuDelegate && [self.trackMenuDelegate isRteGroup:groupName]) }
             }];
-            [cells addObject:groupCellData];
+            [waypointsSectionData.subjects addObject:groupCellData];
 
             if (self.trackMenuDelegate)
             {
-                [cells addObjectsFromArray:[self generateDataForWaypointCells:[self.trackMenuDelegate getWaypointsData][groupName]
-                                                                        isRte:[groupCellData.values[@"is_rte"] boolValue]]];
+                [waypointsSectionData.subjects addObjectsFromArray:[self generateDataForWaypointCells:[self.trackMenuDelegate getWaypointsData][groupName]
+                                                                                                isRte:[groupCellData.values[@"is_rte"] boolValue]]];
             }
 
             [self updatePointsQuadRect:waypointsSectionData];
-            [tableSections addObject:waypointsSectionData];
 
             [waypointsSectionData setData:@{
-                    kSectionHeaderHeight: tableSections.firstObject == waypointsSectionData ? @0.001 : @14.
+                    kSectionHeaderHeight: self.tableData.subjects.firstObject == waypointsSectionData ? @0.001 : @14.
             }];
         }
     }
+    OAGPXTableSectionData *actionsSectionData = [OAGPXTableSectionData withData:@{
+            kTableKey: @"actions_section",
+            kSectionHeader: OALocalizedString(@"actions"),
+            kSectionHeaderHeight: @56.
+    }];
+    [self.tableData.subjects addObject:actionsSectionData];
 
     BOOL hasWaypoints = [self hasWaypoints];
     OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
@@ -167,6 +171,7 @@
             kCellToggle: @(hasWaypoints),
             kCellTintColor: hasWaypoints ? @color_primary_purple : @unselected_tab_icon,
     }];
+    [actionsSectionData.subjects addObject:deleteCellData];
 
     OAGPXTableCellData *addWaypointCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"add_waypoint",
@@ -177,19 +182,7 @@
             kCellToggle: @YES,
             kCellTintColor: @color_primary_purple
     }];
-
-    OAGPXTableSectionData *actionsSectionData = [OAGPXTableSectionData withData:@{
-            kTableKey: @"actions_section",
-            kTableSubjects: @[addWaypointCellData, deleteCellData],
-            kSectionHeader: OALocalizedString(@"actions"),
-            kSectionHeaderHeight: @56.
-    }];
-    [tableSections addObject:actionsSectionData];
-
-    self.tableData = [OAGPXTableData withData:@{
-            kTableKey: @"table_tab_points",
-            kTableSubjects: tableSections
-    }];
+    [actionsSectionData.subjects addObject:addWaypointCellData];
 
     self.isGeneratedData = YES;
 }
@@ -244,6 +237,8 @@
     if (pointsRect)
         waypointsSectionData.values[@"quad_rect_value_points_area"] = pointsRect;
 }
+
+#pragma mark - Cell action methods
 
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {

@@ -77,14 +77,6 @@
 
 - (void)generateData
 {
-    OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
-            kTableKey: @"delete",
-            kCellType: [OAFilledButtonCell getCellIdentifier],
-            kTableValues: @{ @"title_color_value_integer": @color_icon_color_night },
-            kCellTitle: OALocalizedString(@"shared_string_delete"),
-            kCellTintColor: @color_primary_red
-    }];
-
     _tableData = @[
             [OAGPXTableSectionData withData:@{
                     kTableSubjects: @[[OAGPXTableCellData withData:@{
@@ -93,7 +85,15 @@
                             kCellTitle: [NSString stringWithFormat:OALocalizedString(@"delete_group_confirm"), _groupName]
                     }]]
             }],
-            [OAGPXTableSectionData withData:@{ kTableSubjects: @[deleteCellData] }]
+            [OAGPXTableSectionData withData:@{
+                    kTableSubjects: @[[OAGPXTableCellData withData:@{
+                            kTableKey: @"delete",
+                            kCellType: [OAFilledButtonCell getCellIdentifier],
+                            kTableValues: @{ @"title_color_value_integer": @color_icon_color_night },
+                            kCellTitle: OALocalizedString(@"shared_string_delete"),
+                            kCellTintColor: @color_primary_red
+                    }]]
+            }]
     ];
 }
 
@@ -129,6 +129,8 @@
 {
     return _tableData[indexPath.section].subjects[indexPath.row];
 }
+
+#pragma mark - Cell action methods
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData
 {

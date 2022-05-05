@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 {
     UITapGestureRecognizer *_backgroundTapRecognizer;
 
-    NSArray<OAGPXTableSectionData *> *_tableData;
+    NSMutableArray<OAGPXTableSectionData *> *_tableData;
     EOAEditTrackScreenMode _mode;
 
     BOOL _isShown;
@@ -117,24 +117,23 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 
 - (void)generateData
 {
-    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
-    NSMutableArray<OAGPXTableCellData *> *controlCells = [NSMutableArray array];
+    _tableData = [NSMutableArray array];
 
     if (_mode == EOAEditTrackScreenWaypointsMode)
     {
+        OAGPXTableSectionData *controlsSectionData = [OAGPXTableSectionData withData:@{ kTableKey: @"section_controls" }];
+        [_tableData addObject:controlsSectionData];
+
         OAGPXTableCellData *showOnMapCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"control_show_on_map",
                 kCellType: [OATitleSwitchRoundCell getCellIdentifier],
                 kTableValues: @{ @"bool_value": @(_isShown) },
                 kCellTitle: OALocalizedString(@"map_settings_show")
         }];
-        [controlCells addObject:showOnMapCellData];
+        [controlsSectionData.subjects addObject:showOnMapCellData];
 
-        OAGPXTableSectionData *controlsSectionData = [OAGPXTableSectionData withData:@{
-                kTableKey: @"section_controls",
-                kTableSubjects: controlCells
-        }];
-        [tableSections addObject:controlsSectionData];
+        OAGPXTableSectionData *changeSectionData = [OAGPXTableSectionData withData:@{ kTableKey: @"section_change" }];
+        [_tableData addObject:changeSectionData];
 
         OAGPXTableCellData *renameCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"rename",
@@ -142,6 +141,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kCellRightIconName: @"ic_custom_edit",
                 kCellTitle: OALocalizedString(@"fav_rename")
         }];
+        [changeSectionData.subjects addObject:renameCellData];
 
         OAGPXTableCellData *changeColorCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"change_color",
@@ -149,7 +149,10 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kCellRightIconName: @"ic_custom_appearance",
                 kCellTitle: OALocalizedString(@"change_color")
         }];
-        [tableSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[renameCellData, changeColorCellData] }]];
+        [changeSectionData.subjects addObject:changeColorCellData];
+
+        OAGPXTableSectionData *copyToFavoriteSectionData = [OAGPXTableSectionData withData:@{ kTableKey: @"section_copy_to_favorites" }];
+        [_tableData addObject:copyToFavoriteSectionData];
 
         OAGPXTableCellData *copyToFavoritesCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"copy_to_favorites",
@@ -157,16 +160,20 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kCellRightIconName: @"ic_custom_trip_edit",
                 kCellTitle: OALocalizedString(@"copy_to_map_favorites")
         }];
-        [tableSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[copyToFavoritesCellData] }]];
+        [copyToFavoriteSectionData.subjects addObject:copyToFavoritesCellData];
     }
     else
     {
+        OAGPXTableSectionData *editSectionData = [OAGPXTableSectionData withData:@{ kTableKey: @"section_edit" }];
+        [_tableData addObject:editSectionData];
+
         OAGPXTableCellData *analyzeOnMapCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"analyze_on_map",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"analyze_on_map"),
                 kCellRightIconName: @"ic_custom_graph"
         }];
+        [editSectionData.subjects addObject:analyzeOnMapCellData];
 
         OAGPXTableCellData *editCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"edit",
@@ -174,9 +181,11 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kCellRightIconName: @"ic_custom_trip_edit",
                 kCellTitle: OALocalizedString(@"shared_string_edit")
         }];
-
-        [tableSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[analyzeOnMapCellData, editCellData] }]];
+        [editSectionData.subjects addObject:editCellData];
     }
+
+    OAGPXTableSectionData *deleteSectionData = [OAGPXTableSectionData withData:@{ kTableKey: @"section_delete" }];
+    [_tableData addObject:deleteSectionData];
 
     OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"delete",
@@ -186,10 +195,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             kCellRightIconName: @"ic_custom_remove_outlined",
             kCellTintColor: @color_primary_red
     }];
-
-    [tableSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[deleteCellData] }]];
-
-    _tableData = tableSections;
+    [deleteSectionData.subjects addObject:deleteCellData];
 }
 
 - (void)setLeftIcon
@@ -258,6 +264,8 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:_groupName])
             : [OADefaultFavorite getDefaultColor];
 }
+
+#pragma mark - Cell action methods
 
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {

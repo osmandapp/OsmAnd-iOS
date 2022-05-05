@@ -1560,8 +1560,10 @@
 
 - (void)showAlertRenameTrack
 {
+    __weak OATrackMenuHudViewController *weakSelf = self;
+
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"gpx_rename_q")
-                                                                   message:OALocalizedString(@"gpx_enter_new_name \"%@\"", [self.gpx.gpxTitle lastPathComponent])
+                                                                   message:OALocalizedString(@"gpx_enter_new_name \"%@\"", [weakSelf.gpx.gpxTitle lastPathComponent])
                                                             preferredStyle:UIAlertControllerStyleAlert];
 
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
@@ -1571,11 +1573,11 @@
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction *_Nonnull action) {
-                                                [self renameTrack:alert.textFields[0].text];
+                                                [weakSelf renameTrack:alert.textFields[0].text];
                                             }]];
 
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.text = self.gpx.gpxTitle.lastPathComponent.stringByDeletingPathExtension;
+        textField.text = weakSelf.gpx.gpxTitle.lastPathComponent.stringByDeletingPathExtension;
     }];
 
     [self presentViewController:alert animated:YES completion:nil];

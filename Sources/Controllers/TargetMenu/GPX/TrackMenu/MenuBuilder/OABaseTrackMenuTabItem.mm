@@ -73,6 +73,8 @@
     //override
 }
 
+#pragma mark - Cell action methods
+
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {
 }

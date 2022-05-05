@@ -64,7 +64,8 @@
 
 - (void)generateData
 {
-    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
+    self.tableData = [OAGPXTableData withData: @{ kTableKey: @"table_tab_segments" }];
+
     NSArray<OATrkSegment *> *segments = @[];
     if (self.trackMenuDelegate)
     {
@@ -80,8 +81,7 @@
     {
         [self generateSegmentSectionData:generalSegment
                                 analysis:generalAnalysis
-                                   index:0
-                           tableSections:tableSections];
+                                   index:0];
     }
 
     for (NSInteger index = 0; index < segments.count; index++)
@@ -89,14 +89,8 @@
         OAGPXTrackAnalysis *analysis = [OAGPXTrackAnalysis segment:0 seg:segments[index]];
         [self generateSegmentSectionData:segments[index]
                                 analysis:analysis
-                                   index:generalSegment ? index + 1 : index
-                           tableSections:tableSections];
+                                   index:generalSegment ? index + 1 : index];
     }
-
-    self.tableData = [OAGPXTableData withData: @{
-            kTableKey: @"table_tab_segments",
-            kTableSubjects: tableSections
-    }];
 
     self.isGeneratedData = YES;
 }
@@ -104,7 +98,6 @@
 - (void)generateSegmentSectionData:(OATrkSegment *)segment
                           analysis:(OAGPXTrackAnalysis *)analysis
                              index:(NSInteger)index
-                     tableSections:(NSMutableArray<OAGPXTableSectionData *> *)tableSections
 {
     if (!segment)
         return;
@@ -130,6 +123,27 @@
                                       modeCell:nil];
     }
 
+    CLLocationCoordinate2D startChartPoint = self.trackMenuDelegate && [self.trackMenuDelegate openedFromMap]
+            ? [self.trackMenuDelegate getPinLocation] : kCLLocationCoordinate2DInvalid;
+
+    OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{
+            kTableKey: [NSString stringWithFormat:@"section_%p", (__bridge void *) segment],
+            kTableValues: @{
+                    @"segment_value": segment,
+                    @"analysis_value": analysis,
+                    @"mode_value": @(EOARouteStatisticsModeAltitudeSpeed),
+                    @"points_value": _routeLineChartHelper
+                            ? [_routeLineChartHelper generateTrackChartPoints:cell.lineChartView
+                                                                   startPoint:startChartPoint
+                                                                      segment:segment]
+                            : [[OATrackChartPoints alloc] init]
+            }
+    }];
+    if (cell)
+        segmentSectionData.values[@"cell_value"] = cell;
+    [self.tableData.subjects addObject:segmentSectionData];
+    [segmentSectionData setData:@{ kSectionHeaderHeight: self.tableData.subjects.firstObject == segmentSectionData ? @0.001 : @36. }];
+
     NSString *segmentTitle = nil;
     if (self.trackMenuDelegate)
         segmentTitle = [self.trackMenuDelegate getTrackSegmentTitle:segment];
@@ -142,6 +156,15 @@
             kCellTitle: segmentTitle,
             kCellToggle: @NO
     }] : nil;
+
+    if (segmentCellData)
+        [segmentSectionData.subjects addObject:segmentCellData];
+
+    OAGPXTableCellData *tabsCellData = [OAGPXTableCellData withData:@{
+            kTableKey: [NSString stringWithFormat:@"tabs_%p", (__bridge void *) segment],
+            kCellType: [OASegmentTableViewCell getCellIdentifier]
+    }];
+    [segmentSectionData.subjects addObject:tabsCellData];
 
     LineChartData *lineData = cell.lineChartView.lineData;
     NSInteger entryCount = lineData ? lineData.entryCount : 0;
@@ -170,17 +193,16 @@
         cell = nil;
     }
 
+    if (chartCellData)
+        [segmentSectionData.subjects addObject:chartCellData];
+
     OAGPXTableCellData *statisticsCellData = [OAGPXTableCellData withData:@{
             kTableKey: [NSString stringWithFormat:@"statistics_%p", (__bridge void *) segment],
             kCellType: [OAQuadItemsWithTitleDescIconCell getCellIdentifier],
             kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:EOARouteStatisticsModeAltitudeSpeed],
             kCellToggle: @(analysis.timeSpan > 0)
     }];
-
-    OAGPXTableCellData *tabsCellData = [OAGPXTableCellData withData:@{
-            kTableKey: [NSString stringWithFormat:@"tabs_%p", (__bridge void *) segment],
-            kCellType: [OASegmentTableViewCell getCellIdentifier]
-    }];
+    [segmentSectionData.subjects addObject:statisticsCellData];
 
     OAGPXTableCellData *buttonsCellData = [OAGPXTableCellData withData:@{
             kTableKey: [NSString stringWithFormat:@"segment_buttons_%p", (__bridge void *) segment],
@@ -192,19 +214,7 @@
             },
             kCellToggle: @(!segment.generalSegment)
     }];
-
-    NSMutableArray<OAGPXTableCellData *> *segmentCells = [NSMutableArray array];
-
-    if (segmentCellData)
-        [segmentCells addObject:segmentCellData];
-
-    [segmentCells addObject:tabsCellData];
-
-    if (chartCellData)
-        [segmentCells addObject:chartCellData];
-
-    [segmentCells addObject:statisticsCellData];
-    [segmentCells addObject:buttonsCellData];
+    [segmentSectionData.subjects addObject:buttonsCellData];
 
     NSMutableDictionary *values = [NSMutableDictionary dictionary];
     values[@"tab_0_string_value"] = OALocalizedString(@"shared_string_overview");
@@ -212,36 +222,12 @@
         values[@"tab_1_string_value"] = OALocalizedString(@"map_widget_altitude");
     if (analysis.isSpeedSpecified)
         values[analysis.hasElevationData ? @"tab_2_string_value" : @"tab_1_string_value"] = OALocalizedString(@"gpx_speed");
-    values[@"row_to_update_int_value"] = @([segmentCells indexOfObject:statisticsCellData]);
+    values[@"row_to_update_int_value"] = @([segmentSectionData.subjects indexOfObject:statisticsCellData]);
     values[@"selected_index_int_value"] = @0;
     [tabsCellData setData:@{ kTableValues: values }];
 
-    CLLocationCoordinate2D startChartPoint = self.trackMenuDelegate && [self.trackMenuDelegate openedFromMap]
-            ? [self.trackMenuDelegate getPinLocation] : kCLLocationCoordinate2DInvalid;
-
-    OAGPXTableSectionData *segmentSectionData = [OAGPXTableSectionData withData:@{
-            kTableKey: [NSString stringWithFormat:@"section_%p", (__bridge void *) segment],
-            kTableSubjects: segmentCells,
-            kTableValues: @{
-                    @"segment_value": segment,
-                    @"analysis_value": analysis,
-                    @"mode_value": @(EOARouteStatisticsModeAltitudeSpeed),
-                    @"points_value": _routeLineChartHelper
-                            ? [_routeLineChartHelper generateTrackChartPoints:cell.lineChartView
-                                                                   startPoint:startChartPoint
-                                                                      segment:segment]
-                            : [[OATrackChartPoints alloc] init]
-            }
-    }];
-    if (cell)
-        segmentSectionData.values[@"cell_value"] = cell;
-    [tableSections addObject:segmentSectionData];
-    [segmentSectionData setData:@{
-            kSectionHeaderHeight: tableSections.firstObject == segmentSectionData ? @0.001 : @36.
-    }];
-
     if (cell && chartCellData)
-        cell.lineChartView.tag = [tableSections indexOfObject:segmentSectionData] << 10 | [segmentCells indexOfObject:chartCellData];
+        cell.lineChartView.tag = [self.tableData.subjects indexOfObject:segmentSectionData] << 10 | [segmentSectionData.subjects indexOfObject:chartCellData];
 }
 
 - (void)runAdditionalActions
@@ -504,6 +490,8 @@
         }
     }
 }
+
+#pragma mark - Cell action methods
 
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {

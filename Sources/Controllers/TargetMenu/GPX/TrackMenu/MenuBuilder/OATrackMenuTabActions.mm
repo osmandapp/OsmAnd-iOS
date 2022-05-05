@@ -41,12 +41,17 @@
 
 - (void)generateData
 {
-    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
+    self.tableData = [OAGPXTableData withData: @{ kTableKey: @"table_tab_actions" }];
+
+    OAGPXTableSectionData *controlSectionData = [OAGPXTableSectionData withData:@{ kSectionHeaderHeight: @19. }];
+    [self.tableData.subjects addObject:controlSectionData];
+
     OAGPXTableCellData *showOnMapCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"control_show_on_map",
             kCellType: [OATitleSwitchRoundCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"map_settings_show")
     }];
+    [controlSectionData.subjects addObject:showOnMapCellData];
 
     OAGPXTableCellData *appearanceCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"control_appearance",
@@ -54,6 +59,7 @@
             kCellRightIconName: @"ic_custom_appearance",
             kCellTitle: OALocalizedString(@"map_settings_appearance")
     }];
+    [controlSectionData.subjects addObject:appearanceCellData];
 
     OAGPXTableCellData *navigationCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"control_navigation",
@@ -61,11 +67,10 @@
             kCellRightIconName: @"ic_custom_navigation",
             kCellTitle: OALocalizedString(@"routing_settings")
     }];
+    [controlSectionData.subjects addObject:navigationCellData];
 
-    [tableSections addObject:[OAGPXTableSectionData withData:@{
-            kTableSubjects: @[showOnMapCellData, appearanceCellData, navigationCellData],
-            kSectionHeaderHeight: @19.
-    }]];
+    OAGPXTableSectionData *analyzeSectionData = [OAGPXTableSectionData withData:@{ kSectionHeaderHeight: @19. }];
+    [self.tableData.subjects addObject:analyzeSectionData];
 
     OAGPXTableCellData *analyzeCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"analyze",
@@ -73,11 +78,10 @@
             kCellRightIconName: @"ic_custom_graph",
             kCellTitle: OALocalizedString(@"analyze_on_map")
     }];
+    [analyzeSectionData.subjects addObject:analyzeCellData];
 
-    [tableSections addObject:[OAGPXTableSectionData withData:@{
-            kTableSubjects: @[analyzeCellData],
-            kSectionHeaderHeight: @19.
-    }]];
+    OAGPXTableSectionData *shareSectionData = [OAGPXTableSectionData withData:@{ kSectionHeaderHeight: @19. }];
+    [self.tableData.subjects addObject:shareSectionData];
 
     OAGPXTableCellData *shareCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"share",
@@ -85,11 +89,10 @@
             kCellRightIconName: @"ic_custom_export",
             kCellTitle: OALocalizedString(@"ctx_mnu_share")
     }];
+    [shareSectionData.subjects addObject:shareCellData];
 
-    [tableSections addObject:[OAGPXTableSectionData withData:@{
-            kTableSubjects: @[shareCellData],
-            kSectionHeaderHeight: @19.
-    }]];
+    OAGPXTableSectionData *editSectionData = [OAGPXTableSectionData withData:@{ kSectionHeaderHeight: @19. }];
+    [self.tableData.subjects addObject:editSectionData];
 
     OAGPXTableCellData *editCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"edit",
@@ -97,6 +100,7 @@
             kCellRightIconName: @"ic_custom_trip_edit",
             kCellTitle: OALocalizedString(@"edit_track")
     }];
+    [editSectionData.subjects addObject:editCellData];
 
     OAGPXTableCellData *duplicateCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"edit_create_duplicate",
@@ -104,13 +108,13 @@
             kCellRightIconName: @"ic_custom_copy",
             kCellTitle: OALocalizedString(@"duplicate_track")
     }];
+    [editSectionData.subjects addObject:duplicateCellData];
 
-    [tableSections addObject:[OAGPXTableSectionData withData:@{
-            kTableSubjects: @[editCellData, duplicateCellData],
+    OAGPXTableSectionData *changeSectionData = [OAGPXTableSectionData withData:@{
+            kTableKey: @"section_change",
             kSectionHeaderHeight: @19.
-    }]];
-
-    NSMutableArray<OAGPXTableCellData *> *changeCells = [NSMutableArray array];
+    }];
+    [self.tableData.subjects addObject:changeSectionData];
 
     OAGPXTableCellData *renameCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"change_rename",
@@ -118,8 +122,7 @@
             kCellRightIconName: @"ic_custom_edit",
             kCellTitle: OALocalizedString(@"gpx_rename_q")
     }];
-
-    [changeCells addObject:renameCellData];
+    [changeSectionData.subjects addObject:renameCellData];
 
     OAGPXTableCellData *moveCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"change_move",
@@ -128,15 +131,10 @@
             kCellRightIconName: @"ic_custom_folder_move",
             kCellTitle: OALocalizedString(@"plan_route_change_folder")
     }];
+    [changeSectionData.subjects addObject:moveCellData];
 
-    [changeCells addObject:moveCellData];
-
-    OAGPXTableSectionData *changeSectionData = [OAGPXTableSectionData withData:@{
-            kTableKey: @"section_change",
-            kTableSubjects: changeCells,
-            kSectionHeaderHeight: @19.
-    }];
-    [tableSections addObject:changeSectionData];
+    OAGPXTableSectionData *deleteSectionData = [OAGPXTableSectionData withData:@{ kSectionHeaderHeight: @19. }];
+    [self.tableData.subjects addObject:deleteSectionData];
 
     OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"delete",
@@ -146,16 +144,7 @@
             kCellTitle: OALocalizedString(@"shared_string_delete"),
             kCellTintColor: @color_primary_red
     }];
-
-    [tableSections addObject:[OAGPXTableSectionData withData:@{
-            kTableSubjects: @[deleteCellData],
-            kSectionHeaderHeight: @19.
-    }]];
-
-    self.tableData = [OAGPXTableData withData: @{
-            kTableKey: @"table_tab_actions",
-            kTableSubjects: tableSections
-    }];
+    [deleteSectionData.subjects addObject:deleteCellData];
 
     self.isGeneratedData = YES;
 }
@@ -164,6 +153,8 @@
 {
     return self.trackMenuDelegate ? [self.trackMenuDelegate getDirName] : @"";
 }
+
+#pragma mark - Cell action methods
 
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {

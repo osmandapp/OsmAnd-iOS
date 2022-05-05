@@ -1122,6 +1122,9 @@
 
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {
+    if (!tableData)
+        return;
+
     if ([tableData.key isEqualToString:@"direction_arrows"])
     {
         self.gpx.showArrows = toggle;
@@ -1164,6 +1167,9 @@
 
 - (BOOL)isOn:(OAGPXBaseTableData *)tableData
 {
+    if (!tableData)
+        return NO;
+
     if ([tableData.key isEqualToString:@"direction_arrows"])
     {
         return self.gpx.showArrows;
@@ -1181,6 +1187,9 @@
 
 - (void)updateData:(OAGPXBaseTableData *)tableData
 {
+    if (!tableData)
+        return;
+
     if ([tableData.key isEqualToString:@"color_title"])
     {
         [tableData setData:@{ kTableValues: @{ @"string_value": _selectedItem.title } }];
@@ -1347,6 +1356,9 @@
 
 - (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData
 {
+    if (!tableData)
+        return;
+
     if ([tableData.key isEqualToString:@"width_value"])
     {
         if ([value isKindOfClass:NSNumber.class])
@@ -1465,6 +1477,9 @@
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData
 {
+    if (!tableData)
+        return;
+
     if ([tableData.key isEqualToString:@"reset"])
     {
         if (self.isCurrentTrack)

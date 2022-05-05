@@ -31,11 +31,6 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
     EOATrackAppearanceHudMode,
 };
 
-typedef void(^OAGPXTableCellDataOnSwitch)(BOOL toggle);
-typedef BOOL(^OAGPXTableCellDataIsOn)();
-typedef void(^OAGPXTableDataUpdateData)();
-typedef void(^OAGPXTableDataUpdateProperty)(id value);
-
 @class OAGPX, OAGPXMutableDocument, OAGPXTrackAnalysis, OAMapPanelViewController, OAMapViewController, OASavingTrackHelper, OAAppSettings;
 
 @interface OAGPXBaseTableData : NSObject
@@ -64,12 +59,6 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 + (instancetype)withData:(NSDictionary *)data;
 - (OAGPXTableCellData *)getSubject:(NSString *)key;
 
-@property (nonatomic) OAGPXTableCellDataOnSwitch onSwitch;
-@property (nonatomic) OAGPXTableCellDataIsOn isOn;
-@property (nonatomic) OAGPXTableDataUpdateData updateData;
-@property (nonatomic) OAGPXTableDataUpdateData onButtonPressed;
-@property (nonatomic) OAGPXTableDataUpdateProperty updateProperty;
-
 @end
 
 @interface OAGPXTableSectionData : OAGPXBaseTableData
@@ -83,9 +72,6 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 + (instancetype)withData:(NSDictionary *)data;
 - (OAGPXTableCellData *)getSubject:(NSString *)key;
 
-@property (nonatomic) OAGPXTableDataUpdateData updateData;
-@property (nonatomic) OAGPXTableDataUpdateProperty updateProperty;
-
 @end
 
 @interface OAGPXTableData : OAGPXBaseTableData
@@ -94,9 +80,6 @@ typedef void(^OAGPXTableDataUpdateProperty)(id value);
 
 + (instancetype)withData:(NSDictionary *)data;
 - (OAGPXTableSectionData *)getSubject:(NSString *)key;
-
-@property (nonatomic) OAGPXTableDataUpdateData updateData;
-@property (nonatomic) OAGPXTableDataUpdateProperty updateProperty;
 
 @end
 

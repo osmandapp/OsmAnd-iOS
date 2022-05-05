@@ -44,36 +44,38 @@
 
 - (void)generateData
 {
-    NSMutableArray<OAGPXTableSectionData *> *tableSections = [NSMutableArray array];
+    self.tableData = [OAGPXTableData withData:@{ kTableKey: @"table_tab_overview" }];
 
-    NSMutableArray<OAGPXTableCellData *> *descriptionCells = [NSMutableArray array];
+    OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
+            kTableKey: @"section_description",
+            kSectionHeader: OALocalizedString(@"description"),
+            kSectionHeaderHeight: @56.
+    }];
+    [self.tableData.subjects addObject:descriptionSectionData];
 
     [self generateDescription];
     [self generateImageURL];
 
     if (_imageURL && _imageURL.length > 0)
-        [descriptionCells addObject:[self generateImageCellData]];
+        [descriptionSectionData.subjects addObject:[self generateImageCellData]];
 
     if (_description && _description.length > 0)
     {
-        [descriptionCells addObject:[self generateDescriptionCellData]];
-        [descriptionCells addObject:[self generateEditDescriptionCellData]];
-        [descriptionCells addObject:[self generateReadFullDescriptionCellData]];
+        [descriptionSectionData.subjects addObject:[self generateDescriptionCellData]];
+        [descriptionSectionData.subjects addObject:[self generateEditDescriptionCellData]];
+        [descriptionSectionData.subjects addObject:[self generateReadFullDescriptionCellData]];
     }
     else
     {
-        [descriptionCells addObject:[self generateAddDescriptionCellData]];
+        [descriptionSectionData.subjects addObject:[self generateAddDescriptionCellData]];
     }
 
-    OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
-            kTableKey: @"section_description",
-            kTableSubjects: descriptionCells,
-            kSectionHeader: OALocalizedString(@"description"),
+    OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
+            kTableKey: @"section_info",
+            kSectionHeader: OALocalizedString(@"shared_string_info"),
             kSectionHeaderHeight: @56.
     }];
-    [tableSections addObject:descriptionSectionData];
-
-    NSMutableArray<OAGPXTableCellData *> *infoCells = [NSMutableArray array];
+    [self.tableData.subjects addObject:infoSectionData];
 
     OAGPXTableCellData *sizeCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"size",
@@ -81,28 +83,15 @@
             kCellTitle: OALocalizedString(@"res_size"),
             kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getGpxFileSize] : @""
     }];
-    [infoCells addObject:sizeCellData];
+    [infoSectionData.subjects addObject:sizeCellData];
 
     OAGPXTableCellData *createdOnCellData = [self generateCreatedOnCellData];
     if (createdOnCellData.desc && createdOnCellData.desc.length > 0)
-        [infoCells addObject:createdOnCellData];
+        [infoSectionData.subjects addObject:createdOnCellData];
 
     OAGPXTableCellData *locationCellData = [self generateLocationCellData];
     if (self.trackMenuDelegate && ![self.trackMenuDelegate currentTrack])
-        [infoCells addObject:locationCellData];
-
-    OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
-            kTableKey: @"section_info",
-            kTableSubjects: infoCells,
-            kSectionHeader: OALocalizedString(@"shared_string_info"),
-            kSectionHeaderHeight: @56.
-    }];
-    [tableSections addObject:infoSectionData];
-
-    self.tableData = [OAGPXTableData withData:@{
-            kTableKey: @"table_tab_overview",
-            kTableSubjects: tableSections
-    }];
+        [infoSectionData.subjects addObject:locationCellData];
 
     self.isGeneratedData = YES;
 }
@@ -232,6 +221,8 @@
             kCellTintColor: @color_primary_purple
     }];
 }
+
+#pragma mark - Cell action methods
 
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
 {

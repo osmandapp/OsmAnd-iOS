@@ -33,7 +33,6 @@
 @implementation OATrackMenuHeaderView
 {
     NSArray<OAGPXTableCellData *> *_statisticsCells;
-    NSArray<NSDictionary *> *_groupsData;
     EOATrackMenuHudTab _selectedTab;
     OsmAndAppInstance _app;
 }

@@ -21,6 +21,7 @@
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAFollowTrackBottomSheetViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
+#import "OASimulationNavigationSettingViewController.h"
 
 @interface OARouteSettingsBaseViewController () <OARoutePreferencesParametersDelegate, OASettingsDataDelegate, OARouteLineAppearanceViewControllerDelegate>
 
@@ -363,6 +364,13 @@
             [OARootViewController.instance.mapPanel showScrollableHudViewController:routeLineAppearanceHudViewController];
         }];
     }];
+}
+
+- (void) openSimulateNavigationScreen
+{
+    OASimulationNavigationSettingViewController *simulateController = [[OASimulationNavigationSettingViewController alloc] initWithAppMode:[_routingHelper getAppMode]];
+    simulateController.delegate = self;
+    [self presentViewController:simulateController animated:YES completion:nil];
 }
 
 - (void) showTripSettingsScreen

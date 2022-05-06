@@ -299,7 +299,10 @@
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
 
-    settings.simulateRouting = NO;
+    settings.simulateNavigation = NO;
+    settings.simulateNavigationMode = [OASimulationMode toKey:EOASimulationModePreview];
+    settings.simulateNavigationSpeed = kSimMinSpeed;
+    
     [_data setLastMapSourceVariant:settings.applicationMode.get.variantKey];
 
     // Get location of a shipped world mini-basemap and it's version stamp

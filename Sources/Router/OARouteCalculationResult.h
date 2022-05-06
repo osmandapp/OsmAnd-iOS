@@ -13,6 +13,7 @@
 #import "OAMapStyleSettings.h"
 #import "OALocationPoint.h"
 #import "OARouteProvider.h"
+#import "OALocationSimulation.h"
 
 #include "CommonCollections.h"
 #include "commonOsmAndCore.h"
@@ -36,6 +37,7 @@ struct RouteSegmentResult;
 @interface OARouteCalculationResult : NSObject
 
 @property (nonatomic) NSMutableArray<id<OALocationPoint>> *locationPoints;
+@property (nonatomic) NSMutableArray<OASimulatedLocation *> *simulatedLocations;
 @property (nonatomic) NSMutableArray<OAAlarmInfo *> *alarmInfo;
 @property (nonatomic, readonly) OAApplicationMode *appMode;
 @property (nonatomic, readonly) NSString *errorMessage;
@@ -60,6 +62,7 @@ struct RouteSegmentResult;
 + (NSString *) toString:(std::shared_ptr<TurnType>)type shortName:(BOOL)shortName;
 
 - (NSArray<CLLocation *> *) getImmutableAllLocations;
+- (NSArray<OASimulatedLocation *> *)getImmutableSimulatedLocations;
 - (NSArray<OARouteDirectionInfo *> *) getImmutableAllDirections;
 - (NSArray<CLLocation *> *) getRouteLocations;
 - (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult;

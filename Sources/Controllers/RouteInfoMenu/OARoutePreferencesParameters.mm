@@ -762,12 +762,12 @@
 
 - (BOOL) isSelected
 {
-    return self.settings.simulateRouting;
+    return self.settings.simulateNavigation;
 }
 
 - (void) setSelected:(BOOL)isChecked
 {
-    [self.settings setSimulateRouting:isChecked];
+    [self.settings setSimulateNavigation:isChecked];
     if (self.delegate)
         [self.delegate updateParameters];
 }
@@ -790,6 +790,17 @@
 - (UIColor *)getTintColor
 {
     return self.isChecked ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+}
+
+- (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate)
+        [self.delegate openSimulateNavigationScreen];
+}
+
+- (UIImage *)getSecondaryIcon
+{
+    return [UIImage imageNamed:@"ic_action_additional_option"];
 }
 
 @end

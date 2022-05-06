@@ -188,8 +188,6 @@
 #define gpxRouteCalcKey @"gpxRouteCalc"
 #define gpxRouteSegmentKey @"gpxRouteSegment"
 #define showStartFinishIconsKey @"showStartFinishIcons"
-
-#define simulateRoutingKey @"simulateRouting"
 #define useOsmLiveForRoutingKey @"useOsmLiveForRouting"
 
 #define saveTrackToGPXKey @"saveTrackToGPX"
@@ -1085,6 +1083,116 @@
         default:
             return @"";
     }
+}
+
+@end
+
+@interface OASimulationMode()
+
+@property (nonatomic) EOASimulationMode mode;
+
+@end
+
+@implementation OASimulationMode
+{
+    EOASimulationMode _mode;
+}
+
+- (instancetype)initWithMode:(EOASimulationMode)mode
+{
+    self = [super init];
+    if (self)
+    {
+        _mode = mode;
+    }
+    return self;
+}
+
++ (instancetype)withMode:(EOASimulationMode)mode
+{
+    return [[OASimulationMode alloc] initWithMode:mode];
+}
+
++ (NSArray<OASimulationMode *> *)values
+{
+    return @[[OASimulationMode withMode:EOASimulationModePreview],
+             [OASimulationMode withMode:EOASimulationModeConstant],
+             [OASimulationMode withMode:EOASimulationModeRealistic]];
+}
+
++ (OASimulationMode *)getModeObject:(NSString *)key
+{
+    for (OASimulationMode *mode in [OASimulationMode values])
+    {
+        if ([[mode key] isEqualToString:key])
+            return mode;
+    }
+    return nil;
+}
+
++ (EOASimulationMode)getMode:(NSString *)key
+{
+    return [self getModeObject:key].mode;
+}
+
++ (NSString *)toKey:(EOASimulationMode)mode
+{
+    switch (mode)
+    {
+        case EOASimulationModePreview:
+            return @"preview_mode";
+        case EOASimulationModeConstant:
+            return @"const_mode";
+        case EOASimulationModeRealistic:
+            return @"real_mode";
+        default:
+            return @"";
+    }
+}
+
++ (NSString *)toTitle:(EOASimulationMode)mode
+{
+    switch (mode)
+    {
+        case EOASimulationModePreview:
+            return OALocalizedString(@"simulation_preview_mode_title");
+        case EOASimulationModeConstant:
+            return OALocalizedString(@"simulation_constant_mode_title");
+        case EOASimulationModeRealistic:
+            return OALocalizedString(@"simulation_real_mode_title");
+        default:
+            return @"";
+    }
+}
+
++ (NSString *)toDescription:(EOASimulationMode)mode
+{
+    switch (mode)
+    {
+        case EOASimulationModePreview:
+            return OALocalizedString(@"simulation_preview_mode_desc");
+        case EOASimulationModeConstant:
+            return OALocalizedString(@"simulation_constant_mode_desc");
+        case EOASimulationModeRealistic:
+            return OALocalizedString(@"simulation_real_mode_desc");
+        default:
+            return @"";
+    }
+}
+
+- (NSString *)key
+{
+    return [OASimulationMode toKey:_mode];
+}
+
+- (NSString *)title
+{
+    return [OASimulationMode toTitle:_mode];
+}
+
+- (NSString *)description
+{
+    return [OASimulationMode toDescription:_mode];
 }
 
 @end
@@ -3618,8 +3726,6 @@
         [_profilePreferences setObject:_announceWpt forKey:@"announce_wpt"];
         [_profilePreferences setObject:_showScreenAlerts forKey:@"show_routing_alarms"];
 
-        _simulateRouting = [[NSUserDefaults standardUserDefaults] objectForKey:simulateRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:simulateRoutingKey] : NO;
-
         _useOsmLiveForRouting = [[NSUserDefaults standardUserDefaults] objectForKey:useOsmLiveForRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useOsmLiveForRoutingKey] : YES;
 
         _showGpxWpt = [[[OACommonBoolean withKey:showGpxWptKey defValue:YES] makeGlobal] makeShared];
@@ -4461,10 +4567,9 @@
     [[NSUserDefaults standardUserDefaults] setBool:_disableComplexRouting forKey:disableComplexRoutingKey];
 }
 
-- (void) setSimulateRouting:(BOOL)simulateRouting
+- (void) setSimulateNavigation:(BOOL)simulateNavigation
 {
-    _simulateRouting = simulateRouting;
-    [[NSUserDefaults standardUserDefaults] setBool:_simulateRouting forKey:simulateRoutingKey];
+    _simulateNavigation = simulateNavigation;
     [[[OsmAndApp instance] simulateRoutingObservable] notifyEvent];
 }
 

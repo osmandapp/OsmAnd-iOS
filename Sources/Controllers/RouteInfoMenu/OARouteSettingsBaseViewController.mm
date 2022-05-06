@@ -366,7 +366,7 @@
     }];
 }
 
-- (void) openSimulaateNavigationScreen
+- (void) openSimulateNavigationScreen
 {
     OASimulationNavigationSettingViewController *simulateController = [[OASimulationNavigationSettingViewController alloc] initWithAppMode:[_routingHelper getAppMode]];
     simulateController.delegate = self;

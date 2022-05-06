@@ -795,7 +795,7 @@
 - (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
     if (self.delegate)
-        [self.delegate openSimulaateNavigationScreen];
+        [self.delegate openSimulateNavigationScreen];
 }
 
 - (UIImage *)getSecondaryIcon

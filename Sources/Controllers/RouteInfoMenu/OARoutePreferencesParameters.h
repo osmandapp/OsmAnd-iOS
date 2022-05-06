@@ -44,7 +44,7 @@ struct RoutingParameter;
 - (void) showAvoidRoadsScreen;
 - (void) showTripSettingsScreen;
 - (void) showAvoidTransportScreen;
-- (void) openSimulaateNavigationScreen;
+- (void) openSimulateNavigationScreen;
 
 @end
 

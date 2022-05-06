@@ -505,15 +505,13 @@
             int i = s->getStartPointIndex();
             while (i != s->getEndPointIndex() || routeInd == _segments.size() - 1)
             {
-                if (s->isTrafficLight(i))
+                if (s->object->isTrafficLight(i))
                 {
                     LatLon point = s->getPoint(i);
                     for (OASimulatedLocation *sd in _simulatedLocations)
                     {
-                        LatLon latLon = LatLon(sd.coordinate.latitude, sd.coordinate.longitude);
-                        
-                        if ([OAUtilities doublesEqualUpToDigits:5 source:latLon.lat destination:point.lat] &&
-                            [OAUtilities doublesEqualUpToDigits:5 source:latLon.lon destination:point.lon])
+                        if ([OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.latitude destination:point.lat] &&
+                            [OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.longitude destination:point.lon])
                         {
                             [sd setTrafficLight:YES];
                             break;

@@ -188,10 +188,6 @@
 #define gpxRouteCalcKey @"gpxRouteCalc"
 #define gpxRouteSegmentKey @"gpxRouteSegment"
 #define showStartFinishIconsKey @"showStartFinishIcons"
-
-#define simulateNavigationKey @"simulateNavigation"
-#define simulateNavigationModeKey @"simulateNavigationMode"
-#define simulateNavigationSpeedKey @"simulateNavigationSpeed"
 #define useOsmLiveForRoutingKey @"useOsmLiveForRouting"
 
 #define saveTrackToGPXKey @"saveTrackToGPX"
@@ -1098,15 +1094,23 @@
 @end
 
 @implementation OASimulationMode
+{
+    EOASimulationMode _mode;
+}
+
+- (instancetype)initWithMode:(EOASimulationMode)mode
+{
+    self = [super init];
+    if (self)
+    {
+        _mode = mode;
+    }
+    return self;
+}
 
 + (instancetype)withMode:(EOASimulationMode)mode
 {
-    OASimulationMode *obj = [[OASimulationMode alloc] init];
-    if (obj)
-    {
-        obj.mode = mode;
-    }
-    return obj;
+    return [[OASimulationMode alloc] initWithMode:mode];
 }
 
 + (NSArray<OASimulationMode *> *)values
@@ -1116,14 +1120,19 @@
              [OASimulationMode withMode:EOASimulationModeRealistic]];
 }
 
-+ (OASimulationMode *)getMode:(NSString *)key
++ (OASimulationMode *)getModeObject:(NSString *)key
 {
     for (OASimulationMode *mode in [OASimulationMode values])
     {
-        if ([[OASimulationMode toKey:mode.mode] isEqualToString:key])
+        if ([[mode key] isEqualToString:key])
             return mode;
     }
     return nil;
+}
+
++ (EOASimulationMode)getMode:(NSString *)key
+{
+    return [self getModeObject:key].mode;
 }
 
 + (NSString *)toKey:(EOASimulationMode)mode
@@ -1146,11 +1155,11 @@
     switch (mode)
     {
         case EOASimulationModePreview:
-            return @"simulation_preview_mode_title";
+            return OALocalizedString(@"simulation_preview_mode_title");
         case EOASimulationModeConstant:
-            return @"simulation_constant_mode_title";
+            return OALocalizedString(@"simulation_constant_mode_title");
         case EOASimulationModeRealistic:
-            return @"simulation_real_mode_title";
+            return OALocalizedString(@"simulation_real_mode_title");
         default:
             return @"";
     }
@@ -1161,14 +1170,29 @@
     switch (mode)
     {
         case EOASimulationModePreview:
-            return @"simulation_preview_mode_desc";
+            return OALocalizedString(@"simulation_preview_mode_desc");
         case EOASimulationModeConstant:
-            return @"simulation_constant_mode_desc";
+            return OALocalizedString(@"simulation_constant_mode_desc");
         case EOASimulationModeRealistic:
-            return @"simulation_real_mode_desc";
+            return OALocalizedString(@"simulation_real_mode_desc");
         default:
             return @"";
     }
+}
+
+- (NSString *)key
+{
+    return [OASimulationMode toKey:_mode];
+}
+
+- (NSString *)title
+{
+    return [OASimulationMode toTitle:_mode];
+}
+
+- (NSString *)description
+{
+    return [OASimulationMode toDescription:_mode];
 }
 
 @end
@@ -3702,10 +3726,6 @@
         [_profilePreferences setObject:_announceWpt forKey:@"announce_wpt"];
         [_profilePreferences setObject:_showScreenAlerts forKey:@"show_routing_alarms"];
 
-        _simulateNavigation = [[NSUserDefaults standardUserDefaults] objectForKey:simulateNavigationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:simulateNavigationKey] : NO;
-        _simulateNavigationMode = [[NSUserDefaults standardUserDefaults] objectForKey:simulateNavigationModeKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:simulateNavigationModeKey] : NO;
-        _simulateNavigationSpeed = [[NSUserDefaults standardUserDefaults] objectForKey:simulateNavigationSpeedKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:simulateNavigationSpeedKey] : NO;
-
         _useOsmLiveForRouting = [[NSUserDefaults standardUserDefaults] objectForKey:useOsmLiveForRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useOsmLiveForRoutingKey] : YES;
 
         _showGpxWpt = [[[OACommonBoolean withKey:showGpxWptKey defValue:YES] makeGlobal] makeShared];
@@ -4547,10 +4567,9 @@
     [[NSUserDefaults standardUserDefaults] setBool:_disableComplexRouting forKey:disableComplexRoutingKey];
 }
 
-- (void) setSimulateNavigation:(BOOL)simulateRouting
+- (void) setSimulateNavigation:(BOOL)simulateNavigation
 {
-    _simulateNavigation = simulateRouting;
-    [[NSUserDefaults standardUserDefaults] setBool:_simulateNavigation forKey:simulateNavigationKey];
+    _simulateNavigation = simulateNavigation;
     [[[OsmAndApp instance] simulateRoutingObservable] notifyEvent];
 }
 

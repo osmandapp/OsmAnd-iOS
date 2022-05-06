@@ -278,6 +278,7 @@
 		3219705D25FA0DCE00C3FED6 /* ic_custom_replace@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705525FA0DCD00C3FED6 /* ic_custom_replace@3x.png */; };
 		3219705E25FA0DCE00C3FED6 /* bg_point_octagon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705625FA0DCD00C3FED6 /* bg_point_octagon@3x.png */; };
 		3219705F25FA0DCE00C3FED6 /* bg_point_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705725FA0DCE00C3FED6 /* bg_point_circle@3x.png */; };
+		321E95252823B5C10040312C /* OASimulationNavigationSettingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321E95242823B5C10040312C /* OASimulationNavigationSettingViewController.mm */; };
 		323084D926E933FE00D6FC67 /* OAOsmAndFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 323084D826E933FE00D6FC67 /* OAOsmAndFormatter.mm */; };
 		32309A3F26989114005751F5 /* ic_custom_map_zoom_out@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32309A3D26989113005751F5 /* ic_custom_map_zoom_out@2x.png */; };
 		32309A4026989114005751F5 /* ic_custom_map_zoom_out@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32309A3E26989113005751F5 /* ic_custom_map_zoom_out@3x.png */; };
@@ -3393,6 +3394,8 @@
 		3219705525FA0DCD00C3FED6 /* ic_custom_replace@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_replace@3x.png"; path = "Resources/Icons/ic_custom_replace@3x.png"; sourceTree = "<group>"; };
 		3219705625FA0DCD00C3FED6 /* bg_point_octagon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_octagon@3x.png"; path = "Resources/Icons/bg_point_octagon@3x.png"; sourceTree = "<group>"; };
 		3219705725FA0DCE00C3FED6 /* bg_point_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle@3x.png"; path = "Resources/Icons/bg_point_circle@3x.png"; sourceTree = "<group>"; };
+		321E95232823B5980040312C /* OASimulationNavigationSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASimulationNavigationSettingViewController.h; sourceTree = "<group>"; };
+		321E95242823B5C10040312C /* OASimulationNavigationSettingViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASimulationNavigationSettingViewController.mm; sourceTree = "<group>"; };
 		322DACE52750CD7700765BB7 /* hy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hy; path = hy.lproj/Localizable.strings; sourceTree = "<group>"; };
 		323084D726E933EE00D6FC67 /* OAOsmAndFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmAndFormatter.h; sourceTree = "<group>"; };
 		323084D826E933FE00D6FC67 /* OAOsmAndFormatter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmAndFormatter.mm; sourceTree = "<group>"; };
@@ -10430,6 +10433,8 @@
 				DA5A7B7C26C563A100F274C7 /* OASettingsModalPresentationViewController.h */,
 				DA5A7B8D26C563A100F274C7 /* OASettingsModalPresentationViewController.m */,
 				DA5A7B9726C563A100F274C7 /* OASettingsModalPresentationViewController.xib */,
+				321E95232823B5980040312C /* OASimulationNavigationSettingViewController.h */,
+				321E95242823B5C10040312C /* OASimulationNavigationSettingViewController.mm */,
 				DA5A7B8526C563A100F274C7 /* OASpeedLimitToleranceViewController.h */,
 				DA5A7B9C26C563A100F274C7 /* OASpeedLimitToleranceViewController.m */,
 				DA5A7B8326C563A100F274C7 /* OAVehicleParametersSettingsViewController.h */,
@@ -15324,6 +15329,7 @@
 				DA5A843126C563A800F274C7 /* OARouteTargetSelectionViewController.m in Sources */,
 				32D253B027F336C200324717 /* OACloudAccountCreateViewController.m in Sources */,
 				DA5A84D626C563A900F274C7 /* OAMapSettingsWikipediaScreen.mm in Sources */,
+				321E95252823B5C10040312C /* OASimulationNavigationSettingViewController.mm in Sources */,
 				DA5A824226C563A700F274C7 /* OAMainSettingsViewController.m in Sources */,
 				32C21CB127DFC18E00DE4266 /* OAAlertBottomSheetViewController.mm in Sources */,
 				DA5A834A26C563A800F274C7 /* OAWaypointHeaderCell.m in Sources */,

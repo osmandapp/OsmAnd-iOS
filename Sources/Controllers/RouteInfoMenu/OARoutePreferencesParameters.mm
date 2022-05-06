@@ -792,6 +792,17 @@
     return self.isChecked ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
 }
 
+- (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate)
+        [self.delegate openSimulaateNavigationScreen];
+}
+
+- (UIImage *)getSecondaryIcon
+{
+    return [UIImage imageNamed:@"ic_action_additional_option"];
+}
+
 @end
 
 @implementation OAConsiderLimitationsParameter

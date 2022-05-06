@@ -247,13 +247,17 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @interface OASimulationMode : NSObject
 
-@property (nonatomic, readonly) EOASimulationMode mode;
-
+- (instancetype)initWithMode:(EOASimulationMode)mode;
 + (NSArray<OASimulationMode *> *)values;
++ (OASimulationMode *)getModeObject:(NSString *)key;
 + (EOASimulationMode)getMode:(NSString *)key;
 + (NSString *)toKey:(EOASimulationMode)mode;
 + (NSString *)toTitle:(EOASimulationMode)mode;
 + (NSString *)toDescription:(EOASimulationMode)mode;
+- (EOASimulationMode)mode;
+- (NSString *)key;
+- (NSString *)title;
+- (NSString *)description;
 
 @end
 

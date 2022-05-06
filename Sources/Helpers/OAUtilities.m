@@ -1075,7 +1075,9 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         CGContextRelease(bitmapContext);
         CGColorSpaceRelease(colorSpace);
 
-        return [UIImage imageWithCGImage:mainViewContentBitmapContext scale:source.scale orientation:UIImageOrientationUp];
+        UIImage *res = [UIImage imageWithCGImage:mainViewContentBitmapContext scale:source.scale orientation:UIImageOrientationUp];
+        CGImageRelease(mainViewContentBitmapContext);
+        return res;
     }
 }
 

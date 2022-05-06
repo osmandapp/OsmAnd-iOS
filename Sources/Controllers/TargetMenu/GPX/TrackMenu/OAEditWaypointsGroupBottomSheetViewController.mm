@@ -157,7 +157,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         OAGPXTableCellData *copyToFavoritesCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"copy_to_favorites",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
-                kCellRightIconName: @"ic_custom_trip_edit",
+                kCellRightIconName: @"ic_custom_copy",
                 kCellTitle: OALocalizedString(@"copy_to_map_favorites")
         }];
         [copyToFavoriteSectionData.subjects addObject:copyToFavoritesCellData];

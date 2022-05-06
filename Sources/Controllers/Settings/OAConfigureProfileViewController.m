@@ -22,6 +22,7 @@
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAPluginResetBottomSheetViewController.h"
 #import "OASettingsHelper.h"
+#import "OAProfileSettingsItem.h"
 #import "OAMapStyleSettings.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAProfileGeneralSettingsViewController.h"
@@ -682,9 +683,24 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 {
     if (succeed)
     {
+        OASettingsItem *itm = nil;
         for (OASettingsItem *item in items)
-            item.shouldReplace = YES;
-        [self importBackupSettingsItems:_importedFileName items:items];
+        {
+            if ([item isKindOfClass:OAProfileSettingsItem.class])
+            {
+                OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *)item;
+                if ([profileItem.appMode.stringKey isEqualToString:_appMode.stringKey])
+                {
+                    itm = item;
+                    itm.shouldReplace = YES;
+                    break;
+                }
+            }
+        }
+        if (itm)
+        {
+            [self importBackupSettingsItems:_importedFileName items:@[itm]];
+        }
     }
 }
 

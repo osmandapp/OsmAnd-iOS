@@ -1929,13 +1929,6 @@ static const NSInteger _buttonsCount = 4;
         return;
     }
 
-    if (self.targetPoint.type == OATargetWpt)
-    {
-        OAGpxWptItem *item = self.targetPoint.targetObj;
-        [self.menuViewDelegate targetPointEditWaypoint:item];
-        return;
-    }
-
     if (self.activeTargetType == OATargetGPX)
     {
         [self.menuViewDelegate targetPointAddWaypoint];

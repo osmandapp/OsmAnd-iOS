@@ -469,7 +469,7 @@
 "shared_string_time_span" = "Duración";
 "shared_string_start_time" = "Hora de inicio";
 "shared_string_end_time" = "Hora de fin";
-"shared_string_time_moving" = "Tiempo moviéndose";
+"shared_string_time_moving" = "Tiempo en movimiento";
 "shared_string_retry" = "Reintentar";
 "shared_string_enabled" = "Activado";
 "shared_string_start_date" = "Start date";
@@ -651,8 +651,8 @@
 "gpxup_identifiable" = "Identificable";
 "gpxup_trackable" = "Trazable";
 "gpxup_private" = "Privado";
-"gpx_upload_public_visibility_descr" = "«Público» significa que la traza se mostrará públicamente en tu listado de trazas y en los listados de trazas GPS públicas con marcas de tiempo en bruto. Los datos servidos a través de la API no harán referencia a su página de trazas. Las marcas de tiempo de los puntos de la traza no estarán disponible a través de la API pública de GPS, aunque los puntos se ordenan cronológicamente.";
-"gpx_upload_identifiable_visibility_descr" = "«Identificable» significa que la traza se mostrará públicamente en tu listado de trazas y en el listado de trazas GPS públicas, es decir que otros usuarios podrán descargar la traza en bruto y asociarla con su nombre de usuario. Los datos servidos a través de la API de conjunto de puntos hará referencia a la página original de la traza.";
+"gpx_upload_public_visibility_descr" = "«Público» significa que la traza se mostrará públicamente en tus trazas GPS y en las lista públicas de trazas GPS y con marcas de tiempo en crudo. Los datos servidos a través de la API no harán referencia a tu página de trazas. Las marcas de tiempo de los puntos no estarán disponibles a través de la API pública de GPS, y los puntos de la ruta no se ordenarán de manera cronológica.";
+"gpx_upload_identifiable_visibility_descr" = "«Identificable» significa que la traza se mostrará públicamente en tus trazas GPS y en las listas públicas de trazas GPS, es decir que otros usuarios podrán descargar la traza en bruto y asociarla a tu nombre de usuario. Los datos públicos servidos a través de la API con marcas de tiempo GPS harán referencia a la página original de la traza.";
 "gpx_upload_trackable_visibility_descr" = "«Trazable» significa que la traza no aparece en ninguna lista pública, pero el conjunto de puntos procesados con marcas de tiempo (no se pueden asociar directamente con usted) estarán disponibles a través de la API pública de GPS.";
 "gpx_upload_private_visibility_descr" = "«Privado» significa que la traza no aparecerá en ninguna lista pública, pero el conjunto de puntos seguirá estando disponible en orden cronológico a través de la API pública de GPS y sin marcas de tiempo.";
 "track_during_nav" = "Grabar traza automáticamente";
@@ -802,7 +802,7 @@
 "lang_es_ar" = "Español (Argentina)";
 "lang_es_us" = "Español (Estados Unidos)";
 "lang_et" = "Estonio";
-"lang_eu" = "Euskera";
+"lang_eu" = "Vasco";
 "lang_fa" = "Persa";
 "lang_fi" = "Finlandés";
 "lang_fr" = "Francés";

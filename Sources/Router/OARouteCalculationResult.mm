@@ -505,7 +505,7 @@
             int i = s->getStartPointIndex();
             while (i != s->getEndPointIndex() || routeInd == _segments.size() - 1)
             {
-                if (s->object->isTrafficLight(i))
+                if (s->object->hasTrafficLightAt(i))
                 {
                     LatLon point = s->getPoint(i);
                     for (OASimulatedLocation *sd in _simulatedLocations)

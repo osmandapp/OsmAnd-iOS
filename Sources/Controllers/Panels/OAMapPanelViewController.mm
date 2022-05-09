@@ -449,16 +449,13 @@ typedef enum
                                         _targetMenuView.targetPoint.type == OATargetRouteDetailsGraph ||
                                         _targetMenuView.targetPoint.type == OATargetTransportRouteDetails))
         return UIStatusBarStyleDefault;
-    
+    else if (_scrollableHudViewController)
+        return _scrollableHudViewController.preferredStatusBarStyle;
+
     if (_customStatusBarStyleNeeded)
         return _customStatusBarStyle;
 
-    UIStatusBarStyle style;
-    if (!self.hudViewController)
-        style = UIStatusBarStyleDefault;
-    
-    style = self.hudViewController.preferredStatusBarStyle;
-    
+    UIStatusBarStyle style = self.hudViewController ? self.hudViewController.preferredStatusBarStyle : UIStatusBarStyleDefault;
     return [self.targetMenuView getStatusBarStyle:[self contextMenuMode] defaultStyle:style];
 }
 

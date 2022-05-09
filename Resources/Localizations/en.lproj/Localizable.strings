@@ -678,8 +678,10 @@
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "Average altitude";
 "gpx_alt_range" = "Altitude range";
-"gpx_ascent" = "Uphill";
-"gpx_descent" = "Downhill";
+"gpx_ascent" = "Ascent";
+"gpx_descent" = "Descent";
+"altitude_ascent" = "Uphill";
+"altitude_descent" = "Downhill";
 "gpx_updown" = "Up/Down";
 "gpx_uphills_total" = "Uphills total";
 "distance_moving" = "Distance corrected";

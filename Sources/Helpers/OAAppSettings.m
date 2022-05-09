@@ -1103,6 +1103,7 @@
 - (NSObject *) getValue:(OAApplicationMode *)mode;
 - (void) setValue:(NSObject *)value;
 - (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode;
+- (void) setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -3177,7 +3178,10 @@
         [_globalPreferences setObject:_settingMapLanguageTranslit forKey:@"map_transliterate_names"];
 
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
-        _appearanceMode = [OACommonInteger withKey:settingAppModeKey defValue:0];
+        _appearanceMode = [OACommonInteger withKey:settingAppModeKey defValue:APPEARANCE_MODE_DAY];
+        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_AUTO) mode:OAApplicationMode.CAR];
+        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_AUTO) mode:OAApplicationMode.BICYCLE];
+        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_DAY) mode:OAApplicationMode.PEDESTRIAN];
         [_profilePreferences setObject:_appearanceMode forKey:@"daynight_mode"];
 
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;

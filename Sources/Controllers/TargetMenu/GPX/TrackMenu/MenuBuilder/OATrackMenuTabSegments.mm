@@ -299,8 +299,8 @@
         {
             titles[@"top_left_title_string_value"] = OALocalizedString(@"gpx_avg_altitude");
             titles[@"top_right_title_string_value"] = OALocalizedString(@"gpx_alt_range");
-            titles[@"bottom_left_title_string_value"] = OALocalizedString(@"gpx_ascent");
-            titles[@"bottom_right_title_string_value"] = OALocalizedString(@"gpx_descent");
+            titles[@"bottom_left_title_string_value"] = OALocalizedString(@"altitude_ascent");
+            titles[@"bottom_right_title_string_value"] = OALocalizedString(@"altitude_descent");
 
             icons[@"top_left_icon_name_string_value"] = @"ic_small_altitude_average";
             icons[@"top_right_icon_name_string_value"] = @"ic_small_altitude_range";

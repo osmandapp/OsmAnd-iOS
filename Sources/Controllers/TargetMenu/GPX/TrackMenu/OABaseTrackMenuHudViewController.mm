@@ -325,8 +325,7 @@
     [super viewDidAppear:animated];
     [_mapPanelViewController setTopControlsVisible:NO
                           onlyMapSettingsAndSearch:NO
-                              customStatusBarStyle:[OAAppSettings sharedManager].nightMode
-                                      ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
+                              customStatusBarStyle:self.preferredStatusBarStyle];
     [_mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
     [self changeHud:[self getViewHeight]];
 }

@@ -19,9 +19,6 @@
 
 #define MILS_IN_DEGREE 17.777778f
 
-#define FOOTS_IN_ONE_METER  3.2808f
-#define METERS_IN_ONE_METER  1.0000f
-
 #define FORMAT_DEGREES_SHORT 6
 #define FORMAT_DEGREES 0
 #define FORMAT_MINUTES 1
@@ -43,6 +40,7 @@
 
 + (double) calculateRoundedDist:(double)baseMetersDist;
 + (NSString *) getFormattedDistance:(float) meters;
++ (NSString *) getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes;
 + (NSString *) getFormattedAlarmInfoDistance:(float)meters;
 + (NSString *) getFormattedAzimuth:(float)bearing;
 + (NSString *) getFormattedTimeHM:(NSTimeInterval)timeInterval;

@@ -19,11 +19,12 @@
 #define kTitleHeightMin 30.
 #define kDescriptionHeightMin 18.
 #define kDescriptionHeightMax 36.
+#define kBlockStatisticsLineHeight 20.
 #define kBlockStatisticsHeight 40.
 #define kBlockStatisticsWidthMin 80.
-#define kBlockStatisticsWidthMinByValue 60.
+#define kBlockStatisticsWidthMinByValue 52.
 #define kBlockStatisticsWidthMax 120.
-#define kBlockStatisticsWidthMaxByValue 100.
+#define kBlockStatisticsWidthMaxByValue 92.
 #define kBlockStatisticsDivider 13.
 
 @interface OATrackMenuHeaderView () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
@@ -239,7 +240,7 @@
                             @"string_value": [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationUp],
                             @"int_value": @(EOARouteStatisticsModeSlope)
                     },
-                    kCellTitle: OALocalizedString(@"gpx_ascent"),
+                    kCellTitle: OALocalizedString(@"altitude_ascent"),
                     kCellRightIconName: @"ic_small_ascent"
             }]];
             [statisticCells addObject:[OAGPXTableCellData withData:@{
@@ -247,7 +248,7 @@
                             @"string_value": [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationDown],
                             @"int_value": @(EOARouteStatisticsModeSlope)
                     },
-                    kCellTitle: OALocalizedString(@"gpx_descent"),
+                    kCellTitle: OALocalizedString(@"altitude_descent"),
                     kCellRightIconName: @"ic_small_descent"
             }]];
             [statisticCells addObject:[OAGPXTableCellData withData:@{
@@ -578,11 +579,11 @@
 {
     CGSize sizeByTitle = [OAUtilities calculateTextBounds:title
                                                     width:kBlockStatisticsWidthMax
-                                                   height:kBlockStatisticsHeight
+                                                   height:kBlockStatisticsLineHeight
                                                      font:[UIFont systemFontOfSize:13. weight:UIFontWeightRegular]];
     CGSize sizeByValue = [OAUtilities calculateTextBounds:value
                                                     width:kBlockStatisticsWidthMaxByValue
-                                                   height:kBlockStatisticsHeight
+                                                   height:kBlockStatisticsLineHeight
                                                      font:[UIFont systemFontOfSize:13. weight:UIFontWeightMedium]];
     CGFloat widthByTitle = sizeByTitle.width < kBlockStatisticsWidthMin
             ? kBlockStatisticsWidthMin : sizeByTitle.width > kBlockStatisticsWidthMax

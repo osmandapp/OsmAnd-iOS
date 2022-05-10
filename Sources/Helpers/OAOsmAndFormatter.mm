@@ -8,7 +8,6 @@
 
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
-#import "OAAppSettings.h"
 #import "OALocationConvert.h"
 
 #include <GeographicLib/GeoCoords.hpp>
@@ -223,10 +222,15 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
     return (int((meters * unitsInOneMeter) * 100) % 100) < 1;
 }
 
-+ (NSString *) getFormattedAlt:(double) alt
++ (NSString *) getFormattedAlt:(double)alt
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     EOAMetricsConstant mc = [settings.metricSystem get];
+    return [self getFormattedAlt:alt mc:mc];
+}
+
++ (NSString *) getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc
+{
     BOOL useFeet = mc == MILES_AND_FEET || mc == MILES_AND_YARDS;
     if (useFeet)
     {

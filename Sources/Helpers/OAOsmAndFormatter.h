@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAAppSettings.h"
 
 @interface OAOsmAndFormatter : NSObject
 
@@ -51,6 +52,7 @@
 + (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive;
 + (NSString *) getFormattedSpeed:(float) metersperseconds;
 + (NSString *) getFormattedAlt:(double) alt;
++ (NSString *) getFormattedAlt:(double) alt mc:(EOAMetricsConstant)mc;
 + (NSString *) getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
 + (NSString *) getFormattedDistanceInterval:(double)interval;
 + (NSString *) getFormattedOsmTagValue:(NSString *)tagValue;

@@ -1398,7 +1398,7 @@
             }
             else
             {
-                NSString *ref = [*poi getTagContent:OSM_REF_TAG lang:nil];
+                NSString *ref = [*poi getContentLanguage:REF lang:nil defLang:@"en"];
                 if (!ref || ![ns matches:ref])
                 {
                     return NO;

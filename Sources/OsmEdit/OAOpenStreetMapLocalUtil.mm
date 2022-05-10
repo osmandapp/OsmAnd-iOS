@@ -10,28 +10,21 @@
 #import "OAEntity.h"
 #import "OANode.h"
 #import "OAWay.h"
-#import "OARelation.h"
 #import "OAOsmEditsDBHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OsmAndApp.h"
 #import "OAPOIType.h"
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
-#import "OAPOIBaseType.h"
 #import "OAEditPOIData.h"
-#import "OAOSMSettings.h"
 #import "OATargetPoint.h"
 #import "OATransportStop.h"
 #import "OAPOILocationType.h"
 
-#include <OsmAndCore/Data/Amenity.h>
-#include <OsmAndCore/Data/ObfPoiSectionInfo.h>
-#include <OsmAndCore/Map/AmenitySymbolsProvider.h>
-#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
-#include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Utilities.h>
 
 #define WAY_MODULO_REMAINDER 1;
+
 static const int AMENITY_ID_RIGHT_SHIFT = 1;
 static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
 
@@ -106,7 +99,7 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
         [entity putTagNoLC:[OAOSMSettings getOSMKey:NAME] value:poi.name];
     
     if ([poi.openingHours length] > 0)
-        [entity putTagNoLC:[OAOSMSettings getOSMKey:OPENING_HOURS] value:poi.openingHours];
+        [entity putTagNoLC:[OAOSMSettings getOSMKey:OSM_TAG_OPENING_HOURS] value:poi.openingHours];
     
     [poi.values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {
         OAPOIBaseType *pt = [poiHelper getAnyPoiAdditionalTypeByKey:key];

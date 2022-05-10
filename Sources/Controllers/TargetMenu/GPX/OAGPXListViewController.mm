@@ -31,6 +31,7 @@
 #import <MBProgressHUD.h>
 #import "OAExportItemsViewController.h"
 #import "OAIndexConstants.h"
+#import "OsmAndApp.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -77,7 +78,7 @@
 
 @end
 
-@interface OAGPXListViewController ()
+@interface OAGPXListViewController () <UIDocumentPickerDelegate>
 {
     NSURL *_importUrl;
     OAGPXDocument *_doc;
@@ -492,44 +493,6 @@ static UIViewController *parentController;
     });
 }
 
-- (void)importAllGPXFromDocuments
-{
-    [self prepareProcessUrl:^{
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSArray *paths = [fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
-            NSURL *documentsURL = [paths lastObject];
-            NSArray *keys = @[NSURLIsDirectoryKey];
-            NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:documentsURL
-                                                  includingPropertiesForKeys:keys
-                                                                     options:0
-                                                                errorHandler:^(NSURL *url, NSError *error) {
-                // Return YES for the enumeration to continue after the error.
-                return YES;
-            }];
-
-            for (NSURL *url in enumerator)
-            {
-                NSNumber *isDirectory = nil;
-                if ([url isFileURL])
-                {
-                    [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
-                    if ([isDirectory boolValue])
-                    {
-                        [enumerator skipDescendants];
-                    }
-                    else if (![isDirectory boolValue] &&
-                            ([url.pathExtension.lowercaseString isEqualToString:GPX_EXT] ||
-                                    [url.pathExtension.lowercaseString isEqualToString:KML_EXT] ||
-                                    [url.pathExtension.lowercaseString isEqualToString:KMZ_EXT]) &&
-                            ![url.lastPathComponent isEqualToString:@"favourites.gpx"])
-                    {
-                        [self processUrl:url showAlerts:NO openGpxView:NO];
-                    }
-                }
-            }
-    }];
-}
-
 - (void) applyLocalization
 {
     [self updateHeaderLabels];
@@ -613,6 +576,8 @@ static UIViewController *parentController;
                                                         withHandler:@selector(onTrackRecordingChanged)
                                                          andObserve:_app.trackRecordingObservable];
     [self applySafeAreaMargins];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNewTracksFetched) name:kNotificationNewTracksFetched object:nil];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -621,6 +586,8 @@ static UIViewController *parentController;
     
     [_trackRecordingObserver detach];
     _trackRecordingObserver = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationNewTracksFetched object:nil];
 }
 
 -(UIView *) getBottomView
@@ -936,11 +903,11 @@ static UIViewController *parentController;
 
 - (void) onImportClicked
 {
-//    NSString* favoritesImportText = OALocalizedString(@"gpx_import_desc");
-//    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-//    [importHelpAlert show];
-    OAImportGPXBottomSheetViewController *controller = [[OAImportGPXBottomSheetViewController alloc] initWithParam:self];
-    [controller show];
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"public.xml",@"com.topografix.gpx",@"com.google.earth.kmz",@"com.google.earth.kml"] inMode:UIDocumentPickerModeImport];
+    documentPickerVC.allowsMultipleSelection = NO;
+    documentPickerVC.delegate = self;
+    [self presentViewController:documentPickerVC animated:YES completion:nil];
+    
 }
 
 - (void) onCreateTrackClicked
@@ -1640,6 +1607,34 @@ static UIViewController *parentController;
         [[OAGPXDatabase sharedDb] removeGpxItem:gpx.gpxFilePath];
     }
     [self reloadData];
+}
+
+// MARK: UIDocumentPickerDelegate
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
+{
+    if (urls.count == 0)
+        return;
+    
+    NSURL *url = urls.firstObject;
+    NSString *path = url.path;
+    NSString *ext = [path pathExtension].lowerCase;
+    if ([ext isEqualToString:GPX_EXT]
+        || [ext isEqualToString:KML_EXT]
+        || [ext isEqualToString:KMZ_EXT])
+    {
+        [self processUrl:url showAlerts:YES openGpxView:NO];
+        [self reloadData];
+    }
+}
+
+// MARK: NewTracksFetched Notification
+
+- (void) onNewTracksFetched
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self reloadData];
+    });
 }
 
 @end

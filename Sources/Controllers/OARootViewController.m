@@ -23,6 +23,7 @@
 #import "OAFileImportHelper.h"
 #import "OASettingsHelper.h"
 #import "OAXmlImportHandler.h"
+#import "OsmAndApp.h"
 #import "Localization.h"
 
 #define _(name) OARootViewController__##name

@@ -1692,7 +1692,7 @@
 "shared_string_terrain" = "Terreno";
 "announce" = "Anunciar";
 "profile_prefs_reset_successful" = "Todas as configurações de perfil são restauradas para o padrão.";
-"consider_limitations_param" = "Considere limitações temporárias";
+"consider_limitations_param" = "Aplicar limitações temporárias (obras...)";
 "two" = "Dois";
 "shared_string_max" = "Máx.";
 "nav_type_title" = "Tipo de navegação";

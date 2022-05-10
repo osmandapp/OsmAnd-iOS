@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
+#import "OAPOILocationType.h"
 #import "OACollapsableLabelView.h"
 #import "OAColors.h"
 #import "OATransportStopType.h"
@@ -29,6 +30,10 @@
 #include <OsmAndCore/ObfDataInterface.h>
 
 #define WIKI_LINK @".wikipedia.org/w"
+
+static const NSInteger AMENITY_ID_RIGHT_SHIFT = 1;
+static const NSInteger NON_AMENITY_ID_RIGHT_SHIFT = 7;
+static const NSInteger WAY_MODULO_REMAINDER = 1;
 
 @interface OAPOIViewController ()
 
@@ -647,22 +652,26 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         [rows addObject:desc];
     }
 
-    long long id = self.poi.obfId;
-    if (osmEditingEnabled && id > 0 && (id % 2 == 0 || (id >> 1) < INT_MAX))
+    long long objectId = self.poi.obfId;
+    if (osmEditingEnabled && (objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < INT_MAX)))
     {
-        NSString *link = [OAOsmEditingPlugin getOsmUrlForId:id shift:1];
-        OARowInfo *row = [[OARowInfo alloc] initWithKey:nil
-                                                   icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
-                                             textPrefix:nil
-                                                   text:link
-                                              textColor:UIColorFromRGB(kHyperlinkColor)
-                                                 isText:YES
-                                              needLinks:YES
-                                                  order:10000
-                                               typeName:nil
-                                          isPhoneNumber:NO
-                                                  isUrl:YES];
-        [rows addObject:row];
+        OAPOIType *poiType = self.poi.type;
+        BOOL isAmenity = poiType && ![poiType isKindOfClass:[OAPOILocationType class]];
+
+        long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
+        BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
+        NSString *link = isWay ? @"https://www.openstreetmap.org/way/" : @"https://www.openstreetmap.org/node/";
+        [rows addObject:[[OARowInfo alloc] initWithKey:nil
+                                                  icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
+                                            textPrefix:nil
+                                                  text:[NSString stringWithFormat:@"%@%llu", link, entityId]
+                                             textColor:UIColorFromRGB(kHyperlinkColor)
+                                                isText:YES
+                                             needLinks:YES
+                                                 order:10000
+                                              typeName:nil
+                                         isPhoneNumber:NO
+                                                 isUrl:YES]];
     }
 }
 

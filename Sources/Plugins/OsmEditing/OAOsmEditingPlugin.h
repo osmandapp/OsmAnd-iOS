@@ -27,7 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *) getTitle:(OAOsmPoint *)osmPoint;
 + (NSString *) getCategory:(OAOsmPoint *)point;
-+ (NSString *) getOsmUrlForId:(long long)id shift:(int)shift;
 
 @end
 

@@ -214,27 +214,21 @@
     {
         [_rows addObjectsFromArray:self.additionalRows];
     }
-    
-    [_rows sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
-        if (row1.order < row2.order)
-        {
-            return NSOrderedAscending;
-        }
-        else if (row1.order == row2.order)
-        {
-            return [row1.typeName localizedCompare:row2.typeName];
-        }
-        else
-        {
-            return NSOrderedDescending;
-        }
-    }];
 
     if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPlugin getEnabledPlugin:OAWikipediaPlugin.class])
         [self buildRowsPoi:YES];
 
     if ([self showNearestPoi])
         [self buildRowsPoi:NO];
+
+    [_rows sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
+        if (row1.order < row2.order)
+            return NSOrderedAscending;
+        else if (row1.order == row2.order)
+            return [row1.typeName localizedCompare:row2.typeName];
+        else
+            return NSOrderedDescending;
+    }];
 
     if ([self needCoords])
     {
@@ -276,6 +270,7 @@
             rowInfo.collapsed = YES;
             rowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             [((OACollapsableNearestPoiWikiView *) rowInfo.collapsableView) setData:nearest hasItems:(isWiki ? _hasOsmWiki : YES) latitude:self.location.latitude longitude:self.location.longitude filter:filter];
+            rowInfo.order = 1000;
             [_rows addObject:rowInfo];
         }
     }

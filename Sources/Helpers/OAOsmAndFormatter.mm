@@ -8,7 +8,6 @@
 
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
-#import "OAAppSettings.h"
 #import "OALocationConvert.h"
 
 #include <GeographicLib/GeoCoords.hpp>
@@ -16,7 +15,7 @@
 @implementation OAOsmAndFormatter
 
 static NSString * const _unitsKm = OALocalizedString(@"units_km");
-static NSString * const _unitsm = OALocalizedString(@"units_m");
+static NSString * const _unitsM = OALocalizedString(@"units_m");
 static NSString * const _unitsMi = OALocalizedString(@"units_mi");
 static NSString * const _unitsYd = OALocalizedString(@"units_yd");
 static NSString * const _unitsFt = OALocalizedString(@"units_ft");
@@ -133,6 +132,11 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
 
 + (NSString *) getFormattedDistance:(float)meters
 {
+    return [self getFormattedDistance:meters forceTrailingZeroes:YES];
+}
+
++ (NSString *) getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes
+{
     OAAppSettings *settings = [OAAppSettings sharedManager];
     EOAMetricsConstant mc = [settings.metricSystem get];
     
@@ -153,66 +157,102 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
         mainUnitStr = _unitsMi;
         mainUnitInMeters = METERS_IN_ONE_MILE;
     }
-    
+
+    float floatDistance = meters / mainUnitInMeters;
+
     if (meters >= 100 * mainUnitInMeters)
     {
-        return [NSString stringWithFormat:@"%d %@",  (int) (meters / mainUnitInMeters + 0.5), mainUnitStr];
+        return [self formatValue:(int) (meters / mainUnitInMeters + 0.5) unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0];
     }
     else if (meters > 9.99f * mainUnitInMeters)
     {
-        float num = meters / mainUnitInMeters;
-        NSString *numStr = [NSString stringWithFormat:@"%.1f", num];
-        if ([[numStr substringFromIndex:numStr.length - 1] isEqualToString:@"0"])
-            numStr = [numStr substringToIndex:numStr.length - 2];
-        return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1];
     }
     else if (meters > 0.999f * mainUnitInMeters && mc != NAUTICAL_MILES)
     {
-        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
     }
-    else if (mc == MILES_AND_FEET && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:FOOTS_IN_ONE_METER])
+    else if (mc == MILES_AND_FEET && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:FEET_IN_ONE_METER])
     {
-        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
     }
-    else if (mc == MILES_AND_METERS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:METERS_IN_ONE_METER])
+    else if (mc == MILES_AND_METERS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
     {
-        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
     }
     else if (mc == MILES_AND_YARDS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:YARDS_IN_ONE_METER])
     {
-        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
     }
-    else if (mc == NAUTICAL_MILES && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:METERS_IN_ONE_METER])
+    else if (mc == NAUTICAL_MILES && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
     {
-        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
     }
     else
     {
         if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS || mc == NAUTICAL_MILES)
         {
-            return [NSString stringWithFormat:@"%d %@", ((int) (meters + 0.5)), _unitsm];
+            return [self formatValue:(int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0];
         }
         else if (mc == MILES_AND_FEET)
         {
-            int feet = (int) (meters * FOOTS_IN_ONE_METER + 0.5);
-            return [NSString stringWithFormat:@"%d %@", feet, _unitsFt];
+            int feet = (int) (meters * FEET_IN_ONE_METER + 0.5);
+            return [self formatValue:feet unit:_unitsFt forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0];
         }
         else if (mc == MILES_AND_YARDS)
         {
             int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
-            return [NSString stringWithFormat:@"%d %@", yards, _unitsYd];
+            return [self formatValue:yards unit:_unitsYd forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0];
         }
-        return [NSString stringWithFormat:@"%d %@", ((int) (meters + 0.5)), _unitsm];
+        return [self formatValue:(int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0];
     }
 }
 
-+ (NSString *) getMilesFormattedStringWithMeters:(float)meters mainUnitInMeters:(float)mainUnitInMeters mainUnitStr:(NSString *)mainUnitStr
++ (NSString *)formatValue:(float)value
+                     unit:(NSString *)unit
+      forceTrailingZeroes:(BOOL)forceTrailingZeroes
+      decimalPlacesNumber:(NSInteger)decimalPlacesNumber
 {
-    float num = meters / mainUnitInMeters;
-    NSString *numStr = [NSString stringWithFormat:@"%.2f", num];
-    if ([[numStr substringFromIndex:numStr.length - 2] isEqualToString:@"00"])
-        numStr = [numStr substringToIndex:numStr.length - 3];
-    return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+
+    NSMutableString *pattern = [NSMutableString string];
+    [pattern appendString:@"0"];
+    if (decimalPlacesNumber > 0)
+    {
+        [pattern appendString:@"."];
+        NSString *fractionDigitPattern = forceTrailingZeroes ? @"0" : @"#";
+        for (NSInteger i = 0; i < decimalPlacesNumber; i++)
+        {
+            [pattern appendString:fractionDigitPattern];
+        }
+    }
+    numberFormatter.positiveFormat = pattern;
+
+    NSString *preferredLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
+    NSLocale *locale = [NSLocale localeWithLocaleIdentifier:preferredLocale];
+
+    numberFormatter.locale = locale;
+    numberFormatter.groupingSeparator = @" ";
+
+    BOOL fiveOrMoreDigits = ABS(value) >= 10000;
+    numberFormatter.usesGroupingSeparator = fiveOrMoreDigits;
+    if (fiveOrMoreDigits)
+        numberFormatter.groupingSize = 3;
+
+    NSMutableString *formattedValue = [NSMutableString stringWithString:[numberFormatter stringFromNumber:@(value)]];
+    if (decimalPlacesNumber > 0 && forceTrailingZeroes)
+    {
+        while ([formattedValue hasSuffix:@"0"])
+        {
+            [formattedValue deleteCharactersInRange:NSMakeRange(formattedValue.length - 1, 1)];
+        }
+        if ([formattedValue hasSuffix:@"."])
+            [formattedValue deleteCharactersInRange:NSMakeRange(formattedValue.length - 1, 1)];
+    }
+
+    return [OAUtilities getFormattedValue:formattedValue unit:unit];
 }
 
 + (BOOL) isCleanValue:(float)meters inUnits:(float)unitsInOneMeter
@@ -223,20 +263,25 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
     return (int((meters * unitsInOneMeter) * 100) % 100) < 1;
 }
 
-+ (NSString *) getFormattedAlt:(double) alt
++ (NSString *) getFormattedAlt:(double)alt
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     EOAMetricsConstant mc = [settings.metricSystem get];
+    return [self getFormattedAlt:alt mc:mc];
+}
+
++ (NSString *) getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc
+{
     BOOL useFeet = mc == MILES_AND_FEET || mc == MILES_AND_YARDS;
     if (useFeet)
     {
         int feet = (int) (alt * FEET_IN_ONE_METER + 0.5);
-        return [NSString stringWithFormat:@"%d %@", feet, _unitsFt];
+        return [self formatValue:feet unit:_unitsFt forceTrailingZeroes:NO decimalPlacesNumber:0];
     }
     else
     {
         int meters = (int) (alt + 0.5);
-        return [NSString stringWithFormat:@"%d %@", meters, _unitsm];
+        return [self formatValue:meters unit:_unitsM forceTrailingZeroes:NO decimalPlacesNumber:0];
     }
 }
 
@@ -252,18 +297,18 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
     if ([settings.metricSystem get] == KILOMETERS_AND_METERS) {
         if (kmh >= 10 || drive) {
             // case of car
-            return [NSString stringWithFormat:@"%d %@", ((int) round(kmh)), _unitsKmh];
+            return [self formatValue:(int) round(kmh) unit:_unitsKmh forceTrailingZeroes:NO decimalPlacesNumber:0];
         }
         int kmh10 = (int) (kmh * 10.0f);
         // calculate 2.0 km/h instead of 2 km/h in order to not stress UI text lengh
-        return [NSString stringWithFormat:@"%g %@", (kmh10 / 10.0f), _unitsKmh];
+        return [self formatValue:kmh10 / 10.0f unit:_unitsKmh forceTrailingZeroes:NO decimalPlacesNumber:0];
     } else {
         float mph = kmh * METERS_IN_KILOMETER / METERS_IN_ONE_MILE;
         if (mph >= 10) {
-            return [NSString stringWithFormat:@"%d %@", ((int) round(mph)), _unitsMph];
+            return [self formatValue:(int) round(mph) unit:_unitsMph forceTrailingZeroes:NO decimalPlacesNumber:0];
         } else {
             int mph10 = (int) (mph * 10.0f);
-            return [NSString stringWithFormat:@"%g %@", (mph10 / 10.0f), _unitsMph];
+            return [self formatValue:mph10 / 10.0f unit:_unitsMph forceTrailingZeroes:NO decimalPlacesNumber:0];
         }
     }
 }
@@ -276,7 +321,7 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
     double metersInSecondUnit = METERS_IN_KILOMETER;
     if (mc == MILES_AND_FEET)
     {
-        mainUnitInMeter = FOOTS_IN_ONE_METER;
+        mainUnitInMeter = FEET_IN_ONE_METER;
         metersInSecondUnit = METERS_IN_ONE_MILE;
     }
     else if (mc == MILES_AND_METERS)
@@ -300,7 +345,7 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
     int pointer = 1;
     double point = mainUnitInMeter;
     double roundDist = 1;
-    while (baseMetersDist * point > generator)
+    while (baseMetersDist * point >= generator)
     {
         roundDist = (generator / point);
         if (pointer++ % 3 == 2)
@@ -320,9 +365,9 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
         roundDist = 0.5f * METERS_IN_ONE_MILE;
     else if (mc == MILES_AND_METERS && roundDist == 500)
         roundDist = 0.25f * METERS_IN_ONE_MILE;
-    else if (mc == MILES_AND_FEET && roundDist == 2000 / (double) FOOTS_IN_ONE_METER)
+    else if (mc == MILES_AND_FEET && roundDist == 2000 / (double) FEET_IN_ONE_METER)
         roundDist = 0.5f * METERS_IN_ONE_MILE;
-    else if (mc == MILES_AND_FEET && roundDist == 1000 / (double) FOOTS_IN_ONE_METER)
+    else if (mc == MILES_AND_FEET && roundDist == 1000 / (double) FEET_IN_ONE_METER)
         roundDist = 0.25f * METERS_IN_ONE_MILE;
     else if (mc == MILES_AND_YARDS && roundDist == 1000 / (double) YARDS_IN_ONE_METER)
         roundDist = 0.5f * METERS_IN_ONE_MILE;

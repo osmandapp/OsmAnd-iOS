@@ -514,6 +514,12 @@
 		46B0E77227F5E88A00D5A075 /* img_plugin_weather.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */; };
 		46BAED9528204DF600090804 /* ic_action_mountain_bike@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */; };
 		46BAED9628204DF600090804 /* ic_action_mountain_bike@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */; };
+		46BA4840281C2EF900C04F14 /* ic_custom_internet_access_fee@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA483E281C2EF800C04F14 /* ic_custom_internet_access_fee@2x.png */; };
+		46BA4841281C2EF900C04F14 /* ic_custom_internet_access_fee@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA483F281C2EF900C04F14 /* ic_custom_internet_access_fee@3x.png */; };
+		46BA4846281C2F3500C04F14 /* ic_custom_poi_name@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4842281C2F3400C04F14 /* ic_custom_poi_name@2x.png */; };
+		46BA4847281C2F3500C04F14 /* ic_custom_poi_brand@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4843281C2F3400C04F14 /* ic_custom_poi_brand@3x.png */; };
+		46BA4848281C2F3500C04F14 /* ic_custom_poi_name@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4844281C2F3400C04F14 /* ic_custom_poi_name@3x.png */; };
+		46BA4849281C2F3500C04F14 /* ic_custom_poi_brand@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4845281C2F3500C04F14 /* ic_custom_poi_brand@2x.png */; };
 		46E0263927B6773F00E554DD /* ic_custom_terrain_any@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263127B6773E00E554DD /* ic_custom_terrain_any@3x.png */; };
 		46E0263A27B6773F00E554DD /* ic_custom_terrain_hilly@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263227B6773E00E554DD /* ic_custom_terrain_hilly@3x.png */; };
 		46E0263B27B6773F00E554DD /* ic_custom_terrain_hilly@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263327B6773E00E554DD /* ic_custom_terrain_hilly@2x.png */; };
@@ -3652,6 +3658,12 @@
 		46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_weather.jpg; path = Resources/Icons/img_plugin_weather.jpg; sourceTree = "<group>"; };
 		46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_mountain_bike@2x.png"; path = "Resources/Icons/ic_action_mountain_bike@2x.png"; sourceTree = "<group>"; };
 		46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_mountain_bike@3x.png"; path = "Resources/Icons/ic_action_mountain_bike@3x.png"; sourceTree = "<group>"; };
+		46BA483E281C2EF800C04F14 /* ic_custom_internet_access_fee@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_internet_access_fee@2x.png"; path = "Resources/Icons/ic_custom_internet_access_fee@2x.png"; sourceTree = "<group>"; };
+		46BA483F281C2EF900C04F14 /* ic_custom_internet_access_fee@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_internet_access_fee@3x.png"; path = "Resources/Icons/ic_custom_internet_access_fee@3x.png"; sourceTree = "<group>"; };
+		46BA4842281C2F3400C04F14 /* ic_custom_poi_name@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_poi_name@2x.png"; path = "Resources/Icons/ic_custom_poi_name@2x.png"; sourceTree = "<group>"; };
+		46BA4843281C2F3400C04F14 /* ic_custom_poi_brand@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_poi_brand@3x.png"; path = "Resources/Icons/ic_custom_poi_brand@3x.png"; sourceTree = "<group>"; };
+		46BA4844281C2F3400C04F14 /* ic_custom_poi_name@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_poi_name@3x.png"; path = "Resources/Icons/ic_custom_poi_name@3x.png"; sourceTree = "<group>"; };
+		46BA4845281C2F3500C04F14 /* ic_custom_poi_brand@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_poi_brand@2x.png"; path = "Resources/Icons/ic_custom_poi_brand@2x.png"; sourceTree = "<group>"; };
 		46E0263127B6773E00E554DD /* ic_custom_terrain_any@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_any@3x.png"; path = "Resources/Icons/ic_custom_terrain_any@3x.png"; sourceTree = "<group>"; };
 		46E0263227B6773E00E554DD /* ic_custom_terrain_hilly@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_hilly@3x.png"; path = "Resources/Icons/ic_custom_terrain_hilly@3x.png"; sourceTree = "<group>"; };
 		46E0263327B6773E00E554DD /* ic_custom_terrain_hilly@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_hilly@2x.png"; path = "Resources/Icons/ic_custom_terrain_hilly@2x.png"; sourceTree = "<group>"; };
@@ -7572,6 +7584,12 @@
 				DAB048F121CB729000275456 /* ic_action_plus@3x.png */,
 				46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */,
 				46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */,
+				46BA4845281C2F3500C04F14 /* ic_custom_poi_brand@2x.png */,
+				46BA4843281C2F3400C04F14 /* ic_custom_poi_brand@3x.png */,
+				46BA4842281C2F3400C04F14 /* ic_custom_poi_name@2x.png */,
+				46BA4844281C2F3400C04F14 /* ic_custom_poi_name@3x.png */,
+				46BA483E281C2EF800C04F14 /* ic_custom_internet_access_fee@2x.png */,
+				46BA483F281C2EF900C04F14 /* ic_custom_internet_access_fee@3x.png */,
 				46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */,
 				46AEDBA027F4AC32006D90E8 /* ic_custom_wind@2x.png */,
 				46AEDBA127F4AC32006D90E8 /* ic_custom_wind@3x.png */,
@@ -12724,6 +12742,7 @@
 				DA6F7C99216602F7006F14E3 /* ic_action_directions_from@3x.png in Resources */,
 				DA8EE80B247013D400069A6D /* travel.html in Resources */,
 				DA5A820326C563A700F274C7 /* OAOsmLiveCardView.xib in Resources */,
+				46BA4847281C2F3500C04F14 /* ic_custom_poi_brand@3x.png in Resources */,
 				84B6E07E2073CF55002CA15B /* ic_action_route_first_intermediate@2x.png in Resources */,
 				32A7EE1C261BBF7E00F7A697 /* bg_point_square_contour@3x.png in Resources */,
 				847AF5971F8A3D4900FC7F90 /* widget_battery_charging_day@2x.png in Resources */,
@@ -12927,6 +12946,7 @@
 				DA1341C6243DC5A90039D214 /* ic_action_sail_boat_dark@3x.png in Resources */,
 				DA03184222DF0E50008FC564 /* ic_custom_boat@2x.png in Resources */,
 				8433947F1FF4FA38006205A5 /* inclination_left.aiff in Resources */,
+				46BA4848281C2F3500C04F14 /* ic_custom_poi_name@3x.png in Resources */,
 				DA23424E23477F33003911B8 /* ic_custom_route@2x.png in Resources */,
 				15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */,
 				3296B49E27F8790800108AF7 /* ic_custom_terrain_any@3x.png in Resources */,
@@ -13101,6 +13121,7 @@
 				84F3A9331B4EA79E00D16EBC /* ic_connection_dot@3x.png in Resources */,
 				780AB02D242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */,
 				8AFC2C2124334A4E0095BA9F /* map_location_default_center@3x.png in Resources */,
+				46BA4840281C2EF900C04F14 /* ic_custom_internet_access_fee@2x.png in Resources */,
 				DA5A82C026C563A800F274C7 /* OAIconButtonCell.xib in Resources */,
 				3296B49B27F8790800108AF7 /* widget_weather_umbrella_day@3x.png in Resources */,
 				DA71B7EC214B9F4A00FE8B7E /* ski-plugin.html in Resources */,
@@ -13819,6 +13840,7 @@
 				845E06A61B5FF17400DFC2A7 /* ic_plugin_parking@2x.png in Resources */,
 				8476E28E1F6C1EEC00EC274F /* map_car_location_view_angle_night@3x.png in Resources */,
 				B24745C127F862C300C18C3F /* OAWeatherLayerSettingsViewController.xib in Resources */,
+				46BA4841281C2EF900C04F14 /* ic_custom_internet_access_fee@3x.png in Resources */,
 				847777421FAA260E00CA8C1F /* widget_monitoring_rec_inactive_night@3x.png in Resources */,
 				8490B1DD2068E22B007694A5 /* ic_small_turn_right@2x.png in Resources */,
 				323BD9002628850400D255ED /* ic_bg_point_square_center_small@3x.png in Resources */,
@@ -13902,6 +13924,7 @@
 				DA45DA60230EE05A0083DFA2 /* img_mapstyle_touring-view_(more-contrast-and-details)@2x.png in Resources */,
 				843E5D951AB341E000BE14BE /* menu_share_icon@3x.png in Resources */,
 				DA1341A4243DC5A80039D214 /* ic_action_ski_touring@3x.png in Resources */,
+				46BA4846281C2F3500C04F14 /* ic_custom_poi_name@2x.png in Resources */,
 				DA1341C8243DC5A90039D214 /* map_action_shuttle_bus@2x.png in Resources */,
 				DAF7A4F221786BED00FB94FD /* widget_ruler_circle_hide_night@3x.png in Resources */,
 				8441CB5B1B1370580033AC95 /* selection_checked@2x.png in Resources */,
@@ -14090,6 +14113,7 @@
 				8476E2861F6C1EEC00EC274F /* map_car_location_night@2x.png in Resources */,
 				DA0D1635281BEEF500CEEF58 /* map_turn_uturn_right@2x.png in Resources */,
 				DA45DA68230EE05A0083DFA2 /* img_mapstyle_default@2x.png in Resources */,
+				46BA4849281C2F3500C04F14 /* ic_custom_poi_brand@2x.png in Resources */,
 				0AA3BB9826EBC00200A9885D /* OATrackMenuHudViewController.xib in Resources */,
 				DAF3455322F4482B009E2EB6 /* ic_custom_compound_action_remove@2x.png in Resources */,
 				0A7C7F39270395ED00F779E4 /* ic_small_time_interval@3x.png in Resources */,

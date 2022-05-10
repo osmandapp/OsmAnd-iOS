@@ -279,4 +279,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView;
 
++ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit;
++ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace;
+
 @end

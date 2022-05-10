@@ -607,7 +607,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     NSString *editValue = nil;
     BOOL nonEditable = NO;
     BOOL top = NO;
-    int order = 0;
+    int order = 90;
     BOOL mapOnly = NO;
     BOOL reference = NO;
     BOOL isText = NO;
@@ -815,7 +815,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     NSString *editTag = nil;
     NSString *editValue = nil;
     BOOL nonEditable = NO;
-    int order = 0;
+    int order = 90;
     BOOL mapOnly = NO;
     BOOL reference = NO;
     BOOL isText = NO;

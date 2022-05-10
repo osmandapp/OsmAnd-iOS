@@ -891,7 +891,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
                               font, NSFontAttributeName, nil];
     
     CGSize size = [text boundingRectWithSize:CGSizeMake(ceil(width), height)
-                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine
+                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingTruncatesLastVisibleLine
                                   attributes:attrDict context:nil].size;
     
     return CGSizeMake(ceil(size.width), ceil(size.height));
@@ -2171,6 +2171,16 @@ static const double d180PI = 180.0 / M_PI_2;
             [menuController setMenuVisible:YES animated:YES];
         }
     }
+}
+
++ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit
+{
+    return [self getFormattedValue:value unit:unit separateWithSpace:YES];
+}
+
++ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace
+{
+    return [NSString stringWithFormat:separateWithSpace ? OALocalizedString(@"ltr_or_rtl_combine_via_space") : @"%@%@", value, unit];
 }
 
 @end

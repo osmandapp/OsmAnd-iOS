@@ -563,7 +563,7 @@
     for (OAPOIType *type in [[self getOsmwiki] getPoiTypeByKeyName:WIKI_PLACE].poiAdditionals)
     {
         NSString *name = type.name;
-        NSString *wikiLang = [NSString stringWithFormat:@"wiki_lang%@", @":"];
+        NSString *wikiLang = [WIKI_LANG stringByAppendingString:@":"];
         if (name && [name hasPrefix:wikiLang])
         {
             NSString *locale = [name substringFromIndex:wikiLang.length];
@@ -1156,7 +1156,8 @@
         poi.nameLocalized = poi.name;
     
     poi.type = type;
-    
+    poi.subType = amenity->subType.toNSString();
+
     if (poi.name.length == 0)
         poi.name = type.name;
     if (poi.nameLocalized.length == 0)

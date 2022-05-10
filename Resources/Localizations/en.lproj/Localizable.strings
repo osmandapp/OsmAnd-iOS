@@ -550,6 +550,7 @@
 "shared_string_gpx_track" = "Track";
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_any" = "Any";
+"shared_string_capacity" = "Capacity";
 
 "restart" = "Restart";
 
@@ -686,8 +687,10 @@
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "Average altitude";
 "gpx_alt_range" = "Altitude range";
-"gpx_ascent" = "Uphill";
-"gpx_descent" = "Downhill";
+"gpx_ascent" = "Ascent";
+"gpx_descent" = "Descent";
+"altitude_ascent" = "Uphill";
+"altitude_descent" = "Downhill";
 "gpx_updown" = "Up/Down";
 "gpx_uphills_total" = "Uphills total";
 "distance_moving" = "Distance corrected";
@@ -1609,6 +1612,7 @@
 // Units
 "units_km" = "km";
 "units_m" = "m";
+"units_cubic_m" = "m³";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";

@@ -212,6 +212,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSString *) preferredLang;
 + (NSString *) currentLang;
 + (NSString *) capitalizeFirstLetterAndLowercase:(NSString *)s;
++ (NSString *) capitalizeFirstLetter:(NSString *)s;
 + (NSString *) translatedLangName:(NSString *)lang;
 + (NSInteger) findFirstNumberEndIndex:(NSString *)value;
 

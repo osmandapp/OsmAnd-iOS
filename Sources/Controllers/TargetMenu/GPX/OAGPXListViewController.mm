@@ -716,7 +716,7 @@ static UIViewController *parentController;
     for (NSString *key in _gpxFolders.allKeys)
     {
         OAGpxTableGroup* tracksGroup = [[OAGpxTableGroup alloc] init];
-        tracksGroup.groupName = [OALocalizedString(key) capitalizedString];
+        tracksGroup.groupName = [OAUtilities capitalizeFirstLetter:OALocalizedString(key)];
         tracksGroup.groupIcon = @"ic_custom_folder";
         tracksGroup.isMenu = NO;
         tracksGroup.isSelectable = YES;

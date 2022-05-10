@@ -48,7 +48,7 @@
 + (BOOL) deleteNewFavoriteItem:(OAFavoriteItem *)favoritesItem;
 + (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems;
 
-+ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point;
++ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point newName:(NSString *)newName newCategory:(NSString *)newCategory;
 + (NSString *) checkEmoticons:(NSString *)text;
 + (void) sortAll;
 + (void) recalculateCachedFavPoints;

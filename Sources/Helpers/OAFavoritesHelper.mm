@@ -466,86 +466,80 @@ static BOOL _favoritesLoaded = NO;
     return favorites;
 }
 
-+ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point
++ (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point newName:(NSString *)newName newCategory:(NSString *)newCategory
 {
-    NSString *name = [self checkEmoticons:[point getName]];
-    BOOL emoticons = name.length != [point getName].length;
-
+    BOOL emoticons = NO;
     NSString *index = @"";
     int number = 0;
-    [point setCategory:[self checkEmoticons:[point getCategory]]];
-    NSString *description = [point getDescription];
-    if (description && description.length > 0)
-        [point setDescription:[self checkEmoticons:description]];
-
+    NSString *checkingName = newName ? newName : [point getName];
+    NSString *checkingCategory = newCategory ? newCategory : [point getCategory];
+    NSString *editedName = [OAFavoritesHelper checkEmoticons:checkingName];
+    NSString *editedCategory = [OAFavoritesHelper checkEmoticons:checkingCategory];
+    [point setCategory:editedCategory];
+    
+    NSString *description;
+    if ([point getDescription])
+        description = [OAFavoritesHelper checkEmoticons:[point getDescription]];
+    [point setDescription:description];
+    
+    if (editedName.length != checkingName.length)
+        emoticons = YES;
+    
     BOOL fl = YES;
     while (fl)
     {
         fl = NO;
-        for (OAFavoriteItem *fp in [self getFavoriteItems])
+        for (OAFavoriteItem *favoritePoint in _cachedFavoritePoints)
         {
-            if ([[fp getName] isEqualToString:name]
-                    && [point getLatitude] != [fp getLatitude]
-                    && [point getLongitude] != [fp getLongitude]
-                    && [[fp getCategory] isEqualToString:[point getCategory]])
+            if ([[favoritePoint getName] isEqualToString:editedName] &&
+                [[favoritePoint getCategory] isEqualToString:[point getCategory]])
             {
                 number++;
-                index = [NSString stringWithFormat:@" (%i)", number];
-                name = [[point getName] stringByAppendingString:index];
+                index = [NSString stringWithFormat:@" (%i)",number];
+                editedName = [checkingName stringByAppendingString:index];
                 fl = YES;
                 break;
             }
         }
     }
-
+    
     if (index.length > 0 || emoticons)
     {
-        [point setName:name];
+        [point setName:editedName];
         if (emoticons)
-            return @{ @"name": name, @"status": @"emoji" };
+            return @{@"name" : editedName, @"status": @"emoji"};
         else
-            return @{ @"name": name, @"status": @"duplicate" };
+            return @{@"name" : editedName, @"status": @"duplicate"};
     }
-
     return nil;
 }
 
 + (NSString *) checkEmoticons:(NSString *)text
 {
-    NSUInteger length = [text length];
-    unichar chars[length];
-    [text getCharacters:chars range:NSMakeRange(0, length)];
+    __block NSMutableString *tempString = [NSMutableString string];
 
-    unichar ch1;
-    unichar ch2;
+    [text enumerateSubstringsInRange: NSMakeRange(0, text.length) options:NSStringEnumerationByComposedCharacterSequences usingBlock:
+     ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
 
-    int index = 0;
-    NSMutableString *builder = [NSMutableString string];
-    while (index < length)
-    {
-        ch1 = chars[index];
-        if ((int) ch1 == 0xD83C)
-        {
-            ch2 = chars[index + 1];
-            if ((int) ch2 >= 0xDF00 && (int) ch2 <= 0xDFFF)
-            {
-                index += 2;
-                continue;
-            }
-        }
-        else if ((int) ch1 == 0xD83D)
-        {
-            ch2 = chars[index + 1];
-            if ((int) ch2 >= 0xDC00 && (int) ch2 <= 0xDDFF)
-            {
-                index += 2;
-                continue;
-            }
-        }
-        [builder appendString:[NSString stringWithFormat:@"%C", ch1]];
-        ++index;
-    }
-    return [builder trim];
+         const unichar hs = [substring characterAtIndex:0];
+
+        // surrogate pair
+         if (0xd800 <= hs && hs <= 0xdbff)
+         {
+             const unichar ls = [substring characterAtIndex:1];
+             const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+
+             [tempString appendString:(0x1d000 <= uc && uc <= 0x1f77f) ? @"" : substring]; // U+1D000-1F77F
+
+         // non surrogate
+         }
+         else
+         {
+             [tempString appendString:(0x2100 <= hs && hs <= 0x26ff && hs != 0x2116) ? @"" : substring]; // U+2100-26FF
+         }
+     }];
+    
+    return [NSString stringWithString:tempString];
 }
 
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList

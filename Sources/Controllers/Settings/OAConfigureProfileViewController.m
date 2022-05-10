@@ -596,6 +596,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 {
     if (appMode)
     {
+        [OAAppSettings.sharedManager.settingPrefMapLanguage resetToDefault];
         if (appMode.isCustomProfile)
         {
             [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];

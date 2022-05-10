@@ -349,6 +349,12 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         }
         else if ([key isEqualToString:WEBSITE] || [kContactUrlTags containsObject:key])
         {
+            if ([kContactUrlTags containsObject:key])
+            {
+                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:key]];
+                if (!icon)
+                    icon = [OATargetInfoViewController getIcon:[OAUtilities drawablePath:[@"mm_" stringByAppendingString:key]]];
+            }
             iconId = @"ic_website";
             textColor = UIColorFromRGB(kHyperlinkColor);
             isUrl = YES;
@@ -400,10 +406,6 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             else if ([key isEqualToString:@"internet_access_fee_yes"])
             {
                 iconId = @"ic_custom_internet_access_fee";
-            }
-            else if ([key isEqualToString:@"instagram"])
-            {
-                iconId = [OAUtilities drawablePath:@"mm_instagram"];
             }
             else
             {

@@ -128,9 +128,6 @@
 
 - (void)deinit
 {
-    // Just to be sure, try to release context
-    [self releaseContext];
-    
     // Unregister observer
     _renderer->stateChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_stateObservable));
     _renderer->framePreparedObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_framePreparedObservable));
@@ -551,11 +548,6 @@
     }
     
     // Rendering needs to be resumed/started manually, since render target is not created yet
-}
-
-- (void)releaseContext
-{
-    [self releaseContext:NO];
 }
 
 - (void)releaseContext:(BOOL)gpuContextLost

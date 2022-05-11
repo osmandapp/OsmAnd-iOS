@@ -197,6 +197,7 @@
         _savingHelper = [OASavingTrackHelper sharedInstance];
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _mapViewController = _mapPanelViewController.mapViewController;
+        _isCurrentTrack = gpx == nil;
         [self updateGpxData:NO updateDocument:YES];
         if (!_analysis)
             [self updateAnalysis];

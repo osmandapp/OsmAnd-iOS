@@ -334,10 +334,10 @@
 
         if (createdOnCellData.desc && createdOnCellData.desc.length > 0 && !hasCreatedOn)
             [sectionData.subjects insertObject:createdOnCellData atIndex:kInfoCreatedOnCell];
-        else if (!createdOnCellData.desc || createdOnCellData.desc.length == 0 && hasCreatedOn)
+        else if (!createdOnCellData.desc || (createdOnCellData.desc.length == 0 && hasCreatedOn))
             [sectionData.subjects removeObject:createdOnCellData];
 
-        BOOL isCurrentTrack = self.trackMenuDelegate && ![self.trackMenuDelegate currentTrack];
+        BOOL isCurrentTrack = [self.trackMenuDelegate currentTrack];
         OAGPXTableCellData *locationCellData = [sectionData getSubject:@"location"];
         BOOL hasLocation = locationCellData != nil;
         if (!hasLocation)

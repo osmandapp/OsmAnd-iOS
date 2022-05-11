@@ -2479,3 +2479,4 @@
 "routeInfo_horse_scale_description" = "Gengiv stier i henhold til sværhedsgraden af hestestier";
 "routeInfo_horse_scale_name" = "Hestestiers sværhedsgrad";
 "simulation_real_mode_desc" = "• På lige vejstrækninger vil hastigheden være tilnærmelsesvis den maksimalt tilladte hastighed.\n• Ved kryds vil hastigheden af simuleringen sænkes.\n• Der vil blive anvendt ekstra sanktioner ved trafiksignaler, stopskilte mv.";
+"simulation_real_mode_title" = "Realistisk simulering";

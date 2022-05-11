@@ -3037,9 +3037,9 @@
 
 - (void) initRendererWithGpxTracks
 {
+    QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
     if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
     {
-        QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
         auto activeGpx = _selectedGpxHelper.activeGpx;
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
@@ -3048,9 +3048,8 @@
         }
         if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
             docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
-
-        [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
     }
+    [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
 }
 
 - (void) refreshGpxTracks

@@ -1300,7 +1300,12 @@
         [names setObject:nativeName.toNSString() forKey:@""];
     
     if (!nameLocalized.isNull() && transliterate)
-        nameLocalized = OsmAnd::ICU::transliterateToLatin(nameLocalized);
+    {
+        if (hasEnName)
+            nameLocalized = QString([[names[@"en"] stringValue] UTF8String]);
+        else
+            nameLocalized = OsmAnd::ICU::transliterateToLatin(nameLocalized);
+    }
     
     return nameLocalized.isNull() ? @"" : nameLocalized.toNSString();
 }

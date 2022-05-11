@@ -1305,22 +1305,10 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return [[firstLanguage componentsSeparatedByString:@"-"] firstObject];
 }
 
-+ (NSString *) capitalizeFirstLetterAndLowercase:(NSString *)s
-{
-    if (s && s.length > 1)
-    {
-        return [[[s substringToIndex:1] uppercaseStringWithLocale:[NSLocale currentLocale]] stringByAppendingString:[[s substringFromIndex:1] lowercaseStringWithLocale:[NSLocale currentLocale]]];
-    }
-    else
-    {
-        return s;
-    }
-}
-
 + (NSString *) capitalizeFirstLetter:(NSString *)s
 {
     if (s && s.length > 1)
-        return [[[s substringToIndex:1] uppercaseStringWithLocale:[NSLocale currentLocale]] stringByAppendingString:[s substringFromIndex:1]];
+        return [[s substringToIndex:1].uppercaseString stringByAppendingString:[s substringFromIndex:1]];
     else
         return s;
 }

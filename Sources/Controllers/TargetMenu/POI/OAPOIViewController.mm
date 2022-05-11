@@ -457,7 +457,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             }
             else
             {
-                textPrefix = [OAUtilities capitalizeFirstLetterAndLowercase:key];
+                textPrefix = key.capitalizedString;
             }
         }
 

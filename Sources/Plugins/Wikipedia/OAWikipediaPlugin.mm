@@ -188,7 +188,7 @@
         NSMutableArray<NSString *> *translations = [NSMutableArray new];
         for (NSString *locale in [self getLanguagesToShow])
         {
-            [translations addObject:[OAUtilities capitalizeFirstLetterAndLowercase:[OAUtilities translatedLangName:locale]]];
+            [translations addObject:[OAUtilities translatedLangName:locale].capitalizedString];
         }
         return [translations componentsJoinedByString:@", "];
     }

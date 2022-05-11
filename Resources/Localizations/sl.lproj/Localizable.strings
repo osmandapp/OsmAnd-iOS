@@ -1217,7 +1217,7 @@
 "routing_attr_avoid_motorway_name" = "Brez avtocest";
 "rendering_attr_showSurfaces_name" = "Pokaži površino cest";
 "rendering_attr_highway_class_service_name" = "Storitev";
-"routing_attr_allow_motorway_name" = "Vodenje po avtocestah";
+"routing_attr_allow_motorway_name" = "Uporabljaj avtoceste";
 "routing_attr_avoid_shuttle_train_name" = "Izogni se vožnji z vlakom";
 "rendering_value_translucent_pink_name" = "Prosojna rožnata";
 "rendering_attr_highway_class_road_name" = "Cesta";

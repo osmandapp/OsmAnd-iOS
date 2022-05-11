@@ -394,12 +394,6 @@
     
     // Unsubscribe from application notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-
-    if (self.mapViewLoaded)
-    {
-        // Allow view to tear down OpenGLES context
-        [_mapView releaseContext];
-    }
 }
 
 - (void) loadView

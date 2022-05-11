@@ -1283,8 +1283,8 @@
 // Route info
 "gpx_avg_altitude" = "Gennemsnitshøjde";
 "gpx_alt_range" = "Højdeinterval";
-"gpx_ascent" = "Op ad bakke";
-"gpx_descent" = "Ned ad bakke";
+"gpx_ascent" = "Opstigning";
+"gpx_descent" = "Nedstigning";
 "stats_select_graph_data" = "Vælg grafdata";
 "region_nautical" = "Søkort";
 "available_map_styles" = "Tilgængelige kortstilarter";
@@ -2480,3 +2480,12 @@
 "routeInfo_horse_scale_name" = "Hestestiers sværhedsgrad";
 "simulation_real_mode_desc" = "• På lige vejstrækninger vil hastigheden være tilnærmelsesvis den maksimalt tilladte hastighed.\n• Ved kryds vil hastigheden af simuleringen sænkes.\n• Der vil blive anvendt ekstra sanktioner ved trafiksignaler, stopskilte mv.";
 "simulation_real_mode_title" = "Realistisk simulering";
+"simulation_constant_mode_desc" = "Simuleringen vil blive udført med en konstant, valgt hastighed.";
+"simulation_constant_mode_title" = "Fast hastighed";
+"simulation_preview_mode_title" = "Hurtig forhåndsvisningstilstand";
+"speed_mode" = "Hastighedstilstand";
+"altitude_ascent" = "Op ad bakke";
+"units_cubic_m" = "m³";
+"simulation_preview_mode_desc" = "Hastigheden i simuleringen er maksimal på lige strækninger og sænkes kun ved kryds.";
+"shared_string_capacity" = "Kapacitet";
+"altitude_descent" = "Ned ad bakke";

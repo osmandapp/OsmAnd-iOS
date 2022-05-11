@@ -397,7 +397,7 @@
 "traffic_warning_border_control" = "Mejni prehod";
 "traffic_warning_payment" = "Cestninska postaja";
 "traffic_warning_stop" = "Znak STOP";
-"traffic_warning_calming" = "Ležeče ovire";
+"traffic_warning_calming" = "Umirjanje prometa";
 "traffic_warning_speed_camera" = "Hitrostna kamera";
 "traffic_warning" = "Prometno opozorilo";
 "route_kl" = "Držite se leve";
@@ -1017,8 +1017,8 @@
 "rendering_attr_surface_salt_name" = "Sol";
 "routing_attr_avoid_stairs_name" = "Brez stopnic";
 "rendering_value_yellow_name" = "Rumena";
-"rendering_attr_hikingRoutesOSMC_name" = "Prekrivna plast s simboli za pohodništvo";
-"routing_attr_allow_skating_only_description" = "Poti, namenjene prostemu slogu smučanja brez običajnega utrjevanja sledi.";
+"rendering_attr_hikingRoutesOSMC_name" = "Pohodniške poti";
+"routing_attr_allow_skating_only_description" = "Proge, namenjene prostemu slogu smučanja ali drsanju, brez običajnega utrjevanja sledi.";
 "rendering_attr_hideWaterPolygons_description" = "Voda";
 "routing_attr_piste_type_skitour_description" = "Poti za turno smučanje.";
 "routing_attr_allow_intermediate_description" = "Zahtevnejše poti z bolj strmimi odseki in z ovirami, ki se jih je priporočljivo izogniti.";
@@ -1042,10 +1042,10 @@
 "rendering_attr_currentTrackColor_name" = "Barva poti GPX";
 "rendering_attr_highway_class_path_name" = "Pot";
 "routing_attr_avoid_share_taxi_name" = "Brez taksijev";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Barvanje poti po vrsti poti";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Pripadnost mreži poti";
 "rendering_attr_smoothness_horrible_name" = "Grozno";
 "routeInfo_winter_ice_road_name" = "Zimske in ledene ceste";
-"rendering_attr_showMtbRoutes_name" = "Pokaži poti MTB";
+"rendering_attr_showMtbRoutes_name" = "Poti za gorsko kolesarjenje";
 "rendering_attr_noAdminboundaries_description" = "Izbira onemogoči izris upravnih mej (na ravneh približanja od 5 do 9).";
 "rendering_attr_tracktype_grade4_name" = "Pretežno mehka";
 "rendering_attr_hideAccess_name" = "Mesta z omejenim dostopom";
@@ -1062,7 +1062,7 @@
 "rendering_attr_contourWidth_description" = "Širina izrisa izohips";
 "rendering_attr_highway_class_motorway_name" = "Avtocesta";
 "rendering_attr_noPolygons_description" = "Nastavi vse ploskve zemljevida kot prosojne.";
-"rendering_attr_showRoadMaps_description" = "Izberite kdaj naj bodo prikazani zemljevidi le s cestami:";
+"rendering_attr_showRoadMaps_description" = "Izberi kdaj naj bodo prikazani zemljevidi le s cestami:";
 "routing_attr_avoid_unpaved_description" = "Izogne se netlakovanim cestam";
 "rendering_value_translucent_purple_name" = "Prosojna vijolična";
 "rendering_attr_highway_class_cycleway_name" = "Kolesarska steza";
@@ -1091,7 +1091,7 @@
 "rendering_attr_hikingRoutesOSMC_description" = "Izris stez po sledeh OSMC.";
 "rendering_attr_shareTaxiRoutes_name" = "Proge souporabe taksijev";
 "routing_attr_avoid_ice_roads_fords_description" = "Izogibanje zaledenelih cest in plitvin.";
-"routing_attr_freeride_policy_description" = "Turno in izven urejenih smušišč so neuradne poti in prehodi. Običajno niso teptani in uradno ne vzdrževani in jih ob koncu dneva ne preverja nihče. Vstop na lastno odgovornost.";
+"routing_attr_freeride_policy_description" = "Turno in smučanje izven urejenih smučišč so neuradne poti in prehodi. Običajno niso teptani in uradno vzdrževani in jih ob koncu dneva ne preverja nihče. Vstop na lastno odgovornost.";
 "rendering_value_default_name" = "Privzeto";
 "rendering_value_thick_name" = "Debelo";
 "routing_attr_driving_style_balance_name" = "Pretehtano";
@@ -1185,7 +1185,7 @@
 "routing_attr_avoid_shuttle_train_description" = "Izogni se vožnji z vlakom";
 "rendering_attr_contourLines_name" = "Izriši izohipse";
 "rendering_value_americanRoadAtlas_name" = "Ameriški cestni atlas";
-"routing_attr_avoid_sett_name" = "Izogni se tlakovcem vseh vrst";
+"routing_attr_avoid_sett_name" = "Brez tlakovcem vseh vrst";
 "rendering_attr_surface_fine_gravel_name" = "Droben grušč";
 "rendering_attr_surface_metal_name" = "Kovina";
 "rendering_attr_highway_class_track_grade1_name" = "Ocena 1";
@@ -1218,12 +1218,12 @@
 "rendering_attr_showSurfaces_name" = "Pokaži površino cest";
 "rendering_attr_highway_class_service_name" = "Storitev";
 "routing_attr_allow_motorway_name" = "Uporabljaj avtoceste";
-"routing_attr_avoid_shuttle_train_name" = "Izogni se vožnji z vlakom";
+"routing_attr_avoid_shuttle_train_name" = "Brez prevoza z vlakom";
 "rendering_value_translucent_pink_name" = "Prosojna rožnata";
 "rendering_attr_highway_class_road_name" = "Cesta";
 "routing_attr_height_description" = "Navedi dovoljeno višino vozila na poteh.";
 "routing_attr_avoid_ferry_description" = "Načrtovanje poti brez uporabe trajektov";
-"rendering_value_walkingRoutesOSMC_name" = "Barvanje poti po OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_value_translucent_lightblue_name" = "Prosojna svetlo modra";
 "routing_attr_allow_advanced_name" = "Dovoli napredne poti";
 "app_mode_taxi" = "Prevoz s taksijem";
@@ -1287,7 +1287,7 @@
 "shared_string_copy" = "Kopiraj";
 "selected_profile" = "Izbrani profil";
 "appearance_on_map" = "Prikaz na zemljevidu";
-"layer_amenity_label" = "Izpiši oznake točk POI";
+"layer_amenity_label" = "Oznake točk (POI, priljubljene)";
 "reset_to_default" = "Ponastavi na privzeto";
 "profile_type_base_string" = "Osnovni profil";
 "search_activity" = "Iskanje podatkov";
@@ -1372,7 +1372,7 @@
 "split_after" = "Razdeli po";
 "group_name" = "Ime skupine";
 "osmand_settings" = "Nastavitve OsmAnd";
-"fav_point_dublicate" = "Podvojeno ime priljubljene točke";
+"fav_point_dublicate" = "Navedeno podvojeno ime priljubljene točke";
 "gpx_rename_q" = "Preimenuj sled";
 "none_point_error" = "Dodati je treba vsaj eno točko.";
 "plan_route_select_folder" = "Izberi mapo";

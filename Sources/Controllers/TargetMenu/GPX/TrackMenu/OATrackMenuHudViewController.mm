@@ -1289,7 +1289,7 @@
 
 - (NSString *)getDirName
 {
-    NSString *dirName = self.gpx.gpxFolderName.capitalizedString;
+    NSString *dirName = [OAUtilities capitalizeFirstLetter:self.gpx.gpxFolderName];
     return dirName.length > 0 ? dirName : OALocalizedString(@"tracks");
 }
 

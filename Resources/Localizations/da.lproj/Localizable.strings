@@ -674,7 +674,7 @@
 "layer_map_appearance" = "Konfigurer skærm";
 "map_widget_right" = "Højre panel";
 "map_widget_left" = "Venstre panel";
-"shared_string_collapse" = "Kollapset";
+"shared_string_collapse" = "Fold sammen";
 "shared_string_topbar" = "Topbjælke";
 "shared_string_widgets" = "Moduler";
 "map_widget_battery" = "Batteriniveau";
@@ -1302,7 +1302,7 @@
 "rendering_attr_piste_type_nordic_name" = "Nordisk";
 "rendering_attr_showMtbRoutes_name" = "Mountainbike-ruter";
 "rendering_attr_surface_stone_name" = "Sten";
-"rendering_attr_appMode_name" = "Renderingsmåde";
+"rendering_attr_appMode_name" = "Gengivelsesmetode";
 "routing_attr_allow_skating_only_description" = "Ruter forberedt til freestyle eller kun skøjteløb uden klassiske spor.";
 "rendering_value_medium_w_name" = "Mellem";
 "rendering_attr_busRoutes_name" = "Busruter";
@@ -1711,7 +1711,7 @@
 "public_transport_show" = "Vis offentlig transport";
 "public_transport_menu" = "Transport";
 "downloading" = "Henter";
-"rearrange_profiles" = "Omarranger profiler";
+"rearrange_profiles" = "Omorganiser profiler";
 "base_profile_descr_aircraft" = "Fly, svævefly";
 "base_profile_descr_boat" = "Skib, roning, sejlads";
 "base_profile_descr_public_transport" = "Offentlige transportstyper";
@@ -1845,7 +1845,7 @@
 "importing_from" = "Importerer data fra %@";
 "shared_string_importing" = "Importerer";
 "avoid_road" = "Undgå vej";
-"shared_string_rendering_style" = "Renderingsstil";
+"shared_string_rendering_style" = "Gengivelsesstil";
 "shared_string_routing" = "Ruteberegning";
 "quick_action_map_source_title" = "Kortkilder";
 "shared_string_poi_types" = "IP-typer";
@@ -1917,7 +1917,7 @@
 "some_of" = "%d af %d";
 "searching_gps" = "Søger efter GPS";
 "plan_route_select_folder" = "Valg mappe";
-"rearrange_categories" = "Omarrangere kategorier";
+"rearrange_categories" = "Omorganiser kategorier";
 "shared_string_disable" = "Deaktiver";
 "fav_point_dublicate" = "Favoritnavn dublet specificeret";
 "square" = "Firkant";

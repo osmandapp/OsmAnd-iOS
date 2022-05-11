@@ -1282,7 +1282,7 @@
 "gpx_avg_altitude" = "Artària mèdia";
 "gpx_alt_range" = "Intervallu de artària";
 "gpx_ascent" = "Artziada";
-"gpx_descent" = "Falada";
+"gpx_descent" = "Achirrada";
 "stats_select_graph_data" = "Ischerta sos datos gràficos";
 "region_nautical" = "Mapas nàuticas";
 "available_map_styles" = "Istiles de mapa disponìbiles";
@@ -2505,3 +2505,5 @@
 "weather_contours_enable_descr" = "Abìlita·lu pro bìdere s'istratu de sas isolìnias in sa mapa.";
 "product_desc_ext_weather" = "S'estensione pro su mèteu frunit\n- 5 istratos...  previsiones pro 24 oras cada ora e previsiones pro 7 dies cada 3 oras\n- widgets basados subra de sa positzione\n- isolìnias de temperadura e pressione\nSos datos de su tempus los frunit GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
 "ios_release_4_2" = "Aspetu de sa lìnia de s'àndala: annanta sa possibilidade de impostare larghesa e colore\n• Rastas: annantu un'issèberu pro iscantzellare prus rastros in manera contemporànea\n• Menù cuntestuale rasta: agiunta barra de iscurrimentu cun grupos de puntos de coladòrgiu\n• Aspetu mapa: àndalas additzionales partzidas pro casta cun possibilidade de nd'abilitare una pro cada categoria in manera separada\n• Ecuitatzione: annantu unu tipu nou de navigatzione e de profilu de s'aplicatzione\n• Sos documentos OsmAnd sunt como visìbiles in s'aplicatzione \"Archìvios\".\n• Est istada megiorada s'interfache utente de sas optziones \"Imprea sos datos de s'artària\" e \"Ischerta su valore de variatzione de s'artària\", sunt istadas cumbinadas e torradas a numenare in \"Terrinu preferidu\", como a disponimentu pro sos profilos \"Bitzicleta\" e \"Pedone\".\n• Optzione noa \"Include sa diretzione\" pro sa registratzione de sas rastas\n• Widget nùmene de sa carrera: como ammustrat s'iscudu istradale e su nùmeru de essida durante sa navigatzione\n• Àndalas noas pro s'allenamentu e sa cursa in sa mapa\n• Curretziones de errores de CarPlay, annanta de gestos pro sos ischermos tàtiles\n• Risòlvidu su problema cun s'importatzione de archìvios GPX dae su pachete OSF\n• Acontzada s'importatzione de estensiones personalizadas cun documentos incluidos\n• Risoltos arrestos anòmalos vàrios in sa modalidade de pianificatzione de s'àndala\n• Risoltos arrestos anòmalos durante sa navigatzione\n";
+"routeInfo_horse_scale_name" = "Dificultade de sas camineras a caddu";
+"routeInfo_horse_scale_description" = "Disinna sas àndalas in base a sa dificultade de sas camineras a caddu";

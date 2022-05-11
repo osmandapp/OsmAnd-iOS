@@ -610,7 +610,7 @@
 "select_gpx" = "Sélectionner GPX…";
 "shared_string_collapse" = "Réduire";
 "shared_string_topbar" = "Barre supérieure";
-"shared_string_widgets" = "Gadgets";
+"shared_string_widgets" = "Widgets";
 "map_widget_right" = "Panneau de droite";
 "map_widget_left" = "Panneau de gauche";
 "interrupt_music_descr" = "Interrompre la musique lors des annonces vocales (bascule en mode muet)";
@@ -687,7 +687,7 @@
 "driving_region_automatic" = "Automatique";
 "map_widget_magnetic_bearing" = "Cap magnétique";
 "map_widget_bearing" = "Cap relatif";
-"map_widget_transparent" = "Gadgets transparents";
+"map_widget_transparent" = "Widgets transparents";
 "shared_string_near" = "Proche";
 "auto_follow_location_enabled" = "Recentrage automatique de la carte activé.";
 "unknown_location" = "Position inconnue.";
@@ -1975,7 +1975,7 @@
 "searching_gps" = "Recherche des satellites";
 
 // Coordinate widget
-"coordinates_widget" = "Gadget de coordonnées";
+"coordinates_widget" = "Widget de coordonnées";
 "mapil_select_user" = "Sélectionner l'utilisateur";
 "mapil_usernames" = "Noms d'utilisateur";
 "mapil_filter_date" = "Filtrer les images par date";

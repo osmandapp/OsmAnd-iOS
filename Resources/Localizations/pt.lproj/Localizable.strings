@@ -313,7 +313,7 @@
 "make_call" = "Ligar";
 "sett_lang_trans" = "transliterar";
 "shared_string_edit" = "Editar";
-"shared_string_dismiss" = "Rejeitar";
+"shared_string_dismiss" = "Cancelar";
 "shared_string_remove" = "Remover";
 "device_memory" = "Memória do aparelho";
 "free_memory" = "%@ livre";
@@ -401,11 +401,11 @@
 "traffic_warning_pedestrian" = "Passadeira";
 "unit_of_length" = "Unidades de comprimento";
 "driving_region" = "Região de condução";
-"show_traffic_warnings" = "Avisos de moderação de velocidade";
+"show_traffic_warnings" = "Avisos para abrandar";
 "speak_street_names" = "Nomes das ruas (TTS)";
 "speak_speed_limit" = "Limite de velocidade";
 "speak_cameras" = "Radares de velocidade";
-"speak_traffic_warnings" = "Avisos de moderação de velocidade";
+"speak_traffic_warnings" = "Avisos para abrandar";
 "towards" = "para";
 "poi_filter_closest_poi" = "POIs mais próximos";
 "facebook" = "Facebook";
@@ -458,7 +458,7 @@
 "map_widget_right" = "Painel direito";
 "map_widget_left" = "Painel esquerdo";
 "map_markers" = "Marcadores";
-"show_lanes" = "Mostrar faixas de rodagem";
+"show_lanes" = "Vias de trânsito";
 "speak_pedestrian" = "Passadeiras";
 "speak_tunnels" = "Túneis";
 "units_seconds" = "segundos";
@@ -540,7 +540,7 @@
 "traffic_warning_stop" = "Sinal de stop";
 "traffic_warning_calming" = "Redutor de velocidade";
 "traffic_warning_speed_camera" = "Radar de velocidade";
-"traffic_warning" = "Aviso de moderação de velocidade";
+"traffic_warning" = "Aviso para afrouxar";
 "traffic_warning_railways" = "Passagem de nível";
 "traffic_warning_hazard" = "Perigo";
 "driving_region_japan" = "Japão";
@@ -772,8 +772,8 @@
 "choose_auto_follow_route_descr" = "Tempo até o mapa ser centrado na posição atual";
 "auto_zoom_map_descr" = "Nível de ampliação automático de acordo com a velocidade (enquanto o mapa é sincronizado com a posição atual).";
 "snap_to_road_descr" = "Ajustar posição às vias próximas durante a navegação";
-"show_warnings_descr" = "Configure avisos de moderação de velocidade (limites de velocidade, portagens, lombas, passadeiras, túneis), radares e a faixa de rodagem";
-"speak_descr" = "Configure os avisos por voz de nomes de ruas, avisos de moderação de velocidade (portagens, lombas, passadeiras), radares e limites de velocidade";
+"show_warnings_descr" = "Configure avisos para abrandar (limites de velocidade, sinal STOP, lombas, passadeiras, túneis), radares e informação da via de trânsito a tomar";
+"speak_descr" = "Configure os avisos por voz de nomes de ruas, avisos para afrouxar (sinal de STOP, lombas), radares e limites de velocidade";
 "keep_informing_descr" = "Repetir as instruções de navegação por voz em intervalos regulares";
 "default_speed_system_descr" = "Definir unidade de velocidade.";
 "wake_on_voice_descr" = "Ligar o ecrã do aparelho (se estiver desligado) ao fazer a aproximação à próxima viragem.";
@@ -1692,7 +1692,7 @@
 "shared_string_terrain" = "Terreno";
 "announce" = "Avisar por voz";
 "profile_prefs_reset_successful" = "Todas as configurações do perfil foram repostas para os valores de origem";
-"consider_limitations_param" = "Considerar limitações temporárias";
+"consider_limitations_param" = "Aplicar limitações temporárias (obras...)";
 "two" = "Dois";
 "shared_string_max" = "Máximo";
 "nav_type_title" = "Tipo de navegação";

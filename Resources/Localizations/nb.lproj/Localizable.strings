@@ -1710,7 +1710,7 @@
 "app_theme_light" = "Lys";
 "shared_string_finish" = "Fullfør";
 "search_activity" = "Søk";
-"quick_action_remove_next_destination" = "Slett nærmeste målpunkt";
+"quick_action_remove_next_destination" = "Slett nærmeste reisemål";
 "help_purchases" = "OsmAnd-kjøp";
 "select_color" = "Velg farge";
 "width_limit_description" = "Angi kjøretøybredde, noen rutebegrensninger for brede kjøretøy kan tilkomme.";

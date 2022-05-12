@@ -931,7 +931,7 @@
     CGImageRelease( imageRef );
     CGDataProviderRelease(provider);
     CGColorSpaceRelease(colorSpaceRef);
-    //free(buffer2);
+    free(buffer2);
     
     return myImage;
 }

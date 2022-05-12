@@ -512,14 +512,20 @@
 		46AEDBA227F4AC32006D90E8 /* ic_custom_wind@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDBA027F4AC32006D90E8 /* ic_custom_wind@2x.png */; };
 		46AEDBA327F4AC32006D90E8 /* ic_custom_wind@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDBA127F4AC32006D90E8 /* ic_custom_wind@3x.png */; };
 		46B0E77227F5E88A00D5A075 /* img_plugin_weather.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */; };
-		46BAED9528204DF600090804 /* ic_action_mountain_bike@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */; };
-		46BAED9628204DF600090804 /* ic_action_mountain_bike@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */; };
+		46B3F326282BF9FE00A5A57D /* ic_share_coordinates@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B3F320282BF9FC00A5A57D /* ic_share_coordinates@3x.png */; };
+		46B3F327282BF9FE00A5A57D /* ic_share_copy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B3F321282BF9FD00A5A57D /* ic_share_copy@2x.png */; };
+		46B3F328282BF9FE00A5A57D /* ic_share_address@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B3F322282BF9FD00A5A57D /* ic_share_address@2x.png */; };
+		46B3F329282BF9FE00A5A57D /* ic_share_address@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B3F323282BF9FD00A5A57D /* ic_share_address@3x.png */; };
+		46B3F32A282BF9FE00A5A57D /* ic_share_copy@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B3F324282BF9FE00A5A57D /* ic_share_copy@3x.png */; };
+		46B3F32B282BF9FE00A5A57D /* ic_share_coordinates@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B3F325282BF9FE00A5A57D /* ic_share_coordinates@2x.png */; };
 		46BA4840281C2EF900C04F14 /* ic_custom_internet_access_fee@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA483E281C2EF800C04F14 /* ic_custom_internet_access_fee@2x.png */; };
 		46BA4841281C2EF900C04F14 /* ic_custom_internet_access_fee@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA483F281C2EF900C04F14 /* ic_custom_internet_access_fee@3x.png */; };
 		46BA4846281C2F3500C04F14 /* ic_custom_poi_name@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4842281C2F3400C04F14 /* ic_custom_poi_name@2x.png */; };
 		46BA4847281C2F3500C04F14 /* ic_custom_poi_brand@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4843281C2F3400C04F14 /* ic_custom_poi_brand@3x.png */; };
 		46BA4848281C2F3500C04F14 /* ic_custom_poi_name@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4844281C2F3400C04F14 /* ic_custom_poi_name@3x.png */; };
 		46BA4849281C2F3500C04F14 /* ic_custom_poi_brand@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4845281C2F3500C04F14 /* ic_custom_poi_brand@2x.png */; };
+		46BAED9528204DF600090804 /* ic_action_mountain_bike@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */; };
+		46BAED9628204DF600090804 /* ic_action_mountain_bike@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */; };
 		46E0263927B6773F00E554DD /* ic_custom_terrain_any@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263127B6773E00E554DD /* ic_custom_terrain_any@3x.png */; };
 		46E0263A27B6773F00E554DD /* ic_custom_terrain_hilly@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263227B6773E00E554DD /* ic_custom_terrain_hilly@3x.png */; };
 		46E0263B27B6773F00E554DD /* ic_custom_terrain_hilly@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263327B6773E00E554DD /* ic_custom_terrain_hilly@2x.png */; };
@@ -1270,6 +1276,7 @@
 		CA4ED8CAB7D105A8DAAF2A06 /* OAShowHideTemperatureAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDC677CEB19E4B37F9E8C /* OAShowHideTemperatureAction.mm */; };
 		CA4ED8E8B076A382837AEF2D /* OAShowHideWindAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED4192F52C0D811F08ED7 /* OAShowHideWindAction.mm */; };
 		CA4EDBC475684B567F9345C9 /* OAWeatherPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDDD18F59FD98326B733D /* OAWeatherPlugin.mm */; };
+		CA4EDBD4106D179CB0D70834 /* OAShareMenuActivity.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED342B2A4E423D65F9592 /* OAShareMenuActivity.mm */; };
 		CA4EDC32B17473A9290AE863 /* OALabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED8845704B34273CBE2B9 /* OALabel.m */; };
 		CA4EDC45F03787B5F481123A /* OASlider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED20CACFB86C3CEE9C486 /* OASlider.mm */; };
 		CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */; };
@@ -3656,14 +3663,20 @@
 		46AEDBA027F4AC32006D90E8 /* ic_custom_wind@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@2x.png"; path = "Resources/Icons/ic_custom_wind@2x.png"; sourceTree = "<group>"; };
 		46AEDBA127F4AC32006D90E8 /* ic_custom_wind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@3x.png"; path = "Resources/Icons/ic_custom_wind@3x.png"; sourceTree = "<group>"; };
 		46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_weather.jpg; path = Resources/Icons/img_plugin_weather.jpg; sourceTree = "<group>"; };
-		46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_mountain_bike@2x.png"; path = "Resources/Icons/ic_action_mountain_bike@2x.png"; sourceTree = "<group>"; };
-		46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_mountain_bike@3x.png"; path = "Resources/Icons/ic_action_mountain_bike@3x.png"; sourceTree = "<group>"; };
+		46B3F320282BF9FC00A5A57D /* ic_share_coordinates@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_share_coordinates@3x.png"; path = "Resources/Icons/ic_share_coordinates@3x.png"; sourceTree = "<group>"; };
+		46B3F321282BF9FD00A5A57D /* ic_share_copy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_share_copy@2x.png"; path = "Resources/Icons/ic_share_copy@2x.png"; sourceTree = "<group>"; };
+		46B3F322282BF9FD00A5A57D /* ic_share_address@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_share_address@2x.png"; path = "Resources/Icons/ic_share_address@2x.png"; sourceTree = "<group>"; };
+		46B3F323282BF9FD00A5A57D /* ic_share_address@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_share_address@3x.png"; path = "Resources/Icons/ic_share_address@3x.png"; sourceTree = "<group>"; };
+		46B3F324282BF9FE00A5A57D /* ic_share_copy@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_share_copy@3x.png"; path = "Resources/Icons/ic_share_copy@3x.png"; sourceTree = "<group>"; };
+		46B3F325282BF9FE00A5A57D /* ic_share_coordinates@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_share_coordinates@2x.png"; path = "Resources/Icons/ic_share_coordinates@2x.png"; sourceTree = "<group>"; };
 		46BA483E281C2EF800C04F14 /* ic_custom_internet_access_fee@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_internet_access_fee@2x.png"; path = "Resources/Icons/ic_custom_internet_access_fee@2x.png"; sourceTree = "<group>"; };
 		46BA483F281C2EF900C04F14 /* ic_custom_internet_access_fee@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_internet_access_fee@3x.png"; path = "Resources/Icons/ic_custom_internet_access_fee@3x.png"; sourceTree = "<group>"; };
 		46BA4842281C2F3400C04F14 /* ic_custom_poi_name@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_poi_name@2x.png"; path = "Resources/Icons/ic_custom_poi_name@2x.png"; sourceTree = "<group>"; };
 		46BA4843281C2F3400C04F14 /* ic_custom_poi_brand@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_poi_brand@3x.png"; path = "Resources/Icons/ic_custom_poi_brand@3x.png"; sourceTree = "<group>"; };
 		46BA4844281C2F3400C04F14 /* ic_custom_poi_name@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_poi_name@3x.png"; path = "Resources/Icons/ic_custom_poi_name@3x.png"; sourceTree = "<group>"; };
 		46BA4845281C2F3500C04F14 /* ic_custom_poi_brand@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_poi_brand@2x.png"; path = "Resources/Icons/ic_custom_poi_brand@2x.png"; sourceTree = "<group>"; };
+		46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_mountain_bike@2x.png"; path = "Resources/Icons/ic_action_mountain_bike@2x.png"; sourceTree = "<group>"; };
+		46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_mountain_bike@3x.png"; path = "Resources/Icons/ic_action_mountain_bike@3x.png"; sourceTree = "<group>"; };
 		46E0263127B6773E00E554DD /* ic_custom_terrain_any@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_any@3x.png"; path = "Resources/Icons/ic_custom_terrain_any@3x.png"; sourceTree = "<group>"; };
 		46E0263227B6773E00E554DD /* ic_custom_terrain_hilly@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_hilly@3x.png"; path = "Resources/Icons/ic_custom_terrain_hilly@3x.png"; sourceTree = "<group>"; };
 		46E0263327B6773E00E554DD /* ic_custom_terrain_hilly@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_hilly@2x.png"; path = "Resources/Icons/ic_custom_terrain_hilly@2x.png"; sourceTree = "<group>"; };
@@ -4492,6 +4505,7 @@
 		CA4ED11015A078942A50049E /* OAShowHidePrecipitationAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHidePrecipitationAction.h; sourceTree = "<group>"; };
 		CA4ED20CACFB86C3CEE9C486 /* OASlider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASlider.mm; sourceTree = "<group>"; };
 		CA4ED2D9DB83905031540452 /* OAMapillaryOsmTagHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapillaryOsmTagHelper.h; sourceTree = "<group>"; };
+		CA4ED342B2A4E423D65F9592 /* OAShareMenuActivity.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShareMenuActivity.mm; sourceTree = "<group>"; };
 		CA4ED355FD3FAEA8F4F74263 /* OAWeatherBandSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherBandSettingsViewController.mm; sourceTree = "<group>"; };
 		CA4ED4192F52C0D811F08ED7 /* OAShowHideWindAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideWindAction.mm; sourceTree = "<group>"; };
 		CA4ED472FAEB73ACA09D6EE4 /* OALabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALabel.h; sourceTree = "<group>"; };
@@ -4509,6 +4523,7 @@
 		CA4EDABC80C141D6AAD16F8C /* OAShowHideCloudAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideCloudAction.mm; sourceTree = "<group>"; };
 		CA4EDAEF2C0A6CEC8E9F7D26 /* OAWeatherBandSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherBandSettingsViewController.h; sourceTree = "<group>"; };
 		CA4EDC677CEB19E4B37F9E8C /* OAShowHideTemperatureAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideTemperatureAction.mm; sourceTree = "<group>"; };
+		CA4EDCCFE536915C4E41B124 /* OAShareMenuActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShareMenuActivity.h; sourceTree = "<group>"; };
 		CA4EDD64C998F4C38A58E4D5 /* OARouteLineAppearanceHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteLineAppearanceHudViewController.h; sourceTree = "<group>"; };
 		CA4EDDD18F59FD98326B733D /* OAWeatherPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherPlugin.mm; sourceTree = "<group>"; };
 		CA4EDDF0C019CF106448907D /* OAWeatherSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherSettingsViewController.mm; sourceTree = "<group>"; };
@@ -7582,6 +7597,12 @@
 				DA84E84821D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png */,
 				DAB048EF21CB729000275456 /* ic_action_plus@2x.png */,
 				DAB048F121CB729000275456 /* ic_action_plus@3x.png */,
+				46B3F322282BF9FD00A5A57D /* ic_share_address@2x.png */,
+				46B3F323282BF9FD00A5A57D /* ic_share_address@3x.png */,
+				46B3F325282BF9FE00A5A57D /* ic_share_coordinates@2x.png */,
+				46B3F320282BF9FC00A5A57D /* ic_share_coordinates@3x.png */,
+				46B3F321282BF9FD00A5A57D /* ic_share_copy@2x.png */,
+				46B3F324282BF9FE00A5A57D /* ic_share_copy@3x.png */,
 				46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */,
 				46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */,
 				46BA4845281C2F3500C04F14 /* ic_custom_poi_brand@2x.png */,
@@ -12284,6 +12305,8 @@
 				8A7DF79927B9147B0005BF39 /* OAWeatherHelper.mm */,
 				321126FD280070F500ED8D52 /* OAExternalTimeFormatter.h */,
 				321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */,
+				CA4ED342B2A4E423D65F9592 /* OAShareMenuActivity.mm */,
+				CA4EDCCFE536915C4E41B124 /* OAShareMenuActivity.h */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -13096,6 +13119,7 @@
 				0A8DDB0F271772A300FDE034 /* OADeleteWaypointsViewController.xib in Resources */,
 				DA0D1638281BEEF500CEEF58 /* map_turn_right_dark@2x.png in Resources */,
 				DAE08345253F0CFD009B5A11 /* ic_custom_redo@2x.png in Resources */,
+				46B3F328282BF9FE00A5A57D /* ic_share_address@2x.png in Resources */,
 				DA5A83E326C563A800F274C7 /* OAEditColorViewController.xib in Resources */,
 				842432571AEFDD1900925821 /* widget_monitoring_rec_big_day@2x.png in Resources */,
 				DA1341D8243DC5A90039D214 /* ic_action_truck@2x.png in Resources */,
@@ -13210,6 +13234,7 @@
 				0A8D1A0F26FBA1750042444C /* ic_small_altitude_range@3x.png in Resources */,
 				46AEDB9327F4ABF1006D90E8 /* ic_custom_clouds@2x.png in Resources */,
 				1535D8ED243DDA390061220F /* ic_custom_map@2x.png in Resources */,
+				46B3F326282BF9FE00A5A57D /* ic_share_coordinates@3x.png in Resources */,
 				0CBDD0A9245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_2@2x.png in Resources */,
 				157F3CE324A1FC85000A66F0 /* ic_checkmark_default@3x.png in Resources */,
 				DAF2F80E254825BA00967935 /* map_plan_route_point_normal@2x.png in Resources */,
@@ -13517,6 +13542,7 @@
 				843394BB1FF54A19006205A5 /* list_warnings_traffic_calming_us@2x.png in Resources */,
 				8476E2CA1F6C1EEC00EC274F /* map_pedestrian_location_lost@3x.png in Resources */,
 				DABF818B228BDE9300651A91 /* map_mapillary_location_view_angle@3x.png in Resources */,
+				46B3F32A282BF9FE00A5A57D /* ic_share_copy@3x.png in Resources */,
 				157F3CDF24A1FC5D000A66F0 /* ic_custom_delete_disable@2x.png in Resources */,
 				DA5A827526C563A700F274C7 /* OABottomSheetHeaderDescrButtonCell.xib in Resources */,
 				DAF820CD2369BC5D007003FA /* ic_custom_start_point@2x.png in Resources */,
@@ -14335,6 +14361,7 @@
 				84770B921FA313CF00CCE930 /* ic_action_speed_limit@3x.png in Resources */,
 				3219705C25FA0DCE00C3FED6 /* bg_point_octagon@2x.png in Resources */,
 				DA134124243DC5A80039D214 /* ic_action_car_dark@2x.png in Resources */,
+				46B3F32B282BF9FE00A5A57D /* ic_share_coordinates@2x.png in Resources */,
 				336CAAB524AF63520085BF0A /* ic_custom_transport_bus@2x.png in Resources */,
 				DA32845526CBC0460036BA73 /* ic_custom_stop@3x.png in Resources */,
 				15CD7EA725B1C1A700BCB36A /* ic_small_time_start@2x.png in Resources */,
@@ -14656,6 +14683,7 @@
 				8AFC2BE924334A4E0095BA9F /* map_navigation_car_top@3x.png in Resources */,
 				DA0D1617281BEEF500CEEF58 /* map_turn_right@2x.png in Resources */,
 				847AF58E1F8A3D4900FC7F90 /* widget_battery_charging_day@3x.png in Resources */,
+				46B3F329282BF9FE00A5A57D /* ic_share_address@3x.png in Resources */,
 				84BE7D4C1CF759E2001D8D78 /* map_small_group@2x.png in Resources */,
 				DA2F09112217FF75006C7F05 /* ic_action_add_osm_note@3x.png in Resources */,
 				3296B47B27F8790800108AF7 /* widget_weather_temperature_night@3x.png in Resources */,
@@ -14817,6 +14845,7 @@
 				84EE2DA31AFBB6D2007C9A94 /* track_clear_data@3x.png in Resources */,
 				844E07D91E42319700EFC525 /* ic_action_intersection@2x.png in Resources */,
 				DA9A2C2826FB587400BEC681 /* map_direction_arrow@3x.png in Resources */,
+				46B3F327282BF9FE00A5A57D /* ic_share_copy@2x.png in Resources */,
 				84C1028C1FBDC10800D3E5EE /* warnings_traffic_calming_us@2x.png in Resources */,
 				DAF345AF22F4482C009E2EB6 /* ic_custom_quick_action@2x.png in Resources */,
 				845E07311B616E4700DFC2A7 /* ic_restore_purchase@2x.png in Resources */,
@@ -15785,6 +15814,7 @@
 				CA4ED0E24578E7AF0472D74C /* OAShowHideCloudAction.mm in Sources */,
 				CA4ED3C5613C7FCF1FAF6F34 /* OAShowHidePrecipitationAction.mm in Sources */,
 				CA4EDC32B17473A9290AE863 /* OALabel.m in Sources */,
+				CA4EDBD4106D179CB0D70834 /* OAShareMenuActivity.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

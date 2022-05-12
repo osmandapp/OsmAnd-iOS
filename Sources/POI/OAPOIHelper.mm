@@ -1277,17 +1277,21 @@
     NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
 
-    const QString lang = (prefLang ? QString::fromNSString(prefLang) : QString::null);
+    const QString lang = (prefLang ? QString::fromNSString(prefLang) : QString());
     QString nameLocalized;
     BOOL hasEnName = NO;
+    QString enName;
     for(const auto& entry : OsmAnd::rangeOf(localizedNames))
     {
-        if (lang != QString::null && entry.key() == lang)
+        if (!lang.isNull() && entry.key() == lang)
             nameLocalized = entry.value();
         
         [names setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
         if (!hasEnName && entry.key().toLower() == QStringLiteral("en"))
+        {
             hasEnName = YES;
+            enName = entry.value();
+        }
     }
     
     if (!hasEnName && !nativeName.isEmpty())
@@ -1299,7 +1303,9 @@
     if (![names objectForKey:@""] && !nativeName.isEmpty())
         [names setObject:nativeName.toNSString() forKey:@""];
     
-    if (!nameLocalized.isNull() && transliterate)
+    if (transliterate && hasEnName)
+        nameLocalized = enName;
+    else if (transliterate && !nameLocalized.isNull() )
         nameLocalized = OsmAnd::ICU::transliterateToLatin(nameLocalized);
     
     return nameLocalized.isNull() ? @"" : nameLocalized.toNSString();

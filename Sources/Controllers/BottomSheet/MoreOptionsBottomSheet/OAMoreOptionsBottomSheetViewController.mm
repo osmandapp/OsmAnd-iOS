@@ -128,7 +128,8 @@
         for (OAFunctionalAddon *addon in _iapHelper.functionalAddons)
         {
             if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Edit_Waypoint]
-                && (_targetPoint.type == OATargetWpt) && [_targetPoint.targetObj isKindOfClass:[OAGpxWptItem class]] && ([[OASelectedGPXHelper instance] getSelectedGpx:((OAGpxWptItem *)_targetPoint.targetObj).point] != nil || [[OASavingTrackHelper sharedInstance] hasData] || [[OAAppSettings sharedManager] mapSettingTrackRecording])) {
+                && _iapHelper.trackRecording.isActive
+                && (_targetPoint.type == OATargetWpt) && [_targetPoint.targetObj isKindOfClass:[OAGpxWptItem class]]) {
                 [arr addObject:@{ @"title" : addon.titleShort,
                                   @"key" : @"addon_edit_waypoint",
                                   @"img" : addon.imageName,

@@ -217,6 +217,7 @@
 
 - (void)fillExtensions:(const std::shared_ptr<OsmAnd::GpxExtensions>&)extensions
 {
+    extensions->extensions.clear();
     for (OAGpxExtension *e in self.extensions)
     {
         std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> extension(new OsmAnd::GpxExtensions::GpxExtension());
@@ -242,16 +243,7 @@
 - (void) setColor:(int)value
 {
     NSString *hexString = [NSString stringWithFormat:@"#%0X", value];
-    OAGpxExtension *e = [self getExtensionByKey:@"color"];
-    if (!e)
-    {
-        e = [[OAGpxExtension alloc] init];
-        e.name = @"color";
-        e.value = hexString;
-        [self addExtension:e];
-        return;
-    }
-    e.value = hexString;
+    [self setExtension:@"color" value:hexString];
 }
 
 - (int) parseColor:(NSString *)colorString defColor:(int)defColor
@@ -335,16 +327,7 @@
 
 - (void) setProfileType:(NSString *)profileType
 {
-    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
-    if (!e)
-    {
-        e = [[OAGpxExtension alloc] init];
-        e.name = PROFILE_TYPE_EXTENSION;
-        e.value = profileType;
-        [self addExtension:e];
-        return;
-    }
-    e.value = profileType;
+    [self setExtension:PROFILE_TYPE_EXTENSION value:profileType];
 }
 
 - (void) removeProfileType
@@ -373,17 +356,8 @@
 
 - (void) setTrkPtIndex:(NSInteger)index
 {
-    OAGpxExtension *e = [self getExtensionByKey:TRKPT_INDEX_EXTENSION];
     NSString *stringValue = [NSString stringWithFormat:@"%ld", index];
-    if (!e)
-    {
-        e = [[OAGpxExtension alloc] init];
-        e.name = TRKPT_INDEX_EXTENSION;
-        e.value = stringValue;
-        [self addExtension:e];
-        return;
-    }
-    e.value = stringValue;
+    [self setExtension:TRKPT_INDEX_EXTENSION value:stringValue];
 }
 
 - (BOOL) isGap

@@ -397,12 +397,12 @@
 "right_side_navigation" = "Right-hand driving";
 "si_mi_feet" = "Мили/фута";
 "si_mi_yard" = "Мили/ярда";
-"si_mi_meters" = "Мили / м";
+"si_mi_meters" = "Мили / метри";
 "si_km_m" = "Километри/метри";
 "si_nm" = "Морски мили";
-"si_kmh" = "Км в час";
+"si_kmh" = "Километри в час";
 "si_mph" = "Мили в час";
-"si_m_s" = "Метра в секунда";
+"si_m_s" = "Метри в секунда";
 "si_min_km" = "Минути на километър";
 "si_min_m" = "Минути на миля";
 "si_nm_h" = "Nautical miles per hour (knot)";
@@ -582,7 +582,7 @@
 
 // My Places
 "favorites" = "Предпочитани";
-"tracks" = "Следи";
+"tracks" = "Трасета";
 "personal_category_name" = "Personal";
 "visible" = "Visible";
 
@@ -1177,8 +1177,8 @@
 "welmode_download_maps" = "Изтегляне на карти";
 "srtm_unit_format" = "Contour lines unit format";
 "srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
-"srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
-"shared_string_meters" = "meters";
+"srtm_download_list_help_message" = "OsmAnd предоставя информация за изолиниите в метри и футове. За да промените избрания формат трябва да изтеглите отново.";
+"shared_string_meters" = "метри";
 "shared_string_feet" = "feet";
 
 // Menu
@@ -2120,7 +2120,7 @@
 "rendering_attr_highway_class_track_name" = "Следа";
 "rendering_attr_tracktype_grade4_name" = "Mostly soft";
 "rendering_value_disabled_name" = "Спрян";
-"rendering_attr_contourColorScheme_name" = "Contour lines color scheme";
+"rendering_attr_contourColorScheme_name" = "Цветова схема на контурните линии";
 "routing_attr_short_way_name" = "Икономичен маршрут";
 "rendering_attr_alpineHiking_name" = "Трудност по скалата на SAC";
 "rendering_attr_showLez_name" = "Show Low Emission Zones";
@@ -2130,7 +2130,7 @@
 "rendering_attr_noAdminboundaries_description" = "Не показвай административни граници (admin нива 5–9)";
 "rendering_value_bicycle_name" = "Cycling";
 "rendering_value_translucent_lightgreen_name" = "Полупрозрачно светло-зелено";
-"rendering_attr_contourLines_name" = "Показвай контури";
+"rendering_attr_contourLines_name" = "Показване на контурни линии";
 "rendering_attr_showAccess_name" = "Покажи ограниченията за достъп";
 "rendering_attr_surface_dirt_name" = "Dirt";
 "routing_attr_piste_type_skitour_name" = "Ski touring";
@@ -2195,7 +2195,7 @@
 "rendering_attr_tracktype_grade1_name" = "Solid (paved)";
 "routing_attr_avoid_train_description" = "Avoids trains";
 "routing_attr_avoid_shuttle_train_name" = "Избягване на трансферен влак";
-"rendering_attr_contourColorScheme_description" = "Contour lines color scheme";
+"rendering_attr_contourColorScheme_description" = "Цветова схема на контурните линии";
 "rendering_value_boldOutline_name" = "Получер контур";
 "routing_attr_avoid_toll_description" = "Избягване на платени пътища";
 "rendering_attr_noPolygons_name" = "Скрий полигоните";
@@ -2355,3 +2355,4 @@
 "cloud_restore_now" = "Възстанови сега";
 "routing_attr_prefer_horse_routes_name" = "Предпочитане на конни маршрути";
 "routing_attr_prefer_horse_routes_description" = "Предпочитане на конни маршрути";
+"routing_attr_only_permitted_ways_description" = "Използват се само изрично разрешените пътища (селски пътища, пътеки и др.)";

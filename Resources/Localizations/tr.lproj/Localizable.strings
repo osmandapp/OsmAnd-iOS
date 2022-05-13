@@ -962,7 +962,7 @@
 "poi_type" = "POI Türü";
 "modify_poi_short" = "POI düzenle";
 "osm_website" = "Web sitesi";
-"gpx_ascent" = "Yokuş yukarı";
+"gpx_ascent" = "Çıkış";
 "translucent_blue" = "Yarı saydam açık mavi";
 "map_underlays" = "Harita alt katmanları";
 "change_map_overlay" = "Haritaüst katmanını değiştir";
@@ -1000,7 +1000,7 @@
 "add_action" = "Eylem ekle";
 "osm_notes_online_layer" = "OSM Notları (çevrim içi)";
 "directions_more_options" = "Yol tarifi";
-"gpx_descent" = "Yokuş aşağı";
+"gpx_descent" = "İniş";
 "quick_action_start_stop_nav_descr" = "Navigasyonu başlatmak ya da sonlandırmak için bu düğmeye tıklayınız.";
 "translucent_lightgreen" = "Yarı saydam açık yeşil";
 "gpx_avg_altitude" = "Ortalama yükseklik";
@@ -2495,3 +2495,15 @@
 "weather_contours_enable_descr" = "Haritada eş değer eğrileri katmanını görüntülemeyi etkinleştirin.";
 "routeInfo_horse_scale_name" = "At parkurlarının zorluğu";
 "routeInfo_horse_scale_description" = "Yolları at parkurlarının zorluğuna göre görselleştir";
+"simulation_preview_mode_title" = "Hızlı ön izleme modu";
+"simulation_real_mode_desc" = "• Düz yol kesimlerinde hız, izin verilen azami hıza yaklaşık olacaktır.\n• Kavşaklarda simülasyon yavaşlayacaktır.\n• Trafik işaretleri, dur işaretleri vb. için ek cezalar uygulanacaktır.";
+"simulation_real_mode_title" = "Gerçekçi simülasyon";
+"simulation_constant_mode_desc" = "Simülasyon sabit seçilen hızda gerçekleştirilecektir.";
+"shared_string_capacity" = "Kapasite";
+"altitude_descent" = "Yokuş aşağı";
+"altitude_ascent" = "Yokuş yukarı";
+"units_cubic_m" = "m³";
+"ios_release_4_2" = "• Güzergah çizgisi görünümü: genişlik ve renk ayarlama özelliği eklendi\n• İzlenen yollar: aynı anda birkaç yolu silme seçeneği eklendi\n• İzlenen yol içerik menüsü: ara nokta gruplarıyla birlikte kaydırma çubuğu eklendi\n• Harita görünümü: her kategoriden ayrı ayrı etkinleştirme özelliğiyle türe göre bölünmüş ek güzergahlar\n• Binicilik: yeni navigasyon türü ve uygulama profili eklendi\n• OsmAnd dosyaları artık \"Dosyalar\" uygulamasında görülebilir\n• \"Yükseklik verisi kullan\" ve \"Yükseklikte dalgalanma seç\" seçenekleri için kullanıcı deneyimi iyileştirildi, birleştirildi ve şu anda \"Bisiklet\" ve \"Yaya\" profilleri için kullanılabilir olan \"Tercih edilen arazi\" olarak yeniden adlandırıldı.\n• İzlenen yol kaydı için yeni \"Yönü dahil et\" seçeneği\n• Sokak adı widget'ı: artık navigasyon sırasında trafik işaret levhalarını ve çıkış numarasını göster\n• Haritada yeni Fitness ve koşu güzergahları\n• CarPlay hata düzeltmeleri, dokunmatik ekranlar için eklenen hareketler\n• GPX dosyalarının OSF paketinden içe aktarılması düzeltildi\n• Dahil edilen dosyalarla özel eklentilerin içe aktarılması düzeltildi\n• Güzergah planlama modundaki çeşitli çökmeler düzeltildi\n• Navigasyon sırasındaki çökmeler düzeltildi\n";
+"simulation_constant_mode_title" = "Sabit hız";
+"simulation_preview_mode_desc" = "Simülasyonun hızı düz kısımlarda azami olacak ve yalnızca kavşaklarda yavaşlayacaktır.";
+"speed_mode" = "Hız modu";

@@ -1495,7 +1495,7 @@
 "routing_attr_avoid_train_name" = "Без поездов";
 "rendering_attr_surface_salt_name" = "Соль";
 "routing_attr_no_new_routing_name" = "Не использовать маршрутизацию версии 1.9";
-"routing_attr_allow_private_name" = "Разрешить частные зоны";
+"routing_attr_allow_private_name" = "Разрешить частный доступ";
 "rendering_value_green_name" = "Зелёный";
 "rendering_attr_highway_class_track_grade3_name" = "Класс 3";
 "routing_attr_avoid_share_taxi_name" = "Без маршрутных такси";

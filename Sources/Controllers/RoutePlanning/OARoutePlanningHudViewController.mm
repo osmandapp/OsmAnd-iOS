@@ -233,12 +233,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     [_optionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
     [_addPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
-    _optionButtonWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_options") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17]].width + 16;
-    _addButtonWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"add_point") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17]].width + 16;
+    _optionButtonWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_options") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17] singleLine:NO].width + 16;
+    _addButtonWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"add_point") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17] singleLine:NO].width + 16;
     [_landscapeOptionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
     [_landscapeAddPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
-    _optionButtonLandscapeWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_options") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17]].width + 16;
-    _addButtonLandscapeWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"add_point") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17]].width + 16;
+    _optionButtonLandscapeWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_options") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17] singleLine:NO].width + 16;
+    _addButtonLandscapeWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"add_point") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17] singleLine:NO].width + 16;
     
     _expandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
     [_expandButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];

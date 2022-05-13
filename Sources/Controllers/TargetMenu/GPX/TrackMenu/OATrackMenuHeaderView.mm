@@ -342,9 +342,10 @@
 
     CGRect titleFrame = CGRectMake([self isDirectionRTL] ? 46. : 0., 0., headerFrame.size.width - (contentMargin + 46.), 0.);
     CGSize titleSize = [OAUtilities calculateTextBounds:self.titleView.text
-                                                     width:titleFrame.size.width
-                                                    height:kTitleHeightMax
-                                                      font:self.titleView.font];
+                                                  width:titleFrame.size.width
+                                                 height:kTitleHeightMax
+                                                   font:self.titleView.font
+                                             singleLine:NO];
     titleSize.height = (titleSize.width > titleFrame.size.width) || (titleSize.height > kTitleHeightMin)
             ? kTitleHeightMax
             : kTitleHeightMin;
@@ -368,7 +369,8 @@
     CGFloat descriptionHeight = [OAUtilities calculateTextBounds:self.descriptionView.text
                                                            width:headerFrame.size.width - contentMargin
                                                           height:kDescriptionHeightMax
-                                                            font:self.descriptionView.font].height;
+                                                            font:self.descriptionView.font
+                                                      singleLine:NO].height;
     descriptionHeight = descriptionHeight > kDescriptionHeightMin ? kDescriptionHeightMax : kDescriptionHeightMin;
     CGRect descriptionFrame = CGRectMake(leftMargin, headerFrame.size.height, headerFrame.size.width - contentMargin, descriptionHeight);
     if (!self.descriptionView.hidden)
@@ -580,11 +582,13 @@
     CGSize sizeByTitle = [OAUtilities calculateTextBounds:title
                                                     width:kBlockStatisticsWidthMax
                                                    height:kBlockStatisticsLineHeight
-                                                     font:[UIFont systemFontOfSize:13. weight:UIFontWeightRegular]];
+                                                     font:[UIFont systemFontOfSize:13. weight:UIFontWeightRegular]
+                                                 singleLine:YES];
     CGSize sizeByValue = [OAUtilities calculateTextBounds:value
                                                     width:kBlockStatisticsWidthMaxByValue
                                                    height:kBlockStatisticsLineHeight
-                                                     font:[UIFont systemFontOfSize:13. weight:UIFontWeightMedium]];
+                                                     font:[UIFont systemFontOfSize:13. weight:UIFontWeightMedium]
+                                                 singleLine:YES];
     CGFloat widthByTitle = sizeByTitle.width < kBlockStatisticsWidthMin
             ? kBlockStatisticsWidthMin : sizeByTitle.width > kBlockStatisticsWidthMax
                     ? kBlockStatisticsWidthMax : sizeByTitle.width;

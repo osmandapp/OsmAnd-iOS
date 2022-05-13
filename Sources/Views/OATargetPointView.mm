@@ -2571,8 +2571,8 @@ static const NSInteger _buttonsCount = 4;
     {
         case OAShareMenuActivityClipboard:
         {
-            NSString *geoUrl = [OAUtilities buildGeoUrl:[NSString stringWithFormat:@"%.5f", _targetPoint.location.latitude]
-                                              longitude:[NSString stringWithFormat:@"%.5f", _targetPoint.location.longitude]
+            NSString *geoUrl = [OAUtilities buildGeoUrl:_targetPoint.location.latitude
+                                              longitude:_targetPoint.location.longitude
                                                    zoom:_mapView.zoomLevel];
             NSString *httpUrl = [NSString stringWithFormat:kShareLinkTemplate, _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel];
             NSMutableString *sms = [NSMutableString string];
@@ -2599,13 +2599,13 @@ static const NSInteger _buttonsCount = 4;
             [sms appendString:@"\n"];
             [sms appendString:httpUrl];
 
-            [OAUtilities copyToClipboardWithToast:sms inView:self.parentView];
+            [self copyToClipboardWithToast:sms];
             break;
         }
         case OAShareMenuActivityCopyAddress:
         {
             if (_targetPoint.titleAddress && _targetPoint.titleAddress.length > 0)
-                [OAUtilities copyToClipboardWithToast:_targetPoint.titleAddress inView:self.parentView];
+                [self copyToClipboardWithToast:_targetPoint.titleAddress];
             else
                 [OAUtilities showToast:OALocalizedString(@"no_address_found") details:nil duration:4 inView:self.parentView];
             break;
@@ -2613,7 +2613,7 @@ static const NSInteger _buttonsCount = 4;
         case OAShareMenuActivityCopyPOIName:
         {
             if (_targetPoint.title && _targetPoint.title.length > 0)
-                [OAUtilities copyToClipboardWithToast:_targetPoint.title inView:self.parentView];
+                [self copyToClipboardWithToast:_targetPoint.title];
             else
                 [OAUtilities showToast:OALocalizedString(@"toast_empty_name_error") details:nil duration:4 inView:self.parentView];
             break;
@@ -2625,18 +2625,24 @@ static const NSInteger _buttonsCount = 4;
             NSString *coordinates = [OAOsmAndFormatter getFormattedCoordinatesWithLat:_targetPoint.location.latitude
                                                                                   lon:_targetPoint.location.longitude
                                                                          outputFormat:f];
-            [OAUtilities copyToClipboardWithToast:coordinates inView:self.parentView];
+            [self copyToClipboardWithToast:coordinates];
             break;
         }
         case OAShareMenuActivityGeo:
         {
-            NSString *geoUrl = [OAUtilities buildGeoUrl:[NSString stringWithFormat:@"%.5f", _targetPoint.location.latitude]
-                                              longitude:[NSString stringWithFormat:@"%.5f", _targetPoint.location.longitude]
+            NSString *geoUrl = [OAUtilities buildGeoUrl:_targetPoint.location.latitude
+                                              longitude:_targetPoint.location.longitude
                                                    zoom:_mapView.zoomLevel];
-            [OAUtilities copyToClipboardWithToast:geoUrl inView:self.parentView];
+            [self copyToClipboardWithToast:geoUrl];
             break;
         }
     }
+}
+
+- (void)copyToClipboardWithToast:(NSString *)text
+{
+    [[UIPasteboard generalPasteboard] setString:text];
+    [OAUtilities showToast:OALocalizedString(@"copied_to_clipboard") details:text duration:4 inView:self.parentView];
 }
 
 @end

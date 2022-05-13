@@ -2180,18 +2180,9 @@ static const double d180PI = 180.0 / M_PI_2;
     return [NSString stringWithFormat:separateWithSpace ? OALocalizedString(@"ltr_or_rtl_combine_via_space") : @"%@%@", value, unit];
 }
 
-+ (NSString *) buildGeoUrl:(NSString *)latitude longitude:(NSString *)longitude zoom:(int)zoom
++ (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom
 {
-    return [NSString stringWithFormat:@"geo:%@,%@?z=%i", latitude, longitude, zoom];
-}
-
-+ (void)copyToClipboardWithToast:(NSString *)text inView:(UIView *)view
-
-{
-    UIPasteboard *pb = [UIPasteboard generalPasteboard];
-    [pb setString:text];
-
-    [self showToast:OALocalizedString(@"copied_to_clipboard") details:text duration:4 inView:view];
+    return [NSString stringWithFormat:@"geo:%.5f,%.5f?z=%i", latitude, longitude, zoom];
 }
 
 + (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view

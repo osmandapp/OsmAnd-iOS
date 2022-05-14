@@ -113,4 +113,25 @@
     }
 }
 
+- (BOOL)isEqual:(id)other
+{
+    if (other == self)
+        return YES;
+
+    if (![self isKindOfClass:[other class]])
+    {
+        return NO;
+    }
+    else
+    {
+        OAHistoryItem *that = (OAHistoryItem *) other;
+        return self.hHash == that.hHash;
+    }
+}
+
+- (NSUInteger)hash
+{
+    return (NSUInteger) self.hHash;
+}
+
 @end

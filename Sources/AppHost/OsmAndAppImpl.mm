@@ -42,6 +42,7 @@
 #import "OAWeatherHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAExternalTimeFormatter.h"
+#import "OAHistoryHelper.h"
 
 #include <algorithm>
 
@@ -410,6 +411,8 @@
                     [NSFileManager.defaultManager removeItemAtPath:[_inboxPath stringByAppendingPathComponent:inboxFile] error:nil];
                 }
             }
+
+            [[OAHistoryHelper sharedInstance] removeDuplicates];
         }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;

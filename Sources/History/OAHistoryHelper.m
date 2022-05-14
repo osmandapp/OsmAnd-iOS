@@ -42,8 +42,11 @@
 
 - (void)addPoint:(OAHistoryItem *)item
 {
-    [_db addPoint:item.latitude longitude:item.longitude time:[item.date timeIntervalSince1970] name:item.name type:item.hType iconName:item.iconName typeName:item.typeName];
-    [_historyPointAddObservable notifyEventWithKey:item];
+    if (![_db isItemExists:item])
+    {
+        [_db addPoint:item.latitude longitude:item.longitude time:[item.date timeIntervalSince1970] name:item.name type:item.hType iconName:item.iconName typeName:item.typeName];
+        [_historyPointAddObservable notifyEventWithKey:item];
+    }
 }
 
 - (void)removePoint:(OAHistoryItem *)item
@@ -58,6 +61,12 @@
         [_db deletePoint:item.hId];
     
     [_historyPointsRemoveObservable notifyEventWithKey:items];
+}
+
+- (void)removeDuplicates
+{
+    [_db deleteDuplicates];
+    [_historyPointsRemoveObservable notifyEvent];
 }
 
 - (NSArray *)getAllPoints

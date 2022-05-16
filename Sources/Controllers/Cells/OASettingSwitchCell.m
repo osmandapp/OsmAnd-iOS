@@ -25,7 +25,7 @@
 
 - (void) updateConstraints
 {
-    BOOL hasImage = self.imgView.image != nil && !self.imageView.hidden;
+    BOOL hasImage = self.imgView.image != nil && !self.imgView.hidden;
     BOOL hasSecondaryImage = self.secondaryImgView.image != nil;
 
     self.textLeftMargin.active = hasImage;

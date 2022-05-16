@@ -728,6 +728,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *settingOsmAndLiveEnabled;
 @property (nonatomic) OACommonInteger *liveUpdatesRetries;
 
+@property (nonatomic) OACommonBoolean *animateMyLocation;
+
 - (OACommonBoolean *)getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
 - (OACommonString *)getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
 

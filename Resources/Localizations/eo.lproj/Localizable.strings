@@ -289,7 +289,7 @@
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 "guidance_preferences_descr" = "Navigadaj agordoj";
-"routing_preferences_descr" = "Difinado de vojo";
+"routing_preferences_descr" = "Difinado de kurso";
 "recording_preferences_descr" = "Track recording preferences";
 "routing_settings" = "Navigado";
 "shared_string_navigation" = "Navigi";
@@ -503,7 +503,7 @@
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "Movu la mapon por elekti deziratan areon.";
-"number_of_tiles" = "Nombro da kaheloj";
+"number_of_tiles" = "Nombro de kaheloj";
 "download_size" = "Download size";
 "preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
 "select_online_source" = "Select source";

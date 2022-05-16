@@ -690,7 +690,7 @@
 "starting_point" = "Пачатковы пункт";
 "shared_string_road" = "Дарога";
 "avoid_roads_msg" = "Вы можаце абраць іншы маршрут, пазначыўшы дарогі, якія варта пазбягаць";
-"day_off_label" = "выкл";
+"day_off_label" = "адкл";
 "open_from" = "Адчынена з";
 "open_till" = "Адчынена да";
 "will_close_at" = "Зачыніцца а";
@@ -743,7 +743,7 @@
 "contour_lines_hillshade_maps" = "Контурныя лініі і зацяненне рэльефу";
 "index_item_depth_contours_osmand_ext" = "Контуры марскіх глыбінь";
 "donation_to_osm" = "Ахвяраванне супольнасці OpenStreetMap";
-"in_app_purchase" = "Пакупка ў праграме";
+"in_app_purchase" = "Купля ў праграме";
 "in_app_purchase_desc" = "Разавы плацёж";
 "in_app_purchase_desc_ex" = "Аднойчы набыты, будзе заўсёды даступны для вас.";
 "unlock_all_features" = "Разблакаваць усе функцыі OsmAnd";
@@ -821,7 +821,7 @@
 "add_work" = "Дадаць працу";
 "shared_string_clear_all" = "Ачысціць усё";
 "shared_string_on" = "Укл";
-"shared_string_off" = "Выкл";
+"shared_string_off" = "Адкл";
 "by_name" = "Па імёнах";
 "online_map" = "Сеціўная мапа";
 "download_depth_countours" = "Контуры марскіх глыбінь";
@@ -1035,7 +1035,7 @@
 "routing_attr_piste_type_downhill_name" = "Альпійская/горныя лыжы";
 "rendering_attr_pisteRoutes_name" = "Лыжныя трасы";
 "rendering_attr_smoothness_horrible_name" = "Жудасная";
-"rendering_value_disabled_name" = "Выключана";
+"rendering_value_disabled_name" = "Адключана";
 "rendering_attr_hideOverground_name" = "Надземныя аб\'екты";
 "rendering_attr_ice_road_name" = "Ледзяная дарога";
 "routing_attr_avoid_unpaved_name" = "Без грунтавых дарог";
@@ -1919,7 +1919,7 @@
 "select_group" = "Абраць групу";
 "extra_maps" = "Дадатковыя мапы";
 "shared_string_gpx_track" = "След";
-"shared_string_disable" = "Выключыць";
+"shared_string_disable" = "Адключыць";
 "icon" = "Значок";
 "search_preogress" = "Пошук…";
 "square" = "Квадрат";
@@ -1983,7 +1983,7 @@
 "wiki_menu_download_descr" = "Для прагляду POI Вікіпедыі на мапе патрабуюцца дадатковыя мапы.";
 "dialogs_and_notifications" = "Дыялогі і апавяшчэнні";
 "threshold_distance" = "Максімальная дыстанцыя";
-"shared_string_turn_off" = "Выключыць";
+"shared_string_turn_off" = "Адключыць";
 "gpxup_identifiable" = "Ідэнтыфікуемы";
 "shared_string_navigation" = "Навігацыя";
 "navigate_point_northing" = "Па шыраце";

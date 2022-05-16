@@ -10,6 +10,7 @@
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
+#import "Localization.h"
 #import "OAColors.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXMutableDocument.h"
@@ -197,8 +198,8 @@
         _savingHelper = [OASavingTrackHelper sharedInstance];
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _mapViewController = _mapPanelViewController.mapViewController;
-        _isCurrentTrack = gpx == nil;
-        [self updateGpxData:_isCurrentTrack updateDocument:YES];
+        _isCurrentTrack = gpx == nil || !gpx.gpxFileName || gpx.gpxFileName.length == 0 || [gpx.gpxTitle isEqualToString:OALocalizedString(@"track_recording_name")];
+        [self updateGpxData:gpx == nil updateDocument:YES];
         if (!_analysis)
             [self updateAnalysis];
         [self commonInit];

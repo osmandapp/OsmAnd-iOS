@@ -1613,15 +1613,9 @@
         }
 
         if ([[OAAppSettings sharedManager].mapSettingShowRecordingTrack get])
-        {
-            if (!_recTrackShowing)
-                [self showRecGpxTrack:YES];
-        }
+            [self showRecGpxTrack:YES];
         else
-        {
-            if (_recTrackShowing)
-                [self hideRecGpxTrack];
-        }
+            [self hideRecGpxTrack];
     });
 }
 

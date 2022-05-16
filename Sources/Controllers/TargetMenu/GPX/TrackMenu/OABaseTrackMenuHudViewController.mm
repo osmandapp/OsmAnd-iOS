@@ -198,7 +198,7 @@
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _mapViewController = _mapPanelViewController.mapViewController;
         _isCurrentTrack = gpx == nil;
-        [self updateGpxData:NO updateDocument:YES];
+        [self updateGpxData:_isCurrentTrack updateDocument:YES];
         if (!_analysis)
             [self updateAnalysis];
         [self commonInit];

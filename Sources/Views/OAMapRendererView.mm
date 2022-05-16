@@ -82,6 +82,7 @@
     _stateObservable = [[OAObservable alloc] init];
     _settingsObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
+    _targetChangedObservable = [[OAObservable alloc] init];
 
     // Set default values
     _glShareGroup = nil;
@@ -115,6 +116,14 @@
         (const OsmAnd::IMapRenderer* renderer)
         {
             [framePreparedObservable notifyEvent];
+        });
+    
+    OAObservable* targetChangedObservalbe = _targetChangedObservable;
+    _renderer->targetChangedObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_targetChangedObservable),
+        [targetChangedObservalbe]
+        (const OsmAnd::IMapRenderer* renderer)
+        {
+            [targetChangedObservalbe notifyEvent];
         });
 
     // Create animator for that map
@@ -931,7 +940,7 @@
     CGImageRelease( imageRef );
     CGDataProviderRelease(provider);
     CGColorSpaceRelease(colorSpaceRef);
-    //free(buffer2);
+    free(buffer2);
     
     return myImage;
 }

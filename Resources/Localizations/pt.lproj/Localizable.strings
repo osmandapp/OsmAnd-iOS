@@ -2476,3 +2476,15 @@
 "backup_error_invalid_token" = "O token não é válido";
 "routeInfo_horse_scale_name" = "Dificuldade dos percursos equestres";
 "routeInfo_horse_scale_description" = "Mostrar percursos equestres de acordo com a sua dificuldade";
+"user_login" = "Utilizador";
+"simulation_real_mode_title" = "Simulação realista";
+"simulation_constant_mode_desc" = "A simulação será feita na velocidade constante selecionada.";
+"simulation_constant_mode_title" = "Velocidade fixa";
+"simulation_preview_mode_desc" = "A velocidade da simulação será a máxima em retas e diminuirá apenas nos cruzamentos.";
+"simulation_preview_mode_title" = "Visualização rápida";
+"speed_mode" = "Modo de velocidade";
+"units_cubic_m" = "m³";
+"simulation_real_mode_desc" = "• Em trechos de estradas retas, a velocidade será próxima da velocidade máxima permitida.\n• Nos cruzamentos, a velocidade será reduzida.\n• Serão aplicadas penalidades extras em sinais de trânsito, sinais de stop, etc.";
+"shared_string_capacity" = "Capacidade";
+"altitude_ascent" = "Subida";
+"altitude_descent" = "Descida";

@@ -282,4 +282,8 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit;
 + (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace;
 
++ (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom;
+
++ (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view;
+
 @end

@@ -149,6 +149,8 @@
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
 "road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
+"animate_my_location" = "Animate location change";
+"animate_my_location_descr" = "Smooth transition of location on the map during navigation";
 
 // Track recording settings
 "save_global_track_interval" = "General logging interval";
@@ -2631,6 +2633,12 @@
 "cloud_conflicts" = "Conflicts";
 "cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";
 "cloud_view_conflicts" = "View conflicts";
+
+"copy_address" = "Copy address";
+"copy_poi_name" = "Copy POI Name";
+"copy_coordinates" = "Copy coordinates";
+"share_geo" = "geo:";
+"toast_empty_name_error" = "Unnamed location";
 
 // Release Notes
 // instruction:

@@ -2621,3 +2621,4 @@
 "local_backup" = "Copia de seguridad local";
 "local_backup_descr" = "Crea una copia de seguridad o restaura los datos de un archivo local.";
 "cloud_no_online_backup" = "Todavía no tiene un copia de seguridad online";
+"simulation_real_mode_title" = "Simulación realista";

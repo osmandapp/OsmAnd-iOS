@@ -828,6 +828,14 @@
         }
 
         QVector<OsmAnd::PointI> points;
+        CLLocation* lastProj = [_routingHelper getLastProjection];
+        if (lastProj)
+        {
+            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lastProj.coordinate.latitude, lastProj.coordinate.longitude)));
+            if (_colorizationScheme != COLORIZATION_NONE && !_colors.isEmpty())
+                _colors.push_front(_colors.front());
+        }
+        
         for (int i = currentRoute; i < locations.count; i++)
         {
             CLLocation *location = locations[i];

@@ -33,7 +33,6 @@
 #import "OADeleteProfileBottomSheetViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 #import "OAMapWidgetRegistry.h"
-#import "OASettingsItem.h"
 #import "OARendererRegistry.h"
 #import "OAExportItemsViewController.h"
 #import "OAIndexConstants.h"
@@ -597,17 +596,15 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (appMode)
     {
         [OAAppSettings.sharedManager.settingPrefMapLanguage resetToDefault];
+        [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
         if (appMode.isCustomProfile)
         {
-            [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
             NSString *fileName = [self getBackupFileForCustomMode:appMode.stringKey];
             if ([[NSFileManager defaultManager] fileExistsAtPath:fileName])
                 [self restoreCustomModeFromFile:fileName];
         }
         else
         {
-            [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
-            [self showAlertMessage:OALocalizedString(OALocalizedString(@"profile_prefs_reset_successful"))];
             [self updateCopiedOrResetPrefs];
         }
         [self resetMapStylesForProfile:appMode];
@@ -617,7 +614,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) restoreCustomModeFromFile:(NSString *)filePath
 {
     _importedFileName = filePath;
-    [OASettingsHelper.sharedInstance collectSettings:filePath latestChanges:@"" version:1 delegate:self];
+    [OASettingsHelper.sharedInstance collectSettings:filePath latestChanges:@"" version:1 delegate:self onComplete:nil silent:YES];
 }
 
 - (void) resetMapStylesForProfile:(OAApplicationMode *)appMode
@@ -631,9 +628,10 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 	OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:mapStyleInfo[@"id"]
 																		mapPresetName:appMode.variantKey];
-	[styleSettings resetMapStyleForAppMode:appMode.variantKey];
+	[styleSettings resetMapStyleForAppMode:appMode.variantKey onComplete:^{
+        [self showAlertMessage:OALocalizedString(@"profile_prefs_reset_successful")];
+    }];
 }
-
 
 - (void) importBackupSettingsItems:(nonnull NSString *)file items:(nonnull NSArray<OASettingsItem *> *)items
 {
@@ -707,7 +705,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (void)onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items
 {
-    [self showAlertMessage:OALocalizedString(OALocalizedString(@"profile_prefs_reset_successful"))];
     [self updateCopiedOrResetPrefs];
 }
 

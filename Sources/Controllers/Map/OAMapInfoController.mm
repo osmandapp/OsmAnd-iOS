@@ -435,7 +435,7 @@
         {
             CGFloat widgetWidth = DeviceScreenWidth / 2;
             CGFloat leftOffset = widgetWidth / 2 - [OAUtilities getLeftMargin];
-            _downloadMapWidget.frame = CGRectMake(leftOffset, 0., widgetWidth, 155.);
+            _downloadMapWidget.frame = CGRectMake(leftOffset, _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 155.);
         }
     }
 }

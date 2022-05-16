@@ -26,7 +26,6 @@
 - (void)addPoint:(OAHistoryItem *)item;
 - (void)removePoint:(OAHistoryItem *)item;
 - (void)removePoints:(NSArray *)items;
-- (void)removeDuplicates;
 
 - (NSArray *)getAllPoints;
 - (NSArray *)getSearchHistoryPoints:(int)limit;

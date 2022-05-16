@@ -16,9 +16,7 @@
 - (void)addPoint:(double)latitude longitude:(double)longitude time:(NSTimeInterval)time name:(NSString *)name type:(OAHistoryType)type iconName:(NSString *)iconName typeName:(NSString *)typeName;
 
 - (void)deletePoint:(int64_t)id;
-- (void)deleteDuplicates;
-
-- (BOOL)isItemExists:(OAHistoryItem *)item;
+- (void)deleteDuplicate:(OAHistoryItem *)item;
 
 - (OAHistoryItem *)getPointByName:(NSString *)name;
 - (NSArray *)getPoints:(NSString *)selectPostfix limit:(int)limit;

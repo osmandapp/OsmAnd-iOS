@@ -172,7 +172,7 @@
     });
 }
 
-- (void)deleteDuplicate:(OAHistoryItem *)item
+- (void)updateItem:(OAHistoryItem *)item
 {
     int64_t hHash = item.hHash > 0 ? item.hHash : [self getRowHash:item.latitude longitude:item.longitude name:item.name];
     dispatch_async(dbQueue, ^{
@@ -180,17 +180,43 @@
         const char *dbpath = [databasePath UTF8String];
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            NSString *query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = ?", TABLE_NAME, POINT_COL_HASH];
+            NSString *query = [NSString stringWithFormat:@"UPDATE %@ SET %@ = ? WHERE %@ = ?",
+                    TABLE_NAME,
+                    POINT_COL_TIME,
+                    POINT_COL_HASH];
             const char *update_stmt = [query UTF8String];
 
             sqlite3_prepare_v2(historyDB, update_stmt, -1, &statement, NULL);
-            sqlite3_bind_int64(statement, 1, hHash);
+            sqlite3_bind_int64(statement, 1, (int64_t) [item.date timeIntervalSince1970]);
+            sqlite3_bind_int64(statement, 2, hHash);
             sqlite3_step(statement);
             sqlite3_finalize(statement);
-
             sqlite3_close(historyDB);
         }
     });
+}
+
+- (BOOL)isItemExists:(OAHistoryItem *)item
+{
+    __block BOOL exists = NO;
+    int64_t hHash = item.hHash > 0 ? item.hHash : [self getRowHash:item.latitude longitude:item.longitude name:item.name];
+    dispatch_sync(dbQueue, ^{
+        const char *dbpath = [databasePath UTF8String];
+        sqlite3_stmt *statement;
+        if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
+        {
+            NSString *querySQL = [NSString stringWithFormat:@"SELECT 1 FROM %@ WHERE %@ = ?", TABLE_NAME, POINT_COL_HASH];
+            const char *query_stmt = [querySQL UTF8String];
+            if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+            {
+                sqlite3_bind_int64(statement, 1, hHash);
+                exists = sqlite3_step(statement) == SQLITE_ROW;
+                sqlite3_finalize(statement);
+            }
+            sqlite3_close(historyDB);
+        }
+    });
+    return exists;
 }
 
 - (OAHistoryItem *)getPointByName:(NSString *)name

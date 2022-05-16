@@ -42,8 +42,8 @@
 
 - (void)addPoint:(OAHistoryItem *)item
 {
-    if ([_db isItemExists:item])
-        [_db updateItem:item];
+    if ([_db isPointExists:item])
+        [_db updatePoint:item];
     else
         [_db addPoint:item.latitude longitude:item.longitude time:[item.date timeIntervalSince1970] name:item.name type:item.hType iconName:item.iconName typeName:item.typeName];
     [_historyPointAddObservable notifyEventWithKey:item];

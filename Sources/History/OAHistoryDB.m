@@ -172,7 +172,7 @@
     });
 }
 
-- (void)updateItem:(OAHistoryItem *)item
+- (void)updatePoint:(OAHistoryItem *)item
 {
     int64_t hHash = item.hHash > 0 ? item.hHash : [self getRowHash:item.latitude longitude:item.longitude name:item.name];
     dispatch_async(dbQueue, ^{
@@ -180,15 +180,19 @@
         const char *dbpath = [databasePath UTF8String];
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            NSString *query = [NSString stringWithFormat:@"UPDATE %@ SET %@ = ? WHERE %@ = ?",
+            NSString *query = [NSString stringWithFormat:@"UPDATE %@ SET %@ = ? WHERE %@ = ? AND ROWID = (SELECT ROWID FROM %@ WHERE %@ = ? ORDER BY %@ DESC LIMIT 1)",
                     TABLE_NAME,
                     POINT_COL_TIME,
-                    POINT_COL_HASH];
+                    POINT_COL_HASH,
+                    TABLE_NAME,
+                    POINT_COL_HASH,
+                    POINT_COL_TIME];
             const char *update_stmt = [query UTF8String];
 
             sqlite3_prepare_v2(historyDB, update_stmt, -1, &statement, NULL);
             sqlite3_bind_int64(statement, 1, (int64_t) [item.date timeIntervalSince1970]);
             sqlite3_bind_int64(statement, 2, hHash);
+            sqlite3_bind_int64(statement, 3, hHash);
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             sqlite3_close(historyDB);
@@ -196,7 +200,7 @@
     });
 }
 
-- (BOOL)isItemExists:(OAHistoryItem *)item
+- (BOOL)isPointExists:(OAHistoryItem *)item
 {
     __block BOOL exists = NO;
     int64_t hHash = item.hHash > 0 ? item.hHash : [self getRowHash:item.latitude longitude:item.longitude name:item.name];

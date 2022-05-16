@@ -405,7 +405,8 @@
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
--(void) resetMapStyleForAppMode:(NSString *)mapPresetName
+- (void) resetMapStyleForAppMode:(NSString *)mapPresetName
+                      onComplete:(void(^)(void))onComplete
 {
     NSMutableArray <NSString *> *allRenderStyles = [self getMapStyleRenderKeys];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -420,9 +421,11 @@
                     [[NSUserDefaults standardUserDefaults] setValue:p.value forKey:name];
                 }
         }
-        
+
         [OAMapStyleSettings.sharedInstance loadParameters];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+        if (onComplete)
+            onComplete();
     });
 }
 

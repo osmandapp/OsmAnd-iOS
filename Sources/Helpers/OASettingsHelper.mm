@@ -97,12 +97,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
-    [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:self onComplete:nil];
-}
-
-- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate
-{
-    [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:delegate onComplete:nil];
+    [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:self onComplete:nil silent:NO];
 }
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
@@ -111,11 +106,19 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [task executeWithCompletionBlock:onComplete];
 }
 
-- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
+- (void) collectSettings:(NSString *)settingsFile
+           latestChanges:(NSString *)latestChanges
+                 version:(NSInteger)version
+                delegate:(id<OASettingsImportExportDelegate>)delegate
+              onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
+                  silent:(BOOL)silent
 {
-    OAImportSettingsViewController* incomingURLViewController = [[OAImportSettingsViewController alloc] init];
-    [OARootViewController.instance.navigationController pushViewController:incomingURLViewController animated:YES];
-    _importDataVC = incomingURLViewController;
+    if (!silent)
+    {
+        OAImportSettingsViewController* incomingURLViewController = [[OAImportSettingsViewController alloc] init];
+        [OARootViewController.instance.navigationController pushViewController:incomingURLViewController animated:YES];
+        _importDataVC = incomingURLViewController;
+    }
     OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
     task.delegate = delegate;
     [task executeWithCompletionBlock:onComplete];
@@ -836,7 +839,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     if (succeed)
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(OALocalizedString(@"profile_import_success")) preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"profile_import_success") preferredStyle:UIAlertControllerStyleAlert];
         [NSFileManager.defaultManager removeItemAtPath:_importTask.getFile error:nil];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
         [OARootViewController.instance presentViewController:alert animated:YES completion:nil];

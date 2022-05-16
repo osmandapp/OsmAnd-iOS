@@ -11,49 +11,33 @@
 #import "OAMapRendererView.h"
 #import "OADefaultFavorite.h"
 #import "Localization.h"
-#import "OAUtilities.h"
-#import "OADestination.h"
 #import "OADestinationCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDatabase.h"
 #import "OAEditTargetViewController.h"
-#import "OAAppSettings.h"
-#import "OARoutingHelper.h"
-#import "OATargetPointsHelper.h"
-#import "OAScrollView.h"
 #import "OAColors.h"
 #import "OASizes.h"
 #import "OATransportStopViewController.h"
 #import "OAMoreOptionsBottomSheetViewController.h"
 #import "OATransportStopRoute.h"
-#import "OATransportStopType.h"
 #import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
-#import "OAMapViewController.h"
 #import "OAMapLayers.h"
-#import "OATransportStopsLayer.h"
 #import "OANativeUtilities.h"
 #import "OATransportRouteController.h"
 #import "OAFavoriteViewController.h"
 #import "OAFavoritesHelper.h"
-#import "OAFavoriteItem.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmAndFormatter.h"
 #import "OAMapDownloadController.h"
-#import "OARouteDetailsGraphViewController.h"
-
-#include <OsmAndCore.h>
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/IFavoriteLocationsCollection.h>
+#import "OAShareMenuActivity.h"
 
 #define kButtonsViewHeight 44.0
 #define kDefaultMapRulerMarginBottom 0
 
-@interface OATargetPointView() <UIScrollViewDelegate, OAScrollViewDelegate>
+@interface OATargetPointView() <UIScrollViewDelegate, OAScrollViewDelegate, OAShareMenuDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIView *topOverscrollView;
@@ -1942,40 +1926,78 @@ static const NSInteger _buttonsCount = 4;
 - (IBAction) buttonShareClicked:(id)sender
 {
     // http://osmand.net/go.html?lat=12.6313&lon=-7.9955&z=8&title=New+York The location was shared with you by OsmAnd
-    
-    UIActivityViewController *activityViewController;
-    
+
+    NSMutableArray *items = [NSMutableArray array];
+
+    NSMutableString *sharingText = [[NSMutableString alloc] init];
     if (_previousTargetType == OATargetFavorite)
     {
-        NSMutableString *sharingText = [[NSMutableString alloc] init];
-        OAFavoriteViewController *source = (OAFavoriteViewController *)self.customController;
-        
-        if (source.getItemName.length > 0)
-            [sharingText appendString:[NSString stringWithFormat:@"%@\n", source.getItemName]];
-        if (source.getItemGroup.length > 0)
-            [sharingText appendString:[NSString stringWithFormat:@"%@\n", source.getItemGroup]];
-        if (source.getItemDesc.length > 0)
-            [sharingText appendString:[NSString stringWithFormat:@"%@\n", source.getItemDesc]];
-        
-        [sharingText appendString:[NSString stringWithFormat:@"http://osmand.net/go.html?lat=%.5f&lon=%.5f&z=%d\nThe location was shared with you by OsmAnd", _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel]];
-        
-        activityViewController =
-        [[UIActivityViewController alloc] initWithActivityItems:@[sharingText]
-                                          applicationActivities:nil];
+        OAFavoriteViewController *source = (OAFavoriteViewController *) self.customController;
+
+        NSString *itemName = [source getItemName];
+        if (itemName.length > 0)
+            [sharingText appendString:itemName];
+        NSString *itemGroup = [source getItemGroup];
+        if (itemGroup.length > 0)
+        {
+            if (sharingText.length > 0)
+                [sharingText appendString:@"\n"];
+            [sharingText appendString:itemGroup];
+        }
+        NSString *itemDesc = [source getItemDesc];
+        if (itemDesc.length > 0)
+        {
+            if (sharingText.length > 0)
+                [sharingText appendString:@"\n"];
+            [sharingText appendString:itemDesc];
+        }
     }
     else
     {
         UIImage *screenshot = [self.mapView getGLScreenshot];
-        NSString *sharingText = [NSString stringWithFormat:kShareLinkTemplate, _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel];
-        
-        activityViewController =
-        [[UIActivityViewController alloc] initWithActivityItems:@[screenshot, sharingText]
-                                          applicationActivities:nil];
+        [items addObject:screenshot];
+
+        if (_targetPoint.title.length > 0)
+            [sharingText appendString:_targetPoint.title];
+        if (_targetPoint.titleAddress.length > 0)
+        {
+            if (sharingText.length > 0)
+                [sharingText appendString:@"\n"];
+            [sharingText appendString:_targetPoint.titleAddress];
+        }
+
     }
+    if (sharingText && sharingText.length > 0)
+        [items addObject:sharingText];
+
+    OAShareMenuActivity *shareClipboard = [[OAShareMenuActivity alloc] initWithType:OAShareMenuActivityClipboard];
+    shareClipboard.delegate = self;
+
+    OAShareMenuActivity *shareAddress = [[OAShareMenuActivity alloc] initWithType:OAShareMenuActivityCopyAddress];
+    shareAddress.delegate = self;
+
+    OAShareMenuActivity *sharePOIName = [[OAShareMenuActivity alloc] initWithType:OAShareMenuActivityCopyPOIName];
+    sharePOIName.delegate = self;
+
+    OAShareMenuActivity *shareCoordinates = [[OAShareMenuActivity alloc] initWithType:OAShareMenuActivityCopyCoordinates];
+    shareCoordinates.delegate = self;
+
+    OAShareMenuActivity *shareGeo = [[OAShareMenuActivity alloc] initWithType:OAShareMenuActivityGeo];
+    shareGeo.delegate = self;
+
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:items
+                                                                                         applicationActivities:@[
+                                                                                                 shareClipboard,
+                                                                                                 shareAddress,
+                                                                                                 sharePOIName,
+                                                                                                 shareCoordinates,
+                                                                                                 shareGeo]
+    ];
 
     activityViewController.popoverPresentationController.sourceView = self;
     activityViewController.popoverPresentationController.sourceRect = _backView2.frame;
-    
+    activityViewController.excludedActivityTypes = @[UIActivityTypeCopyToPasteboard];
+
     [self.navController presentViewController:activityViewController
                                      animated:YES
                                    completion:^{ }];
@@ -2539,6 +2561,88 @@ static const NSInteger _buttonsCount = 4;
     }
     
     return !scrollDisabled;
+}
+
+#pragma mark - OAShareMenuDelegate
+
+- (void)onCopy:(OAShareMenuActivityType)type
+{
+    switch (type)
+    {
+        case OAShareMenuActivityClipboard:
+        {
+            NSString *geoUrl = [OAUtilities buildGeoUrl:_targetPoint.location.latitude
+                                              longitude:_targetPoint.location.longitude
+                                                   zoom:_mapView.zoomLevel];
+            NSString *httpUrl = [NSString stringWithFormat:kShareLinkTemplate, _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel];
+            NSMutableString *sms = [NSMutableString string];
+            if (_targetPoint.title && _targetPoint.title.length > 0)
+            {
+                [sms appendString:_targetPoint.title];
+                [sms appendString:@"\n"];
+            }
+            if (_targetPoint.titleAddress && _targetPoint.titleAddress.length > 0
+                    && ![_targetPoint.titleAddress isEqualToString:_targetPoint.title]
+                    && ![_targetPoint.titleAddress isEqualToString:OALocalizedString(@"no_address_found")])
+            {
+                [sms appendString:_targetPoint.titleAddress];
+                [sms appendString:@"\n"];
+            }
+
+            [sms appendString:OALocalizedString(@"sett_arr_loc")];
+            [sms appendString:@": "];
+
+            if ([self isDirectionRTL])
+                [sms appendString:@"\n"];
+
+            [sms appendString:geoUrl];
+            [sms appendString:@"\n"];
+            [sms appendString:httpUrl];
+
+            [self copyToClipboardWithToast:sms];
+            break;
+        }
+        case OAShareMenuActivityCopyAddress:
+        {
+            if (_targetPoint.titleAddress && _targetPoint.titleAddress.length > 0)
+                [self copyToClipboardWithToast:_targetPoint.titleAddress];
+            else
+                [OAUtilities showToast:OALocalizedString(@"no_address_found") details:nil duration:4 inView:self.parentView];
+            break;
+        }
+        case OAShareMenuActivityCopyPOIName:
+        {
+            if (_targetPoint.title && _targetPoint.title.length > 0)
+                [self copyToClipboardWithToast:_targetPoint.title];
+            else
+                [OAUtilities showToast:OALocalizedString(@"toast_empty_name_error") details:nil duration:4 inView:self.parentView];
+            break;
+        }
+        case OAShareMenuActivityCopyCoordinates:
+        {
+            OAAppSettings *settings = [OAAppSettings sharedManager];
+            NSInteger f = [settings.settingGeoFormat get];
+            NSString *coordinates = [OAOsmAndFormatter getFormattedCoordinatesWithLat:_targetPoint.location.latitude
+                                                                                  lon:_targetPoint.location.longitude
+                                                                         outputFormat:f];
+            [self copyToClipboardWithToast:coordinates];
+            break;
+        }
+        case OAShareMenuActivityGeo:
+        {
+            NSString *geoUrl = [OAUtilities buildGeoUrl:_targetPoint.location.latitude
+                                              longitude:_targetPoint.location.longitude
+                                                   zoom:_mapView.zoomLevel];
+            [self copyToClipboardWithToast:geoUrl];
+            break;
+        }
+    }
+}
+
+- (void)copyToClipboardWithToast:(NSString *)text
+{
+    [[UIPasteboard generalPasteboard] setString:text];
+    [OAUtilities showToast:OALocalizedString(@"copied_to_clipboard") details:text duration:4 inView:self.parentView];
 }
 
 @end

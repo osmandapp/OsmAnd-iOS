@@ -2632,6 +2632,12 @@
 "cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";
 "cloud_view_conflicts" = "View conflicts";
 
+"copy_address" = "Copy address";
+"copy_poi_name" = "Copy POI Name";
+"copy_coordinates" = "Copy coordinates";
+"share_geo" = "geo:";
+"toast_empty_name_error" = "Unnamed location";
+
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md

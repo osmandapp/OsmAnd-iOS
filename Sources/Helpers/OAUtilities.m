@@ -18,6 +18,7 @@
 #import "OAColors.h"
 #import <UIKit/UIDevice.h>
 #import "OAIndexConstants.h"
+#import <MBProgressHUD.h>
 
 #import <mach/mach.h>
 #import <mach/mach_host.h>
@@ -2177,6 +2178,38 @@ static const double d180PI = 180.0 / M_PI_2;
 + (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace
 {
     return [NSString stringWithFormat:separateWithSpace ? OALocalizedString(@"ltr_or_rtl_combine_via_space") : @"%@%@", value, unit];
+}
+
++ (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom
+{
+    return [NSString stringWithFormat:@"geo:%.5f,%.5f?z=%i", latitude, longitude, zoom];
+}
+
++ (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray *allHUDs = [MBProgressHUD allHUDsForView:view];
+        for (MBProgressHUD *hudView in allHUDs)
+        {
+            if (hudView.mode == MBProgressHUDModeText)
+                [MBProgressHUD hideHUDForView:view animated:YES];
+        }
+
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.margin = 10.f;
+        hud.yOffset = DeviceScreenHeight / 2 - 100;
+        hud.removeFromSuperViewOnHide = YES;
+        hud.userInteractionEnabled = NO;
+
+        hud.labelText = title ? title : details;
+        hud.labelFont = [UIFont systemFontOfSize:14];
+
+        hud.detailsLabelText = title ? details : nil;
+        hud.detailsLabelFont = [UIFont systemFontOfSize:14];
+
+        [hud hide:YES afterDelay:duration];
+    });
 }
 
 @end

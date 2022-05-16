@@ -10,6 +10,7 @@
 #import "OAIconTitleValueCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
+#import "OASettingSwitchCell.h"
 #import "OANavigationTypeViewController.h"
 #import "OARouteParametersViewController.h"
 #import "OAVoicePromptsViewController.h"
@@ -121,6 +122,11 @@
     }];
     [tableData addObject:navigationArr];
     [tableData addObject:otherArr];
+    [tableData addObject:@[@{
+        @"type" : [OASettingSwitchCell getCellIdentifier],
+        @"title" : OALocalizedString(@"animate_my_location")
+    }]];
+    
     _data = [NSArray arrayWithArray:tableData];
     [self updateNavBar];
     [self.tableView reloadData];
@@ -182,6 +188,27 @@
             cell.arrowIconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
+        }
+        return cell;
+    }
+    else if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    {
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
+            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+            cell.descriptionView.hidden = YES;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.imgView.hidden = YES;
+        }
+        if (cell)
+        {
+            cell.textView.text = item[@"title"];
+            cell.switchView.on = [_settings.animateMyLocation get:self.appMode];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
@@ -262,12 +289,28 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section == 0 ? OALocalizedString(@"routing_settings") : OALocalizedString(@"help_other_header");
+    switch (section)
+    {
+        case 0:
+            return OALocalizedString(@"routing_settings");
+        case 1:
+            return OALocalizedString(@"help_other_header");
+        default:
+            return @"";
+    }
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return section == 0 ? @"" : OALocalizedString(@"change_map_behavior");
+    switch (section)
+    {
+        case 1:
+            return OALocalizedString(@"change_map_behavior");
+        case 2:
+            return OALocalizedString(@"animate_my_location_descr");
+        default:
+            return @"";
+    }
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
@@ -307,6 +350,11 @@
                                                                                                targetScreenKey:kNavigationSettings];
         [OARootViewController.instance.navigationController pushViewController:settingsVC animated:NO];
     }
+}
+
+- (void)applyParameter:(UISwitch *)sender
+{
+    [_settings.animateMyLocation set:sender.isOn mode:self.appMode];
 }
 
 @end

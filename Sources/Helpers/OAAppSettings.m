@@ -378,6 +378,8 @@
 #define numberOfAppStartsOnDislikeMomentKey @"numberOfAppStartsOnDislikeMoment"
 #define rateUsStateKey @"rateUsState"
 
+#define animateMyLocationKey @"animateMyLocation"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -3303,6 +3305,9 @@
         [_globalPreferences setObject:_settingDoNotShowPromotions forKey:@"do_not_show_promotions"];
         [_globalPreferences setObject:_settingUseAnalytics forKey:@"use_analytics"];
         [_globalPreferences setObject:_showDownloadMapDialog forKey:@"show_download_map_dialog"];
+        
+        _animateMyLocation = [OACommonBoolean withKey:animateMyLocationKey defValue:YES];
+        [_profilePreferences setObject:_animateMyLocation forKey:@"animate_my_location"];
 
         _liveUpdatesPurchased = [[OACommonBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
         _settingOsmAndLiveEnabled = [[[OACommonBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];

@@ -230,7 +230,7 @@
     margin += showShield ? shieldFrame.size.width + 2 : 0;
     margin += showExit ? exitRefFrame.size.width + 2 : 0;
     CGFloat maxTextWidth = w - margin * 2;
-    CGSize size = [OAUtilities calculateTextBounds:_addressText.text width:maxTextWidth height:h font:_textFont singleLine:NO];
+    CGSize size = [OAUtilities calculateTextBounds:_addressText.text width:maxTextWidth height:h font:_textFont];
     if (size.width > maxTextWidth)
         size.width = maxTextWidth;
     

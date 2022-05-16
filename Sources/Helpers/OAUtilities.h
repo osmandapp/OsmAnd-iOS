@@ -185,7 +185,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (CGSize) calculateTextBounds:(NSAttributedString *)text width:(CGFloat)width;
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
-+ (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font singleLine:(BOOL)singleLine;
++ (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font;
 
 + (NSDictionary<NSString *, NSString *> *) parseUrlQuery:(NSURL *)url;
 + (void) getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds;

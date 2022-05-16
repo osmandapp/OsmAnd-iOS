@@ -296,7 +296,7 @@
         {
             NSString *text = row.textPrefix.length == 0 ? row.text : [NSString stringWithFormat:@"%@: %@", row.textPrefix, row.text];
             CGSize fullBounds = [OAUtilities calculateTextBounds:text width:textWidth font:[row getFont]];
-            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:150.0 font:[row getFont] singleLine:NO];
+            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:150.0 font:[row getFont]];
             
             rowHeight = MAX(bounds.height, 28.0) + 11.0 + 11.0;
             row.height = rowHeight;

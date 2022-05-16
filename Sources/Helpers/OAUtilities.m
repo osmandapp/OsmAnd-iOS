@@ -885,17 +885,15 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
-+ (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font singleLine:(BOOL)singleLine
++ (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font
 {
-    NSStringDrawingOptions options = NSStringDrawingUsesFontLeading;
-    if (!singleLine)
-        options |= NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine;
-
-    NSDictionary *attrDict = @{ NSFontAttributeName: font };
+    NSDictionary *attrDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              font, NSFontAttributeName, nil];
+    
     CGSize size = [text boundingRectWithSize:CGSizeMake(ceil(width), height)
-                                     options:options
+                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingTruncatesLastVisibleLine
                                   attributes:attrDict context:nil].size;
-
+    
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 

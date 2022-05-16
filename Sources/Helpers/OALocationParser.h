@@ -27,6 +27,7 @@
 @interface OALocationParser : NSObject
 
 + (BOOL) isValidOLC:(NSString *) code;
++ (BOOL) isShortCode:(NSString *) code;
 + (OAParsedOpenLocationCode *) parseOpenLocationCode:(NSString *) locPhrase;
 + (CLLocation *) parseLocation:(NSString *)s;
 + (void) splitObjects:(NSString *)s d:(NSMutableArray<NSNumber *> *)d all:(NSMutableArray *)all strings:(NSMutableArray<NSString *> *)strings;

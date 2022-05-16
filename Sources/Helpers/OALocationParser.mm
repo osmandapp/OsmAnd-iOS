@@ -88,6 +88,11 @@
     return [OLCConverter isValidCode:code];
 }
 
++ (BOOL) isShortCode:(NSString *) code
+{
+    return [OLCConverter isShortCode:code];
+}
+
 + (OAParsedOpenLocationCode *) parseOpenLocationCode:(NSString *) locPhrase
 {
     OAParsedOpenLocationCode *parsedCode = [[OAParsedOpenLocationCode alloc] initWithText:[locPhrase trim]];

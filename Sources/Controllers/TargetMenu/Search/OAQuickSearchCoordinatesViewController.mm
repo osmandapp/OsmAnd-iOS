@@ -769,8 +769,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     dispatch_async(dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL), ^{
         int __block count = 0;
         BOOL __block isFinished = NO;
-    
-        [_searchUICore shallowSearch:OASearchAmenityByNameAPI.class text:text matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+        [_searchUICore searchAmenity:text matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
             
             OASearchResult *searchResult = *object;
             std::shared_ptr<const OsmAnd::Amenity> amenity = searchResult.amenity;

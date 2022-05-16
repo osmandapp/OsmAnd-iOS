@@ -452,6 +452,12 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (QuadRect *) getRadiusBBoxToSearch:(int)radius
 {
+    NSString *firstWord = [self.fullTextSearchPhrase componentsSeparatedByString:@" "].firstObject;
+    bool isShortOLC = [OALocationParser isShortCode:firstWord];
+    if (isShortOLC)
+        return [[QuadRect alloc] initWithLeft:get31TileNumberX(MIN_LONGITUDE) top:get31TileNumberY(MAX_LATITUDE) right:get31TileNumberX(MAX_LONGITUDE) bottom:get31TileNumberY(MIN_LATITUDE)];
+
+    
     int radiusInMeters = [self getRadiusSearch:radius];
     QuadRect *cache1kmRect = [self get1km31Rect];
     if (!cache1kmRect)

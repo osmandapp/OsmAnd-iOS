@@ -527,6 +527,25 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
     return nil;
 }
 
+- (OASearchResultCollection *) searchAmenity:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates
+{
+    OASearchAddressByNameAPI *api = (OASearchAddressByNameAPI *)[self getApiByClass:OASearchAmenityByNameAPI.class];
+    if (api)
+    {
+        OASearchPhrase *sphrase = [_phrase generateNewPhrase:text settings:_searchSettings];
+        [self preparePhrase:sphrase];
+        OAAtomicInteger *ai = [OAAtomicInteger atomicInteger:0];
+        OASearchResultMatcher *rm = [[OASearchResultMatcher alloc] initWithMatcher:matcher phrase:sphrase request:[ai get] requestNumber:ai totalLimit:totalLimit];
+        [api search:sphrase fullArea:YES resultMatcher:rm];
+        
+        OASearchResultCollection *collection = [[OASearchResultCollection alloc] initWithPhrase:sphrase];
+        [collection addSearchResults:[rm getRequestResults] resortAll:resortAll removeDuplicates:removeDuplicates];
+
+        return collection;
+    }
+    return nil;
+}
+
 - (void) initApi
 {
     [_apis addObject:[[OASearchLocationAndUrlAPI alloc] init]];

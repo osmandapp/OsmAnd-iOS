@@ -51,6 +51,7 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 - (BOOL) isSearchAvailable:(OASearchPhrase *)p;
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher;
+- (BOOL) search:(OASearchPhrase *)phrase fullArea:(BOOL)fullArea resultMatcher:(OASearchResultMatcher *)resultMatcher;
 - (int) getSearchPriority:(OASearchPhrase *)p;
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase;
 

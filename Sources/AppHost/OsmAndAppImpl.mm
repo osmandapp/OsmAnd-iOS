@@ -42,7 +42,6 @@
 #import "OAWeatherHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAExternalTimeFormatter.h"
-#import "OAHistoryHelper.h"
 
 #include <algorithm>
 

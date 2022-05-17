@@ -162,7 +162,7 @@
 "show_compass_ruler" = "Show compass ruler";
 "hide_compass_ruler" = "Hide compass ruler";
 "map_widget_distance_by_tap" = "Distance by tap";
-"shared_string_collapse" = "Свий";
+"shared_string_collapse" = "Свиване";
 "shared_string_topbar" = "Горна лента";
 "shared_string_widgets" = "Джаджи";
 "map_widget_right" = "Десен панел";
@@ -433,7 +433,7 @@
 "shared_string_custom" = "Custom";
 "shared_string_enable" = "Разреши";
 "shared_string_disable" = "Забрани";
-"shared_string_apply" = "Приложи";
+"shared_string_apply" = "Прилагане";
 "shared_string_select" = "Избор";
 "shared_string_back" = "Back";
 "shared_string_ok" = "OK";
@@ -442,9 +442,9 @@
 "shared_string_close" = "Затваряне";
 "shared_string_no" = "Не";
 "shared_string_yes" = "Да";
-"shared_string_save" = "Запиши";
+"shared_string_save" = "Запазване";
 "shared_string_done" = "Готово";
-"shared_string_clear_all" = "Премахване на всичко";
+"shared_string_clear_all" = "Изчистване на всичко";
 "shared_string_update" = "Обновяване";
 "shared_string_install" = "Инсталиране";
 "shared_string_uninstall" = "Uninstall";
@@ -452,7 +452,7 @@
 "shared_string_upload" = "Качване";
 "shared_string_remove" = "Премахване";
 "shared_string_dismiss" = "Отхвърляне";
-"shared_string_add" = "Добави";
+"shared_string_add" = "Добавяне";
 "shared_string_buy" = "Купи";
 "shared_string_buy_for" = "for";
 "shared_string_or" = "или";
@@ -484,7 +484,7 @@
 "shared_string_warning" = "Предупреждение";
 "shared_string_copy" = "Копиране";
 "shared_string_continue" = "Continue";
-"shared_string_deselect_all" = "Откажи всички";
+"shared_string_deselect_all" = "Избор нищо";
 "shared_string_preparing" = "Подготовка";
 "shared_string_min" = "Мин";
 "shared_string_max" = "Max.";
@@ -591,7 +591,7 @@
 "gpx_waypoint" = "Точка";
 "gpx_waypoints" = "Точки";
 "gpx_points" = "Point(s)";
-"shared_string_export" = "Експорт";
+"shared_string_export" = "Изнасяне";
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Точки от маршрута";
 "import_export" = "Import/Export";
@@ -1761,7 +1761,7 @@
 "gpx_deactivated" = "Изключен";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"shared_string_show_all" = "Покажи всички";
+"shared_string_show_all" = "Показване на всички";
 "parking" = "Паркинг";
 "parked_at" = "Parked at";
 "directions_more_options" = "Упътване от тук";
@@ -1964,7 +1964,7 @@
 "osm_live_banner_descr" = "Subscribe to OsmAnd Live and get unlimited <b>hourly</b> map updates and <b>all features</b> included from %@";
 "osm_live_get_title" = "Get OsmAnd Live";
 "osm_live_ask_for_purchase" = "Моля, първо закупете абонамент за OsmAnd Live";
-"shared_string_io_error" = "входно/изходна грешка";
+"shared_string_io_error" = "Грешка с входа/изхода";
 "osm_live_hide_user_name" = "Не показвай името ми в отчети";
 "subscriptions_public_info" = "Payment will be charged to your iTunes Account at confirmation of purchase. The subscription will automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period. Your account will be charged according to your plan for renewal within 24 hours prior to the end of the current period. You can manage or turn off auto-renew in your Account Settings after purchase. If you purchase a subscription during a free trial period, the unused portion of this period will be forfeited.";
 "terms_of_use" = "Terms of use";

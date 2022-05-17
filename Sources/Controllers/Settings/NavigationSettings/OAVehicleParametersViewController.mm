@@ -87,9 +87,10 @@
         ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
         ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey])
     {
-        auto& parameters = router->getParametersList();
-        for (const auto& p : parameters)
+        auto parameters = router->getParameters(string(self.appMode.getDerivedProfile.UTF8String));
+        for (auto it = parameters.begin(); it != parameters.end(); ++it)
         {
+            auto& p = it->second;
             NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
             NSString *group = [NSString stringWithUTF8String:p.group.c_str()];
             if (![param hasPrefix:@"avoid_"] && ![param hasPrefix:@"prefer_"] && ![param isEqualToString:kRouteParamIdShortWay] && ![group isEqualToString:kRouteParamGroupDrivingStyle])

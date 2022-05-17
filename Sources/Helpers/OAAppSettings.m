@@ -109,6 +109,7 @@
 // App profiles
 #define appModeBeanPrefsIdsKey @"appModeBeanPrefsIds"
 #define routingProfileKey @"routingProfile"
+#define derivedProfileKey @"derivedProfile"
 #define profileIconNameKey @"profileIconName"
 #define profileIconColorKey @"profileIconColor"
 #define userProfileNameKey @"userProfileName"
@@ -3451,7 +3452,12 @@
 
         _mapInfoControls = [OACommonString withKey:mapInfoControlsKey defValue:@""];
         [_profilePreferences setObject:_mapInfoControls forKey:@"map_info_controls"];
-
+        
+        _derivedProfile = [OACommonString withKey:derivedProfileKey defValue:@"default"];
+        [_derivedProfile setModeDefaultValue:@"motorcycle" mode:OAApplicationMode.MOTORCYCLE];
+        [_derivedProfile setModeDefaultValue:@"truck" mode:OAApplicationMode.TRUCK];
+        [_profilePreferences setObject:_derivedProfile forKey:@"derived_profile"];
+        
         _routingProfile = [OACommonString withKey:routingProfileKey defValue:@""];
         [_routingProfile setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
         [_routingProfile setModeDefaultValue:@"bicycle" mode:OAApplicationMode.BICYCLE];

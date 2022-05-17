@@ -759,6 +759,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *routerService;
 
 @property (nonatomic) OACommonString *routingProfile;
+@property (nonatomic) OACommonString *derivedProfile;
 
 @property (nonatomic) OACommonString *customAppModes;
 

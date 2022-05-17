@@ -222,6 +222,7 @@ static OAApplicationMode *_HORSE;
     [builder setIconResName:modeBean.iconName];
     [builder setIconColor:modeBean.iconColor];
     [builder setRoutingProfile:modeBean.routingProfile];
+    [builder setDerivedProfile:modeBean.derivedProfile];
     [builder setRouteService:modeBean.routeService];
     [builder setLocationIcon:modeBean.locIcon];
     [builder setNavigationIcon:modeBean.navIcon];
@@ -294,6 +295,7 @@ static OAApplicationMode *_HORSE;
         @"iconName" : self.getIconName,
         @"parent" : self.parent ? self.parent.stringKey : @"",
         @"routeService" : self.getRouterServiceName,
+        @"derivedProfile" : self.getDerivedProfile,
         @"routingProfile" : self.getRoutingProfile,
         @"locIcon" : self.getLocationIconName,
         @"navIcon" : self.getNavigationIconName,
@@ -428,6 +430,17 @@ static OAApplicationMode *_HORSE;
 {
     if (userProfileName.length > 0)
         [OAAppSettings.sharedManager.userProfileName set:userProfileName mode:self];
+}
+
+- (NSString *) getDerivedProfile
+{
+    return [OAAppSettings.sharedManager.derivedProfile get:self];
+}
+
+- (void) setDerivedProfile:(NSString *)derivedProfile
+{
+    if (derivedProfile.length > 0)
+        [OAAppSettings.sharedManager.derivedProfile set:derivedProfile mode:self];
 }
 
 - (NSString *) getRoutingProfile
@@ -679,6 +692,7 @@ static OAApplicationMode *_HORSE;
         [mode setUserProfileName:builder.userProfileName];
         [mode setIconName:builder.iconResName];
         [mode setRoutingProfile:builder.routingProfile];
+        [mode setDerivedProfile:builder.derivedProfile];
         [mode setRouterService:builder.routeService];
         [mode setIconColor:(int)builder.iconColor];
         [mode setLocationIcon:builder.locationIcon];
@@ -872,7 +886,8 @@ static OAApplicationMode *_HORSE;
     res.navIcon = [self parseNavIcon:jsonData[@"navIcon"]];
     res.order = [jsonData[@"order"] intValue];
     NSInteger routerService = [self.class parseRouterService:jsonData[@"routeService"]];
-    res.routeService =  routerService;
+    res.routeService = routerService;
+    res.derivedProfile = jsonData[@"derivedProfile"];
     res.routingProfile = jsonData[@"routingProfile"];
     res.parent = jsonData[@"parent"];
     res.stringKey = jsonData[@"stringKey"];
@@ -943,6 +958,7 @@ static OAApplicationMode *_HORSE;
     [_am setParent:parent];
     [_am setUserProfileName:_userProfileName];
     [_am setIconName:_iconResName];
+    [_am setDerivedProfile:_derivedProfile];
     [_am setRoutingProfile:_routingProfile];
     [_am setRouterService:_routeService];
     [_am setIconColor:(int)_iconColor];

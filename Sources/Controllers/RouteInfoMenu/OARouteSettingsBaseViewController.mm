@@ -95,10 +95,11 @@
     if (rm == nullptr)
         return list;
     
-    auto& params = rm->getParametersList();
+    auto params = rm->getParameters(string(am.getDerivedProfile.UTF8String));
     vector<RoutingParameter> reliefFactorParameters;
-    for (auto& r : params)
+    for (auto it = params.begin(); it != params.end(); ++it)
     {
+        auto& r = it->second;
         if (r.type == RoutingParameterType::BOOLEAN)
         {
             if ([[NSString stringWithUTF8String:r.group.c_str()] isEqualToString:kRouteParamGroupReliefSmoothnessFactor])
@@ -156,9 +157,10 @@
     if (rm == nullptr)
         return list;
     
-    auto& params = rm->getParametersList();
-    for (auto& r : params)
+    auto params = rm->getParameters(string(am.getDerivedProfile.UTF8String));
+    for (auto it = params.begin(); it != params.end(); ++it)
     {
+        auto& r = it->second;
         if (r.type == RoutingParameterType::BOOLEAN)
         {
             if ([[NSString stringWithUTF8String:r.group.c_str()] isEqualToString:kRouteParamGroupReliefSmoothnessFactor])

@@ -295,24 +295,25 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [types addObject:type];
     }
 
-    NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
-    for (NSString *attribute in attributes)
-    {
-        NSString *title = OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]);
-        NSString *topDescription = OALocalizedString([NSString stringWithFormat:@"%@_description", attribute]);
-        NSString *bottomDescription = OALocalizedString(@"white_color_undefined");
-        OARouteAppearanceType *type = [[OARouteAppearanceType alloc] initWithColoringType:OAColoringType.ATTRIBUTE
-                                                                                    title:title
-                                                                                 attrName:attribute
-                                                                           topDescription:topDescription
-                                                                        bottomDescription:bottomDescription
-                                                                                 isActive:YES];
-        [types addObject:type];
-
-        if ([_previewRouteLineInfo.coloringType isRouteInfoAttribute]
-                && [_previewRouteLineInfo.routeInfoAttribute isEqualToString:attribute])
-            _selectedType = type;
-    }
+    // TODO: add other coloring types with the new subscription
+//    NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
+//    for (NSString *attribute in attributes)
+//    {
+//        NSString *title = OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]);
+//        NSString *topDescription = OALocalizedString([NSString stringWithFormat:@"%@_description", attribute]);
+//        NSString *bottomDescription = OALocalizedString(@"white_color_undefined");
+//        OARouteAppearanceType *type = [[OARouteAppearanceType alloc] initWithColoringType:OAColoringType.ATTRIBUTE
+//                                                                                    title:title
+//                                                                                 attrName:attribute
+//                                                                           topDescription:topDescription
+//                                                                        bottomDescription:bottomDescription
+//                                                                                 isActive:YES];
+//        [types addObject:type];
+//
+//        if ([_previewRouteLineInfo.coloringType isRouteInfoAttribute]
+//                && [_previewRouteLineInfo.routeInfoAttribute isEqualToString:attribute])
+//            _selectedType = type;
+//    }
 
     _coloringTypes = types;
 

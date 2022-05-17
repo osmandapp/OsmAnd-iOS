@@ -32,6 +32,7 @@
 #import "OAStreetIntersection.h"
 #import "OALocationParser.h"
 #import "OrderedDictionary.h"
+#import "OAMapUtils.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>

@@ -2572,12 +2572,13 @@ typedef enum
                 state:(OATrackMenuViewControllerState *)state
          trackHudMode:(EOATrackHudMode)trackHudMode
 {
-    BOOL showCurrentTrack = NO;
-    if (item == nil)
+    BOOL showCurrentTrack = item == nil || !item.gpxFileName || item.gpxFileName.length == 0 || [item.gpxTitle isEqualToString:OALocalizedString(@"track_recording_name")];
+    if (showCurrentTrack)
     {
-        item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
-        item.gpxTitle = OALocalizedString(@"track_recording_name");
-        showCurrentTrack = YES;
+        if (item == nil)
+            item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+        if (!item.gpxTitle || item.gpxTitle.length == 0)
+            item.gpxTitle = OALocalizedString(@"track_recording_name");
     }
 
     [self hideMultiMenuIfNeeded];
@@ -2631,13 +2632,13 @@ typedef enum
     {
         case EOATrackAppearanceHudMode:
         {
-            trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:targetPoint.targetObj
+            trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item
                                                                                                state:state];
             break;
         }
         default:
         {
-            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj
+            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:item
                                                                                      state:state];
             [_mapViewController showContextPinMarker:targetPoint.location.latitude
                                            longitude:targetPoint.location.longitude

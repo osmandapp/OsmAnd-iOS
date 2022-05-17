@@ -113,37 +113,51 @@
            (int64_t)[[name dataUsingEncoding:NSUTF8StringEncoding] crc32];
 }
 
-- (void)addPoint:(double)latitude longitude:(double)longitude time:(NSTimeInterval)time name:(NSString *)name type:(OAHistoryType)type iconName:(NSString *)iconName typeName:(NSString *)typeName
+- (void)addPoint:(OAHistoryItem *)item
 {
-    if (!iconName)
-        iconName = @"";
-    if (!typeName)
-        typeName = @"";
-    
+    int64_t hHash = item.hHash > 0 ? item.hHash : [self getRowHash:item.latitude longitude:item.longitude name:item.name];
     dispatch_async(dbQueue, ^{
-        sqlite3_stmt    *statement;
-        
+        sqlite3_stmt *statement;
         const char *dbpath = [databasePath UTF8String];
-        
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            NSString *query = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@, %@, %@, %@, %@, %@) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", TABLE_NAME, POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME];
-            
-            const char *update_stmt = [query UTF8String];
-            
-            sqlite3_prepare_v2(historyDB, update_stmt, -1, &statement, NULL);
-            sqlite3_bind_int64(statement, 1, [self getRowHash:latitude longitude:longitude name:name]);
-            sqlite3_bind_int64(statement, 2, (int64_t)time);
-            sqlite3_bind_double(statement, 3, latitude);
-            sqlite3_bind_double(statement, 4, longitude);
-            sqlite3_bind_text(statement, 5, [name UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_int(statement, 6, type);
-            sqlite3_bind_text(statement, 7, [iconName UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 8, [typeName UTF8String], -1, SQLITE_TRANSIENT);
-            
+            int64_t hId = 0;
+            NSString *querySQL = [NSString stringWithFormat:@"SELECT ROWID FROM %@ WHERE %@ = ? ORDER BY %@ DESC LIMIT 1", TABLE_NAME, POINT_COL_HASH, POINT_COL_TIME];
+            const char *query_stmt = [querySQL UTF8String];
+            if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+            {
+                sqlite3_bind_int64(statement, 1, hHash);
+                while (sqlite3_step(statement) == SQLITE_ROW)
+                {
+                    hId = sqlite3_column_int64(statement, 0);
+                }
+                sqlite3_finalize(statement);
+            }
+
+            querySQL = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(%@%@, %@, %@, %@, %@, %@, %@, %@) VALUES(%@?, ?, ?, ?, ?, ?, ?, ?)", TABLE_NAME, hId > 0 ? @"ROWID, " : @"", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, hId > 0 ? @"?, " : @""];
+            query_stmt = [querySQL UTF8String];
+
+            sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL);
+
+            int row = 1;
+            if (hId > 0)
+                sqlite3_bind_int64(statement, row++, hId);
+
+            NSString *iconName = item.iconName ? item.iconName : @"";
+            NSString *typeName = item.typeName ? item.typeName : @"";
+
+            sqlite3_bind_int64(statement, row++, hHash);
+            sqlite3_bind_int64(statement, row++, (int64_t) [item.date timeIntervalSince1970]);
+            sqlite3_bind_double(statement, row++, item.latitude);
+            sqlite3_bind_double(statement, row++, item.longitude);
+            sqlite3_bind_text(statement, row++, [item.name UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_int(statement, row++, item.hType);
+            sqlite3_bind_text(statement, row++, [iconName UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, row, [typeName UTF8String], -1, SQLITE_TRANSIENT);
+
             sqlite3_step(statement);
             sqlite3_finalize(statement);
-            
+
             sqlite3_close(historyDB);
         }
     });
@@ -170,57 +184,6 @@
             sqlite3_close(historyDB);
         }
     });
-}
-
-- (void)updatePoint:(OAHistoryItem *)item
-{
-    int64_t hHash = item.hHash > 0 ? item.hHash : [self getRowHash:item.latitude longitude:item.longitude name:item.name];
-    dispatch_async(dbQueue, ^{
-        sqlite3_stmt *statement;
-        const char *dbpath = [databasePath UTF8String];
-        if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
-        {
-            NSString *query = [NSString stringWithFormat:@"UPDATE %@ SET %@ = ? WHERE %@ = ? AND ROWID = (SELECT ROWID FROM %@ WHERE %@ = ? ORDER BY %@ DESC LIMIT 1)",
-                    TABLE_NAME,
-                    POINT_COL_TIME,
-                    POINT_COL_HASH,
-                    TABLE_NAME,
-                    POINT_COL_HASH,
-                    POINT_COL_TIME];
-            const char *update_stmt = [query UTF8String];
-
-            sqlite3_prepare_v2(historyDB, update_stmt, -1, &statement, NULL);
-            sqlite3_bind_int64(statement, 1, (int64_t) [item.date timeIntervalSince1970]);
-            sqlite3_bind_int64(statement, 2, hHash);
-            sqlite3_bind_int64(statement, 3, hHash);
-            sqlite3_step(statement);
-            sqlite3_finalize(statement);
-            sqlite3_close(historyDB);
-        }
-    });
-}
-
-- (BOOL)isPointExists:(OAHistoryItem *)item
-{
-    __block BOOL exists = NO;
-    int64_t hHash = item.hHash > 0 ? item.hHash : [self getRowHash:item.latitude longitude:item.longitude name:item.name];
-    dispatch_sync(dbQueue, ^{
-        const char *dbpath = [databasePath UTF8String];
-        sqlite3_stmt *statement;
-        if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
-        {
-            NSString *querySQL = [NSString stringWithFormat:@"SELECT 1 FROM %@ WHERE %@ = ?", TABLE_NAME, POINT_COL_HASH];
-            const char *query_stmt = [querySQL UTF8String];
-            if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
-            {
-                sqlite3_bind_int64(statement, 1, hHash);
-                exists = sqlite3_step(statement) == SQLITE_ROW;
-                sqlite3_finalize(statement);
-            }
-            sqlite3_close(historyDB);
-        }
-    });
-    return exists;
 }
 
 - (OAHistoryItem *)getPointByName:(NSString *)name

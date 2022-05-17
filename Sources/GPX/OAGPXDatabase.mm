@@ -399,27 +399,27 @@
         NSString *gpxPath = OsmAndApp.instance.gpxPath;
         for (NSURL *url in enumerator)
         {
+            NSURL *fileUrl = url.URLByResolvingSymlinksInPath;
             NSNumber *isDirectory = nil;
-            if ([url isFileURL])
+            if ([fileUrl isFileURL])
             {
-                [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
-                if ([isDirectory boolValue] && ![url.path isEqualToString:gpxPath])
+                [fileUrl getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
+                if ([isDirectory boolValue] && ![fileUrl.path hasPrefix:gpxPath])
                 {
                     [enumerator skipDescendants];
                 }
                 else if (![isDirectory boolValue] &&
-                        ([url.pathExtension.lowercaseString isEqualToString:GPX_EXT] ||
-                                [url.pathExtension.lowercaseString isEqualToString:KML_EXT] ||
-                                [url.pathExtension.lowercaseString isEqualToString:KMZ_EXT]) &&
-                        ![url.lastPathComponent isEqualToString:@"favourites.gpx"])
+                        ([fileUrl.pathExtension.lowercaseString isEqualToString:GPX_EXT] ||
+                                [fileUrl.pathExtension.lowercaseString isEqualToString:KML_EXT] ||
+                                [fileUrl.pathExtension.lowercaseString isEqualToString:KMZ_EXT]) &&
+                        ![fileUrl.lastPathComponent isEqualToString:@"favourites.gpx"])
                 {
-                    if (![existingFilePaths containsObject:url.path])
+                    if (![existingFilePaths containsObject:fileUrl.path])
                     {
-                        NSURL *fileUrl = url;
-                        if (![url.path hasPrefix:gpxPath])
+                        if (![fileUrl.path hasPrefix:gpxPath])
                         {
-                            fileUrl = [NSURL fileURLWithPath:[gpxPath stringByAppendingPathComponent:url.lastPathComponent]];
-                            [fileManager moveItemAtURL:url toURL:fileUrl error:nil];
+                            NSURL *newFileUrl = [NSURL fileURLWithPath:[gpxPath stringByAppendingPathComponent:fileUrl.lastPathComponent]];
+                            [fileManager moveItemAtURL:fileUrl toURL:newFileUrl error:nil];
                         }
                         OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:fileUrl.path];
                         [self addGpxItem:fileUrl.path title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];

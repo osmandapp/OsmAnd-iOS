@@ -293,7 +293,7 @@
     NSString *name = @"ic_custom_trip";
     if ([id isEqualToString:kRouteParamIdShortWay])
         name = @"ic_custom_fuel";
-    else if ([id isEqualToString:kRouteParamIdAllowPrivate])
+    else if ([id isEqualToString:kRouteParamIdAllowPrivate] || [id isEqualToString:kRouteParamIdAllowPrivateTruck])
         name = isChecked ? @"ic_custom_allow_private_access" : @"ic_custom_forbid_private_access";
     else if ([id isEqualToString:kRouteParamIdAllowMotorway])
         name = isChecked ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";

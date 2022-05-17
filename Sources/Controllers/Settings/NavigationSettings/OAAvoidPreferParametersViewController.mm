@@ -65,9 +65,10 @@
     NSString *prefix = _isAvoid ? @"avoid_" : @"prefer_";
     if (router)
     {
-        auto& parameters = router->getParametersList();
-        for (auto& p : parameters)
+        auto parameters = router->getParameters(string(self.appMode.getDerivedProfile.UTF8String));
+        for (auto it = parameters.begin(); it != parameters.end(); ++it)
         {
+            auto& p = it->second;
             NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
             if ([param hasPrefix:prefix])
             {
@@ -93,9 +94,10 @@
     auto router = [OsmAndApp.instance getRouter:appMode];
     if (router)
     {
-        auto& parameters = router->getParametersList();
-        for (auto& p : parameters)
+        auto parameters = router->getParameters(string(appMode.getDerivedProfile.UTF8String));
+        for (auto it = parameters.begin(); it != parameters.end(); ++it)
         {
+            auto& p = it->second;
             NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
             if ([param hasPrefix:@"prefer_"])
                 return YES;

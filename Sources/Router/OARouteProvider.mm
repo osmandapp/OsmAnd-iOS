@@ -606,8 +606,9 @@
 - (std::shared_ptr<RoutingConfiguration>) initOsmAndRoutingConfig:(std::shared_ptr<RoutingConfigurationBuilder>)config params:(OARouteCalculationParams *)params generalRouter:(std::shared_ptr<GeneralRouter>)generalRouter
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
+    string derivedProfile(params.mode.getDerivedProfile.UTF8String);
     MAP_STR_STR paramsR;
-    auto& routerParams = generalRouter->getParameters();
+    auto routerParams = generalRouter->getParameters(derivedProfile);
     auto it = routerParams.begin();
     for(;it != routerParams.end(); it++)
     {
@@ -643,6 +644,9 @@
     double maxSpeed = params.mode.getMaxSpeed;
     if (maxSpeed > 0)
         paramsR[GeneralRouterConstants::MAX_SPEED] = [NSString stringWithFormat:@"%f", maxSpeed].UTF8String;
+    if (!derivedProfile.empty())
+        paramsR["profile_" + derivedProfile] = "true";
+    
     float mb = (1 << 20);
     natural_t freeMemory = [OAUtilities get_free_memory];
 #if TARGET_OS_SIMULATOR

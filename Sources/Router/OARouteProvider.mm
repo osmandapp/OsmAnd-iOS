@@ -35,6 +35,7 @@
 #define MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT 60
 #define ADDITIONAL_DISTANCE_FOR_START_POINT 300
 #define MIN_STRAIGHT_DIST 50000
+#define MIN_INTERMEDIATE_DIST 10
 
 #define GPX_CALC_DIST_THRESHOLD 1000000
 
@@ -988,21 +989,7 @@
     rp.onlyStartPointChanged = routeParams.onlyStartPointChanged;
     rp.previousToRecalculate =  routeParams.previousToRecalculate;
     NSMutableArray<CLLocation *> *rpIntermediates = [NSMutableArray array];
-    NSInteger closest = 0;
-    if (!routeParams.gpxRoute.passWholeRoute) {
-        double maxDist = DBL_MAX;
-        for (NSInteger i = 0; i < intermediates.count; i++)
-        {
-            CLLocation *loc = intermediates[i];
-            double dist = getDistance(loc.coordinate.latitude, loc.coordinate.longitude,
-                                               rp.start.coordinate.latitude, rp.start.coordinate.longitude);
-            if (dist <= maxDist)
-            {
-                closest = i;
-                maxDist = dist;
-            }
-        }
-    }
+    NSInteger closest = [self findClosestIntermediate:routeParams intermediates:intermediates];
     for (NSInteger i = closest; i < intermediates.count; i++)
     {
         CLLocation *w = intermediates[i];
@@ -1021,6 +1008,30 @@
         return [self findStraightRoute:rp];
     
     return [self findVectorMapsRoute:rp calcGPXRoute:NO];
+}
+
+- (NSInteger) findClosestIntermediate:(OARouteCalculationParams *)params intermediates:(NSArray<CLLocation *> *)intermediates
+{
+    NSInteger closest = 0;
+    if (!params.gpxRoute.passWholeRoute)
+    {
+        double maxDist = DBL_MAX;
+        for (NSInteger i = 0; i < intermediates.count; i++)
+        {
+            CLLocation *loc = intermediates[i];
+            double dist = [params.start distanceFromLocation:loc];
+            if (dist <= MIN_INTERMEDIATE_DIST)
+            {
+                return i;
+            }
+            else if (dist < maxDist)
+            {
+                closest = i;
+                maxDist = dist;
+            }
+        }
+    }
+    return closest;
 }
 
 - (NSMutableArray<OARouteDirectionInfo *> *) calcDirections:(NSMutableArray<NSNumber *> *)startI endI:(NSMutableArray<NSNumber *> *)endI inputDirections:(NSArray<OARouteDirectionInfo *> *)inputDirections

@@ -132,7 +132,9 @@
             const auto &p = it->second;
             NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
             NSString *group = [NSString stringWithUTF8String:p.group.c_str()];
-            if ([param hasPrefix:@"avoid_"])
+            if ([param hasPrefix:@"hazmat"])
+                continue;
+            else if ([param hasPrefix:@"avoid_"])
                 _avoidParameters.push_back(p);
             else if ([param hasPrefix:@"prefer_"])
                 _preferParameters.push_back(p);

@@ -653,7 +653,9 @@
     // Simulator returns incorrect values for free memory, so we need to increase it for fast routing calculations
     long memoryLimit = (0.1 * ([NSProcessInfo processInfo].physicalMemory / mb));
 #else
-    long memoryLimit = freeMemory > 0 ? (0.6 * (freeMemory / mb)) : (0.08 * ([NSProcessInfo processInfo].physicalMemory / mb));
+    long memoryLimit = (0.1 * ([NSProcessInfo processInfo].physicalMemory / mb));
+    // Old solution was wrong caused slow routing
+    // long memoryLimit = freeMemory > 0 ? (0.6 * (freeMemory / mb)) : (0.08 * ([NSProcessInfo processInfo].physicalMemory / mb));
 #endif
     // make visible
     long memoryTotal = (long) ([NSProcessInfo processInfo].physicalMemory / mb);

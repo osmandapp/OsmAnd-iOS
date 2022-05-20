@@ -1413,7 +1413,7 @@
 "rendering_attr_undefined_name" = "Indefinido";
 "routing_attr_avoid_ferry_name" = "Sin ferris o transbordadores";
 "routeInfo_smoothness_name" = "Suavidad";
-"routing_attr_avoid_share_taxi_description" = "Evitar taxis colectivos";
+"routing_attr_avoid_share_taxi_description" = "Evitar taxis compartidos";
 "rendering_value_blue_name" = "Azul";
 "rendering_value_highContrastRoads_name" = "Caminos en alto contraste";
 "rendering_attr_piste_difficulty_aerialway_name" = "Vía aérea";
@@ -1526,7 +1526,7 @@
 "rendering_value_default_name" = "Predefinido";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Redes de nodos";
 "routing_attr_avoid_tram_name" = "Sin tranvías";
-"routing_attr_avoid_share_taxi_name" = "Sin taxis colectivos";
+"routing_attr_avoid_share_taxi_name" = "Sin taxis compartidos";
 "routing_attr_height_name" = "Límite de altura";
 "rendering_attr_contourColorScheme_name" = "Esquema de color de las curvas de nivel";
 "rendering_attr_highway_class_track_name" = "Camino rural";
@@ -1544,7 +1544,7 @@
 "rendering_value_car_name" = "Automóvil";
 "rendering_value_translucent_red_name" = "Rojo translúcido";
 "routing_attr_prefer_motorway_name" = "Preferir autopistas";
-"rendering_attr_shareTaxiRoutes_name" = "Rutas de taxi colectivos";
+"rendering_attr_shareTaxiRoutes_name" = "Rutas de taxi compartidos";
 "rendering_attr_tracktype_grade1_name" = "Sólido (pavimentado)";
 "rendering_attr_showCycleRoutes_name" = "Rutas ciclistas";
 "routing_attr_width_description" = "Especifica el límite de anchura permitida del vehículo en rutas.";
@@ -2396,8 +2396,8 @@
 "selected_tracks_count" = "Rutas - %d";
 "map_widget_parking" = "Lugar de estacionamiento";
 "select_wikipedia_article_langs" = "Selecciona los idiomas en los que los artículos de Wikipedia aparecerán en el mapa. Puedes cambiar entre todos los idiomas disponibles al leer el artículo.";
-"rendering_attr_showFitnessTrails_name" = "Mostrar las pistas de fitness";
-"rendering_attr_showFitnessTrails_description" = "Mostrar las pistas de fitness";
+"rendering_attr_showFitnessTrails_name" = "Circuitos aeróbicos";
+"rendering_attr_showFitnessTrails_description" = "Muestra los circuitos aeróbicos";
 "search_more" = "Buscar más…";
 "track_coloring_solid" = "Sólido";
 "available_groups" = "Grupos disponibles";
@@ -2533,7 +2533,7 @@
 "product_desc_mapillary" = "Fotos a nivel de calle en línea para todos";
 "shared_string_time_span" = "Espacio de tiempo";
 "shared_string_start_time" = "Hora de inicio";
-"shared_string_end_time" = "Hora de finalización";
+"shared_string_end_time" = "Hora de fin";
 "shared_string_time_moving" = "Tiempo en movimiento";
 "toggle_coordinates" = "Mostrar/ocultar control de coordenadas";
 "show_coordinates" = "Mostrar coordenadas";
@@ -2622,3 +2622,6 @@
 "local_backup_descr" = "Crea una copia de seguridad o restaura los datos de un archivo local.";
 "cloud_no_online_backup" = "Todavía no tiene un copia de seguridad online";
 "simulation_real_mode_title" = "Simulación realista";
+"simulation_constant_mode_desc" = "La simulación será realizada con una velocidad constante elegida.";
+"simulation_constant_mode_title" = "Velocidad constante";
+"simulation_preview_mode_title" = "Modo de previsualización rápida";

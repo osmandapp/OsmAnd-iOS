@@ -2108,7 +2108,7 @@
 "rendering_attr_surface_snow_name" = "Neĝo";
 "rendering_attr_highway_class_cycleway_name" = "Biciklvojoj";
 "routing_attr_piste_type_downhill_description" = "Skivojoj por skiado alpa (malsuprenira) kaj vojetoj al skitelferoj.";
-"rendering_attr_hideWaterPolygons_name" = "Kaŝi akvon";
+"rendering_attr_hideWaterPolygons_name" = "Akvo";
 "routing_attr_avoid_stairs_name" = "Senŝtuparoj";
 "rendering_value_walkingRoutesOSMC_name" = "reala koloro kaj emblemo";
 "rendering_attr_piste_type_skitour_name" = "ski‑ekskurso";

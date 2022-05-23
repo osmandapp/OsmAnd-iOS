@@ -2492,3 +2492,9 @@
 "simulation_preview_mode_desc" = "ستكون سرعة المحاكاة قصوى على طول الأقسام المستقيمة وبطيئة فقط عند التقاطعات.";
 "altitude_descent" = "منحدر";
 "animate_my_location" = "تحريك التغيير في الموقع";
+"copy_address" = "نسخ العنوان";
+"copy_poi_name" = "نسخ اسم POI";
+"copy_coordinates" = "نسخ الإحداثيات";
+"share_geo" = "الموقع الجغرافي:";
+"toast_empty_name_error" = "موقع بدون اسم";
+"animate_my_location_descr" = "الانتقال السلس للموقع على الخريطة أثناء التنقل";

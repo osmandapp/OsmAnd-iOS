@@ -72,7 +72,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 };
 
 
-@interface OAQuickSearchCoordinatesViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, OAQuickSearchCoordinateFormatsDelegate>
+@interface OAQuickSearchCoordinatesViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, OAQuickSearchCoordinateFormatsDelegate, OAPOISearchDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *toolbarView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -112,6 +112,10 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     BOOL _shouldHideHintBar;
     UIView *_navBarBackgroundView;
     NSTimeInterval _lastTableViewTapTime;
+    
+    NSMutableArray<OAPOI *> *_olcCities;
+    NSString *_olcSearchingCity;
+    UIActivityIndicatorView *_spinner;
 }
 
 - (instancetype) initWithLat:(double)lat lon:(double)lon
@@ -705,7 +709,11 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     if (olcTextParts.count > 1)
     {
         olcTextCode = olcTextParts[0];
-        cityName = olcTextParts[1];
+        cityName = [olcText substringFromIndex:olcTextCode.length + 1];
+        NSInteger commaIndex = [cityName indexOf:@","];
+        if (commaIndex != -1)
+            cityName = [cityName substringToIndex:[cityName indexOf:@","]];
+        _olcSearchingCity = cityName;
     }
     else
     {
@@ -741,77 +749,108 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     return loc;
 }
 
-- (NSArray<OASearchResult *> *)searchCities:(NSString *)text
+- (void) searchCities:(NSString *)text
 {
-    OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
-    NSString * lang = [OAAppSettings.sharedManager.settingPrefMapLanguage get];
-    BOOL transliterate = [OAAppSettings.sharedManager.settingMapLanguageTranslit get];
-    NSMutableArray *amenities = [NSMutableArray new];
-    
-    OAQuickSearchHelper *_searchHelper = OAQuickSearchHelper.instance;
-    OASearchUICore *_searchUICore = _searchHelper.getCore;
-    OASearchSettings *settings = [[_searchUICore getSearchSettings] setOriginalLocation:OsmAndApp.instance.locationServices.lastKnownLocation];
-    settings = [settings setLang:lang ? lang : @"" transliterateIfMissing:transliterate];
-    settings = [settings setSortByName:NO];
-    settings = [settings setAddressSearch:YES];
-    settings = [settings setEmptyQueryAllowed:YES];
-    settings = [settings setOriginalLocation:_searchLocation];
-    [_searchUICore updateSettings:settings];
-    
+    //[self startSpinner];
+    dispatch_async(dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL), ^{
+        _olcCities = [NSMutableArray array];
+        OAPOIHelper.sharedInstance.delegate = self;
+        [OAPOIHelper.sharedInstance findPOIsByKeyword:text];
+    });
+}
+
+- (void) startSpinner
+{
     UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleGray;
     if (@available(iOS 13.0, *))
         spinnerStyle = UIActivityIndicatorViewStyleLarge;
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
-    spinner.center = CGPointMake([[UIScreen mainScreen]bounds].size.width/2, [[UIScreen mainScreen]bounds].size.height/2);
-    [self.view addSubview:spinner];
-    [spinner startAnimating];
-        
-    dispatch_async(dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL), ^{
-        int __block count = 0;
-        BOOL __block isFinished = NO;
-        [_searchUICore searchAmenity:text matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
-            
-            OASearchResult *searchResult = *object;
-            std::shared_ptr<const OsmAnd::Amenity> amenity = searchResult.amenity;
-            if (!amenity)
-                return NO;
-            
-            if (count++ > kSearchCityLimit)
-                return NO;
-            
-            NSArray<NSString *> *otherNames = searchResult.otherNames;
-            NSString *localeName = amenity->getName(QString(lang.UTF8String), transliterate).toNSString();
-            NSString *subType = amenity->subType.toNSString();
-            
-            NSArray<NSString *> *allowedTypes = @[@"city", @"town", @"village"];
-            if (![allowedTypes containsObject:subType] || (![nm matches:localeName] && ![nm matchesMap:otherNames]))
-                return NO;
-            
-            [amenities addObject:searchResult];
-            isFinished = YES;
-            return NO;
-        } cancelledFunc:^BOOL{
-            return count > kSearchCityLimit || isFinished;
-        }] resortAll:YES removeDuplicates:YES];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [spinner stopAnimating];
-            [spinner removeFromSuperview];
-            _isOlcCitySearchRunning = NO;
-            
-            if (amenities && amenities.count > 0)
+    UIActivityIndicatorView *_spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
+    _spinner.center = CGPointMake([[UIScreen mainScreen]bounds].size.width/2, [[UIScreen mainScreen]bounds].size.height/2);
+    [self.view addSubview:_spinner];
+    [_spinner startAnimating];
+}
+
+- (void) stopSpinner
+{
+    [_spinner stopAnimating];
+    [_spinner removeFromSuperview];
+}
+
+- (void) poiFound:(OAPOI *)poi
+{
+    if (!_olcCities)
+        [NSMutableArray array];
+    [_olcCities addObject:poi];
+}
+
+- (void) searchDone:(BOOL)wasInterrupted
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _isOlcCitySearchRunning = NO;
+        //[self stopSpinner];
+        if (_olcCities && _olcCities.count > 0)
+        {
+            NSArray<OAPOI *> * sortedAmenities = [self sortCities:_olcCities phraseName:_olcSearchingCity];
+            OAPOI *firstResult = sortedAmenities[0];
+            if (firstResult)
             {
-                OASearchResult *firstResult = amenities[0];
-                if (firstResult && firstResult.location)
+                _searchLocation = [[CLLocation alloc] initWithLatitude:firstResult.latitude longitude:firstResult.longitude];
+                [self updateDistanceAndDirection:YES];
+            }
+        }
+    });
+}
+
+- (NSArray<OAPOI *> *)sortCities:(NSArray<OAPOI *> *)cities phraseName:(NSString *)phraseName
+{
+    return [cities sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        NSString *str1;
+        NSString *str2;
+        
+        OAPOI *a = (OAPOI *)obj1;
+        str1 = a.name;
+        if ([a.subType isEqualToString:@"city"])
+            str1 = [NSString stringWithFormat:@"!%@", str1];
+        
+        if ([a.name isEqualToString:phraseName])
+        {
+            str1 = [NSString stringWithFormat:@"!%@", str1];
+        }
+        else
+        {
+            for (NSString *name in a.localizedNames)
+            {
+                if ([name isEqualToString:phraseName])
                 {
-                    _searchLocation = firstResult.location;
-                    [self updateDistanceAndDirection:YES];
+                    str1 = [NSString stringWithFormat:@"!%@", str1];
+                    break;
                 }
             }
-        });
-    });
-    
-    return [NSArray arrayWithArray:amenities];
+        }
+        
+        OAPOI *b = (OAPOI *)obj2;
+        str2 = b.name;
+        if ([b.subType isEqualToString:@"city"])
+            str2 = [NSString stringWithFormat:@"!%@", str2];
+        
+        if ([b.name isEqualToString:phraseName])
+        {
+            str2 = [NSString stringWithFormat:@"!%@", str2];
+        }
+        else
+        {
+            for (NSString *name in b.localizedNames)
+            {
+                if ([name isEqualToString:phraseName])
+                {
+                    str2 = [NSString stringWithFormat:@"!%@", str2];
+                    break;
+                }
+            }
+        }
+        
+        return [str1 compare:str2];
+    }];
 }
 
 - (double) parseDoubleFromString:(NSString *)stringValue

@@ -88,7 +88,7 @@
     return [OLCConverter isValidCode:code];
 }
 
-+ (BOOL) isShortCode:(NSString *) code
++ (BOOL) isShortOLC:(NSString *) code
 {
     return [OLCConverter isShortCode:code];
 }

@@ -676,11 +676,6 @@
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    return [self search:phrase fullArea:NO resultMatcher:resultMatcher];
-}
-
-- (BOOL) search:(OASearchPhrase *)phrase fullArea:(BOOL)fullArea resultMatcher:(OASearchResultMatcher *)resultMatcher
-{
     if (![phrase isUnknownSearchWordPresent])
         return NO;
     
@@ -701,11 +696,7 @@
     NSString *searchWord = [phrase getUnknownWordToSearch];
     OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
     
-    QuadRect *bbox;
-    if (fullArea)
-        bbox = [[QuadRect alloc] initWithLeft:get31TileNumberX(MIN_LONGITUDE) top:get31TileNumberY(MAX_LATITUDE) right:get31TileNumberX(MAX_LONGITUDE) bottom:get31TileNumberY(MIN_LATITUDE)];
-    else
-        bbox = [phrase getRadiusBBoxToSearch:BBOX_RADIUS_INSIDE];
+    QuadRect *bbox = [phrase getRadiusBBoxToSearch:BBOX_RADIUS_INSIDE];
     
     int limit = 0;
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAQuickSearchCoordinatesViewController">
             <connections>
+                <outlet property="activityIndicator" destination="08G-0z-nxn" id="po8-Rn-rtw"/>
                 <outlet property="backButton" destination="G5Q-x1-dIo" id="SCL-to-Bh7"/>
                 <outlet property="cancelButton" destination="dj9-4i-jfO" id="3tL-vf-RvR"/>
                 <outlet property="doneButton" destination="SjJ-8f-vqm" id="xcN-37-6Tk"/>
@@ -96,6 +97,9 @@
                         <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="pMJ-YF-MGE"/>
                     </connections>
                 </button>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="08G-0z-nxn">
+                    <rect key="frame" x="197" y="438" width="20" height="20"/>
+                </activityIndicatorView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="FS5-wo-05w"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -110,10 +114,12 @@
                 <constraint firstItem="FS5-wo-05w" firstAttribute="trailing" secondItem="SjJ-8f-vqm" secondAttribute="trailing" constant="16" id="T1U-a8-sTb"/>
                 <constraint firstItem="Bs9-2L-ti4" firstAttribute="top" secondItem="Q3I-vz-wne" secondAttribute="top" id="VZR-b0-Unr"/>
                 <constraint firstItem="Bs9-2L-ti4" firstAttribute="bottom" secondItem="dj9-4i-jfO" secondAttribute="bottom" constant="11" id="bTU-Yk-Ij7"/>
+                <constraint firstItem="08G-0z-nxn" firstAttribute="centerX" secondItem="Q3I-vz-wne" secondAttribute="centerX" id="chx-66-01Q"/>
                 <constraint firstItem="dj9-4i-jfO" firstAttribute="leading" secondItem="FS5-wo-05w" secondAttribute="leading" constant="16" id="ft1-MF-h5O"/>
                 <constraint firstItem="Bs9-2L-ti4" firstAttribute="trailing" secondItem="Q3I-vz-wne" secondAttribute="trailing" id="i6q-63-aK1"/>
                 <constraint firstItem="NrM-78-nBe" firstAttribute="leading" secondItem="Q3I-vz-wne" secondAttribute="leading" id="kQC-2D-wzF"/>
                 <constraint firstItem="Bs9-2L-ti4" firstAttribute="bottom" secondItem="G5Q-x1-dIo" secondAttribute="bottom" constant="13" id="lVq-ub-oms"/>
+                <constraint firstItem="08G-0z-nxn" firstAttribute="centerY" secondItem="Q3I-vz-wne" secondAttribute="centerY" id="xHt-q6-0ft"/>
             </constraints>
             <point key="canvasLocation" x="213.04347826086959" y="6.6964285714285712"/>
         </view>

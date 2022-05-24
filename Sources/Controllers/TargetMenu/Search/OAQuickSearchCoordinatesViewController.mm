@@ -76,6 +76,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 @property (strong, nonatomic) IBOutlet UIView *toolbarView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @property (weak) UITextView *tagTextView;
 
@@ -115,7 +116,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     NSMutableArray<OAPOI *> *_olcCities;
     NSString *_olcSearchingCity;
-    UIActivityIndicatorView *_spinner;
 }
 
 - (instancetype) initWithLat:(double)lat lon:(double)lon
@@ -171,6 +171,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     self.doneButton.hidden = YES;
     self.doneButton.enabled = NO;
+    _activityIndicator.hidden = YES;
     
     _toolbarView.frame = CGRectMake(0, DeviceScreenHeight, self.view.frame.size.width, kHintBarHeight);
     
@@ -330,12 +331,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 }
 
 #pragma mark - OAPOISearchDelegate
-
-- (void) stopSpinner
-{
-    [_spinner stopAnimating];
-    [_spinner removeFromSuperview];
-}
 
 - (void) poiFound:(OAPOI *)poi
 {
@@ -765,7 +760,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (void) searchCities:(NSString *)text
 {
-    //[self startSpinner];
+    [self startSpinner];
     dispatch_async(dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL), ^{
         _olcCities = [NSMutableArray array];
         OAPOIHelper.sharedInstance.delegate = self;
@@ -773,22 +768,11 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     });
 }
 
-- (void) startSpinner
-{
-    UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleGray;
-    if (@available(iOS 13.0, *))
-        spinnerStyle = UIActivityIndicatorViewStyleLarge;
-    UIActivityIndicatorView *_spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
-    _spinner.center = CGPointMake([[UIScreen mainScreen]bounds].size.width/2, [[UIScreen mainScreen]bounds].size.height/2);
-    [self.view addSubview:_spinner];
-    [_spinner startAnimating];
-}
-
 - (void) searchDone:(BOOL)wasInterrupted
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         _isOlcCitySearchRunning = NO;
-        //[self stopSpinner];
+        [self stopSpinner];
         if (_olcCities && _olcCities.count > 0)
         {
             NSArray<OAPOI *> * sortedAmenities = [self sortCities:_olcCities phraseName:_olcSearchingCity];
@@ -800,6 +784,22 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             }
         }
     });
+}
+
+- (void) startSpinner
+{
+    UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleGray;
+    if (@available(iOS 13.0, *))
+        spinnerStyle = UIActivityIndicatorViewStyleLarge;
+    _activityIndicator.activityIndicatorViewStyle = spinnerStyle;
+    [_activityIndicator startAnimating];
+    _activityIndicator.hidden = NO;
+}
+
+- (void) stopSpinner
+{
+    [_activityIndicator stopAnimating];
+    _activityIndicator.hidden = YES;
 }
 
 - (NSArray<OAPOI *> *)sortCities:(NSArray<OAPOI *> *)cities phraseName:(NSString *)phraseName

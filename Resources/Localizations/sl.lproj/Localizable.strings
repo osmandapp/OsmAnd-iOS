@@ -1714,3 +1714,5 @@
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
 "rendering_attr_piste_type_sled_name" = "Sani";
 "app_mode_utv" = "Eno ob drugem";
+"simulation_real_mode_title" = "Realistična simulacija";
+"reddit" = "Reddit";

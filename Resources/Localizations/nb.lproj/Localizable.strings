@@ -2253,3 +2253,5 @@
 "lang_ca" = "Katalansk";
 "routing_attr_only_permitted_streets_description" = "Kun bruk gater som godkjennes spesifikt";
 "lang_hr" = "Kroatisk";
+"routeInfo_horse_scale_description" = "Tegn stier i henhold til vanskelighetsgrad på rideveier";
+"routeInfo_horse_scale_name" = "Vanskelighetsgrad for rideveier";

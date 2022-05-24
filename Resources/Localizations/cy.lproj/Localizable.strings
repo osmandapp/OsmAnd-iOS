@@ -7,7 +7,7 @@
 "months_short" = "";
 "year_short" = "Yr";
 "years_short" = "";
-"day" = "Diwrnod";
+"day" = "Dydd";
 "days_2_4" = "Ddiwrnod";
 "days_5" = "Diwrnod";
 "week" = "Wythnos";
@@ -98,7 +98,7 @@
 "dialogs_and_notifications" = "Dialogs and notifications";
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Mae gosodiadau llywio a golwg map yn cael eu cofio ynôl proffil defnyddwyr. Gosodwch broffil fan hyn.";
-"unit_of_length" = "Units of length";
+"unit_of_length" = "Unedau hyd";
 "unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Coordinates format";
 "coords_format_descr_quick_search" = "You can change coordinates format for profile in General settings";
@@ -106,7 +106,7 @@
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
-"rotate_map_to_bearing" = "Cyfeiriad map";
+"rotate_map_to_bearing" = "Cyfeiriad y map";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "To compass";
 "rotate_map_bearing_opt" = "To direction of movement";
@@ -146,14 +146,14 @@
 "map_widget_next_turn" = "Y tro nesaf";
 "map_widget_next_turn_small" = "Y tro nesaf (bach)";
 "map_widget_next_next_turn" = "Yr ail dro nesaf";
-"always_center_position_on_map" = "Display position always in center";
+"always_center_position_on_map" = "Dangos lleoliad yn y canol o hyd";
 "map_widget_appearance_rem" = "Elfennau yn weddill";
 "map_widget_compass" = "Cwmpawd";
 "map_widget_intermediate_distance" = "Cyrchfan ar y ffordd";
 "map_widget_distance" = "Cyrchfan";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Uchder";
-"map_widget_battery" = "Battery level";
+"map_widget_battery" = "Lefel batri";
 "map_widget_plain_time" = "Amser cyfredol";
 "map_widget_max_speed" = "Terfyn cyflymder";
 "access_arrival_time" = "Amser cyrraedd";
@@ -228,7 +228,7 @@
 "route_parameters" = "Route parameters";
 "fast_route_mode" = "Llwybr cyflymaf";
 "nav_type_title" = "Navigation type";
-"voice_announces" = "Voice prompts";
+"voice_announces" = "Cyfarwyddiadau llais";
 "screen_alerts" = "Screen alerts";
 "vehicle_parameters" = "Vehicle parameters";
 "map_during_navigation" = "Map during navigation";
@@ -257,12 +257,12 @@
 "show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane information";
 "speak_title" = "Cyhoeddi…";
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
-"keep_informing" = "Repeat navigation instructions";
+"keep_informing" = "Ailadrodd cyfarwyddiadau llywio";
 "repeat_after" = "Repeat after";
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
 "arrival_distance" = "Cyhoeddi cyrraedd";
 "arrival_distance_descr" = "How soon do you want the arrival announcement?";
-"default_speed_system" = "Unit of speed";
+"default_speed_system" = "Uned cyflymder";
 "default_speed_system_descr" = "Define unit of speed";
 "speed_limit_exceed" = "Speed limit tolerance";
 "speed_limit_exceed_message" = "Select speed limit tolerance margin, above which you will receive a voice warning.";
@@ -296,11 +296,11 @@
 "get_directions" = "Cyfarwyddiadau";
 "app_mode_bus" = "Bws";
 "app_mode_train" = "Trên";
-"app_mode_truck" = "Tsieineeg";
+"app_mode_truck" = "Lori";
 "app_mode_hiking" = "Heicio";
 "app_mode_motorcycle" = "Beic modur";
-"app_mode_boat" = "Cwch";
-"app_mode_aircraft" = "Awyren";
+"app_mode_boat" = "Morio";
+"app_mode_aircraft" = "Hedfan";
 "gpx_option_calculate_first_last_segment" = "Calculate OsmAnd route for first and last route segment";
 "gpx_option_from_start_point" = "Pasio ar hyd y trac cyfan";
 "gpx_option_reverse_route" = "Reverse GPX direction";
@@ -338,7 +338,7 @@
 "displayed_trips" = "Traciau sy\'n cael eu dangos";
 "prev_route" = "Previous route";
 "shared_string_ellipsis" = "…";
-"shared_string_select_on_map" = "Select on map";
+"shared_string_select_on_map" = "Dewis ar fap";
 "selected_roads" = "Selected roads";
 "shared_string_my_location" = "Fy Lleoliad";
 "route_descr_select_destination" = "Select Destination";
@@ -365,14 +365,14 @@
 "route_roundabout_short" = "Cymrwch %d allanfa a mynd";
 "route_kl" = "Cadwch i\'r chwith a mynd";
 "route_kr" = "Cadwch i\'r dde a mynd";
-"route_tr" = "Turn right and go";
-"route_tshr" = "Turn sharply right and go";
-"route_tslr" = "Turn slightly right and go";
-"route_tl" = "Turn left and go";
-"route_tshl" = "Turn sharply left and go";
-"route_tsll" = "Turn slightly left and go";
+"route_tr" = "Trowch i'r dde a mynd";
+"route_tshr" = "Trowch yn unsyth i'r dde a mynd";
+"route_tslr" = "Trowch ychydig i'r dde a mynd";
+"route_tl" = "Trowch i'r chwith a mynd";
+"route_tshl" = "Trowch yn unsyth i'r chwith a mynd";
+"route_tsll" = "Trowch ychydig i'r chwith a mynd";
 "route_tu" = "Gwneud tro pedol a mynd";
-"route_head" = "Pen";
+"route_head" = "Dilynwch";
 "looking_up_address" = "Looking up address";
 "no_address_found" = "No address determined";
 "traffic_warning_speed_limit" = "Terfyn cyflymder";
@@ -400,11 +400,11 @@
 "si_mi_meters" = "Milltiroedd/metrau";
 "si_km_m" = "Cilometrau/metrau";
 "si_nm" = "Milltiroedd morwrol";
-"si_kmh" = "Kilometers per hour";
-"si_mph" = "Miles per hour";
-"si_m_s" = "Meters per second";
-"si_min_km" = "Minutes per kilometer";
-"si_min_m" = "Minutes per mile";
+"si_kmh" = "Cilomedr yr awr";
+"si_mph" = "Milltir yr awr";
+"si_m_s" = "Metrau yr eiliad";
+"si_min_km" = "Munudau y cilomedr";
+"si_min_m" = "Munudau y filltir";
 "si_nm_h" = "Nautical miles per hour (knot)";
 "units_nm_h" = "nmi/h";
 "units_min_mi" = "mun/m";
@@ -433,7 +433,7 @@
 "shared_string_custom" = "Custom";
 "shared_string_enable" = "Galluogi";
 "shared_string_disable" = "Analluogi";
-"shared_string_apply" = "Apply";
+"shared_string_apply" = "Iawn";
 "shared_string_select" = "Dewis";
 "shared_string_back" = "Nôl";
 "shared_string_ok" = "Iawn";
@@ -718,9 +718,9 @@
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
 "angular_measurment_units" = "Angular measurment units";
-"units_and_formats" = "Units & formats";
+"units_and_formats" = "Unedau a fformatau";
 "device_settings" = "Device settings";
-"osmand_settings" = "OsmAnd settings";
+"osmand_settings" = "Gosodiadau OsmAnd";
 "global_settings_descr" = "Affect the entire application.";
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
@@ -793,7 +793,7 @@
 "lang_cy" = "Cymraeg";
 "lang_da" = "Daneg";
 "lang_de" = "Almaeneg";
-"lang_de_casual" = "Almaeneg (hamddenol)";
+"lang_de_casual" = "Almaeneg (anffurfiol)";
 "lang_el" = "Groegeg";
 "lang_en" = "Saesneg";
 "lang_en_gb" = "Saesneg (Deyrnas Unedig)";
@@ -857,7 +857,7 @@
 "lang_nv" = "Nafacho";
 "lang_oc" = "Ocsitaneg";
 "lang_os" = "Oseteg";
-"lang_pl" = "Pwleg";
+"lang_pl" = "Pwyleg";
 "lang_pms" = "Piedmontese";
 "lang_pnb" = "Pwnjabeg";
 "lang_pt" = "Portiwgaleg";
@@ -950,16 +950,16 @@
 "profile_alert_delete_msg" = "Are you sure you want to completly delete \"%@\" profile?";
 "create_profile_descr" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
 "profile_type_custom_string" = "Custom profile";
-"new_profile" = "New profile";
+"new_profile" = "Proffil newydd";
 "configure_profile" = "Addasu proffil";
 "profile_settings" = "Profile settings";
-"profile_appearance" = "Profile appearance";
+"profile_appearance" = "Golwg y proffil";
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "UI customization";
 "ui_customization_descr" = "Drawer items, context menu";
 "edit_profile_list" = "Edit profile list";
 "enter_profile_name" = "Enter profile name";
-"select_color" = "Select color";
+"select_color" = "Dewis lliw";
 "select_icon" = "Select icon";
 "position_icon_at_rest" = "Position icon at rest";
 "position_icon_while_moving" = "Position icon while moving";
@@ -1293,7 +1293,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Coordinates widget";
+"coordinates_widget" = "Ategyn cyfesurynnau";
 "searching_gps" = "Searching GPS";
 "copied_to_clipboard" = "Copied to clipboard";
 
@@ -1822,11 +1822,11 @@
 "go_to_map" = "Go to Map";
 "import_raster_map_success" = "Raster map has been imported. Open Map Settings and activate it via Overlay/Underlay";
 "import_raster_map_failed" = "Raster map import failed";
-"device_memory" = "Cof y dyfais";
+"device_memory" = "Cof y ddyfais";
 "free_memory" = "%@ am ddim";
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "get_started" = "Dechrau arni";
-"first_usage_wizard_desc" = "Let OsmAnd determine your location and suggest maps to download for that region.";
+"first_usage_wizard_desc" = "Gadewch i OSMAnd ddarganfod eich lleoliad ac awgrymu mapiau i'w llwytho ar gyfer yr ardal honno.";
 "suggested_maps" = "Suggested maps";
 "suggested_maps_descr" = "These maps are required for the plugin";
 "added_profiles" = "Added profiles";
@@ -1839,8 +1839,8 @@
 "search_preogress" = "Yn chwilio…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
-"search_another_country" = "Select another region";
-"skip_map_downloading" = "Skip downloading maps";
+"search_another_country" = "Dewis ardal arall";
+"skip_map_downloading" = "Neidio lawrlwytho mapiau";
 "skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 "wiki_around" = "Nearby Wikipedia articles";
 "categories" = "Categorïau";
@@ -1976,7 +1976,7 @@
 "routing_attr_difficulty_preference_description" = "Prefer routes of this difficulty, although routing over harder or easier pistes is still possible if shorter.";
 "routing_attr_height_description" = "Specify vehicle height to be permitted on routes.";
 "touting_specified_vehicle_parameters_descr" = "Specified vehicle parameters may affect routing.";
-"routing_attr_height_obstacles_name" = "Use elevation data";
+"routing_attr_height_obstacles_name" = "Defnyddio data uchder";
 "routing_attr_avoid_toll_name" = "No toll roads";
 "rendering_attr_appMode_description" = "Optimeiddio\'r map ar gyfer";
 "routing_attr_avoid_ice_roads_fords_name" = "No ice roads or fords";

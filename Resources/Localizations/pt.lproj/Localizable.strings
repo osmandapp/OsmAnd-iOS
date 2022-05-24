@@ -1610,9 +1610,9 @@
 "routing_attr_length_name" = "Limite de comprimento";
 "export_profile" = "Exportar";
 "default_speed_dialog_msg" = "Estima a hora de chegada em tipos de estradas desconhecidos e limita a velocidade para todas as estradas (pode afetar o roteamento)";
-"width_limit_description" = "Forneça a largura do seu veículo, algumas restrições de rotas podem ser aplicadas a veículos largos.";
-"height_limit_description" = "Forneça a altura do seu veículo, algumas restrições de rotas podem ser aplicadas a veículos altos.";
-"weight_limit_description" = "Forneça o peso do seu veículo, algumas restrições de rotas podem ser aplicadas a veículos pesados.";
+"width_limit_description" = "Configure a largura do seu veículo para evitar estradas proibidas a veículos com largura superior a essa.";
+"height_limit_description" = "Configure a altura do seu veículo para evitar estradas proibidas a veículos com altura superior a essa.";
+"weight_limit_description" = "Configure o peso do seu veículo para evitar estradas proibidas a veículos com peso superior a esse.";
 "configure_profile" = "Configurar o perfil";
 "selected_profile" = "Perfil selecionado";
 "profile_appearance" = "Aparência do perfil";
@@ -1767,7 +1767,7 @@
 "service" = "Serviço";
 "emergency" = "Emergência";
 "vessel_height_limit_description" = "Defina a altura da embarcação para evitar pontes baixas. Tenha em conta que se a ponte for móvel, o cálculo utiliza a altura da ponte no estado aberto.";
-"lenght_limit_description" = "Forneça o comprimento do seu veículo, podem ser aplicadas algumas restrições de rota a veículos longos.";
+"lenght_limit_description" = "Configure o comprimento do seu veículo para evitar estradas proibidas a veículos com comprimento superior a esse.";
 "touting_specified_vehicle_parameters_descr" = "Os parâmetros definidos do veículo podem afetar a navegação.";
 "key_hint_recenter_map" = "Recentrar mapa";
 "send_anonymous_data" = "Enviar dados anónimos";
@@ -2476,7 +2476,7 @@
 "backup_error_invalid_token" = "O token não é válido";
 "routeInfo_horse_scale_name" = "Dificuldade dos percursos equestres";
 "routeInfo_horse_scale_description" = "Mostrar percursos equestres de acordo com a sua dificuldade";
-"user_login" = "Utilizador";
+"user_login" = "Login";
 "simulation_real_mode_title" = "Simulação realista";
 "simulation_constant_mode_desc" = "A simulação será feita na velocidade constante selecionada.";
 "simulation_constant_mode_title" = "Velocidade fixa";
@@ -2488,3 +2488,10 @@
 "shared_string_capacity" = "Capacidade";
 "altitude_ascent" = "Subida";
 "altitude_descent" = "Descida";
+"animate_my_location" = "Animar deslocação no mapa";
+"animate_my_location_descr" = "Suavizar a deslocação da posição atual no mapa durante a navegação";
+"copy_address" = "Copiar endereço";
+"copy_poi_name" = "Copiar nome do POI";
+"copy_coordinates" = "Copiar coordenadas";
+"share_geo" = "geo:";
+"toast_empty_name_error" = "Localização sem nome";

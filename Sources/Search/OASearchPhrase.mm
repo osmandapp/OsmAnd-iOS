@@ -338,6 +338,13 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     if (_mainUnknownWordToSearch != nil)
         return;
     
+    if ([OALocationParser isValidOLC:_firstUnknownSearchWord] && _otherUnknownWords.count > 0)
+    {
+        _mainUnknownWordToSearch = _otherUnknownWords[0];
+        _mainUnknownSearchWordComplete = YES;
+        return;
+    }
+    
     NSMutableArray<NSString *> *unknownSearchWords = _otherUnknownWords;
     _mainUnknownWordToSearch = _firstUnknownSearchWord;
     _mainUnknownSearchWordComplete = _lastUnknownSearchWordComplete;

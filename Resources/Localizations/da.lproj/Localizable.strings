@@ -2496,3 +2496,5 @@
 "toast_empty_name_error" = "Unavngivet placering";
 "animate_my_location" = "Animér ændring af placering";
 "animate_my_location_descr" = "Glidende ændring af placering på kortet under navigation";
+"routing_attr_allow_private_for_truck_description" = "Tillad adgang til private områder for lastbiler";
+"routing_attr_allow_private_for_truck_name" = "Tillad privat adgang (lastbil)";

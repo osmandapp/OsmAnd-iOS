@@ -2514,3 +2514,5 @@
 "copy_coordinates" = "Koordinatları kopyala";
 "share_geo" = "Yer:";
 "toast_empty_name_error" = "Adsız konum";
+"routing_attr_allow_private_for_truck_name" = "Özel erişime izin ver (kamyon)";
+"routing_attr_allow_private_for_truck_description" = "Kamyonlar için özel alanlara erişime izin verin";

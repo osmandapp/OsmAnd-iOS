@@ -1855,30 +1855,8 @@
             NSArray<OASearchResult *> *requestResults = resultMatcher.getRequestResults;
             if (requestResults.count > 0)
             {
-                CLLocation *searchLocation = nil;
-                for (OASearchResult *sr in requestResults)
-                {
-                    switch (sr.objectType) {
-                        case POI:
-                        {
-                            OAPOI *a = (OAPOI *) sr.object;
-                            if ([_citySubTypes containsObject:[a.type getOsmValue]])
-                            {
-                                searchLocation = sr.location;
-                            }
-                            break;
-                        }
-                        default:
-                        {
-                            searchLocation = sr.location;
-                            break;
-                        }
-                    }
-                    if (searchLocation != nil)
-                    {
-                        break;
-                    }
-                }
+                requestResults = [self sortCities:requestResults phraseName:phrase.getUnknownWordToSearch];
+                CLLocation *searchLocation = requestResults[0].location;
                 if (searchLocation != nil)
                 {
                     latLon = [parsedCode recover:searchLocation];
@@ -1927,6 +1905,94 @@
             [resultMatcher publish:sp];
         }
     }
+}
+
+- (NSArray<OASearchResult *> *)sortCities:(NSArray<OASearchResult *> *)cities phraseName:(NSString *)phraseName
+{
+    return [cities sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        NSString *str1;
+        NSString *str2;
+        
+        OASearchResult *searchResultA = (OASearchResult *)obj1;
+        switch (searchResultA.objectType) {
+            case POI:
+            {
+                OAPOI *a = (OAPOI *)searchResultA.object;
+                str1 = a.name;
+                if ([_citySubTypes containsObject:a.subType])
+                {
+                    if ([a.subType isEqualToString:@"city"])
+                        str1 = [NSString stringWithFormat:@"!!!%@", str1];
+                    else
+                        str1 = [NSString stringWithFormat:@"!!%@", str1];
+                    if ([a.name isEqualToString:phraseName])
+                    {
+                        str1 = [NSString stringWithFormat:@"!!%@", str1];
+                    }
+                    else
+                    {
+                        for (NSString *name in a.localizedNames)
+                        {
+                            if ([name isEqualToString:phraseName])
+                            {
+                                str1 = [NSString stringWithFormat:@"!!%@", str1];
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            default:
+            {
+                str1 = searchResultA.localeName;
+                if (searchResultA.location)
+                    str1 = [NSString stringWithFormat:@"!%@", str1];
+                break;
+            }
+        }
+        
+        OASearchResult *searchResultB = (OASearchResult *)obj2;
+        switch (searchResultB.objectType) {
+            case POI:
+            {
+                OAPOI *b = (OAPOI *)searchResultB.object;
+                str2 = b.name;
+                if ([_citySubTypes containsObject:b.subType])
+                {
+                    if ([b.subType isEqualToString:@"city"])
+                        str2 = [NSString stringWithFormat:@"!!!%@", str2];
+                    else
+                        str2 = [NSString stringWithFormat:@"!!%@", str2];
+                    if ([b.name isEqualToString:phraseName])
+                    {
+                        str2 = [NSString stringWithFormat:@"!!%@", str2];
+                    }
+                    else
+                    {
+                        for (NSString *name in b.localizedNames)
+                        {
+                            if ([name isEqualToString:phraseName])
+                            {
+                                str2 = [NSString stringWithFormat:@"!!%@", str2];
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            default:
+            {
+                str2 = searchResultB.localeName;
+                if (searchResultB.location)
+                    str2 = [NSString stringWithFormat:@"!%@", str2];
+                break;
+            }
+        }
+        
+        return [str1 compare:str2];
+    }];
 }
 
 - (BOOL) parseUrl:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher

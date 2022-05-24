@@ -329,6 +329,20 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     };
 }
 
+#pragma mark - OAPOISearchDelegate
+
+- (void) stopSpinner
+{
+    [_spinner stopAnimating];
+    [_spinner removeFromSuperview];
+}
+
+- (void) poiFound:(OAPOI *)poi
+{
+    if (!_olcCities)
+        [NSMutableArray array];
+    [_olcCities addObject:poi];
+}
 
 #pragma mark - Coordinates processing
 
@@ -768,19 +782,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     _spinner.center = CGPointMake([[UIScreen mainScreen]bounds].size.width/2, [[UIScreen mainScreen]bounds].size.height/2);
     [self.view addSubview:_spinner];
     [_spinner startAnimating];
-}
-
-- (void) stopSpinner
-{
-    [_spinner stopAnimating];
-    [_spinner removeFromSuperview];
-}
-
-- (void) poiFound:(OAPOI *)poi
-{
-    if (!_olcCities)
-        [NSMutableArray array];
-    [_olcCities addObject:poi];
 }
 
 - (void) searchDone:(BOOL)wasInterrupted

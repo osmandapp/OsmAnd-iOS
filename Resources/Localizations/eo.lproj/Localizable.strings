@@ -2394,3 +2394,4 @@
 "backup_error_gzip_only_supported_upload" = "Dosiero estu en la formo .gzip";
 "backup_error_no_valid_subscription" = "Neniu valida abono";
 "rendering_attr_showFitnessTrails_description" = "Montri“vojetojn de sano”";
+"simulation_real_mode_title" = "Realisma";

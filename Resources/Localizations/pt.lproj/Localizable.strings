@@ -2495,3 +2495,5 @@
 "copy_coordinates" = "Copiar coordenadas";
 "share_geo" = "geo:";
 "toast_empty_name_error" = "Localização sem nome";
+"routing_attr_allow_private_for_truck_name" = "Permitir acesso privado (camião)";
+"routing_attr_allow_private_for_truck_description" = "Permitir acesso a camiões em áreas privadas";

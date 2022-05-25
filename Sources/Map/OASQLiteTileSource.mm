@@ -455,12 +455,15 @@
     BOOL res = NO;
 
     auto *db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(filePath));
-    OsmAnd::TileSqliteDatabase::Meta meta;
-    if (db->obtainMeta(meta))
-        res = !meta.getUrl().isEmpty();
-    
+    if (db->open())
+    {
+        OsmAnd::TileSqliteDatabase::Meta meta;
+        if (db->obtainMeta(meta))
+            res = !meta.getUrl().isEmpty();
+        
+        db->close();
+    }
     delete db;
-    
     return res;
 }
 
@@ -469,9 +472,13 @@
     NSString *title = nil;
 
     auto *db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(filePath));
-    OsmAnd::TileSqliteDatabase::Meta meta;
-    if (db->obtainMeta(meta))
-        title = meta.getTitle().toNSString();
+    if (db->open())
+    {
+        OsmAnd::TileSqliteDatabase::Meta meta;
+        if (db->obtainMeta(meta))
+            title = meta.getTitle().toNSString();
+        db->close();
+    }
 
     delete db;
 

@@ -349,6 +349,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         return [first compare:second];
     }];
     [[_core getSearchSettings] setOfflineIndexes:[NSArray arrayWithArray:resIds]];
+    [[_core getSearchSettings] setRegions:app.worldRegion];
 }
 
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key

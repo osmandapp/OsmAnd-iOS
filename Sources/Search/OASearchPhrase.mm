@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchPhrase.java
-//  git revision 5bcaa01259c937fa29741117b23f89776a1098c6
+//  git revision 9ea32a8fb553ba22e188f6a7896b4868593ca808
 
 #import "OASearchPhrase.h"
 #import "OASearchWord.h"
@@ -178,21 +178,37 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
             NSString *wd = [ws[i] trim];
             BOOL conjunction = [conjunctions containsObject:wd.lowerCase];
             BOOL lastAndComplete = i == (ws.count - 1) && !sp.lastUnknownSearchWordComplete;
+            BOOL decryptAbbreviations = [self needDecryptAbbreviations];
             if (wd.length > 0 && (!conjunction || lastAndComplete))
             {
                 if (first)
                 {
-                    sp.firstUnknownSearchWord = [OAAbbreviations replace:wd];
+                    sp.firstUnknownSearchWord = decryptAbbreviations ? [OAAbbreviations replace:wd] : wd;
                     first = false;
                 }
                 else
                 {
-                    [sp.otherUnknownWords addObject:[OAAbbreviations replace:wd]];
+                    [sp.otherUnknownWords addObject: decryptAbbreviations? [OAAbbreviations replace:wd] : wd];
                 }
             }
         }
     }
     return sp;
+}
+
+- (BOOL) needDecryptAbbreviations
+{
+    NSString *langs = _settings ? [_settings getRegionLang] : nil;
+    if (langs)
+    {
+        NSArray<NSString *> *langArr = [langs componentsSeparatedByString:@","];
+        for (NSString *lang in langArr)
+        {
+            if ([lang isEqualToString:@"en"])
+                return YES;
+        }
+    }
+    return NO;
 }
 
 - (instancetype) initWithSettings:(OASearchSettings *)settings
@@ -242,9 +258,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
             break;
         }
     }
-    OASearchPhrase *sp = [self createNewSearchPhrase:settings fullText:text foundWords:foundWords textToSearch:textToSearch];
-    
-    return sp;
+    return [self createNewSearchPhrase:settings fullText:text foundWords:foundWords textToSearch:textToSearch];;
 }
 
 - (NSString *) normalizeSearchText:(NSString *)s
@@ -340,7 +354,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     NSMutableArray<NSString *> *unknownSearchWords = _otherUnknownWords;
     _mainUnknownWordToSearch = _firstUnknownSearchWord;
     _mainUnknownSearchWordComplete = _lastUnknownSearchWordComplete;
-    if (unknownSearchWords.count > 0)
+    if (unknownSearchWords && unknownSearchWords.count > 0)
     {
         _mainUnknownSearchWordComplete = YES;
         NSMutableArray<NSString *> *searchWords = [NSMutableArray arrayWithArray:unknownSearchWords];
@@ -690,6 +704,10 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return _unknownWordsMatcher[i];
 }
 
+- (OANameStringMatcher *) getFullNameStringMatcher
+{
+    return [self getNameStringMatcher:_fullTextSearchPhrase complete:NO];
+}
 
 - (OANameStringMatcher *) getNameStringMatcher:(NSString *)word complete:(BOOL)complete
 {

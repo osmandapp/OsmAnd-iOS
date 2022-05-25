@@ -1203,14 +1203,17 @@
     if (![source.resourceId hasPrefix:@"skimap"])
     {
         OAMapStyleParameter *ski = [_styleSettings getParameter:PISTE_ROUTES_ATTR];
-        ski.value = @"false";
-        [_styleSettings save:ski];
-
-        if ([_routesWithGroup containsObject:PISTE_ROUTES_ATTR])
+        if (ski && ![ski.value isEqualToString:@"false"])
         {
-            NSMutableArray *routesWithGroup = [_routesWithGroup mutableCopy];
-            [routesWithGroup removeObject:PISTE_ROUTES_ATTR];
-            _routesWithGroup = routesWithGroup;
+            ski.value = @"false";
+            [_styleSettings save:ski];
+
+            if ([_routesWithGroup containsObject:PISTE_ROUTES_ATTR])
+            {
+                NSMutableArray *routesWithGroup = [_routesWithGroup mutableCopy];
+                [routesWithGroup removeObject:PISTE_ROUTES_ATTR];
+                _routesWithGroup = routesWithGroup;
+            }
         }
     }
     else

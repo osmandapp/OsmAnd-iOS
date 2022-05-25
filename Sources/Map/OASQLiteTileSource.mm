@@ -461,7 +461,7 @@
         if (db->obtainMeta(meta))
             res = !meta.getUrl().isEmpty();
         
-        db->close();
+        db->close(false);
     }
     delete db;
     return res;
@@ -477,7 +477,7 @@
         OsmAnd::TileSqliteDatabase::Meta meta;
         if (db->obtainMeta(meta))
             title = meta.getTitle().toNSString();
-        db->close();
+        db->close(false);
     }
 
     delete db;

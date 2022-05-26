@@ -30,6 +30,8 @@
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
+#define TEST_LOCAL_PURCHASE NO
+
 typedef enum : NSUInteger {
     EOARequestProductsProgressType,
     EOAPurchaseProductProgressType,
@@ -576,6 +578,9 @@ typedef enum : NSUInteger {
 
 - (BOOL) requestProductsWithProgress:(BOOL)showProgress reload:(BOOL)reload restorePurchases:(BOOL)restore
 {
+    if (TEST_LOCAL_PURCHASE && restore)
+        return [self restorePurchasesWithProgress:NO];
+
     if (![_iapHelper productsLoaded] || reload)
     {
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
@@ -634,6 +639,13 @@ typedef enum : NSUInteger {
 
 - (BOOL) restorePurchasesWithProgress:(BOOL)showProgress
 {
+    if (TEST_LOCAL_PURCHASE)
+    {
+        [_iapHelper buyProduct:_iapHelper.proAnnually];
+        [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRestoredNotification object:nil userInfo:nil];
+        return YES;
+    }
+
     if (![_iapHelper productsLoaded])
         return NO;
 
@@ -664,8 +676,10 @@ typedef enum : NSUInteger {
 - (void) requestingPurchase:(SKPayment *)payment
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_iapHelper.liveUpdates getPurchasedSubscription])
+        if ([_iapHelper.subscriptionList getPurchasedSubscription])
+        {
             [self.class showInfoAlertWithTitle:@"" message:OALocalizedString(@"already_has_subscription") inController:self];
+        }
         else
         {
             OAProduct *p = [_iapHelper product:payment.productIdentifier];
@@ -679,7 +693,7 @@ typedef enum : NSUInteger {
                 }
                 else
                 {
-                    [OAChoosePlanHelper showChoosePlanScreenWithProduct:p navController:self.navigationController purchasing:YES];
+                    [OAChoosePlanHelper showChoosePlanScreenWithProduct:p navController:self.navigationController];
                     // todo
                     [[SKPaymentQueue defaultQueue] addPayment:payment];
                 }

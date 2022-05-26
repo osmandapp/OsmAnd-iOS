@@ -553,6 +553,9 @@
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_any" = "Any";
 "shared_string_capacity" = "Capacity";
+"shared_string_learn_more" = "Learn more";
+"shared_string_includes" = "Includes";
+"shared_string_purchased" = "Purchased";
 
 "restart" = "Restart";
 
@@ -1046,6 +1049,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
+"ltr_or_rtl_combine_via_or" = "%@ or %@";
 
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
 
@@ -1995,6 +1999,7 @@
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
 "restore" = "Restore";
 "restore_all_purchases" = "Restore all purchases";
+"restore_purchase" = "Restore purchase";
 
 "no_statistics" = "No statistics";
 
@@ -2151,6 +2156,7 @@
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
 "osm_live_payment_annual_title" = "Pay once a year";
 "osm_live_payment_month_cost_descr" = "%@ / month";
+"osm_live_payment_year_cost_descr" = "%@ / year";
 "osm_live_payment_month_cost_descr_ex" = "%@ %@ / month";
 "osm_live_payment_discount_descr" = "Save %@!";
 "osm_live_payment_current_subscription" = "Your current subscription";
@@ -2171,9 +2177,9 @@
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Unlimited downloads";
 "wikipedia_offline" = "Wikipedia offline";
-"contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
-"monthly_map_updates" = "Map updates: every month";
-"daily_map_updates" = "Map updates: every hour";
+"contour_lines_hillshade_maps" = "Terrain maps: contour lines, hillshades, slope";
+"monthly_map_updates" = "Monthly map updates";
+"daily_map_updates" = "Hourly map updates";
 "index_item_depth_contours_osmand_ext" = "Nautical depth contours";
 "donation_to_osm" = "Donation to OpenStreetMap community";
 "purchase_unlim_title" = "Buy - %@";
@@ -2640,6 +2646,51 @@
 "share_geo" = "geo:";
 "toast_empty_name_error" = "Unnamed location";
 
+"pro_features" = "Pro Features";
+"unlimited_map_downloads" = "Unlimited map downloads";
+"carplay" = "CarPlay";
+"wikipedia_and_wikivoyage_offline" = "Wikipedia and Wikivoyage offline";
+"nautical_depth" = "Nautical depth";
+"terrain_maps" = "Terrain maps";
+
+"purchases_feature_desc_osmand_cloud" = "Get OsmAnd Cloud to store all OsmAnd data online. No lost data after reinstalling. Back up and restore all info easily.";
+"purchases_feature_desc_pro_widgets" = "Get access to OsmAnd Pro features: Route coloring and more.";
+"purchases_feature_desc_hourly_map_updates" = "Get access to more frequent map updates. Hourly, daily, or weekly updates. Updates are downloaded incrementally, only for the changed area.";
+"purchases_feature_desc_monthly_map_updates" = "Get access to regular monthly updates for offline maps.";
+"purchases_feature_desc_unlimited_map_download" = "Get unlimited downloads for all continents and regions offline maps.";
+"purchases_feature_desc_carplay" = "Brings OsmAnd offline maps and navigation to your vehicle screen and integrates with your vehicle\'s controls.";
+"purchases_feature_desc_combined_wiki" = "Explore Wikipedia articles on the go, without an internet connection. Offline data divided by countries and available in all languages.";
+"purchases_feature_desc_wikipedia" = "Explore Wikipedia offline. Articles divided by countries and regions and available in all languages.";
+"purchases_feature_desc_wikivoyage" = "Explore Wikivoyage offline. Articles divided by countries and regions and available in all languages.";
+"purchases_feature_desc_terrain" = "Terrain contour lines, full hillshade map with dark shades and slope maps with colors to show peaks and lowlands.";
+"purchases_feature_desc_nautical" = "Get access to nautical depth information";
+"purchases_feature_weather" = "";
+"you_can_get_feature_as_part_of_pattern" = "Get “%@” as part of the %@ plan. Comparison:";
+
+"monthly_subscription" = "Monthly subscription";
+"annually" = "Annually";
+
+"option_available_only_by_subscription" = "Available by subscription";
+"subscriptions" = "Subscriptions";
+
+"product_title_pro_monthly" = "OsmAnd Pro";
+"product_desc_pro_monthly" = "Get maximum features";
+"product_title_pro_annually" = "OsmAnd Pro";
+"product_desc_pro_annually" = "Get maximum features";
+"product_title_maps_annually" = "Maps+";
+"product_desc_maps_annually" = "Get extended features";
+"product_title_maps_full" = "Maps+";
+"product_desc_maps_full" = "Get extended features";
+
+"osmand_pro" = "OsmAnd Pro";
+"maps_plus" = "Maps+";
+"not_available_with" = "Not available with %@";
+"continue_with" = "Continue with %@";
+"complete_purchase" = "Complete purchase";
+"subscription_cancel_description" = "Cancel anytime in AppStore.";
+
+"osm_live_payment_subscription_management_aid" = "Payment will be charged to your Apple ID account at the confirmation of purchase.\n\nSubscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.\n\nYou can manage and cancel your subscriptions by going to your account settings on the App Store after purchase";
+
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
@@ -2671,7 +2722,7 @@
 • Added Finnish localization\n
 • Fixed UI in landscape orientation for \"Plan a route\" screen\n
 • Added support for custom routing and rendering files\n
-• Fixed performance of markers direction line\n 
+• Fixed performance of markers direction line\n
 • Fixed issue with importing GPX files with uppercase extensions\n
 • Fixed issue with \"Follow track\" menu\n
 • Fixed import of OBF files\n";

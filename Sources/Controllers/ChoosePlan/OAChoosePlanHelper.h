@@ -12,12 +12,68 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAProduct;
 
+typedef NS_ENUM(NSUInteger, EOAFeature)
+{
+    EOAFeatureCloud = 0,
+    EOAFeatureAdvancedWidgets,
+    EOAFeatureHourlyMapUpdates,
+    EOAFeatureMonthlyMapUpdates,
+    EOAFeatureUnlimitedMapDownloads,
+    EOAFeatureCarPlay,
+    EOAFeatureCombinedWiki,
+    EOAFeatureWikipedia,
+    EOAFeatureWikivoyage,
+    EOAFeatureTerrain,
+    EOAFeatureNautical,
+    EOAFeatureWeather,
+
+    EOAFeatureRegionAfrica,
+    EOAFeatureRegionRussia,
+    EOAFeatureRegionAsia,
+    EOAFeatureRegionAustralia,
+    EOAFeatureRegionEurope,
+    EOAFeatureRegionCentralAmerica,
+    EOAFeatureRegionNorthAmerica,
+    EOAFeatureRegionSouthAmerica
+};
+
+@interface OAFeature : NSObject
+
+- (instancetype) initWithFeature:(EOAFeature)feature;
+
+- (NSString *)getTitle;
+- (NSString *)getListTitle;
+- (NSString *)getDescription;
+
+- (UIImage *)getIcon;
+- (UIImage *)getIconBig;
+
+- (BOOL)isAvailableInMapsPlus;
+
++ (OAFeature *)OSMAND_CLOUD;
++ (OAFeature *)ADVANCED_WIDGETS;
++ (OAFeature *)HOURLY_MAP_UPDATES;
++ (OAFeature *)MONTHLY_MAP_UPDATES;
++ (OAFeature *)UNLIMITED_MAP_DOWNLOADS;
++ (OAFeature *)CARPLAY;
++ (OAFeature *)COMBINED_WIKI;
++ (OAFeature *)WIKIPEDIA;
++ (OAFeature *)WIKIVOYAGE;
++ (OAFeature *)TERRAIN;
++ (OAFeature *)NAUTICAL;
++ (OAFeature *)WEATHER;
+
++ (NSArray<OAFeature *> *)OSMAND_PRO_FEATURES;
++ (NSArray<OAFeature *> *)OSMAND_PRO_PREVIEW_FEATURES;
++ (NSArray<OAFeature *> *)MAPS_PLUS_FEATURES;
++ (NSArray<OAFeature *> *)MAPS_PLUS_PREVIEW_FEATURES;
+
+@end
+
 @interface OAChoosePlanHelper : NSObject
 
 + (void) showChoosePlanScreenWithSuffix:(NSString *)productIdentifierSuffix navController:(UINavigationController *)navController;
-
 + (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController;
-+ (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController purchasing:(BOOL)purchasing;
 
 @end
 

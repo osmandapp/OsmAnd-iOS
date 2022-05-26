@@ -53,6 +53,7 @@
 #define fullVersionPurchasedKey @"fullVersionPurchasedKey"
 #define depthContoursPurchasedKey @"depthContoursPurchasedKey"
 #define contourLinesPurchasedKey @"contourLinesPurchasedKey"
+#define wikipediaPurchasedKey @"wikipediaPurchasedKey"
 #define emailSubscribedKey @"emailSubscribedKey"
 #define osmandProPurchasedKey @"osmandProPurchasedKey"
 #define osmandMapsPurchasedKey @"osmandMapsPurchasedKey"
@@ -3333,6 +3334,7 @@
         _fullVersionPurchased = [[OACommonBoolean withKey:fullVersionPurchasedKey defValue:NO] makeGlobal];
         _depthContoursPurchased = [[OACommonBoolean withKey:depthContoursPurchasedKey defValue:NO] makeGlobal];
         _contourLinesPurchased = [[OACommonBoolean withKey:contourLinesPurchasedKey defValue:NO] makeGlobal];
+        _wikipediaPurchased = [[OACommonBoolean withKey:wikipediaPurchasedKey defValue:NO] makeGlobal];
         _emailSubscribed = [[OACommonBoolean withKey:emailSubscribedKey defValue:NO] makeGlobal];
         _osmandProPurchased = [[OACommonBoolean withKey:osmandProPurchasedKey defValue:NO] makeGlobal];
         _osmandMapsPurchased = [[OACommonBoolean withKey:osmandMapsPurchasedKey defValue:NO] makeGlobal];
@@ -3356,6 +3358,7 @@
         [_globalPreferences setObject:_fullVersionPurchased forKey:@"billing_full_version_purchased"];
         [_globalPreferences setObject:_depthContoursPurchased forKey:@"billing_sea_depth_purchased"];
         [_globalPreferences setObject:_contourLinesPurchased forKey:@"billing_srtm_purchased"];
+        [_globalPreferences setObject:_wikipediaPurchased forKey:@"billing_wiki_purchased"];
         [_globalPreferences setObject:_emailSubscribed forKey:@"email_subscribed"];
         [_globalPreferences setObject:_osmandProPurchased forKey:@"billing_osmand_pro_purchased"];
         [_globalPreferences setObject:_osmandMapsPurchased forKey:@"billing_osmand_maps_purchased"];

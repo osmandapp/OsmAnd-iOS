@@ -7,15 +7,14 @@
 //
 
 #import "OAPluginPopupViewController.h"
-#import "OAUtilities.h"
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
 #import "OAResourcesUIHelper.h"
 #import "OAPluginsViewController.h"
-#import "OAWorldRegion.h"
 #import "OAColors.h"
+#import "OAChoosePlanHelper.h"
 
 static NSMutableArray *activePopups;
 
@@ -320,6 +319,7 @@ static NSMutableArray *activePopups;
     NSString *descText;
     NSString *okButtonName;
     NSString *cancelButtonName;
+    NSString *iconName;
 
     OAIAPHelper *helper = [OAIAPHelper sharedInstance];
     OAProduct *product;
@@ -371,14 +371,51 @@ static NSMutableArray *activePopups;
 
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
+    else if ([kInAppId_Addon_DepthContours isEqualToString:productIdentifier])
+    {
+        needShow = YES;
+
+        title = OALocalizedString(@"product_title_sea_depth_contours");
+        descText = OALocalizedString(@"option_available_only_by_subscription");
+        okButtonName = OALocalizedString(@"subscriptions");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+        iconName = @"ic_custom_nautical_depth_colored_day";
+        popup.okButton.tag = EOAFeatureNautical;
+
+        [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else if ([kInAppId_Addon_CarPlay isEqualToString:productIdentifier])
+    {
+        needShow = YES;
+
+        title = OALocalizedString(@"carplay");
+        descText = OALocalizedString(@"option_available_only_by_subscription");
+        okButtonName = OALocalizedString(@"subscriptions");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+        iconName = @"ic_custom_carplay_colored";
+        popup.okButton.tag = EOAFeatureCarPlay;
+
+        [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else if ([kInAppId_Addon_Advanced_Widgets isEqualToString:productIdentifier])
+    {
+        needShow = YES;
+
+        title = OALocalizedString(@"pro_features");
+        descText = OALocalizedString(@"option_available_only_by_subscription");
+        okButtonName = OALocalizedString(@"subscriptions");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+        iconName = @"ic_custom_advanced_widgets_colored_day";
+        popup.okButton.tag = EOAFeatureAdvancedWidgets;
+
+        [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
+    }
     
     if (needShow)
     {
-        NSString *iconName = [product productIconName];
-        
         UIViewController *top = [OARootViewController instance].navigationController.topViewController;
         
-        popup.icon.image = [UIImage templateImageNamed:iconName];
+        popup.icon.image = [UIImage templateImageNamed:iconName ? iconName : [product productIconName]];
         popup.icon.tintColor = UIColorFromRGB(plugin_icon_green);
         popup.titleLabel.text = title;
         
@@ -543,6 +580,20 @@ static NSMutableArray *activePopups;
 {
     OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
     [self.navigationController pushViewController:pluginsViewController animated:NO];
+    [self hide];
+}
+
+- (void) goToSubscriptions:(UIButton *)sender
+{
+    OAProduct *product;
+    if (sender.tag == EOAFeatureNautical)
+        product = [OAIAPHelper sharedInstance].nautical;
+    else if (sender.tag == EOAFeatureCarPlay)
+        product = [OAIAPHelper sharedInstance].carplay;
+    else if (sender.tag == EOAFeatureAdvancedWidgets)
+        product = [OAIAPHelper sharedInstance].proMonthly;
+
+    [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
     [self hide];
 }
 

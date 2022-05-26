@@ -7,17 +7,11 @@
 //
 
 #import "OAPurchasesViewController.h"
+#import "OAPluginDetailsViewController.h"
 #import "OAIAPHelper.h"
 #import "OAInAppCell.h"
-#import <StoreKit/StoreKit.h>
-#import "OALog.h"
 #import "OAResourcesUIHelper.h"
-#import "OsmAndApp.h"
-#include "Localization.h"
-#import "OAUtilities.h"
-#import <Reachability.h>
-#import <MBProgressHUD.h>
-#import "OASizes.h"
+#import "Localization.h"
 #import "OARootViewController.h"
 #import "OAChoosePlanHelper.h"
 
@@ -30,18 +24,16 @@
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
-@property (weak, nonatomic) IBOutlet UIButton *btnRestorePurchases;
-
 @end
 
 @implementation OAPurchasesViewController
 {
     OAIAPHelper *_iapHelper;
-    NSNumberFormatter *_numberFormatter;
 
     CALayer *_horizontalLine;
     NSArray<OAProduct *> *_addonsPurchased;
-    
+    NSArray<OAProduct *> *_mapsPurchased;
+
     NSInteger _pluginsSection;
     NSInteger _mapsSection;
     NSInteger _restoreSection;
@@ -58,20 +50,7 @@
     [super viewDidLoad];
 
     _iapHelper = [OAIAPHelper sharedInstance];
-    
-    _addonsPurchased = _iapHelper.inAppAddonsPurchased;
-    NSInteger index = 0;
-    if (_addonsPurchased.count > 0)
-        _pluginsSection = index++;
-    else
-        _pluginsSection = -1;
-    
-    _mapsSection = index++;
-    _restoreSection = index;
-
-    _numberFormatter = [[NSNumberFormatter alloc] init];
-    [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-    [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+    [self generateData];
 
     if (self.openFromSplash)
     {
@@ -84,6 +63,28 @@
 {
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+}
+
+- (void) generateData
+{
+    _mapsPurchased = _iapHelper.inAppMapsPurchased;
+    _addonsPurchased = _iapHelper.inAppAddonsPurchased;
+    if ([OAIAPHelper isDepthContoursPurchased])
+        _addonsPurchased = [_addonsPurchased arrayByAddingObject:_iapHelper.nautical];
+
+    NSInteger index = 0;
+
+    if (_addonsPurchased.count > 0)
+        _pluginsSection = index++;
+    else
+        _pluginsSection = -1;
+
+    if (_mapsPurchased.count > 0)
+        _mapsSection = index++;
+    else
+        _mapsSection = -1;
+
+    _restoreSection = index;
 }
 
 - (UIView *) getTopView
@@ -123,6 +124,7 @@
 - (void) productsRequested:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
         [self.tableView reloadData];
         CATransition *animation = [CATransition animation];
         [animation setType:kCATransitionPush];
@@ -146,7 +148,7 @@
     if (section == _pluginsSection)
         return [_addonsPurchased count];
     else if (section == _mapsSection)
-        return [_iapHelper.inAppMaps count];
+        return [_mapsPurchased count];
     else if (section == _restoreSection)
         return 1;
     else
@@ -182,7 +184,6 @@
         [UIView performWithoutAnimation:^{
             cell.btnPrice.userInteractionEnabled = NO;
             
-            NSString *identifier;
             NSString *title;
             NSString *desc;
             NSString *price;
@@ -191,21 +192,22 @@
             BOOL disabled = YES;
 
             OAProduct *product = nil;
+            BOOL isNautical = NO;
             
             if (indexPath.section == _pluginsSection)
             {
                 product = _addonsPurchased[indexPath.row];
-                imgTitle = [UIImage imageNamed:[product productIconName]];
+                isNautical = [product isEqual:_iapHelper.nautical];
+                imgTitle = [UIImage imageNamed:isNautical ? @"ic_custom_nautical_depth_colored_day" : [product productIconName]];
                 if (!imgTitle)
                     imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
                 cell.imgIconBackground.layer.backgroundColor = UIColorFromRGB(0xF0F0F0).CGColor;
                 cell.imgIconBackground.hidden = NO;
                 cell.btnPrice.hidden = YES;
-                
             }
             else if (indexPath.section == _mapsSection)
             {
-                product = _iapHelper.inAppMaps[indexPath.row];
+                product = _mapsPurchased[indexPath.row];
                 imgTitle = [UIImage imageNamed:@"img_app_purchase_1.png"];
                 cell.imgIconBackground.hidden = YES;
                 cell.btnPrice.hidden = NO;
@@ -224,17 +226,10 @@
                 purchased = [product isPurchased];
                 disabled = product.disabled;
 
-                title = product.localizedTitle;
-                desc = product.localizedDescription;
-                if (product.price)
-                {
-                    [_numberFormatter setLocale:product.priceLocale];
-                    price = [_numberFormatter stringFromNumber:product.price];
-                }
-                else
-                {
+                title = isNautical ? OALocalizedString(@"product_title_sea_depth_contours") : product.localizedTitle;
+                desc = isNautical ? OALocalizedString(@"product_desc_sea_depth_contours") : product.localizedDescription;
+                if (!product.free)
                     price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
-                }
             }
             
             [cell.imgIcon setImage:imgTitle];
@@ -262,7 +257,7 @@
     if (indexPath.section == _pluginsSection)
         product = _addonsPurchased[indexPath.row];
     else if (indexPath.section == _mapsSection)
-        product = _iapHelper.inAppMaps[indexPath.row];
+        product = _mapsPurchased[indexPath.row];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -293,6 +288,7 @@
 - (void) productPurchased:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
         [self.tableView reloadData];
     });
 }
@@ -303,6 +299,7 @@
     int errorsCount = errorsCountObj.intValue;
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
         [self.tableView reloadData];
     });
 }

@@ -11,6 +11,7 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAIAPHelper.h"
+#import "OAChoosePlanHelper.h"
 
 @interface OAFunctionalAddon()
 
@@ -462,8 +463,6 @@
 @property(nonatomic, copy, nullable) NSString *subscriptionGroupIdentifier;
 @property(nonatomic) NSArray<OAProductDiscount *> *discounts;
 
-- (BOOL) isLiveUpdatesPurchased;
-
 @end
 
 @implementation OAProduct
@@ -574,11 +573,6 @@
     return [[NSUserDefaults standardUserDefaults] boolForKey:self.productIdentifier];
 }
 
-- (BOOL) isLiveUpdatesPurchased
-{
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"liveUpdatesPurchasedKey"];
-}
-
 - (NSString *) getDisabledId
 {
     return [self.productIdentifier stringByAppendingString:@"_disabled"];
@@ -642,7 +636,51 @@
 
 - (BOOL) isPurchased
 {
-    return self.purchaseState == PSTATE_PURCHASED || [self isAlreadyPurchased] || [self isLiveUpdatesPurchased];
+    BOOL purchased = self.purchaseState == PSTATE_PURCHASED || [self isAlreadyPurchased];
+    if (!purchased)
+    {
+        if (!purchased && [self isKindOfClass:OASubscription.class])
+        {
+            if ([OAIAPHelper isLiveUpdatesSubscription:self])
+                purchased = [OAIAPHelper isSubscribedToLiveUpdates];
+            else if ([OAIAPHelper isOsmAndProSubscription:self])
+                purchased = [OAIAPHelper isOsmAndProAvailable];
+            else if ([OAIAPHelper isMapsSubscription:self])
+                purchased = [OAIAPHelper isSubscribedToMaps];
+        }
+        else if (!purchased && [self isKindOfClass:OAProduct.class])
+        {
+            if ([self.productIdentifier isEqualToString:kInAppId_Addon_Srtm])
+                purchased = [OAIAPHelper isContourLinesPurchased];
+            else if ([self.productIdentifier isEqualToString:kInAppId_Addon_Wiki])
+                purchased = [OAIAPHelper isWikipediaPurchased];
+
+            if (!purchased)
+            {
+                OASubscription *subscription = [[[OAIAPHelper sharedInstance] subscriptionList] getPurchasedSubscription];
+                if (subscription)
+                {
+                    if ([OAIAPHelper isLiveUpdatesSubscription:subscription] && self.feature)
+                    {
+                        NSMutableArray<OAFeature *> *allFeatures = [NSMutableArray arrayWithArray:OAFeature.OSMAND_PRO_FEATURES];
+                        [allFeatures removeObject:OAFeature.OSMAND_CLOUD];
+                        [allFeatures removeObject:OAFeature.ADVANCED_WIDGETS];
+                        [allFeatures removeObject:OAFeature.WEATHER];
+                        purchased = [allFeatures containsObject:self.feature];
+                    }
+                    else if ([OAIAPHelper isOsmAndProSubscription:subscription])
+                    {
+                        purchased = YES;
+                    }
+                    else if ([OAIAPHelper isMapsSubscription:subscription] && self.feature)
+                    {
+                        purchased = [self.feature isAvailableInMapsPlus];
+                    }
+                }
+            }
+        }
+    }
+    return purchased;
 }
 
 - (BOOL) isActive
@@ -784,6 +822,16 @@
     if (self)
     {
         self.identifierNoVersion = identifierNoVersion;
+
+        NSString *postfix = [[identifierNoVersion componentsSeparatedByString:@"."] lastObject];
+        NSString *locTitleId = [@"product_title_" stringByAppendingString:postfix];
+        NSString *locDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
+        NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];
+
+        self.localizedTitle = OALocalizedString(locTitleId);
+        self.localizedDescription = OALocalizedString(locDescriptionId);
+        self.localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
+
         [self commonInit];
     }
     return self;
@@ -911,6 +959,22 @@
     else
         price = [self getDefaultMonthlyPrice];
     
+    if (price)
+    {
+        NSNumberFormatter *numberFormatter = [self getNumberFormatter:self.priceLocale];
+        return [numberFormatter stringFromNumber:price];
+    }
+    return nil;
+}
+
+- (NSString *) formattedPrice
+{
+    NSDecimalNumber *price;
+    if (self.price)
+        price = self.price;
+    else
+        price = [self getDefaultPrice];
+
     if (price)
     {
         NSNumberFormatter *numberFormatter = [self getNumberFormatter:self.priceLocale];
@@ -1051,6 +1115,11 @@
     return self;
 }
 
+- (OAFeature *) feature
+{
+    return OAFeature.HOURLY_MAP_UPDATES;
+}
+
 - (void) setPrice:(NSDecimalNumber *)price
 {
     [super setPrice:price];
@@ -1113,6 +1182,11 @@
     return self;
 }
 
+- (OAFeature *) feature
+{
+    return OAFeature.HOURLY_MAP_UPDATES;
+}
+
 - (void) setPrice:(NSDecimalNumber *)price
 {
     [super setPrice:price];
@@ -1164,6 +1238,11 @@
     return self;
 }
 
+- (OAFeature *) feature
+{
+    return OAFeature.HOURLY_MAP_UPDATES;
+}
+
 - (void) setPrice:(NSDecimalNumber *)price
 {
     [super setPrice:price];
@@ -1207,6 +1286,248 @@
 
 @end
 
+@implementation OAProSubscriptionMonthly
+
+- (instancetype) initWithVersion:(int)version
+{
+    self = [self initWithIdentifierNoVersion:kSubscriptionId_Pro_Subscription_Monthly version:version];
+    return self;
+}
+
+- (instancetype) initWithIdentifierNoVersion:(NSString *)identifierNoVersion version:(int)version
+{
+    self = [super initWithIdentifierNoVersion:identifierNoVersion version:version];
+    if (self)
+    {
+        self.donationSupported = YES;
+    }
+    return self;
+}
+
+- (instancetype) initWithIdentifier:(NSString *)productIdentifier;
+{
+    self = [super initWithIdentifier:productIdentifier];
+    if (self)
+    {
+        self.donationSupported = YES;
+    }
+    return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.ADVANCED_WIDGETS;
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_custom_osmand_pro_logo_colored";
+}
+
+- (void) setPrice:(NSDecimalNumber *)price
+{
+    [super setPrice:price];
+    self.monthlyPrice = price;
+}
+
+- (NSString *) formattedPrice
+{
+    NSString *price = [super formattedPrice];
+
+    if (price && price.length > 0)
+        return [NSString stringWithFormat:@"%@ / %@", price, [OALocalizedString(@"month") lowerCase]];
+
+    return nil;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Pro_Monthly_Price];
+}
+
+- (NSDecimalNumber *) getDefaultMonthlyPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Pro_Monthly_Price];
+}
+
+- (NSAttributedString *) getTitle:(CGFloat)fontSize
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_monthly_title")];
+}
+
+- (NSAttributedString *) getRenewDescription:(CGFloat)fontSize
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_monthly")];
+}
+
+- (OASubscription *) newInstance:(NSString *)productIdentifier
+{
+    return [productIdentifier hasPrefix:self.identifierNoVersion] ? [[OAProSubscriptionMonthly alloc] initWithIdentifier:productIdentifier] : nil;
+}
+
+@end
+
+@implementation OAProSubscriptionAnnually
+
+- (instancetype) initWithVersion:(int)version
+{
+    self = [super initWithIdentifierNoVersion:kSubscriptionId_Pro_Subscription_Annually version:version];
+    return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.ADVANCED_WIDGETS;
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_custom_osmand_pro_logo_colored";
+}
+
+- (void) setPrice:(NSDecimalNumber *)price
+{
+    [super setPrice:price];
+    self.monthlyPrice = [[NSDecimalNumber alloc] initWithDouble:price.doubleValue / 12.0];
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Pro_Annually_Price];
+}
+
+- (NSDecimalNumber *) getDefaultMonthlyPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Pro_Monthly_Price];
+}
+
+- (NSString *) formattedPrice
+{
+    NSString *price = [super formattedPrice];
+
+    if (price && price.length > 0)
+        return [NSString stringWithFormat:@"%@ / %@", price, [OALocalizedString(@"year") lowerCase]];
+
+    return nil;
+}
+
+- (NSAttributedString *) getTitle:(CGFloat)fontSize
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_annual_title")];
+}
+
+- (NSAttributedString *) getRenewDescription:(CGFloat)fontSize
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_annually")];
+}
+
+- (OASubscription *) newInstance:(NSString *)productIdentifier
+{
+    return [productIdentifier hasPrefix:self.identifierNoVersion] ? [[OAProSubscriptionAnnually alloc] initWithIdentifier:productIdentifier] : nil;
+}
+
+@end
+
+@implementation OAMapsSubscriptionAnnually
+
+- (instancetype) initWithVersion:(int)version
+{
+    self = [super initWithIdentifierNoVersion:kSubscriptionId_Maps_Subscription_Annually version:version];
+    return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.MONTHLY_MAP_UPDATES;
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_custom_osmand_maps_plus";
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Maps_Annually_Price];
+}
+
+- (NSString *) formattedPrice
+{
+    NSString *price = [super formattedPrice];
+
+    if (price && price.length > 0)
+        return [NSString stringWithFormat:@"%@ / %@", price, [OALocalizedString(@"year") lowerCase]];
+
+    return nil;
+}
+
+- (NSAttributedString *) getTitle:(CGFloat)fontSize
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_annual_title")];
+}
+
+- (NSAttributedString *) getRenewDescription:(CGFloat)fontSize
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_annually")];
+}
+
+- (OASubscription *) newInstance:(NSString *)productIdentifier
+{
+    return [productIdentifier hasPrefix:self.identifierNoVersion] ? [[OAMapsSubscriptionAnnually alloc] initWithIdentifier:productIdentifier] : nil;
+}
+
+@end
+
+@implementation OAMapsSubscriptionFull
+
+- (instancetype) initWithVersion:(int)version
+{
+    self = [super initWithIdentifierNoVersion:kSubscriptionId_Maps_Subscription_Full version:version];
+    return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.MONTHLY_MAP_UPDATES;
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_custom_osmand_maps_plus";
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Maps_Full_Price];
+}
+
+- (NSString *) formattedPrice
+{
+    NSString *price = [super formattedPrice];
+
+    if (price && price.length > 0)
+        return price;
+
+    return nil;
+}
+
+- (NSAttributedString *) getTitle:(CGFloat)fontSize
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"in_app_purchase_desc")];
+}
+
+- (NSAttributedString *) getRenewDescription:(CGFloat)fontSize
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"in_app_purchase_desc")];
+}
+
+- (OASubscription *) newInstance:(NSString *)productIdentifier
+{
+    return [productIdentifier hasPrefix:self.identifierNoVersion] ? [[OAMapsSubscriptionFull alloc] initWithIdentifier:productIdentifier] : nil;
+}
+
+@end
+
 
 @implementation OASkiMapProduct
 
@@ -1243,7 +1564,17 @@
 - (instancetype) init
 {
     self = [super initWithIdentifier:kInAppId_Addon_Nautical];
+    if (self)
+    {
+        self.free = YES;
+        [self commonInit];
+    }
     return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.NAUTICAL;
 }
 
 - (NSDecimalNumber *) getDefaultPrice
@@ -1331,6 +1662,11 @@
     return self;
 }
 
+- (OAFeature *) feature
+{
+    return OAFeature.WIKIPEDIA;
+}
+
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_Wiki_Default_Price];
@@ -1354,6 +1690,11 @@
 {
     self = [super initWithIdentifier:kInAppId_Addon_Srtm];
     return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.TERRAIN;
 }
 
 - (NSDecimalNumber *) getDefaultPrice
@@ -1471,6 +1812,11 @@
     return self;
 }
 
+- (OAFeature *) feature
+{
+    return OAFeature.WEATHER;
+}
+
 - (NSString *) productIconName
 {
     return @"ic_custom_umbrella";
@@ -1483,12 +1829,37 @@
 
 @end
 
+@implementation OACarPlayProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_CarPlay];
+    return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.CARPLAY;
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_custom_carplay_colored";
+}
+
+@end
+
 @implementation OAAllWorldProduct
 
 - (instancetype) init
 {
     self = [super initWithIdentifier:kInAppId_Region_All_World];
     return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.UNLIMITED_MAP_DOWNLOADS;
 }
 
 - (NSDecimalNumber *) getDefaultPrice
@@ -1506,6 +1877,11 @@
     return self;
 }
 
+- (OAFeature *) feature
+{
+    return OAFeature.UNLIMITED_MAP_DOWNLOADS;
+}
+
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Russia_Default_Price];
@@ -1519,6 +1895,11 @@
 {
     self = [super initWithIdentifier:kInAppId_Region_Antarctica];
     return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.UNLIMITED_MAP_DOWNLOADS;
 }
 
 - (NSDecimalNumber *) getDefaultPrice
@@ -1536,6 +1917,11 @@
     return self;
 }
 
+- (OAFeature *) feature
+{
+    return OAFeature.UNLIMITED_MAP_DOWNLOADS;
+}
+
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Africa_Default_Price];
@@ -1549,6 +1935,11 @@
 {
     self = [super initWithIdentifier:kInAppId_Region_Asia];
     return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.UNLIMITED_MAP_DOWNLOADS;
 }
 
 - (NSDecimalNumber *) getDefaultPrice
@@ -1566,6 +1957,11 @@
     return self;
 }
 
+- (OAFeature *) feature
+{
+    return OAFeature.UNLIMITED_MAP_DOWNLOADS;
+}
+
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Australia_Default_Price];
@@ -1579,6 +1975,11 @@
 {
     self = [super initWithIdentifier:kInAppId_Region_Europe];
     return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.UNLIMITED_MAP_DOWNLOADS;
 }
 
 - (NSDecimalNumber *) getDefaultPrice
@@ -1596,6 +1997,11 @@
     return self;
 }
 
+- (OAFeature *) feature
+{
+    return OAFeature.UNLIMITED_MAP_DOWNLOADS;
+}
+
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Central_America_Default_Price];
@@ -1611,6 +2017,11 @@
     return self;
 }
 
+- (OAFeature *) feature
+{
+    return OAFeature.UNLIMITED_MAP_DOWNLOADS;
+}
+
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_North_America_Default_Price];
@@ -1624,6 +2035,11 @@
 {
     self = [super initWithIdentifier:kInAppId_Region_South_America];
     return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.UNLIMITED_MAP_DOWNLOADS;
 }
 
 - (NSDecimalNumber *) getDefaultPrice
@@ -1645,6 +2061,7 @@
 @property (nonatomic) OAProduct *mapillary;
 @property (nonatomic) OAProduct *openPlaceReviews;
 @property (nonatomic) OAProduct *weather;
+@property (nonatomic) OAProduct *carplay;
 
 @property (nonatomic) OAProduct *allWorld;
 @property (nonatomic) OAProduct *russia;
@@ -1658,17 +2075,21 @@
 @property (nonatomic) OAProduct *southAmerica;
 
 @property (nonatomic) NSArray<OAProduct *> *inApps;
-@property (nonatomic) NSArray<OAProduct *> *inAppMaps;
-@property (nonatomic) NSArray<OAProduct *> *inAppAddons;
-
 @property (nonatomic) NSArray<OAProduct *> *inAppsFree;
 @property (nonatomic) NSArray<OAProduct *> *inAppsPaid;
-@property (nonatomic) NSArray<OAProduct *> *inAppAddonsPaid;
-@property (nonatomic) NSArray<OAProduct *> *inAppPurchased;
-@property (nonatomic) NSArray<OAProduct *> *inAppAddonsPurchased;
 
+@property (nonatomic) NSArray<OAProduct *> *inAppMaps;
+@property (nonatomic) NSArray<OAProduct *> *inAppMapsPaid;
+
+@property (nonatomic) NSArray<OAProduct *> *inAppAddons;
+@property (nonatomic) NSArray<OAProduct *> *inAppAddonsPaid;
+
+@property (nonatomic) OASubscription *proMonthly;
+@property (nonatomic) OASubscription *proAnnually;
+@property (nonatomic) OASubscription *mapsAnnually;
+@property (nonatomic) OASubscription *mapsFull;
 @property (nonatomic) OASubscription *monthlyLiveUpdates;
-@property (nonatomic) OASubscriptionList *liveUpdates;
+@property (nonatomic) OASubscriptionList *subscriptionList;
 
 @end
 
@@ -1689,6 +2110,7 @@
         self.mapillary = [[OAMapillaryProduct alloc] init];
         self.openPlaceReviews = [[OAOpenPlaceReviewsProduct alloc] init];
         self.weather = [[OAWeatherProduct alloc] init];
+        self.carplay = [[OACarPlayProduct alloc] init];
 
         self.allWorld = [[OAAllWorldProduct alloc] init];
         self.russia = [[OARussiaProduct alloc] init];
@@ -1700,7 +2122,7 @@
         self.centralAmerica = [[OACentralAmericaProduct alloc] init];
         self.northAmerica = [[OANorthAmericaProduct alloc] init];
         self.southAmerica = [[OASouthAmericaProduct alloc] init];
-        
+
         self.inAppAddons = @[self.skiMap,
                              self.nautical,
                              self.trackRecording,
@@ -1710,7 +2132,7 @@
                              self.osmEditing,
                              self.mapillary,
                              self.openPlaceReviews,
-//                             self.weather
+                             self.weather
         ];
 
         self.inAppMaps = @[self.allWorld,
@@ -1722,23 +2144,17 @@
                            self.centralAmerica,
                            self.northAmerica,
                            self.southAmerica];
-        
+
         self.inApps = [self.inAppAddons arrayByAddingObjectsFromArray:self.inAppMaps];
-        
+
         NSMutableArray<OAProduct *> *free = [NSMutableArray array];
         for (OAProduct *p in self.inApps)
+        {
             if (p.free)
                 [free addObject:p];
-        
+        }
         self.inAppsFree = free;
 
-        self.inAppsFree = @[self.skiMap,
-                            self.trackRecording,
-                            self.parking,
-                            self.osmEditing,
-                            self.mapillary,
-                            self.openPlaceReviews];
-        
         NSMutableArray<OAProduct *> *paid = self.inApps.mutableCopy;
         [paid removeObjectsInArray:self.inAppsFree];
 
@@ -1746,12 +2162,27 @@
         [paidAddons removeObjectsInArray:self.inAppsFree];
         self.inAppAddonsPaid = paidAddons;
 
-        self.monthlyLiveUpdates = [[OALiveUpdatesMonthly alloc] initWithVersion:1];
-        self.liveUpdates = [[OASubscriptionList alloc] initWithSubscriptions:@[self.monthlyLiveUpdates,
-                                                                               [[OALiveUpdates3Months alloc] initWithVersion:1],
-                                                                               [[OALiveUpdatesAnnual alloc] initWithVersion:1]]];
+        NSMutableArray<OAProduct *> *paidMaps = self.inAppMaps.mutableCopy;
+        [paidMaps removeObjectsInArray:self.inAppsFree];
+        self.inAppMapsPaid = paidMaps;
 
-        [paid addObjectsFromArray:self.liveUpdates.subscriptions];
+        self.monthlyLiveUpdates = [[OALiveUpdatesMonthly alloc] initWithVersion:1];
+        self.proMonthly = [[OAProSubscriptionMonthly alloc] initWithVersion:1];
+        self.proAnnually = [[OAProSubscriptionAnnually alloc] initWithVersion:1];
+        self.mapsAnnually = [[OAMapsSubscriptionAnnually alloc] initWithVersion:1];
+        self.mapsFull = [[OAMapsSubscriptionFull alloc] initWithVersion:1];
+
+        self.subscriptionList = [[OASubscriptionList alloc] initWithSubscriptions:@[
+                self.monthlyLiveUpdates,
+                [[OALiveUpdates3Months alloc] initWithVersion:1],
+                [[OALiveUpdatesAnnual alloc] initWithVersion:1],
+                self.proMonthly,
+                self.proAnnually,
+                self.mapsAnnually,
+                self.mapsFull
+        ]];
+
+        [paid addObjectsFromArray:self.subscriptionList.subscriptions];
         self.inAppsPaid = paid;
 
         [self buildFunctionalAddonsArray];
@@ -1763,9 +2194,21 @@
 {
     NSMutableArray<OAProduct *> *purchased = [NSMutableArray array];
     for (OAProduct *p in self.inAppsPaid)
+    {
         if ([p isPurchased])
             [purchased addObject:p];
-    
+    }
+    return purchased;
+}
+
+- (NSArray<OAProduct *> *) inAppMapsPurchased
+{
+    NSMutableArray<OAProduct *> *purchased = [NSMutableArray array];
+    for (OAProduct *p in self.inAppMapsPaid)
+    {
+        if ([p isPurchased])
+            [purchased addObject:p];
+    }
     return purchased;
 }
 
@@ -1791,15 +2234,17 @@
 - (OAProduct *) getProduct:(NSString *)productIdentifier
 {
     for (OAProduct *p in self.inApps)
+    {
         if ([p.productIdentifier isEqualToString:productIdentifier])
             return p;
-    
-    return [self.liveUpdates getSubscriptionByIdentifier:productIdentifier];
+    }
+
+    return [self.subscriptionList getSubscriptionByIdentifier:productIdentifier];
 }
 
 - (BOOL) updateProduct:(SKProduct *)skProduct
 {
-    OASubscription *s = [self.liveUpdates getSubscriptionByIdentifier:skProduct.productIdentifier];
+    OASubscription *s = [self.subscriptionList getSubscriptionByIdentifier:skProduct.productIdentifier];
     if (s)
     {
         s.skProduct = skProduct;
@@ -1815,20 +2260,11 @@
     return NO;
 }
 
-- (BOOL) anyMapPurchased
-{
-    for (OAProduct *p in self.inAppMaps)
-        if ([p isPurchased])
-            return YES;
-    
-    return NO;
-}
-
 - (BOOL) setPurchased:(NSString * _Nonnull)productIdentifier
 {
     OAProduct *product = [self getProduct:productIdentifier];
     if (!product)
-        product = [self.liveUpdates upgradeSubscription:productIdentifier];
+        product = [self.subscriptionList upgradeSubscription:productIdentifier];
 
     if (product)
     {
@@ -1843,7 +2279,7 @@
 {
     OAProduct *product = [self getProduct:productIdentifier];
     if (!product)
-        product = [self.liveUpdates upgradeSubscription:productIdentifier];
+        product = [self.subscriptionList upgradeSubscription:productIdentifier];
     
     if (product)
     {
@@ -1858,7 +2294,7 @@
 {
     OAProduct *product = [self getProduct:productIdentifier];
     if (!product)
-        product = [self.liveUpdates upgradeSubscription:productIdentifier];
+        product = [self.subscriptionList upgradeSubscription:productIdentifier];
     
     if (product)
     {
@@ -1924,7 +2360,7 @@
         addon.sortIndex = 3;
         [arr addObject:addon];
     }
-    
+
     [arr sortUsingComparator:^NSComparisonResult(OAFunctionalAddon *obj1, OAFunctionalAddon *obj2) {
         return obj1.sortIndex < obj2.sortIndex ? NSOrderedAscending : NSOrderedDescending;
     }];

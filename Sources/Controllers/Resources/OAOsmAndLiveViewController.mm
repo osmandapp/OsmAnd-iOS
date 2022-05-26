@@ -212,8 +212,8 @@ static const NSInteger sectionCount = 2;
     [self applySafeAreaMargins];
     [self setLastUpdateDate];
     [self adjustViews];
-    
-    if (!_iapHelper.subscribedToLiveUpdates)
+
+    if (!([OAIAPHelper isSubscribedToLiveUpdates] || [OAIAPHelper isSubscribedToOsmAndPro]))
     {
         OASubscription *cheapest = [_iapHelper getCheapestMonthlySubscription];
         if (cheapest && cheapest.formattedPrice)
@@ -229,7 +229,7 @@ static const NSInteger sectionCount = 2;
         _osmLiveBanner = nil;
     }
     self.tableView.tableHeaderView = _osmLiveBanner ? _osmLiveBanner : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
-    self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased];
+    self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased] || ![_iapHelper.proMonthly isAnyPurchased];
     
     [self updateContent];
 }
@@ -550,7 +550,7 @@ static const NSInteger sectionCount = 2;
                 label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
                 [label setFont:[UIFont systemFontOfSize:13]];
                 [label setText:[OALocalizedString(@"osmand_live_updates") upperCase]];
-                [button setOn:_settings.settingOsmAndLiveEnabled.get && _iapHelper.subscribedToLiveUpdates];
+                [button setOn:_settings.settingOsmAndLiveEnabled.get && ([OAIAPHelper isSubscribedToLiveUpdates] || [OAIAPHelper isSubscribedToOsmAndPro])];
                 [button addTarget:self action:@selector(sectionHeaderButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
                 [headerView addSubview:button];
                 [headerView addSubview:label];
@@ -582,7 +582,7 @@ static const NSInteger sectionCount = 2;
 {
     UISwitch *btn = (UISwitch *)sender;
     BOOL newValue = !_settings.settingOsmAndLiveEnabled.get;
-    if (!_iapHelper.subscribedToLiveUpdates)
+    if (!([OAIAPHelper isSubscribedToLiveUpdates] || [OAIAPHelper isSubscribedToOsmAndPro]))
     {
         newValue = NO;
         [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_ask_for_purchase") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];

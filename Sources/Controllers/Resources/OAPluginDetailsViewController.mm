@@ -209,9 +209,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     {
         title = _product.localizedTitle;
         desc = _product.localizedDescriptionExt;
-        if (_product.price)
-            price = _product.formattedPrice;
-        else
+        if (!_product.free)
             price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
     }
     else if (_screenType == EOAPluginScreenTypeCustomPlugin)

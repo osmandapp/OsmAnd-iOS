@@ -9,7 +9,7 @@
 #import <StoreKit/StoreKit.h>
 #import "OAProducts.h"
 
-#define kFreeMapsAvailableTotal 5
+#define kFreeMapsAvailableTotal 7
 
 UIKIT_EXTERN NSString *const OAIAPProductsRequestSucceedNotification;
 UIKIT_EXTERN NSString *const OAIAPProductsRequestFailedNotification;
@@ -33,6 +33,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 @property (nonatomic, readonly) OAProduct *mapillary;
 @property (nonatomic, readonly) OAProduct *openPlaceReviews;
 @property (nonatomic, readonly) OAProduct *weather;
+@property (nonatomic, readonly) OAProduct *carplay;
 
 @property (nonatomic, readonly) OAProduct *allWorld;
 @property (nonatomic, readonly) OAProduct *russia;
@@ -46,22 +47,26 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 @property (nonatomic, readonly) OAProduct *southAmerica;
 
 @property (nonatomic, readonly) OASubscription *monthlyLiveUpdates;
-@property (nonatomic, readonly) OASubscriptionList *liveUpdates;
-@property (nonatomic, readonly) BOOL subscribedToLiveUpdates;
+@property (nonatomic, readonly) OASubscription *proMonthly;
+@property (nonatomic, readonly) OASubscription *proAnnually;
+@property (nonatomic, readonly) OASubscription *mapsAnnually;
+@property (nonatomic, readonly) OASubscription *mapsFull;
+@property (nonatomic, readonly) OASubscriptionList *subscriptionList;
 
 @property (nonatomic, readonly) NSArray<OAProduct *> *inApps;
-@property (nonatomic, readonly) NSArray<OAProduct *> *inAppMaps;
-@property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddons;
-
 @property (nonatomic, readonly) NSArray<OAProduct *> *inAppsFree;
 @property (nonatomic, readonly) NSArray<OAProduct *> *inAppsPaid;
-@property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddonsPaid;
 @property (nonatomic, readonly) NSArray<OAProduct *> *inAppsPurchased;
+
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppMaps;
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppMapsPaid;
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppMapsPurchased;
+
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddons;
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddonsPaid;
 @property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddonsPurchased;
 
 + (OAIAPHelper *) sharedInstance;
-
-@property (nonatomic, readonly) BOOL isAnyMapPurchased;
 
 @property (nonatomic, readonly) NSArray<OAFunctionalAddon *> *functionalAddons;
 @property (nonatomic, readonly) OAFunctionalAddon *singleAddon;
@@ -80,5 +85,22 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 + (int) freeMapsAvailable;
 + (void) increaseFreeMapsCount:(int)count;
 + (void) decreaseFreeMapsCount;
+
++ (BOOL) isPaidVersion;
+
++ (BOOL) isSubscribedToMaps;
++ (BOOL) isSubscribedToLiveUpdates;
++ (BOOL) isSubscribedToOsmAndPro;
++ (BOOL) isSubscribedToPromo;
++ (BOOL) isOsmAndProAvailable;
++ (BOOL) isCarPlayAvailable;
+
++ (BOOL) isDepthContoursPurchased;
++ (BOOL) isContourLinesPurchased;
++ (BOOL) isWikipediaPurchased;
+
++ (BOOL) isLiveUpdatesSubscription:(OASubscription *)subscription;
++ (BOOL) isOsmAndProSubscription:(OASubscription *)subscription;
++ (BOOL) isMapsSubscription:(OASubscription *)subscription;
 
 @end

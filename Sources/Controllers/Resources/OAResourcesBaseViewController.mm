@@ -375,6 +375,8 @@ static BOOL dataInvalidated = NO;
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
             else if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![_iapHelper.wiki isActive])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+            else if (item.resourceType == OsmAndResourceType::DepthContourRegion && ![OAIAPHelper isDepthContoursPurchased])
+                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_DepthContours];
             else
                 [self offerDownloadAndInstallOf:item];
         }

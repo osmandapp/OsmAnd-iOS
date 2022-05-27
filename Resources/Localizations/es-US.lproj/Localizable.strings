@@ -2508,3 +2508,5 @@
 "simulation_preview_mode_desc" = "La velocidad de la simulación será máxima en los tramos rectos y disminuirá sólo en las intersecciones.";
 "simulation_preview_mode_title" = "Modo de previsualización rápida";
 "speed_mode" = "Modo de velocidad";
+"routing_attr_allow_private_for_truck_name" = "Permitir el acceso privado (camión)";
+"routing_attr_allow_private_for_truck_description" = "Permitir el acceso a áreas privadas para camiones.";

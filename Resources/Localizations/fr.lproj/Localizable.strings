@@ -2419,7 +2419,7 @@
 "cloud_existing_account" = "J\'ai déjà un compte";
 "osmand_cloud" = "OsmAnd Cloud";
 "backup_error_no_valid_subscription" = "Aucun abonnement n\'est valide";
-"copy_to_map_favorites" = "Copier vers favoris";
+"copy_to_map_favorites" = "Copier vers les favoris";
 "animate_my_location" = "Animer le changement de position";
 "altitude_ascent" = "Montée";
 "map_settings_weather_layers" = "Couches";
@@ -2429,9 +2429,9 @@
 "altitude_descent" = "Descente";
 "simulation_real_mode_desc" = "• Sur les sections de route droites, la vitesse sera approximative à la limite de vitesse.\n• Au intersections, la simulation ralentira.\n• Des pénalités supplémentaires seront appliqués aux feu tricolores, panneaux stop, etc.";
 "simulation_real_mode_title" = "Simulation réaliste";
-"simulation_constant_mode_desc" = "La simulation s'effectuera à la vitesse constante indiquée.";
+"simulation_constant_mode_desc" = "La simulation se déroulera à la vitesse constante indiquée.";
 "simulation_constant_mode_title" = "Vitesse constante";
-"simulation_preview_mode_desc" = "La vitesse de simulation sera maximale sur les sections droites et diminuera aux intersections.";
+"simulation_preview_mode_desc" = "La vitesse de simulation sera maximale sur les sections droites et diminuera aux bifurcations.";
 "simulation_preview_mode_title" = "Mode de prévisualisation rapide";
 "speed_mode" = "Mode de vitesse";
 "weather_cloud_data_description" = "Les données météorologiques seront téléchargées pour la zone visualisée à chaque fois.";
@@ -2441,7 +2441,7 @@
 "weather_wind_enable_descr" = "Activer pour afficher la couche de vent sur la carte.";
 "weather_precip_enable_descr" = "Activer pour afficher la couche de précipitations sur la carte.";
 "weather_contours_enable_descr" = "Activer pour afficher la couche d'isolignes sur la carte.";
-"backup_and_restore" = "Sauvegarde et restauration";
+"backup_and_restore" = "Sauvegarder & Restaurer";
 "temperature_show" = "Afficher la température";
 "temperature_hide" = "Masquer la température";
 "toggle_temperature" = "Afficher/masquer - Couche de température";
@@ -2485,14 +2485,14 @@
 "backup_into_file" = "Sauvegarde dans un fichier";
 "cloud_no_online_backup" = "Vous n'avez pas encore de sauvegarde en ligne";
 "routeInfo_horse_scale_name" = "Difficulté des sentiers équestres";
-"routeInfo_horse_scale_description" = "Colorer les chemins en fonction de la difficulté des sentiers équestres";
+"routeInfo_horse_scale_description" = "Afficher les chemins en fonction de la difficulté des sentiers équestres";
 "verification" = "Vérification";
 "local_backup_descr" = "Sauvegarde ou restauration de données à partir d'un fichier local.";
 "routing_attr_allow_private_for_truck_description" = "Permettre l'accès des camions aux zones privées";
 "login_footer_email_part" = "support@osmand.net";
 "cloud_create_account" = "Créer un compte";
 "cloud_backup" = "Sauvegarde";
-"copy_address" = "Copie de l'adresse";
+"copy_address" = "Copier l'adresse";
 "copy_poi_name" = "Copier le nom du PI";
 "copy_coordinates" = "Copier les coordonnées";
 "share_geo" = "géo :";

@@ -2433,4 +2433,4 @@
 "simulation_constant_mode_title" = "Vitesse constante";
 "simulation_preview_mode_desc" = "La vitesse de simulation sera au maximal sur les sections droites et ralentira seulement au intersections.";
 "simulation_preview_mode_title" = "Mode de prévisualisation rapide";
-"speed_mode" = "Mode rapide";
+"speed_mode" = "Mode de vitesse";

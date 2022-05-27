@@ -8,11 +8,16 @@
 
 #import "OASearchSettings.h"
 #import "OAObjectType.h"
+#import "OAMapUtils.h"
+
+#define MIN_DISTANCE_REGION_LANG_RECALC 10000.0
 
 @interface OASearchSettings ()
 
 @property (nonatomic) int pRadiusLevel;
 @property (nonatomic) CLLocation *pOriginalLocation;
+@property (nonatomic) OAWorldRegion *pRegions;
+@property (nonatomic) NSString *pRegionLang;
 @property (nonatomic) int pTotalLimit;
 @property (nonatomic) NSString *pLang;
 @property (nonatomic) BOOL pTransliterateIfMissing;
@@ -51,6 +56,8 @@
             self.pTransliterateIfMissing = s.pTransliterateIfMissing;
             self.pTotalLimit = s.pTotalLimit;
             self.pOriginalLocation = s.pOriginalLocation;
+            self.pRegions = s.pRegions;
+            self.pRegionLang = s.pRegionLang;
             [self setOfflineIndexes:[s getOfflineIndexes]];
             if (s.pSearchTypes)
                 self.pSearchTypes = [NSArray arrayWithArray:s.pSearchTypes];
@@ -127,6 +134,8 @@
 - (OASearchSettings *) setOriginalLocation:(CLLocation *)l
 {
     OASearchSettings *s = [[OASearchSettings alloc] initWithSettings:self];
+    double distance = _pOriginalLocation == nil ? -1 :  [OAMapUtils getDistance:l.coordinate second:_pOriginalLocation.coordinate];
+    s.pRegionLang = (distance > MIN_DISTANCE_REGION_LANG_RECALC || distance == -1 || !_pRegionLang ) ? [self calculateRegionLang:l] : _pRegionLang;
     s.pOriginalLocation = l;
     return s;
 }
@@ -196,6 +205,31 @@
     return s;
 }
 
+- (NSString *) getRegionLang
+{
+    return _pRegionLang;
+}
+
+- (OAWorldRegion *)getRegions
+{
+    return _pRegions;
+}
+
+- (void) setRegions:(OAWorldRegion *)regions
+{
+    _pRegions = regions;
+}
+
+- (NSString *) calculateRegionLang:(CLLocation *)l
+{
+    OAWorldRegion *region = [_pRegions findAtLat:l.coordinate.latitude lon:l.coordinate.longitude];
+    if (region)
+    {
+        return region.regionLang;
+    }
+    return nil;
+}
+
 + (OASearchSettings *) parseJSON:(NSDictionary *)json
 {
     OASearchSettings *s = [[OASearchSettings alloc] initWithIndexes:@[]];
@@ -210,6 +244,8 @@
     s.pSortByName = [json[@"sortByName"] boolValue];
     if (json[@"lang"])
         s.pLang = json[@"lang"];
+    if (json[@"regionLang"])
+        s.pRegionLang = json[@"regionLang"];
     
     if (json[@"searchTypes"])
     {

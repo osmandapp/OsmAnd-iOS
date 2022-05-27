@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchPhrase.java
-//  git revision 46b2782a7d94c8e4968ef488956dd4d96925be95
+//  git revision 9ea32a8fb553ba22e188f6a7896b4868593ca808
 
 #import <Foundation/Foundation.h>
 #import "OANameStringMatcher.h"
@@ -90,6 +90,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (OANameStringMatcher *) getMainUnknownNameStringMatcher;
 - (OANameStringMatcher *) getFirstUnknownNameStringMatcher;
 - (OANameStringMatcher *) getUnknownNameStringMatcher;
+- (OANameStringMatcher *) getFullNameStringMatcher;
 - (OANameStringMatcher *) getUnknownWordToSearchBuildingNameMatcher;
 
 - (NSString *) getUnknownWordToSearchBuilding;

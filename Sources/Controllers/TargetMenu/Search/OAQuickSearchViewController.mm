@@ -1557,6 +1557,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) showApiResults:(NSArray<OASearchResult *> *)apiResults phrase:(OASearchPhrase *)phrase hasRegionCollection:(BOOL)hasRegionCollection onPublish:(OAPublishCallback)onPublish
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
         if (!_paused && !_cancelPrev)
         {
             BOOL append = [self getResultCollection] != nil;
@@ -1572,11 +1573,10 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             }
             if (!hasRegionCollection && onPublish)
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
                     onPublish([self getResultCollection], append);
-                });
             }
         }
+    });
 }
 
 - (void) showRegionResults:(OASearchResultCollection *)regionResultCollection onPublish:(OAPublishCallback)onPublish

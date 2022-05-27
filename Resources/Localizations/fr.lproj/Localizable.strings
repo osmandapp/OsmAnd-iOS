@@ -2429,9 +2429,9 @@
 "altitude_descent" = "Descente";
 "simulation_real_mode_desc" = "• Sur les sections de route droites, la vitesse sera approximative à la limite de vitesse.\n• Au intersections, la simulation ralentira.\n• Des pénalités supplémentaires seront appliqués aux feu tricolores, panneaux stop, etc.";
 "simulation_real_mode_title" = "Simulation réaliste";
-"simulation_constant_mode_desc" = "La simulation sera performée avec la vitesse constante choisie.";
+"simulation_constant_mode_desc" = "La simulation s'effectuera à la vitesse constante indiquée.";
 "simulation_constant_mode_title" = "Vitesse constante";
-"simulation_preview_mode_desc" = "La vitesse de simulation sera au maximal sur les sections droites et ralentira seulement au intersections.";
+"simulation_preview_mode_desc" = "La vitesse de simulation sera maximale sur les sections droites et diminuera aux intersections.";
 "simulation_preview_mode_title" = "Mode de prévisualisation rapide";
 "speed_mode" = "Mode de vitesse";
 "weather_cloud_data_description" = "Les données météorologiques seront téléchargées pour la zone visualisée à chaque fois.";

@@ -23,5 +23,9 @@
 - (BOOL)isTrafficLight;
 - (void)setTrafficLight:(BOOL)trafficLight;
 - (CLLocationDistance)distanceFromLocation:(OASimulatedLocation *)location;
+- (NSString *)getHighwayType;
+- (void)setHighwayType:(NSString *)highwayType;
+- (float)getSpeedLimit;
+- (void)setSpeedLimit:(float)speedLimit;
 
 @end

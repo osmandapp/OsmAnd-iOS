@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchCoreFactory.java
-//  git revision 5bcaa01259c937fa29741117b23f89776a1098c6
+//  git revision 5c61cf4c8d3c678f556ad8dba9073bac9c93a6f1
 
 #import "OASearchCoreFactory.h"
 #import "OASearchPhrase.h"
@@ -23,6 +23,7 @@
 #import "OAPOIFilter.h"
 #import "OAPOICategory.h"
 #import "OAPOIHelper.h"
+#import "OAPOIUIFilter.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OAPOI.h"
 #import "OAAddress.h"
@@ -121,7 +122,6 @@
 
 @interface OASearchCoreFactory ()
 
-+ (NSString *) stripBraces:(NSString *)localeName;
 + (CLLocation *) getLocation:(const OsmAnd::PointI)position31;
 + (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Building>&)building hno:(const QString&)hno;
 + (NSMutableArray<NSString *> *) getAllNames:(const QHash<QString, QString>&)names nativeName:(const QString&)nativeName;
@@ -869,6 +869,34 @@
         [topVisibleFilters removeObject:_types.getOsmwiki];
         _topVisibleFilters = topVisibleFilters;
         _categories = [_types getCategories:NO];
+        
+        if (OASearchCoreFactory.DISPLAY_DEFAULT_POI_TYPES)
+        {
+            NSMutableArray<NSString *> *order = [NSMutableArray array];
+            for (OAPOIBaseType *p in topVisibleFilters)
+            {
+                [order addObject:[self getStandardFilterId:p]];
+            }
+            OACustomSearchPoiFilter *nearestPois = [[OACustomSearchPoiFilter alloc] initWithAcceptFunc:^BOOL(OAPOICategory *type, NSString *subcategory) {
+                return YES;
+            } emptyFunction:^BOOL{
+                return NO;
+            } getTypesFunction:^NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *{
+                NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *res = [NSMapTable strongToStrongObjectsMapTable];
+                for (OAPOIUIFilter *f in _topVisibleFilters)
+                {
+                    NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *accTypes = [f getAcceptedTypes];
+                    NSEnumerator<OAPOICategory *> *e = accTypes.keyEnumerator;
+                    for (OAPOICategory *c in e)
+                    {
+                        [res setObject:[accTypes objectForKey:c] forKey:c];
+                    }
+                }
+                return res;
+            }];
+            [self setActivePoiFiltersByOrder:order];
+            [self addCustomFilter:nearestPois priority:100];
+        }
     }
 }
 
@@ -1016,6 +1044,14 @@
         BOOL includeAdditional = ![phrase hasMoreThanOneUnknownSearchWord];
         OANameStringMatcher *nmAdditional = includeAdditional ? [[OANameStringMatcher alloc] initWithNamePart:phrase.getFirstUnknownSearchWord mode:CHECK_EQUALS_FROM_SPACE] : nil;
         NSDictionary<NSString *, OAPoiTypeResult *> *poiTypes = [self getPoiTypeResults:nm additionalMatcher:nmAdditional];
+        OAPoiTypeResult *wikiCategory = poiTypes[OSM_WIKI_CATEGORY];
+        OAPoiTypeResult* wikiType = poiTypes[WIKI_PLACE];
+        if (wikiCategory != nil && wikiType != nil)
+        {
+            NSMutableDictionary *mutableTypes = [NSMutableDictionary dictionaryWithDictionary:poiTypes];
+            [mutableTypes removeObjectForKey:WIKI_PLACE];
+            poiTypes = mutableTypes;
+        }
         for (OAPoiTypeResult *ptr in poiTypes.allValues)
         {
             BOOL match = ![phrase isFirstUnknownSearchWordComplete];
@@ -1032,7 +1068,14 @@
             if (match)
             {
                 OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
-                res.localeName = ptr.pt.nameLocalized;
+                if ([OSM_WIKI_CATEGORY isEqualToString:ptr.pt.name])
+                {
+                    res.localeName = [NSString stringWithFormat:@"%@ (%@)", ptr.pt.nameLocalized, _types.getAllLanguagesTranslationSuffix];
+                }
+                else
+                {
+                    res.localeName = ptr.pt.nameLocalized;
+                }
                 res.object = ptr.pt;
                 [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:showTopFiltersOnly stdFilterId:[self getStandardFilterId:ptr.pt] searchResult:res];
             }
@@ -1823,16 +1866,19 @@
     {
         return nil;
     }
-    
+    NSMutableArray<NSNumber *> *partial = [NSMutableArray arrayWithObject:@NO];
     NSMutableArray<NSNumber *> *d = [NSMutableArray array];
     NSMutableArray *all = [NSMutableArray array];
     NSMutableArray<NSString *> *strings = [NSMutableArray array];
-    [OALocationParser splitObjects:s d:d all:all strings:strings];
-    if (d.count == 0)
-        return nil;
+    [OALocationParser splitObjects:s d:d all:all strings:strings partial:partial];
+    if ([partial[0] boolValue])
+    {
+        double lat = [OALocationParser parse1Coordinate:all begin:0 end:(int)all.count];
+        return [[CLLocation alloc] initWithLatitude:lat longitude:0];
+    }
     
-    double lat = [OALocationParser parse1Coordinate:all begin:0 end:(int)all.count];
-    return [[CLLocation alloc] initWithLatitude:lat longitude:0];
+    return nil;
+    
 }
 
 - (void) parseLocation:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
@@ -1974,6 +2020,7 @@
 
 @end
 
+static BOOL DISPLAY_DEFAULT_POI_TYPES = NO;
 
 @implementation OASearchCoreFactory
 
@@ -1987,22 +2034,14 @@
     return self;
 }
 
-+ (NSString *) stripBraces:(NSString *)localeName
++ (BOOL) DISPLAY_DEFAULT_POI_TYPES
 {
-    int i = [localeName indexOf:@"("];
-    NSString *retName;
-    if (i > -1)
-    {
-        retName = [[localeName substringToIndex:i] trim];
-        int j = [localeName indexOf:@")" start:i];
-        if (j > -1 && j + 2 < localeName.length)
-            retName = [NSString stringWithFormat:@"%@ %@", retName, [localeName substringFromIndex:j + 1]];
-    }
-    else
-    {
-        retName = localeName;
-    }
-    return retName;
+    return DISPLAY_DEFAULT_POI_TYPES;
+}
+
++ (BOOL) setDisplayDefaultPoiTypes:(BOOL)value
+{
+    DISPLAY_DEFAULT_POI_TYPES = value;
 }
 
 + (CLLocation *) getLocation:(const OsmAnd::PointI)position31

@@ -11,6 +11,7 @@
 #import "OARouteProvider.h"
 #import "OARouteCalculationParams.h"
 #import "OsmAndApp.h"
+#import "OAUtilities.h"
 
 #import <CoreLocation/CoreLocation.h>
 

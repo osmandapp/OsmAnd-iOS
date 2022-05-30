@@ -882,17 +882,7 @@
             } emptyFunction:^BOOL{
                 return NO;
             } getTypesFunction:^NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *{
-                NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *res = [NSMapTable strongToStrongObjectsMapTable];
-                for (OAPOIUIFilter *f in _topVisibleFilters)
-                {
-                    NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *accTypes = [f getAcceptedTypes];
-                    NSEnumerator<OAPOICategory *> *e = accTypes.keyEnumerator;
-                    for (OAPOICategory *c in e)
-                    {
-                        [res setObject:[accTypes objectForKey:c] forKey:c];
-                    }
-                }
-                return res;
+                return nil;
             }];
             [self setActivePoiFiltersByOrder:order];
             [self addCustomFilter:nearestPois priority:100];

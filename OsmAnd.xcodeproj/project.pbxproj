@@ -7087,7 +7087,6 @@
 		DAE79D31260E1B4600E2EE11 /* ic_system_checkbox_indeterminate@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_system_checkbox_indeterminate@3x.png"; path = "Resources/Icons/ic_system_checkbox_indeterminate@3x.png"; sourceTree = "<group>"; };
 		DAE79D32260E1B4700E2EE11 /* ic_system_checkbox_indeterminate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_system_checkbox_indeterminate@2x.png"; path = "Resources/Icons/ic_system_checkbox_indeterminate@2x.png"; sourceTree = "<group>"; };
 		DAE79D33260E1B4700E2EE11 /* ic_system_checkbox_selected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_system_checkbox_selected@3x.png"; path = "Resources/Icons/ic_system_checkbox_selected@3x.png"; sourceTree = "<group>"; };
-		DAEA9DB62840F47600362C4D /* libskia_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libskia_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAEA9DB82840F48700362C4D /* libskia_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libskia_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAEC05E62296C6C200045298 /* ic_custom_mapillary_color_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_mapillary_color_logo@3x.png"; path = "Resources/Icons/ic_custom_mapillary_color_logo@3x.png"; sourceTree = "<group>"; };
 		DAEC05E72296C6C300045298 /* ic_custom_mapillary_color_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_mapillary_color_logo@2x.png"; path = "Resources/Icons/ic_custom_mapillary_color_logo@2x.png"; sourceTree = "<group>"; };
@@ -8864,6 +8863,7 @@
 				DAA88909241BCD2A0057722C /* ic_small_pedestrian@3x.png */,
 				1571CE3A24ADEF1800083F92 /* ic_custom_angular_unit@2x.png */,
 				1571CE3924ADEF1700083F92 /* ic_custom_angular_unit@3x.png */,
+				DAEA9DB82840F48700362C4D /* libskia_static.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -9030,8 +9030,6 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DAEA9DB82840F48700362C4D /* libskia_static.a */,
-				DAEA9DB62840F47600362C4D /* libskia_static.a */,
 				8AAFE752278DE23700F6504E /* libsqlite_static.a */,
 				8AF348762779D88100A64824 /* libproj_static.a */,
 				8A5A002727735D76002227DD /* libharfbuzz_static.a */,

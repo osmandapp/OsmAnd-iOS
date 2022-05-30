@@ -265,7 +265,7 @@
         return 60;
     else if ([roadType isEqualToString:@"secondary"])
         return 50;
-    else if ([roadType isEqualToString:@"living_street"] || [roadType isEqualToString:@"living_street"])
+    else if ([roadType isEqualToString:@"living_street"] || [roadType isEqualToString:@"residential"])
         return 15;
     else
         return  40;;

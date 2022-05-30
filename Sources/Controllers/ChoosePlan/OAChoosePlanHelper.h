@@ -68,11 +68,15 @@ typedef NS_ENUM(NSUInteger, EOAFeature)
 + (NSArray<OAFeature *> *)MAPS_PLUS_FEATURES;
 + (NSArray<OAFeature *> *)MAPS_PLUS_PREVIEW_FEATURES;
 
++ (OAFeature *)getFeature:(EOAFeature)type;
+
 @end
 
 @interface OAChoosePlanHelper : NSObject
 
 + (void) showChoosePlanScreenWithSuffix:(NSString *)productIdentifierSuffix navController:(UINavigationController *)navController;
++ (void) showChoosePlanScreen:(UINavigationController *)navController;
++ (void) showChoosePlanScreenWithFeature:(OAFeature * _Nullable)feature navController:(UINavigationController *)navController;
 + (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController;
 
 @end

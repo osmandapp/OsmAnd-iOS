@@ -50,7 +50,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 @property (nonatomic, readonly) OASubscription *proMonthly;
 @property (nonatomic, readonly) OASubscription *proAnnually;
 @property (nonatomic, readonly) OASubscription *mapsAnnually;
-@property (nonatomic, readonly) OASubscription *mapsFull;
+@property (nonatomic, readonly) OAProduct *mapsFull;
 @property (nonatomic, readonly) OASubscriptionList *subscriptionList;
 
 @property (nonatomic, readonly) NSArray<OAProduct *> *inApps;
@@ -95,6 +95,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 + (BOOL) isOsmAndProAvailable;
 + (BOOL) isCarPlayAvailable;
 
++ (BOOL) isFullVersionPurchased;
 + (BOOL) isDepthContoursPurchased;
 + (BOOL) isContourLinesPurchased;
 + (BOOL) isWikipediaPurchased;
@@ -102,5 +103,6 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 + (BOOL) isLiveUpdatesSubscription:(OASubscription *)subscription;
 + (BOOL) isOsmAndProSubscription:(OASubscription *)subscription;
 + (BOOL) isMapsSubscription:(OASubscription *)subscription;
++ (BOOL) isFullVersion:(OAProduct *)product;
 
 @end

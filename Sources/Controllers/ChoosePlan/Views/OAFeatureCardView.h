@@ -10,12 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAFeature, OASubscription;
+@class OAFeature, OAProduct;
 
 @protocol OAFeatureCardViewDelegate
 
 - (void)onFeatureSelected:(OAFeature *)feature;
-- (void)onPlanTypeSelected:(OASubscription *)subscription;
+- (void)onPlanTypeSelected:(OAProduct *)subscription;
 
 - (void)onLearnMoreButtonSelected;
 

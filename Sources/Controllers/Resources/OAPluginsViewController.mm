@@ -338,7 +338,7 @@
 
 - (void) osmLiveBannerPressed
 {
-    [OAChoosePlanHelper showChoosePlanScreenWithProduct:nil navController:self.navigationController];
+    [OAChoosePlanHelper showChoosePlanScreen:self.navigationController];
 }
 
 @end

@@ -16,14 +16,14 @@ typedef NS_ENUM (NSUInteger, OAPlanTypeCardRowType)
     EOAPlanTypePurchase
 };
 
-@class OASubscription, OAFeature;
+@class OAProduct, OAFeature;
 
 @protocol OAPlanTypeCardRowDelegate
 
 - (void)onPlanTypeSelected:(NSInteger)tag
                       type:(OAPlanTypeCardRowType)type
                      state:(UIGestureRecognizerState)state
-              subscription:(OASubscription *)subscription;
+              subscription:(OAProduct *)subscription;
 
 @end
 
@@ -35,6 +35,6 @@ typedef NS_ENUM (NSUInteger, OAPlanTypeCardRowType)
 
 - (void)updateSelected:(BOOL)selected;
 
-- (void)updateInfo:(OASubscription *)subscription selectedFeature:(OAFeature *)selectedFeature selected:(BOOL)selected;
+- (void)updateInfo:(OAProduct *)subscription selectedFeature:(OAFeature *)selectedFeature selected:(BOOL)selected;
 
 @end

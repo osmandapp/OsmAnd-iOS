@@ -8,13 +8,13 @@
 
 #import "OABaseFeatureCardView.h"
 
-@class OAFeature, OASubscription;
+@class OAFeature, OAProduct;
 
 @protocol OAFeatureCardViewDelegate;
 
 @interface OASubscriptionCardView : OABaseFeatureCardView
 
-- (instancetype)initWithSubscription:(OASubscription *)subscription;
+- (instancetype)initWithSubscription:(OAProduct *)subscription;
 
 @property (nonatomic, weak) id <OAFeatureCardViewDelegate> delegate;
 

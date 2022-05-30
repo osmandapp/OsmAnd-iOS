@@ -7,28 +7,16 @@
 //
 
 #import "OAResourcesBaseViewController.h"
-
-#import <Reachability.h>
-#import <UIAlertView+Blocks.h>
-#import <FFCircularProgressView.h>
 #import <MBProgressHUD.h>
-
 #import "OAAutoObserverProxy.h"
-#import "OALocalResourceInformationViewController.h"
-#import "OALog.h"
-#import "OAManageResourcesViewController.h"
 #import "OAIAPHelper.h"
-#import "OAUtilities.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
-#import "OATerrainLayer.h"
-#import "OASizes.h"
-#import "OARootViewController.h"
-#import "OASQLiteTileSource.h"
-#import "OATargetMenuViewController.h"
 #import "OACustomSourceDetailsViewController.h"
+#import "OAPlugin.h"
+#import "OANauticalMapsPlugin.h"
+#import "Localization.h"
 
-#include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -377,6 +365,10 @@ static BOOL dataInvalidated = NO;
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
             else if (item.resourceType == OsmAndResourceType::DepthContourRegion && ![OAIAPHelper isDepthContoursPurchased])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_DepthContours];
+            else if (item.resourceType == OsmAndResourceType::DepthContourRegion && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
+                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];
+            else if (item.resourceType == OsmAndResourceType::MapRegion && [item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()] && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
+                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];
             else
                 [self offerDownloadAndInstallOf:item];
         }

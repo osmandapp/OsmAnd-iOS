@@ -1967,6 +1967,7 @@
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
+"plugin_popup_nautical_ask" = "Please enable Nautical plugin";
 "plugin_popup_osm_editing_title" = "Turn on OpenStreetMap Editing";
 "plugin_popup_osm_editing_ask" = "Please enable OpenStreetMap Editing plugin to add and manage map edits and notes";
 "plugin_popup_weather_title" = "Turn on Weather";
@@ -2668,19 +2669,16 @@
 "you_can_get_feature_as_part_of_pattern" = "Get “%@” as part of the %@ plan. Comparison:";
 
 "monthly_subscription" = "Monthly subscription";
-"annually" = "Annually";
+"annual_subscription" = "Annual subscription";
+"quarterly_subscription" = "Quarterly subscription";
 
 "option_available_only_by_subscription" = "Available by subscription";
 "subscriptions" = "Subscriptions";
 
-"product_title_pro_monthly" = "OsmAnd Pro";
-"product_desc_pro_monthly" = "Get maximum features";
-"product_title_pro_annually" = "OsmAnd Pro";
-"product_desc_pro_annually" = "Get maximum features";
-"product_title_maps_annually" = "Maps+";
-"product_desc_maps_annually" = "Get extended features";
-"product_title_maps_full" = "Maps+";
-"product_desc_maps_full" = "Get extended features";
+"product_title_pro" = "OsmAnd Pro";
+"product_desc_pro" = "Get maximum features";
+"product_title_maps" = "Maps+";
+"product_desc_maps" = "Get extended features";
 
 "osmand_pro" = "OsmAnd Pro";
 "maps_plus" = "Maps+";

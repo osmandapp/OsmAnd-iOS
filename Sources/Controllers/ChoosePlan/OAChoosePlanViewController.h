@@ -22,10 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@class OAProduct;
+@class OAFeature, OAProduct;
 
 @interface OAChoosePlanViewController : OASuperViewController
 
+- (instancetype) initWithFeature:(OAFeature *)feature;
 - (instancetype) initWithProduct:(OAProduct *)product type:(OAChoosePlanViewControllerType)type;
 
 @property (nonatomic, weak) id<OAChoosePlanDelegate> delegate;

@@ -193,7 +193,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
 - (IBAction) subscribeButtonPressed:(id)sender
 {
     [self dismissViewControllerAnimated:NO completion:nil];
-    [OAChoosePlanHelper showChoosePlanScreenWithProduct:nil navController:[OARootViewController instance].navigationController];
+    [OAChoosePlanHelper showChoosePlanScreen:[OARootViewController instance].navigationController];
 }
 
 + (BOOL) shouldShowDialog

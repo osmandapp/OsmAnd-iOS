@@ -642,6 +642,13 @@ typedef enum : NSUInteger {
     if (TEST_LOCAL_PURCHASE)
     {
         [_iapHelper buyProduct:_iapHelper.proAnnually];
+        [_iapHelper buyProduct:_iapHelper.monthlyLiveUpdates];
+        [_iapHelper buyProduct:_iapHelper.mapsFull];
+        [_iapHelper buyProduct:_iapHelper.allWorld];
+        [_iapHelper buyProduct:_iapHelper.europe];
+        [_iapHelper buyProduct:_iapHelper.nautical];
+        [_iapHelper buyProduct:_iapHelper.srtm];
+        [_iapHelper buyProduct:_iapHelper.wiki];
         [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRestoredNotification object:nil userInfo:nil];
         return YES;
     }

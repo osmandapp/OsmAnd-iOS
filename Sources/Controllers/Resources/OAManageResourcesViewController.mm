@@ -43,6 +43,7 @@
 #import "OAMultiIconTextDescCell.h"
 #import "OACustomSourceDetailsViewController.h"
 #import "OAColors.h"
+#import "OANauticalMapsPlugin.h"
 
 #include "Localization.h"
 
@@ -2185,7 +2186,12 @@ static BOOL _lackOfResources;
                     disabled = YES;
                     item.disabled = disabled;
                 }
-                if (item.resourceType == OsmAndResourceType::DepthContourRegion && ![OAIAPHelper isDepthContoursPurchased])
+                if (item.resourceType == OsmAndResourceType::MapRegion && [self isNauticalScope] && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
+                {
+                    disabled = YES;
+                    item.disabled = disabled;
+                }
+                if (item.resourceType == OsmAndResourceType::DepthContourRegion && (![OAIAPHelper isDepthContoursPurchased] || ![OAPlugin isEnabled:OANauticalMapsPlugin.class]))
                 {
                     disabled = YES;
                     item.disabled = disabled;
@@ -3165,7 +3171,7 @@ static BOOL _lackOfResources;
 
     if (self.region == _app.worldRegion && !_displayBannerPurchaseAllMaps)
     {
-        [OAChoosePlanHelper showChoosePlanScreenWithProduct:_iapHelper.allWorld navController:self.navigationController];
+        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.UNLIMITED_MAP_DOWNLOADS navController:self.navigationController];
         /*
         _displayBannerPurchaseAllMaps = YES;
         [self updateFreeDownloadsBanner];
@@ -3176,9 +3182,7 @@ static BOOL _lackOfResources;
     }
     else if (_purchaseInAppId)
     {
-        OAProduct *product = [_iapHelper product:_purchaseInAppId];
-        if (product)
-            [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
+        [OAChoosePlanHelper showChoosePlanScreenWithProduct:[_iapHelper product:_purchaseInAppId] navController:self.navigationController];
     }
 }
 

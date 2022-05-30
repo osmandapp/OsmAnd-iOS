@@ -25,7 +25,7 @@
 @implementation OAPlanTypeCardRow
 {
     OAPlanTypeCardRowType _type;
-    OASubscription *_subscription;
+    OAProduct *_subscription;
 
     UITapGestureRecognizer *_tapRecognizer;
     UILongPressGestureRecognizer *_longPressRecognizer;
@@ -142,18 +142,18 @@
     }
 }
 
-- (void)updateInfo:(OASubscription *)subscription selectedFeature:(OAFeature *)selectedFeature selected:(BOOL)selected
+- (void)updateInfo:(OAProduct *)subscription selectedFeature:(OAFeature *)selectedFeature selected:(BOOL)selected
 {
     _subscription = subscription;
     switch (_type)
     {
         case EOAPlanTypeChoosePlan:
         {
-            BOOL isMapsPlan = [OAIAPHelper isMapsSubscription:_subscription];
-            BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps];
+            BOOL isMaps = [OAIAPHelper isFullVersion:subscription] || ([subscription isKindOfClass:OASubscription.class] && [OAIAPHelper isMapsSubscription:(OASubscription *) subscription]);
+            BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
             BOOL osmAndProPurchased = [OAIAPHelper isOsmAndProAvailable];
-            BOOL isPurchased = (isMapsPlan && mapsPlusPurchased) || osmAndProPurchased;
-            BOOL available = !isMapsPlan || (!mapsPlusPurchased && [selectedFeature isAvailableInMapsPlus]);
+            BOOL isPurchased = (isMaps && mapsPlusPurchased) || osmAndProPurchased;
+            BOOL available = !isMaps || (!mapsPlusPurchased && [selectedFeature isAvailableInMapsPlus]);
             NSString *patternPlanAvailable = OALocalizedString(available ? @"continue_with" : @"not_available_with");
             self.labelTitle.text = isPurchased
                     ? OALocalizedString(@"shared_string_purchased")
@@ -166,14 +166,14 @@
                             _subscription.formattedPrice];
 
             NSString *iconName = [_subscription productIconName];
-            if (!available && isMapsPlan)
+            if (!available && isMaps)
                 iconName = [iconName stringByAppendingString:@"_bw"];
             self.imageViewLeftIcon.image = [UIImage imageNamed:iconName];
             self.imageViewRightIcon.image = nil;
             self.backgroundColor = available && !isPurchased ? UIColorFromARGB(color_primary_purple_10) : UIColorFromRGB(color_route_button_inactive);
             self.labelTitle.textColor = available && !isPurchased ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
             self.labelDescription.textColor = available && !isPurchased ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive);
-            self.userInteractionEnabled = available;
+            self.userInteractionEnabled = available && !isPurchased;
             self.layer.borderWidth = 0.;
             break;
         }

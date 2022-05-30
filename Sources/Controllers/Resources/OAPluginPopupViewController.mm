@@ -371,6 +371,18 @@ static NSMutableArray *activePopups;
 
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
+    else if ([kInAppId_Addon_Nautical isEqualToString:productIdentifier])
+    {
+        needShow = YES;
+
+        title = OALocalizedString(@"product_title_nautical");
+        descText = OALocalizedString(@"plugin_popup_nautical_ask");
+        okButtonName = OALocalizedString(@"plugins");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+        iconName = @"ic_custom_nautical_depth_colored_day";
+
+        [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
+    }
     else if ([kInAppId_Addon_DepthContours isEqualToString:productIdentifier])
     {
         needShow = YES;
@@ -585,15 +597,8 @@ static NSMutableArray *activePopups;
 
 - (void) goToSubscriptions:(UIButton *)sender
 {
-    OAProduct *product;
-    if (sender.tag == EOAFeatureNautical)
-        product = [OAIAPHelper sharedInstance].nautical;
-    else if (sender.tag == EOAFeatureCarPlay)
-        product = [OAIAPHelper sharedInstance].carplay;
-    else if (sender.tag == EOAFeatureAdvancedWidgets)
-        product = [OAIAPHelper sharedInstance].proMonthly;
-
-    [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature getFeature:(EOAFeature) sender.tag]
+                                          navController:self.navigationController];
     [self hide];
 }
 

@@ -34,7 +34,7 @@
         
     self.backImageButton.tintColor = UIColorFromRGB(color_primary_purple);
     
-//    [self setUpTableHeaderView];
+    [self setUpTableHeaderView];
     [self generateData];
     
     self.tableView.delegate = self;
@@ -162,7 +162,7 @@
     }
     else
     {
-        [OAChoosePlanHelper showChoosePlanScreenWithProduct:iapHelper.proMonthly navController:self.navigationController];
+        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:self.navigationController];
     }
 }
 

@@ -72,7 +72,6 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OALocalizedString(@"nautical_depth");
         case EOAFeatureWeather:
             return OALocalizedString(@"product_title_weather");
-
         case EOAFeatureRegionAfrica:
             return OALocalizedString(@"product_desc_africa");
         case EOAFeatureRegionRussia:
@@ -89,7 +88,6 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OALocalizedString(@"product_desc_northamerica");
         case EOAFeatureRegionSouthAmerica:
             return OALocalizedString(@"product_desc_southamerica");
-
         default:
             return @"";
     }
@@ -134,7 +132,6 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OALocalizedString(@"purchases_feature_desc_nautical");
         case EOAFeatureWeather:
             return OALocalizedString(@"purchases_feature_weather");
-
         default:
             return @"";
     }
@@ -153,6 +150,14 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureMonthlyMapUpdates:
             return [UIImage imageNamed:@"ic_custom_monthly_map_updates_colored_day"];
         case EOAFeatureUnlimitedMapDownloads:
+        case EOAFeatureRegionAfrica:
+        case EOAFeatureRegionRussia:
+        case EOAFeatureRegionAsia:
+        case EOAFeatureRegionAustralia:
+        case EOAFeatureRegionEurope:
+        case EOAFeatureRegionCentralAmerica:
+        case EOAFeatureRegionNorthAmerica:
+        case EOAFeatureRegionSouthAmerica:
             return [UIImage imageNamed:@"ic_custom_unlimited_downloads_colored_day"];
         case EOAFeatureCarPlay:
             return [UIImage imageNamed:@"ic_custom_carplay_colored"];
@@ -168,17 +173,6 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return [UIImage imageNamed:@"ic_custom_nautical_depth_colored_day"];
         case EOAFeatureWeather:
             return [UIImage imageNamed:@"ic_custom_umbrella_colored"];
-
-        case EOAFeatureRegionAfrica:
-        case EOAFeatureRegionRussia:
-        case EOAFeatureRegionAsia:
-        case EOAFeatureRegionAustralia:
-        case EOAFeatureRegionEurope:
-        case EOAFeatureRegionCentralAmerica:
-        case EOAFeatureRegionNorthAmerica:
-        case EOAFeatureRegionSouthAmerica:
-            return [UIImage imageNamed:@"ic_custom_unlimited_downloads_colored_day"];
-
         default:
             return nil;
     }
@@ -197,6 +191,14 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureMonthlyMapUpdates:
             return [UIImage imageNamed:@"ic_custom_monthly_map_updates_colored_day_big"];
         case EOAFeatureUnlimitedMapDownloads:
+        case EOAFeatureRegionAfrica:
+        case EOAFeatureRegionRussia:
+        case EOAFeatureRegionAsia:
+        case EOAFeatureRegionAustralia:
+        case EOAFeatureRegionEurope:
+        case EOAFeatureRegionCentralAmerica:
+        case EOAFeatureRegionNorthAmerica:
+        case EOAFeatureRegionSouthAmerica:
             return [UIImage imageNamed:@"ic_custom_unlimited_downloads_colored_day_big"];
         case EOAFeatureCarPlay:
             return [UIImage imageNamed:@"ic_custom_carplay_colored_big"];
@@ -212,17 +214,6 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return [UIImage imageNamed:@"ic_custom_nautical_depth_colored_day_big"];
         case EOAFeatureWeather:
             return [UIImage imageNamed:@"ic_custom_umbrella_colored_big"];
-
-        case EOAFeatureRegionAfrica:
-        case EOAFeatureRegionRussia:
-        case EOAFeatureRegionAsia:
-        case EOAFeatureRegionAustralia:
-        case EOAFeatureRegionEurope:
-        case EOAFeatureRegionCentralAmerica:
-        case EOAFeatureRegionNorthAmerica:
-        case EOAFeatureRegionSouthAmerica:
-            return [UIImage imageNamed:@"ic_custom_unlimited_downloads_colored_day_big"];
-
         default:
             return nil;
     }
@@ -394,6 +385,47 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     return MAPS_PLUS_PREVIEW_FEATURES;
 }
 
++ (OAFeature *)getFeature:(EOAFeature)type
+{
+    switch (type)
+    {
+        case EOAFeatureCloud:
+            return OAFeature.OSMAND_CLOUD;
+        case EOAFeatureAdvancedWidgets:
+            return OAFeature.ADVANCED_WIDGETS;
+        case EOAFeatureHourlyMapUpdates:
+            return OAFeature.HOURLY_MAP_UPDATES;
+        case EOAFeatureMonthlyMapUpdates:
+            return OAFeature.MONTHLY_MAP_UPDATES;
+        case EOAFeatureUnlimitedMapDownloads:
+        case EOAFeatureRegionAfrica:
+        case EOAFeatureRegionRussia:
+        case EOAFeatureRegionAsia:
+        case EOAFeatureRegionAustralia:
+        case EOAFeatureRegionEurope:
+        case EOAFeatureRegionCentralAmerica:
+        case EOAFeatureRegionNorthAmerica:
+        case EOAFeatureRegionSouthAmerica:
+            return OAFeature.UNLIMITED_MAP_DOWNLOADS;
+        case EOAFeatureCarPlay:
+            return OAFeature.CARPLAY;
+        case EOAFeatureCombinedWiki:
+            return OAFeature.COMBINED_WIKI;
+        case EOAFeatureWikipedia:
+            return OAFeature.WIKIPEDIA;
+        case EOAFeatureWikivoyage:
+            return OAFeature.WIKIVOYAGE;
+        case EOAFeatureTerrain:
+            return OAFeature.TERRAIN;
+        case EOAFeatureNautical:
+            return OAFeature.NAUTICAL;
+        case EOAFeatureWeather:
+            return OAFeature.WEATHER;
+        default:
+            return nil;
+    }
+}
+
 @end
 
 @implementation OAChoosePlanHelper
@@ -402,17 +434,31 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
 {
     if (productIdentifierSuffix.length == 0 || [productIdentifierSuffix isEqualToString:@"osmlive"])
     {
-        [self.class showChoosePlanScreenWithProduct:nil navController:navController];
+        [self.class showChoosePlanScreen:navController];
     }
     else
     {
         for (OAProduct *product in [OAIAPHelper sharedInstance].inApps)
+        {
             if ([product.productIdentifier hasSuffix:productIdentifierSuffix])
             {
                 [self.class showChoosePlanScreenWithProduct:product navController:navController];
                 break;
             }
+        }
     }
+}
+
++ (void) showChoosePlanScreen:(UINavigationController *)navController
+{
+    [self showChoosePlanScreenWithFeature:nil navController:navController];
+}
+
++ (void) showChoosePlanScreenWithFeature:(OAFeature * _Nullable)feature navController:(UINavigationController *)navController
+{
+    OAChoosePlanViewController *choosePlanViewController =
+            [[OAChoosePlanViewController alloc] initWithFeature:feature ? feature : OAFeature.OSMAND_PRO_FEATURES.firstObject];
+    [self showImpl:choosePlanViewController navController:navController];
 }
 
 + (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController
@@ -420,7 +466,12 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     OAChoosePlanViewController *choosePlanViewController =
             [[OAChoosePlanViewController alloc] initWithProduct:product ? product : [OAIAPHelper sharedInstance].proMonthly
                                                            type:EOAChoosePlan];
-    UINavigationController *modalController = [[UINavigationController alloc] initWithRootViewController:choosePlanViewController];
+    [self showImpl:choosePlanViewController navController:navController];
+}
+
++ (void) showImpl:(OAChoosePlanViewController *)viewController navController:(UINavigationController *)navController
+{
+    UINavigationController *modalController = [[UINavigationController alloc] initWithRootViewController:viewController];
     modalController.navigationBarHidden = YES;
     modalController.automaticallyAdjustsScrollViewInsets = NO;
     modalController.edgesForExtendedLayout = UIRectEdgeNone;

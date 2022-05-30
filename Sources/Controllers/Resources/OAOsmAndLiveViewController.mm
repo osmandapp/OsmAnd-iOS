@@ -597,7 +597,7 @@ static const NSInteger sectionCount = 2;
 
 - (void) osmLiveBannerPressed
 {
-    [OAChoosePlanHelper showChoosePlanScreenWithProduct:nil navController:self.navigationController];
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.HOURLY_MAP_UPDATES navController:self.navigationController];
 }
 
 - (void) productPurchased:(NSNotification *)notification

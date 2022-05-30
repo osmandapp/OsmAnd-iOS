@@ -63,6 +63,18 @@
     UIView *_lastIncludedView;
 }
 
+- (instancetype) initWithFeature:(OAFeature *)feature;
+{
+    self = [super init];
+    if (self)
+    {
+        _selectedFeature = feature;
+        _type = EOAChoosePlan;
+        [self commonInit];
+    }
+    return self;
+}
+
 - (instancetype) initWithProduct:(OAProduct *)product type:(OAChoosePlanViewControllerType)type
 {
     self = [super init];
@@ -84,6 +96,8 @@
 - (void) commonInit
 {
     _iapHelper = [OAIAPHelper sharedInstance];
+    if (!_product)
+        _product = [_selectedFeature isAvailableInMapsPlus] ? _iapHelper.mapsAnnually : _iapHelper.proMonthly;
 }
 
 - (void) applyLocalization
@@ -151,7 +165,8 @@
         [self.scrollView insertSubview:_labelIncludes belowSubview:_viewIncludesSeparator];
 
         UIView *prevView = _labelIncludes;
-        for (OAFeature *feature in [OAIAPHelper isMapsSubscription:_product] ? OAFeature.MAPS_PLUS_FEATURES : OAFeature.OSMAND_PRO_FEATURES)
+        BOOL isMaps = [OAIAPHelper isFullVersion:_product] || ([_product isKindOfClass:OASubscription.class] && [OAIAPHelper isMapsSubscription:(OASubscription *) _product]);
+        for (OAFeature *feature in isMaps ? OAFeature.MAPS_PLUS_FEATURES : OAFeature.OSMAND_PRO_FEATURES)
         {
             if (feature != OAFeature.COMBINED_WIKI)
             {
@@ -382,16 +397,6 @@
 {
     SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
     [self presentViewController:safariViewController animated:YES completion:nil];
-//    safariViewController.delegate = self;
-//    UINavigationController *navigationController = [[UINavigationController alloc]initWithRootViewController:safariViewController];
-//    [navigationController setNavigationBarHidden:YES animated:NO];
-//    [self presentViewController:navigationController animated:YES completion:nil];
-}
-
-- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
-{
-    [controller dismissViewControllerAnimated:YES completion:nil];
-//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction) backButtonClicked:(id)sender
@@ -450,6 +455,13 @@
     });
 }
 
+#pragma mark - SFSafariViewControllerDelegate
+
+- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -498,7 +510,7 @@
 
             [UIView animateWithDuration:0.2 animations:^{
                 OAFeatureCardRow *row = self.scrollView.subviews[tag];
-                row.backgroundColor = UIColorFromARGB(color_primary_purple_50);
+                row.backgroundColor = UIColorFromARGB(color_primary_purple_25);
             }                completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.2 animations:^{
                     OAFeatureCardRow *row = self.scrollView.subviews[tag];
@@ -515,7 +527,7 @@
         {
             [UIView animateWithDuration:0.2 animations:^{
                 OAFeatureCardRow *row = self.scrollView.subviews[tag];
-                row.backgroundColor = UIColorFromARGB(color_primary_purple_50);
+                row.backgroundColor = UIColorFromARGB(color_primary_purple_25);
             }                completion:nil];
         }
     }
@@ -530,7 +542,7 @@
     [self updateScrollViewContainerSize];
 }
 
-- (void)onPlanTypeSelected:(OASubscription *)subscription
+- (void)onPlanTypeSelected:(OAProduct *)subscription
 {
     if (_type == EOAChoosePlan)
     {

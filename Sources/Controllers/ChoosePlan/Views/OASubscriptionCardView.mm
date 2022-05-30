@@ -79,7 +79,7 @@
     return self;
 }
 
-- (instancetype)initWithSubscription:(OASubscription *)subscription
+- (instancetype)initWithSubscription:(OAProduct *)subscription
 {
     self = [super init];
     if (self)
@@ -101,12 +101,12 @@
     self.viewChooseSubscriptionButtonsContainer.layer.cornerRadius = 9.;
 }
 
-- (BOOL)isProPlan:(OASubscription *)subscription
+- (BOOL)isProPlan:(OAProduct *)subscription
 {
-    return [subscription isEqual:[OAIAPHelper sharedInstance].proMonthly] || [subscription isEqual:[OAIAPHelper sharedInstance].proAnnually];
+    return [subscription isKindOfClass:OASubscription.class] && [OAIAPHelper isOsmAndProSubscription:(OASubscription *) subscription];
 }
 
-- (void)updateInfo:(OASubscription *)subscription replaceFeatureRows:(BOOL)replaceFeatureRows
+- (void)updateInfo:(OAProduct *)subscription replaceFeatureRows:(BOOL)replaceFeatureRows
 {
     NSString *iconName = subscription.productIconName;
     UIImage *icon = [UIImage imageNamed:[iconName stringByAppendingString:@"_big"]];
@@ -145,7 +145,7 @@
             [view removeFromSuperview];
         }
 
-        OASubscription *selectedSubscription = [self isProPlan:subscription]
+        OAProduct *selectedSubscription = [self isProPlan:subscription]
                 ? [OAIAPHelper sharedInstance].proMonthly
                 : [OAIAPHelper sharedInstance].mapsAnnually;
         [self addPlanTypeRow:EOAPlanTypeChooseSubscription
@@ -280,7 +280,7 @@
 }
 
 - (OAPlanTypeCardRow *)addPlanTypeRow:(OAPlanTypeCardRowType)type
-                         subscription:(OASubscription *)subscription
+                         subscription:(OAProduct *)subscription
                              selected:(BOOL)selected
                             container:(UIView *)container
 {
@@ -307,7 +307,7 @@
 - (void)onPlanTypeSelected:(NSInteger)tag
                       type:(OAPlanTypeCardRowType)type
                      state:(UIGestureRecognizerState)state
-              subscription:(OASubscription *)subscription
+              subscription:(OAProduct *)subscription
 {
     BOOL isPurchaseButton = _completePurchasePlanCardRow.tag == tag;
     if (self.viewChooseSubscriptionButtonsContainer.subviews.count > tag || isPurchaseButton)
@@ -340,7 +340,7 @@
                 }
                 row = isPurchaseButton ? _completePurchasePlanCardRow : self.viewChooseSubscriptionButtonsContainer.subviews[_selectedSubscriptionIndex];
                 if (row.userInteractionEnabled)
-                    row.backgroundColor = UIColorFromARGB(color_primary_purple_50);
+                    row.backgroundColor = UIColorFromARGB(color_primary_purple_25);
             }                completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.2 animations:^{
                     OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.viewChooseSubscriptionButtonsContainer.subviews[_selectedSubscriptionIndex];
@@ -365,7 +365,7 @@
             [UIView animateWithDuration:0.2 animations:^{
                 OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.viewChooseSubscriptionButtonsContainer.subviews[tag];
                 if (row.userInteractionEnabled)
-                    row.backgroundColor = UIColorFromARGB(color_primary_purple_50);
+                    row.backgroundColor = UIColorFromARGB(color_primary_purple_25);
             }                completion:nil];
         }
     }

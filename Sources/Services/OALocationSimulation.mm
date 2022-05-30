@@ -18,6 +18,12 @@
 
 #define PRECISION_1_M 0.00001f
 #define DEVIATION_M 6
+#define MOTORWAY_MAX_SPEED 120;
+#define TRUNK_MAX_SPEED 90;
+#define PRIMARY_MAX_SPEED 60;
+#define SECONDARY_MAX_SPEED 50;
+#define LIVING_SPTREET_MAX_SPEED 15;
+#define DEFAULT_MAX_SPEED 40;
 
 @implementation OALocationSimulation
 {
@@ -258,17 +264,29 @@
 - (float) getMaxSpeedForRoadType:(NSString *)roadType
 {
     if ([roadType isEqualToString:@"motorway"])
-        return 120;
+    {
+        return MOTORWAY_MAX_SPEED;
+    }
     else if ([roadType isEqualToString:@"trunk"])
-        return 90;
+    {
+        return TRUNK_MAX_SPEED;
+    }
     else if ([roadType isEqualToString:@"primary"])
-        return 60;
+    {
+        return PRIMARY_MAX_SPEED;
+    }
     else if ([roadType isEqualToString:@"secondary"])
-        return 50;
+    {
+        return SECONDARY_MAX_SPEED;
+    }
     else if ([roadType isEqualToString:@"living_street"] || [roadType isEqualToString:@"residential"])
-        return 15;
+    {
+        return LIVING_SPTREET_MAX_SPEED;
+    }
     else
-        return  40;;
+    {
+        return DEFAULT_MAX_SPEED;
+    }
 }
 
 - (void) stop

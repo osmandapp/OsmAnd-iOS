@@ -2980,6 +2980,7 @@
 		DAE79D36260E1B4800E2EE11 /* ic_system_checkbox_indeterminate@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE79D31260E1B4600E2EE11 /* ic_system_checkbox_indeterminate@3x.png */; };
 		DAE79D38260E1B4800E2EE11 /* ic_system_checkbox_indeterminate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE79D32260E1B4700E2EE11 /* ic_system_checkbox_indeterminate@2x.png */; };
 		DAE79D3A260E1B4800E2EE11 /* ic_system_checkbox_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE79D33260E1B4700E2EE11 /* ic_system_checkbox_selected@3x.png */; };
+		DAEA9DB92840F48700362C4D /* libskia_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEA9DB82840F48700362C4D /* libskia_static.a */; };
 		DAEC05EF2296C6C500045298 /* ic_custom_mapillary_color_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEC05E62296C6C200045298 /* ic_custom_mapillary_color_logo@3x.png */; };
 		DAEC05F12296C6C500045298 /* ic_custom_mapillary_color_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEC05E72296C6C300045298 /* ic_custom_mapillary_color_logo@2x.png */; };
 		DAEC05F32296C6C500045298 /* ic_custom_trouble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEC05E82296C6C300045298 /* ic_custom_trouble@2x.png */; };
@@ -7086,6 +7087,7 @@
 		DAE79D31260E1B4600E2EE11 /* ic_system_checkbox_indeterminate@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_system_checkbox_indeterminate@3x.png"; path = "Resources/Icons/ic_system_checkbox_indeterminate@3x.png"; sourceTree = "<group>"; };
 		DAE79D32260E1B4700E2EE11 /* ic_system_checkbox_indeterminate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_system_checkbox_indeterminate@2x.png"; path = "Resources/Icons/ic_system_checkbox_indeterminate@2x.png"; sourceTree = "<group>"; };
 		DAE79D33260E1B4700E2EE11 /* ic_system_checkbox_selected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_system_checkbox_selected@3x.png"; path = "Resources/Icons/ic_system_checkbox_selected@3x.png"; sourceTree = "<group>"; };
+		DAEA9DB82840F48700362C4D /* libskia_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libskia_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAEC05E62296C6C200045298 /* ic_custom_mapillary_color_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_mapillary_color_logo@3x.png"; path = "Resources/Icons/ic_custom_mapillary_color_logo@3x.png"; sourceTree = "<group>"; };
 		DAEC05E72296C6C300045298 /* ic_custom_mapillary_color_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_mapillary_color_logo@2x.png"; path = "Resources/Icons/ic_custom_mapillary_color_logo@2x.png"; sourceTree = "<group>"; };
 		DAEC05E82296C6C300045298 /* ic_custom_trouble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_trouble@2x.png"; path = "Resources/Icons/ic_custom_trouble@2x.png"; sourceTree = "<group>"; };
@@ -7225,6 +7227,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAEA9DB92840F48700362C4D /* libskia_static.a in Frameworks */,
 				DADC09E827295A2C00ADBB3B /* SystemConfiguration.framework in Frameworks */,
 				DADC09EA27295A4C00ADBB3B /* MobileCoreServices.framework in Frameworks */,
 				DADC09E62729591100ADBB3B /* libexpat_static.a in Frameworks */,
@@ -8860,6 +8863,7 @@
 				DAA88909241BCD2A0057722C /* ic_small_pedestrian@3x.png */,
 				1571CE3A24ADEF1800083F92 /* ic_custom_angular_unit@2x.png */,
 				1571CE3924ADEF1700083F92 /* ic_custom_angular_unit@3x.png */,
+				DAEA9DB82840F48700362C4D /* libskia_static.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";

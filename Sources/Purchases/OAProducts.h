@@ -65,11 +65,11 @@ NS_ASSUME_NONNULL_BEGIN
 #define kSubscriptionId_Osm_Live_Subscription_3_Months @"net.osmand.maps.subscription.3months"
 #define kSubscriptionId_Osm_Live_Subscription_Annual @"net.osmand.maps.subscription.annual"
 
-#define kSubscriptionId_Pro_Subscription_Monthly @"net.osmand.maps.subscription.pro_monthly"
-#define kSubscriptionId_Pro_Subscription_Annual @"net.osmand.maps.subscription.pro_annual"
+#define kSubscriptionId_Pro_Subscription_Monthly @"net.osmand.maps.subscription.pro.monthly"
+#define kSubscriptionId_Pro_Subscription_Annual @"net.osmand.maps.subscription.pro.annual"
 
-#define kSubscriptionId_Maps_Subscription_Annual @"net.osmand.maps.subscription.maps_annual"
-#define kInAppId_Maps_Full @"net.osmand.maps.inapp.maps_full"
+#define kSubscriptionId_Maps_Subscription_Annual @"net.osmand.maps.subscription.plus.annual"
+#define kInAppId_Maps_Full @"net.osmand.maps.inapp.maps.plus"
 
 // Subscriptions default prices (EUR)
 #define kSubscription_Osm_Live_Default_Price 1.49

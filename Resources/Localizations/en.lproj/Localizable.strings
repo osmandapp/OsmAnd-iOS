@@ -2677,8 +2677,8 @@
 
 "product_title_pro" = "OsmAnd Pro";
 "product_desc_pro" = "Get maximum features";
-"product_title_maps" = "Maps+";
-"product_desc_maps" = "Get extended features";
+"product_title_plus" = "Maps+";
+"product_desc_plus" = "Get extended features";
 
 "osmand_pro" = "OsmAnd Pro";
 "maps_plus" = "Maps+";

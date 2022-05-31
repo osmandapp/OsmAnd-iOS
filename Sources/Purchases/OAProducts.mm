@@ -832,18 +832,6 @@
     if (self)
     {
         self.identifierNoVersion = identifierNoVersion;
-
-        NSString *postfix = [[identifierNoVersion componentsSeparatedByString:@"."] lastObject];
-        postfix = [postfix stringByReplacingOccurrencesOfString:@"_monthly" withString:@""];
-        postfix = [postfix stringByReplacingOccurrencesOfString:@"_annual" withString:@""];
-        NSString *locTitleId = [@"product_title_" stringByAppendingString:postfix];
-        NSString *locDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
-        NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];
-
-        self.localizedTitle = OALocalizedString(locTitleId);
-        self.localizedDescription = OALocalizedString(locDescriptionId);
-        self.localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
-
         [self commonInit];
     }
     return self;
@@ -1366,6 +1354,16 @@
     return @"ic_custom_osmand_pro_logo_colored";
 }
 
+- (NSString *)localizedTitle
+{
+    return OALocalizedString(@"product_title_pro");
+}
+
+- (NSString *)localizedDescription
+{
+    return OALocalizedString(@"product_desc_pro");
+}
+
 - (void) setPrice:(NSDecimalNumber *)price
 {
     [super setPrice:price];
@@ -1425,6 +1423,16 @@
 - (NSString *) productIconName
 {
     return @"ic_custom_osmand_pro_logo_colored";
+}
+
+- (NSString *)localizedTitle
+{
+    return OALocalizedString(@"product_title_pro");
+}
+
+- (NSString *)localizedDescription
+{
+    return OALocalizedString(@"product_desc_pro");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1488,6 +1496,16 @@
     return @"ic_custom_osmand_maps_plus";
 }
 
+- (NSString *)localizedTitle
+{
+    return OALocalizedString(@"product_title_plus");
+}
+
+- (NSString *)localizedDescription
+{
+    return OALocalizedString(@"product_desc_plus");
+}
+
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Maps_Annual_Price];
@@ -1525,17 +1543,6 @@
 - (instancetype) init
 {
     self = [super initWithIdentifier:kInAppId_Maps_Full];
-
-    NSString *postfix = [[self.productIdentifier componentsSeparatedByString:@"."] lastObject];
-    postfix = [postfix stringByReplacingOccurrencesOfString:@"_full" withString:@""];
-    NSString *locTitleId = [@"product_title_" stringByAppendingString:postfix];
-    NSString *locDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
-    NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];
-
-    self.localizedTitle = OALocalizedString(locTitleId);
-    self.localizedDescription = OALocalizedString(locDescriptionId);
-    self.localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
-
     return self;
 }
 
@@ -1552,6 +1559,16 @@
 - (NSString *) productIconName
 {
     return @"ic_custom_osmand_maps_plus";
+}
+
+- (NSString *)localizedTitle
+{
+    return OALocalizedString(@"product_title_plus");
+}
+
+- (NSString *)localizedDescription
+{
+    return OALocalizedString(@"product_desc_plus");
 }
 
 - (NSString *) formattedPrice

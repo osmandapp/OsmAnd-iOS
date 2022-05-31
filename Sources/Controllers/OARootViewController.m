@@ -642,7 +642,7 @@ typedef enum : NSUInteger {
     if (TEST_LOCAL_PURCHASE)
     {
         [_iapHelper buyProduct:_iapHelper.proAnnually];
-        [_iapHelper buyProduct:_iapHelper.monthlyLiveUpdates];
+        [_iapHelper buyProduct:[_iapHelper.subscriptionList getSubscriptionByIdentifier:[kSubscriptionId_Osm_Live_Subscription_3_Months stringByAppendingString:@"_v1"]]];
         [_iapHelper buyProduct:_iapHelper.mapsFull];
         [_iapHelper buyProduct:_iapHelper.allWorld];
         [_iapHelper buyProduct:_iapHelper.europe];

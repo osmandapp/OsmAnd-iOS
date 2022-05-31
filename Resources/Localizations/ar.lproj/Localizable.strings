@@ -1111,7 +1111,7 @@
 "obf_import_already_exists" = "الملف بهذا الاسم موجود مسبقا. الرجاء تحديد إجراء.";
 "obf_import_success" = "تم استيراد الملف بنجاح";
 "obf_import_failed" = "فشل استيراد الملف";
-"res_import_success" = "%@ تم االاستيراد بنجاح";
+"res_import_success" = "%@ تم الاستيراد بنجاح";
 "res_import_unsupported" = "نوع الملف غير صحيح. يتم اعتماد ملفات xml و * .xml الخاصة بالتوجيه فقط.";
 "routing_import_please_restart" = "لاستخدام التوجيه .xml الجديد الرجاء أعاده تشغيل التطبيق.";
 "download_pending" = "تحميل معلق";

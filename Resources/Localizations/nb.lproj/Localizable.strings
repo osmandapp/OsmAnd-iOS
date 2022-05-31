@@ -2255,3 +2255,4 @@
 "lang_hr" = "Kroatisk";
 "routeInfo_horse_scale_description" = "Tegn stier i henhold til vanskelighetsgrad på rideveier";
 "routeInfo_horse_scale_name" = "Vanskelighetsgrad for rideveier";
+"routing_attr_allow_private_for_truck_name" = "Tillat privat adgang (lastebil)";

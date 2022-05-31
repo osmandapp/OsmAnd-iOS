@@ -30,7 +30,7 @@
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
-#define TEST_LOCAL_PURCHASE NO
+#define TEST_LOCAL_PURCHASE YES
 
 typedef enum : NSUInteger {
     EOARequestProductsProgressType,

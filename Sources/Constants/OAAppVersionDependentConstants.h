@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define kLatestChangesUrl @"https://osmand.net/docs/versions/future-ios/"
-
 @interface OAAppVersionDependentConstants : NSObject
 
 + (NSString *) getShortAppVersion;

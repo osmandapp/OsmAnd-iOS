@@ -55,7 +55,7 @@
                 <outlet property="iconView" destination="NhW-ol-3GS" id="Jx0-vV-0XM"/>
                 <outlet property="titleLabel" destination="j4O-5N-tnW" id="1Sq-Am-2VT"/>
             </connections>
-            <point key="canvasLocation" x="131.8840579710145" y="68.638392857142847"/>
+            <point key="canvasLocation" x="131.8840579710145" y="67.96875"/>
         </tableViewCell>
     </objects>
 </document>

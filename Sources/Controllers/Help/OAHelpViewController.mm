@@ -10,7 +10,7 @@
 #import "OAMenuSimpleCellNoIcon.h"
 #import "Localization.h"
 #import "OAWebViewController.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OALinks.h"
 
 #define kLinkInternalType @"internal_link"
 #define kLinkExternalType @"ext_link"
@@ -281,7 +281,7 @@ static const NSInteger groupCount = 5;
        @"name" : @"help_what_is_new",
        @"title" : OALocalizedString(@"help_what_is_new"),
        @"type" : kLinkExternalType,
-       @"description" : kLatestChangesUrl
+       @"description" : kDocsLatestVersion
        }];
     
     [dataArr addObject:
@@ -314,7 +314,7 @@ static const NSInteger groupCount = 5;
      @{
        @"name" : @"feedback",
        @"title" : OALocalizedString(@"menu_feedback"),
-       @"description" : @"https://osmand.net/ios-poll.html",
+       @"description" : kOsmAndPoll,
        @"type" : kLinkExternalType
        }];
     
@@ -336,7 +336,7 @@ static const NSInteger groupCount = 5;
      @{
        @"name" : @"twitter",
        @"title" : OALocalizedString(@"twitter"),
-       @"description" : @"https://twitter.com/osmandapp",
+       @"description" : kCommunityTwitter,
        @"type" : kLinkExternalType
        }];
     
@@ -344,7 +344,7 @@ static const NSInteger groupCount = 5;
      @{
        @"name" : @"reddit",
        @"title" : OALocalizedString(@"reddit"),
-       @"description" : @"https://www.reddit.com/r/OsmAnd",
+       @"description" : kCommunityReddit,
        @"type" : kLinkExternalType
        }];
     
@@ -352,7 +352,7 @@ static const NSInteger groupCount = 5;
      @{
        @"name" : @"facebook",
        @"title" : OALocalizedString(@"facebook"),
-       @"description" : @"https://www.facebook.com/osmandapp",
+       @"description" : kCommunityFacebook,
        @"type" : kLinkExternalType
        }];
     
@@ -360,7 +360,7 @@ static const NSInteger groupCount = 5;
      @{
        @"name" : @"vk",
        @"title" : OALocalizedString(@"vk"),
-       @"description" : @"https://vk.com/osmandapp",
+       @"description" : kCommunityVk,
        @"type" : kLinkExternalType
        }];
     

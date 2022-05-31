@@ -17,16 +17,13 @@
 #import "OADonationSettingsViewController.h"
 #import "OARootViewController.h"
 #import "OAFeatureCardRow.h"
+#import "OALinks.h"
 #import <SafariServices/SafariServices.h>
 
 #define kMargin 16.
 #define kSeparatorHeight .5
 #define kNavigationBarHeight 56.
 #define kMinRowHeight 48.
-
-#define kHelpLink @"https://osmand.net/docs/user/purchases/ios/"
-#define kTermsOfUseLink @"https://osmand.net/help-online/terms-of-use/"
-#define kPrivacyPolicyLink @"https://osmand.net/help-online/privacy-policy/"
 
 @interface OAChoosePlanViewController () <UIScrollViewDelegate, OAFeatureCardViewDelegate, OAFeatureCardRowDelegate, OAChoosePlanDelegate, SFSafariViewControllerDelegate>
 
@@ -409,7 +406,7 @@
     if (_type == EOAChoosePlan)
         [[OARootViewController instance] requestProductsWithProgress:YES reload:YES restorePurchases:YES];
     else if (_type == EOAChooseSubscription)
-        [self openSafariWithURL:kHelpLink];
+        [self openSafariWithURL:kDocsPurchasesIOS];
 }
 
 - (IBAction) onButtonRestorePressed:(id)sender
@@ -517,9 +514,9 @@
                     row.backgroundColor = self.scrollView.backgroundColor;
 
                     if (tag == _buttonTermsOfUse.tag)
-                        [self openSafariWithURL:kTermsOfUseLink];
+                        [self openSafariWithURL:kOsmAndTermsOfUse];
                     else if (tag == _buttonPrivacyPolicy.tag)
-                        [self openSafariWithURL:kPrivacyPolicyLink];
+                        [self openSafariWithURL:kOsmAndPrivacyPolicy];
                 }];
             }];
         }

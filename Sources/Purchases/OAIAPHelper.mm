@@ -21,7 +21,7 @@ NSString *const OAIAPProductPurchaseDeferredNotification = @"OAIAPProductPurchas
 NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotification";
 NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchaseProductNotification";
 
-#define TEST_LOCAL_PURCHASE NO
+#define TEST_LOCAL_PURCHASE YES
 
 #define kAllSubscriptionsExpiredStatus 100
 #define kNoSubscriptionsFoundStatus 110
@@ -190,6 +190,24 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 + (BOOL) isFullVersion:(OAProduct *)product
 {
     return [product.productIdentifier isEqualToString:kInAppId_Maps_Full];
+}
+
+- (NSArray<OASubscription *> *) getEverMadeSubscriptions
+{
+    NSMutableArray<OASubscription *> *subscriptions = [NSMutableArray array];
+    for (OASubscription *subscription in [self.subscriptionList getVisibleSubscriptions])
+    {
+        if ([subscription isPurchased] || subscription.purchaseState != PSTATE_UNKNOWN)
+            [subscriptions addObject:subscription];
+    }
+    return subscriptions;
+}
+
+- (NSArray<OAProduct *> *) getEverMadeMainPurchases
+{
+    NSMutableSet<OAProduct *> *products = [NSMutableSet setWithArray:[self getEverMadeSubscriptions]];
+    [products addObjectsFromArray:self.inAppsPurchased];
+    return products.allObjects;
 }
 
 + (OAIAPHelper *) sharedInstance

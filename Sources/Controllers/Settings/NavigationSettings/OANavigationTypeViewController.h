@@ -12,6 +12,4 @@
 
 @interface OANavigationTypeViewController : OABaseSettingsViewController
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
-
 @end

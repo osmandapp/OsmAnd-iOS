@@ -25,19 +25,9 @@
 
 @implementation OANavigationTypeViewController
 {
-    NSString *_currentSelectedKey;
     NSArray<OARoutingProfileDataObject *> *_sortedRoutingProfiles;
     NSArray<NSString *> *_fileNames;
     NSArray<NSArray *> *_data;
-}
-
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
-{
-    self = [super initWithAppMode:appMode];
-    if (self) {
-        _currentSelectedKey = appMode.getRoutingProfile;
-    }
-    return self;
 }
 
 -(void) applyLocalization
@@ -116,6 +106,7 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
+    OARoutingProfileDataObject *profile = _sortedRoutingProfiles[[item[@"profile_ind"] integerValue]];
     if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
         OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
@@ -131,7 +122,9 @@
             cell.arrowIconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
             cell.arrowIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
             cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            BOOL isSelected = [_sortedRoutingProfiles[[item[@"profile_ind"] integerValue]].stringKey isEqualToString:_currentSelectedKey];
+            NSString *derivedProfile = self.appMode.getDerivedProfile;
+            BOOL checkForDerived = ![derivedProfile isEqualToString:@"default"];
+            BOOL isSelected = [profile.stringKey isEqual:self.appMode.getRoutingProfile] && ((!checkForDerived && !profile.derivedProfile) || (checkForDerived && [profile.derivedProfile isEqualToString:derivedProfile]));
             cell.arrowIconView.hidden = !isSelected;
             cell.iconView.tintColor = isSelected ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
         }
@@ -155,9 +148,11 @@
 //            routeService = RouteProvider.RouteService.BROUTER;
         else
             routeService = OSMAND;
-        OAAppSettings *settings = OAAppSettings.sharedManager;
-        [settings.routingProfile set:profileData.stringKey mode:self.appMode];
-        [settings.routerService set:routeService mode:self.appMode];
+        
+        NSString *derivedProfile = profileData.derivedProfile ? profileData.derivedProfile : @"default";
+        [self.appMode setRoutingProfile:profileData.stringKey];
+        [self.appMode setDerivedProfile:derivedProfile];
+        [self.appMode setRouterService:routeService];
         if (self.delegate)
             [self.delegate onSettingsChanged];
         [self dismissViewController];

@@ -21,7 +21,7 @@ NSString *const OAIAPProductPurchaseDeferredNotification = @"OAIAPProductPurchas
 NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotification";
 NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchaseProductNotification";
 
-#define TEST_LOCAL_PURCHASE YES
+#define TEST_LOCAL_PURCHASE NO
 
 #define kAllSubscriptionsExpiredStatus 100
 #define kNoSubscriptionsFoundStatus 110

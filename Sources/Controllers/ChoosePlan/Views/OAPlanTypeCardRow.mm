@@ -153,7 +153,7 @@
             BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
             BOOL osmAndProPurchased = [OAIAPHelper isOsmAndProAvailable];
             BOOL isPurchased = (isMaps && mapsPlusPurchased) || osmAndProPurchased;
-            BOOL available = !isMaps || (!mapsPlusPurchased && [selectedFeature isAvailableInMapsPlus]);
+            BOOL available = ((isMaps && [selectedFeature isAvailableInMapsPlus]) || !isMaps) && !isPurchased;
             NSString *patternPlanAvailable = OALocalizedString(available ? @"continue_with" : @"not_available_with");
             self.labelTitle.text = isPurchased
                     ? OALocalizedString(@"shared_string_purchased")
@@ -166,9 +166,12 @@
                             _subscription.formattedPrice];
 
             NSString *iconName = [_subscription productIconName];
-            if (!available && isMaps)
-                iconName = [iconName stringByAppendingString:@"_bw"];
-            self.imageViewLeftIcon.image = [UIImage imageNamed:iconName];
+            UIImage *icon;
+            if (!available)
+                icon = [UIImage imageNamed:[iconName stringByAppendingString:@"_bw"]];
+            if (!icon)
+                icon = [UIImage imageNamed:iconName];
+            self.imageViewLeftIcon.image = icon;
             self.imageViewRightIcon.image = nil;
             self.backgroundColor = available && !isPurchased ? UIColorFromARGB(color_primary_purple_10) : UIColorFromRGB(color_route_button_inactive);
             self.labelTitle.textColor = available && !isPurchased ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);

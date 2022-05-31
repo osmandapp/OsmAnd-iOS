@@ -2033,7 +2033,7 @@
 "rendering_value_medium_w_name" = "Canolig";
 "rendering_attr_contourDensity_description" = "Contour line density";
 "rendering_attr_currentTrackWidth_name" = "Lled GPX";
-"rendering_attr_horseRoutes_name" = "Llwybrau march";
+"rendering_attr_horseRoutes_name" = "Llwybrau ceffylau";
 "routing_attr_avoid_ferry_description" = "Avoids ferries";
 "rendering_attr_highway_class_track_grade2_name" = "Gradd 2";
 "rendering_attr_shareTaxiRoutes_name" = "Llwybrau tacsis i'w rhannu";
@@ -2325,8 +2325,8 @@
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "routeInfo_roadClass_description" = "Lliwio llinell y llwybr neu drac ynôl y math o ffordd.";
 "routing_attr_allow_gate_name" = "Caniatáu defnydd gât";
-"routing_attr_prefer_horse_routes_name" = "Ffafrio llwybrau marchogaeth";
-"routing_attr_prefer_horse_routes_description" = "Ffafrio llwybrau marchogaeth";
+"routing_attr_prefer_horse_routes_name" = "Ffafrio llwybrau ceffylau";
+"routing_attr_prefer_horse_routes_description" = "Ffafrio llwybrau ceffylau";
 "connect_rp" = "Cysylltu pwyntiau taith";
 "routeInfo_surface_description" = "Dangos gwybodaeth arwyneb ffyrdd/palmentydd.";
 "routeInfo_winter_ice_road_description" = "Lliwio llinell y llwybr neu drac ynôl cyflwr y ffyrdd yn y gaeaf.";

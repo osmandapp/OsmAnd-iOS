@@ -14,7 +14,7 @@ on:
       releaseversion:
         description: 'Release Version'
         required: true
-        default: '4.2.2'
+        default: '4.3.0'
       download_qt_ios_library:
         description: 'Download prebuilt qt library (true) or build locally (false) - extra 2 h'
         required: true
@@ -42,42 +42,42 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v2
       with:
-        ref: r4.2
+        ref: master
         path: ios
     - name: Checkout android
       uses: actions/checkout@v2
       with:
-        ref: r4.2
+        ref: master
         repository: osmandapp/OsmAnd
         path: android
     - name: Checkout build
       uses: actions/checkout@v2
       with:
-        ref: r4.2
+        ref: master
         repository: osmandapp/OsmAnd-build
         path: build
     - name: Checkout core legacy
       uses: actions/checkout@v2
       with:
-        ref: r4.2
+        ref: master
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
     - name: Checkout core
       uses: actions/checkout@v2
       with:
-        ref: r4.2
+        ref: master
         repository: osmandapp/OsmAnd-core
         path: core
     - name: Checkout help
       uses: actions/checkout@v2
       with:
-        ref: r4.2
+        ref: master
         repository: osmandapp/osmandapp.github.io
         path: help
     - name: Checkout resources
       uses: actions/checkout@v2
       with:
-        ref: r4.2
+        ref: master
         repository: osmandapp/OsmAnd-resources
         path: resources
     # - name: Select XCode 11.3

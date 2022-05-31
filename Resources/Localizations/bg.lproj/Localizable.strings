@@ -1189,7 +1189,7 @@
 "menu_help" = "Помощ";
 
 // OSM Editing actions
-"opening_changeset" = "Отваряне на списъка с промени…";
+"opening_changeset" = "Отваряне на списък с промени…";
 "closing_changeset" = "Затваряне на списъка с промени…";
 "commiting_node" = "Изпращане на точка…";
 "loading_poi_obj" = "Зареждане на POI…";
@@ -2233,7 +2233,7 @@
 "rendering_value_thin_name" = "Thin";
 "rendering_attr_whiteWaterSports_name" = "Whitewater sports";
 "routeInfo_roadClass_name" = "Тип път";
-"routing_attr_allow_skating_only_description" = "Routes groomed for freestyle or skating only without classic tracks.";
+"routing_attr_allow_skating_only_description" = "Маршрути, подготвени само за свободен стил или пързаляне без класическо трасе.";
 "rendering_attr_piste_type_nordic_name" = "Nordic";
 "rendering_attr_trainLightrailRoutes_name" = "Маршрути на влакове";
 "rendering_value_pedestrian_name" = "Пешеходец";

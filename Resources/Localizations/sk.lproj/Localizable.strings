@@ -2046,3 +2046,6 @@
 "lang_es" = "Španielsky (Español)";
 "weather_wind_unit_mi_per_hour" = "Míle za hodinu";
 "attribute" = "Vlastnosť";
+"altitude_ascent" = "Do kopca";
+"altitude_descent" = "Z kopca";
+"simulation_real_mode_title" = "Realistická simulácia";

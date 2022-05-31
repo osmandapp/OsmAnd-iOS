@@ -694,7 +694,7 @@
 "map_widget_magnetic_bearing" = "磁力方位";
 "map_widget_bearing" = "相對方位";
 "map_widget_transparent" = "透明小工具";
-"shared_string_near" = "附近";
+"shared_string_near" = "鄰近";
 "settings_preset" = "預置設定檔";
 "settings_preset_descr" = "檢視地圖和導航設定，記住每個使用設定檔。在這裡設定您的預置設定檔。";
 "rotate_map_to_bearing" = "地圖方位";

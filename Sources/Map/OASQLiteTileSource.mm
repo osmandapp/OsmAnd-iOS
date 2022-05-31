@@ -56,7 +56,7 @@
 - (void) dealloc
 {
     if (_db)
-        _db->close();
+        _db->close(false);
 }
 
 - (int) bitDensity
@@ -455,12 +455,13 @@
     BOOL res = NO;
 
     auto *db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(filePath));
-    OsmAnd::TileSqliteDatabase::Meta meta;
-    if (db->obtainMeta(meta))
-        res = !meta.getUrl().isEmpty();
-    
+    if (db->open())
+    {
+        res = db->isOnlineTileSource();
+        
+        db->close(false);
+    }
     delete db;
-    
     return res;
 }
 
@@ -469,9 +470,13 @@
     NSString *title = nil;
 
     auto *db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(filePath));
-    OsmAnd::TileSqliteDatabase::Meta meta;
-    if (db->obtainMeta(meta))
-        title = meta.getTitle().toNSString();
+    if (db->open())
+    {
+        OsmAnd::TileSqliteDatabase::Meta meta;
+        if (db->obtainMeta(meta))
+            title = meta.getTitle().toNSString();
+        db->close(false);
+    }
 
     delete db;
 

@@ -29,7 +29,7 @@
 // Favorites
 "fav_color" = "Renk";
 "fav_colors" = "Renkler";
-"fav_name" = "İsim";
+"fav_name" = "Ad";
 "fav_group" = "Grup";
 "groups" = "Gruplar";
 "favorite" = "Favori";
@@ -143,7 +143,7 @@
 "sett_loc_fmt" = "Konum biçimi";
 "sett_deg" = "Dereceler";
 "sett_pref_lang" = "Tercih edilen dil";
-"sett_lang_show_local" = "Yerel isimleri göster";
+"sett_lang_show_local" = "Yerel adları göster";
 "maps" = "Haritalar";
 "purchases" = "Satın almalar";
 // Purchases
@@ -408,7 +408,7 @@
 "sqlitedb_import_title" = "Raster harita dosyasını içe aktar";
 "sqlitedb_import_already_exists" = "Belirtilen SqliteDb dosya zaten var olduğunu. Eylemi seçiniz.";
 "map_creator" = "Harita Oluşturucusu";
-"local_names" = "Yerel isimler";
+"local_names" = "Yerel adlar";
 "history" = "Geçmiş";
 "today" = "Bugün";
 "yesterday" = "Dün";
@@ -419,7 +419,7 @@
 "gpx_import_desc" = "GPX dosyalarınızı (yaygın GPS veri biçimi) Dropbox, E-posta veya başka bir kaynaktan içe aktarmak için \"OsmAnd Haritalara Kopyala\" seçeneğini kullanın";
 "map_settings_hillshade" = "Tepe gölgesi";
 "sett_lang_trans" = "başka alfabeyle yaz";
-"sett_lang_show_trans" = "İsimlere harf çevirisi yap";
+"sett_lang_show_trans" = "Adlara harf çevirisi yap";
 "product_desc_ext_nautical" = "OsmAnd Deniz Grafikleri, OsmAnd Haritalar & Navigasyon uygulaması için bir eklentidir. Okyanusların, denizlerin, kıyı alanlarının ve nehirlerin ayrıntılı bir grafiksel gösterimidir. Çizelgeler, yelken rotaları, navigasyon ışıkları, tehlikeli alanlar, yelken açılmasına veya yanaşmasına izin verilen ya da izin verilmeyen alanlar vb. gibi çeşitli bilgiler içerebilir.\n\nKullanım Talimatları: Ayrıntılı haritanın olmasına bakılmaksızın haritaları görmek için deniz temel haritasının indirilmesi önemle tavsiye edilir. Deniz çizelgelerini açmak için harita düğmesine dokunun ve harita türünü Deniz olarak ayarlayın.\n\nNot: Tüm profesyonel denizciler gemilerinde resmi deniz çizelgeleri bulundurmak zorundadırlar.\n\nOsmAnd Deniz çizelgeleri, OpenSeaMap projesi verilerini temel almaktadır. Şu anda OpenSeaMap çizelgeleri resmi deniz çizelgeleri ile rekabet edemese de, eğlence amaçlı yelkenciler tarafından yönlendirme veya rota planlama için kullanılabilir.";
 "product_desc_ext_parking" = "OsmAnd Park Etme Eklentisi size park konumunuzu hatırlatır. OsmAnd Haritalar&Navigasyon uygulaması için bir eklentidir.\nZamandan bağımsız bir hatırlatıcı (sadece harita üzerinde bir işaretleyici) veya zaman aşımına uğradığında alarmlı zaman sınırlı bir hatırlatıcı seçin (harita üzerinde bir işaretleyici de içerir). Eklentiyi kullanmak için Eklentiler menüsünden etkinleştirin.";
 "product_desc_ext_skimap" = "OsmAnd Kayak Haritaları, kış sporları konumlarında gezinmek için tasarlanmış bir OsmAnd Haritalar&Navigasyon uygulaması eklentisidir. Kayak pistleri, telesiyej işaretleri hakkında bilgiler vermekte ve hatta her parkurun karmaşıklığını gösteren renkli çizgiler sağlamaktadır. Kayak pistleri ve çevresindeki altyapı hakkında bilgiler edinebilirsiniz.\n\nKullanım Talimatları: OsmAnd uygulamasında eklentiyi etkinleştirin, harita düğmesine dokunun ve harita türünü Kayak haritaları olarak ayarlayın.";
@@ -540,7 +540,7 @@
 "show_traffic_warnings" = "Trafik uyarıları";
 "show_pedestrian_warnings" = "Yaya geçitleri";
 "show_cameras" = "Hız kameraları";
-"speak_street_names" = "Cadde isimleri (TTS)";
+"speak_street_names" = "Cadde adları (TTS)";
 "speak_speed_limit" = "Hız sınırı";
 "speak_cameras" = "Hız kameraları";
 "speak_traffic_warnings" = "Trafik uyarıları";
@@ -744,7 +744,7 @@
 "osm_live_enter_email" = "Lütfen geçerli bir e-posta adresi girin";
 "shared_string_unexpected_error" = "Beklenmeyen hata";
 "osm_live_ask_for_purchase" = "Lütfen önce OsmAnd Live aboneliği satın alın";
-"osm_live_enter_user_name" = "Lütfen herkese açık isim girin";
+"osm_live_enter_user_name" = "Lütfen bir genel ad girin";
 "shared_string_io_error" = "I/O hatası";
 "osm_live_hide_user_name" = "Adımı raporlarda gösterme";
 "shared_string_upload" = "Karşıya yükle";
@@ -761,7 +761,7 @@
 "shared_string_reload" = "Tekrar yükle";
 "sett_generic_ext_input" = "Genel Klavye";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
-"save_poi_too_many_uppercase" = "İsim çok fazla büyük harf içermektedir. Devam et\?";
+"save_poi_too_many_uppercase" = "Ad çok fazla büyük harf içeriyor. Devam edilsin mi?";
 "shared_string_read_more" = "Devamını oku";
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";
@@ -985,7 +985,7 @@
 "keep_informing_descr" = "Navigasyon talimatlarını düzenli aralıklarla yeniden duyurun";
 "change_map_underlay" = "Harita alt katmanını değiştir";
 "help_follow_us" = "Bizi takip edin";
-"osm_edit_without_name" = "İsim olmadan";
+"osm_edit_without_name" = "Ad olmadan";
 "osm_note" = "OSM Notu";
 "shared_string_building" = "Bina";
 "add_first_inermediate" = "Seyahatteki ilk ara-noktayı ekleyin";
@@ -1184,7 +1184,7 @@
 "product_desc_southamerica_short" = "Güney Amerika bölgesi haritaları";
 "product_desc_asia_short" = "Asya bölgesi haritaları";
 "obf_import_title" = "Çevrim dışı harita dosyasını içe aktar";
-"obf_import_already_exists" = "Bu isimde bir dosya zaten var. Lütfen bir eylem seçin.";
+"obf_import_already_exists" = "Bu ada sahip bir dosya zaten var. Lütfen bir eylem seçin.";
 "obf_import_success" = "Dosya başarıyla içe aktarıldı";
 "obf_import_failed" = "Dosya içe aktarılamadı";
 "res_import_success" = "%@ başarıyla içe aktarıldı";
@@ -1291,7 +1291,7 @@
 "trip_name" = "Yol adı";
 "trip_hint" = "Yol adını girin";
 "shared_string_maximum" = "Azami";
-"res_online_name_descr" = "Çevrim içi kaynak için isim sağlayın";
+"res_online_name_descr" = "Çevrim içi kaynak için ad sağlayın";
 "res_online_url_descr" = "Çevrim içi kaynak için URL girin veya kopyalayıp yapıştırın";
 "res_url" = "URL";
 "res_zoom_levels" = "Yakınlaştırma seviyeleri";
@@ -2507,3 +2507,12 @@
 "simulation_constant_mode_title" = "Sabit hız";
 "simulation_preview_mode_desc" = "Simülasyonun hızı düz kısımlarda azami olacak ve yalnızca kavşaklarda yavaşlayacaktır.";
 "speed_mode" = "Hız modu";
+"animate_my_location" = "Konum değişimini canlandır";
+"animate_my_location_descr" = "Navigasyon sırasında harita üzerinde konumun yumuşak değişimi";
+"copy_address" = "Adresi kopyala";
+"copy_poi_name" = "POI adını kopyala";
+"copy_coordinates" = "Koordinatları kopyala";
+"share_geo" = "Yer:";
+"toast_empty_name_error" = "Adsız konum";
+"routing_attr_allow_private_for_truck_name" = "Özel erişime izin ver (kamyon)";
+"routing_attr_allow_private_for_truck_description" = "Kamyonlar için özel alanlara erişime izin verin";

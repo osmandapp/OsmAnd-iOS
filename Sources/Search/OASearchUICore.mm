@@ -127,7 +127,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
             double o2PhraseWeight = o2.unknownPhraseMatchWeight;
             if (o1PhraseWeight == o2PhraseWeight && o1PhraseWeight / SEARCH_PRIORITY_COEF > 1)
             {
-                if (!![[ph getUnknownWordToSearchBuildingNameMatcher] matches:o1.localeName])
+                if (![[ph getUnknownWordToSearchBuildingNameMatcher] matches:o1.localeName])
                     o1PhraseWeight--;
                 if (![[ph getUnknownWordToSearchBuildingNameMatcher] matches:o2.localeName])
                     o2PhraseWeight--;

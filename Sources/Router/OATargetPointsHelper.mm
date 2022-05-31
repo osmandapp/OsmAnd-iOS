@@ -224,12 +224,12 @@
     NSArray<CLLocation *> *is = [self getIntermediatePointsLatLonNavigation];
     if (([_routingHelper isFollowingMode] && lastKnownLocation) || !start)
     {
-        [_routingHelper setFinalAndCurrentLocation:_app.data.pointToNavigate.point intermediatePoints:is currentLocation:lastKnownLocation];
+        [_routingHelper setFinalAndCurrentLocation:_app.data.pointToNavigate.point intermediatePoints:is currentLocation:lastKnownLocation denyRecalculation:NO];
     }
     else
     {
         CLLocation *loc = start.point;
-        [_routingHelper setFinalAndCurrentLocation:_app.data.pointToNavigate.point intermediatePoints:is currentLocation:loc];
+        [_routingHelper setFinalAndCurrentLocation:_app.data.pointToNavigate.point intermediatePoints:is currentLocation:loc denyRecalculation:NO];
     }
 }
 

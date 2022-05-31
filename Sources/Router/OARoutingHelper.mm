@@ -506,14 +506,14 @@ static BOOL _isDeviatedFromRoute = false;
     });
 }
 
-- (void) setFinalAndCurrentLocation:(CLLocation *)finalLocation intermediatePoints:(NSArray<CLLocation *> *)intermediatePoints currentLocation:(CLLocation *)currentLocation
+- (void) setFinalAndCurrentLocation:(CLLocation *)finalLocation intermediatePoints:(NSArray<CLLocation *> *)intermediatePoints currentLocation:(CLLocation *)currentLocation denyRecalculation:(BOOL)denyRecalculation
 {
     @synchronized (self)
     {
         OARouteCalculationResult *previousRoute = _route;
         [self clearCurrentRoute:finalLocation newIntermediatePoints:intermediatePoints];
         // to update route
-        [self setCurrentLocation:currentLocation returnUpdatedLocation:NO previousRoute:previousRoute targetPointsChanged:YES];
+        [self setCurrentLocation:currentLocation returnUpdatedLocation:NO previousRoute:previousRoute targetPointsChanged:YES denyRecalculation:denyRecalculation];
     }
 }
 
@@ -975,7 +975,7 @@ static BOOL _isDeviatedFromRoute = false;
     return false;
 }
 
-- (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation previousRoute:(OARouteCalculationResult *)previousRoute targetPointsChanged:(BOOL)targetPointsChanged
+- (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation previousRoute:(OARouteCalculationResult *)previousRoute targetPointsChanged:(BOOL)targetPointsChanged denyRecalculation:(BOOL)denyRecalculation
 {
     CLLocation *locationProjection = currentLocation;
     if (self.isPublicTransportMode && currentLocation != nil && _finalLocation != nil &&
@@ -1022,7 +1022,7 @@ static BOOL _isDeviatedFromRoute = false;
             if (currentRoute > 0 && allowableDeviation > 0)
             {
                 distOrth = [OAMapUtils getOrthogonalDistance:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
-                if (distOrth > allowableDeviation)
+                if (distOrth > allowableDeviation && !denyRecalculation)
                 {
                     NSLog(@"Recalculate route, because correlation  : %f", distOrth);
                     _isDeviatedFromRoute = true;
@@ -1106,9 +1106,9 @@ static BOOL _isDeviatedFromRoute = false;
     return nil;
 }
 
-- (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation
+- (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation denyRecalculation:(BOOL)denyRecalculation
 {
-    return [self setCurrentLocation:currentLocation returnUpdatedLocation:returnUpdatedLocation previousRoute:_route targetPointsChanged:false];
+    return [self setCurrentLocation:currentLocation returnUpdatedLocation:returnUpdatedLocation previousRoute:_route targetPointsChanged:false denyRecalculation:denyRecalculation];
 }
 
 - (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)next

@@ -624,16 +624,16 @@
         if (!location || [self.class isPointAccurateForRouting:location])
         {
             // Update routing position and get location for sticking mode
-            updatedLocation = [_routingHelper setCurrentLocation:location returnUpdatedLocation:[_settings.snapToRoad get]];
+            updatedLocation = [_routingHelper setCurrentLocation:location returnUpdatedLocation:[_settings.snapToRoad get] denyRecalculation:YES];
         }
     }
     else if ([_routingHelper isRoutePlanningMode] && !_app.data.pointToStart)
     {
-        [_routingHelper setCurrentLocation:location returnUpdatedLocation:NO];
+        [_routingHelper setCurrentLocation:location returnUpdatedLocation:NO denyRecalculation:YES];
     }
     else if ([_locationSimulation isRouteAnimating])
     {
-        [_routingHelper setCurrentLocation:location returnUpdatedLocation:NO];
+        [_routingHelper setCurrentLocation:location returnUpdatedLocation:NO denyRecalculation:YES];
     }
 
     [[OAWaypointHelper sharedInstance] locationChanged:location];

@@ -345,8 +345,8 @@
 "import_export" = "استيراد/تصدير";
 "gpx_import_title" = "استيراد مسارات";
 "gpx_import_already_exists" = "ملف المسار بهذا الاسم موجود مسبقا. الرجاء تحديد إجراء.";
-"gpx_add_new" = "إضافة ملف جديد";
-"gpx_overwrite" = "إعادة الكتابة";
+"gpx_add_new" = "تغيير الاسم";
+"gpx_overwrite" = "استبدال";
 "gpx_cannot_import" = "لا يمكن استيراد ملف GPX المحدد";
 "gpx_export_title" = "تصدير المسار";
 "gpx_export_select_track" = "يرجى اختيار رحلة للتصدير";
@@ -1111,7 +1111,7 @@
 "obf_import_already_exists" = "الملف بهذا الاسم موجود مسبقا. الرجاء تحديد إجراء.";
 "obf_import_success" = "تم استيراد الملف بنجاح";
 "obf_import_failed" = "فشل استيراد الملف";
-"res_import_success" = "%@ تم االاستيراد بنجاح";
+"res_import_success" = "%@ تم الاستيراد بنجاح";
 "res_import_unsupported" = "نوع الملف غير صحيح. يتم اعتماد ملفات xml و * .xml الخاصة بالتوجيه فقط.";
 "routing_import_please_restart" = "لاستخدام التوجيه .xml الجديد الرجاء أعاده تشغيل التطبيق.";
 "download_pending" = "تحميل معلق";

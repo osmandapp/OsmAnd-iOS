@@ -12,6 +12,8 @@
 #import "OASearchSettings.h"
 #import "OASearchUICore.h"
 #import "OASearchPhrase.h"
+#import "OASearchCoreFactory.h"
+#import "OASearchWord.h"
 #import "OAResultMatcher.h"
 #import "OASearchResultMatcher.h"
 #import "OAAtomicInteger.h"
@@ -159,13 +161,35 @@ static BOOL TEST_EXTRA_RESULTS = YES;
         BOOL passed = YES;
         NSString *text = phrases[k];
         NSArray<NSString *> *result = results[k];
-        OASearchPhrase *phrase = [emptyPhrase generateNewPhrase:text settings:s];
-        OASearchResultMatcher *matcher = [[OASearchResultMatcher alloc] initWithMatcher:rm phrase:phrase request:1 requestNumber:[OAAtomicInteger atomicInteger:1] totalLimit:-1];
-        [core searchInBackground:phrase matcher:matcher];
-        
-        OASearchResultCollection *collection = [[OASearchResultCollection alloc] initWithPhrase:phrase];
-        [collection addSearchResults:matcher.getRequestResults resortAll:YES removeDuplicates:YES];
-        NSArray<OASearchResult *> *searchResults = collection.getCurrentSearchResults;
+        NSArray<OASearchResult *> *searchResults;
+        OASearchPhrase *phrase;
+        NSArray<NSString *> *arr = [text regexSplitInStringByPattern:@"[\\{}]"];
+        if (arr.count > 0 && [arr.firstObject isEqualToString:@"POI_TYPE:"])
+        {
+            [OASearchCoreFactory setDisplayDefaultPoiTypes:YES];
+            phrase = [emptyPhrase generateNewPhrase:@"" settings:s];
+            searchResults = [self getSearchResult:phrase rm:rm core:core];
+            for (OASearchResult *searchResult in searchResults)
+            {
+                if (arr.count > 1 && [arr[1] isEqualToString:searchResult.localeName])
+                {
+                    NSString *fullText = @"";
+                    if (arr.count > 2)
+                        fullText = arr[2];
+                
+                    phrase = [emptyPhrase generateNewPhrase:fullText settings:s];
+                    [phrase.getWords addObject:[[OASearchWord alloc] initWithWord:searchResult.localeName res:searchResult]];
+                    searchResults = [self getSearchResult:phrase rm:rm core:core];
+                    break;
+                }
+            }
+            [OASearchCoreFactory setDisplayDefaultPoiTypes:NO];
+        }
+        else
+        {
+            phrase = [emptyPhrase generateNewPhrase:text settings:s];
+            searchResults = [self getSearchResult:phrase rm:rm core:core];
+        }
         for(NSInteger i = 0; i < result.count; i++)
         {
             NSString *expected = result[i];
@@ -208,6 +232,16 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     }
     // Do not use this map for future searches
     //[OsmAndApp.instance removeTestResource:obfFile];
+}
+
+- (NSArray<OASearchResult *> *) getSearchResult:(OASearchPhrase *)phrase rm:(OAResultMatcher<OASearchResult *> *)rm core:(OASearchUICore *)core
+{
+    OASearchResultMatcher *matcher = [[OASearchResultMatcher alloc] initWithMatcher:rm phrase:phrase request:1 requestNumber:[OAAtomicInteger atomicInteger:1] totalLimit:-1];
+    [core searchInBackground:phrase matcher:matcher];
+    OASearchResultCollection *collection = [[OASearchResultCollection alloc] initWithPhrase:phrase];
+    [collection addSearchResults:matcher.getRequestResults resortAll:YES removeDuplicates:YES];
+    
+    return collection.getCurrentSearchResults;
 }
 
 - (void) parseResults:(NSDictionary *)sourceJson tag:(NSString *)tag results:(NSMutableArray<NSMutableArray<NSString *> *> *)results

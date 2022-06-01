@@ -19,7 +19,7 @@
 "year" = "Blwyddyn";
 "years_2_4" = "Blwyddyn";
 "years_5" = "Blwyddyn";
-"months_3" = "";
+"months_3" = "Tri mis";
 "price_free" = "Am ddim";
 "get_discount_title" = "";
 "get_free_trial_title" = "";
@@ -114,7 +114,7 @@
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Rhanbarth gyrru";
 "driving_region_automatic" = "Awtomatig";
-"routing_attr_length_name" = "Length limit";
+"routing_attr_length_name" = "Terfyn hyd";
 "default_speed" = "Default speed";
 "min_speed" = "Min. speed";
 "max_speed" = "Max. speed";
@@ -160,7 +160,7 @@
 "map_widget_time" = "Amser i fynd";
 "map_widget_ruler_control" = "Mesurydd radiws";
 "show_compass_ruler" = "Dangos mesurydd cwmpawd";
-"hide_compass_ruler" = "Hide compass ruler";
+"hide_compass_ruler" = "Cuddio mesurydd cwmpawd";
 "map_widget_distance_by_tap" = "Pellter wrth dapio";
 "shared_string_collapse" = "Cwympo";
 "shared_string_topbar" = "Bar uchaf";
@@ -225,13 +225,13 @@
 "arrival_distance_factor_at_last" = "In the last meters";
 "map_orientation_change_in_accordance_with_speed" = "Map orientation threshold";
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
-"route_parameters" = "Route parameters";
+"route_parameters" = "Paramedrau llwybr";
 "fast_route_mode" = "Llwybr cyflymaf";
 "nav_type_title" = "Navigation type";
 "voice_announces" = "Cyfarwyddiadau llais";
-"screen_alerts" = "Screen alerts";
-"vehicle_parameters" = "Vehicle parameters";
-"map_during_navigation" = "Map during navigation";
+"screen_alerts" = "Rhybuddion sgrin";
+"vehicle_parameters" = "Paramedrau cerbyd";
+"map_during_navigation" = "Map wrth lywio";
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
@@ -430,7 +430,7 @@
 "attribute" = "Priodoledd";
 
 // Shared Strings
-"shared_string_custom" = "Custom";
+"shared_string_custom" = "Cyfaddas";
 "shared_string_enable" = "Galluogi";
 "shared_string_disable" = "Analluogi";
 "shared_string_apply" = "Iawn";
@@ -489,7 +489,7 @@
 "shared_string_min" = "Min.";
 "shared_string_max" = "Uchaf";
 "shared_string_wifi_only" = "Only on Wi-Fi";
-"shared_string_turn_off" = "Turn off";
+"shared_string_turn_off" = "Diffodd";
 "shared_strings_all_regions" = "Pob rhanbarth";
 "regions" = "Rhanbarthau";
 "shared_string_width" = "Lled";
@@ -557,7 +557,7 @@
 "add_group" = "Add group";
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
-"select_group" = "Select group";
+"select_group" = "Dewis grŵp";
 "icon" = "Eicon";
 "shape" = "Siâp";
 "fav_point_dublicate" = "Duplicate Favorite name specified";
@@ -600,7 +600,7 @@
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
-"gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
+"gpx_parse_error" = "Nid yw OsmAnd GPX wedi'i ffurfio'n dda, cysyllta â'r tîm cymorth i ymchwilio ymhellach.";
 "tracks_on_map" = "Tracks on map";
 "gpx_export_title" = "Export track";
 "gpx_export_select_track" = "Please select track for Export";
@@ -651,7 +651,7 @@
 "gpxup_identifiable" = "Adnabyddadwy";
 "gpxup_trackable" = "Traciadwy";
 "gpxup_private" = "Preifat";
-"gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
+"gpx_upload_public_visibility_descr" = "Mae \"cyhoeddus\" yn golygu bod yr olrhain yn cael ei ddangos yn gyhoeddus yn eich olrhain GPS ac mewn rhestrau olrhain GPS cyhoeddus, ac yn y rhestr olrhain gyhoeddus gyda stampiau amser ar ffurf amrwd. Nid yw data a gyflwynir trwy'r API yn cyfeirio at eich tudalen olrhain. Nid yw stampiau amser pwyntiau olrhain ar gael trwy'r API GPS cyhoeddus, ac nid yw pwyntiau olrhain wedi'u trefnu'n gronolegol.";
 "gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
 "gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
 "gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
@@ -690,7 +690,7 @@
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Cysgodion bryniau";
 "mapillary" = "Mapillary";
-"street_level_imagery" = "Street-level imagery";
+"street_level_imagery" = "Delweddau ar lefel stryd";
 "shared_string_terrain" = "Tirwedd";
 "map_settings_layer_transparency" = "Layer transparency";
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
@@ -834,7 +834,7 @@
 "lang_ky" = "Cyrgyseg";
 "lang_la" = "Lladin";
 "lang_lb" = "Lwcsembwrgeg";
-"lang_lmo" = "Lombard";
+"lang_lmo" = "Lombardeg";
 "lang_lo" = "Lao";
 "lang_lt" = "Lithwaneg";
 "lang_lv" = "Latfieg";
@@ -846,7 +846,7 @@
 "lang_mr" = "Marathi";
 "lang_ms" = "Maleieg";
 "lang_my" = "Byrmaneg";
-"lang_nap" = "Neapolitan";
+"lang_nap" = "Napolitaneg";
 "lang_nb" = "Norwyeg Bokmål";
 "lang_nds" = "Low German";
 "lang_ne" = "Nepaleg";
@@ -865,8 +865,8 @@
 "lang_ro" = "Rwmaneg";
 "lang_ru" = "Rwseg";
 "lang_sc" = "Sardinieg";
-"lang_scn" = "Sicilian";
-"lang_sco" = "Scots";
+"lang_scn" = "Sicilieg";
+"lang_sco" = "Scoteg";
 "lang_sh" = "Serbo-Croatian";
 "lang_sk" = "Slofaceg";
 "lang_sl" = "Slofeneg";
@@ -893,8 +893,8 @@
 "lang_zh_cn" = "Tsieineeg (Syml)";
 "lang_zh_hk" = "Tsieineeg (Hong Cong)";
 "lang_zh_tw" = "Tsieineeg (Traddodiadol)";
-"lang_zhminnan" = "Southern Min";
-"lang_zhyue" = "Cantonese";
+"lang_zhminnan" = "Min Deheuol";
+"lang_zhyue" = "Cantoneg";
 "maps" = "Mapiau";
 "purchases" = "Pryniannau";
 "select_map_style" = "Select map style";
@@ -913,20 +913,20 @@
 "selected_profiles" = "%d o %d";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type: %@";
-"shared_string_nothing_selected" = "Nothing selected";
+"shared_string_nothing_selected" = "Dim wedi'i ddewis";
 "export_failed" = "Could not export profile";
 "custom_osmand_plugin_name" = "Custom OsmAnd plugin";
 "custom_plugins" = "Custom plugins";
 "extra_maps" = "Extra maps";
-"import_duplicates_title" = "Some items already exist";
-"import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
-"keep_both" = "Keep both";
-"keep_both_desc" = "Imported items will be added with prefix";
-"replace_all" = "Replace all";
-"replace_all_desc" = "Current items will be replaced with items from the file";
+"import_duplicates_title" = "Mae rhai eitemau eisoes yn bodoli";
+"import_duplicates_description" = "Mae gan OsmAnd eisoes elfennau gyda'r un enwau â'r rhai a fewnforiwyd.\n\nDewis gweithred.";
+"keep_both" = "Cadw'r ddau";
+"keep_both_desc" = "Bydd eitemau a fewnforiwyd yn cael eu hychwanegu gyda rhagddodiad";
+"replace_all" = "Amnewid y cyfan";
+"replace_all_desc" = "Bydd eitemau o'r ffeil yn cymryd lle'r eitemau cyfredol";
 "shared_string_profiles" = "Proffiliau";
-"shared_string_quick_actions" = "Quick actions";
-"shared_string_poi_types" = "POI types";
+"shared_string_quick_actions" = "Gweithredoedd cyflym";
+"shared_string_poi_types" = "Mathau o POI";
 "quick_action_map_source_title" = "Ffynonellau mapiau";
 "shared_string_routing" = "Llwybro";
 "shared_string_rendering_style" = "Rendering styles";
@@ -939,7 +939,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
-"shared_string_import_complete" = "Import complete";
+"shared_string_import_complete" = "Mewnforio wedi ei gwblhau";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
 "app_restart_required" = "Mae ar yr ap angen ailddechrau i roi rhai gosodiadau ar waith.";
 "shared_string_finish" = "Gorffen";
@@ -982,12 +982,12 @@
 "profile_prefs_reset_successful" = "All profile settings restored to default";
 "not_available_profile_name" = "Profile with this name already exists.";
 "profile_type_base_string" = "Proffil sylfaen";
-"selected_profile" = "Selected profile";
+"selected_profile" = "Proffil dethol";
 "app_profiles" = "App profiles";
 "profile_sett_descr" = "Affect selected application profile";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
-"new_plugin_added" = "New plugin added";
+"new_plugin_added" = "Ychwanegwyd ategyn newydd";
 "reset_to_default" = "Ailosod i'r rhagosodiad";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
 "checking_for_duplicates" = "Checking for duplicates...";
@@ -1040,7 +1040,7 @@
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Gwrthdroi'r llwybr";
-"join_segments" = "Join segments";
+"join_segments" = "Cysylltu segmentau";
 "simplified_track" = "Trac wedi\'i symleiddio";
 "simplified_track_description" = "Dim ond llinell y llwybr caiff ei gadw. Caiff y cyfeirbwyntiau eu dileu.";
 "open_saved_track" = "Agor trac wedi\'i gadw";
@@ -1064,11 +1064,11 @@
 "shared_string_gpx_track" = "Trac";
 "select_another_track" = "Dewis drac arall";
 "select_track_to_follow" = "Select track to follow";
-"attach_to_the_roads" = "Attach to the roads";
+"attach_to_the_roads" = "Atodi i'r ffyrdd";
 "reverse_track_dir" = "Gwrthdroi cyfeiriad y trac";
 "point_to_navigate" = "Navigate to";
 "start_of_track" = "Dechrau\'r trac";
-"nearest_point" = "Nearest point";
+"nearest_point" = "Y pwynt agosaf";
 "plan_route_folder" = "Folder";
 "plan_route_change_folder" = "Newid ffolder";
 "plan_route_select_folder" = "Dewiswch ffolder";
@@ -1078,7 +1078,7 @@
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segnet_num" = "Segment %d";
 "some_of" = "%d o %d";
-"threshold_distance" = "Threshold distance";
+"threshold_distance" = "Pellter trothwy";
 "select_profile" = "Select profile";
 
 // Resources
@@ -1294,7 +1294,7 @@
 
 // Coordinate widget
 "coordinates_widget" = "Ategyn cyfesurynnau";
-"searching_gps" = "Searching GPS";
+"searching_gps" = "Chwilio am GPS";
 "copied_to_clipboard" = "Copied to clipboard";
 
 // Quick action
@@ -1428,12 +1428,12 @@
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Delete nearest destination point";
-"quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
+"quick_action_remove_next_destination" = "Dileu'r pwynt cyrchfan agosaf";
+"quick_action_remove_next_destination_descr" = "Yn dileu cyrchfan nesaf eich llwybr. Os mai dyna'r cyrchfan olaf, bydd y llywio yn dod i ben.";
 "change_application_profile" = "Change application profile";
 "select_application_profile" = "Select application profile";
 "shared_string_add_profile" = "Ychwanegu proffil";
-"quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
+"quick_action_switch_profile_descr" = "Mae'r botwm gweithredu yn newid rhwng proffiliau dethol.";
 "profile_type_user_string" = "Proffil defnyddiwr";
 "profile_type_osmand_string" = "Proffil OsmAnd";
 "unsupported_action" = "Unsupported action";
@@ -1659,10 +1659,10 @@
 "product_title_wiki" = "Wicipedia";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"shared_string_all_languages" = "All languages";
+"shared_string_all_languages" = "Pob iaith";
 "select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
-"wiki_menu_download_descr" = "Additional maps are needed to view Wikipedia POIs on the map.";
-"some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
+"wiki_menu_download_descr" = "Mae angen mapiau ychwanegol i weld POIs Wicipedia ar y map.";
+"some_articles_may_not_available_in_lang" = "Efallai na fydd rhai erthyglau Wicipedia ar gael yn eich iaith.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 "product_title_srtm" = "Cyfuchliniau";
@@ -1703,12 +1703,12 @@
 "gpx_dir_arrows" = "Direction arrows";
 "gpx_split_interval" = "Split interval";
 "gpx_split_interval_descr" = "Dewiswch yr ysbaid y bydd nodau gyda phellter neu amser ar y trac yn cael eu harddangos.";
-"gpx_join_gaps" = "Join gaps";
+"gpx_join_gaps" = "Uno'r bylchau";
 "gpx_join_gaps_descr" = "Gaps between segments will be connected.";
 "track_show_start_finish_icons" = "Dangos eiconau dechrau a diwedd";
 "reset_to_original" = "Ailosod i\'r gwreiddiol";
 "route_line_color_elevation_description" = "Route line will be colorized depending on the elevation profile of the route.";
-"gpx_split_interval_none_descr" = "Select the desired splitting option: by time or by distance.";
+"gpx_split_interval_none_descr" = "Dewis yr opsiwn hollti a ddymunir: yn ôl amser neu bellter.";
 "slope_grey_color_descr" = "Grey color is used when slope is undefined.";
 "analyze_on_map" = "Analyze on map";
 "upload_to_openstreetmap" = "Uchwlwytho i OpenStreetMap";
@@ -1827,7 +1827,7 @@
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "get_started" = "Dechrau arni";
 "first_usage_wizard_desc" = "Gadewch i OSMAnd ddarganfod eich lleoliad ac awgrymu mapiau i'w llwytho ar gyfer yr ardal honno.";
-"suggested_maps" = "Suggested maps";
+"suggested_maps" = "Mapiau a awgrymir";
 "suggested_maps_descr" = "These maps are required for the plugin";
 "added_profiles" = "Proffiliau wedi'u hychwanegu";
 "added_profiles_descr" = "Proffiliau wedi'u hychwanegu gan ategyn";
@@ -1863,7 +1863,7 @@
 "create_custom_poi" = "Create custom filter";
 "selected_categories" = "Selected categories";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
-"rearrange_categories" = "Rearrange categories";
+"rearrange_categories" = "Aildrefnu categorïau";
 "visible_categories" = "Visible categories";
 "hidden_categories" = "Hidden categories";
 "create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
@@ -1977,7 +1977,7 @@
 "routing_attr_height_description" = "Specify vehicle height to be permitted on routes.";
 "touting_specified_vehicle_parameters_descr" = "Specified vehicle parameters may affect routing.";
 "routing_attr_height_obstacles_name" = "Defnyddio data uchder";
-"routing_attr_avoid_toll_name" = "No toll roads";
+"routing_attr_avoid_toll_name" = "Dim toll fyrdd";
 "rendering_attr_appMode_description" = "Optimeiddio\'r map ar gyfer";
 "routing_attr_avoid_ice_roads_fords_name" = "No ice roads or fords";
 "rendering_value_germanRoadAtlas_name" = "German road atlas";
@@ -1996,7 +1996,7 @@
 "rendering_attr_streetLighting_name" = "Goleuadau stryd";
 "rendering_attr_appMode_name" = "Modd rendro";
 "routing_attr_avoid_subway_description" = "Avoids subways and lightweight rail transport";
-"routing_attr_driving_style_prefer_unpaved_description" = "Prefer unpaved over paved roads for routing.";
+"routing_attr_driving_style_prefer_unpaved_description" = "Gwell ffyrdd heb balmantu na rhai wedi'u palmantu ar gyfer llwybro.";
 "rendering_value_light_brown_name" = "Light brown";
 "rendering_attr_surface_ice_name" = "Rhew";
 "routing_attr_piste_type_sled_name" = "Sled";
@@ -2005,23 +2005,23 @@
 "routeInfo_surface_name" = "Arwyneb";
 "rendering_attr_showMtbRoutes_name" = "Llwybrau beiciau mynydd";
 "rendering_attr_tracktype_grade5_name" = "Meddal";
-"routing_attr_avoid_share_taxi_description" = "Avoids share taxi";
+"routing_attr_avoid_share_taxi_description" = "Yn osgoi rhannu tacsi";
 "routing_attr_width_description" = "Specify permitted vehicle width limit on routes.";
 "rendering_attr_showSurfaceGrade_name" = "Dangos ansawdd ffyrdd";
 "rendering_attr_currentTrackColor_name" = "Lliw GPX";
 "rendering_attr_contourLines_description" = "Dangos o lefel chwyddo (angen data cyfuchliniau):";
 "routing_attr_avoid_stairs_description" = "Osgoi grisiau";
 "rendering_attr_surface_mud_name" = "Mwd";
-"rendering_attr_ice_road_name" = "Ice road";
+"rendering_attr_ice_road_name" = "Ffordd iâ";
 "rendering_attr_highway_class_track_grade4_name" = "Gradd 4";
 "rendering_attr_piste_difficulty_connection_name" = "Cysylltiad";
 "rendering_attr_streetLightingNight_name" = "Dangos dim ond yn y nos";
-"rendering_attr_piste_difficulty_aerialway_name" = "Aerialway";
+"rendering_attr_piste_difficulty_aerialway_name" = "Awyrffordd";
 "routing_attr_freeride_policy_name" = "Off-piste";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Gwastad";
 "rendering_attr_surface_concrete_name" = "Concrit";
 "rendering_attr_piste_difficulty_intermediate_name" = "Canolig";
-"routeInfo_piste_difficulty_name" = "Piste difficulty";
+"routeInfo_piste_difficulty_name" = "Anhawster piste";
 "routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter).";
 "rendering_attr_highway_class_track_grade3_name" = "Gradd 3";
 "routing_attr_freeride_policy_description" = "\'Freeride\' and \'Off-piste\' are unofficial routes and passages. Typically ungroomed, unmaintained and not checked in the evening. Enter at your own risk.";
@@ -2033,7 +2033,7 @@
 "rendering_value_medium_w_name" = "Canolig";
 "rendering_attr_contourDensity_description" = "Contour line density";
 "rendering_attr_currentTrackWidth_name" = "Lled GPX";
-"rendering_attr_horseRoutes_name" = "Llwybrau march";
+"rendering_attr_horseRoutes_name" = "Llwybrau ceffylau";
 "routing_attr_avoid_ferry_description" = "Avoids ferries";
 "rendering_attr_highway_class_track_grade2_name" = "Gradd 2";
 "rendering_attr_shareTaxiRoutes_name" = "Llwybrau tacsis i'w rhannu";
@@ -2045,7 +2045,7 @@
 "rendering_attr_surface_paved_name" = "Paved";
 "routing_attr_difficulty_preference_name" = "Preferred difficulty";
 "routing_attr_avoid_subway_name" = "No subways";
-"rendering_attr_showLez_description" = "Show Low Emission Zones on the map. Does not affect routing.";
+"rendering_attr_showLez_description" = "Dangos Parthau Allyriadau Isel ar y map. Nid yw'n effeithio ar y llwybro.";
 "rendering_attr_surfaceIntegrity_name" = "Road surface integrity";
 "routing_attr_allow_intermediate_description" = "More difficult routes with steeper sections. Generally some obstacles that should be avoided.";
 "rendering_attr_coloredBuildings_name" = "Lliwio adeiladau yn ôl eu defnydd";
@@ -2053,7 +2053,7 @@
 "routeInfo_road_types_name" = "Mathau o ffyrdd";
 "rendering_attr_showRoadMaps_description" = "Dewis pa bryd i ddangos mapiau ffyrdd yn unig:";
 "rendering_value_translucent_blue_name" = "Glas tryleu";
-"routing_attr_avoid_bus_description" = "Avoids buses and trolleybuses";
+"routing_attr_avoid_bus_description" = "Yn osgoi bysiau a bysiau troli";
 "rendering_attr_hideOverground_name" = "Gwrthrychau ar y ddaear";
 "rendering_attr_hideProposed_name" = "Proposed objects";
 "routeInfo_smoothness_name" = "Esmwythder";
@@ -2078,7 +2078,7 @@
 "rendering_attr_surface_sett_name" = "Sett";
 "rendering_attr_roadStyle_name" = "Math o ffordd";
 "rendering_attr_surface_gravel_name" = "Graean";
-"routing_attr_max_num_changes_name" = "Number of changes";
+"routing_attr_max_num_changes_name" = "Y nifer o newidiadau";
 "rendering_attr_publicTransportMode_name" = "Bus, trolleybus, shuttle routes";
 "rendering_attr_hideNonVehicleHighways_name" = "Ffyrdd di-gerbyd";
 "rendering_value_translucent_pink_name" = "Pinc tryleu";
@@ -2093,16 +2093,16 @@
 "rendering_attr_lessDetailed_name" = "Llai o fanylion";
 "routing_attr_avoid_borders_description" = "Avoids crossing national borders";
 "rendering_attr_highway_class_steps_name" = "Stepiau";
-"routing_attr_avoid_tram_name" = "No trams";
-"rendering_attr_piste_type_downhill_name" = "Downhill";
+"routing_attr_avoid_tram_name" = "Dim tramiau";
+"rendering_attr_piste_type_downhill_name" = "Lawr rhiw";
 "rendering_attr_moreDetailed_name" = "Rhagor o fanylion";
-"rendering_attr_piste_difficulty_undefined_name" = "Undefined";
+"rendering_attr_piste_difficulty_undefined_name" = "Anniffiniedig";
 "routing_attr_allow_motorway_name" = "Defnyddio traffyrdd";
 "rendering_value_black_name" = "Du";
-"routeInfo_winter_ice_road_name" = "Winter and ice roads";
+"routeInfo_winter_ice_road_name" = "Ffyrdd gaeaf a rhew";
 "rendering_attr_hideBuildings_name" = "Adeiladau";
-"routing_attr_max_num_changes_description" = "Specify upper limit of changes";
-"rendering_attr_winter_road_name" = "Winter road";
+"routing_attr_max_num_changes_description" = "Nodi terfyn uchaf y newidiadau";
+"rendering_attr_winter_road_name" = "Ffordd y gaeaf";
 "rendering_attr_tramTrainRoutes_name" = "Llwybrau trenau a thramiau";
 "rendering_attr_smoothness_intermediate_name" = "Gweddol";
 "rendering_attr_surface_snow_name" = "Eira";
@@ -2113,7 +2113,7 @@
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_skitour_name" = "Skitour";
 "routing_attr_avoid_unpaved_description" = "Avoids unpaved roads";
-"routing_attr_prefer_unpaved_description" = "Prefer unpaved roads.";
+"routing_attr_prefer_unpaved_description" = "Gwell ffyrdd heb balmantu.";
 "rendering_attr_roadStyle_description" = "Math o ffordd";
 "routing_attr_prefer_motorway_description" = "Ffafrio traffyrdd";
 "routing_attr_avoid_ferries_name" = "Dim fferis";
@@ -2134,7 +2134,7 @@
 "rendering_attr_showAccess_name" = "Dangos cyfyngiadau mynediad a thollau";
 "rendering_attr_surface_dirt_name" = "Baw";
 "routing_attr_piste_type_skitour_name" = "Ski touring";
-"routing_attr_driving_style_prefer_unpaved_name" = "Prefer unpaved roads";
+"routing_attr_driving_style_prefer_unpaved_name" = "Gwell ffyrdd heb balmantu";
 "rendering_attr_surface_sand_name" = "Tywod";
 "routing_attr_no_new_routing_description" = "Do not use routing rules introduced in v1.9.";
 "routing_attr_prefer_motorway_name" = "Ffafrio traffyrdd";
@@ -2156,7 +2156,7 @@
 "rendering_attr_piste_difficulty_novice_name" = "Nofis";
 "rendering_attr_hideUnderground_name" = "Gwrthrychau tanddaearol";
 "rendering_value_dark_brown_name" = "Dark brown";
-"routeInfo_piste_type_name" = "Piste type";
+"routeInfo_piste_type_name" = "Math piste";
 "routing_attr_driving_style_safety_name" = "Prefer byways";
 "rendering_attr_surface_paving_stones_name" = "Paving stones";
 "rendering_attr_depthContours_name" = "Nautical depth contours";
@@ -2193,7 +2193,7 @@
 "rendering_attr_piste_difficulty_expert_name" = "Arbenigwr";
 "rendering_attr_buildings15zoom_name" = "Buildings on zoom 15";
 "rendering_attr_tracktype_grade1_name" = "Caled (wyneb caled)";
-"routing_attr_avoid_train_description" = "Avoids trains";
+"routing_attr_avoid_train_description" = "Yn osgoi trenau";
 "routing_attr_avoid_shuttle_train_name" = "No shuttle train";
 "rendering_attr_contourColorScheme_description" = "Contour lines color scheme";
 "rendering_value_boldOutline_name" = "Amlinell trwm";
@@ -2206,7 +2206,7 @@
 "routing_attr_allow_private_description" = "Mae'n caniatâu mynediad i lefydd preifat.";
 "rendering_attr_alpineHiking_description" = "Render paths according to the SAC scale.";
 "rendering_attr_highway_class_bridleway_name" = "Llwybr march";
-"routing_attr_avoid_share_taxi_name" = "No share taxi";
+"routing_attr_avoid_share_taxi_name" = "Dim tacsi rhannu";
 "rendering_attr_pisteRoutes_name" = "Llethrau sgïo";
 "rendering_attr_piste_type_sled_name" = "Sled";
 "rendering_attr_noPolygons_description" = "Gwneud pob nodwedd tir yn dryloyw ar y map.";
@@ -2215,7 +2215,7 @@
 "routing_attr_avoid_shuttle_train_description" = "Avoids using shuttle trains";
 "routing_attr_driving_style_balance_name" = "Balanced";
 "routing_attr_piste_type_nordic_name" = "Cross country/nordic ski";
-"routing_attr_avoid_bus_name" = "No buses";
+"routing_attr_avoid_bus_name" = "Dim bysiau";
 "rendering_value_highContrastRoads_name" = "High contrast roads";
 "rendering_attr_highway_class_service_name" = "Gwasanaeth";
 "rendering_attr_showCycleRoutes_name" = "Llwybrau beicio";
@@ -2226,9 +2226,9 @@
 "rendering_attr_tracktype_grade2_name" = "Caled (heb wyneb caled)";
 "rendering_attr_piste_type_hike_name" = "Heicio";
 "rendering_value_medium_name" = "Canolig";
-"rendering_attr_piste_type_snow_park_name" = "Terrain park";
+"rendering_attr_piste_type_snow_park_name" = "Parc tir";
 "rendering_attr_highway_class_footway_name" = "Llwybr droed";
-"routing_attr_avoid_tram_description" = "Avoids trams";
+"routing_attr_avoid_tram_description" = "Yn osgoi tramiau";
 "rendering_value_default13_name" = "Rhagosodiad (13)";
 "rendering_value_thin_name" = "Tenau";
 "rendering_attr_whiteWaterSports_name" = "Whitewater sports";
@@ -2243,7 +2243,7 @@
 "routing_attr_relief_smoothness_factor_name" = "Select elevation fluctuation";
 "routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
 "rendering_value_darkyellow_name" = "Melyn tywyll";
-"routing_attr_prefer_unpaved_name" = "Prefer unpaved roads";
+"routing_attr_prefer_unpaved_name" = "Gwell ffyrdd heb balmantu";
 "rendering_value_default_name" = "Rhagosodedig";
 "routing_attr_no_new_routing_name" = "No v1.9 routing rules";
 "rendering_attr_subwayMode_name" = "Llwybrau tanddaearol";
@@ -2258,17 +2258,17 @@
 "rendering_value_thick_name" = "Trwychus";
 "routing_attr_avoid_ferry_name" = "No ferries";
 "routing_attr_width_name" = "Width limit";
-"routing_attr_avoid_train_name" = "No trains";
+"routing_attr_avoid_train_name" = "Dim trenau";
 "routing_attr_allow_motorway_description" = "Mae\'n caniatau traffyrdd.";
 "rendering_attr_hmRendered_name" = "Dangos mwy o fanylder yn y map";
 "rendering_attr_roadColors_name" = "Cynllun lliwiau ffyrdd";
-"weight_limit_description" = "Provide your vehicle weight, some route restrictions may apply for heavy vehicles.";
-"height_limit_description" = "Provide your vehicle height, some route restrictions may apply for high vehicles.";
+"weight_limit_description" = "Rhoi pwysau'r cerbyd, efallai y bydd rhai cyfyngiadau llwybr yn berthnasol ar gyfer cerbydau trwm.";
+"height_limit_description" = "Rhoi uchder y cerbyd, efallai y bydd rhai cyfyngiadau llwybr yn berthnasol ar gyfer cerbydau uchel.";
 "lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
 "width_limit_description" = "Rhowch led eich cerbyd. Gall fod ar rai llwybrau cyfyngiadau ar gerbydau llydan.";
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
-"default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
+"default_speed_dialog_msg" = "Yn amcangyfrif yr amser cyrraedd ar gyfer mathau o ffyrdd anhysbys, ac yn cyfyngu ar gyflymder ar gyfer pob ffordd (gall effeithio ar lwybrau)";
 "default" = "Rhagosodedig";
 
 
@@ -2290,28 +2290,28 @@
 "app_mode_bicycle" = "Beicio";
 "app_mode_pedestrian" = "Cerdded";
 "app_mode_taxi" = "Tacsi";
-"app_mode_shuttle_bus" = "Shuttle bus";
+"app_mode_shuttle_bus" = "Bws gwennol";
 "app_mode_subway" = "Trên tanddaearol";
 "app_mode_horse" = "Ceffyl";
 "app_mode_helicopter" = "Hofrennydd";
 "app_mode_skiing" = "Sgïo";
-"app_mode_personal_transporter" = "Personal transporter";
+"app_mode_personal_transporter" = "Cludwr personol";
 "app_mode_monowheel" = "Un olwyn";
 "app_mode_scooter" = "Sgwter";
 "app_mode_ufo" = "UFO";
-"app_mode_offroad" = "Offroad";
+"app_mode_offroad" = "Oddi ar y ffordd";
 "app_mode_camper" = "Fan gwersylla";
-"app_mode_campervan" = "Campervan (RV)";
+"app_mode_campervan" = "Fan gwersylla (RV)";
 "app_mode_wagon" = "Wagen";
-"app_mode_pickup_truck" = "Pickup truck";
-"app_mode_utv" = "Side by Side";
+"app_mode_pickup_truck" = "Picyp";
+"app_mode_utv" = "Ochr yn Ochr";
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
 "travel_routes" = "Llwybrau teithio";
 "walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
-"rendering_value_walkingRoutesOSMCNodes_description" = "";
-"rendering_value_walkingRoutesScopeOSMC_description" = "Color by network affiliation.";
-"rendering_value_walkingRoutesOSMC_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and hiking shield symbol.";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Lliw y lwybrau yn ôl eu math o rwydwaith nodau (rhyngwladol, rhanbarthol, lleol).";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Lliw yn ôl cysylltiad rhwydwaith.";
+"rendering_value_walkingRoutesOSMC_description" = "Lliw y llwybrau yn ôl eu lliw lleol unigol (os yw'n bresennol ar OpenStreetMap) a symbol tarian heicio.";
 "routes_color_by_type" = "Lliwio llwybrau ynôl…";
 
 // Release Notes
@@ -2325,8 +2325,8 @@
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "routeInfo_roadClass_description" = "Lliwio llinell y llwybr neu drac ynôl y math o ffordd.";
 "routing_attr_allow_gate_name" = "Caniatáu defnydd gât";
-"routing_attr_prefer_horse_routes_name" = "Ffafrio llwybrau marchogaeth";
-"routing_attr_prefer_horse_routes_description" = "Ffafrio llwybrau marchogaeth";
+"routing_attr_prefer_horse_routes_name" = "Ffafrio llwybrau ceffylau";
+"routing_attr_prefer_horse_routes_description" = "Ffafrio llwybrau ceffylau";
 "connect_rp" = "Cysylltu pwyntiau taith";
 "routeInfo_surface_description" = "Dangos gwybodaeth arwyneb ffyrdd/palmentydd.";
 "routeInfo_winter_ice_road_description" = "Lliwio llinell y llwybr neu drac ynôl cyflwr y ffyrdd yn y gaeaf.";
@@ -2345,7 +2345,7 @@
 "cloud_email_not_registered" = "Nid yw\'r e-bost hwn wedi\'i gofrestru am OsmAnd Cloud";
 "add_description" = "Ychwanegu disgrifiad";
 "user_login" = "Mewngofnodi";
-"backup_error_user_is_not_registered" = "Does dim defnyddiwr wedi cofrestru gyda\'r cyfeiriad e-bost hwnnw.";
+"backup_error_user_is_not_registered" = "Does dim defnyddiwr wedi cofrestru gyda'r cyfeiriad e-bost hwnnw";
 "restore_from_file" = "Adfer o ffeil";
 "cloud_existing_account" = "Mae gen i gyfrif eisoes";
 "cloud_last_backup" = "Copi wrth gefn diwethaf";
@@ -2387,3 +2387,16 @@
 "routing_attr_allow_private_for_truck_name" = "Caniatáu mynediad preifat (lori)";
 "rendering_attr_showRunningRoutes_name" = "Llwybrau rhedeg";
 "rendering_attr_showRunningRoutes_description" = "Dangos llwybrau rhedeg";
+"routeInfo_horse_scale_name" = "Anhawster llwybrau ceffylau";
+"rendering_attr_showFitnessTrails_description" = "Dangos llwybrau ffitrwydd";
+"save_heading" = "Cynnwys y pennawd";
+"routeInfo_smoothness_description" = "Dosbarthiad symudedd ffyrdd/llwybrau troed ar gyfer cerbydau olwyn, yn enwedig o ran rheoleidd-dra/gwastadedd yr arwyneb.";
+"rendering_attr_showFitnessTrails_name" = "Llwybrau ffitrwydd";
+"routeInfo_horse_scale_description" = "Rendro llwybrau yn ôl anhawster llwybrau ceffylau";
+"copy_coordinates" = "Copïo cyfesurynnau";
+"simulation_real_mode_title" = "Efelychiad realistig";
+"simulation_constant_mode_desc" = "Bydd yr efelychiad yn cael ei gyflawni gyda chyflymder dethol cyson.";
+"simulation_constant_mode_title" = "Cyflymder sefydlog";
+"simulation_preview_mode_desc" = "Bydd cyflymder yr efelychiad yn fwyaf ar adrannau syth ac yn arafu dim ond ar groesffyrdd.";
+"simulation_preview_mode_title" = "Y modd rhagolwg cyflym";
+"speed_mode" = "Modd cyflymder";

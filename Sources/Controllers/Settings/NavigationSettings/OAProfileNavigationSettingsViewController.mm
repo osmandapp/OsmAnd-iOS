@@ -69,10 +69,18 @@
     _routingProfileDataObjects = [OAProfileDataUtils getRoutingProfiles];
     NSArray *profiles = [_routingProfileDataObjects allValues];
     OARoutingProfileDataObject *routingData;
+    NSString *derivedProfile = self.appMode.getDerivedProfile;
+    BOOL checkForDerived = ![derivedProfile isEqualToString:@"default"];
     for (OARoutingProfileDataObject *profile in profiles)
     {
         if([profile.stringKey isEqual:selectedProfileName])
-            routingData = profile;
+        {
+            if ((!checkForDerived && !profile.derivedProfile) || (checkForDerived && [profile.derivedProfile isEqualToString:derivedProfile]))
+            {
+                routingData = profile;
+                break;
+            }
+        }
     }
     
     NSMutableArray *tableData = [NSMutableArray array];

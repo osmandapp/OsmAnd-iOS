@@ -65,6 +65,22 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
     return self;
 }
 
+- (instancetype) initWithProfileDataObject:(OARoutingProfileDataObject *)copy
+{
+    self = [super init];
+    if (self) {
+        self.stringKey = copy.stringKey;
+        self.name = copy.name;
+        self.iconName = copy.iconName;
+        self.fileName = copy.fileName;
+        self.descr = copy.descr;
+        self.isEnabled = copy.isEnabled;
+        self.iconColor = copy.iconColor;
+        self.derivedProfile = copy.derivedProfile;
+    }
+    return self;
+}
+
 + (NSString *) getProfileKey:(EOARoutingProfilesResource)type
 {
     switch (type) {

@@ -52,7 +52,7 @@
 "animate_routing_route_not_calculated" = "Gelieve eerst de route te berekenen";
 "settings_preset" = "Standaardprofiel";
 "settings_preset_descr" = "Kaartweergave en navigatie-instellingen worden per profiel opgeslagen. Kies hier het standaardprofiel.";
-"unit_of_length" = "Afstand eenheden";
+"unit_of_length" = "Lengte-eenheden";
 "unit_of_length_descr" = "Wijzig de eenheid van lengte.";
 "coords_format" = "Coördinatenformaat";
 "coords_format_descr" = "Formaat van geografische coördinaten.";
@@ -293,7 +293,7 @@
 "shared_string_and" = "en";
 "shared_string_edit" = "Bewerk";
 "shared_string_modify" = "Aanpassen";
-"shared_string_later" = "Ga door";
+"shared_string_later" = "Later";
 "shared_string_of" = "of";
 "shared_string_all" = "Alles";
 "shared_string_from" = "van";

@@ -15,7 +15,7 @@
 #import "OARTargetPoint.h"
 #import "OAAppSettings.h"
 
-@class MutableOrderedDictionary;
+@class MutableOrderedDictionary, NSUnitCloud;
 
 @interface OAAppData : NSObject <NSCoding>
 

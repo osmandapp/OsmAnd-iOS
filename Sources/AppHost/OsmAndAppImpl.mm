@@ -41,6 +41,7 @@
 #import "OALocationConvert.h"
 #import "OAWeatherHelper.h"
 #import "OAGPXDatabase.h"
+#import "OAExternalTimeFormatter.h"
 
 #include <algorithm>
 
@@ -168,11 +169,11 @@
 
 - (void)dealloc
 {
-    _resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
-    _resourcesManager->repositoryUpdateObservable.detach((__bridge const void*)self);
+    _resourcesManager->localResourcesChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
+    _resourcesManager->repositoryUpdateObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
 
-    _favoritesCollection->collectionChangeObservable.detach((__bridge const void*)self);
-    _favoritesCollection->favoriteLocationChangeObservable.detach((__bridge const void*)self);
+    _favoritesCollection->collectionChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
+    _favoritesCollection->favoriteLocationChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
 }
 
 - (void) buildFolders
@@ -198,6 +199,13 @@
 
 - (void) initOpeningHoursParser
 {
+    [OAExternalTimeFormatter setLocale:[NSLocale currentLocale].localeIdentifier];
+    OpeningHoursParser::setExternalTimeFormatterCallback([OAExternalTimeFormatter getExternalTimeFormatterCallback]);
+    OpeningHoursParser::setTwelveHourFormattingEnabled([OAExternalTimeFormatter isCurrentRegionWith12HourTimeFormat]);
+    OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
+    OpeningHoursParser::setLocalizedDaysOfWeek([OAExternalTimeFormatter getLocalizedWeekdays]);
+    OpeningHoursParser::setLocalizedMonths([OAExternalTimeFormatter getLocalizedMonths]);
+    
     OpeningHoursParser::setAdditionalString("off", [OALocalizedString(@"day_off_label") UTF8String]);
     OpeningHoursParser::setAdditionalString("is_open", [OALocalizedString(@"time_open") UTF8String]);
     OpeningHoursParser::setAdditionalString("is_open_24_7", [OALocalizedString(@"shared_string_is_open_24_7") UTF8String]);
@@ -207,6 +215,27 @@
     OpeningHoursParser::setAdditionalString("open_till", [OALocalizedString(@"open_till") UTF8String]);
     OpeningHoursParser::setAdditionalString("will_open_tomorrow_at", [OALocalizedString(@"will_open_tomorrow_at") UTF8String]);
     OpeningHoursParser::setAdditionalString("will_open_on", [OALocalizedString(@"will_open_on") UTF8String]);
+    
+    //[self runOpeningHoursParserTests];
+}
+
+- (void) runOpeningHoursParserTests
+{
+    [OAExternalTimeFormatter setLocale:@"en"];
+    OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
+    OpeningHoursParser::runTest();
+    
+    [OAExternalTimeFormatter setLocale:@"en"];
+    OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
+    OpeningHoursParser::runTestAmPmEnglish();
+    
+    [OAExternalTimeFormatter setLocale:@"zh"];
+    OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
+    OpeningHoursParser::runTestAmPmChinese();
+    
+    [OAExternalTimeFormatter setLocale:@"ar"];
+    OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
+    OpeningHoursParser::runTestAmPmArabic();
 }
 
 - (BOOL) initialize
@@ -270,7 +299,10 @@
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
 
-    settings.simulateRouting = NO;
+    settings.simulateNavigation = NO;
+    settings.simulateNavigationMode = [OASimulationMode toKey:EOASimulationModePreview];
+    settings.simulateNavigationSpeed = kSimMinSpeed;
+    
     [_data setLastMapSourceVariant:settings.applicationMode.get.variantKey];
 
     // Get location of a shipped world mini-basemap and it's version stamp
@@ -294,16 +326,14 @@
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataDir.absoluteFilePath(QLatin1String("Resources")),
                                                          _documentsDir.absolutePath(),
                                                          QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
-                                                         _worldMiniBasemapFilename != nil
-                                                         ? QString::fromNSString(_worldMiniBasemapFilename)
-                                                         : QString::null,
+                                                         _worldMiniBasemapFilename != nil ? QString::fromNSString(_worldMiniBasemapFilename) : QString(),
                                                          QString::fromNSString(NSTemporaryDirectory()),
                                                          QString::fromNSString(_cachePath),
                                                          QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
                                                          QString::fromNSString(@"http://download.osmand.net"),
                                                          _webClient));
     
-    _resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+    _resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                              [self]
                                                              (const OsmAnd::ResourcesManager* const resourcesManager,
                                                               const QList< QString >& added,
@@ -317,7 +347,7 @@
                                                                  });
                                                              });
     
-    _resourcesManager->repositoryUpdateObservable.attach((__bridge const void*)self,
+    _resourcesManager->repositoryUpdateObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                          [self]
                                                          (const OsmAnd::ResourcesManager* const resourcesManager)
                                                          {
@@ -437,13 +467,13 @@
     _favoriteChangedObservable = [[OAObservable alloc] init];
     _favoritesCollection.reset(new OsmAnd::FavoriteLocationsGpxCollection());
     _favoritesCollection->loadFrom(QString::fromNSString(_favoritesFilename));
-    _favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
+    _favoritesCollection->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                             [self]
                                                             (const OsmAnd::IFavoriteLocationsCollection* const collection)
                                                             {
                                                                 [_favoritesCollectionChangedObservable notifyEventWithKey:self];
                                                             });
-    _favoritesCollection->favoriteLocationChangeObservable.attach((__bridge const void*)self,
+    _favoritesCollection->favoriteLocationChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                   [self]
                                                                   (const OsmAnd::IFavoriteLocationsCollection* const collection,
                                                                    const std::shared_ptr<const OsmAnd::IFavoriteLocation>& favoriteLocation)

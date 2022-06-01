@@ -56,19 +56,18 @@
     
     UIEdgeInsets insets = _window.safeAreaInsets;
     
+    BOOL leftSide = insets.right > insets.left;
+    
     CGFloat w = self.view.frame.size.width;
     CGFloat h = self.view.frame.size.height;
     
-    CGFloat widthOffset = insets.left / w;
+    CGFloat widthOffset = MAX(insets.right, insets.left) / w;
     CGFloat heightOffset = insets.top / h;
     
     if (widthOffset != _cachedWidthOffset && heightOffset != _cachedHeightOffset && widthOffset != 0 && heightOffset != 0)
     {
-        BOOL leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get]];
-
         _mapVc.mapView.viewportXScale = leftSide ? widthOffset : 1.0 + widthOffset;
         _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
-        
         _cachedWidthOffset = widthOffset;
         _cachedHeightOffset = heightOffset;
         
@@ -208,7 +207,7 @@
 
 - (void) enterNavigationMode
 {
-    BOOL leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get]];
+    BOOL leftSide = _window.safeAreaInsets.right > _window.safeAreaInsets.left;
     _mapVc.mapView.viewportXScale = leftSide ? 0.5 : 1.5;
 }
 

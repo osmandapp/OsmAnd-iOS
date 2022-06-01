@@ -9,18 +9,12 @@
 #import "OACollapsableNearestPoiWikiView.h"
 #import "OAPOI.h"
 #import "OARootViewController.h"
-#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "Localization.h"
 #import "OAMapLayers.h"
-#import "OAPOILayer.h"
 #import "OAPOIUIFilter.h"
-#import "OACommonTypes.h"
-#import "OAUtilities.h"
 #import "OAIAPHelper.h"
-#import "OAWorldRegion.h"
-#import "OsmAndApp.h"
 #import "OAInAppCell.h"
 #import "OAPluginDetailsViewController.h"
 #import "OAManageResourcesViewController.h"
@@ -29,12 +23,12 @@
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/ResourcesManager.h>
-
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
+
+@interface OACollapsableNearestPoiWikiView () <OAButtonDelegate>
+
+@end
 
 @implementation OACollapsableNearestPoiWikiView
 {
@@ -42,7 +36,8 @@
     UILabel *_bannerLabel;
     UIButton *_bannerButton;
 
-    NSArray<UIButton *> *_buttons;
+    NSArray<OAButton *> *_buttons;
+    NSInteger _selectedButtonIndex;
     double _latitude;
     double _longitude;
     OAPOIUIFilter *_filter;
@@ -174,18 +169,22 @@
             nameLocalized = poi.nameLocalized;
 
         NSString *title = [NSString stringWithFormat:@"%@ (%@)", nameLocalized, [OAOsmAndFormatter getFormattedDistance:distance]];
-        UIButton *btn = [self createButton:title];
+        OAButton *btn = [self createButton:title tapToCopy:NO longPressToCopy:YES];
         btn.tag = i++;
         [self addSubview:btn];
         [buttons addObject:btn];
     }
 
-    UIButton *showOnMapButton = [self createButton:OALocalizedString(@"map_settings_show")];
+    OAButton *showOnMapButton = [self createButton:OALocalizedString(@"map_settings_show")
+                                         tapToCopy:NO
+                                   longPressToCopy:NO];
     showOnMapButton.tag = _buttonShowOnMapIndex = i++;
     [self addSubview:showOnMapButton];
     [buttons addObject:showOnMapButton];
 
-    UIButton *searchMoreButton = [self createButton:OALocalizedString(@"search_more")];
+    OAButton *searchMoreButton = [self createButton:OALocalizedString(@"search_more")
+                                          tapToCopy:NO
+                                    longPressToCopy:NO];
     searchMoreButton.tag = _buttonSearchMoreIndex = i++;
     [self addSubview:searchMoreButton];
     [buttons addObject:searchMoreButton];
@@ -193,9 +192,11 @@
     _buttons = [NSArray arrayWithArray:buttons];
 }
 
-- (UIButton *)createButton:(NSString *)title
+- (OAButton *)createButton:(NSString *)title
+                 tapToCopy:(BOOL)tapToCopy
+           longPressToCopy:(BOOL)longPressToCopy
 {
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
     [btn setTitle:title forState:UIControlStateNormal];
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
@@ -207,7 +208,7 @@
     btn.layer.borderColor = UIColorFromRGB(0xe6e6e6).CGColor;
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
     btn.tintColor = UIColorFromRGB(0x1b79f8);
-    [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+    btn.delegate = self;
     return btn;
 }
 
@@ -260,7 +261,7 @@
     }
     
     int i = 0;
-    for (UIButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -275,34 +276,6 @@
     
     viewHeight += 8.0;
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
-}
-
-- (void) btnPress:(id)sender
-{
-    UIButton *btn = sender;
-    NSInteger index = btn.tag;
-    if (index >= 0 && index < self.nearestItems.count)
-    {
-        OAPOI *item = self.nearestItems[index];
-        if (item)
-            [self goToPoint:item];
-    }
-    else
-    {
-        [[OARootViewController instance].mapPanel hideContextMenu];
-        if (index == _buttonShowOnMapIndex)
-        {
-            [[OARootViewController instance].mapPanel showPoiToolbar:_filter latitude:_latitude longitude:_longitude];
-            OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
-            [helper clearSelectedPoiFilters];
-            [helper addSelectedPoiFilter:_filter];
-            [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
-        }
-        else if (index == _buttonSearchMoreIndex)
-        {
-            [[OARootViewController instance].mapPanel openSearch:_filter location:[[CLLocation alloc] initWithLatitude:_latitude longitude:_longitude]];
-        }
-    }
 }
 
 - (void) goToPoint:(OAPOI *)poi
@@ -350,6 +323,64 @@
     {
         OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
         [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
+    }
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+}
+
+- (void)copy:(id)sender
+{
+    if (_buttons.count > _selectedButtonIndex)
+    {
+        OAButton *button = _buttons[_selectedButtonIndex];
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:button.titleLabel.text];
+    }
+}
+
+#pragma mark - OACustomButtonDelegate
+
+- (void)onButtonTapped:(NSInteger)tag
+{
+    if (self.nearestItems.count > tag)
+    {
+        OAPOI *item = self.nearestItems[tag];
+        if (item)
+            [self goToPoint:item];
+    }
+    else
+    {
+        [[OARootViewController instance].mapPanel hideContextMenu];
+        if (tag == _buttonShowOnMapIndex)
+        {
+            [[OARootViewController instance].mapPanel showPoiToolbar:_filter latitude:_latitude longitude:_longitude];
+            OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+            [helper clearSelectedPoiFilters];
+            [helper addSelectedPoiFilter:_filter];
+            [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
+        }
+        else if (tag == _buttonSearchMoreIndex)
+        {
+            [[OARootViewController instance].mapPanel openSearch:_filter location:[[CLLocation alloc] initWithLatitude:_latitude longitude:_longitude]];
+        }
+    }
+}
+
+- (void)onButtonLongPressed:(NSInteger)tag
+{
+    if (tag != _buttonShowOnMapIndex && tag != _buttonSearchMoreIndex)
+    {
+        _selectedButtonIndex = tag;
+        if (_buttons.count > _selectedButtonIndex)
+            [OAUtilities showMenuInView:self fromView:_buttons[_selectedButtonIndex]];
     }
 }
 

@@ -188,7 +188,7 @@
         NSMutableArray<NSString *> *translations = [NSMutableArray new];
         for (NSString *locale in [self getLanguagesToShow])
         {
-            [translations addObject:[OAUtilities capitalizeFirstLetterAndLowercase:[OAUtilities translatedLangName:locale]]];
+            [translations addObject:[OAUtilities translatedLangName:locale].capitalizedString];
         }
         return [translations componentsJoinedByString:@", "];
     }
@@ -234,7 +234,7 @@
             if ([self hasCustomSettings])
             {
                 prepareByDefault = NO;
-                NSString *wikiLang = WIKI_LANG;
+                NSString *wikiLang = @"wiki:lang:";
                 NSMutableString *sb = [NSMutableString new];
                 for (NSString *lang in [self getLanguagesToShow])
                 {
@@ -265,7 +265,7 @@
         else if ([obj isKindOfClass:OAPOIBaseType.class])
         {
             OAPOIBaseType *pt = (OAPOIBaseType *) obj;
-            return [pt.name hasPrefix:@"wiki_lang"];
+            return [pt.name hasPrefix:WIKI_LANG] || [pt.name hasPrefix:WIKI_PLACE] || [pt.name hasPrefix:OSM_WIKI_CATEGORY];
         }
     }
     return NO;

@@ -75,6 +75,11 @@
     _selectionIndex = index;
 }
 
+- (BOOL)hasValues
+{
+    return _data && _data.count > 0;
+}
+
 - (void)setSelectedIndex:(NSInteger)index
 {
     _selectionIndex = index;

@@ -18,6 +18,7 @@
 #import "OAColors.h"
 #import <UIKit/UIDevice.h>
 #import "OAIndexConstants.h"
+#import <MBProgressHUD.h>
 
 #import <mach/mach.h>
 #import <mach/mach_host.h>
@@ -891,7 +892,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
                               font, NSFontAttributeName, nil];
     
     CGSize size = [text boundingRectWithSize:CGSizeMake(ceil(width), height)
-                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine
+                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingTruncatesLastVisibleLine
                                   attributes:attrDict context:nil].size;
     
     return CGSizeMake(ceil(size.width), ceil(size.height));
@@ -1060,33 +1061,24 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 {
     @autoreleasepool
     {
-        // begin a new image context, to draw our colored image onto with the right scale
-        UIGraphicsBeginImageContextWithOptions(source.size, NO, [UIScreen mainScreen].scale);
-        
-        // get a reference to that context we created
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        
-        // set the fill color
-        [color setFill];
-        
-        // translate/flip the graphics context (for transforming from CG* coords to UI* coords
-        CGContextTranslateCTM(context, 0, source.size.height);
-        CGContextScaleCTM(context, 1.0, -1.0);
-        
-        CGContextSetBlendMode(context, kCGBlendModeNormal);
-        CGRect rect = CGRectMake(0, 0, source.size.width, source.size.height);
-        CGContextDrawImage(context, rect, source.CGImage);
-        
-        CGContextClipToMask(context, rect, source.CGImage);
-        CGContextAddRect(context, rect);
-        CGContextDrawPath(context,kCGPathFill);
-        
-        // generate a new UIImage from the graphics context we drew onto
-        UIImage *coloredImg = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        //return the color-burned image
-        return coloredImg;
+        CGImageRef maskImage = source.CGImage;
+        CGFloat width = source.scale * source.size.width;
+        CGFloat height = source.scale * source.size.height;
+        CGRect bounds = CGRectMake(0,0,width,height);
+
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        CGContextRef bitmapContext = CGBitmapContextCreate(NULL, width, height, 8, 0, colorSpace, (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
+        CGContextClipToMask(bitmapContext, bounds, maskImage);
+        CGContextSetFillColorWithColor(bitmapContext, color.CGColor);
+        CGContextFillRect(bitmapContext, bounds);
+
+        CGImageRef mainViewContentBitmapContext = CGBitmapContextCreateImage(bitmapContext);
+        CGContextRelease(bitmapContext);
+        CGColorSpaceRelease(colorSpace);
+
+        UIImage *res = [UIImage imageWithCGImage:mainViewContentBitmapContext scale:source.scale orientation:UIImageOrientationUp];
+        CGImageRelease(mainViewContentBitmapContext);
+        return res;
     }
 }
 
@@ -1314,16 +1306,12 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return [[firstLanguage componentsSeparatedByString:@"-"] firstObject];
 }
 
-+ (NSString *) capitalizeFirstLetterAndLowercase:(NSString *)s
++ (NSString *) capitalizeFirstLetter:(NSString *)s
 {
     if (s && s.length > 1)
-    {
-        return [[[s substringToIndex:1] uppercaseStringWithLocale:[NSLocale currentLocale]] stringByAppendingString:[[s substringFromIndex:1] lowercaseStringWithLocale:[NSLocale currentLocale]]];
-    }
+        return [[s substringToIndex:1].uppercaseString stringByAppendingString:[s substringFromIndex:1]];
     else
-    {
         return s;
-    }
 }
 
 + (NSInteger) findFirstNumberEndIndex:(NSString *)value
@@ -2160,6 +2148,68 @@ static const double d180PI = 180.0 / M_PI_2;
     {
         [list addObject:filePath];
     }
+}
+
++ (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView
+{
+    if ([parentView canBecomeFirstResponder])
+    {
+        [parentView becomeFirstResponder];
+        UIMenuController *menuController = UIMenuController.sharedMenuController;
+        if (@available(iOS 13.0, *))
+        {
+            [menuController hideMenu];
+            [menuController showMenuFromView:targetView rect:targetView.bounds];
+        }
+        else
+        {
+            [menuController setMenuVisible:NO animated:YES];
+            [menuController setTargetRect:targetView.bounds inView:targetView];
+            [menuController setMenuVisible:YES animated:YES];
+        }
+    }
+}
+
++ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit
+{
+    return [self getFormattedValue:value unit:unit separateWithSpace:YES];
+}
+
++ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace
+{
+    return [NSString stringWithFormat:separateWithSpace ? OALocalizedString(@"ltr_or_rtl_combine_via_space") : @"%@%@", value, unit];
+}
+
++ (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom
+{
+    return [NSString stringWithFormat:@"geo:%.5f,%.5f?z=%i", latitude, longitude, zoom];
+}
+
++ (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray *allHUDs = [MBProgressHUD allHUDsForView:view];
+        for (MBProgressHUD *hudView in allHUDs)
+        {
+            if (hudView.mode == MBProgressHUDModeText)
+                [MBProgressHUD hideHUDForView:view animated:YES];
+        }
+
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.margin = 10.f;
+        hud.yOffset = DeviceScreenHeight / 2 - 100;
+        hud.removeFromSuperViewOnHide = YES;
+        hud.userInteractionEnabled = NO;
+
+        hud.labelText = title ? title : details;
+        hud.labelFont = [UIFont systemFontOfSize:14];
+
+        hud.detailsLabelText = title ? details : nil;
+        hud.detailsLabelFont = [UIFont systemFontOfSize:14];
+
+        [hud hide:YES afterDelay:duration];
+    });
 }
 
 @end

@@ -129,3 +129,22 @@
 +(NSArray*) convert:(NSArray*)splitSegments;
 
 @end
+
+@interface OAElevationDiffsCalculator : NSObject
+
+@property (nonatomic, readonly) double windowLength;
+@property (nonatomic, readonly) int startIndex;
+@property (nonatomic, readonly) int numberOfPoints;
+@property (nonatomic, readonly) double diffElevationUp;
+@property (nonatomic, readonly) double diffElevationDown;
+
+- (instancetype)init:(int)startIndex numberOfPoints:(int)numberOfPoints splitSegment:(OASplitSegment *)splitSegment;
+- (instancetype)initWithWindowLength:(double)windowLength startIndex:(int)startIndex numberOfPoints:(int)numberOfPoints;
+
+-(OAWptPt *) getPoint:(int)index splitSegment:(OASplitSegment *)splitSegment;
+-(double) getDiffElevationUp;
+-(double) getDiffElevationDown;
+-(void) calculateElevationDiffs:(OASplitSegment *)splitSegment;
+-(double) calcAvg:(double)eleSumm pointsCount:(int)pointsCount eleAvg:(double)eleAvg;
+
+@end

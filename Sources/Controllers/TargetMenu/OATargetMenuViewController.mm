@@ -887,7 +887,7 @@
         if (self.buttonBack.alpha != backButtonAlpha)
         {
             self.buttonBack.alpha = backButtonAlpha;
-            if (!OAUtilities.isLandscape)
+            if (![OAUtilities isLandscape] && ![OAUtilities isIPad])
                 [OARootViewController.instance.mapPanel.hudViewController setTopControlsAlpha:1 - backButtonAlpha];
         }
         

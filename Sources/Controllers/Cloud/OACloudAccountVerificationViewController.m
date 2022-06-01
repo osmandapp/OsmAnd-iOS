@@ -10,7 +10,10 @@
 #import "OABackupHelper.h"
 #import "OAAppSettings.h"
 #import "OABackupListeners.h"
+#import "OABackupError.h"
 #import "OACloudBackupViewController.h"
+
+#define VERIFICATION_CODE_EXPIRATION_TIME_MIN (10 * 60)
 
 @interface OACloudAccountVerificationViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener>
 
@@ -35,15 +38,20 @@
         _email = email;
         _lastTimeCodeSent = 0;
         _backupHelper = OABackupHelper.sharedInstance;
-        
-        [_backupHelper.backupListeners addRegisterUserListener:self];
-        [_backupHelper.backupListeners addRegisterDeviceListener:self];
     }
     return self;
 }
 
-- (void)dealloc
+- (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    [_backupHelper.backupListeners addRegisterUserListener:self];
+    [_backupHelper.backupListeners addRegisterDeviceListener:self];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
     [_backupHelper.backupListeners removeRegisterUserListener:self];
     [_backupHelper.backupListeners removeRegisterDeviceListener:self];
 }
@@ -60,7 +68,6 @@
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray new];
     
     BOOL isTextFieldValidData = [self isValidInputValue:[self getTextFieldValue]];
-    BOOL isUnfolded = YES;
     
     [data addObject:@[@{
         @"type" : [OADescrTitleCell getCellIdentifier],
@@ -75,11 +82,24 @@
     @{
         @"type" : [OAInputCellWithTitle getCellIdentifier],
         @"title" : @"",
-        @"placeholder" : OALocalizedString(@"verification_code_placeholder")
+        @"placeholder" : OALocalizedString(@"verification_code_placeholder"),
+        @"numbersKeyboard" : @(YES)
     },
     @{ @"type" : [OADividerCell getCellIdentifier] } ]];
     
     NSMutableArray<NSDictionary *> *otherCells = [NSMutableArray array];
+    
+    if (self.errorMessage.length > 0)
+    {
+        [otherCells addObject:@{
+            @"type" : [OADescrTitleCell getCellIdentifier],
+            @"title" : self.errorMessage,
+            @"color" : UIColorFromRGB(color_support_red),
+            @"spacing" : @1,
+            @"topMargin" : @14,
+            @"bottomMargin" : @0
+        }];
+    }
     
     [otherCells addObject:@{
         @"type" : [OAButtonCell getCellIdentifier],
@@ -145,16 +165,26 @@
 
 #pragma mark - Actions
 
-- (void) unfoldButtonPressed
+- (void)toggleResendButton
 {
     _isUnfoldPressed = !_isUnfoldPressed;
+    int errorOffset = self.errorMessage.length > 0 ? 1 : 0;
     [self generateData];
-    [self.tableView beginUpdates];
-    if (_isUnfoldPressed)
-        [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:5 inSection:0], [NSIndexPath indexPathForRow:6 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView performBatchUpdates:^{
+        if (_isUnfoldPressed)
+            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 + errorOffset inSection:1], [NSIndexPath indexPathForRow:2 + errorOffset inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        else
+            [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 + errorOffset inSection:1], [NSIndexPath indexPathForRow:2 + errorOffset inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+    } completion:nil];
+}
+
+- (void) unfoldButtonPressed
+{
+    if (_lastTimeCodeSent > 0 && NSDate.date.timeIntervalSince1970 - _lastTimeCodeSent >= VERIFICATION_CODE_EXPIRATION_TIME_MIN)
+        [_backupHelper registerUser:[OAAppSettings.sharedManager.backupUserEmail get] promoCode:@"" login:YES];
     else
-        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:5 inSection:0], [NSIndexPath indexPathForRow:6 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.tableView endUpdates];
+        [self toggleResendButton];
 }
 
 - (void) continueButtonPressed
@@ -162,13 +192,12 @@
     NSString *token = [self getTextFieldValue];
     if ([OABackupHelper isTokenValid:token])
     {
-//        progressBar.setVisibility(View.VISIBLE);
         [_backupHelper registerDevice:token];
     }
     else
     {
-//        editText.requestFocus();
-//        editText.setError("Token is not valid");
+        self.errorMessage = OALocalizedString(@"backup_error_invalid_token");
+        [self updateScreen];
         NSLog(@"Token is not valid");
     }
 }
@@ -176,6 +205,7 @@
 - (void) resendButtonPressed
 {
     [_backupHelper registerUser:[OAAppSettings.sharedManager.backupUserEmail get] promoCode:@"" login:YES];
+    [self toggleResendButton];
 }
 
 - (void) textFieldDoneButtonPressed
@@ -193,11 +223,9 @@
 - (void)onRegisterUser:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        _lastTimeCodeSent = NSDate.date.timeIntervalSince1970;
         if (status == STATUS_SUCCESS)
-        {
-            _lastTimeCodeSent = NSDate.date.timeIntervalSince1970;
             [self.tableView reloadData];
-        }
     });
 }
 
@@ -206,20 +234,14 @@
 - (void)onRegisterDevice:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        //    progressBar.setVisibility(View.INVISIBLE);
         if (status == STATUS_SUCCESS)
         {
-    //        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-    //        if (!fragmentManager.isStateSaved()) {
-    //            fragmentManager.popBackStack(BaseSettingsFragment.SettingsScreenType.BACKUP_AUTHORIZATION.name(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    //        }
             OACloudBackupViewController *vc = [[OACloudBackupViewController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
         }
         else {
-    //        errorText.setText(error != null ? error.getLocalizedError(app) : message);
-    //        buttonContinue.setEnabled(false);
-    //        AndroidUiHelper.updateVisibility(errorText, true);
+            self.errorMessage = error != nil ? error.getLocalizedError : message;
+            [self updateScreen];
         }
     });
 }

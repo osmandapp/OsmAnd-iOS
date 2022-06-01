@@ -281,11 +281,14 @@
         }];
     }
 
+    NSString *mapStyleName = _app.data.lastMapSource.name;
+    if ([_app.data.lastMapSource.resourceId isEqualToString:@"mapnik.render.xml"])
+        mapStyleName = @"Mapnik";
     [data addObject:@{
             @"group_name": OALocalizedString(@"map_settings_type"),
             @"cells": @[@{
                     @"name": OALocalizedString(@"map_settings_type"),
-                    @"value": _app.data.lastMapSource.name,
+                    @"value": mapStyleName,
                     @"image": @"ic_custom_map_style",
                     @"type": [OAIconTitleValueCell getCellIdentifier],
                     @"key": @"map_type"
@@ -395,16 +398,17 @@
             @"key": @"underlay_layer"
     }];
 
-    if (!hasWeather || !_iapHelper.weather.disabled)
-    {
-        [overlayUnderlaySectionData addObject:@{
-                @"name": OALocalizedString(@"product_title_weather"),
-                @"image": @"ic_custom_umbrella",
-                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"product_title_weather"),
-                @"type": hasWeather ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
-                @"key": @"weather_layer"
-        }];
-    }
+    // TODO: Show weather settings later
+//    if (!hasWeather || !_iapHelper.weather.disabled)
+//    {
+//        [overlayUnderlaySectionData addObject:@{
+//                @"name": OALocalizedString(@"product_title_weather"),
+//                @"image": @"ic_custom_umbrella",
+//                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"product_title_weather"),
+//                @"type": hasWeather ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
+//                @"key": @"weather_layer"
+//        }];
+//    }
 
     [data addObject:@{
             @"group_name": OALocalizedString(@"map_settings_overunder"),
@@ -1199,14 +1203,17 @@
     if (![source.resourceId hasPrefix:@"skimap"])
     {
         OAMapStyleParameter *ski = [_styleSettings getParameter:PISTE_ROUTES_ATTR];
-        ski.value = @"false";
-        [_styleSettings save:ski];
-
-        if ([_routesWithGroup containsObject:PISTE_ROUTES_ATTR])
+        if (ski && ![ski.value isEqualToString:@"false"])
         {
-            NSMutableArray *routesWithGroup = [_routesWithGroup mutableCopy];
-            [routesWithGroup removeObject:PISTE_ROUTES_ATTR];
-            _routesWithGroup = routesWithGroup;
+            ski.value = @"false";
+            [_styleSettings save:ski];
+
+            if ([_routesWithGroup containsObject:PISTE_ROUTES_ATTR])
+            {
+                NSMutableArray *routesWithGroup = [_routesWithGroup mutableCopy];
+                [routesWithGroup removeObject:PISTE_ROUTES_ATTR];
+                _routesWithGroup = routesWithGroup;
+            }
         }
     }
     else

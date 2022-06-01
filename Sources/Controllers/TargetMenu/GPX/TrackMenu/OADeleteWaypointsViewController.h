@@ -8,13 +8,13 @@
 
 #import "OACompoundViewController.h"
 
-@class OAGPXTableSectionData;
+@class OAGPXTableData;
 
 @protocol OATrackMenuViewControllerDelegate;
 
 @interface OADeleteWaypointsViewController : OACompoundViewController
 
-- (instancetype)initWithSectionsData:(NSArray<OAGPXTableSectionData *> *)sectionsData;
+- (instancetype)initWithSectionsData:(OAGPXTableData *)tableData;
 
 @property (nonatomic, weak) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 

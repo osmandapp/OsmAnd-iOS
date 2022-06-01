@@ -48,6 +48,8 @@ const static float kTextSize = 13.0f;
     [super updateLayer];
     
     [self updateCaptionStyle];
+    
+    return YES;
 }
 
 - (void) updateCaptionStyle

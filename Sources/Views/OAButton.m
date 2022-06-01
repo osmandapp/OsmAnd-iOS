@@ -9,8 +9,30 @@
 #import "OAButton.h"
 
 @implementation OAButton
+{
+    UITapGestureRecognizer *_tapRecognizer;
+    UILongPressGestureRecognizer *_longPressRecognizer;
+}
 
--(void)layoutSubviews
+- (instancetype) initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self)
+    {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit
+{
+    _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonTapped:)];
+    [self addGestureRecognizer:_tapRecognizer];
+    _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonLongPressed:)];
+    [self addGestureRecognizer:_longPressRecognizer];
+}
+
+- (void)layoutSubviews
 {
     [super layoutSubviews];
     
@@ -55,6 +77,18 @@
 
     self.titleLabel.numberOfLines = 2;
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
+}
+
+- (void)onButtonTapped:(UIGestureRecognizer *)recognizer
+{
+    if (self.delegate && recognizer.state == UIGestureRecognizerStateEnded)
+        [self.delegate onButtonTapped:self.tag];
+}
+
+- (void)onButtonLongPressed:(UIGestureRecognizer *)recognizer
+{
+    if (self.delegate && recognizer.state == UIGestureRecognizerStateEnded)
+        [self.delegate onButtonLongPressed:self.tag];
 }
 
 @end

@@ -211,7 +211,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSString *) preferredLang;
 + (NSString *) currentLang;
-+ (NSString *) capitalizeFirstLetterAndLowercase:(NSString *)s;
++ (NSString *) capitalizeFirstLetter:(NSString *)s;
 + (NSString *) translatedLangName:(NSString *)lang;
 + (NSInteger) findFirstNumberEndIndex:(NSString *)value;
 
@@ -276,5 +276,14 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSString *) getLocalizedString:(NSString *)key;
 + (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list;
+
++ (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView;
+
++ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit;
++ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace;
+
++ (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom;
+
++ (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view;
 
 @end

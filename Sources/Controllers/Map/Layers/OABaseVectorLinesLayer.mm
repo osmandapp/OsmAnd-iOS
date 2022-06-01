@@ -72,12 +72,14 @@
 
 - (BOOL) updateLayer
 {
-    return YES; //override
+    [super updateLayer];
+    
+    return YES;
 }
 
 - (BOOL) isVisible
 {
-    return YES; //override
+    return YES;
 }
 
 - (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection

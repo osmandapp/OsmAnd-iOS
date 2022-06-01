@@ -22,6 +22,7 @@
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAPluginResetBottomSheetViewController.h"
 #import "OASettingsHelper.h"
+#import "OAProfileSettingsItem.h"
 #import "OAMapStyleSettings.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAProfileGeneralSettingsViewController.h"
@@ -32,7 +33,6 @@
 #import "OADeleteProfileBottomSheetViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 #import "OAMapWidgetRegistry.h"
-#import "OASettingsItem.h"
 #import "OARendererRegistry.h"
 #import "OAExportItemsViewController.h"
 #import "OAIndexConstants.h"
@@ -595,17 +595,16 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 {
     if (appMode)
     {
+        [OAAppSettings.sharedManager.settingPrefMapLanguage resetToDefault];
+        [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
         if (appMode.isCustomProfile)
         {
-            [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
             NSString *fileName = [self getBackupFileForCustomMode:appMode.stringKey];
             if ([[NSFileManager defaultManager] fileExistsAtPath:fileName])
                 [self restoreCustomModeFromFile:fileName];
         }
         else
         {
-            [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
-            [self showAlertMessage:OALocalizedString(OALocalizedString(@"profile_prefs_reset_successful"))];
             [self updateCopiedOrResetPrefs];
         }
         [self resetMapStylesForProfile:appMode];
@@ -615,7 +614,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) restoreCustomModeFromFile:(NSString *)filePath
 {
     _importedFileName = filePath;
-    [OASettingsHelper.sharedInstance collectSettings:filePath latestChanges:@"" version:1 delegate:self];
+    [OASettingsHelper.sharedInstance collectSettings:filePath latestChanges:@"" version:1 delegate:self onComplete:nil silent:YES];
 }
 
 - (void) resetMapStylesForProfile:(OAApplicationMode *)appMode
@@ -629,9 +628,10 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 	OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:mapStyleInfo[@"id"]
 																		mapPresetName:appMode.variantKey];
-	[styleSettings resetMapStyleForAppMode:appMode.variantKey];
+	[styleSettings resetMapStyleForAppMode:appMode.variantKey onComplete:^{
+        [self showAlertMessage:OALocalizedString(@"profile_prefs_reset_successful")];
+    }];
 }
-
 
 - (void) importBackupSettingsItems:(nonnull NSString *)file items:(nonnull NSArray<OASettingsItem *> *)items
 {
@@ -682,15 +682,29 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 {
     if (succeed)
     {
+        OASettingsItem *itm = nil;
         for (OASettingsItem *item in items)
-            item.shouldReplace = YES;
-        [self importBackupSettingsItems:_importedFileName items:items];
+        {
+            if ([item isKindOfClass:OAProfileSettingsItem.class])
+            {
+                OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *)item;
+                if ([profileItem.appMode.stringKey isEqualToString:_appMode.stringKey])
+                {
+                    itm = item;
+                    itm.shouldReplace = YES;
+                    break;
+                }
+            }
+        }
+        if (itm)
+        {
+            [self importBackupSettingsItems:_importedFileName items:@[itm]];
+        }
     }
 }
 
 - (void)onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items
 {
-    [self showAlertMessage:OALocalizedString(OALocalizedString(@"profile_prefs_reset_successful"))];
     [self updateCopiedOrResetPrefs];
 }
 

@@ -8,7 +8,6 @@
 
 #import "OAActionConfigurationViewController.h"
 #import "Localization.h"
-#import "OAQuickActionRegistry.h"
 #import "OAQuickAction.h"
 #import "OrderedDictionary.h"
 #import "OATextInputCell.h"
@@ -40,17 +39,15 @@
 #import "OAMultilineTextViewCell.h"
 #import "OAEditPOIData.h"
 #import "OAEntity.h"
+#import "OAQuickActionListViewController.h"
 
 #import <AudioToolbox/AudioServices.h>
-
-#include <OsmAndCore.h>
-#include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/Utilities.h>
 
 #define KEY_MESSAGE @"message"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate>
+
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -329,6 +326,16 @@
         else
             [_actionRegistry updateQuickAction:_action];
         [_actionRegistry.quickActionListChangedObservable notifyEvent];
+        for (UIViewController *controller in self.navigationController.viewControllers)
+        {
+            if ([controller isKindOfClass:[OAQuickActionListViewController class]])
+            {
+                [self.navigationController popToViewController:controller animated:YES];
+                if (self.delegate)
+                    [self.delegate updateData];
+                return;
+            }
+        }
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
     else
@@ -341,6 +348,16 @@
             else
                 [_actionRegistry updateQuickAction:_action];
             [_actionRegistry.quickActionListChangedObservable notifyEvent];
+            for (UIViewController *controller in self.navigationController.viewControllers)
+            {
+                if ([controller isKindOfClass:[OAQuickActionListViewController class]])
+                {
+                    [self.navigationController popToViewController:controller animated:YES];
+                    if (self.delegate)
+                        [self.delegate updateData];
+                    return;
+                }
+            }
             [self.navigationController popToRootViewControllerAnimated:YES];
         }]];
         [self presentViewController:alert animated:YES completion:nil];

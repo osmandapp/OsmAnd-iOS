@@ -92,6 +92,12 @@
     }];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return self.currentState != EOADraggableMenuStateFullScreen && [OAAppSettings sharedManager].nightMode
+            ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
+}
+
 - (void) applyCornerRadius:(BOOL)enable
 {
     CGFloat value = enable ? 9. : 0.;
@@ -202,6 +208,8 @@
     [self onViewStateChanged:self.getViewHeight];
     
     [self doAdditionalLayout];
+
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void) doAdditionalLayout

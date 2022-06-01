@@ -102,7 +102,9 @@
     
     double recalcDist = [_settings.routeRecalculationDistance get:self.appMode];
     recalcDist = recalcDist == 0 ? [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]] : recalcDist;
-    NSString *descr = recalcDist == -1 ? OALocalizedString(@"rendering_value_disabled_name") : [OAOsmAndFormatter getFormattedDistance:recalcDist];
+    NSString *descr = recalcDist == -1
+            ? OALocalizedString(@"rendering_value_disabled_name")
+            : [OAOsmAndFormatter getFormattedDistance:recalcDist forceTrailingZeroes:NO];
     [parametersArr addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"recalculate_route"),
@@ -124,12 +126,15 @@
     [self clearParameters];
     if (router)
     {
-        const auto& parameters = router->getParametersList();
-        for (const auto& p : parameters)
+        const auto parameters = router->getParameters(string(self.appMode.getDerivedProfile.UTF8String));
+        for (auto it = parameters.begin(); it != parameters.end(); ++it)
         {
+            const auto &p = it->second;
             NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
             NSString *group = [NSString stringWithUTF8String:p.group.c_str()];
-            if ([param hasPrefix:@"avoid_"])
+            if ([param hasPrefix:@"hazmat"])
+                continue;
+            else if ([param hasPrefix:@"avoid_"])
                 _avoidParameters.push_back(p);
             else if ([param hasPrefix:@"prefer_"])
                 _preferParameters.push_back(p);
@@ -298,7 +303,7 @@
 {
     if ([parameterName isEqualToString:kRouteParamIdShortWay])
         return @"ic_custom_fuel";
-    else if ([parameterName isEqualToString:kRouteParamIdAllowPrivate])
+    else if ([parameterName isEqualToString:kRouteParamIdAllowPrivate] || [parameterName isEqualToString:kRouteParamIdAllowPrivateTruck])
         return isSelected ? @"ic_custom_allow_private_access" : @"ic_custom_forbid_private_access";
     else if ([parameterName isEqualToString:kRouteParamIdAllowMotorway])
         return isSelected ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";

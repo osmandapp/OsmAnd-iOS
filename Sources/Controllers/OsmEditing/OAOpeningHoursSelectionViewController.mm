@@ -467,14 +467,14 @@ static const NSInteger timeSectionIndex = 1;
     auto rules = [self getRulesWithoutCurrent];
     rules.push_back(_currentRule);
     NSString *openingHoursStr = [self generateOpeningHoursString:rules];
-    [_poiData putTag:[OAOSMSettings getOSMKey:OPENING_HOURS] value:openingHoursStr];
+    [_poiData putTag:[OAOSMSettings getOSMKey:OSM_TAG_OPENING_HOURS] value:openingHoursStr];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)deleteButtonPressed:(id)sender {
     auto rules = [self getRulesWithoutCurrent];
     NSString *openingHoursStr = [self generateOpeningHoursString:rules];
-    [_poiData putTag:[OAOSMSettings getOSMKey:OPENING_HOURS] value:openingHoursStr];
+    [_poiData putTag:[OAOSMSettings getOSMKey:OSM_TAG_OPENING_HOURS] value:openingHoursStr];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

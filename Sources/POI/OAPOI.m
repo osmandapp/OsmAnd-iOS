@@ -8,10 +8,6 @@
 
 #import "OAPOI.h"
 #import "OAAppSettings.h"
-#import "OAUtilities.h"
-
-#define OSM_DELETE_VALUE @"delete"
-#define OSM_DELETE_TAG @"osmand_change"
 
 @implementation OAPOIRoutePoint
 
@@ -126,28 +122,80 @@
     return l;
 }
 
-- (NSString *) getTagContent:(NSString *)tag lang:(NSString *)lang
+- (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang
 {
     if (lang)
     {
-        NSString *translateName = _values[[NSString stringWithFormat:@"%@:%@", tag, lang]];
-        if (translateName.length > 0)
+        NSString *translateName = [self getAdditionalInfo][[NSString stringWithFormat:@"%@:%@", tag, lang]];
+        if (translateName && translateName.length > 0)
             return translateName;
     }
-    NSString *plainName = _values[tag];
-    if (plainName.length > 0)
+    NSString *plainContent = [self getAdditionalInfo][tag];
+    if (plainContent && plainContent.length > 0)
+        return defLang;
+
+    NSString *enName = [self getAdditionalInfo][[tag stringByAppendingString:@":en"]];
+    if (enName && enName.length > 0)
+        return @"en";
+
+    NSInteger maxLen = 0;
+    NSString *lng = defLang;
+    for (NSString *nm in [self getAdditionalInfo].allKeys)
+    {
+        if ([nm hasPrefix:[NSString stringWithFormat:@"%@:", tag]])
+        {
+            NSString *key = [nm substringFromIndex:tag.length + 1];
+            NSString *cnt = [self getAdditionalInfo][[NSString stringWithFormat:@"%@:%@", tag, key]];
+            if (cnt && cnt.length > 0  && cnt.length > maxLen)
+            {
+                maxLen = cnt.length;
+                lng = key;
+            }
+        }
+    }
+    return lng;
+}
+
+- (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang
+{
+    if (lang)
+    {
+        NSString *translateName = [self getAdditionalInfo][[NSString stringWithFormat:@"%@:%@", tag, lang]];
+        if (translateName && translateName.length > 0)
+            return translateName;
+    }
+    NSString *plainName = [self getAdditionalInfo][tag];
+    if (plainName && plainName.length > 0)
         return plainName;
-    
-    NSString *enName = _values[[tag stringByAppendingString:@":en"]];
-    if (enName.length > 0)
+
+    NSString *enName = [self getAdditionalInfo][[NSString stringWithFormat:@"%@:en", tag]];
+    if (enName && enName.length > 0)
         return enName;
-    
-    NSString *tagPrefix = [tag stringByAppendingString:@":"];
-    for (NSString *nm in _values.allKeys)
-        if ([nm hasPrefix:tagPrefix])
-            return _values[nm];
-    
+
     return nil;
+}
+
+- (NSString *)getTagContent:(NSString *)tag lang:(NSString *)lang
+{
+    NSString *translateName = [self getStrictTagContent:tag lang:lang];
+    if (translateName)
+        return translateName;
+
+    for (NSString *nm in [self getAdditionalInfo].allKeys)
+    {
+        if ([nm hasPrefix:[NSString stringWithFormat:@"%@:", tag]])
+            return [self getAdditionalInfo][nm];
+    }
+    return nil;
+}
+
+- (NSString *)getDescription:(NSString *)lang
+{
+    NSString *info = [self getTagContent:@"description" lang:lang];
+    if (info && info.length > 0)
+        return info;
+
+    return [self getTagContent:@"content" lang:lang];
 }
 
 - (NSDictionary<NSString *, NSString *> *) getAdditionalInfo

@@ -335,7 +335,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     __weak OAQuickSearchViewController *weakSelf = self;
     self.searchUICore.onSearchStart = ^void() {
-        _cancelPrev = false;
+        weakSelf.cancelPrev = false;
     };
     self.searchUICore.onResultsComplete = ^void() {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1558,7 +1558,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void) showApiResults:(NSArray<OASearchResult *> *)apiResults phrase:(OASearchPhrase *)phrase hasRegionCollection:(BOOL)hasRegionCollection onPublish:(OAPublishCallback)onPublish
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-
         if (!_paused && !_cancelPrev)
         {
             BOOL append = [self getResultCollection] != nil;
@@ -1573,7 +1572,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 [self setResultCollection:resCollection];
             }
             if (!hasRegionCollection && onPublish)
-                onPublish([self getResultCollection], append);
+            {
+                    onPublish([self getResultCollection], append);
+            }
         }
     });
 }
@@ -1685,14 +1686,15 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) addMoreButton
 {
+    __weak OAQuickSearchViewController *weakSelf = self;
     OAQuickSearchMoreListItem *moreListItem = [[OAQuickSearchMoreListItem alloc] initWithName:OALocalizedString(@"search_POI_level_btn") onClickFunction:^(id sender) {
 
-        if (!self.interruptedSearch)
+        if (!weakSelf.interruptedSearch)
         {
-            OASearchSettings *settings = [self.searchUICore getSearchSettings];
-            [self.searchUICore updateSettings:[settings setRadiusLevel:[settings getRadiusLevel] + 1]];
+            OASearchSettings *settings = [weakSelf.searchUICore getSearchSettings];
+            [weakSelf.searchUICore updateSettings:[settings setRadiusLevel:[settings getRadiusLevel] + 1]];
         }
-        [self runCoreSearch:self.searchQuery updateResult:NO searchMore:YES];
+        [weakSelf runCoreSearch:weakSelf.searchQuery updateResult:NO searchMore:YES];
     }];
 
     if (!_paused && !_cancelPrev)
@@ -1709,7 +1711,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if ([self.searchUICore isSearchMoreAvailable:self.searchUICore.getPhrase] && minimalSearchRadius != INT_MAX)
     {
         double rd = [OAOsmAndFormatter calculateRoundedDist:minimalSearchRadius];
-        item.title = [NSString stringWithFormat:OALocalizedString(@"nothing_found"), [OAOsmAndFormatter getFormattedDistance:rd]];
+        item.title = [NSString stringWithFormat:OALocalizedString(@"nothing_found"),
+                [OAOsmAndFormatter getFormattedDistance:rd forceTrailingZeroes:NO]];
     }
 
     if (!_paused && !_cancelPrev)

@@ -27,6 +27,8 @@
 #import "OAPOIHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAEditPOIData.h"
+#import "OAColors.h"
+#import "OACompoundIconUtils.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -38,6 +40,8 @@
 {
     std::shared_ptr<OsmAnd::MapMarkersCollection> _osmEditsCollection;
     OAOsmEditingPlugin *_plugin;
+    
+    QHash<QString, sk_sp<SkImage>> _iconsCache;
     
     OAAutoObserverProxy *_editsChangedObserver;
     
@@ -118,7 +122,7 @@
         builder.setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.baseOrder)
         .setIsHidden(false)
-        .setPinIcon([OANativeUtilities skImageFromPngResource:@"map_osm_edit"])
+        .setPinIcon([self getIcon:point])
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon([point getLatitude], [point getLongitude])))
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
@@ -131,6 +135,34 @@
         }
         builder.buildAndAddToCollection(_osmEditsCollection);
     }
+}
+
+- (sk_sp<SkImage>) getIcon:(OAOsmPoint *)point
+{
+    if ([point isKindOfClass:OAOpenStreetMapPoint.class])
+    {
+        OAOpenStreetMapPoint *osmP = (OAOpenStreetMapPoint *)point;
+        NSString *poiTranslation = [osmP.getEntity getTagFromString:POI_TYPE_TAG];
+        if (poiTranslation != nil)
+        {
+            NSDictionary<NSString *, OAPOIType *> *poiTypeMap = [OAPOIHelper.sharedInstance getAllTranslatedNames:NO];
+            OAPOIType *type = poiTypeMap[poiTranslation.lowerCase];
+            auto iconId = QString::fromNSString(type.name);
+            const auto bitmapIt = _iconsCache.find(iconId);
+            sk_sp<SkImage> bitmap;
+            if (bitmapIt == _iconsCache.end())
+            {
+                bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:type.name isFullSize:YES icon:type.icon];
+                _iconsCache[iconId] = bitmap;
+            }
+            else
+            {
+                bitmap = bitmapIt.value();
+            }
+            return bitmap;
+        }
+    }
+    return [OANativeUtilities skImageFromPngResource:@"map_osm_edit"];
 }
 
 - (NSString *) getPointDescription:(OAOsmPoint *)point

@@ -324,7 +324,7 @@
     if ([[filePath stringByDeletingLastPathComponent] isEqualToString:OsmAndApp.instance.gpxPath])
         parent = OALocalizedString(@"tracks");
     if (parent.length > 0)
-        folder = parent.capitalizedString;
+        folder = [OAUtilities capitalizeFirstLetter:parent];
     
 //    if (exportMode) {
 //        GpxDataItem dataItem = getDataItem(file, gpxDataItemCallback);

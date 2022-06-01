@@ -14,7 +14,7 @@
 
 @required
 
--(void)onCloseAppearance;
+- (void)onCloseAppearance;
 
 @end
 
@@ -22,6 +22,6 @@
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)appMode;
 
-@property (nonatomic) id<OARouteLineAppearanceViewControllerDelegate> delegate;
+@property (nonatomic, weak) id<OARouteLineAppearanceViewControllerDelegate> delegate;
 
 @end

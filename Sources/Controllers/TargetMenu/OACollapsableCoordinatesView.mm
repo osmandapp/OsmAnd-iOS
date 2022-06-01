@@ -8,20 +8,24 @@
 
 #import "OACollapsableCoordinatesView.h"
 #import "Localization.h"
-#import "OACommonTypes.h"
-#import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OALocationConvert.h"
 #import "OAPointDescription.h"
+#import "OAButton.h"
 
 #define kButtonHeight 32.0
 #define kDefaultZoomOnShow 16.0f
 
+@interface OACollapsableCoordinatesView () <OAButtonDelegate>
+
+@end
+
 @implementation OACollapsableCoordinatesView
 {
-    NSArray<UIButton *> *_buttons;
-    
+    NSArray<OAButton *> *_buttons;
+    NSInteger _selectedButtonIndex;
+
     UILabel *_viewLabel;
 }
 
@@ -71,7 +75,7 @@
     int i = 0;
     for (NSNumber *format in _coordinates.allKeys)
     {
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+        OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
         NSString *coord;
         if (format.integerValue == FORMAT_UTM)
             coord = [NSString stringWithFormat:@"UTM: %@", _coordinates[format]];
@@ -94,28 +98,12 @@
         btn.tintColor = UIColorFromRGB(color_primary_purple);
         btn.tag = i++;
         [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(color_coordinates_background)] forState:UIControlStateHighlighted];
-        [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+        btn.delegate = self;
+
         [self addSubview:btn];
         [buttons addObject:btn];
-        [btn addTarget:self action:@selector(onButtonTouched:) forControlEvents:UIControlEventTouchDown];
     }
     _buttons = [NSArray arrayWithArray:buttons];
-}
-
-- (void) onButtonTouched:(id) sender
-{
-    UIButton *btn = sender;
-    [UIView animateWithDuration:0.3 animations:^{
-        btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
-        btn.layer.borderColor = UIColor.clearColor.CGColor;
-        btn.tintColor = UIColor.whiteColor;
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.2 animations:^{
-            btn.layer.backgroundColor = UIColor.clearColor.CGColor;
-            btn.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
-            btn.tintColor = UIColorFromRGB(color_primary_purple);
-        }];
-    }];
 }
 
 - (void) updateButton
@@ -135,7 +123,7 @@
     y += viewHeight;
     
     int i = 0;
-    for (UIButton *btn in _buttons)
+    for (OAButton *btn in _buttons)
     {
         if (i > 0)
         {
@@ -152,19 +140,59 @@
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
 }
 
-- (void) btnPress:(id)sender
-{
-    UIButton *btn = sender;
-    NSInteger index = btn.tag;
-    if (index >= 0 && index < self.coordinates.count)
-    {
-        UIPasteboard *pb = [UIPasteboard generalPasteboard];
-        [pb setString:self.coordinates.allValues[index]];
-    }
-}
 - (void) adjustHeightForWidth:(CGFloat)width
 {
     [self updateLayout:width];
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return [sender isKindOfClass:UIMenuController.class] && action == @selector(copy:);
+}
+
+- (void)copy:(id)sender
+{
+    if (_buttons.count > _selectedButtonIndex)
+    {
+        OAButton *button = _buttons[_selectedButtonIndex];
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setString:button.titleLabel.text];
+    }
+}
+
+#pragma mark - OACustomButtonDelegate
+
+- (void)onButtonTapped:(NSInteger)tag
+{
+    _selectedButtonIndex = tag;
+    if (_buttons.count > _selectedButtonIndex)
+    {
+        OAButton *button = _buttons[_selectedButtonIndex];
+        [UIView animateWithDuration:0.3 animations:^{
+            button.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
+            button.layer.borderColor = UIColor.clearColor.CGColor;
+            button.tintColor = UIColor.whiteColor;
+        }                completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.2 animations:^{
+                button.layer.backgroundColor = UIColor.clearColor.CGColor;
+                button.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
+                button.tintColor = UIColorFromRGB(color_primary_purple);
+                [OAUtilities showMenuInView:self fromView:button];
+            }];
+        }];
+    }
+}
+
+- (void)onButtonLongPressed:(NSInteger)tag
+{
+    _selectedButtonIndex = tag;
+    if (_buttons.count > _selectedButtonIndex)
+        [OAUtilities showMenuInView:self fromView:_buttons[_selectedButtonIndex]];
 }
 
 @end

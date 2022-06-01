@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,6 +18,7 @@
                 <outlet property="titleView" destination="dZU-FH-XyG" id="pyy-EZ-3X6"/>
                 <outlet property="toolbarView" destination="afD-ec-0rL" id="Xi2-Qv-V7H"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="webView" destination="7OW-mp-1he" id="XVe-6J-yJz"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -90,11 +91,22 @@
                     <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
+                <wkWebView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7OW-mp-1he">
+                    <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                    <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <wkWebViewConfiguration key="configuration">
+                        <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                        <wkPreferences key="preferences"/>
+                    </wkWebViewConfiguration>
+                </wkWebView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="90n-Yy-Nq3"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="90n-Yy-Nq3" firstAttribute="trailing" secondItem="7OW-mp-1he" secondAttribute="trailing" id="2uJ-cE-Cad"/>
+                <constraint firstAttribute="bottom" secondItem="7OW-mp-1he" secondAttribute="bottom" id="7H4-Rp-nq2"/>
                 <constraint firstItem="afD-ec-0rL" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="8Lu-oa-mT3"/>
+                <constraint firstItem="7OW-mp-1he" firstAttribute="leading" secondItem="90n-Yy-Nq3" secondAttribute="leading" id="8Tw-HM-OJh"/>
                 <constraint firstItem="afD-ec-0rL" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="CHI-fd-J91"/>
                 <constraint firstItem="afD-ec-0rL" firstAttribute="bottom" secondItem="90n-Yy-Nq3" secondAttribute="top" constant="44" id="Gp0-6x-SUU"/>
                 <constraint firstAttribute="trailing" secondItem="AUI-Xp-W80" secondAttribute="trailing" id="Isk-Nv-lyR"/>
@@ -102,6 +114,7 @@
                 <constraint firstItem="afD-ec-0rL" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="SER-ur-xX6"/>
                 <constraint firstItem="AUI-Xp-W80" firstAttribute="top" secondItem="afD-ec-0rL" secondAttribute="bottom" id="ctv-HT-grO"/>
                 <constraint firstAttribute="bottom" secondItem="AUI-Xp-W80" secondAttribute="bottom" id="tkj-DM-oOe"/>
+                <constraint firstItem="7OW-mp-1he" firstAttribute="top" secondItem="afD-ec-0rL" secondAttribute="bottom" id="z6T-sG-CBq"/>
             </constraints>
             <point key="canvasLocation" x="311.59420289855075" y="194.19642857142856"/>
         </view>

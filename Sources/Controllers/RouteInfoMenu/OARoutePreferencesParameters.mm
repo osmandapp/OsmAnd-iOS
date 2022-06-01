@@ -293,7 +293,7 @@
     NSString *name = @"ic_custom_trip";
     if ([id isEqualToString:kRouteParamIdShortWay])
         name = @"ic_custom_fuel";
-    else if ([id isEqualToString:kRouteParamIdAllowPrivate])
+    else if ([id isEqualToString:kRouteParamIdAllowPrivate] || [id isEqualToString:kRouteParamIdAllowPrivateTruck])
         name = isChecked ? @"ic_custom_allow_private_access" : @"ic_custom_forbid_private_access";
     else if ([id isEqualToString:kRouteParamIdAllowMotorway])
         name = isChecked ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";
@@ -762,12 +762,12 @@
 
 - (BOOL) isSelected
 {
-    return self.settings.simulateRouting;
+    return self.settings.simulateNavigation;
 }
 
 - (void) setSelected:(BOOL)isChecked
 {
-    [self.settings setSimulateRouting:isChecked];
+    [self.settings setSimulateNavigation:isChecked];
     if (self.delegate)
         [self.delegate updateParameters];
 }
@@ -790,6 +790,17 @@
 - (UIColor *)getTintColor
 {
     return self.isChecked ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+}
+
+- (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate)
+        [self.delegate openSimulateNavigationScreen];
+}
+
+- (UIImage *)getSecondaryIcon
+{
+    return [UIImage imageNamed:@"ic_action_additional_option"];
 }
 
 @end

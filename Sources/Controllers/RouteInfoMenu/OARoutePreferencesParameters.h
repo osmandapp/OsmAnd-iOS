@@ -26,6 +26,7 @@
 #define kRouteParamIdHeightObstacles @"height_obstacles"
 #define kRouteParamIdShortWay @"short_way"
 #define kRouteParamIdAllowPrivate @"allow_private"
+#define kRouteParamIdAllowPrivateTruck @"allow_private_for_truck"
 #define kRouteParamIdAllowMotorway @"allow_motorway"
 
 @class OAApplicationMode, OARoutingHelper, OAAppSettings;
@@ -44,6 +45,7 @@ struct RoutingParameter;
 - (void) showAvoidRoadsScreen;
 - (void) showTripSettingsScreen;
 - (void) showAvoidTransportScreen;
+- (void) openSimulateNavigationScreen;
 
 @end
 

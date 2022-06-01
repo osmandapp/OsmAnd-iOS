@@ -6,10 +6,11 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchSettings.java
-//  git revision 4c2cfb9c97778b99d64fc73ba71dc3cc39ddbfdd
+//  git revision d9a90a3ae40bcdee0c7ffde2a9fd860665ac95ba
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OAWorldRegion.h"
 
 @class OAObjectType;
 
@@ -41,6 +42,9 @@
 - (OASearchSettings *) setSortByName:(BOOL)sortByName;
 - (BOOL) isInAddressSearch;
 - (OASearchSettings *) setAddressSearch:(BOOL)addressSearch;
+- (NSString *) getRegionLang;
+- (OAWorldRegion *)getRegions;
+- (void) setRegions:(OAWorldRegion *)regions;
 
 + (OASearchSettings *) parseJSON:(NSDictionary *)json;
 

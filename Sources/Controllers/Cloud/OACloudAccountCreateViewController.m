@@ -12,6 +12,7 @@
 #import "OABackupError.h"
 #import "OABackupListeners.h"
 #import "OACloudAccountVerificationViewController.h"
+#import "OACloudAccountLoginViewController.h"
 
 @interface OACloudAccountCreateViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener>
 
@@ -30,13 +31,18 @@
 {
     [super viewDidLoad];
     _backupHelper = OABackupHelper.sharedInstance;
-    
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [_backupHelper.backupListeners addRegisterUserListener:self];
     [_backupHelper.backupListeners addRegisterDeviceListener:self];
 }
 
-- (void)dealloc
+- (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     [_backupHelper.backupListeners removeRegisterUserListener:self];
     [_backupHelper.backupListeners removeRegisterDeviceListener:self];
 }
@@ -51,9 +57,7 @@
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray new];
     
     BOOL isTextFieldValidData = [self isValidInputValue:[self getTextFieldValue]];
-    BOOL isIntialLaunch = YES;
-    BOOL isEmailValid = YES;
-    BOOL isEmailRegistred = YES;
+    BOOL isEmailRegistred = [self.errorMessage isEqualToString:OALocalizedString(@"cloud_email_already_registered")];
     
     [data addObject:@[@{
         @"type" : [OADescrTitleCell getCellIdentifier],
@@ -72,8 +76,19 @@
     @{ @"type" : [OADividerCell getCellIdentifier] } ]];
     
     NSMutableArray<NSDictionary *> *otherCells = [NSMutableArray array];
-    if (isIntialLaunch)
+    if (!isEmailRegistred)
     {
+        if (self.errorMessage.length > 0)
+        {
+            [otherCells addObject:@{
+                @"type" : [OADescrTitleCell getCellIdentifier],
+                @"title" : self.errorMessage,
+                @"color" : UIColorFromRGB(color_support_red),
+                @"spacing" : @1,
+                @"topMargin" : @14,
+                @"bottomMargin" : @0
+            }];
+        }
         if (isTextFieldValidData)
         {
             [otherCells addObject: @{
@@ -99,69 +114,32 @@
     }
     else
     {
-        if (!isEmailValid)
-        {
-            [otherCells addObject:@{
-                @"type" : [OADescrTitleCell getCellIdentifier],
-                @"title" : OALocalizedString(@"login_error_email_invalid"),
-                @"color" : UIColorFromRGB(color_support_red),
-                @"spacing" : @1,
-                @"topMargin" : @14,
-                @"bottomMargin" : @0
-            }];
-            
-            if (isTextFieldValidData)
-            {
-                [otherCells addObject: @{
-                    @"type" : [OAFilledButtonCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"shared_string_continue"),
-                    @"buttonColor" : UIColorFromRGB(color_primary_purple),
-                    @"textColor" : UIColor.whiteColor,
-                    @"action" : @"continueButtonPressed",
-                    @"inteactive" : @YES,
-                }];
-            }
-            else
-            {
-                [otherCells addObject: @{
-                    @"type" : [OAFilledButtonCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"shared_string_continue"),
-                    @"buttonColor" : UIColorFromRGB(color_bottom_sheet_secondary),
-                    @"textColor" : UIColorFromRGB(color_text_footer),
-                    @"action": @"continueButtonPressed",
-                    @"inteactive" : @NO,
-                }];
-            }
-        }
-        else if (isEmailRegistred)
-        {
-            [otherCells addObject:@{
-                @"type" : [OADescrTitleCell getCellIdentifier],
-                @"title" : OALocalizedString(@"cloud_email_already_registered"),
-                @"color" : UIColorFromRGB(color_support_red),
-                @"spacing" : @1,
-                @"topMargin" : @14,
-                @"bottomMargin" : @0
-            }];
-            
-            [otherCells addObject: @{
-                @"type" : [OAFilledButtonCell getCellIdentifier],
-                @"title" : OALocalizedString(@"user_login"),
-                @"buttonColor" : UIColorFromRGB(color_bottom_sheet_secondary),
-                @"textColor" : UIColorFromRGB(color_primary_purple),
-                @"action": @"loginButtonPressed",
-                @"inteactive" : @YES,
-            }];
-            
-            [otherCells addObject: @{
-                @"type" : [OAFilledButtonCell getCellIdentifier],
-                @"title" : OALocalizedString(@"shared_string_continue"),
-                @"buttonColor" : UIColorFromRGB(color_bottom_sheet_secondary),
-                @"textColor" : UIColorFromRGB(color_text_footer),
-                @"action": @"continueButtonPressed",
-                @"inteactive" : @NO,
-            }];
-        }
+        [otherCells addObject:@{
+            @"type" : [OADescrTitleCell getCellIdentifier],
+            @"title" : self.errorMessage,
+            @"color" : UIColorFromRGB(color_support_red),
+            @"spacing" : @1,
+            @"topMargin" : @14,
+            @"bottomMargin" : @0
+        }];
+        
+        [otherCells addObject: @{
+            @"type" : [OAFilledButtonCell getCellIdentifier],
+            @"title" : OALocalizedString(@"user_login"),
+            @"buttonColor" : UIColorFromRGB(color_bottom_sheet_secondary),
+            @"textColor" : UIColorFromRGB(color_primary_purple),
+            @"action": @"loginButtonPressed",
+            @"inteactive" : @YES,
+        }];
+        
+        [otherCells addObject: @{
+            @"type" : [OAFilledButtonCell getCellIdentifier],
+            @"title" : OALocalizedString(@"shared_string_continue"),
+            @"buttonColor" : UIColorFromRGB(color_bottom_sheet_secondary),
+            @"textColor" : UIColorFromRGB(color_text_footer),
+            @"action": @"continueButtonPressed",
+            @"inteactive" : @NO,
+        }];
     }
     [data addObject:otherCells];
     _data = data;
@@ -186,6 +164,8 @@
 
 - (void) loginButtonPressed
 {
+    OACloudAccountLoginViewController *vc = [[OACloudAccountLoginViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void) textFieldDoneButtonPressed
@@ -205,27 +185,23 @@
 {
     NSInteger errorCode = error != nil ? error.code : -1;
     
-    if (errorCode == SERVER_ERROR_CODE_TOKEN_IS_NOT_VALID_OR_EXPIRED)
+    if (errorCode == SERVER_ERROR_CODE_USER_IS_NOT_REGISTERED)
     {
         [self registerUser];
     }
     else if (errorCode != -1)
     {
-//        progressBar.setVisibility(View.INVISIBLE);
-        if (errorCode == SERVER_ERROR_CODE_USER_IS_NOT_REGISTERED)
+        if (errorCode == SERVER_ERROR_CODE_TOKEN_IS_NOT_VALID_OR_EXPIRED)
         {
-//            errorText.setText(dialogType.warningId);
-//            AndroidUiHelper.updateVisibility(buttonAuthorize, !promoCodeSupported());
+            self.errorMessage = OALocalizedString(@"cloud_email_already_registered");
         }
         else
         {
-//            errorText.setText(error.getLocalizedError(app));
+            self.errorMessage = error.getLocalizedError;
         }
+        [self updateScreen];
         NSLog(@"Backup error: %@", error.getLocalizedError);
-//        buttonContinue.setEnabled(false);
-//        AndroidUiHelper.updateVisibility(errorText, true);
     }
-//    AndroidUiHelper.updateVisibility(buttonChoosePlan, false);
 }
 
 // MARK: OAOnRegisterUserListener
@@ -233,7 +209,6 @@
 - (void)onRegisterUser:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        //    progressBar.setVisibility(View.INVISIBLE);
         if (status == STATUS_SUCCESS) {
             self.lastTimeCodeSent = NSDate.date.timeIntervalSince1970;
             OACloudAccountVerificationViewController *verificationVc = [[OACloudAccountVerificationViewController alloc] initWithEmail:self.getTextFieldValue];
@@ -241,18 +216,8 @@
         }
         else
         {
-            //        boolean choosePlanVisible = false;
-            //        if (error != null) {
-            //            int code = error.getCode();
-            //            choosePlanVisible = !promoCodeSupported()
-            //            && (code == SERVER_ERROR_CODE_NO_VALID_SUBSCRIPTION
-            //                || code == SERVER_ERROR_CODE_USER_IS_NOT_REGISTERED
-            //                || code == SERVER_ERROR_CODE_SUBSCRIPTION_WAS_EXPIRED_OR_NOT_PRESENT);
-            //        }
-            //        errorText.setText(error != null ? error.getLocalizedError(app) : message);
-            //        buttonContinue.setEnabled(false);
-            //        AndroidUiHelper.updateVisibility(errorText, true);
-            //        AndroidUiHelper.updateVisibility(buttonChoosePlan, choosePlanVisible);
+            self.errorMessage = error != nil ? error.getLocalizedError : message;
+            [self updateScreen];
         }
     });
 }

@@ -30,6 +30,7 @@
 + (OAParsedOpenLocationCode *) parseOpenLocationCode:(NSString *) locPhrase;
 + (CLLocation *) parseLocation:(NSString *)s;
 + (void) splitObjects:(NSString *)s d:(NSMutableArray<NSNumber *> *)d all:(NSMutableArray *)all strings:(NSMutableArray<NSString *> *)strings;
++ (void) splitObjects:(NSString *)s d:(NSMutableArray<NSNumber *> *)d all:(NSMutableArray *)all strings:(NSMutableArray<NSString *> *)strings partial:(NSMutableArray<NSNumber *> *)partial;
 + (double) parse1Coordinate:(NSMutableArray *)all begin:(int)begin end:(int)end;
 
 @end

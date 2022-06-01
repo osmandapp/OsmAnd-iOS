@@ -218,6 +218,7 @@
         OAApplicationModeBuilder *builder = [OAApplicationMode createCustomMode:parent stringKey:_modeBean.stringKey];
         [builder setIconResName:_modeBean.iconName];
         [builder setUserProfileName:_modeBean.userProfileName];
+        [builder setDerivedProfile:_modeBean.derivedProfile];
         [builder setRoutingProfile:_modeBean.routingProfile];
         [builder setRouteService:_modeBean.routeService];
         [builder setIconColor:_modeBean.iconColor];

@@ -107,12 +107,14 @@ static NSArray<NSString *> *nibNames;
 
 - (void) setCards:(NSArray<OAAbstractCard *> *)cards
 {
-    _cards = cards;
-    for (OAAbstractCard *card in cards)
-        card.delegate = self;
-    
-    [self buildViews];
-    [_cardCollection reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _cards = cards;
+        for (OAAbstractCard *card in cards)
+            card.delegate = self;
+        
+        [self buildViews];
+        [_cardCollection reloadData];
+    });
 }
 
 #pragma mark - UICollectionViewDataSource

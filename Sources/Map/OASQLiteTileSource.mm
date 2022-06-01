@@ -56,7 +56,7 @@
 - (void) dealloc
 {
     if (_db)
-        _db->close();
+        _db->close(false);
 }
 
 - (int) bitDensity
@@ -323,6 +323,9 @@
             meta.setMaxZoom(maxZ);
         }
         _db->storeMeta(meta);
+        
+        if (expireTimeMillis != -1)
+            _db->enableTileTimeSupport(false);
     }
 }
 
@@ -437,6 +440,9 @@
         meta.setInvertedY([parameters[@"inverted_y"] intValue]);
         
         res = db->storeMeta(meta);
+        if ([parameters[@"timecolumn"] isEqualToString:@"yes"])
+            db->enableTileTimeSupport(true);
+            
         db->close();
     }
     delete db;
@@ -449,12 +455,13 @@
     BOOL res = NO;
 
     auto *db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(filePath));
-    OsmAnd::TileSqliteDatabase::Meta meta;
-    if (db->obtainMeta(meta))
-        res = !meta.getUrl().isEmpty();
-    
+    if (db->open())
+    {
+        res = db->isOnlineTileSource();
+        
+        db->close(false);
+    }
     delete db;
-    
     return res;
 }
 
@@ -463,13 +470,22 @@
     NSString *title = nil;
 
     auto *db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(filePath));
-    OsmAnd::TileSqliteDatabase::Meta meta;
-    if (db->obtainMeta(meta))
-        title = meta.getTitle().toNSString();
+    if (db->open())
+    {
+        OsmAnd::TileSqliteDatabase::Meta meta;
+        if (db->obtainMeta(meta))
+            title = meta.getTitle().toNSString();
+        db->close(false);
+    }
 
     delete db;
 
     return title.length > 0 ? title : [[[filePath lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+}
+
+- (NSString *) getFilePath
+{
+    return _filePath;
 }
 
 @end

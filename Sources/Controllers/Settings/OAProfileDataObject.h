@@ -33,6 +33,7 @@ typedef NS_ENUM(NSInteger, EOARoutingProfilesResource)
 @property (nonatomic) BOOL isSelected;
 @property (nonatomic) BOOL isEnabled;
 @property (nonatomic) int iconColor;
+@property (nonatomic) NSString *derivedProfile;
 
 - (instancetype) initWithStringKey:(NSString *)stringKey name:(NSString *)name descr:(NSString *)descr iconName:(NSString *)iconName isSelected:(BOOL)isSelected;
 
@@ -47,6 +48,8 @@ typedef NS_ENUM(NSInteger, EOARoutingProfilesResource)
 - (instancetype) initWithStringKey:(NSString *)stringKey name:(NSString *)name descr:(NSString *)descr iconName:(NSString *)iconName isSelected:(BOOL)isSelected fileName:(NSString *) fileName;
 
 - (instancetype) initWithResource:(EOARoutingProfilesResource)res;
+
+- (instancetype) initWithProfileDataObject:(OARoutingProfileDataObject *)copy;
 
 + (NSString *) getLocalizedName:(EOARoutingProfilesResource)res;
 + (NSString *) getIconName:(EOARoutingProfilesResource)res;

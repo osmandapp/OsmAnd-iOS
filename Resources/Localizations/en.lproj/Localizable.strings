@@ -112,6 +112,14 @@
 "unknown_location" = "Position not yet known";
 "animate_routing_route_not_calculated" = "Please calculate the route first";
 
+"simulation_real_mode_desc" = "• On straight road sections, speed will be approximate to the maximum allowed speed.\n• At intersections, the simulation will slow down.\n• Extra penalties will be applied on traffic signals, stop signs, etc.";
+"simulation_real_mode_title" = "Realistic simulation";
+"simulation_constant_mode_desc" = "The simulation will be performed with constant selected speed.";
+"simulation_constant_mode_title" = "Fixed speed";
+"simulation_preview_mode_desc" = "The speed of the simulation will be maximum on straight sections and slow down only at intersections.";
+"simulation_preview_mode_title" = "Fast preview mode";
+"speed_mode" = "Speed mode";
+
 "settings_preset" = "Default profile";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
 "dialogs_and_notifications" = "Dialogs and notifications";
@@ -141,6 +149,8 @@
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
 "road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
+"animate_my_location" = "Animate location change";
+"animate_my_location_descr" = "Smooth transition of location on the map during navigation";
 
 // Track recording settings
 "save_global_track_interval" = "General logging interval";
@@ -542,6 +552,7 @@
 "shared_string_gpx_track" = "Track";
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_any" = "Any";
+"shared_string_capacity" = "Capacity";
 
 "restart" = "Restart";
 
@@ -644,6 +655,7 @@
 "shared_string_export" = "Export";
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Route points";
+"copy_to_map_favorites" = "Copy to favorites";
 
 "import_export" = "Import/Export";
 
@@ -679,6 +691,8 @@
 "gpx_alt_range" = "Altitude range";
 "gpx_ascent" = "Ascent";
 "gpx_descent" = "Descent";
+"altitude_ascent" = "Uphill";
+"altitude_descent" = "Downhill";
 "gpx_updown" = "Up/Down";
 "gpx_uphills_total" = "Uphills total";
 "distance_moving" = "Distance corrected";
@@ -783,7 +797,15 @@
 "map_settings_weather_precip" = "Precipitation";
 "map_settings_clear_geo_cache" = "Clear geo tiles";
 "map_settings_clear_raster_cache" = "Clear raster tiles";
-"map_settings_weather_isolines" = "Isolines";
+"map_settings_weather_contours" = "Contours";
+"map_settings_weather_layers" = "Layers";
+
+"weather_temp_enable_descr" = "Enable to view temperature layer on the map.";
+"weather_pressure_enable_descr" = "Enable to view pressure layer on the map.";
+"weather_wind_enable_descr" = "Enable to view wind layer on the map.";
+"weather_cloud_enable_descr" = "Enable to view cloud layer on the map.";
+"weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
+"weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
 
 "screen_settings_weather_toolbar" = "Weather toolbar";
 
@@ -1580,7 +1602,6 @@
 "osm_alert_button_ok" = "Create note";
 "modify_poi" = "Modify the POI information";
 "actions" = "Actions";
-"parking_marker" = "Parking marker";
 "time_limited" = "Time limited";
 "pickup_car" = "Pickup the car";
 "pickup_car_at" = "Pickup the car at";
@@ -1595,6 +1616,7 @@
 // Units
 "units_km" = "km";
 "units_m" = "m";
+"units_cubic_m" = "m³";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
@@ -1967,7 +1989,7 @@
 "weather_precip_unit_mm" = "Millimeters";
 "weather_precip_unit_in" = "Inches";
 
-"weather_cloud_data_description" = "Weather data will be downloaded for viewed are each time.";
+"weather_cloud_data_description" = "Weather data will be downloaded for viewed area each time.";
 
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
@@ -2217,6 +2239,8 @@
 "routing_attr_allow_expert_description" = "Extremely difficult routes, with dangerous obstacles and surroundings.";
 "routeInfo_surface_name" = "Surface";
 "routeInfo_surface_description" = "Provide road/footpath physical surface info.";
+"routeInfo_horse_scale_name" = "Difficulty of horse trails";
+"routeInfo_horse_scale_description" = "Render paths according to difficulty of horse trails";
 "rendering_attr_showMtbRoutes_name" = "Mountain bike routes";
 "rendering_attr_tracktype_grade5_name" = "Soft";
 "routing_attr_avoid_share_taxi_description" = "Avoids share taxi";
@@ -2394,6 +2418,7 @@
 "rendering_attr_undefined_name" = "Undefined";
 "rendering_value_red_name" = "Red";
 "routing_attr_allow_private_name" = "Allow private access";
+"routing_attr_allow_private_for_truck_name" = "Allow private access (truck)";
 "routeInfo_tracktype_name" = "Surface firmness";
 "routeInfo_tracktype_description" = "Color the route or track line by its surface composition. Typically apply when the road network is largely unpaved.";
 "rendering_attr_highway_class_path_name" = "Path";
@@ -2432,6 +2457,7 @@
 "rendering_attr_surface_salt_name" = "Salt";
 "rendering_value_yellow_name" = "Yellow";
 "routing_attr_allow_private_description" = "Allow access to private areas.";
+"routing_attr_allow_private_for_truck_description" = "Allow access to private areas for trucks";
 "rendering_attr_alpineHiking_description" = "Render paths according to the SAC scale.";
 "rendering_attr_highway_class_bridleway_name" = "Bridleway";
 "routing_attr_avoid_share_taxi_name" = "No share taxi";
@@ -2557,6 +2583,19 @@
 "login_error_email_invalid" = "Please enter a valid e-mail address";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 
+"backup_error_no_valid_subscription" = "No valid subscription present";
+"backup_error_user_is_not_registered" = "No user registered with that e-mail address";
+"backup_error_token_is_not_valid_or_expired" = "Invalid or expired token";
+"backup_error_token_is_not_valid" = "Something is wrong with the provided device ID or token";
+"backup_error_file_not_available" = "File unavailable";
+"backup_error_gzip_only_supported_upload" = "The file should be sent in .gzip format";
+"backup_error_size_is_exceeded" = "Maximum size of OsmAnd Cloud exceeded %@";
+"backup_error_subscription_was_used" = "Subscription or promo used by another account %@";
+"backup_error_subscription_was_expired_descr" = "Your OsmAnd Pro subscription is expired, renew it to use backup. You can still restore data from the Cloud.";
+"backup_error_subscription_was_expired" = "Expired subscription";
+"backup_error_user_is_already_registered" = "This e-mail address is in use on another account";
+"backup_error_invalid_token" = "Token is not valid";
+
 "register_opr_create_new_account" = "Create new account";
 "osmand_cloud_create_account_descr" = "Please enter your e-mail address, a verification code will be sent there, and all your data will be linked to it.";
 
@@ -2598,6 +2637,12 @@
 "cloud_conflicts" = "Conflicts";
 "cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";
 "cloud_view_conflicts" = "View conflicts";
+
+"copy_address" = "Copy address";
+"copy_poi_name" = "Copy POI Name";
+"copy_coordinates" = "Copy coordinates";
+"share_geo" = "geo:";
+"toast_empty_name_error" = "Unnamed location";
 
 // Release Notes
 // instruction:
@@ -2644,3 +2689,21 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+
+"ios_release_4_2" = "• Route line appearance: added ability to set width and color\n
+• Tracks: added option for deleting several tracks at once\n
+• Track context menu: added scroll bar with waypoint groups\n
+• Map appearance: divided additional routes by type with ability to enable one from each category separately\n
+• Horseback riding: add new navigation type and app profile\n
+• OsmAnd files are now visible in the \"Files\" application\n
+• UX of options \"Use elevation data\" and \"Select elevation fluctuation\"  was improved, they were combined and renamed to \"Preferred terrain\", currently available for \"Bicycle\" and \"Pedestrian\" profiles.\n
+• New option \"Include heading\" for track recording\n
+• Street name widget: now show road shield and exit number during navigation\n
+• New Fitness and running routes on the map\n
+• CarPlay bug fixes, added gestures for touchscreens\n
+• Fixed import of GPX files from OSF package\n
+• Fixed import of custom plugins with included files\n
+• Fixed various crashes in the Route planning mode\n
+• Fixed crashes during Navigation\n";
+
+

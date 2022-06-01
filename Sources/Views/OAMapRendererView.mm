@@ -82,6 +82,7 @@
     _stateObservable = [[OAObservable alloc] init];
     _settingsObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
+    _targetChangedObservable = [[OAObservable alloc] init];
 
     // Set default values
     _glShareGroup = nil;
@@ -102,7 +103,7 @@
     _renderer->setConfiguration(rendererConfig);
     
     OAObservable* stateObservable = _stateObservable;
-    _renderer->stateChangeObservable.attach((__bridge const void*)_stateObservable,
+    _renderer->stateChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_stateObservable),
         [stateObservable]
         (const OsmAnd::IMapRenderer* renderer, const OsmAnd::MapRendererStateChange thisChange, const uint32_t allChanges)
         {
@@ -110,11 +111,19 @@
         });
 
     OAObservable* framePreparedObservable = _framePreparedObservable;
-    _renderer->framePreparedObservable.attach((__bridge const void*)_framePreparedObservable,
+    _renderer->framePreparedObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_framePreparedObservable),
         [framePreparedObservable]
         (const OsmAnd::IMapRenderer* renderer)
         {
             [framePreparedObservable notifyEvent];
+        });
+    
+    OAObservable* targetChangedObservalbe = _targetChangedObservable;
+    _renderer->targetChangedObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_targetChangedObservable),
+        [targetChangedObservalbe]
+        (const OsmAnd::IMapRenderer* renderer)
+        {
+            [targetChangedObservalbe notifyEvent];
         });
 
     // Create animator for that map
@@ -128,12 +137,9 @@
 
 - (void)deinit
 {
-    // Just to be sure, try to release context
-    [self releaseContext];
-    
     // Unregister observer
-    _renderer->stateChangeObservable.detach((__bridge const void*)_stateObservable);
-    _renderer->framePreparedObservable.detach((__bridge const void*)_framePreparedObservable);
+    _renderer->stateChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_stateObservable));
+    _renderer->framePreparedObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_framePreparedObservable));
 }
 
 - (void)setTextureFilteringQuality:(OsmAnd::TextureFilteringQuality)quality
@@ -553,11 +559,6 @@
     // Rendering needs to be resumed/started manually, since render target is not created yet
 }
 
-- (void)releaseContext
-{
-    [self releaseContext:NO];
-}
-
 - (void)releaseContext:(BOOL)gpuContextLost
 {
     if (_glShareGroup == nil)
@@ -939,7 +940,7 @@
     CGImageRelease( imageRef );
     CGDataProviderRelease(provider);
     CGColorSpaceRelease(colorSpaceRef);
-    //free(buffer2);
+//    free(buffer2);
     
     return myImage;
 }

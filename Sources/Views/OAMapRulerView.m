@@ -108,7 +108,7 @@
         if (rulerWidth < 0)
             rulerWidth = 0;
         else
-            vl = [OAOsmAndFormatter getFormattedDistance: roundedDist];
+            vl = [OAOsmAndFormatter getFormattedDistance: roundedDist forceTrailingZeroes:NO];
     }
     CGRect frame = self.frame;
     self.hidden = rulerWidth == 0 ? true : false;

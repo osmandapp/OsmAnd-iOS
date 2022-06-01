@@ -80,21 +80,57 @@
             NSString *descr = OALocalizedString(@"osmand_routing");
             NSString *fileName = [NSString stringWithCString:router->fileName.c_str() encoding:NSUTF8StringEncoding];
             fileName = [fileName containsString:@"OsmAnd Maps.app"] ? @"" : fileName;
+            OARoutingProfileDataObject *data;
             if (fileName.length > 0)
             {
                 descr = fileName;
-                OARoutingProfileDataObject *data = [[OARoutingProfileDataObject alloc] initWithStringKey:routerKey name:name descr:descr iconName:iconName isSelected:NO fileName:fileName];
+                data = [[OARoutingProfileDataObject alloc] initWithStringKey:routerKey name:name descr:descr iconName:iconName isSelected:NO fileName:fileName];
                 [profilesObjects setObject:data forKey:routerKey];
             }
             else if ([OARoutingProfileDataObject isRpValue:name.upperCase])
             {
-                OARoutingProfileDataObject *data = [OARoutingProfileDataObject getRoutingProfileDataByName:name.upperCase];
+                data = [OARoutingProfileDataObject getRoutingProfileDataByName:name.upperCase];
                 data.descr = descr;
                 data.stringKey = name;
                 [profilesObjects setObject:data forKey:routerKey];
             }
+            const auto& derivedProfiles = router->getAttribute("derivedProfiles");
+            if (!derivedProfiles.empty())
+            {
+                for (const auto& s : split_string(derivedProfiles, ","))
+                {
+                    if (s == "default")
+                        continue;
+                    OARoutingProfileDataObject *derivedProfile = [[OARoutingProfileDataObject alloc] initWithProfileDataObject:data];
+                    derivedProfile.derivedProfile = [NSString stringWithUTF8String:s.c_str()];
+                    NSString *translationKey = [NSString stringWithFormat:@"app_mode_%@", derivedProfile.derivedProfile];
+                    NSString *localizedProfileName = OALocalizedString(translationKey);
+                    derivedProfile.iconName = [self getIconNameForDerivedProfile:derivedProfile.derivedProfile];
+                    derivedProfile.name = [localizedProfileName isEqualToString:translationKey] ? [derivedProfile.derivedProfile capitalizedString] : localizedProfileName;
+                    [profilesObjects setObject:derivedProfile forKey:derivedProfile.derivedProfile];
+                }
+            }
         }
     }
+}
+
++ (NSString *) getIconNameForDerivedProfile:(NSString *)derivedProfile
+{
+    NSString *imgKey = [NSString stringWithFormat:@"ic_action_%@", derivedProfile];
+    UIImage *testImg = [UIImage imageNamed:imgKey];
+    if (testImg)
+    {
+        return imgKey;
+    }
+    else
+    {
+        // We need to check twice for legacy reasons: some icons have the _dark suffix
+        imgKey = [imgKey stringByAppendingString:@"_dark"];
+        testImg = [UIImage imageNamed:imgKey];
+        if (testImg)
+            return imgKey;
+    }
+    return @"ic_custom_navigation";
 }
 
 //public static List<ProfileDataObject> getBaseProfiles(OsmandApplication app) {

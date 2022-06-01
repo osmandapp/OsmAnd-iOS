@@ -15,7 +15,7 @@
 #import "OARTargetPoint.h"
 #import "OAAppSettings.h"
 
-@class MutableOrderedDictionary;
+@class MutableOrderedDictionary, NSUnitCloud;
 
 @interface OAAppData : NSObject <NSCoding>
 
@@ -73,6 +73,9 @@
 @property (readonly) OAObservable* weatherPrecipChangeObservable;
 @property (readonly) OAObservable* weatherPrecipUnitChangeObservable;
 @property (readonly) OAObservable* weatherPrecipAlphaChangeObservable;
+
+@property (nonatomic) double contoursAlpha;
+@property (readonly) OAObservable* contoursAlphaChangeObservable;
 
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 

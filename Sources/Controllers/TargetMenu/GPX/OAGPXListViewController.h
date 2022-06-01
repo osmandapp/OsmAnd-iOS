@@ -9,10 +9,9 @@
 #import "OACompoundViewController.h"
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
-#import "OAImportGPXBottomSheetViewController.h"
 #import "OAGPXListDeletingBottomSheet.h"
 
-@interface OAGPXListViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, OAGPXImportDelegate, OAGPXListDeletingBottomSheetDelegate>
+@interface OAGPXListViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, OAGPXListDeletingBottomSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;

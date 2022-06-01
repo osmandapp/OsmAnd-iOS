@@ -109,6 +109,7 @@
 // App profiles
 #define appModeBeanPrefsIdsKey @"appModeBeanPrefsIds"
 #define routingProfileKey @"routingProfile"
+#define derivedProfileKey @"derivedProfile"
 #define profileIconNameKey @"profileIconName"
 #define profileIconColorKey @"profileIconColor"
 #define userProfileNameKey @"userProfileName"
@@ -188,8 +189,6 @@
 #define gpxRouteCalcKey @"gpxRouteCalc"
 #define gpxRouteSegmentKey @"gpxRouteSegment"
 #define showStartFinishIconsKey @"showStartFinishIcons"
-
-#define simulateRoutingKey @"simulateRouting"
 #define useOsmLiveForRoutingKey @"useOsmLiveForRouting"
 
 #define saveTrackToGPXKey @"saveTrackToGPX"
@@ -379,6 +378,8 @@
 #define lastCheckedUpdatesKey @"lastCheckedUpdates"
 #define numberOfAppStartsOnDislikeMomentKey @"numberOfAppStartsOnDislikeMoment"
 #define rateUsStateKey @"rateUsState"
+
+#define animateMyLocationKey @"animateMyLocation"
 
 @interface OAMetricsConstant()
 
@@ -1089,6 +1090,116 @@
 
 @end
 
+@interface OASimulationMode()
+
+@property (nonatomic) EOASimulationMode mode;
+
+@end
+
+@implementation OASimulationMode
+{
+    EOASimulationMode _mode;
+}
+
+- (instancetype)initWithMode:(EOASimulationMode)mode
+{
+    self = [super init];
+    if (self)
+    {
+        _mode = mode;
+    }
+    return self;
+}
+
++ (instancetype)withMode:(EOASimulationMode)mode
+{
+    return [[OASimulationMode alloc] initWithMode:mode];
+}
+
++ (NSArray<OASimulationMode *> *)values
+{
+    return @[[OASimulationMode withMode:EOASimulationModePreview],
+             [OASimulationMode withMode:EOASimulationModeConstant],
+             [OASimulationMode withMode:EOASimulationModeRealistic]];
+}
+
++ (OASimulationMode *)getModeObject:(NSString *)key
+{
+    for (OASimulationMode *mode in [OASimulationMode values])
+    {
+        if ([[mode key] isEqualToString:key])
+            return mode;
+    }
+    return nil;
+}
+
++ (EOASimulationMode)getMode:(NSString *)key
+{
+    return [self getModeObject:key].mode;
+}
+
++ (NSString *)toKey:(EOASimulationMode)mode
+{
+    switch (mode)
+    {
+        case EOASimulationModePreview:
+            return @"preview_mode";
+        case EOASimulationModeConstant:
+            return @"const_mode";
+        case EOASimulationModeRealistic:
+            return @"real_mode";
+        default:
+            return @"";
+    }
+}
+
++ (NSString *)toTitle:(EOASimulationMode)mode
+{
+    switch (mode)
+    {
+        case EOASimulationModePreview:
+            return OALocalizedString(@"simulation_preview_mode_title");
+        case EOASimulationModeConstant:
+            return OALocalizedString(@"simulation_constant_mode_title");
+        case EOASimulationModeRealistic:
+            return OALocalizedString(@"simulation_real_mode_title");
+        default:
+            return @"";
+    }
+}
+
++ (NSString *)toDescription:(EOASimulationMode)mode
+{
+    switch (mode)
+    {
+        case EOASimulationModePreview:
+            return OALocalizedString(@"simulation_preview_mode_desc");
+        case EOASimulationModeConstant:
+            return OALocalizedString(@"simulation_constant_mode_desc");
+        case EOASimulationModeRealistic:
+            return OALocalizedString(@"simulation_real_mode_desc");
+        default:
+            return @"";
+    }
+}
+
+- (NSString *)key
+{
+    return [OASimulationMode toKey:_mode];
+}
+
+- (NSString *)title
+{
+    return [OASimulationMode toTitle:_mode];
+}
+
+- (NSString *)description
+{
+    return [OASimulationMode toDescription:_mode];
+}
+
+@end
+
 @interface OACommonPreference ()
 
 @property (nonatomic, readonly) OAApplicationMode *appMode;
@@ -1103,6 +1214,7 @@
 - (NSObject *) getValue:(OAApplicationMode *)mode;
 - (void) setValue:(NSObject *)value;
 - (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode;
+- (void) setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -3177,7 +3289,10 @@
         [_globalPreferences setObject:_settingMapLanguageTranslit forKey:@"map_transliterate_names"];
 
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
-        _appearanceMode = [OACommonInteger withKey:settingAppModeKey defValue:0];
+        _appearanceMode = [OACommonInteger withKey:settingAppModeKey defValue:APPEARANCE_MODE_DAY];
+        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_AUTO) mode:OAApplicationMode.CAR];
+        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_AUTO) mode:OAApplicationMode.BICYCLE];
+        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_DAY) mode:OAApplicationMode.PEDESTRIAN];
         [_profilePreferences setObject:_appearanceMode forKey:@"daynight_mode"];
 
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
@@ -3191,6 +3306,9 @@
         [_globalPreferences setObject:_settingDoNotShowPromotions forKey:@"do_not_show_promotions"];
         [_globalPreferences setObject:_settingUseAnalytics forKey:@"use_analytics"];
         [_globalPreferences setObject:_showDownloadMapDialog forKey:@"show_download_map_dialog"];
+        
+        _animateMyLocation = [OACommonBoolean withKey:animateMyLocationKey defValue:YES];
+        [_profilePreferences setObject:_animateMyLocation forKey:@"animate_my_location"];
 
         _liveUpdatesPurchased = [[OACommonBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
         _settingOsmAndLiveEnabled = [[[OACommonBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];
@@ -3334,7 +3452,12 @@
 
         _mapInfoControls = [OACommonString withKey:mapInfoControlsKey defValue:@""];
         [_profilePreferences setObject:_mapInfoControls forKey:@"map_info_controls"];
-
+        
+        _derivedProfile = [OACommonString withKey:derivedProfileKey defValue:@"default"];
+        [_derivedProfile setModeDefaultValue:@"motorcycle" mode:OAApplicationMode.MOTORCYCLE];
+        [_derivedProfile setModeDefaultValue:@"truck" mode:OAApplicationMode.TRUCK];
+        [_profilePreferences setObject:_derivedProfile forKey:@"derived_profile"];
+        
         _routingProfile = [OACommonString withKey:routingProfileKey defValue:@""];
         [_routingProfile setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
         [_routingProfile setModeDefaultValue:@"bicycle" mode:OAApplicationMode.BICYCLE];
@@ -3492,7 +3615,7 @@
         [_profilePreferences setObject:_arrivalDistanceFactor forKey:@"arrival_distance_factor"];
         _enableTimeConditionalRouting = [OACommonBoolean withKey:enableTimeConditionalRoutingKey defValue:YES];
         [_profilePreferences setObject:_enableTimeConditionalRouting forKey:@"enable_time_conditional_routing"];
-        _useIntermediatePointsNavigation = [OACommonBoolean withKey:useIntermediatePointsNavigationKey defValue:NO];
+        _useIntermediatePointsNavigation = [[OACommonBoolean withKey:useIntermediatePointsNavigationKey defValue:NO] makeGlobal];
         [_globalPreferences setObject:_useIntermediatePointsNavigation forKey:@"use_intermediate_points_navigation"];
 
         _disableOffrouteRecalc = [OACommonBoolean withKey:disableOffrouteRecalcKey defValue:NO];
@@ -3617,8 +3740,6 @@
         [_profilePreferences setObject:_voiceProvider forKey:@"voice_provider"];
         [_profilePreferences setObject:_announceWpt forKey:@"announce_wpt"];
         [_profilePreferences setObject:_showScreenAlerts forKey:@"show_routing_alarms"];
-
-        _simulateRouting = [[NSUserDefaults standardUserDefaults] objectForKey:simulateRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:simulateRoutingKey] : NO;
 
         _useOsmLiveForRouting = [[NSUserDefaults standardUserDefaults] objectForKey:useOsmLiveForRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useOsmLiveForRoutingKey] : YES;
 
@@ -4461,10 +4582,9 @@
     [[NSUserDefaults standardUserDefaults] setBool:_disableComplexRouting forKey:disableComplexRoutingKey];
 }
 
-- (void) setSimulateRouting:(BOOL)simulateRouting
+- (void) setSimulateNavigation:(BOOL)simulateNavigation
 {
-    _simulateRouting = simulateRouting;
-    [[NSUserDefaults standardUserDefaults] setBool:_simulateRouting forKey:simulateRoutingKey];
+    _simulateNavigation = simulateNavigation;
     [[[OsmAndApp instance] simulateRoutingObservable] notifyEvent];
 }
 

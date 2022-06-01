@@ -18,6 +18,7 @@
 #import "OAMultiIconTextDescCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OATitleDescrRightIconTableViewCell.h"
+#import "OAMainSettingsViewController.h"
 
 @interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -161,7 +162,14 @@
 
 - (IBAction)onBackButtonPressed
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    for (UIViewController *controller in self.navigationController.viewControllers)
+    {
+        if ([controller isKindOfClass:[OAMainSettingsViewController class]])
+        {
+            [self.navigationController popToViewController:controller animated:YES];
+            return;
+        }
+    }
 }
 
 - (IBAction)onSettingsButtonPressed

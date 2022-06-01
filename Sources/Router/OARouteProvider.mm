@@ -35,6 +35,7 @@
 #define MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT 60
 #define ADDITIONAL_DISTANCE_FOR_START_POINT 300
 #define MIN_STRAIGHT_DIST 50000
+#define MIN_INTERMEDIATE_DIST 10
 
 #define GPX_CALC_DIST_THRESHOLD 1000000
 
@@ -293,6 +294,17 @@
     OAGPXRouteParams *copy = [[OAGPXRouteParams alloc] init];
     [copy prepareGPXFile:self];
     return copy.points;
+}
+
+- (NSArray<OASimulatedLocation *> *)getSimulatedLocations
+{
+    NSMutableArray<OASimulatedLocation *> *locationList = [NSMutableArray array];
+    for (CLLocation *l in [self getPoints])
+    {
+        [locationList addObject:[[OASimulatedLocation alloc] initWithLocation:l]];
+    }
+    
+    return [NSArray arrayWithArray:locationList];
 }
 
 @end
@@ -595,8 +607,9 @@
 - (std::shared_ptr<RoutingConfiguration>) initOsmAndRoutingConfig:(std::shared_ptr<RoutingConfigurationBuilder>)config params:(OARouteCalculationParams *)params generalRouter:(std::shared_ptr<GeneralRouter>)generalRouter
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
+    string derivedProfile(params.mode.getDerivedProfile.UTF8String);
     MAP_STR_STR paramsR;
-    auto& routerParams = generalRouter->getParameters();
+    auto routerParams = generalRouter->getParameters(derivedProfile);
     auto it = routerParams.begin();
     for(;it != routerParams.end(); it++)
     {
@@ -632,14 +645,12 @@
     double maxSpeed = params.mode.getMaxSpeed;
     if (maxSpeed > 0)
         paramsR[GeneralRouterConstants::MAX_SPEED] = [NSString stringWithFormat:@"%f", maxSpeed].UTF8String;
+    if (!derivedProfile.empty())
+        paramsR["profile_" + derivedProfile] = "true";
+    
     float mb = (1 << 20);
     natural_t freeMemory = [OAUtilities get_free_memory];
-#if TARGET_OS_SIMULATOR
-    // Simulator returns incorrect values for free memory, so we need to increase it for fast routing calculations
     long memoryLimit = (0.1 * ([NSProcessInfo processInfo].physicalMemory / mb));
-#else
-    long memoryLimit = freeMemory > 0 ? (0.6 * (freeMemory / mb)) : (0.08 * ([NSProcessInfo processInfo].physicalMemory / mb));
-#endif
     // make visible
     long memoryTotal = (long) ([NSProcessInfo processInfo].physicalMemory / mb);
     NSLog(@"Use %ld MB of %ld MB, free memory: %ld MB", memoryLimit, memoryTotal, (long)(freeMemory / mb));
@@ -699,7 +710,7 @@
 - (BOOL) containsData:(NSString *)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    const auto& localResource = app.resourcesManager->getLocalResource(QString::fromNSString([localResourceId lastPathComponent]));
+    const auto& localResource = app.resourcesManager->getLocalResource(QString::fromNSString([localResourceId lastPathComponent].lowerCase));
     if (localResource)
     {
         const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(localResource->metadata);
@@ -973,21 +984,7 @@
     rp.onlyStartPointChanged = routeParams.onlyStartPointChanged;
     rp.previousToRecalculate =  routeParams.previousToRecalculate;
     NSMutableArray<CLLocation *> *rpIntermediates = [NSMutableArray array];
-    NSInteger closest = 0;
-    if (!routeParams.gpxRoute.passWholeRoute) {
-        double maxDist = DBL_MAX;
-        for (NSInteger i = 0; i < intermediates.count; i++)
-        {
-            CLLocation *loc = intermediates[i];
-            double dist = getDistance(loc.coordinate.latitude, loc.coordinate.longitude,
-                                               rp.start.coordinate.latitude, rp.start.coordinate.longitude);
-            if (dist <= maxDist)
-            {
-                closest = i;
-                maxDist = dist;
-            }
-        }
-    }
+    NSInteger closest = [self findClosestIntermediate:routeParams intermediates:intermediates];
     for (NSInteger i = closest; i < intermediates.count; i++)
     {
         CLLocation *w = intermediates[i];
@@ -1006,6 +1003,30 @@
         return [self findStraightRoute:rp];
     
     return [self findVectorMapsRoute:rp calcGPXRoute:NO];
+}
+
+- (NSInteger) findClosestIntermediate:(OARouteCalculationParams *)params intermediates:(NSArray<CLLocation *> *)intermediates
+{
+    NSInteger closest = 0;
+    if (!params.gpxRoute.passWholeRoute)
+    {
+        double maxDist = DBL_MAX;
+        for (NSInteger i = 0; i < intermediates.count; i++)
+        {
+            CLLocation *loc = intermediates[i];
+            double dist = [params.start distanceFromLocation:loc];
+            if (dist <= MIN_INTERMEDIATE_DIST)
+            {
+                return i;
+            }
+            else if (dist < maxDist)
+            {
+                closest = i;
+                maxDist = dist;
+            }
+        }
+    }
+    return closest;
 }
 
 - (NSMutableArray<OARouteDirectionInfo *> *) calcDirections:(NSMutableArray<NSNumber *> *)startI endI:(NSMutableArray<NSNumber *> *)endI inputDirections:(NSArray<OARouteDirectionInfo *> *)inputDirections

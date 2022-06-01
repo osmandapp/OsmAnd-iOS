@@ -19,17 +19,20 @@
 #define kTitleHeightMin 30.
 #define kDescriptionHeightMin 18.
 #define kDescriptionHeightMax 36.
+#define kBlockStatisticsLineHeight 20.
 #define kBlockStatisticsHeight 40.
 #define kBlockStatisticsWidthMin 80.
-#define kBlockStatisticsWidthMinByValue 60.
-#define kBlockStatisticsWidthMax 120.
-#define kBlockStatisticsWidthMaxByValue 100.
+#define kBlockStatisticsWidthMinByValue 52.
 #define kBlockStatisticsDivider 13.
+#define kBlockStatisticsIconWithSpace 28.
+
+@interface OATrackMenuHeaderView () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+
+@end
 
 @implementation OATrackMenuHeaderView
 {
     NSArray<OAGPXTableCellData *> *_statisticsCells;
-    NSArray<NSDictionary *> *_groupsData;
     EOATrackMenuHudTab _selectedTab;
     OsmAndAppInstance _app;
 }
@@ -107,13 +110,15 @@
     return res;
 }
 
-- (void)updateHeader:(EOATrackMenuHudTab)selectedTab
-        currentTrack:(BOOL)currentTrack
+- (void)updateSelectedTab:(EOATrackMenuHudTab)selectedTab
+{
+    _selectedTab = selectedTab;
+}
+
+- (void)updateHeader:(BOOL)currentTrack
           shownTrack:(BOOL)shownTrack
                title:(NSString *)title
 {
-    _selectedTab = selectedTab;
-
     self.backgroundColor = _selectedTab != EOATrackMenuHudActionsTab
             ? UIColor.whiteColor : UIColorFromRGB(color_bottom_sheet_background);
 
@@ -200,8 +205,7 @@
         [self makeOnlyHeader:YES];
     }
 
-    self.groupsCollectionView.hidden = _selectedTab != EOATrackMenuHudPointsTab
-            || (_selectedTab == EOATrackMenuHudPointsTab && _groupsData.count == 0);
+    self.groupsCollectionView.hidden = _selectedTab != EOATrackMenuHudPointsTab || ![self.groupsCollectionView hasValues];
 
     [self updateFrame:self.frame.size.width];
 
@@ -235,7 +239,7 @@
                             @"string_value": [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationUp],
                             @"int_value": @(EOARouteStatisticsModeSlope)
                     },
-                    kCellTitle: OALocalizedString(@"gpx_ascent"),
+                    kCellTitle: OALocalizedString(@"altitude_ascent"),
                     kCellRightIconName: @"ic_small_ascent"
             }]];
             [statisticCells addObject:[OAGPXTableCellData withData:@{
@@ -243,7 +247,7 @@
                             @"string_value": [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationDown],
                             @"int_value": @(EOARouteStatisticsModeSlope)
                     },
-                    kCellTitle: OALocalizedString(@"gpx_descent"),
+                    kCellTitle: OALocalizedString(@"altitude_descent"),
                     kCellRightIconName: @"ic_small_descent"
             }]];
             [statisticCells addObject:[OAGPXTableCellData withData:@{
@@ -421,7 +425,9 @@
 - (void)setDescription
 {
     NSString *description = self.trackMenuDelegate ? [self.trackMenuDelegate generateDescription] : @"";
-    description = [OAWikiArticleHelper getFirstParagraph:description];
+    if (_selectedTab == EOATrackMenuHudOverviewTab)
+        description = [OAWikiArticleHelper getFirstParagraph:description];
+
     BOOL hasDescription = description && description.length > 0;
 
     [self.descriptionView setText:description];
@@ -445,12 +451,9 @@
 
 - (void)setGroupsCollection:(NSArray<NSDictionary *> *)data withSelectedIndex:(NSInteger)index
 {
-    BOOL hasData = data && data.count > 0;
-
-    _groupsData = data;
     [self.groupsCollectionView setValues:data withSelectedIndex:index];
     [self.groupsCollectionView reloadData];
-    self.groupsCollectionView.hidden = !hasData;
+    self.groupsCollectionView.hidden = ![self.groupsCollectionView hasValues];
 }
 
 - (CGFloat)getInitialHeight:(CGFloat)additionalHeight
@@ -574,20 +577,15 @@
 - (CGSize)getSizeForItem:(NSString *)title value:(NSString *)value isLast:(BOOL)isLast
 {
     CGSize sizeByTitle = [OAUtilities calculateTextBounds:title
-                                                    width:kBlockStatisticsWidthMax
-                                                   height:kBlockStatisticsHeight
+                                                    width:10000.0
+                                                   height:kBlockStatisticsLineHeight
                                                      font:[UIFont systemFontOfSize:13. weight:UIFontWeightRegular]];
     CGSize sizeByValue = [OAUtilities calculateTextBounds:value
-                                                    width:kBlockStatisticsWidthMaxByValue
-                                                   height:kBlockStatisticsHeight
+                                                    width:10000.0
+                                                   height:kBlockStatisticsLineHeight
                                                      font:[UIFont systemFontOfSize:13. weight:UIFontWeightMedium]];
-    CGFloat widthByTitle = sizeByTitle.width < kBlockStatisticsWidthMin
-            ? kBlockStatisticsWidthMin : sizeByTitle.width > kBlockStatisticsWidthMax
-                    ? kBlockStatisticsWidthMax : sizeByTitle.width;
-    CGFloat widthByValue = (sizeByValue.width < kBlockStatisticsWidthMinByValue
-            ? kBlockStatisticsWidthMinByValue : sizeByValue.width > kBlockStatisticsWidthMaxByValue
-                    ? kBlockStatisticsWidthMaxByValue : sizeByValue.width)
-                            + kBlockStatisticsWidthMax - kBlockStatisticsWidthMaxByValue;
+    CGFloat widthByTitle = sizeByTitle.width < kBlockStatisticsWidthMin ? kBlockStatisticsWidthMin : sizeByTitle.width;
+    CGFloat widthByValue = (sizeByValue.width < kBlockStatisticsWidthMinByValue ? kBlockStatisticsWidthMinByValue : sizeByValue.width) + kBlockStatisticsIconWithSpace;
     if (!isLast)
     {
         widthByTitle += kBlockStatisticsDivider;

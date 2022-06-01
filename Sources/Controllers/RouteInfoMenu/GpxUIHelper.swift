@@ -167,6 +167,7 @@ import Charts.Swift
             self.units = ""
             self.color = OrderedLineDataSet.getColorForType(type: dataSetType)
             super.init(entries: entries, label: label)
+            self.mode = LineChartDataSet.Mode.linear
         }
         
         required init() {
@@ -366,7 +367,17 @@ import Charts.Swift
             chartView.rightAxis.enabled = false
             chartView.leftAxis.enabled = true
         }
+
+        var highlightValues: Array<Highlight> = []
+        for i in 0..<chartView.highlighted.count
+        {
+            var h: Highlight = chartView.highlighted[i]
+            h = Highlight(x: h.x, y: h.y, xPx: h.xPx, yPx: h.yPx, dataIndex: h.dataIndex, dataSetIndex: dataSets.count - 1, stackIndex: h.stackIndex, axis: h.axis)
+            highlightValues.append(h)
+        }
+        chartView.clear()
         chartView.data = LineChartData(dataSets: dataSets)
+        chartView.highlightValues(highlightValues)
     }
 
     @objc static public func refreshLineChart(chartView: LineChartView,
@@ -392,7 +403,16 @@ import Charts.Swift
             chartView.rightAxis.enabled = false
             chartView.leftAxis.enabled = true
         }
+        var highlightValues: Array<Highlight> = []
+        for i in 0..<chartView.highlighted.count
+        {
+            var h: Highlight = chartView.highlighted[i]
+            h = Highlight(x: h.x, y: h.y, xPx: h.xPx, yPx: h.yPx, dataIndex: h.dataIndex, dataSetIndex: dataSets.count - 1, stackIndex: h.stackIndex, axis: h.axis)
+            highlightValues.append(h)
+        }
+        chartView.clear()
         chartView.data = LineChartData(dataSets: dataSets)
+        chartView.highlightValues(highlightValues)
     }
     
     @objc static public func refreshBarChart(chartView: HorizontalBarChartView, statistics: OARouteStatistics, analysis: OAGPXTrackAnalysis, nightMode: Bool)
@@ -631,7 +651,6 @@ import Charts.Swift
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
         dataSet.highlightColor = UIColor(rgbValue: color_primary_purple)
-        dataSet.mode = LineChartDataSet.Mode.linear
         dataSet.fillFormatter = HeightFormatter()
         if useRightAxis {
            dataSet.axisDependency = YAxis.AxisDependency.right
@@ -786,8 +805,7 @@ import Charts.Swift
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
         dataSet.highlightColor = UIColor(rgbValue: color_primary_purple)
-        dataSet.mode = LineChartDataSet.Mode.linear
-        
+
         if useRightAxis {
             dataSet.axisDependency = YAxis.AxisDependency.right
         }
@@ -1057,7 +1075,7 @@ import Charts.Swift
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
         dataSet.highlightColor = UIColor(rgbValue: color_primary_purple)
-        
+
         if (useRightAxis) {
             dataSet.axisDependency = .right
         }

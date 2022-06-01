@@ -34,6 +34,7 @@
     OAWeatherHelper *_weatherHelper;
     OAMapStyleSettings *_styleSettings;
     OAAutoObserverProxy* _weatherChangeObserver;
+    OAAutoObserverProxy* _alphaChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
 }
 
@@ -61,6 +62,9 @@
     _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onWeatherChanged)
                                                         andObserve:self.app.data.weatherChangeObservable];
+    _alphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                     withHandler:@selector(onLayerAlphaChanged)
+                                                      andObserve:self.app.data.contoursAlphaChangeObservable];
     _layerChangeObservers = [NSMutableArray array];
     
     for (OAWeatherBand *band in [[OAWeatherHelper sharedInstance] bands])
@@ -73,6 +77,11 @@
     {
         [_weatherChangeObserver detach];
         _weatherChangeObserver = nil;
+    }
+    if (_alphaChangeObserver)
+    {
+        [_alphaChangeObserver detach];
+        _alphaChangeObserver = nil;
     }
     for (OAAutoObserverProxy *observer in _layerChangeObservers)
         [observer detach];
@@ -98,6 +107,10 @@
             band = WEATHER_BAND_TEMPERATURE;
         else if ([pressureContourLinesParam.value isEqualToString:@"true"])
             band = WEATHER_BAND_PRESSURE;
+        
+        OsmAnd::MapLayerConfiguration config;
+        config.setOpacityFactor(self.app.data.contoursAlpha);
+        [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
 
         if (!self.app.data.weather || band == WEATHER_BAND_UNDEFINED)
             return NO;
@@ -147,6 +160,17 @@
     _mapObjectsSymbolsProvider = nullptr;
     _mapPrimitivesProvider = nullptr;
     _geoTileObjectsProvider = nullptr;
+}
+
+- (void)onLayerAlphaChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.mapViewController runWithRenderSync:^{
+            OsmAnd::MapLayerConfiguration config;
+            config.setOpacityFactor(self.app.data.contoursAlpha);
+            [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+        }];
+    });
 }
 
 - (void) onWeatherChanged

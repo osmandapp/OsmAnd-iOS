@@ -239,7 +239,7 @@
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
 
     /*
-    _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+    _app.resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                  [self]
                                                                  (const OsmAnd::ResourcesManager* const resourcesManager,
                                                                   const QList< QString >& added,
@@ -388,18 +388,12 @@
 
 - (void) deinit
 {
-    _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
+    _app.resourcesManager->localResourcesChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
 
     [_mapLayers destroyLayers];
     
     // Unsubscribe from application notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-
-    if (self.mapViewLoaded)
-    {
-        // Allow view to tear down OpenGLES context
-        [_mapView releaseContext];
-    }
 }
 
 - (void) loadView
@@ -988,6 +982,88 @@
     [recognizer setTranslation:CGPointZero inView:self.view];
 }
 
+- (void) carPlayMoveGestureDetected:(UIGestureRecognizerState)state
+                    numberOfTouches:(NSInteger)numberOfTouches
+                        translation:(CGPoint)translation
+                           velocity:(CGPoint)screenVelocity
+{
+    // Ignore gesture if we have no view
+    if (!self.mapViewLoaded)
+        return;
+
+    if (state == UIGestureRecognizerStateBegan && numberOfTouches > 0)
+    {
+        // Suspend symbols update
+        while (![_mapView suspendSymbolsUpdate]);
+    }
+    
+    // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
+    translation.x *= _mapView.contentScaleFactor;
+    translation.y *= _mapView.contentScaleFactor;
+
+    // Take into account current azimuth and reproject to map space (points)
+    const float angle = qDegreesToRadians(_mapView.azimuth);
+    const float cosAngle = cosf(angle);
+    const float sinAngle = sinf(angle);
+    CGPoint translationInMapSpace;
+    translationInMapSpace.x = translation.x * cosAngle - translation.y * sinAngle;
+    translationInMapSpace.y = translation.x * sinAngle + translation.y * cosAngle;
+
+    // Taking into account current zoom, get how many 31-coordinates there are in 1 point
+    const uint32_t tileSize31 = (1u << (31 - _mapView.zoomLevel));
+    const double scale31 = static_cast<double>(tileSize31) / _mapView.currentTileSizeOnScreenInPixels;
+
+    // Rescale movement to 31 coordinates
+    OsmAnd::PointI target31 = _mapView.target31;
+    target31.x -= static_cast<int32_t>(round(translationInMapSpace.x * scale31));
+    target31.y -= static_cast<int32_t>(round(translationInMapSpace.y * scale31));
+    _mapView.target31 = target31;
+    
+    if (state == UIGestureRecognizerStateEnded ||
+        state == UIGestureRecognizerStateCancelled)
+    {
+        [self restoreMapArrowsLocation];
+        // Resume symbols update
+        while (![_mapView resumeSymbolsUpdate]);
+        _movingByGesture = NO;
+    }
+    else
+    {
+        _movingByGesture = YES;
+    }
+
+    if (state == UIGestureRecognizerStateEnded)
+    {
+        if (screenVelocity.x > 0)
+            screenVelocity.x = MIN(screenVelocity.x, kTargetMoveVelocityLimit);
+        else
+            screenVelocity.x = MAX(screenVelocity.x, -kTargetMoveVelocityLimit);
+        
+        if (screenVelocity.y > 0)
+            screenVelocity.y = MIN(screenVelocity.y, kTargetMoveVelocityLimit);
+        else
+            screenVelocity.y = MAX(screenVelocity.y, -kTargetMoveVelocityLimit);
+        
+        screenVelocity.x *= _mapView.contentScaleFactor;
+        screenVelocity.y *= _mapView.contentScaleFactor;
+
+        // Take into account current azimuth and reproject to map space (points)
+        CGPoint velocityInMapSpace;
+        velocityInMapSpace.x = screenVelocity.x * cosAngle - screenVelocity.y * sinAngle;
+        velocityInMapSpace.y = screenVelocity.x * sinAngle + screenVelocity.y * cosAngle;
+        
+        // Rescale speed to 31 coordinates
+        OsmAnd::PointD velocity;
+        velocity.x = -velocityInMapSpace.x * scale31;
+        velocity.y = -velocityInMapSpace.y * scale31;
+        
+        _mapView.animator->animateTargetWith(velocity,
+                                            OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31),
+                                            kUserInteractionAnimationKey);
+        _mapView.animator->resume();
+    }
+}
+
 - (void) rotateGestureDetected:(UIRotationGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
@@ -1537,15 +1613,9 @@
         }
 
         if ([[OAAppSettings sharedManager].mapSettingShowRecordingTrack get])
-        {
-            if (!_recTrackShowing)
-                [self showRecGpxTrack:YES];
-        }
+            [self showRecGpxTrack:YES];
         else
-        {
-            if (_recTrackShowing)
-                [self hideRecGpxTrack];
-        }
+            [self hideRecGpxTrack];
     });
 }
 
@@ -2961,9 +3031,9 @@
 
 - (void) initRendererWithGpxTracks
 {
+    QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
     if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
     {
-        QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
         auto activeGpx = _selectedGpxHelper.activeGpx;
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
@@ -2972,9 +3042,8 @@
         }
         if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
             docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
-
-        [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
     }
+    [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
 }
 
 - (void) refreshGpxTracks

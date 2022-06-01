@@ -32,5 +32,6 @@ typedef NS_ENUM(NSInteger, EOAPlanningTrackScreenType) {
 @property (nonatomic, weak) id<OAOpenAddTrackDelegate> delegate;
 
 - (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType;
+- (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType showCurrent:(BOOL)showCurrent;
 
 @end

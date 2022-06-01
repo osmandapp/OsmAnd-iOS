@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 
 @interface OAFileSettingsItem : OASettingsItem
 
-@property (nonatomic, readonly) NSString *filePath;
+@property (nonatomic) NSString *filePath;
 @property (nonatomic, readonly) EOASettingsItemFileSubtype subtype;
 
 - (instancetype _Nullable) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error;

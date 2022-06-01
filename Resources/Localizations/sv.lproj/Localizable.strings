@@ -953,7 +953,7 @@
 "new_profile" = "Ny profil";
 "configure_profile" = "Konfigurera profil";
 "profile_settings" = "Profile settings";
-"profile_appearance" = "Profile appearance";
+"profile_appearance" = "Profilutseende";
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "UI customization";
 "ui_customization_descr" = "Drawer items, context menu";
@@ -982,7 +982,7 @@
 "profile_prefs_reset_successful" = "All profile settings restored to default";
 "not_available_profile_name" = "Profile with this name already exists.";
 "profile_type_base_string" = "Basprofil";
-"selected_profile" = "Selected profile";
+"selected_profile" = "Vald profil";
 "app_profiles" = "App-profiler";
 "profile_sett_descr" = "Affect selected application profile";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";

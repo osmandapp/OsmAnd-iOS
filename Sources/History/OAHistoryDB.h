@@ -13,8 +13,7 @@
 
 @interface OAHistoryDB : NSObject
 
-- (void)addPoint:(double)latitude longitude:(double)longitude time:(NSTimeInterval)time name:(NSString *)name type:(OAHistoryType)type iconName:(NSString *)iconName typeName:(NSString *)typeName;
-
+- (void)addPoint:(OAHistoryItem *)item;
 - (void)deletePoint:(int64_t)id;
 
 - (OAHistoryItem *)getPointByName:(NSString *)name;

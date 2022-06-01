@@ -44,7 +44,7 @@ static inline NSString* _OALocalizedString(BOOL upperCase, NSString* defaultValu
     if (key)
     {
         NSString *loc = [[NSBundle mainBundle] localizedStringForKey:key value:@"!!!" table:nil];
-        if ([loc isEqualToString:@"!!!"] || !loc || loc.length == 0)
+        if ([loc isEqualToString:@"!!!"] || loc.length == 0)
             loc = [enBundle localizedStringForKey:key value:@"" table:nil];
 
         NSString *newValue = [defaultValue stringByReplacingOccurrencesOfString:key withString:loc];

@@ -278,6 +278,7 @@
 		32119B4A284789F1005E1E0C /* OAOsmandDevelopmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32119B49284789F1005E1E0C /* OAOsmandDevelopmentViewController.m */; };
 		32119B4C28478C64005E1E0C /* OAOsmandDevelopmentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32119B4B28478BD9005E1E0C /* OAOsmandDevelopmentViewController.xib */; };
 		32119B502847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32119B4F2847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.m */; };
+		32119B552848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32119B542848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m */; };
 		3219704B25FA0C6100C3FED6 /* poi_categories.json in Resources */ = {isa = PBXBuildFile; fileRef = 3219704A25FA0C6100C3FED6 /* poi_categories.json */; };
 		3219705825FA0DCE00C3FED6 /* bg_point_square@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705025FA0DCC00C3FED6 /* bg_point_square@2x.png */; };
 		3219705925FA0DCE00C3FED6 /* ic_custom_replace@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705125FA0DCC00C3FED6 /* ic_custom_replace@2x.png */; };
@@ -3422,6 +3423,8 @@
 		32119B4B28478BD9005E1E0C /* OAOsmandDevelopmentViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAOsmandDevelopmentViewController.xib; sourceTree = "<group>"; };
 		32119B4E2847D7F7005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmandDevelopmentSimulateLocationViewController.h; sourceTree = "<group>"; };
 		32119B4F2847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmandDevelopmentSimulateLocationViewController.m; sourceTree = "<group>"; };
+		32119B532848D910005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmandDevelopmentSimulateSpeedSelectorViewController.h; sourceTree = "<group>"; };
+		32119B542848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmandDevelopmentSimulateSpeedSelectorViewController.m; sourceTree = "<group>"; };
 		3219704A25FA0C6100C3FED6 /* poi_categories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = poi_categories.json; path = ../resources/poi/poi_categories.json; sourceTree = "<group>"; };
 		3219705025FA0DCC00C3FED6 /* bg_point_square@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_square@2x.png"; path = "Resources/Icons/bg_point_square@2x.png"; sourceTree = "<group>"; };
 		3219705125FA0DCC00C3FED6 /* ic_custom_replace@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_replace@2x.png"; path = "Resources/Icons/ic_custom_replace@2x.png"; sourceTree = "<group>"; };
@@ -7342,6 +7345,8 @@
 			children = (
 				32119B4E2847D7F7005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.h */,
 				32119B4F2847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.m */,
+				32119B532848D910005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.h */,
+				32119B542848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m */,
 				32119B48284789E0005E1E0C /* OAOsmandDevelopmentViewController.h */,
 				32119B49284789F1005E1E0C /* OAOsmandDevelopmentViewController.m */,
 				32119B4B28478BD9005E1E0C /* OAOsmandDevelopmentViewController.xib */,
@@ -10331,10 +10336,10 @@
 		DA5A7B0826C563A100F274C7 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				32119B4D2847B4DF005E1E0C /* OsmandDevelopment */,
 				DA5A7B0926C563A100F274C7 /* GeneralSettings */,
 				DA5A7B1B26C563A100F274C7 /* ImportExport */,
 				DA5A7B7226C563A100F274C7 /* NavigationSettings */,
+				32119B4D2847B4DF005E1E0C /* OsmandDevelopment */,
 				DA5A7BA526C563A100F274C7 /* OABaseBigTitleSettingsViewController.h */,
 				DA5A7B6926C563A100F274C7 /* OABaseBigTitleSettingsViewController.m */,
 				DA5A7B6B26C563A100F274C7 /* OABaseBigTitleSettingsViewController.xib */,
@@ -15755,6 +15760,7 @@
 				DA5A81E326C563A700F274C7 /* OAGPXDocumentPrimitives.mm in Sources */,
 				DA5A847A26C563A900F274C7 /* OADestinationLineDelegate.m in Sources */,
 				DA5A84AC26C563A900F274C7 /* OAOpenAddTrackViewController.mm in Sources */,
+				32119B552848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m in Sources */,
 				DA5A847B26C563A900F274C7 /* OATurnDrawable.mm in Sources */,
 				DA5A82E826C563A800F274C7 /* OAIconButtonCell.m in Sources */,
 				DA5A816F26C563A700F274C7 /* OAAppDelegate.mm in Sources */,

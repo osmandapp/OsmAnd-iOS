@@ -8,14 +8,13 @@
 
 #import "OAOsmandDevelopmentSimulateLocationViewController.h"
 #import "OAOpenAddTrackViewController.h"
-//#import "OAAppSettings.h"
-//#import "OsmAndApp.h"
+#import "OAOsmandDevelopmentSimulateSpeedSelectorViewController.h"
 #import "OAIconTitleValueCell.h"
 #import "OATitleRightIconCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAOsmandDevelopmentSimulateLocationViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate>
+@interface OAOsmandDevelopmentSimulateLocationViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate, OAOsmandDevelopmentSimulateSpeedSelectorDelegate>
 
 @end
 
@@ -23,20 +22,21 @@
 {
     NSArray<NSArray *> *_data;
     NSString *_headerDescription;
-//    OAAppSettings *_settings;
+    NSString *_selectedTrackName;
+    NSInteger _selectedSpeedModeIndex;
 }
 
 NSString *const kTrackSelectKey = @"kTrackSelectKey";
 NSString *const kMovementSpeedKey = @"kMovementSpeedKey";
 NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
 CGFloat const kDefaultHeight = 48.0;
+CGFloat const kDefaultHeaderHeight = 40.0;
 
 - (instancetype) init
 {
     self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
     if (self)
     {
-        //_settings = [OAAppSettings sharedManager];
     }
     return self;
 }
@@ -85,23 +85,36 @@ CGFloat const kDefaultHeight = 48.0;
 
 - (void) generateData
 {
+    _selectedTrackName = OALocalizedString(@"gpx_select_track"); //TODO: fetch from settings
+    _selectedSpeedModeIndex = 0; //TODO: fetch from settings
+    
+    NSString *speedModeName;
+    if (_selectedSpeedModeIndex == 0)
+        speedModeName = OALocalizedString(@"simulate_location_movement_speed_original");
+    else if (_selectedSpeedModeIndex == 1)
+        speedModeName = OALocalizedString(@"simulate_location_movement_speed_x2");
+    else if (_selectedSpeedModeIndex == 2)
+        speedModeName = OALocalizedString(@"simulate_location_movement_speed_x3");
+    else
+        speedModeName = OALocalizedString(@"simulate_location_movement_speed_x4");
+    
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *settingsSection = [NSMutableArray array];
     [settingsSection addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"key" : kTrackSelectKey,
         @"title" : OALocalizedString(@"shared_string_gpx_track"),
-        @"value" : @"Hello",
+        @"value" : _selectedTrackName,
         @"icon" : @"ic_custom_trip",
         @"color" : UIColorFromRGB(color_primary_purple),
-        @"hederTitle" : @"",
+        @"hederTitle" : @" ",
         @"footerTitle" : OALocalizedString(@"simulate_location_track_select_descr"),
     }];
     [settingsSection addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"key" : kMovementSpeedKey,
         @"title" : OALocalizedString(@"simulate_location_movement_speed"),
-        @"value" : @"World",
+        @"value" : speedModeName,
         @"icon" : @"ic_action_max_speed",
         @"color" : UIColorFromRGB(color_primary_purple),
     }];
@@ -191,6 +204,11 @@ CGFloat const kDefaultHeight = 48.0;
     return UITableViewAutomaticDimension;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return kDefaultHeaderHeight;
+}
+
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:0 inSection:section]];
@@ -217,22 +235,24 @@ CGFloat const kDefaultHeight = 48.0;
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSDictionary *item = [self getItem:indexPath];
     NSString *itemKey = item[@"key"];
     
     if ([itemKey isEqualToString:kTrackSelectKey])
     {
-        OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOASelectTrack showCurrent:YES];
-        saveTrackViewController.delegate = self;
-        [self presentViewController:saveTrackViewController animated:YES completion:nil];
+        OAOpenAddTrackViewController *vc = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOASelectTrack showCurrent:YES];
+        vc.delegate = self;
+        [self presentViewController:vc animated:YES completion:nil];
     }
     else if ([itemKey isEqualToString:kMovementSpeedKey])
     {
-        //[self.navigationController pushViewController:settingsViewController animated:YES];
+        OAOsmandDevelopmentSimulateSpeedSelectorViewController *vc = [[OAOsmandDevelopmentSimulateSpeedSelectorViewController alloc] init];
+        vc.delegate = self;
+        [self presentViewController:vc animated:YES completion:nil];
     }
     else if ([itemKey isEqualToString:kStartStopButtonKey])
     {
-        
+        //TODO: start/stop simulation
     }
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -246,6 +266,15 @@ CGFloat const kDefaultHeight = 48.0;
 }
 
 - (void) onFileSelected:(NSString *)gpxFilePath
+{
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+
+#pragma mark - OAOsmandDevelopmentSimulateSpeedSelectorDelegate
+
+- (void) onSpeedSelectorInformationUpdated:(NSInteger)selectedSpeedModeIndex;
 {
     [self generateData];
     [self.tableView reloadData];

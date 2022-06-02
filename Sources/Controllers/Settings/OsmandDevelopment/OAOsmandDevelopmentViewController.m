@@ -13,13 +13,7 @@
 #import "OAIconTitleValueCell.h"
 #import "OAOsmandDevelopmentSimulateLocationViewController.h"
 
-//TODO: delete
-//#import "OAOsmAccountSettingsViewController.h"
-#import "OASimulationNavigationSettingViewController.h"
-#import "OAProfileGeneralSettingsViewController.h"
-
 @interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate>
-//@interface OAOsmandDevelopmentViewController ()
 
 @end
 

@@ -1334,6 +1334,14 @@
 "simulate_location_track_select_descr" = "Choose track that will use as source for location moving.";
 "simulate_location_unselected_track_footer" = "You need to select track file";
 "simulate_location_movement_speed" = "Movement speed";
+"simulate_location_movement_speed_original" = "Original";
+"simulate_location_movement_speed_x2" = "x2";
+"simulate_location_movement_speed_x3" = "x3";
+"simulate_location_movement_speed_x4" = "x4";
+"simulate_location_movement_speed_original_desc" = "The location movement speed during the simulation will be equal to the speed in the selected file.";
+"simulate_location_movement_speed_x2_desc" = "The location movement speed during the simulation will be x2 bigger to the speed in the selected file.";
+"simulate_location_movement_speed_x3_desc" = "The location movement speed during the simulation will be x3 bigger to the speed in the selected file.";
+"simulate_location_movement_speed_x4_desc" = "The location movement speed during the simulation will be x4 bigger to the speed in the selected file.";
 
 "osm_note" = "OSM Note";
 "osm_created" = "Created";

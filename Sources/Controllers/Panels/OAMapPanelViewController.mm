@@ -3681,7 +3681,7 @@ typedef enum
             [_routingHelper setRoutePlanningMode:false];
             [_mapViewTrackingUtilities switchToRoutePlanningMode];
             [_routingHelper notifyIfRouteIsCalculated];
-            [_routingHelper setCurrentLocation:_app.locationServices.lastKnownLocation returnUpdatedLocation:false denyRecalculation:NO];
+            [_routingHelper setCurrentLocation:_app.locationServices.lastKnownLocation returnUpdatedLocation:false];
             
             [self updateRouteButton];
             [self updateToolbar];

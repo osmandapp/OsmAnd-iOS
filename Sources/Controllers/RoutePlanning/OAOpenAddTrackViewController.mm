@@ -109,7 +109,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.contentInset = UIEdgeInsetsMake(-16, 0, 0, 0);
-    if (_screenType == EOAAddToATrack)
+    if (_screenType == EOAAddToATrack || _screenType == EOASelectTrack)
         self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_add_track_desc") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
     else if (_screenType == EOAFollowTrack)
         self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_track_to_follow") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
@@ -127,6 +127,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             break;
         case EOAFollowTrack:
             self.titleLabel.text = OALocalizedString(@"follow_track");
+            break;
+        case EOASelectTrack:
+            self.titleLabel.text = OALocalizedString(@"gpx_select_track");
             break;
         default:
             break;
@@ -405,6 +408,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     OAGPX* track = item[@"track"];
     switch (_screenType) {
         case EOAOpenExistingTrack:
+        {
+            [self dismissViewControllerAnimated:YES completion:nil];
+            [self.delegate closeBottomSheet];
+            [self.delegate onFileSelected:track.gpxFilePath];
+            break;
+        }
+        case EOASelectTrack:
         {
             [self dismissViewControllerAnimated:YES completion:nil];
             [self.delegate closeBottomSheet];

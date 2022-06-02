@@ -45,6 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_Mapillary @"net.osmand.maps.inapp.addon.mapillary"
 #define kInAppId_Addon_OpenPlaceReview @"net.osmand.maps.inapp.addon.openplacereviews"
 #define kInAppId_Addon_Weather @"net.osmand.maps.inapp.addon.weather"
+#define kInAppId_Addon_OsmandDevelopment @"net.osmand.maps.inapp.addon.development"
 
 // Addons default prices (EUR)
 #define kInApp_Addon_SkiMap_Default_Price 0.0
@@ -56,6 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInApp_Addon_OsmEditing_Default_Price 0.0
 #define kInApp_Addon_Mapillary_Default_Price 0.0
 #define kInApp_Addon_OpenPlaceReviews_Default_Price 0.0
+#define kInApp_Addon_OsmandDevelopment_Default_Price 0.0
 
 #define kSubscriptionId_Osm_Live_Subscription_Monthly @"net.osmand.maps.subscription.monthly"
 #define kSubscriptionId_Osm_Live_Subscription_3_Months @"net.osmand.maps.subscription.3months"
@@ -285,6 +287,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @interface OAWeatherProduct : OAProduct
 @end
 
+@interface OAOsmandDevelopmentProduct : OAProduct
+@end
+
 // Map regions
 
 @interface OAAllWorldProduct : OAProduct
@@ -330,6 +335,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) OAProduct *mapillary;
 @property (nonatomic, readonly) OAProduct *openPlaceReviews;
 @property (nonatomic, readonly) OAProduct *weather;
+@property (nonatomic, readonly) OAProduct *osmandDevelopment;
 
 @property (nonatomic, readonly) OAProduct *allWorld;
 @property (nonatomic, readonly) OAProduct *russia;

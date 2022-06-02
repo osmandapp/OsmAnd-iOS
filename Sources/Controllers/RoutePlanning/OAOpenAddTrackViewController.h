@@ -11,7 +11,8 @@
 typedef NS_ENUM(NSInteger, EOAPlanningTrackScreenType) {
     EOAOpenExistingTrack = 0,
     EOAAddToATrack,
-    EOAFollowTrack
+    EOAFollowTrack,
+    EOASelectTrack
 };
 
 @class OAGPXDocument;

@@ -33,6 +33,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 @property (nonatomic, readonly) OAProduct *mapillary;
 @property (nonatomic, readonly) OAProduct *openPlaceReviews;
 @property (nonatomic, readonly) OAProduct *weather;
+@property (nonatomic, readonly) OAProduct *osmandDevelopment;
 
 @property (nonatomic, readonly) OAProduct *allWorld;
 @property (nonatomic, readonly) OAProduct *russia;

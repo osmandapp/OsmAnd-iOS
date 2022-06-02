@@ -105,8 +105,8 @@
     self.labelTitle.text = [selectedFeature getListTitle];
     self.labelDescription.text = [selectedFeature getDescription];
 
-    NSString *mapsPlus = OALocalizedString(@"maps_plus");
-    NSString *osmAndPro = OALocalizedString(@"osmand_pro");
+    NSString *mapsPlus = OALocalizedString(@"product_title_plus");
+    NSString *osmAndPro = OALocalizedString(@"product_title_pro");
     NSString *availablePlans = osmAndPro;
     if ([selectedFeature isAvailableInMapsPlus])
         availablePlans = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_or"), mapsPlus, osmAndPro];

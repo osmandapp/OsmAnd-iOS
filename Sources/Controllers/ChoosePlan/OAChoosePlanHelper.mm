@@ -224,6 +224,11 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     return [OAFeature.MAPS_PLUS_FEATURES containsObject:self];
 }
 
+- (BOOL)isAvailableInOsmAndPro
+{
+    return [OAFeature.OSMAND_PRO_FEATURES containsObject:self];
+}
+
 + (OAFeature *)OSMAND_CLOUD
 {
     if (!OSMAND_CLOUD)
@@ -315,6 +320,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         OSMAND_PRO_FEATURES = @[
                 OAFeature.OSMAND_CLOUD,
                 OAFeature.ADVANCED_WIDGETS,
+                OAFeature.WEATHER,
                 OAFeature.HOURLY_MAP_UPDATES,
                 OAFeature.MONTHLY_MAP_UPDATES,
                 OAFeature.UNLIMITED_MAP_DOWNLOADS,
@@ -324,7 +330,6 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
 //                OAFeature.WIKIVOYAGE,
                 OAFeature.TERRAIN,
                 OAFeature.NAUTICAL,
-                OAFeature.WEATHER
         ];
     }
     return OSMAND_PRO_FEATURES;
@@ -337,13 +342,13 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         OSMAND_PRO_PREVIEW_FEATURES = @[
                 OAFeature.OSMAND_CLOUD,
                 OAFeature.ADVANCED_WIDGETS,
+                OAFeature.WEATHER,
                 OAFeature.HOURLY_MAP_UPDATES,
                 OAFeature.UNLIMITED_MAP_DOWNLOADS,
                 OAFeature.CARPLAY,
 //                OAFeature.COMBINED_WIKI,
                 OAFeature.TERRAIN,
-                OAFeature.NAUTICAL,
-                OAFeature.WEATHER
+                OAFeature.NAUTICAL
         ];
     }
     return OSMAND_PRO_PREVIEW_FEATURES;
@@ -361,8 +366,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.WIKIPEDIA,
 //                OAFeature.WIKIVOYAGE,
                 OAFeature.TERRAIN,
-                OAFeature.NAUTICAL,
-                OAFeature.WEATHER
+                OAFeature.NAUTICAL
         ];
     }
     return MAPS_PLUS_FEATURES;
@@ -378,8 +382,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.CARPLAY,
 //                OAFeature.COMBINED_WIKI,
                 OAFeature.TERRAIN,
-                OAFeature.NAUTICAL,
-                OAFeature.WEATHER
+                OAFeature.NAUTICAL
         ];
     }
     return MAPS_PLUS_PREVIEW_FEATURES;

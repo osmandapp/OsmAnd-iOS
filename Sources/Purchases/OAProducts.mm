@@ -661,29 +661,21 @@
             else if ([self.productIdentifier isEqualToString:kInAppId_Addon_Wiki])
                 purchased = [OAIAPHelper isWikipediaPurchased];
 
-            if (!purchased)
+            if (!purchased && self.feature)
             {
-                OASubscription *subscription = [[[OAIAPHelper sharedInstance] subscriptionList] getPurchasedSubscription];
-                if (subscription)
+                if ([OAIAPHelper isSubscribedToLiveUpdates])
                 {
-                    if ([OAIAPHelper isLiveUpdatesSubscription:subscription] && self.feature)
-                    {
-                        NSMutableArray<OAFeature *> *allFeatures = [NSMutableArray arrayWithArray:OAFeature.OSMAND_PRO_FEATURES];
-                        [allFeatures removeObject:OAFeature.OSMAND_CLOUD];
-                        [allFeatures removeObject:OAFeature.ADVANCED_WIDGETS];
-                        [allFeatures removeObject:OAFeature.WEATHER];
-                        purchased = [allFeatures containsObject:self.feature];
-                    }
-                    else if ([OAIAPHelper isOsmAndProSubscription:subscription])
-                    {
-                        purchased = YES;
-                    }
-                    else if ([OAIAPHelper isMapsSubscription:subscription] && self.feature)
-                    {
-                        purchased = [self.feature isAvailableInMapsPlus];
-                    }
+                    NSMutableArray<OAFeature *> *allFeatures = [NSMutableArray arrayWithArray:OAFeature.OSMAND_PRO_FEATURES];
+                    [allFeatures removeObject:OAFeature.OSMAND_CLOUD];
+                    [allFeatures removeObject:OAFeature.ADVANCED_WIDGETS];
+                    [allFeatures removeObject:OAFeature.WEATHER];
+                    purchased = [allFeatures containsObject:self.feature];
                 }
-                else if ([OAIAPHelper isFullVersionPurchased])
+                else if ([OAIAPHelper isSubscribedToOsmAndPro])
+                {
+                    purchased = [self.feature isAvailableInOsmAndPro];
+                }
+                else if ([OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased])
                 {
                     purchased = [self.feature isAvailableInMapsPlus];
                 }

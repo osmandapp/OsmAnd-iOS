@@ -49,6 +49,7 @@ typedef NS_ENUM(NSUInteger, EOAFeature)
 - (UIImage *)getIconBig;
 
 - (BOOL)isAvailableInMapsPlus;
+- (BOOL)isAvailableInOsmAndPro;
 
 + (OAFeature *)OSMAND_CLOUD;
 + (OAFeature *)ADVANCED_WIDGETS;

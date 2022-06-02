@@ -440,6 +440,8 @@
             OAFeatureCardView *featureCardView = self.scrollViewContainerView.subviews.lastObject;
             [featureCardView updateInfo:_selectedFeature replaceFeatureRows:YES];
         }
+        [self.view setNeedsLayout];
+        [self.view layoutIfNeeded];
     });
 }
 

@@ -80,7 +80,7 @@
                 @"key": @"get_osmand_pro",
                 @"type": [OACardButtonCell getCellIdentifier],
                 @"icon": [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"],
-                @"title": OALocalizedString(@"osmand_pro"),
+                @"title": OALocalizedString(@"product_title_pro"),
                 @"description" : OALocalizedString(@"osm_live_banner_desc"),
                 @"button_title": OALocalizedString(@"purchase_get"),
                 @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
@@ -256,8 +256,8 @@
 
 - (void) productsRestored:(NSNotification *)notification
 {
-    NSNumber *errorsCountObj = notification.object;
-    int errorsCount = errorsCountObj.intValue;
+//    NSNumber *errorsCountObj = notification.object;
+//    int errorsCount = errorsCountObj.intValue;
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [self generateData];

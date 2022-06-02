@@ -109,8 +109,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 
 + (BOOL) isSubscribedToLiveUpdates
 {
-    return [[OAAppSettings sharedManager].liveUpdatesPurchased get]
-            /*|| [self isOsmAndProAvailable]*/;
+    return [[OAAppSettings sharedManager].liveUpdatesPurchased get] || [self isOsmAndProAvailable];
 }
 
 + (BOOL) isSubscribedToOsmAndPro

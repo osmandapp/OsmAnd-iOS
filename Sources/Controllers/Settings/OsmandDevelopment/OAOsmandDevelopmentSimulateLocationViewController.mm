@@ -7,12 +7,22 @@
 //
 
 #import "OAOsmandDevelopmentSimulateLocationViewController.h"
+#import "OsmAndApp.h"
+#import "OAAppSettings.h"
+#import "OAGPXDocument.h"
+#import "Localization.h"
+#import "OAColors.h"
+#import "OALocationSimulation.h"
+#import "OARootViewController.h"
+#import "OARouteProvider.h"
+#import "OARoutingHelper.h"
+#import "OATargetPointsHelper.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapActions.h"
 #import "OAOpenAddTrackViewController.h"
 #import "OAOsmandDevelopmentSimulateSpeedSelectorViewController.h"
 #import "OAIconTitleValueCell.h"
 #import "OATitleRightIconCell.h"
-#import "Localization.h"
-#import "OAColors.h"
 
 @interface OAOsmandDevelopmentSimulateLocationViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate, OAOsmandDevelopmentSimulateSpeedSelectorDelegate>
 
@@ -20,10 +30,12 @@
 
 @implementation OAOsmandDevelopmentSimulateLocationViewController
 {
+    OsmAndAppInstance _app;
+    OAAppSettings *_settings;
     NSArray<NSArray *> *_data;
     NSString *_headerDescription;
     NSString *_selectedTrackName;
-    NSInteger _selectedSpeedModeIndex;
+    EOASimulateNavigationSpeed _selectedSpeedMode;
 }
 
 NSString *const kTrackSelectKey = @"kTrackSelectKey";
@@ -37,6 +49,10 @@ CGFloat const kDefaultHeaderHeight = 40.0;
     self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
     if (self)
     {
+        _app = [OsmAndApp instance];
+        _settings = OAAppSettings.sharedManager;
+        _selectedTrackName = _settings.simulateNavigationGpxTrack;
+        _selectedSpeedMode = [OASimulateNavigationSpeed fromKey:_settings.simulateNavigationGpxTrackSpeedMode];
     }
     return self;
 }
@@ -53,8 +69,7 @@ CGFloat const kDefaultHeaderHeight = 40.0;
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self generateData];
-    [self.tableView reloadData];
+    [self reloadData];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -85,50 +100,62 @@ CGFloat const kDefaultHeaderHeight = 40.0;
 
 - (void) generateData
 {
-    _selectedTrackName = OALocalizedString(@"gpx_select_track"); //TODO: fetch from settings
-    _selectedSpeedModeIndex = 0; //TODO: fetch from settings
-    
-    NSString *speedModeName;
-    if (_selectedSpeedModeIndex == 0)
-        speedModeName = OALocalizedString(@"simulate_location_movement_speed_original");
-    else if (_selectedSpeedModeIndex == 1)
-        speedModeName = OALocalizedString(@"simulate_location_movement_speed_x2");
-    else if (_selectedSpeedModeIndex == 2)
-        speedModeName = OALocalizedString(@"simulate_location_movement_speed_x3");
-    else
-        speedModeName = OALocalizedString(@"simulate_location_movement_speed_x4");
-    
     NSMutableArray *tableData = [NSMutableArray array];
+    BOOL isGpxTrackSelected = _selectedTrackName && _selectedTrackName.length > 0;
+    BOOL isRouteAnimating = [_app.locationServices.locationSimulation isRouteAnimating];
+    
     NSMutableArray *settingsSection = [NSMutableArray array];
+    NSString *trackNameText;
+    if (isGpxTrackSelected)
+        trackNameText = [[_selectedTrackName lastPathComponent] stringByDeletingPathExtension];
+    else
+        trackNameText = OALocalizedString(@"gpx_select_track");
     [settingsSection addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"key" : kTrackSelectKey,
-        @"title" : OALocalizedString(@"shared_string_gpx_track"),
-        @"value" : _selectedTrackName,
+        @"titleText" : OALocalizedString(@"shared_string_gpx_track"),
+        @"titleColor" : isRouteAnimating ? UIColorFromRGB(color_text_footer) : UIColor.blackColor,
+        @"descText" : trackNameText,
+        @"descColor" : UIColorFromRGB(color_text_footer),
         @"icon" : @"ic_custom_trip",
-        @"color" : UIColorFromRGB(color_primary_purple),
-        @"hederTitle" : @" ",
+        @"iconColor" : isRouteAnimating ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_primary_purple),
+        @"actionBlock" : (^void(){ [self openGpxTrackSelector]; }),
+        @"isActionEnabled" : @(!isRouteAnimating),
+        @"headerTitle" : @" ",
         @"footerTitle" : OALocalizedString(@"simulate_location_track_select_descr"),
     }];
+    
+    BOOL isMovementSpeedButtonActive = !isRouteAnimating && isGpxTrackSelected;
     [settingsSection addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"key" : kMovementSpeedKey,
-        @"title" : OALocalizedString(@"simulate_location_movement_speed"),
-        @"value" : speedModeName,
+        @"titleText" : OALocalizedString(@"simulate_location_movement_speed"),
+        @"titleColor" : isMovementSpeedButtonActive ? UIColor.blackColor : UIColorFromRGB(color_text_footer),
+        @"descText" : [OASimulateNavigationSpeed toTitle:_selectedSpeedMode],
+        @"descColor" : UIColorFromRGB(color_text_footer),
         @"icon" : @"ic_action_max_speed",
-        @"color" : UIColorFromRGB(color_primary_purple),
+        @"iconColor" : isMovementSpeedButtonActive ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer),
+        @"actionBlock" : (^void(){ [self openMovementSpeedSelector]; }),
+        @"isActionEnabled" : @(isMovementSpeedButtonActive),
     }];
     [tableData addObject:settingsSection];
     
     NSMutableArray *actionsSection = [NSMutableArray array];
+    NSString *buttonSectionFooter = @"";
+    if (!isGpxTrackSelected)
+        buttonSectionFooter = OALocalizedString(@"simulate_location_unselected_track_footer");
+    else if (isRouteAnimating)
+        buttonSectionFooter = OALocalizedString(@"simulate_in_progress");
     [actionsSection addObject:@{
         @"type" : [OATitleRightIconCell getCellIdentifier],
         @"key" : kStartStopButtonKey,
-        @"title" : OALocalizedString(@"shared_string_start"),
-        @"img" : @"ic_custom_play", // ic_custom_stop
-        @"color" : UIColorFromRGB(color_primary_purple),
-        @"hederTitle" : @" ",
-        @"footerTitle" : OALocalizedString(@"simulate_location_unselected_track_footer"),
+        @"titleText" : isRouteAnimating ? OALocalizedString(@"shared_string_stop") : OALocalizedString(@"shared_string_start"),
+        @"icon" : isRouteAnimating ? @"ic_custom_stop" : @"ic_custom_play",
+        @"color" : isGpxTrackSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer),
+        @"actionBlock" : (^void(){ [self setTrackAnimationEnabled:!isRouteAnimating]; }),
+        @"isActionEnabled" : @(isGpxTrackSelected),
+        @"headerTitle" : @" ",
+        @"footerTitle" : buttonSectionFooter,
     }];
     [tableData addObject:actionsSection];
     
@@ -138,6 +165,45 @@ CGFloat const kDefaultHeaderHeight = 40.0;
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.section][indexPath.row];
+}
+
+- (void) reloadData
+{
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+#pragma mark - Actions
+
+- (void) openGpxTrackSelector
+{
+    OAOpenAddTrackViewController *vc = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOASelectTrack showCurrent:YES];
+    vc.delegate = self;
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (void) openMovementSpeedSelector
+{
+    OAOsmandDevelopmentSimulateSpeedSelectorViewController *vc = [[OAOsmandDevelopmentSimulateSpeedSelectorViewController alloc] init];
+    vc.speedSelectorDelegate = self;
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (void) setTrackAnimationEnabled:(BOOL)isEnabled
+{
+    if (isEnabled)
+    {
+        NSInteger speedup = ((NSInteger)_selectedSpeedMode) + 1;
+        NSString * fullPath = [_app.gpxPath stringByAppendingPathComponent:_selectedTrackName];
+        OAGPXDocument *gpxDocument = [[OAGPXDocument alloc] initWithGpxFile:fullPath];
+        OAGPXRouteParamsBuilder *gpxParamsBuilder = [[OAGPXRouteParamsBuilder alloc] initWithDoc:gpxDocument];
+        [_app.locationServices.locationSimulation startAnimationThread:[gpxParamsBuilder getSimulatedLocations] useLocationTime:NO coeff:speedup];
+    }
+    else
+    {
+        [_app.locationServices.locationSimulation startStopRouteAnimation];
+    }
+    [self reloadData];
 }
 
 
@@ -169,9 +235,11 @@ CGFloat const kDefaultHeaderHeight = 40.0;
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
-            cell.leftIconView.tintColor = item[@"color"];
+            cell.textView.text = item[@"titleText"];
+            cell.textView.textColor = item[@"titleColor"];
+            cell.descriptionView.text = item[@"descText"];
+            cell.descriptionView.textColor = item[@"descColor"];
+            cell.leftIconView.tintColor = item[@"iconColor"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
         }
         return cell;
@@ -186,10 +254,10 @@ CGFloat const kDefaultHeaderHeight = 40.0;
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
         }
-        cell.titleView.text = item[@"title"];
+        cell.titleView.text = item[@"titleText"];
         cell.titleView.textColor = item[@"color"];
         cell.iconView.tintColor = item[@"color"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"icon"]]];
         return cell;
     }
     return nil;
@@ -212,7 +280,7 @@ CGFloat const kDefaultHeaderHeight = 40.0;
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:0 inSection:section]];
-    return item[@"hederTitle"];
+    return item[@"headerTitle"];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
@@ -235,27 +303,12 @@ CGFloat const kDefaultHeaderHeight = 40.0;
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *itemKey = item[@"key"];
-    
-    if ([itemKey isEqualToString:kTrackSelectKey])
-    {
-        OAOpenAddTrackViewController *vc = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOASelectTrack showCurrent:YES];
-        vc.delegate = self;
-        [self presentViewController:vc animated:YES completion:nil];
-    }
-    else if ([itemKey isEqualToString:kMovementSpeedKey])
-    {
-        OAOsmandDevelopmentSimulateSpeedSelectorViewController *vc = [[OAOsmandDevelopmentSimulateSpeedSelectorViewController alloc] init];
-        vc.delegate = self;
-        [self presentViewController:vc animated:YES completion:nil];
-    }
-    else if ([itemKey isEqualToString:kStartStopButtonKey])
-    {
-        //TODO: start/stop simulation
-    }
-
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSDictionary *item = [self getItem:indexPath];
+    BOOL isActionEnabled = [item[@"isActionEnabled"] boolValue];
+    void (^actionBlock)() = item[@"actionBlock"];
+    if (actionBlock && isActionEnabled)
+        actionBlock();
 }
 
 
@@ -267,17 +320,19 @@ CGFloat const kDefaultHeaderHeight = 40.0;
 
 - (void) onFileSelected:(NSString *)gpxFilePath
 {
-    [self generateData];
-    [self.tableView reloadData];
+    _settings.simulateNavigationGpxTrack = gpxFilePath;
+    _selectedTrackName = gpxFilePath;
+    [self reloadData];
 }
 
 
 #pragma mark - OAOsmandDevelopmentSimulateSpeedSelectorDelegate
 
-- (void) onSpeedSelectorInformationUpdated:(NSInteger)selectedSpeedModeIndex;
+- (void) onSpeedSelectorInformationUpdated:(EOASimulateNavigationSpeed)selectedSpeedMode;
 {
-    [self generateData];
-    [self.tableView reloadData];
+    _settings.simulateNavigationGpxTrackSpeedMode = [OASimulateNavigationSpeed toKey:selectedSpeedMode];
+    _selectedSpeedMode = selectedSpeedMode;
+    [self reloadData];
 }
 
 @end

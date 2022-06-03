@@ -8,9 +8,26 @@
 
 #import "OABaseSettingsViewController.h"
 
+typedef NS_ENUM(NSInteger, EOASimulateNavigationSpeed) {
+    EOASimulateNavigationSpeedOriginal = 0,
+    EOASimulateNavigationSpeed2x = 1,
+    EOASimulateNavigationSpeed3x = 2,
+    EOASimulateNavigationSpeed4x = 3
+};
+
+@interface OASimulateNavigationSpeed : NSObject
+
++ (NSString *) toTitle:(EOASimulateNavigationSpeed)enumValue;
++ (NSString *) toDescription:(EOASimulateNavigationSpeed)enumValue;
++ (NSString *) toKey:(EOASimulateNavigationSpeed)enumValue;
++ (EOASimulateNavigationSpeed) fromKey:(NSString *)key;
+
+@end
+
+
 @protocol OAOsmandDevelopmentSimulateSpeedSelectorDelegate <NSObject>
 
-- (void) onSpeedSelectorInformationUpdated:(NSInteger)selectedSpeedModeIndex;
+- (void) onSpeedSelectorInformationUpdated:(EOASimulateNavigationSpeed)selectedSpeedMode;
 
 @end
 

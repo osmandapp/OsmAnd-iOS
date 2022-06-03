@@ -7,11 +7,14 @@
 //
 
 #import "OAOsmandDevelopmentViewController.h"
+#import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OALocationSimulation.h"
 #import "OAIconTitleValueCell.h"
 #import "OAOsmandDevelopmentSimulateLocationViewController.h"
+
 
 @interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate>
 
@@ -40,9 +43,8 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    [self generateData];
     [self applySafeAreaMargins];
-    [self.tableView reloadData];
+    [self reloadData];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -71,13 +73,15 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 {
     NSMutableArray<NSArray *> *sectionArr = [NSMutableArray new];
     NSMutableArray *dataArr = [NSMutableArray new];
+    BOOL isRouteAnimating = [[OsmAndApp instance].locationServices.locationSimulation isRouteAnimating];
     
     [dataArr addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"key" : kSimulateLocationKey,
         @"title" : OALocalizedString(@"simulate_routing"),
-        @"value" : OALocalizedString(@"simulate_in_progress"),
-        @"hederTitle" : OALocalizedString(@"osmand_depelopment_simulate_location_section"),
+        @"value" : isRouteAnimating ? OALocalizedString(@"simulate_in_progress") : @"",
+        @"actionBlock" : (^void(){ [self openSimulateLocationSettings]; }),
+        @"headerTitle" : OALocalizedString(@"osmand_depelopment_simulate_location_section"),
         @"footerTitle" : @"",
     }];
     [sectionArr addObject:[NSArray arrayWithArray:dataArr]];
@@ -88,6 +92,22 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.section][indexPath.row];
+}
+
+- (void) reloadData
+{
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+
+#pragma mark - Actions
+
+- (void) openSimulateLocationSettings
+{
+    OAOsmandDevelopmentSimulateLocationViewController *vc = [[OAOsmandDevelopmentSimulateLocationViewController alloc] init];
+    vc.simulateLocationDelegate = self;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 
@@ -133,7 +153,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:0 inSection:section]];
-    return item[@"hederTitle"];
+    return item[@"headerTitle"];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
@@ -156,14 +176,11 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"key"] isEqualToString:kSimulateLocationKey])
-    {
-        OAOsmandDevelopmentSimulateLocationViewController *vc = [[OAOsmandDevelopmentSimulateLocationViewController alloc] init];
-        vc.simulateLocationDelegate = self;
-        [self.navigationController pushViewController:vc animated:YES];
-    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSDictionary *item = [self getItem:indexPath];
+    void (^actionBlock)() = item[@"actionBlock"];
+    if (actionBlock)
+        actionBlock();
 }
 
 
@@ -171,8 +188,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 
 - (void) onSimulateLocationInformationUpdated
 {
-    [self generateData];
-    [self.tableView reloadData];
+    [self reloadData];
 }
 
 @end

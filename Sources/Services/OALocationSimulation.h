@@ -9,13 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface OALocationSimulation : NSObject
-
-- (BOOL) isRouteAnimating;
-- (void) startStopRouteAnimation;
-
-@end
-
 @interface OASimulatedLocation : CLLocation
 
 - (instancetype)initWithSimulatedLocation:(OASimulatedLocation *)location;
@@ -23,5 +16,13 @@
 - (BOOL)isTrafficLight;
 - (void)setTrafficLight:(BOOL)trafficLight;
 - (CLLocationDistance)distanceFromLocation:(OASimulatedLocation *)location;
+
+@end
+
+@interface OALocationSimulation : NSObject
+
+- (BOOL) isRouteAnimating;
+- (void) startStopRouteAnimation;
+- (void) startAnimationThread:(NSArray<OASimulatedLocation *> *)directionsArray useLocationTime:(BOOL)useLocationTime coeff:(float)coeff;
 
 @end

@@ -7,9 +7,74 @@
 //
 
 #import "OAOsmandDevelopmentSimulateSpeedSelectorViewController.h"
-#import "OAOpenAddTrackViewController.h"
+#import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OAOpenAddTrackViewController.h"
+
+@implementation OASimulateNavigationSpeed
+
++ (NSString *) toTitle:(EOASimulateNavigationSpeed)enumValue
+{
+    switch (enumValue)
+    {
+        case EOASimulateNavigationSpeedOriginal:
+            return OALocalizedString(@"simulate_location_movement_speed_original");
+        case EOASimulateNavigationSpeed2x:
+            return OALocalizedString(@"simulate_location_movement_speed_x2");
+        case EOASimulateNavigationSpeed3x:
+            return OALocalizedString(@"simulate_location_movement_speed_x3");
+        case EOASimulateNavigationSpeed4x:
+            return OALocalizedString(@"simulate_location_movement_speed_x4");
+    }
+}
+
++ (NSString *) toDescription:(EOASimulateNavigationSpeed)enumValue
+{
+    switch (enumValue)
+    {
+        case EOASimulateNavigationSpeedOriginal:
+            return OALocalizedString(@"simulate_location_movement_speed_original_desc");
+        case EOASimulateNavigationSpeed2x:
+            return OALocalizedString(@"simulate_location_movement_speed_x2_desc");
+        case EOASimulateNavigationSpeed3x:
+            return OALocalizedString(@"simulate_location_movement_speed_x3_desc");
+        case EOASimulateNavigationSpeed4x:
+            return OALocalizedString(@"simulate_location_movement_speed_x4_desc");
+    }
+}
+
++ (NSString *) toKey:(EOASimulateNavigationSpeed)enumValue
+{
+    switch (enumValue)
+    {
+        case EOASimulateNavigationSpeedOriginal:
+            return @"SpeedOriginalKey";
+        case EOASimulateNavigationSpeed2x:
+            return @"Speed2xKey";
+        case EOASimulateNavigationSpeed3x:
+            return @"Speed3xKey";
+        case EOASimulateNavigationSpeed4x:
+            return @"Speed4xKey";
+    }
+}
+
++ (EOASimulateNavigationSpeed) fromKey:(NSString *)key
+{
+    if ([key isEqualToString:@"SpeedOriginalKey"])
+        return EOASimulateNavigationSpeedOriginal;
+    else if ([key isEqualToString:@"Speed2xKey"])
+        return EOASimulateNavigationSpeed2x;
+    else if ([key isEqualToString:@"Speed3xKey"])
+        return EOASimulateNavigationSpeed3x;
+    else if ([key isEqualToString:@"Speed4xKey"])
+        return EOASimulateNavigationSpeed4x;
+    else
+        return EOASimulateNavigationSpeedOriginal;
+}
+
+@end
+
 
 @interface OAOsmandDevelopmentSimulateSpeedSelectorViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -19,20 +84,17 @@
 {
     NSArray<NSArray *> *_data;
     NSString *_headerDescription;
-    NSInteger _selectedSpeedModeIndex;
+    EOASimulateNavigationSpeed _selectedSpeedMode;
 }
 
 NSString *const kUICellKey = @"kUICellKey";
-NSString *const kOriginalSpeedKey = @"kOriginalSpeedKey";
-NSString *const kSpeedUpTwoKey = @"kSpeedUpTwoKey";
-NSString *const kSpeedUpThreeKey = @"kSpeedUpThreeKey";
-NSString *const kSpeedUpFourKey = @"kSpeedUpFourKey";
 
 - (instancetype) init
 {
     self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
     if (self)
     {
+        _selectedSpeedMode = [OASimulateNavigationSpeed fromKey:OAAppSettings.sharedManager.simulateNavigationGpxTrackSpeedMode];
     }
     return self;
 }
@@ -48,15 +110,7 @@ NSString *const kSpeedUpFourKey = @"kSpeedUpFourKey";
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self generateData];
-    [self.tableView reloadData];
-}
-
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (_speedSelectorDelegate)
-        [_speedSelectorDelegate onSpeedSelectorInformationUpdated:_selectedSpeedModeIndex];
+    [self reloadData];
 }
 
 
@@ -70,49 +124,36 @@ NSString *const kSpeedUpFourKey = @"kSpeedUpFourKey";
 
 - (void) generateData
 {
-    _selectedSpeedModeIndex = 0; //TODO: fetch from settings
-    
-    NSString *footerText;
-    if (_selectedSpeedModeIndex == 0)
-        footerText = OALocalizedString(@"simulate_location_movement_speed_original_desc");
-    else if (_selectedSpeedModeIndex == 1)
-        footerText = OALocalizedString(@"simulate_location_movement_speed_x2_desc");
-    else if (_selectedSpeedModeIndex == 2)
-        footerText = OALocalizedString(@"simulate_location_movement_speed_x3_desc");
-    else
-        footerText = OALocalizedString(@"simulate_location_movement_speed_x4_desc");
-    
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *speedSection = [NSMutableArray array];
     [speedSection addObject:@{
         @"type" : kUICellKey,
-        @"key" : kOriginalSpeedKey,
-        @"title" : OALocalizedString(@"simulate_location_movement_speed_original"),
-        @"descr" : @"",
-        @"selected" : @(_selectedSpeedModeIndex == 0),
-        @"hederTitle" : @"",
-        @"footerTitle" : footerText,
+        @"key" : [OASimulateNavigationSpeed toKey:EOASimulateNavigationSpeedOriginal],
+        @"title" : [OASimulateNavigationSpeed toTitle:EOASimulateNavigationSpeedOriginal],
+        @"selected" : @(_selectedSpeedMode == EOASimulateNavigationSpeedOriginal),
+        @"actionBlock" : (^void(){ [self onSelectMode:EOASimulateNavigationSpeedOriginal]; }),
+        @"footerTitle" : [OASimulateNavigationSpeed toDescription:_selectedSpeedMode],
     }];
     [speedSection addObject:@{
         @"type" : kUICellKey,
-        @"key" : kSpeedUpTwoKey,
-        @"title" :OALocalizedString(@"simulate_location_movement_speed_x2"),
-        @"descr" : @"",
-        @"selected" : @(_selectedSpeedModeIndex == 1),
+        @"key" : [OASimulateNavigationSpeed toKey:EOASimulateNavigationSpeed2x],
+        @"title" : [OASimulateNavigationSpeed toTitle:EOASimulateNavigationSpeed2x],
+        @"selected" : @(_selectedSpeedMode == EOASimulateNavigationSpeed2x),
+        @"actionBlock" : (^void(){ [self onSelectMode:EOASimulateNavigationSpeed2x]; }),
     }];
     [speedSection addObject:@{
         @"type" : kUICellKey,
-        @"key" : kSpeedUpThreeKey,
-        @"title" : OALocalizedString(@"simulate_location_movement_speed_x3"),
-        @"descr" : @"",
-        @"selected" : @(_selectedSpeedModeIndex == 2),
+        @"key" : [OASimulateNavigationSpeed toKey:EOASimulateNavigationSpeed3x],
+        @"title" : [OASimulateNavigationSpeed toTitle:EOASimulateNavigationSpeed3x],
+        @"selected" : @(_selectedSpeedMode == EOASimulateNavigationSpeed3x),
+        @"actionBlock" : (^void(){ [self onSelectMode:EOASimulateNavigationSpeed3x]; }),
     }];
     [speedSection addObject:@{
         @"type" : kUICellKey,
-        @"key" : kSpeedUpFourKey,
-        @"title" : OALocalizedString(@"simulate_location_movement_speed_x4"),
-        @"descr" : @"",
-        @"selected" : @(_selectedSpeedModeIndex == 3),
+        @"key" : [OASimulateNavigationSpeed toKey:EOASimulateNavigationSpeed4x],
+        @"title" : [OASimulateNavigationSpeed toTitle:EOASimulateNavigationSpeed4x],
+        @"selected" : @(_selectedSpeedMode == EOASimulateNavigationSpeed4x),
+        @"actionBlock" : (^void(){ [self onSelectMode:EOASimulateNavigationSpeed4x]; }),
     }];
     [tableData addObject:speedSection];
     
@@ -122,6 +163,22 @@ NSString *const kSpeedUpFourKey = @"kSpeedUpFourKey";
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.section][indexPath.row];
+}
+
+- (void) reloadData
+{
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+
+#pragma mark - Actions
+
+- (void) onSelectMode:(EOASimulateNavigationSpeed)mode
+{
+    if (_speedSelectorDelegate)
+        [_speedSelectorDelegate onSpeedSelectorInformationUpdated:mode];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -146,11 +203,8 @@ NSString *const kSpeedUpFourKey = @"kSpeedUpFourKey";
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUICellKey];
         }
-        if ([item[@"selected"] boolValue])
-            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
-        else
-            cell.accessoryView = nil;
-        
+        BOOL isSelected = [item[@"selected"] boolValue];
+        cell.accessoryView = isSelected ? [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]] : nil;
         NSString *regularText = item[@"title"];
         cell.textLabel.text = regularText;
         return cell;
@@ -180,18 +234,9 @@ NSString *const kSpeedUpFourKey = @"kSpeedUpFourKey";
 {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *item = [self getItem:indexPath];
-    NSString *itemKey = item[@"key"];
-    
-    if ([itemKey isEqualToString:kOriginalSpeedKey])
-        _selectedSpeedModeIndex = 0;
-    else if ([itemKey isEqualToString:kSpeedUpTwoKey])
-        _selectedSpeedModeIndex = 1;
-    else if ([itemKey isEqualToString:kSpeedUpThreeKey])
-        _selectedSpeedModeIndex = 2;
-    else if ([itemKey isEqualToString:kSpeedUpFourKey])
-        _selectedSpeedModeIndex = 3;
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
+    void (^actionBlock)() = item[@"actionBlock"];
+    if (actionBlock)
+        actionBlock();
 }
 
 @end

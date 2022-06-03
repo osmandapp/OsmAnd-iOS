@@ -213,7 +213,7 @@ static const NSInteger sectionCount = 2;
     [self setLastUpdateDate];
     [self adjustViews];
 
-    if (!([OAIAPHelper isSubscribedToLiveUpdates] || [OAIAPHelper isSubscribedToOsmAndPro]))
+    if (![OAIAPHelper isSubscribedToLiveUpdates])
     {
         OASubscription *cheapest = [_iapHelper getCheapestMonthlySubscription];
         if (cheapest && cheapest.formattedPrice)
@@ -550,7 +550,7 @@ static const NSInteger sectionCount = 2;
                 label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
                 [label setFont:[UIFont systemFontOfSize:13]];
                 [label setText:[OALocalizedString(@"osmand_live_updates") upperCase]];
-                [button setOn:_settings.settingOsmAndLiveEnabled.get && ([OAIAPHelper isSubscribedToLiveUpdates] || [OAIAPHelper isSubscribedToOsmAndPro])];
+                [button setOn:_settings.settingOsmAndLiveEnabled.get && [OAIAPHelper isSubscribedToLiveUpdates]];
                 [button addTarget:self action:@selector(sectionHeaderButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
                 [headerView addSubview:button];
                 [headerView addSubview:label];
@@ -582,7 +582,7 @@ static const NSInteger sectionCount = 2;
 {
     UISwitch *btn = (UISwitch *)sender;
     BOOL newValue = !_settings.settingOsmAndLiveEnabled.get;
-    if (!([OAIAPHelper isSubscribedToLiveUpdates] || [OAIAPHelper isSubscribedToOsmAndPro]))
+    if (![OAIAPHelper isSubscribedToLiveUpdates])
     {
         newValue = NO;
         [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_ask_for_purchase") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];

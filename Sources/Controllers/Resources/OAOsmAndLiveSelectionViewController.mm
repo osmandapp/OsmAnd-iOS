@@ -110,7 +110,7 @@ static const NSInteger groupCount = 1;
                                  NSForegroundColorAttributeName : [UIColor whiteColor] };
         NSAttributedString *text = [[NSAttributedString alloc] initWithString:OALocalizedString(@"osmand_live_update_now") attributes:attrs];
         UIButton *updateNow = [UIButton buttonWithType:UIButtonTypeSystem];
-        BOOL canUpdate = [OAAppSettings sharedManager].settingOsmAndLiveEnabled.get && ([OAIAPHelper isSubscribedToLiveUpdates] || [OAIAPHelper isSubscribedToOsmAndPro]);
+        BOOL canUpdate = [OAAppSettings sharedManager].settingOsmAndLiveEnabled.get && [OAIAPHelper isSubscribedToLiveUpdates];
         updateNow.userInteractionEnabled = canUpdate;
         [updateNow setAttributedTitle:text forState:UIControlStateNormal];
         [updateNow addTarget:self action:@selector(updateNow) forControlEvents:UIControlEventTouchUpInside];

@@ -665,10 +665,8 @@
             {
                 if ([OAIAPHelper isSubscribedToLiveUpdates])
                 {
-                    NSMutableArray<OAFeature *> *allFeatures = [NSMutableArray arrayWithArray:OAFeature.OSMAND_PRO_FEATURES];
-                    [allFeatures removeObject:OAFeature.OSMAND_CLOUD];
-                    [allFeatures removeObject:OAFeature.ADVANCED_WIDGETS];
-                    [allFeatures removeObject:OAFeature.WEATHER];
+                    NSMutableArray<OAFeature *> *allFeatures = [NSMutableArray arrayWithArray:OAFeature.MAPS_PLUS_FEATURES];
+                    [allFeatures addObject:OAFeature.HOURLY_MAP_UPDATES];
                     purchased = [allFeatures containsObject:self.feature];
                 }
                 else if ([OAIAPHelper isSubscribedToOsmAndPro])

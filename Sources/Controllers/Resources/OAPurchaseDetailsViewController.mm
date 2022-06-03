@@ -13,6 +13,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAProducts.h"
 #import "OAColors.h"
+#import "OALinks.h"
 #import "Localization.h"
 #import <SafariServices/SafariServices.h>
 
@@ -254,7 +255,7 @@
     NSDictionary *item = _data[indexPath.row];
     BOOL isManageSubscription = [item[@"key"] isEqualToString:@"manage_subscription"];
     if (isManageSubscription)
-        [self openSafariWithURL:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"];
+        [self openSafariWithURL:kAppleManageSubscriptions];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

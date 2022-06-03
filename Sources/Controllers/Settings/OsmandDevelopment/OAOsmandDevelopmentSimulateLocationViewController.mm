@@ -23,6 +23,7 @@
 #import "OAOsmandDevelopmentSimulateSpeedSelectorViewController.h"
 #import "OAIconTitleValueCell.h"
 #import "OATitleRightIconCell.h"
+#import "OAAutoObserverProxy.h"
 
 @interface OAOsmandDevelopmentSimulateLocationViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate, OAOsmandDevelopmentSimulateSpeedSelectorDelegate>
 
@@ -32,6 +33,7 @@
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
+    OAAutoObserverProxy* _simulateRoutingObserver;
     NSArray<NSArray *> *_data;
     NSString *_headerDescription;
     NSString *_selectedTrackName;
@@ -53,6 +55,7 @@ CGFloat const kDefaultHeaderHeight = 40.0;
         _settings = OAAppSettings.sharedManager;
         _selectedTrackName = _settings.simulateNavigationGpxTrack;
         _selectedSpeedMode = [OASimulateNavigationSpeed fromKey:_settings.simulateNavigationGpxTrackSpeedMode];
+        _simulateRoutingObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onTrackAnimationFinished) andObserve:_app.simulateRoutingObservable];
     }
     return self;
 }
@@ -204,6 +207,13 @@ CGFloat const kDefaultHeaderHeight = 40.0;
         [_app.locationServices.locationSimulation startStopRouteAnimation];
     }
     [self reloadData];
+}
+
+- (void) onTrackAnimationFinished
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self reloadData];
+    });
 }
 
 

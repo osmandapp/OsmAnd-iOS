@@ -22,6 +22,7 @@
 #import "OAFollowTrackBottomSheetViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
 #import "OASimulationNavigationSettingViewController.h"
+#import "OARouteParameterValuesViewController.h"
 
 @interface OARouteSettingsBaseViewController () <OARoutePreferencesParametersDelegate, OASettingsDataDelegate, OARouteLineAppearanceViewControllerDelegate>
 
@@ -131,6 +132,13 @@
                 rp.delegate = self;
                 [list addObject:rp];
             }
+        }
+        else if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamIdHazmatCategory])
+        {
+            OAHazmatRoutingParameter *hazmatCategory = [[OAHazmatRoutingParameter alloc] initWithAppMode:[self.routingHelper getAppMode]];
+            hazmatCategory.routingParameter = r;
+            hazmatCategory.delegate = self;
+            [list addObject:hazmatCategory];
         }
     }
 
@@ -332,6 +340,14 @@
 - (void) showParameterGroupScreen:(OALocalRoutingParameterGroup *)group
 {
     OARouteSettingsParameterController *paramController = [[OARouteSettingsParameterController alloc] initWithParameterGroup:group];
+    [self presentViewController:paramController animated:YES completion:nil];
+}
+
+- (void) showParameterValuesScreen:(OALocalRoutingParameter *)parameter;
+{
+    OARouteParameterValuesViewController *paramController = [[OARouteParameterValuesViewController alloc] initWithRoutingParameter:parameter
+                                                                                                                    appMode:[[OARoutingHelper sharedInstance] getAppMode]];
+    paramController.delegate = self;
     [self presentViewController:paramController animated:YES completion:nil];
 }
 

@@ -314,10 +314,6 @@ CGFloat const kDefaultHeaderHeight = 40.0;
 
 #pragma mark - OAOpenAddTrackDelegate
 
-- (void)closeBottomSheet
-{
-}
-
 - (void) onFileSelected:(NSString *)gpxFilePath
 {
     _settings.simulateNavigationGpxTrack = gpxFilePath;

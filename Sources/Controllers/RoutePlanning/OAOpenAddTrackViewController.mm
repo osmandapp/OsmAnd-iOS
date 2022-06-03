@@ -268,11 +268,17 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     return _screenType == EOAAddToATrack;
 }
 
+- (void) closeBottomSheetDelegate
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(closeBottomSheet)])
+        [self.delegate closeBottomSheet];
+}
+
 - (void) dismissViewController
 {
     [self dismissViewControllerAnimated:YES completion:^{
         if (_screenType == EOAFollowTrack)
-            [self.delegate closeBottomSheet];
+            [self closeBottomSheetDelegate];
     }];
 }
 
@@ -410,14 +416,14 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         case EOAOpenExistingTrack:
         {
             [self dismissViewControllerAnimated:YES completion:nil];
-            [self.delegate closeBottomSheet];
+            [self closeBottomSheetDelegate];
             [self.delegate onFileSelected:track.gpxFilePath];
             break;
         }
         case EOASelectTrack:
         {
             [self dismissViewControllerAnimated:YES completion:nil];
-            [self.delegate closeBottomSheet];
+            [self closeBottomSheetDelegate];
             [self.delegate onFileSelected:track.gpxFilePath];
             break;
         }

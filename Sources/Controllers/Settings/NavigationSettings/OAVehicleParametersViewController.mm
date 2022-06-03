@@ -93,7 +93,11 @@
             auto& p = it->second;
             NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
             NSString *group = [NSString stringWithUTF8String:p.group.c_str()];
-            if (![param hasPrefix:@"avoid_"] && ![param hasPrefix:@"prefer_"] && ![param isEqualToString:kRouteParamIdShortWay] && ![group isEqualToString:kRouteParamGroupDrivingStyle])
+            if (![param hasPrefix:@"avoid_"]
+                    && ![param hasPrefix:@"prefer_"]
+                    && ![param isEqualToString:kRouteParamIdShortWay]
+                    && ![param isEqualToString:kRouteParamIdHazmatCategory]
+                    && ![group isEqualToString:kRouteParamGroupDrivingStyle])
                 _otherParameters.push_back(p);
         }
         for (const auto& p : _otherParameters)

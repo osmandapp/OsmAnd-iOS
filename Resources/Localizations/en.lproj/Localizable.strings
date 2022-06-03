@@ -2532,7 +2532,11 @@
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
 "default" = "Default";
-
+"routing_attr_hazmat_category_name" = "Transporting of hazardous materials";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (No restrictions)";
+"transport_hazmat_yes_desc" = "You need to choose proper category.";
+"transport_hazmat_no_desc" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
+   
 
 //Icon categories
 "amenity" = "Amenity";

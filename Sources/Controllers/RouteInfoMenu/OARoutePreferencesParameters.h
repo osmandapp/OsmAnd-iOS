@@ -28,9 +28,13 @@
 #define kRouteParamIdAllowPrivate @"allow_private"
 #define kRouteParamIdAllowPrivateTruck @"allow_private_for_truck"
 #define kRouteParamIdAllowMotorway @"allow_motorway"
+#define kRouteParamIdHazmatCategory @"hazmat_category"
+
+#define kDefaultNumericValue @"0.0"
+#define kDefaultSymbolicValue @"-"
 
 @class OAApplicationMode, OARoutingHelper, OAAppSettings;
-@class OALocalRoutingParameterGroup;
+@class OALocalRoutingParameterGroup, OALocalRoutingParameter;
 
 struct RoutingParameter;
 
@@ -41,6 +45,7 @@ struct RoutingParameter;
 - (void) openNavigationSettings;
 - (void) openRouteLineAppearance;
 - (void) showParameterGroupScreen:(OALocalRoutingParameterGroup *)group;
+- (void) showParameterValuesScreen:(OALocalRoutingParameter *)parameter;
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
 - (void) showAvoidRoadsScreen;
 - (void) showTripSettingsScreen;
@@ -129,4 +134,11 @@ struct RoutingParameter;
 @end
 
 @interface OACustomizeRouteLineRoutingParameter : OALocalRoutingParameter
+@end
+
+@interface OAHazmatRoutingParameter : OALocalRoutingParameter
+
+- (NSString *)getValue:(NSInteger)index;
+- (void)setValue:(NSInteger)index;
+
 @end

@@ -2509,4 +2509,4 @@
 "simulation_preview_mode_title" = "Modo de previsualización rápida";
 "speed_mode" = "Modo de velocidad";
 "routing_attr_allow_private_for_truck_name" = "Permitir el acceso privado (camión)";
-"routing_attr_allow_private_for_truck_description" = "Permitir el acceso a áreas privadas para camiones.";
+"routing_attr_allow_private_for_truck_description" = "Permitir el acceso a áreas privadas para camiones";

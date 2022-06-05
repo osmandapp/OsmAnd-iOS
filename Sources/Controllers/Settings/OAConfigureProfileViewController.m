@@ -20,6 +20,8 @@
 #import "OAMonitoringPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmEditingSettingsViewController.h"
+#import "OAOsmandDevelopmentPlugin.h"
+#import "OAOsmandDevelopmentViewController.h"
 #import "OAPluginResetBottomSheetViewController.h"
 #import "OASettingsHelper.h"
 #import "OAProfileSettingsItem.h"
@@ -173,6 +175,18 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"key" : kOsmEditsSettings
         }];
     }
+    
+    OAPlugin *developmentPlugin = [OAPlugin getEnabledPlugin:OAOsmandDevelopmentPlugin.class];
+    if (developmentPlugin)
+    {
+        [plugins addObject:@{
+            @"type" : [OAIconTextDescCell getCellIdentifier],
+            @"title" : developmentPlugin.getName,
+            @"img" : @"ic_custom_laptop",
+            @"key" : kOsmandDevelopmentSettings
+        }];
+    }
+    
     OAPlugin *weather = [OAPlugin getEnabledPlugin:OAWeatherPlugin.class];
     if (weather)
     {
@@ -406,6 +420,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             settingsScreen = [[OAOsmEditingSettingsViewController alloc] init];
         else if ([targetScreenKey isEqualToString:kWeatherSettings])
             settingsScreen = [[OAWeatherSettingsViewController alloc] init];
+        else if ([targetScreenKey isEqualToString:kOsmandDevelopmentSettings])
+            settingsScreen = [[OAOsmandDevelopmentViewController alloc] init];
 
         if (settingsScreen)
             [self.navigationController pushViewController:settingsScreen animated:YES];

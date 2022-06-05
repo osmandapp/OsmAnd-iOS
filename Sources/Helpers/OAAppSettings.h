@@ -844,6 +844,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (assign, nonatomic) BOOL simulateNavigation;
 @property (nonatomic) NSString *simulateNavigationMode;
 @property (assign, nonatomic) float simulateNavigationSpeed;
+@property (nonatomic) NSString *simulateNavigationGpxTrack;
+@property (nonatomic) NSString *simulateNavigationGpxTrackSpeedMode;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
 @property (nonatomic) OACommonRulerWidgetMode *rulerMode;

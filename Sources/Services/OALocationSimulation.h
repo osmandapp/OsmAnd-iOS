@@ -9,13 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface OALocationSimulation : NSObject
-
-- (BOOL) isRouteAnimating;
-- (void) startStopRouteAnimation;
-
-@end
-
 @interface OASimulatedLocation : CLLocation
 
 - (instancetype)initWithSimulatedLocation:(OASimulatedLocation *)location;
@@ -27,5 +20,13 @@
 - (void)setHighwayType:(NSString *)highwayType;
 - (float)getSpeedLimit;
 - (void)setSpeedLimit:(float)speedLimit;
+
+@end
+
+@interface OALocationSimulation : NSObject
+
+- (BOOL) isRouteAnimating;
+- (void) startStopRouteAnimation;
+- (void) startAnimationThread:(NSArray<OASimulatedLocation *> *)directionsArray useLocationTime:(BOOL)useLocationTime coeff:(float)coeff;
 
 @end

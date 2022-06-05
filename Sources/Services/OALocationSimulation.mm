@@ -292,6 +292,7 @@
 - (void) stop
 {
     _routeAnimation = nil;
+    [_app.simulateRoutingObservable notifyEvent];
 }
 
 @end

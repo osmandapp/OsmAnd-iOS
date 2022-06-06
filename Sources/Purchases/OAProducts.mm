@@ -641,12 +641,7 @@
     {
         if ([self isKindOfClass:OASubscription.class])
         {
-            if ([OAIAPHelper isLiveUpdatesSubscription:self])
-                purchased = [OAIAPHelper isSubscribedToLiveUpdates];
-            else if ([OAIAPHelper isOsmAndProSubscription:self])
-                purchased = [OAIAPHelper isOsmAndProAvailable];
-            else if ([OAIAPHelper isMapsSubscription:self])
-                purchased = [OAIAPHelper isSubscribedToMaps];
+            return NO;
         }
         else if ([OAIAPHelper isFullVersion:self])
         {
@@ -691,7 +686,6 @@
 - (void) setPurchased
 {
     self.purchaseState = PSTATE_PURCHASED;
-    [self setExpirationDate:nil];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:self.productIdentifier];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }

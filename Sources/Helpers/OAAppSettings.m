@@ -57,7 +57,6 @@
 #define emailSubscribedKey @"emailSubscribedKey"
 #define osmandProPurchasedKey @"osmandProPurchasedKey"
 #define osmandMapsPurchasedKey @"osmandMapsPurchasedKey"
-#define displayDonationSettingsKey @"displayDonationSettingsKey"
 #define lastReceiptValidationDateKey @"lastReceiptValidationDateKey"
 #define eligibleForIntroductoryPriceKey @"eligibleForIntroductoryPriceKey"
 #define eligibleForSubscriptionOfferKey @"eligibleForSubscriptionOfferKey"
@@ -3338,7 +3337,6 @@
         _emailSubscribed = [[OACommonBoolean withKey:emailSubscribedKey defValue:NO] makeGlobal];
         _osmandProPurchased = [[OACommonBoolean withKey:osmandProPurchasedKey defValue:NO] makeGlobal];
         _osmandMapsPurchased = [[OACommonBoolean withKey:osmandMapsPurchasedKey defValue:NO] makeGlobal];
-        _displayDonationSettings = [[NSUserDefaults standardUserDefaults] objectForKey:displayDonationSettingsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:displayDonationSettingsKey] : NO;
         _lastReceiptValidationDate = [[NSUserDefaults standardUserDefaults] objectForKey:lastReceiptValidationDateKey] ? [NSDate dateWithTimeIntervalSince1970:[[NSUserDefaults standardUserDefaults] doubleForKey:lastReceiptValidationDateKey]] : [NSDate dateWithTimeIntervalSince1970:0];
         _eligibleForIntroductoryPrice = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForIntroductoryPriceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForIntroductoryPriceKey] : NO;
         _eligibleForSubscriptionOffer = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForSubscriptionOfferKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForSubscriptionOfferKey] : NO;
@@ -4233,12 +4231,6 @@
 {
     _settingShowAltInDriveMode = settingShowAltInDriveMode;
     [[NSUserDefaults standardUserDefaults] setBool:_settingShowAltInDriveMode forKey:settingMapShowAltInDriveModeKey];
-}
-
-- (void) setDisplayDonationSettings:(BOOL)displayDonationSettings
-{
-    _displayDonationSettings = displayDonationSettings;
-    [[NSUserDefaults standardUserDefaults] setBool:_displayDonationSettings forKey:displayDonationSettingsKey];
 }
 
 - (void) setLastReceiptValidationDate:(NSDate *)lastReceiptValidationDate

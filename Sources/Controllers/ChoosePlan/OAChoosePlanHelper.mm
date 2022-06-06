@@ -319,7 +319,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     {
         OSMAND_PRO_FEATURES = @[
                 OAFeature.OSMAND_CLOUD,
-                OAFeature.ADVANCED_WIDGETS,
+//                OAFeature.ADVANCED_WIDGETS,
                 OAFeature.WEATHER,
                 OAFeature.HOURLY_MAP_UPDATES,
                 OAFeature.MONTHLY_MAP_UPDATES,
@@ -341,7 +341,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     {
         OSMAND_PRO_PREVIEW_FEATURES = @[
                 OAFeature.OSMAND_CLOUD,
-                OAFeature.ADVANCED_WIDGETS,
+//                OAFeature.ADVANCED_WIDGETS,
                 OAFeature.WEATHER,
                 OAFeature.HOURLY_MAP_UPDATES,
                 OAFeature.UNLIMITED_MAP_DOWNLOADS,

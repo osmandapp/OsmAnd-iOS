@@ -63,6 +63,17 @@
         else if (product.purchaseState == PSTATE_NOT_PURCHASED)
             [expiredProducts addObject:product];
     }
+    // Display old purchases if no new purchases are active
+    if (activeProducts.count == 0)
+    {
+        for (OAProduct *product in _iapHelper.inAppsPurchased)
+        {
+            if (product.purchaseState == PSTATE_PURCHASED)
+                [activeProducts addObject:product];
+            else if (product.purchaseState == PSTATE_NOT_PURCHASED)
+                [expiredProducts addObject:product];
+        }
+    }
 
     _headers = [NSMapTable new];
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray array];
@@ -117,14 +128,6 @@
             [data addObject:expired];
             [_headers setObject:OALocalizedString(@"expired") forKey:@(data.count - 1)];
         }
-        [data addObject:@[@{
-                @"key": @"explore_osmnad_plans",
-                @"type": [OACardButtonCell getCellIdentifier],
-                @"title": OALocalizedString(@"explore_osmnad_plans_to_find_suitable"),
-                @"button_title": OALocalizedString(@"shared_string_learn_more"),
-                @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
-                @"button_icon_color": UIColorFromRGB(color_primary_purple)
-        }]];
     }
 
     [data addObject:
@@ -225,12 +228,27 @@
 
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterMediumStyle;
-    NSString *dateString = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), datePattern,
-            product.expirationDate ? [formatter stringFromDate:product.expirationDate] : @""];
-
-    return [NSString stringWithFormat:@"%@\n%@", [product isKindOfClass:OASubscription.class]
-            ? [product getTitle:13.].string
-            : OALocalizedString(@"in_app_purchase_desc"), dateString];
+    NSString *dateString = nil;
+    if (product.expirationDate)
+    {
+        dateString = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), datePattern,
+                      product.expirationDate ? [formatter stringFromDate:product.expirationDate] : @""];
+    }
+    
+    NSString *res;
+    if (dateString)
+    {
+        res = [NSString stringWithFormat:@"%@\n%@", [product isKindOfClass:OASubscription.class]
+               ? [product getTitle:13.].string
+               : OALocalizedString(@"in_app_purchase_desc"), dateString];
+    }
+    else
+    {
+        res = [NSString stringWithFormat:@"%@", [product isKindOfClass:OASubscription.class]
+               ? [product getTitle:13.].string
+               : OALocalizedString(@"in_app_purchase_desc")];
+    }
+    return res;
 }
 
 - (IBAction) onRestoreButtonPressed:(id)sender

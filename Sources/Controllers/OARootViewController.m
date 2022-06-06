@@ -725,14 +725,6 @@ typedef enum : NSUInteger {
         OAProduct *product = nil;
         if (identifier)
             product = [_iapHelper product:identifier];
-        
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        if (product && [product isKindOfClass:[OASubscription class]] && ((OASubscription* )product).donationSupported && settings.displayDonationSettings)
-        {
-            settings.displayDonationSettings = NO;
-            OADonationSettingsViewController *donationController = [[OADonationSettingsViewController alloc] init];
-            [self.navigationController pushViewController:donationController animated:YES];
-        }
     });
 }
 

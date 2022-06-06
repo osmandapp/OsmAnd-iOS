@@ -205,7 +205,9 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 - (NSArray<OAProduct *> *) getEverMadeMainPurchases
 {
     NSMutableSet<OAProduct *> *products = [NSMutableSet setWithArray:[self getEverMadeSubscriptions]];
-    [products addObjectsFromArray:self.inAppsPurchased];
+    OAProduct *fullVersion = _products.mapsFull;
+    if (fullVersion && fullVersion.isPurchased)
+        [products addObject:fullVersion];
     return products.allObjects;
 }
 
@@ -615,7 +617,6 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                              if (userId.length > 0)
                              {
                                  [self applyUserPreferences:map];
-                                 _settings.displayDonationSettings = subscription.donationSupported;
                                  [self launchPurchase:subscription];
                              }
                              else
@@ -640,7 +641,6 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
         }
         else
         {
-            _settings.displayDonationSettings = subscription.donationSupported;
             [self launchPurchase:subscription];
         }
     }

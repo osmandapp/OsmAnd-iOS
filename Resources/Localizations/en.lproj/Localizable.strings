@@ -2438,6 +2438,7 @@
 "rendering_value_red_name" = "Red";
 "routing_attr_allow_private_name" = "Allow private access";
 "routing_attr_allow_private_for_truck_name" = "Allow private access (truck)";
+"private_access_routing_req" = "Your destination is located in an area with private access. Allow using private roads for this trip?";
 "routeInfo_tracktype_name" = "Surface firmness";
 "routeInfo_tracktype_description" = "Color the route or track line by its surface composition. Typically apply when the road network is largely unpaved.";
 "rendering_attr_highway_class_path_name" = "Path";

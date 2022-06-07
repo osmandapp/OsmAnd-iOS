@@ -216,18 +216,17 @@
     [_app stopNavigation];
     [[OAWaypointHelper sharedInstance].deletedPoints removeAllObjects];
     [[OARootViewController instance].mapPanel refreshMap];
-
-    //mapActivity.updateApplicationModeSettings();
-    //mapActivity.getDashboard().clearDeletedPoints();
-    /* TODO private routing
-    List<ApplicationMode> modes = ApplicationMode.values(settings);
-    for (ApplicationMode mode : modes) {
-        if (settings.FORCE_PRIVATE_ACCESS_ROUTING_ASKED.getModeValue(mode)) {
-            settings.FORCE_PRIVATE_ACCESS_ROUTING_ASKED.setModeValue(mode, false);
-            settings.getCustomRoutingBooleanProperty(GeneralRouter.ALLOW_PRIVATE, false).setModeValue(mode, false);
+    
+    NSArray<OAApplicationMode *> * modes = OAApplicationMode.allPossibleValues;
+    for (OAApplicationMode *mode in modes)
+    {
+        if (![_settings.forcePrivateAccessRoutingAsked get:[_routingHelper getAppMode]])
+        {
+            [_settings.forcePrivateAccessRoutingAsked set:YES mode:mode];
+            OACommonBoolean *allowPrivate = [_settings getCustomRoutingBooleanProperty:@"allow_private" defaultValue:NO];
+            [allowPrivate set:NO mode:mode];
         }
     }
-     */
 }
 
 - (void) stopNavigationActionConfirm

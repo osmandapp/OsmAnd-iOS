@@ -774,6 +774,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;
+@property (nonatomic) OACommonBoolean *forcePrivateAccessRoutingAsked;
 @property (nonatomic) OACommonBoolean *fastRouteMode;
 @property (assign, nonatomic) BOOL disableComplexRouting;
 @property (nonatomic) OACommonBoolean *followTheRoute;

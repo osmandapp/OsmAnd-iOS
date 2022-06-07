@@ -220,7 +220,7 @@
     NSArray<OAApplicationMode *> * modes = OAApplicationMode.allPossibleValues;
     for (OAApplicationMode *mode in modes)
     {
-        if (![_settings.forcePrivateAccessRoutingAsked get:[_routingHelper getAppMode]])
+        if ([_settings.forcePrivateAccessRoutingAsked get:[_routingHelper getAppMode]])
         {
             [_settings.forcePrivateAccessRoutingAsked set:YES mode:mode];
             OACommonBoolean *allowPrivate = [_settings getCustomRoutingBooleanProperty:@"allow_private" defaultValue:NO];

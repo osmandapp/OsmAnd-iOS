@@ -164,6 +164,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 
 @interface OAProductDiscount : NSObject
 
+// For testing purposes only!
+- (instancetype) initTest;
+
 @property (nonatomic, readonly) NSDecimalNumber *price;
 @property (nonatomic, readonly) NSLocale *priceLocale;
 @property (nonatomic, readonly, nullable) NSString *identifier;

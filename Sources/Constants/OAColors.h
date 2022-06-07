@@ -214,4 +214,7 @@
 #define color_poi_orange 0xE5FF8800
 #define color_osm_edit 0xE54CAF50
 
+#define color_disount_offer 0xEE5622
+#define color_discount_save 0x12B38B
+
 #endif /* OAColors_h */

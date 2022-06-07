@@ -9,6 +9,7 @@
 #import "OAPlanTypeCardRow.h"
 #import "OAProducts.h"
 #import "OAIAPHelper.h"
+#import "OAAppSettings.h"
 #import "OAChoosePlanHelper.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -19,6 +20,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelTitle;
 @property (weak, nonatomic) IBOutlet UILabel *labelDescription;
 @property (weak, nonatomic) IBOutlet UIImageView *imageViewRightIcon;
+@property (weak, nonatomic) IBOutlet UIView *badgeViewContainer;
+@property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *tertiaryDescrLabel;
 
 @end
 
@@ -142,6 +146,22 @@
     }
 }
 
+- (OAProductDiscount *)getDiscountOffer
+{
+    OAProductDiscount *discountOffer = nil;
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    if (settings.eligibleForIntroductoryPrice)
+    {
+        discountOffer = _subscription.introductoryPrice;
+    }
+    else if (settings.eligibleForSubscriptionOffer)
+    {
+        if (_subscription.discounts && _subscription.discounts.count > 0)
+            discountOffer = _subscription.discounts[0];
+    }
+    return discountOffer;
+}
+
 - (void)updateInfo:(OAProduct *)subscription selectedFeature:(OAFeature *)selectedFeature selected:(BOOL)selected
 {
     _subscription = subscription;
@@ -182,9 +202,57 @@
         }
         case EOAPlanTypeChooseSubscription:
         {
+            OAProductDiscount * discountOffer = [self getDiscountOffer];
+            
+            BOOL hasSpecialOffer = discountOffer != nil;
+            
+            NSAttributedString *purchaseDescr = [_subscription getDescription:15.0];
+            NSMutableAttributedString *descr = [[NSMutableAttributedString alloc] initWithString:@""];
+            if (hasSpecialOffer)
+            {
+                [descr appendAttributedString:[[NSAttributedString alloc]
+                                                                 initWithString:discountOffer.getDescriptionTitle
+                                                                 attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]}]];
+            }
+            else if (purchaseDescr)
+            {
+                [descr appendAttributedString:purchaseDescr];
+            }
+            
+            if (descr.length > 0)
+            {
+                _badgeViewContainer.hidden = NO;
+                _badgeViewContainer.backgroundColor = hasSpecialOffer ? UIColorFromRGB(color_disount_offer) : UIColorFromRGB(color_discount_save);
+                _badgeLabel.attributedText = descr;
+            }
+            
             self.labelTitle.text = [_subscription getTitle:17.].string;
-            self.labelDescription.text = _subscription.formattedPrice;
-
+            if (hasSpecialOffer)
+            {
+                if (descr.length > 0)
+                {
+                    NSArray<NSString *> *priceComps = [discountOffer.getFormattedDescription.string componentsSeparatedByString:@"\n"];
+                    if (priceComps.count == 2)
+                    {
+                        self.labelDescription.text = priceComps.firstObject;
+                        self.tertiaryDescrLabel.text = priceComps.lastObject;
+                    }
+                    else
+                    {
+                        self.labelDescription.text = discountOffer.getFormattedDescription.string;
+                    }
+                    self.tertiaryDescrLabel.hidden = self.tertiaryDescrLabel.text.length == 0;
+                }
+                else
+                {
+                    self.labelDescription.text = discountOffer.getFormattedDescription.string;
+                }
+            }
+            else
+            {
+                self.labelDescription.text = _subscription.formattedPrice;
+            }
+            
             self.imageViewLeftIcon.image = nil;
             self.labelTitle.textColor = UIColorFromRGB(color_primary_purple);
             self.labelDescription.textColor = UIColor.blackColor;
@@ -195,7 +263,9 @@
         case EOAPlanTypePurchase:
         {
             self.labelTitle.text = OALocalizedString(@"complete_purchase");
-            self.labelDescription.text = _subscription.formattedPrice;
+            OAProductDiscount *discount = [self getDiscountOffer];
+            NSString *price = discount ? discount.getFormattedDescription.string : _subscription.formattedPrice;
+            self.labelDescription.text = price;
 
             self.layer.borderWidth = 0.;
             self.imageViewLeftIcon.image = nil;
@@ -229,22 +299,42 @@
             textWidth,
             titleSize.height
     );
+    
+    BOOL hasBadge = !_badgeViewContainer.isHidden && _badgeLabel.attributedText.length > 0;
+    CGSize discountSize = !hasBadge ? CGSizeZero : [OAUtilities calculateTextBounds:_badgeLabel.text width:textWidth / 2 font:_badgeLabel.font];
 
     CGSize descriptionSize = [OAUtilities calculateTextBounds:self.labelDescription.text
-                                                        width:textWidth
+                                                        width:textWidth - (hasBadge ? discountSize.width + 8. : 0.)
                                                          font:self.labelDescription.font];
     self.labelDescription.frame = CGRectMake(
-            self.labelTitle.frame.origin.x,
-            self.labelTitle.frame.origin.y + self.labelTitle.frame.size.height + (_type == EOAPlanTypeChooseSubscription ? 8. : 0.),
+            self.labelTitle.frame.origin.x + (hasBadge ? discountSize.width + 20. : 0.),
+            CGRectGetMaxY(self.labelTitle.frame) + (_type == EOAPlanTypeChooseSubscription ? 8. : 0.),
             self.labelTitle.frame.size.width,
             descriptionSize.height
     );
+    
+    CGFloat badgeY = self.labelDescription.frame.origin.y + ((self.labelDescription.frame.size.height - (discountSize.height + 4.)) / 2);
+    
+    self.badgeViewContainer.frame = CGRectMake(self.labelTitle.frame.origin.x, badgeY, discountSize.width + 12., discountSize.height + 4.);
+    
+    BOOL hasTertiaryDescr = !_tertiaryDescrLabel.isHidden && _tertiaryDescrLabel.text.length > 0;
+    
+    CGSize tertiaryDescrSize = hasTertiaryDescr ? [OAUtilities calculateTextBounds:self.tertiaryDescrLabel.text
+                                                        width:textWidth
+                                                         font:self.tertiaryDescrLabel.font] : CGSizeZero;
+    
+    self.tertiaryDescrLabel.frame = CGRectMake(
+                                               self.labelTitle.frame.origin.x,
+                                               CGRectGetMaxY(hasBadge ? self.badgeViewContainer.frame : self.labelDescription.frame) + 1.,
+                                               textWidth,
+                                               tertiaryDescrSize.height
+                                               );
 
     self.frame = CGRectMake(
             kSpaceMargin + [OAUtilities getLeftMargin],
             y,
             width,
-            self.labelDescription.frame.origin.y + self.labelDescription.frame.size.height + textVerticalOffset
+            self.labelDescription.frame.origin.y + self.labelDescription.frame.size.height + (hasTertiaryDescr ? self.tertiaryDescrLabel.frame.size.height + 1. : 0) + textVerticalOffset
     );
 
     self.imageViewLeftIcon.frame = CGRectMake(

@@ -48,6 +48,17 @@
 
 @implementation OAProductSubscriptionPeriod
 
+- (instancetype) initTest
+{
+    self = [super init];
+    if (self)
+    {
+        self.numberOfUnits = 1;
+        self.unit = OAProductPeriodUnitYear;
+    }
+    return self;
+}
+
 - (instancetype) initWithSkSubscriptionPeriod:(SKProductSubscriptionPeriod * _Nonnull)skSubscriptionPeriod API_AVAILABLE(ios(11.2))
 {
     self = [super init];
@@ -97,6 +108,23 @@
 @end
 
 @implementation OAProductDiscount
+
+- (instancetype) initTest
+{
+    self = [super init];
+    if (self)
+    {
+        self.price = [NSDecimalNumber numberWithDouble:2.];
+        self.priceLocale = NSLocale.currentLocale;
+        self.subscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initTest];
+        self.numberOfPeriods = 1;
+        self.paymentMode = OAProductDiscountPaymentModePayUpFront;
+        self.originalPrice = [NSDecimalNumber numberWithDouble:20.];
+        self.originalSubscriptionPeriod = self.subscriptionPeriod;
+        self.type = OAProductDiscountTypeSubscription;
+    }
+    return self;
+}
 
 - (instancetype) initWithSkDiscount:(SKProductDiscount * _Nonnull)skDiscount skProduct:(SKProduct *)skProduct API_AVAILABLE(ios(11.2))
 {
@@ -299,15 +327,11 @@
 
 - (NSString *) getDescriptionTitle
 {
-    NSUInteger totalPeriods = [self getTotalPeriods];
-    NSString *unitStr = [[self getTotalUnitsString:NO] lowerCase];
     switch (self.paymentMode)
     {
         case OAProductDiscountPaymentModePayAsYouGo:
         case OAProductDiscountPaymentModePayUpFront:
-            return [NSString stringWithFormat:OALocalizedString(@"get_discount_title"), totalPeriods, unitStr, (int) self.discountPercent];
-        case OAProductDiscountPaymentModeFreeTrial:
-            return [NSString stringWithFormat:OALocalizedString(@"get_free_trial_title"), totalPeriods, unitStr];
+            return [NSString stringWithFormat:@"-%d%%", (int) self.discountPercent];
         default:
             return @"";
     }
@@ -361,10 +385,10 @@
     BOOL isPlural = originalNumberOfUnits > 1 || self.numberOfPeriods > 1;
     NSString *mainPart = [NSString stringWithFormat:OALocalizedString(isPlural ? @"get_discount_first_few_parts" : @"get_discount_first_part"), periodPriceStr, [self getDisountPeriodString:unitStr totalPeriods:totalPeriods]];
     NSString *thenPart = [NSString stringWithFormat:OALocalizedString(@"get_discount_second_part"), originalPricePeriod];
-    NSAttributedString *mainStrAttributed = [[NSAttributedString alloc] initWithString:mainPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]}];
-    NSAttributedString *secondStrAttributed = [[NSAttributedString alloc] initWithString:thenPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0]}];
+    NSAttributedString *mainStrAttributed = [[NSAttributedString alloc] initWithString:mainPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17.0 weight:UIFontWeightSemibold]}];
+    NSAttributedString *secondStrAttributed = [[NSAttributedString alloc] initWithString:thenPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17.0]}];
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithAttributedString:mainStrAttributed];
-    [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+    [res appendAttributedString:[[NSAttributedString alloc] initWithString:self.paymentMode == OAProductDiscountPaymentModeFreeTrial ? @", " : @"\n"]];
     [res appendAttributedString:secondStrAttributed];
     return res;
 }
@@ -730,22 +754,7 @@
 
 - (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
-    NSNumber *price = self.price;
-    NSLocale *priceLocale = self.priceLocale;
-    if (!price)
-        price = [self getDefaultPrice];
-
-    NSString *priceStr;
-    if (price)
-    {
-        NSNumberFormatter *numberFormatter = [self getNumberFormatter:priceLocale];
-        priceStr = [numberFormatter stringFromNumber:price];
-    }
-    else
-    {
-        priceStr = [OALocalizedString(@"shared_string_buy") upperCase];
-    }
-    return [[NSAttributedString alloc] initWithString:priceStr];
+    return nil;
 }
 
 - (NSString *) productIconName
@@ -873,43 +882,29 @@
 
 - (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
-    OASubscription *monthlyLiveUpdates = [OAIAPHelper sharedInstance].monthlyLiveUpdates;
-    double regularMonthlyPrice = monthlyLiveUpdates.price.doubleValue;
+    if (self == [OAIAPHelper sharedInstance].mapsAnnually)
+        return nil;
+    OASubscription *monthlyPro = [OAIAPHelper sharedInstance].proMonthly;
+    double regularMonthlyPrice = monthlyPro.price.doubleValue;
     double monthlyPrice = self.monthlyPrice ? self.monthlyPrice.doubleValue : 0.0;
     NSString *discountStr;
     BOOL showDiscount = NO;
     if (regularMonthlyPrice > 0 && monthlyPrice > 0 && monthlyPrice < regularMonthlyPrice)
     {
         int discount = (int) ((1 - monthlyPrice / regularMonthlyPrice) * 100.0);
-        discountStr = [NSString stringWithFormat:@"%d%%", discount];
+        discountStr = [NSString stringWithFormat:@"-%d%%", discount];
         if (discount > 0)
         {
             discountStr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_discount_descr"), discountStr];
             showDiscount = YES;
         }
     }
-    NSNumberFormatter *numberFormatter = [self getNumberFormatter:self.priceLocale];
-    NSDecimalNumber *price = self.monthlyPrice;
-    NSString *descr = nil;
-    if (!price)
-        price = [self getDefaultMonthlyPrice];
-    
-    if (price)
-        descr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_month_cost_descr"), [numberFormatter stringFromNumber:price]];
-    else
-        descr = @"";
-    
-    if (descr.length > 0)
+    NSAttributedString *resStr = [[NSAttributedString alloc] initWithString:@""];
+    if (showDiscount && discountStr.length > 0)
     {
-        NSMutableAttributedString *resStr = [[NSMutableAttributedString alloc] initWithString:descr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize] }];
-        if (showDiscount && discountStr.length > 0)
-        {
-            [resStr appendAttributedString:[[NSAttributedString alloc] initWithString:@" • "]];
-            [resStr appendAttributedString:[[NSAttributedString alloc] initWithString:discountStr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize]}]];
-        }
-        return resStr;
+        resStr = [[NSAttributedString alloc] initWithString:discountStr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize weight:UIFontWeightSemibold]}];
     }
-    return [[NSAttributedString alloc] initWithString:descr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize]}];
+    return resStr;
 }
 
 - (NSAttributedString *) getRenewDescription:(CGFloat)fontSize

@@ -67,6 +67,7 @@
 #define kInitialSearchToolbarHeight 44.0
 #define kBarActionViewHeight 44.0
 #define kTabsHeight 40.0
+#define kBottomViewHeight 57.0
 
 #define kCancelButtonY 5.0
 #define kLeftImageButtonY -2.0
@@ -734,13 +735,18 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     {
         if (!_bottomViewVisible)
         {
-            _bottomView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _bottomView.bounds.size.height);
             _bottomView.hidden = NO;
-            CGRect tableFrame = _tableView.frame;
-            tableFrame.size.height -= _bottomView.bounds.size.height;
             [UIView animateWithDuration:.25 animations:^{
+                _bottomView.frame = CGRectMake(
+                        0.,
+                        self.view.frame.size.height - kBottomViewHeight - [OAUtilities getBottomMargin],
+                        self.view.frame.size.width,
+                        kBottomViewHeight + [OAUtilities getBottomMargin]
+                );
+
+                CGRect tableFrame = _tableView.frame;
+                tableFrame.size.height -= _bottomView.frame.size.height;
                 _tableView.frame = tableFrame;
-                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height - _bottomView.bounds.size.height, self.view.bounds.size.width, _bottomView.bounds.size.height);
             }];
         }
         _bottomViewVisible = YES;
@@ -749,12 +755,13 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     {
         if (_bottomViewVisible)
         {
-            CGRect tableFrame = _tableView.frame;
-            tableFrame.size.height = self.view.bounds.size.height - tableFrame.origin.y;
             [UIView animateWithDuration:.25 animations:^{
+                _bottomView.frame = CGRectMake(0., self.view.frame.size.height + 1, self.view.frame.size.width, kBottomViewHeight);
+
+                CGRect tableFrame = _tableView.frame;
+                tableFrame.size.height = self.view.frame.size.height - tableFrame.origin.y;
                 _tableView.frame = tableFrame;
-                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _bottomView.bounds.size.height);
-            } completion:^(BOOL finished) {
+             } completion:^(BOOL finished) {
                 _bottomView.hidden = YES;
             }];
         }
@@ -835,10 +842,10 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     BOOL showInputView = _barActionType != BarActionEditHistory;
     BOOL showMapCenterSearch = !showBarActionView && _searchNearMapCenter && self.searchQuery.length == 0 && _distanceFromMyLocation > 0;
     BOOL showTabs = [self tabsVisible] && _barActionType != BarActionEditHistory;
-    CGRect frame = _topView.frame;
+    CGRect topViewFrame = _topView.frame;
     CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
     statusBarHeight = statusBarHeight == 0 ? 10.0 : statusBarHeight;
-    frame.size.height = (showInputView ? kInitialSearchToolbarHeight + statusBarHeight : statusBarHeight) + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + (showTabs ? kTabsHeight : 0.0);
+    topViewFrame.size.height = (showInputView ? kInitialSearchToolbarHeight + statusBarHeight : statusBarHeight) + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + (showTabs ? kTabsHeight : 0.0);
 
     _textField.hidden = !showInputView;
     _btnCancel.hidden = !showInputView || _modalInput;
@@ -865,8 +872,13 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         self.btnCancel.frame = CGRectMake(self.view.frame.size.width - 84 - OAUtilities.getLeftMargin + 8, self.btnCancel.frame.origin.y, self.btnCancel.frame.size.width, self.btnCancel.frame.size.height);
     }
 
-    _topView.frame = frame;
-    _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, self.view.frame.size.height - frame.size.height - (_bottomViewVisible ? _bottomView.bounds.size.height : 0.0));
+    _topView.frame = topViewFrame;
+    _tableView.frame = CGRectMake(
+            0.,
+            topViewFrame.size.height,
+            topViewFrame.size.width,
+            self.view.frame.size.height - topViewFrame.size.height - (_bottomViewVisible ? self.view.frame.size.height - _bottomView.frame.origin.y : 0.)
+    );
     _pageController.view.frame = _tableView.frame;
 }
 
@@ -928,19 +940,59 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                                   object:nil];
 }
 
+#pragma mark - Keyboard Notifications
+
 // Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWillShow:(NSNotification*)aNotification
+- (void)keyboardWillShow:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.view addGestureRecognizer:_tblMove];
+
+        NSDictionary *userInfo = [notification userInfo];
+        CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+        keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+        CGFloat keyboardHeight = keyboardRect.size.height;
+        CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+        NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+
+        if (_bottomViewVisible)
+        {
+            [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+                _bottomView.frame = CGRectMake(
+                        0,
+                        self.view.frame.size.height - keyboardHeight - kBottomViewHeight,
+                        self.view.frame.size.width,
+                        kBottomViewHeight
+                );
+            }                completion:nil];
+        }
     });
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+- (void)keyboardWillBeHidden:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.view removeGestureRecognizer:_tblMove];
+
+        NSDictionary *userInfo = [notification userInfo];
+        CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+        keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+        CGFloat keyboardHeight = keyboardRect.size.height;
+        CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+        NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
+
+        if (_bottomViewVisible)
+        {
+            [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+                _bottomView.frame = CGRectMake(
+                        0,
+                        self.view.frame.size.height - kBottomViewHeight - [OAUtilities getBottomMargin],
+                        self.view.frame.size.width,
+                        kBottomViewHeight + [OAUtilities getBottomMargin]
+                );
+            }                completion:nil];
+        }
     });
 }
 
@@ -1982,6 +2034,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     sr.priority = 0;
     sr.objectType = POI_TYPE;
     [_searchUICore selectSearchResult:sr];
+    [self setBottomViewVisible:!willSaved];
 
     NSString *txt = [[filter getName] stringByAppendingString:@" "];
     self.searchQuery = txt;
@@ -1992,7 +2045,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     [self runCoreSearch:txt updateResult:NO searchMore:NO];
 
-    [self setBottomViewVisible:!willSaved];
     if (willSaved)
         [self createAndRefreshCustomFilter:filter newName:newName];
 }

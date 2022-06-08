@@ -783,6 +783,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *useIntermediatePointsNavigation;
 @property (nonatomic) OACommonBoolean *disableOffrouteRecalc;
 @property (nonatomic) OACommonBoolean *disableWrongDirectionRecalc;
+@property (nonatomic) OACommonBoolean *hazmatTransportingEnabled;
 @property (nonatomic) OACommonBoolean *gpxRouteCalcOsmandParts;
 @property (nonatomic) OACommonBoolean *gpxCalculateRtept;
 @property (nonatomic) OACommonBoolean *gpxRouteCalc;
@@ -844,6 +845,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (assign, nonatomic) BOOL simulateNavigation;
 @property (nonatomic) NSString *simulateNavigationMode;
 @property (assign, nonatomic) float simulateNavigationSpeed;
+@property (nonatomic) NSString *simulateNavigationGpxTrack;
+@property (nonatomic) NSString *simulateNavigationGpxTrackSpeedMode;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
 @property (nonatomic) OACommonRulerWidgetMode *rulerMode;

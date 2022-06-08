@@ -1795,3 +1795,4 @@
 "routing_attr_allow_advanced_description" = "困难的路线，有危险的障碍物和陡峭的路段。";
 "routing_attr_allow_advanced_name" = "允许高难路线";
 "routing_attr_piste_type_skitour_description" = "滑雪游览线路。";
+"routing_attr_allow_private_for_truck_name" = "允许私人访问（卡车）";

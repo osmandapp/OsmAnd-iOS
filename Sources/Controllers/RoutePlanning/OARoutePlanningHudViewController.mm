@@ -1820,10 +1820,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 #pragma mark - OAOpenAddTrackDelegate
 
-- (void)closeBottomSheet
-{
-}
-
 - (void)onFileSelected:(NSString *)gpxFileName
 {
     OAGPXMutableDocument *gpxFile;

@@ -271,8 +271,6 @@
     else
     {
         [self.tableView reloadData];
-        [self.tableView beginUpdates];
-        [self.tableView endUpdates];
     }
 }
 
@@ -341,6 +339,7 @@
         if (cell == nil)
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUICellKey];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if ([item[@"selected"] boolValue])
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
@@ -398,6 +397,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
             cell.dividerHight = 1.0 / [UIScreen mainScreen].scale;

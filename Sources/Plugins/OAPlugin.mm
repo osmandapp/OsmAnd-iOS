@@ -21,6 +21,7 @@
 #import "OAMonitoringPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmEditingPlugin.h"
+#import "OAOsmandDevelopmentPlugin.h"
 #import "OAMapillaryPlugin.h"
 #import "OASkiMapsPlugin.h"
 #import "OANauticalMapsPlugin.h"
@@ -294,6 +295,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
     [allPlugins addObject:[[OAOpenPlaceReviews alloc] init]];
     [allPlugins addObject:[[OAMapillaryPlugin alloc] init]];
+    [allPlugins addObject:[[OAOsmandDevelopmentPlugin alloc] init]];
     [allPlugins addObject:[[OAWeatherPlugin alloc] init]];
 
     [self loadCustomPlugins];

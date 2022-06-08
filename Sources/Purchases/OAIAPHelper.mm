@@ -156,6 +156,11 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     return _products.weather;
 }
 
+- (OAProduct *) osmandDevelopment
+{
+    return _products.osmandDevelopment;
+}
+
 - (OAProduct *) allWorld
 {
     return _products.allWorld;

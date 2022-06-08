@@ -553,6 +553,8 @@
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_any" = "Any";
 "shared_string_capacity" = "Capacity";
+"shared_string_start" = "Start";
+"shared_string_stop" = "Stop";
 
 "restart" = "Restart";
 
@@ -1328,6 +1330,21 @@
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
+"osmand_depelopment_simulate_location_section" = "Simulate";
+"simulate_in_progress" = "In progress";
+"simulate_your_location_gpx_descr" = "You can simulate location moving by using GPX track.";
+"simulate_location_track_select_descr" = "Choose track that will use as source for location moving.";
+"simulate_location_unselected_track_footer" = "You need to select track file";
+"simulate_location_movement_speed" = "Movement speed";
+"simulate_location_movement_speed_original" = "Original";
+"simulate_location_movement_speed_x2" = "x2";
+"simulate_location_movement_speed_x3" = "x3";
+"simulate_location_movement_speed_x4" = "x4";
+"simulate_location_movement_speed_original_desc" = "The location movement speed during the simulation will be equal to the speed in the selected file.";
+"simulate_location_movement_speed_x2_desc" = "The location movement speed during the simulation will be x2 bigger to the speed in the selected file.";
+"simulate_location_movement_speed_x3_desc" = "The location movement speed during the simulation will be x3 bigger to the speed in the selected file.";
+"simulate_location_movement_speed_x4_desc" = "The location movement speed during the simulation will be x4 bigger to the speed in the selected file.";
+
 "osm_note" = "OSM Note";
 "osm_created" = "Created";
 "osm_deleted" = "Deleted";
@@ -1786,6 +1803,10 @@
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
 "product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
+
+"product_title_development" = "OsmAnd development";
+"product_desc_development" = "Settings for development and debugging features";
+"product_desc_ext_development" = "Settings for development and debugging features, like navigation simulation, rendering performance, or voice prompting. Intended for developers, not needed for normal app use.";
 
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
@@ -2534,7 +2555,11 @@
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
 "default" = "Default";
-
+"routing_attr_hazmat_category_name" = "Transporting of hazardous materials";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (No restrictions)";
+"transport_hazmat_yes_desc" = "You need to choose proper category.";
+"transport_hazmat_no_desc" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
+   
 
 //Icon categories
 "amenity" = "Amenity";

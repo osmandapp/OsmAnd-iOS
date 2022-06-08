@@ -8,9 +8,8 @@
 
 #import "OACoordinatesFormatViewController.h"
 #import "OASettingsTitleTableViewCell.h"
-#import "OAAppSettings.h"
 #import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
+#import "OALinks.h"
 #import "OsmAndApp.h"
 #import "OALocationConvert.h"
 #import "OATableViewCustomFooterView.h"
@@ -89,7 +88,7 @@
         @"title" : OALocalizedString(@"UTM"),
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_UTM_FORMAT),
         @"description" : [NSString stringWithFormat:@"%@: %@\n%@\n%@\n", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM], OALocalizedString(@"utm_description"), OALocalizedString(@"shared_string_read_more")],
-        @"url" : @"https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system",
+        @"url" : kUrlWikipediaUtmFormat,
         @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     },
     @{
@@ -97,7 +96,7 @@
        @"title" : OALocalizedString(@"navigate_point_format_OLC"),
        @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_OLC_FORMAT),
        @"description" : [NSString stringWithFormat:@"%@: %@. %@\n", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC], OALocalizedString(@"shared_string_read_more")],
-       @"url" : @"https://en.wikipedia.org/wiki/Open_Location_Code",
+       @"url" : kUrlWikipediaOpenLocationCode,
        @"icon" : @"ic_custom_direction_compass",
        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     },
@@ -106,7 +105,7 @@
         @"title" : OALocalizedString(@"MGRS"),
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_MGRS_FORMAT),
         @"description" : [NSString stringWithFormat:@"%@: %@\n%@\n%@\n", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MGRS], OALocalizedString(@"mgrs_description"), OALocalizedString(@"shared_string_read_more")],
-        @"url" : @"https://en.wikipedia.org/wiki/Military_Grid_Reference_System",
+        @"url" : kUrlWikipediaMgrsFormat,
         @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     }];
 }

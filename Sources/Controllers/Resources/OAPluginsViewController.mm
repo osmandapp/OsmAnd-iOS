@@ -46,7 +46,6 @@
 @implementation OAPluginsViewController
 {
     OAIAPHelper *_iapHelper;
-    NSNumberFormatter *_numberFormatter;
     OAOsmLiveBannerView *_osmLiveBanner;
     
     NSArray<OACustomPlugin *> *_customPlugins;
@@ -65,10 +64,6 @@
     [super viewDidLoad];
     
     _iapHelper = [OAIAPHelper sharedInstance];
-    
-    _numberFormatter = [[NSNumberFormatter alloc] init];
-    [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-    [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
 }
 
 - (void) viewWillLayoutSubviews
@@ -123,7 +118,7 @@
 
 - (void) updateOsmLiveBanner
 {
-    if (!_iapHelper.subscribedToLiveUpdates)
+    if (![OAIAPHelper isPaidVersion])
     {
         OASubscription *cheapest = [_iapHelper getCheapestMonthlySubscription];
         if (cheapest && cheapest.formattedPrice)
@@ -197,21 +192,13 @@
 
                 purchased = [product isPurchased];
                 disabled = product.disabled;
-                
+
                 imgTitle = [UIImage templateImageNamed:[product productIconName]];
 
                 title = product.localizedTitle;
                 desc = product.localizedDescription;
-                if (product.price)
-                {
-                    [_numberFormatter setLocale:product.priceLocale];
-                    price = [_numberFormatter stringFromNumber:product.price];
-                }
-                else
-                {
+                if (!product.free)
                     price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
-                }
-                
             }
             else if (indexPath.section == kCustomPluginsSection)
             {
@@ -351,7 +338,7 @@
 
 - (void) osmLiveBannerPressed
 {
-    [OAChoosePlanHelper showChoosePlanScreenWithProduct:nil navController:self.navigationController];
+    [OAChoosePlanHelper showChoosePlanScreen:self.navigationController];
 }
 
 @end

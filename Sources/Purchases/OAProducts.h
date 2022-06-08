@@ -45,11 +45,14 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_Mapillary @"net.osmand.maps.inapp.addon.mapillary"
 #define kInAppId_Addon_OpenPlaceReview @"net.osmand.maps.inapp.addon.openplacereviews"
 #define kInAppId_Addon_Weather @"net.osmand.maps.inapp.addon.weather"
+#define kInAppId_Addon_DepthContours @"net.osmand.maps.inapp.addon.depth_contours"
+#define kInAppId_Addon_CarPlay @"net.osmand.maps.inapp.addon.carplay"
+#define kInAppId_Addon_Advanced_Widgets @"net.osmand.maps.inapp.addon.advanced_widgets"
 #define kInAppId_Addon_OsmandDevelopment @"net.osmand.maps.inapp.addon.development"
 
 // Addons default prices (EUR)
 #define kInApp_Addon_SkiMap_Default_Price 0.0
-#define kInApp_Addon_Nautical_Default_Price 0.99
+#define kInApp_Addon_Nautical_Default_Price 0.0
 #define kInApp_Addon_TrackRecording_Default_Price 0.0
 #define kInApp_Addon_Parking_Default_Price 0.0
 #define kInApp_Addon_Wiki_Default_Price 0.0
@@ -59,9 +62,16 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInApp_Addon_OpenPlaceReviews_Default_Price 0.0
 #define kInApp_Addon_OsmandDevelopment_Default_Price 0.0
 
+// Subscriptions ids
 #define kSubscriptionId_Osm_Live_Subscription_Monthly @"net.osmand.maps.subscription.monthly"
 #define kSubscriptionId_Osm_Live_Subscription_3_Months @"net.osmand.maps.subscription.3months"
 #define kSubscriptionId_Osm_Live_Subscription_Annual @"net.osmand.maps.subscription.annual"
+
+#define kSubscriptionId_Pro_Subscription_Monthly @"net.osmand.maps.subscription.pro.monthly"
+#define kSubscriptionId_Pro_Subscription_Annual @"net.osmand.maps.subscription.pro.annual"
+
+#define kSubscriptionId_Maps_Subscription_Annual @"net.osmand.maps.subscription.plus.annual"
+#define kInAppId_Maps_Full @"net.osmand.maps.inapp.maps.plus"
 
 // Subscriptions default prices (EUR)
 #define kSubscription_Osm_Live_Default_Price 1.49
@@ -71,13 +81,18 @@ NS_ASSUME_NONNULL_BEGIN
 #define kSubscription_Osm_Live_Annual_Price 7.99
 #define kSubscription_Osm_Live_Annual_Monthly_Price 0.66
 
+#define kSubscription_Pro_Monthly_Price 2.99
+#define kSubscription_Pro_Annual_Price 29.99
+#define kSubscription_Maps_Annual_Price 9.99
+#define kInApp_Maps_Full_Price 24.99
+
 // Addons internal ids
 #define kId_Addon_TrackRecording_Add_Waypoint @"addon.track_recording.add_waypoint"
 #define kId_Addon_TrackRecording_Edit_Waypoint @"addon.track_recording.edit_waypoint"
 #define kId_Addon_Parking_Set @"addon.parking.set"
 #define kId_Addon_OsmEditing_Edit_POI @"addon.osm_editing.edit_poi"
 
-@class SKProduct;
+@class SKProduct, OAFeature;
 
 typedef NS_ENUM(NSInteger, EOAPurchaseState)
 {
@@ -151,6 +166,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 
 @interface OAProductDiscount : NSObject
 
+// For testing purposes only!
+- (instancetype) initTest;
+
 @property (nonatomic, readonly) NSDecimalNumber *price;
 @property (nonatomic, readonly) NSLocale *priceLocale;
 @property (nonatomic, readonly, nullable) NSString *identifier;
@@ -183,6 +201,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) BOOL disabled;
 @property (nonatomic, readonly, nullable) NSString *formattedPrice;
 @property (nonatomic, readonly, nullable) NSDate *expirationDate;
+@property (nonatomic, readonly, nullable) OAFeature *feature;
 
 @property(nonatomic, readonly, nullable) OAProductSubscriptionPeriod *subscriptionPeriod;
 @property(nonatomic, readonly, nullable) OAProductDiscount *introductoryPrice;
@@ -255,6 +274,27 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 
 @end
 
+@interface OAProSubscriptionMonthly : OASubscription
+
+- (instancetype) initWithVersion:(int)version;
+
+@end
+
+@interface OAProSubscriptionAnnual : OASubscription
+
+- (instancetype) initWithVersion:(int)version;
+
+@end
+
+@interface OAMapsSubscriptionAnnual : OASubscription
+
+- (instancetype) initWithVersion:(int)version;
+
+@end
+
+@interface OAMapsFullProduct : OAProduct
+@end
+
 // Addons
 
 @interface OASkiMapProduct : OAProduct
@@ -287,7 +327,12 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @interface OAWeatherProduct : OAProduct
 @end
 
+@interface OACarPlayProduct : OAProduct
+
+@end
+
 @interface OAOsmandDevelopmentProduct : OAProduct
+
 @end
 
 // Map regions
@@ -335,6 +380,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) OAProduct *mapillary;
 @property (nonatomic, readonly) OAProduct *openPlaceReviews;
 @property (nonatomic, readonly) OAProduct *weather;
+@property (nonatomic, readonly) OAProduct *carplay;
 @property (nonatomic, readonly) OAProduct *osmandDevelopment;
 
 @property (nonatomic, readonly) OAProduct *allWorld;
@@ -349,21 +395,27 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) OAProduct *southAmerica;
 
 @property (nonatomic, readonly) NSArray<OAProduct *> *inApps;
-@property (nonatomic, readonly) NSArray<OAProduct *> *inAppMaps;
-@property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddons;
-
 @property (nonatomic, readonly) NSArray<OAProduct *> *inAppsFree;
 @property (nonatomic, readonly) NSArray<OAProduct *> *inAppsPaid;
-@property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddonsPaid;
 @property (nonatomic, readonly) NSArray<OAProduct *> *inAppsPurchased;
+
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppMaps;
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppMapsPaid;
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppMapsPurchased;
+
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddons;
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddonsPaid;
 @property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddonsPurchased;
-@property (nonatomic, readonly) BOOL anyMapPurchased;
 
 @property (nonatomic, readonly) NSArray<OAFunctionalAddon *> *functionalAddons;
 @property (nonatomic, readonly) OAFunctionalAddon *singleAddon;
 
 @property (nonatomic, readonly) OASubscription *monthlyLiveUpdates;
-@property (nonatomic, readonly) OASubscriptionList *liveUpdates;
+@property (nonatomic, readonly) OASubscription *proMonthly;
+@property (nonatomic, readonly) OASubscription *proAnnually;
+@property (nonatomic, readonly) OASubscription *mapsAnnually;
+@property (nonatomic, readonly) OAProduct *mapsFull;
+@property (nonatomic, readonly) OASubscriptionList *subscriptionList;
 
 + (NSSet<NSString *> *) getProductIdentifiers:(NSArray<OAProduct *> *)products;
 - (OAProduct *) getProduct:(NSString *)productIdentifier;

@@ -31,6 +31,7 @@
 #import "OAManageResourcesViewController.h"
 #import "OADownloadMultipleResourceViewController.h"
 #import "OASegmentedSlider.h"
+#import "OALinks.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -845,7 +846,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) linkButtonPressed
 {
-    NSURL *url = [NSURL URLWithString:@"https://osmand.net/features/contour-lines-plugin"];
+    NSURL *url = [NSURL URLWithString:kOsmAndFeaturesContourLinesPlugin];
     if ([[UIApplication sharedApplication] canOpenURL:url])
         [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }

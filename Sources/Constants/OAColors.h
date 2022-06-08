@@ -217,4 +217,7 @@
 #define color_disount_offer 0xEE5622
 #define color_discount_save 0x12B38B
 
+#define color_banner_background 0x5D2BB5
+#define color_banner_button 0xFFC30D
+
 #endif /* OAColors_h */

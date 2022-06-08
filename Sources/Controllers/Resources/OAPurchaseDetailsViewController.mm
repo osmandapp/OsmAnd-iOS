@@ -88,13 +88,14 @@
                     : OALocalizedString(@"in_app_purchase_desc")
     }];
 
-    //TODO: Purchased type
-
-    /*NSString *purchasedType = OALocalizedString(@"shared_string_purchased");
-    if (_product.purchaseState == PSTATE_NOT_PURCHASED)
-        purchasedType = OALocalizedString(@"expired");
-    else if (isSubscription)
-        purchasedType = OALocalizedString(@"expires");
+    NSString *purchasedType = OALocalizedString(@"shared_string_purchased");
+    if ([_product isKindOfClass:OASubscription.class])
+    {
+        if (_product.purchaseState == PSTATE_NOT_PURCHASED)
+            purchasedType = OALocalizedString(@"expired");
+        else if (isSubscription)
+            purchasedType = OALocalizedString(@"expires");
+    }
 
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterMediumStyle;
@@ -104,9 +105,7 @@
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"title": purchasedType,
             @"description": _product.expirationDate ? [formatter stringFromDate:_product.expirationDate] : @""
-    }];*/
-
-    //TODO: Purchased in platform
+    }];
 
     if (isSubscription)
     {

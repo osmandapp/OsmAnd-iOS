@@ -1353,6 +1353,12 @@
 		CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */; };
 		DA03184222DF0E50008FC564 /* ic_custom_boat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */; };
 		DA03184422DF0E50008FC564 /* ic_custom_boat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */; };
+		DA04D775284F86060097CAED /* ic_custom_osmand_pro_logo_monotone_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D76F284F86040097CAED /* ic_custom_osmand_pro_logo_monotone_big@2x.png */; };
+		DA04D776284F86060097CAED /* ic_custom_osmand_pro_logo_monotone_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D770284F86040097CAED /* ic_custom_osmand_pro_logo_monotone_big@3x.png */; };
+		DA04D777284F86060097CAED /* ic_custom_zero_downloads_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D771284F86050097CAED /* ic_custom_zero_downloads_big@3x.png */; };
+		DA04D778284F86060097CAED /* ic_custom_zero_downloads_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D772284F86050097CAED /* ic_custom_zero_downloads_big@2x.png */; };
+		DA04D779284F86060097CAED /* ic_custom_five_downloads_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D773284F86050097CAED /* ic_custom_five_downloads_big@3x.png */; };
+		DA04D77A284F86060097CAED /* ic_custom_five_downloads_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D774284F86060097CAED /* ic_custom_five_downloads_big@2x.png */; };
 		DA08A0D2227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
 		DA0C2BDD27EF4B3800B7CC4F /* OAPrepareBackupTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */; };
 		DA0C641821245B4500B2A350 /* et_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641721245B4400B2A350 /* et_tts.js */; };
@@ -4665,6 +4671,12 @@
 		CA4EDFA46B3B672B32035B7F /* OASubscriptionCardView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASubscriptionCardView.mm; sourceTree = "<group>"; };
 		DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_boat@2x.png"; path = "Resources/Icons/ic_custom_boat@2x.png"; sourceTree = "<group>"; };
 		DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_boat@3x.png"; path = "Resources/Icons/ic_custom_boat@3x.png"; sourceTree = "<group>"; };
+		DA04D76F284F86040097CAED /* ic_custom_osmand_pro_logo_monotone_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_pro_logo_monotone_big@2x.png"; path = "Resources/Icons/ic_custom_osmand_pro_logo_monotone_big@2x.png"; sourceTree = "<group>"; };
+		DA04D770284F86040097CAED /* ic_custom_osmand_pro_logo_monotone_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_pro_logo_monotone_big@3x.png"; path = "Resources/Icons/ic_custom_osmand_pro_logo_monotone_big@3x.png"; sourceTree = "<group>"; };
+		DA04D771284F86050097CAED /* ic_custom_zero_downloads_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_zero_downloads_big@3x.png"; path = "Resources/Icons/ic_custom_zero_downloads_big@3x.png"; sourceTree = "<group>"; };
+		DA04D772284F86050097CAED /* ic_custom_zero_downloads_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_zero_downloads_big@2x.png"; path = "Resources/Icons/ic_custom_zero_downloads_big@2x.png"; sourceTree = "<group>"; };
+		DA04D773284F86050097CAED /* ic_custom_five_downloads_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_five_downloads_big@3x.png"; path = "Resources/Icons/ic_custom_five_downloads_big@3x.png"; sourceTree = "<group>"; };
+		DA04D774284F86060097CAED /* ic_custom_five_downloads_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_five_downloads_big@2x.png"; path = "Resources/Icons/ic_custom_five_downloads_big@2x.png"; sourceTree = "<group>"; };
 		DA08A0D1227096DA000A53BA /* offroad.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = offroad.render.xml; path = ../resources/rendering_styles/offroad.render.xml; sourceTree = "<group>"; };
 		DA0C2BDB27EF4B3800B7CC4F /* OAPrepareBackupTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPrepareBackupTask.h; sourceTree = "<group>"; };
 		DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPrepareBackupTask.m; sourceTree = "<group>"; };
@@ -7477,6 +7489,12 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				DA04D774284F86060097CAED /* ic_custom_five_downloads_big@2x.png */,
+				DA04D773284F86050097CAED /* ic_custom_five_downloads_big@3x.png */,
+				DA04D76F284F86040097CAED /* ic_custom_osmand_pro_logo_monotone_big@2x.png */,
+				DA04D770284F86040097CAED /* ic_custom_osmand_pro_logo_monotone_big@3x.png */,
+				DA04D772284F86050097CAED /* ic_custom_zero_downloads_big@2x.png */,
+				DA04D771284F86050097CAED /* ic_custom_zero_downloads_big@3x.png */,
 				B24745AD27F7465B00C18C3F /* ic_custom_air_pressure@2x.png */,
 				B24745AC27F7465A00C18C3F /* ic_custom_air_pressure@3x.png */,
 				B24745A927F7465900C18C3F /* ic_custom_clouds@2x.png */,
@@ -13571,6 +13589,7 @@
 				3296B4A827F8790800108AF7 /* widget_weather_clouds_night@3x.png in Resources */,
 				84EE2DE21AFD149F007C9A94 /* map_banner@3x.png in Resources */,
 				DA52CE0524AE087F00CC309D /* img_help_height_limit_day@3x.png in Resources */,
+				DA04D777284F86060097CAED /* ic_custom_zero_downloads_big@3x.png in Resources */,
 				DAE0834B253F0CFD009B5A11 /* ic_custom_undo@3x.png in Resources */,
 				323BD8E62628850400D255ED /* ic_bg_point_octagon_center@2x.png in Resources */,
 				DA0D1622281BEEF500CEEF58 /* map_turn_roundabout_left@2x.png in Resources */,
@@ -14020,6 +14039,7 @@
 				8458BB971B0F1E7A00738132 /* ic_working_time@3x.png in Resources */,
 				8476E2881F6C1EEC00EC274F /* map_car_location_night@3x.png in Resources */,
 				8A836B5C227B43DF005EE20E /* widget_intermediate_time_day@2x.png in Resources */,
+				DA04D776284F86060097CAED /* ic_custom_osmand_pro_logo_monotone_big@3x.png in Resources */,
 				46453AF028352388001F9A3A /* ic_custom_cloud_upload_colored_day@3x.png in Resources */,
 				DA5A828A26C563A700F274C7 /* OADirectionTableViewCell.xib in Resources */,
 				DA5A827126C563A700F274C7 /* OAShapesTableViewCell.xib in Resources */,
@@ -14075,6 +14095,7 @@
 				323BD9122628850400D255ED /* ic_bg_point_octagon_bottom@3x.png in Resources */,
 				DAC588632108995B008B7763 /* fr_tts.js in Resources */,
 				847777351FAA260E00CA8C1F /* widget_altitude_night@2x.png in Resources */,
+				DA04D779284F86060097CAED /* ic_custom_five_downloads_big@3x.png in Resources */,
 				8476E2801F6C1EEC00EC274F /* map_car_location_lost@2x.png in Resources */,
 				84F3A9241B4E7FBA00D16EBC /* ic_coordinates_disable@2x.png in Resources */,
 				DA0D163F281BEEF500CEEF58 /* map_turn_sharp_right@2x.png in Resources */,
@@ -14696,6 +14717,7 @@
 				84C102721FBDC10800D3E5EE /* warnings_railways@2x.png in Resources */,
 				845E07191B60E72300DFC2A7 /* ic_checkmark_big_enable@3x.png in Resources */,
 				15C428DA24A76F0500B21005 /* img_help_weight_limit_day@3x.png in Resources */,
+				DA04D778284F86060097CAED /* ic_custom_zero_downloads_big@2x.png in Resources */,
 				844E07F11E44D8E900EFC525 /* ic_action_world_globe@2x.png in Resources */,
 				0CBDD0B3245038ED00C94BC2 /* map_marker_direction_arrow_p2_color_pin_3@3x.png in Resources */,
 				843E5D9B1AB341E000BE14BE /* menu_star_icon@3x.png in Resources */,
@@ -14864,6 +14886,7 @@
 				0A832603270BE0E3006B8946 /* OATitleSwitchRoundCell.xib in Resources */,
 				DA5A820D26C563A700F274C7 /* OAProfileAppearanceViewController.xib in Resources */,
 				848F559A1FBB609900CEFB4B /* ic_action_bearing@2x.png in Resources */,
+				DA04D775284F86060097CAED /* ic_custom_osmand_pro_logo_monotone_big@2x.png in Resources */,
 				DA5A827B26C563A700F274C7 /* OATargetInfoCollapsableViewCell.xib in Resources */,
 				158DE48F25AEF31B007C1B57 /* ic_destination_pin_6@3x.png in Resources */,
 				32D253AE27F336C100324717 /* OACloudBackupViewController.xib in Resources */,
@@ -15063,6 +15086,7 @@
 				0A8D1A1326FBA1750042444C /* ic_small_altitude_average@3x.png in Resources */,
 				0A9ED66C27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib in Resources */,
 				8A1CF1E3227ED4A70083A04E /* warnings_tunnel@2x.png in Resources */,
+				DA04D77A284F86060097CAED /* ic_custom_five_downloads_big@2x.png in Resources */,
 				3AFEEE481A0E34FD00900A47 /* menu_cell_pointer@2x.png in Resources */,
 				8AFC2BC924334A4E0095BA9F /* map_location_default_bottom@3x.png in Resources */,
 				DA5A852426C563A900F274C7 /* OALanesControl.xib in Resources */,

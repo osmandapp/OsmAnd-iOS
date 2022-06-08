@@ -783,6 +783,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *useIntermediatePointsNavigation;
 @property (nonatomic) OACommonBoolean *disableOffrouteRecalc;
 @property (nonatomic) OACommonBoolean *disableWrongDirectionRecalc;
+@property (nonatomic) OACommonBoolean *hazmatTransportingEnabled;
 @property (nonatomic) OACommonBoolean *gpxRouteCalcOsmandParts;
 @property (nonatomic) OACommonBoolean *gpxCalculateRtept;
 @property (nonatomic) OACommonBoolean *gpxRouteCalc;

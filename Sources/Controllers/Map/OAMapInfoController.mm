@@ -11,14 +11,12 @@
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
 #import "OARoutingHelper.h"
-#import "OAUtilities.h"
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import "OADayNightHelper.h"
 
 #import "OATextInfoWidget.h"
-#import "OAApplicationMode.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OARouteInfoWidgetsFactory.h"
@@ -35,6 +33,9 @@
 #import "OAUserInteractionPassThroughView.h"
 #import "OAToolbarViewController.h"
 #import "OADownloadMapWidget.h"
+#import "OAWeatherToolbar.h"
+
+#define kWeatherToolbar @"weather_toolbar"
 
 @interface OATextState : NSObject
 
@@ -70,9 +71,12 @@
     OATopTextView *_streetNameView;
     OATopCoordinatesWidget *_topCoordinatesView;
     OADownloadMapWidget *_downloadMapWidget;
+    OAWeatherToolbar *_weatherToolbar;
     OALanesControl *_lanesControl;
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
+
+    NSMutableDictionary<NSString *, NSNumber *> *_bottomWidgetsState;
     
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
@@ -106,7 +110,10 @@
         _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
         _expanded = NO;
         _themeId = -1;
-        
+
+        _bottomWidgetsState = [NSMutableDictionary dictionary];
+        _bottomWidgetsState[kWeatherToolbar] = @(NO);
+
         [self registerAllControls];
         [self recreateControls];
         
@@ -438,6 +445,42 @@
             _downloadMapWidget.frame = CGRectMake(leftOffset, _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 155.);
         }
     }
+
+    if (_weatherToolbar && _weatherToolbar.superview)
+        [self changeWeatherToolbarVisible];
+}
+
+- (void)changeWeatherToolbarVisible
+{
+    BOOL visible = [_mapHudViewController shouldShowWeatherToolbar];
+    if (visible)
+        [self showWeatherToolbar];
+    else
+        [self hideWeatherToolbar];
+}
+
+- (void)showWeatherToolbar
+{
+    if (_weatherToolbar.hidden)
+    {
+        _weatherToolbar.frame = CGRectMake(0., DeviceScreenHeight + 1., DeviceScreenWidth, 200. + [OAUtilities getBottomMargin]);
+        _weatherToolbar.hidden = NO;
+    }
+
+    [UIView animateWithDuration:.3 animations:^{
+        _weatherToolbar.frame = CGRectMake(0, DeviceScreenHeight - 200. - [OAUtilities getBottomMargin], DeviceScreenWidth, 200. + [OAUtilities getBottomMargin]);
+    } completion:nil];
+    [_mapHudViewController showBottomControls:_weatherToolbar.frame.size.height - [OAUtilities getBottomMargin] animated:YES];
+}
+
+- (void)hideWeatherToolbar
+{
+    [UIView animateWithDuration:.3 animations: ^{
+        _weatherToolbar.frame = CGRectMake(0., DeviceScreenHeight + 1., DeviceScreenWidth, 200. + [OAUtilities getBottomMargin]);
+    }                completion:^(BOOL finished) {
+        _weatherToolbar.hidden = YES;
+    }];
+    [_mapHudViewController showBottomControls:0. animated:YES];
 }
 
 - (CGFloat) getLeftBottomY
@@ -458,6 +501,7 @@
     
     [_mapHudViewController setCoordinatesWidget:_topCoordinatesView];
     [_mapHudViewController setDownloadMapWidget:_downloadMapWidget];
+    [_mapHudViewController setWeatherToolbarMapWidget:_weatherToolbar];
 
     [_streetNameView removeFromSuperview];
     [_widgetsView addSubview:_streetNameView];
@@ -601,7 +645,11 @@
     _downloadMapWidget = [[OADownloadMapWidget alloc] init];
     _downloadMapWidget.delegate = self;
     [widgetsToUpdate addObject:_downloadMapWidget];
-    
+
+    _weatherToolbar = [[OAWeatherToolbar alloc] init];
+    _weatherToolbar.delegate = self;
+    [widgetsToUpdate addObject:_weatherToolbar];
+
     _widgetsToUpdate = widgetsToUpdate;
     
     _rulerControl = [ric createRulerControl];

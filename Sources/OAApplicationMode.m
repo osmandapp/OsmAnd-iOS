@@ -92,7 +92,7 @@ static OAApplicationMode *_HORSE;
     [self regWidgetVisibility:@"bgService" am:none];
 
     // bottom
-    [self regWidgetVisibility:@"weather_toolbar" am:none];
+    [self regWidgetVisibility:@"weather_button" am:none];
 }
 
 + (void) initialize

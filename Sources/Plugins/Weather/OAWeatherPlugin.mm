@@ -75,11 +75,11 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         OAMapWidgetRegistry *mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
-        OAMapWidgetRegInfo *weatherToolbarController = [mapWidgetRegistry widgetByKey:@"weather_toolbar"];
+        OAMapWidgetRegInfo *weatherButtonController = [mapWidgetRegistry widgetByKey:@"weather_button"];
 
         if ([self isEnabled])
         {
-            if (!weatherToolbarController)
+            if (!weatherButtonController)
                 [self registerToolbarWidget];
 
             if (!_weatherTempControl)
@@ -103,9 +103,9 @@
         }
         else
         {
-            if (weatherToolbarController)
+            if (weatherButtonController)
             {
-                [mapWidgetRegistry removeSideWidget:@"weather_toolbar"];
+                [mapWidgetRegistry removeSideWidget:@"weather_button"];
                 [mapWidgetRegistry updateVisibleWidgets];
             }
 
@@ -151,7 +151,7 @@
         [mapInfoController registerSideWidget:nil
                                       imageId:@"ic_custom_umbrella"
                                       message:OALocalizedString(@"screen_settings_weather_toolbar")
-                                          key:@"weather_toolbar"
+                                          key:@"weather_button"
                                          left:YES
                                 priorityOrder:8];
         [mapInfoController recreateControls];

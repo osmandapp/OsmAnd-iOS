@@ -15,11 +15,7 @@
 #import "OAIconTitleValueCell.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OAColors.h"
-#import "OAWeatherBand.h"
-#import "OAWeatherHelper.h"
 #import "OAWeatherPlugin.h"
-
-#include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
 #define kLayersSection 1
 #define kContoursSection 2
@@ -28,8 +24,9 @@
 #define kWeather @"weather"
 #define kWeatherContourLines @"weather_contour_lines"
 
-#define kTempContourLines @"weatherTempContours"
-#define kPressureContourLines @"weatherPressureContours"
+@interface OAMapSettingsWeatherScreen () <OAWeatherLayerSettingsDelegate>
+
+@end
 
 @implementation OAMapSettingsWeatherScreen
 {
@@ -124,8 +121,8 @@
         }];
 
     NSString *selectedContourLinesName = OALocalizedString(@"shared_string_none");
-    OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:kTempContourLines];
-    OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:kPressureContourLines];
+    OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR];
+    OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR];
     if ([tempContourLinesParam.value isEqualToString:@"true"])
         selectedContourLinesName = OALocalizedString(@"map_settings_weather_temp");
     else if ([pressureContourLinesParam.value isEqualToString:@"true"])
@@ -300,6 +297,7 @@
     NSDictionary *item = [self getItem:indexPath];
     [vwController hide:YES animated:YES];
     OAWeatherLayerSettingsViewController *vc = [[OAWeatherLayerSettingsViewController alloc] initWithLayerType:[self getWeatherLayerType:item[@"name"]]];
+    vc.delegate = self;
     [OARootViewController.instance.mapPanel showScrollableHudViewController:vc];
 }
 
@@ -343,6 +341,18 @@
         return kLayersHeaderHeight;
     else
         return 36.0;
+}
+
+#pragma mark - OAWeatherLayerSettingsDelegate
+
+- (void)onHideWeatherLayerSettings
+{
+    [[OARootViewController instance].mapPanel showWeatherLayersScreen];
+}
+
+- (void)onDoneWeatherLayerSettings
+{
+
 }
 
 @end

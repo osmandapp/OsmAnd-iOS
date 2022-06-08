@@ -21,7 +21,7 @@
                 <outlet property="searchButton" destination="gMm-Ly-WJo" id="4xn-OZ-rlS"/>
                 <outlet property="statusBarView" destination="lga-DK-9T5" id="i0N-tA-Gsh"/>
                 <outlet property="view" destination="1" id="3"/>
-                <outlet property="weatherToolbarButton" destination="Kft-AO-Hcd" id="8Mb-KG-ple"/>
+                <outlet property="weatherButton" destination="Kft-AO-Hcd" id="8Mb-KG-ple"/>
                 <outlet property="widgetsView" destination="6pw-WI-HAJ" id="vac-Sj-Qjx"/>
                 <outlet property="zoomButtonsView" destination="o72-6U-6Av" id="dzB-hp-3xi"/>
                 <outlet property="zoomInButton" destination="GgY-iA-GiG" id="pBy-3y-5hp"/>
@@ -158,7 +158,7 @@
                         <action selector="onMapModeButtonClicked:" destination="-1" eventType="touchUpInside" id="W5u-0h-muR"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Kft-AO-Hcd" userLabel="weatherToolbarButton" customClass="OAHudButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Kft-AO-Hcd" userLabel="weatherButton" customClass="OAHudButton">
                     <rect key="frame" x="16" y="538" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

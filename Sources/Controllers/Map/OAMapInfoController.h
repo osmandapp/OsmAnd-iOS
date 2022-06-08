@@ -27,6 +27,8 @@
 - (void) registerSideWidget:(OATextInfoWidget *)widget widgetState:(OAWidgetState *)widgetState key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder;
 - (void) removeSideWidget:(OATextInfoWidget *)widget;
 
+- (void) changeWeatherToolbarVisible;
+
 - (CGFloat) getLeftBottomY;
 
 - (void) recreateControls;

@@ -16,7 +16,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="420" height="106"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="sAt-3a-33r" customClass="OASlider">
+                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="sAt-3a-33r" customClass="OASegmentedSlider">
                         <rect key="frame" x="18" y="42" width="384" height="29"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="28" id="Ys9-U6-ax7"/>
@@ -26,11 +26,6 @@
                                 <real key="value" value="2"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
-                        <connections>
-                            <action selector="sliderDidEndEditing:" destination="XBX-Uh-gh9" eventType="touchUpOutside" id="IZB-cd-AIv"/>
-                            <action selector="sliderDidEndEditing:" destination="XBX-Uh-gh9" eventType="touchUpInside" id="i4N-6a-8WM"/>
-                            <action selector="sliderValueChanged:" destination="XBX-Uh-gh9" eventType="valueChanged" id="oI5-fR-toA"/>
-                        </connections>
                     </slider>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sEM-QO-aGw">
                         <rect key="frame" x="20" y="13" width="182" height="22"/>

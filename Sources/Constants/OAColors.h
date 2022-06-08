@@ -212,4 +212,6 @@
 #define color_poi_orange 0xE5FF8800
 #define color_osm_edit 0xE54CAF50
 
+#define color_slider_minimum 0x58555E
+
 #endif /* OAColors_h */

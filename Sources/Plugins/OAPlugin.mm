@@ -294,8 +294,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
     [allPlugins addObject:[[OAOpenPlaceReviews alloc] init]];
     [allPlugins addObject:[[OAMapillaryPlugin alloc] init]];
-    // TODO: add weather
-//    [allPlugins addObject:[[OAWeatherPlugin alloc] init]];
+    [allPlugins addObject:[[OAWeatherPlugin alloc] init]];
 
     [self loadCustomPlugins];
     [self enablePluginsByDefault:enabledPlugins];

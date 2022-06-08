@@ -1710,7 +1710,7 @@
                              self.osmEditing,
                              self.mapillary,
                              self.openPlaceReviews,
-//                             self.weather
+                             self.weather
         ];
 
         self.inAppMaps = @[self.allWorld,

@@ -15,6 +15,7 @@
 @class OAMapRulerView;
 @class OAMapInfoController;
 @class OATopCoordinatesWidget, OADownloadMapWidget;
+@class OAWeatherToolbar;
 
 @interface OAMapHudViewController : UIViewController
 
@@ -27,7 +28,7 @@
 @property (weak, nonatomic) IBOutlet OAHudButton *compassButton;
 @property (weak, nonatomic) IBOutlet UIImageView *compassImage;
 
-@property (weak, nonatomic) IBOutlet OAHudButton *weatherToolbarButton;
+@property (weak, nonatomic) IBOutlet OAHudButton *weatherButton;
 
 @property (weak, nonatomic) IBOutlet UIView *widgetsView;
 @property (weak, nonatomic) IBOutlet UIView *leftWidgetsView;
@@ -51,6 +52,7 @@
 @property (nonatomic) OAMapInfoController *mapInfoController;
 @property (nonatomic) OATopCoordinatesWidget *topCoordinatesWidget;
 @property (nonatomic) OADownloadMapWidget *downloadMapWidget;
+@property (nonatomic) OAWeatherToolbar *weatherToolbar;
 
 @property (nonatomic, assign) BOOL contextMenuMode;
 @property (nonatomic, assign) EOAMapModeButtonType mapModeButtonType;
@@ -64,12 +66,17 @@
 - (void) updateMapRulerData;
 - (void) updateMapRulerDataWithDelay;
 
+- (BOOL) shouldShowWeatherToolbar;
+- (void) changeWeatherToolbarVisible;
+- (void) hideWeatherToolbarIfNeeded;
+
 - (void) setToolbar:(OAToolbarViewController *)toolbarController;
 - (void) updateToolbarLayout:(BOOL)animated;
 - (void) removeToolbar;
 
 - (void) setCoordinatesWidget:(OATopCoordinatesWidget *)widget;
 - (void) setDownloadMapWidget:(OADownloadMapWidget *)widget;
+- (void) setWeatherToolbarMapWidget:(OAWeatherToolbar *)widget;
 
 - (void) updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated;
 

@@ -2371,7 +2371,7 @@
 "start_point" = "Dechrau";
 "shared_string_min_height" = "Uchder isf.";
 "route_line_use_map_style_color" = "Defnddio lliw arferol arddull map (%@).";
-"shared_string_max_height" = "Uchder uch.";
+"shared_string_max_height" = "Uchder uchaf";
 "osmand_cloud_login_descr" = "Rhowch y cyfeiriad e-bost bu i chi ei ddefnyddio i gofrestru. Byddwch yn derbyn negesâ chyfrinair i\'w ddefnyddio unwaith ar gyfer y am nesaf.";
 "verify_email_address_descr" = "Anfonwyd cod dilysu at %@. Rhowch y cod yn y maes isod.";
 "customize_route_line" = "Addasu llinell llwybr";

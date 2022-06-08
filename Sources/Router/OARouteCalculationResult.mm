@@ -505,16 +505,17 @@
             int i = s->getStartPointIndex();
             while (i != s->getEndPointIndex() || routeInd == _segments.size() - 1)
             {
-                if (s->object->hasTrafficLightAt(i))
+                LatLon point = s->getPoint(i);
+                for (OASimulatedLocation *sd in _simulatedLocations)
                 {
-                    LatLon point = s->getPoint(i);
-                    for (OASimulatedLocation *sd in _simulatedLocations)
+                    if ([OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.latitude destination:point.lat] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.longitude destination:point.lon])
                     {
-                        if ([OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.latitude destination:point.lat] &&
-                            [OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.longitude destination:point.lon])
+                        [sd setHighwayType:[NSString stringWithUTF8String:s->object->getHighway().c_str()]];
+                        [sd setSpeedLimit:s->object->getMaximumSpeed(YES)];
+                        if (s->object->hasTrafficLightAt(i))
                         {
                             [sd setTrafficLight:YES];
-                            break;
                         }
                     }
                 }

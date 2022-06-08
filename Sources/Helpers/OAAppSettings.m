@@ -136,6 +136,7 @@
 #define useIntermediatePointsNavigationKey @"useIntermediatePointsNavigation"
 #define disableOffrouteRecalcKey @"disableOffrouteRecalc"
 #define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
+#define hazmatTransportingEnabledKey @"hazmatTransportingEnabled"
 #define routerServiceKey @"routerService"
 #define snapToRoadKey @"snapToRoad"
 #define autoFollowRouteKey @"autoFollowRoute"
@@ -3263,6 +3264,7 @@
     {
         _dayNightHelper = [OADayNightHelper instance];
         _customBooleanRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
+        _customRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
         _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _globalPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _profilePreferences = [NSMapTable strongToStrongObjectsMapTable];
@@ -3621,9 +3623,11 @@
 
         _disableOffrouteRecalc = [OACommonBoolean withKey:disableOffrouteRecalcKey defValue:NO];
         _disableWrongDirectionRecalc = [OACommonBoolean withKey:disableWrongDirectionRecalcKey defValue:NO];
+        _hazmatTransportingEnabled = [OACommonBoolean withKey:hazmatTransportingEnabledKey defValue:NO];
 
         [_profilePreferences setObject:_disableOffrouteRecalc forKey:@"disable_offroute_recalc"];
         [_profilePreferences setObject:_disableWrongDirectionRecalc forKey:@"disable_wrong_direction_recalc"];
+        [_profilePreferences setObject:_hazmatTransportingEnabled forKey:@"hazmat_transporting_enabled"];
 
         _autoFollowRoute = [OACommonInteger withKey:autoFollowRouteKey defValue:0];
         [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode CAR]];

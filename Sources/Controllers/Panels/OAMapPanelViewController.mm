@@ -3848,10 +3848,6 @@ typedef enum
 
 #pragma mark - OAOpenAddTrackDelegate
 
-- (void)closeBottomSheet
-{
-}
-
 - (void)onFileSelected:(NSString *)gpxFileName
 {
     NSString *fullPath = nil;

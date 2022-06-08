@@ -1887,6 +1887,36 @@
 
 @end
 
+@implementation OAOsmandDevelopmentProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_OsmandDevelopment];
+    if (self)
+    {
+        self.free = YES;
+        [self commonInit];
+    }
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_OsmandDevelopment_Default_Price];
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_osmand_development.png";
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_custom_laptop";
+}
+
+@end
+
 @implementation OAAllWorldProduct
 
 - (instancetype) init
@@ -2100,6 +2130,7 @@
 @property (nonatomic) OAProduct *openPlaceReviews;
 @property (nonatomic) OAProduct *weather;
 @property (nonatomic) OAProduct *carplay;
+@property (nonatomic) OAProduct *osmandDevelopment;
 
 @property (nonatomic) OAProduct *allWorld;
 @property (nonatomic) OAProduct *russia;
@@ -2149,6 +2180,7 @@
         self.openPlaceReviews = [[OAOpenPlaceReviewsProduct alloc] init];
         self.weather = [[OAWeatherProduct alloc] init];
         self.carplay = [[OACarPlayProduct alloc] init];
+        self.osmandDevelopment = [[OAOsmandDevelopmentProduct alloc] init];
 
         self.allWorld = [[OAAllWorldProduct alloc] init];
         self.russia = [[OARussiaProduct alloc] init];
@@ -2170,7 +2202,8 @@
                              self.osmEditing,
                              self.mapillary,
                              self.openPlaceReviews,
-                             self.weather
+                             self.weather,
+                             self.osmandDevelopment
         ];
 
         self.inAppMaps = @[self.allWorld,
@@ -2399,6 +2432,13 @@
     if ([self.openPlaceReviews isPurchased])
     {
         OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OpenPlaceReview titleShort:OALocalizedString(@"product_title_openplacereviews") titleWide:OALocalizedString(@"product_title_openplacereviews") imageName:@"ic_custom_mapillary_symbol"];
+        addon.sortIndex = 3;
+        [arr addObject:addon];
+    }
+
+    if ([self.osmandDevelopment isPurchased])
+    {
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OsmandDevelopment titleShort:OALocalizedString(@"product_title_development") titleWide:OALocalizedString(@"product_title_development") imageName:@"ic_custom_laptop"];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }

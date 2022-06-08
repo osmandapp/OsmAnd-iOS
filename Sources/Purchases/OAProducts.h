@@ -48,6 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_DepthContours @"net.osmand.maps.inapp.addon.depth_contours"
 #define kInAppId_Addon_CarPlay @"net.osmand.maps.inapp.addon.carplay"
 #define kInAppId_Addon_Advanced_Widgets @"net.osmand.maps.inapp.addon.advanced_widgets"
+#define kInAppId_Addon_OsmandDevelopment @"net.osmand.maps.inapp.addon.development"
 
 // Addons default prices (EUR)
 #define kInApp_Addon_SkiMap_Default_Price 0.0
@@ -59,6 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInApp_Addon_OsmEditing_Default_Price 0.0
 #define kInApp_Addon_Mapillary_Default_Price 0.0
 #define kInApp_Addon_OpenPlaceReviews_Default_Price 0.0
+#define kInApp_Addon_OsmandDevelopment_Default_Price 0.0
 
 // Subscriptions ids
 #define kSubscriptionId_Osm_Live_Subscription_Monthly @"net.osmand.maps.subscription.monthly"
@@ -326,6 +328,11 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @end
 
 @interface OACarPlayProduct : OAProduct
+
+@end
+
+@interface OAOsmandDevelopmentProduct : OAProduct
+
 @end
 
 // Map regions
@@ -374,6 +381,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) OAProduct *openPlaceReviews;
 @property (nonatomic, readonly) OAProduct *weather;
 @property (nonatomic, readonly) OAProduct *carplay;
+@property (nonatomic, readonly) OAProduct *osmandDevelopment;
 
 @property (nonatomic, readonly) OAProduct *allWorld;
 @property (nonatomic, readonly) OAProduct *russia;

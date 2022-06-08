@@ -2406,7 +2406,7 @@
 "weather_wind_unit_knots" = "Knoten";
 "weather_precip_unit_mm" = "Millimeter";
 "weather_precip_unit_in" = "Zoll";
-"weather_cloud_data_description" = "Die Wetterdaten werden jedes Mal zur Ansicht heruntergeladen.";
+"weather_cloud_data_description" = "Wetterdaten werden jedes Mal für die verwendete Ansicht heruntergeladen.";
 "user_login" = "Anmelden";
 "osmand_cloud_login_descr" = "Bitte geben Sie die E-Mail-Adresse ein, mit der Sie sich registriert haben. An diese wird ein Einmal-Passwort für den nächsten Schritt gesendet.";
 "login_footer_full_text" = "Brauchen Sie Hilfe? Bitte kontaktieren Sie uns unter \nsupport@osmand.net";
@@ -2496,7 +2496,7 @@
 "routeInfo_horse_scale_name" = "Schwierigkeitsgrad von Reitwegen";
 "routeInfo_horse_scale_description" = "Zeige Reitwege abhängig vom Schwierigkeitsgrad an";
 "routing_attr_allow_private_for_truck_name" = "Erlaube Privatzugang (LKW)";
-"routing_attr_allow_private_for_truck_description" = "Erlaube Privatzugang für LKW's";
+"routing_attr_allow_private_for_truck_description" = "Zufahrt zu Privatgrundstücken für Lkw erlauben";
 "copy_address" = "Kopiere Adresse";
 "copy_coordinates" = "Kopiere Koordinaten";
 "toast_empty_name_error" = "Standort ohne Name";

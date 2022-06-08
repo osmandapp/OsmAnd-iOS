@@ -10,7 +10,4 @@
 
 @interface OAPurchasesViewController : OACompoundViewController
 
-@property (nonatomic, assign) BOOL openFromSplash;
-@property (nonatomic, assign) BOOL openFromCustomPlace;
-
 @end

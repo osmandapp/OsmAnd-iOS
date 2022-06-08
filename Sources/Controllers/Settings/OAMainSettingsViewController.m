@@ -367,7 +367,6 @@
     else if ([name isEqualToString:@"purchases"])
     {
         OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-        purchasesViewController.openFromSplash = NO;
         [self.navigationController pushViewController:purchasesViewController animated:YES];
     }
     else if ([name isEqualToString:@"profile_val"] || [name isEqualToString:@"current_profile"])

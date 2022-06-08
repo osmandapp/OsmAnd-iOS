@@ -34,7 +34,7 @@
         
     self.backImageButton.tintColor = UIColorFromRGB(color_primary_purple);
     
-//    [self setUpTableHeaderView];
+    [self setUpTableHeaderView];
     [self generateData];
     
     self.tableView.delegate = self;
@@ -155,14 +155,14 @@
 - (void)getOrRegisterButtonPressed
 {
     OAIAPHelper *iapHelper = OAIAPHelper.sharedInstance;
-    if ([iapHelper subscribedToLiveUpdates])
+    if ([OAIAPHelper isSubscribedToOsmAndPro])
     {
         OACloudAccountCreateViewController *vc = [[OACloudAccountCreateViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
     else
     {
-        [OAChoosePlanHelper showChoosePlanScreenWithProduct:iapHelper.monthlyLiveUpdates navController:self.navigationController];
+        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:self.navigationController];
     }
 }
 

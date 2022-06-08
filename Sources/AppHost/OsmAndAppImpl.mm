@@ -76,6 +76,7 @@
 #define VERSION_4_2 4.2
 
 #define kAppData @"app_data"
+#define kInstallDate @"install_date"
 
 #define _(name)
 @implementation OsmAndAppImpl
@@ -163,6 +164,12 @@
         [defaults registerDefaults:defResetSettings];
         NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
+        NSDate *installDate = [defaults objectForKey:kInstallDate];
+        if (!installDate)
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kInstallDate];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
     }
     return self;
 }

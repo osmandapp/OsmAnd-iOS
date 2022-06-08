@@ -29,6 +29,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OAAutoObserverProxy.h"
+#import "OALinks.h"
 
 #define kMinAllowedZoom 1
 #define kMaxAllowedZoom 22
@@ -186,7 +187,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             @"type" : [OAImageTextViewCell getCellIdentifier],
             @"descr" : OALocalizedString(@"map_settings_slopes_legend"),
             @"img" : @"img_legend_slope",
-            @"url" : @"https://en.wikipedia.org/wiki/Grade_(slope)",
+            @"url" : kUrlWikipediaSlope,
         }];
     }
 
@@ -334,7 +335,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) linkButtonPressed
 {
-    NSURL *url = [NSURL URLWithString:@"https://osmand.net/features/contour-lines-plugin"];
+    NSURL *url = [NSURL URLWithString:kOsmAndFeaturesContourLinesPlugin];
     if ([[UIApplication sharedApplication] canOpenURL:url])
         [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }

@@ -15,6 +15,7 @@
 @required
 
 - (void)onItemSelected:(NSInteger)index;
+- (void)askForPaidProduct:(NSString *)productIdentifier;
 
 @end
 

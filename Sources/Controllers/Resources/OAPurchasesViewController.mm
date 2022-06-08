@@ -128,6 +128,14 @@
             [data addObject:expired];
             [_headers setObject:OALocalizedString(@"expired") forKey:@(data.count - 1)];
         }
+        [data addObject:@[@{
+            @"key": @"explore_osmnad_plans",
+            @"type": [OACardButtonCell getCellIdentifier],
+            @"title": OALocalizedString(@"explore_osmnad_plans_to_find_suitable"),
+            @"button_title": OALocalizedString(@"shared_string_learn_more"),
+            @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
+            @"button_icon_color": UIColorFromRGB(color_primary_purple)
+        }]];
     }
 
     [data addObject:

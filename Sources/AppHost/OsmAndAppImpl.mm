@@ -19,6 +19,7 @@
 #import "OALog.h"
 #import <Reachability.h>
 #import "OAManageResourcesViewController.h"
+#import "OAAppVersionDependentConstants.h"
 #import "OAPOIHelper.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
@@ -77,6 +78,7 @@
 
 #define kAppData @"app_data"
 #define kInstallDate @"install_date"
+#define kNumberOfStarts @"starts_num"
 
 #define _(name)
 @implementation OsmAndAppImpl
@@ -164,12 +166,11 @@
         [defaults registerDefaults:defResetSettings];
         NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
-        NSDate *installDate = [defaults objectForKey:kInstallDate];
-        if (!installDate)
-        {
+        if (![defaults objectForKey:kInstallDate])
             [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kInstallDate];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
+        NSInteger ns = [defaults integerForKey:kNumberOfStarts];
+        ns = ns < 0 ? 0 : ns;
+        [defaults setInteger:++ns forKey:kNumberOfStarts];
     }
     return self;
 }
@@ -338,6 +339,7 @@
                                                          QString::fromNSString(_cachePath),
                                                          QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
                                                          QString::fromNSString(@"http://download.osmand.net"),
+                                                         QString::fromNSString([self generateIndexesUrl]),
                                                          _webClient));
     
     _resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
@@ -383,6 +385,7 @@
     float prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] floatForKey:@"appVersion"] : 0.;
     if (_firstLaunch)
     {
+        [[NSUserDefaults standardUserDefaults] setObject:NSDate.date forKey:kInstallDate];
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         _resourcesManager->installBuiltInTileSources();
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
@@ -405,6 +408,8 @@
         }
         if (prevVersion < VERSION_4_2)
         {
+            [[NSUserDefaults standardUserDefaults] setObject:NSDate.date forKey:kInstallDate];
+            
             [OAGPXDatabase.sharedDb save];
             [OAGPXDatabase.sharedDb load];
 
@@ -575,6 +580,29 @@
     [self askReview];
     
     return YES;
+}
+
+- (NSString *) generateIndexesUrl
+{
+    NSMutableString *res = [NSMutableString stringWithFormat:@"https://download.osmand.net/get_indexes?gzip&osmandver=%@", OAAppVersionDependentConstants.getAppVersionForUrl];
+    NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:kInstallDate];
+    if (installDate)
+    {
+        NSInteger nd = [self daysBetween:installDate date2:NSDate.date];
+        if (nd > 0)
+            [res appendFormat:@"&nd=%ld", nd];
+    }
+    [res appendFormat:@"&ns=%ld", [[NSUserDefaults standardUserDefaults] integerForKey:kNumberOfStarts]];
+    [res appendFormat:@"&aid=%@", [self getUserIosId]];
+    return res;
+}
+
+- (NSInteger) daysBetween:(NSDate *)dt1 date2:(NSDate *)dt2
+{
+    NSUInteger unitFlags = NSCalendarUnitDay;
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *components = [calendar components:unitFlags fromDate:dt1 toDate:dt2 options:0];
+    return [components day] + 1;
 }
 
 - (void) instantiateWeatherResourcesManager
@@ -812,6 +840,7 @@
                                                              QString::fromNSString(_cachePath),
                                                              QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
                                                              QString::fromNSString(@"http://download.osmand.net"),
+                                                             QString::fromNSString([self generateIndexesUrl]),
                                                              _webClient));
     }
     

@@ -82,7 +82,7 @@
 "shared_string_go" = "Mynd";
 "shared_string_info" = "Gwybodaeth";
 "simulate_routing" = "Simulate your position";
-"simulate_navigation" = "Dynwared y llywio";
+"simulate_navigation" = "Efelychu llywio";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
@@ -1675,7 +1675,7 @@
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 "my_location" = "My Location";
 "all_categories" = "All categories";
-"get_unlimited_access" = "Get unlimited access";
+"get_unlimited_access" = "Cael mynediad diderfyn";
 "latitude" = "Lledred";
 "longitude" = "Hydred";
 "track_save_short_q" = "Track is too short, do you want to save?";
@@ -1928,7 +1928,7 @@
 "osm_live_payment_discount_descr" = "Save %@!";
 "osm_live_payment_current_subscription" = "Your current subscription";
 "osm_live_payment_renews_monthly" = "Yn adnewyddu'n fisol";
-"osm_live_payment_renews_quarterly" = "Yn adnewyddu pob chwarter";
+"osm_live_payment_renews_quarterly" = "Yn adnewyddu bob chwarter";
 "osm_live_payment_renews_annually" = "Yn adnewyddu'n flynyddol";
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Select the payment period convenient for you:";
@@ -1948,7 +1948,7 @@
 "index_item_depth_contours_osmand_ext" = "Nautical depth contours";
 "donation_to_osm" = "Donation to OpenStreetMap community";
 "purchase_unlim_title" = "Buy - %@";
-"in_app_purchase" = "In-app purchase";
+"in_app_purchase" = "Prynu o fewn yr ap";
 "in_app_purchase_desc" = "Taliad un tro";
 "in_app_purchase_desc_ex" = "Once purchased, it will be permanently available to you.";
 "unlock_all_features" = "Unlock all OsmAnd features";

@@ -2345,7 +2345,7 @@
 "cloud_email_not_registered" = "Nid yw\'r e-bost hwn wedi\'i gofrestru am OsmAnd Cloud";
 "add_description" = "Ychwanegu disgrifiad";
 "user_login" = "Mewngofnodi";
-"backup_error_user_is_not_registered" = "Does dim defnyddiwr wedi cofrestru gyda'r cyfeiriad e-bost hwnnw";
+"backup_error_user_is_not_registered" = "Dim defnyddiwr wedi cofrestru gyda'r e-bost hwnnw";
 "restore_from_file" = "Adfer o ffeil";
 "cloud_existing_account" = "Mae gen i gyfrif eisoes";
 "cloud_last_backup" = "Copi wrth gefn diwethaf";

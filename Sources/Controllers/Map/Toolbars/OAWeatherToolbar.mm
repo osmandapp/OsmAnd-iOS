@@ -325,6 +325,9 @@
 {
     if (visible == self.hidden)
     {
+        if (visible && [OAUtilities isLandscape])
+            self.topControlsVisibleInLandscape = [[OARootViewController instance].mapPanel isTopControlsVisible];
+
         if (self.delegate)
             [self.delegate widgetVisibilityChanged:self visible:!visible];
 

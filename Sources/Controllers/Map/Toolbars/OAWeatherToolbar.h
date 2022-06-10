@@ -42,4 +42,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarDelegateType)
 
 @interface OAWeatherToolbar : OABaseWidgetView
 
+@property (nonatomic) BOOL topControlsVisibleInLandscape;
+
 @end

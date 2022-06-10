@@ -205,13 +205,13 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 
 - (void) show:(UIViewController *)rootViewController parentViewController:(OADashboardViewController *)parentViewController animated:(BOOL)animated;
 {
-    [[OARootViewController instance].mapPanel.hudViewController hideWeatherToolbarIfNeeded];
-
     _showing = YES;
     if (parentViewController)
         _topControlsVisible = parentViewController.topControlsVisible;
     else
         _topControlsVisible = [[OARootViewController instance].mapPanel isTopControlsVisible];
+
+    [[OARootViewController instance].mapPanel.hudViewController hideWeatherToolbarIfNeeded];
 
     self.parentVC = parentViewController;
     self.showFull = parentViewController.showFull;

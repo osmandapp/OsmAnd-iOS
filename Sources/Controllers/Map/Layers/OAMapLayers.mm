@@ -25,7 +25,7 @@
     self = [super init];
     if (self)
     {
-        _weatherDate = [NSDate date];
+        _weatherDate = [OAUtilities getCurrentDate];
         _mapViewController = mapViewController;
         _mapView = mapViewController.mapView;
         _layers = [NSMapTable strongToStrongObjectsMapTable];

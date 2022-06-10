@@ -605,7 +605,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 NSString *v = p.value.length == 0 ? kDefaultDensity : p.value;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
-                cell.sliderView.numberOfMarks = _visibleDensityValues.count;
+                [cell.sliderView setNumberOfMarks:_visibleDensityValues.count additionalMarksBetween:0];
                 cell.sliderView.selectedMark = [_visibleDensityValues indexOfObject:v];
                 [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside];
@@ -614,7 +614,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 NSString *v = p.value.length == 0 ? kDefaultWidth : p.value;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
-                cell.sliderView.numberOfMarks = _visibleWidthValues.count;
+                [cell.sliderView setNumberOfMarks:_visibleWidthValues.count additionalMarksBetween:0];
                 cell.sliderView.selectedMark = [_visibleWidthValues indexOfObject:v];
                 [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside];

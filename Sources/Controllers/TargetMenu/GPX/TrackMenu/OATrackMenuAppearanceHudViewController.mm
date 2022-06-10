@@ -922,7 +922,7 @@
             cell.topRightLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
             cell.bottomLeftLabel.text = arrayValue.firstObject;
             cell.bottomRightLabel.text = arrayValue.lastObject;
-            cell.sliderView.numberOfMarks = arrayValue.count;
+            [cell.sliderView setNumberOfMarks:arrayValue.count additionalMarksBetween:0];
             cell.sliderView.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;

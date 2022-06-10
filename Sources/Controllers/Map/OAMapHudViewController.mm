@@ -895,8 +895,8 @@
 
     _weatherToolbar = widget;
 
-    if (![self.view.subviews containsObject:_weatherToolbar])
-        [self.view addSubview:_weatherToolbar];
+    if (![_mapPanelViewController.view.subviews containsObject:_weatherToolbar])
+        [_mapPanelViewController.view addSubview:_weatherToolbar];
 }
 
 - (void) updateControlsLayout:(CGFloat)y
@@ -1160,7 +1160,7 @@
 
 - (void) showTopControls:(BOOL)onlyMapSettingsAndSearch
 {
-    CGFloat alphaEx = onlyMapSettingsAndSearch || self.contextMenuMode ? 0.0 : 1.0;
+    CGFloat alphaEx = onlyMapSettingsAndSearch || self.contextMenuMode || (_weatherToolbarVisible && [OAUtilities isLandscape]) ? 0.0 : 1.0;
 
     [UIView animateWithDuration:.3 animations:^{
         
@@ -1246,7 +1246,11 @@
     if (menuHeight > 0)
         topSpace -= menuHeight + kButtonOffset;
 
-    _weatherButton.frame = CGRectMake([self getExtraScreenOffset], topSpace - _weatherButton.bounds.size.height - kButtonOffset - _optionsMenuButton.bounds.size.height, _weatherButton.bounds.size.width, _weatherButton.bounds.size.height);
+    if ([OAUtilities isLandscape])
+        _weatherButton.frame = CGRectMake(self.view.bounds.size.width - 3 * kButtonWidth - 2 * kButtonOffset - [self getExtraScreenOffset], topSpace - _weatherButton.bounds.size.height, _weatherButton.bounds.size.width, _weatherButton.bounds.size.height);
+    else
+        _weatherButton.frame = CGRectMake([self getExtraScreenOffset], topSpace - _weatherButton.bounds.size.height - kButtonOffset - _optionsMenuButton.bounds.size.height, _weatherButton.bounds.size.width, _weatherButton.bounds.size.height);
+
     _optionsMenuButton.frame = CGRectMake([self getExtraScreenOffset], topSpace - _optionsMenuButton.bounds.size.height, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
     _driveModeButton.frame = CGRectMake([self getExtraScreenOffset] + kButtonWidth + kButtonOffset, topSpace - _driveModeButton.bounds.size.height, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
     _mapModeButton.frame = CGRectMake(self.view.bounds.size.width - 2 * kButtonWidth - kButtonOffset - [self getExtraScreenOffset], topSpace - _mapModeButton.bounds.size.height, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);

@@ -2727,6 +2727,8 @@
 "expires" = "Expires";
 "manage_subscription" = "Manage subscription";
 
+"shared_string_now" = "Now";
+
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md

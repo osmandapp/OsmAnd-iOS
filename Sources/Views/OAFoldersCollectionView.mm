@@ -294,8 +294,8 @@
     {
         if (available)
         {
-            [self.foldersDelegate onItemSelected:indexPath.row];
             _selectionIndex = indexPath.row;
+            [self.foldersDelegate onItemSelected:indexPath.row];
         }
         else if ([item.allKeys containsObject:@"product_identifier"])
         {

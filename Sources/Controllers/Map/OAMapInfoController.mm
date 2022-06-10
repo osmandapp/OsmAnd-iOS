@@ -15,7 +15,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import "OADayNightHelper.h"
-
+#import "OASizes.h"
 #import "OATextInfoWidget.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAMapWidgetRegInfo.h"
@@ -447,15 +447,15 @@
     }
 
     if (_weatherToolbar && _weatherToolbar.superview)
-        [self changeWeatherToolbarVisible];
+        [self updateWeatherToolbarVisible];
 }
 
-- (void)changeWeatherToolbarVisible
+- (void)updateWeatherToolbarVisible
 {
     BOOL visible = [_mapHudViewController shouldShowWeatherToolbar];
     if (visible)
         [self showWeatherToolbar];
-    else
+    else if (![_weatherToolbar isHidden])
         [self hideWeatherToolbar];
 }
 
@@ -463,24 +463,100 @@
 {
     if (_weatherToolbar.hidden)
     {
-        _weatherToolbar.frame = CGRectMake(0., DeviceScreenHeight + 1., DeviceScreenWidth, 200. + [OAUtilities getBottomMargin]);
+        _weatherToolbar.frame = [self calculateWeatherToolbarFrameOutScreen];
         _weatherToolbar.hidden = NO;
     }
 
     [UIView animateWithDuration:.3 animations:^{
-        _weatherToolbar.frame = CGRectMake(0, DeviceScreenHeight - 200. - [OAUtilities getBottomMargin], DeviceScreenWidth, 200. + [OAUtilities getBottomMargin]);
+        CGRect frame = _weatherToolbar.frame;
+        if ([OAUtilities isIPad])
+        {
+            frame.size.width = kInfoViewLandscapeWidthPad;
+            if ([OAUtilities isLandscape])
+            {
+                frame.size.height = DeviceScreenHeight;
+                frame.origin = CGPointZero;
+            }
+            else
+            {
+                frame.size.height = 205. + [OAUtilities getBottomMargin];
+                frame.origin = CGPointMake(DeviceScreenWidth / 2 - frame.size.width / 2, DeviceScreenHeight - frame.size.height);
+            }
+        }
+        else
+        {
+            if ([OAUtilities isLandscape])
+            {
+                frame.size.width = DeviceScreenWidth * 0.45;
+                frame.size.height = DeviceScreenHeight;
+                frame.origin = CGPointZero;
+            }
+            else
+            {
+                frame.size.width = DeviceScreenWidth;
+                frame.size.height = 205. + [OAUtilities getBottomMargin];
+                frame.origin = CGPointMake(0., DeviceScreenHeight - frame.size.height);
+            }
+        }
+        _weatherToolbar.frame = frame;
     } completion:nil];
-    [_mapHudViewController showBottomControls:_weatherToolbar.frame.size.height - [OAUtilities getBottomMargin] animated:YES];
+    [_mapHudViewController showBottomControls:[OAUtilities isLandscape] ? 0. :_weatherToolbar.frame.size.height - [OAUtilities getBottomMargin]
+                                     animated:YES];
+    [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+
+    CGFloat height = [OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height;
+    CGFloat leftMargin = [OAUtilities isLandscape]
+            ? _weatherToolbar.frame.size.width - [OAUtilities getLeftMargin] + 20.
+            : _mapHudViewController.driveModeButton.frame.origin.x + _mapHudViewController.driveModeButton.frame.size.width + 16.;
+    [_mapHudViewController updateRulerPosition:[OAUtilities isLandscape] ? 0. : -(height - [OAUtilities getBottomMargin] + 20.)
+                                          left:leftMargin];
 }
 
 - (void)hideWeatherToolbar
 {
     [UIView animateWithDuration:.3 animations: ^{
-        _weatherToolbar.frame = CGRectMake(0., DeviceScreenHeight + 1., DeviceScreenWidth, 200. + [OAUtilities getBottomMargin]);
+        _weatherToolbar.frame = [self calculateWeatherToolbarFrameOutScreen];
     }                completion:^(BOOL finished) {
         _weatherToolbar.hidden = YES;
     }];
     [_mapHudViewController showBottomControls:0. animated:YES];
+    [_mapHudViewController resetToDefaultRulerLayout];
+}
+
+- (CGRect)calculateWeatherToolbarFrameOutScreen
+{
+    CGRect frame = _weatherToolbar.frame;
+    if ([OAUtilities isIPad])
+    {
+        frame.size.width = kInfoViewLandscapeWidthPad;
+        if ([OAUtilities isLandscape])
+        {
+            frame.size.height = DeviceScreenHeight;
+            frame.origin = CGPointMake(-frame.size.width, 0.);
+        }
+        else
+        {
+            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.origin = CGPointMake(0., DeviceScreenHeight + 1.);
+        }
+    }
+    else
+    {
+        if ([OAUtilities isLandscape])
+        {
+            frame.size.width = DeviceScreenWidth * .45;
+            frame.size.height = DeviceScreenHeight;
+            frame.origin = CGPointMake(-frame.size.width, 0.);
+        }
+        else
+        {
+            frame.size.width = DeviceScreenWidth;
+            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.origin = CGPointMake(0., DeviceScreenHeight + 1.);
+        }
+    }
+
+    return frame;
 }
 
 - (CGFloat) getLeftBottomY

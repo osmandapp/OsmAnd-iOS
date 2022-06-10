@@ -183,6 +183,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners;
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners radius:(CGFloat)radius;
 
++ (CGSize) calculateTextBounds:(NSString *)text font:(UIFont *)font;
 + (CGSize) calculateTextBounds:(NSAttributedString *)text width:(CGFloat)width;
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font;
@@ -285,5 +286,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom;
 
 + (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view;
+
++ (NSDate *)getCurrentDate;
 
 @end

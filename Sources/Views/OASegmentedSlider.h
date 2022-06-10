@@ -10,16 +10,13 @@
 
 @interface OASegmentedSlider : OASlider
 
-@property (nonatomic) NSInteger numberOfMarks;
 @property (nonatomic) NSInteger selectedMark;
-
-- (void)setCurrentMark:(NSInteger)currentMark;
+@property (nonatomic) CGFloat currentMarkX;
+@property (nonatomic) CGFloat maximumForCurrentMark;
 
 - (void)setNumberOfMarks:(NSInteger)numberOfMarks
   additionalMarksBetween:(NSInteger)additionalMarksBetween;
 
-- (void)makeCustom:(UIColor *)customMinimumTrackTintColor
-    customMaximumTrackTintColor:(UIColor *)customMaximumTrackTintColor
-         customCurrentMarkColor:(UIColor *)customCurrentMarkColor;
+- (void)makeCustom;
 
 @end

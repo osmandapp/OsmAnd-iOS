@@ -35,7 +35,8 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarDelegateType)
 
 @property (nonatomic, weak) id<OAWeatherToolbarDelegate> delegate;
 
-- (NSArray *)getData;
+- (void)updateData:(BOOL)available date:(NSDate *)date;
+- (NSArray<NSMutableDictionary *> *)getData;
 
 @end
 

@@ -35,8 +35,6 @@
 #import "OADownloadMapWidget.h"
 #import "OAWeatherToolbar.h"
 
-#define kWeatherToolbar @"weather_toolbar"
-
 @interface OATextState : NSObject
 
 @property (nonatomic) BOOL textBold;
@@ -76,8 +74,6 @@
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
 
-    NSMutableDictionary<NSString *, NSNumber *> *_bottomWidgetsState;
-    
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
     OAAutoObserverProxy* _framePreparedObserver;
@@ -110,9 +106,6 @@
         _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
         _expanded = NO;
         _themeId = -1;
-
-        _bottomWidgetsState = [NSMutableDictionary dictionary];
-        _bottomWidgetsState[kWeatherToolbar] = @(NO);
 
         [self registerAllControls];
         [self recreateControls];

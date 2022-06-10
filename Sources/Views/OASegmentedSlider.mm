@@ -559,7 +559,6 @@
 
         _selectingMarkTitle = [[UILabel alloc] initWithFrame:CGRectMake(0., 0., 0., 0.)];
         _selectingMarkTitle.numberOfLines = 1;
-//        _selectingMarkTitle.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         _selectingMarkTitle.font = [UIFont systemFontOfSize:13. weight:UIFontWeightMedium];
         _selectingMarkTitle.backgroundColor = UIColor.clearColor;
 

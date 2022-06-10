@@ -2467,9 +2467,6 @@ typedef enum
 
 - (void) openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu
 {
-    if (self.isNewContextMenuDisabled)
-        return;
-
     double lat = item.latitude;
     double lon = item.longitude;
     

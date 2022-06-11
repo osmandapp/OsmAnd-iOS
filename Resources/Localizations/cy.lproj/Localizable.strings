@@ -2345,7 +2345,7 @@
 "cloud_email_not_registered" = "Nid yw\'r e-bost hwn wedi\'i gofrestru am OsmAnd Cloud";
 "add_description" = "Ychwanegu disgrifiad";
 "user_login" = "Mewngofnodi";
-"backup_error_user_is_not_registered" = "Does dim defnyddiwr wedi cofrestru gyda'r cyfeiriad e-bost hwnnw";
+"backup_error_user_is_not_registered" = "Dim defnyddiwr wedi cofrestru gyda'r e-bost hwnnw";
 "restore_from_file" = "Adfer o ffeil";
 "cloud_existing_account" = "Mae gen i gyfrif eisoes";
 "cloud_last_backup" = "Copi wrth gefn diwethaf";
@@ -2371,7 +2371,7 @@
 "start_point" = "Dechrau";
 "shared_string_min_height" = "Uchder isf.";
 "route_line_use_map_style_color" = "Defnddio lliw arferol arddull map (%@).";
-"shared_string_max_height" = "Uchder uch.";
+"shared_string_max_height" = "Uchder uchaf";
 "osmand_cloud_login_descr" = "Rhowch y cyfeiriad e-bost bu i chi ei ddefnyddio i gofrestru. Byddwch yn derbyn negesâ chyfrinair i\'w ddefnyddio unwaith ar gyfer y am nesaf.";
 "verify_email_address_descr" = "Anfonwyd cod dilysu at %@. Rhowch y cod yn y maes isod.";
 "customize_route_line" = "Addasu llinell llwybr";

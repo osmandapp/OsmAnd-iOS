@@ -2509,3 +2509,10 @@
 "simulation_real_mode_desc" = "• Auf geraden Teilstrecken wird die Geschwindigkeit der maximal erlaubten Geschwindigkeit entsprechen.\n• Bei Kreuzungen wird die Simulation langsamer.\n• Auch Ampeln oder Stopschilder werden berücksichtigt.";
 "simulation_real_mode_title" = "Realistische Simulation";
 "speed_mode" = "Geschwindigkeitsmodus";
+"shared_string_learn_more" = "Mehr Informationen";
+"shared_string_includes" = "Umfasst";
+"shared_string_purchased" = "Gekauft";
+"shared_string_start" = "Start";
+"shared_string_stop" = "Stop";
+"ltr_or_rtl_combine_via_or" = "%@ oder %@";
+"simulate_in_progress" = "Im Gange";

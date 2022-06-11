@@ -1943,3 +1943,4 @@
 "navigate_point_format_MGRS" = "MGRS";
 "shared_string_open_street_map" = "OpenStreetMap";
 "cloud_last_backup" = "上次備份";
+"simulation_real_mode_title" = "逼真模擬";

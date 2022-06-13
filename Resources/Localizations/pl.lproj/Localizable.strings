@@ -2518,3 +2518,5 @@
 "routing_attr_avoid_tunnels_name" = "Bez tuneli";
 "routing_attr_avoid_low_emission_zone_description" = "Omija strefy niskich emisji spalin";
 "routing_attr_avoid_tunnels_description" = "Omija tunele";
+"transport_hazmat_yes_desc" = "Należy wybrać odpowiednią kategorię.";
+"transport_hazmat_no_desc" = "Na niektórych drogach i w tunelach przewożenie materiałów niebezpiecznych jest zabronione.";

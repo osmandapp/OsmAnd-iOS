@@ -2581,3 +2581,4 @@
 "purchases_feature_desc_wikipedia" = "Explora Wikipedia sin conexión. Artículos divididos por países y regiones y disponibles en todos los idiomas.";
 "purchases_feature_desc_wikivoyage" = "Explora Wikiviajes sin conexión. Artículos divididos por países y regiones y disponibles en todos los idiomas.";
 "purchases_feature_desc_terrain" = "Curvas de nivel del terreno, mapa completo de sombreados con tonos oscuros y mapas de pendientes con colores para mostrar picos y tierras bajas.";
+"private_access_routing_req" = "El destino se ubica en un área de acceso privado. ¿Permitir el uso de caminos privados para este viaje?";

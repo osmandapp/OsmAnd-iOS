@@ -80,7 +80,7 @@
         [parametersArr addObject:@{
             @"type" : [OAIconTitleValueCell getCellIdentifier],
             @"title" : [group getText],
-            @"icon" : [group getIcon],
+            @"icon" : [[group getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate],
             @"value" : [group getValue],
             @"param" : group,
             @"key" : @"paramGroup"
@@ -109,7 +109,7 @@
         @"type" : [OAIconTitleValueCell getCellIdentifier],
         @"title" : OALocalizedString(@"recalculate_route"),
         @"value" : descr,
-        @"icon" : [UIImage imageNamed:@"ic_custom_minimal_distance"],
+        @"icon" : [UIImage templateImageNamed:@"ic_custom_minimal_distance"],
         @"key" : @"recalculateRoute",
     }];
     
@@ -132,9 +132,7 @@
             const auto &p = it->second;
             NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
             NSString *group = [NSString stringWithUTF8String:p.group.c_str()];
-            if ([param hasPrefix:@"hazmat"])
-                continue;
-            else if ([param hasPrefix:@"avoid_"])
+            if ([param hasPrefix:@"avoid_"])
                 _avoidParameters.push_back(p);
             else if ([param hasPrefix:@"prefer_"])
                 _preferParameters.push_back(p);
@@ -210,15 +208,26 @@
             }
             else
             {
-                OACommonString *setting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
-                NSString *value = [NSString stringWithUTF8String:p.possibleValueDescriptions[[setting get:self.appMode].intValue].c_str()];
-                [parametersArr addObject:@{
-                    @"type" : [OAIconTitleValueCell getCellIdentifier],
-                    @"title" : [NSString stringWithUTF8String:p.name.c_str()],
-                    @"value" : value,
-                    @"ind" : @(i),
-                    @"key" : @"multiValuePref"
-                }];
+                NSMutableDictionary *parameterDict = [NSMutableDictionary dictionary];
+                parameterDict[@"ind"] = @(i);
+                parameterDict[@"key"] = @"multiValuePref";
+                if ([paramId isEqualToString:kRouteParamIdHazmatCategory])
+                {
+                    OAHazmatRoutingParameter *hazmatCategory = [[OAHazmatRoutingParameter alloc] initWithAppMode:self.appMode];
+                    hazmatCategory.routingParameter = p;
+                    parameterDict[@"param"] = hazmatCategory;
+                }
+                else
+                {
+                    NSString *defaultValue = p.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue;
+                    OACommonString *setting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()]
+                                                                     defaultValue:defaultValue];
+                    parameterDict[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+                    parameterDict[@"title"] = title;
+                    NSString *value = [NSString stringWithUTF8String:p.possibleValueDescriptions[[setting get:self.appMode].intValue].c_str()];
+                    parameterDict[@"value"] = value;
+                }
+                [parametersArr addObject:parameterDict];
             }
         }
         for (OALocalRoutingParameter *p in list)
@@ -228,7 +237,7 @@
                 [parametersArr addObject:@{
                     @"type" : [OAIconTitleValueCell getCellIdentifier],
                     @"title" : [p getText],
-                    @"icon" : [UIImage imageNamed:[self getParameterIcon:[NSString stringWithUTF8String:p.routingParameter.id.c_str()] isSelected:[p isSelected]]],
+                    @"icon" : [UIImage templateImageNamed:[self getParameterIcon:[NSString stringWithUTF8String:p.routingParameter.id.c_str()] isSelected:[p isSelected]]],
                     @"value" : [p getValue],
                     @"param" : p,
                     @"key" : @"paramGroup"
@@ -325,7 +334,8 @@
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *cellType = item[@"type"];
+    OALocalRoutingParameter *param = item[@"param"];
+    NSString *cellType = param ? [param getCellType] : item[@"type"];
     if ([cellType isEqualToString:[OADeviceScreenTableViewCell getCellIdentifier]])
     {
         OADeviceScreenTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADeviceScreenTableViewCell getCellIdentifier]];
@@ -355,14 +365,21 @@
         }
         if (cell)
         {
-            cell.leftIconView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftIconView.tintColor = UIColorFromRGB(_iconColor);
+            cell.leftIconView.image = param && ![item.allKeys containsObject:@"icon"] ? [param getIcon] : item[@"icon"];
+            if (param && ![param isSelected] && ![item.allKeys containsObject:@"icon"])
+                cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+            else
+                cell.leftIconView.tintColor = UIColorFromRGB(_iconColor);
+
             if ([item[@"key"] isEqualToString:@"recalculateRoute"])
-            {
                 cell.leftIconView.tintColor = [_settings.routeRecalculationDistance get:self.appMode] == -1 ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(_iconColor);
-            }
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
+
+            cell.textView.text = param ? [param getText] : item[@"title"];
+            cell.descriptionView.text = param
+                    ? [param isKindOfClass:OAHazmatRoutingParameter.class]
+                            ? OALocalizedString([param isSelected] ? @"shared_string_yes" : @"shared_string_no")
+                            : [param getValue]
+                    : item[@"value"];
         }
         return cell;
     }
@@ -445,12 +462,12 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
+    OALocalRoutingParameter *parameter = item[@"param"];
     NSString *itemKey = item[@"key"];
     if ([itemKey isEqualToString:@"paramGroup"])
     {
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-        OALocalRoutingParameterGroup *group = item[@"param"];
-        [group rowSelectAction:tableView indexPath:indexPath];
+        [parameter rowSelectAction:tableView indexPath:indexPath];
         return;
     }
 
@@ -459,8 +476,10 @@
         settingsViewController = [[OARecalculateRouteViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"avoidRoads"])
         settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:YES];
+    else if ([itemKey isEqualToString:@"multiValuePref"] && parameter)
+        settingsViewController = [[OARouteParameterValuesViewController alloc] initWithRoutingParameter:parameter appMode:self.appMode];
     else if ([itemKey isEqualToString:@"multiValuePref"])
-        settingsViewController = [[OARouteParameterValuesViewController alloc] initWithRoutingParameter:_otherParameters[[item[@"ind"] intValue]] appMode:self.appMode];
+        settingsViewController = [[OARouteParameterValuesViewController alloc] initWithParameter:_otherParameters[[item[@"ind"] intValue]] appMode:self.appMode];
     else if ([itemKey isEqualToString:@"preferRoads"])
         settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:NO];
     else if ([itemKey isEqualToString:@"roadSpeeds"])

@@ -8,7 +8,7 @@
 
 #import "OASubscribeEmailView.h"
 #import "OAColors.h"
-#import "OAUtilities.h"
+#import "OALinks.h"
 #import "Localization.h"
 
 #define kMarginHor 6.0
@@ -76,7 +76,7 @@
         if (attrs[@"NSLink"])
         {
             [titleStr removeAttribute:attrs[@"NSLink"] range:range];
-            [titleStr addAttribute:NSLinkAttributeName value:@"https://osmand.net/giveaway" range:range];
+            [titleStr addAttribute:NSLinkAttributeName value:kOsmAndGiveaway range:range];
             [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromARGB(color_primary_text_light_argb) range:range];
             *stop = YES;
         }

@@ -53,10 +53,10 @@
 #define fullVersionPurchasedKey @"fullVersionPurchasedKey"
 #define depthContoursPurchasedKey @"depthContoursPurchasedKey"
 #define contourLinesPurchasedKey @"contourLinesPurchasedKey"
+#define wikipediaPurchasedKey @"wikipediaPurchasedKey"
 #define emailSubscribedKey @"emailSubscribedKey"
 #define osmandProPurchasedKey @"osmandProPurchasedKey"
 #define osmandMapsPurchasedKey @"osmandMapsPurchasedKey"
-#define displayDonationSettingsKey @"displayDonationSettingsKey"
 #define lastReceiptValidationDateKey @"lastReceiptValidationDateKey"
 #define eligibleForIntroductoryPriceKey @"eligibleForIntroductoryPriceKey"
 #define eligibleForSubscriptionOfferKey @"eligibleForSubscriptionOfferKey"
@@ -137,6 +137,7 @@
 #define useIntermediatePointsNavigationKey @"useIntermediatePointsNavigation"
 #define disableOffrouteRecalcKey @"disableOffrouteRecalc"
 #define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
+#define hazmatTransportingEnabledKey @"hazmatTransportingEnabled"
 #define routerServiceKey @"routerService"
 #define snapToRoadKey @"snapToRoad"
 #define autoFollowRouteKey @"autoFollowRoute"
@@ -3264,6 +3265,7 @@
     {
         _dayNightHelper = [OADayNightHelper instance];
         _customBooleanRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
+        _customRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
         _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _globalPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _profilePreferences = [NSMapTable strongToStrongObjectsMapTable];
@@ -3334,10 +3336,10 @@
         _fullVersionPurchased = [[OACommonBoolean withKey:fullVersionPurchasedKey defValue:NO] makeGlobal];
         _depthContoursPurchased = [[OACommonBoolean withKey:depthContoursPurchasedKey defValue:NO] makeGlobal];
         _contourLinesPurchased = [[OACommonBoolean withKey:contourLinesPurchasedKey defValue:NO] makeGlobal];
+        _wikipediaPurchased = [[OACommonBoolean withKey:wikipediaPurchasedKey defValue:NO] makeGlobal];
         _emailSubscribed = [[OACommonBoolean withKey:emailSubscribedKey defValue:NO] makeGlobal];
         _osmandProPurchased = [[OACommonBoolean withKey:osmandProPurchasedKey defValue:NO] makeGlobal];
         _osmandMapsPurchased = [[OACommonBoolean withKey:osmandMapsPurchasedKey defValue:NO] makeGlobal];
-        _displayDonationSettings = [[NSUserDefaults standardUserDefaults] objectForKey:displayDonationSettingsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:displayDonationSettingsKey] : NO;
         _lastReceiptValidationDate = [[NSUserDefaults standardUserDefaults] objectForKey:lastReceiptValidationDateKey] ? [NSDate dateWithTimeIntervalSince1970:[[NSUserDefaults standardUserDefaults] doubleForKey:lastReceiptValidationDateKey]] : [NSDate dateWithTimeIntervalSince1970:0];
         _eligibleForIntroductoryPrice = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForIntroductoryPriceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForIntroductoryPriceKey] : NO;
         _eligibleForSubscriptionOffer = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForSubscriptionOfferKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForSubscriptionOfferKey] : NO;
@@ -3357,6 +3359,7 @@
         [_globalPreferences setObject:_fullVersionPurchased forKey:@"billing_full_version_purchased"];
         [_globalPreferences setObject:_depthContoursPurchased forKey:@"billing_sea_depth_purchased"];
         [_globalPreferences setObject:_contourLinesPurchased forKey:@"billing_srtm_purchased"];
+        [_globalPreferences setObject:_wikipediaPurchased forKey:@"billing_wiki_purchased"];
         [_globalPreferences setObject:_emailSubscribed forKey:@"email_subscribed"];
         [_globalPreferences setObject:_osmandProPurchased forKey:@"billing_osmand_pro_purchased"];
         [_globalPreferences setObject:_osmandMapsPurchased forKey:@"billing_osmand_maps_purchased"];
@@ -3623,9 +3626,11 @@
 
         _disableOffrouteRecalc = [OACommonBoolean withKey:disableOffrouteRecalcKey defValue:NO];
         _disableWrongDirectionRecalc = [OACommonBoolean withKey:disableWrongDirectionRecalcKey defValue:NO];
+        _hazmatTransportingEnabled = [OACommonBoolean withKey:hazmatTransportingEnabledKey defValue:NO];
 
         [_profilePreferences setObject:_disableOffrouteRecalc forKey:@"disable_offroute_recalc"];
         [_profilePreferences setObject:_disableWrongDirectionRecalc forKey:@"disable_wrong_direction_recalc"];
+        [_profilePreferences setObject:_hazmatTransportingEnabled forKey:@"hazmat_transporting_enabled"];
 
         _autoFollowRoute = [OACommonInteger withKey:autoFollowRouteKey defValue:0];
         [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode CAR]];
@@ -4233,12 +4238,6 @@
 {
     _settingShowAltInDriveMode = settingShowAltInDriveMode;
     [[NSUserDefaults standardUserDefaults] setBool:_settingShowAltInDriveMode forKey:settingMapShowAltInDriveModeKey];
-}
-
-- (void) setDisplayDonationSettings:(BOOL)displayDonationSettings
-{
-    _displayDonationSettings = displayDonationSettings;
-    [[NSUserDefaults standardUserDefaults] setBool:_displayDonationSettings forKey:displayDonationSettingsKey];
 }
 
 - (void) setLastReceiptValidationDate:(NSDate *)lastReceiptValidationDate

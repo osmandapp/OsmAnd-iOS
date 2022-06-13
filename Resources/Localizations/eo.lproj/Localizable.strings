@@ -828,7 +828,7 @@
 "lang_ka" = "Kartvela";
 "lang_kab" = "Kabila";
 "lang_kk" = "Kazaĥa";
-"lang_kn" = "Kannada";
+"lang_kn" = "Kanara";
 "lang_ko" = "Korea";
 "lang_ku" = "Kurda";
 "lang_ky" = "Kirgiza";
@@ -2395,3 +2395,5 @@
 "backup_error_no_valid_subscription" = "Neniu valida abono";
 "rendering_attr_showFitnessTrails_description" = "Montri“vojetojn de sano”";
 "simulation_real_mode_title" = "Realisma";
+"transport_hazmat_yes_desc" = "Elektu ĝustan kategorion.";
+"transport_hazmat_no_desc" = "Sur kelkaj ŝoseoj kaj tuneloj transporto de danĝeraj materialoj estas malpermesata.";

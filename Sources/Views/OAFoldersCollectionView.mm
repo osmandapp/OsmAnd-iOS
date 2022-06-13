@@ -287,11 +287,17 @@
 {
     NSDictionary *item = _data[indexPath.row];
     BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
-    if (available)
+    if (self.foldersDelegate)
     {
-        if (self.foldersDelegate)
+        if (available)
+        {
             [self.foldersDelegate onItemSelected:indexPath.row];
-        _selectionIndex = indexPath.row;
+            _selectionIndex = indexPath.row;
+        }
+        else if ([item.allKeys containsObject:@"product_identifier"])
+        {
+            [self.foldersDelegate askForPaidProduct:item[@"product_identifier"]];
+        }
     }
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }

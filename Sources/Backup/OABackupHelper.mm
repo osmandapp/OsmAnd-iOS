@@ -289,8 +289,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 - (void) checkSubscriptions:(id<OAOnUpdateSubscriptionListener>)listener
 {
-    OAIAPHelper *purchaseHelper = OAIAPHelper.sharedInstance;
-    BOOL subscriptionActive = purchaseHelper.subscribedToLiveUpdates;
+    BOOL subscriptionActive = [OAIAPHelper isSubscribedToOsmAndPro];
     
     
 //        OperationLog operationLog = new OperationLog("checkSubscriptions", DEBUG);

@@ -880,7 +880,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
                               font, NSFontAttributeName, nil];
     
     CGSize size = [text boundingRectWithSize:CGSizeMake(ceil(width), 10000.0)
-                                     options:NSStringDrawingUsesLineFragmentOrigin
+                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
                                   attributes:attrDict context:nil].size;
     
     return CGSizeMake(ceil(size.width), ceil(size.height));

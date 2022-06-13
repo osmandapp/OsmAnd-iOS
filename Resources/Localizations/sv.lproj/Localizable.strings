@@ -2294,7 +2294,7 @@
 "app_mode_subway" = "Tunnelbana";
 "app_mode_horse" = "Häst";
 "app_mode_helicopter" = "Helikopter";
-"app_mode_skiing" = "Skidning";
+"app_mode_skiing" = "Skidåkning";
 "app_mode_personal_transporter" = "Personal transporter";
 "app_mode_monowheel" = "Monowheel";
 "app_mode_scooter" = "Skoter";
@@ -2430,3 +2430,4 @@
 "osmand_cloud_login_descr" = "Vänligen ange den e-postadress du registrerade dig med. Ett engångslösenord för nästa steg kommer att skickas till den.";
 "cloud_view_conflicts" = "Visa konflikter";
 "cloud_restore_now" = "Återställ nu";
+"transport_hazmat_no_desc" = "På vissa vägar och i vissa tunnlar är transport av farligt gods förbjudet.";

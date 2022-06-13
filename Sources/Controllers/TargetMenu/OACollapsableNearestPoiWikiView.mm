@@ -223,18 +223,8 @@
     {
         OAProduct *product = [helper product:kInAppId_Addon_Wiki];
         NSString *price;
-        if (product && product.price)
-        {
-            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-            [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-            [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-            [numberFormatter setLocale:product.priceLocale];
-            price = [numberFormatter stringFromNumber:product.price];
-        }
-        else
-        {
+        if (!product.free)
             price = [OALocalizedString(@"shared_string_buy") upperCase];
-        }
         [_bannerButton setTitle:price forState:UIControlStateNormal];
     }
     

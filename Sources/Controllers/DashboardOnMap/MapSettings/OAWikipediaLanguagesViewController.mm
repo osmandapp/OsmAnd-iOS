@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 
 - (instancetype)initWithLocale:(NSString *)locale title:(NSString *)title checked:(BOOL)checked preferred:(BOOL)preferred
 {
-    self = [super self];
+    self = [super init];
     if (self)
     {
         _locale = locale;

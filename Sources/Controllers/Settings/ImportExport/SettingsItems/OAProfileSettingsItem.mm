@@ -17,6 +17,7 @@
 #import "OAVoiceRouter.h"
 #import "OrderedDictionary.h"
 #import "OAIndexConstants.h"
+#import "OARoutePreferencesParameters.h"
 
 @implementation OAProfileSettingsItem
 {
@@ -134,7 +135,7 @@
             }
             else
             {
-                [[settings getCustomRoutingProperty:paramName defaultValue:param->second.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"] set:obj mode:self.appMode];
+                [[settings getCustomRoutingProperty:paramName defaultValue:param->second.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue] set:obj mode:self.appMode];
             }
         }
     }];
@@ -369,7 +370,7 @@
             }
             else
             {
-                OACommonString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
+                OACommonString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
                 res[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [stringSetting get:self.appMode];
                 
             }

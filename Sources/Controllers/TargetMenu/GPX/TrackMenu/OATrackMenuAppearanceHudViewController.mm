@@ -30,6 +30,8 @@
 #import "OAColoringType.h"
 #import "OsmAndApp.h"
 #import "OAMapPanelViewController.h"
+#import "OAIAPHelper.h"
+#import "OAPluginPopupViewController.h"
 
 #define kColorsSection 1
 
@@ -183,7 +185,7 @@
 //
 //    for (NSString *attribute in attributes)
 //    {
-//        BOOL isAvailable = [OAColoringType.ATTRIBUTE isAvailableForDrawingTrack:self.doc attributeName:attribute];
+//        BOOL isAvailable = [OAIAPHelper isSubscribedToOsmAndPro] &&  [OAColoringType.ATTRIBUTE isAvailableForDrawingTrack:self.doc attributeName:attribute];
 //        OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:OAColoringType.ATTRIBUTE title:OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]) attrName:attribute isActive:isAvailable];
 //        [items addObject:item];
 //
@@ -304,7 +306,8 @@
     {
         [trackColoringTypes addObject:@{
             @"title": item.title,
-            @"available": @(item.isActive)
+            @"available": @(item.isActive),
+            @"product_identifier": kInAppId_Addon_Advanced_Widgets
         }];
     }
 
@@ -1084,6 +1087,11 @@
                     completion:nil];
 }
 
+- (void)askForPaidProduct:(NSString *)productIdentifier
+{
+    [OAPluginPopupViewController askForPlugin:productIdentifier];
+}
+
 #pragma mark - OAColorsTableViewCellDelegate
 
 - (void)colorChanged:(NSInteger)tag
@@ -1187,7 +1195,8 @@
         {
             [newTrackColoringTypes addObject:@{
                     @"title": item.title,
-                    @"available": @(item.isActive)
+                    @"available": @(item.isActive),
+                    @"product_identifier": kInAppId_Addon_Advanced_Widgets
             }];
         }
         [tableData setData:@{

@@ -2588,3 +2588,4 @@
 "new_device_account" = "Yeni aygıt / yeni hesap";
 "manage_subscription" = "Aboneliği yönet";
 "expires" = "Süre sonu";
+"private_access_routing_req" = "Hedefiniz özel erişimi olan bir bölgede bulunmaktadır. Bu yolculuk için özel yollar kullanmaya izin verilsin mi?";

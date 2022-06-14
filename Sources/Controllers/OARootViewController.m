@@ -661,6 +661,7 @@ typedef enum : NSUInteger {
         [self showProgress:EOARestorePurchasesProgressType];
 
     [_iapHelper restoreCompletedTransactions];
+    [_iapHelper checkPromo];
     return YES;
 }
 
@@ -683,13 +684,13 @@ typedef enum : NSUInteger {
 - (void) requestingPurchase:(SKPayment *)payment
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_iapHelper.subscriptionList getPurchasedSubscription])
+        OAProduct *p = [_iapHelper product:payment.productIdentifier];
+        if (p && [p isKindOfClass:OASubscription.class] && [[_iapHelper.subscriptionList getPurchasedSubscriptions] containsObject:(OASubscription *)p])
         {
             [self.class showInfoAlertWithTitle:@"" message:OALocalizedString(@"already_has_subscription") inController:self];
         }
         else
         {
-            OAProduct *p = [_iapHelper product:payment.productIdentifier];
             if (p)
             {
                 if ([p isPurchased])

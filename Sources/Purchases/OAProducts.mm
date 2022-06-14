@@ -613,6 +613,22 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (NSString *) getCancelledTimeId
+{
+    return [NSString stringWithFormat:@"%@_cancell_time", self.productIdentifier];
+}
+
+- (NSTimeInterval) purchaseCancelledTime
+{
+    return [[NSUserDefaults standardUserDefaults] doubleForKey:[self getCancelledTimeId]];
+}
+
+- (void)setPurchaseCancelledTime:(NSTimeInterval)purchaseCancelledTime
+{
+    [[NSUserDefaults standardUserDefaults] setDouble:purchaseCancelledTime forKey:[self getCancelledTimeId]];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (NSNumberFormatter *) getNumberFormatter:(NSLocale *)locale
 {
     if (!_numberFormatter)
@@ -876,6 +892,18 @@
     return NO;
 }
 
+- (NSString *) getOrderId
+{
+    NSData *data = [OAAppSettings.sharedManager.purchasedIdentifiers.get dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error = nil;
+    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+    if (!error)
+    {
+        return result[self.productIdentifier];
+    }
+    return nil;
+}
+
 - (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
     if (self == [OAIAPHelper sharedInstance].mapsAnnually)
@@ -989,13 +1017,14 @@
     return res;
 }
 
-- (OASubscription *) getPurchasedSubscription
+- (NSArray<OASubscription *> *) getPurchasedSubscriptions
 {
+    NSMutableArray<OASubscription *> *res = [NSMutableArray array];
     for (OASubscription *s in [self getAllSubscriptions])
         if ([s isPurchased])
-            return s;
+            [res addObject:s];
 
-    return nil;
+    return res;
 }
 
 - (NSArray<OASubscription *> *) getVisibleSubscriptions

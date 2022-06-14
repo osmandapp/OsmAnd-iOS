@@ -13,6 +13,7 @@
 #import "OAColors.h"
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
+#import "OAIAPHelper.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -47,7 +48,6 @@
 #define billingHideUserNameKey @"billingHideUserNameKey"
 #define billingPurchaseTokenSentKey @"billingPurchaseTokenSentKey"
 #define billingPurchaseTokensSentKey @"billingPurchaseTokensSentKey"
-#define liveUpdatesPurchaseCancelledTimeKey @"liveUpdatesPurchaseCancelledTimeKey"
 #define liveUpdatesPurchaseCancelledFirstDlgShownKey @"liveUpdatesPurchaseCancelledFirstDlgShownKey"
 #define liveUpdatesPurchaseCancelledSecondDlgShownKey @"liveUpdatesPurchaseCancelledSecondDlgShownKey"
 #define fullVersionPurchasedKey @"fullVersionPurchasedKey"
@@ -299,6 +299,8 @@
 #define backupPromocodeStartTimeKey @"backupPromocodeStartTime"
 #define backupPromocodeExpireTimeKey @"backupPromocodeExpireTime"
 #define backupPromocodeStateKey @"backupPromocodeState"
+#define proSubscriptionOriginKey @"proSubscriptionOrigin"
+#define purchaseIdentifiersKey @"purchaseIdentifiers"
 
 #define userIosIdKey @"userIosId"
 
@@ -1891,6 +1893,59 @@
 
 @end
 
+@interface OACommonSubscriptionState ()
+
+@property (nonatomic) OASubscriptionState *defValue;
+
+@end
+
+@implementation OACommonSubscriptionState
+
++ (instancetype) withKey:(NSString *)key defValue:(OASubscriptionState *)defValue
+{
+    OACommonSubscriptionState *obj = [[OACommonSubscriptionState alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (OASubscriptionState *) get
+{
+    return [self get:self.appMode];
+}
+
+- (OASubscriptionState *) get:(OAApplicationMode *)mode
+{
+    NSObject *val = [self getValue:mode];
+    return val ? [OASubscriptionState getByStateStr:(NSString *)val] : self.defValue;
+}
+
+- (void) set:(OASubscriptionState *)state
+{
+    [self set:state mode:self.appMode];
+}
+
+- (void) set:(OASubscriptionState *)state mode:(OAApplicationMode *)mode
+{
+    [self setValue:state.stateStr mode:mode];
+}
+
+- (void) resetToDefault
+{
+    OASubscriptionState *defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (OASubscriptionState *) pDefault;
+
+    [self set:defaultValue];
+}
+
+@end
+
+
 @interface OACommonMapSource ()
 
 @property (nonatomic) OAMapSource *defValue;
@@ -3329,7 +3384,6 @@
         _billingHideUserName = [[OACommonBoolean withKey:billingHideUserNameKey defValue:NO] makeGlobal];
         _billingPurchaseTokenSent = [[OACommonBoolean withKey:billingPurchaseTokenSentKey defValue:NO] makeGlobal];
         _billingPurchaseTokensSent = [[OACommonString withKey:billingPurchaseTokensSentKey defValue:@""] makeGlobal];
-        _liveUpdatesPurchaseCancelledTime = [[OACommonDouble withKey:liveUpdatesPurchaseCancelledTimeKey defValue:0] makeGlobal];
         _liveUpdatesPurchaseCancelledFirstDlgShown = [[OACommonBoolean withKey:liveUpdatesPurchaseCancelledFirstDlgShownKey defValue:NO] makeGlobal];
         _liveUpdatesPurchaseCancelledSecondDlgShown = [[OACommonBoolean withKey:liveUpdatesPurchaseCancelledSecondDlgShownKey defValue:NO] makeGlobal];
         _fullVersionPurchased = [[OACommonBoolean withKey:fullVersionPurchasedKey defValue:NO] makeGlobal];
@@ -3354,7 +3408,6 @@
         [_globalPreferences setObject:_billingPurchaseTokensSent forKey:@"billing_purchase_tokens_sent"];
         [_globalPreferences setObject:_liveUpdatesPurchaseCancelledFirstDlgShown forKey:@"live_updates_cancelled_first_dlg_shown_time"];
         [_globalPreferences setObject:_liveUpdatesPurchaseCancelledSecondDlgShown forKey:@"live_updates_cancelled_second_dlg_shown_time"];
-        [_globalPreferences setObject:_liveUpdatesPurchaseCancelledTime forKey:@"live_updates_purchase_cancelled_time"];
         [_globalPreferences setObject:_fullVersionPurchased forKey:@"billing_full_version_purchased"];
         [_globalPreferences setObject:_depthContoursPurchased forKey:@"billing_sea_depth_purchased"];
         [_globalPreferences setObject:_contourLinesPurchased forKey:@"billing_srtm_purchased"];
@@ -3963,13 +4016,17 @@
         _backupPromocodeActive = [[OACommonBoolean withKey:backupPromocodeActiveKey defValue:NO] makeGlobal];
         _backupPromocodeStartTime = [[OACommonLong withKey:backupPromocodeStartTimeKey defValue:0] makeGlobal];
         _backupPromocodeExpireTime = [[OACommonLong withKey:backupPromocodeExpireTimeKey defValue:0] makeGlobal];
-        _backupPromocodeState = [[OACommonInteger withKey:backupPromocodeStateKey defValue:0] makeGlobal];
+        _backupPromocodeState = [[OACommonSubscriptionState withKey:backupPromocodeStateKey defValue:0] makeGlobal];
+        _proSubscriptionOrigin = [[OACommonInteger withKey:proSubscriptionOriginKey defValue:-1] makeGlobal];
         
         [_globalPreferences setObject:_backupPromocode forKey:@"backup_promocode"];
         [_globalPreferences setObject:_backupPromocodeActive forKey:@"backup_promocode_active"];
         [_globalPreferences setObject:_backupPromocodeStartTime forKey:@"promo_website_start_time"];
         [_globalPreferences setObject:_backupPromocodeExpireTime forKey:@"promo_website_expire_time"];
         [_globalPreferences setObject:_backupPromocodeState forKey:@"promo_website_state"];
+        [_globalPreferences setObject:_proSubscriptionOrigin forKey:@"pro_subscription_origin"];
+        
+        _purchasedIdentifiers = [[OACommonString withKey:purchaseIdentifiersKey defValue:@""] makeGlobal];
 
         _favoritesLastUploadedTime = [[OACommonLong withKey:favoritesLastUploadedTimeKey defValue:0] makeGlobal];
         _backupLastUploadedTime = [[OACommonLong withKey:backupLastUploadedTimeKey defValue:0] makeGlobal];

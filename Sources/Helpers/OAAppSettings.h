@@ -27,7 +27,7 @@
 
 #define kSimMinSpeed 5 / 3.6f
 
-@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration;
+@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
 typedef NS_ENUM(NSInteger, EOARouteService)
 {
@@ -361,6 +361,17 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @end
 
+@interface OACommonSubscriptionState : OACommonPreference
+
++ (instancetype) withKey:(NSString *)key defValue:(OASubscriptionState *)defValue;
+
+- (OASubscriptionState *) get;
+- (OASubscriptionState *) get:(OAApplicationMode *)mode;
+- (void) set:(OASubscriptionState *)state;
+- (void) set:(OASubscriptionState *)state mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OACommonMapSource : OACommonPreference
 
 + (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue;
@@ -677,7 +688,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *billingHideUserName;
 @property (nonatomic) OACommonBoolean *billingPurchaseTokenSent;
 @property (nonatomic) OACommonString *billingPurchaseTokensSent;
-@property (nonatomic) OACommonDouble *liveUpdatesPurchaseCancelledTime;
 @property (nonatomic) OACommonBoolean *liveUpdatesPurchaseCancelledFirstDlgShown;
 @property (nonatomic) OACommonBoolean *liveUpdatesPurchaseCancelledSecondDlgShown;
 @property (nonatomic) OACommonBoolean *fullVersionPurchased;
@@ -1000,7 +1010,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *backupPromocodeActive;
 @property (nonatomic) OACommonLong *backupPromocodeStartTime;
 @property (nonatomic) OACommonLong *backupPromocodeExpireTime;
-@property (nonatomic) OACommonInteger *backupPromocodeState;
+@property (nonatomic) OACommonSubscriptionState *backupPromocodeState;
+@property (nonatomic) OACommonInteger *proSubscriptionOrigin;
+
+@property (nonatomic) OACommonString *purchasedIdentifiers;
 
 @property (nonatomic) OACommonLong *favoritesLastUploadedTime;
 @property (nonatomic) OACommonLong *backupLastUploadedTime;

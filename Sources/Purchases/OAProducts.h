@@ -202,6 +202,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly, nullable) NSString *formattedPrice;
 @property (nonatomic, readonly, nullable) NSDate *expirationDate;
 @property (nonatomic, readonly, nullable) OAFeature *feature;
+@property (nonatomic, assign) NSTimeInterval purchaseCancelledTime;
 
 @property(nonatomic, readonly, nullable) OAProductSubscriptionPeriod *subscriptionPeriod;
 @property(nonatomic, readonly, nullable) OAProductDiscount *introductoryPrice;
@@ -239,6 +240,8 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 - (NSDecimalNumber *) getDefaultMonthlyPrice;
 - (NSAttributedString *) getRenewDescription:(CGFloat)fontSize;
 
+- (NSString *) getOrderId;
+
 @end
 
 @interface OASubscriptionList : NSObject
@@ -249,7 +252,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 
 - (NSArray<OASubscription *> *) getAllSubscriptions;
 - (NSArray<OASubscription *> *) getVisibleSubscriptions;
-- (OASubscription *) getPurchasedSubscription;
+- (NSArray<OASubscription *> *) getPurchasedSubscriptions;
 - (OASubscription * _Nullable) getSubscriptionByIdentifier:(NSString * _Nonnull)identifier;
 - (BOOL) containsIdentifier:(NSString * _Nonnull)identifier;
 - (OASubscription * _Nullable) upgradeSubscription:(NSString *)identifier;

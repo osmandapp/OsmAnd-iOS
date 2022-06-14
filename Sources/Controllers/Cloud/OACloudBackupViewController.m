@@ -14,6 +14,8 @@
 #import "OATwoFilledButtonsTableViewCell.h"
 #import "OALargeImageTitleDescrTableViewCell.h"
 #import "OATitleRightIconCell.h"
+#import "OAIAPHelper.h"
+#import "OABackupHelper.h"
 #import "OAButtonRightIconCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAIconTitleValueCell.h"
@@ -50,6 +52,8 @@
     self.tblView.dataSource = self;
     self.tblView.estimatedRowHeight = 44.;
     self.tblView.rowHeight = UITableViewAutomaticDimension;
+    
+    [OAIAPHelper.sharedInstance checkPromo];
 }
 
 - (void)applyLocalization
@@ -174,6 +178,8 @@
 
 - (IBAction)onSettingsButtonPressed
 {
+    // TODO: remove
+    [OABackupHelper.sharedInstance logout];
 }
 
 - (void)onSetUpBackupButtonPressed

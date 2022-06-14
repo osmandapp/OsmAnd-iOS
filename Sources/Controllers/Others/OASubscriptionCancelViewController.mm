@@ -11,6 +11,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OARootViewController.h"
 #import "OAOsmLiveFeaturesCardView.h"
+#import "OAIAPHelper.h"
 
 #include "Localization.h"
 
@@ -199,10 +200,22 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
 + (BOOL) shouldShowDialog
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSTimeInterval cancelledTime = settings.liveUpdatesPurchaseCancelledTime.get;
+    OAIAPHelper *iapHelper = OAIAPHelper.sharedInstance;
+    NSTimeInterval cancelledTime = 0;
+    NSArray<OASubscription *> *subs = iapHelper.subscriptionList.getPurchasedSubscriptions;
+    NSInteger cancelled = 0;
+    for (OASubscription *sub in subs)
+    {
+        if (sub.purchaseCancelledTime > 0)
+        {
+            cancelled++;
+            cancelledTime = sub.purchaseCancelledTime;
+        }
+    }
+    BOOL allCancelled = subs.count == cancelled;
     BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown.get;
     BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown.get;
-    return cancelledTime > 0 && (!firstTimeShown || ([[[NSDate alloc] init] timeIntervalSince1970] - cancelledTime > kSubscriptionHoldingTimeMsec && !secondTimeShown));
+    return cancelledTime > 0 && allCancelled && (!firstTimeShown || ([[[NSDate alloc] init] timeIntervalSince1970] - cancelledTime > kSubscriptionHoldingTimeMsec && !secondTimeShown));
 }
 
 + (void) showInstance:(UINavigationController *)navigationController

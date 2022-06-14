@@ -21,6 +21,42 @@ UIKIT_EXTERN NSString *const OAIAPRequestPurchaseProductNotification;
 
 typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
+@interface OASubscriptionState : NSObject
+
++ (OASubscriptionState *) UNDEFINED;
++ (OASubscriptionState *) ACTIVE;
++ (OASubscriptionState *) CANCELLED;
++ (OASubscriptionState *) IN_GRACE_PERIOD;
++ (OASubscriptionState *) ON_HOLD;
++ (OASubscriptionState *) PAUSED;
++ (OASubscriptionState *) EXPIRED;
+
++ (OASubscriptionState *) getByStateStr:(NSString *)stateStr;
+
+@property (nonatomic, readonly) NSString *stateStr;
+@property (nonatomic, readonly) NSString *localizedName;
+
+- (BOOL) isGone;
+- (BOOL) isActive;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
+    EOASubscriptionOriginUndefined = -1,
+    EOASubscriptionOriginAndroid,
+    EOASubscriptionOriginPromo,
+    EOASubscriptionOriginIOS
+};
+
+@interface OASubscriptionStateHolder : NSObject
+
+@property (nonatomic) OASubscriptionState *state;
+@property (nonatomic, assign) long startTime;
+@property (nonatomic, assign) long expireTime;
+@property (nonatomic, assign) EOASubscriptionOrigin origin;
+
+@end
+
 @interface OAIAPHelper : NSObject
 
 @property (nonatomic, readonly) OAProduct *skiMap;
@@ -84,6 +120,13 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 - (NSArray<OAProduct *> *) getEverMadeMainPurchases;
 
 - (BOOL) productsLoaded;
+
+- (NSArray *) getSubscriptionStateByOrderId:(NSString *)orderId;
+- (NSString *) getOrderIdByDeviceIdAndToken;
+- (OASubscription *) getAnyPurchasedOsmAndProSubscription;
+
+- (void) onPromoRequested;
+- (void) checkPromo;
 
 + (int) freeMapsAvailable;
 + (void) increaseFreeMapsCount:(int)count;

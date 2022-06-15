@@ -1905,7 +1905,7 @@
 "checking_for_duplicate_description" = "OsmAnd vérifie que l'élément %@ n'existe pas déjà dans l'application. Cela peut prendre un certain temps.";
 "checking_for_duplicates" = "Recherche de doublons...";
 "reset_profile_action_descr" = "Réinitialiser tous les paramètres du profil aux valeurs par défaut de l'installation. Appuyez sur Réinitialiser pour annuler toutes vos modifications, cette action ne peut pas être annulée.";
-"new_plugin_added" = "Nouvel extension ajoutée";
+"new_plugin_added" = "Nouvelle extension ajoutée";
 "preparing_file" = "Préparation du fichier";
 "reading_file" = "Lecture du fichier";
 "extra_maps" = "Cartes supplémentaires";

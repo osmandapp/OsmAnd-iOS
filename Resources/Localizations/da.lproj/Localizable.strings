@@ -2566,3 +2566,4 @@
 "purchases_feature_desc_terrain" = "Terræn-højdekurver, fuldt terrænskyggekort med mørke nuancer samt hældningskort med farver til at vise toppe og lavlandsområder.";
 "quarterly_subscription" = "Kvartalsabonnement";
 "purchases_feature_desc_nautical" = "Få adgang til havdybdeoplysninger";
+"private_access_routing_req" = "Din destination ligger i et område med privat adgang. Tillad at der benyttes private veje til denne tur?";

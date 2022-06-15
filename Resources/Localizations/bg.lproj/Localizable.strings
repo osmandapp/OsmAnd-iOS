@@ -982,7 +982,7 @@
 "profile_prefs_reset_successful" = "Всички настройки на профила са върнати в началното си състояние.";
 "not_available_profile_name" = "Profile with this name already exists.";
 "profile_type_base_string" = "Base profile";
-"selected_profile" = "Selected profile";
+"selected_profile" = "Избран профил";
 "app_profiles" = "Профили в приложението";
 "profile_sett_descr" = "Affect selected application profile";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
@@ -1429,7 +1429,7 @@
 "change_application_profile" = "Change application profile";
 "select_application_profile" = "Select application profile";
 "shared_string_add_profile" = "Add profile";
-"quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
+"quick_action_switch_profile_descr" = "Бутонът за действия превлкючва между избраните профили.";
 "profile_type_user_string" = "User profile";
 "profile_type_osmand_string" = "OsmAnd profile";
 "unsupported_action" = "Unsupported action";

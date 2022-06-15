@@ -444,7 +444,8 @@ typedef enum
 {
     if (_dashboard || !_mapillaryController.view.hidden || (_destinationViewController && _destinationViewController.view.superview))
         return UIStatusBarStyleLightContent;
-    else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
+    else if (_targetMenuView != nil && _targetMenuView.customController != nil &&
+                                        (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
                                         _targetMenuView.targetPoint.type == OATargetRouteDetails ||
                                         _targetMenuView.targetPoint.type == OATargetRouteDetailsGraph ||
                                         _targetMenuView.targetPoint.type == OATargetTransportRouteDetails))
@@ -3746,7 +3747,36 @@ typedef enum
 
 - (void) requestPrivateAccessRouting
 {
-    
+    if (![_settings.forcePrivateAccessRoutingAsked get:[_routingHelper getAppMode]])
+    {
+        OACommonBoolean *allowPrivate = [_settings getCustomRoutingBooleanProperty:@"allow_private" defaultValue:NO];
+        NSArray<OAApplicationMode *> * modes = OAApplicationMode.allPossibleValues;
+        for (OAApplicationMode *mode in modes)
+        {
+            if (![allowPrivate get:mode])
+            {
+                [_settings.forcePrivateAccessRoutingAsked set:YES mode:mode];
+            }
+        }
+        if (![allowPrivate get:[_routingHelper getAppMode]])
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"private_access_routing_req") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleCancel handler:nil]];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                for (OAApplicationMode *mode in modes)
+                {
+                    if (![allowPrivate get:mode])
+                    {
+                        [allowPrivate set:YES mode:mode];
+                    }
+                }
+                [_routingHelper recalculateRouteDueToSettingsChange];
+                
+            }]];
+            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+        }
+    }
 }
 
 - (void) start

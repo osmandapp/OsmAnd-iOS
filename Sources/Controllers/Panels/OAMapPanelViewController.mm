@@ -444,7 +444,8 @@ typedef enum
 {
     if (_dashboard || !_mapillaryController.view.hidden || (_destinationViewController && _destinationViewController.view.superview))
         return UIStatusBarStyleLightContent;
-    else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
+    else if (_targetMenuView != nil && _targetMenuView.customController != nil &&
+                                        (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
                                         _targetMenuView.targetPoint.type == OATargetRouteDetails ||
                                         _targetMenuView.targetPoint.type == OATargetRouteDetailsGraph ||
                                         _targetMenuView.targetPoint.type == OATargetTransportRouteDetails))

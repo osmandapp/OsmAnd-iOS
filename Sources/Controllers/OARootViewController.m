@@ -661,7 +661,7 @@ typedef enum : NSUInteger {
         [self showProgress:EOARestorePurchasesProgressType];
 
     [_iapHelper restoreCompletedTransactions];
-    [_iapHelper checkPromo];
+    [_iapHelper checkBackupPurchase];
     return YES;
 }
 

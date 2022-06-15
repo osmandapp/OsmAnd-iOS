@@ -42,9 +42,9 @@
     self = [super init];
     if (self) {
         [self commonInit];
-        [self generateDataForCrossplatform];
         _isCrossplatform = YES;
-        _isPromo = _settings.proSubscriptionOrigin.get == EOASubscriptionOriginPromo;
+        _isPromo = ((EOASubscriptionOrigin) [_settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
+        [self generateDataForCrossplatform];
     }
     return self;
 }
@@ -182,13 +182,13 @@
     }];
 
     NSString *purchasedType = @"";
-    OASubscriptionState *state = [_settings.backupPromocodeState get];
+    OASubscriptionState *state = [_settings.backupPurchaseState get];
     if (!state.isActive)
         purchasedType = OALocalizedString(@"expired");
     else
         purchasedType = OALocalizedString(@"expires");
 
-    NSDate *expirationDate = [_settings.backupPromocodeExpireTime get] > 0 ? [NSDate dateWithTimeIntervalSince1970:_settings.backupPromocodeExpireTime.get] : nil;
+    NSDate *expirationDate = [_settings.backupPurchaseExpireTime get] > 0 ? [NSDate dateWithTimeIntervalSince1970:_settings.backupPurchaseExpireTime.get] : nil;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterMediumStyle;
 

@@ -1,5 +1,5 @@
 //
-//  OACheckPromoTask.h
+//  OACheckBackupSubscriptionTask.h
 //  OsmAnd Maps
 //
 //  Created by Paul on 09.06.2022.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OACheckPromoTask : NSObject
+@interface OACheckBackupSubscriptionTask : NSObject
 
 - (void) execute:(void(^)(BOOL))onComplete;
 

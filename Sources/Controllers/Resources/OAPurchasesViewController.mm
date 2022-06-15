@@ -79,7 +79,7 @@
     _headers = [NSMapTable new];
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray array];
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    BOOL isProSubscriptionAvailable = [settings.backupPromocodeActive get];
+    BOOL isProSubscriptionAvailable = [settings.backupPurchaseActive get];
     if (activeProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
     {
         [data addObject:@[@{
@@ -112,16 +112,16 @@
                 formatter.dateStyle = NSDateFormatterMediumStyle;
                 NSString *dateString = @"";
                 NSString *datePattern = @"";
-                OASubscriptionState *state = [settings.backupPromocodeState get];
-                BOOL isPromo = [settings.proSubscriptionOrigin get] == EOASubscriptionOriginPromo;
+                OASubscriptionState *state = [settings.backupPurchaseState get];
+                BOOL isPromo = ((EOASubscriptionOrigin) [settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
                 if (state != OASubscriptionState.EXPIRED)
                     datePattern = OALocalizedString(@"expires");
                 else
                     datePattern = OALocalizedString(@"expired");
-                long expiretime = [settings.backupPromocodeExpireTime get];
+                long expiretime = [settings.backupPurchaseExpireTime get];
                 if (expiretime > 0)
                 {
-                    NSDate *expireDate = [NSDate dateWithTimeIntervalSince1970:[settings.backupPromocodeExpireTime get]];
+                    NSDate *expireDate = [NSDate dateWithTimeIntervalSince1970:[settings.backupPurchaseExpireTime get]];
                     dateString = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), datePattern,
                                   expireDate ? [formatter stringFromDate:expireDate] : @""];
                 }

@@ -125,8 +125,8 @@ typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
 - (NSString *) getOrderIdByDeviceIdAndToken;
 - (OASubscription *) getAnyPurchasedOsmAndProSubscription;
 
-- (void) onPromoRequested;
-- (void) checkPromo;
+- (void) onBackupPurchaseRequested;
+- (void) checkBackupPurchase;
 
 + (int) freeMapsAvailable;
 + (void) increaseFreeMapsCount:(int)count;
@@ -137,7 +137,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
 + (BOOL) isSubscribedToMaps;
 + (BOOL) isSubscribedToLiveUpdates;
 + (BOOL) isSubscribedToOsmAndPro;
-+ (BOOL) isSubscribedToPromo;
++ (BOOL) isSubscribedCrossPlatform;
 + (BOOL) isOsmAndProAvailable;
 + (BOOL) isCarPlayAvailable;
 

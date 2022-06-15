@@ -1007,10 +1007,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *backupAccessTokenUpdateTime;
 
 @property (nonatomic) OACommonString *backupPromocode;
-@property (nonatomic) OACommonBoolean *backupPromocodeActive;
-@property (nonatomic) OACommonLong *backupPromocodeStartTime;
-@property (nonatomic) OACommonLong *backupPromocodeExpireTime;
-@property (nonatomic) OACommonSubscriptionState *backupPromocodeState;
+@property (nonatomic) OACommonBoolean *backupPurchaseActive;
+@property (nonatomic) OACommonLong *backupPurchaseStartTime;
+@property (nonatomic) OACommonLong *backupPurchaseExpireTime;
+@property (nonatomic) OACommonSubscriptionState *backupPurchaseState;
 @property (nonatomic) OACommonInteger *proSubscriptionOrigin;
 
 @property (nonatomic) OACommonString *purchasedIdentifiers;

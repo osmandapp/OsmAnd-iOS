@@ -13,7 +13,7 @@
 #import "OANetworkUtilities.h"
 #import "Localization.h"
 #import "OADonationSettingsViewController.h"
-#import "OACheckPromoTask.h"
+#import "OACheckBackupSubscriptionTask.h"
 
 NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequestSucceedNotification";
 NSString *const OAIAPProductsRequestFailedNotification = @"OAIAPProductsRequestFailedNotification";
@@ -158,8 +158,8 @@ static OASubscriptionState *EXPIRED;
     BOOL _wasAddedToQueue;
     BOOL _wasProductListFetched;
     
-    NSTimeInterval _lastPromoCheckTime;
-    BOOL _promoRequested;
+    NSTimeInterval _lastBackupPurchaseCheckTime;
+    BOOL _backupPurchaseRequested;
 }
 
 + (int) freeMapsAvailable
@@ -223,9 +223,9 @@ static OASubscriptionState *EXPIRED;
     return [[OAAppSettings sharedManager].osmandProPurchased get];
 }
 
-+ (BOOL) isSubscribedToPromo
++ (BOOL) isSubscribedCrossPlatform
 {
-    return [[OAAppSettings sharedManager].backupPromocodeActive get];
+    return [[OAAppSettings sharedManager].backupPurchaseActive get];
 }
 
 + (BOOL) isOsmAndProAvailable
@@ -233,7 +233,7 @@ static OASubscriptionState *EXPIRED;
 //#if defined(DEBUG)
 //    return YES;
 //#else
-    return [self isSubscribedToPromo]
+    return [self isSubscribedCrossPlatform]
             || [self isSubscribedToOsmAndPro];
 //#endif
 }
@@ -588,7 +588,7 @@ static OASubscriptionState *EXPIRED;
         [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     }
     
-    [self checkPromoIfNeeded];
+    [self checkBackupPurchaseIfNeeded];
 
     NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 
@@ -1440,9 +1440,9 @@ static OASubscriptionState *EXPIRED;
     return subscriptions.count == 0 ? lastReceiptValidationTimeInterval > kReceiptValidationMaxPeriod : NO;
 }
 
-- (BOOL) needRequestPromo
+- (BOOL) needRequestBackupPurhcase
 {
-    return !_promoRequested || NSDate.date.timeIntervalSince1970 - _lastPromoCheckTime > PURCHASE_VALIDATION_PERIOD_SEC;
+    return !_backupPurchaseRequested || NSDate.date.timeIntervalSince1970 - _lastBackupPurchaseCheckTime > PURCHASE_VALIDATION_PERIOD_SEC;
 }
 
 - (void) getActiveProducts:(RequestActiveProductsCompletionHandler)onComplete
@@ -1785,23 +1785,23 @@ static OASubscriptionState *EXPIRED;
     return orderId;
 }
 
-- (void) onPromoRequested
+- (void) onBackupPurchaseRequested
 {
-    _promoRequested = YES;
-    _lastPromoCheckTime = NSDate.date.timeIntervalSince1970;
+    _backupPurchaseRequested = YES;
+    _lastBackupPurchaseCheckTime = NSDate.date.timeIntervalSince1970;
 }
 
-- (void) checkPromo
+- (void) checkBackupPurchase
 {
-    OACheckPromoTask *t = [[OACheckPromoTask alloc] init];
+    OACheckBackupSubscriptionTask *t = [[OACheckBackupSubscriptionTask alloc] init];
     [t execute:nil];
 }
 
-- (void) checkPromoIfNeeded
+- (void) checkBackupPurchaseIfNeeded
 {
-    if ([self needRequestPromo])
+    if ([self needRequestBackupPurhcase])
     {
-        [self checkPromo];
+        [self checkBackupPurchase];
     }
 }
 

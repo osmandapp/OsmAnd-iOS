@@ -53,7 +53,7 @@
     self.tblView.estimatedRowHeight = 44.;
     self.tblView.rowHeight = UITableViewAutomaticDimension;
     
-    [OAIAPHelper.sharedInstance checkPromo];
+    [OAIAPHelper.sharedInstance checkBackupPurchase];
 }
 
 - (void)applyLocalization

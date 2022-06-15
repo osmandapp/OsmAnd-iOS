@@ -1,16 +1,16 @@
 //
-//  OACheckPromoTask.m
+//  OACheckBackupSubscriptionTask.m
 //  OsmAnd Maps
 //
 //  Created by Paul on 09.06.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OACheckPromoTask.h"
+#import "OACheckBackupSubscriptionTask.h"
 #import "OAIAPHelper.h"
 #import "OAAppSettings.h"
 
-@implementation OACheckPromoTask
+@implementation OACheckBackupSubscriptionTask
 {
     __weak OAIAPHelper *_iapHelper;
     OAAppSettings *_settings;
@@ -41,19 +41,19 @@
     BOOL promoActive = NO;
     NSString *promocode = [_settings.backupPromocode get];
     if (promocode.length > 0)
-        promoActive = [self checkPromoSubscription:promocode];
+        promoActive = [self checkBackupSubscription:promocode];
     if (!promoActive)
     {
         NSString *orderId = [_iapHelper getOrderIdByDeviceIdAndToken];
         if (orderId.length > 0) {
-            promoActive = [self checkPromoSubscription:orderId];
+            promoActive = [self checkBackupSubscription:orderId];
         }
         return promoActive;
     }
     return NO;
 }
 
-- (BOOL) checkPromoSubscription:(NSString *)orderId
+- (BOOL) checkBackupSubscription:(NSString *)orderId
 {
     NSArray *entry = [_iapHelper getSubscriptionStateByOrderId:orderId];
     if (entry)
@@ -62,9 +62,9 @@
         [_settings.proSubscriptionOrigin set:(int) stateHolder.origin];
         if (stateHolder.origin != EOASubscriptionOriginUndefined && stateHolder.origin != EOASubscriptionOriginIOS)
         {
-            [_settings.backupPromocodeState set:stateHolder.state];
-            [_settings.backupPromocodeStartTime set:stateHolder.startTime];
-            [_settings.backupPromocodeExpireTime set:stateHolder.expireTime];
+            [_settings.backupPurchaseState set:stateHolder.state];
+            [_settings.backupPurchaseStartTime set:stateHolder.startTime];
+            [_settings.backupPurchaseExpireTime set:stateHolder.expireTime];
             return stateHolder.state.isActive;
         }
     }
@@ -73,8 +73,8 @@
 
 - (void) onPostExecute:(BOOL)active onComplete:(void(^)(BOOL))onComplete
 {
-    [_iapHelper onPromoRequested];
-    [_settings.backupPromocodeActive set:active];
+    [_iapHelper onBackupPurchaseRequested];
+    [_settings.backupPurchaseActive set:active];
     
     if (onComplete)
         onComplete(active);

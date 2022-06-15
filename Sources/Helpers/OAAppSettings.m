@@ -295,10 +295,10 @@
 #define backupAccessTokenUpdateTimeKey @"backupAccessTokenUpdateTime"
 
 #define backupPromocodeKey @"backupPromocode"
-#define backupPromocodeActiveKey @"backupPromocodeActive"
-#define backupPromocodeStartTimeKey @"backupPromocodeStartTime"
-#define backupPromocodeExpireTimeKey @"backupPromocodeExpireTime"
-#define backupPromocodeStateKey @"backupPromocodeState"
+#define backupPurchaseActiveKey @"backupPurchaseActive"
+#define backupPurchaseStartTimeKey @"backupPurchaseStartTime"
+#define backupPurchaseExpireTimeKey @"backupPurchaseExpireTime"
+#define backupPurchaseStateKey @"backupPurchaseState"
 #define proSubscriptionOriginKey @"proSubscriptionOrigin"
 #define purchaseIdentifiersKey @"purchaseIdentifiers"
 
@@ -4013,17 +4013,17 @@
         [_globalPreferences setObject:_backupAccessTokenUpdateTime forKey:@"backup_access_token_update_time"];
         
         _backupPromocode = [[OACommonString withKey:backupPromocodeKey defValue:@""] makeGlobal];
-        _backupPromocodeActive = [[OACommonBoolean withKey:backupPromocodeActiveKey defValue:NO] makeGlobal];
-        _backupPromocodeStartTime = [[OACommonLong withKey:backupPromocodeStartTimeKey defValue:0] makeGlobal];
-        _backupPromocodeExpireTime = [[OACommonLong withKey:backupPromocodeExpireTimeKey defValue:0] makeGlobal];
-        _backupPromocodeState = [[OACommonSubscriptionState withKey:backupPromocodeStateKey defValue:0] makeGlobal];
+        _backupPurchaseActive = [[OACommonBoolean withKey:backupPurchaseActiveKey defValue:NO] makeGlobal];
+        _backupPurchaseStartTime = [[OACommonLong withKey:backupPurchaseStartTimeKey defValue:0] makeGlobal];
+        _backupPurchaseExpireTime = [[OACommonLong withKey:backupPurchaseExpireTimeKey defValue:0] makeGlobal];
+        _backupPurchaseState = [[OACommonSubscriptionState withKey:backupPurchaseStateKey defValue:0] makeGlobal];
         _proSubscriptionOrigin = [[OACommonInteger withKey:proSubscriptionOriginKey defValue:-1] makeGlobal];
         
         [_globalPreferences setObject:_backupPromocode forKey:@"backup_promocode"];
-        [_globalPreferences setObject:_backupPromocodeActive forKey:@"backup_promocode_active"];
-        [_globalPreferences setObject:_backupPromocodeStartTime forKey:@"promo_website_start_time"];
-        [_globalPreferences setObject:_backupPromocodeExpireTime forKey:@"promo_website_expire_time"];
-        [_globalPreferences setObject:_backupPromocodeState forKey:@"promo_website_state"];
+        [_globalPreferences setObject:_backupPurchaseActive forKey:@"backup_promocode_active"];
+        [_globalPreferences setObject:_backupPurchaseStartTime forKey:@"promo_website_start_time"];
+        [_globalPreferences setObject:_backupPurchaseExpireTime forKey:@"promo_website_expire_time"];
+        [_globalPreferences setObject:_backupPurchaseState forKey:@"promo_website_state"];
         [_globalPreferences setObject:_proSubscriptionOrigin forKey:@"pro_subscription_origin"];
         
         _purchasedIdentifiers = [[OACommonString withKey:purchaseIdentifiersKey defValue:@""] makeGlobal];

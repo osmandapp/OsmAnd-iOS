@@ -189,10 +189,6 @@
 // Resources
 "res_mapsres" = "";
 "download_tab_local" = "本地";
-"res_banner_free_maps_title" = "";
-"res_banner_free_maps_desc" = "";
-"res_banner_no_free_maps_title" = "";
-"res_banner_no_free_maps_desc" = "";
 "res_search_world" = "";
 "res_catalog_upd" = "";
 "res_world_map" = "世界地图";

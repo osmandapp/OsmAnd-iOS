@@ -231,10 +231,6 @@
 // Resources
 "res_mapsres" = "Мапи та ресурси";
 "download_tab_local" = "Локальні";
-"res_banner_free_maps_title" = "Ви маєте %d безплатних мап!";
-"res_banner_free_maps_desc" = "Ви можете завантажити %d безплатних мап, без оновлень";
-"res_banner_no_free_maps_title" = "У вас немає безплатних мап!";
-"res_banner_no_free_maps_desc" = "Будь ласка, купуйте мапи регіону чи мапи усього світу";
 "res_search_world" = "Шукати по всьому світу";
 "res_region_map" = "Мапа області";
 "res_updates_avail" = "Доступні оновлення";

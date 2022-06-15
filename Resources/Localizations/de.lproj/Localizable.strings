@@ -266,13 +266,10 @@
 "product_title_asia" = "Asien";
 "product_desc_asia" = "Unbegrenzte Kartendownloads für Asien";
 "my_location" = "Mein Standort";
-"res_banner_no_free_maps_title" = "Keine weiteren kostenlosen Karten verfügbar!";
-"res_banner_no_free_maps_desc" = "Bitte regionale oder gesamte Weltkarten erwerben";
 "shared_string_buy_for" = "für";
 "all_categories" = "Alle Kategorien";
 "shared_string_or" = "oder";
 "show_info" = "Zeige Info";
-"res_banner_free_maps_desc" = "Download von %d kostenlosen Karten (Updates nicht verfügbar!) möglich";
 "map_settings_avail_lay" = "Verfügbare Ebenen";
 "map_settings_under" = "Unterlagerung";
 "map_settings_over" = "Einblendung";
@@ -290,7 +287,6 @@
 "sett_lang_show_local" = "Lokale Namen anzeigen";
 "prch_nau_q1" = "Bitte schalten Sie den \"Nautischen\" Stil in den Karteneinstellungen ein und installieren Sie die weltweite Basiskarte Seemarken.";
 "prch_nau_q3" = "Du kannst es später installieren über die Karten & Ressourcen.";
-"res_banner_free_maps_title" = "Du hast %d freie Karten!";
 "pickup_car" = "Zum Auto gehen";
 "cannot_add_marker" = "Kann den Parkplatz nicht hinzufügen";
 "cannot_add_marker_desc" = "Bitte mindestens eine Richtung entfernen und nochmal versuchen";

@@ -370,12 +370,15 @@
 
             cell.titleView.text = item[@"title"];
 
-            NSMutableAttributedString *attributedString =
-                    [[NSMutableAttributedString alloc] initWithString:item[@"button_title"]
-                                                           attributes:@{
-                    NSFontAttributeName: [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold]
-            }];
-            [cell.buttonView setAttributedTitle:attributedString forState:UIControlStateNormal];
+            NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:item[@"button_title"]];
+            [buttonTitle addAttribute:NSForegroundColorAttributeName
+                                value:UIColorFromRGB(color_primary_purple)
+                                range:NSMakeRange(0, buttonTitle.string.length)];
+            [buttonTitle addAttribute:NSFontAttributeName
+                                value:[UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
+                                range:NSMakeRange(0, buttonTitle.string.length)];
+            [cell.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
+
             [cell.buttonView setImage:item[@"button_icon"] forState:UIControlStateNormal];
             cell.buttonView.tintColor = [item.allKeys containsObject:@"button_icon_color"] ? item[@"button_icon_color"] : UIColor.blackColor;
 

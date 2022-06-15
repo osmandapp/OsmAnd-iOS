@@ -198,10 +198,6 @@
 // Resources
 "res_mapsres" = "Mapy & Zdroje";
 "download_tab_local" = "Lokálne";
-"res_banner_free_maps_title" = "Máte %d máp zdarma!";
-"res_banner_free_maps_desc" = "Môžete si zadarmo stiahnuť %d máp, bez aktualizácií";
-"res_banner_no_free_maps_title" = "Máte už žiadne voľné mapy!";
-"res_banner_no_free_maps_desc" = "Zakúpte si mapy regiónu alebo všetky mapy sveta";
 "res_search_world" = "Hľadať po celom svete";
 "res_catalog_upd" = "Aktualizácia katalógu";
 "res_world_map" = "Mapa sveta";

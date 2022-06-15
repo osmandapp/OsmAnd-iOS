@@ -154,10 +154,6 @@
 // Resources
 "res_mapsres" = "Térképek és erőforrások";
 "download_tab_local" = "Telepítve";
-"res_banner_free_maps_title" = "Önnek %d ingyenes térképe van!";
-"res_banner_free_maps_desc" = "%d ingyenes térképet tölthet le frissítések nélkül";
-"res_banner_no_free_maps_title" = "Önnek nincs ingyenes térképe!";
-"res_banner_no_free_maps_desc" = "Vásároljon régiótérképeket vagy világtérképeket";
 "res_search_world" = "Keresés világszerte";
 "res_catalog_upd" = "Katalógus-frissítés";
 "res_world_map" = "Világtérkép";

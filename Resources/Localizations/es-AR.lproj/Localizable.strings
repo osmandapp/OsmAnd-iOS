@@ -1112,10 +1112,6 @@
 "osmand_live_update_now" = "Actualizar";
 "osmand_live_updates_size" = "Tamaño de las actualizaciones descargadas";
 "osmand_live_deleted_object" = "Objeto borrado";
-"res_banner_free_maps_title" = "¡Tienes %d mapas gratis!";
-"res_banner_free_maps_desc" = "Puedes descargar %d mapas gratis, sin actualizaciones";
-"res_banner_no_free_maps_title" = "¡No tienes mapas gratis!";
-"res_banner_no_free_maps_desc" = "Compra mapas regionales o todos los mapas mundiales";
 "res_search_world" = "Búsqueda mundial";
 "res_catalog_upd" = "Catálogo actualizado";
 "res_world_map" = "Mapa mundial";

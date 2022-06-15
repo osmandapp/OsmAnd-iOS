@@ -12,7 +12,6 @@
 "rendering_category_details" = "Detalhes";
 "favorite" = "Favorito";
 "rendering_category_transport" = "Transportes públicos";
-"res_banner_free_maps_desc" = "Pode descarregar %d mapas gratuitos, sem atualizações";
 "OsmAnd Maps" = "Mapas OsmAnd";
 // Shared Strings
 "shared_string_back" = "Voltar";
@@ -157,9 +156,6 @@
 // Resources
 "res_mapsres" = "Mapas e recursos";
 "download_tab_local" = "Descarregados";
-"res_banner_free_maps_title" = "Tem %d mapas gratuitos!";
-"res_banner_no_free_maps_title" = "Não tem nenhum mapa gratuito!";
-"res_banner_no_free_maps_desc" = "Por favor, compre mapas da região ou mapas de todo o mundo";
 "res_search_world" = "Pesquisar em todo o mundo";
 "res_catalog_upd" = "Atualização do catálogo";
 "res_world_map" = "Mapa do mundo";

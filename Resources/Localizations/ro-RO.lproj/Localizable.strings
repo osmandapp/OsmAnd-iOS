@@ -1228,8 +1228,6 @@
 "res_region_map" = "Harta regiunii";
 "res_worldwide" = "La nivel mondial";
 "res_search_world" = "Căutare în întreaga lume";
-"res_banner_no_free_maps_desc" = "Vă rugăm să achiziționați hărți regionale sau hărți All World";
-"res_banner_free_maps_desc" = "Puteți descărca %d hărți gratuite, fără actualizări";
 "osmand_live_donation_switch_title" = "Donație către comunitatea OpenStreetMap";
 "osmand_live_donation_header" = "Setări pentru donații";
 "osmand_live_last_changed" = "Ultima modificare a hărții: %@";
@@ -1491,8 +1489,6 @@
 "res_maps_inst" = "hartă(e)";
 "res_world_map" = "Voi actualiza catalogul";
 "res_catalog_upd" = "Actualizare catalog";
-"res_banner_no_free_maps_title" = "Nu aveți hărți gratuite!";
-"res_banner_free_maps_title" = "Aveți %d hărți libere!";
 "osmand_live_deleted_object" = "Obiect șters";
 "osmand_live_updates_size" = "Dimensiunea actualizărilor descărcate";
 "osmand_live_cancel_descr" = "Reînnoiți abonamentul pentru a continua să utilizați întreaga funcționalitate:";

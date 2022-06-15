@@ -160,10 +160,6 @@
 // Resources
 "res_mapsres" = "地圖和資源";
 "download_tab_local" = "本機";
-"res_banner_free_maps_title" = "您尚有 %d 個免費地圖！";
-"res_banner_free_maps_desc" = "您尚可以下載 %d 個免費地圖，無更新";
-"res_banner_no_free_maps_title" = "您已無免費地圖！";
-"res_banner_no_free_maps_desc" = "請購買區域的地圖或全球的地圖";
 "res_search_world" = "搜尋世界各地";
 "res_catalog_upd" = "目錄更新";
 "res_world_map" = "世界地圖";

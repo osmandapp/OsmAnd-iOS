@@ -9,23 +9,14 @@
 #import "OAManageResourcesViewController.h"
 
 #import <Reachability.h>
-#import <UIAlertView+Blocks.h>
-#import <FFCircularProgressView.h>
 #import <MBProgressHUD.h>
 #import <FormatterKit/TTTArrayFormatter.h>
-
-#import "OsmAndApp.h"
-#import "OAAutoObserverProxy.h"
 #import "UITableViewCell+getTableView.h"
 #import "OARootViewController.h"
 #import "OALocalResourceInformationViewController.h"
-#import "OAOsmAndLiveViewController.h"
 #import "OAOutdatedResourcesViewController.h"
-#import "OAWorldRegion.h"
-#import "OALog.h"
 #import "OAOcbfHelper.h"
-#import "OABannerView.h"
-#import "OAUtilities.h"
+#import "OASubscriptionBannerCardView.h"
 #import "OAInAppCell.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
@@ -41,14 +32,9 @@
 #import "OADownloadDescriptionInfo.h"
 #import "OATextViewSimpleCell.h"
 #import "OAMultiIconTextDescCell.h"
-#import "OACustomSourceDetailsViewController.h"
 #import "OAColors.h"
 #import "OANauticalMapsPlugin.h"
-
-#include "Localization.h"
-
-#import "OAPurchasesViewController.h"
-#import "OAPluginsViewController.h"
+#import "Localization.h"
 #import "OAResourcesInstaller.h"
 #import "OAIAPHelper.h"
 #import "OADownloadMultipleResourceViewController.h"
@@ -70,7 +56,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, OABannerViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate>
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -153,13 +139,12 @@ struct RegionResources
     BOOL _doDataUpdateReload;
     
     BOOL _displayBanner;
-    OABannerView *_bannerView;
+    OASubscriptionBannerCardView *_subscriptionBannerView;
     OAFreeMemoryView *_freeMemoryView;
     BOOL _displaySubscribeEmailView;
     OASubscribeEmailView *_subscribeEmailView;
-    NSInteger _bannerSection;
-    NSString *_purchaseInAppId;
-    
+    NSInteger _subscriptionBannerSection;
+
     TTTArrayFormatter *_arrFmt;
 
     BOOL _srtmDisabled;
@@ -304,15 +289,7 @@ static BOOL _lackOfResources;
     _updateCouneView.font = [UIFont systemFontOfSize:12.0];
     _updateCouneView.textAlignment = NSTextAlignmentCenter;
     _updateCouneView.textColor = [UIColor whiteColor];
-    
-    if (_displayBanner)
-    {
-        _bannerView = [[OABannerView alloc] init];
-        _bannerView.delegate = self;
-        [self updateBannerDimensions:DeviceScreenWidth];
-        _bannerView.buttonTitle = OALocalizedString(@"shared_string_buy");
-    }
-    
+
     _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0) localResourcesSize:_totalInstalledSize + _liveUpdatesInstalledSize];
     _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 100.0)];
     _subscribeEmailView.delegate = self;
@@ -354,17 +331,16 @@ static BOOL _lackOfResources;
     }
     
     self.updateButton.hidden = hideUpdateButton;
-    
-    [self updateFreeDownloadsBanner];
-    
-    if (_displayBanner)
-        [self updateBannerDimensions:DeviceScreenWidth];
-    
+
+    if (_displayBanner && !_subscriptionBannerView)
+        [self setupSubscriptionBanner];
+
     [self.tableView reloadData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstallationFailed:) name:OAResourceInstallationFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
@@ -428,16 +404,13 @@ static BOOL _lackOfResources;
     return _tableView;
 }
 
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    if (_displayBanner)
-    {
-        [UIView animateWithDuration:duration animations:^{            
-            [self.tableView beginUpdates];
-            [self updateBannerDimensions:DeviceScreenHeight];
-            [self.tableView endUpdates];
-        }];
-    }
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self setupSubscriptionBanner];
+        [self.tableView reloadData];
+    } completion:nil];
 }
 
 - (BOOL) shouldHideBanner
@@ -482,99 +455,69 @@ static BOOL _lackOfResources;
     }
 }
 
-- (void) updateBannerDimensions:(CGFloat)width
+- (void)setupSubscriptionBanner
 {
-    CGFloat height = [_bannerView getHeightByWidth:width];
-    _bannerView.frame = CGRectMake(_bannerView.frame.origin.x, _bannerView.frame.origin.y, width, height);
-}
+    if (!_displayBanner)
+    {
+        _subscriptionBannerView = nil;
+        return;
+    }
 
-- (void) updateFreeDownloadsBanner
-{
     NSString *title;
-    NSString *desc;
-    NSString *buttonTitle = OALocalizedString(@"shared_string_buy");
-    
-    OAProduct *product;
-    NSString *regionId;
-    
+    NSString *description;
+    NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"get_unlimited_access")];
+    NSString *icon;
+
     if ([self.region isKindOfClass:OACustomRegion.class])
         return;
 
-    if (self.region == _app.worldRegion)
+    int freeMaps = [OAIAPHelper freeMapsAvailable];
+    description = OALocalizedString(@"subscription_banner_free_maps_description");
+
+    if (freeMaps > 0)
     {
-        if (!_displayBannerPurchaseAllMaps)
-        {
-            int freeMaps = [OAIAPHelper freeMapsAvailable];
-            if (freeMaps > 0)
-            {
-                title = [NSString stringWithFormat:OALocalizedString(@"res_banner_free_maps_title"), freeMaps];
-                desc = [NSString stringWithFormat:OALocalizedString(@"res_banner_free_maps_desc"), freeMaps];
-            }
-            else
-            {
-                title = OALocalizedString(@"res_banner_no_free_maps_title");
-                desc = OALocalizedString(@"res_banner_no_free_maps_desc");
-            }
-            buttonTitle = OALocalizedString(@"get_unlimited_access");
-        }
-        else
-        {
-            product = _iapHelper.allWorld;
-        }
+        _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:EOASubscriptionBannerFree];
+
+        title = [NSString stringWithFormat:OALocalizedString(@"subscription_banner_free_maps_title"), freeMaps];
+        icon = @"ic_custom_five_downloads_big";
+        [buttonTitle addAttribute:NSForegroundColorAttributeName
+                            value:UIColorFromRGB(color_banner_button)
+                            range:NSMakeRange(0, buttonTitle.string.length)];
     }
     else
     {
-        // For some reason worldRegion can get corrupred in which case we get an infinite loop here
-        OAWorldRegion *region = self.region;
-        while (region.superregion != _app.worldRegion && region)
-        {
-            region = region.superregion;
-        }
+        _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:EOASubscriptionBannerNoFree];
 
-        if (region)
-            regionId = region.regionId;
-        
-        if ([regionId isEqualToString:OsmAnd::WorldRegions::AntarcticaRegionId.toNSString()])
-            product = _iapHelper.antarctica;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()])
-            product = _iapHelper.africa;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::AsiaRegionId.toNSString()])
-            product = _iapHelper.asia;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()])
-            product = _iapHelper.australia;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()])
-            product = _iapHelper.centralAmerica;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::EuropeRegionId.toNSString()])
-            product = _iapHelper.europe;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()])
-            product = _iapHelper.northAmerica;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()])
-            product = _iapHelper.russia;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()])
-            product = _iapHelper.southAmerica;
+        title = OALocalizedString(@"subscription_banner_no_free_maps_title");
+        icon = @"ic_custom_zero_downloads_big";
+        [buttonTitle addAttribute:NSForegroundColorAttributeName
+                            value:UIColorFromRGB(color_primary_purple)
+                            range:NSMakeRange(0, buttonTitle.string.length)];
     }
+    [buttonTitle addAttribute:NSFontAttributeName
+                        value:[UIFont systemFontOfSize:freeMaps > 0 ? 17. : 15. weight:UIFontWeightSemibold]
+                        range:NSMakeRange(0, buttonTitle.string.length)];
 
-    if (product)
+    _subscriptionBannerView.delegate = self;
+
+    _subscriptionBannerView.titleLabel.text = title;
+    _subscriptionBannerView.descriptionLabel.text = description;
+    [_subscriptionBannerView.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
+    _subscriptionBannerView.iconView.image = [UIImage templateImageNamed:icon];
+
+    [_subscriptionBannerView setNeedsLayout];
+    [_subscriptionBannerView setNeedsDisplay];
+
+    CGRect frame = _subscriptionBannerView.frame;
+    frame.size.width = DeviceScreenWidth;
+    frame.size.height = [_subscriptionBannerView calculateViewHeight:DeviceScreenWidth];
+    _subscriptionBannerView.frame = frame;
+
+    if (_subscriptionBannerSection != -1)
     {
-        _purchaseInAppId = product.productIdentifier;
-        title = product.localizedTitle;
-        if (!product.free)
-        {
-            buttonTitle = OALocalizedString(@"shared_string_buy");
-            desc = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"shared_string_buy"), product.localizedDescription];
-        }
-        else
-        {
-            desc = product.localizedDescription;
-        }
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:_subscriptionBannerSection]
+                      withRowAnimation:UITableViewRowAnimationNone];
     }
-
-    _bannerView.title = title;
-    _bannerView.desc = desc;
-    _bannerView.buttonTitle = buttonTitle;
-
-    [_bannerView setNeedsLayout];
-    [_bannerView setNeedsDisplay];
 }
 
 - (void) resourceInstallationFailed:(NSNotification *)notification
@@ -592,10 +535,8 @@ static BOOL _lackOfResources;
     [self obtainDataAndItems];
     [self prepareContent];
     [self refreshContent:YES];
-    
-    if (_displayBanner)
-        [self updateFreeDownloadsBanner];
-    
+    [self setupSubscriptionBanner];
+
     if (_repositoryUpdating)
     {
         _repositoryUpdating = NO;
@@ -1247,7 +1188,7 @@ static BOOL _lackOfResources;
         _otherMapsSection = -1;
         _nauticalMapsSection = -1;
         _regionMapSection = -1;
-        _bannerSection = -1;
+        _subscriptionBannerSection = -1;
         _subscribeEmailSection = -1;
         _outdatedResourcesSection = -1;
         _localResourcesSection = -1;
@@ -1257,7 +1198,7 @@ static BOOL _lackOfResources;
         _freeMemorySection = -1;
         
         if (_displayBanner)
-            _bannerSection = _lastUnusedSectionIndex++;
+            _subscriptionBannerSection = _lastUnusedSectionIndex++;
         
         if (![self.region isKindOfClass:OACustomRegion.class])
             _freeMemorySection = _lastUnusedSectionIndex++;
@@ -1730,8 +1671,8 @@ static BOOL _lackOfResources;
     if ([self isFiltering])
         return nil;
 
-    if (section == _bannerSection)
-        return _bannerView;
+    if (section == _subscriptionBannerSection)
+        return _subscriptionBannerView;
 
     if (section == _freeMemorySection)
         return _freeMemoryView;
@@ -1747,8 +1688,8 @@ static BOOL _lackOfResources;
     if ([self isFiltering] || (_downloadDescriptionInfo && section == _downloadDescriptionSection))
         return 0.0;
 
-    if (section == _bannerSection)
-        return _bannerView.bounds.size.height;
+    if (section == _subscriptionBannerSection)
+        return _subscriptionBannerView.bounds.size.height;
 
     if (section == _freeMemorySection)
         return _freeMemoryView.bounds.size.height;
@@ -1772,7 +1713,7 @@ static BOOL _lackOfResources;
 
     NSInteger sectionsCount = 0;
 
-    if (_bannerSection >= 0)
+    if (_subscriptionBannerSection >= 0)
         sectionsCount++;
     if (_subscribeEmailSection >= 0)
         sectionsCount++;
@@ -1805,7 +1746,7 @@ static BOOL _lackOfResources;
     if ([self isFiltering])
         return [_searchResults count];
 
-    if (section == _bannerSection)
+    if (section == _subscriptionBannerSection)
         return 0;
     if (section == _freeMemorySection)
         return 0;
@@ -3163,37 +3104,30 @@ static BOOL _lackOfResources;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-#pragma mark OABannerViewDelegate
+#pragma mark - OASubscriptionBannerCardViewDelegate
 
-- (void) bannerButtonPressed
+- (void) onButtonPressed
 {
-    [OAAnalyticsHelper logEvent:@"subscribe_email_pressed"];
-
-    if (self.region == _app.worldRegion && !_displayBannerPurchaseAllMaps)
-    {
-        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.UNLIMITED_MAP_DOWNLOADS navController:self.navigationController];
-        /*
-        _displayBannerPurchaseAllMaps = YES;
-        [self updateFreeDownloadsBanner];
-        [_tableView beginUpdates];
-        [self updateBannerDimensions:DeviceScreenWidth];
-        [_tableView endUpdates];
-        */
-    }
-    else if (_purchaseInAppId)
-    {
-        [OAChoosePlanHelper showChoosePlanScreenWithProduct:[_iapHelper product:_purchaseInAppId] navController:self.navigationController];
-    }
+    [OAAnalyticsHelper logEvent:@"subscription_pressed"];
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.UNLIMITED_MAP_DOWNLOADS navController:self.navigationController];
 }
 
 - (void) productsRequested:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateFreeDownloadsBanner];
+        [self setupSubscriptionBanner];
+        [self.tableView reloadData];
     });
 }
 
 - (void) productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateContentIfNeeded];
+    });
+}
+
+- (void) productRestored:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateContentIfNeeded];

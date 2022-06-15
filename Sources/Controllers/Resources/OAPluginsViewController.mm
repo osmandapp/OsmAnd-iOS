@@ -9,21 +9,14 @@
 #import "OAPluginsViewController.h"
 #import "OAIAPHelper.h"
 #import "OAInAppCell.h"
-#import <StoreKit/StoreKit.h>
-#import "OALog.h"
 #import "OAResourcesBaseViewController.h"
-#import "OAPurchasesViewController.h"
-#import "OsmAndApp.h"
 #include "Localization.h"
-#import "OAUtilities.h"
 #import "OAPluginDetailsViewController.h"
 #import "OAPluginPopupViewController.h"
-#import <Reachability.h>
 #import "OASizes.h"
-#import "OAOsmLiveBannerView.h"
+#import "OASubscriptionBannerCardView.h"
 #import "OAChoosePlanHelper.h"
 #import "OARootViewController.h"
-#import "OAChoosePlanHelper.h"
 #import "OAQuickActionRegistry.h"
 #import "OAPlugin.h"
 #import "OACustomPlugin.h"
@@ -32,7 +25,7 @@
 #define kDefaultPluginsSection 0
 #define kCustomPluginsSection 1
 
-@interface OAPluginsViewController ()<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, OAOsmLiveBannerViewDelegate>
+@interface OAPluginsViewController () <UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, OASubscriptionBannerCardViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -46,8 +39,8 @@
 @implementation OAPluginsViewController
 {
     OAIAPHelper *_iapHelper;
-    OAOsmLiveBannerView *_osmLiveBanner;
-    
+    OASubscriptionBannerCardView *_subscriptionBannerView;
+
     NSArray<OACustomPlugin *> *_customPlugins;
     
     CALayer *_horizontalLine;
@@ -71,8 +64,13 @@
     [super viewWillLayoutSubviews];
 
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
-    [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
-    self.tableView.tableHeaderView = _osmLiveBanner;
+
+    if (_subscriptionBannerView)
+    {
+        CGRect frame = _subscriptionBannerView.frame;
+        frame.size = CGSizeMake(DeviceScreenWidth, [_subscriptionBannerView calculateViewHeight:DeviceScreenWidth]);
+        _subscriptionBannerView.frame = frame;
+    }
 }
 
 - (UIView *) getTopView
@@ -102,11 +100,14 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
 
     _customPlugins = [OAPlugin getCustomPlugins];
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
 
-    [self updateOsmLiveBanner];
+    [self setupSubscriptionBanner];
+    self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
+
     [self applySafeAreaMargins];
     [self.tableView reloadData];
 }
@@ -116,24 +117,48 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void) updateOsmLiveBanner
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self setupSubscriptionBanner];
+        self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
+- (void)setupSubscriptionBanner
 {
     if (![OAIAPHelper isPaidVersion])
     {
-        OASubscription *cheapest = [_iapHelper getCheapestMonthlySubscription];
-        if (cheapest && cheapest.formattedPrice)
-        {
-            NSString *minPriceStr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_month_cost_descr"), cheapest.formattedMonthlyPrice];
-            _osmLiveBanner = [OAOsmLiveBannerView bannerWithType:EOAOsmLiveBannerUnlockAll minPriceStr:minPriceStr];
-            _osmLiveBanner.delegate = self;
-            [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
-        }
+        _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:EOASubscriptionBannerUpdates];
+        _subscriptionBannerView.delegate = self;
+
+        _subscriptionBannerView.titleLabel.text = OALocalizedString(@"subscription_banner_osmand_pro_title");
+        _subscriptionBannerView.iconView.image = [UIImage templateImageNamed:@"ic_custom_osmand_pro_logo_monotone_big"];
+        _subscriptionBannerView.iconView.tintColor = UIColorFromRGB(color_banner_button);
+
+        NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"purchase_get")];
+        [buttonTitle addAttribute:NSForegroundColorAttributeName
+                            value:UIColorFromRGB(color_primary_purple)
+                            range:NSMakeRange(0, buttonTitle.string.length)];
+        [buttonTitle addAttribute:NSFontAttributeName
+                            value:[UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
+                            range:NSMakeRange(0, buttonTitle.string.length)];
+        [_subscriptionBannerView.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
+
+        [_subscriptionBannerView setNeedsLayout];
+        [_subscriptionBannerView setNeedsDisplay];
+
+        CGRect frame = _subscriptionBannerView.frame;
+        frame.size.width = DeviceScreenWidth;
+        frame.size.height = [_subscriptionBannerView calculateViewHeight:DeviceScreenWidth];
+        _subscriptionBannerView.frame = frame;
     }
     else
     {
-        _osmLiveBanner = nil;
+        _subscriptionBannerView = nil;
     }
-    self.tableView.tableHeaderView = _osmLiveBanner;
 }
 
 #pragma mark - UITableViewDataSource
@@ -319,13 +344,22 @@
 {
     NSString * identifier = notification.object;
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [self updateOsmLiveBanner];
+        [self setupSubscriptionBanner];
+        self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
         [self.tableView reloadData];
-        
+
         OAProduct *product = [_iapHelper product:identifier];
         if (product)
             [OAPluginPopupViewController showProductAlert:product afterPurchase:YES];
+    });
+}
+
+- (void) productRestored:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupSubscriptionBanner];
+        self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
+        [self.tableView reloadData];
     });
 }
 
@@ -334,9 +368,9 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark OAOsmLiveBannerViewDelegate
+#pragma mark - OASubscriptionBannerCardViewDelegate
 
-- (void) osmLiveBannerPressed
+- (void) onButtonPressed
 {
     [OAChoosePlanHelper showChoosePlanScreen:self.navigationController];
 }

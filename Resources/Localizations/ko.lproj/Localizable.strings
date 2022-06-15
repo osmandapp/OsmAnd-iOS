@@ -155,7 +155,6 @@
 "driving_region_us" = "미국";
 "driving_region_europe_asia" = "유럽, 아시아, 라틴 아메리카 및 유사";
 "region_central_america" = "중앙 아메리카";
-"res_banner_no_free_maps_desc" = "지역 지도 또는 모든 세계 지도를 구입";
 "region_asia" = "아시아";
 
 // World Regions
@@ -485,7 +484,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "노드 네트워크 유형(국제, 지역, 로컬)에 따른 색상 경로다.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "네트워크 계열별 색상이다.";
 "res_updates_no_space" = "공간이 부족하여 %d 업데이트를 설치할 수 없습니다. %@가 필요합니다. 저장공간을 확보해주세요.";
-"res_banner_free_maps_desc" = "업데이트 없이 %d개의 무료 맵을 다운로드할 수 있음";
 "res_size" = "크기";
 "res_created_on" = "작성 날짜";
 "res_update_all" = "모두 업데이트";

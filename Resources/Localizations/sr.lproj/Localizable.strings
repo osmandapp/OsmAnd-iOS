@@ -1112,10 +1112,6 @@
 "osmand_live_update_now" = "Ажурирај сада";
 "osmand_live_updates_size" = "Величина преузетих ажурирања";
 "osmand_live_deleted_object" = "Избрисан објекат";
-"res_banner_free_maps_title" = "Имате %d бесплатних мапа!";
-"res_banner_free_maps_desc" = "Можете преузети %d бесплатних мапа, без ажурирања";
-"res_banner_no_free_maps_title" = "Немате бесплатних мапа!";
-"res_banner_no_free_maps_desc" = "Купите мапе региона или мапе Целог света";
 "res_search_world" = "Претражите широм света";
 "res_catalog_upd" = "Ажурирање каталога";
 "res_world_map" = "Мапа света";

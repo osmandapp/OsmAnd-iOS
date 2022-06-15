@@ -449,10 +449,6 @@
 // Resources
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Geïnstalleerd";
-"res_banner_free_maps_title" = "Je hebt %d gratis kaarten!";
-"res_banner_free_maps_desc" = "Je kunt %d gratis kaarten downloaden, zonder updates";
-"res_banner_no_free_maps_title" = "Je hebt geen gratis kaarten!";
-"res_banner_no_free_maps_desc" = "Koop regio- of  wereldkaarten";
 "res_search_world" = "Zoek wereldwijd";
 "res_catalog_upd" = "Catalogus update";
 "res_world_map" = "Wereldkaart";

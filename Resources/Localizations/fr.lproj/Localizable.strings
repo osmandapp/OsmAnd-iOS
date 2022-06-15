@@ -122,7 +122,6 @@
 "nothanks" = "Pas nécessaire";
 "download_now" = "Télécharger la carte maintenant";
 "download_tab_local" = "Installé";
-"res_banner_free_maps_title" = "Vous avez %d cartes gratuites !";
 "res_search_world" = "Rechercher dans le monde entier";
 "res_world_map" = "Carte du monde";
 "res_updates" = "Misesà jour";
@@ -326,9 +325,6 @@
 "prch_nau_q3" = "Vous pouvez l’installer plus tard via Cartes & Ressources.";
 "proceed_q" = "Appliquer ?";
 "prch_items_failed" = "Les objets n'ont pu être restaurés. Veuillez réessayer.";
-"res_banner_free_maps_desc" = "Vous pouvez télécharger %d cartes gratuites, sans mise à jour";
-"res_banner_no_free_maps_title" = "Il ne vous reste aucune carte gratuite !";
-"res_banner_no_free_maps_desc" = "Veuillez acheter les cartes de la régions ou Toutes les cartes du monde";
 "res_catalog_upd" = "Mise à jour du catalogue";
 "res_worldwide" = "Monde entier";
 "res_region_map" = "Carte de la région";

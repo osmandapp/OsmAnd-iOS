@@ -265,10 +265,6 @@
 "sett_pref_lang" = "Lingua preferita";
 "sett_lang_show_local" = "Mostra i nomi locali";
 "sett_lang_show_trans" = "Traslittera i nomi";
-"res_banner_free_maps_title" = "Hai %d mappe gratuite!";
-"res_banner_free_maps_desc" = "Puoi scaricare %d mappe gratuitamente, senza aggiornamenti";
-"res_banner_no_free_maps_title" = "Non hai nessuna mappa gratuita!";
-"res_banner_no_free_maps_desc" = "Prego acquista le mappe regionali o la mappa mondiale";
 "menu_my_trips" = "Miei Viaggi";
 "other_options" = "Altre opzioni";
 "add_parking" = "Aggiungi come posizione di parcheggio";

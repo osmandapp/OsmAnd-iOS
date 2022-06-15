@@ -1204,7 +1204,7 @@
 "wiki_sheet_title" = "如何打开维基百科文章？";
 "map_settings_color_scheme" = "颜色方案";
 "shared_string_exit" = "退出";
-"units_and_formats" = "单位与格式";
+"units_and_formats" = "单位和格式";
 "routing_attr_allow_expert_name" = "允许专家路线";
 "rendering_value_walkingRoutesOSMCNodes_name" = "节点网络";
 "rendering_attr_surface_compacted_name" = "紧凑的";
@@ -1383,7 +1383,7 @@
 "height_limit_description" = "提供你的车辆高度，较高的车辆可能会受到一些路线限制。";
 "weight_limit_description" = "提供你的车辆重量，较重的车辆可能会受到一些路线限制。";
 "gpx_parse_error" = "OsmAnd GPX格式不正确，请联系支持团队进一步调查。";
-"simplified_track_description" = "只有路线线会被保存，航点会被删除。";
+"simplified_track_description" = "只有路线线会被保存，路点会被删除。";
 "open_saved_track" = "打开保存的轨迹";
 "profile_type_osmand_string" = "OsmAnd配置文件";
 "profile_type_user_string" = "用户配置文件";
@@ -1569,7 +1569,7 @@
 "distance_moving" = "距离已修正";
 "lang_pms" = "皮埃蒙特语";
 "lang_hy" = "亚美尼亚语";
-"delete_waypoints" = "删除航点";
+"delete_waypoints" = "删除路点";
 "lang_zh_tw" = "繁体中文";
 "lang_oc" = "奥克西坦语";
 "lang_bar" = "巴伐利亚语";
@@ -1796,3 +1796,8 @@
 "routing_attr_allow_advanced_name" = "允许高难路线";
 "routing_attr_piste_type_skitour_description" = "滑雪游览线路。";
 "routing_attr_allow_private_for_truck_name" = "允许私人访问（卡车）";
+"follow_track" = "跟随轨迹";
+"added_profiles" = "添加的配置文件";
+"routing_attr_allow_expert_description" = "极其困难的路线，有危险的障碍物和周边环境。";
+"new_plugin_added" = "新插件已添加";
+"added_profiles_descr" = "插件所添加的配置文件";

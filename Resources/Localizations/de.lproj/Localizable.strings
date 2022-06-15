@@ -2517,3 +2517,5 @@
 "ltr_or_rtl_combine_via_or" = "%@ oder %@";
 "simulate_in_progress" = "Im Gange";
 "osmand_depelopment_simulate_location_section" = "Simulieren";
+"transport_hazmat_yes_desc" = "Sie müssen eine richtige Kategorie wählen.";
+"transport_hazmat_no_desc" = "Auf einigen Straßen und Tunneln ist der Transport gefährlicher Materialien verboten.";

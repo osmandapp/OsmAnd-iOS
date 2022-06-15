@@ -704,7 +704,7 @@
                     [allFeatures addObject:OAFeature.HOURLY_MAP_UPDATES];
                     purchased = [allFeatures containsObject:self.feature];
                 }
-                if (!purchased && [OAIAPHelper isSubscribedToOsmAndPro])
+                if (!purchased && [OAIAPHelper isOsmAndProAvailable])
                     purchased = [self.feature isAvailableInOsmAndPro];
                 if (!purchased && ([OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased]))
                     purchased = [self.feature isAvailableInMapsPlus];

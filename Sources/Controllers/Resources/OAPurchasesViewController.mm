@@ -502,8 +502,10 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
         NSDictionary *item = _data[indexPath.section][indexPath.row];
         NSString *key = item[@"key"];
-        if ([key isEqualToString:@"get_osmand_pro"] || [key isEqualToString:@"explore_osmnad_plans"])
+        if ([key isEqualToString:@"get_osmand_pro"])
             [OAChoosePlanHelper showChoosePlanScreen:self.navigationController];
+        else if ([key isEqualToString:@"explore_osmnad_plans"])
+            [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.MONTHLY_MAP_UPDATES navController:self.navigationController];
     }
 }
 

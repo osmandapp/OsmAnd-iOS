@@ -2509,3 +2509,6 @@
 "simulation_preview_mode_desc" = "Брзина симулације ће бити максимална на правим деоницама и успорити само на раскрсницама.";
 "simulation_preview_mode_title" = "Режим брзог прегледа";
 "speed_mode" = "Режим брзине";
+"transport_hazmat_yes_desc" = "Морате одабрати исправну категорију.";
+"routing_attr_hazmat_category_name" = "Превожење опасних материја";
+"transport_hazmat_no_desc" = "На неким путевима и тунелима није дозвољен превоз опасних материја.";

@@ -464,6 +464,13 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_back")
                                                     attributes:@{ NSFontAttributeName:[UIFont systemFontOfSize:17.] }]
                                      forState:UIControlStateNormal];
+    self.backNavBarButton.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+            [self.backNavBarButton.titleLabel.leadingAnchor constraintEqualToAnchor:self.backNavBarButton.leadingAnchor constant:20.],
+            [self.backNavBarButton.titleLabel.trailingAnchor constraintEqualToAnchor:self.backNavBarButton.trailingAnchor],
+            [self.backNavBarButton.titleLabel.topAnchor constraintEqualToAnchor:self.backNavBarButton.topAnchor],
+            [self.backNavBarButton.titleLabel.bottomAnchor constraintEqualToAnchor:self.backNavBarButton.bottomAnchor]
+    ]];
 
     [self.applyButton addBlurEffect:YES cornerRadius:12. padding:0.];
     [self.applyButton setAttributedTitle:
@@ -474,6 +481,14 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_apply")
                                                     attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
                                       forState:UIControlStateNormal];
+
+    self.applyNavBarButton.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+            [self.applyNavBarButton.titleLabel.leadingAnchor constraintEqualToAnchor:self.applyNavBarButton.leadingAnchor],
+            [self.applyNavBarButton.titleLabel.trailingAnchor constraintEqualToAnchor:self.applyNavBarButton.trailingAnchor],
+            [self.applyNavBarButton.titleLabel.topAnchor constraintEqualToAnchor:self.applyNavBarButton.topAnchor],
+            [self.applyNavBarButton.titleLabel.bottomAnchor constraintEqualToAnchor:self.applyNavBarButton.bottomAnchor]
+    ]];
 }
 
 - (OARouteAppearanceType *)getRouteAppearanceType:(OAColoringType *)coloringType
@@ -632,7 +647,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (CGFloat)getStatusBarHeight
 {
-    return _originalStatusBarHeight;
+    return [OAUtilities isIPad] ?  [OAUtilities getStatusBarHeight] : _originalStatusBarHeight;
 }
 
 - (void)doAdditionalLayout

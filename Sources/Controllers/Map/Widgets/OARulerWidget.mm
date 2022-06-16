@@ -229,10 +229,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     if ([self rulerModeOn] && [_mapViewController getMapZoom] > SHOW_RULER_MIN_ZOOM)
     {
         [self updateStyles];
-
-        auto circleCenterPos31 = _mapViewController.mapView.target31;
-        CGPoint circleCenterPoint;
-        [_mapViewController.mapView convert:&circleCenterPos31 toScreen:&circleCenterPoint checkOffScreen:YES];
+        CGPoint circleCenterPoint = [self getCenterPoint];
         
         EOARulerWidgetMode mode = _settings.rulerMode.get;
         BOOL showCompass = _settings.showCompassControlRuler.get && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
@@ -246,13 +243,13 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             if (showCompass)
                 [self updateHeading];
             
-            int compassCircleId = [self getCompassCircleId:circleCenterPoint];
+            int compassCircleId = [self getCompassCircleIndex:circleCenterPoint];
             for (NSUInteger i = _cacheDistances.count; i >= 1; i--)
             {
                 if (showCompass && i == compassCircleId)
                     [self drawCompassCircle:compassCircleId center:circleCenterPoint inContext:ctx];
                 else
-                    [self drawCircle:i center:circleCenterPoint inContext:ctx];
+                    [self drawRulerCircle:((int)i) center:circleCenterPoint inContext:ctx];
             }
         }
     }
@@ -265,10 +262,10 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     return [[OARootViewController instance].mapPanel.mapWidgetRegistry isVisible:@"radius_ruler"] && [self rulerWidgetOn];;
 }
 
-- (int) getCompassCircleId:(CGPoint)center
+- (int) getCompassCircleIndex:(CGPoint)center
 {
-    int compassCircleId = 2;
-    CGFloat radiusLength = _radius * compassCircleId;
+    int compassCircleIndex = 2;
+    CGFloat radiusLength = _radius * compassCircleIndex;
     CGFloat width = self.bounds.size.width;
     CGFloat height = self.bounds.size.height;
 
@@ -280,9 +277,9 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     
     NSNumber *nearestScreenMargin = [[allMargins sortedArrayUsingSelector: @selector(compare:)] firstObject];
     if (radiusLength > nearestScreenMargin.floatValue)
-        compassCircleId = 1;
+        compassCircleIndex = 1;
     
-    return compassCircleId;
+    return compassCircleIndex;
 }
 
 - (void) updateHeading
@@ -307,8 +304,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _cacheMetricSystem = currentMetricSystem;
     _cachedMapZoom = _mapViewController.mapView.zoom;
     _cacheIntZoom = int(_mapViewController.getMapZoom);
-    _cachedCenter31 = _mapViewController.mapView.target31;
-    _cachedCenterLatLon = OsmAnd::Utilities::convert31ToLatLon(_mapViewController.mapView.target31);
+    _cachedCenter31 = [self getCenter31];
+    _cachedCenterLatLon = [self getCenterLatLon];
     _cachedMapDensity = [_mapDensity get];
     _cachedMapElevation = _mapViewController.mapView.elevationAngle;
     _cachedHeading = _app.locationServices.lastKnownHeading;
@@ -363,18 +360,27 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         [_cacheDistances addObject:[OAOsmAndFormatter getFormattedDistance:(_roundedDist * i++) forceTrailingZeroes:NO]];
 }
 
-- (void) drawCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx
+- (void) drawRulerCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx
+{
+    NSArray<NSValue *> *sidePoints = [self drawCircle:circleNumber center:center inContext:ctx];
+    if (sidePoints && sidePoints.count == 2)
+    {
+        NSString *text = _cacheDistances[circleNumber - 1];
+        NSArray<NSValue *> *textCoords = [self calculateTextCoords:text rightOrBottomText:text topOrLeftPoint:sidePoints[0].CGPointValue rightOrBottomPoint:sidePoints[1].CGPointValue];
+        [self drawTextCoords: text textCoords:textCoords font:_font];
+    }
+}
+
+- (NSArray<NSValue *> *) drawCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx
 {
     if (!_mapViewController.zoomingByGesture)
     {
         double circleRadius = _radius * circleNumber;
-        NSString *text = _cacheDistances[circleNumber - 1];
-        
         CGPoint topOrLeftPoint = CGPointZero;
         CGPoint rightOrBottomPoint = CGPointZero;
         NSMutableArray<NSMutableArray<NSValue *> *> *arrays = [NSMutableArray array];
         NSMutableArray<NSValue *> *points = [NSMutableArray array];
-        auto centerLatLon = OsmAnd::Utilities::convert31ToLatLon(_mapViewController.mapView.target31);
+        auto centerLatLon = [self getCenterLatLon];
         
         for (int a = -180; a <= 180; a+= CIRCLE_ANGLE_STEP)
         {
@@ -390,9 +396,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
                 continue;
             }
             
-            auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-            CGPoint screenPoint;
-            [_mapViewController.mapView convert:&pos31 toScreen:&screenPoint checkOffScreen:YES];
+            CGPoint screenPoint = [self latLonToScreenPoint:latLon];
             [points addObject:[NSValue valueWithCGPoint:screenPoint]];
             
             if (_textSide == EOATextSideVertical)
@@ -412,16 +416,16 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         }
         if (points.count > 0)
             [arrays addObject:points];
-
+        
         for (NSMutableArray<NSValue *> *points in arrays)
         {
             [self drawLineByPoints:points color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
             [self drawLineByPoints:points color:_circleColor strokeWidth:_strokeWidth inContext:ctx];
         }
-        
-        NSArray<NSValue *> *textCoords = [self calculateTextCoords:text rightOrBottomText:text topOrLeftPoint:topOrLeftPoint rightOrBottomPoint:rightOrBottomPoint];
-        [self drawTextCoords: text textCoords:textCoords font:_font];
+
+        return @[[NSValue valueWithCGPoint:topOrLeftPoint], [NSValue valueWithCGPoint:rightOrBottomPoint]];
     }
+    return nil;
 }
 
 - (void) drawTextCoords:(NSString *)text textCoords:(NSArray<NSValue *> *)textCoords font:(UIFont *)font
@@ -481,7 +485,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         topOrLeftCoordinate.y = center.y - drawingTextRadius - boundsHeading.height / 2;
         rightOrBottomCoordinate.x = center.x - boundsDistance.width / 2;
         rightOrBottomCoordinate.y = center.y + drawingTextRadius - boundsDistance.height / 2;
-        return @[[NSValue valueWithCGPoint:[self transformTo3D:topOrLeftCoordinate compensateMapRotation:YES]], [NSValue valueWithCGPoint:[self transformTo3D:rightOrBottomCoordinate compensateMapRotation:YES]]];
+        return @[[NSValue valueWithCGPoint:[self screenPointFromPoint:topOrLeftCoordinate compensateMapRotation:YES]], [NSValue valueWithCGPoint:[self screenPointFromPoint:rightOrBottomCoordinate compensateMapRotation:YES]]];
     }
     else if (_textSide == EOATextSideHorizontal)
     {
@@ -500,58 +504,29 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         double radiusLength = _radius * circleNumber;
         double innerRadiusLength = radiusLength - _strokeWidth / 2;
         
-        [self updateCompassPaths:center innerRadiusLength:innerRadiusLength radiusLength:radiusLength inContext:ctx];
+        [self drawCircle:circleNumber center:center inContext:ctx];
+        [self drawCompassCents:center innerRadiusLength:innerRadiusLength radiusLength:radiusLength inContext:ctx];
         [self drawCardinalDirections:center radiusLength:radiusLength];
-        
-        //drawing circle
-        NSMutableArray<NSMutableArray<NSValue *> *> *arrays = [NSMutableArray array];
-        NSMutableArray<NSValue *> *points = [NSMutableArray array];
-        auto centerLatLon = OsmAnd::Utilities::convert31ToLatLon(_mapViewController.mapView.target31);
-        for (int a = -180; a <= 180; a+= CIRCLE_ANGLE_STEP)
-        {
-            double pixelDensity = _cachedMapDensity * [[UIScreen mainScreen] scale];
-            auto latLon = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, radiusLength * pixelDensity, a);
-            
-            if (ABS(latLon.latitude) > 90 || ABS(latLon.longitude) > 180)
-            {
-                if (points.count > 0)
-                {
-                    [arrays addObject:points];
-                    points = [NSMutableArray array];
-                }
-                continue;
-            }
-            
-            auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-            CGPoint screenPoint;
-            [_mapViewController.mapView convert:&pos31 toScreen:&screenPoint checkOffScreen:YES];
-            [points addObject:[NSValue valueWithCGPoint:screenPoint]];
-        }
-        if (points.count > 0)
-            [arrays addObject:points];
-
-        for (NSMutableArray<NSValue *> *points in arrays)
-        {
-            [self drawLineByPoints:points color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
-            [self drawLineByPoints:points color:_circleColor strokeWidth:_strokeWidth inContext:ctx];
-        }
-        
-        NSString *distance = _cacheDistances[circleNumber - 1];
-        NSString *heading = [NSString stringWithFormat:@"%@ %@", [OAOsmAndFormatter getFormattedAzimuth:_cachedHeading], [self getCardinalDirectionForDegrees:_cachedHeading]];
-        
-        double offset = _textSide == EOATextSideHorizontal ? 5 : 20;
-        double drawingTextRadius = radiusLength + offset;
-        
-        NSArray<NSValue *> *textCoords = [self calculateTextCoords:heading rightOrBottomText:distance drawingTextRadius:drawingTextRadius center:center];
-        [self drawTextCoords: heading textCoords:@[textCoords[0]] font:_boldFont];
-        [self drawTextCoords: distance textCoords:@[textCoords[1]] font:_font];
-        
         [self drawTriangleArrowByRadius:radiusLength angle:0 center:center color:_northArrowColor inContext:ctx];
         [self drawTriangleArrowByRadius:radiusLength angle:_cachedHeading center:center color:_headingArrowColor inContext:ctx];
+        [self drawCompassCircleText:circleNumber center:center radiusLength:radiusLength inContext:ctx];
     }
 }
 
-- (void) updateCompassPaths:(CGPoint)center innerRadiusLength:(double)innerRadiusLength radiusLength:(double)radiusLength inContext:(CGContextRef)ctx
+- (void) drawCompassCircleText:(int)circleNumber center:(CGPoint)center radiusLength:(double)radiusLength inContext:(CGContextRef)ctx
+{
+    NSString *distance = _cacheDistances[circleNumber - 1];
+    NSString *heading = [NSString stringWithFormat:@"%@ %@", [OAOsmAndFormatter getFormattedAzimuth:_cachedHeading], [self getCardinalDirectionForDegrees:_cachedHeading]];
+    
+    double offset = _textSide == EOATextSideHorizontal ? 5 : 20;
+    double drawingTextRadius = radiusLength + offset;
+    
+    NSArray<NSValue *> *textCoords = [self calculateTextCoords:heading rightOrBottomText:distance drawingTextRadius:drawingTextRadius center:center];
+    [self drawTextCoords: heading textCoords:@[textCoords[0]] font:_boldFont];
+    [self drawTextCoords: distance textCoords:@[textCoords[1]] font:_font];
+}
+
+- (void) drawCompassCents:(CGPoint)center innerRadiusLength:(double)innerRadiusLength radiusLength:(double)radiusLength inContext:(CGContextRef)ctx
 {
     for (int i = 0; i < _degrees.count; i++)
     {
@@ -573,25 +548,25 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             CGFloat shortLineHeight = 5.66;
             CGFloat startY = center.y + y * (radiusLength - shortLineMargin);
             CGFloat stopY = center.y + y * (radiusLength - shortLineMargin - shortLineHeight);
-            
-            CGPoint startPoint3D = [self transformTo3D:CGPointMake(center.x, startY)];
-            CGPoint stopPoint3D = [self transformTo3D:CGPointMake(center.x, stopY)];
-            [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
-            [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_cardinalLinesColor strokeWidth:_strokeWidth inContext:ctx];
+
+            CGPoint startScreenPoint = [self screenPointFromPoint:CGPointMake(center.x, startY)];
+            CGPoint stopScreenPoint = [self screenPointFromPoint:CGPointMake(center.x, stopY)];
+            [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
+            [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_cardinalLinesColor strokeWidth:_strokeWidth inContext:ctx];
         }
         else
         {
-            CGPoint startPoint3D = [self transformTo3D:CGPointMake(lineStartX, lineStartY)];
-            CGPoint stopPoint3D = [self transformTo3D:CGPointMake(lineStopX, lineStopY)];
-            [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
-            [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_circleColor strokeWidth:_strokeWidth inContext:ctx];
+            CGPoint startScreenPoint = [self screenPointFromPoint:CGPointMake(lineStartX, lineStartY)];
+            CGPoint stopScreenPoint = [self screenPointFromPoint:CGPointMake(lineStopX, lineStopY)];
+            [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
+            [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_circleColor strokeWidth:_strokeWidth inContext:ctx];
         }
         if (i % 9 == 0 && i != 18)
         {
-            CGPoint startPoint3D = [self transformTo3D:CGPointMake(lineStartX, lineStartY)];
-            CGPoint stopPoint3D = [self transformTo3D:CGPointMake(lineStopX, lineStopY)];
-            [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
-            [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_cardinalLinesColor strokeWidth:_strokeWidth inContext:ctx];
+            CGPoint startScreenPoint = [self screenPointFromPoint:CGPointMake(lineStartX, lineStartY)];
+            CGPoint stopScreenPoint = [self screenPointFromPoint:CGPointMake(lineStopX, lineStopY)];
+            [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
+            [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_cardinalLinesColor strokeWidth:_strokeWidth inContext:ctx];
         }
     }
 }
@@ -702,41 +677,59 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double radians = [self toRadians:zeroAngle];
     CGFloat firstPointX = center.x + cos(radians) * (radius + headOffsesFromRadius);
     CGFloat firstPointY = center.y + sin(radians) * (radius + headOffsesFromRadius);
-    CGPoint firstPoint3D = [self transformTo3D:CGPointMake(firstPointX, firstPointY)];
+    CGPoint firstScreenPoint = [self screenPointFromPoint:CGPointMake(firstPointX, firstPointY)];
     
     double radians2 = [self toRadians:zeroAngle + triangleHeadAngle / 2 + 180];
     CGFloat secondPointX = firstPointX + cos(radians2) * triangleSideLength;
     CGFloat secondPointY = firstPointY + sin(radians2) * triangleSideLength;
-    CGPoint secondPoint3D = [self transformTo3D:CGPointMake(secondPointX, secondPointY)];
+    CGPoint secondScreenPoint = [self screenPointFromPoint:CGPointMake(secondPointX, secondPointY)];
     
     double radians3 = [self toRadians:zeroAngle - triangleHeadAngle / 2 + 180];
     CGFloat thirdPointX = firstPointX + cos(radians3) * triangleSideLength;
     CGFloat thirdPointY = firstPointY + sin(radians3) * triangleSideLength;
-    CGPoint thirdPoint3D = [self transformTo3D:CGPointMake(thirdPointX, thirdPointY)];
+    CGPoint thirdScreenPoint = [self screenPointFromPoint:CGPointMake(thirdPointX, thirdPointY)];
     
     [_textShadowColor set];
     CGContextSetLineWidth(ctx, _strokeWidth*2);
-    CGContextMoveToPoint(ctx, firstPoint3D.x, firstPoint3D.y);
-    CGContextAddLineToPoint(ctx, secondPoint3D.x, secondPoint3D.y);
-    CGContextAddLineToPoint(ctx, thirdPoint3D.x, thirdPoint3D.y);
-    CGContextAddLineToPoint(ctx, firstPoint3D.x, firstPoint3D.y);
+    CGContextMoveToPoint(ctx, firstScreenPoint.x, firstScreenPoint.y);
+    CGContextAddLineToPoint(ctx, secondScreenPoint.x, secondScreenPoint.y);
+    CGContextAddLineToPoint(ctx, thirdScreenPoint.x, thirdScreenPoint.y);
+    CGContextAddLineToPoint(ctx, firstScreenPoint.x, firstScreenPoint.y);
     CGContextClosePath(ctx);
     CGContextStrokePath(ctx);
     
     CGContextSetFillColorWithColor(ctx, color.CGColor);
-    CGContextMoveToPoint(ctx, firstPoint3D.x, firstPoint3D.y);
-    CGContextAddLineToPoint(ctx, secondPoint3D.x, secondPoint3D.y);
-    CGContextAddLineToPoint(ctx, thirdPoint3D.x, thirdPoint3D.y);
+    CGContextMoveToPoint(ctx, firstScreenPoint.x, firstScreenPoint.y);
+    CGContextAddLineToPoint(ctx, secondScreenPoint.x, secondScreenPoint.y);
+    CGContextAddLineToPoint(ctx, thirdScreenPoint.x, thirdScreenPoint.y);
     CGContextClosePath(ctx);
     CGContextFillPath(ctx);
 }
 
-- (CGPoint) transformTo3D:(CGPoint)screenPoint
+- (CGPoint) getCenterPoint
 {
-    return [self transformTo3D:screenPoint compensateMapRotation:false];
+    auto circleCenterPos31 = [self getCenter31];
+    CGPoint circleCenterPoint;
+    [_mapViewController.mapView convert:&circleCenterPos31 toScreen:&circleCenterPoint checkOffScreen:YES];
+    return circleCenterPoint;
 }
 
-- (CGPoint) transformTo3D:(CGPoint)screenPoint compensateMapRotation:(BOOL)disableMapRotation
+- (OsmAnd::LatLon) getCenterLatLon
+{
+    return OsmAnd::Utilities::convert31ToLatLon([self getCenter31]);
+}
+
+- (OsmAnd::PointI) getCenter31
+{
+    return _mapViewController.mapView.target31;
+}
+
+- (CGPoint) screenPointFromPoint:(CGPoint)point
+{
+    return [self screenPointFromPoint:point compensateMapRotation:false];
+}
+
+- (CGPoint) screenPointFromPoint:(CGPoint)point compensateMapRotation:(BOOL)disableMapRotation
 {
     auto circleCenterPos31 = _cachedCenter31;
     auto centerLatLon = _cachedCenterLatLon;
@@ -744,8 +737,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
     [_mapViewController.mapView convert:&_cachedCenter31 toScreen:&circleCenterPoint checkOffScreen:YES];
     
-    double dX = circleCenterPoint.x - screenPoint.x;
-    double dY = circleCenterPoint.y - screenPoint.y;
+    double dX = circleCenterPoint.x - point.x;
+    double dY = circleCenterPoint.y - point.y;
     double distanceFromCenter = sqrt(dX * dX + dY * dY);
     double angleFromCenter = [self toDegrees:atan2(dY, dX)] - 90;
     angleFromCenter = disableMapRotation ? angleFromCenter + _cachedMapAzimuth : angleFromCenter;
@@ -767,6 +760,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     [_mapViewController.mapView convert:&pos31 toScreen:&screenPoint checkOffScreen:YES];
     return screenPoint;
 }
+
 - (double) toRadians:(double)degrees
 {
     return degrees * M_PI / 180;

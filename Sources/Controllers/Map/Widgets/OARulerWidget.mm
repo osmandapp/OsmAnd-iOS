@@ -362,22 +362,19 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) drawRulerCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx
 {
-    NSArray<NSValue *> *sidePoints = [self drawCircle:circleNumber center:center inContext:ctx];
-    if (sidePoints && sidePoints.count == 2)
-    {
-        NSString *text = _cacheDistances[circleNumber - 1];
-        NSArray<NSValue *> *textCoords = [self calculateTextCoords:text rightOrBottomText:text topOrLeftPoint:sidePoints[0].CGPointValue rightOrBottomPoint:sidePoints[1].CGPointValue];
-        [self drawTextCoords: text textCoords:textCoords font:_font];
-    }
+    [self drawCircle:circleNumber center:center inContext:ctx];
+    
+    NSString *text = _cacheDistances[circleNumber - 1];
+    double circleRadius = _radius * circleNumber;
+    NSArray<NSValue *> *textCoords = [self calculateTextCoords:text rightOrBottomText:text drawingTextRadius:circleRadius center:center];
+    [self drawTextCoords: text textCoords:textCoords font:_font];
 }
 
-- (NSArray<NSValue *> *) drawCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx
+- (void) drawCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx
 {
     if (!_mapViewController.zoomingByGesture)
     {
         double circleRadius = _radius * circleNumber;
-        CGPoint topOrLeftPoint = CGPointZero;
-        CGPoint rightOrBottomPoint = CGPointZero;
         NSMutableArray<NSMutableArray<NSValue *> *> *arrays = [NSMutableArray array];
         NSMutableArray<NSValue *> *points = [NSMutableArray array];
         auto centerLatLon = [self getCenterLatLon];
@@ -398,21 +395,6 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             
             CGPoint screenPoint = [self latLonToScreenPoint:latLon];
             [points addObject:[NSValue valueWithCGPoint:screenPoint]];
-            
-            if (_textSide == EOATextSideVertical)
-            {
-                if (a == 0)
-                    topOrLeftPoint = CGPointMake(screenPoint.x, screenPoint.y);
-                else if (a == 180)
-                    rightOrBottomPoint = CGPointMake(screenPoint.x, screenPoint.y);
-            }
-            else if (_textSide == EOATextSideHorizontal)
-            {
-                if (a == -90)
-                    topOrLeftPoint = CGPointMake(screenPoint.x, screenPoint.y);
-                else if (a == 90)
-                    rightOrBottomPoint = CGPointMake(screenPoint.x, screenPoint.y);
-            }
         }
         if (points.count > 0)
             [arrays addObject:points];
@@ -422,10 +404,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             [self drawLineByPoints:points color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
             [self drawLineByPoints:points color:_circleColor strokeWidth:_strokeWidth inContext:ctx];
         }
-
-        return @[[NSValue valueWithCGPoint:topOrLeftPoint], [NSValue valueWithCGPoint:rightOrBottomPoint]];
     }
-    return nil;
 }
 
 - (void) drawTextCoords:(NSString *)text textCoords:(NSArray<NSValue *> *)textCoords font:(UIFont *)font

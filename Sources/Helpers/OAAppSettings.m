@@ -53,10 +53,10 @@
 #define fullVersionPurchasedKey @"fullVersionPurchasedKey"
 #define depthContoursPurchasedKey @"depthContoursPurchasedKey"
 #define contourLinesPurchasedKey @"contourLinesPurchasedKey"
+#define wikipediaPurchasedKey @"wikipediaPurchasedKey"
 #define emailSubscribedKey @"emailSubscribedKey"
 #define osmandProPurchasedKey @"osmandProPurchasedKey"
 #define osmandMapsPurchasedKey @"osmandMapsPurchasedKey"
-#define displayDonationSettingsKey @"displayDonationSettingsKey"
 #define lastReceiptValidationDateKey @"lastReceiptValidationDateKey"
 #define eligibleForIntroductoryPriceKey @"eligibleForIntroductoryPriceKey"
 #define eligibleForSubscriptionOfferKey @"eligibleForSubscriptionOfferKey"
@@ -109,6 +109,7 @@
 // App profiles
 #define appModeBeanPrefsIdsKey @"appModeBeanPrefsIds"
 #define routingProfileKey @"routingProfile"
+#define derivedProfileKey @"derivedProfile"
 #define profileIconNameKey @"profileIconName"
 #define profileIconColorKey @"profileIconColor"
 #define userProfileNameKey @"userProfileName"
@@ -126,6 +127,7 @@
 
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
+#define forcePrivateAccessRoutingAskedKey @"forcePrivateAccessRoutingAsked"
 #define fastRouteModeKey @"fastRouteMode"
 #define disableComplexRoutingKey @"disableComplexRouting"
 #define followTheRouteKey @"followTheRoute"
@@ -135,6 +137,7 @@
 #define useIntermediatePointsNavigationKey @"useIntermediatePointsNavigation"
 #define disableOffrouteRecalcKey @"disableOffrouteRecalc"
 #define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
+#define hazmatTransportingEnabledKey @"hazmatTransportingEnabled"
 #define routerServiceKey @"routerService"
 #define snapToRoadKey @"snapToRoad"
 #define autoFollowRouteKey @"autoFollowRoute"
@@ -188,8 +191,6 @@
 #define gpxRouteCalcKey @"gpxRouteCalc"
 #define gpxRouteSegmentKey @"gpxRouteSegment"
 #define showStartFinishIconsKey @"showStartFinishIcons"
-
-#define simulateRoutingKey @"simulateRouting"
 #define useOsmLiveForRoutingKey @"useOsmLiveForRouting"
 
 #define saveTrackToGPXKey @"saveTrackToGPX"
@@ -379,6 +380,8 @@
 #define lastCheckedUpdatesKey @"lastCheckedUpdates"
 #define numberOfAppStartsOnDislikeMomentKey @"numberOfAppStartsOnDislikeMoment"
 #define rateUsStateKey @"rateUsState"
+
+#define animateMyLocationKey @"animateMyLocation"
 
 @interface OAMetricsConstant()
 
@@ -1089,6 +1092,116 @@
 
 @end
 
+@interface OASimulationMode()
+
+@property (nonatomic) EOASimulationMode mode;
+
+@end
+
+@implementation OASimulationMode
+{
+    EOASimulationMode _mode;
+}
+
+- (instancetype)initWithMode:(EOASimulationMode)mode
+{
+    self = [super init];
+    if (self)
+    {
+        _mode = mode;
+    }
+    return self;
+}
+
++ (instancetype)withMode:(EOASimulationMode)mode
+{
+    return [[OASimulationMode alloc] initWithMode:mode];
+}
+
++ (NSArray<OASimulationMode *> *)values
+{
+    return @[[OASimulationMode withMode:EOASimulationModePreview],
+             [OASimulationMode withMode:EOASimulationModeConstant],
+             [OASimulationMode withMode:EOASimulationModeRealistic]];
+}
+
++ (OASimulationMode *)getModeObject:(NSString *)key
+{
+    for (OASimulationMode *mode in [OASimulationMode values])
+    {
+        if ([[mode key] isEqualToString:key])
+            return mode;
+    }
+    return nil;
+}
+
++ (EOASimulationMode)getMode:(NSString *)key
+{
+    return [self getModeObject:key].mode;
+}
+
++ (NSString *)toKey:(EOASimulationMode)mode
+{
+    switch (mode)
+    {
+        case EOASimulationModePreview:
+            return @"preview_mode";
+        case EOASimulationModeConstant:
+            return @"const_mode";
+        case EOASimulationModeRealistic:
+            return @"real_mode";
+        default:
+            return @"";
+    }
+}
+
++ (NSString *)toTitle:(EOASimulationMode)mode
+{
+    switch (mode)
+    {
+        case EOASimulationModePreview:
+            return OALocalizedString(@"simulation_preview_mode_title");
+        case EOASimulationModeConstant:
+            return OALocalizedString(@"simulation_constant_mode_title");
+        case EOASimulationModeRealistic:
+            return OALocalizedString(@"simulation_real_mode_title");
+        default:
+            return @"";
+    }
+}
+
++ (NSString *)toDescription:(EOASimulationMode)mode
+{
+    switch (mode)
+    {
+        case EOASimulationModePreview:
+            return OALocalizedString(@"simulation_preview_mode_desc");
+        case EOASimulationModeConstant:
+            return OALocalizedString(@"simulation_constant_mode_desc");
+        case EOASimulationModeRealistic:
+            return OALocalizedString(@"simulation_real_mode_desc");
+        default:
+            return @"";
+    }
+}
+
+- (NSString *)key
+{
+    return [OASimulationMode toKey:_mode];
+}
+
+- (NSString *)title
+{
+    return [OASimulationMode toTitle:_mode];
+}
+
+- (NSString *)description
+{
+    return [OASimulationMode toDescription:_mode];
+}
+
+@end
+
 @interface OACommonPreference ()
 
 @property (nonatomic, readonly) OAApplicationMode *appMode;
@@ -1103,6 +1216,7 @@
 - (NSObject *) getValue:(OAApplicationMode *)mode;
 - (void) setValue:(NSObject *)value;
 - (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode;
+- (void) setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -3016,6 +3130,111 @@
 
 @end
 
+@interface OACommonUnit ()
+
+@property (nonatomic) NSUnit *defValue;
+
+@end
+
+@implementation OACommonUnit
+
++ (instancetype) withKey:(NSString *)key defValue:(NSUnit *)defValue
+{
+    OACommonUnit *obj = [[OACommonUnit alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (NSUnit *) get
+{
+    return [self get:self.appMode];
+}
+
+- (NSUnit *) get:(OAApplicationMode *)mode
+{
+    NSObject *value = [self getValue:mode];
+    return value ? (NSUnit *) value : self.defValue;
+}
+
+- (NSObject *) getValue:(OAApplicationMode *)mode
+{
+    NSObject *cachedValue = self.global ? self.cachedValue : [self.cachedValues objectForKey:mode];
+    if (!cachedValue)
+    {
+        NSString *key = [self getKey:mode];
+        cachedValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+
+        if ([cachedValue isKindOfClass:NSString.class])
+            cachedValue = [NSUnit unitFromString:cachedValue];
+
+        if ([cachedValue isKindOfClass:NSData.class])
+            cachedValue = [NSKeyedUnarchiver unarchivedObjectOfClass:NSUnit.class fromData:cachedValue error:nil];
+
+        if (self.global)
+            self.cachedValue = cachedValue;
+        else
+            [self.cachedValues setObject:cachedValue forKey:mode];
+    }
+    else if ([cachedValue isKindOfClass:NSString.class])
+    {
+        cachedValue = [NSUnit unitFromString:cachedValue];
+    }
+
+    if (!cachedValue)
+    {
+        cachedValue = [self getProfileDefaultValue:mode];
+    }
+    return cachedValue;
+}
+
+- (void) set:(NSUnit *)unit
+{
+    [self set:unit mode:self.appMode];
+}
+
+- (void) set:(NSUnit *)unit mode:(OAApplicationMode *)mode
+{
+    [self setValue:unit mode:mode];
+}
+
+- (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode
+{
+    NSUnit *unit = (NSUnit *) value;
+
+    if (self.global)
+        self.cachedValue = unit;
+    else
+        [self.cachedValues setObject:unit forKey:mode];
+
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:unit requiringSecureCoding:NO error:nil];
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:[self getKey:mode]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+}
+
+- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
+{
+    NSObject *value = [super getProfileDefaultValue:mode];
+    if ([value isKindOfClass:NSString.class])
+        value = [NSUnit unitFromString:value];
+    return value;
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    [self set:[NSUnit unitFromString:strValue] mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self get:mode].symbol;
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
@@ -3046,6 +3265,7 @@
     {
         _dayNightHelper = [OADayNightHelper instance];
         _customBooleanRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
+        _customRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
         _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _globalPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _profilePreferences = [NSMapTable strongToStrongObjectsMapTable];
@@ -3072,7 +3292,10 @@
         [_globalPreferences setObject:_settingMapLanguageTranslit forKey:@"map_transliterate_names"];
 
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
-        _appearanceMode = [OACommonInteger withKey:settingAppModeKey defValue:0];
+        _appearanceMode = [OACommonInteger withKey:settingAppModeKey defValue:APPEARANCE_MODE_DAY];
+        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_AUTO) mode:OAApplicationMode.CAR];
+        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_AUTO) mode:OAApplicationMode.BICYCLE];
+        [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_DAY) mode:OAApplicationMode.PEDESTRIAN];
         [_profilePreferences setObject:_appearanceMode forKey:@"daynight_mode"];
 
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
@@ -3086,6 +3309,9 @@
         [_globalPreferences setObject:_settingDoNotShowPromotions forKey:@"do_not_show_promotions"];
         [_globalPreferences setObject:_settingUseAnalytics forKey:@"use_analytics"];
         [_globalPreferences setObject:_showDownloadMapDialog forKey:@"show_download_map_dialog"];
+        
+        _animateMyLocation = [OACommonBoolean withKey:animateMyLocationKey defValue:YES];
+        [_profilePreferences setObject:_animateMyLocation forKey:@"animate_my_location"];
 
         _liveUpdatesPurchased = [[OACommonBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
         _settingOsmAndLiveEnabled = [[[OACommonBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];
@@ -3110,10 +3336,10 @@
         _fullVersionPurchased = [[OACommonBoolean withKey:fullVersionPurchasedKey defValue:NO] makeGlobal];
         _depthContoursPurchased = [[OACommonBoolean withKey:depthContoursPurchasedKey defValue:NO] makeGlobal];
         _contourLinesPurchased = [[OACommonBoolean withKey:contourLinesPurchasedKey defValue:NO] makeGlobal];
+        _wikipediaPurchased = [[OACommonBoolean withKey:wikipediaPurchasedKey defValue:NO] makeGlobal];
         _emailSubscribed = [[OACommonBoolean withKey:emailSubscribedKey defValue:NO] makeGlobal];
         _osmandProPurchased = [[OACommonBoolean withKey:osmandProPurchasedKey defValue:NO] makeGlobal];
         _osmandMapsPurchased = [[OACommonBoolean withKey:osmandMapsPurchasedKey defValue:NO] makeGlobal];
-        _displayDonationSettings = [[NSUserDefaults standardUserDefaults] objectForKey:displayDonationSettingsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:displayDonationSettingsKey] : NO;
         _lastReceiptValidationDate = [[NSUserDefaults standardUserDefaults] objectForKey:lastReceiptValidationDateKey] ? [NSDate dateWithTimeIntervalSince1970:[[NSUserDefaults standardUserDefaults] doubleForKey:lastReceiptValidationDateKey]] : [NSDate dateWithTimeIntervalSince1970:0];
         _eligibleForIntroductoryPrice = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForIntroductoryPriceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForIntroductoryPriceKey] : NO;
         _eligibleForSubscriptionOffer = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForSubscriptionOfferKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForSubscriptionOfferKey] : NO;
@@ -3133,6 +3359,7 @@
         [_globalPreferences setObject:_fullVersionPurchased forKey:@"billing_full_version_purchased"];
         [_globalPreferences setObject:_depthContoursPurchased forKey:@"billing_sea_depth_purchased"];
         [_globalPreferences setObject:_contourLinesPurchased forKey:@"billing_srtm_purchased"];
+        [_globalPreferences setObject:_wikipediaPurchased forKey:@"billing_wiki_purchased"];
         [_globalPreferences setObject:_emailSubscribed forKey:@"email_subscribed"];
         [_globalPreferences setObject:_osmandProPurchased forKey:@"billing_osmand_pro_purchased"];
         [_globalPreferences setObject:_osmandMapsPurchased forKey:@"billing_osmand_maps_purchased"];
@@ -3229,7 +3456,12 @@
 
         _mapInfoControls = [OACommonString withKey:mapInfoControlsKey defValue:@""];
         [_profilePreferences setObject:_mapInfoControls forKey:@"map_info_controls"];
-
+        
+        _derivedProfile = [OACommonString withKey:derivedProfileKey defValue:@"default"];
+        [_derivedProfile setModeDefaultValue:@"motorcycle" mode:OAApplicationMode.MOTORCYCLE];
+        [_derivedProfile setModeDefaultValue:@"truck" mode:OAApplicationMode.TRUCK];
+        [_profilePreferences setObject:_derivedProfile forKey:@"derived_profile"];
+        
         _routingProfile = [OACommonString withKey:routingProfileKey defValue:@""];
         [_routingProfile setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
         [_routingProfile setModeDefaultValue:@"bicycle" mode:OAApplicationMode.BICYCLE];
@@ -3376,6 +3608,8 @@
 
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
+        _forcePrivateAccessRoutingAsked = [OACommonBoolean withKey:forcePrivateAccessRoutingAskedKey defValue:NO];
+        [_profilePreferences setObject:_forcePrivateAccessRoutingAsked forKey:@"force_private_access_routing"];
         _fastRouteMode = [OACommonBoolean withKey:fastRouteModeKey defValue:YES];
         [_profilePreferences setObject:_fastRouteMode forKey:@"fast_route_mode"];
         _disableComplexRouting = [[NSUserDefaults standardUserDefaults] objectForKey:disableComplexRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableComplexRoutingKey] : NO;
@@ -3387,14 +3621,16 @@
         [_profilePreferences setObject:_arrivalDistanceFactor forKey:@"arrival_distance_factor"];
         _enableTimeConditionalRouting = [OACommonBoolean withKey:enableTimeConditionalRoutingKey defValue:YES];
         [_profilePreferences setObject:_enableTimeConditionalRouting forKey:@"enable_time_conditional_routing"];
-        _useIntermediatePointsNavigation = [OACommonBoolean withKey:useIntermediatePointsNavigationKey defValue:NO];
+        _useIntermediatePointsNavigation = [[OACommonBoolean withKey:useIntermediatePointsNavigationKey defValue:NO] makeGlobal];
         [_globalPreferences setObject:_useIntermediatePointsNavigation forKey:@"use_intermediate_points_navigation"];
 
         _disableOffrouteRecalc = [OACommonBoolean withKey:disableOffrouteRecalcKey defValue:NO];
         _disableWrongDirectionRecalc = [OACommonBoolean withKey:disableWrongDirectionRecalcKey defValue:NO];
+        _hazmatTransportingEnabled = [OACommonBoolean withKey:hazmatTransportingEnabledKey defValue:NO];
 
         [_profilePreferences setObject:_disableOffrouteRecalc forKey:@"disable_offroute_recalc"];
         [_profilePreferences setObject:_disableWrongDirectionRecalc forKey:@"disable_wrong_direction_recalc"];
+        [_profilePreferences setObject:_hazmatTransportingEnabled forKey:@"hazmat_transporting_enabled"];
 
         _autoFollowRoute = [OACommonInteger withKey:autoFollowRouteKey defValue:0];
         [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode CAR]];
@@ -3512,8 +3748,6 @@
         [_profilePreferences setObject:_voiceProvider forKey:@"voice_provider"];
         [_profilePreferences setObject:_announceWpt forKey:@"announce_wpt"];
         [_profilePreferences setObject:_showScreenAlerts forKey:@"show_routing_alarms"];
-
-        _simulateRouting = [[NSUserDefaults standardUserDefaults] objectForKey:simulateRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:simulateRoutingKey] : NO;
 
         _useOsmLiveForRouting = [[NSUserDefaults standardUserDefaults] objectForKey:useOsmLiveForRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useOsmLiveForRoutingKey] : YES;
 
@@ -4006,12 +4240,6 @@
     [[NSUserDefaults standardUserDefaults] setBool:_settingShowAltInDriveMode forKey:settingMapShowAltInDriveModeKey];
 }
 
-- (void) setDisplayDonationSettings:(BOOL)displayDonationSettings
-{
-    _displayDonationSettings = displayDonationSettings;
-    [[NSUserDefaults standardUserDefaults] setBool:_displayDonationSettings forKey:displayDonationSettingsKey];
-}
-
 - (void) setLastReceiptValidationDate:(NSDate *)lastReceiptValidationDate
 {
     _lastReceiptValidationDate = lastReceiptValidationDate;
@@ -4356,10 +4584,9 @@
     [[NSUserDefaults standardUserDefaults] setBool:_disableComplexRouting forKey:disableComplexRoutingKey];
 }
 
-- (void) setSimulateRouting:(BOOL)simulateRouting
+- (void) setSimulateNavigation:(BOOL)simulateNavigation
 {
-    _simulateRouting = simulateRouting;
-    [[NSUserDefaults standardUserDefaults] setBool:_simulateRouting forKey:simulateRoutingKey];
+    _simulateNavigation = simulateNavigation;
     [[[OsmAndApp instance] simulateRoutingObservable] notifyEvent];
 }
 

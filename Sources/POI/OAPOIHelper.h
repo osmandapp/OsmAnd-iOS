@@ -14,7 +14,7 @@
 #include <OsmAndCore/Data/Amenity.h>
 
 #define OSM_WIKI_CATEGORY @"osmwiki"
-#define WIKI_LANG @"wiki:lang:"
+#define WIKI_LANG @"wiki_lang"
 #define WIKI_PLACE @"wiki_place"
 
 #define kSearchLimit 200
@@ -81,6 +81,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (NSArray<OAPOIBaseType *> *) getTopVisibleFilters;
 - (OAPOICategory *) getOsmwiki;
 - (NSArray<NSString *> *)getAllAvailableWikiLocales;
+- (NSString *) getAllLanguagesTranslationSuffix;
 
 - (void) setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
 

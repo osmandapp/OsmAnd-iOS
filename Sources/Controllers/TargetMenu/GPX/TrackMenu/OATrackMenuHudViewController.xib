@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -48,7 +48,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="414" height="315"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="Dhz-uG-Jnh" userLabel="Top Header Container" customClass="OATrackMenuHeaderView">
+                                <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" id="Dhz-uG-Jnh" userLabel="Top Header Container">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="63"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -90,6 +90,7 @@
                                 <constraint firstItem="j7s-w5-BDJ" firstAttribute="top" secondItem="e2q-mJ-Ycy" secondAttribute="bottom" id="8bX-zV-lQ4"/>
                                 <constraint firstItem="e2q-mJ-Ycy" firstAttribute="top" secondItem="BcL-vj-cdz" secondAttribute="top" id="GHy-26-EsZ"/>
                                 <constraint firstItem="j7s-w5-BDJ" firstAttribute="leading" secondItem="BcL-vj-cdz" secondAttribute="leadingMargin" id="J4y-dV-JHH"/>
+                                <constraint firstAttribute="bottom" secondItem="j7s-w5-BDJ" secondAttribute="bottom" id="T9s-Yx-YaV"/>
                                 <constraint firstAttribute="trailing" secondItem="e2q-mJ-Ycy" secondAttribute="trailing" id="Yoa-gl-y47"/>
                                 <constraint firstItem="e2q-mJ-Ycy" firstAttribute="leading" secondItem="BcL-vj-cdz" secondAttribute="leading" id="x8e-XS-mep"/>
                             </constraints>

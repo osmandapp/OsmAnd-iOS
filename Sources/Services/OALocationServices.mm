@@ -489,7 +489,7 @@
 
 - (void) onSimulateRoutingChanged
 {
-    if (!_settings.simulateRouting && [_locationSimulation isRouteAnimating])
+    if (!_settings.simulateNavigation && [_locationSimulation isRouteAnimating])
         [_locationSimulation startStopRouteAnimation];
 }
 

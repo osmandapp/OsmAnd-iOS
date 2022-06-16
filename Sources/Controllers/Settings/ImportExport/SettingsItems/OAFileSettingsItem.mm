@@ -209,22 +209,14 @@
 
 @end
 
-@interface OAFileSettingsItem()
-
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSString *docPath;
-@property (nonatomic) NSString *libPath;
-
-@end
-
 @implementation OAFileSettingsItem
 {
     NSString *_name;
     OsmAndAppInstance _app;
+    
+    NSString *_docPath;
+    NSString *_libPath;
 }
-
-@dynamic name;
-@synthesize filePath = _filePath;
 
 - (void) commonInit
 {
@@ -243,13 +235,14 @@
         if ([self.name hasPrefix:_libPath])
             self.name = [@"/" stringByAppendingString:self.name.lastPathComponent];
         self.name = [self.name stringByReplacingOccurrencesOfString:@"/GPX/" withString:@"/tracks/"];
+        self.fileName = self.name;
         if (error)
         {
             *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];
             return nil;
         }
             
-        _filePath = filePath;
+        self.filePath = filePath;
         _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath.lastPathComponent];
         if (self.subtype == EOASettingsItemFileSubtypeUnknown)
         {
@@ -276,7 +269,7 @@
         [self commonInit];
         if (self.subtype == EOASettingsItemFileSubtypeOther)
         {
-            _filePath = [_docPath stringByAppendingString:self.name];
+            self.filePath = [_docPath stringByAppendingString:self.name];
         }
         else if (self.subtype == EOASettingsItemFileSubtypeUnknown || !self.subtype)
         {
@@ -287,11 +280,11 @@
         else if (self.subtype == EOASettingsItemFileSubtypeGpx)
         {
             NSString *path = [[json[@"file"] substringFromIndex:1] stringByReplacingOccurrencesOfString:@"tracks/" withString:@""];
-            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path];
+            self.filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path];
         }
         else
         {
-            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
+            self.filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
         }
     }
     return self;
@@ -367,24 +360,9 @@
     return EOASettingsItemTypeFile;
 }
 
-- (NSString *) fileName
-{
-    return self.name;
-}
-
-- (void) setName:(NSString *)name
-{
-    _name = name;
-}
-
-- (NSString *) name
-{
-    return _name;
-}
-
 - (BOOL) exists
 {
-    return [[NSFileManager defaultManager] fileExistsAtPath:_filePath];
+    return [[NSFileManager defaultManager] fileExistsAtPath:self.filePath];
 }
 
 - (NSString *) renameFile:(NSString*)filePath
@@ -410,16 +388,6 @@
         if (![fileManager fileExistsAtPath:newFilePath])
             return newFilePath;
     }
-}
-
-- (void) setFilePath:(NSString *)filePath
-{
-    _filePath = filePath;
-}
-
-- (NSString *)filePath
-{
-    return _filePath;
 }
 
 - (NSString *) getIconName

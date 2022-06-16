@@ -17,6 +17,7 @@
 #import "OAVoiceRouter.h"
 #import "OrderedDictionary.h"
 #import "OAIndexConstants.h"
+#import "OARoutePreferencesParameters.h"
 
 @implementation OAProfileSettingsItem
 {
@@ -102,7 +103,7 @@
     [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         if ([key isEqualToString:@"displayed_transport_settings"])
         {
-            [styleSettings setCategoryEnabled:obj.length > 0 categoryName:@"transport"];
+            [styleSettings setCategoryEnabled:obj.length > 0 categoryName:TRANSPORT_CATEGORY];
             return;
         }
         
@@ -134,7 +135,7 @@
             }
             else
             {
-                [[settings getCustomRoutingProperty:paramName defaultValue:param->second.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"] set:obj mode:self.appMode];
+                [[settings getCustomRoutingProperty:paramName defaultValue:param->second.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue] set:obj mode:self.appMode];
             }
         }
     }];
@@ -218,6 +219,7 @@
         OAApplicationModeBuilder *builder = [OAApplicationMode createCustomMode:parent stringKey:_modeBean.stringKey];
         [builder setIconResName:_modeBean.iconName];
         [builder setUserProfileName:_modeBean.userProfileName];
+        [builder setDerivedProfile:_modeBean.derivedProfile];
         [builder setRoutingProfile:_modeBean.routingProfile];
         [builder setRouteService:_modeBean.routeService];
         [builder setIconColor:_modeBean.iconColor];
@@ -336,9 +338,9 @@
     [OsmAndApp.instance.data addPreferenceValuesToDictionary:res mode:self.appMode];
     OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
     NSMutableString *enabledTransport = [NSMutableString new];
-    if ([styleSettings isCategoryEnabled:@"transport"])
+    if ([styleSettings isCategoryEnabled:TRANSPORT_CATEGORY])
     {
-        NSArray<OAMapStyleParameter *> *transportParams = [styleSettings getParameters:@"transport"];
+        NSArray<OAMapStyleParameter *> *transportParams = [styleSettings getParameters:TRANSPORT_CATEGORY];
         for (OAMapStyleParameter *p in transportParams)
         {
             if ([p.value isEqualToString:@"true"])
@@ -368,7 +370,7 @@
             }
             else
             {
-                OACommonString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
+                OACommonString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
                 res[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [stringSetting get:self.appMode];
                 
             }

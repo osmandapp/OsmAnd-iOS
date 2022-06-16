@@ -25,6 +25,8 @@
 #define kReceiptValidationMinPeriod 60.0 * 60.0 * 24.0 * 1.0 // 1 day
 #define kReceiptValidationMaxPeriod 60.0 * 60.0 * 24.0 * 30.0 // 30 days
 
+#define kSimMinSpeed 5 / 3.6f
+
 @class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration;
 
 typedef NS_ENUM(NSInteger, EOARouteService)
@@ -236,6 +238,29 @@ typedef NS_ENUM(NSInteger, EOACoordinateInputFormats)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOASimulationMode)
+{
+    EOASimulationModePreview = 0,
+    EOASimulationModeConstant,
+    EOASimulationModeRealistic
+};
+
+@interface OASimulationMode : NSObject
+
+- (instancetype)initWithMode:(EOASimulationMode)mode;
++ (NSArray<OASimulationMode *> *)values;
++ (OASimulationMode *)getModeObject:(NSString *)key;
++ (EOASimulationMode)getMode:(NSString *)key;
++ (NSString *)toKey:(EOASimulationMode)mode;
++ (NSString *)toTitle:(EOASimulationMode)mode;
++ (NSString *)toDescription:(EOASimulationMode)mode;
+- (EOASimulationMode)mode;
+- (NSString *)key;
+- (NSString *)title;
+- (NSString *)description;
+
+@end
+
 @interface OACommonPreference : NSObject
 
 @property (nonatomic, readonly) NSString *key;
@@ -344,6 +369,17 @@ typedef NS_ENUM(NSInteger, EOACoordinateInputFormats)
 - (OAMapSource *) get:(OAApplicationMode *)mode;
 - (void) set:(OAMapSource *)mapSource;
 - (void) set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonUnit : OACommonPreference
+
++ (instancetype) withKey:(NSString *)key defValue:(NSUnit *)defValue;
+
+- (NSUnit *) get;
+- (void) set:(NSUnit *)string;
+- (NSUnit *) get:(OAApplicationMode *)mode;
+- (void) set:(NSUnit *)string mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -647,10 +683,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *fullVersionPurchased;
 @property (nonatomic) OACommonBoolean *depthContoursPurchased;
 @property (nonatomic) OACommonBoolean *contourLinesPurchased;
+@property (nonatomic) OACommonBoolean *wikipediaPurchased;
 @property (nonatomic) OACommonBoolean *emailSubscribed;
 @property (nonatomic) OACommonBoolean *osmandProPurchased;
 @property (nonatomic) OACommonBoolean *osmandMapsPurchased;
-@property (nonatomic, assign) BOOL displayDonationSettings; //global ?
 @property (nonatomic) NSDate* lastReceiptValidationDate; //global ?
 @property (nonatomic, assign) BOOL eligibleForIntroductoryPrice; //global ?
 @property (nonatomic, assign) BOOL eligibleForSubscriptionOffer; //global ?
@@ -692,6 +728,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *settingOsmAndLiveEnabled;
 @property (nonatomic) OACommonInteger *liveUpdatesRetries;
 
+@property (nonatomic) OACommonBoolean *animateMyLocation;
+
 - (OACommonBoolean *)getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
 - (OACommonString *)getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
 
@@ -721,6 +759,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *routerService;
 
 @property (nonatomic) OACommonString *routingProfile;
+@property (nonatomic) OACommonString *derivedProfile;
 
 @property (nonatomic) OACommonString *customAppModes;
 
@@ -735,6 +774,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;
+@property (nonatomic) OACommonBoolean *forcePrivateAccessRoutingAsked;
 @property (nonatomic) OACommonBoolean *fastRouteMode;
 @property (assign, nonatomic) BOOL disableComplexRouting;
 @property (nonatomic) OACommonBoolean *followTheRoute;
@@ -744,6 +784,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *useIntermediatePointsNavigation;
 @property (nonatomic) OACommonBoolean *disableOffrouteRecalc;
 @property (nonatomic) OACommonBoolean *disableWrongDirectionRecalc;
+@property (nonatomic) OACommonBoolean *hazmatTransportingEnabled;
 @property (nonatomic) OACommonBoolean *gpxRouteCalcOsmandParts;
 @property (nonatomic) OACommonBoolean *gpxCalculateRtept;
 @property (nonatomic) OACommonBoolean *gpxRouteCalc;
@@ -802,7 +843,11 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *centerPositionOnMap;
 @property (nonatomic) OACommonBoolean *showDistanceRuler;
 
-@property (assign, nonatomic) BOOL simulateRouting;
+@property (assign, nonatomic) BOOL simulateNavigation;
+@property (nonatomic) NSString *simulateNavigationMode;
+@property (assign, nonatomic) float simulateNavigationSpeed;
+@property (nonatomic) NSString *simulateNavigationGpxTrack;
+@property (nonatomic) NSString *simulateNavigationGpxTrackSpeedMode;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
 @property (nonatomic) OACommonRulerWidgetMode *rulerMode;

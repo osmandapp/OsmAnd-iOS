@@ -209,6 +209,7 @@
 {
     OAQuickActionType *item = [self getItem:indexPath];
     OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:[item createNew] isNew:YES];
+    actionScreen.delegate = self.delegate;
     [self.navigationController pushViewController:actionScreen animated:YES];
 }
 

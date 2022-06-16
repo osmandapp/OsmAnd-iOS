@@ -48,6 +48,7 @@
 
 - (void) setFinalAndCurrentLocation:(CLLocation *) finalLocation currentLocation:(CLLocation *)currentLocation;
 - (void) addListener:(id<OARouteInformationListener>)l;
+- (BOOL) removeListener:(id<OARouteInformationListener>)lt;
 
 - (void) clearCurrentRoute:(CLLocation *) newFinalLocation;
 - (void) recalculateRouteDueToSettingsChange;

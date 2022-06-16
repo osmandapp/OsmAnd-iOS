@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAAppSettings.h"
 
 @interface OAOsmAndFormatter : NSObject
 
@@ -18,9 +19,6 @@
 #define FEET_IN_ONE_METER (YARDS_IN_ONE_METER * 3)
 
 #define MILS_IN_DEGREE 17.777778f
-
-#define FOOTS_IN_ONE_METER  3.2808f
-#define METERS_IN_ONE_METER  1.0000f
 
 #define FORMAT_DEGREES_SHORT 6
 #define FORMAT_DEGREES 0
@@ -43,6 +41,7 @@
 
 + (double) calculateRoundedDist:(double)baseMetersDist;
 + (NSString *) getFormattedDistance:(float) meters;
++ (NSString *) getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes;
 + (NSString *) getFormattedAlarmInfoDistance:(float)meters;
 + (NSString *) getFormattedAzimuth:(float)bearing;
 + (NSString *) getFormattedTimeHM:(NSTimeInterval)timeInterval;
@@ -51,6 +50,7 @@
 + (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive;
 + (NSString *) getFormattedSpeed:(float) metersperseconds;
 + (NSString *) getFormattedAlt:(double) alt;
++ (NSString *) getFormattedAlt:(double) alt mc:(EOAMetricsConstant)mc;
 + (NSString *) getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
 + (NSString *) getFormattedDistanceInterval:(double)interval;
 + (NSString *) getFormattedOsmTagValue:(NSString *)tagValue;

@@ -306,8 +306,13 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
     [_mapPanel setTopControlsVisible:YES
             onlyMapSettingsAndSearch:YES
-                customStatusBarStyle:UIStatusBarStyleLightContent];
+                customStatusBarStyle:self.preferredStatusBarStyle];
     [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self getViewHeight] animated:YES];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void) doAdditionalLayout
@@ -1814,10 +1819,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 }
 
 #pragma mark - OAOpenAddTrackDelegate
-
-- (void)closeBottomSheet
-{
-}
 
 - (void)onFileSelected:(NSString *)gpxFileName
 {

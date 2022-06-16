@@ -8,11 +8,7 @@
 
 #import "OAMapInfoWidgetsFactory.h"
 #import "OsmAndApp.h"
-#import "OAAppSettings.h"
-#import "Localization.h"
 #import "OATextInfoWidget.h"
-#import "OAUtilities.h"
-#import "OARulerWidget.h"
 #import "OARootViewController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAMapHudViewController.h"
@@ -20,10 +16,8 @@
 #import "OAMapLayers.h"
 #import "OAMapInfoController.h"
 #import "OAOsmAndFormatter.h"
-#import "OAWeatherBand.h"
+#import "OAIAPHelper.h"
 
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/GeoCommonTypes.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
 
@@ -141,7 +135,7 @@
     OsmAnd::PointI __block cachedTarget31 = OsmAnd::PointI(0, 0);
     OsmAnd::ZoomLevel __block cachedZoom = OsmAnd::ZoomLevel::InvalidZoomLevel;
     weatherControl.updateInfoFunction = ^BOOL{
-        
+
         BOOL enabled = _app.data.weather;
         if (!enabled)
         {
@@ -184,8 +178,12 @@
                             cachedValue[0] = @(value);
                             const auto bandValue = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getConvertedBandValue(band, value);
                             const auto bandValueStr = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getFormattedBandValue(band, bandValue, true);
-                            NSString *bandUnit = [[OAWeatherBand withWeatherBand:band] getBandUnit];
-                            
+
+                            NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+                            formatter.locale = NSLocale.autoupdatingCurrentLocale;
+
+                            NSString *bandUnit = [formatter stringFromUnit:[[OAWeatherBand withWeatherBand:band] getBandUnit]];
+
                             BOOL unitsWithBigFont = band == WEATHER_BAND_TEMPERATURE;
                             if (unitsWithBigFont)
                             {
@@ -241,7 +239,7 @@
         iconNameDay = @"widget_weather_precipitation_day";
         iconNameNight = @"widget_weather_precipitation_night";
     }
-    
+
     [weatherControl setIcons:iconNameDay widgetNightIcon:iconNameNight];
     return weatherControl;
 }

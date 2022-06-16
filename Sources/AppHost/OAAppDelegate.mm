@@ -24,6 +24,8 @@
 #import "OAMapViewState.h"
 #import "OACarPlayMapViewController.h"
 #import "OACarPlayDashboardInterfaceController.h"
+#import "OAIAPHelper.h"
+#import "OAPluginPopupViewController.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -174,10 +176,18 @@
     NSDictionary<NSString *, NSString *> *params = [OAUtilities parseUrlQuery:url];
     if ([url.lastPathComponent isEqualToString:@"add-tile-source"])
     {
-        // https://osmand.net/add-tile-source?name=&url_template=&min_zoom=&max_zoom=
-        OAOnlineTilesEditingViewController *editTileSourceController = [[OAOnlineTilesEditingViewController alloc] initWithUrlParameters:params];
-        [_rootViewController.navigationController pushViewController:editTileSourceController animated:NO];
-        return YES;
+        if (_rootViewController)
+        {
+            // https://osmand.net/add-tile-source?name=&url_template=&min_zoom=&max_zoom=
+            OAOnlineTilesEditingViewController *editTileSourceController = [[OAOnlineTilesEditingViewController alloc] initWithUrlParameters:params];
+            [_rootViewController.navigationController pushViewController:editTileSourceController animated:NO];
+            return YES;
+        }
+        else
+        {
+            loadedURL = url;
+            return NO;
+        }
     }
     else if (params.count != 0)
     {
@@ -371,6 +381,12 @@
 
 - (void)application:(UIApplication *)application didConnectCarInterfaceController:(CPInterfaceController *)interfaceController toWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
 {
+    if (![OAIAPHelper isCarPlayAvailable])
+    {
+        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_CarPlay];
+        return;
+    }
+
     _app.carPlayActive = YES;
     if (!_appInitDone)
     {
@@ -407,21 +423,12 @@
 {
     NSString *scheme = [[url scheme] lowercaseString];
 
-    if ([scheme isEqualToString:@"file"])
-    {
-        if (_rootViewController)
-            return [_rootViewController handleIncomingURL:url];
-
-        loadedURL = url;
-    }
+    if ([scheme isEqualToString:@"file"] && _rootViewController)
+        return [_rootViewController handleIncomingURL:url];
     else if ([scheme isEqualToString:@"osmandmaps"])
-    {
-        if (_rootViewController)
-            return [self handleIncomingURL:url];
+        return [self handleIncomingURL:url];
 
-        loadedURL = url;
-    }
-
+    loadedURL = url;
     return NO;
 }
 

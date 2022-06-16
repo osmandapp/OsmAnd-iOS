@@ -13,7 +13,7 @@
 @protocol OAEditDescriptionViewControllerDelegate <NSObject>
 
 @optional
-- (void) descriptionChanged;
+- (void) descriptionChanged:(NSString *)descr;
 
 @end
 
@@ -28,8 +28,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (weak, nonatomic) id delegate;
-
-@property (nonatomic, copy) NSString *desc;
 
 -(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew isEditing:(BOOL)isEditing readOnly:(BOOL)readOnly;
 

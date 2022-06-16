@@ -12,12 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 struct RoutingParameter;
 
-@class OALocalRoutingParameterGroup;
+@class OALocalRoutingParameterGroup, OALocalRoutingParameter;
 
 @interface OARouteParameterValuesViewController : OABaseSettingsViewController
 
-- (instancetype) initWithRoutingParameter:(RoutingParameter &)parameter appMode:(OAApplicationMode *)mode;
-- (instancetype) initWithRoutingParameterGroup:(OALocalRoutingParameterGroup *)group appMode:(OAApplicationMode *)mode;
+- (instancetype)initWithRoutingParameterGroup:(OALocalRoutingParameterGroup *)group appMode:(OAApplicationMode *)mode;
+- (instancetype)initWithRoutingParameter:(OALocalRoutingParameter *)parameter appMode:(OAApplicationMode *)mode;
+- (instancetype)initWithParameter:(RoutingParameter &)parameter appMode:(OAApplicationMode *)mode;
 
 @end
 

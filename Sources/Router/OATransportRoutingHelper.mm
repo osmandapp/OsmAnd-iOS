@@ -201,7 +201,8 @@
     vector<SHARED_PTR<TransportRouteResult>> res;
     MAP_STR_STR paramsRes;
     auto router = [_app getRouter:params.mode];
-    auto paramsMap = router->getParameters();
+    string derivedProfile(params.mode.getDerivedProfile.UTF8String);
+    auto paramsMap = router->getParameters(derivedProfile);
     for (auto it = paramsMap.begin(); it != paramsMap.end(); ++it)
     {
         std::string key = it->first;
@@ -221,6 +222,8 @@
         if (vl.length() > 0)
             paramsRes.insert(std::pair<string, string>(key, vl));
     }
+    if (!derivedProfile.empty())
+        paramsRes["profile_" + derivedProfile] = "true";
     params.params = paramsRes;
     
     auto cfg = make_shared<TransportRoutingConfiguration>(router, params.params);

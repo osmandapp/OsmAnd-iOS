@@ -33,6 +33,7 @@
 @property (nonatomic) int color;
 @property (nonatomic) NSString *iconName;
 @property (nonatomic) NSString *routingProfile;
+@property (nonatomic) NSString *derivedProfile;
 @property (nonatomic) EOARouteService routeService;
 @property (nonatomic) EOANavigationIcon navigationIcon;
 @property (nonatomic) EOALocationIcon locationIcon;
@@ -150,6 +151,7 @@
     _changedProfile.color = _profile.color;
     _changedProfile.iconName = _profile.iconName;
     _changedProfile.routeService = _profile.routeService;
+    _changedProfile.derivedProfile = _profile.derivedProfile;
     _changedProfile.routingProfile = _profile.routingProfile;
     _changedProfile.navigationIcon = _profile.navigationIcon;
     _changedProfile.locationIcon = _profile.locationIcon;
@@ -164,6 +166,7 @@
     _profile.name = baseModeForNewProfile.toHumanString;
     _profile.color = baseModeForNewProfile.getIconColor;
     _profile.iconName = baseModeForNewProfile.getIconName;
+    _profile.derivedProfile = baseModeForNewProfile.getDerivedProfile;
     _profile.routingProfile = baseModeForNewProfile.getRoutingProfile;
     _profile.routeService = (EOARouteService) baseModeForNewProfile.getRouterService;
     _profile.locationIcon = baseModeForNewProfile.getLocationIcon;
@@ -317,6 +320,7 @@
                @"ic_action_enduro_motorcycle",
                @"ic_action_motor_scooter",
                @"ic_action_bicycle_dark",
+               @"ic_action_mountain_bike",
                @"ic_action_horse",
                @"ic_action_pedestrian_dark",
                @"ic_action_trekking_dark",
@@ -441,6 +445,7 @@
     [builder setIconResName:_changedProfile.iconName];
     [builder setUserProfileName:_changedProfile.name.trim];
     [builder setRoutingProfile:_changedProfile.routingProfile];
+    [builder setDerivedProfile:_changedProfile.derivedProfile];
     [builder setRouteService:_changedProfile.routeService];
     [builder setIconColor:_changedProfile.color];
     [builder setLocationIcon:_changedProfile.locationIcon];

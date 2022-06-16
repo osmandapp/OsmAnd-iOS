@@ -28,8 +28,9 @@ static OAColoringType * ALTITUDE;
 static OAColoringType * SLOPE;
 static OAColoringType * ATTRIBUTE;
 
-static NSArray<OAColoringType *> * ROUTE_COLORING_TYPES = @[OAColoringType.DEFAULT, OAColoringType.CUSTOM_COLOR, OAColoringType.ALTITUDE, OAColoringType.SLOPE, OAColoringType.ATTRIBUTE];
-static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK_SOLID, OAColoringType.SPEED, OAColoringType.ALTITUDE, OAColoringType.SLOPE, OAColoringType.ATTRIBUTE];
+// TODO: make other types available in the new subscription
+static NSArray<OAColoringType *> * ROUTE_COLORING_TYPES = @[OAColoringType.DEFAULT, OAColoringType.CUSTOM_COLOR, OAColoringType.ALTITUDE, /*OAColoringType.SLOPE, OAColoringType.ATTRIBUTE*/];
+static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK_SOLID, OAColoringType.ALTITUDE, /*OAColoringType.SPEED, OAColoringType.SLOPE, OAColoringType.ATTRIBUTE*/];
 
 @implementation OAColoringType
 

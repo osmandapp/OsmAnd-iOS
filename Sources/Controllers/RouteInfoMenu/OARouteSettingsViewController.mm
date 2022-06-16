@@ -126,7 +126,9 @@
     OALocalRoutingParameter *param = _data[@(indexPath.section)][indexPath.row];
     NSString *text = [param getText];
     //NSString *description = [param getDescription];
-    NSString *value = [param getValue];
+    NSString *value = [param isKindOfClass:OAHazmatRoutingParameter.class]
+            ? OALocalizedString([param isSelected] ? @"shared_string_yes" : @"shared_string_no")
+            : [param getValue];
     //UIImage *icon = [param getIcon];
     NSString *type = [param getCellType];
     OAApplicationMode *appMode = [self.routingHelper getAppMode];
@@ -188,7 +190,9 @@
             cell.descriptionView.hidden = !value || value.length == 0;
             cell.descriptionView.text = value;
             cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.leftIconView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftIconView.image = [param isKindOfClass:OAHazmatRoutingParameter.class]
+                    ? [param getIcon]
+                    : [[param getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.leftIconView.tintColor = UIColorFromRGB([appMode getIconColor]);
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
         }

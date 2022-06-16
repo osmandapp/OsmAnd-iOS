@@ -187,7 +187,7 @@ static const NSInteger _contactInfoSectionCount = 5;
 -(void) populateOpeningHours
 {
     NSMutableArray *dataArr = [NSMutableArray new];
-    NSString *openingHoursString = [_poiData getTag:[OAOSMSettings getOSMKey:OPENING_HOURS]];
+    NSString *openingHoursString = [_poiData getTag:[OAOSMSettings getOSMKey:OSM_TAG_OPENING_HOURS]];
     if (openingHoursString && openingHoursString.length > 0)
     {
         _openingHours = OpeningHoursParser::parseOpenedHours([openingHoursString UTF8String]);

@@ -57,6 +57,7 @@
 - (int) getTileSize;
 - (BOOL) supportsTileDownload;
 - (void) updateInfo:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile title:(NSString *)title;
+- (NSString *) getFilePath;
 
 - (void) setTileSize:(int)tileSize;
 

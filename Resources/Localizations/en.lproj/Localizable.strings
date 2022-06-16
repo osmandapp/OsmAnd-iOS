@@ -112,6 +112,14 @@
 "unknown_location" = "Position not yet known";
 "animate_routing_route_not_calculated" = "Please calculate the route first";
 
+"simulation_real_mode_desc" = "• On straight road sections, speed will be approximate to the maximum allowed speed.\n• At intersections, the simulation will slow down.\n• Extra penalties will be applied on traffic signals, stop signs, etc.";
+"simulation_real_mode_title" = "Realistic simulation";
+"simulation_constant_mode_desc" = "The simulation will be performed with constant selected speed.";
+"simulation_constant_mode_title" = "Fixed speed";
+"simulation_preview_mode_desc" = "The speed of the simulation will be maximum on straight sections and slow down only at intersections.";
+"simulation_preview_mode_title" = "Fast preview mode";
+"speed_mode" = "Speed mode";
+
 "settings_preset" = "Default profile";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
 "dialogs_and_notifications" = "Dialogs and notifications";
@@ -141,6 +149,8 @@
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
 "road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
+"animate_my_location" = "Animate location change";
+"animate_my_location_descr" = "Smooth transition of location on the map during navigation";
 
 // Track recording settings
 "save_global_track_interval" = "General logging interval";
@@ -542,6 +552,12 @@
 "shared_string_gpx_track" = "Track";
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_any" = "Any";
+"shared_string_capacity" = "Capacity";
+"shared_string_learn_more" = "Learn more";
+"shared_string_includes" = "Includes";
+"shared_string_purchased" = "Purchased";
+"shared_string_start" = "Start";
+"shared_string_stop" = "Stop";
 
 "restart" = "Restart";
 
@@ -644,6 +660,7 @@
 "shared_string_export" = "Export";
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Route points";
+"copy_to_map_favorites" = "Copy to favorites";
 
 "import_export" = "Import/Export";
 
@@ -679,6 +696,8 @@
 "gpx_alt_range" = "Altitude range";
 "gpx_ascent" = "Ascent";
 "gpx_descent" = "Descent";
+"altitude_ascent" = "Uphill";
+"altitude_descent" = "Downhill";
 "gpx_updown" = "Up/Down";
 "gpx_uphills_total" = "Uphills total";
 "distance_moving" = "Distance corrected";
@@ -775,7 +794,7 @@
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
-"map_settings_weather" = "Weather";
+"product_title_weather" = "Weather";
 "map_settings_weather_temp" = "Temperature";
 "map_settings_weather_pressure" = "Pressure";
 "map_settings_weather_wind" = "Wind";
@@ -783,7 +802,15 @@
 "map_settings_weather_precip" = "Precipitation";
 "map_settings_clear_geo_cache" = "Clear geo tiles";
 "map_settings_clear_raster_cache" = "Clear raster tiles";
-"map_settings_weather_isolines" = "Isolines";
+"map_settings_weather_contours" = "Contours";
+"map_settings_weather_layers" = "Layers";
+
+"weather_temp_enable_descr" = "Enable to view temperature layer on the map.";
+"weather_pressure_enable_descr" = "Enable to view pressure layer on the map.";
+"weather_wind_enable_descr" = "Enable to view wind layer on the map.";
+"weather_cloud_enable_descr" = "Enable to view cloud layer on the map.";
+"weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
+"weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
 
 "settings_app_theme" = "Application theme";
 "app_theme_light" = "Light";
@@ -1024,6 +1051,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
+"ltr_or_rtl_combine_via_or" = "%@ or %@";
 
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
 
@@ -1304,6 +1332,21 @@
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
+"osmand_depelopment_simulate_location_section" = "Simulate";
+"simulate_in_progress" = "In progress";
+"simulate_your_location_gpx_descr" = "You can simulate location moving by using GPX track.";
+"simulate_location_track_select_descr" = "Choose track that will use as source for location moving.";
+"simulate_location_unselected_track_footer" = "You need to select track file";
+"simulate_location_movement_speed" = "Movement speed";
+"simulate_location_movement_speed_original" = "Original";
+"simulate_location_movement_speed_x2" = "x2";
+"simulate_location_movement_speed_x3" = "x3";
+"simulate_location_movement_speed_x4" = "x4";
+"simulate_location_movement_speed_original_desc" = "The location movement speed during the simulation will be equal to the speed in the selected file.";
+"simulate_location_movement_speed_x2_desc" = "The location movement speed during the simulation will be x2 bigger to the speed in the selected file.";
+"simulate_location_movement_speed_x3_desc" = "The location movement speed during the simulation will be x3 bigger to the speed in the selected file.";
+"simulate_location_movement_speed_x4_desc" = "The location movement speed during the simulation will be x4 bigger to the speed in the selected file.";
+
 "osm_note" = "OSM Note";
 "osm_created" = "Created";
 "osm_deleted" = "Deleted";
@@ -1428,6 +1471,21 @@
 "toggle_fav" = "Show/hide favorites";
 "fav_show" = "Show favorites";
 "fav_hide" = "Hide favorites";
+"temperature_show" = "Show temperature";
+"temperature_hide" = "Hide temperature";
+"toggle_temperature" = "Show/hide - Temperature layer";
+"pressure_show" = "Show pressure";
+"pressure_hide" = "Hide pressure";
+"toggle_pressure" = "Show/hide - Pressure layer";
+"wind_show" = "Show wind";
+"wind_hide" = "Hide wind";
+"toggle_wind" = "Show/hide - Wind layer";
+"cloud_show" = "Show cloud";
+"cloud_hide" = "Hide cloud";
+"toggle_cloud" = "Show/hide - Cloud layer";
+"precipitation_show" = "Show precipitation";
+"precipitation_hide" = "Hide precipitation";
+"toggle_precipitation" = "Show/hide - Precipitation layer";
 "toggle_poi" = "Show/hide POI";
 "hide_poi_action" = "Hide POI";
 "add_parking_place" = "Add parking place";
@@ -1563,7 +1621,6 @@
 "osm_alert_button_ok" = "Create note";
 "modify_poi" = "Modify the POI information";
 "actions" = "Actions";
-"parking_marker" = "Parking marker";
 "time_limited" = "Time limited";
 "pickup_car" = "Pickup the car";
 "pickup_car_at" = "Pickup the car at";
@@ -1578,6 +1635,7 @@
 // Units
 "units_km" = "km";
 "units_m" = "m";
+"units_cubic_m" = "m³";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
@@ -1747,6 +1805,10 @@
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
 "product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
+
+"product_title_development" = "OsmAnd development";
+"product_desc_development" = "Settings for development and debugging features";
+"product_desc_ext_development" = "Settings for development and debugging features, like navigation simulation, rendering performance, or voice prompting. Intended for developers, not needed for normal app use.";
 
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
@@ -1926,8 +1988,32 @@
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
+"plugin_popup_nautical_ask" = "Please enable Nautical plugin";
 "plugin_popup_osm_editing_title" = "Turn on OpenStreetMap Editing";
 "plugin_popup_osm_editing_ask" = "Please enable OpenStreetMap Editing plugin to add and manage map edits and notes";
+"plugin_popup_weather_title" = "Turn on Weather";
+"plugin_popup_weather_ask" = "Please enable Weather plugin";
+"product_desc_weather" = "24h hourly forecast & 7 days forecast each 3 hours";
+"product_desc_ext_weather" = "Weather plugin provides\n- 5 layers...  24h hourly forecast & 7 days forecast each 3 hours\n- location-based widgets\n- temperature / pressure isolines\nWeather data is provided by GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
+
+"measurement_units" = "Measurement units";
+
+"weather_temp_unit_c" = "Celsius";
+"weather_temp_unit_f" = "Fahrenheit";
+
+"weather_pressure_unit_hpa" = "Hectopascals";
+"weather_pressure_unit_mmhg" = "Millimeters of mercury";
+"weather_pressure_unit_inhg" = "Inches of mercury";
+
+"weather_wind_unit_m_s" = "Meters/Second";
+"weather_wind_unit_km_per_hour" = "Kilometers per hour";
+"weather_wind_unit_mi_per_hour" = "Miles per hour";
+"weather_wind_unit_knots" = "Knots";
+
+"weather_precip_unit_mm" = "Millimeters";
+"weather_precip_unit_in" = "Inches";
+
+"weather_cloud_data_description" = "Weather data will be downloaded for viewed area each time.";
 
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
@@ -1935,6 +2021,8 @@
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
 "restore" = "Restore";
 "restore_all_purchases" = "Restore all purchases";
+"restore_purchase" = "Restore purchase";
+"restore_purchases" = "Restore purchases";
 
 "no_statistics" = "No statistics";
 
@@ -2091,6 +2179,7 @@
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
 "osm_live_payment_annual_title" = "Pay once a year";
 "osm_live_payment_month_cost_descr" = "%@ / month";
+"osm_live_payment_year_cost_descr" = "%@ / year";
 "osm_live_payment_month_cost_descr_ex" = "%@ %@ / month";
 "osm_live_payment_discount_descr" = "Save %@!";
 "osm_live_payment_current_subscription" = "Your current subscription";
@@ -2111,9 +2200,9 @@
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Unlimited downloads";
 "wikipedia_offline" = "Wikipedia offline";
-"contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
-"monthly_map_updates" = "Map updates: every month";
-"daily_map_updates" = "Map updates: every hour";
+"contour_lines_hillshade_maps" = "Terrain maps: contour lines, hillshades, slope";
+"monthly_map_updates" = "Monthly map updates";
+"daily_map_updates" = "Hourly map updates";
 "index_item_depth_contours_osmand_ext" = "Nautical depth contours";
 "donation_to_osm" = "Donation to OpenStreetMap community";
 "purchase_unlim_title" = "Buy - %@";
@@ -2177,6 +2266,8 @@
 "routing_attr_allow_expert_description" = "Extremely difficult routes, with dangerous obstacles and surroundings.";
 "routeInfo_surface_name" = "Surface";
 "routeInfo_surface_description" = "Provide road/footpath physical surface info.";
+"routeInfo_horse_scale_name" = "Difficulty of horse trails";
+"routeInfo_horse_scale_description" = "Render paths according to difficulty of horse trails";
 "rendering_attr_showMtbRoutes_name" = "Mountain bike routes";
 "rendering_attr_tracktype_grade5_name" = "Soft";
 "routing_attr_avoid_share_taxi_description" = "Avoids share taxi";
@@ -2211,6 +2302,9 @@
 "routing_attr_avoid_ferry_description" = "Avoids ferries";
 "rendering_attr_highway_class_track_grade2_name" = "Grade 2";
 "rendering_attr_shareTaxiRoutes_name" = "Share taxi routes";
+"rendering_attr_lightRailRoutes_name" = "Light rail routes";
+"rendering_attr_monorailRoutes_name" = "Monorail routes";
+"rendering_attr_funicularRoutes_name" = "Funicular routes";
 "routing_attr_relief_smoothness_factor_hills_name" = "Hilly";
 "rendering_attr_contourWidth_name" = "Contour line width";
 "routing_attr_piste_type_sled_description" = "Slopes for sled usage.";
@@ -2351,6 +2445,8 @@
 "rendering_attr_undefined_name" = "Undefined";
 "rendering_value_red_name" = "Red";
 "routing_attr_allow_private_name" = "Allow private access";
+"routing_attr_allow_private_for_truck_name" = "Allow private access (truck)";
+"private_access_routing_req" = "Your destination is located in an area with private access. Allow using private roads for this trip?";
 "routeInfo_tracktype_name" = "Surface firmness";
 "routeInfo_tracktype_description" = "Color the route or track line by its surface composition. Typically apply when the road network is largely unpaved.";
 "rendering_attr_highway_class_path_name" = "Path";
@@ -2389,6 +2485,7 @@
 "rendering_attr_surface_salt_name" = "Salt";
 "rendering_value_yellow_name" = "Yellow";
 "routing_attr_allow_private_description" = "Allow access to private areas.";
+"routing_attr_allow_private_for_truck_description" = "Allow access to private areas for trucks";
 "rendering_attr_alpineHiking_description" = "Render paths according to the SAC scale.";
 "rendering_attr_highway_class_bridleway_name" = "Bridleway";
 "routing_attr_avoid_share_taxi_name" = "No share taxi";
@@ -2465,7 +2562,11 @@
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
 "default" = "Default";
-
+"routing_attr_hazmat_category_name" = "Transporting of hazardous materials";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (No restrictions)";
+"transport_hazmat_yes_desc" = "You need to choose proper category.";
+"transport_hazmat_no_desc" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
+   
 
 //Icon categories
 "amenity" = "Amenity";
@@ -2514,6 +2615,19 @@
 "login_error_email_invalid" = "Please enter a valid e-mail address";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 
+"backup_error_no_valid_subscription" = "No valid subscription present";
+"backup_error_user_is_not_registered" = "No user registered with that e-mail address";
+"backup_error_token_is_not_valid_or_expired" = "Invalid or expired token";
+"backup_error_token_is_not_valid" = "Something is wrong with the provided device ID or token";
+"backup_error_file_not_available" = "File unavailable";
+"backup_error_gzip_only_supported_upload" = "The file should be sent in .gzip format";
+"backup_error_size_is_exceeded" = "Maximum size of OsmAnd Cloud exceeded %@";
+"backup_error_subscription_was_used" = "Subscription or promo used by another account %@";
+"backup_error_subscription_was_expired_descr" = "Your OsmAnd Pro subscription is expired, renew it to use backup. You can still restore data from the Cloud.";
+"backup_error_subscription_was_expired" = "Expired subscription";
+"backup_error_user_is_already_registered" = "This e-mail address is in use on another account";
+"backup_error_invalid_token" = "Token is not valid";
+
 "register_opr_create_new_account" = "Create new account";
 "osmand_cloud_create_account_descr" = "Please enter your e-mail address, a verification code will be sent there, and all your data will be linked to it.";
 
@@ -2556,6 +2670,62 @@
 "cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";
 "cloud_view_conflicts" = "View conflicts";
 
+"copy_address" = "Copy address";
+"copy_poi_name" = "Copy POI Name";
+"copy_coordinates" = "Copy coordinates";
+"share_geo" = "geo:";
+"toast_empty_name_error" = "Unnamed location";
+
+"pro_features" = "Pro Features";
+"unlimited_map_downloads" = "Unlimited map downloads";
+"carplay" = "CarPlay";
+"wikipedia_and_wikivoyage_offline" = "Wikipedia and Wikivoyage offline";
+"nautical_depth" = "Nautical depth";
+"terrain_maps" = "Terrain maps";
+
+"purchases_feature_desc_osmand_cloud" = "Get OsmAnd Cloud to store all OsmAnd data online. No lost data after reinstalling. Back up and restore all info easily.";
+"purchases_feature_desc_pro_widgets" = "Get access to OsmAnd Pro features: Route coloring and more.";
+"purchases_feature_desc_hourly_map_updates" = "Get access to more frequent map updates. Hourly, daily, or weekly updates. Updates are downloaded incrementally, only for the changed area.";
+"purchases_feature_desc_monthly_map_updates" = "Get access to regular monthly updates for offline maps.";
+"purchases_feature_desc_unlimited_map_download" = "Get unlimited downloads for all continents and regions offline maps.";
+"purchases_feature_desc_carplay" = "Brings OsmAnd offline maps and navigation to your vehicle screen and integrates with your vehicle\'s controls.";
+"purchases_feature_desc_combined_wiki" = "Explore Wikipedia articles on the go, without an internet connection. Offline data divided by countries and available in all languages.";
+"purchases_feature_desc_wikipedia" = "Explore Wikipedia offline. Articles divided by countries and regions and available in all languages.";
+"purchases_feature_desc_wikivoyage" = "Explore Wikivoyage offline. Articles divided by countries and regions and available in all languages.";
+"purchases_feature_desc_terrain" = "Terrain contour lines, full hillshade map with dark shades and slope maps with colors to show peaks and lowlands.";
+"purchases_feature_desc_nautical" = "Get access to nautical depth information";
+"purchases_feature_weather" = "";
+"you_can_get_feature_as_part_of_pattern" = "Get “%@” as part of the %@ plan. Comparison:";
+
+"monthly_subscription" = "Monthly subscription";
+"annual_subscription" = "Annual subscription";
+"quarterly_subscription" = "Quarterly subscription";
+
+"option_available_only_by_subscription" = "Available in subscription plans";
+"subscriptions" = "Subscriptions";
+
+"product_title_pro" = "OsmAnd Pro";
+"product_desc_pro" = "Get maximum features";
+"product_title_plus" = "Maps+";
+"product_desc_plus" = "Get extended features";
+
+"not_available_with" = "Not available with %@";
+"continue_with" = "Continue with %@";
+"complete_purchase" = "Complete purchase";
+"subscription_cancel_description" = "Cancel anytime in AppStore.";
+
+"osm_live_payment_subscription_management_aid" = "Payment will be charged to your Apple ID account at the confirmation of purchase.\n\nSubscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.\n\nYou can manage and cancel your subscriptions by going to your account settings on the App Store after purchase";
+
+"no_purchases" = "You don’t have any purchases";
+"empty_purchases_description" = "If your purchases don\'t show up here, tap on “%@”, or contact our support team.";
+"explore_osmnad_plans_to_find_suitable" = "Explore OsmAnd Plans to find one suitable for you.";
+"osm_live_banner_desc" = "Get unlimited map downloads, adding weekly, daily, or even hourly updates.";
+"redeem_promo_code" = "Redeem promo code";
+"new_device_account" = "New device / new account";
+"expired" = "Expired";
+"expires" = "Expires";
+"manage_subscription" = "Manage subscription";
+
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
@@ -2587,7 +2757,7 @@
 • Added Finnish localization\n
 • Fixed UI in landscape orientation for \"Plan a route\" screen\n
 • Added support for custom routing and rendering files\n
-• Fixed performance of markers direction line\n 
+• Fixed performance of markers direction line\n
 • Fixed issue with importing GPX files with uppercase extensions\n
 • Fixed issue with \"Follow track\" menu\n
 • Fixed import of OBF files\n";
@@ -2601,3 +2771,21 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+
+"ios_release_4_2" = "• Route line appearance: added ability to set width and color\n
+• Tracks: added option for deleting several tracks at once\n
+• Track context menu: added scroll bar with waypoint groups\n
+• Map appearance: divided additional routes by type with ability to enable one from each category separately\n
+• Horseback riding: add new navigation type and app profile\n
+• OsmAnd files are now visible in the \"Files\" application\n
+• UX of options \"Use elevation data\" and \"Select elevation fluctuation\"  was improved, they were combined and renamed to \"Preferred terrain\", currently available for \"Bicycle\" and \"Pedestrian\" profiles.\n
+• New option \"Include heading\" for track recording\n
+• Street name widget: now show road shield and exit number during navigation\n
+• New Fitness and running routes on the map\n
+• CarPlay bug fixes, added gestures for touchscreens\n
+• Fixed import of GPX files from OSF package\n
+• Fixed import of custom plugins with included files\n
+• Fixed various crashes in the Route planning mode\n
+• Fixed crashes during Navigation\n";
+
+

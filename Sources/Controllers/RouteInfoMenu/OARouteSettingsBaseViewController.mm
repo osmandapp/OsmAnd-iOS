@@ -21,6 +21,8 @@
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAFollowTrackBottomSheetViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
+#import "OASimulationNavigationSettingViewController.h"
+#import "OARouteParameterValuesViewController.h"
 
 @interface OARouteSettingsBaseViewController () <OARoutePreferencesParametersDelegate, OASettingsDataDelegate, OARouteLineAppearanceViewControllerDelegate>
 
@@ -94,10 +96,11 @@
     if (rm == nullptr)
         return list;
     
-    auto& params = rm->getParametersList();
+    auto params = rm->getParameters(string(am.getDerivedProfile.UTF8String));
     vector<RoutingParameter> reliefFactorParameters;
-    for (auto& r : params)
+    for (auto it = params.begin(); it != params.end(); ++it)
     {
+        auto& r = it->second;
         if (r.type == RoutingParameterType::BOOLEAN)
         {
             if ([[NSString stringWithUTF8String:r.group.c_str()] isEqualToString:kRouteParamGroupReliefSmoothnessFactor])
@@ -130,6 +133,13 @@
                 [list addObject:rp];
             }
         }
+        else if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamIdHazmatCategory])
+        {
+            OAHazmatRoutingParameter *hazmatCategory = [[OAHazmatRoutingParameter alloc] initWithAppMode:[self.routingHelper getAppMode]];
+            hazmatCategory.routingParameter = r;
+            hazmatCategory.delegate = self;
+            [list addObject:hazmatCategory];
+        }
     }
 
     if (reliefFactorParameters.size() > 0)
@@ -155,9 +165,10 @@
     if (rm == nullptr)
         return list;
     
-    auto& params = rm->getParametersList();
-    for (auto& r : params)
+    auto params = rm->getParameters(string(am.getDerivedProfile.UTF8String));
+    for (auto it = params.begin(); it != params.end(); ++it)
     {
+        auto& r = it->second;
         if (r.type == RoutingParameterType::BOOLEAN)
         {
             if ([[NSString stringWithUTF8String:r.group.c_str()] isEqualToString:kRouteParamGroupReliefSmoothnessFactor])
@@ -332,6 +343,14 @@
     [self presentViewController:paramController animated:YES completion:nil];
 }
 
+- (void) showParameterValuesScreen:(OALocalRoutingParameter *)parameter;
+{
+    OARouteParameterValuesViewController *paramController = [[OARouteParameterValuesViewController alloc] initWithRoutingParameter:parameter
+                                                                                                                    appMode:[[OARoutingHelper sharedInstance] getAppMode]];
+    paramController.delegate = self;
+    [self presentViewController:paramController animated:YES completion:nil];
+}
+
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
     OANavigationLanguageViewController *settingsViewController = [[OANavigationLanguageViewController alloc] initWithAppMode:[[OARoutingHelper sharedInstance] getAppMode]];
@@ -363,6 +382,13 @@
             [OARootViewController.instance.mapPanel showScrollableHudViewController:routeLineAppearanceHudViewController];
         }];
     }];
+}
+
+- (void) openSimulateNavigationScreen
+{
+    OASimulationNavigationSettingViewController *simulateController = [[OASimulationNavigationSettingViewController alloc] initWithAppMode:[_routingHelper getAppMode]];
+    simulateController.delegate = self;
+    [self presentViewController:simulateController animated:YES completion:nil];
 }
 
 - (void) showTripSettingsScreen

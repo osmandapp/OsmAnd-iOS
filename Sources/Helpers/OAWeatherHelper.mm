@@ -87,7 +87,7 @@
         }
 
         auto settings = std::make_shared<const OsmAnd::GeoBandSettings>(
-            QString::fromNSString([band getBandUnit]),
+            QString::fromNSString([band getBandUnit].symbol),
             QString::fromNSString([band getBandGeneralUnitFormat]),
             QString::fromNSString([band getBandPreciseUnitFormat]),
             QString::fromNSString([band getInternalBandUnit]),
@@ -100,6 +100,26 @@
         result.insert((OsmAnd::BandIndex)band.bandIndex, settings);
     }
     return result;
+}
+
+- (void) calculateCacheSize:(void (^)(unsigned long long geoDbSize, unsigned long long rasterDbSize))completion
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSFileManager *fm = [NSFileManager defaultManager];
+        unsigned long long geoDbSize = 0;
+        unsigned long long rasterDbSize = 0;
+        NSArray *cacheFilePaths = [fm contentsOfDirectoryAtPath:_app.cachePath error:nil];
+        for (NSString *filePath in cacheFilePaths)
+        {
+            if ([filePath hasSuffix:@".raster.db"]) {
+                rasterDbSize += [[fm attributesOfItemAtPath:[_app.cachePath stringByAppendingPathComponent:filePath] error:nil] fileSize];
+            }
+            if ([filePath hasSuffix:@".tiff.db"]) {
+                geoDbSize += [[fm attributesOfItemAtPath:[_app.cachePath stringByAppendingPathComponent:filePath] error:nil] fileSize];
+            }
+        }
+        completion(geoDbSize, rasterDbSize);
+    });
 }
 
 @end

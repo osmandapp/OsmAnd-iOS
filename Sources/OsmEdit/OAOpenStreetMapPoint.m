@@ -31,7 +31,7 @@
 {
     NSString *type = @"amenity";
     for (NSString *key in [_entity getTagKeySet]) {
-        if (![[OAOSMSettings getOSMKey:NAME] isEqualToString:key] && ![[OAOSMSettings getOSMKey:OPENING_HOURS] isEqualToString:key] &&
+        if (![[OAOSMSettings getOSMKey:NAME] isEqualToString:key] && ![[OAOSMSettings getOSMKey:OSM_TAG_OPENING_HOURS] isEqualToString:key] &&
             ![key hasPrefix:REMOVE_TAG_PREFIX]) {
             type = key;
             break;

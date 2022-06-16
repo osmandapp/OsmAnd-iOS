@@ -45,7 +45,7 @@
     if (_targetPoint.type == OATargetParking)
     {
         _iconView.image = [UIImage imageNamed:@"map_parking_pin"];
-        [_titleView setText:OALocalizedString(@"parking_marker")];
+        [_titleView setText:OALocalizedString(@"map_widget_parking")];
         [self updateDescriptionView];
         OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
         if (plugin && plugin.getParkingType)

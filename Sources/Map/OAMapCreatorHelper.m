@@ -8,7 +8,6 @@
 
 #import "OAMapCreatorHelper.h"
 #import "OALog.h"
-#import "OsmAndApp.h"
 
 @implementation OAMapCreatorHelper
 
@@ -101,8 +100,7 @@
         _files = [NSDictionary dictionaryWithDictionary:tmp];
     }
 
-    if ([filePath hasPrefix:[OsmAndApp instance].inboxPath])
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    [OAUtilities denyAccessToFile:filePath removeFromInbox:YES];
 
     [self applyExcludedFromBackup:path];
     

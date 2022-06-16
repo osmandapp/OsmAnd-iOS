@@ -58,6 +58,7 @@
 #import "OATableViewCustomFooterView.h"
 #import "OARouteAvoidTransportSettingsViewController.h"
 #import "OAOsmAndFormatter.h"
+#import "OALinks.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -77,7 +78,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     EOARouteInfoMenuStateFullScreen
 };
 
-@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, UITextViewDelegate, OASegmentSelectionDelegate>
+@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, UITextViewDelegate, OASegmentSelectionDelegate, OARoutingSettingsCellDelegate>
 
 @end
 
@@ -119,6 +120,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     BOOL _needChartUpdate;
     
     BOOL _hasEmptyTransportRoute;
+    BOOL _optionsMenuSelected;
 }
 
 - (instancetype) init
@@ -305,7 +307,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             if (doc != nullptr && (doc->hasRtePt() || doc->hasTrkPt()))
             {
                 [visibleGpx addObject:gpx];
-                [visibleGpxDocs addObject:[[OAGPXDocument alloc] initWithGpxFile:it.key().toNSString()]];
+                [visibleGpxDocs addObject:[[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(doc)]];
             }
         }
     }
@@ -324,6 +326,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         OAGPXDocument *doc = visibleGpxDocs[i];
         if (gpx && doc)
         {
+            doc.path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
             [section addObject:@{
                 @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
                 @"title" : gpx.getNiceTitle,
@@ -1019,6 +1022,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void)show:(BOOL)animated fullMenu:(BOOL)fullMenu onComplete:(void (^)(void))onComplete
 {
     visible = YES;
+    _optionsMenuSelected = NO;
     [_appModeView setupModeButtons];
     [_tableView setContentOffset:CGPointZero];
     _currentState = fullMenu ? EOARouteInfoMenuStateFullScreen : _currentState;
@@ -1151,7 +1155,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (_switched)
         [mapPanel switchToRouteFollowingLayout];
     
-    if (![_pointsHelper getPointToNavigate] && ![self isSelectingTargetOnMap])
+    if (![_pointsHelper getPointToNavigate] && ![self isSelectingTargetOnMap] && !_optionsMenuSelected)
         [mapPanel.mapActions stopNavigationWithoutConfirm];
 }
 
@@ -1424,6 +1428,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARoutingSettingsCell getCellIdentifier] owner:self options:nil];
             cell = (OARoutingSettingsCell *)[nib objectAtIndex:0];
+            cell.delegate = self;
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
@@ -1829,7 +1834,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@", mainText, additionalText] attributes:attributes];
     
-    [res addAttributes:@{NSLinkAttributeName: @"https://osmand.net/blog/guideline-pt",
+    [res addAttributes:@{NSLinkAttributeName: kBlogGuideline,
                          NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
                          NSFontAttributeName: [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
     } range:NSMakeRange(mainText.length + 2, additionalText.length)];
@@ -2114,6 +2119,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     [self updateData];
     [self.tableView reloadData];
+}
+
+#pragma mark - OASettingsDataDelegate
+
+- (void) onOptionsButtonPressed
+{
+    _optionsMenuSelected = YES;
 }
 
 @end

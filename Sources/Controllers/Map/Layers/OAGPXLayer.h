@@ -25,4 +25,6 @@
 
 - (CGFloat) getLineWidth:(NSString *)gpxWidth;
 
+- (void) updateCachedGpxItem:(NSString *)filePath;
+
 @end

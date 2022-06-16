@@ -10,17 +10,11 @@
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OANode.h"
-#import "OAEntity.h"
 #import "OAEditPOIData.h"
-#import "OrderedDictionary.h"
 #import "OAOsmEditingViewController.h"
-#import "OAOpenStreetMapLocalUtil.h"
-#import "OAPOIType.h"
-#import "OAOsmEditingViewController.h"
-#import "OAOsmEditsDBHelper.h"
+#import "OALinks.h"
 #import "OAQuickActionType.h"
 #import "OAButtonCell.h"
 #import "OAIconTitleValueCell.h"
@@ -97,7 +91,7 @@ static OAQuickActionType *ACTION_TYPE;
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_get_info"),
-                          @"url" : @"https://wiki.openstreetmap.org/wiki/Map_Features"
+                          @"url" : kUrlOsm_wikiMapFeatures
                           }
                       ] forKey:OALocalizedString(@"poi_type")];
     NSMutableArray *arr = [NSMutableArray new];

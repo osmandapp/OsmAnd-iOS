@@ -47,6 +47,10 @@
     self.clipsToBounds = YES;
     self.backgroundColor = [UIColor whiteColor];
     
+    _sysVal = 0;
+    _appVal = 0;
+    _freeVal = 0;
+    
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
     _titleLabel.textColor = [UIColor blackColor];
     _titleLabel.font = [UIFont systemFontOfSize:14.0];;

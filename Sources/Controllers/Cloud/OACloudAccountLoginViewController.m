@@ -12,6 +12,7 @@
 #import "OABackupListeners.h"
 #import "OABackupError.h"
 #import "OACloudAccountVerificationViewController.h"
+#import "OACloudAccountCreateViewController.h"
 
 @interface OACloudAccountLoginViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener>
 
@@ -23,21 +24,27 @@
     
     OABackupHelper *_backupHelper;
     
-    long _lastTimeCodeSent;
+    BOOL _isEmailRegistered;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _lastTimeCodeSent = 0;
+    self.lastTimeCodeSent = 0;
     
     _backupHelper = [OABackupHelper sharedInstance];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [_backupHelper.backupListeners addRegisterUserListener:self];
     [_backupHelper.backupListeners addRegisterDeviceListener:self];
 }
 
-- (void)dealloc
+- (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     [_backupHelper.backupListeners removeRegisterUserListener:self];
     [_backupHelper.backupListeners removeRegisterDeviceListener:self];
 }
@@ -54,7 +61,7 @@
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray new];
     
     BOOL isTextFieldValidData = [self isValidInputValue:[self getTextFieldValue]];
-    BOOL isEmailRegistred = YES;
+    _isEmailRegistered = ![self.errorMessage isEqualToString:OALocalizedString(@"cloud_email_not_registered")];
     
     [data addObject:@[@{
         @"type" : [OADescrTitleCell getCellIdentifier],
@@ -73,8 +80,19 @@
     @{ @"type" : [OADividerCell getCellIdentifier] } ]];
     
     NSMutableArray<NSDictionary *> *otherCells = [NSMutableArray array];
-    if (isEmailRegistred)
+    if (_isEmailRegistered)
     {
+        if (self.errorMessage.length > 0)
+        {
+            [otherCells addObject:@{
+                @"type" : [OADescrTitleCell getCellIdentifier],
+                @"title" : self.errorMessage,
+                @"color" : UIColorFromRGB(color_support_red),
+                @"spacing" : @1,
+                @"topMargin" : @14,
+                @"bottomMargin" : @0
+            }];
+        }
         if (isTextFieldValidData)
         {
             [otherCells addObject: @{
@@ -102,7 +120,7 @@
     {
         [otherCells addObject:@{
             @"type" : [OADescrTitleCell getCellIdentifier],
-            @"title" : OALocalizedString(@"cloud_email_not_registered"),
+            @"title" : self.errorMessage,
             @"color" : UIColorFromRGB(color_support_red),
             @"spacing" : @1,
             @"topMargin" : @14,
@@ -152,11 +170,17 @@
         [OAAppSettings.sharedManager.backupUserEmail set:email];
         [_backupHelper registerDevice:@""];
     }
+    else
+    {
+        self.errorMessage = OALocalizedString(@"login_error_email_invalid");
+        [self updateScreen];
+    }
 }
 
 - (void) createAccountButtonPressed
 {
-    
+    OACloudAccountCreateViewController *vc = [[OACloudAccountCreateViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void) textFieldDoneButtonPressed
@@ -176,21 +200,18 @@
     }
     else if (errorCode != -1)
     {
-//        progressBar.setVisibility(View.INVISIBLE);
         if (errorCode == SERVER_ERROR_CODE_USER_IS_NOT_REGISTERED)
         {
-//            errorText.setText(dialogType.warningId);
-//            AndroidUiHelper.updateVisibility(buttonAuthorize, !promoCodeSupported());
+            _isEmailRegistered = NO;
+            self.errorMessage = OALocalizedString(@"cloud_email_not_registered");
         }
         else
         {
-//            errorText.setText(error.getLocalizedError(app));
+            self.errorMessage = error.getLocalizedError;
         }
+        [self updateScreen];
         NSLog(@"Backup error: %@", error.getLocalizedError);
-//        buttonContinue.setEnabled(false);
-//        AndroidUiHelper.updateVisibility(errorText, true);
     }
-//    AndroidUiHelper.updateVisibility(buttonChoosePlan, false);
 }
 
 // MARK: OAOnRegisterUserListener
@@ -198,26 +219,15 @@
 - (void)onRegisterUser:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        //    progressBar.setVisibility(View.INVISIBLE);
         if (status == STATUS_SUCCESS) {
-            _lastTimeCodeSent = NSDate.date.timeIntervalSince1970;
+            self.lastTimeCodeSent = NSDate.date.timeIntervalSince1970;
             OACloudAccountVerificationViewController *verificationVc = [[OACloudAccountVerificationViewController alloc] initWithEmail:self.getTextFieldValue];
             [self.navigationController pushViewController:verificationVc animated:YES];
         }
         else
         {
-            //        boolean choosePlanVisible = false;
-            //        if (error != null) {
-            //            int code = error.getCode();
-            //            choosePlanVisible = !promoCodeSupported()
-            //            && (code == SERVER_ERROR_CODE_NO_VALID_SUBSCRIPTION
-            //                || code == SERVER_ERROR_CODE_USER_IS_NOT_REGISTERED
-            //                || code == SERVER_ERROR_CODE_SUBSCRIPTION_WAS_EXPIRED_OR_NOT_PRESENT);
-            //        }
-            //        errorText.setText(error != null ? error.getLocalizedError(app) : message);
-            //        buttonContinue.setEnabled(false);
-            //        AndroidUiHelper.updateVisibility(errorText, true);
-            //        AndroidUiHelper.updateVisibility(buttonChoosePlan, choosePlanVisible);
+            self.errorMessage = error != nil ? error.getLocalizedError : message;
+            [self updateScreen];
         }
     });
 }

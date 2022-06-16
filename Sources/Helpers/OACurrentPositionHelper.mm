@@ -93,7 +93,7 @@
         _roadLocatorSync = [[NSObject alloc] init];
         _road.reset();
         
-        _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+        _app.resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                      [self]
                                                                      (const OsmAnd::ResourcesManager* const resourcesManager,
                                                                       const QList< QString >& added,

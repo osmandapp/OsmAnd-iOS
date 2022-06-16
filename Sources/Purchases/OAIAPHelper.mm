@@ -8,14 +8,10 @@
 
 #import "OAIAPHelper.h"
 #import "OALog.h"
-#import "Localization.h"
 #import "OsmAndApp.h"
-#import "OAAppSettings.h"
-#import <Reachability.h>
 #import "OAAnalyticsHelper.h"
 #import "OANetworkUtilities.h"
 #import "OADonationSettingsViewController.h"
-#import <CommonCrypto/CommonDigest.h>
 
 NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequestSucceedNotification";
 NSString *const OAIAPProductsRequestFailedNotification = @"OAIAPProductsRequestFailedNotification";
@@ -31,6 +27,8 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 #define kNoSubscriptionsFoundStatus 110
 #define kInconsistentReceiptStatus 200
 #define kUserNotFoundStatus 300
+
+#define CARPLAY_START_DATE_MS (10L * 1000L * 60L * 60L * 24L) // 10 days
 
 typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *products, NSDictionary<NSString *, NSDate *> *expirationDates, BOOL success);
 
@@ -96,6 +94,123 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     OALog(@"Free maps left: %d", freeMaps);
 }
 
++ (BOOL) isPaidVersion
+{
+    return [self isFullVersionPurchased]
+            || [self isSubscribedToLiveUpdates]
+            || [self isSubscribedToMaps]
+            || [self isOsmAndProAvailable];
+}
+
++ (BOOL) isSubscribedToMaps
+{
+    return [[OAAppSettings sharedManager].osmandMapsPurchased get];
+}
+
++ (BOOL) isSubscribedToLiveUpdates
+{
+    return [[OAAppSettings sharedManager].liveUpdatesPurchased get] || [self isOsmAndProAvailable];
+}
+
++ (BOOL) isSubscribedToOsmAndPro
+{
+    return [[OAAppSettings sharedManager].osmandProPurchased get];
+}
+
++ (BOOL) isSubscribedToPromo
+{
+    return [[OAAppSettings sharedManager].backupPromocodeActive get];
+}
+
++ (BOOL) isOsmAndProAvailable
+{
+    return [self isSubscribedToPromo]
+            || [self isSubscribedToOsmAndPro];
+}
+
++ (BOOL) isCarPlayAvailable
+{
+    long time = (long) NSDate.date.timeIntervalSince1970;
+    long installTime = [self getInstallTime];
+    if (time >= installTime + CARPLAY_START_DATE_MS)
+        return [self isPaidVersion];
+
+    return YES;
+}
+
++ (long) getInstallTime
+{
+    NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:@"install_date"];
+    long firstInstalledTime = (long) installDate.timeIntervalSince1970;
+    return firstInstalledTime;
+}
+
++ (BOOL) isFullVersionPurchased
+{
+    return [[OAAppSettings sharedManager].fullVersionPurchased get];
+}
+
++ (BOOL) isDepthContoursPurchased
+{
+    return [self isPaidVersion]
+            || [[OAAppSettings sharedManager].depthContoursPurchased get];
+}
+
++ (BOOL) isContourLinesPurchased
+{
+    return [self isPaidVersion]
+            || [[OAAppSettings sharedManager].contourLinesPurchased get];
+}
+
++ (BOOL) isWikipediaPurchased
+{
+    return [self isPaidVersion]
+            || [[OAAppSettings sharedManager].wikipediaPurchased get];
+}
+
++ (BOOL)isLiveUpdatesSubscription:(OASubscription *)subscription
+{
+    return [subscription.identifierNoVersion isEqualToString:kSubscriptionId_Osm_Live_Subscription_Monthly]
+            || [subscription.identifierNoVersion isEqualToString:kSubscriptionId_Osm_Live_Subscription_3_Months]
+            || [subscription.identifierNoVersion isEqualToString:kSubscriptionId_Osm_Live_Subscription_Annual];
+}
+
++ (BOOL)isOsmAndProSubscription:(OASubscription *)subscription
+{
+    return [subscription.identifierNoVersion isEqualToString:kSubscriptionId_Pro_Subscription_Monthly]
+            || [subscription.identifierNoVersion isEqualToString:kSubscriptionId_Pro_Subscription_Annual];
+}
+
++ (BOOL)isMapsSubscription:(OASubscription *)subscription
+{
+    return [subscription.identifierNoVersion isEqualToString:kSubscriptionId_Maps_Subscription_Annual];
+}
+
++ (BOOL) isFullVersion:(OAProduct *)product
+{
+    return [product.productIdentifier isEqualToString:kInAppId_Maps_Full];
+}
+
+- (NSArray<OASubscription *> *) getEverMadeSubscriptions
+{
+    NSMutableArray<OASubscription *> *subscriptions = [NSMutableArray array];
+    for (OASubscription *subscription in [self.subscriptionList getVisibleSubscriptions])
+    {
+        if ([subscription isPurchased] || subscription.purchaseState != PSTATE_UNKNOWN)
+            [subscriptions addObject:subscription];
+    }
+    return subscriptions;
+}
+
+- (NSArray<OAProduct *> *) getEverMadeMainPurchases
+{
+    NSMutableSet<OAProduct *> *products = [NSMutableSet setWithArray:[self getEverMadeSubscriptions]];
+    OAProduct *fullVersion = _products.mapsFull;
+    if (fullVersion && fullVersion.isPurchased)
+        [products addObject:fullVersion];
+    return products.allObjects;
+}
+
 + (OAIAPHelper *) sharedInstance
 {
     static dispatch_once_t once;
@@ -149,6 +264,21 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 - (OAProduct *) srtm
 {
     return _products.srtm;
+}
+
+- (OAProduct *) weather
+{
+    return _products.weather;
+}
+
+- (OAProduct *) carplay
+{
+    return _products.carplay;
+}
+
+- (OAProduct *) osmandDevelopment
+{
+    return _products.osmandDevelopment;
 }
 
 - (OAProduct *) allWorld
@@ -216,9 +346,29 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     return _products.monthlyLiveUpdates;
 }
 
-- (OASubscriptionList *) liveUpdates
+- (OASubscription *) proMonthly
 {
-    return _products.liveUpdates;
+    return _products.proMonthly;
+}
+
+- (OASubscription *) proAnnually
+{
+    return _products.proAnnually;
+}
+
+- (OASubscription *) mapsAnnually
+{
+    return _products.mapsAnnually;
+}
+
+- (OAProduct *) mapsFull
+{
+    return _products.mapsFull;
+}
+
+- (OASubscriptionList *) subscriptionList
+{
+    return _products.subscriptionList;
 }
 
 - (NSArray<OAProduct *> *) inApps
@@ -251,7 +401,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     return _products.inAppAddonsPaid;
 }
 
-- (NSArray<OAProduct *> *) inAppPurchased
+- (NSArray<OAProduct *> *) inAppsPurchased
 {
     return _products.inAppsPurchased;
 }
@@ -259,6 +409,16 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 - (NSArray<OAProduct *> *) inAppAddonsPurchased
 {
     return _products.inAppAddonsPurchased;
+}
+
+- (NSArray<OAProduct *> *) inAppMapsPaid
+{
+    return _products.inAppMapsPaid;
+}
+
+- (NSArray<OAProduct *> *) inAppMapsPurchased
+{
+    return _products.inAppMapsPurchased;
 }
 
 - (BOOL) productsLoaded
@@ -279,12 +439,31 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
         _products = [[OAProducts alloc] init];
         _wasProductListFetched = NO;
         
-        // test - reset osm live purchases
+        // test - reset purchases
         if (TEST_LOCAL_PURCHASE)
         {
             [_settings.liveUpdatesPurchased set:NO];
-            for (OASubscription *s in [_products.liveUpdates getAllSubscriptions])
-                [_products setExpired:s.productIdentifier];
+            [_settings.osmandProPurchased set:NO];
+            [_settings.osmandMapsPurchased set:NO];
+            [_settings.fullVersionPurchased set:NO];
+            [_settings.depthContoursPurchased set:NO];
+            [_settings.contourLinesPurchased set:NO];
+            [_settings.wikipediaPurchased set:NO];
+            for (OAProduct *product in _products.inAppsPaid)
+            {
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:product.productIdentifier])
+                {
+                    if ([product isKindOfClass:OASubscription.class])
+                    {
+                        [_products setExpired:product.productIdentifier];
+                    }
+                    else
+                    {
+                        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:product.productIdentifier];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
+                }
+            }
         }
     }
     return self;
@@ -316,7 +495,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                         id subObj = [map objectForKey:subscriptionType];
                         NSString *identifier = [subObj objectForKey:@"sku"];                        
                         if (identifier.length > 0)
-                            [self.liveUpdates upgradeSubscription:identifier];
+                            [self.subscriptionList upgradeSubscription:identifier];
                     }
                 }
                 
@@ -443,7 +622,6 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                              if (userId.length > 0)
                              {
                                  [self applyUserPreferences:map];
-                                 _settings.displayDonationSettings = subscription.donationSupported;
                                  [self launchPurchase:subscription];
                              }
                              else
@@ -468,7 +646,6 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
         }
         else
         {
-            _settings.displayDonationSettings = subscription.donationSupported;
             [self launchPurchase:subscription];
         }
     }
@@ -531,18 +708,9 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     }
 }
 
-- (BOOL) subscribedToLiveUpdates
-{
-#ifdef DEBUG
-    return YES;
-#else
-    return _settings.liveUpdatesPurchased.get;
-#endif
-}
-
 - (OASubscription *) getCheapestMonthlySubscription
 {
-    NSArray<OASubscription *> *subscriptions = [self.liveUpdates getVisibleSubscriptions];
+    NSArray<OASubscription *> *subscriptions = [self.subscriptionList getVisibleSubscriptions];
     OASubscription *cheapest = nil;
     for (OASubscription *subscription in subscriptions)
     {
@@ -550,15 +718,6 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
             cheapest = subscription;
     }
     return cheapest;
-}
-
-- (BOOL) isAnyMapPurchased
-{
-    for (OAProduct *map in self.inAppMaps)
-        if ([map isPurchased])
-            return YES;
-    
-    return NO;
 }
 
 #pragma mark - SKProductsRequestDelegate
@@ -596,13 +755,46 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
             }
             
             NSMutableArray<OAProduct *> *purchased = [NSMutableArray array];
-            BOOL subscribedToLiveUpdates = NO;
+            BOOL subscribed = NO;
+            BOOL live = NO;
+            BOOL pro = NO;
+            BOOL maps = NO;
+            BOOL full = NO;
+            BOOL depth = NO;
+            BOOL contour = NO;
+            BOOL wiki = NO;
             for (OAProduct *product in products)
             {
                 BOOL isSubscription = [product isKindOfClass:[OASubscription class]];
-                if (!subscribedToLiveUpdates && isSubscription)
-                    subscribedToLiveUpdates = YES;
-                
+                if (!subscribed && isSubscription)
+                    subscribed = YES;
+
+                if (isSubscription)
+                {
+                    if ([OAIAPHelper isLiveUpdatesSubscription:product])
+                        live = YES;
+                    else if ([OAIAPHelper isOsmAndProSubscription:product])
+                        pro = YES;
+                    else if ([OAIAPHelper isMapsSubscription:product])
+                        maps = YES;
+                }
+                else if ([OAIAPHelper isFullVersion:product])
+                {
+                    full = YES;
+                }
+                else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Nautical])
+                {
+                    depth = YES;
+                }
+                else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Srtm])
+                {
+                    contour = YES;
+                }
+                else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Wiki])
+                {
+                    wiki = YES;
+                }
+
                 BOOL wasPurchased = [product isPurchased];
                 [_products setPurchased:product.productIdentifier];
                 if (!wasPurchased)
@@ -610,9 +802,9 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
             }
             
             NSTimeInterval subscriptionCancelledTime = _settings.liveUpdatesPurchaseCancelledTime.get;
-            if (!subscribedToLiveUpdates && self.subscribedToLiveUpdates)
+            if (!subscribed && [OAIAPHelper isPaidVersion])
             {
-                OASubscription *s = [self.liveUpdates getPurchasedSubscription];
+                OASubscription *s = [self.subscriptionList getPurchasedSubscription];
                 if (s)
                     [_products setExpired:s.productIdentifier];
 
@@ -626,20 +818,31 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                 else if ([[[NSDate alloc] init] timeIntervalSince1970] - subscriptionCancelledTime > kSubscriptionHoldingTimeMsec)
                 {
                     [_settings.liveUpdatesPurchased set:NO];
+                    [_settings.osmandProPurchased set:NO];
+                    [_settings.osmandMapsPurchased set:NO];
                     //if (!isDepthContoursPurchased(ctx))
                     //    ctx.getSettings().getCustomRenderBooleanProperty("depthContours").set(false);
                 }
             }
-            else if (subscribedToLiveUpdates)
+            else if (subscribed)
             {
                 [_settings.liveUpdatesPurchaseCancelledTime set:0];
-                [_settings.liveUpdatesPurchased set:YES];
             }
-            
+
+            [_settings.liveUpdatesPurchased set:live];
+            [_settings.osmandProPurchased set:pro];
+            [_settings.osmandMapsPurchased set:maps];
+            [_settings.fullVersionPurchased set:full];
+            [_settings.depthContoursPurchased set:depth];
+            [_settings.contourLinesPurchased set:contour];
+            [_settings.wikipediaPurchased set:wiki];
+
             for (OAProduct *p in purchased)
+            {
                 [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:p.productIdentifier userInfo:nil];
+            }
         }
-        
+
         _wasProductListFetched = success;
 
         if (_completionHandler)
@@ -881,19 +1084,45 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     OAProduct *product = [self product:productIdentifier];
     if (product)
     {
+        NSLog(@"%@ product purchased.", product.localizedTitle);
+
+        // test - emulate purchase
+        if (TEST_LOCAL_PURCHASE)
+        {
+            [_products setPurchased:productIdentifier];
+
+            if ([product isKindOfClass:OASubscription.class])
+            {
+                if ([self.class isLiveUpdatesSubscription:product])
+                    [_settings.liveUpdatesPurchased set:YES];
+                else if ([self.class isOsmAndProSubscription:product])
+                    [_settings.osmandProPurchased set:YES];
+                else if ([self.class isMapsSubscription:product])
+                    [_settings.osmandMapsPurchased set:YES];
+            }
+            else if ([self.class isFullVersion:product])
+            {
+                [_settings.fullVersionPurchased set:YES];
+            }
+            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Nautical])
+            {
+                [_settings.depthContoursPurchased set:YES];
+            }
+            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Srtm])
+            {
+                [_settings.contourLinesPurchased set:YES];
+            }
+            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Wiki])
+            {
+                [_settings.wikipediaPurchased set:YES];
+            }
+
+            [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
+            return;
+        }
+
         if ([product isKindOfClass:[OASubscription class]])
         {
-            NSLog(@"Live updates subscription purchased.");
-            
-            // test - emulate purchase
-            if (TEST_LOCAL_PURCHASE)
-            {
-                [_settings.liveUpdatesPurchased set:YES];
-                [_products setPurchased:productIdentifier];
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
-                return;
-            }
-            
             NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
             NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
             if (!receipt || !transaction)
@@ -951,7 +1180,13 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                                      if ([map objectForKey:@"userid"])
                                          [self applyUserPreferences:map];
 
-                                     [_settings.liveUpdatesPurchased set:YES];
+                                     if ([self.class isLiveUpdatesSubscription:product])
+                                         [_settings.liveUpdatesPurchased set:YES];
+                                     else if ([self.class isOsmAndProSubscription:product])
+                                         [_settings.osmandProPurchased set:YES];
+                                     else if ([self.class isMapsSubscription:product])
+                                         [_settings.osmandMapsPurchased set:YES];
+
                                      _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
                                      [_products setPurchased:productIdentifier];
                                      [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
@@ -980,6 +1215,15 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
         }
         else
         {
+            if ([OAIAPHelper isFullVersion:product])
+                [_settings.fullVersionPurchased set:YES];
+            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Nautical])
+                [_settings.depthContoursPurchased set:YES];
+            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Srtm])
+                [_settings.contourLinesPurchased set:YES];
+            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Wiki])
+                [_settings.wikipediaPurchased set:YES];
+
             [_products setPurchased:productIdentifier];
             [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
         }
@@ -991,7 +1235,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
     _restoringPurchases = YES;
     _transactionErrors = 0;
-    
+
     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
 }
 
@@ -1001,7 +1245,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
         return YES;
     
     NSTimeInterval lastReceiptValidationTimeInterval = [[[NSDate alloc] init] timeIntervalSinceDate:_settings.lastReceiptValidationDate];
-    OASubscription *subscription = [_products.liveUpdates getPurchasedSubscription];
+    OASubscription *subscription = [_products.subscriptionList getPurchasedSubscription];
     if (subscription)
     {
         NSDate *expDate = subscription.expirationDate;
@@ -1161,7 +1405,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
         [params setObject:userId forKey:@"userId"];
 
     NSMutableSet<NSString *> *productIdentifiers = [NSMutableSet set];
-    NSArray<OASubscription *> *subscriptions = [_products.liveUpdates getVisibleSubscriptions];
+    NSArray<OASubscription *> *subscriptions = [_products.subscriptionList getVisibleSubscriptions];
     for (OASubscription *s in subscriptions)
         if (s.discounts)
         {
@@ -1225,7 +1469,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                                  }
                                  for (OAPaymentDiscount *paymentDiscount in paymentDiscounts)
                                  {
-                                     OASubscription *subscription = [_products.liveUpdates getSubscriptionByIdentifier:paymentDiscount.productIdentifier];
+                                     OASubscription *subscription = [_products.subscriptionList getSubscriptionByIdentifier:paymentDiscount.productIdentifier];
                                      if (subscription)
                                      {
                                          for (OAProductDiscount *discount in subscription.discounts)

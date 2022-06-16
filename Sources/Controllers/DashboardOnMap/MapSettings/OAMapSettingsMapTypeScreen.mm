@@ -63,7 +63,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) commonInit
 {
-    _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+    _app.resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                  [self]
                                                                  (const OsmAnd::ResourcesManager* const resourcesManager,
                                                                   const QList< QString >& added,
@@ -79,7 +79,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) deinit
 {
-    _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
+    _app.resourcesManager->localResourcesChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
 }
 
 - (void) setupView
@@ -123,6 +123,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if ([mapStyleInfo[@"title"] isEqualToString:WINTER_SKI_RENDER] && ![iapHelper.skiMap isActive])
             continue;
         if ([mapStyleInfo[@"title"] isEqualToString:NAUTICAL_RENDER] && ![iapHelper.nautical isActive])
+            continue;
+        if ([item.mapSource.resourceId isEqualToString:@"mapnik.render.xml"] && ![_app.data.lastMapSource isEqual:item.mapSource])
             continue;
 
         item.resourceType = OsmAndResourceType::MapStyle;
@@ -220,6 +222,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             caption = item.mapSource.name;
             if ([caption isEqualToString:TOURING_VIEW])
                 caption = @"Touring view";
+            else if ([item.mapSource.resourceId isEqualToString:@"mapnik.render.xml"])
+                caption = @"Mapnik";
+
             description = nil;
         }
         else if ([someItem isKindOfClass:OAOnlineTilesResourceItem.class])

@@ -82,6 +82,7 @@
     _stateObservable = [[OAObservable alloc] init];
     _settingsObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
+    _targetChangedObservable = [[OAObservable alloc] init];
 
     // Set default values
     _glShareGroup = nil;
@@ -102,7 +103,7 @@
     _renderer->setConfiguration(rendererConfig);
     
     OAObservable* stateObservable = _stateObservable;
-    _renderer->stateChangeObservable.attach((__bridge const void*)_stateObservable,
+    _renderer->stateChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_stateObservable),
         [stateObservable]
         (const OsmAnd::IMapRenderer* renderer, const OsmAnd::MapRendererStateChange thisChange, const uint32_t allChanges)
         {
@@ -110,11 +111,19 @@
         });
 
     OAObservable* framePreparedObservable = _framePreparedObservable;
-    _renderer->framePreparedObservable.attach((__bridge const void*)_framePreparedObservable,
+    _renderer->framePreparedObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_framePreparedObservable),
         [framePreparedObservable]
         (const OsmAnd::IMapRenderer* renderer)
         {
             [framePreparedObservable notifyEvent];
+        });
+    
+    OAObservable* targetChangedObservalbe = _targetChangedObservable;
+    _renderer->targetChangedObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_targetChangedObservable),
+        [targetChangedObservalbe]
+        (const OsmAnd::IMapRenderer* renderer)
+        {
+            [targetChangedObservalbe notifyEvent];
         });
 
     // Create animator for that map
@@ -128,12 +137,9 @@
 
 - (void)deinit
 {
-    // Just to be sure, try to release context
-    [self releaseContext];
-    
     // Unregister observer
-    _renderer->stateChangeObservable.detach((__bridge const void*)_stateObservable);
-    _renderer->framePreparedObservable.detach((__bridge const void*)_framePreparedObservable);
+    _renderer->stateChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_stateObservable));
+    _renderer->framePreparedObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)_framePreparedObservable));
 }
 
 - (void)setTextureFilteringQuality:(OsmAnd::TextureFilteringQuality)quality
@@ -553,11 +559,6 @@
     // Rendering needs to be resumed/started manually, since render target is not created yet
 }
 
-- (void)releaseContext
-{
-    [self releaseContext:NO];
-}
-
 - (void)releaseContext:(BOOL)gpuContextLost
 {
     if (_glShareGroup == nil)
@@ -900,8 +901,8 @@
     _renderer->setConfiguration(configuration);
 }
 
-- (UIImage*) getGLScreenshot {
-
+- (UIImage*) getGLScreenshot
+{
     int s = (int) [[UIScreen mainScreen] scale];
     const int w = self.frame.size.width;
     const int h = self.frame.size.height;
@@ -909,18 +910,23 @@
     const NSInteger myDataLength = w * h * 4 * s * s;
     // allocate array and read pixels into it.
     GLubyte *buffer = (GLubyte *) malloc(myDataLength);
-    glReadPixels(0, 0, w*s, h*s, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    glReadPixels(0, 0, w * s, h * s, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
     
     // gl renders "upside down" so swap top to bottom into new array.
     GLubyte *buffer2 = (GLubyte *) malloc(myDataLength);
-    for(int y = 0; y < h*s; y++)
+    for(int y = 0; y < h * s; y++)
     {
-        memcpy( buffer2 + (h*s - 1 - y) * w * 4 * s, buffer + (y * 4 * w * s), w * 4 * s );
+        memcpy(buffer2 + (h * s - 1 - y) * w * 4 * s, buffer + (y * 4 * w * s), w * 4 * s);
     }
     free(buffer); // work with the flipped buffer, so get rid of the original one.
     
     // make data provider with data.
-    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer2, myDataLength, NULL);
+    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer2, myDataLength,
+        [](void * __nullable info, const void * data, size_t size)
+        {
+            free((void *) data);
+        }
+    );
     
     // prep the ingredients
     int bitsPerComponent = 8;
@@ -931,15 +937,13 @@
     CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
     
     // make the cgimage
-    CGImageRef imageRef = CGImageCreate(w*s, h*s, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
-    
+    CGImageRef imageRef = CGImageCreate(w * s, h * s, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
     // then make the uiimage from that
-    UIImage *myImage = [ UIImage imageWithCGImage:imageRef scale:s orientation:UIImageOrientationUp ];
+    UIImage *myImage = [UIImage imageWithCGImage:imageRef scale:s orientation:UIImageOrientationUp];
 
-    CGImageRelease( imageRef );
+    CGImageRelease(imageRef);
     CGDataProviderRelease(provider);
     CGColorSpaceRelease(colorSpaceRef);
-    //free(buffer2);
     
     return myImage;
 }

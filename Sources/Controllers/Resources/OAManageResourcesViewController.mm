@@ -43,6 +43,7 @@
 #import "OAMultiIconTextDescCell.h"
 #import "OACustomSourceDetailsViewController.h"
 #import "OAColors.h"
+#import "OANauticalMapsPlugin.h"
 
 #include "Localization.h"
 
@@ -160,7 +161,6 @@ struct RegionResources
     NSString *_purchaseInAppId;
     
     TTTArrayFormatter *_arrFmt;
-    NSNumberFormatter *_numberFormatter;
 
     BOOL _srtmDisabled;
     BOOL _hasSrtm;
@@ -265,10 +265,6 @@ static BOOL _lackOfResources;
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-
-    _numberFormatter = [[NSNumberFormatter alloc] init];
-    [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-    [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
 
     if (self.openFromSplash)
     {
@@ -446,12 +442,12 @@ static BOOL _lackOfResources;
 
 - (BOOL) shouldHideBanner
 {
-    return _currentScope == kLocalResourcesScope || _iapHelper.subscribedToLiveUpdates || (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) || (self.region != _app.worldRegion && [self.region isInPurchasedArea]) || [self.region.regionId isEqualToString:_otherRegionId] || [self.region isKindOfClass:OACustomRegion.class];
+    return _currentScope == kLocalResourcesScope || [OAIAPHelper isPaidVersion] || (self.region == _app.worldRegion && [_iapHelper inAppMapsPurchased].count > 0) || (self.region != _app.worldRegion && [self.region isInPurchasedArea]) || [self.region.regionId isEqualToString:_otherRegionId] || [self.region isKindOfClass:OACustomRegion.class];
 }
 
 - (BOOL) shouldHideEmailSubscription
 {
-    return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || _iapHelper.subscribedToLiveUpdates || [OAAppSettings sharedManager].emailSubscribed.get || [self.region isKindOfClass:OACustomRegion.class];
+    return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || [OAIAPHelper isPaidVersion] || [OAAppSettings sharedManager].emailSubscribed.get || [self.region isKindOfClass:OACustomRegion.class];
 }
 
 - (void) updateContentIfNeeded
@@ -562,12 +558,10 @@ static BOOL _lackOfResources;
     {
         _purchaseInAppId = product.productIdentifier;
         title = product.localizedTitle;
-        if (product.price)
+        if (!product.free)
         {
-            [_numberFormatter setLocale:product.priceLocale];
-            NSString *price = [_numberFormatter stringFromNumber:product.price];
-            buttonTitle = [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"shared_string_buy"), price];
-            desc = [NSString stringWithFormat:@"%@ %@ %@ %@", OALocalizedString(@"shared_string_buy"), product.localizedDescription, OALocalizedString(@"shared_string_buy_for"), price];
+            buttonTitle = OALocalizedString(@"shared_string_buy");
+            desc = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"shared_string_buy"), product.localizedDescription];
         }
         else
         {
@@ -1069,6 +1063,11 @@ static BOOL _lackOfResources;
         }
     }
     return nil;
+}
+
+- (BOOL) isNauticalScope
+{
+    return [self.region.regionId isEqualToString:_nauticalRegionId];
 }
 
 - (void) collectResourcesDataAndItems
@@ -1862,7 +1861,7 @@ static BOOL _lackOfResources;
         if (section == _extraMapsSection)
             return OALocalizedString(@"extra_maps");
         if (section == _resourcesSection)
-            return OALocalizedString(@"res_worldwide");
+            return OALocalizedString([self isNauticalScope] ? @"region_nautical" : @"res_worldwide");
         if (section == _localResourcesSection)
             return OALocalizedString(@"download_tab_local");
         if (section == _regionMapSection)
@@ -1882,7 +1881,7 @@ static BOOL _lackOfResources;
     if (section == _extraMapsSection)
         return OALocalizedString(@"extra_maps");
     if (section == _resourcesSection)
-        return OALocalizedString(@"res_mapsres");
+        return OALocalizedString([self isNauticalScope] ? @"region_nautical" : @"res_mapsres");
     if (section == _localResourcesSection)
         return OALocalizedString(@"download_tab_local");
     if (section == _regionMapSection)
@@ -2183,6 +2182,16 @@ static BOOL _lackOfResources;
                 }
                 if (item.resourceType == OsmAndResourceType::WikiMapRegion
                     && ![_iapHelper.wiki isActive] && ![self.region isInPurchasedArea])
+                {
+                    disabled = YES;
+                    item.disabled = disabled;
+                }
+                if (item.resourceType == OsmAndResourceType::MapRegion && [self isNauticalScope] && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
+                {
+                    disabled = YES;
+                    item.disabled = disabled;
+                }
+                if (item.resourceType == OsmAndResourceType::DepthContourRegion && (![OAIAPHelper isDepthContoursPurchased] || ![OAPlugin isEnabled:OANauticalMapsPlugin.class]))
                 {
                     disabled = YES;
                     item.disabled = disabled;
@@ -3162,7 +3171,7 @@ static BOOL _lackOfResources;
 
     if (self.region == _app.worldRegion && !_displayBannerPurchaseAllMaps)
     {
-        [OAChoosePlanHelper showChoosePlanScreenWithProduct:_iapHelper.allWorld navController:self.navigationController];
+        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.UNLIMITED_MAP_DOWNLOADS navController:self.navigationController];
         /*
         _displayBannerPurchaseAllMaps = YES;
         [self updateFreeDownloadsBanner];
@@ -3173,9 +3182,7 @@ static BOOL _lackOfResources;
     }
     else if (_purchaseInAppId)
     {
-        OAProduct *product = [_iapHelper product:_purchaseInAppId];
-        if (product)
-            [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
+        [OAChoosePlanHelper showChoosePlanScreenWithProduct:[_iapHelper product:_purchaseInAppId] navController:self.navigationController];
     }
 }
 

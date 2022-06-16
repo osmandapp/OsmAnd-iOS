@@ -7,14 +7,11 @@
 //
 
 #import "OAWeatherRasterLayer.h"
-
-#import "OAMapCreatorHelper.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
-#import "OARootViewController.h"
-#import "OAWebClient.h"
 #import "OAWeatherHelper.h"
+#import "OAIAPHelper.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/WeatherRasterLayerProvider.h>
@@ -91,46 +88,48 @@
 {
     [super updateLayer];
 
-    [self updateOpacitySliderVisibility];
-    
-    QList<OsmAnd::BandIndex> bands = [_weatherHelper getVisibleBands];
-    if (!self.app.data.weather || bands.empty())
-        return NO;
-    
-    //[self showProgressHUD];
-          
-    const auto dateTime = QDateTime::fromNSDate(_date).toUTC();
-    OsmAnd::WeatherLayer layer;
-    switch (_weatherLayer) {
-        case WEATHER_LAYER_LOW:
-            layer = OsmAnd::WeatherLayer::Low;
-            break;
-        case WEATHER_LAYER_HIGH:
-            layer = OsmAnd::WeatherLayer::High;
-            break;
-        default:
-            layer = OsmAnd::WeatherLayer::Low;
-            break;
-    }
-    if (true)//!_provider)
+    if ([[OAIAPHelper sharedInstance].weather isActive])
     {
-        _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, dateTime, bands);
-        [self.mapView setProvider:_provider forLayer:self.layerIndex];
-        
-        OsmAnd::MapLayerConfiguration config;
-        config.setOpacityFactor(1.0f);
-        [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-    }
-    else
-    {
-        _provider->setDateTime(dateTime);
-        _provider->setBands(bands);
-        [self.mapView invalidateFrame];
-    }
+        [self updateOpacitySliderVisibility];
 
-    //[self hideProgressHUD];
-    
-    return YES;
+        QList<OsmAnd::BandIndex> bands = [_weatherHelper getVisibleBands];
+        if (!self.app.data.weather || bands.empty())
+            return NO;
+
+        //[self showProgressHUD];
+
+        const auto dateTime = QDateTime::fromNSDate(_date).toUTC();
+        OsmAnd::WeatherLayer layer;
+        switch (_weatherLayer) {
+            case WEATHER_LAYER_LOW:
+                layer = OsmAnd::WeatherLayer::Low;
+                break;
+            case WEATHER_LAYER_HIGH:
+                layer = OsmAnd::WeatherLayer::High;
+                break;
+            default:
+                layer = OsmAnd::WeatherLayer::Low;
+                break;
+        }
+        if (true)//!_provider)
+        {
+            _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, dateTime, bands);
+            [self.mapView setProvider:_provider forLayer:self.layerIndex];
+
+            OsmAnd::MapLayerConfiguration config;
+            config.setOpacityFactor(1.0f);
+            [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+        } else {
+            _provider->setDateTime(dateTime);
+            _provider->setBands(bands);
+            [self.mapView invalidateFrame];
+        }
+
+        //[self hideProgressHUD];
+
+        return YES;
+    }
+    return NO;
 }
 
 - (void) onWeatherChanged

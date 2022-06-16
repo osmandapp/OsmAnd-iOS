@@ -109,7 +109,51 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 @end
 
+@interface NSUnit (util)
+
++ (NSUnit *) unitFromString:(NSString *)unitStr;
+
++ (NSUnit *) current;
+- (NSString *) name;
+
+@end
+
+@interface NSUnitTemperature (util)
+
++ (NSUnitTemperature *) current;
+
+@end
+
+@interface NSUnitSpeed (util)
+
++ (NSUnitSpeed *) current;
+
+@end
+
+@interface NSUnitPressure (util)
+
++ (NSUnitPressure *) current;
+
+@end
+
+@interface NSUnitLength (util)
+
++ (NSUnitLength *) current;
+
+@end
+
+@interface NSUnitCloud : NSUnit
+
+@property (class, readonly, copy) NSUnitCloud *percent;
+
++ (NSUnitCloud *) current;
+
+@end
+
 @interface OAUtilities : NSObject
+
++ (BOOL) getAccessToFile:(NSString *)filePath;
++ (void) denyAccessToFile:(NSString *)filePath removeFromInbox:(BOOL)remove;
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion;
 + (BOOL) iosVersionIsExactly:(NSString*)testVersion;
@@ -167,7 +211,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSString *) preferredLang;
 + (NSString *) currentLang;
-+ (NSString *) capitalizeFirstLetterAndLowercase:(NSString *)s;
++ (NSString *) capitalizeFirstLetter:(NSString *)s;
 + (NSString *) translatedLangName:(NSString *)lang;
 + (NSInteger) findFirstNumberEndIndex:(NSString *)value;
 
@@ -233,5 +277,14 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSString *) getLocalizedString:(NSString *)key;
 + (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list;
 + (NSString*) fileMD5:(NSString*)path;
+
++ (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView;
+
++ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit;
++ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace;
+
++ (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom;
+
++ (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view;
 
 @end

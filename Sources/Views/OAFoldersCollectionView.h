@@ -15,16 +15,18 @@
 @required
 
 - (void)onItemSelected:(NSInteger)index;
+- (void)askForPaidProduct:(NSString *)productIdentifier;
 
 @end
 
 @interface OAFoldersCollectionView : UICollectionView
 
-@property (nonatomic) id<OAFoldersCellDelegate> foldersDelegate;
+@property (nonatomic, weak) id<OAFoldersCellDelegate> foldersDelegate;
 @property (weak, nonatomic) OACollectionViewCellState *state;
 @property (nonatomic) NSIndexPath *cellIndex;
 
 - (void)setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(NSInteger)index;
+- (BOOL)hasValues;
 - (void)setSelectedIndex:(NSInteger)index;
 - (NSInteger)getSelectedIndex;
 - (void)updateContentOffset;

@@ -34,6 +34,10 @@
 - (BOOL) handleIncomingURL:(NSURL *)url;
 - (void) importAsGPX:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView;
 
++ (void) showInfoAlertWithTitle:(NSString *)title
+                        message:(NSString *)message
+                   inController:(UIViewController *)controller;
+
 - (void) showNoInternetAlert;
 - (void) showNoInternetAlertFor:(NSString*)actionTitle;
 

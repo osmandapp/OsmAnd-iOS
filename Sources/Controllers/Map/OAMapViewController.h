@@ -131,6 +131,11 @@
              centerBBox:(BOOL)centerBBox
                animated:(BOOL)animated;
 
+- (void) carPlayMoveGestureDetected:(UIGestureRecognizerState)state
+                    numberOfTouches:(NSInteger)numberOfTouches
+                        translation:(CGPoint)translation
+                           velocity:(CGPoint)screenVelocity;
+
 - (float) calculateMapRuler;
 
 - (BOOL) isMyLocationVisible;

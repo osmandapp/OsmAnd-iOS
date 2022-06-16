@@ -14,7 +14,6 @@
 
 // Context-related:
 - (void)createContext;
-- (void)releaseContext;
 - (void)releaseContext:(BOOL)gpuContextLost;
 
 // Rendering process:

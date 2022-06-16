@@ -16,6 +16,7 @@
 #import "OALocationPoint.h"
 #import "OAAppSettings.h"
 #import "OAResultMatcher.h"
+#import "OALocationSimulation.h"
 
 #include <OsmAndCore.h>
 
@@ -93,6 +94,7 @@ struct RouteSegmentResult;
 
 - (OAGPXRouteParams *) build:(CLLocation *)start;
 - (NSArray<CLLocation *> *) getPoints;
+- (NSArray<OASimulatedLocation *> *)getSimulatedLocations;
 
 @end
 

@@ -404,9 +404,9 @@ typedef enum
         [_scrollableHudViewController removeFromParentViewController];
         _scrollableHudViewController = nil;
     }
-    [_hudViewController.quickActionController updateViewVisibility];
     [self resetActiveTargetMenu];
     [self restoreFromContextMenuMode];
+    [_hudViewController.quickActionController updateViewVisibility];
 }
 
 - (void)showPlanRouteViewController:(OARoutePlanningHudViewController *)controller
@@ -444,21 +444,19 @@ typedef enum
 {
     if (_dashboard || !_mapillaryController.view.hidden || (_destinationViewController && _destinationViewController.view.superview))
         return UIStatusBarStyleLightContent;
-    else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
+    else if (_targetMenuView != nil && _targetMenuView.customController != nil &&
+                                        (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
                                         _targetMenuView.targetPoint.type == OATargetRouteDetails ||
                                         _targetMenuView.targetPoint.type == OATargetRouteDetailsGraph ||
                                         _targetMenuView.targetPoint.type == OATargetTransportRouteDetails))
         return UIStatusBarStyleDefault;
-    
+    else if (_scrollableHudViewController)
+        return _scrollableHudViewController.preferredStatusBarStyle;
+
     if (_customStatusBarStyleNeeded)
         return _customStatusBarStyle;
 
-    UIStatusBarStyle style;
-    if (!self.hudViewController)
-        style = UIStatusBarStyleDefault;
-    
-    style = self.hudViewController.preferredStatusBarStyle;
-    
+    UIStatusBarStyle style = self.hudViewController ? self.hudViewController.preferredStatusBarStyle : UIStatusBarStyleDefault;
     return [self.targetMenuView getStatusBarStyle:[self contextMenuMode] defaultStyle:style];
 }
 
@@ -864,14 +862,26 @@ typedef enum
 
 - (void) showMapStylesScreen
 {
-    [OAAnalyticsHelper logEvent:@"configure_map_styles_open"];
+    [self showMapSettingsScreen:EMapSettingsScreenMapType logEvent:@"configure_map_styles_open"];
+}
+
+- (void) showWeatherLayersScreen
+{
+    [self showMapSettingsScreen:EMapSettingsScreenWeather logEvent:nil];
+
+}
+
+- (void)showMapSettingsScreen:(EMapSettingsScreen)screen logEvent:(nullable NSString *)event
+{
+    if (event)
+        [OAAnalyticsHelper logEvent:event];
     
     _targetAppMode = nil;
     _reopenSettings = _targetAppMode != nil;
     
     [self removeGestureRecognizers];
     
-    _dashboard = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType];
+    _dashboard = [[OAMapSettingsViewController alloc] initWithSettingsScreen:screen];
     [_dashboard show:self parentViewController:nil animated:YES];
     
     [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
@@ -1844,7 +1854,7 @@ typedef enum
             }
             return;
         }
-        OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAOpenExistingTrack];
+        OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAOpenExistingTrack showCurrent:YES];
         saveTrackViewController.delegate = self;
         [self presentViewController:saveTrackViewController animated:YES completion:nil];
     }
@@ -2270,15 +2280,16 @@ typedef enum
         
         if (onComplete)
             onComplete();
-        
-        [_hudViewController.quickActionController updateViewVisibility];
 
         if (_prevScrollableHudViewController)
         {
             [self showScrollableHudViewController:_prevScrollableHudViewController];
             _prevScrollableHudViewController = nil;
         }
-
+        else
+        {
+            [_hudViewController.quickActionController updateViewVisibility];
+        }
     }];
     
     [self showTopControls:NO];
@@ -2562,12 +2573,13 @@ typedef enum
                 state:(OATrackMenuViewControllerState *)state
          trackHudMode:(EOATrackHudMode)trackHudMode
 {
-    BOOL showCurrentTrack = NO;
-    if (item == nil)
+    BOOL showCurrentTrack = item == nil || !item.gpxFileName || item.gpxFileName.length == 0 || [item.gpxTitle isEqualToString:OALocalizedString(@"track_recording_name")];
+    if (showCurrentTrack)
     {
-        item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
-        item.gpxTitle = OALocalizedString(@"track_recording_name");
-        showCurrentTrack = YES;
+        if (item == nil)
+            item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+        if (!item.gpxTitle || item.gpxTitle.length == 0)
+            item.gpxTitle = OALocalizedString(@"track_recording_name");
     }
 
     [self hideMultiMenuIfNeeded];
@@ -2621,13 +2633,13 @@ typedef enum
     {
         case EOATrackAppearanceHudMode:
         {
-            trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:targetPoint.targetObj
+            trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item
                                                                                                state:state];
             break;
         }
         default:
         {
-            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj
+            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:item
                                                                                      state:state];
             [_mapViewController showContextPinMarker:targetPoint.location.latitude
                                            longitude:targetPoint.location.longitude
@@ -3650,7 +3662,7 @@ typedef enum
         if (_settings.applicationMode.get != [_routingHelper getAppMode])
             [_settings setApplicationModePref:[_routingHelper getAppMode]];
 
-        if (_settings.simulateRouting && ![_app.locationServices.locationSimulation isRouteAnimating])
+        if (_settings.simulateNavigation && ![_app.locationServices.locationSimulation isRouteAnimating])
             [_app.locationServices.locationSimulation startStopRouteAnimation];
     }
     else
@@ -3675,7 +3687,7 @@ typedef enum
             [self updateRouteButton];
             [self updateToolbar];
             
-            if (_settings.simulateRouting && ![_app.locationServices.locationSimulation isRouteAnimating])
+            if (_settings.simulateNavigation && ![_app.locationServices.locationSimulation isRouteAnimating])
                 [_app.locationServices.locationSimulation startStopRouteAnimation];
         }
     }
@@ -3689,7 +3701,7 @@ typedef enum
     else
         [_mapActions stopNavigationWithoutConfirm];
 
-    if (_settings.simulateRouting && [_app.locationServices.locationSimulation isRouteAnimating])
+    if (_settings.simulateNavigation && [_app.locationServices.locationSimulation isRouteAnimating])
         [_app.locationServices.locationSimulation startStopRouteAnimation];
 }
 
@@ -3735,7 +3747,36 @@ typedef enum
 
 - (void) requestPrivateAccessRouting
 {
-    
+    if (![_settings.forcePrivateAccessRoutingAsked get:[_routingHelper getAppMode]])
+    {
+        OACommonBoolean *allowPrivate = [_settings getCustomRoutingBooleanProperty:@"allow_private" defaultValue:NO];
+        NSArray<OAApplicationMode *> * modes = OAApplicationMode.allPossibleValues;
+        for (OAApplicationMode *mode in modes)
+        {
+            if (![allowPrivate get:mode])
+            {
+                [_settings.forcePrivateAccessRoutingAsked set:YES mode:mode];
+            }
+        }
+        if (![allowPrivate get:[_routingHelper getAppMode]])
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"private_access_routing_req") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleCancel handler:nil]];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                for (OAApplicationMode *mode in modes)
+                {
+                    if (![allowPrivate get:mode])
+                    {
+                        [allowPrivate set:YES mode:mode];
+                    }
+                }
+                [_routingHelper recalculateRouteDueToSettingsChange];
+                
+            }]];
+            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+        }
+    }
 }
 
 - (void) start
@@ -3837,17 +3878,12 @@ typedef enum
 
 #pragma mark - OAOpenAddTrackDelegate
 
-- (void)closeBottomSheet
-{
-}
-
 - (void)onFileSelected:(NSString *)gpxFileName
 {
+    NSString *fullPath = nil;
     if (gpxFileName && gpxFileName.length > 0)
-    {
-        NSString *fullPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFileName];
-        [self targetPointAddWaypoint:fullPath];
-    }
+        fullPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFileName];
+    [self targetPointAddWaypoint:fullPath];
 }
 
 @end

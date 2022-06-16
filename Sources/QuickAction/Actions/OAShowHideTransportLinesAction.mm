@@ -6,12 +6,9 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "OAShowHideTransportLinesAction.h"
 #import "OAPublicTransportOptionsBottomSheet.h"
 #import "OAMapStyleSettings.h"
-#import "OAQuickActionSelectionBottomSheetViewController.h"
-#import "OABottomSheetTwoButtonsViewController.h"
 #import "OAQuickActionType.h"
 
 #define KEY_DIALOG @"dialog"
@@ -31,9 +28,9 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    BOOL wasCategoryEnabled = [_styleSettings isCategoryEnabled:@"transport"];
-    [_styleSettings setCategoryEnabled:!wasCategoryEnabled categoryName:@"transport"];
-    if (!wasCategoryEnabled && ![_styleSettings isCategoryEnabled:@"transport"])
+    BOOL wasCategoryEnabled = [_styleSettings isCategoryEnabled:TRANSPORT_CATEGORY];
+    [_styleSettings setCategoryEnabled:!wasCategoryEnabled categoryName:TRANSPORT_CATEGORY];
+    if (!wasCategoryEnabled && ![_styleSettings isCategoryEnabled:TRANSPORT_CATEGORY])
         [self showDashboardMenu];
 }
 
@@ -44,7 +41,7 @@ static OAQuickActionType *TYPE;
 
 - (BOOL)isActionWithSlash
 {
-    return [_styleSettings isCategoryEnabled:@"transport"];
+    return [_styleSettings isCategoryEnabled:TRANSPORT_CATEGORY];
 }
 
 - (NSString *)getActionStateName

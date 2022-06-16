@@ -20,8 +20,11 @@
 #import "OAMonitoringPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmEditingSettingsViewController.h"
+#import "OAOsmandDevelopmentPlugin.h"
+#import "OAOsmandDevelopmentViewController.h"
 #import "OAPluginResetBottomSheetViewController.h"
 #import "OASettingsHelper.h"
+#import "OAProfileSettingsItem.h"
 #import "OAMapStyleSettings.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAProfileGeneralSettingsViewController.h"
@@ -32,10 +35,11 @@
 #import "OADeleteProfileBottomSheetViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 #import "OAMapWidgetRegistry.h"
-#import "OASettingsItem.h"
 #import "OARendererRegistry.h"
 #import "OAExportItemsViewController.h"
 #import "OAIndexConstants.h"
+#import "OAWeatherPlugin.h"
+#import "OAWeatherSettingsViewController.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"
@@ -157,7 +161,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : tripRec.getName,
             @"img" : @"ic_custom_trip",
-            @"key" : @"trip_rec"
+            @"key" : kTrackRecordingSettings
         }];
     }
     
@@ -168,7 +172,29 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"type" : [OAIconTextDescCell getCellIdentifier],
             @"title" : osmEdit.getName,
             @"img" : @"ic_custom_osm_edits",
-            @"key" : @"osm_edits"
+            @"key" : kOsmEditsSettings
+        }];
+    }
+    
+    OAPlugin *developmentPlugin = [OAPlugin getEnabledPlugin:OAOsmandDevelopmentPlugin.class];
+    if (developmentPlugin)
+    {
+        [plugins addObject:@{
+            @"type" : [OAIconTextDescCell getCellIdentifier],
+            @"title" : developmentPlugin.getName,
+            @"img" : @"ic_custom_laptop",
+            @"key" : kOsmandDevelopmentSettings
+        }];
+    }
+    
+    OAPlugin *weather = [OAPlugin getEnabledPlugin:OAWeatherPlugin.class];
+    if (weather)
+    {
+        [plugins addObject:@{
+            @"type" : [OAIconTextDescCell getCellIdentifier],
+            @"title" : weather.getName,
+            @"img" : @"ic_custom_umbrella",
+            @"key" : kWeatherSettings
         }];
     }
     
@@ -392,6 +418,10 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             settingsScreen = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:_appMode];
         else if ([targetScreenKey isEqualToString:kOsmEditsSettings])
             settingsScreen = [[OAOsmEditingSettingsViewController alloc] init];
+        else if ([targetScreenKey isEqualToString:kWeatherSettings])
+            settingsScreen = [[OAWeatherSettingsViewController alloc] init];
+        else if ([targetScreenKey isEqualToString:kOsmandDevelopmentSettings])
+            settingsScreen = [[OAOsmandDevelopmentViewController alloc] init];
 
         if (settingsScreen)
             [self.navigationController pushViewController:settingsScreen animated:YES];
@@ -581,17 +611,16 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 {
     if (appMode)
     {
+        [OAAppSettings.sharedManager.settingPrefMapLanguage resetToDefault];
+        [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
         if (appMode.isCustomProfile)
         {
-            [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
             NSString *fileName = [self getBackupFileForCustomMode:appMode.stringKey];
             if ([[NSFileManager defaultManager] fileExistsAtPath:fileName])
                 [self restoreCustomModeFromFile:fileName];
         }
         else
         {
-            [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
-            [self showAlertMessage:OALocalizedString(OALocalizedString(@"profile_prefs_reset_successful"))];
             [self updateCopiedOrResetPrefs];
         }
         [self resetMapStylesForProfile:appMode];
@@ -601,7 +630,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) restoreCustomModeFromFile:(NSString *)filePath
 {
     _importedFileName = filePath;
-    [OASettingsHelper.sharedInstance collectSettings:filePath latestChanges:@"" version:1 delegate:self];
+    [OASettingsHelper.sharedInstance collectSettings:filePath latestChanges:@"" version:1 delegate:self onComplete:nil silent:YES];
 }
 
 - (void) resetMapStylesForProfile:(OAApplicationMode *)appMode
@@ -615,9 +644,10 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 	OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:mapStyleInfo[@"id"]
 																		mapPresetName:appMode.variantKey];
-	[styleSettings resetMapStyleForAppMode:appMode.variantKey];
+	[styleSettings resetMapStyleForAppMode:appMode.variantKey onComplete:^{
+        [self showAlertMessage:OALocalizedString(@"profile_prefs_reset_successful")];
+    }];
 }
-
 
 - (void) importBackupSettingsItems:(nonnull NSString *)file items:(nonnull NSArray<OASettingsItem *> *)items
 {
@@ -668,15 +698,29 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 {
     if (succeed)
     {
+        OASettingsItem *itm = nil;
         for (OASettingsItem *item in items)
-            item.shouldReplace = YES;
-        [self importBackupSettingsItems:_importedFileName items:items];
+        {
+            if ([item isKindOfClass:OAProfileSettingsItem.class])
+            {
+                OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *)item;
+                if ([profileItem.appMode.stringKey isEqualToString:_appMode.stringKey])
+                {
+                    itm = item;
+                    itm.shouldReplace = YES;
+                    break;
+                }
+            }
+        }
+        if (itm)
+        {
+            [self importBackupSettingsItems:_importedFileName items:@[itm]];
+        }
     }
 }
 
 - (void)onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items
 {
-    [self showAlertMessage:OALocalizedString(OALocalizedString(@"profile_prefs_reset_successful"))];
     [self updateCopiedOrResetPrefs];
 }
 

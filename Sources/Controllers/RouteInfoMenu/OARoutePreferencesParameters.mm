@@ -293,7 +293,7 @@
     NSString *name = @"ic_custom_trip";
     if ([id isEqualToString:kRouteParamIdShortWay])
         name = @"ic_custom_fuel";
-    else if ([id isEqualToString:kRouteParamIdAllowPrivate])
+    else if ([id isEqualToString:kRouteParamIdAllowPrivate] || [id isEqualToString:kRouteParamIdAllowPrivateTruck])
         name = isChecked ? @"ic_custom_allow_private_access" : @"ic_custom_forbid_private_access";
     else if ([id isEqualToString:kRouteParamIdAllowMotorway])
         name = isChecked ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";
@@ -762,12 +762,12 @@
 
 - (BOOL) isSelected
 {
-    return self.settings.simulateRouting;
+    return self.settings.simulateNavigation;
 }
 
 - (void) setSelected:(BOOL)isChecked
 {
-    [self.settings setSimulateRouting:isChecked];
+    [self.settings setSimulateNavigation:isChecked];
     if (self.delegate)
         [self.delegate updateParameters];
 }
@@ -790,6 +790,17 @@
 - (UIColor *)getTintColor
 {
     return self.isChecked ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+}
+
+- (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate)
+        [self.delegate openSimulateNavigationScreen];
+}
+
+- (UIImage *)getSecondaryIcon
+{
+    return [UIImage imageNamed:@"ic_action_additional_option"];
 }
 
 @end
@@ -902,6 +913,80 @@
 - (UIColor *)getTintColor
 {
     return UIColorFromRGB(color_chart_orange);
+}
+
+@end
+
+@implementation OAHazmatRoutingParameter
+{
+    OACommonString *_property;
+}
+
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
+{
+    self = [super initWithAppMode:appMode];
+    if (self)
+    {
+        NSString *id = [NSString stringWithUTF8String:self.routingParameter.id.c_str()];
+        _property = [self.settings getCustomRoutingProperty:id defaultValue:kDefaultNumericValue];
+    }
+    return self;
+}
+
+- (UIImage *)getIcon
+{
+    return [self isSelected] ? [UIImage imageNamed:@"ic_custom_hazmat_limit_colored"] : [UIImage templateImageNamed:@"ic_custom_hazmat_limit"];
+}
+
+- (NSString *) getDescription
+{
+    return OALocalizedString([self isSelected] ? @"transport_hazmat_yes_desc" : @"transport_hazmat_no_desc");
+}
+
+- (NSString *)getValue
+{
+    return [self getValue:[_property get:[self getApplicationMode]].integerValue];
+}
+
+- (NSString *)getValue:(NSInteger)index
+{
+    NSString *defaultValue = [NSString stringWithUTF8String:self.routingParameter.possibleValueDescriptions[index].c_str()];
+    NSString *value = [defaultValue stringByReplacingOccurrencesOfString:@" " withString:@"_"].lowercaseString;
+    NSString *key = [NSString stringWithFormat:@"routing_attr_%@_name", [NSString stringWithFormat:@"%@_%@", kRouteParamIdHazmatCategory, value]];
+    NSString *res = OALocalizedString(key);
+    if ([res isEqualToString:key])
+        res = defaultValue;
+    return res;
+}
+
+- (void)setValue:(NSInteger)index
+{
+    NSString *value = [NSString stringWithFormat:@"%.1f", self.routingParameter.possibleValues[index]];
+    [_property set:value mode:[self getApplicationMode]];
+}
+
+- (BOOL) isSelected
+{
+    if (![[_property get:[self getApplicationMode]] isEqualToString:kDefaultNumericValue] && ![self.settings.hazmatTransportingEnabled get])
+        [self.settings.hazmatTransportingEnabled set:YES];
+    return [self.settings.hazmatTransportingEnabled get];
+}
+
+- (void) setSelected:(BOOL)isChecked
+{
+    [self.settings.hazmatTransportingEnabled set:isChecked];
+    [_property set:kDefaultNumericValue mode:[self getApplicationMode]];
+}
+
+- (NSString *) getCellType
+{
+    return [OAIconTitleValueCell getCellIdentifier];
+}
+
+- (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate)
+        [self.delegate showParameterValuesScreen:self];
 }
 
 @end

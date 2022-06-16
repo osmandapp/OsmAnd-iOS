@@ -391,22 +391,29 @@
                 // Update target
                 if (!sameLocation)
                 {
-                    if (targetAnimation)
+                    if (![self.class isSmallSpeedForAnimation:newLocation] && _settings.animateMyLocation.get)
                     {
-                        _mapView.animator->cancelAnimation(targetAnimation);
-                        
-                        double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
-                        _mapView.animator->animateTargetTo(newTarget31,
-                                                           duration,
-                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                           kLocationServicesAnimationKey);
+                        if (targetAnimation)
+                        {
+                            _mapView.animator->cancelAnimation(targetAnimation);
+                            
+                            double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
+                            _mapView.animator->animateTargetTo(newTarget31,
+                                                               duration,
+                                                               OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                               kLocationServicesAnimationKey);
+                        }
+                        else
+                        {
+                            _mapView.animator->animateTargetTo(newTarget31,
+                                                               kFastAnimationTime,
+                                                               OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                               kLocationServicesAnimationKey);
+                        }
                     }
                     else
                     {
-                        _mapView.animator->animateTargetTo(newTarget31,
-                                                           kFastAnimationTime,
-                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                           kLocationServicesAnimationKey);
+                        [_mapView setTarget31:newTarget31];
                     }
                 }
                 
@@ -563,7 +570,7 @@
 
 + (BOOL) isSmallSpeedForAnimation:(CLLocation *)location
 {
-    return location.speed < 1.5;
+    return isnan(location.speed) || location.speed < 1.5;
 }
 
 - (BOOL) isContextMenuVisible

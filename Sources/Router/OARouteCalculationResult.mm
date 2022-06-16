@@ -60,6 +60,7 @@
     {
         _cacheCurrentTextDirectionInfo = -1;
         _locationPoints = [NSMutableArray array];
+        _simulatedLocations = [NSMutableArray array];
 
         _currentDirectionInfo = 0;
         _currentRoute = 0;
@@ -487,6 +488,46 @@
 - (NSArray<CLLocation *> *) getImmutableAllLocations
 {
     return [NSArray arrayWithArray:_locations];
+}
+
+- (NSArray<OASimulatedLocation *> *)getImmutableSimulatedLocations
+{
+    if (_simulatedLocations.count == 0)
+    {
+        for (CLLocation *l in _locations)
+        {
+            [_simulatedLocations addObject:[[OASimulatedLocation alloc] initWithLocation:l]];
+        }
+        for (int routeInd = 0; routeInd < _segments.size(); routeInd++)
+        {
+            std::shared_ptr<RouteSegmentResult> s = _segments[routeInd];
+            BOOL plus = s->getStartPointIndex() < s->getEndPointIndex();
+            int i = s->getStartPointIndex();
+            while (i != s->getEndPointIndex() || routeInd == _segments.size() - 1)
+            {
+                LatLon point = s->getPoint(i);
+                for (OASimulatedLocation *sd in _simulatedLocations)
+                {
+                    if ([OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.latitude destination:point.lat] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.longitude destination:point.lon])
+                    {
+                        [sd setHighwayType:[NSString stringWithUTF8String:s->object->getHighway().c_str()]];
+                        [sd setSpeedLimit:s->object->getMaximumSpeed(YES)];
+                        if (s->object->hasTrafficLightAt(i))
+                        {
+                            [sd setTrafficLight:YES];
+                        }
+                    }
+                }
+                if (i == s->getEndPointIndex())
+                {
+                    break;
+                }
+                i += plus ? 1 : -1;
+            }
+        }
+    }
+    return _simulatedLocations;
 }
 
 - (NSArray<OARouteDirectionInfo *> *) getImmutableAllDirections
@@ -1307,6 +1348,7 @@
         _listDistance = [NSMutableArray arrayWithObject:@(0) count:locations.count];
         [self.class updateListDistanceTime:_listDistance locations:_locations];
         _alarmInfo = [NSMutableArray array];
+        _simulatedLocations = [NSMutableArray array];
         [self.class calculateIntermediateIndexes:_locations intermediates:params.intermediates localDirections:localDirections intermediatePoints:_intermediatePoints];
         _directions = localDirections;
         [self.class updateDirectionsTime:_directions listDistance:_listDistance];
@@ -1339,6 +1381,7 @@
         
         _locations = locations;
         _segments = segments;
+        _simulatedLocations = [NSMutableArray array];
         _listDistance = [NSMutableArray arrayWithObject:@(0) count:locations.count];
         [self.class calculateIntermediateIndexes:_locations intermediates:intermediates localDirections:computeDirections intermediatePoints:_intermediatePoints];;
         [self.class updateListDistanceTime:_listDistance locations:_locations];

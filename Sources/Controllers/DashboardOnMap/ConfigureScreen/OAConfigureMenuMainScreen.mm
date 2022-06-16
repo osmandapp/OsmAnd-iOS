@@ -9,13 +9,10 @@
 #import "OAConfigureMenuMainScreen.h"
 #import "OAConfigureMenuViewController.h"
 #import "Localization.h"
-#import "OsmAndApp.h"
-#import "OAAppSettings.h"
 #import "OAAppModeCell.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
-#import "OAUtilities.h"
 #import "OASettingSwitchCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OAMapHudViewController.h"
@@ -24,6 +21,8 @@
 #import "OADirectionAppearanceViewController.h"
 #import "OAColors.h"
 #import "OAMapLayers.h"
+#import "OAIAPHelper.h"
+#import "OAWeatherPlugin.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -124,6 +123,14 @@
                      @"cells" : controlsList,
                      } ];
     
+    if (_settings.applicationMode.get != OAApplicationMode.DEFAULT)
+    {
+        [controlsList addObject:@{ @"title" : OALocalizedString(@"osm_str_name"),
+                                   @"key" : @"street_name",
+                                   @"selected" : @([_settings.showStreetName get]),
+                                   @"type" : [OASettingSwitchCell getCellIdentifier]} ];
+    }
+    
     [controlsList addObject:@{ @"title" : OALocalizedString(@"coordinates_widget"),
                                @"img" : @"ic_custom_coordinates",
                                @"key" : @"coordinates_widget",
@@ -165,7 +172,7 @@
     {
         if (![mode isWidgetAvailable:r.key])
             continue;
-        
+
         BOOL selected = [r visibleCollapsed:mode] || [r visible:mode];
         NSString *collapsedStr = OALocalizedString(@"shared_string_collapse");
         
@@ -221,6 +228,11 @@
         {
             [_settings.showCoordinatesWidget set:visible];
             [[[OsmAndApp instance].data mapLayerChangeObservable] notifyEvent];
+        }
+        else if ([key isEqualToString:@"street_name"])
+        {
+            [_settings.showStreetName set:visible];
+            [[OARootViewController instance].mapPanel recreateControls];
         }
         else if ([key isEqualToString:@"map_widget_distance_by_tap"])
         {

@@ -18,6 +18,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARendererRegistry.h"
+#import "OARoutePreferencesParameters.h"
 
 @interface OACopyProfileBottomSheetViewControler()
 
@@ -123,7 +124,7 @@
             }
             else
             {
-                OACommonString *stringSetting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
+                OACommonString *stringSetting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
                 [stringSetting set:[stringSetting get:_sourceAppMode] mode:_targetAppMode];
             }
         }

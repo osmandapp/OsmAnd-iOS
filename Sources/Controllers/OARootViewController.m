@@ -7,38 +7,30 @@
 //
 
 #import "OARootViewController.h"
-
-#import <QuartzCore/QuartzCore.h>
 #import <SafariServices/SafariServices.h>
-
-#import <JASidePanelController.h>
-#import <UIAlertView+Blocks.h>
 #import <MBProgressHUD.h>
-#import <Reachability.h>
-
 #import "OAAppDelegate.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAMenuOriginViewControllerProtocol.h"
 #import "OAMenuViewControllerProtocol.h"
 #import "OAFavoriteImportViewController.h"
-#import "OANavigationController.h"
 #import "OAOptionsPanelBlackViewController.h"
 #import "OAGPXListViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAIAPHelper.h"
 #import "OADonationSettingsViewController.h"
 #import "OAChoosePlanHelper.h"
-#import "OAGPXListViewController.h"
 #import "OAFileImportHelper.h"
 #import "OASettingsHelper.h"
 #import "OAXmlImportHandler.h"
-
+#import "OsmAndApp.h"
 #import "Localization.h"
-#import "OAGPXDatabase.h"
 
 #define _(name) OARootViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
+
+#define TEST_LOCAL_PURCHASE NO
 
 typedef enum : NSUInteger {
     EOARequestProductsProgressType,
@@ -298,16 +290,16 @@ typedef enum : NSUInteger {
 
 - (void) sqliteDbImportedAlert
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"import_title") message:OALocalizedString(@"import_raster_map_success") preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
+    [self.class showInfoAlertWithTitle:OALocalizedString(@"import_title")
+                               message:OALocalizedString(@"import_raster_map_success")
+                          inController:self];
 }
 
 - (void) sqliteDbImportFailedAlert
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"import_title") message:OALocalizedString(@"import_raster_map_failed") preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
+    [self.class showInfoAlertWithTitle:OALocalizedString(@"import_title")
+                               message:OALocalizedString(@"import_raster_map_failed")
+                          inController:self];
 }
 
 - (void) installSqliteDbFile:(NSString *)path newFileName:(NSString *)newFileName
@@ -344,7 +336,9 @@ typedef enum : NSUInteger {
     [self closeMenuAndPanelsAnimated:NO];
 }
 
-- (void)showInfoAlertWithTitle:(NSString*)title message:(NSString*)message
++ (void)showInfoAlertWithTitle:(NSString *)title
+                       message:(NSString *)message
+                  inController:(UIViewController *)controller
 {
     UIAlertController* alert = [UIAlertController
                                 alertControllerWithTitle:title
@@ -357,7 +351,7 @@ typedef enum : NSUInteger {
                                 handler:^(UIAlertAction * action) {}];
 
     [alert addAction:defaultAction];
-    [self presentViewController:alert animated:YES completion:nil];
+    [controller presentViewController:alert animated:YES completion:nil];
 }
 
 - (BOOL) handleIncomingURL:(NSURL *)url_
@@ -375,7 +369,7 @@ typedef enum : NSUInteger {
         if ([[NSFileManager defaultManager] fileExistsAtPath:newPath])
             [[NSFileManager defaultManager] removeItemAtPath:newPath error:nil];
 
-        if ([path hasPrefix:[OsmAndApp instance].inboxPath])
+        if ([path containsString:[OsmAndApp instance].inboxPath])
             [[NSFileManager defaultManager] moveItemAtPath:path toPath:newPath error:nil];
         else
             [[NSFileManager defaultManager] copyItemAtPath:path toPath:newPath error:nil];
@@ -386,6 +380,14 @@ typedef enum : NSUInteger {
     path = url.path;
     fileName = [url.path lastPathComponent];
     NSString *ext = [[path pathExtension] lowercaseString];
+
+    if (![OAUtilities getAccessToFile:path])
+    {
+        [self.class showInfoAlertWithTitle:OALocalizedString(@"import_failed")
+                                   message:OALocalizedString(@"import_cannot")
+                              inController:self];
+        return NO;
+    }
 
     [[self mapPanel] onHandleIncomingURL:ext];
 
@@ -402,7 +404,9 @@ typedef enum : NSUInteger {
             UIAlertAction *cancelButtonItem = [UIAlertAction
                                             actionWithTitle:OALocalizedString(@"shared_string_cancel")
                                             style:UIAlertActionStyleCancel
-                                            handler:nil];
+                                            handler:^(UIAlertAction * _Nonnull action) {
+                                                [OAUtilities denyAccessToFile:path removeFromInbox:YES];
+            }];
 
             UIAlertAction *replaceButtonItem = [UIAlertAction
                                             actionWithTitle:OALocalizedString(@"fav_replace")
@@ -439,6 +443,7 @@ typedef enum : NSUInteger {
         {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"obf_import_title") message:OALocalizedString(@"obf_import_already_exists") preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [OAUtilities denyAccessToFile:path removeFromInbox:YES];
             }]];
             
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"fav_replace") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -476,9 +481,9 @@ typedef enum : NSUInteger {
             if (((OAFavoriteImportViewController *)incomingURLViewController).handled == NO)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    [self showInfoAlertWithTitle:OALocalizedString(@"import_failed") message:OALocalizedString(@"import_cannot")];
-                    
+                    [self.class showInfoAlertWithTitle:OALocalizedString(@"import_failed")
+                                               message:OALocalizedString(@"import_cannot")
+                                          inController:self];
                 });
                 
                 incomingURLViewController = nil;
@@ -511,9 +516,7 @@ typedef enum : NSUInteger {
 
 - (void) showNoInternetAlertFor:(NSString*)actionTitle
 {
-    
-    [self showInfoAlertWithTitle:actionTitle message:OALocalizedString(@"alert_inet_needed")];
-
+    [self.class showInfoAlertWithTitle:actionTitle message:OALocalizedString(@"alert_inet_needed") inController:self];
 }
 
 - (MBProgressHUD *) showProgress:(EOAProgressType)progressType
@@ -575,6 +578,9 @@ typedef enum : NSUInteger {
 
 - (BOOL) requestProductsWithProgress:(BOOL)showProgress reload:(BOOL)reload restorePurchases:(BOOL)restore
 {
+    if (TEST_LOCAL_PURCHASE && restore)
+        return [self restorePurchasesWithProgress:NO];
+
     if (![_iapHelper productsLoaded] || reload)
     {
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
@@ -633,6 +639,20 @@ typedef enum : NSUInteger {
 
 - (BOOL) restorePurchasesWithProgress:(BOOL)showProgress
 {
+    if (TEST_LOCAL_PURCHASE)
+    {
+        [_iapHelper buyProduct:_iapHelper.proAnnually];
+        [_iapHelper buyProduct:[_iapHelper.subscriptionList getSubscriptionByIdentifier:[kSubscriptionId_Osm_Live_Subscription_3_Months stringByAppendingString:@"_v1"]]];
+        [_iapHelper buyProduct:_iapHelper.mapsFull];
+        [_iapHelper buyProduct:_iapHelper.allWorld];
+        [_iapHelper buyProduct:_iapHelper.europe];
+        [_iapHelper buyProduct:_iapHelper.nautical];
+        [_iapHelper buyProduct:_iapHelper.srtm];
+        [_iapHelper buyProduct:_iapHelper.wiki];
+        [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRestoredNotification object:nil userInfo:nil];
+        return YES;
+    }
+
     if (![_iapHelper productsLoaded])
         return NO;
 
@@ -663,8 +683,10 @@ typedef enum : NSUInteger {
 - (void) requestingPurchase:(SKPayment *)payment
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_iapHelper.liveUpdates getPurchasedSubscription])
-            [self showInfoAlertWithTitle:@"" message:OALocalizedString(@"already_has_subscription")];
+        if ([_iapHelper.subscriptionList getPurchasedSubscription])
+        {
+            [self.class showInfoAlertWithTitle:@"" message:OALocalizedString(@"already_has_subscription") inController:self];
+        }
         else
         {
             OAProduct *p = [_iapHelper product:payment.productIdentifier];
@@ -674,11 +696,11 @@ typedef enum : NSUInteger {
                 {
                     NSString *text = [NSString stringWithFormat:OALocalizedString(@"already_has_inapp"), p.localizedTitle];
                     
-                    [self showInfoAlertWithTitle:@"" message:text];
+                    [self.class showInfoAlertWithTitle:@"" message:text inController:self];
                 }
                 else
                 {
-                    [OAChoosePlanHelper showChoosePlanScreenWithProduct:p navController:self.navigationController purchasing:YES];
+                    [OAChoosePlanHelper showChoosePlanScreenWithProduct:p navController:self.navigationController];
                     // todo
                     [[SKPaymentQueue defaultQueue] addPayment:payment];
                 }
@@ -687,7 +709,7 @@ typedef enum : NSUInteger {
             {
                 NSString *text = [NSString stringWithFormat:OALocalizedString(@"inapp_not_found"), p.localizedTitle];
                 
-                [self showInfoAlertWithTitle:@"" message:text];
+                [self.class showInfoAlertWithTitle:@"" message:text inController:self];
             }
         }
     });
@@ -703,14 +725,6 @@ typedef enum : NSUInteger {
         OAProduct *product = nil;
         if (identifier)
             product = [_iapHelper product:identifier];
-        
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        if (product && [product isKindOfClass:[OASubscription class]] && ((OASubscription* )product).donationSupported && settings.displayDonationSettings)
-        {
-            settings.displayDonationSettings = NO;
-            OADonationSettingsViewController *donationController = [[OADonationSettingsViewController alloc] init];
-            [self.navigationController pushViewController:donationController animated:YES];
-        }
     });
 }
 
@@ -739,7 +753,7 @@ typedef enum : NSUInteger {
         {
             NSString *title = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
             NSString *text = notification.userInfo ? notification.userInfo[@"error"] : nil;
-            [self showInfoAlertWithTitle:title message:text];
+            [self.class showInfoAlertWithTitle:title message:text inController:self];
         }
     });
 }
@@ -757,7 +771,7 @@ typedef enum : NSUInteger {
         {
             NSString *text = [NSString stringWithFormat:@"%d %@", errorsCount, OALocalizedString(@"prch_items_failed")];
             
-            [self showInfoAlertWithTitle:@"" message:text];
+            [self.class showInfoAlertWithTitle:@"" message:text inController:self];
         }
     });
     

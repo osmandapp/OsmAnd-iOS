@@ -15,7 +15,7 @@
 #import "OARTargetPoint.h"
 #import "OAAppSettings.h"
 
-@class MutableOrderedDictionary;
+@class MutableOrderedDictionary, NSUnitCloud;
 
 @interface OAAppData : NSObject <NSCoding>
 
@@ -37,19 +37,24 @@
 
 @property (nonatomic) BOOL weather;
 @property (nonatomic) BOOL weatherTemp;
-@property (nonatomic) NSString *weatherTempUnit;
+@property (nonatomic) NSUnitTemperature *weatherTempUnit;
+@property (nonatomic) BOOL weatherTempUnitAuto;
 @property (nonatomic) double weatherTempAlpha;
 @property (nonatomic) BOOL weatherPressure;
-@property (nonatomic) NSString *weatherPressureUnit;
+@property (nonatomic) NSUnitPressure *weatherPressureUnit;
+@property (nonatomic) BOOL weatherPressureUnitAuto;
 @property (nonatomic) double weatherPressureAlpha;
 @property (nonatomic) BOOL weatherWind;
-@property (nonatomic) NSString *weatherWindUnit;
+@property (nonatomic) NSUnitSpeed *weatherWindUnit;
+@property (nonatomic) BOOL weatherWindUnitAuto;
 @property (nonatomic) double weatherWindAlpha;
 @property (nonatomic) BOOL weatherCloud;
-@property (nonatomic) NSString *weatherCloudUnit;
+@property (nonatomic) NSUnitCloud *weatherCloudUnit;
+@property (nonatomic) BOOL weatherCloudUnitAuto;
 @property (nonatomic) double weatherCloudAlpha;
 @property (nonatomic) BOOL weatherPrecip;
-@property (nonatomic) NSString *weatherPrecipUnit;
+@property (nonatomic) NSUnitLength *weatherPrecipUnit;
+@property (nonatomic) BOOL weatherPrecipUnitAuto;
 @property (nonatomic) double weatherPrecipAlpha;
 
 @property (readonly) OAObservable* weatherChangeObservable;
@@ -68,6 +73,9 @@
 @property (readonly) OAObservable* weatherPrecipChangeObservable;
 @property (readonly) OAObservable* weatherPrecipUnitChangeObservable;
 @property (readonly) OAObservable* weatherPrecipAlphaChangeObservable;
+
+@property (nonatomic) double contoursAlpha;
+@property (readonly) OAObservable* contoursAlphaChangeObservable;
 
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 

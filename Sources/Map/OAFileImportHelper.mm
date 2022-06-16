@@ -51,7 +51,10 @@
 
     NSString *path = [self.documentsDir stringByAppendingPathComponent:fileName];
     if ([filePath isEqualToString:path])
+    {
+        [OAUtilities denyAccessToFile:filePath removeFromInbox:NO];
         return YES;
+    }
 
     QString str = QString::fromNSString(fileName);
     QString resourceId = str.toLower().remove(QStringLiteral("_2"));
@@ -63,8 +66,7 @@
     if (error)
         OALog(@"Failed to import OBF file: %@", filePath);
 
-    if ([filePath hasPrefix:_app.inboxPath])
-        [_fileManager removeItemAtPath:filePath error:nil];
+    [OAUtilities denyAccessToFile:filePath removeFromInbox:YES];
     
     if (error)
     {
@@ -93,8 +95,7 @@
     if (error)
         OALog(@"Failed to import resource: %@", filePath);
 
-    if ([filePath hasPrefix:_app.inboxPath])
-        [_fileManager removeItemAtPath:filePath error:nil];
+    [OAUtilities denyAccessToFile:filePath removeFromInbox:YES];
     
     if (error)
     {

@@ -214,27 +214,21 @@
     {
         [_rows addObjectsFromArray:self.additionalRows];
     }
-    
-    [_rows sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
-        if (row1.order < row2.order)
-        {
-            return NSOrderedAscending;
-        }
-        else if (row1.order == row2.order)
-        {
-            return [row1.typeName localizedCompare:row2.typeName];
-        }
-        else
-        {
-            return NSOrderedDescending;
-        }
-    }];
 
     if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPlugin getEnabledPlugin:OAWikipediaPlugin.class])
         [self buildRowsPoi:YES];
 
     if ([self showNearestPoi])
         [self buildRowsPoi:NO];
+
+    [_rows sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
+        if (row1.order < row2.order)
+            return NSOrderedAscending;
+        else if (row1.order == row2.order)
+            return [row1.typeName localizedCompare:row2.typeName];
+        else
+            return NSOrderedDescending;
+    }];
 
     if ([self needCoords])
     {
@@ -276,6 +270,7 @@
             rowInfo.collapsed = YES;
             rowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             [((OACollapsableNearestPoiWikiView *) rowInfo.collapsableView) setData:nearest hasItems:(isWiki ? _hasOsmWiki : YES) latitude:self.location.latitude longitude:self.location.longitude filter:filter];
+            rowInfo.order = 1000;
             [_rows addObject:rowInfo];
         }
     }
@@ -346,7 +341,6 @@
     view.backgroundColor = UIColorFromRGB(0xffffff);
     self.tableView.backgroundView = view;
     self.tableView.scrollEnabled = NO;
-    [self.tableView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressToCopyText:)]];
     _calculatedWidth = 0;
     [self buildRowsInternal];
 }
@@ -616,9 +610,7 @@
                                         [cards addObject:card];
                                         if (cards.count == features.count + cardsCount)
                                         {
-                                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                                [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
-                                            });
+                                            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
                                         }
                                     }
                                 }];
@@ -648,6 +640,8 @@
 
         if (nearbyImagesRowInfo)
             [((OACollapsableCardsView *) nearbyImagesRowInfo.collapsableView) setCards:cards];
+        
+        _otherCardsReady = _openPlaceCardsReady = _wikiCardsReady = NO;
     }
 }
 
@@ -702,7 +696,7 @@
 {
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
         return;
-    
+
     OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
 
     OACollapsableCardsView *cardView = [[OACollapsableCardsView alloc] init];
@@ -714,26 +708,6 @@
     [_rows addObject:nearbyImagesRowInfo];
     
     _nearbyImagesRowInfo = nearbyImagesRowInfo;
-}
-
--(void)handleLongPressToCopyText:(UILongPressGestureRecognizer *)gestureRecognizer
-{
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
-    {
-        CGPoint p = [gestureRecognizer locationInView:self.tableView];
-        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:p];
-        if (indexPath)
-        {
-            OARowInfo *info = _rows[indexPath.row];
-            NSString *textToCopy;
-            if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
-                textToCopy = [OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES];
-            else
-                textToCopy = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
-
-            [[UIPasteboard generalPasteboard] setString:textToCopy];
-        }
-    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -813,9 +787,13 @@
             cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
             cell.textView.textColor = info.textColor;
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
+            [cell setDescription:nil];
 
             cell.collapsableView = info.collapsableView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
+
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
 
             return cell;
         }
@@ -975,6 +953,31 @@
             [self.delegate requestFullMode];
         NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    return (action == @selector(copy:));
+}
+
+- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (action == @selector(copy:))
+    {
+        OARowInfo *info = _rows[indexPath.row];
+        NSString *textToCopy;
+        if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
+            textToCopy = [OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES];
+        else
+            textToCopy = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
+
+        [[UIPasteboard generalPasteboard] setString:textToCopy];
     }
 }
 

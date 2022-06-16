@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 
 - (instancetype)initWithLocale:(NSString *)locale title:(NSString *)title checked:(BOOL)checked preferred:(BOOL)preferred
 {
-    self = [super self];
+    self = [super init];
     if (self)
     {
         _locale = locale;
@@ -331,7 +331,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
         }
         if (cell)
         {
-            cell.textView.text = [OAUtilities capitalizeFirstLetterAndLowercase:language.title];
+            cell.textView.text = language.title.capitalizedString;
         }
         return cell;
     }

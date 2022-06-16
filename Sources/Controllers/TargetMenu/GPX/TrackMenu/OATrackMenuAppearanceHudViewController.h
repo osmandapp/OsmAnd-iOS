@@ -7,10 +7,11 @@
 //
 
 #import "OABaseTrackMenuHudViewController.h"
-#import "OATrackMenuHudViewController.h"
+
+@class OATrackMenuViewControllerState;
 
 @interface OATrackMenuAppearanceHudViewController : OABaseTrackMenuHudViewController
 
-- (instancetype)initWithGpx:(OAGPX *)gpx state:(OATargetMenuViewControllerState *)state;
+- (instancetype)initWithGpx:(OAGPX *)gpx state:(OATrackMenuViewControllerState *)state;
 
 @end

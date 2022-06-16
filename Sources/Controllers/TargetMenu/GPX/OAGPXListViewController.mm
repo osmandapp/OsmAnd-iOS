@@ -8,47 +8,34 @@
 
 #import "OAGPXListViewController.h"
 #import "OAIconTextTableViewCell.h"
-#import "OAMapViewController.h"
 #import "OAMenuSimpleCellNoIcon.h"
 #import "OAGpxInfo.h"
 #import "OALoadGpxTask.h"
-
 #import "OAGPXRecTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OASettingSwitchCell.h"
 #import "OAGPXTrackCell.h"
-
-#import "OsmAndApp.h"
-#import "OsmAndCore/GpxDocument.h"
-#import "OAGPXDatabase.h"
 #import "OAGPXDocument.h"
-#import "OAGPXMutableDocument.h"
-#import "OAGPXTrackAnalysis.h"
 #import "OASavingTrackHelper.h"
-#import "OAAppSettings.h"
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAKml2Gpx.h"
 #import "OAOsmAndFormatter.h"
-
-#include <OsmAndCore.h>
-#include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/Utilities.h>
-#include "Localization.h"
-#import "OAUtilities.h"
+#import "Localization.h"
 #import "OAAlertBottomSheetViewController.h"
 #import "OARecordSettingsBottomSheetViewController.h"
 #import "OAPluginsViewController.h"
 #import "OARoutePlanningHudViewController.h"
-#import "OAImportGPXBottomSheetViewController.h"
 #import <MBProgressHUD.h>
-
 #import "OAExportItemsViewController.h"
+#import "OAIndexConstants.h"
+#import "OsmAndApp.h"
 
 #include <OsmAndCore/ArchiveReader.h>
-
+#include <OsmAndCore/IFavoriteLocation.h>
+#include <OsmAndCore/Utilities.h>
 
 #define _(name) OAGPXListViewController__##name
 #define kAlertViewRemoveId -3
@@ -91,7 +78,7 @@
 
 @end
 
-@interface OAGPXListViewController ()
+@interface OAGPXListViewController () <UIDocumentPickerDelegate>
 {
     NSURL *_importUrl;
     OAGPXDocument *_doc;
@@ -187,7 +174,12 @@ static UIViewController *parentController;
     _popToParent = shouldPop;
 }
 
-- (void) showImportGpxAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray <NSString *> *) otherButtonTitles {
+- (void) showImportGpxAlert:(NSString *)title
+                    message:(NSString *)message
+          cancelButtonTitle:(NSString *)cancelButtonTitle
+          otherButtonTitles:(NSArray <NSString *> *)otherButtonTitles
+                openGpxView:(BOOL)openGpxView
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         id createCopyHandler = ^(UIAlertAction * _Nonnull action) {
@@ -202,8 +194,13 @@ static UIViewController *parentController;
                 }
                 
                 _newGpxName = [newName copy];
-                
-                [self doImport:YES];
+
+                OAGPX *gpx = [self doImport:YES];
+                if (openGpxView)
+                {
+                    [self doPush];
+                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+                }
             });
         };
         
@@ -211,7 +208,13 @@ static UIViewController *parentController;
             dispatch_async(dispatch_get_main_queue(), ^{
                 _newGpxName = nil;
                 [self removeFromDB];
-                [self doImport:YES];
+
+                OAGPX *gpx = [self doImport:YES];
+                if (openGpxView)
+                {
+                    [self doPush];
+                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx];
+                }
             });
         };
         
@@ -220,8 +223,7 @@ static UIViewController *parentController;
             [alert addAction:[UIAlertAction actionWithTitle:otherButtonTitles[i] style:UIAlertActionStyleDefault handler:i == 0 ? createCopyHandler : overwriteHandler]];
         }
         [alert addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            if ([_importUrl.path hasPrefix:_app.inboxPath])
-                [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
+            [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
         }]];
         [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
     });
@@ -247,8 +249,7 @@ static UIViewController *parentController;
     }
     else
     {
-        if ([_importUrl.path hasPrefix:_app.inboxPath])
-            [fileManager removeItemAtPath:_importUrl.path error:nil];
+        [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
         _importUrl = nil;
     }
     [fileManager removeItemAtPath:tmpKmzPath error:nil];
@@ -256,27 +257,44 @@ static UIViewController *parentController;
 
 - (void) handleKmlImport:(NSData *)data
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
     if (data && data.length > 0)
     {
         NSString *gpxStr = [OAKml2Gpx toGpx:data];
         if (gpxStr)
         {
-            NSString *finalFilePath = [[_app.inboxPath stringByAppendingPathComponent:[_importUrl.lastPathComponent stringByDeletingPathExtension]] stringByAppendingPathExtension:GPX_EXT];
+            NSString *finalFilePath = [[[_app.gpxPath stringByAppendingPathComponent:TEMP_DIR]
+                                        stringByAppendingPathComponent:[_importUrl.lastPathComponent stringByDeletingPathExtension]] stringByAppendingPathExtension:GPX_EXT];
             NSError *err;
-            [gpxStr writeToFile:finalFilePath atomically:YES encoding:NSUTF8StringEncoding error:&err];
-            if (err)
-                NSLog(@"Error creating gpx file");
+            if (![NSFileManager.defaultManager fileExistsAtPath:[_app.gpxPath stringByAppendingPathComponent:TEMP_DIR]])
+            {
+                [NSFileManager.defaultManager createDirectoryAtPath:[_app.gpxPath stringByAppendingPathComponent:TEMP_DIR]
+                                        withIntermediateDirectories:YES
+                                                         attributes:nil
+                                                              error:&err];
+            }
+            if (!err)
+            {
+                [gpxStr writeToFile:finalFilePath atomically:YES encoding:NSUTF8StringEncoding error:&err];
+                if (err)
+                    NSLog(@"Error creating gpx file");
 
-            if ([_importUrl.path hasPrefix:_app.inboxPath])
-                [fileManager removeItemAtPath:_importUrl.path error:nil];
+                [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
 
-            _importUrl = [NSURL fileURLWithPath:finalFilePath];
+                _importUrl = [NSURL fileURLWithPath:finalFilePath];
+            }
+            if (![NSFileManager.defaultManager fileExistsAtPath:finalFilePath])
+            {
+                [OAUtilities denyAccessToFile:finalFilePath removeFromInbox:YES];
+                _importUrl = nil;
+                [OARootViewController showInfoAlertWithTitle:OALocalizedString(@"import_failed")
+                                                     message:OALocalizedString(@"import_cannot")
+                                                inController:self];
+            }
         }
     }
     else
     {
+        [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
         _importUrl = nil;
     }
 }
@@ -308,14 +326,16 @@ static UIViewController *parentController;
                 [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
                                  message:OALocalizedString(@"gpx_import_already_exists_short")
                        cancelButtonTitle:OALocalizedString(@"shared_string_ok")
-                       otherButtonTitles:@[]];
+                       otherButtonTitles:@[]
+                             openGpxView:openGpxView];
             }
             else if (showAlerts)
             {
                 [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
                                  message:OALocalizedString(@"gpx_import_already_exists")
                        cancelButtonTitle:OALocalizedString(@"shared_string_cancel")
-                       otherButtonTitles:@[OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite")]];
+                       otherButtonTitles:@[OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite")]
+                             openGpxView:openGpxView];
             }
             else
             {
@@ -339,7 +359,8 @@ static UIViewController *parentController;
             [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
                              message:OALocalizedString(@"gpx_cannot_import")
                    cancelButtonTitle:OALocalizedString(@"shared_string_ok")
-                   otherButtonTitles:nil];
+                   otherButtonTitles:nil
+                         openGpxView:NO];
         }
     }
     
@@ -411,8 +432,7 @@ static UIViewController *parentController;
     }
     [[OAGPXDatabase sharedDb] save];
 
-    if ([_importUrl.path hasPrefix:_app.inboxPath])
-        [fileManager removeItemAtPath:_importUrl.path error:nil];
+    [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
 
     _doc = nil;
     _importUrl = nil;
@@ -471,44 +491,6 @@ static UIViewController *parentController;
         [self generateData];
         [self setupView];
     });
-}
-
-- (void)importAllGPXFromDocuments
-{
-    [self prepareProcessUrl:^{
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSArray *paths = [fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
-            NSURL *documentsURL = [paths lastObject];
-            NSArray *keys = @[NSURLIsDirectoryKey];
-            NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtURL:documentsURL
-                                                  includingPropertiesForKeys:keys
-                                                                     options:0
-                                                                errorHandler:^(NSURL *url, NSError *error) {
-                // Return YES for the enumeration to continue after the error.
-                return YES;
-            }];
-
-            for (NSURL *url in enumerator)
-            {
-                NSNumber *isDirectory = nil;
-                if ([url isFileURL])
-                {
-                    [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
-                    if ([isDirectory boolValue])
-                    {
-                        [enumerator skipDescendants];
-                    }
-                    else if (![isDirectory boolValue] &&
-                            ([url.pathExtension.lowercaseString isEqualToString:GPX_EXT] ||
-                                    [url.pathExtension.lowercaseString isEqualToString:KML_EXT] ||
-                                    [url.pathExtension.lowercaseString isEqualToString:KMZ_EXT]) &&
-                            ![url.lastPathComponent isEqualToString:@"favourites.gpx"])
-                    {
-                        [self processUrl:url showAlerts:NO openGpxView:NO];
-                    }
-                }
-            }
-    }];
 }
 
 - (void) applyLocalization
@@ -594,6 +576,8 @@ static UIViewController *parentController;
                                                         withHandler:@selector(onTrackRecordingChanged)
                                                          andObserve:_app.trackRecordingObservable];
     [self applySafeAreaMargins];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNewTracksFetched) name:kNotificationNewTracksFetched object:nil];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -602,6 +586,8 @@ static UIViewController *parentController;
     
     [_trackRecordingObserver detach];
     _trackRecordingObserver = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationNewTracksFetched object:nil];
 }
 
 -(UIView *) getBottomView
@@ -730,7 +716,7 @@ static UIViewController *parentController;
     for (NSString *key in _gpxFolders.allKeys)
     {
         OAGpxTableGroup* tracksGroup = [[OAGpxTableGroup alloc] init];
-        tracksGroup.groupName = [OALocalizedString(key) capitalizedString];
+        tracksGroup.groupName = [OAUtilities capitalizeFirstLetter:OALocalizedString(key)];
         tracksGroup.groupIcon = @"ic_custom_folder";
         tracksGroup.isMenu = NO;
         tracksGroup.isSelectable = YES;
@@ -917,11 +903,11 @@ static UIViewController *parentController;
 
 - (void) onImportClicked
 {
-//    NSString* favoritesImportText = OALocalizedString(@"gpx_import_desc");
-//    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-//    [importHelpAlert show];
-    OAImportGPXBottomSheetViewController *controller = [[OAImportGPXBottomSheetViewController alloc] initWithParam:self];
-    [controller show];
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"public.xml",@"com.topografix.gpx",@"com.google.earth.kmz",@"com.google.earth.kml"] inMode:UIDocumentPickerModeImport];
+    documentPickerVC.allowsMultipleSelection = NO;
+    documentPickerVC.delegate = self;
+    [self presentViewController:documentPickerVC animated:YES completion:nil];
+    
 }
 
 - (void) onCreateTrackClicked
@@ -1621,6 +1607,34 @@ static UIViewController *parentController;
         [[OAGPXDatabase sharedDb] removeGpxItem:gpx.gpxFilePath];
     }
     [self reloadData];
+}
+
+// MARK: UIDocumentPickerDelegate
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
+{
+    if (urls.count == 0)
+        return;
+    
+    NSURL *url = urls.firstObject;
+    NSString *path = url.path;
+    NSString *ext = [path pathExtension].lowerCase;
+    if ([ext isEqualToString:GPX_EXT]
+        || [ext isEqualToString:KML_EXT]
+        || [ext isEqualToString:KMZ_EXT])
+    {
+        [self processUrl:url showAlerts:YES openGpxView:NO];
+        [self reloadData];
+    }
+}
+
+// MARK: NewTracksFetched Notification
+
+- (void) onNewTracksFetched
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self reloadData];
+    });
 }
 
 @end

@@ -17,11 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OASettingsItem : NSObject
 
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *fileName;
 @property (nonatomic, readonly) EOASettingsItemType type;
 @property (nonatomic, readonly) NSString *pluginId;
 @property (nonatomic, readonly) NSString *publicName;
-@property (nonatomic) NSString *fileName;
 @property (nonatomic, readonly) NSString *defaultFileName;
 @property (nonatomic, readonly) NSString *defaultFileExtension;
 

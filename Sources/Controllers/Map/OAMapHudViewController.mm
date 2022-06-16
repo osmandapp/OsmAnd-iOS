@@ -858,7 +858,7 @@
 - (CGFloat) getHudTopOffset
 {
     CGFloat offset = [self getHudMinTopOffset];
-    BOOL isLandscape = [OAUtilities isLandscapeIpadAware];
+    BOOL isLandscape = [OAUtilities isLandscape];
     BOOL isMarkersWidgetVisible = _toolbarViewController.view.alpha != 0;
     CGFloat markersWidgetHeaderHeight = _toolbarViewController.view.frame.size.height;
     BOOL isCoordinatesVisible = [_topCoordinatesWidget isVisible] && _topCoordinatesWidget.alpha != 0;

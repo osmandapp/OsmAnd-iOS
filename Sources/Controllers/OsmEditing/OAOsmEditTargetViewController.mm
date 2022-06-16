@@ -9,19 +9,12 @@
 #import "OAOsmEditTargetViewController.h"
 #import "OATransportStopRoute.h"
 #import "OsmAndApp.h"
-#import "OAMapRendererView.h"
 #import "OARootViewController.h"
-#import "OANativeUtilities.h"
 #import "Localization.h"
-#import "OAUtilities.h"
-#import "OAAppSettings.h"
-#import "OAMapLayers.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
-#import "OAEntity.h"
 #import "OAColors.h"
 #import "OAPOIHelper.h"
-#import "OACollapsableLabelView.h"
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
 #import "OAEditPOIData.h"
@@ -30,8 +23,6 @@
 #import "OAOsmEditingBottomSheetViewController.h"
 #import "OAOsmNoteBottomSheetViewController.h"
 #import "OAOsmEditingPlugin.h"
-#import "OAEditPOIData.h"
-#import "Reachability.h"
 
 @interface OAOsmEditTargetViewController () <OAOsmEditingBottomSheetDelegate>
 
@@ -191,7 +182,7 @@
             poiTypeKeyName = pType.name;
         }
         
-        if ([key hasPrefix:@"wiki_lang"])
+        if ([key hasPrefix:WIKI_LANG])
         {
             skip = YES;
         }
@@ -199,7 +190,7 @@
         if (!skip)
         {
             [descriptions addObject:[[OARowInfo alloc] initWithKey:@"" icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:textPrefix text:[NSString stringWithFormat:@"%@=%@", key, value] textColor:nil isText:YES needLinks:YES order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
-            
+
         }
     }];
     

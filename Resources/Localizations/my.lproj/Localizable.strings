@@ -465,7 +465,6 @@
 "add_waypoint_short" = "Add waypoint";
 "edit_waypoint_short" = "Edit waypoint";
 "more" = "More";
-"parking_marker" = "Parking marker";
 "time_limited" = "Time limited";
 "pickup_car" = "Pickup the car";
 "pickup_car_at" = "Pickup the car at";
@@ -903,3 +902,4 @@
 "map_during_navigation" = "လမ်းညွှန်နေစဉ်မြေပုံ";
 "searching_gps" = "GPSရှာဖွေခြင်း";
 "shared_string_wifi_only" = "Wi-Fiပေါ်မှသာ";
+"weather_wind_unit_mi_per_hour" = "တစ်နာရီမိုင်";

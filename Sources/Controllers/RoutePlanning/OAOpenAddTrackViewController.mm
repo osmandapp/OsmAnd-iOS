@@ -21,6 +21,7 @@
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OATrackSegmentsViewController.h"
 #import "OAUtilities.h"
+#import "OASavingTrackHelper.h"
 #import "OARootViewController.h"
 #import "OATargetPointsHelper.h"
 #import "OARoutingHelper.h"
@@ -56,6 +57,22 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSArray<NSString *> *_allFolders;
     OACollectionViewCellState *_scrollCellsState;
     OAFoldersCell *_foldersCell;
+    
+    BOOL _showCurrentGpx;
+}
+
+- (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType showCurrent:(BOOL)showCurrent
+{
+    self = [super initWithNibName:@"OAOpenAddTrackViewController"
+                           bundle:nil];
+    if (self)
+    {
+        _screenType = screenType;
+        _showCurrentGpx = showCurrent;
+        [self commonInit];
+        [self generateData];
+    }
+    return self;
 }
 
 - (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType
@@ -92,7 +109,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.contentInset = UIEdgeInsetsMake(-16, 0, 0, 0);
-    if (_screenType == EOAAddToATrack)
+    if (_screenType == EOAAddToATrack || _screenType == EOASelectTrack)
         self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_add_track_desc") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
     else if (_screenType == EOAFollowTrack)
         self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_track_to_follow") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
@@ -110,6 +127,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             break;
         case EOAFollowTrack:
             self.titleLabel.text = OALocalizedString(@"follow_track");
+            break;
+        case EOASelectTrack:
+            self.titleLabel.text = OALocalizedString(@"gpx_select_track");
             break;
         default:
             break;
@@ -139,7 +159,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     
     [existingTracksSection addObject:@{
         @"type" : [OAFoldersCell getCellIdentifier],
-        @"selectedValue" : [NSNumber numberWithInt:_selectedFolderIndex],
+        @"selectedValue" : @(_selectedFolderIndex),
         @"values" : [self getFoldersList]
     }];
     
@@ -153,19 +173,19 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         @"key" : @"segment_control"
     }];
     
-    OsmAndAppInstance app = OsmAndApp.instance;
+    OASavingTrackHelper *gpxRecHelper = OASavingTrackHelper.sharedInstance;
     
-    /*if ([self isShowCurrentGpx])
+    if (_showCurrentGpx && gpxRecHelper.getIsRecording)
     {
         [existingTracksSection addObject:@{
                 @"type" : [OAGPXTrackCell getCellIdentifier],
                 @"title" : OALocalizedString(@"track_recording_name"),
-                @"distance" : [OAOsmAndFormatter getFormattedDistance:0],
+                @"distance" : [OAOsmAndFormatter getFormattedDistance:gpxRecHelper.distance],
                 @"time" : [OAOsmAndFormatter getFormattedTimeInterval:0 shortFormat:YES],
-                @"wpt" : [NSString stringWithFormat:@"%d", 0],
+                @"wpt" : [NSString stringWithFormat:@"%d", gpxRecHelper.points],
                 @"key" : @"gpx_route"
             }];
-    }*/
+    }
     
     for (OAGPX *gpx in gpxList)
     {
@@ -248,11 +268,17 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     return _screenType == EOAAddToATrack;
 }
 
+- (void) closeBottomSheetDelegate
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(closeBottomSheet)])
+        [self.delegate closeBottomSheet];
+}
+
 - (void) dismissViewController
 {
     [self dismissViewControllerAnimated:YES completion:^{
         if (_screenType == EOAFollowTrack)
-            [self.delegate closeBottomSheet];
+            [self closeBottomSheetDelegate];
     }];
 }
 
@@ -390,11 +416,15 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         case EOAOpenExistingTrack:
         {
             [self dismissViewControllerAnimated:YES completion:nil];
-            if (self.delegate && track)
-            {
-                [self.delegate closeBottomSheet];
-                [self.delegate onFileSelected:track.gpxFilePath];
-            }
+            [self closeBottomSheetDelegate];
+            [self.delegate onFileSelected:track.gpxFilePath];
+            break;
+        }
+        case EOASelectTrack:
+        {
+            [self dismissViewControllerAnimated:YES completion:nil];
+            [self closeBottomSheetDelegate];
+            [self.delegate onFileSelected:track.gpxFilePath];
             break;
         }
         case EOAAddToATrack:

@@ -14,33 +14,24 @@
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
 #import "OAGPXTrackAnalysis.h"
-#import "OANativeUtilities.h"
 #import "OALineChartCell.h"
 #import "OARouteInfoCell.h"
-#import "OsmAndApp.h"
 #import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
 #import "OAMapLayers.h"
-#import "OARouteLayer.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARouteCalculationResult.h"
 #import "OsmAnd_Maps-Swift.h"
-#import "Localization.h"
 #import "OARouteStatistics.h"
 #import "OARouteInfoAltitudeCell.h"
-#import "OATargetPointsHelper.h"
 #import "OAMapRendererView.h"
 #import "OARouteInfoLegendItemView.h"
 #import "OARouteInfoLegendCell.h"
 #import "OARouteStatisticsModeCell.h"
 #import "OAFilledButtonCell.h"
 #import "OASaveGpxToTripsActivity.h"
-#import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OAOsmAndFormatter.h"
-
 #import <Charts/Charts-Swift.h>
-
-#include <OsmAndCore/Utilities.h>
 
 #define kStatsSection 0
 #define kAdditionalRouteDetailsOffset 184.0
@@ -329,7 +320,7 @@
     _bottomToolBarDividerView.frame = bottomDividerFrame;
     
     if (self.delegate)
-        [self.delegate requestFullMode];
+        [self.delegate requestHeaderOnlyMode];
 }
 
 - (void) setupRouteInfo
@@ -445,6 +436,11 @@
     return YES;
 }
 
+- (BOOL)supportFullMenu
+{
+    return NO;
+}
+
 - (BOOL)offerMapDownload
 {
     return NO;
@@ -457,6 +453,7 @@
 
 - (void)onMenuDismissed
 {
+    [super onMenuDismissed];
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
     [self restoreMapViewPort];
 }
@@ -472,6 +469,11 @@
 - (CGFloat)contentHeight
 {
     return _tableView.contentSize.height;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
 }
 
 - (void)onSectionPressed:(NSIndexPath *)indexPath {

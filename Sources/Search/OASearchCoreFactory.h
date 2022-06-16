@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchCoreFactory.java
-//  git revision 69c9d12f443ac7227605a09c41b58fdd5dfd2dd2
+//  git revision 5c61cf4c8d3c678f556ad8dba9073bac9c93a6f1
 
 #import <Foundation/Foundation.h>
 #import "OASearchCoreAPI.h"
@@ -105,6 +105,9 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 
 @interface OASearchCoreFactory : NSObject
+
++ (BOOL) DISPLAY_DEFAULT_POI_TYPES;
++ (BOOL) setDisplayDefaultPoiTypes:(BOOL)value;
 
 
 @end

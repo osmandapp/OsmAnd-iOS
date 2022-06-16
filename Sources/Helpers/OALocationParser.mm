@@ -317,8 +317,14 @@
 
 + (void) splitObjects:(NSString *)s d:(NSMutableArray<NSNumber *> *)d all:(NSMutableArray *)all strings:(NSMutableArray<NSString *> *)strings
 {
+    return [self splitObjects:s d:d all:all strings:strings partial:[NSMutableArray arrayWithObject:@NO]];
+}
+
++ (void) splitObjects:(NSString *)s d:(NSMutableArray<NSNumber *> *)d all:(NSMutableArray *)all strings:(NSMutableArray<NSString *> *)strings partial:(NSMutableArray<NSNumber *> *)partial
+{
     bool digit = false;
     int word = -1;
+    int firstNumeralIdx = -1;
     for (int i = 0; i <= s.length; i++)
     {
         unichar ch = i == s.length ? ' ' : [s characterAtIndex:i];
@@ -352,6 +358,9 @@
                 {
                     [d addObject:[NSNumber numberWithDouble:dl]];
                     [all addObject:[NSNumber numberWithDouble:dl]];
+                    if (firstNumeralIdx == -1) {
+                        firstNumeralIdx = (int) all.count - 1;
+                    }
                     [strings addObject:str];
                     digit = false;
                     word = -1;
@@ -385,6 +394,15 @@
                     [strings addObject:str];
                 }
                 word = -1;
+            }
+        }
+        partial[0] = @NO;
+        if (firstNumeralIdx != -1)
+        {
+            int nextTokenIdx = firstNumeralIdx + 1;
+            if (all.count <= nextTokenIdx)
+            {
+                partial[0] = @YES;
             }
         }
     }

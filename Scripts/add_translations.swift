@@ -86,7 +86,7 @@ func addRoutingParams (language: String) {
     var routeDict: [String:String] = [:]
     var outputArray: [String] = []
     
-    let url = URL(fileURLWithPath: "../Resources/Localizations/" + language + ".lproj/Localizable.strings")
+    let url = URL(fileURLWithPath: "./Resources/Localizations/" + language + ".lproj/Localizable.strings")
     let path = url.path
     
     var str: String = ""
@@ -104,7 +104,7 @@ func addRoutingParams (language: String) {
             myLang = "-" + lang
         }
     }
-    let androidURL = URL(fileURLWithPath: "../../android/OsmAnd/res/values" + myLang + "/strings.xml")
+    let androidURL = URL(fileURLWithPath: "../android/OsmAnd/res/values" + myLang + "/strings.xml")
     let myparser = Parser()
     let androidDict = myparser.myparser(path: androidURL)
     for elem in androidDict {
@@ -158,7 +158,7 @@ func parseIos (language: String, initial: Bool) -> [String : String] {
     if !initial {
         myLang = language
     }
-    let url = URL(fileURLWithPath: "../Resources/Localizations/" + myLang + ".lproj/Localizable.strings")
+    let url = URL(fileURLWithPath: "./Resources/Localizations/" + myLang + ".lproj/Localizable.strings")
     guard let dict = NSDictionary(contentsOf: url) else {return iosDict }
     iosDict = dict as! [String : String]
     return iosDict
@@ -218,7 +218,7 @@ func parseAndroid(language: String, initial: Bool) -> [String : String] {
             myLang = "-" + lang
         }
     }
-    let url = URL(fileURLWithPath: "../../android/OsmAnd/res/values" + myLang + "/strings.xml")
+    let url = URL(fileURLWithPath: "../android/OsmAnd/res/values" + myLang + "/strings.xml")
     let myparser = Parser()
     return myparser.myparser(path: url)
 }
@@ -315,7 +315,7 @@ func makeNewDict(language: String, iosDict: [String : String], androidDict: [Str
     }
     
     if existingLinesDict.count > 0 || newLinesDict.count > 0 {
-        let fileURL = URL(fileURLWithPath: "../Resources/Localizations/" + language + ".lproj/Localizable.strings")
+        let fileURL = URL(fileURLWithPath: "./Resources/Localizations/" + language + ".lproj/Localizable.strings")
         do {
             let fileContent = try String(contentsOf: fileURL)
             var strings = fileContent.components(separatedBy: ";")
@@ -544,21 +544,22 @@ func changeDir(_ argument: String) -> String {
 // Update repositories to avoid Weblate merge conflicts
 
 let currentIosScriptsFolder = URL(fileURLWithPath: shell("echo $PWD"), isDirectory: true)
-let osmandRepositoriesFolder = currentIosScriptsFolder.deletingLastPathComponent().deletingLastPathComponent()
+let osmandRepositoriesFolder = currentIosScriptsFolder.deletingLastPathComponent()
+
 //
 print( changeDir(osmandRepositoriesFolder.appendingPathComponent("android/").path) )
-print( shell("git pull") )
+print( shell("git pull origin master") )
 
 print( changeDir(osmandRepositoriesFolder.appendingPathComponent("ios/").path) )
-print( shell("git pull") )
+print( shell("git pull origin master") )
 
 print( changeDir(osmandRepositoriesFolder.appendingPathComponent("resources/").path) )
-print( shell("git pull") )
+print( shell("git pull origin master") )
 
 
 // Update phrases
 
-print( changeDir(osmandRepositoriesFolder.appendingPathComponent("resources/poi/").path) )
+print( changeDir(osmandRepositoriesFolder.appendingPathComponent("resources/poi").path) )
 print( shell("./copy_phrases.sh"))
 //Don't commit this changes by script to avoid merge conflicts.
 //Do manual commit of Resources repo on new app version build.

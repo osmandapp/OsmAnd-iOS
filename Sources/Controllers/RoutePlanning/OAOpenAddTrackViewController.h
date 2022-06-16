@@ -11,18 +11,21 @@
 typedef NS_ENUM(NSInteger, EOAPlanningTrackScreenType) {
     EOAOpenExistingTrack = 0,
     EOAAddToATrack,
-    EOAFollowTrack
+    EOAFollowTrack,
+    EOASelectTrack
 };
 
 @class OAGPXDocument;
 
 @protocol OAOpenAddTrackDelegate <NSObject>
 
-- (void) closeBottomSheet;
+@required
+
 - (void) onFileSelected:(NSString *)gpxFilePath;
 
 @optional
 
+- (void) closeBottomSheet;
 - (void) onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx;
 
 @end
@@ -32,5 +35,6 @@ typedef NS_ENUM(NSInteger, EOAPlanningTrackScreenType) {
 @property (nonatomic, weak) id<OAOpenAddTrackDelegate> delegate;
 
 - (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType;
+- (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType showCurrent:(BOOL)showCurrent;
 
 @end

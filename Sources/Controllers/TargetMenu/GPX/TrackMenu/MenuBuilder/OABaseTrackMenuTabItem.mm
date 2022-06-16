@@ -12,6 +12,7 @@
 @interface OABaseTrackMenuTabItem ()
 
 @property (nonatomic) OAGPXTableData *tableData;
+@property (nonatomic) BOOL isGeneratedData;
 
 @end
 
@@ -57,6 +58,11 @@
     self.tableData = [[OAGPXTableData alloc] init]; //override
 }
 
+- (void)resetData
+{
+    _isGeneratedData = NO;
+}
+
 - (OAGPXTableData *)getTableData
 {
     return self.tableData;
@@ -65,6 +71,29 @@
 - (void)runAdditionalActions
 {
     //override
+}
+
+#pragma mark - Cell action methods
+
+- (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
+{
+}
+
+- (BOOL)isOn:(OAGPXBaseTableData *)tableData
+{
+    return NO;
+}
+
+- (void)updateData:(OAGPXBaseTableData *)tableData
+{
+}
+
+- (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData
+{
+}
+
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+{
 }
 
 @end

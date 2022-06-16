@@ -110,9 +110,13 @@
     {
         long segmentTime = [OAGPXUIHelper getSegmentTime:seg];
         double segmentDist = [OAGPXUIHelper getSegmentDistance:seg];
-        
+
+        NSString *segmentTitle = [self getTrackSegmentTitle:seg];
+        if (!segmentTitle)
+            segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), idx];
+
         NSMutableDictionary *item = [NSMutableDictionary new];
-        item[@"title"] = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), (int) idx];
+        item[@"title"] = segmentTitle;
         item[@"type"] = [OAGPXTrackCell getCellIdentifier];
         item[@"img"] = @"ic_custom_join_segments";
         item[@"distance"] = [OAOsmAndFormatter getFormattedDistance:segmentDist];
@@ -130,6 +134,25 @@
 - (NSString *) getLocalizedDescription
 {
     return [NSString stringWithFormat:OALocalizedString(@"track_multiple_segments_select"), [[self getFileName] stringByAppendingPathExtension:@"gpx"]];
+}
+
+- (NSString *)getTrackSegmentTitle:(OATrkSegment *)segment
+{
+    OATrack *track = [self getTrack:segment];
+    if (track)
+        return [OAGPXDocument buildTrackSegmentName:_gpx track:track segment:segment];
+
+    return nil;
+}
+
+- (OATrack *)getTrack:(OATrkSegment *)segment
+{
+    for (OATrack *trk in _gpx.tracks)
+    {
+        if ([trk.segments containsObject:segment])
+            return trk;
+    }
+    return nil;
 }
 
 #pragma mark - UITableViewDataSource

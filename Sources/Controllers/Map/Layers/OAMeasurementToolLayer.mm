@@ -90,8 +90,11 @@
 
 - (void) onMapFrameRendered
 {
-    [self updateLastPointToCenter];
-    [self updateDistAndBearing];
+    if (self.isVisible)
+    {
+        [self updateLastPointToCenter];
+        [self updateDistAndBearing];
+    }
 }
 
 - (void) buildLine:(OsmAnd::VectorLineBuilder &)builder collection:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection linePoints:(const QVector<OsmAnd::PointI> &)linePoints
@@ -178,9 +181,7 @@
 
 - (void) updateLastPointToCenter
 {
-    [self.mapViewController runWithRenderSync:^{
-        [self drawBeforeAfterPath];
-    }];
+    [self drawBeforeAfterPath];
 }
 
 - (void) resetLayer
@@ -460,10 +461,8 @@
 }
 
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points {
-    [self.mapViewController runWithRenderSync:^{
-        [self drawRouteSegments];
-        [self drawPointMarkers:points collection:_pointMarkers];
-    }];
+    [self drawRouteSegments];
+    [self drawPointMarkers:points collection:_pointMarkers];
 }
 
 - (BOOL) isVisible

@@ -508,6 +508,7 @@
 		3AFEEE541A0E34FD00900A47 /* menu_share_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE2F1A0E34FD00900A47 /* menu_share_icon@2x.png */; };
 		3AFEEE571A0E34FD00900A47 /* menu_star_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE301A0E34FD00900A47 /* menu_star_icon@2x.png */; };
 		460679FB27708A980076740B /* OARouteLineAppearanceHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */; };
+<<<<<<< HEAD
 		461F451E283E36EB00796360 /* ic_navbar_help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F451C283E36EB00796360 /* ic_navbar_help@2x.png */; };
 		461F451F283E36EB00796360 /* ic_navbar_help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F451D283E36EB00796360 /* ic_navbar_help@3x.png */; };
 		461F4522283E370C00796360 /* ic_custom_arrow_down_short@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */; };
@@ -569,6 +570,8 @@
 		46453B45283524E5001F9A3A /* ic_custom_wikipedia_download_colored_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46453B41283524E5001F9A3A /* ic_custom_wikipedia_download_colored_big@3x.png */; };
 		46453B4828358854001F9A3A /* OAChoosePlanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46453B4728358854001F9A3A /* OAChoosePlanViewController.xib */; };
 		4647D3542838137A002BBD11 /* OAPlanTypeCardRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4647D3532838137A002BBD11 /* OAPlanTypeCardRow.xib */; };
+=======
+>>>>>>> 55aae737df98ff1e385c94f2f1a46bb0c4782c69
 		46693AB0284919DA00ADA1A1 /* ic_custom_hazmat_limit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46693AAC284919D800ADA1A1 /* ic_custom_hazmat_limit@2x.png */; };
 		46693AB1284919DA00ADA1A1 /* ic_custom_hazmat_limit_colored@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46693AAD284919D900ADA1A1 /* ic_custom_hazmat_limit_colored@2x.png */; };
 		46693AB2284919DA00ADA1A1 /* ic_custom_hazmat_limit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46693AAE284919D900ADA1A1 /* ic_custom_hazmat_limit@3x.png */; };
@@ -3740,6 +3743,7 @@
 		3AFEEE2F1A0E34FD00900A47 /* menu_share_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu_share_icon@2x.png"; path = "Resources/Icons/menu_share_icon@2x.png"; sourceTree = "<group>"; };
 		3AFEEE301A0E34FD00900A47 /* menu_star_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu_star_icon@2x.png"; path = "Resources/Icons/menu_star_icon@2x.png"; sourceTree = "<group>"; };
 		460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARouteLineAppearanceHudViewController.xib; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		461F451C283E36EB00796360 /* ic_navbar_help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_help@2x.png"; path = "Resources/Icons/ic_navbar_help@2x.png"; sourceTree = "<group>"; };
 		461F451D283E36EB00796360 /* ic_navbar_help@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_help@3x.png"; path = "Resources/Icons/ic_navbar_help@3x.png"; sourceTree = "<group>"; };
 		461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_down_short@3x.png"; path = "Resources/Icons/ic_custom_arrow_down_short@3x.png"; sourceTree = "<group>"; };
@@ -3801,6 +3805,8 @@
 		46453B41283524E5001F9A3A /* ic_custom_wikipedia_download_colored_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wikipedia_download_colored_big@3x.png"; path = "Resources/Icons/ic_custom_wikipedia_download_colored_big@3x.png"; sourceTree = "<group>"; };
 		46453B4728358854001F9A3A /* OAChoosePlanViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAChoosePlanViewController.xib; sourceTree = "<group>"; };
 		4647D3532838137A002BBD11 /* OAPlanTypeCardRow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPlanTypeCardRow.xib; sourceTree = "<group>"; };
+=======
+>>>>>>> 55aae737df98ff1e385c94f2f1a46bb0c4782c69
 		46693AAC284919D800ADA1A1 /* ic_custom_hazmat_limit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hazmat_limit@2x.png"; path = "Resources/Icons/ic_custom_hazmat_limit@2x.png"; sourceTree = "<group>"; };
 		46693AAD284919D900ADA1A1 /* ic_custom_hazmat_limit_colored@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hazmat_limit_colored@2x.png"; path = "Resources/Icons/ic_custom_hazmat_limit_colored@2x.png"; sourceTree = "<group>"; };
 		46693AAE284919D900ADA1A1 /* ic_custom_hazmat_limit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hazmat_limit@3x.png"; path = "Resources/Icons/ic_custom_hazmat_limit@3x.png"; sourceTree = "<group>"; };
@@ -7790,6 +7796,7 @@
 				DA84E84821D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png */,
 				DAB048EF21CB729000275456 /* ic_action_plus@2x.png */,
 				DAB048F121CB729000275456 /* ic_action_plus@3x.png */,
+<<<<<<< HEAD
 				46B4A7D62841183D008AE194 /* ic_custom_label_sale@2x.png */,
 				46B4A7D72841183D008AE194 /* ic_custom_label_sale@3x.png */,
 				461F4521283E370C00796360 /* ic_custom_arrow_down_short@2x.png */,
@@ -7847,6 +7854,8 @@
 				46453AD82835234B001F9A3A /* ic_custom_advanced_widgets_colored_big@3x.png */,
 				46453AD62835234A001F9A3A /* ic_custom_advanced_widgets_colored_day@2x.png */,
 				46453AD92835234B001F9A3A /* ic_custom_advanced_widgets_colored_day@3x.png */,
+=======
+>>>>>>> 55aae737df98ff1e385c94f2f1a46bb0c4782c69
 				46693AAD284919D900ADA1A1 /* ic_custom_hazmat_limit_colored@2x.png */,
 				46693AAF284919DA00ADA1A1 /* ic_custom_hazmat_limit_colored@3x.png */,
 				46693AAC284919D800ADA1A1 /* ic_custom_hazmat_limit@2x.png */,
@@ -16278,6 +16287,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -16356,6 +16366,7 @@
 					"BUILD_$(CONFIGURATION)",
 					"$(inherited)",
 					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

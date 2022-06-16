@@ -673,7 +673,7 @@
 "map_settings_show" = "Mostrar en el mapa";
 "map_settings_type" = "Tipo de mapa";
 "map_mode" = "Modo del mapa";
-"map_settings_map_magnifier" = "Ampliar mapa";
+"map_settings_map_magnifier" = "Lupa del mapa";
 "map_settings_text_size" = "Tamaño del texto";
 "map_settings_day" = "Diurno";
 "map_settings_night" = "Por la noche";

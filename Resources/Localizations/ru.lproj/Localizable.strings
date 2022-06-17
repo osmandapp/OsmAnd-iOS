@@ -2481,3 +2481,4 @@
 "map_settings_weather_wind" = "Ветер";
 "map_settings_weather_cloud" = "Облачность";
 "map_settings_weather_isolines" = "Изолинии";
+"transport_hazmat_yes_desc" = "Выберите подходящую категорию.";

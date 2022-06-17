@@ -23,6 +23,8 @@ typedef NS_ENUM(NSInteger, EOASubscriptionBannerType)
 
 @interface OASubscriptionBannerCardView : UIView
 
+@property (nonatomic, assign, readonly) EOASubscriptionBannerType type;
+
 - (instancetype)initWithType:(EOASubscriptionBannerType)type;
 
 @property (strong, nonatomic) IBOutlet UIView *contentView;
@@ -44,7 +46,5 @@ typedef NS_ENUM(NSInteger, EOASubscriptionBannerType)
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonBottomNoSeparatorMargin;
 
 @property (nonatomic, weak) id<OASubscriptionBannerCardViewDelegate> delegate;
-
-- (CGFloat)calculateViewHeight:(CGFloat)width;
 
 @end

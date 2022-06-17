@@ -13,9 +13,6 @@
 #define kButtonHeight 36.
 
 @implementation OASubscriptionBannerCardView
-{
-    EOASubscriptionBannerType _type;
-}
 
 - (instancetype)initWithType:(EOASubscriptionBannerType)type
 {
@@ -116,12 +113,16 @@
         }
     }
 
+    CGRect frame = self.frame;
+    frame.size.height = [self calculateViewHeight];
+    self.frame = frame;
+
     CGFloat horizontalInset = _type == EOASubscriptionBannerFree ? 0. : 12.;
     if (@available(iOS 15.0, *))
     {
         CGFloat buttonTitleWidth = [OAUtilities calculateTextBounds:self.buttonView.titleLabel.attributedText
                                                               width:self.buttonView.frame.size.width - horizontalInset * 2 - self.buttonView.imageView.frame.size.width].width;
-        CGFloat imagePadding = self.buttonView.frame.size.width - (horizontalInset * 2 + buttonTitleWidth + self.buttonView.imageView.frame.size.width);
+        CGFloat imagePadding = self.buttonView.frame.size.width - (horizontalInset * 2 + buttonTitleWidth + 30.);
 
         UIButtonConfiguration *configuration = UIButtonConfiguration.plainButtonConfiguration;
         configuration.titleAlignment = UIButtonConfigurationTitleAlignmentLeading;
@@ -151,10 +152,10 @@
     }
 }
 
-- (CGFloat)calculateViewHeight:(CGFloat)width
+- (CGFloat)calculateViewHeight
 {
     CGFloat titleHeight = [OAUtilities calculateTextBounds:self.titleLabel.text
-                                                     width:width - self.iconView.frame.size.width - 16. - self.titleLabel.frame.origin.x - 10.
+                                                     width:self.frame.size.width - self.iconView.frame.size.width - 16. - self.titleLabel.frame.origin.x - 10.
                                                       font:self.titleLabel.font].height;
 
     CGFloat buttonHeight = [OAUtilities calculateTextBounds:self.buttonView.titleLabel.attributedText
@@ -171,7 +172,7 @@
             CGFloat textBlockHeight = titleHeight;
             textBlockHeight += self.titleBottomMargin.constant;
             CGFloat descriptionHeight = [OAUtilities calculateTextBounds:self.descriptionLabel.text
-                                                                   width:width - self.iconView.frame.size.width - 16. - self.descriptionLabel.frame.origin.x - 10.
+                                                                   width:self.frame.size.width - self.iconView.frame.size.width - 16. - self.descriptionLabel.frame.origin.x - 10.
                                                                     font:self.descriptionLabel.font].height;
             textBlockHeight += descriptionHeight;
             textBlockHeight += self.descriptionBottomMargin.constant;
@@ -202,7 +203,7 @@
             CGFloat textBlockHeight = titleHeight;
             textBlockHeight += self.titleBottomMargin.constant;
             CGFloat descriptionHeight = [OAUtilities calculateTextBounds:self.descriptionLabel.text
-                                                                   width:width - self.iconView.frame.size.width - 16. - self.descriptionLabel.frame.origin.x - 10.
+                                                                   width:self.frame.size.width - self.iconView.frame.size.width - 16. - self.descriptionLabel.frame.origin.x - 10.
                                                                     font:self.descriptionLabel.font].height;
             textBlockHeight += descriptionHeight;
             textBlockHeight += self.descriptionBottomNoSeparatorMargin.constant;
@@ -250,8 +251,6 @@
             break;
         }
     }
-
-    [self layoutIfNeeded];
 
     return height;
 }

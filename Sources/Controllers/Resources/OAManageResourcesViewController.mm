@@ -463,61 +463,41 @@ static BOOL _lackOfResources;
         return;
     }
 
-    NSString *title;
-    NSString *description;
-    NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"get_unlimited_access")];
-    NSString *icon;
-
     if ([self.region isKindOfClass:OACustomRegion.class])
         return;
 
     int freeMaps = [OAIAPHelper freeMapsAvailable];
-    description = OALocalizedString(@"subscription_banner_free_maps_description");
+    EOASubscriptionBannerType bannerType = freeMaps > 0 ? EOASubscriptionBannerFree : EOASubscriptionBannerNoFree;
 
-    if (freeMaps > 0)
+    if (_subscriptionBannerView && _subscriptionBannerView.type == bannerType)
+        return;
+
+    if (!_subscriptionBannerView || _subscriptionBannerView.type != bannerType)
     {
-        _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:EOASubscriptionBannerFree];
-
-        title = [NSString stringWithFormat:OALocalizedString(@"subscription_banner_free_maps_title"), freeMaps];
-        icon = @"ic_custom_five_downloads_big";
-        [buttonTitle addAttribute:NSForegroundColorAttributeName
-                            value:UIColorFromRGB(color_banner_button)
-                            range:NSMakeRange(0, buttonTitle.string.length)];
+        _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:bannerType];
+        _subscriptionBannerView.delegate = self;
     }
-    else
-    {
-        _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:EOASubscriptionBannerNoFree];
 
-        title = OALocalizedString(@"subscription_banner_no_free_maps_title");
-        icon = @"ic_custom_zero_downloads_big";
-        [buttonTitle addAttribute:NSForegroundColorAttributeName
-                            value:UIColorFromRGB(color_primary_purple)
-                            range:NSMakeRange(0, buttonTitle.string.length)];
-    }
+    NSString *title = freeMaps > 0
+            ? [NSString stringWithFormat:OALocalizedString(@"subscription_banner_free_maps_title"), freeMaps]
+            : OALocalizedString(@"subscription_banner_no_free_maps_title");
+    NSString *description = OALocalizedString(@"subscription_banner_free_maps_description");
+    NSString *icon = freeMaps > 0 ? @"ic_custom_five_downloads_big" : @"ic_custom_zero_downloads_big";
+    NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"get_unlimited_access")];
+
+    [buttonTitle addAttribute:NSForegroundColorAttributeName
+                        value:freeMaps > 0 ? UIColorFromRGB(color_banner_button) : UIColorFromRGB(color_primary_purple)
+                        range:NSMakeRange(0, buttonTitle.string.length)];
     [buttonTitle addAttribute:NSFontAttributeName
                         value:[UIFont systemFontOfSize:freeMaps > 0 ? 17. : 15. weight:UIFontWeightSemibold]
                         range:NSMakeRange(0, buttonTitle.string.length)];
-
-    _subscriptionBannerView.delegate = self;
 
     _subscriptionBannerView.titleLabel.text = title;
     _subscriptionBannerView.descriptionLabel.text = description;
     [_subscriptionBannerView.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
     _subscriptionBannerView.iconView.image = [UIImage templateImageNamed:icon];
 
-    [_subscriptionBannerView setNeedsLayout];
-    [_subscriptionBannerView setNeedsDisplay];
-
-    CGRect frame = _subscriptionBannerView.frame;
-    frame.size.width = DeviceScreenWidth;
-    frame.size.height = [_subscriptionBannerView calculateViewHeight:DeviceScreenWidth];
-    _subscriptionBannerView.frame = frame;
-
-    if (_subscriptionBannerSection != -1)
-    {
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:_subscriptionBannerSection]
-                      withRowAnimation:UITableViewRowAnimationNone];
-    }
+    [_subscriptionBannerView layoutSubviews];
 }
 
 - (void) resourceInstallationFailed:(NSNotification *)notification
@@ -2967,7 +2947,6 @@ static BOOL _lackOfResources;
     else if ([segue.identifier isEqualToString:kOpenOutdatedResourcesSegue])
     {
         OAOutdatedResourcesViewController *outdatedResourcesViewController = [segue destinationViewController];
-        outdatedResourcesViewController.openFromSplash = _openFromSplash;
         [outdatedResourcesViewController setupWithRegion:self.region
                                         andOutdatedItems:_outdatedResourceItems];
     }
@@ -3116,7 +3095,6 @@ static BOOL _lackOfResources;
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupSubscriptionBanner];
-        [self.tableView reloadData];
     });
 }
 

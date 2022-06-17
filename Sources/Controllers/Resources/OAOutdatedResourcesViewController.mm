@@ -86,7 +86,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
 
     [self setupSubscriptionBanner];
-    self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
 
     [self.tableView reloadData];
 }
@@ -96,13 +95,6 @@
     [super viewWillLayoutSubviews];
 
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
-
-    if (_subscriptionBannerView)
-    {
-        CGRect frame = _subscriptionBannerView.frame;
-        frame.size = CGSizeMake(DeviceScreenWidth, [_subscriptionBannerView calculateViewHeight:DeviceScreenWidth]);
-        _subscriptionBannerView.frame = frame;
-    }
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -110,14 +102,13 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self setupSubscriptionBanner];
-        self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
-        [self.tableView reloadData];
     } completion:nil];
 }
 
 - (void)setupSubscriptionBanner
 {
-    if (![OAIAPHelper isPaidVersion])
+    BOOL isPaid = [OAIAPHelper isPaidVersion];
+    if (!isPaid && !_subscriptionBannerView)
     {
         _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:EOASubscriptionBannerUpdates];
         _subscriptionBannerView.delegate = self;
@@ -134,19 +125,16 @@
                             value:[UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
                             range:NSMakeRange(0, buttonTitle.string.length)];
         [_subscriptionBannerView.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
-
-        [_subscriptionBannerView setNeedsLayout];
-        [_subscriptionBannerView setNeedsDisplay];
-
-        CGRect frame = _subscriptionBannerView.frame;
-        frame.size.width = DeviceScreenWidth;
-        frame.size.height = [_subscriptionBannerView calculateViewHeight:DeviceScreenWidth];
-        _subscriptionBannerView.frame = frame;
     }
-    else
+    else if (isPaid)
     {
         _subscriptionBannerView = nil;
     }
+
+    if (_subscriptionBannerView)
+        [_subscriptionBannerView layoutSubviews];
+
+    self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
 }
 
 -(UIView *) getTopView
@@ -555,7 +543,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateContent];
         [self setupSubscriptionBanner];
-        self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
         [self.tableView reloadData];
     });
 }
@@ -565,7 +552,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateContent];
         [self setupSubscriptionBanner];
-        self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
         [self.tableView reloadData];
     });
 }

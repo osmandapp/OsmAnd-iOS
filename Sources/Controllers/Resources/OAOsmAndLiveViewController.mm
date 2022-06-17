@@ -118,18 +118,6 @@ static const NSInteger sectionCount = 2;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void) viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-
-    if (_subscriptionBannerView)
-    {
-        CGRect frame = _subscriptionBannerView.frame;
-        frame.size = CGSizeMake(DeviceScreenWidth, [_subscriptionBannerView calculateViewHeight:DeviceScreenWidth]);
-        _subscriptionBannerView.frame = frame;
-    }
-}
-
 - (UIView *) getTopView
 {
     return _navBarView;
@@ -211,7 +199,8 @@ static const NSInteger sectionCount = 2;
 
 - (void)setupSubscriptionBanner
 {
-    if (![OAIAPHelper isSubscribedToLiveUpdates])
+    BOOL isSubscribed = [OAIAPHelper isSubscribedToLiveUpdates];
+    if (!isSubscribed && !_subscriptionBannerView)
     {
         _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:EOASubscriptionBannerUpdates];
         _subscriptionBannerView.delegate = self;
@@ -228,19 +217,16 @@ static const NSInteger sectionCount = 2;
                             value:[UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
                             range:NSMakeRange(0, buttonTitle.string.length)];
         [_subscriptionBannerView.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
-
-        [_subscriptionBannerView setNeedsLayout];
-        [_subscriptionBannerView setNeedsDisplay];
-
-        CGRect frame = _subscriptionBannerView.frame;
-        frame.size.width = DeviceScreenWidth;
-        frame.size.height = [_subscriptionBannerView calculateViewHeight:DeviceScreenWidth];
-        _subscriptionBannerView.frame = frame;
     }
-    else
+    else if (isSubscribed)
     {
         _subscriptionBannerView = nil;
     }
+
+    if (_subscriptionBannerView)
+        [_subscriptionBannerView layoutSubviews];
+
+    self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
 }
 
 - (void) setupView
@@ -250,7 +236,6 @@ static const NSInteger sectionCount = 2;
     [self adjustViews];
 
     [self setupSubscriptionBanner];
-    self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
 
     self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased] || ![_iapHelper.proMonthly isAnyPurchased];
 
@@ -300,8 +285,6 @@ static const NSInteger sectionCount = 2;
             [self adjustLabelToMargin:label parentView:_availableHeaderView];
         }
         [self setupSubscriptionBanner];
-        self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
-        [self.tableView reloadData];
     } completion:nil];
 }
 

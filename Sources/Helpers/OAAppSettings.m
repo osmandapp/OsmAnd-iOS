@@ -127,6 +127,7 @@
 
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
+#define forcePrivateAccessRoutingAskedKey @"forcePrivateAccessRoutingAsked"
 #define fastRouteModeKey @"fastRouteMode"
 #define disableComplexRoutingKey @"disableComplexRouting"
 #define followTheRouteKey @"followTheRoute"
@@ -3607,6 +3608,8 @@
 
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
+        _forcePrivateAccessRoutingAsked = [OACommonBoolean withKey:forcePrivateAccessRoutingAskedKey defValue:NO];
+        [_profilePreferences setObject:_forcePrivateAccessRoutingAsked forKey:@"force_private_access_routing"];
         _fastRouteMode = [OACommonBoolean withKey:fastRouteModeKey defValue:YES];
         [_profilePreferences setObject:_fastRouteMode forKey:@"fast_route_mode"];
         _disableComplexRouting = [[NSUserDefaults standardUserDefaults] objectForKey:disableComplexRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableComplexRoutingKey] : NO;

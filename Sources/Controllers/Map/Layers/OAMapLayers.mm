@@ -47,7 +47,7 @@
     _contextMenuLayer = [[OAContextMenuLayer alloc] initWithMapViewController:_mapViewController baseOrder:-210000];
     [self addLayer:_contextMenuLayer];
 
-    _poiLayer = [[OAPOILayer alloc] initWithMapViewController:_mapViewController baseOrder:-180000];
+    _poiLayer = [[OAPOILayer alloc] initWithMapViewController:_mapViewController baseOrder:-90000];
     [self addLayer:_poiLayer];
 
     _terrainMapLayer = [[OATerrainMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:4];

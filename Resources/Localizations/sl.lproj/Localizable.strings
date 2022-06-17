@@ -1716,3 +1716,5 @@
 "app_mode_utv" = "Eno ob drugem";
 "simulation_real_mode_title" = "Realistična simulacija";
 "reddit" = "Reddit";
+"transport_hazmat_yes_desc" = "Izbrati moraš ustrezno kategorijo.";
+"transport_hazmat_no_desc" = "Na nekaterih cestah in predorih je prevoz nevarnih snovi prepovedan.";

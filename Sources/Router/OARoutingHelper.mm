@@ -695,23 +695,35 @@ static BOOL _isDeviatedFromRoute = false;
                 }
                 else
                 {
-                    /* TODO
                     if (calculationProgress->requestPrivateAccessRouting)
                     {
-                        [_progressRoute requestPrivateAccessRouting];
+                        if (progressRoute)
+                        {
+                            [progressRoute requestPrivateAccessRouting];
+                        }
+                        else
+                        {
+                            for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                                [progressRoute requestPrivateAccessRouting];
+                        }
                     }
-                     */
                     [self updateProgress:params];
                 }
             }
             else
             {
-                /* TODO
                 if (calculationProgress->requestPrivateAccessRouting)
                 {
-                    [_progressRoute requestPrivateAccessRouting];
+                    if (progressRoute)
+                    {
+                        [progressRoute requestPrivateAccessRouting];
+                    }
+                    else
+                    {
+                        for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                            [progressRoute requestPrivateAccessRouting];
+                    }
                 }
-                 */
                 if (progressRoute)
                 {
                     [progressRoute finish];

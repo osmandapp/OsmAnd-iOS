@@ -16302,6 +16302,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -16380,6 +16381,7 @@
 					"BUILD_$(CONFIGURATION)",
 					"$(inherited)",
 					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

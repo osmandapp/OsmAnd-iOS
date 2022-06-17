@@ -973,9 +973,9 @@
 "osm_live_subscription" = "Predplatné OsmAnd Live";
 "unlimited_downloads" = "Neobmedzené sťahovania";
 "wikipedia_offline" = "Wikipédia offline";
-"contour_lines_hillshade_maps" = "Vrstevnice & Tieňované svahy";
-"monthly_map_updates" = "Aktualizácie máp: každý mesiac";
-"daily_map_updates" = "Aktualizácie máp: každú hodinu";
+"contour_lines_hillshade_maps" = "Mapy terénu: vrstevnice, tieňované svahy, sklony svahov";
+"monthly_map_updates" = "Aktualizácie máp každý mesiac";
+"daily_map_updates" = "Aktualizácie máp každú hodinu";
 "index_item_depth_contours_osmand_ext" = "Námorné hĺbkové vrstevnice";
 "donation_to_osm" = "Príspevok komunite OpenStreetMap";
 "purchase_unlim_title" = "Kúpiť - %@";
@@ -2049,3 +2049,6 @@
 "altitude_ascent" = "Do kopca";
 "altitude_descent" = "Z kopca";
 "simulation_real_mode_title" = "Realistická simulácia";
+"routing_attr_hazmat_category_name" = "Transport nebezpečných látok";
+"transport_hazmat_yes_desc" = "Musíte zvoliť správnu kategóriu.";
+"transport_hazmat_no_desc" = "Prevoz nebezpečných látok je zakázaná na niektorých cestách a tuneloch.";

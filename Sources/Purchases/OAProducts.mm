@@ -688,14 +688,10 @@
                     [allFeatures addObject:OAFeature.HOURLY_MAP_UPDATES];
                     purchased = [allFeatures containsObject:self.feature];
                 }
-                else if ([OAIAPHelper isSubscribedToOsmAndPro])
-                {
+                if (!purchased && [OAIAPHelper isSubscribedToOsmAndPro])
                     purchased = [self.feature isAvailableInOsmAndPro];
-                }
-                else if ([OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased])
-                {
+                if (!purchased && ([OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased]))
                     purchased = [self.feature isAvailableInMapsPlus];
-                }
             }
         }
     }

@@ -189,6 +189,8 @@
 
     if (_currentMarkView.superview)
         [self layoutCurrentMarkLine];
+
+    [self paintMarks];
 }
 
 - (void)setSelectedMark:(NSInteger)selectedMark

@@ -2222,9 +2222,8 @@ static const double d180PI = 180.0 / M_PI_2;
     });
 }
 
-+ (NSDate *)getCurrentDate
++ (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate
 {
-    NSDate *sourceDate = [NSDate date];
     NSTimeZone *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
     NSTimeZone *destinationTimeZone = [NSTimeZone systemTimeZone];
     NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];

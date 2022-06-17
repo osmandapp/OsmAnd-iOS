@@ -11,199 +11,8 @@
 #import "OAMapHudViewController.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OASegmentedSlider.h"
-#import "OAMapStyleSettings.h"
 #import "OAMapLayers.h"
-#import "Localization.h"
-
-#define kTempIndex 0
-#define kPressureIndex 1
-#define kWindIndex 2
-#define kCloudIndex 3
-#define kPrecipitationIndex 4
-#define kContoursIndex 5
-
-@implementation OAWeatherToolbarLayersDelegate
-{
-    OAMapStyleSettings *_styleSettings;
-    OsmAndAppInstance _app;
-
-    NSMutableArray<NSMutableDictionary *> *_data;
-}
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
-
-- (void)commonInit
-{
-    _styleSettings = [OAMapStyleSettings sharedInstance];
-    _app = [OsmAndApp instance];
-
-    [self updateData];
-}
-
-- (void)updateData
-{
-    NSMutableArray<NSMutableDictionary *> *layersData = [NSMutableArray array];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"img": @"ic_custom_thermometer",
-            @"selected": @(_app.data.weatherTemp)
-    }]];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"img": @"ic_custom_air_pressure",
-            @"selected": @(_app.data.weatherPressure)
-    }]];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"img": @"ic_custom_wind",
-            @"selected": @(_app.data.weatherWind)
-    }]];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"img": @"ic_custom_clouds",
-            @"selected": @(_app.data.weatherCloud)
-    }]];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"img": @"ic_custom_precipitation",
-            @"selected": @(_app.data.weatherPrecip)
-    }]];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"img": @"ic_custom_contour_lines",
-            @"selected": @([[_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR].value isEqualToString:@"true"]
-                    || [[_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR].value isEqualToString:@"true"])
-    }]];
-
-    _data = layersData;
-}
-
-- (NSArray *)getData
-{
-    return _data;
-}
-
-#pragma mark - OAFoldersCellDelegate
-
-- (void)onItemSelected:(NSInteger)index
-{
-    if (index == kTempIndex)
-    {
-        BOOL selected = !_app.data.weatherTemp;
-        _data[kTempIndex][@"selected"] = @(selected);
-        _app.data.weatherTemp = selected;
-    }
-    else if (index == kPressureIndex)
-    {
-        BOOL selected = !_app.data.weatherPressure;
-        _data[kPressureIndex][@"selected"] = @(selected);
-        _app.data.weatherPressure = selected;
-    }
-    else if (index == kWindIndex)
-    {
-        BOOL selected = !_app.data.weatherWind;
-        _data[kWindIndex][@"selected"] = @(selected);
-        _app.data.weatherWind = selected;
-    }
-    else if (index == kCloudIndex)
-    {
-        BOOL selected = !_app.data.weatherCloud;
-        _data[kCloudIndex][@"selected"] = @(selected);
-        _app.data.weatherCloud = selected;
-    }
-    else if (index == kPrecipitationIndex)
-    {
-        BOOL selected = !_app.data.weatherPrecip;
-        _data[kPrecipitationIndex][@"selected"] = @(selected);
-        _app.data.weatherPrecip = selected;
-    }
-    else if (index == kContoursIndex)
-    {
-        BOOL selected = !([[_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR].value isEqualToString:@"true"]
-                || [[_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR].value isEqualToString:@"true"]);
-        _data[kContoursIndex][@"selected"] = @(selected);
-        [OAMapStyleSettings weatherContoursParamChangedToValue:selected ? WEATHER_TEMP_CONTOUR_LINES_ATTR : WEATHER_NONE_CONTOURS_LINES_VALUE
-                                                 styleSettings:_styleSettings];
-    }
-
-    if (self.delegate)
-        [self.delegate updateData:_data type:EOAWeatherToolbarLayers];
-}
-
-- (void)askForPaidProduct:(NSString *)productIdentifier
-{
-}
-
-@end
-
-@implementation OAWeatherToolbarDatesDelegate
-{
-    NSMutableArray<NSMutableDictionary *> *_data;
-}
-
-- (instancetype)initWithAvailable:(BOOL)available date:(NSDate *)date
-{
-    self = [super init];
-    if (self)
-    {
-        [self commonInit:available date:date];
-    }
-    return self;
-}
-
-- (void)commonInit:(BOOL)available date:(NSDate *)date
-{
-    [self updateData:available date:date];
-}
-
-- (void)updateData:(BOOL)available date:(NSDate *)date
-{
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"dd.MM"];
-
-    NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-    calendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
-    date = [calendar dateBySettingHour:0 minute:0 second:0 ofDate:date options:0];
-
-    NSMutableArray<NSMutableDictionary *> *layersData = [NSMutableArray array];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"title": OALocalizedString(@"today"),
-            @"available": @(available),
-            @"value": date
-    }]];
-    for (NSInteger i = 1; i <= 6; i++)
-    {
-        date = [calendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:date options:0];
-        [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-                @"title": [formatter stringFromDate:date],
-                @"available": @(available),
-                @"value": date
-        }]];
-    }
-
-    _data = layersData;
-}
-
-- (NSArray<NSMutableDictionary *> *)getData
-{
-    return _data;
-}
-
-#pragma mark - OAFoldersCellDelegate
-
-- (void)onItemSelected:(NSInteger)index
-{
-    if (self.delegate)
-        [self.delegate updateData:_data type:EOAWeatherToolbarDates];
-}
-
-- (void)askForPaidProduct:(NSString *)productIdentifier
-{
-}
-
-@end
+#import "OAWeatherToolbarHandlers.h"
 
 @interface OAWeatherToolbar () <OAWeatherToolbarDelegate, OAWeatherLayerSettingsDelegate>
 
@@ -216,13 +25,15 @@
 @implementation OAWeatherToolbar
 {
     OsmAndAppInstance _app;
-    OAMapStyleSettings *_styleSettings;
-    NSCalendar *_calendar;
-    OAWeatherToolbarLayersDelegate *_layersDelegate;
-    OAWeatherToolbarDatesDelegate *_datesDelegate;
+    NSCalendar *_currentTimezoneCalendar;
+    OAWeatherToolbarLayersHandler *_layersHandler;
+    OAWeatherToolbarDatesHandler *_datesHandler;
+    NSArray<NSDate *> *_timeInGMTTimezoneValues;
 
     BOOL _available;
-    NSInteger _selectedDateIndex;
+    NSInteger _selectedDayIndex;
+    NSInteger _previousSelectedDayIndex;
+    NSInteger _previousSelectedMarkIndex;
 }
 
 - (instancetype)init
@@ -252,28 +63,31 @@
     [self updateInfo];
 
     _app = [OsmAndApp instance];
-    _styleSettings = [OAMapStyleSettings sharedInstance];
-    _calendar = NSCalendar.autoupdatingCurrentCalendar;
-    _calendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    _currentTimezoneCalendar = NSCalendar.autoupdatingCurrentCalendar;
+    _currentTimezoneCalendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    _previousSelectedDayIndex = -1;
+    _previousSelectedMarkIndex = -1;
 
-    _layersDelegate = [[OAWeatherToolbarLayersDelegate alloc] init];
-    _layersDelegate.delegate = self;
-    self.layersCollectionView.foldersDelegate = _layersDelegate;
-    [self updateData:[_layersDelegate getData] type:EOAWeatherToolbarLayers];
+    _layersHandler = [[OAWeatherToolbarLayersHandler alloc] init];
+    _layersHandler.delegate = self;
+    self.layersCollectionView.foldersDelegate = _layersHandler;
+    [self updateData:[_layersHandler getData] type:EOAWeatherToolbarLayers];
 
     UILongPressGestureRecognizer *longPressOnLayerRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                                              action:@selector(handleLongPressOnLayer:)];
     [self.layersCollectionView addGestureRecognizer:longPressOnLayerRecognizer];
 
-    NSDate *currentDate = [OAUtilities getCurrentDate];
-    _datesDelegate = [[OAWeatherToolbarDatesDelegate alloc] initWithAvailable:_available date:currentDate];
-    _datesDelegate.delegate = self;
-    self.dateCollectionView.foldersDelegate = _datesDelegate;
-    [self updateData:[_datesDelegate getData] type:EOAWeatherToolbarDates];
-    [self setCurrentMark:currentDate];
+    _datesHandler = [[OAWeatherToolbarDatesHandler alloc] initWithAvailable:_available date:[NSDate date]];
+    _datesHandler.delegate = self;
+    self.dateCollectionView.foldersDelegate = _datesHandler;
+    [self updateData:[_datesHandler getData] type:EOAWeatherToolbarDates];
+    [self setCurrentMark:[OAUtilities getCurrentTimezoneDate:[NSDate date]]];
     self.timeSliderView.userInteractionEnabled = _available;
     [self.timeSliderView setNumberOfMarks:9 additionalMarksBetween:2];
-    self.timeSliderView.selectedMark = [self getSelectedTimeIndex:[self getSelectedDate]];
+    NSDate *selectedDate = [OAUtilities getCurrentTimezoneDate:[self getSelectedGMTDate]];
+    self.timeSliderView.selectedMark = [self getSelectedTimeIndex:selectedDate];
+
+    [self updateTimeValues:[_datesHandler getData][_selectedDayIndex][@"value"]];
 
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside];
@@ -340,52 +154,51 @@
 {
     NSInteger selectedIndex = 0;
     if (_available)
-        selectedIndex = [_calendar components:NSCalendarUnitHour fromDate:date].hour;
+        selectedIndex = [_currentTimezoneCalendar components:NSCalendarUnitHour fromDate:date].hour;
     return selectedIndex;
 }
 
-- (NSDate *)getSelectedDate
+- (NSDate *)getSelectedGMTDate
 {
     return [OARootViewController instance].mapPanel.mapViewController.mapLayers.weatherDate;
 }
 
 - (void)setCurrentMark:(NSDate *)date
 {
-    NSInteger minimumForCurrentMark = [_calendar startOfDayForDate:date].timeIntervalSince1970;
+    NSInteger minimumForCurrentMark = [_currentTimezoneCalendar startOfDayForDate:date].timeIntervalSince1970;
     NSInteger currentValue = date.timeIntervalSince1970;
-    self.timeSliderView.currentMarkX = _available && _selectedDateIndex == 0 ? (currentValue - minimumForCurrentMark) : -1;
-    date = [_calendar dateBySettingHour:0 minute:0 second:0 ofDate:date options:0];
-    date = [_calendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:date options:0];
-    self.timeSliderView.maximumForCurrentMark = [_calendar startOfDayForDate:date].timeIntervalSince1970 - minimumForCurrentMark;
+    self.timeSliderView.currentMarkX = _available && _selectedDayIndex == 0 ? (currentValue - minimumForCurrentMark) : -1;
+    date = [_currentTimezoneCalendar dateBySettingHour:0 minute:0 second:0 ofDate:date options:0];
+    date = [_currentTimezoneCalendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:date options:0];
+    self.timeSliderView.maximumForCurrentMark = [_currentTimezoneCalendar startOfDayForDate:date].timeIntervalSince1970 - minimumForCurrentMark;
+}
+
+- (void)updateTimeValues:(NSDate *)date
+{
+    NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+    NSDate *selectedNextDate = [calendar dateBySettingHour:0 minute:0 second:0 ofDate:date options:0];
+    NSMutableArray<NSDate *> *selectedTimeValues = [NSMutableArray array];
+    [selectedTimeValues addObject:selectedNextDate];
+
+    NSInteger count = _selectedDayIndex == 0 ? 9 + (9 - 1) * 2 : 9;
+    for (NSInteger i = 0; i < count - 1; i++)
+    {
+        selectedNextDate = [calendar dateByAddingUnit:NSCalendarUnitHour
+                                                value:_selectedDayIndex == 0 ? 1 : 3
+                                               toDate:selectedNextDate
+                                              options:0];
+        [selectedTimeValues addObject:selectedNextDate];
+    }
+
+    _timeInGMTTimezoneValues = selectedTimeValues;
 }
 
 #pragma mark - UISlider
 
 - (void)timeChanged:(UISlider *)sender
 {
-    if (sender)
-    {
-        NSInteger index = self.timeSliderView.selectedMark;
-        if (_selectedDateIndex > 0)
-            index *= 3;
-
-        NSDate *date = [OAUtilities getCurrentDate];
-        NSDateComponents *components = [_calendar components:NSCalendarUnitDay fromDate:date];
-        NSInteger currentDay = components.day;
-        date = [_calendar dateBySettingUnit:NSCalendarUnitDay value:currentDay + _selectedDateIndex ofDate:date options:0];
-
-        if (index >= 24)
-        {
-            date = [_calendar dateBySettingHour:0 minute:0 second:0 ofDate:date options:0];
-            date = [_calendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:date options:0];
-        }
-        else
-        {
-            date = [_calendar dateBySettingHour:index minute:0 second:0 ofDate:date options:0];
-        }
-
-        [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherDate:date];
-    }
+    NSInteger index = self.timeSliderView.selectedMark;
+    [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherDate:_timeInGMTTimezoneValues[index]];
 }
 
 #pragma mark - OAWeatherToolbarDelegate
@@ -409,39 +222,63 @@
         if (available != _available)
         {
             _available = available;
-            NSDate *currentDate = [OAUtilities getCurrentDate];
+            NSDate *currentDate = [OAUtilities getCurrentTimezoneDate:[NSDate date]];
             [self setCurrentMark:currentDate];
-            self.timeSliderView.selectedMark = [self getSelectedTimeIndex:[self getSelectedDate]];
-            self.timeSliderView.userInteractionEnabled = _available;
-            if (_datesDelegate)
+            NSDate *selectedDate = [OAUtilities getCurrentTimezoneDate:[self getSelectedGMTDate]];
+            
+            if (!_available)
             {
-                [_datesDelegate updateData:_available date:[OAUtilities getCurrentDate]];
-                [self updateData:[_datesDelegate getData] type:EOAWeatherToolbarDates];
+                _previousSelectedDayIndex = _selectedDayIndex;
+                _previousSelectedMarkIndex = self.timeSliderView.selectedMark;
+            }
+
+            self.timeSliderView.selectedMark = [self getSelectedTimeIndex:selectedDate];
+            self.timeSliderView.userInteractionEnabled = _available;
+            if (_datesHandler)
+            {
+                [_datesHandler updateData:_available date:currentDate];
+                [self updateData:[_datesHandler getData] type:EOAWeatherToolbarDates];
             }
         }
     }
     else if (type == EOAWeatherToolbarDates)
     {
-        NSInteger selectedDateIndex = _available ? [self.dateCollectionView getSelectedIndex] : 0;
-        if (selectedDateIndex == -1)
-            selectedDateIndex = 0;
+        BOOL needToUpdate = YES;
+        NSInteger selectedDayIndex = _available ? [self.dateCollectionView getSelectedIndex] : 0;
+        if (selectedDayIndex == -1)
+        {
+            selectedDayIndex = 0;
+            needToUpdate = NO;
+        }
 
-        NSDate *date = data[selectedDateIndex][@"value"];
-        NSDate *selectedDate = [self getSelectedDate];
-        date = [_calendar dateBySettingHour:[_calendar components:NSCalendarUnitHour fromDate:selectedDate].hour
-                                    minute:[_calendar components:NSCalendarUnitMinute fromDate:selectedDate].minute
-                                    second:[_calendar components:NSCalendarUnitSecond fromDate:selectedDate].second
-                                    ofDate:date
-                                   options:0];
-        [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherDate:date];
+        if (_available && (selectedDayIndex != _selectedDayIndex || _previousSelectedDayIndex != -1))
+        {
+            if (_previousSelectedDayIndex != -1)
+                selectedDayIndex = _previousSelectedDayIndex;
 
-        if (_available && selectedDateIndex != _selectedDateIndex)
-            _selectedDateIndex = selectedDateIndex;
+            [self.timeSliderView setNumberOfMarks:9 additionalMarksBetween:selectedDayIndex > 0 ? 0 : 2];
 
-        NSDate *currentDate = [OAUtilities getCurrentDate];
+            if (needToUpdate && ((_selectedDayIndex == 0 && selectedDayIndex > 0) || (selectedDayIndex == 0 && _selectedDayIndex > 0)))
+            {
+                NSInteger index = self.timeSliderView.selectedMark;
+                index = _timeInGMTTimezoneValues.count > 9 ? (NSInteger) round(index / 3) : index * 3;
+                self.timeSliderView.selectedMark = index;
+            }
+            else if (_previousSelectedMarkIndex != -1)
+            {
+                self.timeSliderView.selectedMark = _previousSelectedMarkIndex;
+            }
+            _previousSelectedDayIndex = -1;
+            _previousSelectedMarkIndex = -1;
+
+            _selectedDayIndex = selectedDayIndex;
+            [self updateTimeValues:data[_selectedDayIndex][@"value"]];
+            [self timeChanged:nil];
+        }
+
+        NSDate *currentDate = [OAUtilities getCurrentTimezoneDate:[NSDate date]];
         [self setCurrentMark:currentDate];
-        [self.timeSliderView setNumberOfMarks:9 additionalMarksBetween:selectedDateIndex > 0 ? 0 : 2];
-        [self.dateCollectionView setValues:data withSelectedIndex:_available ? _selectedDateIndex : -1];
+        [self.dateCollectionView setValues:data withSelectedIndex:_available ? _selectedDayIndex : -1];
         [self.dateCollectionView reloadData];
     }
 }
@@ -456,9 +293,9 @@
 
 - (void)onDoneWeatherLayerSettings
 {
-    [_layersDelegate updateData];
-    [self updateData:[_layersDelegate getData] type:EOAWeatherToolbarLayers];
-    [self.layersCollectionView setValues:[_layersDelegate getData] withSelectedIndex:-1];
+    [_layersHandler updateData];
+    [self updateData:[_layersHandler getData] type:EOAWeatherToolbarLayers];
+    [self.layersCollectionView setValues:[_layersHandler getData] withSelectedIndex:-1];
     [self.layersCollectionView reloadData];
 }
 

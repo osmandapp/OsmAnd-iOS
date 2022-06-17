@@ -287,6 +287,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view;
 
-+ (NSDate *)getCurrentDate;
++ (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate;
 
 @end

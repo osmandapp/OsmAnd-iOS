@@ -20,6 +20,7 @@ let languageDict = [
     "be" : "be",
     "bg" : "bg",
     "ca" : "ca",
+    "ckb" : "ckb"
     "cs" : "cs",
     "cy" : "cy",
     "da" : "da",

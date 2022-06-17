@@ -3578,6 +3578,7 @@
 		3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAGPXListDeletingBottomSheet.m; sourceTree = "<group>"; };
 		3242A46D26CB0F05001CA174 /* OACollapsableNearestPoiTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableNearestPoiTypeView.h; sourceTree = "<group>"; };
 		3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableNearestPoiTypeView.mm; sourceTree = "<group>"; };
+		3249BFBE285CC2D200FFEF42 /* ckb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ckb; path = ckb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		325B69FB26D828DC00D8B67C /* OAQuickSearchCoordinatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinatesViewController.h; sourceTree = "<group>"; };
 		325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchCoordinatesViewController.mm; sourceTree = "<group>"; };
 		325B69FE26D8FE4500D8B67C /* OACoodinateSearchCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACoodinateSearchCell.xib; sourceTree = "<group>"; };
@@ -12965,6 +12966,7 @@
 				ta,
 				vi,
 				cy,
+				ckb,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -16239,6 +16241,7 @@
 				32113577275424DC0050242B /* ta */,
 				32113578275425870050242B /* vi */,
 				32113579275426020050242B /* cy */,
+				3249BFBE285CC2D200FFEF42 /* ckb */,
 			);
 			name = Localizable.strings;
 			path = Resources/Localizations;

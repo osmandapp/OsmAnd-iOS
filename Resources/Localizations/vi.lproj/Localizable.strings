@@ -1765,7 +1765,7 @@
 "parking" = "Parking";
 "parked_at" = "Parked at";
 "directions_more_options" = "Directions from";
-"nearby_search" = "Tìm kiếm gần";
+"nearby_search" = "Tìm xung quanh";
 "change_object_posiotion" = "Change object's position";
 "change_position_descr" = "Move the map to change object's position";
 "est_travel_time" = "Estimate travel time";
@@ -2329,3 +2329,5 @@
 "backup_error_no_valid_subscription" = "Không có gói đăng ký hợp lệ nào đang có";
 "shared_string_min_height" = "Độ cao tối thiểu";
 "shared_string_any" = "Bất kỳ";
+"shared_string_stop" = "Dừng";
+"expired" = "Đã hết hạn";

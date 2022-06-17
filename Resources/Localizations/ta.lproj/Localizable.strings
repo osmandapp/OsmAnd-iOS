@@ -786,7 +786,7 @@
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
-"sett_show" = "காட்டு";
+"sett_show" = "காண்பி";
 "sett_notshow" = "Don't show";
 "sett_deg180" = "Degrees 180";
 "sett_deg360" = "Degrees 360";
@@ -1742,7 +1742,7 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"product_title_srtm" = "சமநிலைக்கோடுகள்";
+"product_title_srtm" = "\"எல்லைகோடு  \"";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
@@ -1770,7 +1770,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Roads";
-"res_srtm" = "சமநிலைக்கோடுகள்";
+"res_srtm" = "\"எல்லைகோடு  \"";
 "res_wiki" = "விக்கிபீடியா";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Slope";
@@ -2065,8 +2065,9 @@
 "unlimited_downloads" = "வரம்பற்ற பதிவிறக்கங்கள்";
 "wikipedia_offline" = "விக்கிப்பீடியா இணையாநிலை";
 "contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
-"monthly_map_updates" = "Map updates: every month";
-"daily_map_updates" = "Map updates: every hour";
+"monthly_map_updates" = "வரைபட புதுப்பிப்புகள்: 1 எல்லா மாதமும்2";
+"daily_map_updates" = "வரைபட புதுப்பிப்புகள்:1 எல்லா
+\nமணிநேரமும் 2";
 "index_item_depth_contours_osmand_ext" = "Nautical depth contours";
 "donation_to_osm" = "Donation to OpenStreetMap community";
 "purchase_unlim_title" = "வாங்க -%@";
@@ -2493,3 +2494,9 @@
 "login_error_email_invalid" = "சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்";
 "units_min_short" = "மீ";
 "altitude" = "உயரம்";
+"subscriptions" = "சந்தாக்கள்
+\n";
+"osm_live_banner_desc" = "வரம்பற்ற வரைபட பதிவிறக்கங்களைப் பெறுக, மேலும் ஒரு மாதத்திற்கு ஒருமுறை விட மேம்படுத்துங்கள்: வாராந்திர, தினசரிஅல்லது மணிநேரம்.";
+"shared_string_stop" = "நிறுத்து";
+"shared_string_start" = "இயக்கு";
+"toast_empty_name_error" = "பெயரிடப்படாத இடம்";

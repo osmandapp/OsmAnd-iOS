@@ -2516,3 +2516,4 @@
 "shared_string_stop" = "Stop";
 "ltr_or_rtl_combine_via_or" = "%@ oder %@";
 "simulate_in_progress" = "Im Gange";
+"osmand_depelopment_simulate_location_section" = "Simulieren";

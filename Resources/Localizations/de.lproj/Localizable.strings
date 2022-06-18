@@ -673,7 +673,7 @@
 "voice_pref_title" = "Stimme";
 "voice_provider_descr" = "Sprachpaket für Navigation auswählen";
 "choose_audio_stream" = "Navi-Sprachausgabe";
-"choose_audio_stream_descr" = "Lautsprecher für Sprachansagen auswählen";
+"choose_audio_stream_descr" = "Ausgabekanal für Sprachansagen auswählen";
 "guidance_preferences_descr" = "Navigationseinstellungen";
 "routing_preferences_descr" = "Einstellungen für Routenberechnung";
 "routing_settings" = "Navigation";

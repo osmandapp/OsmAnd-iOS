@@ -1918,3 +1918,5 @@
 "backup_error_file_not_available" = "پرونده در دسترس نیست";
 "shared_string_open_street_map" = "اوپن‌استریت‌مپ";
 "routeInfo_tracktype_description" = "مسیر یا خط مسیر را با ترکیب سطح آن رنگ کنید. معمولاً زمانی اعمال می‌شود که شبکه جاده تا حد زیادی آسفالت نشده باشد.";
+"transport_hazmat_yes_desc" = "شما باید دسته‌بندی مناسب را انتخاب کنید.";
+"transport_hazmat_no_desc" = "در برخی جاده‌ها و تونل‌ها حمل و نقل مواد خطرناک ممنوع است.";

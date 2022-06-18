@@ -871,9 +871,9 @@
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Unbegrenzte Downloads";
 "wikipedia_offline" = "Wikipedia offline";
-"contour_lines_hillshade_maps" = "Karten mit Höhenlinien und Relief";
-"monthly_map_updates" = "Kartenaktualisierungen: jeden Monat";
-"daily_map_updates" = "Kartenaktualisierung: jede Stunde";
+"contour_lines_hillshade_maps" = "Geländekarten: Höhenlinien, Relief, Hangneigung";
+"monthly_map_updates" = "Monatliche Kartenaktualisierung";
+"daily_map_updates" = "Stündliche Kartenaktualisierung";
 "index_item_depth_contours_osmand_ext" = "Nautische Tiefenlinien";
 "donation_to_osm" = "Spende an die OpenStreetMap-Gemeinschaft";
 "purchase_unlim_title" = "Kaufen - %@";
@@ -1795,7 +1795,7 @@
 "settings_app_theme" = "Thema der Anwendung";
 "instructions_repeat" = "Tippen Sie auf das Widget \"Nächste Richtungsangabe\", um Anweisungen zu wiederholen";
 "default_speed_dialog_msg" = "Schätzt die Ankunftszeit für unbekannte Straßentypen und begrenzt die Geschwindigkeit für alle Straßen (kann die Navigation beeinflussen)";
-"vessel_width_limit_description" = "Stellen Sie die Schiffsbreite ein, um schmale Brücken zu vermeiden";
+"vessel_width_limit_description" = "Stellen Sie die Schiffsbreite ein, um schmale Brücken zu vermeiden.";
 "lenght_limit_description" = "Bitte geben Sie Ihre Fahrzeuglänge an. Für lange Fahrzeuge könnten einige Streckenabschnitte nicht befahrbar sein.";
 "profile_settings" = "Profileinstellungen";
 "vessel_height_limit_description" = "Schiffshöhe einstellen, um niedrige Brücken zu vermeiden. Beachten Sie: Wenn die Brücke beweglich ist, verwendet die Berechnung ihre Höhe im geöffneten Zustand.";
@@ -1845,7 +1845,7 @@
 "repeat_after" = "Wiederholen nach";
 "plugin_settings_reset" = "Plugin-Einstellungen auf Voreinstellung zurücksetzen";
 "trip_rec_actions_descr" = "Sie finden alle Ihre aufgezeichneten Tracks in %@";
-"logging_accuracy" = "Genauigkeit der Protokollierung";
+"logging_accuracy" = "Aufzeichnungsgenauigkeit";
 "profile_prefs_reset_successful" = "Alle Profileinstellungen auf Standard zurückgesetzt";
 "help_nav_profiles" = "Navigationsprofile";
 "reset_profile_action_descr" = "Setzen Sie alle Profileinstellungen auf die Installationsvorgaben zurück. Wenn Sie auf Zurücksetzen tippen, werden alle Ihre Änderungen verworfen, diese Aktion kann nicht rückgängig gemacht werden.";
@@ -2114,7 +2114,7 @@
 "available_languages" = "Verfügbare Sprachen";
 "some_articles_may_not_available_in_lang" = "Einige Wikipedia-Artikel sind möglicherweise nicht in Ihrer Sprache verfügbar.";
 "wiki_menu_download_descr" = "Zusätzliche Karten werden benötigt um Wikipedia-POIs auf der Karte anzuzeigen.";
-"select_wikipedia_article_langs" = "Sprachauswahl für Wikipedia-Artikel auf der Karte. Während des Lesens eines Artikels ist ein Wechsel in jede verfügbare Sprache möglich.";
+"select_wikipedia_article_langs" = "Wählen Sie die Sprachen aus, in welchen Wikipedia Artikel auf der Karte erscheinen sollen. Sie können zwischen allen verfügbaren Sprachen wechseln, während Sie den Artikel lesen.";
 "shared_string_all_languages" = "Alle Sprachen";
 "population_num" = "Einwohnerzahl";
 "added_profiles_descr" = "Vom Plugin hinzugefügte Profile";
@@ -2519,3 +2519,4 @@
 "osmand_depelopment_simulate_location_section" = "Simulieren";
 "transport_hazmat_yes_desc" = "Sie müssen eine richtige Kategorie wählen.";
 "transport_hazmat_no_desc" = "Auf einigen Straßen und Tunneln ist der Transport gefährlicher Materialien verboten.";
+"purchases_feature_desc_hourly_map_updates" = "Erhalten Sie Zugang zu häufigeren Kartenaktualisierungen. Wählen Sie zwischen stündlichen, täglichen oder wöchentlichen Aktualisierungen. Updates erfolgen inkrementell, nur der geänderte Bereich wird heruntergeladen.";

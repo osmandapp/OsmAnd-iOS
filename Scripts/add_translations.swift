@@ -20,6 +20,7 @@ let languageDict = [
     "be" : "be",
     "bg" : "bg",
     "ca" : "ca",
+    "ckb" : "ckb",
     "cs" : "cs",
     "cy" : "cy",
     "da" : "da",
@@ -80,7 +81,7 @@ allLanguagesDict["en"] = ""
 
 
 
-//mark: Add Routing Params
+//MARK: Add Routing Params
 
 func addRoutingParams (language: String) {
     var routeDict: [String:String] = [:]
@@ -136,7 +137,7 @@ func addRoutingParams (language: String) {
 
 
 
-//mark: Add Translations
+//MARK: Add Translations
 
 func addTranslations(language: String, initial: Bool) {
     let iosDict = parseIos(language: language, initial: initial)
@@ -151,7 +152,7 @@ func addTranslations(language: String, initial: Bool) {
 
 
 
-//mark: IOS specific methods
+//MARK: IOS specific methods
 func parseIos (language: String, initial: Bool) -> [String : String] {
     var iosDict: [String:String] = [:]
     var myLang: String = "en"
@@ -210,7 +211,7 @@ func makeOutputString(str1: String, str2: String) -> String {
 
 
 
-//mark: Android specific methods
+//MARK: Android specific methods
 func parseAndroid(language: String, initial: Bool) -> [String : String] {
     var myLang: String = ""
     if !initial {
@@ -236,7 +237,7 @@ func androidContains(androidDict: [String:String], keys: [String]) -> String? {
 
 
 
-//mark: Compare Dict
+//MARK: Compare Dict
 func compareDicts(language: String, iosDict: [String : String], androidDict: [String : String]){
     let androidDict = modifyVariables(dict: androidDict)
     var common: Dictionary = [String:String]()
@@ -284,7 +285,7 @@ func equalWithoutDots(str1: String, str2: String) -> Bool {
 
 
 
-//mark: Make new dict
+//MARK: Make new dict
 
 func makeNewDict(language: String, iosDict: [String : String], androidDict: [String : String]) {
     let androidDict = modifyVariables(dict: androidDict)
@@ -411,7 +412,7 @@ func filterUnsafeChars(_ text: String) -> String {
 
 
 
-//mark: Global utils
+//MARK: Global utils
 
 func modifyVariables(dict: [String : String]) -> [String : String] {
     var androidDict = dict
@@ -491,7 +492,7 @@ class Parser: NSObject, XMLParserDelegate {
 
 
 
-//mark: Bash commands helper
+//MARK: Bash commands helper
 
 func shell(_ command: String) -> String {
     let task = Process()
@@ -535,18 +536,26 @@ func changeDir(_ argument: String) -> String {
 
 
 
-//mark: Start script
+//MARK: Start script
+
+print("Start add_translations script")
+
+
+//MARK: Getting folders pathes
+
+// ..OsmAnd/ios/Scripts/add_translations.swift
+let scriptFilePath = URL(fileURLWithPath: CommandLine.arguments[0], isDirectory: false)
+// ..OsmAnd/
+var osmandRepositoriesFolder = scriptFilePath.deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
 
 ///Uncomment this line for debugging. Change this path to your "OsmAnd/ios/Scripts/" folder's path.
-//print( changeDir("/Users/nnngrach/Documents/Projects/Coding/OsmAnd/ios/Scripts/") )
+//osmandRepositoriesFolder = URL(fileURLWithPath: "/Users/nnngrach/Documents/Projects/Coding/OsmAnd/", isDirectory: true)
+
+print("osmandRepositoriesFolder: ", osmandRepositoriesFolder)
 
 
-// Update repositories to avoid Weblate merge conflicts
+//MARK: Update repositories to avoid Weblate merge conflicts
 
-let currentIosScriptsFolder = URL(fileURLWithPath: shell("echo $PWD"), isDirectory: true)
-let osmandRepositoriesFolder = currentIosScriptsFolder.deletingLastPathComponent()
-
-//
 print( changeDir(osmandRepositoriesFolder.appendingPathComponent("android/").path) )
 print( shell("git pull origin master") )
 
@@ -557,18 +566,17 @@ print( changeDir(osmandRepositoriesFolder.appendingPathComponent("resources/").p
 print( shell("git pull origin master") )
 
 
-// Update phrases
+//MARK: Update phrases
 
 print( changeDir(osmandRepositoriesFolder.appendingPathComponent("resources/poi").path) )
 print( shell("./copy_phrases.sh"))
-//Don't commit this changes by script to avoid merge conflicts.
-//Do manual commit of Resources repo on new app version build.
+///Don't commit this changes by script to avoid merge conflicts.
+///Do manual commit of Resources repo on new app version build.
 
 
+//MARK: Run translation updating
 
-
-//mark: run translation updating
-print( changeDir(currentIosScriptsFolder.path) )
+print( changeDir(osmandRepositoriesFolder.appendingPathComponent("ios/").path) )
 
 if (CommandLine.arguments.count == 2) && (CommandLine.arguments[1] == "-routing") {
     for lang in allLanguagesDict {

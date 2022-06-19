@@ -310,7 +310,7 @@
 "shared_string_and" = "e";
 "shared_string_edit" = "Editar";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Despois";
+"shared_string_later" = "Noutro intre";
 "shared_string_of" = "of";
 "shared_string_all" = "Todo";
 "shared_string_from" = "dende";
@@ -407,8 +407,8 @@
 "gpx_speed" = "Velocidade";
 // Map settings
 "rendering_value_browse_map_name" = "Ollar mapa";
-"m_style_car" = "Conducindo";
-"m_style_walk" = "Camiñando";
+"m_style_car" = "Automóbil";
+"m_style_walk" = "Peón";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Amosar no mapa";
@@ -555,7 +555,7 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Planificación dunha viaxe";
 "help_legend" = "Lenda do mapa";
-"help_other_header" = "Outros";
+"help_other_header" = "Outra";
 "help_install_and_troubleshoot" = "Instalación e resolución de problemas";
 "help_tech_articles" = "Artigos técnicos";
 "help_versions" = "Versións";
@@ -712,7 +712,7 @@
 "get_directions" = "Indicacións";
 "parking" = "Aparcamento";
 "directions_more_options" = "Indicacións dende";
-"nearby_search" = "Procurar preto daquí";
+"nearby_search" = "Procurar preto";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -905,7 +905,7 @@
 "brown" = "Marrón";
 "display_starting_at_zoom_level" = "Amosar dende o nivel de achegamento";
 "osm_live_cancel_subscription" = "Cancelar subscrición";
-"osm_alert_title" = "Remitir";
+"osm_alert_title" = "Enviar";
 "hide_contour_lines" = "Agochar curvas de nivel";
 "blue" = "Azul";
 "shared_string_upload" = "Enviar";
@@ -1366,7 +1366,7 @@
 "edit_profile_list" = "Editar a listaxe de perfís";
 "amenity" = "Instalación";
 "profile_type_custom_string" = "Perfil personalizado";
-"nothing_found_empty" = "Non se atopou nada";
+"nothing_found_empty" = "Non se atopou ren";
 "position_icon_at_rest" = "Icona de posición en asueto";
 "app_profiles" = "Perfís de aplicación";
 "reverse_route" = "Ruta inversa";
@@ -1560,7 +1560,7 @@
 "square" = "Cadrado";
 "simplified_track_description" = "Só gravarase a liña da ruta, os puntos intermedios serán eliminados.";
 "show_compass_ruler" = "Amosar a regra de compás";
-"sport" = "Sport";
+"sport" = "Deporte";
 "shared_string_enable" = "Activar";
 "displayed_trips" = "Pistas amosadas";
 "res_standard" = "Mapa normal";
@@ -1578,7 +1578,7 @@
 "split_before" = "Dividir antes";
 "select_group" = "Escoller grupo";
 "gpxup_trackable" = "Seguíbel";
-"default" = "Predeterminado";
+"default" = "Predefinido";
 "context_menu_item_edit_waypoint" = "Editar punto de pasaxe GPX";
 "navigate_point_zone" = "Zona";
 "dialogs_and_notifications" = "Diálogos e notificacións";
@@ -1779,3 +1779,27 @@
 "lang_br" = "Bretón";
 "lang_sk" = "Eslovaco";
 "gpx_split_interval_descr" = "Selecciona o intre no cal as marcas con distancia ou tempo na pista serán amosadas.";
+"altitude_ascent" = "Ascenso";
+"monthly_map_updates" = "Actualizacións do mapa: cada mes";
+"altitude_descent" = "Descenso";
+"private_access_routing_req" = "O destino ubícase nunha área de acceso privado. Permitir o emprego de camiños privados para esta viaxe\?";
+"shared_string_stop" = "Deter";
+"copy_coordinates" = "Copiar coordenadas";
+"osm_live_banner_desc" = "Obtén descargas ilimitadas de mapas, engadindo actualizacións semanais, diarias ou cada hora.";
+"copy_to_map_favorites" = "Copiar aos favoritos";
+"new_device_account" = "Novo dispositivo / nova conta";
+"expired" = "Expirado";
+"units_cubic_m" = "m³";
+"product_title_development" = "Desenvolvemento do OsmAnd";
+"product_desc_ext_development" = "Axusta as funcións de desenvolvemento e depuración, como a simulación de navegación, o rendemento do renderizado ou as indicacións por voz. Destinado para desenvolvedores, non é necesario para o normal uso da aplicación.";
+"toast_empty_name_error" = "Localización sen nome";
+"subscriptions" = "Subscricións";
+"restore_purchases" = "Restaurar as compras";
+"share_geo" = "Outros mapas:";
+"manage_subscription" = "Xestionar subscrición";
+"monthly_subscription" = "Subscrición mensual";
+"annual_subscription" = "Subscrición anual";
+"copy_address" = "Copiar enderezo";
+"shared_string_start" = "Comezar";
+"shared_string_capacity" = "Capacidade";
+"daily_map_updates" = "Actualizacións do mapa: cada hora";

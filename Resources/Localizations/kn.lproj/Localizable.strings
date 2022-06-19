@@ -613,7 +613,7 @@
 "poi_hide" = "ಅಡಗಿಸಿ";
 
 // My Places
-"favorites" = "ಇಷ್ಟವಾದವುಗಳು";
+"favorites" = "ನನ್ನ ಇಷ್ಟವಾದವುಗಳು";
 "tracks" = "ನನ್ನ ಟ್ರ್ಯಾಕ್ ಗಳು";
 "personal_category_name" = "ವೈಯಕ್ತಿಕ";
 "visible" = "Visible";
@@ -2483,3 +2483,6 @@
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "save_heading" = "ಶೀರ್ಷಿಕೆಯನ್ನು ಸೇರಿಸಿ";
+"shared_string_stop" = "ನಿಲ್ಲಿಸು";
+"shared_string_start" = "ಶುರುಮಾಡು";
+"product_title_development" = "ಒಸ್ಮಾಂಡ್ ತಂತ್ರಾಶ ಅಭಿವೃದ್ಧಿ";

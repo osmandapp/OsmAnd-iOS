@@ -39,7 +39,7 @@
 "years_5" = "Iseggasen";
 "units_mph" = "m/tasint";
 "product_title_africa" = "Tafriqt";
-"favorites" = "Inurifen";
+"favorites" = "Imenyafen";
 "rendering_category_transport" = "Amesni";
 "col_blue" = "Azegzaw";
 "shared_string_yes" = "Ih";
@@ -536,7 +536,7 @@
 "profile_type_base_string" = "Amaɣnu";
 "reset_to_default" = "Err-d azalen s lexṣas";
 "search_activity" = "Rechercher";
-"save_changes" = "Sekles asnifel";
+"save_changes" = "Sekles ibeddilen";
 "shared_string_settings" = "Iɣewwaṛen";
 "selected_profiles" = "%dɣef %d";
 "profile_type_osmand_string" = "Amaɣnu OsmAnd";
@@ -760,3 +760,9 @@
 "lang_lt" = "Taliṭwanit";
 "lang_tl" = "Tafilippinit";
 "lang_uk" = "Tukranit";
+"copy_coordinates" = "Tisidag";
+"units_cubic_m" = "_M";
+"shared_string_start" = "Bdu";
+"shared_string_stop" = "Seḥbes";
+"subscriptions" = "Ijerriden";
+"shared_string_capacity" = "Akettur";

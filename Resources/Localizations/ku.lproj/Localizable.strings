@@ -176,3 +176,6 @@
 "group_name" = "Navê komê";
 "regions" = "Herêman";
 "units_min_short" = "m";
+"shared_string_stop" = "Bisekine";
+"shared_string_start" = "Dest pê bike";
+"share_geo" = "Cih:";

@@ -362,7 +362,7 @@
 "shared_string_and" = "a";
 "shared_string_edit" = "Wobdźěłać";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Dale";
+"shared_string_later" = "Pozdźišo";
 "shared_string_of" = "of";
 "shared_string_all" = "All";
 "shared_string_from" = "wot";
@@ -425,7 +425,7 @@
 "poi_hide" = "Schować";
 // My Places
 "favorites" = "Fawority";
-"tracks" = "Čary";
+"tracks" = "Puće";
 // GPX
 "gpx_point" = "Dypk";
 "gpx_waypoint" = "Čarowy dypk";
@@ -502,7 +502,7 @@
 "shared_string_none" = "žane";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online-karty";
-"map_settings_transp" = "Transparency";
+"map_settings_transp" = "Transparenca";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 "mapillary" = "Mapillary";
@@ -730,7 +730,7 @@
 "shared_string_reload" = "wobnowić";
 "shared_string_show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
-"shared_string_filter" = "filter";
+"shared_string_filter" = "Filter";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
@@ -850,7 +850,7 @@
 "open_osm_note" = "OSM-noticu wočinić";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Commit";
-"osm_alert_message" = "Powěsć";
+"osm_alert_message" = "Zdźělenka";
 "osm_alert_button_ok" = "Noticu wutworić";
 "modify_poi" = "Modify the POI information";
 "actions" = "Akcije";
@@ -1085,11 +1085,11 @@
 "get_directions" = "Nawigacija";
 "parking" = "Parkowanišćo";
 "directions_more_options" = "Nawigacija wottud";
-"nearby_search" = "We wokolinje pytać";
+"nearby_search" = "Wokoło stejišća pytać";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
-"plugins" = "Přidatki";
+"plugins" = "Rozšěrjenja";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -1407,7 +1407,7 @@
 "app_theme_light" = "Swětłe";
 "update_map" = "Kartowe kachlicy zaktualizować";
 "enter_profile_name" = "Zapodaj mjeno profila";
-"nothing_found_empty" = "Žadyn wuslědk";
+"nothing_found_empty" = "Žadyn pytanski wuslědk";
 "res_slope" = "spad";
 "export_profile" = "Profil eksportować";
 "base_profile_descr_public_transport" = "Wše typy zjawneho wobchada";
@@ -1569,3 +1569,11 @@
 "lang_be_by" = "běłorušćina (łaćonsce)";
 "shared_string_import_complete" = "Import dokónčeny";
 "add_description" = "Wopisanje dodać";
+"private_access_routing_req" = "Twój cil leži w priwatnej kónčinje. Za tutu jězbu wužiwanje priwatnych pućow dowolić\?";
+"shared_string_stop" = "Stop";
+"altitude_descent" = "Wotstup";
+"shared_string_start" = "Start";
+"rendering_value_pink_name" = "pink";
+"osm_live_banner_desc" = "Za njewobmjezowane sćehnjenje kartow a aktualizacije husćišo hač jónu wob měsac: tydźensce, wšědnje abo hodźinsce.";
+"map_settings_legend" = "Legenda";
+"altitude_ascent" = "Postup";

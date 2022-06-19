@@ -645,8 +645,6 @@
     double maxSpeed = params.mode.getMaxSpeed;
     if (maxSpeed > 0)
         paramsR[GeneralRouterConstants::MAX_SPEED] = [NSString stringWithFormat:@"%f", maxSpeed].UTF8String;
-    if (!derivedProfile.empty())
-        paramsR["profile_" + derivedProfile] = "true";
     
     float mb = (1 << 20);
     natural_t freeMemory = [OAUtilities get_free_memory];
@@ -655,7 +653,8 @@
     long memoryTotal = (long) ([NSProcessInfo processInfo].physicalMemory / mb);
     NSLog(@"Use %ld MB of %ld MB, free memory: %ld MB", memoryLimit, memoryTotal, (long)(freeMemory / mb));
     
-    auto cf = config->build(params.mode.getRoutingProfile.UTF8String, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : -360, memoryLimit, paramsR);
+    string routingProfile = derivedProfile == "default" ? params.mode.getRoutingProfile.UTF8String : derivedProfile;
+    auto cf = config->build(routingProfile, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : -360, memoryLimit, paramsR);
     if ([OAAppSettings.sharedManager.enableTimeConditionalRouting get:params.mode])
     {
         cf->routeCalculationTime = [[NSDate date] timeIntervalSince1970] * 1000;

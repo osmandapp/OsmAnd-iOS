@@ -197,9 +197,12 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 - (NSString *) getOrderId
 {
-//    InAppPurchaseHelper purchaseHelper = app.getInAppPurchaseHelper();
-//    InAppSubscription purchasedSubscription = purchaseHelper.getAnyPurchasedOsmAndProSubscription();
-//    return purchasedSubscription != null ? purchasedSubscription.getOrderId() : null;
+    OAIAPHelper *iapHelper = OAIAPHelper.sharedInstance;
+    OASubscription *purchasedSubscription = iapHelper.getAnyPurchasedOsmAndProSubscription;
+    if (purchasedSubscription)
+    {
+        return [purchasedSubscription getOrderId];
+    }
     return nil;
 }
 

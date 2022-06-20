@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-NS_ASSUME_NONNULL_BEGIN
+#import "OABackupListeners.h"
 
 #define STATUS_SUCCESS 0
 #define STATUS_PARSE_JSON_ERROR 1
@@ -53,11 +52,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *) getEmail;
 - (BOOL) isRegistered;
 
+- (void) logout;
+- (void) updateOrderId:(id<OAOnUpdateSubscriptionListener>)listener;
+
 - (void) registerUser:(NSString *)email promoCode:(NSString *)promoCode login:(BOOL)login;
 - (void) registerDevice:(NSString *)token;
 
 + (BOOL) isTokenValid:(NSString *)token;
 
 @end
-
-NS_ASSUME_NONNULL_END

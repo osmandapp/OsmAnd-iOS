@@ -391,7 +391,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     [task execute];
 }
 
-- (void) downloadFileList:(id<OAOnDownloadFileListListener>)listener
+- (void) downloadFileList:(void(^)(NSInteger status, NSString *message, NSArray<OARemoteFile *> *remoteFiles))onComplete
 {
     [self checkRegistered];
     
@@ -441,8 +441,8 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             message = @"Download file list error: empty response";
             status = STATUS_EMPTY_RESPONSE_ERROR;
         }
-        if (listener)
-            [listener onDownloadFileList:status message:message remoteFiles:remoteFiles];
+        if (onComplete)
+            onComplete(status, message, remoteFiles);
 //        operationLog.finishOperation(status + " " + message);
     }];
 }

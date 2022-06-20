@@ -9,8 +9,10 @@
 #import "OABackupImporter.h"
 #import "OABackupHelper.h"
 #import "OABackupListeners.h"
+#import "OABackupDbHelper.h"
 #import "OAPrepareBackupResult.h"
 #import "OARemoteFile.h"
+#import "OABackupInfo.h"
 #import "OASettingsItem.h"
 #import "OAFileSettingsItem.h"
 
@@ -18,7 +20,7 @@
 
 @end
 
-@interface OABackupImporter () <OAOnDownloadFileListListener, OAOnDownloadFileListener>
+@interface OABackupImporter () <OAOnDownloadFileListener>
 
 - (void) importItemFile:(OARemoteFile *)remoteFile item:(OASettingsItem *)item forceReadData:(BOOL)forceReadData;
 
@@ -59,8 +61,6 @@
     BOOL _cancelled;
     BOOL _readItems;
     
-    NSMutableString *_error;
-    
     NSOperationQueue *_queue;
     
     NSString *_tmpFilesDir;
@@ -82,21 +82,35 @@
 
 - (OACollectItemsResult *) collectItems:(BOOL)readItems
 {
-//    OACollectItemsResult *result = [[OACollectItemsResult alloc] init];
-//    _error = [NSMutableString string];
+    OACollectItemsResult *result = [[OACollectItemsResult alloc] init];
+    __block NSString *error = nil;
 //    _readItems = readItems;
 ////    OperationLog operationLog = new OperationLog("collectRemoteItems", BackupHelper.DEBUG);
 ////    operationLog.startOperation();
-//    @try {
-//        [_backupHelper downloadFileList:self];
-//    } @catch (NSException *e) {
-//        NSLog(@"Failed to collect items for backup");
-//    }
+    @try {
+        [_backupHelper downloadFileList:^(NSInteger status, NSString * _Nonnull message, NSArray<OARemoteFile *> * _Nonnull remoteFiles) {
+            if (status == STATUS_SUCCESS)
+            {
+                result.remoteFiles = remoteFiles;
+                @try {
+                    result.items = [self getRemoteItems:remoteFiles readItems:_readItems];
+                } @catch (NSException *e) {
+                    error = e.reason;
+                }
+            }
+            else
+            {
+                error = message;
+            }
+        }];
+    } @catch (NSException *e) {
+        NSLog(@"Failed to collect items for backup");
+    }
 ////    operationLog.finishOperation();
-//    if (_error.length > 0)
-//        @throw [NSException exceptionWithName:@"IllegalArgumentException" reason:_error userInfo:nil];
-//    
-//    return result;
+    if (error.length > 0)
+        @throw [NSException exceptionWithName:@"IllegalArgumentException" reason:error userInfo:nil];
+    
+    return result;
 }
 
 - (void) importItems:(NSArray<OASettingsItem *> *)items forceReadData:(BOOL)forceReadData
@@ -164,129 +178,132 @@
 //    item.applyAdditionalParams(reader);
 }
 
-//private List<SettingsItem> getRemoteItems(@NonNull List<RemoteFile> remoteFiles, boolean readItems) throws IllegalArgumentException, IOException {
-//    if (remoteFiles.isEmpty()) {
-//        return Collections.emptyList();
-//    }
-//    List<SettingsItem> items = new ArrayList<>();
-//    try {
+- (NSArray<OASettingsItem *> *) getRemoteItems:(NSArray<OARemoteFile *> *)remoteFiles readItems:(BOOL)readItems
+{
+    if (remoteFiles.count == 0)
+        return @[];
+    NSMutableArray<OASettingsItem *> *items = [NSMutableArray array];
+    @try {
 //        OperationLog operationLog = new OperationLog("getRemoteItems", BackupHelper.DEBUG);
 //        operationLog.startOperation();
-//        JSONObject json = new JSONObject();
-//        JSONArray itemsJson = new JSONArray();
-//        json.put("items", itemsJson);
-//        Map<File, RemoteFile> remoteInfoFilesMap = new HashMap<>();
-//        Map<String, RemoteFile> remoteItemFilesMap = new HashMap<>();
-//        List<RemoteFile> remoteInfoFiles = new ArrayList<>();
-//        Set<String> remoteInfoNames = new HashSet<>();
-//        List<RemoteFile> noInfoRemoteItemFiles = new ArrayList<>();
-//        OsmandApplication app = backupHelper.getApp();
-//        File tempDir = FileUtils.getTempDir(app);
-//
-//        List<RemoteFile> uniqueRemoteFiles = new ArrayList<>();
-//        Set<String> uniqueFileIds = new TreeSet<>();
-//        for (RemoteFile rf : remoteFiles) {
-//            String fileId = rf.getTypeNamePath();
-//            if (uniqueFileIds.add(fileId) && !rf.isDeleted()) {
-//                uniqueRemoteFiles.add(rf);
-//            }
-//        }
+        NSMutableDictionary *json = [NSMutableDictionary dictionary];
+        NSMutableArray *itemsJson = [NSMutableArray array];
+        json[@"items"] = itemsJson;
+        NSMutableDictionary<NSString *, OARemoteFile *> *remoteInfoFilesMap = [NSMutableDictionary dictionary];
+        NSMutableDictionary<NSString *, OARemoteFile *> *remoteItemFilesMap = [NSMutableDictionary dictionary];
+        NSMutableArray<OARemoteFile *> *remoteInfoFiles = [NSMutableArray array];
+        NSMutableSet<NSString *> *remoteInfoNames = [NSMutableSet set];
+        NSMutableArray<OARemoteFile *> *noInfoRemoteItemFiles = [NSMutableArray array];
+
+        NSMutableArray<OARemoteFile *> *uniqueRemoteFiles = [NSMutableArray array];
+        NSMutableOrderedSet<NSString *> *uniqueFileIds = [NSMutableOrderedSet orderedSet];
+        for (OARemoteFile *rf in remoteFiles)
+        {
+            NSString *fileId = rf.getTypeNamePath;
+            if (![uniqueFileIds containsObject:fileId] && !rf.isDeleted)
+            {
+                [uniqueFileIds addObject:fileId];
+                [uniqueRemoteFiles addObject:rf];
+            }
+        }
 //        operationLog.log("build uniqueRemoteFiles");
-//
-//        Map<String, UploadedFileInfo> infoMap = backupHelper.getDbHelper().getUploadedFileInfoMap();
-//        BackupInfo backupInfo = backupHelper.getBackup().getBackupInfo();
-//        List<RemoteFile> filesToDelete = backupInfo != null ? backupInfo.filesToDelete : Collections.emptyList();
-//        for (RemoteFile remoteFile : uniqueRemoteFiles) {
-//            String fileName = remoteFile.getTypeNamePath();
-//            if (fileName.endsWith(INFO_EXT)) {
-//                boolean delete = false;
-//                String origFileName = remoteFile.getName().substring(0, remoteFile.getName().length() - INFO_EXT.length());
-//                for (RemoteFile file : filesToDelete) {
-//                    if (file.getName().equals(origFileName)) {
-//                        delete = true;
-//                        break;
-//                    }
-//                }
-//                UploadedFileInfo fileInfo = infoMap.get(remoteFile.getType() + "___" + origFileName);
-//                long uploadTime = fileInfo != null ? fileInfo.getUploadTime() : 0;
-//                if (readItems && (uploadTime != remoteFile.getClienttimems() || delete)) {
-//                    remoteInfoFilesMap.put(new File(tempDir, fileName), remoteFile);
-//                }
-//                String itemFileName = fileName.substring(0, fileName.length() - INFO_EXT.length());
-//                remoteInfoNames.add(itemFileName);
-//                remoteInfoFiles.add(remoteFile);
-//            } else if (!remoteItemFilesMap.containsKey(fileName)) {
-//                remoteItemFilesMap.put(fileName, remoteFile);
-//            }
-//        }
-//        operationLog.log("build maps");
-//
-//        for (Entry<String, RemoteFile> remoteFileEntry : remoteItemFilesMap.entrySet()) {
-//            String itemFileName = remoteFileEntry.getKey();
-//            RemoteFile remoteFile = remoteFileEntry.getValue();
-//            boolean hasInfo = false;
-//            for (String remoteInfoName : remoteInfoNames) {
-//                if (itemFileName.equals(remoteInfoName) || itemFileName.startsWith(remoteInfoName + "/")) {
-//                    hasInfo = true;
-//                    break;
-//                }
-//            }
-//            if (!hasInfo && !remoteFile.isRecordedVoiceFile()) {
-//                noInfoRemoteItemFiles.add(remoteFile);
-//            }
-//        }
-//        operationLog.log("build noInfoRemoteItemFiles");
-//
-//        if (readItems) {
-//            generateItemsJson(itemsJson, remoteInfoFilesMap, noInfoRemoteItemFiles);
-//        } else {
-//            generateItemsJson(itemsJson, remoteInfoFiles, noInfoRemoteItemFiles);
-//        }
-//        operationLog.log("generateItemsJson");
-//
-//        SettingsItemsFactory itemsFactory = new SettingsItemsFactory(app, json);
-//        operationLog.log("create setting items");
-//        List<SettingsItem> settingsItemList = itemsFactory.getItems();
-//        if (settingsItemList.isEmpty()) {
-//            return Collections.emptyList();
-//        }
-//        updateFilesInfo(remoteItemFilesMap, settingsItemList);
-//        items.addAll(settingsItemList);
-//        operationLog.log("updateFilesInfo");
-//
-//        if (readItems) {
-//            Map<RemoteFile, SettingsItemReader<? extends SettingsItem>> remoteFilesForRead = new HashMap<>();
-//            for (SettingsItem item : settingsItemList) {
-//                if (item.shouldReadOnCollecting()) {
-//                    List<RemoteFile> foundRemoteFiles = getItemRemoteFiles(item, remoteItemFilesMap);
-//                    for (RemoteFile remoteFile : foundRemoteFiles) {
-//                        SettingsItemReader<? extends SettingsItem> reader = item.getReader();
-//                        if (reader != null) {
-//                            remoteFilesForRead.put(remoteFile, reader);
-//                        }
-//                    }
-//                }
-//            }
-//            Map<File, RemoteFile> remoteFilesForDownload = new HashMap<>();
-//            for (RemoteFile remoteFile : remoteFilesForRead.keySet()) {
-//                String fileName = remoteFile.getTypeNamePath();
-//                remoteFilesForDownload.put(new File(tempDir, fileName), remoteFile);
-//            }
-//            if (!remoteFilesForDownload.isEmpty()) {
-//                downloadAndReadItemFiles(remoteFilesForRead, remoteFilesForDownload);
-//            }
-//            operationLog.log("readItems");
-//        }
-//        operationLog.finishOperation();
-//    } catch (IllegalArgumentException e) {
-//        throw new IllegalArgumentException("Error reading items", e);
-//    } catch (JSONException e) {
-//        throw new IllegalArgumentException("Error parsing items", e);
-//    } catch (IOException e) {
-//        throw new IOException(e);
-//    }
-//    return items;
-//}
+
+        NSDictionary<NSString *, OAUploadedFileInfo *> *infoMap = [OABackupDbHelper.sharedDatabase getUploadedFileInfoMap];
+        OABackupInfo *backupInfo = _backupHelper.backup.backupInfo;
+        NSArray<OARemoteFile *> *filesToDelete = backupInfo != nil ? backupInfo.filesToDelete : @[];
+        for (OARemoteFile *remoteFile in uniqueRemoteFiles)
+        {
+            NSString *fileName = remoteFile.getTypeNamePath;
+            if (fileName hasSuffix:OABackupHelper.INFO_EXT)
+            {
+                BOOL delete = NO;
+                NSString *origFileName = remoteFile.getName().substring(0, remoteFile.getName().length() - INFO_EXT.length());
+                for (RemoteFile file : filesToDelete) {
+                    if (file.getName().equals(origFileName)) {
+                        delete = true;
+                        break;
+                    }
+                }
+                UploadedFileInfo fileInfo = infoMap.get(remoteFile.getType() + "___" + origFileName);
+                long uploadTime = fileInfo != null ? fileInfo.getUploadTime() : 0;
+                if (readItems && (uploadTime != remoteFile.getClienttimems() || delete)) {
+                    remoteInfoFilesMap.put(new File(tempDir, fileName), remoteFile);
+                }
+                String itemFileName = fileName.substring(0, fileName.length() - INFO_EXT.length());
+                remoteInfoNames.add(itemFileName);
+                remoteInfoFiles.add(remoteFile);
+            } else if (!remoteItemFilesMap.containsKey(fileName)) {
+                remoteItemFilesMap.put(fileName, remoteFile);
+            }
+        }
+        operationLog.log("build maps");
+
+        for (Entry<String, RemoteFile> remoteFileEntry : remoteItemFilesMap.entrySet()) {
+            String itemFileName = remoteFileEntry.getKey();
+            RemoteFile remoteFile = remoteFileEntry.getValue();
+            boolean hasInfo = false;
+            for (String remoteInfoName : remoteInfoNames) {
+                if (itemFileName.equals(remoteInfoName) || itemFileName.startsWith(remoteInfoName + "/")) {
+                    hasInfo = true;
+                    break;
+                }
+            }
+            if (!hasInfo && !remoteFile.isRecordedVoiceFile()) {
+                noInfoRemoteItemFiles.add(remoteFile);
+            }
+        }
+        operationLog.log("build noInfoRemoteItemFiles");
+
+        if (readItems) {
+            generateItemsJson(itemsJson, remoteInfoFilesMap, noInfoRemoteItemFiles);
+        } else {
+            generateItemsJson(itemsJson, remoteInfoFiles, noInfoRemoteItemFiles);
+        }
+        operationLog.log("generateItemsJson");
+
+        SettingsItemsFactory itemsFactory = new SettingsItemsFactory(app, json);
+        operationLog.log("create setting items");
+        List<SettingsItem> settingsItemList = itemsFactory.getItems();
+        if (settingsItemList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        updateFilesInfo(remoteItemFilesMap, settingsItemList);
+        items.addAll(settingsItemList);
+        operationLog.log("updateFilesInfo");
+
+        if (readItems) {
+            Map<RemoteFile, SettingsItemReader<? extends SettingsItem>> remoteFilesForRead = new HashMap<>();
+            for (SettingsItem item : settingsItemList) {
+                if (item.shouldReadOnCollecting()) {
+                    List<RemoteFile> foundRemoteFiles = getItemRemoteFiles(item, remoteItemFilesMap);
+                    for (RemoteFile remoteFile : foundRemoteFiles) {
+                        SettingsItemReader<? extends SettingsItem> reader = item.getReader();
+                        if (reader != null) {
+                            remoteFilesForRead.put(remoteFile, reader);
+                        }
+                    }
+                }
+            }
+            Map<File, RemoteFile> remoteFilesForDownload = new HashMap<>();
+            for (RemoteFile remoteFile : remoteFilesForRead.keySet()) {
+                String fileName = remoteFile.getTypeNamePath();
+                remoteFilesForDownload.put(new File(tempDir, fileName), remoteFile);
+            }
+            if (!remoteFilesForDownload.isEmpty()) {
+                downloadAndReadItemFiles(remoteFilesForRead, remoteFilesForDownload);
+            }
+            operationLog.log("readItems");
+        }
+        operationLog.finishOperation();
+    } catch (IllegalArgumentException e) {
+        throw new IllegalArgumentException("Error reading items", e);
+    } catch (JSONException e) {
+        throw new IllegalArgumentException("Error parsing items", e);
+    } catch (IOException e) {
+        throw new IOException(e);
+    }
+    return items;
+}
 //
 //@NonNull
 //private List<RemoteFile> getItemRemoteFiles(@NonNull SettingsItem item, @NonNull Map<String, RemoteFile> remoteFiles) {
@@ -561,24 +578,12 @@
 //    };
 //}
 //
-//// MARK: OAOnDownloadFileListListener
-//
-//- (void) onDownloadFileList:(NSInteger)status message:(NSString *)message remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles
-//{
-//    if (status == STATUS_SUCCESS)
-//    {
-//        _result.remoteFiles = remoteFiles;
-//        @try {
-//            result.items = [self getRemoteItems:remoteFiles readItems:_readItems];
-//        } @catch (NSException *e) {
-//            [_error appendString:e.message];
-//        }
-//    }
-//    else
-//    {
-//        [error appendString:message];
-//    }
-//}
+// MARK: OAOnDownloadFileListListener
+
+- (void) onDownloadFileList:(NSInteger)status message:(NSString *)message remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles
+{
+    
+}
 
 // MARK: OAOnDownloadFileListener
 

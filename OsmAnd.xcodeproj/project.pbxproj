@@ -1373,6 +1373,7 @@
 		DA04D778284F86060097CAED /* ic_custom_zero_downloads_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D772284F86050097CAED /* ic_custom_zero_downloads_big@2x.png */; };
 		DA04D779284F86060097CAED /* ic_custom_five_downloads_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D773284F86050097CAED /* ic_custom_five_downloads_big@3x.png */; };
 		DA04D77A284F86060097CAED /* ic_custom_five_downloads_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D774284F86060097CAED /* ic_custom_five_downloads_big@2x.png */; };
+		DA05A6A3285B3DCE00D0AFAB /* OABackupExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */; };
 		DA08A0D2227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
 		DA0C2BDD27EF4B3800B7CC4F /* OAPrepareBackupTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */; };
 		DA0C641821245B4500B2A350 /* et_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641721245B4400B2A350 /* et_tts.js */; };
@@ -4714,6 +4715,8 @@
 		DA04D772284F86050097CAED /* ic_custom_zero_downloads_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_zero_downloads_big@2x.png"; path = "Resources/Icons/ic_custom_zero_downloads_big@2x.png"; sourceTree = "<group>"; };
 		DA04D773284F86050097CAED /* ic_custom_five_downloads_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_five_downloads_big@3x.png"; path = "Resources/Icons/ic_custom_five_downloads_big@3x.png"; sourceTree = "<group>"; };
 		DA04D774284F86060097CAED /* ic_custom_five_downloads_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_five_downloads_big@2x.png"; path = "Resources/Icons/ic_custom_five_downloads_big@2x.png"; sourceTree = "<group>"; };
+		DA05A6A1285B3DCE00D0AFAB /* OABackupExporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupExporter.h; sourceTree = "<group>"; };
+		DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABackupExporter.m; sourceTree = "<group>"; };
 		DA08A0D1227096DA000A53BA /* offroad.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = offroad.render.xml; path = ../resources/rendering_styles/offroad.render.xml; sourceTree = "<group>"; };
 		DA0C2BDB27EF4B3800B7CC4F /* OAPrepareBackupTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPrepareBackupTask.h; sourceTree = "<group>"; };
 		DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPrepareBackupTask.m; sourceTree = "<group>"; };
@@ -12848,6 +12851,8 @@
 				DAAC0EBC2801807200867D35 /* OAImportBackupTask.m */,
 				DAAC0EC12801885800867D35 /* OABackupImporter.h */,
 				DAAC0EC22801885800867D35 /* OABackupImporter.m */,
+				DA05A6A1285B3DCE00D0AFAB /* OABackupExporter.h */,
+				DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */,
 			);
 			path = Backup;
 			sourceTree = "<group>";
@@ -15924,6 +15929,7 @@
 				DA5A823926C563A700F274C7 /* OAOsmAccountSettingsViewController.m in Sources */,
 				DA5A815C26C563A700F274C7 /* OAPlugin.mm in Sources */,
 				DA5A812426C563A700F274C7 /* OATransportStopRoute.mm in Sources */,
+				DA05A6A3285B3DCE00D0AFAB /* OABackupExporter.m in Sources */,
 				32119B502847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm in Sources */,
 				DA5A821E26C563A700F274C7 /* OAProfileSettingsItem.mm in Sources */,
 				DA5A831526C563A800F274C7 /* OADeleteButtonTableViewCell.m in Sources */,

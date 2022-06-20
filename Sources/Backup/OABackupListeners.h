@@ -41,12 +41,6 @@
 
 @end
 
-@protocol OAOnDownloadFileListListener <NSObject>
-
-- (void) onDownloadFileList:(NSInteger)status message:(NSString *)message remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles;
-
-@end
-
 @protocol OAOnCollectLocalFilesListener <NSObject>
 
 - (void) onFileCollected:(OALocalFile *)localFile;

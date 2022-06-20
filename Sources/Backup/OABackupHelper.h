@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) logout;
 
 - (void) collectLocalFiles:(id<OAOnCollectLocalFilesListener>)listener;
-- (void) downloadFileList:(id<OAOnDownloadFileListListener>)listener;
+- (void) downloadFileList:(void(^)(NSInteger status, NSString *message, NSArray<OARemoteFile *> *remoteFiles))onComplete;
 
 + (BOOL) isTokenValid:(NSString *)token;
 

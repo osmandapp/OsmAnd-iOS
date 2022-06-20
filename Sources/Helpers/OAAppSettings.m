@@ -4016,7 +4016,7 @@
         _backupPurchaseActive = [[OACommonBoolean withKey:backupPurchaseActiveKey defValue:NO] makeGlobal];
         _backupPurchaseStartTime = [[OACommonLong withKey:backupPurchaseStartTimeKey defValue:0] makeGlobal];
         _backupPurchaseExpireTime = [[OACommonLong withKey:backupPurchaseExpireTimeKey defValue:0] makeGlobal];
-        _backupPurchaseState = [[OACommonSubscriptionState withKey:backupPurchaseStateKey defValue:0] makeGlobal];
+        _backupPurchaseState = [[OACommonSubscriptionState withKey:backupPurchaseStateKey defValue:OASubscriptionState.UNDEFINED] makeGlobal];
         _proSubscriptionOrigin = [[OACommonInteger withKey:proSubscriptionOriginKey defValue:-1] makeGlobal];
         
         [_globalPreferences setObject:_backupPromocode forKey:@"backup_promocode"];

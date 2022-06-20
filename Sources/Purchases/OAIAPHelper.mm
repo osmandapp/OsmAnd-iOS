@@ -1440,7 +1440,7 @@ static OASubscriptionState *EXPIRED;
     return subscriptions.count == 0 ? lastReceiptValidationTimeInterval > kReceiptValidationMaxPeriod : NO;
 }
 
-- (BOOL) needRequestBackupPurhcase
+- (BOOL) needRequestBackupPurchase
 {
     return !_backupPurchaseRequested || NSDate.date.timeIntervalSince1970 - _lastBackupPurchaseCheckTime > PURCHASE_VALIDATION_PERIOD_SEC;
 }
@@ -1761,10 +1761,6 @@ static OASubscriptionState *EXPIRED;
         };
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/userdata/user-validate-sub" params:params post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            if (data)
-            {
-                NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-            }
             if (((NSHTTPURLResponse *)response).statusCode == 200 && data)
             {
                 NSError *jsonParsingError = nil;
@@ -1799,7 +1795,7 @@ static OASubscriptionState *EXPIRED;
 
 - (void) checkBackupPurchaseIfNeeded
 {
-    if ([self needRequestBackupPurhcase])
+    if ([self needRequestBackupPurchase])
     {
         [self checkBackupPurchase];
     }

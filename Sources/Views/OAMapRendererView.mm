@@ -280,9 +280,24 @@
     return _renderer->getMapState().metersPerPixel;
 }
 
+- (double) normalizeElevationAngle:(double)elevationAngle
+{
+    int verticalTilesCount = round(UIScreen.mainScreen.bounds.size.height * self.viewportYScale * self.displayDensityFactor / 256.0);
+    if (verticalTilesCount < 6)
+        return MAX(30.0, elevationAngle);
+    else if (verticalTilesCount < 8)
+        return MAX(36.0, elevationAngle);
+    else if (verticalTilesCount < 9)
+        return MAX(40.0, elevationAngle);
+    else if (verticalTilesCount < 11)
+        return MAX(42.0, elevationAngle);
+    else
+        return MAX(48.0, elevationAngle);
+}
+
 - (void)setElevationAngle:(float)elevationAngle
 {
-    _renderer->setElevationAngle(elevationAngle);
+    _renderer->setElevationAngle([self normalizeElevationAngle:elevationAngle]);
 }
 
 - (OsmAnd::PointI)target31
@@ -465,7 +480,7 @@
     return nil;
 }
 
-- (void)dumpResourcesInfo
+- (void) dumpResourcesInfo
 {
     _renderer->dumpResourcesInfo();
 }
@@ -609,6 +624,9 @@
     if (!CGRectIsEmpty(self.bounds))
         prevBounds = self.bounds;
     
+    // Normalize elevation angle
+    [self setElevationAngle:self.elevationAngle];
+    
     OALog(@"[OAMapRendererView %p] Recreating OpenGLES2 frame and render buffers due to resize", self);
 
     // Kill buffers, since window was resized
@@ -627,6 +645,9 @@
 {
     _viewportYScale = viewportYScale;
     
+    // Normalize elevation angle
+    [self setElevationAngle:self.elevationAngle];
+
     // Kill buffers, since viewport was resized
     [self releaseRenderAndFrameBuffers];
 }

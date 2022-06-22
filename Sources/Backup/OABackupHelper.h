@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "OABackupListeners.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
 #define STATUS_SUCCESS 0
 #define STATUS_PARSE_JSON_ERROR 1
 #define STATUS_EMPTY_RESPONSE_ERROR 2
@@ -57,16 +55,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *) getEmail;
 - (BOOL) isRegistered;
 
+- (void) logout;
+- (void) updateOrderId:(id<OAOnUpdateSubscriptionListener>)listener;
+
 - (void) registerUser:(NSString *)email promoCode:(NSString *)promoCode login:(BOOL)login;
 - (void) registerDevice:(NSString *)token;
 
-- (void) logout;
 
 - (void) collectLocalFiles:(id<OAOnCollectLocalFilesListener>)listener;
 - (void) downloadFileList:(void(^)(NSInteger status, NSString *message, NSArray<OARemoteFile *> *remoteFiles))onComplete;
+- (NSString *)downloadFile:(NSString *)filePath
+                remoteFile:(OARemoteFile *)remoteFile
+                  listener:(id<OAOnDownloadFileListener>)listener;
 
 + (BOOL) isTokenValid:(NSString *)token;
 
 @end
-
-NS_ASSUME_NONNULL_END

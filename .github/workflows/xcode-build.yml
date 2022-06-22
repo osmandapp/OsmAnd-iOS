@@ -1,4 +1,4 @@
-name: Build OsmAn,dMaps
+name: Build OsmAndMaps
 # on:
 #  push:
 #    branches: [ master ]

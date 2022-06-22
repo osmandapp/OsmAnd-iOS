@@ -37,6 +37,8 @@
 - (void) main
 {
     OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
+    if (_token.length == 0)
+        [backupHelper updateOrderId:nil];
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"email"] = backupHelper.getEmail;
     NSString *orderId = backupHelper.getOrderId;

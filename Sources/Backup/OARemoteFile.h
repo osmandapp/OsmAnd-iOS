@@ -35,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) isInfoFile;
 - (BOOL) isDeleted;
 
+- (BOOL) isRecordedVoiceFile;
+
 @end
 
 NS_ASSUME_NONNULL_END

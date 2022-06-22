@@ -65,6 +65,8 @@ FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeEmptyJson;
 
 typedef NS_ENUM(NSInteger, EOAImportType) {
     EOAImportTypeCollect = 0,
+    EOAImportTypeCollectAndRead,
+    EOAImportTypeImportForceRead,
     EOAImportTypeCheckDuplicates,
     EOAImportTypeImport
 };

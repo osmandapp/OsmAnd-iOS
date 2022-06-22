@@ -29,6 +29,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OABackupImporter : NSObject
 
+- (instancetype) initWithListener:(id<OANetworkImportProgressListener>)listener;
+
+@property (nonatomic, assign) BOOL cancelled;
+
+- (void) importItems:(NSArray<OASettingsItem *> *)items forceReadData:(BOOL)forceReadData;
+
 @end
 
 @interface OAItemFileImportTask : NSOperation

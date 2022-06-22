@@ -22,6 +22,7 @@
 #import "OABackupError.h"
 #import "OABackupDbHelper.h"
 #import "OACollectLocalFilesTask.h"
+#import "OAWebClient.h"
 
 #import "OARegisterUserCommand.h"
 #import "OARegisterDeviceCommand.h"
@@ -199,9 +200,12 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 - (NSString *) getOrderId
 {
-//    InAppPurchaseHelper purchaseHelper = app.getInAppPurchaseHelper();
-//    InAppSubscription purchasedSubscription = purchaseHelper.getAnyPurchasedOsmAndProSubscription();
-//    return purchasedSubscription != null ? purchasedSubscription.getOrderId() : null;
+    OAIAPHelper *iapHelper = OAIAPHelper.sharedInstance;
+    OASubscription *purchasedSubscription = iapHelper.getAnyPurchasedOsmAndProSubscription;
+    if (purchasedSubscription)
+    {
+        return [purchasedSubscription getOrderId];
+    }
     return nil;
 }
 
@@ -445,6 +449,78 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             onComplete(status, message, remoteFiles);
 //        operationLog.finishOperation(status + " " + message);
     }];
+}
+
+- (NSString *)downloadFile:(NSString *)filePath
+                remoteFile:(OARemoteFile *)remoteFile
+                  listener:(id<OAOnDownloadFileListener>)listener
+{
+    [self checkRegistered];
+    
+//    OperationLog operationLog = new OperationLog("downloadFile " + file.getName(), DEBUG);
+    NSString *error;
+    NSString *type = remoteFile.type;
+    NSString *fileName = remoteFile.name;
+    
+    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+    NSString *deviceId = [self getDeviceId];
+    if (deviceId)
+        params[@"deviceid"] = deviceId;
+    params[@"accessToken"] = [self getAccessToken];
+    params[@"name"] = fileName;
+    params[@"type"] = type;
+    NSMutableString *sb = [NSMutableString stringWithString:DOWNLOAD_FILE_URL];
+    __block BOOL firstParam = YES;
+    [params enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        [sb appendString:[NSString stringWithFormat:@"%@%@=%@", firstParam ? @"?" : @"&", key, [obj stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
+        firstParam = NO;
+    }];
+    
+    const auto webClient = std::make_shared<OAWebClient>();
+    bool sucseess = webClient->downloadFile(QString::fromNSString(sb), QString::fromNSString(filePath));
+    if (!sucseess)
+        error = [NSString stringWithFormat:@"Could not download remote file:%@", fileName];
+    
+//    IProgress progress = new AbstractProgress() {
+//
+//        private int work = 0;
+//        private int progress = 0;
+//        private int deltaProgress = 0;
+//
+//        @Override
+//        public void startWork(int work) {
+//            if (listener != null) {
+//                this.work = work > 0 ? work : 1;
+//                listener.onFileDownloadStarted(type, fileName, work);
+//            }
+//        }
+//
+//        @Override
+//        public void progress(int deltaWork) {
+//            if (listener != null) {
+//                deltaProgress += deltaWork;
+//                if ((deltaProgress > (work / 100)) || ((progress + deltaProgress) >= work)) {
+//                    progress += deltaProgress;
+//                    listener.onFileDownloadProgress(type, fileName, progress, deltaProgress);
+//                    deltaProgress = 0;
+//                }
+//            }
+//        }
+//
+//        @Override
+//        public boolean isInterrupted() {
+//            if (listener != null) {
+//                return listener.isDownloadCancelled();
+//            }
+//            return super.isInterrupted();
+//        }
+//    };
+//    progress.startWork((int) (remoteFile.getFilesize() / 1024));
+    
+    if (listener)
+        [listener onFileDownloadDone:type fileName:fileName error:error];
+    //    operationLog.finishOperation();
+    return error;
 }
 
 @end

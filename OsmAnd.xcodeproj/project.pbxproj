@@ -1375,6 +1375,7 @@
 		DA04D77A284F86060097CAED /* ic_custom_five_downloads_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D774284F86060097CAED /* ic_custom_five_downloads_big@2x.png */; };
 		DA05A6A3285B3DCE00D0AFAB /* OABackupExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */; };
 		DA08A0D2227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
+		DA0BAC732851F25000AFA550 /* OACheckBackupSubscriptionTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0BAC722851F25000AFA550 /* OACheckBackupSubscriptionTask.m */; };
 		DA0C2BDD27EF4B3800B7CC4F /* OAPrepareBackupTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */; };
 		DA0C641821245B4500B2A350 /* et_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641721245B4400B2A350 /* et_tts.js */; };
 		DA0C641B21245B6600B2A350 /* fa_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641A21245B6600B2A350 /* fa_tts.js */; };
@@ -1434,6 +1435,7 @@
 		DA0D1644281BEEF500CEEF58 /* map_turn_right_dark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0D160E281BEEF400CEEF58 /* map_turn_right_dark@3x.png */; };
 		DA0D1645281BEEF500CEEF58 /* map_turn_sharp_right_dark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0D160F281BEEF400CEEF58 /* map_turn_sharp_right_dark@3x.png */; };
 		DA0D1646281BEEF500CEEF58 /* map_turn_uturn_right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0D1610281BEEF400CEEF58 /* map_turn_uturn_right@3x.png */; };
+		DA12757E28631154007E2A0D /* OAImportBackupItemsTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA12757D28631154007E2A0D /* OAImportBackupItemsTask.m */; };
 		DA1340B0243DC5A70039D214 /* map_action_taxi@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA133FFF243DC5A50039D214 /* map_action_taxi@3x.png */; };
 		DA1340B2243DC5A70039D214 /* ic_action_skiing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA134000243DC5A50039D214 /* ic_action_skiing@3x.png */; };
 		DA1340B6243DC5A70039D214 /* map_action_car_dark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA134002243DC5A50039D214 /* map_action_car_dark@3x.png */; };
@@ -3584,6 +3586,7 @@
 		3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAGPXListDeletingBottomSheet.m; sourceTree = "<group>"; };
 		3242A46D26CB0F05001CA174 /* OACollapsableNearestPoiTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableNearestPoiTypeView.h; sourceTree = "<group>"; };
 		3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableNearestPoiTypeView.mm; sourceTree = "<group>"; };
+		3249BFBE285CC2D200FFEF42 /* ckb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ckb; path = ckb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		325B69FB26D828DC00D8B67C /* OAQuickSearchCoordinatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinatesViewController.h; sourceTree = "<group>"; };
 		325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchCoordinatesViewController.mm; sourceTree = "<group>"; };
 		325B69FE26D8FE4500D8B67C /* OACoodinateSearchCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACoodinateSearchCell.xib; sourceTree = "<group>"; };
@@ -4718,6 +4721,8 @@
 		DA05A6A1285B3DCE00D0AFAB /* OABackupExporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupExporter.h; sourceTree = "<group>"; };
 		DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABackupExporter.m; sourceTree = "<group>"; };
 		DA08A0D1227096DA000A53BA /* offroad.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = offroad.render.xml; path = ../resources/rendering_styles/offroad.render.xml; sourceTree = "<group>"; };
+		DA0BAC712851F25000AFA550 /* OACheckBackupSubscriptionTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACheckBackupSubscriptionTask.h; sourceTree = "<group>"; };
+		DA0BAC722851F25000AFA550 /* OACheckBackupSubscriptionTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACheckBackupSubscriptionTask.m; sourceTree = "<group>"; };
 		DA0C2BDB27EF4B3800B7CC4F /* OAPrepareBackupTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPrepareBackupTask.h; sourceTree = "<group>"; };
 		DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPrepareBackupTask.m; sourceTree = "<group>"; };
 		DA0C641721245B4400B2A350 /* et_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = et_tts.js; path = ../resources/voice/et/et_tts.js; sourceTree = "<group>"; };
@@ -4778,6 +4783,8 @@
 		DA0D160E281BEEF400CEEF58 /* map_turn_right_dark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_turn_right_dark@3x.png"; sourceTree = "<group>"; };
 		DA0D160F281BEEF400CEEF58 /* map_turn_sharp_right_dark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_turn_sharp_right_dark@3x.png"; sourceTree = "<group>"; };
 		DA0D1610281BEEF400CEEF58 /* map_turn_uturn_right@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_turn_uturn_right@3x.png"; sourceTree = "<group>"; };
+		DA12757C28631154007E2A0D /* OAImportBackupItemsTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAImportBackupItemsTask.h; sourceTree = "<group>"; };
+		DA12757D28631154007E2A0D /* OAImportBackupItemsTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAImportBackupItemsTask.m; sourceTree = "<group>"; };
 		DA133FFF243DC5A50039D214 /* map_action_taxi@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_action_taxi@3x.png"; sourceTree = "<group>"; };
 		DA134000243DC5A50039D214 /* ic_action_skiing@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_skiing@3x.png"; sourceTree = "<group>"; };
 		DA134002243DC5A50039D214 /* map_action_car_dark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_action_car_dark@3x.png"; sourceTree = "<group>"; };
@@ -9723,6 +9730,8 @@
 				DA5A790626C5639F00F274C7 /* OAIAPHelper.mm */,
 				DA5A790426C5639F00F274C7 /* OAProducts.h */,
 				DA5A790126C5639F00F274C7 /* OAProducts.mm */,
+				DA0BAC712851F25000AFA550 /* OACheckBackupSubscriptionTask.h */,
+				DA0BAC722851F25000AFA550 /* OACheckBackupSubscriptionTask.m */,
 			);
 			path = Purchases;
 			sourceTree = "<group>";
@@ -12853,6 +12862,8 @@
 				DAAC0EC22801885800867D35 /* OABackupImporter.m */,
 				DA05A6A1285B3DCE00D0AFAB /* OABackupExporter.h */,
 				DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */,
+				DA12757C28631154007E2A0D /* OAImportBackupItemsTask.h */,
+				DA12757D28631154007E2A0D /* OAImportBackupItemsTask.m */,
 			);
 			path = Backup;
 			sourceTree = "<group>";
@@ -12995,6 +13006,7 @@
 				ta,
 				vi,
 				cy,
+				ckb,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -15479,6 +15491,7 @@
 				DA5A835026C563A800F274C7 /* OADownloadInfoTableViewCell.m in Sources */,
 				DA5A82FD26C563A800F274C7 /* OAProgressTitleCell.m in Sources */,
 				DA5A845126C563A900F274C7 /* OAMyPositionLayer.mm in Sources */,
+				DA0BAC732851F25000AFA550 /* OACheckBackupSubscriptionTask.m in Sources */,
 				DA5A834526C563A800F274C7 /* OAIconTextDescButtonCell.m in Sources */,
 				DA5A824126C563A700F274C7 /* OACoordinatesFormatViewController.m in Sources */,
 				DA5A813726C563A700F274C7 /* OAOsmPoint.m in Sources */,
@@ -15552,6 +15565,7 @@
 				DA5A844D26C563A900F274C7 /* OAMapViewController.mm in Sources */,
 				DA5A844326C563A900F274C7 /* OAMapillaryImageViewController.mm in Sources */,
 				DA5A844B26C563A900F274C7 /* OADestinationsHelper.mm in Sources */,
+				DA12757E28631154007E2A0D /* OAImportBackupItemsTask.m in Sources */,
 				DA5A840026C563A800F274C7 /* OAQuickSearchMoreListItem.mm in Sources */,
 				DA5A819D26C563A700F274C7 /* OASwitchProfileAction.m in Sources */,
 				DA5A82FE26C563A800F274C7 /* OATextInputFloatingCell.mm in Sources */,
@@ -16275,6 +16289,7 @@
 				32113577275424DC0050242B /* ta */,
 				32113578275425870050242B /* vi */,
 				32113579275426020050242B /* cy */,
+				3249BFBE285CC2D200FFEF42 /* ckb */,
 			);
 			name = Localizable.strings;
 			path = Resources/Localizations;

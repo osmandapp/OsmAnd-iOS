@@ -708,7 +708,7 @@
 "m_style_car" = "കാര്‍";
 "m_style_walk" = "കാല്‍നടയാത്ര";
 "m_style_bicycle" = "സൈക്ളിങ്ങ്";
-"m_style_pulic_transport" = "പൊതു ഗതാഗതം";
+"m_style_pulic_transport" = "പൊതു ഗതാഗത സംവിധാനം";
 
 "map_settings_map" = "ഭൂപടം";
 "layer_amenity_label" = "ബിന്ദുവിന്റെ പേരുചീട്ട്";
@@ -1146,7 +1146,7 @@
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "പ്രാദേശികം";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "\"പരിഷ്കരണങ്ങള്‍ \"";
+"osmand_live_updates" = "\"തത്സമയ പരിഷ്കരണങ്ങള്‍ \"";
 "osmand_live_available_maps" = "ലഭ്യമായ ഭൂപടങ്ങള്‍";
 "osmand_live_last_changed" = "Last map change: %@";
 "osmand_live_last_live_update" = "\"അവസാന പരിഷ്ക്കരണം : %@\"";
@@ -1267,7 +1267,7 @@
 
 "osm_note" = "\"ഓഎസ്എം കുറിപ്പ് \"";
 "osm_created" = "Created";
-"osm_deleted" = "\"നീക്കം ചെയ്തത് \"";
+"osm_deleted" = "താല്‍പര്യ ബിന്ദു (പിഓഐ) വിജയകരമായി നീക്കം ചെയ്തിരിക്കുന്നു";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1569,7 +1569,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "മാപ്പ് ലെജൻഡ്";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "മറ്റുളളവ";
+"help_other_header" = "മറ്റുളള സ്ഥലങ്ങള്‍";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "ഇന്‍സ്റ്റലേഷനും പ്രശ്നപരിഹാരവും";
 "help_tech_articles" = "സാങ്കേതിക ലേഖനങ്ങള്‍";
@@ -2060,8 +2060,8 @@
 "unlimited_downloads" = "\"പരിധിയില്ലാത്ത  ഡൌണ്‍ലോഡുകള്‍\"";
 "wikipedia_offline" = "ഓഫ്‌ലൈന്‍ വിക്കിപീഡിയ";
 "contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
-"monthly_map_updates" = "Map updates: every month";
-"daily_map_updates" = "Map updates: every hour";
+"monthly_map_updates" = "മാപ്പ് അപ്ഡേറ്റുകൾ: എല്ലാ മാസവും every month";
+"daily_map_updates" = "മാപ്പ് അപ്ഡേറ്റുകൾ: ഓരോ മണിക്കൂറും every hour";
 "index_item_depth_contours_osmand_ext" = "നോട്ടിക്കൽ ഡെപ്ത് കോണ്ടൂറുകള്‍";
 "donation_to_osm" = "Donation to OpenStreetMap community";
 "purchase_unlim_title" = "വാങ്ങാം - %@";
@@ -2489,3 +2489,17 @@
 "login_error_email_invalid" = "ദയവായി ഈ-മെയില്‍ വിലാസം തരുക";
 "points_delete_multiple" = "നിങ്ങൾ %d പോയിന്റ് (കൾ) ഇല്ലാതാക്കാൻ പോകുന്നു. ഉറപ്പാണോ\?";
 "shared_string_any" = "ഏതെങ്കിലും";
+"shared_string_capacity" = "അളവ്(വ്യാപ്തി)";
+"shared_string_stop" = "നിര്‍ത്തുക";
+"osm_live_banner_desc" = "പരിധിയില്ലാത്ത ഭൂപട ഡൗണ്‍ലോഡുകളും മണിക്കൂര്‍, ദിന, വാര അപ്ഡേറ്റുകളും നേടു.";
+"toast_empty_name_error" = "പേരില്ലാത്ത സ്ഥലം";
+"share_geo" = "ഭൗമമായ(geo):";
+"private_access_routing_req" = "നിങ്ങളുടെ ലക്ഷ്യസ്ഥാനം പൊതുസ്ഥലമല്ല. ഈ യാത്രയില്‍ സ്വകാര്യ വഴികളില്‍ പ്രവേശിക്കാമോ\?";
+"units_cubic_m" = "m³";
+"product_title_development" = "ഓഎസ്എം ആന്റ് വികസനം";
+"shared_string_start" = "തുടക്കം";
+"altitude_ascent" = "കയറ്റം";
+"restore_purchases" = "വാങ്ങലുകൾ പുനഃസ്ഥാപിക്കുക";
+"product_desc_ext_development" = "\"റൂട്ടിംഗ്, സ്ക്രീൻ റെൻഡറിംഗ് പ്രകടനം, അല്ലെങ്കിൽ വോയ്സ് പ്രോംപ്റ്റിംഗ് എന്നിവ പരിശോധിക്കുന്നതിനോ മെച്ചപ്പെടുത്തുന്നതിനോ ഉള്ള ഡെവലപ്മെന്റ്, ഡീബഗ്ഗിംഗ് ഫീച്ചറുകൾക്കായുള്ള ക്രമീകരണങ്ങള്‍ കാണിക്കുന്ന പ്ലഗിൻ  . ഈ ക്രമീകരണങ്ങൾ ഡെവലപ്പർമാർക്ക് ഉദ്ദേശിച്ചതും പൊതു ഉപയോക്താവിനായി ആവശ്യമില്ലാത്തതുമാണ്.\"";
+"altitude_descent" = "ഇറക്കം";
+"subscriptions" = "സബ്സ്ക്രിപ്ഷനുകള്‍";

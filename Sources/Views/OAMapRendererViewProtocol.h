@@ -40,7 +40,9 @@
 
 @property(readonly) OAObservable* framePreparedObservable;
 
+- (double) normalizeElevationAngle:(double)elevationAngle;
+
 // Utilities:
-- (void)dumpResourcesInfo;
+- (void) dumpResourcesInfo;
 
 @end

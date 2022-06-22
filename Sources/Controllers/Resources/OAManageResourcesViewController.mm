@@ -186,7 +186,8 @@ static QHash< OAWorldRegion *__weak, RegionResources > _resourcesByRegions;
 
 static NSMutableArray *_searchableWorldwideRegionItems;
 
-static BOOL _lackOfResources;
+static BOOL _lackOfResources = NO;
+static BOOL _repositoryUpdated = NO;
 
 + (NSArray<NSString *> *)getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region
 {
@@ -381,7 +382,11 @@ static BOOL _lackOfResources;
         if (!_app.isRepositoryUpdating &&
             [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && self.region == _app.worldRegion && _currentScope != kLocalResourcesScope)
         {
-            [self updateRepository];
+            if (!_repositoryUpdated)
+            {
+                _repositoryUpdated = YES;
+                [self updateRepository];
+            }
         }
         else if (self.region == _app.worldRegion &&
                  [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
@@ -788,6 +793,7 @@ static BOOL _lackOfResources;
         _resourcesByRegions.insert(region, regionResources);
     }
 }
+
 - (void) collectSubregionsDataAndItems
 {
     _srtmDisabled = _iapHelper.srtm.disabled;
@@ -1614,9 +1620,10 @@ static BOOL _lackOfResources;
                                 [_app loadWorldRegions];
                                 self.region = _app.worldRegion;                                
                                 [_app startRepositoryUpdateAsync:NO];
+                                [_app.worldRegion buildResourceGroupItem];
                             }
                                 completionBlock:^{
-                                    [_app.worldRegion buildResourceGroupItem];
+                                    [self updateContent];
                                     _updateButton.enabled = YES;
                                     if (self.openFromSplash)
                                         [self onSearchBtnClicked:nil];

@@ -218,24 +218,29 @@
 {
     self = [super init];
     if (self) {
-        _app = [OsmAndApp instance];
-        _items = [NSMutableArray new];
+        [self commonItit];
         [self collectItems:jsonStr];
     }
     return self;
 }
 
-- (void) collectItems:(NSString *)jsonStr
+- (instancetype) initWithParsedJSON:(NSDictionary *)json
 {
-    NSError *jsonError;
-    NSData* jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&jsonError];
-    if (jsonError)
-    {
-        NSLog(@"Error reading json");
-        return;
+    self = [super init];
+    if (self) {
+        [self commonItit];
+        [self collectItemsFromDictioanry:json];
     }
-    
+    return self;
+}
+
+- (void) commonItit
+{
+    _app = [OsmAndApp instance];
+    _items = [NSMutableArray new];
+}
+
+- (void)collectItemsFromDictioanry:(NSDictionary *)json {
     NSArray* itemsJson = json[@"items"];
     NSInteger version = json[@"version"] ? [json[@"version"] integerValue] : 1;
     if (version > kVersion)
@@ -243,7 +248,7 @@
         NSLog(@"Error: unsupported version");
         return;
     }
-
+    
     NSMutableDictionary<NSString *, NSMutableArray<OASettingsItem *> *> *pluginItems = [NSMutableDictionary new];
     for (NSDictionary* itemJSON in itemsJson)
     {
@@ -253,7 +258,7 @@
             OASettingsItem *item = [self createItem:itemJSON];
             if (item)
                 [_items addObject:item];
-
+            
             NSString *pluginId = item.pluginId;
             if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
             {
@@ -285,6 +290,20 @@
                 pluginSettingsItem.pluginDependentItems = [pluginSettingsItem.pluginDependentItems arrayByAddingObjectsFromArray:pluginDependentItems];
         }
     }
+}
+
+- (void) collectItems:(NSString *)jsonStr
+{
+    NSError *jsonError;
+    NSData* jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&jsonError];
+    if (jsonError)
+    {
+        NSLog(@"Error reading json");
+        return;
+    }
+    
+    [self collectItemsFromDictioanry:json];
 }
 
 - (NSArray<OASettingsItem *> *) getItems

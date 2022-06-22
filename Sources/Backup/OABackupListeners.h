@@ -73,7 +73,7 @@
     
 - (void) onFileDownloadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork itemFileName:(NSString *)itemFileName;
     
-- (void) onFileDownloadDone:(NSString *)type fileName:(NSString *)fileName error:(NSString *)error itemFileName:(NSString *)itemFileName;
+- (void) onFileDownloadDone:(NSString *)type fileName:(NSString *)fileName error:(NSString *)error;
     
 - (BOOL) isDownloadCancelled;
 

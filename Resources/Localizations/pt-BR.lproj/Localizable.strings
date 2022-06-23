@@ -1517,7 +1517,7 @@
 "rendering_value_fine_name" = "Mais fino";
 "rendering_attr_trolleybusRoutes_name" = "Linhas de trólebus";
 "rendering_attr_piste_type_nordic_name" = "Nórdico";
-"rendering_attr_piste_difficulty_freeride_name" = "Freeride";
+"rendering_attr_piste_difficulty_freeride_name" = "Ciclismo livre";
 "rendering_value_highContrastRoads_name" = "Vias em alto contraste";
 "rendering_value_low_name" = "Baixo";
 "rendering_attr_publicTransportMode_name" = "Linhas deônibus, trólebus e de conexão";
@@ -2432,3 +2432,7 @@
 "altitude_ascent" = "Subida";
 "manage_subscription" = "Gerenciar assinatura";
 "unlimited_map_downloads" = "Downloads ilimitados de mapas";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Sem restrições)";
+"rendering_attr_showFitnessTrails_name" = "Trilhas de exercícios";
+"rendering_attr_showFitnessTrails_description" = "Mostrar trilhas de exercícios";
+"simulation_real_mode_title" = "Simulação realista";

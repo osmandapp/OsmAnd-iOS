@@ -2549,3 +2549,6 @@
 "purchases_feature_desc_monthly_map_updates" = "Обезбедите приступ редовним месечним исправкама за офлајн мапе.";
 "not_available_with" = "Није доступно са %@";
 "redeem_promo_code" = "Искористите промотивни код";
+"transport_hazmat_yes_desc" = "Морате одабрати исправну категорију.";
+"routing_attr_hazmat_category_name" = "Превожење опасних материја";
+"transport_hazmat_no_desc" = "На неким путевима и тунелима није дозвољен превоз опасних материја.";

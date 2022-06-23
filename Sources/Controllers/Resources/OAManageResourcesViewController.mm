@@ -1621,10 +1621,10 @@ static BOOL _repositoryUpdated = NO;
                                 [_app loadWorldRegions];
                                 self.region = _app.worldRegion;                                
                                 [_app startRepositoryUpdateAsync:NO];
-                                [_app.worldRegion buildResourceGroupItem];
                             }
                                 completionBlock:^{
                                     [self updateContent];
+                                    [_app.worldRegion buildResourceGroupItem];
                                     _updateButton.enabled = YES;
                                     if (self.openFromSplash)
                                         [self onSearchBtnClicked:nil];

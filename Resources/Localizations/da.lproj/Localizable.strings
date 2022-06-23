@@ -2571,3 +2571,17 @@
 "quarterly_subscription" = "Kvartalsabonnement";
 "purchases_feature_desc_nautical" = "Få adgang til havdybdeoplysninger";
 "private_access_routing_req" = "Din destination ligger i et område med privat adgang. Tillad at der benyttes private veje til denne tur\?";
+"paused" = "På pause";
+"app_store" = "App Store";
+"promo" = "Kampagne";
+"google_play" = "Google Play";
+"promo_subscription" = "OsmAnd Pro (kampagne)";
+"subscription" = "Abonnement";
+"purchase_origin" = "Købets oprindelse";
+
+// Shared Strings
+"shared_string_cancelled" = "Annulleret";
+"in_grace_period" = "I henstandsperiode";
+"on_hold" = "I venteposition";
+"shared_string_undefined" = "Udefineret";
+"lang_ckb" = "Centralkurdisk";

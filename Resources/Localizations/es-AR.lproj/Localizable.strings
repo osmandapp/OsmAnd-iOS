@@ -2582,3 +2582,17 @@
 "purchases_feature_desc_wikivoyage" = "Explora Wikiviajes sin conexión. Artículos divididos por países y regiones y disponibles en todos los idiomas.";
 "purchases_feature_desc_terrain" = "Curvas de nivel del terreno, mapa completo de sombreados con tonos oscuros y mapas de pendientes con colores para mostrar picos y tierras bajas.";
 "private_access_routing_req" = "El destino se ubica en unárea de acceso privado. ¿Permitir el uso de caminos privados para este viaje\?";
+"subscription" = "Suscripción";
+"google_play" = "Google Play";
+"app_store" = "App Store";
+"promo" = "Promoción";
+"purchase_origin" = "Origen de la compra";
+"on_hold" = "En espera";
+"paused" = "Pausado";
+"in_grace_period" = "En período de gracia";
+"shared_string_undefined" = "Indefinido";
+"lang_ckb" = "Kurdo central";
+
+// Shared Strings
+"shared_string_cancelled" = "Cancelado";
+"promo_subscription" = "OsmAnd Pro (Promo)";

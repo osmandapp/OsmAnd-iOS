@@ -2313,3 +2313,6 @@
 "private_access_routing_req" = "Reisemålet ditt ligger i et område med privat adgang. Tillat bruk av private veier for denne turen\?";
 "expired" = "Utløpt";
 "share_geo" = "geo:";
+"lang_ckb" = "Sorani";
+"transport_hazmat_yes_desc" = "Du må velge rett kategori.";
+"transport_hazmat_no_desc" = "I noen tunneler og på noen veier er transport av farlig gods forbudt.";

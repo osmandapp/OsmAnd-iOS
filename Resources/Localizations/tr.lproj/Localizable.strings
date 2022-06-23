@@ -2575,3 +2575,17 @@
 "manage_subscription" = "Aboneliği yönet";
 "expires" = "Süre sonu";
 "private_access_routing_req" = "Hedefiniz özel erişimi olan bir bölgede bulunmaktadır. Bu yolculuk için özel yollar kullanmaya izin verilsin mi?";
+"promo_subscription" = "OsmAnd Pro (Tanıtım)";
+"subscription" = "Abonelik";
+"google_play" = "Google Play";
+"app_store" = "App Store";
+"promo" = "Tanıtım";
+"purchase_origin" = "Satın almanın kökeni";
+"on_hold" = "Beklemede";
+"in_grace_period" = "Ek süre içinde";
+"lang_ckb" = "Orta Kürtçe";
+"paused" = "Duraklatıldı";
+
+// Shared Strings
+"shared_string_cancelled" = "İptal edildi";
+"shared_string_undefined" = "Tanımlanmamış";

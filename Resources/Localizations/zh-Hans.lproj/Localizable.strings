@@ -1204,7 +1204,7 @@
 "wiki_sheet_title" = "如何打开维基百科文章？";
 "map_settings_color_scheme" = "颜色方案";
 "shared_string_exit" = "退出";
-"units_and_formats" = "单位与格式";
+"units_and_formats" = "单位和格式";
 "routing_attr_allow_expert_name" = "允许专家路线";
 "rendering_value_walkingRoutesOSMCNodes_name" = "节点网络";
 "rendering_attr_surface_compacted_name" = "紧凑的";
@@ -1861,3 +1861,8 @@
 "expired" = "已过期";
 "new_plugin_added" = "新插件已添加";
 "share_geo" = "地理：";
+"follow_track" = "跟随轨迹";
+"added_profiles" = "添加的配置文件";
+"routing_attr_allow_expert_description" = "极其困难的路线，有危险的障碍物和周边环境。";
+"new_plugin_added" = "新插件已添加";
+"added_profiles_descr" = "插件所添加的配置文件";

@@ -541,7 +541,7 @@
 "avoid_in_routing_descr" = "Éviter les routes à péage, les voies non revêtues, les ferries";
 "prefer_in_routing_title" = "Privilégier…";
 "prefer_in_routing_descr" = "Privilégier les itinéraires sur Autoroutes.";
-"relief_smoothness_factor_descr" = "Terrain préféré : Plat ou Vallonné.";
+"relief_smoothness_factor_descr" = "Terrain préféré : Plat ou Vallonné";
 "choose_auto_follow_route" = "Centrer automatiquement la carte";
 "auto_zoom_map" = "Zoom automatique de la carte";
 "auto_zoom_map_descr" = "Zoom automatique de la carte en fonction de votre vitesse (lorsque que votre position figure sur la carte)";
@@ -592,15 +592,15 @@
 "speak_title" = "Annoncer…";
 "speak_descr" = "Annoncer les noms de rue, les avertissements (stops, ralentisseurs, radars), les limites de vitesse";
 "keep_informing" = "Répéter les instructions de guidage";
-"keep_informing_descr" = "Répéter les instructions de guidage à intervalles réguliers.";
+"keep_informing_descr" = "Répéter les instructions de guidage à intervalles réguliers";
 "arrival_distance" = "Annonce d\'arrivée";
 "arrival_distance_descr" = "Quand souhaitez-vousêtre informé de l\'arrivée à destination ?";
 "default_speed_system" = "Unité de vitesse";
-"default_speed_system_descr" = "Définir l\'unité de vitesse.";
+"default_speed_system_descr" = "Définir l'unité de vitesse";
 "speed_limit_exceed" = "Marge de tolérance aux limites de vitesse";
 "speed_limit_exceed_message" = "Indiquez la marge de tolérance à ajouter à la limitation de vitesse et au-dessus de laquelle vous recevrez une alerte vocale.";
 "wake_on_voice" = "Allumage de l\'écran";
-"wake_on_voice_descr" = "Allumer l\'écran (si éteint) à l\'approche d\'une bifurcation.";
+"wake_on_voice_descr" = "Allumer l'écran (si éteint) à l'approche d'une bifurcation";
 "voice_pref_title" = "Voix";
 "voice_provider_descr" = "Sélectionnez la langue de guidage vocal";
 "choose_audio_stream" = "Sortie audio pour le guidage";
@@ -690,7 +690,7 @@
 "map_widget_transparent" = "Widgets transparents";
 "shared_string_near" = "Proche";
 "auto_follow_location_enabled" = "Recentrage automatique de la carte activé.";
-"unknown_location" = "Position inconnue.";
+"unknown_location" = "Position inconnue";
 "animate_routing_route_not_calculated" = "Veuillez d\'abord calculer l\'itinéraire";
 "day_night_info" = "Information jour/nuit";
 "daynight_mode_auto" = "Lever/coucher du soleil";
@@ -1761,7 +1761,7 @@
 "shared_string_importing" = "Import en cours";
 "maximum_speed" = "Vitesse maximale";
 "not_available_profile_name" = "Un profil avec ce nom existe déjà.";
-"profile_prefs_reset_successful" = "Tous les paramètres du profile ont été restaurés à leurs valeurs par défaut.";
+"profile_prefs_reset_successful" = "Tous les paramètres du profile ont été restaurés à leurs valeurs par défaut";
 "profile_import_success" = "Le profil d'application a été importé avec succès";
 "added_items" = "Éléments ajoutés : %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
@@ -1805,11 +1805,11 @@
 "quick_action_remove_next_destination_descr" = "Supprime la prochaineétape de votre route. S\'il s\'agit de la destination finale, le guidage s\'arrêtera.";
 "num_stops" = "arrêts";
 "help_nav_profiles" = "Profils de navigation";
-"vessel_width_limit_description" = "Définir la largeur du navire pour éviter les ponts étroits";
+"vessel_width_limit_description" = "Définir la largeur du navire pour éviter les ponts étroits.";
 "route_betw_points" = "Itinéraire entre points";
 "save_new_track" = "Enregistrer comme nouvelle trace";
 "quick_action_showhide_mapillary_title" = "Afficher/masquer Mapillary";
-"arrived_at_destination" = "Vousêtes arrivés.";
+"arrived_at_destination" = "Vousêtes arrivés";
 "add_to_track" = "Ajouterà une trace";
 "public_transport_menu" = "Transport";
 "shared_string_add_profile" = "Ajouter un profil";
@@ -2113,7 +2113,7 @@
 "travel_routes" = "Itinéraires de voyage";
 "added_profiles_descr" = "Profils ajoutés par extension";
 "added_profiles" = "Profils ajoutés";
-"suggested_maps_descr" = "Ces cartes sont nécessaires pour utiliser l\'extension.";
+"suggested_maps_descr" = "Ces cartes sont nécessaires pour utiliser l'extension";
 "suggested_maps" = "Cartes suggérées";
 "product_desc_ext_openplacereviews" = "Envoyez des photos, des avis et des liens sur des lieux publics tels que des restaurants, des hôtels, des musées et des waypoints en tant que données ouvertes https://openplacereviews.org/data/.\n\nEn savoir plus sur https://openplacereviews.org";
 "product_desc_openplacereviews" = "Envoyer des photos, des avis et des liens sur les lieux publics";
@@ -2538,3 +2538,4 @@
 "expired" = "Expiré";
 "purchases_feature_desc_wikipedia" = "Consultez les articles Wikipédia sans connexion Internet. Les articles sont découpés par pays et disponibles dans toutes les langues.";
 "wikipedia_and_wikivoyage_offline" = "Wikipédia et Wikivoyage hors ligne";
+"shared_string_learn_more" = "En savoir plus";

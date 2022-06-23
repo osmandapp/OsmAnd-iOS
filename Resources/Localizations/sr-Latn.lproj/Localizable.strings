@@ -1,8 +1,5 @@
-
 "OsmAnd Maps" = "OsmAnd Maps";
-
 "download_depth_countours" = "Pomorske izobate";
-
 "day_short" = "D";
 "week_short" = "Wk";
 "weeks_short" = "Wks";
@@ -23,23 +20,19 @@
 "years_2_4" = "Godine";
 "years_5" = "Godina";
 "months_3" = "Tri meseca";
-
 "price_free" = "Besplatno";
-
 "get_discount_title" = "Get %d %@ at %d%% off.";
 "get_free_trial_title" = "Start your %d %@ free trial.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
 "get_discount_first_part" = "%@ for first %@";
 "get_discount_first_few_parts" = "%@ for first %@";
 "get_discount_second_part" = "then %@";
-
 "mapillary_image" = "Slika sa Mapilara";
 "shared_string_milliradians" = "Miliradijani";
 "angular_units" = "Angular measurement units";
 "angular_units_descr" = "Change azimuth measurement units.";
 "allow_3d" = "Allow 2.5D view";
 "allow_3d_descr" = "Enable this option to be able to view the map in the 2.5D perspective";
-
 "access_intermediate_arrival_time" = "Vreme dolaska u međutačku";
 "map_widget_intermediate_time" = "Međuvreme";
 "shared_string_previous" = "Prethodno";
@@ -49,13 +42,11 @@
 "transport_nearby_routes_within" = "Prevoz u blizini";
 "transport_nearby_routes" = "Blizu";
 "transport_stop" = "Zaustavi";
-
 "cancel_navigation" = "Zaustavi navođenje";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Poređaj od vrata do vrata";
 "switch_start_finish" = "Reverse starting point & destination";
 "clear_all_intermediates" = "Očisti sve prolazne tačke";
-
 "shared_string_options" = "Opcije";
 "new_destination_point_dialog" = "You have already set a destination";
 "replace_destination_point" = "Zameni odredište";
@@ -67,7 +58,6 @@
 "first_intermediate_dest_description" = "Adds the first stop on the route";
 "add_as_last_destination_point" = "Dodaj kao završno prolazno odredište";
 "last_intermediate_dest_description" = "Adds the last stop along the route";
-
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "Traži";
 "address_search" = "Pretraga adresa";
@@ -84,7 +74,6 @@
 "will_open_at" = "Will open at";
 "will_open_on" = "Will open on";
 "will_open_tomorrow_at" = "Will open tomorrow at";
-
 "error_avoid_specific_road" = "Nisam pronašao zaobilaznice";
 "road_blocked" = "Blocked road";
 "starting_point" = "Početna tačka";
@@ -98,16 +87,13 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-
 "day_night_info_description" = "Sunrise: %@\nSunset: %@";
 "day_night_info" = "Dan/noć informacije";
 "daynight_mode_auto" = "Izlazak/zalazak sunca";
-
 "route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "Auto-centriranje karte tokom upotrebe.";
 "unknown_location" = "Položaj još nije poznat.";
 "animate_routing_route_not_calculated" = "Najpre izračunajte putanju";
-
 "settings_preset" = "Primarni profil";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
 "dialogs_and_notifications" = "Dijalozi i obaveštenja";
@@ -154,7 +140,6 @@
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
 "plugin_settings_reset" = "Resetuj postavke dodataka na podrazumevane vrednosti";
-
 "map_widget_magnetic_bearing" = "Magnetno vreteno";
 "map_widget_bearing" = "Usmereno vreteno";
 "map_widget_transparent" = "Prozirne spravice";
@@ -178,7 +163,6 @@
 "show_compass_ruler" = "Prikaži lenjir kompas";
 "hide_compass_ruler" = "Sakrij lenjir kompas";
 "map_widget_distance_by_tap" = "Udaljenost po kliktanju";
-
 "shared_string_collapse" = "Sklopi";
 "shared_string_topbar" = "Gornja traka";
 "shared_string_widgets" = "Spravice";
@@ -192,13 +176,10 @@
 "map_markers_empty" = "You have no active map markers";
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
-
 "last_used" = "Poslednje korišćeno";
-
 "carplay_active_message" = "Map is displayed via CarPlay";
 "carplay_profile" = "CarPlay profile";
 "carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";
-
 "show_traffic_warnings" = "Upozorenja o saobraćaju";
 "show_pedestrian_warnings" = "Pešački prelazi";
 "show_cameras" = "Radari";
@@ -245,7 +226,6 @@
 "arrival_distance_factor_at_last" = "U poslednjih par metara";
 "map_orientation_change_in_accordance_with_speed" = "Zadrška usmerenja karte";
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
-
 "route_parameters" = "Parametri puta";
 "fast_route_mode" = "Najbrži put";
 "nav_type_title" = "Tip navođenja";
@@ -309,7 +289,6 @@
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
-
 "guidance_preferences_descr" = "Postavke navođenja";
 "routing_preferences_descr" = "Postavke putovanja";
 "recording_preferences_descr" = "Track recording preferences";
@@ -343,14 +322,14 @@
 "select_route_finish_on_map" = "Select end point of the route";
 "select_route_intermediate" = "Select an intermediate point";
 "select_home" = "Select home point";
-"select_work_point" =  "Select work point";
+"select_work_point" = "Select work point";
 "sort_by_distance" = "Raspored po daljini";
 "sort_by_name" = "Raspored po imenu";
 "by_name" = "By name";
 "by_dist" = "By distance";
 "sort_by" = "Sort";
-"map_markers_other"= "Ostale oznake";
-"directions_other"= "Other directions";
+"map_markers_other" = "Ostale oznake";
+"directions_other" = "Other directions";
 "shared_string_turn" = "Skretanje";
 "stop_routing_confirm" = "Are you sure you want to stop the navigation?";
 "cancel_route" = "Dismiss route";
@@ -382,7 +361,6 @@
 "ending_point_too_far" = "Završna tačka je predaleko od najbližeg puta.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
 "arrived_at_destination" = "Stigli ste.";
-
 "towards" = "prema";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Odredi %d izlaz i idi";
@@ -395,7 +373,6 @@
 "route_tshl" = "Skrenite oštro levo i nastavite";
 "route_tsll" = "Skrenite blago levo i nastavite";
 "route_tu" = "Napravite polukružno i nastavite";
-
 "route_head" = "Početak";
 "looking_up_address" = "Pretražujem adresu";
 "no_address_found" = "Nije određena adresa";
@@ -411,17 +388,14 @@
 "traffic_warning_hazard" = "Opasnost";
 "traffic_warning_tunnel" = "Tunel ispred";
 "announce" = "Objavi";
-
 "driving_region_japan" = "Japan";
 "driving_region_us" = "Sjedinjene Američke Države";
 "driving_region_canada" = "Kanada";
 "driving_region_europe_asia" = "Europe, Asia, Latin America & similar";
 "driving_region_uk" = "UK, India & similar";
 "driving_region_australia" = "Australija";
-
 "left_side_navigation" = "Left-hand driving";
 "right_side_navigation" = "Right-hand driving";
-
 "si_mi_feet" = "Milje/stope";
 "si_mi_yard" = "Milje/jardi";
 "si_mi_meters" = "Milje/metri";
@@ -438,7 +412,6 @@
 "units_min_km" = "min/km";
 "units_m_s" = "m/s";
 "tones" = "tona";
-
 "nothing_found" = "Nothing found: %@";
 "nothing_found_empty" = "Nema ničeg pronađenog";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
@@ -454,7 +427,6 @@
 "search_poi_category_hint" = "Kucajte za pretragu";
 "poi_categories" = "POI categories";
 "search_history" = "Pretraga";
-
 "track_coloring_solid" = "Čvrst";
 "attribute" = "Atribut";
 
@@ -524,9 +496,7 @@
 "shared_string_width" = "Širina";
 "shared_string_interval" = "Interval";
 "shared_string_none" = "Ništa";
-
 "restart" = "Restart";
-
 "offline_maps" = "Offline Maps";
 "download_map" = "Preuzmi kartu";
 "download_map_dialog" = "Dijalog preuzimanja karte";
@@ -596,7 +566,6 @@
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
 "default_color" = "Podrazumevana boja";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
-
 "favorite_friends_category" = "Prijatelji";
 "favorite_places_category" = "Mesta";
 "shared_string_others" = "Ostalo";
@@ -626,7 +595,6 @@
 "shared_string_export" = "Izvezi";
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Tačke putanje";
-
 "import_export" = "Import/Export";
 
 "gpx_import_title" = "Uvezi putanje";
@@ -636,7 +604,6 @@
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "OsmAnd GPX nije dobro formiran, molimo obratite se timu podrške radi dalje istrage.";
 "tracks_on_map" = "Tracks on map";
-
 "gpx_export_title" = "Export track";
 "gpx_export_select_track" = "Please select track for Export";
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
@@ -644,7 +611,6 @@
 "import_from_files" = "Import from files";
 "gpx_no_tracks" = "There are no tracks";
 "gpx_export_failed" = "Could not save created route";
-
 "gpx_remove" = "Remove track?";
 "gpx_stat" = "Statistike";
 "gpx_route" = "Ruta";
@@ -683,25 +649,20 @@
 "record_trip" = "Record your track";
 "poi_clear" = "Očisti";
 "poi_list" = "Spisak tačaka od interesa";
-
 "gpxup_public" = "Javni";
 "gpxup_identifiable" = "Može da se koristi za identifikaciju";
 "gpxup_trackable" = "Može da se koristi za praćenje";
 "gpxup_private" = "Privatni";
-
 "gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
 "gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
 "gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
 "gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
-
 "track_during_nav" = "Auto-record track";
 "track_during_nav_descr" = "Turn on to automatically save a track during navigation";
-
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Brzina";
 "gpx_slope" = "Nagib";
-
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
@@ -709,7 +670,6 @@
 "m_style_walk" = "Pešačenje";
 "m_style_bicycle" = "Bicikla";
 "m_style_pulic_transport" = "Javni prevoz";
-
 "map_settings_map" = "Karta";
 "layer_amenity_label" = "Nazivi tačaka (tačke od interesa, omiljene)";
 "map_settings_show" = "Prikaži na karti";
@@ -742,7 +702,6 @@
 "map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
 "map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "map_settings_legend" = "Legenda";
-
 "map_settings_show_slider_map" = "Show slider on the map";
 "map_settings_add_online_source" = "Dodaj mrežni izvor";
 "map_settings_hide_polygons" = "Hide polygons";
@@ -755,14 +714,13 @@
 "map_settings_appearance" = "Izgled";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
-
 "settings_app_theme" = "Application theme";
 "app_theme_light" = "Svetla";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
 "angular_measurment_units" = "Angular measurment units";
-"units_and_formats" = "Units & formats";
+"units_and_formats" = "Merne jedinice i oblici";
 "device_settings" = "Device settings";
 "osmand_settings" = "Osmand postavke";
 "global_settings_descr" = "Affect the entire application.";
@@ -804,11 +762,9 @@
 "navigate_point_olc" = "Otvoreni kôd lokacije";
 "navigate_point_olc_short" = "OLC";
 "approximate_file_size" = "Approximate file size: %@";
-
 "coordinates_example" = "Primer";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
-
 "sett_lang_local" = "Lokalno";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
@@ -942,10 +898,8 @@
 "lang_zh_tw" = "Kineski (tradicionalni)";
 "lang_zhminnan" = "Južnominski";
 "lang_zhyue" = "Kantonski";
-
 "maps" = "Karte";
 "purchases" = "Kupovine";
-
 "select_map_style" = "Select map style";
 "select_map_source" = "Select map source";
 "select_overlay" = "Select overlay map";
@@ -954,7 +908,6 @@
 "avoid_by_type" = "Avoid by type";
 "available_map_styles" = "Available map styles";
 "available_map_sources" = "Available map sources";
-
 "export_profile" = "Export";
 "shared_string_import" = "Uvezi";
 "create_profile" = "Create profile";
@@ -968,7 +921,6 @@
 "custom_osmand_plugin_name" = "Proizvoljni OsmAnd dodatak";
 "custom_plugins" = "Custom plugins";
 "extra_maps" = "Dodatne karte";
-
 "import_duplicates_title" = "Neke stavke već postoje";
 "import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
 "keep_both" = "Zadrži obe";
@@ -984,22 +936,17 @@
 "avoid_road" = "Izbegavaj put";
 "shared_string_importing" = "Uvozim";
 "importing_from" = "Uvozim podatke iz %@";
-
 "shared_string_settings" = "Postavke";
 "configure_screen_quick_action" = "Brze radnje";
 "search_activity" = "Traži";
-
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
-
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
-
 "shared_string_import_complete" = "Uvoz završen";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
 "app_restart_required" = "Potreban je restart aplikacije da se neka podešavanja primene.";
 "shared_string_finish" = "Kraj";
 "added_items" = "Added items: %@";
-
 "copy_from_other_profile" = "Kopiraj iz drugog profila";
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
 "profile_alert_delete_title" = "Obriši profil";
@@ -1044,23 +991,19 @@
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
 "new_plugin_added" = "Novi dodatak dodat";
-
 "reset_to_default" = "Resetuj na podrazumevano";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
-
 "checking_for_duplicates" = "Checking for duplicates...";
 "checking_for_duplicate_description" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
 
 // Purchases
 "prch_addons" = "Addons";
-
 "prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "prch_nau_q2_cell" = "Downloading requires %@ over cellular network.";
 "incur_high_charges" = "This may incur high charges.";
 "prch_nau_q2_wifi" = "Downloading requires %@ over WiFi network.";
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
-
 "download" = "Preuzmi";
 "nothanks" = "Ne, hvala";
 "download_now" = "Download map now";
@@ -1254,7 +1197,6 @@
 "commiting_node" = "Predajemčvor…";
 "loading_poi_obj" = "Učitavam tačke od interesa…";
 "shared_string_loading" = "Loading…";
-
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
 "osm_editing_lost_changes_title" = "Izađi pre čuvanja\?";
@@ -1264,7 +1206,6 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
-
 "osm_note" = "Beleška OSM-a";
 "osm_created" = "Created";
 "osm_deleted" = "Izbrisana";
@@ -1501,7 +1442,6 @@
 "unsupported_action" = "Unsupported action";
 "unsupported_action_title" = "Unsupported action (%@)";
 "unsupported_action_descr" = "This quick action in not supported now. This can be fixed in new app versions.";
-
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";
@@ -1543,12 +1483,10 @@
 "units_nm" = "nmi";
 "units_km_h" = "km/h";
 "units_mph" = "mph";
-
 "units_hour" = "h";
 "units_min" = "min.";
 "units_sec" = "sek";
 "units_sec_short" = "s";
-
 "units_t" = "t";
 
 // Help
@@ -1675,31 +1613,24 @@
 "product_title_nautical" = "Nautical map";
 "product_desc_nautical" = "Nautical map of all world";
 "product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-
 "product_title_skimap" = "Ski map";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
-
 "product_title_track_recording" = "Track recording";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
-
 "product_title_osm_editing" = "OpenStreetMap Editing";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "product_desc_ext_osm_editing" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
-
 "product_title_mapillary" = "Mapillary";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "product_desc_ext_mapillary" = "Mrežne slike ulica za sve. Otkrijte mesta, sarađujte, osvojite svet.";
-
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
 "product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
-
 "product_title_africa" = "Afrika";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_title_antarctica" = "Antarktik";
@@ -1728,7 +1659,6 @@
 "product_title_asia" = "Azija";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
-
 "product_title_wiki" = "Vikipedija";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
@@ -1738,28 +1668,22 @@
 "some_articles_may_not_available_in_lang" = "Nekičlanci sa Vikipedija su možda dostupni na Vašem jeziku.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-
 "product_title_srtm" = "Izohipse";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
-
 "product_title_wikivoyage" = "Turistički vodiči";
 "product_desc_wikivoyage" = "Besplatni svetski turistički vodič koji svako može da uređuje.";
 "product_desc_ext_wikivoyage" = "Vodiči za najzanimljivija mesta na planeti, unutar OsmAnd-a, bez potrebe za internet konekcijom.";
-
 "product_title_sea_depth_contours" = "Pomorske izobate";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
-
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Uzmi neograničeni pristup";
-
 "latitude" = "Geografskaširina";
 "longitude" = "Geografska dužina";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
-
 "all_group_points" = "Sve tačke grupe";
 "enter_description" = "Enter description";
 "description" = "Opis";
@@ -1772,7 +1696,6 @@
 "res_hillshade" = "Senke brda";
 "res_slope" = "Nagib";
 "res_standard" = "Uobičajena karta";
-
 "select_language" = "Select language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -1797,31 +1720,25 @@
 "enter_name" = "Unesite ime";
 "not_selected" = "Nije označeno";
 "language" = "Jezik";
-
 "you_searching" = "You are searching";
 "from_location" = "away";
-
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "purchase_get" = "Preuzmi";
 "srtm_disabled" = "Izohipse su isključene";
 "prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-
 "time_open" = "Otvoreno";
 "time_closed" = "Closed";
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
-
 "menu_active_trips" = "Aktivno";
 "menu_all_trips" = "All Tracks";
-
 "public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
 "calc_pedestrian_route" = "Calculate pedestrian route";
 "public_transport_warning_title" = "Navođenje javnim prevozom je trenutno u beta testiranju, očekujte greške i nepravilnosti.";
 "public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
 "public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
 "public_transport_empty_warning_descr" = "Pokušajte sa promenom postavki.";
-
 "total" = "Ukupno";
 "walk" = "Peške";
 "board_at" = "Board at";
@@ -1842,8 +1759,7 @@
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Tačke";
 "shared_string_overview" = "Sažetak";
-"activity"= "Activity";
-
+"activity" = "Activity";
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "Isključeno";
 "gpx_trip_groups" = "Track groups";
@@ -1851,20 +1767,16 @@
 "shared_string_show_all" = "Prikaži sve";
 "parking" = "Parking";
 "parked_at" = "Parked at";
-
 "directions_more_options" = "Navođenje od";
 "nearby_search" = "Pretraži okolinu";
 "change_object_posiotion" = "Change object's position";
 "change_position_descr" = "Move the map to change object's position";
-
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
-
 "plugins" = "Dodaci";
 "open_map_settings" = "Open Map Settings";
-
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
 "plugin_popup_wiki_title" = "Download Wikipedia";
@@ -1877,22 +1789,17 @@
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "plugin_popup_osm_editing_title" = "Turn on OpenStreetMap Editing";
 "plugin_popup_osm_editing_ask" = "Please enable OpenStreetMap Editing plugin to add and manage map edits and notes";
-
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
-
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
 "restore" = "Povrati";
 "restore_all_purchases" = "Restore all purchases";
-
 "no_statistics" = "No statistics";
-
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
 "show_region_on_map_title" = "Karta je preuzeta";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
-
 "obf_import_title" = "Import offline map file";
 "obf_import_already_exists" = "File with this name already exists. Please select an action.";
 "obf_import_success" = "File was successfully imported";
@@ -1918,45 +1825,34 @@
 "go_to_map" = "Go to Map";
 "import_raster_map_success" = "Raster map has been imported. Open Map Settings and activate it via Overlay/Underlay";
 "import_raster_map_failed" = "Raster map import failed";
-
 "device_memory" = "Skladište uređaja";
 "free_memory" = "Slobodno %@";
-
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "get_started" = "Počnimo";
-
 "first_usage_wizard_desc" = "Pusti da OsmAnd odredi Vaš položaj i da prema tome predloži karte za preuzimanje te oblasti.";
-
 "suggested_maps" = "Predložene karte";
 "suggested_maps_descr" = "Ove karte su potrebne za rad ovog dodatka.";
 "added_profiles" = "Dodati profili";
 "added_profiles_descr" = "Profili dodati od strane dodatka";
-
 "location_not_found" = "Nije prepoznat položaj";
 "search_my_location" = "Search my location";
-
 "no_inet_connection" = "Nema mrežne veze";
 "no_inet_connection_desc_map" = "Zahtevane za preuzimanje.";
 "try_again" = "Pokušajte ponovo";
-
 "search_preogress" = "Pretražujem…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "Odaberite drugu oblast";
-
 "skip_map_downloading" = "Preskoči preuzimanje karata";
 "skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
-
 "wiki_around" = "Članci Vikipedije o okolini";
 "categories" = "Kategorije";
 "items_selected" = "%d selected";
-
 "wiki_sheet_title" = "Kako da otvoritečlanke sa Vikipedije\?";
 "download_wiki_data" = "Download Wikipedia data for %@";
 "open_wiki_online" = "Otvoričlanak na internetu";
 "explore_wikipedia_offline" = "Istražite Vikipediju van mreže.";
 "online_webpage_warning" = "Strana dostupna samo dok ste na mreži. Otvoriti je u veb čitaču\?";
-
 "custom_search" = "Proizvoljna pretraga";
 "add_custom_category" = "Dodaj proizvoljnu kategoriju";
 "poi_filter_custom_filter" = "Prilagođeni filter";
@@ -1976,7 +1872,6 @@
 "create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
 "reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
 "search_poi_types_descr" = "You can combine POI types from different categories.";
-
 "email_example_hint" = "user@example.com";
 "shared_string_required" = "Required";
 "shared_string_account" = "Nalog";
@@ -1998,7 +1893,6 @@
 "poi_select_type" = "Select type";
 "shared_a_z" = "A - Z";
 "shared_z_a" = "Z - A";
-
 "city_type_suburb" = "Predgrađe";
 "city_type_hamlet" = "Zaseok";
 "city_type_village" = "Selo";
@@ -2009,31 +1903,25 @@
 "postcode" = "Poštanski broj";
 "show_something_on_map" = "Prikaži na karti %@";
 "search_POI_level_btn" = "Increase search radius";
-
 "shared_string_street" = "Ulica";
 "shared_string_building" = "Zgrada";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Adresa";
-
 "do_not_show_discount" = "Do not show promotions";
 "send_anonymous_data" = "Send anonymous data";
-
 "sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
 "sett_ext_input" = "Eksterni ulazni uređaj";
 "sett_generic_ext_input" = "Generic Keyboard";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
-
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";
 "key_hint_select" = "Označi";
 "key_hint_deselect" = "Odznači";
 "key_hint_goback" = "Go Back";
 "key_hint_recenter_map" = "Recenter Map";
-
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "map_an_region" = "ova regija";
-
 "osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Pay monthly";
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
@@ -2048,14 +1936,12 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Select the payment period convenient for you:";
 "osm_live_payment_contribute_descr" = "Part of income goes to OpenStreetMap contributors.";
-
 "purchase_dialog_title" = "Odaberite plan";
 "purchase_dialog_travel_description" = "Kupite jedno od sledećeg da možete da čitate turističke članke van mreže:";
 "free_version_message" = "You can download or update %d maps";
 "get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "osm_live_subscription" = "Članarina na OsmAnd uživo";
 "osm_live_cancel_subscription" = "Poništi članarinu";
-
 "wikivoyage_offline" = "Wikivoyage van mreže";
 "unlimited_downloads" = "Neograničeno preuzimanja";
 "wikipedia_offline" = "Vikipedija van mreže";
@@ -2083,16 +1969,12 @@
 "osm_live_ask_for_purchase" = "Molimo prvo kupitečlanarinu na OsmAnd uživo";
 "shared_string_io_error" = "Ulazno-izlazna greška";
 "osm_live_hide_user_name" = "Ne prikazuj moje ime u izveštajima";
-
 "subscriptions_public_info" = "Payment will be charged to your iTunes Account at confirmation of purchase. The subscription will automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period. Your account will be charged according to your plan for renewal within 24 hours prior to the end of the current period. You can manage or turn off auto-renew in your Account Settings after purchase. If you purchase a subscription during a free trial period, the unused portion of this period will be forfeited.";
-
 "terms_of_use" = "Terms of use";
 "privacy_policy" = "Privacy policy";
-
 "already_has_subscription" = "You have already subscribed to OsmAnd Live and have all the functionality unlocked.";
 "already_has_inapp" = "You have already subscribed to %@.";
 "inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";
-
 "rendering_value_high_name" = "Gusta";
 "routing_attr_difficulty_preference_description" = "Preferiraj staze ove težine, ali ostavi moguće navođenje preko težih ili lakših staza ako je kraće.";
 "routing_attr_height_description" = "Odredi visinu vozila koja je dozvoljena na putevima.";
@@ -2145,7 +2027,7 @@
 "routeInfo_piste_difficulty_name" = "Težina staze";
 "routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter).";
 "rendering_attr_highway_class_track_grade3_name" = "Kvalitet 3";
-"routing_attr_freeride_policy_description" = "\'Freeride\' and \'Off-piste\' are unofficial routes and passages. Typically ungroomed, unmaintained and not checked in the evening. Enter at your own risk.";
+"routing_attr_freeride_policy_description" = "'Besplatana vožnja' i 'Sa-piste' su nezvanične rute i prolazi. Tipično neuređeno, neodržavano i nije provereno uveče. Ulazite na sopstveni rizik.";
 "rendering_attr_highway_class_street_name" = "Ulica";
 "rendering_attr_surface_grass_name" = "Trava";
 "routing_attr_piste_type_skitour_description" = "Putanje ski tura.";
@@ -2405,7 +2287,6 @@
 "nautical" = "Pomorska";
 "industrial" = "Industrija";
 "education" = "Obrazovanje";
-
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Pregled karte";
 "app_mode_car" = "Vožnja";
@@ -2482,6 +2363,10 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n• New arrangement of settings by profiles and types: navigation, general, map and screen\n• Ability to import or export profile settings\n• Added data sources for Online photos\n• Added ability to download online maps to cache\n• Improved \"Search\" algorithms\n";
+"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
+"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
+"ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "user_login" = "Prijava";
 "shared_string_any" = "Bilo koji";
 "login_error_email_invalid" = "Molimo unesite ispravnu adresu e-pošte";
@@ -2616,3 +2501,82 @@
 "purchases_feature_desc_wikivoyage" = "Istražite Vikiputovanje van mreže. Članci su podeljeni po zemljama i regionima i dostupni na svim jezicima.";
 "product_title_development" = "Razvoj OsmAnd-a";
 "backup_error_user_is_already_registered" = "Ova adresa e-pošte se koristi na drugom nalogu";
+"points_delete_multiple" = "Da li ste sigurni daželite da izbrišete %d tačku(i)\?";
+"altitude" = "Visina";
+"backup_and_restore" = "Rezervna kopija i vraćanje";
+"grey_color_undefined" = "Delovi bez podataka su sivi.";
+"shared_string_purchased" = "Kupljeno";
+"shared_string_includes" = "Uključuje";
+"shared_string_learn_more" = "Saznajte više";
+"routeInfo_winter_ice_road_description" = "Obojite rutu ili liniju putanje prema njenoj zimskoj klasifikaciji puteva.";
+"routing_attr_prefer_horse_routes_description" = "Preferiraj rute konja";
+"altitude_ascent" = "Uzbrdo";
+"routeInfo_horse_scale_name" = "Težina konjskih staza";
+"routeInfo_horse_scale_description" = "Prikaz staza prema težini konjskih staza";
+"routeInfo_smoothness_description" = "Klasifikacija upravljivosti puta/pešačke staze za vozila na točkovima, posebno u pogledu pravilnosti/ravnosti površine.";
+"rendering_attr_showFitnessTrails_description" = "Prikaz staza za fitnes";
+"rendering_attr_showRunningRoutes_name" = "Aktivne rute";
+"rendering_attr_showRunningRoutes_description" = "Prikaz aktivnih ruta";
+"rendering_attr_showFitnessTrails_name" = "Fitnes staze";
+"horseback_riding" = "Jahanje konja";
+"backup_error_user_is_already_registered" = "Ova adresa e-pošte se koristi na drugom nalogu";
+"share_geo" = "geo:";
+"toast_empty_name_error" = "Neimenovana lokacija";
+"shared_string_open_street_map" = "OpenStritMap";
+"routing_attr_only_permitted_streets_description" = "Koristi samo ulice koje su izričito dozvoljene";
+"start_point" = "Početak";
+"shared_string_max_height" = "Maks. visina";
+"shared_string_min_height" = "Min. visina";
+"routing_attr_allow_gate_name" = "Dozvoli korišćenje kapije";
+"routing_attr_only_permitted_streets_name" = "Izričito dozvoljene ulice";
+"routing_attr_only_permitted_ways_description" = "Koristite samo puteve (trake, staze, itd.) koji su izričito dozvoljeni";
+"cloud_email_not_registered" = "Ova adresa e-pošte nije registrovana za OsmAnd oblak";
+"backup_error_token_is_not_valid_or_expired" = "Nevažeći ili istekao token";
+"restore_from_file" = "Vrati iz datoteke";
+"routeInfo_surface_description" = "Dostavlja info o fizičkoj podlozi puta/pešačke staze.";
+"routing_attr_prefer_horse_routes_name" = "Preferirane rute konja";
+"routing_attr_allow_gate_description" = "Dozvola upotreba kapija";
+"routing_attr_only_permitted_ways_name" = "Izričito dozvoljeni putevi";
+"transport_hazmat_yes_desc" = "Morate odabrati ispravnu kategoriju.";
+"transport_hazmat_no_desc" = "Na nekim putevima i tunelima nije dozvoljen prevoz opasnih materija.";
+"backup_error_no_valid_subscription" = "Nema važeće pretplate";
+"cloud_email_already_registered" = "Ova adresa e-pošte je već registrovana.";
+"backup_error_user_is_not_registered" = "Nijedan korisnik nije registrovan sa tom adresom e-pošte";
+"verification_code_missing" = "Nisam dobio verifikacioni kod";
+"resend_verification_code" = "Ponovo pošalji";
+"nautical_depth" = "Nautička dubina";
+"terrain_maps" = "Mape terena";
+"purchases_feature_desc_monthly_map_updates" = "Obezbedite pristup redovnim mesečnim ispravkama za oflajn mape.";
+"purchases_feature_desc_unlimited_map_download" = "Nabavite neograničena preuzimanja oflajn mapa za sve kontinente i regione.";
+"purchases_feature_desc_combined_wiki" = "Istražujte članke na Vikipediji u pokretu, bez internet veze. Oflajn podaci su podeljeni po zemljama i dostupni na svim jezicima.";
+"purchases_feature_desc_terrain" = "Izohipse terena, cela karta reljefa sa tamnim senčenjem i mape nagiba sa bojama za prikaz, vrhova i nizija.";
+"complete_purchase" = "Kompletna kupovina";
+"explore_osmnad_plans_to_find_suitable" = "Istražite OsmAnd Planove radi pronalaženja Vama odgovarajućih.";
+"redeem_promo_code" = "Iskoristite promotivni kod";
+"simulation_real_mode_title" = "Realistična simulacija";
+"simulation_constant_mode_desc" = "Simulacija će se izvoditi sa konstantnom odabranom brzinom.";
+"simulation_constant_mode_title" = "Fiksna brzina";
+"simulation_preview_mode_desc" = "Brzina simulacije će biti maksimalna na pravim deonicama i usporiti samo na raskrsnicama.";
+"simulation_preview_mode_title" = "Režim brzog pregleda";
+"speed_mode" = "Režim brzine";
+"shared_string_hide_all" = "Sakrij sve";
+"routeInfo_roadClass_description" = "Obojite rutu ili liniju putanje prema klasifikaciji puteva.";
+"routeInfo_tracktype_description" = "Obojite rutu ili liniju putanje prema sastavu površine. Obično se primenjuje kada je putna mreža uglavnom nepresvučena.";
+"backup_error_token_is_not_valid" = "Nešto nije u redu sa navedenim ID-om uređaja ili tokenom";
+"purchases_feature_desc_pro_widgets" = "Dobavite pristup mogućnostima profesionalnog OsmAnd-a; bojenje puteva i još štošta.";
+"backup_error_file_not_available" = "Datoteka nije dostupna";
+"backup_error_gzip_only_supported_upload" = "Datoteku treba poslati u .gzip formatu";
+"backup_error_subscription_was_expired_descr" = "Vaša OsmAnd Pro pretplata je istekla, obnovite je da pravite rezervne kopije. I dalje možete povratiti podatke iz oblaka.";
+"backup_error_subscription_was_expired" = "Istekla pretplata";
+"purchases_feature_desc_osmand_cloud" = "Nabavite OsmAnd oblak za skladištenje svih podataka OsmAnd -a na mreži. Zaboravite na gubitak podataka nakon ponovne instalacije, napravite rezervne kopije i vratite sve podatke bez problema.";
+"purchases_feature_desc_hourly_map_updates" = "Obezbedite pristup češćem ažuriranju mapa, izaberite između: ažuriranja po satu, dnevno ili nedeljno. Ažuriranja se preuzimaju postepeno, samo za promenjeno područje.";
+"wikipedia_and_wikivoyage_offline" = "Vikipedia i Vikivojaž van mreže";
+"unlimited_map_downloads" = "Neograničeno preuzimanje mapa";
+"purchases_feature_desc_wikipedia" = "Istražite Vikipediju van mreže. Članci su podeljeni po zemljama i regionima i dostupni na svim jezicima.";
+"purchases_feature_desc_nautical" = "Pristupite informacijama o nautičkoj dubini";
+"purchases_feature_desc_wikivoyage" = "Istražite Vikiputovanje van mreže. Članci su podeljeni po zemljama i regionima i dostupni na svim jezicima.";
+"osmand_cloud_login_descr" = "Unesite adresu e-pošte sa kojom ste se registrovali. Na tu adresu biće poslata jednokratna lozinka za sledeći.";
+"osmand_cloud" = "OsmAnd oblak";
+"routing_attr_allow_private_for_truck_name" = "Dozvoljen privatni pristup (kamion)";
+"turn_arrows" = "Strelice skretanja";
+"altitude_descent" = "Nizbrdo";

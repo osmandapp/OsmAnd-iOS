@@ -2554,3 +2554,26 @@
 "transport_hazmat_yes_desc" = "Sie müssen eine richtige Kategorie wählen.";
 "transport_hazmat_no_desc" = "Auf einigen Straßen und Tunneln ist der Transport gefährlicher Materialien verboten.";
 "purchases_feature_desc_hourly_map_updates" = "Erhalten Sie Zugang zu häufigeren Kartenaktualisierungen. Wählen Sie zwischen stündlichen, täglichen oder wöchentlichen Aktualisierungen. Updates erfolgen inkrementell, nur der geänderte Bereich wird heruntergeladen.";
+"paused" = "Angehalten";
+
+// Shared Strings
+"shared_string_cancelled" = "Abgebrochen";
+"shared_string_undefined" = "Undefiniert";
+"lang_ckb" = "Zentralkurdisch";
+"promo_subscription" = "OsmAnd Pro (Promo)";
+"simulate_location_movement_speed_original" = "Original";
+"simulate_location_movement_speed_x2" = "x2";
+"simulate_location_movement_speed_x3" = "x3";
+"simulate_location_movement_speed_x4" = "x4";
+"product_desc_development" = "Einstellungen für Entwicklungs- und Debugging-Funktionen";
+"plugin_popup_nautical_ask" = "Bitte aktivieren Sie das Nautical-Plugin";
+"restore_purchase" = "Kauf wiederherstellen";
+"osm_live_payment_year_cost_descr" = "%@ / Jahr";
+"routing_attr_hazmat_category_name" = "Transport von Gefahrgut";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Keine Einschränkungen)";
+"pro_features" = "Pro Funktionen";
+"carplay" = "CarPlay";
+"purchases_feature_desc_carplay" = "Bringt OsmAnd Offline-Karten und Navigation auf den Bildschirm Ihres Fahrzeugs und integriert sich in die Bedienelemente Ihres Fahrzeugs.";
+"quarterly_subscription" = "Vierteljährliches Abonnement";
+"option_available_only_by_subscription" = "Verfügbar im Abonnement";
+"product_title_pro" = "OsmAnd Pro";

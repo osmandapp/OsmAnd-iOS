@@ -2599,3 +2599,5 @@
 "empty_purchases_description" = "Wenn Ihre Einkäufe hier nicht angezeigt werden, tippen Sie auf \"%@\", oder kontaktieren Sie unser Support-Team.";
 "osm_live_payment_subscription_management_aid" = "Die Zahlung wird Ihrem Apple ID Konto bei der Kaufbestätigung belastet.\n\nDas Abonnement verlängert sich automatisch, wenn es nicht mindestens 24 Stunden vor Ablauf des aktuellen Zeitraums gekündigt wird. Ihr Konto wird innerhalb von 24 Stunden vor dem Ende des aktuellen Zeitraums für die Verlängerung belastet.\n\nSie können Ihre Abonnements verwalten und kündigen, indem Sie nach dem Kauf zu Ihren Kontoeinstellungen im App Store gehen";
 "expires" = "Verfällt";
+"screen_settings_weather_toolbar" = "Wetter-Symbolleiste";
+"shared_string_now" = "Jetzt";

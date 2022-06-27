@@ -2589,3 +2589,5 @@
 // Shared Strings
 "shared_string_cancelled" = "İptal edildi";
 "shared_string_undefined" = "Tanımlanmamış";
+"shared_string_now" = "Şimdi";
+"screen_settings_weather_toolbar" = "Hava durumu araç çubuğu";

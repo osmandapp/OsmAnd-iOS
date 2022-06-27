@@ -16,8 +16,6 @@
 #import "OAMapStyleSettings.h"
 
 #define kContourLines @"contourLines"
-#define kTempContourLines @"weatherTempContours"
-#define kPressureContourLines @"weatherPressureContours"
 
 typedef void(^OAMapSettingsCategoryCellDataOnSwitch)(BOOL is, NSIndexPath *indexPath);
 typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
@@ -80,7 +78,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
     {
         parameters = [[_styleSettings getParameters:categoryName] filteredArrayUsingPredicate:
                 [NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)",
-                                kContourLines, kTempContourLines, kPressureContourLines]];
+                                kContourLines, WEATHER_TEMP_CONTOUR_LINES_ATTR, WEATHER_PRESSURE_CONTOURS_LINES_ATTR]];
     }
     else
     {

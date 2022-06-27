@@ -865,12 +865,22 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     [button setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
 }
 
++ (CGSize) calculateTextBounds:(NSString *)text font:(UIFont *)font
+{
+    CGSize size = [text boundingRectWithSize:CGSizeMake(10000.0, 10000.0)
+                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                                  attributes:@{ NSFontAttributeName: font }
+                                     context:nil].size;
+
+    return CGSizeMake(ceil(size.width), ceil(size.height));
+}
+
 + (CGSize) calculateTextBounds:(NSAttributedString *)text width:(CGFloat)width
 {
     CGSize size = [text boundingRectWithSize:CGSizeMake(ceil(width), 10000.0)
                                      options:NSStringDrawingUsesLineFragmentOrigin
                                      context:nil].size;
-    
+
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
@@ -2210,6 +2220,16 @@ static const double d180PI = 180.0 / M_PI_2;
 
         [hud hide:YES afterDelay:duration];
     });
+}
+
++ (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate
+{
+    NSTimeZone *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSTimeZone *destinationTimeZone = [NSTimeZone systemTimeZone];
+    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
+    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
+    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+    return [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
 }
 
 @end

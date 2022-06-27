@@ -28,7 +28,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OARoutingHelper.h"
-#import "OARouteStatisticsHelper.h"
+#import "OASegmentedSlider.h"
 #import "OADayNightHelper.h"
 #import "OAMapLayers.h"
 #import "OAPreviewRouteLineInfo.h"
@@ -1463,8 +1463,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [cell showLabels:NO topRight:NO bottomLeft:YES bottomRight:YES];
             cell.bottomLeftLabel.text = arrayValue.firstObject;
             cell.bottomRightLabel.text = arrayValue.lastObject;
-            cell.numberOfMarks = arrayValue.count;
-            cell.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
+            [cell.sliderView setNumberOfMarks:arrayValue.count additionalMarksBetween:0];
+            cell.sliderView.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
@@ -1611,7 +1611,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         OASegmentSliderTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         OAGPXTableCellData *cellData = [self getCellData:indexPath];
-        [self updateProperty:@(cell.selectedMark + 1) tableData:cellData];
+        [self updateProperty:@(cell.sliderView.selectedMark + 1) tableData:cellData];
         [self updateData:cellData];
 
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];

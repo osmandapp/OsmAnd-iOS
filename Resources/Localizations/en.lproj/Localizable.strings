@@ -818,6 +818,8 @@
 "weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
 "weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
 
+"screen_settings_weather_toolbar" = "Weather toolbar";
+
 "settings_app_theme" = "Application theme";
 "app_theme_light" = "Light";
 "do_not_rotate" = "Do not rotate";
@@ -2738,6 +2740,8 @@
 "app_store" = "App Store";
 "promo" = "Promo";
 "purchase_origin" = "Purchase origin";
+
+"shared_string_now" = "Now";
 
 // Release Notes
 // instruction:

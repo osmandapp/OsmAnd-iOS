@@ -35,6 +35,10 @@ static NSString * const MONORAIL_ROUTES_ATTR = @"showMonorailRoutes";
 static NSString * const CURRENT_TRACK_COLOR_ATTR = @"currentTrackColor";
 static NSString * const CURRENT_TRACK_WIDTH_ATTR = @"currentTrackWidth";
 
+static NSString * const WEATHER_TEMP_CONTOUR_LINES_ATTR = @"weatherTempContours";
+static NSString * const WEATHER_PRESSURE_CONTOURS_LINES_ATTR = @"weatherPressureContours";
+static NSString * const WEATHER_NONE_CONTOURS_LINES_VALUE = @"none";
+
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 {
     OABoolean,
@@ -97,5 +101,7 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 
 + (NSString *)getTransportIconForName:(NSString *)name;
 + (int)getTransportSortIndexForName:(NSString *)name;
+
++ (NSString *)weatherContoursParamChangedToValue:(NSString *)newValue styleSettings:(OAMapStyleSettings *)styleSettings;
 
 @end

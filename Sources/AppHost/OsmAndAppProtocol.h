@@ -32,6 +32,7 @@
 
 @property(readonly) OAAppData* data;
 @property(readonly) OAWorldRegion* worldRegion;
+@property(nonatomic, readonly) NSString *worldMiniBasemapFilename;
 
 @property(readonly) OALocationServices* locationServices;
 

@@ -24,6 +24,7 @@
 #import <mach/mach_host.h>
 
 #define kBlurViewTag -999
+#define kSpinnerViewTag -998
 
 @implementation UIBezierPath (util)
 
@@ -409,6 +410,39 @@
         {
             [subview removeFromSuperview];
             self.backgroundColor = UIColor.whiteColor;
+            break;
+        }
+    }
+}
+
+- (void) addSpinner
+{
+    for (UIView *subview in self.subviews)
+    {
+        if (subview.tag == kSpinnerViewTag)
+            return;
+    }
+
+    UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleGray;
+    if (@available(iOS 13.0, *))
+        spinnerStyle = UIActivityIndicatorViewStyleLarge;
+
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
+    spinner.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+    spinner.tag = kSpinnerViewTag;
+    [self addSubview:spinner];
+    [spinner startAnimating];
+}
+
+- (void) removeSpinner
+{
+    for (UIView *subview in self.subviews)
+    {
+        if (subview.tag == kSpinnerViewTag)
+        {
+            UIActivityIndicatorView *spinner = (UIActivityIndicatorView *) subview;
+            [spinner stopAnimating];
+            [spinner removeFromSuperview];
             break;
         }
     }

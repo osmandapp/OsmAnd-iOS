@@ -44,7 +44,7 @@
 #include <GeographicLib/GeoCoords.hpp>
 #include <GeographicLib/MGRS.hpp>
 
-#define kSearchCityLimit 100
+#define kSearchCityLimit 10000
 #define defaultNavBarHeight 58
 #define kHintBarHeight 44
 #define kMaxEastingValue 833360
@@ -733,7 +733,23 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             _searchLocation = mapLocation;
             _region = cityName;
             _isOlcCitySearchRunning = YES;
-            [self searchCities:cityName];
+            [self.class searchCities:cityName
+                      searchLocation:_searchLocation
+                                view:self.view
+                          onComplete:^(NSMutableArray *amenities)
+                          {
+                              _isOlcCitySearchRunning = NO;
+                              if (amenities && amenities.count > 0)
+                              {
+                                  OASearchResult *firstResult = amenities[0];
+                                  if (firstResult && firstResult.location)
+                                  {
+                                      _searchLocation = firstResult.location;
+                                      [self updateDistanceAndDirection:YES];
+                                  }
+                              }
+                          }
+            ];
         }
     }
     if (codeArea)
@@ -741,7 +757,10 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     return loc;
 }
 
-- (NSArray<OASearchResult *> *)searchCities:(NSString *)text
++ (NSArray<OASearchResult *> *)searchCities:(NSString *)text
+                             searchLocation:(CLLocation *)searchLocation
+                                       view:(UIView *)view
+                                 onComplete:(void (^)(NSMutableArray *amenities))onComplete
 {
     OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
     NSString * lang = [OAAppSettings.sharedManager.settingPrefMapLanguage get];
@@ -755,23 +774,16 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     settings = [settings setSortByName:NO];
     settings = [settings setAddressSearch:YES];
     settings = [settings setEmptyQueryAllowed:YES];
-    settings = [settings setOriginalLocation:_searchLocation];
+    settings = [settings setOriginalLocation:searchLocation];
     [_searchUICore updateSettings:settings];
-    
-    UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleGray;
-    if (@available(iOS 13.0, *))
-        spinnerStyle = UIActivityIndicatorViewStyleLarge;
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
-    spinner.center = CGPointMake([[UIScreen mainScreen]bounds].size.width/2, [[UIScreen mainScreen]bounds].size.height/2);
-    [self.view addSubview:spinner];
-    [spinner startAnimating];
-        
+
+    [view addSpinner];
+
     dispatch_async(dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL), ^{
         int __block count = 0;
-        BOOL __block isFinished = NO;
-    
+
         [_searchUICore shallowSearch:OASearchAmenityByNameAPI.class text:text matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
-            
+
             OASearchResult *searchResult = *object;
             std::shared_ptr<const OsmAnd::Amenity> amenity = searchResult.amenity;
             if (!amenity)
@@ -789,26 +801,16 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 return NO;
             
             [amenities addObject:searchResult];
-            isFinished = YES;
             return NO;
         } cancelledFunc:^BOOL{
-            return count > kSearchCityLimit || isFinished;
+            return count > kSearchCityLimit;
         }] resortAll:YES removeDuplicates:YES];
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
-            [spinner stopAnimating];
-            [spinner removeFromSuperview];
-            _isOlcCitySearchRunning = NO;
-            
-            if (amenities && amenities.count > 0)
-            {
-                OASearchResult *firstResult = amenities[0];
-                if (firstResult && firstResult.location)
-                {
-                    _searchLocation = firstResult.location;
-                    [self updateDistanceAndDirection:YES];
-                }
-            }
+            if (onComplete)
+                onComplete(amenities);
+
+            [view removeSpinner];
         });
     });
     

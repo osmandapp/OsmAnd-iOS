@@ -9,8 +9,14 @@
 #import "OABaseTableViewController.h"
 #import <CoreLocation/CoreLocation.h>
 
+@class OASearchResult;
+
 @interface OAQuickSearchCoordinatesViewController : OABaseTableViewController
 
 - (instancetype) initWithLat:(double)lat lon:(double)lon;
 
++ (NSArray<OASearchResult *> *)searchCities:(NSString *)text
+                             searchLocation:(CLLocation *)searchLocation
+                                       view:(UIView *)view
+                                 onComplete:(void (^)(NSMutableArray *amenities))onComplete;
 @end

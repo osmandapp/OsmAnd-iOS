@@ -2275,7 +2275,7 @@
 //Icon categories
 "amenity" = "Comodidad";
 "emergency" = "Emergencia";
-"service" = "Vía de servicio";
+"service" = "Servicio";
 "special" = "Especial";
 "sport" = "Deporte";
 "symbols" = "Símbolos";
@@ -2507,7 +2507,7 @@
 "copy_coordinates" = "Copiar coordenadas";
 "share_geo" = "geo:";
 "toast_empty_name_error" = "Ubicación sin nombre";
-"routing_attr_allow_private_for_truck_description" = "Permitir el acceso aáreas privadas para camiones.";
+"routing_attr_allow_private_for_truck_description" = "Permitir el acceso a áreas privadas para camiones.";
 "routing_attr_allow_private_for_truck_name" = "Permitir el acceso privado (camión)";
 "shared_string_start" = "Iniciar";
 "osmand_depelopment_simulate_location_section" = "Simular";
@@ -2596,3 +2596,4 @@
 // Shared Strings
 "shared_string_cancelled" = "Cancelado";
 "promo_subscription" = "OsmAnd Pro (Promo)";
+"screen_settings_weather_toolbar" = "Barra de herramientas del clima";

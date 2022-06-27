@@ -2523,3 +2523,4 @@
 "purchases_feature_desc_osmand_cloud" = "Obtén OsmAnd Cloud para almacenar en línea todos los datos de OsmAnd. No se pierden los datos al reinstalar. Haz copias de seguridad y restaura toda la información fácilmente.";
 "complete_purchase" = "Completar compra";
 "routing_attr_allow_private_for_truck_description" = "Permitir el acceso aáreas privadas para camiones.";
+"lang_ckb" = "Kurdo Central";

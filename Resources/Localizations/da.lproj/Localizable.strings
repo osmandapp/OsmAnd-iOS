@@ -2585,3 +2585,5 @@
 "on_hold" = "I venteposition";
 "shared_string_undefined" = "Udefineret";
 "lang_ckb" = "Centralkurdisk";
+"shared_string_now" = "Nu";
+"screen_settings_weather_toolbar" = "Vejr-værktøjslinje";

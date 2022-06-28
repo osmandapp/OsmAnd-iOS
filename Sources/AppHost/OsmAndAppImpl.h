@@ -18,8 +18,6 @@
 
 @property(readonly) OAAppData* data;
 
-@property(nonatomic, readonly) NSString *worldMiniBasemapFilename;
-
 @property(nonatomic) OAMapMode mapMode;
 @property(nonatomic) OAMapMode prevMapMode;
 

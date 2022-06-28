@@ -83,6 +83,8 @@
 #define _(name)
 @implementation OsmAndAppImpl
 {
+    NSString* _worldMiniBasemapFilename;
+
     OAMapMode _mapMode;
     OAMapMode _prevMapMode;
 
@@ -360,6 +362,8 @@
                                                          {
                                                              [_resourcesRepositoryUpdatedObservable notifyEventWithKey:self];
                                                          });
+
+    _resourcesManager->addLocalResource(QString::fromNSString(_worldMiniBasemapFilename));
 
     [self instantiateWeatherResourcesManager];
     
@@ -898,7 +902,6 @@
 
 @synthesize data = _data;
 @synthesize worldRegion = _worldRegion;
-@synthesize worldMiniBasemapFilename = _worldMiniBasemapFilename;
 
 @synthesize locationServices = _locationServices;
 @synthesize downloadsManager = _downloadsManager;

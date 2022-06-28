@@ -518,23 +518,17 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 - (BOOL) containsData:(NSString *)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
 {
     const auto& localResource = _app.resourcesManager->getLocalResource(QString::fromNSString(localResourceId));
-    std::shared_ptr<const OsmAnd::ObfFile> obfFile;
-
     if (localResource)
     {
         const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(localResource->metadata);
-        if (obfMetadata != nullptr)
-            obfFile = obfMetadata->obfFile;
-        else if ([localResourceId isEqualToString:_app.worldMiniBasemapFilename])
-            obfFile = _app.resourcesManager->getMiniBasemapObfFile();
-    }
-    if (obfFile != nullptr)
-    {
-        OsmAnd::AreaI pBbox31 = OsmAnd::AreaI((int)rect.top, (int)rect.left, (int)rect.bottom, (int)rect.right);
-        if (zoomLevel == OsmAnd::InvalidZoomLevel)
-            return obfFile->obfInfo->containsDataFor(&pBbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, desiredDataTypes);
-        else
-            return obfFile->obfInfo->containsDataFor(&pBbox31, zoomLevel, zoomLevel, desiredDataTypes);
+        if (obfMetadata)
+        {
+            OsmAnd::AreaI pBbox31 = OsmAnd::AreaI((int)rect.top, (int)rect.left, (int)rect.bottom, (int)rect.right);
+            if (zoomLevel == OsmAnd::InvalidZoomLevel)
+                return obfMetadata->obfFile->obfInfo->containsDataFor(&pBbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, desiredDataTypes);
+            else
+                return obfMetadata->obfFile->obfInfo->containsDataFor(&pBbox31, zoomLevel, zoomLevel, desiredDataTypes);
+        }
     }
     return NO;
 }

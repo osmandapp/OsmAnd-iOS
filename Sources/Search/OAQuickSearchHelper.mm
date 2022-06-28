@@ -325,9 +325,6 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
             [resIds addObject:resource->id.toNSString()];
         }
 
-    if (![resIds containsObject:QString(kWorldBasemapKey).toNSString()])
-        [resIds addObject:app.worldMiniBasemapFilename];
-
     [resIds sortUsingComparator:^NSComparisonResult(NSString *first, NSString *second) {
         first = [[first stringByReplacingOccurrencesOfString:@".map.obf" withString:@""] stringByReplacingOccurrencesOfString:@".live.obf" withString:@""];
         second = [[second stringByReplacingOccurrencesOfString:@".map.obf" withString:@""] stringByReplacingOccurrencesOfString:@".live.obf" withString:@""];

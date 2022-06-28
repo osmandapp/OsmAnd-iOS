@@ -41,7 +41,7 @@
 "transport_routes" = "Rutter";
 "transport_nearby_routes_within" = "Rutter nära i";
 "transport_nearby_routes" = "i";
-"transport_stop" = "Stoppa";
+"transport_stop" = "Hållplats";
 "cancel_navigation" = "Avbryt navigeringen";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sortera dörr-till-dörr";
@@ -412,7 +412,7 @@
 "units_m_s" = "m/s";
 "tones" = "ton";
 "nothing_found" = "Nothing found: %@";
-"nothing_found_empty" = "Hittade ingenting";
+"nothing_found_empty" = "Hittar ingenting";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Välj gator";
 "shared_string_in_name" = "i %@";
@@ -595,7 +595,7 @@
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Ruttpunkter";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Import tracks";
+"gpx_import_title" = "Importera spår";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -615,8 +615,8 @@
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
-"gpx_average_speed" = "Genomsnittlig hastighet";
-"gpx_start" = "Starta";
+"gpx_average_speed" = "Medelhastighet";
+"gpx_start" = "Start";
 "gpx_finish" = "Avsluta";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
@@ -665,8 +665,8 @@
 
 // Map settings
 "m_style_car" = "Fordonskörning";
-"m_style_walk" = "Gående";
-"m_style_bicycle" = "Cykling";
+"m_style_walk" = "Gång";
+"m_style_bicycle" = "Cyckling";
 "m_style_pulic_transport" = "Kollektivtrafik";
 "map_settings_map" = "Karta";
 "layer_amenity_label" = "Punktetiketter (POI, Favoriter)";
@@ -957,7 +957,7 @@
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "UI customization";
 "ui_customization_descr" = "Drawer items, context menu";
-"edit_profile_list" = "Edit profile list";
+"edit_profile_list" = "Redigera profillista";
 "enter_profile_name" = "Ange profilnamn";
 "select_color" = "Välj färg";
 "select_icon" = "Välj ikon";
@@ -1157,7 +1157,7 @@
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
 "res_elliptic_mercator" = "Elliptic mercator";
-"res_pseudo_mercator" = "Pseudo-Mercator projection";
+"res_pseudo_mercator" = "Pseudo-Mercator-projektion";
 "res_source_format" = "Source format";
 "res_source_sqlite" = "SQLiteDB-fil";
 "res_source_one_per_tile" = "One image file per tile";
@@ -1201,7 +1201,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osm_note" = "OSM-anteckning";
 "osm_created" = "Created";
-"osm_deleted" = "Borttagen";
+"osm_deleted" = "Raderad";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1247,7 +1247,7 @@
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
 "osm_edits_basic" = "Grundläggande";
-"osm_edits_advanced" = "Avancerad";
+"osm_edits_advanced" = "Avancerat";
 "osm_edits_all" = "All edits";
 "osm_edits_poi" = "POI edits";
 "osm_edits_notes" = "Notes";
@@ -1661,7 +1661,7 @@
 "some_articles_may_not_available_in_lang" = "Vissa Wikipedia-artiklar finns kanske inte tillgängliga på ditt språk.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"product_title_srtm" = "Höjdkurvor";
+"product_title_srtm" = "Höjdkurvsdata";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "product_title_wikivoyage" = "Reseguider";
@@ -1684,7 +1684,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Vägar";
-"res_srtm" = "Höjdkurvor";
+"res_srtm" = "Höjdkurvsdata";
 "res_wiki" = "Wikipedia";
 "res_hillshade" = "Höjdskugga";
 "res_slope" = "Sluttning";
@@ -1768,7 +1768,7 @@
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
-"plugins" = "Insticksmoduler";
+"plugins" = "Insticksprogram";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -1939,8 +1939,8 @@
 "unlimited_downloads" = "Obegränsat antal nedladdningar";
 "wikipedia_offline" = "Wikipedia frånkopplad";
 "contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
-"monthly_map_updates" = "Map updates: every month";
-"daily_map_updates" = "Map updates: every hour";
+"monthly_map_updates" = "Månatliga kartuppdateringar";
+"daily_map_updates" = "Uppdatering av kartan varje timme";
 "index_item_depth_contours_osmand_ext" = "Nautiska djupkurvor";
 "donation_to_osm" = "Donation to OpenStreetMap community";
 "purchase_unlim_title" = "Köp - %@";
@@ -2270,14 +2270,14 @@
 
 //Icon categories
 "amenity" = "bekvämligheter";
-"emergency" = "Nödsituation";
+"emergency" = "Olycksfall";
 "service" = "Service";
 "special" = "Speciell";
-"sport" = "Idrott";
+"sport" = "Sport";
 "symbols" = "Symboler";
 "transport" = "Transporter";
 "travel" = "Resa";
-"nautical" = "Nautiska";
+"nautical" = "Nautisk";
 "industrial" = "Industriell";
 "education" = "Utbildning";
 "settings_item_read_error" = "Could not read %@.";
@@ -2427,3 +2427,43 @@
 "cloud_view_conflicts" = "Visa konflikter";
 "cloud_restore_now" = "Återställ nu";
 "transport_hazmat_no_desc" = "På vissa vägar och i vissa tunnlar är transport av farligt gods förbjudet.";
+"expired" = "Upphörd";
+"shared_string_includes" = "Inkluderar";
+"product_title_development" = "Utveckling av OsmAnd";
+"unlimited_map_downloads" = "Obegränsade kartnedladdningar";
+"shared_string_purchased" = "Köpt";
+"restore_purchases" = "Återställ köp";
+"complete_purchase" = "Slutför köp";
+"shared_string_learn_more" = "Läs mer";
+"units_cubic_m" = "m³";
+"annual_subscription" = "Årlig prenumeration";
+"copy_to_map_favorites" = "Kopiera till favoriter";
+"wikipedia_and_wikivoyage_offline" = "Wikipedia och Wikivoyage i nedkopplat läge";
+"continue_with" = "Fortsätt med %@";
+"purchases_feature_desc_terrain" = "Höjdkurvor, terrängskuggning/relief och sluttningskartor med färgläggning, för att visa toppar och dalar.";
+"purchases_feature_desc_pro_widgets" = "Få tillgång till OsmAnd Pro-finesser: Färgläggning av rutter med mera.";
+"new_device_account" = "Ny enhet / nytt konto";
+"routeInfo_horse_scale_name" = "Svårigheter av häst spår";
+"copy_coordinates" = "Kopiera koordinater";
+"shared_string_capacity" = "Kapacitet";
+"ltr_or_rtl_combine_via_or" = "%@ eller %@";
+"shared_string_stop" = "Hållplats";
+"purchases_feature_desc_wikipedia" = "Utforska Wikipedia i nedkopplat läge. Artiklar uppdelade efter länder och regioner och tillgängliga på alla språk.";
+"copy_address" = "Kopiera adress";
+"explore_osmnad_plans_to_find_suitable" = "Utforska OsmAnd Plans för att hitta en plan som passar dig.";
+"subscriptions" = "Abonnemang";
+"manage_subscription" = "Hantera prenumeration";
+"private_access_routing_req" = "Din destinationär belägen i ett område med privat tillträde. Tillåt anvädning av privata vägar för denna resa\?";
+"purchases_feature_desc_monthly_map_updates" = "Få tillgång till regelbundna månatliga uppdateringar av offline-kartor.";
+"product_desc_ext_development" = "Inställningar för utvecklings- och felsökningsfunktioner, som simulering av navigation, renderingsprestanda eller röststyrning. Avsedda för utvecklare, behövs ej för den vanliga användaren.";
+"purchases_feature_desc_wikivoyage" = "Utforska Wikivoyage i nedkopplat läge. Artiklar uppdelade efter länder och regioner och tillgängliga på alla språk.";
+"shared_string_start" = "Start";
+"osm_live_banner_desc" = "Få obegränsad nedladdning av kartor, lägg till uppdateringar varje vecka, dagligen eller till och med varje timme.";
+"altitude_ascent" = "Stigning";
+"terrain_maps" = "Terrängkartor";
+"toast_empty_name_error" = "Ej namngiven plats";
+"purchases_feature_desc_combined_wiki" = "Utforska Wikipedia-artiklar i farten, utan internetuppkoppling. Offline-data indelad per land och tillgänglig på alla språk.";
+"altitude_descent" = "Sänkning";
+"purchases_feature_desc_unlimited_map_download" = "Få obergänsade nedladdningar av offline-kartor för alla kontinenter och regioner.";
+"share_geo" = "geo:";
+"monthly_subscription" = "Månadspernumeration";

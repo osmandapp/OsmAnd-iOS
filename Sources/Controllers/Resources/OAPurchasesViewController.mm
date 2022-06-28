@@ -48,6 +48,7 @@
     [super viewDidLoad];
 
     _iapHelper = [OAIAPHelper sharedInstance];
+    [[OARootViewController instance] restorePurchasesWithProgress:NO];
     [self generateData];
 }
 
@@ -77,7 +78,9 @@
 
     _headers = [NSMapTable new];
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray array];
-    if (activeProducts.count == 0 && expiredProducts.count == 0)
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    BOOL isProSubscriptionAvailable = [settings.backupPurchaseActive get];
+    if (activeProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
     {
         [data addObject:@[@{
                 @"key": @"no_purchases",
@@ -100,9 +103,36 @@
     }
     else
     {
-        if (activeProducts.count > 0)
+        if (activeProducts.count > 0 || isProSubscriptionAvailable)
         {
             NSMutableArray *active = [NSMutableArray array];
+            if (isProSubscriptionAvailable)
+            {
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                formatter.dateStyle = NSDateFormatterMediumStyle;
+                NSString *dateString = @"";
+                NSString *datePattern = @"";
+                OASubscriptionState *state = [settings.backupPurchaseState get];
+                BOOL isPromo = ((EOASubscriptionOrigin) [settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
+                if (state != OASubscriptionState.EXPIRED)
+                    datePattern = OALocalizedString(@"expires");
+                else
+                    datePattern = OALocalizedString(@"expired");
+                long expiretime = [settings.backupPurchaseExpireTime get];
+                if (expiretime > 0)
+                {
+                    NSDate *expireDate = [NSDate dateWithTimeIntervalSince1970:[settings.backupPurchaseExpireTime get]];
+                    dateString = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), datePattern,
+                                  expireDate ? [formatter stringFromDate:expireDate] : @""];
+                }
+                [active addObject:@{
+                    @"key" : @"product_pro_crossplatform",
+                    @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+                    @"icon" : @"ic_custom_osmand_pro_logo_colored",
+                    @"title" : isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro"),
+                    @"descr" : dateString
+                }];
+            }
             for (OAProduct *product in activeProducts)
             {
                 [active addObject:@{
@@ -137,32 +167,30 @@
             @"button_icon_color": UIColorFromRGB(color_primary_purple)
         }]];
     }
-
-    [data addObject:
-            @[
-                    @{
-                            @"key": @"restore_purchases",
-                            @"type": [OAIconTitleValueCell getCellIdentifier],
-                            @"title": OALocalizedString(@"restore_purchases"),
-                            @"icon": [UIImage templateImageNamed:@"ic_custom_reset"],
-                            @"tint_color": UIColorFromRGB(color_primary_purple)
-                    },
-                    @{
-                            @"key": @"redeem_promo_code",
-                            @"type": [OAIconTitleValueCell getCellIdentifier],
-                            @"title": OALocalizedString(@"redeem_promo_code"),
-                            @"icon": [UIImage templateImageNamed:@"ic_custom_label_sale"],
-                            @"tint_color": UIColorFromRGB(color_primary_purple)
-                    },
-                    @{
-                            @"key": @"new_device_account",
-                            @"type": [OAIconTitleValueCell getCellIdentifier],
-                            @"title": OALocalizedString(@"new_device_account"),
-                            @"icon": [UIImage templateImageNamed:@"ic_navbar_help"],
-                            @"tint_color": UIColorFromRGB(color_primary_purple)
-                    }
-            ]
-    ];
+    
+    [data addObject:@[
+        @{
+            @"key": @"restore_purchases",
+            @"type": [OAIconTitleValueCell getCellIdentifier],
+            @"title": OALocalizedString(@"restore_purchases"),
+            @"icon": [UIImage templateImageNamed:@"ic_custom_reset"],
+            @"tint_color": UIColorFromRGB(color_primary_purple)
+        },
+        @{
+            @"key": @"redeem_promo_code",
+            @"type": [OAIconTitleValueCell getCellIdentifier],
+            @"title": OALocalizedString(@"redeem_promo_code"),
+            @"icon": [UIImage templateImageNamed:@"ic_custom_label_sale"],
+            @"tint_color": UIColorFromRGB(color_primary_purple)
+        },
+        @{
+            @"key": @"new_device_account",
+            @"type": [OAIconTitleValueCell getCellIdentifier],
+            @"title": OALocalizedString(@"new_device_account"),
+            @"icon": [UIImage templateImageNamed:@"ic_navbar_help"],
+            @"tint_color": UIColorFromRGB(color_primary_purple)
+        }
+    ]];
     [_headers setObject:OALocalizedString(@"menu_help") forKey:@(data.count - 1)];
 
     _data = data;
@@ -418,14 +446,22 @@
         if (cell)
         {
             OAProduct *product = item[@"product"];
-            cell.textView.text = [product.productIdentifier isEqualToString:kInAppId_Addon_Nautical]
-                    ? OALocalizedString(@"product_title_sea_depth_contours")
-                    : product.localizedTitle;
-            cell.iconView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product]
-                    ? [UIImage imageNamed:product.productIconName]
-                    : [product.feature getIcon];
-            cell.descView.text = [self getStatus:product];
-
+            if (product)
+            {
+                cell.textView.text = [product.productIdentifier isEqualToString:kInAppId_Addon_Nautical]
+                        ? OALocalizedString(@"product_title_sea_depth_contours")
+                        : product.localizedTitle;
+                cell.iconView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product]
+                        ? [UIImage imageNamed:product.productIconName]
+                        : [product.feature getIcon];
+                cell.descView.text = [self getStatus:product];
+            }
+            else
+            {
+                cell.textView.text = item[@"title"];
+                cell.iconView.image = [UIImage imageNamed:item[@"icon"]];
+                cell.descView.text = item[@"descr"];
+            }
             [cell setOverflowVisibility:NO];
             [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"] forState:UIControlStateNormal];
             cell.overflowButton.tintColor = UIColorFromRGB(color_tint_gray);
@@ -451,6 +487,8 @@
         [self openSafariWithURL:kAppleRedeemPromoCode];
     else if ([key isEqualToString:@"new_device_account"])
         [self openSafariWithURL:kDocsPurchasesNewDevice];
+    else if ([key isEqualToString:@"product_pro_crossplatform"])
+        [self presentViewController:[[OAPurchaseDetailsViewController alloc] initForCrossplatformSubscription] animated:YES completion:nil];
     else if ([key hasPrefix:@"product_"])
         [self presentViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:item[@"product"]] animated:YES completion:nil];
 
@@ -467,8 +505,10 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
         NSDictionary *item = _data[indexPath.section][indexPath.row];
         NSString *key = item[@"key"];
-        if ([key isEqualToString:@"get_osmand_pro"] || [key isEqualToString:@"explore_osmnad_plans"])
+        if ([key isEqualToString:@"get_osmand_pro"])
             [OAChoosePlanHelper showChoosePlanScreen:self.navigationController];
+        else if ([key isEqualToString:@"explore_osmnad_plans"])
+            [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.MONTHLY_MAP_UPDATES navController:self.navigationController];
     }
 }
 

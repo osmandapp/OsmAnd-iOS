@@ -2565,3 +2565,19 @@
 "osm_live_payment_subscription_management_aid" = "O pagamento será debitado na sua conta Apple ID na confirmação da compra.\n\nA subscrição renova-se automaticamente, a não ser que seja cancelada pelo menos 24 horas antes do fim do período atual. A cobrança será feita na sua conta 24 horas antes do fim do período atual.\n\nPode gerir e cancelar as suas subscrições, acedendo às definições da sua conta na App Store após a compra";
 "osm_live_banner_desc" = "Obtenha descarregamentos ilimitados de mapas, para além de atualizações semanais, diárias ou de hora a hora.";
 "new_device_account" = "Novo dispositivo / nova conta";
+"on_hold" = "Em espera";
+"paused" = "Pausado";
+"shared_string_undefined" = "Não definido";
+"promo_subscription" = "OsmAnd Pro (promoção)";
+"promo" = "Promoção";
+"purchase_origin" = "Origem da compra";
+"in_grace_period" = "Em período de prorrogação para pagamento";
+
+// Shared Strings
+"shared_string_cancelled" = "Cancelado";
+"lang_ckb" = "Curdo central";
+"subscription" = "Subscrição";
+"app_store" = "App Store";
+"google_play" = "Google Play";
+"purchases_feature_weather" = "  ";
+"private_access_routing_req" = "O seu destino está localizado numa área com acesso privado. Permitir a utilização de estradas privadas para esta viagem?";

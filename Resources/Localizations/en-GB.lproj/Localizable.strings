@@ -581,7 +581,7 @@
 "poi_hide" = "Hide";
 
 // My Places
-"favorites" = "Favourites";
+"favorites" = "My Favourites";
 "tracks" = "Tracks";
 "personal_category_name" = "Personal";
 "visible" = "Visible";
@@ -2321,3 +2321,4 @@
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "customize_route_line" = "Customise route line";
 "routing_attr_allow_private_for_truck_name" = "Allow private access (lorry)";
+"routing_attr_allow_private_for_truck_description" = "Allow access to private areas for lorries.";

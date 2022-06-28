@@ -213,7 +213,10 @@
         [destCell.imageView setImage:hasIcon ? [UIImage templateImageNamed:item[@"img"]] : nil];
 
         UIColor *backgroundColor = UIColorFromARGB(color_primary_purple_10);
-        if (indexPath.row == _selectionIndex)
+        BOOL selected = [item.allKeys containsObject:@"selected"]
+                ? [item[@"selected"] boolValue]
+                : indexPath.row == _selectionIndex;
+        if (selected)
         {
             backgroundColor = UIColorFromRGB(color_primary_purple);
             destCell.titleLabel.textColor = UIColor.whiteColor;
@@ -291,8 +294,8 @@
     {
         if (available)
         {
-            [self.foldersDelegate onItemSelected:indexPath.row];
             _selectionIndex = indexPath.row;
+            [self.foldersDelegate onItemSelected:indexPath.row];
         }
         else if ([item.allKeys containsObject:@"product_identifier"])
         {

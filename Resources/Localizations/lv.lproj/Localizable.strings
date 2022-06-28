@@ -41,7 +41,7 @@
 "transport_routes" = "Maršruti";
 "transport_nearby_routes_within" = "Tuvākie iekļaujošie maršruti";
 "transport_nearby_routes" = "Iekļaujošie";
-"transport_stop" = "Izslēgt";
+"transport_stop" = "Apturēt";
 "cancel_navigation" = "Apturēt navigāciju";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Kārtot pēc attāluma";
@@ -740,7 +740,7 @@
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
-"sett_show" = "Parādīt";
+"sett_show" = "Rādīt";
 "sett_notshow" = "Don't show";
 "sett_deg180" = "Degrees 180";
 "sett_deg360" = "Degrees 360";
@@ -984,7 +984,7 @@
 "not_available_profile_name" = "Profile with this name already exists.";
 "profile_type_base_string" = "Bāzes profils";
 "selected_profile" = "Izvēlētais profils";
-"app_profiles" = "Lietotnes profili";
+"app_profiles" = "Lietotāja režīmi";
 "profile_sett_descr" = "Affect selected application profile";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
@@ -1202,7 +1202,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osm_note" = "OSM piezīme";
 "osm_created" = "Created";
-"osm_deleted" = "POI tika veiksmīgi izdzēsts";
+"osm_deleted" = "Izdzēsts";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1282,7 +1282,7 @@
 "shared_string_reload" = "Pārlādēt";
 "shared_string_show_more" = "Parādīt vēl";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
-"shared_string_filter" = "Filtrs";
+"shared_string_filter" = "Filtrēt";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
@@ -1452,7 +1452,7 @@
 "modify_edit_short" = "Rediģēt POI";
 "open_osm_note" = "Atvērt OSM piezīmi";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Iesniegt";
+"osm_alert_title" = "Apvienot";
 "osm_alert_message" = "Ziņa";
 "osm_alert_button_ok" = "Izveidot piezīmi";
 "modify_poi" = "Modify the POI information";
@@ -1476,7 +1476,7 @@
 "units_ft" = "Pēdas";
 "units_km_h" = "km/h";
 "units_mph" = "mil/h";
-"units_hour" = "h";
+"units_hour" = "st";
 "units_min" = "min.";
 "units_sec" = "sec";
 "units_sec_short" = "s";
@@ -1500,7 +1500,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Kartes leģenda";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Cits";
+"help_other_header" = "Citi";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Uzstādīšana un iespējamās problēmas";
 "help_tech_articles" = "Tehniskā dokumentācija";
@@ -1661,7 +1661,7 @@
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"product_title_srtm" = "Kontūrlīnijas";
+"product_title_srtm" = "Kontūrlīniju spraudnis";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "product_title_wikivoyage" = "Ceļojumu gids";
@@ -1684,7 +1684,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Ceļi";
-"res_srtm" = "Kontūrlīnijas";
+"res_srtm" = "Kontūrlīniju spraudnis";
 "res_wiki" = "Vikipēdija";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Slīpums";
@@ -1768,7 +1768,7 @@
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
-"plugins" = "Spraudņu pārvaldnieks";
+"plugins" = "Spraudņi";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -1939,8 +1939,8 @@
 "unlimited_downloads" = "Neierobežotas lejupielādes";
 "wikipedia_offline" = "Vikipēdija bezsaistē";
 "contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
-"monthly_map_updates" = "Map updates: every month";
-"daily_map_updates" = "Map updates: every hour";
+"monthly_map_updates" = "Kartes atjauninājumi: ikmēneša";
+"daily_map_updates" = "Kartes atjauninājumi: katru stundu";
 "index_item_depth_contours_osmand_ext" = "Jūras dziļuma kontūras";
 "donation_to_osm" = "Donation to OpenStreetMap community";
 "purchase_unlim_title" = "Pirkt - %@";
@@ -2265,12 +2265,12 @@
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
-"default" = "Pēc noklusējuma";
+"default" = "Standarta";
 
 
 //Icon categories
 "amenity" = "Amenity";
-"emergency" = "Ātrā palīdzība";
+"emergency" = "Ārkārtas";
 "service" = "Serviss";
 "special" = "Speciālais";
 "sport" = "Sports";
@@ -2340,3 +2340,26 @@
 "cloud_set_up_backup" = "Izveidot dublējumkopiju";
 "weather_wind_unit_mi_per_hour" = "Jūdzes stundā";
 "login_error_email_invalid" = "Lūdzu, ievadiet derīgu epasta adresi";
+"toast_empty_name_error" = "Bez vārda";
+"product_desc_plus" = "Iegūstiet paplašinātās iespējas";
+"subscriptions" = "Abonomenti";
+"altitude_descent" = "Pazeminās";
+"restore_purchases" = "Atjaunot pirkumus";
+"redeem_promo_code" = "Atlaižu kods";
+"altitude_ascent" = "Paaugstinās";
+"shared_string_includes" = "Iekļauts";
+"osm_live_banner_desc" = "Saņemt neierobežotas karšu lejupielādes un atjauninājumus biežāk nekā reizi mēnesī: reizi stundā, dienā vai nedēļā.";
+"shared_string_learn_more" = "Uzzināt vairāk";
+"shared_string_start" = "Sākt";
+"product_desc_ext_development" = "Rādīt izstrādes un atkļūdošanas iestatījumus, kā piemēram, animētā navigācija, renderēšanas izpildījuma attēlošana vai balss uzvednes. Šie iestatījumi ir paredzēti izstrādātājiem un nav vajadzīgi gala lietotājam.";
+"complete_purchase" = "Pabeidziet pirkumu";
+"shared_string_capacity" = "Kapacitāte";
+"units_cubic_m" = "m³";
+"private_access_routing_req" = "Galamērķis atrodas privātas teritorijas vietā. Vai iekļaut maršrutā ierobežotas piekļuves ceļus\?";
+"share_geo" = "ģeo:";
+"product_desc_pro" = "Iegūstiet maksimālās iespējas";
+"copy_coordinates" = "Kopēt koordinātas";
+"unlimited_map_downloads" = "Neierobežotas karšu lejupielādes";
+"product_title_development" = "OsmAnd izstrāde";
+"manage_subscription" = "Pārvaldīt abonomentu";
+"shared_string_stop" = "Apturēt";

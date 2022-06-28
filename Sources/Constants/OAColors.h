@@ -220,4 +220,6 @@
 #define color_banner_background 0x5D2BB5
 #define color_banner_button 0xFFC30D
 
+#define color_slider_minimum 0x58555E
+
 #endif /* OAColors_h */

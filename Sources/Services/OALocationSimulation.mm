@@ -5,6 +5,8 @@
 //  Created by Alexey Kulish on 23/11/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+// OsmAnd/src/net/osmand/plus/OsmAndLocationSimulation.java
+// git revision af522f8c5c428aa6cacbd8ce1e44dfac779b6458
 
 #import "OALocationSimulation.h"
 #import "OsmAndApp.h"
@@ -121,7 +123,7 @@
                     }
                     else
                     {
-                        result = [self useDefaultSimulation:current directions:directions meters:meters intervalTime:intervalTime coeff:coeff];
+                        result = [self useDefaultSimulation:current directions:directions meters:meters intervalTime:intervalTime coeff:coeff isRealistic:realistic];
                     }
                     current = (OASimulatedLocation *)result[0];
                     meters = ((NSNumber *)result[1]).floatValue;
@@ -150,6 +152,7 @@
             if (realistic && current.isTrafficLight && stopDelayCount == 0)
             {
                 stopDelayCount = 5;
+                speed = 0;
                 current = [self removeBearing:current];
             }
             else if (stopDelayCount > 0)
@@ -207,7 +210,7 @@
     return [NSArray arrayWithArray:result];
 }
 
-- (NSArray *)useDefaultSimulation:(OASimulatedLocation *)current directions:(NSMutableArray<OASimulatedLocation *> *)directions meters:(float)meters intervalTime:(float)intervalTime coeff:(float)coeff
+- (NSArray *)useDefaultSimulation:(OASimulatedLocation *)current directions:(NSMutableArray<OASimulatedLocation *> *)directions meters:(float)meters intervalTime:(float)intervalTime coeff:(float)coeff isRealistic:(BOOL)isRealistic
 {
     NSMutableArray *result = [NSMutableArray array];
     if ([current distanceFromLocation:directions[0]] > meters)
@@ -221,9 +224,12 @@
         meters = [self metersToGoInFiveSteps:directions current:current];  
     }
 
-    float limit = [self getMetersLimitForPoint:current intervalTime:intervalTime coeff:coeff];
-    if (meters > limit)
-        meters = limit;
+    if (isRealistic)
+    {
+        float limit = [self getMetersLimitForPoint:current intervalTime:intervalTime coeff:coeff];
+        if (meters > limit)
+            meters = limit;
+    }
     
     [result addObject:current];
     [result addObject:[NSNumber numberWithFloat:meters]];

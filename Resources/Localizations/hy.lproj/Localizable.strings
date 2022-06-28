@@ -48,7 +48,7 @@
 "transport_routes" = "Երթուղիներ";
 "transport_nearby_routes_within" = "Մոտակա երթուղիները";
 "transport_nearby_routes" = "Ներսում";
-"transport_stop" = "Կանգնել";
+"transport_stop" = "Կանգառ";
 
 "cancel_navigation" = "Վերջացնել նավիգացիան";
 "start_navigation" = "Start navigation";
@@ -614,7 +614,7 @@
 
 // My Places
 "favorites" = "Սիրածները";
-"tracks" = "Տրեկեր";
+"tracks" = "Տրեկները";
 "personal_category_name" = "Personal";
 "visible" = "Տեսանելի";
 
@@ -718,7 +718,7 @@
 "map_settings_map_magnifier" = "Խոշորացույց";
 "map_settings_text_size" = "Տեքստի չափը";
 "map_settings_day" = "Ցերեկային";
-"map_settings_night" = "Գիշեր";
+"map_settings_night" = "Գիշերային";
 "map_settings_style" = "Քարտեզի ոճը";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -1263,7 +1263,7 @@
 
 "osm_note" = "OSMնշում";
 "osm_created" = "Created";
-"osm_deleted" = "Ջնջված է";
+"osm_deleted" = "Նջված է";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1404,7 +1404,7 @@
 "add_intermediate" = "Add intermediate point";
 "add_home" = "Add home";
 "add_work" = "Add work";
-"home_pt" = "Տուն";
+"home_pt" = "Գլխավոր";
 "work_pt" = "Work";
 "map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Ավելացնել առաջին միջանկյալ կետը";
@@ -1540,7 +1540,7 @@
 "units_km_h" = "կմ/ժ";
 "units_mph" = "մղ/ժ";
 
-"units_hour" = "ժ";
+"units_hour" = "ժամ";
 "units_min" = "րոպ․";
 "units_sec" = "sec";
 "units_sec_short" = "s";
@@ -1586,7 +1586,7 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "«Սիրված»";
+"import_favorite" = "Սիրված";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -2056,8 +2056,8 @@
 "unlimited_downloads" = "Անսահմանափակ ներբեռնում";
 "wikipedia_offline" = "Վիքիպեդիա (անցանց)";
 "contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
-"monthly_map_updates" = "Map updates: every month";
-"daily_map_updates" = "Map updates: every hour";
+"monthly_map_updates" = "Քարտեզների թարմացումներ`ամսական";
+"daily_map_updates" = "Քարտեզների թարմացումները`ամեն ժամ";
 "index_item_depth_contours_osmand_ext" = "Ծովային խորքային ուրվագծեր";
 "donation_to_osm" = "Donation to OpenStreetMap community";
 "purchase_unlim_title" = "Գնել - %@";
@@ -2485,3 +2485,14 @@
 "altitude" = "Բարձրություն";
 "shared_string_any" = "Ցանկացած";
 "weather_wind_unit_km_per_hour" = "Կիլոմետր ժամում";
+"shared_string_start" = "ձայնագրել";
+"private_access_routing_req" = "Նպատակակետը գտնվում է մասնավոր տարածքում: Թույլատրել այս ուղևորությանը մասնավոր ճանապարհներ մուտք գործել\?";
+"altitude_ascent" = "Վերելք";
+"toast_empty_name_error" = "Դիրքը անուն չունի";
+"product_title_development" = "OsmAnd-ի կարգավորումը և զարգացումը";
+"restore_purchases" = "Գնումների վերականգնում";
+"altitude_descent" = "Վայրեջք";
+"shared_string_stop" = "Կանգառ";
+"product_desc_ext_development" = "Կարգավորումներ զարգացման եւ կարգաբերման գործառույթների համար, ինչպիսիք են երթուղու ստուգումը կամ մոդելավորումը,քարտեզի ցուցադրման կատարումը, ձայնային հուշումները ստուգելը: Այս կարգավորումները մշակողների համար են և հասարակ օգտագործողների համար անհրաժեշտ չեն:";
+"osm_live_banner_desc" = "Ստացեք քարտեզի անսահմանափակ ներբեռնման հնարավորութուն նաև քարտեզների թարմացում ամիսը մեկ անգամ, շաբաթական, ամենօրյա կամ ամեն ժամ:";
+"share_geo" = "գեո:";

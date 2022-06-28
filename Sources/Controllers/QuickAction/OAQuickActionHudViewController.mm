@@ -260,6 +260,8 @@
 
 - (void)showActionsSheetAnimated
 {
+    [_mapHudController hideWeatherToolbarIfNeeded];
+
     _actionsView.frame = CGRectMake(OAUtilities.getLeftMargin, DeviceScreenHeight, _actionsView.frame.size.width, _actionsView.frame.size.height);
     [UIView animateWithDuration:.3 animations:^{
         _quickActionPin.hidden = NO;

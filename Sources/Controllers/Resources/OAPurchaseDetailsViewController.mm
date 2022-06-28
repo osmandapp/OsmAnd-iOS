@@ -12,6 +12,7 @@
 #import "OAIAPHelper.h"
 #import "OAChoosePlanHelper.h"
 #import "OAProducts.h"
+#import "OAAppSettings.h"
 #import "OAColors.h"
 #import "OALinks.h"
 #import "Localization.h"
@@ -30,6 +31,22 @@
 {
     OAProduct *_product;
     NSArray<NSDictionary *> *_data;
+    OAAppSettings *_settings;
+    
+    BOOL _isCrossplatform;
+    BOOL _isPromo;
+}
+
+- (instancetype)initForCrossplatformSubscription
+{
+    self = [super init];
+    if (self) {
+        [self commonInit];
+        _isCrossplatform = YES;
+        _isPromo = ((EOASubscriptionOrigin) [_settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
+        [self generateDataForCrossplatform];
+    }
+    return self;
 }
 
 - (instancetype)initWithProduct:(OAProduct *)product
@@ -37,17 +54,30 @@
     self = [super init];
     if (self)
     {
+        [self commonInit];
         _product = product;
         [self generateData];
     }
     return self;
 }
 
+- (void) commonInit
+{
+    _settings = OAAppSettings.sharedManager;
+}
+
 - (void)applyLocalization
 {
     [super applyLocalization];
-    BOOL isDepthContours = [_product.productIdentifier isEqualToString:kInAppId_Addon_Nautical];
-    self.titleView.text = isDepthContours ? OALocalizedString(@"product_title_sea_depth_contours") : _product.localizedTitle;
+    if (_isCrossplatform)
+    {
+        self.titleView.text = _isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro");
+    }
+    else
+    {
+        BOOL isDepthContours = [_product.productIdentifier isEqualToString:kInAppId_Addon_Nautical];
+        self.titleView.text = isDepthContours ? OALocalizedString(@"product_title_sea_depth_contours") : _product.localizedTitle;
+    }
     [self.backButton setTitle:@"" forState:UIControlStateNormal];
     [self.backButton setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
 }
@@ -67,7 +97,6 @@
     BOOL isDepthContours = [_product.productIdentifier isEqualToString:kInAppId_Addon_Nautical];
 
     NSMutableDictionary *productDict = [NSMutableDictionary dictionary];
-    productDict[@"key"] = @"product";
     productDict[@"type"] = [OATitleDescriptionBigIconCell getCellIdentifier];
     productDict[@"title"] = isDepthContours ? OALocalizedString(@"product_title_sea_depth_contours") : _product.localizedTitle;
     UIImage *icon = [self getIcon];
@@ -78,9 +107,7 @@
 
     [data addObject:productDict];
 
-
     [data addObject:@{
-            @"key": @"product_type",
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"title": OALocalizedString(@"res_type"),
             @"description": isSubscription || [OAIAPHelper isFullVersion:_product]
@@ -99,12 +126,26 @@
 
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterMediumStyle;
-
+    
+    NSString *descr = _product.expirationDate ? [formatter stringFromDate:_product.expirationDate] : @"";
+    if (_product.purchaseState == PSTATE_NOT_PURCHASED && [_product isKindOfClass:OASubscription.class])
+    {
+        if (_product.purchaseCancelledTime > 0)
+        {
+            descr = [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:_product.purchaseCancelledTime]];
+        }
+    }
+    
     [data addObject:@{
-            @"key": @"purchased_type",
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"title": purchasedType,
-            @"description": _product.expirationDate ? [formatter stringFromDate:_product.expirationDate] : @""
+            @"description": descr
+    }];
+    
+    [data addObject:@{
+            @"type": [OAIconTitleValueCell getCellIdentifier],
+            @"title": OALocalizedString(@"purchase_origin"),
+            @"description": OALocalizedString(@"app_store")
     }];
 
     if (isSubscription)
@@ -116,6 +157,52 @@
                 @"icon": [UIImage templateImageNamed:@"ic_custom_shop_bag"]
         }];
     }
+
+    _data = data;
+}
+
+- (void)generateDataForCrossplatform
+{
+    NSMutableArray<NSDictionary *> *data = [NSMutableArray array];
+
+    NSMutableDictionary *productDict = [NSMutableDictionary dictionary];
+    productDict[@"type"] = [OATitleDescriptionBigIconCell getCellIdentifier];
+    productDict[@"title"] = _isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro");
+    UIImage *icon = [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"];
+    if (icon)
+        productDict[@"icon"] = icon;
+    
+
+    [data addObject:productDict];
+
+    [data addObject:@{
+            @"type": [OAIconTitleValueCell getCellIdentifier],
+            @"title": OALocalizedString(@"res_type"),
+            @"description": OALocalizedString(@"subscription")
+    }];
+
+    NSString *purchasedType = @"";
+    OASubscriptionState *state = [_settings.backupPurchaseState get];
+    if (!state.isActive)
+        purchasedType = OALocalizedString(@"expired");
+    else
+        purchasedType = OALocalizedString(@"expires");
+
+    NSDate *expirationDate = [_settings.backupPurchaseExpireTime get] > 0 ? [NSDate dateWithTimeIntervalSince1970:_settings.backupPurchaseExpireTime.get] : nil;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateStyle = NSDateFormatterMediumStyle;
+
+    [data addObject:@{
+            @"type": [OAIconTitleValueCell getCellIdentifier],
+            @"title": purchasedType,
+            @"description": expirationDate ? [formatter stringFromDate:expirationDate] : @""
+    }];
+
+    [data addObject:@{
+            @"type": [OAIconTitleValueCell getCellIdentifier],
+            @"title": OALocalizedString(@"purchase_origin"),
+            @"description": _isPromo ? OALocalizedString(@"promo") : OALocalizedString(@"google_play")
+    }];
 
     _data = data;
 }

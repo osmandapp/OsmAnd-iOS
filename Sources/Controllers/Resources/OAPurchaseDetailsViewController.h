@@ -13,5 +13,6 @@
 @interface OAPurchaseDetailsViewController : OACompoundViewController
 
 - (instancetype)initWithProduct:(OAProduct *)product;
+- (instancetype)initForCrossplatformSubscription;
 
 @end

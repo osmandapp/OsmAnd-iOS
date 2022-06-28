@@ -218,7 +218,7 @@
 "units_km" = "χλμ";
 "gpx_waypoint" = "Σημείο διαδρομής";
 "show_pedestrian_warnings" = "Διαβάσεις πεζών";
-"nearby_search" = "Αναζήτηση κοντινών αποστάσεων";
+"nearby_search" = "Αναζήτηση στη γύρω περιοχή";
 "help_versions" = "Εκδόσεις";
 "prefer_in_routing_descr" = "Να προτιμώνται αυτοκινητόδρομοι.";
 "gpx_deactivated" = "Απενεργοποιημένο";
@@ -427,7 +427,7 @@
 "si_nm" = "Ναυτικά μίλια";
 "selected_categories" = "Επιλεγμένες κατηγορίες";
 "product_title_sea_depth_contours" = "Ναυτικές ισοβαθείς καμπύλες";
-"home_pt" = "Σπίτι";
+"home_pt" = "Αρχική σελίδα";
 "traffic_warning_pedestrian" = "Διάβαση πεζών";
 "price_free" = "Δωρεάν";
 "map_markers" = "Δείκτες χάρτη";
@@ -456,7 +456,7 @@
 "shared_string_building" = "Κτήριο";
 "osmand_live_updates" = "Ζωντανές ενημερώσεις";
 "create_items" = "Δημιουργία στοιχείων";
-"transport_routes" = "Διαδρομές";
+"transport_routes" = "Δρομολόγια";
 "get_discount_second_part" = "έπειτα %@";
 "sett_settings" = "Επιλογές";
 "edit_action" = "Επεξεργασία ενέργειας";
@@ -491,7 +491,7 @@
 "speak_title" = "Εκφώνηση…";
 "app_mode_bus" = "Λεωφορείο";
 "help_faq_descr" = "Συχνές ερωτήσεις";
-"osm_deleted" = "Διαγράφτηκε";
+"osm_deleted" = "Διαγραμμένο";
 "arrival_distance" = "Αναγγελία άφιξης";
 "actions" = "Ενέργειες";
 "res_details" = "Λεπτομέρειες";
@@ -534,7 +534,7 @@
 "shared_string_remove" = "Αφαίρεση";
 "osm_live_payment_renews_quarterly" = "Τριμηνιαίες ανανεώσεις";
 "city_type_district" = "Περιοχή";
-"help_other_header" = "Άλλα";
+"help_other_header" = "Άλλη";
 "osm_live_enter_email" = "Παρακαλούμε, εισάγετε μια έγκυρη διεύθυνση ηλεκτρονικής αλληλογραφίας";
 "intro_skip" = "Παράλειψη";
 "speak_cameras" = "Κάμερες ταχύτητας";
@@ -567,7 +567,7 @@
 "units_mph" = "μαω";
 "gpx_avg_altitude" = "Μέσο υψόμετρο";
 "simulate_navigation" = "Προσομοίωση πλοήγησης";
-"transport_stop" = "Διακοπή";
+"transport_stop" = "Στάση";
 "rendering_category_others" = "Άλλα χαρακτηριστικά χάρτη";
 "m_style_bicycle" = "Ποδηλασία";
 "osm_live_hide_user_name" = "Να μην εμφανίζεται το όνομά μου στις αναφορές";
@@ -1016,7 +1016,7 @@
 "default_speed_dialog_msg" = "Εκτιμά τον χρόνο άφιξης αγνώστων τύπων δρόμων και περιορίζει την ταχύτητα σε όλους τους δρόμους (μπορεί να επηρεάσει τη διαδρομή)";
 "base_profile_descr_car" = "Αυτοκίνητο, φορτηγό, μηχανή";
 "reverse_route" = "Αντιστροφή διαδρομής";
-"nothing_found_empty" = "Δε βρέθηκε τίποτα";
+"nothing_found_empty" = "Δεν βρέθηκε τίποτα";
 "announce" = "Ανακοίνωση";
 "base_profile_descr_pedestrian" = "Περπάτημα, πεζοπορία, τρέξιμο";
 "map_settings_legend" = "Υπόμνημα";
@@ -1431,3 +1431,20 @@
 "lang_hi" = "Χίντι";
 "lang_ru" = "Ρωσικά";
 "lang_be" = "Λευκορωσικά";
+"monthly_map_updates" = "Μηνιαίες ενημερώσεις χαρτών";
+"altitude_ascent" = "Ανηφόρα";
+"shared_string_start" = "Έναρξη";
+"toast_empty_name_error" = "Ανώνυμη τοποθεσία";
+"osm_live_banner_desc" = "Κάντε απεριόριστες λήψεις χαρτών, προσθέτοντας εβδομαδιαία, ημερησίως, ή ακόμα και ωριαίες ενημερώσεις.";
+"share_geo" = "γεω:";
+"shared_string_capacity" = "Χωρητικότητα";
+"copy_coordinates" = "Αντέγραψε συντεταγμένες";
+"altitude_descent" = "Κατηφόρα";
+"product_title_development" = "Ανάπτυξη του OsmAnd";
+"subscriptions" = "Συνδρομές";
+"units_cubic_m" = "m³";
+"product_desc_ext_development" = "Ρυθμίσεις για τα χαρακτηριστικά ανάπτυξης και αποσφαλμάτωσης όπως απόδοση απεικόνισης, ή η φωνητική καθοδήγηση. Αυτές οι ρυθμίσεις προορίζονται για τους προγραμματιστές και δεν χρειάζονται στην κανονική χρήση της εφαρμογής.";
+"daily_map_updates" = "Ωριαίες ενημερώσεις χαρτών";
+"shared_string_stop" = "Στάση";
+"restore_purchases" = "Επαναφορά αγορών";
+"private_access_routing_req" = "Ο προορισμός σας βρίσκεται σε ιδιωτική περιοχή. Να επιτραπεί η πρόσβαση σε ιδιωτικούς δρόμους για αυτό το ταξίδι";

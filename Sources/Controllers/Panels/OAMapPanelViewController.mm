@@ -385,6 +385,8 @@ typedef enum
 
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller
 {
+    [self.hudViewController hideWeatherToolbarIfNeeded];
+
     self.sidePanelController.recognizesPanGesture = NO;
 
     if ([controller isKindOfClass:OARoutePlanningHudViewController.class])
@@ -849,6 +851,8 @@ typedef enum
         [self hideScrollableHudViewController];
     }
 
+    [self.hudViewController hideWeatherToolbarIfNeeded];
+
     _dashboard = [[OAMapSettingsViewController alloc] init];
     [_dashboard show:self parentViewController:nil animated:YES];
     
@@ -959,6 +963,8 @@ typedef enum
     [OAAnalyticsHelper logEvent:@"route_info_open"];
 
     [self removeGestureRecognizers];
+
+    [self.hudViewController hideWeatherToolbarIfNeeded];
 
     if (self.targetMenuView.superview)
     {
@@ -1216,6 +1222,9 @@ typedef enum
 {
     if (self.isNewContextMenuDisabled)
         return;
+
+    [self.hudViewController hideWeatherToolbarIfNeeded];
+
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
         
     if (_activeTargetType == OATargetRouteIntermediateSelection && targetPoints.count > 1)
@@ -1273,6 +1282,8 @@ typedef enum
     
     if (targetPoint.type == OATargetMapillaryImage)
     {
+        [self.hudViewController hideWeatherToolbarIfNeeded];
+
         [_mapillaryController showImage:targetPoint.targetObj];
         [self applyTargetPoint:targetPoint];
         [self goToTargetPointMapillary];
@@ -1984,6 +1995,7 @@ typedef enum
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete
 {
+    [self.hudViewController hideWeatherToolbarIfNeeded];
     [self hideMultiMenuIfNeeded];
 
     if (_scrollableHudViewController)
@@ -3461,6 +3473,8 @@ typedef enum
 
 - (void) openDestinationCardsView
 {
+    [self.hudViewController hideWeatherToolbarIfNeeded];
+
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
     
     if (!cardsController.view.superview)

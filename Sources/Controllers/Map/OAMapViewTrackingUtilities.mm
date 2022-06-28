@@ -264,7 +264,7 @@
                                                  OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                  kLocationServicesAnimationKey);
                 
-                _mapView.animator->animateElevationAngleTo(kMapModeFollowDefaultElevationAngle,
+                _mapView.animator->animateElevationAngleTo([_mapView normalizeElevationAngle:kMapModeFollowDefaultElevationAngle],
                                                            kFastAnimationTime,
                                                            OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                            kLocationServicesAnimationKey);

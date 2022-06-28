@@ -37,7 +37,7 @@
 "transport_routes" = "ルート";
 "transport_nearby_routes_within" = "近辺のルート";
 "transport_nearby_routes" = "内";
-"transport_stop" = "乗り場";
+"transport_stop" = "停止";
 "cancel_navigation" = "ナビゲーションの停止";
 "start_navigation" = "ナビゲーションの開始";
 "intermediate_items_sort_by_distance" = "移動距離を最短で並べ替え";
@@ -482,7 +482,7 @@
 "gpx_slope" = "勾配";
 // Map settings
 "rendering_value_browse_map_name" = "マップの閲覧";
-"m_style_car" = "乗用車";
+"m_style_car" = "ドライブ";
 "m_style_walk" = "徒歩";
 "m_style_bicycle" = "自転車";
 "map_settings_map" = "マップ";
@@ -648,7 +648,7 @@
 "osm_failed_uploads" = "失敗しました";
 "osm_note" = "OSMでの注釈";
 "osm_created" = "作成しました";
-"osm_deleted" = "削除されました";
+"osm_deleted" = "削除しました";
 "osm_modified" = "修正しました";
 "osm_reopened" = "再開しました";
 "osm_name" = "OpenStreetMapのユーザー名";
@@ -693,7 +693,7 @@
 "osm_edits_offline_layer" = "OSM編集/メモ (オフライン)";
 "osm_notes_online_layer" = "OSMメモ (オンライン)";
 "osm_edits_basic" = "基本";
-"osm_edits_advanced" = "拡張";
+"osm_edits_advanced" = "上級者向け";
 "osm_edits_all" = "すべての編集";
 "osm_edits_poi" = "POIの編集";
 "osm_edits_notes" = "メモ";
@@ -854,7 +854,7 @@
 "modify_edit_short" = "修正をOSMに反映";
 "open_osm_note" = "OSMでの注釈を開く";
 "edit_osm_note" = "OSMメモの編集";
-"osm_alert_title" = "コミット";
+"osm_alert_title" = "情報の追加、返信等";
 "osm_alert_message" = "メッセージ";
 "osm_alert_button_ok" = "注釈の作成";
 "modify_poi" = "POI情報を変更";
@@ -1090,7 +1090,7 @@
 "get_directions" = "ナビ開始";
 "parking" = "駐車場";
 "directions_more_options" = "ここから出発";
-"nearby_search" = "近隣を検索";
+"nearby_search" = "近くを検索";
 "est_travel_time" = "所要時間の見積もり";
 "pedestrian" = "徒歩";
 "sorting" = "並び替え";
@@ -1191,7 +1191,7 @@
 "postcode" = "郵便番号";
 "show_something_on_map" = "マップ上に%@を表示";
 "search_POI_level_btn" = "検索範囲を拡大";
-"shared_string_street" = "通り";
+"shared_string_street" = "街路";
 "shared_string_building" = "建物";
 "shared_string_street_intersection" = "交差点";
 "shared_string_address" = "住所";
@@ -1233,8 +1233,8 @@
 "unlimited_downloads" = "無制限ダウンロード";
 "wikipedia_offline" = "Wikipediaオフライン";
 "contour_lines_hillshade_maps" = "等高線と陰影起伏図";
-"monthly_map_updates" = "マップ更新:毎月";
-"daily_map_updates" = "マップ更新:毎時";
+"monthly_map_updates" = "マップ更新: 毎月";
+"daily_map_updates" = "マップ更新: 毎時";
 "index_item_depth_contours_osmand_ext" = "海洋等深線データ";
 "donation_to_osm" = "OpenStreetMapコミュニティへの寄付";
 "purchase_unlim_title" = "購入 - %@";
@@ -2008,7 +2008,7 @@
 "service" = "アクセス道路、特定施設用道路";
 "special" = "特別";
 "sport" = "スポーツ";
-"emergency" = "救急施設";
+"emergency" = "緊急";
 "key_hint_recenter_map" = "マップを中央に再配置";
 "shared_z_a" = "降順(Z～A)";
 "shared_a_z" = "昇順(A～Z)";
@@ -2069,9 +2069,7 @@
 "gpx_upload_trackable_visibility_descr" = "\"追跡可能\"は、トレース状況が公開リストに表示されないことを意味しますが、タイムスタンプ付きで処理済みの経路ポイント(直接関連付けされないもの)は、パブリックなGPS APIからのダウンロードを通じて表示されます。";
 "gpx_upload_identifiable_visibility_descr" = "\"識別可能\"は、経路がGPS経路およびパブリックGPS経路リストに表示されることを示唆しています。他のユーザーは現在の経路をダウンロードして、ユーザー名とリンクできます。経路ポイント APIを介して配信されるデータは、元の経路追跡ページを参照します。経路ポイントのタイムスタンプは、公的GPS APIを通じて入手できます。";
 "gpx_upload_private_visibility_descr" = "\"プライベート\"は、経路が公開リストに表示されないことを示唆しています。経路ポイントはタイムスタンプなしで公的GPS APIを介して引き続き利用できますが、時系列で並べられることはありません。";
-"route_between_points_warning_desc" = "このオプションを使用するには、OsmAndで経路をマップ上の道路にスナップする必要があります。
-\n
-\n次にナビゲーションプロファイルを選択して、利用予定の道路(一般道、高速道路)と、道路を追跡するおおよその距離を検出する必要があります。";
+"route_between_points_warning_desc" = "このオプションを使用するには、OsmAndで経路をマップ上の道路にスナップする必要があります。\n\n次にナビゲーションプロファイルを選択して、利用予定の道路(一般道、高速道路)と、道路を追跡するおおよその距離を検出する必要があります。";
 "some_articles_may_not_available_in_lang" = "一部のウィキペディア記事は、ご使用の言語で利用できない場合があります。";
 "last_used" = "最後に利用";
 "suggested_maps" = "推奨マップ";
@@ -2104,7 +2102,7 @@
 "context_menu_item_edit_waypoint" = "GPX経由地点の編集";
 "dialogs_and_notifications" = "ダイアログと通知";
 "gpxup_identifiable" = "識別可能";
-"default" = "デフォルト";
+"default" = "標準";
 "product_title_mapillary" = "Mapillary";
 "contour_lines_hillshades_slope" = "等高線、陰影起伏、勾配";
 "routeInfo_smoothness_description" = "特に表面の規則性/平坦性の観点での、車輪の付いたあらゆる乗り物においてそれぞれの通行が認められる歩道および車道の操縦性分類です。";
@@ -2125,7 +2123,7 @@
 "edit_track" = "経路の編集";
 "gpx_split_interval_descr" = "距離または時間のマーカーが経路に表示される間隔を選択します。";
 "reset_to_original" = "初期値へリセット";
-"nautical" = "航海";
+"nautical" = "船舶";
 "start_point" = "開始";
 "map_widget_speed" = "速度";
 "carplay_profile" = "CarPlayプロファイル";
@@ -2347,3 +2345,51 @@
 "rendering_attr_showFitnessTrails_name" = "アスレチックコース";
 "routing_attr_only_permitted_ways_name" = "許可された道のみ通行";
 "upload_to_openstreetmap" = "OpenStreetMapにアップロード";
+"complete_purchase" = "全て含む";
+"ltr_or_rtl_combine_via_or" = "%@または%@";
+"monthly_subscription" = "月毎のサブスクリプション";
+"manage_subscription" = "サブスクリプションの管理";
+"osm_live_banner_desc" = "マップダウンロードの制限がなくなり、設定した更新頻度(月、週、日、時間)での自動ダウンロードが可能になります。";
+"purchases_feature_desc_hourly_map_updates" = "より短い頻度でマップ更新が可能になります。時間ごと、日ごと、週ごとの更新。更新は変更されたエリアに対してのみ、段階的にダウンロードされます。";
+"shared_string_purchased" = "購入済";
+"altitude_descent" = "下り坂";
+"purchases_feature_desc_wikipedia" = "オフラインでもWikipediaを参考に探索することが可能になります。記事は国や地域ごとに分けられ、言語に寄らず利用できます。";
+"purchases_feature_desc_wikivoyage" = "オフラインでもWikivoyage を参考に探索することが可能になります。記事は国や地域ごとに分けられ、言語に寄らず利用できます。";
+"product_desc_pro" = "全ての機能を手に入れる";
+"product_desc_plus" = "より拡張された機能を手に入れる";
+"private_access_routing_req" = "目的地が専有エリア(私有地)内にあります。専有道路あるいは私道を通ることを許可しますか？";
+"subscriptions" = "サブスクリプション";
+"purchases_feature_desc_nautical" = "水深に関する情報を入手しましょう";
+"share_geo" = "geo:";
+"redeem_promo_code" = "プロモーションコードを利用";
+"unlimited_map_downloads" = "マップの無制限ダウンロード";
+"terrain_maps" = "地形マップ";
+"restore_purchases" = "購入情報の復元";
+"copy_to_map_favorites" = "お気に入りにコピー";
+"shared_string_capacity" = "容量";
+"altitude_ascent" = "上り坂";
+"copy_address" = "住所をコピー";
+"product_desc_ext_development" = "ナビゲーション時のシミュレーション、レンダリングパフォーマンス確認、音声指示の確認などの開発およびデバッグ機能の利用や設定がおこなえます。開発者向けで通常アプリの使用には必要ありません。";
+"purchases_feature_desc_terrain" = "地形の等高線、地形の起伏を影で表現する陰影起伏図、色で判別できる傾斜マップ、山頂と低地などが含まれます。";
+"shared_string_start" = "開始";
+"product_title_development" = "OsmAnd開発者向けオプション";
+"copy_coordinates" = "座標をコピー";
+"wikipedia_and_wikivoyage_offline" = "WikipediaとWikivoyageはオフライン";
+"new_device_account" = "新しい端末 / 新規アカウント";
+"shared_string_stop" = "停止";
+"purchases_feature_desc_unlimited_map_download" = "すべての大陸と地域のオフラインマップを制限無くダウンロードできます。";
+"nautical_depth" = "水深";
+"purchases_feature_desc_combined_wiki" = "インターネット接続のない外出先でもWikipedia記事を参考に探索してみましょう。すべての言語で利用可能で記事は国ごとに分割されたオフラインデータとなっています。";
+"expired" = "期限切れ";
+"units_cubic_m" = "立方メートル";
+"toast_empty_name_error" = "名前の付けられていない場所";
+"annual_subscription" = "年毎のサブスクリプション";
+"purchases_feature_desc_pro_widgets" = "OsmAnd Proの機能(ルートの色付けなど)が利用できます。";
+"purchases_feature_desc_monthly_map_updates" = "オフラインマップの定期および月毎更新が可能になります。";
+"shared_string_learn_more" = "詳細を見る";
+"continue_with" = "%@への手続きに進む";
+"shared_string_includes" = "含む";
+"explore_osmnad_plans_to_find_suitable" = "OsmAnd Plansを参照し、自分に適したプランやサブスクリプションをご利用ください。";
+"purchases_feature_desc_osmand_cloud" = "OsmAndクラウドを入手することで、すべてのOsmAndデータをクラウド保存が可能になります。再インストール後にデータが失われることはありません。全情報を簡単にバックアップおよび復元出来ます。";
+"not_available_with" = "%@は利用できません";
+"lang_ckb" = "中央クルド語";

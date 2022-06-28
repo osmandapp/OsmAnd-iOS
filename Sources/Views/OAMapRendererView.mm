@@ -280,9 +280,24 @@
     return _renderer->getMapState().metersPerPixel;
 }
 
+- (double) normalizeElevationAngle:(double)elevationAngle
+{
+    int verticalTilesCount = round(UIScreen.mainScreen.bounds.size.height * self.viewportYScale * self.displayDensityFactor / 256.0);
+    if (verticalTilesCount < 6)
+        return MAX(30.0, elevationAngle);
+    else if (verticalTilesCount < 8)
+        return MAX(36.0, elevationAngle);
+    else if (verticalTilesCount < 9)
+        return MAX(40.0, elevationAngle);
+    else if (verticalTilesCount < 11)
+        return MAX(42.0, elevationAngle);
+    else
+        return MAX(48.0, elevationAngle);
+}
+
 - (void)setElevationAngle:(float)elevationAngle
 {
-    _renderer->setElevationAngle(elevationAngle);
+    _renderer->setElevationAngle([self normalizeElevationAngle:elevationAngle]);
 }
 
 - (OsmAnd::PointI)target31
@@ -465,7 +480,7 @@
     return nil;
 }
 
-- (void)dumpResourcesInfo
+- (void) dumpResourcesInfo
 {
     _renderer->dumpResourcesInfo();
 }
@@ -609,6 +624,9 @@
     if (!CGRectIsEmpty(self.bounds))
         prevBounds = self.bounds;
     
+    // Normalize elevation angle
+    [self setElevationAngle:self.elevationAngle];
+    
     OALog(@"[OAMapRendererView %p] Recreating OpenGLES2 frame and render buffers due to resize", self);
 
     // Kill buffers, since window was resized
@@ -627,6 +645,9 @@
 {
     _viewportYScale = viewportYScale;
     
+    // Normalize elevation angle
+    [self setElevationAngle:self.elevationAngle];
+
     // Kill buffers, since viewport was resized
     [self releaseRenderAndFrameBuffers];
 }
@@ -901,8 +922,8 @@
     _renderer->setConfiguration(configuration);
 }
 
-- (UIImage*) getGLScreenshot {
-
+- (UIImage*) getGLScreenshot
+{
     int s = (int) [[UIScreen mainScreen] scale];
     const int w = self.frame.size.width;
     const int h = self.frame.size.height;
@@ -910,18 +931,23 @@
     const NSInteger myDataLength = w * h * 4 * s * s;
     // allocate array and read pixels into it.
     GLubyte *buffer = (GLubyte *) malloc(myDataLength);
-    glReadPixels(0, 0, w*s, h*s, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    glReadPixels(0, 0, w * s, h * s, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
     
     // gl renders "upside down" so swap top to bottom into new array.
     GLubyte *buffer2 = (GLubyte *) malloc(myDataLength);
-    for(int y = 0; y < h*s; y++)
+    for(int y = 0; y < h * s; y++)
     {
-        memcpy( buffer2 + (h*s - 1 - y) * w * 4 * s, buffer + (y * 4 * w * s), w * 4 * s );
+        memcpy(buffer2 + (h * s - 1 - y) * w * 4 * s, buffer + (y * 4 * w * s), w * 4 * s);
     }
     free(buffer); // work with the flipped buffer, so get rid of the original one.
     
     // make data provider with data.
-    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer2, myDataLength, NULL);
+    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer2, myDataLength,
+        [](void * __nullable info, const void * data, size_t size)
+        {
+            free((void *) data);
+        }
+    );
     
     // prep the ingredients
     int bitsPerComponent = 8;
@@ -932,15 +958,13 @@
     CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
     
     // make the cgimage
-    CGImageRef imageRef = CGImageCreate(w*s, h*s, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
-    
+    CGImageRef imageRef = CGImageCreate(w * s, h * s, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
     // then make the uiimage from that
-    UIImage *myImage = [ UIImage imageWithCGImage:imageRef scale:s orientation:UIImageOrientationUp ];
+    UIImage *myImage = [UIImage imageWithCGImage:imageRef scale:s orientation:UIImageOrientationUp];
 
-    CGImageRelease( imageRef );
+    CGImageRelease(imageRef);
     CGDataProviderRelease(provider);
     CGColorSpaceRelease(colorSpaceRef);
-//    free(buffer2);
     
     return myImage;
 }

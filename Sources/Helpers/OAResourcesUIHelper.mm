@@ -1126,7 +1126,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
     if (region.superregion)
     {
-        while (region.superregion != worldRegion)
+        while (region.superregion != worldRegion && region.superregion != nil)
             region = region.superregion;
 
         if ([region.regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()])

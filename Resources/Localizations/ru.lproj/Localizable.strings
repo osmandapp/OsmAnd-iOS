@@ -290,10 +290,6 @@
 "track_clear" = "Очистить текущий трек";
 "track_clear_q" = "Вы действительно хотите очистить текущий трек?";
 "show_info" = "Показать информацию";
-"res_banner_free_maps_title" = "У вас есть %d бесплатных карт!";
-"res_banner_free_maps_desc" = "Вы можете загрузить %d бесплатных карт без обновлений";
-"res_banner_no_free_maps_title" = "У вас нет бесплатных карт!";
-"res_banner_no_free_maps_desc" = "Пожалуйста, купите карту региона или карты всего мира";
 //inapps
 "product_title_nautical" = "Морская карта";
 "product_desc_nautical" = "Морская карта мира";

@@ -552,6 +552,8 @@ static OASubscriptionState *EXPIRED;
         // test - reset purchases
         if (TEST_LOCAL_PURCHASE)
         {
+            [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"freeMapsAvailable"];
+
             [_settings.liveUpdatesPurchased set:NO];
             [_settings.osmandProPurchased set:NO];
             [_settings.osmandMapsPurchased set:NO];

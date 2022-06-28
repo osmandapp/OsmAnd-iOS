@@ -206,7 +206,6 @@
 // Resources
 "res_mapsres" = "Мапы і рэсурсы";
 "download_tab_local" = "Спампаваныя";
-"res_banner_no_free_maps_title" = "У вас няма бясплатных мапаў!";
 "res_search_world" = "Шукаць па ўсім свеце";
 "res_catalog_upd" = "Абнаўленне каталога";
 "res_worldwide" = "Па ўсім свеце";
@@ -301,9 +300,6 @@
 "purchases" = "Куплі";
 // Purchases
 "prch_addons" = "Дапаўненні";
-"res_banner_free_maps_title" = "У вас ёсць %d бясплатных мапаў!";
-"res_banner_free_maps_desc" = "Вы можаце спампаваць %d бясплатных мапаў без абнаўленняў";
-"res_banner_no_free_maps_desc" = "Калі ласка, купіце мапы рэгіёна ці мапы ўсяго свету";
 "res_wmap" = "Сусветная аглядная мапа";
 "res_details" = "Падрабязнасці";
 "time_left" = "засталося";

@@ -449,10 +449,6 @@
 // Resources
 "res_mapsres" = "إدارة الخرائط";
 "download_tab_local" = "على الهاتف";
-"res_banner_free_maps_title" = "لديك %d خرائط مجانية!";
-"res_banner_free_maps_desc" = "يمكنك تنزيل %d خرائط مجانية ، دون تحديثات";
-"res_banner_no_free_maps_title" = "ليس لديك خرائط مجانية!";
-"res_banner_no_free_maps_desc" = "يرجى شراء خرائط المنطقة أو خرائط جميع العالم";
 "res_search_world" = "البحث في جميع أنحاء العالم";
 "res_catalog_upd" = "تحديث الدليل";
 "res_world_map" = "خريطة العالم العامة";

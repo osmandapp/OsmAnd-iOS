@@ -12,7 +12,6 @@
 @interface OAManageResourcesViewController : OAResourcesBaseViewController
 
 @property (nonatomic, assign) BOOL openFromSplash;
-@property (nonatomic, assign) BOOL displayBannerPurchaseAllMaps;
 
 + (NSArray<NSString *> *) getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region;
 + (void) prepareData;

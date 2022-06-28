@@ -592,10 +592,6 @@
 "osmand_live_update_now" = "今すぐ更新";
 "osmand_live_updates_size" = "ダウンロードした更新ファイルのサイズ";
 "osmand_live_deleted_object" = "削除されたオブジェクト";
-"res_banner_free_maps_title" = "%d個の無料マップがあります！";
-"res_banner_free_maps_desc" = "更新しなくても%d個の無料マップがダウンロードできます";
-"res_banner_no_free_maps_title" = "利用できる無料マップがありません！";
-"res_banner_no_free_maps_desc" = "地域マップまたは世界地図を購入してください";
 "res_search_world" = "全世界で検索";
 "res_catalog_upd" = "カタログ更新";
 "res_world_map" = "世界地図";

@@ -167,10 +167,6 @@
 // Resources
 "res_mapsres" = "Haritalar & Kaynaklar";
 "download_tab_local" = "Yerel";
-"res_banner_free_maps_title" = "%d ücretsiz haritalar var!";
-"res_banner_free_maps_desc" = "%d güncelleştirmeler olmadan ücretsiz haritalar indirebilir miyim";
-"res_banner_no_free_maps_title" = "Ücretsiz hiçbir haritalar var!";
-"res_banner_no_free_maps_desc" = "Lütfen bölge haritaları satın almak ya da tüm dünya haritaları";
 "res_search_world" = "Dünya çapında arama";
 "res_catalog_upd" = "Katalog güncelleştirme";
 "res_world_map" = "Dünya Haritası";

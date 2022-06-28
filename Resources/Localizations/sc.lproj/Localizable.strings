@@ -175,10 +175,6 @@
 // Resources
 "res_mapsres" = "Mapas e Resursas";
 "res_installed" = "Installadas";
-"res_banner_free_maps_title" = "Tenes %d mapas de badas!";
-"res_banner_free_maps_desc" = "Podes iscarrigare %d mapas de badas, chene sos agiornamentos";
-"res_banner_no_free_maps_title" = "Non tenes peruna mapa de badas!";
-"res_banner_no_free_maps_desc" = "Pro piaghere compora sas mapas regionales o sa mapa mundiale";
 "res_search_world" = "Chirca globale";
 "res_catalog_upd" = "Agiorna su catàlogu";
 "res_world_map" = "Mapa mundiale";

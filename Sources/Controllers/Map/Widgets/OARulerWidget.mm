@@ -31,7 +31,6 @@
 #define TITLE_PADDING 2
 #define COMPASS_INDEX 2
 
-#define SHOW_RULER_MIN_ZOOM 3
 #define SHOW_COMPASS_MIN_ZOOM 8
 #define ZOOM_UPDATING_THRESHOLD 0.05
 #define RULER_ROTATION_UPDATING_THRESHOLD 1
@@ -39,6 +38,11 @@
 #define ELEVATION_UPDATING_THRESHOLD 2
 #define TARGET31_UPDATING_THRESHOLD 1000000
 #define FRAMES_PER_SECOND 10
+
+#define MAX_LAT_VALUE 90
+#define MAX_LON_VALUE 180
+#define ESTIMATED_MAX_LON_VALUE 179.999999
+#define ESTIMATED_MIN_LON_VALUE -179.999999
 
 typedef NS_ENUM(NSInteger, EOATextSide) {
     EOATextSideVertical = 0,
@@ -226,7 +230,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     UIGraphicsPushContext(ctx);
     CGContextSaveGState(ctx);
 
-    if ([self rulerModeOn] && [_mapViewController getMapZoom] > SHOW_RULER_MIN_ZOOM)
+    if ([self rulerModeOn])
     {
         [self updateStyles];
         CGPoint circleCenterPoint = [self getCenterPoint];
@@ -383,18 +387,27 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         {
             double pixelDensity = _cachedMapDensity * [[UIScreen mainScreen] scale];
             auto latLon = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, circleRadius * pixelDensity, a);
-            if (ABS(latLon.latitude) > 90 || ABS(latLon.longitude) > 180)
+            if (ABS(latLon.latitude) < MAX_LAT_VALUE && ABS(latLon.longitude) < MAX_LON_VALUE)
             {
-                if (points.count > 0)
-                {
-                    [arrays addObject:points];
-                    points = [NSMutableArray array];
-                }
-                continue;
+                CGPoint screenPoint = [self latLonToScreenPoint:latLon];
+                [points addObject:[NSValue valueWithCGPoint:screenPoint]];
             }
-            
-            CGPoint screenPoint = [self latLonToScreenPoint:latLon];
-            [points addObject:[NSValue valueWithCGPoint:screenPoint]];
+            else
+            {
+                NSValue *screenPointValue = [self latLonToScreenPointWithBoundsCheck:latLon];
+                if (screenPointValue)
+                {
+                    [points addObject:screenPointValue];
+                }
+                else
+                {
+                    if (points.count > 0)
+                    {
+                        [arrays addObject:points];
+                        points = [NSMutableArray array];
+                    }
+                }
+            }
         }
         if (points.count > 0)
             [arrays addObject:points];
@@ -738,6 +751,51 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     CGPoint screenPoint;
     [_mapViewController.mapView convert:&pos31 toScreen:&screenPoint checkOffScreen:YES];
     return screenPoint;
+}
+
+- (NSValue *) latLonToScreenPointWithBoundsCheck:(OsmAnd::LatLon)latLon
+{
+    if (ABS(latLon.latitude) >= MAX_LAT_VALUE)
+        return nil;
+    
+    if (ABS(latLon.longitude) <= MAX_LON_VALUE)
+    {
+        return [NSValue valueWithCGPoint:[self latLonToScreenPoint:latLon]];
+    }
+    else
+    {
+        CGPoint correctScreenPoint;
+        CGPoint screenPointOutOfScreen = [self latLonToScreenPoint:latLon];
+        CGFloat correctXNear180Lon;
+        CGFloat incorrectXNear180Lon;
+        
+        auto latLonWithMinLongitude = OsmAnd::LatLon(latLon.latitude, ESTIMATED_MIN_LON_VALUE);
+        auto latLonWithMaxLongitude = OsmAnd::LatLon(latLon.latitude, ESTIMATED_MAX_LON_VALUE);
+        CGPoint pointWithMinLongitude = [self latLonToScreenPoint:latLonWithMinLongitude];
+        CGPoint pointWithMaxLongitude = [self latLonToScreenPoint:latLonWithMaxLongitude];
+        
+        if (screenPointOutOfScreen.x > 0)
+        {
+            correctXNear180Lon = pointWithMinLongitude.x;
+            incorrectXNear180Lon = pointWithMaxLongitude.x;
+        }
+        else
+        {
+            correctXNear180Lon = pointWithMaxLongitude.x;
+            incorrectXNear180Lon = pointWithMinLongitude.x;
+        }
+
+        correctScreenPoint.x = correctXNear180Lon + (screenPointOutOfScreen.x - incorrectXNear180Lon);
+        correctScreenPoint.y = screenPointOutOfScreen.y;
+        
+        if (correctScreenPoint.x < 0 ||
+            correctScreenPoint.y < 0 ||
+            correctScreenPoint.x > [UIScreen mainScreen].bounds.size.width ||
+            correctScreenPoint.y > [UIScreen mainScreen].bounds.size.height)
+            return nil;
+        else
+            return [NSValue valueWithCGPoint:correctScreenPoint];
+    }
 }
 
 - (double) toRadians:(double)degrees

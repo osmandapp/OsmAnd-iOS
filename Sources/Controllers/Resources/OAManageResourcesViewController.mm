@@ -2947,6 +2947,7 @@ static BOOL _lackOfResources;
     else if ([segue.identifier isEqualToString:kOpenOutdatedResourcesSegue])
     {
         OAOutdatedResourcesViewController *outdatedResourcesViewController = [segue destinationViewController];
+        outdatedResourcesViewController.openFromSplash = _openFromSplash;
         [outdatedResourcesViewController setupWithRegion:self.region
                                         andOutdatedItems:_outdatedResourceItems];
     }

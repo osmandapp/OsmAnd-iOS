@@ -31,7 +31,7 @@ OsmAnd::AlphaChannelPresence OATerrainMapLayerProvider::getAlphaChannelPresence(
     return OsmAnd::AlphaChannelPresence::Present;
 }
 
-sk_sp<SkImage> OATerrainMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
+sk_sp<const SkImage> OATerrainMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
 {
     return nullptr;
 }

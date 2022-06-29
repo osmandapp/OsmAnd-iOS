@@ -46,7 +46,7 @@
 
 - (void) populateStackControl:(UIView *)stack mode:(OAApplicationMode *)mode left:(BOOL)left expanded:(BOOL)expanded
 {
-    NSOrderedSet<OAMapWidgetRegInfo *> *s = left ? [_leftWidgetSet copy] : [_rightWidgetSet copy];
+    NSArray<OAMapWidgetRegInfo *> *s = [NSArray arrayWithArray:left ? _leftWidgetSet.array : _rightWidgetSet.array];
     for (OAMapWidgetRegInfo *r in s)
     {
         if (r.widget && ([r visible:mode] || [r.widget isExplicitlyVisible]))

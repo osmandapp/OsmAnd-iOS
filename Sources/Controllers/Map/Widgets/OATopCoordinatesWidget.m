@@ -9,17 +9,14 @@
 #import "OATopCoordinatesWidget.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
-#import "OAAppSettings.h"
-#import "OAUtilities.h"
-#import "OATextInfoWidget.h"
 #import "OALocationConvert.h"
 #import "Localization.h"
 #import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAToolbarViewController.h"
 #import "OADownloadMapWidget.h"
 #import "OAOsmAndFormatter.h"
+#import "OASearchToolbarViewController.h"
 
 #define kHorisontalOffset 8
 #define kIconWidth 30
@@ -138,9 +135,12 @@
 
 - (BOOL) isVisible
 {
-    OAMapHudViewController *hudController = [OARootViewController instance].mapPanel.hudViewController;
-    OAToolbarViewController *topToolbar = [hudController toolbarViewController];
-    return [_settings.showCoordinatesWidget get] && [topToolbar getAttentionLevel] != EOAToolbarAttentionLevelHigh && !hudController.downloadMapWidget.isVisible;
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OAToolbarViewController *topToolbar = [mapPanel.hudViewController toolbarViewController];
+    return [_settings.showCoordinatesWidget get]
+            && [topToolbar getAttentionLevel] != EOAToolbarAttentionLevelHigh
+            && !mapPanel.hudViewController.downloadMapWidget.isVisible
+            && ![mapPanel isTopToolbarSearchVisible];
 }
 
 - (BOOL) updateInfo

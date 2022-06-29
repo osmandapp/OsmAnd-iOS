@@ -733,86 +733,30 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             _searchLocation = mapLocation;
             _region = cityName;
             _isOlcCitySearchRunning = YES;
-            [self searchCities:cityName];
+            [OAQuickSearchHelper searchCities:cityName
+                               searchLocation:_searchLocation
+                                 allowedTypes:@[@"city", @"town", @"village"]
+                                    cityLimit:kSearchCityLimit
+                                         view:self.view
+                                   onComplete:^(NSMutableArray *amenities)
+                                   {
+                                       _isOlcCitySearchRunning = NO;
+                                       if (amenities && amenities.count > 0)
+                                       {
+                                           OASearchResult *firstResult = amenities[0];
+                                           if (firstResult && firstResult.location)
+                                           {
+                                               _searchLocation = firstResult.location;
+                                               [self updateDistanceAndDirection:YES];
+                                           }
+                                       }
+                                   }
+            ];
         }
     }
     if (codeArea)
         loc = [[CLLocation alloc] initWithLatitude:codeArea.latitudeCenter longitude:codeArea.longitudeCenter];
     return loc;
-}
-
-- (NSArray<OASearchResult *> *)searchCities:(NSString *)text
-{
-    OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
-    NSString * lang = [OAAppSettings.sharedManager.settingPrefMapLanguage get];
-    BOOL transliterate = [OAAppSettings.sharedManager.settingMapLanguageTranslit get];
-    NSMutableArray *amenities = [NSMutableArray new];
-    
-    OAQuickSearchHelper *_searchHelper = OAQuickSearchHelper.instance;
-    OASearchUICore *_searchUICore = _searchHelper.getCore;
-    OASearchSettings *settings = [[_searchUICore getSearchSettings] setOriginalLocation:OsmAndApp.instance.locationServices.lastKnownLocation];
-    settings = [settings setLang:lang ? lang : @"" transliterateIfMissing:transliterate];
-    settings = [settings setSortByName:NO];
-    settings = [settings setAddressSearch:YES];
-    settings = [settings setEmptyQueryAllowed:YES];
-    settings = [settings setOriginalLocation:_searchLocation];
-    [_searchUICore updateSettings:settings];
-    
-    UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleGray;
-    if (@available(iOS 13.0, *))
-        spinnerStyle = UIActivityIndicatorViewStyleLarge;
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
-    spinner.center = CGPointMake([[UIScreen mainScreen]bounds].size.width/2, [[UIScreen mainScreen]bounds].size.height/2);
-    [self.view addSubview:spinner];
-    [spinner startAnimating];
-        
-    dispatch_async(dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL), ^{
-        int __block count = 0;
-        BOOL __block isFinished = NO;
-    
-        [_searchUICore shallowSearch:OASearchAmenityByNameAPI.class text:text matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
-            
-            OASearchResult *searchResult = *object;
-            std::shared_ptr<const OsmAnd::Amenity> amenity = searchResult.amenity;
-            if (!amenity)
-                return NO;
-            
-            if (count++ > kSearchCityLimit)
-                return NO;
-            
-            NSArray<NSString *> *otherNames = searchResult.otherNames;
-            NSString *localeName = amenity->getName(QString(lang.UTF8String), transliterate).toNSString();
-            NSString *subType = amenity->subType.toNSString();
-            
-            NSArray<NSString *> *allowedTypes = @[@"city", @"town", @"village"];
-            if (![allowedTypes containsObject:subType] || (![nm matches:localeName] && ![nm matchesMap:otherNames]))
-                return NO;
-            
-            [amenities addObject:searchResult];
-            isFinished = YES;
-            return NO;
-        } cancelledFunc:^BOOL{
-            return count > kSearchCityLimit || isFinished;
-        }] resortAll:YES removeDuplicates:YES];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [spinner stopAnimating];
-            [spinner removeFromSuperview];
-            _isOlcCitySearchRunning = NO;
-            
-            if (amenities && amenities.count > 0)
-            {
-                OASearchResult *firstResult = amenities[0];
-                if (firstResult && firstResult.location)
-                {
-                    _searchLocation = firstResult.location;
-                    [self updateDistanceAndDirection:YES];
-                }
-            }
-        });
-    });
-    
-    return [NSArray arrayWithArray:amenities];
 }
 
 - (double) parseDoubleFromString:(NSString *)stringValue

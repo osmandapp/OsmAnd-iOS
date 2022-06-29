@@ -122,7 +122,6 @@
 "nothanks" = "Pas nécessaire";
 "download_now" = "Télécharger la carte maintenant";
 "download_tab_local" = "Installé";
-"res_banner_free_maps_title" = "Vous avez %d cartes gratuites !";
 "res_search_world" = "Rechercher dans le monde entier";
 "res_world_map" = "Carte du monde";
 "res_updates" = "Misesà jour";
@@ -326,9 +325,6 @@
 "prch_nau_q3" = "Vous pouvez l’installer plus tard via Cartes & Ressources.";
 "proceed_q" = "Appliquer ?";
 "prch_items_failed" = "Les objets n'ont pu être restaurés. Veuillez réessayer.";
-"res_banner_free_maps_desc" = "Vous pouvez télécharger %d cartes gratuites, sans mise à jour";
-"res_banner_no_free_maps_title" = "Il ne vous reste aucune carte gratuite !";
-"res_banner_no_free_maps_desc" = "Veuillez acheter les cartes de la régions ou Toutes les cartes du monde";
 "res_catalog_upd" = "Mise à jour du catalogue";
 "res_worldwide" = "Monde entier";
 "res_region_map" = "Carte de la région";
@@ -2539,3 +2535,38 @@
 "purchases_feature_desc_wikipedia" = "Consultez les articles Wikipédia sans connexion Internet. Les articles sont découpés par pays et disponibles dans toutes les langues.";
 "wikipedia_and_wikivoyage_offline" = "Wikipédia et Wikivoyage hors ligne";
 "shared_string_learn_more" = "En savoir plus";
+"on_hold" = "En attente";
+"osmand_depelopment_simulate_location_section" = "Simuler";
+"simulate_location_movement_speed_x2" = "x2";
+"simulate_location_movement_speed_x3" = "x3";
+"simulate_location_movement_speed_x4" = "x4";
+"plugin_popup_nautical_ask" = "Veuillez activer l'extension Nautical";
+"restore_purchase" = "Restaurer les achats";
+"routing_attr_hazmat_category_name" = "Transporte des matériaux dangereux";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Aucune restriction)";
+"pro_features" = "Fonctionnalités Pro";
+"product_desc_development" = "Paramètres de développement et de débogage";
+"osm_live_payment_year_cost_descr" = "%@ par an";
+"option_available_only_by_subscription" = "Disponible dans les formules de souscription";
+"subscription_cancel_description" = "Annulez n'importe quand dans l'AppStore.";
+"no_purchases" = "Vous n'avez pas d'achat";
+"shared_string_now" = "Maintenant";
+"promo" = "Promo";
+"purchase_origin" = "Origine de l'achat";
+"simulate_location_movement_speed" = "Vitesse de déplacement";
+"simulate_location_movement_speed_original" = "Original";
+"shared_string_undefined" = "Non défini";
+
+// Shared Strings
+"shared_string_cancelled" = "Annulé";
+"simulate_in_progress" = "En cours";
+"promo_subscription" = "OsmAnd Pro (Promo)";
+"screen_settings_weather_toolbar" = "Barre d'outils de météo";
+"subscription" = "Souscription";
+"quarterly_subscription" = "Souscription trimestrielle";
+"simulate_location_unselected_track_footer" = "Vous devez sélectionner un fichier de trace";
+"paused" = "En pause";
+"you_can_get_feature_as_part_of_pattern" = "Obtenez “%@” dans la formule %@. Comparaison :";
+"in_grace_period" = "En période d'essai";
+"expires" = "Se termine";
+"simulate_your_location_gpx_descr" = "Vous pouvez simuler les déplacements de votre position via des traces GPX.";

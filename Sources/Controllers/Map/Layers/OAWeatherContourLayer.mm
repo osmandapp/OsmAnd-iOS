@@ -19,9 +19,6 @@
 #include <OsmAndCore/Map/GeoTileObjectsProvider.h>
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 
-#define kTempContourLines @"weatherTempContours"
-#define kPressureContourLines @"weatherPressureContours"
-
 @implementation OAWeatherContourLayer
 {
     std::shared_ptr<OsmAnd::WeatherTileResourcesManager> _resourcesManager;
@@ -101,8 +98,8 @@
     if ([[OAIAPHelper sharedInstance].weather isActive])
     {
         OsmAnd::BandIndex band = WEATHER_BAND_UNDEFINED;
-        OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:kTempContourLines];
-        OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:kPressureContourLines];
+        OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR];
+        OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR];
         if ([tempContourLinesParam.value isEqualToString:@"true"])
             band = WEATHER_BAND_TEMPERATURE;
         else if ([pressureContourLinesParam.value isEqualToString:@"true"])

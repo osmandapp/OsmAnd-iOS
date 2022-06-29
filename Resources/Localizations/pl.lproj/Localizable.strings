@@ -156,7 +156,6 @@
 "map_settings_under" = "Podkład";
 "sett_show" = "Wyświetl";
 "sett_notshow" = "Nie pokazuj";
-"res_banner_free_maps_title" = "Masz %d darmowych map!";
 // World Regions
 "region_africa" = "Afryka";
 "region_asia" = "Azja";
@@ -240,8 +239,6 @@
 "incur_high_charges" = "Może to wiązać się z wysokimi opłatami.";
 "prch_nau_q2_wifi" = "Pobieranie wymaga %@ za pośrednictwem sieci Wi-Fi.";
 "prch_items_failed" = "element(y/ów) nie został(y/o) przywrócony(-e/-ych). Spróbuj ponownie.";
-"res_banner_free_maps_desc" = "Możesz pobrać %d darmowe mapy, bez aktualizacji";
-"res_banner_no_free_maps_desc" = "Należy zakupić mapy regionów lub mapy całego świata";
 "res_wsea_map" = "Mapa podstawowa światowych znaków nawigacyjnych";
 "res_wmap" = "Podstawowa mapa świata";
 "res_map_of_region" = "Regiony";
@@ -341,7 +338,6 @@
 "sett_zoom" = "Przycisk zoom";
 "sett_arr_map" = "Środek mapy";
 "sett_lang_show_trans" = "Transliteracja nazw";
-"res_banner_no_free_maps_title" = "Nie masz darmowych map!";
 "res_type" = "Rodzaj";
 "add_parking_short" = "Dodaj Parking";
 "add_waypoint_short" = "Dodaj punkt trasy";

@@ -589,10 +589,6 @@
 "osmand_live_update_now" = "Actualizar ara";
 "osmand_live_updates_size" = "Dimension deis actualizacions teledescargadas";
 "osmand_live_deleted_object" = "Objècte escafat";
-"res_banner_free_maps_title" = "Avètz %d mapas a gratis !";
-"res_banner_free_maps_desc" = "Podètz teledescargar %d mapas a gratis, sensa actualizacions";
-"res_banner_no_free_maps_title" = "Avètz ges de mapas a gratis !";
-"res_banner_no_free_maps_desc" = "Crompatz de mapas regionalas ò mondialas";
 "res_search_world" = "Recercar dins lo monde entier";
 "res_catalog_upd" = "Actualizacion dau catalòg";
 "res_world_map" = "Mapa mondiala";

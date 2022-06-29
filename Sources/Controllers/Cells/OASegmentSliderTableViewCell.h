@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class OASlider;
+@class OASegmentedSlider;
 
 @interface OASegmentSliderTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *topLeftLabel;
 @property (weak, nonatomic) IBOutlet UILabel *topRightLabel;
-@property (weak, nonatomic) IBOutlet OASlider *sliderView;
+@property (weak, nonatomic) IBOutlet OASegmentedSlider *sliderView;
 @property (weak, nonatomic) IBOutlet UILabel *bottomLeftLabel;
 @property (weak, nonatomic) IBOutlet UILabel *bottomRightLabel;
 
@@ -22,9 +22,6 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *sliderNoLabelsTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *sliderLabelsBottomConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *sliderNoLabelsBottomConstraint;
-
-@property (nonatomic) NSInteger numberOfMarks;
-@property (nonatomic) NSInteger selectedMark;
 
 - (void)showLabels:(BOOL)topLeft topRight:(BOOL)topRight bottomLeft:(BOOL)bottomLeft bottomRight:(BOOL)bottomRight;
 

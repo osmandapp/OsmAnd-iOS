@@ -341,7 +341,7 @@
                                                          QString::fromNSString(@"http://download.osmand.net"),
                                                          QString::fromNSString([self generateIndexesUrl]),
                                                          _webClient));
-    
+
     _resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                              [self]
                                                              (const OsmAnd::ResourcesManager* const resourcesManager,

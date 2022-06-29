@@ -175,10 +175,6 @@
 // Resources
 "res_mapsres" = "Kort & tilföng";
 "download_tab_local" = "Staðvært";
-"res_banner_free_maps_title" = "Þú ert með %d ókeypis kort!";
-"res_banner_free_maps_desc" = "Þú getur náð í %d ókeypis kort, án uppfærslna";
-"res_banner_no_free_maps_title" = "Þú ert ekki með nein ókeypis kort!";
-"res_banner_no_free_maps_desc" = "Endilega kauptu héraðskort eða kort af öllum heiminum";
 "res_search_world" = "Leita út um allan heim";
 "res_catalog_upd" = "Uppfærsla á safnskrá";
 "res_world_map" = "Heimskort";

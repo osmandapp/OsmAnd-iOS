@@ -155,12 +155,11 @@
 "driving_region_us" = "미국";
 "driving_region_europe_asia" = "유럽, 아시아, 라틴 아메리카 및 유사";
 "region_central_america" = "중앙 아메리카";
-"res_banner_no_free_maps_desc" = "지역 지도 또는 모든 세계 지도를 구입";
 "region_asia" = "아시아";
 
 // World Regions
 "region_antarctica" = "남극 대륙";
-"copy_from_other_profile" = "다른 프로파일에서 복사";
+"copy_from_other_profile" = "다른 프로필에서 복사";
 "road_min_speed_descr" = "경로 내 모든 도로의 최소 이동 속도를 설정하십시오. 권장 속도가 최소 속도 미만인 도로의 우선 순위 상승합니다.";
 "road_max_speed_descr" = "경로 내 모든 도로의 최대 이동 속도를 설정하십시오. 가능한 속도가 최대 속도보다 높은 도로의 우선순위를 낮춘다.";
 
@@ -485,7 +484,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "노드 네트워크 유형(국제, 지역, 로컬)에 따른 색상 경로다.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "네트워크 계열별 색상이다.";
 "res_updates_no_space" = "공간이 부족하여 %d 업데이트를 설치할 수 없습니다. %@가 필요합니다. 저장공간을 확보해주세요.";
-"res_banner_free_maps_desc" = "업데이트 없이 %d개의 무료 맵을 다운로드할 수 있음";
 "res_size" = "크기";
 "res_created_on" = "작성 날짜";
 "res_update_all" = "모두 업데이트";
@@ -1197,3 +1195,7 @@
 "redeem_promo_code" = "리딤 프로모션 코드";
 "purchases_feature_desc_pro_widgets" = "OsmAnd Pro기능을 액세스한다면: 경로 색칠 및 기타 정보 등등.";
 "unlimited_map_downloads" = "지도 다운로드 제한 없음";
+"lang_ckb" = "중부 쿠르드족";
+"transport_hazmat_yes_desc" = "적절한 카테고리를 선택해야 합니다.";
+"transport_hazmat_no_desc" = "일부 도로 및 터널에서는 유해 물질 운송이 금지되어 있습니다.";
+"online_webpage_warning" = "페이지는 온라인에서만 사용할 수 있습니다. 웹 브라우저에서 열었습니까?";

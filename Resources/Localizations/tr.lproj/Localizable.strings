@@ -167,10 +167,6 @@
 // Resources
 "res_mapsres" = "Haritalar & Kaynaklar";
 "download_tab_local" = "Yerel";
-"res_banner_free_maps_title" = "%d ücretsiz haritalar var!";
-"res_banner_free_maps_desc" = "%d güncelleştirmeler olmadan ücretsiz haritalar indirebilir miyim";
-"res_banner_no_free_maps_title" = "Ücretsiz hiçbir haritalar var!";
-"res_banner_no_free_maps_desc" = "Lütfen bölge haritaları satın almak ya da tüm dünya haritaları";
 "res_search_world" = "Dünya çapında arama";
 "res_catalog_upd" = "Katalog güncelleştirme";
 "res_world_map" = "Dünya Haritası";
@@ -2575,3 +2571,19 @@
 "manage_subscription" = "Aboneliği yönet";
 "expires" = "Süre sonu";
 "private_access_routing_req" = "Hedefiniz özel erişimi olan bir bölgede bulunmaktadır. Bu yolculuk için özel yollar kullanmaya izin verilsin mi?";
+"promo_subscription" = "OsmAnd Pro (Tanıtım)";
+"subscription" = "Abonelik";
+"google_play" = "Google Play";
+"app_store" = "App Store";
+"promo" = "Tanıtım";
+"purchase_origin" = "Satın almanın kökeni";
+"on_hold" = "Beklemede";
+"in_grace_period" = "Ek süre içinde";
+"lang_ckb" = "Orta Kürtçe";
+"paused" = "Duraklatıldı";
+
+// Shared Strings
+"shared_string_cancelled" = "İptal edildi";
+"shared_string_undefined" = "Tanımlanmamış";
+"shared_string_now" = "Şimdi";
+"screen_settings_weather_toolbar" = "Hava durumu araç çubuğu";

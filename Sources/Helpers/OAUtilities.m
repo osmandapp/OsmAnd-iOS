@@ -25,6 +25,7 @@
 #include <CommonCrypto/CommonDigest.h>
 
 #define kBlurViewTag -999
+#define kSpinnerViewTag -998
 
 @implementation UIBezierPath (util)
 
@@ -410,6 +411,39 @@
         {
             [subview removeFromSuperview];
             self.backgroundColor = UIColor.whiteColor;
+            break;
+        }
+    }
+}
+
+- (void) addSpinner
+{
+    for (UIView *subview in self.subviews)
+    {
+        if (subview.tag == kSpinnerViewTag)
+            return;
+    }
+
+    UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleGray;
+    if (@available(iOS 13.0, *))
+        spinnerStyle = UIActivityIndicatorViewStyleLarge;
+
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
+    spinner.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+    spinner.tag = kSpinnerViewTag;
+    [self addSubview:spinner];
+    [spinner startAnimating];
+}
+
+- (void) removeSpinner
+{
+    for (UIView *subview in self.subviews)
+    {
+        if (subview.tag == kSpinnerViewTag)
+        {
+            UIActivityIndicatorView *spinner = (UIActivityIndicatorView *) subview;
+            [spinner stopAnimating];
+            [spinner removeFromSuperview];
             break;
         }
     }
@@ -866,12 +900,22 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     [button setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
 }
 
++ (CGSize) calculateTextBounds:(NSString *)text font:(UIFont *)font
+{
+    CGSize size = [text boundingRectWithSize:CGSizeMake(10000.0, 10000.0)
+                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                                  attributes:@{ NSFontAttributeName: font }
+                                     context:nil].size;
+
+    return CGSizeMake(ceil(size.width), ceil(size.height));
+}
+
 + (CGSize) calculateTextBounds:(NSAttributedString *)text width:(CGFloat)width
 {
     CGSize size = [text boundingRectWithSize:CGSizeMake(ceil(width), 10000.0)
                                      options:NSStringDrawingUsesLineFragmentOrigin
                                      context:nil].size;
-    
+
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
@@ -2258,6 +2302,16 @@ static const double d180PI = 180.0 / M_PI_2;
         [builder appendString:w];
     }
     return builder;
+}
+
++ (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate
+{
+    NSTimeZone *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSTimeZone *destinationTimeZone = [NSTimeZone systemTimeZone];
+    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
+    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
+    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+    return [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
 }
 
 @end

@@ -20,7 +20,7 @@
 #import "OAMultiIconTextDescCell.h"
 #import "OAColors.h"
 #import "OARootViewController.h"
-#import "OATargetPoint.h"
+#import "OAMapHudViewController.h"
 #import "OAOsmEditsLayer.h"
 #import "OAOsmEditActionsViewController.h"
 #import "OAMapLayers.h"

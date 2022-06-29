@@ -592,10 +592,6 @@
 "osmand_live_update_now" = "今すぐ更新";
 "osmand_live_updates_size" = "ダウンロードした更新ファイルのサイズ";
 "osmand_live_deleted_object" = "削除されたオブジェクト";
-"res_banner_free_maps_title" = "%d個の無料マップがあります！";
-"res_banner_free_maps_desc" = "更新しなくても%d個の無料マップがダウンロードできます";
-"res_banner_no_free_maps_title" = "利用できる無料マップがありません！";
-"res_banner_no_free_maps_desc" = "地域マップまたは世界地図を購入してください";
 "res_search_world" = "全世界で検索";
 "res_catalog_upd" = "カタログ更新";
 "res_world_map" = "世界地図";
@@ -2073,9 +2069,7 @@
 "gpx_upload_trackable_visibility_descr" = "\"追跡可能\"は、トレース状況が公開リストに表示されないことを意味しますが、タイムスタンプ付きで処理済みの経路ポイント(直接関連付けされないもの)は、パブリックなGPS APIからのダウンロードを通じて表示されます。";
 "gpx_upload_identifiable_visibility_descr" = "\"識別可能\"は、経路がGPS経路およびパブリックGPS経路リストに表示されることを示唆しています。他のユーザーは現在の経路をダウンロードして、ユーザー名とリンクできます。経路ポイント APIを介して配信されるデータは、元の経路追跡ページを参照します。経路ポイントのタイムスタンプは、公的GPS APIを通じて入手できます。";
 "gpx_upload_private_visibility_descr" = "\"プライベート\"は、経路が公開リストに表示されないことを示唆しています。経路ポイントはタイムスタンプなしで公的GPS APIを介して引き続き利用できますが、時系列で並べられることはありません。";
-"route_between_points_warning_desc" = "このオプションを使用するには、OsmAndで経路をマップ上の道路にスナップする必要があります。
-\n
-\n次にナビゲーションプロファイルを選択して、利用予定の道路(一般道、高速道路)と、道路を追跡するおおよその距離を検出する必要があります。";
+"route_between_points_warning_desc" = "このオプションを使用するには、OsmAndで経路をマップ上の道路にスナップする必要があります。\n\n次にナビゲーションプロファイルを選択して、利用予定の道路(一般道、高速道路)と、道路を追跡するおおよその距離を検出する必要があります。";
 "some_articles_may_not_available_in_lang" = "一部のウィキペディア記事は、ご使用の言語で利用できない場合があります。";
 "last_used" = "最後に利用";
 "suggested_maps" = "推奨マップ";
@@ -2398,3 +2392,4 @@
 "explore_osmnad_plans_to_find_suitable" = "OsmAnd Plansを参照し、自分に適したプランやサブスクリプションをご利用ください。";
 "purchases_feature_desc_osmand_cloud" = "OsmAndクラウドを入手することで、すべてのOsmAndデータをクラウド保存が可能になります。再インストール後にデータが失われることはありません。全情報を簡単にバックアップおよび復元出来ます。";
 "not_available_with" = "%@は利用できません";
+"lang_ckb" = "中央クルド語";

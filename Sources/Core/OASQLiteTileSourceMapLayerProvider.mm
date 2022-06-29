@@ -192,7 +192,7 @@ const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::decodeBitmap(const QByt
     return image;
 }
 
-sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
+sk_sp<const SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
 {
     auto tileId = request.tileId;
     auto zoom = request.zoom;

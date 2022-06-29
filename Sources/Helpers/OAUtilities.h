@@ -75,6 +75,8 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 - (void) setCornerRadius:(CGFloat)value;
 - (void) addBlurEffect:(BOOL)light cornerRadius:(CGFloat)cornerRadius padding:(CGFloat)padding;
 - (void) removeBlurEffect;
+- (void) addSpinner;
+- (void) removeSpinner;
 
 @end
 
@@ -183,6 +185,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners;
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners radius:(CGFloat)radius;
 
++ (CGSize) calculateTextBounds:(NSString *)text font:(UIFont *)font;
 + (CGSize) calculateTextBounds:(NSAttributedString *)text width:(CGFloat)width;
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font;
@@ -287,5 +290,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view;
 + (NSString *) formatWarnings:(NSArray<NSString *> *)warnings;
+
++ (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate;
 
 @end

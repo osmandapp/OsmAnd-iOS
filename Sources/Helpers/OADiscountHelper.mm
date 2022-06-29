@@ -416,8 +416,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
             }
             else if ([@"map" isEqualToString:discountType])
             {
-                OAManageResourcesViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
-                resourcesViewController.displayBannerPurchaseAllMaps = YES;
+                OAManageResourcesViewController *resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
                 [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
             }
         }

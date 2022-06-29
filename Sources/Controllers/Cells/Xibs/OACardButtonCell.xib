@@ -32,6 +32,19 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ogP-tt-9VY">
+                        <rect key="frame" x="66" y="88" width="328" height="37"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="Q4j-Ab-iDt"/>
+                        </constraints>
+                        <state key="normal" title="Button" image="ic_custom_arrow_forward.png"/>
+                        <buttonConfiguration key="configuration" style="plain" title="Get" />
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="8"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Get unlimited map downloads, adding weekly, daily, or even hourly updates." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dW8-ML-0wR" userLabel="Description Label">
                         <rect key="frame" x="66" y="44" width="328" height="36"/>
                         <constraints>
@@ -41,25 +54,6 @@
                         <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ogP-tt-9VY">
-                        <rect key="frame" x="66" y="88" width="328" height="37"/>
-                        <color key="tintColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.0" colorSpace="calibratedRGB"/>
-                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                        <state key="normal" title="Button" image="ic_custom_arrow_forward.png"/>
-                        <buttonConfiguration key="configuration" style="tinted" image="ic_custom_arrow_forward.png" imagePlacement="trailing" imagePadding="0.0">
-                            <backgroundConfiguration key="background" cornerRadius="8">
-                                <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                            </backgroundConfiguration>
-                            <attributedString key="attributedTitle">
-                                <fragment content="Get">
-                                    <attributes>
-                                        <color key="NSColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <font key="NSFont" size="15" name="Helvetica-Bold"/>
-                                    </attributes>
-                                </fragment>
-                            </attributedString>
-                        </buttonConfiguration>
-                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailingMargin" secondItem="Vdr-HP-SbV" secondAttribute="trailing" id="A3u-5x-VlG"/>

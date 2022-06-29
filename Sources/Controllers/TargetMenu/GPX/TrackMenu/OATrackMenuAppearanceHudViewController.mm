@@ -26,12 +26,11 @@
 #import "OAGpxMutableDocument.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXAppearanceCollection.h"
-#import "OARouteStatisticsHelper.h"
-#import "OAColoringType.h"
 #import "OsmAndApp.h"
 #import "OAMapPanelViewController.h"
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
+#import "OASegmentedSlider.h"
 
 #define kColorsSection 1
 
@@ -923,8 +922,8 @@
             cell.topRightLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
             cell.bottomLeftLabel.text = arrayValue.firstObject;
             cell.bottomRightLabel.text = arrayValue.lastObject;
-            cell.numberOfMarks = arrayValue.count;
-            cell.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
+            [cell.sliderView setNumberOfMarks:arrayValue.count additionalMarksBetween:0];
+            cell.sliderView.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
@@ -1049,7 +1048,7 @@
         OASegmentSliderTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
-        [self updateProperty:@(cell.selectedMark) tableData:cellData];
+        [self updateProperty:@(cell.sliderView.selectedMark) tableData:cellData];
 
         [self updateData:cellData];
 

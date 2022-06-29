@@ -599,10 +599,6 @@
 "osmand_live_update_now" = "Uuenda kohe";
 "osmand_live_updates_size" = "Allalaaditud uuenduste maht";
 "osmand_live_deleted_object" = "Kustutatud objekt";
-"res_banner_free_maps_title" = "Sul on %d tasuta kaarti!";
-"res_banner_free_maps_desc" = "Saad alla laadida %d tasuta kaarti, ilma uuendusteta";
-"res_banner_no_free_maps_title" = "Sul ei ole tasuta kaarte!";
-"res_banner_no_free_maps_desc" = "Palun osta piirkonnakaardid või kogu maailma kaardid";
 "res_search_world" = "Otsi üle maailma";
 "res_catalog_upd" = "Kataloogi värskendus";
 "res_world_map" = "Maailmakaart";

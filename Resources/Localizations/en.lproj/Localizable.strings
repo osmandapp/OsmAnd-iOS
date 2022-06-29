@@ -818,6 +818,8 @@
 "weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
 "weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
 
+"screen_settings_weather_toolbar" = "Weather toolbar";
+
 "settings_app_theme" = "Application theme";
 "app_theme_light" = "Light";
 "do_not_rotate" = "Do not rotate";
@@ -1239,10 +1241,6 @@
 "osmand_live_update_now" = "Update now";
 "osmand_live_updates_size" = "Downloaded updates size";
 "osmand_live_deleted_object" = "Deleted object";
-"res_banner_free_maps_title" = "You have %d free maps!";
-"res_banner_free_maps_desc" = "You can download %d free maps, without updates";
-"res_banner_no_free_maps_title" = "You have no free maps!";
-"res_banner_no_free_maps_desc" = "Please purchase region maps or All World maps";
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
@@ -2740,6 +2738,13 @@
 "app_store" = "App Store";
 "promo" = "Promo";
 "purchase_origin" = "Purchase origin";
+
+"shared_string_now" = "Now";
+
+"subscription_banner_free_maps_title" = "You can download %i maps for free.";
+"subscription_banner_free_maps_description" = "Get unlimited map downloads and updates.";
+"subscription_banner_no_free_maps_title" = "You spent all free downloads";
+"subscription_banner_osmand_pro_title" = "Get hourly, daily or weekly map updates with OsmAnd Pro.";
 
 // Release Notes
 // instruction:

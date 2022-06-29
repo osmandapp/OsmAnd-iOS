@@ -8,17 +8,12 @@
 
 #import "OADashboardViewController.h"
 #import "OAAutoObserverProxy.h"
-#import "OANativeUtilities.h"
-#import "OAMapRendererView.h"
-#import "OAMapViewController.h"
 #import "OARootViewController.h"
-
+#import "OAMapPanelViewController.h"
+#import "OAMapHudViewController.h"
 #import "Localization.h"
-#import "OAUtilities.h"
 #import "OAColors.h"
 #import "OASizes.h"
-
-#import <CoreLocation/CoreLocation.h>
 
 const static CGFloat kMapSettingsInitialPosKoeff = 0.35;
 const static CGFloat kMapSettingsLandscapeWidth = 320.0;
@@ -215,6 +210,8 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
         _topControlsVisible = parentViewController.topControlsVisible;
     else
         _topControlsVisible = [[OARootViewController instance].mapPanel isTopControlsVisible];
+
+    [[OARootViewController instance].mapPanel.hudViewController hideWeatherToolbarIfNeeded];
 
     self.parentVC = parentViewController;
     self.showFull = parentViewController.showFull;

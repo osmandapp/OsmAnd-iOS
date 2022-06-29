@@ -7,24 +7,15 @@
 //
 
 #import "OAOutdatedResourcesViewController.h"
-
 #import <Reachability.h>
 #import <UIAlertView+Blocks.h>
-#import <FFCircularProgressView.h>
-#import <MBProgressHUD.h>
-#import "OAUtilities.h"
-#import "OsmAndApp.h"
-#import "FFCircularProgressView+isSpinning.h"
-#include "Localization.h"
-#import "OASizes.h"
+#import "Localization.h"
 #import "OAColors.h"
+#import "OASubscriptionBannerCardView.h"
+#import "OAChoosePlanHelper.h"
+#import "OAIAPHelper.h"
 
-#import "OAPurchasesViewController.h"
-#import "OAPluginsViewController.h"
-
-#include <OsmAndCore/WorldRegions.h>
-
-@interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource, OASubscriptionBannerCardViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -43,6 +34,7 @@
     NSMutableArray* _resourcesItems;
 
     CALayer *_horizontalLine;
+    OASubscriptionBannerCardView *_subscriptionBannerView;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -88,12 +80,61 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [self applySafeAreaMargins];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
+
+    [self setupSubscriptionBanner];
+
+    [self.tableView reloadData];
 }
 
--(void)viewWillLayoutSubviews
+- (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
+
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self setupSubscriptionBanner];
+    } completion:nil];
+}
+
+- (void)setupSubscriptionBanner
+{
+    BOOL isPaid = [OAIAPHelper isPaidVersion];
+    if (!isPaid && !_subscriptionBannerView)
+    {
+        _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:EOASubscriptionBannerUpdates];
+        _subscriptionBannerView.delegate = self;
+
+        _subscriptionBannerView.titleLabel.text = OALocalizedString(@"subscription_banner_osmand_pro_title");
+        _subscriptionBannerView.iconView.image = [UIImage templateImageNamed:@"ic_custom_osmand_pro_logo_monotone_big"];
+        _subscriptionBannerView.iconView.tintColor = UIColorFromRGB(color_banner_button);
+
+        NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"purchase_get")];
+        [buttonTitle addAttribute:NSForegroundColorAttributeName
+                            value:UIColorFromRGB(color_primary_purple)
+                            range:NSMakeRange(0, buttonTitle.string.length)];
+        [buttonTitle addAttribute:NSFontAttributeName
+                            value:[UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
+                            range:NSMakeRange(0, buttonTitle.string.length)];
+        [_subscriptionBannerView.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
+    }
+    else if (isPaid)
+    {
+        _subscriptionBannerView = nil;
+    }
+
+    if (_subscriptionBannerView)
+        [_subscriptionBannerView layoutSubviews];
+
+    self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
 }
 
 -(UIView *) getTopView
@@ -480,6 +521,46 @@
             }
         }
     }
+}
+
+- (void) productsRequested:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateContent];
+        [self.tableView reloadData];
+        CATransition *animation = [CATransition animation];
+        [animation setType:kCATransitionPush];
+        [animation setSubtype:kCATransitionFromBottom];
+        [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [animation setFillMode:kCAFillModeBoth];
+        [animation setDuration:.3];
+        [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
+    });
+}
+
+- (void) productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateContent];
+        [self setupSubscriptionBanner];
+        [self.tableView reloadData];
+    });
+}
+
+- (void) productRestored:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateContent];
+        [self setupSubscriptionBanner];
+        [self.tableView reloadData];
+    });
+}
+
+#pragma mark - OASubscriptionBannerCardViewDelegate
+
+- (void) onButtonPressed
+{
+    [OAChoosePlanHelper showChoosePlanScreen:self.navigationController];
 }
 
 @end

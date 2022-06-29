@@ -296,10 +296,6 @@
 "product_desc_asia" = "Descargas ilimitadas de mapas para Asia";
 "my_location" = "Mi ubicación";
 "all_categories" = "Todas las categorías";
-"res_banner_free_maps_title" = "¡Tienes %d mapas gratis!";
-"res_banner_free_maps_desc" = "Puedes descargar %d mapas gratis, sin actualizaciones";
-"res_banner_no_free_maps_title" = "¡No tienes mapas gratis!";
-"res_banner_no_free_maps_desc" = "Compra mapas regionales o todos los mapas mundiales";
 "get_unlimited_access" = "Obtener acceso ilimitado";
 "shared_string_or" = "o";
 "latitude" = "Latitud";
@@ -2522,4 +2518,5 @@
 "unlimited_map_downloads" = "Descargas de mapas ilimitadas";
 "purchases_feature_desc_osmand_cloud" = "Obtén OsmAnd Cloud para almacenar en línea todos los datos de OsmAnd. No se pierden los datos al reinstalar. Haz copias de seguridad y restaura toda la información fácilmente.";
 "complete_purchase" = "Completar compra";
-"routing_attr_allow_private_for_truck_description" = "Permitir el acceso aáreas privadas para camiones.";
+"routing_attr_allow_private_for_truck_description" = "Permitir el acceso a áreas privadas para camiones.";
+"lang_ckb" = "Kurdo Central";

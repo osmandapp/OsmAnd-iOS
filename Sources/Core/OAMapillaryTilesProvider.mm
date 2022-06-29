@@ -381,7 +381,7 @@ QByteArray OAMapillaryTilesProvider::obtainImageData(const OsmAnd::ImageMapLayer
     return getVectorTileImage(req);
 }
 
-sk_sp<SkImage> OAMapillaryTilesProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
+sk_sp<const SkImage> OAMapillaryTilesProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
 {
     return nullptr;
 }

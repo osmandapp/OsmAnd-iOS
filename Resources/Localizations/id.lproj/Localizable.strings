@@ -964,7 +964,7 @@
 "position_icon_at_rest" = "Posisi ikon saat istirahat";
 "position_icon_while_moving" = "Posisikan ikon saat bergerak";
 "will_be_show_while_moving" = "It will be show while moving";
-"base_profile_descr_car" = "Mobil, truk, motor";
+"base_profile_descr_car" = "Mobil, truk, sepeda motor";
 "base_profile_descr_bicycle" = "Sepeda gunung, motor bebek, kuda";
 "base_profile_descr_pedestrian" = "Berjalan, naik gunung, berlari";
 "base_profile_descr_public_transport" = "Tipe angkutan publik";
@@ -2388,7 +2388,7 @@
 "backup_error_no_valid_subscription" = "Tidak ada langganan yang valid";
 "routing_attr_prefer_horse_routes_name" = "Lebih suka rute kuda";
 "save_heading" = "Sertakan heading";
-"routing_attr_allow_private_for_truck_name" = "Perbolehkan akses privat (truk)";
+"routing_attr_allow_private_for_truck_name" = "Izinkan akses pribadi (truk)";
 "simulation_real_mode_title" = "Simulasi realistis";
 "purchases_feature_desc_terrain" = "Garis kontur medan, peta bayangan bukit penuh dengan nuansa gelap dan peta lereng dengan warna untuk menunjukkan puncak dan dataran rendah.";
 "complete_purchase" = "Selesaikan pembelian";

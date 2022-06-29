@@ -69,6 +69,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kOpenInstalledResourcesSegue @"openInstalledResourcesSegue"
 #define kOpenOsmAndLiveSegue @"openOsmAndLiveSegue"
 
+#define kSearchCityLimit 10000
 
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
@@ -1515,35 +1516,37 @@ static BOOL _repositoryUpdated = NO;
         _searchResults = resultByContains;
         [_tableView reloadData];
 
-        [OAQuickSearchCoordinatesViewController searchCities:searchString
-                                              searchLocation:[[CLLocation alloc] initWithLatitude:_app.worldRegion.bboxTopLeft.latitude longitude:_app.worldRegion.bboxBottomRight.longitude]
-                                                        view:self.view
-                                                  onComplete:^(NSMutableArray *amenities)
-                                                  {
-                                                      NSMutableArray *regions_byCity = [NSMutableArray array];
-                                                      for (OASearchResult *amenity in amenities)
-                                                      {
-                                                          OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
-                                                          if (region)
-                                                          {
-                                                              NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
-                                                              if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
-                                                              {
-                                                                  amenity.relatedObject = searchResult.firstObject;
-                                                                  [regions_byCity addObject:amenity];
-                                                              }
-                                                              else
-                                                              {
-                                                                  [regions_byCity addObjectsFromArray:searchResult];
-                                                              }
-                                                          }
-                                                      }
-                                                      if (regions_byCity.count > 0)
-                                                      {
-                                                          _searchResults = [resultByContains arrayByAddingObjectsFromArray:regions_byCity];
-                                                          [_tableView reloadData];
-                                                      }
-                                                  }
+        [OAQuickSearchHelper searchCities:searchString
+                           searchLocation:[[CLLocation alloc] initWithLatitude:_app.worldRegion.bboxTopLeft.latitude longitude:_app.worldRegion.bboxBottomRight.longitude]
+                             allowedTypes:@[@"city", @"town"]
+                                cityLimit:kSearchCityLimit
+                                     view:self.view
+                               onComplete:^(NSMutableArray *amenities)
+                               {
+                                   NSMutableArray *regions_byCity = [NSMutableArray array];
+                                   for (OASearchResult *amenity in amenities)
+                                   {
+                                       OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
+                                       if (region)
+                                       {
+                                           NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
+                                           if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
+                                           {
+                                               amenity.relatedObject = searchResult.firstObject;
+                                               [regions_byCity addObject:amenity];
+                                           }
+                                           else
+                                           {
+                                               [regions_byCity addObjectsFromArray:searchResult];
+                                           }
+                                       }
+                                   }
+                                   if (regions_byCity.count > 0)
+                                   {
+                                       _searchResults = [resultByContains arrayByAddingObjectsFromArray:regions_byCity];
+                                       [_tableView reloadData];
+                                   }
+                               }
         ];
     }
 }

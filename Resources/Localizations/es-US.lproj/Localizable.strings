@@ -2595,3 +2595,7 @@
 "no_purchases" = "No tienes compras";
 "google_play" = "Google Play";
 "app_store" = "App Store";
+"subscription_banner_free_maps_title" = "Puedes descargar %i mapas gratis.";
+"subscription_banner_free_maps_description" = "Obtén descargas y actualizaciones de mapas ilimitadas.";
+"subscription_banner_no_free_maps_title" = "Has gastado todas las descargas gratuitas";
+"subscription_banner_osmand_pro_title" = "Obtén actualizaciones de mapas, diarias o semanales con OsmAnd Pro.";

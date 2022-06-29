@@ -341,7 +341,6 @@
                                                          QString::fromNSString(@"http://download.osmand.net"),
                                                          QString::fromNSString([self generateIndexesUrl]),
                                                          _webClient));
-    _resourcesManager->addLocalResource(QString::fromNSString(_worldMiniBasemapFilename));
 
     _resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                              [self]

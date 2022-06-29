@@ -16,6 +16,7 @@
 #import "OAPlugin.h"
 #import "OANauticalMapsPlugin.h"
 #import "Localization.h"
+#import "OASearchResult.h"
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -337,9 +338,9 @@ static BOOL dataInvalidated = NO;
 
 - (void) onItemClicked:(id)senderItem
 {
-    if ([senderItem isKindOfClass:[OAResourceItem class]])
+    if ([senderItem isKindOfClass:[OAResourceItem class]] || [senderItem isKindOfClass:[OASearchResult class]])
     {
-        OAResourceItem* item_ = (OAResourceItem *)senderItem;
+        OAResourceItem* item_ = (OAResourceItem *) ([senderItem isKindOfClass:OASearchResult.class] ? ((OASearchResult *) senderItem).relatedObject : senderItem);
 
         if (item_.downloadTask != nil)
         {

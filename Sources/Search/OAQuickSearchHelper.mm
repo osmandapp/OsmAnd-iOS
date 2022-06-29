@@ -324,6 +324,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         {
             [resIds addObject:resource->id.toNSString()];
         }
+
     [resIds sortUsingComparator:^NSComparisonResult(NSString *first, NSString *second) {
         first = [[first stringByReplacingOccurrencesOfString:@".map.obf" withString:@""] stringByReplacingOccurrencesOfString:@".live.obf" withString:@""];
         second = [[second stringByReplacingOccurrencesOfString:@".map.obf" withString:@""] stringByReplacingOccurrencesOfString:@".live.obf" withString:@""];
@@ -357,6 +358,67 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setResourcesForSearchUICore];
     });
+}
+
++ (NSArray<OASearchResult *> *)searchCities:(NSString *)text
+                             searchLocation:(CLLocation *)searchLocation
+                               allowedTypes:(NSArray<NSString *> *)allowedTypes
+                                  cityLimit:(NSInteger)cityLimit
+                                       view:(UIView *)view
+                                 onComplete:(void (^)(NSMutableArray *amenities))onComplete
+{
+    OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
+    NSString * lang = [OAAppSettings.sharedManager.settingPrefMapLanguage get];
+    BOOL transliterate = [OAAppSettings.sharedManager.settingMapLanguageTranslit get];
+    NSMutableArray *amenities = [NSMutableArray new];
+
+    OAQuickSearchHelper *_searchHelper = OAQuickSearchHelper.instance;
+    OASearchUICore *_searchUICore = _searchHelper.getCore;
+    OASearchSettings *settings = [[_searchUICore getSearchSettings] setOriginalLocation:OsmAndApp.instance.locationServices.lastKnownLocation];
+    settings = [settings setLang:lang ? lang : @"" transliterateIfMissing:transliterate];
+    settings = [settings setSortByName:NO];
+    settings = [settings setAddressSearch:YES];
+    settings = [settings setEmptyQueryAllowed:YES];
+    settings = [settings setOriginalLocation:searchLocation];
+    [_searchUICore updateSettings:settings];
+
+    [view addSpinner];
+
+    dispatch_async(dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL), ^{
+        int __block count = 0;
+
+        [_searchUICore shallowSearch:OASearchAmenityByNameAPI.class text:text matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+
+            OASearchResult *searchResult = *object;
+            std::shared_ptr<const OsmAnd::Amenity> amenity = searchResult.amenity;
+            if (!amenity)
+                return NO;
+
+            if (count++ > cityLimit)
+                return NO;
+
+            NSArray<NSString *> *otherNames = searchResult.otherNames;
+            NSString *localeName = amenity->getName(QString(lang.UTF8String), transliterate).toNSString();
+            NSString *subType = amenity->subType.toNSString();
+
+            if (![allowedTypes containsObject:subType] || (![nm matches:localeName] && ![nm matchesMap:otherNames]))
+                return NO;
+
+            [amenities addObject:searchResult];
+            return NO;
+        } cancelledFunc:^BOOL{
+            return count > cityLimit;
+        }] resortAll:YES removeDuplicates:YES];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (onComplete)
+                onComplete(amenities);
+
+            [view removeSpinner];
+        });
+    });
+
+    return amenities;
 }
 
 @end

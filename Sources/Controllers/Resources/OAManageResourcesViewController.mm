@@ -38,6 +38,10 @@
 #import "OAResourcesInstaller.h"
 #import "OAIAPHelper.h"
 #import "OADownloadMultipleResourceViewController.h"
+#import "OAQuickSearchCoordinatesViewController.h"
+#import "OASearchResult.h"
+#import "OAPointDescription.h"
+#import "OAQuickSearchHelper.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -52,6 +56,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kOpenInstalledResourcesSegue @"openInstalledResourcesSegue"
 #define kOpenOsmAndLiveSegue @"openOsmAndLiveSegue"
 
+#define kSearchCityLimit 10000
 
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
@@ -1250,9 +1255,15 @@ static BOOL _repositoryUpdated = NO;
         {
             if (update)
                 [self updateSearchResults];
+            else
+            {
+                [self.tableView reloadData];
+            }
+        }
+        else
+        {
             [self.tableView reloadData];
         }
-        [self.tableView reloadData];
     }
 }
 
@@ -1266,7 +1277,10 @@ static BOOL _repositoryUpdated = NO;
             {
                 if ([_searchResults[i] isKindOfClass:[OAWorldRegion class]])
                     continue;
-                OAResourceItem *item = _searchResults[i];
+
+                id searchResult = _searchResults[i];
+                OAResourceItem *item = (OAResourceItem *) ([searchResult isKindOfClass:OASearchResult.class] ? ((OASearchResult *) searchResult).relatedObject : searchResult);
+
                 if ([[item.downloadTask key] isEqualToString:downloadTaskKey])
                 {
                     [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
@@ -1420,110 +1434,171 @@ static BOOL _repositoryUpdated = NO;
 
         // Assemble all regions all togather
         NSArray *regions = [regions_startsWith arrayByAddingObjectsFromArray:regions_onlyContains];
-        NSMutableArray *results = [NSMutableArray array];
-        for (OAWorldRegion *region in regions)
-        {
-            if (region.subregions.count > 0)
-                [results addObject:region];
+        NSArray *resultByContains = [self createSearchResult:regions byMapRegion:NO];
+        _searchResults = resultByContains;
+        [_tableView reloadData];
 
-            // Get all resources that are direct children of current region
-            const auto citRegionResources = _resourcesByRegions.constFind(region);
-            if (citRegionResources == _resourcesByRegions.cend())
-                continue;
-            const auto& regionResources = *citRegionResources;
-
-            // Create items for each resource found
-            NSMutableArray *resourceItems = [NSMutableArray array];
-            for (const auto& resource_ : regionResources.allResources)
-            {
-                if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
-                {
-                    if (regionResources.outdatedResources.contains(resource->id))
-                    {
-                        OAOutdatedResourceItem *item = [[OAOutdatedResourceItem alloc] init];
-                        item.resourceId = resource->id;
-                        item.resourceType = resource->type;
-                        item.title = [OAResourcesUIHelper titleOfResource:resource_
-                                                                 inRegion:region
-                                                           withRegionName:YES
-                                                         withResourceType:NO];
-                        item.resource = resource;
-                        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-                        item.worldRegion = region;
-
-                        const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
-                        item.size = resourceInRepository->size;
-                        item.sizePkg = resourceInRepository->packageSize;
-                        item.date = [NSDate dateWithTimeIntervalSince1970:(resourceInRepository->timestamp / 1000)];
-
-                        if (item.title == nil)
-                            continue;
-
-                        [resourceItems addObject:item];
-                    }
-                    else
-                    {
-                        OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
-                        item.resourceId = resource->id;
-                        item.resourceType = resource->type;
-                        item.title = [OAResourcesUIHelper titleOfResource:resource_
-                                                                 inRegion:region
-                                                           withRegionName:YES
-                                                         withResourceType:NO];
-                        item.resource = resource;
-                        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-                        item.worldRegion = region;
-                        NSString *localResourcePath = _app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
-                        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
-
-                        const auto localResource = _app.resourcesManager->getLocalResource(resource->id);
-                        item.resource = localResource;
-                        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
-
-                        item.size = resource->size;
-
-                        if (item.title == nil)
-                            continue;
-
-                        [resourceItems addObject:item];
-                    }
-                }
-                else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
-                {
-                    OARepositoryResourceItem *item = [[OARepositoryResourceItem alloc] init];
-                    item.resourceId = resource->id;
-                    item.resourceType = resource->type;
-                    item.title = [OAResourcesUIHelper titleOfResource:resource_
-                                                             inRegion:region
-                                                       withRegionName:YES
-                                                     withResourceType:NO];
-                    item.resource = resource;
-                    item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-                    item.worldRegion = region;
-                    item.size = resource->size;
-                    item.sizePkg = resource->packageSize;
-                    item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
-
-                    if (item.title == nil)
-                        continue;
-
-                    [resourceItems addObject:item];
-                }
-            }
-
-            if (resourceItems.count > 1)
-            {
-                if (![results containsObject:region])
-                    [results addObject:region];
-            }
-            else
-            {
-                [results addObjectsFromArray:resourceItems];
-            }
-        }
-        
-        _searchResults = results;
+        [OAQuickSearchHelper searchCities:searchString
+                           searchLocation:[[CLLocation alloc] initWithLatitude:_app.worldRegion.bboxTopLeft.latitude longitude:_app.worldRegion.bboxBottomRight.longitude]
+                             allowedTypes:@[@"city", @"town"]
+                                cityLimit:kSearchCityLimit
+                                     view:self.view
+                               onComplete:^(NSMutableArray *amenities)
+                               {
+                                   NSMutableArray *regions_byCity = [NSMutableArray array];
+                                   for (OASearchResult *amenity in amenities)
+                                   {
+                                       OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
+                                       if (region)
+                                       {
+                                           NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
+                                           if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
+                                           {
+                                               amenity.relatedObject = searchResult.firstObject;
+                                               [regions_byCity addObject:amenity];
+                                           }
+                                           else
+                                           {
+                                               [regions_byCity addObjectsFromArray:searchResult];
+                                           }
+                                       }
+                                   }
+                                   if (regions_byCity.count > 0)
+                                   {
+                                       _searchResults = [resultByContains arrayByAddingObjectsFromArray:regions_byCity];
+                                       [_tableView reloadData];
+                                   }
+                               }
+        ];
     }
+}
+
+- (OAResourceItem *)createResourceItemResult:(std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource_
+                                     region:(OAWorldRegion *)region
+                            regionResources:(RegionResources)regionResources
+{
+    if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
+    {
+        if (regionResources.outdatedResources.contains(resource->id))
+        {
+            OAOutdatedResourceItem *item = [[OAOutdatedResourceItem alloc] init];
+            item.resourceId = resource->id;
+            item.resourceType = resource->type;
+            item.title = [OAResourcesUIHelper titleOfResource:resource_
+                                                     inRegion:region
+                                               withRegionName:YES
+                                             withResourceType:NO];
+            item.resource = resource;
+            item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+            item.worldRegion = region;
+
+            const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
+            item.size = resourceInRepository->size;
+            item.sizePkg = resourceInRepository->packageSize;
+            item.date = [NSDate dateWithTimeIntervalSince1970:(resourceInRepository->timestamp / 1000)];
+
+            if (item.title == nil)
+                return nil;
+
+            return item;
+        }
+        else
+        {
+            OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
+            item.resourceId = resource->id;
+            item.resourceType = resource->type;
+            item.title = [OAResourcesUIHelper titleOfResource:resource_
+                                                     inRegion:region
+                                               withRegionName:YES
+                                             withResourceType:NO];
+            item.resource = resource;
+            item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+            item.worldRegion = region;
+            auto localResource = _app.resourcesManager->getLocalResource(item.resourceId);
+            if (localResource != nullptr)
+            {
+                NSString *localResourcePath = localResource->localPath.toNSString();
+                item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
+                item.resource = localResource;
+                item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
+            }
+
+            item.size = resource->size;
+
+            if (item.title == nil)
+                return nil;
+
+            return item;
+        }
+    }
+    else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
+    {
+        OARepositoryResourceItem *item = [[OARepositoryResourceItem alloc] init];
+        item.resourceId = resource->id;
+        item.resourceType = resource->type;
+        item.title = [OAResourcesUIHelper titleOfResource:resource_
+                                                 inRegion:region
+                                           withRegionName:YES
+                                         withResourceType:NO];
+        item.resource = resource;
+        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+        item.worldRegion = region;
+        item.size = resource->size;
+        item.sizePkg = resource->packageSize;
+        item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
+
+        if (item.title == nil)
+            return nil;
+
+        return item;
+    }
+
+    return nil;
+}
+
+- (NSArray *)createSearchResult:(NSArray *)regions byMapRegion:(BOOL)byMapRegion
+{
+    NSMutableArray *results = [NSMutableArray array];
+    for (OAWorldRegion *region in regions)
+    {
+        if (region.subregions.count > 0)
+            [results addObject:region];
+
+        // Get all resources that are direct children of current region
+        const auto citRegionResources = _resourcesByRegions.constFind(region);
+        if (citRegionResources == _resourcesByRegions.cend())
+            continue;
+        const auto& regionResources = *citRegionResources;
+
+        // Create items for each resource found
+        NSMutableArray *resourceItems = [NSMutableArray array];
+        for (const auto& resource_ : regionResources.allResources)
+        {
+            OAResourceItem *item = [self createResourceItemResult:resource_ region:region regionResources:regionResources];
+            if (item)
+                [resourceItems addObject:item];
+        }
+
+        if (resourceItems.count > 1)
+        {
+            if (byMapRegion)
+            {
+                for (OAResourceItem *item in resourceItems)
+                {
+                    if (item.resourceType == OsmAndResourceType::MapRegion)
+                        [results addObject:item];
+                }
+            }
+
+            if ((!byMapRegion && ![results containsObject:region]) || results.count == 0)
+                [results addObject:region];
+        }
+        else
+        {
+            [results addObjectsFromArray:resourceItems];
+        }
+    }
+    return results;
 }
 
 - (void) showNoInternetAlertForCatalogUpdate
@@ -1836,7 +1911,7 @@ static BOOL _repositoryUpdated = NO;
         
         if (![item_ isKindOfClass:[OAWorldRegion class]])
         {
-            OAResourceItem *item = (OAResourceItem *) item_;
+            OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
             if (item.downloadTask != nil)
                 cellTypeId = downloadingResourceCell;
         }
@@ -1879,7 +1954,7 @@ static BOOL _repositoryUpdated = NO;
     
     if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
-        OAResourceItem *item = (OAResourceItem *) item_;
+        OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
 
         float progressCompleted = item.downloadTask.progressCompleted;
@@ -1940,9 +2015,9 @@ static BOOL _repositoryUpdated = NO;
             if (item.superregion != nil)
                 subtitle = item.superregion.name;
         }
-        else if ([item_ isKindOfClass:[OAResourceItem class]])
+        else if ([item_ isKindOfClass:[OAResourceItem class]] || [item_ isKindOfClass:[OASearchResult class]])
         {
-            OAResourceItem *item = (OAResourceItem *) item_;
+            OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
 
             if ([item isKindOfClass:[OAMultipleResourceItem class]])
             {
@@ -1975,8 +2050,11 @@ static BOOL _repositoryUpdated = NO;
                 cellTypeId = repositoryResourceCell;
             }
 
-            title = item.title;
-            if (item.worldRegion.superregion)
+            BOOL isSearchResult = [item_ isKindOfClass:[OASearchResult class]];
+            title = isSearchResult ? ((OASearchResult *) item_).localeName : item.title;
+            if (isSearchResult)
+                subtitle = item.title;
+            else if (item.worldRegion.superregion)
                 subtitle = item.worldRegion.superregion.name;
             else
                 subtitle = item.worldRegion.name;
@@ -2475,9 +2553,9 @@ static BOOL _repositoryUpdated = NO;
         cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         cell.imageView.tintColor = color;
     }
-    else if ([item_ isKindOfClass:OAResourceItem.class])
+    else if ([item_ isKindOfClass:OAResourceItem.class] || [item_ isKindOfClass:OASearchResult.class])
     {
-        OAResourceItem *item = (OAResourceItem *) item_;
+        OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? UIColorFromRGB(resource_installed_icon_color) : UIColorFromRGB(color_tint_gray);
         cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         cell.imageView.tintColor = color;
@@ -2543,7 +2621,10 @@ static BOOL _repositoryUpdated = NO;
     }
     else if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
-        OAResourceItem *item = [item_ isKindOfClass:OAMultipleResourceItem.class] && downloadingMultipleItem ? downloadingMultipleItem : (OAResourceItem *) item_;
+        OAResourceItem *item = [item_ isKindOfClass:OAMultipleResourceItem.class] && downloadingMultipleItem
+                ? downloadingMultipleItem
+                : (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
+
         FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
 
         float progressCompleted = item.downloadTask.progressCompleted;
@@ -2661,6 +2742,9 @@ static BOOL _repositoryUpdated = NO;
 
     if (item)
     {
+        if ([item isKindOfClass:OASearchResult.class])
+            item = ((OASearchResult *) item).relatedObject;
+
         if ([item isKindOfClass:[OAMultipleResourceItem class]])
         {
             [self onItemClicked:item];
@@ -2696,7 +2780,7 @@ static BOOL _repositoryUpdated = NO;
     if (item == nil)
         return NO;
 
-    if (![item isKindOfClass:[OALocalResourceItem class]])
+    if (!([item isKindOfClass:[OALocalResourceItem class]] || [item isKindOfClass:[OASearchResult class]] && [((OASearchResult *) item).relatedObject isKindOfClass:[OALocalResourceItem class]]))
         return NO;
 
     return YES;
@@ -2713,7 +2797,7 @@ static BOOL _repositoryUpdated = NO;
     if (item == nil)
         return UITableViewCellEditingStyleNone;
 
-    if (![item isKindOfClass:[OALocalResourceItem class]])
+    if (!([item isKindOfClass:[OALocalResourceItem class]] || [item isKindOfClass:[OASearchResult class]] && [((OASearchResult *) item).relatedObject isKindOfClass:[OALocalResourceItem class]]))
         return UITableViewCellEditingStyleNone;
 
     return UITableViewCellEditingStyleDelete;
@@ -2729,6 +2813,9 @@ static BOOL _repositoryUpdated = NO;
 
     if (item == nil)
         return;
+
+    if ([item isKindOfClass:OASearchResult.class])
+        item = ((OASearchResult *) item).relatedObject;
 
     if ([item isKindOfClass:[OALocalResourceItem class]])
     {
@@ -2836,7 +2923,6 @@ static BOOL _repositoryUpdated = NO;
     _lastSearchScope = _searchController.searchBar.selectedScopeButtonIndex;
     [self performSearchForSearchString:_lastSearchString
                         andSearchScope:_lastSearchScope];
-    [_tableView reloadData];
 }
 
 - (BOOL) isFiltering
@@ -2976,7 +3062,8 @@ static BOOL _repositoryUpdated = NO;
         OALocalResourceItem *item = nil;
         if ([self isFiltering])
         {
-            item = _searchResults[cellPath.row];
+            id searchResult = _searchResults[cellPath.row];
+            item = (OALocalResourceItem *) ([searchResult isKindOfClass:OASearchResult.class] ? ((OASearchResult *) searchResult).relatedObject : searchResult);
         }
         else
         {

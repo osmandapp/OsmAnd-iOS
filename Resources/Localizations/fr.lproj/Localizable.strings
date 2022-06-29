@@ -2567,3 +2567,6 @@
 "simulate_location_unselected_track_footer" = "Vous devez sélectionner un fichier de trace";
 "paused" = "En pause";
 "you_can_get_feature_as_part_of_pattern" = "Obtenez “%@” dans la formule %@. Comparaison :";
+"in_grace_period" = "En période d'essai";
+"expires" = "Se termine";
+"simulate_your_location_gpx_descr" = "Vous pouvez simuler les déplacements de votre position via des traces GPX.";

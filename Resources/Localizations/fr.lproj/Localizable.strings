@@ -2542,7 +2542,7 @@
 "simulate_location_movement_speed_x4" = "x4";
 "plugin_popup_nautical_ask" = "Veuillez activer l'extension Nautical";
 "restore_purchase" = "Restaurer les achats";
-"routing_attr_hazmat_category_name" = "Transporte des matériaux dangereux";
+"routing_attr_hazmat_category_name" = "Transport des matières dangereuses";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Aucune restriction)";
 "pro_features" = "Fonctionnalités Pro";
 "product_desc_development" = "Paramètres de développement et de débogage";
@@ -2563,7 +2563,7 @@
 "promo_subscription" = "OsmAnd Pro (Promo)";
 "screen_settings_weather_toolbar" = "Barre d'outils de météo";
 "subscription" = "Souscription";
-"quarterly_subscription" = "Souscription trimestrielle";
+"quarterly_subscription" = "Abonnement trimestriel";
 "simulate_location_unselected_track_footer" = "Vous devez sélectionner un fichier de trace";
 "paused" = "En pause";
 "you_can_get_feature_as_part_of_pattern" = "Obtenez “%@” dans la formule %@. Comparaison :";

@@ -55,6 +55,7 @@
 #import "OAQuickSearchCoordinatesViewController.h"
 #import "OASearchResult.h"
 #import "OAPointDescription.h"
+#import "OAQuickSearchHelper.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>

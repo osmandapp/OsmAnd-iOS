@@ -135,7 +135,6 @@
     id<OANetworkImportProgressListener> _listener;
     
     BOOL _cancelled;
-    BOOL _readItems;
     
     NSOperationQueue *_queue;
     
@@ -160,27 +159,31 @@
 {
     OACollectItemsResult *result = [[OACollectItemsResult alloc] init];
     __block NSString *error = nil;
-//    _readItems = readItems;
 ////    OperationLog operationLog = new OperationLog("collectRemoteItems", BackupHelper.DEBUG);
 ////    operationLog.startOperation();
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     @try {
         [_backupHelper downloadFileList:^(NSInteger status, NSString * _Nonnull message, NSArray<OARemoteFile *> * _Nonnull remoteFiles) {
             if (status == STATUS_SUCCESS)
             {
                 result.remoteFiles = remoteFiles;
                 @try {
-                    result.items = [self getRemoteItems:remoteFiles readItems:_readItems];
+                    result.items = [self getRemoteItems:remoteFiles readItems:readItems];
                 } @catch (NSException *e) {
                     error = e.reason;
+                    dispatch_semaphore_signal(semaphore);
                 }
             }
             else
             {
                 error = message;
             }
+            dispatch_semaphore_signal(semaphore);
         }];
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     } @catch (NSException *e) {
         NSLog(@"Failed to collect items for backup");
+        dispatch_semaphore_signal(semaphore);
     }
 ////    operationLog.finishOperation();
     if (error.length > 0)
@@ -302,6 +305,7 @@
                         break;
                     }
                 }
+                // TODO: Chceck why some files are not added here
                 OAUploadedFileInfo *fileInfo = infoMap[[NSString stringWithFormat:@"%@___%@", remoteFile.type, origFileName]];
                 long uploadTime = fileInfo != nil ? fileInfo.uploadTime : 0;
                 if (readItems && (uploadTime != remoteFile.clienttimems || delete))
@@ -318,7 +322,7 @@
         }
 //        operationLog.log("build maps");
         
-        [remoteInfoFilesMap enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull itemFileName, OARemoteFile * _Nonnull remoteFile, BOOL * _Nonnull stop) {
+        [remoteItemFilesMap enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull itemFileName, OARemoteFile * _Nonnull remoteFile, BOOL * _Nonnull stop) {
             BOOL hasInfo = NO;
             for (NSString *remoteInfoName in remoteInfoNames)
             {

@@ -22,6 +22,7 @@
 #import "OABackupError.h"
 #import "OABackupDbHelper.h"
 #import "OACollectLocalFilesTask.h"
+#import "OABackupInfoGenerationTask.h"
 #import "OAWebClient.h"
 
 #import "OARegisterUserCommand.h"
@@ -47,14 +48,15 @@ static NSString *DELETE_FILE_VERSION_URL = [SERVER_URL stringByAppendingPathComp
 static NSString *BACKUP_TYPE_PREFIX = @"backup_type_";
 static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
+@interface OABackupHelper () <OAOnPrepareBackupListener>
+
+@end
+
 @implementation OABackupHelper
 {
-    NSOperationQueue *_executor;
     
-//    private PrepareBackupTask prepareBackupTask;
-//        private PrepareBackupResult backup = new PrepareBackupResult();
-//        private final List<OnPrepareBackupListener> prepareBackupListeners = new ArrayList<>();
-//
+    OAPrepareBackupTask *_prepareBackupTask;
+    NSHashTable<id<OAOnPrepareBackupListener>> *_prepareBackupListeners;
     
     OABackupDbHelper *_dbHelper;
     
@@ -179,6 +181,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         _settings = [OAAppSettings sharedManager];
         _backupListeners = [[OABackupListeners alloc] init];
         _dbHelper = OABackupDbHelper.sharedDatabase;
+        _prepareBackupListeners = [NSHashTable weakObjectsHashTable];
     }
     return self;
 }
@@ -405,7 +408,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     params[@"allVersions"] = @"true";
 //    final OperationLog operationLog = new OperationLog("downloadFileList", DEBUG);
 //    operationLog.startOperation();
-    [OANetworkUtilities sendRequestWithUrl:LIST_FILES_URL params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [OANetworkUtilities sendRequestWithUrl:LIST_FILES_URL params:params post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         int status;
         NSString *message;
         NSString *result = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"";
@@ -422,16 +425,16 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
             if (!jsonParsingError)
             {
-                NSString *totalZipSize = resultJson[@"totalZipSize"];
-                NSString *totalFiles = resultJson[@"totalFiles"];
-                NSString *totalFileVersions = resultJson[@"totalFileVersions"];
+                NSInteger totalZipSize = [resultJson[@"totalZipSize"] integerValue];
+                NSInteger totalFiles = [resultJson[@"totalFiles"] integerValue];
+                NSInteger totalFileVersions = [resultJson[@"totalFileVersions"] integerValue];
                 NSArray *allFiles = resultJson[@"allFiles"];
                 for (NSDictionary *f in allFiles)
                 {
                     [remoteFiles addObject:[[OARemoteFile alloc] initWithJson:f]];
                 }
                 status = STATUS_SUCCESS;
-                message = [NSString stringWithFormat:@"Total files: %@ Total zip size: %@ Total file versions: %@", totalFiles, [NSByteCountFormatter stringFromByteCount:totalZipSize.integerValue countStyle:NSByteCountFormatterCountStyleFile], totalFileVersions];
+                message = [NSString stringWithFormat:@"Total files: %ld Total zip size: %@ Total file versions: %ld", totalFiles, [NSByteCountFormatter stringFromByteCount:totalZipSize countStyle:NSByteCountFormatterCountStyleFile], totalFileVersions];
             }
             else
             {
@@ -521,6 +524,63 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         [listener onFileDownloadDone:type fileName:fileName error:error];
     //    operationLog.finishOperation();
     return error;
+}
+
+- (void) generateBackupInfo:(NSDictionary<NSString *, OALocalFile *> *)localFiles
+          uniqueRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)uniqueRemoteFiles
+         deletedRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)deletedRemoteFiles
+                 onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete
+{
+    
+//    OperationLog operationLog = new OperationLog("generateBackupInfo", DEBUG, 200);
+//    operationLog.startOperation();
+    
+    OABackupInfoGenerationTask *task = [[OABackupInfoGenerationTask alloc] initWithLocalFiles:localFiles uniqueRemoteFiles:uniqueRemoteFiles deletedRemoteFiles:deletedRemoteFiles onComplete:onComplete];
+    [_executor addOperation:task];
+}
+
+- (BOOL) isBackupPreparing
+{
+    return _prepareBackupTask != nil;
+}
+
+- (void) addPrepareBackupListener:(id<OAOnPrepareBackupListener>)listener
+{
+    [_prepareBackupListeners addObject:listener];
+    if ([self isBackupPreparing])
+        [listener onBackupPreparing];
+}
+
+- (void) removePrepareBackupListener:(id<OAOnPrepareBackupListener>)listener
+{
+    [_prepareBackupListeners removeObject:listener];
+}
+
+- (BOOL) prepareBackup
+{
+    if ([self isBackupPreparing])
+        return NO;
+
+    OAPrepareBackupTask *prepareBackupTask = [[OAPrepareBackupTask alloc] initWithListener:self];
+    
+    _prepareBackupTask = prepareBackupTask;
+    [prepareBackupTask prepare];
+    return YES;
+}
+
+// MARK: OAOnPrepareBackupListener
+
+- (void)onBackupPreparing
+{
+    for (id<OAOnPrepareBackupListener> listener in _prepareBackupListeners)
+        [listener onBackupPreparing];
+}
+
+- (void)onBackupPrepared:(OAPrepareBackupResult *)backupResult
+{
+    _prepareBackupTask = nil;
+    for (id<OAOnPrepareBackupListener> listener in _prepareBackupListeners)
+        [listener onBackupPrepared:backupResult];
 }
 
 @end

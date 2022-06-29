@@ -2245,4 +2245,19 @@ static const double d180PI = 180.0 / M_PI_2;
     });
 }
 
++ (NSString *) formatWarnings:(NSArray<NSString *> *)warnings
+{
+    NSMutableString *builder = [[NSMutableString alloc] init];
+    BOOL f = YES;
+    for (NSString *w in warnings)
+    {
+        if (f)
+            f = NO;
+        else
+            [builder appendString:@"\n"];
+        [builder appendString:w];
+    }
+    return builder;
+}
+
 @end

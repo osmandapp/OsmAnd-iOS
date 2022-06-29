@@ -22,8 +22,8 @@ typedef NS_ENUM(NSInteger, EOARemoteFilesType) {
 
 @interface OAPrepareBackupResult : NSObject
 
-@property (nonatomic, readonly) OABackupInfo *backupInfo;
-@property (nonatomic, readonly) NSArray<OASettingsItem *> *settingsItems;
+@property (nonatomic) OABackupInfo *backupInfo;
+@property (nonatomic) NSArray<OASettingsItem *> *settingsItems;
 
 @property (nonatomic) NSDictionary<NSString *, OARemoteFile *> *remoteFiles;
 
@@ -33,6 +33,9 @@ typedef NS_ENUM(NSInteger, EOARemoteFilesType) {
 - (void)setLocalFilesFromArray:(NSArray<OALocalFile *> *)localFiles;
 
 - (NSDictionary<NSString *, OARemoteFile *> *) getRemoteFiles:(EOARemoteFilesType)type;
+- (OARemoteFile *) getRemoteFile:(NSString *)type fileName:(NSString *)fileName;
+
+- (void)setRemoteFilesFromArray:(NSArray<OARemoteFile *> *)remoteFiles;
 
 @end
 

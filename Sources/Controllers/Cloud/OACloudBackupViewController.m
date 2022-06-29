@@ -21,6 +21,7 @@
 #import "OAIconTitleValueCell.h"
 #import "OATitleDescrRightIconTableViewCell.h"
 #import "OAMainSettingsViewController.h"
+#import "OARestoreBackupViewController.h"
 
 @interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -54,6 +55,7 @@
     self.tblView.rowHeight = UITableViewAutomaticDimension;
     
     [OAIAPHelper.sharedInstance checkBackupPurchase];
+    [OABackupHelper.sharedInstance prepareBackup];
 }
 
 - (void)applyLocalization
@@ -189,7 +191,8 @@
 
 - (void)onRestoreButtonPressed
 {
-    
+    OARestoreBackupViewController *restoreVC = [[OARestoreBackupViewController alloc] init];
+    [self.navigationController pushViewController:restoreVC animated:YES];
 }
 
 // MARK: UITableViewDataSource

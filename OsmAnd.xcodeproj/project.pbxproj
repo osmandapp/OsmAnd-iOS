@@ -3076,6 +3076,8 @@
 		DAECA4FA26CFE62600241B0B /* OABaseWidgetView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAECA4F926CFE62600241B0B /* OABaseWidgetView.m */; };
 		DAECEF1222D62AB70044EC36 /* ic_navbar_chevron@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAECEF0F22D62AB60044EC36 /* ic_navbar_chevron@2x.png */; };
 		DAECEF1422D62AB70044EC36 /* ic_navbar_chevron@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAECEF1022D62AB70044EC36 /* ic_navbar_chevron@3x.png */; };
+		DAEDAAA12865A0F100CE54D0 /* OABackupInfoGenerationTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEDAAA02865A0F100CE54D0 /* OABackupInfoGenerationTask.m */; };
+		DAEDAAA42865E65800CE54D0 /* OARestoreBackupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAEDAAA32865E65700CE54D0 /* OARestoreBackupViewController.mm */; };
 		DAF2F804254825BA00967935 /* map_plan_route_point_movable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF2F7FB254825B600967935 /* map_plan_route_point_movable@3x.png */; };
 		DAF2F808254825BA00967935 /* map_plan_route_point_normal@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF2F7FD254825B700967935 /* map_plan_route_point_normal@3x.png */; };
 		DAF2F80C254825BA00967935 /* map_plan_route_point_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF2F7FF254825B800967935 /* map_plan_route_point_selected@2x.png */; };
@@ -7280,6 +7282,10 @@
 		DAECA4F926CFE62600241B0B /* OABaseWidgetView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseWidgetView.m; sourceTree = "<group>"; };
 		DAECEF0F22D62AB60044EC36 /* ic_navbar_chevron@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_chevron@2x.png"; path = "Resources/Icons/ic_navbar_chevron@2x.png"; sourceTree = "<group>"; };
 		DAECEF1022D62AB70044EC36 /* ic_navbar_chevron@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_chevron@3x.png"; path = "Resources/Icons/ic_navbar_chevron@3x.png"; sourceTree = "<group>"; };
+		DAEDAA9F2865A0F100CE54D0 /* OABackupInfoGenerationTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupInfoGenerationTask.h; sourceTree = "<group>"; };
+		DAEDAAA02865A0F100CE54D0 /* OABackupInfoGenerationTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABackupInfoGenerationTask.m; sourceTree = "<group>"; };
+		DAEDAAA22865E65700CE54D0 /* OARestoreBackupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARestoreBackupViewController.h; sourceTree = "<group>"; };
+		DAEDAAA32865E65700CE54D0 /* OARestoreBackupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARestoreBackupViewController.mm; sourceTree = "<group>"; };
 		DAF2F7FB254825B600967935 /* map_plan_route_point_movable@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_plan_route_point_movable@3x.png"; path = "Resources/Icons/map_plan_route_point_movable@3x.png"; sourceTree = "<group>"; };
 		DAF2F7FD254825B700967935 /* map_plan_route_point_normal@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_plan_route_point_normal@3x.png"; path = "Resources/Icons/map_plan_route_point_normal@3x.png"; sourceTree = "<group>"; };
 		DAF2F7FF254825B800967935 /* map_plan_route_point_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_plan_route_point_selected@2x.png"; path = "Resources/Icons/map_plan_route_point_selected@2x.png"; sourceTree = "<group>"; };
@@ -9272,6 +9278,8 @@
 				32D253A127F336BF00324717 /* OACloudBackupViewController.xib */,
 				32D253A827F336C000324717 /* OACloudIntroductionViewController.h */,
 				32D253AB27F336C100324717 /* OACloudIntroductionViewController.m */,
+				DAEDAAA22865E65700CE54D0 /* OARestoreBackupViewController.h */,
+				DAEDAAA32865E65700CE54D0 /* OARestoreBackupViewController.mm */,
 			);
 			path = Cloud;
 			sourceTree = "<group>";
@@ -12864,6 +12872,8 @@
 				DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */,
 				DA12757C28631154007E2A0D /* OAImportBackupItemsTask.h */,
 				DA12757D28631154007E2A0D /* OAImportBackupItemsTask.m */,
+				DAEDAA9F2865A0F100CE54D0 /* OABackupInfoGenerationTask.h */,
+				DAEDAAA02865A0F100CE54D0 /* OABackupInfoGenerationTask.m */,
 			);
 			path = Backup;
 			sourceTree = "<group>";
@@ -15375,6 +15385,7 @@
 				DA5A82F726C563A800F274C7 /* OARangeSliderCell.m in Sources */,
 				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
+				DAEDAAA42865E65800CE54D0 /* OARestoreBackupViewController.mm in Sources */,
 				DA5A84E826C563A900F274C7 /* OAWaypointsViewController.mm in Sources */,
 				DA5A83FE26C563A800F274C7 /* OAQuickSearchListItem.mm in Sources */,
 				DA5A818E26C563A700F274C7 /* OANewAction.m in Sources */,
@@ -15393,6 +15404,7 @@
 				DA5A817326C563A700F274C7 /* OAFavoriteItem.mm in Sources */,
 				DA5A831626C563A800F274C7 /* OADescrTitleCell.mm in Sources */,
 				DA5A855B26C563A900F274C7 /* OAWorldRegion.mm in Sources */,
+				DAEDAAA12865A0F100CE54D0 /* OABackupInfoGenerationTask.m in Sources */,
 				DA5A83DD26C563A800F274C7 /* OAFavoriteListViewController.mm in Sources */,
 				DA5A81C626C563A700F274C7 /* OACollatorStringMatcher.m in Sources */,
 				DA5A81E926C563A700F274C7 /* OAHistoryHelper.m in Sources */,

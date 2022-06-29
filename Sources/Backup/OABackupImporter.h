@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL cancelled;
 
 - (void) importItems:(NSArray<OASettingsItem *> *)items forceReadData:(BOOL)forceReadData;
+- (OACollectItemsResult *) collectItems:(BOOL)readItems;
 
 @end
 

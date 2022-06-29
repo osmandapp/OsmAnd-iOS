@@ -44,7 +44,7 @@
     return _remoteFiles[typeWithName];
 }
 
-- (void)setRemoteFiles:(NSDictionary<NSString *,OARemoteFile *> *)remoteFiles
+- (void)setRemoteFilesFromArray:(NSArray<OARemoteFile *> *)remoteFiles
 {
     NSMutableDictionary<NSString *, OARemoteFile *> *remoteFilesMap = [NSMutableDictionary dictionary];
     NSMutableDictionary<NSString *, OARemoteFile *> *oldRemoteFiles = [NSMutableDictionary dictionary];
@@ -60,7 +60,7 @@
     NSMutableDictionary<NSString *, OARemoteFile *> *uniqueInfoRemoteFiles = [NSMutableDictionary dictionary];
     NSMutableDictionary<NSString *, OARemoteFile *> *deletedRemoteFiles = [NSMutableDictionary dictionary];;
     NSMutableSet<NSString *> *uniqueFileIds = [NSMutableSet set];
-    [remoteFiles enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull fileId, OARemoteFile * _Nonnull rf, BOOL * _Nonnull stop) {
+    [remoteFilesMap enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull fileId, OARemoteFile * _Nonnull rf, BOOL * _Nonnull stop) {
         if (![uniqueFileIds containsObject:fileId]) {
             [uniqueFileIds addObject:fileId];
             if (rf.isInfoFile)

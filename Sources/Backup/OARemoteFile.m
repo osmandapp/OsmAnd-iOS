@@ -65,8 +65,7 @@
 - (NSString *) getTypeNamePath
 {
     if (_name.length > 0)
-        return [NSString stringWithFormat:@"%@%@", _type, _name];
-//        type + (name.charAt(0) == '/' ? name : "/" + name);
+        return [NSString stringWithFormat:@"%@%@", _type, ([_name characterAtIndex:0] != '/' ? [@"/" stringByAppendingString:_name] : _name)];
     else
         return _type;
 }

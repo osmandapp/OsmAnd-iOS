@@ -10,6 +10,7 @@
 #import "OABackupHelper.h"
 #import "OABackupListeners.h"
 #import "OAPrepareBackupResult.h"
+#import "OANetworkSettingsHelper.h"
 
 @interface OABackupTaskType ()
 
@@ -55,7 +56,7 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
 
 @end
 
-@interface OAPrepareBackupTask () <OAOnCollectLocalFilesListener>
+@interface OAPrepareBackupTask () <OAOnCollectLocalFilesListener, OABackupCollectListener>
 
 @end
 
@@ -63,7 +64,7 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
 {
     OABackupHelper *_backupHelper;
     
-    id<OAOnPrepareBackupListener> _listener;
+    __weak id<OAOnPrepareBackupListener> _listener;
     
     NSMutableArray<OABackupTaskType *> *_pendingTasks;
     NSMutableArray<OABackupTaskType *> *_finishedTasks;
@@ -73,6 +74,7 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
 {
     self = [super init];
     if (self) {
+        _backupHelper = OABackupHelper.sharedInstance;
         _listener = listener;
         
         _pendingTasks = [NSMutableArray array];
@@ -153,47 +155,40 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
 
 - (void) doCollectLocalFiles
 {
-    [OABackupHelper.sharedInstance collectLocalFiles:self];
+    [_backupHelper collectLocalFiles:self];
 }
 
 - (void) doCollectRemoteFiles
 {
-//    try {
-//        app.getNetworkSettingsHelper().collectSettings(PREPARE_BACKUP_KEY, false,
-//                                                       (succeed, empty, items, remoteFiles) -> {
-//            if (succeed) {
-//                backup.setSettingsItems(items);
-//                backup.setRemoteFiles(remoteFiles);
-//            } else {
-//                onError("Download remote items error");
-//            }
-//            onTaskFinished(TaskType.COLLECT_REMOTE_FILES);
-//        }
-//                                                       );
-//    } catch (IllegalStateException e) {
-//        String message = e.getMessage();
-//        if (message != null) {
-//            onError(message);
-//        }
-//        log.error(message, e);
-//    }
+    @try
+    {
+        [OANetworkSettingsHelper.sharedInstance collectSettings:kPrepareBackupKey readData:NO listener:self];
+    }
+    @catch (NSException *e)
+    {
+        NSString *message = e.reason;
+        if (message != nil)
+        {
+            [self onError:message];
+        }
+        NSLog(@"Collect remote files error: %@", e.reason);
+    }
 }
 
 - (void) doGenerateBackupInfo
 {
-//    if (backup.getLocalFiles() == null || backup.getRemoteFiles() == null) {
-//        onTaskFinished(TaskType.GENERATE_BACKUP_INFO);
-//        return;
-//    }
-//    backupHelper.generateBackupInfo(backup.getLocalFiles(), backup.getRemoteFiles(RemoteFilesType.UNIQUE),
-//                                    backup.getRemoteFiles(RemoteFilesType.DELETED), (backupInfo, error) -> {
-//        if (Algorithms.isEmpty(error)) {
-//            backup.setBackupInfo(backupInfo);
-//        } else {
-//            onError(error);
-//        }
-//        onTaskFinished(TaskType.GENERATE_BACKUP_INFO);
-//    });
+    if (_backup.localFiles == nil || _backup.remoteFiles == nil)
+    {
+        [self onTaskFinished:OABackupTaskType.GENERATE_BACKUP_INFO];
+        return;
+    }
+    [_backupHelper generateBackupInfo:_backup.localFiles uniqueRemoteFiles:[_backup getRemoteFiles:EOARemoteFilesTypeUnique] deletedRemoteFiles:[_backup getRemoteFiles:EOARemoteFilesTypeDeleted] onComplete:^(OABackupInfo *backupInfo, NSString *error) {
+        if (error.length == 0)
+            _backup.backupInfo = backupInfo;
+        else
+            [self onError:error];
+        [self onTaskFinished:OABackupTaskType.GENERATE_BACKUP_INFO];
+    }];
 }
 
 - (void) onError:(NSString *)message
@@ -214,13 +209,27 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
 
 - (void)onFileCollected:(OALocalFile *)localFile
 {
-    
 }
 
 - (void)onFilesCollected:(NSArray<OALocalFile *> *)localFiles
 {
     [_backup setLocalFilesFromArray:localFiles];
     [self onTaskFinished:OABackupTaskType.COLLECT_LOCAL_FILES];
+}
+
+// MARK: OABackupCollectListener
+
+- (void)onBackupCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(nonnull NSArray<OASettingsItem *> *)items remoteFiles:(nonnull NSArray<OARemoteFile *> *)remoteFiles {
+    if (succeed)
+    {
+        _backup.settingsItems = items;
+        [_backup setRemoteFilesFromArray:remoteFiles];
+    }
+    else
+    {
+        [self onError:@"Download remote items error"];
+    }
+    [self onTaskFinished:OABackupTaskType.COLLECT_REMOTE_FILES];
 }
 
 @end

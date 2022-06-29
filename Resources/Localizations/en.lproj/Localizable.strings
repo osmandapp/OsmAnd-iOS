@@ -2621,6 +2621,8 @@
 "cloud_email_already_registered" = "This e-mail address is already registered.";
 "login_error_email_invalid" = "Please enter a valid e-mail address";
 "login_help_email_title" = "OsmAnd iOS Cloud";
+"restore_from_osmand_cloud" = "Restore from OsmAnd Cloud";
+"choose_what_to_restore" = "Choose items to restore";
 
 "backup_error_no_valid_subscription" = "No valid subscription present";
 "backup_error_user_is_not_registered" = "No user registered with that e-mail address";

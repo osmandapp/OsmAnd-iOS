@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OABackupListeners.h"
+#import "OAPrepareBackupTask.h"
 
 #define STATUS_SUCCESS 0
 #define STATUS_PARSE_JSON_ERROR 1
@@ -35,6 +36,8 @@
 
 @property (nonatomic) OAPrepareBackupResult *backup;
 @property (nonatomic, readonly) OABackupListeners *backupListeners;
+
+@property (nonatomic, readonly) NSOperationQueue *executor;
 
 + (NSString *) INFO_EXT;
 
@@ -67,7 +70,21 @@
 - (NSString *)downloadFile:(NSString *)filePath
                 remoteFile:(OARemoteFile *)remoteFile
                   listener:(id<OAOnDownloadFileListener>)listener;
+- (void) generateBackupInfo:(NSDictionary<NSString *, OALocalFile *> *)localFiles
+          uniqueRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)uniqueRemoteFiles
+         deletedRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)deletedRemoteFiles
+                 onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete;
+
+- (void) updateFileUploadTime:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)updateTime;
+
+- (BOOL) prepareBackup;
+- (void) addPrepareBackupListener:(id<OAOnPrepareBackupListener>)listener;
+- (void) removePrepareBackupListener:(id<OAOnPrepareBackupListener>)listener;
+
+- (BOOL) isBackupPreparing;
 
 + (BOOL) isTokenValid:(NSString *)token;
+
++ (BOOL) applyItem:(OASettingsItem *)item type:(NSString *)type name:(NSString *)name;
 
 @end

@@ -42,6 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL) isTypeEnabled:(OAExportSettingsType *)type;
 
 @property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *itemName;
 @property (nonatomic, readonly) NSString *title;
 @property (nonatomic, readonly) UIImage *icon;
 

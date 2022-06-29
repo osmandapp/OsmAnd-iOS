@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OASettingsHelper.h"
+#import "OANetworkSettingsHelper.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,6 +23,28 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface OAImportBackupTask : NSOperation
+
+@property (nonatomic, assign) EOAImportType importType;
+@property (nonatomic, weak) id<OAImportListener> importListener;
+@property (nonatomic, weak) id<OACheckDuplicatesListener> duplicatesListener;
+
+@property (nonatomic, readonly) NSArray<OASettingsItem *> *items;
+@property (nonatomic, readonly) NSArray<OASettingsItem *> *selectedItems;
+@property (nonatomic, readonly) NSArray *duplicates;
+
+- (instancetype) initWithKey:(NSString *)key
+             collectListener:(id<OABackupCollectListener>)collectListener
+                    readData:(BOOL)readData;
+
+- (instancetype) initWithKey:(NSString *)key
+                       items:(NSArray<OASettingsItem *> *)items
+              importListener:(id<OAImportListener>)importListener
+               forceReadData:(BOOL)forceReadData;
+
+- (instancetype) initWithKey:(NSString *)key
+                       items:(NSArray<OASettingsItem *> *)items
+               selectedItems:(NSArray<OASettingsItem *> *)selectedItems
+          duplicatesListener:(id<OACheckDuplicatesListener>)duplicatesListener;
 
 @end
 

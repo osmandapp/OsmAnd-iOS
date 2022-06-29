@@ -23,4 +23,6 @@
 - (ObjectType) renameItem:(ObjectType)item;
 - (BOOL) shouldShowDuplicates;
 
+- (BOOL) isEmpty;
+
 @end

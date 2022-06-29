@@ -2539,3 +2539,35 @@
 "purchases_feature_desc_wikipedia" = "Consultez les articles Wikipédia sans connexion Internet. Les articles sont découpés par pays et disponibles dans toutes les langues.";
 "wikipedia_and_wikivoyage_offline" = "Wikipédia et Wikivoyage hors ligne";
 "shared_string_learn_more" = "En savoir plus";
+"on_hold" = "En attente";
+"osmand_depelopment_simulate_location_section" = "Simuler";
+"simulate_location_movement_speed_x2" = "x2";
+"simulate_location_movement_speed_x3" = "x3";
+"simulate_location_movement_speed_x4" = "x4";
+"plugin_popup_nautical_ask" = "Veuillez activer l'extension Nautical";
+"restore_purchase" = "Restaurer les achats";
+"routing_attr_hazmat_category_name" = "Transporte des matériaux dangereux";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Aucune restrictions)";
+"pro_features" = "Fonctionnalités Pro";
+"product_desc_development" = "Paramètres de développement et de débogage";
+"osm_live_payment_year_cost_descr" = "%@ par an";
+"option_available_only_by_subscription" = "Disponible dans les formules de souscription";
+"subscription_cancel_description" = "Annulez n'importe quand dans l'AppStore.";
+"no_purchases" = "Vous n'avez pas d'achat";
+"shared_string_now" = "Maintenant";
+"promo" = "Promo";
+"purchase_origin" = "Origine de l'achat";
+"simulate_location_movement_speed" = "Vitesse de déplacement";
+"simulate_location_movement_speed_original" = "Original";
+"shared_string_undefined" = "Indéfini";
+
+// Shared Strings
+"shared_string_cancelled" = "Annulé";
+"simulate_in_progress" = "En cours";
+"promo_subscription" = "OsmAnd Pro (Promo)";
+"screen_settings_weather_toolbar" = "Barre d'outils de météo";
+"subscription" = "Souscription";
+"quarterly_subscription" = "Souscription trimestrielle";
+"simulate_location_unselected_track_footer" = "Vous devez sélectionner un fichier de trace";
+"paused" = "En pause";
+"you_can_get_feature_as_part_of_pattern" = "Obtenez “%@” dans la formule %@. Comparaison :";

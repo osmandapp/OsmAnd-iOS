@@ -2547,7 +2547,7 @@
 "plugin_popup_nautical_ask" = "Veuillez activer l'extension Nautical";
 "restore_purchase" = "Restaurer les achats";
 "routing_attr_hazmat_category_name" = "Transporte des matériaux dangereux";
-"routing_attr_hazmat_category_no_restrictions_name" = "A (Aucune restrictions)";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Aucune restriction)";
 "pro_features" = "Fonctionnalités Pro";
 "product_desc_development" = "Paramètres de développement et de débogage";
 "osm_live_payment_year_cost_descr" = "%@ par an";

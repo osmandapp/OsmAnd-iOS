@@ -2587,3 +2587,7 @@
 "shared_string_undefined" = "Tanımlanmamış";
 "shared_string_now" = "Şimdi";
 "screen_settings_weather_toolbar" = "Hava durumu araç çubuğu";
+"subscription_banner_free_maps_title" = "Ücretsiz olarak %i harita indirebilirsiniz.";
+"subscription_banner_free_maps_description" = "Sınırsız harita indirme ve güncellemeleri alın.";
+"subscription_banner_osmand_pro_title" = "OsmAnd Pro ile saatlik, günlük veya haftalık harita güncellemeleri alın.";
+"subscription_banner_no_free_maps_title" = "Tüm ücretsiz indirmeleri harcadınız";

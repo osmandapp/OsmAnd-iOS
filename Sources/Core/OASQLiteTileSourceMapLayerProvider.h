@@ -62,7 +62,7 @@ public:
     virtual ~OASQLiteTileSourceMapLayerProvider();
         
     virtual QByteArray obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request);
-    virtual sk_sp<SkImage> obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
+    virtual sk_sp<const SkImage> obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
     virtual bool supportsObtainImage() const;
 
     virtual void obtainImageAsync(

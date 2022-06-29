@@ -2555,7 +2555,7 @@
 "purchase_origin" = "Origine de l'achat";
 "simulate_location_movement_speed" = "Vitesse de déplacement";
 "simulate_location_movement_speed_original" = "Original";
-"shared_string_undefined" = "Indéfini";
+"shared_string_undefined" = "Non défini";
 
 // Shared Strings
 "shared_string_cancelled" = "Annulé";

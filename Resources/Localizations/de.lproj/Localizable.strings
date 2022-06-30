@@ -2597,3 +2597,7 @@
 "expires" = "Verfällt";
 "screen_settings_weather_toolbar" = "Wetter-Symbolleiste";
 "shared_string_now" = "Jetzt";
+"subscription_banner_osmand_pro_title" = "Mit OsmAnd Pro erhalten Sie stündliche, tägliche oder wöchentliche Kartenaktualisierungen.";
+"subscription_banner_free_maps_description" = "Sie können unbegrenzt Karten herunterladen und aktualisieren.";
+"subscription_banner_no_free_maps_title" = "Sie haben alle kostenlosen Downloads verbraucht";
+"subscription_banner_free_maps_title" = "Sie können %i Karten kostenlos herunterladen.";

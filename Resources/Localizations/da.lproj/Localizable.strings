@@ -2583,3 +2583,7 @@
 "lang_ckb" = "Centralkurdisk";
 "shared_string_now" = "Nu";
 "screen_settings_weather_toolbar" = "Vejr-værktøjslinje";
+"subscription_banner_no_free_maps_title" = "Du har opbrugt alle gratis downloads";
+"subscription_banner_osmand_pro_title" = "Få kortopdateringer hver time, dag eller uge med OsmAnd Pro.";
+"subscription_banner_free_maps_title" = "Du kan downloade %i kort gratis.";
+"subscription_banner_free_maps_description" = "Få ubegrænset download af kort og opdateringer.";

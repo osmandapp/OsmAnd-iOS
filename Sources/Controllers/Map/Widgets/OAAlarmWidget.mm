@@ -8,19 +8,12 @@
 
 #import "OAAlarmWidget.h"
 #import "OsmAndApp.h"
-#import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OAMapViewTrackingUtilities.h"
-#import "OALocationServices.h"
-#import "OAUtilities.h"
-#import "OATextInfoWidget.h"
 #import "OAWaypointHelper.h"
 #import "OAAlarmInfo.h"
 #import "OACurrentPositionHelper.h"
 #import "OAOsmAndFormatter.h"
-
-#include <CommonCollections.h>
-#include <binaryRead.h>
 
 @interface OAAlarmWidget ()
 
@@ -123,14 +116,21 @@
         }
         if (alarm)
         {
-            BOOL americanSigns = [OADrivingRegion isAmericanSigns:[_settings.drivingRegion get]];
+            EOADrivingRegion region = [_settings.drivingRegion get];
+            BOOL americanSigns = [OADrivingRegion isAmericanSigns:region];
+            BOOL isCanadianRegion = region == DR_CANADA;
 
             NSString  *locImgId = @"warnings_limit";
             NSString *text = @"";
             NSString *bottomText = @"";
             if (alarm.type == AIT_SPEED_LIMIT)
             {
-                if (americanSigns)
+                if (isCanadianRegion)
+                {
+                    locImgId = @"warnings_speed_limit_ca";
+                    bottomText = [OASpeedConstant toShortString:[_settings.speedSystem get]];
+                }
+                else if (americanSigns)
                 {
                     locImgId = @"warnings_speed_limit_us";
                     //else case is done by drawing red ring
@@ -170,7 +170,9 @@
             }
             else if(alarm.type == AIT_RAILWAY)
             {
-                if (americanSigns)
+                if (isCanadianRegion)
+                    locImgId = @"warnings_railways_ca";
+                else if (americanSigns)
                     locImgId = @"warnings_railways_us";
                 else
                     locImgId = @"warnings_railways";
@@ -220,10 +222,10 @@
                     _textString = text;
                     _textView.text = _textString;
                     CGRect f = _textView.frame;
-                    f.origin.y = alarm.type == AIT_SPEED_LIMIT && americanSigns ? 10 : 0;
+                    f.origin.y = alarm.type == AIT_SPEED_LIMIT && americanSigns && !isCanadianRegion ? 10 : 0;
                     _textView.frame = f;
                 }
-                if (![bottomText isEqualToString:_bottomTextString])
+                if (![self stringEquals:bottomText b:_bottomTextString])
                 {
                     _bottomTextString = bottomText;
                     _bottomTextView.text = _bottomTextString;

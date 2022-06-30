@@ -346,13 +346,17 @@
         _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)", kContourLinesDensity, kContourLinesWidth, kContourLinesColorScheme]];
         for (OAMapStyleParameter *parameter in _filteredTopLevelParams)
         {
-            [mapStyleSectionData addObject:@{
-                    @"name": parameter.title,
-                    @"image": [self getImageForParameterOrCategory:parameter.name],
-                    @"value": [parameter getValueTitle],
-                    @"type": [OAIconTitleValueCell getCellIdentifier],
-                    @"key": [NSString stringWithFormat:@"filtered_%@", parameter.name]
-            }];
+            if (parameter.title)
+            {
+                NSString *val = [parameter getValueTitle];
+                [mapStyleSectionData addObject:@{
+                        @"name": parameter.title,
+                        @"image": [self getImageForParameterOrCategory:parameter.name],
+                        @"value": val ? val : @"",
+                        @"type": [OAIconTitleValueCell getCellIdentifier],
+                        @"key": [NSString stringWithFormat:@"filtered_%@", parameter.name]
+                }];
+            }
         }
 
         if (hasSRTM && !_iapHelper.srtm.disabled)

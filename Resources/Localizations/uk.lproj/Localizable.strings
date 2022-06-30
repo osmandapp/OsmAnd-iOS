@@ -2591,3 +2591,7 @@
 "promo_subscription" = "OsmAnd Pro (Промо)";
 "screen_settings_weather_toolbar" = "Панель засобів погоди";
 "shared_string_now" = "Зараз";
+"subscription_banner_free_maps_title" = "Ви можете завантажити %i мапи безплатно.";
+"subscription_banner_free_maps_description" = "Отримайте необмежену кількість завантажень та оновлень мап.";
+"subscription_banner_no_free_maps_title" = "Ви витратили всі безплатні завантаження";
+"subscription_banner_osmand_pro_title" = "Отримуйте щогодинні, щоденні або щотижневі оновлення мап придбавши OsmAnd Pro.";

@@ -2467,3 +2467,4 @@
 "purchases_feature_desc_unlimited_map_download" = "Få obergänsade nedladdningar av offline-kartor för alla kontinenter och regioner.";
 "share_geo" = "geo:";
 "monthly_subscription" = "Månadspernumeration";
+"purchases_feature_desc_osmand_cloud" = "Skaffa OsmAnd Cloud för att lagra all OsmAnd-data online. Ingen förlorad data efter ominstallation. Säkerhetskopiera och återställ all info med lätthet.";

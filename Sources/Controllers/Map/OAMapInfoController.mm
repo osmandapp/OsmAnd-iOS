@@ -34,6 +34,7 @@
 #import "OAToolbarViewController.h"
 #import "OADownloadMapWidget.h"
 #import "OAWeatherToolbar.h"
+#import "OACompassModeWidgetState.h"
 
 @interface OATextState : NSObject
 
@@ -733,9 +734,9 @@
     
     */
     // register left stack
-    
-    [self registerSideWidget:nil imageId:@"ic_action_compass" message:OALocalizedString(@"map_widget_compass") key:@"compass" left:YES priorityOrder:4];
-    
+
+    [self registerSideWidget:nil widgetState:[[OACompassModeWidgetState alloc] init] key:@"compass" left:YES priorityOrder:4];
+
     OANextTurnWidget *bigInfoControl = [ric createNextInfoControl:NO];
     [self registerSideWidget:bigInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_turn") key:@"next_turn" left:YES priorityOrder:5];
     OANextTurnWidget *smallInfoControl = [ric createNextInfoControl:YES];

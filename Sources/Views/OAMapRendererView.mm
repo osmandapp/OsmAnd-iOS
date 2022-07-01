@@ -635,6 +635,9 @@
 
 - (void) setViewportXScale:(float)viewportXScale
 {
+    if (_viewportXScale == viewportXScale)
+        return;
+    
     _viewportXScale = viewportXScale;
 
     // Kill buffers, since viewport was resized
@@ -643,6 +646,9 @@
 
 - (void) setViewportYScale:(float)viewportYScale
 {
+    if (_viewportYScale == viewportYScale)
+        return;
+
     _viewportYScale = viewportYScale;
     
     // Normalize elevation angle

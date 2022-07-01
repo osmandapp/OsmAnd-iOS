@@ -55,7 +55,7 @@
         streetName.text = [OARoutingHelperUtils formatStreetName:nm ref:rf destination:dn towards:@"»"];
         streetName.turnType = n.directionInfo.turnType;
         streetName.shieldObject = n.directionInfo.routeDataObject;
-        if (streetName.turnType)
+        if (!streetName.turnType)
             streetName.turnType = TurnType::ptrValueOf(TurnType::C, false);
         if (n.directionInfo.exitInfo != nil)
         {

@@ -348,7 +348,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
            if (latLon)
            {
                GeographicLib::GeoCoords pnt(latLon.coordinate.latitude, latLon.coordinate.longitude);
-               _zoneStr = [NSString stringWithFormat:@"%i%c", pnt.Zone(), toupper(pnt.Hemisphere())];
+               _zoneStr = [NSString stringWithFormat:@"%i%@", pnt.Zone(), [OALocationConvert getUTMLetterDesignator:latLon.coordinate.latitude]];
                _northingStr = [NSString stringWithFormat:@"%i", int(round(pnt.Northing()))];
                _eastingStr = [NSString stringWithFormat:@"%i", int(round(pnt.Easting()))];
            }

@@ -409,10 +409,10 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
     }
     else if (outputFormat == FORMAT_UTM)
     {
-        GeographicLib::GeoCoords pnt(lat, lon);
-        [result appendString:[NSString stringWithFormat:@"%i%c ", pnt.Zone(), toupper(pnt.Hemisphere())]];
-        [result appendString:[NSString stringWithFormat:@"%i ", int(round(pnt.Easting()))]];
-        [result appendString:[NSString stringWithFormat:@"%i", int(round(pnt.Northing()))]];
+        NSString *r = [OALocationConvert getUTMCoordinateString:lat lon:lon];
+        if (!r)
+            r = @"0, 0";
+        [result appendString:r];
     }
     else if (outputFormat == FORMAT_OLC)
     {

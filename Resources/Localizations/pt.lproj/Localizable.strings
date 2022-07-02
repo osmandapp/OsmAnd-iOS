@@ -2581,3 +2581,9 @@
 "google_play" = "Google Play";
 "purchases_feature_weather" = "  ";
 "private_access_routing_req" = "O seu destino está localizado numa área com acesso privado. Permitir a utilização de estradas privadas para esta viagem?";
+"screen_settings_weather_toolbar" = "Barra de ferramentas de meteorologia";
+"shared_string_now" = "Agora";
+"subscription_banner_no_free_maps_title" = "Já gastou a quantidade de mapas gratuitos";
+"subscription_banner_osmand_pro_title" = "Obtenha atualizações de mapas a cada hora, dia ou semana com o OsmAnd Pro.";
+"subscription_banner_free_maps_title" = "Pode descarregar %i mapas gratuitamente.";
+"subscription_banner_free_maps_description" = "Obter descarregamentos e atualizações ilimitadas de mapas.";

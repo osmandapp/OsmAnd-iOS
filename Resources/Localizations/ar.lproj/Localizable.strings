@@ -2602,3 +2602,23 @@
 "purchases_feature_desc_combined_wiki" = "استكشف مقالات ويكيبيديا أثناء التنقل ، بدون اتصال بالإنترنت. البيانات غير المتصلة بالإنترنت مقسمة على البلدان ومتاحة بجميع اللغات.";
 "empty_purchases_description" = "إذا لم تظهر مشترياتك هنا، فانقر على “%@”, أو اتصل بفريق الدعم لدينا.";
 "explore_osmnad_plans_to_find_suitable" = "استكشف خطط أوسماند لتجد التي تناسبك.";
+"in_grace_period" = "في فترة سماح";
+"on_hold" = "قيد الانتظار";
+"paused" = "متوقف مؤقتًا";
+
+// Shared Strings
+"shared_string_cancelled" = "ملغى";
+"shared_string_undefined" = "غير معرف";
+"promo" = "برومو";
+"purchase_origin" = "مصدر الشراء";
+"lang_ckb" = "الكردية الوسطى";
+"subscription" = "الاشتراك";
+"google_play" = "جوجل بلاي";
+"app_store" = "متجر التطبيقات";
+"shared_string_now" = "حاليا";
+"subscription_banner_no_free_maps_title" = "لقد صرفت كل التحميلات المجانية";
+"subscription_banner_free_maps_title" = "يمكنك تنزيل %i خرائط مجانا.";
+"screen_settings_weather_toolbar" = "شريط أدوات الطقس";
+"promo_subscription" = "OsmAnd Pro (برومو)";
+"subscription_banner_free_maps_description" = "احصل على تنزيلات وتحديثات غير محدودة للخرائط.";
+"subscription_banner_osmand_pro_title" = "احصل على تحديثات الخرائط كل ساعة أو يوميا أو أسبوعيا مع OsmAnd Pro.";

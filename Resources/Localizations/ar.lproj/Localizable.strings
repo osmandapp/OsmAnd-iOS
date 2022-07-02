@@ -2610,12 +2610,12 @@
 "shared_string_cancelled" = "ملغى";
 "shared_string_undefined" = "غير معرف";
 "promo" = "برومو";
-"purchase_origin" = "أصل الشراء";
+"purchase_origin" = "مصدر الشراء";
 "lang_ckb" = "الكردية الوسطى";
 "subscription" = "الاشتراك";
 "google_play" = "جوجل بلاي";
 "app_store" = "متجر التطبيقات";
-"shared_string_now" = "الآن";
+"shared_string_now" = "حاليا";
 "subscription_banner_no_free_maps_title" = "لقد صرفت كل التحميلات المجانية";
 "subscription_banner_free_maps_title" = "يمكنك تنزيل %i خرائط مجانا.";
 "screen_settings_weather_toolbar" = "شريط أدوات الطقس";

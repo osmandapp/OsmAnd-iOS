@@ -193,9 +193,9 @@
         }
         case EOAImportTypeCheckDuplicates:
         {
+            [_helper.importAsyncTasks removeObjectForKey:_key];
             if (_duplicatesListener)
                 [_duplicatesListener onDuplicatesChecked:_duplicates items:_selectedItems];
-            [_helper.importAsyncTasks removeObjectForKey:_key];
             break;
         }
         case EOAImportTypeImport:

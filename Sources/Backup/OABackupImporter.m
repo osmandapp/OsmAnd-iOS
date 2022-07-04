@@ -233,28 +233,37 @@
 
 - (void) importItemFile:(OARemoteFile *)remoteFile item:(OASettingsItem *)item forceReadData:(BOOL)forceReadData
 {
-//    NSString *fileName = remoteFile.getTypeNamePath;
-//    NSString *tempFilePath = [_tmpFilesDir stringByAppendingPathComponent:fileName];
-//    NSString *itemFileName = [OABackupHelper getItemFileName:item];
-//    NSString *error = [_backupHelper downloadFile:tempFilePath remoteFile:remoteFile listener:self itemFileName:itemFileName];
-//    if (error.length == 0)
-//    {
-//        if (forceReadData)
-//            [item apply];
-//
-//        [_backupHelper updateFileUploadTime:remoteFile.type name:remoteFile.name clienttimems:remoteFile.clienttimems];
-//        if ([item isKindOfClass:OAFileSettingsItem.class])
-//        {
-//            NSString *itemFileName = [OABackupHelper getFileItemName:(OAFileSettingsItem *)item];
-//            if (app.getAppPath(itemFileName).isDirectory()) {
-//                backupHelper.updateFileUploadTime(item.getType().name(), itemFileName,
-//                                                  remoteFile.getClienttimems());
-//            }
-//        }
-//    } else {
-//        throw new IOException("Error reading temp item file " + fileName + ": " + error);
-//    }
-//    item.applyAdditionalParams(reader);
+    OASettingsItemReader *reader = item.getReader;
+    NSString *fileName = remoteFile.getTypeNamePath;
+    NSString *tempFilePath = [_tmpFilesDir stringByAppendingPathComponent:fileName];
+    if (reader)
+    {
+        NSString *error = [_backupHelper downloadFile:tempFilePath remoteFile:remoteFile listener:self];
+        if (error.length == 0)
+        {
+            [reader readFromFile:tempFilePath error:nil];
+            if (forceReadData)
+                [item apply];
+
+            [_backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.clienttimems];
+            
+            if ([item isKindOfClass:OAFileSettingsItem.class])
+            {
+                NSString *itemFileName = [OABackupHelper getItemFileName:item];
+                if (itemFileName.pathExtension.length == 0)
+                {
+                    [_backupHelper updateFileUploadTime:[OASettingsItemType typeName:item.type] fileName:itemFileName
+                                            uploadTime:remoteFile.clienttimems];
+                }
+            }
+        }
+        else
+        {
+            @throw [NSException exceptionWithName:@"IOException" reason:[NSString stringWithFormat:@"Error reading temp item file %@: %@", fileName, error] userInfo:nil];
+        }
+        
+    }
+    [item applyAdditionalParams:tempFilePath];
 }
 
 - (NSArray<OASettingsItem *> *) getRemoteItems:(NSArray<OARemoteFile *> *)remoteFiles readItems:(BOOL)readItems
@@ -305,7 +314,6 @@
                         break;
                     }
                 }
-                // TODO: Chceck why some files are not added here
                 OAUploadedFileInfo *fileInfo = infoMap[[NSString stringWithFormat:@"%@___%@", remoteFile.type, origFileName]];
                 long uploadTime = fileInfo != nil ? fileInfo.uploadTime : 0;
                 if (readItems && (uploadTime != remoteFile.clienttimems || delete))
@@ -365,7 +373,7 @@
             {
                 if (item.shouldReadOnCollecting)
                 {
-                    NSArray<OARemoteFile *> *foundRemoteFiles = [self getItemRemoteFiles:item remoteFiles:remoteInfoFilesMap];
+                    NSArray<OARemoteFile *> *foundRemoteFiles = [self getItemRemoteFiles:item remoteFiles:remoteItemFilesMap];
                     for (OARemoteFile *remoteFile in foundRemoteFiles)
                     {
                         OASettingsItemReader *reader = item.getReader;
@@ -427,14 +435,9 @@
         
         if ([item isKindOfClass:OAGpxSettingsItem.class])
         {
-            OAGpxSettingsItem *gpxItem = (OAGpxSettingsItem *) item;
-            NSString *folder = [OAFileSettingsItemFileSubtype getSubtypeFolder:gpxItem.subtype];
-            if (folder.length > 0 && [folder characterAtIndex:0] != '/')
-            {
-                folder = [@"/" stringByAppendingString:folder];
-            }
+            NSString *folder = @"/tracks";
             if ([fileName hasPrefix:folder])
-                fileName = [fileName substringFromIndex:folder.length - 1];
+                fileName = [fileName substringFromIndex:folder.length];
         }
         NSString *typeFileName = [[OASettingsItemType typeName:item.type] stringByAppendingString:fileName];
         OARemoteFile *remoteFile = remoteFiles[typeFileName];
@@ -468,7 +471,7 @@
         itemJson[@"type"] = type;
         if ([[OASettingsItemType typeName:EOASettingsItemTypeGpx] isEqualToString:type])
         {
-            fileName = [[OAFileSettingsItemFileSubtype getSubtypeFolder:EOASettingsItemFileSubtypeGpx] stringByAppendingPathComponent:fileName];
+            fileName = [@"tracks" stringByAppendingPathComponent:fileName];
         }
         
         if ([[OASettingsItemType typeName:EOASettingsItemTypeProfile] isEqualToString:type])

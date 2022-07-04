@@ -58,13 +58,8 @@
 @implementation OAImportDuplicatesViewController
 {
     OsmAndAppInstance _app;
-    NSArray *_duplicatesList;
-    NSArray<OASettingsItem *> * _settingsItems;
     NSString *_file;
     OASettingsHelper *_settingsHelper;
-    
-    NSString *_title;
-    NSString *_description;
 
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
@@ -92,11 +87,7 @@
     return self;
 }
 
-- (void) commonInit
-{
-    _app = [OsmAndApp instance];
-    _settingsHelper = [OASettingsHelper sharedInstance];
-    
+- (void) fetchData {
     OAImportAsyncTask *importTask = _settingsHelper.importTask;
     if (!importTask)
     {
@@ -108,6 +99,14 @@
             _file = [importTask getFile];
         importTask.delegate = self;
     }
+}
+
+- (void) commonInit
+{
+    _app = [OsmAndApp instance];
+    _settingsHelper = [OASettingsHelper sharedInstance];
+    
+    [self fetchData];
 }
 
 - (void) viewDidLoad
@@ -123,9 +122,7 @@
         [self prepareData: [self prepareDuplicates:_duplicatesList]];
     if ([_settingsHelper.importTask getImportType] == EOAImportTypeImport)
         [self setupImportingUI];
-    else
-        _title = OALocalizedString(@"import_duplicates_title");
-    _title = OALocalizedString(@"import_duplicates_title");
+    _screenTitle = OALocalizedString(@"import_duplicates_title");
 }
 
 - (void) setupImportingUI
@@ -438,8 +435,8 @@
 
 - (void) applyLocalization
 {
-    _title = OALocalizedString(@"shared_string_importing");
-    _description = [NSString stringWithFormat:OALocalizedString(@"importing_from"), _file];
+    _screenTitle = OALocalizedString(@"shared_string_importing");
+    _screenDescription = [NSString stringWithFormat:OALocalizedString(@"importing_from"), _file];
     [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 

@@ -297,14 +297,17 @@
     }
     else if ([OAFileSettingsItemFileSubtype isMap:fileSubtype])
     {
+        BOOL fileExists = [NSFileManager.defaultManager fileExistsAtPath:filePath];
         NSString *fileName = filePath.lastPathComponent;
         NSString *formattedSize = [self getFormattedSize:filePath];
         item[@"title"] = [OAFileNameTranslationHelper getMapName:[fileName stringByDeletingPathExtension]];
         NSString *mapDescr = [self getMapDescription:filePath];
         
-        if (mapDescr.length > 0)
+        if (!fileExists && mapDescr)
+            item[@"descr"] = mapDescr;
+        else if (mapDescr.length > 0)
             item[@"descr"] = [NSString stringWithFormat:@"%@ • %@", mapDescr, formattedSize];
-        else
+        else if (fileExists)
             item[@"descr"] = formattedSize;
     }
 }

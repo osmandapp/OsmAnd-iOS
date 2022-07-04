@@ -97,7 +97,8 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         else if ([item isKindOfClass:OAFileSettingsItem.class])
         {
             OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
-            if ([name hasPrefix:[OAFileSettingsItemFileSubtype getSubtypeFolder:fileItem.subtype]])
+            NSString *subfolder = [OAFileSettingsItemFileSubtype getSubtypeFolderName:fileItem.subtype];
+            if ([name hasPrefix:subfolder] || subfolder.length == 0)
             {
                 if (fileItem.filePath.pathExtension.length == 0 && ![itemFileName hasSuffix:@"/"])
                 {

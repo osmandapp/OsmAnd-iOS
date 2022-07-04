@@ -1690,6 +1690,7 @@ static OASubscriptionState *EXPIRED;
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"orderId"] = orderId;
     __block NSArray *res;
+    __block BOOL alreadyFinished = NO;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/subscriptions/get" params:params post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (((NSHTTPURLResponse *)response).statusCode == 200 && data)
@@ -1710,9 +1711,11 @@ static OASubscriptionState *EXPIRED;
         {
             res = nil;
         }
+        alreadyFinished = YES;
         dispatch_semaphore_signal(semaphore);
     }];
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    if (!alreadyFinished)
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     return res;
 }
 

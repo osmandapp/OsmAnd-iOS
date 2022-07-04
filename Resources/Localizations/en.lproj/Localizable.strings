@@ -1053,6 +1053,9 @@
 "shared_string_importing" = "Importing";
 "importing_from" = "Importing data from %@";
 
+"shared_string_restoring" = "Restoring";
+"restoring_from" = "Restoring selected data from the cloud";
+
 "shared_string_settings" = "Settings";
 "configure_screen_quick_action" = "Quick action";
 "search_activity" = "Search";
@@ -2663,6 +2666,7 @@
 "local_backup_descr" = "Backup or restore data from a local file.";
 "backup_into_file" = "Backup into file";
 "restore_from_file" = "Restore from file";
+"fetching_from_server" = "Fetching data from server";
 
 "cloud_no_online_backup" = "You don’t have any online backup yet";
 "cloud_no_online_backup_descr" = "Set up an automatic backup so you don't have to worry about lost data.";

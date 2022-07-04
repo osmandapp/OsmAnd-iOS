@@ -17,6 +17,8 @@
 #import "OAExportSettingsType.h"
 #import "OAImportBackupTask.h"
 #import "OAPrepareBackupResult.h"
+#import "OAImportCompleteViewController.h"
+#import "OARestoreDuplicatesViewController.h"
 #import "OABackupInfo.h"
 #import "OARemoteFile.h"
 #import "OsmAndApp.h"
@@ -28,10 +30,11 @@
 
 @implementation OARestoreBackupViewController
 {
+    NSArray<OASettingsItem *> *_settingsItems;
     OANetworkSettingsHelper *_settingsHelper;
     OABackupHelper *_backupHelper;
 
-    BOOL _exportStarted;
+    BOOL _importStarted;
     BOOL _fetchingBackup;
     NSString *_fileSize;
     NSString *_headerLabel;
@@ -55,6 +58,7 @@
     {
         if (!self.itemsMap)
         {
+            _settingsItems = importTask.items;
             self.itemsMap = [OASettingsHelper getSettingsToOperateByCategory:importTask.items importComplete:NO];
             _fetchingBackup = importTask.items.count == 0;
         }
@@ -83,6 +87,8 @@
 {
     [super viewWillDisappear:animated];
     [_backupHelper removePrepareBackupListener:self];
+    // Clear the downloaded files
+    [NSFileManager.defaultManager removeItemAtPath:[NSTemporaryDirectory() stringByAppendingPathComponent:@"backupTmp"] error:nil];
 }
 
 -(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -97,17 +103,30 @@
 {
     [self setTableHeaderView:self.descriptionBoldText];
     
-    if (_exportStarted || _fetchingBackup)
+    if (_importStarted || _fetchingBackup)
     {
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.type = [OAProgressTitleCell getCellIdentifier];
-        group.groupName = _fetchingBackup ? OALocalizedString(@"shared_string_preparing") : OALocalizedString(@"preparing_file");
+        group.groupName = _fetchingBackup ? OALocalizedString(@"fetching_from_server") : [NSString stringWithFormat:OALocalizedString(@"importing_from"), OALocalizedString(@"osmand_cloud")];
         self.data = @[group];
         self.additionalNavBarButton.hidden = YES;
+        [self updateControls];
         return;
     }
     [self generateData];
     [self updateControls];
+}
+
+- (BOOL) hasSelection
+{
+    if (_importStarted || _fetchingBackup)
+        return NO;
+    for (NSArray *items in self.selectedItemsMap.allValues)
+    {
+        if (items.count > 0)
+            return YES;
+    }
+    return NO;
 }
 
 - (void) collectItems
@@ -151,9 +170,20 @@
 
 - (IBAction)primaryButtonPressed:(id)sender
 {
-    
+    [self importItems];
 }
 
+- (void) importItems
+{
+    if (self.getSelectedItems.count > 0)
+    {
+        _importStarted = YES;
+        [self setupView];
+        [self.tableView reloadData];
+        NSArray<OASettingsItem *> *selectedItems = [_settingsHelper prepareSettingsItems:self.getSelectedItems settingsItems:_settingsItems doExport:NO];
+        [_settingsHelper checkDuplicates:kRestoreItemsKey items:_settingsItems selectedItems:selectedItems listener:self];
+    }
+}
 #pragma mark - UITableViewDelegate
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -191,22 +221,6 @@
     return _headerLabel;
 }
 
-#pragma mark - OASettingItemsSelectionDelegate
-
-- (void)onItemsSelected:(NSArray *)items type:(OAExportSettingsType *)type
-{
-    //    self.selectedItemsMap[type] = items;
-    //    [self updateFileSize];
-    //    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-    //
-    //    OAExportSettingsCategory * category = [type getCategory];
-    //    NSInteger indexCategory = [self.itemTypes indexOfObject:category];
-    //    if (category && indexCategory != 0)
-    //        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexCategory] withRowAnimation:UITableViewRowAnimationNone];
-    
-    [self updateControls];
-}
-
 // MARK: OABackupCollectListener
 
 - (void)onBackupCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles
@@ -226,6 +240,7 @@
                     [itemsForRestore addObject:restoreItem];
             }
         }
+        _settingsItems = items;
         self.itemsMap = [OASettingsHelper getSettingsToOperateByCategory:items importComplete:NO];
         self.itemTypes = self.itemsMap.allKeys;
         [self setupView];
@@ -256,8 +271,9 @@
 //        if (plugin != null) {
 //            plugin.indexingFiles(true, true);
 //        }
+        OAImportCompleteViewController *importVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES] fileName:OALocalizedString(@"osmand_cloud")];
+        [self.navigationController pushViewController:importVC animated:YES];
     }
-    [self onSettingsImportFinished:succeed items:items];
 }
 
 - (void)onImportItemFinished:(NSString *)type fileName:(NSString *)fileName {
@@ -278,14 +294,24 @@
 }
 
 - (void)onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items {
-//    long spentTime = NS
-//    System.currentTimeMillis() - duplicateStartTime;
-//    if (spentTime < MIN_DELAY_TIME_MS) {
-//        long delay = MIN_DELAY_TIME_MS - spentTime;
-//        app.runInUIThread(() -> processDuplicates(duplicates, items), delay);
-//    } else {
-//        processDuplicates(duplicates, items);
-//    }
+    [self processDuplicates:duplicates items:items];
+}
+
+- (void) processDuplicates:(NSArray *)duplicates items:(NSArray<OASettingsItem *> *)items
+{
+    if (duplicates.count == 0)
+    {
+        @try {
+            [_settingsHelper importSettings:kRestoreItemsKey items:items forceReadData:NO listener:self];
+        } @catch (NSException *e) {
+            NSLog(@"Restore backup import error: %@", e.reason);
+        }
+    }
+    else
+    {
+        OARestoreDuplicatesViewController *duplicatesVC = [[OARestoreDuplicatesViewController alloc] initWithDuplicatesList:duplicates settingsItems:items file:OALocalizedString(@"osmand_cloud")];
+        [self.navigationController pushViewController:duplicatesVC animated:YES];
+    }
 }
 
 @end

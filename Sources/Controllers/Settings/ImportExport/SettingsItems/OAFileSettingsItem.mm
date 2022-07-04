@@ -78,6 +78,25 @@
     }
 }
 
++ (NSString *) getSubtypeFolderName:(EOASettingsItemFileSubtype)subtype
+{
+    switch (subtype)
+    {
+        case EOASettingsItemFileSubtypeRenderingStyle:
+            return RENDERERS_DIR;
+        case EOASettingsItemFileSubtypeRoutingConfig:
+            return ROUTING_PROFILES_DIR;
+        case EOASettingsItemFileSubtypeGpx:
+            return @"tracks";
+            // unsupported
+//        case EOASettingsItemFileSubtypeTravel:
+//        case EOASettingsItemFileSubtypeVoice:
+//            return [documentsPath stringByAppendingPathComponent:@"Voice"];
+        default:
+            return @"";
+    }
+}
+
 + (EOASettingsItemFileSubtype) getSubtypeByName:(NSString *)name
 {
     for (int i = 0; i < EOASettingsItemFileSubtypesCount; i++)
@@ -104,7 +123,7 @@
                 break;
             case EOASettingsItemFileSubtypeObfMap:
             {
-                if ([name hasSuffix:BINARY_MAP_INDEX_EXT] && ![name containsString:@"/"])
+                if ([name hasSuffix:BINARY_MAP_INDEX_EXT])
                     return subtype;
                 break;
             }
@@ -211,7 +230,6 @@
 
 @implementation OAFileSettingsItem
 {
-    NSString *_name;
     OsmAndAppInstance _app;
     
     NSString *_docPath;

@@ -153,7 +153,7 @@
         {
             try
             {
-                GeographicLib::GeoCoords geoCoords(d[0].intValue, ch == 'n' || ch == 'N', d[1].doubleValue, d[2].doubleValue);
+                GeographicLib::GeoCoords geoCoords(d[0].intValue, ch >= 'n' || ch >= 'N', d[1].doubleValue, d[2].doubleValue);
                 return [self validateAndCreateLatitude:geoCoords.Latitude() longitude:geoCoords.Longitude()];
             }
             catch(GeographicLib::GeographicErr err)
@@ -174,7 +174,7 @@
                 NSString *north = [combined substringFromIndex:combined.length / 2];
                 try
                 {
-                    GeographicLib::GeoCoords geoCoords(d[0].intValue, ch == 'n' || ch == 'N', east.doubleValue, north.doubleValue);
+                    GeographicLib::GeoCoords geoCoords(d[0].intValue, ch >= 'n' || ch >= 'N', east.doubleValue, north.doubleValue);
                     return [self validateAndCreateLatitude:geoCoords.Latitude() longitude:geoCoords.Longitude()];
                 }
                 catch(GeographicLib::GeographicErr err)

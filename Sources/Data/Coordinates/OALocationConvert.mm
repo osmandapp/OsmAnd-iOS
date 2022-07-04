@@ -157,7 +157,7 @@
 {
     try{
         GeographicLib::GeoCoords pnt(lat, lon);
-        return [NSString stringWithFormat:@"%d%c %.0f %.0f", pnt.Zone(), toupper(pnt.Hemisphere()), pnt.Easting(), pnt.Northing()];
+        return [NSString stringWithFormat:@"%d%@ %.0f %.0f", pnt.Zone(), [self getUTMLetterDesignator:lat], pnt.Easting(), pnt.Northing()];
     }
     catch(GeographicLib::GeographicErr err)
     {
@@ -277,6 +277,54 @@
         [self.class formatCoordinate:coordinate string:string delimeter:DELIMITER_SECONDS];
     }
     return [NSString stringWithString:string];
+}
+
++ (NSString *)getUTMLetterDesignator:(double)lat
+{
+    NSString *letterDesignator = @"Z";
+
+    if ((84 >= lat) && (lat >= 72))
+        letterDesignator = @"X";
+    else if ((72 > lat) && (lat >= 64))
+        letterDesignator = @"W";
+    else if ((64 > lat) && (lat >= 56))
+        letterDesignator = @"V";
+    else if ((56 > lat) && (lat >= 48))
+        letterDesignator = @"U";
+    else if ((48 > lat) && (lat >= 40))
+        letterDesignator = @"T";
+    else if ((40 > lat) && (lat >= 32))
+        letterDesignator = @"S";
+    else if ((32 > lat) && (lat >= 24))
+        letterDesignator = @"R";
+    else if ((24 > lat) && (lat >= 16))
+        letterDesignator = @"Q";
+    else if ((16 > lat) && (lat >= 8))
+        letterDesignator = @"P";
+    else if ((8 > lat) && (lat >= 0))
+        letterDesignator = @"N";
+    else if ((0 > lat) && (lat >= -8))
+        letterDesignator = @"M";
+    else if ((-8 > lat) && (lat >= -16))
+        letterDesignator = @"L";
+    else if ((-16 > lat) && (lat >= -24))
+        letterDesignator = @"K";
+    else if ((-24 > lat) && (lat >= -32))
+        letterDesignator = @"J";
+    else if ((-32 > lat) && (lat >= -40))
+        letterDesignator = @"H";
+    else if ((-40 > lat) && (lat >= -48))
+        letterDesignator = @"G";
+    else if ((-48 > lat) && (lat >= -56))
+        letterDesignator = @"F";
+    else if ((-56 > lat) && (lat >= -64))
+        letterDesignator = @"E";
+    else if ((-64 > lat) && (lat >= -72))
+        letterDesignator = @"D";
+    else if ((-72 > lat) && (lat >= -80))
+        letterDesignator = @"C";
+
+    return letterDesignator;
 }
 
 @end

@@ -100,6 +100,7 @@
 - (void) addWaypoint;
 
 - (BOOL) isTopToolbarActive;
+- (BOOL) isTopToolbarSearchVisible;
 
 - (BOOL) isTopControlsVisible;
 - (void) setTopControlsVisible:(BOOL)visible;

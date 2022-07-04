@@ -963,7 +963,7 @@
 "mapil_images_nearby" = "Знімки поруч";
 "mapil_no_images" = "В цьому місці знімків немає.";
 "mapil_add_photos" = "Додати світлини";
-"mapillary_get_title" = "Поліпшити фотопокриття Mapillary";
+"mapillary_get_title" = "Поліпшити покриття знімками Mapillary";
 "shared_string_start_date" = "Початок";
 "shared_string_end_date" = "Кінець";
 "shared_string_not_set" = "Не встановлено";
@@ -1091,7 +1091,7 @@
 "poi_category_and_type" = "Категорія та тип точок інтересу";
 "poi_select_category" = "Виберіть категорію";
 "poi_select_type" = "Виберіть тип";
-"mapillary_get_descr" = "Завантажте Mapillary, щоб додати фотографії до цього місця";
+"mapillary_get_descr" = "Завантажте Mapillary, щоб додати світлини до цього місця";
 "mapil_contribute" = "Внесіть ваші власні знімки вулиці";
 "mapillary_turn_on_widget" = "Увімкнути віджет Mapillary";
 "mapillary_turn_on_widget_descr" = "Дозволяє швидко робити внески в Mapillary";

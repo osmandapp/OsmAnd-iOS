@@ -99,6 +99,7 @@
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
 #import "OAOpenAddTrackViewController.h"
+#import "OASearchToolbarViewController.h"
 
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
@@ -3227,6 +3228,12 @@ typedef enum
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
     return toolbar || [_targetMenuView isToolbarVisible];
+}
+
+- (BOOL)isTopToolbarSearchVisible
+{
+    OAToolbarViewController *toolbar = [self getTopToolbar];
+    return toolbar && [toolbar isKindOfClass:OASearchToolbarViewController.class];
 }
 
 - (OAToolbarViewController *) getTopToolbar

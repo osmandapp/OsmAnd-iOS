@@ -260,7 +260,7 @@
         [containers addObject:_rightWidgetsView];
     }
     
-    BOOL portrait = !OAUtilities.isLandscapeIpadAware;
+    BOOL portrait = ![OAUtilities isLandscape];
     CGFloat maxContainerHeight = 0;
     CGFloat yPos = 0;
     BOOL hasStreetName = NO;

@@ -2595,3 +2595,8 @@
 "subscription_banner_free_maps_description" = "Отримайте необмежену кількість завантажень та оновлень мап.";
 "subscription_banner_no_free_maps_title" = "Ви витратили всі безплатні завантаження";
 "subscription_banner_osmand_pro_title" = "Отримуйте щогодинні, щоденні або щотижневі оновлення мап придбавши OsmAnd Pro.";
+"shared_string_always_hidden" = "Завжди сховано";
+"shared_string_always_visible" = "Завжди показувати";
+"compass_options_description" = "Натисніть на компас, щоб змінити режим орієнтації мапи";
+"compass_visible_in_rotated_mode_descr" = "Ховати, коли північ вгорі";
+"compass_visible_in_rotated_mode" = "Показувати, якщо обернути мапу";

@@ -564,6 +564,8 @@
 "shared_string_purchased" = "Purchased";
 "shared_string_start" = "Start";
 "shared_string_stop" = "Stop";
+"shared_string_always_visible" = "Always visible";
+"shared_string_always_hidden" = "Always hidden";
 
 "restart" = "Restart";
 
@@ -2743,6 +2745,10 @@
 "subscription_banner_free_maps_description" = "Get unlimited map downloads and updates.";
 "subscription_banner_no_free_maps_title" = "You spent all free downloads";
 "subscription_banner_osmand_pro_title" = "Get hourly, daily or weekly map updates with OsmAnd Pro.";
+
+"compass_visible_in_rotated_mode" = "Visible if map is rotated";
+"compass_visible_in_rotated_mode_descr" = "Hidden when north is up";
+"compass_options_description" = "Click on compass to switch map orientation mode";
 
 // Release Notes
 // instruction:

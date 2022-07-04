@@ -29,6 +29,21 @@
 
 @class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
+typedef NS_ENUM(NSInteger, EOACompassMode)
+{
+    EOACompassVisible = 0,
+    EOACompassHidden,
+    EOACompassRotated
+};
+
+@interface OACompassMode : NSObject
+
++ (NSString *) getTitle:(EOACompassMode)cm;
++ (NSString *) getDescription:(EOACompassMode)cm;
++ (NSString *) getIconName:(EOACompassMode)cm;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOARouteService)
 {
     OSMAND = 0,
@@ -752,6 +767,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *isCarPlayModeDefault;
 @property (nonatomic) OAApplicationMode *lastRoutingApplicationMode;
 @property (nonatomic) OACommonInteger *rotateMap;
+@property (nonatomic) OACommonInteger *compassMode;
 
 // Application mode related settings
 @property (nonatomic) OACommonString *profileIconName;

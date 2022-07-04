@@ -75,6 +75,14 @@
         return _message;
 }
 
+- (NSString *) getDescription
+{
+    if (_widgetState)
+        return [_widgetState getMenuDescription];
+    else
+        return nil;
+}
+
 - (NSString *) getItemId
 {
     if (_widgetState)
@@ -95,6 +103,14 @@
 {
     if (_widgetState)
         return [_widgetState getMenuTitles];
+    else
+        return nil;
+}
+
+- (NSArray<NSString *> *) getDescriptions
+{
+    if (_widgetState)
+        return [_widgetState getMenuDescriptions];
     else
         return nil;
 }

@@ -104,6 +104,7 @@
 #define showStreetNameKey @"showStreetName"
 #define centerPositionOnMapKey @"centerPositionOnMap"
 #define rotateMapKey @"rotateMap"
+#define compassModeKey @"compassMode"
 #define firstMapIsDownloadedKey @"firstMapIsDownloaded"
 
 // App profiles
@@ -384,6 +385,47 @@
 #define rateUsStateKey @"rateUsState"
 
 #define animateMyLocationKey @"animateMyLocation"
+
+@implementation OACompassMode
+
++ (NSString *) getTitle:(EOACompassMode)cm
+{
+    switch (cm)
+    {
+        case EOACompassVisible:
+            return OALocalizedString(@"shared_string_always_visible");
+        case EOACompassHidden:
+            return OALocalizedString(@"shared_string_always_hidden");
+        default:
+            return OALocalizedString(@"compass_visible_in_rotated_mode");
+    }
+}
+
++ (NSString *) getDescription:(EOACompassMode)cm
+{
+    switch (cm)
+    {
+        case EOACompassRotated:
+            return OALocalizedString(@"compass_visible_in_rotated_mode_descr");
+        default:
+            return @"";
+    }
+}
+
++ (NSString *) getIconName:(EOACompassMode)cm
+{
+    switch (cm)
+    {
+        case EOACompassVisible:
+            return @"ic_custom_compass_north";
+        case EOACompassHidden:
+            return @"ic_custom_compass_hidden";
+        default:
+            return @"ic_custom_compass_rotated";
+    }
+}
+
+@end
 
 @interface OAMetricsConstant()
 
@@ -3621,6 +3663,9 @@
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode BICYCLE]];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_COMPASS) mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_rotateMap forKey:@"rotate_map"];
+
+        _compassMode = [OACommonInteger withKey:compassModeKey defValue:EOACompassRotated];
+        [_profilePreferences setObject:_compassMode forKey:@"compass_mode"];
 
         _mapDensity = [OACommonDouble withKey:mapDensityKey defValue:MAGNIFIER_DEFAULT_VALUE];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_CAR) mode:[OAApplicationMode CAR]];

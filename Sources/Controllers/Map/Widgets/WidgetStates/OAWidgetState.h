@@ -12,11 +12,15 @@
 
 - (NSString *) getMenuTitle;
 
+- (NSString *) getMenuDescription;
+
 - (NSString *) getMenuIconId;
 
 - (NSString *) getMenuItemId;
 
 - (NSArray<NSString *> *) getMenuTitles;
+
+- (NSArray<NSString *> *) getMenuDescriptions;
 
 - (NSArray<NSString *> *) getMenuIconIds;
 

@@ -16,6 +16,11 @@
     return nil;
 }
 
+- (NSString *) getMenuDescription
+{
+    return nil;
+}
+
 - (NSString *) getMenuIconId
 {
     return nil;
@@ -27,6 +32,11 @@
 }
 
 - (NSArray<NSString *> *) getMenuTitles
+{
+    return nil;
+}
+
+- (NSArray<NSString *> *) getMenuDescriptions
 {
     return nil;
 }

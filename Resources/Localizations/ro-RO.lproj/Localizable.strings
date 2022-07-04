@@ -920,7 +920,7 @@
 "shared_string_next" = "Următorul";
 "default_speed_dialog_msg" = "Estimarea timpului de sosire pentru tipurile de drumuri necunoscuteși limitarea vitezei pe toate drumurile (poate afecta traseul)";
 "update_map" = "Actualizează hartă";
-"profile_prefs_reset_successful" = "Toate setările de profil sunt restabilite la valorile implicite.";
+"profile_prefs_reset_successful" = "Toate setările profilului au fost restabilite la valorile implicite";
 "tones" = "tone";
 "shared_string_nothing_selected" = "Nimic selectat";
 "units_t" = "t";
@@ -2475,7 +2475,7 @@
 "routeInfo_horse_scale_name" = "Dificultatea traseelor de cai";
 "routing_attr_allow_private_for_truck_name" = "Permiteți accesul privat (camion)";
 "routing_attr_allow_private_for_truck_description" = "Să permită accesul camioanelor la zonele private";
-"routing_attr_hazmat_category_name" = "Transportul de materiale periculoase";
+"routing_attr_hazmat_category_name" = "Transport de materiale periculoase";
 "cloud_create_account" = "Creați un cont";
 "copy_poi_name" = "Copiați numele POI";
 "copy_coordinates" = "Copiați coordonatele";
@@ -2610,3 +2610,23 @@
 "product_desc_weather" = "Prognoza orară pe 24h și prognoza pe 7 zile la fiecare 3 ore";
 "product_desc_ext_weather" = "Plugin-ul meteo oferă\n- 5 straturi.... prognoza pe oră pe 24h și prognoza pe 7 zile la fiecare 3 ore\n- widget-uri bazate pe locație\n- izolatoare de temperatură / presiune\nDatele meteo sunt furnizate de GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
 "weather_wind_unit_knots" = "Noduri";
+"in_grace_period" = "În perioada de grație";
+"on_hold" = "În așteptare";
+"paused" = "Pe pauză";
+
+// Shared Strings
+"shared_string_cancelled" = "Anulat";
+"promo_subscription" = "OsmAnd Pro (Promoțional)";
+"subscription" = "Abonament";
+"google_play" = "Google Play";
+"app_store" = "App Store";
+"promo" = "Promoțional";
+"purchase_origin" = "Sursă achiziții";
+"screen_settings_weather_toolbar" = "Bara cu informații despre vreme";
+"lang_ckb" = "Kurdă centrală";
+"shared_string_now" = "Acum";
+"subscription_banner_free_maps_title" = "Puteți downloada %i hărți pe gratis.";
+"subscription_banner_free_maps_description" = "Obține downloadări și actualizări ale hărții nelimitate.";
+"subscription_banner_no_free_maps_title" = "Ați utilizat toate downloadările gratuite";
+"shared_string_undefined" = "Nedefinit";
+"subscription_banner_osmand_pro_title" = "Obține actualizări orare, zilnice sau săptămânale ale hărții cu OsmAnd Pro.";

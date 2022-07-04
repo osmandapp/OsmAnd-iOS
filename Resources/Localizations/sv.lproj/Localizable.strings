@@ -189,7 +189,7 @@
 "speak_traffic_warnings" = "Trafikvarningar";
 "announce_gpx_waypoints" = "Spåra waypoints";
 "speak_favorites" = "Närliggande favoriter";
-"speak_poi" = "Närbelägna intresssepunkter";
+"speak_poi" = "Närbelägna intressepunkter";
 "speak_pedestrian" = "Övergångsställen";
 "speak_tunnels" = "Tunnlar";
 "show_tunnels" = "Tunnlar";
@@ -1431,7 +1431,7 @@
 "shared_string_add_profile" = "Lägg till profil";
 "quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
 "profile_type_user_string" = "Användarprofil";
-"profile_type_osmand_string" = "OsmAnd profil";
+"profile_type_osmand_string" = "OsmAnd-profil";
 "unsupported_action" = "Unsupported action";
 "unsupported_action_title" = "Unsupported action (%@)";
 "unsupported_action_descr" = "This quick action in not supported now. This can be fixed in new app versions.";
@@ -2467,3 +2467,5 @@
 "purchases_feature_desc_unlimited_map_download" = "Få obergänsade nedladdningar av offline-kartor för alla kontinenter och regioner.";
 "share_geo" = "geo:";
 "monthly_subscription" = "Månadspernumeration";
+"purchases_feature_desc_osmand_cloud" = "Skaffa OsmAnd Cloud för att lagra all OsmAnd-data online. Ingen förlorad data efter ominstallation. Säkerhetskopiera och återställ all info med lätthet.";
+"lang_ckb" = "Sorani";

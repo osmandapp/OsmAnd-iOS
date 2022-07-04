@@ -994,7 +994,7 @@
 "poi_category_and_type" = "Catégorie et type de POI";
 "poi_select_type" = "Sélectionner le type";
 "purchase_dialog_travel_description" = "Achetez l\'une des options suivantes pour obtenir la fonctionnalité guide de voyage hors ligne :";
-"contour_lines_hillshade_maps" = "Cartes avec courbes de niveaux et ombrage du relief";
+"contour_lines_hillshade_maps" = "Cartes de relief : courbes de niveaux, ombrage, pente";
 "index_item_depth_contours_osmand_ext" = "Lignes de sonde marines";
 "in_app_purchase" = "Achat depuis l\'application";
 "in_app_purchase_desc_ex" = "La validité de votre achat sera permanente.";

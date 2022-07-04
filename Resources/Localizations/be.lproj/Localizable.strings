@@ -2331,3 +2331,35 @@
 "turn_arrows_descr" = "Абярыце, ці паказваць стрэлкі павароту на лініі маршруту.";
 "road_speeds" = "Хуткасць руху";
 "simulation_real_mode_desc" = "• На прамых участках дарог хуткасць будзе блізкай да максімальна дазволенай хуткасці.\n• На скрыжаваннях мадэляванне будзе запавольвацца.\n• Дадатковыя штрафы будуць прымяняцца да сігналаў святлафора, знакаў прыпынку і г.д.";
+"point_num" = "Кропка %d";
+"point_to_navigate" = "Маршрут да";
+"paused" = "Прыпынена";
+
+// Shared Strings
+"shared_string_cancelled" = "Скасавана";
+"shared_string_undefined" = "Нявызначана";
+"unsupported_items" = "Элементы, якія не падтрымліваюцца";
+"move_point" = "Перамясціць кропку";
+"available_groups" = "Даступныя групы";
+"add_favorite" = "Дадаць ва ўлюбёнае";
+"delete_point" = "Выдаліць кропку";
+"osmand_depelopment_simulate_location_section" = "Сімуляваць";
+"carplay" = "CarPlay";
+"product_title_plus" = "Maps+";
+"shared_string_rendering_style" = "Стылі адмалёўкі";
+"points_count" = "Пункты:";
+"promo" = "Акцыя";
+"add_folder" = "Дадаць каталог";
+"select_segment" = "Выбраць сегмент";
+"key_hint_recenter_map" = "Паўторна цэнтраваць мапу";
+"simulate_location_movement_speed_x2" = "х2";
+"simulate_location_movement_speed_x3" = "х3";
+"simulate_location_movement_speed_x4" = "х4";
+"subscription" = "Падпіска";
+"shared_string_now" = "Цяпер";
+"simulate_location_movement_speed_original" = "Зыходная";
+"unsupported_action" = "Непадтрымліваемае дзеянне";
+"poi_categories" = "Катэгорыі POI";
+"expires" = "Мінае";
+"vk" = "VK";
+"help_what_is_new" = "Што новага";

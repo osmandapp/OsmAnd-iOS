@@ -17,7 +17,8 @@
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
-@interface OAWeatherBandSettingsViewController () <UIViewControllerTransitioningDelegate>
+@interface OAWeatherBandSettingsViewController () <UIViewControllerTransitioningDelegate, UITableViewDelegate, UITableViewDataSource>
+
 @end
 
 @implementation OAWeatherBandSettingsViewController

@@ -22,5 +22,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherLayer)
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController layerIndex:(int)layerIndex weatherLayer:(EOAWeatherLayer)weatherLayer date:(NSDate *)date;
 
 - (void) updateDate:(NSDate *)date;
+- (void) updateWeatherLayer;
 
 @end

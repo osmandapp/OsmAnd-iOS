@@ -995,7 +995,7 @@
 "poi_select_type" = "Sélectionner le type";
 "purchase_dialog_travel_description" = "Achetez l\'une des options suivantes pour obtenir la fonctionnalité guide de voyage hors ligne :";
 "contour_lines_hillshade_maps" = "Cartes de relief : courbes de niveaux, ombrage, pente";
-"index_item_depth_contours_osmand_ext" = "Lignes de sonde marines";
+"index_item_depth_contours_osmand_ext" = "Lignes de sondes marines";
 "in_app_purchase" = "Achat depuis l\'application";
 "in_app_purchase_desc_ex" = "La validité de votre achat sera permanente.";
 "subscribe_email_desc" = "Abonnez-vous à notre liste de diffusion :<br/>- Obtenez 3 cartes supplémentaires à télécharger <br/>- Écoutez d'abord les réductions <br/>- Participez aux promocodes <a href='https://osmand.net/giveaway'>ici</a>";
@@ -1097,7 +1097,7 @@
 "quick_action_name" = "Action rapide";
 "mapillary" = "Mapillary";
 "quick_action_name_str" = "Nom de l\'action";
-"download_depth_countours" = "Lignes de sonde marines";
+"download_depth_countours" = "Lignes de sondes marines";
 "change_map_overlay" = "Modifier la sur-couche de carte";
 "shared_string_show_more" = "Afficher plus";
 "mapil_pano_only" = "N\'afficher que les imagesà 360°";
@@ -1149,7 +1149,7 @@
 "rendering_value_translucent_blue_name" = "Bleu translucide";
 "rendering_attr_surface_pebblestone_name" = "Galets";
 "routing_attr_avoid_ice_roads_fords_description" = "Éviter les routes sur glace et les fjords.";
-"rendering_attr_depthContours_name" = "Lignes de sonde marines";
+"rendering_attr_depthContours_name" = "Lignes de sondes marines";
 "routing_attr_avoid_train_description" = "Éviter le train";
 "rendering_value_translucent_purple_name" = "Violet translucide";
 "routing_attr_avoid_sett_description" = "Éviter les pavés";
@@ -1215,7 +1215,7 @@
 "rendering_attr_winter_road_name" = "Route sur neige";
 "rendering_attr_horseRoutes_name" = "Itinéraires à cheval";
 "routing_attr_short_way_name" = "Trajetéconome en carburant";
-"rendering_attr_contourWidth_description" = "Épaisseur des traits pour les courbes de niveaux";
+"rendering_attr_contourWidth_description" = "Épaisseur des traits pour les courbes de niveau";
 "routing_attr_avoid_stairs_name" = "Éviter les escaliers";
 "rendering_value_medium_w_name" = "Moyen";
 "rendering_attr_hideNonVehicleHighways_name" = "Voies non adaptées aux véhicules";
@@ -1332,7 +1332,7 @@
 "rendering_attr_surface_dirt_name" = "Poussière";
 "rendering_value_white_name" = "Blanc";
 "rendering_attr_surface_wood_name" = "Bois";
-"rendering_attr_contourWidth_name" = "Épaisseur des courbes de niveaux";
+"rendering_attr_contourWidth_name" = "Épaisseur des courbes de niveau";
 "rendering_attr_publicTransportMode_name" = "Lignes de bus, trolleybus et navettes";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Plat";
 "rendering_value_pink_name" = "Rose";
@@ -1349,7 +1349,7 @@
 "routing_attr_width_name" = "Limite de largeur";
 "rendering_attr_piste_difficulty_easy_name" = "Facile";
 "routing_attr_avoid_share_taxi_description" = "Éviter le taxi partagé";
-"rendering_attr_contourDensity_description" = "Densité des courbes de niveaux";
+"rendering_attr_contourDensity_description" = "Densité des courbes de niveau";
 "routing_attr_avoid_toll_description" = "Éviter les péages";
 "routing_attr_allow_skating_only_name" = "Autoriser uniquement les pistes de skating";
 "rendering_attr_tracktype_grade3_name" = "Principalement compact";
@@ -1405,7 +1405,7 @@
 "rendering_value_blue_name" = "Bleu";
 "routing_attr_avoid_toll_name" = "Éviter les routes à péage";
 "rendering_attr_currentTrackColor_name" = "Couleur des traces GPX";
-"rendering_attr_contourDensity_name" = "Densité des courbes de niveaux";
+"rendering_attr_contourDensity_name" = "Densité des courbes de niveau";
 "rendering_attr_appMode_description" = "Optimisation de la carte selon le profil d\'utilisation";
 "rendering_attr_roadColors_name" = "Thème de couleurs pour les routes";
 "rendering_attr_surface_stone_name" = "Pierre";
@@ -2124,14 +2124,14 @@
 "mapil_contribute" = "Apportez vos propres images des rues";
 "population_num" = "Population";
 "shared_string_feet" = "Pieds";
-"srtm_download_list_help_message" = "OsmAnd fournit des données de lignes de contour en mètres et en pieds. Vous devrez télécharger à nouveau le fichier pour changer le format.";
+"srtm_download_list_help_message" = "OsmAnd fournit des données de courbes de niveau en mètres et en pieds. Vous devrez télécharger à nouveau le fichier pour modifier l'unité.";
 "srtm_download_single_help_message" = "Veuillez sélectionner le format nécessaire. Vous devrez télécharger à nouveau le fichier pour changer le format.";
 "srtm_unit_format" = "Format d'unité de lignes de contour";
 "welmode_download_maps" = "Télécharger les cartes";
 "shared_strings_all_regions" = "Toutes les régions";
 "shared_string_navigation" = "Navigation";
 "navigate_point_northing" = "Ordonnée";
-"contour_lines_hillshades_slope" = "Courbes de niveau, ombrage, pente";
+"contour_lines_hillshades_slope" = "Courbes de niveau, ombres, pentes";
 "navigate_point_easting" = "Abscisse";
 "explore_wikipedia_offline" = "Explorez Wikipédia hors ligne.";
 "navigate_point_zone" = "Zone";
@@ -2502,7 +2502,7 @@
 "transport_hazmat_yes_desc" = "Vous devez sélectionner une catégorie.";
 "ltr_or_rtl_combine_via_or" = "%@ ou %@";
 "purchases_feature_desc_combined_wiki" = "Consultez les articles Wikipédia sans connexion Internet. Les données hors ligne sont découpées par pays et disponibles dans toutes les langues.";
-"purchases_feature_desc_terrain" = "Cartes avec courbes de niveaux, ombrage du relief, pentes et couleurs mettant en valeur sommets et plaines.";
+"purchases_feature_desc_terrain" = "Cartes avec courbes de niveau, ombrage du relief, pentes et couleurs mettant en valeur sommets et plaines.";
 "complete_purchase" = "Finaliser l\'achat";
 "product_desc_pro" = "Bénéficiez d\'un maximum de fonctionnalités";
 "purchases_feature_desc_wikivoyage" = "Explorez Wikivoyage sans connexion Internet. Les articles sont découpés par pays et disponibles dans toutes les langues.";

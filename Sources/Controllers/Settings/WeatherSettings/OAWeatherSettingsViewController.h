@@ -8,6 +8,6 @@
 
 #import "OABaseSettingsViewController.h"
 
-@interface OAWeatherSettingsViewController : OABaseSettingsViewController<UITableViewDelegate, UITableViewDataSource>
+@interface OAWeatherSettingsViewController : OABaseSettingsViewController
 
 @end

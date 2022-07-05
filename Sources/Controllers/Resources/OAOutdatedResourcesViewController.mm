@@ -110,7 +110,7 @@
     @synchronized (_dataLock)
     {
         _updatesSection = 0;
-        _availableMapsSection = [_resourcesItems count] > 0 ? 1 : -1;
+        _availableMapsSection = 1;
     }
 }
 
@@ -339,14 +339,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    NSInteger sectionsCount = 0;
-
-    if (_updatesSection >= 0)
-        sectionsCount++;
-    if (_availableMapsSection > 0)
-        sectionsCount++;
-
-    return sectionsCount;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -354,7 +347,7 @@
     if (section == _updatesSection)
         return 1;
     else if (section == _availableMapsSection)
-        return [_resourcesItems count];
+        return _resourcesItems.count;
 
     return 0;
 }
@@ -414,7 +407,7 @@
         cellTypeId = liveUpdatesCell;
         title = OALocalizedString(@"osmand_live_updates");
     }
-    else if (indexPath.section == _availableMapsSection)
+    else if (indexPath.section == _availableMapsSection && _resourcesItems.count > 0)
     {
         item = (OAResourceItem *) _resourcesItems[indexPath.row];
 
@@ -444,8 +437,7 @@
         if (indexPath.section == _availableMapsSection)
         {
             cell.textLabel.font = [UIFont systemFontOfSize:17.];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.];
-            cell.detailTextLabel.textColor = [UIColor darkGrayColor];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:13.];
 
             if ([cellTypeId isEqualToString:outdatedResourceCell])
             {
@@ -491,15 +483,19 @@
         {
             if (item.sizePkg > 0)
             {
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@",
+                NSString *date = [item getDate];
+                NSString *dateDescription = date ? [NSString stringWithFormat:@"  •  %@", date] : @"";
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@%@",
                         [OAResourceType resourceTypeLocalized:item.resourceType],
                         [NSByteCountFormatter stringFromByteCount:item.sizePkg
-                                                       countStyle:NSByteCountFormatterCountStyleFile]];
+                                                       countStyle:NSByteCountFormatterCountStyleFile],
+                        dateDescription];
             }
             else
             {
                 cell.detailTextLabel.text = [OAResourceType resourceTypeLocalized:item.resourceType];
             }
+            cell.detailTextLabel.textColor = UIColorFromRGB(color_text_footer);
         }
     }
 
@@ -566,18 +562,21 @@
 
 - (void)refreshDownloadingContent:(NSString *)downloadTaskKey
 {
-    @synchronized(_dataLock)
+    if (_resourcesItems.count > 0)
     {
-        for (int i = 0; i < _resourcesItems.count; i++)
+        @synchronized (_dataLock)
         {
-            if ([_resourcesItems[i] isKindOfClass:[OAWorldRegion class]])
-                continue;
-
-            OAResourceItem *item = _resourcesItems[i];
-            if ([[item.downloadTask key] isEqualToString:downloadTaskKey] && _availableMapsSection > 0)
+            for (int i = 0; i < _resourcesItems.count; i++)
             {
-                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_availableMapsSection]];
-                break;
+                if ([_resourcesItems[i] isKindOfClass:[OAWorldRegion class]])
+                    continue;
+
+                OAResourceItem *item = _resourcesItems[i];
+                if ([[item.downloadTask key] isEqualToString:downloadTaskKey] && _availableMapsSection > 0)
+                {
+                    [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_availableMapsSection]];
+                    break;
+                }
             }
         }
     }

@@ -2605,10 +2605,10 @@
 "shared_string_total_size" = "Загальний розмір";
 "shared_string_delete_all" = "Видалити все";
 "weather_data_provider" = "Постачальник даних GFS.";
-"weather_clear_online_cache" = "Це очистить весь кеш для мережевих плиток погоди.";
+"weather_clear_online_cache" = "Це очистить весь кеш плиток онлайн-погоди.";
 "weather_plugin" = "Втулок погоди";
-"weather_offline_forecast" = "Безмережний прогноз";
-"weather_offline_forecast_only" = "Тільки безмережний прогноз";
+"weather_offline_forecast" = "Офлайн-прогноз";
+"weather_offline_forecast_only" = "Лише офлайн-прогноз";
 "weather_offline_forecast_only_desc" = "Прогноз буде доступний тільки для країн з попередньо завантаженими даними.";
 "shared_string_countries" = "Країни";
 "shared_string_clear_online_cache" = "Очистити мереж. кеш";

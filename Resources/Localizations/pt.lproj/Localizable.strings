@@ -1744,7 +1744,7 @@
 "map_settings_hillshade_description" = "Os mapas de sombras de relevo permitem visualizar declives, picos e planícies usando diferentes níveis de cinzas";
 "map_settings_slopes_description" = "Os mapas de declives usam cores diferentes para visualizar o terreno";
 "map_settings_slopes_legend" = "Pode ler mais sobre declives na Wikipédia";
-"ios_release_3_90" = "- Introduzida a funcionalidade \"Planear uma rota\" para planear viagens futuras com a capacidade de criar segmentos de trilhos utilizando diferentes tipos de navegação\n- Adicionada uma opção para ativar um compasso sobre a ferramenta \"Raio da régua\"\n- Adicionada a opção \"Nomes dos POI\" que permite mostrar nomes de favoritos, pontos de passagem de trilhos e marcadores no mapa\n- Adicionadas novas ações rápidas para visibilidade das curvas de nível e do terreno no mapa, alterando um perfil de aplicação, eliminando um ponto intermédio mais próximo\n- Problemas corrigidos com a categoria de pesquisa da Wikipédia em falta\n- Importação de configurações: erros corrigidos, suporte adicionado para todos os tipos de dados disponíveis no OsmAnd\n- Edição do OpenStreetMap: corrigido o seletor de tempo e a incapacidade de alterar o comentário do conjunto de alterações\n";
+"ios_release_3_90" = "- Introduzida a funcionalidade \"Planear uma rota\" para planear viagens futuras com a capacidade de criar segmentos de trilhos utilizando diferentes tipos de navegação\n- Adicionada uma opção para ativar uma bússola sobre a ferramenta \"Raio da régua\"\n- Adicionada a opção \"Nomes dos POI\" que permite mostrar nomes de favoritos, pontos de passagem de trilhos e marcadores no mapa\n- Adicionadas novas ações rápidas para visibilidade das curvas de nível e do terreno no mapa, alterando um perfil de aplicação, eliminando um ponto intermédio mais próximo\n- Problemas corrigidos com a categoria de pesquisa da Wikipédia em falta\n- Importação de configurações: erros corrigidos, suporte adicionado para todos os tipos de dados disponíveis no OsmAnd\n- Edição do OpenStreetMap: corrigido o seletor de tempo e a incapacidade de alterar o comentário do conjunto de alterações\n";
 "ios_release_3_80" = "• Adicionados \"Perfis da aplicação\" com configurações independentes\n• Nova disposição das configurações por perfis e tipos: navegação, geral, mapa e ecrã\n• Capacidade de importar ou exportar configurações de perfis\n• Adicionadas origens de dados para fotografias online\n• Adicionada a capacidade de descarregar mapas online para a cache\n• Algoritmos de \"Pesquisa\" melhorados\n";
 
 
@@ -2019,8 +2019,8 @@
 "favorites_empty" = "Não gravou nenhum ponto favorito";
 "tracks_empty" = "A sua lista de trilhos está vazia";
 "map_markers_empty" = "Não tem marcadores de mapa ativos";
-"hide_compass_ruler" = "Ocultar régua de compasso";
-"show_compass_ruler" = "Mostrar régua de compasso";
+"hide_compass_ruler" = "Ocultar régua de bússola";
+"show_compass_ruler" = "Mostrar régua de bússola";
 "trip_rec_actions_descr" = "Pode encontrar todas os seus trilhos gravados em % @";
 "road_max_speed_descr" = "Define a velocidade máxima de viagem para todas as estradas da rota. Diminui a prioridade para estradas com uma possível velocidade superior ao máximo.";
 "road_min_speed_descr" = "Define a velocidade mínima de viagem para todas as estradas da rota. Aumenta a prioridade para as estradas com velocidades recomendadas inferiores à mínima.";

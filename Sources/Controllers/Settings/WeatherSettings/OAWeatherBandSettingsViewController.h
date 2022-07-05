@@ -18,8 +18,7 @@
 
 @end
 
-
-@interface OAWeatherBandSettingsViewController : OABaseSettingsViewController<UITableViewDelegate, UITableViewDataSource>
+@interface OAWeatherBandSettingsViewController : OABaseSettingsViewController
 
 - (instancetype)initWithWeatherBand:(OAWeatherBand *)band;
 

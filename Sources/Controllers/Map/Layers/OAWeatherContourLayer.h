@@ -15,5 +15,6 @@
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController layerIndex:(int)layerIndex date:(NSDate *)date;
 
 - (void) updateDate:(NSDate *)date;
+- (void) updateWeatherLayer;
 
 @end

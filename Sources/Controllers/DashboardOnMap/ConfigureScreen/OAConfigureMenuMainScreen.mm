@@ -21,8 +21,7 @@
 #import "OADirectionAppearanceViewController.h"
 #import "OAColors.h"
 #import "OAMapLayers.h"
-#import "OAIAPHelper.h"
-#import "OAWeatherPlugin.h"
+#import "OAIconTitleValueCell.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -173,17 +172,33 @@
         if (![mode isWidgetAvailable:r.key])
             continue;
 
+        NSString *type;
+        NSString *description;
+
+        if ([r.key isEqualToString:@"compass"])
+        {
+            EOACompassMode compassMode = (EOACompassMode) [r getItemId].intValue;
+            description = [OACompassMode getTitle:compassMode];
+            type = [OAIconTitleValueCell getCellIdentifier];
+        }
+        else
+        {
+            NSString *collapsedStr = OALocalizedString(@"shared_string_collapse");
+            description = [r visibleCollapsed:mode] ? collapsedStr : @"";
+            type = [OASettingSwitchCell getCellIdentifier];
+        }
+
         BOOL selected = [r visibleCollapsed:mode] || [r visible:mode];
-        NSString *collapsedStr = OALocalizedString(@"shared_string_collapse");
-        
-        [controlsList addObject:@{ @"title" : [r getMessage],
-                                   @"description" : [r visibleCollapsed:mode] ? collapsedStr : @"",
-                                   @"key" : r.key,
-                                   @"img" : [r getImageId],
-                                   @"selected" : @(selected),
-                                   @"secondaryImg" : r.widget ? @"ic_action_additional_option" : @"",
-                                   
-                                   @"type" : [OASettingSwitchCell getCellIdentifier]} ];
+
+        [controlsList addObject:@{
+                @"title" : [r getMessage],
+                @"description" : description,
+                @"key" : r.key,
+                @"img" : [r getImageId],
+                @"selected" : @(selected),
+                @"secondaryImg" : r.widget ? @"ic_action_additional_option" : @"",
+                @"type" : type
+        }];
     }
 }
 
@@ -344,7 +359,27 @@
         }
         return cell;
     }
-    
+    else if ([data[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    {
+        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTitleValueCell *) nib[0];
+            [cell showLeftIcon:YES];
+        }
+        if (cell)
+        {
+            cell.textView.text = data[@"title"];
+            cell.descriptionView.text = data[@"description"];
+            cell.leftIconView.image = [UIImage templateImageNamed:data[@"img"]];
+            cell.leftIconView.tintColor = [data[@"selected"] boolValue] ? UIColorFromRGB(_settings.applicationMode.get.getIconColor) : UIColorFromRGB(color_icon_inactive);
+        }
+        if ([cell needsUpdateConstraints])
+            [cell updateConstraints];
+        return cell;
+    }
+
     return outCell;
 }
 
@@ -394,14 +429,14 @@
         OADirectionAppearanceViewController *vc = [[OADirectionAppearanceViewController alloc] init];
         [self.vwController.navigationController pushViewController:vc animated:YES];
     }
-    else if ([data[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([data[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]] || [data[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
         OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
-        if (r && r.widget)
+        if (r && (r.widget || [r.key isEqualToString:@"compass"]))
         {
             configureMenuViewController = [[OAConfigureMenuViewController alloc] initWithConfigureMenuScreen:EConfigureMenuScreenVisibility param:data[@"key"]];
         }
-        else
+        else if ([data[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
         {
             OASettingSwitchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             BOOL visible = !cell.switchView.isOn;

@@ -372,7 +372,9 @@
 
 - (BOOL) shouldShowCompass:(float)azimuth
 {
-    return (azimuth != 0.0 || [[OAAppSettings sharedManager].rotateMap get] != ROTATE_MAP_NONE || [_mapPanelViewController.mapWidgetRegistry isVisible:@"compass"]) && _mapSettingsButton.alpha == 1.0;
+    NSInteger rotateMap = [[OAAppSettings sharedManager].rotateMap get];
+    NSInteger compassMode = [[OAAppSettings sharedManager].compassMode get];
+    return (((azimuth != 0.0 || rotateMap != ROTATE_MAP_NONE) && compassMode == EOACompassRotated) || compassMode == EOACompassVisible) && _mapSettingsButton.alpha == 1.0;
 }
 
 - (BOOL) isOverlayUnderlayViewVisible
@@ -776,20 +778,12 @@
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     BOOL showCompass = [self shouldShowCompass];
     if ([rotateMap get] == ROTATE_MAP_NONE)
-    {
         _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_north_night" : @"ic_custom_direction_north_day"];
-        [self updateCompassVisibility:showCompass];
-    }
     else if ([rotateMap get] == ROTATE_MAP_BEARING)
-    {
         _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_bearing_night" : @"ic_custom_direction_bearing_day"];
-        [self updateCompassVisibility:YES];
-    }
     else
-    {
         _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_compass_night" : @"ic_custom_direction_compass_day"];
-        [self updateCompassVisibility:YES];
-    }
+    [self updateCompassVisibility:showCompass];
     [_compassButton updateColorsForPressedState:NO];
 }
 

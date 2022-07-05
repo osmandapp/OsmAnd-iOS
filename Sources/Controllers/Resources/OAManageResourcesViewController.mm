@@ -1306,6 +1306,11 @@ static BOOL _repositoryUpdated = NO;
     }];
 }
 
+- (BOOL)hasLocalResources
+{
+    return _localResourceItems.count > 0 || _localRegionMapItems.count > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0;
+}
+
 - (NSMutableArray *) getResourceItems
 {
     switch (_currentScope)
@@ -1778,7 +1783,7 @@ static BOOL _repositoryUpdated = NO;
     if (section == _resourcesSection)
         return [[self getResourceItems] count];
     if (section == _localResourcesSection)
-        return ([_localResourceItems count] > 0 || [_localRegionMapItems count] > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0) ? 2 : 1;
+        return ([self hasLocalResources]) ? 2 : 1;
     if (section == _regionMapSection)
         return [[self getRegionMapItems] count];
     if (section == _localSqliteSection)
@@ -2006,7 +2011,7 @@ static BOOL _repositoryUpdated = NO;
     {
         if (indexPath.section == _localResourcesSection && _localResourcesSection >= 0)
         {
-            BOOL isLocalCell = indexPath.row == 0;
+            BOOL isLocalCell = indexPath.row == 0 && [self hasLocalResources];
             cellTypeId = isLocalCell ? installedResourcesSubmenuCell : outdatedResourcesSubmenuCell;
             title = OALocalizedString(isLocalCell ? @"download_tab_local" : @"res_updates");
 

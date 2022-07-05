@@ -2600,3 +2600,15 @@
 "compass_options_description" = "Натисніть на компас, щоб змінити режим орієнтації мапи";
 "compass_visible_in_rotated_mode_descr" = "Ховати, коли північ вгорі";
 "compass_visible_in_rotated_mode" = "Показувати, якщо обернути мапу";
+"shared_string_data" = "Дані";
+"shared_string_online_cache" = "Мережевий кеш";
+"shared_string_total_size" = "Загальний розмір";
+"shared_string_delete_all" = "Видалити все";
+"weather_data_provider" = "Постачальник даних GFS.";
+"weather_clear_online_cache" = "Це очистить весь кеш для мережевих плиток погоди.";
+"weather_plugin" = "Втулок погоди";
+"weather_offline_forecast" = "Безмережний прогноз";
+"weather_offline_forecast_only" = "Тільки безмережний прогноз";
+"weather_offline_forecast_only_desc" = "Прогноз буде доступний тільки для країн з попередньо завантаженими даними.";
+"shared_string_countries" = "Країни";
+"shared_string_clear_online_cache" = "Очистити мереж. кеш";

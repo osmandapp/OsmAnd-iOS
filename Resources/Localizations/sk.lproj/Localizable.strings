@@ -660,7 +660,7 @@
 "routing_settings" = "Navigácia";
 "app_mode_bus" = "Autobus";
 "app_mode_train" = "Vlak";
-"app_mode_truck" = "Kamión";
+"app_mode_truck" = "Nákladné auto";
 "app_mode_hiking" = "Turistika";
 "app_mode_motorcycle" = "Motocykel";
 "app_mode_boat" = "Loď";

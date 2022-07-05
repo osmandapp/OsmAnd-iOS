@@ -2598,3 +2598,8 @@
 "subscription_banner_no_free_maps_title" = "Has gastado todas las descargas gratuitas";
 "subscription_banner_free_maps_title" = "Puedes descargar %i mapas gratis.";
 "subscription_banner_osmand_pro_title" = "Obtén actualizaciones de mapas, diarias o semanales con OsmAnd Pro.";
+"compass_visible_in_rotated_mode" = "Visible al girar el mapa";
+"compass_visible_in_rotated_mode_descr" = "Se oculta cuando el Norte se encuentra arriba";
+"compass_options_description" = "Pulsa en la brújula para cambiar el modo de orientación del mapa";
+"shared_string_always_visible" = "Siempre visible";
+"shared_string_always_hidden" = "Siempre oculto";

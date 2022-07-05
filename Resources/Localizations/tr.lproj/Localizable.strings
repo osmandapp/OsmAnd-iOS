@@ -2591,3 +2591,8 @@
 "subscription_banner_free_maps_description" = "Sınırsız harita indirme ve güncellemeleri alın.";
 "subscription_banner_osmand_pro_title" = "OsmAnd Pro ile saatlik, günlük veya haftalık harita güncellemeleri alın.";
 "subscription_banner_no_free_maps_title" = "Tüm ücretsiz indirmeleri harcadınız";
+"shared_string_always_visible" = "Her zaman görünür";
+"compass_visible_in_rotated_mode" = "Harita döndürülürse görünür";
+"compass_visible_in_rotated_mode_descr" = "Kuzey yukarı olduğunda gizli";
+"compass_options_description" = "Harita yönlendirme modunu değiştirmek için pusulaya tıklayın";
+"shared_string_always_hidden" = "Her zaman gizli";

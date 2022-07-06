@@ -562,9 +562,9 @@
 
 - (void)refreshDownloadingContent:(NSString *)downloadTaskKey
 {
-    if (_resourcesItems.count > 0)
+    @synchronized (_dataLock)
     {
-        @synchronized (_dataLock)
+        if (_resourcesItems.count > 0)
         {
             for (int i = 0; i < _resourcesItems.count; i++)
             {

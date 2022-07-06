@@ -2763,7 +2763,7 @@
 "weather_data_provider" = "Data provider GFS.";
 "weather_clear_online_cache" = "This will clear all cache for online weather tile.";
 
-"all_maps_is_up_to_date" = "All maps is up to date";
+"all_maps_are_up_to_date" = "All maps are up to date";
 
 // Release Notes
 // instruction:

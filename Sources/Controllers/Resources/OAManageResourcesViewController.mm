@@ -1035,22 +1035,22 @@ static BOOL _repositoryUpdated = NO;
     [_localResourceItems removeAllObjects];
     _outdatedMapsCount = 0;
     _totalOutdatedSize = 0;
-    for (const auto& resource_ : _outdatedResources)
+    for (const auto& outdatedResource : _outdatedResources)
     {
         OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
-                                                          thatContainsResource:resource_->id];
+                                                          thatContainsResource:outdatedResource->id];
         if (!match)
             continue;
 
         OAOutdatedResourceItem *item = [[OAOutdatedResourceItem alloc] init];
-        item.resourceId = resource_->id;
-        item.resourceType = resource_->type;
-        item.title = [OAResourcesUIHelper titleOfResource:resource_
+        item.resourceId = outdatedResource->id;
+        item.resourceType = outdatedResource->type;
+        item.title = [OAResourcesUIHelper titleOfResource:outdatedResource
                                                  inRegion:match
                                            withRegionName:YES
                                          withResourceType:NO];
-        item.resource = resource_;
-        item.downloadTask = [self getDownloadTaskFor:resource_->id.toNSString()];
+        item.resource = outdatedResource;
+        item.downloadTask = [self getDownloadTaskFor:outdatedResource->id.toNSString()];
         item.worldRegion = match;
 
         const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
@@ -1074,42 +1074,40 @@ static BOOL _repositoryUpdated = NO;
     _liveUpdatesInstalledSize = _app.resourcesManager->changesManager->getUpdatesSize();
     
     _totalInstalledSize = 0;
-    for (const auto& resource : _localResources)
+    for (const auto& localResource : _localResources)
     {
-        //NSLog(@"=== %@", resource->id.toNSString());
-        
         OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
-                                                          thatContainsResource:resource->id];
+                                                          thatContainsResource:localResource->id];
         
-        if (!match && ![OAResourceType isMapResourceType:resource->type])
+        if (!match && ![OAResourceType isMapResourceType:localResource->type])
             continue;
         
         OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
-        item.resourceId = resource->id;
-        item.resourceType = resource->type;
+        item.resourceId = localResource->id;
+        item.resourceType = localResource->type;
         if (match)
         {
-            item.title = [OAResourcesUIHelper titleOfResource:resource
+            item.title = [OAResourcesUIHelper titleOfResource:localResource
                                                      inRegion:match
                                                withRegionName:YES
                                              withResourceType:NO];
         }
         else
         {
-            NSString *title = [OAFileNameTranslationHelper getMapName:resource->id.toNSString()];
+            NSString *title = [OAFileNameTranslationHelper getMapName:localResource->id.toNSString()];
             item.title = title;
         }
             
-        item.resource = resource;
+        item.resource = localResource;
         if (match)
-            item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-        item.size = resource->size;
-        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:resource->localPath.toNSString() error:NULL] fileModificationDate];;
+            item.downloadTask = [self getDownloadTaskFor:localResource->id.toNSString()];
+        item.size = localResource->size;
+        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];;
         item.worldRegion = match;
         NSString *localResourcePath = _app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
 
-        _totalInstalledSize += resource->size;
+        _totalInstalledSize += localResource->size;
         
         if (item.title != nil)
         {
@@ -1166,7 +1164,6 @@ static BOOL _repositoryUpdated = NO;
         if (_displaySubscribeEmailView)
             _subscribeEmailSection = _lastUnusedSectionIndex++;
 
-        // Updates always go first
         if (_currentScope == kAllResourcesScope && self.region == _app.worldRegion)
             _localResourcesSection = _lastUnusedSectionIndex++;
 

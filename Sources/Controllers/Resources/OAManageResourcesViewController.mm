@@ -7,10 +7,8 @@
 //
 
 #import "OAManageResourcesViewController.h"
-
 #import <Reachability.h>
 #import <MBProgressHUD.h>
-#import <FormatterKit/TTTArrayFormatter.h>
 #import "UITableViewCell+getTableView.h"
 #import "OARootViewController.h"
 #import "OALocalResourceInformationViewController.h"
@@ -54,7 +52,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kOpenOutdatedResourcesSegue @"openOutdatedResourcesSegue"
 #define kOpenDetailsSegue @"openDetailsSegue"
 #define kOpenInstalledResourcesSegue @"openInstalledResourcesSegue"
-#define kOpenOsmAndLiveSegue @"openOsmAndLiveSegue"
 
 #define kSearchCityLimit 10000
 
@@ -107,13 +104,11 @@ struct RegionResources
     NSInteger _downloadDescriptionSection;
     NSInteger _extraMapsSection;
     NSInteger _regionMapSection;
-    NSInteger _osmAndLiveSection;
     NSInteger _otherMapsSection;
     NSInteger _nauticalMapsSection;
 
-    NSInteger _outdatedResourcesSection;
-    NSMutableArray *_outdatedResourceItems;
-    NSArray *_regionsWithOutdatedResources;
+    NSInteger _outdatedMapsCount;
+    uint64_t _totalOutdatedSize;
 
     NSInteger _localResourcesSection;
     NSInteger _localSqliteSection;
@@ -139,7 +134,6 @@ struct RegionResources
     BOOL _doNotSearch;
     BOOL hideUpdateButton;
     
-    UILabel *_updateCouneView;
     BOOL _doDataUpdate;
     BOOL _doDataUpdateReload;
     
@@ -149,8 +143,6 @@ struct RegionResources
     BOOL _displaySubscribeEmailView;
     OASubscribeEmailView *_subscribeEmailView;
     NSInteger _subscriptionBannerSection;
-
-    TTTArrayFormatter *_arrFmt;
 
     BOOL _srtmDisabled;
     BOOL _hasSrtm;
@@ -212,8 +204,6 @@ static BOOL _repositoryUpdated = NO;
 
         _allSubregionItems = [NSMutableArray array];
 
-        _outdatedResourceItems = [NSMutableArray array];
-
         _allResourceItems = [NSMutableArray array];
         _localResourceItems = [NSMutableArray array];
         _localSqliteItems = [NSMutableArray array];
@@ -225,9 +215,6 @@ static BOOL _repositoryUpdated = NO;
         _lastSearchString = @"";
         _lastSearchScope = 0;
         _searchResults = nil;
-        
-        _arrFmt = [[TTTArrayFormatter alloc] init];
-        _arrFmt.usesSerialDelimiter = NO;
         
         _viewAppeared = NO;
     }
@@ -286,15 +273,6 @@ static BOOL _repositoryUpdated = NO;
 
     [self obtainDataAndItems];
     [self prepareContent];
-    
-    // IOS-172
-    _updateCouneView = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 20.0, 20.0)];
-    _updateCouneView.layer.cornerRadius = 10.0;
-    _updateCouneView.layer.masksToBounds = YES;
-    _updateCouneView.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:143.0/255.0 blue:0.0 alpha:1.0];
-    _updateCouneView.font = [UIFont systemFontOfSize:12.0];
-    _updateCouneView.textAlignment = NSTextAlignmentCenter;
-    _updateCouneView.textColor = [UIColor whiteColor];
 
     _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0) localResourcesSize:_totalInstalledSize + _liveUpdatesInstalledSize];
     _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 100.0)];
@@ -1055,23 +1033,24 @@ static BOOL _repositoryUpdated = NO;
     
     // Outdated Resources
     [_localResourceItems removeAllObjects];
-    [_outdatedResourceItems removeAllObjects];
-    for (const auto& resource : _outdatedResources)
+    _outdatedMapsCount = 0;
+    _totalOutdatedSize = 0;
+    for (const auto& outdatedResource : _outdatedResources)
     {
         OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
-                                                          thatContainsResource:resource->id];
+                                                          thatContainsResource:outdatedResource->id];
         if (!match)
             continue;
 
         OAOutdatedResourceItem *item = [[OAOutdatedResourceItem alloc] init];
-        item.resourceId = resource->id;
-        item.resourceType = resource->type;
-        item.title = [OAResourcesUIHelper titleOfResource:resource
+        item.resourceId = outdatedResource->id;
+        item.resourceType = outdatedResource->type;
+        item.title = [OAResourcesUIHelper titleOfResource:outdatedResource
                                                  inRegion:match
                                            withRegionName:YES
                                          withResourceType:NO];
-        item.resource = resource;
-        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+        item.resource = outdatedResource;
+        item.downloadTask = [self getDownloadTaskFor:outdatedResource->id.toNSString()];
         item.worldRegion = match;
 
         const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
@@ -1085,52 +1064,50 @@ static BOOL _repositoryUpdated = NO;
                 [_localRegionMapItems addObject:item];
             else
                 [_localResourceItems addObject:item];
-        
-            [_outdatedResourceItems addObject:item];
+
+            _outdatedMapsCount++;
+            _totalOutdatedSize += resourceInRepository->packageSize;
         }
     }
-    [_outdatedResourceItems sortUsingComparator:self.resourceItemsComparator];
-    
+
     // Local Resources
     _liveUpdatesInstalledSize = _app.resourcesManager->changesManager->getUpdatesSize();
     
     _totalInstalledSize = 0;
-    for (const auto& resource : _localResources)
+    for (const auto& localResource : _localResources)
     {
-        //NSLog(@"=== %@", resource->id.toNSString());
-        
         OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
-                                                          thatContainsResource:resource->id];
+                                                          thatContainsResource:localResource->id];
         
-        if (!match && ![OAResourceType isMapResourceType:resource->type])
+        if (!match && ![OAResourceType isMapResourceType:localResource->type])
             continue;
         
         OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
-        item.resourceId = resource->id;
-        item.resourceType = resource->type;
+        item.resourceId = localResource->id;
+        item.resourceType = localResource->type;
         if (match)
         {
-            item.title = [OAResourcesUIHelper titleOfResource:resource
+            item.title = [OAResourcesUIHelper titleOfResource:localResource
                                                      inRegion:match
                                                withRegionName:YES
                                              withResourceType:NO];
         }
         else
         {
-            NSString *title = [OAFileNameTranslationHelper getMapName:resource->id.toNSString()];
+            NSString *title = [OAFileNameTranslationHelper getMapName:localResource->id.toNSString()];
             item.title = title;
         }
             
-        item.resource = resource;
+        item.resource = localResource;
         if (match)
-            item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-        item.size = resource->size;
-        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:resource->localPath.toNSString() error:NULL] fileModificationDate];;
+            item.downloadTask = [self getDownloadTaskFor:localResource->id.toNSString()];
+        item.size = localResource->size;
+        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];;
         item.worldRegion = match;
         NSString *localResourcePath = _app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
 
-        _totalInstalledSize += resource->size;
+        _totalInstalledSize += localResource->size;
         
         if (item.title != nil)
         {
@@ -1158,14 +1135,6 @@ static BOOL _repositoryUpdated = NO;
             break;
         }
     }
-
-    NSMutableSet *regionsSet = [NSMutableSet set];
-    for (OAOutdatedResourceItem *item in _outdatedResourceItems)
-    {
-        if (item.worldRegion.regionId)
-            [regionsSet addObject:item.worldRegion];
-    }
-    _regionsWithOutdatedResources = [[regionsSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
 }
 
 - (void) prepareContent
@@ -1175,13 +1144,11 @@ static BOOL _repositoryUpdated = NO;
         _lastUnusedSectionIndex = 0;
         _downloadDescriptionSection = -1;
         _extraMapsSection = -1;
-        _osmAndLiveSection = -1;
         _otherMapsSection = -1;
         _nauticalMapsSection = -1;
         _regionMapSection = -1;
         _subscriptionBannerSection = -1;
         _subscribeEmailSection = -1;
-        _outdatedResourcesSection = -1;
         _localResourcesSection = -1;
         _resourcesSection = -1;
         _localSqliteSection = -1;
@@ -1197,21 +1164,14 @@ static BOOL _repositoryUpdated = NO;
         if (_displaySubscribeEmailView)
             _subscribeEmailSection = _lastUnusedSectionIndex++;
 
-        // Updates always go first
-        if (_currentScope == kAllResourcesScope && [_outdatedResourceItems count] > 0 && self.region == _app.worldRegion)
-            _outdatedResourcesSection = _lastUnusedSectionIndex++;
-        
         if (_currentScope == kAllResourcesScope && self.region == _app.worldRegion)
-            _osmAndLiveSection = _lastUnusedSectionIndex++;
-        
+            _localResourcesSection = _lastUnusedSectionIndex++;
+
         if (_currentScope == kAllResourcesScope && _downloadDescriptionInfo)
             _downloadDescriptionSection = _lastUnusedSectionIndex++;
         
         if (_currentScope == kAllResourcesScope && _customRegions.count > 0 && (self.region == _app.worldRegion || [self.region isKindOfClass:OACustomRegion.class]))
             _extraMapsSection = _lastUnusedSectionIndex++;
-
-        if (_currentScope == kAllResourcesScope && ([_localResourceItems count] > 0 || [_localRegionMapItems count] > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0) && self.region == _app.worldRegion)
-            _localResourcesSection = _lastUnusedSectionIndex++;
 
         if (self.region && self.region != _app.worldRegion && _currentScope == kAllResourcesScope)
         {
@@ -1341,6 +1301,11 @@ static BOOL _repositoryUpdated = NO;
     [UIView animateWithDuration:.2 animations:^{
         self.tableView.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
     }];
+}
+
+- (BOOL)hasLocalResources
+{
+    return _localResourceItems.count > 0 || _localRegionMapItems.count > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0;
 }
 
 - (NSMutableArray *) getResourceItems
@@ -1781,15 +1746,11 @@ static BOOL _repositoryUpdated = NO;
         sectionsCount++;
     if (_freeMemorySection >= 0)
         sectionsCount++;
-    if (_osmAndLiveSection >= 0)
-        sectionsCount++;
     if (_extraMapsSection >= 0)
         sectionsCount++;
     if (_downloadDescriptionSection >= 0)
         sectionsCount++;
     if (_localResourcesSection >= 0)
-        sectionsCount++;
-    if (_outdatedResourcesSection >= 0)
         sectionsCount++;
     if (_resourcesSection >= 0)
         sectionsCount++;
@@ -1812,10 +1773,6 @@ static BOOL _repositoryUpdated = NO;
         return 0;
     if (section == _freeMemorySection)
         return 0;
-    if (section == _outdatedResourcesSection)
-        return 1;
-    if (section == _osmAndLiveSection)
-        return 1;
     if (section == _extraMapsSection)
         return _customRegions.count;
     if (section == _downloadDescriptionSection)
@@ -1823,7 +1780,7 @@ static BOOL _repositoryUpdated = NO;
     if (section == _resourcesSection)
         return [[self getResourceItems] count];
     if (section == _localResourcesSection)
-        return 1;
+        return ([self hasLocalResources]) ? 2 : 1;
     if (section == _regionMapSection)
         return [[self getRegionMapItems] count];
     if (section == _localSqliteSection)
@@ -1856,17 +1813,11 @@ static BOOL _repositoryUpdated = NO;
             else
                 return OALocalizedString(@"res_mapsres");
         }
-        
-        if (section == _outdatedResourcesSection)
-            return OALocalizedString(@"res_updates");
-        if (section == _osmAndLiveSection)
-            return OALocalizedString(@"osmand_live_title");
+
         if (section == _extraMapsSection)
             return OALocalizedString(@"extra_maps");
         if (section == _resourcesSection)
             return OALocalizedString([self isNauticalScope] ? @"region_nautical" : @"res_worldwide");
-        if (section == _localResourcesSection)
-            return OALocalizedString(@"download_tab_local");
         if (section == _regionMapSection)
             return OALocalizedString(@"res_world_map");
         if (section == _otherMapsSection)
@@ -1877,16 +1828,10 @@ static BOOL _repositoryUpdated = NO;
         return nil;
     }
 
-    if (section == _outdatedResourcesSection)
-        return OALocalizedString(@"res_updates");
-    if (section == _osmAndLiveSection)
-        return OALocalizedString(@"osmand_live_title");
     if (section == _extraMapsSection)
         return OALocalizedString(@"extra_maps");
     if (section == _resourcesSection)
         return OALocalizedString([self isNauticalScope] ? @"region_nautical" : @"res_mapsres");
-    if (section == _localResourcesSection)
-        return OALocalizedString(@"download_tab_local");
     if (section == _regionMapSection)
         return OALocalizedString(@"res_region_map");
     if (section == _otherMapsSection)
@@ -1987,7 +1932,6 @@ static BOOL _repositoryUpdated = NO;
     static NSString *const descriptionButtonIconCell = @"OAMultiIconTextDescCell";
     static NSString *const subregionCell = @"subregionCell";
     static NSString *const outdatedResourceCell = @"outdatedResourceCell";
-    static NSString *const osmAndLiveCell = @"osmAndLiveCell";
     static NSString *const localResourceCell = @"localResourceCell";
     static NSString *const repositoryResourceCell = @"repositoryResourceCell";
     static NSString *const downloadingResourceCell = @"downloadingResourceCell";
@@ -2062,25 +2006,30 @@ static BOOL _repositoryUpdated = NO;
     }
     else
     {
-        if (indexPath.section == _outdatedResourcesSection && _outdatedResourcesSection >= 0)
+        if (indexPath.section == _localResourcesSection && _localResourcesSection >= 0)
         {
-            cellTypeId = outdatedResourcesSubmenuCell;
-            title = OALocalizedString(@"res_updates_avail");
+            BOOL isLocalCell = indexPath.row == 0 && [self hasLocalResources];
+            cellTypeId = isLocalCell ? installedResourcesSubmenuCell : outdatedResourcesSubmenuCell;
+            title = OALocalizedString(isLocalCell ? @"download_tab_local" : @"res_updates");
 
-            NSArray *regionsNames = [_regionsWithOutdatedResources valueForKey:NSStringFromSelector(@selector(name))];
-            subtitle = [_arrFmt stringFromArray:regionsNames];
-        }
-        else if (indexPath.section == _localResourcesSection && _localResourcesSection >= 0)
-        {
-            cellTypeId = installedResourcesSubmenuCell;
-            title = OALocalizedString(@"download_tab_local");
-            
-            subtitle = [NSString stringWithFormat:@"%d %@ - %@", (int)(_localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count + _localOnlineTileSources.count), OALocalizedString(@"res_maps_inst"), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
-        }
-        else if (indexPath.section == _osmAndLiveSection)
-        {
-            cellTypeId = osmAndLiveCell;
-            title = OALocalizedString(@"osmand_live_title");
+            if (isLocalCell)
+            {
+                subtitle = [NSString stringWithFormat:@"%lu %@ - %@",
+                        _localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count + _localOnlineTileSources.count,
+                        OALocalizedString(@"res_maps_inst"),
+                        [NSByteCountFormatter stringFromByteCount:_totalInstalledSize
+                                                       countStyle:NSByteCountFormatterCountStyleFile]];
+            }
+            else
+            {
+                subtitle = _outdatedMapsCount > 0
+                        ? [NSString stringWithFormat:@"%li %@ - %@",
+                                _outdatedMapsCount,
+                                OALocalizedString(@"res_maps_inst"),
+                                [NSByteCountFormatter stringFromByteCount:_totalOutdatedSize
+                                                               countStyle:NSByteCountFormatterCountStyleFile]]
+                        : OALocalizedString(@"all_maps_is_up_to_date");
+            }
         }
         else if (indexPath.section == _extraMapsSection)
         {
@@ -2421,7 +2370,7 @@ static BOOL _repositoryUpdated = NO;
             cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
-            UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_import"];
+            UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -2478,12 +2427,6 @@ static BOOL _repositoryUpdated = NO;
     // Try to allocate cell from own table, since it may be configured there
     if (cell == nil)
         cell = [self.tableView dequeueReusableCellWithIdentifier:cellTypeId];
-
-    if ([cellTypeId isEqualToString:outdatedResourcesSubmenuCell])
-    {
-        [_updateCouneView setText:[NSString stringWithFormat:@"%d", (int)_outdatedResourceItems.count]];
-        cell.accessoryView = _updateCouneView;
-    }
 
     // Fill cell content
     
@@ -3041,8 +2984,6 @@ static BOOL _repositoryUpdated = NO;
     {
         OAOutdatedResourcesViewController *outdatedResourcesViewController = [segue destinationViewController];
         outdatedResourcesViewController.openFromSplash = _openFromSplash;
-        [outdatedResourcesViewController setupWithRegion:self.region
-                                        andOutdatedItems:_outdatedResourceItems];
     }
     else if ([segue.identifier isEqualToString:kOpenInstalledResourcesSegue])
     {

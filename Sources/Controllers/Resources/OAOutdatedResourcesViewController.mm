@@ -15,6 +15,8 @@
 #import "OAChoosePlanHelper.h"
 #import "OAIAPHelper.h"
 
+#define kOpenLiveUpdatesSegue @"openLiveUpdatesSegue"
+
 @interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource, OASubscriptionBannerCardViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -30,6 +32,9 @@
     OsmAndAppInstance _app;
     NSObject* _dataLock;
 
+    NSInteger _updatesSection;
+    NSInteger _availableMapsSection;
+
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _outdatedResources;
     NSMutableArray* _resourcesItems;
 
@@ -42,17 +47,12 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         _app = [OsmAndApp instance];
+        _resourcesItems = [NSMutableArray array];
+        self.region = _app.worldRegion;
 
         _dataLock = [[NSObject alloc] init];
     }
     return self;
-}
-
-- (void)setupWithRegion:(OAWorldRegion*)region
-       andOutdatedItems:(NSArray*)items
-{
-    self.region = region;
-    _resourcesItems = [NSMutableArray arrayWithArray:items];
 }
 
 -(void)applyLocalization
@@ -86,8 +86,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
 
     [self setupSubscriptionBanner];
-
-    [self.tableView reloadData];
+    [self updateContent];
+    [self prepareContent];
 }
 
 - (void)viewWillLayoutSubviews
@@ -103,6 +103,15 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self setupSubscriptionBanner];
     } completion:nil];
+}
+
+- (void)prepareContent
+{
+    @synchronized (_dataLock)
+    {
+        _updatesSection = 0;
+        _availableMapsSection = 1;
+    }
 }
 
 - (void)setupSubscriptionBanner
@@ -330,17 +339,25 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_resourcesItems count];
+    if (section == _updatesSection)
+        return 1;
+    else if (section == _availableMapsSection)
+        return _resourcesItems.count;
+
+    return 0;
 }
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return OALocalizedStringUp(@"res_updates");
+    if (section == _availableMapsSection)
+        return OALocalizedStringUp(@"res_updates_avail");
+
+    return nil;
 }
 
 -(void)updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
@@ -379,56 +396,68 @@
 {
     static NSString* const outdatedResourceCell = @"outdatedResourceCell";
     static NSString* const downloadingResourceCell = @"downloadingResourceCell";
+    static NSString *const liveUpdatesCell = @"liveUpdatesCell";
 
     NSString* cellTypeId = nil;
     NSString* title = nil;
+    OAResourceItem *item;
 
-    OAResourceItem* item = (OAResourceItem*)[_resourcesItems objectAtIndex:indexPath.row];
-    if (item.downloadTask != nil)
-        cellTypeId = downloadingResourceCell;
-    else if ([item isKindOfClass:[OAOutdatedResourceItem class]])
-        cellTypeId = outdatedResourceCell;
-
-    if (item.worldRegion && item.worldRegion.superregion)
+    if (indexPath.section == _updatesSection)
     {
-        NSString *countryName = [OAResourcesUIHelper getCountryName:item];
-        if (countryName)
-            title = [NSString stringWithFormat:@"%@ - %@", countryName, item.title];
-        else
-            title = item.title;
+        cellTypeId = liveUpdatesCell;
+        title = OALocalizedString(@"osmand_live_updates");
     }
-    else
+    else if (indexPath.section == _availableMapsSection && _resourcesItems.count > 0)
     {
-        title = item.title;
+        item = (OAResourceItem *) _resourcesItems[indexPath.row];
+
+        if (item.downloadTask != nil)
+            cellTypeId = downloadingResourceCell;
+        else if ([item isKindOfClass:[OAOutdatedResourceItem class]])
+            cellTypeId = outdatedResourceCell;
+
+        if (item.worldRegion && item.worldRegion.superregion)
+        {
+            NSString *countryName = [OAResourcesUIHelper getCountryName:item];
+            if (countryName)
+                title = [NSString stringWithFormat:@"%@ - %@", countryName, item.title];
+            else
+                title = item.title;
+        }
+        else
+        {
+            title = item.title;
+        }
     }
 
     // Obtain reusable cell or create one
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
     if (cell == nil)
     {
-        if ([cellTypeId isEqualToString:outdatedResourceCell])
+        if (indexPath.section == _availableMapsSection)
         {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                          reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
-            cell.detailTextLabel.textColor = [UIColor darkGrayColor];
-            UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_import"];
-            cell.accessoryView = [[UIImageView alloc] initWithImage:iconImage];
-            [cell.accessoryView setTintColor:UIColorFromRGB(color_primary_purple)];
-        }
-        else if ([cellTypeId isEqualToString:downloadingResourceCell])
-        {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                          reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
-            cell.detailTextLabel.textColor = [UIColor darkGrayColor];
+            cell.textLabel.font = [UIFont systemFontOfSize:17.];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:13.];
 
-            FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-            progressView.iconView = [[UIView alloc] init];
+            if ([cellTypeId isEqualToString:outdatedResourceCell])
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                              reuseIdentifier:cellTypeId];
+                UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
+                cell.accessoryView = [[UIImageView alloc] initWithImage:iconImage];
+                [cell.accessoryView setTintColor:UIColorFromRGB(color_primary_purple)];
+            }
+            else if ([cellTypeId isEqualToString:downloadingResourceCell])
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                              reuseIdentifier:cellTypeId];
 
-            cell.accessoryView = progressView;
+                FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
+                progressView.iconView = [[UIView alloc] init];
+                progressView.tintColor = UIColorFromRGB(color_primary_purple);
+
+                cell.accessoryView = progressView;
+            }
         }
     }
 
@@ -436,18 +465,40 @@
     if (cell == nil)
         cell = [self.tableView dequeueReusableCellWithIdentifier:cellTypeId];
 
+    if (cell && indexPath.section == _availableMapsSection && item)
+    {
+        cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
+        cell.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
+    }
+
     // Fill cell content
     cell.textLabel.text = title;
-    if (cell.detailTextLabel != nil)
+    if (cell.detailTextLabel)
     {
-        if (item.sizePkg > 0)
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
-        else
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [OAResourceType resourceTypeLocalized:item.resourceType]];
+        if ([cellTypeId isEqualToString:liveUpdatesCell])
+        {
+            cell.detailTextLabel.text = nil;
+        }
+        else if (item)
+        {
+            if (item.sizePkg > 0)
+            {
+                NSString *date = [item getDate];
+                NSString *dateDescription = date ? [NSString stringWithFormat:@"  •  %@", date] : @"";
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@%@",
+                        [OAResourceType resourceTypeLocalized:item.resourceType],
+                        [NSByteCountFormatter stringFromByteCount:item.sizePkg
+                                                       countStyle:NSByteCountFormatterCountStyleFile],
+                        dateDescription];
+            }
+            else
+            {
+                cell.detailTextLabel.text = [OAResourceType resourceTypeLocalized:item.resourceType];
+            }
+            cell.detailTextLabel.textColor = UIColorFromRGB(color_text_footer);
+        }
     }
-    
-    //[NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:item.resourceType]
-    
+
     if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
         if (cell.accessoryView && [cell.accessoryView isKindOfClass:FFCircularProgressView.class])
@@ -478,16 +529,17 @@
 
 #pragma mark - UITableViewDelegate
 
-/*
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 0.1f;
+    if (section == _updatesSection)
+        return 35.;
+
+    return UITableViewAutomaticDimension;
 }
-*/
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    id item = [_resourcesItems objectAtIndex:indexPath.row];
+    id item = _resourcesItems[indexPath.row];
 
     if (item == nil)
         return;
@@ -497,27 +549,34 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id item = [_resourcesItems objectAtIndex:indexPath.row];
+    if (indexPath.section == _availableMapsSection)
+    {
+        id item = _resourcesItems[indexPath.row];
 
-    if (item != nil)
-        [self onItemClicked:item];
+        if (item != nil)
+            [self onItemClicked:item];
+    }
 
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
-#pragma mark -
-
 - (void)refreshDownloadingContent:(NSString *)downloadTaskKey
 {
-    @synchronized(_dataLock)
+    @synchronized (_dataLock)
     {
-        for (int i = 0; i < _resourcesItems.count; i++) {
-            if ([_resourcesItems[i] isKindOfClass:[OAWorldRegion class]])
-                continue;
-            OAResourceItem *item = _resourcesItems[i];
-            if ([[item.downloadTask key] isEqualToString:downloadTaskKey]) {
-                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-                break;
+        if (_resourcesItems.count > 0)
+        {
+            for (int i = 0; i < _resourcesItems.count; i++)
+            {
+                if ([_resourcesItems[i] isKindOfClass:[OAWorldRegion class]])
+                    continue;
+
+                OAResourceItem *item = _resourcesItems[i];
+                if ([[item.downloadTask key] isEqualToString:downloadTaskKey] && _availableMapsSection > 0)
+                {
+                    [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_availableMapsSection]];
+                    break;
+                }
             }
         }
     }

@@ -13,7 +13,4 @@
 
 @property (nonatomic, assign) BOOL openFromSplash;
 
-- (void)setupWithRegion:(OAWorldRegion*)region
-       andOutdatedItems:(NSArray*)items;
-
 @end

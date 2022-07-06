@@ -2592,3 +2592,15 @@
 "compass_options_description" = "Klik på kompasset for at skifte måden hvorpå kortet er orienteret";
 "shared_string_always_visible" = "Altid synlig";
 "shared_string_always_hidden" = "Altid skjult";
+"shared_string_online_cache" = "Online cache";
+"shared_string_clear_online_cache" = "Ryd online cache";
+"shared_string_delete_all" = "Slet alt";
+"shared_string_countries" = "Lande";
+"weather_plugin" = "Vejr-udvidelse";
+"weather_offline_forecast" = "Offline prognose";
+"weather_offline_forecast_only" = "Kun offline prognose";
+"weather_offline_forecast_only_desc" = "Prognoser vil kun være tilgængelige for lande med data, der er downloadet på forhånd.";
+"weather_data_provider" = "Dataleverandør GFS.";
+"weather_clear_online_cache" = "Dette vil rydde al cache for online vejrfliser.";
+"shared_string_data" = "Data";
+"shared_string_total_size" = "Samlet størrelse";

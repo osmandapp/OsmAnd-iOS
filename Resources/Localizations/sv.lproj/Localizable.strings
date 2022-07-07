@@ -793,10 +793,10 @@
 "lang_cy" = "Walesiska";
 "lang_da" = "Danska";
 "lang_de" = "Tyska";
-"lang_de_casual" = "German (casual)";
+"lang_de_casual" = "Tyska (informell)";
 "lang_el" = "Grekiska";
 "lang_en" = "Engelska";
-"lang_en_gb" = "Engelska (UK)";
+"lang_en_gb" = "Engelska (Storbritannien)";
 "lang_eo" = "Esperanto";
 "lang_es" = "Spanska";
 "lang_es_ar" = "Spanska (Argentina)";
@@ -1340,7 +1340,7 @@
 "add_destination" = "Add destination";
 "add_start" = "Add starting point";
 "add_intermediate" = "Lägg till mellanliggande punkt";
-"add_home" = "Lägg till bostad";
+"add_home" = "Lägg till hem";
 "add_work" = "Lägg till arbetsplats";
 "home_pt" = "Hem";
 "work_pt" = "Arbetsplats";
@@ -1826,7 +1826,7 @@
 "suggested_maps" = "Föreslagna kartor";
 "suggested_maps_descr" = "Dessa kartor erfordras av insticksprogrammet.";
 "added_profiles" = "Tillagda profiler";
-"added_profiles_descr" = "Profiler tillaggda av insticksprogram";
+"added_profiles_descr" = "Profiler tillagda av insticksmoduler";
 "location_not_found" = "Platsen hittades inte";
 "search_my_location" = "Search my location";
 "no_inet_connection" = "Ingen Internetanslutning";
@@ -1847,7 +1847,7 @@
 "explore_wikipedia_offline" = "Utforska Wikipedia i nedkopplat läge.";
 "online_webpage_warning" = "Sidan endast tillgänglig online. Öppna i webbläsare?";
 "custom_search" = "Egen sökning";
-"add_custom_category" = "Add custom category";
+"add_custom_category" = "Lägg till skräddarsydd kategori";
 "poi_filter_custom_filter" = "Anpassat filter";
 "delete_custom_categories" = "Delete custom categories";
 "poi_filter_closest_poi" = "Närmaste intressepunkter";

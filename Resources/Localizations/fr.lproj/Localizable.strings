@@ -2592,3 +2592,15 @@
 "compass_options_description" = "Cliquez sur la boussole pour changer de mode d'orientation de la carte";
 "shared_string_always_visible" = "Toujours visible";
 "shared_string_always_hidden" = "Toujours masqué";
+"shared_string_data" = "Données";
+"shared_string_countries" = "Pays";
+"shared_string_online_cache" = "Cache en ligne";
+"shared_string_clear_online_cache" = "Effacer le cache en ligne";
+"weather_plugin" = "Extension de météo";
+"weather_offline_forecast" = "Prévision hors-ligne";
+"weather_offline_forecast_only" = "Seules les prévisions hors-ligne";
+"weather_data_provider" = "Fournisseur de données GFS.";
+"weather_offline_forecast_only_desc" = "Les prévisions seront disponibles seulement pour les pays avec des données pré-téléchargées.";
+"weather_clear_online_cache" = "Ça effacera tous les caches pour les tuiles météo en ligne.";
+"shared_string_total_size" = "Taille totale";
+"shared_string_delete_all" = "Tout supprimer";

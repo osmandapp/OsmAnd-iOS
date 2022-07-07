@@ -1478,7 +1478,7 @@
 "rendering_attr_trolleybusRoutes_name" = "Маршруты троллейбусов";
 "rendering_attr_highway_class_track_name" = "Трек";
 "rendering_attr_hideText_name" = "Текст";
-"rendering_attr_contourColorScheme_description" = "Цветовая схема горизонталей";
+"rendering_attr_contourColorScheme_description" = "Цвет горизонталей";
 "rendering_attr_winter_road_name" = "Автозимник";
 "rendering_attr_roadColors_description" = "Выберите цветовую схему дорог:";
 "routing_attr_allow_classic_only_name" = "Разрешить только классические маршруты";

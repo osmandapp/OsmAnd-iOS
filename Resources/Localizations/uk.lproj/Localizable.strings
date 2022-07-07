@@ -2612,3 +2612,4 @@
 "weather_offline_forecast_only_desc" = "Прогноз буде доступний тільки для країн з попередньо завантаженими даними.";
 "shared_string_countries" = "Країни";
 "shared_string_clear_online_cache" = "Очистити мереж. кеш";
+"all_maps_are_up_to_date" = "Усі мапи актуальні";

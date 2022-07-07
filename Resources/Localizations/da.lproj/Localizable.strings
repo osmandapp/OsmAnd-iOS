@@ -2604,3 +2604,4 @@
 "weather_clear_online_cache" = "Dette vil rydde al cache for online vejrfliser.";
 "shared_string_data" = "Data";
 "shared_string_total_size" = "Samlet størrelse";
+"all_maps_are_up_to_date" = "Alle kort er ajourført";

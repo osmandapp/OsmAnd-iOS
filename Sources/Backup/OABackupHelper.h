@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OABackupListeners.h"
+#import "OAPrepareBackupTask.h"
 
 #define STATUS_SUCCESS 0
 #define STATUS_PARSE_JSON_ERROR 1
@@ -29,12 +30,14 @@
 #define SERVER_ERROR_CODE_SUBSCRIPTION_WAS_EXPIRED_OR_NOT_PRESENT 110
 #define SERVER_ERROR_CODE_USER_IS_ALREADY_REGISTERED 111
 
-@class OAExportSettingsType, OACommonBoolean, OAPrepareBackupResult, OABackupListeners;
+@class OAExportSettingsType, OACommonBoolean, OAPrepareBackupResult, OABackupListeners, OASettingsItem, OAFileSettingsItem;
 
 @interface OABackupHelper : NSObject
 
-@property (nonatomic, readonly) OAPrepareBackupResult *backup;
+@property (nonatomic) OAPrepareBackupResult *backup;
 @property (nonatomic, readonly) OABackupListeners *backupListeners;
+
+@property (nonatomic, readonly) NSOperationQueue *executor;
 
 + (NSString *) INFO_EXT;
 
@@ -42,6 +45,9 @@
 + (NSString *) DEVICE_REGISTER_URL;
 
 + (OABackupHelper *)sharedInstance;
+
++ (NSString *) getItemFileName:(OASettingsItem *)item;
++ (NSString *) getFileItemName:(OAFileSettingsItem *)fileSettingsItem;
 
 - (OACommonBoolean *) getBackupTypePref:(OAExportSettingsType *)type;
 - (OACommonBoolean *) getVersionHistoryTypePref:(OAExportSettingsType *)type;
@@ -58,6 +64,27 @@
 - (void) registerUser:(NSString *)email promoCode:(NSString *)promoCode login:(BOOL)login;
 - (void) registerDevice:(NSString *)token;
 
+
+- (void) collectLocalFiles:(id<OAOnCollectLocalFilesListener>)listener;
+- (void) downloadFileList:(void(^)(NSInteger status, NSString *message, NSArray<OARemoteFile *> *remoteFiles))onComplete;
+- (NSString *)downloadFile:(NSString *)filePath
+                remoteFile:(OARemoteFile *)remoteFile
+                  listener:(id<OAOnDownloadFileListener>)listener;
+- (void) generateBackupInfo:(NSDictionary<NSString *, OALocalFile *> *)localFiles
+          uniqueRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)uniqueRemoteFiles
+         deletedRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)deletedRemoteFiles
+                 onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete;
+
+- (void) updateFileUploadTime:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)updateTime;
+
+- (BOOL) prepareBackup;
+- (void) addPrepareBackupListener:(id<OAOnPrepareBackupListener>)listener;
+- (void) removePrepareBackupListener:(id<OAOnPrepareBackupListener>)listener;
+
+- (BOOL) isBackupPreparing;
+
 + (BOOL) isTokenValid:(NSString *)token;
+
++ (BOOL) applyItem:(OASettingsItem *)item type:(NSString *)type name:(NSString *)name;
 
 @end

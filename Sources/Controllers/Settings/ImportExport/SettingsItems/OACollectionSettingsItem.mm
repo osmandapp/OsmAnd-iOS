@@ -85,4 +85,9 @@
     return YES;
 }
 
+- (BOOL) isEmpty
+{
+    return _items.count == 0;
+}
+
 @end

@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
     EOASettingsItemFileSubtypeRoadMap,
     EOASettingsItemFileSubtypeGpx,
     EOASettingsItemFileSubtypeVoice,
+    EOASettingsItemFileSubtypeVoiceTTS,
     EOASettingsItemFileSubtypeTravel,
 //    EOASettingsItemFileSubtypeMultimediaFile,
     EOASettingsItemFileSubtypesCount
@@ -35,6 +36,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 + (NSString *) getSubtypeFolder:(EOASettingsItemFileSubtype)subtype;
 + (EOASettingsItemFileSubtype) getSubtypeByName:(NSString *)name;
 + (EOASettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName;
++ (NSString *) getSubtypeFolderName:(EOASettingsItemFileSubtype)subtype;
 + (BOOL) isMap:(EOASettingsItemFileSubtype)type;
 + (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype;
 
@@ -44,6 +46,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 
 @property (nonatomic) NSString *filePath;
 @property (nonatomic, readonly) EOASettingsItemFileSubtype subtype;
+@property (nonatomic, assign) long size;
 
 - (instancetype _Nullable) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error;
 - (BOOL) exists;
@@ -51,6 +54,8 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 - (NSString *) getPluginPath;
 - (void) installItem:(NSString *)destFilePath;
 - (NSString *) getIconName;
+
+- (BOOL) needMd5Digest;
 
 @end
 

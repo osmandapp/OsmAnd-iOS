@@ -17,10 +17,13 @@
 #import "OABackupInfo.h"
 #import "OALocalFile.h"
 #import "OARemoteFile.h"
-#import "OABackupListeners.h"
 #import "OAIAPHelper.h"
 #import "OANetworkUtilities.h"
 #import "OABackupError.h"
+#import "OABackupDbHelper.h"
+#import "OACollectLocalFilesTask.h"
+#import "OABackupInfoGenerationTask.h"
+#import "OAWebClient.h"
 
 #import "OARegisterUserCommand.h"
 #import "OARegisterDeviceCommand.h"
@@ -45,16 +48,17 @@ static NSString *DELETE_FILE_VERSION_URL = [SERVER_URL stringByAppendingPathComp
 static NSString *BACKUP_TYPE_PREFIX = @"backup_type_";
 static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
+@interface OABackupHelper () <OAOnPrepareBackupListener>
+
+@end
+
 @implementation OABackupHelper
 {
-    NSOperationQueue *_executor;
     
-//    private PrepareBackupTask prepareBackupTask;
-//        private PrepareBackupResult backup = new PrepareBackupResult();
-//        private final List<OnPrepareBackupListener> prepareBackupListeners = new ArrayList<>();
-//
+    OAPrepareBackupTask *_prepareBackupTask;
+    NSHashTable<id<OAOnPrepareBackupListener>> *_prepareBackupListeners;
     
-//    private final BackupDbHelper dbHelper;
+    OABackupDbHelper *_dbHelper;
     
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
@@ -93,7 +97,8 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         else if ([item isKindOfClass:OAFileSettingsItem.class])
         {
             OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
-            if ([name hasPrefix:[OAFileSettingsItemFileSubtype getSubtypeFolder:fileItem.subtype]])
+            NSString *subfolder = [OAFileSettingsItemFileSubtype getSubtypeFolderName:fileItem.subtype];
+            if ([name hasPrefix:subfolder] || subfolder.length == 0)
             {
                 if (fileItem.filePath.pathExtension.length == 0 && ![itemFileName hasSuffix:@"/"])
                 {
@@ -176,6 +181,8 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         _executor = [[NSOperationQueue alloc] init];
         _settings = [OAAppSettings sharedManager];
         _backupListeners = [[OABackupListeners alloc] init];
+        _dbHelper = OABackupDbHelper.sharedDatabase;
+        _prepareBackupListeners = [NSHashTable weakObjectsHashTable];
     }
     return self;
 }
@@ -229,12 +236,12 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 - (void) updateFileUploadTime:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)updateTime
 {
-//    dbHelper.updateFileUploadTime(type, fileName, updateTime);
+    [_dbHelper updateFileUploadTime:type name:fileName updateTime:updateTime];
 }
 
 - (void) updateFileMd5Digest:(NSString *)type fileName:(NSString *)fileName md5Hex:(NSString *)md5Hex
 {
-//    dbHelper.updateFileMd5Digest(type, fileName, md5Hex);
+    [_dbHelper updateFileMd5Digest:type name:fileName md5Digest:md5Hex];
 }
 
 - (void) updateBackupUploadTime
@@ -384,6 +391,197 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     }];
 }
 
+- (void) collectLocalFiles:(id<OAOnCollectLocalFilesListener>)listener
+{
+//    OperationLog operationLog = new OperationLog("collectLocalFiles", DEBUG);
+//    operationLog.startOperation();
+    OACollectLocalFilesTask *task = [[OACollectLocalFilesTask alloc] initWithListener:listener];
+    [task execute];
+}
 
+- (void) downloadFileList:(void(^)(NSInteger status, NSString *message, NSArray<OARemoteFile *> *remoteFiles))onComplete
+{
+    [self checkRegistered];
+    
+    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+    params[@"deviceid"] = self.getDeviceId;
+    params[@"accessToken"] = self.getAccessToken;
+    params[@"allVersions"] = @"true";
+//    final OperationLog operationLog = new OperationLog("downloadFileList", DEBUG);
+//    operationLog.startOperation();
+    [OANetworkUtilities sendRequestWithUrl:LIST_FILES_URL params:params post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        int status;
+        NSString *message;
+        NSString *result = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"";
+        NSMutableArray<OARemoteFile *> *remoteFiles = [NSMutableArray array];
+        if (((NSHTTPURLResponse *)response).statusCode != 200)
+        {
+            OABackupError *backupError = [[OABackupError alloc] initWithError:result];
+            message = [NSString stringWithFormat:@"Download file list error: %@", backupError.toString];
+            status = STATUS_SERVER_ERROR;
+        }
+        else if (result.length > 0)
+        {
+            NSError *jsonParsingError = nil;
+            NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
+            if (!jsonParsingError)
+            {
+                NSInteger totalZipSize = [resultJson[@"totalZipSize"] integerValue];
+                NSInteger totalFiles = [resultJson[@"totalFiles"] integerValue];
+                NSInteger totalFileVersions = [resultJson[@"totalFileVersions"] integerValue];
+                NSArray *allFiles = resultJson[@"allFiles"];
+                for (NSDictionary *f in allFiles)
+                {
+                    [remoteFiles addObject:[[OARemoteFile alloc] initWithJson:f]];
+                }
+                status = STATUS_SUCCESS;
+                message = [NSString stringWithFormat:@"Total files: %ld Total zip size: %@ Total file versions: %ld", totalFiles, [NSByteCountFormatter stringFromByteCount:totalZipSize countStyle:NSByteCountFormatterCountStyleFile], totalFileVersions];
+            }
+            else
+            {
+                message = @"Download file list error: json parsing";
+                status = STATUS_PARSE_JSON_ERROR;
+            }
+            
+        }
+        else
+        {
+            message = @"Download file list error: empty response";
+            status = STATUS_EMPTY_RESPONSE_ERROR;
+        }
+        if (onComplete)
+            onComplete(status, message, remoteFiles);
+//        operationLog.finishOperation(status + " " + message);
+    }];
+}
+
+- (NSString *)downloadFile:(NSString *)filePath
+                remoteFile:(OARemoteFile *)remoteFile
+                  listener:(id<OAOnDownloadFileListener>)listener
+{
+    [self checkRegistered];
+    
+//    OperationLog operationLog = new OperationLog("downloadFile " + file.getName(), DEBUG);
+    NSString *error;
+    NSString *type = remoteFile.type;
+    NSString *fileName = remoteFile.name;
+    
+    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+    NSString *deviceId = [self getDeviceId];
+    if (deviceId)
+        params[@"deviceid"] = deviceId;
+    params[@"accessToken"] = [self getAccessToken];
+    params[@"name"] = fileName;
+    params[@"type"] = type;
+    NSMutableString *sb = [NSMutableString stringWithString:DOWNLOAD_FILE_URL];
+    __block BOOL firstParam = YES;
+    [params enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        [sb appendString:[NSString stringWithFormat:@"%@%@=%@", firstParam ? @"?" : @"&", key, [obj stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
+        firstParam = NO;
+    }];
+    
+    const auto webClient = std::make_shared<OAWebClient>();
+    bool sucseess = webClient->downloadFile(QString::fromNSString(sb), QString::fromNSString(filePath));
+    if (!sucseess)
+        error = [NSString stringWithFormat:@"Could not download remote file:%@", fileName];
+    
+//    IProgress progress = new AbstractProgress() {
+//
+//        private int work = 0;
+//        private int progress = 0;
+//        private int deltaProgress = 0;
+//
+//        @Override
+//        public void startWork(int work) {
+//            if (listener != null) {
+//                this.work = work > 0 ? work : 1;
+//                listener.onFileDownloadStarted(type, fileName, work);
+//            }
+//        }
+//
+//        @Override
+//        public void progress(int deltaWork) {
+//            if (listener != null) {
+//                deltaProgress += deltaWork;
+//                if ((deltaProgress > (work / 100)) || ((progress + deltaProgress) >= work)) {
+//                    progress += deltaProgress;
+//                    listener.onFileDownloadProgress(type, fileName, progress, deltaProgress);
+//                    deltaProgress = 0;
+//                }
+//            }
+//        }
+//
+//        @Override
+//        public boolean isInterrupted() {
+//            if (listener != null) {
+//                return listener.isDownloadCancelled();
+//            }
+//            return super.isInterrupted();
+//        }
+//    };
+//    progress.startWork((int) (remoteFile.getFilesize() / 1024));
+    
+    if (listener)
+        [listener onFileDownloadDone:type fileName:fileName error:error];
+    //    operationLog.finishOperation();
+    return error;
+}
+
+- (void) generateBackupInfo:(NSDictionary<NSString *, OALocalFile *> *)localFiles
+          uniqueRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)uniqueRemoteFiles
+         deletedRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)deletedRemoteFiles
+                 onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete
+{
+    
+//    OperationLog operationLog = new OperationLog("generateBackupInfo", DEBUG, 200);
+//    operationLog.startOperation();
+    
+    OABackupInfoGenerationTask *task = [[OABackupInfoGenerationTask alloc] initWithLocalFiles:localFiles uniqueRemoteFiles:uniqueRemoteFiles deletedRemoteFiles:deletedRemoteFiles onComplete:onComplete];
+    [_executor addOperation:task];
+}
+
+- (BOOL) isBackupPreparing
+{
+    return _prepareBackupTask != nil;
+}
+
+- (void) addPrepareBackupListener:(id<OAOnPrepareBackupListener>)listener
+{
+    [_prepareBackupListeners addObject:listener];
+    if ([self isBackupPreparing])
+        [listener onBackupPreparing];
+}
+
+- (void) removePrepareBackupListener:(id<OAOnPrepareBackupListener>)listener
+{
+    [_prepareBackupListeners removeObject:listener];
+}
+
+- (BOOL) prepareBackup
+{
+    if ([self isBackupPreparing])
+        return NO;
+
+    OAPrepareBackupTask *prepareBackupTask = [[OAPrepareBackupTask alloc] initWithListener:self];
+    
+    _prepareBackupTask = prepareBackupTask;
+    [prepareBackupTask prepare];
+    return YES;
+}
+
+// MARK: OAOnPrepareBackupListener
+
+- (void)onBackupPreparing
+{
+    for (id<OAOnPrepareBackupListener> listener in _prepareBackupListeners)
+        [listener onBackupPreparing];
+}
+
+- (void)onBackupPrepared:(OAPrepareBackupResult *)backupResult
+{
+    _prepareBackupTask = nil;
+    for (id<OAOnPrepareBackupListener> listener in _prepareBackupListeners)
+        [listener onBackupPrepared:backupResult];
+}
 
 @end

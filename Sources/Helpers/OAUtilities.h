@@ -279,6 +279,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSString *) getLocalizedString:(NSString *)key;
 + (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list;
++ (NSString*) fileMD5:(NSString*)path;
 
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView;
 
@@ -288,6 +289,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom;
 
 + (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view;
++ (NSString *) formatWarnings:(NSArray<NSString *> *)warnings;
 
 + (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate;
 

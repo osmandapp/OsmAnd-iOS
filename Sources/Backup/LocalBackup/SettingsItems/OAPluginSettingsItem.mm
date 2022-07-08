@@ -12,6 +12,8 @@
 #import "OAFileSettingsItem.h"
 #import "OASuggestedDownloadsItem.h"
 
+#define APPROXIMATE_PLUGIN_SIZE_BYTES 1024
+
 @implementation OAPluginSettingsItem
 {
     NSArray<OASettingsItem *> *_pluginDependentItems;
@@ -49,6 +51,11 @@
 - (void)setPluginDependentItems:(NSArray<OASettingsItem *> *)pluginDependentItems
 {
     _pluginDependentItems = pluginDependentItems;
+}
+
+- (long)getEstimatedSize
+{
+    return APPROXIMATE_PLUGIN_SIZE_BYTES;
 }
 
 - (void)apply

@@ -81,6 +81,11 @@
     _additionalPrefs = json[@"prefs"];
 }
 
+- (long)getEstimatedSize
+{
+    return OAAppSettings.sharedManager.getRegisteredPreferences.count * APPROXIMATE_PREFERENCE_SIZE_BYTES;
+}
+
 - (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs
 {
     OsmAndAppInstance app = [OsmAndApp instance];

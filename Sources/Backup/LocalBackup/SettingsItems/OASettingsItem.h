@@ -13,6 +13,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define APPROXIMATE_PREFERENCE_SIZE_BYTES 60
+
 @class OAGPXDocument;
 
 @interface OASettingsItem : NSObject
@@ -42,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) applyFileName:(NSString *)fileName;
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error;
 - (NSDictionary *) getSettingsJson;
+- (long) getEstimatedSize;
 
 - (OASettingsItemReader *) getReader;
 - (OASettingsItemWriter *) getWriter;

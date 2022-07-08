@@ -7,10 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAItemExporter.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OABackupExporter : NSObject
+@protocol OANetworkExportProgressListener <NSObject>
+
+- (void) itemExportStarted:(NSString *)type fileName:(NSString *)fileName work:(int)work;
+
+- (void) updateItemProgress:(NSString *)type fileName:(NSString *)fileName progress:(int)progress;
+
+- (void) itemExportDone:(NSString *)type fileName:(NSString *)fileName;
+
+- (void) updateGeneralProgress:(int)uploadedItems uploadedKb:(int)uploadedKb;
+
+- (void) networkExportDone:(NSDictionary<NSString *, NSString *> *)errors;
+
+@end
+
+@interface OABackupExporter : OAItemExporter
 
 @end
 

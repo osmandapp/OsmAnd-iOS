@@ -378,6 +378,11 @@
     return EOASettingsItemTypeFile;
 }
 
+- (long)getEstimatedSize
+{
+    return self.size;
+}
+
 - (BOOL) exists
 {
     return [[NSFileManager defaultManager] fileExistsAtPath:self.filePath];

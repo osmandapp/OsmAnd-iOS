@@ -59,7 +59,8 @@
 - (BOOL) isRegistered;
 
 - (void) logout;
-- (void) updateOrderId:(id<OAOnUpdateSubscriptionListener>)listener;
+- (void) updateOrderId:(void(^)(NSInteger status, NSString *message, NSString *error))listener;
+- (void) checkSubscriptions:(void(^)(NSInteger status, NSString *message, NSString *error))listener;
 
 - (void) registerUser:(NSString *)email promoCode:(NSString *)promoCode login:(BOOL)login;
 - (void) registerDevice:(NSString *)token;

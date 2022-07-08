@@ -20,6 +20,8 @@
 #define kACCEPTED_TYPES_KEY @"acceptedTypes"
 #define kFILTER_BY_NAME @"filterByName"
 
+#define APPROXIMATE_POI_UI_FILTER_SIZE_BYTES 500
+
 @interface OAPoiUiFilterSettingsItem()
 
 @property (nonatomic) NSMutableArray<OAPOIUIFilter *> *items;
@@ -96,6 +98,11 @@
 - (BOOL) shouldReadOnCollecting
 {
     return YES;
+}
+
+- (long)getEstimatedItemSize:(id)item
+{
+    return APPROXIMATE_POI_UI_FILTER_SIZE_BYTES;
 }
 
 - (OASettingsItemReader *) getReader

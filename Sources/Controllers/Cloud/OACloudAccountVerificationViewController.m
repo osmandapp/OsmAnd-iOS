@@ -28,15 +28,17 @@
     long _lastTimeCodeSent;
     
     OABackupHelper *_backupHelper;
+    EOACloudScreenSourceType _sourceType;
 }
 
-- (instancetype) initWithEmail:(NSString *)email
+- (instancetype) initWithEmail:(NSString *)email sourceType:(EOACloudScreenSourceType)type
 {
     self = [super init];
     if (self)
     {
         _email = email;
         _lastTimeCodeSent = 0;
+        _sourceType = type;
         _backupHelper = OABackupHelper.sharedInstance;
     }
     return self;
@@ -236,7 +238,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (status == STATUS_SUCCESS)
         {
-            OACloudBackupViewController *vc = [[OACloudBackupViewController alloc] init];
+            OACloudBackupViewController *vc = [[OACloudBackupViewController alloc] initWithSourceType:_sourceType];
             [self.navigationController pushViewController:vc animated:YES];
         }
         else {

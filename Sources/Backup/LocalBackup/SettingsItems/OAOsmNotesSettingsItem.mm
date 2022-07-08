@@ -19,6 +19,8 @@
 #define kAUTHOR_KEY @"author"
 #define kACTION_KEY @"action"
 
+#define APPROXIMATE_OSM_NOTE_SIZE_BYTES 250
+
 @interface OAOsmNotesSettingsItem()
 
 @property (nonatomic) NSMutableArray<OAOsmNotePoint *> *items;
@@ -96,6 +98,11 @@
 - (BOOL)shouldShowDuplicates
 {
     return NO;
+}
+
+- (long)getEstimatedItemSize:(id)item
+{
+    return APPROXIMATE_OSM_NOTE_SIZE_BYTES;
 }
 
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error

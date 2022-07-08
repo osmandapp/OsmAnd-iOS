@@ -90,4 +90,19 @@
     return _items.count == 0;
 }
 
+- (long)getEstimatedSize
+{
+    long size = 0;
+    for (id item in _items)
+    {
+        size += [self getEstimatedItemSize:item];
+    }
+    return size;
+}
+
+- (long) getEstimatedItemSize:(id)item
+{
+    return 0; // override
+}
+
 @end

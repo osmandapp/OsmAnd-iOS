@@ -178,22 +178,28 @@
     }
 }
 
-//void exportSettings(@NonNull String key,
-//                           @NonNull List<SettingsItem> items,
-//                           @NonNull List<SettingsItem> itemsToDelete,
-//                           @Nullable BackupExportListener listener) throws IllegalStateException {
-//    if (!exportAsyncTasks.containsKey(key)) {
-//        ExportBackupTask exportTask = new ExportBackupTask(key, this, items, itemsToDelete, listener);
+- (void) exportSettings:(NSString *)key
+                  items:(NSArray<OASettingsItem *> *)items
+          itemsToDelete:(NSArray<OASettingsItem *> *)itemsToDelete
+               listener:(id<OABackupExportListener>)listener
+{
+    if (!_exportAsyncTasks[key])
+    {
+//        OAExportBackupTask *exportTask = new ExportBackupTask(key, this, items, itemsToDelete, listener);
 //        exportAsyncTasks.put(key, exportTask);
 //        exportTask.executeOnExecutor(getBackupHelper().getExecutor());
-//    } else {
-//        throw new IllegalStateException("Already exporting " + key);
-//    }
-//}
-//
-//public void exportSettings(@NonNull String key, @Nullable BackupExportListener listener,
-//                           @NonNull SettingsItem... items) throws IllegalStateException {
-//    exportSettings(key, new ArrayList<>(Arrays.asList(items)), Collections.emptyList(), listener);
-//}
+    }
+    else
+    {
+        @throw [NSException exceptionWithName:@"IllegalStateException" reason:[@"Already exporting " stringByAppendingString:key] userInfo:nil];
+    }
+}
+
+- (void) exportSettings:(NSString *)key
+               listener:(id<OABackupExportListener>)listener
+                  items:(NSArray<OASettingsItem *> *)items
+{
+    [self exportSettings:key items:items itemsToDelete:@[] listener:listener];
+}
 
 @end

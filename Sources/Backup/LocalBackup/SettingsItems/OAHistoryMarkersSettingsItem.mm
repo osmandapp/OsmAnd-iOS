@@ -11,6 +11,8 @@
 #import "OAHistoryHelper.h"
 #import "Localization.h"
 
+#define APPROXIMATE_HISTORY_MARKER_SIZE_BYTES 380
+
 @interface OAHistoryMarkersSettingsItem()
 
 @property (nonatomic) NSMutableArray *items;
@@ -96,6 +98,11 @@
         }
     }
     return NO;
+}
+
+- (long)getEstimatedItemSize:(OAHistoryItem *)item
+{
+    return APPROXIMATE_HISTORY_MARKER_SIZE_BYTES;
 }
 
 - (OAHistoryItem *)renameItem:(OAHistoryItem *)item

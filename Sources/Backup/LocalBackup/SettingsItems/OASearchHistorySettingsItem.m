@@ -11,6 +11,8 @@
 #import "OAPointDescription.h"
 #import "Localization.h"
 
+#define APPROXIMATE_SEARCH_HISTORY_SIZE_BYTES 320
+
 @interface OASearchHistorySettingsItem ()
 
 @property (nonatomic) NSMutableArray<OAHistoryItem *> *items;
@@ -57,6 +59,11 @@
 - (BOOL) shouldReadOnCollecting
 {
     return YES;
+}
+
+- (long)getEstimatedItemSize:(id)item
+{
+    return APPROXIMATE_SEARCH_HISTORY_SIZE_BYTES;
 }
 
 - (void)apply

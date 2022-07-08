@@ -18,6 +18,8 @@
 
 #include <OsmAndCore/IFavoriteLocation.h>
 
+#define APPROXIMATE_FAVOURITE_SIZE_BYTES 470
+
 @interface OAFavoritesSettingsItem()
 
 @property (nonatomic) NSMutableArray<OAFavoriteGroup *> *items;
@@ -127,6 +129,11 @@
         [app saveFavoritesToPermamentStorage];
         [OAFavoritesHelper loadFavorites];
     }
+}
+
+- (long)getEstimatedItemSize:(OAFavoriteGroup *)item
+{
+    return item.points.count * APPROXIMATE_FAVOURITE_SIZE_BYTES;
 }
 
 - (OAFavoriteGroup *) getGroup:(NSString *)nameId

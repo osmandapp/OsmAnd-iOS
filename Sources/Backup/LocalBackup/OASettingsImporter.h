@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "OASettingsHelper.h"
 
-#define kTmpProfileFolder @"tmpProfileData"
-
 typedef void(^ OAOnImportComplete)(BOOL succeed, NSArray<OASettingsItem *> *items);
 typedef void(^ OAOnSettingsCollected)(BOOL succeed, BOOL empty, NSArray<OASettingsItem *> *items);
 typedef void(^ OAOnDuplicatesChecked)(NSArray<OASettingsItem *> *duplicates, NSArray<OASettingsItem *> *items);

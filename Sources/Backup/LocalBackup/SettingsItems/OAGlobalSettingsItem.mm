@@ -34,6 +34,11 @@
     return YES;
 }
 
+- (long)getEstimatedSize
+{
+    return OAAppSettings.sharedManager.getGlobalPreferences.count * APPROXIMATE_PREFERENCE_SIZE_BYTES;
+}
+
 - (OASettingsItemReader *)getReader
 {
     return [[OAGlobalSettingsItemReader alloc] initWithItem:self];

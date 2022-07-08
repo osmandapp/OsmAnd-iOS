@@ -41,6 +41,7 @@
 #include <OsmAndCore/ResourcesManager.h>
 
 #define kVersion 1
+#define kTmpProfileFolder @"tmpProfileData"
 
 @interface OAImportItemsAsyncTask()
 

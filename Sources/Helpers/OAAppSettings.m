@@ -4268,6 +4268,11 @@
     return _registeredPreferences;
 }
 
+- (NSMapTable<NSString *, OACommonPreference *> *)getGlobalPreferences
+{
+    return _globalPreferences;
+}
+
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key
 {
     return [_registeredPreferences objectForKey:key];

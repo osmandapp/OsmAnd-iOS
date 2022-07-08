@@ -18,6 +18,8 @@
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
+#define APPROXIMATE_MAP_SOURCES_SIZE_BYTES 450
+
 @interface OAMapSourcesSettingsItem()
 
 @property (nonatomic) NSArray<OATileSource *> *items;
@@ -171,6 +173,11 @@
             return YES;
     }
     return NO;
+}
+
+- (long)getEstimatedItemSize:(id)item
+{
+    return APPROXIMATE_MAP_SOURCES_SIZE_BYTES;
 }
 
 - (OASettingsItemReader *) getReader

@@ -1764,6 +1764,7 @@ static OASubscriptionState *EXPIRED;
             @"deviceid" : deviceId,
             @"accessToken" : accessToken
         };
+        __block BOOL alreadyFinished = NO;
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/userdata/user-validate-sub" params:params post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
             if (((NSHTTPURLResponse *)response).statusCode == 200 && data)
@@ -1779,11 +1780,43 @@ static OASubscriptionState *EXPIRED;
                     NSLog(@"Subscription validation json error");
                 }
             }
+            alreadyFinished = YES;
             dispatch_semaphore_signal(semaphore);
         }];
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        if (!alreadyFinished)
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     }
     return orderId;
+}
+
+- (BOOL) checkBackupSubscriptions
+{
+    BOOL subscriptionActive = NO;
+    NSString *promocode = [_settings.backupPromocode get];
+    if (promocode.length > 0)
+    {
+        subscriptionActive = [self checkSubscriptionByOrderId:promocode];
+    }
+    if (!subscriptionActive)
+    {
+        NSString *orderId = [self getOrderIdByDeviceIdAndToken];
+        if (orderId.length > 0)
+        {
+            subscriptionActive = [self checkSubscriptionByOrderId:orderId];
+        }
+    }
+    return subscriptionActive;
+}
+
+- (BOOL) checkSubscriptionByOrderId:(NSString *)orderId
+{
+    NSArray *entry = [self getSubscriptionStateByOrderId:orderId];
+    if (entry != nil)
+    {
+        OASubscriptionStateHolder *stateHolder = entry.lastObject;
+        return stateHolder.state.isActive;
+    }
+    return NO;
 }
 
 - (void) onBackupPurchaseRequested

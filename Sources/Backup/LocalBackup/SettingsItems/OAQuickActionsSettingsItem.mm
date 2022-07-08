@@ -18,6 +18,8 @@
 #import "OASwitchableAction.h"
 #import "OASwitchProfileAction.h"
 
+#define APPROXIMATE_QUICK_ACTION_SIZE_BYTES 135
+
 @interface OAQuickActionsSettingsItem()
 
 @property (nonatomic) NSMutableArray<OAQuickAction *> *items;
@@ -96,6 +98,11 @@
 - (BOOL) shouldReadOnCollecting
 {
     return YES;
+}
+
+- (long)getEstimatedItemSize:(id)item
+{
+    return APPROXIMATE_QUICK_ACTION_SIZE_BYTES;
 }
 
 - (NSString *) name

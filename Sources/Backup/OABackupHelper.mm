@@ -297,23 +297,24 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     [_executor addOperation:[[OARegisterDeviceCommand alloc] initWithToken:token]];
 }
 
-- (void) checkSubscriptions:(id<OAOnUpdateSubscriptionListener>)listener
+- (void) checkSubscriptions:(void(^)(NSInteger status, NSString *message, NSString *error))listener
 {
-    BOOL subscriptionActive = [OAIAPHelper isSubscribedToOsmAndPro];
-    
-    
+    BOOL subscriptionActive = NO;
 //        OperationLog operationLog = new OperationLog("checkSubscriptions", DEBUG);
-//        String error = "";
-//        try {
-//            subscriptionActive = purchaseHelper.checkBackupSubscriptions();
-//        } catch (Exception e) {
-//            error = e.getMessage();
-//        }
+    NSString *error = @"";
+    try
+    {
+        subscriptionActive = [OAIAPHelper.sharedInstance checkBackupSubscriptions];;
+    }
+    catch (NSException *e)
+    {
+        error = e.reason;
+    }
 //        operationLog.finishOperation(subscriptionActive + " " + error);
     if (subscriptionActive)
     {
         if (listener)
-            [listener onUpdateSubscription:STATUS_SUCCESS message:@"Subscriptions have been checked successfully" error:nil];
+            listener(STATUS_SUCCESS, @"Subscriptions have been checked successfully", nil);
     }
     else
     {
@@ -321,7 +322,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     }
 }
 
-- (void) updateOrderId:(id<OAOnUpdateSubscriptionListener>)listener
+- (void) updateOrderId:(void(^)(NSInteger status, NSString *message, NSString *error))listener
 {
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"email"] = [self getEmail];
@@ -333,7 +334,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         {
             NSString *message = @"Order id is empty";
             NSString *error = [NSString stringWithFormat:@"{\"error\":{\"errorCode\":%d,\"message\":\"%@\"}}", STATUS_NO_ORDER_ID_ERROR, message];
-            [listener onUpdateSubscription:STATUS_NO_ORDER_ID_ERROR message:message error:error];
+            listener(STATUS_NO_ORDER_ID_ERROR, message, error);
         }
         return;
     }
@@ -386,7 +387,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             status = STATUS_EMPTY_RESPONSE_ERROR;
         }
         if (listener)
-            [listener onUpdateSubscription:status message:message error:err];
+            listener(status, message, err);
 //        operationLog.finishOperation(status + " " + message);
     }];
 }

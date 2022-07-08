@@ -13,6 +13,8 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 
+#define APPROXIMATE_MARKER_SIZE_BYTES 240
+
 @interface OAMarkersSettingsItem()
 
 @property (nonatomic) NSMutableArray *items;
@@ -121,6 +123,11 @@
             return renamedMarker;
     }
     return nil;
+}
+
+- (long)getEstimatedItemSize:(id)item
+{
+    return APPROXIMATE_MARKER_SIZE_BYTES;
 }
 
 - (OASettingsItemReader *) getReader

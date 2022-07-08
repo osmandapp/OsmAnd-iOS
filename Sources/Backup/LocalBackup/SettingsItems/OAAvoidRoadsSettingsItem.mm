@@ -14,6 +14,8 @@
 #import "OARoutingHelper.h"
 #import "OASettingsItemReader.h"
 
+#define APPROXIMATE_AVOID_ROAD_SIZE_BYTES 185
+
 @interface OAAvoidRoadsSettingsItem()
 
 @property (nonatomic) NSMutableArray<OAAvoidRoadInfo *> *items;
@@ -91,6 +93,11 @@
 - (OASettingsItemReader *) getReader
 {
     return [self getJsonReader];
+}
+
+- (long)getEstimatedItemSize:(OAAvoidRoadInfo *)item
+{
+    return APPROXIMATE_AVOID_ROAD_SIZE_BYTES;
 }
 
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error

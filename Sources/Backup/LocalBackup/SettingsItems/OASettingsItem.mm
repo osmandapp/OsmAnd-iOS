@@ -182,6 +182,11 @@
     // override
 }
 
+- (long) getEstimatedSize
+{
+    return -1; // override
+}
+
 - (OASettingsItemReader *) getJsonReader
 {
     return [[OASettingsItemReader alloc] initWithItem:self];

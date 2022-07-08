@@ -16,6 +16,7 @@
 #import "OAPluginSettingsItem.h"
 #import "OARendererRegistry.h"
 #import "Localization.h"
+#import "OAExportAsyncTask.h"
 #import "OAImportSettingsViewController.h"
 #import "OAExportSettingsCategory.h"
 #import "OASettingsCategoryItems.h"

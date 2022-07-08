@@ -211,7 +211,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (status == STATUS_SUCCESS) {
             self.lastTimeCodeSent = NSDate.date.timeIntervalSince1970;
-            OACloudAccountVerificationViewController *verificationVc = [[OACloudAccountVerificationViewController alloc] initWithEmail:self.getTextFieldValue];
+            OACloudAccountVerificationViewController *verificationVc = [[OACloudAccountVerificationViewController alloc] initWithEmail:self.getTextFieldValue sourceType:EOACloudScreenSourceTypeSignUp];
             [self.navigationController pushViewController:verificationVc animated:YES];
         }
         else

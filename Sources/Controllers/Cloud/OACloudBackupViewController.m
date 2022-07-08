@@ -22,8 +22,16 @@
 #import "OATitleDescrRightIconTableViewCell.h"
 #import "OAMainSettingsViewController.h"
 #import "OARestoreBackupViewController.h"
+#import "OANetworkSettingsHelper.h"
+#import "OAPrepareBackupResult.h"
+#import "OABackupHelper.h"
+#import "OABackupInfo.h"
+#import "OABackupStatus.h"
+#import "OAAppSettings.h"
+#import "OAChoosePlanHelper.h"
+#import "OAOsmAndFormatter.h"
 
-@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OABackupExportListener, OAImportListener, OAOnPrepareBackupListener>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UILabel *navBarTitle;
@@ -36,26 +44,51 @@
 @implementation OACloudBackupViewController
 {
     NSArray<NSDictionary *> *_data;
+    OANetworkSettingsHelper *_settingsHelper;
+    OABackupHelper *_backupHelper;
+    
+    EOACloudScreenSourceType _sourceType;
+    OAPrepareBackupResult *_backup;
+    OABackupInfo *_info;
+    OABackupStatus *_status;
+    NSString *_error;
+}
+
+- (instancetype) initWithSourceType:(EOACloudScreenSourceType)type
+{
+    self = [self init];
+    if (self) {
+        _sourceType = type;
+    }
+    return self;
 }
 
 - (instancetype)init
 {
     self = [super initWithNibName:@"OACloudBackupViewController" bundle:nil];
+    if (self) {
+        _sourceType = EOACloudScreenSourceTypeDirect;
+    }
     return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [OAIAPHelper.sharedInstance checkBackupPurchase];
+    _settingsHelper = OANetworkSettingsHelper.sharedInstance;
+    _backupHelper = OABackupHelper.sharedInstance;
+    [_settingsHelper updateExportListener:self];
+    [_settingsHelper updateImportListener:self];
+    [_backupHelper addPrepareBackupListener:self];
+    if (!_settingsHelper.isBackupExporting)
+        [_backupHelper prepareBackup];
     [self generateData];
     
     self.tblView.delegate = self;
     self.tblView.dataSource = self;
     self.tblView.estimatedRowHeight = 44.;
     self.tblView.rowHeight = UITableViewAutomaticDimension;
-    
-    [OAIAPHelper.sharedInstance checkBackupPurchase];
-    [OABackupHelper.sharedInstance prepareBackup];
 }
 
 - (void)applyLocalization
@@ -67,103 +100,212 @@
 {
     NSMutableArray<NSDictionary *> *result = [NSMutableArray array];
     
-    // No backup case
-    NSArray <NSDictionary *> *noBackupRows = @[
-        @{
-            @"cellId": OALargeImageTitleDescrTableViewCell.getCellIdentifier,
-            @"name": @"noOnlineBackup",
-            @"title": OALocalizedString(@"cloud_no_online_backup"),
-            @"description": OALocalizedString(@"cloud_no_online_backup_descr"),
-            @"image": @"ic_custom_cloud_neutral_face_colored"
-        },
-        @{
-            @"cellId": OAFilledButtonCell.getCellIdentifier,
-            @"name": @"setUpBackup",
-            @"title": OALocalizedString(@"cloud_set_up_backup")
+    if (!_status)
+        _status = [OABackupStatus getBackupStatus:_backup];
+    
+    BOOL backupSaved = _backup.remoteFiles.count != 0;
+    BOOL showIntroductionItem = _info != nil && ((_sourceType == EOACloudScreenSourceTypeSignUp && !backupSaved)
+                    || (_sourceType == EOACloudScreenSourceTypeSignIn && (backupSaved || _backup.localFiles.count > 0)));
+    
+    if (showIntroductionItem)
+    {
+        if (_sourceType == EOACloudScreenSourceTypeSignIn)
+        {
+            // Existing backup case
+            NSMutableArray<NSDictionary *> *existingBackupRows = [NSMutableArray array];
+            [existingBackupRows addObject:@{
+                @"cellId": OALargeImageTitleDescrTableViewCell.getCellIdentifier,
+                @"name": @"existingOnlineBackup",
+                @"title": OALocalizedString(@"cloud_welcome_back"),
+                @"description": OALocalizedString(@"cloud_description"),
+                @"image": @"ic_action_cloud_smile_face_colored"
+            }];
+            BOOL showBothButtons = [self shouldShowBackupButton] && [self shouldShowRestoreButton];
+            if (showBothButtons)
+            {
+                [existingBackupRows addObject:@{
+                    @"cellId": OATwoFilledButtonsTableViewCell.getCellIdentifier,
+                    @"name": @"backupAndRestore",
+                    @"topTitle": OALocalizedString(@"cloud_restore_now"),
+                    @"bottomTitle": OALocalizedString(@"cloud_set_up_backup")
+                }];
+            }
+            if ([self shouldShowRestoreButton] && !showBothButtons)
+            {
+                [existingBackupRows addObject:@{
+                    @"cellId": OAFilledButtonCell.getCellIdentifier,
+                    @"name": @"onRestoreButtonPressed",
+                    @"title": OALocalizedString(@"cloud_restore_now")
+                }];
+            }
+            if ([self shouldShowBackupButton] && !showBothButtons)
+            {
+                [existingBackupRows addObject:@{
+                    @"cellId": OAFilledButtonCell.getCellIdentifier,
+                    @"name": @"onSetUpBackupButtonPressed",
+                    @"title": OALocalizedString(@"cloud_set_up_backup")
+                }];
+            }
+            NSDictionary *backupSection = @{
+                @"sectionHeader": OALocalizedString(@"cloud_backup"),
+                @"rows": existingBackupRows
+            };
+            [result addObject:backupSection];
         }
-    ];
-    
-    // Existing backup case
-    NSArray <NSDictionary *> *existingBackupRows = @[
-        @{
-            @"cellId": OALargeImageTitleDescrTableViewCell.getCellIdentifier,
-            @"name": @"existingOnlineBackup",
-            @"title": OALocalizedString(@"cloud_welcome_back"),
-            @"description": OALocalizedString(@"cloud_description"),
-            @"image": @"ic_action_cloud_smile_face_colored"
-        },
-        @{
-            @"cellId": OATwoFilledButtonsTableViewCell.getCellIdentifier,
-            @"name": @"backupAndRestore",
-            @"topTitle": OALocalizedString(@"cloud_restore_now"),
-            @"bottomTitle": OALocalizedString(@"cloud_set_up_backup")
+        else if (_sourceType == EOACloudScreenSourceTypeSignUp)
+        {
+            // No backup case
+            NSMutableArray<NSDictionary *> *noBackupRows = [NSMutableArray array];
+            [noBackupRows addObject:@{
+                @"cellId": OALargeImageTitleDescrTableViewCell.getCellIdentifier,
+                @"name": @"noOnlineBackup",
+                @"title": OALocalizedString(@"cloud_no_online_backup"),
+                @"description": OALocalizedString(@"cloud_no_online_backup_descr"),
+                @"image": @"ic_custom_cloud_neutral_face_colored"
+            }];
+            
+            if ([self shouldShowBackupButton])
+            {
+                [noBackupRows addObject:@{
+                    @"cellId": OAFilledButtonCell.getCellIdentifier,
+                    @"name": @"onSetUpBackupButtonPressed",
+                    @"title": OALocalizedString(@"cloud_set_up_backup")
+                }];
+            }
+            NSDictionary *backupSection = @{
+                @"sectionHeader": OALocalizedString(@"cloud_backup"),
+                @"rows": noBackupRows
+            };
+            [result addObject:backupSection];
         }
-    ];
-    
-    // Last backup cell
-    NSDictionary *lastBackupCell = @{
-        @"cellId": OAMultiIconTextDescCell.getCellIdentifier,
-        @"name": @"lastBackup",
-        @"title": OALocalizedString(@"cloud_last_backup"),
-        @"description": @"2 days ago", // TODO: insert correct relative last backup time
-        @"image": @"ic_custom_cloud_done"
+    }
+    else
+    {
+        OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
+        if (exportTask)
+        {
+            // TODO: show progress from HeaderStatusViewHolder.java
+        }
+        else
+        {
+            NSMutableArray<NSDictionary *> *backupRows = [NSMutableArray array];
+            NSString *backupTime = [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
+            NSDictionary *lastBackupCell = @{
+                @"cellId": OAMultiIconTextDescCell.getCellIdentifier,
+                @"name": @"lastBackup",
+                @"title": _status.statusTitle,
+                @"description": backupTime,
+                @"image": _status.statusIconName
+            };
+            [backupRows addObject:lastBackupCell];
+            
+            if (_status.warningTitle != nil || _error.length > 0)
+            {
+                BOOL hasWarningStatus = _status.warningTitle != nil;
+                BOOL hasDescr = _error || _status.warningDescription;
+                NSString *descr = hasDescr && hasWarningStatus ? _status.warningDescription : _error;
+                NSDictionary *makeBackupWarningCell = @{
+                    @"cellId": OATitleDescrRightIconTableViewCell.getCellIdentifier,
+                    @"name": @"makeBackupWarning",
+                    @"title": hasWarningStatus ? _status.warningTitle : OALocalizedString(@"osm_failed_uploads"),
+                    @"description": descr ? descr : @"",
+                    @"imageColor": UIColorFromRGB(color_support_green), // TODO: add icon color to backupStatus
+                    @"image": _status.warningIconName
+                };
+                [backupRows addObject:makeBackupWarningCell];
+            }
+            
+//            if (info != null && uploadItemsVisible) {
+//                items.addAll(info.itemsToUpload);
+//                items.addAll(info.itemsToDelete);
+//                items.addAll(info.filteredFilesToMerge);
+//            }
+            
+            BOOL actionButtonHidden = _status == OABackupStatus.BACKUP_COMPLETE ||
+                (_status == OABackupStatus.CONFLICTS
+                 && (_info == nil || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0)));
+            if (!actionButtonHidden)
+            {
+                if (_settingsHelper.isBackupExporting)
+                {
+                    NSDictionary *cancellCell = @{
+                        @"cellId": OAButtonRightIconCell.getCellIdentifier,
+                        @"name": @"cancellBackupPressed",
+                        @"title": OALocalizedString(@"shared_string_cancel"),
+                        @"image": @"ic_custom_cancel"
+                    };
+                    [backupRows addObject:cancellCell];
+                }
+                else if (_status == OABackupStatus.MAKE_BACKUP || _status == OABackupStatus.CONFLICTS)
+                {
+                    NSDictionary *backupNowCell = @{
+                        @"cellId": OAButtonRightIconCell.getCellIdentifier,
+                        @"name": @"onSetUpBackupButtonPressed",
+                        @"title": OALocalizedString(@"cloud_backup_now"),
+                        @"image": @"ic_custom_cloud_upload"
+                    };
+                    [backupRows addObject:backupNowCell];
+                }
+                else if (_status == OABackupStatus.NO_INTERNET_CONNECTION || _status == OABackupStatus.ERROR)
+                {
+                    NSDictionary *retryCell = @{
+                        @"cellId": OAButtonRightIconCell.getCellIdentifier,
+                        @"name": @"onRetryPressed",
+                        @"title": _status.actionTitle,
+                        @"image": @"ic_custom_reset"
+                    };
+                    [backupRows addObject:retryCell];
+                }
+                else if (_status == OABackupStatus.SUBSCRIPTION_EXPIRED)
+                {
+                    NSDictionary *purchaseCell = @{
+                        @"cellId": OAButtonRightIconCell.getCellIdentifier,
+                        @"name": @"onSubscriptionExpired",
+                        @"title": _status.actionTitle,
+                        @"image": @"ic_custom_osmand_pro_logo_colored"
+                    };
+                    [backupRows addObject:purchaseCell];
+                }
+            }
+            
+            NSDictionary *backupSection = @{
+                @"sectionHeader": OALocalizedString(@"cloud_backup"),
+                @"rows": backupRows
+            };
+            [result addObject:backupSection];
+        }
+    }
+    NSDictionary *restoreSection = @{
+        @"sectionHeader" : OALocalizedString(@"restore"),
+        @"sectionFooter" : OALocalizedString(@"restore_backup_descr"),
+        @"rows" : @[@{
+            @"cellId": OAButtonRightIconCell.getCellIdentifier,
+            @"name": @"onRestoreButtonPressed",
+            @"title": OALocalizedString(@"restore_data"),
+            @"image": @"ic_custom_restore"
+        }]
     };
-    // Backup now cell
-    NSDictionary *backupNowCell = @{
-        @"cellId": OAButtonRightIconCell.getCellIdentifier,
-        @"name": @"backupNow",
-        @"title": OALocalizedString(@"cloud_backup_now"),
-        @"image": @"ic_custom_cloud_upload"
-    };
-    // Make backup warning cell
-    NSDictionary *makeBackupWarningCell = @{
-        @"cellId": OATitleDescrRightIconTableViewCell.getCellIdentifier,
-        @"name": @"makeBackupWarning",
-        @"title": OALocalizedString(@"cloud_make_backup"),
-        @"description": OALocalizedString(@"cloud_make_backup_descr"),
-        @"imageColor": UIColorFromRGB(color_support_green),
-        @"image": @"ic_custom_alert_circle"
-    };
-    // No Internet warning cell
-    NSDictionary *noInternetWarningCell = @{
-        @"cellId": OATitleDescrRightIconTableViewCell.getCellIdentifier,
-        @"name": @"noInternetWarning",
-        @"title": OALocalizedString(@"no_inet_connection"),
-        @"description": OALocalizedString(@"osm_upload_no_internet"),
-        @"imageColor": UIColorFromRGB(color_support_red),
-        @"image": @"ic_custom_wifi_off"
-    };
-    // Conflicts warning cell
-    NSDictionary *conflictsWarningCell = @{
-        @"cellId": OATitleDescrRightIconTableViewCell.getCellIdentifier,
-        @"name": @"conflictsWarning",
-        @"title": OALocalizedString(@"cloud_conflicts"),
-        @"description": OALocalizedString(@"cloud_conflicts_descr"),
-        @"imageColor": UIColorFromRGB(color_support_red),
-        @"image": @"ic_custom_alert"
-    };
-    // Retry button cell
-    NSDictionary *retryCell = @{
-        @"cellId": OAButtonRightIconCell.getCellIdentifier,
-        @"name": @"retry",
-        @"title": OALocalizedString(@"shared_string_retry"),
-        @"image": @"ic_custom_reset"
-    };
-    // View conflicts cell
-    NSDictionary *viewConflictsCell = @{
-        @"cellId": OAIconTitleValueCell.getCellIdentifier,
-        @"name": @"viewConflicts",
-        @"title": OALocalizedString(@"cloud_view_conflicts"),
-        @"value": @"13" // TODO: insert conflicts count
-    };
-    
-    NSDictionary *backupSection = @{
-        @"sectionHeader": OALocalizedString(@"cloud_backup"),
-        @"rows": existingBackupRows
-    };
-    [result addObject:backupSection];
+    [result addObject:restoreSection];
+
+//    // View conflicts cell
+//    NSDictionary *viewConflictsCell = @{
+//        @"cellId": OAIconTitleValueCell.getCellIdentifier,
+//        @"name": @"viewConflicts",
+//        @"title": OALocalizedString(@"cloud_view_conflicts"),
+//        @"value": @"13" // TODO: insert conflicts count
+//    };
     [result addObject:[self getLocalBackupSectionData]];
     _data = result;
+}
+
+- (BOOL) shouldShowBackupButton
+{
+    return _backup.localFiles.count > 0;
+}
+
+- (BOOL) shouldShowRestoreButton
+{
+    return _backup.remoteFiles.count > 0;
 }
 
 - (IBAction)onBackButtonPressed
@@ -186,7 +328,34 @@
 
 - (void)onSetUpBackupButtonPressed
 {
-    
+    @try
+    {
+        NSArray<OASettingsItem *> *items = _info.itemsToUpload;
+        if (items.count > 0 || _info.filteredFilesToDelete.count > 0)
+        {
+//            [_settingsHelper exportSettings:kBackupItemsKey items:items itemsToDelete:_info.itemsToDelete listener:self];
+        }
+    }
+    @catch (NSException *e)
+    {
+        NSLog(@"Backup generation error: %@", e.reason);
+    }
+}
+
+- (void)onRetyPressed
+{
+    [_backupHelper prepareBackup];
+}
+
+- (void) cancellBackupPressed
+{
+    [_settingsHelper cancelImport];
+    [_settingsHelper cancelExport];
+}
+
+- (void) onSubscriptionExpired
+{
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:self.navigationController];
 }
 
 - (void)onRestoreButtonPressed
@@ -267,7 +436,7 @@
         }
         [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-        [cell.button addTarget:self action:@selector(onSetUpBackupButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        [cell.button addTarget:self action:NSSelectorFromString(item[@"name"]) forControlEvents:UIControlEventTouchUpInside];
         return cell;
     }
     else if ([cellId isEqualToString:OATwoFilledButtonsTableViewCell.getCellIdentifier])
@@ -310,8 +479,9 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonRightIconCell *)[nib objectAtIndex:0];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
         }
+        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+        [cell.button addTarget:self action:NSSelectorFromString(item[@"name"]) forControlEvents:UIControlEventTouchUpInside];
         [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"image"]]];
         return cell;
@@ -380,6 +550,73 @@
         
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+// MARK: OABackupExportListener
+
+- (void)onBackupExportFinished:(nonnull NSString *)error
+{
+    
+}
+
+- (void)onBackupExportItemFinished:(nonnull NSString *)type fileName:(nonnull NSString *)fileName
+{
+    
+}
+
+- (void)onBackupExportItemProgress:(nonnull NSString *)type fileName:(nonnull NSString *)fileName value:(int)value
+{
+    
+}
+
+- (void)onBackupExportItemStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(int)work
+{
+    
+}
+
+- (void)onBackupExportProgressUpdate:(int)value
+{
+    
+}
+
+- (void)onBackupExportStarted
+{
+    
+}
+
+// MARK: OAImportListener
+
+- (void)onImportFinished:(BOOL)succeed needRestart:(BOOL)needRestart items:(NSArray<OASettingsItem *> *)items {
+    
+}
+
+- (void)onImportItemFinished:(NSString *)type fileName:(NSString *)fileName {
+    
+}
+
+- (void)onImportItemProgress:(NSString *)type fileName:(NSString *)fileName value:(int)value {
+    
+}
+
+- (void)onImportItemStarted:(NSString *)type fileName:(NSString *)fileName work:(int)work {
+    
+}
+
+// MARK: OAOnPrepareBackupListener
+
+- (void)onBackupPrepared:(nonnull OAPrepareBackupResult *)backupResult
+{
+    _backup = backupResult;
+    _info = _backup.backupInfo;
+    _status = [OABackupStatus getBackupStatus:_backup];
+    _error = _backup.error;
+    [self generateData];
+    [self.tblView reloadData];
+}
+
+- (void)onBackupPreparing
+{
+    // Show progress bar
 }
 
 @end

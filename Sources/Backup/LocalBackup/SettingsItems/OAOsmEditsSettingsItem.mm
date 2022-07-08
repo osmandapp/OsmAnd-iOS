@@ -27,6 +27,8 @@
 #define kTAGS_KEY @"tags"
 #define kENTITY_KEY @"entity"
 
+#define APPROXIMATE_OSM_EDIT_SIZE_BYTES 500
+
 @interface OAOsmEditsSettingsItem()
 
 @property (nonatomic) NSMutableArray<OAOpenStreetMapPoint *> *items;
@@ -100,6 +102,11 @@
 - (BOOL) shouldReadOnCollecting
 {
     return YES;
+}
+
+- (long)getEstimatedItemSize:(id)item
+{
+    return APPROXIMATE_OSM_EDIT_SIZE_BYTES;
 }
 
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error

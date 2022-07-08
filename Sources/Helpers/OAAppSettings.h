@@ -961,6 +961,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (void)setProfilePreference:(NSString *)value key:(NSString *)key;
 
 - (NSMapTable<NSString *, OACommonPreference *> *)getRegisteredPreferences;
+- (NSMapTable<NSString *, OACommonPreference *> *)getGlobalPreferences;
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key;
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key;
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;

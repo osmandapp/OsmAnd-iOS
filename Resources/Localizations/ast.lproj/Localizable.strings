@@ -610,7 +610,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "Hide";
+"poi_hide" = "Anubrir";
 
 // My Places
 "favorites" = "Favoritos";
@@ -771,7 +771,7 @@
 // Intro
 "intro_skip" = "Saltar";
 "intro_download" = "Download\nmap";
-"intro_next" = "Next";
+"intro_next" = "Siguiente";
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global offline maps";
 "intro_placeholder" = "enter the name of your region";
@@ -1198,7 +1198,7 @@
 "res_cancel_inst_q" = "You're going to cancel %@ installation.";
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
-"res_details" = "Detalles";
+"res_details" = "Details";
 "res_type" = "Type";
 "res_unknown" = "Unknown";
 "res_size" = "Size";
@@ -1277,7 +1277,7 @@
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "Contact info";
-"osm_str_name" = "Nome de les cais";
+"osm_str_name" = "Street name";
 "osm_building_num" = "Building number";
 "osm_phone" = "Phone";
 "osm_website" = "Sitiu web";
@@ -2589,3 +2589,10 @@
 "purchases_feature_desc_pro_widgets" = "Get access to OsmAnd Pro features: Route coloring and more.";
 "continue_with" = "Siguir con %@";
 "nautical_depth" = "Nautical depth";
+"on_hold" = "On hold";
+"shared_string_data" = "Datos";
+"restore_from_osmand_cloud" = "Restore from OsmAnd Cloud";
+"in_grace_period" = "In grace period";
+"shared_string_delete_all" = "Desaniciar too";
+"shared_string_undefined" = "Ensin definir";
+"paused" = "En posa";

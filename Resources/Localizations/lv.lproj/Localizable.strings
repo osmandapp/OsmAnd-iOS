@@ -41,7 +41,7 @@
 "transport_routes" = "Maršruti";
 "transport_nearby_routes_within" = "Tuvākie iekļaujošie maršruti";
 "transport_nearby_routes" = "Iekļaujošie";
-"transport_stop" = "Apturēt";
+"transport_stop" = "Pietura";
 "cancel_navigation" = "Apturēt navigāciju";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Kārtot pēc attāluma";
@@ -413,7 +413,7 @@
 "units_m_s" = "m/s";
 "tones" = "tones";
 "nothing_found" = "Nothing found: %@";
-"nothing_found_empty" = "Nekas netika atrasts";
+"nothing_found_empty" = "Neko neatrada";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Izvēlieties ielu";
 "shared_string_in_name" = "%@";
@@ -582,7 +582,7 @@
 "poi_hide" = "Paslēpt";
 
 // My Places
-"favorites" = "Mana izlase";
+"favorites" = "Izlase";
 "tracks" = "Treki";
 "personal_category_name" = "Personal";
 "visible" = "Redzams";
@@ -728,7 +728,7 @@
 // Intro
 "intro_skip" = "Izlaist";
 "intro_download" = "Download\nmap";
-"intro_next" = "Nākošais";
+"intro_next" = "Tālāk";
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global offline maps";
 "intro_placeholder" = "enter the name of your region";
@@ -740,7 +740,7 @@
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
-"sett_show" = "Rādīt";
+"sett_show" = "Parādīt";
 "sett_notshow" = "Don't show";
 "sett_deg180" = "Degrees 180";
 "sett_deg360" = "Degrees 360";
@@ -1452,7 +1452,7 @@
 "modify_edit_short" = "Rediģēt POI";
 "open_osm_note" = "Atvērt OSM piezīmi";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Apvienot";
+"osm_alert_title" = "Iesniegt";
 "osm_alert_message" = "Ziņa";
 "osm_alert_button_ok" = "Izveidot piezīmi";
 "modify_poi" = "Modify the POI information";
@@ -1500,7 +1500,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Kartes leģenda";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Citi";
+"help_other_header" = "Cits";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Uzstādīšana un iespējamās problēmas";
 "help_tech_articles" = "Tehniskā dokumentācija";
@@ -1661,7 +1661,7 @@
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"product_title_srtm" = "Kontūrlīniju spraudnis";
+"product_title_srtm" = "Kontūrlīnijas";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "product_title_wikivoyage" = "Ceļojumu gids";
@@ -1684,7 +1684,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Ceļi";
-"res_srtm" = "Kontūrlīniju spraudnis";
+"res_srtm" = "Kontūrlīnijas";
 "res_wiki" = "Vikipēdija";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Slīpums";
@@ -2270,7 +2270,7 @@
 
 //Icon categories
 "amenity" = "Amenity";
-"emergency" = "Ārkārtas";
+"emergency" = "Avārijas dienesti";
 "service" = "Serviss";
 "special" = "Speciālais";
 "sport" = "Sports";
@@ -2362,4 +2362,8 @@
 "unlimited_map_downloads" = "Neierobežotas karšu lejupielādes";
 "product_title_development" = "OsmAnd izstrāde";
 "manage_subscription" = "Pārvaldīt abonomentu";
-"shared_string_stop" = "Apturēt";
+"shared_string_stop" = "Pietura";
+"shared_string_delete_all" = "Dzēst visu";
+"shared_string_data" = "Dati";
+"shared_string_undefined" = "Nedefinēts";
+"paused" = "Nopauzēts";

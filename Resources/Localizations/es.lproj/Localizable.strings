@@ -88,8 +88,8 @@
 "map_settings_show" = "Mostrar en el mapa";
 "map_settings_type" = "Tipo de mapa";
 "map_mode" = "Modo del mapa";
-"map_settings_day" = "Diurno";
-"map_settings_night" = "Por la noche";
+"map_settings_day" = "Día";
+"map_settings_night" = "Nocturno";
 "map_settings_style" = "Estilo del mapa";
 "shared_string_none" = "Ninguno";
 "map_settings_offline" = "Estilos de mapas sin conexión";
@@ -376,7 +376,7 @@
 "get_directions" = "Indicaciones";
 "shared_string_dismiss" = "Descartar";
 "shared_string_modify" = "Editar";
-"parking" = "Aparcamientos";
+"parking" = "Aparcamiento";
 "est_travel_time" = "Tiempo de viaje estimado";
 "pedestrian" = "Peatón";
 "sorting" = "Ordenar";
@@ -1781,7 +1781,7 @@
 "total" = "Total";
 "res_online_source_cache_alert" = "Al aplicar estos cambios, los datos almacenados serán borrados para este repositorio de teselas";
 "menu" = "Menú";
-"app_profiles" = "Perfiles de la aplicación";
+"app_profiles" = "Perfiles de aplicación";
 "quick_action_showhide_mapillary_title" = "Mostrar u ocultar Mapillary";
 "public_transport_show" = "Mostrar transporte público";
 "help_osmand_live" = "Suscripción - OsmAnd Live";
@@ -2518,5 +2518,13 @@
 "unlimited_map_downloads" = "Descargas de mapas ilimitadas";
 "purchases_feature_desc_osmand_cloud" = "Obtén OsmAnd Cloud para almacenar en línea todos los datos de OsmAnd. No se pierden los datos al reinstalar. Haz copias de seguridad y restaura toda la información fácilmente.";
 "complete_purchase" = "Completar compra";
-"routing_attr_allow_private_for_truck_description" = "Permitir el acceso a áreas privadas para camiones.";
+"routing_attr_allow_private_for_truck_description" = "Permitir el acceso aáreas privadas para camiones.";
 "lang_ckb" = "Kurdo Central";
+"restore_from_osmand_cloud" = "Restaurar desde OsmAnd Cloud";
+"paused" = "Pausado";
+"on_hold" = "En espera";
+"shared_string_delete_all" = "Borrar todo";
+"shared_string_undefined" = "Indefinido";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Sin restricciones)";
+"in_grace_period" = "En período de gracia";
+"shared_string_data" = "Datos";

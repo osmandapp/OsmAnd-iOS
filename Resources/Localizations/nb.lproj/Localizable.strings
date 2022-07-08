@@ -881,7 +881,7 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Turplanlegging";
 "help_legend" = "Kartforklaring";
-"help_other_header" = "Andre";
+"help_other_header" = "Annet";
 "help_install_and_troubleshoot" = "Installering og problemløsing";
 "help_tech_articles" = "Tekniske artikler";
 "help_versions" = "Versjoner";
@@ -1994,7 +1994,7 @@
 "walking_route_osmc_description" = "Fargelegg ruter i henhold til deres individuelle lokale farge (hvis den forefinnes i OpenStreetMap) og type (internasjonal, regional, lokal).";
 "navigate_point_zone" = "Sone";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Fargelegg ruter i henhold til deres nodenettverkstype (internasjonal, regional, lokal).";
-"default" = "Forvalg";
+"default" = "Standard";
 "dialogs_and_notifications" = "Dialogvinduer og merknader";
 "some_articles_may_not_available_in_lang" = "Noen Wikipedia-artikler er kanskje ikke tilgjengelige på ditt språk.";
 "product_title_mapillary" = "Mapillary";
@@ -2312,3 +2312,11 @@
 "lang_ckb" = "Sorani";
 "transport_hazmat_yes_desc" = "Du må velge rett kategori.";
 "transport_hazmat_no_desc" = "I noen tunneler og på noen veier er transport av farlig gods forbudt.";
+"shared_string_delete_all" = "Slett alle";
+"shared_string_undefined" = "Udefinert";
+"shared_string_data" = "Data";
+"restore_from_osmand_cloud" = "Gjenopprett fra OsmAnd-sky";
+"on_hold" = "På vent";
+"paused" = "I pausemodus";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Ingen begrensninger)";
+"in_grace_period" = "I nådeperioden";

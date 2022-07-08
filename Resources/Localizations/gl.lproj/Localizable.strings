@@ -4,7 +4,7 @@
 "transport_routes" = "Rotas";
 "transport_nearby_routes_within" = "Liñas próximas a menos dos";
 "transport_nearby_routes" = "Preto dos";
-"transport_stop" = "Deter";
+"transport_stop" = "Stop";
 "cancel_navigation" = "Deter a navegación";
 "intermediate_items_sort_by_distance" = "Ordenar porta a porta";
 "switch_start_finish" = "Inverter o punto de partida e o destino";
@@ -310,7 +310,7 @@
 "shared_string_and" = "e";
 "shared_string_edit" = "Editar";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Noutro intre";
+"shared_string_later" = "Despois";
 "shared_string_of" = "of";
 "shared_string_all" = "Todo";
 "shared_string_from" = "dende";
@@ -551,7 +551,7 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Planificación dunha viaxe";
 "help_legend" = "Lenda do mapa";
-"help_other_header" = "Outra";
+"help_other_header" = "Outros";
 "help_install_and_troubleshoot" = "Instalación e resolución de problemas";
 "help_tech_articles" = "Artigos técnicos";
 "help_versions" = "Versións";
@@ -708,7 +708,7 @@
 "get_directions" = "Indicacións";
 "parking" = "Aparcamento";
 "directions_more_options" = "Indicacións dende";
-"nearby_search" = "Procurar preto";
+"nearby_search" = "Procurar preto daquí";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -1364,7 +1364,7 @@
 "profile_type_custom_string" = "Perfil personalizado";
 "nothing_found_empty" = "Non se atopou ren";
 "position_icon_at_rest" = "Icona de posición en asueto";
-"app_profiles" = "Perfís de aplicación";
+"app_profiles" = "Perfís da aplicación";
 "reverse_route" = "Ruta inversa";
 "plugin_settings_reset" = "Restabelecer a configuración do plugin ós valores por defecto";
 "app_theme_light" = "Claro";
@@ -1556,12 +1556,12 @@
 "square" = "Cadrado";
 "simplified_track_description" = "Só gravarase a liña da ruta, os puntos intermedios serán eliminados.";
 "show_compass_ruler" = "Amosar a regra de compás";
-"sport" = "Deporte";
+"sport" = "Sport";
 "shared_string_enable" = "Activar";
 "displayed_trips" = "Pistas amosadas";
 "res_standard" = "Mapa normal";
 "shared_string_resources" = "Recursos";
-"service" = "Servizo";
+"service" = "Vía de servizo";
 "shared_string_import" = "Importar";
 "join_segments" = "Unir segmentos";
 "special" = "Especial";
@@ -1574,7 +1574,7 @@
 "split_before" = "Dividir antes";
 "select_group" = "Escoller grupo";
 "gpxup_trackable" = "Seguíbel";
-"default" = "Predefinido";
+"default" = "Predeterminado";
 "context_menu_item_edit_waypoint" = "Editar punto de pasaxe GPX";
 "navigate_point_zone" = "Zona";
 "dialogs_and_notifications" = "Diálogos e notificacións";
@@ -1779,7 +1779,7 @@
 "monthly_map_updates" = "Actualizacións do mapa: cada mes";
 "altitude_descent" = "Descenso";
 "private_access_routing_req" = "O destino ubícase nunha área de acceso privado. Permitir o emprego de camiños privados para esta viaxe\?";
-"shared_string_stop" = "Deter";
+"shared_string_stop" = "Stop";
 "copy_coordinates" = "Copiar coordenadas";
 "osm_live_banner_desc" = "Obtén descargas ilimitadas de mapas, engadindo actualizacións semanais, diarias ou cada hora.";
 "copy_to_map_favorites" = "Copiar aos favoritos";
@@ -1799,3 +1799,9 @@
 "shared_string_start" = "Comezar";
 "shared_string_capacity" = "Capacidade";
 "daily_map_updates" = "Actualizacións do mapa: cada hora";
+"on_hold" = "En espera";
+"shared_string_data" = "Data";
+"paused" = "Detido";
+"shared_string_delete_all" = "Eliminar todo";
+"in_grace_period" = "En período experimental";
+"shared_string_undefined" = "Sen definir";

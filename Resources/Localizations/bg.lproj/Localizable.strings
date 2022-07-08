@@ -41,7 +41,7 @@
 "transport_routes" = "Маршрути";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Изключване";
+"transport_stop" = "Стоп";
 "cancel_navigation" = "Спиране на навигацията";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Сортиране врата-до-врата";
@@ -91,7 +91,7 @@
 "daynight_mode_auto" = "Изгрев/залез";
 "route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "Автоматичното центриране е включено.";
-"unknown_location" = "Все още не е определена позицията";
+"unknown_location" = "Местоположението все още не е определено.";
 "animate_routing_route_not_calculated" = "Първо изчислете маршрута";
 "settings_preset" = "Текущ профил";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
@@ -581,7 +581,7 @@
 "poi_hide" = "Скриване";
 
 // My Places
-"favorites" = "Избрани";
+"favorites" = "Предпочитани";
 "tracks" = "Трасета";
 "personal_category_name" = "Personal";
 "visible" = "Visible";
@@ -665,7 +665,7 @@
 
 // Map settings
 "m_style_car" = "Автомобил";
-"m_style_walk" = "Пешеходец";
+"m_style_walk" = "Ходене";
 "m_style_bicycle" = "Велосипед";
 "m_style_pulic_transport" = "Обществен транспорт";
 "map_settings_map" = "Карта";
@@ -676,7 +676,7 @@
 "map_settings_map_magnifier" = "Лупа за картата";
 "map_settings_text_size" = "Размер на текста";
 "map_settings_day" = "Ден";
-"map_settings_night" = "През нощта";
+"map_settings_night" = "Нощ";
 "map_settings_style" = "Стил на картата";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -1201,7 +1201,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osm_note" = "Бележка на OSM";
 "osm_created" = "Created";
-"osm_deleted" = "Изтрито";
+"osm_deleted" = "Премахнато";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1247,7 +1247,7 @@
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
 "osm_edits_basic" = "Основни";
-"osm_edits_advanced" = "Разширени";
+"osm_edits_advanced" = "Напреднали";
 "osm_edits_all" = "All edits";
 "osm_edits_poi" = "POI edits";
 "osm_edits_notes" = "Notes";
@@ -1451,7 +1451,7 @@
 "modify_edit_short" = "Промяна на OSM редакцията";
 "open_osm_note" = "Отвори OSM бележка";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Изпращане на данни до OSM";
+"osm_alert_title" = "Изпрати";
 "osm_alert_message" = "Съобщение";
 "osm_alert_button_ok" = "Създайте Бележка";
 "modify_poi" = "Modify the POI information";
@@ -1476,7 +1476,7 @@
 "units_nm" = "мор. мили";
 "units_km_h" = "км/ч";
 "units_mph" = "мили/час";
-"units_hour" = "ч";
+"units_hour" = "ч.";
 "units_min" = "мин";
 "units_sec" = "sec";
 "units_sec_short" = "s";
@@ -1500,7 +1500,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Легенда на картата";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Друго";
+"help_other_header" = "Други";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Инсталиране и отстраняване на неизправности";
 "help_tech_articles" = "Технически статии";
@@ -1521,7 +1521,7 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "Любими";
+"import_favorite" = "Избрана";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -1545,34 +1545,34 @@
 "col_purple" = "лилав";
 "col_green" = "зелен";
 "col_yellow" = "жълт";
-"col_orange" = "оранжев";
+"col_orange" = "Оранжева";
 "col_gray" = "Gray";
-"col_red" = "червен";
-"col_blue" = "син";
+"col_red" = "Червена";
+"col_blue" = "Синя";
 "col_magenta" = "Magenta";
 
 // GPX colors
-"red" = "червен";
-"orange" = "оранжев";
-"lightblue" = "Свелто-син";
-"blue" = "син";
+"red" = "Червена";
+"orange" = "Оранжева";
+"lightblue" = "Свелтосиня";
+"blue" = "Синя";
 "purple" = "лилав";
-"pink" = "розов";
+"pink" = "Розова";
 "translucent_red" = "Полупрозрачно червено";
 "translucent_orange" = "Полупрозрачно оранжево";
 "translucent_lightblue" = "Полупрозрачно свелто-синьо";
 "translucent_blue" = "Полупрозрачен светло-син";
 "translucent_purple" = "Полупрозрачно лилаво";
-"translucent_pink" = "Translucent pink";
-"dark_yellow" = "Dark yellow";
+"translucent_pink" = "Прозрачнорозова";
+"dark_yellow" = "Тъмножълта";
 "yellow" = "жълт";
 "translucent_yellow" = "Полупрозрачно жълто";
 "lightgreen" = "светло-зелен";
 "translucent_lightgreen" = "Полупрозрачно светло-зелено";
 "green" = "зелен";
 "translucent_green" = "Полупрозрачно зелено";
-"brown" = "кафяв";
-"black" = "Black";
+"brown" = "Кафява";
+"black" = "Черна";
 
 // World Regions
 "region_antarctica" = "Antarctica";
@@ -1652,7 +1652,7 @@
 "product_title_asia" = "Азия";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
-"product_title_wiki" = "Wikipedia";
+"product_title_wiki" = "Уикипедия";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "shared_string_all_languages" = "Всички езици";
@@ -1685,7 +1685,7 @@
 "res_installing" = "Installing…";
 "res_roads" = "Пътища";
 "res_srtm" = "Контурни линии";
-"res_wiki" = "Wikipedia";
+"res_wiki" = "Уикипедия";
 "res_hillshade" = "Оцветяване на релефа";
 "res_slope" = "Slope";
 "res_standard" = "Стандартна карта";
@@ -1761,7 +1761,7 @@
 "parking" = "Паркинг";
 "parked_at" = "Parked at";
 "directions_more_options" = "Упътване от тук";
-"nearby_search" = "Търси близо до това място";
+"nearby_search" = "Търси наблизо";
 "change_object_posiotion" = "Change object's position";
 "change_position_descr" = "Move the map to change object's position";
 "est_travel_time" = "Estimate travel time";
@@ -1976,15 +1976,15 @@
 "routing_attr_avoid_toll_name" = "Избягване на пътни такси";
 "rendering_attr_appMode_description" = "Оптимизирай картата за";
 "routing_attr_avoid_ice_roads_fords_name" = "No ice roads or fords";
-"rendering_value_germanRoadAtlas_name" = "Германски стил";
+"rendering_value_germanRoadAtlas_name" = "Немска пътна карта";
 "rendering_attr_hikingRoutesOSMC_name" = "Наслагване на туристически символи";
 "rendering_attr_showRoadMaps_name" = "Карти само с пътища";
 "routing_attr_avoid_ferries_description" = "Намиране на маршрут без използване на фериботи";
 "rendering_attr_contourWidth_description" = "Contour line width";
 "routing_attr_driving_style_name" = "Driving style";
 "rendering_attr_surface_pebblestone_name" = "Pebblestone";
-"rendering_value_lightblue_name" = "Свелто-син";
-"rendering_value_americanRoadAtlas_name" = "Американски стил";
+"rendering_value_lightblue_name" = "Свелтосиня";
+"rendering_value_americanRoadAtlas_name" = "Американска пътна карта";
 "rendering_value_fine_name" = "Фина";
 "routing_attr_relief_smoothness_factor_plains_name" = "Less hilly";
 "rendering_value_purple_name" = "лилав";
@@ -1993,7 +1993,7 @@
 "rendering_attr_appMode_name" = "Режим на показване";
 "routing_attr_avoid_subway_description" = "Avoids subways and lightweight rail transport";
 "routing_attr_driving_style_prefer_unpaved_description" = "Предпочитане на пътища без настилка.";
-"rendering_value_light_brown_name" = "Светло жълта";
+"rendering_value_light_brown_name" = "Светлокафява";
 "rendering_attr_surface_ice_name" = "Ice";
 "routing_attr_piste_type_sled_name" = "Шейни";
 "rendering_attr_smoothness_bad_name" = "Bad";
@@ -2025,7 +2025,7 @@
 "rendering_attr_surface_grass_name" = "Grass";
 "routing_attr_piste_type_skitour_description" = "Routes for ski touring.";
 "rendering_attr_surface_fine_gravel_name" = "Fine gravel";
-"rendering_value_orange_name" = "оранжев";
+"rendering_value_orange_name" = "Оранжева";
 "rendering_value_medium_w_name" = "Средна";
 "rendering_attr_contourDensity_description" = "Contour line density";
 "rendering_attr_currentTrackWidth_name" = "GPXширина";
@@ -2077,7 +2077,7 @@
 "routing_attr_max_num_changes_name" = "Number of changes";
 "rendering_attr_publicTransportMode_name" = "Автобусни, тролейбусни, маршрутни линии";
 "rendering_attr_hideNonVehicleHighways_name" = "Скрий пътищата, които не са за автомобили";
-"rendering_value_translucent_pink_name" = "Розова прозрачна";
+"rendering_value_translucent_pink_name" = "Прозрачнорозова";
 "rendering_attr_surface_ground_name" = "Ground";
 "routing_attr_height_obstacles_description" = "Factor in terrain elevation (via SRTM, ASTER, and EU-DEM data).";
 "rendering_attr_currentTrackColor_description" = "GPXцвят";
@@ -2151,7 +2151,7 @@
 "rendering_attr_hidePOILabels_name" = "POIетикети";
 "rendering_attr_piste_difficulty_novice_name" = "Начинаещ";
 "rendering_attr_hideUnderground_name" = "Подземни обекти";
-"rendering_value_dark_brown_name" = "Тъмно кафява";
+"rendering_value_dark_brown_name" = "Тъмнокафява";
 "routeInfo_piste_type_name" = "Вид на пистата";
 "routing_attr_driving_style_safety_name" = "Prefer byways";
 "rendering_attr_surface_paving_stones_name" = "Paving stones";
@@ -2161,12 +2161,12 @@
 "rendering_attr_smoothness_very_bad_name" = "Very bad";
 "rendering_attr_surface_compacted_name" = "Compacted";
 "rendering_attr_undefined_name" = "Undefined";
-"rendering_value_red_name" = "червен";
+"rendering_value_red_name" = "Червена";
 "routing_attr_allow_private_name" = "Разрешаване на частен достъп";
 "routeInfo_tracktype_name" = "Surface firmness";
 "rendering_attr_highway_class_path_name" = "Path";
 "rendering_value_white_name" = "Бяла";
-"rendering_value_blue_name" = "син";
+"rendering_value_blue_name" = "Синя";
 "routing_attr_avoid_ice_roads_fords_description" = "Avoids ice roads and fords.";
 "routing_attr_allow_advanced_name" = "Allow advanced routes";
 "rendering_attr_surface_grass_paver_name" = "Grass paver";
@@ -2238,13 +2238,13 @@
 "rendering_attr_piste_type_connection_name" = "Връзка";
 "routing_attr_relief_smoothness_factor_name" = "Select elevation fluctuation";
 "routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
-"rendering_value_darkyellow_name" = "Тъмно жълта";
+"rendering_value_darkyellow_name" = "Тъмножълта";
 "routing_attr_prefer_unpaved_name" = "Предпочитане на селски пътища";
 "rendering_value_default_name" = "По подразбиране";
 "routing_attr_no_new_routing_name" = "Без ползване на алгоритми от v1.9";
 "rendering_attr_subwayMode_name" = "Подземен транспорт";
 "rendering_attr_highway_class_motorway_name" = "Motorway";
-"rendering_value_brown_name" = "кафяв";
+"rendering_value_brown_name" = "Кафява";
 "rendering_attr_hideIcons_name" = "POIзнаци";
 "rendering_attr_roadColors_description" = "Избор на схема за оцветяване на пътищата:";
 "rendering_value_browse_map_name" = "Карта";
@@ -2383,11 +2383,14 @@
 "explore_osmnad_plans_to_find_suitable" = "Разгледайте плановете на OsmAnd, за да намерите подходящия за вас.";
 "shared_string_learn_more" = "Научете повече";
 "purchases_feature_desc_terrain" = "Контурни линии на терена, пълна карта на хълмовете с тъмни нюанси и карти на склоновете с оцветяване на върховете и низините.";
-"shared_string_stop" = "Изключване";
+"shared_string_stop" = "Стоп";
 "purchases_feature_desc_pro_widgets" = "Получете достъп до функциите на OsmAnd Pro. Оцветяване на маршрути и др.";
 "private_access_routing_req" = "Крайната точка се намира на частна територия. Разрешавате ли използване на частни пътища за пътуването\?";
 "purchases_feature_desc_wikivoyage" = "Разгледайте Wikivoyage офлайн. Статиите са разделени по държави и региони и са достъпни на всички езици.";
 "redeem_promo_code" = "Използване на промоционален код";
-"cloud_backup_now" = "Създаване на резервно копие";
-"cloud_make_backup" = "Създаване на резервно копие";
 "cloud_conflicts" = "Конфликти";
+"shared_string_data" = "Данни";
+"shared_string_undefined" = "Неопределена";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Без ограничения)";
+"restore_from_osmand_cloud" = "Възстановяване от OsmAnd Cloud";
+"shared_string_delete_all" = "Премахване на всичко";

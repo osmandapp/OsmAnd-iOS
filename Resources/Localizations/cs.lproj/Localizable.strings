@@ -418,7 +418,7 @@
 "sett_km" = "Kilometry";
 "sett_ml" = "Míle";
 "sett_zoom" = "Tlačítko přiblížení";
-"sett_show" = "Ukázat";
+"sett_show" = "Zobrazit";
 "sett_notshow" = "Nezobrazovat";
 "sett_loc_fmt" = "Location format";
 "sett_deg" = "Degrees";
@@ -790,7 +790,7 @@
 "help_search" = "Hledání v mapě";
 "help_trip_planning" = "Plánování cesty";
 "help_legend" = "Legenda mapy";
-"help_other_header" = "Ostatní";
+"help_other_header" = "Další";
 "help_install_and_troubleshoot" = "Instalace ařešení problémů";
 "help_tech_articles" = "Technické články";
 "help_versions" = "Verze";
@@ -802,7 +802,7 @@
 "shared_string_close" = "Zavřít";
 "actions" = "Akce";
 "directions_more_options" = "Navigovat odsud";
-"nearby_search" = "Hledat poblíž";
+"nearby_search" = "Hledat v okolí";
 "map_widget_ruler_control" = "Kruhové pravítko";
 "import_from_docs" = "Import z dokumentů";
 "osm_live_routing" = "OsmAnd Live navigace";
@@ -955,7 +955,7 @@
 "change_map_overlay" = "Změnit překryvnou mapu";
 "quick_action_add_overlay" = "Přidat překrytí";
 "blue" = "Modrá";
-"osm_edits_advanced" = "Pokročilý";
+"osm_edits_advanced" = "Rozšířené";
 "quick_action_name" = "Rychlá akce";
 "gpx_avg_altitude" = "Průměrná výška";
 "shared_string_time_of_day" = "Denní doba";
@@ -967,7 +967,7 @@
 "red" = "Červená";
 "map_settings_text_size" = "Velikost písma";
 "key_hint_deselect" = "Zrušit výběr";
-"osm_str_name" = "Jméno ulice";
+"osm_str_name" = "Název ulice";
 "add_action" = "Přidat akci";
 "add_gpx_waypoint" = "Přidat GPX mezicíl";
 "osm_note" = "OSM poznámka";
@@ -997,7 +997,7 @@
 "green" = "Zelená";
 "osm_edit_without_name" = "Bez názvu";
 "replace_destination" = "Nahradit cíl";
-"osm_poi_delete_title" = "Vymazat POI";
+"osm_poi_delete_title" = "Smazat POI";
 "osm_target_created" = "Vytvořen OSM POI";
 "quick_action_name_footer" = "Ponecháte-li prázdné, bude použita adresa nebo název místa.";
 "dark_yellow" = "Tmavě žlutá";
@@ -1005,7 +1005,7 @@
 "add_intermediate" = "Přidat mezicíl";
 "osm_alert_title" = "Uložit";
 "translucent_red" = "Průsvitná červená";
-"home_pt" = "Doma";
+"home_pt" = "Domov";
 "simulate_navigation" = "Simulovat navigaci";
 "add_first_inermediate" = "Přidat první mezicíl";
 "mapil_pano_only" = "Zobrazit pouze 360° obrázky";
@@ -1996,7 +1996,7 @@
 "sport" = "Sport";
 "special" = "Speciální";
 "service" = "Služby";
-"emergency" = "Pomoc v nouzi";
+"emergency" = "Pohotovost";
 "search_poi_types_descr" = "Můžete kombinovat body zájmu různých kategorií.";
 "reset_to_default_category_button_promo" = "Obnovení do základního nastavení vrátí pořadí do výchozího stavu.";
 "create_custom_categories_list_promo" = "Můžete přidat vlastní kategorie, skrýt kategorie, které nepotřebujete, či změnit jejich pořadí v seznamu. Vlastní kategorie můžete importovat a exportovat pomocí profilů.";
@@ -2445,3 +2445,10 @@
 "copy_address" = "Kopírovat adresu";
 "complete_purchase" = "Dokončit nákup";
 "explore_osmnad_plans_to_find_suitable" = "Prozkoumejte předplatné OsmAnd a najděte si takové, které vám bude vyhovovat.";
+"shared_string_delete_all" = "Odstranit vše";
+"on_hold" = "Pozastaveno";
+"paused" = "Pozastaveno";
+"restore_from_osmand_cloud" = "Obnovit zOsmAnd Cloud";
+"shared_string_data" = "Data";
+"in_grace_period" = "V období tolerance";
+"shared_string_undefined" = "Nedefinováno";

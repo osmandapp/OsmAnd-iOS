@@ -113,7 +113,7 @@
 "map_settings_show" = "Haritada göster";
 "map_settings_type" = "Harita türü";
 "map_mode" = "Harita kipi";
-"map_settings_day" = "Gündüz";
+"map_settings_day" = "Gün";
 "map_settings_night" = "Gece";
 "map_settings_style" = "Harita tarzı";
 "map_settings_overunder" = "Üst katman / Alt katman";
@@ -797,7 +797,7 @@
 "first_intermediate_dest_description" = "Rotadaki ilk durağı ekler";
 "last_intermediate_dest_description" = "Rota boyunca son durağı ekler";
 "transport_routes" = "Rotalar";
-"transport_stop" = "Dur";
+"transport_stop" = "Durak";
 "route_stops_before" = "%d durak önce";
 "logging_interval_navigation" = "Navigasyon sırasında kayıt aralığı";
 "logging_interval_navigation_descr" = "Navigasyon sırasında yol kaydı için kayıt aralığını seçin";
@@ -845,7 +845,7 @@
 "mapil_pano_only" = "Sadece 360° resimleri göster";
 "shared_string_in_name" = "%@ \'de";
 "help_legend" = "Harita lejandı";
-"osmand_live_updates" = "Canlı güncelleştirmeler";
+"osmand_live_updates" = "Canlı güncellemeler";
 "translucent_purple" = "Yarı saydam mor";
 "show_contour_lines" = "Eş yükselti eğrilerini göster";
 "help_about" = "Hakkında";
@@ -874,7 +874,7 @@
 "toggle_voice" = "Ses açık/kapalı";
 "day_mode" = "Gündüz modu";
 "osm_edits_notes" = "Notlar";
-"shared_string_filter" = "Filtrele";
+"shared_string_filter" = "Süzgeç";
 "osmand_live_support_reg_title" = "Destek bölgesi";
 "work_pt" = "İş";
 "wake_on_voice_descr" = "Bir dönüşe yaklaşırken (kapalı ise) aygıtın ekranını aç.";
@@ -890,7 +890,7 @@
 "map_settings_text_size" = "Yazı boyutu";
 "coordinates_example" = "Örnek";
 "lightblue" = "Açık mavi";
-"osm_str_name" = "Sokak Adı";
+"osm_str_name" = "Sokak ismi";
 "osm_deleted" = "Silindi";
 "my_places" = "Yerlerim";
 "osm_close_changeset" = "Değişiklik listesini kapat";
@@ -2003,7 +2003,7 @@
 "sport" = "Spor";
 "special" = "Özel";
 "service" = "Servis yolu";
-"emergency" = "Acil Durum";
+"emergency" = "Acil durum";
 "shared_string_gpx_points" = "Noktalar";
 "res_standard" = "Standart harita";
 "quick_action_coordinates_widget_descr" = "Bu eylem düğmesine dokunmak, koordinatlar widget'ını gösterir veya gizler.";
@@ -2500,7 +2500,7 @@
 "routing_attr_allow_private_for_truck_description" = "Kamyonlar için özel alanlara erişime izin verin.";
 "shared_string_purchased" = "Satın alındı";
 "shared_string_start" = "Başlat";
-"shared_string_stop" = "Dur";
+"shared_string_stop" = "Durak";
 "osmand_depelopment_simulate_location_section" = "Simüle et";
 "simulate_in_progress" = "Devam ediyor";
 "simulate_location_movement_speed" = "Hareket hızı";
@@ -2570,7 +2570,7 @@
 "new_device_account" = "Yeni aygıt / yeni hesap";
 "manage_subscription" = "Aboneliği yönet";
 "expires" = "Süre sonu";
-"private_access_routing_req" = "Hedefiniz özel erişimi olan bir bölgede bulunmaktadır. Bu yolculuk için özel yollar kullanmaya izin verilsin mi?";
+"private_access_routing_req" = "Hedefinizözel erişimi olan bir bölgede bulunmaktadır. Bu yolculuk için özel yollar kullanmaya izin verilsin mi\?";
 "promo_subscription" = "OsmAnd Pro (Tanıtım)";
 "subscription" = "Abonelik";
 "google_play" = "Google Play";
@@ -2596,3 +2596,6 @@
 "compass_visible_in_rotated_mode_descr" = "Kuzey yukarı olduğunda gizli";
 "compass_options_description" = "Harita yönlendirme modunu değiştirmek için pusulaya tıklayın";
 "shared_string_always_hidden" = "Her zaman gizli";
+"shared_string_delete_all" = "Tümünü sil";
+"shared_string_data" = "Veriler";
+"restore_from_osmand_cloud" = "OsmAnd Cloud\'dan geri yükle";

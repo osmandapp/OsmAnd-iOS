@@ -39,7 +39,7 @@
 "years_5" = "Iseggasen";
 "units_mph" = "m/tasint";
 "product_title_africa" = "Tafriqt";
-"favorites" = "Imenyafen";
+"favorites" = "Inurifen";
 "rendering_category_transport" = "Amesni";
 "col_blue" = "Azegzaw";
 "shared_string_yes" = "Ih";
@@ -350,7 +350,7 @@
 "app_mode_utv" = "Côte à côte";
 "shared_string_buy" = "AΓ";
 "actions" = "Tigawin";
-"intro_next" = "Ɣer zdat";
+"intro_next" = "Ar zdat";
 "no_inet_connection" = "Ulac tuqqna n Internet";
 "rendering_attr_highway_class_steps_name" = "Imecwaṛen";
 "rendering_attr_hideWaterPolygons_name" = "Ffer aman";
@@ -536,7 +536,7 @@
 "profile_type_base_string" = "Amaɣnu";
 "reset_to_default" = "Err-d azalen s lexṣas";
 "search_activity" = "Rechercher";
-"save_changes" = "Sekles ibeddilen";
+"save_changes" = "Sekles asnifel";
 "shared_string_settings" = "Iɣewwaṛen";
 "selected_profiles" = "%dɣef %d";
 "profile_type_osmand_string" = "Amaɣnu OsmAnd";
@@ -604,7 +604,7 @@
 "group_name" = "Isem n wegraw";
 "plan_route_create_new_route" = "Rnu abrid amaynut";
 "copied_to_clipboard" = "Aḍris yettwanɣel ɣef afus";
-"tracks" = "Iberdan";
+"tracks" = "Iberdan-iw";
 "map_mode" = "Takarḍa";
 "searching_gps" = "Anadi...";
 "default_color" = "Fren ini n lexṣas";
@@ -766,3 +766,7 @@
 "shared_string_stop" = "Seḥbes";
 "subscriptions" = "Ijerriden";
 "shared_string_capacity" = "Akettur";
+"paused" = "Yettraǧu";
+"shared_string_undefined" = "D arbadu";
+"shared_string_delete_all" = "Kkes-it meṛṛa";
+"shared_string_data" = "Isefka";

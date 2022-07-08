@@ -104,7 +104,7 @@
 "rendering_value_browse_map_name" = "瀏覽地圖";
 "m_style_car" = "駕駛";
 "m_style_walk" = "步行";
-"m_style_bicycle" = "腳踏車";
+"m_style_bicycle" = "自行車";
 "map_settings_map" = "地圖";
 "map_settings_show" = "在地圖上顯示";
 "map_settings_type" = "地圖類型";
@@ -153,7 +153,7 @@
 "prch_nau_q3" = "您稍後可以通過地圖和資源安裝。";
 "proceed_q" = "是否繼續？";
 "download" = "下載";
-"nothanks" = "不需要，謝謝";
+"nothanks" = "不，謝了";
 "download_now" = "現在下載地圖";
 "prch_failed" = "購買\"%@\"失敗";
 "prch_items_failed" = "項目未還原。請再試一次。";
@@ -218,7 +218,7 @@
 "units_ft" = "呎";
 "units_km_h" = "公里/小時";
 "units_mph" = "哩/小時";
-"units_hour" = "時";
+"units_hour" = "小時";
 "units_min" = "分";
 "units_sec" = "秒";
 "map_remind" = "稍後提醒我";
@@ -475,7 +475,7 @@
 "postcode" = "郵遞區號";
 "show_something_on_map" = "在地圖上顯示 %@";
 "search_POI_level_btn" = "增加搜尋半徑";
-"shared_string_street" = "街道";
+"shared_string_street" = "道路";
 "shared_string_building" = "建築物";
 "shared_string_street_intersection" = "街道路口";
 "shared_string_address" = "地址";
@@ -755,7 +755,7 @@
 "switch_start_finish" = "起始點與目的地對調";
 "clear_all_intermediates" = "清除所有中轉地點";
 "cancel_navigation" = "停止導航";
-"transport_routes" = "路線";
+"transport_routes" = "導航路線";
 "transport_nearby_routes_within" = "在附近的路線";
 "transport_stop" = "停止";
 "transport_nearby_routes" = "範圍內";
@@ -951,7 +951,7 @@
 "osm_note_reopen" = "重新開啟";
 "osm_notes_online_layer" = "OSM 註解(連線)";
 "osm_edits_basic" = "基本";
-"osm_edits_advanced" = "展開";
+"osm_edits_advanced" = "進階";
 "osm_edits_notes" = "註解";
 "modify_poi_short" = "修改 POI";
 "create_poi_short" = "建立 POI";
@@ -1066,7 +1066,7 @@
 "angular_units_descr" = "變更測量的方位角。";
 "quick_action_name" = "快速動作";
 "osm_edit_without_name" = "沒有名稱";
-"home_pt" = "家";
+"home_pt" = "住家";
 "gpx_descent" = "下坡";
 "osm_note_action_field_descr" = "此訊息會包含在註解欄。";
 "add_parking_place" = "增加停車地點";
@@ -1999,3 +1999,15 @@
 "purchases_feature_desc_monthly_map_updates" = "取得每月定期更新的離線地圖。";
 "purchases_feature_desc_osmand_cloud" = "取得 OsmAnd 以將所有 OsmAnd 的資料儲存到線上。重新安裝後資料也不會遺失。輕鬆備份並輕鬆復原。";
 "product_desc_pro" = "取得最多功能";
+"shared_string_delete_all" = "全部刪除";
+"paused" = "暫停";
+"shared_string_data" = "資料";
+"compass_visible_in_rotated_mode" = "若地圖旋轉時可見";
+"shared_string_always_hidden" = "一律隱藏";
+"in_grace_period" = "在寬限期內";
+"shared_string_undefined" = "未定義";
+"on_hold" = "保留";
+"lang_ckb" = "中庫德語";
+"shared_string_always_visible" = "一律可見";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (無限制)";
+"restore_from_osmand_cloud" = "從 OsmAnd Cloud 復原";

@@ -41,7 +41,7 @@
 "transport_routes" = "გზები";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "შიგნით";
-"transport_stop" = "შეწყვეტა";
+"transport_stop" = "გაჩერება";
 "cancel_navigation" = "ნავიგაციის შეწყვეტა";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "სახლის ნომრებით დალაგება";
@@ -412,7 +412,7 @@
 "units_m_s" = "მ/წმ";
 "tones" = "ტონა";
 "nothing_found" = "Nothing found: %@";
-"nothing_found_empty" = "არაფერი არ იქნა ნაპოვნი";
+"nothing_found_empty" = "ვერაფერი ვიპოვეთ :(";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "ქუჩის არჩევა";
 "shared_string_in_name" = "%@-ში";
@@ -667,7 +667,7 @@
 "m_style_car" = "მანქანით";
 "m_style_walk" = "სიარული";
 "m_style_bicycle" = "ველოსიპედით";
-"m_style_pulic_transport" = "საზოგადო ტრანსპორტი";
+"m_style_pulic_transport" = "საზოგადოებრივი ტრანსპორტი";
 "map_settings_map" = "რუკა";
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
 "map_settings_show" = "რუკაზე ჩვენება";
@@ -1086,7 +1086,7 @@
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "ადგილობრივი";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "ცოცხალი განახლებები";
+"osmand_live_updates" = "განახლებები მიმდინარე რეჟიმში";
 "osmand_live_available_maps" = "ხელმისაწვდომი რუკები";
 "osmand_live_last_changed" = "Last map change: %@";
 "osmand_live_last_live_update" = "ბოლო განახლება: %@";
@@ -1247,7 +1247,7 @@
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
 "osm_edits_basic" = "ძირითადი";
-"osm_edits_advanced" = "დამატებით";
+"osm_edits_advanced" = "რთული";
 "osm_edits_all" = "All edits";
 "osm_edits_poi" = "POI edits";
 "osm_edits_notes" = "Notes";
@@ -1661,13 +1661,13 @@
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"product_title_srtm" = "კონტურული ხაზების დამატება";
+"product_title_srtm" = "კოტურული ხაზების მონაცემები";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "product_title_wikivoyage" = "მოგზაურთა გიდები";
 "product_desc_wikivoyage" = "The free worldwide travel guide anyone can edit.";
 "product_desc_ext_wikivoyage" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
-"product_title_sea_depth_contours" = "სიღრმის კონტურები";
+"product_title_sea_depth_contours" = "საზღვაო სიღრმის კონტურები";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 "my_location" = "My Location";
 "all_categories" = "All categories";
@@ -1684,7 +1684,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "გზები";
-"res_srtm" = "კონტურული ხაზების დამატება";
+"res_srtm" = "კოტურული ხაზების მონაცემები";
 "res_wiki" = "Wikipedia";
 "res_hillshade" = "ბორცვი";
 "res_slope" = "დაქანება";
@@ -1761,7 +1761,7 @@
 "parking" = "პარკინგი";
 "parked_at" = "Parked at";
 "directions_more_options" = "მიმართულება";
-"nearby_search" = "ახლოს ძებნა";
+"nearby_search" = "ახლო ძიება";
 "change_object_posiotion" = "Change object's position";
 "change_position_descr" = "Move the map to change object's position";
 "est_travel_time" = "Estimate travel time";
@@ -2270,7 +2270,7 @@
 
 //Icon categories
 "amenity" = "კომფორტი";
-"emergency" = "სასწრაფო დახმარება";
+"emergency" = "სასწრაფო";
 "service" = "სერვისი";
 "special" = "სპეციალური";
 "sport" = "სპორტი";
@@ -2358,8 +2358,12 @@
 "nautical_depth" = "საზღვაო სიღრმე";
 "copy_coordinates" = "კოორდინატების კოპირება";
 "shared_string_purchased" = "შეძენილია";
-"shared_string_stop" = "შეწყვეტა";
+"shared_string_stop" = "გაჩერება";
 "copy_address" = "მისამართის დაკოპირება";
 "altitude_ascent" = "აღმართი";
 "expired" = "ვადაგასული";
 "altitude_descent" = "დაღმართი";
+"shared_string_delete_all" = "ყველას წაშლა";
+"shared_string_undefined" = "არააღწერილი";
+"shared_string_data" = "მონაცემები";
+"paused" = "დაპაუზებული";

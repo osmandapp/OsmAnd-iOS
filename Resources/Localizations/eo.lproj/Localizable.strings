@@ -41,7 +41,7 @@
 "transport_routes" = "Kursoj";
 "transport_nearby_routes_within" = "Kursoj proksime";
 "transport_nearby_routes" = "Proksime";
-"transport_stop" = "Ĉesigi";
+"transport_stop" = "Haltejo";
 "cancel_navigation" = "Ĉesigi navigadon";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Ordigi de celoĝis celo (laŭ la plej malgranda distanco)";
@@ -584,7 +584,7 @@
 "favorites" = "Ŝatataj";
 "tracks" = "Spuroj";
 "personal_category_name" = "Personaj";
-"visible" = "Videbla";
+"visible" = "Videbla(j)";
 
 // GPX
 "gpx_point" = "Punkto";
@@ -664,8 +664,8 @@
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
-"m_style_car" = "Stirado";
-"m_style_walk" = "Irado";
+"m_style_car" = "Aŭto";
+"m_style_walk" = "Piediranto";
 "m_style_bicycle" = "Biciklado";
 "m_style_pulic_transport" = "Transporto publika";
 "map_settings_map" = "Mapo";
@@ -1002,7 +1002,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "Elŝuti";
-"nothanks" = "Ne, dankon";
+"nothanks" = "Ne, mi ne volas";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -1049,7 +1049,9 @@
 "plan_route_open_existing_track" = "Malfermi ekzistan spuron";
 "plan_route_last_modified" = "Antaŭe modifita";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
-"route_between_points_warning_desc" = "Por uzi tiunĉi agordon, OsmAnd postulas ĝustigi vian kurson al vojoj sur la mapo.\n\n Sekve vi devos elekti profilon de navigo (por trovi permesatajn vojojn) kaj sojlan distancon (por alproksimigi vian kurson al vojoj).";
+"route_between_points_warning_desc" = "Por uzi tiunĉi agordon, OsmAnd postulas ĝustigi vian kurson al vojoj sur la mapo.
+\n
+\n Sekve vi devos elekti profilon de navigo (por trovi permesatajn vojojn) kaj sojlan distancon (por alproksimigi vian kurson al vojoj).";
 "plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
 "gpx_saved_successfully" = "GPX file saved to %@";
 "none_point_error" = "Bonvolu aldoni almenaŭ unu punkton.";
@@ -1281,7 +1283,7 @@
 "shared_string_reload" = "Reŝargi";
 "shared_string_show_more" = "Montri pli";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
-"shared_string_filter" = "Filtrilo";
+"shared_string_filter" = "Filtri";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
@@ -1294,7 +1296,7 @@
 "copied_to_clipboard" = "Enpoŝigita";
 
 // Quick action
-"quick_action_name" = "Rapida ago";
+"quick_action_name" = "Butono de rapida ago";
 "quick_action_no_overlay" = "Neniu surtavolo";
 "quick_action_add_overlay" = "Aldoni surtavolon";
 "quick_action_no_underlay" = "Neniu subtavolo";
@@ -2438,7 +2440,7 @@
 "routeInfo_horse_scale_description" = "Bildigi vojojn laŭ facilo de ĉevalaj vojoj";
 "redeem_promo_code" = "Uzi reklamkodon";
 "rendering_attr_monorailRoutes_name" = "Unurel-fervojaj kursoj";
-"shared_string_stop" = "Ĉesigi";
+"shared_string_stop" = "Haltejo";
 "purchases_feature_desc_nautical" = "Akiru aliron al informoj pri mara profundo.";
 "subscriptions" = "Abonoj";
 "not_available_with" = "Ne disponebla kun %@";
@@ -2454,3 +2456,11 @@
 "purchases_feature_desc_osmand_cloud" = "Tenuĉiujn datumojn de OsmAnd enrete en OsmAnd-Nubo. Ne perdu viajn datumojn post reinstalu. Facile kreu kaj restarigu sekurkopiojn de viaj datumoj.";
 "product_desc_pro" = "Akiriĉiujn eblaĵojn";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (neniu limigo)";
+"restore_from_osmand_cloud" = "Restarigi el OsmAnd-Nubo";
+"in_grace_period" = "En prokrastoperiodo";
+"lang_ckb" = "Sorana";
+"shared_string_delete_all" = "Forigiĉiujn";
+"shared_string_undefined" = "Nedifinita";
+"shared_string_data" = "Datumoj";
+"on_hold" = "Ĉesigita";
+"paused" = "Paŭzigita";

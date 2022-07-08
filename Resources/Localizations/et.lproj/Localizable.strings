@@ -38,7 +38,7 @@
 "transport_routes" = "Teekonnad";
 "transport_nearby_routes_within" = "Lähedalolevad teekonnad";
 "transport_nearby_routes" = "Ulatus";
-"transport_stop" = "Peatu";
+"transport_stop" = "Stop";
 "cancel_navigation" = "Lõpeta navigeerimine";
 "start_navigation" = "Alusta navigeerimist";
 "intermediate_items_sort_by_distance" = "Sorteeri ukselt-uksele";
@@ -427,7 +427,7 @@
 "poi_hide" = "Peida";
 // My Places
 "favorites" = "Lemmikud";
-"tracks" = "Rajad";
+"tracks" = "Rajafailid";
 // GPX
 "gpx_point" = "Punkt";
 "gpx_waypoint" = "Teekonnapunkt";
@@ -451,7 +451,7 @@
 "gpx_route_time" = "Teekonna time";
 "gpx_uphldownhl" = "Ülesmäge/allamäge";
 "gpx_average_speed" = "Keskmine kiirus";
-"gpx_start" = "Alusta";
+"gpx_start" = "Start";
 "gpx_finish" = "Lõpp-punkt";
 "gpx_avg_elev" = "Keskmine kõrgus";
 "gpx_elev_range" = "Kõrguse vahemik";
@@ -884,7 +884,7 @@
 "units_ft" = "jalga";
 "units_km_h" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "t";
+"units_hour" = "h";
 "units_min" = "min.";
 "units_sec" = "sek";
 "units_sec_short" = "s";
@@ -1832,7 +1832,7 @@
 "arrows_direction_to_markers" = "Nooled osutavad aktiivse markeri suunda, kui see asub väljaspool ekraani. Suunajooned viitavad aktiivsetele markeritele.";
 "specify_number_of_dir_indicators" = "Määra suunamärguannete arv, see mõjutab kõiki allpool olevaid seadeid.";
 "gpx_parse_error" = "OsmAnd GPX-andmestiku vorming on vigane. Täpsemaks uurimiseks palun võta ühendust meie kasutajatoega.";
-"nothing_found_empty" = "Midagi ei leitud";
+"nothing_found_empty" = "Ei leitud midagi";
 "shared_string_next" = "Järgmine";
 "checking_for_duplicates" = "Otsin topeltkirjeid...";
 "added_items" = "Lisatud kirjed: %@";
@@ -2015,7 +2015,7 @@
 "shared_string_gpx_points" = "Punktid";
 "shared_string_disable" = "Keela";
 "special" = "Eriteenused";
-"emergency" = "Hädaabi";
+"emergency" = "Esmaabi";
 "square" = "Ruut";
 "symbols" = "Sümbolid";
 "sport" = "Sport";
@@ -2151,7 +2151,7 @@
 "track_show_start_finish_icons" = "Näita alguse ja lõpu ikoone";
 "reset_to_original" = "Lähtesta originaalile";
 "gpx_join_gaps_descr" = "Lõikudevahelised lüngad ühendatakse.";
-"nautical" = "Merenduslik";
+"nautical" = "Merendus";
 "ios_release_4_1" = "- Täielikult ümber kujundatud suhtlemine radadega: uus menüü koos graafikute, statistika, välimuse muutmise võimalus, värvimine kiiruse, kõrguse ja kallakuga ning raja valik kaardil- Uus ekraan koordinaatide otsimiseks erinevates formaatides.\n- Parandatud koordinaatide otsing OLC-formaadis\n- Uus kasutajasõbralik menüü keelte valimiseks, et kuvada kaardil Vikipeedia artikleid\n- Lisatud võimalus hõlpsasti ja paari klõpsuga laadida kõigi riigi piirkondade kaarte.\n- Lisatud kontuurjooned jalgades (tuleb alla laadida täiendavaid faile)\n- Lisatud võimalus kaardid alla laadida, valides kaardil soovitud piirkonna või riigi, samuti lisatud dialoogiaken ettepanekuga laadida kuvatud piirkonna puuduv kaart\n- Uus välimus kaardikontrolli nupud ja võimalus muuta kaardi suumimist topeltpuudutuse ja pühkimise abil.\n- Marsruutide nähtavuse seaded on viidud \"Configure map\" ekraanil kõrgemale ja korraldatud ümber parema paindlikkuse tagamiseks\n";
 "delete_group_confirm_short" = "Kustutada grupp?";
 "delete_group_confirm" = "Kas oled kindel, et soovid kustutada grupi \"%@\"?";
@@ -2412,7 +2412,7 @@
 "routeInfo_roadClass_description" = "Teekonna või raja värvimine vastavalt teede klassifikatsioonile.";
 "cloud_view_conflicts" = "Vaata versioonide erinevusi";
 "cloud_email_already_registered" = "Selle e-posti aadressiga konto on juba registreeritud.";
-"shared_string_start" = "Alusta";
+"shared_string_start" = "Start";
 "product_desc_plus" = "Hangi täiendavaid funktsioone";
 "purchases_feature_desc_hourly_map_updates" = "Hangi juurdepääs sagedasematele kaardiuuendustele. Tundide, päevade või nädalate kaupa uuendused. Uuendused laaditakse alla järk-järgult, ainult muutunud piirkonna osas.";
 "explore_osmnad_plans_to_find_suitable" = "Tutvu OsmAnd plaanidega, et leida endale sobiv.";
@@ -2434,7 +2434,7 @@
 "purchases_feature_desc_unlimited_map_download" = "Hangi kõigi mandrite ja piirkondade võrguühenduseta kaartide piiramatud allalaadimised.";
 "unlimited_map_downloads" = "Piiramatu kaartide allalaadimine";
 "shared_string_learn_more" = "Lisateave";
-"shared_string_stop" = "Peatu";
+"shared_string_stop" = "Stop";
 "altitude_ascent" = "Tõus";
 "subscriptions" = "Tellimused";
 "routeInfo_horse_scale_description" = "Kuva rajad vastavalt hobuseradade raskusastmele";
@@ -2461,3 +2461,10 @@
 "private_access_routing_req" = "Sinu sihtkoht asub eramaal. Luba kasutada erateid sellel teekonnal\?";
 "expired" = "Aegunud";
 "share_geo" = "maa:";
+"on_hold" = "Ootel";
+"shared_string_undefined" = "Määramata";
+"paused" = "Peatatud";
+"shared_string_data" = "Andmed";
+"restore_from_osmand_cloud" = "Taasta OsmAnd Cloud\'ist";
+"in_grace_period" = "Ajapikendusperioodil";
+"shared_string_delete_all" = "Kustuta kõik";

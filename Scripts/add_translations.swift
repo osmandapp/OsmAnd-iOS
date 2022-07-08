@@ -14,66 +14,66 @@ var commonValuesDict: [String:[String]] = [:]
 var duplicatesCount = 0
 
 let languageDict = [
-    "ar" : "ar",
-    "ast" : "ast",
-    "az" : "az",
-    "be" : "be",
-    "bg" : "bg",
-    "ca" : "ca",
-    "ckb" : "ckb",
-    "cs" : "cs",
-    "cy" : "cy",
-    "da" : "da",
-    "de" : "de",
-    "el" : "el",
-    "en-GB" : "en-rGB",
-    "eo" : "eo",
-    "es" : "es",
-    "es-AR" : "es-rAR",
-    "es-US" : "es-rUS",
-    "et" : "et",
-    "eu" : "eu",
-    "fa" : "fa",
-    "fi" : "fi",
-    "fr" : "fr",
-    "gl" : "gl",
-    "he" : "iw",
-    "hsb" : "b+hsb",
-    "hu" : "hu",
-    "hy" : "hy",
-    "id" : "id",
-    "is" : "is",
-    "it" : "it",
-    "ja" : "ja",
-    "ka" : "ka",
-    "kab" : "b+kab",
-    "kn" : "kn",
-    "ko" : "ko",
-    "ku" : "ku",
-    "lt" : "lt",
-    "lv" : "lv",
-    "ml" : "ml",
-    "my" : "my",
-    "nb" : "nb",
-    "nl" : "nl",
-    "oc" : "oc",
-    "pl" : "pl",
-    "pt-BR" : "pt-rBR",
-    "ro-RO" : "ro",
-    "ru" : "ru",
-    "sc" : "sc",
-    "sk" : "sk",
-    "sl" : "sl",
-    "sq" : "sq",
-    "sr" : "sr",
+//    "ar" : "ar",
+//    "ast" : "ast",
+//    "az" : "az",
+//    "be" : "be",
+//    "bg" : "bg",
+//    "ca" : "ca",
+//    "ckb" : "ckb",
+//    "cs" : "cs",
+//    "cy" : "cy",
+//    "da" : "da",
+//    "de" : "de",
+//    "el" : "el",
+//    "en-GB" : "en-rGB",
+//    "eo" : "eo",
+//    "es" : "es",
+//    "es-AR" : "es-rAR",
+//    "es-US" : "es-rUS",
+//    "et" : "et",
+//    "eu" : "eu",
+//    "fa" : "fa",
+//    "fi" : "fi",
+//    "fr" : "fr",
+//    "gl" : "gl",
+//    "he" : "iw",
+//    "hsb" : "b+hsb",
+//    "hu" : "hu",
+//    "hy" : "hy",
+//    "id" : "id",
+//    "is" : "is",
+//    "it" : "it",
+//    "ja" : "ja",
+//    "ka" : "ka",
+//    "kab" : "b+kab",
+//    "kn" : "kn",
+//    "ko" : "ko",
+//    "ku" : "ku",
+//    "lt" : "lt",
+//    "lv" : "lv",
+//    "ml" : "ml",
+//    "my" : "my",
+//    "nb" : "nb",
+//    "nl" : "nl",
+//    "oc" : "oc",
+//    "pl" : "pl",
+//    "pt-BR" : "pt-rBR",
+//    "ro-RO" : "ro",
+//    "ru" : "ru",
+//    "sc" : "sc",
+//    "sk" : "sk",
+//    "sl" : "sl",
+//    "sq" : "sq",
+//    "sr" : "sr",
     "sr-Latn" : "b+sr+Latn",
-    "sv" : "sv",
-    "ta" : "ta",
-    "tr" : "tr",
-    "uk" : "uk",
-    "vi" : "vi",
-    "zh-Hans" : "zh-rCN" ,
-    "zh-Hant" : "zh-rTW",
+//    "sv" : "sv",
+//    "ta" : "ta",
+//    "tr" : "tr",
+//    "uk" : "uk",
+//    "vi" : "vi",
+//    "zh-Hans" : "zh-rCN" ,
+//    "zh-Hant" : "zh-rTW",
 ]
 
 var allLanguagesDict = languageDict
@@ -206,7 +206,7 @@ func makeOutputString(str1: String, str2: String) -> String {
             i += 1
         }
     }
-    return "\n\"" + str1 + "\" = \"" + str2 + "\";"
+    return "\"" + str1 + "\" = \"" + str2 + "\";"
 }
 
 
@@ -319,7 +319,7 @@ func makeNewDict(language: String, iosDict: [String : String], androidDict: [Str
         let fileURL = URL(fileURLWithPath: "./Resources/Localizations/" + language + ".lproj/Localizable.strings")
         do {
             let fileContent = try String(contentsOf: fileURL)
-            var strings = fileContent.components(separatedBy: ";")
+            var strings = fileContent.components(separatedBy: ";\n")
             strings = filterDuplicateStrings(strings, iosDict: iosDict)
             strings = filterEndingEmptyStrings(strings)
 
@@ -332,11 +332,11 @@ func makeNewDict(language: String, iosDict: [String : String], androidDict: [Str
             }
 
             for elem in newLinesDict {
-                strings.append("\n\"" + elem.key + "\" = \"" + filterUnsafeChars(elem.value) + "\"")
+                strings.append("\"" + elem.key + "\" = \"" + filterUnsafeChars(elem.value) + "\"")
             }
             strings.append("")
             
-            let newFileContent = strings.joined(separator: ";")
+            let newFileContent = strings.joined(separator: ";\n")
         
             do {
                 try newFileContent.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)

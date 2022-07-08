@@ -48,7 +48,7 @@
 "transport_routes" = "Երթուղիներ";
 "transport_nearby_routes_within" = "Մոտակա երթուղիները";
 "transport_nearby_routes" = "Ներսում";
-"transport_stop" = "Կանգառ";
+"transport_stop" = "Դադարեցնել";
 
 "cancel_navigation" = "Վերջացնել նավիգացիան";
 "start_navigation" = "Start navigation";
@@ -613,7 +613,7 @@
 "poi_hide" = "Թաքցնել";
 
 // My Places
-"favorites" = "Սիրածները";
+"favorites" = "Սիրված";
 "tracks" = "Տրեկները";
 "personal_category_name" = "Personal";
 "visible" = "Տեսանելի";
@@ -718,7 +718,7 @@
 "map_settings_map_magnifier" = "Խոշորացույց";
 "map_settings_text_size" = "Տեքստի չափը";
 "map_settings_day" = "Ցերեկային";
-"map_settings_night" = "Գիշերային";
+"map_settings_night" = "Գիշեր";
 "map_settings_style" = "Քարտեզի ոճը";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -1263,7 +1263,7 @@
 
 "osm_note" = "OSMնշում";
 "osm_created" = "Created";
-"osm_deleted" = "Նջված է";
+"osm_deleted" = "Ջնջված է";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1404,7 +1404,7 @@
 "add_intermediate" = "Add intermediate point";
 "add_home" = "Add home";
 "add_work" = "Add work";
-"home_pt" = "Գլխավոր";
+"home_pt" = "Տուն";
 "work_pt" = "Work";
 "map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Ավելացնել առաջին միջանկյալ կետը";
@@ -1586,7 +1586,7 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "Սիրված";
+"import_favorite" = "«Սիրված»";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -1725,7 +1725,7 @@
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
-"product_title_wiki" = "Վիքիպեդիա";
+"product_title_wiki" = "Վիքիփեդիա";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "shared_string_all_languages" = "Բոլոր լեզուները";
@@ -1743,7 +1743,7 @@
 "product_desc_wikivoyage" = "Աշխարհի ուղեցույց, որը կարող է խմբագրել ցանկացած մեկը:";
 "product_desc_ext_wikivoyage" = "Տեսեք ուղեցույցները, OsmAnd-ում աշխարհի ամենահետաքրքիր վայրերը, առանց ինտերնետին միանալու:";
 
-"product_title_sea_depth_contours" = "Ծովային խորքային ուրվագիծը";
+"product_title_sea_depth_contours" = "Ծովային խորքային ուրվագծեր";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 
 "my_location" = "My Location";
@@ -1764,7 +1764,7 @@
 "res_installing" = "Installing…";
 "res_roads" = "Ճանապարհներ";
 "res_srtm" = "Բարձունքների գծեր";
-"res_wiki" = "Վիքիպեդիա";
+"res_wiki" = "Վիքիփեդիա";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Լանջ";
 "res_standard" = "Ստանդարտ քարտեզ";
@@ -1845,7 +1845,7 @@
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "shared_string_show_all" = "Ցույց տալ ամբողջը";
-"parking" = "Ավտոկայանատեղեր";
+"parking" = "Կայանատեղ";
 "parked_at" = "Parked at";
 
 "directions_more_options" = "Մեկնման կետ";
@@ -1858,7 +1858,7 @@
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
 
-"plugins" = "Պլագիններ (Plugins)";
+"plugins" = "Պլագիններ";
 "open_map_settings" = "Open Map Settings";
 
 "plugin_popup_ski_title" = "Turn on Ski map style";
@@ -2492,7 +2492,11 @@
 "product_title_development" = "OsmAnd-ի կարգավորումը և զարգացումը";
 "restore_purchases" = "Գնումների վերականգնում";
 "altitude_descent" = "Վայրեջք";
-"shared_string_stop" = "Կանգառ";
+"shared_string_stop" = "Դադարեցնել";
 "product_desc_ext_development" = "Կարգավորումներ զարգացման եւ կարգաբերման գործառույթների համար, ինչպիսիք են երթուղու ստուգումը կամ մոդելավորումը,քարտեզի ցուցադրման կատարումը, ձայնային հուշումները ստուգելը: Այս կարգավորումները մշակողների համար են և հասարակ օգտագործողների համար անհրաժեշտ չեն:";
 "osm_live_banner_desc" = "Ստացեք քարտեզի անսահմանափակ ներբեռնման հնարավորութուն նաև քարտեզների թարմացում ամիսը մեկ անգամ, շաբաթական, ամենօրյա կամ ամեն ժամ:";
 "share_geo" = "գեո:";
+"paused" = "Դադարեցվել է";
+"shared_string_delete_all" = "Ջնջել բոլորը";
+"shared_string_undefined" = "Անորոշ է";
+"shared_string_data" = "Տվյալներ";

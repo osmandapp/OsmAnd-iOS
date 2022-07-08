@@ -755,7 +755,7 @@
 "cancel_navigation" = "Stöðva leiðsögn";
 "transport_routes" = "Leiðir";
 "transport_nearby_routes_within" = "Nálægar leiðir innan";
-"transport_stop" = "Stöðva";
+"transport_stop" = "Biðstöð";
 "route_stops_before" = "%d stopp á undan";
 "transport_nearby_routes" = "innan";
 "shared_string_previous" = "Fyrra";
@@ -992,7 +992,7 @@
 "osm_edits_offline_layer" = "OSM breytingar/minnispunktar (ónettengt)";
 "osm_notes_online_layer" = "OSM-minnispunktar (nettengt)";
 "osm_edits_basic" = "Einfalt";
-"osm_edits_advanced" = "Lengra komnir";
+"osm_edits_advanced" = "Nánar";
 "osm_edits_all" = "Allar breytingar";
 "osm_edits_poi" = "Breytingar á merkisstöðum (POI)";
 "osm_edits_notes" = "Minnispunktar";
@@ -2497,7 +2497,7 @@
 "nautical_depth" = "Dýpt sjávar";
 "simulation_preview_mode_title" = "Hraðvirkur forskoðunarhamur";
 "purchases_feature_desc_unlimited_map_download" = "Fáðu ótakmörkuð niðurhöl ónettengdra korta allra heimsálfa og svæða.";
-"shared_string_stop" = "Stöðva";
+"shared_string_stop" = "Biðstöð";
 "unlimited_map_downloads" = "Ótakmörkuð niðurhöl korta";
 "shared_string_learn_more" = "Kanna nánar";
 "altitude_ascent" = "Hækkun";
@@ -2529,7 +2529,7 @@
 "share_geo" = "geo:";
 "simulate_location_movement_speed_x2" = "x2";
 "simulate_location_movement_speed_x3" = "x3";
-"routing_attr_allow_private_for_truck_description" = "Leyfa aðgang flutningabifreiða að einkasvæðum";
+"routing_attr_allow_private_for_truck_description" = "Leyfa aðgang flutningabifreiða að einkasvæðum.";
 "routing_attr_hazmat_category_name" = "Flutningur hættulegra spilliefna";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (engar takmarkanir)";
 "transport_hazmat_yes_desc" = "Þú þarft að velja réttan flokk.";
@@ -2587,3 +2587,5 @@
 "compass_visible_in_rotated_mode_descr" = "Falið þegar norður er upp";
 "weather_plugin" = "Forritsviðbót fyrir veðurlýsingar";
 "simulation_real_mode_desc" = "• Á beinum veghlutum verður hraði nálægt leyfilegum hámarkshraða.\n• Við gatnamót hægist á hraða hermingar.\n• Frádráttur kemur til við umferðarljós, stöðvunarmerki o.s.frv.";
+"compass_visible_in_rotated_mode" = "Sýnilegt ef korti er snúið";
+"restore_from_osmand_cloud" = "Endurheimtaúr OsmAnd Cloud-tölvuskýi";

@@ -412,7 +412,7 @@
 "units_m_s" = "מ/שנ׳";
 "tones" = "טונות";
 "nothing_found" = "Nothing found: %@";
-"nothing_found_empty" = "לא נמצא כלום";
+"nothing_found_empty" = "לא נמצא דבר";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "בחירת רחוב";
 "shared_string_in_name" = "ב־%@";
@@ -1014,7 +1014,7 @@
 "point_num" = "Point %d";
 "points_count" = "Points:";
 "route_betw_points" = "מסלול בין נקודות";
-"save_changes" = "שמירת שינויים";
+"save_changes" = "שמירת השינויים";
 "save_new_track" = "שמירה כמסלול חדש";
 "add_to_track" = "הוספה למסלול";
 "move_point" = "Move point";
@@ -1215,7 +1215,7 @@
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "פרטי קשר";
-"osm_str_name" = "שם רחוב";
+"osm_str_name" = "שם הרחוב";
 "osm_building_num" = "Building number";
 "osm_phone" = "טלפון";
 "osm_website" = "אתר";
@@ -1451,7 +1451,7 @@
 "modify_edit_short" = "עריכת שינוי ב־OSM";
 "open_osm_note" = "פתיחת הערת OSM";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "הגשה";
+"osm_alert_title" = "שליחה";
 "osm_alert_message" = "הודעה";
 "osm_alert_button_ok" = "יצירת הערה";
 "modify_poi" = "Modify the POI information";
@@ -1476,7 +1476,7 @@
 "units_nm" = "מייל ימי";
 "units_km_h" = "קמ״ש";
 "units_mph" = "מייל לשעה";
-"units_hour" = "שע׳";
+"units_hour" = "שע";
 "units_min" = "דקות";
 "units_sec" = "שנ׳";
 "units_sec_short" = "s";
@@ -1667,7 +1667,7 @@
 "product_title_wikivoyage" = "מדריכי תיירות";
 "product_desc_wikivoyage" = "מדריך התיירות המקוון שכל אחד יכול לערוך.";
 "product_desc_ext_wikivoyage" = "מדריכים למקומות המעניינים ביותר בעולם, בתוך OsmAnd, ללא חיבור לאינטרנט.";
-"product_title_sea_depth_contours" = "קווי עומק ימיים";
+"product_title_sea_depth_contours" = "קווי מתאר של עומק הים";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 "my_location" = "My Location";
 "all_categories" = "All categories";
@@ -1761,14 +1761,14 @@
 "parking" = "חנייה";
 "parked_at" = "Parked at";
 "directions_more_options" = "הנחיות מ־";
-"nearby_search" = "חיפוש בסביבה";
+"nearby_search" = "חיפוש בסביבת מקום";
 "change_object_posiotion" = "Change object's position";
 "change_position_descr" = "Move the map to change object's position";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
-"plugins" = "מנהל התוספים";
+"plugins" = "תוספים";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -2467,3 +2467,12 @@
 "purchases_feature_desc_monthly_map_updates" = "קבלת גישה לעדכונים חודשיים מתחדשים למפות בלתי־מקוונות.";
 "purchases_feature_desc_osmand_cloud" = "הצטרפות ל־OsmAnd Cloud מאפשרת לך לאחסן את כל נתוני ה־OsmAnd שלך באופן מקוון. הנתונים שלך לא הולכים לאיבוד לאחר ההתקנה. ניתן לגבות ולשחזר את כל הנתונים בקלות.";
 "product_desc_pro" = "קבלת פסגת היכולות";
+"in_grace_period" = "בתקופת חסד";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (אין הגבלות)";
+"shared_string_data" = "נתונים";
+"on_hold" = "מוקפא";
+"restore_from_osmand_cloud" = "שחזור מ־OsmAnd Cloud";
+"shared_string_undefined" = "בלתי מוגדר";
+"shared_string_delete_all" = "למחוק הכול";
+"lang_ckb" = "כורדית מרכזית";
+"paused" = "הופסק";

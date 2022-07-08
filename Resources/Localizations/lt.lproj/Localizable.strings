@@ -48,7 +48,7 @@
 "transport_routes" = "Maršrutai";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Viduje";
-"transport_stop" = "Nutraukti";
+"transport_stop" = "Stop";
 
 "cancel_navigation" = "Stabdyti navigaciją";
 "start_navigation" = "Start navigation";
@@ -440,7 +440,7 @@
 "tones" = "tones";
 
 "nothing_found" = "Nothing found: %@";
-"nothing_found_empty" = "Nepavyko nieko rasti";
+"nothing_found_empty" = "Nieko nerasta";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Pasirinkite gatvę";
 "shared_string_in_name" = "už %@";
@@ -613,7 +613,7 @@
 "poi_hide" = "Slėpti";
 
 // My Places
-"favorites" = "Mėgiami";
+"favorites" = "Įsimintos vietos";
 "tracks" = "Keliai";
 "personal_category_name" = "Asmeninis";
 "visible" = "Matomas";
@@ -718,7 +718,7 @@
 "map_settings_map_magnifier" = "Žemėlapio padidinimo stiklas";
 "map_settings_text_size" = "Teksto dydis";
 "map_settings_day" = "Diena";
-"map_settings_night" = "Naktis";
+"map_settings_night" = "Naktį";
 "map_settings_style" = "Atvaizdavimo stilius";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -1146,7 +1146,7 @@
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Vietinis";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Tiesioginiai atnaujinimai";
+"osmand_live_updates" = "Automatinis naujinimas";
 "osmand_live_available_maps" = "Galimižemėlapiai";
 "osmand_live_last_changed" = "Last map change: %@";
 "osmand_live_last_live_update" = "Paskutinįkart atnaujinta: %@";
@@ -1198,7 +1198,7 @@
 "res_cancel_inst_q" = "You're going to cancel %@ installation.";
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
-"res_details" = "Išsami informacija";
+"res_details" = "Detalės";
 "res_type" = "Tipas";
 "res_unknown" = "Unknown";
 "res_size" = "Size";
@@ -1309,7 +1309,7 @@
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
 "osm_edits_basic" = "Pagrindinis";
-"osm_edits_advanced" = "Pažengęs";
+"osm_edits_advanced" = "Išplėstinis";
 "osm_edits_all" = "All edits";
 "osm_edits_poi" = "POI edits";
 "osm_edits_notes" = "Notes";
@@ -1586,7 +1586,7 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "Įsimintos vietos";
+"import_favorite" = "Įsiminta vieta";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -1735,7 +1735,7 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"product_title_srtm" = "Kontūrinės linijos";
+"product_title_srtm" = "SRTMžemėlapiai";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
@@ -1763,7 +1763,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Keliai";
-"res_srtm" = "Kontūrinės linijos";
+"res_srtm" = "SRTMžemėlapiai";
 "res_wiki" = "Vikipedija";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Nuolydis";
@@ -1845,7 +1845,7 @@
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "shared_string_show_all" = "RODYTI VISKĄ";
-"parking" = "Parkingas";
+"parking" = "Automobilio statymas";
 "parked_at" = "Parked at";
 
 "directions_more_options" = "Kelio nuorodos nuo";
@@ -2525,10 +2525,14 @@
 "restore_purchases" = "Atkurti pirkinius";
 "product_desc_plus" = "Gauti išplėstines funkcijas";
 "not_available_with" = "Neprieinama su %@";
-"shared_string_stop" = "Nutraukti";
+"shared_string_stop" = "Stop";
 "toast_empty_name_error" = "Neįvardinta vieta";
 "product_title_development" = "OsmAnd vystymas";
 "shared_string_learn_more" = "Sužinoti daugiau";
 "unlimited_map_downloads" = "Neribotasžemėlapių atsisiuntimas";
 "purchases_feature_desc_combined_wiki" = "Naršykite Wikipedia straipsnius keliaudami, neturėdami interneto ryšio. Duomenys neprisijungus prie interneto suskirstyti pagal šalis ir prieinami visomis kalbomis.";
 "product_desc_pro" = "Gaukite maksimalias funkcijas";
+"shared_string_delete_all" = "Viską ištrinti";
+"shared_string_data" = "Data";
+"paused" = "Pristabdyta";
+"shared_string_undefined" = "Nenurodyta";

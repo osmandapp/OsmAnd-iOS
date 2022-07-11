@@ -1231,6 +1231,8 @@
                 
                 NSString *ref = [NSString stringWithUTF8String:next->object->getRef(locale,
                                             transliterate, next->isForwardDirection()).c_str()];
+                ref = ref.length > 0 ? ref : nil;
+                
                 info.ref = ref;
                 NSString *streetName = [NSString stringWithUTF8String:next->object->getName(locale,
                                             transliterate).c_str()];

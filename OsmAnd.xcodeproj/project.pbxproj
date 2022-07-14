@@ -1061,7 +1061,6 @@
 		84F3A9901B501C5800D16EBC /* ic_destination_arrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F3A9871B501C5800D16EBC /* ic_destination_arrow@3x.png */; };
 		84F4641E1B664D3B00C1D96F /* ic_popup_no_internet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F464171B664D3B00C1D96F /* ic_popup_no_internet@2x.png */; };
 		84F464211B664D3B00C1D96F /* ic_popup_no_internet@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F464181B664D3B00C1D96F /* ic_popup_no_internet@3x.png */; };
-		84F648D61E5B49C9001A7373 /* mapnik.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84F648D51E5B49C9001A7373 /* mapnik.render.xml */; };
 		8A1C56A3245B247800739846 /* map-icons-png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1C56A0245B247700739846 /* map-icons-png */; };
 		8A1C56A5245B247800739846 /* map-shaders-png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1C56A1245B247700739846 /* map-shaders-png */; };
 		8A1C56A7245B247800739846 /* poi-icons-png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1C56A2245B247800739846 /* poi-icons-png */; };
@@ -4237,7 +4236,6 @@
 		84F3A9871B501C5800D16EBC /* ic_destination_arrow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_arrow@3x.png"; path = "Resources/Icons/ic_destination_arrow@3x.png"; sourceTree = "<group>"; };
 		84F464171B664D3B00C1D96F /* ic_popup_no_internet@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_popup_no_internet@2x.png"; path = "Resources/Icons/ic_popup_no_internet@2x.png"; sourceTree = "<group>"; };
 		84F464181B664D3B00C1D96F /* ic_popup_no_internet@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_popup_no_internet@3x.png"; path = "Resources/Icons/ic_popup_no_internet@3x.png"; sourceTree = "<group>"; };
-		84F648D51E5B49C9001A7373 /* mapnik.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = mapnik.render.xml; path = ../resources/rendering_styles/mapnik.render.xml; sourceTree = "<group>"; };
 		84F712571AE4FED70071B326 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84F712581AE4FF940071B326 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A0DF07B23942D47000A1D4B /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -8631,7 +8629,6 @@
 				DA5A5DE2276B445800ABC19D /* snowmobile.render.xml */,
 				8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */,
 				DA08A0D1227096DA000A53BA /* offroad.render.xml */,
-				84F648D51E5B49C9001A7373 /* mapnik.render.xml */,
 				84E297551E2FD80A006EA6B1 /* topo.render.xml */,
 				844499B71AAF816E00ACA20D /* skimap.render.xml */,
 				84CC524B1AA5A539000063CF /* nautical.render.xml */,
@@ -12769,7 +12766,6 @@
 				DA5A82C826C563A800F274C7 /* OAButtonRightIconCell.xib in Resources */,
 				32B50ADF26BBE3C7002E6C92 /* ic_custom_map_location_follow@3x.png in Resources */,
 				DA5A82B326C563A700F274C7 /* OASettingSwitchCell.xib in Resources */,
-				84F648D61E5B49C9001A7373 /* mapnik.render.xml in Resources */,
 				84F3A9631B4ECF2700D16EBC /* ic_trip_visitedpoint@3x.png in Resources */,
 				848A14D61B223A4C00A31AE7 /* bg_title@2x.png in Resources */,
 				DA1BC120233F9B01004DAF78 /* ic_custom_search@2x.png in Resources */,

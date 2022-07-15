@@ -1539,26 +1539,24 @@
                 }
                 else
                 {
-                    //TODO: comment this code?
-                    
-                    OAMissingMapsHelper *missingMapsHelper = [[OAMissingMapsHelper alloc] initWithParams:params];
-                    NSArray<CLLocation *> *points = [missingMapsHelper getStartFinishIntermediatePoints];
-                    NSArray<OAWorldRegion *> *missingMaps = [missingMapsHelper getMissingMaps:points];
-                    NSArray<CLLocation *> *pathPoints = [missingMapsHelper getDistributedPathPoints:points];
-                    if (missingMaps && missingMaps.count > 0)
-                    {
-                        res = [[OARouteCalculationResult alloc] initWithErrorMessage:@"Additional maps available"];
-                        res.missingMaps = [missingMapsHelper getMissingMaps:pathPoints];
-                    }
-                    else
-                    {
-                        if (![missingMapsHelper isAnyPointOnWater:pathPoints])
-                        {
-                            // TODO: how to store OAWorldRegion in cpp calculationProgress class?
-                            // params.calculationProgress.missingMaps = missingMapsHelper.getMissingMaps(pathPoints);
-                        }
+//                    OAMissingMapsHelper *missingMapsHelper = [[OAMissingMapsHelper alloc] initWithParams:params];
+//                    NSArray<CLLocation *> *points = [missingMapsHelper getStartFinishIntermediatePoints];
+//                    NSArray<OAWorldRegion *> *missingMaps = [missingMapsHelper getMissingMaps:points];
+//                    NSArray<CLLocation *> *pathPoints = [missingMapsHelper getDistributedPathPoints:points];
+//                    if (missingMaps && missingMaps.count > 0)
+//                    {
+//                        res = [[OARouteCalculationResult alloc] initWithErrorMessage:@"Additional maps available"];
+//                        res.missingMaps = [missingMapsHelper getMissingMaps:pathPoints];
+//                    }
+//                    else
+//                    {
+//                        if (![missingMapsHelper isAnyPointOnWater:pathPoints])
+//                        {
+//                            // TODO: how to store OAWorldRegion in cpp calculationProgress class?
+//                            // params.calculationProgress.missingMaps = missingMapsHelper.getMissingMaps(pathPoints);
+//                        }
                         res = [self findVectorMapsRoute:params calcGPXRoute:calcGPXRoute];
-                    }
+//                    }
                 }
             }
 //            else if (params.mode.getRouterService == BROUTER)

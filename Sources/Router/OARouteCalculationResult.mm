@@ -14,18 +14,16 @@
 #import "OALocationServices.h"
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
+#import "OARoutingHelperUtils.h"
 #import "OAUtilities.h"
 #import "QuadRect.h"
 #import "OAExitInfo.h"
 
 #include <routeSegmentResult.h>
 
-#define distanceClosestToIntermediate 400.0
+#define distanceClosestToIntermediate 3000.0
+#define distanceThresholdToIntermediate 25
 #define distanceThresholdToIntroduceFirstAndLastPoints 50
-
-// Evaluates street name that the route follows after turn within specified distance.
-// It is useful to find names for short segments on intersections and roundabouts.
-#define distanceSeekStreetName 150.0
 
 @implementation OANextDirectionInfo
 
@@ -86,6 +84,7 @@
         _listDistance = [NSMutableArray array];
         _directions = [NSMutableArray array];
         _alarmInfo = [NSMutableArray array];
+        _initialCalculation = NO;
     }
     return self;
 }
@@ -96,6 +95,15 @@
         return [_locations subarrayWithRange:NSMakeRange(_currentRoute, _locations.count - _currentRoute)];
                                                          
     return [NSArray array];
+}
+
+- (int) getRouteDistanceToFinish:(int)posFromCurrentIndex
+{
+    if (_listDistance && _currentRoute + posFromCurrentIndex < _listDistance.count)
+    {
+        return _listDistance[_currentRoute + posFromCurrentIndex].intValue;
+    }
+    return 0;
 }
 
 - (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult
@@ -196,6 +204,16 @@
 - (BOOL) isEmpty
 {
     return _locations.count == 0 || _currentRoute >= _locations.count;
+}
+
+- (BOOL) hasMissingMaps
+{
+    return _missingMaps.count > 0;
+}
+
+- (BOOL) isInitialCalculation
+{
+    return _initialCalculation;
 }
 
 - (void) updateCurrentRoute:(int)currentRoute
@@ -363,11 +381,39 @@
     return nil;
 }
 
+- (CLLocation *) getNextRouteLocation:(int)after
+{
+    if (_currentRoute + after >= 0 && _currentRoute + after < _locations.count)
+        return _locations[_currentRoute + after];
+    
+    return nil;
+}
+
+- (BOOL) directionsAvailable
+{
+    return _currentDirectionInfo < _directions.count;
+}
+
+- (OARouteDirectionInfo *) getCurrentDirection
+{
+    if (_currentDirectionInfo < _directions.count)
+        return _directions[_currentDirectionInfo];
+    return nil;
+}
+
 - (int) getDistanceToPoint:(int)locationIndex
 {
-    if (_listDistance && _currentRoute < _listDistance.count && locationIndex < _listDistance.count &&
-       locationIndex > _currentRoute)
+    if (_listDistance && _currentRoute < _listDistance.count
+        && locationIndex < _listDistance.count && locationIndex > _currentRoute)
         return _listDistance[_currentRoute].intValue - _listDistance[locationIndex].intValue;
+    
+    return 0;
+}
+
+- (int) getDistanceFromStart
+{
+    if (_listDistance && _currentRoute > 0 && _currentRoute < _listDistance.count)
+        return _listDistance[0].intValue - _listDistance[_currentRoute - 1].intValue;
     
     return 0;
 }
@@ -403,7 +449,8 @@
 
 - (int) getDistanceFromPoint:(int) locationIndex
 {
-    if(_listDistance && locationIndex < _listDistance.count) {
+    if(_listDistance && locationIndex < _listDistance.count)
+    {
         return [_listDistance[locationIndex] intValue];
     }
     return 0;
@@ -417,6 +464,11 @@
 - (int) getListDistance:(int)index
 {
     return _listDistance.count > index ? _listDistance[index].intValue : 0;
+}
+
+- (int) getCurrentStraightAngleRoute
+{
+    return MAX(_currentStraightAngleRoute, _currentRoute);
 }
 
 - (int) getDistanceToNextIntermediate:(CLLocation *)fromLoc
@@ -462,19 +514,52 @@
     if (_currentDirectionInfo < _directions.count)
     {
         OARouteDirectionInfo *current = _directions[_currentDirectionInfo];
-        time = current.afterLeftTime;
-        
-        int distanceToNextTurn = _listDistance[_currentRoute].intValue;
-        if (_currentDirectionInfo + 1 < _directions.count)
-            distanceToNextTurn -= _listDistance[_directions[_currentDirectionInfo + 1].routePointOffset].intValue;
-        
-        CLLocation *l = _locations[_currentRoute];
-        if (fromLoc)
-            distanceToNextTurn += [fromLoc distanceFromLocation:l];
-        
-        time += distanceToNextTurn / current.averageSpeed;
+        time = current.afterLeftTime + [self getLeftTimeToNextDirection:fromLoc];
     }
     return time;
+}
+
+- (long) getLeftTimeToNextTurn:(CLLocation *)fromLoc
+{
+    long time = 0;
+    if (_currentDirectionInfo < _directions.count)
+    {
+        OARouteDirectionInfo *current = _directions[_currentDirectionInfo];
+        // Locate next direction of interest
+        int nextInd = _currentDirectionInfo + 1;
+        while (nextInd < _directions.count)
+        {
+            OARouteDirectionInfo *i = _directions[nextInd];
+            if (i.turnType && !i.turnType->isSkipToSpeak())
+            {
+                break;
+            }
+            nextInd++;
+            time += [i getExpectedTime];
+        }
+        time += [self getLeftTimeToNextDirection:fromLoc];
+    }
+    return MAX(time, 0);
+}
+
+- (int) getLeftTimeToNextDirection:(CLLocation *)fromLoc
+{
+    if (_currentDirectionInfo < _directions.count)
+    {
+        OARouteDirectionInfo *current = _directions[_currentDirectionInfo];
+        int distanceToNextTurn = [self getListDistance:_currentRoute];
+        if (_currentDirectionInfo + 1 < _directions.count)
+        {
+            distanceToNextTurn -= [self getListDistance:_directions[_currentDirectionInfo + 1].routePointOffset];
+        }
+        CLLocation *l = _locations[_currentRoute];
+        if (fromLoc)
+        {
+            distanceToNextTurn = [fromLoc distanceFromLocation:l];
+        }
+        return (int) (distanceToNextTurn / current.averageSpeed);
+    }
+    return 0;
 }
 
 - (long) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc
@@ -542,20 +627,26 @@
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex
 {
-    return [self getOriginalRoute:startIndex endIndex:(int)_segments.size()];
+    return [self getOriginalRoute:startIndex endIndex:(int)_segments.size() includeFirstSegment:YES];
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex endIndex:(int)endIndex
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex includeFirstSegment:(BOOL)includeFirstSegment
+{
+    return [self getOriginalRoute:startIndex endIndex:(int)_segments.size() includeFirstSegment:includeFirstSegment];
+}
+
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex endIndex:(int)endIndex includeFirstSegment:(BOOL)includeFirstSegment
 {
     if (_segments.size() == 0)
         return std::vector<std::shared_ptr<RouteSegmentResult>>();
     
     std::vector<std::shared_ptr<RouteSegmentResult>> list;
     list.push_back(_segments[startIndex++]);
-    for (int i = startIndex; i < endIndex; i++)
+    for (int i = ++startIndex; i < endIndex; i++)
+    {
         if (_segments[i - 1] != _segments[i])
             list.push_back(_segments[i]);
-    
+    }
     return list;
 }
 
@@ -613,7 +704,7 @@
     }
 }
 
-+ (void) addMissingTurnsToRoute:(NSArray<CLLocation *> *)locations originalDirections:(NSMutableArray<OARouteDirectionInfo *> *)originalDirections start:(CLLocation *)start end:(CLLocation *)end mode:(OAApplicationMode *)mode leftSide:(BOOL)leftSide
++ (void) addMissingTurnsToRoute:(NSArray<CLLocation *> *)locations originalDirections:(NSMutableArray<OARouteDirectionInfo *> *)originalDirections mode:(OAApplicationMode *)mode leftSide:(BOOL)leftSide useLocationTime:(BOOL)useLocationTime
 {
     if (locations.count == 0)
         return;
@@ -633,7 +724,19 @@
     
     int previousLocation = 0;
     int prevBearingLocation = 0;
-    OARouteDirectionInfo *previousInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:speed turnType:TurnType::ptrStraight()];
+    int prevStrictLocation = 0;
+    float startSpeed = speed;
+    CLLocation *prevLoc = locations[prevStrictLocation];
+
+    if (useLocationTime && locations.count > 1 &&
+        [locations[1].timestamp timeIntervalSince1970] > 0 &&
+        [prevLoc.timestamp timeIntervalSince1970] > 0 &&
+        [locations[1].timestamp timeIntervalSince1970] > [prevLoc.timestamp timeIntervalSince1970])
+    {
+        startSpeed = [locations[1] distanceFromLocation:prevLoc] / ([locations[1].timestamp timeIntervalSince1970] - [prevLoc.timestamp timeIntervalSince1970]);
+    }
+    
+    OARouteDirectionInfo *previousInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:startSpeed turnType:TurnType::ptrStraight()];
     previousInfo.routePointOffset = 0;
     previousInfo.descriptionRoute = OALocalizedString(@"route_head");
     [computeDirections addObject:previousInfo];
@@ -667,10 +770,12 @@
         std::shared_ptr<TurnType> type = nullptr;
         NSString *description = nil;
         float delta = previousBearing - bearing;
-        while (delta < 0) {
+        while (delta < 0)
+        {
             delta += 360;
         }
-        while (delta > 360) {
+        while (delta > 360)
+        {
             delta -= 360;
         }
         
@@ -684,7 +789,7 @@
             continue;
         }
         
-        if (delta > 45 && delta < 315)
+        if (delta > 30 && delta < 330)
         {
             if (delta < 60)
             {
@@ -721,10 +826,13 @@
             }
             else if (delta < 210)
             {
-                if(leftSide) {
+                if(leftSide)
+                {
                     type = TurnType::ptrValueOf(TurnType::TU, leftSide);
                     description = OALocalizedString(@"route_tu");
-                } else {
+                }
+                else
+                {
                     description = OALocalizedString(@"route_tshr");
                     type = TurnType::ptrValueOf(TurnType::TSHR, leftSide);
                 }
@@ -748,18 +856,37 @@
             // calculate for previousRoute
             previousInfo.distance = [listDistance[previousLocation] intValue] - [listDistance[i] intValue];
             type->setTurnAngle(360 - delta);
+            CLLocation *strictPrevious = locations[prevStrictLocation];
+            if (useLocationTime && [current.timestamp timeIntervalSince1970] > 0 &&
+                [strictPrevious.timestamp timeIntervalSince1970] > 0 &&
+                [current.timestamp timeIntervalSince1970] > [strictPrevious.timestamp timeIntervalSince1970])
+            {
+                float directionSpeed = previousInfo.distance / (([current.timestamp timeIntervalSince1970] - [strictPrevious.timestamp timeIntervalSince1970]));
+                previousInfo.averageSpeed = directionSpeed;
+            }
             previousInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:speed turnType:type];
             previousInfo.descriptionRoute = description;
             previousInfo.routePointOffset = startTurnPoint;
             [computeDirections addObject:previousInfo];
             previousLocation = startTurnPoint;
             prevBearingLocation = i; // for bearing using current location
+            prevStrictLocation = i;
         }
         // clear dist for turn
         distForTurn = 0;
     }
     
     previousInfo.distance = [listDistance[previousLocation] intValue];
+    CLLocation *strictPrevious = locations[prevStrictLocation];
+    CLLocation *current = locations[locations.count - 1];
+    if (useLocationTime && [current.timestamp timeIntervalSince1970] > 0 &&
+        [strictPrevious.timestamp timeIntervalSince1970] > 0 &&
+        [current.timestamp timeIntervalSince1970] > [strictPrevious.timestamp timeIntervalSince1970])
+    {
+        float directionSpeed = previousInfo.distance / (([current.timestamp timeIntervalSince1970] - [strictPrevious.timestamp timeIntervalSince1970]));
+        previousInfo.averageSpeed = directionSpeed;
+    }
+    
     if (originalDirections.count == 0)
     {
         [originalDirections addObjectsFromArray:computeDirections];
@@ -770,9 +897,11 @@
         // one more
         for (int i = 0; i <= originalDirections.count && currentDirection < computeDirections.count; i++)
         {
-            while (currentDirection < computeDirections.count) {
+            while (currentDirection < computeDirections.count)
+            {
                 int distanceAfter = 0;
-                if (i < originalDirections.count) {
+                if (i < originalDirections.count)
+                {
                     OARouteDirectionInfo *resInfo = originalDirections[i];
                     int r1 = computeDirections[currentDirection].routePointOffset;
                     int r2 = resInfo.routePointOffset;
@@ -795,17 +924,17 @@
                 // add turn because it was missed
                 OARouteDirectionInfo *toAdd = computeDirections[currentDirection];
                 
-                if (i > 0) {
+                if (i > 0)
+                {
                     // update previous
                     OARouteDirectionInfo *previous = originalDirections[i - 1];
                     toAdd.averageSpeed = previous.averageSpeed;
                 }
                 toAdd.distance = [listDistance[toAdd.routePointOffset] intValue] - distanceAfter;
-                if (i < originalDirections.count) {
+                if (i < originalDirections.count)
                     [originalDirections insertObject:toAdd atIndex:i];
-                } else {
+                else
                     [originalDirections addObject:toAdd];
-                }
                 i++;
                 currentDirection++;
             }
@@ -838,7 +967,10 @@
         int type = TurnType::C;
         CLLocation *prevLast = locations[locations.count - 2];
         double lastBearing = [prevLast bearingTo:locations[locations.count - 1]];
-        double bearingToEnd = [prevLast bearingTo:end];
+        
+        double bearingToEnd;
+        [OALocationServices computeDistanceAndBearing:prevLast.coordinate.latitude lon1:prevLast.coordinate.longitude lat2:end.coordinate.latitude lon2:end.coordinate.longitude distance:nil initialBearing:&bearingToEnd];
+        
         double diff = degreesDiff(lastBearing, bearingToEnd);
         if(abs(diff) > 10)
             type = diff > 0 ? TurnType::KL : TurnType::KR;
@@ -849,6 +981,7 @@
         {
             auto lastSegmentResult = segs[segs.size() - 1];
             auto routeDataObject = lastSegmentResult->object;
+            info.routeDataObject = routeDataObject;
             
             NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
             if (!lang)
@@ -856,7 +989,7 @@
             
             auto locale = std::string([lang UTF8String]);
             BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
-            info.routeDataObject = routeDataObject;
+            
             info.ref = [NSString stringWithUTF8String:routeDataObject->getRef(locale, transliterate, lastSegmentResult->isForwardDirection()).c_str()];
             info.streetName = [NSString stringWithUTF8String:routeDataObject->getName(locale, transliterate).c_str()];
             info.destinationName = [NSString stringWithUTF8String:routeDataObject->getDestinationName(locale, transliterate, lastSegmentResult->isForwardDirection()).c_str()];
@@ -872,6 +1005,11 @@
 {
     if (locations.count > 0 && [locations[0] distanceFromLocation:start] > distanceThresholdToIntroduceFirstAndLastPoints)
     {
+        // Start location can have wrong altitude
+        double firstValidAltitude = [self getFirstValidAltitude:locations];
+        if (!isnan(firstValidAltitude))
+            start = [[CLLocation alloc] initWithCoordinate:start.coordinate altitude:firstValidAltitude horizontalAccuracy:start.horizontalAccuracy verticalAccuracy:start.verticalAccuracy course:start.course speed:start.speed timestamp:start.timestamp];
+        
         // add start point
         [locations insertObject:start atIndex:0];
         if (segs.size() > 0)
@@ -892,6 +1030,16 @@
         return YES;
     }
     return NO;
+}
+
++ (double) getFirstValidAltitude:(NSMutableArray<CLLocation *> *)locations
+{
+    for (CLLocation *location in locations)
+    {
+        if (!isnan(location.altitude) && location.altitude != 0)
+            return location.altitude;
+    }
+    return NAN;
 }
 
 + (BOOL) introduceLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs end:(CLLocation *)end
@@ -988,27 +1136,34 @@
     if (intermediates && localDirections)
     {
         NSMutableArray<NSNumber *> *interLocations = [NSMutableArray arrayWithObject:@(0) count:intermediates.count];
-        int currentIntermediate = 0;
-        int currentLocation = 0;
-        double distanceThreshold = 25;
-        double prevDistance = distanceThreshold * 4;
-        while((currentIntermediate < intermediates.count || prevDistance > distanceThreshold) && currentLocation < locations.count)
+        
+        for (int currentIntermediate = 0; currentIntermediate < intermediates.count; currentIntermediate++)
         {
-            if (currentIntermediate < intermediates.count &&
-                [self.class getDistanceToLocation:locations p:intermediates[currentIntermediate] currentLocation:currentLocation] < distanceClosestToIntermediate)
+            double setDistance = distanceClosestToIntermediate;
+            CLLocation *currentIntermediatePoint = intermediates[currentIntermediate];
+            NSNumber *prevLocation = currentIntermediate == 0 ? 0 : interLocations[currentIntermediate - 1];
+            for (int currentLocation = prevLocation.intValue; currentLocation < locations.count; currentLocation++)
             {
-                prevDistance = [self.class getDistanceToLocation:locations p:intermediates[currentIntermediate] currentLocation:currentLocation];
-                interLocations[currentIntermediate] = @(currentLocation);
-                currentIntermediate++;
-            } else if (currentIntermediate > 0 && prevDistance > distanceThreshold && [self.class getDistanceToLocation:locations p:intermediates[currentIntermediate - 1] currentLocation:currentLocation] < prevDistance)
-            {
-                prevDistance = [self.class getDistanceToLocation:locations p:intermediates[currentIntermediate - 1] currentLocation:currentLocation];
-                interLocations[currentIntermediate - 1] = @(currentLocation);
+                double currentDistance = [self getDistanceToLocation:locations p:currentIntermediatePoint currentLocation:currentLocation];
+                if (currentDistance < setDistance)
+                {
+                    interLocations[currentIntermediate] = [NSNumber numberWithInt:currentLocation];
+                    setDistance = currentDistance;
+                }
+                else if (currentDistance > distanceThresholdToIntermediate && setDistance < distanceThresholdToIntermediate)
+                {
+                    // finish search
+                    break;
+                }
             }
-            currentLocation ++;
+            if (setDistance == distanceClosestToIntermediate)
+            {
+                return;
+            }
         }
+        
         int currentDirection = 0;
-        currentIntermediate = 0;
+        int currentIntermediate = 0;
         while (currentIntermediate < intermediates.count && currentDirection < localDirections.count)
         {
             int locationIndex = localDirections[currentDirection].routePointOffset;
@@ -1037,17 +1192,22 @@
 
 + (void) attachAlarmInfo:(NSMutableArray<OAAlarmInfo *> *)alarms res:(std::shared_ptr<RouteSegmentResult>)res intId:(int)intId locInd:(int)locInd
 {
-    if (res->object->pointTypes.size() > intId) {
-        const auto& pointTypes = res->object->pointTypes[intId];
+    if (res == nullptr || res->object == nullptr || res->object->pointTypes.size() == 0 || res->object->pointTypes.size() <= intId)
+        return;
+    
+    const auto& pointTypes = res->object->pointTypes[intId];
+    if (pointTypes.size() > 0)
+    {
         auto reg = res->object->region;
-        for (int r = 0; r < pointTypes.size(); r++) {
+        for (int r = 0; r < pointTypes.size(); r++)
+        {
             auto& typeRule = reg->quickGetEncodingRule(pointTypes[r]);
             auto x31 = res->object->pointsX[intId];
             auto y31 = res->object->pointsY[intId];
             CLLocation *loc = [[CLLocation alloc] initWithLatitude:get31LatitudeY(y31) longitude:get31LongitudeX(x31)];
             OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:typeRule locInd:locInd coordinate:loc.coordinate];
             // For STOP first check if it has directional info
-            if (info && !(info.type == AIT_STOP && !res->object->isStopApplicable(res->isForwardDirection(), intId, res->getStartPointIndex(), res->getEndPointIndex()))) 
+            if (info && !(info.type == AIT_STOP && !res->object->isStopApplicable(res->isForwardDirection(), intId, res->getStartPointIndex(), res->getEndPointIndex())))
                 [alarms addObject:info];
         }
     }
@@ -1081,34 +1241,33 @@
 {
     if (type->isRoundAbout())
     {
-        if (shortName) {
+        if (shortName)
             return [NSString stringWithFormat:OALocalizedString(@"route_roundabout_short"), type->getExitOut()];
-        } else {
+        else
             return [NSString stringWithFormat:OALocalizedString(@"route_roundabout"), type->getExitOut()];
-        }
-    } else if (type->getValue() == TurnType::C) {
-        return OALocalizedString(@"route_head");
-    } else if (type->getValue() == TurnType::TSLL) {
-        return OALocalizedString(@"route_tsll");
-    } else if (type->getValue() == TurnType::TL) {
-        return OALocalizedString(@"route_tl");
-    } else if (type->getValue() == TurnType::TSHL) {
-        return OALocalizedString(@"route_tshl");
-    } else if (type->getValue() == TurnType::TSLR) {
-        return OALocalizedString(@"route_tslr");
-    } else if (type->getValue() == TurnType::TR) {
-        return OALocalizedString(@"route_tr");
-    } else if (type->getValue() == TurnType::TSHR) {
-        return OALocalizedString(@"route_tshr");
-    } else if (type->getValue() == TurnType::TU) {
-        return OALocalizedString(@"route_tu");
-    } else if (type->getValue() == TurnType::TRU) {
-        return OALocalizedString(@"route_tu");
-    } else if (type->getValue() == TurnType::KL) {
-        return OALocalizedString(@"route_kl");
-    } else if (type->getValue() == TurnType::KR) {
-        return OALocalizedString(@"route_kr");
     }
+    else if (type->getValue() == TurnType::C)
+        return OALocalizedString(@"route_head");
+    else if (type->getValue() == TurnType::TSLL)
+        return OALocalizedString(@"route_tsll");
+    else if (type->getValue() == TurnType::TL)
+        return OALocalizedString(@"route_tl");
+    else if (type->getValue() == TurnType::TSHL)
+        return OALocalizedString(@"route_tshl");
+    else if (type->getValue() == TurnType::TSLR)
+        return OALocalizedString(@"route_tslr");
+    else if (type->getValue() == TurnType::TR)
+        return OALocalizedString(@"route_tr");
+    else if (type->getValue() == TurnType::TSHR)
+        return OALocalizedString(@"route_tshr");
+    else if (type->getValue() == TurnType::TU)
+        return OALocalizedString(@"route_tu");
+    else if (type->getValue() == TurnType::TRU)
+        return OALocalizedString(@"route_tu");
+    else if (type->getValue() == TurnType::KL)
+        return OALocalizedString(@"route_kl");
+    else if (type->getValue() == TurnType::KR)
+        return OALocalizedString(@"route_kr");
     return @"";
 }
 
@@ -1158,13 +1317,15 @@
                 break;
             auto lat = get31LatitudeY(s->object->pointsY[i]);
             auto lon = get31LongitudeX(s->object->pointsX[i]);
+            float speed = s->segmentSpeed;
             
             NSNumber *alt = nil;
-            if (i * 2 + 1 < vls.size())
+            if (vls.size() > 0 && i * 2 + 1 < vls.size())
             {
                 float h = vls[2 * i + 1];
                 alt = @(h);
-                if (lastHeight == RouteDataObject::HEIGHT_UNDEFINED && locations.count > 0) {
+                if (lastHeight == RouteDataObject::HEIGHT_UNDEFINED && locations.count > 0)
+                {
                     
                     for (int i = 0; i < locations.count; i++)
                     {
@@ -1176,19 +1337,20 @@
                 }
                 lastHeight = h;
             }
-            // FIXME: investigate gpx file
-            if (s->object->pointsX[i] == 0 && s->object->pointsY[i] == 0)
-            {
-                if (locations.count > 0)
-                {
-                    CLLocation *prev = locations[locations.count - 1];
-                    lat = prev.coordinate.latitude;
-                    lon = prev.coordinate.longitude;
-                    if (prev.altitude)
-                        alt = @(prev.altitude);
-                }
-            }
-            [locations addObject:[[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(lat, lon) altitude:alt? alt.doubleValue : NAN horizontalAccuracy:0 verticalAccuracy:0 timestamp:[NSDate date]]];
+//            // FIXME: investigate gpx file
+//            if (s->object->pointsX[i] == 0 && s->object->pointsY[i] == 0)
+//            {
+//                if (locations.count > 0)
+//                {
+//                    CLLocation *prev = locations[locations.count - 1];
+//                    lat = prev.coordinate.latitude;
+//                    lon = prev.coordinate.longitude;
+//                    if (prev.altitude)
+//                        alt = @(prev.altitude);
+//                }
+//            }
+            
+            [locations addObject:[[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(lat, lon) altitude:alt? alt.doubleValue : NAN horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:speed timestamp:[NSDate date]]];
 
             [self.class attachAlarmInfo:alarms res:s intId:i locInd:(int)locations.count];
             segmentsToPopulate.push_back(s);
@@ -1220,7 +1382,7 @@
                     // Consider roundabout end.
                     info.routeEndPointOffset = roundAboutEnd;
                 }
-                auto next = list[lind];
+                auto current = (routeInd == lind) ? s : list[lind];
                 
                 NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
                 if (!lang)
@@ -1229,63 +1391,59 @@
                 auto locale = std::string([lang UTF8String]);
                 BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
                 
-                NSString *ref = [NSString stringWithUTF8String:next->object->getRef(locale,
-                                            transliterate, next->isForwardDirection()).c_str()];
-                ref = ref.length > 0 ? ref : nil;
+                info.streetName = [NSString stringWithUTF8String:current->getStreetName(locale, transliterate, list, routeInd).c_str()];
+                info.destinationName = [NSString stringWithUTF8String:current->getDestinationName(locale, transliterate, list, routeInd).c_str()];
                 
-                info.ref = ref;
-                NSString *streetName = [NSString stringWithUTF8String:next->object->getName(locale,
-                                            transliterate).c_str()];
-                if (streetName.length == 0)
-                {
-                    // try to get street names from following segments
-                    float distanceFromTurn = next->distance;
-                    for (int n = lind + 1; n + 1 < list.size(); n++)
-                    {
-                        const auto& s1 = list[n];
-                        // scan the list only until the next turn
-                        if (s1->turnType != nullptr || distanceFromTurn > distanceSeekStreetName || streetName.length > 0)
-                            break;
-
-                        streetName = [NSString stringWithUTF8String:s1->object->getName(locale, transliterate).c_str()];
-                        distanceFromTurn += s1->distance;
-                    }
-                }
+                std::shared_ptr<RouteDataObject> rdoWithShield = nullptr;
+                std::shared_ptr<RouteDataObject> rdoWithoutShield = nullptr;
                 
-                info.streetName = streetName;
-                info.destinationName = [NSString stringWithUTF8String:next->object->getDestinationName(locale, transliterate, next->isForwardDirection()).c_str()];
-                if (s->object->isExitPoint() && next->object->getHighway() == "motorway_link")
+                if (s->object->isExitPoint())
                 {
                     OAExitInfo *exitInfo = [[OAExitInfo alloc] init];
-                    exitInfo.ref = [NSString stringWithUTF8String:next->object->getExitRef().c_str()];
-                    exitInfo.exitStreetName = [NSString stringWithUTF8String:next->object->getExitName().c_str()];
+                    exitInfo.ref = [NSString stringWithUTF8String:current->object->getExitRef().c_str()];
+                    exitInfo.exitStreetName = [NSString stringWithUTF8String:current->object->getExitName().c_str()];
+                    exitInfo.ref = exitInfo.ref.length > 0 ? exitInfo.ref : nil;
+                    exitInfo.exitStreetName = exitInfo.exitStreetName.length > 0 ? exitInfo.ref : nil;
                     info.exitInfo = exitInfo;
-                }
-                
-                if (ref)
-                {
-                    const auto& nextRoad = next->object;
-                    info.routeDataObject = nextRoad;
-                    
-                    BOOL isNextShieldFound = nextRoad->hasNameTagStartsWith("road_ref");
-                    for (int ind = lind; ind < list.size() && !isNextShieldFound; ind++) {
-                        if (list[ind]->turnType != nullptr)
-                        {
-                            isNextShieldFound = YES;
-                        } else {
-                            const auto& obj = list[ind]->object;
-                            if (obj->hasNameTagStartsWith("road_ref"))
-                            {
-                                info.routeDataObject = obj;
-                                isNextShieldFound = YES;
-                            }
+                    if (routeInd > 0 && (exitInfo.ref || exitInfo.exitStreetName))
+                    {
+                        // set ref and road name (or shield icon) from previous segment because exit point is not consist of highway ref
+                        std::shared_ptr<RouteSegmentResult> previous;
+                        previous = list[routeInd - 1];
+                        rdoWithoutShield = previous->object;
+                        info.ref = [NSString stringWithUTF8String:previous->getRef(locale, transliterate).c_str()];
+                        info.ref = info.ref.length > 0 ? info.ref : nil;
+                        if (info.ref) {
+                            rdoWithShield = previous->getObjectWithShield(list, lind);
                         }
                     }
                 }
+                
+                if (!info.ref)
+                {
+                    NSString *ref = [NSString stringWithUTF8String:current->object->getRef(locale, transliterate, current->isForwardDirection()).c_str()];
+                    NSString *destRef = [NSString stringWithUTF8String:current->object->getDestinationRef(current->isForwardDirection()).c_str()];
+                    ref = ref.length > 0 ? ref : nil;
+                    destRef = destRef.length > 0 ? destRef : nil;
+                    rdoWithoutShield = current->object;
+                    if (ref && ![ref isEqualToString:destRef])
+                    {
+                        info.ref = ref;
+                        rdoWithShield = current->getObjectWithShield(list, lind);
+                    }
+                }
+                
+                if (info.ref)
+                {
+                    if (rdoWithShield)
+                        info.routeDataObject = rdoWithShield;
+                    else
+                        info.routeDataObject = rdoWithoutShield;
+                }
             }
             
-            NSString *description = [[NSString stringWithFormat:@"%@ %@", [self.class toString:turn shortName:false],  [OARoutingHelper formatStreetName:info.streetName ref:info.ref destination:info.destinationName towards:OALocalizedString(@"towards")]] trim];
-            
+            NSString *description = [[NSString stringWithFormat:@"%@ %@", [self.class toString:turn shortName:false], [OARoutingHelperUtils formatStreetName:info.streetName ref:info.ref destination:info.destinationName towards:OALocalizedString(@"towards")]] trim];
+                        
             if (s->object->pointNames.size() > s->getStartPointIndex())
             {
                 const auto& pointNames = s->object->pointNames[s->getStartPointIndex()];
@@ -1333,13 +1491,14 @@
         if (locations.count > 0)
             [self.class checkForDuplicatePoints:locations directions:localDirections];
         
-        if (waypoints) {
+        if (waypoints)
+        {
             [_locationPoints addObjectsFromArray:waypoints];
         }
         if (addMissingTurns)
         {
             [self removeUnnecessaryGoAhead:localDirections];
-            [self.class addMissingTurnsToRoute:locations originalDirections:localDirections start:params.start end:params.end mode:params.mode leftSide:params.leftSide];
+            [self.class addMissingTurnsToRoute:locations originalDirections:localDirections mode:params.mode leftSide:params.leftSide useLocationTime:(params.gpxRoute && params.gpxRoute.calculatedRouteTimeSpeed)];
             // if there is no closest points to start - add it
             std::vector<std::shared_ptr<RouteSegmentResult>> segs;
             [self.class introduceFirstPointAndLastPoint:locations directions:localDirections segs:segs start:params.start end:params.end];
@@ -1359,11 +1518,13 @@
         OAAppSettings *settings = OAAppSettings.sharedManager;
         _routeRecalcDistance = [settings.routeRecalculationDistance get:_appMode];
         _routeVisibleAngle = _routeProvider == STRAIGHT ? [settings.routeStraightAngle get:_appMode] : 0;
+        
+        _initialCalculation = params.initialCalculation;
     }
     return self;
 }
 
-- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode calculateFirstAndLastPoint:(BOOL)calculateFirstAndLastPoint
+- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode calculateFirstAndLastPoint:(BOOL)calculateFirstAndLastPoint initialCalculation:(BOOL)initialCalculation
 {
     self = [[OARouteCalculationResult alloc] init];
     if (self)
@@ -1397,8 +1558,10 @@
         OAAppSettings *settings = OAAppSettings.sharedManager;
         _routeRecalcDistance = [settings.routeRecalculationDistance get:_appMode];
         _routeVisibleAngle = _routeProvider == STRAIGHT ? [settings.routeStraightAngle get:_appMode] : 0;
+        
+        _initialCalculation = initialCalculation;
     }
     return self;
 }
-
+    
 @end

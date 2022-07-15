@@ -117,7 +117,7 @@
     _passWholeRoute = [[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_from_start_point_id text:OALocalizedString(@"gpx_option_from_start_point") selected:params.passWholeRoute];
     if (params.useIntermediatePointsRTE)
     {
-        _navigationType = [[OAOtherLocalRoutingParameter alloc] initWithId:connect_route_points_id text:OALocalizedString(@"connect_rp") selected:params.connectRoutePoints];
+        _navigationType = [[OAOtherLocalRoutingParameter alloc] initWithId:connect_route_points_id text:OALocalizedString(@"connect_rp") selected:params.connectPointsStraightly];
     }
     else
     {

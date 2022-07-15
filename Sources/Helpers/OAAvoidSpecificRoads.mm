@@ -10,6 +10,7 @@
 #import "OAAppSettings.h"
 #import "OACurrentPositionHelper.h"
 #import "OARoutingHelper.h"
+#import "OARoutingHelperUtils.h"
 #import "OsmAndApp.h"
 #import "OAStateChangedListener.h"
 #import "OAAlertBottomSheetViewController.h"
@@ -191,7 +192,7 @@
         
         NSString *towards = OALocalizedString(@"towards");
         
-        name = [OARoutingHelper formatStreetName:streetName ref:refName destination:destinationName towards:towards];
+        name = [OARoutingHelperUtils formatStreetName:streetName ref:refName destination:destinationName towards:towards];
     }
     return !name || name.length == 0 ? OALocalizedString(@"shared_string_road") : name;
 }

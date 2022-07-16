@@ -1149,7 +1149,6 @@
 		84F3A9901B501C5800D16EBC /* ic_destination_arrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F3A9871B501C5800D16EBC /* ic_destination_arrow@3x.png */; };
 		84F4641E1B664D3B00C1D96F /* ic_popup_no_internet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F464171B664D3B00C1D96F /* ic_popup_no_internet@2x.png */; };
 		84F464211B664D3B00C1D96F /* ic_popup_no_internet@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F464181B664D3B00C1D96F /* ic_popup_no_internet@3x.png */; };
-		84F648D61E5B49C9001A7373 /* mapnik.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84F648D51E5B49C9001A7373 /* mapnik.render.xml */; };
 		8A1C56A3245B247800739846 /* map-icons-png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1C56A0245B247700739846 /* map-icons-png */; };
 		8A1C56A5245B247800739846 /* map-shaders-png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1C56A1245B247700739846 /* map-shaders-png */; };
 		8A1C56A7245B247800739846 /* poi-icons-png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1C56A2245B247800739846 /* poi-icons-png */; };
@@ -1157,6 +1156,7 @@
 		8A1CF1E1227ED4A70083A04E /* warnings_tunnel_us@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1D9227ED4A60083A04E /* warnings_tunnel_us@2x.png */; };
 		8A1CF1E3227ED4A70083A04E /* warnings_tunnel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1DA227ED4A60083A04E /* warnings_tunnel@2x.png */; };
 		8A1CF1E5227ED4A70083A04E /* warnings_tunnel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A1CF1DB227ED4A70083A04E /* warnings_tunnel@3x.png */; };
+		8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A2DF236287EFD9E003642B7 /* OAMapCreatorDbHelper.mm */; };
 		8A31787527E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A31787427E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm */; };
 		8A3BE84F27DBB2AC00C5DFE2 /* OAWeatherContourLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A3BE84E27DBB2AC00C5DFE2 /* OAWeatherContourLayer.mm */; };
 		8A4D03E327A6DF2300B8A778 /* wind_color.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8A4D03DE27A6DF2200B8A778 /* wind_color.txt */; };
@@ -1888,7 +1888,7 @@
 		DA5A81CD26C563A700F274C7 /* QuadTree.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A8926C563A000F274C7 /* QuadTree.m */; };
 		DA5A81CE26C563A700F274C7 /* OATileSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A8B26C563A000F274C7 /* OATileSource.mm */; };
 		DA5A81CF26C563A700F274C7 /* QuadRect.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A8E26C563A000F274C7 /* QuadRect.m */; };
-		DA5A81D026C563A700F274C7 /* OAMapCreatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A8F26C563A000F274C7 /* OAMapCreatorHelper.m */; };
+		DA5A81D026C563A700F274C7 /* OAMapCreatorHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A8F26C563A000F274C7 /* OAMapCreatorHelper.mm */; };
 		DA5A81D126C563A700F274C7 /* OATerrainLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A9226C563A000F274C7 /* OATerrainLayer.mm */; };
 		DA5A81D226C563A700F274C7 /* OAFileImportHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A9326C563A000F274C7 /* OAFileImportHelper.mm */; };
 		DA5A81D326C563A700F274C7 /* OATTSCommandPlayerImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A9826C563A000F274C7 /* OATTSCommandPlayerImpl.mm */; };
@@ -4432,7 +4432,6 @@
 		84F3A9871B501C5800D16EBC /* ic_destination_arrow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_arrow@3x.png"; path = "Resources/Icons/ic_destination_arrow@3x.png"; sourceTree = "<group>"; };
 		84F464171B664D3B00C1D96F /* ic_popup_no_internet@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_popup_no_internet@2x.png"; path = "Resources/Icons/ic_popup_no_internet@2x.png"; sourceTree = "<group>"; };
 		84F464181B664D3B00C1D96F /* ic_popup_no_internet@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_popup_no_internet@3x.png"; path = "Resources/Icons/ic_popup_no_internet@3x.png"; sourceTree = "<group>"; };
-		84F648D51E5B49C9001A7373 /* mapnik.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = mapnik.render.xml; path = ../resources/rendering_styles/mapnik.render.xml; sourceTree = "<group>"; };
 		84F712571AE4FED70071B326 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84F712581AE4FF940071B326 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A0DF07B23942D47000A1D4B /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -4449,6 +4448,8 @@
 		8A1CF862250D145C003D3829 /* test-resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "test-resources"; path = "../../resources/test-resources"; sourceTree = "<group>"; };
 		8A23E6F021C05E340060DE70 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A23E6F121C05F680060DE70 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8A2DF235287EFD9E003642B7 /* OAMapCreatorDbHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapCreatorDbHelper.h; sourceTree = "<group>"; };
+		8A2DF236287EFD9E003642B7 /* OAMapCreatorDbHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapCreatorDbHelper.mm; sourceTree = "<group>"; };
 		8A31787327E1D8A800CA8AA4 /* OAMapRendererEnvironment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapRendererEnvironment.h; sourceTree = "<group>"; };
 		8A31787427E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapRendererEnvironment.mm; sourceTree = "<group>"; };
 		8A38B5E72192CCBD00D21059 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -5460,7 +5461,7 @@
 		DA5A7A8C26C563A000F274C7 /* OAFileImportHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFileImportHelper.h; sourceTree = "<group>"; };
 		DA5A7A8D26C563A000F274C7 /* OATerrainLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATerrainLayer.h; sourceTree = "<group>"; };
 		DA5A7A8E26C563A000F274C7 /* QuadRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuadRect.m; sourceTree = "<group>"; };
-		DA5A7A8F26C563A000F274C7 /* OAMapCreatorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapCreatorHelper.m; sourceTree = "<group>"; };
+		DA5A7A8F26C563A000F274C7 /* OAMapCreatorHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapCreatorHelper.mm; sourceTree = "<group>"; };
 		DA5A7A9126C563A000F274C7 /* QuadTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadTree.h; sourceTree = "<group>"; };
 		DA5A7A9226C563A000F274C7 /* OATerrainLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATerrainLayer.mm; sourceTree = "<group>"; };
 		DA5A7A9326C563A000F274C7 /* OAFileImportHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFileImportHelper.mm; sourceTree = "<group>"; };
@@ -8980,7 +8981,6 @@
 				DA5A5DE2276B445800ABC19D /* snowmobile.render.xml */,
 				8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */,
 				DA08A0D1227096DA000A53BA /* offroad.render.xml */,
-				84F648D51E5B49C9001A7373 /* mapnik.render.xml */,
 				84E297551E2FD80A006EA6B1 /* topo.render.xml */,
 				844499B71AAF816E00ACA20D /* skimap.render.xml */,
 				84CC524B1AA5A539000063CF /* nautical.render.xml */,
@@ -10426,7 +10426,9 @@
 				DA5A7A8C26C563A000F274C7 /* OAFileImportHelper.h */,
 				DA5A7A9326C563A000F274C7 /* OAFileImportHelper.mm */,
 				DA5A7A8A26C563A000F274C7 /* OAMapCreatorHelper.h */,
-				DA5A7A8F26C563A000F274C7 /* OAMapCreatorHelper.m */,
+				DA5A7A8F26C563A000F274C7 /* OAMapCreatorHelper.mm */,
+				8A2DF235287EFD9E003642B7 /* OAMapCreatorDbHelper.h */,
+				8A2DF236287EFD9E003642B7 /* OAMapCreatorDbHelper.mm */,
 				DA5A7A9426C563A000F274C7 /* OASQLiteTileSource.h */,
 				DA5A7A8526C563A000F274C7 /* OASQLiteTileSource.mm */,
 				DA5A7A8D26C563A000F274C7 /* OATerrainLayer.h */,
@@ -13143,7 +13145,6 @@
 				DA5A82C826C563A800F274C7 /* OAButtonRightIconCell.xib in Resources */,
 				32B50ADF26BBE3C7002E6C92 /* ic_custom_map_location_follow@3x.png in Resources */,
 				DA5A82B326C563A700F274C7 /* OASettingSwitchCell.xib in Resources */,
-				84F648D61E5B49C9001A7373 /* mapnik.render.xml in Resources */,
 				84F3A9631B4ECF2700D16EBC /* ic_trip_visitedpoint@3x.png in Resources */,
 				848A14D61B223A4C00A31AE7 /* bg_title@2x.png in Resources */,
 				DA1BC120233F9B01004DAF78 /* ic_custom_search@2x.png in Resources */,
@@ -15894,6 +15895,7 @@
 				DA5A819026C563A700F274C7 /* OAShowHideGPXTracksAction.mm in Sources */,
 				DA5A82E526C563A800F274C7 /* OAPublicTransportShieldCell.mm in Sources */,
 				DA5A850F26C563A900F274C7 /* OAUserInteractionInterceptorView.m in Sources */,
+				8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */,
 				DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */,
 				DA5A831826C563A800F274C7 /* OATargetInfoViewCell.m in Sources */,
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,
@@ -16499,6 +16501,10 @@
 				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
+				WARNING_CFLAGS = (
+					"-Wno-conversion",
+					"-Wno-shorten-64-to-32",
+				);
 			};
 			name = Debug;
 		};
@@ -16578,6 +16584,10 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
+				WARNING_CFLAGS = (
+					"-Wno-conversion",
+					"-Wno-shorten-64-to-32",
+				);
 			};
 			name = Release;
 		};
@@ -16635,6 +16645,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WARNING_CFLAGS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -16691,6 +16702,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WARNING_CFLAGS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

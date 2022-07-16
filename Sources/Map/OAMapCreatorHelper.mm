@@ -7,11 +7,12 @@
 //
 
 #import "OAMapCreatorHelper.h"
+#import "OAMapCreatorDbHelper.h"
 #import "OALog.h"
 
 @implementation OAMapCreatorHelper
 
-+ (OAMapCreatorHelper *)sharedInstance
++ (OAMapCreatorHelper *) sharedInstance
 {
     static dispatch_once_t once;
     static OAMapCreatorHelper * sharedInstance;
@@ -21,7 +22,7 @@
     return sharedInstance;
 }
 
-- (void)addSqliteFilePaths:(NSMutableDictionary *)filesArray path:(NSString *)path
+- (void) addSqliteFilePaths:(NSMutableDictionary *)filesArray path:(NSString *)path
 {
     NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
     if (files)
@@ -36,13 +37,15 @@
                 ![file hasSuffix:@"slope.sqlite"] &&
                 ![file hasSuffix:@"heightmap.sqlite"])
             {
-                [filesArray setObject:[path stringByAppendingPathComponent:file] forKey:file];
+                NSString *filePath = [path stringByAppendingPathComponent:file];
+                [filesArray setObject:filePath forKey:file];
+                [OAMapCreatorDbHelper.sharedInstance addSqliteFile:filePath];
             }
         }
     }
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -75,7 +78,7 @@
         [_sqlitedbResourcesChangedObservable notifyEvent];
 }
 
-- (BOOL)installFile:(NSString *)filePath newFileName:(NSString *)newFileName
+- (BOOL) installFile:(NSString *)filePath newFileName:(NSString *)newFileName
 {
     NSString *fileName;
     if (newFileName)
@@ -98,6 +101,8 @@
         NSMutableDictionary *tmp = [NSMutableDictionary dictionaryWithDictionary:_files];
         [tmp setObject:path forKey:fileName];
         _files = [NSDictionary dictionaryWithDictionary:tmp];
+        
+        [OAMapCreatorDbHelper.sharedInstance addSqliteFile:path];
     }
 
     [OAUtilities denyAccessToFile:filePath removeFromInbox:YES];
@@ -117,7 +122,7 @@
     return (error == nil);
 }
 
-- (void)renameFile:(NSString *)fileName toName:(NSString *)newName
+- (void) renameFile:(NSString *)fileName toName:(NSString *)newName
 {
     NSString *path = self.files[fileName];
     NSString *newPath = [self.filesDir stringByAppendingPathComponent:newName];;
@@ -133,10 +138,13 @@
     _files = [NSDictionary dictionaryWithDictionary:dictionary];
     [self applyExcludedFromBackup:newPath];
 
+    [OAMapCreatorDbHelper.sharedInstance removeSqliteFile:path];
+    [OAMapCreatorDbHelper.sharedInstance addSqliteFile:newPath];
+
     [_sqlitedbResourcesChangedObservable notifyEvent];
 }
 
-- (void)removeFile:(NSString *)fileName
+- (void) removeFile:(NSString *)fileName
 {
     NSString *path = self.files[fileName];
 
@@ -146,10 +154,12 @@
     [dictionary removeObjectForKey:fileName];
     _files = [NSDictionary dictionaryWithDictionary:dictionary];
 
+    [OAMapCreatorDbHelper.sharedInstance removeSqliteFile:path];
+
     [_sqlitedbResourcesChangedObservable notifyEvent];
 }
 
-- (NSString *)getNewNameIfExists:(NSString *)fileName
+- (NSString *) getNewNameIfExists:(NSString *)fileName
 {
     NSString *res;
     

@@ -23,6 +23,7 @@
 #import "OABackupDbHelper.h"
 #import "OACollectLocalFilesTask.h"
 #import "OABackupInfoGenerationTask.h"
+#import "OADeleteFilesCommand.h"
 #import "OAWebClient.h"
 
 #import "OARegisterUserCommand.h"
@@ -77,6 +78,16 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 + (NSString *) DEVICE_REGISTER_URL
 {
     return DEVICE_REGISTER_URL;
+}
+
++ (NSString *) DELETE_FILE_VERSION_URL
+{
+    return DELETE_FILE_VERSION_URL;
+}
+
++ (NSString *) DELETE_FILE_URL
+{
+    return DELETE_FILE_URL;
 }
 
 + (BOOL) isTokenValid:(NSString *)token
@@ -568,6 +579,157 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     _prepareBackupTask = prepareBackupTask;
     [prepareBackupTask prepare];
     return YES;
+}
+
+- (NSString *) uploadFile:(NSString *)fileName
+                     type:(NSString *)type
+                     data:(NSData *)data
+               uploadTime:(NSTimeInterval)uploadTime
+                 listener:(id<OAOnUploadFileListener>)listener
+{
+    [self checkRegistered];
+    
+    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+    params[@"deviceid"] = [self getDeviceId];
+    params[@"accessToken"] = [self getAccessToken];
+    params[@"name"] = fileName;
+    params[@"type"] = type;
+    params[@"clienttime"] = [NSString stringWithFormat:@"%.0f", uploadTime];
+    
+    NSMutableDictionary<NSString *, NSString *> *headers = [NSMutableDictionary dictionary];
+    headers[@"Accept-Encoding"] = @"deflate, gzip";
+    
+//    OperationLog operationLog = new OperationLog("uploadFile", DEBUG);
+//    operationLog.startOperation(type + " " + fileName);
+    __block NSString *error = nil;
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
+        if (((NSHTTPURLResponse *)response).statusCode != 200)
+        {
+            error = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
+        }
+        dispatch_semaphore_signal(semaphore);
+    }];
+//    NetworkResult networkResult = AndroidNetworkUtils.uploadFile(UPLOAD_FILE_URL, streamWriter, fileName, true, params, headers,
+//                                                                 new AbstractProgress() {
+//
+//        private int work = 0;
+//        private int progress = 0;
+//        private int deltaProgress = 0;
+//
+//        @Override
+//        public void startWork(int work) {
+//            if (listener != null) {
+//                this.work = work > 0 ? work : 1;
+//                listener.onFileUploadStarted(type, fileName, work);
+//            }
+//        }
+//
+//        @Override
+//        public void progress(int deltaWork) {
+//            if (listener != null) {
+//                deltaProgress += deltaWork;
+//                if ((deltaProgress > (work / 100)) || ((progress + deltaProgress) >= work)) {
+//                    progress += deltaProgress;
+//                    listener.onFileUploadProgress(type, fileName, progress, deltaProgress);
+//                    deltaProgress = 0;
+//                }
+//            }
+//        }
+//
+//        @Override
+//        public boolean isInterrupted() {
+//            if (listener != null) {
+//                return listener.isUploadCancelled();
+//            }
+//            return super.isInterrupted();
+//        }
+//    });
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    if (error == nil)
+    {
+        [self updateFileUploadTime:type fileName:fileName uploadTime:uploadTime];
+    }
+    if (listener != nil)
+    {
+        [listener onFileUploadDone:type fileName:fileName uploadTime:uploadTime error:error];
+    }
+//    operationLog.finishOperation(type + " " + fileName + (error != null ? " Error: " + new BackupError(error) : " OK"));
+    return error;
+}
+
+- (void) deleteFilesSync:(NSArray<OARemoteFile *> *)remoteFiles byVersion:(BOOL)byVersion listener:(id<OAOnDeleteFilesListener>)listener
+{
+    [self checkRegistered];
+    @try
+    {
+        OADeleteFilesCommand *command = [[OADeleteFilesCommand alloc] initWithVersion:byVersion listener:listener remoteFiles:remoteFiles];
+        NSOperationQueue *executor = [[NSOperationQueue alloc] init];
+        [executor addOperations:@[command] waitUntilFinished:YES];
+    }
+    @catch (NSException *e)
+    {
+        if (listener != nil)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [listener onFilesDeleteError:STATUS_EXECUTION_ERROR message:@"Execution error while deleting files"];
+            });
+        }
+    }
+}
+
+- (BOOL) isObfMapExistsOnServer:(NSString *)name
+{
+    __block BOOL isFinished = NO;
+    __block BOOL exists = NO;
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+    params[@"name"] = name;
+    params[@"type"] = @"file";
+    
+//    OperationLog operationLog = new OperationLog("isObfMapExistsOnServer", DEBUG);
+//    operationLog.startOperation(name);
+    
+    [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/userdata/check-file-on-server" params:params post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        int status;
+        NSString *message;
+        NSString *result = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"";
+        if (((NSHTTPURLResponse *)response).statusCode != 200)
+        {
+            OABackupError *backupError = [[OABackupError alloc] initWithError:result];
+            message = [NSString stringWithFormat:@"Check obf map on server error: %@", backupError.toString];
+            status = STATUS_SERVER_ERROR;
+        }
+        else if (result.length > 0)
+        {
+            NSError *jsonParsingError = nil;
+            NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
+            if (!jsonParsingError)
+            {
+                NSString *fileStatus = resultJson[@"status"];
+                exists = [fileStatus isEqualToString:@"present"];
+                status = STATUS_SUCCESS;
+                message = [NSString stringWithFormat:@"%@ exists: %@", name, exists ? @"true" : @"false"];
+            }
+            else
+            {
+                message = @"Check obf map on server error: json parsing";
+                status = STATUS_PARSE_JSON_ERROR;
+            }
+        }
+        else
+        {
+            status = STATUS_EMPTY_RESPONSE_ERROR;
+            message = @"Check obf map on server error: empty response";
+        }
+        dispatch_semaphore_signal(semaphore);
+        isFinished = YES;
+//        operationLog.finishOperation("(" + status + "): " + message);
+    }];
+    if (!isFinished)
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    return exists;
 }
 
 // MARK: OAOnPrepareBackupListener

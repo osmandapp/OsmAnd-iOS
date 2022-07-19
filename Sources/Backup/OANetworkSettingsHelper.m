@@ -9,6 +9,7 @@
 #import "OANetworkSettingsHelper.h"
 #import "OABackupHelper.h"
 #import "OAImportBackupTask.h"
+#import "OAExportBackupTask.h"
 #import "OASettingsItem.h"
 #import "OAUtilities.h"
 #import "OABackupHelper.h"
@@ -61,10 +62,11 @@
     BOOL cancelled = NO;
     for (OAExportBackupTask *exportTask in self.exportAsyncTasks.allValues)
     {
-//        if (exportTask != nil && exportTask.isExecuting)
-//        {
-//            cancelled |= exportTask.cancel(true);
-//        }
+        if (exportTask.isExecuting)
+        {
+            [exportTask cancel];
+            cancelled |= exportTask.isCancelled;
+        }
     }
     return cancelled;
 }
@@ -95,10 +97,10 @@
 
 - (void) updateExportListener:(id<OABackupExportListener>)listener
 {
-//    for (OAExportBackupTask *exportTask in self.exportAsyncTasks.allValues)
-//    {
-//        exportTask.setListener(listener);
-//    }
+    for (OAExportBackupTask *exportTask in self.exportAsyncTasks.allValues)
+    {
+        exportTask.listener = listener;
+    }
 }
 
 - (void) updateImportListener:(id<OAImportListener>)listener
@@ -185,9 +187,9 @@
 {
     if (!_exportAsyncTasks[key])
     {
-//        OAExportBackupTask *exportTask = new ExportBackupTask(key, this, items, itemsToDelete, listener);
-//        exportAsyncTasks.put(key, exportTask);
-//        exportTask.executeOnExecutor(getBackupHelper().getExecutor());
+        OAExportBackupTask *exportTask = [[OAExportBackupTask alloc] initWithKey:key items:items itemsToDelete:itemsToDelete listener:listener];
+        _exportAsyncTasks[key] = exportTask;
+        [OABackupHelper.sharedInstance.executor addOperation:exportTask];
     }
     else
     {

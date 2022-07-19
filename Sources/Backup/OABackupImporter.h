@@ -14,8 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol OANetworkImportProgressListener <NSObject>
         
-- (void) itemExportStarted:(NSString *)type fileName:(NSString *)fileName work:(int)work;
-- (void) updateItemProgress:(NSString *)type fileName:(NSString *)fileName progress:(int)progress;
+- (void) itemExportStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work;
+- (void) updateItemProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress;
 - (void) itemExportDone:(NSString *)type fileName:(NSString *)fileName;
 
 @end

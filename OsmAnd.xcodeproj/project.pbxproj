@@ -1657,6 +1657,7 @@
 		DA32848326CD38170036BA73 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DA32848126CD38170036BA73 /* Settings.bundle */; };
 		DA32BBF025C443F200ED7100 /* ic_custom_attach_track@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32BBED25C443F200ED7100 /* ic_custom_attach_track@3x.png */; };
 		DA32BBF225C443F200ED7100 /* ic_custom_attach_track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32BBEE25C443F200ED7100 /* ic_custom_attach_track@2x.png */; };
+		DA346374287C157300C18214 /* OAConcurrentCollections.m in Sources */ = {isa = PBXBuildFile; fileRef = DA346373287C157300C18214 /* OAConcurrentCollections.m */; };
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
 		DA357C4D22A636CC00A1F82D /* ic_custom_coordinates@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4A22A636CB00A1F82D /* ic_custom_coordinates@3x.png */; };
 		DA357C5122A636CC00A1F82D /* ic_custom_coordinates@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */; };
@@ -2913,6 +2914,9 @@
 		DA83602B23449C6B003374B5 /* ic_custom_options@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA83601823449C69003374B5 /* ic_custom_options@2x.png */; };
 		DA83602D23449C6B003374B5 /* ic_custom_options@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA83601923449C69003374B5 /* ic_custom_options@3x.png */; };
 		DA83603123449C6B003374B5 /* ic_custom_slider@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA83601B23449C6A003374B5 /* ic_custom_slider@2x.png */; };
+		DA849996287D93DD002B1E11 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = DA849995287D93DC002B1E11 /* NSData+GZIP.m */; };
+		DA849999287EBEC7002B1E11 /* OADeleteFilesCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = DA849998287EBEC7002B1E11 /* OADeleteFilesCommand.m */; };
+		DA84999C287EBF27002B1E11 /* OABaseDeleteFilesCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = DA84999B287EBF27002B1E11 /* OABaseDeleteFilesCommand.m */; };
 		DA84E84B21D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84721D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png */; };
 		DA84E84D21D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84821D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png */; };
 		DA84E85221D77EEA006954D0 /* ic_action_close_banner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84F21D77EE9006954D0 /* ic_action_close_banner@2x.png */; };
@@ -5045,6 +5049,8 @@
 		DA32848226CD38170036BA73 /* OA-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OA-Prefix.pch"; sourceTree = "<group>"; };
 		DA32BBED25C443F200ED7100 /* ic_custom_attach_track@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_attach_track@3x.png"; path = "Resources/Icons/ic_custom_attach_track@3x.png"; sourceTree = "<group>"; };
 		DA32BBEE25C443F200ED7100 /* ic_custom_attach_track@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_attach_track@2x.png"; path = "Resources/Icons/ic_custom_attach_track@2x.png"; sourceTree = "<group>"; };
+		DA346372287C157300C18214 /* OAConcurrentCollections.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAConcurrentCollections.h; sourceTree = "<group>"; };
+		DA346373287C157300C18214 /* OAConcurrentCollections.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAConcurrentCollections.m; sourceTree = "<group>"; };
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		DA357C4A22A636CB00A1F82D /* ic_custom_coordinates@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates@3x.png"; path = "Resources/Icons/ic_custom_coordinates@3x.png"; sourceTree = "<group>"; };
 		DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates@2x.png"; path = "Resources/Icons/ic_custom_coordinates@2x.png"; sourceTree = "<group>"; };
@@ -7142,6 +7148,12 @@
 		DA83601823449C69003374B5 /* ic_custom_options@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_options@2x.png"; path = "Resources/Icons/ic_custom_options@2x.png"; sourceTree = "<group>"; };
 		DA83601923449C69003374B5 /* ic_custom_options@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_options@3x.png"; path = "Resources/Icons/ic_custom_options@3x.png"; sourceTree = "<group>"; };
 		DA83601B23449C6A003374B5 /* ic_custom_slider@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_slider@2x.png"; path = "Resources/Icons/ic_custom_slider@2x.png"; sourceTree = "<group>"; };
+		DA849994287D93DC002B1E11 /* NSData+GZIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GZIP.h"; sourceTree = "<group>"; };
+		DA849995287D93DC002B1E11 /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GZIP.m"; sourceTree = "<group>"; };
+		DA849997287EBEC7002B1E11 /* OADeleteFilesCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADeleteFilesCommand.h; sourceTree = "<group>"; };
+		DA849998287EBEC7002B1E11 /* OADeleteFilesCommand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OADeleteFilesCommand.m; sourceTree = "<group>"; };
+		DA84999A287EBF27002B1E11 /* OABaseDeleteFilesCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseDeleteFilesCommand.h; sourceTree = "<group>"; };
+		DA84999B287EBF27002B1E11 /* OABaseDeleteFilesCommand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseDeleteFilesCommand.m; sourceTree = "<group>"; };
 		DA84E84721D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_osmand_logo_banner@2x.png"; path = "Resources/Icons/ic_action_osmand_logo_banner@2x.png"; sourceTree = "<group>"; };
 		DA84E84821D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_osmand_logo_banner@3x.png"; path = "Resources/Icons/ic_action_osmand_logo_banner@3x.png"; sourceTree = "<group>"; };
 		DA84E84F21D77EE9006954D0 /* ic_action_close_banner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_close_banner@2x.png"; path = "Resources/Icons/ic_action_close_banner@2x.png"; sourceTree = "<group>"; };
@@ -12631,6 +12643,8 @@
 			isa = PBXGroup;
 			children = (
 				DA5A80AC26C563A600F274C7 /* kml2gpx.xslt */,
+				DA849994287D93DC002B1E11 /* NSData+GZIP.h */,
+				DA849995287D93DC002B1E11 /* NSData+GZIP.m */,
 				DA5A80B326C563A600F274C7 /* NSData+CRC32.h */,
 				DA5A80DD26C563A600F274C7 /* NSData+CRC32.m */,
 				DA5A80E026C563A600F274C7 /* OAAppSettings.h */,
@@ -12716,6 +12730,8 @@
 				321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */,
 				CA4ED342B2A4E423D65F9592 /* OAShareMenuActivity.mm */,
 				CA4EDCCFE536915C4E41B124 /* OAShareMenuActivity.h */,
+				DA346372287C157300C18214 /* OAConcurrentCollections.h */,
+				DA346373287C157300C18214 /* OAConcurrentCollections.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -12915,6 +12931,10 @@
 				DAA9F44D27EC9EB8002BB1A8 /* OARegisterUserCommand.m */,
 				DA66796927EDCABA00509932 /* OARegisterDeviceCommand.h */,
 				DA66796A27EDCABA00509932 /* OARegisterDeviceCommand.m */,
+				DA849997287EBEC7002B1E11 /* OADeleteFilesCommand.h */,
+				DA849998287EBEC7002B1E11 /* OADeleteFilesCommand.m */,
+				DA84999A287EBF27002B1E11 /* OABaseDeleteFilesCommand.h */,
+				DA84999B287EBF27002B1E11 /* OABaseDeleteFilesCommand.m */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -15574,9 +15594,11 @@
 				DA5A83A826C563A800F274C7 /* OAOsmNotesOnlineTargetViewController.mm in Sources */,
 				DA5A839426C563A800F274C7 /* OAOutdatedResourcesViewController.mm in Sources */,
 				DA5A832126C563A800F274C7 /* OAShapesTableViewCell.m in Sources */,
+				DA849996287D93DD002B1E11 /* NSData+GZIP.m in Sources */,
 				DA5A836826C563A800F274C7 /* OARouteAvoidTransportSettingsViewController.mm in Sources */,
 				DA5A836626C563A800F274C7 /* OARouteStatistics.m in Sources */,
 				8A90CEDB27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm in Sources */,
+				DA849999287EBEC7002B1E11 /* OADeleteFilesCommand.m in Sources */,
 				DA4ABF1E2876DA6800B996EF /* OAProfileSettingsItem.mm in Sources */,
 				DA5A830126C563A800F274C7 /* OAIconsTableViewCell.m in Sources */,
 				DA5A813F26C563A700F274C7 /* OAWay.m in Sources */,
@@ -15666,6 +15688,7 @@
 				DA5A81C326C563A700F274C7 /* OAPOILocationType.mm in Sources */,
 				DA5A818D26C563A700F274C7 /* OAShowHideCoordinatesAction.mm in Sources */,
 				DA5A848926C563A900F274C7 /* OASaveTrackViewController.mm in Sources */,
+				DA84999C287EBF27002B1E11 /* OABaseDeleteFilesCommand.m in Sources */,
 				DA5A838626C563A800F274C7 /* OADestinationItem.m in Sources */,
 				DA5A823D26C563A700F274C7 /* OAConfigureProfileViewController.m in Sources */,
 				DA5A819126C563A700F274C7 /* OAShowHideMapillaryAction.m in Sources */,
@@ -16244,6 +16267,7 @@
 				DA5A855326C563A900F274C7 /* OAKml2Gpx.m in Sources */,
 				DA5A846B26C563A900F274C7 /* OAToolbarViewController.mm in Sources */,
 				DA5A854F26C563A900F274C7 /* OpenLocationCodeObjCBridge.swift in Sources */,
+				DA346374287C157300C18214 /* OAConcurrentCollections.m in Sources */,
 				DA5A832426C563A800F274C7 /* OATextViewSimpleCell.m in Sources */,
 				DA377DE027BBBB19004B4EBD /* OAMapPresentationEnvironment.mm in Sources */,
 				DABC7F1F27B65C36005C76E2 /* OACurrentStreetName.mm in Sources */,

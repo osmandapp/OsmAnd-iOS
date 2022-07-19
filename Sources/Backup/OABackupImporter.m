@@ -637,7 +637,7 @@
 - (void)onFileDownloadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work itemFileName:(NSString *)itemFileName
 {
     if (_listener)
-        [_listener itemExportStarted:type fileName:fileName work:(int)work];
+        [_listener itemExportStarted:type fileName:fileName work:work];
 }
 
 @end

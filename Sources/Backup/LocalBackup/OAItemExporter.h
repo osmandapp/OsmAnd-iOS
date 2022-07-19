@@ -15,6 +15,8 @@
 
 @property (nonatomic, weak) id<OAExportProgressListener> progressListener;
 
+- (instancetype) initWithListener:(id<OAExportProgressListener>)listener;
+
 - (void) addSettingsItem:(OASettingsItem *)item;
 - (void) writeItems:(OAAbstractWriter *)writer;
 - (void) doExport;

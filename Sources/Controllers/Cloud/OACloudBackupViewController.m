@@ -19,6 +19,7 @@
 #import "OAButtonRightIconCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAIconTitleValueCell.h"
+#import "OAProgressBarCell.h"
 #import "OATitleDescrRightIconTableViewCell.h"
 #import "OAMainSettingsViewController.h"
 #import "OARestoreBackupViewController.h"
@@ -30,6 +31,7 @@
 #import "OAAppSettings.h"
 #import "OAChoosePlanHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OABackupError.h"
 
 @interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OABackupExportListener, OAImportListener, OAOnPrepareBackupListener>
 
@@ -52,6 +54,8 @@
     OABackupInfo *_info;
     OABackupStatus *_status;
     NSString *_error;
+    
+    OAProgressBarCell *_backupProgressCell;
 }
 
 - (instancetype) initWithSourceType:(EOACloudScreenSourceType)type
@@ -182,13 +186,19 @@
     else
     {
         OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
+        NSMutableArray<NSDictionary *> *backupRows = [NSMutableArray array];
         if (exportTask)
         {
             // TODO: show progress from HeaderStatusViewHolder.java
+            _backupProgressCell = [self getProgressBarCell];
+            NSDictionary *backupProgressCell = @{
+                @"cellId": OAProgressBarCell.getCellIdentifier,
+                @"cell": _backupProgressCell
+            };
+            [backupRows addObject:backupProgressCell];
         }
         else
         {
-            NSMutableArray<NSDictionary *> *backupRows = [NSMutableArray array];
             NSString *backupTime = [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
             NSDictionary *lastBackupCell = @{
                 @"cellId": OAMultiIconTextDescCell.getCellIdentifier,
@@ -220,60 +230,60 @@
 //                items.addAll(info.itemsToDelete);
 //                items.addAll(info.filteredFilesToMerge);
 //            }
-            
-            BOOL actionButtonHidden = _status == OABackupStatus.BACKUP_COMPLETE ||
-                (_status == OABackupStatus.CONFLICTS
-                 && (_info == nil || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0)));
-            if (!actionButtonHidden)
-            {
-                if (_settingsHelper.isBackupExporting)
-                {
-                    NSDictionary *cancellCell = @{
-                        @"cellId": OAButtonRightIconCell.getCellIdentifier,
-                        @"name": @"cancellBackupPressed",
-                        @"title": OALocalizedString(@"shared_string_cancel"),
-                        @"image": @"ic_custom_cancel"
-                    };
-                    [backupRows addObject:cancellCell];
-                }
-                else if (_status == OABackupStatus.MAKE_BACKUP || _status == OABackupStatus.CONFLICTS)
-                {
-                    NSDictionary *backupNowCell = @{
-                        @"cellId": OAButtonRightIconCell.getCellIdentifier,
-                        @"name": @"onSetUpBackupButtonPressed",
-                        @"title": OALocalizedString(@"cloud_backup_now"),
-                        @"image": @"ic_custom_cloud_upload"
-                    };
-                    [backupRows addObject:backupNowCell];
-                }
-                else if (_status == OABackupStatus.NO_INTERNET_CONNECTION || _status == OABackupStatus.ERROR)
-                {
-                    NSDictionary *retryCell = @{
-                        @"cellId": OAButtonRightIconCell.getCellIdentifier,
-                        @"name": @"onRetryPressed",
-                        @"title": _status.actionTitle,
-                        @"image": @"ic_custom_reset"
-                    };
-                    [backupRows addObject:retryCell];
-                }
-                else if (_status == OABackupStatus.SUBSCRIPTION_EXPIRED)
-                {
-                    NSDictionary *purchaseCell = @{
-                        @"cellId": OAButtonRightIconCell.getCellIdentifier,
-                        @"name": @"onSubscriptionExpired",
-                        @"title": _status.actionTitle,
-                        @"image": @"ic_custom_osmand_pro_logo_colored"
-                    };
-                    [backupRows addObject:purchaseCell];
-                }
-            }
-            
-            NSDictionary *backupSection = @{
-                @"sectionHeader": OALocalizedString(@"cloud_backup"),
-                @"rows": backupRows
-            };
-            [result addObject:backupSection];
         }
+            
+        BOOL actionButtonHidden = _status == OABackupStatus.BACKUP_COMPLETE ||
+        (_status == OABackupStatus.CONFLICTS
+         && (_info == nil || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0)));
+        if (!actionButtonHidden)
+        {
+            if (_settingsHelper.isBackupExporting)
+            {
+                NSDictionary *cancellCell = @{
+                    @"cellId": OAButtonRightIconCell.getCellIdentifier,
+                    @"name": @"cancellBackupPressed",
+                    @"title": OALocalizedString(@"shared_string_cancel"),
+                    @"image": @"ic_custom_cancel"
+                };
+                [backupRows addObject:cancellCell];
+            }
+            else if (_status == OABackupStatus.MAKE_BACKUP || _status == OABackupStatus.CONFLICTS)
+            {
+                NSDictionary *backupNowCell = @{
+                    @"cellId": OAButtonRightIconCell.getCellIdentifier,
+                    @"name": @"onSetUpBackupButtonPressed",
+                    @"title": OALocalizedString(@"cloud_backup_now"),
+                    @"image": @"ic_custom_cloud_upload"
+                };
+                [backupRows addObject:backupNowCell];
+            }
+            else if (_status == OABackupStatus.NO_INTERNET_CONNECTION || _status == OABackupStatus.ERROR)
+            {
+                NSDictionary *retryCell = @{
+                    @"cellId": OAButtonRightIconCell.getCellIdentifier,
+                    @"name": @"onRetryPressed",
+                    @"title": _status.actionTitle,
+                    @"image": @"ic_custom_reset"
+                };
+                [backupRows addObject:retryCell];
+            }
+            else if (_status == OABackupStatus.SUBSCRIPTION_EXPIRED)
+            {
+                NSDictionary *purchaseCell = @{
+                    @"cellId": OAButtonRightIconCell.getCellIdentifier,
+                    @"name": @"onSubscriptionExpired",
+                    @"title": _status.actionTitle,
+                    @"image": @"ic_custom_osmand_pro_logo_colored"
+                };
+                [backupRows addObject:purchaseCell];
+            }
+        }
+        
+        NSDictionary *backupSection = @{
+            @"sectionHeader": OALocalizedString(@"cloud_backup"),
+            @"rows": backupRows
+        };
+        [result addObject:backupSection];
     }
     NSDictionary *restoreSection = @{
         @"sectionHeader" : OALocalizedString(@"restore"),
@@ -298,6 +308,17 @@
     _data = result;
 }
 
+- (OAProgressBarCell *) getProgressBarCell
+{
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAProgressBarCell getCellIdentifier] owner:self options:nil];
+    OAProgressBarCell *resultCell = (OAProgressBarCell *)[nib objectAtIndex:0];
+    [resultCell.progressBar setProgress:0.0 animated:NO];
+    [resultCell.progressBar setProgressTintColor:UIColorFromRGB(color_primary_purple)];
+    resultCell.backgroundColor = [UIColor clearColor];
+    resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return resultCell;
+}
+
 - (BOOL) shouldShowBackupButton
 {
     return _backup.localFiles.count > 0;
@@ -306,6 +327,12 @@
 - (BOOL) shouldShowRestoreButton
 {
     return _backup.remoteFiles.count > 0;
+}
+
+- (void) refreshContent
+{
+    [self generateData];
+    [self.tblView reloadData];
 }
 
 - (IBAction)onBackButtonPressed
@@ -333,7 +360,8 @@
         NSArray<OASettingsItem *> *items = _info.itemsToUpload;
         if (items.count > 0 || _info.filteredFilesToDelete.count > 0)
         {
-//            [_settingsHelper exportSettings:kBackupItemsKey items:items itemsToDelete:_info.itemsToDelete listener:self];
+            [_settingsHelper exportSettings:kBackupItemsKey items:items itemsToDelete:_info.itemsToDelete listener:self];
+            [self refreshContent];
         }
     }
     @catch (NSException *e)
@@ -520,6 +548,10 @@
         cell.descriptionView.text = item[@"value"];
         return cell;
     }
+    else if ([cellId isEqualToString:OAProgressBarCell.getCellIdentifier])
+    {
+        return item[@"cell"];
+    }
     return nil;
 }
 
@@ -556,7 +588,15 @@
 
 - (void)onBackupExportFinished:(nonnull NSString *)error
 {
-    
+    if (error != nil)
+    {
+        [self refreshContent];
+        [OAUtilities showToast:nil details:[[OABackupError alloc] initWithError:error].getLocalizedError duration:.4 inView:self.view];
+    }
+    else if (!_settingsHelper.isBackupExporting)
+    {
+        [_backupHelper prepareBackup];
+    }
 }
 
 - (void)onBackupExportItemFinished:(nonnull NSString *)type fileName:(nonnull NSString *)fileName
@@ -564,24 +604,29 @@
     
 }
 
-- (void)onBackupExportItemProgress:(nonnull NSString *)type fileName:(nonnull NSString *)fileName value:(int)value
+- (void)onBackupExportItemProgress:(nonnull NSString *)type fileName:(nonnull NSString *)fileName value:(NSInteger)value
 {
     
 }
 
-- (void)onBackupExportItemStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(int)work
+- (void)onBackupExportItemStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(NSInteger)work
 {
     
 }
 
-- (void)onBackupExportProgressUpdate:(int)value
+- (void)onBackupExportProgressUpdate:(NSInteger)value
 {
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_backupProgressCell && !isnan(value))
+            _backupProgressCell.progressBar.progress = value / 1000;
+    });
 }
 
 - (void)onBackupExportStarted
 {
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self refreshContent];
+    });
 }
 
 // MARK: OAImportListener
@@ -610,8 +655,7 @@
     _info = _backup.backupInfo;
     _status = [OABackupStatus getBackupStatus:_backup];
     _error = _backup.error;
-    [self generateData];
-    [self.tblView reloadData];
+    [self refreshContent];
 }
 
 - (void)onBackupPreparing

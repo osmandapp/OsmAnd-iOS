@@ -12,6 +12,12 @@
 #import "OAAbstractWriter.h"
 #import "OAAtomicInteger.h"
 #import "OANetworkWriter.h"
+#import "OAAppSettings.h"
+#import "OAPrepareBackupResult.h"
+#import "OAExportSettingsType.h"
+#import "OAExportBackupTask.h"
+#import "OAConcurrentCollections.h"
+#import "OARemoteFile.h"
 
 #define MAX_LIGHT_ITEM_SIZE 10 * 1024 * 1024
 
@@ -60,16 +66,19 @@
     NSMutableArray<OASettingsItem *> *_oldItemsToDelete;
     NSOperationQueue *_executor;
     __weak id<OANetworkExportProgressListener> _listener;
-    NSMutableArray<OARemoteFile *> *_oldFilesToDelete;
+    OAConcurrentArray<OARemoteFile *> *_oldFilesToDelete;
+    
+    OAAtomicInteger *_dataProgress;
+    OAConcurrentSet *_itemsProgress;
+    OAConcurrentDictionary<NSString *, NSString *> *_errors;
 }
 
 - (instancetype) initWithListener:(id<OANetworkExportProgressListener>)listener
 {
-    self = [super init];
+    self = [super initWithListener:nil];
     if (self) {
         _itemsToDelete = [NSMutableArray array];
-        _oldFilesToDelete = [NSMutableArray array];
-        _oldFilesToDelete = [NSMutableArray array];
+        _oldFilesToDelete = [[OAConcurrentArray alloc] init];
         _backupHelper = OABackupHelper.sharedInstance;
         _listener = listener;
     }
@@ -156,190 +165,151 @@
 
 - (void) exportItems
 {
-    OAAtomicInteger *dataProgress = [[OAAtomicInteger alloc] initWithInteger:0];
-    NSMutableSet *itemsProgress = [NSMutableSet set];
-    NSMutableDictionary<NSString *, NSString *> *errors = [NSMutableDictionary dictionary];
+    _dataProgress = [[OAAtomicInteger alloc] initWithInteger:0];
+    _itemsProgress = [[OAConcurrentSet alloc] init];
+    _errors = [[OAConcurrentDictionary alloc] init];
 
-//    OnUploadItemListener uploadItemListener = getOnUploadItemListener(itemsProgress, dataProgress, errors);
-//    OnDeleteFilesListener deleteFilesListener = getOnDeleteFilesListener(itemsProgress, dataProgress);
-//
-//    NetworkWriter networkWriter = new NetworkWriter(backupHelper, uploadItemListener);
-//    writeItems(networkWriter);
-//    deleteFiles(deleteFilesListener);
-//    deleteOldFiles(deleteFilesListener);
-//    if (!isCancelled()) {
-//        backupHelper.updateBackupUploadTime();
-//    }
-//    if (listener != null) {
-//        listener.networkExportDone(errors);
-//    }
+    OANetworkWriter *networkWriter = [[OANetworkWriter alloc] initWithListener:self];
+    [self writeItems:networkWriter];
+    [self deleteFiles:self];
+    [self deleteOldFiles:self];
+    if (!self.isCancelled)
+        [_backupHelper updateBackupUploadTime];
+    if (_listener != nil)
+        [_listener networkExportDone:_errors.asDictionary];
 }
 
-//protected void deleteFiles(OnDeleteFilesListener listener) throws IOException {
-//    try {
-//        List<RemoteFile> remoteFiles = new ArrayList<>();
-//        Map<String, RemoteFile> remoteFilesMap = backupHelper.getBackup().getRemoteFiles(RemoteFilesType.UNIQUE);
-//        if (remoteFilesMap != null) {
-//            List<SettingsItem> itemsToDelete = this.itemsToDelete;
-//            for (RemoteFile remoteFile : remoteFilesMap.values()) {
-//                for (SettingsItem item : itemsToDelete) {
-//                    if (item.equals(remoteFile.item)) {
-//                        remoteFiles.add(remoteFile);
-//                    }
-//                }
-//            }
-//            if (!Algorithms.isEmpty(remoteFiles)) {
-//                backupHelper.deleteFilesSync(remoteFiles, false, AsyncTask.THREAD_POOL_EXECUTOR, listener);
-//            }
-//        }
-//    } catch (UserNotRegisteredException e) {
-//        throw new IOException(e.getMessage(), e);
-//    }
-//}
-//
-//protected void deleteOldFiles(OnDeleteFilesListener listener) throws IOException {
-//    try {
-//        if (!Algorithms.isEmpty(oldFilesToDelete)) {
-//            backupHelper.deleteFilesSync(oldFilesToDelete, true, AsyncTask.THREAD_POOL_EXECUTOR, listener);
-//        }
-//    } catch (UserNotRegisteredException e) {
-//        throw new IOException(e.getMessage(), e);
-//    }
-//}
-//
-//@Override
-//public void cancel() {
-//    super.cancel();
-//    if (executor != null) {
-//        executor.cancel();
-//    }
-//}
-//
-//private OnUploadItemListener getOnUploadItemListener(Set<Object> itemsProgress, AtomicInteger dataProgress, Map<String, String> errors) {
-//    return new OnUploadItemListener() {
-//        
-//        @Override
-//        public void onItemUploadStarted(@NonNull SettingsItem item, @NonNull String fileName, int work) {
-//            if (listener != null) {
-//                listener.itemExportStarted(item.getType().name(), fileName, work);
-//            }
-//        }
-//        
-//        @Override
-//        public void onItemUploadProgress(@NonNull SettingsItem item, @NonNull String fileName, int progress, int deltaWork) {
-//            int p = dataProgress.addAndGet(deltaWork);
-//            if (listener != null) {
-//                listener.updateItemProgress(item.getType().name(), fileName, progress);
-//                listener.updateGeneralProgress(itemsProgress.size(), p);
-//            }
-//        }
-//        
-//        @Override
-//        public void onItemFileUploadDone(@NonNull SettingsItem item, @NonNull String fileName, long uploadTime, @Nullable String error) {
-//            String type = item.getType().name();
-//            if (!Algorithms.isEmpty(error)) {
-//                errors.put(type + "/" + fileName, error);
-//            } else {
-//                markOldFileForDeletion(item, fileName);
-//            }
-//            int p = dataProgress.addAndGet(APPROXIMATE_FILE_SIZE_BYTES / 1024);
-//            if (listener != null) {
-//                listener.updateGeneralProgress(itemsProgress.size(), p);
-//            }
-//        }
-//        
-//        @Override
-//        public void onItemUploadDone(@NonNull SettingsItem item, @NonNull String fileName, long uploadTime, @Nullable String error) {
-//            String type = item.getType().name();
-//            if (!Algorithms.isEmpty(error)) {
-//                errors.put(type + "/" + fileName, error);
-//            }
-//            itemsProgress.add(item);
-//            if (listener != null) {
-//                listener.itemExportDone(item.getType().name(), fileName);
-//                listener.updateGeneralProgress(itemsProgress.size(), dataProgress.get());
-//            }
-//        }
-//    };
-//}
-//
-//private OnDeleteFilesListener getOnDeleteFilesListener(Set<Object> itemsProgress, AtomicInteger dataProgress) {
-//    return new OnDeleteFilesListener() {
-//        
-//        @Override
-//        public void onFilesDeleteStarted(@NonNull List<RemoteFile> files) {
-//            
-//        }
-//        
-//        @Override
-//        public void onFileDeleteProgress(@NonNull RemoteFile file, int progress) {
-//            int p = dataProgress.addAndGet(APPROXIMATE_FILE_SIZE_BYTES / 1024);
-//            itemsProgress.add(file);
-//            if (listener != null) {
-//                listener.itemExportDone(file.getType(), file.getName());
-//                listener.updateGeneralProgress(itemsProgress.size(), p);
-//            }
-//        }
-//        
-//        @Override
-//        public void onFilesDeleteDone(@NonNull Map<RemoteFile, String> errors) {
-//            
-//        }
-//        
-//        @Override
-//        public void onFilesDeleteError(int status, @NonNull String message) {
-//            
-//        }
-//    };
-//}
-//
-//private void markOldFileForDeletion(@NonNull SettingsItem item, @NonNull String fileName) {
-//    String type = item.getType().name();
-//    ExportSettingsType exportType = ExportSettingsType.getExportSettingsTypeForItem(item);
-//    if (exportType != null && !backupHelper.getVersionHistoryTypePref(exportType).get()) {
-//        RemoteFile remoteFile = backupHelper.getBackup().getRemoteFile(type, fileName);
-//        if (remoteFile != null) {
-//            oldFilesToDelete.add(remoteFile);
-//        }
-//    }
-//}
-//
+- (void) deleteFiles:(id<OAOnDeleteFilesListener>)listener
+{
+    @try
+    {
+        NSMutableArray<OARemoteFile *> *remoteFiles = [NSMutableArray array];
+        NSDictionary<NSString *, OARemoteFile *> *remoteFilesMap = [_backupHelper.backup getRemoteFiles:EOARemoteFilesTypeUnique];
+        if (remoteFilesMap != nil)
+        {
+            NSArray<OASettingsItem *> *itemsToDelete = _itemsToDelete;
+            for (OARemoteFile *remoteFile in remoteFilesMap.allValues)
+            {
+                for (OASettingsItem *item in itemsToDelete)
+                {
+                    if ([item isEqual:remoteFile.item])
+                    {
+                        [remoteFiles addObject:remoteFile];
+                    }
+                }
+            }
+            if (remoteFiles.count > 0)
+            {
+                [_backupHelper deleteFilesSync:remoteFiles byVersion:NO listener:listener];
+            }
+        }
+    }
+    @catch (NSException *e)
+    {
+        @throw [NSException exceptionWithName:@"IOException" reason:e.reason userInfo:nil];
+    }
+}
+
+- (void) deleteOldFiles:(id<OAOnDeleteFilesListener>)listener
+{
+    @try {
+        if (_oldFilesToDelete.countSync > 0)
+        {
+            [_backupHelper deleteFilesSync:_oldFilesToDelete.asArray byVersion:YES listener:listener];
+        }
+    }
+    @catch (NSException *e)
+    {
+        @throw [NSException exceptionWithName:@"IOException" reason:e.reason userInfo:nil];
+    }
+}
+
+- (void)cancel
+{
+    [super cancel];
+    if (_executor)
+        [_executor cancelAllOperations];
+}
+
+- (void) markOldFileForDeletion:(OASettingsItem *)item fileName:(NSString *)fileName
+{
+    NSString *type = [OASettingsItemType typeName:item.type];
+    OAExportSettingsType *exportType = [OAExportSettingsType getExportSettingsTypeForItem:item];
+    if (exportType != nil && ![_backupHelper getVersionHistoryTypePref:exportType].get)
+    {
+        OARemoteFile *remoteFile = [_backupHelper.backup getRemoteFile:type fileName:fileName];
+        if (remoteFile != nil)
+            [_oldFilesToDelete addObjectSync:remoteFile];
+    }
+}
 
 // MARK: OAOnUploadItemListener
 
 - (void)onItemFileUploadDone:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName uploadTime:(long)uploadTime error:(nonnull NSString *)error {
-    
+    NSString *type = [OASettingsItemType typeName:item.type];
+    if (error.length > 0)
+    {
+        [_errors setObjectSync:error forKey:[NSString stringWithFormat:@"%@/%@", type, fileName]];
+    }
+    else
+    {
+        [self markOldFileForDeletion:item fileName:fileName];
+    }
+    int p = [_dataProgress addAndGet:(APPROXIMATE_FILE_SIZE_BYTES / 1024)];
+    if (_listener != nil)
+    {
+        [_listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:(NSInteger)p];
+    }
 }
 
 - (void)onItemUploadDone:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName uploadTime:(long)uploadTime error:(nonnull NSString *)error {
-    
+    NSString *type = [OASettingsItemType typeName:item.type];
+    if (error.length > 0)
+    {
+        [_errors setObjectSync:error forKey:[NSString stringWithFormat:@"%@/%@", type, fileName]];
+    }
+    [_itemsProgress addObjectSync:item];
+    if (_listener)
+    {
+        [_listener itemExportDone:type fileName:fileName];
+        [_listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:(NSInteger)_dataProgress.get];
+    }
 }
 
 - (void)onItemUploadProgress:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork {
-    
+    NSInteger p = [_dataProgress addAndGet:(int) deltaWork];
+    if (_listener)
+    {
+        [_listener updateItemProgress:[OASettingsItemType typeName:item.type] fileName:fileName progress:progress];
+        [_listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:p];
+    }
 }
 
 - (void)onItemUploadStarted:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName work:(NSInteger)work {
-    
+    if (_listener)
+        [_listener itemExportStarted:[OASettingsItemType typeName:item.type] fileName:fileName work:work];
 }
 
 
 // MARK: OAOnDeleteFilesListener
 
 - (void)onFileDeleteProgress:(OARemoteFile *)file progress:(NSInteger)progress {
-    
+    int p = [_dataProgress addAndGet:(APPROXIMATE_FILE_SIZE_BYTES / 1024)];
+    [_itemsProgress addObjectSync:file];
+    if (_listener != nil)
+    {
+        [_listener itemExportDone:file.type fileName:file.name];
+        [_listener updateGeneralProgress:_itemsProgress.countSync uploadedKb:(NSInteger)p];
+    }
 }
 
 - (void)onFilesDeleteDone:(NSDictionary<OARemoteFile *,NSString *> *)errors {
-    
 }
 
 - (void)onFilesDeleteError:(NSInteger)status message:(NSString *)message {
-    
 }
 
 - (void)onFilesDeleteStarted:(NSArray<OARemoteFile *> *)files {
-    
 }
 
 @end

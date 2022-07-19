@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAUploadedFileInfo : NSObject
 
+- (instancetype) initWithType:(NSString *)type name:(NSString *)name;
+
 @property (nonatomic, readonly) NSString *type;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic) long uploadTime;

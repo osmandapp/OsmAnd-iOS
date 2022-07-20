@@ -76,7 +76,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 
 - (void)clearCache:(BOOL)localData;
 - (void)clearOutdatedCache;
-- (void)removeForecast:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
+- (void)removeLocalForecast:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
 - (void)removeIncompleteDownloads:(OAWorldRegion *)region;
 
 - (void)updatePreferences:(OAWorldRegion *)region;

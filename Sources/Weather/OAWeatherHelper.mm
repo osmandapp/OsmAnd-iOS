@@ -163,7 +163,7 @@
     OsmAnd::LatLon latLonTopLeft = OsmAnd::LatLon(region.bboxTopLeft.latitude, region.bboxTopLeft.longitude);
     OsmAnd::LatLon latLonBottomRight = OsmAnd::LatLon(region.bboxBottomRight.latitude, region.bboxBottomRight.longitude);
     OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();
-    QVector<OsmAnd::TileId> tileIds = OsmAnd::WeatherTileResourceProvider::generateGeoTileIds(latLonTopLeft, latLonBottomRight, zoom);
+    QVector<OsmAnd::TileId> tileIds = OsmAnd::WeatherTileResourcesManager::generateGeoTileIds(latLonTopLeft, latLonBottomRight, zoom);
 
     [self setProgress:region key:kWeatherProgressDestinationSuffix value:tileIds.size() * 7 * 24];
     NSString *operationKey = region.regionId;
@@ -265,6 +265,7 @@
     NSDate *date = [NSCalendar.autoupdatingCurrentCalendar startOfDayForDate:[NSDate date]];
     QDateTime dateTime = QDateTime::fromNSDate(date).toUTC();
     _weatherResourcesManager->clearDbCache(false, dateTime);
+    _weatherResourcesManager->clearDbCache(true, dateTime);
     for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
     {
         NSInteger status = [self.class getPreferenceStatus:region.regionId];
@@ -274,7 +275,7 @@
     }
 }
 
-- (void)removeForecast:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap
+- (void)removeLocalForecast:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap
 {
     NSArray *excludeKeys = [self.class getPreferenceStatus:region.regionId] & EOAWeatherForecastStatusUpdatesCalculated
             ? @[[kWeatherForecastSizeUpdatesPrefix stringByAppendingString:region.regionId]] : @[];
@@ -284,7 +285,7 @@
 
     OsmAnd::LatLon latLonTopLeft = OsmAnd::LatLon(region.bboxTopLeft.latitude, region.bboxTopLeft.longitude);
     OsmAnd::LatLon latLonBottomRight = OsmAnd::LatLon(region.bboxBottomRight.latitude, region.bboxBottomRight.longitude);
-    _weatherResourcesManager->clearDbCache(latLonTopLeft, latLonBottomRight, OsmAnd::WeatherTileResourceProvider::getGeoTileZoom());
+    _weatherResourcesManager->clearLocalDbCache(latLonTopLeft, latLonBottomRight, OsmAnd::WeatherTileResourceProvider::getGeoTileZoom());
 
     if (refreshMap)
     {
@@ -300,7 +301,7 @@
     NSInteger status = [self.class getPreferenceStatus:region.regionId];
     NSDate *dateChecked = [NSDate dateWithTimeIntervalSince1970:[OAWeatherHelper getPreferenceLastUpdate:region.regionId]];
     if (status & EOAWeatherForecastStatusDownloading && [dateChecked isEqualToDate:[NSDate dateWithTimeIntervalSince1970:-1]])
-        [self removeForecast:region refreshMap:NO];
+        [self removeLocalForecast:region refreshMap:NO];
 }
 
 - (void)updatePreferences:(OAWorldRegion *)region

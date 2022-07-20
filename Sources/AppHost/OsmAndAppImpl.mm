@@ -630,6 +630,7 @@
     QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>> bandSettings; // init later
     _resourcesManager->instantiateWeatherResourcesManager(
         bandSettings,
+        _data.weatherUseOfflineData,
         QString::fromNSString(_weatherForecastPath),
         QString::fromNSString([NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj"]),
         256,

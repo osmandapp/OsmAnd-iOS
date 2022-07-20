@@ -68,7 +68,7 @@
     ];
     QDateTime dateTime = QDateTime::fromNSDate(_date).toUTC();
     QByteArray outData;
-    BOOL containsTileId = _weatherResourcesManager->containsTileId(_tileId, dateTime, _zoom, outData);
+    BOOL containsTileId = _weatherResourcesManager->containsLocalTileId(_tileId, dateTime, _zoom, outData);
     if (_calculateSizeLocal)
     {
         [self onProgressUpdate:0 sizeLocal:outData.size() success:containsTileId];
@@ -132,7 +132,7 @@
                                                                     success = !fileData.isEmpty();
                                                                     if (success)
                                                                     {
-                                                                        success = _weatherResourcesManager->storeTileData(_tileId, dateTime, _zoom, fileData);
+                                                                        success = _weatherResourcesManager->storeLocalTileData(_tileId, dateTime, _zoom, fileData);
                                                                         sizeLocal = fileData.size();
                                                                     }
                                                                 }

@@ -53,7 +53,7 @@
                                                        withHandler:@selector(onWeatherChanged)
                                                         andObserve:self.app.data.weatherChangeObservable];
     _weatherUseOfflineDataChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                     withHandler:@selector(updateWeatherLayer)
+                                                                     withHandler:@selector(onWeatherLayerLocalDataChanged)
                                                                       andObserve:self.app.data.weatherUseOfflineDataChangeObservable];
     _layerChangeObservers = [NSMutableArray array];
     _alphaChangeObservers = [NSMutableArray array];
@@ -122,7 +122,7 @@
         }
         if (true)//!_provider)
         {
-            _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, dateTime, bands, self.app.data.weatherUseOfflineData);
+            _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, dateTime, bands);
             [self.mapView setProvider:_provider forLayer:self.layerIndex];
 
             OsmAnd::MapLayerConfiguration config;
@@ -133,7 +133,6 @@
         {
             _provider->setDateTime(dateTime);
             _provider->setBands(bands);
-            _provider->setUseLocalData(self.app.data.weatherUseOfflineData);
 
             [self.mapView invalidateFrame];
         }
@@ -187,6 +186,16 @@
         }];
     });
  */
+}
+
+- (void)onWeatherLayerLocalDataChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.mapViewController runWithRenderSync:^{
+            _resourcesManager->setLocalData(self.app.data.weatherUseOfflineData);
+            [self updateWeatherLayer];
+        }];
+    });
 }
 
 - (void) updateWeatherLayer

@@ -541,7 +541,7 @@ static BOOL _repositoryUpdated = NO;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        [[OAWeatherHelper sharedInstance] removeForecast:item.worldRegion refreshMap:YES];
+        [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion refreshMap:YES];
         if (onComplete)
             onComplete();
 
@@ -1873,7 +1873,7 @@ static BOOL _repositoryUpdated = NO;
                 {
                     if (status & EOAWeatherForecastStatusDownloading)
                     {
-                        [[OAWeatherHelper sharedInstance] removeForecast:region refreshMap:YES];
+                        [[OAWeatherHelper sharedInstance] removeLocalForecast:region refreshMap:YES];
 
                         OAResourceItem *newItem = [OAWeatherHelper generateResourceItem:self.region];
                         _regionMapItems[_weatherForecastRow] = newItem;

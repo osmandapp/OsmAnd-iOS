@@ -448,10 +448,8 @@ static BOOL _repositoryUpdated = NO;
 
 - (BOOL) shouldDisplayWeatherForecast:(OAWorldRegion *)region
 {
-    NSString *northAmericaRegionId = OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString();
     NSString *unitedKingdomRegionId = [NSString stringWithFormat:@"%@_gb", OsmAnd::WorldRegions::EuropeRegionId.toNSString()];
-
-    return (([region getLevel] == 2 && ![region.regionId hasPrefix:northAmericaRegionId] && ![region.regionId hasPrefix:unitedKingdomRegionId]) || ([region getLevel] == 3 && ([region.regionId hasPrefix:northAmericaRegionId] || [region.regionId hasPrefix:unitedKingdomRegionId]))) && region == self.region;
+    return (([region getLevel] == 2 && ![region.regionId hasPrefix:unitedKingdomRegionId]) || ([region getLevel] == 3 && [region.regionId hasPrefix:unitedKingdomRegionId])) && region == self.region;
 }
 
 - (void)onWeatherSizeLocalCalculate:(id)sender withKey:(id)key andValue:(id)value

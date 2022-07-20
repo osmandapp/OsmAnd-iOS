@@ -372,7 +372,6 @@
 		326B4FB4257FD0FC00ABAB1D /* ic_action_motorboat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FB0257FD0FB00ABAB1D /* ic_action_motorboat@3x.png */; };
 		326B4FBF257FD11400ABAB1D /* ic_action_light_aircraft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBB257FD11300ABAB1D /* ic_action_light_aircraft@2x.png */; };
 		326B4FC1257FD11400ABAB1D /* ic_action_light_aircraft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */; };
-		327A4C362880320A00C14F32 /* OAMissingMapsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 327A4C352880290100C14F32 /* OAMissingMapsHelper.mm */; };
 		3296B47B27F8790800108AF7 /* widget_weather_temperature_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B44B27F878FD00108AF7 /* widget_weather_temperature_night@3x.png */; };
 		3296B47C27F8790800108AF7 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B44C27F878FE00108AF7 /* ic_navbar_overflow_menu_stroke@2x.png */; };
 		3296B47D27F8790800108AF7 /* ic_custom_wind@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B44D27F878FE00108AF7 /* ic_custom_wind@3x.png */; };
@@ -3622,8 +3621,6 @@
 		326B4FB0257FD0FB00ABAB1D /* ic_action_motorboat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_motorboat@3x.png"; path = "Resources/Icons/Profile/ic_action_motorboat@3x.png"; sourceTree = "<group>"; };
 		326B4FBB257FD11300ABAB1D /* ic_action_light_aircraft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_light_aircraft@2x.png"; path = "Resources/Icons/Profile/ic_action_light_aircraft@2x.png"; sourceTree = "<group>"; };
 		326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_light_aircraft@3x.png"; path = "Resources/Icons/Profile/ic_action_light_aircraft@3x.png"; sourceTree = "<group>"; };
-		327A4C34288028ED00C14F32 /* OAMissingMapsHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMissingMapsHelper.h; sourceTree = "<group>"; };
-		327A4C352880290100C14F32 /* OAMissingMapsHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMissingMapsHelper.mm; sourceTree = "<group>"; };
 		3296B44B27F878FD00108AF7 /* widget_weather_temperature_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_temperature_night@3x.png"; path = "Resources/Icons/widget_weather_temperature_night@3x.png"; sourceTree = "<group>"; };
 		3296B44C27F878FE00108AF7 /* ic_navbar_overflow_menu_stroke@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@2x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@2x.png"; sourceTree = "<group>"; };
 		3296B44D27F878FE00108AF7 /* ic_custom_wind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wind@3x.png"; path = "Resources/Icons/ic_custom_wind@3x.png"; sourceTree = "<group>"; };
@@ -12727,8 +12724,6 @@
 				DA5A80FC26C563A600F274C7 /* OALocationPointWrapper.mm */,
 				DA5A810B26C563A600F274C7 /* OALocationsHolder.h */,
 				DA5A810626C563A600F274C7 /* OALocationsHolder.mm */,
-				327A4C34288028ED00C14F32 /* OAMissingMapsHelper.h */,
-				327A4C352880290100C14F32 /* OAMissingMapsHelper.mm */,
 				DA5A811A26C563A600F274C7 /* OARouteCalculationParams.h */,
 				DA5A811F26C563A600F274C7 /* OARouteCalculationParams.mm */,
 				DA5A810A26C563A600F274C7 /* OARouteCalculationResult.h */,
@@ -15630,7 +15625,6 @@
 				DA5A839C26C563A800F274C7 /* OADirectionAppearanceViewController.m in Sources */,
 				DA5A844626C563A900F274C7 /* OABaseScrollableHudViewController.mm in Sources */,
 				DA5A841826C563A800F274C7 /* OAGPXEditWptListViewController.mm in Sources */,
-				327A4C362880320A00C14F32 /* OAMissingMapsHelper.mm in Sources */,
 				DA5A852E26C563A900F274C7 /* OrderedDictionary.m in Sources */,
 				DA5A82F826C563A800F274C7 /* OASettingsTableViewCell.m in Sources */,
 				DA5A833A26C563A800F274C7 /* OAHomeWorkCell.mm in Sources */,

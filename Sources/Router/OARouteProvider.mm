@@ -23,7 +23,6 @@
 #import "OAResultMatcher.h"
 #import "OAGpxRouteApproximation.h"
 #import "OATargetPointsHelper.h"
-#import "OAMissingMapsHelper.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>
@@ -658,7 +657,7 @@
     
     float mb = (1 << 20);
     natural_t freeMemory = [OAUtilities get_free_memory];
-    long memoryLimit = (0.95 * ([NSProcessInfo processInfo].physicalMemory / mb));
+    long memoryLimit = (0.1 * ([NSProcessInfo processInfo].physicalMemory / mb));
     // make visible
     long memoryTotal = (long) ([NSProcessInfo processInfo].physicalMemory / mb);
     NSLog(@"Use %ld MB of %ld MB, free memory: %ld MB", memoryLimit, memoryTotal, (long)(freeMemory / mb));

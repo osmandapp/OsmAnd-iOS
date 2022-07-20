@@ -206,11 +206,6 @@
     return _locations.count == 0 || _currentRoute >= _locations.count;
 }
 
-- (BOOL) hasMissingMaps
-{
-    return _missingMaps.count > 0;
-}
-
 - (BOOL) isInitialCalculation
 {
     return _initialCalculation;
@@ -1337,18 +1332,6 @@
                 }
                 lastHeight = h;
             }
-//            // FIXME: investigate gpx file
-//            if (s->object->pointsX[i] == 0 && s->object->pointsY[i] == 0)
-//            {
-//                if (locations.count > 0)
-//                {
-//                    CLLocation *prev = locations[locations.count - 1];
-//                    lat = prev.coordinate.latitude;
-//                    lon = prev.coordinate.longitude;
-//                    if (prev.altitude)
-//                        alt = @(prev.altitude);
-//                }
-//            }
             
             [locations addObject:[[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(lat, lon) altitude:alt? alt.doubleValue : NAN horizontalAccuracy:0 verticalAccuracy:0 course:0 speed:speed timestamp:[NSDate date]]];
 

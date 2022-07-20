@@ -497,7 +497,7 @@
         {
             if ([_settings.showStreetName get])
             {
-                OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES];
+                OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
                 streetName = [_routingHelper getCurrentName:nextDirInfo];
                 _turnDrawable.clr = UIColorFromRGB(color_nav_arrow);
             }
@@ -508,7 +508,7 @@
             if (di >= 0 && [OARouteInfoView isVisible] && di < [_routingHelper getRouteDirections].count)
             {
                 showClosestWaypointFirstInAddress = NO;
-                streetName = [_routingHelper getCurrentName:[_routingHelper getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES]];
+                streetName = [_routingHelper getCurrentName:[_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES]];
                 _turnDrawable.clr = UIColorFromRGB(color_nav_arrow_distant);
             }
         }

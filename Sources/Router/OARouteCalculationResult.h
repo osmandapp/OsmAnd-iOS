@@ -50,7 +50,6 @@ struct RouteSegmentResult;
 @property (nonatomic, readonly) bool initialCalculation;
 @property (nonatomic, readonly) CLLocation *currentStraightAnglePoint;
 @property (nonatomic, readonly) EOARouteService routeProvider;
-@property (nonatomic) NSArray<OAWorldRegion *> *missingMaps;
 
 - (instancetype) initWithErrorMessage:(NSString *)errorMessage;
 
@@ -77,7 +76,6 @@ struct RouteSegmentResult;
 - (int) getWholeDistance;
 - (BOOL) isCalculated;
 - (BOOL) isEmpty;
-- (BOOL) hasMissingMaps;
 - (BOOL) isInitialCalculation;
 - (void) updateCurrentRoute:(int)currentRoute;
 - (void) passIntermediatePoint;

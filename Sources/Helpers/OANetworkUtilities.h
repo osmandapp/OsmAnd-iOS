@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
                                       params:(NSDictionary<NSString *, NSString *> *)params
                                         post:(BOOL)post
                                         size:(BOOL)size
-        onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
+                                  onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
 
 @end
 

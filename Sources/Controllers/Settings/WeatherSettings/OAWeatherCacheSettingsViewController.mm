@@ -12,7 +12,7 @@
 #import "OATextLineViewCell.h"
 #import "OATitleDescrRightIconTableViewCell.h"
 #import "OsmAndApp.h"
-#import "../../../Weather/OAWeatherHelper.h"
+#import "OAWeatherHelper.h"
 #import "OAMapLayers.h"
 #import "Localization.h"
 #import "OAColors.h"

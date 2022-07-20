@@ -124,7 +124,8 @@
                                                             {
                                                                 auto tileFile = QFile(filePath);
                                                                 success = tileFile.open(QIODevice::ReadOnly);
-                                                                if (success) {
+                                                                if (success)
+                                                                {
                                                                     QByteArray fileData = tileFile.readAll();
                                                                     tileFile.close();
                                                                     success = !fileData.isEmpty();

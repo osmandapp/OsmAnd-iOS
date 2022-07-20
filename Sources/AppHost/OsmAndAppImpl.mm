@@ -40,7 +40,7 @@
 #import "OAAvoidSpecificRoads.h"
 #import "OAIndexConstants.h"
 #import "OALocationConvert.h"
-#import "../Weather/OAWeatherHelper.h"
+#import "OAWeatherHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAExternalTimeFormatter.h"
 

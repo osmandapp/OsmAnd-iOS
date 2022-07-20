@@ -38,7 +38,7 @@
 #import "OADownloadMultipleResourceViewController.h"
 #import "OASearchResult.h"
 #import "OAQuickSearchHelper.h"
-#import "../../Weather/OAWeatherHelper.h"
+#import "OAWeatherHelper.h"
 
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -337,7 +337,7 @@ static BOOL _repositoryUpdated = NO;
                                       withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:)
                                        andObserve:[OAWeatherHelper sharedInstance].weatherForecastDownloadingObserver];
 
-    if ([self shouldHasWeatherForecast:self.region])
+    if ([self shouldDisplayWeatherForecast:self.region])
         [[OAWeatherHelper sharedInstance] updatePreferences:self.region];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstallationFailed:) name:OAResourceInstallationFailedNotification object:nil];
@@ -446,7 +446,7 @@ static BOOL _repositoryUpdated = NO;
     return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || [OAIAPHelper isPaidVersion] || [OAAppSettings sharedManager].emailSubscribed.get || [self.region isKindOfClass:OACustomRegion.class];
 }
 
-- (BOOL) shouldHasWeatherForecast:(OAWorldRegion *)region
+- (BOOL) shouldDisplayWeatherForecast:(OAWorldRegion *)region
 {
     NSString *northAmericaRegionId = OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString();
     NSString *unitedKingdomRegionId = [NSString stringWithFormat:@"%@_gb", OsmAnd::WorldRegions::EuropeRegionId.toNSString()];
@@ -539,13 +539,13 @@ static BOOL _repositoryUpdated = NO;
     }
 }
 
-- (void)offerDeleteResourceOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
+- (void)offerDeleteResourceOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)onComplete
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
         [[OAWeatherHelper sharedInstance] removeForecast:item.worldRegion refreshMap:YES];
-        if (block)
-            block();
+        if (onComplete)
+            onComplete();
 
         OAResourceItem *newItem = [OAWeatherHelper generateResourceItem:self.region];
         _regionMapItems[_weatherForecastRow] = newItem;
@@ -556,7 +556,7 @@ static BOOL _repositoryUpdated = NO;
     }
     else
     {
-        [super offerDeleteResourceOf:item executeAfterSuccess:block];
+        [super offerDeleteResourceOf:item executeAfterSuccess:onComplete];
     }
 }
 
@@ -653,7 +653,7 @@ static BOOL _repositoryUpdated = NO;
     [self prepareContent];
     [self refreshContent:YES];
 
-    if ([self shouldHasWeatherForecast:self.region])
+    if ([self shouldDisplayWeatherForecast:self.region])
         [[OAWeatherHelper sharedInstance] updatePreferences:self.region];
 
     [self setupSubscriptionBanner];
@@ -925,7 +925,7 @@ static BOOL _repositoryUpdated = NO;
         }
     }
 
-    if ([self shouldHasWeatherForecast:region])
+    if ([self shouldDisplayWeatherForecast:region])
     {
         OAResourceItem *item = [OAWeatherHelper generateResourceItem:region];
         [regionMapArray addObject:item];
@@ -1315,7 +1315,7 @@ static BOOL _repositoryUpdated = NO;
         _freeMemorySection = -1;
 
         _weatherForecastRow = -1;
-        if ([self shouldHasWeatherForecast:self.region])
+        if ([self shouldDisplayWeatherForecast:self.region])
         {
             for (NSInteger i = 0; i < _regionMapItems.count; i ++)
             {

@@ -15,7 +15,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAWeatherBand.h"
-#import "../../../Weather/OAWeatherHelper.h"
+#import "OAWeatherHelper.h"
 
 @interface OAWeatherSettingsViewController () <OAWeatherBandSettingsDelegate, OAWeatherCacheSettingsDelegate, UITableViewDelegate, UITableViewDataSource>
 

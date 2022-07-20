@@ -12,7 +12,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAWeatherBand.h"
-#import "../../../Weather/OAWeatherHelper.h"
+#import "OAWeatherHelper.h"
 #import "OsmAndApp.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>

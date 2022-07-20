@@ -53,7 +53,7 @@
 #import "OARouteStatistics.h"
 #import "OAMapRendererEnvironment.h"
 #import "OAMapPresentationEnvironment.h"
-#import "../../Weather/OAWeatherHelper.h"
+#import "OAWeatherHelper.h"
 
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -1885,8 +1885,7 @@
                                                                                    rasterTileSize));
             [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
 
-            OAWeatherHelper *weatherHelper = [OAWeatherHelper sharedInstance];
-            _app.resourcesManager->getWeatherResourcesManager()->setBandSettings([weatherHelper getBandSettings]);
+            _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
         }
         else if (resourceType == OsmAndResourceType::OnlineTileSources || mapCreatorFilePath)
         {

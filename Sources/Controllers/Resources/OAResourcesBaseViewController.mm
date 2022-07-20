@@ -291,14 +291,14 @@ static BOOL dataInvalidated = NO;
     }];
 }
 
-- (void) offerDeleteResourceOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
+- (void) offerDeleteResourceOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)onComplete
 {
-    dispatch_block_t block_ = ^{
+    dispatch_block_t onComplete_ = ^{
         [self.region.superregion updateGroupItems:self.region type:[OAResourceType toValue:item.resourceType]];
-        if (block)
-            block();
+        if (onComplete)
+            onComplete();
     };
-    [OAResourcesUIHelper offerDeleteResourceOf:item viewController:self progressHUD:_deleteResourceProgressHUD executeAfterSuccess:block_];
+    [OAResourcesUIHelper offerDeleteResourceOf:item viewController:self progressHUD:_deleteResourceProgressHUD executeAfterSuccess:onComplete_];
 }
 
 - (void) offerDeleteResourceOf:(OALocalResourceItem *)item

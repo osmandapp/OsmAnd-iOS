@@ -10,7 +10,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
-#import "../../../Weather/OAWeatherHelper.h"
+#import "OAWeatherHelper.h"
 #import "OAMapRendererEnvironment.h"
 #import "OAMapStyleSettings.h"
 #import "OAIAPHelper.h"

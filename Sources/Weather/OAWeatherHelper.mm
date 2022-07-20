@@ -60,6 +60,7 @@
         _app = [OsmAndApp instance];
         _weatherResourcesManager = _app.resourcesManager->getWeatherResourcesManager();
         _weatherDownloaderQueue = [[OAWeatherDownloaderOperationQueue alloc] init];
+        _weatherDownloaderQueue.maxConcurrentOperationCount = 50;
         _progress = [NSMutableDictionary dictionary];
 
         _bands = @[

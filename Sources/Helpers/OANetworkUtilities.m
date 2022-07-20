@@ -19,6 +19,7 @@
     NSURLSessionDataTask *downloadTask = [self createDownloadTask:url
                                                            params:params
                                                              post:post
+                                                             size:NO
                                                        onComplete:onComplete];
 
     [downloadTask resume];
@@ -27,6 +28,7 @@
 + (NSURLSessionDataTask *)createDownloadTask:(NSString *)url
                                       params:(NSDictionary<NSString *, NSString *> *)params
                                         post:(BOOL)post
+                                        size:(BOOL)size
                                   onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
     NSURL *urlObj;
@@ -62,6 +64,10 @@
         [request addValue:@(postData.length).stringValue forHTTPHeaderField:@"Content-Length"];
         [request setHTTPMethod:@"POST"];
         [request setHTTPBody:postData];
+    }
+    else if (size)
+    {
+        [request setHTTPMethod:@"HEAD"];
     }
     else
     {

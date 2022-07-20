@@ -17,7 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSURLSessionDataTask *)createDownloadTask:(NSString *)url
                                       params:(NSDictionary<NSString *, NSString *> *)params
                                         post:(BOOL)post
-                                  onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
+                                        size:(BOOL)size
+        onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
 
 @end
 

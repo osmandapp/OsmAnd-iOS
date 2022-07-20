@@ -77,6 +77,7 @@
     _task = [OANetworkUtilities createDownloadTask:geoTileUrl
                                             params:@{}
                                               post:NO
+                                              size:_calculateSizeUpdates
                                         onComplete:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error)
                                         {
                                             NSInteger sizeUpdates = 0;

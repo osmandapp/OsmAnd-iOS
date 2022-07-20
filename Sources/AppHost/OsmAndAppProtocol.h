@@ -27,6 +27,7 @@
 @property(nonatomic, readonly) NSString* dataPath;
 @property(nonatomic, readonly) NSString* documentsPath;
 @property(nonatomic, readonly) NSString* cachePath;
+@property(nonatomic, readonly) NSString* weatherForecastPath;
 @property(nonatomic, readonly) NSString* gpxPath;
 @property(nonatomic, readonly) NSString* inboxPath;
 

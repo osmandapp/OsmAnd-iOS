@@ -10,7 +10,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
-#import "OAWeatherHelper.h"
+#import "../../../Weather/OAWeatherHelper.h"
 #import "OAMapRendererEnvironment.h"
 #import "OAMapStyleSettings.h"
 #import "OAIAPHelper.h"
@@ -31,6 +31,7 @@
     OAWeatherHelper *_weatherHelper;
     OAMapStyleSettings *_styleSettings;
     OAAutoObserverProxy* _weatherChangeObserver;
+    OAAutoObserverProxy* _weatherUseOfflineDataChangeObserver;
     OAAutoObserverProxy* _alphaChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
 }
@@ -59,6 +60,9 @@
     _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onWeatherChanged)
                                                         andObserve:self.app.data.weatherChangeObservable];
+    _weatherUseOfflineDataChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                     withHandler:@selector(updateWeatherLayer)
+                                                                      andObserve:self.app.data.weatherUseOfflineDataChangeObservable];
     _alphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                      withHandler:@selector(onLayerAlphaChanged)
                                                       andObserve:self.app.data.contoursAlphaChangeObservable];
@@ -74,6 +78,11 @@
     {
         [_weatherChangeObserver detach];
         _weatherChangeObserver = nil;
+    }
+    if (_weatherUseOfflineDataChangeObserver)
+    {
+        [_weatherUseOfflineDataChangeObserver detach];
+        _weatherUseOfflineDataChangeObserver = nil;
     }
     if (_alphaChangeObserver)
     {

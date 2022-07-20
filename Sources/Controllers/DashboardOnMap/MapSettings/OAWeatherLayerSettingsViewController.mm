@@ -14,7 +14,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapStyleSettings.h"
-#import "OAWeatherHelper.h"
+#import "../../../Weather/OAWeatherHelper.h"
 #import "OAWeatherBand.h"
 #import "OAWeatherBandSettingsViewController.h"
 #import "OAMapLayers.h"

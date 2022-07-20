@@ -11,7 +11,23 @@
 
 @implementation OANetworkUtilities
 
-+ (void) sendRequestWithUrl:(NSString *)url params:(NSDictionary<NSString *, NSString *> *)params post:(BOOL)post onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
++ (void) sendRequestWithUrl:(NSString *)url
+                     params:(NSDictionary<NSString *, NSString *> *)params
+                       post:(BOOL)post
+                 onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
+{
+    NSURLSessionDataTask *downloadTask = [self createDownloadTask:url
+                                                           params:params
+                                                             post:post
+                                                       onComplete:onComplete];
+
+    [downloadTask resume];
+}
+
++ (NSURLSessionDataTask *)createDownloadTask:(NSString *)url
+                                      params:(NSDictionary<NSString *, NSString *> *)params
+                                        post:(BOOL)post
+                                  onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
     NSURL *urlObj;
     NSMutableString *paramsStr = nil;
@@ -22,7 +38,7 @@
         [params enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
             if (paramsStr.length > 0)
                 [paramsStr appendString:@"&"];
-            
+
             [paramsStr appendString:[key escapeUrl]];
             [paramsStr appendString:@"="];
             [paramsStr appendString:[value escapeUrl]];
@@ -36,7 +52,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                        timeoutInterval:30.0];
-    
+
     [request addValue:@"UTF-8" forHTTPHeaderField:@"Accept-Charset"];
     [request addValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
     if (post && paramsStr)
@@ -51,13 +67,13 @@
     {
         [request setHTTPMethod:@"GET"];
     }
-    
+
     NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (onComplete)
             onComplete(data, response, error);
     }];
-    
-    [downloadTask resume];
+
+    return downloadTask;
 }
 
 @end

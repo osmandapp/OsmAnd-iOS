@@ -134,6 +134,7 @@
     NSMutableArray *cachedValue = @[undefined].mutableCopy;
     OsmAnd::PointI __block cachedTarget31 = OsmAnd::PointI(0, 0);
     OsmAnd::ZoomLevel __block cachedZoom = OsmAnd::ZoomLevel::InvalidZoomLevel;
+    __block NSDate *cachedDate;
     weatherControl.updateInfoFunction = ^BOOL{
 
         BOOL enabled = _app.data.weather;
@@ -151,15 +152,17 @@
                                         
         OsmAnd::PointI target31 = mapCtrl.mapView.target31;
         OsmAnd::ZoomLevel zoom = mapCtrl.mapView.zoomLevel;
-        
-        if (cachedTarget31 == target31 && cachedZoom == zoom)
+        NSDate *date = mapCtrl.mapLayers.weatherDate;
+
+        if (cachedTarget31 == target31 && cachedZoom == zoom && cachedDate && [cachedDate isEqualToDate:date])
             return false;
 
         cachedTarget31 = target31;
         cachedZoom = zoom;
+        cachedDate = date;
 
         OsmAnd::WeatherTileResourcesManager::ValueRequest _request;
-        _request.dataTime = QDateTime::fromNSDate(mapCtrl.mapLayers.weatherDate).toUTC();
+        _request.dataTime = QDateTime::fromNSDate(date).toUTC();
         _request.point31 = target31;
         _request.zoom = zoom;
         _request.band = (OsmAnd::BandIndex)band;

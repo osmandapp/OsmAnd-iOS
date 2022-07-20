@@ -10,8 +10,8 @@
 
 typedef NS_ENUM(NSInteger, EOAWeatherCacheType)
 {
-    EOAWeatherOnlineCache = 0,
-    EOAWeatherOfflineForecast
+    EOAWeatherOnlineData = 0,
+    EOAWeatherOfflineData
 };
 
 @protocol OAWeatherCacheSettingsDelegate <NSObject>

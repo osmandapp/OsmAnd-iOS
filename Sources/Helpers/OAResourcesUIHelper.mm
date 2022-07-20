@@ -81,6 +81,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"res_slope");
         case OsmAndResourceType::SqliteFile:
             return OALocalizedString(@"online_map");
+        case OsmAndResourceType::WeatherForecast:
+            return OALocalizedString(@"weather_forecast");
         default:
             return OALocalizedString(@"res_unknown");
     }
@@ -125,6 +127,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::OnlineTileSources:
             imageNamed = @"ic_custom_map_online";
             break;
+        case OsmAndResourceType::WeatherForecast:
+            imageNamed = @"ic_custom_umbrella";
+            break;
         default:
             imageNamed = @"ic_custom_map";
             break;
@@ -164,6 +169,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return 75;
         case OsmAndResourceType::SqliteFile:
             return 80;
+        case OsmAndResourceType::WeatherForecast:
+            return 85;
         default:
             return 1000; //HeightmapRegion, MapStyle, MapStylesPresets, OnlineTileSources
     }
@@ -199,6 +206,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return OsmAndResourceType::GpxFile;
     else if ([scopeId isEqualToString:@"sqlite"])
         return OsmAndResourceType::SqliteFile;
+    else if ([scopeId isEqualToString:@"weather_forecast"])
+        return OsmAndResourceType::WeatherForecast;
 
     //TODO: add another types from ResourcesManager.h
     //HeightmapRegion,
@@ -231,7 +240,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::HeightmapRegion],
             [self.class toValue:OsmAndResourceType::MapStyle],
             [self.class toValue:OsmAndResourceType::MapStylesPresets],
-            [self.class toValue:OsmAndResourceType::OnlineTileSources]
+            [self.class toValue:OsmAndResourceType::OnlineTileSources],
+            [self.class toValue:OsmAndResourceType::WeatherForecast]
     ];
 }
 
@@ -243,7 +253,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::SrtmMapRegion],
             [self.class toValue:OsmAndResourceType::HillshadeRegion],
             [self.class toValue:OsmAndResourceType::SlopeRegion],
-            [self.class toValue:OsmAndResourceType::WikiMapRegion]
+            [self.class toValue:OsmAndResourceType::WikiMapRegion],
+            [self.class toValue:OsmAndResourceType::WeatherForecast]
     ];
 }
 

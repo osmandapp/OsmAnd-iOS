@@ -36,13 +36,10 @@
 #import "OAResourcesInstaller.h"
 #import "OAIAPHelper.h"
 #import "OADownloadMultipleResourceViewController.h"
-#import "OAQuickSearchCoordinatesViewController.h"
 #import "OASearchResult.h"
-#import "OAPointDescription.h"
 #import "OAQuickSearchHelper.h"
+#import "../../Weather/OAWeatherHelper.h"
 
-#include <OsmAndCore/ResourcesManager.h>
-#include <OsmAndCore/QKeyValueIterator.h>
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
@@ -119,6 +116,8 @@ struct RegionResources
     NSMutableArray *_localSqliteItems;
     NSMutableArray *_localOnlineTileSources;
 
+    NSInteger _weatherForecastRow;
+
     NSString *_lastSearchString;
     NSInteger _lastSearchScope;
     NSArray *_searchResults;
@@ -159,6 +158,10 @@ struct RegionResources
     OADownloadDescriptionInfo *_downloadDescriptionInfo;
 
     NSArray<OAResourceItem *> *_multipleItems;
+
+    OAAutoObserverProxy *_weatherSizeLocalCalculateObserver;
+    OAAutoObserverProxy *_weatherSizeUpdatesCalculateObserver;
+    OAAutoObserverProxy *_weatherForecastDownloadingObserver;
 }
 
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
@@ -320,7 +323,23 @@ static BOOL _repositoryUpdated = NO;
         [self setupSubscriptionBanner];
 
     [self.tableView reloadData];
-    
+
+    _weatherSizeLocalCalculateObserver =
+            [[OAAutoObserverProxy alloc] initWith:self
+                                      withHandler:@selector(onWeatherSizeLocalCalculate:withKey:andValue:)
+                                       andObserve:[OAWeatherHelper sharedInstance].weatherSizeLocalCalculateObserver];
+    _weatherSizeUpdatesCalculateObserver =
+            [[OAAutoObserverProxy alloc] initWith:self
+                                      withHandler:@selector(onWeatherSizeUpdatesCalculate:withKey:andValue:)
+                                       andObserve:[OAWeatherHelper sharedInstance].weatherSizeUpdatesCalculateObserver];
+    _weatherForecastDownloadingObserver =
+            [[OAAutoObserverProxy alloc] initWith:self
+                                      withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:)
+                                       andObserve:[OAWeatherHelper sharedInstance].weatherForecastDownloadingObserver];
+
+    if ([self shouldHasWeatherForecast:self.region])
+        [[OAWeatherHelper sharedInstance] updatePreferences:self.region];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstallationFailed:) name:OAResourceInstallationFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
@@ -372,7 +391,23 @@ static BOOL _repositoryUpdated = NO;
     [super viewWillDisappear:animated];
     
     self.tableView.editing = NO;
-    
+
+    if (_weatherSizeLocalCalculateObserver)
+    {
+        [_weatherSizeLocalCalculateObserver detach];
+        _weatherSizeLocalCalculateObserver = nil;
+    }
+    if (_weatherSizeUpdatesCalculateObserver)
+    {
+        [_weatherSizeUpdatesCalculateObserver detach];
+        _weatherSizeUpdatesCalculateObserver = nil;
+    }
+    if (_weatherForecastDownloadingObserver)
+    {
+        [_weatherForecastDownloadingObserver detach];
+        _weatherForecastDownloadingObserver = nil;
+    }
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -409,6 +444,120 @@ static BOOL _repositoryUpdated = NO;
 - (BOOL) shouldHideEmailSubscription
 {
     return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || [OAIAPHelper isPaidVersion] || [OAAppSettings sharedManager].emailSubscribed.get || [self.region isKindOfClass:OACustomRegion.class];
+}
+
+- (BOOL) shouldHasWeatherForecast:(OAWorldRegion *)region
+{
+    NSString *northAmericaRegionId = OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString();
+    NSString *unitedKingdomRegionId = [NSString stringWithFormat:@"%@_gb", OsmAnd::WorldRegions::EuropeRegionId.toNSString()];
+
+    return (([region getLevel] == 2 && ![region.regionId hasPrefix:northAmericaRegionId] && ![region.regionId hasPrefix:unitedKingdomRegionId]) || ([region getLevel] == 3 && ([region.regionId hasPrefix:northAmericaRegionId] || [region.regionId hasPrefix:unitedKingdomRegionId]))) && region == self.region;
+}
+
+- (void)onWeatherSizeLocalCalculate:(id)sender withKey:(id)key andValue:(id)value
+{
+    if (value == self.region)
+    {
+        OAResourceItem *item = _regionMapItems[_weatherForecastRow];
+        item.size = [OAWeatherHelper getPreferenceSizeLocal:self.region.regionId];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        });
+    }
+}
+
+- (void)onWeatherSizeUpdatesCalculate:(id)sender withKey:(id)key andValue:(id)value
+{
+    if (value == self.region)
+    {
+        OAResourceItem *item = _regionMapItems[_weatherForecastRow];
+        item.sizePkg = [OAWeatherHelper getPreferenceSizeUpdates:self.region.regionId];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        });
+    }
+}
+
+- (void)onWeatherForecastDownloading:(id)sender withKey:(id)key andValue:(id)value
+{
+    OAResourceItem *item = _regionMapItems.count > _weatherForecastRow ? _regionMapItems[_weatherForecastRow] : nil;
+    if (value == self.region || (item && value == item.worldRegion))
+    {
+        NSInteger status = [OAWeatherHelper getPreferenceStatus:self.region.regionId];
+        if (status & EOAWeatherForecastStatusUndefined && !(status & EOAWeatherForecastStatusCalculating))
+            return;
+
+        NSInteger progressDownloading = [[OAWeatherHelper sharedInstance] getProgress:self.region key:kWeatherProgressDownloadingSuffix];
+        NSInteger progressDownloadDestination = [[OAWeatherHelper sharedInstance] getProgress:self.region key:kWeatherProgressDestinationSuffix];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
+
+            long long sizeLocal = [OAWeatherHelper getPreferenceSizeLocal:self.region.regionId];
+            if (sizeLocal == 0 && status & EOAWeatherForecastStatusDownloading)
+            {
+                OAResourceItem *newItem = [OAWeatherHelper generateResourceItem:self.region];
+                _regionMapItems[_weatherForecastRow] = newItem;
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            }
+
+            UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
+            FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
+
+            CGFloat progressCompleted = (CGFloat) progressDownloading / progressDownloadDestination;
+            if (progressCompleted >= 0.001 && status & EOAWeatherForecastStatusDownloading)
+            {
+                progressView.iconPath = nil;
+                if (progressView.isSpinning)
+                    [progressView stopSpinProgressBackgroundLayer];
+                progressView.progress = progressCompleted - 0.001;
+            }
+            else if (status & EOAWeatherForecastStatusDownloaded)
+            {
+                progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
+                progressView.progress = 0.;
+                if (!progressView.isSpinning)
+                    [progressView startSpinProgressBackgroundLayer];
+
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                    OAResourceItem *newItem = [OAWeatherHelper generateResourceItem:self.region];
+                    _regionMapItems[_weatherForecastRow] = newItem;
+                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                });
+            }
+            else
+            {
+                progressView.iconPath = [UIBezierPath bezierPath];
+                progressView.progress = 0.;
+                if (!progressView.isSpinning)
+                    [progressView startSpinProgressBackgroundLayer];
+                [progressView setNeedsDisplay];
+            }
+        });
+    }
+}
+
+- (void)offerDeleteResourceOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
+{
+    if (item.resourceType == OsmAndResourceType::WeatherForecast)
+    {
+        [[OAWeatherHelper sharedInstance] removeForecast:item.worldRegion refreshMap:YES];
+        if (block)
+            block();
+
+        OAResourceItem *newItem = [OAWeatherHelper generateResourceItem:self.region];
+        _regionMapItems[_weatherForecastRow] = newItem;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        });
+    }
+    else
+    {
+        [super offerDeleteResourceOf:item executeAfterSuccess:block];
+    }
 }
 
 - (void) updateContentIfNeeded
@@ -503,6 +652,10 @@ static BOOL _repositoryUpdated = NO;
     [self obtainDataAndItems];
     [self prepareContent];
     [self refreshContent:YES];
+
+    if ([self shouldHasWeatherForecast:self.region])
+        [[OAWeatherHelper sharedInstance] updatePreferences:self.region];
+
     [self setupSubscriptionBanner];
 
     if (_repositoryUpdating)
@@ -770,6 +923,12 @@ static BOOL _repositoryUpdated = NO;
                 [allResourcesArray addObject:item_];
             }
         }
+    }
+
+    if ([self shouldHasWeatherForecast:region])
+    {
+        OAResourceItem *item = [OAWeatherHelper generateResourceItem:region];
+        [regionMapArray addObject:item];
     }
 
     [_regionMapItems addObjectsFromArray:regionMapArray];
@@ -1154,7 +1313,21 @@ static BOOL _repositoryUpdated = NO;
         _localSqliteSection = -1;
         _localOnlineTileSourcesSection = -1;
         _freeMemorySection = -1;
-        
+
+        _weatherForecastRow = -1;
+        if ([self shouldHasWeatherForecast:self.region])
+        {
+            for (NSInteger i = 0; i < _regionMapItems.count; i ++)
+            {
+                OAResourceItem *resourceItem = _regionMapItems[i];
+                if (resourceItem.resourceType == OsmAndResourceType::WeatherForecast)
+                {
+                    _weatherForecastRow = i;
+                    break;
+                }
+            }
+        }
+
         if (_displayBanner)
             _subscriptionBannerSection = _lastUnusedSectionIndex++;
         
@@ -1686,6 +1859,39 @@ static BOOL _repositoryUpdated = NO;
             }
         }
     }
+    else if ([senderItem isKindOfClass:OARepositoryResourceItem.class] && ((OARepositoryResourceItem *) senderItem).resourceType == OsmAndResourceType::WeatherForecast)
+    {
+        if (![_iapHelper.weather isActive])
+        {
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Weather];
+        }
+        else
+        {
+            OAWorldRegion *region = ((OAResourceItem *) senderItem).worldRegion;
+            if (region)
+            {
+                NSInteger status = [OAWeatherHelper getPreferenceStatus:region.regionId];
+                if (!(status & EOAWeatherForecastStatusCalculating))
+                {
+                    if (status & EOAWeatherForecastStatusDownloading)
+                    {
+                        [[OAWeatherHelper sharedInstance] removeForecast:region refreshMap:YES];
+
+                        OAResourceItem *newItem = [OAWeatherHelper generateResourceItem:self.region];
+                        _regionMapItems[_weatherForecastRow] = newItem;
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
+                            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                        });
+                    }
+                    else
+                    {
+                        [[OAWeatherHelper sharedInstance] downloadForecast:region];
+                    }
+                }
+            }
+        }
+    }
     else
     {
         [super onItemClicked:senderItem];
@@ -2028,7 +2234,7 @@ static BOOL _repositoryUpdated = NO;
                                 OALocalizedString(@"res_maps_inst"),
                                 [NSByteCountFormatter stringFromByteCount:_totalOutdatedSize
                                                                countStyle:NSByteCountFormatterCountStyleFile]]
-                        : OALocalizedString(@"all_maps_is_up_to_date");
+                        : OALocalizedString(@"all_maps_are_up_to_date");
             }
         }
         else if (indexPath.section == _extraMapsSection)
@@ -2100,7 +2306,7 @@ static BOOL _repositoryUpdated = NO;
             {
                 OAResourceItem *item = (OAResourceItem *) item_;
                 uint64_t _sizePkg = item.sizePkg;
-                
+
                 if (item.downloadTask != nil)
                 {
                     cellTypeId = downloadingResourceCell;
@@ -2215,7 +2421,8 @@ static BOOL _repositoryUpdated = NO;
                 }
                 cellTypeId = hasTask ? downloadingResourceCell : repositoryResourceCell;
             }
-            else if (item.downloadTask != nil)
+            else if (item.downloadTask != nil
+                    || (item.resourceType == OsmAndResourceType::WeatherForecast && ([OAWeatherHelper getPreferenceStatus:item.worldRegion.regionId] & EOAWeatherForecastStatusDownloading || [OAWeatherHelper getPreferenceStatus:item.worldRegion.regionId] & EOAWeatherForecastStatusCalculating)))
             {
                 cellTypeId = downloadingResourceCell;
             }
@@ -2255,6 +2462,12 @@ static BOOL _repositoryUpdated = NO;
                 disabled = YES;
                 item.disabled = disabled;
             }
+            if (item.resourceType == OsmAndResourceType::WeatherForecast
+                && ![_iapHelper.weather isActive] && ![self.region isInPurchasedArea])
+            {
+                disabled = YES;
+                item.disabled = disabled;
+            }
 
             subtitle = @"";
 
@@ -2283,6 +2496,8 @@ static BOOL _repositoryUpdated = NO;
 
                 if (_sizePkg > 0)
                     subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+                else if (item.resourceType == OsmAndResourceType::WeatherForecast && [OAWeatherHelper getPreferenceStatus:item.worldRegion.regionId] & EOAWeatherForecastStatusCalculating)
+                    subtitle = OALocalizedString(@"shared_string_loading");
 
                 if ([item isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || [OAResourceType isSRTMResourceItem:item]))
                 {
@@ -2568,30 +2783,33 @@ static BOOL _repositoryUpdated = NO;
                 ? downloadingMultipleItem
                 : (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
 
-        FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
+        if (item.resourceType != OsmAndResourceType::WeatherForecast)
+        {
+            FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
 
-        float progressCompleted = item.downloadTask.progressCompleted;
-        if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)
-        {
-            progressView.iconPath = nil;
-            if (progressView.isSpinning)
-                [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = progressCompleted - 0.001;
-        }
-        else if (item.downloadTask.state == OADownloadTaskStateFinished)
-        {
-            progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-            progressView.progress = 0.0f;
-            if (!progressView.isSpinning)
-                [progressView startSpinProgressBackgroundLayer];
-        }
-        else
-        {
-            progressView.iconPath = [UIBezierPath bezierPath];
-            progressView.progress = 0.0;
-            if (!progressView.isSpinning)
-                [progressView startSpinProgressBackgroundLayer];
-            [progressView setNeedsDisplay];
+            float progressCompleted = item.downloadTask.progressCompleted;
+            if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)
+            {
+                progressView.iconPath = nil;
+                if (progressView.isSpinning)
+                    [progressView stopSpinProgressBackgroundLayer];
+                progressView.progress = progressCompleted - 0.001;
+            }
+            else if (item.downloadTask.state == OADownloadTaskStateFinished)
+            {
+                progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
+                progressView.progress = 0.0f;
+                if (!progressView.isSpinning)
+                    [progressView startSpinProgressBackgroundLayer];
+            }
+            else
+            {
+                progressView.iconPath = [UIBezierPath bezierPath];
+                progressView.progress = 0.0;
+                if (!progressView.isSpinning)
+                    [progressView startSpinProgressBackgroundLayer];
+                [progressView setNeedsDisplay];
+            }
         }
     }
     else if ([cellTypeId isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
@@ -3035,6 +3253,11 @@ static BOOL _repositoryUpdated = NO;
             else if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
             {
                 [resourceInfoViewController initWithLocalOnlineSourceItem:(OAOnlineTilesResourceItem *) item];
+                return;
+            }
+            else if (item.resourceType == OsmAndResourceType::WeatherForecast)
+            {
+                [resourceInfoViewController initWithWeatherForecastItem:item];
                 return;
             }
             else

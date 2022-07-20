@@ -14,6 +14,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void) sendRequestWithUrl:(NSString *)url params:(NSDictionary<NSString *, NSString *> *)params post:(BOOL)post onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
 
++ (NSURLSessionDataTask *)createDownloadTask:(NSString *)url
+                                      params:(NSDictionary<NSString *, NSString *> *)params
+                                        post:(BOOL)post
+                                  onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
+
 @end
 
 NS_ASSUME_NONNULL_END

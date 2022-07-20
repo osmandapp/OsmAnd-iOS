@@ -10,7 +10,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
-#import "OAWeatherHelper.h"
+#import "../../../Weather/OAWeatherHelper.h"
 #import "OAIAPHelper.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
@@ -23,6 +23,7 @@
 
     OAWeatherHelper *_weatherHelper;
     OAAutoObserverProxy* _weatherChangeObserver;
+    OAAutoObserverProxy* _weatherUseOfflineDataChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
     NSMutableArray<OAAutoObserverProxy *> *_alphaChangeObservers;
 }
@@ -51,6 +52,9 @@
     _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onWeatherChanged)
                                                         andObserve:self.app.data.weatherChangeObservable];
+    _weatherUseOfflineDataChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                     withHandler:@selector(updateWeatherLayer)
+                                                                      andObserve:self.app.data.weatherUseOfflineDataChangeObservable];
     _layerChangeObservers = [NSMutableArray array];
     _alphaChangeObservers = [NSMutableArray array];
     
@@ -67,6 +71,11 @@
     {
         [_weatherChangeObserver detach];
         _weatherChangeObserver = nil;
+    }
+    if (_weatherUseOfflineDataChangeObserver)
+    {
+        [_weatherUseOfflineDataChangeObserver detach];
+        _weatherUseOfflineDataChangeObserver = nil;
     }
     for (OAAutoObserverProxy *observer in _layerChangeObservers)
         [observer detach];
@@ -113,15 +122,19 @@
         }
         if (true)//!_provider)
         {
-            _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, dateTime, bands);
+            _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, dateTime, bands, self.app.data.weatherUseOfflineData);
             [self.mapView setProvider:_provider forLayer:self.layerIndex];
 
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(1.0f);
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-        } else {
+        }
+        else
+        {
             _provider->setDateTime(dateTime);
             _provider->setBands(bands);
+            _provider->setUseLocalData(self.app.data.weatherUseOfflineData);
+
             [self.mapView invalidateFrame];
         }
 

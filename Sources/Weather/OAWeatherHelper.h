@@ -83,6 +83,10 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 
 + (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region;
 
++ (BOOL)hasStatus:(NSInteger)status region:(OAWorldRegion *)region;
++ (void)addStatus:(NSInteger)status region:(OAWorldRegion *)region;
++ (void)removeStatus:(NSInteger)status region:(OAWorldRegion *)region;
+
 + (NSInteger)getPreferenceStatus:(NSString *)regionId;
 + (void)setPreferenceStatus:(NSString *)regionId value:(NSInteger)value;
 

@@ -28,6 +28,7 @@
 - (void) updateContent;
 - (void) refreshContent:(BOOL)update;
 - (void) refreshDownloadingContent:(NSString *)downloadTaskKey;
+- (void) updateDisplayItem:(OAResourceItem *)item;
 
 - (void) onItemClicked:(id)senderItem;
 

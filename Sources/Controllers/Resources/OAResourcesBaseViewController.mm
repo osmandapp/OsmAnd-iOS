@@ -17,6 +17,7 @@
 #import "OANauticalMapsPlugin.h"
 #import "Localization.h"
 #import "OASearchResult.h"
+#import "OAWeatherHelper.h"
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -237,6 +238,10 @@ static BOOL dataInvalidated = NO;
 {
 }
 
+- (void) updateDisplayItem:(OAResourceItem *)item
+{
+}
+
 - (void) downloadCustomItem:(OACustomResourceItem *)item
 {
     [OAResourcesUIHelper startDownloadOfCustomItem:item onTaskCreated:^(id<OADownloadTask> task) {
@@ -248,15 +253,39 @@ static BOOL dataInvalidated = NO;
 
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
 {
+    BOOL isWeatherForecast = item.resourceType == OsmAndResourceType::WeatherForecast;
+    if (isWeatherForecast && [OAWeatherHelper hasStatus:EOAWeatherForecastStatusCalculating region:item.worldRegion])
+        return;
+
     [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
-        [self updateContent];
+        if (!isWeatherForecast)
+            [self updateContent];
     } onTaskResumed:^(id<OADownloadTask> task) {
-        [self showDownloadViewForTask:task];
+        if (!isWeatherForecast)
+            [self showDownloadViewForTask:task];
     }];
 }
 
 - (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item
 {
+    if (item.resourceType == OsmAndResourceType::WeatherForecast)
+    {
+        if ([OAWeatherHelper hasStatus:EOAWeatherForecastStatusCalculating region:item.worldRegion])
+            return;
+
+        OARepositoryResourceItem *repositoryItem = [[OARepositoryResourceItem alloc] init];
+        repositoryItem.resourceId = item.resourceId;
+        repositoryItem.resourceType = item.resourceType;
+        repositoryItem.title = item.title;
+        repositoryItem.size = item.size;
+        repositoryItem.sizePkg = item.sizePkg;
+        repositoryItem.worldRegion = item.worldRegion;
+        repositoryItem.date = item.date;
+
+        [self offerDownloadAndInstallOf:repositoryItem];
+        return;
+    }
+
     [OAResourcesUIHelper offerDownloadAndUpdateOf:item onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
     } onTaskResumed:^(id<OADownloadTask> task) {
@@ -293,17 +322,27 @@ static BOOL dataInvalidated = NO;
 
 - (void) offerDeleteResourceOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)onComplete
 {
+    BOOL isWeatherForecast = item.resourceType == OsmAndResourceType::WeatherForecast;
     dispatch_block_t onComplete_ = ^{
-        [self.region.superregion updateGroupItems:self.region type:[OAResourceType toValue:item.resourceType]];
+        if (!isWeatherForecast)
+            [self.region.superregion updateGroupItems:self.region type:[OAResourceType toValue:item.resourceType]];
+
         if (onComplete)
             onComplete();
+
+        if (isWeatherForecast)
+            [self updateDisplayItem:item];
     };
     [OAResourcesUIHelper offerDeleteResourceOf:item viewController:self progressHUD:_deleteResourceProgressHUD executeAfterSuccess:onComplete_];
 }
 
 - (void) offerDeleteResourceOf:(OALocalResourceItem *)item
 {
-    [self offerDeleteResourceOf:item executeAfterSuccess:nil];
+    dispatch_block_t onComplete = ^{
+        if (item.resourceType == OsmAndResourceType::WeatherForecast)
+            [self updateDisplayItem:item];
+    };
+    [self offerDeleteResourceOf:item executeAfterSuccess:onComplete];
 }
 
 - (void)offerSilentDeleteResourcesOf:(NSArray<OALocalResourceItem *> *)items
@@ -346,6 +385,13 @@ static BOOL dataInvalidated = NO;
         {
             [OAResourcesUIHelper offerCancelDownloadOf:item_];
         }
+        else if (item_.resourceType == OsmAndResourceType::WeatherForecast && [OAWeatherHelper hasStatus:EOAWeatherForecastStatusDownloading region:item_.worldRegion])
+        {
+            [OAResourcesUIHelper offerCancelDownloadOf:item_ onTaskStop:^(id<OADownloadTask>)
+            {
+                [self updateDisplayItem:item_];
+            }];
+        }
         else if ([item_ isKindOfClass:[OAOutdatedResourceItem class]])
         {
             OAOutdatedResourceItem* item = (OAOutdatedResourceItem *)item_;
@@ -370,6 +416,8 @@ static BOOL dataInvalidated = NO;
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];
             else if (item.resourceType == OsmAndResourceType::MapRegion && [item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()] && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];
+            else if (item.resourceType == OsmAndResourceType::WeatherForecast && ![_iapHelper.weather isActive])
+                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Weather];
             else
                 [self offerDownloadAndInstallOf:item];
         }

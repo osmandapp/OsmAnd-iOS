@@ -169,33 +169,35 @@
     NSString *operationKey = region.regionId;
     if (!calculateSizeLocal && !calculateSizeUpdates)
     {
+        [_weatherDownloaderQueue clearOperations:region.regionId];
         [self setProgress:region key:kWeatherProgressDownloadingSuffix value:0];
         operationKey = [operationKey stringByAppendingString:kWeatherProgressDownloadingSuffix];
-        NSInteger status = [self.class getPreferenceStatus:region.regionId];
-        if (status & EOAWeatherForecastStatusUpdatesCalculated)
-            status = EOAWeatherForecastStatusUpdatesCalculated | EOAWeatherForecastStatusDownloading;
+        if ([self.class hasStatus:EOAWeatherForecastStatusUpdatesCalculated region:region])
+        {
+            [self.class setPreferenceStatus:region.regionId value:EOAWeatherForecastStatusDownloading];
+            [self.class addStatus:EOAWeatherForecastStatusUpdatesCalculated region:region];
+        }
         else
-            status = EOAWeatherForecastStatusDownloading;
-        [self.class setPreferenceStatus:region.regionId value:status];
+        {
+            [self.class setPreferenceStatus:region.regionId value:EOAWeatherForecastStatusDownloading];
+        }
         [self.class setPreferenceSizeLocal:region.regionId value:0];
     }
     else if (calculateSizeLocal)
     {
         [self setProgress:region key:kWeatherProgressCalculateSizeLocalSuffix value:0];
         operationKey = [operationKey stringByAppendingString:kWeatherProgressCalculateSizeLocalSuffix];
-        NSInteger status = [self.class getPreferenceStatus:region.regionId];
-        if (status & EOAWeatherForecastStatusLocalCalculated)
-            status &= ~EOAWeatherForecastStatusLocalCalculated;
-        [self.class setPreferenceStatus:region.regionId value:status | EOAWeatherForecastStatusCalculating];
+        [_weatherDownloaderQueue cancelOperations:operationKey];
+        [self.class removeStatus:EOAWeatherForecastStatusLocalCalculated region:region];
+        [self.class addStatus:EOAWeatherForecastStatusCalculating region:region];
     }
     else
     {
         [self setProgress:region key:kWeatherProgressCalculateSizeUpdatesSuffix value:0];
         operationKey = [operationKey stringByAppendingString:kWeatherProgressCalculateSizeUpdatesSuffix];
-        NSInteger status = [self.class getPreferenceStatus:region.regionId];
-        if (status & EOAWeatherForecastStatusUpdatesCalculated)
-            status &= ~EOAWeatherForecastStatusUpdatesCalculated;
-        [self.class setPreferenceStatus:region.regionId value:status | EOAWeatherForecastStatusCalculating];
+        [_weatherDownloaderQueue cancelOperations:operationKey];
+        [self.class removeStatus:EOAWeatherForecastStatusUpdatesCalculated region:region];
+        [self.class addStatus:EOAWeatherForecastStatusCalculating region:region];
     }
     [self onProgressUpdate:region
                sizeUpdates:[self.class getPreferenceSizeUpdates:region.regionId]
@@ -246,9 +248,12 @@
     {
         for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
         {
-            NSArray *excludeKeys = [self.class getPreferenceStatus:region.regionId] & EOAWeatherForecastStatusUpdatesCalculated
-                    ? @[[kWeatherForecastSizeUpdatesPrefix stringByAppendingString:region.regionId]] : @[];
+            NSString *sizeUpdatesKey = [kWeatherForecastSizeUpdatesPrefix stringByAppendingString:region.regionId];
+            NSArray<NSString *> *excludeKeys = [self.class hasStatus:EOAWeatherForecastStatusUpdatesCalculated region:region] ? @[sizeUpdatesKey] : @[];
             [self.class removePreferences:region.regionId excludeKeys:excludeKeys];
+            if ([excludeKeys containsObject:sizeUpdatesKey])
+                [self.class addStatus:EOAWeatherForecastStatusUpdatesCalculated region:region];
+
             [_weatherDownloaderQueue clearOperations:region.regionId];
             [self clearProgress:region];
         }
@@ -268,18 +273,19 @@
     _weatherResourcesManager->clearDbCache(true, dateTime);
     for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
     {
-        NSInteger status = [self.class getPreferenceStatus:region.regionId];
-        NSInteger localSize = [self.class getPreferenceSizeLocal:region.regionId];
-        if (!(status & EOAWeatherForecastStatusUndefined) && localSize > 0)
+        if (![self.class hasStatus:EOAWeatherForecastStatusUndefined region:region] && [self.class getPreferenceSizeLocal:region.regionId] > 0)
             [self calculateCacheSize:region localData:YES];
     }
 }
 
 - (void)removeLocalForecast:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap
 {
-    NSArray *excludeKeys = [self.class getPreferenceStatus:region.regionId] & EOAWeatherForecastStatusUpdatesCalculated
-            ? @[[kWeatherForecastSizeUpdatesPrefix stringByAppendingString:region.regionId]] : @[];
+    NSString *sizeUpdatesKey = [kWeatherForecastSizeUpdatesPrefix stringByAppendingString:region.regionId];
+    NSArray<NSString *> *excludeKeys = [self.class hasStatus:EOAWeatherForecastStatusUpdatesCalculated region:region] ? @[sizeUpdatesKey] : @[];
     [self.class removePreferences:region.regionId excludeKeys:excludeKeys];
+    if ([excludeKeys containsObject:sizeUpdatesKey])
+        [self.class addStatus:EOAWeatherForecastStatusUpdatesCalculated region:region];
+
     [_weatherDownloaderQueue clearOperations:region.regionId];
     [self clearProgress:region];
 
@@ -298,15 +304,13 @@
 
 - (void)removeIncompleteDownloads:(OAWorldRegion *)region
 {
-    NSInteger status = [self.class getPreferenceStatus:region.regionId];
     NSDate *dateChecked = [NSDate dateWithTimeIntervalSince1970:[OAWeatherHelper getPreferenceLastUpdate:region.regionId]];
-    if (status & EOAWeatherForecastStatusDownloading && [dateChecked isEqualToDate:[NSDate dateWithTimeIntervalSince1970:-1]])
+    if ([self.class hasStatus:EOAWeatherForecastStatusDownloading region:region] && [dateChecked isEqualToDate:[NSDate dateWithTimeIntervalSince1970:-1]])
         [self removeLocalForecast:region refreshMap:NO];
 }
 
 - (void)updatePreferences:(OAWorldRegion *)region
 {
-    NSInteger status = [self.class getPreferenceStatus:region.regionId];
     NSInteger daysGone = 0;
     NSDate *dateChecked = [NSDate dateWithTimeIntervalSince1970:[self.class getPreferenceLastUpdate:region.regionId]];
     if (![dateChecked isEqualToDate:[NSDate dateWithTimeIntervalSince1970:-1]])
@@ -316,7 +320,7 @@
         daysGone = [calendar components:NSCalendarUnitDay fromDate:dateChecked toDate:dateNow options:0].day;
     }
 
-    if (daysGone >= 1 && (status & EOAWeatherForecastStatusDownloaded || status & EOAWeatherForecastStatusOutdated))
+    if (daysGone >= 1 && ([self.class hasStatus:EOAWeatherForecastStatusDownloaded region:region] || [self.class hasStatus:EOAWeatherForecastStatusOutdated region:region]))
     {
         [self calculateCacheSize:region localData:NO];
         [self calculateCacheSize:region localData:YES];
@@ -325,29 +329,28 @@
     {
         if ([self.class getPreferenceSizeUpdates:region.regionId] == 0)
             [self calculateCacheSize:region localData:NO];
-        if ([self.class getPreferenceSizeLocal:region.regionId] == 0 && status & EOAWeatherForecastStatusDownloaded)
+        if ([self.class getPreferenceSizeLocal:region.regionId] == 0 && [self.class hasStatus:EOAWeatherForecastStatusDownloaded region:region])
             [self calculateCacheSize:region localData:YES];
     }
 
-    if (daysGone >= 7 && status & EOAWeatherForecastStatusDownloaded)
+    if (daysGone >= 7 && [self.class hasStatus:EOAWeatherForecastStatusDownloaded region:region])
     {
-        status &= ~EOAWeatherForecastStatusDownloaded;
-        [self.class setPreferenceStatus:region.regionId value:status | EOAWeatherForecastStatusOutdated];
+        [self.class removeStatus:EOAWeatherForecastStatusDownloaded region:region];
+        [self.class addStatus:EOAWeatherForecastStatusOutdated region:region];
     }
 }
 
 + (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region
 {
-    NSInteger status = [self getPreferenceStatus:region.regionId];
     OAResourceItem *item;
-    if (status & EOAWeatherForecastStatusUndefined || status & EOAWeatherForecastStatusDownloading)
+    if ([self.class hasStatus:EOAWeatherForecastStatusUndefined region:region] || [self.class hasStatus:EOAWeatherForecastStatusDownloading region:region])
     {
         item = [[OARepositoryResourceItem alloc] init];
         item.date = [NSCalendar.autoupdatingCurrentCalendar startOfDayForDate:[NSDate date]];
     }
     else
     {
-        if (status & EOAWeatherForecastStatusDownloaded)
+        if ([self.class hasStatus:EOAWeatherForecastStatusDownloaded region:region])
             item = [[OALocalResourceItem alloc] init];
         else
             item = [[OAOutdatedResourceItem alloc] init];
@@ -388,6 +391,27 @@
                                                       hour < 10 ? @"0" : @"", hour,
                                                       minute < 10 ? @"0" : @"", minute];
     return resourceId;
+}
+
++ (BOOL)hasStatus:(NSInteger)status region:(OAWorldRegion *)region
+{
+    NSInteger regionStatus = [self getPreferenceStatus:region.regionId];
+    regionStatus &= status;
+    return regionStatus != 0;
+}
+
++ (void)addStatus:(NSInteger)status region:(OAWorldRegion *)region
+{
+    NSInteger regionStatus = [self getPreferenceStatus:region.regionId];
+    regionStatus |= status;
+    [self setPreferenceStatus:region.regionId value:regionStatus];
+}
+
++ (void)removeStatus:(NSInteger)status region:(OAWorldRegion *)region
+{
+    NSInteger regionStatus = [self getPreferenceStatus:region.regionId];
+    regionStatus &= ~status;
+    [self setPreferenceStatus:region.regionId value:regionStatus];
 }
 
 + (NSInteger)getPreferenceStatus:(NSString *)regionId
@@ -546,10 +570,8 @@
         }
         else if (progress == 1.)
         {
-            NSInteger status = [self.class getPreferenceStatus:region.regionId];
-            if (status & EOAWeatherForecastStatusCalculating)
-                status &= ~EOAWeatherForecastStatusCalculating;
-            [self.class setPreferenceStatus:region.regionId value:status | EOAWeatherForecastStatusLocalCalculated];
+            [self.class removeStatus:EOAWeatherForecastStatusCalculating region:region];
+            [self.class addStatus:EOAWeatherForecastStatusLocalCalculated region:region];
             [_weatherSizeLocalCalculateObserver notifyEventWithKey:self andValue:region];
             [_weatherDownloaderQueue removeOperations:[region.regionId stringByAppendingString:kWeatherProgressCalculateSizeLocalSuffix]];
             [self removeProgress:region key:kWeatherProgressCalculateSizeLocalSuffix];
@@ -571,10 +593,8 @@
         }
         else if (progress == 1.)
         {
-            NSInteger status = [self.class getPreferenceStatus:region.regionId];
-            if (status & EOAWeatherForecastStatusCalculating)
-                status &= ~EOAWeatherForecastStatusCalculating;
-            [self.class setPreferenceStatus:region.regionId value:status | EOAWeatherForecastStatusUpdatesCalculated];
+            [self.class removeStatus:EOAWeatherForecastStatusCalculating region:region];
+            [self.class addStatus:EOAWeatherForecastStatusUpdatesCalculated region:region];
             [_weatherSizeUpdatesCalculateObserver notifyEventWithKey:self andValue:region];
             [_weatherDownloaderQueue removeOperations:[region.regionId stringByAppendingString:kWeatherProgressCalculateSizeUpdatesSuffix]];
             [self removeProgress:region key:kWeatherProgressCalculateSizeUpdatesSuffix];
@@ -598,7 +618,9 @@
         }
         else if (progress == 1.)
         {
-            [self.class setPreferenceStatus:region.regionId value:EOAWeatherForecastStatusDownloaded | EOAWeatherForecastStatusLocalCalculated | EOAWeatherForecastStatusUpdatesCalculated];
+            [self.class setPreferenceStatus:region.regionId value:EOAWeatherForecastStatusDownloaded];
+            [self.class addStatus:EOAWeatherForecastStatusLocalCalculated region:region];
+            [self.class addStatus:EOAWeatherForecastStatusUpdatesCalculated region:region];
             NSTimeInterval timeInterval = [NSCalendar.autoupdatingCurrentCalendar startOfDayForDate:[NSDate date]].timeIntervalSince1970;
             [self.class setPreferenceLastUpdate:region.regionId value:timeInterval];
             [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];

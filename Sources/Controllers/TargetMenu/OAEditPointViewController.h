@@ -7,6 +7,7 @@
 //
 
 #import "OABaseTableViewController.h"
+#import "OARowInfo.h"
 #import <CoreLocation/CoreLocation.h>
 
 typedef NS_ENUM(NSInteger, EOAEditPointType) {
@@ -52,6 +53,7 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
            customParam:(NSString *)customParam
              pointType:(EOAEditPointType)pointType
        targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
-                   poi:(OAPOI *)poi;
+                   poi:(OAPOI *)poi
+            attributes:(NSMutableArray<OARowInfo *> *)attributes;
 
 @end

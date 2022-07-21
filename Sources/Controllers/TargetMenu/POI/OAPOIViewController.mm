@@ -356,9 +356,13 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         {
             if ([kContactUrlTags containsObject:key])
             {
-                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:key]];
+                iconId = [@"mx_" stringByAppendingString:key];
+                icon = [OATargetInfoViewController getIcon:iconId];
                 if (!icon)
-                    icon = [OATargetInfoViewController getIcon:[OAUtilities drawablePath:[@"mm_" stringByAppendingString:key]]];
+                {
+                    iconId = [@"mm_" stringByAppendingString:key];
+                    icon = [OATargetInfoViewController getIcon:[OAUtilities drawablePath:iconId]];
+                }
             }
             iconId = @"ic_website";
             textColor = UIColorFromRGB(kHyperlinkColor);
@@ -422,7 +426,8 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
                 poiTypeKeyName = pType.name;
                 if (pType.parentType && [pType.parentType isKindOfClass:OAPOIType.class])
                 {
-                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@_%@_%@", ((OAPOIType *) pType.parentType).tag, [pType.tag stringByReplacingOccurrencesOfString:@":" withString:@"_"], pType.value]];
+                    iconId = [NSString stringWithFormat:@"mx_%@_%@_%@", ((OAPOIType *) pType.parentType).tag, [pType.tag stringByReplacingOccurrencesOfString:@":" withString:@"_"], pType.value];
+                    icon = [OATargetInfoViewController getIcon:iconId];
                 }
                 if (!pType.isText)
                 {
@@ -444,7 +449,8 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
                 }
                 if (!isDescription && !icon)
                 {
-                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+                    iconId = [NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]];
+                    icon = [OATargetInfoViewController getIcon:iconId];
                     if (isText && icon)
                         textPrefix = @"";
                 }
@@ -487,6 +493,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         {
             row = [[OARowInfo alloc] initWithKey:key
                                            icon:[UIImage imageNamed:@"ic_description"]
+                                        iconName:@"ic_description"
                                       textPrefix:textPrefix
                                             text:vl
                                        textColor:nil
@@ -501,6 +508,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         {
             row = [[OARowInfo alloc] initWithKey:key
                                             icon:icon ? icon : [OATargetInfoViewController getIcon:iconId]
+                                        iconName:iconId
                                       textPrefix:textPrefix
                                             text:vl
                                        textColor:textColor
@@ -534,17 +542,31 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         if (categoryTypes.count > 0)
         {
             UIImage *icon;
+            NSString *iconName;
             OAPOIType *pType = categoryTypes.firstObject;
             NSString *poiAdditionalCategoryName = pType.poiAdditionalCategory;
             NSString *poiAdditionalIconName = [_poiHelper getPoiAdditionalCategoryIcon:poiAdditionalCategoryName];
+            
             if (poiAdditionalIconName)
-                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:poiAdditionalIconName]];
+            {
+                iconName = [@"mx_" stringByAppendingString:poiAdditionalIconName];
+                icon = [OATargetInfoViewController getIcon:iconName];
+            }
             if (!icon)
-                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:poiAdditionalCategoryName]];
+            {
+                iconName = [@"mx_" stringByAppendingString:poiAdditionalCategoryName];
+                icon = [OATargetInfoViewController getIcon:iconName];
+            }
             if (!icon)
-                icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+            {
+                iconName = [NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]];
+                icon = [OATargetInfoViewController getIcon:iconName];
+            }
             if (!icon)
-                icon = [UIImage imageNamed:@"ic_description"];
+            {
+                iconName = @"ic_description";
+                icon = [UIImage imageNamed:iconName];
+            }
 
             NSMutableString *sb = [NSMutableString new];
             for (OAPOIType *pt in categoryTypes)
@@ -565,6 +587,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
                              textRow:cuisineOrDish ? cuisineRow : nil];
             OARowInfo *row = [[OARowInfo alloc] initWithKey:poiAdditionalCategoryName
                                                        icon:icon
+                                                   iconName:iconName
                                                  textPrefix:pType.poiAdditionalCategoryLocalized
                                                        text:sb
                                                   textColor:nil
@@ -592,7 +615,8 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
                  isPoiAdditional:NO
                          textRow:nil];
         OAPOIType *poiCategory = self.poi.type;
-        UIImage *icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", poiCategory.name]];
+        NSString *iconName = [NSString stringWithFormat:@"mx_%@", poiCategory.name];
+        UIImage *icon = [OATargetInfoViewController getIcon:iconName];
         NSMutableString *sb = [NSMutableString new];
         for (OAPOIType *pt in collectedPoiTypes)
         {
@@ -602,6 +626,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         }
         OARowInfo *row = [[OARowInfo alloc] initWithKey:poiCategory.name
                                                    icon:icon
+                                               iconName:iconName
                                              textPrefix:poiCategory.nameLocalized
                                                    text:sb
                                               textColor:nil
@@ -663,6 +688,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         NSString *link = isWay ? @"https://www.openstreetmap.org/way/" : @"https://www.openstreetmap.org/node/";
         [rows addObject:[[OARowInfo alloc] initWithKey:nil
                                                   icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
+                                              iconName:@"ic_custom_osm_edits"
                                             textPrefix:nil
                                                   text:[NSString stringWithFormat:@"%@%llu", link, entityId]
                                              textColor:UIColorFromRGB(kHyperlinkColor)

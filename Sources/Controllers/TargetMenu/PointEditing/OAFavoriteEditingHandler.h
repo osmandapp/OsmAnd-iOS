@@ -7,6 +7,7 @@
 //
 
 #import "OABasePointEditingHandler.h"
+#import "OARowInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,7 +18,7 @@ struct CLLocationCoordinate2D;
 @interface OAFavoriteEditingHandler : OABasePointEditingHandler
 
 - (instancetype) initWithItem:(OAFavoriteItem *)favorite;
-- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation poi:(OAPOI *)poi;
+- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation poi:(OAPOI *)poi attributes:(NSMutableArray<OARowInfo *> *)attributes;
 
 - (OAFavoriteItem *) getFavoriteItem;
 

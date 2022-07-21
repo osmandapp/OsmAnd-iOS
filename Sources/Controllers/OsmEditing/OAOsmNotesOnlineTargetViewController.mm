@@ -136,7 +136,7 @@
     
     for (OACommentWrapper *cw in _point.comments)
     {
-        [descriptions addObject:[[OARowInfo alloc] initWithKey:@"" icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:nil text:[NSString stringWithFormat:@"%@ %@: %@", cw.date, cw.user, cw.text] textColor:nil isText:YES needLinks:YES order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        [descriptions addObject:[[OARowInfo alloc] initWithKey:@"" icon:[OATargetInfoViewController getIcon:@"ic_description.png"] iconName:@"ic_description.png" textPrefix:nil text:[NSString stringWithFormat:@"%@ %@: %@", cw.date, cw.user, cw.text] textColor:nil isText:YES needLinks:YES order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     
     int i = 10000;

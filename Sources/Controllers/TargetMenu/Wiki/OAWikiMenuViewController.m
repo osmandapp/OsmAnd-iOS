@@ -24,7 +24,7 @@
     if (self)
     {
         _content = content;
-        OARowInfo* contentRow = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:nil text:content textColor:nil isText:YES needLinks:NO order:1 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        OARowInfo* contentRow = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_description.png"] iconName:@"ic_description.png" textPrefix:nil text:content textColor:nil isText:YES needLinks:NO order:1 typeName:@"" isPhoneNumber:NO isUrl:NO];
         contentRow.isHtml = YES;
         contentRow.delegate = self;
         self.additionalRows = @[contentRow];

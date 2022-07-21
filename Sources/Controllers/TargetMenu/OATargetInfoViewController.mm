@@ -55,49 +55,6 @@
 #define kNearbyPoiSearchFactory 2
 #define kCollapseDetailsRowType @"kCollapseDetailsRowType"
 
-@implementation OARowInfo
-
-- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl
-{
-    self = [super init];
-    if (self)
-    {
-        _key = key;
-        _icon = icon;
-        _icon = [_icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _textPrefix = textPrefix;
-        _text = text;
-        _textColor = textColor;
-        _isText = isText;
-        _needLinks = needLinks;
-        _order = order;
-        _typeName = typeName;
-        _isPhoneNumber = isPhoneNumber;
-        _isUrl = isUrl;
-    }
-    return self;
-}
-
-- (int) height
-{
-    if (_collapsable && _collapsableView && !_collapsed)
-        return _height + _collapsableView.frame.size.height;
-    else
-        return _height;
-}
-
-- (int) getRawHeight
-{
-    return _height;
-}
-
-- (UIFont *) getFont
-{
-    return [UIFont systemFontOfSize:17.0 weight:_isUrl ? UIFontWeightMedium : UIFontWeightRegular];
-}
-
-@end
-
 @interface OATargetInfoViewController() <OACollapsableCardViewDelegate>
 
 @end
@@ -165,7 +122,7 @@
         NSArray<OATransportStopRoute *> *nearbyTransportRoutes = [self getNearbyTransportStopRoutes];
         if (localTransportRoutes.count > 0)
         {
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil iconName:nil textPrefix:nil text:OALocalizedString(@"transport_routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = NO;
             rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
@@ -175,7 +132,7 @@
         if (nearbyTransportRoutes.count > 0)
         {
             NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [OAOsmAndFormatter getFormattedDistance:kShowStopsRadiusMeters]];
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil iconName:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = NO;
             rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
@@ -194,7 +151,7 @@
 {
     if ([self showDetailsButton])
     {
-        OARowInfo *collapseDetailsRowCell = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:nil] textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
+        OARowInfo *collapseDetailsRowCell = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:nil] iconName:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
         [collapseDetailsRowCell setHeight:[self detailsButtonHeight]];
         [rows addObject:collapseDetailsRowCell];
     }
@@ -232,7 +189,7 @@
 
     if ([self needCoords])
     {
-        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil iconName:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
         coordinatesRow.collapsed = YES;
         coordinatesRow.collapsable = YES;
         OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
@@ -265,7 +222,8 @@
         if (nearest.count > 0)
         {
             UIImage *icon = isWiki ? [UIImage imageNamed:[OAUtilities drawablePath:@"mx_wiki_place"]] : poi.icon;
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            NSString *iconName = isWiki ? @"mx_wiki_place" : poi.iconName;
+            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon iconName:iconName textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = YES;
             rowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
@@ -697,7 +655,7 @@
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
         return;
 
-    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] iconName:@"ic_custom_photo" textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
 
     OACollapsableCardsView *cardView = [[OACollapsableCardsView alloc] init];
     cardView.delegate = self;

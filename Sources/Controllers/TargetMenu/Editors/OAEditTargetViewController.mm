@@ -24,6 +24,11 @@
 #import "OAGPXWptViewController.h"
 #import "OAFavoriteViewController.h"
 #import "OATargetInfoViewCell.h"
+#import "OAGPXWptViewController.h"
+#import "OAGpxWptItem.h"
+#import "OAGPXDocumentPrimitives.h"
+#import "OATargetInfoViewController.h"
+#import "OrderedDictionary.h"
 
 #include "Localization.h"
 
@@ -386,6 +391,8 @@
 - (void) generateData
 {
     _data = [NSMutableArray new];
+    NSArray<OAGpxExtension *> *extensions;
+    
     if ([self hasDescription])
     {
         [_data addObject:@{
@@ -397,6 +404,7 @@
 
     if ([self isKindOfClass:OAFavoriteViewController.class])
     {
+        extensions = [((OAFavoriteViewController *)self).favorite getExtensions];
         [_data addObject:@{
             @"type" : [OATargetInfoCollapsableViewCell getCellIdentifier],
             @"label" : self.groupTitle,
@@ -418,6 +426,7 @@
     }
     else if ([self isKindOfClass:OAGPXWptViewController.class])
     {
+        extensions = ((OAGPXWptViewController *)self).wpt.point.extensions;
         NSString *groupName = self.groupTitle;
         if (!groupName)
             groupName = [((OAGPXWptViewController *)self) getGpxFileName];
@@ -447,6 +456,49 @@
         @"lat" : [NSNumber numberWithFloat:self.location.latitude],
         @"lon" : [NSNumber numberWithFloat:self.location.longitude]
     }];
+    
+    if (extensions && extensions.count > 0)
+    {
+        //collect and merge POI extensions data
+        NSArray<NSString *> *osmandTags = @[@"color", @"background", @"icon"];
+        MutableOrderedDictionary<NSString *, NSMutableDictionary<NSString *, NSString *> *> *combinedExtensions = [MutableOrderedDictionary dictionary];
+        for (OAGpxExtension *extension in extensions)
+        {
+            if (![osmandTags containsObject:extension.name] && extension.name.length > 0 && extension.value.length > 0)
+            {
+                if ([extension.name hasSuffix:@"_label"])
+                {
+                    NSString *key = [extension.name stringByReplacingOccurrencesOfString:@"_label" withString:@""];
+                    if (!combinedExtensions[key])
+                        combinedExtensions[key] = [NSMutableDictionary dictionary];
+                    combinedExtensions[key][@"label"] = extension.value;
+                }
+                else if ([extension.name hasSuffix:@"_icon"])
+                {
+                    NSString *key = [extension.name stringByReplacingOccurrencesOfString:@"_icon" withString:@""];
+                    if (!combinedExtensions[key])
+                        combinedExtensions[key] = [NSMutableDictionary dictionary];
+                    combinedExtensions[key][@"iconName"] = extension.value;
+                }
+            }
+        }
+        
+        //check and add to tableView data
+        for (NSString *key in combinedExtensions.allKeys)
+        {
+            NSString *label = combinedExtensions[key][@"label"];
+            NSString *iconName = combinedExtensions[key][@"iconName"] ? combinedExtensions[key][@"iconName"] : @"ic_custom_poi";
+            if (label && label.length > 0)
+            {
+                [_data addObject:@{
+                    @"type" : [OATargetInfoViewCell getCellIdentifier],
+                    @"key" : key,
+                    @"label" : combinedExtensions[key][@"label"],
+                    @"iconName" : combinedExtensions[key][@"iconName"] ? combinedExtensions[key][@"iconName"] : @"ic_custom_poi"
+                }];
+            }
+        }
+    }
 }
 
 - (NSString *)dateToString:(NSDate *)date
@@ -699,8 +751,14 @@
             cell = (OATargetInfoViewCell *)[nib objectAtIndex:0];
         }
         cell.backgroundColor = UIColorFromRGB(0xffffff);
-        cell.iconView.image = [UIImage templateImageNamed:item[@"iconName"]];
+        cell.iconView.image = [[OATargetInfoViewController getIcon:item[@"iconName"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
+        
         cell.textView.text = item[@"label"];
+        if([item[@"key"] isEqualToString:@"website"] || [item[@"key"] isEqualToString:@"phone"] || [item[@"label"] hasPrefix:@"http"])
+            cell.textView.textColor = UIColorFromRGB(color_primary_light_blue);
+        else
+            cell.textView.textColor = UIColor.blackColor;
         return cell;
     }
     else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
@@ -872,6 +930,23 @@
             if (self.delegate)
                 [self.delegate contentHeightChanged];
             [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+    }
+    else if ([item[@"type"] isEqualToString:[OATargetInfoViewCell getCellIdentifier]])
+    {
+        NSString *key = item[@"key"];
+        NSString *value = item[@"label"];
+        if (key && key.length > 0 && value && value.length > 0)
+        {
+            if([key isEqualToString:@"website"] || [value hasPrefix:@"http"])
+            {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:value] options:@{} completionHandler:nil];
+            }
+            else if ([key isEqualToString:@"phone"])
+            {
+                NSURL *phoneURL = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", value]];
+                [[UIApplication sharedApplication] openURL:phoneURL options:@{} completionHandler:nil];
+            }
         }
     }
 }

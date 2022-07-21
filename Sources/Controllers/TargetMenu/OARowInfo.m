@@ -1,0 +1,53 @@
+//
+//  OARowInfo.m
+//  OsmAnd Maps
+//
+//  Created by nnngrach on 20.07.2022.
+//  Copyright © 2022 OsmAnd. All rights reserved.
+//
+
+#import "OARowInfo.h"
+
+@implementation OARowInfo
+
+- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon iconName:(NSString *)iconName textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl
+{
+    self = [super init];
+    if (self)
+    {
+        _key = key;
+        _icon = icon;
+        _icon = [_icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _iconName = iconName;
+        _textPrefix = textPrefix;
+        _text = text;
+        _textColor = textColor;
+        _isText = isText;
+        _needLinks = needLinks;
+        _order = order;
+        _typeName = typeName;
+        _isPhoneNumber = isPhoneNumber;
+        _isUrl = isUrl;
+    }
+    return self;
+}
+
+- (int) height
+{
+    if (_collapsable && _collapsableView && !_collapsed)
+        return _height + _collapsableView.frame.size.height;
+    else
+        return _height;
+}
+
+- (int) getRawHeight
+{
+    return _height;
+}
+
+- (UIFont *) getFont
+{
+    return [UIFont systemFontOfSize:17.0 weight:_isUrl ? UIFontWeightMedium : UIFontWeightRegular];
+}
+
+@end

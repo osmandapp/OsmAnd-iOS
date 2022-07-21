@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OALocationPoint.h"
+#import "OAGPXDocumentPrimitives.h"
 #include <OsmAndCore/IFavoriteLocation.h>
 
 #define EXTENSION_HIDDEN @"hidden"
@@ -67,6 +68,9 @@
 
 - (UIColor *) getColor;
 - (void) setColor:(UIColor *)color;
+
+- (NSArray<OAGpxExtension *> *) getExtensions;
+- (void) setExtensions:(NSArray<OAGpxExtension *> *)extensions;
 
 - (BOOL) isVisible;
 - (void) setVisible:(BOOL)isVisible;

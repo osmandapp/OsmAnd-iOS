@@ -224,14 +224,15 @@ static OATransportRouteToolbarViewController *toolbarController;
 {
     const auto& stops = _transportRoute.route->forwardStops;
     int currentStop = [self getCurrentStop];
-    UIImage *defaultIcon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"%@.png", !_transportRoute.type ? @"mx_route_bus_ref" : _transportRoute.type.resId]];
+    NSString *defaultIconName = [NSString stringWithFormat:@"%@.png", !_transportRoute.type ? @"mx_route_bus_ref" : _transportRoute.type.resId];
+    UIImage *defaultIcon = [OATargetInfoViewController getIcon:defaultIconName];
     int startPosition = 0;
     if (!_transportRoute.showWholeRoute && currentStop > 1)
     {
         startPosition = (currentStop == -1 ? 0 : currentStop);
         if (currentStop > 0)
         {
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:@"button" icon:defaultIcon textPrefix:[NSString stringWithFormat:OALocalizedString(@"route_stops_before"), currentStop] text:OALocalizedString(@"sett_show") textColor:nil isText:YES needLinks:NO order:-1 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:@"button" icon:defaultIcon iconName:defaultIconName textPrefix:[NSString stringWithFormat:OALocalizedString(@"route_stops_before"), currentStop] text:OALocalizedString(@"sett_show") textColor:nil isText:YES needLinks:NO order:-1 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.delegate = self;
             [rows addObject:rowInfo];
         }
@@ -243,7 +244,9 @@ static OATransportRouteToolbarViewController *toolbarController;
         if (name.length == 0)
             name = [self.class getStopType:_transportRoute];
         
-        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:[NSString stringWithFormat:@"stop_%d", i] icon:(currentStop == i ? [UIImage imageNamed:@"ic_custom_location_marker"] : defaultIcon) textPrefix:@"" text:name textColor:nil isText:YES needLinks:NO order:i typeName:@"" isPhoneNumber:NO isUrl:NO];
+        NSString *iconName = currentStop == i ? @"ic_custom_location_marker" : defaultIconName;
+        UIImage *icon = currentStop == i ? [UIImage imageNamed:@"ic_custom_location_marker"] : defaultIcon;
+        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:[NSString stringWithFormat:@"stop_%d", i] icon:icon iconName:iconName textPrefix:@"" text:name textColor:nil isText:YES needLinks:NO order:i typeName:@"" isPhoneNumber:NO isUrl:NO];
         rowInfo.delegate = self;
         [rows addObject:rowInfo];
     }

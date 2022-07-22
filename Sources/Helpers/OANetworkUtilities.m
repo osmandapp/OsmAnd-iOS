@@ -8,7 +8,6 @@
 
 #import "OANetworkUtilities.h"
 #import "OAUtilities.h"
-#import "NSData+GZIP.h"
 
 #define BOUNDARY @"CowMooCowMooCowCowCow"
 

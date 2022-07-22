@@ -2922,7 +2922,6 @@
 		DA83602B23449C6B003374B5 /* ic_custom_options@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA83601823449C69003374B5 /* ic_custom_options@2x.png */; };
 		DA83602D23449C6B003374B5 /* ic_custom_options@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA83601923449C69003374B5 /* ic_custom_options@3x.png */; };
 		DA83603123449C6B003374B5 /* ic_custom_slider@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA83601B23449C6A003374B5 /* ic_custom_slider@2x.png */; };
-		DA849996287D93DD002B1E11 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = DA849995287D93DC002B1E11 /* NSData+GZIP.m */; };
 		DA849999287EBEC7002B1E11 /* OADeleteFilesCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = DA849998287EBEC7002B1E11 /* OADeleteFilesCommand.m */; };
 		DA84999C287EBF27002B1E11 /* OABaseDeleteFilesCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = DA84999B287EBF27002B1E11 /* OABaseDeleteFilesCommand.m */; };
 		DA84E84B21D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84721D77EE0006954D0 /* ic_action_osmand_logo_banner@2x.png */; };
@@ -7166,8 +7165,6 @@
 		DA83601823449C69003374B5 /* ic_custom_options@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_options@2x.png"; path = "Resources/Icons/ic_custom_options@2x.png"; sourceTree = "<group>"; };
 		DA83601923449C69003374B5 /* ic_custom_options@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_options@3x.png"; path = "Resources/Icons/ic_custom_options@3x.png"; sourceTree = "<group>"; };
 		DA83601B23449C6A003374B5 /* ic_custom_slider@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_slider@2x.png"; path = "Resources/Icons/ic_custom_slider@2x.png"; sourceTree = "<group>"; };
-		DA849994287D93DC002B1E11 /* NSData+GZIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+GZIP.h"; sourceTree = "<group>"; };
-		DA849995287D93DC002B1E11 /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+GZIP.m"; sourceTree = "<group>"; };
 		DA849997287EBEC7002B1E11 /* OADeleteFilesCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADeleteFilesCommand.h; sourceTree = "<group>"; };
 		DA849998287EBEC7002B1E11 /* OADeleteFilesCommand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OADeleteFilesCommand.m; sourceTree = "<group>"; };
 		DA84999A287EBF27002B1E11 /* OABaseDeleteFilesCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseDeleteFilesCommand.h; sourceTree = "<group>"; };
@@ -12671,8 +12668,6 @@
 			isa = PBXGroup;
 			children = (
 				DA5A80AC26C563A600F274C7 /* kml2gpx.xslt */,
-				DA849994287D93DC002B1E11 /* NSData+GZIP.h */,
-				DA849995287D93DC002B1E11 /* NSData+GZIP.m */,
 				DA5A80B326C563A600F274C7 /* NSData+CRC32.h */,
 				DA5A80DD26C563A600F274C7 /* NSData+CRC32.m */,
 				DA5A80E026C563A600F274C7 /* OAAppSettings.h */,
@@ -15628,7 +15623,6 @@
 				DA5A83A826C563A800F274C7 /* OAOsmNotesOnlineTargetViewController.mm in Sources */,
 				DA5A839426C563A800F274C7 /* OAOutdatedResourcesViewController.mm in Sources */,
 				DA5A832126C563A800F274C7 /* OAShapesTableViewCell.m in Sources */,
-				DA849996287D93DD002B1E11 /* NSData+GZIP.m in Sources */,
 				DA5A836826C563A800F274C7 /* OARouteAvoidTransportSettingsViewController.mm in Sources */,
 				DA5A836626C563A800F274C7 /* OARouteStatistics.m in Sources */,
 				8A90CEDB27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm in Sources */,

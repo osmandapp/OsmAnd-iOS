@@ -550,7 +550,7 @@
         CLLocation *l = _locations[_currentRoute];
         if (fromLoc)
         {
-            distanceToNextTurn = [fromLoc distanceFromLocation:l];
+            distanceToNextTurn += [fromLoc distanceFromLocation:l];
         }
         return (int) (distanceToNextTurn / current.averageSpeed);
     }
@@ -636,7 +636,9 @@
         return std::vector<std::shared_ptr<RouteSegmentResult>>();
     
     std::vector<std::shared_ptr<RouteSegmentResult>> list;
-    list.push_back(_segments[startIndex++]);
+    if (includeFirstSegment)
+        list.push_back(_segments[startIndex++]);
+    
     for (int i = ++startIndex; i < endIndex; i++)
     {
         if (_segments[i - 1] != _segments[i])

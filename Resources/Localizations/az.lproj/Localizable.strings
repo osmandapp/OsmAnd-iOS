@@ -665,7 +665,7 @@
 
 // Map settings
 "m_style_car" = "Avtomobil";
-"m_style_walk" = "Gəzinti";
+"m_style_walk" = "Piyada";
 "m_style_bicycle" = "Velosiped";
 "m_style_pulic_transport" = "İctimai nəqliyyat";
 "map_settings_map" = "Xəritə";
@@ -675,7 +675,7 @@
 "map_mode" = "Xəritə rejimi";
 "map_settings_map_magnifier" = "Xəritə böyüdücü";
 "map_settings_text_size" = "Mətn ölçüsü";
-"map_settings_day" = "Gün";
+"map_settings_day" = "Gündüz";
 "map_settings_night" = "Gecə";
 "map_settings_style" = "Xəritə stili";
 "map_settings_overunder" = "Overlay / Underlay";
@@ -2398,3 +2398,8 @@
 "purchases_feature_desc_osmand_cloud" = "Bütün OsmAnd məlumatlarını onlayn saxlamaq üçün OsmAnd Cloud əldə edin. Yenidən quraşdırdıqda məlumatları itirməyin. Bütün məlumatları asanlıqla nüsxələyin və bərpa edin.";
 "expired" = "Müddəti bitdi";
 "product_desc_pro" = "Maksimum funksiyalarəldə edin";
+"shared_string_data" = "Məlumatlar";
+"shared_string_delete_all" = "Hamısını sil";
+"restore_from_osmand_cloud" = "OsmAnd Cloud-dan bərpa et";
+"on_hold" = "Gözləmədə";
+"paused" = "Fasilə verildi";

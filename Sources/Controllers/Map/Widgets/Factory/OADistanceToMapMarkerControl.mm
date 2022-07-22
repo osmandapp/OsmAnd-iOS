@@ -110,12 +110,13 @@
     return YES;
 }
 
-- (UIImage *) drawImage:(UIImage*) fgImage inImage:(UIImage*) bgImage
+- (UIImage *) drawImage:(UIImage*)fgImage inImage:(UIImage*)bgImage
 {
     UIGraphicsBeginImageContextWithOptions(bgImage.size, NO, 0.0);
     
     [bgImage drawInRect:CGRectMake(0.0, 0.0, bgImage.size.width, bgImage.size.height)];
-    [fgImage drawInRect:CGRectMake(0.0, 0.0, fgImage.size.width, fgImage.size.height)];
+    if (fgImage)
+        [fgImage drawInRect:CGRectMake(0.0, 0.0, fgImage.size.width, fgImage.size.height)];
     
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -126,7 +127,8 @@
 {
     _dayIcon = widgetDayIcon;
     _nightIcon = widgetNightIcon;
-    UIImage *markerIcon = [self drawImage:[UIImage imageNamed:_innerMarkerColor] inImage:[UIImage imageNamed:(![self isNight] ? _dayIcon : _nightIcon)]];
+    UIImage *innerMarkerImage = _innerMarkerColor ? [UIImage imageNamed:_innerMarkerColor] : nil;
+    UIImage *markerIcon = [self drawImage:innerMarkerImage inImage:[UIImage imageNamed:(![self isNight] ? _dayIcon : _nightIcon)]];
     [self setImage:markerIcon];
     return YES;
 }

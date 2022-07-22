@@ -17,12 +17,12 @@
 
 @property(readonly) OAObservable *sqlitedbResourcesChangedObservable;
 
-+ (OAMapCreatorHelper *)sharedInstance;
++ (OAMapCreatorHelper *) sharedInstance;
 
-- (BOOL)installFile:(NSString *)filePath newFileName:(NSString *)newFileName;
-- (void)removeFile:(NSString *)fileName;
-- (NSString *)getNewNameIfExists:(NSString *)fileName;
-- (void)renameFile:(NSString *)fileName toName:(NSString *)newName;
+- (BOOL) installFile:(NSString *)filePath newFileName:(NSString *)newFileName;
+- (void) removeFile:(NSString *)fileName;
+- (NSString *) getNewNameIfExists:(NSString *)fileName;
+- (void) renameFile:(NSString *)fileName toName:(NSString *)newName;
 - (void) fetchSQLiteDBFiles:(BOOL)notifyChange;
 
 @end

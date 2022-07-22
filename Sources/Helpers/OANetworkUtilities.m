@@ -63,6 +63,7 @@
     {
         [request setHTTPMethod:@"GET"];
     }
+    [request setTimeoutInterval:100];
     
     NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (onComplete)
@@ -97,22 +98,11 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                        timeoutInterval:30.0];
-//    if (post && paramsStr)
-//    {
-//        NSData *postData = [paramsStr dataUsingEncoding:NSUTF8StringEncoding];
-//        [request addValue:@"application/x-www-form-urlencoded;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
-//        [request addValue:@(postData.length).stringValue forHTTPHeaderField:@"Content-Length"];
-//        [request setHTTPMethod:@"POST"];
-//        [request setHTTPBody:postData];
-//    }
-//    else
-//    {
-//        [request setHTTPMethod:@"GET"];
-//    }
     
     [request setHTTPMethod:@"POST"];
     [request addValue:[@"multipart/form-data; boundary=" stringByAppendingString:BOUNDARY] forHTTPHeaderField:@"Content-Type"];
     [request addValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
+    [request setTimeoutInterval:1000];
     if (headers)
     {
         [headers enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
@@ -125,7 +115,7 @@
         fileName = [fileName stringByAppendingPathExtension:@"gz"];
     [postData appendData:[[NSString stringWithFormat:@"content-disposition: form-data; name=\"file\"; filename=\"%@\"\r\n", fileName] dataUsingEncoding:NSUTF8StringEncoding]];
     [postData appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    [postData appendData:gzip ? [data gzippedData] : data];
+    [postData appendData:data];
     [postData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", BOUNDARY] dataUsingEncoding:NSUTF8StringEncoding]];
     [request setHTTPBody:postData];
     

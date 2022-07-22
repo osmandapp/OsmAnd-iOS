@@ -362,7 +362,7 @@
 "shared_string_and" = "と";
 "shared_string_edit" = "編集";
 "shared_string_modify" = "変更する";
-"shared_string_later" = "続ける";
+"shared_string_later" = "後で";
 "shared_string_of" = "of";
 "shared_string_all" = "全て";
 "shared_string_from" = "から";
@@ -491,7 +491,7 @@
 "map_mode" = "昼夜モード切替";
 "map_settings_map_magnifier" = "マップ表示倍率";
 "map_settings_text_size" = "文字サイズ";
-"map_settings_day" = "昼固定";
+"map_settings_day" = "日";
 "map_settings_night" = "夜";
 "map_settings_style" = "マップスタイル";
 "map_settings_overunder" = "オーバーレイ / アンダーレイ";
@@ -648,7 +648,7 @@
 "osm_failed_uploads" = "失敗しました";
 "osm_note" = "OSMでの注釈";
 "osm_created" = "作成しました";
-"osm_deleted" = "削除しました";
+"osm_deleted" = "削除されました";
 "osm_modified" = "修正しました";
 "osm_reopened" = "再開しました";
 "osm_name" = "OpenStreetMapのユーザー名";
@@ -2008,7 +2008,7 @@
 "service" = "アクセス道路、特定施設用道路";
 "special" = "特別";
 "sport" = "スポーツ";
-"emergency" = "緊急";
+"emergency" = "救急";
 "key_hint_recenter_map" = "マップを中央に再配置";
 "shared_z_a" = "降順(Z～A)";
 "shared_a_z" = "昇順(A～Z)";
@@ -2069,7 +2069,9 @@
 "gpx_upload_trackable_visibility_descr" = "\"追跡可能\"は、トレース状況が公開リストに表示されないことを意味しますが、タイムスタンプ付きで処理済みの経路ポイント(直接関連付けされないもの)は、パブリックなGPS APIからのダウンロードを通じて表示されます。";
 "gpx_upload_identifiable_visibility_descr" = "\"識別可能\"は、経路がGPS経路およびパブリックGPS経路リストに表示されることを示唆しています。他のユーザーは現在の経路をダウンロードして、ユーザー名とリンクできます。経路ポイント APIを介して配信されるデータは、元の経路追跡ページを参照します。経路ポイントのタイムスタンプは、公的GPS APIを通じて入手できます。";
 "gpx_upload_private_visibility_descr" = "\"プライベート\"は、経路が公開リストに表示されないことを示唆しています。経路ポイントはタイムスタンプなしで公的GPS APIを介して引き続き利用できますが、時系列で並べられることはありません。";
-"route_between_points_warning_desc" = "このオプションを使用するには、OsmAndで経路をマップ上の道路にスナップする必要があります。\n\n次にナビゲーションプロファイルを選択して、利用予定の道路(一般道、高速道路)と、道路を追跡するおおよその距離を検出する必要があります。";
+"route_between_points_warning_desc" = "このオプションを使用するには、OsmAndで経路をマップ上の道路にスナップする必要があります。
+\n
+\n次にナビゲーションプロファイルを選択して、利用予定の道路(一般道、高速道路)と、道路を追跡するおおよその距離を検出する必要があります。";
 "some_articles_may_not_available_in_lang" = "一部のウィキペディア記事は、ご使用の言語で利用できない場合があります。";
 "last_used" = "最後に利用";
 "suggested_maps" = "推奨マップ";
@@ -2102,7 +2104,7 @@
 "context_menu_item_edit_waypoint" = "GPX経由地点の編集";
 "dialogs_and_notifications" = "ダイアログと通知";
 "gpxup_identifiable" = "識別可能";
-"default" = "標準";
+"default" = "デフォルト";
 "product_title_mapillary" = "Mapillary";
 "contour_lines_hillshades_slope" = "等高線、陰影起伏、勾配";
 "routeInfo_smoothness_description" = "特に表面の規則性/平坦性の観点での、車輪の付いたあらゆる乗り物においてそれぞれの通行が認められる歩道および車道の操縦性分類です。";
@@ -2123,7 +2125,7 @@
 "edit_track" = "経路の編集";
 "gpx_split_interval_descr" = "距離または時間のマーカーが経路に表示される間隔を選択します。";
 "reset_to_original" = "初期値へリセット";
-"nautical" = "船舶";
+"nautical" = "航海";
 "start_point" = "開始";
 "map_widget_speed" = "速度";
 "carplay_profile" = "CarPlayプロファイル";
@@ -2393,3 +2395,10 @@
 "purchases_feature_desc_osmand_cloud" = "OsmAndクラウドを入手することで、すべてのOsmAndデータをクラウド保存が可能になります。再インストール後にデータが失われることはありません。全情報を簡単にバックアップおよび復元出来ます。";
 "not_available_with" = "%@は利用できません";
 "lang_ckb" = "中央クルド語";
+"shared_string_delete_all" = "すべて削除";
+"restore_from_osmand_cloud" = "OsmAndクラウドから復元";
+"paused" = "一時停止";
+"on_hold" = "保留中";
+"in_grace_period" = "猶予期間中";
+"shared_string_undefined" = "未定義";
+"shared_string_data" = "データ";

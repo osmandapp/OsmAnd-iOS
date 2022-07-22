@@ -133,7 +133,7 @@
             {
                 NSLog(@"Failed to collect items for backup: %@", e.reason);
             }
-            break;
+            return nil;
         }
         case EOAImportTypeCheckDuplicates:
         {

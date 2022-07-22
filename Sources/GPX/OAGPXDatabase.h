@@ -32,6 +32,8 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 @property (nonatomic) NSString *gpxDescription;
 @property (nonatomic) NSDate   *importDate;
 
+@property (nonatomic, readonly) NSString *absolutePath;
+
 @property (nonatomic) OAGpxBounds  bounds;
 @property (nonatomic, assign) BOOL newGpx;
 

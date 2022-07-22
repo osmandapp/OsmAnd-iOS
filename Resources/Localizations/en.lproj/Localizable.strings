@@ -2774,6 +2774,8 @@
 "weather_data_provider" = "Data provider GFS.";
 "weather_clear_online_cache" = "This will clear all cache for online weather tile.";
 
+"all_maps_are_up_to_date" = "All maps are up to date";
+
 // Release Notes
 // instruction:
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md

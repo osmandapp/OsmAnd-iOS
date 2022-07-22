@@ -19,7 +19,7 @@
 #import "OAButtonRightIconCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAIconTitleValueCell.h"
-#import "OAProgressBarCell.h"
+#import "OATitleIconProgressbarCell.h"
 #import "OATitleDescrRightIconTableViewCell.h"
 #import "OAMainSettingsViewController.h"
 #import "OARestoreBackupViewController.h"
@@ -32,6 +32,8 @@
 #import "OAChoosePlanHelper.h"
 #import "OAOsmAndFormatter.h"
 #import "OABackupError.h"
+
+#import "OAExportSettingsType.h"
 
 @interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OABackupExportListener, OAImportListener, OAOnPrepareBackupListener>
 
@@ -55,7 +57,7 @@
     OABackupStatus *_status;
     NSString *_error;
     
-    OAProgressBarCell *_backupProgressCell;
+    OATitleIconProgressbarCell *_backupProgressCell;
 }
 
 - (instancetype) initWithSourceType:(EOACloudScreenSourceType)type
@@ -87,6 +89,7 @@
     [_backupHelper addPrepareBackupListener:self];
     if (!_settingsHelper.isBackupExporting)
         [_backupHelper prepareBackup];
+//    [[_backupHelper getBackupTypePref:OAExportSettingsType.OFFLINE_MAPS] set:NO];
     [self generateData];
     
     self.tblView.delegate = self;
@@ -192,7 +195,7 @@
             // TODO: show progress from HeaderStatusViewHolder.java
             _backupProgressCell = [self getProgressBarCell];
             NSDictionary *backupProgressCell = @{
-                @"cellId": OAProgressBarCell.getCellIdentifier,
+                @"cellId": OATitleIconProgressbarCell.getCellIdentifier,
                 @"cell": _backupProgressCell
             };
             [backupRows addObject:backupProgressCell];
@@ -214,12 +217,13 @@
                 BOOL hasWarningStatus = _status.warningTitle != nil;
                 BOOL hasDescr = _error || _status.warningDescription;
                 NSString *descr = hasDescr && hasWarningStatus ? _status.warningDescription : _error;
+                NSInteger color = _status.iconColor;
                 NSDictionary *makeBackupWarningCell = @{
                     @"cellId": OATitleDescrRightIconTableViewCell.getCellIdentifier,
                     @"name": @"makeBackupWarning",
                     @"title": hasWarningStatus ? _status.warningTitle : OALocalizedString(@"osm_failed_uploads"),
                     @"description": descr ? descr : @"",
-                    @"imageColor": UIColorFromRGB(color_support_green), // TODO: add icon color to backupStatus
+                    @"imageColor": @(color),
                     @"image": _status.warningIconName
                 };
                 [backupRows addObject:makeBackupWarningCell];
@@ -308,13 +312,14 @@
     _data = result;
 }
 
-- (OAProgressBarCell *) getProgressBarCell
+- (OATitleIconProgressbarCell *) getProgressBarCell
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAProgressBarCell getCellIdentifier] owner:self options:nil];
-    OAProgressBarCell *resultCell = (OAProgressBarCell *)[nib objectAtIndex:0];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconProgressbarCell getCellIdentifier] owner:self options:nil];
+    OATitleIconProgressbarCell *resultCell = (OATitleIconProgressbarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
     [resultCell.progressBar setProgressTintColor:UIColorFromRGB(color_primary_purple)];
-    resultCell.backgroundColor = [UIColor clearColor];
+    resultCell.textView.text = OALocalizedString(@"osm_edit_uploading");
+    resultCell.imgView.image = [UIImage imageNamed:@"ic_custom_cloud_upload"];
     resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return resultCell;
 }
@@ -370,7 +375,7 @@
     }
 }
 
-- (void)onRetyPressed
+- (void)onRetryPressed
 {
     [_backupHelper prepareBackup];
 }
@@ -524,8 +529,17 @@
         }
         cell.titleLabel.text = item[@"title"];
         cell.descriptionLabel.text = item[@"description"];
-        cell.iconView.tintColor = item[@"imageColor"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"image"]]];
+        NSInteger color = [item[@"imageColor"] integerValue];
+        if (color != -1)
+        {
+            cell.iconView.tintColor = UIColorFromRGB(color);
+            [cell.iconView setImage:[UIImage templateImageNamed:item[@"image"]]];
+        }
+        else
+        {
+            [cell.iconView setImage:[UIImage imageNamed:item[@"image"]]];
+        }
+        
         return cell;
     }
     else if ([cellId isEqualToString:OAIconTitleValueCell.getCellIdentifier])
@@ -548,7 +562,7 @@
         cell.descriptionView.text = item[@"value"];
         return cell;
     }
-    else if ([cellId isEqualToString:OAProgressBarCell.getCellIdentifier])
+    else if ([cellId isEqualToString:OATitleIconProgressbarCell.getCellIdentifier])
     {
         return item[@"cell"];
     }

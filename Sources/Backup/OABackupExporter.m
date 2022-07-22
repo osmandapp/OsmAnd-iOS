@@ -141,6 +141,7 @@
     if (lightTasks.count > 0)
     {
         _executor = [[NSOperationQueue alloc] init];
+        _executor.maxConcurrentOperationCount = 10;
         [_executor addOperations:lightTasks waitUntilFinished:YES];
         
 //        if (!executor.getExceptions().isEmpty()) {

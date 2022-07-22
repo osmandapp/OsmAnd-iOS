@@ -41,7 +41,7 @@
 "transport_routes" = "Rute-rute";
 "transport_nearby_routes_within" = "Rute terdekat dalam";
 "transport_nearby_routes" = "Dalam";
-"transport_stop" = "Stop";
+"transport_stop" = "Berhenti";
 "cancel_navigation" = "Hentikan navigasi";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sortir pintu ke pintu";
@@ -335,7 +335,7 @@
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Start navigation along track?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
-"displayed_trips" = "Displayed tracks";
+"displayed_trips" = "Trek yang ditampilkan";
 "prev_route" = "Rute sebelumnya";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Pilih di peta";
@@ -464,7 +464,7 @@
 "shared_string_all" = "Semua";
 "shared_string_from" = "Dari";
 "shared_string_time" = "Waktu";
-"shared_string_time_of_day" = "Time of day";
+"shared_string_time_of_day" = "Waktu dalam sehari";
 "shared_string_distance" = "Jarak";
 "shared_string_time_span" = "Rentang waktu";
 "shared_string_start_time" = "Waktu mulai";
@@ -667,7 +667,7 @@
 "m_style_car" = "Mengemudi";
 "m_style_walk" = "Berjalan";
 "m_style_bicycle" = "Bersepeda";
-"m_style_pulic_transport" = "Angkutan publik";
+"m_style_pulic_transport" = "Transportasi umum";
 "map_settings_map" = "Peta";
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
 "map_settings_show" = "Tampilkan di peta";
@@ -1247,7 +1247,7 @@
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
 "osm_edits_basic" = "Dasar";
-"osm_edits_advanced" = "Tingkat Lanjut";
+"osm_edits_advanced" = "Lanjutan";
 "osm_edits_all" = "All edits";
 "osm_edits_poi" = "POI edits";
 "osm_edits_notes" = "Notes";
@@ -1677,7 +1677,7 @@
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
-"all_group_points" = "All points of the group";
+"all_group_points" = "Semua poin dari kelompok";
 "enter_description" = "Enter description";
 "description" = "Deskripsi";
 "read_full_description" = "Read full description";
@@ -1695,7 +1695,7 @@
 "no_other_translations" = "There are no other translations";
 "wpt_remove_q" = "Remove waypoint?";
 "gpx_select_track" = "Select track";
-"gpx_curr_new_track" = "Current track";
+"gpx_curr_new_track" = "Trek saat ini";
 "gpx_dir_arrows" = "Panah arah";
 "gpx_split_interval" = "Interval pisah";
 "gpx_split_interval_descr" = "Pilih interval di mana tanda dengan jarak atau waktu di trek akan ditampilkan.";
@@ -2394,7 +2394,7 @@
 "complete_purchase" = "Selesaikan pembelian";
 "purchases_feature_desc_hourly_map_updates" = "Dapatkan pembaruan peta lebih sering. Pembaruan setiap jam, hari, atau minggu. Pembaruan diunduh secara bertahap, hanya untuk area yang diubah.";
 "monthly_subscription" = "Langganan bulanan";
-"routing_attr_allow_private_for_truck_description" = "Izinkan akses ke area privat untuk truk.";
+"routing_attr_allow_private_for_truck_description" = "Izinkan akses ke area pribadi untuk truk.";
 "toast_empty_name_error" = "Lokasi tanpa nama";
 "purchases_feature_desc_unlimited_map_download" = "Dapatkan unduhan tidak terbatas untuk semua peta benua dan wilayah luring.";
 "ltr_or_rtl_combine_via_or" = "%@ atau %@";
@@ -2416,7 +2416,7 @@
 "altitude_ascent" = "Naik";
 "private_access_routing_req" = "Tujuan Anda terletak di area dengan akses pribadi. Izinkan menggunakan jalan pribadi untuk perjalanan ini\?";
 "simulation_constant_mode_desc" = "Simulasi akan dilakukan dengan kecepatan konstan yang dipilih.";
-"shared_string_stop" = "Stop";
+"shared_string_stop" = "Berhenti";
 "not_available_with" = "Tidak tersedia pada %@";
 "cloud_make_backup" = "Buat sebuah cadangan";
 "shared_string_capacity" = "Kapasitas";
@@ -2454,3 +2454,10 @@
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Tanpa batasan)";
 "transport_hazmat_yes_desc" = "Anda harus memilih kategori yang tepat.";
 "transport_hazmat_no_desc" = "Di beberapa jalan dan terowongan, pengangkutan bahan berbahaya tidak diperbolehkan.";
+"restore_from_osmand_cloud" = "Pulihkan dari OsmAnd Cloud";
+"in_grace_period" = "Dalam masa tenggang";
+"paused" = "Telah dijeda";
+"on_hold" = "Dihentikan";
+"shared_string_delete_all" = "Hapus semua";
+"shared_string_data" = "Data";
+"shared_string_undefined" = "Tidak tersedia";

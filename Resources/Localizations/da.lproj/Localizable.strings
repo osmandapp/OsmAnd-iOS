@@ -51,7 +51,7 @@
 // Map settings
 "rendering_value_browse_map_name" = "Gennemse kort";
 "m_style_car" = "Kørsel";
-"m_style_bicycle" = "Cykling";
+"m_style_bicycle" = "Cykle";
 "map_settings_map" = "Kort";
 "map_settings_show" = "Vis på kort";
 "map_settings_day" = "Dag";
@@ -775,7 +775,7 @@
 "logging_min_speed_descr" = "Filter: Ingen logning under denne hastighed";
 "help_trip_planning" = "Turplanlægning";
 "help_legend" = "Signaturforklaring";
-"help_other_header" = "Andet";
+"help_other_header" = "Andre";
 "help_install_and_troubleshoot" = "Installation og fejlfinding";
 "help_tech_articles" = "Tekniske artikler";
 "help_versions" = "Versioner";
@@ -994,7 +994,7 @@
 "osm_notes_online_layer" = "OSM-noter (online)";
 "my_places" = "Mine steder";
 "osm_edits_basic" = "Grundlæggende";
-"osm_edits_advanced" = "Udvidet";
+"osm_edits_advanced" = "Avanceret";
 "osm_edits_all" = "Alle redigeringer";
 "osm_edits_poi" = "IP-redigeringer";
 "osm_edits_notes" = "Noter";
@@ -1664,7 +1664,7 @@
 "product_desc_antarctica" = "Ubegrænset hentning af kort til Antarktis";
 "product_title_antarctica" = "Antarktis";
 "map_settings_line_density_slowdown_warning" = "Høj linjetæthed kan bremse kortgengivelse";
-"m_style_pulic_transport" = "Kollektivtrafik";
+"m_style_pulic_transport" = "Offentlig transport";
 "transfers" = "Overførsler:";
 "consider_limitations_param" = "Overvej midlertidige begrænsninger";
 "avoid_transport_type" = "Undgå transporttyper";
@@ -1861,7 +1861,7 @@
 "shared_string_preparing" = "Forbereder";
 "shared_string_deselect_all" = "Fravælg alle";
 "shared_string_continue" = "Fortsæt";
-"nothing_found_empty" = "Fandt ikke noget";
+"nothing_found_empty" = "Fandt intet";
 "nav_type_direct_to" = "Direkte-til-punkt";
 "nav_type_osmand" = "OsmAnd (offline ruteberegning)";
 "nav_type_descr" = "Vælg, hvordan en rute skal beregnes for profilen";
@@ -2514,7 +2514,7 @@
 "simulate_location_movement_speed" = "Bevægelseshastighed";
 "simulate_location_movement_speed_x4" = "x4";
 "routing_attr_hazmat_category_name" = "Transport af farligt gods";
-"routing_attr_hazmat_category_no_restrictions_name" = "A (Ingen begrænsninger)";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Ingen restriktioner)";
 "transport_hazmat_yes_desc" = "Du skal vælge rette kategori.";
 "transport_hazmat_no_desc" = "På nogle veje og i nogle tunneller er transport af farlige materialer forbudt.";
 "pro_features" = "Pro-funktioner";
@@ -2567,7 +2567,7 @@
 "quarterly_subscription" = "Kvartalsabonnement";
 "purchases_feature_desc_nautical" = "Få adgang til havdybdeoplysninger";
 "private_access_routing_req" = "Din destination ligger i et område med privat adgang. Tillad at der benyttes private veje til denne tur\?";
-"paused" = "På pause";
+"paused" = "Pauset";
 "app_store" = "App Store";
 "promo" = "Kampagne";
 "google_play" = "Google Play";
@@ -2587,3 +2587,21 @@
 "subscription_banner_osmand_pro_title" = "Få kortopdateringer hver time, dag eller uge med OsmAnd Pro.";
 "subscription_banner_free_maps_title" = "Du kan downloade %i kort gratis.";
 "subscription_banner_free_maps_description" = "Få ubegrænset download af kort og opdateringer.";
+"compass_visible_in_rotated_mode" = "Synlig, hvis kortet er roteret";
+"compass_visible_in_rotated_mode_descr" = "Skjult, når nord er op";
+"compass_options_description" = "Klik på kompasset for at skifte måden hvorpå kortet er orienteret";
+"shared_string_always_visible" = "Altid synlig";
+"shared_string_always_hidden" = "Altid skjult";
+"shared_string_online_cache" = "Online cache";
+"shared_string_clear_online_cache" = "Ryd online cache";
+"shared_string_delete_all" = "Slet alt";
+"shared_string_countries" = "Lande";
+"weather_plugin" = "Vejr-udvidelse";
+"weather_offline_forecast" = "Offline prognose";
+"weather_offline_forecast_only" = "Kun offline prognose";
+"weather_offline_forecast_only_desc" = "Prognoser vil kun være tilgængelige for lande med data, der er downloadet på forhånd.";
+"weather_data_provider" = "Dataleverandør GFS.";
+"weather_clear_online_cache" = "Dette vil rydde al cache for online vejrfliser.";
+"shared_string_data" = "Data";
+"shared_string_total_size" = "Samlet størrelse";
+"restore_from_osmand_cloud" = "Gendan fra OsmAnd Cloud";

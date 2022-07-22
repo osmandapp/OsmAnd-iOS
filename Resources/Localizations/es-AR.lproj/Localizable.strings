@@ -41,7 +41,7 @@
 "transport_routes" = "Rutas";
 "transport_nearby_routes_within" = "Rutas a menos de";
 "transport_nearby_routes" = "A menos de";
-"transport_stop" = "Parada";
+"transport_stop" = "Parar";
 "cancel_navigation" = "Parar navegación";
 "start_navigation" = "Iniciar navegación";
 "intermediate_items_sort_by_distance" = "Ordenar puerta a puerta";
@@ -91,7 +91,7 @@
 "daynight_mode_auto" = "Alba/ocaso";
 "route_simulation" = "Simulación de la ruta";
 "auto_follow_location_enabled" = "Centrado automático del mapa activado.";
-"unknown_location" = "Ubicación desconocida";
+"unknown_location" = "Ubicación desconocida.";
 "animate_routing_route_not_calculated" = "Primero calcular la ruta";
 "settings_preset" = "Perfil predefinido";
 "default_profile_descr" = "Elige el perfil que se usará al ejecutar la aplicación.";
@@ -240,12 +240,12 @@
 "nav_type_brouter" = "BRouter";
 "nav_type_ski" = "Esquí";
 "nav_type_geocoding" = "Geocodificación";
-"fast_route_mode_descr" = "Activar para calcular la ruta más rápida o desactivar para la más eficiente en combustible";
+"fast_route_mode_descr" = "Activar para calcular la ruta más rápida o desactivar para la más eficiente en combustible.";
 "avoid_in_routing_title" = "Evitar…";
 "avoid_in_routing_descr" = "Evita caminos con peajes, sin pavimentar, transbordadores y otros";
 "prefer_in_routing_title" = "Preferir…";
-"prefer_in_routing_descr" = "Preferir usar autopistas";
-"relief_smoothness_factor_descr" = "Terreno preferido: llano o empinado";
+"prefer_in_routing_descr" = "Preferir usar autopistas.";
+"relief_smoothness_factor_descr" = "Terreno preferido: llano o empinado.";
 "choose_auto_follow_route" = "Centrado automático del mapa";
 "choose_auto_follow_route_descr" = "Tiempo hasta que la vista del mapa vuelve a sincronizarse con la ubicación actual";
 "choose_auto_center_map_view_descr" = "El tiempo hasta que la vista del mapa se sincroniza con la ubicación actual al moverse";
@@ -259,15 +259,15 @@
 "speak_descr" = "Configura los anuncios para nombres de calles, advertencias de tráfico (paradas, lomadas), radares y límites de velocidad";
 "keep_informing" = "Repetir instrucciones de navegación";
 "repeat_after" = "Repetir después";
-"keep_informing_descr" = "Repite instrucciones de navegación a intervalos regulares";
+"keep_informing_descr" = "Repite instrucciones de navegación a intervalos regulares.";
 "arrival_distance" = "Anuncio de llegada";
 "arrival_distance_descr" = "¿Cuándo quieres el anuncio de llegada?";
 "default_speed_system" = "Unidad de velocidad";
-"default_speed_system_descr" = "Define la unidad de velocidad";
+"default_speed_system_descr" = "Define la unidad de velocidad.";
 "speed_limit_exceed" = "Tolerancia del límite de velocidad";
 "speed_limit_exceed_message" = "Margen de tolerancia sobre el límite de velocidad, en el cual recibirás un aviso de voz.";
 "wake_on_voice" = "Encender pantalla";
-"wake_on_voice_descr" = "Enciende la pantalla del dispositivo al aproximarse a un giro";
+"wake_on_voice_descr" = "Enciende la pantalla del dispositivo al aproximarse a un giro.";
 "voice_pref_title" = "Voz";
 "voice_provider" = "Indicaciones por voz";
 "voice_provider_descr" = "Indicaciones por voz para la navegación";
@@ -312,7 +312,7 @@
 "road_speeds" = "Velocidades de caminos";
 "avoid_transport_type" = "Evitar tipos de transporte";
 "consider_limitations_param" = "Considerar limitaciones temporales";
-"impassable_road_desc" = "Elige los caminos a evitar durante la navegación";
+"impassable_road_desc" = "Elige los caminos a evitar durante la navegación.";
 "interrupt_music_descr" = "Pausa completamente cualquier música durante los avisos por voz (no sólo reduce el volumen)";
 "interrupt_music" = "Pausar música";
 "shared_string_do_not_use" = "No usar";
@@ -359,7 +359,7 @@
 "starting_point_too_far" = "Punto de partida demasiado lejos del camino más cercano.";
 "ending_point_too_far" = "Punto final demasiado lejos del camino más cercano.";
 "intermediate_point_too_far" = "Destino intermedio «%d» demasiado lejos del camino.";
-"arrived_at_destination" = "Has llegado";
+"arrived_at_destination" = "Has llegado.";
 "towards" = "hacia";
 "route_roundabout" = "Rotonda: toma la %dª salida en";
 "route_roundabout_short" = "Toma la %dª salida y continúa";
@@ -675,7 +675,7 @@
 "map_mode" = "Modo del mapa";
 "map_settings_map_magnifier" = "Lupa del mapa";
 "map_settings_text_size" = "Tamaño del texto";
-"map_settings_day" = "Diurno";
+"map_settings_day" = "Día";
 "map_settings_night" = "Nocturno";
 "map_settings_style" = "Estilo del mapa";
 "map_settings_overunder" = "Superpuesta / Subyacente";
@@ -979,11 +979,11 @@
 "reading_file" = "Leyendo archivo";
 "preparing_file" = "Preparando archivo";
 "profile_import_success" = "Perfil de aplicación importado correctamente";
-"profile_prefs_reset_successful" = "Todos los ajustes del perfil se restauraron al valor predefinido";
+"profile_prefs_reset_successful" = "Todos los ajustes del perfil se restauraron al valor predefinido.";
 "not_available_profile_name" = "Ya existe un perfil con ese nombre.";
 "profile_type_base_string" = "Perfil base";
 "selected_profile" = "Perfil marcado";
-"app_profiles" = "Perfiles de la aplicación";
+"app_profiles" = "Perfiles de aplicación";
 "profile_sett_descr" = "Afecta al perfil de la aplicación elegido";
 "import_profile_descr" = "Para importar un perfil, pulsa en el archivo necesario (*.osf) en cualquier aplicación y marca «Copiar a mapas de OsmAnd»";
 "export_profile_descr" = "Puedes exportar todos los ajustes del perfil, copiar todos los ajustes de otro perfil o restablecer todos los ajustes del perfil al estado predefinido.";
@@ -1758,7 +1758,7 @@
 "gpx_trip_groups" = "Grupos de trazas";
 "gpx_group_select" = "Grupo elegido";
 "shared_string_show_all" = "Mostrar todo";
-"parking" = "Estacionamiento";
+"parking" = "Estacionamientos";
 "parked_at" = "Estacionado a las";
 "directions_more_options" = "Ir desde";
 "nearby_search" = "Buscar cerca";
@@ -1824,7 +1824,7 @@
 "get_started" = "Empezar";
 "first_usage_wizard_desc" = "Deja que OsmAnd determine tu ubicación y sugiera mapas a descargar para esa región.";
 "suggested_maps" = "Mapas sugeridos";
-"suggested_maps_descr" = "Estos mapas deben usarse con el complemento";
+"suggested_maps_descr" = "Estos mapas deben usarse con el complemento.";
 "added_profiles" = "Perfiles añadidos";
 "added_profiles_descr" = "Perfiles añadidos por el complemento";
 "location_not_found" = "Ubicación no encontrada";
@@ -1896,7 +1896,7 @@
 "postcode" = "Código postal";
 "show_something_on_map" = "Mostrar«%@» en el mapa";
 "search_POI_level_btn" = "Aumentar radio de búsqueda";
-"shared_string_street" = "Calle";
+"shared_string_street" = "Calle residencial";
 "shared_string_building" = "Edificio";
 "shared_string_street_intersection" = "Intersección de calles";
 "shared_string_address" = "Dirección";
@@ -2263,7 +2263,7 @@
 "lenght_limit_description" = "Proporciona la longitud del vehículo, se pueden aplicar algunas restricciones de rutas para vehículos largos.";
 "width_limit_description" = "Proporciona el ancho del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos anchos.";
 "vessel_height_limit_description" = "Define la altura de la embarcación para evitar puentes bajos. Tener en cuenta que si el puente es móvil, usaremos su altura en estado abierto.";
-"vessel_width_limit_description" = "Define el ancho de la embarcación para evitar puentes estrechos.";
+"vessel_width_limit_description" = "Define el ancho de la embarcación para evitar puentes estrechos";
 "default_speed_dialog_msg" = "Estima el tiempo de llegada para los tipos de caminos desconocidos, y limita la velocidad para todos los caminos (puede afectar a la ruta)";
 "default" = "Predefinido";
 
@@ -2503,11 +2503,11 @@
 "copy_coordinates" = "Copiar coordenadas";
 "share_geo" = "geo:";
 "toast_empty_name_error" = "Ubicación sin nombre";
-"routing_attr_allow_private_for_truck_description" = "Permitir el acceso a áreas privadas para camiones";
+"routing_attr_allow_private_for_truck_description" = "Permitir el acceso aáreas privadas para camiones.";
 "routing_attr_allow_private_for_truck_name" = "Permitir el acceso privado (camión)";
 "shared_string_start" = "Iniciar";
 "osmand_depelopment_simulate_location_section" = "Simular";
-"shared_string_stop" = "Parada";
+"shared_string_stop" = "Parar";
 "simulate_in_progress" = "En curso";
 "simulate_location_movement_speed_x3" = "x3";
 "simulate_location_track_select_descr" = "Elige la traza que será usada como origen para el desplazamiento de la ubicación.";
@@ -2598,3 +2598,11 @@
 "subscription_banner_no_free_maps_title" = "Has gastado todas las descargas gratuitas";
 "subscription_banner_free_maps_title" = "Puedes descargar %i mapas gratis.";
 "subscription_banner_osmand_pro_title" = "Obtén actualizaciones de mapas, diarias o semanales con OsmAnd Pro.";
+"compass_visible_in_rotated_mode" = "Visible al girar el mapa";
+"compass_visible_in_rotated_mode_descr" = "Se oculta cuando el Norte se encuentra arriba";
+"compass_options_description" = "Pulsa en la brújula para cambiar el modo de orientación del mapa";
+"shared_string_always_visible" = "Siempre visible";
+"shared_string_always_hidden" = "Siempre oculto";
+"shared_string_data" = "Datos";
+"shared_string_delete_all" = "Borrar todo";
+"restore_from_osmand_cloud" = "Restaurar desde la nube de OsmAnd";

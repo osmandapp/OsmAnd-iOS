@@ -13,6 +13,7 @@
 #import "OABackupHelper.h"
 #import "Reachability.h"
 #import "Localization.h"
+#import "OAColors.h"
 
 @implementation OABackupStatus
 
@@ -29,6 +30,7 @@ static OABackupStatus *ERROR;
                         warningTitle:(NSString *)warningTitle
                   warningDescription:(NSString *)warningDescription
                          actionTitle:(NSString *)actionTitle
+                           iconColor:(NSInteger)iconColor
 {
     self = [super init];
     if (self) {
@@ -38,6 +40,7 @@ static OABackupStatus *ERROR;
         _warningTitle = warningTitle;
         _warningDescription = warningDescription;
         _actionTitle = actionTitle;
+        _iconColor = iconColor;
     }
     return self;
 }
@@ -50,7 +53,8 @@ static OABackupStatus *ERROR;
                                                        statusIconName:@"ic_custom_cloud_done"
                                                       warningIconName:nil warningTitle:nil
                                                    warningDescription:nil
-                                                          actionTitle:OALocalizedString(@"cloud_backup_now")];
+                                                          actionTitle:OALocalizedString(@"cloud_backup_now")
+                                                            iconColor:-1];
     }
     return BACKUP_COMPLETE;
 }
@@ -63,7 +67,8 @@ static OABackupStatus *ERROR;
                                                   warningIconName:@"ic_custom_alert_circle"
                                                      warningTitle:OALocalizedString(@"cloud_make_backup")
                                                warningDescription:OALocalizedString(@"cloud_make_backup_descr")
-                                                      actionTitle:OALocalizedString(@"cloud_backup_now")];
+                                                      actionTitle:OALocalizedString(@"cloud_backup_now")
+                                                        iconColor:color_support_green];
     }
     return MAKE_BACKUP;
 }
@@ -77,7 +82,8 @@ static OABackupStatus *ERROR;
                                                 warningIconName:@"ic_custom_alert"
                                                    warningTitle:OALocalizedString(@"cloud_conflicts")
                                              warningDescription:OALocalizedString(@"cloud_conflicts_descr")
-                                                    actionTitle:OALocalizedString(@"cloud_view_conflicts")];
+                                                    actionTitle:OALocalizedString(@"cloud_view_conflicts")
+                                                      iconColor:color_primary_red];
     }
     return CONFLICTS;
 }
@@ -91,7 +97,8 @@ static OABackupStatus *ERROR;
                                                              warningIconName:@"ic_custom_wifi_off"
                                                                 warningTitle:OALocalizedString(@"no_inet_connection")
                                                           warningDescription:OALocalizedString(@"osm_upload_no_internet")
-                                                                 actionTitle:OALocalizedString(@"shared_string_retry")];
+                                                                 actionTitle:OALocalizedString(@"shared_string_retry")
+                                                                   iconColor:color_osmand_orange];
     }
     return NO_INTERNET_CONNECTION;
 }
@@ -105,7 +112,8 @@ static OABackupStatus *ERROR;
                                                            warningIconName:@"ic_custom_osmand_pro_logo_colored"
                                                               warningTitle:OALocalizedString(@"backup_error_subscription_was_expired")
                                                         warningDescription:OALocalizedString(@"backup_error_subscription_was_expired_descr")
-                                                               actionTitle:OALocalizedString(@"renew_subscription")];
+                                                               actionTitle:OALocalizedString(@"renew_subscription")
+                                                                 iconColor:-1];
     }
     return SUBSCRIPTION_EXPIRED;
 }
@@ -118,7 +126,8 @@ static OABackupStatus *ERROR;
                                             warningIconName:@"ic_custom_alert"
                                                warningTitle:nil
                                          warningDescription:nil
-                                                actionTitle:OALocalizedString(@"shared_string_retry")];
+                                                actionTitle:OALocalizedString(@"shared_string_retry")
+                                                  iconColor:color_primary_red];
     }
     return ERROR;
 }

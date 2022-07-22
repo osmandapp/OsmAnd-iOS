@@ -41,7 +41,7 @@
 "transport_routes" = "Reitit";
 "transport_nearby_routes_within" = "Lähellä olevat reitit";
 "transport_nearby_routes" = "Sisältäen";
-"transport_stop" = "Pysähdys";
+"transport_stop" = "Lopeta";
 "cancel_navigation" = "Keskeytä navigointi";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Lajittele ovelta ovelle";
@@ -558,7 +558,7 @@
 
 // My Places
 "favorites" = "Suosikit";
-"tracks" = "Jäljet";
+"tracks" = "Reittini";
 "personal_category_name" = "Henkilökohtainen";
 "visible" = "Näkyvissä";
 
@@ -1037,7 +1037,7 @@
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "Yhteystiedot";
-"osm_str_name" = "Kadun nimi";
+"osm_str_name" = "Katunimi";
 "osm_building_num" = "Building number";
 "osm_phone" = "puhelin";
 "osm_website" = "Sivusto";
@@ -1289,7 +1289,7 @@
 "units_nm" = "mpk";
 "units_km_h" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "t";
+"units_hour" = "h";
 "units_min" = "min.";
 "units_sec" = "sek";
 "units_sec_short" = "s";
@@ -1313,7 +1313,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Karttaselite";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Muu";
+"help_other_header" = "Muuta";
 "help_what_is_new" = "Mitä uutta";
 "help_install_and_troubleshoot" = "Asennus ja ongelmien ratkaisu";
 "help_tech_articles" = "Tekniset artikkelit";
@@ -1554,7 +1554,7 @@
 "pedestrian" = "Jalankulkija";
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
-"plugins" = "Liitännäiset";
+"plugins" = "Lisäosat";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -2391,7 +2391,7 @@
 "purchases_feature_desc_combined_wiki" = "Tutustu Wikipedian artikkeleihin tien päällä ilman internetyhteyttä. Offline-tiedot on jaettu maittain ja ne on saatavilla kaikilla kielillä.";
 "purchases_feature_desc_osmand_cloud" = "Hanki OsmAnd Cloud tallentaaksesi kaikki OsmAnd tiedot verkkoon. Et menetä tietoja uudelleenasennuksen jälkeen. Varmuuskopioi ja palauta kaikki tiedot helposti.";
 "complete_purchase" = "Viimeistele osto";
-"shared_string_stop" = "Pysähdys";
+"shared_string_stop" = "Lopeta";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia ja Wikivoyage offline-tilassa";
 "shared_string_purchased" = "Maksettu";
 "copy_coordinates" = "Kopioi koordinaatit";
@@ -2402,3 +2402,11 @@
 "altitude_descent" = "Lasku";
 "monthly_subscription" = "Kuukausitilaus";
 "purchases_feature_desc_unlimited_map_download" = "Hanki rajoittamaton lataus kaikille maanosille ja alueille offline-kartoilla.";
+"shared_string_data" = "Data";
+"shared_string_undefined" = "Määrittelemätön";
+"on_hold" = "Pidossa";
+"shared_string_delete_all" = "Poista kaikki";
+"in_grace_period" = "Armoajalla";
+"tones" = "tonnia";
+"restore_from_osmand_cloud" = "Palauta OsmAnd Cloudista";
+"paused" = "Keskeytetty";

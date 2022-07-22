@@ -13,6 +13,8 @@
 #import "OAFileSettingsItem.h"
 #import "OrderedDictionary.h"
 
+#include <OsmAndCore/ArchiveWriter.h>
+
 @interface OANetworkWriter () <OAOnUploadFileListener>
 
 @end
@@ -30,6 +32,8 @@
     NSInteger _itemProgress;
     NSInteger _deltaProgress;
     BOOL _uploadStarted;
+    
+    NSString *_tmpDir;
 }
 
 - (instancetype)initWithListener:(id<OAOnUploadItemListener>)listener
@@ -38,14 +42,21 @@
     if (self) {
         _listener = listener;
         _backupHelper = OABackupHelper.sharedInstance;
+        _tmpDir = [NSTemporaryDirectory() stringByAppendingPathComponent:@"backup_upload"];
+        [NSFileManager.defaultManager createDirectoryAtPath:_tmpDir withIntermediateDirectories:NO attributes:nil error:nil];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [NSFileManager.defaultManager removeItemAtPath:_tmpDir error:nil];
 }
 
 - (void)write:(OASettingsItem *)item
 {
     NSString *error = nil;
-    NSTimeInterval uploadTime = [NSDate date].timeIntervalSince1970 * 1000;
+    NSTimeInterval uploadTime = round([NSDate date].timeIntervalSince1970 * 1000);
     NSString *fileName = [OABackupHelper getItemFileName:item];
     OASettingsItemWriter *itemWriter = item.getWriter;
     if (itemWriter != nil)
@@ -102,11 +113,18 @@
         {
             NSError *error = nil;
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:0 error:&error];
-            if (!error)
+            NSString *path = [_tmpDir stringByAppendingPathComponent:fileName];
+            [jsonData writeToFile:path atomically:NO];
+            BOOL ok = YES;
+            QString filePath = QString::fromNSString([path stringByAppendingPathExtension:@"gz"]);
+            OsmAnd::ArchiveWriter archiveWriter;
+            archiveWriter.createArchive(&ok, filePath, {QString::fromNSString(path)}, QString::fromNSString(_tmpDir), true);
+            
+            if (!error && ok)
             {
                 _item = item;
                 _isDirListener = NO;
-                return [_backupHelper uploadFile:fileName type:[OASettingsItemType typeName:item.type] data:jsonData uploadTime:uploadTime listener:self];
+                return [_backupHelper uploadFile:fileName type:[OASettingsItemType typeName:item.type] data:[NSData dataWithContentsOfFile:filePath.toNSString() options:NSDataReadingMappedAlways error:NULL] uploadTime:uploadTime listener:self];
             }
         }
         return nil;
@@ -131,18 +149,24 @@
         NSData *data = [[NSData alloc] init];
         if (![self shouldUseEmptyWriter:itemWriter fileName:fileName])
         {
-            if ([itemWriter.item isKindOfClass:OAFileSettingsItem.class])
-            {
-                NSString *path = ((OAFileSettingsItem *) itemWriter.item).filePath;
-                if([[NSFileManager defaultManager] fileExistsAtPath:path])
-                    data = [[NSFileManager defaultManager] contentsAtPath:path];
-                else
-                    NSLog(@"File to upload does not exist");
-            }
+            OASettingsItem *item = itemWriter.item;
+            NSString *fileName = item.fileName;
+            if ([fileName hasSuffix:@"WorldMiniBasemap.obf"])
+                return nil;
+            if (!fileName || fileName.length == 0)
+                fileName = item.defaultFileName;
+            NSString *path = [_tmpDir stringByAppendingPathComponent:fileName];
+            [NSFileManager.defaultManager removeItemAtPath:path error:nil];
+            NSError *error = nil;
+            [itemWriter writeToFile:path error:&error];
+            BOOL ok = YES;
+            QString filePath = QString::fromNSString([_tmpDir stringByAppendingPathComponent:[path.lastPathComponent stringByAppendingPathExtension:@"gz"]]);
+            OsmAnd::ArchiveWriter archiveWriter;
+            archiveWriter.createArchive(&ok, filePath, {QString::fromNSString(path)}, QString::fromNSString(_tmpDir), true);
+            if (ok)
+                data = [NSData dataWithContentsOfFile:filePath.toNSString() options:NSDataReadingMappedAlways error:NULL];
         }
         
-        
-//        StreamWriter streamWriter = getStreamWriter(itemWriter, fileName);
         return [_backupHelper uploadFile:fileName type:type data:data uploadTime:uploadTime listener:self];
     }
 }

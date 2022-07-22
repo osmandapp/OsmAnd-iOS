@@ -27,5 +27,6 @@
 @property (nonatomic, readonly) NSString *warningTitle;
 @property (nonatomic, readonly) NSString *warningDescription;
 @property (nonatomic, readonly) NSString *actionTitle;
+@property (nonatomic, readonly) NSInteger iconColor;
 
 @end

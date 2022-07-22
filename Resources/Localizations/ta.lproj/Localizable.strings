@@ -786,7 +786,7 @@
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
-"sett_show" = "காண்பி";
+"sett_show" = "காட்டு";
 "sett_notshow" = "Don't show";
 "sett_deg180" = "Degrees 180";
 "sett_deg360" = "Degrees 360";
@@ -1543,7 +1543,7 @@
 "units_km_h" = "கிமீ / மணி";
 "units_mph" = "மைல்";
 
-"units_hour" = "மணி";
+"units_hour" = "மணிநேரம்";
 "units_min" = "மணிதுளி";
 "units_sec" = "sec";
 "units_sec_short" = "s";
@@ -1728,7 +1728,7 @@
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
-"product_title_wiki" = "விக்கிபீடியா";
+"product_title_wiki" = "விக்கிப்பீடியா";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "shared_string_all_languages" = "All languages";
@@ -1767,7 +1767,7 @@
 "res_installing" = "Installing…";
 "res_roads" = "Roads";
 "res_srtm" = "\"எல்லைகோடு  \"";
-"res_wiki" = "விக்கிபீடியா";
+"res_wiki" = "விக்கிப்பீடியா";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Slope";
 "res_standard" = "நிலையான வரைபடம்";
@@ -2496,3 +2496,4 @@
 "shared_string_stop" = "நிறுத்து";
 "shared_string_start" = "இயக்கு";
 "toast_empty_name_error" = "பெயரிடப்படாத இடம்";
+"shared_string_delete_all" = "அனைத்தையும் நீக்கு";

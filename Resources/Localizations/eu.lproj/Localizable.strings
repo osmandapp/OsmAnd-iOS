@@ -664,9 +664,9 @@
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
-"m_style_car" = "Gidatzea";
+"m_style_car" = "Gidatzen";
 "m_style_walk" = "Oinezkoa";
-"m_style_bicycle" = "Txirringa";
+"m_style_bicycle" = "Bizikleta";
 "m_style_pulic_transport" = "Garraio publikoa";
 "map_settings_map" = "Mapa";
 "layer_amenity_label" = "Interesguneen gainazalaren etiketak";
@@ -1002,7 +1002,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "Deskargatu";
-"nothanks" = "Ez, milesker";
+"nothanks" = "Ez, eskerrik asko";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -1215,7 +1215,7 @@
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "Kontaktu informazioa";
-"osm_str_name" = "Kale izena";
+"osm_str_name" = "Kalearen izena";
 "osm_building_num" = "Building number";
 "osm_phone" = "Telefonoa";
 "osm_website" = "Webgunea";
@@ -1281,7 +1281,7 @@
 "shared_string_reload" = "Birkargatu";
 "shared_string_show_more" = "Erakutsi gehiago";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
-"shared_string_filter" = "Iragazi";
+"shared_string_filter" = "Iragazkia";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
@@ -1451,7 +1451,7 @@
 "modify_edit_short" = "Eraldatu OSM aldaketa";
 "open_osm_note" = "Ireki OSM oharra";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Bidali";
+"osm_alert_title" = "Berretsi";
 "osm_alert_message" = "Mezua";
 "osm_alert_button_ok" = "Sortu oharra";
 "modify_poi" = "Modify the POI information";
@@ -1500,7 +1500,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Maparen legenda";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Bestelakoa";
+"help_other_header" = "Beste bat";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Instalazioa eta arazoen konponketa";
 "help_tech_articles" = "Artikulu teknikoak";
@@ -2270,7 +2270,7 @@
 
 //Icon categories
 "amenity" = "Prestazioa";
-"emergency" = "Larrialdiak";
+"emergency" = "Larrialdia";
 "service" = "Zerbitzua";
 "special" = "Berezia";
 "sport" = "Kirola";
@@ -2435,3 +2435,10 @@
 "nautical_depth" = "Sakonera nautikoa";
 "copy_coordinates" = "Kopiatu koordenatuak";
 "product_title_development" = "OsmAnd garapena";
+"restore_from_osmand_cloud" = "Leheneratu OsmAnd hodeitik";
+"on_hold" = "Zain";
+"shared_string_delete_all" = "Dena ezabatu";
+"paused" = "Pausatua";
+"in_grace_period" = "Grazia aldian";
+"shared_string_undefined" = "Indefinitua";
+"shared_string_data" = "Datuak";

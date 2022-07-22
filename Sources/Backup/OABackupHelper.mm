@@ -33,7 +33,7 @@
 
 #define kUpdateIdOperation @"Update order id"
 
-static NSString *INFO_EXT = @".info";
+static NSString *INFO_EXT = @"info";
 
 static NSString *SERVER_URL = @"https://osmand.net";
 
@@ -257,7 +257,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 - (void) updateBackupUploadTime
 {
-    [_settings.backupLastUploadedTime set:[NSDate.date timeIntervalSince1970] * 1000 + 1];
+    [_settings.backupLastUploadedTime set:[NSDate.date timeIntervalSince1970]];
 }
 
 - (void) logout

@@ -37,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL) isRecordedVoiceFile;
 
+- (NSString *) toString;
+
 @end
 
 NS_ASSUME_NONNULL_END

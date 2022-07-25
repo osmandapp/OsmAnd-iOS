@@ -18,6 +18,7 @@
 #import "OAExportBackupTask.h"
 #import "OAConcurrentCollections.h"
 #import "OARemoteFile.h"
+#import "OAOperationLog.h"
 
 #define MAX_LIGHT_ITEM_SIZE 10 * 1024 * 1024
 
@@ -112,8 +113,8 @@
 
 - (void) writeItems:(OAAbstractWriter *)writer
 {
-//    OperationLog log = new OperationLog("writeItems", true);
-//    log.startOperation();
+    OAOperationLog *log = [[OAOperationLog alloc] initWithOperationName:@"writeItems" debug:BACKUP_DEBUG_LOGS];
+    [log startOperation];
     
     __block NSString *subscriptionError = nil;
     [_backupHelper checkSubscriptions:^(NSInteger status, NSString *message, NSString *error) {
@@ -161,7 +162,7 @@
 //            throw new IOException(t.getMessage(), t);
 //        }
     }
-//    log.finishOperation();
+    [log finishOperation];
 }
 
 - (void) exportItems

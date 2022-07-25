@@ -12,6 +12,7 @@
 #import "OABackupHelper.h"
 #import "OARemoteFile.h"
 #import "OABackupError.h"
+#import "OAOperationLog.h"
 
 static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
 
@@ -49,10 +50,8 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
 
 - (void)main
 {
-    //    OperationLog operationLog = new OperationLog("deleteFile", BackupHelper.DEBUG);
-    __block BOOL isFinished = NO;
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    [OANetworkUtilities sendRequest:_request onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"deleteFile" debug:BACKUP_DEBUG_LOGS];
+    [OANetworkUtilities sendRequest:_request async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (((NSHTTPURLResponse *)response).statusCode == 200 && !error && !_byVersion)
         {
             if (data)
@@ -66,12 +65,8 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
             else
                 _error = [NSString stringWithFormat:@"Delete file request error code: %ld", ((NSHTTPURLResponse *)response).statusCode];
         }
-        dispatch_semaphore_signal(semaphore);
-        isFinished = YES;
     }];
-    if (!isFinished)
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-//                operationLog.finishOperation(remoteFile.getName());
+    [operationLog finishOperation:_remoteFile.name];
 }
 
 @end
@@ -81,6 +76,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
     BOOL _byVersion;
     __weak id<OAOnDeleteFilesListener> _listener;
     NSArray<OADeleteRemoteFileTask *> *_tasks;
+    NSArray<OADeleteRemoteFileTask *> *_allTasks;
     NSMutableSet *_itemsProgress;
     OABackupHelper *_backupHelper;
     NSOperationQueue *_executor;
@@ -146,6 +142,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
         [t addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:nil];
         [tasks addObject:t];
     }
+    _allTasks = tasks;
     _executor = [[NSOperationQueue alloc] init];
     [_executor addObserver:self forKeyPath:@"operations" options:0 context:&kQueueOperationsChanged];
     [_executor addOperations:tasks waitUntilFinished:YES];
@@ -153,19 +150,16 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
-//    dispatch_async(dispatch_get_main_queue(), ^{
-        if (object == _executor && [keyPath isEqualToString:@"operations"] && context == &kQueueOperationsChanged) {
-            if ([_executor.operations count] == 0)
-            {
-                // TODO: see if this returns same things as in android
-                _tasks = _executor.operations;
-            }
-        }
-        else if ([keyPath isEqualToString:@"isFinished"])
+    if (object == _executor && [keyPath isEqualToString:@"operations"] && context == &kQueueOperationsChanged) {
+        if ([_executor.operations count] == 0)
         {
-            [self publishProgress:object];
+            _tasks = _allTasks;
         }
-//    });
+    }
+    else if ([keyPath isEqualToString:@"isFinished"])
+    {
+        [self publishProgress:object];
+    }
 }
 
 - (void) onPreExecute

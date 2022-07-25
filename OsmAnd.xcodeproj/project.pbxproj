@@ -3069,6 +3069,7 @@
 		DACBB99D25D6979900378C47 /* btn_map_current_location_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACBB99A25D6979800378C47 /* btn_map_current_location_day@2x.png */; };
 		DACBB99F25D6979900378C47 /* btn_map_current_location_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACBB99C25D6979800378C47 /* btn_map_current_location_day@3x.png */; };
 		DACF784427E3441700A8A218 /* OABackupHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACF784327E3441600A8A218 /* OABackupHelper.mm */; };
+		DAD5B4CF288E80EC009CF611 /* OAOperationLog.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD5B4CE288E80EC009CF611 /* OAOperationLog.m */; };
 		DADC09DE272957EC00ADBB3B /* libqtpcre2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA578C4B266263D2007A086E /* libqtpcre2.a */; };
 		DADC09E0272957FB00ADBB3B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADC09DF272957FB00ADBB3B /* UIKit.framework */; };
 		DADC09E22729581000ADBB3B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DADC09E12729580F00ADBB3B /* Foundation.framework */; };
@@ -7329,6 +7330,8 @@
 		DACBB99C25D6979800378C47 /* btn_map_current_location_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_current_location_day@3x.png"; path = "Resources/Icons/btn_map_current_location_day@3x.png"; sourceTree = "<group>"; };
 		DACF784227E3441600A8A218 /* OABackupHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupHelper.h; sourceTree = "<group>"; };
 		DACF784327E3441600A8A218 /* OABackupHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABackupHelper.mm; sourceTree = "<group>"; };
+		DAD5B4CD288E80EC009CF611 /* OAOperationLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOperationLog.h; sourceTree = "<group>"; };
+		DAD5B4CE288E80EC009CF611 /* OAOperationLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOperationLog.m; sourceTree = "<group>"; };
 		DADC09DF272957FB00ADBB3B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		DADC09E12729580F00ADBB3B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		DADC09E32729581700ADBB3B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
@@ -12755,6 +12758,8 @@
 				CA4EDCCFE536915C4E41B124 /* OAShareMenuActivity.h */,
 				DA346372287C157300C18214 /* OAConcurrentCollections.h */,
 				DA346373287C157300C18214 /* OAConcurrentCollections.m */,
+				DAD5B4CD288E80EC009CF611 /* OAOperationLog.h */,
+				DAD5B4CE288E80EC009CF611 /* OAOperationLog.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -16278,6 +16283,7 @@
 				DA5A847B26C563A900F274C7 /* OATurnDrawable.mm in Sources */,
 				DA5A82E826C563A800F274C7 /* OAIconButtonCell.m in Sources */,
 				DA5A816F26C563A700F274C7 /* OAAppDelegate.mm in Sources */,
+				DAD5B4CF288E80EC009CF611 /* OAOperationLog.m in Sources */,
 				DA5A853826C563A900F274C7 /* OAFavoritesHelper.mm in Sources */,
 				DA5A845426C563A900F274C7 /* OARouteLayer.mm in Sources */,
 				DA5A818B26C563A700F274C7 /* OAShowHideLocalOSMChanges.m in Sources */,

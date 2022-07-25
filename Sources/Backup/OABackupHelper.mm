@@ -25,6 +25,7 @@
 #import "OABackupInfoGenerationTask.h"
 #import "OADeleteFilesCommand.h"
 #import "OAWebClient.h"
+#import "OAOperationLog.h"
 
 #import "OARegisterUserCommand.h"
 #import "OARegisterDeviceCommand.h"
@@ -311,7 +312,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 - (void) checkSubscriptions:(void(^)(NSInteger status, NSString *message, NSString *error))listener
 {
     BOOL subscriptionActive = NO;
-//        OperationLog operationLog = new OperationLog("checkSubscriptions", DEBUG);
+    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"checkSubscriptions" debug:BACKUP_DEBUG_LOGS];
     NSString *error = @"";
     try
     {
@@ -321,7 +322,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     {
         error = e.reason;
     }
-//        operationLog.finishOperation(subscriptionActive + " " + error);
+    [operationLog finishOperation:[NSString stringWithFormat:@"%@ %@", subscriptionActive ? @"true" : @"false", error]];
     if (subscriptionActive)
     {
         if (listener)
@@ -356,7 +357,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     NSString *iosId = [self getIosId];
     if (iosId.length > 0)
         params[@"deviceid"] = iosId;
-//    OperationLog operationLog = new OperationLog("updateOrderId", DEBUG);
+    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"updateOrderId" debug:BACKUP_DEBUG_LOGS];
     [OANetworkUtilities sendRequestWithUrl:UPDATE_ORDER_ID_URL params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         int status;
         NSString *message;
@@ -399,14 +400,12 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         }
         if (listener)
             listener(status, message, err);
-//        operationLog.finishOperation(status + " " + message);
+        [operationLog finishOperation:[NSString stringWithFormat:@"%d %@", status, message]];
     }];
 }
 
 - (void) collectLocalFiles:(id<OAOnCollectLocalFilesListener>)listener
 {
-//    OperationLog operationLog = new OperationLog("collectLocalFiles", DEBUG);
-//    operationLog.startOperation();
     OACollectLocalFilesTask *task = [[OACollectLocalFilesTask alloc] initWithListener:listener];
     [task execute];
 }
@@ -419,9 +418,9 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     params[@"deviceid"] = self.getDeviceId;
     params[@"accessToken"] = self.getAccessToken;
     params[@"allVersions"] = @"true";
-//    final OperationLog operationLog = new OperationLog("downloadFileList", DEBUG);
-//    operationLog.startOperation();
-    [OANetworkUtilities sendRequestWithUrl:LIST_FILES_URL params:params post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"downloadFileList" debug:BACKUP_DEBUG_LOGS];
+    [operationLog startOperation];
+    [OANetworkUtilities sendRequestWithUrl:LIST_FILES_URL params:params post:NO async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         int status;
         NSString *message;
         NSString *result = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"";
@@ -463,7 +462,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         }
         if (onComplete)
             onComplete(status, message, remoteFiles);
-//        operationLog.finishOperation(status + " " + message);
+        [operationLog finishOperation:[NSString stringWithFormat:@"%d %@", status, message]];
     }];
 }
 
@@ -473,7 +472,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 {
     [self checkRegistered];
     
-//    OperationLog operationLog = new OperationLog("downloadFile " + file.getName(), DEBUG);
+    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"downloadFile" debug:BACKUP_DEBUG_LOGS];
     NSString *error;
     NSString *type = remoteFile.type;
     NSString *fileName = remoteFile.name;
@@ -535,7 +534,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     
     if (listener)
         [listener onFileDownloadDone:type fileName:fileName error:error];
-    //    operationLog.finishOperation();
+    [operationLog finishOperation];
     return error;
 }
 
@@ -544,10 +543,6 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
          deletedRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)deletedRemoteFiles
                  onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete
 {
-    
-//    OperationLog operationLog = new OperationLog("generateBackupInfo", DEBUG, 200);
-//    operationLog.startOperation();
-    
     OABackupInfoGenerationTask *task = [[OABackupInfoGenerationTask alloc] initWithLocalFiles:localFiles uniqueRemoteFiles:uniqueRemoteFiles deletedRemoteFiles:deletedRemoteFiles onComplete:onComplete];
     [_executor addOperation:task];
 }
@@ -599,16 +594,14 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     NSMutableDictionary<NSString *, NSString *> *headers = [NSMutableDictionary dictionary];
     headers[@"Accept-Encoding"] = @"deflate, gzip";
     
-//    OperationLog operationLog = new OperationLog("uploadFile", DEBUG);
-//    operationLog.startOperation(type + " " + fileName);
+    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"uploadFile" debug:BACKUP_DEBUG_LOGS];
+    [operationLog startOperation:[NSString stringWithFormat:@"%@ %@", type, fileName]];
     __block NSString *error = nil;
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
         if (((NSHTTPURLResponse *)response).statusCode != 200)
         {
             error = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
         }
-        dispatch_semaphore_signal(semaphore);
     }];
 //    NetworkResult networkResult = AndroidNetworkUtils.uploadFile(UPLOAD_FILE_URL, streamWriter, fileName, true, params, headers,
 //                                                                 new AbstractProgress() {
@@ -645,7 +638,6 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 //            return super.isInterrupted();
 //        }
 //    });
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     if (error == nil)
     {
         [self updateFileUploadTime:type fileName:fileName uploadTime:uploadTime];
@@ -654,7 +646,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     {
         [listener onFileUploadDone:type fileName:fileName uploadTime:uploadTime error:error];
     }
-//    operationLog.finishOperation(type + " " + fileName + (error != null ? " Error: " + new BackupError(error) : " OK"));
+    [operationLog finishOperation:[NSString stringWithFormat:@"%@ %@ %@", type, fileName, (error ? [NSString stringWithFormat:@"Error: %@", [[OABackupError alloc] initWithError:error].getLocalizedError] : @"OK")]];
     return error;
 }
 
@@ -680,18 +672,16 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 - (BOOL) isObfMapExistsOnServer:(NSString *)name
 {
-    __block BOOL isFinished = NO;
     __block BOOL exists = NO;
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"name"] = name;
     params[@"type"] = @"file";
     
-//    OperationLog operationLog = new OperationLog("isObfMapExistsOnServer", DEBUG);
-//    operationLog.startOperation(name);
+    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"isObfMapExistsOnServer" debug:BACKUP_TYPE_PREFIX];
+    [operationLog startOperation:name];
     
-    [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/userdata/check-file-on-server" params:params post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/userdata/check-file-on-server" params:params post:NO async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         int status;
         NSString *message;
         NSString *result = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"";
@@ -723,12 +713,8 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             status = STATUS_EMPTY_RESPONSE_ERROR;
             message = @"Check obf map on server error: empty response";
         }
-        dispatch_semaphore_signal(semaphore);
-        isFinished = YES;
-//        operationLog.finishOperation("(" + status + "): " + message);
+        [operationLog finishOperation:[NSString stringWithFormat:@"(%d): %@", status, message]];
     }];
-    if (!isFinished)
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     return exists;
 }
 

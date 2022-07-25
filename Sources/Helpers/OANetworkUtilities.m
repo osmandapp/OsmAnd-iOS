@@ -17,13 +17,19 @@
 
 @implementation OANetworkUtilities
 
-+ (void) sendRequest:(OANetworkRequest *)request onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
++ (void) sendRequest:(OANetworkRequest *)request async:(BOOL)async onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
     [self sendRequestWithUrl:request.url params:request.params post:request.post onComplete:onComplete];
 }
 
 + (void) sendRequestWithUrl:(NSString *)url params:(NSDictionary<NSString *, NSString *> *)params post:(BOOL)post onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
+    [self sendRequestWithUrl:url params:params post:post async:YES onComplete:onComplete];
+}
+
++ (void) sendRequestWithUrl:(NSString *)url params:(NSDictionary<NSString *, NSString *> *)params post:(BOOL)post async:(BOOL)async onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
+{
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     NSURL *urlObj;
     NSMutableString *paramsStr = nil;
     NSString *paramsSeparator = [url containsString:@"?"] ? @"&" : @"?";
@@ -63,17 +69,22 @@
         [request setHTTPMethod:@"GET"];
     }
     [request setTimeoutInterval:100];
-    
+    __block BOOL hasFinished = NO;
     NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        hasFinished = YES;
         if (onComplete)
             onComplete(data, response, error);
+        if (!async)
+            dispatch_semaphore_signal(semaphore);
     }];
-    
     [downloadTask resume];
+    if (!hasFinished && !async)
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
 
 + (void) uploadFile:(NSString *)url fileName:(NSString *)fileName params:(NSDictionary<NSString *, NSString *> *)params headers:(NSDictionary<NSString *, NSString *> *)headers data:(NSData *)data gzip:(BOOL)gzip onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     NSURL *urlObj;
     NSMutableString *paramsStr = nil;
     NSString *paramsSeparator = [url containsString:@"?"] ? @"&" : @"?";
@@ -118,14 +129,19 @@
     [postData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", BOUNDARY] dataUsingEncoding:NSUTF8StringEncoding]];
     [request setHTTPBody:postData];
     
+    __block BOOL hasFinished = NO;
     NSURLSessionDataTask *uploadTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        hasFinished = YES;
         if (onComplete)
             onComplete(data, response, error);
+        dispatch_semaphore_signal(semaphore);
     }];
     // TODO: add progress
 //    uploadTask.progress addObserver: forKeyPath: options: context:
     
     [uploadTask resume];
+    if (!hasFinished)
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
 
 

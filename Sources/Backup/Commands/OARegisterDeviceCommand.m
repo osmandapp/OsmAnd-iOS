@@ -12,6 +12,7 @@
 #import "OABackupError.h"
 #import "OANetworkUtilities.h"
 #import "OAAppSettings.h"
+#import "OAOperationLog.h"
 
 #define kUserOperation @"Register device"
 
@@ -36,6 +37,7 @@
 
 - (void) main
 {
+    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"registerDevice" debug:BACKUP_DEBUG_LOGS];
     OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
     if (_token.length == 0)
         [backupHelper updateOrderId:nil];
@@ -95,7 +97,7 @@
             status = STATUS_EMPTY_RESPONSE_ERROR;
         }
         [self onProgressUpdate:status message:message error:backupError];
-//        operationLog.finishOperation(status + " " + message);
+        [operationLog finishOperation:[NSString stringWithFormat:@"%d %@", status, message]];
     }];
 }
 

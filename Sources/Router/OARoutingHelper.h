@@ -112,8 +112,6 @@ struct RouteSegmentResult;
 
 - (OAGPXDocument *) generateGPXFileWithRoute:(NSString *)name;
 
-+ (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards;
-
 + (void) applyApplicationSettings:(OARouteCalculationParams *) params  appMode:(OAApplicationMode *) mode;
 
 + (NSInteger) getGpsTolerance;

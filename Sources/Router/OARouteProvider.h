@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/plus/routing/RouteProvider.java
-//  git revision 355d6bb3096f532d1398eaaebac1fcfbd4421b83
+//  git revision 0b1f9e53eb0b705f8bb5786dac2f95c221efe96d
 //
 //  Partially syncronized
 //  To sync: GPXRouteParams, GPXRouteParamsBuilder, parseOsmAndGPXRoute()
@@ -65,8 +65,9 @@ struct RouteSegmentResult;
 @property (nonatomic) BOOL calculateOsmAndRoute;
 @property (nonatomic) BOOL passWholeRoute;
 @property (nonatomic) BOOL calculateOsmAndRouteParts;
+@property (nonatomic) BOOL calculatedRouteTimeSpeed;
 @property (nonatomic) BOOL useIntermediatePointsRTE;
-@property (nonatomic) BOOL connectRoutePoints;
+@property (nonatomic) BOOL connectPointsStraightly;
 @property (nonatomic) BOOL reverse;
 @property (nonatomic) NSArray<id<OALocationPoint>> *wpt;
 @property (nonatomic, readonly) NSArray<CLLocation *> *segmentEndPoints;
@@ -87,7 +88,7 @@ struct RouteSegmentResult;
 @property (nonatomic) BOOL passWholeRoute;
 @property (nonatomic) BOOL calculateOsmAndRouteParts;
 @property (nonatomic) BOOL useIntermediatePointsRTE;
-@property (nonatomic) BOOL connectRoutePoints;
+@property (nonatomic) BOOL connectPointsStraightly;
 @property (nonatomic) NSInteger selectedSegment;
 
 - (instancetype)initWithDoc:(OAGPXDocument *)document;
@@ -99,6 +100,9 @@ struct RouteSegmentResult;
 @end
 
 @interface OARouteProvider : NSObject
+
++ (CLLocation *) createLocation:(OAWptPt *)pt;
++ (NSArray<CLLocation *> *) locationsFromWpts:(NSArray<OAWptPt *> *)wpts;
 
 - (OARouteCalculationResult *) calculateRouteImpl:(OARouteCalculationParams *)params;
 - (OARouteCalculationResult *) recalculatePartOfflineRoute:(OARouteCalculationResult *)res params:(OARouteCalculationParams *)params;

@@ -1525,7 +1525,7 @@
         try
         {
             OARouteCalculationResult *res = nil;
-            BOOL calcGPXRoute = params.gpxRoute && (params.gpxRoute.points.count > 0|| (params.gpxRoute.reverse && params.gpxRoute.routePoints.count > 0));
+            BOOL calcGPXRoute = params.gpxRoute && (params.gpxRoute.points.count > 0 || (params.gpxRoute.reverse && params.gpxRoute.routePoints.count > 0));
             if (calcGPXRoute && !params.gpxRoute.calculateOsmAndRoute)
             {
                 res = [self calculateGpxRoute:params];
@@ -1538,49 +1538,52 @@
                 }
                 else
                 {
-//                    OAMissingMapsHelper *missingMapsHelper = [[OAMissingMapsHelper alloc] initWithParams:params];
-//                    NSArray<CLLocation *> *points = [missingMapsHelper getStartFinishIntermediatePoints];
-//                    NSArray<OAWorldRegion *> *missingMaps = [missingMapsHelper getMissingMaps:points];
-//                    NSArray<CLLocation *> *pathPoints = [missingMapsHelper getDistributedPathPoints:points];
-//                    if (missingMaps && missingMaps.count > 0)
-//                    {
-//                        res = [[OARouteCalculationResult alloc] initWithErrorMessage:@"Additional maps available"];
-//                        res.missingMaps = [missingMapsHelper getMissingMaps:pathPoints];
-//                    }
-//                    else
-//                    {
-//                        if (![missingMapsHelper isAnyPointOnWater:pathPoints])
-//                        {
-//                            // TODO: how to store OAWorldRegion in cpp calculationProgress class?
-//                            // params.calculationProgress.missingMaps = missingMapsHelper.getMissingMaps(pathPoints);
-//                        }
+                    // TODO: Implement MissingMapsHelper
+                    //OAMissingMapsHelper *missingMapsHelper = [[OAMissingMapsHelper alloc] initWithParams:params];
+                    //NSArray<CLLocation *> *points = [missingMapsHelper getStartFinishIntermediatePoints];
+                    //NSArray<OAWorldRegion *> *missingMaps = [missingMapsHelper getMissingMaps:points];
+                    //NSArray<CLLocation *> *pathPoints = [missingMapsHelper getDistributedPathPoints:points];
+                    //if (missingMaps && missingMaps.count > 0)
+                    //{
+                    //    res = [[OARouteCalculationResult alloc] initWithErrorMessage:@"Additional maps available"];
+                    //    res.missingMaps = [missingMapsHelper getMissingMaps:pathPoints];
+                    //}
+                    //else
+                    //{
+                    //    if (![missingMapsHelper isAnyPointOnWater:pathPoints])
+                    //    {
+                    // TODO: how to store OAWorldRegion in cpp calculationProgress class?
+                    //         params.calculationProgress.missingMaps = missingMapsHelper.getMissingMaps(pathPoints);
+                    //    }
+                    
                         res = [self findVectorMapsRoute:params calcGPXRoute:calcGPXRoute];
-//                    }
+                    
+                    //}
                 }
             }
-//            else if (params.mode.getRouterService == BROUTER)
-//            {
-//                //res = findBROUTERRoute(params);
-//            }
-//            else if (params.mode.getRouteService() == RouteService.ONLINE)
-//            {
-//                boolean useFallbackRouting = false;
-//                try {
-//                    res = findOnlineRoute(params);
-//                } catch (IOException | JSONException e) {
-//                    res = new RouteCalculationResult(null);
-//                    params.initialCalculation = false;
-//                    useFallbackRouting = true;
-//                }
-//                if (useFallbackRouting || !res.isCalculated()) {
-//                    OnlineRoutingHelper helper = params.ctx.getOnlineRoutingHelper();
-//                    String engineKey = params.mode.getRoutingProfile();
-//                    OnlineRoutingEngine engine = helper.getEngineByKey(engineKey);
-//                    if (engine != null && engine.useRoutingFallback()) {
-//                        res = findVectorMapsRoute(params, calcGPXRoute);
-//                    }
-//                }
-//            }
+            //else if (params.mode.getRouterService == BROUTER)
+            //{
+            //    res = findBROUTERRoute(params);
+            //}
+            //else if (params.mode.getRouteService() == RouteService.ONLINE)
+            //{
+            //    boolean useFallbackRouting = false;
+            //    try {
+            //        res = findOnlineRoute(params);
+            //    } catch (IOException | JSONException e) {
+            //        res = new RouteCalculationResult(null);
+            //        params.initialCalculation = false;
+            //        useFallbackRouting = true;
+            //    }
+            //    if (useFallbackRouting || !res.isCalculated()) {
+            //        OnlineRoutingHelper helper = params.ctx.getOnlineRoutingHelper();
+            //        String engineKey = params.mode.getRoutingProfile();
+            //        OnlineRoutingEngine engine = helper.getEngineByKey(engineKey);
+            //        if (engine != null && engine.useRoutingFallback()) {
+            //            res = findVectorMapsRoute(params, calcGPXRoute);
+            //        }
+            //    }
+            //}
             else if (params.mode.getRouterService == STRAIGHT || params.mode.getRouterService == DIRECT_TO)
             {
                 res = [self findStraightRoute:params];

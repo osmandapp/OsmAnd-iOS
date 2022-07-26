@@ -18,6 +18,7 @@
 #import "OAFileSettingsItem.h"
 #import "OASettingsImporter.h"
 #import "OAGpxSettingsItem.h"
+#import "OAOperationLog.h"
 
 @interface OAItemFileDownloadTask : NSOperation
 
@@ -159,9 +160,8 @@
 {
     OACollectItemsResult *result = [[OACollectItemsResult alloc] init];
     __block NSString *error = nil;
-////    OperationLog operationLog = new OperationLog("collectRemoteItems", BackupHelper.DEBUG);
-////    operationLog.startOperation();
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"collectRemoteItems" debug:BACKUP_DEBUG_LOGS];
+    [operationLog startOperation];
     @try {
         [_backupHelper downloadFileList:^(NSInteger status, NSString * _Nonnull message, NSArray<OARemoteFile *> * _Nonnull remoteFiles) {
             if (status == STATUS_SUCCESS)
@@ -171,21 +171,17 @@
                     result.items = [self getRemoteItems:remoteFiles readItems:readItems];
                 } @catch (NSException *e) {
                     error = e.reason;
-                    dispatch_semaphore_signal(semaphore);
                 }
             }
             else
             {
                 error = message;
             }
-            dispatch_semaphore_signal(semaphore);
         }];
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     } @catch (NSException *e) {
         NSLog(@"Failed to collect items for backup");
-        dispatch_semaphore_signal(semaphore);
     }
-////    operationLog.finishOperation();
+    [operationLog finishOperation];
     if (error.length > 0)
         @throw [NSException exceptionWithName:@"IllegalArgumentException" reason:error userInfo:nil];
     
@@ -200,8 +196,8 @@
     NSArray<OARemoteFile *> *remoteFiles = [_backupHelper.backup getRemoteFiles:EOARemoteFilesTypeUnique].allValues;
     if (remoteFiles.count == 0)
         @throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"No remote files" userInfo:nil];
-//    OperationLog operationLog = new OperationLog("importItems", BackupHelper.DEBUG);
-//    operationLog.startOperation();
+    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"importItems" debug:BACKUP_DEBUG_LOGS];
+    [operationLog startOperation];
     NSMutableArray<OAItemFileImportTask *> *tasks = [NSMutableArray array];
     NSMutableDictionary<OARemoteFile *, OASettingsItem *> *remoteFileItems = [NSMutableDictionary dictionary];
     for (OARemoteFile *remoteFile in remoteFiles)
@@ -228,7 +224,7 @@
         obj.localModifiedTime = key.clienttimems;
     }];
 
-//    operationLog.finishOperation();
+    [operationLog finishOperation];
 }
 
 - (void) importItemFile:(OARemoteFile *)remoteFile item:(OASettingsItem *)item forceReadData:(BOOL)forceReadData
@@ -272,8 +268,8 @@
         return @[];
     NSMutableArray<OASettingsItem *> *items = [NSMutableArray array];
     @try {
-//        OperationLog operationLog = new OperationLog("getRemoteItems", BackupHelper.DEBUG);
-//        operationLog.startOperation();
+        OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"getRemoteItems" debug:BACKUP_DEBUG_LOGS];
+        [operationLog startOperation];
         NSMutableDictionary *json = [NSMutableDictionary dictionary];
         NSMutableArray *itemsJson = [NSMutableArray array];
         json[@"items"] = itemsJson;
@@ -294,7 +290,7 @@
                 [uniqueRemoteFiles addObject:rf];
             }
         }
-//        operationLog.log("build uniqueRemoteFiles");
+        [operationLog log:@"build uniqueRemoteFiles"];
 
         NSDictionary<NSString *, OAUploadedFileInfo *> *infoMap = [OABackupDbHelper.sharedDatabase getUploadedFileInfoMap];
         OABackupInfo *backupInfo = _backupHelper.backup.backupInfo;
@@ -328,7 +324,7 @@
                 remoteItemFilesMap[fileName] = remoteFile;
             }
         }
-//        operationLog.log("build maps");
+        [operationLog log:@"build maps"];
         
         [remoteItemFilesMap enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull itemFileName, OARemoteFile * _Nonnull remoteFile, BOOL * _Nonnull stop) {
             BOOL hasInfo = NO;
@@ -346,25 +342,25 @@
             }
         }];
         
-//        operationLog.log("build noInfoRemoteItemFiles");
+        [operationLog log:@"build noInfoRemoteItemFiles"];
 
         if (readItems)
             [self generateItemsJsonByDictionary:itemsJson remoteInfoFiles:remoteInfoFilesMap noInfoRemoteItemFiles:noInfoRemoteItemFiles];
         else
             [self generateItemsJson:itemsJson remoteInfoFiles:remoteInfoFiles noInfoRemoteItemFiles:noInfoRemoteItemFiles];
         
-//        operationLog.log("generateItemsJson");
+        [operationLog log:@"generateItemsJson"];
 
         OASettingsItemsFactory *itemsFactory = [[OASettingsItemsFactory alloc] initWithParsedJSON:json];
         
-//        operationLog.log("create setting items");
+        [operationLog log:@"create setting items"];
         NSArray<OASettingsItem *> *settingsItemList = itemsFactory.getItems;
         if (settingsItemList.count == 0)
             return @[];
         
         [self updateFilesInfo:remoteItemFilesMap settingsItemList:settingsItemList];
         [items addObjectsFromArray:settingsItemList];
-//        operationLog.log("updateFilesInfo");
+        [operationLog log:@"updateFilesInfo"];
         
         if (readItems)
         {
@@ -393,9 +389,9 @@
             if (remoteFilesForDownload.count > 0)
                 [self downloadAndReadItemFiles:remoteFilesForRead remoteFilesForDownload:remoteFilesForDownload];
 
-//            operationLog.log("readItems");
+            [operationLog log:@"readItems"];
         }
-//        operationLog.finishOperation();
+        [operationLog finishOperation];
     }
     @catch (NSException *e)
     {
@@ -637,7 +633,7 @@
 - (void)onFileDownloadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work itemFileName:(NSString *)itemFileName
 {
     if (_listener)
-        [_listener itemExportStarted:type fileName:fileName work:(int)work];
+        [_listener itemExportStarted:type fileName:fileName work:work];
 }
 
 @end

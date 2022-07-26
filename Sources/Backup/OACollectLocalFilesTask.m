@@ -17,6 +17,7 @@
 #import "OAExportSettingsType.h"
 #import "OAAppSettings.h"
 #import "OASettingsHelper.h"
+#import "OAOperationLog.h"
 
 @implementation OACollectLocalFilesTask
 {
@@ -24,6 +25,8 @@
     NSDictionary<NSString *, OAUploadedFileInfo *> *_infos;
     
     id<OAOnCollectLocalFilesListener> _listener;
+    
+    OAOperationLog *_operationLog;
 }
 
 - (instancetype) initWithListener:(id<OAOnCollectLocalFilesListener>)listener
@@ -32,6 +35,8 @@
     if (self) {
         _dbHelper = OABackupDbHelper.sharedDatabase;
         _listener = listener;
+        _operationLog = [[OAOperationLog alloc] initWithOperationName:@"collectLocalFiles" debug:BACKUP_DEBUG_LOGS];
+        [_operationLog startOperation];
     }
     return self;
 }
@@ -39,11 +44,12 @@
 - (void) execute
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        
         NSMutableArray<OALocalFile *> *result = [NSMutableArray array];
         _infos = [_dbHelper getUploadedFileInfoMap];
         NSArray<OASettingsItem *> *localItems = [self getLocalItems];
         NSFileManager *fileManager = NSFileManager.defaultManager;
-//        operationLog.log("getLocalItems");
+        [_operationLog log:@"getLocalItems"];
         for (OASettingsItem *item in localItems)
         {
             NSString *fileName = [OABackupHelper getItemFileName:item];
@@ -87,7 +93,7 @@
                     NSMutableArray<NSString *> *dirs = [NSMutableArray array];
                     [dirs addObject:filePath];
                     [OAUtilities collectDirFiles:filePath list:dirs];
-//                    operationLog.log("collectDirs " + file.getName() + " BEGIN");
+                    [_operationLog log:[NSString stringWithFormat:@"collectDirs %@ BEGIN", filePath.lastPathComponent]];
                     for (NSString *dir in dirs)
                     {
                         NSArray<NSString *> *files = [fileManager contentsOfDirectoryAtPath:dir error:nil];
@@ -106,7 +112,7 @@
                             }
                         }
                     }
-//                    operationLog.log("collectDirs " + file.getName() + " END");
+                    [_operationLog log:[NSString stringWithFormat:@"collectDirs %@ END", filePath.lastPathComponent]];
                 }
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeTilesMap)
                 {
@@ -128,7 +134,7 @@
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-//            operationLog.finishOperation(" Files=" + localFiles.size());
+            [_operationLog finishOperation:[NSString stringWithFormat:@"Files=%ld", result.count]];
             if (_listener)
                 [_listener onFilesCollected:result];
         });

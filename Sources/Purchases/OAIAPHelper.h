@@ -124,6 +124,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
 - (NSArray *) getSubscriptionStateByOrderId:(NSString *)orderId;
 - (NSString *) getOrderIdByDeviceIdAndToken;
 - (OASubscription *) getAnyPurchasedOsmAndProSubscription;
+- (BOOL) checkBackupSubscriptions;
 
 - (void) onBackupPurchaseRequested;
 - (void) checkBackupPurchase;

@@ -17,13 +17,6 @@
 #import "OASettingsHelper.h"
 #import "OAImportBackupItemsTask.h"
 
-@interface OAItemProgressInfo ()
-
-@property (nonatomic) NSString *type;
-@property (nonatomic) NSString *fileName;
-
-@end
-
 @implementation OAItemProgressInfo
 
 - (instancetype) initWithType:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress work:(NSInteger)work finished:(BOOL)finished
@@ -140,7 +133,7 @@
             {
                 NSLog(@"Failed to collect items for backup: %@", e.reason);
             }
-            break;
+            return nil;
         }
         case EOAImportTypeCheckDuplicates:
         {
@@ -249,11 +242,11 @@
     
 }
 
-- (void)itemExportStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(int)work {
+- (void)itemExportStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(NSInteger)work {
     
 }
 
-- (void)updateItemProgress:(nonnull NSString *)type fileName:(nonnull NSString *)fileName progress:(int)progress {
+- (void)updateItemProgress:(nonnull NSString *)type fileName:(nonnull NSString *)fileName progress:(NSInteger)progress {
     
 }
 

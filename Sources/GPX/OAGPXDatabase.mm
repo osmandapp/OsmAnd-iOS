@@ -53,6 +53,13 @@
     self.hiddenGroups = self.hiddenGroups ? [self.hiddenGroups setByAddingObject:groupName] : [NSSet setWithObject:groupName];
 }
 
+- (NSString *)absolutePath
+{
+    if (self.gpxFilePath)
+        return [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:self.gpxFilePath];
+    return @"";
+}
+
 - (NSString *)width
 {
     return _width ? _width : @"";
@@ -277,7 +284,7 @@
         NSMutableArray *newGpxList = [gpxList mutableCopy];
         [newGpxList removeObject:gpx];
         gpxList = newGpxList;
-        [[NSFileManager defaultManager] removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath] error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:gpx.absolutePath error:nil];
     }
 }
 

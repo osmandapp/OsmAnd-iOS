@@ -20,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) NSInteger value;
 @property (nonatomic, assign, readonly) BOOL finished;
 
+@property (nonatomic, readonly) NSString *type;
+@property (nonatomic, readonly) NSString *fileName;
+
 @end
 
 @interface OAImportBackupTask : NSOperation

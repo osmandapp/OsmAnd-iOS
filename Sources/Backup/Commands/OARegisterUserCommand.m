@@ -12,6 +12,7 @@
 #import "OABackupListeners.h"
 #import "OANetworkUtilities.h"
 #import "OsmAndApp.h"
+#import "OAOperationLog.h"
 
 #define kUserOperation @"Register user"
 
@@ -40,6 +41,7 @@
 
 - (void) main
 {
+    OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"registerUser" debug:BACKUP_DEBUG_LOGS];
     OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"email"] = _email;
@@ -90,7 +92,7 @@
             status = STATUS_EMPTY_RESPONSE_ERROR;
         }
         [self onProgressUpdate:status message:message error:backupError];
-//        operationLog.finishOperation(status + " " + message);
+        [operationLog finishOperation:[NSString stringWithFormat:@"%d %@", status, message]];
     }];
 }
 

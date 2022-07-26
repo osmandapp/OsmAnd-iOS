@@ -117,8 +117,8 @@
     double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
     OsmAnd::ColorARGB lineColor = _editingCtx.getLineColor;
     std::vector<double> linePattern;
-    linePattern.push_back(80 / mapDensity);
-    linePattern.push_back(40 / mapDensity);
+    linePattern.push_back(70 / mapDensity);
+    linePattern.push_back(55 / mapDensity);
     if (line)
     {
         line->setFillColor(lineColor);

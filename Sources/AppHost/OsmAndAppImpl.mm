@@ -54,6 +54,7 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IWebClient.h>
 #include "OAWebClient.h"
+#include "OAWeatherWebClient.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
@@ -630,12 +631,11 @@
     QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>> bandSettings; // init later
     _resourcesManager->instantiateWeatherResourcesManager(
         bandSettings,
-        _data.weatherUseOfflineData,
         QString::fromNSString(_weatherForecastPath),
         QString::fromNSString([NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj"]),
         256,
         [UIScreen mainScreen].scale,
-        _webClient
+        std::make_shared<OAWeatherWebClient>()
     );
 }
 

@@ -485,23 +485,20 @@ static BOOL _repositoryUpdated = NO;
         if ([OAWeatherHelper hasStatus:EOAWeatherForecastStatusUndefined region:self.region] && ![OAWeatherHelper hasStatus:EOAWeatherForecastStatusCalculating region:self.region])
             return;
 
-        NSInteger progressDownloading = [[OAWeatherHelper sharedInstance] getProgress:self.region key:kWeatherProgressDownloadingSuffix];
-        NSInteger progressDownloadDestination = [[OAWeatherHelper sharedInstance] getProgress:self.region key:kWeatherProgressDestinationSuffix];
+        NSInteger progressDownloading = [[OAWeatherHelper sharedInstance] getProgress:self.region];
+        NSInteger progressDownloadDestination = [[OAWeatherHelper sharedInstance] getProgressDestination:self.region];
 
         dispatch_async(dispatch_get_main_queue(), ^{
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
+            UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
 
-            long long sizeLocal = [OAWeatherHelper getPreferenceSizeLocal:self.region.regionId];
-            if (sizeLocal == 0 && [OAWeatherHelper hasStatus:EOAWeatherForecastStatusDownloading region:self.region])
+            if (![cell.reuseIdentifier isEqualToString:@"downloadingResourceCell"])
             {
-                OAResourceItem *newItem = [OAWeatherHelper generateResourceItem:self.region];
-                _regionMapItems[_weatherForecastRow] = newItem;
                 [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                cell = [_tableView cellForRowAtIndexPath:indexPath];
             }
 
-            UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
             FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-
             CGFloat progressCompleted = (CGFloat) progressDownloading / progressDownloadDestination;
             if (progressCompleted >= 0.001 && [OAWeatherHelper hasStatus:EOAWeatherForecastStatusDownloading region:self.region])
             {
@@ -2766,6 +2763,15 @@ static BOOL _repositoryUpdated = NO;
                     [progressView startSpinProgressBackgroundLayer];
                 [progressView setNeedsDisplay];
             }
+        }
+        else if ([OAWeatherHelper hasStatus:EOAWeatherForecastStatusCalculating region:self.region])
+        {
+            FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
+            progressView.iconPath = [UIBezierPath bezierPath];
+            progressView.progress = 0.0;
+            if (!progressView.isSpinning)
+                [progressView startSpinProgressBackgroundLayer];
+            [progressView setNeedsDisplay];
         }
     }
     else if ([cellTypeId isEqualToString:[OATextViewSimpleCell getCellIdentifier]])

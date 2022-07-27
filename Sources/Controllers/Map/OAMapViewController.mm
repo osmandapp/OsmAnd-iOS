@@ -1886,7 +1886,6 @@
             [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
 
             _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
-            _app.resourcesManager->getWeatherResourcesManager()->setLocalData(_app.data.weatherUseOfflineData);
         }
         else if (resourceType == OsmAndResourceType::OnlineTileSources || mapCreatorFilePath)
         {

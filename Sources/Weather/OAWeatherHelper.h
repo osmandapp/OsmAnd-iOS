@@ -13,11 +13,6 @@
 #include <OsmAndCore/Map/GeoCommonTypes.h>
 #include <OsmAndCore/Map/GeoBandSettings.h>
 
-#define kWeatherProgressDownloadingSuffix @"_downloading"
-#define kWeatherProgressCalculateSizeLocalSuffix @"_calculate_size_local"
-#define kWeatherProgressCalculateSizeUpdatesSuffix @"_calculate_size_updates"
-#define kWeatherProgressDestinationSuffix @"_destination"
-
 typedef NS_ENUM(NSInteger, EOAWeatherForecastUpdatesFrequency)
 {
     EOAWeatherForecastUpdatesUndefined = -1,
@@ -41,17 +36,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 @class OAWorldRegion, OAResourceItem, OAObservable;
 
 //NS_ASSUME_NONNULL_BEGIN
-
-@protocol OAWeatherDownloaderDelegate
-
-- (void)onProgressUpdate:(OAWorldRegion *)region
-             sizeUpdates:(NSInteger)sizeUpdates
-               sizeLocal:(NSInteger)sizeLocal
-      calculateSizeLocal:(BOOL)calculateSizeLocal
-    calculateSizeUpdates:(BOOL)calculateSizeUpdates
-                 success:(BOOL)success;
-
-@end
 
 @interface OAWeatherHelper : NSObject
 
@@ -77,9 +61,15 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 - (void)clearCache:(BOOL)localData;
 - (void)clearOutdatedCache;
 - (void)removeLocalForecast:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
-- (void)removeIncompleteDownloads:(OAWorldRegion *)region;
+- (void)removeIncompleteForecast:(OAWorldRegion *)region;
 
 - (void)updatePreferences:(OAWorldRegion *)region;
+
+- (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegion:(OAWorldRegion *)excludeRegion;
+- (void)setOfflineRegion:(OAWorldRegion *)region;
+- (NSArray<NSString *> *)getOfflineRegions;
+- (NSInteger)getProgress:(OAWorldRegion *)region;
+- (NSInteger)getProgressDestination:(OAWorldRegion *)region;
 
 + (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region;
 
@@ -92,6 +82,9 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 
 + (NSTimeInterval)getPreferenceLastUpdate:(NSString *)regionId;
 + (void)setPreferenceLastUpdate:(NSString *)regionId value:(NSTimeInterval)value;
+
++ (NSArray<NSArray<NSNumber *> *> *)getPreferenceTileIds:(NSString *)regionId;
++ (void)setPreferenceTileIds:(NSString *)regionId value:(NSArray<NSArray<NSNumber *> *> *)value;
 
 + (BOOL)getPreferenceWifi:(NSString *)regionId;
 + (void)setPreferenceWifi:(NSString *)regionId value:(BOOL)value;
@@ -106,10 +99,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 + (void)setPreferenceSizeUpdates:(NSString *)regionId value:(NSInteger)value;
 
 + (NSArray<NSString *> *)getPreferenceKeys:(NSString *)regionId;
-+ (void)setDefaultPreferences:(NSString *)regionId;
 + (void)removePreferences:(NSString *)regionId excludeKeys:(NSArray<NSString *> *)excludeKeys;
-
-- (NSInteger)getProgress:(OAWorldRegion *)region key:(NSString *)key;
 
 @end
 

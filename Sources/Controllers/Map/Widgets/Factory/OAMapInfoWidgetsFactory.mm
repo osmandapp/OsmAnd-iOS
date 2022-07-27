@@ -166,6 +166,7 @@
         _request.point31 = target31;
         _request.zoom = zoom;
         _request.band = (OsmAnd::BandIndex)band;
+        _request.localData = _app.data.weatherUseOfflineData;
 
         OsmAnd::WeatherTileResourcesManager::ObtainValueAsyncCallback _callback =
             [selfWeak, cachedValue, band, undefined, weatherControlWeak]

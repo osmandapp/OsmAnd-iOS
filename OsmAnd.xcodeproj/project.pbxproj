@@ -1363,6 +1363,7 @@
 		CA4ED153BFA207753EEE0E13 /* OAMapillaryOsmTagHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED676EDCD24E9BE24075D /* OAMapillaryOsmTagHelper.mm */; };
 		CA4ED15F50530CD41EB6F164 /* OAPlanTypeCardRow.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED0221B1888DD1A891DAE /* OAPlanTypeCardRow.mm */; };
 		CA4ED29358E483696800D91A /* OASubscriptionCardView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDFA46B3B672B32035B7F /* OASubscriptionCardView.mm */; };
+		CA4ED34FEE569EF38DAC35F6 /* OAWeatherWebClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDE6E1DAF70B53B04003C /* OAWeatherWebClient.mm */; };
 		CA4ED3C5613C7FCF1FAF6F34 /* OAShowHidePrecipitationAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED932CD20B5BC04F13428 /* OAShowHidePrecipitationAction.mm */; };
 		CA4ED3D292CC8CAE7922DC3E /* OAWeatherSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDDF0C019CF106448907D /* OAWeatherSettingsViewController.mm */; };
 		CA4ED3D37A857AA9DE517533 /* OAPurchaseDetailsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDEB1E81E651CF37C98A7 /* OAPurchaseDetailsViewController.mm */; };
@@ -1374,7 +1375,6 @@
 		CA4ED855557936D7E91423FC /* OAWeatherHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED61F6893CC4346F50D14 /* OAWeatherHelper.mm */; };
 		CA4ED8CAB7D105A8DAAF2A06 /* OAShowHideTemperatureAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDC677CEB19E4B37F9E8C /* OAShowHideTemperatureAction.mm */; };
 		CA4ED8E8B076A382837AEF2D /* OAShowHideWindAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED4192F52C0D811F08ED7 /* OAShowHideWindAction.mm */; };
-		CA4ED9B6905F1ECC28683B57 /* OAWeatherDownloaderOperationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED94EDC3A43C70278F5B4 /* OAWeatherDownloaderOperationQueue.mm */; };
 		CA4EDBC475684B567F9345C9 /* OAWeatherPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDDD18F59FD98326B733D /* OAWeatherPlugin.mm */; };
 		CA4EDBD4106D179CB0D70834 /* OAShareMenuActivity.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED342B2A4E423D65F9592 /* OAShareMenuActivity.mm */; };
 		CA4EDC32B17473A9290AE863 /* OALabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED8845704B34273CBE2B9 /* OALabel.m */; };
@@ -1384,7 +1384,6 @@
 		CA4EDE42AAD38F5BB5B4C6B1 /* OASegmentedSlider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */; };
 		CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */; };
 		CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDD1F641FDF3A3C7BB25C /* OAWeatherToolbar.mm */; };
-		CA4EDF8234C2FC678D7BC8ED /* OAWeatherDownloaderOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED5242461CF1768047591 /* OAWeatherDownloaderOperation.mm */; };
 		DA03184222DF0E50008FC564 /* ic_custom_boat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */; };
 		DA03184422DF0E50008FC564 /* ic_custom_boat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */; };
 		DA04D775284F86060097CAED /* ic_custom_osmand_pro_logo_monotone_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D76F284F86040097CAED /* ic_custom_osmand_pro_logo_monotone_big@2x.png */; };
@@ -4708,10 +4707,9 @@
 		CA4ED3D44F40B6C3E50165B7 /* OAWeatherToolbarHandlers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherToolbarHandlers.mm; sourceTree = "<group>"; };
 		CA4ED4192F52C0D811F08ED7 /* OAShowHideWindAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideWindAction.mm; sourceTree = "<group>"; };
 		CA4ED472FAEB73ACA09D6EE4 /* OALabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALabel.h; sourceTree = "<group>"; };
+		CA4ED4DA76018A8B23059CA6 /* OAWeatherWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherWebClient.h; sourceTree = "<group>"; };
 		CA4ED4ED6060269841C56359 /* OAPreviewRouteLineInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPreviewRouteLineInfo.h; sourceTree = "<group>"; };
-		CA4ED5242461CF1768047591 /* OAWeatherDownloaderOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherDownloaderOperation.mm; sourceTree = "<group>"; };
 		CA4ED526936BFF80957E31DA /* OACompassModeWidgetState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACompassModeWidgetState.h; sourceTree = "<group>"; };
-		CA4ED561A50E06A96983A16A /* OAWeatherDownloaderOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherDownloaderOperation.h; sourceTree = "<group>"; };
 		CA4ED5839151481FB6475983 /* OAWeatherPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherPlugin.h; sourceTree = "<group>"; };
 		CA4ED58F58E106312EB43FEC /* OAShowHideTemperatureAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideTemperatureAction.h; sourceTree = "<group>"; };
 		CA4ED5B77046F2C3F6FB7181 /* OASlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASlider.h; sourceTree = "<group>"; };
@@ -4727,9 +4725,7 @@
 		CA4ED8CABB8E66D48FDF5F2B /* OACollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollectionViewFlowLayout.h; sourceTree = "<group>"; };
 		CA4ED932CD20B5BC04F13428 /* OAShowHidePrecipitationAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHidePrecipitationAction.mm; sourceTree = "<group>"; };
 		CA4ED935455688DA2569D4D5 /* OATitleDescriptionBigIconCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATitleDescriptionBigIconCell.mm; sourceTree = "<group>"; };
-		CA4ED94EDC3A43C70278F5B4 /* OAWeatherDownloaderOperationQueue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherDownloaderOperationQueue.mm; sourceTree = "<group>"; };
 		CA4ED9D55AB15C1FE6B35C45 /* OAWeatherToolbarHandlers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherToolbarHandlers.h; sourceTree = "<group>"; };
-		CA4ED9F013AB6AEF44C27030 /* OAWeatherDownloaderOperationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherDownloaderOperationQueue.h; sourceTree = "<group>"; };
 		CA4EDA8AF5FFC0BD10336632 /* OACardButtonCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACardButtonCell.mm; sourceTree = "<group>"; };
 		CA4EDABC80C141D6AAD16F8C /* OAShowHideCloudAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideCloudAction.mm; sourceTree = "<group>"; };
 		CA4EDAEF2C0A6CEC8E9F7D26 /* OAWeatherBandSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherBandSettingsViewController.h; sourceTree = "<group>"; };
@@ -4745,6 +4741,7 @@
 		CA4EDDF0C019CF106448907D /* OAWeatherSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherSettingsViewController.mm; sourceTree = "<group>"; };
 		CA4EDE2F7056768E208C7410 /* OASubscriptionCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASubscriptionCardView.h; sourceTree = "<group>"; };
 		CA4EDE5AC5CCE1F6DFDC5D41 /* OARouteLineAppearanceHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteLineAppearanceHudViewController.mm; sourceTree = "<group>"; };
+		CA4EDE6E1DAF70B53B04003C /* OAWeatherWebClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherWebClient.mm; sourceTree = "<group>"; };
 		CA4EDEB1E81E651CF37C98A7 /* OAPurchaseDetailsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPurchaseDetailsViewController.mm; sourceTree = "<group>"; };
 		CA4EDEE8F5FFEC6F5045BDD4 /* OACardButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACardButtonCell.h; sourceTree = "<group>"; };
 		CA4EDF91E0E48AA51B18F96F /* OAShowHideWindAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideWindAction.h; sourceTree = "<group>"; };
@@ -8916,12 +8913,10 @@
 		46C04FAB2885645B00607301 /* Weather */ = {
 			isa = PBXGroup;
 			children = (
-				CA4ED5242461CF1768047591 /* OAWeatherDownloaderOperation.mm */,
-				CA4ED561A50E06A96983A16A /* OAWeatherDownloaderOperation.h */,
-				CA4ED94EDC3A43C70278F5B4 /* OAWeatherDownloaderOperationQueue.mm */,
-				CA4ED9F013AB6AEF44C27030 /* OAWeatherDownloaderOperationQueue.h */,
 				CA4ED3D00AC3839226291450 /* OAWeatherHelper.h */,
 				CA4ED61F6893CC4346F50D14 /* OAWeatherHelper.mm */,
+				CA4EDE6E1DAF70B53B04003C /* OAWeatherWebClient.mm */,
+				CA4ED4DA76018A8B23059CA6 /* OAWeatherWebClient.h */,
 			);
 			path = Weather;
 			sourceTree = "<group>";
@@ -16258,9 +16253,8 @@
 				CA4ED053363110BD3446216F /* OASubscriptionBannerCardView.mm in Sources */,
 				CA4ED672AF26061C16E48A61 /* OACompassModeWidgetState.mm in Sources */,
 				CA4ED3D4E92007B8D20ECBC5 /* OAWeatherCacheSettingsViewController.mm in Sources */,
-				CA4EDF8234C2FC678D7BC8ED /* OAWeatherDownloaderOperation.mm in Sources */,
-				CA4ED9B6905F1ECC28683B57 /* OAWeatherDownloaderOperationQueue.mm in Sources */,
 				CA4ED855557936D7E91423FC /* OAWeatherHelper.mm in Sources */,
+				CA4ED34FEE569EF38DAC35F6 /* OAWeatherWebClient.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

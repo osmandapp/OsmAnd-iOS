@@ -61,7 +61,7 @@
                                                        withHandler:@selector(onWeatherChanged)
                                                         andObserve:self.app.data.weatherChangeObservable];
     _weatherUseOfflineDataChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                     withHandler:@selector(updateWeatherLayer)
+                                                                     withHandler:@selector(onWeatherLayerChanged)
                                                                       andObserve:self.app.data.weatherUseOfflineDataChangeObservable];
     _alphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                      withHandler:@selector(onLayerAlphaChanged)

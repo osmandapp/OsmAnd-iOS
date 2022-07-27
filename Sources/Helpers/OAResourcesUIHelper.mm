@@ -1631,9 +1631,13 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion refreshMap:YES];
+        [OAWeatherHelper setPreferenceStatus:item.worldRegion.regionId value:EOAWeatherForecastStatusUndefined];
         if (onTaskStop)
             onTaskStop(nil);
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion refreshMap:NO];
+        });
     }
     else
     {

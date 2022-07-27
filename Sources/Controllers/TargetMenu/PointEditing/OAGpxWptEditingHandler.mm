@@ -43,7 +43,7 @@
     return self;
 }
 
-- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedLocation gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi attributes:(NSMutableArray<OARowInfo *> *)attributes
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedLocation gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi
 {
     self = [super init];
     if (self)
@@ -70,25 +70,7 @@
         [p setIcon:_iconName];
         [p setBackgroundIcon:@"circle"];
         [p setExtension:ADDRESS_EXTENSION value:@""];
-        
-        if (attributes && attributes.count > 0)
-        {
-            for (OARowInfo *rowInfo in attributes)
-            {
-                NSString *labelExtensionKey = [NSString stringWithFormat:@"%@_label", rowInfo.key];
-                NSString *labelExtensionValue;
-                if (rowInfo.textPrefix && rowInfo.textPrefix.length > 0)
-                    labelExtensionValue = [NSString stringWithFormat:@"%@ : %@", rowInfo.textPrefix, rowInfo.text];
-                else
-                    labelExtensionValue = rowInfo.text;
-                [p setExtension:labelExtensionKey value:labelExtensionValue];
-                
-                OAGpxExtension *iconExtension = [[OAGpxExtension alloc] init];
-                NSString *iconExtensionkey = [NSString stringWithFormat:@"%@_icon", rowInfo.key];
-                NSString *iconExtensionValue = rowInfo.iconName;
-                [p setExtension:iconExtensionkey value:iconExtensionValue];
-            }
-        }
+        [p setAmenity:poi];
 
         wpt.color = color;
         wpt.point = p;

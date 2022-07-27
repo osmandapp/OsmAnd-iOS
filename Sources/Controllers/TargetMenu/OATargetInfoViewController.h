@@ -10,6 +10,11 @@
 #import "OACollapsableView.h"
 #import "OARowInfo.h"
 
+#define kCollapseDetailsRowType @"kCollapseDetailsRowType"
+#define kDescriptionRowType @"kDescriptionRowType"
+#define kTimestampRowType @"kTimestampRowType"
+#define kGroupRowType @"kGroupRowType"
+
 @interface OATargetInfoViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -18,8 +23,12 @@
 
 - (BOOL) needCoords;
 - (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows;
+- (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows;
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows;
+- (void) buildRowsInternal:(NSMutableArray<OARowInfo *> *)rows;
+- (void) buildDateRow:(NSMutableArray<OARowInfo *> *)rows timestamp:(NSDate *)timestamp;
 - (void) rebuildRows;
+- (void) setRows:(NSMutableArray<OARowInfo *> *)rows;
 
 + (UIImage *) getIcon:(NSString *)fileName;
 

@@ -52,6 +52,8 @@ typedef NS_ENUM(NSInteger, EOAGPXColor)
     TEAL
 };
 
+@class OAPOI;
+
 struct RouteDataBundle;
 
 @interface OAGPXColor : NSObject
@@ -155,6 +157,9 @@ struct RouteDataBundle;
 
 - (NSInteger) getTrkPtIndex;
 - (void) setTrkPtIndex:(NSInteger)index;
+
+- (OAPOI *) getAmenity;
+- (void) setAmenity:(OAPOI *)amenity;
 
 @end
 

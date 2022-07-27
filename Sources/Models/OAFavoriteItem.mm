@@ -16,6 +16,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
+#import "OAPOI.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -122,7 +123,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     self = [super init];
     if (self) {
-        _favorite = [self createFavoritePointWithLat:lat lon:lon altitude:0 timestamp:NSDate.date name:name description:nil address:nil category:category iconName:nil backgroundIconName:nil color:nil extensions:nil visible:YES];
+        _favorite = [self createFavoritePointWithLat:lat lon:lon altitude:0 timestamp:NSDate.date name:name description:nil address:nil category:category iconName:nil backgroundIconName:nil color:nil visible:YES];
         
         if (!name)
             [self setName:name];
@@ -137,7 +138,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     self = [super init];
     if (self) {
-        _favorite = [self createFavoritePointWithLat:lat lon:lon altitude:altitude timestamp:timestamp name:name description:nil address:nil category:category iconName:nil backgroundIconName:nil color:nil extensions:nil visible:YES];
+        _favorite = [self createFavoritePointWithLat:lat lon:lon altitude:altitude timestamp:timestamp name:name description:nil address:nil category:category iconName:nil backgroundIconName:nil color:nil visible:YES];
         
         if (!name)
             [self setName:name];
@@ -149,7 +150,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     return self;
 }
 
-- (std::shared_ptr<OsmAnd::IFavoriteLocation>) createFavoritePointWithLat:(double)lat lon:(double)lon altitude:(double)altitude timestamp:(NSDate *)timestamp name:(NSString *)name description:(NSString *)description address:(NSString *)address category:(NSString *)category iconName:(NSString *)iconName backgroundIconName:(NSString *)backgroundIconName color:(UIColor *)color extensions:(NSArray<OAGpxExtension *> *)extensions visible:(BOOL)visible
+- (std::shared_ptr<OsmAnd::IFavoriteLocation>) createFavoritePointWithLat:(double)lat lon:(double)lon altitude:(double)altitude timestamp:(NSDate *)timestamp name:(NSString *)name description:(NSString *)description address:(NSString *)address category:(NSString *)category iconName:(NSString *)iconName backgroundIconName:(NSString *)backgroundIconName color:(UIColor *)color visible:(BOOL)visible
 {
     OsmAnd::PointI locationPoint;
     locationPoint.x = OsmAnd::Utilities::get31TileNumberX(lon);
@@ -172,8 +173,6 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
                 green:&g
                 blue:&b
                 alpha:&a];
-    
-    QHash<QString, QString> qExtensions = [self toQExtntions:extensions];
 
     std::shared_ptr<OsmAnd::IFavoriteLocation> favorite = [OsmAndApp instance].favoritesCollection->createFavoriteLocation(locationPoint,
                                                                      qElevation,
@@ -185,8 +184,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
                                                                      qCategory,
                                                                      qIconName,
                                                                      qBackgroundIconName,
-                                                                     OsmAnd::FColorRGB(r,g,b),
-                                                                     qExtensions);
+                                                                     OsmAnd::FColorRGB(r,g,b));
     
     favorite->setIsHidden(!visible);
     return favorite;
@@ -220,7 +218,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setLat:(double)lat lon:(double)lon
 {
-    auto newFavorite = [self createFavoritePointWithLat:lat lon:lon altitude:[self getAltitude] timestamp:[self getTimestamp] name:[self getName] description:[self getDisplayName] address:[self getAddress] category:[self getCategory] iconName:[self getIcon] backgroundIconName:[self getBackgroundIcon] color:[self getColor] extensions:[self getExtensions] visible:[self isVisible]];
+    auto newFavorite = [self createFavoritePointWithLat:lat lon:lon altitude:[self getAltitude] timestamp:[self getTimestamp] name:[self getName] description:[self getDisplayName] address:[self getAddress] category:[self getCategory] iconName:[self getIcon] backgroundIconName:[self getBackgroundIcon] color:[self getColor] visible:[self isVisible]];
     
     [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(self.favorite);
     self.favorite = newFavorite;
@@ -376,45 +374,39 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
 }
 
-- (NSArray<OAGpxExtension *> *) getExtensions
+- (OAPOI *) getAmenity
 {
-    return [self toOAGpxExtensions:self.favorite->getExtensions()];
-}
-
-- (void) setExtensions:(NSArray<OAGpxExtension *> *)extensions
-{
-    self.favorite->setExtensions([self toQExtntions:extensions]);
-}
-
-- (NSArray<OAGpxExtension *> *) toOAGpxExtensions:(QHash<QString, QString>)qExtensions
-{
-    NSMutableArray<OAGpxExtension *> *result = [NSMutableArray array];
-    if (!qExtensions.empty())
+    QHash<QString, QString> extensionsToRead = self.favorite->getExtensions();
+    if (extensionsToRead.size() > 0)
     {
-        for (int i = 0; i < qExtensions.keys().count(); i++)
+        NSMutableDictionary<NSString *, NSString *> *extensions = [NSMutableDictionary dictionary];
+        for (int i = 0; i < extensionsToRead.keys().size(); i++)
         {
-            OAGpxExtension *extention = [[OAGpxExtension alloc] init];
-            QString key = qExtensions.keys()[i];
-            QString value = qExtensions[key];
-            extention.name = key.toNSString();
-            extention.value = value.toNSString();
-            [result addObject:extention];
+            NSString *key = extensionsToRead.keys()[i].toNSString();
+            NSString *value = extensionsToRead[extensionsToRead.keys()[i]].toNSString();
+            if (key && key.length > 0 && value && value.length > 0)
+                extensions[key] = value;
+        }
+        return [OAPOI fromHashMap:extensions];
+    }
+    return nil;
+}
+
+- (void) setAmenity:(OAPOI *)amenity
+{
+    if (amenity)
+    {
+        NSMutableDictionary<NSString *, NSString *> *extensions = [amenity toHashMap];
+        if (extensions && extensions.count > 0)
+        {
+            for (NSString *key in extensions.allKeys)
+            {
+                NSString *value = extensions[key];
+                if (key.length > 0 && value.length > 0)
+                    self.favorite->setExtension(QString::fromNSString(key), QString::fromNSString(value));
+            }
         }
     }
-    return [NSArray arrayWithArray:result];
-}
-
-- (QHash<QString, QString>)toQExtntions:(NSArray<OAGpxExtension *> *)extensions
-{
-    QHash<QString, QString> qExtensions = QHash<QString, QString>();
-    if (extensions && extensions.count > 0)
-    {
-        for (OAGpxExtension *extension in extensions)
-        {
-            qExtensions[QString::fromNSString(extension.name)] = QString::fromNSString(extension.value);
-        }
-    }
-    return qExtensions;
 }
 
 - (BOOL) isVisible
@@ -590,6 +582,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         e.value = @"true";
         [exts addObject:e];
     }
+    [pt setAmenity:[self getAmenity]];
     pt.extensions = exts;
     pt.name = self.getName;
     pt.desc = self.getDescription;

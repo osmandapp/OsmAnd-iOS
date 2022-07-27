@@ -170,7 +170,6 @@
                        pointType:(EOAEditPointType)pointType
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
                              poi:(OAPOI *)poi
-                      attributes:(NSMutableArray<OARowInfo *> *)attributes
 {
     self = [super initWithNibName:@"OAEditPointViewController" bundle:nil];
     if (self)
@@ -183,12 +182,12 @@
 
         if (_editPointType == EOAEditPointTypeFavorite)
         {
-            _pointHandler = [[OAFavoriteEditingHandler alloc] initWithLocation:location title:formattedTitle address:customParam poi:poi attributes:attributes];
+            _pointHandler = [[OAFavoriteEditingHandler alloc] initWithLocation:location title:formattedTitle address:customParam poi:poi];
             self.address = customParam ? customParam : @"";
         }
         else if (_editPointType == EOAEditPointTypeWaypoint)
         {
-            _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle gpxFileName:customParam poi:poi attributes:attributes];
+            _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle gpxFileName:customParam poi:poi];
             self.gpxFileName = customParam ? customParam : @"";
             self.address = ((OAGpxWptEditingHandler *)_pointHandler).getAddress;
         }

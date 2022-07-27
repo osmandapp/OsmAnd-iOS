@@ -13,7 +13,7 @@
 
 #define EXTENSION_HIDDEN @"hidden"
 
-@class OAWptPt;
+@class OAWptPt, OAPOI;
 
 @interface OASpecialPointType : NSObject
 
@@ -69,8 +69,8 @@
 - (UIColor *) getColor;
 - (void) setColor:(UIColor *)color;
 
-- (NSArray<OAGpxExtension *> *) getExtensions;
-- (void) setExtensions:(NSArray<OAGpxExtension *> *)extensions;
+- (OAPOI *) getAmenity;
+- (void) setAmenity:(OAPOI *)amenity;
 
 - (BOOL) isVisible;
 - (void) setVisible:(BOOL)isVisible;

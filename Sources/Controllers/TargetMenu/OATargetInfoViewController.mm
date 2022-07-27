@@ -40,6 +40,9 @@
 #import "OAOsmAndFormatter.h"
 #import "OAButtonRightIconCell.h"
 #import "OAMapillaryOsmTagHelper.h"
+#import "OACollapsableWaypointsView.h"
+#import "OATextMultiViewCell.h"
+#import "OAEditDescriptionViewController.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -53,9 +56,8 @@
 #define kNearbyPoiMinRadius 250
 #define kNearbyPoiMaxRadius 1000
 #define kNearbyPoiSearchFactory 2
-#define kCollapseDetailsRowType @"kCollapseDetailsRowType"
 
-@interface OATargetInfoViewController() <OACollapsableCardViewDelegate>
+@interface OATargetInfoViewController() <OACollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
 @end
 
@@ -73,6 +75,11 @@
     BOOL _otherCardsReady;
     BOOL _openPlaceCardsReady;
     BOOL _wikiCardsReady;
+}
+
+- (void) setRows:(NSMutableArray<OARowInfo *> *)rows
+{
+    _rows = rows;
 }
 
 - (BOOL) needCoords
@@ -116,13 +123,14 @@
 
 - (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows
 {
+    [self buildDescription:rows];
     if (self.routes.count > 0)
     {
         NSArray<OATransportStopRoute *> *localTransportRoutes = [self getLocalTransportStopRoutes];
         NSArray<OATransportStopRoute *> *nearbyTransportRoutes = [self getNearbyTransportStopRoutes];
         if (localTransportRoutes.count > 0)
         {
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil iconName:nil textPrefix:nil text:OALocalizedString(@"transport_routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = NO;
             rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
@@ -132,7 +140,7 @@
         if (nearbyTransportRoutes.count > 0)
         {
             NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [OAOsmAndFormatter getFormattedDistance:kShowStopsRadiusMeters]];
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil iconName:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = NO;
             rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
@@ -140,6 +148,11 @@
             [_rows addObject:rowInfo];
         }
     }
+}
+
+- (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows
+{
+    // implement in subclasses
 }
 
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
@@ -151,15 +164,15 @@
 {
     if ([self showDetailsButton])
     {
-        OARowInfo *collapseDetailsRowCell = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:nil] iconName:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
+        OARowInfo *collapseDetailsRowCell = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:nil] textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:kCollapseDetailsRowType isPhoneNumber:NO isUrl:NO];
         [collapseDetailsRowCell setHeight:[self detailsButtonHeight]];
         [rows addObject:collapseDetailsRowCell];
     }
 }
 
-- (void) buildRowsInternal
-{    
-    _rows = [NSMutableArray array];
+- (void) buildRowsInternal:(NSMutableArray<OARowInfo *> *)rows
+{
+    _rows = rows;
 
     [self buildTopRows:_rows];
     
@@ -189,7 +202,7 @@
 
     if ([self needCoords])
     {
-        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil iconName:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
         coordinatesRow.collapsed = YES;
         coordinatesRow.collapsable = YES;
         OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
@@ -222,8 +235,7 @@
         if (nearest.count > 0)
         {
             UIImage *icon = isWiki ? [UIImage imageNamed:[OAUtilities drawablePath:@"mx_wiki_place"]] : poi.icon;
-            NSString *iconName = isWiki ? @"mx_wiki_place" : poi.iconName;
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon iconName:iconName textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = YES;
             rowInfo.collapsableView = [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
@@ -231,6 +243,19 @@
             rowInfo.order = 1000;
             [_rows addObject:rowInfo];
         }
+    }
+}
+
+- (void) buildDateRow:(NSMutableArray<OARowInfo *> *)rows timestamp:(NSDate *)timestamp
+{
+    if (timestamp)
+    {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+        dateFormatter.timeStyle = NSDateFormatterShortStyle;
+        NSString *formattedDate = [dateFormatter stringFromDate:timestamp];
+        OARowInfo *dateRowCell = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_custom_date"] textPrefix:nil text:formattedDate textColor:nil isText:NO needLinks:NO order:3 typeName:kTimestampRowType isPhoneNumber:NO isUrl:NO];
+        [rows addObject:dateRowCell];
     }
 }
 
@@ -300,7 +325,7 @@
     self.tableView.backgroundView = view;
     self.tableView.scrollEnabled = NO;
     _calculatedWidth = 0;
-    [self buildRowsInternal];
+    [self buildRowsInternal:[NSMutableArray array]];
 }
 
 - (void) didReceiveMemoryWarning
@@ -322,7 +347,7 @@
 
 - (void) rebuildRows
 {
-    [self buildRowsInternal];
+    [self buildRowsInternal:[NSMutableArray array]];
 }
 
 - (void)processNearestWiki:(OAPOI *)poi
@@ -655,7 +680,7 @@
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
         return;
 
-    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] iconName:@"ic_custom_photo" textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
 
     OACollapsableCardsView *cardView = [[OACollapsableCardsView alloc] init];
     cardView.delegate = self;
@@ -704,6 +729,49 @@
        
         return cell;
     }
+    else if ([info.typeName isEqualToString:kDescriptionRowType])
+    {
+        OATextMultiViewCell* cell;
+        cell = (OATextMultiViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextMultiViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultiViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultiViewCell *)[nib objectAtIndex:0];
+        }
+        
+        NSString *label = info.text;
+        if (label.length == 0)
+        {
+            cell.textView.font = [UIFont systemFontOfSize:16.0];
+            cell.textView.textContainerInset = UIEdgeInsetsMake(11,11,0,0);
+            cell.textView.text = info.textPrefix;
+            cell.textView.textColor = [UIColor lightGrayColor];
+            cell.iconView.hidden = NO;
+        }
+        else
+        {
+            cell.textView.font = [UIFont systemFontOfSize:14.0];
+            cell.textView.textColor = [UIColor blackColor];
+            cell.textView.text = label;
+            cell.iconView.hidden = NO;
+            
+            CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont systemFontOfSize:14.0]];
+            CGFloat h = MIN(188.0, s.height + 10.0);
+            h = MAX(44.0, h);
+            info.height = h;
+            
+            BOOL descSingleLine = (s.height < 24.0);
+            if (descSingleLine)
+                cell.textView.textContainerInset = UIEdgeInsetsMake(12,11,0,35);
+            else if (info.height > 44.0)
+                cell.textView.textContainerInset = UIEdgeInsetsMake(5,11,0,35);
+            else
+                cell.textView.textContainerInset = UIEdgeInsetsMake(3,11,0,35);
+        }
+        cell.textView.backgroundColor = UIColorFromRGB(0xffffff);
+        cell.backgroundColor = UIColorFromRGB(0xffffff);
+        return cell;
+    }
     
     if (!info.isHtml)
     {
@@ -724,6 +792,32 @@
             cell.collapsableView = coordinateView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
 
+            return cell;
+        }
+        if ([info.collapsableView isKindOfClass:OACollapsableWaypointsView.class])
+        {
+            OATargetInfoCollapsableViewCell* cell;
+            cell = (OATargetInfoCollapsableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATargetInfoCollapsableViewCell getCellIdentifier]];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATargetInfoCollapsableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OATargetInfoCollapsableViewCell *)[nib objectAtIndex:0];
+            }
+            cell.textView.text = info.text;
+            cell.descrLabel.hidden = NO;
+            cell.descrLabel.text = info.textPrefix;
+            [cell setDescription:info.textPrefix];
+
+            cell.iconView.contentMode = UIViewContentModeCenter;
+            [cell setImage:info.icon];
+            cell.iconView.tintColor = info.textColor;
+            
+            OACollapsableWaypointsView *groupView = (OACollapsableWaypointsView *) info.collapsableView;
+            cell.collapsableView = groupView;
+            [cell setCollapsed:info.collapsed rawHeight:64.];
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
+            
             return cell;
         }
         else if (info.collapsable)
@@ -821,7 +915,12 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OARowInfo *info = _rows[indexPath.row];
-    if ([info.typeName isEqualToString:kCollapseDetailsRowType] && !self.delegate.isInFullMode && !OAUtilities.isLandscape)
+    [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
+    if ([info.typeName isEqualToString:kGroupRowType])
+        return info.height + 16;
+    if ([info.typeName isEqualToString:kDescriptionRowType])
+        return info.height;
+    else if ([info.typeName isEqualToString:kCollapseDetailsRowType] && !self.delegate.isInFullMode && !OAUtilities.isLandscape)
         return info.height + OAUtilities.getBottomMargin;
     else
         return info.height;
@@ -912,6 +1011,12 @@
         NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+    else if ([info.typeName isEqualToString:kDescriptionRowType])
+    {
+        OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO readOnly:YES];
+        editDescController.delegate = self;
+        [self.navController pushViewController:editDescController animated:YES];
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -954,6 +1059,13 @@
         _wikiCardsReady = YES;
         [self sendNearbyOtherImagesRequest:cards];
     }];
+}
+
+#pragma mark - OAEditDescriptionViewControllerDelegate
+
+- (void) descriptionChanged:(NSString *)descr
+{
+    [self.tableView reloadData];
 }
 
 @end

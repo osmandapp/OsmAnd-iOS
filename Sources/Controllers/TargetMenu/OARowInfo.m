@@ -10,7 +10,7 @@
 
 @implementation OARowInfo
 
-- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon iconName:(NSString *)iconName textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl
+- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl
 {
     self = [super init];
     if (self)
@@ -18,7 +18,6 @@
         _key = key;
         _icon = icon;
         _icon = [_icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _iconName = iconName;
         _textPrefix = textPrefix;
         _text = text;
         _textColor = textColor;

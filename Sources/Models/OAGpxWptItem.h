@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAWptPt;
+@class OAWptPt, OAPOI;
 
 @interface OAGpxWptItem : NSObject
 
@@ -26,5 +26,7 @@
 @property (nonatomic) NSString *docPath;
 
 - (UIImage *) getCompositeIcon;
+- (OAPOI *) getAmenity;
+- (void) setAmenity:(OAPOI *)amenity;
 
 @end

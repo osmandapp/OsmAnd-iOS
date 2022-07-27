@@ -22,7 +22,6 @@
 
 @property (nonatomic) NSString *key;
 @property (nonatomic) UIImage *icon;
-@property (nonatomic) NSString *iconName;
 @property (nonatomic) NSString *text;
 @property (nonatomic) NSString *textPrefix;
 @property (nonatomic) UIColor *textColor;
@@ -42,7 +41,7 @@
 
 @property (weak, nonatomic) id<OARowInfoDelegate> delegate;
 
-- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon iconName:(NSString *)iconName textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
+- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
 
 - (int) getRawHeight;
 - (UIFont *) getFont;

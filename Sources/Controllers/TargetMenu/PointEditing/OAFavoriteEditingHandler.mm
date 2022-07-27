@@ -12,8 +12,6 @@
 #import "OAFavoritesHelper.h"
 #import "OsmAndApp.h"
 
-#import "OAPOIViewController.h"
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
@@ -39,7 +37,7 @@
     return self;
 }
 
-- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation poi:(OAPOI *)poi attributes:(NSMutableArray<OARowInfo *> *)attributes
+- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation poi:(OAPOI *)poi
 {
     self = [super init];
     if (self)
@@ -98,27 +96,7 @@
                                                                         OsmAnd::FColorRGB(r,g,b));
         
         _favorite = [[OAFavoriteItem alloc] initWithFavorite:favorite];
-                
-        NSMutableArray<OAGpxExtension *> *extensions = [NSMutableArray array];
-        if (attributes && attributes.count > 0)
-        {
-            for (OARowInfo *rowInfo in attributes)
-            {
-                OAGpxExtension *labelExtension = [[OAGpxExtension alloc] init];
-                labelExtension.name = [NSString stringWithFormat:@"%@_label", rowInfo.key];
-                if (rowInfo.textPrefix && rowInfo.textPrefix.length > 0)
-                    labelExtension.value = [NSString stringWithFormat:@"%@ : %@", rowInfo.textPrefix, rowInfo.text];
-                else
-                    labelExtension.value = rowInfo.text;
-                [extensions addObject:labelExtension];
-                
-                OAGpxExtension *iconExtension = [[OAGpxExtension alloc] init];
-                iconExtension.name = [NSString stringWithFormat:@"%@_icon", rowInfo.key];
-                iconExtension.value = rowInfo.iconName;
-                [extensions addObject:iconExtension];
-            }
-        }
-        [_favorite setExtensions:extensions];
+        [_favorite setAmenity:poi];
         
         [_app saveFavoritesToPermamentStorage];
     }

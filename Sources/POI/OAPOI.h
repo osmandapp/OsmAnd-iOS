@@ -87,4 +87,7 @@
 - (NSString *)getTagContent:(NSString *)tag lang:(NSString *)lang;
 - (NSString *)getDescription:(NSString *)lang;
 
+- (NSMutableDictionary<NSString *, NSString *> *) toHashMap;
++ (OAPOI *) fromHashMap:(NSMutableDictionary<NSString *, NSString *> *)map;
+
 @end

@@ -11,6 +11,7 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OADefaultFavorite.h"
+#import "OAPOI.h"
 
 #include <routeSegmentResult.h>
 #include <routeDataBundle.h>
@@ -298,6 +299,38 @@
 - (void)setIcon:(NSString *)iconName
 {
     [self setExtension:ICON_NAME_EXTENSION value:iconName];
+}
+
+- (OAPOI *) getAmenity
+{
+    NSArray<OAGpxExtension *> *extensionsToRead = [self extensions];
+    if (extensionsToRead && extensionsToRead.count > 0)
+    {
+        NSMutableDictionary<NSString *, NSString *> *extensions = [NSMutableDictionary dictionary];
+        for (OAGpxExtension *extension in extensionsToRead)
+        {
+            extensions[extension.name] = extension.value;
+        }
+        return [OAPOI fromHashMap:extensions];
+    }
+    return nil;
+}
+
+- (void) setAmenity:(OAPOI *)amenity
+{
+    if (amenity)
+    {
+        NSMutableDictionary<NSString *, NSString *> *extensions = [amenity toHashMap];
+        if (extensions && extensions.count > 0)
+        {
+            for (NSString *key in extensions.allKeys)
+            {
+                NSString *value = extensions[key];
+                if (key.length > 0 && value.length > 0)
+                    [self setExtension:key value:value];
+            }
+        }
+    }
 }
 
 - (NSString *)getBackgroundIcon

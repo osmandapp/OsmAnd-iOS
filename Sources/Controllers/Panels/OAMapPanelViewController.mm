@@ -1729,19 +1729,13 @@ typedef enum
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     
     OAPOI *poi = [self getTargetPointPoi];
-    
-    NSMutableArray<OARowInfo *> *attributesRows = [NSMutableArray array];
-    if ([self.targetMenuView.customController isKindOfClass:OAPOIViewController.class])
-        [((OAPOIViewController *)self.targetMenuView.customController) buildRows:attributesRows];
-    
     OAEditPointViewController *controller =
             [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
                                                           title:self.targetMenuView.targetPoint.title
                                                     customParam:self.targetMenuView.targetPoint.titleAddress
                                                       pointType:EOAEditPointTypeFavorite
                                                 targetMenuState:nil
-                                                            poi:poi
-                                                     attributes:attributesRows];
+                                                            poi:poi];
     [self presentViewController:controller animated:YES completion:nil];
 }
 
@@ -1890,17 +1884,12 @@ typedef enum
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     
     OAPOI *poi = [self getTargetPointPoi];
-    NSMutableArray<OARowInfo *> *attributesRows = [NSMutableArray array];
-    if ([self.targetMenuView.customController isKindOfClass:OAPOIViewController.class])
-        [((OAPOIViewController *)self.targetMenuView.customController) buildRows:attributesRows];
-    
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location
                                                                                           title:title
                                                                                     customParam:gpxFileName
                                                                                       pointType:EOAEditPointTypeWaypoint
                                                                                 targetMenuState:_activeViewControllerState
-                                                                                            poi:poi
-                                                                                     attributes:attributesRows];
+                                                                            poi:poi];
     controller.gpxWptDelegate = self;
     [self presentViewController:controller animated:YES completion:nil];
 }

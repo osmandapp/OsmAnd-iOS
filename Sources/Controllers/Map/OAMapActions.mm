@@ -160,7 +160,7 @@
 {
     OAGPXDocument* document = nil;
     const auto& gpxMap = [OASelectedGPXHelper instance].activeGpx;
-    NSString * path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+    NSString * path = gpx.absolutePath;
     QString qPath = QString::fromNSString(path);
     if (gpxMap.contains(qPath))
     {

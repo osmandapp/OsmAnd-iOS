@@ -29,12 +29,15 @@ class OASQLiteTileSourceMapLayerProvider : public OsmAnd::ImageMapLayerProvider
 private:
     const std::shared_ptr<const OsmAnd::IWebClient> _webClient;
     
-    OsmAnd::TileSqliteDatabase *_ts;
+    std::shared_ptr<OsmAnd::TileSqliteDatabase> _ts;
+    QString _fileName;
     int _tileSize;
-    bool _ellipsoid;
-    int64_t _expirationTimeMillis;
     QList<QString> _randomsArray;
     
+    std::shared_ptr<OsmAnd::TileSqliteDatabase> getDatabase() const;
+    bool isEllipsoid();
+    int64_t getExpirationTimeMillis();
+
     mutable QMutex _tilesInProcessMutex;
     std::array< QSet< OsmAnd::TileId >, OsmAnd::ZoomLevelsCount > _tilesInProcess;
     QWaitCondition _waitUntilAnyTileIsProcessed;

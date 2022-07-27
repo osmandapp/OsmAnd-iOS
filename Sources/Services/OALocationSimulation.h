@@ -9,6 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+@interface OALocation : CLLocation
+
+@property (nonatomic) NSString *provider;
+
+- (instancetype)initWithProvider:(NSString *)provider location:(CLLocation *)location;
+
+@end
+
 @interface OASimulatedLocation : CLLocation
 
 - (instancetype)initWithSimulatedLocation:(OASimulatedLocation *)location;

@@ -32,6 +32,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) OAPrepareBackupResult *backup;
 
+- (instancetype) initWithListener:(id<OAOnPrepareBackupListener>)listener;
+
+- (BOOL) prepare;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -40,7 +40,7 @@
 "poi_search_near_center" = "Поиск выполняется вокруг центра карты";
 "poi_hide" = "Скрыть";
 // My Places
-"favorites" = "Избранные";
+"favorites" = "Избранное";
 "tracks" = "Треки";
 // GPX
 "gpx_point" = "Точка";
@@ -75,9 +75,9 @@
 "gpx_uphills_total" = "Всего подъем";
 // Map settings
 "rendering_value_browse_map_name" = "Обзор карты";
-"m_style_car" = "Автомобиль";
+"m_style_car" = "Вождение";
 "m_style_walk" = "Пешеход";
-"m_style_bicycle" = "Велосипед";
+"m_style_bicycle" = "Езда на велосипеде";
 "map_settings_map" = "Карта";
 "map_settings_fav" = "Избранное";
 "map_settings_tracks" = "Треки";
@@ -100,7 +100,7 @@
 // Intro
 "intro_skip" = "Пропустить";
 "intro_download" = "Загрузить\nкарту";
-"intro_next" = "Следующий";
+"intro_next" = "Далее";
 "intro_welcome" = "Добро пожаловать\nOsmAnd";
 "intro_promo" = "Мировые офлайн карты";
 "intro_placeholder" = "введите название региона";
@@ -280,7 +280,7 @@
 "cannot_add_marker" = "Нельзя добавить парковку";
 "cannot_add_marker_desc" = "Уберите одно из направлений и повторите попытку";
 "cannot_add_destination" = "Нельзя добавить направление";
-"units_hour" = "ч";
+"units_hour" = "час";
 "units_min" = "мин";
 "units_sec" = "с";
 "cannot_access_calendar" = "Ошибка доступа к календарю";
@@ -339,14 +339,14 @@
 "shared_string_edit" = "Редактировать";
 "product_title_wiki" = "Википедия";
 "product_desc_wiki" = "Данные Википедии";
-"product_title_srtm" = "Линии высот";
+"product_title_srtm" = "Контурные линии";
 "product_desc_srtm" = "Отображать контурные линии";
 "enter_description" = "Введите описание";
 "description" = "Описание";
 "enter_fav_name" = "Введите имя";
 "res_installing" = "Установка…";
 "res_roads" = "Дороги";
-"res_srtm" = "Линии высот";
+"res_srtm" = "Контурные линии";
 "res_wiki" = "Википедия";
 "res_hillshade" = "Затенение рельефа";
 "select_language" = "Выберите язык";
@@ -625,7 +625,7 @@
 "in_app_purchase_desc" = "Разовый платёж";
 "transport_routes" = "Маршруты";
 "transport_nearby_routes" = "В пределах";
-"transport_stop" = "Выключить";
+"transport_stop" = "Остановка";
 "cancel_navigation" = "Остановить навигацию";
 "switch_start_finish" = "Поменять местами пункты отправления и назначения";
 "shared_string_options" = "Опции";
@@ -752,7 +752,7 @@
 "help_search" = "Поиск по карте";
 "help_trip_planning" = "Планирование маршрута при навигации";
 "help_legend" = "Легенда";
-"help_other_header" = "Другое";
+"help_other_header" = "Прочее";
 "help_install_and_troubleshoot" = "Установка и решение проблем";
 "help_tech_articles" = "Технические статьи";
 "help_versions" = "Версии";
@@ -951,7 +951,7 @@
 "osm_name" = "Имя пользователя OpenStreetMap";
 "osm_pass" = "Пароль OpenStreetMap";
 "osm_confirm_delete" = "Удалить POI?";
-"create_poi_short" = "Добавить POI";
+"create_poi_short" = "Добавление POI";
 "amenity" = "Удобства";
 "osm_tag" = "Тег";
 "osm_edits_edits_label" = "Правки";
@@ -976,7 +976,7 @@
 "add_map_style" = "Добавить стиль карты";
 "map_sources" = "Источники карт";
 "map_styles" = "Стили карты";
-"add_action" = "Добавить действие";
+"add_action" = "Добавить";
 "toggle_poi" = "Показать/скрыть POI";
 "add_parking_place" = "Добавить место парковки";
 "add_poi" = "Добавить POI";
@@ -1153,7 +1153,7 @@
 "osm_edits_offline_layer" = "OSM Правки/Заметки (офлайн)";
 "osm_notes_online_layer" = "OSM Заметки (онлайн)";
 "osm_edits_basic" = "Основные";
-"osm_edits_advanced" = "Продвинуто";
+"osm_edits_advanced" = "Расширенные";
 "osm_edits_poi" = "Правки POI";
 "osm_poi_id_label" = "Идентификатор POI:";
 "osm_edits_title" = "OSM Правки";
@@ -1478,7 +1478,7 @@
 "rendering_attr_trolleybusRoutes_name" = "Маршруты троллейбусов";
 "rendering_attr_highway_class_track_name" = "Трек";
 "rendering_attr_hideText_name" = "Текст";
-"rendering_attr_contourColorScheme_description" = "Цветовая схема горизонталей";
+"rendering_attr_contourColorScheme_description" = "Цвет горизонталей";
 "rendering_attr_winter_road_name" = "Автозимник";
 "rendering_attr_roadColors_description" = "Выберите цветовую схему дорог:";
 "routing_attr_allow_classic_only_name" = "Разрешить только классические маршруты";
@@ -1643,7 +1643,7 @@
 "gpx_analyze" = "Анализировать";
 "shared_string_warning" = "Предупреждение";
 "map_settings_base_transp" = "Прозрачность основной карты";
-"map_settings_color_scheme" = "Цветовая схема";
+"map_settings_color_scheme" = "Цвет";
 "res_zoom_levels" = "Уровни масштаба";
 "map_settings_appearance" = "Внешний вид";
 "all_group_points" = "Все точки группы";
@@ -2012,9 +2012,9 @@
 "none_point_error" = "Добавьте хотя бы одну точку.";
 "default_color" = "Цвет по умолчанию";
 "copied_to_clipboard" = "Скопировано в буфер обмена";
-"service" = "Служебная";
+"service" = "Сервис";
 "square" = "Квадрат";
-"emergency" = "Экстренные службы";
+"emergency" = "Чрезвычайные обстоятельства";
 "symbols" = "Символы";
 "fav_point_dublicate" = "Введено повторяющееся название избранной точки";
 "reverse_track_dir" = "Реверсировать";
@@ -2338,7 +2338,7 @@
 "grey_color_undefined" = "Серым отмечены участки без данных.";
 "white_color_undefined" = "Белым отмечены участки без данных.";
 "parked_at" = "Припаркован в";
-"nautical" = "Море";
+"nautical" = "Морской";
 "osmand_cloud_login_descr" = "Введите адрес электронной почты, который вы использовали при регистрации. На него будет выслан одноразовый код для следующего шага.";
 "cloud_email_already_registered" = "Данный адрес электронной почты уже зарегистрирован.";
 "backup_error_file_not_available" = "Файл недоступен";
@@ -2504,7 +2504,7 @@
 "purchases_feature_desc_unlimited_map_download" = "Неограниченные загрузки локальных карт всех континентов и регионов.";
 "unlimited_map_downloads" = "Неограниченные загрузки карт";
 "shared_string_learn_more" = "Подробнее";
-"shared_string_stop" = "Выключить";
+"shared_string_stop" = "Остановка";
 "altitude_ascent" = "Подъём";
 "subscriptions" = "Подписки";
 "purchases_feature_desc_nautical" = "Информация о морских глубинах";
@@ -2536,3 +2536,15 @@
 "private_access_routing_req" = "Пункт назначения находится на частной территории. Разрешить использование частных дорог на этом маршруте\?";
 "expired" = "Срок истёк";
 "share_geo" = "гео:";
+"shared_string_always_hidden" = "Всегда скрыт";
+"restore_from_osmand_cloud" = "Восстановить из OsmAnd Cloud";
+"lang_ckb" = "Центральный курдский";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Без ограничений)";
+"shared_string_delete_all" = "Удалить все";
+"in_grace_period" = "В льготный период";
+"on_hold" = "Приостановлено";
+"shared_string_always_visible" = "Всегда виден";
+"paused" = "Приостановлено";
+"compass_visible_in_rotated_mode" = "Виден, если карта повернута";
+"shared_string_data" = "Данные";
+"shared_string_undefined" = "Неопределённо";

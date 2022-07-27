@@ -1061,6 +1061,9 @@
 "shared_string_importing" = "Importing";
 "importing_from" = "Importing data from %@";
 
+"shared_string_restoring" = "Restoring";
+"restoring_from" = "Restoring selected data from the cloud";
+
 "shared_string_settings" = "Settings";
 "configure_screen_quick_action" = "Quick action";
 "search_activity" = "Search";
@@ -2036,6 +2039,8 @@
 "restore_all_purchases" = "Restore all purchases";
 "restore_purchase" = "Restore purchase";
 "restore_purchases" = "Restore purchases";
+"restore_backup_descr" = "Restore data on the device unsing online backups";
+"restore_data" = "Restore data";
 
 "no_statistics" = "No statistics";
 
@@ -2627,6 +2632,8 @@
 "cloud_email_already_registered" = "This e-mail address is already registered.";
 "login_error_email_invalid" = "Please enter a valid e-mail address";
 "login_help_email_title" = "OsmAnd iOS Cloud";
+"restore_from_osmand_cloud" = "Restore from OsmAnd Cloud";
+"choose_what_to_restore" = "Choose items to restore";
 
 "backup_error_no_valid_subscription" = "No valid subscription present";
 "backup_error_user_is_not_registered" = "No user registered with that e-mail address";
@@ -2637,10 +2644,11 @@
 "backup_error_size_is_exceeded" = "Maximum size of OsmAnd Cloud exceeded %@";
 "backup_error_subscription_was_used" = "Subscription or promo used by another account %@";
 "backup_error_subscription_was_expired_descr" = "Your OsmAnd Pro subscription is expired, renew it to use backup. You can still restore data from the Cloud.";
-"backup_error_subscription_was_expired" = "Expired subscription";
+"backup_error_subscription_was_expired" = "Subscription expired";
 "backup_error_user_is_already_registered" = "This e-mail address is in use on another account";
 "backup_error_invalid_token" = "Token is not valid";
 "promo_subscription" = "OsmAnd Pro (Promo)";
+"renew_subscription" = "Renew subscription";
 
 "register_opr_create_new_account" = "Create new account";
 "osmand_cloud_create_account_descr" = "Please enter your e-mail address, a verification code will be sent there, and all your data will be linked to it.";
@@ -2669,6 +2677,9 @@
 "local_backup_descr" = "Backup or restore data from a local file.";
 "backup_into_file" = "Backup into file";
 "restore_from_file" = "Restore from file";
+"fetching_from_server" = "Fetching data from server";
+"backup_complete" = "Backup complete";
+"duration_ago" = "%@ ago";
 
 "cloud_no_online_backup" = "You don’t have any online backup yet";
 "cloud_no_online_backup_descr" = "Set up an automatic backup so you don't have to worry about lost data.";

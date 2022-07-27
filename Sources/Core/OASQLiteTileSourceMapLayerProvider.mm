@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#include "OASQLiteTileSourceMapLayerProvider.h"
-#include "OANativeUtilities.h"
+#import "OASQLiteTileSourceMapLayerProvider.h"
+#import "OANativeUtilities.h"
 
 #include <SkImageEncoder.h>
 #include <SkStream.h>
@@ -22,33 +22,31 @@
 #include <OsmAndCore/Logging.h>
 
 #import "OAWebClient.h"
+#import "OAMapCreatorDbHelper.h"
 
 OASQLiteTileSourceMapLayerProvider::OASQLiteTileSourceMapLayerProvider(const QString& fileName)
 : _webClient(std::shared_ptr<const OsmAnd::IWebClient>(new OAWebClient()))
-, _ts(new OsmAnd::TileSqliteDatabase(fileName))
+, _fileName(fileName)
 , _tileSize(256)
-, _ellipsoid(0)
-, _expirationTimeMillis(-1)
 {
-    if (_ts->open())
+    auto db = [OAMapCreatorDbHelper.sharedInstance getTileSqliteDatabase:fileName.toNSString()];
+    if (!db)
+    {
+        db = std::make_shared<OsmAnd::TileSqliteDatabase>(fileName);
+        _ts = db;
+    }
+    
+    if (db->open())
     {
         OsmAnd::TileSqliteDatabase::Meta meta;
-        if (_ts->obtainMeta(meta))
+        if (db->obtainMeta(meta))
         {
             bool ok = false;
             
             auto tileSize = meta.getTileSize(&ok);
             if (ok)
                 _tileSize = (int) tileSize;
-            
-            auto ellipsoid = meta.getEllipsoid(&ok);
-            if (ok)
-                _ellipsoid = ellipsoid > 0;
-            
-            auto expireMinutes = meta.getExpireMinutes(&ok);
-            if (ok)
-                _expirationTimeMillis = expireMinutes * 60 * 1000;
-            
+                        
             _randomsArray = OsmAnd::OnlineTileSources::parseRandoms(meta.getRandoms());
         }
     }
@@ -56,8 +54,39 @@ OASQLiteTileSourceMapLayerProvider::OASQLiteTileSourceMapLayerProvider(const QSt
 
 OASQLiteTileSourceMapLayerProvider::~OASQLiteTileSourceMapLayerProvider()
 {
-    _ts->close();
-    delete _ts;
+}
+
+std::shared_ptr<OsmAnd::TileSqliteDatabase> OASQLiteTileSourceMapLayerProvider::getDatabase() const
+{
+    return _ts ? _ts : [OAMapCreatorDbHelper.sharedInstance getTileSqliteDatabase:_fileName.toNSString()];
+}
+
+bool OASQLiteTileSourceMapLayerProvider::isEllipsoid()
+{
+    const auto& db = getDatabase();
+    OsmAnd::TileSqliteDatabase::Meta meta;
+    if (db && db->open() && db->obtainMeta(meta))
+    {
+        bool ok = false;
+        auto ellipsoid = meta.getEllipsoid(&ok);
+        if (ok)
+            return ellipsoid > 0;
+    }
+    return 0;
+}
+
+int64_t OASQLiteTileSourceMapLayerProvider::getExpirationTimeMillis()
+{
+    const auto& db = getDatabase();
+    OsmAnd::TileSqliteDatabase::Meta meta;
+    if (db && db->open() && db->obtainMeta(meta))
+    {
+        bool ok = false;
+        auto expireMinutes = meta.getExpireMinutes(&ok);
+        if (ok)
+             return expireMinutes * 60 * 1000;
+    }
+    return -1;
 }
 
 OsmAnd::AlphaChannelPresence OASQLiteTileSourceMapLayerProvider::getAlphaChannelPresence() const
@@ -74,12 +103,13 @@ QString OASQLiteTileSourceMapLayerProvider::getUrlToLoad(const OsmAnd::TileId ti
 {
     int32_t x = tileId.x;
     int32_t y = tileId.y;
-    
+        
+    const auto& db = getDatabase();
     OsmAnd::TileSqliteDatabase::Meta meta;
-    if (!_ts->obtainMeta(meta))
+    if (!db || !db->open() || !db->obtainMeta(meta))
         return QString();
 
-    auto maxZoom = _ts->getMaxZoom();
+    auto maxZoom = db->getMaxZoom();
     if (zoom > maxZoom)
         return QString();
     
@@ -97,8 +127,13 @@ QString OASQLiteTileSourceMapLayerProvider::getUrlToLoad(const OsmAnd::TileId ti
 
 bool OASQLiteTileSourceMapLayerProvider::expired(const int64_t time)
 {
-    if (_ts->isTileTimeSupported() && _expirationTimeMillis > 0)
-        return QDateTime::currentMSecsSinceEpoch() - time > _expirationTimeMillis;
+    const auto& db = getDatabase();
+    if (db && db->open() && db->isTileTimeSupported())
+    {
+        auto expirationTimeMillis = getExpirationTimeMillis();
+        if (expirationTimeMillis > 0)
+            return QDateTime::currentMSecsSinceEpoch() - time > expirationTimeMillis;
+    }
     
     return false;
 }
@@ -108,6 +143,10 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
     const OsmAnd::ZoomLevel zoom,
     const std::shared_ptr<const OsmAnd::IQueryController>& queryController/* = nullptr*/)
 {
+    const auto& db = getDatabase();
+    if (!db || !db->open())
+        return nullptr;
+
     const auto& tileUrl = getUrlToLoad(tileId, zoom);
     if (!tileUrl.isEmpty())
     {
@@ -128,12 +167,12 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
                 
                 // 404 means that this tile does not exist, so delete it
                 if (httpStatus == 404)
-                    _ts->removeTileData(tileId, zoom);
+                    db->removeTileData(tileId, zoom);
             }
             requestResult.reset();
             return nullptr;
         }
-        _ts->storeTileData(tileId, zoom, downloadResult, QDateTime::currentMSecsSinceEpoch());
+        db->storeTileData(tileId, zoom, downloadResult, QDateTime::currentMSecsSinceEpoch());
         requestResult.reset();
         return downloadResult;
     }
@@ -161,9 +200,10 @@ const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::createShiftedTileBitmap
 
 const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const QByteArray& data, double offsetY)
 {
+    const auto& db = getDatabase();
     QByteArray dataNext;
     int64_t timeNext;
-    bool ok = _ts->obtainTileData(tileIdNext, zoom, dataNext, &timeNext);
+    bool ok = db && db->open() && db->obtainTileData(tileIdNext, zoom, dataNext, &timeNext);
     if (ok && !expired(timeNext))
     {
         const auto shiftedTile = createShiftedTileBitmap(data, dataNext, offsetY);
@@ -197,7 +237,7 @@ sk_sp<const SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAn
     auto tileId = request.tileId;
     auto zoom = request.zoom;
     double offsetY = 0;
-    if (_ellipsoid)
+    if (isEllipsoid())
     {
         double latitude = OsmAnd::Utilities::getLatitudeFromTile(zoom, tileId.y);
         auto numberOffset = OsmAnd::Utilities::getTileEllipsoidNumberAndOffsetY(zoom, latitude, _tileSize);
@@ -212,9 +252,10 @@ sk_sp<const SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAn
     if (shiftedTile)
         lockTile(tileIdNext, zoom);
 
+    const auto& db = getDatabase();
     QByteArray data;
     int64_t time;
-    bool ok = _ts->obtainTileData(tileId, zoom, data, &time);
+    bool ok = db && db->open() && db->obtainTileData(tileId, zoom, data, &time);
     if (ok && !data.isEmpty() && !expired(time))
     {
         if (shiftedTile)
@@ -319,24 +360,27 @@ bool OASQLiteTileSourceMapLayerProvider::supportsNaturalObtainDataAsync() const
 
 OsmAnd::ZoomLevel OASQLiteTileSourceMapLayerProvider::getMinZoom() const
 {
-    return _ts->getMinZoom();
+    const auto& db = getDatabase();
+    return db ? db->getMinZoom() : OsmAnd::MinZoomLevel;
 }
 
 OsmAnd::ZoomLevel OASQLiteTileSourceMapLayerProvider::getMaxZoom() const
 {
-    return _ts->getMaxZoom();
+    const auto& db = getDatabase();
+    return db ? db->getMaxZoom() : OsmAnd::MaxZoomLevel;
 }
 
 void OASQLiteTileSourceMapLayerProvider::performAdditionalChecks(sk_sp<SkImage> image)
 {
     if (_tileSize != image->width() && image->width() != 0)
     {
+        const auto& db = getDatabase();
         OsmAnd::TileSqliteDatabase::Meta meta;
-        if (_ts->obtainMeta(meta))
+        if (db && db->open() && db->obtainMeta(meta))
         {
             _tileSize = image->width();
             meta.setTileSize(_tileSize);
-            _ts->storeMeta(meta);
+            db->storeMeta(meta);
         }
     }
 }

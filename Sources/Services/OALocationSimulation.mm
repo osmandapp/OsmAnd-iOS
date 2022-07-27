@@ -304,6 +304,21 @@
 @end
 
 
+@implementation OALocation
+
+- (instancetype)initWithProvider:(NSString *)provider location:(CLLocation *)location
+{
+    self = [super initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude];
+    if (self)
+    {
+        _provider = provider;
+    }
+    return self;
+}
+
+@end
+
+
 @implementation OASimulatedLocation
 {
     BOOL _trafficLight;

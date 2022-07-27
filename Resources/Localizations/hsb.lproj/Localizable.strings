@@ -37,7 +37,7 @@
 "transport_routes" = "Čary";
 "transport_nearby_routes_within" = "Bliske linije w radiusu";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Stop";
+"transport_stop" = "Zastanišćo";
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
@@ -362,7 +362,7 @@
 "shared_string_and" = "a";
 "shared_string_edit" = "Wobdźěłać";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Pozdźišo";
+"shared_string_later" = "Dale";
 "shared_string_of" = "of";
 "shared_string_all" = "All";
 "shared_string_from" = "wot";
@@ -425,7 +425,7 @@
 "poi_hide" = "Schować";
 // My Places
 "favorites" = "Fawority";
-"tracks" = "Puće";
+"tracks" = "Čary";
 // GPX
 "gpx_point" = "Dypk";
 "gpx_waypoint" = "Čarowy dypk";
@@ -668,7 +668,7 @@
 "osm_website" = "Webstrona";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"osm_poi_delete_title" = "POI wotstronić";
+"osm_poi_delete_title" = "POI wušmórnyć";
 "osm_target_modified" = "Změnjene OSM POI-dypki";
 "osm_target_deleted" = "Wotstronjene OSM POI-dypki";
 "osm_target_created" = "OSM POI-dypk wutworjeny";
@@ -726,7 +726,7 @@
 "shared_string_reload" = "wobnowić";
 "shared_string_show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
-"shared_string_filter" = "Filter";
+"shared_string_filter" = "filter";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
@@ -846,7 +846,7 @@
 "open_osm_note" = "OSM-noticu wočinić";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Commit";
-"osm_alert_message" = "Zdźělenka";
+"osm_alert_message" = "Powěsć";
 "osm_alert_button_ok" = "Noticu wutworić";
 "modify_poi" = "Modify the POI information";
 "actions" = "Akcije";
@@ -885,7 +885,7 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Jězbu planować";
 "help_legend" = "Legenda karty";
-"help_other_header" = "druhe";
+"help_other_header" = "Druhe";
 "help_install_and_troubleshoot" = "Instalacija a rozrisowanje problemow";
 "help_tech_articles" = "Technical articles";
 "help_versions" = "Wersije";
@@ -1081,11 +1081,11 @@
 "get_directions" = "Nawigacija";
 "parking" = "Parkowanišćo";
 "directions_more_options" = "Nawigacija wottud";
-"nearby_search" = "Wokoło stejišća pytać";
+"nearby_search" = "We wokolinje pytać";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
-"plugins" = "Rozšěrjenja";
+"plugins" = "Přidatki";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -1401,9 +1401,9 @@
 "shared_string_next" = "Přichodne";
 "base_profile_descr_aircraft" = "Lětadło, gliding";
 "app_theme_light" = "Swětłe";
-"update_map" = "Kartowe kachlicy zaktualizować";
+"update_map" = "Zaktualizuj kartu";
 "enter_profile_name" = "Zapodaj mjeno profila";
-"nothing_found_empty" = "Žadyn pytanski wuslědk";
+"nothing_found_empty" = "Žadyn wuslědk";
 "res_slope" = "spad";
 "export_profile" = "Profil eksportować";
 "base_profile_descr_public_transport" = "Wše typy zjawneho wobchada";
@@ -1566,10 +1566,13 @@
 "shared_string_import_complete" = "Import dokónčeny";
 "add_description" = "Wopisanje dodać";
 "private_access_routing_req" = "Twój cil leži w priwatnej kónčinje. Za tutu jězbu wužiwanje priwatnych pućow dowolić\?";
-"shared_string_stop" = "Stop";
+"shared_string_stop" = "Zastanišćo";
 "altitude_descent" = "Wotstup";
 "shared_string_start" = "Start";
-"rendering_value_pink_name" = "pink";
 "osm_live_banner_desc" = "Za njewobmjezowane sćehnjenje kartow a aktualizacije husćišo hač jónu wob měsac: tydźensce, wšědnje abo hodźinsce.";
 "map_settings_legend" = "Legenda";
 "altitude_ascent" = "Postup";
+"shared_string_delete_all" = "Wšitke wotstronić";
+"paused" = "Přetorhnjene";
+"shared_string_data" = "Daty";
+"shared_string_undefined" = "njedefinowane";

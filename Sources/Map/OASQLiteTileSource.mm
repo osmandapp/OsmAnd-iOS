@@ -9,6 +9,7 @@
 #import "OASQLiteTileSource.h"
 #import <sqlite3.h>
 #import "QuadRect.h"
+#import "OAMapCreatorDbHelper.h""
 
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
@@ -39,8 +40,10 @@
         _filePath = [filePath copy];
         _name = [[_filePath lastPathComponent] stringByDeletingPathExtension];
         
-        _db = std::make_shared<OsmAnd::TileSqliteDatabase>(QString::fromNSString(_filePath));
-                
+        _db = [OAMapCreatorDbHelper.sharedInstance getTileSqliteDatabase:_filePath];
+        if (!_db)
+            _db = std::make_shared<OsmAnd::TileSqliteDatabase>(QString::fromNSString(_filePath));
+                        
         _minZoom = 1;
         _maxZoom = 17;
         _inversiveZoom = YES; // BigPlanet
@@ -55,8 +58,6 @@
 
 - (void) dealloc
 {
-    if (_db)
-        _db->close(false);
 }
 
 - (int) bitDensity
@@ -454,14 +455,13 @@
 {
     BOOL res = NO;
 
-    auto *db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(filePath));
-    if (db->open())
-    {
+    auto db = [OAMapCreatorDbHelper.sharedInstance getTileSqliteDatabase:filePath];
+    if (!db)
+        db = std::make_shared<OsmAnd::TileSqliteDatabase>(QString::fromNSString(filePath));
+    
+    if (db && db->open())
         res = db->isOnlineTileSource();
-        
-        db->close(false);
-    }
-    delete db;
+
     return res;
 }
 
@@ -469,17 +469,16 @@
 {
     NSString *title = nil;
 
-    auto *db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(filePath));
-    if (db->open())
+    auto db = [OAMapCreatorDbHelper.sharedInstance getTileSqliteDatabase:filePath];
+    if (!db)
+        db = std::make_shared<OsmAnd::TileSqliteDatabase>(QString::fromNSString(filePath));
+    
+    if (db && db->open())
     {
         OsmAnd::TileSqliteDatabase::Meta meta;
         if (db->obtainMeta(meta))
             title = meta.getTitle().toNSString();
-        db->close(false);
     }
-
-    delete db;
-
     return title.length > 0 ? title : [[[filePath lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 }
 

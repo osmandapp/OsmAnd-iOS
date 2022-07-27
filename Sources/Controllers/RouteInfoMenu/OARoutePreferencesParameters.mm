@@ -254,7 +254,7 @@
         }
         else if ([gpxParam getId] == connect_route_points_id)
         {
-            [rp setConnectRoutePoints:selected];
+            [rp setConnectPointsStraightly:selected];
         }
     }
     if ([gpxParam getId] == calculate_osmand_route_without_internet_id)

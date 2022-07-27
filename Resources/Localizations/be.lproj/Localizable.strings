@@ -25,15 +25,15 @@
 "fav_replace" = "Замяніць";
 "poi_hide" = "Схаваць";
 // My Places
-"favorites" = "Улюбёныя мясціны";
+"favorites" = "Улюбёныя";
 "gpx_waypoints" = "Пункты шляху";
 "shared_string_export" = "Экспартаваць";
 "gpx_stat" = "Статыстыка";
 "rec_interval" = "Інтэрвал запісу";
 // Map settings
 "rendering_value_browse_map_name" = "Прагляд мапы";
-"m_style_car" = "Аўтамабіль";
-"m_style_bicycle" = "Язда на ровары";
+"m_style_car" = "Кіраванне";
+"m_style_bicycle" = "Ровар";
 "map_settings_map" = "Мапа";
 "map_settings_show" = "Паказаць на мапе";
 "map_settings_day" = "Дзень";
@@ -258,7 +258,7 @@
 // Import
 "import_title" = "Імпартаваць даныя";
 "import_choose_type" = "Абярыце што імпартаваць";
-"import_favorite" = "Улюбёнае";
+"import_favorite" = "Улюбёныя мясціны";
 "import_failed" = "Не атрымалася імпартаваць";
 "import_cannot" = "Вызначаны файл не можа быць імпартаваны";
 "import_gpx" = "GPX-сляды";
@@ -496,7 +496,7 @@
 "menu_my_directions" = "Мае напрамкі";
 "product_title_trip_planning" = "Планаванне паездак";
 "shared_string_street_intersection" = "Скрыжаванне вуліц";
-"shared_string_building" = "Дом";
+"shared_string_building" = "Будынак";
 "shared_string_street" = "Вуліца";
 "arrived_at_intermediate_point" = "Вы дасягнулі прамежкавага пункта";
 "ending_point_too_far" = "Канцавы пункт занадта далёка ад бліжэйшай дарогі.";
@@ -721,7 +721,7 @@
 "twitter" = "Twitter";
 "route_stops_before" = "%1$s прыпынкаў да абранага";
 "transport_routes" = "Маршруты";
-"transport_stop" = "Прыпынак";
+"transport_stop" = "Спыніць";
 "new_destination_point_dialog" = "Вы ўжо абралі пункт прызначэння";
 "show_poi_over_map" = "Паказваць POI";
 "search_radius" = "Радыус пошуку";
@@ -871,7 +871,7 @@
 "quick_actions_show_dialog" = "Паказваць прамежкавы дыялог";
 "mapillary_get_title" = "Палепшыць фотапакрыццё Mapillary";
 "osm_website" = "Вэб-сайт";
-"osm_edits_advanced" = "Высокая";
+"osm_edits_advanced" = "Пашыранае";
 "add_first_inermediate" = "Дадаць прамежкавы пункт";
 "help_map_viewing" = "Агляд мапы";
 "directions_more_options" = "Маршрут адсюль";
@@ -2296,7 +2296,7 @@
 "backup_error_size_is_exceeded" = "Максімальны памер OsmAnd Cloud перавышаны на %@";
 "redeem_promo_code" = "Скарыстацца прома-кодам";
 "rendering_attr_monorailRoutes_name" = "Манарэйкавыя маршруты";
-"shared_string_stop" = "Прыпынак";
+"shared_string_stop" = "Спыніць";
 "cloud_last_backup" = "Апошняе рэзервовае капіяванне";
 "purchases_feature_desc_nautical" = "Атрымайце доступ да інфармацыі аб марскіх глыбінях";
 "subscriptions" = "Падпіскі";
@@ -2389,3 +2389,8 @@
 "gpx_upload_public_visibility_descr" = "\"Публічны\" азначае, што след публічна адлюстроўваецца ў вашых слядах і ў агульнадаступных спісах слядоў, а таксама ў агульнадаступным спісе слядоў з пазнакамі часу ў неапрацаваным выглядзе. Даныя з API, не спасылаюцца на вашу старонку слядоў. Пазнакі часу недаступныя праз агульнадаступны API GPS і не размяшчаюцца ў храналагічным парадку.";
 "gpx_upload_identifiable_visibility_descr" = "\"Можна ідэнтыфікаваць\" азначае, што след будзе публічна адлюстроўвацца ў вашых слядах і ў агульнадаступных спісах слядоў. Гэта азначае, што іншыя карыстальнікі змогуць спампаваць неапрацаваны след і звязаць яго з вашым імем карыстальніка. Агульнадаступныя даныя следу з GPS API, якія абслугоўваюцца з дапамогай API кропак следу, будуць спасылацца на пачатковую старонку следу.";
 "gpx_import_already_exists_short" = "Указаны файл следу ўжо існуе ў спісе.";
+"shared_string_delete_all" = "Выдаліць усё";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Без абмежаванняў)";
+"shared_string_data" = "Даныя";
+"lang_ckb" = "Курдская (цэнтральная)";
+"restore_from_osmand_cloud" = "Аднаўленне з OsmAnd Cloud";

@@ -41,7 +41,7 @@
 "transport_routes" = "Путеви";
 "transport_nearby_routes_within" = "Превоз у близини";
 "transport_nearby_routes" = "Близу";
-"transport_stop" = "Станица";
+"transport_stop" = "Заустави";
 "cancel_navigation" = "Заустави навођење";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Поређај од врата до врата";
@@ -412,7 +412,7 @@
 "units_m_s" = "m/s";
 "tones" = "тона";
 "nothing_found" = "Ништа није пронађено: %@";
-"nothing_found_empty" = "Ништа није пронађено";
+"nothing_found_empty" = "Нема ничег пронађеног";
 "nothing_found_descr" = "Измените упит за претрагу или повећајте радијус претраге";
 "select_street" = "Изаберите улицу";
 "shared_string_in_name" = "у %@";
@@ -581,7 +581,7 @@
 "poi_hide" = "Сакриј";
 
 // My Places
-"favorites" = "Омиљено";
+"favorites" = "Омиљени";
 "tracks" = "Путање";
 "personal_category_name" = "Лични";
 "visible" = "Видљиво";
@@ -664,7 +664,7 @@
 "stats_select_graph_data" = "Изаберите податке графикона";
 
 // Map settings
-"m_style_car" = "Вожња";
+"m_style_car" = "Вожња аутомобила";
 "m_style_walk" = "Пешачење";
 "m_style_bicycle" = "Бицикла";
 "m_style_pulic_transport" = "Јавни превоз";
@@ -1201,7 +1201,7 @@
 "osm_editing_settings_descr" = "Подешавања овог додатка су глобална и примењују се на све профиле.";
 "osm_note" = "Белешка ОСМ-а";
 "osm_created" = "Направљено";
-"osm_deleted" = "Избрисана";
+"osm_deleted" = "Избрисано";
 "osm_modified" = "Измењено";
 "osm_reopened" = "Поново отворено";
 "osm_name" = "OpenStreetMap корисничко име";
@@ -1247,7 +1247,7 @@
 "osm_edits_offline_layer" = "OSM измене/белешке (ван мреже)";
 "osm_notes_online_layer" = "OSM Notes (online)";
 "osm_edits_basic" = "Основно";
-"osm_edits_advanced" = "Напредно";
+"osm_edits_advanced" = "Напредна";
 "osm_edits_all" = "Све измене";
 "osm_edits_poi" = "POI измене";
 "osm_edits_notes" = "Notes";
@@ -1311,7 +1311,7 @@
 "add_map_style" = "Додајте стил мапе";
 "map_sources" = "Додај извор карте";
 "map_styles" = "Стилови карте";
-"add_action" = "Додај акцију";
+"add_action" = "Додај радњу";
 "unsupported_items" = "Неподржане ставке";
 "create_items" = "Направи ставке";
 "configure_map" = "Подеси карту";
@@ -1761,7 +1761,7 @@
 "parking" = "Паркинг";
 "parked_at" = "Паркирано у";
 "directions_more_options" = "Навођење од";
-"nearby_search" = "Тражи у близини";
+"nearby_search" = "Претражи околину";
 "change_object_posiotion" = "Промените позицију објекта";
 "change_position_descr" = "Померите мапу да промените позицију објекта";
 "est_travel_time" = "Процени време путовања";
@@ -2277,7 +2277,7 @@
 "symbols" = "Симболи";
 "transport" = "Превоз";
 "travel" = "Путовање";
-"nautical" = "Поморско";
+"nautical" = "Поморска";
 "industrial" = "Индустрија";
 "education" = "Образовање";
 "settings_item_read_error" = "Није могуће прочитати %@.";
@@ -2517,7 +2517,7 @@
 "explore_osmnad_plans_to_find_suitable" = "Истражите OsmAnd Планове ради проналажења Вама одговарајућих.";
 "transport_hazmat_no_desc" = "На неким путевима и тунелима није дозвољен превоз опасних материја.";
 "expired" = "Истекло";
-"shared_string_stop" = "Станица";
+"shared_string_stop" = "Заустави";
 "purchases_feature_desc_combined_wiki" = "Истражујте чланке на Википедији у покрету, без интернет везе. Офлајн подаци су подељени по земљама и доступни на свим језицима.";
 "product_desc_ext_development" = "Подешавања за развој и отклањање гррешака као што су симулација навођења, перформансе исцртавања или гласовни упити. Намењено програмерима, непотребно приликом нормалног коришћења.";
 "terrain_maps" = "Мапе терена";
@@ -2545,6 +2545,12 @@
 "purchases_feature_desc_monthly_map_updates" = "Обезбедите приступ редовним месечним исправкама за офлајн мапе.";
 "not_available_with" = "Није доступно са %@";
 "redeem_promo_code" = "Искористите промотивни код";
-"transport_hazmat_yes_desc" = "Морате одабрати исправну категорију.";
 "routing_attr_hazmat_category_name" = "Превожење опасних материја";
-"transport_hazmat_no_desc" = "На неким путевима и тунелима није дозвољен превоз опасних материја.";
+"on_hold" = "На чекању";
+"shared_string_data" = "Подаци";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Нема ограничења)";
+"paused" = "Паузирано";
+"shared_string_delete_all" = "Обриши све";
+"restore_from_osmand_cloud" = "Врати са OsmAnd облака";
+"in_grace_period" = "У грејс периоду";
+"shared_string_undefined" = "Неодређено";

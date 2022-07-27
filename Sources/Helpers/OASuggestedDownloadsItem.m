@@ -11,6 +11,8 @@
 #import "OACustomRegion.h"
 #import "OACustomPlugin.h"
 
+#define APPROXIMATE_SUGGESTED_DOWNLOAD_SIZE_BYTES 120
+
 @implementation OASuggestedDownloadsItem
 
 - (instancetype) initWithScopeId:(NSString *)scopeId searchType:(NSString *)searchType names:(NSArray<NSString *> *)names limit:(NSInteger)limit
@@ -39,6 +41,11 @@
 - (NSString *)publicName
 {
     return @"suggested_downloads";
+}
+
+- (long)getEstimatedSize
+{
+    return APPROXIMATE_SUGGESTED_DOWNLOAD_SIZE_BYTES;
 }
 
 - (void)readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error

@@ -11,6 +11,8 @@
 #import "OACustomRegion.h"
 #import "OACustomPlugin.h"
 
+#define APPROXIMATE_DOWNLOAD_ITEM_SIZE_BYTES 2048
+
 @implementation OADownloadsItem
 
 - (EOASettingsItemType)type
@@ -51,6 +53,11 @@
         }
         json[@"items"] = jsonArray;
     }
+}
+
+- (long)getEstimatedSize
+{
+    return APPROXIMATE_DOWNLOAD_ITEM_SIZE_BYTES;
 }
 
 - (OASettingsItemWriter *)getWriter

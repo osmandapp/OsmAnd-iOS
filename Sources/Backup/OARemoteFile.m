@@ -65,8 +65,7 @@
 - (NSString *) getTypeNamePath
 {
     if (_name.length > 0)
-        return [NSString stringWithFormat:@"%@%@", _type, _name];
-//        type + (name.charAt(0) == '/' ? name : "/" + name);
+        return [NSString stringWithFormat:@"%@%@", _type, ([_name characterAtIndex:0] != '/' ? [@"/" stringByAppendingString:_name] : _name)];
     else
         return _type;
 }
@@ -109,6 +108,43 @@
 - (NSString *) toString
 {
     return [NSString stringWithFormat:@"%@/%@ (%ld) clientTime=%ld updateTime=%ld", _type, _name, _filesize, _clienttimems, _updatetimems];
+}
+
+- (NSDictionary *) toJson
+{
+    NSMutableDictionary *res = [NSMutableDictionary dictionary];
+    if (_userid != 0)
+        res[@"userid"] = @(_userid);
+    if (_identifier != 0)
+        res[@"id"] = @(_identifier);
+    if (_deviceid != 0)
+        res[@"deviceid"] = @(_deviceid);
+    if (_filesize != 0)
+        res[@"filesize"] = @(_filesize);
+    if (_type)
+        res[@"type"] = _type;
+    if (_name)
+        res[@"name"] = _name;
+    if (_updatetime)
+    {
+        res[@"updatetimems"] = @(_updatetimems);
+    }
+    if (_clienttime)
+    {
+        res[@"clienttimems"] = @(_clienttimems);
+    }
+    if (_zipSize > 0)
+        res[@"zipSize"] = @(_zipSize);
+    
+    return res;
+}
+
+// MARK: NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    OARemoteFile* clone = [[OARemoteFile alloc] initWithJson:self.toJson];
+    return clone;
 }
 
 @end

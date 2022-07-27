@@ -8,10 +8,15 @@
 
 #import "OABaseCloudBackupViewController.h"
 
-NS_ASSUME_NONNULL_BEGIN
+typedef NS_ENUM(NSInteger, EOACloudScreenSourceType) {
+    EOACloudScreenSourceTypeSignIn = 0,
+    EOACloudScreenSourceTypeSignUp,
+    EOACloudScreenSourceTypeDirect
+};
 
 @interface OACloudBackupViewController : OABaseCloudBackupViewController
 
+- (instancetype) initWithSourceType:(EOACloudScreenSourceType)type;
+
 @end
 
-NS_ASSUME_NONNULL_END

@@ -1368,7 +1368,7 @@
 "m_style_pulic_transport" = "Transpòrt public";
 "app_profiles" = "Perfius de l\'aplicacion";
 "none_point_error" = "Ajustar un ponch aumens.";
-"service" = "Via de servici";
+"service" = "Servici";
 "shared_string_gpx_track" = "Pista, draia, carraira";
 "hide_compass_ruler" = "Escondre la règla de la bossòla";
 "shared_string_disable" = "Desactivar";
@@ -2227,3 +2227,7 @@
 "purchases_feature_desc_combined_wiki" = "Exploratz leis articles de Wikipèdia onte que vos trobetz, sensa connexion a Internet. Donadas fòra de linha segon lo país e disponiblas dins totei lei lengas.";
 "shared_string_learn_more" = "Legir mai";
 "purchases_feature_desc_wikipedia" = "Exploratz Wikipèdia fòra de linha. Articles segon lo país e disponibles dins totei lei lengas.";
+"on_hold" = "A l\'espèra";
+"restore_from_osmand_cloud" = "Restaurar de la Nívol OsmAnd";
+"in_grace_period" = "En periòde de gràcia";
+"shared_string_data" = "Donadas";

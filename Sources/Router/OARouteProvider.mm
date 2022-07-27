@@ -29,6 +29,7 @@
 #include <routingConfiguration.h>
 #include <routingContext.h>
 #include <routeSegmentResult.h>
+#include "routeResultPreparation.h"
 
 #define OSMAND_ROUTER @"OsmAndRouter"
 #define OSMAND_ROUTER_V2 @"OsmAndRouterV2"
@@ -157,7 +158,7 @@
     _reverse = builder.reverse;
     self.passWholeRoute = builder.passWholeRoute;
     self.useIntermediatePointsRTE = builder.useIntermediatePointsRTE;
-    self.connectRoutePoints = builder.connectRoutePoints;
+    self.connectPointsStraightly = builder.connectPointsStraightly;
     builder.calculateOsmAndRoute = NO; // Disabled temporary builder.calculateOsmAndRoute;
     if (file.points.count > 0)
     {
@@ -416,6 +417,14 @@
 {
     CLLocation *loc = [[CLLocation alloc] initWithCoordinate:pt.position altitude:isnan(pt.elevation) ? 0. : pt.elevation horizontalAccuracy:isnan(pt.horizontalDilutionOfPrecision) ? 0. : pt.horizontalDilutionOfPrecision verticalAccuracy:0. course:0. speed:pt.speed timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
     return loc;
+}
+
++ (NSArray<CLLocation *> *) locationsFromWpts:(NSArray<OAWptPt *> *)wpts
+{
+    NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
+    for (OAWptPt *pt in wpts)
+        [locations addObject:[self createLocation:pt]];
+    return [NSArray arrayWithArray:locations];
 }
 
 + (NSArray<OARouteDirectionInfo *> *) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)res gpxFile:(OAGPXDocument *)gpxFile segmentEndPoints:(NSMutableArray<CLLocation *> *)segmentEndPoints osmandRouter:(BOOL)osmandRouter leftSide:(BOOL)leftSide defSpeed:(float)defSpeed selectedSegment:(NSInteger)selectedSegment
@@ -825,7 +834,7 @@
             if (ctx->progress)
                 routingTime = ctx->progress->routingCalculatedTime;
             
-            return [[OARouteCalculationResult alloc] initWithSegmentResults:result start:params.start end:params.end intermediates:params.intermediates leftSide:params.leftSide routingTime:routingTime waypoints:!params.gpxRoute ? nil : params.gpxRoute.wpt mode:params.mode calculateFirstAndLastPoint:YES];
+            return [[OARouteCalculationResult alloc] initWithSegmentResults:result start:params.start end:params.end intermediates:params.intermediates leftSide:params.leftSide routingTime:routingTime waypoints:!params.gpxRoute ? nil : params.gpxRoute.wpt mode:params.mode calculateFirstAndLastPoint:YES initialCalculation:params.initialCalculation];
         }
     }
     catch (NSException *e)
@@ -849,21 +858,21 @@
 }
 
 - (SHARED_PTR<GpxRouteApproximation>) calculateGpxApproximation:(OARoutingEnvironment *)env
-														   gctx:(SHARED_PTR<GpxRouteApproximation>)gctx
-														 points:(std::vector<SHARED_PTR<GpxPoint>> &)points
-												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+                                                           gctx:(SHARED_PTR<GpxRouteApproximation>)gctx
+                                                         points:(std::vector<SHARED_PTR<GpxPoint>> &)points
+                                                  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
 {
-	const auto resultAcceptor =
-	[resultMatcher]
-	(SHARED_PTR<GpxRouteApproximation> approximation) -> bool
-	{
-		OAGpxRouteApproximation *approx = [[OAGpxRouteApproximation alloc] initWithApproximation:approximation];
-		[resultMatcher publish:approx];
-		return true;
-	};
-	
-	env.router->searchGpxRoute(gctx, points, resultAcceptor);
-	return gctx;
+    const auto resultAcceptor =
+    [resultMatcher]
+    (SHARED_PTR<GpxRouteApproximation> approximation) -> bool
+    {
+        OAGpxRouteApproximation *approx = [[OAGpxRouteApproximation alloc] initWithApproximation:approximation];
+        [resultMatcher publish:approx];
+        return true;
+    };
+    
+    env.router->searchGpxRoute(gctx, points, resultAcceptor);
+    return gctx;
 }
 
 - (OARoutingEnvironment *) calculateRoutingEnvironment:(OARouteCalculationParams *)params calcGPXRoute:(BOOL)calcGPXRoute skipComplex:(BOOL)skipComplex
@@ -982,7 +991,9 @@
     rp.fast = routeParams.fast;
     rp.onlyStartPointChanged = routeParams.onlyStartPointChanged;
     rp.previousToRecalculate =  routeParams.previousToRecalculate;
+    rp.extraIntermediates = YES;
     NSMutableArray<CLLocation *> *rpIntermediates = [NSMutableArray array];
+    
     NSInteger closest = [self findClosestIntermediate:routeParams intermediates:intermediates];
     for (NSInteger i = closest; i < intermediates.count; i++)
     {
@@ -1062,27 +1073,28 @@
     return directions;
 }
 
-- (OARouteCalculationResult *) findOfflineRouteSegment:(OARouteCalculationParams *)rParams start:(CLLocation *)start end:(CLLocation  *)end
+- (OARouteCalculationResult *) findOfflineRouteSegment:(OARouteCalculationParams *)params start:(CLLocation *)start end:(CLLocation  *)end
 {
     OARouteCalculationParams *newParams = [[OARouteCalculationParams alloc] init];
     newParams.start = start;
     newParams.end = end;
-    newParams.calculationProgress = rParams.calculationProgress;
-    newParams.mode = rParams.mode;
-    newParams.leftSide = rParams.leftSide;
+    newParams.calculationProgress = params.calculationProgress;
+    newParams.mode = params.mode;
+    newParams.leftSide = params.leftSide;
     OARouteCalculationResult *newRes = nil;
     try
     {
-        if (rParams.mode.getRouterService == OSMAND)
+        EOARouteService routeService = (EOARouteService) params.mode.getRouterService;
+        if (routeService == OSMAND)
         {
             newRes = [self findVectorMapsRoute:newParams calcGPXRoute:NO];
         }
-//        else if (rParams.mode.getRouteService() == RouteService.BROUTER)
+//        else if (routeService == RouteService.BROUTER)
 //        {
 //            newRes= findBROUTERRoute(newParams);
 //        }
-        else if (rParams.mode.getRouterService == STRAIGHT ||
-                   rParams.mode.getRouterService == DIRECT_TO)
+        else if (params.mode.getRouterService == STRAIGHT ||
+                   params.mode.getRouterService == DIRECT_TO)
         {
             newRes = [self findStraightRoute:newParams];
         }
@@ -1160,17 +1172,21 @@
 
 - (OARouteCalculationResult *) findStraightRoute:(OARouteCalculationParams *)routeParams
 {
-    NSMutableArray<CLLocation *> *points = [NSMutableArray new];
+    NSMutableArray<OALocation *> *points = [NSMutableArray new];
     NSMutableArray<CLLocation *> *segments = [NSMutableArray new];
-    [points addObject:[routeParams.start copy]];
+    [points addObject:[[OALocation alloc] initWithProvider:@"pnt" location:routeParams.start]];
     if(routeParams.intermediates) {
         for (CLLocation *l in routeParams.intermediates)
         {
-            [points addObject:[l copy]];
+            [points addObject:[[OALocation alloc] initWithProvider:routeParams.extraIntermediates ? @"" : @"pnt" location:l]];
+        }
+        if (routeParams.extraIntermediates)
+        {
+            routeParams.intermediates = nil;
         }
     }
-    [points addObject:[routeParams.end copy]];
-    CLLocation *lastAdded = nil;
+    [points addObject:[[OALocation alloc] initWithProvider:@"" location:routeParams.end]];
+    OALocation *lastAdded = nil;
     float speed = [routeParams.mode getDefaultSpeed];
     NSMutableArray<OARouteDirectionInfo *> *computeDirections = [NSMutableArray new];
     while(points.count > 0)
@@ -1180,22 +1196,22 @@
         {
             lastAdded = points.firstObject;
             [points removeObjectAtIndex:0];
-            if(lastAdded)
+            if(lastAdded && [lastAdded.provider isEqualToString:@"pnt"])
             {
                 OARouteDirectionInfo *previousInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:speed turnType:TurnType::ptrStraight()];
                 previousInfo.routePointOffset = (int) segments.count;
                 [previousInfo setDescriptionRoute:OALocalizedString(@"route_head")];
                 [computeDirections addObject:previousInfo];
             }
-            [segments addObject:lastAdded];
+            [segments addObject:(CLLocation *) lastAdded];
         }
         else
         {
-            CLLocation *mp = [OAMapUtils calculateMidPoint:lastAdded s2:pl];
+            OALocation *mp = [[OALocation alloc] initWithProvider:@"" location:[OAMapUtils calculateMidPoint:lastAdded s2:pl]];
             [points insertObject:mp atIndex:0];
         }
     }
-    return [[OARouteCalculationResult alloc] initWithLocations:segments directions:computeDirections params:routeParams waypoints:nil addMissingTurns:NO];
+    return [[OARouteCalculationResult alloc] initWithLocations:segments directions:computeDirections params:routeParams waypoints:nil addMissingTurns:routeParams.extraIntermediates];
 }
 
 + (std::vector<std::pair<double, double>>) coordsToLocations:(NSArray<CLLocation *> *)points
@@ -1210,7 +1226,6 @@
 
 - (OARouteCalculationResult *) calculateGpxRoute:(OARouteCalculationParams *)routeParams
 {
-    // get the closest point to start and to end
     OAGPXRouteParams *gpxParams = routeParams.gpxRoute;
     BOOL calcWholeRoute = gpxParams.passWholeRoute && (routeParams.previousToRecalculate == nil || !routeParams.onlyStartPointChanged);
     BOOL calculateOsmAndRouteParts = gpxParams.calculateOsmAndRouteParts;
@@ -1225,9 +1240,9 @@
         
         for (NSInteger i = 1; i < gpxParams.routePoints.count; i++)
         {
-            OAWptPt *trackPoint = gpxParams.routePoints[i];
-            OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:trackPoint.getProfileType def:OAApplicationMode.DEFAULT];
-            CLLocation *end = [[CLLocation alloc] initWithLatitude:trackPoint.getLatitude longitude:trackPoint.getLongitude];
+            OAWptPt *gpxPoint = gpxParams.routePoints[i];
+            OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:gpxPoint.getProfileType def:OAApplicationMode.DEFAULT];
+            CLLocation *end = [[CLLocation alloc] initWithLatitude:gpxPoint.getLatitude longitude:gpxPoint.getLongitude];
             
             OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
             params.inSnapToRoadMode = YES;
@@ -1265,9 +1280,9 @@
     {
         if (calcWholeRoute && !calculateOsmAndRouteParts)
         {
-            return [[OARouteCalculationResult alloc] initWithSegmentResults:gpxRouteResult start:routeParams.start end:routeParams.end intermediates:routeParams.intermediates leftSide:routeParams.leftSide routingTime:0. waypoints:nil mode:routeParams.mode calculateFirstAndLastPoint:YES];
+            return [[OARouteCalculationResult alloc] initWithSegmentResults:gpxRouteResult start:routeParams.start end:routeParams.end intermediates:routeParams.intermediates leftSide:routeParams.leftSide routingTime:0. waypoints:gpxParams.wpt mode:routeParams.mode calculateFirstAndLastPoint:YES initialCalculation:routeParams.initialCalculation];
         }
-        OARouteCalculationResult *result = [[OARouteCalculationResult alloc] initWithSegmentResults:gpxRouteResult start:routeParams.start end:routeParams.end intermediates:routeParams.intermediates leftSide:routeParams.leftSide routingTime:0. waypoints:nil mode:routeParams.mode calculateFirstAndLastPoint:NO];
+        OARouteCalculationResult *result = [[OARouteCalculationResult alloc] initWithSegmentResults:gpxRouteResult start:routeParams.start end:routeParams.end intermediates:routeParams.intermediates leftSide:routeParams.leftSide routingTime:0. waypoints:gpxParams.wpt mode:routeParams.mode calculateFirstAndLastPoint:NO initialCalculation:routeParams.initialCalculation];
         NSArray<CLLocation *> *gpxRouteLocations = [result getImmutableAllLocations];
         NSInteger nearestGpxPointInd = calcWholeRoute ? 0 : [self findNearestGpxPointIndexFromRoute:gpxRouteLocations startLoc:routeParams.start calculateOsmAndRouteParts:calculateOsmAndRouteParts];
         CLLocation *nearestGpxLocation = nil;
@@ -1294,10 +1309,15 @@
         {
             if (nearestGpxPointInd > 0)
             {
-                gpxRoute = [result getOriginalRoute:(int)nearestGpxPointInd];
+                gpxRoute = [result getOriginalRoute:(int)nearestGpxPointInd includeFirstSegment:NO];
                 if (gpxRoute.size() > 0)
                 {
-                    gpxRoute.erase(gpxRoute.begin());
+                    LatLon startPoint = gpxRoute[0]->getStartPoint();
+                    nearestGpxLocation = [[CLLocation alloc] initWithLatitude:startPoint.lat longitude:startPoint.lon];
+                }
+                else
+                {
+                    nearestGpxLocation = [[CLLocation alloc] initWithLatitude:routeParams.end.coordinate.latitude longitude:routeParams.end.coordinate.longitude];
                 }
             }
             else
@@ -1331,11 +1351,11 @@
         {
             newGpxRoute.insert(newGpxRoute.end(), lastSegmentRoute.begin(), lastSegmentRoute.end());
         }
-        return [[OARouteCalculationResult alloc] initWithSegmentResults:newGpxRoute start:routeParams.start end:routeParams.end intermediates:routeParams.intermediates leftSide:routeParams.leftSide routingTime:0. waypoints:nil mode:routeParams.mode calculateFirstAndLastPoint:YES];
+        return [[OARouteCalculationResult alloc] initWithSegmentResults:newGpxRoute start:routeParams.start end:routeParams.end intermediates:routeParams.intermediates leftSide:routeParams.leftSide routingTime:0. waypoints:gpxParams.wpt mode:routeParams.mode calculateFirstAndLastPoint:YES initialCalculation:routeParams.initialCalculation];
     }
     
     if (routeParams.gpxRoute.useIntermediatePointsRTE)
-        return [self calculateOsmAndRouteWithIntermediatePoints:routeParams intermediates:gpxParams.points connectRtePts:gpxParams.connectRoutePoints];
+        return [self calculateOsmAndRouteWithIntermediatePoints:routeParams intermediates:gpxParams.points connectRtePts:gpxParams.connectPointsStraightly];
     
     NSMutableArray<CLLocation *> *gpxRoute = [NSMutableArray array];
     NSMutableArray<NSNumber *> *startI = [NSMutableArray arrayWithObject:@(0)];
@@ -1364,12 +1384,21 @@
     return [[OARouteCalculationResult alloc] initWithLocations:gpxRoute directions:gpxDirections params:routeParams waypoints:gpxParams.wpt addMissingTurns:routeParams.gpxRoute.addMissingTurns];
 }
 
+- (void) calculateGpxRouteTimeSpeed:(OARouteCalculationParams *)params gpxRouteResult:(std::vector<std::shared_ptr<RouteSegmentResult>>)gpxRouteResult
+{
+    OARoutingEnvironment *env = [self calculateRoutingEnvironment:params calcGPXRoute:NO skipComplex:YES];
+    if (env)
+    {
+        calculateTimeSpeed(env.ctx.get(), gpxRouteResult);
+    }
+}
+
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) findRouteWithIntermediateSegments:(OARouteCalculationParams *)routeParams result:(OARouteCalculationResult *)result gpxRouteLocations:(NSArray<CLLocation *> *)gpxRouteLocations segmentEndpoints:(NSArray<CLLocation *> *)segmentEndpoints nearestGpxPointInd:(NSInteger)nearestGpxPointInd
 {
     std::vector<std::shared_ptr<RouteSegmentResult>> newGpxRoute;
     
     NSInteger lastIndex = nearestGpxPointInd;
-    for (NSInteger i = 0; i < (NSInteger) segmentEndpoints.count - 1; i++)
+    for (NSInteger i = 0; i < (NSInteger) segmentEndpoints.count - 1; i += 2)
     {
         CLLocation *prevSegmentPoint = segmentEndpoints[i];
         CLLocation *newSegmentPoint = segmentEndpoints[i + 1];
@@ -1381,8 +1410,9 @@
         NSInteger indexPrev = [self findNearestGpxPointIndexFromRoute:gpxRouteLocations startLoc:prevSegmentPoint calculateOsmAndRouteParts:routeParams.gpxRoute.calculateOsmAndRouteParts];
         if (indexPrev != -1 && indexPrev > nearestGpxPointInd && indexNew != -1)
         {
-            const auto& origRoute = [result getOriginalRoute:(int)lastIndex endIndex:(int)indexPrev];
-            newGpxRoute.insert(newGpxRoute.end(), origRoute.begin(), origRoute.end());
+            const auto& origRoute = [result getOriginalRoute:(int)lastIndex endIndex:(int)indexPrev includeFirstSegment:YES];
+            if (origRoute.size() > 0)
+                newGpxRoute.insert(newGpxRoute.end(), origRoute.begin(), origRoute.end());
             lastIndex = indexNew;
             
             CLLocation *end = [[CLLocation alloc] initWithLatitude:newSegmentPoint.coordinate.latitude longitude:newSegmentPoint.coordinate.longitude];
@@ -1393,7 +1423,8 @@
         }
     }
     const auto& origRoute = [result getOriginalRoute:(int)lastIndex];
-    newGpxRoute.insert(newGpxRoute.end(), origRoute.begin(), origRoute.end());
+    if (origRoute.size() > 0)
+        newGpxRoute.insert(newGpxRoute.end(), origRoute.begin(), origRoute.end());
     
     return newGpxRoute;
 }
@@ -1403,7 +1434,7 @@
                    segmentEndpoints:(NSArray<CLLocation *> *)segmentEndpoints
           calculateOsmAndRouteParts:(BOOL)calculateOsmAndRouteParts
 {
-    for (NSInteger i = 0; i < (NSInteger) segmentEndpoints.count - 1 && segmentEndpoints.count != 0; i++)
+    for (NSInteger i = 0; i < segmentEndpoints.count - 1; i += 2)
     {
         CLLocation *prevSegmentPoint = segmentEndpoints[i];
         CLLocation *newSegmentPoint = segmentEndpoints[i + 1];
@@ -1424,7 +1455,7 @@
                 
                 for (OARouteDirectionInfo *directionInfo in dt)
                 {
-                    directionInfo.routePointOffset += points.count;
+                    directionInfo.routePointOffset += (int)points.count;
                 }
                 [points insertObjects:loct atIndexes:[[NSIndexSet alloc] initWithIndexesInRange:NSMakeRange(index, loct.count)]];
                 
@@ -1489,23 +1520,70 @@
     NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
     if (params.start && params.end)
     {
+        params.calculationProgress->routingCalculatedTime = time;
         NSLog(@"Start finding route from %@ to %@ using %@", params.start, params.end, [OARouteService getName:(EOARouteService)params.mode.getRouterService]);
         try
         {
             OARouteCalculationResult *res = nil;
-            BOOL calcGPXRoute = params.gpxRoute && params.gpxRoute.points.count > 0;
+            BOOL calcGPXRoute = params.gpxRoute && (params.gpxRoute.points.count > 0 || (params.gpxRoute.reverse && params.gpxRoute.routePoints.count > 0));
             if (calcGPXRoute && !params.gpxRoute.calculateOsmAndRoute)
             {
                 res = [self calculateGpxRoute:params];
             }
             else if (params.mode.getRouterService == OSMAND)
             {
-                res = [self findVectorMapsRoute:params calcGPXRoute:calcGPXRoute];
+                if (params.inPublicTransportMode)
+                {
+                    res = [self findVectorMapsRoute:params calcGPXRoute:calcGPXRoute];
+                }
+                else
+                {
+                    // TODO: Implement MissingMapsHelper
+                    //OAMissingMapsHelper *missingMapsHelper = [[OAMissingMapsHelper alloc] initWithParams:params];
+                    //NSArray<CLLocation *> *points = [missingMapsHelper getStartFinishIntermediatePoints];
+                    //NSArray<OAWorldRegion *> *missingMaps = [missingMapsHelper getMissingMaps:points];
+                    //NSArray<CLLocation *> *pathPoints = [missingMapsHelper getDistributedPathPoints:points];
+                    //if (missingMaps && missingMaps.count > 0)
+                    //{
+                    //    res = [[OARouteCalculationResult alloc] initWithErrorMessage:@"Additional maps available"];
+                    //    res.missingMaps = [missingMapsHelper getMissingMaps:pathPoints];
+                    //}
+                    //else
+                    //{
+                    //    if (![missingMapsHelper isAnyPointOnWater:pathPoints])
+                    //    {
+                    // TODO: how to store OAWorldRegion in cpp calculationProgress class?
+                    //         params.calculationProgress.missingMaps = missingMapsHelper.getMissingMaps(pathPoints);
+                    //    }
+                    
+                        res = [self findVectorMapsRoute:params calcGPXRoute:calcGPXRoute];
+                    
+                    //}
+                }
             }
-//            else if (params.mode.getRouterService == BROUTER)
-//            {
-//                //res = findBROUTERRoute(params);
-//            }
+            //else if (params.mode.getRouterService == BROUTER)
+            //{
+            //    res = findBROUTERRoute(params);
+            //}
+            //else if (params.mode.getRouteService() == RouteService.ONLINE)
+            //{
+            //    boolean useFallbackRouting = false;
+            //    try {
+            //        res = findOnlineRoute(params);
+            //    } catch (IOException | JSONException e) {
+            //        res = new RouteCalculationResult(null);
+            //        params.initialCalculation = false;
+            //        useFallbackRouting = true;
+            //    }
+            //    if (useFallbackRouting || !res.isCalculated()) {
+            //        OnlineRoutingHelper helper = params.ctx.getOnlineRoutingHelper();
+            //        String engineKey = params.mode.getRoutingProfile();
+            //        OnlineRoutingEngine engine = helper.getEngineByKey(engineKey);
+            //        if (engine != null && engine.useRoutingFallback()) {
+            //            res = findVectorMapsRoute(params, calcGPXRoute);
+            //        }
+            //    }
+            //}
             else if (params.mode.getRouterService == STRAIGHT || params.mode.getRouterService == DIRECT_TO)
             {
                 res = [self findStraightRoute:params];

@@ -190,7 +190,7 @@
                 else
                 {
                     doc = [[OAGPXDocument alloc] initWithGpxDocument:doc_];
-                    doc.path = [self.app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+                    doc.path = gpx.absolutePath;
                 }
 
                 cachedTrack = [NSMutableDictionary dictionary];

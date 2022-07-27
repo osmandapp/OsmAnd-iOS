@@ -412,7 +412,7 @@
 "units_m_s" = "m/e";
 "tones" = "tonau";
 "nothing_found" = "Nothing found: %@";
-"nothing_found_empty" = "Heb ganfod unrhyw beth";
+"nothing_found_empty" = "Ni chanfuwyd unrhyw beth";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Dewiswch stryd";
 "shared_string_in_name" = "yn %@";
@@ -615,7 +615,7 @@
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
-"gpx_average_speed" = "Cyflymder cyfartaledd";
+"gpx_average_speed" = "Cyflymder cyfartalog";
 "gpx_start" = "Dechrau";
 "gpx_finish" = "Gorffen";
 "gpx_avg_elev" = "Average elevation";
@@ -666,7 +666,7 @@
 // Map settings
 "m_style_car" = "Gyrru";
 "m_style_walk" = "Cerdded";
-"m_style_bicycle" = "Seiclo";
+"m_style_bicycle" = "Beicio";
 "m_style_pulic_transport" = "Trafnidiaeth gyhoeddus";
 "map_settings_map" = "Map";
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
@@ -1215,7 +1215,7 @@
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "Gwybodaeth cysylltu";
-"osm_str_name" = "Enw\'r ffordd";
+"osm_str_name" = "Enw stryd/ffordd/heol";
 "osm_building_num" = "Building number";
 "osm_phone" = "Ffôn";
 "osm_website" = "Gwefan";
@@ -1768,7 +1768,7 @@
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
-"plugins" = "Ategion";
+"plugins" = "Ategolion";
 "open_map_settings" = "Open Map Settings";
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
@@ -2454,3 +2454,11 @@
 "purchases_feature_desc_osmand_cloud" = "Cael OsmAnd Cloud i gadw holl ddata OsmAnd ar-lein. Dim colli data arôl ailosod. Cadw gwybodaeth wrth gefn a\'i hadfer yn hawdd.";
 "complete_purchase" = "Cwblhau\'r archeb";
 "routing_attr_allow_private_for_truck_description" = "Mae\'n caniatáu mynediad i lefydd preifat i lorïau.";
+"shared_string_data" = "Data";
+"on_hold" = "Yn aros";
+"shared_string_undefined" = "Anniffiniedig";
+"in_grace_period" = "Mewn cyfnod o aros";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Dim cyfyngiadau)";
+"paused" = "Oedwyd";
+"restore_from_osmand_cloud" = "Adfer o OsmAnd Cloud";
+"shared_string_delete_all" = "Dileu\'r cwbl";

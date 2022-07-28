@@ -98,6 +98,7 @@
     _originObject = [_wpt getAmenity];
     if (!_originObject)
     {
+        //TODO: find poi by latlon
         //String originObjectName = wpt.comment;
         //originObject = findAmenityObject(originObjectName, wpt.lat, wpt.lon);
     }

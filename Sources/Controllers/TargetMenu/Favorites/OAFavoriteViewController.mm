@@ -128,6 +128,7 @@
     _originObject = [_favorite getAmenity];
     if (!_originObject)
     {
+        //TODO: find poi by latlon
         //String originObjectName = fav.getOriginObjectName();
         //originObject = findAmenityObject(originObjectName, fav.getLatitude(), fav.getLongitude());
     }

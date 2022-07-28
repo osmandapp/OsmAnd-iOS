@@ -23,6 +23,8 @@
 #define PROFILE_TYPE_EXTENSION @"profile"
 #define GAP_PROFILE_TYPE @"gap"
 #define TRKPT_INDEX_EXTENSION @"trkpt_idx"
+#define PRIVATE_PREFIX @"amenity_"
+#define OSM_PREFIX @"osm_tag_"
 
 typedef NS_ENUM(NSInteger, EOAGPXColor)
 {

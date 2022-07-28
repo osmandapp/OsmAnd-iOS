@@ -311,7 +311,7 @@
         {
             extensions[extension.name] = extension.value;
         }
-        return [OAPOI fromHashMap:extensions];
+        return [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
     }
     return nil;
 }
@@ -320,7 +320,7 @@
 {
     if (amenity)
     {
-        NSMutableDictionary<NSString *, NSString *> *extensions = [amenity toHashMap];
+        NSMutableDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
         if (extensions && extensions.count > 0)
         {
             for (NSString *key in extensions.allKeys)

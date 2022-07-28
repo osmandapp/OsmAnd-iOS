@@ -10,7 +10,6 @@
 #import "OAAppSettings.h"
 #import "OAPOIHelper.h"
 
-#define AMENITY_PREFIX @"osm_poi_"
 #define TYPE @"type"
 #define SUBTYPE @"subtype"
 #define OPENING_HOURS @"opening_hours"
@@ -218,23 +217,23 @@
     return res;
 }
 
-- (NSMutableDictionary<NSString *, NSString *> *) toHashMap
+- (NSMutableDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix
 {
     NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary dictionary];
     if (self.subType)
     {
-        NSString *savingGey = [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, SUBTYPE];
-        result[savingGey] = self.subType;
+        NSString *savingKey = [NSString stringWithFormat:@"%@%@", privatePrefix, SUBTYPE];
+        result[savingKey] = self.subType;
     }
     if (self.type)
     {
-        NSString *savingGey = [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, TYPE];
-        result[savingGey] = self.type.name;
+        NSString *savingKey = [NSString stringWithFormat:@"%@%@", privatePrefix, TYPE];
+        result[savingKey] = self.type.name;
     }
     if (self.openingHours)
     {
-        NSString *savingGey = [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, OPENING_HOURS];
-        result[savingGey] = self.openingHours;
+        NSString *savingKey = [NSString stringWithFormat:@"%@%@", privatePrefix, OPENING_HOURS];
+        result[savingKey] = self.openingHours;
     }
     
     NSDictionary<NSString *, NSString *> *additionalInfo = [self getAdditionalInfo];
@@ -243,52 +242,60 @@
         for (NSString *key in additionalInfo.allKeys)
         {
             NSString *value = additionalInfo[key];
-            if (value && value.length > 0)
-            {
-                NSString *savingKey = [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, key];
-                result[savingKey] = value;
-            }
+            NSString *savingKey = [NSString stringWithFormat:@"%@%@", osmPrefix, key];
+            result[savingKey] = value;
         }
     }
     return result;
 }
 
-+ (OAPOI *) fromHashMap:(NSMutableDictionary<NSString *, NSString *> *)map
++ (OAPOI *) fromTagValue:(NSMutableDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix
 {
     if (map && map.count > 0)
     {
-        OAPOI *amenity = [[OAPOI alloc] init];
+        OAPOIType *type = nil;
+        NSString *subType = nil;
+        NSString *openingHours = nil;
         NSMutableDictionary<NSString *, NSString *> *additionalInfo = [NSMutableDictionary dictionary];
-        BOOL isExtensionsFounded = NO;
+        
         for (NSString *key in map.allKeys)
         {
-            if ([key hasPrefix:AMENITY_PREFIX])
+            if ([key hasPrefix:privatePrefix])
             {
-                NSString *shortKey = [key stringByReplacingOccurrencesOfString:AMENITY_PREFIX withString:@""];
-                if ([shortKey isEqualToString:SUBTYPE])
+                NSString *shortKey = [key stringByReplacingOccurrencesOfString:privatePrefix withString:@""];
+                if ([shortKey isEqualToString:TYPE])
                 {
-                    amenity.subType = map[key];
+                    type = [OAPOIHelper.sharedInstance getPoiTypeByName:map[key]];
+                    if (!type)
+                        type = [OAPOIHelper.sharedInstance getPoiTypeByName:@"user_defined_other"];
                 }
-                else if ([shortKey isEqualToString:TYPE])
+                else if ([shortKey isEqualToString:SUBTYPE])
                 {
-                    amenity.type = [OAPOIHelper.sharedInstance getPoiTypeByName:map[key]];
+                    subType = map[key];
                 }
                 else if ([shortKey isEqualToString:OPENING_HOURS])
                 {
-                    amenity.openingHours = map[key];
-                }
-                else
-                {
-                    isExtensionsFounded = YES;
-                    additionalInfo[shortKey] = map[key];
+                    openingHours = map[key];
                 }
             }
+            else if ([key hasPrefix:osmPrefix])
+            {
+                NSString *shortKey = [key stringByReplacingOccurrencesOfString:osmPrefix withString:@""];
+                additionalInfo[shortKey] = map[key];
+            }
         }
-        [amenity setValues:additionalInfo];
-        if (!amenity.type)
-            amenity.type = [OAPOIHelper.sharedInstance getPoiTypeByName:@"user_defined_other"];
-
-        return isExtensionsFounded ? amenity : nil;
+        
+        if (type)
+        {
+            OAPOI *amenity = [[OAPOI alloc] init];
+            amenity.type = type;
+            if (subType)
+                amenity.subType = subType;
+            if (openingHours)
+                amenity.openingHours = openingHours;
+            [amenity setValues:additionalInfo];
+            return amenity;
+        }
     }
     return nil;
 }

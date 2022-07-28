@@ -387,7 +387,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
             if (key && key.length > 0 && value && value.length > 0)
                 extensions[key] = value;
         }
-        return [OAPOI fromHashMap:extensions];
+        return [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
     }
     return nil;
 }
@@ -396,7 +396,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     if (amenity)
     {
-        NSMutableDictionary<NSString *, NSString *> *extensions = [amenity toHashMap];
+        NSMutableDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
         if (extensions && extensions.count > 0)
         {
             for (NSString *key in extensions.allKeys)

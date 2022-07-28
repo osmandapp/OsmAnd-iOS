@@ -10,8 +10,7 @@
 #import "OAAppSettings.h"
 #import "OAPOIHelper.h"
 
-#define AMENITY_PREFIX @"amenity_"
-#define EXTENSIONS_PREFIX @"extensions_"
+#define AMENITY_PREFIX @"osm_poi_"
 #define TYPE @"type"
 #define SUBTYPE @"subtype"
 #define OPENING_HOURS @"opening_hours"
@@ -246,7 +245,7 @@
             NSString *value = additionalInfo[key];
             if (value && value.length > 0)
             {
-                NSString *savingKey = [NSString stringWithFormat:@"%@%@%@", AMENITY_PREFIX, EXTENSIONS_PREFIX, key];
+                NSString *savingKey = [NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, key];
                 result[savingKey] = value;
             }
         }
@@ -263,21 +262,26 @@
         BOOL isExtensionsFounded = NO;
         for (NSString *key in map.allKeys)
         {
-            if ([key hasPrefix:[NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, EXTENSIONS_PREFIX]])
-            {
-                isExtensionsFounded = YES;
-                NSString *shortKey = [key stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@%@", AMENITY_PREFIX, EXTENSIONS_PREFIX] withString:@""];
-                additionalInfo[shortKey] = map[key];
-            }
-            else if ([key hasPrefix:AMENITY_PREFIX])
+            if ([key hasPrefix:AMENITY_PREFIX])
             {
                 NSString *shortKey = [key stringByReplacingOccurrencesOfString:AMENITY_PREFIX withString:@""];
                 if ([shortKey isEqualToString:SUBTYPE])
+                {
                     amenity.subType = map[key];
+                }
                 else if ([shortKey isEqualToString:TYPE])
+                {
                     amenity.type = [OAPOIHelper.sharedInstance getPoiTypeByName:map[key]];
+                }
                 else if ([shortKey isEqualToString:OPENING_HOURS])
+                {
                     amenity.openingHours = map[key];
+                }
+                else
+                {
+                    isExtensionsFounded = YES;
+                    additionalInfo[shortKey] = map[key];
+                }
             }
         }
         [amenity setValues:additionalInfo];

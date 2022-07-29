@@ -192,75 +192,52 @@
     }
     [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
 
+    BOOL downloadRequest = !calculateSizeLocal && !calculateSizeUpdates;
+    std::shared_ptr<const OsmAnd::IQueryController> queryController;
+    if (downloadRequest)
+    {
+        queryController.reset(new OsmAnd::FunctorQueryController(
+                [self, region]
+                        (const OsmAnd::IQueryController *const controller) -> bool
+                {
+                    return [self.class hasStatus:EOAWeatherForecastStatusUndefined region:region];
+                }
+        ));
+    }
+
     NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
     NSDate *date = [calendar startOfDayForDate:[NSDate date]];
     for (NSInteger i = 0; i < 7 * 24; i++)
     {
         QDateTime dateTime = QDateTime::fromNSDate(date).toUTC();
 
-        if (calculateSizeLocal || calculateSizeUpdates)
-        {
-            OsmAnd::WeatherTileResourcesManager::FileRequest request;
-            request.dataTime = dateTime;
-            request.topLeft = latLonTopLeft;
-            request.bottomRight = latLonBottomRight;
-            request.localData = calculateSizeLocal;
+        OsmAnd::WeatherTileResourcesManager::DownloadGeoTileRequest request;
+        request.dataTime = dateTime;
+        request.topLeft = latLonTopLeft;
+        request.bottomRight = latLonBottomRight;
+        request.forceDownload = downloadRequest;
+        request.localData = downloadRequest ? true : calculateSizeLocal;
+        request.calculateSize = !downloadRequest;
+        request.queryController = queryController;
 
-            OsmAnd::WeatherTileResourcesManager::FileAsyncCallback callback =
-                    [self, region, calculateSizeLocal, calculateSizeUpdates]
-                            (const bool succeeded,
-                             const long long fileSize,
-                             const std::shared_ptr<OsmAnd::Metric> &metric)
-                    {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self onProgressUpdate:region
-                                              size:fileSize
-                                calculateSizeLocal:calculateSizeLocal
-                              calculateSizeUpdates:calculateSizeUpdates
-                                           success:YES];
-                        });
-                    };
+        OsmAnd::WeatherTileResourcesManager::DownloadGeoTilesAsyncCallback callback =
+                [self, region, calculateSizeLocal, calculateSizeUpdates]
+                        (const bool succeeded,
+                                const uint64_t downloadedTiles,
+                                const uint64_t totalTiles,
+                                const int tileSize,
+                                const std::shared_ptr<OsmAnd::Metric> &metric)
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self onProgressUpdate:region
+                                          size:tileSize
+                            calculateSizeLocal:calculateSizeLocal
+                          calculateSizeUpdates:calculateSizeUpdates
+                                       success:succeeded];
+                    });
+                };
 
-            _weatherResourcesManager->obtainFileAsync(request, callback);
-        }
-        else
-        {
-            std::shared_ptr<const OsmAnd::IQueryController> queryController;
-            queryController.reset(new OsmAnd::FunctorQueryController(
-                    [self, region]
-                    (const OsmAnd::IQueryController* const controller) -> bool
-                    {
-                        return [self.class hasStatus:EOAWeatherForecastStatusUndefined region:region];
-                    }
-            ));
-
-            OsmAnd::WeatherTileResourcesManager::DownloadGeoTileRequest request;
-            request.dataTime = dateTime;
-            request.topLeft = latLonTopLeft;
-            request.bottomRight = latLonBottomRight;
-            request.forceDownload = true;
-            request.localData = true;
-            request.queryController = queryController;
-
-            OsmAnd::WeatherTileResourcesManager::DownloadGeoTilesAsyncCallback callback =
-                    [self, region, calculateSizeLocal, calculateSizeUpdates]
-                            (const bool succeeded,
-                             const uint64_t downloadedTiles,
-                             const uint64_t totalTiles,
-                             const int downloadedTileSize,
-                             const std::shared_ptr<OsmAnd::Metric> &metric)
-                    {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self onProgressUpdate:region
-                                              size:downloadedTileSize
-                                calculateSizeLocal:calculateSizeLocal
-                              calculateSizeUpdates:calculateSizeUpdates
-                                           success:succeeded];
-                            });
-                    };
-
-            _weatherResourcesManager->downloadGeoTilesAsync(request, callback);
-        }
+        _weatherResourcesManager->downloadGeoTilesAsync(request, callback);
 
         date = [calendar dateByAddingUnit:NSCalendarUnitHour value:1 toDate:date options:0];
     }

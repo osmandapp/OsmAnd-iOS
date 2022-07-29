@@ -1456,7 +1456,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        [[OAWeatherHelper sharedInstance] downloadForecast:item.worldRegion];
+        [[OAWeatherHelper sharedInstance] downloadForecastByRegion:item.worldRegion];
         if (onTaskResumed)
             onTaskResumed(nil);
     }
@@ -1636,7 +1636,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             onTaskStop(nil);
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion refreshMap:NO];
+            [[OAWeatherHelper sharedInstance] removeForecast:item.worldRegion.regionId refreshMap:NO];
         });
     }
     else
@@ -1705,7 +1705,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         {
             if (item.resourceType == OsmAndResourceType::WeatherForecast)
             {
-                [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion refreshMap:item == items.lastObject];
+                [[OAWeatherHelper sharedInstance] removeForecast:item.worldRegion.regionId refreshMap:item == items.lastObject];
             }
             else if ([item isKindOfClass:[OASqliteDbResourceItem class]])
             {

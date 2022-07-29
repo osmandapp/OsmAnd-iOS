@@ -53,29 +53,33 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 - (QList<OsmAnd::BandIndex>) getVisibleBands;
 - (QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>>) getBandSettings;
 
-- (void)downloadForecast:(OAWorldRegion *)region;
++ (BOOL)shouldHaveWeatherForecast:(OAWorldRegion *)region;
 
-- (void)calculateCacheSize:(OAWorldRegion *)region localData:(BOOL)localData;
+- (void)downloadForecastByRegion:(OAWorldRegion *)region;
+- (void)downloadForecastByRegionId:(NSString *)regionId;
+
+- (void)calculateCacheSizeByRegion:(OAWorldRegion *)region localData:(BOOL)localData;
+- (void)calculateCacheSizeByRegionId:(NSString *)regionId localData:(BOOL)localData;
 - (void)calculateCacheSize:(BOOL)localData onComplete:(void (^)(unsigned long long))onComplete;
 
 - (void)clearCache:(BOOL)localData;
 - (void)clearOutdatedCache;
-- (void)removeLocalForecast:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
-- (void)removeIncompleteForecast:(OAWorldRegion *)region;
+- (void)removeForecast:(NSString *)regionId refreshMap:(BOOL)refreshMap;
+- (void)removeIncompleteForecast:(NSString *)regionId;
 
-- (void)updatePreferences:(OAWorldRegion *)region;
+- (void)updatePreferences:(NSString *)regionId;
 
-- (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegion:(OAWorldRegion *)excludeRegion;
-- (void)setOfflineRegion:(OAWorldRegion *)region;
+- (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegionId:(NSString *)excludeRegionId;
+- (void)setOfflineRegion:(NSString *)regionId;
 - (NSArray<NSString *> *)getOfflineRegions;
-- (NSInteger)getProgress:(OAWorldRegion *)region;
-- (NSInteger)getProgressDestination:(OAWorldRegion *)region;
+- (NSInteger)getProgress:(NSString *)regionId;
+- (NSInteger)getProgressDestination:(NSString *)regionId;
 
 + (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region;
 
-+ (BOOL)hasStatus:(NSInteger)status region:(OAWorldRegion *)region;
-+ (void)addStatus:(NSInteger)status region:(OAWorldRegion *)region;
-+ (void)removeStatus:(NSInteger)status region:(OAWorldRegion *)region;
++ (BOOL)hasStatus:(NSInteger)status regionId:(NSString *)regionId;
++ (void)addStatus:(NSInteger)status regionId:(NSString *)regionId;
++ (void)removeStatus:(NSInteger)status regionId:(NSString *)regionId;
 
 + (NSInteger)getPreferenceStatus:(NSString *)regionId;
 + (void)setPreferenceStatus:(NSString *)regionId value:(NSInteger)value;

@@ -14,6 +14,7 @@
 #import "OASubscriptionBannerCardView.h"
 #import "OAChoosePlanHelper.h"
 #import "OAIAPHelper.h"
+#import "OAWeatherForecastViewController.h"
 
 #define kOpenLiveUpdatesSegue @"openLiveUpdatesSegue"
 
@@ -345,7 +346,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == _updatesSection)
-        return 1;
+        return 2;
     else if (section == _availableMapsSection)
         return _resourcesItems.count;
 
@@ -397,6 +398,7 @@
     static NSString* const outdatedResourceCell = @"outdatedResourceCell";
     static NSString* const downloadingResourceCell = @"downloadingResourceCell";
     static NSString *const liveUpdatesCell = @"liveUpdatesCell";
+    static NSString *const weatherForecastCell = @"weatherForecastCell";
 
     NSString* cellTypeId = nil;
     NSString* title = nil;
@@ -404,8 +406,16 @@
 
     if (indexPath.section == _updatesSection)
     {
-        cellTypeId = liveUpdatesCell;
-        title = OALocalizedString(@"osmand_live_updates");
+        if (indexPath.row == 0)
+        {
+            cellTypeId = liveUpdatesCell;
+            title = OALocalizedString(@"osmand_live_updates");
+        }
+        else if (indexPath.row == 1)
+        {
+            cellTypeId = weatherForecastCell;
+            title = OALocalizedString(@"weather_forecast");
+        }
     }
     else if (indexPath.section == _availableMapsSection && _resourcesItems.count > 0)
     {
@@ -434,7 +444,17 @@
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
     if (cell == nil)
     {
-        if (indexPath.section == _availableMapsSection)
+        
+        if (indexPath.section == _updatesSection)
+        {
+            if ([cellTypeId isEqualToString:weatherForecastCell])
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                            reuseIdentifier:cellTypeId];
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
+        }
+        else if (indexPath.section == _availableMapsSection)
         {
             cell.textLabel.font = [UIFont systemFontOfSize:17.];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:13.];
@@ -475,7 +495,7 @@
     cell.textLabel.text = title;
     if (cell.detailTextLabel)
     {
-        if ([cellTypeId isEqualToString:liveUpdatesCell])
+        if (indexPath.section == _updatesSection)
         {
             cell.detailTextLabel.text = nil;
         }
@@ -556,8 +576,13 @@
         if (item != nil)
             [self onItemClicked:item];
     }
+    else if (indexPath.section == _updatesSection && indexPath.row == 1)
+    {
+        OAWeatherForecastViewController *weatherForecastController = [[OAWeatherForecastViewController alloc] init];
+        [self showViewController:weatherForecastController];
+    }
 
-    [tableView deselectRowAtIndexPath:indexPath animated:true];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)refreshDownloadingContent:(NSString *)downloadTaskKey

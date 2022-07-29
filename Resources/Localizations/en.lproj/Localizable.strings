@@ -572,6 +572,8 @@
 "shared_string_total_size" = "Total size";
 "shared_string_delete_all" = "Delete all";
 "shared_string_countries" = "Countries";
+"shared_string_status" = "Status";
+"shared_string_selected" = "Selected";
 
 "restart" = "Restart";
 
@@ -2776,6 +2778,9 @@
 "weather_clear_online_cache" = "This will clear all cache for online weather tile.";
 
 "all_maps_are_up_to_date" = "All maps are up to date";
+
+"with_offline_maps" = "With offline maps";
+"other_countries" = "Other countries";
 
 // Release Notes
 // instruction:

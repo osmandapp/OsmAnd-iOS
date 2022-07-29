@@ -47,4 +47,32 @@
         }
 }
 
+- (void)updateConstraints
+{
+    BOOL hasIcon = !self.iconImageView.hidden;
+
+    self.titleWithIconConstraint.active = hasIcon;
+    self.titleNoIconConstraint.active = !hasIcon;
+
+    [super updateConstraints];
+}
+
+- (BOOL)needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
+    {
+        BOOL hasIcon = !self.iconImageView.hidden;
+
+        res = res || self.titleWithIconConstraint.active != hasIcon;
+        res = res || self.titleNoIconConstraint.active != !hasIcon;
+    }
+    return res;
+}
+
+- (void)showIcon:(BOOL)show
+{
+    self.iconImageView.hidden = !show;
+}
+
 @end

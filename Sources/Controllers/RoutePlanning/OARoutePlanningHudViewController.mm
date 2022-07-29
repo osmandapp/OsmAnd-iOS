@@ -570,7 +570,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (selectedFile != nullptr)
         mutableDocument = [[OAGPXMutableDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFile)];
     else
-        mutableDocument = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]];
+        mutableDocument = [[OAGPXMutableDocument alloc] initWithGpxFile:gpx.absolutePath];
     
     if (!mutableDocument.routes)
         mutableDocument.routes = [NSMutableArray new];

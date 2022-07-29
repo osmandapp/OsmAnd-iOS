@@ -1130,16 +1130,6 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-- (NSString *) getRouteSegmentStreetName:(std::shared_ptr<RouteSegmentResult>)rs
-{
-    string locale = _settings.settingPrefMapLanguage.get ? [_settings.settingPrefMapLanguage.get UTF8String] : "";
-    BOOL transliterate = _settings.settingMapLanguageTranslit.get;
-    NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];
-    NSString *rf = [NSString stringWithUTF8String:rs->object->getRef(locale, transliterate, rs->isForwardDirection()).c_str()];
-    NSString *dn = [NSString stringWithUTF8String:rs->object->getDestinationName(locale, transliterate, rs->isForwardDirection()).c_str()];
-    return [self.class formatStreetName:nm ref:rf destination:dn towards:@"»"];
-}
-
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart
 {
     return [_route getUpcomingTunnel:distToStart];
@@ -1280,32 +1270,6 @@ static BOOL _isDeviatedFromRoute = false;
 												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
 {
 	return [_provider calculateGpxApproximation:env gctx:gctx points:points resultMatcher:resultMatcher];
-}
-
-+ (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards
-{
-    //Hardy, 2016-08-05:
-    //Now returns: (ref) + ((" ")+name) + ((" ")+"toward "+dest) or ""
-    
-    NSString *formattedStreetName = @"";
-    if (ref && ref.length > 0)
-        formattedStreetName = ref;
-    
-    if (name && name.length > 0)
-    {
-        if (formattedStreetName.length > 0)
-            formattedStreetName = [formattedStreetName stringByAppendingString:@" "];
-        
-        formattedStreetName = [formattedStreetName stringByAppendingString:name];
-    }
-    if (destination && destination.length > 0)
-    {
-        if (formattedStreetName.length > 0)
-            formattedStreetName = [formattedStreetName stringByAppendingString:@" "];
-        
-        formattedStreetName = [formattedStreetName stringByAppendingString:[NSString stringWithFormat:@"%@ %@",towards, destination]];
-    }
-    return [formattedStreetName stringByReplacingOccurrencesOfString:@";" withString:@", "];
 }
 
 - (CLLocation *) getLastProjection

@@ -12,6 +12,8 @@
 
 #include <GeographicLib/GeoCoords.hpp>
 
+#define MIN_DURATION_FOR_DATE_FORMAT (48 * 60 * 60)
+
 @implementation OAOsmAndFormatter
 
 static NSString * const _unitsKm = OALocalizedString(@"units_km");
@@ -57,6 +59,38 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
     
     NSString *formattedInterval = [NSString stringWithFormat:@"%d", (int)intervalInUnits];
     return [NSString stringWithFormat:@"%@ %@", formattedInterval, unitsStr];
+}
+
++ (NSString *) getFormattedPassedTime:(NSTimeInterval)time def:(NSString *)def
+{
+    if (time > 0)
+    {
+        NSTimeInterval duration = (NSDate.date.timeIntervalSince1970 - time);
+        if (duration > MIN_DURATION_FOR_DATE_FORMAT)
+        {
+            return [self getFormattedDate:time];
+        }
+        else
+        {
+            NSString *formattedDuration;
+            if (duration < 60)
+                formattedDuration = [NSString stringWithFormat:@"<1 %@", OALocalizedString(@"units_min")];
+            else
+                formattedDuration = [self getFormattedTimeInterval:duration];
+            
+            return [NSString stringWithFormat:OALocalizedString(@"duration_ago"), formattedDuration];
+        }
+    }
+    return def;
+}
+
++ (NSString *) getFormattedDate:(NSTimeInterval)time
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    return [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:time]];
 }
 
 + (NSString*) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat

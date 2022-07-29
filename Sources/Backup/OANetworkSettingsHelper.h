@@ -19,10 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol OABackupExportListener <NSObject>
 
 - (void) onBackupExportStarted;
-- (void) onBackupExportProgressUpdate:(int)value;
+- (void) onBackupExportProgressUpdate:(NSInteger)value;
 - (void) onBackupExportFinished:(NSString *)error;
-- (void) onBackupExportItemStarted:(NSString *)type fileName:(NSString *)fileName work:(int)work;
-- (void) onBackupExportItemProgress:(NSString *)type fileName:(NSString *)fileName value:(int)value;
+- (void) onBackupExportItemStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work;
+- (void) onBackupExportItemProgress:(NSString *)type fileName:(NSString *)fileName value:(NSInteger)value;
 - (void) onBackupExportItemFinished:(NSString *)type fileName:(NSString *)fileName;
 
 @end
@@ -49,7 +49,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) cancelExport;
 - (BOOL) cancelImport;
 
-
 - (BOOL) isBackupExporting;
 - (BOOL) isBackupImporting;
 
@@ -72,6 +71,11 @@ NS_ASSUME_NONNULL_BEGIN
                   items:(NSArray<OASettingsItem *> *)items
           forceReadData:(BOOL)forceReadData
                listener:(id<OAImportListener>)listener;
+
+- (void) exportSettings:(NSString *)key
+                  items:(NSArray<OASettingsItem *> *)items
+          itemsToDelete:(NSArray<OASettingsItem *> *)itemsToDelete
+               listener:(id<OABackupExportListener>)listener;
 
 @end
 

@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *) getTypeFileName;
 
+- (NSString *) toString;
+
 @end
 
 NS_ASSUME_NONNULL_END

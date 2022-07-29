@@ -3340,6 +3340,8 @@
     NSMapTable<NSString *, OACommonPreference *> *_globalPreferences;
     NSMapTable<NSString *, OACommonPreference *> *_profilePreferences;
     OADayNightHelper *_dayNightHelper;
+    
+    NSObject *_settingsLock;
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
@@ -3360,6 +3362,7 @@
     self = [super init];
     if (self)
     {
+        _settingsLock = [[NSObject alloc] init];
         _dayNightHelper = [OADayNightHelper instance];
         _customBooleanRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
         _customRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
@@ -4268,6 +4271,11 @@
     return _registeredPreferences;
 }
 
+- (NSMapTable<NSString *, OACommonPreference *> *)getGlobalPreferences
+{
+    return _globalPreferences;
+}
+
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key
 {
     return [_registeredPreferences objectForKey:key];
@@ -4652,24 +4660,30 @@
 
 - (OACommonBoolean *)getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue
 {
-    OACommonBoolean *value = [_customBooleanRoutingProps objectForKey:attrName];
-    if (!value)
+    @synchronized (_settingsLock)
     {
-        value = [OACommonBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
-        [_customBooleanRoutingProps setObject:value forKey:attrName];
+        OACommonBoolean *value = [_customBooleanRoutingProps objectForKey:attrName];
+        if (!value)
+        {
+            value = [OACommonBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
+            [_customBooleanRoutingProps setObject:value forKey:attrName];
+        }
+        return value;
     }
-    return value;
 }
 
 - (OACommonString *)getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue
 {
-    OACommonString *value = [_customRoutingProps objectForKey:attrName];
-    if (!value)
+    @synchronized (_settingsLock)
     {
-        value = [OACommonString withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
-        [_customRoutingProps setObject:value forKey:attrName];
+        OACommonString *value = [_customRoutingProps objectForKey:attrName];
+        if (!value)
+        {
+            value = [OACommonString withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
+            [_customRoutingProps setObject:value forKey:attrName];
+        }
+        return value;
     }
-    return value;
 }
 
 

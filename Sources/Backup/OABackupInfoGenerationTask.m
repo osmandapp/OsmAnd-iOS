@@ -13,6 +13,8 @@
 #import "OALocalFile.h"
 #import "OABackupDbHelper.h"
 #import "OACollectionSettingsItem.h"
+#import "OABackupHelper.h"
+#import "OAOperationLog.h"
 
 @implementation OABackupInfoGenerationTask
 {
@@ -20,6 +22,8 @@
     NSDictionary<NSString *, OARemoteFile *> *_uniqueRemoteFiles;
     NSDictionary<NSString *, OARemoteFile *> *_deletedRemoteFiles;
     void (^_onComplete)(OABackupInfo *backupInfo, NSString *error);
+    
+    OAOperationLog *_operationLog;
 }
 
 - (instancetype) initWithLocalFiles:(NSDictionary<NSString *, OALocalFile *> *)localFiles
@@ -33,6 +37,8 @@
         _uniqueRemoteFiles = uniqueRemoteFiles;
         _deletedRemoteFiles = deletedRemoteFiles;
         _onComplete = onComplete;
+        _operationLog = [[OAOperationLog alloc] initWithOperationName:@"generateBackupInfo" debug:BACKUP_DEBUG_LOGS logThreshold:0.2];
+        [_operationLog startOperation];
     }
     return self;
 }
@@ -133,27 +139,30 @@
     }
     [info createItemCollections];
     
-//    operationLog.log("=== filesToUpload ===");
-//    for (OALocalFile *localFile in info.filesToUpload)
-//    {
-//        operationLog.log(localFile.toString());
-//    }
-//    operationLog.log("=== filesToUpload ===");
-//    operationLog.log("=== filesToDownload ===");
-//    for (RemoteFile remoteFile : info.filesToDownload) {
-//        operationLog.log(remoteFile.toString());
-//    }
-//    operationLog.log("=== filesToDownload ===");
-//    operationLog.log("=== filesToDelete ===");
-//    for (RemoteFile remoteFile : info.filesToDelete) {
-//        operationLog.log(remoteFile.toString());
-//    }
-//    operationLog.log("=== filesToDelete ===");
-//    operationLog.log("=== filesToMerge ===");
-//    for (Pair<LocalFile, RemoteFile> filePair : info.filesToMerge) {
-//        operationLog.log("LOCAL=" + filePair.first.toString() + " REMOTE=" + filePair.second.toString());
-//    }
-//    operationLog.log("=== filesToMerge ===");
+    [_operationLog log:@"=== filesToUpload ==="];
+    for (OALocalFile *localFile in info.filesToUpload)
+    {
+        [_operationLog log:localFile.toString];
+    }
+    [_operationLog log:@"=== filesToUpload ==="];
+    [_operationLog log:@"=== filesToDownload ==="];
+    for (OARemoteFile *remoteFile in info.filesToDownload)
+    {
+        [_operationLog log:remoteFile.toString];
+    }
+    [_operationLog log:@"=== filesToDownload ==="];
+    [_operationLog log:@"=== filesToDelete ==="];
+    for (OARemoteFile *remoteFile in info.filesToDelete)
+    {
+        [_operationLog log:remoteFile.toString];
+    }
+    [_operationLog log:@"=== filesToDelete ==="];
+    [_operationLog log:@"=== filesToMerge ==="];
+    for (NSArray *filePair in info.filesToMerge)
+    {
+        [_operationLog log:[NSString stringWithFormat:@"LOCAL=%@ REMOTE=%@", ((OALocalFile *)filePair.firstObject).toString, ((OARemoteFile *)filePair.lastObject).toString]];
+    }
+    [_operationLog log:@"=== filesToMerge ==="];
     return info;
 }
 

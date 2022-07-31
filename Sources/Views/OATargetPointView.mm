@@ -16,7 +16,6 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDatabase.h"
-#import "OAEditTargetViewController.h"
 #import "OAColors.h"
 #import "OASizes.h"
 #import "OATransportStopViewController.h"
@@ -728,10 +727,7 @@ static const NSInteger _buttonsCount = 4;
     switch (_targetPoint.type)
     {
         case OATargetFavorite:
-            if (self.customController && [self.customController isKindOfClass:[OAEditTargetViewController class]])
-                return ((OAEditTargetViewController *)self.customController).newItem;
-            else
-                return NO;
+            return NO;
             break;
         case OATargetGPX:
             return ((OAGPX *)targetObj).newGpx;

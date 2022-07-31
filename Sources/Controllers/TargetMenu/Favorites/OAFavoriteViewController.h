@@ -6,16 +6,20 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OAEditTargetViewController.h"
+#import "OATargetInfoViewController.h"
 #import "OAFavoriteItem.h"
 #import <CoreLocation/CoreLocation.h>
 
-@interface OAFavoriteViewController : OAEditTargetViewController
+@interface OAFavoriteViewController : OATargetInfoViewController
 
 @property (nonatomic) OAFavoriteItem *favorite;
 - (id) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly;
 - (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation headerOnly:(BOOL)headerOnly;
 
+- (NSString *) getItemName;
+- (NSString *) getItemGroup;
+- (NSString *) getItemDesc;
+- (UIImage *) getIcon;
 - (NSDate *) getTimestamp;
 
 @end

@@ -17,6 +17,11 @@
 #import "OAGPXDocument.h"
 #import "OAMapViewController.h"
 #import "OACollapsableWaypointsView.h"
+#import "OAPOI.h"
+#import "OAPOIViewController.h"
+#import "OAColors.h"
+#import "OACollapsableCoordinatesView.h"
+#import "OATextMultiViewCell.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -30,11 +35,12 @@
 {
     OsmAndAppInstance _app;
     NSString *_gpxFileName;
+    OAPOI *_originObject;
 }
 
 - (id) initWithItem:(OAGpxWptItem *)wpt headerOnly:(BOOL)headerOnly
 {
-    self = [super initWithItem:wpt];
+    self = [super init];
     if (self)
     {
         _app = [OsmAndApp instance];
@@ -43,18 +49,7 @@
             wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
         }
         self.wpt = wpt;
-
-        if (!headerOnly)
-        {
-            [super setupCollapableViewsWithData:wpt lat:wpt.point.position.latitude lon:wpt.point.position.longitude];
-        }
-
-        self.groupTitle = self.wpt.docPath == nil ? OALocalizedString(@"track_recording_name") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
-        self.groupColor = self.wpt.color;
-        
-        self.name = [self getItemName];
-        self.desc = [self getItemDesc];
-
+        [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
     return self;
@@ -62,7 +57,7 @@
 
 - (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation gpxFileName:(NSString *)gpxFileName
 {
-    self = [super initWithLocation:location andTitle:formattedLocation];
+    self = [super init];
     if (self)
     {
         _app = [OsmAndApp instance];
@@ -92,30 +87,86 @@
         wpt.color = color;
         
         self.wpt = wpt;
-        
+        [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
-        [super setupCollapableViewsWithData:wpt lat:wpt.point.position.latitude lon:wpt.point.position.longitude];
     }
     return self;
 }
 
-- (void)viewDidLoad
+- (void) acquireOriginObject
 {
-    [super viewDidLoad];
-    self.titleGradient.frame = self.navBar.frame;
+    _originObject = [_wpt getAmenity];
+    if (!_originObject)
+    {
+        //TODO: find poi by latlon
+        //String originObjectName = wpt.comment;
+        //originObject = findAmenityObject(originObjectName, wpt.lat, wpt.lon);
+    }
 }
 
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self applySafeAreaMargins];
-        self.titleGradient.frame = self.navBar.frame;
-    } completion:nil];
+    [super buildTopRows:rows];
+    [self buildWaypointsView:rows];
 }
 
-- (void) setupDeleteButtonIcon
+- (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows
 {
-    [self.deleteButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
+    NSString *desc = [self getItemDesc];
+    if (desc && desc.length > 0)
+    {
+        OARowInfo *descriptionRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:OALocalizedString(@"enter_description") text:desc textColor:nil isText:NO needLinks:NO order:0 typeName:kDescriptionRowType isPhoneNumber:NO isUrl:NO];
+        [rows addObject:descriptionRow];
+    }
+}
+
+- (void) buildRowsInternal:(NSMutableArray<OARowInfo *> *)rows
+{
+    [self buildTopRows:rows];
+    
+    if ([self getTimestamp] && [[self getTimestamp] timeIntervalSince1970] > 0)
+    {
+        [self buildDateRow:rows timestamp:[self getTimestamp]];
+    }
+    
+    //TODO: add extra fields
+    //wpt.speed
+    //wpt.ele
+    //wpt.hdop
+    //wpt.desc
+    //wpt.comment
+    
+    if ( _originObject && [ _originObject isKindOfClass:OAPOI.class])
+    {
+        OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI: _originObject];
+        builder.location = CLLocationCoordinate2DMake(_wpt.point.position.latitude, _wpt.point.position.longitude);
+        [builder buildRowsInternal:rows];
+    }
+    [self setRows:rows];
+}
+
+- (void) buildWaypointsView:(NSMutableArray<OARowInfo *> *)rows
+{
+    NSString *name = OALocalizedString(@"all_group_points");
+    NSString *gpxName = self.wpt.docPath == nil ? OALocalizedString(@"track_recording_name") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
+    UIColor *color = [self getItemColor];
+    UIImage *icon = [UIImage templateImageNamed:@"ic_custom_folder"];
+    
+    OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:name text:gpxName textColor:color isText:NO needLinks:NO order:1 typeName:kGroupRowType isPhoneNumber:NO isUrl:NO];
+    rowInfo.collapsed = YES;
+    rowInfo.collapsable = YES;
+    rowInfo.height = 64;
+    rowInfo.collapsableView = [self getCollapsableWaypointsView:_wpt];
+    
+    [rows addObject:rowInfo];
+}
+
+- (OACollapsableWaypointsView *) getCollapsableWaypointsView:(OAGpxWptItem *)wpt
+{
+    OACollapsableWaypointsView *collapsableGroupView = [[OACollapsableWaypointsView alloc] init];
+    [collapsableGroupView setData:wpt];
+    collapsableGroupView.collapsed = YES;
+    return collapsableGroupView;
 }
 
 - (NSString *) getGpxFileName
@@ -123,105 +174,38 @@
     return [[_gpxFileName lastPathComponent] stringByDeletingPathExtension];
 }
 
+- (BOOL) showNearestWiki;
+{
+    return YES;
+}
+
+- (BOOL) showNearestPoi
+{
+    return YES;
+}
+
+- (NSString *)getTypeStr
+{
+    NSString *group = [self getItemGroup];
+    if (group.length > 0)
+        return group;
+    else
+        return [self getCommonTypeStr];
+}
+
 - (NSString *) getCommonTypeStr
 {
     return OALocalizedString(@"gpx_waypoint");
 }
 
-- (BOOL)supportMapInteraction
+- (NSAttributedString *) getAttributedTypeStr
 {
-    return YES;
+    return [self getAttributedTypeStr:[self getTypeStr]];
 }
 
-- (BOOL)supportsForceClose
+- (NSAttributedString *) getAttributedTypeStr:(NSString *)group
 {
-    return YES;
-}
-
-- (BOOL)shouldEnterContextModeManually
-{
-    return YES;
-}
-
-- (void) applyLocalization
-{
-    [super applyLocalization];
-    
-    if (self.newItem)
-        self.titleView.text = OALocalizedString(@"add_waypoint_short");
-    else
-        self.titleView.text = OALocalizedString(@"edit_waypoint_short");
-}
-
-- (BOOL) isItemExists:(NSString *)name
-{
-    return NO;
-}
-
--(BOOL) preHide
-{
-    if (self.newItem && !self.actionButtonPressed)
-        return NO;
-    else
-        return [super preHide];
-}
-
-- (void) okPressed
-{
-    if (self.savedColorIndex != -1)
-        [[NSUserDefaults standardUserDefaults] setInteger:self.savedColorIndex forKey:kWptDefaultColorKey];
-    if (self.savedGroupName)
-        [[NSUserDefaults standardUserDefaults] setObject:self.savedGroupName forKey:kWptDefaultGroupKey];
-    
-    [super okPressed];
-}
-
--(BOOL) supportEditing
-{
-    return YES;//![self.wpt.point isKindOfClass:[OAGpxRoutePoint class]];
-}
-
--(void)activateEditing
-{
-    [[OARootViewController instance].mapPanel targetPointEditWaypoint:self.wpt];
-}
-
--(void) deleteItem
-{
-    [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"wpt_remove_q") cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")] otherButtonItems:
-      [RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_yes") action:^{
-        
-        [_mapViewController deleteFoundWpt];
-        
-        if (self.delegate)
-            [self.delegate btnDeletePressed];
-
-    }],
-      nil] show];
-}
-
-- (void) saveItemToStorage
-{
-    if (self.wpt.point.wpt != nullptr)
-    {
-        [OAGPXDocument fillWpt:self.wpt.point.wpt usingWpt:self.wpt.point];
-        [_mapViewController saveFoundWpt];
-        
-        if (self.wptDelegate && [self.wptDelegate respondsToSelector:@selector(changedWptItem)])
-            [self.wptDelegate changedWptItem];
-    }
-}
-
-- (void) removeExistingItemFromCollection
-{
-}
-
-- (void) removeNewItemFromCollection
-{
-    [_mapViewController deleteFoundWpt];
-    
-    if (self.delegate)
-        [self.delegate btnCancelPressed];
+    return [self getAttributedTypeStr:group color:[self getItemColor]];
 }
 
 - (NSString *) getItemName
@@ -229,34 +213,14 @@
     return self.wpt.point.name;
 }
 
-- (void) setItemName:(NSString *)name
-{
-    self.wpt.point.name = name;
-}
-
 - (UIColor *) getItemColor
 {
     return self.wpt.color ? self.wpt.color : ((OAFavoriteColor *) OADefaultFavorite.builtinColors.firstObject).color;
 }
 
-- (void) setItemColor:(UIColor *)color
-{
-    self.wpt.color = color;
-    [self saveItemToStorage];
-}
-
 - (NSString *) getItemGroup
 {
     return (self.wpt.point.type ? self.wpt.point.type : @"");
-}
-
-- (void) setItemGroup:(NSString *)groupName
-{
-    self.wpt.point.type = groupName;
-    [self saveItemToStorage];
-   
-    if (![self.wpt.groups containsObject:groupName] && groupName.length > 0)
-        self.wpt.groups = [self.wpt.groups arrayByAddingObject:groupName];
 }
 
 - (NSArray *) getItemGroups
@@ -267,11 +231,6 @@
 - (NSString *) getItemDesc
 {
     return self.wpt.point.desc;
-}
-
-- (void) setItemDesc:(NSString *)desc
-{
-    self.wpt.point.desc = desc;
 }
 
 - (NSDate *) getTimestamp

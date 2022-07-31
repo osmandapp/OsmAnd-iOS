@@ -87,7 +87,7 @@
 - (NSString *)getTagContent:(NSString *)tag lang:(NSString *)lang;
 - (NSString *)getDescription:(NSString *)lang;
 
-- (NSMutableDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
-+ (OAPOI *) fromTagValue:(NSMutableDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
+- (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
++ (OAPOI *) fromTagValue:(NSDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 
 @end

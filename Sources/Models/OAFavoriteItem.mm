@@ -376,17 +376,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (OAPOI *) getAmenity
 {
-    QHash<QString, QString> extensionsToRead = self.favorite->getExtensions();
-    if (extensionsToRead.size() > 0)
+    const QHash<QString, QString> extensionsToRead = self.favorite->getExtensions();
+    if (!extensionsToRead.empty())
     {
         NSMutableDictionary<NSString *, NSString *> *extensions = [NSMutableDictionary dictionary];
-        for (int i = 0; i < extensionsToRead.keys().size(); i++)
-        {
-            NSString *key = extensionsToRead.keys()[i].toNSString();
-            NSString *value = extensionsToRead[extensionsToRead.keys()[i]].toNSString();
-            if (key && key.length > 0 && value && value.length > 0)
-                extensions[key] = value;
-        }
+        for (const auto& extension : OsmAnd::rangeOf(extensionsToRead))
+            extensions[extension.key().toNSString()] = extension.value().toNSString();
+
         return [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
     }
     return nil;
@@ -396,16 +392,10 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     if (amenity)
     {
-        NSMutableDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
-        if (extensions && extensions.count > 0)
-        {
-            for (NSString *key in extensions.allKeys)
-            {
-                NSString *value = extensions[key];
-                if (key.length > 0 && value.length > 0)
-                    self.favorite->setExtension(QString::fromNSString(key), QString::fromNSString(value));
-            }
-        }
+        NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+        [extensions enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
+            self.favorite->setExtension(QString::fromNSString(key), QString::fromNSString(value));
+        }];
     }
 }
 

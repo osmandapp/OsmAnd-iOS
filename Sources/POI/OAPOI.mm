@@ -217,7 +217,7 @@
     return res;
 }
 
-- (NSMutableDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix
+- (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix
 {
     NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary dictionary];
     if (self.subType)
@@ -246,11 +246,12 @@
             result[savingKey] = value;
         }
     }
-    return result;
+    return [NSDictionary dictionaryWithDictionary:result];
 }
 
-+ (OAPOI *) fromTagValue:(NSMutableDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix
++ (OAPOI *) fromTagValue:(NSDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix
 {
+    OAPOI *amenity = nil;
     if (map && map.count > 0)
     {
         OAPOIType *type = nil;
@@ -287,17 +288,16 @@
         
         if (type)
         {
-            OAPOI *amenity = [[OAPOI alloc] init];
+            amenity = [[OAPOI alloc] init];
             amenity.type = type;
             if (subType)
                 amenity.subType = subType;
             if (openingHours)
                 amenity.openingHours = openingHours;
             [amenity setValues:additionalInfo];
-            return amenity;
         }
     }
-    return nil;
+    return amenity;
 }
 
 - (BOOL) isEqual:(id)o

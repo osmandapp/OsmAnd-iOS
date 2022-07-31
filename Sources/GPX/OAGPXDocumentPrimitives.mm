@@ -308,9 +308,8 @@
     {
         NSMutableDictionary<NSString *, NSString *> *extensions = [NSMutableDictionary dictionary];
         for (OAGpxExtension *extension in extensionsToRead)
-        {
             extensions[extension.name] = extension.value;
-        }
+
         return [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
     }
     return nil;
@@ -320,15 +319,12 @@
 {
     if (amenity)
     {
-        NSMutableDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+        NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
         if (extensions && extensions.count > 0)
         {
-            for (NSString *key in extensions.allKeys)
-            {
-                NSString *value = extensions[key];
-                if (key.length > 0 && value.length > 0)
-                    [self setExtension:key value:value];
-            }
+            [extensions enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
+                [self setExtension:key value:value];
+            }];
         }
     }
 }

@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "OALocationPoint.h"
+#import "OAGPXDocumentPrimitives.h"
 #include <OsmAndCore/IFavoriteLocation.h>
 
 #define EXTENSION_HIDDEN @"hidden"
 
-@class OAWptPt;
+@class OAWptPt, OAPOI;
 
 @interface OASpecialPointType : NSObject
 
@@ -67,6 +68,9 @@
 
 - (UIColor *) getColor;
 - (void) setColor:(UIColor *)color;
+
+- (OAPOI *) getAmenity;
+- (void) setAmenity:(OAPOI *)amenity;
 
 - (BOOL) isVisible;
 - (void) setVisible:(BOOL)isVisible;

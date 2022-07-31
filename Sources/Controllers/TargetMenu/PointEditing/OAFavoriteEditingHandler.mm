@@ -96,6 +96,8 @@
                                                                         OsmAnd::FColorRGB(r,g,b));
         
         _favorite = [[OAFavoriteItem alloc] initWithFavorite:favorite];
+        [_favorite setAmenity:poi];
+        
         [_app saveFavoritesToPermamentStorage];
     }
     return self;

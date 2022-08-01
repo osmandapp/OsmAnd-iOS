@@ -89,7 +89,6 @@
     [_backupHelper addPrepareBackupListener:self];
     if (!_settingsHelper.isBackupExporting)
         [_backupHelper prepareBackup];
-//    [[_backupHelper getBackupTypePref:OAExportSettingsType.OFFLINE_MAPS] set:NO];
     [self generateData];
     
     self.tblView.delegate = self;

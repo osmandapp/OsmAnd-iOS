@@ -686,7 +686,7 @@
         [app loadRoutingFiles];
     if (updateResources)
     {
-        app.resourcesManager->rescanUnmanagedStoragePaths();
+        app.resourcesManager->rescanUnmanagedStoragePaths(true);
         [app.localResourcesChangedObservable notifyEvent];
     }
 }

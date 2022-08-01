@@ -878,8 +878,8 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     if (ll)
     {
         [_indexes sortUsingComparator:^NSComparisonResult(NSString * _Nonnull id1, NSString * _Nonnull id2) {
-            NSString *first = [[id1 stringByReplacingOccurrencesOfString:@".map.obf" withString:@""] stringByReplacingOccurrencesOfString:@".live.obf" withString:@""];
-            NSString *second = [[id2 stringByReplacingOccurrencesOfString:@".map.obf" withString:@""] stringByReplacingOccurrencesOfString:@".live.obf" withString:@""];
+            NSString *first = [[id1 stringByReplacingOccurrencesOfString:@".live.obf" withString:@""] stringByReplacingOccurrencesOfString:@".obf" withString:@""];
+            NSString *second = [[id2 stringByReplacingOccurrencesOfString:@".live.obf" withString:@""] stringByReplacingOccurrencesOfString:@".obf" withString:@""];
             NSRange rangeFirst = [first rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
             NSRange rangeSecond = [second rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
             if (rangeFirst.location != NSNotFound && rangeSecond.location == NSNotFound)

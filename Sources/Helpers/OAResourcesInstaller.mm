@@ -235,7 +235,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                 success = _app.resourcesManager->installFromRepository(resourceId, filePath);
                 if (success)
                 {
-                    if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".map.obf"])
+                    if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".obf"] && ![[nsResourceId lowercaseString] hasSuffix:@"live.obf"])
                     {
                         OAWorldRegion* match = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
                         if (!match || ![match isInPurchasedArea])

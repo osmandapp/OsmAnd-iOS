@@ -63,11 +63,6 @@ public:
             std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult = nullptr,
             const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback = nullptr,
             const std::shared_ptr<const OsmAnd::IQueryController>& queryController = nullptr) const;
-    virtual long long getFileSize(
-            const QString& url,
-            std::shared_ptr<const IRequestResult>* const requestResult = nullptr,
-            const RequestProgressCallbackSignature progressCallback = nullptr,
-            const std::shared_ptr<const OsmAnd::IQueryController>& queryController = nullptr) const;
 };
 
 #endif /* OAWeatherWebClient_h */

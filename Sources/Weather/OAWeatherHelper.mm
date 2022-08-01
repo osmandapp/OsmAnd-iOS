@@ -28,6 +28,7 @@
 #define kWeatherForecastWifiPrefix @"forecast_download_via_wifi_"
 
 #define kTileSize 40000
+#define kForecastDatesCount (24 + (6 * 8) + 1)
 
 @implementation OAWeatherHelper
 {
@@ -155,8 +156,9 @@
     ));
 
     NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+    calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
     NSDate *date = [calendar startOfDayForDate:[NSDate date]];
-    for (NSInteger i = 0; i < 7 * 24; i++)
+    for (NSInteger i = 0; i < kForecastDatesCount; i++)
     {
         QDateTime dateTime = QDateTime::fromNSDate(date).toUTC();
 
@@ -183,7 +185,7 @@
 
         _weatherResourcesManager->downloadGeoTilesAsync(request, callback);
 
-        date = [calendar dateByAddingUnit:NSCalendarUnitHour value:1 toDate:date options:0];
+        date = [calendar dateByAddingUnit:NSCalendarUnitHour value:(i < 24 ? 1 : 3) toDate:date options:0];
     }
 }
 
@@ -279,15 +281,15 @@
 
 - (void)clearOutdatedCache
 {
-    NSDate *date = [NSCalendar.autoupdatingCurrentCalendar startOfDayForDate:[NSDate date]];
+    NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+    calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+    NSDate *date = [calendar startOfDayForDate:[NSDate date]];
     QDateTime dateTime = QDateTime::fromNSDate(date).toUTC();
     _weatherResourcesManager->clearDbCache(dateTime);
     for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
     {
         if (![self.class hasStatus:EOAWeatherForecastStatusUndefined region:region.regionId] && [self.class getPreferenceSizeLocal:region.regionId] > 0)
-        {
             [self calculateCacheSize:region onComplete:nil];
-        }
     }
 }
 
@@ -325,7 +327,7 @@
     [self.class removeStatus:EOAWeatherForecastStatusCalculating region:region.regionId];
     if ([self.class hasStatus:EOAWeatherForecastStatusDownloading region:region.regionId])
     {
-        NSDate *dateChecked = [NSDate dateWithTimeIntervalSince1970:[OAWeatherHelper getPreferenceLastUpdate:region.regionId]];
+        NSDate *dateChecked = [NSDate dateWithTimeIntervalSince1970:[self.class getPreferenceLastUpdate:region.regionId]];
         if ([dateChecked isEqualToDate:[NSDate dateWithTimeIntervalSince1970:-1]])
             [self removeLocalForecast:region refreshMap:NO];
     }
@@ -338,6 +340,7 @@
     if (![dateChecked isEqualToDate:[NSDate dateWithTimeIntervalSince1970:-1]])
     {
         NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+        calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
         NSDate *dayNow = [calendar startOfDayForDate:[NSDate date]];
         daysGone = [calendar components:NSCalendarUnitDay fromDate:dateChecked toDate:dayNow options:0].day;
     }
@@ -415,7 +418,7 @@
 
 - (NSInteger)getProgressDestination:(OAWorldRegion *)region
 {
-    return [self.class getPreferenceTileIds:region.regionId].count * 7 * 24;
+    return [self.class getPreferenceTileIds:region.regionId].count * kForecastDatesCount;
 }
 
 - (void)onProgressUpdate:(OAWorldRegion *)region
@@ -432,7 +435,9 @@
     if (progress == 1.)
     {
         [self.class setPreferenceStatus:region.regionId value:EOAWeatherForecastStatusDownloaded];
-        NSTimeInterval timeInterval = [NSCalendar.autoupdatingCurrentCalendar startOfDayForDate:[NSDate date]].timeIntervalSince1970;
+        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+        calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+        NSTimeInterval timeInterval = [calendar startOfDayForDate:[NSDate date]].timeIntervalSince1970;
         [self.class setPreferenceLastUpdate:region.regionId value:timeInterval];
         [self setOfflineRegion:region];
         [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
@@ -452,7 +457,9 @@
     if ([self.class hasStatus:EOAWeatherForecastStatusUndefined region:region.regionId] || [self.class hasStatus:EOAWeatherForecastStatusDownloading region:region.regionId])
     {
         item = [[OARepositoryResourceItem alloc] init];
-        item.date = [NSCalendar.autoupdatingCurrentCalendar startOfDayForDate:[NSDate date]];
+        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+        calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+        item.date = [calendar startOfDayForDate:[NSDate date]];
     }
     else
     {

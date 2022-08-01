@@ -56,6 +56,7 @@
 #import "OAAddWaypointViewController.h"
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
+#import "OAFavoriteViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

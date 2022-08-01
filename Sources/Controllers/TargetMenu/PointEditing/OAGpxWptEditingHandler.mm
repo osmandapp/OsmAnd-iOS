@@ -70,6 +70,7 @@
         [p setIcon:_iconName];
         [p setBackgroundIcon:@"circle"];
         [p setExtension:ADDRESS_EXTENSION value:@""];
+        [p setAmenity:poi];
 
         wpt.color = color;
         wpt.point = p;

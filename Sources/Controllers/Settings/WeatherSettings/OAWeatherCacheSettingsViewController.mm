@@ -13,11 +13,8 @@
 #import "OATitleDescrRightIconTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAWeatherHelper.h"
-#import "OAMapLayers.h"
 #import "Localization.h"
 #import "OAColors.h"
-
-#include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
 @interface OAWeatherCacheSettingsViewController () <UIViewControllerTransitioningDelegate, UITableViewDelegate, UITableViewDataSource>
 
@@ -27,7 +24,9 @@
 {
     NSArray<NSDictionary *> *_data;
     NSIndexPath *_sizeIndexPath;
+    NSIndexPath *_clearIndexPath;
     EOAWeatherCacheType _type;
+    BOOL _clearButtonActive;
 }
 
 - (instancetype)initWithCacheType:(EOAWeatherCacheType)type
@@ -89,6 +88,8 @@
     if (clearCells.count > 0)
         [data addObject:@{ @"cells": clearCells }];
 
+    _clearIndexPath = [NSIndexPath indexPathForRow:(clearCells.count > 0 ? clearCells.count : infoCells.count) - 1 inSection:data.count - 1];
+
     _data = data;
 }
 
@@ -99,7 +100,7 @@
 
 - (void)updateCacheSize
 {
-    [[OAWeatherHelper sharedInstance] calculateCacheSize:_type == EOAWeatherOfflineData onComplete:^(unsigned long long size)
+    [[OAWeatherHelper sharedInstance] calculateFullCacheSize:_type == EOAWeatherOfflineData onComplete:^(unsigned long long size)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (_sizeIndexPath)
@@ -112,30 +113,27 @@
                         @"value": sizeString,
                         @"type": [OAIconTitleValueCell getCellIdentifier]
                 };
+                _clearButtonActive = size > 0;
 
-                [self.tableView reloadRowsAtIndexPaths:@[_sizeIndexPath]
+                [self.tableView reloadRowsAtIndexPaths:@[_sizeIndexPath, _clearIndexPath]
                                       withRowAnimation:UITableViewRowAnimationNone];
             }
         });
     }];
 }
 
-- (void) clearCache
+- (void)clearCache
 {
     OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
     [mapVC showProgressHUD];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[OAWeatherHelper sharedInstance] clearCache:_type == EOAWeatherOfflineData];
-
-        [mapVC.mapLayers.weatherLayerLow updateWeatherLayer];
-        [mapVC.mapLayers.weatherLayerHigh updateWeatherLayer];
-        [mapVC.mapLayers.weatherContourLayer updateWeatherLayer];
-
         dispatch_async(dispatch_get_main_queue(), ^{
             [mapVC hideProgressHUD];
-            [self updateCacheSize];
             if (self.cacheDelegate)
                 [self.cacheDelegate onCacheClear:_type];
+
+            [self dismissViewController];
         });
     });
 }
@@ -193,6 +191,16 @@
         }
         if (cell)
         {
+            if ([item[@"key"] isEqualToString:@"clear"])
+            {
+                cell.selectionStyle = _clearButtonActive ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+                cell.textView.textColor = _clearButtonActive ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer);
+            }
+            else
+            {
+                cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+                cell.textView.textColor = UIColor.blackColor;
+            }
             cell.textView.text = item[@"title"];
             cell.textView.textAlignment = _type == EOAWeatherOnlineData ? NSTextAlignmentCenter : NSTextAlignmentNatural;
         }
@@ -227,7 +235,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"key"] isEqualToString:@"clear"])
+    if ([item[@"key"] isEqualToString:@"clear"] && _clearButtonActive)
     {
         UIAlertController *alert =
                 [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_clear_online_cache")

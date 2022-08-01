@@ -35,6 +35,15 @@
     [self applyColor];
 }
 
+- (OAPOI *) getAmenity
+{
+    return [_point getAmenity];
+}
+- (void) setAmenity:(OAPOI *)amenity
+{
+    [_point setAmenity:amenity];
+}
+
 - (void) applyColor
 {
     if (!self.point)

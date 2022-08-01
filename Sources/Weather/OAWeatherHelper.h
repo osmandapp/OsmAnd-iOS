@@ -42,8 +42,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 @property (nonatomic, readonly) NSArray<OAWeatherBand *> *bands;
 @property (nonatomic, readonly) OAMapPresentationEnvironment *mapPresentationEnvironment;
 
-@property (readonly) OAObservable *weatherSizeLocalCalculateObserver;
-@property (readonly) OAObservable *weatherSizeUpdatesCalculateObserver;
+@property (readonly) OAObservable *weatherSizeCalculatedObserver;
 @property (readonly) OAObservable *weatherForecastDownloadingObserver;
 
 + (OAWeatherHelper *) sharedInstance;
@@ -55,31 +54,31 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 
 + (BOOL)shouldHaveWeatherForecast:(OAWorldRegion *)region;
 
-- (void)downloadForecastByRegion:(OAWorldRegion *)region;
-- (void)downloadForecastByRegionId:(NSString *)regionId;
+- (void)downloadForecast:(OAWorldRegion *)region;
 
-- (void)calculateCacheSizeByRegion:(OAWorldRegion *)region localData:(BOOL)localData;
-- (void)calculateCacheSizeByRegionId:(NSString *)regionId localData:(BOOL)localData;
-- (void)calculateCacheSize:(BOOL)localData onComplete:(void (^)(unsigned long long))onComplete;
+- (void)calculateCacheSize:(OAWorldRegion *)region
+                onComplete:(void (^)(unsigned long long, unsigned long long))onComplete;
+- (void)calculateFullCacheSize:(BOOL)localData
+                    onComplete:(void (^)(unsigned long long))onComplete;
 
 - (void)clearCache:(BOOL)localData;
 - (void)clearOutdatedCache;
-- (void)removeForecast:(NSString *)regionId refreshMap:(BOOL)refreshMap;
-- (void)removeIncompleteForecast:(NSString *)regionId;
+- (void)removeLocalForecast:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
+- (void)removeIncompleteForecast:(OAWorldRegion *)region;
 
-- (void)updatePreferences:(NSString *)regionId;
+- (void)updatePreferences:(OAWorldRegion *)region;
 
-- (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegionId:(NSString *)excludeRegionId;
-- (void)setOfflineRegion:(NSString *)regionId;
+- (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegion:(OAWorldRegion *)excludeRegion;
+- (void)setOfflineRegion:(OAWorldRegion *)region;
 - (NSArray<NSString *> *)getOfflineRegions;
-- (NSInteger)getProgress:(NSString *)regionId;
-- (NSInteger)getProgressDestination:(NSString *)regionId;
+- (NSInteger)getProgress:(OAWorldRegion *)region;
+- (NSInteger)getProgressDestination:(OAWorldRegion *)region;
 
 + (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region;
 
-+ (BOOL)hasStatus:(NSInteger)status regionId:(NSString *)regionId;
-+ (void)addStatus:(NSInteger)status regionId:(NSString *)regionId;
-+ (void)removeStatus:(NSInteger)status regionId:(NSString *)regionId;
++ (BOOL)hasStatus:(NSInteger)status region:(NSString *)regionId;
++ (void)addStatus:(NSInteger)status region:(NSString *)regionId;
++ (void)removeStatus:(NSInteger)status region:(NSString *)regionId;
 
 + (NSInteger)getPreferenceStatus:(NSString *)regionId;
 + (void)setPreferenceStatus:(NSString *)regionId value:(NSInteger)value;

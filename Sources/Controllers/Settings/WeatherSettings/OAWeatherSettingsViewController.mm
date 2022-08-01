@@ -56,15 +56,16 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self updateCacheSize:YES];
-    [self updateCacheSize:NO];
+    [self updateCacheSize:NO onComplete:^{
+        [self updateCacheSize:YES onComplete:nil];
+    }];
 }
 
-- (void)updateCacheSize:(BOOL)localData
+- (void)updateCacheSize:(BOOL)localData onComplete:(void (^)())onComplete
 {
     if ((localData && _useOfflineDataIndexPath) || (!localData && _onlineDataIndexPath))
     {
-        [[OAWeatherHelper sharedInstance] calculateCacheSize:localData onComplete:^(unsigned long long dbsSize)
+        [[OAWeatherHelper sharedInstance] calculateFullCacheSize:localData onComplete:^(unsigned long long dbsSize)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSMutableArray<NSDictionary *> *cells = _data[localData ? _useOfflineDataIndexPath.section : _onlineDataIndexPath.section][@"cells"];
@@ -78,6 +79,9 @@
 
                 [self.tableView reloadRowsAtIndexPaths:@[localData ? _useOfflineDataIndexPath : _onlineDataIndexPath]
                                       withRowAnimation:UITableViewRowAnimationNone];
+
+                if (onComplete)
+                    onComplete();
             });
         }];
     }
@@ -132,7 +136,7 @@
     [cacheData addObject:@{
             @"key": @"offline_forecast",
             @"title": OALocalizedString(@"weather_offline_forecast"),
-            @"value": @"size",
+            @"value": sizeString,
             @"type": [OAIconTitleValueCell getCellIdentifier]
     }];
     _useOfflineDataIndexPath = [NSIndexPath indexPathForRow:cacheData.count - 1 inSection:data.count - 1];
@@ -306,7 +310,9 @@
 
 - (void)onCacheClear:(EOAWeatherCacheType)type
 {
-    [self updateCacheSize:type == EOAWeatherOfflineData];
+    [self updateCacheSize:type == EOAWeatherOfflineData onComplete:^{
+        [self updateCacheSize:type != EOAWeatherOfflineData onComplete:nil];
+    }];
 }
 
 @end

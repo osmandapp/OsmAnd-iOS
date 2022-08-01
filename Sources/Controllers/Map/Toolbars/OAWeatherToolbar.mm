@@ -168,7 +168,7 @@
     NSInteger minimumForCurrentMark = [_currentTimezoneCalendar startOfDayForDate:date].timeIntervalSince1970;
     NSInteger currentValue = date.timeIntervalSince1970;
     self.timeSliderView.currentMarkX = _available && _selectedDayIndex == 0 ? (currentValue - minimumForCurrentMark) : -1;
-    date = [_currentTimezoneCalendar dateBySettingHour:0 minute:0 second:0 ofDate:date options:0];
+    date = [_currentTimezoneCalendar startOfDayForDate:date];
     date = [_currentTimezoneCalendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:date options:0];
     self.timeSliderView.maximumForCurrentMark = [_currentTimezoneCalendar startOfDayForDate:date].timeIntervalSince1970 - minimumForCurrentMark;
 }
@@ -176,7 +176,8 @@
 - (void)updateTimeValues:(NSDate *)date
 {
     NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-    NSDate *selectedNextDate = [calendar dateBySettingHour:0 minute:0 second:0 ofDate:date options:0];
+    calendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSDate *selectedNextDate = [calendar startOfDayForDate:date];
     NSMutableArray<NSDate *> *selectedTimeValues = [NSMutableArray array];
     [selectedTimeValues addObject:selectedNextDate];
 

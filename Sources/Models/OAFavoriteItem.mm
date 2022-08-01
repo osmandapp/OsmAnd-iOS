@@ -16,6 +16,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
+#import "OAPOI.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -373,6 +374,31 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
 }
 
+- (OAPOI *) getAmenity
+{
+    const QHash<QString, QString> extensionsToRead = self.favorite->getExtensions();
+    if (!extensionsToRead.empty())
+    {
+        NSMutableDictionary<NSString *, NSString *> *extensions = [NSMutableDictionary dictionary];
+        for (const auto& extension : OsmAnd::rangeOf(extensionsToRead))
+            extensions[extension.key().toNSString()] = extension.value().toNSString();
+
+        return [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+    }
+    return nil;
+}
+
+- (void) setAmenity:(OAPOI *)amenity
+{
+    if (amenity)
+    {
+        NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+        [extensions enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
+            self.favorite->setExtension(QString::fromNSString(key), QString::fromNSString(value));
+        }];
+    }
+}
+
 - (BOOL) isVisible
 {
     return !self.favorite->isHidden();
@@ -546,6 +572,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         e.value = @"true";
         [exts addObject:e];
     }
+    [pt setAmenity:[self getAmenity]];
     pt.extensions = exts;
     pt.name = self.getName;
     pt.desc = self.getDescription;

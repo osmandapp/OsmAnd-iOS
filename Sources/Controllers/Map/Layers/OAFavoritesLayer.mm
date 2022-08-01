@@ -277,6 +277,7 @@
             QString icon = favorite->getIcon();
             QString background = favorite->getBackground();
             OsmAnd::ColorRGB color = favorite->getColor();
+            QHash<QString, QString> extensions = favorite->getExtensions();
             bool calendarEvent = favorite->getCalendarEvent();
             
             self.app.favoritesCollection->removeFavoriteLocation(favorite);
@@ -291,6 +292,7 @@
                                                             icon,
                                                             background,
                                                             color,
+                                                            extensions,
                                                             calendarEvent);
             if (item.specialPointType == OASpecialPointType.PARKING)
             {

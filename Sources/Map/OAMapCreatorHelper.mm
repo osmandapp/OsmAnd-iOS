@@ -30,8 +30,8 @@
         for (NSString *file in files)
         {
             if ([[file pathExtension] caseInsensitiveCompare:@"sqlitedb"] == NSOrderedSame &&
-                ![file hasPrefix:@"Hillshade_"] &&
-                ![file hasPrefix:@"Slope_"] &&
+                ![file hasPrefix:@"Hillshade "] &&
+                ![file hasPrefix:@"Slope "] &&
                 ![file hasPrefix:@"Heightmap_"] &&
                 ![file hasSuffix:@"hillshade.sqlite"] &&
                 ![file hasSuffix:@"slope.sqlite"] &&
@@ -53,7 +53,7 @@
         _sqlitedbResourcesChangedObservable = [[OAObservable alloc] init];
         NSFileManager *fileManager = [NSFileManager defaultManager];
 
-        _filesDir = [NSHomeDirectory() stringByAppendingString:@"/Library/MapCreator"];
+        _filesDir = [NSHomeDirectory() stringByAppendingString:@"/Documents/MapCreator"];
         _documentsDir = [fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].lastObject.path;
         
         BOOL isDir = YES;

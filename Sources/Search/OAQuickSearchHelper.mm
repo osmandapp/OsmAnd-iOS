@@ -326,8 +326,8 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         }
 
     [resIds sortUsingComparator:^NSComparisonResult(NSString *first, NSString *second) {
-        first = [[first stringByReplacingOccurrencesOfString:@".map.obf" withString:@""] stringByReplacingOccurrencesOfString:@".live.obf" withString:@""];
-        second = [[second stringByReplacingOccurrencesOfString:@".map.obf" withString:@""] stringByReplacingOccurrencesOfString:@".live.obf" withString:@""];
+        first = [[first stringByReplacingOccurrencesOfString:@".live.obf" withString:@""] stringByReplacingOccurrencesOfString:@".obf" withString:@""];
+        second = [[second stringByReplacingOccurrencesOfString:@".live.obf" withString:@""] stringByReplacingOccurrencesOfString:@".obf" withString:@""];
         NSRange rangeFirst = [first rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
         NSRange rangeSecond = [second rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
         if (rangeFirst.location != NSNotFound && rangeSecond.location == NSNotFound)

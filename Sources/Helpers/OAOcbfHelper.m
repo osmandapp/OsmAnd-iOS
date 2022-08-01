@@ -21,7 +21,7 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     NSString *cachedPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
-    NSString *cachedPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
+    NSString *cachedPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
 
     if (![fileManager fileExistsAtPath:cachedPathLib])
     {
@@ -103,7 +103,7 @@
 + (BOOL) isBundledOcbfNewer
 {
     NSString *cachedPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
-    NSString *cachedPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
+    NSString *cachedPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:cachedPathLib])

@@ -108,7 +108,7 @@
                 if (resource && resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
                 {
                     if ([region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)]
-                        && !resource->id.isNull() && [resource->id.toNSString() hasPrefix:region.downloadsIdPrefix])
+                        && !resource->id.isNull() && [resource->id.toLower().toNSString() hasPrefix:region.downloadsIdPrefix])
                     {
                         [mapRegions addObject:region];
                         [toRemove addObjectsFromArray:region.subregions];
@@ -151,7 +151,7 @@
 {
     int baseOrder = self.baseOrder;
     const auto& outdatedResources = self.app.resourcesManager->getOutdatedInstalledResources();
-    const auto& resource = self.app.resourcesManager->getLocalResource(QString::fromNSString([region.downloadsIdPrefix stringByAppendingString:@"map.obf"]));
+    const auto& resource = self.app.resourcesManager->getLocalResource(QString::fromNSString([region.downloadsIdPrefix stringByAppendingString:@"obf"]));
     BOOL outdated = NO;
     if (resource)
     {

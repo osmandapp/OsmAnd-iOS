@@ -42,8 +42,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 @property (nonatomic, readonly) NSArray<OAWeatherBand *> *bands;
 @property (nonatomic, readonly) OAMapPresentationEnvironment *mapPresentationEnvironment;
 
-@property (readonly) OAObservable *weatherSizeLocalCalculateObserver;
-@property (readonly) OAObservable *weatherSizeUpdatesCalculateObserver;
+@property (readonly) OAObservable *weatherSizeCalculatedObserver;
 @property (readonly) OAObservable *weatherForecastDownloadingObserver;
 
 + (OAWeatherHelper *) sharedInstance;
@@ -55,8 +54,10 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 
 - (void)downloadForecast:(OAWorldRegion *)region;
 
-- (void)calculateCacheSize:(OAWorldRegion *)region localData:(BOOL)localData;
-- (void)calculateCacheSize:(BOOL)localData onComplete:(void (^)(unsigned long long))onComplete;
+- (void)calculateCacheSize:(OAWorldRegion *)region
+                onComplete:(void (^)(unsigned long long, unsigned long long))onComplete;
+- (void)calculateFullCacheSize:(BOOL)localData
+                    onComplete:(void (^)(unsigned long long))onComplete;
 
 - (void)clearCache:(BOOL)localData;
 - (void)clearOutdatedCache;
@@ -73,9 +74,9 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 
 + (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region;
 
-+ (BOOL)hasStatus:(NSInteger)status region:(OAWorldRegion *)region;
-+ (void)addStatus:(NSInteger)status region:(OAWorldRegion *)region;
-+ (void)removeStatus:(NSInteger)status region:(OAWorldRegion *)region;
++ (BOOL)hasStatus:(NSInteger)status region:(NSString *)regionId;
++ (void)addStatus:(NSInteger)status region:(NSString *)regionId;
++ (void)removeStatus:(NSInteger)status region:(NSString *)regionId;
 
 + (NSInteger)getPreferenceStatus:(NSString *)regionId;
 + (void)setPreferenceStatus:(NSString *)regionId value:(NSInteger)value;

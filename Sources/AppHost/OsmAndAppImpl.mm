@@ -200,28 +200,6 @@
         if (!success)
             OALog(@"Error creating GPX folder: %@", error.localizedFailureReason);
     }
-
-    NSString *weatherOfflineDataPath = [_weatherForecastPath stringByAppendingPathComponent:@"offline"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:weatherOfflineDataPath])
-    {
-        BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:weatherOfflineDataPath
-                                                 withIntermediateDirectories:NO
-                                                                  attributes:nil
-                                                                       error:&error];
-        if (!success)
-            OALog(@"Error creating Weather forecast (offline) folder: %@", error.localizedFailureReason);
-    }
-
-    NSString *weatherOnlineDataPath = [_weatherForecastPath stringByAppendingPathComponent:@"online"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:weatherOnlineDataPath])
-    {
-        BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:weatherOnlineDataPath
-                                                 withIntermediateDirectories:NO
-                                                                  attributes:nil
-                                                                       error:&error];
-        if (!success)
-            OALog(@"Error creating Weather forecast (online) folder: %@", error.localizedFailureReason);
-    }
 }
 
 - (void) initOpeningHoursParser

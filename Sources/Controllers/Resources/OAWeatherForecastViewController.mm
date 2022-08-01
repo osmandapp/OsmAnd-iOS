@@ -45,8 +45,7 @@
     NSIndexPath *_sizeIndexPath;
     NSIndexPath *_selectedIndexPath;
 
-    OAAutoObserverProxy *_weatherSizeLocalCalculateObserver;
-    OAAutoObserverProxy *_weatherSizeUpdatesCalculateObserver;
+    OAAutoObserverProxy *_weatherSizeCalculatedObserver;
     OAAutoObserverProxy *_weatherForecastDownloadingObserver;
 }
 
@@ -66,14 +65,10 @@
     _editMode = NO;
     _weatherHelper = [OAWeatherHelper sharedInstance];
 
-    _weatherSizeLocalCalculateObserver =
+    _weatherSizeCalculatedObserver =
             [[OAAutoObserverProxy alloc] initWith:self
-                                      withHandler:@selector(onWeatherSizeLocalCalculate:withKey:andValue:)
-                                       andObserve:[OAWeatherHelper sharedInstance].weatherSizeLocalCalculateObserver];
-    _weatherSizeUpdatesCalculateObserver =
-            [[OAAutoObserverProxy alloc] initWith:self
-                                      withHandler:@selector(onWeatherSizeUpdatesCalculate:withKey:andValue:)
-                                       andObserve:[OAWeatherHelper sharedInstance].weatherSizeUpdatesCalculateObserver];
+                                      withHandler:@selector(onWeatherSizeCalculated:withKey:andValue:)
+                                       andObserve:[OAWeatherHelper sharedInstance].weatherSizeCalculatedObserver];
     _weatherForecastDownloadingObserver =
             [[OAAutoObserverProxy alloc] initWith:self
                                       withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:)
@@ -120,15 +115,10 @@
 
 //    self.tableView.editing = NO;
 
-    if (_weatherSizeLocalCalculateObserver)
+    if (_weatherSizeCalculatedObserver)
     {
-        [_weatherSizeLocalCalculateObserver detach];
-        _weatherSizeLocalCalculateObserver = nil;
-    }
-    if (_weatherSizeUpdatesCalculateObserver)
-    {
-        [_weatherSizeUpdatesCalculateObserver detach];
-        _weatherSizeUpdatesCalculateObserver = nil;
+        [_weatherSizeCalculatedObserver detach];
+        _weatherSizeCalculatedObserver = nil;
     }
     if (_weatherForecastDownloadingObserver)
     {
@@ -265,7 +255,7 @@
 
 - (void)updateCacheSize
 {
-    [_weatherHelper calculateCacheSize:YES onComplete:^(unsigned long long size)
+    [_weatherHelper calculateFullCacheSize:YES onComplete:^(unsigned long long size)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (_sizeIndexPath)
@@ -279,11 +269,7 @@
     }];
 }
 
-- (void)onWeatherSizeLocalCalculate:(id)sender withKey:(id)key andValue:(id)value
-{
-}
-
-- (void)onWeatherSizeUpdatesCalculate:(id)sender withKey:(id)key andValue:(id)value
+- (void)onWeatherSizeCalculated:(id)sender withKey:(id)key andValue:(id)value
 {
 }
 
@@ -457,7 +443,6 @@
 
 - (IBAction)onEditButtonClicked:(id)sender
 {
-
     dispatch_queue_t serialQueue = dispatch_queue_create(@"edit_button_pressed".UTF8String, DISPATCH_QUEUE_SERIAL);
     dispatch_async(serialQueue, ^{
         if (_editMode)
@@ -484,7 +469,7 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [_deleteForecastProgressHUD show:YES];
                         [forecastsToDelete enumerateObjectsUsingBlock:^(NSString *regionId, NSUInteger idx, BOOL *stop) {
-                            [_weatherHelper removeForecast:regionId refreshMap:YES];
+                            [_weatherHelper removeLocalForecast:regionId refreshMap:YES];
                             [forecastsToDelete removeObject:regionId];
                         }];
                         [_deleteForecastProgressHUD hide:YES];
@@ -514,6 +499,9 @@
             [self updateSearchBarVisible];
             [self setupView];
             [self.tableView reloadData];
+
+            if (!_editMode)
+                [self updateCacheSize];
         });
     });
 }

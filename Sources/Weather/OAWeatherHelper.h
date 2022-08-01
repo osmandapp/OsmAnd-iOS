@@ -54,7 +54,8 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 
 + (BOOL)shouldHaveWeatherForecast:(OAWorldRegion *)region;
 
-- (void)downloadForecast:(OAWorldRegion *)region;
+- (void)downloadForecastByRegionId:(NSString *)regionId;
+- (void)downloadForecastByRegion:(OAWorldRegion *)region;
 
 - (void)calculateCacheSize:(OAWorldRegion *)region
                 onComplete:(void (^)(unsigned long long, unsigned long long))onComplete;
@@ -63,22 +64,22 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 
 - (void)clearCache:(BOOL)localData;
 - (void)clearOutdatedCache;
-- (void)removeLocalForecast:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
-- (void)removeIncompleteForecast:(OAWorldRegion *)region;
+- (void)removeLocalForecast:(NSString *)regionId refreshMap:(BOOL)refreshMap;
+- (void)removeIncompleteForecast:(NSString *)regionId;
 
 - (void)updatePreferences:(OAWorldRegion *)region;
 
-- (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegion:(OAWorldRegion *)excludeRegion;
-- (void)setOfflineRegion:(OAWorldRegion *)region;
+- (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegion:(NSString *)excludeRegionId;
+- (void)setOfflineRegion:(NSString *)regionId;
 - (NSArray<NSString *> *)getOfflineRegions;
-- (NSInteger)getProgress:(OAWorldRegion *)region;
-- (NSInteger)getProgressDestination:(OAWorldRegion *)region;
+- (NSInteger)getProgress:(NSString *)regionId;
+- (NSInteger)getProgressDestination:(NSString *)regionId;
 
 + (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region;
 
-+ (BOOL)hasStatus:(NSInteger)status region:(NSString *)regionId;
-+ (void)addStatus:(NSInteger)status region:(NSString *)regionId;
-+ (void)removeStatus:(NSInteger)status region:(NSString *)regionId;
++ (BOOL)hasStatus:(NSInteger)status regionId:(NSString *)regionId;
++ (void)addStatus:(NSInteger)status regionId:(NSString *)regionId;
++ (void)removeStatus:(NSInteger)status regionId:(NSString *)regionId;
 
 + (NSInteger)getPreferenceStatus:(NSString *)regionId;
 + (void)setPreferenceStatus:(NSString *)regionId value:(NSInteger)value;

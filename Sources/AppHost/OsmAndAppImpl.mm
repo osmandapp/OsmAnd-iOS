@@ -429,13 +429,13 @@
             [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
             [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]];
             [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
-            _resourcesManager->rescanUnmanagedStoragePaths();
+            _resourcesManager->rescanUnmanagedStoragePaths(true);
         }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }
     
-    // Copy regions.ocbf to Library/Resources if needed
+    // Copy regions.ocbf to Documents/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
     

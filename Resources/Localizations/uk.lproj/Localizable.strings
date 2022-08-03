@@ -2613,3 +2613,6 @@
 "shared_string_countries" = "Країни";
 "shared_string_clear_online_cache" = "Очистити мереж. кеш";
 "restore_from_osmand_cloud" = "Відновити з OsmAnd Cloud";
+"all_maps_are_up_to_date" = "Усі мапи актуальні";
+"shared_string_restoring" = "Відновлення";
+"restoring_from" = "Відновлення вибраних даних з хмари";

@@ -23,7 +23,6 @@
 
 @implementation OASettingsExporter
 {
-    MutableOrderedDictionary *_items;
     MutableOrderedDictionary *_additionalParams;
     BOOL _exportItemsFiles;
     
@@ -36,10 +35,9 @@
 
 - (instancetype) initWithExportParam:(BOOL)exportItemsFiles acceptedExtensions:(NSSet<NSString *> *)extensions
 {
-    self = [super init];
+    self = [super initWithListener:nil];
     if (self)
     {
-        _items = [MutableOrderedDictionary new];
         _additionalParams = [MutableOrderedDictionary new];
         _exportItemsFiles = exportItemsFiles;
         _acceptedExtensions = extensions;
@@ -110,7 +108,7 @@
 
 - (void) writeItemsFiles:(NSMutableArray<NSString *> *)paths
 {
-    for (OASettingsItem *item in _items.allValues)
+    for (OASettingsItem *item in self.getItems)
     {
         OASettingsItemWriter *writer = [item getWriter];
         if (writer != nil)

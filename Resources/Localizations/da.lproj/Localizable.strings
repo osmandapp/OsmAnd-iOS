@@ -2605,3 +2605,4 @@
 "shared_string_data" = "Data";
 "shared_string_total_size" = "Samlet størrelse";
 "restore_from_osmand_cloud" = "Gendan fra OsmAnd Cloud";
+"all_maps_are_up_to_date" = "Alle kort er ajourført";

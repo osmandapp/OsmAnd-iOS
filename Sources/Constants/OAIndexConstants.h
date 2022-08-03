@@ -35,6 +35,8 @@
 #define BINARY_ROAD_MAP_INDEX_EXT_ZIP @".road.obf.zip"
 #define BINARY_SRTM_MAP_INDEX_EXT @".srtm.obf"
 #define BINARY_SRTM_MAP_INDEX_EXT_ZIP @".srtm.obf.zip"
+#define BINARY_SRTMF_MAP_INDEX_EXT @".srtmf.obf"
+#define BINARY_SRTMF_MAP_INDEX_EXT_ZIP @".srtmf.obf.zip"
 #define EXTRA_EXT @".extra"
 #define EXTRA_ZIP_EXT @".extra.zip"
 

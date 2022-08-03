@@ -396,10 +396,10 @@
 
     [self calculateCacheSize:region onComplete:nil];
 
-    if (daysGone >= 7 && [self.class hasStatus:EOAWeatherForecastStatusDownloaded region:region.regionId])
+    if (daysGone >= 7 && [self.class hasStatus:EOAWeatherForecastStatusDownloaded regionId:region.regionId])
     {
-        [self.class removeStatus:EOAWeatherForecastStatusDownloaded region:region.regionId];
-        [self.class addStatus:EOAWeatherForecastStatusOutdated region:region.regionId];
+        [self.class removeStatus:EOAWeatherForecastStatusDownloaded regionId:region.regionId];
+        [self.class addStatus:EOAWeatherForecastStatusOutdated regionId:region.regionId];
     }
 }
 

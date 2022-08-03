@@ -12,6 +12,7 @@
 #import "OATitleDescrRightIconTableViewCell.h"
 #import "OADeleteButtonTableViewCell.h"
 #import "OAIconTitleValueCell.h"
+#import "OALargeImageTitleDescrTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAWeatherHelper.h"
 #import "OAColors.h"
@@ -89,6 +90,8 @@
     self.searchBar.placeholder = OALocalizedString(@"shared_string_search");
     [self updateSearchBarVisible];
 
+    self.editButton.hidden = [_weatherHelper getOfflineRegions].count == 0 && [_weatherHelper getDownloadingRegions].count == 0;
+
     _progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_progressHUD];
 }
@@ -126,6 +129,7 @@
 {
     NSMutableArray *data = [NSMutableArray array];
     NSArray<NSString *> *offlineRegions = [_weatherHelper getOfflineRegions];
+    NSArray<NSString *> *downloadingRegions = [_weatherHelper getDownloadingRegions];
 
     if (_editMode)
     {
@@ -181,65 +185,87 @@
     }
     else
     {
-        NSMutableArray<NSMutableDictionary *> *updateCells = [NSMutableArray array];
-        NSMutableDictionary *updateSection = [NSMutableDictionary dictionary];
-        updateSection[@"key"] = @"update_section";
-        updateSection[@"cells"] = updateCells;
-
-        NSMutableDictionary *updateAllData = [NSMutableDictionary dictionary];
-        updateAllData[@"key"] = @"update_cell_all";
-        updateAllData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
-        updateAllData[@"title"] = OALocalizedString(@"res_update_all");
-        updateAllData[@"icon"] = @"ic_custom_download";
-        [updateCells addObject:updateAllData];
-
-        [data addObject:updateSection];
-
-        NSMutableArray<NSMutableDictionary *> *statusCells = [NSMutableArray array];
-        NSMutableDictionary *statusSection = [NSMutableDictionary dictionary];
-        statusSection[@"key"] = @"status_section";
-        statusSection[@"header"] = OALocalizedString(@"shared_string_status");
-        statusSection[@"cells"] = statusCells;
-        for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
+        if (offlineRegions.count == 0 && downloadingRegions.count == 0)
         {
-            if ([offlineRegions containsObject:region.regionId])
-            {
-                [_weatherHelper checkStatusOutdated:region];
+            NSMutableArray<NSMutableDictionary *> *emptyCells = [NSMutableArray array];
+            NSMutableDictionary *emptySection = [NSMutableDictionary dictionary];
+            emptySection[@"key"] = @"empty_section";
+            emptySection[@"cells"] = emptyCells;
 
-                NSMutableDictionary *offlineForecastData = [NSMutableDictionary dictionary];
-                offlineForecastData[@"key"] = [@"status_cell_" stringByAppendingString:region.regionId];
-                offlineForecastData[@"type"] = [OATitleDescrRightIconTableViewCell getCellIdentifier];
-                offlineForecastData[@"region_id"] = region.regionId;
-                offlineForecastData[@"title"] = region.localizedName;
-                offlineForecastData[@"description"] = [OAWeatherHelper getStatusInfoDescription:region.regionId];
-                [statusCells addObject:offlineForecastData];
-            }
+            NSMutableDictionary *emptyData = [NSMutableDictionary dictionary];
+            emptyData[@"key"] = @"empty_cell";
+            emptyData[@"type"] = [OALargeImageTitleDescrTableViewCell getCellIdentifier];
+            emptyData[@"title"] = OALocalizedString(@"weather_miss_forecasts");
+            emptyData[@"description"] = OALocalizedString(@"weather_miss_forecasts_description");
+            emptyData[@"icon"] = @"ic_custom_umbrella";
+            emptyData[@"icon_color"] = UIColorFromRGB(color_tint_gray);
+            emptyData[@"button_title"] = OALocalizedString(@"shared_string_select");
+            [emptyCells addObject:emptyData];
+
+            [data addObject:emptySection];
         }
+        else
+        {
+            NSMutableArray<NSMutableDictionary *> *updateCells = [NSMutableArray array];
+            NSMutableDictionary *updateSection = [NSMutableDictionary dictionary];
+            updateSection[@"key"] = @"update_section";
+            updateSection[@"cells"] = updateCells;
 
-        [statusCells sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
-            return [obj1[@"title"] compare:obj2[@"title"]];
-        }];
+            NSMutableDictionary *updateAllData = [NSMutableDictionary dictionary];
+            updateAllData[@"key"] = @"update_cell_all";
+            updateAllData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+            updateAllData[@"title"] = OALocalizedString(@"res_update_all");
+            updateAllData[@"icon"] = @"ic_custom_download";
+            [updateCells addObject:updateAllData];
 
-        [data addObject:statusSection];
+            [data addObject:updateSection];
 
-        NSMutableArray<NSMutableDictionary *> *dataCells = [NSMutableArray array];
-        NSMutableDictionary *dataSection = [NSMutableDictionary dictionary];
-        dataSection[@"key"] = @"data_section";
-        dataSection[@"header"] = OALocalizedString(@"shared_string_data");
-        dataSection[@"cells"] = dataCells;
+            NSMutableArray<NSMutableDictionary *> *statusCells = [NSMutableArray array];
+            NSMutableDictionary *statusSection = [NSMutableDictionary dictionary];
+            statusSection[@"key"] = @"status_section";
+            statusSection[@"header"] = OALocalizedString(@"shared_string_status");
+            statusSection[@"cells"] = statusCells;
+            for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
+            {
+                if ([offlineRegions containsObject:region.regionId])
+                {
+                    [_weatherHelper checkStatusOutdated:region];
 
-        NSMutableDictionary *totalSizeData = [NSMutableDictionary dictionary];
-        totalSizeData[@"key"] = @"data_cell_size";
-        totalSizeData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
-        totalSizeData[@"title"] = OALocalizedString(@"shared_string_total_size");
-        totalSizeData[@"icon"] = @"menu_cell_pointer";
-        NSString *sizeString = [NSByteCountFormatter stringFromByteCount:0 countStyle:NSByteCountFormatterCountStyleFile];
-        totalSizeData[@"description"] = sizeString;
-        [dataCells addObject:totalSizeData];
+                    NSMutableDictionary *offlineForecastData = [NSMutableDictionary dictionary];
+                    offlineForecastData[@"key"] = [@"status_cell_" stringByAppendingString:region.regionId];
+                    offlineForecastData[@"type"] = [OATitleDescrRightIconTableViewCell getCellIdentifier];
+                    offlineForecastData[@"region_id"] = region.regionId;
+                    offlineForecastData[@"title"] = region.localizedName;
+                    offlineForecastData[@"description"] = [OAWeatherHelper getStatusInfoDescription:region.regionId];
+                    [statusCells addObject:offlineForecastData];
+                }
+            }
 
-        [data addObject:dataSection];
-        
-        _sizeIndexPath = [NSIndexPath indexPathForRow:dataCells.count - 1 inSection:data.count - 1];
+            [statusCells sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
+                return [obj1[@"title"] compare:obj2[@"title"]];
+            }];
+
+            [data addObject:statusSection];
+
+            NSMutableArray<NSMutableDictionary *> *dataCells = [NSMutableArray array];
+            NSMutableDictionary *dataSection = [NSMutableDictionary dictionary];
+            dataSection[@"key"] = @"data_section";
+            dataSection[@"header"] = OALocalizedString(@"shared_string_data");
+            dataSection[@"cells"] = dataCells;
+
+            NSMutableDictionary *totalSizeData = [NSMutableDictionary dictionary];
+            totalSizeData[@"key"] = @"data_cell_size";
+            totalSizeData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+            totalSizeData[@"title"] = OALocalizedString(@"shared_string_total_size");
+            totalSizeData[@"icon"] = @"menu_cell_pointer";
+            NSString *sizeString = [NSByteCountFormatter stringFromByteCount:0 countStyle:NSByteCountFormatterCountStyleFile];
+            totalSizeData[@"description"] = sizeString;
+            [dataCells addObject:totalSizeData];
+
+            [data addObject:dataSection];
+
+            _sizeIndexPath = [NSIndexPath indexPathForRow:dataCells.count - 1 inSection:data.count - 1];
+        }
     }
 
     _data = data;
@@ -247,18 +273,18 @@
 
 - (void)updateCacheSize
 {
+    if (!_sizeIndexPath)
+        return;
+
     [_weatherHelper calculateFullCacheSize:YES onComplete:^(unsigned long long size)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (_sizeIndexPath)
-            {
-                NSMutableDictionary *totalSizeData = _data[_sizeIndexPath.section][@"cells"][_sizeIndexPath.row];
-                NSString *sizeString = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
-                totalSizeData[@"description"] = sizeString;
-                [UIView setAnimationsEnabled:NO];
-                [self.tableView reloadRowsAtIndexPaths:@[_sizeIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-                [UIView setAnimationsEnabled:YES];
-            }
+            NSMutableDictionary *totalSizeData = _data[_sizeIndexPath.section][@"cells"][_sizeIndexPath.row];
+            NSString *sizeString = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
+            totalSizeData[@"description"] = sizeString;
+            [UIView setAnimationsEnabled:NO];
+            [self.tableView reloadRowsAtIndexPaths:@[_sizeIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+            [UIView setAnimationsEnabled:YES];
         });
     }];
 }
@@ -380,7 +406,6 @@
                                                             }
                             ];
                     [statusCells addObject:offlineForecastData];
-
                     [statusCells sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2)
                     {
                         return [obj1[@"title"] compare:obj2[@"title"]];
@@ -535,7 +560,6 @@
     {
         _editMode = NO;
         self.titleLabel.text = OALocalizedString(@"weather_offline_forecast");
-        [_editButton setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
         [_backButton setTitle:nil forState:UIControlStateNormal];
         [_backButton setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
 
@@ -544,7 +568,17 @@
         [self.tableView reloadData];
         self.tableView.contentOffset = CGPointZero;
 
-        [self updateCacheSize];
+        if ([_weatherHelper getOfflineRegions].count == 0 && [_weatherHelper getDownloadingRegions].count == 0)
+        {
+            _editButton.hidden = YES;
+            _sizeIndexPath = nil;
+        }
+        else
+        {
+            [_editButton setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
+            _editButton.hidden = NO;
+            [self updateCacheSize];
+        }
     }
     else
     {
@@ -650,9 +684,10 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             _editMode = !_editMode;
 
+            if (downloadingBlock)
+                downloadingBlock();
+
             self.titleLabel.text = OALocalizedString(_editMode ? @"shared_string_edit" : @"weather_offline_forecast");
-            [_editButton setTitle:OALocalizedString(_editMode ? @"shared_string_apply" : @"shared_string_edit")
-                         forState:UIControlStateNormal];
             [_backButton setTitle:_editMode ? OALocalizedString(@"shared_string_cancel") : nil
                          forState:UIControlStateNormal];
             [_backButton setImage:_editMode ? nil : [UIImage templateImageNamed:@"ic_navbar_chevron"]
@@ -663,11 +698,27 @@
             [self.tableView reloadData];
             self.tableView.contentOffset = CGPointZero;
 
-            if (!_editMode)
-                [self updateCacheSize];
-
-            if (downloadingBlock)
-                downloadingBlock();
+            if (_editMode)
+            {
+                [_editButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
+                _editButton.hidden = NO;
+                _sizeIndexPath = nil;
+            }
+            else
+            {
+                BOOL hasRegions = [_weatherHelper getOfflineRegions].count > 0 || [_weatherHelper getDownloadingRegions].count > 0;
+                if (hasRegions)
+                {
+                    [_editButton setTitle:OALocalizedString(_editMode ? @"shared_string_apply" : @"shared_string_edit")
+                                 forState:UIControlStateNormal];
+                    [self updateCacheSize];
+                }
+                else
+                {
+                    _sizeIndexPath = nil;
+                }
+                _editButton.hidden = !hasRegions;
+            }
         });
     };
 
@@ -773,7 +824,30 @@
             NSString *imageName = [item[@"key"] hasPrefix:@"selected_"] ? @"ic_custom_delete" : @"ic_custom_plus";
             [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
+            [cell.deleteButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.deleteButton addTarget:self action:@selector(rearrangeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        outCell = cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OALargeImageTitleDescrTableViewCell getCellIdentifier]])
+    {
+        OALargeImageTitleDescrTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OALargeImageTitleDescrTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALargeImageTitleDescrTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OALargeImageTitleDescrTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell showButton:YES];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.descriptionLabel.text = item[@"description"];
+            cell.cellImageView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.cellImageView.tintColor = item[@"icon_color"];
+            [cell.button setTitle:item[@"button_title"] forState:UIControlStateNormal];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.button addTarget:self action:@selector(onEditButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         }
         outCell = cell;
     }

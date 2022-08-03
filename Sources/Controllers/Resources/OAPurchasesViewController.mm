@@ -424,6 +424,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALargeImageTitleDescrTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OALargeImageTitleDescrTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell showButton:NO];
         }
         if (cell)
         {

@@ -444,10 +444,15 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALargeImageTitleDescrTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OALargeImageTitleDescrTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+            [cell showButton:NO];
         }
         cell.titleLabel.text = item[@"title"];
         cell.descriptionLabel.text = item[@"description"];
         [cell.cellImageView setImage:[UIImage imageNamed:item[@"image"]]];
+
+        if (cell.needsUpdateConstraints)
+            [cell updateConstraints];
+
         return cell;
     }
     else if ([cellId isEqualToString:OAFilledButtonCell.getCellIdentifier])

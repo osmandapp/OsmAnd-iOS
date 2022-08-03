@@ -495,9 +495,10 @@ static NSString *kPrecipContourStyleName;
     auto zoom = minZoom;
     while (zoom <= maxZoom)
     {
+        const auto qUnit = QString::fromNSString(unit).remove(QStringLiteral("°"));
         const auto& result = valueType == CONTOUR_VALUE_LEVELS
-            ? env->getWeatherContourLevels(QString::asprintf("%s_%s", qPrintable(type), qPrintable(QString::fromNSString(unit))), zoom)
-            : env->getWeatherContourTypes(QString::asprintf("%s_%s", qPrintable(type), qPrintable(QString::fromNSString(unit))), zoom);
+            ? env->getWeatherContourLevels(QString::asprintf("%s_%s", qPrintable(type), qPrintable(qUnit)), zoom)
+            : env->getWeatherContourTypes(QString::asprintf("%s_%s", qPrintable(type), qPrintable(qUnit)), zoom);
         
         if (!result.isEmpty())
         {

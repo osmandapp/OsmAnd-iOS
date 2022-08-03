@@ -162,12 +162,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _indexSelected = indexPath.row;
-
+    NSUnit *prevUnit = [_band getBandUnit];
     [_band setBandUnitAuto:_indexSelected == 0];
     if (_indexSelected != 0)
         [_band setBandUnit:_data[indexPath.row][@"unit"]];
+    NSUnit *currentUnit = [_band getBandUnit];
 
     [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->setBandSettings([[OAWeatherHelper sharedInstance] getBandSettings]);
+    if (![prevUnit.symbol isEqualToString:currentUnit.symbol])
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     if (self.bandDelegate)
         [self.bandDelegate onBandUnitChanged];
 

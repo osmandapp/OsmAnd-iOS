@@ -236,39 +236,43 @@
 {
     [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self.class setPreferenceSizeLocal:region.regionId value:0];
-        [self.class setPreferenceSizeUpdates:region.regionId value:0];
+    [self.class setPreferenceSizeLocal:region.regionId value:0];
+    [self.class setPreferenceSizeUpdates:region.regionId value:0];
 
         [self.class removeStatus:EOAWeatherForecastStatusLocalCalculated regionId:region.regionId];
         [self.class removeStatus:EOAWeatherForecastStatusUpdatesCalculated regionId:region.regionId];
 
         [self.class addStatus:EOAWeatherForecastStatusCalculating regionId:region.regionId];
 
-        [self.class updatePreferenceTileIdsIfNeeded:region];
-        NSArray<NSArray<NSNumber *> *> *tileIds = [self.class getPreferenceTileIds:region.regionId];
+    [self.class updatePreferenceTileIdsIfNeeded:region];
+    NSArray<NSArray<NSNumber *> *> *tileIds = [self.class getPreferenceTileIds:region.regionId];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
         QList<OsmAnd::TileId> qTileIds = [OANativeUtilities convertToQListTileIds:tileIds];
         OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();
-        unsigned long long sizeLocal = 0;
-        unsigned long long sizeUpdates = 0;
+        uint64_t sizeLocal = 0;
+        uint64_t sizeUpdates = 0;
         if (!qTileIds.isEmpty())
         {
             sizeLocal = _weatherResourcesManager->calculateDbCacheSize(qTileIds, QList<OsmAnd::TileId>(), zoom);
-            sizeUpdates = kTileSize * tileIds.count * 24 * 7;
+            sizeUpdates = kTileSize * tileIds.count * kForecastDatesCount;
         }
 
-        [self.class removeStatus:EOAWeatherForecastStatusCalculating regionId:region.regionId];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.class removeStatus:EOAWeatherForecastStatusCalculating regionId:region.regionId];
 
-        [self.class setPreferenceSizeLocal:region.regionId value:sizeLocal];
-        [self.class addStatus:EOAWeatherForecastStatusLocalCalculated regionId:region.regionId];
+            [self.class setPreferenceSizeLocal:region.regionId value:sizeLocal];
+            [self.class addStatus:EOAWeatherForecastStatusLocalCalculated regionId:region.regionId];
 
-        [self.class setPreferenceSizeUpdates:region.regionId value:sizeUpdates];
-        [self.class addStatus:EOAWeatherForecastStatusUpdatesCalculated regionId:region.regionId];
+            [self.class setPreferenceSizeUpdates:region.regionId value:sizeUpdates];
+            [self.class addStatus:EOAWeatherForecastStatusUpdatesCalculated regionId:region.regionId];
 
-        [_weatherSizeCalculatedObserver notifyEventWithKey:self andValue:region];
+            [_weatherSizeCalculatedObserver notifyEventWithKey:self andValue:region];
 
-        if (onComplete)
-            onComplete(sizeLocal, sizeUpdates);
+            if (onComplete)
+                onComplete(sizeLocal, sizeUpdates);
+        });
     });
 }
 
@@ -375,6 +379,27 @@
         NSDate *dateChecked = [NSDate dateWithTimeIntervalSince1970:[self.class getPreferenceLastUpdate:regionId]];
         if ([dateChecked isEqualToDate:[NSDate dateWithTimeIntervalSince1970:-1]])
             [self removeLocalForecast:regionId refreshMap:NO];
+    }
+}
+
+- (void)updatePreferences:(OAWorldRegion *)region
+{
+    NSInteger daysGone = 0;
+    NSDate *dateChecked = [NSDate dateWithTimeIntervalSince1970:[self.class getPreferenceLastUpdate:region.regionId]];
+    if (![dateChecked isEqualToDate:[NSDate dateWithTimeIntervalSince1970:-1]])
+    {
+        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+        calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+        NSDate *dayNow = [calendar startOfDayForDate:[NSDate date]];
+        daysGone = [calendar components:NSCalendarUnitDay fromDate:dateChecked toDate:dayNow options:0].day;
+    }
+
+    [self calculateCacheSize:region onComplete:nil];
+
+    if (daysGone >= 7 && [self.class hasStatus:EOAWeatherForecastStatusDownloaded region:region.regionId])
+    {
+        [self.class removeStatus:EOAWeatherForecastStatusDownloaded region:region.regionId];
+        [self.class addStatus:EOAWeatherForecastStatusOutdated region:region.regionId];
     }
 }
 

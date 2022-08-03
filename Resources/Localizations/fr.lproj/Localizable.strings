@@ -775,7 +775,7 @@
 "track_during_nav" = "Auto-enregistrement de la trace";
 "track_during_nav_descr" = "Activez pour enregistrer automatiquement une trace durant la navigation";
 "osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Miseà jour automatique";
+"osmand_live_updates" = "Mise à jour automatique";
 "osmand_live_available_maps" = "Cartes disponibles";
 "osmand_live_last_changed" = "Dernière modification de la carte : %@";
 "osmand_live_last_live_update" = "Dernière mise à jour : %@";
@@ -803,8 +803,8 @@
 "nearby_search" = "Rechercherà proximité";
 "unlimited_downloads" = "Téléchargements illimités";
 "wikipedia_offline" = "Wikipedia hors-ligne";
-"monthly_map_updates" = "Miseà jour des cartes : Tous les mois";
-"daily_map_updates" = "Miseà jour des cartes : Toutes les heures";
+"monthly_map_updates" = "Mise à jour des cartes : Tous les mois";
+"daily_map_updates" = "Mise à jour des cartes : Toutes les heures";
 "donation_to_osm" = "Don à la communauté OpenStreetMap";
 "unlock_all_features" = "Débloquer toutes les fonctionnalités d\'OsmAnd";
 "shared_string_email_address" = "Adresse courriel";

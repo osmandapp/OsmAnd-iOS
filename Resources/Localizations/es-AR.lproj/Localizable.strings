@@ -2603,6 +2603,18 @@
 "compass_options_description" = "Pulsa en la brújula para cambiar el modo de orientación del mapa";
 "shared_string_always_visible" = "Siempre visible";
 "shared_string_always_hidden" = "Siempre oculto";
-"shared_string_data" = "Datos";
-"shared_string_delete_all" = "Borrar todo";
+
 "restore_from_osmand_cloud" = "Restaurar desde la nube de OsmAnd";
+"all_maps_are_up_to_date" = "Todos los mapas están actualizados";
+"shared_string_data" = "Datos";
+"shared_string_online_cache" = "Caché en línea";
+"shared_string_clear_online_cache" = "Borrar la caché en línea";
+"shared_string_total_size" = "Tamaño total";
+"shared_string_delete_all" = "Borrar todo";
+"shared_string_countries" = "Países";
+"weather_plugin" = "Complemento del clima";
+"weather_offline_forecast" = "Pronóstico sin conexión";
+"weather_offline_forecast_only" = "Solo pronóstico sin conexión";
+"weather_offline_forecast_only_desc" = "El pronóstico estará disponible solo para países con datos descargados previamente.";
+"weather_data_provider" = "Proveedor de datos GFS.";
+"weather_clear_online_cache" = "Esto vaciará toda la memoria caché de las teselas meteorológicas en línea.";

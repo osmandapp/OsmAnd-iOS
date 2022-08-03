@@ -574,6 +574,8 @@
 "shared_string_countries" = "Countries";
 "shared_string_status" = "Status";
 "shared_string_selected" = "Selected";
+"shared_string_updated" = "Updated";
+"shared_string_available_until" = "Available until";
 
 "restart" = "Restart";
 
@@ -2781,6 +2783,9 @@
 
 "with_offline_maps" = "With offline maps";
 "other_countries" = "Other countries";
+"weather_forecast_is_outdated" = "Forecast is outdated.";
+"weather_remove_forecast" = "Remove forecast";
+"weather_remove_forecast_description" = "Are you sure you want to remove forecast for countries: %d.";
 
 // Release Notes
 // instruction:

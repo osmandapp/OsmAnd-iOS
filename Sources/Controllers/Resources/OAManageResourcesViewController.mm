@@ -333,7 +333,10 @@ static BOOL _repositoryUpdated = NO;
                                        andObserve:[OAWeatherHelper sharedInstance].weatherForecastDownloadingObserver];
 
     if ([self shouldDisplayWeatherForecast:self.region])
-        [[OAWeatherHelper sharedInstance] updatePreferences:self.region];
+    {
+        [[OAWeatherHelper sharedInstance] calculateCacheSize:self.region onComplete:nil];
+        [[OAWeatherHelper sharedInstance] checkStatusOutdated:self.region];
+    }
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstallationFailed:) name:OAResourceInstallationFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
@@ -593,7 +596,10 @@ static BOOL _repositoryUpdated = NO;
     [self refreshContent:YES];
 
     if ([self shouldDisplayWeatherForecast:self.region])
-        [[OAWeatherHelper sharedInstance] updatePreferences:self.region];
+    {
+        [[OAWeatherHelper sharedInstance] calculateCacheSize:self.region onComplete:nil];
+        [[OAWeatherHelper sharedInstance] checkStatusOutdated:self.region];
+    }
 
     [self setupSubscriptionBanner];
 

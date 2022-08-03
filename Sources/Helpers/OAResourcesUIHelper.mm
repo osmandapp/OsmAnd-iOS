@@ -1631,7 +1631,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        [OAWeatherHelper setPreferenceStatus:item.worldRegion.regionId value:EOAWeatherForecastStatusUndefined];
+        [[OAWeatherHelper sharedInstance] prepareToStopDownloading:item.worldRegion.regionId];
         if (onTaskStop)
             onTaskStop(nil);
 

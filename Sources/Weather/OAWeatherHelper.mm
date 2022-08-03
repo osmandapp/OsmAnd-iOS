@@ -14,6 +14,7 @@
 #import "OAMapLayers.h"
 #import "OALog.h"
 #import "OANativeUtilities.h"
+#import "OAColors.h"
 
 #include <OsmAndCore/Map/WeatherTileResourceProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
@@ -36,6 +37,8 @@
     OsmAndAppInstance _app;
     std::shared_ptr<OsmAnd::WeatherTileResourcesManager> _weatherResourcesManager;
     NSMutableDictionary<NSString *, NSNumber *> *_offlineRegionsWithProgress;
+    dispatch_queue_t _forecastSerialDownloader;
+    dispatch_group_t _forecastGroupDownloader;
 }
 
 @synthesize weatherSizeCalculatedObserver = _weatherSizeCalculatedObserver;
@@ -59,6 +62,8 @@
         _app = [OsmAndApp instance];
         _weatherResourcesManager = _app.resourcesManager->getWeatherResourcesManager();
         _offlineRegionsWithProgress = [NSMutableDictionary dictionary];
+        _forecastSerialDownloader = dispatch_queue_create("forecast_downloader", DISPATCH_QUEUE_SERIAL);
+        _forecastGroupDownloader = dispatch_group_create();
 
         _bands = @[
             [OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE],
@@ -141,26 +146,26 @@
     return ([region getLevel] == 2 && ![region.regionId hasPrefix:unitedKingdomRegionId]) || ([region getLevel] == 3 && [region.regionId hasPrefix:unitedKingdomRegionId]);
 }
 
-- (void)downloadForecastByRegionId:(NSString *)regionId
+- (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
 {
-    OAWorldRegion *region;
-    for (OAWorldRegion *flattenedRegion in _app.worldRegion.flattenedSubregions)
+    NSInteger forecastsDownloading = 0;
+    for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
     {
-        if ([regionId isEqualToString:flattenedRegion.regionId])
+        if ([regionIds containsObject:region.regionId])
         {
-            region = flattenedRegion;
-            break;
+            [self downloadForecastByRegion:region];
+            forecastsDownloading++;
         }
+
+        if (forecastsDownloading == regionIds.count)
+            break;
     }
-    if (region)
-        [self downloadForecastByRegion:region];
 }
 
 - (void)downloadForecastByRegion:(OAWorldRegion *)region
 {
     OsmAnd::LatLon latLonTopLeft = OsmAnd::LatLon(region.bboxTopLeft.latitude, region.bboxTopLeft.longitude);
     OsmAnd::LatLon latLonBottomRight = OsmAnd::LatLon(region.bboxBottomRight.latitude, region.bboxBottomRight.longitude);
-    OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();
 
     [self.class updatePreferenceTileIdsIfNeeded:region];
 
@@ -170,45 +175,60 @@
 
     std::shared_ptr<const OsmAnd::IQueryController> queryController;
     queryController.reset(new OsmAnd::FunctorQueryController(
-            [self, region]
-            (const OsmAnd::IQueryController *const controller) -> bool
-            {
-                return [self.class hasStatus:EOAWeatherForecastStatusUndefined regionId:region.regionId];
-            }
+        [self, region]
+        (const OsmAnd::IQueryController *const controller) -> bool
+        {
+            return [self.class hasStatus:EOAWeatherForecastStatusUndefined regionId:region.regionId];
+        }
     ));
 
-    NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-    calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
-    NSDate *date = [calendar startOfDayForDate:[NSDate date]];
-    for (NSInteger i = 0; i < kForecastDatesCount; i++)
-    {
-        QDateTime dateTime = QDateTime::fromNSDate(date).toUTC();
+    dispatch_block_t forecastDownload = ^{
+        dispatch_group_wait(_forecastGroupDownloader, DISPATCH_TIME_FOREVER);
+        dispatch_group_enter(_forecastGroupDownloader);
 
-        OsmAnd::WeatherTileResourcesManager::DownloadGeoTileRequest request;
-        request.dataTime = dateTime;
-        request.topLeft = latLonTopLeft;
-        request.bottomRight = latLonBottomRight;
-        request.forceDownload = true;
-        request.localData = true;
-        request.queryController = queryController;
+        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+        calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+        NSDate *date = [calendar startOfDayForDate:[NSDate date]];
 
-        OsmAnd::WeatherTileResourcesManager::DownloadGeoTilesAsyncCallback callback =
-                [self, region]
-                (const bool succeeded,
-                        const uint64_t downloadedTiles,
-                        const uint64_t totalTiles,
-                        const std::shared_ptr<OsmAnd::Metric> &metric)
-                {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self onProgressUpdate:region
-                                       success:succeeded];
-                    });
-                };
+        for (NSInteger i = 0; i < kForecastDatesCount; i++)
+        {
+            QDateTime dateTime = QDateTime::fromNSDate(date).toUTC();
 
-        _weatherResourcesManager->downloadGeoTilesAsync(request, callback);
+            OsmAnd::WeatherTileResourcesManager::DownloadGeoTileRequest request;
+            request.dataTime = dateTime;
+            request.topLeft = latLonTopLeft;
+            request.bottomRight = latLonBottomRight;
+            request.forceDownload = true;
+            request.localData = true;
+            request.queryController = queryController;
+            OsmAnd::WeatherTileResourcesManager::DownloadGeoTilesAsyncCallback callback =
+                    [self, region]
+                    (bool succeeded,
+                     const uint64_t downloadedTiles,
+                     const uint64_t totalTiles,
+                     const std::shared_ptr<OsmAnd::Metric> &metric)
+                    {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self onProgressUpdate:region success:succeeded];
+                        });
+                    };
 
-        date = [calendar dateByAddingUnit:NSCalendarUnitHour value:(i < 24 ? 1 : 3) toDate:date options:0];
-    }
+            _weatherResourcesManager->downloadGeoTilesAsync(request, callback);
+            date = [calendar dateByAddingUnit:NSCalendarUnitHour value:(i < 24 ? 1 : 3) toDate:date options:0];
+        }
+    };
+
+    dispatch_group_notify(_forecastGroupDownloader, _forecastSerialDownloader, ^{
+        dispatch_async(_forecastSerialDownloader, forecastDownload);
+    });
+}
+
+- (void)prepareToStopDownloading:(NSString *)regionId
+{
+    if ([self.class hasStatus:EOAWeatherForecastStatusDownloading regionId:regionId] && [self getProgress:regionId] > 0)
+        dispatch_group_leave(_forecastGroupDownloader);
+    [self.class setPreferenceStatus:regionId value:EOAWeatherForecastStatusUndefined];
+    [self removeOfflineRegion:regionId];
 }
 
 - (void)calculateCacheSize:(OAWorldRegion *)region
@@ -285,13 +305,9 @@
     {
         for (NSString *regionId in [self getOfflineRegions])
         {
-            NSString *sizeUpdatesKey = [kWeatherForecastSizeUpdatesPrefix stringByAppendingString:regionId];
             NSString *tileIdsKey = [kWeatherForecastTileIdsPrefix stringByAppendingString:regionId];
-            NSArray<NSString *> *excludeKeys = [self.class hasStatus:EOAWeatherForecastStatusUpdatesCalculated regionId:regionId] ? @[tileIdsKey, sizeUpdatesKey] : @[tileIdsKey];
-            [self.class removePreferences:regionId excludeKeys:excludeKeys];
+            [self.class removePreferences:regionId excludeKeys:@[tileIdsKey]];
             [self removeOfflineRegion:regionId];
-            if ([excludeKeys containsObject:sizeUpdatesKey])
-                [self.class addStatus:EOAWeatherForecastStatusUpdatesCalculated regionId:regionId];
         }
     }
 
@@ -317,23 +333,30 @@
 
 - (void)removeLocalForecast:(NSString *)regionId refreshMap:(BOOL)refreshMap
 {
-    NSMutableArray<NSArray<NSNumber *> *> *tileIds = [NSMutableArray arrayWithArray:[self.class getPreferenceTileIds:regionId]];
-    [tileIds enumerateObjectsUsingBlock:^(NSArray<NSNumber *> *tileId, NSUInteger idx, BOOL * stop) {
-        if ([self isContainsInOfflineRegions:tileId excludeRegion:regionId])
-            [tileIds removeObject:tileId];
-    }];
+    [self removeLocalForecasts:@[regionId] refreshMap:refreshMap];
+}
+
+- (void)removeLocalForecasts:(NSArray<NSString *> *)regionIds refreshMap:(BOOL)refreshMap
+{
+    NSMutableArray<NSArray<NSNumber *> *> *tileIds = [NSMutableArray array];
+    for (NSString *regionId in regionIds)
+    {
+        NSArray<NSArray<NSNumber *> *> *regionTileIds = [self.class getPreferenceTileIds:regionId];
+        for (NSArray<NSNumber *> *tileId in regionTileIds)
+        {
+            if (![tileIds containsObject:tileId] && ![self isContainsInOfflineRegions:tileId excludeRegion:regionId])
+                [tileIds addObject:tileId];
+        }
+
+        NSString *tileIdsKey = [kWeatherForecastTileIdsPrefix stringByAppendingString:regionId];
+        [self.class removePreferences:regionId excludeKeys:@[tileIdsKey]];
+        [self setOfflineRegion:regionId];
+    }
+
     QList<OsmAnd::TileId> qTileIds = [OANativeUtilities convertToQListTileIds:tileIds];
     OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();
     if (!qTileIds.isEmpty())
         _weatherResourcesManager->clearDbCache(qTileIds, QList<OsmAnd::TileId>(), zoom);
-
-    NSString *sizeUpdatesKey = [kWeatherForecastSizeUpdatesPrefix stringByAppendingString:regionId];
-    NSString *tileIdsKey = [kWeatherForecastTileIdsPrefix stringByAppendingString:regionId];
-    NSArray<NSString *> *excludeKeys = [self.class hasStatus:EOAWeatherForecastStatusUpdatesCalculated regionId:regionId] ? @[tileIdsKey, sizeUpdatesKey] : @[tileIdsKey];
-    [self.class removePreferences:regionId excludeKeys:excludeKeys];
-    [self setOfflineRegion:regionId];
-    if ([excludeKeys containsObject:sizeUpdatesKey])
-        [self.class addStatus:EOAWeatherForecastStatusUpdatesCalculated regionId:regionId];
 
     if (refreshMap)
     {
@@ -352,27 +375,6 @@
         NSDate *dateChecked = [NSDate dateWithTimeIntervalSince1970:[self.class getPreferenceLastUpdate:regionId]];
         if ([dateChecked isEqualToDate:[NSDate dateWithTimeIntervalSince1970:-1]])
             [self removeLocalForecast:regionId refreshMap:NO];
-    }
-}
-
-- (void)updatePreferences:(OAWorldRegion *)region
-{
-    NSInteger daysGone = 0;
-    NSDate *dateChecked = [NSDate dateWithTimeIntervalSince1970:[self.class getPreferenceLastUpdate:region.regionId]];
-    if (![dateChecked isEqualToDate:[NSDate dateWithTimeIntervalSince1970:-1]])
-    {
-        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-        calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
-        NSDate *dayNow = [calendar startOfDayForDate:[NSDate date]];
-        daysGone = [calendar components:NSCalendarUnitDay fromDate:dateChecked toDate:dayNow options:0].day;
-    }
-
-    [self calculateCacheSize:region onComplete:nil];
-
-    if (daysGone >= 7 && [self.class hasStatus:EOAWeatherForecastStatusDownloaded regionId:region.regionId])
-    {
-        [self.class removeStatus:EOAWeatherForecastStatusDownloaded regionId:region.regionId];
-        [self.class addStatus:EOAWeatherForecastStatusOutdated regionId:region.regionId];
     }
 }
 
@@ -397,8 +399,8 @@
     {
         if (![regionId isEqualToString:excludeRegionId])
         {
-            NSArray<NSArray<NSNumber *> *> *offlineTileIds = [self.class getPreferenceTileIds:regionId];
-            for (NSArray<NSNumber *> *offlineTileId in offlineTileIds)
+            NSArray<NSArray<NSNumber *> *> *regionTileIds = [self.class getPreferenceTileIds:regionId];
+            for (NSArray<NSNumber *> *offlineTileId in regionTileIds)
             {
                 if ([offlineTileId isEqualToArray:tileId])
                     return YES;
@@ -420,7 +422,24 @@
 
 - (NSArray<NSString *> *)getOfflineRegions
 {
-    return _offlineRegionsWithProgress.allKeys;
+    NSMutableArray<NSString *> *offlineRegions = [NSMutableArray array];
+    for (NSString *regionId in _offlineRegionsWithProgress.allKeys)
+    {
+        if (![self.class hasStatus:EOAWeatherForecastStatusDownloading regionId:regionId])
+            [offlineRegions addObject:regionId];
+    }
+    return offlineRegions;
+}
+
+- (NSArray<NSString *> *)getDownloadingRegions
+{
+    NSMutableArray<NSString *> *downloadingRegions = [NSMutableArray array];
+    for (NSString *regionId in _offlineRegionsWithProgress.allKeys)
+    {
+        if ([self.class hasStatus:EOAWeatherForecastStatusDownloading regionId:regionId])
+            [downloadingRegions addObject:regionId];
+    }
+    return downloadingRegions;
 }
 
 - (void)removeOfflineRegion:(NSString *)regionId
@@ -433,9 +452,9 @@
     _offlineRegionsWithProgress[regionId] = @(value);
 }
 
-- (NSInteger)getProgress:(OAWorldRegion *)region
+- (NSInteger)getProgress:(NSString *)regionId
 {
-    return [_offlineRegionsWithProgress.allKeys containsObject:region.regionId] ? [_offlineRegionsWithProgress[region.regionId] integerValue] : 0;
+    return [_offlineRegionsWithProgress.allKeys containsObject:regionId] ? [_offlineRegionsWithProgress[regionId] integerValue] : 0;
 }
 
 - (NSInteger)getProgressDestination:(NSString *)regionId
@@ -446,6 +465,12 @@
 - (void)onProgressUpdate:(OAWorldRegion *)region
                  success:(BOOL)success
 {
+    if ([self.class hasStatus:EOAWeatherForecastStatusUndefined regionId:region.regionId])
+    {
+        OALog(@"Weather offline forecast download %@ : cancel", region.regionId);
+        return;
+    }
+
     NSInteger progressDestination = [self getProgressDestination:region.regionId];
     NSInteger progressDownloading = [self getProgress:region.regionId];
     [self setProgress:region.regionId value:++progressDownloading];
@@ -457,9 +482,7 @@
     if (progress == 1.)
     {
         [self.class setPreferenceStatus:region.regionId value:EOAWeatherForecastStatusDownloaded];
-        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-        calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
-        NSTimeInterval timeInterval = [calendar startOfDayForDate:[NSDate date]].timeIntervalSince1970;
+        NSTimeInterval timeInterval = [NSDate date].timeIntervalSince1970;
         [self.class setPreferenceLastUpdate:region.regionId value:timeInterval];
         [self setOfflineRegion:region.regionId];
         [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
@@ -469,7 +492,10 @@
         [mapViewController.mapLayers.weatherLayerHigh updateWeatherLayer];
         [mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
 
-        [self calculateCacheSize:region onComplete:nil];
+        [self calculateCacheSize:region onComplete:^(unsigned long long sizeLocal, unsigned long long sizeUpdates)
+        {
+            dispatch_group_leave(_forecastGroupDownloader);
+        }];
     }
 }
 
@@ -504,6 +530,79 @@
     return item;
 }
 
++ (NSAttributedString *)getStatusInfoDescription:(NSString *)regionId
+{
+    NSMutableAttributedString *attributedDescription = [NSMutableAttributedString new];
+    BOOL downloaded = [self hasStatus:EOAWeatherForecastStatusDownloaded regionId:regionId];
+    BOOL outdated = [self hasStatus:EOAWeatherForecastStatusOutdated regionId:regionId];
+    NSString *statusStr = outdated ? OALocalizedString(@"weather_forecast_is_outdated") : @"";
+    if (outdated)
+    {
+        NSDictionary *outdatedStrAttributes = @{
+                NSFontAttributeName: [UIFont systemFontOfSize:13.],
+                NSForegroundColorAttributeName: UIColorFromRGB(color_primary_red)
+        };
+        [attributedDescription appendAttributedString:[[NSAttributedString alloc] initWithString:[statusStr stringByAppendingString:@" "] attributes:outdatedStrAttributes]];
+    }
+    statusStr = [OALocalizedString(@"shared_string_updated") stringByAppendingString:@": "];
+
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    NSDate *lastUpdateDate = [NSDate dateWithTimeIntervalSince1970:[self getPreferenceLastUpdate:regionId]];
+    NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+    if ([calendar isDateInToday:lastUpdateDate])
+    {
+        statusStr = [[statusStr stringByAppendingString:OALocalizedString(@"today")] stringByAppendingString:@" "];
+    }
+    else if ([calendar isDateInYesterday:lastUpdateDate])
+    {
+        statusStr = [[statusStr stringByAppendingString:OALocalizedString(@"yesterday")] stringByAppendingString:@" "];
+    }
+    else
+    {
+        formatter.dateStyle = NSDateFormatterLongStyle;
+        formatter.timeStyle = NSDateFormatterNoStyle;
+        statusStr = [statusStr stringByAppendingString:[[formatter stringFromDate:lastUpdateDate] stringByAppendingString:@", "]];
+    }
+    formatter.dateStyle = NSDateFormatterNoStyle;
+    formatter.timeStyle = NSDateFormatterShortStyle;
+    statusStr = [statusStr stringByAppendingString:[formatter stringFromDate:lastUpdateDate]];
+
+    if (downloaded)
+    {
+        statusStr = [[statusStr stringByAppendingString:@", "] stringByAppendingString:OALocalizedString(@"shared_string_available_until")];
+        formatter.locale = NSLocale.currentLocale;
+        [formatter setLocalizedDateFormatFromTemplate:@"MMMMd"];
+        lastUpdateDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:7 toDate:lastUpdateDate options:0];
+        statusStr = [[statusStr stringByAppendingString:@" " ] stringByAppendingString:[formatter stringFromDate:lastUpdateDate]];
+    }
+
+    NSDictionary *updatedStrAttributes = @{
+            NSFontAttributeName: [UIFont systemFontOfSize:13.],
+            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
+    };
+    [attributedDescription appendAttributedString:[[NSAttributedString alloc] initWithString:statusStr attributes:updatedStrAttributes]];
+
+    return attributedDescription;
+}
+
+- (void)checkStatusOutdated:(OAWorldRegion *)region
+{
+    NSInteger daysGone = 0;
+    NSDate *dateChecked = [NSDate dateWithTimeIntervalSince1970:[self.class getPreferenceLastUpdate:region.regionId]];
+    if (![dateChecked isEqualToDate:[NSDate dateWithTimeIntervalSince1970:-1]])
+    {
+        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+        calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+        NSDate *dayNow = [calendar startOfDayForDate:[NSDate date]];
+        daysGone = [calendar components:NSCalendarUnitDay fromDate:dateChecked toDate:dayNow options:0].day;
+    }
+
+    if (daysGone >= 7 && [self.class hasStatus:EOAWeatherForecastStatusDownloaded regionId:region.regionId])
+    {
+        [self.class removeStatus:EOAWeatherForecastStatusDownloaded regionId:region.regionId];
+        [self.class addStatus:EOAWeatherForecastStatusOutdated regionId:region.regionId];
+    }
+}
 
 + (BOOL)hasStatus:(NSInteger)status regionId:(NSString *)regionId
 {
@@ -600,12 +699,12 @@
 
 + (void)updatePreferenceTileIdsIfNeeded:(OAWorldRegion *)region
 {
-    OsmAnd::LatLon latLonTopLeft = OsmAnd::LatLon(region.bboxTopLeft.latitude, region.bboxTopLeft.longitude);
-    OsmAnd::LatLon latLonBottomRight = OsmAnd::LatLon(region.bboxBottomRight.latitude, region.bboxBottomRight.longitude);
-    OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();
-
     if ([self getPreferenceTileIds:region.regionId].count == 0)
     {
+        OsmAnd::LatLon latLonTopLeft = OsmAnd::LatLon(region.bboxTopLeft.latitude, region.bboxTopLeft.longitude);
+        OsmAnd::LatLon latLonBottomRight = OsmAnd::LatLon(region.bboxBottomRight.latitude, region.bboxBottomRight.longitude);
+        OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();
+
         QVector<OsmAnd::TileId> qTileIds = OsmAnd::WeatherTileResourcesManager::generateGeoTileIds(latLonTopLeft, latLonBottomRight, zoom);
         NSMutableArray<NSArray<NSNumber *> *> *tileIds = [NSMutableArray array];
         for (auto &qTileId: qTileIds)

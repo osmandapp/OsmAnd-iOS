@@ -186,6 +186,8 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 
++ (void) showNoInternetAlert;
+
 + (void) startDownloadOfItem:(OARepositoryResourceItem *)item
                onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                onTaskResumed:(OADownloadTaskCallback)onTaskResumed;

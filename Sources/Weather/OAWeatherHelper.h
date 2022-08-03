@@ -54,8 +54,9 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 
 + (BOOL)shouldHaveWeatherForecast:(OAWorldRegion *)region;
 
-- (void)downloadForecastByRegionId:(NSString *)regionId;
+- (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
 - (void)downloadForecastByRegion:(OAWorldRegion *)region;
+- (void)prepareToStopDownloading:(NSString *)regionId;
 
 - (void)calculateCacheSize:(OAWorldRegion *)region
                 onComplete:(void (^)(unsigned long long, unsigned long long))onComplete;
@@ -65,22 +66,24 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastStatus)
 - (void)clearCache:(BOOL)localData;
 - (void)clearOutdatedCache;
 - (void)removeLocalForecast:(NSString *)regionId refreshMap:(BOOL)refreshMap;
+- (void)removeLocalForecasts:(NSArray<NSString *> *)regionIds refreshMap:(BOOL)refreshMap;
 - (void)removeIncompleteForecast:(NSString *)regionId;
-
-- (void)updatePreferences:(OAWorldRegion *)region;
 
 - (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegion:(NSString *)excludeRegionId;
 - (void)setOfflineRegion:(NSString *)regionId;
 - (NSArray<NSString *> *)getOfflineRegions;
+- (NSArray<NSString *> *)getDownloadingRegions;
 - (NSInteger)getProgress:(NSString *)regionId;
 - (NSInteger)getProgressDestination:(NSString *)regionId;
 
 + (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region;
++ (NSAttributedString *)getStatusInfoDescription:(NSString *)regionId;
+
+- (void)checkStatusOutdated:(OAWorldRegion *)region;
 
 + (BOOL)hasStatus:(NSInteger)status regionId:(NSString *)regionId;
 + (void)addStatus:(NSInteger)status regionId:(NSString *)regionId;
 + (void)removeStatus:(NSInteger)status regionId:(NSString *)regionId;
-
 + (NSInteger)getPreferenceStatus:(NSString *)regionId;
 + (void)setPreferenceStatus:(NSString *)regionId value:(NSInteger)value;
 

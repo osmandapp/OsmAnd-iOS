@@ -2603,7 +2603,6 @@
 "compass_options_description" = "Pulsa en la brújula para cambiar el modo de orientación del mapa";
 "shared_string_always_visible" = "Siempre visible";
 "shared_string_always_hidden" = "Siempre oculto";
-
 "restore_from_osmand_cloud" = "Restaurar desde la nube de OsmAnd";
 "all_maps_are_up_to_date" = "Todos los mapas están actualizados";
 "shared_string_data" = "Datos";
@@ -2618,3 +2617,12 @@
 "weather_offline_forecast_only_desc" = "El pronóstico estará disponible solo para países con datos descargados previamente.";
 "weather_data_provider" = "Proveedor de datos GFS.";
 "weather_clear_online_cache" = "Esto vaciará toda la memoria caché de las teselas meteorológicas en línea.";
+"shared_string_restoring" = "Restaurar";
+"choose_what_to_restore" = "Elige qué restaurar";
+"renew_subscription" = "Renovar suscripción";
+"duration_ago" = "hace %@";
+"restore_data" = "Restaurar datos";
+"restoring_from" = "Restaurar de la nube los datos marcados";
+"restore_backup_descr" = "Restaura los datos en el dispositivo, usando copias de seguridad en línea";
+"backup_complete" = "Copia de seguridad completa";
+"fetching_from_server" = "Obteniendo datos del servidor";

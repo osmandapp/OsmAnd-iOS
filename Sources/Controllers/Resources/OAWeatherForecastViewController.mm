@@ -20,7 +20,7 @@
 #import "OAResourcesUIHelper.h"
 #import <Reachability.h>
 
-@interface OAWeatherForecastViewController () <UITableViewDelegate, UITableViewDataSource, OAWeatherCacheSettingsDelegate>
+@interface OAWeatherForecastViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, OAWeatherCacheSettingsDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navigationBarView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -41,8 +41,16 @@
 {
     OsmAndAppInstance _app;
     OAWeatherHelper *_weatherHelper;
-    BOOL _editMode;
     MBProgressHUD* _progressHUD;
+    BOOL _editMode;
+
+    NSObject *_searchDataLock;
+    NSArray<OAWorldRegion *> *_searchResults;
+    NSString *_searchText;
+
+    NSMutableArray<OAWorldRegion *> *_regionsSelected;
+    NSMutableArray<OAWorldRegion *> *_regionsWithOfflineMaps;
+    NSMutableArray<OAWorldRegion *> *_regionsOtherCountries;
 
     NSMutableArray<NSMutableDictionary *> *_data;
     NSIndexPath *_sizeIndexPath;
@@ -50,6 +58,8 @@
     OAAutoObserverProxy *_weatherSizeCalculatedObserver;
     OAAutoObserverProxy *_weatherForecastDownloadingObserver;
 }
+
+static NSMutableArray<OAWorldRegion *> *_filteredRegions;
 
 - (instancetype)init
 {
@@ -66,6 +76,14 @@
     _app = [OsmAndApp instance];
     _editMode = NO;
     _weatherHelper = [OAWeatherHelper sharedInstance];
+    _filteredRegions = [NSMutableArray array];
+
+    _searchDataLock = [[NSObject alloc] init];
+    _searchResults = @[];
+
+    _regionsSelected = [NSMutableArray array];
+    _regionsWithOfflineMaps = [NSMutableArray array];
+    _regionsOtherCountries = [NSMutableArray array];
 
     _weatherSizeCalculatedObserver =
             [[OAAutoObserverProxy alloc] initWith:self
@@ -86,7 +104,7 @@
     self.tableView.estimatedRowHeight = 65.;
 
     [self setupView];
-//    self.searchBar.delegate = self;
+    self.searchBar.delegate = self;
     self.searchBar.placeholder = OALocalizedString(@"shared_string_search");
     [self updateSearchBarVisible];
 
@@ -130,11 +148,16 @@
     NSMutableArray *data = [NSMutableArray array];
     NSArray<NSString *> *offlineRegions = [_weatherHelper getOfflineRegions];
     NSArray<NSString *> *downloadingRegions = [_weatherHelper getDownloadingRegions];
+    BOOL needInitFilteredRegions = _filteredRegions.count == 0;
+    BOOL needInitEditingRegions = _regionsSelected.count == 0 && _regionsOtherCountries.count == 0;
+    NSComparator regionComparator = ^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
+        OAWorldRegion *item1 = obj1[@"region"];
+        OAWorldRegion *item2 = obj2[@"region"];
+        return [item1.name localizedCaseInsensitiveCompare:item2.name];
+    };
 
     if (_editMode)
     {
-        NSArray<NSString *> *downloadingRegions = [_weatherHelper getDownloadingRegions];
-
         NSMutableArray<NSMutableDictionary *> *selectedCells = [NSMutableArray array];
         NSMutableDictionary *selectedSection = [NSMutableDictionary dictionary];
         selectedSection[@"key"] = @"selected_section";
@@ -156,32 +179,47 @@
         otherCountriesSection[@"cells"] = otherCountriesCells;
         [data addObject:otherCountriesSection];
 
-        for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
+        BOOL isFiltering = _searchText.length > 0;
+        NSArray *regions = isFiltering ? _searchResults : needInitFilteredRegions ? _app.worldRegion.flattenedSubregions : _filteredRegions;
+        for (OAWorldRegion *region in regions)
         {
             if ([OAWeatherHelper shouldHaveWeatherForecast:region])
             {
+                if (needInitFilteredRegions)
+                    [_filteredRegions addObject:region];
+
                 NSMutableDictionary *forecastData = [NSMutableDictionary dictionary];
                 forecastData[@"type"] = [OADeleteButtonTableViewCell getCellIdentifier];
-                forecastData[@"region_id"] = region.regionId;
-                forecastData[@"title"] = region.localizedName;
-                if ([offlineRegions containsObject:region.regionId] || [downloadingRegions containsObject:region.regionId])
+                forecastData[@"region"] = region;
+
+                BOOL downloaded = [offlineRegions containsObject:region.regionId] || [downloadingRegions containsObject:region.regionId];
+                BOOL regionsSelectedContains = [_regionsSelected containsObject:region];
+                BOOL regionsWithOfflineMapsContains = [_regionsWithOfflineMaps containsObject:region];
+                BOOL regionsOtherCountriesContains = [_regionsOtherCountries containsObject:region];
+                if (regionsSelectedContains || (needInitEditingRegions && downloaded))
                 {
                     forecastData[@"key"] = [@"selected_cell_" stringByAppendingString:region.regionId];
                     [selectedCells addObject:forecastData];
+                    if (needInitEditingRegions)
+                        [_regionsSelected addObject:region];
                 }
-                else
+                else if (regionsWithOfflineMapsContains)
+                {
+                    forecastData[@"key"] = [@"with_offline_maps_cell_" stringByAppendingString:region.regionId];
+                    [withOfflineMapsCells addObject:forecastData];
+                }
+                else if (regionsOtherCountriesContains || (needInitEditingRegions && !downloaded))
                 {
                     forecastData[@"key"] = [@"other_countries_cell_" stringByAppendingString:region.regionId];
                     [otherCountriesCells addObject:forecastData];
+                    if (needInitEditingRegions)
+                        [_regionsOtherCountries addObject:region];
                 }
             }
         }
-        [selectedCells sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
-            return [obj1[@"title"] compare:obj2[@"title"]];
-        }];
-        [otherCountriesCells sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
-            return [obj1[@"title"] compare:obj2[@"title"]];
-        }];
+
+        [selectedCells sortUsingComparator:regionComparator];
+        [otherCountriesCells sortUsingComparator:regionComparator];
     }
     else
     {
@@ -225,8 +263,13 @@
             statusSection[@"key"] = @"status_section";
             statusSection[@"header"] = OALocalizedString(@"shared_string_status");
             statusSection[@"cells"] = statusCells;
-            for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
+
+            NSArray *regions = needInitFilteredRegions ? _app.worldRegion.flattenedSubregions : _filteredRegions;
+            for (OAWorldRegion *region in regions)
             {
+                if (needInitFilteredRegions)
+                    [_filteredRegions addObject:region];
+
                 if ([offlineRegions containsObject:region.regionId])
                 {
                     [_weatherHelper checkStatusOutdated:region];
@@ -234,16 +277,13 @@
                     NSMutableDictionary *offlineForecastData = [NSMutableDictionary dictionary];
                     offlineForecastData[@"key"] = [@"status_cell_" stringByAppendingString:region.regionId];
                     offlineForecastData[@"type"] = [OATitleDescrRightIconTableViewCell getCellIdentifier];
-                    offlineForecastData[@"region_id"] = region.regionId;
-                    offlineForecastData[@"title"] = region.localizedName;
+                    offlineForecastData[@"region"] = region;
                     offlineForecastData[@"description"] = [OAWeatherHelper getStatusInfoDescription:region.regionId];
                     [statusCells addObject:offlineForecastData];
                 }
             }
 
-            [statusCells sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
-                return [obj1[@"title"] compare:obj2[@"title"]];
-            }];
+            [statusCells sortUsingComparator:regionComparator];
 
             [data addObject:statusSection];
 
@@ -306,7 +346,7 @@
                 for (NSInteger j = 0; j < statusCells.count; j++)
                 {
                     NSDictionary *cell = statusCells[j];
-                    if ([cell[@"region_id"] isEqualToString:region.regionId])
+                    if ([((OAWorldRegion *) cell[@"region"]).regionId isEqualToString:region.regionId])
                     {
                         indexPath = [NSIndexPath indexPathForRow:j inSection:i];
                         break;
@@ -339,7 +379,7 @@
             for (NSInteger j = 0; j < statusCells.count; j++)
             {
                 NSDictionary *cell = statusCells[j];
-                if ([cell[@"region_id"] isEqualToString:region.regionId])
+                if ([((OAWorldRegion *) cell[@"region"]).regionId isEqualToString:region.regionId])
                 {
                     indexPath = [NSIndexPath indexPathForRow:j inSection:i];
                     break;
@@ -396,8 +436,7 @@
                     NSMutableDictionary *offlineForecastData = [NSMutableDictionary dictionary];
                     offlineForecastData[@"key"] = [@"status_cell_" stringByAppendingString:region.regionId];
                     offlineForecastData[@"type"] = [OATitleDescrRightIconTableViewCell getCellIdentifier];
-                    offlineForecastData[@"region_id"] = region.regionId;
-                    offlineForecastData[@"title"] = region.localizedName;
+                    offlineForecastData[@"region"] = region;
                     offlineForecastData[@"description"] =
                             [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_loading")
                                                             attributes:@{
@@ -408,7 +447,9 @@
                     [statusCells addObject:offlineForecastData];
                     [statusCells sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2)
                     {
-                        return [obj1[@"title"] compare:obj2[@"title"]];
+                        OAWorldRegion *item1 = obj1[@"region"];
+                        OAWorldRegion *item2 = obj2[@"region"];
+                        return [item1.name localizedCaseInsensitiveCompare:item2.name];
                     }];
 
                     [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[statusCells indexOfObject:offlineForecastData] inSection:i]]
@@ -425,7 +466,8 @@
     NSMutableDictionary *item = [self getItem:indexPath];
     NSArray<NSString *> *offlineRegions = [_weatherHelper getOfflineRegions];
     NSArray<NSString *> *downloadingRegions = [_weatherHelper getDownloadingRegions];
-    BOOL forecastDownloaded = [offlineRegions containsObject:item[@"region_id"]] || [downloadingRegions containsObject:item[@"region_id"]];
+    OAWorldRegion *region = (OAWorldRegion *) item[@"region"];
+    BOOL forecastDownloaded = [offlineRegions containsObject:region.regionId] || [downloadingRegions containsObject:region.regionId];
 
     NSMutableDictionary *currentSection = _data[indexPath.section];
     NSMutableDictionary *destinationSection;
@@ -437,19 +479,28 @@
             if (forecastDownloaded && [section[@"key"] isEqualToString:@"with_offline_maps_section"])
             {
                 destinationSection = section;
-                item[@"key"] = [@"with_offline_maps_cell_" stringByAppendingString:item[@"region_id"]];
+                item[@"key"] = [@"with_offline_maps_cell_" stringByAppendingString:region.regionId];
+                [_regionsSelected removeObject:region];
+                [_regionsWithOfflineMaps addObject:region];
+                [_regionsOtherCountries removeObject:region];
                 break;
             }
             else if (!forecastDownloaded && [section[@"key"] isEqualToString:@"other_countries_section"])
             {
                 destinationSection = section;
-                item[@"key"] = [@"other_countries_cell_" stringByAppendingString:item[@"region_id"]];
+                item[@"key"] = [@"other_countries_cell_" stringByAppendingString:region.regionId];
+                [_regionsSelected removeObject:region];
+                [_regionsWithOfflineMaps removeObject:region];
+                [_regionsOtherCountries addObject:region];
                 break;
             }
             else if ([section[@"key"] isEqualToString:@"selected_section"])
             {
                 destinationSection = section;
-                item[@"key"] = [@"selected_cell_" stringByAppendingString:item[@"region_id"]];
+                item[@"key"] = [@"selected_cell_" stringByAppendingString:region.regionId];
+                [_regionsSelected addObject:region];
+                [_regionsWithOfflineMaps removeObject:region];
+                [_regionsOtherCountries removeObject:region];
                 break;
             }
         }
@@ -463,7 +514,9 @@
     [destinationCells addObject:item];
 
     [destinationCells sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
-        return [obj1[@"title"] compare:obj2[@"title"]];
+        OAWorldRegion *item1 = obj1[@"region"];
+        OAWorldRegion *item2 = obj2[@"region"];
+        return [item1.name localizedCaseInsensitiveCompare:item2.name];
     }];
 
     NSIndexPath *targetPath = [NSIndexPath indexPathForRow:[destinationCells indexOfObject:item]
@@ -520,7 +573,7 @@
 - (void)updateSearchBarVisible
 {
     self.searchBar.text = @"";
-    /*if (_editMode)
+    if (_editMode)
     {
         self.searchBar.hidden = NO;
 
@@ -533,7 +586,7 @@
         [self.searchBar becomeFirstResponder];
     }
     else
-    {*/
+    {
         self.searchBar.hidden = YES;
 
         self.titleWithSearchConstraint.active = NO;
@@ -543,7 +596,7 @@
         self.tableViewNoSearchConstraint.active = YES;
 
         [self.searchBar resignFirstResponder];
-//    }
+    }
 
     [self.view setNeedsUpdateConstraints];
     [self.view updateConstraintsIfNeeded];
@@ -559,6 +612,10 @@
     if (_editMode)
     {
         _editMode = NO;
+        _searchResults = @[];
+        [_regionsSelected removeAllObjects];
+        [_regionsWithOfflineMaps removeAllObjects];
+        [_regionsOtherCountries removeAllObjects];
         self.titleLabel.text = OALocalizedString(@"weather_offline_forecast");
         [_backButton setTitle:nil forState:UIControlStateNormal];
         [_backButton setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
@@ -598,28 +655,24 @@
 
     if (_editMode)
     {
+        _searchResults = @[];
         NSArray<NSString *> *offlineRegions = [_weatherHelper getOfflineRegions];
         NSArray<NSString *> *downloadingRegions = [_weatherHelper getDownloadingRegions];
 
-        for (NSDictionary *section in _data)
+        for (OAWorldRegion *region in _regionsSelected)
         {
-            for (NSDictionary *cell in section[@"cells"])
-            {
-                NSString *regionId = cell[@"region_id"];
-                if ([section[@"key"] isEqualToString:@"selected_section"]
-                        && ![offlineRegions containsObject:regionId]
-                        && ![downloadingRegions containsObject:regionId])
-                {
-                    [forecastsToDownload addObject:regionId];
-                }
-                else if ([section[@"key"] isEqualToString:@"with_offline_maps_section"]
-                        && ([offlineRegions containsObject:regionId] || [downloadingRegions containsObject:regionId]))
-                {
-                    if ([downloadingRegions containsObject:regionId])
-                        [_weatherHelper prepareToStopDownloading:regionId];
+            if (![offlineRegions containsObject:region.regionId] && ![downloadingRegions containsObject:region.regionId])
+                [forecastsToDownload addObject:region.regionId];
+        }
 
-                    [forecastsToDelete addObject:regionId];
-                }
+        for (OAWorldRegion *region in _regionsWithOfflineMaps)
+        {
+            if ([offlineRegions containsObject:region.regionId] || [downloadingRegions containsObject:region.regionId])
+            {
+                if ([downloadingRegions containsObject:region.regionId])
+                    [_weatherHelper prepareToStopDownloading:region.regionId];
+
+                [forecastsToDownload addObject:region.regionId];
             }
         }
 
@@ -719,6 +772,10 @@
                 }
                 _editButton.hidden = !hasRegions;
             }
+
+            [_regionsSelected removeAllObjects];
+            [_regionsWithOfflineMaps removeAllObjects];
+            [_regionsOtherCountries removeAllObjects];
         });
     };
 
@@ -726,6 +783,83 @@
               countOfItems:countOfItems
                onExecuting:deletionBlock
                 onComplete:completionBlock];
+}
+
+- (void)performSearchForSearchString:(NSString *)searchString
+{
+    @synchronized (_searchDataLock)
+    {
+        // If case searchString is empty, there are no results
+        if (searchString == nil || [searchString length] == 0)
+        {
+            _searchResults = @[];
+            [self setupView];
+            [self.tableView reloadData];
+            return;
+        }
+
+        // In case searchString has only spaces, also nothing to do here
+        if ([[searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length] == 0)
+        {
+            _searchResults = @[];
+            [self setupView];
+            [self.tableView reloadData];
+            return;
+        }
+
+        // Select where to look
+        NSArray *searchableContent = _filteredRegions;
+
+        // Search through subregions:
+
+        NSComparator regionComparator = ^NSComparisonResult(id obj1, id obj2) {
+            OAWorldRegion *item1 = obj1;
+            OAWorldRegion *item2 = obj2;
+
+            return [item1.name localizedCaseInsensitiveCompare:item2.name];
+        };
+
+        // Regions that start with given name have higher priority
+        NSPredicate *startsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", searchString];
+        NSMutableArray *regions_startsWith = [[searchableContent filteredArrayUsingPredicate:startsWith] mutableCopy];
+        if ([regions_startsWith count] == 0)
+        {
+            NSPredicate *anyStartsWith = [NSPredicate predicateWithFormat:@"ANY allNames BEGINSWITH[cd] %@", searchString];
+            [regions_startsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyStartsWith]];
+        }
+        [regions_startsWith sortUsingComparator:regionComparator];
+
+        // Regions that only contain given string have less priority
+        NSPredicate *onlyContains = [NSPredicate predicateWithFormat:
+                @"(name CONTAINS[cd] %@) AND NOT (name BEGINSWITH[cd] %@)",
+                searchString,
+                searchString];
+        NSMutableArray *regions_onlyContains = [[searchableContent filteredArrayUsingPredicate:onlyContains] mutableCopy];
+        if ([regions_onlyContains count] == 0)
+        {
+            NSPredicate *anyOnlyContains = [NSPredicate predicateWithFormat:
+                    @"(ANY allNames CONTAINS[cd] %@) AND NOT (ANY allNames BEGINSWITH[cd] %@)",
+                    searchString,
+                    searchString];
+            [regions_onlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyOnlyContains]];
+        }
+        [regions_onlyContains sortUsingComparator:regionComparator];
+
+        // Assemble all regions all together
+        NSArray *regions = [regions_startsWith arrayByAddingObjectsFromArray:regions_onlyContains];
+
+        _searchResults = regions;
+        [self setupView];
+        [self.tableView reloadData];
+    }
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    _searchText = searchText;
+    [self performSearchForSearchString:searchText];
 }
 
 #pragma mark - UITableViewDataSource
@@ -758,11 +892,11 @@
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.text = [item.allKeys containsObject:@"region"] ? ((OAWorldRegion *) item[@"region"]).name : item[@"title"];
             cell.descriptionLabel.attributedText = item[@"description"];
-
-            if ([OAWeatherHelper hasStatus:EOAWeatherForecastStatusDownloading regionId:item[@"region_id"]]
-                    || [OAWeatherHelper hasStatus:EOAWeatherForecastStatusCalculating regionId:item[@"region_id"]])
+            NSString *regionId = ((OAWorldRegion *) item[@"region"]).regionId;
+            if ([OAWeatherHelper hasStatus:EOAWeatherForecastStatusDownloading regionId:regionId]
+                    || [OAWeatherHelper hasStatus:EOAWeatherForecastStatusCalculating regionId:regionId])
             {
                 FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
                 progressView.iconView = [[UIView alloc] init];
@@ -820,7 +954,7 @@
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.text = [item.allKeys containsObject:@"region"] ? ((OAWorldRegion *) item[@"region"]).name : item[@"title"];
             NSString *imageName = [item[@"key"] hasPrefix:@"selected_"] ? @"ic_custom_delete" : @"ic_custom_plus";
             [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
@@ -875,11 +1009,11 @@
     }
     else if ([item[@"key"] hasPrefix:@"status_cell_"])
     {
-        NSString *regionId = item[@"region_id"];
+        NSString *regionId = ((OAWorldRegion *) item[@"region"]).regionId;
         if ([OAWeatherHelper hasStatus:EOAWeatherForecastStatusDownloading regionId:regionId])
         {
             NSMutableString *message = [NSMutableString stringWithFormat:OALocalizedString(@"res_cancel_inst_q"),
-                    [item[@"title"] stringByAppendingString:[NSString stringWithFormat:@" - %@",
+                    [((OAWorldRegion *) item[@"region"]).name stringByAppendingString:[NSString stringWithFormat:@" - %@",
                             [OAResourceType resourceTypeLocalized:OsmAndResourceType::WeatherForecast]]]];
             [message appendString:@" "];
             [message appendString:OALocalizedString(@"data_will_be_lost")];

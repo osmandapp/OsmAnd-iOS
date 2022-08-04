@@ -12,7 +12,7 @@
 
 #include <GeographicLib/GeoCoords.hpp>
 
-#define MIN_DURATION_FOR_DATE_FORMAT (48 * 60 * 60)
+#define MIN_DURATION_FOR_DATE_FORMAT (48 * 60)
 
 @implementation OAOsmAndFormatter
 

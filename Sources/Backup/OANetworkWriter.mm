@@ -176,7 +176,7 @@
     OASettingsItem *item = itemWriter.item;
     if ([item isKindOfClass:OAFileSettingsItem.class])
     {
-        if (((OAFileSettingsItem *) item).subtype == EOASettingsItemFileSubtypeObfMap)
+        if ([OAFileSettingsItemFileSubtype isMap:((OAFileSettingsItem *) item).subtype])
         {
             return [_backupHelper isObfMapExistsOnServer:fileName];
         }

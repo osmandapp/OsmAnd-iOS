@@ -604,7 +604,7 @@
 
 - (BOOL) disabled
 {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:[self getDisabledId]] || ![self isPurchased];
+    return [[NSUserDefaults standardUserDefaults] objectForKey:[self getDisabledId]] ? [[NSUserDefaults standardUserDefaults] boolForKey:[self getDisabledId]] : YES;
 }
 
 - (void) setDisabled:(BOOL)disabled

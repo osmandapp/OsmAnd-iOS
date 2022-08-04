@@ -56,15 +56,14 @@
     switch (subtype)
     {
         case EOASettingsItemFileSubtypeOther:
+            return documentsPath;
         case EOASettingsItemFileSubtypeObfMap:
         case EOASettingsItemFileSubtypeWikiMap:
         case EOASettingsItemFileSubtypeRoadMap:
-        case EOASettingsItemFileSubtypeSrtmMap:
-            return documentsPath;
+        case EOASettingsItemFileSubtypeTilesMap:
+            return [documentsPath stringByAppendingPathComponent:RESOURCES_DIR];
         case EOASettingsItemFileSubtypeRenderingStyle:
             return [documentsPath stringByAppendingPathComponent:@"rendering"];
-        case EOASettingsItemFileSubtypeTilesMap:
-            return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"];
         case EOASettingsItemFileSubtypeRoutingConfig:
             return [documentsPath stringByAppendingPathComponent:@"routing"];
         case EOASettingsItemFileSubtypeGpx:
@@ -129,7 +128,7 @@
             }
             case EOASettingsItemFileSubtypeSrtmMap:
             {
-                if ([name hasSuffix:BINARY_SRTM_MAP_INDEX_EXT])
+                if ([name hasSuffix:BINARY_SRTM_MAP_INDEX_EXT] || [name hasSuffix:BINARY_SRTMF_MAP_INDEX_EXT])
                     return subtype;
                 break;
             }
@@ -250,7 +249,8 @@
     {
         [self commonInit];
         self.name = [filePath stringByReplacingOccurrencesOfString:_docPath withString:@""];
-        if ([self.name hasPrefix:_libPath])
+        self.name = [self.name stringByReplacingOccurrencesOfString:_libPath withString:@""];
+        if ([self.name hasPrefix:@"/Resources/"])
             self.name = [@"/" stringByAppendingString:self.name.lastPathComponent];
         self.name = [self.name stringByReplacingOccurrencesOfString:@"/GPX/" withString:@"/tracks/"];
         self.fileName = self.name;
@@ -325,48 +325,10 @@
         case EOASettingsItemFileSubtypeRoadMap:
         case EOASettingsItemFileSubtypeWikiMap:
         case EOASettingsItemFileSubtypeSrtmMap:
-        {
-            OsmAndApp.instance.resourcesManager->rescanUnmanagedStoragePaths();
-            break;
-        }
         case EOASettingsItemFileSubtypeTilesMap:
         {
-            NSString *path = [destFilePath stringByDeletingLastPathComponent];
-            NSString *fileName = destFilePath.lastPathComponent;
-            NSString *ext = fileName.pathExtension;
-            fileName = [fileName stringByDeletingPathExtension].lowerCase;
-            NSString *newFileName = fileName;
-            BOOL isHillShade = [fileName containsString:@"hillshade"];
-            BOOL isSlope = [fileName containsString:@"slope"];
-            if (isHillShade)
-            {
-                newFileName = [fileName stringByReplacingOccurrencesOfString:@"hillshade" withString:@""];
-                newFileName = [newFileName trim];
-                newFileName = [newFileName stringByAppendingString:@".hillshade"];
-            }
-            else if (isSlope)
-            {
-                newFileName = [fileName stringByReplacingOccurrencesOfString:@"slope" withString:@""];
-                newFileName = [newFileName trim];
-                newFileName = [newFileName stringByAppendingString:@".slope"];
-            }
-            newFileName = [newFileName stringByAppendingPathExtension:ext];
-            newFileName = [newFileName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-            path = [path stringByAppendingPathComponent:newFileName];
-            
-            NSFileManager *fileManager = NSFileManager.defaultManager;
-            [fileManager moveItemAtPath:destFilePath toPath:path error:nil];
-            OsmAnd::ResourcesManager::ResourceType resType = OsmAnd::ResourcesManager::ResourceType::Unknown;
-            if (isHillShade)
-                resType = OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
-            else if (isSlope)
-                resType = OsmAnd::ResourcesManager::ResourceType::SlopeRegion;
-            
-            if (resType != OsmAnd::ResourcesManager::ResourceType::Unknown)
-            {
-                // TODO: update exisitng sqlite
-                OsmAndApp.instance.resourcesManager->installFromFile(QString::fromNSString(path), resType);
-            }
+            OsmAndApp.instance.resourcesManager->rescanUnmanagedStoragePaths(true);
+            break;
         }
         default:
             break;

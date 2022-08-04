@@ -216,7 +216,7 @@
             {
                 OACustomResourceItem *indexItem = [[OACustomResourceItem alloc] init];
                 indexItem.worldRegion = self;
-                indexItem.resourceId = QString::fromNSString(fileName.lowerCase);
+                indexItem.resourceId = QString::fromNSString(fileName);
                 indexItem.title = fileName;
                 indexItem.subfolder = _subfolder;
                 indexItem.downloadUrl = downloadUrl;

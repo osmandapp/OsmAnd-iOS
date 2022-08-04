@@ -551,7 +551,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             isSqlSource = [self.downloadContent[@"sql"] boolValue];
 
         if (isSqlSource)
-            return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR];
+            return [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR];
         else
             return [OsmAndApp.instance.cachePath stringByAppendingPathComponent:self.downloadContent[@"name"]];
     }
@@ -1190,7 +1190,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             if (pluginPath.length > 0 && relPath.length > 0)
             {
                 NSString *srcFilePath = [pluginPath stringByAppendingPathComponent:relPath];
-                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath nsResourceId:srcFilePath.lastPathComponent.lowerCase fileName:name];
+                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath nsResourceId:srcFilePath.lastPathComponent fileName:name];
                 if (!failed)
                     [OsmAndApp.instance.localResourcesChangedObservable notifyEvent];
             }

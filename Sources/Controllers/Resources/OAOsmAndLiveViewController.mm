@@ -150,7 +150,7 @@ static const NSInteger sectionCount = 2;
 
 - (NSString *) getLiveDescription:(QString) resourceId
 {
-    NSString *regionName = QString(resourceId).remove(QStringLiteral(".map.obf")).toNSString();
+    NSString *regionName = QString(resourceId).remove(QStringLiteral(".obf")).toNSString();
     NSTimeInterval timestamp = [OAOsmAndLiveHelper getPreferenceLastUpdateForLocalIndex:regionName];
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -175,7 +175,7 @@ static const NSInteger sectionCount = 2;
             continue;
         
         NSString *itemId = item.resourceId.toNSString();
-        BOOL isLive = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:QString(item.resourceId).remove(QStringLiteral(".map.obf")).toNSString()];
+        BOOL isLive = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:QString(item.resourceId).remove(QStringLiteral(".obf")).toNSString()];
         NSString *countryName = [OAResourcesUIHelper getCountryName:item];
         NSString *title = countryName == nil ? item.title : [NSString stringWithFormat:@"%@ %@", countryName, item.title];
         // Convert to seconds
@@ -490,7 +490,7 @@ static const NSInteger sectionCount = 2;
         if (!isAvailable)
         {
             ELiveUpdateFrequency frequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:[item[@"id"]
-                                                                                                      stringByReplacingOccurrencesOfString:@".map.obf" withString:@""]];
+                                                                                                      stringByReplacingOccurrencesOfString:@".obf" withString:@""]];
             NSString *frequencyString = [OAOsmAndLiveHelper getFrequencyString:frequency];
             NSMutableAttributedString *formattedText = [self setColorForText:frequencyString inText:item[@"description"] withColor:UIColorFromRGB(color_live_frequency)];
             cell.descView.attributedText = formattedText;
@@ -532,7 +532,7 @@ static const NSInteger sectionCount = 2;
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    const QString regionName = QString::fromNSString(item[@"id"]).remove(QStringLiteral(".map.obf"));
+    const QString regionName = QString::fromNSString(item[@"id"]).remove(QStringLiteral(".obf"));
     OAOsmAndLiveSelectionViewController *selectionController = [[OAOsmAndLiveSelectionViewController alloc] initWithRegionName:regionName titleName:item[@"title"]];
     [self.navigationController pushViewController:selectionController animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:true];

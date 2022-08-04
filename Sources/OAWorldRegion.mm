@@ -675,7 +675,7 @@
             if ([regionDownloadId hasSuffix:@"."])
                 regionDownloadId = [regionDownloadId substringToIndex:[regionDownloadId length] - 1];
 
-            if ([regionDownloadId isEqualToString:downloadName.lowercaseString])
+            if ([regionDownloadId isEqualToString:downloadName])
                 return region;
         }
         return nil;

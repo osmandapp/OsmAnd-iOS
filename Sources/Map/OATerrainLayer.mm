@@ -62,7 +62,7 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
     {
         _sync = [[NSObject alloc] init];
         _terrainType = terrainType;
-        _tilesDir = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources"];
+        _tilesDir = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources"];
         
         [self initCollection];
         

@@ -506,8 +506,8 @@
 "auto_follow_location_enabled" = "Haritayı kullanırken görünümü otomatik olarak ortala.";
 "unknown_location" = "Konum henüz bilinmiyor.";
 "animate_routing_route_not_calculated" = "Lütfen ilk olarak rotayı hesaplayın";
-"settings_preset" = "Öntanımlı profil";
-"settings_preset_descr" = "Harita görünümü ve navigasyon ayarları kullanılan profile göre hatırlanır. Öntanımlı profilinizi burada ayarlayın.";
+"settings_preset" = "Varsayılan profil";
+"settings_preset_descr" = "Harita görünümü ve navigasyon ayarları kullanılan profile göre kaydedilir. Varsayılan profilinizi burada ayarlayın.";
 "coords_format_descr" = "Coğrafi koordinatlar için biçim.";
 "do_not_send_anonymous_data_desc" = "Konum bilgisi toplamıyoruz. Yalnızca app kullanımı ve harita indirme istatistiklerini topluyoruz.";
 "save_global_track_interval" = "Genel kayıt tutma aralığı";
@@ -1368,7 +1368,7 @@
 "rendering_value_germanRoadAtlas_name" = "Alman yol atlası";
 "rendering_value_translucent_orange_name" = "Yarı saydam turuncu";
 "rendering_attr_trolleybusRoutes_name" = "Troleybüs yolları";
-"rendering_value__name" = "Öntanımlı";
+"rendering_value__name" = "Varsayılan";
 "rendering_attr_publicTransportMode_name" = "Otobüs, troleybüs, mekik yolları";
 "rendering_value_translucent_yellow_name" = "Yarı saydam sarı";
 "rendering_value_brown_name" = "Kahverengi";
@@ -1380,7 +1380,7 @@
 "rendering_attr_hideOverground_name" = "Yerüstü nesneleri";
 "routeInfo_piste_type_name" = "Pist türü";
 "rendering_attr_hideWaterPolygons_name" = "Suyu gizle";
-"rendering_value_defaultTranslucentCyan_name" = "Öntanımlı (yarı saydam camgöbeği)";
+"rendering_value_defaultTranslucentCyan_name" = "Varsayılan (yarı saydam camgöbeği)";
 "rendering_attr_tracktype_grade4_name" = "Çoğunlukla yumuşak";
 "rendering_value_yellow_name" = "Sarı";
 "rendering_value_pedestrian_name" = "Yürüyerek";
@@ -1547,7 +1547,7 @@
 "rendering_attr_depthContours_description" = "Eş derinlik eğrilerini ve noktalarını göster.";
 "routing_attr_height_obstacles_name" = "Yükseklik verisi kullan";
 "routing_attr_prefer_unpaved_name" = "Asfaltsız yolları tercih et";
-"rendering_value_default13_name" = "Öntanımlı (13)";
+"rendering_value_default13_name" = "Varsayılan (13)";
 "routing_attr_piste_type_skitour_name" = "Kayak turu";
 "routing_attr_allow_skating_only_name" = "Sadece-paten rotalarına izin ver";
 "routing_attr_driving_style_name" = "Sürüş tarzı";
@@ -1557,7 +1557,7 @@
 "rendering_attr_piste_difficulty_freeride_name" = "Serbest sürüş";
 "rendering_attr_piste_difficulty_novice_name" = "Acemi";
 "rendering_value_white_name" = "Beyaz";
-"rendering_value_default_name" = "Öntanımlı";
+"rendering_value_default_name" = "Varsayılan";
 "routing_attr_avoid_toll_name" = "Ücretli yol yok";
 "rendering_attr_surface_fine_gravel_name" = "İnce çakıl";
 "routing_attr_piste_type_downhill_description" = "Alp veya yokuş aşağı kayak ve kayak teleferiklerine erişim için yamaçlar.";
@@ -1709,7 +1709,7 @@
 "empty_profile_name_warning" = "Profil adı boş olamaz.";
 "after_tapping_done" = "Bitti düğmesine dokunduktan sonra, silinen profiller tamamen kaybolacaktır.";
 "all_application_profiles" = "Tüm uygulama profilleri";
-"rearrange_profile_descr" = "Öntanımlı OsmAnd profilleri silinemez, ancak önceki ekranda devre dışı bırakabilir veya listenin en altına sürükleyebilirsiniz.";
+"rearrange_profile_descr" = "Varsayılan OsmAnd profilleri silinemez, ancak önceki ekranda devre dışı bırakabilir veya listenin en altına sürükleyebilirsiniz.";
 "rearrange_profiles" = "Profilleri yeniden düzenle";
 "will_be_show_while_moving" = "Hareket ederken gösterilecek";
 "position_icon_while_moving" = "Hareket halindeyken konum simgesi";
@@ -1718,7 +1718,7 @@
 "enter_profile_name" = "Profil adı girin";
 "edit_profile_list" = "Profil listesini düzenle";
 "profile_type_custom_string" = "Özel profil";
-"create_profile_descr" = "Özel profilinizi öntanımlı uygulama profillerinden birine dayandırın, bu widget\'ların öntanımlı görünürlüğü ile hız ve mesafe birimleri gibi temel ayarları tanımlar. Bunlar, genişletilebilecekleri özel profillerin örnekleri ile birlikte öntanımlı uygulama profilleridir:";
+"create_profile_descr" = "Özel profilinizi varsayılan uygulama profillerinden birine dayandırın, bu widget'ların varsayılan görünürlüğü ile hız ve mesafe birimleri gibi temel ayarları tanımlar. Bunlar, genişletilebilecekleri özel profillerin örnekleri ile birlikte varsayılan uygulama profilleridir:";
 "create_profile" = "Profil oluştur";
 "import_from_files" = "Dosyadan içe aktar";
 "import_routing_file_descr" = "Yönlendirme dosyasını OsmAnd'da açarak herhangi bir bulut depolama uygulamasından içe aktarabilirsiniz.";
@@ -1759,7 +1759,7 @@
 "voice_announces" = "Sesli uyarılar";
 "max_speed" = "En yüksek hız";
 "min_speed" = "En düşük hız";
-"default_speed" = "Öntanımlı hız";
+"default_speed" = "Varsayılan hız";
 "units_and_formats" = "Birimler ve biçimler";
 "routing_attr_length_name" = "Uzunluk sınırı";
 "vehicle_height_descr" = "Aracınızın yüksekliğini belirtin, yüksek araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
@@ -1801,7 +1801,7 @@
 "export_profile" = "Dışa aktar";
 "profile_settings" = "Profil ayarları";
 "configure_map_descr" = "Harita görünümü";
-"export_profile_descr" = "Tüm profil ayarlarını dışa aktarabilir, başka bir profilden kopyalayabilir veya öntanımlı durumlarına sıfırlayabilirsiniz.";
+"export_profile_descr" = "Tüm profil ayarlarını dışa aktarabilir, başka bir profilden kopyalayabilir veya varsayılan durumlarına sıfırlayabilirsiniz.";
 "profile_sett_descr" = "Seçili uygulama profilini etkiler";
 "app_profiles" = "Uygulama profilleri";
 "selected_profile" = "Seçilen profil";
@@ -1822,7 +1822,7 @@
 "osm_editing_settings_descr" = "Bu eklentinin ayarları geneldir ve tüm profiller için geçerlidir.";
 // Menu
 "menu" = "Menü";
-"plugin_settings_reset" = "Eklenti ayarlarını öntanımlılara sıfırla";
+"plugin_settings_reset" = "Eklenti ayarlarını varsayılanlara sıfırla";
 "trip_rec_actions_descr" = "Kaydedilen tüm yollarınızı %@ içinde bulabilirsiniz";
 "logging_accuracy" = "Kayıt tutma doğruluğu";
 "units_t" = "t";
@@ -1833,11 +1833,11 @@
 "shared_string_copy" = "Kopyala";
 "profile_alert_delete_msg" = "\"%@\" profilini tamamen silmek istediğinizden emin misiniz?";
 "profile_alert_delete_title" = "Profili sil";
-"reset_to_default" = "Öntanımlı değerlere sıfırla";
+"reset_to_default" = "Varsayılanlara sıfırla";
 "help_nav_profiles" = "Navigasyon profilleri";
-"reset_profile_action_descr" = "Tüm profil ayarlarını kurulum öntanımlı değerlerine sıfırlayın. Sıfırla düğmesine dokunduğunuzda tüm değişiklikleriniz atılacaktır, bu işlem geri alınamaz.";
+"reset_profile_action_descr" = "Tüm profil ayarlarını kurulumdaki varsayılan değerlerine sıfırlayın. Sıfırla düğmesine dokunduğunuzda tüm değişiklikleriniz atılacaktır, bu işlem geri alınamaz.";
 "import_profile_descr" = "Bir profili içe aktarmak için, herhangi bir uygulamada gerekli dosyanın üzerine (*.osf) dokunun ve \"OsmAnd Haritalara Kopyala\" seçeneğini seçin";
-"profile_prefs_reset_successful" = "Tüm profil ayarları öntanımlı değerlerine geri yüklendi.";
+"profile_prefs_reset_successful" = "Tüm profil ayarları varsayılanlara sıfırlandı.";
 "gpx_parse_error" = "OsmAnd GPX doğru biçimlendirilmemiş, daha derinlemesine incelemek için lütfen destek ekibiyle iletişime geçin.";
 "nothing_found_empty" = "Hiçbir şey bulunamadı";
 "shared_string_next" = "Sonraki";
@@ -2034,7 +2034,7 @@
 "favorite_places_category" = "Yerler";
 "favorite_friends_category" = "Arkadaşlar";
 "default_color_descr" = "Bu renk, gruba eklenen tüm yeni sık kullanılanlar için kullanılacak.";
-"default_color" = "Öntanımlı renk";
+"default_color" = "Varsayılan renk";
 "fav_point_emoticons_message" = "Sık Kullanılan adı, emoticon içeren metni dosyaya kaydetmek için '%@' olarak değiştirildi.";
 "fav_point_dublicate_message" = "Sık Kullanılan, yinelemeyi önlemek için '%@' olarak yeniden adlandırıldı.";
 "fav_point_dublicate" = "Yinelenen Sık Kullanılan adı belirtildi";
@@ -2059,7 +2059,7 @@
 "export_failed" = "Profil dışa aktarılamadı";
 "export_profile_select_descr" = "Dışa aktarılacak verileri seçin.";
 "delete_custom_categories" = "Özel kategorileri sil";
-"reset_to_default_category_button_promo" = "Öntanımlı değerlere sıfırlamak, sıralama düzenini başlangıç durumuna geri yükleyecektir.";
+"reset_to_default_category_button_promo" = "Varsayılana sıfırlamak, sıralama düzenini başlangıç durumuna geri yükleyecektir.";
 "create_custom_categories_list_promo" = "Özel kategoriler ekleyebilir, gerekli bulmadığınız kategorileri gizleyebilir ve listenin sıralama düzenini değiştirebilirsiniz. Profillerle özel kategoriler içe ve dışa aktarılabilir.";
 "hidden_categories" = "Gizli kategoriler";
 "visible_categories" = "Görünür kategoriler";
@@ -2076,7 +2076,7 @@
 "add_custom_category" = "Özel kategori ekle";
 "ios_release_4_0" = "• Yeni! Özel simge, renk ve şekli seçme seçenekleriyle \"Sık kullanılanlara ekle\" ekranı\n• Geçerli konumun koordinatlarıyla yeni \"Koordinatlar widget'ı\" eklendi\n• Özel kullanıcı tarafından tanımlanan eklentileri içe aktarma özelliği eklendi\n• İçe/dışa aktarma işlevi önemli ölçüde genişletildi\n• Dokunma mesafesi, Yarıçap cetvelinden ayrı bir seçeneğe taşındı\n• iPhone ekranı kapatıldığında CarPlay uygulamasının donması düzeltildi\n• Eklentiler ekranı, Haritalar & Kaynaklar bölümünden ana menüye taşındı\n• Fince yerelleştirmesi eklendi\n• \"Güzergah planla\" ekranı için yatay yönlendirmede kullanıcı arayüzü düzeltildi\n• Özel yönlendirme ve görselleştirme dosyaları için destek eklendi\n• İşaretleyici yön çizgisinin performansı düzeltildi\n• Büyük harfli uzantıya sahip GPX dosyalarını içe aktarmayla ilgili sorun düzeltildi\n• \"Yolu takip et\" menüsüyle ilgili sorun düzeltildi\n• OBF dosyalarının içe aktarılması düzeltildi\n";
 "approximate_file_size" = "Yaklaşık dosya boyutu: %@";
-"default" = "Öntanımlı";
+"default" = "Varsayılan";
 "added_profiles_descr" = "Eklenti tarafından eklenen profiller";
 "added_profiles" = "Eklenen profiller";
 "suggested_maps_descr" = "Bu haritalar eklenti için gereklidir.";
@@ -2329,12 +2329,12 @@
 "map_settings_weather_pressure" = "Basınç";
 "map_settings_weather_cloud" = "Bulut";
 "map_settings_weather_wind" = "Rüzgar";
-"route_line_use_map_style_width" = "Harita tarzı (%@) öntanımlı genişliğini kullan.";
+"route_line_use_map_style_width" = "Harita tarzı (%@) varsayılan genişliğini kullan.";
 "turn_arrows_descr" = "Güzergah hattında dönüş oklarının gösterilip gösterilmeyeceğini denetleyin.";
 "shared_string_max_height" = "Azami yükseklik";
 "routeInfo_roadClass_description" = "Yol sınıflandırmasına göre rota veya yol hattını renklendir.";
 "customize_route_line" = "Rota hattını özelleştir";
-"route_line_use_map_style_color" = "Harita tarzı (%@) öntanımlı rengini kullan.";
+"route_line_use_map_style_color" = "Harita tarzı (%@) varsayılan rengini kullan.";
 "navigate_point_format_MGRS" = "MGRS";
 "turn_arrows" = "Dönüş Okları";
 "shared_string_min_height" = "Asgari yükseklik";
@@ -2596,6 +2596,17 @@
 "compass_visible_in_rotated_mode_descr" = "Kuzey yukarı olduğunda gizli";
 "compass_options_description" = "Harita yönlendirme modunu değiştirmek için pusulaya tıklayın";
 "shared_string_always_hidden" = "Her zaman gizli";
-"shared_string_delete_all" = "Tümünü sil";
-"shared_string_data" = "Veriler";
 "restore_from_osmand_cloud" = "OsmAnd Cloud\'dan geri yükle";
+"all_maps_are_up_to_date" = "Tüm haritalar güncel";
+"weather_offline_forecast" = "Çevrim dışı tahmin";
+"weather_offline_forecast_only_desc" = "Tahmin, yalnızca önceden indirilmiş verilere sahip ülkeler için geçerli olacaktır.";
+"shared_string_data" = "Veri";
+"shared_string_online_cache" = "Çevrim içi önbelleği";
+"shared_string_clear_online_cache" = "Çevrim içi önbelleğini temizle";
+"shared_string_total_size" = "Toplam boyut";
+"shared_string_delete_all" = "Hepsini sil";
+"shared_string_countries" = "Ülkeler";
+"weather_plugin" = "Hava durumu eklentisi";
+"weather_offline_forecast_only" = "Sadece çevrim dışı tahmin";
+"weather_data_provider" = "Veri sağlayıcısı GFS.";
+"weather_clear_online_cache" = "Bu, çevrim içi hava durumu katmanı için tüm önbelleği temizleyecektir.";

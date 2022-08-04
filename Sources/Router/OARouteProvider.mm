@@ -23,6 +23,7 @@
 #import "OAResultMatcher.h"
 #import "OAGpxRouteApproximation.h"
 #import "OATargetPointsHelper.h"
+#import "OAIndexConstants.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>
@@ -715,10 +716,10 @@
     return sublist;
 }
 
-- (BOOL) containsData:(NSString *)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
+- (BOOL) containsData:(const QString &)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    const auto& localResource = app.resourcesManager->getLocalResource(QString::fromNSString([localResourceId lastPathComponent]));
+    const auto& localResource = app.resourcesManager->getLocalResource(localResourceId);
     if (localResource)
     {
         const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(localResource->metadata);
@@ -748,7 +749,9 @@
         if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
         {
             NSString *localPath = resource->localPath.toNSString();
-            if (![_nativeFiles containsObject:localPath] && [self containsData:localPath rect:rect desiredDataTypes:dataTypes zoomLevel:(OsmAnd::ZoomLevel)zoom])
+            if (![localPath.lowerCase hasSuffix:BINARY_MAP_INDEX_EXT])
+                continue;
+            if (![_nativeFiles containsObject:localPath] && [self containsData:resource->id rect:rect desiredDataTypes:dataTypes zoomLevel:(OsmAnd::ZoomLevel)zoom])
             {
                 [_nativeFiles addObject:localPath];
                 initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting, true);

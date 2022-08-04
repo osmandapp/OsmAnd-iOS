@@ -254,7 +254,7 @@ static BOOL dataInvalidated = NO;
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
 {
     BOOL isWeatherForecast = item.resourceType == OsmAndResourceType::WeatherForecast;
-    if (isWeatherForecast && [OAWeatherHelper hasStatus:EOAWeatherForecastStatusCalculating region:item.worldRegion.regionId])
+    if (isWeatherForecast && ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:item.worldRegion.regionId])
         return;
 
     [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
@@ -270,7 +270,7 @@ static BOOL dataInvalidated = NO;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        if ([OAWeatherHelper hasStatus:EOAWeatherForecastStatusCalculating region:item.worldRegion.regionId])
+        if (![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:item.worldRegion.regionId])
             return;
 
         OARepositoryResourceItem *repositoryItem = [[OARepositoryResourceItem alloc] init];
@@ -385,7 +385,7 @@ static BOOL dataInvalidated = NO;
         {
             [OAResourcesUIHelper offerCancelDownloadOf:item_];
         }
-        else if (item_.resourceType == OsmAndResourceType::WeatherForecast && [OAWeatherHelper hasStatus:EOAWeatherForecastStatusDownloading region:item_.worldRegion.regionId])
+        else if (item_.resourceType == OsmAndResourceType::WeatherForecast && [OAWeatherHelper getPreferenceDownloadState:item_.worldRegion.regionId] == EOAWeatherForecastDownloadStateInProgress)
         {
             [OAResourcesUIHelper offerCancelDownloadOf:item_ onTaskStop:^(id<OADownloadTask>)
             {

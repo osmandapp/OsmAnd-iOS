@@ -790,22 +790,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     }
 }
 
-- (void) startSpinner
-{
-    UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleGray;
-    if (@available(iOS 13.0, *))
-        spinnerStyle = UIActivityIndicatorViewStyleLarge;
-    _activityIndicator.activityIndicatorViewStyle = spinnerStyle;
-    [_activityIndicator startAnimating];
-    _activityIndicator.hidden = NO;
-}
-
-- (void) stopSpinner
-{
-    [_activityIndicator stopAnimating];
-    _activityIndicator.hidden = YES;
-}
-
 - (double) parseDoubleFromString:(NSString *)stringValue
 {
     if (stringValue)

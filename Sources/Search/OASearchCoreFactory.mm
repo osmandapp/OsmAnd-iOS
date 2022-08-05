@@ -1977,11 +1977,17 @@
         [orderedCities addObject:[NSMutableArray arrayWithArray:@[searchResult, @(resultScore)]]];
     }
     
-    [orderedCities sortUsingComparator:^NSComparisonResult(NSMutableArray *obj1, NSMutableArray *obj2) {
-        return [obj2[scoreIndex] compare:obj1[scoreIndex]];
-    }];
-    
-    return orderedCities.firstObject[cityIndex];
+    if (orderedCities.count > 0)
+    {
+        [orderedCities sortUsingComparator:^NSComparisonResult(NSMutableArray *obj1, NSMutableArray *obj2) {
+            return [obj2[scoreIndex] compare:obj1[scoreIndex]];
+        }];
+        return orderedCities.firstObject[cityIndex];
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 - (BOOL) parseUrl:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher

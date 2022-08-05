@@ -4,7 +4,7 @@
 "transport_routes" = "Rotas";
 "transport_nearby_routes_within" = "Liñas próximas a menos dos";
 "transport_nearby_routes" = "Preto dos";
-"transport_stop" = "Deter";
+"transport_stop" = "Stop";
 "cancel_navigation" = "Deter a navegación";
 "intermediate_items_sort_by_distance" = "Ordenar porta a porta";
 "switch_start_finish" = "Inverter o punto de partida e o destino";
@@ -407,8 +407,8 @@
 "gpx_speed" = "Velocidade";
 // Map settings
 "rendering_value_browse_map_name" = "Ollar mapa";
-"m_style_car" = "Conducindo";
-"m_style_walk" = "Camiñando";
+"m_style_car" = "Automóbil";
+"m_style_walk" = "Peón";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Amosar no mapa";
@@ -471,10 +471,6 @@
 // Resources
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Local";
-"res_banner_free_maps_title" = "You have %d free maps!";
-"res_banner_free_maps_desc" = "You can download %d free maps, without updates";
-"res_banner_no_free_maps_title" = "You have no free maps!";
-"res_banner_no_free_maps_desc" = "Please purchase region maps or All World maps";
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
@@ -905,7 +901,7 @@
 "brown" = "Marrón";
 "display_starting_at_zoom_level" = "Amosar dende o nivel de achegamento";
 "osm_live_cancel_subscription" = "Cancelar subscrición";
-"osm_alert_title" = "Remitir";
+"osm_alert_title" = "Enviar";
 "hide_contour_lines" = "Agochar curvas de nivel";
 "blue" = "Azul";
 "shared_string_upload" = "Enviar";
@@ -1366,9 +1362,9 @@
 "edit_profile_list" = "Editar a listaxe de perfís";
 "amenity" = "Instalación";
 "profile_type_custom_string" = "Perfil personalizado";
-"nothing_found_empty" = "Non se atopou nada";
+"nothing_found_empty" = "Non se atopou ren";
 "position_icon_at_rest" = "Icona de posición en asueto";
-"app_profiles" = "Perfís de aplicación";
+"app_profiles" = "Perfís da aplicación";
 "reverse_route" = "Ruta inversa";
 "plugin_settings_reset" = "Restabelecer a configuración do plugin ós valores por defecto";
 "app_theme_light" = "Claro";
@@ -1565,7 +1561,7 @@
 "displayed_trips" = "Pistas amosadas";
 "res_standard" = "Mapa normal";
 "shared_string_resources" = "Recursos";
-"service" = "Servizo";
+"service" = "Vía de servizo";
 "shared_string_import" = "Importar";
 "join_segments" = "Unir segmentos";
 "special" = "Especial";
@@ -1779,3 +1775,33 @@
 "lang_br" = "Bretón";
 "lang_sk" = "Eslovaco";
 "gpx_split_interval_descr" = "Selecciona o intre no cal as marcas con distancia ou tempo na pista serán amosadas.";
+"altitude_ascent" = "Ascenso";
+"monthly_map_updates" = "Actualizacións do mapa: cada mes";
+"altitude_descent" = "Descenso";
+"private_access_routing_req" = "O destino ubícase nunha área de acceso privado. Permitir o emprego de camiños privados para esta viaxe\?";
+"shared_string_stop" = "Stop";
+"copy_coordinates" = "Copiar coordenadas";
+"osm_live_banner_desc" = "Obtén descargas ilimitadas de mapas, engadindo actualizacións semanais, diarias ou cada hora.";
+"copy_to_map_favorites" = "Copiar aos favoritos";
+"new_device_account" = "Novo dispositivo / nova conta";
+"expired" = "Expirado";
+"units_cubic_m" = "m³";
+"product_title_development" = "Desenvolvemento do OsmAnd";
+"product_desc_ext_development" = "Axusta as funcións de desenvolvemento e depuración, como a simulación de navegación, o rendemento do renderizado ou as indicacións por voz. Destinado para desenvolvedores, non é necesario para o normal uso da aplicación.";
+"toast_empty_name_error" = "Localización sen nome";
+"subscriptions" = "Subscricións";
+"restore_purchases" = "Restaurar as compras";
+"share_geo" = "Outros mapas:";
+"manage_subscription" = "Xestionar subscrición";
+"monthly_subscription" = "Subscrición mensual";
+"annual_subscription" = "Subscrición anual";
+"copy_address" = "Copiar enderezo";
+"shared_string_start" = "Comezar";
+"shared_string_capacity" = "Capacidade";
+"daily_map_updates" = "Actualizacións do mapa: cada hora";
+"on_hold" = "En espera";
+"shared_string_data" = "Data";
+"paused" = "Detido";
+"shared_string_delete_all" = "Eliminar todo";
+"in_grace_period" = "En período experimental";
+"shared_string_undefined" = "Sen definir";

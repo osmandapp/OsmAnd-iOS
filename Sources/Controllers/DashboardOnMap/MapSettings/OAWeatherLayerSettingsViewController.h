@@ -20,9 +20,18 @@ typedef NS_ENUM(NSInteger, EOAWeatherLayerType)
     EOAWeatherLayerTypeContours
 };
 
+@protocol OAWeatherLayerSettingsDelegate
+
+- (void)onHideWeatherLayerSettings;
+- (void)onDoneWeatherLayerSettings;
+
+@end
+
 @interface OAWeatherLayerSettingsViewController : OABaseScrollableHudViewController
 
 - (instancetype)initWithLayerType:(EOAWeatherLayerType)layerType;
+
+@property (nonatomic, weak) id<OAWeatherLayerSettingsDelegate> delegate;
 
 @end
 

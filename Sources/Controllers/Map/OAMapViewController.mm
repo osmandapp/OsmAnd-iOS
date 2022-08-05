@@ -1613,15 +1613,9 @@
         }
 
         if ([[OAAppSettings sharedManager].mapSettingShowRecordingTrack get])
-        {
-            if (!_recTrackShowing)
-                [self showRecGpxTrack:YES];
-        }
+            [self showRecGpxTrack:YES];
         else
-        {
-            if (_recTrackShowing)
-                [self hideRecGpxTrack];
-        }
+            [self hideRecGpxTrack];
     });
 }
 
@@ -2233,7 +2227,7 @@
             _gpxDocsTemp.clear();
             _gpxDocFileTemp = [filePath copy];
             OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
-            NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+            NSString *path = gpx.absolutePath;
             _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
         }
         
@@ -2309,7 +2303,7 @@
 
     std::shared_ptr<const OsmAnd::GpxDocument> doc = _gpxDocsTemp.first();
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_gpxDocFileTemp];
-    NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]; 
+    NSString *path = gpx.absolutePath;
     QString qPath = QString::fromNSString(path);
     if (![[OAAppSettings sharedManager].mapSettingVisibleGpx.get containsObject:_gpxDocFileTemp])
     {

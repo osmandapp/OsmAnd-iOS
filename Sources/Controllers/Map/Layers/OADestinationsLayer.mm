@@ -375,14 +375,14 @@
 
     double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
     std::vector<double> outlinePattern;
-    outlinePattern.push_back(95 / mapDensity);
-    outlinePattern.push_back(35 / mapDensity);
+    outlinePattern.push_back(75 / mapDensity);
+    outlinePattern.push_back(55 / mapDensity);
 
     double strokeWidth = [_destinationLayerWidget getStrokeWidth];
     std::vector<double> inlinePattern;
-    inlinePattern.push_back(-strokeWidth / mapDensity);
-    inlinePattern.push_back((95 - strokeWidth * 1.5) / mapDensity);
-    inlinePattern.push_back((35 + strokeWidth * 1.5) / mapDensity);
+    inlinePattern.push_back(-strokeWidth / 2 / mapDensity);
+    inlinePattern.push_back((75 - strokeWidth) / mapDensity);
+    inlinePattern.push_back((55 + strokeWidth) / mapDensity);
 
     const auto color = [destination.color toFColorARGB];
     const auto outlineColor = OsmAnd::FColorARGB(1.0, 1.0, 1.0, 1.0);

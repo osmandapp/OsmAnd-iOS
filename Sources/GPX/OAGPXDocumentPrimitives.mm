@@ -11,6 +11,7 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OADefaultFavorite.h"
+#import "OAPOI.h"
 
 #include <routeSegmentResult.h>
 #include <routeDataBundle.h>
@@ -217,6 +218,7 @@
 
 - (void)fillExtensions:(const std::shared_ptr<OsmAnd::GpxExtensions>&)extensions
 {
+    extensions->extensions.clear();
     for (OAGpxExtension *e in self.extensions)
     {
         std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> extension(new OsmAnd::GpxExtensions::GpxExtension());
@@ -242,16 +244,7 @@
 - (void) setColor:(int)value
 {
     NSString *hexString = [NSString stringWithFormat:@"#%0X", value];
-    OAGpxExtension *e = [self getExtensionByKey:@"color"];
-    if (!e)
-    {
-        e = [[OAGpxExtension alloc] init];
-        e.name = @"color";
-        e.value = hexString;
-        [self addExtension:e];
-        return;
-    }
-    e.value = hexString;
+    [self setExtension:@"color" value:hexString];
 }
 
 - (int) parseColor:(NSString *)colorString defColor:(int)defColor
@@ -308,6 +301,34 @@
     [self setExtension:ICON_NAME_EXTENSION value:iconName];
 }
 
+- (OAPOI *) getAmenity
+{
+    NSArray<OAGpxExtension *> *extensionsToRead = [self extensions];
+    if (extensionsToRead && extensionsToRead.count > 0)
+    {
+        NSMutableDictionary<NSString *, NSString *> *extensions = [NSMutableDictionary dictionary];
+        for (OAGpxExtension *extension in extensionsToRead)
+            extensions[extension.name] = extension.value;
+
+        return [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+    }
+    return nil;
+}
+
+- (void) setAmenity:(OAPOI *)amenity
+{
+    if (amenity)
+    {
+        NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+        if (extensions && extensions.count > 0)
+        {
+            [extensions enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
+                [self setExtension:key value:value];
+            }];
+        }
+    }
+}
+
 - (NSString *)getBackgroundIcon
 {
     NSString *value = [self getExtensionByKey:BACKGROUND_TYPE_EXTENSION].value;
@@ -335,16 +356,7 @@
 
 - (void) setProfileType:(NSString *)profileType
 {
-    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
-    if (!e)
-    {
-        e = [[OAGpxExtension alloc] init];
-        e.name = PROFILE_TYPE_EXTENSION;
-        e.value = profileType;
-        [self addExtension:e];
-        return;
-    }
-    e.value = profileType;
+    [self setExtension:PROFILE_TYPE_EXTENSION value:profileType];
 }
 
 - (void) removeProfileType
@@ -373,17 +385,8 @@
 
 - (void) setTrkPtIndex:(NSInteger)index
 {
-    OAGpxExtension *e = [self getExtensionByKey:TRKPT_INDEX_EXTENSION];
     NSString *stringValue = [NSString stringWithFormat:@"%ld", index];
-    if (!e)
-    {
-        e = [[OAGpxExtension alloc] init];
-        e.name = TRKPT_INDEX_EXTENSION;
-        e.value = stringValue;
-        [self addExtension:e];
-        return;
-    }
-    e.value = stringValue;
+    [self setExtension:TRKPT_INDEX_EXTENSION value:stringValue];
 }
 
 - (BOOL) isGap

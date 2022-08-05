@@ -99,6 +99,7 @@
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
 #import "OAOpenAddTrackViewController.h"
+#import "OASearchToolbarViewController.h"
 
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
@@ -385,6 +386,8 @@ typedef enum
 
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller
 {
+    [self.hudViewController hideWeatherToolbarIfNeeded];
+
     self.sidePanelController.recognizesPanGesture = NO;
 
     if ([controller isKindOfClass:OARoutePlanningHudViewController.class])
@@ -444,7 +447,8 @@ typedef enum
 {
     if (_dashboard || !_mapillaryController.view.hidden || (_destinationViewController && _destinationViewController.view.superview))
         return UIStatusBarStyleLightContent;
-    else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
+    else if (_targetMenuView != nil && _targetMenuView.customController != nil &&
+                                        (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
                                         _targetMenuView.targetPoint.type == OATargetRouteDetails ||
                                         _targetMenuView.targetPoint.type == OATargetRouteDetailsGraph ||
                                         _targetMenuView.targetPoint.type == OATargetTransportRouteDetails))
@@ -848,6 +852,8 @@ typedef enum
         [self hideScrollableHudViewController];
     }
 
+    [self.hudViewController hideWeatherToolbarIfNeeded];
+
     _dashboard = [[OAMapSettingsViewController alloc] init];
     [_dashboard show:self parentViewController:nil animated:YES];
     
@@ -958,6 +964,8 @@ typedef enum
     [OAAnalyticsHelper logEvent:@"route_info_open"];
 
     [self removeGestureRecognizers];
+
+    [self.hudViewController hideWeatherToolbarIfNeeded];
 
     if (self.targetMenuView.superview)
     {
@@ -1215,6 +1223,9 @@ typedef enum
 {
     if (self.isNewContextMenuDisabled)
         return;
+
+    [self.hudViewController hideWeatherToolbarIfNeeded];
+
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
         
     if (_activeTargetType == OATargetRouteIntermediateSelection && targetPoints.count > 1)
@@ -1272,6 +1283,8 @@ typedef enum
     
     if (targetPoint.type == OATargetMapillaryImage)
     {
+        [self.hudViewController hideWeatherToolbarIfNeeded];
+
         [_mapillaryController showImage:targetPoint.targetObj];
         [self applyTargetPoint:targetPoint];
         [self goToTargetPointMapillary];
@@ -1828,7 +1841,7 @@ typedef enum
     for (NSString *filePath in settings.mapSettingVisibleGpx.get)
     {
         OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+        NSString *path = gpx.absolutePath;
         if ([[NSFileManager defaultManager] fileExistsAtPath:path])
         {
             [names addObject:[filePath.lastPathComponent stringByDeletingPathExtension]];
@@ -1844,7 +1857,7 @@ typedef enum
             if (_activeTargetObj)
             {
                 OAGPX *gpx = (OAGPX *)_activeTargetObj;
-                NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+                NSString *path = gpx.absolutePath;
                 [self targetPointAddWaypoint:path];
             }
             else
@@ -1983,6 +1996,7 @@ typedef enum
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete
 {
+    [self.hudViewController hideWeatherToolbarIfNeeded];
     [self hideMultiMenuIfNeeded];
 
     if (_scrollableHudViewController)
@@ -2572,12 +2586,13 @@ typedef enum
                 state:(OATrackMenuViewControllerState *)state
          trackHudMode:(EOATrackHudMode)trackHudMode
 {
-    BOOL showCurrentTrack = NO;
-    if (item == nil)
+    BOOL showCurrentTrack = item == nil || !item.gpxFileName || item.gpxFileName.length == 0 || [item.gpxTitle isEqualToString:OALocalizedString(@"track_recording_name")];
+    if (showCurrentTrack)
     {
-        item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
-        item.gpxTitle = OALocalizedString(@"track_recording_name");
-        showCurrentTrack = YES;
+        if (item == nil)
+            item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+        if (!item.gpxTitle || item.gpxTitle.length == 0)
+            item.gpxTitle = OALocalizedString(@"track_recording_name");
     }
 
     [self hideMultiMenuIfNeeded];
@@ -2631,13 +2646,13 @@ typedef enum
     {
         case EOATrackAppearanceHudMode:
         {
-            trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:targetPoint.targetObj
+            trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item
                                                                                                state:state];
             break;
         }
         default:
         {
-            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:targetPoint.targetObj
+            trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:item
                                                                                      state:state];
             [_mapViewController showContextPinMarker:targetPoint.location.latitude
                                            longitude:targetPoint.location.longitude
@@ -3215,6 +3230,12 @@ typedef enum
     return toolbar || [_targetMenuView isToolbarVisible];
 }
 
+- (BOOL)isTopToolbarSearchVisible
+{
+    OAToolbarViewController *toolbar = [self getTopToolbar];
+    return toolbar && [toolbar isKindOfClass:OASearchToolbarViewController.class];
+}
+
 - (OAToolbarViewController *) getTopToolbar
 {
     BOOL followingMode = [_routingHelper isFollowingMode];
@@ -3459,6 +3480,8 @@ typedef enum
 
 - (void) openDestinationCardsView
 {
+    [self.hudViewController hideWeatherToolbarIfNeeded];
+
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
     
     if (!cardsController.view.superview)
@@ -3745,7 +3768,36 @@ typedef enum
 
 - (void) requestPrivateAccessRouting
 {
-    
+    if (![_settings.forcePrivateAccessRoutingAsked get:[_routingHelper getAppMode]])
+    {
+        OACommonBoolean *allowPrivate = [_settings getCustomRoutingBooleanProperty:@"allow_private" defaultValue:NO];
+        NSArray<OAApplicationMode *> * modes = OAApplicationMode.allPossibleValues;
+        for (OAApplicationMode *mode in modes)
+        {
+            if (![allowPrivate get:mode])
+            {
+                [_settings.forcePrivateAccessRoutingAsked set:YES mode:mode];
+            }
+        }
+        if (![allowPrivate get:[_routingHelper getAppMode]])
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"private_access_routing_req") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleCancel handler:nil]];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                for (OAApplicationMode *mode in modes)
+                {
+                    if (![allowPrivate get:mode])
+                    {
+                        [allowPrivate set:YES mode:mode];
+                    }
+                }
+                [_routingHelper recalculateRouteDueToSettingsChange];
+                
+            }]];
+            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+        }
+    }
 }
 
 - (void) start
@@ -3846,10 +3898,6 @@ typedef enum
 }
 
 #pragma mark - OAOpenAddTrackDelegate
-
-- (void)closeBottomSheet
-{
-}
 
 - (void)onFileSelected:(NSString *)gpxFileName
 {

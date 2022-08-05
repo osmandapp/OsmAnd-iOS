@@ -24,6 +24,8 @@
 #import "OAMapViewState.h"
 #import "OACarPlayMapViewController.h"
 #import "OACarPlayDashboardInterfaceController.h"
+#import "OAIAPHelper.h"
+#import "OAPluginPopupViewController.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -379,6 +381,12 @@
 
 - (void)application:(UIApplication *)application didConnectCarInterfaceController:(CPInterfaceController *)interfaceController toWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
 {
+    if (![OAIAPHelper isCarPlayAvailable])
+    {
+        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_CarPlay];
+        return;
+    }
+
     _app.carPlayActive = YES;
     if (!_appInitDone)
     {

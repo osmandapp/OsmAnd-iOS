@@ -69,7 +69,7 @@
 "shared_string_previous" = "이전";
 "shared_string_next" = "다음";
 "route_stops_before" = "%d이(가) 다음에서 중지됨";
-"transport_routes" = "노선 (Routes)";
+"transport_routes" = "경로";
 "transport_nearby_routes_within" = "다음 내 인근 경로";
 "transport_nearby_routes" = "안쪽";
 "transport_stop" = "정지";
@@ -155,12 +155,11 @@
 "driving_region_us" = "미국";
 "driving_region_europe_asia" = "유럽, 아시아, 라틴 아메리카 및 유사";
 "region_central_america" = "중앙 아메리카";
-"res_banner_no_free_maps_desc" = "지역 지도 또는 모든 세계 지도를 구입";
 "region_asia" = "아시아";
 
 // World Regions
 "region_antarctica" = "남극 대륙";
-"copy_from_other_profile" = "다른 프로파일에서 복사";
+"copy_from_other_profile" = "다른 프로필에서 복사";
 "road_min_speed_descr" = "경로 내 모든 도로의 최소 이동 속도를 설정하십시오. 권장 속도가 최소 속도 미만인 도로의 우선 순위 상승합니다.";
 "road_max_speed_descr" = "경로 내 모든 도로의 최대 이동 속도를 설정하십시오. 가능한 속도가 최대 속도보다 높은 도로의 우선순위를 낮춘다.";
 
@@ -485,7 +484,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "노드 네트워크 유형(국제, 지역, 로컬)에 따른 색상 경로다.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "네트워크 계열별 색상이다.";
 "res_updates_no_space" = "공간이 부족하여 %d 업데이트를 설치할 수 없습니다. %@가 필요합니다. 저장공간을 확보해주세요.";
-"res_banner_free_maps_desc" = "업데이트 없이 %d개의 무료 맵을 다운로드할 수 있음";
 "res_size" = "크기";
 "res_created_on" = "작성 날짜";
 "res_update_all" = "모두 업데이트";
@@ -601,7 +599,7 @@
 "col_red" = "빨강";
 "rendering_value_translucent_green_name" = "반투명 녹색";
 "lang_nb" = "노르웨이 보크몰어";
-"emergency" = "응급기관";
+"emergency" = "비상";
 "translucent_green" = "반투명 녹색";
 "product_title_wiki" = "위키백과";
 "navigate_point_easting" = "동향";
@@ -623,7 +621,7 @@
 "shared_string_is_open" = "열기";
 "rendering_value_orange_name" = "오렌지";
 "units_m" = "m";
-"education" = "교육";
+"education" = "교육기관";
 "rendering_attr_lessDetailed_name" = "덜 상세";
 "nothing_found_empty" = "아무것도 찾지 못했습니다";
 "osm_poi_delete_title" = "POI삭제";
@@ -726,7 +724,7 @@
 "rendering_value_boldOutline_name" = "큰 선";
 "gpx_deactivated" = "비활성화";
 "offline_vector_maps" = "오프라인 벡터 맵";
-"units_hour" = "시간";
+"units_hour" = "h";
 "transport" = "대중교통";
 "lang_al" = "알바니아어";
 "layer_amenity_label" = "포인트 이름";
@@ -833,7 +831,7 @@
 "key_hint_deselect" = "선택 취소";
 "arrival_distance_factor_at_last" = "마지막 미터에서";
 "industrial" = "공업";
-"product_title_srtm" = "등고선 데이터";
+"product_title_srtm" = "등고선";
 "lang_vi" = "베트남어";
 "nothanks" = "필요없음";
 "rendering_attr_trainLightrailRoutes_name" = "기차 노선";
@@ -845,7 +843,7 @@
 "lang_hr" = "크로아티아어";
 "lang_de" = "독일어";
 "rendering_attr_OSMMapperAssistant_name" = "OSM지도작성 도우미";
-"res_srtm" = "등고선 데이터";
+"res_srtm" = "등고선";
 "rendering_attr_busRoutes_name" = "버스 노선";
 "rendering_attr_showSurfaces_name" = "도로 표면 표시";
 "osm_phone" = "전화";
@@ -903,7 +901,7 @@
 "routing_attr_avoid_borders_description" = "타국의 국경 횡단 방지";
 "routing_attr_weight_name" = "중량 제한";
 "lang_sk" = "슬로바키아어";
-"default" = "기본값";
+"default" = "기본";
 "shared_string_navigation" = "내비게이션";
 "lang_sv" = "스웨덴어";
 "lang_lt" = "리투아니아어";
@@ -1076,7 +1074,7 @@
 "plan_route_folder" = "폴더";
 "plan_route_create_new_route" = "새 경로 만들기";
 "res_updates_avail_q" = "업데이트가 있습니다.";
-"edit_profile_list" = "프로필 리스트 수정";
+"edit_profile_list" = "‎프로파일‎‎ 목록 편집‎";
 "plan_route_change_folder" = "폴더 변경";
 "plan_route_select_folder" = "폴더 선택";
 "routing_attr_allow_gate_description" = "게이트 사용 허용";
@@ -1163,3 +1161,50 @@
 "lang_lmo" = "롬바르드어 이태리사투리";
 "lang_pnb" = "펀자브어";
 "reset_to_original" = "기본 으로 재설정";
+"osmand_cloud" = "‎오스엠앤‎‎드 클라우드‎";
+"restore_from_file" = "‎파일에서 복원‎";
+"new_device_account" = "‎새 ‎‎장치 / 새‎‎ 계정‎";
+"product_desc_plus" = "확장 피쳐 가져오기";
+"wikipedia_and_wikivoyage_offline" = "위키백과 및 위키보이지 오프라인";
+"restore_purchases" = "‎구매 ‎‎항목 복원‎";
+"terrain_maps" = "지형 지도";
+"explore_osmnad_plans_to_find_suitable" = "OsmAnd Plans을 탐색하여 귀하에게 적합한 계획을 찾으십시오.";
+"purchases_feature_desc_osmand_cloud" = "OsmAnd Cloud에서 모든 OsmAnd 데이터를 온라인으로 저장하십시오. 재설치 후 손실된 데이터가 없습니다. 모든 정보를 쉽게 백업 및 복원할 수 있습니다.";
+"annual_subscription" = "연간 구독";
+"product_desc_pro" = "최대 피쳐 가져오기";
+"shared_string_stop" = "정지";
+"purchases_feature_desc_terrain" = "지형 등고선, 어두운 색조가 있는 완전한 언덕길 지도, 봉우리와 저지대를 보여주는 색상의 경사 지도.";
+"monthly_map_updates" = "월별 지도 업데이트";
+"purchases_feature_desc_wikipedia" = "오프라인에서 Wikipedia를 탐색합니다. 국가별, 지역별로 구분된 문서이며 모든 언어로 제공됩니다.";
+"shared_string_purchased" = "구입됨";
+"daily_map_updates" = "시간별 지도 업데이트";
+"shared_string_learn_more" = "더 배우기";
+"cloud_description" = "‎데이터를 ‎‎잃지‎‎ 마십시오. 모든 정보를 쉽게 백업하고 복원하십시오.‎";
+"monthly_subscription" = "월 구독";
+"nautical_depth" = "해저 지형";
+"product_title_development" = "OsmAnd개발";
+"purchases_feature_desc_combined_wiki" = "인터넷 연결 없이 이동 중에 Wikipedia 문서를 탐색하십시오. 오프라인 데이터는 국가별로 구분되어 있으며 모든 언어로 제공됩니다.";
+"purchases_feature_desc_monthly_map_updates" = "오프라인 지도에 대한 정기적인 월간 업데이트에 액세스할 수 있습니다.";
+"product_desc_ext_development" = "모의 주행이나 렌더링 성능 표시와 같은 개발 및 디버깅 기능에 대한 설정을 표시합니다.";
+"shared_string_start" = "시작";
+"purchases_feature_desc_hourly_map_updates" = "지도 업데이트에 더 자주 액세스하십시오. 매시간, 매일 또는 매주 업데이트. 업데이트는 변경된 영역에 대해서만 점진적으로 다운로드된다.";
+"complete_purchase" = "구매완료";
+"shared_string_includes" = "포함됨";
+"purchases_feature_desc_unlimited_map_download" = "모든 대륙 및 지역의 오프라인 지도를 무제한 다운로드하십시오.";
+"expired" = "만료됨";
+"redeem_promo_code" = "리딤 프로모션 코드";
+"purchases_feature_desc_pro_widgets" = "OsmAnd Pro기능을 액세스한다면: 경로 색칠 및 기타 정보 등등.";
+"unlimited_map_downloads" = "지도 다운로드 제한 없음";
+"lang_ckb" = "중부 쿠르드족";
+"transport_hazmat_yes_desc" = "적절한 카테고리를 선택해야 합니다.";
+"transport_hazmat_no_desc" = "일부 도로 및 터널에서는 유해 물질 운송이 금지되어 있습니다.";
+"online_webpage_warning" = "페이지는 온라인에서만 사용할 수 있습니다. 웹 브라우저에서 열었습니까\?";
+"shared_string_data" = "데이터";
+"route_line_use_map_style_width" = "지도 스타일(%@) 기본 너비를 사용합니다.";
+"on_hold" = "대기 중";
+"map_settings_add_online_source" = "온라인 소스 추가";
+"route_line_use_map_style_color" = "지도 스타일(%@) 기본 색상을 사용합니다.";
+"restore_from_osmand_cloud" = "OsmAnd클라우드에서 복원";
+"menu_feedback" = "피드백";
+"shared_string_undefined" = "정의되지 않음";
+"shared_string_delete_all" = "모두 삭제";

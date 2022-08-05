@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSMutableArray<OARemoteFile *> *filteredFilesToDelete;
 @property (nonatomic) NSMutableArray<NSArray *> *filteredFilesToMerge;
 
+- (void) createItemCollections;
+
 @end
 
 NS_ASSUME_NONNULL_END

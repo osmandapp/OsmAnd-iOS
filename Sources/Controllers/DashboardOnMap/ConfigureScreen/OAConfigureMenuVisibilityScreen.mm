@@ -7,14 +7,13 @@
 //
 
 #import "OAConfigureMenuVisibilityScreen.h"
-#import "OsmAndApp.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAConfigureMenuViewController.h"
 #import "Localization.h"
-#import "OAIconTextTableViewCell.h"
+#import "OAIconTextDescCell.h"
 #import "OARootViewController.h"
-#import "OAUtilities.h"
+#import "OAColors.h"
 
 @implementation OAConfigureMenuVisibilityScreen
 {
@@ -48,7 +47,7 @@
         
         vwController = viewController;
         tblView = tableView;
-        
+
         [self commonInit];
         [self initData];
     }
@@ -70,6 +69,24 @@
 
 - (void) initData
 {
+    _data = [NSDictionary dictionary];
+}
+
+- (NSDictionary *)createTableItem:(NSString *)itemTitle
+                      description:(NSString *)description
+                              key:(NSString *)key
+                             icon:(NSString *)icon
+                         selected:(BOOL)selected
+{
+    return @{
+            @"title": itemTitle,
+            @"description": description,
+            @"key": key,
+            @"img": icon,
+            @"selected": @(selected),
+            @"color": selected ? UIColorFromRGB(color_osmand_orange) : UIColorFromRGB(color_footer_icon_gray),
+            @"type": [OAIconTextDescCell getCellIdentifier]
+    };
 }
 
 - (void) setupView
@@ -77,39 +94,9 @@
     if (_r)
     {
         OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
-        
-        _data = [NSMutableDictionary dictionary];
-        NSMutableArray *standardList = [NSMutableArray array];
-        
-        BOOL showSelected = ![_r visibleCollapsed:mode] && [_r visible:mode];
-        BOOL hideSelected = ![_r visibleCollapsed:mode] && ![_r visible:mode];
-        BOOL collapsedSelected = [_r visibleCollapsed:mode];
+        NSMutableDictionary *data = [NSMutableDictionary dictionary];
+        NSMutableArray<NSDictionary *> *additionalList = [NSMutableArray array];
 
-        [standardList addObject:@{ @"title" : OALocalizedString(@"sett_show"),
-                                   @"key" : @"action_show",
-                                   @"img" : @"ic_action_view",
-                                   @"selected" : @(showSelected),
-                                   @"color" : showSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
-                                   @"secondaryImg" : showSelected ? @"menu_cell_selected" : [NSNull null],
-                                   @"type" : [OAIconTextTableViewCell getCellIdentifier]} ];
-
-        [standardList addObject:@{ @"title" : OALocalizedString(@"poi_hide"),
-                                   @"key" : @"action_hide",
-                                   @"img" : @"ic_action_hide",
-                                   @"selected" : @(hideSelected),
-                                   @"color" : hideSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
-                                   @"secondaryImg" : hideSelected ? @"menu_cell_selected" : [NSNull null],
-                                   @"type" : [OAIconTextTableViewCell getCellIdentifier]} ];
-        
-        [standardList addObject:@{ @"title" : OALocalizedString(@"shared_string_collapse"),
-                                   @"key" : @"action_collapse",
-                                   @"img" : @"ic_action_widget_collapse",
-                                   @"selected" : @(collapsedSelected),
-                                   @"color" : collapsedSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
-                                   @"secondaryImg" : collapsedSelected ? @"menu_cell_selected" : [NSNull null],
-                                   @"type" : [OAIconTextTableViewCell getCellIdentifier]} ];
-        
-        NSMutableArray *additionalList = [NSMutableArray array];
         if ([_r getItemIds])
         {
             for (int i = 0; i < [_r getItemIds].count; i++)
@@ -118,21 +105,51 @@
                 NSString *messageId = [_r getMessages][i];
                 NSString *imageId = [_r getImageIds][i];
                 BOOL selected = [[_r getItemId] isEqualToString:itemId];
-                [additionalList addObject:@{ @"title" : OALocalizedString(messageId),
-                                           @"key" : itemId,
-                                           @"img" : imageId,
-                                           @"selected" : @(selected),
-                                           @"color" : selected ? UIColorFromRGB(0xff8f00) : [NSNull null],
-                                           @"secondaryImg" : selected ? @"menu_cell_selected" : [NSNull null],
-                                           @"type" : [OAIconTextTableViewCell getCellIdentifier]} ];
+
+                NSString *descriptionId = @"";
+                NSArray<NSString *> *descriptions = [_r getDescriptions];
+                if (descriptions)
+                    descriptionId = [_r getDescriptions][i];
+
+                [additionalList addObject:[self createTableItem:OALocalizedString(messageId)
+                                                    description:OALocalizedString(descriptionId)
+                                                            key:itemId
+                                                           icon:imageId
+                                                       selected:selected]];
             }
         }
-        
+
         if (additionalList.count > 0)
-            _data = @{ @"additional" : additionalList,
-                       @"standard" : standardList };
-        else
-            _data = @{ @"standard" : standardList };
+            data[@"additional"] = additionalList;
+
+        if (![_r.key isEqualToString:@"compass"])
+        {
+            NSMutableArray<NSDictionary *> *standardList = [NSMutableArray array];
+
+            BOOL showSelected = ![_r visibleCollapsed:mode] && [_r visible:mode];
+            BOOL hideSelected = ![_r visibleCollapsed:mode] && ![_r visible:mode];
+            BOOL collapsedSelected = [_r visibleCollapsed:mode];
+
+            [standardList addObject:[self createTableItem:OALocalizedString(@"sett_show")
+                                              description:@""
+                                                      key:@"action_show"
+                                                     icon:@"ic_action_view"
+                                                 selected:showSelected]];
+            [standardList addObject:[self createTableItem:OALocalizedString(@"poi_hide")
+                                              description:@""
+                                                      key:@"action_hide"
+                                                     icon:@"ic_action_hide"
+                                                 selected:hideSelected]];
+            [standardList addObject:[self createTableItem:OALocalizedString(@"shared_string_collapse")
+                                              description:@""
+                                                      key:@"action_collapse"
+                                                     icon:@"ic_action_widget_collapse"
+                                                 selected:collapsedSelected]];
+
+            data[@"standard"] = standardList;
+        }
+
+        _data = data;
     }
 }
 
@@ -160,39 +177,52 @@
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
-          
-    OAIconTextTableViewCell* cell;
-    cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+    OAIconTextDescCell *cell = [tblView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
+        cell = (OAIconTextDescCell *) nib[0];
         cell.textView.numberOfLines = 0;
+        cell.descView.font = [UIFont systemFontOfSize:15.];
+        cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
     }
     if (cell)
     {
         cell.textView.text = item[@"title"];
-        [cell.textView setTextColor:[UIColor blackColor]];
-        
+
+        NSString *description = item[@"description"];
+        cell.descView.hidden = description.length == 0;
+        cell.descView.text = description;
+
         NSString *imageName = item[@"img"];
         if (imageName)
         {
             UIColor *color = nil;
             if (item[@"color"] != [NSNull null])
                 color = item[@"color"];
-            
+
             if (color)
-                cell.iconView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:imageName] color:color];
+                cell.iconView.image = [UIImage templateImageNamed:imageName];
             else
                 cell.iconView.image = [UIImage imageNamed:imageName];
+
+            cell.iconView.tintColor = color;
         }
         cell.textView.text = item[@"title"];
-        if (item[@"secondaryImg"] != [NSNull null])
-            cell.arrowIconView.image = [UIImage imageNamed:item[@"secondaryImg"]];
-        else
-            cell.arrowIconView.image = nil;
+
+        BOOL selected = [item[@"selected"] boolValue];
+        cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
+        cell.arrowIconView.image = selected ? [UIImage templateImageNamed:@"menu_cell_selected"] : nil;
+
+        if ([cell needsUpdateConstraints])
+            [cell updateConstraints];
     }
     return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    return [_data.allKeys containsObject:@"additional"] ? [_r getDescription] : nil;
 }
 
 #pragma mark - UITableViewDelegate

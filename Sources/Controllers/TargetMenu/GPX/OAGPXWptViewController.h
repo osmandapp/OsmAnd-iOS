@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OAEditTargetViewController.h"
+#import "OATargetInfoViewController.h"
 #import "OAGpxWptItem.h"
 #import <CoreLocation/CoreLocation.h>
 
@@ -21,7 +21,7 @@
 
 @class OAMapViewController;
 
-@interface OAGPXWptViewController : OAEditTargetViewController
+@interface OAGPXWptViewController : OATargetInfoViewController
 
 @property (nonatomic) OAMapViewController *mapViewController;
 @property (nonatomic) OAGpxWptItem *wpt;
@@ -32,6 +32,10 @@
 - (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation gpxFileName:(NSString *)gpxFileName;
 - (NSString *) getGpxFileName;
 
+- (NSString *) getItemName;
+- (NSString *) getItemGroup;
+- (NSString *) getItemDesc;
+- (UIImage *) getIcon;
 - (NSDate *) getTimestamp;
 
 @end

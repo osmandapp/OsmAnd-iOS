@@ -41,12 +41,6 @@
 
 @end
 
-@protocol OAOnDownloadFileListListener <NSObject>
-
-- (void) onDownloadFileList:(NSInteger)status message:(NSString *)message remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles;
-
-@end
-
 @protocol OAOnCollectLocalFilesListener <NSObject>
 
 - (void) onFileCollected:(OALocalFile *)localFile;
@@ -75,9 +69,9 @@
 
 @protocol OAOnDownloadFileListener <NSObject>
 
-- (void) onFileDownloadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work;
+- (void) onFileDownloadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work itemFileName:(NSString *)itemFileName;
     
-- (void) onFileDownloadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork;
+- (void) onFileDownloadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork itemFileName:(NSString *)itemFileName;
     
 - (void) onFileDownloadDone:(NSString *)type fileName:(NSString *)fileName error:(NSString *)error;
     

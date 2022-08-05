@@ -27,5 +27,7 @@
 + (NSString *) getLocationOlcName:(double) lat lon:(double)lon;
 + (NSString *) getMgrsCoordinateString:(double)lat lon:(double)lon;
 
++ (NSString *)getUTMLetterDesignator:(double)lat;
+
 @end
 

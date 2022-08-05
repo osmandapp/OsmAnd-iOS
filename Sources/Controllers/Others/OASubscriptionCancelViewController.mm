@@ -7,12 +7,11 @@
 //
 
 #import "OASubscriptionCancelViewController.h"
-#import "OAUtilities.h"
 #import "OAColors.h"
 #import "OAChoosePlanHelper.h"
-#import "OAChoosePlanViewController.h"
 #import "OARootViewController.h"
 #import "OAOsmLiveFeaturesCardView.h"
+#import "OAIAPHelper.h"
 
 #include "Localization.h"
 
@@ -21,11 +20,11 @@
 #define kMarginV 20.0
 #define kMarginDescV 12.0
 
-static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
-                                                        [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
-                                                        [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
-                                                        [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                                                        [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
+static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureHourlyMapUpdates],
+                                                        [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedMapDownloads],
+                                                        [[OAFeature alloc] initWithFeature:EOAFeatureWikipedia],
+                                                        [[OAFeature alloc] initWithFeature:EOAFeatureTerrain],
+                                                        [[OAFeature alloc] initWithFeature:EOAFeatureNautical]];
 
 @interface OASubscriptionCancelViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;
@@ -138,13 +137,10 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
     CGFloat y = 0;
     for (UIView *v in self.cardsContainer.subviews)
     {
-        if ([v isKindOfClass:[OAPurchaseDialogItemView class]])
+        if ([v isKindOfClass:[OABaseFeatureCardView class]])
         {
-            OAPurchaseDialogItemView *card = (OAPurchaseDialogItemView *)v;
-            CGRect crf = [card updateFrame:w];
-            crf.origin.y = y;
-            card.frame = crf;
-            y += crf.size.height + kMarginH;
+            OABaseFeatureCardView *card = (OABaseFeatureCardView *) v;
+            y += [card updateFrame:y];
         }
     }
     if (y > 0)
@@ -178,16 +174,12 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
 - (OAOsmLiveFeaturesCardView *) buildOsmLiveCard
 {
     OAOsmLiveFeaturesCardView *cardView = [[OAOsmLiveFeaturesCardView alloc] initWithFrame:{0, 0, 300, 200}];
-    
     BOOL firstRow = YES;
     for (OAFeature *feature in osmLiveFeatures)
     {
-        if (![feature isFeatureAvailable] || [feature isFeatureFree])
-            continue;
-        
-        NSString *featureName = [feature toHumanString];
-        
-        [cardView addInfoRowWithText:featureName image:[feature getImage] selected:NO showDivider:NO];
+        OAFeatureCardRow *cardRow = [cardView addInfoRowWithFeature:feature selected:YES showDivider:NO];
+        cardRow.backgroundColor = UIColor.clearColor;
+        cardRow.labelTitle.textColor = UIColor.blackColor;
         if (firstRow)
             firstRow = NO;
     }
@@ -202,16 +194,28 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
 - (IBAction) subscribeButtonPressed:(id)sender
 {
     [self dismissViewControllerAnimated:NO completion:nil];
-    [OAChoosePlanHelper showChoosePlanScreenWithProduct:nil navController:[OARootViewController instance].navigationController];
+    [OAChoosePlanHelper showChoosePlanScreen:[OARootViewController instance].navigationController];
 }
 
 + (BOOL) shouldShowDialog
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSTimeInterval cancelledTime = settings.liveUpdatesPurchaseCancelledTime.get;
+    OAIAPHelper *iapHelper = OAIAPHelper.sharedInstance;
+    NSTimeInterval cancelledTime = 0;
+    NSArray<OASubscription *> *subs = iapHelper.subscriptionList.getPurchasedSubscriptions;
+    NSInteger cancelled = 0;
+    for (OASubscription *sub in subs)
+    {
+        if (sub.purchaseCancelledTime > 0)
+        {
+            cancelled++;
+            cancelledTime = sub.purchaseCancelledTime;
+        }
+    }
+    BOOL allCancelled = subs.count == cancelled;
     BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown.get;
     BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown.get;
-    return cancelledTime > 0 && (!firstTimeShown || ([[[NSDate alloc] init] timeIntervalSince1970] - cancelledTime > kSubscriptionHoldingTimeMsec && !secondTimeShown));
+    return cancelledTime > 0 && allCancelled && (!firstTimeShown || ([[[NSDate alloc] init] timeIntervalSince1970] - cancelledTime > kSubscriptionHoldingTimeMsec && !secondTimeShown));
 }
 
 + (void) showInstance:(UINavigationController *)navigationController

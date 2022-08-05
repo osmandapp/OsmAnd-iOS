@@ -346,13 +346,17 @@
         _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)", kContourLinesDensity, kContourLinesWidth, kContourLinesColorScheme]];
         for (OAMapStyleParameter *parameter in _filteredTopLevelParams)
         {
-            [mapStyleSectionData addObject:@{
-                    @"name": parameter.title,
-                    @"image": [self getImageForParameterOrCategory:parameter.name],
-                    @"value": [parameter getValueTitle],
-                    @"type": [OAIconTitleValueCell getCellIdentifier],
-                    @"key": [NSString stringWithFormat:@"filtered_%@", parameter.name]
-            }];
+            if (parameter.title)
+            {
+                NSString *val = [parameter getValueTitle];
+                [mapStyleSectionData addObject:@{
+                        @"name": parameter.title,
+                        @"image": [self getImageForParameterOrCategory:parameter.name],
+                        @"value": val ? val : @"",
+                        @"type": [OAIconTitleValueCell getCellIdentifier],
+                        @"key": [NSString stringWithFormat:@"filtered_%@", parameter.name]
+                }];
+            }
         }
 
         if (hasSRTM && !_iapHelper.srtm.disabled)
@@ -398,17 +402,16 @@
             @"key": @"underlay_layer"
     }];
 
-    // TODO: Show weather settings later
-//    if (!hasWeather || !_iapHelper.weather.disabled)
-//    {
-//        [overlayUnderlaySectionData addObject:@{
-//                @"name": OALocalizedString(@"product_title_weather"),
-//                @"image": @"ic_custom_umbrella",
-//                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"product_title_weather"),
-//                @"type": hasWeather ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
-//                @"key": @"weather_layer"
-//        }];
-//    }
+    if (!hasWeather || !_iapHelper.weather.disabled)
+    {
+        [overlayUnderlaySectionData addObject:@{
+                @"name": OALocalizedString(@"product_title_weather"),
+                @"image": @"ic_custom_umbrella",
+                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"product_title_weather"),
+                @"type": hasWeather ? [OAIconTextDividerSwitchCell getCellIdentifier] : [OAPromoButtonCell getCellIdentifier],
+                @"key": @"weather_layer"
+        }];
+    }
 
     [data addObject:@{
             @"group_name": OALocalizedString(@"map_settings_overunder"),
@@ -1203,14 +1206,17 @@
     if (![source.resourceId hasPrefix:@"skimap"])
     {
         OAMapStyleParameter *ski = [_styleSettings getParameter:PISTE_ROUTES_ATTR];
-        ski.value = @"false";
-        [_styleSettings save:ski];
-
-        if ([_routesWithGroup containsObject:PISTE_ROUTES_ATTR])
+        if (ski && ![ski.value isEqualToString:@"false"])
         {
-            NSMutableArray *routesWithGroup = [_routesWithGroup mutableCopy];
-            [routesWithGroup removeObject:PISTE_ROUTES_ATTR];
-            _routesWithGroup = routesWithGroup;
+            ski.value = @"false";
+            [_styleSettings save:ski];
+
+            if ([_routesWithGroup containsObject:PISTE_ROUTES_ATTR])
+            {
+                NSMutableArray *routesWithGroup = [_routesWithGroup mutableCopy];
+                [routesWithGroup removeObject:PISTE_ROUTES_ATTR];
+                _routesWithGroup = routesWithGroup;
+            }
         }
     }
     else

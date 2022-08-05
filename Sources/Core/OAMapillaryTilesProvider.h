@@ -106,7 +106,7 @@ public:
     virtual ~OAMapillaryTilesProvider();
     
     virtual QByteArray obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request);
-    virtual sk_sp<SkImage> obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
+    virtual sk_sp<const SkImage> obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
     virtual void obtainImageAsync(
                                   const OsmAnd::IMapTiledDataProvider::Request& request,
                                   const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData);

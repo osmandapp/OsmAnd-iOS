@@ -7,25 +7,14 @@
 //
 
 #import "OAManageResourcesViewController.h"
-
 #import <Reachability.h>
-#import <UIAlertView+Blocks.h>
-#import <FFCircularProgressView.h>
 #import <MBProgressHUD.h>
-#import <FormatterKit/TTTArrayFormatter.h>
-
-#import "OsmAndApp.h"
-#import "OAAutoObserverProxy.h"
 #import "UITableViewCell+getTableView.h"
 #import "OARootViewController.h"
 #import "OALocalResourceInformationViewController.h"
-#import "OAOsmAndLiveViewController.h"
 #import "OAOutdatedResourcesViewController.h"
-#import "OAWorldRegion.h"
-#import "OALog.h"
 #import "OAOcbfHelper.h"
-#import "OABannerView.h"
-#import "OAUtilities.h"
+#import "OASubscriptionBannerCardView.h"
 #import "OAInAppCell.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
@@ -41,16 +30,16 @@
 #import "OADownloadDescriptionInfo.h"
 #import "OATextViewSimpleCell.h"
 #import "OAMultiIconTextDescCell.h"
-#import "OACustomSourceDetailsViewController.h"
 #import "OAColors.h"
-
-#include "Localization.h"
-
-#import "OAPurchasesViewController.h"
-#import "OAPluginsViewController.h"
+#import "OANauticalMapsPlugin.h"
+#import "Localization.h"
 #import "OAResourcesInstaller.h"
 #import "OAIAPHelper.h"
 #import "OADownloadMultipleResourceViewController.h"
+#import "OAQuickSearchCoordinatesViewController.h"
+#import "OASearchResult.h"
+#import "OAPointDescription.h"
+#import "OAQuickSearchHelper.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -63,13 +52,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kOpenOutdatedResourcesSegue @"openOutdatedResourcesSegue"
 #define kOpenDetailsSegue @"openDetailsSegue"
 #define kOpenInstalledResourcesSegue @"openInstalledResourcesSegue"
-#define kOpenOsmAndLiveSegue @"openOsmAndLiveSegue"
 
+#define kSearchCityLimit 10000
 
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, OABannerViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate>
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -115,13 +104,11 @@ struct RegionResources
     NSInteger _downloadDescriptionSection;
     NSInteger _extraMapsSection;
     NSInteger _regionMapSection;
-    NSInteger _osmAndLiveSection;
     NSInteger _otherMapsSection;
     NSInteger _nauticalMapsSection;
 
-    NSInteger _outdatedResourcesSection;
-    NSMutableArray *_outdatedResourceItems;
-    NSArray *_regionsWithOutdatedResources;
+    NSInteger _outdatedMapsCount;
+    uint64_t _totalOutdatedSize;
 
     NSInteger _localResourcesSection;
     NSInteger _localSqliteSection;
@@ -147,20 +134,15 @@ struct RegionResources
     BOOL _doNotSearch;
     BOOL hideUpdateButton;
     
-    UILabel *_updateCouneView;
     BOOL _doDataUpdate;
     BOOL _doDataUpdateReload;
     
     BOOL _displayBanner;
-    OABannerView *_bannerView;
+    OASubscriptionBannerCardView *_subscriptionBannerView;
     OAFreeMemoryView *_freeMemoryView;
     BOOL _displaySubscribeEmailView;
     OASubscribeEmailView *_subscribeEmailView;
-    NSInteger _bannerSection;
-    NSString *_purchaseInAppId;
-    
-    TTTArrayFormatter *_arrFmt;
-    NSNumberFormatter *_numberFormatter;
+    NSInteger _subscriptionBannerSection;
 
     BOOL _srtmDisabled;
     BOOL _hasSrtm;
@@ -186,7 +168,8 @@ static QHash< OAWorldRegion *__weak, RegionResources > _resourcesByRegions;
 
 static NSMutableArray *_searchableWorldwideRegionItems;
 
-static BOOL _lackOfResources;
+static BOOL _lackOfResources = NO;
+static BOOL _repositoryUpdated = NO;
 
 + (NSArray<NSString *> *)getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region
 {
@@ -221,8 +204,6 @@ static BOOL _lackOfResources;
 
         _allSubregionItems = [NSMutableArray array];
 
-        _outdatedResourceItems = [NSMutableArray array];
-
         _allResourceItems = [NSMutableArray array];
         _localResourceItems = [NSMutableArray array];
         _localSqliteItems = [NSMutableArray array];
@@ -234,9 +215,6 @@ static BOOL _lackOfResources;
         _lastSearchString = @"";
         _lastSearchScope = 0;
         _searchResults = nil;
-        
-        _arrFmt = [[TTTArrayFormatter alloc] init];
-        _arrFmt.usesSerialDelimiter = NO;
         
         _viewAppeared = NO;
     }
@@ -265,10 +243,6 @@ static BOOL _lackOfResources;
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-
-    _numberFormatter = [[NSNumberFormatter alloc] init];
-    [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-    [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
 
     if (self.openFromSplash)
     {
@@ -299,24 +273,7 @@ static BOOL _lackOfResources;
 
     [self obtainDataAndItems];
     [self prepareContent];
-    
-    // IOS-172
-    _updateCouneView = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 20.0, 20.0)];
-    _updateCouneView.layer.cornerRadius = 10.0;
-    _updateCouneView.layer.masksToBounds = YES;
-    _updateCouneView.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:143.0/255.0 blue:0.0 alpha:1.0];
-    _updateCouneView.font = [UIFont systemFontOfSize:12.0];
-    _updateCouneView.textAlignment = NSTextAlignmentCenter;
-    _updateCouneView.textColor = [UIColor whiteColor];
-    
-    if (_displayBanner)
-    {
-        _bannerView = [[OABannerView alloc] init];
-        _bannerView.delegate = self;
-        [self updateBannerDimensions:DeviceScreenWidth];
-        _bannerView.buttonTitle = OALocalizedString(@"shared_string_buy");
-    }
-    
+
     _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0) localResourcesSize:_totalInstalledSize + _liveUpdatesInstalledSize];
     _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 100.0)];
     _subscribeEmailView.delegate = self;
@@ -358,17 +315,16 @@ static BOOL _lackOfResources;
     }
     
     self.updateButton.hidden = hideUpdateButton;
-    
-    [self updateFreeDownloadsBanner];
-    
-    if (_displayBanner)
-        [self updateBannerDimensions:DeviceScreenWidth];
-    
+
+    if (_displayBanner && !_subscriptionBannerView)
+        [self setupSubscriptionBanner];
+
     [self.tableView reloadData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstallationFailed:) name:OAResourceInstallationFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
@@ -385,7 +341,11 @@ static BOOL _lackOfResources;
         if (!_app.isRepositoryUpdating &&
             [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && self.region == _app.worldRegion && _currentScope != kLocalResourcesScope)
         {
-            [self updateRepository];
+            if (!_repositoryUpdated)
+            {
+                _repositoryUpdated = YES;
+                [self updateRepository];
+            }
         }
         else if (self.region == _app.worldRegion &&
                  [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
@@ -432,26 +392,23 @@ static BOOL _lackOfResources;
     return _tableView;
 }
 
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    if (_displayBanner)
-    {
-        [UIView animateWithDuration:duration animations:^{            
-            [self.tableView beginUpdates];
-            [self updateBannerDimensions:DeviceScreenHeight];
-            [self.tableView endUpdates];
-        }];
-    }
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self setupSubscriptionBanner];
+        [self.tableView reloadData];
+    } completion:nil];
 }
 
 - (BOOL) shouldHideBanner
 {
-    return _currentScope == kLocalResourcesScope || _iapHelper.subscribedToLiveUpdates || (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) || (self.region != _app.worldRegion && [self.region isInPurchasedArea]) || [self.region.regionId isEqualToString:_otherRegionId] || [self.region isKindOfClass:OACustomRegion.class];
+    return _currentScope == kLocalResourcesScope || [OAIAPHelper isPaidVersion] || (self.region == _app.worldRegion && [_iapHelper inAppMapsPurchased].count > 0) || (self.region != _app.worldRegion && [self.region isInPurchasedArea]) || [self.region.regionId isEqualToString:_otherRegionId] || [self.region isKindOfClass:OACustomRegion.class];
 }
 
 - (BOOL) shouldHideEmailSubscription
 {
-    return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || _iapHelper.subscribedToLiveUpdates || [OAAppSettings sharedManager].emailSubscribed.get || [self.region isKindOfClass:OACustomRegion.class];
+    return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || [OAIAPHelper isPaidVersion] || [OAAppSettings sharedManager].emailSubscribed.get || [self.region isKindOfClass:OACustomRegion.class];
 }
 
 - (void) updateContentIfNeeded
@@ -486,101 +443,49 @@ static BOOL _lackOfResources;
     }
 }
 
-- (void) updateBannerDimensions:(CGFloat)width
+- (void)setupSubscriptionBanner
 {
-    CGFloat height = [_bannerView getHeightByWidth:width];
-    _bannerView.frame = CGRectMake(_bannerView.frame.origin.x, _bannerView.frame.origin.y, width, height);
-}
+    if (!_displayBanner)
+    {
+        _subscriptionBannerView = nil;
+        return;
+    }
 
-- (void) updateFreeDownloadsBanner
-{
-    NSString *title;
-    NSString *desc;
-    NSString *buttonTitle = OALocalizedString(@"shared_string_buy");
-    
-    OAProduct *product;
-    NSString *regionId;
-    
     if ([self.region isKindOfClass:OACustomRegion.class])
         return;
 
-    if (self.region == _app.worldRegion)
-    {
-        if (!_displayBannerPurchaseAllMaps)
-        {
-            int freeMaps = [OAIAPHelper freeMapsAvailable];
-            if (freeMaps > 0)
-            {
-                title = [NSString stringWithFormat:OALocalizedString(@"res_banner_free_maps_title"), freeMaps];
-                desc = [NSString stringWithFormat:OALocalizedString(@"res_banner_free_maps_desc"), freeMaps];
-            }
-            else
-            {
-                title = OALocalizedString(@"res_banner_no_free_maps_title");
-                desc = OALocalizedString(@"res_banner_no_free_maps_desc");
-            }
-            buttonTitle = OALocalizedString(@"get_unlimited_access");
-        }
-        else
-        {
-            product = _iapHelper.allWorld;
-        }
-    }
-    else
-    {
-        // For some reason worldRegion can get corrupred in which case we get an infinite loop here
-        OAWorldRegion *region = self.region;
-        while (region.superregion != _app.worldRegion && region)
-        {
-            region = region.superregion;
-        }
+    int freeMaps = [OAIAPHelper freeMapsAvailable];
+    EOASubscriptionBannerType bannerType = freeMaps > 0 ? EOASubscriptionBannerFree : EOASubscriptionBannerNoFree;
 
-        if (region)
-            regionId = region.regionId;
-        
-        if ([regionId isEqualToString:OsmAnd::WorldRegions::AntarcticaRegionId.toNSString()])
-            product = _iapHelper.antarctica;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()])
-            product = _iapHelper.africa;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::AsiaRegionId.toNSString()])
-            product = _iapHelper.asia;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()])
-            product = _iapHelper.australia;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()])
-            product = _iapHelper.centralAmerica;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::EuropeRegionId.toNSString()])
-            product = _iapHelper.europe;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()])
-            product = _iapHelper.northAmerica;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()])
-            product = _iapHelper.russia;
-        else if ([regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()])
-            product = _iapHelper.southAmerica;
+    if (_subscriptionBannerView && _subscriptionBannerView.type == bannerType)
+        return;
+
+    if (!_subscriptionBannerView || _subscriptionBannerView.type != bannerType)
+    {
+        _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:bannerType];
+        _subscriptionBannerView.delegate = self;
     }
 
-    if (product)
-    {
-        _purchaseInAppId = product.productIdentifier;
-        title = product.localizedTitle;
-        if (product.price)
-        {
-            [_numberFormatter setLocale:product.priceLocale];
-            NSString *price = [_numberFormatter stringFromNumber:product.price];
-            buttonTitle = [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"shared_string_buy"), price];
-            desc = [NSString stringWithFormat:@"%@ %@ %@ %@", OALocalizedString(@"shared_string_buy"), product.localizedDescription, OALocalizedString(@"shared_string_buy_for"), price];
-        }
-        else
-        {
-            desc = product.localizedDescription;
-        }
-    }
+    NSString *title = freeMaps > 0
+            ? [NSString stringWithFormat:OALocalizedString(@"subscription_banner_free_maps_title"), freeMaps]
+            : OALocalizedString(@"subscription_banner_no_free_maps_title");
+    NSString *description = OALocalizedString(@"subscription_banner_free_maps_description");
+    NSString *icon = freeMaps > 0 ? @"ic_custom_five_downloads_big" : @"ic_custom_zero_downloads_big";
+    NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"get_unlimited_access")];
 
-    _bannerView.title = title;
-    _bannerView.desc = desc;
-    _bannerView.buttonTitle = buttonTitle;
+    [buttonTitle addAttribute:NSForegroundColorAttributeName
+                        value:freeMaps > 0 ? UIColorFromRGB(color_banner_button) : UIColorFromRGB(color_primary_purple)
+                        range:NSMakeRange(0, buttonTitle.string.length)];
+    [buttonTitle addAttribute:NSFontAttributeName
+                        value:[UIFont systemFontOfSize:freeMaps > 0 ? 17. : 15. weight:UIFontWeightSemibold]
+                        range:NSMakeRange(0, buttonTitle.string.length)];
 
-    [_bannerView setNeedsLayout];
-    [_bannerView setNeedsDisplay];
+    _subscriptionBannerView.titleLabel.text = title;
+    _subscriptionBannerView.descriptionLabel.text = description;
+    [_subscriptionBannerView.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
+    _subscriptionBannerView.iconView.image = [UIImage templateImageNamed:icon];
+
+    [_subscriptionBannerView layoutSubviews];
 }
 
 - (void) resourceInstallationFailed:(NSNotification *)notification
@@ -598,10 +503,8 @@ static BOOL _lackOfResources;
     [self obtainDataAndItems];
     [self prepareContent];
     [self refreshContent:YES];
-    
-    if (_displayBanner)
-        [self updateFreeDownloadsBanner];
-    
+    [self setupSubscriptionBanner];
+
     if (_repositoryUpdating)
     {
         _repositoryUpdating = NO;
@@ -794,6 +697,7 @@ static BOOL _lackOfResources;
         _resourcesByRegions.insert(region, regionResources);
     }
 }
+
 - (void) collectSubregionsDataAndItems
 {
     _srtmDisabled = _iapHelper.srtm.disabled;
@@ -1071,6 +975,11 @@ static BOOL _lackOfResources;
     return nil;
 }
 
+- (BOOL) isNauticalScope
+{
+    return [self.region.regionId isEqualToString:_nauticalRegionId];
+}
+
 - (void) collectResourcesDataAndItems
 {
     [self collectSubregionItems:self.region];
@@ -1124,23 +1033,24 @@ static BOOL _lackOfResources;
     
     // Outdated Resources
     [_localResourceItems removeAllObjects];
-    [_outdatedResourceItems removeAllObjects];
-    for (const auto& resource : _outdatedResources)
+    _outdatedMapsCount = 0;
+    _totalOutdatedSize = 0;
+    for (const auto& outdatedResource : _outdatedResources)
     {
         OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
-                                                          thatContainsResource:resource->id];
+                                                          thatContainsResource:outdatedResource->id];
         if (!match)
             continue;
 
         OAOutdatedResourceItem *item = [[OAOutdatedResourceItem alloc] init];
-        item.resourceId = resource->id;
-        item.resourceType = resource->type;
-        item.title = [OAResourcesUIHelper titleOfResource:resource
+        item.resourceId = outdatedResource->id;
+        item.resourceType = outdatedResource->type;
+        item.title = [OAResourcesUIHelper titleOfResource:outdatedResource
                                                  inRegion:match
                                            withRegionName:YES
                                          withResourceType:NO];
-        item.resource = resource;
-        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+        item.resource = outdatedResource;
+        item.downloadTask = [self getDownloadTaskFor:outdatedResource->id.toNSString()];
         item.worldRegion = match;
 
         const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
@@ -1154,52 +1064,50 @@ static BOOL _lackOfResources;
                 [_localRegionMapItems addObject:item];
             else
                 [_localResourceItems addObject:item];
-        
-            [_outdatedResourceItems addObject:item];
+
+            _outdatedMapsCount++;
+            _totalOutdatedSize += resourceInRepository->packageSize;
         }
     }
-    [_outdatedResourceItems sortUsingComparator:self.resourceItemsComparator];
-    
+
     // Local Resources
     _liveUpdatesInstalledSize = _app.resourcesManager->changesManager->getUpdatesSize();
     
     _totalInstalledSize = 0;
-    for (const auto& resource : _localResources)
+    for (const auto& localResource : _localResources)
     {
-        //NSLog(@"=== %@", resource->id.toNSString());
-        
         OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
-                                                          thatContainsResource:resource->id];
+                                                          thatContainsResource:localResource->id];
         
-        if (!match && ![OAResourceType isMapResourceType:resource->type])
+        if (!match && ![OAResourceType isMapResourceType:localResource->type])
             continue;
         
         OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
-        item.resourceId = resource->id;
-        item.resourceType = resource->type;
+        item.resourceId = localResource->id;
+        item.resourceType = localResource->type;
         if (match)
         {
-            item.title = [OAResourcesUIHelper titleOfResource:resource
+            item.title = [OAResourcesUIHelper titleOfResource:localResource
                                                      inRegion:match
                                                withRegionName:YES
                                              withResourceType:NO];
         }
         else
         {
-            NSString *title = [OAFileNameTranslationHelper getMapName:resource->id.toNSString()];
+            NSString *title = [OAFileNameTranslationHelper getMapName:localResource->id.toNSString()];
             item.title = title;
         }
             
-        item.resource = resource;
+        item.resource = localResource;
         if (match)
-            item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-        item.size = resource->size;
-        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:resource->localPath.toNSString() error:NULL] fileModificationDate];;
+            item.downloadTask = [self getDownloadTaskFor:localResource->id.toNSString()];
+        item.size = localResource->size;
+        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];;
         item.worldRegion = match;
         NSString *localResourcePath = _app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
 
-        _totalInstalledSize += resource->size;
+        _totalInstalledSize += localResource->size;
         
         if (item.title != nil)
         {
@@ -1227,14 +1135,6 @@ static BOOL _lackOfResources;
             break;
         }
     }
-
-    NSMutableSet *regionsSet = [NSMutableSet set];
-    for (OAOutdatedResourceItem *item in _outdatedResourceItems)
-    {
-        if (item.worldRegion.regionId)
-            [regionsSet addObject:item.worldRegion];
-    }
-    _regionsWithOutdatedResources = [[regionsSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
 }
 
 - (void) prepareContent
@@ -1244,13 +1144,11 @@ static BOOL _lackOfResources;
         _lastUnusedSectionIndex = 0;
         _downloadDescriptionSection = -1;
         _extraMapsSection = -1;
-        _osmAndLiveSection = -1;
         _otherMapsSection = -1;
         _nauticalMapsSection = -1;
         _regionMapSection = -1;
-        _bannerSection = -1;
+        _subscriptionBannerSection = -1;
         _subscribeEmailSection = -1;
-        _outdatedResourcesSection = -1;
         _localResourcesSection = -1;
         _resourcesSection = -1;
         _localSqliteSection = -1;
@@ -1258,7 +1156,7 @@ static BOOL _lackOfResources;
         _freeMemorySection = -1;
         
         if (_displayBanner)
-            _bannerSection = _lastUnusedSectionIndex++;
+            _subscriptionBannerSection = _lastUnusedSectionIndex++;
         
         if (![self.region isKindOfClass:OACustomRegion.class])
             _freeMemorySection = _lastUnusedSectionIndex++;
@@ -1266,21 +1164,14 @@ static BOOL _lackOfResources;
         if (_displaySubscribeEmailView)
             _subscribeEmailSection = _lastUnusedSectionIndex++;
 
-        // Updates always go first
-        if (_currentScope == kAllResourcesScope && [_outdatedResourceItems count] > 0 && self.region == _app.worldRegion)
-            _outdatedResourcesSection = _lastUnusedSectionIndex++;
-        
         if (_currentScope == kAllResourcesScope && self.region == _app.worldRegion)
-            _osmAndLiveSection = _lastUnusedSectionIndex++;
-        
+            _localResourcesSection = _lastUnusedSectionIndex++;
+
         if (_currentScope == kAllResourcesScope && _downloadDescriptionInfo)
             _downloadDescriptionSection = _lastUnusedSectionIndex++;
         
         if (_currentScope == kAllResourcesScope && _customRegions.count > 0 && (self.region == _app.worldRegion || [self.region isKindOfClass:OACustomRegion.class]))
             _extraMapsSection = _lastUnusedSectionIndex++;
-
-        if (_currentScope == kAllResourcesScope && ([_localResourceItems count] > 0 || [_localRegionMapItems count] > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0) && self.region == _app.worldRegion)
-            _localResourcesSection = _lastUnusedSectionIndex++;
 
         if (self.region && self.region != _app.worldRegion && _currentScope == kAllResourcesScope)
         {
@@ -1324,9 +1215,15 @@ static BOOL _lackOfResources;
         {
             if (update)
                 [self updateSearchResults];
+            else
+            {
+                [self.tableView reloadData];
+            }
+        }
+        else
+        {
             [self.tableView reloadData];
         }
-        [self.tableView reloadData];
     }
 }
 
@@ -1340,7 +1237,10 @@ static BOOL _lackOfResources;
             {
                 if ([_searchResults[i] isKindOfClass:[OAWorldRegion class]])
                     continue;
-                OAResourceItem *item = _searchResults[i];
+
+                id searchResult = _searchResults[i];
+                OAResourceItem *item = (OAResourceItem *) ([searchResult isKindOfClass:OASearchResult.class] ? ((OASearchResult *) searchResult).relatedObject : searchResult);
+
                 if ([[item.downloadTask key] isEqualToString:downloadTaskKey])
                 {
                     [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
@@ -1401,6 +1301,11 @@ static BOOL _lackOfResources;
     [UIView animateWithDuration:.2 animations:^{
         self.tableView.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
     }];
+}
+
+- (BOOL)hasLocalResources
+{
+    return _localResourceItems.count > 0 || _localRegionMapItems.count > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0;
 }
 
 - (NSMutableArray *) getResourceItems
@@ -1494,110 +1399,171 @@ static BOOL _lackOfResources;
 
         // Assemble all regions all togather
         NSArray *regions = [regions_startsWith arrayByAddingObjectsFromArray:regions_onlyContains];
-        NSMutableArray *results = [NSMutableArray array];
-        for (OAWorldRegion *region in regions)
-        {
-            if (region.subregions.count > 0)
-                [results addObject:region];
+        NSArray *resultByContains = [self createSearchResult:regions byMapRegion:NO];
+        _searchResults = resultByContains;
+        [_tableView reloadData];
 
-            // Get all resources that are direct children of current region
-            const auto citRegionResources = _resourcesByRegions.constFind(region);
-            if (citRegionResources == _resourcesByRegions.cend())
-                continue;
-            const auto& regionResources = *citRegionResources;
-
-            // Create items for each resource found
-            NSMutableArray *resourceItems = [NSMutableArray array];
-            for (const auto& resource_ : regionResources.allResources)
-            {
-                if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
-                {
-                    if (regionResources.outdatedResources.contains(resource->id))
-                    {
-                        OAOutdatedResourceItem *item = [[OAOutdatedResourceItem alloc] init];
-                        item.resourceId = resource->id;
-                        item.resourceType = resource->type;
-                        item.title = [OAResourcesUIHelper titleOfResource:resource_
-                                                                 inRegion:region
-                                                           withRegionName:YES
-                                                         withResourceType:NO];
-                        item.resource = resource;
-                        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-                        item.worldRegion = region;
-
-                        const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
-                        item.size = resourceInRepository->size;
-                        item.sizePkg = resourceInRepository->packageSize;
-                        item.date = [NSDate dateWithTimeIntervalSince1970:(resourceInRepository->timestamp / 1000)];
-
-                        if (item.title == nil)
-                            continue;
-
-                        [resourceItems addObject:item];
-                    }
-                    else
-                    {
-                        OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
-                        item.resourceId = resource->id;
-                        item.resourceType = resource->type;
-                        item.title = [OAResourcesUIHelper titleOfResource:resource_
-                                                                 inRegion:region
-                                                           withRegionName:YES
-                                                         withResourceType:NO];
-                        item.resource = resource;
-                        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-                        item.worldRegion = region;
-                        NSString *localResourcePath = _app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
-                        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
-
-                        const auto localResource = _app.resourcesManager->getLocalResource(resource->id);
-                        item.resource = localResource;
-                        item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
-
-                        item.size = resource->size;
-
-                        if (item.title == nil)
-                            continue;
-
-                        [resourceItems addObject:item];
-                    }
-                }
-                else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
-                {
-                    OARepositoryResourceItem *item = [[OARepositoryResourceItem alloc] init];
-                    item.resourceId = resource->id;
-                    item.resourceType = resource->type;
-                    item.title = [OAResourcesUIHelper titleOfResource:resource_
-                                                             inRegion:region
-                                                       withRegionName:YES
-                                                     withResourceType:NO];
-                    item.resource = resource;
-                    item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-                    item.worldRegion = region;
-                    item.size = resource->size;
-                    item.sizePkg = resource->packageSize;
-                    item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
-
-                    if (item.title == nil)
-                        continue;
-
-                    [resourceItems addObject:item];
-                }
-            }
-
-            if (resourceItems.count > 1)
-            {
-                if (![results containsObject:region])
-                    [results addObject:region];
-            }
-            else
-            {
-                [results addObjectsFromArray:resourceItems];
-            }
-        }
-        
-        _searchResults = results;
+        [OAQuickSearchHelper searchCities:searchString
+                           searchLocation:[[CLLocation alloc] initWithLatitude:_app.worldRegion.bboxTopLeft.latitude longitude:_app.worldRegion.bboxBottomRight.longitude]
+                             allowedTypes:@[@"city", @"town"]
+                                cityLimit:kSearchCityLimit
+                                     view:self.view
+                               onComplete:^(NSMutableArray *amenities)
+                               {
+                                   NSMutableArray *regions_byCity = [NSMutableArray array];
+                                   for (OASearchResult *amenity in amenities)
+                                   {
+                                       OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
+                                       if (region)
+                                       {
+                                           NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
+                                           if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
+                                           {
+                                               amenity.relatedObject = searchResult.firstObject;
+                                               [regions_byCity addObject:amenity];
+                                           }
+                                           else
+                                           {
+                                               [regions_byCity addObjectsFromArray:searchResult];
+                                           }
+                                       }
+                                   }
+                                   if (regions_byCity.count > 0)
+                                   {
+                                       _searchResults = [resultByContains arrayByAddingObjectsFromArray:regions_byCity];
+                                       [_tableView reloadData];
+                                   }
+                               }
+        ];
     }
+}
+
+- (OAResourceItem *)createResourceItemResult:(std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource_
+                                     region:(OAWorldRegion *)region
+                            regionResources:(RegionResources)regionResources
+{
+    if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
+    {
+        if (regionResources.outdatedResources.contains(resource->id))
+        {
+            OAOutdatedResourceItem *item = [[OAOutdatedResourceItem alloc] init];
+            item.resourceId = resource->id;
+            item.resourceType = resource->type;
+            item.title = [OAResourcesUIHelper titleOfResource:resource_
+                                                     inRegion:region
+                                               withRegionName:YES
+                                             withResourceType:NO];
+            item.resource = resource;
+            item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+            item.worldRegion = region;
+
+            const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
+            item.size = resourceInRepository->size;
+            item.sizePkg = resourceInRepository->packageSize;
+            item.date = [NSDate dateWithTimeIntervalSince1970:(resourceInRepository->timestamp / 1000)];
+
+            if (item.title == nil)
+                return nil;
+
+            return item;
+        }
+        else
+        {
+            OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
+            item.resourceId = resource->id;
+            item.resourceType = resource->type;
+            item.title = [OAResourcesUIHelper titleOfResource:resource_
+                                                     inRegion:region
+                                               withRegionName:YES
+                                             withResourceType:NO];
+            item.resource = resource;
+            item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+            item.worldRegion = region;
+            auto localResource = _app.resourcesManager->getLocalResource(item.resourceId);
+            if (localResource != nullptr)
+            {
+                NSString *localResourcePath = localResource->localPath.toNSString();
+                item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
+                item.resource = localResource;
+                item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
+            }
+
+            item.size = resource->size;
+
+            if (item.title == nil)
+                return nil;
+
+            return item;
+        }
+    }
+    else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
+    {
+        OARepositoryResourceItem *item = [[OARepositoryResourceItem alloc] init];
+        item.resourceId = resource->id;
+        item.resourceType = resource->type;
+        item.title = [OAResourcesUIHelper titleOfResource:resource_
+                                                 inRegion:region
+                                           withRegionName:YES
+                                         withResourceType:NO];
+        item.resource = resource;
+        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+        item.worldRegion = region;
+        item.size = resource->size;
+        item.sizePkg = resource->packageSize;
+        item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
+
+        if (item.title == nil)
+            return nil;
+
+        return item;
+    }
+
+    return nil;
+}
+
+- (NSArray *)createSearchResult:(NSArray *)regions byMapRegion:(BOOL)byMapRegion
+{
+    NSMutableArray *results = [NSMutableArray array];
+    for (OAWorldRegion *region in regions)
+    {
+        if (region.subregions.count > 0)
+            [results addObject:region];
+
+        // Get all resources that are direct children of current region
+        const auto citRegionResources = _resourcesByRegions.constFind(region);
+        if (citRegionResources == _resourcesByRegions.cend())
+            continue;
+        const auto& regionResources = *citRegionResources;
+
+        // Create items for each resource found
+        NSMutableArray *resourceItems = [NSMutableArray array];
+        for (const auto& resource_ : regionResources.allResources)
+        {
+            OAResourceItem *item = [self createResourceItemResult:resource_ region:region regionResources:regionResources];
+            if (item)
+                [resourceItems addObject:item];
+        }
+
+        if (resourceItems.count > 1)
+        {
+            if (byMapRegion)
+            {
+                for (OAResourceItem *item in resourceItems)
+                {
+                    if (item.resourceType == OsmAndResourceType::MapRegion)
+                        [results addObject:item];
+                }
+            }
+
+            if ((!byMapRegion && ![results containsObject:region]) || results.count == 0)
+                [results addObject:region];
+        }
+        else
+        {
+            [results addObjectsFromArray:resourceItems];
+        }
+    }
+    return results;
 }
 
 - (void) showNoInternetAlertForCatalogUpdate
@@ -1617,6 +1583,7 @@ static BOOL _lackOfResources;
                                 [_app startRepositoryUpdateAsync:NO];
                             }
                                 completionBlock:^{
+                                    [self updateContent];
                                     [_app.worldRegion buildResourceGroupItem];
                                     _updateButton.enabled = YES;
                                     if (self.openFromSplash)
@@ -1731,8 +1698,8 @@ static BOOL _lackOfResources;
     if ([self isFiltering])
         return nil;
 
-    if (section == _bannerSection)
-        return _bannerView;
+    if (section == _subscriptionBannerSection)
+        return _subscriptionBannerView;
 
     if (section == _freeMemorySection)
         return _freeMemoryView;
@@ -1748,8 +1715,8 @@ static BOOL _lackOfResources;
     if ([self isFiltering] || (_downloadDescriptionInfo && section == _downloadDescriptionSection))
         return 0.0;
 
-    if (section == _bannerSection)
-        return _bannerView.bounds.size.height;
+    if (section == _subscriptionBannerSection)
+        return _subscriptionBannerView.bounds.size.height;
 
     if (section == _freeMemorySection)
         return _freeMemoryView.bounds.size.height;
@@ -1773,21 +1740,17 @@ static BOOL _lackOfResources;
 
     NSInteger sectionsCount = 0;
 
-    if (_bannerSection >= 0)
+    if (_subscriptionBannerSection >= 0)
         sectionsCount++;
     if (_subscribeEmailSection >= 0)
         sectionsCount++;
     if (_freeMemorySection >= 0)
-        sectionsCount++;
-    if (_osmAndLiveSection >= 0)
         sectionsCount++;
     if (_extraMapsSection >= 0)
         sectionsCount++;
     if (_downloadDescriptionSection >= 0)
         sectionsCount++;
     if (_localResourcesSection >= 0)
-        sectionsCount++;
-    if (_outdatedResourcesSection >= 0)
         sectionsCount++;
     if (_resourcesSection >= 0)
         sectionsCount++;
@@ -1806,14 +1769,10 @@ static BOOL _lackOfResources;
     if ([self isFiltering])
         return [_searchResults count];
 
-    if (section == _bannerSection)
+    if (section == _subscriptionBannerSection)
         return 0;
     if (section == _freeMemorySection)
         return 0;
-    if (section == _outdatedResourcesSection)
-        return 1;
-    if (section == _osmAndLiveSection)
-        return 1;
     if (section == _extraMapsSection)
         return _customRegions.count;
     if (section == _downloadDescriptionSection)
@@ -1821,7 +1780,7 @@ static BOOL _lackOfResources;
     if (section == _resourcesSection)
         return [[self getResourceItems] count];
     if (section == _localResourcesSection)
-        return 1;
+        return ([self hasLocalResources]) ? 2 : 1;
     if (section == _regionMapSection)
         return [[self getRegionMapItems] count];
     if (section == _localSqliteSection)
@@ -1854,17 +1813,11 @@ static BOOL _lackOfResources;
             else
                 return OALocalizedString(@"res_mapsres");
         }
-        
-        if (section == _outdatedResourcesSection)
-            return OALocalizedString(@"res_updates");
-        if (section == _osmAndLiveSection)
-            return OALocalizedString(@"osmand_live_title");
+
         if (section == _extraMapsSection)
             return OALocalizedString(@"extra_maps");
         if (section == _resourcesSection)
-            return OALocalizedString(@"res_worldwide");
-        if (section == _localResourcesSection)
-            return OALocalizedString(@"download_tab_local");
+            return OALocalizedString([self isNauticalScope] ? @"region_nautical" : @"res_worldwide");
         if (section == _regionMapSection)
             return OALocalizedString(@"res_world_map");
         if (section == _otherMapsSection)
@@ -1875,16 +1828,10 @@ static BOOL _lackOfResources;
         return nil;
     }
 
-    if (section == _outdatedResourcesSection)
-        return OALocalizedString(@"res_updates");
-    if (section == _osmAndLiveSection)
-        return OALocalizedString(@"osmand_live_title");
     if (section == _extraMapsSection)
         return OALocalizedString(@"extra_maps");
     if (section == _resourcesSection)
-        return OALocalizedString(@"res_mapsres");
-    if (section == _localResourcesSection)
-        return OALocalizedString(@"download_tab_local");
+        return OALocalizedString([self isNauticalScope] ? @"region_nautical" : @"res_mapsres");
     if (section == _regionMapSection)
         return OALocalizedString(@"res_region_map");
     if (section == _otherMapsSection)
@@ -1909,7 +1856,7 @@ static BOOL _lackOfResources;
         
         if (![item_ isKindOfClass:[OAWorldRegion class]])
         {
-            OAResourceItem *item = (OAResourceItem *) item_;
+            OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
             if (item.downloadTask != nil)
                 cellTypeId = downloadingResourceCell;
         }
@@ -1952,7 +1899,7 @@ static BOOL _lackOfResources;
     
     if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
-        OAResourceItem *item = (OAResourceItem *) item_;
+        OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
 
         float progressCompleted = item.downloadTask.progressCompleted;
@@ -1985,7 +1932,6 @@ static BOOL _lackOfResources;
     static NSString *const descriptionButtonIconCell = @"OAMultiIconTextDescCell";
     static NSString *const subregionCell = @"subregionCell";
     static NSString *const outdatedResourceCell = @"outdatedResourceCell";
-    static NSString *const osmAndLiveCell = @"osmAndLiveCell";
     static NSString *const localResourceCell = @"localResourceCell";
     static NSString *const repositoryResourceCell = @"repositoryResourceCell";
     static NSString *const downloadingResourceCell = @"downloadingResourceCell";
@@ -2013,9 +1959,9 @@ static BOOL _lackOfResources;
             if (item.superregion != nil)
                 subtitle = item.superregion.name;
         }
-        else if ([item_ isKindOfClass:[OAResourceItem class]])
+        else if ([item_ isKindOfClass:[OAResourceItem class]] || [item_ isKindOfClass:[OASearchResult class]])
         {
-            OAResourceItem *item = (OAResourceItem *) item_;
+            OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
 
             if ([item isKindOfClass:[OAMultipleResourceItem class]])
             {
@@ -2048,8 +1994,11 @@ static BOOL _lackOfResources;
                 cellTypeId = repositoryResourceCell;
             }
 
-            title = item.title;
-            if (item.worldRegion.superregion)
+            BOOL isSearchResult = [item_ isKindOfClass:[OASearchResult class]];
+            title = isSearchResult ? ((OASearchResult *) item_).localeName : item.title;
+            if (isSearchResult)
+                subtitle = item.title;
+            else if (item.worldRegion.superregion)
                 subtitle = item.worldRegion.superregion.name;
             else
                 subtitle = item.worldRegion.name;
@@ -2057,25 +2006,30 @@ static BOOL _lackOfResources;
     }
     else
     {
-        if (indexPath.section == _outdatedResourcesSection && _outdatedResourcesSection >= 0)
+        if (indexPath.section == _localResourcesSection && _localResourcesSection >= 0)
         {
-            cellTypeId = outdatedResourcesSubmenuCell;
-            title = OALocalizedString(@"res_updates_avail");
+            BOOL isLocalCell = indexPath.row == 0 && [self hasLocalResources];
+            cellTypeId = isLocalCell ? installedResourcesSubmenuCell : outdatedResourcesSubmenuCell;
+            title = OALocalizedString(isLocalCell ? @"download_tab_local" : @"res_updates");
 
-            NSArray *regionsNames = [_regionsWithOutdatedResources valueForKey:NSStringFromSelector(@selector(name))];
-            subtitle = [_arrFmt stringFromArray:regionsNames];
-        }
-        else if (indexPath.section == _localResourcesSection && _localResourcesSection >= 0)
-        {
-            cellTypeId = installedResourcesSubmenuCell;
-            title = OALocalizedString(@"download_tab_local");
-            
-            subtitle = [NSString stringWithFormat:@"%d %@ - %@", (int)(_localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count + _localOnlineTileSources.count), OALocalizedString(@"res_maps_inst"), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
-        }
-        else if (indexPath.section == _osmAndLiveSection)
-        {
-            cellTypeId = osmAndLiveCell;
-            title = OALocalizedString(@"osmand_live_title");
+            if (isLocalCell)
+            {
+                subtitle = [NSString stringWithFormat:@"%lu %@ - %@",
+                        _localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count + _localOnlineTileSources.count,
+                        OALocalizedString(@"res_maps_inst"),
+                        [NSByteCountFormatter stringFromByteCount:_totalInstalledSize
+                                                       countStyle:NSByteCountFormatterCountStyleFile]];
+            }
+            else
+            {
+                subtitle = _outdatedMapsCount > 0
+                        ? [NSString stringWithFormat:@"%li %@ - %@",
+                                _outdatedMapsCount,
+                                OALocalizedString(@"res_maps_inst"),
+                                [NSByteCountFormatter stringFromByteCount:_totalOutdatedSize
+                                                               countStyle:NSByteCountFormatterCountStyleFile]]
+                        : OALocalizedString(@"all_maps_is_up_to_date");
+            }
         }
         else if (indexPath.section == _extraMapsSection)
         {
@@ -2183,6 +2137,16 @@ static BOOL _lackOfResources;
                 }
                 if (item.resourceType == OsmAndResourceType::WikiMapRegion
                     && ![_iapHelper.wiki isActive] && ![self.region isInPurchasedArea])
+                {
+                    disabled = YES;
+                    item.disabled = disabled;
+                }
+                if (item.resourceType == OsmAndResourceType::MapRegion && [self isNauticalScope] && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
+                {
+                    disabled = YES;
+                    item.disabled = disabled;
+                }
+                if (item.resourceType == OsmAndResourceType::DepthContourRegion && (![OAIAPHelper isDepthContoursPurchased] || ![OAPlugin isEnabled:OANauticalMapsPlugin.class]))
                 {
                     disabled = YES;
                     item.disabled = disabled;
@@ -2406,7 +2370,7 @@ static BOOL _lackOfResources;
             cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
-            UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_import"];
+            UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -2463,12 +2427,6 @@ static BOOL _lackOfResources;
     // Try to allocate cell from own table, since it may be configured there
     if (cell == nil)
         cell = [self.tableView dequeueReusableCellWithIdentifier:cellTypeId];
-
-    if ([cellTypeId isEqualToString:outdatedResourcesSubmenuCell])
-    {
-        [_updateCouneView setText:[NSString stringWithFormat:@"%d", (int)_outdatedResourceItems.count]];
-        cell.accessoryView = _updateCouneView;
-    }
 
     // Fill cell content
     
@@ -2538,9 +2496,9 @@ static BOOL _lackOfResources;
         cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         cell.imageView.tintColor = color;
     }
-    else if ([item_ isKindOfClass:OAResourceItem.class])
+    else if ([item_ isKindOfClass:OAResourceItem.class] || [item_ isKindOfClass:OASearchResult.class])
     {
-        OAResourceItem *item = (OAResourceItem *) item_;
+        OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? UIColorFromRGB(resource_installed_icon_color) : UIColorFromRGB(color_tint_gray);
         cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         cell.imageView.tintColor = color;
@@ -2606,7 +2564,10 @@ static BOOL _lackOfResources;
     }
     else if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
-        OAResourceItem *item = [item_ isKindOfClass:OAMultipleResourceItem.class] && downloadingMultipleItem ? downloadingMultipleItem : (OAResourceItem *) item_;
+        OAResourceItem *item = [item_ isKindOfClass:OAMultipleResourceItem.class] && downloadingMultipleItem
+                ? downloadingMultipleItem
+                : (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
+
         FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
 
         float progressCompleted = item.downloadTask.progressCompleted;
@@ -2724,6 +2685,9 @@ static BOOL _lackOfResources;
 
     if (item)
     {
+        if ([item isKindOfClass:OASearchResult.class])
+            item = ((OASearchResult *) item).relatedObject;
+
         if ([item isKindOfClass:[OAMultipleResourceItem class]])
         {
             [self onItemClicked:item];
@@ -2759,7 +2723,7 @@ static BOOL _lackOfResources;
     if (item == nil)
         return NO;
 
-    if (![item isKindOfClass:[OALocalResourceItem class]])
+    if (!([item isKindOfClass:[OALocalResourceItem class]] || [item isKindOfClass:[OASearchResult class]] && [((OASearchResult *) item).relatedObject isKindOfClass:[OALocalResourceItem class]]))
         return NO;
 
     return YES;
@@ -2776,7 +2740,7 @@ static BOOL _lackOfResources;
     if (item == nil)
         return UITableViewCellEditingStyleNone;
 
-    if (![item isKindOfClass:[OALocalResourceItem class]])
+    if (!([item isKindOfClass:[OALocalResourceItem class]] || [item isKindOfClass:[OASearchResult class]] && [((OASearchResult *) item).relatedObject isKindOfClass:[OALocalResourceItem class]]))
         return UITableViewCellEditingStyleNone;
 
     return UITableViewCellEditingStyleDelete;
@@ -2792,6 +2756,9 @@ static BOOL _lackOfResources;
 
     if (item == nil)
         return;
+
+    if ([item isKindOfClass:OASearchResult.class])
+        item = ((OASearchResult *) item).relatedObject;
 
     if ([item isKindOfClass:[OALocalResourceItem class]])
     {
@@ -2899,7 +2866,6 @@ static BOOL _lackOfResources;
     _lastSearchScope = _searchController.searchBar.selectedScopeButtonIndex;
     [self performSearchForSearchString:_lastSearchString
                         andSearchScope:_lastSearchScope];
-    [_tableView reloadData];
 }
 
 - (BOOL) isFiltering
@@ -3018,8 +2984,6 @@ static BOOL _lackOfResources;
     {
         OAOutdatedResourcesViewController *outdatedResourcesViewController = [segue destinationViewController];
         outdatedResourcesViewController.openFromSplash = _openFromSplash;
-        [outdatedResourcesViewController setupWithRegion:self.region
-                                        andOutdatedItems:_outdatedResourceItems];
     }
     else if ([segue.identifier isEqualToString:kOpenInstalledResourcesSegue])
     {
@@ -3039,7 +3003,8 @@ static BOOL _lackOfResources;
         OALocalResourceItem *item = nil;
         if ([self isFiltering])
         {
-            item = _searchResults[cellPath.row];
+            id searchResult = _searchResults[cellPath.row];
+            item = (OALocalResourceItem *) ([searchResult isKindOfClass:OASearchResult.class] ? ((OASearchResult *) searchResult).relatedObject : searchResult);
         }
         else
         {
@@ -3154,39 +3119,29 @@ static BOOL _lackOfResources;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-#pragma mark OABannerViewDelegate
+#pragma mark - OASubscriptionBannerCardViewDelegate
 
-- (void) bannerButtonPressed
+- (void) onButtonPressed
 {
-    [OAAnalyticsHelper logEvent:@"subscribe_email_pressed"];
-
-    if (self.region == _app.worldRegion && !_displayBannerPurchaseAllMaps)
-    {
-        [OAChoosePlanHelper showChoosePlanScreenWithProduct:_iapHelper.allWorld navController:self.navigationController];
-        /*
-        _displayBannerPurchaseAllMaps = YES;
-        [self updateFreeDownloadsBanner];
-        [_tableView beginUpdates];
-        [self updateBannerDimensions:DeviceScreenWidth];
-        [_tableView endUpdates];
-        */
-    }
-    else if (_purchaseInAppId)
-    {
-        OAProduct *product = [_iapHelper product:_purchaseInAppId];
-        if (product)
-            [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
-    }
+    [OAAnalyticsHelper logEvent:@"subscription_pressed"];
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.UNLIMITED_MAP_DOWNLOADS navController:self.navigationController];
 }
 
 - (void) productsRequested:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateFreeDownloadsBanner];
+        [self setupSubscriptionBanner];
     });
 }
 
 - (void) productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateContentIfNeeded];
+    });
+}
+
+- (void) productRestored:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateContentIfNeeded];

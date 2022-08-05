@@ -5,6 +5,8 @@
 //  Created by Alexey Kulish on 23/11/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+// OsmAnd/src/net/osmand/plus/OsmAndLocationSimulation.java
+// git revision af522f8c5c428aa6cacbd8ce1e44dfac779b6458
 
 #import "OALocationSimulation.h"
 #import "OsmAndApp.h"
@@ -18,6 +20,12 @@
 
 #define PRECISION_1_M 0.00001f
 #define DEVIATION_M 6
+#define MOTORWAY_MAX_SPEED 120;
+#define TRUNK_MAX_SPEED 90;
+#define PRIMARY_MAX_SPEED 60;
+#define SECONDARY_MAX_SPEED 50;
+#define LIVING_SPTREET_MAX_SPEED 15;
+#define DEFAULT_MAX_SPEED 40;
 
 @implementation OALocationSimulation
 {
@@ -115,7 +123,7 @@
                     }
                     else
                     {
-                        result = [self useDefaultSimulation:current directions:directions meters:meters];
+                        result = [self useDefaultSimulation:current directions:directions meters:meters intervalTime:intervalTime coeff:coeff isRealistic:realistic];
                     }
                     current = (OASimulatedLocation *)result[0];
                     meters = ((NSNumber *)result[1]).floatValue;
@@ -144,6 +152,7 @@
             if (realistic && current.isTrafficLight && stopDelayCount == 0)
             {
                 stopDelayCount = 5;
+                speed = 0;
                 current = [self removeBearing:current];
             }
             else if (stopDelayCount > 0)
@@ -201,7 +210,7 @@
     return [NSArray arrayWithArray:result];
 }
 
-- (NSArray *)useDefaultSimulation:(OASimulatedLocation *)current directions:(NSMutableArray<OASimulatedLocation *> *)directions meters:(float)meters
+- (NSArray *)useDefaultSimulation:(OASimulatedLocation *)current directions:(NSMutableArray<OASimulatedLocation *> *)directions meters:(float)meters intervalTime:(float)intervalTime coeff:(float)coeff isRealistic:(BOOL)isRealistic
 {
     NSMutableArray *result = [NSMutableArray array];
     if ([current distanceFromLocation:directions[0]] > meters)
@@ -213,6 +222,13 @@
         current = [[OASimulatedLocation alloc] initWithSimulatedLocation:directions[0]];
         [directions removeObjectAtIndex:0];
         meters = [self metersToGoInFiveSteps:directions current:current];  
+    }
+
+    if (isRealistic)
+    {
+        float limit = [self getMetersLimitForPoint:current intervalTime:intervalTime coeff:coeff];
+        if (meters > limit)
+            meters = limit;
     }
     
     [result addObject:current];
@@ -242,9 +258,62 @@
     return directions.count == 0 ? 20.0f : MAX(20.0f, [current distanceFromLocation:directions[0]] / 2);
 }
 
+- (float) getMetersLimitForPoint:(OASimulatedLocation *)point intervalTime:(float)intervalTime coeff:(float)coeff
+{
+    float maxSpeed = [self getMaxSpeedForRoadType:[point getHighwayType]] / 3.6;
+    float speedLimit = [point getSpeedLimit];
+    if (speedLimit > 0 && maxSpeed > speedLimit)
+        maxSpeed = speedLimit;
+    return maxSpeed * intervalTime / coeff;
+}
+
+- (float) getMaxSpeedForRoadType:(NSString *)roadType
+{
+    if ([roadType isEqualToString:@"motorway"])
+    {
+        return MOTORWAY_MAX_SPEED;
+    }
+    else if ([roadType isEqualToString:@"trunk"])
+    {
+        return TRUNK_MAX_SPEED;
+    }
+    else if ([roadType isEqualToString:@"primary"])
+    {
+        return PRIMARY_MAX_SPEED;
+    }
+    else if ([roadType isEqualToString:@"secondary"])
+    {
+        return SECONDARY_MAX_SPEED;
+    }
+    else if ([roadType isEqualToString:@"living_street"] || [roadType isEqualToString:@"residential"])
+    {
+        return LIVING_SPTREET_MAX_SPEED;
+    }
+    else
+    {
+        return DEFAULT_MAX_SPEED;
+    }
+}
+
 - (void) stop
 {
     _routeAnimation = nil;
+    [_app.simulateRoutingObservable notifyEvent];
+}
+
+@end
+
+
+@implementation OALocation
+
+- (instancetype)initWithProvider:(NSString *)provider location:(CLLocation *)location
+{
+    self = [super initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude];
+    if (self)
+    {
+        _provider = provider;
+    }
+    return self;
 }
 
 @end
@@ -253,6 +322,8 @@
 @implementation OASimulatedLocation
 {
     BOOL _trafficLight;
+    NSString *_highwayType;
+    float _speedLimit;
 }
 
 - (instancetype)initWithSimulatedLocation:(OASimulatedLocation *)location
@@ -261,6 +332,8 @@
     if (self)
     {
         _trafficLight = [location isTrafficLight];
+        _highwayType = [location getHighwayType];
+        _speedLimit = [location getSpeedLimit];
     }
     return self;
 }
@@ -271,6 +344,8 @@
     if (self)
     {
         _trafficLight = NO;
+        _highwayType = @"";
+        _speedLimit = 0;
     }
     return self;
 }
@@ -288,6 +363,26 @@
 - (CLLocationDistance) distanceFromLocation:(OASimulatedLocation *)location
 {
     return [super distanceFromLocation:((CLLocation *)location)];
+}
+
+- (NSString *)getHighwayType
+{
+    return _highwayType;
+}
+
+- (void)setHighwayType:(NSString *)highwayType
+{
+    _highwayType = highwayType;
+}
+
+- (float)getSpeedLimit
+{
+    return _speedLimit;
+}
+
+- (void)setSpeedLimit:(float)speedLimit
+{
+    _speedLimit = speedLimit;
 }
 
 @end

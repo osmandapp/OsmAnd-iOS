@@ -573,6 +573,15 @@
     return availableWikiLocales;
 }
 
+- (NSString *) getAllLanguagesTranslationSuffix
+{
+    // TODO: sync poi code with Android
+//    if (poiTranslator != null) {
+//        return poiTranslator.getAllLanguagesTranslationSuffix();
+//    }
+    return @"all languages";
+}
+
 - (NSArray<OAPOIBaseType *> *) getTopVisibleFilters
 {
     NSMutableArray<OAPOIBaseType *> *lf = [NSMutableArray array];

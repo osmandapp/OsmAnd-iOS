@@ -27,7 +27,22 @@
 
 #define kSimMinSpeed 5 / 3.6f
 
-@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration;
+@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
+
+typedef NS_ENUM(NSInteger, EOACompassMode)
+{
+    EOACompassVisible = 0,
+    EOACompassHidden,
+    EOACompassRotated
+};
+
+@interface OACompassMode : NSObject
+
++ (NSString *) getTitle:(EOACompassMode)cm;
++ (NSString *) getDescription:(EOACompassMode)cm;
++ (NSString *) getIconName:(EOACompassMode)cm;
+
+@end
 
 typedef NS_ENUM(NSInteger, EOARouteService)
 {
@@ -361,6 +376,17 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @end
 
+@interface OACommonSubscriptionState : OACommonPreference
+
++ (instancetype) withKey:(NSString *)key defValue:(OASubscriptionState *)defValue;
+
+- (OASubscriptionState *) get;
+- (OASubscriptionState *) get:(OAApplicationMode *)mode;
+- (void) set:(OASubscriptionState *)state;
+- (void) set:(OASubscriptionState *)state mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OACommonMapSource : OACommonPreference
 
 + (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue;
@@ -677,16 +703,15 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *billingHideUserName;
 @property (nonatomic) OACommonBoolean *billingPurchaseTokenSent;
 @property (nonatomic) OACommonString *billingPurchaseTokensSent;
-@property (nonatomic) OACommonDouble *liveUpdatesPurchaseCancelledTime;
 @property (nonatomic) OACommonBoolean *liveUpdatesPurchaseCancelledFirstDlgShown;
 @property (nonatomic) OACommonBoolean *liveUpdatesPurchaseCancelledSecondDlgShown;
 @property (nonatomic) OACommonBoolean *fullVersionPurchased;
 @property (nonatomic) OACommonBoolean *depthContoursPurchased;
 @property (nonatomic) OACommonBoolean *contourLinesPurchased;
+@property (nonatomic) OACommonBoolean *wikipediaPurchased;
 @property (nonatomic) OACommonBoolean *emailSubscribed;
 @property (nonatomic) OACommonBoolean *osmandProPurchased;
 @property (nonatomic) OACommonBoolean *osmandMapsPurchased;
-@property (nonatomic, assign) BOOL displayDonationSettings; //global ?
 @property (nonatomic) NSDate* lastReceiptValidationDate; //global ?
 @property (nonatomic, assign) BOOL eligibleForIntroductoryPrice; //global ?
 @property (nonatomic, assign) BOOL eligibleForSubscriptionOffer; //global ?
@@ -728,6 +753,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *settingOsmAndLiveEnabled;
 @property (nonatomic) OACommonInteger *liveUpdatesRetries;
 
+@property (nonatomic) OACommonBoolean *animateMyLocation;
+
 - (OACommonBoolean *)getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
 - (OACommonString *)getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
 
@@ -740,6 +767,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *isCarPlayModeDefault;
 @property (nonatomic) OAApplicationMode *lastRoutingApplicationMode;
 @property (nonatomic) OACommonInteger *rotateMap;
+@property (nonatomic) OACommonInteger *compassMode;
 
 // Application mode related settings
 @property (nonatomic) OACommonString *profileIconName;
@@ -757,6 +785,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *routerService;
 
 @property (nonatomic) OACommonString *routingProfile;
+@property (nonatomic) OACommonString *derivedProfile;
 
 @property (nonatomic) OACommonString *customAppModes;
 
@@ -771,6 +800,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;
+@property (nonatomic) OACommonBoolean *forcePrivateAccessRoutingAsked;
 @property (nonatomic) OACommonBoolean *fastRouteMode;
 @property (assign, nonatomic) BOOL disableComplexRouting;
 @property (nonatomic) OACommonBoolean *followTheRoute;
@@ -780,6 +810,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *useIntermediatePointsNavigation;
 @property (nonatomic) OACommonBoolean *disableOffrouteRecalc;
 @property (nonatomic) OACommonBoolean *disableWrongDirectionRecalc;
+@property (nonatomic) OACommonBoolean *hazmatTransportingEnabled;
 @property (nonatomic) OACommonBoolean *gpxRouteCalcOsmandParts;
 @property (nonatomic) OACommonBoolean *gpxCalculateRtept;
 @property (nonatomic) OACommonBoolean *gpxRouteCalc;
@@ -841,6 +872,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (assign, nonatomic) BOOL simulateNavigation;
 @property (nonatomic) NSString *simulateNavigationMode;
 @property (assign, nonatomic) float simulateNavigationSpeed;
+@property (nonatomic) NSString *simulateNavigationGpxTrack;
+@property (nonatomic) NSString *simulateNavigationGpxTrackSpeedMode;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
 @property (nonatomic) OACommonRulerWidgetMode *rulerMode;
@@ -928,6 +961,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (void)setProfilePreference:(NSString *)value key:(NSString *)key;
 
 - (NSMapTable<NSString *, OACommonPreference *> *)getRegisteredPreferences;
+- (NSMapTable<NSString *, OACommonPreference *> *)getGlobalPreferences;
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key;
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key;
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
@@ -991,10 +1025,13 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *backupAccessTokenUpdateTime;
 
 @property (nonatomic) OACommonString *backupPromocode;
-@property (nonatomic) OACommonBoolean *backupPromocodeActive;
-@property (nonatomic) OACommonLong *backupPromocodeStartTime;
-@property (nonatomic) OACommonLong *backupPromocodeExpireTime;
-@property (nonatomic) OACommonInteger *backupPromocodeState;
+@property (nonatomic) OACommonBoolean *backupPurchaseActive;
+@property (nonatomic) OACommonLong *backupPurchaseStartTime;
+@property (nonatomic) OACommonLong *backupPurchaseExpireTime;
+@property (nonatomic) OACommonSubscriptionState *backupPurchaseState;
+@property (nonatomic) OACommonInteger *proSubscriptionOrigin;
+
+@property (nonatomic) OACommonString *purchasedIdentifiers;
 
 @property (nonatomic) OACommonLong *favoritesLastUploadedTime;
 @property (nonatomic) OACommonLong *backupLastUploadedTime;

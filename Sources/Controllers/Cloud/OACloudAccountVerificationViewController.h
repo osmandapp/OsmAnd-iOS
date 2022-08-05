@@ -7,9 +7,10 @@
 //
 
 #import "OACloudAccountBaseViewController.h"
+#import "OACloudBackupViewController.h"
 
 @interface OACloudAccountVerificationViewController : OACloudAccountBaseViewController
 
-- (instancetype) initWithEmail:(NSString *)email;
+- (instancetype) initWithEmail:(NSString *)email sourceType:(EOACloudScreenSourceType)type;
 
 @end

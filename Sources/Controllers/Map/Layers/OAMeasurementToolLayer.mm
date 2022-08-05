@@ -90,8 +90,11 @@
 
 - (void) onMapFrameRendered
 {
-    [self updateLastPointToCenter];
-    [self updateDistAndBearing];
+    if (self.isVisible)
+    {
+        [self updateLastPointToCenter];
+        [self updateDistAndBearing];
+    }
 }
 
 - (void) buildLine:(OsmAnd::VectorLineBuilder &)builder collection:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection linePoints:(const QVector<OsmAnd::PointI> &)linePoints
@@ -114,8 +117,8 @@
     double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
     OsmAnd::ColorARGB lineColor = _editingCtx.getLineColor;
     std::vector<double> linePattern;
-    linePattern.push_back(80 / mapDensity);
-    linePattern.push_back(40 / mapDensity);
+    linePattern.push_back(70 / mapDensity);
+    linePattern.push_back(55 / mapDensity);
     if (line)
     {
         line->setFillColor(lineColor);
@@ -178,9 +181,7 @@
 
 - (void) updateLastPointToCenter
 {
-    [self.mapViewController runWithRenderSync:^{
-        [self drawBeforeAfterPath];
-    }];
+    [self drawBeforeAfterPath];
 }
 
 - (void) resetLayer
@@ -460,10 +461,8 @@
 }
 
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points {
-    [self.mapViewController runWithRenderSync:^{
-        [self drawRouteSegments];
-        [self drawPointMarkers:points collection:_pointMarkers];
-    }];
+    [self drawRouteSegments];
+    [self drawPointMarkers:points collection:_pointMarkers];
 }
 
 - (BOOL) isVisible

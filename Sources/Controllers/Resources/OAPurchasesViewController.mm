@@ -7,50 +7,40 @@
 //
 
 #import "OAPurchasesViewController.h"
+#import "OAPurchaseDetailsViewController.h"
 #import "OAIAPHelper.h"
-#import "OAInAppCell.h"
-#import <StoreKit/StoreKit.h>
-#import "OALog.h"
-#import "OAResourcesUIHelper.h"
-#import "OsmAndApp.h"
-#include "Localization.h"
-#import "OAUtilities.h"
-#import <Reachability.h>
-#import <MBProgressHUD.h>
-#import "OASizes.h"
+#import "Localization.h"
 #import "OARootViewController.h"
 #import "OAChoosePlanHelper.h"
+#import "OAMultiIconTextDescCell.h"
+#import "OALargeImageTitleDescrTableViewCell.h"
+#import "OACardButtonCell.h"
+#import "OAIconTitleValueCell.h"
+#import "OAColors.h"
+#import "OALinks.h"
+#import <SafariServices/SafariServices.h>
 
-@interface OAPurchasesViewController ()<UITableViewDelegate, UITableViewDataSource>
+@interface OAPurchasesViewController () <UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIView *titlePanelView;
 
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *doneButton;
-
-@property (weak, nonatomic) IBOutlet UIButton *btnRestorePurchases;
+@property (weak, nonatomic) IBOutlet UIButton *restoreButton;
 
 @end
 
 @implementation OAPurchasesViewController
 {
     OAIAPHelper *_iapHelper;
-    NSNumberFormatter *_numberFormatter;
-
-    CALayer *_horizontalLine;
-    NSArray<OAProduct *> *_addonsPurchased;
-    
-    NSInteger _pluginsSection;
-    NSInteger _mapsSection;
-    NSInteger _restoreSection;
+    NSArray<NSArray<NSDictionary *> *> *_data;
+    NSMapTable<NSNumber *, NSString *> *_headers;
 }
 
 -(void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"purchases");
-    [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad
@@ -58,32 +48,152 @@
     [super viewDidLoad];
 
     _iapHelper = [OAIAPHelper sharedInstance];
-    
-    _addonsPurchased = _iapHelper.inAppAddonsPurchased;
-    NSInteger index = 0;
-    if (_addonsPurchased.count > 0)
-        _pluginsSection = index++;
-    else
-        _pluginsSection = -1;
-    
-    _mapsSection = index++;
-    _restoreSection = index;
-
-    _numberFormatter = [[NSNumberFormatter alloc] init];
-    [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-    [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-
-    if (self.openFromSplash)
-    {
-        self.backButton.hidden = YES;
-        self.doneButton.hidden = NO;
-    }
+    [[OARootViewController instance] restorePurchasesWithProgress:NO];
+    [self generateData];
 }
 
-- (void) viewWillLayoutSubviews
+- (void) generateData
 {
-    [super viewWillLayoutSubviews];
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+    NSArray<OAProduct *> *mainPurchases = [_iapHelper getEverMadeMainPurchases];
+    NSMutableArray<OAProduct *> *activeProducts = [NSMutableArray array];
+    NSMutableArray<OAProduct *> *expiredProducts = [NSMutableArray array];
+    for (OAProduct *product in mainPurchases)
+    {
+        if (product.purchaseState == PSTATE_PURCHASED)
+            [activeProducts addObject:product];
+        else if (product.purchaseState == PSTATE_NOT_PURCHASED)
+            [expiredProducts addObject:product];
+    }
+    // Display old purchases if no new purchases are active
+    if (activeProducts.count == 0)
+    {
+        for (OAProduct *product in _iapHelper.inAppsPurchased)
+        {
+            if (product.purchaseState == PSTATE_PURCHASED)
+                [activeProducts addObject:product];
+            else if (product.purchaseState == PSTATE_NOT_PURCHASED)
+                [expiredProducts addObject:product];
+        }
+    }
+
+    _headers = [NSMapTable new];
+    NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray array];
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    BOOL isProSubscriptionAvailable = [settings.backupPurchaseActive get];
+    if (activeProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
+    {
+        [data addObject:@[@{
+                @"key": @"no_purchases",
+                @"type": [OALargeImageTitleDescrTableViewCell getCellIdentifier],
+                @"icon": [UIImage templateImageNamed:@"ic_custom_shop_bag"],
+                @"icon_color": UIColorFromRGB(color_tint_gray),
+                @"title": OALocalizedString(@"no_purchases"),
+                @"description" : [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
+        }]];
+        [data addObject:@[@{
+                @"key": @"get_osmand_pro",
+                @"type": [OACardButtonCell getCellIdentifier],
+                @"icon": [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"],
+                @"title": OALocalizedString(@"product_title_pro"),
+                @"description" : OALocalizedString(@"osm_live_banner_desc"),
+                @"button_title": OALocalizedString(@"purchase_get"),
+                @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
+                @"button_icon_color": UIColorFromRGB(color_primary_purple),
+        }]];
+    }
+    else
+    {
+        if (activeProducts.count > 0 || isProSubscriptionAvailable)
+        {
+            NSMutableArray *active = [NSMutableArray array];
+            if (isProSubscriptionAvailable)
+            {
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                formatter.dateStyle = NSDateFormatterMediumStyle;
+                NSString *dateString = @"";
+                NSString *datePattern = @"";
+                OASubscriptionState *state = [settings.backupPurchaseState get];
+                BOOL isPromo = ((EOASubscriptionOrigin) [settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
+                if (state != OASubscriptionState.EXPIRED)
+                    datePattern = OALocalizedString(@"expires");
+                else
+                    datePattern = OALocalizedString(@"expired");
+                long expiretime = [settings.backupPurchaseExpireTime get];
+                if (expiretime > 0)
+                {
+                    NSDate *expireDate = [NSDate dateWithTimeIntervalSince1970:[settings.backupPurchaseExpireTime get]];
+                    dateString = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), datePattern,
+                                  expireDate ? [formatter stringFromDate:expireDate] : @""];
+                }
+                [active addObject:@{
+                    @"key" : @"product_pro_crossplatform",
+                    @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+                    @"icon" : @"ic_custom_osmand_pro_logo_colored",
+                    @"title" : isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro"),
+                    @"descr" : dateString
+                }];
+            }
+            for (OAProduct *product in activeProducts)
+            {
+                [active addObject:@{
+                        @"key": [@"product_" stringByAppendingString:product.productIdentifier],
+                        @"type": [OAMultiIconTextDescCell getCellIdentifier],
+                        @"product": product
+                }];
+            }
+            [data addObject:active];
+            [_headers setObject:OALocalizedString(@"menu_active_trips") forKey:@(data.count - 1)];
+        }
+        if (expiredProducts.count > 0)
+        {
+            NSMutableArray *expired = [NSMutableArray array];
+            for (OAProduct *product in expiredProducts)
+            {
+                [expired addObject:@{
+                        @"key": [@"product_" stringByAppendingString:product.productIdentifier],
+                        @"type": [OAMultiIconTextDescCell getCellIdentifier],
+                        @"product": product
+                }];
+            }
+            [data addObject:expired];
+            [_headers setObject:OALocalizedString(@"expired") forKey:@(data.count - 1)];
+        }
+        [data addObject:@[@{
+            @"key": @"explore_osmnad_plans",
+            @"type": [OACardButtonCell getCellIdentifier],
+            @"title": OALocalizedString(@"explore_osmnad_plans_to_find_suitable"),
+            @"button_title": OALocalizedString(@"shared_string_learn_more"),
+            @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
+            @"button_icon_color": UIColorFromRGB(color_primary_purple)
+        }]];
+    }
+    
+    [data addObject:@[
+        @{
+            @"key": @"restore_purchases",
+            @"type": [OAIconTitleValueCell getCellIdentifier],
+            @"title": OALocalizedString(@"restore_purchases"),
+            @"icon": [UIImage templateImageNamed:@"ic_custom_reset"],
+            @"tint_color": UIColorFromRGB(color_primary_purple)
+        },
+        @{
+            @"key": @"redeem_promo_code",
+            @"type": [OAIconTitleValueCell getCellIdentifier],
+            @"title": OALocalizedString(@"redeem_promo_code"),
+            @"icon": [UIImage templateImageNamed:@"ic_custom_label_sale"],
+            @"tint_color": UIColorFromRGB(color_primary_purple)
+        },
+        @{
+            @"key": @"new_device_account",
+            @"type": [OAIconTitleValueCell getCellIdentifier],
+            @"title": OALocalizedString(@"new_device_account"),
+            @"icon": [UIImage templateImageNamed:@"ic_navbar_help"],
+            @"tint_color": UIColorFromRGB(color_primary_purple)
+        }
+    ]];
+    [_headers setObject:OALocalizedString(@"menu_help") forKey:@(data.count - 1)];
+
+    _data = data;
 }
 
 - (UIView *) getTopView
@@ -107,6 +217,7 @@
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
 
@@ -123,6 +234,7 @@
 - (void) productsRequested:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
         [self.tableView reloadData];
         CATransition *animation = [CATransition animation];
         [animation setType:kCATransitionPush];
@@ -134,204 +246,269 @@
     });
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (void)openSafariWithURL:(NSString *)url
 {
-    return (_pluginsSection >=0 ? 3 : 2);
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
+    [self presentViewController:safariViewController animated:YES completion:nil];
 }
 
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSString *)getStatus:(OAProduct *)product
 {
-    if (section == _pluginsSection)
-        return [_addonsPurchased count];
-    else if (section == _mapsSection)
-        return [_iapHelper.inAppMaps count];
-    else if (section == _restoreSection)
-        return 1;
+    NSString *datePattern;
+    if (product.purchaseState == PSTATE_NOT_PURCHASED)
+        datePattern = OALocalizedString(@"expired");
+    else if ([product isKindOfClass:OASubscription.class])
+        datePattern = OALocalizedString(@"expires");
+    else if ([product isKindOfClass:OAProduct.class])
+        datePattern = OALocalizedString(@"shared_string_purchased");
+
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateStyle = NSDateFormatterMediumStyle;
+    NSString *dateString = nil;
+    if (product.expirationDate)
+    {
+        dateString = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), datePattern,
+                      product.expirationDate ? [formatter stringFromDate:product.expirationDate] : @""];
+    }
+    
+    NSString *res;
+    if (dateString)
+    {
+        res = [NSString stringWithFormat:@"%@\n%@", [product isKindOfClass:OASubscription.class]
+               ? [product getTitle:13.].string
+               : OALocalizedString(@"in_app_purchase_desc"), dateString];
+    }
     else
-        return 0;
+    {
+        res = [NSString stringWithFormat:@"%@", [product isKindOfClass:OASubscription.class]
+               ? [product getTitle:13.].string
+               : OALocalizedString(@"in_app_purchase_desc")];
+    }
+    return res;
 }
 
-- (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (IBAction) onRestoreButtonPressed:(id)sender
 {
-    if (section == _pluginsSection)
-        return OALocalizedString(@"plugins");
-    else if (section == _mapsSection)
-        return OALocalizedString(@"maps");
-    else if (section == _restoreSection)
-        return OALocalizedString(@"restore");
-    else
-        return @"";
-}
-
-- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAInAppCell* cell;
-    cell = (OAInAppCell *)[tableView dequeueReusableCellWithIdentifier:[OAInAppCell getCellIdentifier]];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInAppCell getCellIdentifier] owner:self options:nil];
-        cell = (OAInAppCell *)[nib objectAtIndex:0];
-    }
-    
-    BOOL allWorldMapsPurchased = [_iapHelper.allWorld isPurchased];
-    
-    if (cell)
-    {
-        [UIView performWithoutAnimation:^{
-            cell.btnPrice.userInteractionEnabled = NO;
-            
-            NSString *identifier;
-            NSString *title;
-            NSString *desc;
-            NSString *price;
-            UIImage *imgTitle;
-            BOOL purchased = NO;
-            BOOL disabled = YES;
-
-            OAProduct *product = nil;
-            
-            if (indexPath.section == _pluginsSection)
-            {
-                product = _addonsPurchased[indexPath.row];
-                imgTitle = [UIImage imageNamed:[product productIconName]];
-                if (!imgTitle)
-                    imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
-                cell.imgIconBackground.layer.backgroundColor = UIColorFromRGB(0xF0F0F0).CGColor;
-                cell.imgIconBackground.hidden = NO;
-                cell.btnPrice.hidden = YES;
-                
-            }
-            else if (indexPath.section == _mapsSection)
-            {
-                product = _iapHelper.inAppMaps[indexPath.row];
-                imgTitle = [UIImage imageNamed:@"img_app_purchase_1.png"];
-                cell.imgIconBackground.hidden = YES;
-                cell.btnPrice.hidden = NO;
-            }
-            else if (indexPath.section == _restoreSection)
-            {
-                imgTitle = [UIImage imageNamed:@"ic_restore_purchase"];
-                title = OALocalizedString(@"restore_all_purchases");
-                cell.imgIconBackground.layer.backgroundColor = UIColorFromRGB(0xff8f00).CGColor;
-                cell.imgIconBackground.hidden = NO;
-                cell.btnPrice.hidden = YES;
-            }
-            
-            if (product)
-            {
-                purchased = [product isPurchased];
-                disabled = product.disabled;
-
-                title = product.localizedTitle;
-                desc = product.localizedDescription;
-                if (product.price)
-                {
-                    [_numberFormatter setLocale:product.priceLocale];
-                    price = [_numberFormatter stringFromNumber:product.price];
-                }
-                else
-                {
-                    price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
-                }
-            }
-            
-            [cell.imgIcon setImage:imgTitle];
-            [cell.lbTitle setText:title];
-            [cell.lbDescription setText:desc];
-            [cell.btnPrice setTitle:price forState:UIControlStateNormal];
-            
-            if (indexPath.section == _mapsSection)
-                [cell setPurchased:(purchased || allWorldMapsPurchased) disabled:NO];
-            else  if (indexPath.section == _pluginsSection)
-                [cell setPurchased:purchased disabled:disabled];
-            
-            [cell.btnPrice layoutIfNeeded];
-        }];
-    }
-    
-    return cell;
-}
-
-#pragma mark - UITableViewDelegate
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAProduct *product;
-    if (indexPath.section == _pluginsSection)
-        product = _addonsPurchased[indexPath.row];
-    else if (indexPath.section == _mapsSection)
-        product = _iapHelper.inAppMaps[indexPath.row];
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    if (indexPath.section == _restoreSection)
-    {
-        [self btnRestorePurchasesClicked:nil];
-        return;
-    }
-
-    BOOL purchased = product && [product isPurchased];
-    BOOL allWorldMapsPurchased = [_iapHelper.allWorld isPurchased];
-    
-    if (indexPath.section == _mapsSection)
-    {
-        if (purchased || allWorldMapsPurchased)
-            return;
-    }
-    else if (indexPath.section == _pluginsSection)
-    {
-        return;
-    }
-    
-    if (product)
-        [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
-//        [[OARootViewController instance] buyProduct:product showProgress:YES];
+    [[OARootViewController instance] restorePurchasesWithProgress:NO];
 }
 
 - (void) productPurchased:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
+        [self.tableView reloadData];
+    });
+}
+
+- (void) productPurchaseFailed:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
         [self.tableView reloadData];
     });
 }
 
 - (void) productsRestored:(NSNotification *)notification
 {
-    NSNumber *errorsCountObj = notification.object;
-    int errorsCount = errorsCountObj.intValue;
+//    NSNumber *errorsCountObj = notification.object;
+//    int errorsCount = errorsCountObj.intValue;
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
         [self.tableView reloadData];
     });
 }
 
-- (IBAction) btnRestorePurchasesClicked:(id)sender
+#pragma mark - SFSafariViewControllerDelegate
+
+- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
 {
-    [[OARootViewController instance] restorePurchasesWithProgress:NO];
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - UITableViewDataSource
 
-#pragma mark - UIAlertViewDelegate
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return _data.count;
+}
 
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    if (alertView.tag == 100 && buttonIndex != alertView.cancelButtonIndex)
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return _data[section].count;
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [_headers objectForKey:@(section)];
+}
+
+- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *cellType = item[@"type"];
+    UITableViewCell *outCell = nil;
+    if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        // Download map
-        std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
-        if (!repositoryMap)
-            repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksOldKey);
-        
-        if (repositoryMap)
+        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        if (cell == nil)
         {
-            NSString *name = [OAResourcesUIHelper titleOfResource:repositoryMap
-                                                         inRegion:[OsmAndApp instance].worldRegion
-                                                   withRegionName:YES withResourceType:NO];
-            
-            [OAResourcesUIHelper startBackgroundDownloadOf:repositoryMap resourceName:name];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTitleValueCell *) nib[0];
+            [cell showLeftIcon:NO];
+            [cell showRightIcon:YES];
+            cell.textView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.descriptionView.text = @"";
         }
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(
+                    0.,
+                    [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1 == indexPath.row + 1 ? 0. : 20.,
+                    0.,
+                    0.
+            );
+
+            UIColor *tintColor = [item.allKeys containsObject:@"tint_color"] ? item[@"tint_color"] : UIColor.blackColor;
+            cell.textView.text = item[@"title"];
+            cell.textView.textColor = tintColor;
+            cell.rightIconView.image = item[@"icon"];
+            cell.rightIconView.tintColor = tintColor;
+        }
+        outCell = cell;
+    }
+    else if ([cellType isEqualToString:[OACardButtonCell getCellIdentifier]])
+    {
+        OACardButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACardButtonCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACardButtonCell getCellIdentifier] owner:self options:nil];
+            cell = (OACardButtonCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (cell)
+        {
+            UIImage *icon = item[@"icon"];
+            cell.iconView.image = icon;
+            [cell showIcon:icon != nil];
+
+            NSString *description = item[@"description"];
+            cell.descriptionView.text = description;
+            [cell showDescription:description != nil && description.length > 0];
+
+            cell.titleView.text = item[@"title"];
+
+            NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:item[@"button_title"]];
+            [buttonTitle addAttribute:NSForegroundColorAttributeName
+                                value:UIColorFromRGB(color_primary_purple)
+                                range:NSMakeRange(0, buttonTitle.string.length)];
+            [buttonTitle addAttribute:NSFontAttributeName
+                                value:[UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
+                                range:NSMakeRange(0, buttonTitle.string.length)];
+            [cell.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
+
+            [cell.buttonView setImage:item[@"button_icon"] forState:UIControlStateNormal];
+            cell.buttonView.tintColor = [item.allKeys containsObject:@"button_icon_color"] ? item[@"button_icon_color"] : UIColor.blackColor;
+
+            cell.buttonView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.buttonView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.buttonView addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        outCell = cell;
+    }
+    else if ([cellType isEqualToString:[OALargeImageTitleDescrTableViewCell getCellIdentifier]])
+    {
+        OALargeImageTitleDescrTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OALargeImageTitleDescrTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALargeImageTitleDescrTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OALargeImageTitleDescrTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.descriptionLabel.text = item[@"description"];
+            cell.cellImageView.image = item[@"icon"];
+            cell.cellImageView.tintColor = item[@"icon_color"];
+        }
+        outCell = cell;
+    }
+    else if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
+    {
+        OAMultiIconTextDescCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
+            cell = nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0, 66., 0, 0);
+        }
+        if (cell)
+        {
+            OAProduct *product = item[@"product"];
+            if (product)
+            {
+                cell.textView.text = [product.productIdentifier isEqualToString:kInAppId_Addon_Nautical]
+                        ? OALocalizedString(@"product_title_sea_depth_contours")
+                        : product.localizedTitle;
+                cell.iconView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product]
+                        ? [UIImage imageNamed:product.productIconName]
+                        : [product.feature getIcon];
+                cell.descView.text = [self getStatus:product];
+            }
+            else
+            {
+                cell.textView.text = item[@"title"];
+                cell.iconView.image = [UIImage imageNamed:item[@"icon"]];
+                cell.descView.text = item[@"descr"];
+            }
+            [cell setOverflowVisibility:NO];
+            [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"] forState:UIControlStateNormal];
+            cell.overflowButton.tintColor = UIColorFromRGB(color_tint_gray);
+        }
+        outCell = cell;
+    }
+
+    if ([outCell needsUpdateConstraints])
+        [outCell updateConstraints];
+
+    return outCell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *key = item[@"key"];
+    if ([key isEqualToString:@"restore_purchases"])
+        [self onRestoreButtonPressed:nil];
+    else if ([key isEqualToString:@"redeem_promo_code"])
+        [self openSafariWithURL:kAppleRedeemPromoCode];
+    else if ([key isEqualToString:@"new_device_account"])
+        [self openSafariWithURL:kDocsPurchasesNewDevice];
+    else if ([key isEqualToString:@"product_pro_crossplatform"])
+        [self presentViewController:[[OAPurchaseDetailsViewController alloc] initForCrossplatformSubscription] animated:YES completion:nil];
+    else if ([key hasPrefix:@"product_"])
+        [self presentViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:item[@"product"]] animated:YES completion:nil];
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Selectors
+
+- (void)onButtonPressed:(id)sender
+{
+    UIButton *button = (UIButton *) sender;
+    if (button)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
+        NSDictionary *item = _data[indexPath.section][indexPath.row];
+        NSString *key = item[@"key"];
+        if ([key isEqualToString:@"get_osmand_pro"])
+            [OAChoosePlanHelper showChoosePlanScreen:self.navigationController];
+        else if ([key isEqualToString:@"explore_osmnad_plans"])
+            [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.MONTHLY_MAP_UPDATES navController:self.navigationController];
     }
 }
 

@@ -18,11 +18,14 @@
 #import "OAColors.h"
 #import <UIKit/UIDevice.h>
 #import "OAIndexConstants.h"
+#import <MBProgressHUD.h>
 
 #import <mach/mach.h>
 #import <mach/mach_host.h>
+#include <CommonCrypto/CommonDigest.h>
 
 #define kBlurViewTag -999
+#define kSpinnerViewTag -998
 
 @implementation UIBezierPath (util)
 
@@ -408,6 +411,39 @@
         {
             [subview removeFromSuperview];
             self.backgroundColor = UIColor.whiteColor;
+            break;
+        }
+    }
+}
+
+- (void) addSpinner
+{
+    for (UIView *subview in self.subviews)
+    {
+        if (subview.tag == kSpinnerViewTag)
+            return;
+    }
+
+    UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleGray;
+    if (@available(iOS 13.0, *))
+        spinnerStyle = UIActivityIndicatorViewStyleLarge;
+
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
+    spinner.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+    spinner.tag = kSpinnerViewTag;
+    [self addSubview:spinner];
+    [spinner startAnimating];
+}
+
+- (void) removeSpinner
+{
+    for (UIView *subview in self.subviews)
+    {
+        if (subview.tag == kSpinnerViewTag)
+        {
+            UIActivityIndicatorView *spinner = (UIActivityIndicatorView *) subview;
+            [spinner stopAnimating];
+            [spinner removeFromSuperview];
             break;
         }
     }
@@ -864,12 +900,22 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     [button setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
 }
 
++ (CGSize) calculateTextBounds:(NSString *)text font:(UIFont *)font
+{
+    CGSize size = [text boundingRectWithSize:CGSizeMake(10000.0, 10000.0)
+                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                                  attributes:@{ NSFontAttributeName: font }
+                                     context:nil].size;
+
+    return CGSizeMake(ceil(size.width), ceil(size.height));
+}
+
 + (CGSize) calculateTextBounds:(NSAttributedString *)text width:(CGFloat)width
 {
     CGSize size = [text boundingRectWithSize:CGSizeMake(ceil(width), 10000.0)
                                      options:NSStringDrawingUsesLineFragmentOrigin
                                      context:nil].size;
-    
+
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
@@ -879,7 +925,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
                               font, NSFontAttributeName, nil];
     
     CGSize size = [text boundingRectWithSize:CGSizeMake(ceil(width), 10000.0)
-                                     options:NSStringDrawingUsesLineFragmentOrigin
+                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
                                   attributes:attrDict context:nil].size;
     
     return CGSizeMake(ceil(size.width), ceil(size.height));
@@ -2149,6 +2195,38 @@ static const double d180PI = 180.0 / M_PI_2;
     }
 }
 
++ (NSString*) fileMD5:(NSString*)path
+{
+    NSFileHandle *handle = [NSFileHandle fileHandleForReadingAtPath:path];
+    if( handle== nil )
+        return @""; // file didnt exist
+
+    CC_MD5_CTX md5;
+
+    CC_MD5_Init(&md5);
+
+    BOOL done = NO;
+    while(!done)
+    {
+        NSData* fileData = [handle readDataOfLength:1000000]; // 1 mb chunk
+        CC_MD5_Update(&md5, [fileData bytes], [fileData length]);
+        if( [fileData length] == 0 )
+            done = YES;
+    }
+    unsigned char digest[CC_MD5_DIGEST_LENGTH];
+    CC_MD5_Final(digest, &md5);
+    NSString* s = [NSString stringWithFormat: @"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+                   digest[0], digest[1],
+                   digest[2], digest[3],
+                   digest[4], digest[5],
+                   digest[6], digest[7],
+                   digest[8], digest[9],
+                   digest[10], digest[11],
+                   digest[12], digest[13],
+                   digest[14], digest[15]];
+    return s;
+}
+
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView
 {
     if ([parentView canBecomeFirstResponder])
@@ -2177,6 +2255,63 @@ static const double d180PI = 180.0 / M_PI_2;
 + (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace
 {
     return [NSString stringWithFormat:separateWithSpace ? OALocalizedString(@"ltr_or_rtl_combine_via_space") : @"%@%@", value, unit];
+}
+
++ (NSString *) buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom
+{
+    return [NSString stringWithFormat:@"geo:%.5f,%.5f?z=%i", latitude, longitude, zoom];
+}
+
++ (void)showToast:(NSString *)title details:(NSString *)details duration:(NSTimeInterval)duration inView:(UIView *)view
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray *allHUDs = [MBProgressHUD allHUDsForView:view];
+        for (MBProgressHUD *hudView in allHUDs)
+        {
+            if (hudView.mode == MBProgressHUDModeText)
+                [MBProgressHUD hideHUDForView:view animated:YES];
+        }
+
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.margin = 10.f;
+        hud.yOffset = DeviceScreenHeight / 2 - 100;
+        hud.removeFromSuperViewOnHide = YES;
+        hud.userInteractionEnabled = NO;
+
+        hud.labelText = title ? title : details;
+        hud.labelFont = [UIFont systemFontOfSize:14];
+
+        hud.detailsLabelText = title ? details : nil;
+        hud.detailsLabelFont = [UIFont systemFontOfSize:14];
+
+        [hud hide:YES afterDelay:duration];
+    });
+}
+
++ (NSString *) formatWarnings:(NSArray<NSString *> *)warnings
+{
+    NSMutableString *builder = [[NSMutableString alloc] init];
+    BOOL f = YES;
+    for (NSString *w in warnings)
+    {
+        if (f)
+            f = NO;
+        else
+            [builder appendString:@"\n"];
+        [builder appendString:w];
+    }
+    return builder;
+}
+
++ (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate
+{
+    NSTimeZone *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSTimeZone *destinationTimeZone = [NSTimeZone systemTimeZone];
+    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
+    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
+    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+    return [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
 }
 
 @end

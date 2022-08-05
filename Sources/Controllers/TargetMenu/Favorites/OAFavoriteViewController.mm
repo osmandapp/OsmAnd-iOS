@@ -18,6 +18,11 @@
 #import "OACollapsableView.h"
 #import "OACollapsableWaypointsView.h"
 #import <UIAlertView+Blocks.h>
+#import "OAPOI.h"
+#import "OAPOIViewController.h"
+#import "OAColors.h"
+#import "OACollapsableCoordinatesView.h"
+#import "OATextMultiViewCell.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -27,32 +32,23 @@
 @implementation OAFavoriteViewController
 {
     OsmAndAppInstance _app;
+    OAPOI *_originObject;
+    OAFavoriteGroup *_favoriteGroup;
 }
 
 - (id) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly
 {
-    self = [super initWithItem:favorite];
+    self = [super init];
     if (self)
     {
         _app = [OsmAndApp instance];
-        self.favorite = favorite;
+        _favorite = favorite;
+        _favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
 
-        self.name = [self getItemName];
-        self.desc = [self getItemDesc];
-        
-        if (!headerOnly)
-        {
-            [super setupCollapableViewsWithData:favorite lat:favorite.getLatitude lon:favorite.getLongitude];
-        }
-        
-        self.groupTitle = [self.favorite getCategoryDisplayName];
-        
         if (!OAFavoritesHelper.isFavoritesLoaded)
             [OAFavoritesHelper loadFavorites];
         
-        OAFavoriteGroup *favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
-        self.groupColor = favoriteGroup.color;
-
+        [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
     return self;
@@ -60,7 +56,7 @@
 
 - (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation headerOnly:(BOOL)headerOnly
 {
-    self = [super initWithLocation:location andTitle:formattedLocation];
+    self = [super init];
     if (self)
     {
         _app = [OsmAndApp instance];
@@ -70,7 +66,7 @@
         locationPoint.x = OsmAnd::Utilities::get31TileNumberX(location.longitude);
         locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
         
-        QString elevation = QString::null;
+        QString elevation = QString();
         QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
         QString creationTime = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
         
@@ -95,12 +91,12 @@
         if (groupName)
             group = QString::fromNSString(groupName);
         else
-            group = QString::null;
+            group = QString();
         
-        QString description = QString::null;
-        QString address = QString::null;
-        QString icon = QString::null;
-        QString background = QString::null;
+        QString description = QString();
+        QString address = QString();
+        QString icon = QString();
+        QString background = QString();
 
         auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
                                                                         elevation,
@@ -115,42 +111,109 @@
                                                                         OsmAnd::FColorRGB(r,g,b));
         
         OAFavoriteItem* fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
-        
-        self.favorite = fav;
+        _favorite = fav;
         [_app saveFavoritesToPermamentStorage];
-        
-        if (!headerOnly)
-        {
-            [super setupCollapableViewsWithData:fav lat:location.latitude lon:location.longitude];
-        }
-        
-        self.groupTitle = [self.favorite getCategoryDisplayName];
-        
         if (!OAFavoritesHelper.isFavoritesLoaded)
             [OAFavoritesHelper loadFavorites];
         
-        OAFavoriteGroup *favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
-        self.groupColor = favoriteGroup.color;
-
+        _favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
+        [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
     return self;
-
 }
 
-- (BOOL) supportMapInteraction
+- (void) acquireOriginObject
+{
+    _originObject = [_favorite getAmenity];
+    if (!_originObject)
+    {
+        //TODO: find poi by latlon
+        //String originObjectName = fav.getOriginObjectName();
+        //originObject = findAmenityObject(originObjectName, fav.getLatitude(), fav.getLongitude());
+    }
+}
+
+- (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows
+{
+    [super buildTopRows:rows];
+    [self buildGroupFavouritesView:rows];
+}
+
+- (void) buildRowsInternal:(NSMutableArray<OARowInfo *> *)rows
+{
+    [self buildTopRows:rows];
+    
+    if (_favorite && [_favorite.getTimestamp timeIntervalSince1970] > 0)
+    {
+        [self buildDateRow:rows timestamp:[_favorite getTimestamp]];
+    }
+    if ( _originObject && [ _originObject isKindOfClass:OAPOI.class])
+    {
+        OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI: _originObject];
+        builder.location = CLLocationCoordinate2DMake([_favorite getLatitude], [_favorite getLongitude]);
+        [builder buildRowsInternal:rows];
+    }
+    [self setRows:rows];
+}
+
+- (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows
+{
+    NSString *desc = [_favorite getDescription];
+    if (desc && desc.length > 0)
+    {
+        OARowInfo *descriptionRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:OALocalizedString(@"enter_description") text:desc textColor:nil isText:NO needLinks:NO order:0 typeName:kDescriptionRowType isPhoneNumber:NO isUrl:NO];
+        [rows addObject:descriptionRow];
+    }
+}
+
+- (void) buildGroupFavouritesView:(NSMutableArray<OARowInfo *> *)rows
+{
+    OAFavoriteGroup *favoriteGroup = _favoriteGroup;
+    if (favoriteGroup && favoriteGroup.points.count > 0)
+    {
+        UIColor *color = favoriteGroup.color ? favoriteGroup.color : [OADefaultFavorite getDefaultColor];
+        UIColor *disabledColor = UIColorFromRGB(color_text_footer);
+        color = favoriteGroup.isVisible ? color : disabledColor;
+        UIImage *icon = [UIImage templateImageNamed:@"ic_custom_folder"];
+        NSString *name = [self.favorite getCategoryDisplayName];
+        NSString *description = OALocalizedString(@"all_group_points");
+
+        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:description text:name textColor:color isText:NO needLinks:NO order:1 typeName:kGroupRowType isPhoneNumber:NO isUrl:NO];
+        rowInfo.collapsed = YES;
+        rowInfo.collapsable = YES;
+        rowInfo.height = 64;
+        rowInfo.collapsableView = [self getCollapsableFavouritesView:self.favorite];
+
+        [rows addObject:rowInfo];
+    }
+}
+
+- (OACollapsableWaypointsView *) getCollapsableFavouritesView:(OAFavoriteItem *)favorite
+{
+    OACollapsableWaypointsView *collapsableGroupView = [[OACollapsableWaypointsView alloc] init];
+    [collapsableGroupView setData:favorite];
+    collapsableGroupView.collapsed = YES;
+    return collapsableGroupView;
+}
+
+- (BOOL) showNearestWiki;
 {
     return YES;
 }
 
-- (BOOL) supportsForceClose
+- (BOOL) showNearestPoi
 {
     return YES;
 }
 
-- (BOOL)shouldEnterContextModeManually
+- (NSString *)getTypeStr
 {
-    return YES;
+    NSString *group = [self getItemGroup];
+    if (group.length > 0)
+        return group;
+    else
+        return [self getCommonTypeStr];
 }
 
 - (NSString *) getCommonTypeStr
@@ -158,107 +221,14 @@
     return OALocalizedString(@"favorites");
 }
 
-- (void) applyLocalization
+- (NSAttributedString *) getAttributedTypeStr
 {
-    [super applyLocalization];
-    
-    self.titleView.text = OALocalizedString(@"favorites");
-}
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    
-    OAAppSettings* settings = [OAAppSettings sharedManager];
-    [settings setShowFavorites:YES];
-    self.titleGradient.frame = self.navBar.frame;
-    self.deleteButton.hidden = YES;
-}
-
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self applySafeAreaMargins];
-        self.titleGradient.frame = self.navBar.frame;
-    } completion:nil];
-}
-
-- (BOOL) isItemExists:(NSString *)name
-{
-    for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
-        if ((localFavorite != self.favorite.favorite) &&
-            [name isEqualToString:localFavorite->getTitle().toNSString()])
-        {
-            return YES;
-        }
-    
-    return NO;
-}
-
--(BOOL) preHide
-{
-    if (self.newItem && !self.actionButtonPressed)
-    {
-        [self removeNewItemFromCollection];
-        return YES;
-    }
-    else
-    {
-        return [super preHide];
-    }
-}
-
-- (void) okPressed
-{
-    if (self.savedColorIndex != -1)
-        [[NSUserDefaults standardUserDefaults] setInteger:self.savedColorIndex forKey:kFavoriteDefaultColorKey];
-    if (self.savedGroupName)
-        [[NSUserDefaults standardUserDefaults] setObject:self.savedGroupName forKey:kFavoriteDefaultGroupKey];
-    
-    [super okPressed];
-}
-
--(void) deleteItem
-{
-    [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_remove_q") cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")] otherButtonItems:
-      [RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_yes") action:^{
-        
-        OsmAndAppInstance app = [OsmAndApp instance];
-        app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
-        [app saveFavoritesToPermamentStorage];
-        
-    }],
-      nil] show];
-}
-
-- (void) saveItemToStorage
-{
-    [[OsmAndApp instance] saveFavoritesToPermamentStorage];
-}
-
-- (void) removeExistingItemFromCollection
-{
-    NSString *favoriteTitle = [self.favorite getName];
-    for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
-    {
-        if ((localFavorite != self.favorite.favorite) &&
-            [favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()])
-        {
-            [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(localFavorite);
-            break;
-        }
-    }
-}
-
-- (void) removeNewItemFromCollection
-{
-    _app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
-    [_app saveFavoritesToPermamentStorage];
+    return [self getAttributedTypeStr:[self getTypeStr]];
 }
 
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group
 {
-    return [self getAttributedTypeStr:group color:self.groupColor];
+    return [self getAttributedTypeStr:group color:[_favoriteGroup color]];
 }
 
 - (NSString *) getItemName

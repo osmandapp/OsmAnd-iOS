@@ -58,6 +58,7 @@
 #import "OATableViewCustomFooterView.h"
 #import "OARouteAvoidTransportSettingsViewController.h"
 #import "OAOsmAndFormatter.h"
+#import "OALinks.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -325,7 +326,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         OAGPXDocument *doc = visibleGpxDocs[i];
         if (gpx && doc)
         {
-            doc.path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+            doc.path = gpx.absolutePath;
             [section addObject:@{
                 @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
                 @"title" : gpx.getNiceTitle,
@@ -1833,7 +1834,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@", mainText, additionalText] attributes:attributes];
     
-    [res addAttributes:@{NSLinkAttributeName: @"https://osmand.net/blog/guideline-pt",
+    [res addAttributes:@{NSLinkAttributeName: kBlogGuideline,
                          NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
                          NSFontAttributeName: [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
     } range:NSMakeRange(mainText.length + 2, additionalText.length)];

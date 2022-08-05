@@ -20,6 +20,7 @@
 @property (nonatomic) NSString *parent;
 @property (nonatomic) NSString *iconName;
 @property (nonatomic) int iconColor;
+@property (nonatomic) NSString *derivedProfile;
 @property (nonatomic) NSString *routingProfile;
 @property (nonatomic) NSInteger routeService;
 @property (nonatomic) EOALocationIcon locIcon;
@@ -107,6 +108,8 @@
 - (int) getOrder;
 - (void) setOrder:(int)order;
 - (NSString *) getRoutingProfile;
+- (NSString *) getDerivedProfile;
+- (void) setDerivedProfile:(NSString *)derivedProfile;
 - (NSString *) getProfileDescription;
 
 - (BOOL) isCustomProfile;
@@ -127,6 +130,7 @@
 @property (nonatomic) OAApplicationMode *am;
 @property (nonatomic) NSString *userProfileName;
 @property (nonatomic) NSInteger routeService;
+@property (nonatomic) NSString *derivedProfile;
 @property (nonatomic) NSString *routingProfile;
 @property (nonatomic) NSString *iconResName;
 @property (nonatomic) NSInteger iconColor;

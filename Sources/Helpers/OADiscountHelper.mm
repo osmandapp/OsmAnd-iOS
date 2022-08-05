@@ -25,7 +25,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAChoosePlanHelper.h"
 
-const static NSString *URL = @"http://osmand.net/api/motd";
+const static NSString *URL = @"https://osmand.net/api/motd";
 
 @implementation OAPurchaseCondition
 
@@ -63,7 +63,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 
 - (BOOL) matches:(NSString *)value
 {
-    OASubscription *subscription = [self.helper.liveUpdates getSubscriptionByIdentifier:value];
+    OASubscription *subscription = [self.helper.subscriptionList getSubscriptionByIdentifier:value];
     return !subscription || ![subscription isPurchased];
 }
 
@@ -78,7 +78,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 
 - (BOOL) matches:(NSString *)value
 {
-    OASubscription *subscription = [self.helper.liveUpdates getSubscriptionByIdentifier:value];
+    OASubscription *subscription = [self.helper.subscriptionList getSubscriptionByIdentifier:value];
     return subscription && [subscription isPurchased];
 }
 
@@ -196,7 +196,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
     NSDictionary *languageDictionary = [NSLocale componentsFromLocaleIdentifier:language];
     NSString *languageCode = [languageDictionary objectForKey:NSLocaleLanguageCode];
-    NSURL *urlObj = [NSURL URLWithString:[NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&lang=%@", URL, ver, appInstalledDays, execCount, languageCode]];
+    NSURL *urlObj = [NSURL URLWithString:[NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&aid=%@&lang=%@", URL, ver, appInstalledDays, execCount, OsmAndApp.instance.getUserIosId, languageCode]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                        timeoutInterval:30.0];
@@ -416,8 +416,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
             }
             else if ([@"map" isEqualToString:discountType])
             {
-                OAManageResourcesViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
-                resourcesViewController.displayBannerPurchaseAllMaps = YES;
+                OAManageResourcesViewController *resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
                 [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
             }
         }

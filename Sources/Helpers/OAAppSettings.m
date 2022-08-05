@@ -13,6 +13,7 @@
 #import "OAColors.h"
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
+#import "OAIAPHelper.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -47,16 +48,15 @@
 #define billingHideUserNameKey @"billingHideUserNameKey"
 #define billingPurchaseTokenSentKey @"billingPurchaseTokenSentKey"
 #define billingPurchaseTokensSentKey @"billingPurchaseTokensSentKey"
-#define liveUpdatesPurchaseCancelledTimeKey @"liveUpdatesPurchaseCancelledTimeKey"
 #define liveUpdatesPurchaseCancelledFirstDlgShownKey @"liveUpdatesPurchaseCancelledFirstDlgShownKey"
 #define liveUpdatesPurchaseCancelledSecondDlgShownKey @"liveUpdatesPurchaseCancelledSecondDlgShownKey"
 #define fullVersionPurchasedKey @"fullVersionPurchasedKey"
 #define depthContoursPurchasedKey @"depthContoursPurchasedKey"
 #define contourLinesPurchasedKey @"contourLinesPurchasedKey"
+#define wikipediaPurchasedKey @"wikipediaPurchasedKey"
 #define emailSubscribedKey @"emailSubscribedKey"
 #define osmandProPurchasedKey @"osmandProPurchasedKey"
 #define osmandMapsPurchasedKey @"osmandMapsPurchasedKey"
-#define displayDonationSettingsKey @"displayDonationSettingsKey"
 #define lastReceiptValidationDateKey @"lastReceiptValidationDateKey"
 #define eligibleForIntroductoryPriceKey @"eligibleForIntroductoryPriceKey"
 #define eligibleForSubscriptionOfferKey @"eligibleForSubscriptionOfferKey"
@@ -104,11 +104,13 @@
 #define showStreetNameKey @"showStreetName"
 #define centerPositionOnMapKey @"centerPositionOnMap"
 #define rotateMapKey @"rotateMap"
+#define compassModeKey @"compassMode"
 #define firstMapIsDownloadedKey @"firstMapIsDownloaded"
 
 // App profiles
 #define appModeBeanPrefsIdsKey @"appModeBeanPrefsIds"
 #define routingProfileKey @"routingProfile"
+#define derivedProfileKey @"derivedProfile"
 #define profileIconNameKey @"profileIconName"
 #define profileIconColorKey @"profileIconColor"
 #define userProfileNameKey @"userProfileName"
@@ -126,6 +128,7 @@
 
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
+#define forcePrivateAccessRoutingAskedKey @"forcePrivateAccessRoutingAsked"
 #define fastRouteModeKey @"fastRouteMode"
 #define disableComplexRoutingKey @"disableComplexRouting"
 #define followTheRouteKey @"followTheRoute"
@@ -135,6 +138,7 @@
 #define useIntermediatePointsNavigationKey @"useIntermediatePointsNavigation"
 #define disableOffrouteRecalcKey @"disableOffrouteRecalc"
 #define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
+#define hazmatTransportingEnabledKey @"hazmatTransportingEnabled"
 #define routerServiceKey @"routerService"
 #define snapToRoadKey @"snapToRoad"
 #define autoFollowRouteKey @"autoFollowRoute"
@@ -293,10 +297,12 @@
 #define backupAccessTokenUpdateTimeKey @"backupAccessTokenUpdateTime"
 
 #define backupPromocodeKey @"backupPromocode"
-#define backupPromocodeActiveKey @"backupPromocodeActive"
-#define backupPromocodeStartTimeKey @"backupPromocodeStartTime"
-#define backupPromocodeExpireTimeKey @"backupPromocodeExpireTime"
-#define backupPromocodeStateKey @"backupPromocodeState"
+#define backupPurchaseActiveKey @"backupPurchaseActive"
+#define backupPurchaseStartTimeKey @"backupPurchaseStartTime"
+#define backupPurchaseExpireTimeKey @"backupPurchaseExpireTime"
+#define backupPurchaseStateKey @"backupPurchaseState"
+#define proSubscriptionOriginKey @"proSubscriptionOrigin"
+#define purchaseIdentifiersKey @"purchaseIdentifiers"
 
 #define userIosIdKey @"userIosId"
 
@@ -377,6 +383,49 @@
 #define lastCheckedUpdatesKey @"lastCheckedUpdates"
 #define numberOfAppStartsOnDislikeMomentKey @"numberOfAppStartsOnDislikeMoment"
 #define rateUsStateKey @"rateUsState"
+
+#define animateMyLocationKey @"animateMyLocation"
+
+@implementation OACompassMode
+
++ (NSString *) getTitle:(EOACompassMode)cm
+{
+    switch (cm)
+    {
+        case EOACompassVisible:
+            return OALocalizedString(@"shared_string_always_visible");
+        case EOACompassHidden:
+            return OALocalizedString(@"shared_string_always_hidden");
+        default:
+            return OALocalizedString(@"compass_visible_in_rotated_mode");
+    }
+}
+
++ (NSString *) getDescription:(EOACompassMode)cm
+{
+    switch (cm)
+    {
+        case EOACompassRotated:
+            return OALocalizedString(@"compass_visible_in_rotated_mode_descr");
+        default:
+            return @"";
+    }
+}
+
++ (NSString *) getIconName:(EOACompassMode)cm
+{
+    switch (cm)
+    {
+        case EOACompassVisible:
+            return @"ic_custom_compass_north";
+        case EOACompassHidden:
+            return @"ic_custom_compass_hidden";
+        default:
+            return @"ic_custom_compass_rotated";
+    }
+}
+
+@end
 
 @interface OAMetricsConstant()
 
@@ -1887,6 +1936,59 @@
 
 @end
 
+@interface OACommonSubscriptionState ()
+
+@property (nonatomic) OASubscriptionState *defValue;
+
+@end
+
+@implementation OACommonSubscriptionState
+
++ (instancetype) withKey:(NSString *)key defValue:(OASubscriptionState *)defValue
+{
+    OACommonSubscriptionState *obj = [[OACommonSubscriptionState alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (OASubscriptionState *) get
+{
+    return [self get:self.appMode];
+}
+
+- (OASubscriptionState *) get:(OAApplicationMode *)mode
+{
+    NSObject *val = [self getValue:mode];
+    return val ? [OASubscriptionState getByStateStr:(NSString *)val] : self.defValue;
+}
+
+- (void) set:(OASubscriptionState *)state
+{
+    [self set:state mode:self.appMode];
+}
+
+- (void) set:(OASubscriptionState *)state mode:(OAApplicationMode *)mode
+{
+    [self setValue:state.stateStr mode:mode];
+}
+
+- (void) resetToDefault
+{
+    OASubscriptionState *defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (OASubscriptionState *) pDefault;
+
+    [self set:defaultValue];
+}
+
+@end
+
+
 @interface OACommonMapSource ()
 
 @property (nonatomic) OAMapSource *defValue;
@@ -3238,6 +3340,8 @@
     NSMapTable<NSString *, OACommonPreference *> *_globalPreferences;
     NSMapTable<NSString *, OACommonPreference *> *_profilePreferences;
     OADayNightHelper *_dayNightHelper;
+    
+    NSObject *_settingsLock;
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
@@ -3258,8 +3362,10 @@
     self = [super init];
     if (self)
     {
+        _settingsLock = [[NSObject alloc] init];
         _dayNightHelper = [OADayNightHelper instance];
         _customBooleanRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
+        _customRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
         _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _globalPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _profilePreferences = [NSMapTable strongToStrongObjectsMapTable];
@@ -3269,7 +3375,7 @@
 
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
         
-        _mapLanguages = @[@"af", @"als", @"ar", @"az", @"be", @"ber", @"bg", @"bn", @"bpy", @"br", @"bs", @"ca", @"ceb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hsb", @"hr", @"ht", @"hu", @"hy", @"id", @"is", @"it", @"ja", @"ka", @"kab", @"kn", @"ko", @"ku", @"la", @"lb", @"lo", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"oc", @"os", @"pl", @"pms", @"pt", @"ro", @"ru", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh", @"zh_cn"];
+        _mapLanguages = @[@"af", @"als", @"ar", @"az", @"be", @"ber", @"bg", @"bn", @"bpy", @"br", @"bs", @"ca", @"ceb", @"ckb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hsb", @"hr", @"ht", @"hu", @"hy", @"id", @"is", @"it", @"ja", @"ka", @"kab", @"kn", @"ko", @"ku", @"la", @"lb", @"lo", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"oc", @"os", @"pl", @"pms", @"pt", @"ro", @"ru", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh", @"zh_cn"];
 
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
 
@@ -3303,6 +3409,9 @@
         [_globalPreferences setObject:_settingDoNotShowPromotions forKey:@"do_not_show_promotions"];
         [_globalPreferences setObject:_settingUseAnalytics forKey:@"use_analytics"];
         [_globalPreferences setObject:_showDownloadMapDialog forKey:@"show_download_map_dialog"];
+        
+        _animateMyLocation = [OACommonBoolean withKey:animateMyLocationKey defValue:YES];
+        [_profilePreferences setObject:_animateMyLocation forKey:@"animate_my_location"];
 
         _liveUpdatesPurchased = [[OACommonBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
         _settingOsmAndLiveEnabled = [[[OACommonBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];
@@ -3321,16 +3430,15 @@
         _billingHideUserName = [[OACommonBoolean withKey:billingHideUserNameKey defValue:NO] makeGlobal];
         _billingPurchaseTokenSent = [[OACommonBoolean withKey:billingPurchaseTokenSentKey defValue:NO] makeGlobal];
         _billingPurchaseTokensSent = [[OACommonString withKey:billingPurchaseTokensSentKey defValue:@""] makeGlobal];
-        _liveUpdatesPurchaseCancelledTime = [[OACommonDouble withKey:liveUpdatesPurchaseCancelledTimeKey defValue:0] makeGlobal];
         _liveUpdatesPurchaseCancelledFirstDlgShown = [[OACommonBoolean withKey:liveUpdatesPurchaseCancelledFirstDlgShownKey defValue:NO] makeGlobal];
         _liveUpdatesPurchaseCancelledSecondDlgShown = [[OACommonBoolean withKey:liveUpdatesPurchaseCancelledSecondDlgShownKey defValue:NO] makeGlobal];
         _fullVersionPurchased = [[OACommonBoolean withKey:fullVersionPurchasedKey defValue:NO] makeGlobal];
         _depthContoursPurchased = [[OACommonBoolean withKey:depthContoursPurchasedKey defValue:NO] makeGlobal];
         _contourLinesPurchased = [[OACommonBoolean withKey:contourLinesPurchasedKey defValue:NO] makeGlobal];
+        _wikipediaPurchased = [[OACommonBoolean withKey:wikipediaPurchasedKey defValue:NO] makeGlobal];
         _emailSubscribed = [[OACommonBoolean withKey:emailSubscribedKey defValue:NO] makeGlobal];
         _osmandProPurchased = [[OACommonBoolean withKey:osmandProPurchasedKey defValue:NO] makeGlobal];
         _osmandMapsPurchased = [[OACommonBoolean withKey:osmandMapsPurchasedKey defValue:NO] makeGlobal];
-        _displayDonationSettings = [[NSUserDefaults standardUserDefaults] objectForKey:displayDonationSettingsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:displayDonationSettingsKey] : NO;
         _lastReceiptValidationDate = [[NSUserDefaults standardUserDefaults] objectForKey:lastReceiptValidationDateKey] ? [NSDate dateWithTimeIntervalSince1970:[[NSUserDefaults standardUserDefaults] doubleForKey:lastReceiptValidationDateKey]] : [NSDate dateWithTimeIntervalSince1970:0];
         _eligibleForIntroductoryPrice = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForIntroductoryPriceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForIntroductoryPriceKey] : NO;
         _eligibleForSubscriptionOffer = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForSubscriptionOfferKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForSubscriptionOfferKey] : NO;
@@ -3346,10 +3454,10 @@
         [_globalPreferences setObject:_billingPurchaseTokensSent forKey:@"billing_purchase_tokens_sent"];
         [_globalPreferences setObject:_liveUpdatesPurchaseCancelledFirstDlgShown forKey:@"live_updates_cancelled_first_dlg_shown_time"];
         [_globalPreferences setObject:_liveUpdatesPurchaseCancelledSecondDlgShown forKey:@"live_updates_cancelled_second_dlg_shown_time"];
-        [_globalPreferences setObject:_liveUpdatesPurchaseCancelledTime forKey:@"live_updates_purchase_cancelled_time"];
         [_globalPreferences setObject:_fullVersionPurchased forKey:@"billing_full_version_purchased"];
         [_globalPreferences setObject:_depthContoursPurchased forKey:@"billing_sea_depth_purchased"];
         [_globalPreferences setObject:_contourLinesPurchased forKey:@"billing_srtm_purchased"];
+        [_globalPreferences setObject:_wikipediaPurchased forKey:@"billing_wiki_purchased"];
         [_globalPreferences setObject:_emailSubscribed forKey:@"email_subscribed"];
         [_globalPreferences setObject:_osmandProPurchased forKey:@"billing_osmand_pro_purchased"];
         [_globalPreferences setObject:_osmandMapsPurchased forKey:@"billing_osmand_maps_purchased"];
@@ -3446,7 +3554,12 @@
 
         _mapInfoControls = [OACommonString withKey:mapInfoControlsKey defValue:@""];
         [_profilePreferences setObject:_mapInfoControls forKey:@"map_info_controls"];
-
+        
+        _derivedProfile = [OACommonString withKey:derivedProfileKey defValue:@"default"];
+        [_derivedProfile setModeDefaultValue:@"motorcycle" mode:OAApplicationMode.MOTORCYCLE];
+        [_derivedProfile setModeDefaultValue:@"truck" mode:OAApplicationMode.TRUCK];
+        [_profilePreferences setObject:_derivedProfile forKey:@"derived_profile"];
+        
         _routingProfile = [OACommonString withKey:routingProfileKey defValue:@""];
         [_routingProfile setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
         [_routingProfile setModeDefaultValue:@"bicycle" mode:OAApplicationMode.BICYCLE];
@@ -3554,6 +3667,9 @@
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_COMPASS) mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_rotateMap forKey:@"rotate_map"];
 
+        _compassMode = [OACommonInteger withKey:compassModeKey defValue:EOACompassRotated];
+        [_profilePreferences setObject:_compassMode forKey:@"compass_mode"];
+
         _mapDensity = [OACommonDouble withKey:mapDensityKey defValue:MAGNIFIER_DEFAULT_VALUE];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_CAR) mode:[OAApplicationMode CAR]];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode BICYCLE]];
@@ -3593,6 +3709,8 @@
 
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
+        _forcePrivateAccessRoutingAsked = [OACommonBoolean withKey:forcePrivateAccessRoutingAskedKey defValue:NO];
+        [_profilePreferences setObject:_forcePrivateAccessRoutingAsked forKey:@"force_private_access_routing"];
         _fastRouteMode = [OACommonBoolean withKey:fastRouteModeKey defValue:YES];
         [_profilePreferences setObject:_fastRouteMode forKey:@"fast_route_mode"];
         _disableComplexRouting = [[NSUserDefaults standardUserDefaults] objectForKey:disableComplexRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableComplexRoutingKey] : NO;
@@ -3609,9 +3727,11 @@
 
         _disableOffrouteRecalc = [OACommonBoolean withKey:disableOffrouteRecalcKey defValue:NO];
         _disableWrongDirectionRecalc = [OACommonBoolean withKey:disableWrongDirectionRecalcKey defValue:NO];
+        _hazmatTransportingEnabled = [OACommonBoolean withKey:hazmatTransportingEnabledKey defValue:NO];
 
         [_profilePreferences setObject:_disableOffrouteRecalc forKey:@"disable_offroute_recalc"];
         [_profilePreferences setObject:_disableWrongDirectionRecalc forKey:@"disable_wrong_direction_recalc"];
+        [_profilePreferences setObject:_hazmatTransportingEnabled forKey:@"hazmat_transporting_enabled"];
 
         _autoFollowRoute = [OACommonInteger withKey:autoFollowRouteKey defValue:0];
         [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode CAR]];
@@ -3944,16 +4064,20 @@
         [_globalPreferences setObject:_backupAccessTokenUpdateTime forKey:@"backup_access_token_update_time"];
         
         _backupPromocode = [[OACommonString withKey:backupPromocodeKey defValue:@""] makeGlobal];
-        _backupPromocodeActive = [[OACommonBoolean withKey:backupPromocodeActiveKey defValue:NO] makeGlobal];
-        _backupPromocodeStartTime = [[OACommonLong withKey:backupPromocodeStartTimeKey defValue:0] makeGlobal];
-        _backupPromocodeExpireTime = [[OACommonLong withKey:backupPromocodeExpireTimeKey defValue:0] makeGlobal];
-        _backupPromocodeState = [[OACommonInteger withKey:backupPromocodeStateKey defValue:0] makeGlobal];
+        _backupPurchaseActive = [[OACommonBoolean withKey:backupPurchaseActiveKey defValue:NO] makeGlobal];
+        _backupPurchaseStartTime = [[OACommonLong withKey:backupPurchaseStartTimeKey defValue:0] makeGlobal];
+        _backupPurchaseExpireTime = [[OACommonLong withKey:backupPurchaseExpireTimeKey defValue:0] makeGlobal];
+        _backupPurchaseState = [[OACommonSubscriptionState withKey:backupPurchaseStateKey defValue:OASubscriptionState.UNDEFINED] makeGlobal];
+        _proSubscriptionOrigin = [[OACommonInteger withKey:proSubscriptionOriginKey defValue:-1] makeGlobal];
         
         [_globalPreferences setObject:_backupPromocode forKey:@"backup_promocode"];
-        [_globalPreferences setObject:_backupPromocodeActive forKey:@"backup_promocode_active"];
-        [_globalPreferences setObject:_backupPromocodeStartTime forKey:@"promo_website_start_time"];
-        [_globalPreferences setObject:_backupPromocodeExpireTime forKey:@"promo_website_expire_time"];
-        [_globalPreferences setObject:_backupPromocodeState forKey:@"promo_website_state"];
+        [_globalPreferences setObject:_backupPurchaseActive forKey:@"backup_promocode_active"];
+        [_globalPreferences setObject:_backupPurchaseStartTime forKey:@"promo_website_start_time"];
+        [_globalPreferences setObject:_backupPurchaseExpireTime forKey:@"promo_website_expire_time"];
+        [_globalPreferences setObject:_backupPurchaseState forKey:@"promo_website_state"];
+        [_globalPreferences setObject:_proSubscriptionOrigin forKey:@"pro_subscription_origin"];
+        
+        _purchasedIdentifiers = [[OACommonString withKey:purchaseIdentifiersKey defValue:@""] makeGlobal];
 
         _favoritesLastUploadedTime = [[OACommonLong withKey:favoritesLastUploadedTimeKey defValue:0] makeGlobal];
         _backupLastUploadedTime = [[OACommonLong withKey:backupLastUploadedTimeKey defValue:0] makeGlobal];
@@ -4147,6 +4271,11 @@
     return _registeredPreferences;
 }
 
+- (NSMapTable<NSString *, OACommonPreference *> *)getGlobalPreferences
+{
+    return _globalPreferences;
+}
+
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key
 {
     return [_registeredPreferences objectForKey:key];
@@ -4219,12 +4348,6 @@
 {
     _settingShowAltInDriveMode = settingShowAltInDriveMode;
     [[NSUserDefaults standardUserDefaults] setBool:_settingShowAltInDriveMode forKey:settingMapShowAltInDriveModeKey];
-}
-
-- (void) setDisplayDonationSettings:(BOOL)displayDonationSettings
-{
-    _displayDonationSettings = displayDonationSettings;
-    [[NSUserDefaults standardUserDefaults] setBool:_displayDonationSettings forKey:displayDonationSettingsKey];
 }
 
 - (void) setLastReceiptValidationDate:(NSDate *)lastReceiptValidationDate
@@ -4537,24 +4660,30 @@
 
 - (OACommonBoolean *)getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue
 {
-    OACommonBoolean *value = [_customBooleanRoutingProps objectForKey:attrName];
-    if (!value)
+    @synchronized (_settingsLock)
     {
-        value = [OACommonBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
-        [_customBooleanRoutingProps setObject:value forKey:attrName];
+        OACommonBoolean *value = [_customBooleanRoutingProps objectForKey:attrName];
+        if (!value)
+        {
+            value = [OACommonBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
+            [_customBooleanRoutingProps setObject:value forKey:attrName];
+        }
+        return value;
     }
-    return value;
 }
 
 - (OACommonString *)getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue
 {
-    OACommonString *value = [_customRoutingProps objectForKey:attrName];
-    if (!value)
+    @synchronized (_settingsLock)
     {
-        value = [OACommonString withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
-        [_customRoutingProps setObject:value forKey:attrName];
+        OACommonString *value = [_customRoutingProps objectForKey:attrName];
+        if (!value)
+        {
+            value = [OACommonString withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
+            [_customRoutingProps setObject:value forKey:attrName];
+        }
+        return value;
     }
-    return value;
 }
 
 

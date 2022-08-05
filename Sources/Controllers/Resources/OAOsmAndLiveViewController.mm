@@ -7,12 +7,11 @@
 //
 
 #import "OAOsmAndLiveViewController.h"
-
 #import "OAResourcesUIHelper.h"
 #import "OAOsmAndLiveSelectionViewController.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
-#include "Localization.h"
+#import "Localization.h"
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAIconTextDescCell.h"
@@ -23,11 +22,10 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAIAPHelper.h"
-#import "OAOsmLiveBannerView.h"
+#import "OASubscriptionBannerCardView.h"
 #import "OAChoosePlanHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAWorldRegion.h"
-
 #import "OAOsmAndLiveHelper.h"
 
 #include <OsmAndCore/IncrementalChangesManager.h>
@@ -45,8 +43,8 @@
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
-@interface OAOsmAndLiveViewController ()<UITableViewDelegate, UITableViewDataSource, OAOsmLiveBannerViewDelegate> {
-    
+@interface OAOsmAndLiveViewController () <UITableViewDelegate, UITableViewDataSource, OASubscriptionBannerCardViewDelegate>
+{
     NSMutableArray *_enabledData;
     NSMutableArray *_availableData;
     
@@ -68,8 +66,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAIAPHelper *_iapHelper;
-    
-    OAOsmLiveBannerView *_osmLiveBanner;
+    OASubscriptionBannerCardView *_subscriptionBannerView;
 }
 
 static const NSInteger enabledIndex = 0;
@@ -78,7 +75,7 @@ static const NSInteger sectionCount = 2;
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"osmand_live_title");
+    _titleView.text = OALocalizedString(@"osmand_live_updates");
     [_segmentControl setTitle:OALocalizedString(@"res_updates") forSegmentAtIndex:0];
     [_segmentControl setTitle:OALocalizedString(@"osmand_live_reports") forSegmentAtIndex:1];
 }
@@ -94,15 +91,6 @@ static const NSInteger sectionCount = 2;
     _localIndexes = [NSMutableArray new];
 }
 
-- (void) viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-    
-    if (_osmLiveBanner)
-        [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
-    [self.tableView reloadData];
-}
-
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -111,7 +99,9 @@ static const NSInteger sectionCount = 2;
     [self setupView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
+
     _osmAndLiveDownloadedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onOsmAndLiveUpdated)
                                                                 andObserve:_app.osmAndLiveUpdatedObservable];
@@ -160,7 +150,7 @@ static const NSInteger sectionCount = 2;
 
 - (NSString *) getLiveDescription:(QString) resourceId
 {
-    NSString *regionName = QString(resourceId).remove(QStringLiteral(".map.obf")).toNSString();
+    NSString *regionName = QString(resourceId).remove(QStringLiteral(".obf")).toNSString();
     NSTimeInterval timestamp = [OAOsmAndLiveHelper getPreferenceLastUpdateForLocalIndex:regionName];
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -185,7 +175,7 @@ static const NSInteger sectionCount = 2;
             continue;
         
         NSString *itemId = item.resourceId.toNSString();
-        BOOL isLive = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:QString(item.resourceId).remove(QStringLiteral(".map.obf")).toNSString()];
+        BOOL isLive = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:QString(item.resourceId).remove(QStringLiteral(".obf")).toNSString()];
         NSString *countryName = [OAResourcesUIHelper getCountryName:item];
         NSString *title = countryName == nil ? item.title : [NSString stringWithFormat:@"%@ %@", countryName, item.title];
         // Convert to seconds
@@ -207,30 +197,48 @@ static const NSInteger sectionCount = 2;
     [self.tableView reloadData];
 }
 
+- (void)setupSubscriptionBanner
+{
+    BOOL isSubscribed = [OAIAPHelper isSubscribedToLiveUpdates];
+    if (!isSubscribed && !_subscriptionBannerView)
+    {
+        _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:EOASubscriptionBannerUpdates];
+        _subscriptionBannerView.delegate = self;
+
+        _subscriptionBannerView.titleLabel.text = OALocalizedString(@"subscription_banner_osmand_pro_title");
+        _subscriptionBannerView.iconView.image = [UIImage templateImageNamed:@"ic_custom_osmand_pro_logo_monotone_big"];
+        _subscriptionBannerView.iconView.tintColor = UIColorFromRGB(color_banner_button);
+
+        NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"purchase_get")];
+        [buttonTitle addAttribute:NSForegroundColorAttributeName
+                            value:UIColorFromRGB(color_primary_purple)
+                            range:NSMakeRange(0, buttonTitle.string.length)];
+        [buttonTitle addAttribute:NSFontAttributeName
+                            value:[UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
+                            range:NSMakeRange(0, buttonTitle.string.length)];
+        [_subscriptionBannerView.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
+    }
+    else if (isSubscribed)
+    {
+        _subscriptionBannerView = nil;
+    }
+
+    if (_subscriptionBannerView)
+        [_subscriptionBannerView layoutSubviews];
+
+    self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
+}
+
 - (void) setupView
 {
     [self applySafeAreaMargins];
     [self setLastUpdateDate];
     [self adjustViews];
-    
-    if (!_iapHelper.subscribedToLiveUpdates)
-    {
-        OASubscription *cheapest = [_iapHelper getCheapestMonthlySubscription];
-        if (cheapest && cheapest.formattedPrice)
-        {
-            NSString *minPriceStr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_month_cost_descr"), cheapest.formattedMonthlyPrice];
-            _osmLiveBanner = [OAOsmLiveBannerView bannerWithType:EOAOsmLiveBannerUnlockUpdates minPriceStr:minPriceStr];
-            _osmLiveBanner.delegate = self;
-            [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
-        }
-    }
-    else
-    {
-        _osmLiveBanner = nil;
-    }
-    self.tableView.tableHeaderView = _osmLiveBanner ? _osmLiveBanner : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
-    self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased];
-    
+
+    [self setupSubscriptionBanner];
+
+    self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased] || ![_iapHelper.proMonthly isAnyPurchased];
+
     [self updateContent];
 }
 
@@ -254,8 +262,9 @@ static const NSInteger sectionCount = 2;
     }
 }
 
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applySafeAreaMargins];
         [self adjustViews];
@@ -275,6 +284,7 @@ static const NSInteger sectionCount = 2;
             UIView *label = [_availableHeaderView viewWithTag:kAvailableLabelTag];
             [self adjustLabelToMargin:label parentView:_availableHeaderView];
         }
+        [self setupSubscriptionBanner];
     } completion:nil];
 }
 
@@ -480,7 +490,7 @@ static const NSInteger sectionCount = 2;
         if (!isAvailable)
         {
             ELiveUpdateFrequency frequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:[item[@"id"]
-                                                                                                      stringByReplacingOccurrencesOfString:@".map.obf" withString:@""]];
+                                                                                                      stringByReplacingOccurrencesOfString:@".obf" withString:@""]];
             NSString *frequencyString = [OAOsmAndLiveHelper getFrequencyString:frequency];
             NSMutableAttributedString *formattedText = [self setColorForText:frequencyString inText:item[@"description"] withColor:UIColorFromRGB(color_live_frequency)];
             cell.descView.attributedText = formattedText;
@@ -522,7 +532,7 @@ static const NSInteger sectionCount = 2;
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    const QString regionName = QString::fromNSString(item[@"id"]).remove(QStringLiteral(".map.obf"));
+    const QString regionName = QString::fromNSString(item[@"id"]).remove(QStringLiteral(".obf"));
     OAOsmAndLiveSelectionViewController *selectionController = [[OAOsmAndLiveSelectionViewController alloc] initWithRegionName:regionName titleName:item[@"title"]];
     [self.navigationController pushViewController:selectionController animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:true];
@@ -550,7 +560,7 @@ static const NSInteger sectionCount = 2;
                 label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
                 [label setFont:[UIFont systemFontOfSize:13]];
                 [label setText:[OALocalizedString(@"osmand_live_updates") upperCase]];
-                [button setOn:_settings.settingOsmAndLiveEnabled.get && _iapHelper.subscribedToLiveUpdates];
+                [button setOn:_settings.settingOsmAndLiveEnabled.get && [OAIAPHelper isSubscribedToLiveUpdates]];
                 [button addTarget:self action:@selector(sectionHeaderButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
                 [headerView addSubview:button];
                 [headerView addSubview:label];
@@ -582,7 +592,7 @@ static const NSInteger sectionCount = 2;
 {
     UISwitch *btn = (UISwitch *)sender;
     BOOL newValue = !_settings.settingOsmAndLiveEnabled.get;
-    if (!_iapHelper.subscribedToLiveUpdates)
+    if (![OAIAPHelper isSubscribedToLiveUpdates])
     {
         newValue = NO;
         [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_ask_for_purchase") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
@@ -593,14 +603,35 @@ static const NSInteger sectionCount = 2;
         [_app checkAndDownloadOsmAndLiveUpdates];
 }
 
-#pragma mark OAOsmLiveBannerViewDelegate
+#pragma mark - OASubscriptionBannerCardViewDelegate
 
-- (void) osmLiveBannerPressed
+- (void)onButtonPressed
 {
-    [OAChoosePlanHelper showChoosePlanScreenWithProduct:nil navController:self.navigationController];
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.HOURLY_MAP_UPDATES navController:self.navigationController];
+}
+
+- (void)productsRequested:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupView];
+        CATransition *animation = [CATransition animation];
+        [animation setType:kCATransitionPush];
+        [animation setSubtype:kCATransitionFromBottom];
+        [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [animation setFillMode:kCAFillModeBoth];
+        [animation setDuration:.3];
+        [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
+    });
 }
 
 - (void) productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupView];
+    });
+}
+
+- (void) productRestored:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupView];

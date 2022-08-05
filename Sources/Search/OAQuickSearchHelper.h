@@ -12,7 +12,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/GpxDocument.h>
 
-@class OASearchUICore, OASearchResultCollection;
+@class OASearchUICore, OASearchResultCollection, OASearchResult, CLLocation;
 
 @interface OASearchFavoritesAPI : OASearchBaseAPI
 
@@ -42,4 +42,10 @@
 - (void) setResultCollection:(OASearchResultCollection *)resultCollection;
 - (void) refreshCustomPoiFilters;
 
++ (NSArray<OASearchResult *> *)searchCities:(NSString *)text
+                             searchLocation:(CLLocation *)searchLocation
+                               allowedTypes:(NSArray<NSString *> *)allowedTypes
+                                  cityLimit:(NSInteger)cityLimit
+                                       view:(UIView *)view
+                                 onComplete:(void (^)(NSMutableArray *amenities))onComplete;
 @end

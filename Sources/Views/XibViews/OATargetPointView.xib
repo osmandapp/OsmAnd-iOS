@@ -68,12 +68,12 @@
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </view>
-                                <textView opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Open 24/7" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0vP-Vz-W7S">
+                                <textView opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Open 24/7" translatesAutoresizingMaskIntoConstraints="NO" id="0vP-Vz-W7S">
                                     <rect key="frame" x="16" y="101" width="288" height="19"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
                                     <color key="textColor" red="0.44313725490196076" green="0.77254901960784317" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <nil key="highlightedColor"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
+                                    <textInputTraits key="textInputTraits"/>
                                 </textView>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hve-we-D1N" userLabel="Shadow">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="123"/>

@@ -213,7 +213,10 @@
         [destCell.imageView setImage:hasIcon ? [UIImage templateImageNamed:item[@"img"]] : nil];
 
         UIColor *backgroundColor = UIColorFromARGB(color_primary_purple_10);
-        if (indexPath.row == _selectionIndex)
+        BOOL selected = [item.allKeys containsObject:@"selected"]
+                ? [item[@"selected"] boolValue]
+                : indexPath.row == _selectionIndex;
+        if (selected)
         {
             backgroundColor = UIColorFromRGB(color_primary_purple);
             destCell.titleLabel.textColor = UIColor.whiteColor;
@@ -287,11 +290,17 @@
 {
     NSDictionary *item = _data[indexPath.row];
     BOOL available = [item.allKeys containsObject:@"available"] ? [item[@"available"] boolValue] : YES;
-    if (available)
+    if (self.foldersDelegate)
     {
-        if (self.foldersDelegate)
+        if (available)
+        {
+            _selectionIndex = indexPath.row;
             [self.foldersDelegate onItemSelected:indexPath.row];
-        _selectionIndex = indexPath.row;
+        }
+        else if ([item.allKeys containsObject:@"product_identifier"])
+        {
+            [self.foldersDelegate askForPaidProduct:item[@"product_identifier"]];
+        }
     }
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }

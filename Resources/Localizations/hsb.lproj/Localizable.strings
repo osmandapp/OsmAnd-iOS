@@ -37,7 +37,7 @@
 "transport_routes" = "Čary";
 "transport_nearby_routes_within" = "Bliske linije w radiusu";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Stop";
+"transport_stop" = "Zastanišćo";
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
@@ -502,7 +502,7 @@
 "shared_string_none" = "žane";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online-karty";
-"map_settings_transp" = "Transparency";
+"map_settings_transp" = "Transparenca";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 "mapillary" = "Mapillary";
@@ -592,10 +592,6 @@
 "osmand_live_update_now" = "Update now";
 "osmand_live_updates_size" = "Downloaded updates size";
 "osmand_live_deleted_object" = "Deleted object";
-"res_banner_free_maps_title" = "You have %d free maps!";
-"res_banner_free_maps_desc" = "You can download %d free maps, without updates";
-"res_banner_no_free_maps_title" = "You have no free maps!";
-"res_banner_no_free_maps_desc" = "Please purchase region maps or All World maps";
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
@@ -672,7 +668,7 @@
 "osm_website" = "Webstrona";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"osm_poi_delete_title" = "POI wotstronić";
+"osm_poi_delete_title" = "POI wušmórnyć";
 "osm_target_modified" = "Změnjene OSM POI-dypki";
 "osm_target_deleted" = "Wotstronjene OSM POI-dypki";
 "osm_target_created" = "OSM POI-dypk wutworjeny";
@@ -889,7 +885,7 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Jězbu planować";
 "help_legend" = "Legenda karty";
-"help_other_header" = "druhe";
+"help_other_header" = "Druhe";
 "help_install_and_troubleshoot" = "Instalacija a rozrisowanje problemow";
 "help_tech_articles" = "Technical articles";
 "help_versions" = "Wersije";
@@ -1405,7 +1401,7 @@
 "shared_string_next" = "Přichodne";
 "base_profile_descr_aircraft" = "Lětadło, gliding";
 "app_theme_light" = "Swětłe";
-"update_map" = "Kartowe kachlicy zaktualizować";
+"update_map" = "Zaktualizuj kartu";
 "enter_profile_name" = "Zapodaj mjeno profila";
 "nothing_found_empty" = "Žadyn wuslědk";
 "res_slope" = "spad";
@@ -1569,3 +1565,14 @@
 "lang_be_by" = "běłorušćina (łaćonsce)";
 "shared_string_import_complete" = "Import dokónčeny";
 "add_description" = "Wopisanje dodać";
+"private_access_routing_req" = "Twój cil leži w priwatnej kónčinje. Za tutu jězbu wužiwanje priwatnych pućow dowolić\?";
+"shared_string_stop" = "Zastanišćo";
+"altitude_descent" = "Wotstup";
+"shared_string_start" = "Start";
+"osm_live_banner_desc" = "Za njewobmjezowane sćehnjenje kartow a aktualizacije husćišo hač jónu wob měsac: tydźensce, wšědnje abo hodźinsce.";
+"map_settings_legend" = "Legenda";
+"altitude_ascent" = "Postup";
+"shared_string_delete_all" = "Wšitke wotstronić";
+"paused" = "Přetorhnjene";
+"shared_string_data" = "Daty";
+"shared_string_undefined" = "njedefinowane";

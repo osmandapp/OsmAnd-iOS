@@ -26,10 +26,11 @@
 #import "OAGpxMutableDocument.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXAppearanceCollection.h"
-#import "OARouteStatisticsHelper.h"
-#import "OAColoringType.h"
 #import "OsmAndApp.h"
 #import "OAMapPanelViewController.h"
+#import "OAIAPHelper.h"
+#import "OAPluginPopupViewController.h"
+#import "OASegmentedSlider.h"
 
 #define kColorsSection 1
 
@@ -178,18 +179,18 @@
         if (currentType == coloringType)
             _selectedItem = item;
     }
-
-    NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
-
-    for (NSString *attribute in attributes)
-    {
-        BOOL isAvailable = [OAColoringType.ATTRIBUTE isAvailableForDrawingTrack:self.doc attributeName:attribute];
-        OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:OAColoringType.ATTRIBUTE title:OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]) attrName:attribute isActive:isAvailable];
-        [items addObject:item];
-
-        if (currentType == OAColoringType.ATTRIBUTE && [self.gpx.coloringType isEqualToString:attribute])
-            _selectedItem = item;
-    }
+    // TODO: make other types available in the new subscription
+//    NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
+//
+//    for (NSString *attribute in attributes)
+//    {
+//        BOOL isAvailable = [OAIAPHelper isSubscribedToOsmAndPro] &&  [OAColoringType.ATTRIBUTE isAvailableForDrawingTrack:self.doc attributeName:attribute];
+//        OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:OAColoringType.ATTRIBUTE title:OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]) attrName:attribute isActive:isAvailable];
+//        [items addObject:item];
+//
+//        if (currentType == OAColoringType.ATTRIBUTE && [self.gpx.coloringType isEqualToString:attribute])
+//            _selectedItem = item;
+//    }
 
     _availableColoringTypes = items;
 
@@ -304,7 +305,8 @@
     {
         [trackColoringTypes addObject:@{
             @"title": item.title,
-            @"available": @(item.isActive)
+            @"available": @(item.isActive),
+            @"product_identifier": kInAppId_Addon_Advanced_Widgets
         }];
     }
 
@@ -920,8 +922,8 @@
             cell.topRightLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
             cell.bottomLeftLabel.text = arrayValue.firstObject;
             cell.bottomRightLabel.text = arrayValue.lastObject;
-            cell.numberOfMarks = arrayValue.count;
-            cell.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
+            [cell.sliderView setNumberOfMarks:arrayValue.count additionalMarksBetween:0];
+            cell.sliderView.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
@@ -1046,7 +1048,7 @@
         OASegmentSliderTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         OAGPXTableCellData *cellData = [self getCellData:indexPath];
 
-        [self updateProperty:@(cell.selectedMark) tableData:cellData];
+        [self updateProperty:@(cell.sliderView.selectedMark) tableData:cellData];
 
         [self updateData:cellData];
 
@@ -1082,6 +1084,11 @@
                         [self.tableView reloadData];
                     }
                     completion:nil];
+}
+
+- (void)askForPaidProduct:(NSString *)productIdentifier
+{
+    [OAPluginPopupViewController askForPlugin:productIdentifier];
 }
 
 #pragma mark - OAColorsTableViewCellDelegate
@@ -1187,7 +1194,8 @@
         {
             [newTrackColoringTypes addObject:@{
                     @"title": item.title,
-                    @"available": @(item.isActive)
+                    @"available": @(item.isActive),
+                    @"product_identifier": kInAppId_Addon_Advanced_Widgets
             }];
         }
         [tableData setData:@{

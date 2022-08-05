@@ -30,7 +30,8 @@
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OADownloadMultipleResourceViewController.h"
-#import "OASlider.h"
+#import "OASegmentedSlider.h"
+#import "OALinks.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -604,8 +605,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 NSString *v = p.value.length == 0 ? kDefaultDensity : p.value;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
-                cell.numberOfMarks = _visibleDensityValues.count;
-                cell.selectedMark = [_visibleDensityValues indexOfObject:v];
+                [cell.sliderView setNumberOfMarks:_visibleDensityValues.count additionalMarksBetween:0];
+                cell.sliderView.selectedMark = [_visibleDensityValues indexOfObject:v];
                 [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside];
             }
@@ -613,8 +614,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 NSString *v = p.value.length == 0 ? kDefaultWidth : p.value;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
-                cell.numberOfMarks = _visibleWidthValues.count;
-                cell.selectedMark = [_visibleWidthValues indexOfObject:v];
+                [cell.sliderView setNumberOfMarks:_visibleWidthValues.count additionalMarksBetween:0];
+                cell.sliderView.selectedMark = [_visibleWidthValues indexOfObject:v];
                 [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside];
             }
@@ -845,7 +846,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) linkButtonPressed
 {
-    NSURL *url = [NSURL URLWithString:@"https://osmand.net/features/contour-lines-plugin"];
+    NSURL *url = [NSURL URLWithString:kOsmAndFeaturesContourLinesPlugin];
     if ([[UIApplication sharedApplication] canOpenURL:url])
         [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }
@@ -855,8 +856,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (sender)
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
-        OASegmentSliderTableViewCell *cell = (OASegmentSliderTableViewCell *) [tblView cellForRowAtIndexPath:indexPath];
-        NSInteger index = cell.selectedMark;
+        OASegmentSliderTableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
+        NSInteger index = cell.sliderView.selectedMark;
         OAMapStyleParameter *p = [_styleSettings getParameter:kContourLinesWidth];
         NSString *currentValue = p.value.length == 0 ? kDefaultWidth : p.value;
         NSString *selectedValue = _visibleWidthValues[index];
@@ -874,8 +875,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (sender)
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
-        OASegmentSliderTableViewCell *cell = (OASegmentSliderTableViewCell *) [tblView cellForRowAtIndexPath:indexPath];
-        NSInteger index = cell.selectedMark;
+        OASegmentSliderTableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
+        NSInteger index = cell.sliderView.selectedMark;
         OAMapStyleParameter *p = [_styleSettings getParameter:kContourLinesDensity];
         NSString *currentValue = p.value.length == 0 ? kDefaultDensity : p.value;
         NSString *selectedValue = _visibleDensityValues[index];

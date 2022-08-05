@@ -273,6 +273,7 @@ typedef enum {
     CLLocationDirection _lastHeading;
     
     OAAutoObserverProxy* _appModeChangeObserver;
+    OAAutoObserverProxy* _mapTargetChangedObserver;
 
     BOOL _initDone;
 }
@@ -366,6 +367,8 @@ typedef enum {
                                                        withHandler:@selector(onAvailableAppModesChanged)
                                                         andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
     
+    _mapTargetChangedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapTargetChanged) andObserve:self.mapView.targetChangedObservable];
+    
     [self generateMarkersCollection];
     
     _initDone = YES;
@@ -378,6 +381,9 @@ typedef enum {
 {
     [_appModeChangeObserver detach];
     _appModeChangeObserver = nil;
+    
+    [_mapTargetChangedObserver detach];
+    _mapTargetChangedObserver = nil;
 }
 
 - (void) onAvailableAppModesChanged
@@ -450,10 +456,10 @@ typedef enum {
         [c hideMarkers];
         return;
     }
-    
-    const OsmAnd::PointI newTarget31(OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
-                                     OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
-    
+    BOOL useScreenCenter = _mapViewTrackingUtilities.isMapLinkedToLocation && ![OAMapViewTrackingUtilities isSmallSpeedForAnimation:_lastLocation];
+    const OsmAnd::PointI newTarget31 = useScreenCenter ? self.mapView.target31 :
+            OsmAnd::PointI(OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
+                           OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
     if (newLocation.course >= 0)
     {
         c.state = OAMarkerColletionStateMove;
@@ -477,6 +483,12 @@ typedef enum {
     OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
     OAMarkerCollection *c = [_modeMarkers objectForKey:currentMode];
     [self updateLocation:c];
+}
+
+- (void) onMapTargetChanged
+{
+    if (_mapViewTrackingUtilities.isMapLinkedToLocation && ![OAMapViewTrackingUtilities isSmallSpeedForAnimation:_lastLocation])
+        [self updateLocation:_lastLocation heading:_lastHeading];
 }
 
 #pragma mark - OAContextMenuProvider

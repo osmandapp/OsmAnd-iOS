@@ -30,6 +30,8 @@
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
+#define TEST_LOCAL_PURCHASE NO
+
 typedef enum : NSUInteger {
     EOARequestProductsProgressType,
     EOAPurchaseProductProgressType,
@@ -576,6 +578,9 @@ typedef enum : NSUInteger {
 
 - (BOOL) requestProductsWithProgress:(BOOL)showProgress reload:(BOOL)reload restorePurchases:(BOOL)restore
 {
+    if (TEST_LOCAL_PURCHASE && restore)
+        return [self restorePurchasesWithProgress:NO];
+
     if (![_iapHelper productsLoaded] || reload)
     {
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
@@ -634,6 +639,20 @@ typedef enum : NSUInteger {
 
 - (BOOL) restorePurchasesWithProgress:(BOOL)showProgress
 {
+    if (TEST_LOCAL_PURCHASE)
+    {
+        [_iapHelper buyProduct:_iapHelper.proAnnually];
+        [_iapHelper buyProduct:[_iapHelper.subscriptionList getSubscriptionByIdentifier:[kSubscriptionId_Osm_Live_Subscription_3_Months stringByAppendingString:@"_v1"]]];
+        [_iapHelper buyProduct:_iapHelper.mapsFull];
+        [_iapHelper buyProduct:_iapHelper.allWorld];
+        [_iapHelper buyProduct:_iapHelper.europe];
+        [_iapHelper buyProduct:_iapHelper.nautical];
+        [_iapHelper buyProduct:_iapHelper.srtm];
+        [_iapHelper buyProduct:_iapHelper.wiki];
+        [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRestoredNotification object:nil userInfo:nil];
+        return YES;
+    }
+
     if (![_iapHelper productsLoaded])
         return NO;
 
@@ -642,6 +661,7 @@ typedef enum : NSUInteger {
         [self showProgress:EOARestorePurchasesProgressType];
 
     [_iapHelper restoreCompletedTransactions];
+    [_iapHelper checkBackupPurchase];
     return YES;
 }
 
@@ -664,11 +684,13 @@ typedef enum : NSUInteger {
 - (void) requestingPurchase:(SKPayment *)payment
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_iapHelper.liveUpdates getPurchasedSubscription])
+        OAProduct *p = [_iapHelper product:payment.productIdentifier];
+        if (p && [p isKindOfClass:OASubscription.class] && [[_iapHelper.subscriptionList getPurchasedSubscriptions] containsObject:(OASubscription *)p])
+        {
             [self.class showInfoAlertWithTitle:@"" message:OALocalizedString(@"already_has_subscription") inController:self];
+        }
         else
         {
-            OAProduct *p = [_iapHelper product:payment.productIdentifier];
             if (p)
             {
                 if ([p isPurchased])
@@ -679,7 +701,7 @@ typedef enum : NSUInteger {
                 }
                 else
                 {
-                    [OAChoosePlanHelper showChoosePlanScreenWithProduct:p navController:self.navigationController purchasing:YES];
+                    [OAChoosePlanHelper showChoosePlanScreenWithProduct:p navController:self.navigationController];
                     // todo
                     [[SKPaymentQueue defaultQueue] addPayment:payment];
                 }
@@ -704,14 +726,6 @@ typedef enum : NSUInteger {
         OAProduct *product = nil;
         if (identifier)
             product = [_iapHelper product:identifier];
-        
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        if (product && [product isKindOfClass:[OASubscription class]] && ((OASubscription* )product).donationSupported && settings.displayDonationSettings)
-        {
-            settings.displayDonationSettings = NO;
-            OADonationSettingsViewController *donationController = [[OADonationSettingsViewController alloc] init];
-            [self.navigationController pushViewController:donationController animated:YES];
-        }
     });
 }
 

@@ -350,7 +350,7 @@
 "app_mode_utv" = "Côte à côte";
 "shared_string_buy" = "AΓ";
 "actions" = "Tigawin";
-"intro_next" = "Ɣer zdat";
+"intro_next" = "Ar zdat";
 "no_inet_connection" = "Ulac tuqqna n Internet";
 "rendering_attr_highway_class_steps_name" = "Imecwaṛen";
 "rendering_attr_hideWaterPolygons_name" = "Ffer aman";
@@ -604,7 +604,7 @@
 "group_name" = "Isem n wegraw";
 "plan_route_create_new_route" = "Rnu abrid amaynut";
 "copied_to_clipboard" = "Aḍris yettwanɣel ɣef afus";
-"tracks" = "Iberdan";
+"tracks" = "Iberdan-iw";
 "map_mode" = "Takarḍa";
 "searching_gps" = "Anadi...";
 "default_color" = "Fren ini n lexṣas";
@@ -760,3 +760,13 @@
 "lang_lt" = "Taliṭwanit";
 "lang_tl" = "Tafilippinit";
 "lang_uk" = "Tukranit";
+"copy_coordinates" = "Tisidag";
+"units_cubic_m" = "_M";
+"shared_string_start" = "Bdu";
+"shared_string_stop" = "Seḥbes";
+"subscriptions" = "Ijerriden";
+"shared_string_capacity" = "Akettur";
+"paused" = "Yettraǧu";
+"shared_string_undefined" = "D arbadu";
+"shared_string_delete_all" = "Kkes-it meṛṛa";
+"shared_string_data" = "Isefka";

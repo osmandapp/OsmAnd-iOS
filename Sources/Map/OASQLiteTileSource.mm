@@ -9,6 +9,7 @@
 #import "OASQLiteTileSource.h"
 #import <sqlite3.h>
 #import "QuadRect.h"
+#import "OAMapCreatorDbHelper.h""
 
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
@@ -39,8 +40,10 @@
         _filePath = [filePath copy];
         _name = [[_filePath lastPathComponent] stringByDeletingPathExtension];
         
-        _db = std::make_shared<OsmAnd::TileSqliteDatabase>(QString::fromNSString(_filePath));
-                
+        _db = [OAMapCreatorDbHelper.sharedInstance getTileSqliteDatabase:_filePath];
+        if (!_db)
+            _db = std::make_shared<OsmAnd::TileSqliteDatabase>(QString::fromNSString(_filePath));
+                        
         _minZoom = 1;
         _maxZoom = 17;
         _inversiveZoom = YES; // BigPlanet
@@ -55,8 +58,6 @@
 
 - (void) dealloc
 {
-    if (_db)
-        _db->close();
 }
 
 - (int) bitDensity
@@ -454,13 +455,13 @@
 {
     BOOL res = NO;
 
-    auto *db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(filePath));
-    OsmAnd::TileSqliteDatabase::Meta meta;
-    if (db->obtainMeta(meta))
-        res = !meta.getUrl().isEmpty();
+    auto db = [OAMapCreatorDbHelper.sharedInstance getTileSqliteDatabase:filePath];
+    if (!db)
+        db = std::make_shared<OsmAnd::TileSqliteDatabase>(QString::fromNSString(filePath));
     
-    delete db;
-    
+    if (db && db->open())
+        res = db->isOnlineTileSource();
+
     return res;
 }
 
@@ -468,13 +469,16 @@
 {
     NSString *title = nil;
 
-    auto *db = new OsmAnd::TileSqliteDatabase(QString::fromNSString(filePath));
-    OsmAnd::TileSqliteDatabase::Meta meta;
-    if (db->obtainMeta(meta))
-        title = meta.getTitle().toNSString();
-
-    delete db;
-
+    auto db = [OAMapCreatorDbHelper.sharedInstance getTileSqliteDatabase:filePath];
+    if (!db)
+        db = std::make_shared<OsmAnd::TileSqliteDatabase>(QString::fromNSString(filePath));
+    
+    if (db && db->open())
+    {
+        OsmAnd::TileSqliteDatabase::Meta meta;
+        if (db->obtainMeta(meta))
+            title = meta.getTitle().toNSString();
+    }
     return title.length > 0 ? title : [[[filePath lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 }
 

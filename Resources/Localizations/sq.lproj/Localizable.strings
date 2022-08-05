@@ -32,3 +32,5 @@
 "app_theme_light" = "Ndriçimi";
 "navigate_point_northing" = "Vlera veriore";
 "navigate_point_easting" = "Vlera lindore";
+"shared_string_start" = "Fillo";
+"shared_string_delete_all" = "Fshij të gjitha";

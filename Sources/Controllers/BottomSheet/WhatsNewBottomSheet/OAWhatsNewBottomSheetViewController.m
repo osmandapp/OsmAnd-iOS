@@ -11,7 +11,7 @@
 #import "OAAppVersionDependentConstants.h"
 #import "OADescrTitleCell.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OALinks.h"
 #import "OARootViewController.h"
 
 #define kVerticalMargin 16.
@@ -97,7 +97,7 @@
 - (void) onRightButtonPressed
 {
     [super onRightButtonPressed];
-    [OARootViewController.instance openSafariWithURL:kLatestChangesUrl];
+    [OARootViewController.instance openSafariWithURL:kDocsLatestVersion];
 }
 
 #pragma mark - UITableViewDataSource

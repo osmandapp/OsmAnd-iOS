@@ -33,7 +33,7 @@
 //        _gradientSlopeColor = dataItem.getGradientSlopeColor;
 //        _gradientAltitudeColor = dataItem.getGradientAltitudeColor;
 //
-        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:dataItem.gpxFilePath];
+        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:dataItem.absolutePath];
         OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
         if (analysis)
         {
@@ -47,7 +47,7 @@
 
 - (void) toJson:(id)json
 {
-    json[@"color"] = [NSString stringWithFormat:@"#%0X", _color];
+    json[@"color"] = [NSString stringWithFormat:@"#%0lX", (long)_color];
     json[@"coloring_type"] = _coloringType;
     json[@"width"] = _width;
     json[@"show_arrows"] = _showArrows ? @"true" : @"false";
@@ -67,8 +67,12 @@
 + (OAGpxAppearanceInfo *) fromJson:()json
 {
     OAGpxAppearanceInfo *gpxAppearanceInfo = [[OAGpxAppearanceInfo alloc] init];
-
-    gpxAppearanceInfo.color = [OAUtilities colorToNumberFromString:json[@"color"]];
+    id color = json[@"color"];
+    BOOL hasColor = color != nil;
+    if (hasColor)
+        gpxAppearanceInfo.color = [color isKindOfClass:NSNumber.class] ? ((NSNumber *) color).intValue : [OAUtilities colorToNumberFromString:color];
+    else
+        gpxAppearanceInfo.color = [OAUtilities colorToNumberFromString:nil];
     gpxAppearanceInfo.coloringType = json[@"coloring_type"];
     gpxAppearanceInfo.width = json[@"width"];
     gpxAppearanceInfo.showArrows = [json[@"show_arrows"] boolValue];

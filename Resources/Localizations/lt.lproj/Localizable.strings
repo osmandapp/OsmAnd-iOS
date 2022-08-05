@@ -48,7 +48,7 @@
 "transport_routes" = "Maršrutai";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Viduje";
-"transport_stop" = "Nutraukti";
+"transport_stop" = "Stop";
 
 "cancel_navigation" = "Stabdyti navigaciją";
 "start_navigation" = "Start navigation";
@@ -718,7 +718,7 @@
 "map_settings_map_magnifier" = "Žemėlapio padidinimo stiklas";
 "map_settings_text_size" = "Teksto dydis";
 "map_settings_day" = "Diena";
-"map_settings_night" = "Naktis";
+"map_settings_night" = "Naktį";
 "map_settings_style" = "Atvaizdavimo stilius";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -1172,10 +1172,6 @@
 "osmand_live_update_now" = "Atnaujinti tuoj pat";
 "osmand_live_updates_size" = "Downloaded updates size";
 "osmand_live_deleted_object" = "Deleted object";
-"res_banner_free_maps_title" = "You have %d free maps!";
-"res_banner_free_maps_desc" = "You can download %d free maps, without updates";
-"res_banner_no_free_maps_title" = "You have no free maps!";
-"res_banner_no_free_maps_desc" = "Please purchase region maps or All World maps";
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
@@ -1202,7 +1198,7 @@
 "res_cancel_inst_q" = "You're going to cancel %@ installation.";
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
-"res_details" = "Išsami informacija";
+"res_details" = "Detalės";
 "res_type" = "Tipas";
 "res_unknown" = "Unknown";
 "res_size" = "Size";
@@ -1267,7 +1263,7 @@
 
 "osm_note" = "OSM pastaba";
 "osm_created" = "Created";
-"osm_deleted" = "Ištrinta";
+"osm_deleted" = "Panaikinta";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1518,8 +1514,8 @@
 "modify_edit_short" = "Redaguoti LV";
 "open_osm_note" = "Pridėti OSM pastabą";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Užfiksuoti";
-"osm_alert_message" = "Pranešimas";
+"osm_alert_title" = "Patvirtinti";
+"osm_alert_message" = "Žinutė";
 "osm_alert_button_ok" = "Sukurti pastabą";
 "modify_poi" = "Modify the POI information";
 "actions" = "Veiksmai";
@@ -1590,7 +1586,7 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "Įsimintos vietos";
+"import_favorite" = "Įsiminta vieta";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -1739,7 +1735,7 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"product_title_srtm" = "Kontūrinės linijos";
+"product_title_srtm" = "SRTMžemėlapiai";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
@@ -1747,7 +1743,7 @@
 "product_desc_wikivoyage" = "Atviras pasaulinis kelionių vadovas, kurie kiekvienas gali redaguoti.";
 "product_desc_ext_wikivoyage" = "Maršrutai į pačius įdomiausius objektus planetoje, panaudojant OsmAnd nereikalingas interneto ryšis.";
 
-"product_title_sea_depth_contours" = "Vandenyno gylio kontūrai";
+"product_title_sea_depth_contours" = "Jūrlapiai su gylio kontūrais";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 
 "my_location" = "My Location";
@@ -1767,7 +1763,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Keliai";
-"res_srtm" = "Kontūrinės linijos";
+"res_srtm" = "SRTMžemėlapiai";
 "res_wiki" = "Vikipedija";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Nuolydis";
@@ -2060,8 +2056,8 @@
 "unlimited_downloads" = "Neriboti atsisiuntimai";
 "wikipedia_offline" = "Wikipedia offline";
 "contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
-"monthly_map_updates" = "Map updates: every month";
-"daily_map_updates" = "Map updates: every hour";
+"monthly_map_updates" = "Mėnesinis žemėlapio atnaujinamas";
+"daily_map_updates" = "Valandinisžemėlapio atnaujinamas";
 "index_item_depth_contours_osmand_ext" = "Jūrlapiai su gylio kontūrais";
 "donation_to_osm" = "Donation to OpenStreetMap community";
 "purchase_unlim_title" = "Pirkti - %@";
@@ -2502,3 +2498,41 @@
 "backup_error_size_is_exceeded" = "Maksimalus OsmAnd Cloud dydis viršytas %@";
 "cloud_set_up_backup" = "Nustatyti atsarginę kopiją";
 "weather_wind_unit_mi_per_hour" = "Mylios per valandą";
+"purchases_feature_desc_terrain" = "Reljefo kontūrinės linijos, pilnas kalvų žemėlapis su tamsiais atspalviais ir šlaitų žemėlapiai su spalvomis, rodančiomis viršūnes ir žemumas.";
+"ltr_or_rtl_combine_via_or" = "%@ arba %@";
+"shared_string_start" = "Įrašyti";
+"redeem_promo_code" = "Išgryninti promo kodą";
+"shared_string_capacity" = "Talpa";
+"altitude_ascent" = "Sukilimas";
+"product_desc_ext_development" = "Įskiepis rodo nustatymus kūrimo ir klaidų paieškos funkcionalumui: patikrinti arba imituoti navigaciją, ekrano generavimo efektyvumo, balso pranešimų patikrinimui. Šie nustatymui akrtualūs programuotojui ir nėra įdomūs eiliniam vartotojui.";
+"osm_live_banner_desc" = "Gaukite neribotą kiekį žemėlapių parsiuntimų ir atnaujinimus dažniau nei kas mėnesį: kas savaitę, kas dieną ar kas valandą.";
+"complete_purchase" = "Užbaigti pirkimą";
+"shared_string_includes" = "Apima";
+"purchases_feature_desc_nautical" = "Gaukite prieigą prie jūrinio gylio informacijos";
+"subscriptions" = "Prenumerata";
+"shared_string_purchased" = "Įsigyta";
+"copy_address" = "Kopijuoti adresą";
+"purchases_feature_desc_wikivoyage" = "Naršykite Wikipedia neprisijungę prie interneto. Straipsniai suskirstyti pagal šalis ir regionus ir pateikiami visomis kalbomis.";
+"altitude_descent" = "Nusileidimas";
+"continue_with" = "Tęsti su %@";
+"share_geo" = "geo:";
+"private_access_routing_req" = "Jūsų kelionės tikslas yra privačioje teritorijoje. Ar leisti keliauti privačiais keliais šioje kelionėje\?";
+"wikipedia_and_wikivoyage_offline" = "Wikipedia ir Wikivoyage be interneto";
+"purchases_feature_desc_wikipedia" = "Naršykite Wikipedia neprisijungę prie interneto. Straipsniai suskirstyti pagal šalis ir regionus ir pateikiami visomis kalbomis.";
+"nautical_depth" = "Jūrinis gylis";
+"units_cubic_m" = "m³";
+"terrain_maps" = "Reljefožemėlapiai";
+"restore_purchases" = "Atkurti pirkinius";
+"product_desc_plus" = "Gauti išplėstines funkcijas";
+"not_available_with" = "Neprieinama su %@";
+"shared_string_stop" = "Stop";
+"toast_empty_name_error" = "Neįvardinta vieta";
+"product_title_development" = "OsmAnd vystymas";
+"shared_string_learn_more" = "Sužinoti daugiau";
+"unlimited_map_downloads" = "Neribotasžemėlapių atsisiuntimas";
+"purchases_feature_desc_combined_wiki" = "Naršykite Wikipedia straipsnius keliaudami, neturėdami interneto ryšio. Duomenys neprisijungus prie interneto suskirstyti pagal šalis ir prieinami visomis kalbomis.";
+"product_desc_pro" = "Gaukite maksimalias funkcijas";
+"shared_string_delete_all" = "Viską ištrinti";
+"shared_string_data" = "Data";
+"paused" = "Pristabdyta";
+"shared_string_undefined" = "Nenurodyta";

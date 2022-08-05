@@ -27,8 +27,10 @@
 - (NSString *) getItemId;
 - (NSString *) getImageId;
 - (NSString *) getMessage;
+- (NSString *) getDescription;
 - (NSArray<NSString *> *) getImageIds;
 - (NSArray<NSString *> *) getMessages;
+- (NSArray<NSString *> *) getDescriptions;
 - (NSArray<NSString *> *) getItemIds;
 - (void) changeState:(NSString *)stateId;
 

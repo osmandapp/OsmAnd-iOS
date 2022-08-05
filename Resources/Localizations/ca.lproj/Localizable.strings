@@ -48,7 +48,7 @@
 "poi_hide" = "Amaga";
 // My Places
 "favorites" = "Preferits";
-"tracks" = "Pistes";
+"tracks" = "Traces";
 // GPX
 "gpx_point" = "Punt";
 "gpx_waypoints" = "Fites";
@@ -144,7 +144,6 @@
 "nothanks" = "No, gràcies";
 "download_tab_local" = "Local";
 "download_now" = "Baixa el mapa ara";
-"res_banner_no_free_maps_title" = "No teniu cap mapa gratuït!";
 "res_catalog_upd" = "Actualització del catàleg";
 "res_world_map" = "Mapa mundial";
 "res_updates" = "Actualitzacions";
@@ -205,7 +204,7 @@
 // Import
 "import_title" = "Importa dades";
 "import_choose_type" = "Trieu què voleu importar";
-"import_favorite" = "Preferit";
+"import_favorite" = "Preferida";
 "import_failed" = "La importació ha fallat";
 "import_cannot" = "No es pot importar el fitxer especificat";
 "import_gpx" = "Trajecte en GPX";
@@ -290,9 +289,6 @@
 "prch_items_failed" = "element(s) no s'han restaurat. Intenteu-ho altre cop.";
 // Resources
 "res_mapsres" = "Mapes i recursos";
-"res_banner_free_maps_title" = "Teniu %d mapes gratuïts!";
-"res_banner_free_maps_desc" = "Podeu baixar %d mapes gratuïts, sense actualitzacions";
-"res_banner_no_free_maps_desc" = "Compreu mapes regionals o mundials";
 "res_search_world" = "Cerca a tot el món";
 "res_wsea_map" = "Mapa bàsic mundial marítim";
 "sett_lang_trans" = "transliterats";
@@ -315,14 +311,14 @@
 "help_quiz" = "Consulta";
 "product_title_wiki" = "Viquipèdia";
 "product_desc_wiki" = "Dades de la Viquipèdia";
-"product_title_srtm" = "Corbes de nivell";
+"product_title_srtm" = "Dades de corbes de nivell";
 "product_desc_srtm" = "Mostra les corbes de nivell";
 "enter_description" = "Introduïu la descripció";
 "description" = "Descripció";
 "enter_fav_name" = "Introduïu el nom del preferit";
 "res_installing" = "S'està instal·lant…";
 "res_roads" = "Carreteres";
-"res_srtm" = "Corbes de nivell";
+"res_srtm" = "Dades de corbes de nivell";
 "res_wiki" = "Viquipèdia";
 "select_language" = "Tria la llengua";
 "language_short" = "Llengua";
@@ -593,19 +589,19 @@
 "routing_settings_2" = "Paràmetres de navegació";
 "gpx_navigation" = "Segueix el trajecte";
 "impassable_road" = "Evita carreteres";
-"impassable_road_desc" = "Indiqueu les vies que voleu evitar en la navegació";
+"impassable_road_desc" = "Indiqueu les vies que voleu evitar en la navegació.";
 "interrupt_music_descr" = "Les indicacions de veu suspenen la reproducció de música, no s'hi superposen";
 "interrupt_music" = "Atura la música";
 "shared_string_do_not_use" = "No utilitzeu";
 "voice_provider" = "Guiatge per veu";
 "shared_string_sound" = "So";
 "fast_route_mode" = "La ruta més ràpida";
-"fast_route_mode_descr" = "Activeu per calcular la ruta més ràpida o desactiveu per buscar la de menor consum";
+"fast_route_mode_descr" = "Activeu per calcular la ruta més ràpida o desactiveu per buscar la de menor consum.";
 "avoid_in_routing_title" = "Evita…";
 "avoid_in_routing_descr" = "Evita les carreteres de peatge, les no pavimentades i els ferris";
 "prefer_in_routing_title" = "Preferències…";
-"prefer_in_routing_descr" = "Preferència per autopistes";
-"relief_smoothness_factor_descr" = "Predilecció del terreny: pla o aturonat";
+"prefer_in_routing_descr" = "Preferència per autopistes.";
+"relief_smoothness_factor_descr" = "Predilecció del terreny: pla o aturonat.";
 "choose_auto_follow_route" = "Visualització del mapa centrada automàticament";
 "choose_auto_follow_route_descr" = "Temps de sincronització de la vista segons la posició actual";
 "auto_zoom_map" = "Zoom automàtic del mapa";
@@ -657,11 +653,11 @@
 "speak_title" = "Anuncia…";
 "arrival_distance" = "Anunci d\'arribada";
 "default_speed_system" = "Unitats de velocitat";
-"default_speed_system_descr" = "Definiu la unitat de velocitat";
+"default_speed_system_descr" = "Definiu la unitat de velocitat.";
 "speed_limit_exceed" = "Tolerància sobre el límit de velocitat";
 "speed_limit_exceed_message" = "Trieu el marge de tolerància al límit de velocitat per sobre del que rebreu un avís de veu.";
 "wake_on_voice" = "Activa la pantalla";
-"wake_on_voice_descr" = "Activa la pantalla del dispositiu (si no ho està) en aproximar-se a un gir";
+"wake_on_voice_descr" = "Activa la pantalla del dispositiu (si no ho està) en aproximar-se a un gir.";
 "voice_pref_title" = "Veu";
 "voice_provider_descr" = "Trieu la llengua en el guiatge per la navegació";
 "choose_audio_stream" = "Sortida de guiat per veu";
@@ -669,7 +665,7 @@
 "show_warnings_descr" = "Configureu les notificacions de trànsit (límits de velocitat, cues, bandes rugoses, túnels), avisos de radars i informació dels carrils";
 "speak_descr" = "Configureu la notificació dels noms de carrer, incidències de trànsit (cues, bandes sonores), avisos de radar, límits de velocitat";
 "keep_informing" = "Repeteix les instruccions de navegació";
-"keep_informing_descr" = "Repeteix les instruccions de navegació a intervals regulars";
+"keep_informing_descr" = "Repeteix les instruccions de navegació a intervals regulars.";
 "arrival_distance_descr" = "Amb quina antelació voleu l\'anunci d\'arribada?";
 "map_widget_right" = "Tauler dret";
 "map_widget_left" = "Tauler esquerre";
@@ -714,7 +710,7 @@
 "driving_region_descr" = "Seleccioneu la regió de conducció: EUA, Europa, Regne Unit, Àsia i altres.";
 "driving_region_automatic" = "Automàtic";
 "auto_follow_location_enabled" = "S\'està utilitzant la visualització del mapa centrada automàticament.";
-"unknown_location" = "La posició encara no es coneix";
+"unknown_location" = "La posició encara no es coneix.";
 "route_simulation" = "Simulació de ruta";
 "animate_routing_route_not_calculated" = "Calculeu primer la ruta";
 "simulate_routing" = "Simula la vostra ubicació";
@@ -851,8 +847,8 @@
 "unlimited_downloads" = "Baixades il·limitades";
 "wikipedia_offline" = "Viquipèdia sense connexió";
 "contour_lines_hillshade_maps" = "Mapes amb corbes de nivell i ombrejat de relleu";
-"monthly_map_updates" = "Actualitzacions del mapa: cada mes";
-"daily_map_updates" = "Actualitzacions del mapa: cada hora";
+"monthly_map_updates" = "Actualització mensual de mapes";
+"daily_map_updates" = "Actualització horària de mapes";
 "index_item_depth_contours_osmand_ext" = "Isòbates";
 "donation_to_osm" = "Donació a la comunitat OpenStreetMap";
 "purchase_unlim_title" = "Compra - %@";
@@ -928,7 +924,7 @@
 "loading_poi_obj" = "S\'està carregant el PDI…";
 "osm_note" = "Nota d\'OSM";
 "osm_created" = "Creat";
-"osm_deleted" = "Eliminat";
+"osm_deleted" = "S\'ha esborrat";
 "osm_modified" = "Modificat";
 "osm_reopened" = "Tornat a obrir";
 "osm_name" = "Nom d'usuari OpenStreetMap";
@@ -943,7 +939,7 @@
 "osm_opens_at" = "Obre a les:";
 "osm_closes_at" = "Tanca a les:";
 "osm_editing_contact_info" = "Informació de contacte";
-"osm_str_name" = "Nom del carrer";
+"osm_str_name" = "Nom de carrer";
 "osm_building_num" = "Número de finca";
 "osm_phone" = "Telèfon";
 "osm_website" = "Lloc web";
@@ -961,7 +957,7 @@
 "modify_edit_short" = "Modifica el canvi OSM";
 "open_osm_note" = "Obre una nota d\'OSM";
 "edit_osm_note" = "Edita la nota d'OSM";
-"osm_alert_title" = "Publica";
+"osm_alert_title" = "Valida";
 "osm_alert_message" = "Missatge";
 "osm_alert_button_ok" = "Crea nota";
 "modify_poi" = "Modifica la informació del PDI";
@@ -999,7 +995,7 @@
 "osm_notes_online_layer" = "Notes d'OSM (en línia)";
 "my_places" = "Preferits";
 "osm_edits_basic" = "Bàsic";
-"osm_edits_advanced" = "Avançada";
+"osm_edits_advanced" = "Estès";
 "osm_edits_all" = "Totes les edicions";
 "osm_edits_poi" = "Edicions de PDI";
 "osm_edits_notes" = "Notes";
@@ -1768,7 +1764,7 @@
 "default_profile_descr" = "Seleccioneu un perfil que s'utilitzarà en iniciar l'aplicació.";
 "settings_item_read_error" = "No s'ha pogut llegir %@.";
 "default_speed_dialog_msg" = "Estima l\'hora d\'arribada per tipus de carretera desconeguts i limita la velocitat a totes les vies (podria afectar la ruta)";
-"vessel_width_limit_description" = "Indiqueu l'amplada del vaixell per evitar ponts ajustats.";
+"vessel_width_limit_description" = "Indiqueu l\'amplada del vaixell per evitar ponts ajustats";
 "vessel_height_limit_description" = "Establiu l'alçada del vaixell per evitar els ponts baixos. Recordeu que si el pont és mòbil, el càlcul utilitza l'alçada quan està obert.";
 "width_limit_description" = "Proporcioneu l\'amplada del vostre vehicle, pot haver-hi rutes restringides als vehicles amples.";
 "lenght_limit_description" = "Proporcioneu la llargada del vostre vehicle, pot haver-hi rutes restringides als vehicles llargs.";
@@ -1782,7 +1778,7 @@
 "downloading" = "S’està baixant";
 "export_profile_descr" = "Podeu exportar totes les configuracions dels perfils, copiar-les d'un altre perfil o retornar-les als valors predeterminats.";
 "profile_sett_descr" = "Afecta als perfils d'aplicació seleccionats";
-"app_profiles" = "Perfils d\'aplicació";
+"app_profiles" = "Perfils de l\'aplicació";
 "osmand_profile" = "Perfil OsmAnd";
 "not_available_profile_name" = "Ja existeix un perfil amb aquest nom.";
 "err_profile_import" = "S'ha produït un error llegint l'element de dades: %@";
@@ -1842,7 +1838,7 @@
 "repeat_after" = "Repeteix després";
 "profile_alert_delete_title" = "Suprimeix el perfil";
 "import_profile_descr" = "Per importar un perfil, premeu necessàriament un arxiu (*.osf) a qualsevol aplicació i seleccioneu \"Copia a OsmAnd\"";
-"profile_prefs_reset_successful" = "Totes les configuracions dels perfils s'han restablert per defecte";
+"profile_prefs_reset_successful" = "Totes les configuracions dels perfils s\'han restablert per defecte.";
 "help_nav_profiles" = "Perfils de navegació";
 "units_t" = "t";
 "reset_profile_action_descr" = "Reinicialitza la configuració de tots els perfils als valors inicials d'instal·lació. Si toqueu Restableix, es descartaran tots els canvis i no es podrà desfer aquesta acció.";
@@ -1951,7 +1947,7 @@
 "profile_type_osmand_string" = "Perfil OsmAnd";
 "quick_action_remove_next_destination_descr" = "Esborra la propera fita de la vostra ruta. Si aquesta fos la Destinació, la navegació s\'aturaria.";
 "quick_action_mapillary_show" = "Mostra Mapillary";
-"arrived_at_destination" = "Heu arribat";
+"arrived_at_destination" = "Heu arribat.";
 "quick_action_showhide_mapillary_title" = "Mostra/amaga Mapil·lary";
 "reverse_route" = "Ruta inversa";
 "plan_route_create_new_route" = "Crea una ruta nova";
@@ -2002,7 +1998,7 @@
 "shared_string_disable" = "Desactiva";
 "open_saved_track" = "Obre una traça enregistrada";
 "octagon" = "Octàgon";
-"emergency" = "Emergència";
+"emergency" = "Emergències";
 "nearest_point" = "El punt més proper";
 "visible" = "Visible";
 "default_color" = "Color per defecte";
@@ -2018,7 +2014,7 @@
 "gpxup_trackable" = "Seguible";
 "gpxup_private" = "Privat";
 "route_between_points_warning_desc" = "Desprès, ajusteu la traçada a la carretera permesa més propera amb un dels vostres perfils de navegació per utilitzar aquesta opció.";
-"suggested_maps_descr" = "El connector necessita aquests mapes";
+"suggested_maps_descr" = "El connector necessita aquests mapes.";
 "no_waypoints_found" = "No s\'ha trobat cap fita";
 "added_profiles" = "Perfils afegits";
 "suggested_maps" = "Mapes suggerits";
@@ -2204,3 +2200,25 @@
 "lang_eu" = "Basc";
 "lang_als" = "Albanès (Tosc)";
 "lang_de_casual" = "Alemany (col·loquial)";
+"altitude_ascent" = "Ascens";
+"restore_purchases" = "Recupera les compres";
+"shared_string_start" = "Comença";
+"altitude_descent" = "Descens";
+"product_title_development" = "Desenvolupament de l\'OsmAnd";
+"routing_attr_allow_private_for_truck_description" = "Permet l\'accés a zones privades per a camions.";
+"product_desc_ext_development" = "Configuració de característiques per al desenvolupament i depuració, com simulació de navegació, rendiment de renderitzat o les indicacions de veu. Adreçat a desenvolupadorsimés que a usuaris normals de l\'aplicació.";
+"subscriptions" = "Subscripcions";
+"shared_string_capacity" = "Capacitat";
+"share_geo" = "geo:";
+"units_cubic_m" = "m³";
+"shared_string_stop" = "Atura";
+"copy_coordinates" = "Copia les coordenades";
+"routing_attr_allow_private_for_truck_name" = "Permet l\'accés privat (camió)";
+"private_access_routing_req" = "La vostra destinació és dins una zona amb accés privat. Es poden utilitzar les vies privades en aquest trajecte\?";
+"toast_empty_name_error" = "Ubicació sense nom";
+"osm_live_banner_desc" = "Obteniu baixades il·limitades de mapes, incloent actualitzacions setmanals, diàries o, fins i tot, horàries.";
+"shared_string_delete_all" = "Suprimeix-ho tot";
+"paused" = "En pausa";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (Sense restriccions)";
+"shared_string_data" = "Dades";
+"shared_string_undefined" = "Indefinida";

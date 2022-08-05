@@ -23,9 +23,8 @@
 #define kBlockStatisticsHeight 40.
 #define kBlockStatisticsWidthMin 80.
 #define kBlockStatisticsWidthMinByValue 52.
-#define kBlockStatisticsWidthMax 120.
-#define kBlockStatisticsWidthMaxByValue 92.
 #define kBlockStatisticsDivider 13.
+#define kBlockStatisticsIconWithSpace 28.
 
 @interface OATrackMenuHeaderView () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -578,20 +577,15 @@
 - (CGSize)getSizeForItem:(NSString *)title value:(NSString *)value isLast:(BOOL)isLast
 {
     CGSize sizeByTitle = [OAUtilities calculateTextBounds:title
-                                                    width:kBlockStatisticsWidthMax
+                                                    width:10000.0
                                                    height:kBlockStatisticsLineHeight
                                                      font:[UIFont systemFontOfSize:13. weight:UIFontWeightRegular]];
     CGSize sizeByValue = [OAUtilities calculateTextBounds:value
-                                                    width:kBlockStatisticsWidthMaxByValue
+                                                    width:10000.0
                                                    height:kBlockStatisticsLineHeight
                                                      font:[UIFont systemFontOfSize:13. weight:UIFontWeightMedium]];
-    CGFloat widthByTitle = sizeByTitle.width < kBlockStatisticsWidthMin
-            ? kBlockStatisticsWidthMin : sizeByTitle.width > kBlockStatisticsWidthMax
-                    ? kBlockStatisticsWidthMax : sizeByTitle.width;
-    CGFloat widthByValue = (sizeByValue.width < kBlockStatisticsWidthMinByValue
-            ? kBlockStatisticsWidthMinByValue : sizeByValue.width > kBlockStatisticsWidthMaxByValue
-                    ? kBlockStatisticsWidthMaxByValue : sizeByValue.width)
-                            + kBlockStatisticsWidthMax - kBlockStatisticsWidthMaxByValue;
+    CGFloat widthByTitle = sizeByTitle.width < kBlockStatisticsWidthMin ? kBlockStatisticsWidthMin : sizeByTitle.width;
+    CGFloat widthByValue = (sizeByValue.width < kBlockStatisticsWidthMinByValue ? kBlockStatisticsWidthMinByValue : sizeByValue.width) + kBlockStatisticsIconWithSpace;
     if (!isLast)
     {
         widthByTitle += kBlockStatisticsDivider;

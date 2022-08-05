@@ -361,7 +361,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
            if (latLon)
            {
                GeographicLib::GeoCoords pnt(latLon.coordinate.latitude, latLon.coordinate.longitude);
-               _zoneStr = [NSString stringWithFormat:@"%i%c", pnt.Zone(), toupper(pnt.Hemisphere())];
+               _zoneStr = [NSString stringWithFormat:@"%i%@", pnt.Zone(), [OALocationConvert getUTMLetterDesignator:latLon.coordinate.latitude]];
                _northingStr = [NSString stringWithFormat:@"%i", int(round(pnt.Northing()))];
                _eastingStr = [NSString stringWithFormat:@"%i", int(round(pnt.Easting()))];
            }
@@ -750,7 +750,25 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             _searchLocation = mapLocation;
             _region = cityName;
             _isOlcCitySearchRunning = YES;
-            [self searchCities:cityName];
+            [OAQuickSearchHelper searchCities:cityName
+                               searchLocation:_searchLocation
+                                 allowedTypes:@[@"city", @"town", @"village"]
+                                    cityLimit:kSearchCityLimit
+                                         view:self.view
+                                   onComplete:^(NSMutableArray *amenities)
+                                   {
+                                       _isOlcCitySearchRunning = NO;
+                                       if (amenities && amenities.count > 0)
+                                       {
+                                           OASearchResult *firstResult = amenities[0];
+                                           if (firstResult && firstResult.location)
+                                           {
+                                               _searchLocation = firstResult.location;
+                                               [self updateDistanceAndDirection:YES];
+                                           }
+                                       }
+                                   }
+            ];
         }
     }
     if (codeArea)

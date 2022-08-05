@@ -152,7 +152,7 @@
 "shared_string_save_as" = "Bi awayekî cuda qeyd bike";
 "osm_working_days" = "Rojên Karê";
 "intro_next" = "Dû re";
-"transport_stop" = "Bisekine";
+"transport_stop" = "Rawestgeh";
 "transport_nearby_routes" = "NÊZÎK";
 "osm_deleted" = "Jêbirî";
 "poi_type" = "Cureya POIyê";
@@ -176,3 +176,6 @@
 "group_name" = "Navê komê";
 "regions" = "Herêman";
 "units_min_short" = "m";
+"shared_string_stop" = "Rawestgeh";
+"shared_string_start" = "Dest pê bike";
+"share_geo" = "Cih:";

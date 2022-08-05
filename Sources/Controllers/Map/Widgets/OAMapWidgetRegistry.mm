@@ -46,7 +46,7 @@
 
 - (void) populateStackControl:(UIView *)stack mode:(OAApplicationMode *)mode left:(BOOL)left expanded:(BOOL)expanded
 {
-    NSOrderedSet<OAMapWidgetRegInfo *> *s = left ? [_leftWidgetSet copy] : [_rightWidgetSet copy];
+    NSArray<OAMapWidgetRegInfo *> *s = [NSArray arrayWithArray:left ? _leftWidgetSet.array : _rightWidgetSet.array];
     for (OAMapWidgetRegInfo *r in s)
     {
         if (r.widget && ([r visible:mode] || [r.widget isExplicitlyVisible]))
@@ -88,6 +88,19 @@
             [r.widget updateInfo];
 }
 
+- (void) removeSideWidget:(NSString *)key
+{
+    for (OAMapWidgetRegInfo *widget in _leftWidgetSet)
+    {
+        if ([widget.key isEqualToString:key])
+            [_leftWidgetSet removeObject:widget];
+    }
+    for (OAMapWidgetRegInfo *widget in _rightWidgetSet)
+    {
+        if ([widget.key isEqualToString:key])
+            [_rightWidgetSet removeObject:widget];
+    }
+}
 
 - (void) removeSideWidgetInternal:(OATextInfoWidget *)widget
 {

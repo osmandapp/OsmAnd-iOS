@@ -1112,10 +1112,6 @@
 "osmand_live_update_now" = "Update now";
 "osmand_live_updates_size" = "Downloaded updates size";
 "osmand_live_deleted_object" = "Deleted object";
-"res_banner_free_maps_title" = "You have %d free maps!";
-"res_banner_free_maps_desc" = "You can download %d free maps, without updates";
-"res_banner_no_free_maps_title" = "You have no free maps!";
-"res_banner_no_free_maps_desc" = "Please purchase region maps or All World maps";
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
@@ -1504,7 +1500,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Map legend";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Khác";
+"help_other_header" = "Mục khác";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Installation and troubleshooting";
 "help_tech_articles" = "Technical articles";
@@ -2329,3 +2325,7 @@
 "backup_error_no_valid_subscription" = "Không có gói đăng ký hợp lệ nào đang có";
 "shared_string_min_height" = "Độ cao tối thiểu";
 "shared_string_any" = "Bất kỳ";
+"shared_string_stop" = "Dừng";
+"expired" = "Đã hết hạn";
+"shared_string_data" = "Dữ liệu";
+"shared_string_undefined" = "Chưa rõ";

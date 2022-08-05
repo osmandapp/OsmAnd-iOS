@@ -48,7 +48,7 @@
 "transport_routes" = "Երթուղիներ";
 "transport_nearby_routes_within" = "Մոտակա երթուղիները";
 "transport_nearby_routes" = "Ներսում";
-"transport_stop" = "Կանգնել";
+"transport_stop" = "Դադարեցնել";
 
 "cancel_navigation" = "Վերջացնել նավիգացիան";
 "start_navigation" = "Start navigation";
@@ -613,8 +613,8 @@
 "poi_hide" = "Թաքցնել";
 
 // My Places
-"favorites" = "Սիրածները";
-"tracks" = "Տրեկեր";
+"favorites" = "Սիրված";
+"tracks" = "Տրեկները";
 "personal_category_name" = "Personal";
 "visible" = "Տեսանելի";
 
@@ -1172,10 +1172,6 @@
 "osmand_live_update_now" = "Թարմացնել հիմա";
 "osmand_live_updates_size" = "Downloaded updates size";
 "osmand_live_deleted_object" = "Deleted object";
-"res_banner_free_maps_title" = "You have %d free maps!";
-"res_banner_free_maps_desc" = "You can download %d free maps, without updates";
-"res_banner_no_free_maps_title" = "You have no free maps!";
-"res_banner_no_free_maps_desc" = "Please purchase region maps or All World maps";
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
@@ -1544,7 +1540,7 @@
 "units_km_h" = "կմ/ժ";
 "units_mph" = "մղ/ժ";
 
-"units_hour" = "ժ";
+"units_hour" = "ժամ";
 "units_min" = "րոպ․";
 "units_sec" = "sec";
 "units_sec_short" = "s";
@@ -1729,7 +1725,7 @@
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
-"product_title_wiki" = "Վիքիպեդիա";
+"product_title_wiki" = "Վիքիփեդիա";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "shared_string_all_languages" = "Բոլոր լեզուները";
@@ -1747,7 +1743,7 @@
 "product_desc_wikivoyage" = "Աշխարհի ուղեցույց, որը կարող է խմբագրել ցանկացած մեկը:";
 "product_desc_ext_wikivoyage" = "Տեսեք ուղեցույցները, OsmAnd-ում աշխարհի ամենահետաքրքիր վայրերը, առանց ինտերնետին միանալու:";
 
-"product_title_sea_depth_contours" = "Ծովային խորքային ուրվագիծը";
+"product_title_sea_depth_contours" = "Ծովային խորքային ուրվագծեր";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 
 "my_location" = "My Location";
@@ -1768,7 +1764,7 @@
 "res_installing" = "Installing…";
 "res_roads" = "Ճանապարհներ";
 "res_srtm" = "Բարձունքների գծեր";
-"res_wiki" = "Վիքիպեդիա";
+"res_wiki" = "Վիքիփեդիա";
 "res_hillshade" = "Hillshade";
 "res_slope" = "Լանջ";
 "res_standard" = "Ստանդարտ քարտեզ";
@@ -1849,7 +1845,7 @@
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "shared_string_show_all" = "Ցույց տալ ամբողջը";
-"parking" = "Ավտոկայանատեղեր";
+"parking" = "Կայանատեղ";
 "parked_at" = "Parked at";
 
 "directions_more_options" = "Մեկնման կետ";
@@ -1862,7 +1858,7 @@
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
 
-"plugins" = "Պլագիններ (Plugins)";
+"plugins" = "Պլագիններ";
 "open_map_settings" = "Open Map Settings";
 
 "plugin_popup_ski_title" = "Turn on Ski map style";
@@ -2060,8 +2056,8 @@
 "unlimited_downloads" = "Անսահմանափակ ներբեռնում";
 "wikipedia_offline" = "Վիքիպեդիա (անցանց)";
 "contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
-"monthly_map_updates" = "Map updates: every month";
-"daily_map_updates" = "Map updates: every hour";
+"monthly_map_updates" = "Քարտեզների թարմացումներ`ամսական";
+"daily_map_updates" = "Քարտեզների թարմացումները`ամեն ժամ";
 "index_item_depth_contours_osmand_ext" = "Ծովային խորքային ուրվագծեր";
 "donation_to_osm" = "Donation to OpenStreetMap community";
 "purchase_unlim_title" = "Գնել - %@";
@@ -2489,3 +2485,18 @@
 "altitude" = "Բարձրություն";
 "shared_string_any" = "Ցանկացած";
 "weather_wind_unit_km_per_hour" = "Կիլոմետր ժամում";
+"shared_string_start" = "ձայնագրել";
+"private_access_routing_req" = "Նպատակակետը գտնվում է մասնավոր տարածքում: Թույլատրել այս ուղևորությանը մասնավոր ճանապարհներ մուտք գործել\?";
+"altitude_ascent" = "Վերելք";
+"toast_empty_name_error" = "Դիրքը անուն չունի";
+"product_title_development" = "OsmAnd-ի կարգավորումը և զարգացումը";
+"restore_purchases" = "Գնումների վերականգնում";
+"altitude_descent" = "Վայրեջք";
+"shared_string_stop" = "Դադարեցնել";
+"product_desc_ext_development" = "Կարգավորումներ զարգացման եւ կարգաբերման գործառույթների համար, ինչպիսիք են երթուղու ստուգումը կամ մոդելավորումը,քարտեզի ցուցադրման կատարումը, ձայնային հուշումները ստուգելը: Այս կարգավորումները մշակողների համար են և հասարակ օգտագործողների համար անհրաժեշտ չեն:";
+"osm_live_banner_desc" = "Ստացեք քարտեզի անսահմանափակ ներբեռնման հնարավորութուն նաև քարտեզների թարմացում ամիսը մեկ անգամ, շաբաթական, ամենօրյա կամ ամեն ժամ:";
+"share_geo" = "գեո:";
+"paused" = "Դադարեցվել է";
+"shared_string_delete_all" = "Ջնջել բոլորը";
+"shared_string_undefined" = "Անորոշ է";
+"shared_string_data" = "Տվյալներ";

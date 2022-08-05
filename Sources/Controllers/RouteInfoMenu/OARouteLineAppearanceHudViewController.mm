@@ -28,7 +28,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OARoutingHelper.h"
-#import "OARouteStatisticsHelper.h"
+#import "OASegmentedSlider.h"
 #import "OADayNightHelper.h"
 #import "OAMapLayers.h"
 #import "OAPreviewRouteLineInfo.h"
@@ -295,24 +295,25 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [types addObject:type];
     }
 
-    NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
-    for (NSString *attribute in attributes)
-    {
-        NSString *title = OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]);
-        NSString *topDescription = OALocalizedString([NSString stringWithFormat:@"%@_description", attribute]);
-        NSString *bottomDescription = OALocalizedString(@"white_color_undefined");
-        OARouteAppearanceType *type = [[OARouteAppearanceType alloc] initWithColoringType:OAColoringType.ATTRIBUTE
-                                                                                    title:title
-                                                                                 attrName:attribute
-                                                                           topDescription:topDescription
-                                                                        bottomDescription:bottomDescription
-                                                                                 isActive:YES];
-        [types addObject:type];
-
-        if ([_previewRouteLineInfo.coloringType isRouteInfoAttribute]
-                && [_previewRouteLineInfo.routeInfoAttribute isEqualToString:attribute])
-            _selectedType = type;
-    }
+    // TODO: add other coloring types with the new subscription
+//    NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
+//    for (NSString *attribute in attributes)
+//    {
+//        NSString *title = OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]);
+//        NSString *topDescription = OALocalizedString([NSString stringWithFormat:@"%@_description", attribute]);
+//        NSString *bottomDescription = OALocalizedString(@"white_color_undefined");
+//        OARouteAppearanceType *type = [[OARouteAppearanceType alloc] initWithColoringType:OAColoringType.ATTRIBUTE
+//                                                                                    title:title
+//                                                                                 attrName:attribute
+//                                                                           topDescription:topDescription
+//                                                                        bottomDescription:bottomDescription
+//                                                                                 isActive:YES];
+//        [types addObject:type];
+//
+//        if ([_previewRouteLineInfo.coloringType isRouteInfoAttribute]
+//                && [_previewRouteLineInfo.routeInfoAttribute isEqualToString:attribute])
+//            _selectedType = type;
+//    }
 
     _coloringTypes = types;
 
@@ -463,6 +464,13 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_back")
                                                     attributes:@{ NSFontAttributeName:[UIFont systemFontOfSize:17.] }]
                                      forState:UIControlStateNormal];
+    self.backNavBarButton.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+            [self.backNavBarButton.titleLabel.leadingAnchor constraintEqualToAnchor:self.backNavBarButton.leadingAnchor constant:20.],
+            [self.backNavBarButton.titleLabel.trailingAnchor constraintEqualToAnchor:self.backNavBarButton.trailingAnchor],
+            [self.backNavBarButton.titleLabel.topAnchor constraintEqualToAnchor:self.backNavBarButton.topAnchor],
+            [self.backNavBarButton.titleLabel.bottomAnchor constraintEqualToAnchor:self.backNavBarButton.bottomAnchor]
+    ]];
 
     [self.applyButton addBlurEffect:YES cornerRadius:12. padding:0.];
     [self.applyButton setAttributedTitle:
@@ -473,6 +481,14 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_apply")
                                                     attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
                                       forState:UIControlStateNormal];
+
+    self.applyNavBarButton.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+            [self.applyNavBarButton.titleLabel.leadingAnchor constraintEqualToAnchor:self.applyNavBarButton.leadingAnchor],
+            [self.applyNavBarButton.titleLabel.trailingAnchor constraintEqualToAnchor:self.applyNavBarButton.trailingAnchor],
+            [self.applyNavBarButton.titleLabel.topAnchor constraintEqualToAnchor:self.applyNavBarButton.topAnchor],
+            [self.applyNavBarButton.titleLabel.bottomAnchor constraintEqualToAnchor:self.applyNavBarButton.bottomAnchor]
+    ]];
 }
 
 - (OARouteAppearanceType *)getRouteAppearanceType:(OAColoringType *)coloringType
@@ -631,7 +647,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (CGFloat)getStatusBarHeight
 {
-    return _originalStatusBarHeight;
+    return [OAUtilities isIPad] ?  [OAUtilities getStatusBarHeight] : _originalStatusBarHeight;
 }
 
 - (void)doAdditionalLayout
@@ -1447,8 +1463,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [cell showLabels:NO topRight:NO bottomLeft:YES bottomRight:YES];
             cell.bottomLeftLabel.text = arrayValue.firstObject;
             cell.bottomRightLabel.text = arrayValue.lastObject;
-            cell.numberOfMarks = arrayValue.count;
-            cell.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
+            [cell.sliderView setNumberOfMarks:arrayValue.count additionalMarksBetween:0];
+            cell.sliderView.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
@@ -1595,7 +1611,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         OASegmentSliderTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         OAGPXTableCellData *cellData = [self getCellData:indexPath];
-        [self updateProperty:@(cell.selectedMark + 1) tableData:cellData];
+        [self updateProperty:@(cell.sliderView.selectedMark + 1) tableData:cellData];
         [self updateData:cellData];
 
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];

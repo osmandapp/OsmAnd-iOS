@@ -20,10 +20,6 @@
 #import "OATargetInfoViewController.h"
 #import "OAPublicTransportCollapsableCell.h"
 #import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
-#import "OAMapViewController.h"
-#import "OAPointDescription.h"
-#import "OAReverseGeocoder.h"
 #import "OAPublicTransportRouteShieldCell.h"
 #import "OADividerCell.h"
 #import "OAOsmAndFormatter.h"
@@ -154,7 +150,7 @@
     NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray new];
     [collapsableCell setObject:[OAPublicTransportCollapsableCell getCellIdentifier] forKey:@"cell"];
     [collapsableCell setObject:[NSString stringWithFormat:OALocalizedString(@"by_type"), [r getTypeStr]] forKey:@"descr"];
-    [collapsableCell setObject:[NSString stringWithFormat:@"%lu %@ • %@", stops.size(), OALocalizedString(@"num_stops"), [OAOsmAndFormatter getFormattedDistance:segment->getTravelDist()]] forKey:@"title"];
+    [collapsableCell setObject:[NSString stringWithFormat:@"%lu %@ • %@", stops.size() - 1, OALocalizedString(@"num_stops"), [OAOsmAndFormatter getFormattedDistance:segment->getTravelDist()]] forKey:@"title"];
     [collapsableCell setObject:@(YES) forKey:@"collapsed"];
     [collapsableCell setObject:color forKey:@"line_color"];
     NSInteger row = arr.count;

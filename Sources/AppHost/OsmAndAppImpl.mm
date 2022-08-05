@@ -19,6 +19,7 @@
 #import "OALog.h"
 #import <Reachability.h>
 #import "OAManageResourcesViewController.h"
+#import "OAAppVersionDependentConstants.h"
 #import "OAPOIHelper.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
@@ -74,8 +75,11 @@
 #define VERSION_3_10 3.10
 #define VERSION_3_14 3.14
 #define VERSION_4_2 4.2
+#define VERSION_4_3 4.3
 
 #define kAppData @"app_data"
+#define kInstallDate @"install_date"
+#define kNumberOfStarts @"starts_num"
 
 #define _(name)
 @implementation OsmAndAppImpl
@@ -163,6 +167,11 @@
         [defaults registerDefaults:defResetSettings];
         NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
+        if (![defaults objectForKey:kInstallDate])
+            [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kInstallDate];
+        NSInteger ns = [defaults integerForKey:kNumberOfStarts];
+        ns = ns < 0 ? 0 : ns;
+        [defaults setInteger:++ns forKey:kNumberOfStarts];
     }
     return self;
 }
@@ -323,7 +332,7 @@
     _localResourcesChangedObservable = [[OAObservable alloc] init];
     _resourcesRepositoryUpdatedObservable = [[OAObservable alloc] init];
     _osmAndLiveUpdatedObservable = [[OAObservable alloc] init];
-    _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataDir.absoluteFilePath(QLatin1String("Resources")),
+    _resourcesManager.reset(new OsmAnd::ResourcesManager(_documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)),
                                                          _documentsDir.absolutePath(),
                                                          QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
                                                          _worldMiniBasemapFilename != nil ? QString::fromNSString(_worldMiniBasemapFilename) : QString(),
@@ -331,8 +340,9 @@
                                                          QString::fromNSString(_cachePath),
                                                          QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
                                                          QString::fromNSString(@"http://download.osmand.net"),
+                                                         QString::fromNSString([self generateIndexesUrl]),
                                                          _webClient));
-    
+
     _resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                              [self]
                                                              (const OsmAnd::ResourcesManager* const resourcesManager,
@@ -376,6 +386,7 @@
     float prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] floatForKey:@"appVersion"] : 0.;
     if (_firstLaunch)
     {
+        [[NSUserDefaults standardUserDefaults] setObject:NSDate.date forKey:kInstallDate];
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         _resourcesManager->installBuiltInTileSources();
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
@@ -398,6 +409,8 @@
         }
         if (prevVersion < VERSION_4_2)
         {
+            [[NSUserDefaults standardUserDefaults] setObject:NSDate.date forKey:kInstallDate];
+            
             [OAGPXDatabase.sharedDb save];
             [OAGPXDatabase.sharedDb load];
 
@@ -411,13 +424,20 @@
                 }
             }
         }
+        if (prevVersion < VERSION_4_3)
+        {
+            [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
+            [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]];
+            [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
+            _resourcesManager->rescanUnmanagedStoragePaths(true);
+        }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }
     
-    // Copy regions.ocbf to Library/Resources if needed
+    // Copy regions.ocbf to Documents/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
-    NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
+    NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
     
     if ([OAOcbfHelper isBundledOcbfNewer])
         [[NSFileManager defaultManager] removeItemAtPath:ocbfPathLib error:nil];
@@ -568,6 +588,101 @@
     [self askReview];
     
     return YES;
+}
+
+- (void) moveContentsOfDirectory:(NSString *)src toDest:(NSString *)dest
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    if (![fm fileExistsAtPath:dest])
+        [fm createDirectoryAtPath:dest withIntermediateDirectories:YES attributes:nil error:nil];
+
+    NSArray *files = [fm contentsOfDirectoryAtPath:src error:nil];
+
+    for (NSString *file in files)
+    {
+        [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
+                    toPath:[dest stringByAppendingPathComponent:file]
+                     error:nil];
+    }
+    [fm removeItemAtPath:src error:nil];
+}
+
+- (void) migrateMapNames:(NSString *)path
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    BOOL isDirectory = NO;
+    [fm fileExistsAtPath:path isDirectory:&isDirectory];
+    if (!isDirectory)
+        return;
+
+    NSArray *files = [fm contentsOfDirectoryAtPath:path error:nil];
+
+    for (NSString *file in files)
+    {
+        NSString *oldPath = [path stringByAppendingPathComponent:file];
+        BOOL isDir = NO;
+        [fm fileExistsAtPath:oldPath isDirectory:&isDir];
+        if (isDir)
+            [self migrateMapNames:oldPath];
+        else
+        {
+            [fm moveItemAtPath:oldPath
+                        toPath:[path stringByAppendingPathComponent:[self generateCorrectFileName:file]]
+                         error:nil];
+        }
+    }
+}
+
+- (NSString *) generateCorrectFileName:(NSString *)path
+{
+    NSString *fileName = path.lastPathComponent;
+    if ([fileName hasSuffix:@".map.obf"])
+    {
+        fileName = [OAUtilities capitalizeFirstLetter:[fileName stringByReplacingOccurrencesOfString:@".map.obf" withString:@".obf"]];
+    }
+    else if ([fileName.pathExtension isEqualToString:@"obf"])
+    {
+        fileName = [OAUtilities capitalizeFirstLetter:fileName];
+    }
+    else if ([fileName.pathExtension isEqualToString:@"sqlitedb"])
+    {
+        if ([fileName hasSuffix:@".hillshade.sqlitedb"])
+        {
+            fileName = [fileName stringByReplacingOccurrencesOfString:@".hillshade.sqlitedb" withString:@".sqlitedb"];
+            fileName = [fileName stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+            fileName = [NSString stringWithFormat:@"Hillshade %@", [OAUtilities capitalizeFirstLetter:fileName]];
+        }
+        else if ([fileName hasSuffix:@".slope.sqlitedb"])
+        {
+            fileName = [fileName stringByReplacingOccurrencesOfString:@".slope.sqlitedb" withString:@".sqlitedb"];
+            fileName = [fileName stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+            fileName = [NSString stringWithFormat:@"Slope %@", [OAUtilities capitalizeFirstLetter:fileName]];
+        }
+    }
+    return [path.stringByDeletingLastPathComponent stringByAppendingPathComponent:fileName];
+}
+
+- (NSString *) generateIndexesUrl
+{
+    NSMutableString *res = [NSMutableString stringWithFormat:@"https://download.osmand.net/get_indexes?gzip&osmandver=%@", OAAppVersionDependentConstants.getAppVersionForUrl];
+    NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:kInstallDate];
+    if (installDate)
+    {
+        NSInteger nd = [self daysBetween:installDate date2:NSDate.date];
+        if (nd > 0)
+            [res appendFormat:@"&nd=%ld", nd];
+    }
+    [res appendFormat:@"&ns=%ld", [[NSUserDefaults standardUserDefaults] integerForKey:kNumberOfStarts]];
+    [res appendFormat:@"&aid=%@", [self getUserIosId]];
+    return res;
+}
+
+- (NSInteger) daysBetween:(NSDate *)dt1 date2:(NSDate *)dt2
+{
+    NSUInteger unitFlags = NSCalendarUnitDay;
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *components = [calendar components:unitFlags fromDate:dt1 toDate:dt2 options:0];
+    return [components day] + 1;
 }
 
 - (void) instantiateWeatherResourcesManager
@@ -787,7 +902,7 @@
     QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
     for (const auto& localResource : _resourcesManager->getLocalResources())
     {
-        [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".map.obf")) resourcesManager:_resourcesManager];
+        [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".obf")) resourcesManager:_resourcesManager];
     }
 }
 
@@ -795,16 +910,17 @@
 {
     if(_resourcesManager == nullptr)
     {
-        _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataDir.absoluteFilePath(QLatin1String("Resources")),
+        _resourcesManager.reset(new OsmAnd::ResourcesManager(_documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)),
                                                              _documentsDir.absolutePath(),
                                                              QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
                                                              _worldMiniBasemapFilename != nil
                                                              ? QString::fromNSString(_worldMiniBasemapFilename)
-                                                             : QString::null,
+                                                             : QString(),
                                                              QString::fromNSString(NSTemporaryDirectory()),
                                                              QString::fromNSString(_cachePath),
                                                              QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
                                                              QString::fromNSString(@"http://download.osmand.net"),
+                                                             QString::fromNSString([self generateIndexesUrl]),
                                                              _webClient));
     }
     
@@ -820,7 +936,7 @@
 
 - (void) loadWorldRegions
 {
-    NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
+    NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
     _worldRegion = [OAWorldRegion loadFrom:ocbfPathLib];
 }
 
@@ -924,7 +1040,7 @@
     
     if (deviceMemoryAvailable == 0)
     {
-        NSDictionary* dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:_dataPath error:&error];
+        NSDictionary* dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:_documentsPath error:&error];
         if (dictionary)
         {
             NSNumber *fileSystemFreeSizeInBytes = [dictionary objectForKey: NSFileSystemFreeSize];

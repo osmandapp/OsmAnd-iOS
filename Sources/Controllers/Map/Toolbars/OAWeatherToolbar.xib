@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="jQ7-Py-E2J" customClass="OAWeatherToolbar">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="205"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="SUC-UW-N83" customClass="OAFoldersCollectionView">
+                    <rect key="frame" x="0.0" y="3" width="414" height="55"/>
+                    <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="55" id="sok-6z-w9n"/>
+                    </constraints>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="e16-bA-b6i">
+                        <size key="itemSize" width="128" height="128"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="IOB-SJ-nfi" customClass="OAFoldersCollectionView">
+                    <rect key="frame" x="0.0" y="58" width="414" height="52"/>
+                    <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="52" id="E0J-ic-gJu"/>
+                    </constraints>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Xp6-hH-km7">
+                        <size key="itemSize" width="128" height="128"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="H2C-uP-knh" customClass="OASegmentedSlider">
+                    <rect key="frame" x="18" y="123" width="378" height="73"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="72" id="Anv-8i-EZX"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="trackHeight">
+                            <real key="value" value="2"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </slider>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="aBx-xP-AGq"/>
+            <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="IOB-SJ-nfi" secondAttribute="trailing" id="15M-gt-URh"/>
+                <constraint firstItem="SUC-UW-N83" firstAttribute="leading" secondItem="jQ7-Py-E2J" secondAttribute="leading" id="2ef-hb-5G2"/>
+                <constraint firstItem="IOB-SJ-nfi" firstAttribute="leading" secondItem="jQ7-Py-E2J" secondAttribute="leading" id="8gK-gw-UQl"/>
+                <constraint firstItem="H2C-uP-knh" firstAttribute="top" secondItem="IOB-SJ-nfi" secondAttribute="bottom" constant="13" id="INP-Ym-kfx"/>
+                <constraint firstItem="SUC-UW-N83" firstAttribute="top" secondItem="jQ7-Py-E2J" secondAttribute="top" constant="3" id="kxm-rY-fqh"/>
+                <constraint firstAttribute="trailing" secondItem="SUC-UW-N83" secondAttribute="trailing" id="tge-Zh-hc0"/>
+                <constraint firstItem="H2C-uP-knh" firstAttribute="leading" secondItem="aBx-xP-AGq" secondAttribute="leading" constant="20" id="wqW-eI-JWp"/>
+                <constraint firstItem="aBx-xP-AGq" firstAttribute="trailing" secondItem="H2C-uP-knh" secondAttribute="trailing" constant="20" id="xtQ-9l-dxX"/>
+                <constraint firstItem="IOB-SJ-nfi" firstAttribute="top" secondItem="SUC-UW-N83" secondAttribute="bottom" id="zPX-Bb-c3A"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="dateCollectionView" destination="IOB-SJ-nfi" id="Z4t-hq-2UG"/>
+                <outlet property="layersCollectionView" destination="SUC-UW-N83" id="DDs-DN-NZe"/>
+                <outlet property="timeSliderView" destination="H2C-uP-knh" id="fZf-5P-ZH3"/>
+            </connections>
+            <point key="canvasLocation" x="-172.46376811594203" y="122.54464285714285"/>
+        </view>
+    </objects>
+</document>

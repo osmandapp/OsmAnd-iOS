@@ -41,7 +41,7 @@
 "transport_routes" = "Kursoj";
 "transport_nearby_routes_within" = "Kursoj proksime";
 "transport_nearby_routes" = "Proksime";
-"transport_stop" = "Ĉesigi";
+"transport_stop" = "Haltejo";
 "cancel_navigation" = "Ĉesigi navigadon";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Ordigi de celoĝis celo (laŭ la plej malgranda distanco)";
@@ -289,7 +289,7 @@
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 "guidance_preferences_descr" = "Navigadaj agordoj";
-"routing_preferences_descr" = "Difinado de vojo";
+"routing_preferences_descr" = "Difinado de kurso";
 "recording_preferences_descr" = "Track recording preferences";
 "routing_settings" = "Navigado";
 "shared_string_navigation" = "Navigi";
@@ -503,7 +503,7 @@
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "Movu la mapon por elekti deziratan areon.";
-"number_of_tiles" = "Nombro da kaheloj";
+"number_of_tiles" = "Nombro de kaheloj";
 "download_size" = "Download size";
 "preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
 "select_online_source" = "Select source";
@@ -584,7 +584,7 @@
 "favorites" = "Ŝatataj";
 "tracks" = "Spuroj";
 "personal_category_name" = "Personaj";
-"visible" = "Videbla";
+"visible" = "Videbla(j)";
 
 // GPX
 "gpx_point" = "Punkto";
@@ -616,7 +616,7 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "Mezuma rapido";
-"gpx_start" = "Ekigi";
+"gpx_start" = "Komenco";
 "gpx_finish" = "Fini";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
@@ -665,9 +665,9 @@
 
 // Map settings
 "m_style_car" = "Aŭto";
-"m_style_walk" = "Piedirado";
-"m_style_bicycle" = "Biciklo";
-"m_style_pulic_transport" = "Publika transporto";
+"m_style_walk" = "Piediranto";
+"m_style_bicycle" = "Biciklado";
+"m_style_pulic_transport" = "Transporto publika";
 "map_settings_map" = "Mapo";
 "layer_amenity_label" = "Etikedoj de punktoj (interesejoj,ŝatataj)";
 "map_settings_show" = "Montri sur mapo";
@@ -675,8 +675,8 @@
 "map_mode" = "Map-reĝimo";
 "map_settings_map_magnifier" = "Map-skalado";
 "map_settings_text_size" = "Grando de teksto";
-"map_settings_day" = "Taga";
-"map_settings_night" = "Nokte";
+"map_settings_day" = "tago";
+"map_settings_night" = "Nokta";
 "map_settings_style" = "Map-aspekto";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -828,7 +828,7 @@
 "lang_ka" = "Kartvela";
 "lang_kab" = "Kabila";
 "lang_kk" = "Kazaĥa";
-"lang_kn" = "Kannada";
+"lang_kn" = "Kanara";
 "lang_ko" = "Korea";
 "lang_ku" = "Kurda";
 "lang_ky" = "Kirgiza";
@@ -1049,7 +1049,9 @@
 "plan_route_open_existing_track" = "Malfermi ekzistan spuron";
 "plan_route_last_modified" = "Antaŭe modifita";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
-"route_between_points_warning_desc" = "Por uzi tiunĉi agordon, OsmAnd postulas ĝustigi vian kurson al vojoj sur la mapo.\n\n Sekve vi devos elekti profilon de navigo (por trovi permesatajn vojojn) kaj sojlan distancon (por alproksimigi vian kurson al vojoj).";
+"route_between_points_warning_desc" = "Por uzi tiunĉi agordon, OsmAnd postulas ĝustigi vian kurson al vojoj sur la mapo.
+\n
+\n Sekve vi devos elekti profilon de navigo (por trovi permesatajn vojojn) kaj sojlan distancon (por alproksimigi vian kurson al vojoj).";
 "plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
 "gpx_saved_successfully" = "GPX file saved to %@";
 "none_point_error" = "Bonvolu aldoni almenaŭ unu punkton.";
@@ -1112,10 +1114,6 @@
 "osmand_live_update_now" = "Ĝisdatigi nun";
 "osmand_live_updates_size" = "Downloaded updates size";
 "osmand_live_deleted_object" = "Deleted object";
-"res_banner_free_maps_title" = "You have %d free maps!";
-"res_banner_free_maps_desc" = "You can download %d free maps, without updates";
-"res_banner_no_free_maps_title" = "You have no free maps!";
-"res_banner_no_free_maps_desc" = "Please purchase region maps or All World maps";
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
@@ -1205,7 +1203,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osm_note" = "OSM-rimarko";
 "osm_created" = "Created";
-"osm_deleted" = "Forigite";
+"osm_deleted" = "Forigita(j)";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1251,7 +1249,7 @@
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
 "osm_edits_basic" = "Bazaj";
-"osm_edits_advanced" = "malfacila";
+"osm_edits_advanced" = "Altnivelaj";
 "osm_edits_all" = "All edits";
 "osm_edits_poi" = "POI edits";
 "osm_edits_notes" = "Notes";
@@ -1504,7 +1502,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Mapklarigo";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Aliaj";
+"help_other_header" = "Alia";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Instalado kaj problemoj";
 "help_tech_articles" = "Teĥnikaj artikoloj";
@@ -1943,8 +1941,8 @@
 "unlimited_downloads" = "Senlimaj elŝutoj";
 "wikipedia_offline" = "Vikipedio malkonekte";
 "contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
-"monthly_map_updates" = "Map updates: every month";
-"daily_map_updates" = "Map updates: every hour";
+"monthly_map_updates" = "Ĉiumonataj map‑ĝisdatigoj";
+"daily_map_updates" = "Ĉiuhoraj map‑ĝisdatigoj";
 "index_item_depth_contours_osmand_ext" = "Maraj profundec-kurboj";
 "donation_to_osm" = "Donation to OpenStreetMap community";
 "purchase_unlim_title" = "Aĉeti - %@";
@@ -1973,7 +1971,7 @@
 "already_has_inapp" = "You have already subscribed to %@.";
 "inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";
 "rendering_value_high_name" = "Alta";
-"routing_attr_difficulty_preference_description" = "Preferi skivojojn tiu ĉi facilo, sed la aplikaĵo povos difini kurson tra pli (mal)facilaj skivojoj, se la rezulta kurso estos pli mallonga.";
+"routing_attr_difficulty_preference_description" = "Preferi skivojojn tiuĉi facilo, sed la aplikaĵo povos difini kurson tra pli (mal)facilaj skivojoj, se la rezulta kurso estos pli mallonga.";
 "routing_attr_height_description" = "Difini permesatan alton de veturilo.";
 "touting_specified_vehicle_parameters_descr" = "Specified vehicle parameters may affect routing.";
 "routing_attr_height_obstacles_name" = "Uzi datumojn pri altitudo";
@@ -2108,7 +2106,7 @@
 "rendering_attr_surface_snow_name" = "Neĝo";
 "rendering_attr_highway_class_cycleway_name" = "Biciklvojoj";
 "routing_attr_piste_type_downhill_description" = "Skivojoj por skiado alpa (malsuprenira) kaj vojetoj al skitelferoj.";
-"rendering_attr_hideWaterPolygons_name" = "Kaŝi akvon";
+"rendering_attr_hideWaterPolygons_name" = "Akvo";
 "routing_attr_avoid_stairs_name" = "Senŝtuparoj";
 "rendering_value_walkingRoutesOSMC_name" = "reala koloro kaj emblemo";
 "rendering_attr_piste_type_skitour_name" = "ski‑ekskurso";
@@ -2262,10 +2260,10 @@
 "routing_attr_allow_motorway_description" = "Uzi aŭtoŝoseojn.";
 "rendering_attr_hmRendered_name" = "Montri pli map-detalojn";
 "rendering_attr_roadColors_name" = "Skemkoloro de vojoj";
-"weight_limit_description" = "Enigu pezon de via veturilo, iuj vojaj limigoj aplikas al pezaj veturiloj.";
-"height_limit_description" = "Enigu alton de via veturilo, iuj vojaj limigoj aplikas al altaj veturiloj.";
+"weight_limit_description" = "Enigu pezon de via veturilo, iuj vojaj limigoj aplikiĝas al pezaj veturiloj.";
+"height_limit_description" = "Enigu alton de via veturilo, iuj vojaj limigoj aplikiĝas al altaj veturiloj.";
 "lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
-"width_limit_description" = "Enigu larĝon de via veturilo, iuj vojaj limigoj aplikas al larĝaj veturiloj.";
+"width_limit_description" = "Enigu larĝon de via veturilo, iuj vojaj limigoj aplikiĝas al larĝaj veturiloj.";
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
 "vessel_width_limit_description" = "Enigu larĝon de akvoveturilo por eviti mallarĝajn pontojn";
 "default_speed_dialog_msg" = "Antaŭkalkulas tempon de alveno por vojoj de nekonata speco kaj limigas rapidon por ĉiuj vojoj (povas influi kurs‑difinadon).";
@@ -2275,13 +2273,13 @@
 //Icon categories
 "amenity" = "Oportunaĵo";
 "emergency" = "Vivsavo";
-"service" = "Servo";
+"service" = "Aliraj";
 "special" = "Specialaj";
 "sport" = "Sporto";
 "symbols" = "Simboloj";
 "transport" = "Transporto";
 "travel" = "Vojaĝo";
-"nautical" = "Mar-navigado";
+"nautical" = "Marnavigada";
 "industrial" = "Industrio";
 "education" = "Edukado";
 "settings_item_read_error" = "Could not read %@.";
@@ -2394,3 +2392,75 @@
 "backup_error_gzip_only_supported_upload" = "Dosiero estu en la formo .gzip";
 "backup_error_no_valid_subscription" = "Neniu valida abono";
 "rendering_attr_showFitnessTrails_description" = "Montri“vojetojn de sano”";
+"simulation_real_mode_title" = "Realisma";
+"transport_hazmat_yes_desc" = "Elektuĝustan kategorion.";
+"transport_hazmat_no_desc" = "Sur kelkajŝoseoj kaj tuneloj transporto de danĝeraj materialoj estas malpermesata.";
+"altitude_ascent" = "Supreniro";
+"complete_purchase" = "Aĉeti";
+"simulation_constant_mode_desc" = "La simulado estos farita kun la konstanta elektita rapido.";
+"purchases_feature_desc_unlimited_map_download" = "Akiru aliron al senlimaj elŝutoj de malkonektaj mapoj de ĉiuj kontinentoj kaj regionoj.";
+"toast_empty_name_error" = "Sennoma ejo";
+"purchases_feature_desc_wikipedia" = "Esploru Vikipedion malkonekte. Artikoloj estas dividitaj laŭ landoj/regionoj kaj estas disponeblaj en ĉiuj lingvoj.";
+"continue_with" = "Pluigi kun %@";
+"purchases_feature_desc_terrain" = "Montrado de montpintoj, altaĵoj kaj malaltaĵoj per nivelkurboj, mapoj de nivelombrumo (tonoj de grizo) kaj mapoj de dekliveco (koloraj).";
+"shared_string_includes" = "Enhavas";
+"annual_subscription" = "Jara abono";
+"expired" = "Eksvalidiĝita";
+"restore_purchases" = "Restarigi aĉetaĵojn";
+"explore_osmnad_plans_to_find_suitable" = "Ekkonu kun planoj de OsmAnd por trovi la plej taŭgan por vi.";
+"ltr_or_rtl_combine_via_or" = "%@ aŭ %@";
+"nautical_depth" = "Maraj profundec-kurboj";
+"shared_string_purchased" = "Aĉetita";
+"simulation_constant_mode_title" = "Konstanta rapido";
+"shared_string_capacity" = "Enhaveco";
+"units_cubic_m" = "m³";
+"routeInfo_horse_scale_name" = "Facilo deĉevalaj vojoj";
+"purchases_feature_desc_hourly_map_updates" = "Akiru aliron al pli oftajĝisdatigoj de mapoj: ĉiuhoraj, ĉiutagaj aŭ ĉiusemajnaj. Ne necesas reelŝuti la tutan mapon – ĝisdatigoj enhavas nur ŝanĝitajn objektojn.";
+"rendering_attr_lightRailRoutes_name" = "Malpez-fervojaj kursoj";
+"monthly_subscription" = "Monata abono";
+"copy_to_map_favorites" = "Kopii alŝatataj";
+"map_widget_speed" = "Rapido";
+"copy_coordinates" = "Kopii koordinatojn";
+"manage_subscription" = "Administri abonon";
+"simulation_preview_mode_title" = "Rapida antaŭvido";
+"osm_live_banner_desc" = "Havigu senlimigitan elŝutojn de mapoj kaj ĉiusemajnaj, ĉiutagajn kaj eĉ ĉiuhorajn ĝisdatigojn.";
+"altitude_descent" = "Malsupreniro";
+"private_access_routing_req" = "Via celo troviĝas en privata tereno. Ĉu permesi aliron al privataj vojoj por tiu ĉi kurso\?";
+"simulation_preview_mode_desc" = "Rapido de la simulado estos maksimuma sur rektaj fragmentoj kaj malrapidiĝos nur sur vojkruciĝoj.";
+"copy_address" = "Kopii adreson";
+"purchases_feature_desc_pro_widgets" = "Akiru aliron al altnivelaj agordoj: kolorigo de kursoj kaj pli.";
+"shared_string_learn_more" = "Pliaj informoj";
+"terrain_maps" = "Terenaj mapoj";
+"share_geo" = "geo:";
+"unlimited_map_downloads" = "Senlimaj elŝutoj de mapoj";
+"purchases_feature_desc_wikivoyage" = "Esploru Vikivojaĝon malkonekte. Artikoloj estas dividitaj laŭ landoj/regionoj kaj estas disponeblaj en ĉiuj lingvoj.";
+"routing_attr_allow_private_for_truck_description" = "Permesi aliron al privataj areoj por kamionoj.";
+"rendering_attr_funicularRoutes_name" = "Funikularaj kursoj";
+"product_desc_ext_development" = "Agordoj pri evoluigo kaj senerarigado de OsmAnd: simuladi kurson, efikeco de ekran‑bildigado, voĉaj anoncoj. Destinitaj por programistoj, ne bezonataj por kutimaj uzantoj.";
+"routeInfo_horse_scale_description" = "Bildigi vojojn laŭ facilo de ĉevalaj vojoj";
+"redeem_promo_code" = "Uzi reklamkodon";
+"rendering_attr_monorailRoutes_name" = "Unurel-fervojaj kursoj";
+"shared_string_stop" = "Haltejo";
+"purchases_feature_desc_nautical" = "Akiru aliron al informoj pri mara profundo.";
+"subscriptions" = "Abonoj";
+"not_available_with" = "Ne disponebla kun %@";
+"speed_mode" = "Reĝimo de rapido";
+"shared_string_start" = "Komenco";
+"routing_attr_allow_private_for_truck_name" = "Permesi privatan aliron (kamionoj)";
+"new_device_account" = "Nova aparato / nova konto";
+"product_desc_plus" = "Akiri aldonajn eblaĵojn";
+"wikipedia_and_wikivoyage_offline" = "Vikipedo kaj Vikivojaĝo malkonekte";
+"product_title_development" = "OsmAnd-programistilo";
+"purchases_feature_desc_combined_wiki" = "Esploru artikolojn de Vikipedio dum vojaĝi sen interreta konekto. Datumoj estas dividitaj laŭ landoj kaj liveras artikolojn en ĉiuj lingvoj.";
+"purchases_feature_desc_monthly_map_updates" = "Akiru aliron alĉiumonataj ĝisdatigoj de malkonektaj mapoj.";
+"purchases_feature_desc_osmand_cloud" = "Tenuĉiujn datumojn de OsmAnd enrete en OsmAnd-Nubo. Ne perdu viajn datumojn post reinstalu. Facile kreu kaj restarigu sekurkopiojn de viaj datumoj.";
+"product_desc_pro" = "Akiriĉiujn eblaĵojn";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (neniu limigo)";
+"restore_from_osmand_cloud" = "Restarigi el OsmAnd-Nubo";
+"in_grace_period" = "En prokrastoperiodo";
+"lang_ckb" = "Sorana";
+"shared_string_delete_all" = "Forigiĉiujn";
+"shared_string_undefined" = "Nedifinita";
+"shared_string_data" = "Datumoj";
+"on_hold" = "Ĉesigita";
+"paused" = "Paŭzigita";

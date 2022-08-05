@@ -613,7 +613,7 @@
 "poi_hide" = "ಅಡಗಿಸಿ";
 
 // My Places
-"favorites" = "ಇಷ್ಟವಾದವುಗಳು";
+"favorites" = "ನನ್ನ ಇಷ್ಟವಾದವುಗಳು";
 "tracks" = "ನನ್ನ ಟ್ರ್ಯಾಕ್ ಗಳು";
 "personal_category_name" = "ವೈಯಕ್ತಿಕ";
 "visible" = "Visible";
@@ -1172,10 +1172,6 @@
 "osmand_live_update_now" = "Update now";
 "osmand_live_updates_size" = "Downloaded updates size";
 "osmand_live_deleted_object" = "Deleted object";
-"res_banner_free_maps_title" = "You have %d free maps!";
-"res_banner_free_maps_desc" = "You can download %d free maps, without updates";
-"res_banner_no_free_maps_title" = "You have no free maps!";
-"res_banner_no_free_maps_desc" = "Please purchase region maps or All World maps";
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
@@ -2483,3 +2479,7 @@
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "save_heading" = "ಶೀರ್ಷಿಕೆಯನ್ನು ಸೇರಿಸಿ";
+"shared_string_stop" = "ನಿಲ್ಲಿಸು";
+"shared_string_start" = "ಶುರುಮಾಡು";
+"product_title_development" = "ಒಸ್ಮಾಂಡ್ ತಂತ್ರಾಶ ಅಭಿವೃದ್ಧಿ";
+"shared_string_delete_all" = "ಎಲ್ಲವನ್ನು ಅಳಿಸಿ";

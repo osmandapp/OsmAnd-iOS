@@ -405,7 +405,8 @@
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
--(void) resetMapStyleForAppMode:(NSString *)mapPresetName
+- (void) resetMapStyleForAppMode:(NSString *)mapPresetName
+                      onComplete:(void(^)(void))onComplete
 {
     NSMutableArray <NSString *> *allRenderStyles = [self getMapStyleRenderKeys];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -420,9 +421,11 @@
                     [[NSUserDefaults standardUserDefaults] setValue:p.value forKey:name];
                 }
         }
-        
+
         [OAMapStyleSettings.sharedInstance loadParameters];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+        if (onComplete)
+            onComplete();
     });
 }
 
@@ -495,6 +498,36 @@
         return 9;
     else
         return 0;
+}
+
++ (NSString *)weatherContoursParamChangedToValue:(NSString *)newValue styleSettings:(OAMapStyleSettings *)styleSettings
+{
+    OAMapStyleParameter *tempContourLinesParam = [styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR];
+    OAMapStyleParameter *pressureContourLinesParam = [styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR];
+    if ([WEATHER_TEMP_CONTOUR_LINES_ATTR isEqualToString:newValue])
+    {
+        tempContourLinesParam.value = @"true";
+        [styleSettings save:tempContourLinesParam];
+        pressureContourLinesParam.value = @"false";
+        [styleSettings save:pressureContourLinesParam];
+        return WEATHER_TEMP_CONTOUR_LINES_ATTR;
+    }
+    else if ([WEATHER_PRESSURE_CONTOURS_LINES_ATTR isEqualToString:newValue])
+    {
+        tempContourLinesParam.value = @"false";
+        [styleSettings save:tempContourLinesParam];
+        pressureContourLinesParam.value = @"true";
+        [styleSettings save:pressureContourLinesParam];
+        return WEATHER_PRESSURE_CONTOURS_LINES_ATTR;
+    }
+    else
+    {
+        tempContourLinesParam.value = @"false";
+        [styleSettings save:tempContourLinesParam];
+        pressureContourLinesParam.value = @"false";
+        [styleSettings save:pressureContourLinesParam];
+        return WEATHER_NONE_CONTOURS_LINES_VALUE;
+    }
 }
 
 @end

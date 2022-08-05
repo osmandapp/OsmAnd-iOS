@@ -43,18 +43,18 @@
     OAWeatherHelper *_weatherHelper;
     MBProgressHUD* _progressHUD;
     BOOL _editMode;
+    NSIndexPath *_sizeIndexPath;
+    BOOL _needToUpTable;
 
+    NSMutableArray<NSMutableDictionary *> *_data;
     NSArray<OAWorldRegion *> *_filteredRegions;
-    NSObject *_searchDataLock;
-    NSArray<OAWorldRegion *> *_searchResults;
-    NSString *_searchText;
-
     NSMutableArray<OAWorldRegion *> *_regionsSelected;
     NSMutableArray<OAWorldRegion *> *_regionsWithOfflineMaps;
     NSMutableArray<OAWorldRegion *> *_regionsOtherCountries;
 
-    NSMutableArray<NSMutableDictionary *> *_data;
-    NSIndexPath *_sizeIndexPath;
+    NSObject *_searchDataLock;
+    NSArray<OAWorldRegion *> *_searchResults;
+    NSString *_searchText;
 
     OAAutoObserverProxy *_weatherSizeCalculatedObserver;
     OAAutoObserverProxy *_weatherForecastDownloadingObserver;
@@ -75,17 +75,6 @@
     _app = [OsmAndApp instance];
     _editMode = NO;
     _weatherHelper = [OAWeatherHelper sharedInstance];
-
-
-    NSPredicate *onlyWeatherPredicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary<NSString *, id> *bindings) {
-        return [OAWeatherHelper shouldHaveWeatherForecast:evaluatedObject];
-    }];
-
-    NSComparator regionComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
-        return [region1.name localizedCaseInsensitiveCompare:region2.name];
-    };
-
-    _filteredRegions = [[_app.worldRegion.flattenedSubregions filteredArrayUsingPredicate:onlyWeatherPredicate] sortedArrayUsingComparator:regionComparator];
 
     _searchDataLock = [[NSObject alloc] init];
     _searchResults = @[];
@@ -112,9 +101,18 @@
     self.tableView.dataSource = self;
     self.tableView.estimatedRowHeight = 65.;
 
+    NSPredicate *onlyWeatherPredicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary<NSString *, id> *bindings) {
+        return [OAWeatherHelper shouldHaveWeatherForecast:evaluatedObject];
+    }];
+
+    NSComparator regionComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
+        return [region1.name localizedCaseInsensitiveCompare:region2.name];
+    };
+
+    _filteredRegions = [[_app.worldRegion.flattenedSubregions filteredArrayUsingPredicate:onlyWeatherPredicate] sortedArrayUsingComparator:regionComparator];
+
     [self setupView];
     self.searchBar.delegate = self;
-    self.searchBar.placeholder = OALocalizedString(@"shared_string_search");
     [self updateSearchBarVisible];
 
     self.editButton.hidden = [_weatherHelper getForecastsWithDownloadStateRegionIds].count == 0;
@@ -150,6 +148,7 @@
 {
     [self.editButton setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
     self.titleLabel.text = OALocalizedString(@"weather_offline_forecast");
+    self.searchBar.placeholder = OALocalizedString(@"shared_string_search");
 }
 
 - (void)setupView
@@ -262,7 +261,13 @@
                     offlineForecastData[@"key"] = [@"status_cell_" stringByAppendingString:region.regionId];
                     offlineForecastData[@"type"] = [OATitleDescrRightIconTableViewCell getCellIdentifier];
                     offlineForecastData[@"region"] = region;
-                    offlineForecastData[@"description"] = [OAWeatherHelper getStatusInfoDescription:region.regionId];
+                    offlineForecastData[@"description"] = [OAWeatherHelper getPreferenceDownloadState:region.regionId] == EOAWeatherForecastDownloadStateInProgress
+                            ? [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_loading")
+                                                              attributes:@{
+                                                                      NSFontAttributeName: [UIFont systemFontOfSize:13.],
+                                                                      NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
+                                                              }]
+                            : [OAWeatherHelper getStatusInfoDescription:region.regionId];
                     [statusCells addObject:offlineForecastData];
                 }
             }
@@ -336,7 +341,10 @@
                 }
 
                 if (indexPath)
+                {
+                    statusCells[indexPath.row][@"description"] = [OAWeatherHelper getStatusInfoDescription:region.regionId];
                     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
 
                 break;
             }
@@ -399,8 +407,6 @@
                         progressView.progress = 0.;
                         if (!progressView.isSpinning)
                             [progressView startSpinProgressBackgroundLayer];
-
-                        statusCells[indexPath.row][@"description"] = [OAWeatherHelper getStatusInfoDescription:region.regionId];
                     }
                     else
                     {
@@ -410,32 +416,6 @@
                             [progressView startSpinProgressBackgroundLayer];
                         [progressView setNeedsDisplay];
                     }
-                });
-            }
-            else
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSMutableDictionary *offlineForecastData = [NSMutableDictionary dictionary];
-                    offlineForecastData[@"key"] = [@"status_cell_" stringByAppendingString:region.regionId];
-                    offlineForecastData[@"type"] = [OATitleDescrRightIconTableViewCell getCellIdentifier];
-                    offlineForecastData[@"region"] = region;
-                    offlineForecastData[@"description"] =
-                            [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_loading")
-                                                            attributes:@{
-                                                                    NSFontAttributeName: [UIFont systemFontOfSize:13.],
-                                                                    NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
-                                                            }
-                            ];
-                    [statusCells addObject:offlineForecastData];
-                    [statusCells sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2)
-                    {
-                        OAWorldRegion *item1 = obj1[@"region"];
-                        OAWorldRegion *item2 = obj2[@"region"];
-                        return [item1.name localizedCaseInsensitiveCompare:item2.name];
-                    }];
-
-                    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[statusCells indexOfObject:offlineForecastData] inSection:i]]
-                                          withRowAnimation:UITableViewRowAnimationAutomatic];
                 });
             }
             break;
@@ -566,8 +546,6 @@
 
         self.tableViewWithSearchConstraint.active = YES;
         self.tableViewNoSearchConstraint.active = NO;
-
-        [self.searchBar becomeFirstResponder];
     }
     else
     {
@@ -611,6 +589,17 @@
     [_regionsOtherCountries sortUsingComparator:regionComparator];
 }
 
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+
+    if (_needToUpTable)
+    {
+        [self.tableView setContentOffset:CGPointZero];
+        _needToUpTable = NO;
+    }
+}
+
 - (IBAction)backButtonClicked:(id)sender
 {
     if (_editMode)
@@ -637,8 +626,8 @@
                                     [self updateSearchBarVisible];
 
                                     [self setupView];
+                                    [self.tableView setContentOffset:CGPointZero animated:NO];
                                     [self.tableView reloadData];
-                                    self.tableView.contentOffset = CGPointZero;
 
                                     if ([_weatherHelper getForecastsWithDownloadStateRegionIds].count == 0)
                                     {
@@ -651,7 +640,7 @@
                                         _editButton.hidden = NO;
                                     }
                                 }
-                                completion: ^(BOOL finished)
+                                completion:^(BOOL finished)
                                 {
                                     [self updateCacheSize];
                                 }
@@ -784,8 +773,8 @@
                                              forState:UIControlStateNormal];
 
                                 [self setupView];
+                                [self.tableView setContentOffset:CGPointZero animated:NO];
                                 [self.tableView reloadData];
-                                self.tableView.contentOffset = CGPointZero;
 
                                 if (_editMode)
                                 {
@@ -1096,10 +1085,28 @@
     }
 }
 
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self.searchBar resignFirstResponder];
+}
+
 #pragma mark - OAWeatherCacheSettingsDelegate
 
 - (void)onCacheClear:(EOAWeatherCacheType)type
 {
+    [_regionsOtherCountries addObjectsFromArray:_regionsSelected];
+    [_regionsOtherCountries sortUsingComparator:^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
+        return [region1.name localizedCaseInsensitiveCompare:region2.name];
+    }];
+    [_regionsSelected removeAllObjects];
+
+    _editButton.hidden = YES;
+    _sizeIndexPath = nil;
+
+    [self setupView];
+    [self.tableView reloadData];
     [self updateCacheSize];
 }
 

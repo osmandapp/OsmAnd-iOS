@@ -14,7 +14,7 @@
                 <outlet property="backButton" destination="57D-V1-8Tb" id="RIw-cL-ZX3"/>
                 <outlet property="editButton" destination="nnv-aa-9Ji" id="X0R-ms-Wrp"/>
                 <outlet property="navigationBarView" destination="Zk3-JI-OC2" id="r0n-GL-QRK"/>
-                <outlet property="searchBar" destination="D3q-Qn-VnP" id="OL3-Yt-JfC"/>
+                <outlet property="searchBar" destination="D3q-Qn-VnP" id="fVo-9g-CAy"/>
                 <outlet property="tableView" destination="y2H-vl-k8i" id="5Wr-4G-PMl"/>
                 <outlet property="tableViewNoSearchConstraint" destination="C5S-ug-uei" id="XZW-ro-hKg"/>
                 <outlet property="tableViewWithSearchConstraint" destination="IFB-fG-JXa" id="fo6-4A-gRt"/>
@@ -78,6 +78,11 @@
                             <color key="tintColor" red="0.76862745098039209" green="0.76862745098039209" blue="0.76862745098039209" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <color key="barTintColor" red="0.98823529409999999" green="0.4823529412" blue="0.031372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <textInputTraits key="textInputTraits"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="color" keyPath="searchField.backgroundColor">
+                                    <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
                         </searchBar>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cvn-7y-fQa" userLabel="Separator View">
                             <rect key="frame" x="0.0" y="141" width="414" height="1"/>

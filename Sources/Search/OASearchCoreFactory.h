@@ -43,7 +43,7 @@ static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR = 700;
 static const double SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE = 0.001;
 static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
-@class OAObjectType, OAPOIBaseType;
+@class OAObjectType, OAPOIBaseType, OASearchResult;
 
 @interface OASearchBaseAPI : OASearchCoreAPI
 
@@ -101,6 +101,8 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 @end
 
 @interface OASearchLocationAndUrlAPI : OASearchBaseAPI
+
++ (OASearchResult *)getBestMatchedOLCSearchResult:(NSArray<OASearchResult *> *)searchResults phraseName:(NSString *)phraseName;
 
 @end
 

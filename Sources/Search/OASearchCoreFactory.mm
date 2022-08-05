@@ -1799,7 +1799,6 @@
     NSUInteger _olcPhraseHash;
     CLLocation *_olcPhraseLocation;
     OAParsedOpenLocationCode *_cachedParsedCode;
-    NSArray<NSString *> *_citySubTypes;
 }
 
 - (instancetype)init
@@ -1808,7 +1807,6 @@
                                         [OAObjectType withType:PARTIAL_LOCATION]]];
     if (self)
     {
-        _citySubTypes = @[@"city", @"town", @"village"];
     }
     return self;
 }
@@ -1891,10 +1889,9 @@
             NSArray<OASearchResult *> *requestResults = resultMatcher.getRequestResults;
             if (requestResults.count > 0)
             {
-                OASearchResult *result = [self getBestMatchedOLCSearchResult:requestResults phraseName:phrase.getUnknownWordToSearch];
-                CLLocation *searchLocation = result.location;
-                if (searchLocation != nil)
-                    latLon = [parsedCode recover:searchLocation];
+                OASearchResult *bestMatchedCity = [self.class getBestMatchedOLCSearchResult:requestResults phraseName:phrase.getUnknownWordToSearch];
+                if (bestMatchedCity && bestMatchedCity.location)
+                    latLon = [parsedCode recover:bestMatchedCity.location];
             }
         }
         if (latLon == nil && !parsedCode.full)
@@ -1941,19 +1938,20 @@
     }
 }
 
-- (OASearchResult *)getBestMatchedOLCSearchResult:(NSArray<OASearchResult *> *)cities phraseName:(NSString *)phraseName
++ (OASearchResult *)getBestMatchedOLCSearchResult:(NSArray<OASearchResult *> *)searchResults phraseName:(NSString *)phraseName
 {
     int cityIndex = 0;
     int scoreIndex = 1;
+    NSArray<NSString *> *citySubTypes = @[@"city", @"town", @"village"];
     NSMutableArray<NSMutableArray *> *orderedCities = [NSMutableArray array];
     
-    for (OASearchResult *city in cities)
+    for (OASearchResult *searchResult in searchResults)
     {
         int resultScore = 0;
-        if (city.location && city.objectType == POI)
+        if (searchResult.location && searchResult.objectType == POI)
         {
-            OAPOI *poi = (OAPOI *)city.object;
-            if ([_citySubTypes containsObject:poi.subType])
+            OAPOI *poi = (OAPOI *)searchResult.object;
+            if ([citySubTypes containsObject:poi.subType])
             {
                 resultScore += 1;
                 if ([poi.subType isEqualToString:@"city"])
@@ -1976,7 +1974,7 @@
                 }
             }
         }
-        [orderedCities addObject:[NSMutableArray arrayWithArray:@[city, @(resultScore)]]];
+        [orderedCities addObject:[NSMutableArray arrayWithArray:@[searchResult, @(resultScore)]]];
     }
     
     [orderedCities sortUsingComparator:^NSComparisonResult(NSMutableArray *obj1, NSMutableArray *obj2) {

@@ -37,6 +37,7 @@
 #import "OAHistoryHelper.h"
 #import "OAQuickSearchListItem.h"
 #import "OASearchResult.h"
+#import "OASearchCoreFactory.h"
 
 #import "OsmAnd_Maps-Swift.h"
 #import <OsmAndCore/Utilities.h>
@@ -44,7 +45,7 @@
 #include <GeographicLib/GeoCoords.hpp>
 #include <GeographicLib/MGRS.hpp>
 
-#define kSearchCityLimit 100
+#define kSearchCityLimit 500
 #define defaultNavBarHeight 58
 #define kHintBarHeight 44
 #define kMaxEastingValue 833360
@@ -116,6 +117,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     NSMutableArray<OAPOI *> *_olcCities;
     NSString *_olcSearchingCity;
+    NSString *_olcSearchingCode;
 }
 
 - (instancetype) initWithLat:(double)lat lon:(double)lon
@@ -712,63 +714,41 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 - (CLLocation *) parseOlcCode:(NSString *)olcText
 {
     CLLocation *loc = nil;
-    NSString *olcTextCode;
-    NSString *cityName = @"";
+    _olcSearchingCity = @"";
     NSArray<NSString *> *olcTextParts = [olcText componentsSeparatedByString:@" "];
     if (olcTextParts.count > 1)
     {
-        olcTextCode = olcTextParts[0];
-        cityName = [olcText substringFromIndex:olcTextCode.length + 1];
-        NSInteger commaIndex = [cityName indexOf:@","];
+        _olcSearchingCode = olcTextParts[0];
+        _olcSearchingCity = [olcText substringFromIndex:_olcSearchingCode.length + 1];
+        NSInteger commaIndex = [_olcSearchingCity indexOf:@","];
         if (commaIndex != -1)
-            cityName = [cityName substringToIndex:[cityName indexOf:@","]];
-        _olcSearchingCity = cityName;
+            _olcSearchingCity = [_olcSearchingCity substringToIndex:[_olcSearchingCity indexOf:@","]];
     }
     else
     {
-        olcTextCode = olcText;
+        _olcSearchingCode = olcText;
     }
     OLCArea *codeArea = nil;
-    if ([OLCConverter isFullCode:olcTextCode])
+    if ([OLCConverter isFullCode:_olcSearchingCode])
     {
-        codeArea = [OLCConverter decode:olcTextCode];
+        codeArea = [OLCConverter decode:_olcSearchingCode];
     }
-    else if ([OLCConverter isShortCode:olcTextCode])
+    else if ([OLCConverter isShortCode:_olcSearchingCode])
     {
-        NSString *code = olcTextCode;
         CLLocation *mapLocation = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
-        if (!cityName || cityName.length == 0)
+        if (!_olcSearchingCity || _olcSearchingCity.length == 0)
         {
             if (mapLocation)
             {
-                NSString *newCode = [OLCConverter recoverNearestWithShortcode:code referenceLatitude:mapLocation.coordinate.latitude referenceLongitude:mapLocation.coordinate.longitude];
+                NSString *newCode = [OLCConverter recoverNearestWithShortcode:_olcSearchingCode referenceLatitude:mapLocation.coordinate.latitude referenceLongitude:mapLocation.coordinate.longitude];
                 codeArea = [OLCConverter decode:newCode];
             }
         }
         else
         {
             _searchLocation = mapLocation;
-            _region = cityName;
-            _isOlcCitySearchRunning = YES;
-            [OAQuickSearchHelper searchCities:cityName
-                               searchLocation:_searchLocation
-                                 allowedTypes:@[@"city", @"town", @"village"]
-                                    cityLimit:kSearchCityLimit
-                                         view:self.view
-                                   onComplete:^(NSMutableArray *amenities)
-                                   {
-                                       _isOlcCitySearchRunning = NO;
-                                       if (amenities && amenities.count > 0)
-                                       {
-                                           OASearchResult *firstResult = amenities[0];
-                                           if (firstResult && firstResult.location)
-                                           {
-                                               _searchLocation = firstResult.location;
-                                               [self updateDistanceAndDirection:YES];
-                                           }
-                                       }
-                                   }
-            ];
+            _region = _olcSearchingCity;
+            [self startAsyncCitySearching];
         }
     }
     if (codeArea)
@@ -776,32 +756,38 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     return loc;
 }
 
-- (void) searchCities:(NSString *)text
+- (void) startAsyncCitySearching
 {
-    [self startSpinner];
-    dispatch_async(dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL), ^{
-        _olcCities = [NSMutableArray array];
-        OAPOIHelper.sharedInstance.delegate = self;
-        [OAPOIHelper.sharedInstance findPOIsByKeyword:text];
-    });
+    _isOlcCitySearchRunning = YES;
+    [OAQuickSearchHelper searchCities:_olcSearchingCity
+                       searchLocation:_searchLocation
+                         allowedTypes:@[@"city", @"town", @"village"]
+                            cityLimit:kSearchCityLimit
+                                 view:self.view
+                           onComplete:^(NSMutableArray *amenities)
+                           {
+                               _isOlcCitySearchRunning = NO;
+                                [self onCitiesSearchDone:amenities];
+                           }
+    ];
 }
 
-- (void) searchDone:(BOOL)wasInterrupted
+- (void) onCitiesSearchDone:(NSArray<OASearchResult *> *)searchResults
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _isOlcCitySearchRunning = NO;
-        [self stopSpinner];
-        if (_olcCities && _olcCities.count > 0)
+    if (searchResults && searchResults.count > 0)
+    {
+        OASearchResult *searchResult = [OASearchLocationAndUrlAPI getBestMatchedOLCSearchResult:searchResults phraseName:_olcSearchingCity];
+        if (searchResult && searchResult.location)
         {
-            NSArray<OAPOI *> * sortedAmenities = [self sortCities:_olcCities phraseName:_olcSearchingCity];
-            OAPOI *firstResult = sortedAmenities[0];
-            if (firstResult)
+            NSString *newCode = [OLCConverter recoverNearestWithShortcode:_olcSearchingCode referenceLatitude:searchResult.location.coordinate.latitude referenceLongitude:searchResult.location.coordinate.longitude];
+            OLCArea *codeArea = [OLCConverter decode:newCode];
+            if (codeArea)
             {
-                _searchLocation = [[CLLocation alloc] initWithLatitude:firstResult.latitude longitude:firstResult.longitude];
+                _searchLocation = [[CLLocation alloc] initWithLatitude:codeArea.latitudeCenter longitude:codeArea.longitudeCenter];
                 [self updateDistanceAndDirection:YES];
             }
         }
-    });
+    }
 }
 
 - (void) startSpinner
@@ -818,58 +804,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 {
     [_activityIndicator stopAnimating];
     _activityIndicator.hidden = YES;
-}
-
-- (NSArray<OAPOI *> *)sortCities:(NSArray<OAPOI *> *)cities phraseName:(NSString *)phraseName
-{
-    return [cities sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        NSString *str1;
-        NSString *str2;
-        
-        OAPOI *a = (OAPOI *)obj1;
-        str1 = a.name;
-        if ([a.subType isEqualToString:@"city"])
-            str1 = [NSString stringWithFormat:@"!%@", str1];
-        
-        if ([a.name isEqualToString:phraseName])
-        {
-            str1 = [NSString stringWithFormat:@"!%@", str1];
-        }
-        else
-        {
-            for (NSString *name in a.localizedNames)
-            {
-                if ([name isEqualToString:phraseName])
-                {
-                    str1 = [NSString stringWithFormat:@"!%@", str1];
-                    break;
-                }
-            }
-        }
-        
-        OAPOI *b = (OAPOI *)obj2;
-        str2 = b.name;
-        if ([b.subType isEqualToString:@"city"])
-            str2 = [NSString stringWithFormat:@"!%@", str2];
-        
-        if ([b.name isEqualToString:phraseName])
-        {
-            str2 = [NSString stringWithFormat:@"!%@", str2];
-        }
-        else
-        {
-            for (NSString *name in b.localizedNames)
-            {
-                if ([name isEqualToString:phraseName])
-                {
-                    str2 = [NSString stringWithFormat:@"!%@", str2];
-                    break;
-                }
-            }
-        }
-        
-        return [str1 compare:str2];
-    }];
 }
 
 - (double) parseDoubleFromString:(NSString *)stringValue

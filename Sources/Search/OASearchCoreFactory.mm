@@ -1891,12 +1891,10 @@
             NSArray<OASearchResult *> *requestResults = resultMatcher.getRequestResults;
             if (requestResults.count > 0)
             {
-                requestResults = [self sortCities:requestResults phraseName:phrase.getUnknownWordToSearch];
-                CLLocation *searchLocation = requestResults[0].location;
+                OASearchResult *result = [self getBestMatchedOLCSearchResult:requestResults phraseName:phrase.getUnknownWordToSearch];
+                CLLocation *searchLocation = result.location;
                 if (searchLocation != nil)
-                {
                     latLon = [parsedCode recover:searchLocation];
-                }
             }
         }
         if (latLon == nil && !parsedCode.full)
@@ -1943,92 +1941,49 @@
     }
 }
 
-- (NSArray<OASearchResult *> *)sortCities:(NSArray<OASearchResult *> *)cities phraseName:(NSString *)phraseName
+- (OASearchResult *)getBestMatchedOLCSearchResult:(NSArray<OASearchResult *> *)cities phraseName:(NSString *)phraseName
 {
-    return [cities sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        NSString *str1;
-        NSString *str2;
-        
-        OASearchResult *searchResultA = (OASearchResult *)obj1;
-        switch (searchResultA.objectType) {
-            case POI:
+    int cityIndex = 0;
+    int scoreIndex = 1;
+    NSMutableArray<NSMutableArray *> *orderedCities = [NSMutableArray array];
+    
+    for (OASearchResult *city in cities)
+    {
+        int resultScore = 0;
+        if (city.location && city.objectType == POI)
+        {
+            OAPOI *poi = (OAPOI *)city.object;
+            if ([_citySubTypes containsObject:poi.subType])
             {
-                OAPOI *a = (OAPOI *)searchResultA.object;
-                str1 = a.name;
-                if ([_citySubTypes containsObject:a.subType])
+                resultScore += 1;
+                if ([poi.subType isEqualToString:@"city"])
+                    resultScore += 1;
+                
+                if ([poi.name isEqualToString:phraseName])
                 {
-                    if ([a.subType isEqualToString:@"city"])
-                        str1 = [NSString stringWithFormat:@"!!!%@", str1];
-                    else
-                        str1 = [NSString stringWithFormat:@"!!%@", str1];
-                    if ([a.name isEqualToString:phraseName])
+                    resultScore += 2;
+                }
+                else
+                {
+                    for (NSString *localizedName in poi.localizedNames)
                     {
-                        str1 = [NSString stringWithFormat:@"!!%@", str1];
-                    }
-                    else
-                    {
-                        for (NSString *name in a.localizedNames)
+                        if ([localizedName isEqualToString:phraseName])
                         {
-                            if ([name isEqualToString:phraseName])
-                            {
-                                str1 = [NSString stringWithFormat:@"!!%@", str1];
-                                break;
-                            }
+                            resultScore += 2;
+                            break;
                         }
                     }
                 }
-                break;
-            }
-            default:
-            {
-                str1 = searchResultA.localeName;
-                if (searchResultA.location)
-                    str1 = [NSString stringWithFormat:@"!%@", str1];
-                break;
             }
         }
-        
-        OASearchResult *searchResultB = (OASearchResult *)obj2;
-        switch (searchResultB.objectType) {
-            case POI:
-            {
-                OAPOI *b = (OAPOI *)searchResultB.object;
-                str2 = b.name;
-                if ([_citySubTypes containsObject:b.subType])
-                {
-                    if ([b.subType isEqualToString:@"city"])
-                        str2 = [NSString stringWithFormat:@"!!!%@", str2];
-                    else
-                        str2 = [NSString stringWithFormat:@"!!%@", str2];
-                    if ([b.name isEqualToString:phraseName])
-                    {
-                        str2 = [NSString stringWithFormat:@"!!%@", str2];
-                    }
-                    else
-                    {
-                        for (NSString *name in b.localizedNames)
-                        {
-                            if ([name isEqualToString:phraseName])
-                            {
-                                str2 = [NSString stringWithFormat:@"!!%@", str2];
-                                break;
-                            }
-                        }
-                    }
-                }
-                break;
-            }
-            default:
-            {
-                str2 = searchResultB.localeName;
-                if (searchResultB.location)
-                    str2 = [NSString stringWithFormat:@"!%@", str2];
-                break;
-            }
-        }
-        
-        return [str1 compare:str2];
+        [orderedCities addObject:[NSMutableArray arrayWithArray:@[city, @(resultScore)]]];
+    }
+    
+    [orderedCities sortUsingComparator:^NSComparisonResult(NSMutableArray *obj1, NSMutableArray *obj2) {
+        return [obj2[scoreIndex] compare:obj1[scoreIndex]];
     }];
+    
+    return orderedCities.firstObject[cityIndex];
 }
 
 - (BOOL) parseUrl:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher

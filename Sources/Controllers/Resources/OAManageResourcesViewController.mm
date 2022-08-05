@@ -333,7 +333,7 @@ static BOOL _repositoryUpdated = NO;
                                        andObserve:[OAWeatherHelper sharedInstance].weatherForecastDownloadingObserver];
 
     if ([self shouldDisplayWeatherForecast:self.region])
-        [[OAWeatherHelper sharedInstance] calculateCacheSize:self.region];
+        [[OAWeatherHelper sharedInstance] calculateCacheSize:self.region onComplete:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstallationFailed:) name:OAResourceInstallationFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
@@ -469,8 +469,8 @@ static BOOL _repositoryUpdated = NO;
             }
 
             FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-            NSInteger progressDownloading = [[OAWeatherHelper sharedInstance] getOfflineForecastProgressInfo:self.region];
-            NSInteger progressDownloadDestination = [[OAWeatherHelper sharedInstance] getProgressDestination:self.region];
+            NSInteger progressDownloading = [[OAWeatherHelper sharedInstance] getOfflineForecastProgressInfo:self.region.regionId];
+            NSInteger progressDownloadDestination = [[OAWeatherHelper sharedInstance] getProgressDestination:self.region.regionId];
             CGFloat progressCompleted = (CGFloat) progressDownloading / progressDownloadDestination;
             if (progressCompleted >= 0.001 && [OAWeatherHelper getPreferenceDownloadState:self.region.regionId] == EOAWeatherForecastDownloadStateInProgress)
             {
@@ -593,7 +593,7 @@ static BOOL _repositoryUpdated = NO;
     [self refreshContent:YES];
 
     if ([self shouldDisplayWeatherForecast:self.region])
-        [[OAWeatherHelper sharedInstance] calculateCacheSize:self.region];
+        [[OAWeatherHelper sharedInstance] calculateCacheSize:self.region onComplete:nil];
 
     [self setupSubscriptionBanner];
 

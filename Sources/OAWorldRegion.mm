@@ -450,7 +450,7 @@
             OAWorldRegion *newRegion = [[OAWorldRegion alloc] initFrom:region];
             [parentRegion addSubregion:newRegion];
             regionsLookupTable[newRegion.regionId] = newRegion;
-            [[OAWeatherHelper sharedInstance] firstInitForecast:newRegion];
+            [[OAWeatherHelper sharedInstance] firstInitForecast:newRegion.regionId];
 
             // Remove
             processedRegions++;

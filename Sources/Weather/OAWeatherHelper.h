@@ -53,8 +53,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 - (void)downloadForecastByRegion:(OAWorldRegion *)region;
 - (void)prepareToStopDownloading:(NSString *)regionId;
 
-- (void)calculateCacheSize:(OAWorldRegion *)region
-                onComplete:(void (^)(unsigned long long, unsigned long long))onComplete;
+- (void)calculateCacheSize:(OAWorldRegion *)region onComplete:(void (^)())onComplete;
 - (void)calculateFullCacheSize:(BOOL)localData
                     onComplete:(void (^)(unsigned long long))onComplete;
 
@@ -66,13 +65,16 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 - (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegion:(NSString *)excludeRegionId;
 
 + (BOOL)isForecastOutdated:(NSString *)regionId;
-- (void)firstInitForecast:(OAWorldRegion *)region;
+- (void)firstInitForecast:(NSString *)region;
 
+- (NSArray<NSString *> *)getForecastsWithDownloadStateRegionIds;
 - (NSArray<NSString *> *)getOfflineForecastsRegionIds;
+- (NSArray<NSString *> *)getDownloadingForecastsRegionIds;
+
 - (uint64_t)getOfflineForecastSizeInfo:(NSString *)regionId local:(BOOL)local;
 - (BOOL)isOfflineForecastSizesInfoCalculated:(NSString *)regionId;
-- (NSInteger)getOfflineForecastProgressInfo:(OAWorldRegion *)region;
-- (NSInteger)getProgressDestination:(OAWorldRegion *)region;
+- (NSInteger)getOfflineForecastProgressInfo:(NSString *)regionId;
+- (NSInteger)getProgressDestination:(NSString *)regionId;
 
 - (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region;
 + (NSAttributedString *)getStatusInfoDescription:(NSString *)regionId;

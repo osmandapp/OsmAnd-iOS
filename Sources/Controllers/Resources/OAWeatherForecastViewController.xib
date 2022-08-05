@@ -75,7 +75,7 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="48" id="1Vj-Nn-qNb"/>
                             </constraints>
-                            <color key="tintColor" white="1" alpha="0.23722627737226276" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="tintColor" red="0.76862745098039209" green="0.76862745098039209" blue="0.76862745098039209" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <color key="barTintColor" red="0.98823529409999999" green="0.4823529412" blue="0.031372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>

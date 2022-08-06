@@ -696,11 +696,7 @@
     NSString *searchWord = [phrase getUnknownWordToSearch];
     OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
     
-    QuadRect *bbox;
-    if ([OALocationParser isValidOLC:phrase.getFirstUnknownSearchWord])
-        bbox = [[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX];
-    else
-        bbox = [phrase getRadiusBBoxToSearch:BBOX_RADIUS_INSIDE];
+    QuadRect *bbox = [phrase getRadiusBBoxToSearch:BBOX_RADIUS_INSIDE];
     
     int limit = 0;
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;

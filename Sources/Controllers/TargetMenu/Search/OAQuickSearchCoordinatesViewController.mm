@@ -337,7 +337,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 - (void) poiFound:(OAPOI *)poi
 {
     if (!_olcCities)
-        [NSMutableArray array];
+        _olcCities = [NSMutableArray array];
     [_olcCities addObject:poi];
 }
 

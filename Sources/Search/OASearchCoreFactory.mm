@@ -1894,7 +1894,8 @@
             NSArray<OASearchResult *> *requestResults = resultMatcher.getRequestResults;
             if (requestResults.count > 0)
             {
-                OASearchResult *bestMatchedCity = [self.class getBestMatchedOLCSearchResult:requestResults phraseName:phrase.getUnknownWordToSearch];
+                //OASearchResult *bestMatchedCity = [self.class getBestMatchedOLCSearchResult:requestResults phraseName:phrase.getUnknownWordToSearch];
+                OASearchResult *bestMatchedCity = requestResults[0];
                 if (bestMatchedCity && bestMatchedCity.location)
                     latLon = [parsedCode recover:bestMatchedCity.location];
             }

@@ -364,13 +364,12 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
                              searchLocation:(CLLocation *)searchLocation
                                allowedTypes:(NSArray<NSString *> *)allowedTypes
                                   cityLimit:(NSInteger)cityLimit
-                                       view:(UIView *)view
-                                 onComplete:(void (^)(NSMutableArray *amenities))onComplete
+                                 onComplete:(void (^)(NSArray *amenities))onComplete
 {
     OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
     NSString * lang = [OAAppSettings.sharedManager.settingPrefMapLanguage get];
     BOOL transliterate = [OAAppSettings.sharedManager.settingMapLanguageTranslit get];
-    NSMutableArray *amenities = [NSMutableArray new];
+    NSMutableArray *amenities = [NSMutableArray array];
 
     OAQuickSearchHelper *_searchHelper = OAQuickSearchHelper.instance;
     OASearchUICore *_searchUICore = _searchHelper.getCore;
@@ -381,8 +380,6 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     settings = [settings setEmptyQueryAllowed:YES];
     settings = [settings setOriginalLocation:searchLocation];
     [_searchUICore updateSettings:settings];
-
-    [view addSpinner];
 
     dispatch_async(dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL), ^{
         int __block count = 0;
@@ -412,9 +409,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
 
         dispatch_async(dispatch_get_main_queue(), ^{
             if (onComplete)
-                onComplete(amenities);
-
-            [view removeSpinner];
+                onComplete([NSArray arrayWithArray:amenities]);
         });
     });
 

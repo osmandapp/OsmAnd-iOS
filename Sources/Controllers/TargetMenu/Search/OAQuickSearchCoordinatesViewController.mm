@@ -759,15 +759,16 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 - (void) startAsyncCitySearching
 {
     _isOlcCitySearchRunning = YES;
+    [self.view addSpinner];
     [OAQuickSearchHelper searchCities:_olcSearchingCity
                        searchLocation:_searchLocation
                          allowedTypes:@[@"city", @"town", @"village"]
                             cityLimit:kSearchCityLimit
-                                 view:self.view
-                           onComplete:^(NSMutableArray *amenities)
+                           onComplete:^(NSArray *amenities)
                            {
                                _isOlcCitySearchRunning = NO;
                                 [self onCitiesSearchDone:amenities];
+                                [self.view removeSpinner];
                            }
     ];
 }

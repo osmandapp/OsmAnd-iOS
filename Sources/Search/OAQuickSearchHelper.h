@@ -46,6 +46,5 @@
                              searchLocation:(CLLocation *)searchLocation
                                allowedTypes:(NSArray<NSString *> *)allowedTypes
                                   cityLimit:(NSInteger)cityLimit
-                                       view:(UIView *)view
-                                 onComplete:(void (^)(NSMutableArray *amenities))onComplete;
+                                 onComplete:(void (^)(NSArray *amenities))onComplete;
 @end

@@ -1403,12 +1403,12 @@ static BOOL _repositoryUpdated = NO;
         _searchResults = resultByContains;
         [_tableView reloadData];
 
+        [self.view addSpinner];
         [OAQuickSearchHelper searchCities:searchString
                            searchLocation:[[CLLocation alloc] initWithLatitude:_app.worldRegion.bboxTopLeft.latitude longitude:_app.worldRegion.bboxBottomRight.longitude]
                              allowedTypes:@[@"city", @"town"]
                                 cityLimit:kSearchCityLimit
-                                     view:self.view
-                               onComplete:^(NSMutableArray *amenities)
+                               onComplete:^(NSArray *amenities)
                                {
                                    NSMutableArray *regions_byCity = [NSMutableArray array];
                                    for (OASearchResult *amenity in amenities)
@@ -1433,6 +1433,7 @@ static BOOL _repositoryUpdated = NO;
                                        _searchResults = [resultByContains arrayByAddingObjectsFromArray:regions_byCity];
                                        [_tableView reloadData];
                                    }
+                                   [self.view removeSpinner];
                                }
         ];
     }

@@ -59,6 +59,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 // Main unknown word used for search
 @property (nonatomic) NSString *mainUnknownWordToSearch;
 @property (nonatomic) BOOL mainUnknownSearchWordComplete;
+@property (nonatomic) BOOL mainUnknownSearchWordOLC;
 
 // Name Searchers
 @property (nonatomic) OANameStringMatcher *firstUnknownNameStringMatcher;
@@ -356,6 +357,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     {
         _mainUnknownWordToSearch = _otherUnknownWords[0];
         _mainUnknownSearchWordComplete = YES;
+        _mainUnknownSearchWordOLC = YES;
         return;
     }
     
@@ -406,6 +408,12 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 - (BOOL) isMainUnknownSearchWordComplete
 {
     return _mainUnknownSearchWordComplete;
+}
+
+- (BOOL) isMainUnknownSearchWordOLC
+{
+    [self calcMainUnknownWordToSearch];
+    return _mainUnknownSearchWordOLC;
 }
 
 - (BOOL) hasMoreThanOneUnknownSearchWord
@@ -474,6 +482,9 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (QuadRect *) getRadiusBBoxToSearch:(int)radius
 {
+    if (_mainUnknownSearchWordOLC)
+        return [[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX];
+
     int radiusInMeters = [self getRadiusSearch:radius];
     QuadRect *cache1kmRect = [self get1km31Rect];
     if (!cache1kmRect)

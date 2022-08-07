@@ -326,7 +326,7 @@
     if (![p isNoSelectedType] && [p getRadiusLevel] == 1)
         return -1;
 
-    if([p isLastWord:POI] || [p isLastWord:POI_TYPE])
+    if ([p isMainUnknownSearchWordOLC] || [p isLastWord:POI] || [p isLastWord:POI_TYPE])
         return -1;
     
     if ([p isNoSelectedType])
@@ -1128,7 +1128,7 @@
 
 - (int) getSearchPriority:(OASearchPhrase *)p
 {
-    if ([p hasObjectType:POI] || [p hasObjectType:POI_TYPE])
+    if ([p isMainUnknownSearchWordOLC] || [p hasObjectType:POI] || [p hasObjectType:POI_TYPE])
         return -1;
     
     if (![p isNoSelectedType] && ![p isUnknownSearchWordPresent])
@@ -1503,6 +1503,9 @@
 
 - (int) getSearchPriority:(OASearchPhrase *)p
 {
+    if ([p isMainUnknownSearchWordOLC])
+        return -1;
+
     if (([p isLastWord:POI_TYPE] && [p getLastTokenLocation]) || [p isNoSelectedType])
         return SEARCH_AMENITY_BY_TYPE_PRIORITY;
     
@@ -1676,6 +1679,9 @@
 
 - (int) getSearchPriority:(OASearchPhrase *)p
 {
+    if ([p isMainUnknownSearchWordOLC])
+        return -1;
+
     if ([OASearchCoreFactory isLastWordCityGroup:p])
         return SEARCH_BUILDING_BY_CITY_PRIORITY;
     
@@ -1777,6 +1783,9 @@
 
 - (int) getSearchPriority:(OASearchPhrase *)p
 {
+    if ([p isMainUnknownSearchWordOLC])
+        return -1;
+
     if ([OASearchCoreFactory isLastWordCityGroup:p])
         return SEARCH_STREET_BY_CITY_PRIORITY;
     

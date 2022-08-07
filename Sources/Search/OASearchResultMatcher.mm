@@ -155,7 +155,8 @@
         object.alternateName = nil;
     }
     object.parentSearchResult = _parentSearchResult;
-    if (!_matcher || [_matcher publish:object])
+    BOOL matcherPublish = !_phrase.isMainUnknownSearchWordOLC || object.objectType == LOCATION || object.objectType == PARTIAL_LOCATION;
+    if (!matcherPublish || !_matcher || [_matcher publish:object])
     {
         _count++;
         if (_totalLimit == -1 || _count < _totalLimit) {

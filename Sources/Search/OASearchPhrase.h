@@ -36,6 +36,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (int) countWords:(NSString *)word;
 
 - (BOOL) isMainUnknownSearchWordComplete;
+- (BOOL) isMainUnknownSearchWordOLC;
 - (BOOL) isLastUnknownSearchWordComplete;
 - (BOOL) hasMoreThanOneSearchWord;
 

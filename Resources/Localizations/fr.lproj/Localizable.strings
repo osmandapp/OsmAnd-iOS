@@ -2394,7 +2394,7 @@
 "backup_error_token_is_not_valid" = "Une erreur s\'est produite avec l\'ID d\'appareil ou le jeton fournit";
 "rendering_attr_funicularRoutes_name" = "Voies pour funiculaire";
 "backup_error_token_is_not_valid_or_expired" = "Jeton non valide ou ayant expiré";
-"backup_error_subscription_was_expired" = "Souscription expiré";
+"backup_error_subscription_was_expired" = "Souscription expirée";
 "register_opr_create_new_account" = "Créer un nouveau compte";
 "cloud_email_already_registered" = "Il existe déjà un compte pour cet email.";
 "backup_error_subscription_was_used" = "L\'abonnement ou la promo aété utilisé par un autre compte %@";
@@ -2612,6 +2612,6 @@
 "choose_what_to_restore" = "Choisir les éléments à restaurer";
 "duration_ago" = "il y a %@";
 "backup_complete" = "Sauvegarde terminée";
-"renew_subscription" = "Renouveler la souscription";
-"fetching_from_server" = "Récupérer des données depuis le serveur";
+"renew_subscription" = "Renouveler l’abonnement";
+"fetching_from_server" = "Récupération des données depuis le serveur";
 "restore_backup_descr" = "Restaurer les données de l'appareil en utilisant des sauvegardes en ligne";

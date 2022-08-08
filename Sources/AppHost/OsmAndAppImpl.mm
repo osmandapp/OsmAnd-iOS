@@ -201,6 +201,15 @@
         if (!success)
             OALog(@"Error creating GPX folder: %@", error.localizedFailureReason);
     }
+    if (![[NSFileManager defaultManager] fileExistsAtPath:_weatherForecastPath])
+    {
+        BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:_weatherForecastPath
+                                                 withIntermediateDirectories:NO
+                                                                  attributes:nil
+                                                                       error:&error];
+        if (!success)
+            OALog(@"Error creating WeatherForecast folder: %@", error.localizedFailureReason);
+    }
 }
 
 - (void) initOpeningHoursParser

@@ -316,14 +316,15 @@
     [self setOfflineRegion:region];
     if ([excludeKeys containsObject:sizeUpdatesKey])
         [self.class addStatus:EOAWeatherForecastStatusUpdatesCalculated region:region.regionId];
-
-    if (refreshMap)
-    {
-        OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-        [mapViewController.mapLayers.weatherLayerLow updateWeatherLayer];
-        [mapViewController.mapLayers.weatherLayerHigh updateWeatherLayer];
-        [mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (refreshMap)
+        {
+            OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+            [mapViewController.mapLayers.weatherLayerLow updateWeatherLayer];
+            [mapViewController.mapLayers.weatherLayerHigh updateWeatherLayer];
+            [mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
+        }
+    });
 }
 
 - (void)removeIncompleteForecast:(OAWorldRegion *)region

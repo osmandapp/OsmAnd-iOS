@@ -349,13 +349,15 @@
     if (!qTileIds.isEmpty())
         _weatherResourcesManager->clearDbCache(qTileIds, QList<OsmAnd::TileId>(), zoom);
 
-    if (refreshMap)
-    {
-        OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-        [mapViewController.mapLayers.weatherLayerLow updateWeatherLayer];
-        [mapViewController.mapLayers.weatherLayerHigh updateWeatherLayer];
-        [mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (refreshMap)
+        {
+            OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+            [mapViewController.mapLayers.weatherLayerLow updateWeatherLayer];
+            [mapViewController.mapLayers.weatherLayerHigh updateWeatherLayer];
+            [mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
+        }
+    });
 }
 
 - (NSArray<NSArray<NSNumber *> *> *)getOfflineTileIds

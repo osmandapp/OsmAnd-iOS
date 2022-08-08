@@ -2068,7 +2068,7 @@
 "hidden_categories" = "Приховані категорії";
 "visible_categories" = "Видимі категорії";
 "rearrange_categories" = "Перевпорядкування категорій";
-"new_plugin_added" = "Додано новий втулок";
+"new_plugin_added" = "Додано новий плагін";
 "extra_maps" = "Додаткові мапи";
 "custom_plugins" = "Власні втулки";
 "custom_osmand_plugin_name" = "Втулки користувача";
@@ -2110,7 +2110,7 @@
 "select_wikipedia_article_langs" = "Виберіть мови статей Вікіпедії на мапі. Перемикайтеся між усіма доступними мовами під час читання статті.";
 "shared_string_all_languages" = "Усі мови";
 "population_num" = "Населення";
-"added_profiles_descr" = "Профілі, додані втулком";
+"added_profiles_descr" = "Профілі, додані плагіном";
 "added_profiles" = "Додані профілі";
 "suggested_maps_descr" = "Ці мапи потрібні для роботи плагіна";
 "suggested_maps" = "Пропоновані мапи";

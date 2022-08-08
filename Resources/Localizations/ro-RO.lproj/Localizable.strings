@@ -31,7 +31,7 @@
 "shared_string_my_location" = "Poziția mea";
 "osmand_live_available_maps" = "Hărți disponibile";
 "help_faq" = "Întrebări frecvente";
-"fast_route_mode_descr" = "Activați pentru a calcula cel mai rapid traseu sau dezactivați pentru un traseu de economisire a combustibilului.";
+"fast_route_mode_descr" = "Activați pentru a calcula cel mai rapid traseu sau dezactivați pentru un traseu de economisire a combustibilului";
 "loading_poi_obj" = "Seîncarcă POI…";
 "stop_routing_confirm" = "Sunteți sigur că doriți să opriți navigația?";
 "route_parameters" = "Parametrii rutei";
@@ -43,7 +43,7 @@
 "osmand_live_daily" = "Zilnic";
 "shared_string_back" = "Înapoi";
 "driving_region_japan" = "Japonia";
-"relief_smoothness_factor_descr" = "Teren preferat: plat sau deluros.";
+"relief_smoothness_factor_descr" = "Teren preferat: plat sau deluros";
 "help_features" = "Funcționalități";
 "night_mode" = "Mod nocturn";
 "osm_edits_title" = "Editare OSM";
@@ -107,7 +107,7 @@
 "shared_string_show_all" = "Arată tot";
 "arrival_distance" = "Anunţ de sosire";
 "access_intermediate_arrival_time" = "Timp intermediar de sosire";
-"keep_informing_descr" = "Re-anunțați instrucțiunile de navigare la intervale regulate.";
+"keep_informing_descr" = "Re-anunțați instrucțiunile de navigare la intervale regulate";
 "shared_string_close" = "Închideți";
 "red" = "Roșu";
 "quick_action_tags" = "Tag-uri";
@@ -208,7 +208,7 @@
 "product_title_asia" = "Asia";
 "region_russia" = "Rusia";
 "postcode" = "Cod poștal";
-"unknown_location" = "Poziția nu este încă cunoscută.";
+"unknown_location" = "Poziția nu este încă cunoscută";
 "traffic_warning_hazard" = "Pericol";
 "route_tshl" = "Virați brusc al stânga și continuați";
 "rendering_category_routes" = "Rute";
@@ -269,7 +269,7 @@
 "shared_string_street" = "Stradă";
 "product_title_srtm" = "Hărți SRTM";
 "keep_informing" = "Repetați instrucțiunile de navigare";
-"default_speed_system_descr" = "Definiți unitatea de viteză.";
+"default_speed_system_descr" = "Definiți unitatea de viteză";
 "speak_pedestrian" = "Treceri pietonale";
 "actions" = "Acțiuni";
 "map_settings_online" = "Hărți online";
@@ -388,7 +388,7 @@
 "shared_string_milliradians" = "Miliradiani";
 "map_widget_transparent" = "Widget-uri transparente";
 "res_updates" = "Actualizări";
-"impassable_road_desc" = "Selectați drumurile pe care doriți să le evitați în timpul navigației.";
+"impassable_road_desc" = "Selectați drumurile pe care doriți să le evitați în timpul navigației";
 "osm_edits_advanced" = "Avansat";
 "shared_string_from" = "de la";
 "m_style_walk" = "Mers pe jos";
@@ -430,7 +430,7 @@
 "shared_string_yes" = "Da";
 "configure_map" = "Configuraţi harta";
 "nothanks" = "Nu, mulțumesc";
-"prefer_in_routing_descr" = "Prefer autostrăzile.";
+"prefer_in_routing_descr" = "Preferă autostrăzile";
 "osm_poi_delete_title" = "Șterge POI";
 "shared_string_options" = "Opțiuni";
 "shared_string_delete" = "Șterge";
@@ -878,7 +878,7 @@
 "consider_limitations_param" = "Luați în considerare limitările temporare";
 "avoid_road" = "Evită drumul";
 "shared_string_import_complete" = "Importarea s-a finalizat";
-"arrived_at_destination" = "Ați ajuns.";
+"arrived_at_destination" = "Ați ajuns";
 "reset_to_default" = "Resetează la valorile implicite";
 "default_speed" = "Viteză implicită";
 "selected_profiles" = "%d din %d";
@@ -920,7 +920,7 @@
 "shared_string_next" = "Următorul";
 "default_speed_dialog_msg" = "Estimarea timpului de sosire pentru tipurile de drumuri necunoscuteși limitarea vitezei pe toate drumurile (poate afecta traseul)";
 "update_map" = "Actualizare hartă";
-"profile_prefs_reset_successful" = "Toate setările de profil sunt restabilite la valorile implicite.";
+"profile_prefs_reset_successful" = "Toate setările de profil sunt restabilite la valorile implicite";
 "tones" = "tone";
 "shared_string_nothing_selected" = "Nimic selectat";
 "units_t" = "t";
@@ -1068,7 +1068,7 @@
 "osm_live_routing_descr" = "Utilizați actualizările OsmAnd Live pentru navigare";
 "choose_audio_stream_descr" = "Selectați un difuzor să redea ghidajul vocal";
 "voice_provider_descr" = "Selectați ghidajul vocal pentru navigare";
-"wake_on_voice_descr" = "Porniți ecranul dispozitivului (dacă este dezactivat) atunci când vă apropiați de o curbă.";
+"wake_on_voice_descr" = "Porniți ecranul dispozitivului (dacă este dezactivat) atunci când vă apropiați de o curbă";
 "speed_limit_exceed_message" = "Selectați pragul de toleranță pentru limita de viteză peste care primiți un avertisment vocal.";
 "repeat_after" = "Se repetă după";
 "speak_descr" = "Se poate configura să anunțe numele străzilor, avertizările de trafic (opriri forțate, limitatoare de viteză), avertizări ale radarelor, limite de viteză";
@@ -1574,7 +1574,7 @@
 //Poi catagories
 "amenity" = "Amenajare";
 "default" = "Implicit";
-"vessel_width_limit_description" = "Setați lățimea navei pentru a evita podurile înguste";
+"vessel_width_limit_description" = "Setați lățimea navei pentru a evita podurile înguste.";
 "vessel_height_limit_description" = "Setați înălțimea vasului pentru a evita podurile joase. Rețineți că, în cazul în care podul este mobil, calculul utilizează înălțimea acestuia în stare deschisă.";
 "lenght_limit_description" = "Precizați lungimea autovehiculului, unele restricții de traseu pot fi aplicate pentru vehiculele lungi.";
 "routing_attr_piste_type_downhill_name" = "Schi alpin/coborâre";
@@ -2090,7 +2090,7 @@
 "product_title_mapillary" = "Mapillary";
 "added_profiles_descr" = "Profiluri adăugate de plugin";
 "added_profiles" = "Profiluri adăugate";
-"suggested_maps_descr" = "Aceste hărți sunt necesare pentru plugin.";
+"suggested_maps_descr" = "Aceste hărți sunt necesare pentru plugin";
 "suggested_maps" = "Hărți sugerate";
 "welmode_download_maps" = "Descărcați hărțile";
 "shared_strings_all_regions" = "Toate regiunile";
@@ -2351,7 +2351,7 @@
 "routing_attr_avoid_tunnels_name" = "Fără tuneluri";
 "routing_attr_avoid_tunnels_description" = "Evită tunelurile";
 "weather_wind_unit_km_per_hour" = "Kilometrii pe oră";
-"backup_error_subscription_was_expired" = "Abonament expirat";
+"backup_error_subscription_was_expired" = "Abonamentul a expirat";
 "backup_error_subscription_was_expired_descr" = "Abonamentul dvs. la OsmAnd Pro a expirat, reînnoiți-l pentru a utiliza copia de rezervă. Puteți restaura în continuare datele din Cloud.";
 "backup_error_token_is_not_valid" = "Ceva nu esteîn regulă cu ID-ul dispozitivului sau token-ul furnizat";
 "osmand_cloud_login_descr" = "Vă rugăm să introduceți adresa de e-mail cu care v-ați înregistrat. O parolă unică pentru următorul pas va fi trimisă la aceasta.";
@@ -2425,7 +2425,7 @@
 "copy_address" = "Copiați adresa";
 "purchases_feature_desc_pro_widgets" = "Obțineți acces la caracteristicile OsmAnd Pro: Colorarea traseelor și multe altele.";
 "terrain_maps" = "Hărți de teren";
-"routing_attr_allow_private_for_truck_description" = "Permiteți accesul camioanelor la zonele private.";
+"routing_attr_allow_private_for_truck_description" = "Permiteți accesul camioanelor la zonele private";
 "share_geo" = "geo:";
 "unlimited_map_downloads" = "Descărcări nelimitate de hărți";
 "simulation_real_mode_title" = "Simulare realistă";
@@ -2463,7 +2463,7 @@
 "weather_precip_unit_in" = "Inci";
 "restore_purchase" = "Restabilirea achiziției";
 "osm_live_payment_year_cost_descr" = "%@ / an";
-"routing_attr_hazmat_category_name" = "Transport de materiale periculoase";
+"routing_attr_hazmat_category_name" = "Transportul de materiale periculoase";
 "cloud_create_account" = "Creați un cont";
 "copy_poi_name" = "Copiați numele POI";
 "pro_features" = "Funcții Pro";
@@ -2570,3 +2570,28 @@
 "restore_from_osmand_cloud" = "Restaurați din OsmAnd Cloud";
 "shared_string_data" = "Date";
 "shared_string_delete_all" = "Ștergeți tot";
+"all_maps_are_up_to_date" = "Toate hărțile sunt actualizate";
+"shared_string_restoring" = "Restaurarea";
+"restoring_from" = "Restaurarea datelor selectate din cloud";
+"restore_backup_descr" = "Restaurați datele de pe dispozitiv fără a face backup-uri online";
+"restore_data" = "Restaurarea datelor";
+"choose_what_to_restore" = "Alegeți elementele de restaurat";
+"renew_subscription" = "Reînnoiți abonamentul";
+"backup_complete" = "Copie de rezervă completă";
+"duration_ago" = "%@ în urmă";
+"weather_offline_forecast_only" = "Numai prognoza offline";
+"weather_data_provider" = "Furnizorul de date GFS.";
+"weather_clear_online_cache" = "Acest lucru va șterge toată memoria cache pentru panoul meteo online.";
+"fetching_from_server" = "Preluarea datelor de pe server";
+"weather_offline_forecast_only_desc" = "Previziunile vor fi disponibile numai pentru țările cu date descărcate în prealabil.";
+"shared_string_always_visible" = "Întotdeauna vizibil";
+"shared_string_always_hidden" = "Întotdeauna ascuns";
+"compass_visible_in_rotated_mode" = "Vizibil dacă harta este rotită";
+"compass_options_description" = "Faceți clic pe busolă pentru a comuta modul de orientare a hărții";
+"shared_string_online_cache" = "Cache online";
+"shared_string_clear_online_cache" = "Ștergeți memoria cache online";
+"shared_string_total_size" = "Dimensiunea totală";
+"shared_string_countries" = "Țări";
+"compass_visible_in_rotated_mode_descr" = "Ascuns când nordul este sus";
+"weather_plugin" = "Plugin meteo";
+"weather_offline_forecast" = "Prognoza offline";

@@ -2626,3 +2626,4 @@
 "restore_backup_descr" = "Restaura los datos en el dispositivo, usando copias de seguridad en línea";
 "backup_complete" = "Copia de seguridad completa";
 "fetching_from_server" = "Obteniendo datos del servidor";
+"purchases_feature_weather" = " ";

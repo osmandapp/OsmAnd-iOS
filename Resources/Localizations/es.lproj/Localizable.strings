@@ -2528,3 +2528,4 @@
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Sin restricciones)";
 "in_grace_period" = "En período de gracia";
 "shared_string_data" = "Datos";
+"transport_hazmat_yes_desc" = "Necesitas escoger una categoría apropiada.";

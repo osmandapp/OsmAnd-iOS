@@ -2795,7 +2795,7 @@
 "weather_remove_forecast" = "Remove forecast";
 "weather_remove_forecasts_description" = "Are you sure you want to remove forecast for countries: %d.";
 "weather_remove_forecast_description" = "Are you sure you want to remove forecast for %@";
-"weather_miss_forecasts" = "You don’t have offline forecast";
+"weather_miss_forecasts" = "You don’t have offline forecasts";
 "weather_miss_forecasts_description" = "Offline forecast is available per country. Duration up to 7 days. You need to select needed countries.";
 "weather_updates_automatically" = "OsmAnd will be download updates automatically when it is running.";
 "weather_accuracy_forecast_description" = "Offline forecast is available until: %@.\nAccuracy: %@, hourly. %@ for every 3 hours.";

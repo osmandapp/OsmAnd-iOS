@@ -16,6 +16,8 @@
 #import "OAIAPHelper.h"
 #import "OAWeatherForecastViewController.h"
 
+#define kRowsInUpdatesSection 2
+
 #define kOpenLiveUpdatesSegue @"openLiveUpdatesSegue"
 
 @interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource, OASubscriptionBannerCardViewDelegate>
@@ -35,6 +37,8 @@
 
     NSInteger _updatesSection;
     NSInteger _availableMapsSection;
+    NSInteger _liveUpdatesRow;
+    NSInteger _weatherForecastsRow;
 
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _outdatedResources;
     NSMutableArray* _resourcesItems;
@@ -112,6 +116,8 @@
     {
         _updatesSection = 0;
         _availableMapsSection = 1;
+        _liveUpdatesRow = 0;
+        _weatherForecastsRow = 1;
     }
 }
 
@@ -346,7 +352,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == _updatesSection)
-        return 2;
+        return kRowsInUpdatesSection;
     else if (section == _availableMapsSection)
         return _resourcesItems.count;
 
@@ -406,12 +412,12 @@
 
     if (indexPath.section == _updatesSection)
     {
-        if (indexPath.row == 0)
+        if (indexPath.row == _liveUpdatesRow)
         {
             cellTypeId = liveUpdatesCell;
             title = OALocalizedString(@"osmand_live_updates");
         }
-        else if (indexPath.row == 1)
+        else if (indexPath.row == _weatherForecastsRow)
         {
             cellTypeId = weatherForecastCell;
             title = OALocalizedString(@"weather_forecast");
@@ -576,7 +582,7 @@
         if (item != nil)
             [self onItemClicked:item];
     }
-    else if (indexPath.section == _updatesSection && indexPath.row == 1)
+    else if (indexPath.section == _updatesSection && indexPath.row == _weatherForecastsRow)
     {
         OAWeatherForecastViewController *weatherForecastController = [[OAWeatherForecastViewController alloc] init];
         [self showViewController:weatherForecastController];

@@ -111,7 +111,13 @@
     NSString *text = [OAResourceType resourceTypeLocalized:_mapObject.indexItem.resourceType];
     OAResourceItem *item = _mapObject.indexItem;
     if (item.sizePkg && item.sizePkg > 0)
+    {
+        if (item.resourceType == OsmAndResourceType::SrtmMapRegion)
+        {
+            text = [NSString stringWithFormat:@"%@ (%@)", text, [OAResourceType getSRTMFormatResource:OsmAndApp.instance.resourcesManager->getResourceInRepository(item.resourceId) longFormat:NO]];
+        }
         text = [NSString stringWithFormat:@"%@ - %@", text, [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+    }
     
     return text;
 }   

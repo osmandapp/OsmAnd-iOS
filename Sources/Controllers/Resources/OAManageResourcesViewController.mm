@@ -39,6 +39,7 @@
 #import "OASearchResult.h"
 #import "OAQuickSearchHelper.h"
 #import "OAWeatherHelper.h"
+#import "OAWeatherForecastDetailsViewController.h"
 
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -55,7 +56,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate, OAWeatherForecastDetails>
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -438,7 +439,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (BOOL) shouldDisplayWeatherForecast:(OAWorldRegion *)region
 {
-    return [OAWeatherHelper shouldHaveWeatherForecast:region] &&  region == self.region;
+    return [OAWeatherHelper shouldHaveWeatherForecast:region] && region == self.region;
 }
 
 - (void)onWeatherSizeCalculated:(id)sender withKey:(id)key andValue:(id)value
@@ -1723,7 +1724,16 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) showDetailsOf:(OALocalResourceItem *)item
 {
-    [self performSegueWithIdentifier:kOpenDetailsSegue sender:item];
+    if (item.resourceType == OsmAndResourceType::WeatherForecast)
+    {
+        OAWeatherForecastDetailsViewController *forecastDetailsViewController = [[OAWeatherForecastDetailsViewController alloc] initWithRegion:item.worldRegion];
+        forecastDetailsViewController.delegate = self;
+        [self.navigationController pushViewController:forecastDetailsViewController animated:YES];
+    }
+    else
+    {
+        [self performSegueWithIdentifier:kOpenDetailsSegue sender:item];
+    }
 }
 
 - (IBAction) onDoneClicked:(id)sender
@@ -2854,6 +2864,10 @@ static BOOL _repositoryUpdated = NO;
         {
             [self onItemClicked:item];
         }
+        else if ([item isKindOfClass:OALocalResourceItem.class] && ((OAResourceItem *) item).resourceType == OsmAndResourceType::WeatherForecast)
+        {
+            [self showDetailsOf:item];
+        }
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:true];
@@ -3051,6 +3065,10 @@ static BOOL _repositoryUpdated = NO;
 
             return (subregion != nil);
         }
+        else if ([identifier isEqualToString:kOpenDetailsSegue] && [self shouldDisplayWeatherForecast:self.region] && cellPath.row == _weatherForecastRow)
+        {
+            return NO;
+        }
     }
 
     return YES;
@@ -3182,11 +3200,6 @@ static BOOL _repositoryUpdated = NO;
             else if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
             {
                 [resourceInfoViewController initWithLocalOnlineSourceItem:(OAOnlineTilesResourceItem *) item];
-                return;
-            }
-            else if (item.resourceType == OsmAndResourceType::WeatherForecast)
-            {
-                [resourceInfoViewController initWithWeatherForecastItem:item];
                 return;
             }
             else
@@ -3341,6 +3354,20 @@ static BOOL _repositoryUpdated = NO;
 - (void)clearMultipleResources
 {
     _multipleItems = nil;
+}
+
+#pragma mark - OAWeatherForecastDetails
+
+- (void)onRemoveForecast
+{
+    OAResourceItem *item = _regionMapItems[_weatherForecastRow];
+    [self updateDisplayItem:item];
+}
+
+- (void)onUpdateForecast
+{
+    OAResourceItem *item = _regionMapItems[_weatherForecastRow];
+    [self updateDisplayItem:item];
 }
 
 @end

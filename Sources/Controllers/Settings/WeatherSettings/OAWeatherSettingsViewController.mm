@@ -308,10 +308,10 @@
 
 #pragma mark - OAWeatherCacheSettingsDelegate
 
-- (void)onCacheClear:(EOAWeatherCacheType)type
+- (void)onCacheClear
 {
-    [self updateCacheSize:type == EOAWeatherOfflineData onComplete:^{
-        [self updateCacheSize:type != EOAWeatherOfflineData onComplete:nil];
+    [self updateCacheSize:NO onComplete:^{
+        [self updateCacheSize:YES onComplete:nil];
     }];
 }
 

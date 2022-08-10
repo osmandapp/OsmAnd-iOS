@@ -222,4 +222,6 @@
 
 #define color_slider_minimum 0x58555E
 
+#define color_view_background 0xf9f9f9
+
 #endif /* OAColors_h */

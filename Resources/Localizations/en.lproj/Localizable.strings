@@ -569,13 +569,17 @@
 "shared_string_data" = "Data";
 "shared_string_online_cache" = "Online cache";
 "shared_string_clear_online_cache" = "Clear online cache";
+"shared_string_clear_offline_cache" = "Clear offline cache";
 "shared_string_total_size" = "Total size";
 "shared_string_delete_all" = "Delete all";
 "shared_string_countries" = "Countries";
 "shared_string_status" = "Status";
 "shared_string_selected" = "Selected";
 "shared_string_updated" = "Updated";
+"shared_string_next_update" = "Next update";
 "shared_string_available_until" = "Available until";
+"shared_string_updates_size" = "Updates size";
+"shared_string_updates_frequency" = "Updates frequency";
 
 "restart" = "Restart";
 
@@ -2074,6 +2078,7 @@
 "history" = "History";
 "today" = "Today";
 "yesterday" = "Yesterday";
+"tomorrow" = "Tomorrow";
 "hist_select_remove" = "Please select history items to remove";
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
@@ -2779,6 +2784,8 @@
 "weather_offline_forecast_only_desc" = "Forecast will be available only for countries with pre-downloaded data.";
 "weather_data_provider" = "Data provider GFS.";
 "weather_clear_online_cache" = "This will clear all cache for online weather tile.";
+"weather_clear_offline_cache" = "This will clear all cache for offline weather tile.";
+"weather_clear_offline_cache_for" = "This will clear all cache for offline weather tile for %@.";
 
 "all_maps_are_up_to_date" = "All maps are up to date";
 
@@ -2786,9 +2793,16 @@
 "other_countries" = "Other countries";
 "weather_forecast_is_outdated" = "Forecast is outdated.";
 "weather_remove_forecast" = "Remove forecast";
-"weather_remove_forecast_description" = "Are you sure you want to remove forecast for countries: %d.";
+"weather_remove_forecasts_description" = "Are you sure you want to remove forecast for countries: %d.";
+"weather_remove_forecast_description" = "Are you sure you want to remove forecast for %@";
 "weather_miss_forecasts" = "You don’t have offline forecast";
 "weather_miss_forecasts_description" = "Offline forecast is available per country. Duration up to 7 days. You need to select needed countries.";
+"weather_updates_automatically" = "OsmAnd will be download updates automatically when it is running.";
+"weather_accuracy_forecast_description" = "Offline forecast is available until: %@.\nAccuracy: %@, hourly. %@ for every 3 hours.";
+"weather_generates_new_forecast_description" = "OsmAnd generates a new forecast every 6 hours. The closer to the current date, the more accurate it will be.";
+
+"update_only_over_wi_fi" = "Update only over Wi-Fi";
+"update_parameters" = "Update parameters";
 
 // Release Notes
 // instruction:

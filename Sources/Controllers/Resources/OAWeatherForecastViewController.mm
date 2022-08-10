@@ -8,6 +8,7 @@
 
 #import "OAWeatherForecastViewController.h"
 #import "OAWeatherCacheSettingsViewController.h"
+#import "OAWeatherForecastDetailsViewController.h"
 #import "MBProgressHUD.h"
 #import "OATitleDescrRightIconTableViewCell.h"
 #import "OADeleteButtonTableViewCell.h"
@@ -20,7 +21,7 @@
 #import "OAResourcesUIHelper.h"
 #import <Reachability.h>
 
-@interface OAWeatherForecastViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, OAWeatherCacheSettingsDelegate>
+@interface OAWeatherForecastViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, OAWeatherCacheSettingsDelegate, OAWeatherForecastDetails>
 
 @property (weak, nonatomic) IBOutlet UIView *navigationBarView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -41,10 +42,10 @@
 {
     OsmAndAppInstance _app;
     OAWeatherHelper *_weatherHelper;
-    MBProgressHUD* _progressHUD;
+    MBProgressHUD *_progressHUD;
     BOOL _editMode;
     NSIndexPath *_sizeIndexPath;
-    BOOL _needToUpTable;
+    NSIndexPath *_selectedIndexPath;
 
     NSMutableArray<NSMutableDictionary *> *_data;
     NSArray<OAWorldRegion *> *_filteredRegions;
@@ -99,7 +100,6 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.estimatedRowHeight = 65.;
 
     NSPredicate *onlyWeatherPredicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary<NSString *, id> *bindings) {
         return [OAWeatherHelper shouldHaveWeatherForecast:evaluatedObject];
@@ -115,7 +115,7 @@
     self.searchBar.delegate = self;
     [self updateSearchBarVisible];
 
-    self.editButton.hidden = [_weatherHelper getForecastsWithDownloadStateRegionIds].count == 0;
+    self.editButton.hidden = [_weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateInProgress), @(EOAWeatherForecastDownloadStateFinished)]].count == 0;
 
     _progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_progressHUD];
@@ -124,6 +124,22 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+
+    if (!_weatherSizeCalculatedObserver)
+    {
+        _weatherSizeCalculatedObserver =
+                [[OAAutoObserverProxy alloc] initWith:self
+                                          withHandler:@selector(onWeatherSizeCalculated:withKey:andValue:)
+                                           andObserve:[OAWeatherHelper sharedInstance].weatherSizeCalculatedObserver];
+    }
+    if (!_weatherForecastDownloadingObserver)
+    {
+        _weatherForecastDownloadingObserver =
+                [[OAAutoObserverProxy alloc] initWith:self
+                                          withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:)
+                                           andObserve:[OAWeatherHelper sharedInstance].weatherForecastDownloadingObserver];
+    }
+
     if (!_editMode)
         [self updateCacheSize];
 }
@@ -154,7 +170,7 @@
 - (void)setupView
 {
     NSMutableArray *data = [NSMutableArray array];
-    NSArray<NSString *> *forecastsWithDownloadState = [_weatherHelper getForecastsWithDownloadStateRegionIds];
+    NSArray<NSString *> *forecastsWithDownloadState = [_weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateInProgress), @(EOAWeatherForecastDownloadStateFinished)]];
 
     if (_editMode)
     {
@@ -321,36 +337,7 @@
     if (_editMode)
         return;
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        OAWorldRegion *region = (OAWorldRegion *) value;
-        for (NSInteger i = 0; i < _data.count; i++)
-        {
-            NSDictionary *section = _data[i];
-            if ([section[@"key"] isEqualToString:@"status_section"])
-            {
-                NSIndexPath *indexPath;
-                NSMutableArray *statusCells = (NSMutableArray *) section[@"cells"];
-                for (NSInteger j = 0; j < statusCells.count; j++)
-                {
-                    NSDictionary *cell = statusCells[j];
-                    if ([((OAWorldRegion *) cell[@"region"]).regionId isEqualToString:region.regionId])
-                    {
-                        indexPath = [NSIndexPath indexPathForRow:j inSection:i];
-                        break;
-                    }
-                }
-
-                if (indexPath)
-                {
-                    statusCells[indexPath.row][@"description"] = [OAWeatherHelper getStatusInfoDescription:region.regionId];
-                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                }
-
-                break;
-            }
-        }
-        [self updateCacheSize];
-    });
+    [self updateCacheSize];
 }
 
 - (void)onWeatherForecastDownloading:(id)sender withKey:(id)key andValue:(id)value
@@ -407,10 +394,15 @@
                         progressView.progress = 0.;
                         if (!progressView.isSpinning)
                             [progressView startSpinProgressBackgroundLayer];
+
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            statusCells[indexPath.row][@"description"] = [OAWeatherHelper getStatusInfoDescription:region.regionId];
+                            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        });
                     }
                     else
                     {
-                        progressView.iconPath = [UIBezierPath bezierPath];
+                        progressView.iconPath = statusSizeCalculating ? [OAResourcesUIHelper tickPath:progressView] : [UIBezierPath bezierPath];
                         progressView.progress = 0.;
                         if (!progressView.isSpinning)
                             [progressView startSpinProgressBackgroundLayer];
@@ -427,7 +419,7 @@
 {
     NSMutableDictionary *item = [self getItem:indexPath];
     OAWorldRegion *region = (OAWorldRegion *) item[@"region"];
-    BOOL forecastWithDownloadState = [[_weatherHelper getForecastsWithDownloadStateRegionIds] containsObject:region.regionId];
+    BOOL forecastWithDownloadState = [[_weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateInProgress), @(EOAWeatherForecastDownloadStateFinished)]] containsObject:region.regionId];
 
     NSMutableDictionary *currentSection = _data[indexPath.section];
     NSMutableDictionary *destinationSection;
@@ -506,24 +498,32 @@
 
             UIAlertController *alert =
                     [UIAlertController alertControllerWithTitle:OALocalizedString(@"weather_remove_forecast")
-                                                        message:[NSString stringWithFormat:OALocalizedString(@"weather_remove_forecast_description"), countOfItems]
+                                                        message:[NSString stringWithFormat:OALocalizedString(@"weather_remove_forecasts_description"), countOfItems]
                                                  preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_remove")
-                                                      style:UIAlertActionStyleDefault
-                                                    handler:^(UIAlertAction *action)
-                                                    {
-                                                        _progressHUD.labelText = title;
-                                                        [_progressHUD showAnimated:YES whileExecutingBlock:^{
-                                                            onExecuting();
-                                                            [_regionsOtherCountries addObjectsFromArray:_regionsWithOfflineMaps];
-                                                            [_regionsWithOfflineMaps removeAllObjects];
-                                                            [_regionsOtherCountries sortUsingComparator:regionComparator];
-                                                        } completionBlock:onComplete];
-                                                    }
-            ]];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
-                                                      style:UIAlertActionStyleCancel
-                                                    handler:nil]];
+
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                                   style:UIAlertActionStyleDefault
+                                                                 handler:nil];
+
+            UIAlertAction *clearCacheAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_remove")
+                                                                       style:UIAlertActionStyleDefault
+                                                                     handler:^(UIAlertAction *action)
+                                                                     {
+                                                                         _progressHUD.labelText = title;
+                                                                         [_progressHUD showAnimated:YES whileExecutingBlock:^{
+                                                                             onExecuting();
+                                                                             [_regionsOtherCountries addObjectsFromArray:_regionsWithOfflineMaps];
+                                                                             [_regionsWithOfflineMaps removeAllObjects];
+                                                                             [_regionsOtherCountries sortUsingComparator:regionComparator];
+                                                                             } completionBlock:onComplete];
+                                                                     }
+            ];
+
+            [alert addAction:cancelAction];
+            [alert addAction:clearCacheAction];
+
+            alert.preferredAction = clearCacheAction;
+
             [self presentViewController:alert animated:YES completion:nil];
         }
         else
@@ -589,17 +589,6 @@
     [_regionsOtherCountries sortUsingComparator:regionComparator];
 }
 
-- (void)viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-
-    if (_needToUpTable)
-    {
-        [self.tableView setContentOffset:CGPointZero];
-        _needToUpTable = NO;
-    }
-}
-
 - (IBAction)backButtonClicked:(id)sender
 {
     if (_editMode)
@@ -629,7 +618,11 @@
                                     [self.tableView setContentOffset:CGPointZero animated:NO];
                                     [self.tableView reloadData];
 
-                                    if ([_weatherHelper getForecastsWithDownloadStateRegionIds].count == 0)
+                                    NSArray<NSString *> *regionIds = [_weatherHelper getTempForecastsWithDownloadStates:@[
+                                            @(EOAWeatherForecastDownloadStateInProgress),
+                                            @(EOAWeatherForecastDownloadStateFinished)
+                                    ]];
+                                    if (regionIds.count == 0)
                                     {
                                         _editButton.hidden = YES;
                                         _sizeIndexPath = nil;
@@ -670,16 +663,16 @@
 
     if (_editMode)
     {
-        NSArray<NSString *> *forecastsWithDownloadState = [_weatherHelper getForecastsWithDownloadStateRegionIds];
+        NSArray<NSString *> *forecastsWithDownloadStates = [_weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateInProgress), @(EOAWeatherForecastDownloadStateFinished)]];
         for (OAWorldRegion *region in _regionsSelected)
         {
-            if (![forecastsWithDownloadState containsObject:region.regionId])
+            if (![forecastsWithDownloadStates containsObject:region.regionId])
                 [forecastsToDownload addObject:region.regionId];
         }
 
         for (OAWorldRegion *region in _regionsWithOfflineMaps)
         {
-            if ([forecastsWithDownloadState containsObject:region.regionId])
+            if ([forecastsWithDownloadStates containsObject:region.regionId])
                 [forecastsToDelete addObject:region.regionId];
         }
 
@@ -690,8 +683,7 @@
             deletionBlock = ^{
                 for (NSString *regionId in forecastsToDelete)
                 {
-                    if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
-                        [_weatherHelper prepareToStopDownloading:regionId];
+                    [_weatherHelper prepareToStopDownloading:regionId];
                 }
 
                 [_weatherHelper removeLocalForecasts:forecastsToDelete refreshMap:YES];
@@ -784,8 +776,11 @@
                                 }
                                 else
                                 {
-                                    BOOL hasRegions = [_weatherHelper getForecastsWithDownloadStateRegionIds].count > 0;
-                                    if (hasRegions)
+                                    NSArray<NSString *> *forecastsWithDownloadStates = [_weatherHelper getTempForecastsWithDownloadStates:@[
+                                            @(EOAWeatherForecastDownloadStateInProgress),
+                                            @(EOAWeatherForecastDownloadStateFinished)
+                                    ]];
+                                    if (forecastsWithDownloadStates.count > 0)
                                     {
                                         [_editButton setTitle:OALocalizedString(_editMode ? @"shared_string_apply" : @"shared_string_edit")
                                                      forState:UIControlStateNormal];
@@ -794,7 +789,7 @@
                                     {
                                         _sizeIndexPath = nil;
                                     }
-                                    _editButton.hidden = !hasRegions;
+                                    _editButton.hidden = forecastsWithDownloadStates.count == 0;
                                 }
                             }
                             completion: ^(BOOL finished)
@@ -1009,15 +1004,25 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-
+    _selectedIndexPath = indexPath;
     if ([item[@"key"] isEqualToString:@"update_cell_all"])
     {
-        [_weatherHelper downloadForecastsByRegionIds:[_weatherHelper getOfflineForecastsRegionIds]];
+        [_weatherHelper downloadForecastsByRegionIds:[_weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateFinished)]]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setupView];
+            [self.tableView reloadData];
+        });
     }
     else if ([item[@"key"] hasPrefix:@"status_cell_"])
     {
         NSString *regionId = ((OAWorldRegion *) item[@"region"]).regionId;
-        if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
+        if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
+        {
+            OAWeatherForecastDetailsViewController *forecastDetailsViewController = [[OAWeatherForecastDetailsViewController alloc] initWithRegion:item[@"region"]];
+            forecastDetailsViewController.delegate = self;
+            [self.navigationController pushViewController:forecastDetailsViewController animated:YES];
+        }
+        else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
         {
             NSMutableString *message = [NSMutableString stringWithFormat:OALocalizedString(@"res_cancel_inst_q"),
                     [((OAWorldRegion *) item[@"region"]).name stringByAppendingString:[NSString stringWithFormat:@" - %@",
@@ -1035,26 +1040,44 @@
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction *action)
                                                     {
-                                                        [_weatherHelper prepareToStopDownloading:regionId];
-                                                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                                                            [_weatherHelper removeLocalForecast:regionId refreshMap:NO];
-                                                        });
-                                                        [((NSMutableArray *) _data[indexPath.section][@"cells"]) removeObjectAtIndex:indexPath.row];
-                                                        [_regionsOtherCountries addObject:item[@"region"]];
-                                                        [_regionsOtherCountries sortUsingComparator:^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
-                                                            return [region1.name localizedCaseInsensitiveCompare:region2.name];
+                                                        [_progressHUD showAnimated:YES whileExecutingBlock:^{
+                                                            [_weatherHelper prepareToStopDownloading:regionId];
+                                                            if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined)
+                                                            {
+                                                                [_weatherHelper removeLocalForecast:regionId refreshMap:NO];
+                                                                [((NSMutableArray *) _data[indexPath.section][@"cells"]) removeObjectAtIndex:indexPath.row];
+                                                                [_regionsOtherCountries addObject:item[@"region"]];
+                                                                [_regionsOtherCountries sortUsingComparator:^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
+                                                                    return [region1.name localizedCaseInsensitiveCompare:region2.name];
+                                                                }];
+                                                                [_regionsSelected removeObject:item[@"region"]];
+                                                            }
+                                                            else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
+                                                            {
+                                                                [_weatherHelper calculateCacheSize:item[@"region"] onComplete:nil];
+                                                            }
+                                                        } completionBlock:^{
+                                                            if (_regionsSelected.count > 0)
+                                                            {
+                                                                [CATransaction begin];
+                                                                [CATransaction setCompletionBlock:^{
+                                                                    [self.tableView reloadData];
+                                                                }];
+                                                                [self.tableView beginUpdates];
+                                                                [self.tableView deleteRowsAtIndexPaths:@[indexPath]
+                                                                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+                                                                [self.tableView endUpdates];
+                                                                [CATransaction commit];
+                                                                [self updateCacheSize];
+                                                            }
+                                                            else
+                                                            {
+                                                                _editButton.hidden = YES;
+                                                                _sizeIndexPath = nil;
+                                                                [self setupView];
+                                                                [self.tableView reloadData];
+                                                            }
                                                         }];
-                                                        [_regionsSelected removeObject:item[@"region"]];
-                                                        [CATransaction begin];
-                                                        [CATransaction setCompletionBlock:^{
-                                                            [self.tableView reloadData];
-                                                        }];
-                                                        [self.tableView beginUpdates];
-                                                        [self.tableView deleteRowsAtIndexPaths:@[indexPath]
-                                                                              withRowAnimation:UITableViewRowAnimationAutomatic];
-
-                                                        [self.tableView endUpdates];
-                                                        [CATransaction commit];
                                                     }
             ]];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no")
@@ -1094,20 +1117,58 @@
 
 #pragma mark - OAWeatherCacheSettingsDelegate
 
-- (void)onCacheClear:(EOAWeatherCacheType)type
+- (void)onCacheClear
 {
-    [_regionsOtherCountries addObjectsFromArray:_regionsSelected];
-    [_regionsOtherCountries sortUsingComparator:^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
-        return [region1.name localizedCaseInsensitiveCompare:region2.name];
-    }];
-    [_regionsSelected removeAllObjects];
-
-    _editButton.hidden = YES;
-    _sizeIndexPath = nil;
-
-    [self setupView];
-    [self.tableView reloadData];
     [self updateCacheSize];
+}
+
+#pragma mark - OAWeatherForecastDetails
+
+- (void)onRemoveForecast
+{
+    if (_selectedIndexPath)
+    {
+        [_progressHUD showAnimated:YES whileExecutingBlock:^{
+            NSDictionary *item = [self getItem:_selectedIndexPath];
+            [((NSMutableArray *) _data[_selectedIndexPath.section][@"cells"]) removeObjectAtIndex:_selectedIndexPath.row];
+            [_regionsOtherCountries addObject:item[@"region"]];
+            [_regionsOtherCountries sortUsingComparator:^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
+                return [region1.name localizedCaseInsensitiveCompare:region2.name];
+            }];
+            [_regionsSelected removeObject:item[@"region"]];
+        } completionBlock:^{
+            if (_regionsSelected.count > 0)
+            {
+                [CATransaction begin];
+                [CATransaction setCompletionBlock:^{
+                    [self.tableView reloadData];
+                }];
+                [self.tableView beginUpdates];
+                [self.tableView deleteRowsAtIndexPaths:@[_selectedIndexPath]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView endUpdates];
+                [CATransaction commit];
+                [self updateCacheSize];
+            }
+            else
+            {
+                _editButton.hidden = YES;
+                _sizeIndexPath = nil;
+                [self setupView];
+                [self.tableView reloadData];
+            }
+        }];
+    }
+}
+
+- (void)onUpdateForecast
+{
+    if (_selectedIndexPath)
+    {
+        NSMutableDictionary *forecastCell = _data[_selectedIndexPath.section][@"cells"][_selectedIndexPath.row];
+        forecastCell[@"description"] = [OAWeatherHelper getStatusInfoDescription:((OAWorldRegion *) forecastCell[@"region"]).regionId];
+        [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 @end

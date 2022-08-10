@@ -240,30 +240,6 @@
     [self calculateSizeAndUpdate:item];
 }
 
-- (void)initWithWeatherForecastItem:(OALocalResourceItem *)item
-{
-    self.localItem = item;
-
-    NSMutableArray *tKeys = [NSMutableArray array];
-    NSMutableArray *tValues = [NSMutableArray array];
-    NSMutableArray *tButtons = [NSMutableArray array];
-
-    // Type
-    [tKeys addObject:OALocalizedString(@"res_type")];
-    [tValues addObject:OALocalizedString(@"weather_forecast")];
-
-    // Size
-    [tKeys addObject:OALocalizedString(@"res_size")];
-    [tValues addObject:[NSByteCountFormatter stringFromByteCount:item.size
-                                                      countStyle:NSByteCountFormatterCountStyleFile]];
-
-    [tButtons addObject:@"delete"];
-
-    tableKeys = tKeys;
-    tableValues = tValues;
-    tableButtons = tButtons;
-}
-
 - (void) calculateSizeAndUpdate:(OAOnlineTilesResourceItem *)item
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {

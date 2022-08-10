@@ -94,7 +94,7 @@
         [params enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
             if (paramsStr.length > 0)
                 [paramsStr appendString:@"&"];
-            
+
             [paramsStr appendString:[key escapeUrl]];
             [paramsStr appendString:@"="];
             [paramsStr appendString:[value escapeUrl]];
@@ -108,7 +108,7 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                        timeoutInterval:30.0];
-    
+
     [request setHTTPMethod:@"POST"];
     [request addValue:[@"multipart/form-data; boundary=" stringByAppendingString:BOUNDARY] forHTTPHeaderField:@"Content-Type"];
     [request addValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
@@ -128,7 +128,7 @@
     [postData appendData:data];
     [postData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", BOUNDARY] dataUsingEncoding:NSUTF8StringEncoding]];
     [request setHTTPBody:postData];
-    
+
     __block BOOL hasFinished = NO;
     NSURLSessionDataTask *uploadTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         hasFinished = YES;
@@ -138,7 +138,7 @@
     }];
     // TODO: add progress
 //    uploadTask.progress addObserver: forKeyPath: options: context:
-    
+
     [uploadTask resume];
     if (!hasFinished)
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);

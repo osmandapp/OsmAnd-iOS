@@ -31,5 +31,6 @@
                               forRegion:(OAWorldRegion*)region;
 - (void)initWithLocalSqliteDbItem:(OASqliteDbResourceItem *)item;
 - (void)initWithLocalOnlineSourceItem:(OAOnlineTilesResourceItem *)item;
+- (void)initWithWeatherForecastItem:(OALocalResourceItem *)item;
 
 @end

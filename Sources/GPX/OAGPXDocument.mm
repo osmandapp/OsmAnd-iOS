@@ -276,7 +276,7 @@
     wptPt.name = mark->name.toNSString();
     wptPt.desc = mark->description.toNSString();
     wptPt.elevation = mark->elevation;
-    wptPt.time = mark->timestamp.toTime_t();
+    wptPt.time = mark->timestamp.toSecsSinceEpoch();
     wptPt.comment = mark->comment.toNSString();
     wptPt.type = mark->type.toNSString();
     wptPt.horizontalDilutionOfPrecision = mark->horizontalDilutionOfPrecision;
@@ -310,7 +310,7 @@
         OAMetadata *metadata = [[OAMetadata alloc] init];
         metadata.name = gpxDocument->metadata->name.toNSString();
         metadata.desc = gpxDocument->metadata->description.toNSString();
-        metadata.time = gpxDocument->metadata->timestamp.toTime_t();
+        metadata.time = gpxDocument->metadata->timestamp.toSecsSinceEpoch();
         metadata.links = [self.class fetchLinks:gpxDocument->metadata->links];
         
         OsmAnd::Ref<OsmAnd::GpxDocument::Metadata> *_metadata = &gpxDocument->metadata;
@@ -377,7 +377,7 @@
                             _p.name = p->name.toNSString();
                             _p.desc = p->description.toNSString();
                             _p.elevation = p->elevation;
-                            _p.time = p->timestamp.isNull() ? 0 : p->timestamp.toTime_t();
+                            _p.time = p->timestamp.isNull() ? 0 : p->timestamp.toSecsSinceEpoch();
                             _p.comment = p->comment.toNSString();
                             _p.type = p->type.toNSString();
                             _p.links = [self.class fetchLinks:p->links];
@@ -438,7 +438,7 @@
                     _p.name = p->name.toNSString();
                     _p.desc = p->description.toNSString();
                     _p.elevation = p->elevation;
-                    _p.time = p->timestamp.isNull() ? 0 : p->timestamp.toTime_t();
+                    _p.time = p->timestamp.isNull() ? 0 : p->timestamp.toSecsSinceEpoch();
                     _p.comment = p->comment.toNSString();
                     _p.type = p->type.toNSString();
                     _p.links = [self.class fetchLinks:p->links];

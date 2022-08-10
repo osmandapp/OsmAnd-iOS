@@ -28,6 +28,7 @@
 - (void) updateContent;
 - (void) refreshContent:(BOOL)update;
 - (void) refreshDownloadingContent:(NSString *)downloadTaskKey;
+- (void) updateDisplayItem:(OAResourceItem *)item;
 
 - (void) onItemClicked:(id)senderItem;
 
@@ -42,7 +43,7 @@
 
 - (void) offerCancelDownloadOf:(OAResourceItem *)item;
 
-- (void) offerDeleteResourceOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;
+- (void) offerDeleteResourceOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)onComplete;
 - (void) offerDeleteResourceOf:(OALocalResourceItem *)item;
 - (void) offerSilentDeleteResourcesOf:(NSArray<OALocalResourceItem *> *)items;
 

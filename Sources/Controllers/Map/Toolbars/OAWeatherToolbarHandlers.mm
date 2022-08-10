@@ -153,11 +153,8 @@
 - (void)updateData:(BOOL)available date:(NSDate *)date
 {
     NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-    NSDate *selectedDate = [calendar dateBySettingHour:[calendar components:NSCalendarUnitHour fromDate:date].hour
-                                                minute:[calendar components:NSCalendarUnitMinute fromDate:date].minute
-                                                second:[calendar components:NSCalendarUnitSecond fromDate:date].second
-                                                ofDate:date
-                                               options:0];
+    calendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSDate *selectedDate = [calendar startOfDayForDate:date];
 
     NSMutableArray<NSMutableDictionary *> *layersData = [NSMutableArray array];
     [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
@@ -166,20 +163,14 @@
             @"value": selectedDate
     }]];
 
-    NSCalendar *currentCalendar = NSCalendar.autoupdatingCurrentCalendar;
-    currentCalendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
-    NSDate *currentDate = [currentCalendar dateBySettingHour:0 minute:0 second:0 ofDate:date options:0];
-    selectedDate = [calendar dateBySettingHour:0 minute:0 second:0 ofDate:date options:0];
-
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.timeZone = calendar.timeZone;
     [formatter setDateFormat:@"dd.MM"];
-
     for (NSInteger i = 1; i <= 6; i++)
     {
         selectedDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:selectedDate options:0];
-        currentDate = [currentCalendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:currentDate options:0];
         [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-                @"title": [formatter stringFromDate:currentDate],
+                @"title": [formatter stringFromDate:selectedDate],
                 @"available": @(available),
                 @"value": selectedDate
         }]];

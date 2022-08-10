@@ -11,6 +11,7 @@
 #import "OAWeatherCacheSettingsViewController.h"
 #import "OAIconTitleValueCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAWeatherBand.h"
@@ -24,11 +25,8 @@
 {
     NSArray<NSDictionary *> *_data;
     NSIndexPath *_selectedIndexPath;
-    NSIndexPath *_onlineCacheIndexPath;
-    NSIndexPath *_offlineForecastIndexPath;
-
-    unsigned long long _geoDbSize;
-    unsigned long long _rasterDbSize;
+    NSIndexPath *_onlineDataIndexPath;
+    NSIndexPath *_useOfflineDataIndexPath;
 }
 
 - (instancetype)init
@@ -58,31 +56,32 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self updateCacheSize:YES];
-    [self updateCacheSize:NO];
+    [self updateCacheSize:NO onComplete:^{
+        [self updateCacheSize:YES onComplete:nil];
+    }];
 }
 
-- (void)updateCacheSize:(BOOL)onlineCache
+- (void)updateCacheSize:(BOOL)localData onComplete:(void (^)())onComplete
 {
-    if ((onlineCache && _onlineCacheIndexPath) || (!onlineCache && _offlineForecastIndexPath))
+    if ((localData && _useOfflineDataIndexPath) || (!localData && _onlineDataIndexPath))
     {
-        [[OAWeatherHelper sharedInstance] calculateCacheSize:^(unsigned long long geoDbSize, unsigned long long rasterDbSize) {
+        [[OAWeatherHelper sharedInstance] calculateFullCacheSize:localData onComplete:^(unsigned long long dbsSize)
+        {
             dispatch_async(dispatch_get_main_queue(), ^{
-                _geoDbSize = geoDbSize;
-                _rasterDbSize = rasterDbSize;
-
-                NSMutableArray<NSDictionary *> *cells = _data[onlineCache ? _onlineCacheIndexPath.section : _offlineForecastIndexPath.section][@"cells"];
-                unsigned long long size = onlineCache ? _geoDbSize + _rasterDbSize : 0;
-                NSString *sizeString = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
-                cells[onlineCache ? _onlineCacheIndexPath.row : _offlineForecastIndexPath.row] = @{
-                        @"key": onlineCache ? @"online_cache" : @"offline_forecast",
-                        @"title": OALocalizedString(onlineCache ? @"shared_string_online_cache" : @"weather_offline_forecast"),
+                NSMutableArray<NSDictionary *> *cells = _data[localData ? _useOfflineDataIndexPath.section : _onlineDataIndexPath.section][@"cells"];
+                NSString *sizeString = [NSByteCountFormatter stringFromByteCount:dbsSize countStyle:NSByteCountFormatterCountStyleFile];
+                cells[localData ? _useOfflineDataIndexPath.row : _onlineDataIndexPath.row] = @{
+                        @"key": localData ? @"offline_forecast" : @"online_cache",
+                        @"title": OALocalizedString(localData ? @"weather_offline_forecast" : @"shared_string_online_cache"),
                         @"value": sizeString,
                         @"type": [OAIconTitleValueCell getCellIdentifier]
                 };
 
-                [self.tableView reloadRowsAtIndexPaths:@[onlineCache ? _onlineCacheIndexPath : _offlineForecastIndexPath]
+                [self.tableView reloadRowsAtIndexPaths:@[localData ? _useOfflineDataIndexPath : _onlineDataIndexPath]
                                       withRowAnimation:UITableViewRowAnimationNone];
+
+                if (onComplete)
+                    onComplete();
             });
         }];
     }
@@ -106,17 +105,17 @@
             @"cells": measurementCells
     }];
 
-    /*NSMutableArray<NSDictionary *> *forecastData = [NSMutableArray array];
+    NSMutableArray<NSDictionary *> *forecastData = [NSMutableArray array];
     [forecastData addObject:@{
             @"key": @"offline_forecast_only",
             @"title": OALocalizedString(@"weather_offline_forecast_only"),
-            @"selected": @(NO),
+            @"selected": @([OsmAndApp instance].data.weatherUseOfflineData),
             @"type": [OASwitchTableViewCell getCellIdentifier]
     }];
     [data addObject:@{
             @"cells": forecastData,
             @"footer": OALocalizedString(@"weather_offline_forecast_only_desc")
-    }];*/
+    }];
 
     NSMutableArray<NSDictionary *> *cacheData = [NSMutableArray array];
     [data addObject:@{
@@ -125,22 +124,22 @@
             @"footer": OALocalizedString(@"weather_data_provider")
     }];
 
-    NSString *sizeString = [NSByteCountFormatter stringFromByteCount:_geoDbSize + _rasterDbSize countStyle:NSByteCountFormatterCountStyleFile];
+    NSString *sizeString = [NSByteCountFormatter stringFromByteCount:0 countStyle:NSByteCountFormatterCountStyleFile];
     [cacheData addObject:@{
             @"key": @"online_cache",
             @"title": OALocalizedString(@"shared_string_online_cache"),
             @"value": sizeString,
             @"type": [OAIconTitleValueCell getCellIdentifier]
     }];
-    _onlineCacheIndexPath = [NSIndexPath indexPathForRow:cacheData.count - 1 inSection:data.count - 1];
+    _onlineDataIndexPath = [NSIndexPath indexPathForRow:cacheData.count - 1 inSection:data.count - 1];
 
-    /*[cacheData addObject:@{
+    [cacheData addObject:@{
             @"key": @"offline_forecast",
             @"title": OALocalizedString(@"weather_offline_forecast"),
-            @"value": @"size",
+            @"value": sizeString,
             @"type": [OAIconTitleValueCell getCellIdentifier]
     }];
-    _offlineForecastIndexPath = [NSIndexPath indexPathForRow:cacheData.count - 1 inSection:data.count - 1];*/
+    _useOfflineDataIndexPath = [NSIndexPath indexPathForRow:cacheData.count - 1 inSection:data.count - 1];
 
     _data = data;
 }
@@ -268,13 +267,13 @@
     }
     else if ([item[@"key"] isEqualToString:@"online_cache"])
     {
-        OAWeatherCacheSettingsViewController *controller = [[OAWeatherCacheSettingsViewController alloc] initWithCacheType:EOAWeatherOnlineCache];
+        OAWeatherCacheSettingsViewController *controller = [[OAWeatherCacheSettingsViewController alloc] initWithCacheType:EOAWeatherOnlineData];
         controller.cacheDelegate = self;
         [self presentViewController:controller animated:YES completion:nil];
     }
     else if ([item[@"key"] isEqualToString:@"offline_forecast"])
     {
-        OAWeatherCacheSettingsViewController *controller = [[OAWeatherCacheSettingsViewController alloc] initWithCacheType:EOAWeatherOfflineForecast];
+        OAWeatherCacheSettingsViewController *controller = [[OAWeatherCacheSettingsViewController alloc] initWithCacheType:EOAWeatherOfflineData];
         controller.cacheDelegate = self;
         [self presentViewController:controller animated:YES completion:nil];
     }
@@ -292,9 +291,7 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
         NSDictionary *item = [self getItem:indexPath];
         if ([item[@"key"] isEqualToString:@"offline_forecast_only"])
-        {
-
-        }
+            [[OsmAndApp instance].data setWeatherUseOfflineData:switchView.isOn];
     }
 }
 
@@ -313,7 +310,9 @@
 
 - (void)onCacheClear:(EOAWeatherCacheType)type
 {
-    [self updateCacheSize:type == EOAWeatherOnlineCache];
+    [self updateCacheSize:type == EOAWeatherOfflineData onComplete:^{
+        [self updateCacheSize:type != EOAWeatherOfflineData onComplete:nil];
+    }];
 }
 
 @end

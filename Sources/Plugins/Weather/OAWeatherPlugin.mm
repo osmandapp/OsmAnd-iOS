@@ -232,4 +232,18 @@
     }
 }
 
+- (void)updateInfoWidgets
+{
+    if (_weatherTempControl)
+        [_weatherTempControl updateInfo];
+    if (_weatherPressureControl)
+        [_weatherPressureControl updateInfo];
+    if (_weatherWindSpeedControl)
+        [_weatherWindSpeedControl updateInfo];
+    if (_weatherCloudControl)
+        [_weatherCloudControl updateInfo];
+    if (_weatherPrecipControl)
+        [_weatherPrecipControl updateInfo];
+}
+
 @end

@@ -1059,15 +1059,22 @@
                                                         } completionBlock:^{
                                                             if (_regionsSelected.count > 0)
                                                             {
-                                                                [CATransaction begin];
-                                                                [CATransaction setCompletionBlock:^{
-                                                                    [self.tableView reloadData];
-                                                                }];
-                                                                [self.tableView beginUpdates];
-                                                                [self.tableView deleteRowsAtIndexPaths:@[indexPath]
-                                                                                      withRowAnimation:UITableViewRowAnimationAutomatic];
-                                                                [self.tableView endUpdates];
-                                                                [CATransaction commit];
+                                                                if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined)
+                                                                {
+                                                                    [CATransaction begin];
+                                                                    [CATransaction setCompletionBlock:^{
+                                                                        [self.tableView reloadData];
+                                                                    }];
+                                                                    [self.tableView beginUpdates];
+                                                                    [self.tableView deleteRowsAtIndexPaths:@[indexPath]
+                                                                                          withRowAnimation:UITableViewRowAnimationAutomatic];
+                                                                    [self.tableView endUpdates];
+                                                                    [CATransaction commit];
+                                                                }
+                                                                else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
+                                                                {
+                                                                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                                                                }
                                                                 [self updateCacheSize];
                                                             }
                                                             else

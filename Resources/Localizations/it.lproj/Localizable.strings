@@ -584,7 +584,7 @@
 "clear_all_intermediates" = "Cancella tutti i punti intermedi";
 "shared_string_options" = "Opzioni";
 "make_as_start_point" = "Usalo come punto di partenza";
-"open_till" = "Aperto sino";
+"open_till" = "Aperto sino alle";
 "road_blocked" = "Strada bloccata";
 "shared_string_road" = "Strada";
 "cancel_navigation" = "Interrompere la navigazione";
@@ -596,7 +596,7 @@
 "targets" = "Destinazioni";
 "search_radius_proximity" = "Nel raggio di";
 "poi" = "PDI";
-"open_from" = "Aperto da";
+"open_from" = "Aperto dalle";
 "error_avoid_specific_road" = "Nessuna alternativa trovata";
 "starting_point" = "Punto di partenza";
 "day_night_info" = "Informazioni giorno/notte";
@@ -1548,7 +1548,7 @@
 "app_mode_pickup_truck" = "Pick-up";
 "app_mode_wagon" = "Familiare";
 "app_mode_utv" = "Lato per lato";
-"app_mode_ufo" = "UFO";
+"app_mode_ufo" = "OVNI";
 "app_mode_osm" = "OSM";
 "wiki_sheet_title" = "Come aprire gli articoli di Wikipedia?";
 "map_settings_base_transp" = "Trasparenza mappa di base";
@@ -1771,7 +1771,7 @@
 "default_speed_dialog_msg" = "Utilizzata per stimare l\'orario d\'arrivo per le strade di tipo sconosciute e come limite di velocità per tutte le strade (può influenzare il calcolo del percorso)";
 "res_slope" = "Pendenza";
 "help_nav_profiles" = "Profili di navigazione";
-"quick_action_remove_next_destination_descr" = "Elimina la destinazione successiva nel percorso. Se questaè la destinazione finale, la navigazione si fermerà.";
+"quick_action_remove_next_destination_descr" = "Elimina la destinazione successiva nel percorso. Se questa è la destinazione finale, la navigazione si fermerà.";
 "units_t" = "t";
 "total" = "Totale";
 "height_limit_description" = "Indica l\'altezza del veicolo, alcune restrizioni stradali potrebbero essere applicate per veicoli alti.";
@@ -1782,7 +1782,7 @@
 "none_point_error" = "Aggiungi almeno un punto.";
 "plan_route_open_existing_track" = "Apri traccia esistente";
 "plan_route_create_new_route" = "Crea un nuovo percorso";
-"open_saved_track" = "Apri una traccia salvata";
+"open_saved_track" = "Apri la traccia salvata";
 "simplified_track_description" = "Solo la linea del percorso verrà salvata, i punti intermedi saranno cancellati.";
 "simplified_track" = "Traccia semplificata";
 "join_segments" = "Unisci segmenti";

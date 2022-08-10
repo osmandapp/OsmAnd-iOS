@@ -3703,13 +3703,20 @@ typedef enum
             [_routingHelper setRoutePlanningMode:false];
             [_mapViewTrackingUtilities switchToRoutePlanningMode];
             [_routingHelper notifyIfRouteIsCalculated];
-            [_routingHelper setCurrentLocation:_app.locationServices.lastKnownLocation returnUpdatedLocation:false];
+
+            if (!_settings.simulateNavigation)
+            {
+                [_routingHelper setCurrentLocation:_app.locationServices.lastKnownLocation returnUpdatedLocation:false];
+            }
+            else if ([_routingHelper isRouteCalculated] && ![_routingHelper isRouteBeingCalculated])
+            {
+                OALocationSimulation *sim = _app.locationServices.locationSimulation;
+                if (!sim.isRouteAnimating)
+                    [_app.locationServices.locationSimulation startStopRouteAnimation];
+            }
             
             [self updateRouteButton];
             [self updateToolbar];
-            
-            if (_settings.simulateNavigation && ![_app.locationServices.locationSimulation isRouteAnimating])
-                [_app.locationServices.locationSimulation startStopRouteAnimation];
         }
     }
 }

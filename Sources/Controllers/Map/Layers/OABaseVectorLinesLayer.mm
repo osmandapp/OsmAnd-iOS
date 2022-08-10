@@ -37,7 +37,7 @@
 @implementation OABaseVectorLinesLayer
 {
     OAAutoObserverProxy* _mapZoomObserver;
-        
+
     QReadWriteLock _lock;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _vectorLinesCollection;
     std::shared_ptr<OsmAnd::VectorLineArrowsProvider> _vectorLinesArrowsProvider;
@@ -85,7 +85,7 @@
 - (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection
 {
     QWriteLocker scopedLocker(&_lock);
-    
+
     _vectorLinesCollection = collection;
     _vectorLinesArrowsProvider = _vectorLinesCollection->getVectorLineArrowsProvider();
     [self.mapViewController runWithRenderSync:^{
@@ -114,7 +114,7 @@
                   bitmapSize);
         return nullptr;
     }
-    
+
     bitmap.eraseColor(SK_ColorTRANSPARENT);
 
     SkCanvas canvas(bitmap);
@@ -123,17 +123,17 @@
     paint.setColor(SkColorSetARGB(0x33, 0x00, 0x00, 0x00));
     paint.setStrokeWidth(strokeWidth);
     canvas.drawCircle(bitmapSize / 2, bitmapSize / 2, (bitmapSize - strokeWidth) / 2, paint);
-    
+
     paint.reset();
     paint.setStyle(SkPaint::Style::kFill_Style);
     paint.setColor(SkColorSetARGB(color.a, color.r, color.g, color.b));
     canvas.drawCircle(bitmapSize / 2, bitmapSize  / 2, (bitmapSize - strokeWidth) / 2, paint);
-    
+
     const auto arrowImage = [OANativeUtilities skImageFromPngResource:@"map_direction_arrow_small"];
     canvas.drawImage(arrowImage,
                      (bitmapSize - arrowImage->width()) / 2.0f,
                      (bitmapSize - arrowImage->height()) / 2.0f);
-    
+
     canvas.flush();
     return bitmap.asImage();
 }
@@ -154,7 +154,7 @@
         OARouteSegmentAttribute *attribute = [statsComputer classifySegment:attrName slopeClass:-1 segment:routeSeg];
         OsmAnd::ColorARGB color((int)attribute.color);
 //        color = color == 0 ? RouteColorize.LIGHT_GREY : color;
-        
+
         if (i == 0)
         {
             for (int j = 0; j < firstSegmentLocationIdx; j++)
@@ -162,13 +162,13 @@
                 colors.push_back(color);
             }
         }
-        
+
         int pointsSize = abs(segment->getStartPointIndex() - segment->getEndPointIndex());
         for (int j = 0; j < pointsSize; j++)
         {
             colors.push_back(color);
         }
-        
+
         if (i == segs.size() - 1)
         {
             int start = colors.size();

@@ -1084,7 +1084,7 @@
 // Resources
 "shared_string_resources" = "Resources";
 "res_mapsres" = "Maps & Resources";
-"download_tab_local" = "Местни";
+"download_tab_local" = "Изтеглени";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Обновяване на живо";
 "osmand_live_available_maps" = "Достъпни карти";

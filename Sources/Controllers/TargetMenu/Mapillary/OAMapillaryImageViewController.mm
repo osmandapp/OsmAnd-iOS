@@ -286,6 +286,7 @@
     [self showUpdatedImage];
     _cachedYViewPort = _mapView.viewportYScale;
     [self adjustMapViewPort];
+    [_app.mapillaryImageChangedObservable notifyEventWithKey:image];
 }
 
 - (void) showUpdatedImage

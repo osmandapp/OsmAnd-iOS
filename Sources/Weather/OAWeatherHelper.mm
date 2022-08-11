@@ -14,6 +14,7 @@
 #import "OAMapLayers.h"
 #import "OALog.h"
 #import "OANativeUtilities.h"
+#import "OAIAPHelper.h"
 #import "OAColors.h"
 
 #include <OsmAndCore/Map/WeatherTileResourceProvider.h>
@@ -29,6 +30,10 @@
 
 #define kTileSize 40000
 #define kForecastDatesCount (24 + (6 * 8) + 1)
+
+#define kWeatherForecastFrequencyHalfDay 43200
+#define kWeatherForecastFrequencyDay 86400
+#define kWeatherForecastFrequencyWeek 604800
 
 @implementation OAWeatherHelper
 {
@@ -144,6 +149,36 @@
     return ([region getLevel] == 2 && ![region.regionId hasPrefix:unitedKingdomRegionId]) || ([region getLevel] == 3 && [region.regionId hasPrefix:unitedKingdomRegionId]);
 }
 
+- (void)checkAndDownloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds
+{
+    NetworkStatus reachabilityStatus = [[Reachability reachabilityForInternetConnection] currentReachabilityStatus];
+    if (reachabilityStatus == NotReachable)
+        return;
+
+    NSInteger forecastsDownloading = 0;
+    for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
+    {
+        if ([regionIds containsObject:region.regionId])
+        {
+            forecastsDownloading++;
+            if (reachabilityStatus != ReachableViaWiFi && [self.class getPreferenceWifi:region.regionId])
+                continue;
+
+            NSTimeInterval lastUpdateTime = [self.class getPreferenceLastUpdate:region.regionId];
+            EOAWeatherForecastUpdatesFrequency updateFrequency = [self.class getPreferenceFrequency:region.regionId];
+            int seconds = -[[NSDate dateWithTimeIntervalSince1970:lastUpdateTime] timeIntervalSinceNow];
+            int secondsRequired = updateFrequency == EOAWeatherForecastUpdatesSemiDaily ? kWeatherForecastFrequencyHalfDay
+                    : updateFrequency == EOAWeatherForecastUpdatesDaily ? kWeatherForecastFrequencyDay
+                            : kWeatherForecastFrequencyWeek;
+            if (seconds >= secondsRequired || lastUpdateTime == -1.)
+                [self downloadForecastByRegion:region];
+        }
+
+        if (forecastsDownloading == regionIds.count)
+            break;
+    }
+}
+
 - (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
 {
     NSInteger forecastsDownloading = 0;
@@ -162,6 +197,9 @@
 
 - (void)downloadForecastByRegion:(OAWorldRegion *)region
 {
+    if (!_app.data.weather || !([OAIAPHelper isOsmAndProAvailable] || [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased]))
+        return;
+
     OsmAnd::LatLon latLonTopLeft = OsmAnd::LatLon(region.bboxTopLeft.latitude, region.bboxTopLeft.longitude);
     OsmAnd::LatLon latLonBottomRight = OsmAnd::LatLon(region.bboxBottomRight.latitude, region.bboxBottomRight.longitude);
 
@@ -570,10 +608,11 @@
         [mapViewController.mapLayers.weatherLayerHigh updateWeatherLayer];
         [mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
 
-        [self calculateCacheSize:region onComplete:^()
-        {
-            dispatch_group_leave(_forecastGroupDownloader);
-        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self calculateCacheSize:region onComplete:^() {
+                dispatch_group_leave(_forecastGroupDownloader);
+            }];
+        });
     }
 }
 
@@ -695,7 +734,13 @@
 
     NSDate *updatesDate = [NSDate dateWithTimeIntervalSince1970:[self getPreferenceLastUpdate:regionId]];
     if (next)
-        updatesDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:7 toDate:updatesDate options:0];
+    {
+        EOAWeatherForecastUpdatesFrequency frequency = [self.class getPreferenceFrequency:regionId];
+        NSInteger hours = frequency == EOAWeatherForecastUpdatesSemiDaily ? 12
+                : frequency == EOAWeatherForecastUpdatesDaily ? 24
+                        : 168;
+        updatesDate = [calendar dateByAddingUnit:NSCalendarUnitHour value:hours toDate:updatesDate options:0];
+    }
     NSMutableString *updatesStr = [NSMutableString string];
     BOOL isToday = [calendar isDateInToday:updatesDate];
     if (isToday || (next ? [calendar isDateInTomorrow:updatesDate] : [calendar isDateInYesterday:updatesDate]))
@@ -713,6 +758,23 @@
     formatter.timeStyle = NSDateFormatterShortStyle;
     [updatesStr appendString:[formatter stringFromDate:updatesDate]];
     return updatesStr;
+}
+
++ (NSString *)getFrequencyFormat:(EOAWeatherForecastUpdatesFrequency)frequency
+{
+    if (frequency == EOAWeatherForecastUpdatesSemiDaily || frequency == EOAWeatherForecastUpdatesDaily)
+    {
+        NSDateComponentsFormatter *formatter = [[NSDateComponentsFormatter alloc] init];
+        formatter.unitsStyle = NSDateComponentsFormatterUnitsStyleAbbreviated;
+        formatter.allowedUnits = NSCalendarUnitHour;
+        NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+        [dateComponents setValue:frequency == EOAWeatherForecastUpdatesSemiDaily ? 12 : 24 forComponent:NSCalendarUnitHour];
+        return [formatter stringFromDateComponents:dateComponents].capitalizedString;
+    }
+    else
+    {
+        return OALocalizedString(@"osmand_live_weekly");
+    }
 }
 
 + (EOAWeatherForecastDownloadState)getPreferenceDownloadState:(NSString *)regionId

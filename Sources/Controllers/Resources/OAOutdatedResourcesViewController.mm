@@ -15,6 +15,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAIAPHelper.h"
 #import "OAWeatherForecastViewController.h"
+#import "OAPluginPopupViewController.h"
 
 #define kRowsInUpdatesSection 2
 
@@ -584,8 +585,10 @@
     }
     else if (indexPath.section == _updatesSection && indexPath.row == _weatherForecastsRow)
     {
-        OAWeatherForecastViewController *weatherForecastController = [[OAWeatherForecastViewController alloc] init];
-        [self showViewController:weatherForecastController];
+        if (![[OAIAPHelper sharedInstance].weather isActive])
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Weather];
+        else
+            [self showViewController:[[OAWeatherForecastViewController alloc] init]];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

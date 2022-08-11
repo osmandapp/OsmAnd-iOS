@@ -16,9 +16,9 @@
 typedef NS_ENUM(NSInteger, EOAWeatherForecastUpdatesFrequency)
 {
     EOAWeatherForecastUpdatesUndefined = -1,
-    EOAWeatherForecastUpdates12h = 0,
-    EOAWeatherForecastUpdates24h,
-    EOAWeatherForecastUpdatesWeek,
+    EOAWeatherForecastUpdatesSemiDaily = 0,
+    EOAWeatherForecastUpdatesDaily,
+    EOAWeatherForecastUpdatesWeekly,
 };
 
 typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
@@ -49,6 +49,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 
 + (BOOL)shouldHaveWeatherForecast:(OAWorldRegion *)region;
 
+- (void)checkAndDownloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
 - (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
 - (void)downloadForecastByRegion:(OAWorldRegion *)region;
 - (void)prepareToStopDownloading:(NSString *)regionId;
@@ -78,6 +79,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 + (NSAttributedString *)getStatusInfoDescription:(NSString *)regionId;
 + (NSString *)getAccuracyDescription:(NSString *)regionId;
 + (NSString *)getUpdatesDateFormat:(NSString *)regionId next:(BOOL)next;
++ (NSString *)getFrequencyFormat:(EOAWeatherForecastUpdatesFrequency)frequency;
 
 + (EOAWeatherForecastDownloadState)getPreferenceDownloadState:(NSString *)regionId;
 + (void)setPreferenceDownloadState:(NSString *)regionId value:(EOAWeatherForecastDownloadState)value;

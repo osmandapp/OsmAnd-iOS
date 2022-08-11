@@ -41,7 +41,7 @@
 
 #import "OAFirstUsageWelcomeController.h"
 
-#define kCheckLiveIntervalHour 3600
+#define kCheckUpdatesIntervalHour 3600
 
 @implementation OAAppDelegate
 {
@@ -53,8 +53,8 @@
     BOOL _appInitializing;
     
     NSURL *loadedURL;
-    NSTimer *_checkLiveTimer;
-    
+    NSTimer *_checkUpdatesTimer;
+
     OACarPlayMapViewController *_carPlayMapController API_AVAILABLE(ios(12.0));
     OACarPlayDashboardInterfaceController *_carPlayDashboardController API_AVAILABLE(ios(12.0));
     CPWindow *_windowToAttach API_AVAILABLE(ios(12.0));
@@ -149,11 +149,12 @@
             
             // Check for updates at the app start
             [_app checkAndDownloadOsmAndLiveUpdates];
+            [_app checkAndDownloadWeatherForecastsUpdates];
             // Set the background fetch
-            [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:kCheckLiveIntervalHour];
+            [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:kCheckUpdatesIntervalHour];
             // Check for updates every hour when the app is in the foreground
-            _checkLiveTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckLiveIntervalHour target:self selector:@selector(performUpdateCheck) userInfo:nil repeats:YES];
-            
+            _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesIntervalHour target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
+
             // show map in carPlay if it is a cold start
             if (@available(iOS 12.0, *)) {
                 if (_windowToAttach && _carPlayInterfaceController)
@@ -257,9 +258,10 @@
         
 }
 
-- (void) performUpdateCheck
+- (void)performUpdatesCheck
 {
     [_app checkAndDownloadOsmAndLiveUpdates];
+    [_app checkAndDownloadWeatherForecastsUpdates];
 }
 
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -273,12 +275,13 @@
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     NSDate *methodStart = [NSDate date];
-    if (_app.resourcesManager == nullptr )
+    if (_app.resourcesManager == nullptr)
     {
         completionHandler(UIBackgroundFetchResultFailed);
         return;
     }
     [_app checkAndDownloadOsmAndLiveUpdates];
+    [_app checkAndDownloadWeatherForecastsUpdates];
     completionHandler(UIBackgroundFetchResultNewData);
     NSDate *methodEnd = [NSDate date];
     NSLog(@"Background fetch took %f sec.", [methodEnd timeIntervalSinceDate:methodStart]);
@@ -307,10 +310,10 @@
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    if (_checkLiveTimer)
+    if (_checkUpdatesTimer)
     {
-        [_checkLiveTimer invalidate];
-        _checkLiveTimer = nil;
+        [_checkUpdatesTimer invalidate];
+        _checkUpdatesTimer = nil;
     }
     if (_appInitDone)
         [_app onApplicationDidEnterBackground];
@@ -332,7 +335,7 @@
     
     if (_appInitDone)
     {
-        _checkLiveTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckLiveIntervalHour target:self selector:@selector(performUpdateCheck) userInfo:nil repeats:YES];
+        _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesIntervalHour target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
         [_app onApplicationDidBecomeActive];
     }
 }

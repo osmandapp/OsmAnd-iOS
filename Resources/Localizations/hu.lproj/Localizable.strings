@@ -1947,3 +1947,12 @@
 "lang_ckb" = "Közép-kurd";
 "shared_string_always_visible" = "Mindig látható";
 "paused" = "Szüneteltetve";
+"animate_my_location" = "Helyszín változásának animálása";
+"choose_audio_stream_descr" = "Válassza ki a hangszórót a hangutasítás lejátszásához";
+"osm_live_routing_descr" = "Használja az OsmAnd Live frissítéseket a navigációhoz";
+"calculate_osmand_route_without_internet" = "OsmAnd útvonalszegmens kiszámítása internet nélkül";
+"only_manually" = "Csak kézzel";
+"speed_limit_tolerance_descr" = "Válassza ki a sebességhatár túllépésének értékét, amely felett figyelmeztető hangjelzés érkezzen.";
+"recalculate_wrong_dir" = "Útvonal újraszámítás fordított irány esetén";
+"interrupt_music_descr" = "A zene teljes szüneteltetése a hangutasítások alatt (nem csak a hangerő csökkentése)";
+"simulation_real_mode_desc" = "- Az egyenes útszakaszokon a sebesség megközelíti a megengedett legnagyobb sebességet.\n- A kereszteződéseknél a szimuláció lelassít.\n- A közlekedési jelzőtábláknál, stop tábláknál stb. extra büntetéseket alkalmaz a rendszer.";

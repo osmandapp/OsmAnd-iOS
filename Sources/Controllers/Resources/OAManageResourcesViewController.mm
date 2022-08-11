@@ -3360,14 +3360,12 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)onRemoveForecast
 {
-    OAResourceItem *item = _regionMapItems[_weatherForecastRow];
-    [self updateDisplayItem:item];
+    [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
 }
 
 - (void)onUpdateForecast
 {
-    OAResourceItem *item = _regionMapItems[_weatherForecastRow];
-    [self updateDisplayItem:item];
+    [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
 }
 
 @end

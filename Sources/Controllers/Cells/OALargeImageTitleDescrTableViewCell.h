@@ -15,6 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIImageView *cellImageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+@property (weak, nonatomic) IBOutlet UIButton *button;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionWithButtonConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionNoButtonConstraint;
+
+- (void)showButton:(BOOL)show;
 
 @end
 

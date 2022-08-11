@@ -1456,7 +1456,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        [[OAWeatherHelper sharedInstance] downloadForecast:item.worldRegion];
+        [[OAWeatherHelper sharedInstance] downloadForecastByRegion:item.worldRegion];
         if (onTaskResumed)
             onTaskResumed(nil);
     }
@@ -1631,13 +1631,20 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        [OAWeatherHelper setPreferenceDownloadState:item.worldRegion.regionId value:EOAWeatherForecastDownloadStateUndefined];
-        if (onTaskStop)
-            onTaskStop(nil);
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion refreshMap:NO];
-        });
+        UIView *view = [[UIApplication sharedApplication] windows].lastObject;
+        MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:view];
+        [view addSubview:progressHUD];
+        [progressHUD showAnimated:YES whileExecutingBlock:^{
+            [[OAWeatherHelper sharedInstance] prepareToStopDownloading:item.worldRegion.regionId];
+            if ([OAWeatherHelper getPreferenceDownloadState:item.worldRegion.regionId] == EOAWeatherForecastDownloadStateUndefined)
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion.regionId refreshMap:NO];
+            else if ([OAWeatherHelper getPreferenceDownloadState:item.worldRegion.regionId] == EOAWeatherForecastDownloadStateFinished)
+                [[OAWeatherHelper sharedInstance] calculateCacheSize:item.worldRegion onComplete:nil];
+        } completionBlock:^{
+            if (onTaskStop)
+                onTaskStop(nil);
+            [progressHUD removeFromSuperview];
+        }];
     }
     else
     {
@@ -1705,7 +1712,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         {
             if (item.resourceType == OsmAndResourceType::WeatherForecast)
             {
-                [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion refreshMap:item == items.lastObject];
+                [[OAWeatherHelper sharedInstance] prepareToStopDownloading:item.worldRegion.regionId];
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion.regionId refreshMap:item == items.lastObject];
             }
             else if ([item isKindOfClass:[OASqliteDbResourceItem class]])
             {

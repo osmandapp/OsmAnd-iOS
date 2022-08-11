@@ -7,7 +7,7 @@
 //
 
 #import "OAWeatherCacheSettingsViewController.h"
-#import "OARootViewController.h"
+#import "MBProgressHUD.h"
 #import "OAIconTitleValueCell.h"
 #import "OATextLineViewCell.h"
 #import "OATitleDescrRightIconTableViewCell.h"
@@ -26,7 +26,9 @@
     NSIndexPath *_sizeIndexPath;
     NSIndexPath *_clearIndexPath;
     EOAWeatherCacheType _type;
+    OAWorldRegion *_region;
     BOOL _clearButtonActive;
+    MBProgressHUD *_progressHUD;
 }
 
 - (instancetype)initWithCacheType:(EOAWeatherCacheType)type
@@ -39,10 +41,25 @@
     return self;
 }
 
+- (instancetype)initWithRegion:(OAWorldRegion *)region
+{
+    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
+    if (self)
+    {
+        _region = region;
+    }
+    return self;
+}
+
 - (void)applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(_type == EOAWeatherOnlineData ? @"shared_string_online_cache" : @"weather_offline_forecast");
+    if (_region)
+        self.titleLabel.text = OALocalizedString(@"shared_string_updates_size");
+    else if (_type == EOAWeatherOnlineData)
+        self.titleLabel.text = OALocalizedString(@"shared_string_online_cache");
+    else if (_type == EOAWeatherOfflineData)
+        self.titleLabel.text = OALocalizedString(@"weather_offline_forecast");
 }
 
 - (void)viewDidLoad
@@ -53,8 +70,12 @@
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     self.tableView.sectionHeaderHeight = 34.;
+    self.tableView.sectionFooterHeight = 0.001;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     [self setupView];
+
+    _progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:_progressHUD];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -69,9 +90,16 @@
 
     NSMutableArray<NSDictionary *> *infoCells = [NSMutableArray array];
     NSString *sizeString = [NSByteCountFormatter stringFromByteCount:0 countStyle:NSByteCountFormatterCountStyleFile];
+    NSString *sizeTitle = @"";
+    if (_region)
+        sizeTitle = OALocalizedString(@"total");
+    else if (_type == EOAWeatherOnlineData)
+        sizeTitle = OALocalizedString(@"res_size");
+    else if (_type == EOAWeatherOfflineData)
+        sizeTitle = OALocalizedString(@"shared_string_total_size");
     [infoCells addObject:@{
             @"key": @"size",
-            @"title": OALocalizedString(_type == EOAWeatherOnlineData ? @"res_size" : @"shared_string_total_size"),
+            @"title": sizeTitle,
             @"value": sizeString,
             @"type": [OAIconTitleValueCell getCellIdentifier]
     }];
@@ -79,9 +107,16 @@
     _sizeIndexPath = [NSIndexPath indexPathForRow:infoCells.count - 1 inSection:data.count - 1];
 
     NSMutableArray<NSDictionary *> *clearCells = [NSMutableArray array];
+    NSString *clearTitle = @"";
+    if (_region)
+        clearTitle = OALocalizedString(@"shared_string_delete");
+    else if (_type == EOAWeatherOnlineData)
+        clearTitle = OALocalizedString(@"poi_clear");
+    else if (_type == EOAWeatherOfflineData)
+        clearTitle = OALocalizedString(@"shared_string_delete_all");
     [_type == EOAWeatherOnlineData ? clearCells : infoCells addObject:@{
             @"key": @"clear",
-            @"title": OALocalizedString(_type == EOAWeatherOnlineData ? @"poi_clear" : @"shared_string_delete_all"),
+            @"title": clearTitle,
             @"type": [OATextLineViewCell getCellIdentifier]
     }];
 
@@ -100,16 +135,18 @@
 
 - (void)updateCacheSize
 {
-    [[OAWeatherHelper sharedInstance] calculateFullCacheSize:_type == EOAWeatherOfflineData onComplete:^(unsigned long long size)
+    if (_region)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [[OAWeatherHelper sharedInstance] calculateCacheSize:_region onComplete:^() {
             if (_sizeIndexPath)
             {
+                uint64_t size = [[OAWeatherHelper sharedInstance] getOfflineForecastSizeInfo:_region.regionId local:YES];
                 NSMutableArray<NSDictionary *> *cells = _data[_sizeIndexPath.section][@"cells"];
-                NSString *sizeString = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
+                NSString *sizeString = [NSByteCountFormatter stringFromByteCount:size
+                                                                      countStyle:NSByteCountFormatterCountStyleFile];
                 cells[_sizeIndexPath.row] = @{
                         @"key": @"size",
-                        @"title": OALocalizedString(_type == EOAWeatherOnlineData ? @"res_size" : @"shared_string_total_size"),
+                        @"title": OALocalizedString(@"total"),
                         @"value": sizeString,
                         @"type": [OAIconTitleValueCell getCellIdentifier]
                 };
@@ -118,24 +155,45 @@
                 [self.tableView reloadRowsAtIndexPaths:@[_sizeIndexPath, _clearIndexPath]
                                       withRowAnimation:UITableViewRowAnimationNone];
             }
-        });
-    }];
+        }];
+    }
+    else
+    {
+        [[OAWeatherHelper sharedInstance] calculateFullCacheSize:_type == EOAWeatherOfflineData onComplete:^(unsigned long long size)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (_sizeIndexPath)
+                {
+                    NSMutableArray<NSDictionary *> *cells = _data[_sizeIndexPath.section][@"cells"];
+                    NSString *sizeString = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
+                    cells[_sizeIndexPath.row] = @{
+                            @"key": @"size",
+                            @"title": OALocalizedString(_type == EOAWeatherOnlineData ? @"res_size" : @"shared_string_total_size"),
+                            @"value": sizeString,
+                            @"type": [OAIconTitleValueCell getCellIdentifier]
+                    };
+                    _clearButtonActive = size > 0;
+
+                    [self.tableView reloadRowsAtIndexPaths:@[_sizeIndexPath, _clearIndexPath]
+                                          withRowAnimation:UITableViewRowAnimationNone];
+                }
+            });
+        }];
+    }
 }
 
 - (void)clearCache
 {
-    OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    [mapVC showProgressHUD];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[OAWeatherHelper sharedInstance] clearCache:_type == EOAWeatherOfflineData];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [mapVC hideProgressHUD];
-            if (self.cacheDelegate)
-                [self.cacheDelegate onCacheClear:_type];
-
-            [self dismissViewController];
-        });
-    });
+    [_progressHUD showAnimated:YES whileExecutingBlock:^{
+        if (_region)
+            [[OAWeatherHelper sharedInstance] clearCache:YES regionIds:@[_region.regionId]];
+        else
+            [[OAWeatherHelper sharedInstance] clearCache:_type == EOAWeatherOfflineData regionIds:nil];
+    } completionBlock:^{
+        [self dismissViewController];
+        if (self.cacheDelegate)
+            [self.cacheDelegate onCacheClear];
+    }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -148,11 +206,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return ((NSArray *) _data[section][@"cells"]).count;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return _data[section][@"header"];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -237,9 +290,27 @@
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"key"] isEqualToString:@"clear"] && _clearButtonActive)
     {
+        NSString *title = @"";
+        NSString *message = @"";
+        if (_region)
+        {
+            title = OALocalizedString(@"shared_string_clear_offline_cache");
+            message = [NSString stringWithFormat:OALocalizedString(@"weather_clear_offline_cache_for"), _region.name];
+        }
+        else if (_type == EOAWeatherOnlineData)
+        {
+            title = OALocalizedString(@"shared_string_clear_online_cache");
+            message = OALocalizedString(@"weather_clear_online_cache");
+        }
+        else if (_type == EOAWeatherOfflineData)
+        {
+            title = OALocalizedString(@"shared_string_clear_offline_cache");
+            message = OALocalizedString(@"weather_clear_offline_cache");
+        }
+
         UIAlertController *alert =
-                [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_clear_online_cache")
-                                                    message:OALocalizedString(@"weather_clear_online_cache")
+                [UIAlertController alertControllerWithTitle:title
+                                                    message:message
                                              preferredStyle:UIAlertControllerStyleAlert];
 
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
@@ -261,7 +332,7 @@
 
         [self presentViewController:alert animated:YES completion:nil];
     }
-    
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

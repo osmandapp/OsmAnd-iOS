@@ -390,9 +390,10 @@ static BOOL dataInvalidated = NO;
             [OAResourcesUIHelper offerCancelDownloadOf:item_ onTaskStop:^(id<OADownloadTask>)
             {
                 [self updateDisplayItem:item_];
+                [[OAWeatherHelper sharedInstance] calculateCacheSize:item_.worldRegion onComplete:nil];
             }];
         }
-        else if ([item_ isKindOfClass:[OAOutdatedResourceItem class]])
+        else if ([item_ isKindOfClass:[OAOutdatedResourceItem class]] && item_.resourceType != OsmAndResourceType::WeatherForecast)
         {
             OAOutdatedResourceItem* item = (OAOutdatedResourceItem *)item_;
             [self offerDownloadAndUpdateOf:item];

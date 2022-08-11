@@ -520,6 +520,7 @@
 		4627664D283D766E00F412F6 /* OASubscriptionCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4627664C283D766E00F412F6 /* OASubscriptionCardView.xib */; };
 		462F13EB283FD0D400B73795 /* OAOsmLiveFeaturesCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 462F13E9283FD0D300B73795 /* OAOsmLiveFeaturesCardView.xib */; };
 		462F13EC283FD0D400B73795 /* OAOsmLiveFeaturesCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 462F13EA283FD0D300B73795 /* OAOsmLiveFeaturesCardView.m */; };
+		46339CED2891AAC10090BB93 /* OAWeatherForecastViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46339CEC2891AAC10090BB93 /* OAWeatherForecastViewController.xib */; };
 		463C5369286B58FB00AFABE9 /* warnings_speed_limit_ca@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 463C5365286B58FA00AFABE9 /* warnings_speed_limit_ca@2x.png */; };
 		463C536A286B58FB00AFABE9 /* warnings_railways_ca@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 463C5366286B58FA00AFABE9 /* warnings_railways_ca@2x.png */; };
 		463C536B286B58FB00AFABE9 /* warnings_speed_limit_ca@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 463C5367286B58FA00AFABE9 /* warnings_speed_limit_ca@3x.png */; };
@@ -630,6 +631,7 @@
 		46E0263F27B6773F00E554DD /* ic_custom_terrain_flat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263727B6773F00E554DD /* ic_custom_terrain_flat@3x.png */; };
 		46E0264027B6773F00E554DD /* ic_custom_terrain_less_hilly@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263827B6773F00E554DD /* ic_custom_terrain_less_hilly@2x.png */; };
 		46E32497284A6B7700F95084 /* OAWeatherToolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46E32496284A6B7700F95084 /* OAWeatherToolbar.xib */; };
+		46F55272289D75C500103E81 /* OAWeatherForecastDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46F55271289D75C500103E81 /* OAWeatherForecastDetailsViewController.xib */; };
 		780AB027242B3730001DF5EF /* ic_custom_safari@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */; };
 		780AB029242B3730001DF5EF /* ic_custom_safari@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */; };
 		780AB02D242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */; };
@@ -1380,11 +1382,13 @@
 		CA4ED3D4E92007B8D20ECBC5 /* OAWeatherCacheSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED246F9044A5A588BDE25 /* OAWeatherCacheSettingsViewController.mm */; };
 		CA4ED5E21D6762F76CAF347A /* OACardButtonCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDA8AF5FFC0BD10336632 /* OACardButtonCell.mm */; };
 		CA4ED672AF26061C16E48A61 /* OACompassModeWidgetState.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED0C27E8E86DF61C122D4 /* OACompassModeWidgetState.mm */; };
+		CA4ED6FF8F7B115D3C5DC810 /* OAWeatherForecastViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDBF02D5DA0E9D890AA05 /* OAWeatherForecastViewController.mm */; };
 		CA4ED710806E780B7FAB796A /* OAPreviewRouteLineInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED0D4B38A47C7C60819AA /* OAPreviewRouteLineInfo.mm */; };
 		CA4ED74E88CC146ED42AE3D2 /* OARouteLineAppearanceHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDE5AC5CCE1F6DFDC5D41 /* OARouteLineAppearanceHudViewController.mm */; };
 		CA4ED855557936D7E91423FC /* OAWeatherHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED61F6893CC4346F50D14 /* OAWeatherHelper.mm */; };
 		CA4ED8CAB7D105A8DAAF2A06 /* OAShowHideTemperatureAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDC677CEB19E4B37F9E8C /* OAShowHideTemperatureAction.mm */; };
 		CA4ED8E8B076A382837AEF2D /* OAShowHideWindAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED4192F52C0D811F08ED7 /* OAShowHideWindAction.mm */; };
+		CA4EDA76E3361F7FEB8D4A1E /* OAWeatherForecastDetailsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED9770A754EE1330448F2 /* OAWeatherForecastDetailsViewController.mm */; };
 		CA4EDBC475684B567F9345C9 /* OAWeatherPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDDD18F59FD98326B733D /* OAWeatherPlugin.mm */; };
 		CA4EDBD4106D179CB0D70834 /* OAShareMenuActivity.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED342B2A4E423D65F9592 /* OAShareMenuActivity.mm */; };
 		CA4EDC32B17473A9290AE863 /* OALabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED8845704B34273CBE2B9 /* OALabel.m */; };
@@ -3804,6 +3808,7 @@
 		4627664C283D766E00F412F6 /* OASubscriptionCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionCardView.xib; sourceTree = "<group>"; };
 		462F13E9283FD0D300B73795 /* OAOsmLiveFeaturesCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOsmLiveFeaturesCardView.xib; sourceTree = "<group>"; };
 		462F13EA283FD0D300B73795 /* OAOsmLiveFeaturesCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOsmLiveFeaturesCardView.m; sourceTree = "<group>"; };
+		46339CEC2891AAC10090BB93 /* OAWeatherForecastViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAWeatherForecastViewController.xib; sourceTree = "<group>"; };
 		463C5365286B58FA00AFABE9 /* warnings_speed_limit_ca@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warnings_speed_limit_ca@2x.png"; sourceTree = "<group>"; };
 		463C5366286B58FA00AFABE9 /* warnings_railways_ca@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warnings_railways_ca@2x.png"; sourceTree = "<group>"; };
 		463C5367286B58FA00AFABE9 /* warnings_speed_limit_ca@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warnings_speed_limit_ca@3x.png"; sourceTree = "<group>"; };
@@ -3914,6 +3919,7 @@
 		46E0263727B6773F00E554DD /* ic_custom_terrain_flat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_flat@3x.png"; path = "Resources/Icons/ic_custom_terrain_flat@3x.png"; sourceTree = "<group>"; };
 		46E0263827B6773F00E554DD /* ic_custom_terrain_less_hilly@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_less_hilly@2x.png"; path = "Resources/Icons/ic_custom_terrain_less_hilly@2x.png"; sourceTree = "<group>"; };
 		46E32496284A6B7700F95084 /* OAWeatherToolbar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAWeatherToolbar.xib; sourceTree = "<group>"; };
+		46F55271289D75C500103E81 /* OAWeatherForecastDetailsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAWeatherForecastDetailsViewController.xib; sourceTree = "<group>"; };
 		4812C702BBB164A7AE849D7E /* libPods-OsmAnd Maps.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@2x.png"; path = "Resources/Icons/ic_custom_safari@2x.png"; sourceTree = "<group>"; };
 		780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@3x.png"; path = "Resources/Icons/ic_custom_safari@3x.png"; sourceTree = "<group>"; };
@@ -4735,6 +4741,7 @@
 		BBE1D2B5190D1C9600D90F0A /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = "../resources/countries-info/regions.ocbf"; sourceTree = "<group>"; };
 		CA4ED01DD17D02CD759BBC7C /* OAShowHidePressureAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHidePressureAction.mm; sourceTree = "<group>"; };
 		CA4ED0221B1888DD1A891DAE /* OAPlanTypeCardRow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanTypeCardRow.mm; sourceTree = "<group>"; };
+		CA4ED02BF41419F656CFE755 /* OAWeatherForecastDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherForecastDetailsViewController.h; sourceTree = "<group>"; };
 		CA4ED0674197CBD54D7AB46B /* OAWeatherCacheSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherCacheSettingsViewController.h; sourceTree = "<group>"; };
 		CA4ED0C27E8E86DF61C122D4 /* OACompassModeWidgetState.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACompassModeWidgetState.mm; sourceTree = "<group>"; };
 		CA4ED0D4B38A47C7C60819AA /* OAPreviewRouteLineInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPreviewRouteLineInfo.mm; sourceTree = "<group>"; };
@@ -4769,11 +4776,13 @@
 		CA4ED8CABB8E66D48FDF5F2B /* OACollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollectionViewFlowLayout.h; sourceTree = "<group>"; };
 		CA4ED932CD20B5BC04F13428 /* OAShowHidePrecipitationAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHidePrecipitationAction.mm; sourceTree = "<group>"; };
 		CA4ED935455688DA2569D4D5 /* OATitleDescriptionBigIconCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATitleDescriptionBigIconCell.mm; sourceTree = "<group>"; };
+		CA4ED9770A754EE1330448F2 /* OAWeatherForecastDetailsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherForecastDetailsViewController.mm; sourceTree = "<group>"; };
 		CA4ED9D55AB15C1FE6B35C45 /* OAWeatherToolbarHandlers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherToolbarHandlers.h; sourceTree = "<group>"; };
 		CA4EDA8AF5FFC0BD10336632 /* OACardButtonCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACardButtonCell.mm; sourceTree = "<group>"; };
 		CA4EDABC80C141D6AAD16F8C /* OAShowHideCloudAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideCloudAction.mm; sourceTree = "<group>"; };
 		CA4EDAEF2C0A6CEC8E9F7D26 /* OAWeatherBandSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherBandSettingsViewController.h; sourceTree = "<group>"; };
 		CA4EDB568946B3B7E439A94E /* OASubscriptionBannerCardView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASubscriptionBannerCardView.mm; sourceTree = "<group>"; };
+		CA4EDBF02D5DA0E9D890AA05 /* OAWeatherForecastViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherForecastViewController.mm; sourceTree = "<group>"; };
 		CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASegmentedSlider.mm; sourceTree = "<group>"; };
 		CA4EDC677CEB19E4B37F9E8C /* OAShowHideTemperatureAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideTemperatureAction.mm; sourceTree = "<group>"; };
 		CA4EDCB3E33EDB65F355EDAA /* OAPurchaseDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPurchaseDetailsViewController.h; sourceTree = "<group>"; };
@@ -4786,6 +4795,7 @@
 		CA4EDE2F7056768E208C7410 /* OASubscriptionCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASubscriptionCardView.h; sourceTree = "<group>"; };
 		CA4EDE5AC5CCE1F6DFDC5D41 /* OARouteLineAppearanceHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteLineAppearanceHudViewController.mm; sourceTree = "<group>"; };
 		CA4EDE6E1DAF70B53B04003C /* OAWeatherWebClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherWebClient.mm; sourceTree = "<group>"; };
+		CA4EDE7802C8464D0E4F36B2 /* OAWeatherForecastViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherForecastViewController.h; sourceTree = "<group>"; };
 		CA4EDEB1E81E651CF37C98A7 /* OAPurchaseDetailsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPurchaseDetailsViewController.mm; sourceTree = "<group>"; };
 		CA4EDEE8F5FFEC6F5045BDD4 /* OACardButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACardButtonCell.h; sourceTree = "<group>"; };
 		CA4EDF91E0E48AA51B18F96F /* OAShowHideWindAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideWindAction.h; sourceTree = "<group>"; };
@@ -11516,6 +11526,12 @@
 				CA4EDEB1E81E651CF37C98A7 /* OAPurchaseDetailsViewController.mm */,
 				CA4EDCB3E33EDB65F355EDAA /* OAPurchaseDetailsViewController.h */,
 				46D6CF492844F736007A43F9 /* OAPurchaseDetailsViewController.xib */,
+				CA4EDBF02D5DA0E9D890AA05 /* OAWeatherForecastViewController.mm */,
+				CA4EDE7802C8464D0E4F36B2 /* OAWeatherForecastViewController.h */,
+				46339CEC2891AAC10090BB93 /* OAWeatherForecastViewController.xib */,
+				CA4ED9770A754EE1330448F2 /* OAWeatherForecastDetailsViewController.mm */,
+				CA4ED02BF41419F656CFE755 /* OAWeatherForecastDetailsViewController.h */,
+				46F55271289D75C500103E81 /* OAWeatherForecastDetailsViewController.xib */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -13643,6 +13659,7 @@
 				8466964C207CD7E000BA971B /* ic_action_clear_all@2x.png in Resources */,
 				DAF3454922F4482B009E2EB6 /* ic_custom_compound_action_hide_bottom@2x.png in Resources */,
 				845E06B21B5FF17400DFC2A7 /* ic_plugin_skimap@3x.png in Resources */,
+				46339CED2891AAC10090BB93 /* OAWeatherForecastViewController.xib in Resources */,
 				0CF5859D2440745F0081238D /* ic_custom_direction_widget_two@3x.png in Resources */,
 				84451A371AA050B3003F4D8D /* ic_close@3x.png in Resources */,
 				0CF585952440745F0081238D /* ic_custom_direction_widget_one@3x.png in Resources */,
@@ -14245,6 +14262,7 @@
 				843E5D1D1AB341E000BE14BE /* left_menu_icon_settings@3x.png in Resources */,
 				DA6F7C97216602F7006F14E3 /* ic_action_directions_from@2x.png in Resources */,
 				DA68B406233B826E00F5ACCC /* ic_custom_add@2x.png in Resources */,
+				46F55272289D75C500103E81 /* OAWeatherForecastDetailsViewController.xib in Resources */,
 				DAB854AC23054C7C002566A6 /* ic_navbar_search@2x.png in Resources */,
 				DA1341BA243DC5A90039D214 /* map_action_openstreetmap_logo@2x.png in Resources */,
 				DA1341C0243DC5A90039D214 /* ic_action_bicycle_dark@3x.png in Resources */,
@@ -16431,6 +16449,8 @@
 				CA4ED3D4E92007B8D20ECBC5 /* OAWeatherCacheSettingsViewController.mm in Sources */,
 				CA4ED855557936D7E91423FC /* OAWeatherHelper.mm in Sources */,
 				CA4ED34FEE569EF38DAC35F6 /* OAWeatherWebClient.mm in Sources */,
+				CA4ED6FF8F7B115D3C5DC810 /* OAWeatherForecastViewController.mm in Sources */,
+				CA4EDA76E3361F7FEB8D4A1E /* OAWeatherForecastDetailsViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

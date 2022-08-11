@@ -47,28 +47,37 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 - (QList<OsmAnd::BandIndex>) getVisibleBands;
 - (QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>>) getBandSettings;
 
-- (void)downloadForecast:(OAWorldRegion *)region;
++ (BOOL)shouldHaveWeatherForecast:(OAWorldRegion *)region;
 
-- (void)calculateCacheSize:(OAWorldRegion *)region;
+- (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
+- (void)downloadForecastByRegion:(OAWorldRegion *)region;
+- (void)prepareToStopDownloading:(NSString *)regionId;
+
+- (void)calculateCacheSize:(OAWorldRegion *)region onComplete:(void (^)())onComplete;
 - (void)calculateFullCacheSize:(BOOL)localData
                     onComplete:(void (^)(unsigned long long))onComplete;
 
-- (void)clearCache:(BOOL)localData;
+- (void)clearCache:(BOOL)localData regionIds:(NSArray<NSString *> *)regionIds;
 - (void)clearOutdatedCache;
-- (void)removeLocalForecast:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
+- (void)removeLocalForecast:(NSString *)regionId refreshMap:(BOOL)refreshMap;
+- (void)removeLocalForecasts:(NSArray<NSString *> *)regionIds refreshMap:(BOOL)refreshMap;
 
-- (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegion:(OAWorldRegion *)excludeRegion;
+- (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegion:(NSString *)excludeRegionId;
 
 + (BOOL)isForecastOutdated:(NSString *)regionId;
-- (void)firstInitForecast:(OAWorldRegion *)region;
+- (void)firstInitForecast:(NSString *)region;
 
-- (NSArray<NSString *> *)getOfflineForecastsRegionIds;
+- (NSArray<NSString *> *)getTempForecastsWithDownloadStates:(NSArray<NSNumber *> *)states;
+
 - (uint64_t)getOfflineForecastSizeInfo:(NSString *)regionId local:(BOOL)local;
 - (BOOL)isOfflineForecastSizesInfoCalculated:(NSString *)regionId;
-- (NSInteger)getOfflineForecastProgressInfo:(OAWorldRegion *)region;
-- (NSInteger)getProgressDestination:(OAWorldRegion *)region;
+- (NSInteger)getOfflineForecastProgressInfo:(NSString *)regionId;
+- (NSInteger)getProgressDestination:(NSString *)regionId;
 
 - (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region;
++ (NSAttributedString *)getStatusInfoDescription:(NSString *)regionId;
++ (NSString *)getAccuracyDescription:(NSString *)regionId;
++ (NSString *)getUpdatesDateFormat:(NSString *)regionId next:(BOOL)next;
 
 + (EOAWeatherForecastDownloadState)getPreferenceDownloadState:(NSString *)regionId;
 + (void)setPreferenceDownloadState:(NSString *)regionId value:(EOAWeatherForecastDownloadState)value;

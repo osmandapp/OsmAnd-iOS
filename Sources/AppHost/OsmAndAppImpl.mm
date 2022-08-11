@@ -76,7 +76,6 @@
 #define VERSION_3_10 3.10
 #define VERSION_3_14 3.14
 #define VERSION_4_2 4.2
-#define VERSION_4_3 4.3
 
 #define kAppData @"app_data"
 #define kInstallDate @"install_date"
@@ -251,6 +250,15 @@
     [OAExternalTimeFormatter setLocale:@"ar"];
     OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
     OpeningHoursParser::runTestAmPmArabic();
+}
+
+- (void)migrateResourcesToDocumentsIfNeeded {
+    BOOL movedRes = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
+    BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]];
+    if (movedRes)
+        [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
+    if (movedRes || movedSqlite)
+        _resourcesManager->rescanUnmanagedStoragePaths(true);
 }
 
 - (BOOL) initialize
@@ -432,16 +440,10 @@
                 }
             }
         }
-        if (prevVersion < VERSION_4_3)
-        {
-            [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
-            [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]];
-            [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
-            _resourcesManager->rescanUnmanagedStoragePaths(true);
-        }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }
+    [self migrateResourcesToDocumentsIfNeeded];
     
     // Copy regions.ocbf to Documents/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
@@ -598,9 +600,11 @@
     return YES;
 }
 
-- (void) moveContentsOfDirectory:(NSString *)src toDest:(NSString *)dest
+- (BOOL) moveContentsOfDirectory:(NSString *)src toDest:(NSString *)dest
 {
     NSFileManager *fm = [NSFileManager defaultManager];
+    if (![fm fileExistsAtPath:src])
+        return NO;
     if (![fm fileExistsAtPath:dest])
         [fm createDirectoryAtPath:dest withIntermediateDirectories:YES attributes:nil error:nil];
 
@@ -608,11 +612,15 @@
 
     for (NSString *file in files)
     {
+        NSError *err = nil;
         [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
                     toPath:[dest stringByAppendingPathComponent:file]
-                     error:nil];
+                     error:&err];
+        if (err)
+            return NO;
     }
     [fm removeItemAtPath:src error:nil];
+    return YES;
 }
 
 - (void) migrateMapNames:(NSString *)path
@@ -634,9 +642,13 @@
             [self migrateMapNames:oldPath];
         else
         {
-            [fm moveItemAtPath:oldPath
-                        toPath:[path stringByAppendingPathComponent:[self generateCorrectFileName:file]]
-                         error:nil];
+            NSString *newPath = [path stringByAppendingPathComponent:[self generateCorrectFileName:file]];
+            if (![newPath isEqualToString:oldPath])
+            {
+                [fm moveItemAtPath:oldPath
+                            toPath:newPath
+                             error:nil];
+            }
         }
     }
 }

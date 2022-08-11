@@ -2615,3 +2615,5 @@
 "backup_complete" = "Sikkerhedskopiering fuldført";
 "duration_ago" = "%@ siden";
 "restore_backup_descr" = "Gendan data på enheden ved hjælp af online sikkerhedskopier";
+"service_is_not_available_please_try_later" = "Tjenesten er midlertidigt ikke tilgængelig. Prøv igen senere.";
+"weather_forecast" = "Vejrudsigt";

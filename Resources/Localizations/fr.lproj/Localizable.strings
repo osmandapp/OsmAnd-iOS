@@ -2615,3 +2615,5 @@
 "renew_subscription" = "Renouveler l’abonnement";
 "fetching_from_server" = "Récupération des données depuis le serveur";
 "restore_backup_descr" = "Restaurer les données de l'appareil en utilisant des sauvegardes en ligne";
+"service_is_not_available_please_try_later" = "Ce service est actuellement indisponible. Veuillez réessayer plus tard.";
+"weather_forecast" = "Prévisions météo";

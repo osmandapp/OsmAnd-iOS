@@ -1804,15 +1804,15 @@
 //inapps
 "product_title_nautical" = "Nautical map";
 "product_desc_nautical" = "Vector maps appropriate for sailing routes navigation";
-"product_desc_ext_nautical" = "Turn on to enrich your map with information about sailing routes, navigation lights, danger zones, zones where it is allowed or prohibited to sail or dock, etc. To use download Nautical maps and enable "Nautical map" type in Configure map. \n\nHow to - https://osmand.net/docs/user/plugins/nautical-charts";
+"product_desc_ext_nautical" = "Turn on to enrich your map with information about sailing routes, navigation lights, danger zones, zones where it is allowed or prohibited to sail or dock, etc. To use download Nautical maps and enable \"Nautical map\" type in Configure map. \n\nHow to - https://osmand.net/docs/user/plugins/nautical-charts";
 
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Track the parking time and location of your car";
-"product_desc_ext_parking" = "Enable to set a point on the map where your car is left on the street and notify your calendar when parking time starts. Plugin helps to track the parking time and location of your car. To place a marker choose a place on the map, then go to Actions and press "Add parking".";
+"product_desc_ext_parking" = "Enable to set a point on the map where your car is left on the street and notify your calendar when parking time starts. Plugin helps to track the parking time and location of your car. To place a marker choose a place on the map, then go to Actions and press \"Add parking\".";
 
 "product_title_skimap" = "Ski map";
 "product_desc_skimap" = "Up-to-date ski trail map with lifts and slopes";
-"product_desc_ext_skimap" = "Designed to navigate at winter sports locations. Watch ski pistes, ski lift markers and colored lines indicating the complexity of each track. To use after enabling go to Configure map and choose "Winter and ski" map type.";
+"product_desc_ext_skimap" = "Designed to navigate at winter sports locations. Watch ski pistes, ski lift markers and colored lines indicating the complexity of each track. To use after enabling go to Configure map and choose \"Winter and ski\" map type.";
 
 "product_title_track_recording" = "Trip recording";
 "product_desc_track_recording" = "Record and save your trips as GPX tracks";
@@ -1824,7 +1824,7 @@
 
 "product_title_mapillary" = "Mapillary";
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
-"product_desc_ext_mapillary" = "Brings street-level views. Where imagery is missing, you can just add it yourself so that others can make use of it. To enable the Mapillary layer turn on the "Street-level imagery" in Configure map menu.";
+"product_desc_ext_mapillary" = "Brings street-level views. Where imagery is missing, you can just add it yourself so that others can make use of it. To enable the Mapillary layer turn on the \"Street-level imagery\" in Configure map menu.";
 
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Share your opinion about public places";

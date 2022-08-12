@@ -2279,7 +2279,7 @@
 
                 QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > gpxDocs;
                 gpxDocs[QString::fromNSString(kCurrentTrack)] = doc;
-                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs];
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs reset:NO];
             }
         }];
     }

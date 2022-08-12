@@ -107,7 +107,13 @@
 
 - (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs
 {
-    [self resetLayer];
+    [self refreshGpxTracks:gpxDocs reset:YES];
+}
+
+- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs reset:(BOOL)reset
+{
+    if (reset)
+        [self resetLayer];
 
     if (_cachedTracks.count > 0)
     {
@@ -284,7 +290,14 @@
                         segStartIndex += points.size() - 1;
                         if (!gpx.joinSegments || !segmentColors.isEmpty())
                         {
-                            [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue]];
+                            if (isCurrentTrack)
+                            {
+                                [self refreshLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue]];
+                            }
+                            else
+                            {
+                                [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue]];
+                            }
                             points.clear();
                             segmentColors.clear();
                         }
@@ -292,7 +305,14 @@
                 }
                 if (gpx.joinSegments && segmentColors.isEmpty())
                 {
-                    [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue]];
+                    if (isCurrentTrack)
+                    {
+                        [self refreshLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue]];
+                    }
+                    else
+                    {
+                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue]];
+                    }
                 }
             }
             else if (doc_->hasRtePt())
@@ -304,7 +324,14 @@
                     {
                         points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
                     }
-                    [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:{} colorizationScheme:COLORIZATION_NONE];
+                    if (isCurrentTrack)
+                    {
+                        [self refreshLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:{} colorizationScheme:COLORIZATION_NONE];
+                    }
+                    else
+                    {
+                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:{} colorizationScheme:COLORIZATION_NONE];
+                    }
                 }
             }
         }
@@ -325,7 +352,7 @@ colorizationScheme:(int)colorizationScheme
     if (points.size() > 1)
     {
         CGFloat lineWidth;
-        if ([_cachedTrackWidth.allKeys containsObject:gpx.width])
+        if (_cachedTrackWidth[gpx.width])
         {
             lineWidth = _cachedTrackWidth[gpx.width].floatValue;
         }
@@ -390,6 +417,120 @@ colorizationScheme:(int)colorizationScheme
         
         builder.buildAndAddToCollection(_linesCollection);
     }
+}
+
+- (void) refreshLine:(QVector<OsmAnd::PointI> &)points
+                 gpx:(OAGPX *)gpx
+           baseOrder:(int)baseOrder
+              lineId:(int)lineId
+              colors:(const QList<OsmAnd::FColorARGB> &)colors
+  colorizationScheme:(int)colorizationScheme
+{
+    if (points.size() > 1)
+    {
+        CGFloat lineWidth;
+        if (_cachedTrackWidth[gpx.width])
+        {
+            lineWidth = _cachedTrackWidth[gpx.width].floatValue;
+        }
+        else
+        {
+            lineWidth = [self getLineWidth:gpx.width];
+            _cachedTrackWidth[gpx.width] = @(lineWidth);
+        }
+
+        // Add outline for colorized lines
+        if (!colors.isEmpty() && colorizationScheme != COLORIZATION_NONE)
+        {
+            auto line = [self getLineById:lineId + 1000];
+            if (!line)
+            {
+                OsmAnd::VectorLineBuilder outlineBuilder;
+                outlineBuilder.setBaseOrder(baseOrder--)
+                    .setIsHidden(points.size() == 0)
+                    .setLineId(lineId + 1000)
+                    .setLineWidth(lineWidth + kOutlineWidth)
+                    .setOutlineWidth(kOutlineWidth)
+                    .setPoints(points)
+                    .setFillColor(kOutlineColor)
+                    .setApproximationEnabled(false);
+                
+                outlineBuilder.buildAndAddToCollection(_linesCollection);
+            }
+            else
+            {
+                line->setIsHidden(points.size() == 0);
+                line->setLineWidth(lineWidth + kOutlineWidth);
+                line->setOutlineWidth(kOutlineWidth);
+                line->setPoints(points);
+                line->setFillColor(kOutlineColor);
+            }
+        }
+
+        OsmAnd::FColorARGB colorARGB;
+        if (gpx.color != 0)
+        {
+            colorARGB = OsmAnd::ColorARGB((int) gpx.color);
+        }
+        else
+        {
+            if (!colors.isEmpty() && colorizationScheme == COLORIZATION_NONE)
+                colorARGB = colors[0];
+            else
+                colorARGB = [UIColorFromRGB(kDefaultTrackColor) toFColorARGB];
+        }
+
+        auto line = [self getLineById:lineId];
+        if (!line)
+        {
+            OsmAnd::VectorLineBuilder builder;
+            builder.setBaseOrder(baseOrder)
+                .setIsHidden(points.size() == 0)
+                .setLineId(lineId)
+                .setLineWidth(lineWidth)
+                .setPoints(points)
+                .setFillColor(colorARGB);
+
+            if (!colors.empty() && colorizationScheme != COLORIZATION_NONE)
+            {
+                builder.setColorizationMapping(colors)
+                    .setColorizationScheme(colorizationScheme);
+            }
+            
+            if (gpx.showArrows)
+            {
+                // Use black arrows for gradient colorization
+                UIColor *color = gpx.coloringType.length != 0 && ![gpx.coloringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB(gpx.color);
+                builder.setPathIcon([self bitmapForColor:color fileName:@"map_direction_arrow"])
+                    .setSpecialPathIcon([self specialBitmapWithColor:colorARGB])
+                    .setShouldShowArrows(true)
+                    .setScreenScale(UIScreen.mainScreen.scale);
+            }
+            
+            builder.buildAndAddToCollection(_linesCollection);
+        }
+        else
+        {
+            line->setIsHidden(points.size() == 0);
+            line->setLineWidth(lineWidth);
+            line->setPoints(points);
+            line->setFillColor(colorARGB);
+            
+            line->setColorizationMapping(colors);
+            line->setColorizationScheme(colorizationScheme);
+            line->setShowArrows(gpx.showArrows);
+        }
+    }
+}
+
+- (std::shared_ptr<OsmAnd::VectorLine>) getLineById:(int)lineId
+{
+    for (auto& line : _linesCollection->getLines())
+    {
+        if (line->lineId == lineId)
+            return line;
+    }
+    return nullptr;
 }
 
 - (void) refreshStartFinishPoints

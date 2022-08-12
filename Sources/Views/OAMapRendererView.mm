@@ -24,6 +24,7 @@
 #include <OsmAndCore/Map/IAtlasMapRenderer.h>
 #include <OsmAndCore/Map/AtlasMapRendererConfiguration.h>
 #include <OsmAndCore/Map/MapAnimator.h>
+#include <OsmAndCore/Map/AtlasMapRenderer_Metrics.h>
 
 #import "OALog.h"
 
@@ -844,13 +845,21 @@
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         validateGL();
 
+        const auto debugSettings = _renderer->getDebugSettings();
+
         // Perform rendering
-        if (!_renderer->renderFrame())
+        const auto metric = debugSettings->debugStageEnabled ? std::make_shared<OsmAnd::AtlasMapRenderer_Metrics::Metric_renderFrame>() : nullptr;
+
+        if (!_renderer->renderFrame(metric.get()))
         {
             [NSException raise:NSGenericException
                         format:@"Failed to render frame using OpenGLES2+ map renderer 0x%08x", glGetError()];
             return;
         }
+
+        if (metric)
+            OALog(@"Metric_renderFrame = %@", metric->toString().toNSString());
+
         validateGL();
 
         //TODO: apply multisampling?

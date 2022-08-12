@@ -157,4 +157,15 @@
     return res;
 }
 
++ (QList<OsmAnd::TileId>)convertToQListTileIds:(NSArray<NSArray<NSNumber *> *> *)tileIds
+{
+    QList<OsmAnd::TileId> qTileIds;
+    for (NSArray<NSNumber *> *tileId in tileIds)
+    {
+        OsmAnd::TileId qTileId = OsmAnd::TileId::fromXY([tileId.firstObject intValue], [tileId.lastObject intValue]);
+        qTileIds.append(qTileId);
+    }
+    return qTileIds;
+}
+
 @end

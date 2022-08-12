@@ -431,16 +431,18 @@
     }
     else if ([key isEqualToString:@"change_route_before"])
     {
-        [self hide:YES];
-        if (self.delegate)
-            [self.delegate onChangeRouteTypeBefore];
+        [self hide:YES completion:^{
+            if (self.delegate)
+                [self.delegate onChangeRouteTypeBefore];
+        }];
         return;
     }
     else if ([key isEqualToString:@"change_route_after"])
     {
-        [self hide:YES];
-        if (self.delegate)
-            [self.delegate onChangeRouteTypeAfter];
+        [self hide:YES completion:^{
+            if (self.delegate)
+                [self.delegate onChangeRouteTypeAfter];
+        }];
         return;
     }
     else if ([key isEqualToString:@"new_segment"])

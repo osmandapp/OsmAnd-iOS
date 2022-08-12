@@ -10,21 +10,24 @@
 
 typedef NS_ENUM(NSInteger, EOAWeatherCacheType)
 {
-    EOAWeatherOnlineCache = 0,
-    EOAWeatherOfflineForecast
+    EOAWeatherOnlineData = 0,
+    EOAWeatherOfflineData
 };
+
+@class OAWorldRegion;
 
 @protocol OAWeatherCacheSettingsDelegate <NSObject>
 
 @required
 
-- (void)onCacheClear:(EOAWeatherCacheType)type;
+- (void)onCacheClear;
 
 @end
 
 @interface OAWeatherCacheSettingsViewController : OABaseSettingsViewController
 
 - (instancetype)initWithCacheType:(EOAWeatherCacheType)type;
+- (instancetype)initWithRegion:(OAWorldRegion *)region;
 
 @property (nonatomic, weak) id<OAWeatherCacheSettingsDelegate> cacheDelegate;
 

@@ -8,30 +8,23 @@
 
 #import "OAResourcesUIHelper.h"
 #import <Reachability.h>
-#import <UIAlertView+Blocks.h>
 #import <MBProgressHUD.h>
-
-#import "OAAutoObserverProxy.h"
 #import "OALog.h"
 #import "OAIAPHelper.h"
-#import "OAUtilities.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAManageResourcesViewController.h"
-#import "OATerrainLayer.h"
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
 #import "OAChoosePlanHelper.h"
-#import "OADownloadDescriptionInfo.h"
 #import "OAJsonHelper.h"
 #import "OATileSource.h"
 #import "OAIndexConstants.h"
 #import "OAResourcesInstaller.h"
 #import "OAPlugin.h"
-#import "OAWorldRegion.h"
-#import "OACustomRegion.h"
+#import "OAWeatherHelper.h"
+#import "Localization.h"
 
-#include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
 
 #include <OsmAndCore/Utilities.h>
@@ -81,6 +74,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"res_slope");
         case OsmAndResourceType::SqliteFile:
             return OALocalizedString(@"online_map");
+        case OsmAndResourceType::WeatherForecast:
+            return OALocalizedString(@"weather_forecast");
         default:
             return OALocalizedString(@"res_unknown");
     }
@@ -125,6 +120,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::OnlineTileSources:
             imageNamed = @"ic_custom_map_online";
             break;
+        case OsmAndResourceType::WeatherForecast:
+            imageNamed = @"ic_custom_umbrella";
+            break;
         default:
             imageNamed = @"ic_custom_map";
             break;
@@ -164,6 +162,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return 75;
         case OsmAndResourceType::SqliteFile:
             return 80;
+        case OsmAndResourceType::WeatherForecast:
+            return 85;
         default:
             return 1000; //HeightmapRegion, MapStyle, MapStylesPresets, OnlineTileSources
     }
@@ -199,6 +199,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return OsmAndResourceType::GpxFile;
     else if ([scopeId isEqualToString:@"sqlite"])
         return OsmAndResourceType::SqliteFile;
+    else if ([scopeId isEqualToString:@"weather_forecast"])
+        return OsmAndResourceType::WeatherForecast;
 
     //TODO: add another types from ResourcesManager.h
     //HeightmapRegion,
@@ -231,7 +233,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::HeightmapRegion],
             [self.class toValue:OsmAndResourceType::MapStyle],
             [self.class toValue:OsmAndResourceType::MapStylesPresets],
-            [self.class toValue:OsmAndResourceType::OnlineTileSources]
+            [self.class toValue:OsmAndResourceType::OnlineTileSources],
+            [self.class toValue:OsmAndResourceType::WeatherForecast]
     ];
 }
 
@@ -243,7 +246,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::SrtmMapRegion],
             [self.class toValue:OsmAndResourceType::HillshadeRegion],
             [self.class toValue:OsmAndResourceType::SlopeRegion],
-            [self.class toValue:OsmAndResourceType::WikiMapRegion]
+            [self.class toValue:OsmAndResourceType::WikiMapRegion],
+            [self.class toValue:OsmAndResourceType::WeatherForecast]
     ];
 }
 
@@ -647,6 +651,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::WikiMapRegion:
         case OsmAndResourceType::HillshadeRegion:
         case OsmAndResourceType::SlopeRegion:
+        case OsmAndResourceType::WeatherForecast:
 
             if ([region.subregions count] > 0)
             {
@@ -1282,15 +1287,31 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
         return;
 
-    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:item.resource->packageSize
+    BOOL isWeatherForecast = item.resourceType == OsmAndResourceType::WeatherForecast;
+    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:isWeatherForecast ? item.sizePkg : item.resource->packageSize
                                                                countStyle:NSByteCountFormatterCountStyleFile];
+    NSString *resourceName;
+    if (isWeatherForecast)
+    {
+        resourceName = [self.class titleOfResourceType:item.resourceType
+                                              inRegion:item.worldRegion
+                                        withRegionName:YES
+                                      withResourceType:YES];
+    }
+    else
+    {
+        resourceName = [self.class titleOfResource:item.resource
+                                          inRegion:item.worldRegion
+                                    withRegionName:YES
+                                  withResourceType:YES];
+    }
 
-    NSString* resourceName = [self.class titleOfResource:item.resource
-                                                inRegion:item.worldRegion
-                                          withRegionName:YES
-                                        withResourceType:YES];
+    uint64_t spaceNeeded;
+    if (isWeatherForecast)
+        spaceNeeded = item.sizePkg * 5;
+    else
+        spaceNeeded = item.resource->packageSize + item.resource->size;
 
-    uint64_t spaceNeeded = item.resource->packageSize + item.resource->size;
     if (![self.class verifySpaceAvailableDownloadAndUnpackResource:spaceNeeded withResourceName:resourceName asUpdate:YES])
         return;
     
@@ -1433,37 +1454,46 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
               onTaskCreated:(OADownloadTaskCallback)onTaskCreated
               onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
-    // Create download tasks
-    NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSURL *pureUrl = item.resource->url.toNSURL();
-    NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [pureUrl absoluteString], params];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-
-    NSLog(@"%@", url);
-
-    NSString* name = [self.class titleOfResource:item.resource
-                                        inRegion:item.worldRegion
-                                  withRegionName:YES
-                                withResourceType:YES];
-
-    OsmAndAppInstance app = [OsmAndApp instance];
-    id<OADownloadTask> task;
-    if (!item.downloadTask)
-        item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request andKey:[@"resource:" stringByAppendingString:item.resource->id.toNSString()] andName:name];
-    else
-        task = item.downloadTask;
-
-    if (onTaskCreated)
-        onTaskCreated(task);
-
-    // Resume task only if it's other resource download tasks are not running
-    if ([app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+    if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        [task resume];
+        [[OAWeatherHelper sharedInstance] downloadForecastByRegion:item.worldRegion];
         if (onTaskResumed)
-            onTaskResumed(task);
+            onTaskResumed(nil);
+    }
+    else
+    {
+        // Create download tasks
+        NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        NSURL *pureUrl = item.resource->url.toNSURL();
+        NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [pureUrl absoluteString], params];
+        NSURL *url = [NSURL URLWithString:urlString];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+        NSLog(@"%@", url);
+
+        NSString* name = [self.class titleOfResource:item.resource
+                                            inRegion:item.worldRegion
+                                      withRegionName:YES
+                                    withResourceType:YES];
+
+        OsmAndAppInstance app = [OsmAndApp instance];
+        id<OADownloadTask> task;
+        if (!item.downloadTask)
+            item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request andKey:[@"resource:" stringByAppendingString:item.resource->id.toNSString()] andName:name];
+        else
+            task = item.downloadTask;
+
+        if (onTaskCreated)
+            onTaskCreated(task);
+
+        // Resume task only if it's other resource download tasks are not running
+        if ([app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+        {
+            [task resume];
+            if (onTaskResumed)
+                onTaskResumed(task);
+        }
     }
 }
 
@@ -1532,7 +1562,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     BOOL isUpdate = NO;
     NSString *resourceName;
-    if ([item_ isKindOfClass:[OALocalResourceItem class]])
+
+    if ([item_ isKindOfClass:OAMultipleResourceItem.class] || item_.resourceType == OsmAndResourceType::WeatherForecast)
+    {
+        resourceName = [self.class titleOfResourceType:item_.resourceType inRegion:item_.worldRegion withRegionName:YES withResourceType:YES];
+    }
+    else if ([item_ isKindOfClass:[OALocalResourceItem class]])
     {
         OALocalResourceItem* item = (OALocalResourceItem*)item_;
         isUpdate = [item isKindOfClass:[OAOutdatedResourceItem class]];
@@ -1542,11 +1577,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     {
         OARepositoryResourceItem* item = (OARepositoryResourceItem*)item_;
         resourceName = [self.class titleOfResource:item.resource inRegion:item.worldRegion withRegionName:YES withResourceType:YES];
-    }
-    else if ([item_ isKindOfClass:OAMultipleResourceItem.class])
-    {
-        OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *) item_;
-        resourceName = [self.class titleOfResourceType:multipleItem.resourceType inRegion:multipleItem.worldRegion withRegionName:YES withResourceType:YES];
     }
 
     if (!resourceName)
@@ -1599,10 +1629,30 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (void) cancelDownloadOf:(OAResourceItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop
 {
-    if (onTaskStop)
-        onTaskStop(item.downloadTask);
+    if (item.resourceType == OsmAndResourceType::WeatherForecast)
+    {
+        UIView *view = [[UIApplication sharedApplication] windows].lastObject;
+        MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:view];
+        [view addSubview:progressHUD];
+        [progressHUD showAnimated:YES whileExecutingBlock:^{
+            [[OAWeatherHelper sharedInstance] prepareToStopDownloading:item.worldRegion.regionId];
+            if ([OAWeatherHelper getPreferenceDownloadState:item.worldRegion.regionId] == EOAWeatherForecastDownloadStateUndefined)
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion.regionId refreshMap:NO];
+            else if ([OAWeatherHelper getPreferenceDownloadState:item.worldRegion.regionId] == EOAWeatherForecastDownloadStateFinished)
+                [[OAWeatherHelper sharedInstance] calculateCacheSize:item.worldRegion onComplete:nil];
+        } completionBlock:^{
+            if (onTaskStop)
+                onTaskStop(nil);
+            [progressHUD removeFromSuperview];
+        }];
+    }
+    else
+    {
+        if (onTaskStop)
+            onTaskStop(item.downloadTask);
 
-    [item.downloadTask stop];
+        [item.downloadTask stop];
+    }
 }
 
 + (void) offerDeleteResourceOf:(OALocalResourceItem *)item
@@ -1612,14 +1662,27 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     NSString *title;
     if ([item isKindOfClass:[OASqliteDbResourceItem class]])
-        title = ((OASqliteDbResourceItem *)item).title;
+    {
+        title = ((OASqliteDbResourceItem *) item).title;
+    }
     else if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
-        title = ((OAOnlineTilesResourceItem *)item).title;
+    {
+        title = ((OAOnlineTilesResourceItem *) item).title;
+    }
+    else if (item.resourceType == OsmAndResourceType::WeatherForecast)
+    {
+        title = [self.class titleOfResourceType:item.resourceType
+                                       inRegion:item.worldRegion
+                                 withRegionName:YES
+                               withResourceType:YES];
+    }
     else
+    {
         title = [self.class titleOfResource:item.resource
                                    inRegion:item.worldRegion
                              withRegionName:YES
                            withResourceType:YES];
+    }
 
     NSString* message = [NSString stringWithFormat:OALocalizedString(@"res_confirmation_delete"), title];
 
@@ -1647,7 +1710,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         OsmAndAppInstance app = [OsmAndApp instance];
         for (OALocalResourceItem *item in items)
         {
-            if ([item isKindOfClass:[OASqliteDbResourceItem class]])
+            if (item.resourceType == OsmAndResourceType::WeatherForecast)
+            {
+                [[OAWeatherHelper sharedInstance] prepareToStopDownloading:item.worldRegion.regionId];
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion.regionId refreshMap:item == items.lastObject];
+            }
+            else if ([item isKindOfClass:[OASqliteDbResourceItem class]])
             {
                 OASqliteDbResourceItem *sqliteItem = (OASqliteDbResourceItem *) item;
                 [[OAMapCreatorHelper sharedInstance] removeFile:sqliteItem.fileName];

@@ -36,6 +36,7 @@
 @property (readonly) OAObservable* mapLayersConfigurationChangeObservable;
 
 @property (nonatomic) BOOL weather;
+@property (nonatomic) BOOL weatherUseOfflineData;
 @property (nonatomic) BOOL weatherTemp;
 @property (nonatomic) NSUnitTemperature *weatherTempUnit;
 @property (nonatomic) BOOL weatherTempUnitAuto;
@@ -58,6 +59,7 @@
 @property (nonatomic) double weatherPrecipAlpha;
 
 @property (readonly) OAObservable* weatherChangeObservable;
+@property (readonly) OAObservable* weatherUseOfflineDataChangeObservable;
 @property (readonly) OAObservable* weatherTempChangeObservable;
 @property (readonly) OAObservable* weatherTempUnitChangeObservable;
 @property (readonly) OAObservable* weatherTempAlphaChangeObservable;

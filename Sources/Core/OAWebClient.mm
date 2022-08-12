@@ -280,4 +280,3 @@ bool OAWebClient::downloadFile(
     }
     return success;
 }
-

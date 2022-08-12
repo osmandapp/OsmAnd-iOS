@@ -1884,7 +1884,7 @@
             _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
                                                                                    rasterTileSize));
             [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
-            
+
             _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
         }
         else if (resourceType == OsmAndResourceType::OnlineTileSources || mapCreatorFilePath)
@@ -2279,7 +2279,7 @@
 
                 QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > gpxDocs;
                 gpxDocs[QString::fromNSString(kCurrentTrack)] = doc;
-                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs];
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs reset:NO];
             }
         }];
     }

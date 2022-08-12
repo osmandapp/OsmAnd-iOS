@@ -203,6 +203,7 @@
         cell = (OADeleteButtonTableViewCell *)[nib objectAtIndex:0];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 58.0, 0.0, 0.0);
+        [cell showIcon:YES];
     }
     if (cell)
     {
@@ -220,6 +221,8 @@
         cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
         [cell.deleteButton addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
+    if (cell.needsUpdateConstraints)
+        [cell updateConstraints];
     return cell;
 }
 

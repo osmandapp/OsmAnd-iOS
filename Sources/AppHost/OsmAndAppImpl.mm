@@ -54,6 +54,7 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IWebClient.h>
 #include "OAWebClient.h"
+#include "OAWeatherWebClient.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
@@ -75,7 +76,6 @@
 #define VERSION_3_10 3.10
 #define VERSION_3_14 3.14
 #define VERSION_4_2 4.2
-#define VERSION_4_3 4.3
 
 #define kAppData @"app_data"
 #define kInstallDate @"install_date"
@@ -107,6 +107,7 @@
 @synthesize gpxPath = _gpxPath;
 @synthesize inboxPath = _inboxPath;
 @synthesize cachePath = _cachePath;
+@synthesize weatherForecastPath = _weatherForecastPath;
 
 @synthesize initialURLMapState = _initialURLMapState;
 
@@ -152,6 +153,7 @@
         _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
         _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+        _weatherForecastPath = [_cachePath stringByAppendingPathComponent:@"WeatherForecast"];
 
         [self buildFolders];
 
@@ -188,21 +190,24 @@
 - (void) buildFolders
 {
     NSError *error;
-    BOOL success;
-    
+
     if (![[NSFileManager defaultManager] fileExistsAtPath:_gpxPath])
     {
-        success = [[NSFileManager defaultManager]
-                   createDirectoryAtPath:_gpxPath
-                   withIntermediateDirectories:NO
-                   attributes:nil error:&error];
-        
+        BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:_gpxPath
+                                                 withIntermediateDirectories:NO
+                                                                  attributes:nil
+                                                                       error:&error];
         if (!success)
-        {
             OALog(@"Error creating GPX folder: %@", error.localizedFailureReason);
-            return;
-        }
-        
+    }
+    if (![[NSFileManager defaultManager] fileExistsAtPath:_weatherForecastPath])
+    {
+        BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:_weatherForecastPath
+                                                 withIntermediateDirectories:NO
+                                                                  attributes:nil
+                                                                       error:&error];
+        if (!success)
+            OALog(@"Error creating WeatherForecast folder: %@", error.localizedFailureReason);
     }
 }
 
@@ -245,6 +250,15 @@
     [OAExternalTimeFormatter setLocale:@"ar"];
     OpeningHoursParser::setAmpmOnLeft([OAExternalTimeFormatter isCurrentRegionWithAmpmOnLeft]);
     OpeningHoursParser::runTestAmPmArabic();
+}
+
+- (void)migrateResourcesToDocumentsIfNeeded {
+    BOOL movedRes = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
+    BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]];
+    if (movedRes)
+        [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
+    if (movedRes || movedSqlite)
+        _resourcesManager->rescanUnmanagedStoragePaths(true);
 }
 
 - (BOOL) initialize
@@ -304,7 +318,8 @@
     OALog(@"Documents path: %@", _documentsPath);
     OALog(@"GPX path: %@", _gpxPath);
     OALog(@"Cache path: %@", _cachePath);
-    
+    OALog(@"Weather Forecast path: %@", _weatherForecastPath);
+
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
 
@@ -365,7 +380,8 @@
                                                          });
 
     [self instantiateWeatherResourcesManager];
-    
+    [[OAWeatherHelper sharedInstance] clearOutdatedCache];
+
     // Check for NSURLIsExcludedFromBackupKey and setup if needed
     const auto& localResources = _resourcesManager->getLocalResources();
     for (const auto& resource : localResources)
@@ -424,16 +440,10 @@
                 }
             }
         }
-        if (prevVersion < VERSION_4_3)
-        {
-            [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
-            [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]];
-            [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
-            _resourcesManager->rescanUnmanagedStoragePaths(true);
-        }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }
+    [self migrateResourcesToDocumentsIfNeeded];
     
     // Copy regions.ocbf to Documents/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
@@ -590,9 +600,11 @@
     return YES;
 }
 
-- (void) moveContentsOfDirectory:(NSString *)src toDest:(NSString *)dest
+- (BOOL) moveContentsOfDirectory:(NSString *)src toDest:(NSString *)dest
 {
     NSFileManager *fm = [NSFileManager defaultManager];
+    if (![fm fileExistsAtPath:src])
+        return NO;
     if (![fm fileExistsAtPath:dest])
         [fm createDirectoryAtPath:dest withIntermediateDirectories:YES attributes:nil error:nil];
 
@@ -600,11 +612,15 @@
 
     for (NSString *file in files)
     {
+        NSError *err = nil;
         [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
                     toPath:[dest stringByAppendingPathComponent:file]
-                     error:nil];
+                     error:&err];
+        if (err)
+            return NO;
     }
     [fm removeItemAtPath:src error:nil];
+    return YES;
 }
 
 - (void) migrateMapNames:(NSString *)path
@@ -626,9 +642,13 @@
             [self migrateMapNames:oldPath];
         else
         {
-            [fm moveItemAtPath:oldPath
-                        toPath:[path stringByAppendingPathComponent:[self generateCorrectFileName:file]]
-                         error:nil];
+            NSString *newPath = [path stringByAppendingPathComponent:[self generateCorrectFileName:file]];
+            if (![newPath isEqualToString:oldPath])
+            {
+                [fm moveItemAtPath:oldPath
+                            toPath:newPath
+                             error:nil];
+            }
         }
     }
 }
@@ -690,11 +710,11 @@
     QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>> bandSettings; // init later
     _resourcesManager->instantiateWeatherResourcesManager(
         bandSettings,
-        QString::fromNSString(_cachePath),
+        QString::fromNSString(_weatherForecastPath),
         QString::fromNSString([NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj"]),
         256,
         [UIScreen mainScreen].scale,
-        _webClient
+        std::make_shared<OAWeatherWebClient>()
     );
 }
 

@@ -74,4 +74,6 @@
 #define kAppleRedeemPromoCode  @"https://support.apple.com/en-gb/HT201209"
 #define kAppleManageSubscriptions @"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"
 
+#define kWeatherTilesUrlPrefix @"https://osmand.net/weather/gfs/tiff/"
+
 #endif /* OAIndexConstants_h */

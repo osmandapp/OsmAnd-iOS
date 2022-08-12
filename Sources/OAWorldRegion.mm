@@ -26,6 +26,7 @@
 #import "OAWorldRegion+Protected.h"
 #import "OAResourcesUIHelper.h"
 #import "QuadRect.h"
+#import "Weather/OAWeatherHelper.h"
 
 @implementation OAWorldRegion
 {
@@ -449,7 +450,8 @@
             OAWorldRegion *newRegion = [[OAWorldRegion alloc] initFrom:region];
             [parentRegion addSubregion:newRegion];
             regionsLookupTable[newRegion.regionId] = newRegion;
-            
+            [[OAWeatherHelper sharedInstance] firstInitForecast:newRegion.regionId];
+
             // Remove
             processedRegions++;
             itRegion.remove();

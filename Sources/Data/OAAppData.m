@@ -38,6 +38,7 @@
 #define kWikipediaGlobalKey @"wikipediaGlobal"
 
 #define kWeatherKey @"weather"
+#define kWeatherUseOfflineDataKey @"weatherUseOfflineData"
 #define kWeatherTempKey @"weatherTemp"
 #define kWeatherTempUnitKey @"weatherTempUnit"
 #define kWeatherTempUnitAutoKey @"weatherTempUnitAuto"
@@ -88,6 +89,7 @@
     OACommonStringList *_wikipediaLanguagesProfile;
 
     OACommonBoolean *_weatherProfile;
+    OACommonBoolean *_weatherUseOfflineDataProfile;
     OACommonBoolean *_weatherTempProfile;
     OACommonUnit *_weatherTempUnitProfile;
     OACommonBoolean *_weatherTempUnitAutoProfile;
@@ -246,6 +248,7 @@
     _wikipediaLanguagesProfile = [OACommonStringList withKey:kWikipediaLanguagesKey defValue:@[]];
 
     _weatherProfile = [OACommonBoolean withKey:kWeatherKey defValue:NO];
+    _weatherUseOfflineDataProfile = [OACommonBoolean withKey:kWeatherUseOfflineDataKey defValue:NO];
     _weatherTempProfile = [OACommonBoolean withKey:kWeatherTempKey defValue:NO];
     _weatherTempUnitProfile = [OACommonUnit withKey:kWeatherTempUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_TEMPERATURE]];
     _weatherTempUnitAutoProfile = [OACommonBoolean withKey:kWeatherTempUnitAutoKey defValue:YES];
@@ -268,6 +271,7 @@
     _weatherPrecipAlphaProfile = [OACommonDouble withKey:kWeatherPrecipAlphaKey defValue:0.7];
 
     _weatherChangeObservable = [[OAObservable alloc] init];
+    _weatherUseOfflineDataChangeObservable = [[OAObservable alloc] init];
     _weatherTempChangeObservable = [[OAObservable alloc] init];
     _weatherTempUnitChangeObservable = [[OAObservable alloc] init];
     _weatherPressureChangeObservable = [[OAObservable alloc] init];
@@ -303,6 +307,7 @@
     [_registeredPreferences setObject:_wikipediaLanguagesProfile forKey:@"wikipedia_poi_enabled_languages"];
 
     [_registeredPreferences setObject:_weatherProfile forKey:@"show_weather"];
+    [_registeredPreferences setObject:_weatherUseOfflineDataProfile forKey:@"show_weather_offline_data"];
     [_registeredPreferences setObject:_weatherTempProfile forKey:@"show_weather_temp"];
     [_registeredPreferences setObject:_weatherTempUnitProfile forKey:@"show_weather_temp_unit"];
     [_registeredPreferences setObject:_weatherTempUnitAutoProfile forKey:@"show_weather_temp_unit_auto"];
@@ -476,6 +481,7 @@
 @synthesize wikipediaChangeObservable = _wikipediaChangeObservable;
 
 @synthesize weatherChangeObservable = _weatherChangeObservable;
+@synthesize weatherUseOfflineDataChangeObservable = _weatherUseOfflineDataChangeObservable;
 @synthesize weatherTempChangeObservable = _weatherTempChangeObservable;
 @synthesize weatherTempUnitChangeObservable = _weatherTempUnitChangeObservable;
 @synthesize weatherTempAlphaChangeObservable = _weatherTempAlphaChangeObservable;
@@ -506,6 +512,23 @@
     {
         [_weatherProfile set:weather];
         [_weatherChangeObservable notifyEventWithKey:self andValue:@(self.weather)];
+    }
+}
+
+- (BOOL)weatherUseOfflineData
+{
+    @synchronized(_lock)
+    {
+        return [_weatherUseOfflineDataProfile get];
+    }
+}
+
+- (void)setWeatherUseOfflineData:(BOOL)weatherUseOfflineData
+{
+    @synchronized(_lock)
+    {
+        [_weatherUseOfflineDataProfile set:weatherUseOfflineData];
+        [_weatherUseOfflineDataChangeObservable notifyEventWithKey:self andValue:@(self.weatherUseOfflineData)];
     }
 }
 
@@ -1522,6 +1545,7 @@
     [_wikipediaLanguagesProfile set:[_wikipediaLanguagesProfile get:sourceMode] mode:targetMode];
 
     [_weatherProfile set:[_weatherProfile get:sourceMode] mode:targetMode];
+    [_weatherUseOfflineDataProfile set:[_weatherUseOfflineDataProfile get:sourceMode] mode:targetMode];
     [_weatherTempProfile set:[_weatherTempProfile get:sourceMode] mode:targetMode];
     [_weatherTempUnitProfile set:[_weatherTempUnitProfile get:sourceMode] mode:targetMode];
     [_weatherTempUnitAutoProfile set:[_weatherTempUnitAutoProfile get:sourceMode] mode:targetMode];

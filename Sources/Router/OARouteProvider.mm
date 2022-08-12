@@ -406,7 +406,7 @@
         {
             [points addObject:[self createLocation:wptPt]];
         }
-        if (i <= segments.count - 1 && lastPoint != nil) {
+        if (i <= (NSInteger) segments.count - 1 && lastPoint != nil) {
             [segmentEndpoints addObject:lastPoint];
             [segmentEndpoints addObject:points[points.count - segment.points.count]];
         }
@@ -485,7 +485,7 @@
                 }
                 // save time as a speed because we don't know distance of the route segment
                 float avgSpeed = time;
-                if (i == route.points.count - 1 && time > 0)
+                if (i == (int) route.points.count - 1 && time > 0)
                 {
                     if (distanceToEnd.count > offset)
                         avgSpeed = distanceToEnd[offset].floatValue / time;
@@ -535,7 +535,7 @@
                         double bearing = [res[previous.routePointOffset - 1] bearingTo:res[previous.routePointOffset]];
                         float paz = bearing;
                         float caz;
-                        if (previous.turnType->isRoundAbout() && dirInfo.routePointOffset < res.count - 1)
+                        if (previous.turnType->isRoundAbout() && dirInfo.routePointOffset < (int) res.count - 1)
                         {
                             bearing = [res[previous.routePointOffset] bearingTo:res[previous.routePointOffset + 1]];
                             caz = bearing;
@@ -571,7 +571,7 @@
     if (previous && TurnType::C != previous.turnType->getValue())
     {
         // calculate angle
-        if (previous.routePointOffset > 0 && previous.routePointOffset < res.count - 1)
+        if (previous.routePointOffset > 0 && previous.routePointOffset < (int) res.count - 1)
         {
             double bearing = [res[previous.routePointOffset - 1] bearingTo:res[previous.routePointOffset]];
             float paz = bearing;
@@ -1437,7 +1437,7 @@
                    segmentEndpoints:(NSArray<CLLocation *> *)segmentEndpoints
           calculateOsmAndRouteParts:(BOOL)calculateOsmAndRouteParts
 {
-    for (NSInteger i = 0; i < segmentEndpoints.count - 1; i += 2)
+    for (NSInteger i = 0; i < (NSInteger) segmentEndpoints.count - 1; i += 2)
     {
         CLLocation *prevSegmentPoint = segmentEndpoints[i];
         CLLocation *newSegmentPoint = segmentEndpoints[i + 1];

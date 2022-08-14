@@ -16,6 +16,7 @@
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OAColors.h"
 #import "OAWeatherPlugin.h"
+#import "OAMapHudViewController.h"
 
 #define kLayersSection 1
 #define kContoursSection 2
@@ -345,14 +346,12 @@
 
 #pragma mark - OAWeatherLayerSettingsDelegate
 
-- (void)onHideWeatherLayerSettings
+- (void)onDoneWeatherLayerSettings:(BOOL)show
 {
-    [[OARootViewController instance].mapPanel showWeatherLayersScreen];
-}
+    if (show)
+        [[OARootViewController instance].mapPanel showWeatherLayersScreen];
 
-- (void)onDoneWeatherLayerSettings
-{
-
+    [[OARootViewController instance].mapPanel.hudViewController updateWeatherButton];
 }
 
 @end

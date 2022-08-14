@@ -366,7 +366,7 @@
 {
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
-            [self.delegate onHideWeatherLayerSettings];
+            [self.delegate onDoneWeatherLayerSettings:YES];
     }];
 }
 
@@ -374,7 +374,7 @@
 {
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
-            [self.delegate onDoneWeatherLayerSettings];
+            [self.delegate onDoneWeatherLayerSettings:NO];
     }];
 }
 

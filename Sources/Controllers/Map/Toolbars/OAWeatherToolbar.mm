@@ -11,8 +11,10 @@
 #import "OAMapHudViewController.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OASegmentedSlider.h"
+#import "OACollectionViewFlowLayout.h"
 #import "OAMapLayers.h"
 #import "OAWeatherToolbarHandlers.h"
+#import "OAWeatherHelper.h"
 
 @interface OAWeatherToolbar () <OAWeatherToolbarDelegate, OAWeatherLayerSettingsDelegate>
 
@@ -25,6 +27,8 @@
 @implementation OAWeatherToolbar
 {
     OsmAndAppInstance _app;
+    NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
+
     NSCalendar *_currentTimezoneCalendar;
     OAWeatherToolbarLayersHandler *_layersHandler;
     OAWeatherToolbarDatesHandler *_datesHandler;
@@ -60,8 +64,7 @@
 
 - (void)commonInit
 {
-    [self updateInfo];
-
+    self.hidden = YES;
     _app = [OsmAndApp instance];
     _currentTimezoneCalendar = NSCalendar.autoupdatingCurrentCalendar;
     _currentTimezoneCalendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
@@ -70,6 +73,8 @@
 
     _layersHandler = [[OAWeatherToolbarLayersHandler alloc] init];
     _layersHandler.delegate = self;
+
+    [self.layersCollectionView setOnlyIconCompact:YES];
     self.layersCollectionView.foldersDelegate = _layersHandler;
     [self updateData:[_layersHandler getData] type:EOAWeatherToolbarLayers];
 
@@ -91,11 +96,37 @@
 
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside];
+
+    _layerChangeObservers = [NSMutableArray array];
+
+    for (OAWeatherBand *band in [[OAWeatherHelper sharedInstance] bands])
+    {
+        [_layerChangeObservers addObject:[band createSwitchObserver:self handler:@selector(onUpdateWeatherLayerSettings)]];
+    }
+    [self updateInfo];
+}
+
+- (void)dealloc
+{
+    for (OAAutoObserverProxy *observer in _layerChangeObservers)
+        [observer detach];
+
+    [_layerChangeObservers removeAllObjects];
+}
+
+- (void)onUpdateWeatherLayerSettings
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_layersHandler updateData];
+        [self updateData:[_layersHandler getData] type:EOAWeatherToolbarLayers];
+        [self.layersCollectionView setValues:[_layersHandler getData] withSelectedIndex:-1];
+        [self.layersCollectionView reloadData];
+    });
 }
 
 - (void)handleLongPressOnLayer:(UILongPressGestureRecognizer *)gestureRecognizer
 {
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan)
     {
         CGPoint point = [gestureRecognizer locationInView:self.layersCollectionView];
         NSIndexPath *indexPath = [self.layersCollectionView indexPathForItemAtPoint:point];
@@ -115,15 +146,12 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-
-    self.layer.masksToBounds = NO;
     self.layer.shadowColor = [UIColor blackColor].CGColor;
     self.layer.shadowOpacity = .2;
     self.layer.shadowRadius = 5.;
     self.layer.shadowOffset = CGSizeMake(0., -1.);
-    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.frame cornerRadius:9];
-    self.layer.shadowPath = shadowPath.CGPath;
-
+    self.layer.masksToBounds = NO;
+    
     self.layer.cornerRadius = 9.;
     self.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
 }
@@ -286,18 +314,13 @@
 
 #pragma mark - OAWeatherLayerSettingsDelegate
 
-- (void)onHideWeatherLayerSettings
+- (void)onDoneWeatherLayerSettings:(BOOL)show
 {
-    [self onDoneWeatherLayerSettings];
-    [[OARootViewController instance].mapPanel.hudViewController changeWeatherToolbarVisible];
-}
-
-- (void)onDoneWeatherLayerSettings
-{
-    [_layersHandler updateData];
-    [self updateData:[_layersHandler getData] type:EOAWeatherToolbarLayers];
-    [self.layersCollectionView setValues:[_layersHandler getData] withSelectedIndex:-1];
-    [self.layersCollectionView reloadData];
+    [self onUpdateWeatherLayerSettings];
+    if (show)
+        [[OARootViewController instance].mapPanel.hudViewController changeWeatherToolbarVisible];
+    else
+        [[OARootViewController instance].mapPanel.hudViewController updateWeatherButton];
 }
 
 @end

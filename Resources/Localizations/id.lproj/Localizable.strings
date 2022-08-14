@@ -262,7 +262,7 @@
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
 "arrival_distance" = "Pengumuman kedatangan";
 "arrival_distance_descr" = "How soon do you want the arrival announcement?";
-"default_speed_system" = "Unit of speed";
+"default_speed_system" = "Unit kecepatan";
 "default_speed_system_descr" = "Define unit of speed";
 "speed_limit_exceed" = "Toleransi batas kecepatan";
 "speed_limit_exceed_message" = "Select speed limit tolerance margin, above which you will receive a voice warning.";
@@ -373,7 +373,7 @@
 "route_tsll" = "Belok sedikit ke kiri dan jalan";
 "route_tu" = "Putar balik dan jalan";
 "route_head" = "Kepala";
-"looking_up_address" = "Looking up address";
+"looking_up_address" = "Mencari alamat";
 "no_address_found" = "No address determined";
 "traffic_warning_speed_limit" = "Batas kecepatan";
 "traffic_warning_border_control" = "Gerbang perbatasan";
@@ -423,7 +423,7 @@
 "coords_search" = "Cari Koordinat";
 "nearest_cities" = "Kota terdekat";
 "type_address" = "Ketik alamat";
-"search_poi_category_hint" = "Type to search all";
+"search_poi_category_hint" = "Ketik untuk mencari semua";
 "poi_categories" = "POI categories";
 "search_history" = "Riwayat pencarian";
 "track_coloring_solid" = "Padat";
@@ -800,7 +800,7 @@
 "lang_eo" = "Esperanto";
 "lang_es" = "Bahasa Spanyol";
 "lang_es_ar" = "Spanyol (Argentina)";
-"lang_es_us" = "Spanish (American)";
+"lang_es_us" = "Spanyol (Amerika)";
 "lang_et" = "Estonia";
 "lang_eu" = "Basque";
 "lang_fa" = "Bahasa Persia";
@@ -1291,7 +1291,7 @@
 // Coordinate widget
 "coordinates_widget" = "Widget koordinat";
 "searching_gps" = "Mencari GPS";
-"copied_to_clipboard" = "Copied to clipboard";
+"copied_to_clipboard" = "Disalin ke papan klip";
 
 // Quick action
 "quick_action_name" = "Tindakan cepat";
@@ -1319,7 +1319,7 @@
 "add_map_marker" = "Tambahkan penanda peta";
 "select_map_marker" = "Select map marker";
 "add_gpx_waypoint" = "Add GPX waypoint";
-"context_menu_item_edit_waypoint" = "Edit GPX waypoint";
+"context_menu_item_edit_waypoint" = "Edit titik jalan GPX";
 "toggle_fav" = "Show/hide favorites";
 "fav_show" = "Show favorites";
 "fav_hide" = "Hide favorites";
@@ -1878,7 +1878,7 @@
 "save_filter" = "Simpan filter";
 "edit_filter_delete_dialog_title" = "Delete selected filter?";
 "apply_filters" = "Terapkan filter";
-"filter_poi_hint" = "Filter by name";
+"filter_poi_hint" = "Saring berdasarkan nama";
 "shared_string_category" = "Kategori";
 "poi_category_and_type" = "Category and POI Type";
 "poi_opening_hours" = "Jam buka";
@@ -2056,7 +2056,7 @@
 "rendering_attr_highway_class_road_name" = "Jalan raya";
 "rendering_value_translucent_green_name" = "Hijau tembus pandang";
 "rendering_value_translucent_yellow_name" = "Kuning tembus pandang";
-"rendering_attr_OSMMapperAssistant_name" = "OSM mapper assistant";
+"rendering_attr_OSMMapperAssistant_name" = "Asisten pemetaan OSM";
 "routing_attr_avoid_borders_name" = "No border crossings";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Afiliasi jaringan";
 "rendering_attr_smoothness_excellent_name" = "Bagus sekali";
@@ -2077,7 +2077,7 @@
 "routing_attr_max_num_changes_name" = "Jumlah perubahan";
 "rendering_attr_publicTransportMode_name" = "Rute bus, bus listrik, antar-jemput";
 "rendering_attr_hideNonVehicleHighways_name" = "Jalan raya non-kendaraan";
-"rendering_value_translucent_pink_name" = "Translucent pink";
+"rendering_value_translucent_pink_name" = "Merah muda translucent";
 "rendering_attr_surface_ground_name" = "Tanah";
 "routing_attr_height_obstacles_description" = "Factor in terrain elevation (via SRTM, ASTER, and EU-DEM data).";
 "rendering_attr_currentTrackColor_description" = "Warna GPX";
@@ -2125,7 +2125,7 @@
 "rendering_attr_surface_unpaved_name" = "Tidak beraspal";
 "rendering_attr_noAdminboundaries_description" = "Suppress display of regional boundaries (admin levels 5–9).";
 "rendering_value_bicycle_name" = "Cycling";
-"rendering_value_translucent_lightgreen_name" = "Translucent light green";
+"rendering_value_translucent_lightgreen_name" = "Hijau muda translucent";
 "rendering_attr_contourLines_name" = "Tampilkan garis jejak";
 "rendering_attr_showAccess_name" = "Show access restrictions and toll";
 "rendering_attr_surface_dirt_name" = "Tanah";
@@ -2137,7 +2137,7 @@
 "rendering_attr_surface_cobblestone_name" = "Batu besar";
 "rendering_attr_highway_class_state_road_name" = "Jalan raya kota";
 "routing_attr_avoid_sett_name" = "No cobblestone or sett";
-"rendering_value_translucent_lightblue_name" = "Translucent light blue";
+"rendering_value_translucent_lightblue_name" = "Biru muda translucent";
 "rendering_attr_smoothness_good_name" = "Bagus";
 "routing_attr_weight_name" = "Batas berat";
 "rendering_value_bold_name" = "Tebal";
@@ -2180,7 +2180,7 @@
 "rendering_value_low_name" = "Rendah";
 "rendering_value_lightgreen_name" = "Hijau muda";
 "rendering_attr_busRoutes_name" = "Rute bus";
-"rendering_value_defaultTranslucentCyan_name" = "Default (translucent cyan)";
+"rendering_value_defaultTranslucentCyan_name" = "Bawaan (cyan translucent)";
 "rendering_attr_hideHouseNumbers_name" = "Nomor rumah";
 "rendering_value_translucent_red_name" = "Merah tembus pandang";
 "rendering_attr_highway_class_track_grade1_name" = "Tingkat 1";
@@ -2238,7 +2238,7 @@
 "rendering_attr_piste_type_connection_name" = "Koneksi";
 "routing_attr_relief_smoothness_factor_name" = "Pilih fluktuasi ketinggian";
 "routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
-"rendering_value_darkyellow_name" = "Dark yellow";
+"rendering_value_darkyellow_name" = "Kuning gelap";
 "routing_attr_prefer_unpaved_name" = "Utamakan jalan yang belum diaspal";
 "rendering_value_default_name" = "Default";
 "routing_attr_no_new_routing_name" = "No v1.9 routing rules";

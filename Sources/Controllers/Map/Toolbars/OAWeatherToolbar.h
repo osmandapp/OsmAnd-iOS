@@ -14,4 +14,6 @@
 
 @property (nonatomic) BOOL topControlsVisibleInLandscape;
 
+- (void)reloadLayersCollectionView;
+
 @end

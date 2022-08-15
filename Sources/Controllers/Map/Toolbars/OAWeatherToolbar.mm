@@ -11,7 +11,7 @@
 #import "OAMapHudViewController.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OASegmentedSlider.h"
-#import "OACollectionViewFlowLayout.h"
+#import "OASizes.h"
 #import "OAMapLayers.h"
 #import "OAWeatherToolbarHandlers.h"
 #import "OAWeatherHelper.h"
@@ -45,7 +45,12 @@
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAWeatherToolbar" owner:self options:nil];
     self = (OAWeatherToolbar *) nib[0];
     if (self)
-        self.frame = CGRectMake(0, 0, DeviceScreenWidth, 150);
+        self.frame = CGRectMake(
+                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? -kInfoViewLandscapeWidthPad : -(DeviceScreenWidth * .45) : 0.,
+                [OAUtilities isLandscape] ? 0. : DeviceScreenHeight,
+                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth * .45 : DeviceScreenWidth,
+                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? DeviceScreenHeight - [OAUtilities getStatusBarHeight] : DeviceScreenHeight : 205. + [OAUtilities getBottomMargin]
+        );
 
     [self commonInit];
     return self;
@@ -64,7 +69,6 @@
 
 - (void)commonInit
 {
-    self.hidden = YES;
     _app = [OsmAndApp instance];
     _currentTimezoneCalendar = NSCalendar.autoupdatingCurrentCalendar;
     _currentTimezoneCalendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
@@ -111,7 +115,7 @@
     for (OAAutoObserverProxy *observer in _layerChangeObservers)
         [observer detach];
 
-    [_layerChangeObservers removeAllObjects];
+    _layerChangeObservers = nil;
 }
 
 - (void)onUpdateWeatherLayerSettings
@@ -120,7 +124,7 @@
         [_layersHandler updateData];
         [self updateData:[_layersHandler getData] type:EOAWeatherToolbarLayers];
         [self.layersCollectionView setValues:[_layersHandler getData] withSelectedIndex:-1];
-        [self.layersCollectionView reloadData];
+        [self reloadLayersCollectionView];
     });
 }
 
@@ -222,6 +226,11 @@
     _timeInGMTTimezoneValues = selectedTimeValues;
 }
 
+- (void)reloadLayersCollectionView
+{
+    [self.layersCollectionView reloadData];
+}
+
 #pragma mark - UISlider
 
 - (void)timeChanged:(UISlider *)sender
@@ -237,7 +246,7 @@
     if (type == EOAWeatherToolbarLayers)
     {
         [self.layersCollectionView setValues:data withSelectedIndex:-1];
-        [self.layersCollectionView reloadData];
+        [self reloadLayersCollectionView];
 
         BOOL available = NO;
         for (NSDictionary *item in data)

@@ -165,12 +165,12 @@
                 continue;
 
             NSTimeInterval lastUpdateTime = [self.class getPreferenceLastUpdate:region.regionId];
+            NSTimeInterval nowTime = [NSDate date].timeIntervalSince1970;
             EOAWeatherForecastUpdatesFrequency updateFrequency = [self.class getPreferenceFrequency:region.regionId];
-            int seconds = -[[NSDate dateWithTimeIntervalSince1970:lastUpdateTime] timeIntervalSinceNow];
             int secondsRequired = updateFrequency == EOAWeatherForecastUpdatesSemiDaily ? kWeatherForecastFrequencyHalfDay
                     : updateFrequency == EOAWeatherForecastUpdatesDaily ? kWeatherForecastFrequencyDay
                             : kWeatherForecastFrequencyWeek;
-            if (seconds >= secondsRequired || lastUpdateTime == -1.)
+            if (nowTime >= lastUpdateTime + secondsRequired)
                 [self downloadForecastByRegion:region];
         }
 
@@ -197,7 +197,7 @@
 
 - (void)downloadForecastByRegion:(OAWorldRegion *)region
 {
-    if (!_app.data.weather || !([OAIAPHelper isOsmAndProAvailable] || [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased]))
+    if (!_app.data.weather || ![OAIAPHelper isOsmAndProAvailable])
         return;
 
     OsmAnd::LatLon latLonTopLeft = OsmAnd::LatLon(region.bboxTopLeft.latitude, region.bboxTopLeft.longitude);
@@ -603,12 +603,12 @@
         [self.class setPreferenceLastUpdate:region.regionId value:timeInterval];
         [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
 
-        OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-        [mapViewController.mapLayers.weatherLayerLow updateWeatherLayer];
-        [mapViewController.mapLayers.weatherLayerHigh updateWeatherLayer];
-        [mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
-
         dispatch_async(dispatch_get_main_queue(), ^{
+            OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+            [mapViewController.mapLayers.weatherLayerLow updateWeatherLayer];
+            [mapViewController.mapLayers.weatherLayerHigh updateWeatherLayer];
+            [mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
+
             [self calculateCacheSize:region onComplete:^() {
                 dispatch_group_leave(_forecastGroupDownloader);
             }];

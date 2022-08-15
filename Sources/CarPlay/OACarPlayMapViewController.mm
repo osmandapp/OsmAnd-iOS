@@ -207,7 +207,7 @@
 
 - (void) enterNavigationMode
 {
-    BOOL leftSide = _window.safeAreaInsets.right > _window.safeAreaInsets.left;
+    BOOL leftSide = _window.safeAreaInsets.right > _window.safeAreaInsets.left && _window.safeAreaInsets.bottom == 0;
     _mapVc.mapView.viewportXScale = leftSide ? 0.5 : 1.5;
 }
 

@@ -47,7 +47,7 @@
     if (self)
         self.frame = CGRectMake(
                 [OAUtilities isLandscape] ? [OAUtilities isIPad] ? -kInfoViewLandscapeWidthPad : -(DeviceScreenWidth * .45) : 0.,
-                [OAUtilities isLandscape] ? 0. : DeviceScreenHeight,
+                [self.class calculateYOutScreen],
                 [OAUtilities isLandscape] ? [OAUtilities isIPad] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth * .45 : DeviceScreenWidth,
                 [OAUtilities isLandscape] ? [OAUtilities isIPad] ? DeviceScreenHeight - [OAUtilities getStatusBarHeight] : DeviceScreenHeight : 205. + [OAUtilities getBottomMargin]
         );
@@ -69,6 +69,7 @@
 
 - (void)commonInit
 {
+    self.hidden = YES;
     _app = [OsmAndApp instance];
     _currentTimezoneCalendar = NSCalendar.autoupdatingCurrentCalendar;
     _currentTimezoneCalendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
@@ -229,6 +230,96 @@
 - (void)reloadLayersCollectionView
 {
     [self.layersCollectionView reloadData];
+}
+
+- (void)moveToScreen
+{
+    CGRect frame = self.frame;
+    CGFloat y = [self.class calculateY];
+    if ([OAUtilities isIPad])
+    {
+        if ([OAUtilities isLandscape])
+        {
+            frame.size.width = kInfoViewLandscapeWidthPad;
+            frame.size.height = DeviceScreenHeight - [OAUtilities getStatusBarHeight];
+            frame.origin = CGPointMake(0., y);
+        }
+        else
+        {
+            frame.size.width = DeviceScreenWidth;
+            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.origin = CGPointMake(0., y);
+        }
+    }
+    else
+    {
+        if ([OAUtilities isLandscape])
+        {
+            frame.size.width = DeviceScreenWidth * 0.45;
+            frame.size.height = DeviceScreenHeight;
+            frame.origin = CGPointZero;
+        }
+        else
+        {
+            frame.size.width = DeviceScreenWidth;
+            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.origin = CGPointMake(0., y);
+        }
+    }
+    self.frame = frame;
+}
+
+- (void)moveOutOfScreen
+{
+    CGRect frame = self.frame;
+    CGFloat y = [self.class calculateYOutScreen];
+    if ([OAUtilities isIPad])
+    {
+        if ([OAUtilities isLandscape])
+        {
+            frame.size.width = kInfoViewLandscapeWidthPad;
+            frame.size.height = DeviceScreenHeight - [OAUtilities getStatusBarHeight];
+            frame.origin = CGPointMake(-frame.size.width, y);
+        }
+        else
+        {
+            frame.size.width = DeviceScreenWidth;
+            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.origin = CGPointMake(0., y);
+        }
+    }
+    else
+    {
+        if ([OAUtilities isLandscape])
+        {
+            frame.size.width = DeviceScreenWidth * .45;
+            frame.size.height = DeviceScreenHeight;
+            frame.origin = CGPointMake(-frame.size.width, y);
+        }
+        else
+        {
+            frame.size.width = DeviceScreenWidth;
+            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.origin = CGPointMake(0., y);
+        }
+    }
+    self.frame = frame;
+}
+
++ (CGFloat)calculateY
+{
+    if ([OAUtilities isLandscape])
+        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] : 0.;
+
+    return DeviceScreenHeight - (205. + [OAUtilities getBottomMargin]);
+}
+
++ (CGFloat)calculateYOutScreen
+{
+    if ([OAUtilities isLandscape])
+        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] -1 : -1.;
+
+    return DeviceScreenHeight + 205. + [OAUtilities getBottomMargin];
 }
 
 #pragma mark - UISlider

@@ -15,5 +15,10 @@
 @property (nonatomic) BOOL topControlsVisibleInLandscape;
 
 - (void)reloadLayersCollectionView;
+- (void)moveOutOfScreen;
+- (void)moveToScreen;
+
++ (CGFloat)calculateY;
++ (CGFloat)calculateYOutScreen;
 
 @end

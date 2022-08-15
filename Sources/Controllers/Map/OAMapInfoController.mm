@@ -447,9 +447,9 @@
 - (void)updateWeatherToolbarVisible
 {
     BOOL visible = [_mapHudViewController shouldShowWeatherToolbar];
-    if (visible && (_weatherToolbar.hidden || _weatherToolbar.frame.origin.y != [self calculateWeatherToolbarY]))
+    if (visible && (_weatherToolbar.hidden || _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateY]))
         [self showWeatherToolbar];
-    else if (!visible && _weatherToolbar.frame.origin.y != [self calculateWeatherToolbarYOutScreen])
+    else if (!visible && _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateYOutScreen])
         [self hideWeatherToolbar];
 }
 
@@ -457,44 +457,12 @@
 {
     if (_weatherToolbar.hidden)
     {
-        _weatherToolbar.frame = [self calculateWeatherToolbarFrameOutScreen];
+        [_weatherToolbar moveOutOfScreen];
         _weatherToolbar.hidden = NO;
     }
 
     [UIView animateWithDuration:.3 animations:^{
-        CGRect frame = _weatherToolbar.frame;
-        CGFloat y = [self calculateWeatherToolbarY];
-        if ([OAUtilities isIPad])
-        {
-            if ([OAUtilities isLandscape])
-            {
-                frame.size.width = kInfoViewLandscapeWidthPad;
-                frame.size.height = DeviceScreenHeight - [OAUtilities getStatusBarHeight];
-                frame.origin = CGPointMake(0., y);
-            }
-            else
-            {
-                frame.size.width = DeviceScreenWidth;
-                frame.size.height = 205. + [OAUtilities getBottomMargin];
-                frame.origin = CGPointMake(0., y);
-            }
-        }
-        else
-        {
-            if ([OAUtilities isLandscape])
-            {
-                frame.size.width = DeviceScreenWidth * 0.45;
-                frame.size.height = DeviceScreenHeight;
-                frame.origin = CGPointZero;
-            }
-            else
-            {
-                frame.size.width = DeviceScreenWidth;
-                frame.size.height = 205. + [OAUtilities getBottomMargin];
-                frame.origin = CGPointMake(0., y);
-            }
-        }
-        _weatherToolbar.frame = frame;
+        [_weatherToolbar moveToScreen];
 
         [_mapHudViewController showBottomControls:[OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height - [OAUtilities getBottomMargin]
                                          animated:YES];
@@ -512,7 +480,7 @@
 - (void)hideWeatherToolbar
 {
     [UIView animateWithDuration:.3 animations: ^{
-        _weatherToolbar.frame = [self calculateWeatherToolbarFrameOutScreen];
+        [_weatherToolbar moveOutOfScreen];
     }                completion:^(BOOL finished) {
         _weatherToolbar.hidden = YES;
     }];
@@ -520,60 +488,6 @@
     [_mapHudViewController resetToDefaultRulerLayout];
     if ([OAUtilities isLandscape] && _weatherToolbar.topControlsVisibleInLandscape)
         [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
-}
-
-- (CGRect)calculateWeatherToolbarFrameOutScreen
-{
-    CGRect frame = _weatherToolbar.frame;
-    CGFloat y = [self calculateWeatherToolbarYOutScreen];
-    if ([OAUtilities isIPad])
-    {
-        if ([OAUtilities isLandscape])
-        {
-            frame.size.width = kInfoViewLandscapeWidthPad;
-            frame.size.height = DeviceScreenHeight - [OAUtilities getStatusBarHeight];
-            frame.origin = CGPointMake(-frame.size.width, y);
-        }
-        else
-        {
-            frame.size.width = DeviceScreenWidth;
-            frame.size.height = 205. + [OAUtilities getBottomMargin];
-            frame.origin = CGPointMake(0., y);
-        }
-    }
-    else
-    {
-        if ([OAUtilities isLandscape])
-        {
-            frame.size.width = DeviceScreenWidth * .45;
-            frame.size.height = DeviceScreenHeight;
-            frame.origin = CGPointMake(-frame.size.width, y);
-        }
-        else
-        {
-            frame.size.width = DeviceScreenWidth;
-            frame.size.height = 205. + [OAUtilities getBottomMargin];
-            frame.origin = CGPointMake(0., y);
-        }
-    }
-
-    return frame;
-}
-
-- (CGFloat)calculateWeatherToolbarY
-{
-    if ([OAUtilities isLandscape])
-        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] : 0.;
-
-    return DeviceScreenHeight - (205. + [OAUtilities getBottomMargin]);
-}
-
-- (CGFloat)calculateWeatherToolbarYOutScreen
-{
-    if ([OAUtilities isLandscape])
-        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] -1 : -1.;
-
-    return DeviceScreenHeight + 205. + [OAUtilities getBottomMargin];
 }
 
 - (CGFloat) getLeftBottomY

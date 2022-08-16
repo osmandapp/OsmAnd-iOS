@@ -14,6 +14,10 @@
 #define kFixedHeight 338.
 #define kLabelOffset 40.
 
+#define kImageWidth 52.
+#define kBaseImagesCount 5
+#define kAnimationDuration 60 // 1 minute
+
 @interface OACloudIntroductionHeaderView ()
 
 @property (strong, nonatomic) IBOutlet UIView *contentView;
@@ -27,6 +31,9 @@
 @end
 
 @implementation OACloudIntroductionHeaderView
+{
+    NSMutableArray<UIView *> *_animatedViews;
+}
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
@@ -48,11 +55,109 @@
     return self;
 }
 
+- (void)addAnimatedViews
+{
+    for (UIView *view in _animatedViews)
+    {
+        [view removeFromSuperview];
+    }
+    [_animatedViews removeAllObjects];
+    NSArray<UIImage *> *myPlacesImages = @[[UIImage imageNamed:@"ic_custom_overlay_map"], [UIImage imageNamed:@"ic_custom_trip"],
+                                           [UIImage imageNamed:@"ic_custom_settings"], [UIImage imageNamed:@"ic_custom_map_style"],
+                                           [UIImage imageNamed:@"ic_custom_info"], [UIImage imageNamed:@"ic_profile_pedestrian"]];
+    NSArray<UIImage *> *pluginsImages = @[[UIImage imageNamed:@"ic_custom_contour_lines"], [UIImage imageNamed:@"ic_custom_sound"],
+                                          [UIImage imageNamed:@"ic_custom_osm_edits"], [UIImage imageNamed:@"ic_custom_routes"],
+                                          [UIImage imageNamed:@"ic_custom_my_places"]];
+    NSArray<UIImage *> *navImages = @[[UIImage imageNamed:@"ic_custom_favorites"], [UIImage imageNamed:@"ic_custom_map_languge"],
+                                      [UIImage imageNamed:@"ic_custom_navigation"], [UIImage imageNamed:@"ic_custom_ruler"],
+                                      [UIImage imageNamed:@"ic_profile_car"]];
+    CGFloat maxY = [self animateBackground:myPlacesImages tintColor:UIColorFromRGB(color_banner_button) startY:0. rightToLeft:YES];
+    maxY = [self animateBackground:pluginsImages tintColor:UIColorFromRGB(color_primary_purple) startY:maxY rightToLeft:NO];
+    [self animateBackground:navImages tintColor:UIColorFromRGB(color_discount_save) startY:maxY rightToLeft:YES];
+}
+
 - (void)commonInit
 {
     [NSBundle.mainBundle loadNibNamed:@"OACloudIntroductionHeaderView" owner:self options:nil];
     [self addSubview:self.contentView];
     self.contentView.frame = self.bounds;
+    
+    _animatedViews = [NSMutableArray array];
+    [self addAnimatedViews];
+}
+
+- (CGFloat)getCompoundImageWidth:(NSInteger)count
+{
+    CGFloat compoundImageWidth = kImageWidth * count;
+    if (compoundImageWidth < DeviceScreenWidth)
+    {
+        CGFloat coef = DeviceScreenWidth / compoundImageWidth;
+        compoundImageWidth = round(compoundImageWidth * coef);
+    }
+    return compoundImageWidth;
+}
+
+- (CGFloat) animateBackground:(NSArray<UIImage *> *)images tintColor:(UIColor *)tintColor startY:(CGFloat)startY rightToLeft:(BOOL)rightToLeft
+{
+    CGFloat compoundImageWidth = [self getCompoundImageWidth:images.count];
+    UIColor *fillColor = [self createPatternColorFromImages:images tintColor:tintColor];
+    
+    CGRect rect1 = CGRectMake(rightToLeft ? 0. : -compoundImageWidth, startY, compoundImageWidth, 52.);
+    UIView *view1 = [[UIView alloc] initWithFrame:rect1];
+    view1.backgroundColor = fillColor;
+    [self.bannerView insertSubview:view1 belowSubview:self.bannerMainImageView];
+
+    CGRect rect2 = CGRectMake(rightToLeft ? view1.frame.size.width : 0., startY, compoundImageWidth, 52.);
+    UIView *view2 = [[UIView alloc] initWithFrame:rect2];
+    view2.backgroundColor = fillColor;
+    [self.bannerView insertSubview:view2 belowSubview:self.bannerMainImageView];
+    
+    [_animatedViews addObjectsFromArray:@[view1, view2]];
+    CGFloat animationTimeCoef = compoundImageWidth / [self getCompoundImageWidth:kBaseImagesCount];
+    [UIView animateWithDuration:kAnimationDuration * animationTimeCoef delay:0. options:UIViewAnimationOptionRepeat | UIViewAnimationOptionCurveLinear animations:^{
+        CGRect fr1;
+        CGRect fr2;
+        if (rightToLeft)
+        {
+            fr1 = CGRectOffset(view1.frame, -1 * view1.frame.size.width, 0.);
+            fr2 = CGRectOffset(view2.frame, -1 * view2.frame.size.width, 0.);
+        }
+        else
+        {
+            fr1 = CGRectOffset(view1.frame, view1.frame.size.width, 0.);
+            fr2 = CGRectOffset(view2.frame, view2.frame.size.width, 0.);
+        }
+        view1.frame = fr1;
+        view2.frame = fr2;
+    } completion:nil];
+    
+    return CGRectGetMaxY(rect1);
+}
+
+- (UIColor *) createPatternColorFromImages:(NSArray<UIImage *> *)images tintColor:(UIColor *)tintColor
+{
+    CGFloat imageWidth = 52.;
+    CGFloat circleWidth = 42.;
+    CGSize size = CGSizeMake(imageWidth * images.count, 52.);
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0);
+    CGContextRef contextRef = UIGraphicsGetCurrentContext();
+    for (NSInteger i = 0; i < images.count; i++)
+    {
+        UIImage *img = [OAUtilities tintImageWithColor:images[i] color:tintColor];
+        CGRect imgRect = CGRectMake(imageWidth * i + 10., (size.height - img.size.height) / 2, img.size.width, img.size.height);
+        [img drawInRect:imgRect];
+        
+        CGPoint center = CGPointMake(CGRectGetMidX(imgRect), CGRectGetMidY(imgRect));
+        CGRect circleRect = CGRectMake(center.x - (circleWidth / 2), center.y - (circleWidth / 2), circleWidth, circleWidth);
+        CGContextSetLineWidth(contextRef, 2.0);
+        CGContextSetStrokeColorWithColor(contextRef, [[tintColor colorWithAlphaComponent:.1] CGColor]);
+        CGContextStrokeEllipseInRect(contextRef, circleRect);
+    }
+    UIImage *resImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return [UIColor colorWithPatternImage:resImage];
 }
 
 - (void)setUpViewWithTitle:(NSString *)title description:(NSString *)description image:(UIImage *)image topButtonTitle:(NSString *)topButtonTitle bottomButtonTitle:(NSString *)bottomButtonTitle

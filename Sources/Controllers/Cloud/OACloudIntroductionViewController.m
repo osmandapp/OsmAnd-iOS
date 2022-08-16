@@ -48,7 +48,9 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self setUpTableHeaderView];
         self.tableView.tableHeaderView = _headerView;
-    } completion:nil];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [_headerView addAnimatedViews];
+    }];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle

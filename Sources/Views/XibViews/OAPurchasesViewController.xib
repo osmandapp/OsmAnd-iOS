@@ -44,7 +44,7 @@
                                 <constraint firstAttribute="height" constant="44" id="xbL-RI-bxj"/>
                             </constraints>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <state key="normal" image="ic_custom_reset.png"/>
+                            <state key="normal" image="ic_navbar_reset.png"/>
                             <connections>
                                 <action selector="onRestoreButtonPressed:" destination="-1" eventType="touchUpInside" id="3rX-w7-v8a"/>
                             </connections>
@@ -90,7 +90,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_reset.png" width="30" height="30"/>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
+        <image name="ic_navbar_reset.png" width="28" height="28"/>
     </resources>
 </document>

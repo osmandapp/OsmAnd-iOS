@@ -609,17 +609,20 @@
         [fm createDirectoryAtPath:dest withIntermediateDirectories:YES attributes:nil error:nil];
 
     NSArray *files = [fm contentsOfDirectoryAtPath:src error:nil];
-
+    BOOL tryAgain = NO;
     for (NSString *file in files)
     {
+        if ([fm fileExistsAtPath:[dest stringByAppendingPathComponent:file]])
+            continue;
         NSError *err = nil;
         [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
                     toPath:[dest stringByAppendingPathComponent:file]
                      error:&err];
         if (err)
-            return NO;
+            tryAgain = YES;
     }
-    [fm removeItemAtPath:src error:nil];
+    if (!tryAgain)
+        [fm removeItemAtPath:src error:nil];
     return YES;
 }
 

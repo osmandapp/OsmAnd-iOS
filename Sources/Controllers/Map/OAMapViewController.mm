@@ -1086,12 +1086,18 @@
         [recognizer setRotation:0];
 
         [self restoreMapArrowsLocation];
-        // Resume symbols update
-        while (![_mapView resumeSymbolsUpdate]);
+
+        if (recognizer.state == UIGestureRecognizerStateEnded ||
+            recognizer.state == UIGestureRecognizerStateCancelled)
+        {
+            // Resume symbols update
+            while (![_mapView resumeSymbolsUpdate]);
+        }
+
         _rotatingByGesture = NO;
         return;
     }
-    
+
     // Get center of all touches as centroid
     CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
     for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)

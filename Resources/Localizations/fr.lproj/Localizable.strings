@@ -179,7 +179,7 @@
 "reminder_not_set_text" = "Le rappel n'a pas été établi car vous n'êtes pas autorisé à accéder au calendrier";
 //inapps
 "product_title_nautical" = "Carte marine";
-"product_desc_nautical" = "Carte marine du monde entier";
+"product_desc_nautical" = "Une carte vectorielle adapté à la navigation maritime";
 "product_title_africa" = "Afrique";
 "product_desc_africa" = "Téléchargement illimité de cartes pour l'Afrique";
 "product_title_australia" = "Australie";
@@ -240,10 +240,10 @@
 "alert_inet_needed" = "Connexion Internet requise pour effectuer cette action. Veuillez vérifier votre connexion Internet.";
 "ctx_mnu_add_fav" = "Ajouter un favori";
 "loc_access_denied_desc" = "L'accès au service de localisation a été refusé";
-"product_title_track_recording" = "Enregistrement de la trace";
+"product_title_track_recording" = "Enregistrement du trajet";
 "product_title_trip_planning" = "Planification de voyage";
 "product_title_allworld" = "Toutes les cartes du monde";
-"product_desc_wiki" = "Données de Wikipédia";
+"product_desc_wiki" = "Articles Wikipédia sur la carte en fonction de la position";
 "my_location" = "Ma position";
 "get_unlimited_access" = "Obtenir un accès illimité";
 "res_installing" = "Installation…";
@@ -360,10 +360,10 @@
 // Help
 "help_quiz" = "Jeu-questionnaire";
 "product_title_parking" = "Emplacement de stationnement";
-"product_desc_parking" = "Vous permet de retenir facilement l'emplacement et le temps restant (s'il y en a un) de stationnement";
+"product_desc_parking" = "Suivre le temps et la position de stationnement de votre voiture";
 "product_title_skimap" = "Plan des pistes";
 "product_desc_skimap" = "Pistes de ski pour toutes les stations de ski dans le monde";
-"product_desc_track_recording" = "Active la fonctionnalité pour enregistrer et sauvegarder vos traces";
+"product_desc_track_recording" = "Enregistre et sauvegarde vos trajets dans des traces GPX";
 "product_desc_trip_planning" = "Planifiez votre trajets, ajoutez des points de passage, mesurez la distance à votre destination avec ce greffon";
 "product_desc_allworld" = "Cartes du Monde";
 "product_title_srtm" = "Courbes de niveau";
@@ -983,7 +983,7 @@
 "product_desc_ext_skimap" = "OsmAnd Ski Maps est un plugin de l'application OsmAnd Maps&Navigation conçu pour naviguer sur les sites de sports d'hiver. Il donne des informations sur les pistes de ski, des repères de remontées mécaniques et même des lignes colorées indiquant la complexité de chaque piste. Vous obtiendrez des informations sur les pistes de ski elles-mêmes ainsi que sur les infrastructures environnantes.\n\nInstructions d'utilisation : Activez le plugin dans l'application OsmAnd, appuyez sur le bouton Carte et réglez le type de carte sur Carte de ski.";
 "product_desc_ext_trip_planning" = "Le plugin de planification de trajet vous permet de créer votre trajet sur la carte, de le sauvegarder, de mesurer la distance entre les points reliés par des lignes droites, etc. Conçu pour la planification préliminaire des trajets plutôt que pour la construction d'un itinéraire complet.";
 "product_title_osm_editing" = "Edition d'OpenStreetMap";
-"product_desc_osm_editing" = "Apporter des modifications à OpenStreetMap directement depuis OsmAnd";
+"product_desc_osm_editing" = "Transformez votre téléphone mobile en outil de cartographie";
 "product_desc_ext_osm_editing" = "OSM Editing plugin peut être utilisé pour faire des contributions OSM comme créer ou modifier des objets POI, ouvrir ou commenter des notes OSM, et contribuer des fichiers GPX enregistrés. OSM est un projet communautaire de cartographie du domaine public mondial. Pour plus d'informations, veuillez consulter le site https://osm.org. Les contributions peuvent être faites directement depuis OsmAnd, si vous spécifiez vos identifiants OSM dans l'application.";
 "product_desc_ext_srtm" = "Ce plugin fournit des courbes de niveau et des ombres de collines, qui peuvent être affichées sur des cartes OsmAnd hors ligne. Les courbes de niveau fournissent des informations sur les hauteurs de la zone tandis que l'ombre des collines est leur visualisation. Voir les noms des sommets de montagne et les caractéristiques spécifiques du terrain à l'aide de ce plugin.\n\nLes données globales (entre 70 degrés nord et 70 degrés sud) sont basées sur des mesures effectuées par SRTM (Shuttle Radar Topography Mission) et ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), un instrument d'imagerie à bord de Terra, le satellite phare du système d'observation de la Terre de la NASA. ASTER est un effort de coopération entre la NASA, le ministère japonais de l'économie, du commerce et de l'industrie (METI) et Japan Space Systems (J-spacesystems).";
 "product_desc_ext_wikivoyage" = "Guides des lieux les plus intéressants au monde depuis OsmAnd et sans connexion Internet.";
@@ -2112,10 +2112,10 @@
 "suggested_maps_descr" = "Ces cartes sont nécessaires pour utiliser l\'extension.";
 "suggested_maps" = "Cartes suggérées";
 "product_desc_ext_openplacereviews" = "Envoyez des photos, des avis et des liens sur des lieux publics tels que des restaurants, des hôtels, des musées et des waypoints en tant que données ouvertes https://openplacereviews.org/data/.\n\nEn savoir plus sur https://openplacereviews.org";
-"product_desc_openplacereviews" = "Envoyer des photos, des avis et des liens sur les lieux publics";
+"product_desc_openplacereviews" = "Partager vos avis sur les lieux publics";
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "product_desc_ext_mapillary" = "Des photos détaillées en ligne pour tous. Découvrez des lieux, collaborez, capturez le monde.";
-"product_desc_mapillary" = "Photos en ligne au niveau des rues pour tout le monde";
+"product_desc_mapillary" = "Des photos des rues pour vérifier les alentours";
 "product_title_mapillary" = "Mapillary";
 "no_waypoints_found" = "Aucun waypoint trouvé";
 "replace_waypoint_confirmation" = "Remplacer le Waypoint %@ ?";
@@ -2462,7 +2462,7 @@
 "routing_attr_allow_private_for_truck_name" = "Autoriser l\'accès privé (camion)";
 "plugin_popup_weather_title" = "Activer la météo";
 "plugin_popup_weather_ask" = "Veuillez activer le greffon Météo";
-"product_desc_weather" = "Prévisions horaires sur 24h & ; prévisions sur 7 jours toutes les 3 heures";
+"product_desc_weather" = "Prévisions horaires 24h/24 et sur 7 jours sur la carte";
 "product_desc_ext_weather" = "Le plugin météo fournit\n- 5 couches... prévisions horaires sur 24h & ; prévisions sur 7 jours toutes les 3 heures\n- widgets basés sur la localisation\n- isolignes de température / pression\nLes données météorologiques sont fournies par GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
 "measurement_units" = "Unités de mesure";
 "weather_pressure_unit_hpa" = "Hectopascals";
@@ -2544,7 +2544,7 @@
 "routing_attr_hazmat_category_name" = "Transport des matières dangereuses";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Aucune restriction)";
 "pro_features" = "Fonctionnalités Pro";
-"product_desc_development" = "Paramètres de développement et de débogage";
+"product_desc_development" = "Pour les développeurs et utilisateurs avancés";
 "osm_live_payment_year_cost_descr" = "%@ par an";
 "option_available_only_by_subscription" = "Disponible dans les formules de souscription";
 "subscription_cancel_description" = "Annulez n'importe quand dans l'AppStore.";
@@ -2617,3 +2617,24 @@
 "restore_backup_descr" = "Restaurer les données de l'appareil en utilisant des sauvegardes en ligne";
 "service_is_not_available_please_try_later" = "Ce service est actuellement indisponible. Veuillez réessayer plus tard.";
 "weather_forecast" = "Prévisions météo";
+"shared_string_updates_frequency" = "Fréquence des mises à jour";
+"shared_string_clear_offline_cache" = "Effacer le cache hors-ligne";
+"tomorrow" = "Demain";
+"update_parameters" = "Mettre à jours les paramètres";
+"other_countries" = "Autres pays";
+"with_offline_maps" = "Avec les cartes hors-ligne";
+"update_only_over_wi_fi" = "Mettre à jour par Wifi";
+"weather_miss_forecasts" = "Vous n'avez pas de prévision hors-ligne";
+"weather_remove_forecast_description" = "Êtes-vous sûr(e) de supprimer les prévisions pour %@";
+"weather_remove_forecasts_description" = "Êtes-vous sûr(e) de supprimer les prévisions pour les pays : %d.";
+"weather_updates_automatically" = "OsmAnd téléchargement les mises à jour automatiquement quand il sera lancé.";
+"weather_clear_offline_cache_for" = "Cela va effacer tout le cache hors-ligne des tuiles de météo pour %@.";
+"weather_miss_forecasts_description" = "Les prévisions hors-ligne sont disponible par pays. Pour une prévisions jusqu'à 7 jours. Vous devez sélectionner les pays.";
+"shared_string_available_until" = "Disponible jusqu'à";
+"shared_string_status" = "État";
+"shared_string_updated" = "Mis à jour";
+"shared_string_updates_size" = "Taille des mises à jour";
+"weather_remove_forecast" = "Supprimer les prévisions";
+"weather_forecast_is_outdated" = "Les prévisions ne sont plus à jour.";
+"shared_string_selected" = "Sélectionné";
+"shared_string_next_update" = "Prochaine mise à jour";

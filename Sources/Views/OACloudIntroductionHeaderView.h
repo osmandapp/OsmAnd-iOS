@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setUpViewWithTitle:(NSString *)title description:(NSString *)description image:(UIImage *)image topButtonTitle:(NSString *)topButtonTitle bottomButtonTitle:(NSString *)bottomButtonTitle;
 - (CGFloat)calculateViewHeight;
 
+- (void)addAnimatedViews;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -102,6 +102,8 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 @interface OASearchLocationAndUrlAPI : OASearchBaseAPI
 
+- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI;
+
 + (OASearchResult *)getBestMatchedOLCSearchResult:(NSArray<OASearchResult *> *)searchResults phraseName:(NSString *)phraseName;
 
 @end
@@ -110,7 +112,7 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 @interface OASearchCoreFactory : NSObject
 
 + (BOOL) DISPLAY_DEFAULT_POI_TYPES;
-+ (BOOL) setDisplayDefaultPoiTypes:(BOOL)value;
++ (void) setDisplayDefaultPoiTypes:(BOOL)value;
 
 
 @end

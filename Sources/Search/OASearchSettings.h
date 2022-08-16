@@ -30,6 +30,8 @@
 - (OASearchSettings *) setTotalLimit:(int)totalLimit;
 - (CLLocation *) getOriginalLocation;
 - (OASearchSettings *) setOriginalLocation:(CLLocation *)l;
+- (QuadRect *) getSearchBBox31;
+- (OASearchSettings *) setSearchBBox31:(QuadRect *)searchBBox31;
 - (BOOL) isTransliterate;
 
 - (NSArray<OAObjectType *> *)getSearchTypes;

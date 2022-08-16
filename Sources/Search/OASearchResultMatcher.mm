@@ -25,7 +25,7 @@
     OASearchPhrase *_phrase;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -35,7 +35,11 @@
     return self;
 }
 
-- (instancetype)initWithMatcher:(OAResultMatcher<OASearchResult *> *)matcher phrase:(OASearchPhrase *)phrase request:(int)request requestNumber:(OAAtomicInteger *)requestNumber totalLimit:(int)totalLimit
+- (instancetype) initWithMatcher:(OAResultMatcher<OASearchResult *> *)matcher
+                          phrase:(OASearchPhrase *)phrase
+                         request:(int)request
+                   requestNumber:(OAAtomicInteger *)requestNumber
+                      totalLimit:(int)totalLimit
 {
     self = [self init];
     if (self)
@@ -155,8 +159,7 @@
         object.alternateName = nil;
     }
     object.parentSearchResult = _parentSearchResult;
-    BOOL matcherPublish = !_phrase.isMainUnknownSearchWordOLC || object.objectType == LOCATION || object.objectType == PARTIAL_LOCATION;
-    if (!matcherPublish || !_matcher || [_matcher publish:object])
+    if (!_matcher || [_matcher publish:object])
     {
         _count++;
         if (_totalLimit == -1 || _count < _totalLimit) {
@@ -169,7 +172,7 @@
 
 -(BOOL)isCancelled
 {
-    BOOL cancelled = _request != [_requestNumber get];
+    BOOL cancelled = _requestNumber && _request != [_requestNumber get];
     return cancelled || (_matcher && [_matcher isCancelled]);
 }
 

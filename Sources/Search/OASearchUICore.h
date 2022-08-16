@@ -47,8 +47,11 @@ typedef void (^OASearchUICoreRunnable)();
 - (instancetype) initWithLang:(NSString *)lang transliterate:(BOOL)transliterate;
 
 - (OASearchCoreAPI *) getApiByClass:(Class)cl;
+
 - (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher;
 - (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates;
+- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings;
+
 - (void) initApi;
 
 - (void) clearCustomSearchPoiFilters;

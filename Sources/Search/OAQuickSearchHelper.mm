@@ -360,60 +360,55 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     });
 }
 
-+ (NSArray<OASearchResult *> *)searchCities:(NSString *)text
-                             searchLocation:(CLLocation *)searchLocation
-                               allowedTypes:(NSArray<NSString *> *)allowedTypes
-                                  cityLimit:(NSInteger)cityLimit
-                                 onComplete:(void (^)(NSArray *amenities))onComplete
+- (void) searchAmenities:(NSString *)text
+          searchLocation:(CLLocation *)searchLocation
+            searchBBox31:(QuadRect *)searchBBox31
+            allowedTypes:(NSArray<NSString *> *)allowedTypes
+                   limit:(NSInteger)limit
+              onComplete:(void (^)(NSArray<OASearchResult *> *searchResults))onComplete
 {
     OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
-    NSString * lang = [OAAppSettings.sharedManager.settingPrefMapLanguage get];
+    NSString *lang = [OAAppSettings.sharedManager.settingPrefMapLanguage get];
+    const auto qLang = QString::fromNSString(lang);
     BOOL transliterate = [OAAppSettings.sharedManager.settingMapLanguageTranslit get];
-    NSMutableArray *amenities = [NSMutableArray array];
 
-    OAQuickSearchHelper *_searchHelper = OAQuickSearchHelper.instance;
-    OASearchUICore *_searchUICore = _searchHelper.getCore;
-    OASearchSettings *settings = [[_searchUICore getSearchSettings] setOriginalLocation:OsmAndApp.instance.locationServices.lastKnownLocation];
+    OASearchSettings *settings = [_core.getSearchSettings setOriginalLocation:OsmAndApp.instance.locationServices.lastKnownLocation];
     settings = [settings setLang:lang ? lang : @"" transliterateIfMissing:transliterate];
     settings = [settings setSortByName:NO];
     settings = [settings setAddressSearch:YES];
     settings = [settings setEmptyQueryAllowed:YES];
     settings = [settings setOriginalLocation:searchLocation];
-    [_searchUICore updateSettings:settings];
+    settings = [settings setSearchBBox31:searchBBox31];
 
-    dispatch_async(dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL), ^{
+    dispatch_async(dispatch_queue_create("quickSearch_searchAmenitiesQueue", DISPATCH_QUEUE_SERIAL), ^{
         int __block count = 0;
-
-        [_searchUICore shallowSearch:OASearchAmenityByNameAPI.class text:text matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+        OASearchResultCollection *result = [_core shallowSearch:OASearchAmenityByNameAPI.class text:text matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
 
             OASearchResult *searchResult = *object;
-            std::shared_ptr<const OsmAnd::Amenity> amenity = searchResult.amenity;
+            const auto& amenity = searchResult.amenity;
             if (!amenity)
                 return NO;
 
-            if (count++ > cityLimit)
+            if (count++ > limit)
                 return NO;
 
-            NSArray<NSString *> *otherNames = searchResult.otherNames;
-            NSString *localeName = amenity->getName(QString(lang.UTF8String), transliterate).toNSString();
             NSString *subType = amenity->subType.toNSString();
+            NSString *localeName = amenity->getName(qLang, transliterate).toNSString();
+            NSArray<NSString *> *otherNames = searchResult.otherNames;
 
             if (![allowedTypes containsObject:subType] || (![nm matches:localeName] && ![nm matchesMap:otherNames]))
                 return NO;
 
-            [amenities addObject:searchResult];
             return NO;
         } cancelledFunc:^BOOL{
-            return count > cityLimit;
-        }] resortAll:YES removeDuplicates:YES];
+            return count > limit;
+        }] resortAll:YES removeDuplicates:YES searchSettings:settings];
 
         dispatch_async(dispatch_get_main_queue(), ^{
             if (onComplete)
-                onComplete([NSArray arrayWithArray:amenities]);
+                onComplete([result getCurrentSearchResults]);
         });
     });
-
-    return amenities;
 }
 
 @end

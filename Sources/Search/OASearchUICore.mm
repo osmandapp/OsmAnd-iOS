@@ -511,10 +511,15 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 
 - (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates
 {
+    [self shallowSearch:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:_searchSettings];
+}
+
+- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings
+{
     OASearchCoreAPI *api = [self getApiByClass:cl];
     if (api)
     {
-        OASearchPhrase *sphrase = [_phrase generateNewPhrase:text settings:_searchSettings];
+        OASearchPhrase *sphrase = [_phrase generateNewPhrase:text settings:searchSettings];
         [self preparePhrase:sphrase];
         OAAtomicInteger *ai = [OAAtomicInteger atomicInteger:0];
         OASearchResultMatcher *rm = [[OASearchResultMatcher alloc] initWithMatcher:matcher phrase:sphrase request:[ai get] requestNumber:ai totalLimit:totalLimit];
@@ -532,11 +537,12 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 
 - (void) initApi
 {
-    [_apis addObject:[[OASearchLocationAndUrlAPI alloc] init]];
+    OASearchAmenityByNameAPI *amenitiesApi = [[OASearchAmenityByNameAPI alloc] init];
+    [_apis addObject:[[OASearchLocationAndUrlAPI alloc] initWithAPI:amenitiesApi]];
     OASearchAmenityTypesAPI *searchAmenityTypesAPI = [[OASearchAmenityTypesAPI alloc] init];
     [_apis addObject:searchAmenityTypesAPI];
     [_apis addObject:[[OASearchAmenityByTypeAPI alloc] initWithTypesAPI:searchAmenityTypesAPI]];
-    [_apis addObject:[[OASearchAmenityByNameAPI alloc] init]];
+    [_apis addObject:amenitiesApi];
     OASearchBuildingAndIntersectionsByStreetAPI *streetsApi = [[OASearchBuildingAndIntersectionsByStreetAPI alloc] init];
     [_apis addObject:streetsApi];
     OASearchStreetByCityAPI *cityApi = [[OASearchStreetByCityAPI alloc] initWithAPI:streetsApi];
@@ -798,6 +804,9 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         {
             NSLog(@"OASearchUICore.searchInBackground error %@", e);
         }
+
+        if ([api isSearchDone:phrase])
+            break;
     }
 }
 

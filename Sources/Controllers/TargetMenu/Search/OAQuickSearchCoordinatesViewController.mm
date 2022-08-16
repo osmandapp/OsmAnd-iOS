@@ -38,6 +38,7 @@
 #import "OAQuickSearchListItem.h"
 #import "OASearchResult.h"
 #import "OASearchCoreFactory.h"
+#import "QuadRect.h"
 
 #import "OsmAnd_Maps-Swift.h"
 #import <OsmAndCore/Utilities.h>
@@ -773,17 +774,17 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 {
     _isOlcCitySearchRunning = YES;
     [self.view addSpinner];
-    [OAQuickSearchHelper searchCities:_olcSearchingCity
-                       searchLocation:_searchLocation
-                         allowedTypes:@[@"city", @"town", @"village"]
-                            cityLimit:kSearchCityLimit
-                           onComplete:^(NSArray *amenities)
-                           {
-                               _isOlcCitySearchRunning = NO;
-                                [self onCitiesSearchDone:amenities];
-                                [self.view removeSpinner];
-                           }
-    ];
+    [OAQuickSearchHelper.instance searchAmenities:_olcSearchingCity
+                                   searchLocation:_searchLocation
+                                     searchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]
+                                     allowedTypes:@[@"city", @"town", @"village"]
+                                            limit:kSearchCityLimit
+                                       onComplete:^(NSArray<OASearchResult *> *searchResults)
+    {
+        _isOlcCitySearchRunning = NO;
+        [self onCitiesSearchDone:searchResults];
+        [self.view removeSpinner];
+    }];
 }
 
 - (void) onCitiesSearchDone:(NSArray<OASearchResult *> *)searchResults

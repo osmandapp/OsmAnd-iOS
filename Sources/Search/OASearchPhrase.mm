@@ -59,7 +59,6 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 // Main unknown word used for search
 @property (nonatomic) NSString *mainUnknownWordToSearch;
 @property (nonatomic) BOOL mainUnknownSearchWordComplete;
-@property (nonatomic) BOOL mainUnknownSearchWordOLC;
 
 // Name Searchers
 @property (nonatomic) OANameStringMatcher *firstUnknownNameStringMatcher;
@@ -353,14 +352,6 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     if (_mainUnknownWordToSearch != nil)
         return;
     
-    if ([OALocationParser isValidOLC:_firstUnknownSearchWord] && _otherUnknownWords.count > 0)
-    {
-        _mainUnknownWordToSearch = _otherUnknownWords[0];
-        _mainUnknownSearchWordComplete = YES;
-        _mainUnknownSearchWordOLC = YES;
-        return;
-    }
-    
     NSMutableArray<NSString *> *unknownSearchWords = _otherUnknownWords;
     _mainUnknownWordToSearch = _firstUnknownSearchWord;
     _mainUnknownSearchWordComplete = _lastUnknownSearchWordComplete;
@@ -386,7 +377,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         }];
         for (NSString *s in searchWords)
         {
-            if (s.length > 0 && ![OALocationParser isValidOLC:s])
+            if (s.length > 0)
             {
                 _mainUnknownWordToSearch = s.trim;
                 if ([_mainUnknownWordToSearch hasSuffix:@"."])
@@ -408,12 +399,6 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 - (BOOL) isMainUnknownSearchWordComplete
 {
     return _mainUnknownSearchWordComplete;
-}
-
-- (BOOL) isMainUnknownSearchWordOLC
-{
-    [self calcMainUnknownWordToSearch];
-    return _mainUnknownSearchWordOLC;
 }
 
 - (BOOL) hasMoreThanOneUnknownSearchWord
@@ -480,10 +465,11 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return _firstUnknownSearchWord.length > 0;
 }
 
-- (QuadRect *) getRadiusBBoxToSearch:(int)radius
+- (QuadRect *) getRadiusBBox31ToSearch:(int)radius
 {
-    if (_mainUnknownSearchWordOLC)
-        return [[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX];
+    QuadRect *searchBBox31 = self.settings.getSearchBBox31;
+    if (searchBBox31)
+        return searchBBox31;
 
     int radiusInMeters = [self getRadiusSearch:radius];
     QuadRect *cache1kmRect = [self get1km31Rect];
@@ -524,7 +510,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt
 {
-    QuadRect *rect = meters > 0 ? [self getRadiusBBoxToSearch:meters] : nil;
+    QuadRect *rect = meters > 0 ? [self getRadiusBBox31ToSearch:meters] : nil;
     return [self getOfflineIndexes:rect dt:dt];
     
 }

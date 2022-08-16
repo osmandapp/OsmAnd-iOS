@@ -40,6 +40,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OAWeatherHelper.h"
 #import "OAWeatherForecastDetailsViewController.h"
+#import "QuadRect.h"
 
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -1499,69 +1500,69 @@ static BOOL _repositoryUpdated = NO;
 
         // Regions that start with given name have higher priority
         NSPredicate *startsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", searchString];
-        NSMutableArray *regions_startsWith = [[searchableContent filteredArrayUsingPredicate:startsWith] mutableCopy];
-        if ([regions_startsWith count] == 0)
+        NSMutableArray *regionsStartsWith = [[searchableContent filteredArrayUsingPredicate:startsWith] mutableCopy];
+        if ([regionsStartsWith count] == 0)
         {
             NSPredicate *anyStartsWith = [NSPredicate predicateWithFormat:@"ANY allNames BEGINSWITH[cd] %@", searchString];
-            [regions_startsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyStartsWith]];
+            [regionsStartsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyStartsWith]];
         }
-        [regions_startsWith sortUsingComparator:regionComparator];
+        [regionsStartsWith sortUsingComparator:regionComparator];
 
         // Regions that only contain given string have less priority
         NSPredicate *onlyContains = [NSPredicate predicateWithFormat:
                                      @"(name CONTAINS[cd] %@) AND NOT (name BEGINSWITH[cd] %@)",
                                      searchString,
                                      searchString];
-        NSMutableArray *regions_onlyContains = [[searchableContent filteredArrayUsingPredicate:onlyContains] mutableCopy];
-        if ([regions_onlyContains count] == 0)
+        NSMutableArray *regionsOnlyContains = [[searchableContent filteredArrayUsingPredicate:onlyContains] mutableCopy];
+        if ([regionsOnlyContains count] == 0)
         {
             NSPredicate *anyOnlyContains = [NSPredicate predicateWithFormat:
                                             @"(ANY allNames CONTAINS[cd] %@) AND NOT (ANY allNames BEGINSWITH[cd] %@)",
                                             searchString,
                                             searchString];
-            [regions_onlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyOnlyContains]];
+            [regionsOnlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyOnlyContains]];
         }
-        [regions_onlyContains sortUsingComparator:regionComparator];
+        [regionsOnlyContains sortUsingComparator:regionComparator];
 
         // Assemble all regions all togather
-        NSArray *regions = [regions_startsWith arrayByAddingObjectsFromArray:regions_onlyContains];
+        NSArray *regions = [regionsStartsWith arrayByAddingObjectsFromArray:regionsOnlyContains];
         NSArray *resultByContains = [self createSearchResult:regions byMapRegion:NO];
         _searchResults = resultByContains;
         [_tableView reloadData];
 
         [self.view addSpinner];
-        [OAQuickSearchHelper searchCities:searchString
-                           searchLocation:[[CLLocation alloc] initWithLatitude:_app.worldRegion.bboxTopLeft.latitude longitude:_app.worldRegion.bboxBottomRight.longitude]
-                             allowedTypes:@[@"city", @"town"]
-                                cityLimit:kSearchCityLimit
-                               onComplete:^(NSArray *amenities)
-                               {
-                                   NSMutableArray *regions_byCity = [NSMutableArray array];
-                                   for (OASearchResult *amenity in amenities)
-                                   {
-                                       OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
-                                       if (region)
-                                       {
-                                           NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
-                                           if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
-                                           {
-                                               amenity.relatedObject = searchResult.firstObject;
-                                               [regions_byCity addObject:amenity];
-                                           }
-                                           else
-                                           {
-                                               [regions_byCity addObjectsFromArray:searchResult];
-                                           }
-                                       }
-                                   }
-                                   if (regions_byCity.count > 0)
-                                   {
-                                       _searchResults = [resultByContains arrayByAddingObjectsFromArray:regions_byCity];
-                                       [_tableView reloadData];
-                                   }
-                                   [self.view removeSpinner];
-                               }
-        ];
+        [OAQuickSearchHelper.instance searchAmenities:searchString
+                                       searchLocation:_app.locationServices.lastKnownLocation
+                                         searchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]
+                                         allowedTypes:@[@"city", @"town"]
+                                                limit:kSearchCityLimit
+                                           onComplete:^(NSArray<OASearchResult *> *searchResults)
+         {
+            NSMutableArray *regionsByCity = [NSMutableArray array];
+            for (OASearchResult *amenity in searchResults)
+            {
+                OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
+                if (region)
+                {
+                    NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
+                    if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
+                    {
+                        amenity.relatedObject = searchResult.firstObject;
+                        [regionsByCity addObject:amenity];
+                    }
+                    else
+                    {
+                        [regionsByCity addObjectsFromArray:searchResult];
+                    }
+                }
+            }
+            if (regionsByCity.count > 0)
+            {
+                _searchResults = [resultByContains arrayByAddingObjectsFromArray:regionsByCity];
+                [_tableView reloadData];
+            }
+            [self.view removeSpinner];
+        }];
     }
 }
 

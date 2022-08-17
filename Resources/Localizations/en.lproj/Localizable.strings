@@ -2765,6 +2765,9 @@
 "app_store" = "App Store";
 "promo" = "Promo";
 "purchase_origin" = "Purchase origin";
+"contact_support" = "Contact support";
+"contact_support_description" = "If you have any questions, please contact us at support@osmand.net.";
+"loading_purchase_information" = "Loading purchase information";
 
 "shared_string_now" = "Now";
 

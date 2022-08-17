@@ -12,15 +12,18 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAChoosePlanHelper.h"
-#import "OAMultiIconTextDescCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OALargeImageTitleDescrTableViewCell.h"
 #import "OACardButtonCell.h"
 #import "OAIconTitleValueCell.h"
+#import "OAActivityViewWithTitleCell.h"
+#import "OADividerCell.h"
 #import "OAColors.h"
 #import "OALinks.h"
 #import <SafariServices/SafariServices.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
-@interface OAPurchasesViewController () <UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate>
+@interface OAPurchasesViewController () <UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -36,6 +39,7 @@
     OAIAPHelper *_iapHelper;
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSMapTable<NSNumber *, NSString *> *_headers;
+    BOOL _checkPurchaseInformation;
 }
 
 -(void) applyLocalization
@@ -47,134 +51,202 @@
 {
     [super viewDidLoad];
 
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
     _iapHelper = [OAIAPHelper sharedInstance];
     [[OARootViewController instance] restorePurchasesWithProgress:NO];
     [self generateData];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
 - (void) generateData
 {
-    NSArray<OAProduct *> *mainPurchases = [_iapHelper getEverMadeMainPurchases];
-    NSMutableArray<OAProduct *> *activeProducts = [NSMutableArray array];
-    NSMutableArray<OAProduct *> *expiredProducts = [NSMutableArray array];
-    for (OAProduct *product in mainPurchases)
+    NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray array];
+    if (!_checkPurchaseInformation)
     {
-        if (product.purchaseState == PSTATE_PURCHASED)
-            [activeProducts addObject:product];
-        else if (product.purchaseState == PSTATE_NOT_PURCHASED)
-            [expiredProducts addObject:product];
+        [data addObject:@[@{
+                @"key": @"loading_information",
+                @"type": [OAActivityViewWithTitleCell getCellIdentifier],
+                @"title": OALocalizedString(@"loading_purchase_information"),
+        }]];
     }
-    // Display old purchases if no new purchases are active
-    if (activeProducts.count == 0)
+    else
     {
-        for (OAProduct *product in _iapHelper.inAppsPurchased)
+        NSArray<OAProduct *> *mainPurchases = [_iapHelper getEverMadeMainPurchases];
+        NSMutableArray<OAProduct *> *activeProducts = [NSMutableArray array];
+        NSMutableArray<OAProduct *> *expiredProducts = [NSMutableArray array];
+        for (OAProduct *product in mainPurchases)
         {
             if (product.purchaseState == PSTATE_PURCHASED)
                 [activeProducts addObject:product];
             else if (product.purchaseState == PSTATE_NOT_PURCHASED)
                 [expiredProducts addObject:product];
         }
-    }
+        // Display old purchases if no new purchases are active
+        if (activeProducts.count == 0)
+        {
+            for (OAProduct *product in _iapHelper.inAppsPurchased)
+            {
+                if (product.purchaseState == PSTATE_PURCHASED)
+                    [activeProducts addObject:product];
+                else if (product.purchaseState == PSTATE_NOT_PURCHASED)
+                    [expiredProducts addObject:product];
+            }
+        }
 
-    _headers = [NSMapTable new];
-    NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray array];
-    OAAppSettings *settings = OAAppSettings.sharedManager;
-    BOOL isProSubscriptionAvailable = [settings.backupPurchaseActive get];
-    if (activeProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
-    {
-        [data addObject:@[@{
-                @"key": @"no_purchases",
-                @"type": [OALargeImageTitleDescrTableViewCell getCellIdentifier],
-                @"icon": [UIImage templateImageNamed:@"ic_custom_shop_bag"],
-                @"icon_color": UIColorFromRGB(color_tint_gray),
-                @"title": OALocalizedString(@"no_purchases"),
-                @"description" : [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
-        }]];
-        [data addObject:@[@{
-                @"key": @"get_osmand_pro",
-                @"type": [OACardButtonCell getCellIdentifier],
-                @"icon": [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"],
-                @"title": OALocalizedString(@"product_title_pro"),
-                @"description" : OALocalizedString(@"osm_live_banner_desc"),
-                @"button_title": OALocalizedString(@"purchase_get"),
-                @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
-                @"button_icon_color": UIColorFromRGB(color_primary_purple),
-        }]];
-    }
-    else
-    {
-        if (activeProducts.count > 0 || isProSubscriptionAvailable)
+        _headers = [NSMapTable new];
+        OAAppSettings *settings = OAAppSettings.sharedManager;
+        BOOL isProSubscriptionAvailable = [settings.backupPurchaseActive get];
+        if (activeProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
         {
-            NSMutableArray *active = [NSMutableArray array];
-            if (isProSubscriptionAvailable)
+            [data addObject:@[
+                    @{
+                            @"type": [OADividerCell getCellIdentifier]
+                    },
+                    @{
+                            @"key": @"no_purchases",
+                            @"type": [OALargeImageTitleDescrTableViewCell getCellIdentifier],
+                            @"icon": [UIImage templateImageNamed:@"ic_custom_shop_bag_48"],
+                            @"icon_color": UIColorFromRGB(color_tint_gray),
+                            @"title": OALocalizedString(@"no_purchases"),
+                            @"description": [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
+                    },
+                    @{
+                            @"type": [OADividerCell getCellIdentifier]
+                    }
+            ]];
+            [data addObject:@[
+                    @{
+                            @"type": [OADividerCell getCellIdentifier]
+                    },
+                    @{
+                            @"key": @"get_osmand_pro",
+                            @"type": [OACardButtonCell getCellIdentifier],
+                            @"icon": [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"],
+                            @"title": OALocalizedString(@"product_title_pro"),
+                            @"description": OALocalizedString(@"osm_live_banner_desc"),
+                            @"button_title": OALocalizedString(@"purchase_get"),
+                            @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
+                            @"button_icon_color": UIColorFromRGB(color_primary_purple)
+                    },
+                    @{
+                            @"type": [OADividerCell getCellIdentifier]
+                    }
+            ]];
+        }
+        else
+        {
+            if (activeProducts.count > 0 || isProSubscriptionAvailable)
             {
-                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                formatter.dateStyle = NSDateFormatterMediumStyle;
-                NSString *dateString = @"";
-                NSString *datePattern = @"";
-                OASubscriptionState *state = [settings.backupPurchaseState get];
-                BOOL isPromo = ((EOASubscriptionOrigin) [settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
-                if (state != OASubscriptionState.EXPIRED)
-                    datePattern = OALocalizedString(@"expires");
-                else
-                    datePattern = OALocalizedString(@"expired");
-                long expiretime = [settings.backupPurchaseExpireTime get];
-                if (expiretime > 0)
+                NSMutableArray *active = [NSMutableArray array];
+                [active addObject:@{ @"type":[OADividerCell getCellIdentifier] }];
+                if (isProSubscriptionAvailable)
                 {
-                    NSDate *expireDate = [NSDate dateWithTimeIntervalSince1970:[settings.backupPurchaseExpireTime get]];
-                    dateString = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), datePattern,
-                                  expireDate ? [formatter stringFromDate:expireDate] : @""];
+                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                    formatter.dateStyle = NSDateFormatterMediumStyle;
+                    NSString *dateString = @"";
+                    NSString *datePattern = @"";
+                    OASubscriptionState *state = [settings.backupPurchaseState get];
+                    BOOL isPromo = ((EOASubscriptionOrigin) [settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
+                    if (state != OASubscriptionState.EXPIRED)
+                        datePattern = OALocalizedString(@"expires");
+                    else
+                        datePattern = OALocalizedString(@"expired");
+                    long expiretime = [settings.backupPurchaseExpireTime get];
+                    if (expiretime > 0)
+                    {
+                        NSDate *expireDate = [NSDate dateWithTimeIntervalSince1970:[settings.backupPurchaseExpireTime get]];
+                        dateString = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), datePattern,
+                                                                expireDate ? [formatter stringFromDate:expireDate] : @""];
+                    }
+                    [active addObject:@{
+                            @"key": @"product_pro_crossplatform",
+                            @"type": [OAMenuSimpleCell getCellIdentifier],
+                            @"icon": @"ic_custom_osmand_pro_logo_colored",
+                            @"title": isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro"),
+                            @"descr": dateString
+                    }];
+                    [active addObject:@{
+                            @"type":[OADividerCell getCellIdentifier],
+                            @"product_section": @(activeProducts.count > 0)
+                    }];
                 }
-                [active addObject:@{
-                    @"key" : @"product_pro_crossplatform",
-                    @"type" : [OAMultiIconTextDescCell getCellIdentifier],
-                    @"icon" : @"ic_custom_osmand_pro_logo_colored",
-                    @"title" : isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro"),
-                    @"descr" : dateString
-                }];
+                for (NSInteger i = 0; i < activeProducts.count; i++)
+                {
+                    OAProduct *product = activeProducts[i];
+                    [active addObject:@{
+                            @"key": [@"product_" stringByAppendingString:product.productIdentifier],
+                            @"type": [OAMenuSimpleCell getCellIdentifier],
+                            @"product": product
+                    }];
+                    [active addObject:@{
+                            @"type": [OADividerCell getCellIdentifier],
+                            @"product_section": @(i < activeProducts.count - 1)
+                    }];
+                }
+                [data addObject:active];
+                [_headers setObject:OALocalizedString(@"menu_active_trips") forKey:@(data.count - 1)];
             }
-            for (OAProduct *product in activeProducts)
+            if (expiredProducts.count > 0)
             {
-                [active addObject:@{
-                        @"key": [@"product_" stringByAppendingString:product.productIdentifier],
-                        @"type": [OAMultiIconTextDescCell getCellIdentifier],
-                        @"product": product
-                }];
+                NSMutableArray *expired = [NSMutableArray array];
+                [expired addObject:@{ @"type":[OADividerCell getCellIdentifier] }];
+                for (NSInteger i = 0; i < expiredProducts.count; i++)
+                {
+                    OAProduct *product = expiredProducts[i];
+                    [expired addObject:@{
+                            @"key": [@"product_" stringByAppendingString:product.productIdentifier],
+                            @"type": [OAMenuSimpleCell getCellIdentifier],
+                            @"product": product
+                    }];
+                    [expired addObject:@{
+                            @"type": [OADividerCell getCellIdentifier],
+                            @"product_section": @(i < expiredProducts.count - 1)
+                    }];
+                }
+                [data addObject:expired];
+                [_headers setObject:OALocalizedString(@"expired") forKey:@(data.count - 1)];
             }
-            [data addObject:active];
-            [_headers setObject:OALocalizedString(@"menu_active_trips") forKey:@(data.count - 1)];
+            [data addObject:@[
+                    @{
+                            @"type": [OADividerCell getCellIdentifier]
+                    },
+                    @{
+                            @"key": @"explore_osmnad_plans",
+                            @"type": [OACardButtonCell getCellIdentifier],
+                            @"title": OALocalizedString(@"explore_osmnad_plans_to_find_suitable"),
+                            @"button_title": OALocalizedString(@"shared_string_learn_more"),
+                            @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
+                            @"button_icon_color": UIColorFromRGB(color_primary_purple)
+                    },
+                    @{
+                            @"type": [OADividerCell getCellIdentifier]
+                    }
+            ]];
         }
-        if (expiredProducts.count > 0)
-        {
-            NSMutableArray *expired = [NSMutableArray array];
-            for (OAProduct *product in expiredProducts)
-            {
-                [expired addObject:@{
-                        @"key": [@"product_" stringByAppendingString:product.productIdentifier],
-                        @"type": [OAMultiIconTextDescCell getCellIdentifier],
-                        @"product": product
-                }];
-            }
-            [data addObject:expired];
-            [_headers setObject:OALocalizedString(@"expired") forKey:@(data.count - 1)];
-        }
-        [data addObject:@[@{
-            @"key": @"explore_osmnad_plans",
-            @"type": [OACardButtonCell getCellIdentifier],
-            @"title": OALocalizedString(@"explore_osmnad_plans_to_find_suitable"),
-            @"button_title": OALocalizedString(@"shared_string_learn_more"),
-            @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
-            @"button_icon_color": UIColorFromRGB(color_primary_purple)
-        }]];
     }
     
     [data addObject:@[
+        @{
+            @"type": [OADividerCell getCellIdentifier]
+        },
         @{
             @"key": @"restore_purchases",
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"title": OALocalizedString(@"restore_purchases"),
             @"icon": [UIImage templateImageNamed:@"ic_custom_reset"],
-            @"tint_color": UIColorFromRGB(color_primary_purple)
+            @"tint_color": UIColorFromRGB(color_primary_purple),
+        },
+        @{
+            @"type": [OADividerCell getCellIdentifier],
+            @"help_section": @(YES)
         },
         @{
             @"key": @"redeem_promo_code",
@@ -184,12 +256,34 @@
             @"tint_color": UIColorFromRGB(color_primary_purple)
         },
         @{
+            @"type": [OADividerCell getCellIdentifier],
+            @"help_section": @(YES)
+        },
+        @{
             @"key": @"new_device_account",
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"title": OALocalizedString(@"new_device_account"),
             @"icon": [UIImage templateImageNamed:@"ic_navbar_help"],
             @"tint_color": UIColorFromRGB(color_primary_purple)
-        }
+        },
+        @{
+            @"type": [OADividerCell getCellIdentifier]
+        },
+        @{
+            @"key": @"contact_support_description",
+            @"type": [OAIconTitleValueCell getCellIdentifier],
+            @"title": OALocalizedString(@"contact_support_description"),
+            @"tint_color": UIColorFromRGB(color_text_footer)
+        },
+        @{
+            @"key": @"contact_support",
+            @"type": [OAIconTitleValueCell getCellIdentifier],
+            @"title": OALocalizedString(@"contact_support"),
+            @"tint_color": UIColorFromRGB(color_primary_purple)
+        },
+        @{
+            @"type": [OADividerCell getCellIdentifier]
+        },
     ]];
     [_headers setObject:OALocalizedString(@"menu_help") forKey:@(data.count - 1)];
 
@@ -289,11 +383,17 @@
 
 - (IBAction) onRestoreButtonPressed:(id)sender
 {
+    _checkPurchaseInformation = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
+        [self.tableView reloadData];
+    });
     [[OARootViewController instance] restorePurchasesWithProgress:NO];
 }
 
 - (void) productPurchased:(NSNotification *)notification
 {
+    _checkPurchaseInformation = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self generateData];
         [self.tableView reloadData];
@@ -302,6 +402,7 @@
 
 - (void) productPurchaseFailed:(NSNotification *)notification
 {
+    _checkPurchaseInformation = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self generateData];
         [self.tableView reloadData];
@@ -310,6 +411,7 @@
 
 - (void) productsRestored:(NSNotification *)notification
 {
+    _checkPurchaseInformation = YES;
 //    NSNumber *errorsCountObj = notification.object;
 //    int errorsCount = errorsCountObj.intValue;
 
@@ -356,22 +458,26 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *) nib[0];
             [cell showLeftIcon:NO];
-            [cell showRightIcon:YES];
             cell.textView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
             cell.descriptionView.text = @"";
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(
-                    0.,
-                    [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1 == indexPath.row + 1 ? 0. : 20.,
-                    0.,
-                    0.
-            );
+            NSString *key = item[@"key"];
+            CGFloat leftInset = [key isEqualToString: @"new_device_account"]
+                    ? 0. : [key isEqualToString: @"contact_support_description"]
+                            ? CGFLOAT_MAX : 20.;
+            cell.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
 
             UIColor *tintColor = [item.allKeys containsObject:@"tint_color"] ? item[@"tint_color"] : UIColor.blackColor;
             cell.textView.text = item[@"title"];
             cell.textView.textColor = tintColor;
+
+            BOOL hasRightIcon = ![key hasPrefix:@"contact_support"];
+            [cell showRightIcon:hasRightIcon];
+            cell.selectionStyle = [key isEqualToString: @"contact_support_description"]
+                    ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
+
             cell.rightIconView.image = item[@"icon"];
             cell.rightIconView.tintColor = tintColor;
         }
@@ -397,6 +503,8 @@
             [cell showDescription:description != nil && description.length > 0];
 
             cell.titleView.text = item[@"title"];
+            cell.titleView.font = [item[@"key"] isEqualToString:@"get_osmand_pro"]
+                    ? [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] : [UIFont systemFontOfSize:17.];
 
             NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:item[@"button_title"]];
             [buttonTitle addAttribute:NSForegroundColorAttributeName
@@ -435,14 +543,15 @@
         }
         outCell = cell;
     }
-    else if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        OAMultiIconTextDescCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
+        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0, 66., 0, 0);
+            [cell changeHeight:YES];
         }
         if (cell)
         {
@@ -452,22 +561,74 @@
                 cell.textView.text = [product.productIdentifier isEqualToString:kInAppId_Addon_Nautical]
                         ? OALocalizedString(@"product_title_sea_depth_contours")
                         : product.localizedTitle;
-                cell.iconView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product]
+                cell.imgView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product]
                         ? [UIImage imageNamed:product.productIconName]
                         : [product.feature getIcon];
-                cell.descView.text = [self getStatus:product];
+
+                NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[self getStatus:product]];
+                NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+                paragraphStyle.minimumLineHeight = 17.;
+                paragraphStyle.lineSpacing = 2.;
+                [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attributedString.length)];
+                [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13.] range:NSMakeRange(0, attributedString.length)];
+                cell.descriptionView.attributedText = attributedString;
             }
             else
             {
                 cell.textView.text = item[@"title"];
-                cell.iconView.image = [UIImage imageNamed:item[@"icon"]];
-                cell.descView.text = item[@"descr"];
+                cell.imgView.image = [UIImage imageNamed:item[@"icon"]];
+                cell.descriptionView.text = item[@"descr"];
             }
-            [cell setOverflowVisibility:NO];
-            [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"] forState:UIControlStateNormal];
-            cell.overflowButton.tintColor = UIColorFromRGB(color_tint_gray);
+            UIImageView *rightImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"]];
+            rightImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.accessoryView = rightImageView;
         }
         outCell = cell;
+    }
+    else if ([cellType isEqualToString:[OAActivityViewWithTitleCell getCellIdentifier]])
+    {
+        OAActivityViewWithTitleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAActivityViewWithTitleCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAActivityViewWithTitleCell getCellIdentifier] owner:self options:nil];
+            cell = (OAActivityViewWithTitleCell *) nib[0];
+            cell.activityIndicatorView.hidden = NO;
+            cell.backgroundColor = UIColor.clearColor;
+            cell.contentView.backgroundColor = UIColor.clearColor;
+        }
+        if (cell)
+        {
+            cell.titleView.text = item[@"title"];
+            [cell.activityIndicatorView startAnimating];
+        }
+        outCell = cell;
+    }
+    else if ([cellType isEqualToString:[OADividerCell getCellIdentifier]])
+    {
+        BOOL isProductSection = [item[@"product_section"] boolValue];
+        BOOL isHelpSection = [item[@"help_section"] boolValue];
+        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
+            cell = (OADividerCell *) nib[0];
+            cell.backgroundColor = UIColor.whiteColor;
+            cell.dividerColor = UIColorFromRGB(color_tint_gray);
+            cell.dividerHight = .5;
+        }
+        if (cell)
+        {
+            CGFloat leftInset = 0.;
+            if (!(indexPath.row == 0 || indexPath.row == _data[indexPath.section][indexPath.row].count + 1))
+            {
+                if (isProductSection)
+                    leftInset = [OAUtilities getLeftMargin] + 66.;
+                else if (isHelpSection)
+                    leftInset = [OAUtilities getLeftMargin] + 20.;
+            }
+            cell.dividerInsets = UIEdgeInsetsMake(0., leftInset, 0., 0.);
+        }
+        return cell;
     }
 
     if ([outCell needsUpdateConstraints])
@@ -476,7 +637,26 @@
     return outCell;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:[OACardButtonCell getCellIdentifier]])
+    {
+        if (@available(iOS 15.0, *))
+            [((OACardButtonCell *) cell) setNeedsUpdateConfiguration];
+    }
+}
+
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
+        return [OADividerCell cellHeight:.5 dividerInsets:UIEdgeInsetsZero];
+    else
+        return UITableViewAutomaticDimension;
+}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -488,6 +668,8 @@
         [self openSafariWithURL:kAppleRedeemPromoCode];
     else if ([key isEqualToString:@"new_device_account"])
         [self openSafariWithURL:kDocsPurchasesNewDevice];
+    else if ([key isEqualToString:@"contact_support"])
+        [self sendEmail];
     else if ([key isEqualToString:@"product_pro_crossplatform"])
         [self presentViewController:[[OAPurchaseDetailsViewController alloc] initForCrossplatformSubscription] animated:YES completion:nil];
     else if ([key hasPrefix:@"product_"])
@@ -511,6 +693,26 @@
         else if ([key isEqualToString:@"explore_osmnad_plans"])
             [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.MONTHLY_MAP_UPDATES navController:self.navigationController];
     }
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+
+- (void)sendEmail
+{
+    if ([MFMailComposeViewController canSendMail])
+    {
+        MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
+        mailCont.mailComposeDelegate = self;
+        [mailCont setSubject:OALocalizedString(@"help_purchases")];
+        [mailCont setToRecipients:@[OALocalizedString(@"login_footer_email_part")]];
+        [mailCont setMessageBody:@"" isHTML:NO];
+        [self presentViewController:mailCont animated:YES completion:nil];
+    }
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

@@ -17,6 +17,7 @@
 #import "OACardButtonCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAActivityViewWithTitleCell.h"
+#import "OADividerCell.h"
 #import "OAColors.h"
 #import "OALinks.h"
 #import <SafariServices/SafariServices.h>
@@ -50,9 +51,19 @@
 {
     [super viewDidLoad];
 
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
     _iapHelper = [OAIAPHelper sharedInstance];
     [[OARootViewController instance] restorePurchasesWithProgress:NO];
     [self generateData];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self.tableView reloadData];
+    } completion:nil];
 }
 
 - (void) generateData
@@ -95,30 +106,47 @@
         BOOL isProSubscriptionAvailable = [settings.backupPurchaseActive get];
         if (activeProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
         {
-            [data addObject:@[@{
-                    @"key": @"no_purchases",
-                    @"type": [OALargeImageTitleDescrTableViewCell getCellIdentifier],
-                    @"icon": [UIImage templateImageNamed:@"ic_custom_shop_bag_48"],
-                    @"icon_color": UIColorFromRGB(color_tint_gray),
-                    @"title": OALocalizedString(@"no_purchases"),
-                    @"description": [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
-            }]];
-            [data addObject:@[@{
-                    @"key": @"get_osmand_pro",
-                    @"type": [OACardButtonCell getCellIdentifier],
-                    @"icon": [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"],
-                    @"title": OALocalizedString(@"product_title_pro"),
-                    @"description": OALocalizedString(@"osm_live_banner_desc"),
-                    @"button_title": OALocalizedString(@"purchase_get"),
-                    @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
-                    @"button_icon_color": UIColorFromRGB(color_primary_purple),
-            }]];
+            [data addObject:@[
+                    @{
+                            @"type": [OADividerCell getCellIdentifier]
+                    },
+                    @{
+                            @"key": @"no_purchases",
+                            @"type": [OALargeImageTitleDescrTableViewCell getCellIdentifier],
+                            @"icon": [UIImage templateImageNamed:@"ic_custom_shop_bag_48"],
+                            @"icon_color": UIColorFromRGB(color_tint_gray),
+                            @"title": OALocalizedString(@"no_purchases"),
+                            @"description": [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
+                    },
+                    @{
+                            @"type": [OADividerCell getCellIdentifier]
+                    }
+            ]];
+            [data addObject:@[
+                    @{
+                            @"type": [OADividerCell getCellIdentifier]
+                    },
+                    @{
+                            @"key": @"get_osmand_pro",
+                            @"type": [OACardButtonCell getCellIdentifier],
+                            @"icon": [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"],
+                            @"title": OALocalizedString(@"product_title_pro"),
+                            @"description": OALocalizedString(@"osm_live_banner_desc"),
+                            @"button_title": OALocalizedString(@"purchase_get"),
+                            @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
+                            @"button_icon_color": UIColorFromRGB(color_primary_purple)
+                    },
+                    @{
+                            @"type": [OADividerCell getCellIdentifier]
+                    }
+            ]];
         }
         else
         {
             if (activeProducts.count > 0 || isProSubscriptionAvailable)
             {
                 NSMutableArray *active = [NSMutableArray array];
+                [active addObject:@{ @"type":[OADividerCell getCellIdentifier] }];
                 if (isProSubscriptionAvailable)
                 {
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -145,13 +173,22 @@
                             @"title": isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro"),
                             @"descr": dateString
                     }];
+                    [active addObject:@{
+                            @"type":[OADividerCell getCellIdentifier],
+                            @"product_section": @(activeProducts.count > 0)
+                    }];
                 }
-                for (OAProduct *product in activeProducts)
+                for (NSInteger i = 0; i < activeProducts.count; i++)
                 {
+                    OAProduct *product = activeProducts[i];
                     [active addObject:@{
                             @"key": [@"product_" stringByAppendingString:product.productIdentifier],
                             @"type": [OAMenuSimpleCell getCellIdentifier],
                             @"product": product
+                    }];
+                    [active addObject:@{
+                            @"type": [OADividerCell getCellIdentifier],
+                            @"product_section": @(i < activeProducts.count - 1)
                     }];
                 }
                 [data addObject:active];
@@ -160,35 +197,56 @@
             if (expiredProducts.count > 0)
             {
                 NSMutableArray *expired = [NSMutableArray array];
-                for (OAProduct *product in expiredProducts)
+                [expired addObject:@{ @"type":[OADividerCell getCellIdentifier] }];
+                for (NSInteger i = 0; i < expiredProducts.count; i++)
                 {
+                    OAProduct *product = expiredProducts[i];
                     [expired addObject:@{
                             @"key": [@"product_" stringByAppendingString:product.productIdentifier],
                             @"type": [OAMenuSimpleCell getCellIdentifier],
                             @"product": product
                     }];
+                    [expired addObject:@{
+                            @"type": [OADividerCell getCellIdentifier],
+                            @"product_section": @(i < expiredProducts.count - 1)
+                    }];
                 }
                 [data addObject:expired];
                 [_headers setObject:OALocalizedString(@"expired") forKey:@(data.count - 1)];
             }
-            [data addObject:@[@{
-                    @"key": @"explore_osmnad_plans",
-                    @"type": [OACardButtonCell getCellIdentifier],
-                    @"title": OALocalizedString(@"explore_osmnad_plans_to_find_suitable"),
-                    @"button_title": OALocalizedString(@"shared_string_learn_more"),
-                    @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
-                    @"button_icon_color": UIColorFromRGB(color_primary_purple)
-            }]];
+            [data addObject:@[
+                    @{
+                            @"type": [OADividerCell getCellIdentifier]
+                    },
+                    @{
+                            @"key": @"explore_osmnad_plans",
+                            @"type": [OACardButtonCell getCellIdentifier],
+                            @"title": OALocalizedString(@"explore_osmnad_plans_to_find_suitable"),
+                            @"button_title": OALocalizedString(@"shared_string_learn_more"),
+                            @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
+                            @"button_icon_color": UIColorFromRGB(color_primary_purple)
+                    },
+                    @{
+                            @"type": [OADividerCell getCellIdentifier]
+                    }
+            ]];
         }
     }
     
     [data addObject:@[
+        @{
+            @"type": [OADividerCell getCellIdentifier]
+        },
         @{
             @"key": @"restore_purchases",
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"title": OALocalizedString(@"restore_purchases"),
             @"icon": [UIImage templateImageNamed:@"ic_custom_reset"],
             @"tint_color": UIColorFromRGB(color_primary_purple),
+        },
+        @{
+            @"type": [OADividerCell getCellIdentifier],
+            @"help_section": @(YES)
         },
         @{
             @"key": @"redeem_promo_code",
@@ -198,11 +256,18 @@
             @"tint_color": UIColorFromRGB(color_primary_purple)
         },
         @{
+            @"type": [OADividerCell getCellIdentifier],
+            @"help_section": @(YES)
+        },
+        @{
             @"key": @"new_device_account",
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"title": OALocalizedString(@"new_device_account"),
             @"icon": [UIImage templateImageNamed:@"ic_navbar_help"],
             @"tint_color": UIColorFromRGB(color_primary_purple)
+        },
+        @{
+            @"type": [OADividerCell getCellIdentifier]
         },
         @{
             @"key": @"contact_support_description",
@@ -215,7 +280,10 @@
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"title": OALocalizedString(@"contact_support"),
             @"tint_color": UIColorFromRGB(color_primary_purple)
-        }
+        },
+        @{
+            @"type": [OADividerCell getCellIdentifier]
+        },
     ]];
     [_headers setObject:OALocalizedString(@"menu_help") forKey:@(data.count - 1)];
 
@@ -309,7 +377,6 @@
         res = [NSString stringWithFormat:@"%@", [product isKindOfClass:OASubscription.class]
                ? [product getTitle:13.].string
                : OALocalizedString(@"in_app_purchase_desc")];
-        res = [res stringByAppendingString:@"\nafaagaagdsag"];
     }
     return res;
 }
@@ -536,6 +603,33 @@
         }
         outCell = cell;
     }
+    else if ([cellType isEqualToString:[OADividerCell getCellIdentifier]])
+    {
+        BOOL isProductSection = [item[@"product_section"] boolValue];
+        BOOL isHelpSection = [item[@"help_section"] boolValue];
+        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
+            cell = (OADividerCell *) nib[0];
+            cell.backgroundColor = UIColor.whiteColor;
+            cell.dividerColor = UIColorFromRGB(color_tint_gray);
+            cell.dividerHight = .5;
+        }
+        if (cell)
+        {
+            CGFloat leftInset = 0.;
+            if (!(indexPath.row == 0 || indexPath.row == _data[indexPath.section][indexPath.row].count + 1))
+            {
+                if (isProductSection)
+                    leftInset = [OAUtilities getLeftMargin] + 66.;
+                else if (isHelpSection)
+                    leftInset = [OAUtilities getLeftMargin] + 20.;
+            }
+            cell.dividerInsets = UIEdgeInsetsMake(0., leftInset, 0., 0.);
+        }
+        return cell;
+    }
 
     if ([outCell needsUpdateConstraints])
         [outCell updateConstraints];
@@ -554,6 +648,15 @@
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
+        return [OADividerCell cellHeight:.5 dividerInsets:UIEdgeInsetsZero];
+    else
+        return UITableViewAutomaticDimension;
+}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

@@ -18,17 +18,4 @@
     [super setSelected:selected animated:animated];
 }
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-
-    for (UIView *view in self.subviews)
-    {
-        if ([view isEqual:self.contentView])
-            continue;
-
-        view.hidden = view.bounds.size.width == self.bounds.size.width;
-    }
-}
-
 @end

@@ -48,7 +48,9 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self setUpTableHeaderView];
         self.tableView.tableHeaderView = _headerView;
-    } completion:nil];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [_headerView addAnimatedViews];
+    }];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -69,7 +71,7 @@
 - (void)setUpTableHeaderView
 {
     _headerView = [[OACloudIntroductionHeaderView alloc] init];
-    NSString *topButtonTitle = OALocalizedString(@"cloud_create_account");
+    NSString *topButtonTitle = [OAIAPHelper isSubscribedToOsmAndPro] ? OALocalizedString(@"cloud_create_account") : OALocalizedString(@"purchase_get");
     [_headerView setUpViewWithTitle:OALocalizedString(@"osmand_cloud") description:OALocalizedString(@"cloud_description") image:[UIImage imageNamed:@"ic_custom_cloud_upload_colored_day_big"] topButtonTitle:topButtonTitle bottomButtonTitle:OALocalizedString(@"cloud_existing_account")];
     CGRect frame = _headerView.frame;
     frame.size.height = [_headerView calculateViewHeight];
@@ -154,7 +156,6 @@
 
 - (void)getOrRegisterButtonPressed
 {
-    OAIAPHelper *iapHelper = OAIAPHelper.sharedInstance;
     if ([OAIAPHelper isSubscribedToOsmAndPro])
     {
         OACloudAccountCreateViewController *vc = [[OACloudAccountCreateViewController alloc] init];

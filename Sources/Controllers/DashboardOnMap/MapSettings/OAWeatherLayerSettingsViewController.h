@@ -22,8 +22,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherLayerType)
 
 @protocol OAWeatherLayerSettingsDelegate
 
-- (void)onHideWeatherLayerSettings;
-- (void)onDoneWeatherLayerSettings;
+- (void)onDoneWeatherLayerSettings:(BOOL)show;
 
 @end
 

@@ -30,7 +30,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 #define kInconsistentReceiptStatus 200
 #define kUserNotFoundStatus 300
 
-#define CARPLAY_START_DATE_MS (10L * 1000L * 60L * 60L * 24L) // 10 days
+#define CARPLAY_START_DATE_SEC (10L * 60L * 60L * 24L) // 10 days
 #define PURCHASE_VALIDATION_PERIOD_SEC 60 * 60 * 24 // daily
 
 typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *products, NSDictionary<NSString *, NSDate *> *expirationDates, BOOL success);
@@ -242,7 +242,7 @@ static OASubscriptionState *EXPIRED;
 {
     long time = (long) NSDate.date.timeIntervalSince1970;
     long installTime = [self getInstallTime];
-    if (time >= installTime + CARPLAY_START_DATE_MS)
+    if (time >= installTime + CARPLAY_START_DATE_SEC)
         return [self isPaidVersion];
 
     return YES;

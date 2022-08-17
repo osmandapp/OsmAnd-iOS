@@ -31,6 +31,7 @@
 
 - (void) recreateControls;
 - (void) updateInfo;
+- (void) updateWeatherToolbarVisible;
 - (void) expandClicked:(id)sender;
 
 - (void) updateRuler;

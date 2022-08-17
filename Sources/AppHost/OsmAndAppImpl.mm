@@ -929,6 +929,16 @@
     }
 }
 
+- (void)checkAndDownloadWeatherForecastsUpdates
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+        return;
+
+    OAWeatherHelper *weatherHelper = [OAWeatherHelper sharedInstance];
+    NSArray<NSString *> *regionIds = [weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateFinished)]];
+    [weatherHelper checkAndDownloadForecastsByRegionIds:regionIds];
+}
+
 - (BOOL) installTestResource:(NSString *)filePath
 {
     if(_resourcesManager == nullptr)

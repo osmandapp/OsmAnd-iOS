@@ -456,8 +456,8 @@ static BOOL _repositoryUpdated = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (value == self.region)
         {
-            if ([OAWeatherHelper getPreferenceDownloadState:self.region.regionId] == EOAWeatherForecastDownloadStateUndefined
-                    && [[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:self.region.regionId])
+            BOOL statusSizeCalculating = ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:self.region.regionId];
+            if ([OAWeatherHelper getPreferenceDownloadState:self.region.regionId] == EOAWeatherForecastDownloadStateUndefined && !statusSizeCalculating)
                 return;
 
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
@@ -480,8 +480,7 @@ static BOOL _repositoryUpdated = NO;
                     [progressView stopSpinProgressBackgroundLayer];
                 progressView.progress = progressCompleted - 0.001;
             }
-            else if ([OAWeatherHelper getPreferenceDownloadState:self.region.regionId] == EOAWeatherForecastDownloadStateFinished
-                    && [[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:self.region.regionId])
+            else if ([OAWeatherHelper getPreferenceDownloadState:self.region.regionId] == EOAWeatherForecastDownloadStateFinished && !statusSizeCalculating)
             {
                 progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
                 progressView.progress = 0.;

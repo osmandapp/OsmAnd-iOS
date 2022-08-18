@@ -41,7 +41,6 @@ typedef NS_ENUM (NSUInteger, OAFeatureCardRowType)
 - (void)updateSimpleRowInfo:(NSString *)title
                 showDivider:(BOOL)showDivider
           dividerLeftMargin:(CGFloat)dividerLeftMargin
-               dividerWidth:(CGFloat)dividerWidth
                        icon:(NSString *)icon;
 
 - (void)updateIncludeInfo:(OAFeature *)feature;

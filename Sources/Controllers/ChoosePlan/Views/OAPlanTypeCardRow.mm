@@ -140,9 +140,9 @@
     if (_type == EOAPlanTypeChooseSubscription)
     {
         self.layer.borderWidth = selected ? 2. : 0.;
-        self.layer.borderColor = selected ? UIColorFromRGB(color_primary_purple).CGColor : UIColor.whiteColor.CGColor;
-        self.imageViewRightIcon.image = selected ? [UIImage imageNamed:@"ic_system_checkbox_selected"] : nil;
-        self.backgroundColor = selected ? UIColorFromARGB(color_primary_purple_10) : UIColor.whiteColor;
+        self.layer.borderColor = selected ? UIColorFromRGB(color_primary_purple).CGColor : UIColor.clearColor.CGColor;
+        self.imageViewRightIcon.image = [UIImage imageNamed:selected ? @"ic_system_checkbox_selected" : @"ic_custom_checkbox_unselected"];
+        self.backgroundColor = selected ? UIColorFromARGB(color_primary_purple_10) : UIColor.clearColor;
     }
 }
 
@@ -239,18 +239,18 @@
                     }
                     else
                     {
-                        self.labelDescription.text = discountOffer.getFormattedDescription.string;
+                        self.labelDescription.attributedText = [discountOffer getFormattedDescription];
                     }
                     self.tertiaryDescrLabel.hidden = self.tertiaryDescrLabel.text.length == 0;
                 }
                 else
                 {
-                    self.labelDescription.text = discountOffer.getFormattedDescription.string;
+                    self.labelDescription.attributedText = [discountOffer getFormattedDescription];
                 }
             }
             else
             {
-                self.labelDescription.text = _subscription.formattedPrice;
+                self.labelDescription.attributedText = _subscription.formattedPriceAttributed;
             }
             
             self.imageViewLeftIcon.image = nil;
@@ -281,11 +281,11 @@
 
 - (CGFloat)updateLayout:(CGFloat)y
 {
-    CGFloat width = DeviceScreenWidth - kSpaceMargin * 2 - [OAUtilities getLeftMargin] * 2;
-    CGFloat textVerticalOffset = 12.;
-    CGFloat leftSideOffset = _type == EOAPlanTypeChoosePlan ? 12. : kSpaceMargin;
-    CGFloat rightSideOffset = _type == EOAPlanTypePurchase ? kSpaceMargin : 12.;
-    CGFloat iconMargin = kIconSize + kSpaceMargin;
+    CGFloat width = DeviceScreenWidth - kPrimarySpaceMargin * 2 - [OAUtilities getLeftMargin] * 2;
+    CGFloat textVerticalOffset = kSecondarySpaceMargin;
+    CGFloat leftSideOffset = _type == EOAPlanTypeChoosePlan ? kSecondarySpaceMargin : kPrimarySpaceMargin;
+    CGFloat rightSideOffset = _type == EOAPlanTypePurchase ? kPrimarySpaceMargin : kSecondarySpaceMargin;
+    CGFloat iconMargin = kIconSize + kPrimarySpaceMargin;
     CGFloat textWidth = width - leftSideOffset - rightSideOffset;
     if (_type != EOAPlanTypePurchase)
         textWidth -= iconMargin;
@@ -303,9 +303,19 @@
     BOOL hasBadge = !_badgeViewContainer.isHidden && _badgeLabel.attributedText.length > 0;
     CGSize discountSize = !hasBadge ? CGSizeZero : [OAUtilities calculateTextBounds:_badgeLabel.text width:textWidth / 2 font:_badgeLabel.font];
 
-    CGSize descriptionSize = [OAUtilities calculateTextBounds:self.labelDescription.text
-                                                        width:textWidth - (hasBadge ? discountSize.width + 8. : 0.)
-                                                         font:self.labelDescription.font];
+    CGSize descriptionSize;
+    if (self.labelDescription.attributedText.length > 0)
+    {
+        descriptionSize = [OAUtilities calculateTextBounds:self.labelDescription.attributedText
+                                                     width:textWidth - (hasBadge ? discountSize.width + 8. : 0.)];
+    }
+    else
+    {
+        descriptionSize = [OAUtilities calculateTextBounds:self.labelDescription.text
+                                                     width:textWidth - (hasBadge ? discountSize.width + 8. : 0.)
+                                                      font:self.labelDescription.font];
+    }
+
     self.labelDescription.frame = CGRectMake(
             self.labelTitle.frame.origin.x + (hasBadge ? discountSize.width + 20. : 0.),
             CGRectGetMaxY(self.labelTitle.frame) + (_type == EOAPlanTypeChooseSubscription ? 8. : 0.),
@@ -315,7 +325,7 @@
     
     CGFloat badgeY = self.labelDescription.frame.origin.y + ((self.labelDescription.frame.size.height - (discountSize.height + 4.)) / 2);
     
-    self.badgeViewContainer.frame = CGRectMake(self.labelTitle.frame.origin.x, badgeY, discountSize.width + 12., discountSize.height + 4.);
+    self.badgeViewContainer.frame = CGRectMake(self.labelTitle.frame.origin.x, badgeY, discountSize.width + kSecondarySpaceMargin, discountSize.height + 4.);
     
     BOOL hasTertiaryDescr = !_tertiaryDescrLabel.isHidden && _tertiaryDescrLabel.text.length > 0;
     
@@ -331,7 +341,7 @@
                                                );
 
     self.frame = CGRectMake(
-            kSpaceMargin + [OAUtilities getLeftMargin],
+            kPrimarySpaceMargin + [OAUtilities getLeftMargin],
             y,
             width,
             self.labelDescription.frame.origin.y + self.labelDescription.frame.size.height + (hasTertiaryDescr ? self.tertiaryDescrLabel.frame.size.height + 1. : 0) + textVerticalOffset
@@ -352,6 +362,13 @@
     );
 
     return self.frame.size.height;
+}
+
+- (void)updateRightIconFrameX:(CGFloat)x
+{
+    CGRect frame = self.imageViewRightIcon.frame;
+    frame.origin.x = x;
+    self.imageViewRightIcon.frame = frame;
 }
 
 - (void)onTapped:(UIGestureRecognizer *)recognizer

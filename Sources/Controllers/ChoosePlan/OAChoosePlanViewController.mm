@@ -58,6 +58,7 @@
     UIView *_viewIncludesSeparator;
     UILabel *_labelIncludes;
     UIView *_lastIncludedView;
+    UIView *_backgroundAboveScrollViewContainer;
 }
 
 - (instancetype) initWithFeature:(OAFeature *)feature;
@@ -176,6 +177,10 @@
         _lastIncludedView = prevView;
     }
 
+    _backgroundAboveScrollViewContainer = [[UIView alloc] initWithFrame:CGRectMake(0., -self.scrollView.contentInset.top, DeviceScreenWidth, self.scrollView.contentInset.top)];
+    _backgroundAboveScrollViewContainer.backgroundColor = UIColor.whiteColor;
+    [self.scrollView insertSubview:_backgroundAboveScrollViewContainer aboveSubview:self.scrollViewContainerView];
+
     NSInteger index1 = [self.scrollView.subviews indexOfObject:_buttonTermsOfUse];
     _buttonTermsOfUse.tag = index1;
     _buttonTermsOfUse.labelTitle.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
@@ -213,9 +218,18 @@
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     if (@available(iOS 13.0, *))
-        return _type == EOAChoosePlan ? UIStatusBarStyleDefault : UIStatusBarStyleLightContent;
+        return _type == EOAChoosePlan ? UIStatusBarStyleDefault : UIStatusBarStyleDarkContent;
 
     return UIStatusBarStyleDefault;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
+        backgroundFrame.size.width = DeviceScreenWidth;
+        _backgroundAboveScrollViewContainer.frame = backgroundFrame;
+    } completion:nil];
 }
 
 - (void) viewWillLayoutSubviews
@@ -243,6 +257,10 @@
             0.
     );
     self.scrollView.frame = CGRectMake(0., 0., self.view.frame.size.width, DeviceScreenHeight);
+    CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
+    backgroundFrame.origin.y = -self.scrollView.contentInset.top;
+    backgroundFrame.size.height = self.scrollView.contentInset.top;
+    _backgroundAboveScrollViewContainer.frame = backgroundFrame;
 
     CGRect frame = self.buttonNavigationBack.frame;
     frame.origin.x = [OAUtilities getLeftMargin] + 10.;
@@ -314,7 +332,7 @@
     self.buttonRestore.frame = CGRectMake(
             kMargin + [OAUtilities getLeftMargin],
             _type == EOAChooseSubscription
-                    ? _buttonPrivacyPolicy.frame.origin.y + _buttonPrivacyPolicy.frame.size.height
+                    ? _buttonPrivacyPolicy.frame.origin.y + _buttonPrivacyPolicy.frame.size.height + 5.
                     : self.scrollViewContainerView.frame.size.height + 20.,
             self.view.frame.size.width - kMargin * 2 - [OAUtilities getLeftMargin] * 2,
             self.buttonRestore.frame.size.height
@@ -368,9 +386,8 @@
 
 - (void)setupButton:(UIButton *)button
 {
-    button.layer.cornerRadius = 9.;
-    button.backgroundColor = UIColorFromRGB(color_route_button_inactive);
     [button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+    button.titleLabel.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (OAFeatureCardRow *)addSimpleRow:(NSString *)title
@@ -381,8 +398,7 @@
     OAFeatureCardRow *row = [[OAFeatureCardRow alloc] initWithType:EOAFeatureCardRowSimple];
     [row updateSimpleRowInfo:title
                  showDivider:showDivider
-           dividerLeftMargin:20. + [OAUtilities getLeftMargin]
-                dividerWidth:self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
+           dividerLeftMargin:20.
                         icon:icon];
     row.delegate = self;
     [self.scrollView insertSubview:row aboveSubview:aboveSubview];
@@ -468,6 +484,11 @@
     CGFloat y = scrollView.contentOffset.y;
     if (_type == EOAChooseSubscription)
         y += [OAUtilities getTopMargin];
+
+    CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
+    backgroundFrame.origin.y = y < 0. ? y : -y;
+    backgroundFrame.size.height = y < 0. ? ABS(y) : 0.;
+    _backgroundAboveScrollViewContainer.frame = backgroundFrame;
 
     if (!_isHeaderBlurred && y > 0.)
     {

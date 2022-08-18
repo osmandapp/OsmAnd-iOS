@@ -10,7 +10,8 @@
 
 #define kSeparatorHeight .5
 #define kIconSize 30.
-#define kSpaceMargin 16.
+#define kPrimarySpaceMargin 16.
+#define kSecondarySpaceMargin 12.
 
 NS_ASSUME_NONNULL_BEGIN
 

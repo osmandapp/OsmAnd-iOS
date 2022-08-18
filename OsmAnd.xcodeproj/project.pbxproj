@@ -525,6 +525,8 @@
 		463C536A286B58FB00AFABE9 /* warnings_railways_ca@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 463C5366286B58FA00AFABE9 /* warnings_railways_ca@2x.png */; };
 		463C536B286B58FB00AFABE9 /* warnings_speed_limit_ca@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 463C5367286B58FA00AFABE9 /* warnings_speed_limit_ca@3x.png */; };
 		463C536C286B58FB00AFABE9 /* warnings_railways_ca@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 463C5368286B58FA00AFABE9 /* warnings_railways_ca@3x.png */; };
+		464167D428AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464167D228AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png */; };
+		464167D528AE4F2D00C6AA8F /* ic_custom_checkbox_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464167D328AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@3x.png */; };
 		46453ADA2835234B001F9A3A /* ic_custom_advanced_widgets_colored_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46453AD62835234A001F9A3A /* ic_custom_advanced_widgets_colored_day@2x.png */; };
 		46453ADB2835234B001F9A3A /* ic_custom_advanced_widgets_colored_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46453AD72835234A001F9A3A /* ic_custom_advanced_widgets_colored_big@2x.png */; };
 		46453ADC2835234B001F9A3A /* ic_custom_advanced_widgets_colored_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46453AD82835234B001F9A3A /* ic_custom_advanced_widgets_colored_big@3x.png */; };
@@ -3814,6 +3816,8 @@
 		463C5366286B58FA00AFABE9 /* warnings_railways_ca@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warnings_railways_ca@2x.png"; sourceTree = "<group>"; };
 		463C5367286B58FA00AFABE9 /* warnings_speed_limit_ca@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warnings_speed_limit_ca@3x.png"; sourceTree = "<group>"; };
 		463C5368286B58FA00AFABE9 /* warnings_railways_ca@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warnings_railways_ca@3x.png"; sourceTree = "<group>"; };
+		464167D228AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_checkbox_unselected@2x.png"; path = "Resources/Icons/ic_custom_checkbox_unselected@2x.png"; sourceTree = "<group>"; };
+		464167D328AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_checkbox_unselected@3x.png"; path = "Resources/Icons/ic_custom_checkbox_unselected@3x.png"; sourceTree = "<group>"; };
 		46453AD62835234A001F9A3A /* ic_custom_advanced_widgets_colored_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_advanced_widgets_colored_day@2x.png"; path = "Resources/Icons/ic_custom_advanced_widgets_colored_day@2x.png"; sourceTree = "<group>"; };
 		46453AD72835234A001F9A3A /* ic_custom_advanced_widgets_colored_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_advanced_widgets_colored_big@2x.png"; path = "Resources/Icons/ic_custom_advanced_widgets_colored_big@2x.png"; sourceTree = "<group>"; };
 		46453AD82835234B001F9A3A /* ic_custom_advanced_widgets_colored_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_advanced_widgets_colored_big@3x.png"; path = "Resources/Icons/ic_custom_advanced_widgets_colored_big@3x.png"; sourceTree = "<group>"; };
@@ -7940,6 +7944,8 @@
 				DA84E84821D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png */,
 				DAB048EF21CB729000275456 /* ic_action_plus@2x.png */,
 				DAB048F121CB729000275456 /* ic_action_plus@3x.png */,
+				464167D228AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png */,
+				464167D328AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@3x.png */,
 				4649427B286DB36700A44103 /* ic_custom_compass_hidden@2x.png */,
 				4649427A286DB36700A44103 /* ic_custom_compass_hidden@3x.png */,
 				46494279286DB36700A44103 /* ic_custom_compass_north@2x.png */,
@@ -14021,6 +14027,7 @@
 				8424325A1AEFDD1900925821 /* widget_monitoring_rec_big_day@3x.png in Resources */,
 				46E0263E27B6773F00E554DD /* ic_custom_terrain_less_hilly@3x.png in Resources */,
 				DA5A82BD26C563A800F274C7 /* OAIconTextTableViewCell.xib in Resources */,
+				464167D428AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png in Resources */,
 				DA5A83AE26C563A800F274C7 /* OASubscriptionCancelViewController.xib in Resources */,
 				DA5A82E226C563A800F274C7 /* OADescrTitleCell.xib in Resources */,
 				84F3A8CE1B4DA93100D16EBC /* ic_map_pin_small@3x.png in Resources */,
@@ -14500,6 +14507,7 @@
 				DAF2F812254825BA00967935 /* map_plan_route_point_selected@3x.png in Resources */,
 				DA5A82B526C563A800F274C7 /* OADividerCell.xib in Resources */,
 				DAC0279322A1566600D1689E /* ic_custom_overlay_map@3x.png in Resources */,
+				464167D528AE4F2D00C6AA8F /* ic_custom_checkbox_unselected@3x.png in Resources */,
 				15B4E49924AB3FD700119365 /* list_warnings_speed_camera@3x.png in Resources */,
 				46453AF7283523C2001F9A3A /* ic_custom_contour_lines_colored_big@3x.png in Resources */,
 				84EC52BA1F8BF26600AFC252 /* ic_action_altitude@3x.png in Resources */,

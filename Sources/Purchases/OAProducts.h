@@ -200,6 +200,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) BOOL free;
 @property (nonatomic, readonly) BOOL disabled;
 @property (nonatomic, readonly, nullable) NSString *formattedPrice;
+@property (nonatomic, readonly, nullable) NSAttributedString *formattedPriceAttributed;
 @property (nonatomic, readonly, nullable) NSDate *expirationDate;
 @property (nonatomic, readonly, nullable) OAFeature *feature;
 @property (nonatomic, assign) NSTimeInterval purchaseCancelledTime;

@@ -603,7 +603,7 @@
 "si_min_km" = "Минут на километр";
 "si_min_m" = "Минут на милю";
 "si_nm_h" = "Морских миль в час (узел)";
-"search_poi_category_hint" = "Введите для поиска";
+"search_poi_category_hint" = "Напечатайте для поиска";
 "shared_string_is_open" = "Открыто";
 "open_from" = "Откроется в";
 "open_till" = "Открыто до";

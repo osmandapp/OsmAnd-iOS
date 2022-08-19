@@ -57,8 +57,11 @@
     OAFeatureCardRow *_buttonPrivacyPolicy;
     UIView *_viewIncludesSeparator;
     UILabel *_labelIncludes;
+    UILabel *_labelNotIncluded;
     UIView *_lastIncludedView;
     UIView *_backgroundAboveScrollViewContainer;
+    NSArray<OAFeatureCardRow *> *_includesRows;
+    NSArray<OAFeatureCardRow *> *_notIncludedRows;
 }
 
 - (instancetype) initWithFeature:(OAFeature *)feature;
@@ -162,6 +165,7 @@
                 OALocalizedString(@"shared_string_includes"), @""];
         [self.scrollView insertSubview:_labelIncludes belowSubview:_viewIncludesSeparator];
 
+        NSMutableArray<OAFeatureCardRow *> *includesRows = [NSMutableArray array];
         UIView *prevView = _labelIncludes;
         BOOL isMaps = [OAIAPHelper isFullVersion:_product] || ([_product isKindOfClass:OASubscription.class] && [OAIAPHelper isMapsSubscription:(OASubscription *) _product]);
         for (OAFeature *feature in isMaps ? OAFeature.MAPS_PLUS_FEATURES : OAFeature.OSMAND_PRO_FEATURES)
@@ -172,7 +176,35 @@
                 [row updateIncludeInfo:feature];
                 [self.scrollView addSubview:row];
                 prevView = row;
+                [includesRows addObject:row];
             }
+        }
+        _includesRows = includesRows;
+
+        if (isMaps)
+        {
+            _labelNotIncluded = [[UILabel alloc] init];
+            _labelNotIncluded.font = [UIFont systemFontOfSize:17.];
+            _labelNotIncluded.textColor = UIColor.blackColor;
+            _labelNotIncluded.numberOfLines = 0;
+            _labelNotIncluded.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
+                                                                OALocalizedString(@"shared_string_not_included"), @""];
+            [self.scrollView insertSubview:_labelNotIncluded belowSubview:prevView];
+
+            NSMutableArray<OAFeatureCardRow *> *notIncludedRows = [NSMutableArray array];
+            prevView = _labelNotIncluded;
+            for (OAFeature *feature in OAFeature.OSMAND_PRO_FEATURES)
+            {
+                if (feature != OAFeature.COMBINED_WIKI && ![feature isAvailableInMapsPlus])
+                {
+                    OAFeatureCardRow *row = [[OAFeatureCardRow alloc] initWithType:EOAFeatureCardRowInclude];
+                    [row updateIncludeInfo:feature];
+                    [self.scrollView addSubview:row];
+                    prevView = row;
+                    [notIncludedRows addObject:row];
+                }
+            }
+            _notIncludedRows = notIncludedRows;
         }
         _lastIncludedView = prevView;
     }
@@ -368,12 +400,29 @@
         );
 
         y = _labelIncludes.frame.origin.y + _labelIncludes.frame.size.height;
-        for (UIView *view in self.scrollView.subviews)
+        for (OAFeatureCardRow *cardRow in _includesRows)
         {
-            if ([view isKindOfClass:[OAFeatureCardRow class]] && view != _buttonTermsOfUse && view != _buttonPrivacyPolicy)
+            y += [cardRow updateFrame:y] + 36.;
+        }
+
+        BOOL isMaps = [OAIAPHelper isFullVersion:_product] || ([_product isKindOfClass:OASubscription.class] && [OAIAPHelper isMapsSubscription:(OASubscription *) _product]);
+        if (isMaps)
+        {
+            CGSize notIncludedSize = [OAUtilities calculateTextBounds:_labelNotIncluded.text
+                                                                width:self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
+                                                                 font:_labelNotIncluded.font];
+            CGFloat notIncludedVerticalOffset = notIncludedSize.height > kMinRowHeight ? 9. : (kMinRowHeight - notIncludedSize.height) / 2;
+            _labelNotIncluded.frame = CGRectMake(
+                    20. + [OAUtilities getLeftMargin],
+                    _includesRows.lastObject.frame.origin.y + _includesRows.lastObject.frame.size.height + 32.,
+                    self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2,
+                    notIncludedSize.height + notIncludedVerticalOffset * 2
+            );
+
+            y = _labelNotIncluded.frame.origin.y + _labelNotIncluded.frame.size.height;
+            for (OAFeatureCardRow *cardRow in _notIncludedRows)
             {
-                OAFeatureCardRow *card = (OAFeatureCardRow *) view;
-                y += [card updateFrame:y] + 36.;
+                y += [cardRow updateFrame:y] + 36.;
             }
         }
     }

@@ -124,7 +124,7 @@
 "download_tab_local" = "Installé";
 "res_search_world" = "Rechercher dans le monde entier";
 "res_world_map" = "Carte du monde";
-"res_updates" = "Misesà jour";
+"res_updates" = "Mises à jour";
 "res_updates_avail" = "Mises à jour disponibles";
 "res_maps_inst" = "carte(s)";
 "res_deleting" = "Suppression…";
@@ -362,7 +362,7 @@
 "product_title_parking" = "Emplacement de stationnement";
 "product_desc_parking" = "Suivre le temps et la position de stationnement de votre voiture";
 "product_title_skimap" = "Plan des pistes";
-"product_desc_skimap" = "Pistes de ski pour toutes les stations de ski dans le monde";
+"product_desc_skimap" = "Carte à jour des pistes de ski avec inclinaison";
 "product_desc_track_recording" = "Enregistre et sauvegarde vos trajets dans des traces GPX";
 "product_desc_trip_planning" = "Planifiez votre trajets, ajoutez des points de passage, mesurez la distance à votre destination avec ce greffon";
 "product_desc_allworld" = "Cartes du Monde";
@@ -978,7 +978,7 @@
 "translucent_yellow" = "Jaune translucide";
 "translucent_lightgreen" = "Vert clair translucide";
 "translucent_green" = "Vert translucide";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts est un greffon pour l'application OsmAnd Maps & Navigation. Il s'agit d'une représentation graphique détaillée des océans, des mers, des zones côtières et des rivières. Les cartes peuvent contenir diverses informations comme les routes de navigation, les feux de navigation, les zones dangereuses, les zones où il est permis ou non de naviguer ou d'accoster, etc..\n\nInstructions d'utilisation : il est fortement recommandé de télécharger la carte marine de base afin de voir les cartes indépendamment de la présence d'une carte détaillée. Pour activer les cartes marines, appuyez sur le bouton Carte et réglez le type de carte sur Nautical.\n\nNote : Tous les marins professionnels sont tenus d'avoir des cartes marines officielles sur leurs navires.\n\nLes cartes marines OsmAnd Nautical sont basées sur les données du projet OpenSeaMap. Bien que les cartes OpenSeaMap ne puissent actuellement pas rivaliser avec les cartes nautiques officielles, elles peuvent être utilisées par les plaisanciers pour l'orientation ou la planification d'itinéraire.";
+"product_desc_ext_nautical" = "Activez cette carte pour enrichir l'application d'informations sur les routes navigables, les feux de navigation, les zones dangereuses et où il est autorisé ou interdit de naviguer ou d'accoster, etc. Pour télécharger et activer les cartes maritimes, appuyez sur le bouton Carte et réglez le type de carte sur Nautical.\n\nPlus d'informations - https://osmand.net/docs/user/plugins/nautical-charts";
 "product_desc_ext_parking" = "Le plugin OsmAnd Parking vous rappelle votre position de parking. C'est un plugin pour l'application OsmAnd Maps&Navigation.\nChoisissez un rappel indépendant du temps (seulement un marqueur sur la carte) ou un rappel limité dans le temps avec alarme à l'expiration du temps (inclut également un marqueur sur la carte). Pour utiliser le plugin, activez-le dans le menu Plugins.";
 "product_desc_ext_skimap" = "OsmAnd Ski Maps est un plugin de l'application OsmAnd Maps&Navigation conçu pour naviguer sur les sites de sports d'hiver. Il donne des informations sur les pistes de ski, des repères de remontées mécaniques et même des lignes colorées indiquant la complexité de chaque piste. Vous obtiendrez des informations sur les pistes de ski elles-mêmes ainsi que sur les infrastructures environnantes.\n\nInstructions d'utilisation : Activez le plugin dans l'application OsmAnd, appuyez sur le bouton Carte et réglez le type de carte sur Carte de ski.";
 "product_desc_ext_trip_planning" = "Le plugin de planification de trajet vous permet de créer votre trajet sur la carte, de le sauvegarder, de mesurer la distance entre les points reliés par des lignes droites, etc. Conçu pour la planification préliminaire des trajets plutôt que pour la construction d'un itinéraire complet.";
@@ -2507,7 +2507,7 @@
 "product_desc_pro" = "Bénéficiez d\'un maximum de fonctionnalités";
 "purchases_feature_desc_wikivoyage" = "Explorez Wikivoyage sans connexion Internet. Les articles sont découpés par pays et disponibles dans toutes les langues.";
 "unlimited_map_downloads" = "Téléchargements illimités de cartes";
-"product_desc_ext_development" = "Gérez les paramètres de développement et de débogage tels que la simulation du guidage, l\'affichage des performances ou le guidage vocal. Ces paramètres sont conçus pour les développeurs et peuvent être ignorés par les autres utilisateurs.";
+"product_desc_ext_development" = "Permet de configurer OsmAnd pour faire des tests : simulation du guidage, l'affichage des performances, etc. Cette extension n'est pas requise pour une utilisation normale de l'application.";
 "manage_subscription" = "Gérer l\'abonnement";
 "private_access_routing_req" = "Votre destination se situe dans une zone privée. Souhaitez-vous autoriser l\'accès aux zones privées pour cet itinéraire \?";
 "purchases_feature_desc_osmand_cloud" = "Utilisez OsmAnd Cloud pour sauvegarder toutes les données d\'OsmAnd en ligne. Plus aucun risque de perdre vos données après une réinstallation. Sauvegardez et restaurez toutes vos informations sans difficulté.";
@@ -2520,7 +2520,7 @@
 "osm_live_banner_desc" = "Téléchargez un nombre illimité de cartes et obtenez des mises à jour plus fréquentes (hebdomadaires ou quotidiennes voire horaires).";
 "product_title_development" = "Débogage et développement OsmAnd";
 "purchases_feature_desc_unlimited_map_download" = "Téléchargez en illimité des cartes hors ligne pour tous les continents et toutes les régions.";
-"purchases_feature_desc_monthly_map_updates" = "Obtenez les misesà jour mensuelles pour les cartes hors ligne.";
+"purchases_feature_desc_monthly_map_updates" = "Obtenez les mises à jour mensuelles pour les cartes hors ligne.";
 "shared_string_purchased" = "Acheté";
 "annual_subscription" = "Abonnement annuel";
 "continue_with" = "Continuer avec %@";
@@ -2638,3 +2638,6 @@
 "weather_forecast_is_outdated" = "Les prévisions ne sont plus à jour.";
 "shared_string_selected" = "Sélectionné";
 "shared_string_next_update" = "Prochaine mise à jour";
+"weather_clear_offline_cache" = "Cela va supprimer tout le cache hors-ligne des tuiles météo.";
+"weather_generates_new_forecast_description" = "OsmAnd génère une nouvelle prévision toutes les 6 heures. Le plus proche de la date actuelle, le plus précise les prévisions seront.";
+"weather_accuracy_forecast_description" = "La prévision hors-ligne est disponible jusqu'à : %@.\nIndice de confiance : %@, par heure. %@ pour toutes les 3 heures.";

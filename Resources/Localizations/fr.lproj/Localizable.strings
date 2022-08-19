@@ -124,7 +124,7 @@
 "download_tab_local" = "Installé";
 "res_search_world" = "Rechercher dans le monde entier";
 "res_world_map" = "Carte du monde";
-"res_updates" = "Misesà jour";
+"res_updates" = "Mises à jour";
 "res_updates_avail" = "Mises à jour disponibles";
 "res_maps_inst" = "carte(s)";
 "res_deleting" = "Suppression…";
@@ -2520,7 +2520,7 @@
 "osm_live_banner_desc" = "Téléchargez un nombre illimité de cartes et obtenez des mises à jour plus fréquentes (hebdomadaires ou quotidiennes voire horaires).";
 "product_title_development" = "Débogage et développement OsmAnd";
 "purchases_feature_desc_unlimited_map_download" = "Téléchargez en illimité des cartes hors ligne pour tous les continents et toutes les régions.";
-"purchases_feature_desc_monthly_map_updates" = "Obtenez les misesà jour mensuelles pour les cartes hors ligne.";
+"purchases_feature_desc_monthly_map_updates" = "Obtenez les mises à jour mensuelles pour les cartes hors ligne.";
 "shared_string_purchased" = "Acheté";
 "annual_subscription" = "Abonnement annuel";
 "continue_with" = "Continuer avec %@";

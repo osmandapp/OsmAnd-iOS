@@ -34,7 +34,7 @@ typedef NS_ENUM (NSUInteger, OAPlanTypeCardRowType)
 @property (nonatomic, weak) id<OAPlanTypeCardRowDelegate> delegate;
 
 - (void)updateSelected:(BOOL)selected;
-
 - (void)updateInfo:(OAProduct *)subscription selectedFeature:(OAFeature *)selectedFeature selected:(BOOL)selected;
+- (void)updateRightIconFrameX:(CGFloat)x;
 
 @end

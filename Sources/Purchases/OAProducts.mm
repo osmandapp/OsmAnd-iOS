@@ -669,6 +669,12 @@
     return nil;
 }
 
+- (NSAttributedString *) formattedPriceAttributed
+{
+    NSString *price = self.formattedPrice;
+    return price ? [[NSAttributedString alloc] initWithString:price] : nil;
+}
+
 - (NSDecimalNumber *) getDefaultPrice
 {
     return nil;
@@ -983,6 +989,24 @@
         NSNumberFormatter *numberFormatter = [self getNumberFormatter:self.priceLocale];
         return [numberFormatter stringFromNumber:price];
     }
+    return nil;
+}
+
+- (NSAttributedString *) formattedPriceAttributed
+{
+    NSString *formattedPrice = [self formattedPrice];
+    if (formattedPrice && formattedPrice.length > 0)
+    {
+        NSString *price = [super formattedPrice];
+        NSMutableAttributedString *priceAttributed =
+                [[NSMutableAttributedString alloc] initWithString:formattedPrice
+                                                       attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15] }];
+        [priceAttributed addAttribute:NSFontAttributeName
+                                value:[UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
+                                range:NSMakeRange(0, price.length)];
+        return priceAttributed;
+    }
+
     return nil;
 }
 

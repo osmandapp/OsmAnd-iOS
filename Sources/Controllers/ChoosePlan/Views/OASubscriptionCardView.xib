@@ -44,7 +44,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YeY-jO-Etx" userLabel="View Choose Subscription Buttons Container">
+                <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YeY-jO-Etx" userLabel="View Choose Subscription Buttons Border">
                     <rect key="frame" x="0.0" y="281" width="414" height="165"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -73,7 +73,7 @@
                 <outlet property="labelPurchaseDescription" destination="IjD-lx-czF" id="4uw-ss-wkm"/>
                 <outlet property="labelTitle" destination="Z9G-KS-kr6" id="rL5-VS-ZAG"/>
                 <outlet property="viewBottomSeparator" destination="vag-0U-zs5" id="gnC-Rp-cXJ"/>
-                <outlet property="viewChooseSubscriptionButtonsContainer" destination="YeY-jO-Etx" id="svA-FI-HIj"/>
+                <outlet property="viewChooseSubscriptionButtonsBorder" destination="YeY-jO-Etx" id="svA-FI-HIj"/>
                 <outlet property="viewFeatureRowsContainer" destination="bmx-km-0th" id="LN7-bT-tP3"/>
                 <outlet property="viewTitleContainer" destination="ujq-n2-sLo" id="GdS-8G-l05"/>
             </connections>

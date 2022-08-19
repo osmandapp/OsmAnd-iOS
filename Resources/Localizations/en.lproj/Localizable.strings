@@ -580,6 +580,7 @@
 "shared_string_available_until" = "Available until";
 "shared_string_updates_size" = "Updates size";
 "shared_string_updates_frequency" = "Updates frequency";
+"shared_string_not_included" = "Not included";
 
 "restart" = "Restart";
 

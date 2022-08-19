@@ -2556,7 +2556,7 @@
 "shared_string_learn_more" = "Få mere at vide";
 "shared_string_purchased" = "Købt";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia og Wikivoyage offline";
-"purchases_feature_desc_osmand_cloud" = "Få OsmAnd Cloud for at gemme alle OsmAnd-data online. Ingen mistede data efter geninstallation. Sikkerhedskopiér og gendan nemt alle informationer.";
+"purchases_feature_desc_osmand_cloud" = "Gem alle OsmAnd-data online. Ingen tabte data efter geninstallation. Sikkerhedskopiér og gendan alle oplysninger nemt.";
 "purchases_feature_desc_unlimited_map_download" = "Få ubegrænset download af offline kort for alle kontinenter og regioner.";
 "you_can_get_feature_as_part_of_pattern" = "Få \"%@\" som en del af %@ abonnementet. Sammenligning:";
 "purchases_feature_desc_carplay" = "Giver dig OsmAnd offline kort og navigation på skærmen i dit køretøj og integreres med bilens betjeningselementer.";
@@ -2565,7 +2565,7 @@
 "purchases_feature_desc_wikipedia" = "Udforsk Wikipedia offline. Artikler er opdelt efter lande og regioner og er tilgængelige på alle sprog.";
 "purchases_feature_desc_terrain" = "Terræn-højdekurver, fuldt terrænskyggekort med mørke nuancer samt hældningskort med farver til at vise toppe og lavlandsområder.";
 "quarterly_subscription" = "Kvartalsabonnement";
-"purchases_feature_desc_nautical" = "Få adgang til havdybdeoplysninger";
+"purchases_feature_desc_nautical" = "Vektorkort, der er egnede til navigation på sejlruter";
 "private_access_routing_req" = "Din destination ligger i et område med privat adgang. Tillad at der benyttes private veje til denne tur\?";
 "paused" = "Pauset";
 "app_store" = "App Store";
@@ -2641,3 +2641,7 @@
 "weather_updates_automatically" = "OsmAnd downloader automatisk opdateringer, når den kører.";
 "update_only_over_wi_fi" = "Opdater kun via Wi-Fi";
 "update_parameters" = "Opdater parametre";
+"contact_support" = "Kontakt support";
+"contact_support_description" = "Hvis du har spørgsmål, kan du kontakte os på support@osmand.net.";
+"loading_purchase_information" = "Indlæser købsoplysninger";
+"purchases_feature_weather" = "24-timers vejrudsigt 7 dage frem farvelagt på kortet";

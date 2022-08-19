@@ -60,7 +60,7 @@
     UILabel *_labelNotIncluded;
     UIView *_lastIncludedView;
     UIView *_backgroundAboveScrollViewContainer;
-    NSArray<OAFeatureCardRow *> *_includesRows;
+    NSArray<OAFeatureCardRow *> *_includedRows;
     NSArray<OAFeatureCardRow *> *_notIncludedRows;
 }
 
@@ -165,7 +165,7 @@
                 OALocalizedString(@"shared_string_includes"), @""];
         [self.scrollView insertSubview:_labelIncludes belowSubview:_viewIncludesSeparator];
 
-        NSMutableArray<OAFeatureCardRow *> *includesRows = [NSMutableArray array];
+        NSMutableArray<OAFeatureCardRow *> *includedRows = [NSMutableArray array];
         UIView *prevView = _labelIncludes;
         BOOL isMaps = [OAIAPHelper isFullVersion:_product] || ([_product isKindOfClass:OASubscription.class] && [OAIAPHelper isMapsSubscription:(OASubscription *) _product]);
         for (OAFeature *feature in isMaps ? OAFeature.MAPS_PLUS_FEATURES : OAFeature.OSMAND_PRO_FEATURES)
@@ -176,10 +176,10 @@
                 [row updateIncludeInfo:feature];
                 [self.scrollView addSubview:row];
                 prevView = row;
-                [includesRows addObject:row];
+                [includedRows addObject:row];
             }
         }
-        _includesRows = includesRows;
+        _includedRows = includedRows;
 
         if (isMaps)
         {
@@ -400,7 +400,7 @@
         );
 
         y = _labelIncludes.frame.origin.y + _labelIncludes.frame.size.height;
-        for (OAFeatureCardRow *cardRow in _includesRows)
+        for (OAFeatureCardRow *cardRow in _includedRows)
         {
             y += [cardRow updateFrame:y] + 36.;
         }
@@ -414,7 +414,7 @@
             CGFloat notIncludedVerticalOffset = notIncludedSize.height > kMinRowHeight ? 9. : (kMinRowHeight - notIncludedSize.height) / 2;
             _labelNotIncluded.frame = CGRectMake(
                     20. + [OAUtilities getLeftMargin],
-                    _includesRows.lastObject.frame.origin.y + _includesRows.lastObject.frame.size.height + 32.,
+                    _includedRows.lastObject.frame.origin.y + _includedRows.lastObject.frame.size.height + 32.,
                     self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2,
                     notIncludedSize.height + notIncludedVerticalOffset * 2
             );

@@ -2535,7 +2535,7 @@
 "explore_osmnad_plans_to_find_suitable" = "استكشف خطط أوسماند لتجد التي تناسبك.";
 "product_desc_plus" = "احصل على ميزات موسعة";
 "private_access_routing_req" = "تقع وجهتك في منطقة ذات وصول خاص. السماح باستخدام الطرق الخاصة لهذه الرحلة؟";
-"purchases_feature_desc_osmand_cloud" = "احصل على أوسماند كلاود لتخزين جميع بيانات أوسماند عبر الإنترنت. لن تفقد بياناتك بعد إعادة التثبيت. نسخ الاحتياطي واستعادة جميع المعلومات بسهولة.";
+"purchases_feature_desc_osmand_cloud" = "قم بتخزين جميع بيانات أوسماند عبر الإنترنت. لن تفقد بياناتك بعد إعادة التثبيت. نسخ احتياطي واستعادة جميع المعلومات بسهولة.";
 "purchases_feature_desc_combined_wiki" = "استكشف مقالات ويكيبيديا أثناء التنقل ، بدون اتصال بالإنترنت. البيانات غير المتصلة بالإنترنت مقسمة على البلدان ومتاحة بجميع اللغات.";
 "product_desc_pro" = "احصل على أقصى قدر من الميزات";
 "purchases_feature_desc_monthly_map_updates" = "احصل على التحديثات الشهرية المنتظمة للخرائط غير المتصلة بالإنترنت.";
@@ -2567,7 +2567,7 @@
 "routing_attr_hazmat_category_name" = "فئة المواد الخطرة";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (لا قيود)";
 "pro_features" = "الميزات الاحترافية";
-"purchases_feature_weather" = " ";
+"purchases_feature_weather" = "توقعات الطقس لمدة 24 ساعة قبل 7 أيام ملونة على الخريطة";
 "plugin_popup_nautical_ask" = "يرجى تمكين الملحق البحري";
 "empty_purchases_description" = "إذا لم تظهر مشترياتك هنا، فانقر على “%@”, أو اتصل بفريق الدعم لدينا.";
 "in_grace_period" = "في فترة سماح";
@@ -2644,3 +2644,6 @@
 "weather_generates_new_forecast_description" = "أوسماند الطقس يزودك بتوقعات جديدة كل 6 ساعات. كلما اقتربنا من التاريخ الحالي ، كان ذلك أكثر دقة.";
 "update_only_over_wi_fi" = "قم بالتحديث عبر شبكة Wi-Fi فقط";
 "update_parameters" = "تحديث المعلمات";
+"contact_support" = "اتصل بالدعم";
+"contact_support_description" = "إذا كان لديك أي أسئلة ، يرجى الاتصال بنا على support@osmand.net.";
+"loading_purchase_information" = "تحميل معلومات الشراء";

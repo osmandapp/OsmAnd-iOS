@@ -91,7 +91,7 @@
         case STATUS_SERVER_TEMPORALLY_UNAVAILABLE_ERROR:
             return OALocalizedString(@"service_is_not_available_please_try_later");
         case STATUS_NO_ORDER_ID_ERROR:
-            return OALocalizedString(@"backup_error_no_subscription");
+            return OALocalizedString(@"backup_error_no_valid_subscription");
         default:
             break;
     }

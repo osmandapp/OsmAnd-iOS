@@ -9,7 +9,6 @@
 #import "OACloudBackupViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
-
 #import "OAFilledButtonCell.h"
 #import "OATwoFilledButtonsTableViewCell.h"
 #import "OALargeImageTitleDescrTableViewCell.h"
@@ -25,14 +24,13 @@
 #import "OARestoreBackupViewController.h"
 #import "OANetworkSettingsHelper.h"
 #import "OAPrepareBackupResult.h"
-#import "OABackupHelper.h"
 #import "OABackupInfo.h"
 #import "OABackupStatus.h"
 #import "OAAppSettings.h"
 #import "OAChoosePlanHelper.h"
 #import "OAOsmAndFormatter.h"
 #import "OABackupError.h"
-
+#import "OASettingsBackupViewController.h"
 #import "OAExportSettingsType.h"
 
 @interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OABackupExportListener, OAImportListener, OAOnPrepareBackupListener>
@@ -353,8 +351,8 @@
 
 - (IBAction)onSettingsButtonPressed
 {
-    // TODO: remove
-    [OABackupHelper.sharedInstance logout];
+    OASettingsBackupViewController *settingsBackupViewController = [[OASettingsBackupViewController alloc] init];
+    [self.navigationController pushViewController:settingsBackupViewController animated:YES];
 }
 
 - (void)onSetUpBackupButtonPressed

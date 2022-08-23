@@ -45,6 +45,7 @@
 
 + (NSString *) USER_REGISTER_URL;
 + (NSString *) DEVICE_REGISTER_URL;
++ (NSString *) LIST_FILES_URL;
 + (NSString *) DELETE_FILE_VERSION_URL;
 + (NSString *) DELETE_FILE_URL;
 
@@ -74,6 +75,10 @@
 - (NSArray<NSString *> *) collectItemFilesForUpload:(OAFileSettingsItem *)item;
 - (void) collectLocalFiles:(id<OAOnCollectLocalFilesListener>)listener;
 - (void) downloadFileList:(void(^)(NSInteger status, NSString *message, NSArray<OARemoteFile *> *remoteFiles))onComplete;
+- (void) deleteAllFiles:(NSArray<OAExportSettingsType *> *)types;
+- (void) deleteAllFiles:(NSArray<OAExportSettingsType *> *)types listener:(id<OAOnDeleteFilesListener>)listener;
+- (void) deleteOldFiles:(NSArray<OAExportSettingsType *> *)types;
+- (void) deleteOldFiles:(NSArray<OAExportSettingsType *> *)types listener:(id<OAOnDeleteFilesListener>)listener;
 - (NSString *)downloadFile:(NSString *)filePath
                 remoteFile:(OARemoteFile *)remoteFile
                   listener:(id<OAOnDownloadFileListener>)listener;

@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) onPreExecute;
 - (id) doInBackground;
+- (void) publishProgress:(id)object;
 
 - (void) deleteFiles:(NSArray<OARemoteFile *> *)remoteFiles;
 - (NSArray<id<OAOnDeleteFilesListener>> *)getListeners;

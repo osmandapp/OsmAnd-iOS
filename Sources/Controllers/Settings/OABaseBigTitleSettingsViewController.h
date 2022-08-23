@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *backImageButton;
 
+- (IBAction)backImageButtonPressed:(id)sender;
+
 - (NSString *) getTableHeaderTitle;
 - (void) setTableHeaderView:(NSString *)label;
 - (CGFloat) heightForLabel:(NSString *)text;

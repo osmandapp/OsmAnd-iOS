@@ -2507,14 +2507,14 @@
 "wikipedia_and_wikivoyage_offline" = "Wikipédia e Wikivoyage offline";
 "nautical_depth" = "Profundidade náutica";
 "terrain_maps" = "Mapas de terreno";
-"purchases_feature_desc_osmand_cloud" = "Obtenha o OsmAnd Cloud para armazenar todos os dados do OsmAnd online. Não perca os seus dados após reinstalações. Faça cópias de segurança e restaure todos os seus dados facilmente.";
+"purchases_feature_desc_osmand_cloud" = "Armazene todos os dados do OsmAnd Cloud online. Não perca os seus dados após reinstalações. Faça cópias de segurança e restaure todos os seus dados facilmente.";
 "purchases_feature_desc_pro_widgets" = "Obtenha acesso às funcionalidades OsmAnd Pro: coloração de rotas e mais.";
 "purchases_feature_desc_hourly_map_updates" = "Tenha acesso a atualizações de mapas com mais frequência. Atualizações de hora em hora, diárias ou semanais. As atualizações são descarregadas de forma incremental, apenas para a área alterada.";
 "purchases_feature_desc_monthly_map_updates" = "Obtenha acesso a atualizações mensais regulares para mapas offline.";
 "purchases_feature_desc_unlimited_map_download" = "Obtenha descarregamentos ilimitados para todos os mapas offline de continentes e regiões.";
 "purchases_feature_desc_combined_wiki" = "Explore os artigos da Wikipédia em qualquer lugar, sem uma ligação à Internet. Estes dados offline estão divididos por países e disponíveis em todos os idiomas.";
 "purchases_feature_desc_terrain" = "Veja curvas de nível do terreno, mapas em sombras de relevo com tons escuros e mapas de declive com cores para mostrar picos e planícies.";
-"purchases_feature_desc_nautical" = "Tenha acesso a informações de profundidade náutica";
+"purchases_feature_desc_nautical" = "Mapas vetoriais apropriados para navegação náutica.";
 "you_can_get_feature_as_part_of_pattern" = "Obtenha “%@” como parte do plano: %@. Comparação:";
 "monthly_subscription" = "Subscrição mensal";
 "annual_subscription" = "Subscrição anual";
@@ -2641,3 +2641,7 @@
 "weather_clear_offline_cache" = "Isto irá eliminar todos os ficheiros temporários para os ladrilhos da previsão meteorológica.";
 "update_only_over_wi_fi" = "Atualizar apenas em Wi-Fi";
 "service_is_not_available_please_try_later" = "Serviço indisponível. Tente mais tarde.";
+"shared_string_not_included" = "Não incluído";
+"contact_support" = "Contactar o apoio ao cliente";
+"contact_support_description" = "Se tiver alguma dúvida, contacte-nos em support@osmand.net.";
+"loading_purchase_information" = "A carregar a informação de compras";

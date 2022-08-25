@@ -705,7 +705,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 {
     if (filePath)
     {
-        if (![filePath containsString:[OsmAndApp instance].inboxPath])
+        if (![filePath containsString:[OsmAndApp instance].inboxPath] && ![filePath containsString:NSTemporaryDirectory()])
         {
             if (!_accessingSecurityScopedResource)
                 _accessingSecurityScopedResource = [NSMutableArray array];

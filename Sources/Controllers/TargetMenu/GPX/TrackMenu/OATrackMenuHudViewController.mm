@@ -400,7 +400,6 @@
 
 - (void)generateData
 {
-    _tableData = nil;
     _tableData = [_uiBuilder generateSectionsData];
     if (_selectedTab == EOATrackMenuHudOverviewTab)
         [self fetchDescriptionImageIfNeeded];

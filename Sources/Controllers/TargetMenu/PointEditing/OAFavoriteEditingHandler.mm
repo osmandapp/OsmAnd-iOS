@@ -97,8 +97,6 @@
         
         _favorite = [[OAFavoriteItem alloc] initWithFavorite:favorite];
         [_favorite setAmenity:poi];
-        
-        [_app saveFavoritesToPermamentStorage];
     }
     return self;
 }
@@ -148,7 +146,8 @@
 {
     OAFavoriteItem *comparingPoint = [[OAFavoriteItem alloc] initWithLat:_favorite.getLatitude lon:_favorite.getLongitude name:name category:group];
     NSDictionary *result = [OAFavoritesHelper checkDuplicates:comparingPoint];
-    [OAFavoritesHelper deleteNewFavoriteItem:comparingPoint];
+    if (result)
+        [OAFavoritesHelper deleteNewFavoriteItem:comparingPoint];
     return result;
 }
 

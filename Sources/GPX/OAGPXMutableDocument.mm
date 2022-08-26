@@ -389,7 +389,7 @@
 
     for (OATrack *track in self.tracks)
     {
-        if ([track.segments containsObject:segment])
+        if ([track.segments containsObject:segment] && segment.trkseg != nullptr)
         {
             BOOL removed = track.trk->segments.removeOne(std::dynamic_pointer_cast<OsmAnd::GpxDocument::TrkSegment>(segment.trkseg));
             if (removed)

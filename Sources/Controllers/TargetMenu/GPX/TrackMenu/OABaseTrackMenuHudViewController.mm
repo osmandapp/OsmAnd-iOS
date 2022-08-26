@@ -152,8 +152,6 @@
 
 @implementation OAGPXTableData
 
-@dynamic subjects;
-
 + (instancetype)withData:(NSDictionary *)data
 {
     OAGPXTableData *cellData = [OAGPXTableData new];

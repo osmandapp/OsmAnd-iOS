@@ -68,6 +68,8 @@
 
 @implementation OAGPXTableCellData
 
+@dynamic subjects;
+
 + (instancetype)withData:(NSDictionary *)data
 {
     OAGPXTableCellData *cellData = [OAGPXTableCellData new];
@@ -110,6 +112,8 @@
 @end
 
 @implementation OAGPXTableSectionData
+
+@dynamic subjects;
 
 + (instancetype)withData:(NSDictionary *)data
 {

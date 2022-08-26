@@ -72,8 +72,8 @@
     NSString *segmentName = !segment.name || segment.name.length == 0
             ? [NSString stringWithFormat:@"%li", segmentIdx + 1]
             : segment.name;
-    NSString *segmentString = OALocalizedString(@"gpx_selection_segment_title");
-    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), segmentString, segmentName];
+    NSString *segmentString = OALocalizedString(@"gpx_segment");
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), segmentString, segmentName];
 }
 
 + (NSString *)getTrackTitle:(OAGPXDocument *)gpxFile track:(OATrack *)track
@@ -100,8 +100,8 @@
 
     BOOL oneSegmentPerTrack =
             [gpxFile getNonEmptySegmentsCount] == [gpxFile getNonEmptyTracksCount];
-    BOOL oneOriginalTrack = [gpxFile hasGeneralTrack] && [gpxFile getNonEmptyTracksCount] == 2
-            || ![gpxFile hasGeneralTrack] && [gpxFile getNonEmptyTracksCount] == 1;
+    BOOL oneOriginalTrack = ([gpxFile hasGeneralTrack] && [gpxFile getNonEmptyTracksCount] == 2)
+            || (![gpxFile hasGeneralTrack] && [gpxFile getNonEmptyTracksCount] == 1);
 
     if (oneSegmentPerTrack)
         return trackTitle;

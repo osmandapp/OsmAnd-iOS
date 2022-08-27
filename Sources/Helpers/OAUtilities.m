@@ -1562,8 +1562,13 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (BOOL) isWindowed
 {
-    if (@available(iOS 13.0, *)) {
-        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
+    BOOL isiOSAppOnMac = NO;
+    if (@available(iOS 14.0, *))
+        isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
+
+    if (@available(iOS 13.0, *))
+    {
+        return !isiOSAppOnMac && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
             UIApplication.sharedApplication.delegate.window.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
     }
     return NO;

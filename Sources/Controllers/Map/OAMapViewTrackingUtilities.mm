@@ -326,6 +326,7 @@
         bool sameLocation = newLocation && [newLocation isEqual:_myLocation];
         bool sameHeading = _heading == newHeading;
 
+        CLLocation* prevLocation = _myLocation;
         _myLocation = newLocation;
         _heading = newHeading;
 
@@ -397,7 +398,12 @@
                         {
                             _mapView.animator->cancelAnimation(targetAnimation);
                             
-                            double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
+                            double duration;
+                            if (prevLocation)
+                                duration = MAX(1.0, [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp]);
+                            else
+                                double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
+
                             _mapView.animator->animateTargetTo(newTarget31,
                                                                duration,
                                                                OsmAnd::MapAnimator::TimingFunction::Linear,
@@ -405,8 +411,14 @@
                         }
                         else
                         {
+                            double duration;
+                            if (prevLocation)
+                                duration = MAX(1.0, [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp]);
+                            else
+                                duration = kOneSecondAnimatonTime;
+
                             _mapView.animator->animateTargetTo(newTarget31,
-                                                               kFastAnimationTime,
+                                                               duration,
                                                                OsmAnd::MapAnimator::TimingFunction::Linear,
                                                                kLocationServicesAnimationKey);
                         }

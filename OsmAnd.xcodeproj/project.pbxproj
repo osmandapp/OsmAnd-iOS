@@ -1277,14 +1277,6 @@
 		8EBE587727297A320075B834 /* test-resources in Resources */ = {isa = PBXBuildFile; fileRef = 8EBE587627297A310075B834 /* test-resources */; };
 		972A49622889820600348A86 /* ic_navbar_update@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 972A49602889820600348A86 /* ic_navbar_update@3x.png */; };
 		972A49632889820600348A86 /* ic_navbar_update@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 972A49612889820600348A86 /* ic_navbar_update@2x.png */; };
-		975A7FA528B9014500FDBB20 /* widget_battery_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 975A7F9D28B9014400FDBB20 /* widget_battery_day@2x.png */; };
-		975A7FA628B9014500FDBB20 /* widget_battery_charging_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 975A7F9E28B9014400FDBB20 /* widget_battery_charging_night@3x.png */; };
-		975A7FA728B9014500FDBB20 /* widget_battery_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 975A7F9F28B9014400FDBB20 /* widget_battery_night@2x.png */; };
-		975A7FA828B9014500FDBB20 /* widget_battery_charging_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 975A7FA028B9014400FDBB20 /* widget_battery_charging_night@2x.png */; };
-		975A7FA928B9014500FDBB20 /* widget_battery_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 975A7FA128B9014500FDBB20 /* widget_battery_night@3x.png */; };
-		975A7FAA28B9014500FDBB20 /* widget_battery_charging_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 975A7FA228B9014500FDBB20 /* widget_battery_charging_day@3x.png */; };
-		975A7FAB28B9014500FDBB20 /* widget_battery_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 975A7FA328B9014500FDBB20 /* widget_battery_day@3x.png */; };
-		975A7FAC28B9014500FDBB20 /* widget_battery_charging_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 975A7FA428B9014500FDBB20 /* widget_battery_charging_day@2x.png */; };
 		975A7FAF28B909B000FDBB20 /* ic_custom_cloud_upload_colored_day_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 975A7FAD28B909B000FDBB20 /* ic_custom_cloud_upload_colored_day_big@3x.png */; };
 		975A7FB028B909B000FDBB20 /* ic_custom_cloud_upload_colored_day_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 975A7FAE28B909B000FDBB20 /* ic_custom_cloud_upload_colored_day_big@2x.png */; };
 		97BCFBE9287D9152003AFFB2 /* ic_custom_shop_bag_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97BCFBE7287D9152003AFFB2 /* ic_custom_shop_bag_48@3x.png */; };
@@ -1321,8 +1313,6 @@
 		B247452F27E34B3600C18C3F /* ic_custom_restore@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B247452D27E34B3500C18C3F /* ic_custom_restore@2x.png */; };
 		B247453827E35E9B00C18C3F /* OACloudIntroductionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B247453727E35E9B00C18C3F /* OACloudIntroductionHeaderView.m */; };
 		B247453E27E3A8D000C18C3F /* OACloudIntroductionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B247453D27E3A8D000C18C3F /* OACloudIntroductionHeaderView.xib */; };
-		B247454127E3AFE400C18C3F /* ic_custom_cloud_upload_colored_day_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B247453F27E3AFE200C18C3F /* ic_custom_cloud_upload_colored_day_big@3x.png */; };
-		B247454227E3AFE400C18C3F /* ic_custom_cloud_upload_colored_day_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B247454027E3AFE300C18C3F /* ic_custom_cloud_upload_colored_day_big@2x.png */; };
 		B247454827E4A8E300C18C3F /* ic_custom_read_from_file@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B247454627E4A8E200C18C3F /* ic_custom_read_from_file@3x.png */; };
 		B247454927E4A8E300C18C3F /* ic_custom_read_from_file@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B247454727E4A8E300C18C3F /* ic_custom_read_from_file@2x.png */; };
 		B247455227E6424000C18C3F /* OALargeImageTitleDescrTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B247455027E6424000C18C3F /* OALargeImageTitleDescrTableViewCell.m */; };
@@ -4619,14 +4609,6 @@
 		8EBE587627297A310075B834 /* test-resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "test-resources"; path = "../resources/test-resources"; sourceTree = "<group>"; };
 		972A49602889820600348A86 /* ic_navbar_update@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_update@3x.png"; path = "Resources/Icons/ic_navbar_update@3x.png"; sourceTree = "<group>"; };
 		972A49612889820600348A86 /* ic_navbar_update@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_update@2x.png"; path = "Resources/Icons/ic_navbar_update@2x.png"; sourceTree = "<group>"; };
-		975A7F9D28B9014400FDBB20 /* widget_battery_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_battery_day@2x.png"; path = "../../../../../../Desktop/widget/widget_battery_day@2x.png"; sourceTree = "<group>"; };
-		975A7F9E28B9014400FDBB20 /* widget_battery_charging_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_battery_charging_night@3x.png"; path = "../../../../../../Desktop/widget/widget_battery_charging_night@3x.png"; sourceTree = "<group>"; };
-		975A7F9F28B9014400FDBB20 /* widget_battery_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_battery_night@2x.png"; path = "../../../../../../Desktop/widget/widget_battery_night@2x.png"; sourceTree = "<group>"; };
-		975A7FA028B9014400FDBB20 /* widget_battery_charging_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_battery_charging_night@2x.png"; path = "../../../../../../Desktop/widget/widget_battery_charging_night@2x.png"; sourceTree = "<group>"; };
-		975A7FA128B9014500FDBB20 /* widget_battery_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_battery_night@3x.png"; path = "../../../../../../Desktop/widget/widget_battery_night@3x.png"; sourceTree = "<group>"; };
-		975A7FA228B9014500FDBB20 /* widget_battery_charging_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_battery_charging_day@3x.png"; path = "../../../../../../Desktop/widget/widget_battery_charging_day@3x.png"; sourceTree = "<group>"; };
-		975A7FA328B9014500FDBB20 /* widget_battery_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_battery_day@3x.png"; path = "../../../../../../Desktop/widget/widget_battery_day@3x.png"; sourceTree = "<group>"; };
-		975A7FA428B9014500FDBB20 /* widget_battery_charging_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_battery_charging_day@2x.png"; path = "../../../../../../Desktop/widget/widget_battery_charging_day@2x.png"; sourceTree = "<group>"; };
 		975A7FAD28B909B000FDBB20 /* ic_custom_cloud_upload_colored_day_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_cloud_upload_colored_day_big@3x.png"; sourceTree = "<group>"; };
 		975A7FAE28B909B000FDBB20 /* ic_custom_cloud_upload_colored_day_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_cloud_upload_colored_day_big@2x.png"; sourceTree = "<group>"; };
 		97BCFBE7287D9152003AFFB2 /* ic_custom_shop_bag_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_shop_bag_48@3x.png"; path = "Resources/Icons/ic_custom_shop_bag_48@3x.png"; sourceTree = "<group>"; };
@@ -4688,8 +4670,6 @@
 		B247453627E35E9B00C18C3F /* OACloudIntroductionHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACloudIntroductionHeaderView.h; sourceTree = "<group>"; };
 		B247453727E35E9B00C18C3F /* OACloudIntroductionHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACloudIntroductionHeaderView.m; sourceTree = "<group>"; };
 		B247453D27E3A8D000C18C3F /* OACloudIntroductionHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACloudIntroductionHeaderView.xib; sourceTree = "<group>"; };
-		B247453F27E3AFE200C18C3F /* ic_custom_cloud_upload_colored_day_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_upload_colored_day_big@3x.png"; path = "Resources/Icons/ic_custom_cloud_upload_colored_day_big@3x.png"; sourceTree = "<group>"; };
-		B247454027E3AFE300C18C3F /* ic_custom_cloud_upload_colored_day_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_upload_colored_day_big@2x.png"; path = "Resources/Icons/ic_custom_cloud_upload_colored_day_big@2x.png"; sourceTree = "<group>"; };
 		B247454627E4A8E200C18C3F /* ic_custom_read_from_file@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_read_from_file@3x.png"; path = "Resources/Icons/ic_custom_read_from_file@3x.png"; sourceTree = "<group>"; };
 		B247454727E4A8E300C18C3F /* ic_custom_read_from_file@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_read_from_file@2x.png"; path = "Resources/Icons/ic_custom_read_from_file@2x.png"; sourceTree = "<group>"; };
 		B247454F27E6424000C18C3F /* OALargeImageTitleDescrTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OALargeImageTitleDescrTableViewCell.h; sourceTree = "<group>"; };
@@ -7759,8 +7739,6 @@
 				B247458327F3583D00C18C3F /* ic_navbar_settings@3x.png */,
 				B247454727E4A8E300C18C3F /* ic_custom_read_from_file@2x.png */,
 				B247454627E4A8E200C18C3F /* ic_custom_read_from_file@3x.png */,
-				B247454027E3AFE300C18C3F /* ic_custom_cloud_upload_colored_day_big@2x.png */,
-				B247453F27E3AFE200C18C3F /* ic_custom_cloud_upload_colored_day_big@3x.png */,
 				B247452D27E34B3500C18C3F /* ic_custom_restore@2x.png */,
 				B247452C27E34B3500C18C3F /* ic_custom_restore@3x.png */,
 				3296B46127F8790200108AF7 /* ic_custom_air_pressure@2x.png */,
@@ -9102,14 +9080,6 @@
 		847AF52D1F8A3D4900FC7F90 /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
-				975A7FA428B9014500FDBB20 /* widget_battery_charging_day@2x.png */,
-				975A7FA228B9014500FDBB20 /* widget_battery_charging_day@3x.png */,
-				975A7FA028B9014400FDBB20 /* widget_battery_charging_night@2x.png */,
-				975A7F9E28B9014400FDBB20 /* widget_battery_charging_night@3x.png */,
-				975A7F9D28B9014400FDBB20 /* widget_battery_day@2x.png */,
-				975A7FA328B9014500FDBB20 /* widget_battery_day@3x.png */,
-				975A7F9F28B9014400FDBB20 /* widget_battery_night@2x.png */,
-				975A7FA128B9014500FDBB20 /* widget_battery_night@3x.png */,
 				0CF58535244072D90081238D /* widget_marker_day@2x.png */,
 				0CF58541244072E40081238D /* widget_marker_day@3x.png */,
 				0CF5853C244072E00081238D /* widget_marker_night@2x.png */,
@@ -13493,7 +13463,6 @@
 				DA5A83AF26C563A800F274C7 /* OAWebViewController.xib in Resources */,
 				336CAAB324AF63520085BF0A /* ic_custom_transport_bus@3x.png in Resources */,
 				326B4FB2257FD0FC00ABAB1D /* ic_action_motorboat@2x.png in Resources */,
-				975A7FAA28B9014500FDBB20 /* widget_battery_charging_day@3x.png in Resources */,
 				84E441B61AF8A07500F87542 /* add_waypoint_to_track@2x.png in Resources */,
 				32309A652698D1F7005751F5 /* ic_custom_direction_bearing_day@2x.png in Resources */,
 				DA5A823C26C563A700F274C7 /* OABaseBigTitleSettingsViewController.xib in Resources */,
@@ -13503,7 +13472,6 @@
 				0A3EE20E275E4EE600C8B772 /* OAFoldersCollectionView.xib in Resources */,
 				DA5A840426C563A800F274C7 /* OADeleteCustomFiltersViewController.xib in Resources */,
 				849E81A21AFA5D6700549953 /* btn_map_type_icon_view_selected@2x.png in Resources */,
-				975A7FA828B9014500FDBB20 /* widget_battery_charging_night@2x.png in Resources */,
 				32A001702610B43700ABE0D2 /* widget_coordinates_latitude_south_day@3x.png in Resources */,
 				DA540D8E229E63270069201E /* ic_custom_plus@2x.png in Resources */,
 				DA0D163B281BEEF500CEEF58 /* map_turn_keep_right@2x.png in Resources */,
@@ -13657,12 +13625,10 @@
 				0CF5854A244072EC0081238D /* widget_marker_night@3x.png in Resources */,
 				3296B48F27F8790800108AF7 /* widget_weather_precipitation_night@2x.png in Resources */,
 				DAAE21E62269D6010006E016 /* ic_custom_my_places@3x.png in Resources */,
-				975A7FA628B9014500FDBB20 /* widget_battery_charging_night@3x.png in Resources */,
 				DA5A82A726C563A700F274C7 /* OAGPXRecTableViewCell.xib in Resources */,
 				8A6CBCA821CE25F0004033C7 /* ic_live_purchased@3x.png in Resources */,
 				0A8E4506270A12720016826E /* img_track_gradient_speed.png in Resources */,
 				DA6676D52450660800EF476D /* ic_action_bus@3x.png in Resources */,
-				975A7FAB28B9014500FDBB20 /* widget_battery_day@3x.png in Resources */,
 				DAB854D7230586CC002566A6 /* ic_custom_underlay_map@3x.png in Resources */,
 				DA5F6A13245844A100C7DF71 /* map_public_transport_transfer@2x.png in Resources */,
 				843257881A9DADE300A7964E /* ic_gpx_points@2x.png in Resources */,
@@ -14244,7 +14210,6 @@
 				843E5D831AB341E000BE14BE /* menu_cell_selected@3x.png in Resources */,
 				DA1340C8243DC5A70039D214 /* map_action_bus_dark@3x.png in Resources */,
 				DA5A83D026C563A800F274C7 /* OATransportRouteController.xib in Resources */,
-				975A7FAC28B9014500FDBB20 /* widget_battery_charging_day@2x.png in Resources */,
 				84F4641E1B664D3B00C1D96F /* ic_popup_no_internet@2x.png in Resources */,
 				DA1340D6243DC5A80039D214 /* map_action_scooter@3x.png in Resources */,
 				DA5A844226C563A900F274C7 /* OAUsernameFilterViewController.xib in Resources */,
@@ -14704,7 +14669,6 @@
 				DA5A829C26C563A700F274C7 /* OAProgressBarCell.xib in Resources */,
 				DA13A0272345FA0100C1A1A8 /* ic_custom_avoid_motorways@2x.png in Resources */,
 				DA6471B522CF5433008F937F /* ic_custom_unlimited_downloads@2x.png in Resources */,
-				B247454127E3AFE400C18C3F /* ic_custom_cloud_upload_colored_day_big@3x.png in Resources */,
 				DA5A843026C563A800F274C7 /* OARouteTargetSelectionViewController.xib in Resources */,
 				842431F41AEFDD1900925821 /* ic_action_rec_start@2x.png in Resources */,
 				0A7C7F312703955200F779E4 /* ic_custom_track_line_thin@3x.png in Resources */,
@@ -14768,7 +14732,6 @@
 				8476E2E21F6C1EEC00EC274F /* map_pedestrian_location@3x.png in Resources */,
 				DAA4EDF1240E85B800F16073 /* ic_custom_download@2x.png in Resources */,
 				DABA3DEF22686E72005BB777 /* ic_custom_upload@3x.png in Resources */,
-				975A7FA528B9014500FDBB20 /* widget_battery_day@2x.png in Resources */,
 				32E2A6E027206ACF00F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib in Resources */,
 				DAE79D36260E1B4800E2EE11 /* ic_system_checkbox_indeterminate@3x.png in Resources */,
 				84E442131AF8A07500F87542 /* track_new_segement@3x.png in Resources */,
@@ -14847,7 +14810,6 @@
 				46E0263B27B6773F00E554DD /* ic_custom_terrain_hilly@2x.png in Resources */,
 				DA1BC124233F9B01004DAF78 /* ic_custom_sort_door_to_door@2x.png in Resources */,
 				DABA3DEB22686E72005BB777 /* ic_tabbar_trips@3x.png in Resources */,
-				975A7FA928B9014500FDBB20 /* widget_battery_night@3x.png in Resources */,
 				DAF3455B22F4482B009E2EB6 /* ic_custom_osm_note_resolved@2x.png in Resources */,
 				DAF3456122F4482B009E2EB6 /* ic_custom_sunset@2x.png in Resources */,
 				DA5A82A526C563A700F274C7 /* OAColorViewCell.xib in Resources */,
@@ -15039,7 +15001,6 @@
 				847777531FAA260E00CA8C1F /* widget_speed_night@2x.png in Resources */,
 				DA68B3AE233B81DB00F5ACCC /* ic_custom_fuel@3x.png in Resources */,
 				323BD8EC2628850400D255ED /* ic_bg_point_square_center_small@2x.png in Resources */,
-				975A7FA728B9014500FDBB20 /* widget_battery_night@2x.png in Resources */,
 				46453B04283523FB001F9A3A /* ic_custom_maps_purchase@2x.png in Resources */,
 				8A7A4CA1210A036E00EC1B06 /* map_transport_stop_bus@3x.png in Resources */,
 				DA0D1629281BEEF500CEEF58 /* map_turn_slight_right@3x.png in Resources */,
@@ -15467,7 +15428,6 @@
 				DA5A82CF26C563A800F274C7 /* OAPointHeaderTableViewCell.xib in Resources */,
 				847AF5961F8A3D4900FC7F90 /* widget_battery_day@2x.png in Resources */,
 				845E06941B5FF17400DFC2A7 /* ic_plugin_contourlines@2x.png in Resources */,
-				B247454227E3AFE400C18C3F /* ic_custom_cloud_upload_colored_day_big@2x.png in Resources */,
 				32A001662610B43700ABE0D2 /* widget_coordinates_longitude_west_night@2x.png in Resources */,
 				3296B4A127F8790800108AF7 /* ic_custom_thermometer@3x.png in Resources */,
 				32B50ADA26BBE3C7002E6C92 /* ic_custom_drawer@3x.png in Resources */,

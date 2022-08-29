@@ -3086,7 +3086,9 @@
 
 - (NSDictionary<NSString *, NSArray<NSNumber *> *> *) getGpxWidth
 {
-    const auto &gpxWidthMap = _mapPresentationEnvironment->getGpxWidth();
+    auto gpxWidthMap = _mapPresentationEnvironment->getGpxWidth();
+    if (gpxWidthMap.isEmpty())
+        gpxWidthMap = _app.defaultRenderer->getGpxWidth();
     NSMutableDictionary<NSString *, NSArray<NSNumber *> *> *result = [NSMutableDictionary new];
     QHashIterator<QString, QList<int>> it(gpxWidthMap);
     while (it.hasNext()) {

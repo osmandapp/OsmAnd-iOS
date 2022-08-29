@@ -102,6 +102,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
         _byVersion = byVersion;
         _listener = listener;
         _backupHelper = OABackupHelper.sharedInstance;
+        _itemsProgress = [NSMutableSet set];
     }
     return self;
 }

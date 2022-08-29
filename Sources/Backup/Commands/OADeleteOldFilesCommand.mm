@@ -112,9 +112,15 @@
             {
                 [filesToDelete addObjectsFromArray:remoteFiles];
             }
-            [self publishProgress:filesToDelete];
             if (filesToDelete.count > 0)
+            {
+                [self publishProgress:filesToDelete];
                 [self deleteFiles:filesToDelete];
+            }
+            else
+            {
+                [self publishProgress:@[]];
+            }
         }
         [operationLog finishOperation:[NSString stringWithFormat:@"%d %@", status, message]];
     }];
@@ -127,23 +133,22 @@
 
     for (id<OAOnDeleteFilesListener> listener in [self getListeners])
     {
-        if ([object isKindOfClass:NSArray.class])
+        if ([object isKindOfClass:NSMutableArray.class])
+        {
+            [listener onFilesDeleteStarted:object];
+        }
+        else if ([object isKindOfClass:NSArray.class])
         {
             NSArray *files = (NSArray *) object;
-            if (files.count > 0)
+            if (files.count == 0)
             {
-                if (files.count == 2 && [files.firstObject isKindOfClass:NSNumber.class] && [files.lastObject isKindOfClass:NSString.class])
-                {
-                    int status = [files.firstObject intValue];
-                    NSString *message = (NSString *) files.lastObject;
-                    [listener onFilesDeleteError:status message:message];
-                }
-
-                [listener onFilesDeleteStarted:object];
+                [listener onFilesDeleteDone:@{}];
             }
-            else
+            else if (files.count == 2 && [files.firstObject isKindOfClass:NSNumber.class] && [files.lastObject isKindOfClass:NSString.class])
             {
-                [listener onFilesDeleteDone:[NSDictionary dictionary]];
+                int status = [files.firstObject intValue];
+                NSString *message = (NSString *) files.lastObject;
+                [listener onFilesDeleteError:status message:message];
             }
         }
     }

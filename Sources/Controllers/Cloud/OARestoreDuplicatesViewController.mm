@@ -101,7 +101,7 @@
 //        if (plugin != null) {
 //            plugin.indexingFiles(true, true);
 //        }
-        OAImportCompleteViewController *importVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES] fileName:OALocalizedString(@"osmand_cloud")];
+        OAImportCompleteViewController *importVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES addEmptyItems:NO] fileName:OALocalizedString(@"osmand_cloud")];
         [self.navigationController pushViewController:importVC animated:YES];
     }
 }

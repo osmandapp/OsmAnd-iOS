@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAExportSettingsType *) getExportSettingsTypeForItem:(OASettingsItem *)item;
 + (OAExportSettingsType *) getExportSettingsTypeForRemoteFile:(OARemoteFile *)remoteFile;
 
++ (NSArray<OAExportSettingsType *> *)getAllValues;
 + (NSArray<OAExportSettingsType *> *)getEnabledTypes;
 + (BOOL) isTypeEnabled:(OAExportSettingsType *)type;
 

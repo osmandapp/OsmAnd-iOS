@@ -407,15 +407,24 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return resourcesItems;
 }
 
-+ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *) getSettingsToOperateByCategory:(NSArray<OASettingsItem *> *)items importComplete:(BOOL)importComplete
++ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)getSettingsToOperateByCategory:(NSArray<OASettingsItem *> *)items
+                                                                                         importComplete:(BOOL)importComplete
+                                                                                          addEmptyItems:(BOOL)addEmptyItems
 {
-    MutableOrderedDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *exportMap = [MutableOrderedDictionary new];
-    NSDictionary<OAExportSettingsType *, NSArray *> *settingsToOperate = [self getSettingsToOperate:items importComplete:importComplete];
-    
+    NSDictionary<OAExportSettingsType *, NSArray *> *settingsToOperate = [self getSettingsToOperate:items
+                                                                                     importComplete:importComplete
+                                                                                      addEmptyItems:addEmptyItems];
+
+    return [self getSettingsToOperateByCategory:settingsToOperate addEmptyItems:addEmptyItems];
+}
+
++ (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)getSettingsToOperateByCategory:(NSDictionary<OAExportSettingsType *, NSArray *> *)settingsToOperate
+                                                                                          addEmptyItems:(BOOL)addEmptyItems
+{
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *settingsItems = [MutableOrderedDictionary new];
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *myPlacesItems = [MutableOrderedDictionary new];
     MutableOrderedDictionary<OAExportSettingsType *, NSArray *> *resourcesItems = [MutableOrderedDictionary new];
-    
+
     [settingsToOperate enumerateKeysAndObjectsUsingBlock:^(OAExportSettingsType * _Nonnull type, NSArray * _Nonnull obj, BOOL * _Nonnull stop) {
         if (type.isSettingsCategory)
             settingsItems[type] = obj;
@@ -424,16 +433,17 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         else if (type.isResourcesCategory)
             resourcesItems[type] = obj;
     }];
-    
-    if (settingsItems.count > 0)
+
+    MutableOrderedDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *exportMap = [MutableOrderedDictionary new];
+    if (settingsItems.count > 0 || addEmptyItems)
         exportMap[OAExportSettingsCategory.SETTINGS] = [[OASettingsCategoryItems alloc] initWithItemsMap:settingsItems];
-    
-    if (myPlacesItems.count > 0)
+
+    if (myPlacesItems.count > 0 || addEmptyItems)
         exportMap[OAExportSettingsCategory.MY_PLACES] = [[OASettingsCategoryItems alloc] initWithItemsMap:myPlacesItems];
-    
-    if (resourcesItems.count > 0)
+
+    if (resourcesItems.count > 0 || addEmptyItems)
         exportMap[OAExportSettingsCategory.RESOURCES] = [[OASettingsCategoryItems alloc] initWithItemsMap:resourcesItems];
-    
+
     return exportMap;
 }
 
@@ -618,7 +628,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return result;
 }
 
-+ (NSDictionary<OAExportSettingsType *, NSArray *> *) getSettingsToOperate:(NSArray<OASettingsItem *> *)settingsItems importComplete:(BOOL)importComplete
++ (NSDictionary<OAExportSettingsType *, NSArray *> *)getSettingsToOperate:(NSArray<OASettingsItem *> *)settingsItems
+                                                           importComplete:(BOOL)importComplete
+                                                            addEmptyItems:(BOOL)addEmptyItems
 {
     NSMutableDictionary<OAExportSettingsType *, NSArray *> *settingsToOperate = [NSMutableDictionary new];
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray array];
@@ -756,37 +768,37 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 break;
         }
     }
-    if (profiles.count > 0)
+    if (profiles.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.PROFILE] = profiles;
-    if (quickActions.count > 0)
+    if (quickActions.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.QUICK_ACTIONS] = quickActions;
-    if (poiUIFilters.count > 0)
+    if (poiUIFilters.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.POI_TYPES] = poiUIFilters;
-    if (tileSourceTemplates.count > 0)
+    if (tileSourceTemplates.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.MAP_SOURCES] = tileSourceTemplates;
-    if (renderFilesList.count > 0)
+    if (renderFilesList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.CUSTOM_RENDER_STYLE] = renderFilesList;
-    if (routingFilesList.count > 0)
+    if (routingFilesList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.CUSTOM_ROUTING] = routingFilesList;
-    if (tracksFilesList.count > 0)
+    if (tracksFilesList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.TRACKS] = tracksFilesList;
-    if (mapFilesList.count > 0)
+    if (mapFilesList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.OFFLINE_MAPS] = mapFilesList;
-    if (avoidRoads.count > 0)
+    if (avoidRoads.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.AVOID_ROADS] = avoidRoads;
-    if (favorites.count > 0)
+    if (favorites.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.FAVORITES] = favorites;
-    if (notesPointList.count > 0)
+    if (notesPointList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.OSM_NOTES] = notesPointList;
-    if (osmEditsPointList.count > 0)
+    if (osmEditsPointList.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.OSM_EDITS] = osmEditsPointList;
-    if (markers.count > 0)
+    if (markers.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.ACTIVE_MARKERS] = markers;
-    if (historyMarkers.count > 0)
+    if (historyMarkers.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.HISTORY_MARKERS] = historyMarkers;
-    if (historyEntries.count > 0)
+    if (historyEntries.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.SEARCH_HISTORY] = historyEntries;
-    if (globalSettingsItems.count > 0)
+    if (globalSettingsItems.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.GLOBAL] = globalSettingsItems;
     return settingsToOperate;
 }

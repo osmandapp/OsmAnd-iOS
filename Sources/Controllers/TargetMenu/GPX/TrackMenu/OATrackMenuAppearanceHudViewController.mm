@@ -351,13 +351,16 @@
     }];
     [widthCells addObject:widthTitleCellData];
 
-    OAGPXTableCellData *widthValueCellData = [OAGPXTableCellData withData:@{
-            kTableKey: @"width_value",
-            kCellType: [OASegmentedControlCell getCellIdentifier],
-            kTableValues: @{ @"array_value": [_appearanceCollection getAvailableWidth] },
-            kCellToggle: @YES
-    }];
-    [widthCells addObject:widthValueCellData];
+    if ([_appearanceCollection getAvailableWidth].count > 1)
+    {
+        OAGPXTableCellData *widthValueCellData = [OAGPXTableCellData withData:@{
+                kTableKey: @"width_value",
+                kCellType: [OASegmentedControlCell getCellIdentifier],
+                kTableValues: @{ @"array_value": [_appearanceCollection getAvailableWidth] },
+                kCellToggle: @YES
+        }];
+        [widthCells addObject:widthValueCellData];
+    }
     [widthCells addObject:[OAGPXTableCellData withData:@{
         kTableKey: @"width_empty_space",
         kCellType: [OADividerCell getCellIdentifier],

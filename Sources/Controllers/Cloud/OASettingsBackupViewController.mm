@@ -228,9 +228,7 @@
         outCell =  cell;
     }
 
-    if ([outCell needsUpdateConstraints])
-        [outCell setNeedsUpdateConstraints];
-
+    [outCell updateConstraintsIfNeeded];
     return outCell;
 }
 

@@ -42,15 +42,9 @@
     NSInteger _progressFilesTotalCount;
 }
 
-- (instancetype)init
-{
-    self = [super initWithNibName:@"OADeleteAllVersionsBackupViewController" bundle:nil];
-    return self;
-}
-
 - (instancetype)initWithScreenType:(EOADeleteBackupScreenType)screenType
 {
-    self = [self init];
+    self = [super initWithNibName:@"OADeleteAllVersionsBackupViewController" bundle:nil];
     if (self)
     {
         _screenType = screenType;
@@ -181,7 +175,6 @@
 
         NSMutableArray<NSMutableDictionary *> *progressCells = [NSMutableArray array];
         NSMutableDictionary *progressSection = [NSMutableDictionary dictionary];
-        progressSection[@"key"] = @"progress_section";
         progressSection[@"cells"] = progressCells;
         progressSection[@"footer"] = _sectionDescription;
         [data addObject:progressSection];
@@ -198,7 +191,6 @@
     {
         NSMutableArray<NSMutableDictionary *> *descriptionCells = [NSMutableArray array];
         NSMutableDictionary *descriptionSection = [NSMutableDictionary dictionary];
-        descriptionSection[@"key"] = @"description_section";
         descriptionSection[@"cells"] = descriptionCells;
         [data addObject:descriptionSection];
 
@@ -212,7 +204,6 @@
         {
             NSMutableArray<NSMutableDictionary *> *deleteCells = [NSMutableArray array];
             NSMutableDictionary *deleteSection = [NSMutableDictionary dictionary];
-            deleteSection[@"key"] = @"delete_section";
             deleteSection[@"cells"] = deleteCells;
             [data addObject:deleteSection];
 
@@ -437,9 +428,7 @@
         outCell = cell;
     }
 
-    if ([outCell needsUpdateConstraints])
-        [outCell setNeedsUpdateConstraints];
-
+    [outCell updateConstraintsIfNeeded];
     return outCell;
 }
 

@@ -1,4 +1,4 @@
-"OsmAnd Maps" = "خرائط أوسماند";
+"OsmAnd Maps" = "خرائط Osmand";
 "shared_string_previous" = "السابق";
 "route_stops_before" = "%d محطة توقف قبل";
 "transport_routes" = "المسارات الرياضية";
@@ -2523,7 +2523,7 @@
 "terrain_maps" = "خرائط التضاريس";
 "manage_subscription" = "إدارة الاشتراك";
 "osm_live_banner_desc" = "الحصول على عدد غير محدود من تحميلات الخرائط والتحديثات في الشهر : أسبوعياً، يومياً أو كل ساعة.";
-"purchases_feature_desc_nautical" = "الحصول على معلومات العمق البحري";
+"purchases_feature_desc_nautical" = "خرائط متجهات مناسبة للملاحة في طرق الإبحار";
 "unlimited_map_downloads" = "تنزيلات خرائط غير محدودة";
 "monthly_subscription" = "اشتراك شهري";
 "purchases_feature_desc_wikivoyage" = "استكشف Wikivoyage دون اتصال بالإنترنت. المقالات مقسمة حسب البلدان والمناطق ومتاحة بجميع اللغات.";
@@ -2647,3 +2647,5 @@
 "contact_support" = "اتصل بالدعم";
 "contact_support_description" = "إذا كان لديك أي أسئلة ، يرجى الاتصال بنا على support@osmand.net.";
 "loading_purchase_information" = "تحميل معلومات الشراء";
+"shared_string_not_included" = "غير مدرج";
+"gpx_segment" = "قطعة";

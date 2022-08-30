@@ -11,8 +11,6 @@
 #import "OAExportSettingsType.h"
 #import "OASettingsItem.h"
 #import "OAFileSettingsItem.h"
-#import "OASettingsItemType.h"
-#import "OAGpxSettingsItem.h"
 #import "OAPrepareBackupResult.h"
 #import "OABackupInfo.h"
 #import "OALocalFile.h"
@@ -26,7 +24,8 @@
 #import "OADeleteFilesCommand.h"
 #import "OAWebClient.h"
 #import "OAOperationLog.h"
-
+#import "OADeleteAllFilesCommand.h"
+#import "OADeleteOldFilesCommand.h"
 #import "OARegisterUserCommand.h"
 #import "OARegisterDeviceCommand.h"
 
@@ -79,6 +78,11 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 + (NSString *) DEVICE_REGISTER_URL
 {
     return DEVICE_REGISTER_URL;
+}
+
++ (NSString *) LIST_FILES_URL
+{
+    return LIST_FILES_URL;
 }
 
 + (NSString *) DELETE_FILE_VERSION_URL
@@ -464,6 +468,30 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             onComplete(status, message, remoteFiles);
         [operationLog finishOperation:[NSString stringWithFormat:@"%d %@", status, message]];
     }];
+}
+
+- (void)deleteAllFiles:(NSArray<OAExportSettingsType *> *)types
+{
+    [self checkRegistered];
+    [_executor addOperation:[[OADeleteAllFilesCommand alloc] initWithTypes:types]];
+}
+
+- (void)deleteAllFiles:(NSArray<OAExportSettingsType *> *)types listener:(id<OAOnDeleteFilesListener>)listener
+{
+    [self checkRegistered];
+    [_executor addOperation:[[OADeleteAllFilesCommand alloc] initWithTypes:types listener:listener]];
+}
+
+- (void)deleteOldFiles:(NSArray<OAExportSettingsType *> *)types
+{
+    [self checkRegistered];
+    [_executor addOperation:[[OADeleteOldFilesCommand alloc] initWithTypes:types]];
+}
+
+- (void)deleteOldFiles:(NSArray<OAExportSettingsType *> *)types listener:(id<OAOnDeleteFilesListener>)listener
+{
+    [self checkRegistered];
+    [_executor addOperation:[[OADeleteOldFilesCommand alloc] initWithTypes:types listener:listener]];
 }
 
 - (NSString *)downloadFile:(NSString *)filePath

@@ -18,7 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithVersion:(BOOL)byVersion listener:(id<OAOnDeleteFilesListener>)listener;
 
 - (void) onPreExecute;
-- (id) doInBackground;
+- (void) doInBackground;
+- (void) publishProgress:(id)object;
 
 - (void) deleteFiles:(NSArray<OARemoteFile *> *)remoteFiles;
 - (NSArray<id<OAOnDeleteFilesListener>> *)getListeners;

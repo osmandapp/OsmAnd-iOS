@@ -21,6 +21,7 @@
 + (OASelectedGPXHelper *)instance;
 
 - (BOOL)buildGpxList;
+- (void) markTrackForReload:(NSString *)filePath;
 - (OAGPXDocument *)getSelectedGpx:(OAWptPt *)gpxWpt;
 - (BOOL)isShowingAnyGpxFiles;
 

@@ -400,7 +400,6 @@
 
 - (void)generateData
 {
-    _tableData = nil;
     _tableData = [_uiBuilder generateSectionsData];
     if (_selectedTab == EOATrackMenuHudOverviewTab)
         [self fetchDescriptionImageIfNeeded];
@@ -450,9 +449,9 @@
 
 - (BOOL)adjustCentering
 {
-    return [self openedFromMap] && _wasFirstOpening
-            || ![self openedFromMap] && _wasFirstOpening
-            || ![self openedFromMap] && !_wasFirstOpening;
+    return ([self openedFromMap] && _wasFirstOpening)
+            || (![self openedFromMap] && _wasFirstOpening)
+            || (![self openedFromMap] && !_wasFirstOpening);
 }
 
 - (BOOL)stopChangingHeight:(UIView *)view
@@ -907,30 +906,29 @@
     {
         [self.doc saveTo:self.doc.path];
         [self.doc processPoints];
-        [self updateGpxData:YES updateDocument:NO];
+        [self updateGpxData:YES updateDocument:YES];
 
         if (self.isCurrentTrack)
-            [[_app updateRecTrackOnMapObservable] notifyEvent];
-        else
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
-
-        OAGPXTableSectionData *sectionData = [_tableData getSubject:[NSString stringWithFormat:@"section_%p", (__bridge void *) segment]];
-        if (sectionData)
         {
-            NSInteger sectionIndexToDelete = [_tableData.subjects indexOfObject:sectionData];
-            [sectionData setData:@{ kTableValues: @{ @"delete_section_bool_value": @YES } }];
-            [_uiBuilder updateData:sectionData];
-
-            if (sectionIndexToDelete != NSNotFound)
-            {
-                [self.tableView beginUpdates];
-                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndexToDelete]
-                              withRowAnimation:UITableViewRowAnimationNone];
-                [self.tableView endUpdates];
-            }
-
-            [self.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
+            [_app.updateRecTrackOnMapObservable notifyEvent];
         }
+        else
+        {
+            [OASelectedGPXHelper.instance markTrackForReload:self.doc.path];
+            [_app.updateGpxTracksOnMapObservable notifyEvent];
+        }
+        
+        [_uiBuilder resetDataInTab:_selectedTab];
+        [self generateData];
+        
+        [UIView transitionWithView: self.tableView
+                          duration: 0.35f
+                           options: UIViewAnimationOptionTransitionCrossDissolve
+                        animations: ^(void) {
+            [self.tableView reloadData];
+        } completion:^(BOOL finished) {
+            [self.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
+        }];
 
         if (_headerView)
             [_headerView setDescription];
@@ -1334,9 +1332,9 @@
         }
         case EOATrackMenuHudSegmentsTab:
         {
-            return [NSString stringWithFormat:@"%@: %li",
+            return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
                     OALocalizedString(@"gpx_selection_segment_title"),
-                    [self getGeneralSegment] ? _tableData.subjects.count - 1 : _tableData.subjects.count];
+                    @([self getGeneralSegment] ? _tableData.subjects.count - 1 : _tableData.subjects.count).stringValue];
         }
         case EOATrackMenuHudPointsTab:
         {

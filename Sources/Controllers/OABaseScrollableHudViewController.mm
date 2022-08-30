@@ -655,11 +655,13 @@
     if (animated)
     {
         [UIView animateWithDuration:0.2 animations:^{
+            [self.tableView reloadData];
             [self layoutSubviews];
         } completion:nil];
     }
     else
     {
+        [self.tableView reloadData];
         [self layoutSubviews];
     }
 }

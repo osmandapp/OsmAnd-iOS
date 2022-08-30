@@ -2520,9 +2520,9 @@
 "purchases_feature_desc_monthly_map_updates" = "Отримайте доступ до регулярних щомісячних оновлень для офлайн-мап.";
 "purchases_feature_desc_wikipedia" = "Переглядайте Вікіпедію в офлайн режимі. Статті, розділені за країнами та регіонами й доступні всіма мовами.";
 "purchases_feature_desc_terrain" = "Ізолінії рельєфу, повноколірна відмивка рельєфу з темними відтінками та мапами схилів в кольорах для показу піків та низин.";
-"purchases_feature_desc_nautical" = "Отримайте доступ до даних про морські глибини";
+"purchases_feature_desc_nautical" = "Векторні мапи, що підходять для навігації вітрильними маршрутами";
 "you_can_get_feature_as_part_of_pattern" = "Отримайте «%1$s» частиною тарифного плану %2$s. Порівняння:";
-"purchases_feature_weather" = " ";
+"purchases_feature_weather" = "Цілодобовий погодинний прогноз на 7 днів вперед, забарвлений на мапі";
 "annual_subscription" = "Річна передплата";
 "subscriptions" = "Передплати";
 "product_title_pro" = "OsmAnd Pro";
@@ -2556,7 +2556,7 @@
 "unlimited_map_downloads" = "Необмежена кількість завантажень мап";
 "carplay" = "CarPlay";
 "purchases_feature_desc_unlimited_map_download" = "Отримайте необмежені завантаження для всіх офлайн-мап континентів і регіонів.";
-"purchases_feature_desc_osmand_cloud" = "Отримайте OsmAnd Cloud для зберігання всіх даних OsmAnd онлайн. Не втрачайте дані після перевстановлення. Легко створюйте резервні копії та відновлюйте всі дані.";
+"purchases_feature_desc_osmand_cloud" = "Зберігайте всі дані OsmAnd онлайн. Не втрачайте дані після перевстановлення. Легко створюйте резервні копії та відновлюйте всі дані.";
 "purchases_feature_desc_hourly_map_updates" = "Отримайте доступ до часто оновлюваних мап. Щогодинні, щоденні або щотижневі оновлення. Завантажуються поступово, лише для зміненої ділянки.";
 "purchases_feature_desc_carplay" = "Офлайн-мапи та навігація OsmAnd на екрані вашого автомобіля. Зручна інтеграція з органами керування вашого автомобіля.";
 "purchases_feature_desc_combined_wiki" = "Переглядайте статті Вікіпедії в дорозі, без з’єднання з Інтернетом. Офлайнові дані, розділені за країнами та доступні всіма мовами.";
@@ -2649,3 +2649,8 @@
 "weather_accuracy_forecast_description" = "Офлайн-прогноз доступний до: %@.\nТочність: %@, щогодини. %@ на кожні 3 години.";
 "shared_string_available_until" = "Доступно до";
 "shared_string_updates_size" = "Розмір оновлень";
+"contact_support_description" = "Якщо маєте будь-які питання, зв'яжіться з нами за адресою support@osmand.net.";
+"loading_purchase_information" = "Завантаження даних про купівлю";
+"contact_support" = "Звернутися до служби підтримки";
+"shared_string_not_included" = "Не включає";
+"gpx_segment" = "Відрізок";

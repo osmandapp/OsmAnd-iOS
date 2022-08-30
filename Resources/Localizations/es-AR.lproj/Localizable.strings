@@ -2529,7 +2529,7 @@
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Sin restricciones)";
 "transport_hazmat_yes_desc" = "Debes elegir la categoría adecuada.";
 "carplay" = "CarPlay";
-"purchases_feature_desc_osmand_cloud" = "Obtén la nube de OsmAnd para almacenar en línea todos los datos de OsmAnd. No pierdes los datos al reinstalar. Haz copias de seguridad y restaura toda la información fácilmente.";
+"purchases_feature_desc_osmand_cloud" = "Almacena en línea todos los datos de OsmAnd. No pierdes los datos al reinstalar. Haz copias de seguridad y restaura toda la información fácilmente.";
 "purchases_feature_desc_pro_widgets" = "Obtén acceso a las funciones de OsmAnd Pro: Coloración de rutas y más.";
 "you_can_get_feature_as_part_of_pattern" = "Consigue «%@» como parte del plan %@. Comparación:";
 "monthly_subscription" = "Suscripción mensual";
@@ -2564,7 +2564,7 @@
 "plugin_popup_nautical_ask" = "Activa el complemento náutico";
 "restore_purchases" = "Restaurar compras";
 "transport_hazmat_no_desc" = "En algunos caminos y túneles se prohíbe el transporte de materiales peligrosos.";
-"purchases_feature_desc_nautical" = "Obtén acceso a la información de profundidad náutica";
+"purchases_feature_desc_nautical" = "Mapas vectoriales adecuados para la navegación náutica";
 "pro_features" = "Funciones «Pro»";
 "unlimited_map_downloads" = "Descargas de mapas ilimitadas";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia y Wikiviajes sin conexión";
@@ -2626,7 +2626,7 @@
 "restore_backup_descr" = "Restaura los datos en el dispositivo, usando copias de seguridad en línea";
 "backup_complete" = "Copia de seguridad completa";
 "fetching_from_server" = "Obteniendo datos del servidor";
-"purchases_feature_weather" = " ";
+"purchases_feature_weather" = "Pronóstico coloreado en el mapa de 24 horas con 7 días de antelación";
 "service_is_not_available_please_try_later" = "Servicio no disponible. Intenta más tarde.";
 "weather_forecast" = "Previsión meteorológica";
 "other_countries" = "Otros países";
@@ -2653,3 +2653,8 @@
 "weather_miss_forecasts_description" = "El pronóstico sin conexión está disponible por país. Duran hasta 7 días. Debes marcar los países necesarios.";
 "weather_updates_automatically" = "OsmAnd descargará las actualizaciones automáticamente mientras se ejecute.";
 "weather_generates_new_forecast_description" = "OsmAnd genera un nuevo pronóstico cada 6 horas. Cuanto más cerca de la fecha actual, más preciso será.";
+"loading_purchase_information" = "Cargando datos de compra";
+"contact_support_description" = "Si tienes alguna duda, ponte en contacto con nosotros en support@osmand.net.";
+"contact_support" = "Contacto con soporte";
+"shared_string_not_included" = "No incluido";
+"gpx_segment" = "Segmento";

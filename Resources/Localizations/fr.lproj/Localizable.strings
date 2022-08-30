@@ -2111,7 +2111,7 @@
 "added_profiles" = "Profils ajoutés";
 "suggested_maps_descr" = "Ces cartes sont nécessaires pour utiliser l\'extension.";
 "suggested_maps" = "Cartes suggérées";
-"product_desc_ext_openplacereviews" = "Envoyez des photos, des avis et des liens sur des lieux publics tels que des restaurants, des hôtels, des musées et des waypoints en tant que données ouvertes https://openplacereviews.org/data/.\n\nEn savoir plus sur https://openplacereviews.org";
+"product_desc_ext_openplacereviews" = "Permet de contribuer au projet OpenPlaceReviews. Envoyez des photos, des avis et des liens sur des lieux publics tels que des restaurants, des hôtels, des musées et des waypoints.\n\nVous savoir comment contribuer, consultez le site internet - https://openplacereviews.org";
 "product_desc_openplacereviews" = "Partager vos avis sur les lieux publics";
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "product_desc_ext_mapillary" = "Des photos détaillées en ligne pour tous. Découvrez des lieux, collaborez, capturez le monde.";
@@ -2496,7 +2496,7 @@
 "ios_release_4_2" = "- Apparence de la ligne de route : ajout de la possibilité de définir la largeur et la couleur\n- Traces : ajout d'une option pour supprimer plusieurs traces à la fois\n- Menu contextuel des pistes : ajout d'une barre de défilement avec des groupes de points de repère\n- Apparence de la carte : division des routes supplémentaires par type avec la possibilité d'activer une route de chaque catégorie séparément.\n- Équitation : ajout d'un nouveau type de navigation et d'un profil d'application\n- Les fichiers OsmAnd sont maintenant visibles dans l'application \"Files\".\n- L'interface utilisateur des options \"Utiliser les données d'élévation\" et \"Sélectionner les fluctuations d'élévation\" a été améliorée, elles ont été combinées et renommées \"Terrain préféré\", actuellement disponible pour les profils \"Bicyclette\" et \"Piéton\".\n- Nouvelle option \"Inclure l'en-tête\" pour l'enregistrement des pistes.\n- Widget nom de rue : affiche désormais le bouclier routier et le numéro de sortie pendant la navigation.\n- Nouveaux itinéraires de fitness et de course à pied sur la carte\n- Correction des bugs de CarPlay, ajout de gestes pour les écrans tactiles\n- Correction de l'importation de fichiers GPX à partir du paquet OSF\n- Correction de l'importation de plugins personnalisés avec des fichiers inclus\n- Correction de divers dysfonctionnements en mode Planification d'itinéraire\n- Correction de crashs pendant la navigation\n";
 "not_available_with" = "Non disponible avec %@";
 "explore_osmnad_plans_to_find_suitable" = "Explorez les offres OsmAnd et trouvez celle qui vous convient.";
-"purchases_feature_desc_nautical" = "Accédez aux informations de profondeur bathymétrique";
+"purchases_feature_desc_nautical" = "Carte vectorielle adaptée pour la navigation sur les routes maritimes";
 "shared_string_stop" = "Arrêt";
 "product_desc_plus" = "Bénéficiez de fonctionnalités étendues";
 "transport_hazmat_yes_desc" = "Vous devez sélectionner une catégorie.";
@@ -2510,7 +2510,7 @@
 "product_desc_ext_development" = "Permet de configurer OsmAnd pour faire des tests : simulation du guidage, l'affichage des performances, etc. Cette extension n'est pas requise pour une utilisation normale de l'application.";
 "manage_subscription" = "Gérer l\'abonnement";
 "private_access_routing_req" = "Votre destination se situe dans une zone privée. Souhaitez-vous autoriser l\'accès aux zones privées pour cet itinéraire \?";
-"purchases_feature_desc_osmand_cloud" = "Utilisez OsmAnd Cloud pour sauvegarder toutes les données d\'OsmAnd en ligne. Plus aucun risque de perdre vos données après une réinstallation. Sauvegardez et restaurez toutes vos informations sans difficulté.";
+"purchases_feature_desc_osmand_cloud" = "Sauvegardez toutes les données d'OsmAnd en ligne. Plus aucun risque de perdre vos données après une réinstallation. Sauvegardez et restaurez toutes vos informations sans difficulté.";
 "new_device_account" = "Nouvel appareil / nouveau compte";
 "subscriptions" = "Abonnements";
 "shared_string_learn_more" = "En savoir plus";
@@ -2641,3 +2641,8 @@
 "weather_clear_offline_cache" = "Cela va supprimer tout le cache hors-ligne des tuiles météo.";
 "weather_generates_new_forecast_description" = "OsmAnd génère une nouvelle prévision toutes les 6 heures. Le plus proche de la date actuelle, le plus précise les prévisions seront.";
 "weather_accuracy_forecast_description" = "La prévision hors-ligne est disponible jusqu'à : %@.\nIndice de confiance : %@, par heure. %@ pour toutes les 3 heures.";
+"contact_support" = "Contacter le support";
+"shared_string_not_included" = "Non inclus";
+"loading_purchase_information" = "Chargement des informations d'achat";
+"contact_support_description" = "Si vous avez des questions, veuillez nous contacter à support@osmand.net.";
+"purchases_feature_weather" = "Prévisions météo par heure sur 7 jours coloriées sur la carte";

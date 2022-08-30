@@ -9,6 +9,8 @@
 #import "OABaseFeatureCardView.h"
 #import "OAChoosePlanViewController.h"
 
+#define kMinRowHeight 48.
+
 NS_ASSUME_NONNULL_BEGIN
 
 @class OAFeature;

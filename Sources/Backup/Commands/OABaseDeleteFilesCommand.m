@@ -106,17 +106,17 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
     return self;
 }
 
-- (id)doInBackground
+- (void)doInBackground
 {
-    return nil; // override
+    // override
 }
 
 - (void)main
 {
     [self onPreExecute];
-    id obj = [self doInBackground];
+    [self doInBackground];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self onPostExecute:obj];
+        [self onPostExecute];
     });
 }
 
@@ -185,7 +185,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
     }
 }
 
-- (void) onPostExecute:(id)obj
+- (void) onPostExecute
 {
     NSArray<id<OAOnDeleteFilesListener>> *listeners = [self getListeners];
     if (listeners.count > 0)

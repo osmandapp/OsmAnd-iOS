@@ -42,7 +42,7 @@
     return self;
 }
 
-- (id)doInBackground
+- (void)doInBackground
 {
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"deviceid"] = [_backupHelper getDeviceId];
@@ -119,7 +119,6 @@
         }
         [operationLog finishOperation:[NSString stringWithFormat:@"%d %@", status, message]];
     }];
-    return nil;
 }
 
 - (void)publishProgress:(id)object

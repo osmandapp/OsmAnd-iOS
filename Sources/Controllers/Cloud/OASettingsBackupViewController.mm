@@ -100,7 +100,6 @@
 
     NSMutableArray<NSMutableDictionary *> *osmAndCloudCells = [NSMutableArray array];
     NSMutableDictionary *osmAndCloudSection = [NSMutableDictionary dictionary];
-    osmAndCloudSection[@"key"] = @"osmand_cloud_section";
     osmAndCloudSection[@"header"] = OALocalizedString(@"osmand_cloud");
     osmAndCloudSection[@"footer"] = OALocalizedString(@"select_backup_data_descr");
     osmAndCloudSection[@"cells"] = osmAndCloudCells;
@@ -121,7 +120,6 @@
 
     NSMutableArray<NSMutableDictionary *> *accountCells = [NSMutableArray array];
     NSMutableDictionary *accountSection = [NSMutableDictionary dictionary];
-    accountSection[@"key"] = @"account_section";
     accountSection[@"header"] = OALocalizedString(@"shared_string_account");
     accountSection[@"cells"] = accountCells;
     [data addObject:accountSection];
@@ -135,7 +133,6 @@
 
     NSMutableArray<NSMutableDictionary *> *dangerZoneCells = [NSMutableArray array];
     NSMutableDictionary *dangerZoneSection = [NSMutableDictionary dictionary];
-    dangerZoneSection[@"key"] = @"danger_zone_section";
     dangerZoneSection[@"header"] = OALocalizedString(@"backup_danger_zone");
     dangerZoneSection[@"footer"] = OALocalizedString(@"backup_delete_all_data_or_versions_descr");
     dangerZoneSection[@"cells"] = dangerZoneCells;
@@ -202,6 +199,8 @@
             return;
         }
     }
+
+    [self dismissViewController];
 }
 
 #pragma mark - OADeleteAllVersionsBackupDelegate
@@ -354,9 +353,7 @@
         outCell =  cell;
     }
 
-    if ([outCell needsUpdateConstraints])
-        [outCell setNeedsUpdateConstraints];
-
+    [outCell updateConstraintsIfNeeded];
     return outCell;
 }
 

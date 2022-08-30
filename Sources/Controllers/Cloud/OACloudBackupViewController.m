@@ -360,6 +360,8 @@
             return;
         }
     }
+
+    [self dismissViewController];
 }
 
 - (IBAction)onSettingsButtonPressed

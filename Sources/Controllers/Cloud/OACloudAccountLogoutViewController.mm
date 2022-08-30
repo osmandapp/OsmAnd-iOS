@@ -18,7 +18,7 @@
 
 @implementation OACloudAccountLogoutViewController
 {
-    NSArray<NSDictionary *> *_data;
+    NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
 - (instancetype)init
@@ -46,29 +46,23 @@
 - (void)setupView
 {
     _data = @[
-            @{
-                    @"key": @"user_section",
-                    @"cells": @[@{
-                            @"key": @"user_cell",
-                            @"type": [OAIconTitleValueCell getCellIdentifier],
-                            @"title": [[OAAppSettings sharedManager].backupUserEmail get],
-                            @"icon": @"ic_custom_user_profile"
-                    }]
-            },
-            @{
-                    @"key": @"logout_section",
-                    @"cells": @[@{
-                            @"key": @"logout_cell",
-                            @"type": [OAIconTitleValueCell getCellIdentifier],
-                            @"title": OALocalizedString(@"shared_string_logout")
-                    }]
-            }
+            @[@{
+                    @"key": @"user_cell",
+                    @"type": [OAIconTitleValueCell getCellIdentifier],
+                    @"title": [[OAAppSettings sharedManager].backupUserEmail get],
+                    @"icon": @"ic_custom_user_profile"
+            }],
+            @[@{
+                    @"key": @"logout_cell",
+                    @"type": [OAIconTitleValueCell getCellIdentifier],
+                    @"title": OALocalizedString(@"shared_string_logout")
+            }]
     ];
 }
 
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
-    return _data[indexPath.section][@"cells"][indexPath.row];
+    return _data[indexPath.section][indexPath.row];
 }
 
 #pragma mark - UITableViewDataSource
@@ -80,7 +74,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return ((NSArray *) _data[section][@"cells"]).count;
+    return _data[section].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -113,9 +107,7 @@
         outCell = cell;
     }
 
-    if ([outCell needsUpdateConstraints])
-        [outCell updateConstraints];
-
+    [outCell updateConstraintsIfNeeded];
     return outCell;
 }
 

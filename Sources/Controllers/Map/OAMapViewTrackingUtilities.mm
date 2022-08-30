@@ -402,7 +402,7 @@
                             if (prevLocation)
                                 duration = MAX(1.0, [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp]);
                             else
-                                double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
+                                duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
 
                             _mapView.animator->animateTargetTo(newTarget31,
                                                                duration,

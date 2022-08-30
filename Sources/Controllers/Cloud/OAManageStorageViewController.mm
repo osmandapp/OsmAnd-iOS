@@ -71,7 +71,6 @@
 
     NSMutableArray<NSMutableDictionary *> *manageStorageCells = [NSMutableArray array];
     NSMutableDictionary *manageStorageSection = [NSMutableDictionary dictionary];
-    manageStorageSection[@"key"] = @"manage_storage";
     manageStorageSection[@"cells"] = manageStorageCells;
     [data addObject:manageStorageSection];
 
@@ -107,21 +106,18 @@
 
     NSMutableArray<NSMutableDictionary *> *myPlacesCells = [NSMutableArray array];
     NSMutableDictionary *myPlacesSection = [NSMutableDictionary dictionary];
-    myPlacesSection[@"key"] = @"my_places_section";
     myPlacesSection[@"header"] = OALocalizedString(@"my_places");
     myPlacesSection[@"cells"] = myPlacesCells;
     [data addObject:myPlacesSection];
 
     NSMutableArray<NSMutableDictionary *> *resourcesCells = [NSMutableArray array];
     NSMutableDictionary *resourcesSection = [NSMutableDictionary dictionary];
-    resourcesSection[@"key"] = @"resources_section";
     resourcesSection[@"header"] = OALocalizedString(@"shared_string_resources");
     resourcesSection[@"cells"] = resourcesCells;
     [data addObject:resourcesSection];
 
     NSMutableArray<NSMutableDictionary *> *settingsCells = [NSMutableArray array];
     NSMutableDictionary *settingsSection = [NSMutableDictionary dictionary];
-    settingsSection[@"key"] = @"settings_section";
     settingsSection[@"header"] = OALocalizedString(@"shared_string_settings");
     settingsSection[@"cells"] = settingsCells;
     [data addObject:settingsSection];

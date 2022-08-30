@@ -25,15 +25,9 @@
     NSMutableArray<NSMutableDictionary *> *_data;
 }
 
-- (instancetype)init
-{
-    self = [super initWithNibName:@"OAManageTypeViewController" bundle:nil];
-    return self;
-}
-
 - (instancetype)initWithSettingsType:(OAExportSettingsType *)settingsType size:(NSString *)size
 {
-    self = [self init];
+    self = [super initWithNibName:@"OAManageTypeViewController" bundle:nil];
     if (self)
     {
         _settingsType = settingsType;
@@ -80,7 +74,6 @@
 
     NSMutableArray<NSMutableDictionary *> *sizeCells = [NSMutableArray array];
     NSMutableDictionary *sizeSection = [NSMutableDictionary dictionary];
-    sizeSection[@"key"] = @"size_section";
     sizeSection[@"header"] = OALocalizedString(@"my_places");
     sizeSection[@"cells"] = sizeCells;
     [data addObject:sizeSection];
@@ -93,7 +86,6 @@
 
     NSMutableArray<NSMutableDictionary *> *deleteCells = [NSMutableArray array];
     NSMutableDictionary *deleteSection = [NSMutableDictionary dictionary];
-    deleteSection[@"key"] = @"delete_section";
     deleteSection[@"cells"] = deleteCells;
     deleteSection[@"footer"] = [NSString stringWithFormat:OALocalizedString(@"backup_delete_data_type_description"), _settingsType.title];
     [data addObject:deleteSection];
@@ -158,9 +150,7 @@
         outCell = cell;
     }
 
-    if ([outCell needsUpdateConstraints])
-        [outCell setNeedsUpdateConstraints];
-
+    [outCell updateConstraintsIfNeeded];
     return outCell;
 }
 

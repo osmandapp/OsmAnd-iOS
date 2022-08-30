@@ -40,7 +40,7 @@
 
 - (instancetype)init
 {
-    self = [self initWithNibName:@"OABaseBackupTypesViewController" bundle:nil];
+    self = [super initWithNibName:@"OABaseBackupTypesViewController" bundle:nil];
     {
         [self commonInit];
     }

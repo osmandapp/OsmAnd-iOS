@@ -2618,7 +2618,7 @@
 
 "backup_error_no_valid_subscription" = "No valid subscription present";
 "backup_error_user_is_not_registered" = "No user registered with that e-mail address";
-"backup_error_token_is_not_valid_or_expired" = "Invalid or expired token";
+"backup_error_token_is_not_valid_or_expired" = "Invalid or expired verification code";
 "backup_error_token_is_not_valid" = "Something is wrong with the provided device ID or token";
 "backup_error_file_not_available" = "File unavailable";
 "backup_error_gzip_only_supported_upload" = "The file should be sent in .gzip format";

@@ -1950,8 +1950,10 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset
 {
-    CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin * 2) - 12 - iconFrameSize - 16;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
+    BOOL hasIcon = iconFrameSize > 0;
+    CGFloat iconOffset = hasIcon ? 12 + iconFrameSize + 20 : 0;
+    CGFloat textWidth = DeviceScreenWidth - (20 + OAUtilities.getLeftMargin * 2) - iconOffset;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
     label.attributedText = text;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
@@ -1964,20 +1966,23 @@ static const double d180PI = 180.0 / M_PI_2;
     UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 16)];
     [tableHeaderView addSubview:label];
     
-    CGFloat yOffset = iconYOffset == 0 ? tableHeaderView.frame.size.height / 2 - iconFrameSize / 2 : iconYOffset;
-    UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 20 - OAUtilities.getLeftMargin - iconFrameSize, yOffset, iconFrameSize, iconFrameSize)];
-    imageContainer.backgroundColor = iconBackgroundColor;
-    
-    UIImageView *imageView = [[UIImageView alloc] init];
-    imageView.frame = CGRectMake(iconFrameSize / 2 - 15., iconFrameSize / 2 - 15., 30, 30);
-    imageView.contentMode = contentMode;
-    [imageView setTintColor:tintColor];
-    [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-    
-    [imageContainer insertSubview:imageView atIndex:0];
-    imageContainer.layer.cornerRadius = iconFrameSize / 2;
-    
-    [tableHeaderView addSubview:imageContainer];
+    if (hasIcon)
+    {
+        CGFloat yOffset = iconYOffset == 0 ? tableHeaderView.frame.size.height / 2 - iconFrameSize / 2 : iconYOffset;
+        UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 20 - OAUtilities.getLeftMargin - iconFrameSize, yOffset, iconFrameSize, iconFrameSize)];
+        imageContainer.backgroundColor = iconBackgroundColor;
+        
+        UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.frame = CGRectMake(iconFrameSize / 2 - 15., iconFrameSize / 2 - 15., 30, 30);
+        imageView.contentMode = contentMode;
+        [imageView setTintColor:tintColor];
+        [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        
+        [imageContainer insertSubview:imageView atIndex:0];
+        imageContainer.layer.cornerRadius = iconFrameSize / 2;
+        
+        [tableHeaderView addSubview:imageContainer];
+    }
     
     return tableHeaderView;
 }

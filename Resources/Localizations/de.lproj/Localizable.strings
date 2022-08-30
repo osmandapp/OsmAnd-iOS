@@ -2657,3 +2657,4 @@
 "loading_purchase_information" = "Kaufinformationen werden geladen";
 "contact_support_description" = "Wenn Sie Fragen haben, wenden Sie sich bitte an support@osmand.net.";
 "shared_string_not_included" = "Nicht enthalten";
+"gpx_segment" = "Segment";

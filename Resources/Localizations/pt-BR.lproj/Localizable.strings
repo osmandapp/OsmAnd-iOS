@@ -2639,3 +2639,9 @@
 "map_settings_clear_geo_cache" = "Limpar mosaicos geográficos";
 "map_settings_clear_raster_cache" = "Limpar mosaicos raster";
 "login_footer_email_part" = "support@osmand.net";
+"contact_support" = "Contatar o suporte";
+"purchases_feature_weather" = "Previsão horária 24h 7 dias à frente colorida no mapa";
+"contact_support_description" = "Se você tiver alguma dúvida, entre em contato conosco em support@osmand.net.";
+"loading_purchase_information" = "Carregando informações de compra";
+"shared_string_not_included" = "Não incluído";
+"gpx_segment" = "Segmento";

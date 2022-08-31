@@ -112,15 +112,9 @@
             {
                 [filesToDelete addObjectsFromArray:remoteFiles];
             }
+            [self publishProgress:filesToDelete];
             if (filesToDelete.count > 0)
-            {
-                [self publishProgress:filesToDelete];
                 [self deleteFiles:filesToDelete];
-            }
-            else
-            {
-                [self publishProgress:@[]];
-            }
         }
         [operationLog finishOperation:[NSString stringWithFormat:@"%d %@", status, message]];
     }];
@@ -132,11 +126,7 @@
 
     for (id<OAOnDeleteFilesListener> listener in [self getListeners])
     {
-        if ([object isKindOfClass:NSMutableArray.class])
-        {
-            [listener onFilesDeleteStarted:object];
-        }
-        else if ([object isKindOfClass:NSArray.class])
+        if ([object isKindOfClass:NSArray.class])
         {
             NSArray *files = (NSArray *) object;
             if (files.count == 0)
@@ -148,6 +138,10 @@
                 int status = [files.firstObject intValue];
                 NSString *message = (NSString *) files.lastObject;
                 [listener onFilesDeleteError:status message:message];
+            }
+            else
+            {
+                [listener onFilesDeleteStarted:object];
             }
         }
     }

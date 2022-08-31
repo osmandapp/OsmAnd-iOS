@@ -2727,7 +2727,7 @@
 "backup_remove_old_versions_finished" = "Old versions was successfully deleted from OsmAnd Cloud.";
 "delete_all_confirmation" = "Yes, delete all";
 "manage_storage" = "Manage storage";
-"backup_delete_types_descr" = "Delete all data for deprecated data types from OsmAnd Cloud?";
+"backup_delete_types_descr" = "Delete all data for disabled data types from OsmAnd Cloud?";
 "backup_delete_data_type_description" = "This will delete all %@ data from OsmAnd Cloud. This action cannot be undone.";
 "backup_empty_data_from_category" = "OsmAnd Cloud doesn't include any data from this category.";
 "cloud_storage_used" = "%@ of %@ used";

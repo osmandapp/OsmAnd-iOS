@@ -8,7 +8,7 @@
 
 #import "OAManageStorageViewController.h"
 #import "OAIconTitleValueCell.h"
-#import "OAManageStorageProgressCell.h"
+#import "OAStorageStateValuesCell.h"
 #import "OAExportSettingsCategory.h"
 #import "OAExportSettingsType.h"
 #import "OASettingsCategoryItems.h"
@@ -20,13 +20,11 @@
 @implementation OAManageStorageViewController
 {
     OABackupHelper *_backupHelper;
-    NSMutableArray<NSMutableDictionary *> *_data;
 }
 
 - (void)commonInit
 {
     _backupHelper = [OABackupHelper sharedInstance];
-
     [super commonInit];
 }
 
@@ -60,11 +58,6 @@
     [self.navigationController presentViewController:manageTypeViewController animated:YES completion:nil];
 }
 
-- (NSMutableArray<NSMutableDictionary *> *)getData
-{
-    return _data;
-}
-
 - (void)generateData
 {
     NSMutableArray *data = [NSMutableArray array];
@@ -76,7 +69,7 @@
 
     NSMutableDictionary *manageStorageProgressData = [NSMutableDictionary dictionary];
     manageStorageProgressData[@"key"] = @"manage_storage_progress_cell";
-    manageStorageProgressData[@"type"] = [OAManageStorageProgressCell getCellIdentifier];
+    manageStorageProgressData[@"type"] = [OAStorageStateValuesCell getCellIdentifier];
     manageStorageProgressData[@"show_description"] = @(NO);
     [manageStorageCells addObject:manageStorageProgressData];
 
@@ -202,7 +195,7 @@
         [settingsCells addObject:emptyData];
     }
 
-    _data = data;
+    [self setData:data];
 }
 
 @end

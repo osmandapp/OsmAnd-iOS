@@ -10,7 +10,7 @@
 #import "OAManageStorageViewController.h"
 #import "OAIconTextDividerSwitchCell.h"
 #import "OAIconTitleValueCell.h"
-#import "OAManageStorageProgressCell.h"
+#import "OAStorageStateValuesCell.h"
 #import "OAExportSettingsCategory.h"
 #import "OAExportSettingsType.h"
 #import "OASettingsCategoryItems.h"
@@ -22,7 +22,6 @@
 @implementation OABackupTypesViewController
 {
     OABackupHelper *_backupHelper;
-    NSMutableArray<NSMutableDictionary *> *_data;
 }
 
 - (void)commonInit
@@ -111,11 +110,6 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (NSMutableArray<NSMutableDictionary *> *)getData
-{
-    return _data;
-}
-
 - (void)generateData
 {
     NSMutableArray *data = [NSMutableArray array];
@@ -127,7 +121,7 @@
 
     NSMutableDictionary *manageStorageProgressData = [NSMutableDictionary dictionary];
     manageStorageProgressData[@"key"] = @"manage_storage_progress_cell";
-    manageStorageProgressData[@"type"] = [OAManageStorageProgressCell getCellIdentifier];
+    manageStorageProgressData[@"type"] = [OAStorageStateValuesCell getCellIdentifier];
     manageStorageProgressData[@"show_description"] = @(YES);
     [manageStorageCells addObject:manageStorageProgressData];
 
@@ -200,7 +194,7 @@
     manageStorageProgressData[@"second_progress"] = @(myPlacesSize);
     manageStorageProgressData[@"third_progress"] = @(settingsSize);
 
-    _data = data;
+    [self setData:data];
 }
 
 @end

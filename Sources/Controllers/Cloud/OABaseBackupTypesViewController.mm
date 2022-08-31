@@ -10,7 +10,7 @@
 #import "MBProgressHUD.h"
 #import "OAIconTextDividerSwitchCell.h"
 #import "OAIconTitleValueCell.h"
-#import "OAManageStorageProgressCell.h"
+#import "OAStorageStateValuesCell.h"
 #import "OAExportSettingsType.h"
 #import "OASettingsCategoryItems.h"
 #import "OAPrepareBackupResult.h"
@@ -33,6 +33,7 @@
     NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *_dataItems;
     NSMutableDictionary<OAExportSettingsType *, NSArray *> *_selectedItems;
 
+    NSMutableArray<NSMutableDictionary *> *_data;
     NSIndexPath *_selectedIndexPath;
     NSInteger _progressFilesCompleteCount;
     NSInteger _progressFilesTotalCount;
@@ -111,11 +112,7 @@
         [self showClearTypeScreen:type];
 
     if (_selectedIndexPath)
-    {
-        [UIView performWithoutAnimation:^{
-            [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-        }];
-    }
+        [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)showClearTypeScreen:(OAExportSettingsType *)type
@@ -186,19 +183,19 @@
     return _selectedIndexPath;
 };
 
-- (NSMutableArray<NSMutableDictionary *> *)getData
+- (void)setData:(NSMutableArray<NSMutableDictionary *> *)data
 {
-    return [NSMutableArray array]; // override
+    _data = data;
 }
 
 - (void)generateData
 {
-    // override;
+    _data = [NSMutableArray array]; // override;
 }
 
 - (NSMutableDictionary *)getItem:(NSIndexPath *)indexPath
 {
-    return ((NSArray *) [self getData][indexPath.section][@"cells"])[indexPath.row];
+    return ((NSArray *) _data[indexPath.section][@"cells"])[indexPath.row];
 }
 
 #pragma mark - OAManageTypeDelegate
@@ -328,12 +325,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self getData].count;
+    return _data.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return ((NSArray *) [self getData][section][@"cells"]).count;
+    return ((NSArray *) _data[section][@"cells"]).count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -356,10 +353,10 @@
             [cell showIcon:YES];
             cell.dividerView.hidden = YES;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
         }
         if (cell)
         {
+            cell.separatorInset = UIEdgeInsetsMake(0., 66. + [OAUtilities getLeftMargin], 0., 0.);
             cell.switchView.on = [_selectedItems.allKeys containsObject:settingsType];
             cell.textView.text = settingsType.title;
             cell.iconView.image = settingsType.icon;
@@ -378,10 +375,10 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *) nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
         }
         if (cell)
         {
+            cell.separatorInset = UIEdgeInsetsMake(0., 66. + [OAUtilities getLeftMargin], 0., 0.);
             cell.selectionStyle = emptyCell || hasEmptyIcon ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
 
             cell.textView.text = settingsType ? settingsType.title : item[@"title"];
@@ -408,13 +405,13 @@
         }
         outCell = cell;
     }
-    else if ([cellType isEqualToString:[OAManageStorageProgressCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAStorageStateValuesCell getCellIdentifier]])
     {
-        OAManageStorageProgressCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAManageStorageProgressCell getCellIdentifier]];
+        OAStorageStateValuesCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAStorageStateValuesCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAManageStorageProgressCell getCellIdentifier] owner:self options:nil];
-            cell = (OAManageStorageProgressCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAStorageStateValuesCell getCellIdentifier] owner:self options:nil];
+            cell = (OAStorageStateValuesCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
@@ -424,10 +421,10 @@
 
             cell.titleLabel.text = item[@"title"];
             [cell showDescription:showDescription];
-            [cell setTotalProgress:[item[@"total_progress"] integerValue]];
-            [cell setFirstProgress:[item[@"first_progress"] integerValue]];
-            [cell setSecondProgress:[item[@"second_progress"] integerValue]];
-            [cell setThirdProgress:[item[@"third_progress"] integerValue]];
+            [cell setTotalAvailableValue:[item[@"total_progress"] integerValue]];
+            [cell setFirstValue:[item[@"first_progress"] integerValue]];
+            [cell setSecondValue:[item[@"second_progress"] integerValue]];
+            [cell setThirdValue:[item[@"third_progress"] integerValue]];
         }
         outCell = cell;
     }
@@ -440,7 +437,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [self getData][section][@"header"];
+    return _data[section][@"header"];
 }
 
 #pragma mark - UITableViewDelegate

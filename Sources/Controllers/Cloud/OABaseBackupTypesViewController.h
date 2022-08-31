@@ -35,6 +35,7 @@
 + (NSInteger)calculateItemsSize:(NSArray *)items;
 
 - (NSIndexPath *)getSelectedIndexPath;
+- (void)setData:(NSMutableArray<NSMutableDictionary *> *)data;
 - (NSMutableDictionary *)getItem:(NSIndexPath *)indexPath;
 
 @property (nonatomic, weak) id<OABackupTypesDelegate> backupTypesDelegate;

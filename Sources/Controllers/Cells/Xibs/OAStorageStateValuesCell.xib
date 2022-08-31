@@ -10,7 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="8Kn-IU-q68" customClass="OAManageStorageProgressCell">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="8Kn-IU-q68" customClass="OAStorageStateValuesCell">
             <rect key="frame" x="0.0" y="0.0" width="414" height="116"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8Kn-IU-q68" id="Ak0-sY-GJL">
@@ -181,18 +181,18 @@
             <connections>
                 <outlet property="descriptionContainerView" destination="SET-oh-YyK" id="PHN-mk-KTW"/>
                 <outlet property="firstDescriptionLabel" destination="aPW-C9-giS" id="FQ2-Y6-7rm"/>
-                <outlet property="progressContainerView" destination="KoG-iN-Ayi" id="tYT-Rh-IEz"/>
-                <outlet property="progressFirstDescriptionView" destination="g1A-2L-0zZ" id="ATK-oU-gGv"/>
-                <outlet property="progressFirstView" destination="Qss-uc-g2q" id="kg8-sD-JMn"/>
-                <outlet property="progressFirstViewWidth" destination="15x-mk-Rob" id="U6a-1W-ZYQ"/>
-                <outlet property="progressNoDescriptionConstraint" destination="knj-QR-75P" id="slW-44-pwb"/>
-                <outlet property="progressSecondDescriptionView" destination="TST-aB-gpG" id="hhs-0S-x7E"/>
-                <outlet property="progressSecondView" destination="p6l-Oe-MW0" id="nyw-S1-2O7"/>
-                <outlet property="progressSecondViewWidth" destination="i5K-7Q-tWg" id="6dw-GQ-SyQ"/>
-                <outlet property="progressThirdDescriptionView" destination="4Xb-K8-obh" id="Gci-bv-p2v"/>
-                <outlet property="progressThirdView" destination="AIc-EO-Z2l" id="bm4-Dm-eXz"/>
-                <outlet property="progressThirdViewWidth" destination="puq-zQ-SZv" id="oUy-WU-3BM"/>
-                <outlet property="progressWithDescriptionConstraint" destination="Hvl-fy-4ZZ" id="hZ6-os-e29"/>
+                <outlet property="valuesContainerView" destination="KoG-iN-Ayi" id="tYT-Rh-IEz"/>
+                <outlet property="firstValueDescriptionView" destination="g1A-2L-0zZ" id="ATK-oU-gGv"/>
+                <outlet property="firstValueView" destination="Qss-uc-g2q" id="kg8-sD-JMn"/>
+                <outlet property="firstValueViewWidth" destination="15x-mk-Rob" id="U6a-1W-ZYQ"/>
+                <outlet property="valuesNoDescriptionConstraint" destination="knj-QR-75P" id="slW-44-pwb"/>
+                <outlet property="secondValueDescriptionView" destination="TST-aB-gpG" id="hhs-0S-x7E"/>
+                <outlet property="secondValueView" destination="p6l-Oe-MW0" id="nyw-S1-2O7"/>
+                <outlet property="secondValueViewWidth" destination="i5K-7Q-tWg" id="6dw-GQ-SyQ"/>
+                <outlet property="thirdValueDescriptionView" destination="4Xb-K8-obh" id="Gci-bv-p2v"/>
+                <outlet property="thirdValueView" destination="AIc-EO-Z2l" id="bm4-Dm-eXz"/>
+                <outlet property="thirdValueViewWidth" destination="puq-zQ-SZv" id="oUy-WU-3BM"/>
+                <outlet property="valuesWithDescriptionConstraint" destination="Hvl-fy-4ZZ" id="hZ6-os-e29"/>
                 <outlet property="secondDescriptionLabel" destination="cHd-Mk-dRh" id="vbu-Mx-To9"/>
                 <outlet property="thirdDescriptionLabel" destination="kJ5-7m-iq2" id="0qH-p3-3Uq"/>
                 <outlet property="titleLabel" destination="tRQ-Yw-PeO" id="E4O-Gc-Hlh"/>

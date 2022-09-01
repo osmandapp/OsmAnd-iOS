@@ -130,7 +130,11 @@
     NSString *descr = _product.expirationDate ? [formatter stringFromDate:_product.expirationDate] : @"";
     if (_product.purchaseState == PSTATE_NOT_PURCHASED && [_product isKindOfClass:OASubscription.class])
     {
-        if (_product.purchaseCancelledTime > 0)
+        if (_product.expirationDate)
+        {
+            descr = [formatter stringFromDate:_product.expirationDate];
+        }
+        else if (_product.purchaseCancelledTime > 0)
         {
             descr = [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:_product.purchaseCancelledTime]];
         }

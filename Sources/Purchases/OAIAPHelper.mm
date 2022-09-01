@@ -32,6 +32,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 
 #define CARPLAY_START_DATE_SEC (10L * 60L * 60L * 24L) // 10 days
 #define PURCHASE_VALIDATION_PERIOD_SEC 60 * 60 * 24 // daily
+#define SECONDS_PER_DAY 86400
 
 typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *products, NSDictionary<NSString *, NSDate *> *expirationDates, BOOL success);
 
@@ -1243,6 +1244,37 @@ static OASubscriptionState *EXPIRED;
         [_settings.billingUserEmail set:[email isKindOfClass:[NSString class]] ? (NSString *)email : @""];
 }
 
+- (NSCalendarUnit)calendarUnitFromSkUnit:(SKProductPeriodUnit)unit
+{
+    NSCalendarUnit calendarComponent = NSCalendarUnitNanosecond;
+    switch (unit)
+    {
+        case SKProductPeriodUnitDay:
+        {
+            calendarComponent = NSCalendarUnitDay;
+            break;
+        }
+        case SKProductPeriodUnitMonth:
+        {
+            calendarComponent = NSCalendarUnitMonth;
+            break;
+        }
+        case SKProductPeriodUnitWeek:
+        {
+            calendarComponent = NSCalendarUnitWeekOfYear;
+            break;
+        }
+        case SKProductPeriodUnitYear:
+        {
+            calendarComponent = NSCalendarUnitYear;
+            break;
+        }
+        default:
+            break;
+    }
+    return calendarComponent;
+}
+
 - (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transaction:(SKPaymentTransaction *)transaction
 {
     OAProduct *product = [self product:productIdentifier];
@@ -1344,17 +1376,54 @@ static OASubscriptionState *EXPIRED;
                                      if ([map objectForKey:@"userid"])
                                          [self applyUserPreferences:map];
 
-                                     if ([self.class isLiveUpdatesSubscription:product])
-                                         [_settings.liveUpdatesPurchased set:YES];
-                                     else if ([self.class isOsmAndProSubscription:product])
-                                         [_settings.osmandProPurchased set:YES];
-                                     else if ([self.class isMapsSubscription:product])
-                                         [_settings.osmandMapsPurchased set:YES];
-
                                      _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
                                      if (transaction.transactionState == SKPaymentTransactionStatePurchased || transaction.transactionState == SKPaymentTransactionStateRestored)
                                      {
-                                         [_products setPurchased:productIdentifier];
+                                         OAProduct *product = [_products getProduct:productIdentifier];
+                                         if ([product isKindOfClass:OASubscription.class])
+                                         {
+                                             OASubscription *s = (OASubscription *) product;
+                                             NSTimeInterval daysPassedSincePurchase = [NSDate.date timeIntervalSinceDate:transaction.transactionDate] / SECONDS_PER_DAY;
+                                             NSTimeInterval daysInSubscription = -1;
+                                             NSDate *currDate = NSDate.date;
+                                             if (s.skProduct)
+                                             {
+                                                 SKProductSubscriptionPeriod *subPeriod = s.skProduct.subscriptionPeriod;
+                                                 NSUInteger numberOfUnits = subPeriod.numberOfUnits;
+                                                 SKProductPeriodUnit unit = subPeriod.unit;
+                                                     
+                                                 NSCalendarUnit calendarComponent = [self calendarUnitFromSkUnit:unit];
+                                                 if (calendarComponent != NSCalendarUnitNanosecond)
+                                                 {
+                                                     NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierISO8601];
+                                                     NSDate *subDate = [calendar dateByAddingUnit:calendarComponent value:numberOfUnits toDate:currDate options:0];
+                                                     daysInSubscription = [subDate timeIntervalSinceDate:currDate] / SECONDS_PER_DAY;
+                                                 }
+                                             }
+                                             BOOL isPurchaseActive = (!s.expirationDate || [s.expirationDate compare:currDate] == NSOrderedDescending);
+                                             BOOL isPurchaseCancelled = s.purchaseCancelledTime != 0 && [currDate timeIntervalSince1970] - s.purchaseCancelledTime > kSubscriptionHoldingTimeMsec;
+                                             if (isPurchaseActive
+                                                 && !isPurchaseCancelled
+                                                 && daysInSubscription != -1
+                                                 && daysPassedSincePurchase <= daysInSubscription)
+                                             {
+                                                 [_products setPurchased:productIdentifier];
+                                                 if ([self.class isLiveUpdatesSubscription:s])
+                                                     [_settings.liveUpdatesPurchased set:YES];
+                                                 else if ([self.class isOsmAndProSubscription:s])
+                                                     [_settings.osmandProPurchased set:YES];
+                                                 else if ([self.class isMapsSubscription:s])
+                                                     [_settings.osmandMapsPurchased set:YES];
+                                             }
+                                             else
+                                             {
+                                                 [_products setExpired:productIdentifier];
+                                             }
+                                         }
+                                         else
+                                         {
+                                             [_products setPurchased:productIdentifier];
+                                         }
                                          if (sku && transactionId)
                                          {
                                              NSData* data = [_settings.purchasedIdentifiers.get dataUsingEncoding:NSUTF8StringEncoding];

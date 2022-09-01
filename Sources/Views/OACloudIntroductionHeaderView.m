@@ -83,7 +83,6 @@
     self.contentView.frame = self.bounds;
     
     _animatedViews = [NSMutableArray array];
-    [self addAnimatedViews];
 }
 
 - (CGFloat)getCompoundImageWidth:(NSInteger)count

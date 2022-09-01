@@ -45,13 +45,23 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="taW-sp-CC3">
+                            <rect key="frame" x="0.0" y="84" width="414" height="4"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="4" id="1sy-vm-kHF"/>
+                            </constraints>
+                            <color key="progressTintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                        </progressView>
                     </subviews>
                     <color key="backgroundColor" red="1" green="0.53333333329999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="JHj-ue-qso" firstAttribute="leading" secondItem="Pfi-Ug-d0T" secondAttribute="leadingMargin" constant="2" id="0GN-g9-2OL"/>
                         <constraint firstItem="nD6-uK-bcg" firstAttribute="leading" secondItem="Pfi-Ug-d0T" secondAttribute="leadingMargin" constant="42" id="5Cf-WL-3U1"/>
                         <constraint firstAttribute="trailingMargin" secondItem="nD6-uK-bcg" secondAttribute="trailing" constant="42" id="7gg-5N-SGX"/>
+                        <constraint firstItem="taW-sp-CC3" firstAttribute="leading" secondItem="Pfi-Ug-d0T" secondAttribute="leading" id="9t3-5n-HMv"/>
+                        <constraint firstAttribute="bottom" secondItem="taW-sp-CC3" secondAttribute="bottom" id="D3N-4B-8wN"/>
                         <constraint firstAttribute="bottom" secondItem="nD6-uK-bcg" secondAttribute="bottom" constant="11" id="aRV-kb-MI0"/>
+                        <constraint firstAttribute="trailing" secondItem="taW-sp-CC3" secondAttribute="trailing" id="d6I-bY-jBp"/>
                         <constraint firstAttribute="bottom" secondItem="JHj-ue-qso" secondAttribute="bottom" constant="8" id="iuB-zM-lQK"/>
                     </constraints>
                 </view>

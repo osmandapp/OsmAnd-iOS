@@ -77,7 +77,7 @@
     
     if (_settingsItems)
     {
-        self.itemsMap = [OASettingsHelper getSettingsToOperateByCategory:_settingsItems importComplete:NO];
+        self.itemsMap = [OASettingsHelper getSettingsToOperateByCategory:_settingsItems importComplete:NO addEmptyItems:NO];
         self.itemTypes = self.itemsMap.allKeys;
         [self generateData];
     }
@@ -184,7 +184,7 @@
     if (succeed)
     {
         [self.tableView reloadData];
-        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES] fileName:[_file lastPathComponent]];
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES addEmptyItems:NO] fileName:[_file lastPathComponent]];
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
         [OAUtilities denyAccessToFile:_file removeFromInbox:YES];

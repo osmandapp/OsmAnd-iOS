@@ -59,7 +59,7 @@
         if (!self.itemsMap)
         {
             _settingsItems = importTask.items;
-            self.itemsMap = [OASettingsHelper getSettingsToOperateByCategory:importTask.items importComplete:NO];
+            self.itemsMap = [OASettingsHelper getSettingsToOperateByCategory:importTask.items importComplete:NO addEmptyItems:NO];
             _fetchingBackup = importTask.items.count == 0;
         }
         NSArray *duplicates = importTask.duplicates;
@@ -241,7 +241,7 @@
             }
         }
         _settingsItems = items;
-        self.itemsMap = [OASettingsHelper getSettingsToOperateByCategory:items importComplete:NO];
+        self.itemsMap = [OASettingsHelper getSettingsToOperateByCategory:items importComplete:NO addEmptyItems:NO];
         self.itemTypes = self.itemsMap.allKeys;
         [self setupView];
         [self.tableView reloadData];
@@ -271,7 +271,7 @@
 //        if (plugin != null) {
 //            plugin.indexingFiles(true, true);
 //        }
-        OAImportCompleteViewController *importVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES] fileName:OALocalizedString(@"osmand_cloud")];
+        OAImportCompleteViewController *importVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES addEmptyItems:NO] fileName:OALocalizedString(@"osmand_cloud")];
         [self.navigationController pushViewController:importVC animated:YES];
     }
 }

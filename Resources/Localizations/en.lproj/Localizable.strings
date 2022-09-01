@@ -583,6 +583,8 @@
 "shared_string_not_included" = "Not included";
 "shared_string_logout" = "Logout";
 "shared_string_progress" = "Progress";
+"shared_string_leave" = "Leave";
+"shared_string_delete_data" = "Delete data";
 
 "restart" = "Restart";
 
@@ -2650,7 +2652,7 @@
 
 "backup_error_no_valid_subscription" = "No valid subscription present";
 "backup_error_user_is_not_registered" = "No user registered with that e-mail address";
-"backup_error_token_is_not_valid_or_expired" = "Invalid or expired token";
+"backup_error_token_is_not_valid_or_expired" = "Invalid or expired verification code";
 "backup_error_token_is_not_valid" = "Something is wrong with the provided device ID or token";
 "backup_error_file_not_available" = "File unavailable";
 "backup_error_gzip_only_supported_upload" = "The file should be sent in .gzip format";
@@ -2724,6 +2726,11 @@
 "backup_delete_all_data_finished" = "All your data was successfully deleted from OsmAnd Cloud.";
 "backup_remove_old_versions_finished" = "Old versions was successfully deleted from OsmAnd Cloud.";
 "delete_all_confirmation" = "Yes, delete all";
+"manage_storage" = "Manage storage";
+"backup_delete_types_descr" = "Delete all data for disabled data types from OsmAnd Cloud?";
+"backup_delete_data_type_description" = "This will delete all %@ data from OsmAnd Cloud. This action cannot be undone.";
+"backup_empty_data_from_category" = "OsmAnd Cloud doesn't include any data from this category.";
+"cloud_storage_used" = "%@ of %@ used";
 
 "copy_address" = "Copy address";
 "copy_poi_name" = "Copy POI Name";

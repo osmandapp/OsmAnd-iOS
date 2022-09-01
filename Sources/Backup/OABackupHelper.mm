@@ -63,6 +63,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
+    NSInteger _maximumAccountSize;
 }
 
 + (NSString *) INFO_EXT
@@ -242,6 +243,11 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 - (BOOL) isRegistered
 {
     return [self getDeviceId].length > 0 && [self getAccessToken].length > 0;
+}
+
+- (NSInteger)getMaximumAccountSize
+{
+    return _maximumAccountSize;
 }
 
 - (void) checkRegistered
@@ -444,6 +450,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
                 NSInteger totalZipSize = [resultJson[@"totalZipSize"] integerValue];
                 NSInteger totalFiles = [resultJson[@"totalFiles"] integerValue];
                 NSInteger totalFileVersions = [resultJson[@"totalFileVersions"] integerValue];
+                _maximumAccountSize = [resultJson[@"maximumAccountSize"] integerValue];
                 NSArray *allFiles = resultJson[@"allFiles"];
                 for (NSDictionary *f in allFiles)
                 {

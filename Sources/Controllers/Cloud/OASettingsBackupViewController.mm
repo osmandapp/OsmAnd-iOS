@@ -10,18 +10,22 @@
 #import "OACloudAccountLogoutViewController.h"
 #import "OADeleteAllVersionsBackupViewController.h"
 #import "OAMainSettingsViewController.h"
+#import "OABaseBackupTypesViewController.h"
+#import "OABackupTypesViewController.h"
 #import "OAMenuSimpleCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAAppSettings.h"
 #import "OABackupHelper.h"
+#import "OAPrepareBackupResult.h"
 #import "OAColors.h"
 #import "Localization.h"
 
-@interface OASettingsBackupViewController () <UITableViewDelegate, UITableViewDataSource, OACloudAccountLogoutDelegate, OADeleteAllVersionsBackupDelegate>
+@interface OASettingsBackupViewController () <UITableViewDelegate, UITableViewDataSource, OACloudAccountLogoutDelegate, OADeleteAllVersionsBackupDelegate, OABackupTypesDelegate, OAOnDeleteFilesListener, OAOnPrepareBackupListener>
 
 @property (weak, nonatomic) IBOutlet UIView *navigationBarView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
@@ -30,6 +34,12 @@
 {
     NSMutableArray<NSMutableDictionary *> *_data;
     OABackupHelper *_backupHelper;
+    NSDictionary<NSString *, OARemoteFile *> *_uniqueRemoteFiles;
+
+    NSIndexPath *_backupDataIndexPath;
+    NSInteger _progressFilesCompleteCount;
+    NSInteger _progressFilesTotalCount;
+    BOOL _needUpdateBackupDataCell;
 }
 
 - (instancetype)init
@@ -45,6 +55,9 @@
 - (void)commonInit
 {
     _backupHelper = [OABackupHelper sharedInstance];
+    _uniqueRemoteFiles = [_backupHelper.backup getRemoteFiles:EOARemoteFilesTypeUnique];
+    _progressFilesCompleteCount = 0;
+    _progressFilesTotalCount = 1;
 }
 
 - (void)viewDidLoad
@@ -57,6 +70,24 @@
     [self setupView];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [_backupHelper addPrepareBackupListener:self];
+    if (![_backupHelper isBackupPreparing])
+        [self onBackupPrepared:_backupHelper.backup];
+    [_backupHelper.backupListeners addDeleteFilesListener:self];
+
+    [self updateAfterDeleted];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [_backupHelper removePrepareBackupListener:self];
+    [_backupHelper.backupListeners removeDeleteFilesListener:self];
+}
+
 - (void)applyLocalization
 {
     [super applyLocalization];
@@ -67,7 +98,7 @@
 {
     NSMutableArray *data = [NSMutableArray array];
 
-    /*NSMutableArray<NSMutableDictionary *> *osmAndCloudCells = [NSMutableArray array];
+    NSMutableArray<NSMutableDictionary *> *osmAndCloudCells = [NSMutableArray array];
     NSMutableDictionary *osmAndCloudSection = [NSMutableDictionary dictionary];
     osmAndCloudSection[@"header"] = OALocalizedString(@"osmand_cloud");
     osmAndCloudSection[@"footer"] = OALocalizedString(@"select_backup_data_descr");
@@ -79,20 +110,13 @@
     backupData[@"type"] = [OAMenuSimpleCell getCellIdentifier];
     backupData[@"title"] = OALocalizedString(@"backup_data");
     backupData[@"icon"] = @"ic_custom_cloud_upload_colored_day";
-    NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:0
-                                                                    countStyle:NSByteCountFormatterCountStyleFile];
+    NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:
+            [OABaseBackupTypesViewController calculateItemsSize:_uniqueRemoteFiles.allValues]
+                                                     countStyle:NSByteCountFormatterCountStyleFile];
     backupData[@"description"] = sizeBackupDataString;
     [osmAndCloudCells addObject:backupData];
-
-    NSMutableDictionary *versionHistoryData = [NSMutableDictionary dictionary];
-    versionHistoryData[@"key"] = @"version_history_cell";
-    versionHistoryData[@"type"] = [OAMenuSimpleCell getCellIdentifier];
-    versionHistoryData[@"title"] = OALocalizedString(@"backup_version_history");
-    versionHistoryData[@"icon"] = @"ic_custom_history";
-    NSString *sizeVersionHistoryString = [NSByteCountFormatter stringFromByteCount:0
-                                                                        countStyle:NSByteCountFormatterCountStyleFile];
-    versionHistoryData[@"description"] = sizeVersionHistoryString;
-    [osmAndCloudCells addObject:versionHistoryData];*/
+    _backupDataIndexPath = [NSIndexPath indexPathForRow:[osmAndCloudCells indexOfObject:backupData]
+                                              inSection:[data indexOfObject:osmAndCloudSection]];
 
     NSMutableArray<NSMutableDictionary *> *accountCells = [NSMutableArray array];
     NSMutableDictionary *accountSection = [NSMutableDictionary dictionary];
@@ -136,6 +160,26 @@
     return _data[indexPath.section][@"cells"][indexPath.row];
 }
 
+- (void)updateAfterDeleted
+{
+    if (_needUpdateBackupDataCell && _backupDataIndexPath)
+    {
+        NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:
+                [OABaseBackupTypesViewController calculateItemsSize:_uniqueRemoteFiles.allValues]
+                                                                        countStyle:NSByteCountFormatterCountStyleFile];
+        NSArray *cells = ((NSArray *) _data[_backupDataIndexPath.section][@"cells"]);
+        ((NSMutableDictionary *) cells[_backupDataIndexPath.row])[@"description"] = sizeBackupDataString;
+        [UIView performWithoutAnimation:^{
+            [self.tableView reloadRowsAtIndexPaths:@[_backupDataIndexPath]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+        }];
+
+        _needUpdateBackupDataCell = NO;
+        if (self.backupTypesDelegate)
+            [self.backupTypesDelegate onAllFilesDeleted];
+    }
+}
+
 - (IBAction)backButtonClicked:(id)sender
 {
     [self dismissViewController];
@@ -161,13 +205,95 @@
 
 #pragma mark - OADeleteAllVersionsBackupDelegate
 
-- (void)onDeleteAllBackupData
+- (void)onCloseDeleteAllBackupData
 {
+}
+
+- (void)onAllFilesDeleted
+{
+    _needUpdateBackupDataCell = YES;
     [_backupHelper prepareBackup];
 }
 
-- (void)onCloseDeleteAllBackupData
+#pragma mark - OABackupTypesDelegate
+
+- (void)setProgressTotal:(NSInteger)total
 {
+    _progressFilesTotalCount = total;
+}
+
+#pragma mark - OAOnDeleteFilesListener
+
+- (void)onFilesDeleteStarted:(NSArray<OARemoteFile *> *)files
+{
+    _progressFilesTotalCount = files.count;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.progressView setProgress:0.0 animated:NO];
+            self.progressView.hidden = NO;
+        }];
+    });
+}
+
+- (void)onFileDeleteProgress:(OARemoteFile *)file progress:(NSInteger)progress
+{
+    _progressFilesCompleteCount = progress;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3 animations:^{
+            if (self.progressView.hidden)
+                self.progressView.hidden = NO;
+
+            float progressValue = (float) _progressFilesCompleteCount / _progressFilesTotalCount;
+            [self.progressView setProgress:progressValue animated:YES];
+        }];
+    });
+}
+
+- (void)onFilesDeleteDone:(NSDictionary<OARemoteFile *, NSString *> *)errors
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.progressView setProgress:1.0 animated:YES];
+        } completion:^(BOOL finished) {
+            self.progressView.hidden = YES;
+            [_backupHelper prepareBackup];
+            _progressFilesCompleteCount = 0;
+            _progressFilesTotalCount = 1;
+        }];
+    });
+}
+
+- (void) onFilesDeleteError:(NSInteger)status message:(NSString *)message
+{
+    [_backupHelper prepareBackup];
+    _progressFilesCompleteCount = 0;
+    _progressFilesTotalCount = 1;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.progressView setProgress:_progressFilesCompleteCount animated:NO];
+    });
+}
+
+#pragma mark - OAOnPrepareBackupListener
+
+- (void)onBackupPreparing
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.progressView setProgress:0.1 animated:NO];
+        self.progressView.hidden = NO;
+    }];
+}
+
+- (void)onBackupPrepared:(OAPrepareBackupResult *)backupResult
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.progressView setProgress:1.0 animated:YES];
+            _uniqueRemoteFiles = [backupResult getRemoteFiles:EOARemoteFilesTypeUnique];
+            [self updateAfterDeleted];
+        } completion:^(BOOL finished) {
+            self.progressView.hidden = YES;
+        }];
+    });
 }
 
 #pragma mark - UITableViewDataSource
@@ -250,11 +376,9 @@
 
     if ([key isEqualToString:@"backup_data_cell"])
     {
-
-    }
-    else if ([key isEqualToString:@"version_history_cell"])
-    {
-
+        OABackupTypesViewController *backupDataController = [[OABackupTypesViewController alloc] init];
+        backupDataController.backupTypesDelegate = self;
+        [self.navigationController pushViewController:backupDataController animated:YES];
     }
     else if ([key isEqualToString:@"account_cell"])
     {

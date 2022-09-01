@@ -8,7 +8,6 @@
 
 #import "OADeleteAllVersionsBackupViewController.h"
 #import "OASettingsBackupViewController.h"
-#import "OATableViewCustomFooterView.h"
 #import "OATextLineViewCell.h"
 #import "OADownloadProgressBarCell.h"
 #import "OAFilledButtonCell.h"
@@ -40,6 +39,7 @@
 
     NSInteger _progressFilesCompleteCount;
     NSInteger _progressFilesTotalCount;
+    BOOL _isDeleted;
 }
 
 - (instancetype)initWithScreenType:(EOADeleteBackupScreenType)screenType
@@ -61,7 +61,6 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
 
     [self setupButtons];
     [self setupView];
@@ -70,7 +69,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self onDeleteAllBackupData];
+    [self deleteBackupFiles];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -172,7 +171,6 @@
             || _screenType == EOARemoveOldVersionsProgressBackupScreenType;
     if (isProgress)
     {
-
         NSMutableArray<NSMutableDictionary *> *progressCells = [NSMutableArray array];
         NSMutableDictionary *progressSection = [NSMutableDictionary dictionary];
         progressSection[@"cells"] = progressCells;
@@ -224,7 +222,17 @@
     return _data[indexPath.section][@"cells"][indexPath.row];
 }
 
-- (void)onAllFilesDeleted
+- (void)deleteBackupFiles
+{
+    BOOL isProgressOfDeleteAll = _screenType == EOADeleteAllDataProgressBackupScreenType;
+    BOOL isProgressOfRemoveOld = _screenType == EOARemoveOldVersionsProgressBackupScreenType;
+    if (isProgressOfDeleteAll)
+        [[OABackupHelper sharedInstance] deleteAllFiles:nil listener:self];
+    else if (isProgressOfRemoveOld)
+        [[OABackupHelper sharedInstance] deleteOldFiles:nil listener:self];
+}
+
+- (void)updateAfterFinished
 {
     if (_screenType == EOADeleteAllDataProgressBackupScreenType)
         _sectionDescription = OALocalizedString(@"backup_delete_all_data_finished");
@@ -238,8 +246,8 @@
     self.bottomButton.hidden = NO;
     self.buttonsContainerView.hidden = NO;
 
-    if (self.deleteDelegate)
-        [self.deleteDelegate onDeleteAllBackupData];
+    [self onAllFilesDeleted];
+    _isDeleted = YES;
 }
 
 - (void)onDeleteButtonPressed
@@ -295,9 +303,7 @@
 {
     _progressFilesCompleteCount = progress;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_progressFilesCompleteCount == _progressFilesTotalCount)
-            [self onAllFilesDeleted];
-        else if (_progressIndexPath)
+        if (_progressIndexPath)
             [self.tableView reloadRowsAtIndexPaths:@[_progressIndexPath] withRowAnimation:UITableViewRowAnimationNone];
     });
 }
@@ -307,28 +313,18 @@
     _progressFilesCompleteCount = 1;
     _progressFilesTotalCount = 1;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self onAllFilesDeleted];
+        [self updateAfterFinished];
     });
 }
 
 - (void)onFilesDeleteError:(NSInteger)status message:(NSString *)message
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self onAllFilesDeleted];
+        [self updateAfterFinished];
     });
 }
 
 #pragma mark - OADeleteAllVersionsBackupDelegate
-
-- (void)onDeleteAllBackupData
-{
-    BOOL isProgressOfDeleteAll = _screenType == EOADeleteAllDataProgressBackupScreenType;
-    BOOL isProgressOfRemoveOld = _screenType == EOARemoveOldVersionsProgressBackupScreenType;
-    if (isProgressOfDeleteAll)
-        [[OABackupHelper sharedInstance] deleteAllFiles:nil listener:self];
-    else if (isProgressOfRemoveOld)
-        [[OABackupHelper sharedInstance] deleteOldFiles:nil listener:self];
-}
 
 - (void)onCloseDeleteAllBackupData
 {
@@ -348,6 +344,12 @@
     }
 
     [self dismissViewController];
+}
+
+- (void)onAllFilesDeleted
+{
+    if (!_isDeleted && self.deleteDelegate)
+        [self.deleteDelegate onAllFilesDeleted];
 }
 
 #pragma mark - UITableViewDataSource
@@ -430,32 +432,6 @@
 
     [outCell updateConstraintsIfNeeded];
     return outCell;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    NSString *footer = _data[section][@"footer"];
-    if (!footer || footer.length == 0)
-        return 0.001;
-
-    return [OATableViewCustomFooterView getHeight:footer width:tableView.bounds.size.width];
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    NSString *footer = _data[section][@"footer"];
-    if (!footer || footer.length == 0)
-        return nil;
-
-    OATableViewCustomFooterView *vw =
-            [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    UIFont *textFont = [UIFont systemFontOfSize:15];
-    NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
-            NSFontAttributeName: textFont,
-            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
-    }];
-    vw.label.attributedText = textStr;
-    return vw;
 }
 
 @end

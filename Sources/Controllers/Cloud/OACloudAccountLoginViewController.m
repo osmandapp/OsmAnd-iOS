@@ -13,6 +13,7 @@
 #import "OABackupError.h"
 #import "OACloudAccountVerificationViewController.h"
 #import "OACloudAccountCreateViewController.h"
+#import "OAChoosePlanHelper.h"
 
 @interface OACloudAccountLoginViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener>
 
@@ -25,6 +26,16 @@
     OABackupHelper *_backupHelper;
     
     BOOL _isEmailRegistered;
+    BOOL _hasValidSub;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _hasValidSub = YES;
+    }
+    return self;
 }
 
 - (void)viewDidLoad
@@ -115,6 +126,17 @@
                 @"inteactive" : @NO,
             }];
         }
+        if (!_hasValidSub)
+        {
+            [otherCells addObject: @{
+                @"type" : [OAFilledButtonCell getCellIdentifier],
+                @"title" : OALocalizedString(@"purchase_get"),
+                @"buttonColor" : UIColorFromRGB(color_primary_purple),
+                @"textColor" : UIColor.whiteColor,
+                @"action" : @"getButtonPressed",
+                @"inteactive" : @YES,
+            }];
+        }
     }
     else
     {
@@ -170,11 +192,11 @@
         [OAAppSettings.sharedManager.backupUserEmail set:email];
         [_backupHelper registerDevice:@""];
     }
-    else
-    {
-        self.errorMessage = OALocalizedString(@"login_error_email_invalid");
-        [self updateScreen];
-    }
+}
+
+- (void) getButtonPressed
+{
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:self.navigationController];
 }
 
 - (void) createAccountButtonPressed
@@ -204,6 +226,11 @@
         {
             _isEmailRegistered = NO;
             self.errorMessage = OALocalizedString(@"cloud_email_not_registered");
+        }
+        else if (errorCode == SERVER_ERROR_CODE_NO_VALID_SUBSCRIPTION)
+        {
+            _hasValidSub = NO;
+            self.errorMessage = error.getLocalizedError;
         }
         else
         {

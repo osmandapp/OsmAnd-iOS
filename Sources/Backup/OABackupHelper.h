@@ -64,6 +64,7 @@
 - (NSString *) getAccessToken;
 - (NSString *) getEmail;
 - (BOOL) isRegistered;
+- (NSInteger)getMaximumAccountSize;
 
 - (void) logout;
 - (void) updateOrderId:(void(^)(NSInteger status, NSString *message, NSString *error))listener;

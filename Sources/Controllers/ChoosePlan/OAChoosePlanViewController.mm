@@ -23,7 +23,6 @@
 #define kMargin 16.
 #define kSeparatorHeight .5
 #define kNavigationBarHeight 56.
-#define kMinRowHeight 48.
 
 @interface OAChoosePlanViewController () <UIScrollViewDelegate, OAFeatureCardViewDelegate, OAFeatureCardRowDelegate, OAChoosePlanDelegate, SFSafariViewControllerDelegate>
 
@@ -141,7 +140,19 @@
         _subscriptionManagement.font = [UIFont systemFontOfSize:15.];
         _subscriptionManagement.textColor = UIColor.blackColor;
         _subscriptionManagement.numberOfLines = 0;
-        _subscriptionManagement.text = OALocalizedString(@"osm_live_payment_subscription_management_aid");
+
+        NSMutableAttributedString *attributedSubscriptionManagement =
+                [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_subscription_management_aid")];
+        NSMutableParagraphStyle *subscriptionManagementParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+        subscriptionManagementParagraphStyle.minimumLineHeight = 21.;
+        [attributedSubscriptionManagement addAttribute:NSParagraphStyleAttributeName
+                                                 value:subscriptionManagementParagraphStyle
+                                                 range:NSMakeRange(0, attributedSubscriptionManagement.length)];
+        [attributedSubscriptionManagement addAttribute:NSFontAttributeName
+                                                 value:[UIFont systemFontOfSize:15.]
+                                                 range:NSMakeRange(0, attributedSubscriptionManagement.length)];
+        _subscriptionManagement.attributedText = attributedSubscriptionManagement;
+
         [self.scrollView insertSubview:_subscriptionManagement aboveSubview:self.buttonRestore];
 
         _buttonTermsOfUse = [self addSimpleRow:OALocalizedString(@"terms_of_use")

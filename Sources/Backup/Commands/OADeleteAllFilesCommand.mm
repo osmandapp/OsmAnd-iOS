@@ -124,20 +124,19 @@
         if ([object isKindOfClass:NSArray.class])
         {
             NSArray *files = (NSArray *) object;
-            if (files.count > 0)
+            if (files.count == 0)
             {
-                if (files.count == 2 && [files.firstObject isKindOfClass:NSNumber.class] && [files.lastObject isKindOfClass:NSString.class])
-                {
-                    int status = [files.firstObject intValue];
-                    NSString *message = (NSString *) files.lastObject;
-                    [listener onFilesDeleteError:status message:message];
-                }
-
-                [listener onFilesDeleteStarted:object];
+                [listener onFilesDeleteDone:@{}];
+            }
+            else if (files.count == 2 && [files.firstObject isKindOfClass:NSNumber.class] && [files.lastObject isKindOfClass:NSString.class])
+            {
+                int status = [files.firstObject intValue];
+                NSString *message = (NSString *) files.lastObject;
+                [listener onFilesDeleteError:status message:message];
             }
             else
             {
-                [listener onFilesDeleteDone:[NSDictionary dictionary]];
+                [listener onFilesDeleteStarted:object];
             }
         }
     }

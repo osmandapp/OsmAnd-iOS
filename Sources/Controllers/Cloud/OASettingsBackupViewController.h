@@ -9,7 +9,10 @@
 #import "OACompoundViewController.h"
 
 @protocol OACloudAccountLogoutDelegate;
+@protocol OABackupTypesDelegate;
 
 @interface OASettingsBackupViewController : OACompoundViewController
+
+@property (nonatomic, weak) id<OABackupTypesDelegate> backupTypesDelegate;
 
 @end

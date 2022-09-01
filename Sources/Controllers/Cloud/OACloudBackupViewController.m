@@ -32,8 +32,9 @@
 #import "OABackupError.h"
 #import "OASettingsBackupViewController.h"
 #import "OAExportSettingsType.h"
+#import "OABaseBackupTypesViewController.h"
 
-@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OABackupExportListener, OAImportListener, OAOnPrepareBackupListener>
+@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OABackupExportListener, OAImportListener, OAOnPrepareBackupListener, OABackupTypesDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UILabel *navBarTitle;
@@ -88,11 +89,23 @@
     if (!_settingsHelper.isBackupExporting)
         [_backupHelper prepareBackup];
     [self generateData];
-    
+
     self.tblView.delegate = self;
     self.tblView.dataSource = self;
     self.tblView.estimatedRowHeight = 44.;
     self.tblView.rowHeight = UITableViewAutomaticDimension;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [_backupHelper addPrepareBackupListener:self];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [_backupHelper removePrepareBackupListener:self];
 }
 
 - (void)applyLocalization
@@ -354,6 +367,7 @@
 - (IBAction)onSettingsButtonPressed
 {
     OASettingsBackupViewController *settingsBackupViewController = [[OASettingsBackupViewController alloc] init];
+    settingsBackupViewController.backupTypesDelegate = self;
     [self.navigationController pushViewController:settingsBackupViewController animated:YES];
 }
 
@@ -674,11 +688,27 @@
     _status = [OABackupStatus getBackupStatus:_backup];
     _error = _backup.error;
     [self refreshContent];
+    self.settingsButton.userInteractionEnabled = YES;
+    self.settingsButton.tintColor = UIColor.whiteColor;
 }
 
 - (void)onBackupPreparing
 {
     // Show progress bar
+
+    self.settingsButton.userInteractionEnabled = NO;
+    self.settingsButton.tintColor = UIColorFromRGB(color_tint_gray);
+}
+
+#pragma mark - OABackupTypesDelegate
+
+- (void)onAllFilesDeleted
+{
+    [self onBackupPrepared:_backupHelper.backup];
+}
+
+- (void)setProgressTotal:(NSInteger)total
+{
 }
 
 @end

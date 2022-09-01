@@ -16,7 +16,7 @@
 
 #define kImageWidth 52.
 #define kBaseImagesCount 5
-#define kAnimationDuration 60 // 1 minute
+#define kAnimationDuration 50.
 
 @interface OACloudIntroductionHeaderView ()
 
@@ -88,10 +88,8 @@
 - (CGFloat)getCompoundImageWidth:(NSInteger)count
 {
     CGFloat compoundImageWidth = kImageWidth * count;
-    if (compoundImageWidth < DeviceScreenWidth)
-    {
-        CGFloat coef = DeviceScreenWidth / compoundImageWidth;
-        compoundImageWidth = round(compoundImageWidth * coef);
+    while (compoundImageWidth < DeviceScreenWidth) {
+        compoundImageWidth += compoundImageWidth;
     }
     return compoundImageWidth;
 }
@@ -113,7 +111,7 @@
     
     [_animatedViews addObjectsFromArray:@[view1, view2]];
     CGFloat animationTimeCoef = compoundImageWidth / [self getCompoundImageWidth:kBaseImagesCount];
-    [UIView animateWithDuration:kAnimationDuration * animationTimeCoef delay:0. options:UIViewAnimationOptionRepeat | UIViewAnimationOptionCurveLinear animations:^{
+    [UIView animateWithDuration:kAnimationDuration * animationTimeCoef * UIScreen.mainScreen.scale delay:0. options:UIViewAnimationOptionRepeat | UIViewAnimationOptionCurveLinear animations:^{
         CGRect fr1;
         CGRect fr2;
         if (rightToLeft)
@@ -135,15 +133,14 @@
 
 - (UIColor *) createPatternColorFromImages:(NSArray<UIImage *> *)images tintColor:(UIColor *)tintColor
 {
-    CGFloat imageWidth = 52.;
     CGFloat circleWidth = 42.;
-    CGSize size = CGSizeMake(imageWidth * images.count, 52.);
+    CGSize size = CGSizeMake(kImageWidth * images.count, 52.);
     UIGraphicsBeginImageContextWithOptions(size, NO, 0);
     CGContextRef contextRef = UIGraphicsGetCurrentContext();
     for (NSInteger i = 0; i < images.count; i++)
     {
         UIImage *img = [OAUtilities tintImageWithColor:images[i] color:tintColor];
-        CGRect imgRect = CGRectMake(imageWidth * i + 10., (size.height - img.size.height) / 2, img.size.width, img.size.height);
+        CGRect imgRect = CGRectMake(kImageWidth * i + 10., (size.height - img.size.height) / 2, img.size.width, img.size.height);
         [img drawInRect:imgRect];
         
         CGPoint center = CGPointMake(CGRectGetMidX(imgRect), CGRectGetMidY(imgRect));

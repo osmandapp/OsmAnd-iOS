@@ -16,8 +16,6 @@
 #import "OALargeImageTitleDescrTableViewCell.h"
 #import "OACardButtonCell.h"
 #import "OAIconTitleValueCell.h"
-#import "OAActivityViewWithTitleCell.h"
-#import "OADividerCell.h"
 #import "OAColors.h"
 #import "OALinks.h"
 #import <SafariServices/SafariServices.h>
@@ -28,9 +26,17 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIView *titlePanelView;
-
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *restoreButton;
+
+@property (weak, nonatomic) IBOutlet UIView *loadingView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingIndicator;
+@property (weak, nonatomic) IBOutlet UILabel *loadingLabel;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewTopWithLoadingViewConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewTopWithLoadingViewSafeAreaConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewTopNoLoadingViewConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewTopNoLoadingViewSafeAreaConstraint;
 
 @end
 
@@ -39,45 +45,73 @@
     OAIAPHelper *_iapHelper;
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSMapTable<NSNumber *, NSString *> *_headers;
-    BOOL _checkPurchaseInformation;
 }
+
+static BOOL _purchasesUpdated = NO;
 
 -(void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"purchases");
+    self.titleView.text = OALocalizedString(@"purchases");
+    self.loadingLabel.text = OALocalizedString(@"loading_purchase_information");
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
 
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
 
     _iapHelper = [OAIAPHelper sharedInstance];
-    [[OARootViewController instance] restorePurchasesWithProgress:NO];
+
+    [self updateLoadingView:_purchasesUpdated];
     [self generateData];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
+
+    if (!_purchasesUpdated)
+        [[OARootViewController instance] requestProductsWithProgress:NO reload:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.tableView reloadData];
     } completion:nil];
 }
 
+- (void)updateLoadingView:(BOOL)purchasesUpdated
+{
+    _purchasesUpdated = purchasesUpdated;
+    self.loadingView.hidden = purchasesUpdated;
+
+    self.tableViewTopWithLoadingViewConstraint.active = !_purchasesUpdated;
+    self.tableViewTopWithLoadingViewSafeAreaConstraint.active = !_purchasesUpdated;
+
+    self.tableViewTopNoLoadingViewConstraint.active = _purchasesUpdated;
+    self.tableViewTopNoLoadingViewSafeAreaConstraint.active = _purchasesUpdated;
+
+    [self.view setNeedsUpdateConstraints];
+    [self.view updateConstraintsIfNeeded];
+}
+
 - (void) generateData
 {
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray array];
-    if (!_checkPurchaseInformation)
-    {
-        [data addObject:@[@{
-                @"key": @"loading_information",
-                @"type": [OAActivityViewWithTitleCell getCellIdentifier],
-                @"title": OALocalizedString(@"loading_purchase_information"),
-        }]];
-    }
-    else
+    if (_purchasesUpdated)
     {
         NSArray<OAProduct *> *mainPurchases = [_iapHelper getEverMadeMainPurchases];
         NSMutableArray<OAProduct *> *activeProducts = [NSMutableArray array];
@@ -108,24 +142,15 @@
         {
             [data addObject:@[
                     @{
-                            @"type": [OADividerCell getCellIdentifier]
-                    },
-                    @{
                             @"key": @"no_purchases",
                             @"type": [OALargeImageTitleDescrTableViewCell getCellIdentifier],
                             @"icon": [UIImage templateImageNamed:@"ic_custom_shop_bag_48"],
                             @"icon_color": UIColorFromRGB(color_tint_gray),
                             @"title": OALocalizedString(@"no_purchases"),
                             @"description": [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
-                    },
-                    @{
-                            @"type": [OADividerCell getCellIdentifier]
                     }
             ]];
             [data addObject:@[
-                    @{
-                            @"type": [OADividerCell getCellIdentifier]
-                    },
                     @{
                             @"key": @"get_osmand_pro",
                             @"type": [OACardButtonCell getCellIdentifier],
@@ -135,9 +160,6 @@
                             @"button_title": OALocalizedString(@"purchase_get"),
                             @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
                             @"button_icon_color": UIColorFromRGB(color_primary_purple)
-                    },
-                    @{
-                            @"type": [OADividerCell getCellIdentifier]
                     }
             ]];
         }
@@ -146,7 +168,6 @@
             if (activeProducts.count > 0 || isProSubscriptionAvailable)
             {
                 NSMutableArray *active = [NSMutableArray array];
-                [active addObject:@{ @"type":[OADividerCell getCellIdentifier] }];
                 if (isProSubscriptionAvailable)
                 {
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -173,10 +194,6 @@
                             @"title": isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro"),
                             @"descr": dateString
                     }];
-                    [active addObject:@{
-                            @"type":[OADividerCell getCellIdentifier],
-                            @"product_section": @(activeProducts.count > 0)
-                    }];
                 }
                 for (NSInteger i = 0; i < activeProducts.count; i++)
                 {
@@ -186,10 +203,6 @@
                             @"type": [OAMenuSimpleCell getCellIdentifier],
                             @"product": product
                     }];
-                    [active addObject:@{
-                            @"type": [OADividerCell getCellIdentifier],
-                            @"product_section": @(i < activeProducts.count - 1)
-                    }];
                 }
                 [data addObject:active];
                 [_headers setObject:OALocalizedString(@"menu_active_trips") forKey:@(data.count - 1)];
@@ -197,7 +210,6 @@
             if (expiredProducts.count > 0)
             {
                 NSMutableArray *expired = [NSMutableArray array];
-                [expired addObject:@{ @"type":[OADividerCell getCellIdentifier] }];
                 for (NSInteger i = 0; i < expiredProducts.count; i++)
                 {
                     OAProduct *product = expiredProducts[i];
@@ -206,18 +218,11 @@
                             @"type": [OAMenuSimpleCell getCellIdentifier],
                             @"product": product
                     }];
-                    [expired addObject:@{
-                            @"type": [OADividerCell getCellIdentifier],
-                            @"product_section": @(i < expiredProducts.count - 1)
-                    }];
                 }
                 [data addObject:expired];
                 [_headers setObject:OALocalizedString(@"expired") forKey:@(data.count - 1)];
             }
             [data addObject:@[
-                    @{
-                            @"type": [OADividerCell getCellIdentifier]
-                    },
                     @{
                             @"key": @"explore_osmnad_plans",
                             @"type": [OACardButtonCell getCellIdentifier],
@@ -225,9 +230,6 @@
                             @"button_title": OALocalizedString(@"shared_string_learn_more"),
                             @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
                             @"button_icon_color": UIColorFromRGB(color_primary_purple)
-                    },
-                    @{
-                            @"type": [OADividerCell getCellIdentifier]
                     }
             ]];
         }
@@ -235,18 +237,11 @@
     
     [data addObject:@[
         @{
-            @"type": [OADividerCell getCellIdentifier]
-        },
-        @{
             @"key": @"restore_purchases",
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"title": OALocalizedString(@"restore_purchases"),
             @"icon": [UIImage templateImageNamed:@"ic_custom_reset"],
             @"tint_color": UIColorFromRGB(color_primary_purple),
-        },
-        @{
-            @"type": [OADividerCell getCellIdentifier],
-            @"help_section": @(YES)
         },
         @{
             @"key": @"redeem_promo_code",
@@ -256,18 +251,11 @@
             @"tint_color": UIColorFromRGB(color_primary_purple)
         },
         @{
-            @"type": [OADividerCell getCellIdentifier],
-            @"help_section": @(YES)
-        },
-        @{
             @"key": @"new_device_account",
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"title": OALocalizedString(@"new_device_account"),
             @"icon": [UIImage templateImageNamed:@"ic_navbar_help"],
             @"tint_color": UIColorFromRGB(color_primary_purple)
-        },
-        @{
-            @"type": [OADividerCell getCellIdentifier]
         },
         @{
             @"key": @"contact_support_description",
@@ -280,64 +268,17 @@
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"title": OALocalizedString(@"contact_support"),
             @"tint_color": UIColorFromRGB(color_primary_purple)
-        },
-        @{
-            @"type": [OADividerCell getCellIdentifier]
-        },
+        }
     ]];
     [_headers setObject:OALocalizedString(@"menu_help") forKey:@(data.count - 1)];
 
     _data = data;
 }
 
-- (UIView *) getTopView
-{
-    return _titlePanelView;
-}
-
-- (UIView *) getMiddleView
-{
-    return _tableView;
-}
-
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
-
-    [[OARootViewController instance] requestProductsWithProgress:YES reload:NO];
-
-    [self applySafeAreaMargins];
-}
-
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void) productsRequested:(NSNotification *)notification
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self generateData];
-        [self.tableView reloadData];
-        CATransition *animation = [CATransition animation];
-        [animation setType:kCATransitionPush];
-        [animation setSubtype:kCATransitionFromBottom];
-        [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [animation setFillMode:kCAFillModeBoth];
-        [animation setDuration:.3];
-        [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
-    });
 }
 
 - (void)openSafariWithURL:(NSString *)url
@@ -381,44 +322,46 @@
     return res;
 }
 
-- (IBAction) onRestoreButtonPressed:(id)sender
+- (void)updateViewAfterProductsRequested
 {
-    _checkPurchaseInformation = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateLoadingView:YES];
         [self generateData];
         [self.tableView reloadData];
     });
-    [[OARootViewController instance] restorePurchasesWithProgress:NO];
 }
 
 - (void) productPurchased:(NSNotification *)notification
 {
-    _checkPurchaseInformation = YES;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self generateData];
-        [self.tableView reloadData];
-    });
+    [self updateViewAfterProductsRequested];
 }
 
 - (void) productPurchaseFailed:(NSNotification *)notification
 {
-    _checkPurchaseInformation = YES;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self generateData];
-        [self.tableView reloadData];
-    });
+    [self updateViewAfterProductsRequested];
 }
 
 - (void) productsRestored:(NSNotification *)notification
 {
-    _checkPurchaseInformation = YES;
-//    NSNumber *errorsCountObj = notification.object;
-//    int errorsCount = errorsCountObj.intValue;
+    [self updateViewAfterProductsRequested];
+}
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self generateData];
-        [self.tableView reloadData];
-    });
+- (void) productsRequested:(NSNotification *)notification
+{
+    [self updateViewAfterProductsRequested];
+}
+
+- (IBAction) onRestoreButtonPressed:(id)sender
+{
+    [UIView transitionWithView:self.loadingView
+                      duration:.3
+                       options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
+                    animations:^(void) {
+                        [self updateLoadingView:NO];
+                    }
+                    completion:^(BOOL finished) {
+                        [[OARootViewController instance] restorePurchasesWithProgress:NO];
+                    }];
 }
 
 #pragma mark - SFSafariViewControllerDelegate
@@ -466,7 +409,7 @@
             NSString *key = item[@"key"];
             CGFloat leftInset = [key isEqualToString: @"new_device_account"]
                     ? 0. : [key isEqualToString: @"contact_support_description"]
-                            ? CGFLOAT_MAX : 20.;
+                            ? CGFLOAT_MAX : 20. + [OAUtilities getLeftMargin];
             cell.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
 
             UIColor *tintColor = [item.allKeys containsObject:@"tint_color"] ? item[@"tint_color"] : UIColor.blackColor;
@@ -550,11 +493,11 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0, 66., 0, 0);
             [cell changeHeight:YES];
         }
         if (cell)
         {
+            cell.separatorInset = UIEdgeInsetsMake(0, 66. + [OAUtilities getLeftMargin], 0, 0);
             OAProduct *product = item[@"product"];
             if (product)
             {
@@ -571,6 +514,7 @@
                 paragraphStyle.lineSpacing = 2.;
                 [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attributedString.length)];
                 [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13.] range:NSMakeRange(0, attributedString.length)];
+                [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, attributedString.length)];
                 cell.descriptionView.attributedText = attributedString;
             }
             else
@@ -578,57 +522,14 @@
                 cell.textView.text = item[@"title"];
                 cell.imgView.image = [UIImage imageNamed:item[@"icon"]];
                 cell.descriptionView.text = item[@"descr"];
+                cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
+                cell.descriptionView.font = [UIFont systemFontOfSize:13.];
             }
             UIImageView *rightImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"]];
             rightImageView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.accessoryView = rightImageView;
         }
         outCell = cell;
-    }
-    else if ([cellType isEqualToString:[OAActivityViewWithTitleCell getCellIdentifier]])
-    {
-        OAActivityViewWithTitleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAActivityViewWithTitleCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAActivityViewWithTitleCell getCellIdentifier] owner:self options:nil];
-            cell = (OAActivityViewWithTitleCell *) nib[0];
-            cell.activityIndicatorView.hidden = NO;
-            cell.backgroundColor = UIColor.clearColor;
-            cell.contentView.backgroundColor = UIColor.clearColor;
-        }
-        if (cell)
-        {
-            cell.titleView.text = item[@"title"];
-            [cell.activityIndicatorView startAnimating];
-        }
-        outCell = cell;
-    }
-    else if ([cellType isEqualToString:[OADividerCell getCellIdentifier]])
-    {
-        BOOL isProductSection = [item[@"product_section"] boolValue];
-        BOOL isHelpSection = [item[@"help_section"] boolValue];
-        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
-            cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = UIColorFromRGB(color_tint_gray);
-            cell.dividerHight = .5;
-        }
-        if (cell)
-        {
-            CGFloat leftInset = 0.;
-            if (!(indexPath.row == 0 || indexPath.row == _data[indexPath.section][indexPath.row].count + 1))
-            {
-                if (isProductSection)
-                    leftInset = [OAUtilities getLeftMargin] + 66.;
-                else if (isHelpSection)
-                    leftInset = [OAUtilities getLeftMargin] + 20.;
-            }
-            cell.dividerInsets = UIEdgeInsetsMake(0., leftInset, 0., 0.);
-        }
-        return cell;
     }
 
     if ([outCell needsUpdateConstraints])
@@ -648,15 +549,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:.5 dividerInsets:UIEdgeInsetsZero];
-    else
-        return UITableViewAutomaticDimension;
-}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

@@ -1387,6 +1387,7 @@
 		CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED355FD3FAEA8F4F74263 /* OAWeatherBandSettingsViewController.mm */; };
 		CA4ED0E24578E7AF0472D74C /* OAShowHideCloudAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDABC80C141D6AAD16F8C /* OAShowHideCloudAction.mm */; };
 		CA4ED127365B6FCBDC4E739E /* OABackupTypesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDA0456BEB6851C6646AE /* OABackupTypesViewController.mm */; };
+		CA4ED0FA5BD7BC1DFD06331C /* OAPurchasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA4EDD70E43F2B7DF3B13937 /* OAPurchasesViewController.xib */; };
 		CA4ED153BFA207753EEE0E13 /* OAMapillaryOsmTagHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED676EDCD24E9BE24075D /* OAMapillaryOsmTagHelper.mm */; };
 		CA4ED15F50530CD41EB6F164 /* OAPlanTypeCardRow.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED0221B1888DD1A891DAE /* OAPlanTypeCardRow.mm */; };
 		CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED280E20BA36D408B95DD /* OAStorageStateValuesCell.m */; };
@@ -2732,7 +2733,6 @@
 		DA5A851F26C563A900F274C7 /* OAAlarmWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A808226C563A500F274C7 /* OAAlarmWidget.xib */; };
 		DA5A852026C563A900F274C7 /* OATargetMultiView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A808326C563A500F274C7 /* OATargetMultiView.xib */; };
 		DA5A852126C563A900F274C7 /* OADistanceToMapMarkerControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A808426C563A500F274C7 /* OADistanceToMapMarkerControl.xib */; };
-		DA5A852226C563A900F274C7 /* OAPurchasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A808526C563A500F274C7 /* OAPurchasesViewController.xib */; };
 		DA5A852326C563A900F274C7 /* OAIntermediateDistanceControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A808626C563A500F274C7 /* OAIntermediateDistanceControl.xib */; };
 		DA5A852426C563A900F274C7 /* OALanesControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A808726C563A500F274C7 /* OALanesControl.xib */; };
 		DA5A852526C563A900F274C7 /* OATableViewCellWithSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A808926C563A500F274C7 /* OATableViewCellWithSwitch.m */; };
@@ -4847,6 +4847,7 @@
 		CA4EDD14CA25B1A6AEB53FE3 /* OASegmentedSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASegmentedSlider.h; sourceTree = "<group>"; };
 		CA4EDD1F641FDF3A3C7BB25C /* OAWeatherToolbar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherToolbar.mm; sourceTree = "<group>"; };
 		CA4EDD64C998F4C38A58E4D5 /* OARouteLineAppearanceHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteLineAppearanceHudViewController.h; sourceTree = "<group>"; };
+		CA4EDD70E43F2B7DF3B13937 /* OAPurchasesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPurchasesViewController.xib; sourceTree = "<group>"; };
 		CA4EDDD18F59FD98326B733D /* OAWeatherPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherPlugin.mm; sourceTree = "<group>"; };
 		CA4EDDF0C019CF106448907D /* OAWeatherSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherSettingsViewController.mm; sourceTree = "<group>"; };
 		CA4EDE2F7056768E208C7410 /* OASubscriptionCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASubscriptionCardView.h; sourceTree = "<group>"; };
@@ -6937,7 +6938,6 @@
 		DA5A808226C563A500F274C7 /* OAAlarmWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAlarmWidget.xib; sourceTree = "<group>"; };
 		DA5A808326C563A500F274C7 /* OATargetMultiView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATargetMultiView.xib; sourceTree = "<group>"; };
 		DA5A808426C563A500F274C7 /* OADistanceToMapMarkerControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADistanceToMapMarkerControl.xib; sourceTree = "<group>"; };
-		DA5A808526C563A500F274C7 /* OAPurchasesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAPurchasesViewController.xib; sourceTree = "<group>"; };
 		DA5A808626C563A500F274C7 /* OAIntermediateDistanceControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAIntermediateDistanceControl.xib; sourceTree = "<group>"; };
 		DA5A808726C563A500F274C7 /* OALanesControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OALanesControl.xib; sourceTree = "<group>"; };
 		DA5A808826C563A500F274C7 /* OARangeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARangeSlider.h; sourceTree = "<group>"; };
@@ -11622,6 +11622,7 @@
 				46F55271289D75C500103E81 /* OAWeatherForecastDetailsViewController.xib */,
 				CA4EDED38B4AD1FD86AB63E4 /* OAWeatherFrequencySettingsViewController.mm */,
 				CA4EDB52242C414C788B24DE /* OAWeatherFrequencySettingsViewController.h */,
+				CA4EDD70E43F2B7DF3B13937 /* OAPurchasesViewController.xib */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -12774,7 +12775,6 @@
 				DA5A808226C563A500F274C7 /* OAAlarmWidget.xib */,
 				DA5A808326C563A500F274C7 /* OATargetMultiView.xib */,
 				DA5A808426C563A500F274C7 /* OADistanceToMapMarkerControl.xib */,
-				DA5A808526C563A500F274C7 /* OAPurchasesViewController.xib */,
 				DA5A808626C563A500F274C7 /* OAIntermediateDistanceControl.xib */,
 				DA5A808726C563A500F274C7 /* OALanesControl.xib */,
 				0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */,
@@ -13833,7 +13833,6 @@
 				8420C1CE1B42F2AC004EDAE6 /* ic_dialog_rename@2x.png in Resources */,
 				0CF58566244072EC0081238D /* widget_marker_triangle_pin_4@3x.png in Resources */,
 				DA5A82BF26C563A800F274C7 /* OATextInputIconCell.xib in Resources */,
-				DA5A852226C563A900F274C7 /* OAPurchasesViewController.xib in Resources */,
 				DA83602D23449C6B003374B5 /* ic_custom_options@3x.png in Resources */,
 				DA5A857326C567B400F274C7 /* OAPluginPopupViewController.xib in Resources */,
 				0A31AFCD26FBAC39000EE842 /* ic_small_speed@2x.png in Resources */,
@@ -15562,6 +15561,7 @@
 				845E07311B616E4700DFC2A7 /* ic_restore_purchase@2x.png in Resources */,
 				84EE2DD61AFD149F007C9A94 /* img_purchase_banner_portrait@2x.png in Resources */,
 				DA5A84CF26C563A900F274C7 /* OABottomSheetViewController.xib in Resources */,
+				CA4ED0FA5BD7BC1DFD06331C /* OAPurchasesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -60,7 +60,10 @@
         return;
     }
     
-    [audioSession setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDuckOthers error:nil];
+    [audioSession setCategory:AVAudioSessionCategoryPlayback
+                         mode:AVAudioSessionModeVoicePrompt
+                      options:(AVAudioSessionCategoryOptionDuckOthers | AVAudioSessionCategoryOptionInterruptSpokenAudioAndMixWithOthers)
+                        error:nil];
     [audioSession setActive:YES error:nil];
 
     NSMutableString *toSpeak = [[NSMutableString alloc] init];

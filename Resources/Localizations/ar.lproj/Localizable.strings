@@ -2403,7 +2403,7 @@
 "rendering_attr_lightRailRoutes_name" = "طرق السكك الحديدية الخفيفة";
 "routing_attr_only_permitted_streets_description" = "استخدم فقط الشوارع المسموحة بها علنا";
 "cloud_conflicts" = "المشاكل";
-"backup_error_token_is_not_valid_or_expired" = "الرمز غير صالح أو منتهي الصلاحية";
+"backup_error_token_is_not_valid_or_expired" = "رمز التحقق غير صالح أو منتهي الصلاحية";
 "cloud_description" = "تجنب فقد بياناتك ، وقم بالنسخ الاحتياطي واستعادة جميع المعلومات دون مشاكل.";
 "backup_error_no_valid_subscription" = "لا يوجد اشتراك صالح";
 "cloud_view_conflicts" = "عرض التعارضات";
@@ -2649,3 +2649,6 @@
 "loading_purchase_information" = "تحميل معلومات الشراء";
 "shared_string_not_included" = "غير مدرج";
 "gpx_segment" = "قطعة";
+"shared_string_logout" = "تسجيل خروج";
+"shared_string_progress" = "التقدم";
+"backup_data" = "نسخ إحتياطي للبيانات";

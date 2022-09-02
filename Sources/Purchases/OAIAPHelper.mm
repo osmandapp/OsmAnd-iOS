@@ -1244,37 +1244,6 @@ static OASubscriptionState *EXPIRED;
         [_settings.billingUserEmail set:[email isKindOfClass:[NSString class]] ? (NSString *)email : @""];
 }
 
-- (NSCalendarUnit)calendarUnitFromSkUnit:(SKProductPeriodUnit)unit
-{
-    NSCalendarUnit calendarComponent = NSCalendarUnitNanosecond;
-    switch (unit)
-    {
-        case SKProductPeriodUnitDay:
-        {
-            calendarComponent = NSCalendarUnitDay;
-            break;
-        }
-        case SKProductPeriodUnitMonth:
-        {
-            calendarComponent = NSCalendarUnitMonth;
-            break;
-        }
-        case SKProductPeriodUnitWeek:
-        {
-            calendarComponent = NSCalendarUnitWeekOfYear;
-            break;
-        }
-        case SKProductPeriodUnitYear:
-        {
-            calendarComponent = NSCalendarUnitYear;
-            break;
-        }
-        default:
-            break;
-    }
-    return calendarComponent;
-}
-
 - (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transaction:(SKPaymentTransaction *)transaction
 {
     OAProduct *product = [self product:productIdentifier];
@@ -1383,29 +1352,10 @@ static OASubscriptionState *EXPIRED;
                                          if ([product isKindOfClass:OASubscription.class])
                                          {
                                              OASubscription *s = (OASubscription *) product;
-                                             NSTimeInterval daysPassedSincePurchase = [NSDate.date timeIntervalSinceDate:transaction.transactionDate] / SECONDS_PER_DAY;
-                                             NSTimeInterval daysInSubscription = -1;
                                              NSDate *currDate = NSDate.date;
-                                             if (s.skProduct)
-                                             {
-                                                 SKProductSubscriptionPeriod *subPeriod = s.skProduct.subscriptionPeriod;
-                                                 NSUInteger numberOfUnits = subPeriod.numberOfUnits;
-                                                 SKProductPeriodUnit unit = subPeriod.unit;
-                                                     
-                                                 NSCalendarUnit calendarComponent = [self calendarUnitFromSkUnit:unit];
-                                                 if (calendarComponent != NSCalendarUnitNanosecond)
-                                                 {
-                                                     NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierISO8601];
-                                                     NSDate *subDate = [calendar dateByAddingUnit:calendarComponent value:numberOfUnits toDate:currDate options:0];
-                                                     daysInSubscription = [subDate timeIntervalSinceDate:currDate] / SECONDS_PER_DAY;
-                                                 }
-                                             }
                                              BOOL isPurchaseActive = (!s.expirationDate || [s.expirationDate compare:currDate] == NSOrderedDescending);
                                              BOOL isPurchaseCancelled = s.purchaseCancelledTime != 0 && [currDate timeIntervalSince1970] - s.purchaseCancelledTime > kSubscriptionHoldingTimeMsec;
-                                             if (isPurchaseActive
-                                                 && !isPurchaseCancelled
-                                                 && daysInSubscription != -1
-                                                 && daysPassedSincePurchase <= daysInSubscription)
+                                             if (isPurchaseActive && !isPurchaseCancelled)
                                              {
                                                  [_products setPurchased:productIdentifier];
                                                  if ([self.class isLiveUpdatesSubscription:s])

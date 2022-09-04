@@ -2676,3 +2676,9 @@
 "logout_from_osmand_cloud_decsr" = "Möchten Sie sich wirklich abmelden? \nSie müssen sich erneut anmelden, um die Daten zu sichern oder wiederherzustellen.";
 "backup_delete_old_data_warning" = "Sie sind im Begriff, den Änderungsverlauf für die zuvor geladenen Daten zu löschen.\n\nDie aktuelle Version der Daten wird auf dem Server gespeichert, aber Sie können nicht zu den zuvor vorgenommenen Änderungen zurückkehren.";
 "delete_all_confirmation" = "Ja, alle löschen";
+"shared_string_delete_data" = "Daten löschen";
+"manage_storage" = "Speicher verwalten";
+"backup_delete_data_type_description" = "Dadurch werden alle %@ Daten aus der OsmAnd Cloud gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.";
+"cloud_storage_used" = "%@ von %@ verwendet";
+"backup_delete_types_descr" = "Alle Daten für veraltete Datentypen aus der OsmAnd Cloud löschen?";
+"backup_empty_data_from_category" = "Die OsmAnd Cloud enthält keine Daten aus dieser Kategorie.";

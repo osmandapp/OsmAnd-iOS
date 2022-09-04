@@ -2672,3 +2672,10 @@
 "backup_delete_all_data_warning" = "Ви збираєтесь вилучити всі дані, раніше завантажені в OsmAnd Cloud, включно з історією версій. Ви не зможете відновити вилучені дані.";
 "backup_remove_old_versions_finished" = "Старі версії були успішно вилучені з OsmAnd Cloud.";
 "backup_delete_old_data_warning" = "Ви збираєтеся вилучити історію змін для раніше завантажених даних.\n\nПоточну версію даних буде збережено на сервері, але ви не зможете повернути раніше внесені зміни.";
+"backup_delete_types_descr" = "Видалити всі дані для вимкнених типів даних з OsmAnd Cloud?";
+"shared_string_leave" = "Залишити";
+"manage_storage" = "Керувати сховищем";
+"cloud_storage_used" = "%@ з %@ використано";
+"shared_string_delete_data" = "Видалити дані";
+"backup_delete_data_type_description" = "Це видалить усі дані %@ з OsmAnd Cloud. Цю дію не можна скасувати.";
+"backup_empty_data_from_category" = "OsmAnd Cloud не включає жодних даних з цієї категорії.";

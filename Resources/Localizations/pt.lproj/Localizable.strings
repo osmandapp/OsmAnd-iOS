@@ -2664,3 +2664,9 @@
 "backup_deleting_all_data" = "Eliminar todos os dados";
 "backup_delete_all_data_warning" = "Está prestes a eliminar todos os dados previamente carregados no OsmAnd Cloud, incluindo o histórico das versões. Não será possível recuperar os dados eliminados.";
 "gpx_segment" = "Segmento";
+"manage_storage" = "Gerir armazenamento";
+"backup_delete_types_descr" = "Eliminar todos os dados para tipos de dados desativados do OsmAnd Cloud?";
+"backup_delete_data_type_description" = "Isto irá eliminar todos os %@ dados do OsmAnd Cloud. Esta ação não pode ser desfeita.";
+"backup_empty_data_from_category" = "O OsmAnd Cloud não inclui quaisquer dados desta categoria.";
+"cloud_storage_used" = "%@ de %@ utilizado";
+"shared_string_delete_data" = "Eliminar dados";

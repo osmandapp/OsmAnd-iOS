@@ -1111,7 +1111,7 @@ static OASubscriptionState *EXPIRED;
     }
     dispatch_group_notify(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^ {
         if (validateProducts)
-            [self requestProductsWithCompletionHandler:_completionHandler];
+            [self requestProductsWithCompletionHandler:nil];
     });
 }
 

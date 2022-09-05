@@ -1071,25 +1071,48 @@ static OASubscriptionState *EXPIRED;
 // Sent when the transaction array has changed (additions or state changes).  Client should check state of transactions and finish as appropriate.
 - (void) paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
 {
+    BOOL validateProducts = NO;
+    dispatch_group_t group = dispatch_group_create();
     for (SKPaymentTransaction * transaction in transactions)
     {
         switch (transaction.transactionState)
         {
             case SKPaymentTransactionStatePurchased:
-                [self completeTransaction:transaction];
+            {
+                dispatch_group_async(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^ {
+                    [self completeTransaction:transaction];
+                });
+                validateProducts |= YES;
                 break;
+            }
             case SKPaymentTransactionStateFailed:
+            {
                 _transactionErrors++;
                 [self failedTransaction:transaction];
                 break;
+            }
             case SKPaymentTransactionStateRestored:
-                [self restoreTransaction:transaction];
-            case SKPaymentTransactionStateDeferred:
-                [self deferredTransaction:transaction];
-            default:
+            {
+                dispatch_group_async(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^ {
+                    [self restoreTransaction:transaction];
+                });
+                validateProducts |= YES;
                 break;
+            }
+            case SKPaymentTransactionStateDeferred:
+            {
+                [self deferredTransaction:transaction];
+            }
+            default:
+            {
+                break;
+            }
         }
-    };
+    }
+    dispatch_group_notify(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^ {
+        if (validateProducts)
+            [self requestProductsWithCompletionHandler:nil];
+    });
 }
 
 // Sent when all transactions from the user's purchase history have successfully been added back to the queue.
@@ -1124,7 +1147,6 @@ static OASubscriptionState *EXPIRED;
             else
             {
                 OALog(@"completeTransaction - %@", transaction.payment.productIdentifier);
-                [self logTransactionType:@"purchased" productIdentifier:transaction.payment.productIdentifier];
                 [self provideContentForProductIdentifier:transaction.payment.productIdentifier transaction:transaction.originalTransaction ? transaction.originalTransaction : transaction];
             }
         }
@@ -1145,7 +1167,6 @@ static OASubscriptionState *EXPIRED;
             else
             {
                 OALog(@"restoreTransaction - %@", transaction.originalTransaction.payment.productIdentifier);
-                [self logTransactionType:@"restored" productIdentifier:transaction.originalTransaction.payment.productIdentifier];
                 [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier transaction:transaction.originalTransaction];
             }
         }
@@ -1328,7 +1349,7 @@ static OASubscriptionState *EXPIRED;
                 if (email)
                     [params setObject:email forKey:@"email"];
                 
-                [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/purchased" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+                [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/purchased" params:params post:YES async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
                  {
                      NSString *errorStr = error ? error.localizedDescription : nil;
                      if (!error && response && data)
@@ -1343,36 +1364,8 @@ static OASubscriptionState *EXPIRED;
                                  {
                                      if ([map objectForKey:@"userid"])
                                          [self applyUserPreferences:map];
-
-                                     if ([self.class isLiveUpdatesSubscription:product])
-                                         [_settings.liveUpdatesPurchased set:YES];
-                                     else if ([self.class isOsmAndProSubscription:product])
-                                         [_settings.osmandProPurchased set:YES];
-                                     else if ([self.class isMapsSubscription:product])
-                                         [_settings.osmandMapsPurchased set:YES];
-
+                                     
                                      _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
-                                     if (transaction.transactionState == SKPaymentTransactionStatePurchased || transaction.transactionState == SKPaymentTransactionStateRestored)
-                                     {
-                                         [_products setPurchased:productIdentifier];
-                                         if (sku && transactionId)
-                                         {
-                                             NSData* data = [_settings.purchasedIdentifiers.get dataUsingEncoding:NSUTF8StringEncoding];
-                                             NSMutableDictionary *res = _settings.purchasedIdentifiers.get.length == 0 ?
-                                                [NSMutableDictionary dictionary] :
-                                                [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]];
-                                             res[sku] = transactionId;
-                                             NSError *err = nil;
-                                             data = [NSJSONSerialization dataWithJSONObject:res options:0 error:&err];
-                                             if (!err)
-                                             {
-                                                 [_settings.purchasedIdentifiers set:[[NSString alloc]
-                                                                                      initWithData:data
-                                                                                      encoding:NSUTF8StringEncoding]];
-                                             }
-                                         }
-                                         [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
-                                     }
                                  }
                                  else
                                  {
@@ -1395,20 +1388,6 @@ static OASubscriptionState *EXPIRED;
                          [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:product.productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"/purchased %@", errorStr]}];
                  }];
             }
-        }
-        else
-        {
-            if ([OAIAPHelper isFullVersion:product])
-                [_settings.fullVersionPurchased set:YES];
-            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Nautical])
-                [_settings.depthContoursPurchased set:YES];
-            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Srtm])
-                [_settings.contourLinesPurchased set:YES];
-            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Wiki])
-                [_settings.wikipediaPurchased set:YES];
-
-            [_products setPurchased:productIdentifier];
-            [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
         }
     }
 }

@@ -26,7 +26,7 @@
 "get_discount_short_descr" = "%@ for %d %@, then %@";
 "get_discount_first_part" = "%@ for first %@";
 "get_discount_first_few_parts" = "%@ for first %@";
-"get_discount_second_part" = "then %@";
+"get_discount_second_part" = "sonra %@";
 "mapillary_image" = "Mapillary təsviri";
 "shared_string_milliradians" = "Milliradians";
 "angular_units" = "Angular measurement units";
@@ -65,7 +65,7 @@
 "targets" = "Təyinat nöqtələri";
 "search_radius_proximity" = "Within";
 "poi" = "POI";
-"search_more" = "Dahaçox axtar…";
+"search_more" = "Daha çox axtar…";
 "day_off_label" = "off";
 "open_from" = "Open from";
 "open_till" = "Open till";

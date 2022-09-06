@@ -486,7 +486,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                         [_lanesDrawable setNeedsDisplay];
                     }
                     UIImage *img = _lanesDrawable.toUIImage;
-                    NSLog(@"Lanes image dimens: %fx%f", img.size.width, img.size.height);
                     lanesManeuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:img darkContentImage:img];
                     lanesManeuver.instructionVariants = @[];
                 });

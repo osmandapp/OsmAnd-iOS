@@ -146,8 +146,7 @@
 {
     OAFavoriteItem *comparingPoint = [[OAFavoriteItem alloc] initWithLat:_favorite.getLatitude lon:_favorite.getLongitude name:name category:group];
     NSDictionary *result = [OAFavoritesHelper checkDuplicates:comparingPoint];
-    if (result)
-        [OAFavoritesHelper deleteNewFavoriteItem:comparingPoint];
+    [OAFavoritesHelper deleteNewFavoriteItem:comparingPoint];
     return result;
 }
 

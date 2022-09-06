@@ -23,6 +23,7 @@
 #import "OALocationSimulation.h"
 #import "OACommonTypes.h"
 #import "OAOsmAndFormatter.h"
+#import "OALanesDrawable.h"
 
 #define unitsKm OALocalizedString(@"units_km")
 #define unitsM OALocalizedString(@"units_m")
@@ -61,6 +62,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     OAAutoObserverProxy *_locationServicesUpdateObserver;
     OANextDirectionInfo *_currentDirectionInfo;
+    
+    OALanesDrawable *_lanesDrawable;
 }
 
 - (void) commonInit
@@ -68,6 +71,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _routingHelper = OARoutingHelper.sharedInstance;
     [_routingHelper addListener:self];
     [_routingHelper addProgressBar:self];
+    _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:1];
     
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesUpdate)
@@ -351,6 +355,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                                                       userInfo:nil];
 }
 
+- (CPManeuverDisplayStyle)mapTemplate:(CPMapTemplate *)mapTemplate displayStyleForManeuver:(CPManeuver *)maneuver
+{
+    return CPManeuverDisplayStyleSymbolOnly;
+}
+
 // MARK: - OARouteInformationListener
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
@@ -460,6 +469,27 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             turnType = nextTurn.directionInfo.turnType;
             nextTurnDistance = nextTurn.distanceTo;
             turnImminent = nextTurn.imminent;
+            vector<int> loclanes = nextTurn.directionInfo.turnType->getLanes();
+            bool lanesVisible = !loclanes.empty();
+            __block CPManeuver *lanesManeuver = nil;
+            if (lanesVisible)
+            {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    lanesManeuver = [[CPManeuver alloc] init];
+                    auto& drawableLanes = [_lanesDrawable getLanes];
+                    if (drawableLanes.size() != loclanes.size() || (drawableLanes.size() > 0 && !std::equal(drawableLanes.begin(), drawableLanes.end(), loclanes.begin())) || (turnImminent == 0) != _lanesDrawable.imminent)
+                    {
+                        _lanesDrawable.imminent = turnImminent == 0;
+                        [_lanesDrawable setLanes:loclanes];
+                        [_lanesDrawable updateBounds];
+                        _lanesDrawable.frame = CGRectMake(0, 0, _lanesDrawable.width, _lanesDrawable.height);
+                        [_lanesDrawable setNeedsDisplay];
+                    }
+                    UIImage *img = _lanesDrawable.toUIImage;
+                    lanesManeuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:img darkContentImage:img];
+                    lanesManeuver.instructionVariants = @[];
+                });
+            }
             
             CPManeuver *maneuver = _navigationSession.upcomingManeuvers.firstObject;
             NSMeasurement<NSUnitLength *> * dist = [self getFormattedDistance:nextTurnDistance];
@@ -476,7 +506,10 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 maneuver.initialTravelEstimates = estimates;
                 if (nextTurn.directionInfo.streetName)
                     maneuver.instructionVariants = @[nextTurn.directionInfo.streetName];
-                _navigationSession.upcomingManeuvers = @[maneuver];
+                if (lanesVisible)
+                    _navigationSession.upcomingManeuvers = @[maneuver, lanesManeuver];
+                else
+                    _navigationSession.upcomingManeuvers = @[maneuver];
                 _currentDirectionInfo = nextTurn;
             }
             else

@@ -485,8 +485,6 @@ static BOOL _favoritesLoaded = NO;
         for (OAFavoriteItem *fp in [self getFavoriteItems])
         {
             if ([[fp getName] isEqualToString:name]
-                    && [point getLatitude] != [fp getLatitude]
-                    && [point getLongitude] != [fp getLongitude]
                     && [[fp getCategory] isEqualToString:[point getCategory]])
             {
                 number++;

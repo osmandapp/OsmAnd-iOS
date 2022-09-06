@@ -892,6 +892,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *oprUseDevUrl;
 @property (nonatomic) OACommonBoolean *offlineEditing;
 @property (nonatomic) OACommonBoolean *osmUseDevUrl;
+@property (nonatomic) OACommonLong *mapperLiveUpdatesExpireTime;
 
 // Mapillary
 @property (nonatomic) OACommonBoolean *showMapillary;

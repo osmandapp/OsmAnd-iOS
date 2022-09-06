@@ -215,6 +215,7 @@
 #define oprUseDevUrlKey @"opr_use_dev_url"
 #define offlineEditingKey @"offline_editing"
 #define osmUseDevUrlKey @"use_dev_url"
+#define mapperLiveUpdatesExpireTimeKey @"mapper_live_updates_expire_time"
 
 #define showMapillaryKey @"show_mapillary"
 #define onlinePhotosRowCollapsedKey @"onlinePhotosRowCollapsed"
@@ -3902,6 +3903,7 @@
         _oprUseDevUrl = [[[OACommonBoolean withKey:oprUseDevUrlKey defValue:NO] makeGlobal] makeShared];
         _offlineEditing = [[[OACommonBoolean withKey:offlineEditingKey defValue:YES] makeGlobal] makeShared];
         _osmUseDevUrl = [[[OACommonBoolean withKey:osmUseDevUrlKey defValue:NO] makeGlobal] makeShared];
+        _mapperLiveUpdatesExpireTime = [[OACommonLong withKey:mapperLiveUpdatesExpireTimeKey defValue:0] makeGlobal];
 
         [_globalPreferences setObject:_osmUserName forKey:@"user_name"];
         [_globalPreferences setObject:_osmUserDisplayName forKey:@"user_display_name"];

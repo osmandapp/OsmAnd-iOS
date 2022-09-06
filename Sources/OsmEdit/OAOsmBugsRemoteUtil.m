@@ -17,10 +17,14 @@
 static const NSString* NOTES_API_BASE_URL = @"https://api.openstreetmap.org/api/0.6/notes";
 static const NSString* USERS_API_BASE_URL = @"https://api.openstreetmap.org/api/0.6/user/details";
 
+@interface OAOsmBugsRemoteUtil () <NSXMLParserDelegate>
+
+@end
 
 @implementation OAOsmBugsRemoteUtil
 {
     BOOL _anonymous;
+    NSString *_displayName;
 }
 
 - (OAOsmBugResult *)commit:(OAOsmNotePoint *)point text:(NSString *)text action:(EOAAction)action {
@@ -87,12 +91,28 @@ static const NSString* USERS_API_BASE_URL = @"https://api.openstreetmap.org/api/
     NSURLSessionDataTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
         if (error || httpResponse.statusCode < 200 || httpResponse.statusCode >= 300)
+        {
             res.warning = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        }
+        else
+        {
+            NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
+            parser.delegate = self;
+            [parser parse];
+            res.userName = _displayName;
+            _displayName = nil;
+        }
         dispatch_semaphore_signal(semaphore);
     }];
     [task resume];
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     return res;
+}
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
+ {
+    if ([elementName isEqualToString:@"user"])
+        _displayName = [attributeDict objectForKey:@"display_name"];
 }
 
 - (void)URLSession:(NSURLSession *)session

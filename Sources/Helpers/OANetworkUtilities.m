@@ -19,7 +19,7 @@
 
 + (void) sendRequest:(OANetworkRequest *)request async:(BOOL)async onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
-    [self sendRequestWithUrl:request.url params:request.params post:request.post onComplete:onComplete];
+    [self sendRequestWithUrl:request.url params:request.params post:request.post async:async onComplete:onComplete];
 }
 
 + (void) sendRequestWithUrl:(NSString *)url params:(NSDictionary<NSString *, NSString *> *)params post:(BOOL)post onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete

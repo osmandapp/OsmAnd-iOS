@@ -139,6 +139,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
 + (BOOL) isSubscribedToLiveUpdates;
 + (BOOL) isSubscribedToOsmAndPro;
 + (BOOL) isSubscribedCrossPlatform;
++ (BOOL) isSubscribedToMapperUpdates;
 + (BOOL) isOsmAndProAvailable;
 + (BOOL) isCarPlayAvailable;
 

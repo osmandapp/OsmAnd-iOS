@@ -16,6 +16,7 @@
                 <outlet property="doneButton" destination="xMH-jv-0wi" id="UIK-8H-c9z"/>
                 <outlet property="navBarHeightConstraint" destination="QPz-gy-72e" id="Lay-q2-6fz"/>
                 <outlet property="navbarView" destination="io8-yi-lxZ" id="Yy1-TJ-xXA"/>
+                <outlet property="separatorNavbarView" destination="MRs-qb-nr0" id="g9C-Lv-cGe"/>
                 <outlet property="subtitleLabel" destination="iCR-tw-0Oz" id="IeF-J0-iai"/>
                 <outlet property="tableView" destination="Zbn-6q-pLe" id="dwQ-KE-2IP"/>
                 <outlet property="titleLabel" destination="5Fb-iQ-XT3" id="yj7-rU-zlo"/>

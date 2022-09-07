@@ -279,14 +279,14 @@
     }
 }
 
-- (CGFloat)updateLayout:(CGFloat)y
+- (CGFloat)updateLayout:(CGFloat)y width:(CGFloat)width
 {
-    CGFloat width = DeviceScreenWidth - kPrimarySpaceMargin * 2 - [OAUtilities getLeftMargin] * 2;
+    CGFloat newWidth = width - kPrimarySpaceMargin * 2 - [OAUtilities getLeftMargin] * 2;
     CGFloat textVerticalOffset = kSecondarySpaceMargin;
     CGFloat leftSideOffset = _type == EOAPlanTypeChoosePlan ? kSecondarySpaceMargin : kPrimarySpaceMargin;
     CGFloat rightSideOffset = _type == EOAPlanTypePurchase ? kPrimarySpaceMargin : kSecondarySpaceMargin;
     CGFloat iconMargin = kIconSize + kPrimarySpaceMargin;
-    CGFloat textWidth = width - leftSideOffset - rightSideOffset;
+    CGFloat textWidth = newWidth - leftSideOffset - rightSideOffset;
     if (_type != EOAPlanTypePurchase)
         textWidth -= iconMargin;
 
@@ -343,7 +343,7 @@
     self.frame = CGRectMake(
             kPrimarySpaceMargin + [OAUtilities getLeftMargin],
             y,
-            width,
+            newWidth,
             self.labelDescription.frame.origin.y + self.labelDescription.frame.size.height + (hasTertiaryDescr ? self.tertiaryDescrLabel.frame.size.height + 1. : 0) + textVerticalOffset
     );
 
@@ -355,7 +355,7 @@
     );
 
     self.imageViewRightIcon.frame = CGRectMake(
-            width - rightSideOffset - kIconSize,
+            newWidth - rightSideOffset - kIconSize,
             self.labelTitle.frame.origin.y + titleSize.height - titleSize.height / 2 - kIconSize / 2,
             kIconSize,
             kIconSize

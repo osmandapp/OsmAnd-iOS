@@ -140,7 +140,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
         if ([v isKindOfClass:[OABaseFeatureCardView class]])
         {
             OABaseFeatureCardView *card = (OABaseFeatureCardView *) v;
-            y += [card updateFrame:y];
+            y += [card updateFrame:y width:self.view.frame.size.width];
         }
     }
     if (y > 0)

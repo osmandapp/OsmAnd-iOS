@@ -159,9 +159,8 @@
     self.labelProductIncluded.attributedText = productIncludedText;
 }
 
-- (CGFloat)updateLayout:(CGFloat)y
+- (CGFloat)updateLayout:(CGFloat)y width:(CGFloat)width
 {
-    CGFloat width = DeviceScreenWidth;
     CGFloat leftMargin = 20. + [OAUtilities getLeftMargin];
     CGFloat titleLeftMargin = leftMargin + kIconBigTitleSize + 16.;
     CGSize titleSize = [OAUtilities calculateTextBounds:self.labelTitle.text
@@ -211,7 +210,7 @@
     CGFloat yRow = 0.;
     for (OAFeatureCardRow *row in self.viewFeatureRowsContainer.subviews)
     {
-        yRow += [row updateFrame:yRow];
+        yRow += [row updateFrame:yRow width:width];
     }
     self.viewFeatureRowsContainer.frame = CGRectMake(
             0.,
@@ -223,7 +222,7 @@
     yRow = 9.;
     for (OAPlanTypeCardRow *row in self.viewChoosePlanButtonsContainer.subviews)
     {
-        yRow += [row updateFrame:yRow] + 16.;
+        yRow += [row updateFrame:yRow width:width] + 16.;
     }
     self.viewChoosePlanButtonsContainer.frame = CGRectMake(
             0.,
@@ -302,7 +301,7 @@
                     [allFeatures removeObject:OAFeature.COMBINED_WIKI];
                     OAFeature *feature = allFeatures[tag];
                     [self updateInfo:feature replaceFeatureRows:NO];
-                    [self updateLayout:self.frame.origin.y];
+                    [self updateLayout:self.frame.origin.y width:self.frame.size.width];
                     if (self.delegate)
                         [self.delegate onFeatureSelected:feature];
 

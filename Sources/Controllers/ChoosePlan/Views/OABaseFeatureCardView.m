@@ -15,14 +15,14 @@
     //[self updateLayout:self.frame.size.width];
 }
 
-- (CGFloat) updateLayout:(CGFloat)y
+- (CGFloat) updateLayout:(CGFloat)y width:(CGFloat)width
 {
     return 0;
 }
 
-- (CGFloat)updateFrame:(CGFloat)y
+- (CGFloat)updateFrame:(CGFloat)y width:(CGFloat)width
 {
-    return [self updateLayout:y];
+    return [self updateLayout:y width:width];
 }
 
 @end

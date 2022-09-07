@@ -267,15 +267,27 @@
             {
                 int segStartIndex = 0;
                 QVector<OsmAnd::PointI> points;
+                QVector<OsmAnd::PointI> pointsJoinSegment;
                 QList<OsmAnd::FColorARGB> segmentColors;
                 for (const auto& track : doc_->tracks)
                 {
-                    for (const auto& seg : track->segments)
+                    for (int i = 0; i < track->segments.count(); i++)
                     {
+                        const auto& seg = track->segments[i];
                         for (const auto& pt : seg->points)
                         {
                             points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
                         }
+                        
+                        if (gpx.joinSegments && i < track->segments.count() - 1)
+                        {
+                            const auto& nextSeg = track->segments[i+1];
+                            const auto& start = seg->points.last();
+                            const auto& finish = nextSeg->points.first();
+                            pointsJoinSegment.push_back((OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(start->position))));
+                            pointsJoinSegment.push_back((OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(finish->position))));
+                        }
+                        
                         if (points.size() > 1 && !_cachedColors[key].isEmpty() && segStartIndex < _cachedColors[key].size() && segStartIndex + points.size() - 1 < _cachedColors[key].size())
                         {
                             segmentColors = _cachedColors[key].mid(segStartIndex, points.size());
@@ -296,9 +308,11 @@
                             }
                             else
                             {
-                                [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue]];
+                                [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] isJoiningSegment:NO];
+                                [self drawLine:pointsJoinSegment gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] isJoiningSegment:YES];
                             }
                             points.clear();
+                            pointsJoinSegment.clear();
                             segmentColors.clear();
                         }
                     }
@@ -311,7 +325,7 @@
                     }
                     else
                     {
-                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue]];
+                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] isJoiningSegment:NO];
                     }
                 }
             }
@@ -330,7 +344,7 @@
                     }
                     else
                     {
-                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:{} colorizationScheme:COLORIZATION_NONE];
+                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:{} colorizationScheme:COLORIZATION_NONE isJoiningSegment:NO];
                     }
                 }
             }
@@ -348,6 +362,7 @@
            lineId:(int)lineId
            colors:(const QList<OsmAnd::FColorARGB> &)colors
 colorizationScheme:(int)colorizationScheme
+ isJoiningSegment:(BOOL)isJoiningSegment
 {
     if (points.size() > 1)
     {
@@ -379,16 +394,26 @@ colorizationScheme:(int)colorizationScheme
         }
 
         OsmAnd::FColorARGB colorARGB;
-        if (gpx.color != 0)
-        {
-            colorARGB = OsmAnd::ColorARGB((int) gpx.color);
-        }
-        else
+        if (isJoiningSegment)
         {
             if (!colors.isEmpty() && colorizationScheme == COLORIZATION_NONE)
                 colorARGB = colors[0];
             else
-                colorARGB = [UIColorFromRGB(kDefaultTrackColor) toFColorARGB];
+                colorARGB = [UIColorFromARGB(0xFFC8C8C8) toFColorARGB];
+        }
+        else
+        {
+            if (gpx.color != 0)
+            {
+                colorARGB = OsmAnd::ColorARGB((int) gpx.color);
+            }
+            else
+            {
+                if (!colors.isEmpty() && colorizationScheme == COLORIZATION_NONE)
+                    colorARGB = colors[0];
+                else
+                    colorARGB = [UIColorFromRGB(kDefaultTrackColor) toFColorARGB];
+            }
         }
 
         OsmAnd::VectorLineBuilder builder;

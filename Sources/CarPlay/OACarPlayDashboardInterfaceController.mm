@@ -64,6 +64,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     OANextDirectionInfo *_currentDirectionInfo;
     
     OALanesDrawable *_lanesDrawable;
+    CPManeuverDisplayStyle _secondaryStyle;
 }
 
 - (void) commonInit
@@ -71,8 +72,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _routingHelper = OARoutingHelper.sharedInstance;
     [_routingHelper addListener:self];
     [_routingHelper addProgressBar:self];
-    _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:1];
-    
+    _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:10.];
+    _secondaryStyle = CPManeuverDisplayStyleDefault;
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesUpdate)
                                                                  andObserve:[OsmAndApp instance].locationServices.updateObserver];
@@ -357,7 +358,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (CPManeuverDisplayStyle)mapTemplate:(CPMapTemplate *)mapTemplate displayStyleForManeuver:(CPManeuver *)maneuver
 {
-    return CPManeuverDisplayStyleSymbolOnly;
+    return _secondaryStyle;
 }
 
 // MARK: - OARouteInformationListener
@@ -454,60 +455,83 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     return NSUnitLength.meters;
 }
 
+- (CPManeuver *)createTurnManeuver:(CPTravelEstimates *)estimates directionInfo:(OANextDirectionInfo *)directionInfo
+{
+    const auto turnType = directionInfo.directionInfo.turnType;
+    CPManeuver *maneuver = [[CPManeuver alloc] init];
+    NSString *lightImageName = [self imageNameForTurnType:turnType];
+    NSString *darkImageName = [lightImageName stringByAppendingString:@"_dark"];
+    UIImage *darkImage = [UIImage imageNamed:darkImageName];
+    UIImage *lightImage = [UIImage imageNamed:lightImageName];
+    maneuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:lightImage darkContentImage:darkImage];
+    
+    maneuver.initialTravelEstimates = estimates;
+    if (directionInfo.directionInfo.streetName)
+        maneuver.instructionVariants = @[directionInfo.directionInfo.streetName];
+    return maneuver;
+}
+
 // MARK: Location service updates
 
 - (void) onLocationServicesUpdate
 {
     if (_navigationSession)
     {
-        std::shared_ptr<TurnType> turnType = nullptr;
         int turnImminent = 0;
         int nextTurnDistance = 0;
+        int secondaryTurnDistance = 0;
         OANextDirectionInfo *nextTurn = [_routingHelper getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES];
         if (nextTurn && nextTurn.distanceTo > 0 && nextTurn.directionInfo)
         {
-            turnType = nextTurn.directionInfo.turnType;
+            OANextDirectionInfo *secondaryInfo = nil;
             nextTurnDistance = nextTurn.distanceTo;
             turnImminent = nextTurn.imminent;
             vector<int> loclanes = nextTurn.directionInfo.turnType->getLanes();
             bool lanesVisible = !loclanes.empty();
-            __block CPManeuver *lanesManeuver = nil;
-            if (lanesVisible)
+            bool secondaryVisible = false;
+            __block CPManeuver *secondaryManeuver = nil;
+            if (!lanesVisible)
             {
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    lanesManeuver = [[CPManeuver alloc] init];
-                    auto& drawableLanes = [_lanesDrawable getLanes];
-                    if (drawableLanes.size() != loclanes.size() || (drawableLanes.size() > 0 && !std::equal(drawableLanes.begin(), drawableLanes.end(), loclanes.begin())) || (turnImminent == 0) != _lanesDrawable.imminent)
-                    {
-                        _lanesDrawable.imminent = turnImminent == 0;
-                        [_lanesDrawable setLanes:loclanes];
-                        [_lanesDrawable updateBounds];
-                        _lanesDrawable.frame = CGRectMake(0, 0, _lanesDrawable.width, _lanesDrawable.height);
-                        [_lanesDrawable setNeedsDisplay];
-                    }
-                    UIImage *img = _lanesDrawable.toUIImage;
-                    lanesManeuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:img darkContentImage:img];
-                    lanesManeuver.instructionVariants = @[];
-                });
+                secondaryInfo = [_routingHelper getNextRouteDirectionInfoAfter:nextTurn to:[[OANextDirectionInfo alloc] init] toSpeak:YES];
+                if (secondaryInfo && secondaryInfo.directionInfo)
+                {
+                    secondaryTurnDistance = secondaryInfo.distanceTo;
+                    _secondaryStyle = CPManeuverDisplayStyleDefault;
+                    secondaryVisible = true;
+                }
             }
             
             CPManeuver *maneuver = _navigationSession.upcomingManeuvers.firstObject;
-            NSMeasurement<NSUnitLength *> * dist = [self getFormattedDistance:nextTurnDistance];
+            NSMeasurement<NSUnitLength *> *dist = [self getFormattedDistance:nextTurnDistance];
             CPTravelEstimates *estimates = [[CPTravelEstimates alloc] initWithDistanceRemaining:dist timeRemaining:-1];
             if (!maneuver || nextTurn.directionInfoInd != _currentDirectionInfo.directionInfoInd)
             {
-                maneuver = [[CPManeuver alloc] init];
-                NSString *lightImageName = [self imageNameForTurnType:turnType];
-                NSString *darkImageName = [lightImageName stringByAppendingString:@"_dark"];
-                UIImage *darkImage = [UIImage imageNamed:darkImageName];
-                UIImage *lightImage = [UIImage imageNamed:lightImageName];
-                maneuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:lightImage darkContentImage:darkImage];
-                
-                maneuver.initialTravelEstimates = estimates;
-                if (nextTurn.directionInfo.streetName)
-                    maneuver.instructionVariants = @[nextTurn.directionInfo.streetName];
+                maneuver = [self createTurnManeuver:estimates directionInfo:nextTurn];
                 if (lanesVisible)
-                    _navigationSession.upcomingManeuvers = @[maneuver, lanesManeuver];
+                {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        secondaryManeuver = [[CPManeuver alloc] init];
+                        auto& drawableLanes = [_lanesDrawable getLanes];
+                        if (drawableLanes.size() != loclanes.size() || (drawableLanes.size() > 0 && !std::equal(drawableLanes.begin(), drawableLanes.end(), loclanes.begin())) || (turnImminent == 0) != _lanesDrawable.imminent)
+                        {
+                            _lanesDrawable.imminent = turnImminent == 0;
+                            [_lanesDrawable setLanes:loclanes];
+                            [_lanesDrawable updateBounds];
+                            _lanesDrawable.frame = CGRectMake(0, 0, _lanesDrawable.width, _lanesDrawable.height);
+                            [_lanesDrawable setNeedsDisplay];
+                        }
+                        UIImage *img = _lanesDrawable.toUIImage;
+                        secondaryManeuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:img darkContentImage:img];
+                        secondaryManeuver.instructionVariants = @[];
+                        _secondaryStyle = CPManeuverDisplayStyleSymbolOnly;
+                    });
+                }
+                else if (secondaryVisible)
+                {
+                    secondaryManeuver = [self createTurnManeuver:nil directionInfo:secondaryInfo];
+                }
+                if (secondaryManeuver)
+                    _navigationSession.upcomingManeuvers = @[maneuver, secondaryManeuver];
                 else
                     _navigationSession.upcomingManeuvers = @[maneuver];
                 _currentDirectionInfo = nextTurn;
@@ -521,7 +545,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     }
 }
 
-- (NSString *) imageNameForTurnType:(std::shared_ptr<TurnType> &)turnType
+- (NSString *) imageNameForTurnType:(const std::shared_ptr<TurnType> &)turnType
 {
     if (turnType->getValue() == TurnType::C) {
         return @"map_turn_forward";

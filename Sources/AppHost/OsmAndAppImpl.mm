@@ -323,7 +323,7 @@
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
 
-    settings.simulateNavigation = YES;
+    settings.simulateNavigation = NO;
     settings.simulateNavigationMode = [OASimulationMode toKey:EOASimulationModePreview];
     settings.simulateNavigationSpeed = kSimMinSpeed;
     

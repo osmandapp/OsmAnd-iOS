@@ -572,7 +572,7 @@
     UIBezierPath *path = [cache objectForKey:turnResource];
     if (!path)
     {
-        path = [self.class getPathFromTurnResource:turnResource withSize:{LANE_IMG_SIZE, 18.} smallArrow:smallArrow];
+        path = [self.class getPathFromTurnResource:turnResource withSize:{LANE_IMG_SIZE, LANE_IMG_SIZE} smallArrow:smallArrow];
         [cache setObject:path forKey:turnResource];
     }    
     return path;

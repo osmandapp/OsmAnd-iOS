@@ -45,9 +45,9 @@
     OAIAPHelper *_iapHelper;
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSMapTable<NSNumber *, NSString *> *_headers;
+    
+    BOOL _purchasesUpdated;
 }
-
-static BOOL _purchasesUpdated = NO;
 
 -(void) applyLocalization
 {
@@ -76,8 +76,8 @@ static BOOL _purchasesUpdated = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
 
-    if (!_purchasesUpdated)
-        [[OARootViewController instance] requestProductsWithProgress:NO reload:YES];
+    OAAppSettings.sharedManager.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
+    [[OARootViewController instance] requestProductsWithProgress:NO reload:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

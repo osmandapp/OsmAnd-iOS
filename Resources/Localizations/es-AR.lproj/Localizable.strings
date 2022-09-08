@@ -2676,3 +2676,8 @@
 "backup_delete_old_data" = "Quitar versiones antiguas";
 "backup_delete_all_data_in_progress" = "Espera hasta que OsmAnd borre todos los datos de la nube. Los datos en el dispositivo permanecen intactos.";
 "backup_remove_old_versions_finished" = "Las versiones antiguas han sido borradas con éxito de la nube de OsmAnd.";
+"manage_storage" = "Gestionar almacenamiento";
+"backup_delete_data_type_description" = "Esto borrará todos los datos de «%@» en la nube de OsmAnd. Esta acción no se puede deshacer.";
+"shared_string_delete_data" = "Borrar datos";
+"backup_delete_types_descr" = "¿Borrar de la nube de OsmAnd todos los tipos de datos obsoletos?";
+"shared_string_leave" = "Salir";

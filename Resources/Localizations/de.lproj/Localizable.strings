@@ -2683,3 +2683,4 @@
 "backup_delete_types_descr" = "Alle Daten für veraltete Datentypen aus der OsmAnd Cloud löschen?";
 "backup_empty_data_from_category" = "Die OsmAnd Cloud enthält keine Daten aus dieser Kategorie.";
 "shared_string_leave" = "Verlassen";
+"recording_delete_confirm" = "Dieses Element löschen?";

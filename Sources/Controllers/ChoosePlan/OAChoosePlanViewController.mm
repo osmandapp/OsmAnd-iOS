@@ -346,7 +346,7 @@
         if ([view isKindOfClass:[OABaseFeatureCardView class]])
         {
             OABaseFeatureCardView *card = (OABaseFeatureCardView *) view;
-            y += [card updateFrame:y];
+            y += [card updateFrame:y width:self.view.frame.size.width];
         }
     }
     self.scrollViewContainerView.frame = CGRectMake(
@@ -368,8 +368,10 @@
                 subscriptionManagementSize.height
         );
 
-        [_buttonTermsOfUse updateFrame:_subscriptionManagement.frame.origin.y + _subscriptionManagement.frame.size.height];
-        [_buttonPrivacyPolicy updateFrame:_buttonTermsOfUse.frame.origin.y + _buttonTermsOfUse.frame.size.height];
+        [_buttonTermsOfUse updateFrame:_subscriptionManagement.frame.origin.y + _subscriptionManagement.frame.size.height
+                                 width:self.view.frame.size.width];
+        [_buttonPrivacyPolicy updateFrame:_buttonTermsOfUse.frame.origin.y + _buttonTermsOfUse.frame.size.height
+                                    width:self.view.frame.size.width];
     }
 
     self.buttonRestore.frame = CGRectMake(
@@ -413,7 +415,7 @@
         y = _labelIncludes.frame.origin.y + _labelIncludes.frame.size.height;
         for (OAFeatureCardRow *cardRow in _includedRows)
         {
-            y += [cardRow updateFrame:y] + 36.;
+            y += [cardRow updateFrame:y width:self.view.frame.size.width] + 36.;
         }
 
         BOOL isMaps = [OAIAPHelper isFullVersion:_product] || ([_product isKindOfClass:OASubscription.class] && [OAIAPHelper isMapsSubscription:(OASubscription *) _product]);
@@ -433,7 +435,7 @@
             y = _labelNotIncluded.frame.origin.y + _labelNotIncluded.frame.size.height;
             for (OAFeatureCardRow *cardRow in _notIncludedRows)
             {
-                y += [cardRow updateFrame:y] + 36.;
+                y += [cardRow updateFrame:y width:self.view.frame.size.width] + 36.;
             }
         }
     }
@@ -502,9 +504,10 @@
 - (void) productPurchaseFailed:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self dismissViewController];
-        if (self.delegate)
-            [self.delegate onProductNotification];
+        [OAUtilities showToast:[NSString stringWithFormat:OALocalizedString(@"prch_failed"), _product.localizedTitle]
+                       details:nil
+                      duration:4
+                        inView:self.view];
     });
 }
 

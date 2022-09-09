@@ -65,7 +65,7 @@
     CGRect cf = self.rowsContainer.frame;
     for (OAFeatureCardRow *row in self.rowsContainer.subviews)
     {
-        y += [row updateFrame:y];
+        y += [row updateFrame:y width:self.frame.size.width];
     }
     cf.size.width = width;
     cf.size.height = y;

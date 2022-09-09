@@ -487,18 +487,6 @@
         int showMapIterator = (int)[[NSUserDefaults standardUserDefaults] integerForKey:kShowMapIterator];
         [[NSUserDefaults standardUserDefaults] setInteger:++showMapIterator forKey:kShowMapIterator];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        NSString *key = [@"resource:" stringByAppendingString:_app.resourcesManager->getResourceInRepository(kWorldBasemapKey)->id.toNSString()];
-        BOOL _isWorldMapDownloading = [_app.downloadsManager.keysOfDownloadTasks containsObject:key];
-
-        BOOL mapDownloadStopReminding = [[NSUserDefaults standardUserDefaults] boolForKey:kMapDownloadStopReminding];
-        double mapDownloadReminderDelta = [[NSDate date] timeIntervalSince1970] - [[NSUserDefaults standardUserDefaults] doubleForKey:kMapDownloadReminderStoppedDate];
-        const auto worldMap = _app.resourcesManager->getLocalResource(kWorldBasemapKey);
-        if (!_isWorldMapDownloading &&
-            (!mapDownloadStopReminding || mapDownloadReminderDelta > 60.0 * 60.0 * 24.0 * 8.0) &&
-            !worldMap && (showMapIterator == 1 || showMapIterator % 6 == 0))
-            
-            [OAPluginPopupViewController askForWorldMap];
     }
     
     [self showWhatsNewDialogIfNeeded];

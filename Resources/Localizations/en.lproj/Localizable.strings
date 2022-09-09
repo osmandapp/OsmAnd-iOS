@@ -2837,6 +2837,8 @@
 "update_only_over_wi_fi" = "Update only over Wi-Fi";
 "update_parameters" = "Update parameters";
 
+"recording_delete_confirm" = "Delete this item?";
+
 "login_open_street_map_org" = "Login to OpenStreetMap.org";
 "map_updates_for_mappers" = "Map updates for mappers";
 "offline_edition_descr" = "If offline editing is enabled, changes will be saved locally and can only be uploaded manually, otherwise, changes will be uploaded immediately.";

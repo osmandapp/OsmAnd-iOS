@@ -38,7 +38,6 @@ typedef NS_ENUM(NSInteger, OAPluginPopupType)
 
 + (void)showProductAlert:(OAProduct *)product afterPurchase:(BOOL)afterPurchase;
 + (void)askForPlugin:(NSString *)productIdentifier;
-+ (void)askForWorldMap;
 
 + (void)showNoInternetConnectionFirst;
 + (void)hideNoInternetConnection;

@@ -1524,7 +1524,7 @@
 "shared_string_turn_off" = "关闭";
 "shared_string_navigation" = "导航";
 "download_map_dialog" = "下载地图对话框";
-"product_desc_ext_mapillary" = "供所有人使用的在线街景照片。协作发现景点，捕捉世界之美。";
+"product_desc_ext_mapillary" = "供所有人使用的在线街景照片。在缺少图像的地方，您可以协作发现景点，捕捉世界之美。要启用 Mapillary 图层，请在配置地图菜单中打开“街道级图像”。";
 "shared_strings_all_regions" = "所有区域";
 "navigate_point_olc" = "打开位置代码";
 "gpxup_trackable" = "可追踪";
@@ -1726,7 +1726,7 @@
 "backup_error_file_not_available" = "文件不可用";
 "start_point" = "开始";
 "routing_attr_only_permitted_ways_name" = "明确允许的道路";
-"backup_error_token_is_not_valid_or_expired" = "无效或过期的令牌";
+"backup_error_token_is_not_valid_or_expired" = "无效或过期的验证码";
 "cloud_existing_account" = "我已经有一个账户";
 "backup_error_subscription_was_expired_descr" = "您的 OsmAnd Pro 订阅已过期，请续订以使用备份。您仍然可以从云端恢复数据。";
 "routing_attr_only_permitted_ways_description" = "仅使用明确允许的道路（轨迹、路径等）";
@@ -1826,7 +1826,7 @@
 "added_profiles_descr" = "插件所添加的配置文件";
 "subscriptions" = "订阅";
 "routeInfo_horse_scale_description" = "根据马道的难度级别渲染路径";
-"purchases_feature_desc_nautical" = "获得航海深度信息";
+"purchases_feature_desc_nautical" = "适合航海路线导航的矢量地图";
 "simulation_constant_mode_desc" = "模拟将在所选择的恒定速度下进行。";
 "purchases_feature_desc_combined_wiki" = "在没有互联网连接的情况下，探索维基百科上的文章。离线数据按国家划分，提供所有语言版本。";
 "shared_string_includes" = "包括";
@@ -1843,12 +1843,12 @@
 "added_profiles" = "添加的配置文件";
 "complete_purchase" = "完成购买";
 "toast_empty_name_error" = "未命名位置";
-"purchases_feature_desc_osmand_cloud" = "让 OsmAnd 云在线存储所有 OsmAnd 数据。重新安装后不会丢失数据。轻松备份和恢复所有信息。";
+"purchases_feature_desc_osmand_cloud" = "在线存储所有 OsmAnd 数据。重新安装后不会丢失数据。轻松备份和恢复所有信息。";
 "shared_string_capacity" = "容量";
 "product_title_development" = "OsmAnd开发";
 "routeInfo_horse_scale_name" = "马道难度";
 "daily_map_updates" = "每小时更新地图";
-"product_desc_ext_development" = "开发和调试功能的设置，如导航模拟、渲染性能或语音提示。适用于开发人员，正常应用使用时不需要。";
+"product_desc_ext_development" = "允许将OsmAnd配置为测试用，如模拟导航、查看屏幕渲染性能等。适用于开发人员，正常应用使用时不需要插件。";
 "manage_subscription" = "管理订阅";
 "copy_to_map_favorites" = "复制到收藏";
 "suggested_maps_descr" = "插件需要这些地图。";
@@ -1870,10 +1870,12 @@
 "routing_attr_piste_type_nordic_description" = "适合北欧或越野滑雪的小径。";
 "map_orientation_change_in_accordance_with_speed" = "地图方向阈值";
 "routing_attr_allow_classic_only_name" = "只允许经典路线";
-"routing_attr_difficulty_preference_description" = "倾向于这种难度的路线，尽管如果时间较短，在更难或更容易的滑雪道上的路线仍是可能的。";
+"routing_attr_difficulty_preference_description" = "倾向于这种难度的路线，尽管在更难或更容易的滑雪道仍可用时其路线时间更短。";
 "routing_attr_piste_type_sled_description" = "供雪橇使用的斜坡。";
-"routing_attr_avoid_sett_name" = "无鹅卵石或小型原石砖";
+"routing_attr_avoid_sett_name" = "无鹅卵石或小型铺路石";
 "routing_attr_allow_skating_only_name" = "只允许滑冰路线";
 "routing_attr_allow_skating_only_description" = "仅针对自由式或滑冰而修整的路线，没有经典轨迹。";
 "routing_attr_allow_classic_only_description" = "路线仅针对经典风格进行了修饰，没有滑冰道。这包括由较小的雪地摩托和较松的滑雪道以及滑雪者手动制作的轨迹。";
 "routing_attr_allow_intermediate_description" = "较难的路线，有较陡峭的路段。一般来说，有些障碍物是应该避免的。";
+"choose_what_to_restore" = "选择要恢复的项目";
+"login_help_email_title" = "OsmAnd iOS云";

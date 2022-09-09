@@ -17,8 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OABaseFeatureCardView : UIView
 
-- (CGFloat)updateLayout:(CGFloat)y;
-- (CGFloat)updateFrame:(CGFloat)y;
+- (CGFloat)updateLayout:(CGFloat)y width:(CGFloat)width;
+- (CGFloat)updateFrame:(CGFloat)y width:(CGFloat)width;
 
 @end
 

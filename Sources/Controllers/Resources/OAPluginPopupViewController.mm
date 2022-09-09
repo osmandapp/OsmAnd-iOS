@@ -231,43 +231,6 @@ static NSMutableArray *activePopups;
         }
 }
 
-+ (void)askForWorldMap
-{
-    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] initWithType:OAPluginPopupTypeWorldMap];
-    popup.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 200.0);
-    
-    NSString *title;
-    NSString *descText;
-    NSString *okButtonName;
-    NSString *cancelButtonName;
-    
-    title = OALocalizedString(@"res_wmap");
-    descText = OALocalizedString(@"all_world_popup_desc");
-    cancelButtonName = OALocalizedString(@"shared_string_later");
-    
-    const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldBasemapKey);
-    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
-                                                               countStyle:NSByteCountFormatterCountStyleFile];
-    okButtonName = [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"download"), stringifiedSize];
-
-    [popup.okButton addTarget:popup action:@selector(downloadWorldMap) forControlEvents:UIControlEventTouchUpInside];
-    [popup.cancelButton addTarget:popup action:@selector(cancelDownloadWorldMap) forControlEvents:UIControlEventTouchUpInside];
-
-    UIViewController *top = [OARootViewController instance].navigationController.topViewController;
-    
-    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_map"] color:UIColorFromRGB(0x4caf50)];
-    popup.titleLabel.text = title;
-    
-    NSString *styledText = [self.class styledHTMLwithHTML:descText];
-    popup.descTextView.attributedText = [self.class attributedStringWithHTML:styledText];
-    
-    [popup.okButton setTitle:okButtonName forState:UIControlStateNormal];
-    [popup.cancelButton setTitle:cancelButtonName forState:UIControlStateNormal];
-    
-    [top addChildViewController:popup];
-    [popup show];
-}
-
 + (void)showNoInternetConnectionFirst
 {
     OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] initWithType:OAPluginPopupTypeNoInternet];

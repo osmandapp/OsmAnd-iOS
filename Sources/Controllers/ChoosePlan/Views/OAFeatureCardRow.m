@@ -176,10 +176,9 @@
 
 }
 
-- (CGFloat)updateLayout:(CGFloat)y
+- (CGFloat)updateLayout:(CGFloat)y width:(CGFloat)width
 {
     BOOL isRowInclude = _type == EOAFeatureCardRowInclude;
-    CGFloat width = DeviceScreenWidth;
     CGFloat iconMargin = _type == EOAFeatureCardRowSimple || isRowInclude
             ? 0.
             : kIconSize + kPrimarySpaceMargin;

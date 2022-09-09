@@ -159,9 +159,8 @@
     }
 }
 
-- (CGFloat)updateLayout:(CGFloat)y
+- (CGFloat)updateLayout:(CGFloat)y width:(CGFloat)width
 {
-    CGFloat width = DeviceScreenWidth;
     CGFloat leftMargin = 20. + [OAUtilities getLeftMargin];
     CGFloat titleRightMargin = leftMargin + kIconBigTitleSize + 16.;
     CGSize titleSize = [OAUtilities calculateTextBounds:self.labelTitle.text
@@ -196,7 +195,7 @@
     CGFloat yRow = 0.;
     for (OAFeatureCardRow *row in self.viewFeatureRowsContainer.subviews)
     {
-        yRow += [row updateFrame:yRow];
+        yRow += [row updateFrame:yRow width:width];
     }
     self.viewFeatureRowsContainer.frame = CGRectMake(
             0.,
@@ -205,14 +204,14 @@
             yRow
     );
 
-    [_firstPlanCardRow updateFrame:self.viewFeatureRowsContainer.frame.origin.y + self.viewFeatureRowsContainer.frame.size.height + 20.];
+    [_firstPlanCardRow updateFrame:self.viewFeatureRowsContainer.frame.origin.y + self.viewFeatureRowsContainer.frame.size.height + 20. width:width];
     CGRect firstPlanFrame = _firstPlanCardRow.frame;
     firstPlanFrame.origin.x = leftMargin;
     firstPlanFrame.size.width = width - leftMargin * 2;
     _firstPlanCardRow.frame = firstPlanFrame;
     [_firstPlanCardRow updateRightIconFrameX:_firstPlanCardRow.frame.size.width - kSecondarySpaceMargin - kIconSize];
 
-    [_secondPlanCardRow updateFrame:_firstPlanCardRow.frame.origin.y + _firstPlanCardRow.frame.size.height];
+    [_secondPlanCardRow updateFrame:_firstPlanCardRow.frame.origin.y + _firstPlanCardRow.frame.size.height width:width];
     CGRect secondPlanFrame = _secondPlanCardRow.frame;
     secondPlanFrame.origin.x = leftMargin;
     secondPlanFrame.size.width = width - leftMargin * 2;
@@ -227,7 +226,7 @@
     );
 
     yRow = self.viewChooseSubscriptionButtonsBorder.frame.origin.y + self.viewChooseSubscriptionButtonsBorder.frame.size.height + 20.;
-    CGFloat purchaseButtonHeight = [_completePurchasePlanCardRow updateFrame:yRow];
+    CGFloat purchaseButtonHeight = [_completePurchasePlanCardRow updateFrame:yRow width:width];
     _completePurchasePlanCardRow.frame = CGRectMake(
             leftMargin,
             yRow,

@@ -2674,3 +2674,4 @@
 "backup_delete_data_type_description" = "سيؤدي ذلك إلى حذف جميع بيانات %@ من سحابة OsmAnd. لا يمكن التراجع عن هذا الإجراء.";
 "backup_empty_data_from_category" = "لا تتضمن سحابة OsmAnd أي بيانات من هذه الفئة.";
 "cloud_storage_used" = "%@ من %@ مستخدم";
+"recording_delete_confirm" = "هل تريد حذف هذا العنصر؟";

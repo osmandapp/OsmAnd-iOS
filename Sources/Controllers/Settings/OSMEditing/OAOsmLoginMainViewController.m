@@ -32,7 +32,7 @@
 {
     [self.cancelLabel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     self.titleLabel.text = OALocalizedString(@"login_open_street_map_org");
-    self.descriptionLabel.text = OALocalizedString(@"open_street_map_login_mode");
+    self.descriptionLabel.text = OALocalizedString(@"open_street_map_login_mode_simple");
     [self.topButton setTitle:OALocalizedString(@"sign_in_with_open_street_map") forState:UIControlStateNormal];
     [self.bottomButton setTitle:OALocalizedString(@"use_login_and_password") forState:UIControlStateNormal];
 }

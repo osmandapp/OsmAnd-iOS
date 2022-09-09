@@ -712,6 +712,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *emailSubscribed;
 @property (nonatomic) OACommonBoolean *osmandProPurchased;
 @property (nonatomic) OACommonBoolean *osmandMapsPurchased;
+@property (nonatomic) OACommonLong *mapperLiveUpdatesExpireTime;
+
 @property (nonatomic) NSDate* lastReceiptValidationDate; //global ?
 @property (nonatomic, assign) BOOL eligibleForIntroductoryPrice; //global ?
 @property (nonatomic, assign) BOOL eligibleForSubscriptionOffer; //global ?
@@ -892,7 +894,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *oprUseDevUrl;
 @property (nonatomic) OACommonBoolean *offlineEditing;
 @property (nonatomic) OACommonBoolean *osmUseDevUrl;
-@property (nonatomic) OACommonLong *mapperLiveUpdatesExpireTime;
 
 // Mapillary
 @property (nonatomic) OACommonBoolean *showMapillary;

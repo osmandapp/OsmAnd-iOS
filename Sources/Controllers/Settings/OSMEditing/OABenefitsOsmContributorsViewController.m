@@ -60,13 +60,6 @@
     self.separatorNavbarView.hidden = YES;
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self.tableView reloadData];
-    } completion:nil];
-}
-
 - (void)setupNavBarHeight
 {
     self.navBarHeightConstraint.constant = defaultNavBarHeight;

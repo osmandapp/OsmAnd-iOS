@@ -19,6 +19,7 @@
 #import "OATitleDescrRightIconTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAAppSettings.h"
+#import "OAIAPHelper.h"
 
 @interface OAOsmEditingSettingsViewController () <OAAccountSettingDelegate>
 
@@ -99,12 +100,22 @@
     ]];
     [_footers setObject:OALocalizedString(@"offline_edition_descr") forKey:@(data.count - 1)];
 
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MMM d"];
+    
+    NSString *mappersDescription = !_isLogged ? OALocalizedString(@"shared_string_learn_more")
+        : ![OAIAPHelper isSubscribedToMapperUpdates]
+            ? OALocalizedString(@"shared_string_unavailable")
+            : [NSString stringWithFormat:@"%@ %@",
+               OALocalizedString(@"shared_string_available_until"),
+               [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[_settings.mapperLiveUpdatesExpireTime get]]]];
+
     [data addObject:@[
             @{
                     @"key" : @"updates_for_mappers",
                     @"type" : [OATitleDescrRightIconTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"map_updates_for_mappers"),
-                    @"description" : _isLogged ? OALocalizedString(@"shared_string_learn_more") : OALocalizedString(@"shared_string_unavailable"),
+                    @"description" : mappersDescription,
                     @"right_icon" : @"menu_cell_pointer"
             }
     ]];

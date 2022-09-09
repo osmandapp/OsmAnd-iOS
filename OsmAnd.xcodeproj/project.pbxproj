@@ -588,6 +588,8 @@
 		46494280286DB36800A44103 /* ic_custom_compass_hidden@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4649427A286DB36700A44103 /* ic_custom_compass_hidden@3x.png */; };
 		46494281286DB36800A44103 /* ic_custom_compass_hidden@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4649427B286DB36700A44103 /* ic_custom_compass_hidden@2x.png */; };
 		46494282286DB36800A44103 /* ic_custom_compass_north@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4649427C286DB36700A44103 /* ic_custom_compass_north@3x.png */; };
+		4650723328CA2C3C00456CA1 /* OAMultiIconsDescCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4650723228CA2C3C00456CA1 /* OAMultiIconsDescCustomCell.m */; };
+		4650723628CA2D7400456CA1 /* OAMultiIconsDescCustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4650723528CA2D7400456CA1 /* OAMultiIconsDescCustomCell.xib */; };
 		46693AB0284919DA00ADA1A1 /* ic_custom_hazmat_limit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46693AAC284919D800ADA1A1 /* ic_custom_hazmat_limit@2x.png */; };
 		46693AB1284919DA00ADA1A1 /* ic_custom_hazmat_limit_colored@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46693AAD284919D900ADA1A1 /* ic_custom_hazmat_limit_colored@2x.png */; };
 		46693AB2284919DA00ADA1A1 /* ic_custom_hazmat_limit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46693AAE284919D900ADA1A1 /* ic_custom_hazmat_limit@3x.png */; };
@@ -3913,6 +3915,9 @@
 		4649427A286DB36700A44103 /* ic_custom_compass_hidden@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_hidden@3x.png"; path = "Resources/Icons/ic_custom_compass_hidden@3x.png"; sourceTree = "<group>"; };
 		4649427B286DB36700A44103 /* ic_custom_compass_hidden@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_hidden@2x.png"; path = "Resources/Icons/ic_custom_compass_hidden@2x.png"; sourceTree = "<group>"; };
 		4649427C286DB36700A44103 /* ic_custom_compass_north@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_north@3x.png"; path = "Resources/Icons/ic_custom_compass_north@3x.png"; sourceTree = "<group>"; };
+		4650723228CA2C3C00456CA1 /* OAMultiIconsDescCustomCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAMultiIconsDescCustomCell.m; sourceTree = "<group>"; };
+		4650723428CA2D0200456CA1 /* OAMultiIconsDescCustomCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMultiIconsDescCustomCell.h; sourceTree = "<group>"; };
+		4650723528CA2D7400456CA1 /* OAMultiIconsDescCustomCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAMultiIconsDescCustomCell.xib; sourceTree = "<group>"; };
 		46693AAC284919D800ADA1A1 /* ic_custom_hazmat_limit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hazmat_limit@2x.png"; path = "Resources/Icons/ic_custom_hazmat_limit@2x.png"; sourceTree = "<group>"; };
 		46693AAD284919D900ADA1A1 /* ic_custom_hazmat_limit_colored@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hazmat_limit_colored@2x.png"; path = "Resources/Icons/ic_custom_hazmat_limit_colored@2x.png"; sourceTree = "<group>"; };
 		46693AAE284919D900ADA1A1 /* ic_custom_hazmat_limit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hazmat_limit@3x.png"; path = "Resources/Icons/ic_custom_hazmat_limit@3x.png"; sourceTree = "<group>"; };
@@ -11385,6 +11390,8 @@
 				CA4ED743584C99F37C78C03B /* OATitleDescriptionBigIconCell.h */,
 				CA4ED280E20BA36D408B95DD /* OAStorageStateValuesCell.m */,
 				CA4EDC5CE83480EEF57C8EAD /* OAStorageStateValuesCell.h */,
+				4650723428CA2D0200456CA1 /* OAMultiIconsDescCustomCell.h */,
+				4650723228CA2C3C00456CA1 /* OAMultiIconsDescCustomCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -11535,6 +11542,7 @@
 				46B4A7D328410789008AE194 /* OACardButtonCell.xib */,
 				46D6CF4B28452F5D007A43F9 /* OATitleDescriptionBigIconCell.xib */,
 				46C78C0928BD16A30019FF69 /* OAStorageStateValuesCell.xib */,
+				4650723528CA2D7400456CA1 /* OAMultiIconsDescCustomCell.xib */,
 			);
 			path = Xibs;
 			sourceTree = "<group>";
@@ -14266,6 +14274,7 @@
 				847777371FAA260E00CA8C1F /* widget_monitoring_rec_inactive_day@3x.png in Resources */,
 				DA134184243DC5A80039D214 /* ic_action_ski_touring@2x.png in Resources */,
 				15B4E49424AB3FAF00119365 /* ic_custom_map_languge@2x.png in Resources */,
+				4650723628CA2D7400456CA1 /* OAMultiIconsDescCustomCell.xib in Resources */,
 				DA45DA7A230EE05A0083DFA2 /* img_mapstyle_lightrs@2x.png in Resources */,
 				0AC13D272715C44B00142BFD /* ic_custom_folder_hidden@3x.png in Resources */,
 				84F3A9301B4EA79E00D16EBC /* ic_connection_dot@2x.png in Resources */,
@@ -15750,6 +15759,7 @@
 				DA5A816026C563A700F274C7 /* OAParkingPositionPlugin.mm in Sources */,
 				DA5A816826C563A700F274C7 /* OAWikiImageCard.mm in Sources */,
 				DA5A843226C563A800F274C7 /* OATransportDetailsTableViewController.mm in Sources */,
+				4650723328CA2C3C00456CA1 /* OAMultiIconsDescCustomCell.m in Sources */,
 				DAC849B426CF967C00018091 /* OADownloadMapWidget.mm in Sources */,
 				DA5A845626C563A900F274C7 /* OARulerByTapControlLayer.mm in Sources */,
 				32D253B127F336C200324717 /* OACloudAccountBaseViewController.m in Sources */,

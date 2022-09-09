@@ -376,17 +376,6 @@
     return [_footers objectForKey:@(section)];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OAMultiIconsDescCustomCell getCellIdentifier]])
-    {
-        return [item.allKeys containsObject:@"bottom_description"] ? 66. : 48;
-    }
-
-    return UITableViewAutomaticDimension;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];

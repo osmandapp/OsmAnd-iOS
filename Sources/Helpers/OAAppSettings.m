@@ -215,6 +215,7 @@
 #define oprUseDevUrlKey @"opr_use_dev_url"
 #define offlineEditingKey @"offline_editing"
 #define osmUseDevUrlKey @"use_dev_url"
+#define mapperLiveUpdatesExpireTimeKey @"mapper_live_updates_expire_time"
 
 #define showMapillaryKey @"show_mapillary"
 #define onlinePhotosRowCollapsedKey @"onlinePhotosRowCollapsed"
@@ -3439,6 +3440,8 @@
         _emailSubscribed = [[OACommonBoolean withKey:emailSubscribedKey defValue:NO] makeGlobal];
         _osmandProPurchased = [[OACommonBoolean withKey:osmandProPurchasedKey defValue:NO] makeGlobal];
         _osmandMapsPurchased = [[OACommonBoolean withKey:osmandMapsPurchasedKey defValue:NO] makeGlobal];
+        _mapperLiveUpdatesExpireTime = [[OACommonLong withKey:mapperLiveUpdatesExpireTimeKey defValue:0] makeGlobal];
+
         _lastReceiptValidationDate = [[NSUserDefaults standardUserDefaults] objectForKey:lastReceiptValidationDateKey] ? [NSDate dateWithTimeIntervalSince1970:[[NSUserDefaults standardUserDefaults] doubleForKey:lastReceiptValidationDateKey]] : [NSDate dateWithTimeIntervalSince1970:0];
         _eligibleForIntroductoryPrice = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForIntroductoryPriceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForIntroductoryPriceKey] : NO;
         _eligibleForSubscriptionOffer = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForSubscriptionOfferKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForSubscriptionOfferKey] : NO;
@@ -3461,6 +3464,7 @@
         [_globalPreferences setObject:_emailSubscribed forKey:@"email_subscribed"];
         [_globalPreferences setObject:_osmandProPurchased forKey:@"billing_osmand_pro_purchased"];
         [_globalPreferences setObject:_osmandMapsPurchased forKey:@"billing_osmand_maps_purchased"];
+        [_globalPreferences setObject:_mapperLiveUpdatesExpireTime forKey:@"mapper_live_updates_expire_time"];
 
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
 

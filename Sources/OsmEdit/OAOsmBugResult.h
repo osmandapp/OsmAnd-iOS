@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OAOsmBugResult : NSObject
 
 @property (nonatomic) OAOsmNotePoint *localPoint;
+@property (nonatomic) NSString *userName;
 @property (nonatomic) NSString *warning;
 
 @end

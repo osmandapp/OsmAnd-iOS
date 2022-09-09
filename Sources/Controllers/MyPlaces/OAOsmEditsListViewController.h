@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "OACompoundViewController.h"
 
+#define kOSMEditsTabIndex 2
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OAOsmEditsListViewController : OACompoundViewController

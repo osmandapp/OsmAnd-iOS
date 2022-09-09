@@ -215,7 +215,7 @@ static OASubscriptionState *EXPIRED;
 
 + (BOOL) isSubscribedToLiveUpdates
 {
-    return [[OAAppSettings sharedManager].liveUpdatesPurchased get] || [self isOsmAndProAvailable];
+    return [[OAAppSettings sharedManager].liveUpdatesPurchased get] || [self isSubscribedToMapperUpdates] || [self isOsmAndProAvailable];
 }
 
 + (BOOL) isSubscribedToOsmAndPro
@@ -226,6 +226,11 @@ static OASubscriptionState *EXPIRED;
 + (BOOL) isSubscribedCrossPlatform
 {
     return [[OAAppSettings sharedManager].backupPurchaseActive get];
+}
+
++ (BOOL) isSubscribedToMapperUpdates
+{
+    return [[OAAppSettings sharedManager].mapperLiveUpdatesExpireTime get] > [NSDate date].timeIntervalSince1970;
 }
 
 + (BOOL) isOsmAndProAvailable

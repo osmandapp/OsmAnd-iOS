@@ -585,6 +585,9 @@
 "shared_string_progress" = "Progress";
 "shared_string_leave" = "Leave";
 "shared_string_delete_data" = "Delete data";
+"shared_string_unavailable" = "Unavailable";
+"shared_string_contributions" = "Contributions";
+"shared_string_refresh" = "Refresh";
 
 "restart" = "Restart";
 
@@ -2835,6 +2838,23 @@
 "update_parameters" = "Update parameters";
 
 "recording_delete_confirm" = "Delete this item?";
+
+"login_open_street_map_org" = "Login to OpenStreetMap.org";
+"map_updates_for_mappers" = "Map updates for mappers";
+"offline_edition_descr" = "If offline editing is enabled, changes will be saved locally and can only be uploaded manually, otherwise, changes will be uploaded immediately.";
+"open_street_map_login_mode_simple" = "You need to log in to upload your changes.";
+"sign_in_with_open_street_map" = "Sign in with OpenStreetMap";
+"use_login_and_password" = "Use login and password";
+"use_login_and_password_description" = "Use your email/login and password to log in to OpenStreetMap.org.";
+"benefits_for_contributors" = "Benefits for active OSM contributors";
+"benefits_for_contributors_primary_descr" = "Active contributors to OpenStreetMap.org may be entitled to unlimited hourly map updates.";
+"benefits_for_contributors_secondary_descr" = "Sign in to OpenStreetMap to check if you are eligible for unlimited monthly and hourly map updates.";
+"contributions_may_calculate_with_delay" = "Contributions might be calculated with several hour delay.";
+"map_updates_are_unavailable_yet" = "Map updates are not yet available :-(";
+"not_enough_contributions_descr" = "A minimum of %i changes over last two-month period %@ is required to get access for unlimited hourly map updates.";
+"enough_contributions_descr" = "Congratulations, you have made enough OpenStreetMap contributions and can now enjoy unlimited OsmAnd map updates!";
+"last_two_month_total" = "Last two month total";
+"auth_error" = "Authorization Error";
 
 // Release Notes
 // instruction:

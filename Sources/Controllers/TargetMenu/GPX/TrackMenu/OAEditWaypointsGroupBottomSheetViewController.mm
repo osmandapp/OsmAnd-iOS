@@ -343,9 +343,35 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     else if ([tableData.key isEqualToString:@"delete"] && self.trackMenuDelegate)
     {
         if (_mode == EOAEditTrackScreenWaypointsMode)
+        {
             [self hide:YES completion:^{ [self.trackMenuDelegate openConfirmDeleteWaypointsScreen:_groupName]; }];
+        }
         else
-            [self hide:YES completion:^{ [self.trackMenuDelegate deleteAndSaveSegment:_segment]; }];
+        {
+            UIAlertController *alert =
+                    [UIAlertController alertControllerWithTitle:OALocalizedString(@"recording_delete_confirm")
+                                                        message:nil
+                                                 preferredStyle:UIAlertControllerStyleAlert];
+
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                                   style:UIAlertActionStyleDefault
+                                                                 handler:nil];
+
+            UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes")
+                                                                       style:UIAlertActionStyleDefault
+                                                                     handler:^(UIAlertAction * _Nonnull action)
+                                                                     {
+                                                                         [self hide:YES completion:^{ [self.trackMenuDelegate deleteAndSaveSegment:_segment]; }];
+                                                                     }
+            ];
+
+            [alert addAction:cancelAction];
+            [alert addAction:deleteAction];
+
+            alert.preferredAction = deleteAction;
+
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     }
 }
 

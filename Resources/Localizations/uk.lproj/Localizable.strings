@@ -2679,3 +2679,4 @@
 "shared_string_delete_data" = "Видалити дані";
 "backup_delete_data_type_description" = "Це видалить усі дані %@ з OsmAnd Cloud. Цю дію не можна скасувати.";
 "backup_empty_data_from_category" = "OsmAnd Cloud не включає жодних даних з цієї категорії.";
+"recording_delete_confirm" = "Видалити цей елемент?";

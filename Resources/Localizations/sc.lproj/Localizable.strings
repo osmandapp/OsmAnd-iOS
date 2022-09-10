@@ -2699,3 +2699,4 @@
 "backup_delete_data_type_description" = "Custu at a iscantzellare totu sos datos %@ dae OsmAnd Cloud. Custa atzione non si podet annullare.";
 "backup_empty_data_from_category" = "OsmAnd Cloud no incluit perunu datu de custa categoria.";
 "backup_delete_types_descr" = "Iscantzellare totu sos datos pro sas castas de datos disabilitadas dae OsmAnd Could?";
+"recording_delete_confirm" = "Iscantzellare custu elementu?";

@@ -2681,3 +2681,6 @@
 "shared_string_delete_data" = "Borrar datos";
 "backup_delete_types_descr" = "¿Borrar de la nube de OsmAnd todos los tipos de datos obsoletos?";
 "shared_string_leave" = "Salir";
+"backup_empty_data_from_category" = "La nube de OsmAnd no incluye datos de esta categoría.";
+"cloud_storage_used" = "Utilizado: %@ de %@";
+"recording_delete_confirm" = "¿Borrar este elemento?";

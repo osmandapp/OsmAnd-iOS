@@ -4084,7 +4084,7 @@
         [_globalPreferences setObject:_showDownloadMapDialog forKey:@"show_download_map_dialog"];
 
         _sendAnonymousMapDownloadsData = [[[OACommonBoolean withKey:sendAnonymousMapDownloadsDataKey defValue:NO] makeGlobal] makeShared];
-        _sendAnonymousAppUsageData = [[[OACommonBoolean withKey:sendAnonymousAppUsageDataKey defValue:NO] makeGlobal] makeShared];
+        _sendAnonymousAppUsageData = [[[OACommonBoolean withKey:sendAnonymousAppUsageDataKey defValue:YES] makeGlobal] makeShared];
         _sendAnonymousDataRequestProcessed = [[[OACommonBoolean withKey:sendAnonymousDataRequestProcessedKey defValue:NO] makeGlobal] makeShared];
         _sendAnonymousDataRequestCount = [[OACommonInteger withKey:sendAnonymousDataRequestCountKey defValue:0] makeGlobal];
         _sendAnonymousDataLastRequestNs = [[OACommonInteger withKey:sendAnonymousDataLastRequestNsKey defValue:-1] makeGlobal];

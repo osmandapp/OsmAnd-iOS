@@ -179,6 +179,21 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     return item.subtype == EOASettingsItemFileSubtypeVoice;
 }
 
++ (void) setLastModifiedTime:(NSString *)name
+{
+    [self setLastModifiedTime:name lastModifiedTime:NSDate.date.timeIntervalSince1970];
+}
+
++ (void) setLastModifiedTime:(NSString *)name lastModifiedTime:(long)lastModifiedTime
+{
+    [OABackupDbHelper.sharedDatabase setLastModifiedTime:name lastModifiedTime:lastModifiedTime];
+}
+
++ (long) getLastModifiedTime:(NSString *)name
+{
+    return [OABackupDbHelper.sharedDatabase getLastModifiedTime:name];
+}
+
 + (OABackupHelper *)sharedInstance
 {
     static OABackupHelper *_sharedInstance = nil;

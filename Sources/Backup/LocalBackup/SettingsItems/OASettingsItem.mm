@@ -19,6 +19,11 @@
 @end
 
 @implementation OASettingsItem
+{
+    BOOL _fromJSON;
+}
+
+@synthesize lastModifiedTime = _lastModifiedTime;
 
 - (instancetype) init
 {
@@ -49,6 +54,7 @@
     if (self)
     {
         [self initialization];
+        _fromJSON = YES;
         NSError *readError;
         [self readFromJson:json error:&readError];
         if (readError)
@@ -79,6 +85,25 @@
 - (NSString *) defaultFileExtension
 {
     return @".json";
+}
+
+- (long)localModifiedTime
+{
+    return 0;
+}
+
+- (long)lastModifiedTime
+{
+    if (_fromJSON)
+        return _lastModifiedTime;
+    else if (_lastModifiedTime == 0)
+        _lastModifiedTime = self.localModifiedTime;
+    return _lastModifiedTime;
+}
+
+- (void)setLastModifiedTime:(long)lastModifiedTime
+{
+    _lastModifiedTime = lastModifiedTime;
 }
 
 - (BOOL) applyFileName:(NSString *)fileName

@@ -281,6 +281,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 @property (nonatomic, readonly) NSString *key;
 @property (nonatomic, readonly) BOOL global;
 @property (nonatomic, readonly) BOOL shared;
+@property (nonatomic, assign) BOOL lastModifiedTimeStored;
+@property (nonatomic) long lastModifiedTime;
 
 - (id) makeGlobal;
 - (id) makeShared;
@@ -291,6 +293,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (void) setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode;
 - (NSString *) toStringValue:(OAApplicationMode *)mode;
 - (void) copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
+
+- (BOOL) isSetForMode:(OAApplicationMode *)mode;
 
 @end
 
@@ -1116,5 +1120,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonLong *lastCheckedUpdates;
 @property (nonatomic) OACommonInteger *numberOfAppStartsOnDislikeMoment;
 @property (nonatomic) OACommonRateUsState *rateUsState;
+
+- (long) getLastGloblalSettingsModifiedTime;
+- (void) setLastGlobalModifiedTime:(long)timestamp;
+- (long) getLastProfileSettingsModifiedTime:(OAApplicationMode *)mode;
+- (void) setLastProfileModifiedTime:(long)timestamp mode:(OAApplicationMode *)mode;
 
 @end

@@ -45,6 +45,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(OAQuickAction *) generateUniqueName:(OAQuickAction *) action;
 
+- (long) getLastModifiedTime;
+- (void) setLastModifiedTime:(long)lastModifiedTime;
+
 @end
 
 NS_ASSUME_NONNULL_END

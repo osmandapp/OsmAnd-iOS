@@ -66,6 +66,16 @@
     return APPROXIMATE_SEARCH_HISTORY_SIZE_BYTES;
 }
 
+- (long)localModifiedTime
+{
+    return _searchHistoryHelper.getMarkersHistoryLastModifiedTime;
+}
+
+- (void)setLocalModifiedTime:(long)lastModifiedTime
+{
+    [_searchHistoryHelper setMarkersHistoryLastModifiedTime:lastModifiedTime];
+}
+
 - (void)apply
 {
     NSArray<OAHistoryItem *> *newItems = self.getNewItems;

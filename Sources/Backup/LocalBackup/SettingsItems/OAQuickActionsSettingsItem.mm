@@ -59,6 +59,16 @@
     return [_actionsRegistry generateUniqueName:item];
 }
 
+- (long)localModifiedTime
+{
+    return _actionsRegistry.getLastModifiedTime;
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    [_actionsRegistry setLastModifiedTime:localModifiedTime];
+}
+
 - (void) apply
 {
     NSArray<OAQuickAction *> *newItems = [self getNewItems];

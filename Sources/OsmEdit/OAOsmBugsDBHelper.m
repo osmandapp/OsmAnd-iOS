@@ -7,6 +7,7 @@
 //
 
 #import "OAOsmBugsDBHelper.h"
+#import "OABackupHelper.h"
 
 #import "OALog.h"
 #import "OAOsmNotePoint.h"
@@ -25,6 +26,8 @@
 #define OSMBUGS_COL_LON @"longitude"
 #define OSMBUGS_COL_ACTION @"action"
 #define OSMBUGS_COL_AUTHOR @"author"
+
+#define OSMBUGS_DB_LAST_MODIFIED_NAME @"osmbugs"
 
 @interface OAOsmBugsDBHelper ()
 
@@ -108,6 +111,37 @@
             // Failed to upate database
         }
     });
+}
+
+- (long)getLastModifiedTime
+{
+    long lastModifiedTime = [OABackupHelper getLastModifiedTime:OSMBUGS_DB_LAST_MODIFIED_NAME];
+    if (lastModifiedTime == 0)
+    {
+        lastModifiedTime = [self getDBLastModifiedTime];
+        [OABackupHelper setLastModifiedTime:OSMBUGS_DB_LAST_MODIFIED_NAME lastModifiedTime:lastModifiedTime];
+    }
+    return lastModifiedTime;
+}
+
+- (void) setLastModifiedTime:(long)lastModified
+{
+    [OABackupHelper setLastModifiedTime:OSMBUGS_DB_LAST_MODIFIED_NAME lastModifiedTime:lastModified];
+}
+
+- (long) getDBLastModifiedTime
+{
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if ([manager fileExistsAtPath:_dbFilePath])
+    {
+        NSError *err = nil;
+        NSDictionary *attrs = [manager attributesOfItemAtPath:_dbFilePath error:&err];
+        if (!err)
+        {
+            return attrs.fileModificationDate.timeIntervalSince1970;
+        }
+    }
+    return 0;
 }
 
 -(NSArray<OAOsmNotePoint *> *) getOsmBugsPoints

@@ -125,7 +125,7 @@
 - (void) renameFile:(NSString *)fileName toName:(NSString *)newName
 {
     NSString *path = self.files[fileName];
-    NSString *newPath = [self.filesDir stringByAppendingPathComponent:newName];;
+    NSString *newPath = [self.filesDir stringByAppendingPathComponent:newName];
 
     if ([path isEqualToString:newPath])
         return;

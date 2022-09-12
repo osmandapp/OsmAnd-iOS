@@ -605,15 +605,14 @@ static OAApplicationMode *_HORSE;
 + (void) initModesParams
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    int defaultValue = 0;
-    if ([settings.appModeOrder get:_PEDESTRIAN] != defaultValue)
+    if ([settings.appModeOrder isSetForMode:_PEDESTRIAN])
     {
-        if ([settings.appModeOrder get:_TRUCK] != defaultValue)
+        if (![settings.appModeOrder isSetForMode:_TRUCK])
             [_TRUCK setOrder:_PEDESTRIAN.getOrder + 1];
-        if ([settings.appModeOrder get:_MOTORCYCLE] != defaultValue)
+        if (![settings.appModeOrder isSetForMode:_MOTORCYCLE])
             [_MOTORCYCLE setOrder:_PEDESTRIAN.getOrder + 1];
     }
-    if ([settings.appModeOrder get:_SKI] != defaultValue && [settings.appModeOrder get:_HORSE] != defaultValue)
+    if ([settings.appModeOrder isSetForMode:_SKI] && ![settings.appModeOrder isSetForMode:_HORSE])
         [_HORSE setOrder:_SKI.getOrder + 1];
 }
 

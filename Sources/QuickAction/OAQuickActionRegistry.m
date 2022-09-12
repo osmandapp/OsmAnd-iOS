@@ -121,6 +121,7 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
         _quickActions = [NSMutableArray new];
         _settings = [OAAppSettings sharedManager];
         _quickActionListChangedObservable = [[OAObservable alloc] init];
+        _settings.quickActionsList.lastModifiedTimeStored = YES;
         
         [self updateActionTypes];
     }
@@ -338,6 +339,16 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
             }
         }
     }
+}
+
+- (long) getLastModifiedTime
+{
+    return [_settings.quickActionsList lastModifiedTime];
+}
+
+- (void) setLastModifiedTime:(long)lastModifiedTime
+{
+    [_settings.quickActionsList setLastModifiedTime:lastModifiedTime];
 }
 
 - (OAQuickAction *) newActionByStringType:(NSString *) actionType

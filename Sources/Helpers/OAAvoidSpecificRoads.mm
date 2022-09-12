@@ -26,8 +26,11 @@
 #include <OsmAndCore/Data/Road.h>
 #include <OsmAndCore/Utilities.h>
 
+#define kAvoidModifiedTimeKey @"avoid_modified_key"
+
 @implementation OAAvoidSpecificRoads
 {
+    OACommonLong *_lastModifiedTime;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     
@@ -52,6 +55,7 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
+        _lastModifiedTime = [[[OACommonLong withKey:kAvoidModifiedTimeKey defValue:0] makeGlobal] makeShared];
         _listeners = [NSMutableArray array];
 
         [self loadImpassableRoads];
@@ -288,8 +292,19 @@
 
 - (void) updateListeners
 {
+    [_lastModifiedTime set:NSDate.date.timeIntervalSince1970];
     for (id<OAStateChangedListener> l in _listeners)
         [l stateChanged:(nil)];
+}
+
+- (long) getLastModifiedTime
+{
+    return _lastModifiedTime.get;
+}
+
+- (void) setLastModifiedTime:(long)lastModifiedTime
+{
+    [_lastModifiedTime set:lastModifiedTime];
 }
 
 @end

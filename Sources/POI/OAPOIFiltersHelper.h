@@ -51,4 +51,7 @@
 - (void) saveFiltersOrder:(OAApplicationMode *)appMode filterIds:(NSArray<NSString *> *)filterIds;
 - (void) saveInactiveFilters:(OAApplicationMode *)appMode filterIds:(NSArray<NSString *> *)filterIds;
 
+- (long)getLastModifiedTime;
+- (void) setLastModifiedTime:(long)lastModified;
+
 @end

@@ -335,6 +335,28 @@
     }
 }
 
+- (long)localModifiedTime
+{
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if ([manager fileExistsAtPath:self.filePath])
+    {
+        NSError *err = nil;
+        NSDictionary *attrs = [manager attributesOfItemAtPath:self.filePath error:&err];
+        if (!err)
+            return attrs.fileModificationDate.timeIntervalSince1970;
+    }
+    return 0;
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if ([manager fileExistsAtPath:self.filePath])
+    {
+        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime] } ofItemAtPath:self.filePath error:nil];
+    }
+}
+
 - (EOASettingsItemType) type
 {
     return EOASettingsItemTypeFile;

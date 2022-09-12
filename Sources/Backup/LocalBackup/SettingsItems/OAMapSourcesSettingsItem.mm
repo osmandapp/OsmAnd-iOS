@@ -68,6 +68,62 @@
     return EOASettingsItemTypeMapSources;
 }
 
+- (long)localModifiedTime
+{
+    long lastModifiedTime = 0;
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    for (OATileSource *source in self.items)
+    {
+        NSString *filePath = nil;
+        if (source.isSql)
+        {
+            filePath = [OAMapCreatorHelper.sharedInstance.filesDir stringByAppendingPathComponent:[source.name stringByAppendingPathExtension:@"sqlitedb"]];
+        }
+        else
+        {
+            filePath = [[OsmAndApp.instance.cachePath stringByAppendingPathComponent:source.name] stringByAppendingPathComponent:@".metainfo"];
+        }
+        if (filePath)
+        {
+            NSError *err= nil;
+            NSDictionary *attrs = [fileManager attributesOfItemAtPath:filePath error:&err];
+            if (!err)
+            {
+                if (attrs.fileModificationDate.timeIntervalSince1970 > lastModifiedTime)
+                    lastModifiedTime = attrs.fileModificationDate.timeIntervalSince1970;
+            }
+        }
+    }
+    return lastModifiedTime;
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    for (OATileSource *source in self.items)
+    {
+        NSString *filePath = nil;
+        if (source.isSql)
+        {
+            filePath = [OAMapCreatorHelper.sharedInstance.filesDir stringByAppendingPathComponent:[source.name stringByAppendingPathExtension:@"sqlitedb"]];
+        }
+        else
+        {
+            filePath = [[OsmAndApp.instance.cachePath stringByAppendingPathComponent:source.name] stringByAppendingPathComponent:@".metainfo"];
+        }
+        if (filePath)
+        {
+            NSError *err= nil;
+            NSDictionary *attrs = [fileManager attributesOfItemAtPath:filePath error:&err];
+            if (!err)
+            {
+                if (attrs.fileModificationDate.timeIntervalSince1970 > localModifiedTime)
+                    [fileManager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime]} ofItemAtPath:filePath error:nil];
+            }
+        }
+    }
+}
+
 - (void) apply
 {
     NSArray<OATileSource *> *newItems = [self getNewItems];

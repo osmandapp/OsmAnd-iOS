@@ -66,6 +66,16 @@
     return @".gpx";
 }
 
+- (long)localModifiedTime
+{
+    return [_destinationsHelper getMarkersLastModifiedTime];
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    [_destinationsHelper setMarkersLastModifiedTime:localModifiedTime];
+}
+
 - (void) apply
 {
    NSArray<OADestination *> *newItems = [self getNewItems];

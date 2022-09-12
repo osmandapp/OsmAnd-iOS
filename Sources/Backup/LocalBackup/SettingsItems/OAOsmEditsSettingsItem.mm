@@ -54,6 +54,16 @@
     return EOASettingsItemTypeOsmEdits;
 }
 
+- (long)localModifiedTime
+{
+    return [OAOsmEditsDBHelper sharedDatabase].getLastModifiedTime;
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    [[OAOsmEditsDBHelper sharedDatabase] setLastModifiedTime:localModifiedTime];
+}
+
 - (void) apply
 {
     NSArray<OAOpenStreetMapPoint *>*newItems = [self getNewItems];

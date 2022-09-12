@@ -847,7 +847,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         if (localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Installed)
             continue;
         const auto& installedResource = std::static_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(localResource);
-        if (resourceTypes.contains(installedResource->type))
+        // Skip mini basemap since it's builtin and not installed in ios
+        if (resourceTypes.contains(installedResource->type) && installedResource->id != QStringLiteral("worldminibasemap.obf"))
         {
             [items addObject:installedResource->localPath.toNSString()];
         }

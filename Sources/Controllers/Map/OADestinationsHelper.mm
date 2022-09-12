@@ -18,11 +18,14 @@
 #import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 
+#define kMarkersChanged @"markers_modified_time"
 
 @implementation OADestinationsHelper
 {
     NSObject *_syncObj;
     OsmAndAppInstance _app;
+    
+    OACommonLong *_markersModificationDate;
 }
 
 @synthesize sortedDestinations = _sortedDestinations;
@@ -46,6 +49,7 @@
         _syncObj = [[NSObject alloc] init];
         
         _sortedDestinations = [NSMutableArray array];
+        _markersModificationDate = [[OACommonLong withKey:kMarkersChanged defValue:0] makeGlobal];
         
         [self initSortedDestinations];
     }
@@ -80,7 +84,18 @@
         _sortedDestinations = newDestinations;
         [self refreshDestinationIndexes];
         [_app.data.destinationsChangeObservable notifyEvent];
+        [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
     }
+}
+
+- (long) getMarkersLastModifiedTime
+{
+    return [_markersModificationDate get];
+}
+
+- (void) setMarkersLastModifiedTime:(long)lastModified
+{
+    [_markersModificationDate set:lastModified];
 }
 
 - (void) refreshDestinationIndexes
@@ -151,6 +166,7 @@
     }
     
     [_app.data.destinationsChangeObservable notifyEvent];
+    [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
 - (void) apply2ndRowAutoSelection
@@ -207,6 +223,7 @@
 
     if (wasSelected)
         [_app.data.destinationsChangeObservable notifyEvent];
+    [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
 - (void) addDestination:(OADestination *)destination
@@ -221,6 +238,7 @@
     
     [_app.data.destinationAddObservable notifyEventWithKey:destination];
     [_app.data.destinationsChangeObservable notifyEvent];
+    [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
 - (void) replaceDestination:(OADestination *)destination withDestination:(OADestination *)newDestination
@@ -241,6 +259,7 @@
     [_app.data.destinationRemoveObservable notifyEventWithKey:destination];
     [_app.data.destinationAddObservable notifyEventWithKey:newDestination];
     [_app.data.destinationsChangeObservable notifyEvent];
+    [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
 - (void) removeDestination:(OADestination *)destination
@@ -258,6 +277,7 @@
     
     [_app.data.destinationRemoveObservable notifyEventWithKey:destination];
     [_app.data.destinationsChangeObservable notifyEvent];
+    [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
 - (void) showOnMap:(OADestination *)destination
@@ -273,6 +293,7 @@
     }
     
     [_app.data.destinationsChangeObservable notifyEvent];
+    [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
 - (void) hideOnMap:(OADestination *)destination
@@ -288,6 +309,7 @@
     }
     
     [_app.data.destinationsChangeObservable notifyEvent];
+    [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
 - (void) addHistoryItem:(OADestination *)destination

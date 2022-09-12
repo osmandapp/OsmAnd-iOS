@@ -1051,9 +1051,6 @@
     [userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data]
                                               forKey:kAppData];
     [userDefaults synchronize];
-
-    // Favorites
-    [self saveFavoritesToPermamentStorage];
 }
 
 - (void)saveFavoritesToPermamentStorage

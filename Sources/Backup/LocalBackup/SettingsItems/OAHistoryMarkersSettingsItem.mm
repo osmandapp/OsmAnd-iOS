@@ -65,6 +65,16 @@
     return NO;
 }
 
+- (long)localModifiedTime
+{
+    return _historyMarkersHelper.getMarkersHistoryLastModifiedTime;
+}
+
+- (void)setLocalModifiedTime:(long)lastModifiedTime
+{
+    [_historyMarkersHelper setMarkersHistoryLastModifiedTime:lastModifiedTime];
+}
+
 - (void) apply
 {
     NSArray<OAHistoryItem *> *newItems = [self getNewItems];

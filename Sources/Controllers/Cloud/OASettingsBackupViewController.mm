@@ -41,7 +41,6 @@
     NSIndexPath *_backupDataIndexPath;
     NSInteger _progressFilesCompleteCount;
     NSInteger _progressFilesTotalCount;
-    BOOL _needUpdateBackupDataCell;
 }
 
 - (instancetype)init
@@ -163,7 +162,7 @@
 
 - (void)updateAfterDeleted
 {
-    if (_needUpdateBackupDataCell && _backupDataIndexPath)
+    if (_backupDataIndexPath)
     {
         NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:
                 [OABaseBackupTypesViewController calculateItemsSize:_uniqueRemoteFiles.allValues]
@@ -174,7 +173,6 @@
                                   withRowAnimation:UITableViewRowAnimationNone];
         }];
 
-        _needUpdateBackupDataCell = NO;
         if (self.backupTypesDelegate)
             [self.backupTypesDelegate onAllFilesDeleted];
     }
@@ -211,7 +209,6 @@
 
 - (void)onAllFilesDeleted
 {
-    _needUpdateBackupDataCell = YES;
     [_backupHelper prepareBackup];
 }
 

@@ -51,7 +51,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
 - (void)main
 {
     OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"deleteFile" debug:BACKUP_DEBUG_LOGS];
-    [OANetworkUtilities sendRequest:_request async:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [OANetworkUtilities sendRequest:_request async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (((NSHTTPURLResponse *)response).statusCode == 200 && !error && !_byVersion)
         {
             if (data)
@@ -80,6 +80,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
     NSMutableSet *_itemsProgress;
     OABackupHelper *_backupHelper;
     NSOperationQueue *_executor;
+    NSArray *_filesToDelete;
 }
 
 - (instancetype)initWithVersion:(BOOL)byVersion
@@ -116,9 +117,16 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
 {
     [self onPreExecute];
     [self doInBackground];
+    if (_filesToDelete && _filesToDelete.count > 0)
+        [self deleteFiles:_filesToDelete];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self onPostExecute];
     });
+}
+
+- (void)setFilesToDelete:(NSArray *)files
+{
+    _filesToDelete = files;
 }
 
 - (void) deleteFiles:(NSArray<OARemoteFile *> *)remoteFiles

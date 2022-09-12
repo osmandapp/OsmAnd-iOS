@@ -390,6 +390,8 @@
 #define lastGlobalSettingsModifiedTimeKey @"lastGlobalSettingsModifiedTime"
 #define lastProfileSettingsModifiedTimeKey @"lastProfileSettingsModifiedTime"
 
+#define lastUUIDChangeTimestampKey @"lastUUIDChangeTimestamp"
+
 @implementation OACompassMode
 
 + (NSString *) getTitle:(EOACompassMode)cm
@@ -4272,6 +4274,8 @@
         [_globalPreferences setObject:_lastCheckedUpdates forKey:@"last_checked_updates"];
         [_globalPreferences setObject:_numberOfAppStartsOnDislikeMoment forKey:@"number_of_app_starts_on_dislike_moment"];
         [_globalPreferences setObject:_rateUsState forKey:@"rate_us_state"];
+        
+        _lastUUIDChangeTimestamp = [[OACommonLong withKey:lastUUIDChangeTimestampKey defValue:0] makeGlobal];
 
         [self fetchImpassableRoads];
 

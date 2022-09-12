@@ -196,7 +196,12 @@ const static NSString *URL = @"https://osmand.net/api/motd";
     NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
     NSDictionary *languageDictionary = [NSLocale componentsFromLocaleIdentifier:language];
     NSString *languageCode = [languageDictionary objectForKey:NSLocaleLanguageCode];
-    NSURL *urlObj = [NSURL URLWithString:[NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&aid=%@&lang=%@", URL, ver, appInstalledDays, execCount, OsmAndApp.instance.getUserIosId, languageCode]];
+    NSString *url = [NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&lang=%@", URL, ver, appInstalledDays, execCount, languageCode];
+    NSString *aid = OsmAndApp.instance.getUserIosId;
+    if (aid.length > 0)
+       url = [url stringByAppendingString:[NSString stringWithFormat:@"&aid=%@", aid]];
+    
+    NSURL *urlObj = [NSURL URLWithString:url];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                        timeoutInterval:30.0];

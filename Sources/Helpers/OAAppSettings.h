@@ -1121,6 +1121,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *numberOfAppStartsOnDislikeMoment;
 @property (nonatomic) OACommonRateUsState *rateUsState;
 
+@property (nonatomic) OACommonString *userUUID;
+@property (nonatomic) OACommonLong *lastUUIDChangeTimestamp;
+
 - (long) getLastGloblalSettingsModifiedTime;
 - (void) setLastGlobalModifiedTime:(long)timestamp;
 - (long) getLastProfileSettingsModifiedTime:(OAApplicationMode *)mode;

@@ -226,7 +226,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 - (NSString *) getIosId
 {
-    return UIDevice.currentDevice.identifierForVendor.UUIDString;
+    return _app.getUserIosId;
 }
 
 - (NSString *) getDeviceId

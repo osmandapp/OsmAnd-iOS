@@ -14,17 +14,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OABackupInfo : NSObject
 
-@property (nonatomic, retain) NSMutableArray<OARemoteFile *> *filesToDownload;
-@property (nonatomic, retain) NSMutableArray<OALocalFile *> *filesToUpload;
-@property (nonatomic, retain) NSMutableArray<OARemoteFile *> *filesToDelete;
-@property (nonatomic, retain) NSMutableArray<OALocalFile *> *localFilesToDelete;
-@property (nonatomic, retain) NSMutableArray<NSArray *> *filesToMerge;
+@property (nonatomic) NSMutableArray<OARemoteFile *> *filesToDownload;
+@property (nonatomic) NSMutableArray<OALocalFile *> *filesToUpload;
+@property (nonatomic) NSMutableArray<OARemoteFile *> *filesToDelete;
+@property (nonatomic) NSMutableArray<OALocalFile *> *localFilesToDelete;
+@property (nonatomic) NSMutableArray<NSArray *> *filesToMerge;
 
-@property (nonatomic, retain) NSMutableArray<OASettingsItem *> *itemsToUpload;
-@property (nonatomic, retain) NSMutableArray<OASettingsItem *> *itemsToDelete;
-@property (nonatomic, retain) NSMutableArray<OALocalFile *> *filteredFilesToUpload;
-@property (nonatomic, retain) NSMutableArray<OARemoteFile *> *filteredFilesToDelete;
-@property (nonatomic, retain) NSMutableArray<NSArray *> *filteredFilesToMerge;
+@property (nonatomic) NSMutableArray<OASettingsItem *> *itemsToUpload;
+@property (nonatomic) NSMutableArray<OASettingsItem *> *itemsToDelete;
+@property (nonatomic) NSMutableArray<OALocalFile *> *filteredFilesToUpload;
+@property (nonatomic) NSMutableArray<OARemoteFile *> *filteredFilesToDelete;
+@property (nonatomic) NSMutableArray<NSArray *> *filteredFilesToMerge;
 
 - (void) createItemCollections;
 

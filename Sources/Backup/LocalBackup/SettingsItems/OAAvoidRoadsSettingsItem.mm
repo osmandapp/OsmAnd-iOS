@@ -41,6 +41,16 @@
     self.existingItems = [[_specificRoads getImpassableRoads] mutableCopy];
 }
 
+- (long)localModifiedTime
+{
+    return _specificRoads.getLastModifiedTime;
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    [_specificRoads setLastModifiedTime:localModifiedTime];
+}
+
 - (EOASettingsItemType) type
 {
     return EOASettingsItemTypeAvoidRoads;

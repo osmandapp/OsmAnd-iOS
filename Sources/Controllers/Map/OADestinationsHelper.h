@@ -40,4 +40,7 @@
 
 - (OAGPXDocument *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup;
 
+- (long) getMarkersLastModifiedTime;
+- (void) setMarkersLastModifiedTime:(long)lastModified;
+
 @end

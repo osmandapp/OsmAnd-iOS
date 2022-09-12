@@ -7,6 +7,7 @@
 //
 
 #import "OAHistoryDB.h"
+#import "OABackupHelper.h"
 #import <sqlite3.h>
 #import "OALog.h"
 #import "NSData+CRC32.h"
@@ -20,6 +21,8 @@
 #define POINT_COL_TYPE @"ftype"
 #define POINT_COL_ICON_NAME @"ficonname"
 #define POINT_COL_TYPE_NAME @"ftypename"
+
+#define MARKERS_HISTORY_LAST_MODIFIED_NAME @"map_markers_history"
 
 @implementation OAHistoryDB
 {
@@ -332,5 +335,35 @@
     return [self getPoints:[NSString stringWithFormat:@"WHERE %@ in (%@)", POINT_COL_TYPE, arrayStr] limit:limit];
 }
 
+- (long)getMarkersHistoryLastModifiedTime
+{
+    long lastModifiedTime = [OABackupHelper getLastModifiedTime:MARKERS_HISTORY_LAST_MODIFIED_NAME];
+    if (lastModifiedTime == 0)
+    {
+        lastModifiedTime = [self getDBLastModifiedTime];
+        [OABackupHelper setLastModifiedTime:MARKERS_HISTORY_LAST_MODIFIED_NAME lastModifiedTime:lastModifiedTime];
+    }
+    return lastModifiedTime;
+}
+
+- (void) setMarkersHistoryLastModifiedTime:(long)lastModified
+{
+    [OABackupHelper setLastModifiedTime:MARKERS_HISTORY_LAST_MODIFIED_NAME lastModifiedTime:lastModified];
+}
+
+- (long) getDBLastModifiedTime
+{
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if ([manager fileExistsAtPath:databasePath])
+    {
+        NSError *err = nil;
+        NSDictionary *attrs = [manager attributesOfItemAtPath:databasePath error:&err];
+        if (!err)
+        {
+            return attrs.fileModificationDate.timeIntervalSince1970;
+        }
+    }
+    return 0;
+}
 
 @end

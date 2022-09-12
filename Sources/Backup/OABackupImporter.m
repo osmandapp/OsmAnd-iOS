@@ -221,7 +221,7 @@
     [_queue addOperations:tasks waitUntilFinished:YES];
 
     [remoteFileItems enumerateKeysAndObjectsUsingBlock:^(OARemoteFile * _Nonnull key, OASettingsItem * _Nonnull obj, BOOL * _Nonnull stop) {
-        obj.localModifiedTime = key.clienttimems;
+        obj.localModifiedTime = key.clienttimems / 1000;
     }];
 
     [operationLog finishOperation];
@@ -409,7 +409,7 @@
         NSArray<OARemoteFile *> *foundRemoteFiles = [self getItemRemoteFiles:settingsItem remoteFiles:remoteFilesMap];
         for (OARemoteFile *remoteFile in foundRemoteFiles)
         {
-            settingsItem.lastModifiedTime = remoteFile.clienttimems;
+            settingsItem.lastModifiedTime = remoteFile.clienttimems / 1000;
             remoteFile.item = settingsItem;
             if ([settingsItem isKindOfClass:OAFileSettingsItem.class])
             {

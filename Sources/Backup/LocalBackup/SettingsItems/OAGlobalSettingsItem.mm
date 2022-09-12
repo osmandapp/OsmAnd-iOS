@@ -34,6 +34,16 @@
     return YES;
 }
 
+- (long)localModifiedTime
+{
+    return [OAAppSettings.sharedManager getLastGloblalSettingsModifiedTime];
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    [OAAppSettings.sharedManager setLastGlobalModifiedTime:localModifiedTime];
+}
+
 - (long)getEstimatedSize
 {
     return OAAppSettings.sharedManager.getGlobalPreferences.count * APPROXIMATE_PREFERENCE_SIZE_BYTES;

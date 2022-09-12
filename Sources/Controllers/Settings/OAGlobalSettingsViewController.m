@@ -126,7 +126,7 @@
                     @"name" : @"do_not_send_anonymous_data",
                     @"title" : OALocalizedString(@"send_anonymous_data"),
                     @"description" : OALocalizedString(@"send_anonymous_data_desc"),
-                    @"value" : @(_settings.settingUseAnalytics.get),
+                    @"value" : @(_settings.sendAnonymousAppUsageData.get),
                     @"img" : @"menu_cell_pointer.png",
                     @"type" : [OASwitchTableViewCell getCellIdentifier], }
             ];

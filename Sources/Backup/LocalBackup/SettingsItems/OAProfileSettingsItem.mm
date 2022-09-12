@@ -64,6 +64,16 @@
     return [OAApplicationMode valueOfStringKey:_appMode.stringKey def:nil] != nil;
 }
 
+- (long)localModifiedTime
+{
+    return [OAAppSettings.sharedManager getLastProfileSettingsModifiedTime:_appMode];
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    [OAAppSettings.sharedManager setLastProfileModifiedTime:localModifiedTime mode:_appMode];
+}
+
 - (void)readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     [super readFromJson:json error:error];

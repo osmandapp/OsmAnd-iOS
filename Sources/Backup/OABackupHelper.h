@@ -55,6 +55,10 @@
 + (NSString *) getFileItemName:(OAFileSettingsItem *)fileSettingsItem;
 + (NSString *)getFileItemName:(NSString *)filePath fileSettingsItem:(OAFileSettingsItem *)fileSettingsItem;
 
++ (void) setLastModifiedTime:(NSString *)name;
++ (void) setLastModifiedTime:(NSString *)name lastModifiedTime:(long)lastModifiedTime;
++ (long) getLastModifiedTime:(NSString *)name;
+
 - (OACommonBoolean *) getBackupTypePref:(OAExportSettingsType *)type;
 - (OACommonBoolean *) getVersionHistoryTypePref:(OAExportSettingsType *)type;
 

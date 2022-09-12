@@ -52,6 +52,16 @@
     return EOASettingsItemTypePoiUIFilters;
 }
 
+- (long)localModifiedTime
+{
+    return [_filtersHelper getLastModifiedTime];
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    [_filtersHelper setLastModifiedTime:localModifiedTime];
+}
+
 - (void) apply
 {
     NSArray<OAPOIUIFilter *> *newItems = [self getNewItems];

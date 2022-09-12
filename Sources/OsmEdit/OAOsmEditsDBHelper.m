@@ -7,6 +7,7 @@
 //
 
 #import "OAOsmEditsDBHelper.h"
+#import "OABackupHelper.h"
 #import "OALog.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAEntity.h"
@@ -30,6 +31,8 @@
 #define OPENSTREETMAP_COL_COMMENT @"comment"
 #define OPENSTREETMAP_COL_CHANGED_TAGS @"changed_tags"
 #define OPENSTREETMAP_COL_ENTITY_TYPE @"entity_type"
+
+#define OPENSTREETMAP_DB_LAST_MODIFIED_NAME @"openstreetmap"
 
 @interface OAOsmEditsDBHelper ()
 
@@ -113,6 +116,37 @@
                // Failed to upate database
         }
     });
+}
+
+- (long)getLastModifiedTime
+{
+    long lastModifiedTime = [OABackupHelper getLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME];
+    if (lastModifiedTime == 0)
+    {
+        lastModifiedTime = [self getDBLastModifiedTime];
+        [OABackupHelper setLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME lastModifiedTime:lastModifiedTime];
+    }
+    return lastModifiedTime;
+}
+
+- (void) setLastModifiedTime:(long)lastModified
+{
+    [OABackupHelper setLastModifiedTime:OPENSTREETMAP_DB_LAST_MODIFIED_NAME lastModifiedTime:lastModified];
+}
+
+- (long) getDBLastModifiedTime
+{
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if ([manager fileExistsAtPath:_dbFilePath])
+    {
+        NSError *err = nil;
+        NSDictionary *attrs = [manager attributesOfItemAtPath:_dbFilePath error:&err];
+        if (!err)
+        {
+            return attrs.fileModificationDate.timeIntervalSince1970;
+        }
+    }
+    return 0;
 }
 
 -(NSArray<OAOpenStreetMapPoint *> *) getOpenstreetmapPoints

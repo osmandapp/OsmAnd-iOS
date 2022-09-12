@@ -21,4 +21,7 @@
 - (NSArray *)getSearchHistoryPoints:(int)count;
 - (NSArray *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
 
+- (long) getMarkersHistoryLastModifiedTime;
+- (void) setMarkersHistoryLastModifiedTime:(long)lastModified;
+
 @end

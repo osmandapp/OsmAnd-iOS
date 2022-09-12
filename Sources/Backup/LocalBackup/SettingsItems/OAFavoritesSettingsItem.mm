@@ -62,6 +62,30 @@
     return @".gpx";
 }
 
+- (long)localModifiedTime
+{
+    NSString *favPath = OsmAndApp.instance.favoritesStorageFilename;
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if ([manager fileExistsAtPath:favPath])
+    {
+        NSError *err = nil;
+        NSDictionary *attrs = [manager attributesOfItemAtPath:favPath error:&err];
+        if (!err)
+            return attrs.fileModificationDate.timeIntervalSince1970;
+    }
+    return 0;
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    NSString *favPath = OsmAndApp.instance.favoritesStorageFilename;
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if ([manager fileExistsAtPath:favPath])
+    {
+        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime] } ofItemAtPath:favPath error:nil];
+    }
+}
+
 - (void) apply
 {
     OsmAndAppInstance app = [OsmAndApp instance];

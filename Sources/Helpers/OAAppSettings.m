@@ -387,6 +387,11 @@
 
 #define animateMyLocationKey @"animateMyLocation"
 
+#define lastGlobalSettingsModifiedTimeKey @"lastGlobalSettingsModifiedTime"
+#define lastProfileSettingsModifiedTimeKey @"lastProfileSettingsModifiedTime"
+
+#define lastUUIDChangeTimestampKey @"lastUUIDChangeTimestamp"
+
 @implementation OACompassMode
 
 + (NSString *) getTitle:(EOACompassMode)cm
@@ -1333,13 +1338,56 @@
 
 - (void)setValue:(NSObject *)value mode:(OAApplicationMode *)mode
 {
+    id oldVal = [self getValue:mode];
+    oldVal = oldVal ? oldVal : value;
+    BOOL bothNil = value == nil && oldVal == nil;
+    BOOL changed = !bothNil && ![value isEqual:oldVal];
     if (self.global)
+    {
         self.cachedValue = value;
+    }
     else
+    {
         [self.cachedValues setObject:value forKey:mode];
+    }
+    if (changed)
+    {
+        if (self.global && self.shared)
+            [[NSUserDefaults standardUserDefaults] setObject:@(NSDate.date.timeIntervalSince1970) forKey:lastGlobalSettingsModifiedTimeKey];
+        else if (!self.global && mode)
+            [[NSUserDefaults standardUserDefaults] setObject:@(NSDate.date.timeIntervalSince1970) forKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]];
+    }
+    if (self.lastModifiedTimeStored)
+       [self setLastModifiedTime:NSDate.date.timeIntervalSince1970];
 
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getKey:mode]];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+}
+
+- (BOOL) isSetForMode:(OAApplicationMode *)mode
+{
+    return [self getValue:mode] != nil;
+}
+
+- (long)lastModifiedTime
+{
+    if (self.lastModifiedTimeStored)
+        return [[[NSUserDefaults standardUserDefaults] objectForKey:self.getLastModifiedTimeId] longValue];
+    else
+        @throw [NSException exceptionWithName:@"IllegalStateException" reason:[NSString stringWithFormat:@"Setting %@  is not granted to store last modified time", self.key] userInfo:nil];
+}
+
+- (void)setLastModifiedTime:(long)lastModifiedTime
+{
+    if (self.lastModifiedTimeStored)
+        [[NSUserDefaults standardUserDefaults] setObject:@(lastModifiedTime) forKey:self.getLastModifiedTimeId];
+    else
+        @throw [NSException exceptionWithName:@"IllegalStateException" reason:[NSString stringWithFormat:@"Setting %@  is not granted to store last modified time", self.key] userInfo:nil];
+}
+
+- (NSString *) getLastModifiedTimeId
+{
+    return [self.key stringByAppendingString:@"_last_modified"];
 }
 
 - (void)setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode
@@ -4226,6 +4274,8 @@
         [_globalPreferences setObject:_lastCheckedUpdates forKey:@"last_checked_updates"];
         [_globalPreferences setObject:_numberOfAppStartsOnDislikeMoment forKey:@"number_of_app_starts_on_dislike_moment"];
         [_globalPreferences setObject:_rateUsState forKey:@"rate_us_state"];
+        
+        _lastUUIDChangeTimestamp = [[OACommonLong withKey:lastUUIDChangeTimestampKey defValue:0] makeGlobal];
 
         [self fetchImpassableRoads];
 
@@ -4880,6 +4930,26 @@
     NSString *appModeKeys = self.customAppModes.get;
     NSArray<NSString *> *keysArr = [appModeKeys componentsSeparatedByString:@","];
     return [NSSet setWithArray:keysArr];
+}
+
+- (long) getLastGloblalSettingsModifiedTime
+{
+    return [[[NSUserDefaults standardUserDefaults] objectForKey:lastGlobalSettingsModifiedTimeKey] longValue];
+}
+
+- (void) setLastGlobalModifiedTime:(long)timestamp
+{
+    [[NSUserDefaults standardUserDefaults] setObject:@(timestamp) forKey:lastGlobalSettingsModifiedTimeKey];
+}
+
+- (long) getLastProfileSettingsModifiedTime:(OAApplicationMode *)mode
+{
+    return [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]] longValue];
+}
+
+- (void) setLastProfileModifiedTime:(long)timestamp mode:(OAApplicationMode *)mode
+{
+    [[NSUserDefaults standardUserDefaults] setObject:@(timestamp) forKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]];
 }
 
 @end

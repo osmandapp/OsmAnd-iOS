@@ -71,6 +71,8 @@
 
 #include <openingHoursParser.h>
 
+#define k3MonthInSeconds 60 * 60 * 24 * 90
+
 #define MILS_IN_DEGREE 17.777778f
 
 #define VERSION_3_10 3.10
@@ -696,7 +698,8 @@
             [res appendFormat:@"&nd=%ld", nd];
     }
     [res appendFormat:@"&ns=%ld", [[NSUserDefaults standardUserDefaults] integerForKey:kNumberOfStarts]];
-    [res appendFormat:@"&aid=%@", [self getUserIosId]];
+    if (self.getUserIosId.length > 0)
+        [res appendFormat:@"&aid=%@", [self getUserIosId]];
     return res;
 }
 
@@ -1051,9 +1054,6 @@
     [userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data]
                                               forKey:kAppData];
     [userDefaults synchronize];
-
-    // Favorites
-    [self saveFavoritesToPermamentStorage];
 }
 
 - (void)saveFavoritesToPermamentStorage
@@ -1192,14 +1192,14 @@
 - (NSString *) getUserIosId
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *userIosId = settings.userIosId.get;
+    if (![settings.sendAnonymousAppUsageData get])
+        return @"";
+    long lastRotation = [settings.lastUUIDChangeTimestamp get];
+    BOOL needRotation = NSDate.date.timeIntervalSince1970 - lastRotation > k3MonthInSeconds;
+    NSString *userIosId = needRotation ? settings.userIosId.get : @"";
     if (userIosId.length > 0)
         return userIosId;
-    userIosId = [UIDevice.currentDevice.identifierForVendor.UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    if (userIosId == nil)
-    {
-        userIosId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    }
+    userIosId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
     [settings.userIosId set:userIosId];
     return userIosId;
 }

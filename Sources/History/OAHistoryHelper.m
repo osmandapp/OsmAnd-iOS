@@ -40,6 +40,16 @@
     return self;
 }
 
+- (long) getMarkersHistoryLastModifiedTime
+{
+    return _db.getMarkersHistoryLastModifiedTime;
+}
+
+- (void) setMarkersHistoryLastModifiedTime:(long)lastModified
+{
+    [_db setMarkersHistoryLastModifiedTime:lastModified];
+}
+
 - (void)addPoint:(OAHistoryItem *)item
 {
     [_db addPoint:item];

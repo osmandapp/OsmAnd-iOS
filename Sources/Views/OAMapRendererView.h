@@ -23,6 +23,8 @@
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
 
+#define kSymbolsUpdateInterval 2000
+
 #define _DECLARE_ENTRY(name)                                                                                                \
     OAMapRendererViewStateEntry##name = (NSUInteger)OsmAnd::MapRendererStateChange::name
 typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)

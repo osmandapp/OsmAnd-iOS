@@ -134,6 +134,7 @@
     // Create animator for that map
     _animator.reset(new OsmAnd::MapAnimator());
     _animator->setMapRenderer(_renderer);
+    _renderer->setSymbolsUpdateInterval(kSymbolsUpdateInterval);
 
     auto debugSettings = [self getMapDebugSettings];
     //debugSettings->disableSymbolsFastCheckByFrustum = true;

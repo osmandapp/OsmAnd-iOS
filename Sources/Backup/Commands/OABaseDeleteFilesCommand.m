@@ -51,7 +51,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
 - (void)main
 {
     OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"deleteFile" debug:BACKUP_DEBUG_LOGS];
-    [OANetworkUtilities sendRequest:_request async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [OANetworkUtilities sendRequest:_request async:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (((NSHTTPURLResponse *)response).statusCode == 200 && !error && !_byVersion)
         {
             if (data)

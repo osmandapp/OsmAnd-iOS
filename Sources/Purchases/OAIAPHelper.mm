@@ -1712,15 +1712,15 @@ static OASubscriptionState *EXPIRED;
     for (NSInteger i = 0; i < subscriptionsStateJson.count; i++)
     {
         NSDictionary *subObj = subscriptionsStateJson[i];
-        NSString *sku = [subObj[@"sku"] stringValue];
-        NSString *state = [subObj[@"state"] stringValue];
+        NSString *sku = subObj[@"sku"];
+        NSString *state = subObj[@"state"];
         
         if (sku.length > 0 && state.length > 0)
         {
             OASubscriptionStateHolder *stateHolder = [[OASubscriptionStateHolder alloc] init];
             stateHolder.state = [OASubscriptionState getByStateStr:state];
-            stateHolder.startTime = [subObj[@"start_time"] stringValue].integerValue / 1000;
-            stateHolder.expireTime = [subObj[@"expire_time"] stringValue].integerValue / 1000;
+            stateHolder.startTime = [subObj[@"start_time"] integerValue] / 1000;
+            stateHolder.expireTime = [subObj[@"expire_time"] integerValue] / 1000;
             stateHolder.origin = [self getSubscriptionOriginBySku:sku];
             subscriptionStateMap[sku] = stateHolder;
         }
@@ -1760,7 +1760,7 @@ static OASubscriptionState *EXPIRED;
                 NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
                 if (!jsonParsingError)
                 {
-                    orderId = [resultJson[@"orderid"] stringValue];
+                    orderId = resultJson[@"orderid"];
                 }
                 else
                 {

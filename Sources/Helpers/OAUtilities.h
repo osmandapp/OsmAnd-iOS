@@ -75,6 +75,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 - (void) setCornerRadius:(CGFloat)value;
 - (void) addBlurEffect:(BOOL)light cornerRadius:(CGFloat)cornerRadius padding:(CGFloat)padding;
 - (void) removeBlurEffect;
+- (void) removeBlurEffect:(UIColor *)backgroundColor;
 - (void) addSpinner;
 - (void) removeSpinner;
 - (UIImage *) toUIImage;

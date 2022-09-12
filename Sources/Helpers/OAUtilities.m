@@ -405,12 +405,17 @@
 
 - (void) removeBlurEffect
 {
+    [self removeBlurEffect:UIColor.whiteColor];
+}
+
+- (void) removeBlurEffect:(UIColor *)backgroundColor
+{
     for (UIView *subview in self.subviews)
     {
         if (subview.tag == kBlurViewTag)
         {
             [subview removeFromSuperview];
-            self.backgroundColor = UIColor.whiteColor;
+            self.backgroundColor = backgroundColor;
             break;
         }
     }

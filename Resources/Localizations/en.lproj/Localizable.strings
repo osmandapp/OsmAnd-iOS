@@ -2734,6 +2734,7 @@
 "backup_delete_data_type_description" = "This will delete all %@ data from OsmAnd Cloud. This action cannot be undone.";
 "backup_empty_data_from_category" = "OsmAnd Cloud doesn't include any data from this category.";
 "cloud_storage_used" = "%@ of %@ used";
+"cloud_confirm_delete_type" = "Are you sure you want to delete \"%@\" from OsmAnd Cloud?";
 
 "copy_address" = "Copy address";
 "copy_poi_name" = "Copy POI Name";

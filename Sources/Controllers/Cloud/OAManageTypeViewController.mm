@@ -8,7 +8,7 @@
 
 #import "OAManageTypeViewController.h"
 #import "OABaseBackupTypesViewController.h"
-#import "OAIconTitleValueCell.h"
+#import "OAMultiIconsDescCustomCell.h"
 #import "OAExportSettingsType.h"
 #import "OASettingsCategoryItems.h"
 #import "OAColors.h"
@@ -22,7 +22,8 @@
 {
     OAExportSettingsType *_settingsType;
     NSString *_size;
-    NSMutableArray<NSMutableDictionary *> *_data;
+    NSArray<NSArray<NSDictionary *> *> *_data;
+    NSMapTable<NSNumber *, NSString *> *_footers;
 }
 
 - (instancetype)initWithSettingsType:(OAExportSettingsType *)settingsType size:(NSString *)size
@@ -32,6 +33,7 @@
     {
         _settingsType = settingsType;
         _size = size;
+        _footers = [NSMapTable new];
     }
     return self;
 }
@@ -40,14 +42,26 @@
 {
     [super viewDidLoad];
 
+    self.titleLabel.hidden = YES;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-
-    [self.backButton setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
+    UIView *tableHeaderView = self.tableView.tableHeaderView;
+    CGRect frame = tableHeaderView.frame;
+    frame.size.height += 21.;
+    tableHeaderView.frame = frame;
 
     [self setupView];
 }
-
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        UIView *tableHeaderView = self.tableView.tableHeaderView;
+        CGRect frame = tableHeaderView.frame;
+        frame.size.height += 21.;
+        tableHeaderView.frame = frame;
+    } completion:nil];
+}
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     if (@available(iOS 13.0, *))
@@ -70,38 +84,25 @@
 
 - (void)setupView
 {
-    NSMutableArray *data = [NSMutableArray array];
-
-    NSMutableArray<NSMutableDictionary *> *sizeCells = [NSMutableArray array];
-    NSMutableDictionary *sizeSection = [NSMutableDictionary dictionary];
-    sizeSection[@"header"] = OALocalizedString(@"my_places");
-    sizeSection[@"cells"] = sizeCells;
-    [data addObject:sizeSection];
-
-    NSMutableDictionary *sizeData = [NSMutableDictionary dictionary];
-    sizeData[@"key"] = @"size_cell";
-    sizeData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
-    sizeData[@"title"] = OALocalizedString(@"res_size");
-    [sizeCells addObject:sizeData];
-
-    NSMutableArray<NSMutableDictionary *> *deleteCells = [NSMutableArray array];
-    NSMutableDictionary *deleteSection = [NSMutableDictionary dictionary];
-    deleteSection[@"cells"] = deleteCells;
-    deleteSection[@"footer"] = [NSString stringWithFormat:OALocalizedString(@"backup_delete_data_type_description"), _settingsType.title];
-    [data addObject:deleteSection];
-
-    NSMutableDictionary *deleteData = [NSMutableDictionary dictionary];
-    deleteData[@"key"] = @"delete_cell";
-    deleteData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
-    deleteData[@"title"] = OALocalizedString(@"shared_string_delete_data");
-    [deleteCells addObject:deleteData];
-
-    _data = data;
+    _data = @[
+            @[@{
+                    @"key" : @"size_cell",
+                    @"type" : [OAMultiIconsDescCustomCell getCellIdentifier],
+                    @"title" : OALocalizedString(@"res_size")
+            }],
+            @[@{
+                    @"key" : @"delete_cell",
+                    @"type" : [OAMultiIconsDescCustomCell getCellIdentifier],
+                    @"title" : OALocalizedString(@"shared_string_delete_data")
+            }]
+    ];
+    [_footers setObject:[NSString stringWithFormat:OALocalizedString(@"backup_delete_data_type_description"), _settingsType.title]
+                 forKey:@(_data.count - 1)];
 }
 
-- (NSMutableDictionary *)getItem:(NSIndexPath *)indexPath
+- (NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
-    return _data[indexPath.section][@"cells"][indexPath.row];
+    return _data[indexPath.section][indexPath.row];
 }
 
 - (IBAction)backButtonClicked:(id)sender
@@ -118,7 +119,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return ((NSArray *) _data[section][@"cells"]).count;
+    return _data[section].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -128,48 +129,85 @@
     NSDictionary *item = [self getItem:indexPath];
     NSString *cellType = item[@"type"];
 
-    if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAMultiIconsDescCustomCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAMultiIconsDescCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconsDescCustomCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            [cell showLeftIcon:NO];
-            [cell showRightIcon:NO];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconsDescCustomCell getCellIdentifier] owner:self options:nil];
+            cell = (OAMultiIconsDescCustomCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell rightIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
             BOOL isSize = [item[@"key"] isEqualToString:@"size_cell"];
             cell.selectionStyle = isSize ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
-            cell.textView.text = item[@"title"];
-            cell.textView.font = [UIFont systemFontOfSize:17. weight:isSize ? UIFontWeightRegular : UIFontWeightMedium];
-            cell.textView.textColor = isSize ? UIColor.blackColor : UIColorFromRGB(color_support_red);
-            cell.descriptionView.text = isSize ? _size : @"";
+            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:isSize ? UIFontWeightRegular : UIFontWeightMedium];
+            cell.titleLabel.textColor = isSize ? UIColor.blackColor : UIColorFromRGB(color_support_red);
+            cell.valueLabel.text = isSize ? _size : @"";
         }
         outCell = cell;
     }
 
-    [outCell updateConstraintsIfNeeded];
     return outCell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return _data[section][@"footer"];
+    return [_footers objectForKey:@(section)];
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if ([_footers.keyEnumerator.allObjects containsObject:@(section)])
+    {
+        UIFont *font = [UIFont systemFontOfSize:13.];
+        CGFloat footerSize = [OAUtilities calculateTextBounds:[_footers objectForKey:@(section)]
+                                                        width:tableView.frame.size.width - [OAUtilities getLeftMargin] * 2
+                                                         font:font].height + (34. - font.lineHeight);
+
+        return round(footerSize);
+    }
+
+    return 36.;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"key"] isEqualToString:@"delete_cell"])
     {
-        [self dismissViewController];
+        UIAlertController *alert =
+                             [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_delete_data")
+                                                                 message:[NSString stringWithFormat:OALocalizedString(@"cloud_confirm_delete_type"), _settingsType.title]
+                                                          preferredStyle:UIAlertControllerStyleAlert];
 
-        if (self.manageTypeDelegate)
-            [self.manageTypeDelegate onDeleteTypeData:_settingsType];
+                     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                                            style:UIAlertActionStyleDefault
+                                                                          handler:nil];
+
+                     UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete")
+                                                                                style:UIAlertActionStyleDefault
+                                                                              handler:^(UIAlertAction * _Nonnull action)
+                                                                              {
+                                                                                  [self dismissViewController];
+
+                                                                                  if (self.manageTypeDelegate)
+                                                                                      [self.manageTypeDelegate onDeleteTypeData:_settingsType];
+                                                                              }
+                     ];
+
+                     [alert addAction:cancelAction];
+                     [alert addAction:deleteAction];
+
+                     alert.preferredAction = deleteAction;
+
+                     [self presentViewController:alert animated:YES completion:nil];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

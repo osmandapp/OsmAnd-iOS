@@ -6,9 +6,21 @@
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OAMultiIconsDescCustomCell.h"
+#import "OACustomBasicTableCell.h"
 
-@implementation OAMultiIconsDescCustomCell
+@interface OACustomBasicTableCell ()
+
+@property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginTopStackView;
+@property (weak, nonatomic) IBOutlet UIView *topContentSpaceView;
+@property (weak, nonatomic) IBOutlet UIStackView *contentInsideStackView;
+@property (weak, nonatomic) IBOutlet UIStackView *textStackView;
+@property (weak, nonatomic) IBOutlet UIView *bottomContentSpaceView;
+@property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginBottomStackView;
+@property (weak, nonatomic) IBOutlet UIStackView *valueStackView;
+
+@end
+
+@implementation OACustomBasicTableCell
 
 - (void)leftIconVisibility:(BOOL)show
 {
@@ -30,6 +42,11 @@
 - (void)rightIconVisibility:(BOOL)show
 {
     self.rightIconView.hidden = !show;
+}
+
+- (void)switchVisibility:(BOOL)show
+{
+    self.switchView.hidden = !show;
 }
 
 - (void)textIndentsStyle:(EOACustomCellTextIndentsStyle)style

@@ -7,7 +7,7 @@
 //
 
 #import "OAMappersViewController.h"
-#import "OAMultiIconsDescCustomCell.h"
+#import "OACustomBasicTableCell.h"
 #import "OAAppSettings.h"
 #import "OANetworkUtilities.h"
 #import "OAColors.h"
@@ -104,7 +104,7 @@
 
     [data addObject:@[
             @{
-                    @"type" : [OAMultiIconsDescCustomCell getCellIdentifier],
+                    @"type" : [OACustomBasicTableCell getCellIdentifier],
                     @"attributed_title" : [[NSAttributedString alloc] initWithString:availableTitle
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont systemFontOfSize:17.],
@@ -118,7 +118,7 @@
             },
             @{
                     @"key" : @"refresh_cell",
-                    @"type": [OAMultiIconsDescCustomCell getCellIdentifier],
+                    @"type": [OACustomBasicTableCell getCellIdentifier],
                     @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_refresh")
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont systemFontOfSize:17. weight:UIFontWeightMedium],
@@ -161,7 +161,7 @@
                                    range:[dateAttributed.string rangeOfString:[formatterYear stringFromDate:date]]];
 
             [dateCells addObject:@{
-                    @"type": [OAMultiIconsDescCustomCell getCellIdentifier],
+                    @"type": [OACustomBasicTableCell getCellIdentifier],
                     @"attributed_title": dateAttributed,
                     @"value": [_objectChanges[dateStr] stringValue],
                     @"original_value" : dateStr
@@ -174,7 +174,7 @@
     }
 
     [dateCells insertObject:@{
-            @"type": [OAMultiIconsDescCustomCell getCellIdentifier],
+            @"type": [OACustomBasicTableCell getCellIdentifier],
             @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"last_two_month_total")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont systemFontOfSize:17.],
@@ -191,7 +191,7 @@
                                         stringByAppendingString:@"/history"];
     [dateCells addObject:@{
             @"key" : @"profile_cell",
-            @"type" : [OAMultiIconsDescCustomCell getCellIdentifier],
+            @"type" : [OACustomBasicTableCell getCellIdentifier],
             @"attributed_title" : [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_profiles")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont systemFontOfSize:17. weight:UIFontWeightMedium],
@@ -322,14 +322,15 @@
     UITableViewCell *outCell = nil;
 
     NSString *type = item[@"type"];
-    if ([type isEqualToString:[OAMultiIconsDescCustomCell getCellIdentifier]])
+    if ([type isEqualToString:[OACustomBasicTableCell getCellIdentifier]])
     {
-        OAMultiIconsDescCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconsDescCustomCell getCellIdentifier]];
+        OACustomBasicTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomBasicTableCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconsDescCustomCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMultiIconsDescCustomCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomBasicTableCell getCellIdentifier] owner:self options:nil];
+            cell = (OACustomBasicTableCell *) nib[0];
             [cell leftIconVisibility:NO];
+            [cell switchVisibility:NO];
         }
         if (cell)
         {

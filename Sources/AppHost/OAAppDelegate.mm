@@ -23,9 +23,12 @@
 #import "OAPOILayer.h"
 #import "OAMapViewState.h"
 #import "OACarPlayMapViewController.h"
+#import "OACarPlayPurchaseViewController.h"
 #import "OACarPlayDashboardInterfaceController.h"
 #import "OAIAPHelper.h"
-#import "OAPluginPopupViewController.h"
+#import "OAChoosePlanHelper.h"
+#import "OACarPlayActiveViewController.h"
+#import "Localization.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -364,32 +367,40 @@
 
 - (void)presentInCarPlay:(CPInterfaceController * _Nonnull)interfaceController window:(CPWindow * _Nonnull)window API_AVAILABLE(ios(12.0))
 {
-    OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
-    if (!mapVc)
+    
+    if (OAIAPHelper.isCarPlayAvailable)
     {
-        mapVc = [[OAMapViewController alloc] init];
-        [OARootViewController.instance.mapPanel setMapViewController:mapVc];
+        OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
+        if (!mapVc)
+        {
+            mapVc = [[OAMapViewController alloc] init];
+            [OARootViewController.instance.mapPanel setMapViewController:mapVc];
+        }
+        
+        _carPlayMapController = [[OACarPlayMapViewController alloc] initWithCarPlayWindow:window mapViewController:mapVc];
+        
+        window.rootViewController = _carPlayMapController;
+        
+        _carPlayDashboardController = [[OACarPlayDashboardInterfaceController alloc] initWithInterfaceController:interfaceController];
+        _carPlayDashboardController.delegate = _carPlayMapController;
+        [_carPlayDashboardController present];
+        [OARootViewController.instance.mapPanel onCarPlayConnected];
     }
-    
-    _carPlayMapController = [[OACarPlayMapViewController alloc] initWithCarPlayWindow:window mapViewController:mapVc];
-    
-    window.rootViewController = _carPlayMapController;
-    
-    _carPlayDashboardController = [[OACarPlayDashboardInterfaceController alloc] initWithInterfaceController:interfaceController];
-    _carPlayDashboardController.delegate = _carPlayMapController;
-    [_carPlayDashboardController present];
-    
-    [OARootViewController.instance.mapPanel onCarPlayConnected];
+    else
+    {
+        OACarPlayActiveViewController *vc = [[OACarPlayActiveViewController alloc] init];
+        vc.messageText = OALocalizedString(@"carplay_available_in_sub_plans");
+        vc.smallLogo = YES;
+        OACarPlayPurchaseViewController *purchaseController = [[OACarPlayPurchaseViewController alloc] initWithCarPlayWindow:window viewController:vc];
+        window.rootViewController = purchaseController;
+        _carPlayDashboardController = [[OACarPlayDashboardInterfaceController alloc] initWithInterfaceController:interfaceController];
+        [_carPlayDashboardController present];
+        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.CARPLAY navController:OARootViewController.instance.navigationController];
+    }
 }
 
 - (void)application:(UIApplication *)application didConnectCarInterfaceController:(CPInterfaceController *)interfaceController toWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
 {
-    if (![OAIAPHelper isCarPlayAvailable])
-    {
-        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_CarPlay];
-        return;
-    }
-
     _app.carPlayActive = YES;
     if (!_appInitDone)
     {

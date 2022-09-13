@@ -3844,6 +3844,8 @@ typedef enum
     if (_carPlayActiveController && _carPlayActiveController.presentingViewController == self)
         return;
     _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
+    _carPlayActiveController.messageText = OALocalizedString(@"carplay_active_message");
+    
     _carPlayActiveController.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:_carPlayActiveController animated:YES completion:nil];
 }

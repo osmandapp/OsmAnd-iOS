@@ -211,6 +211,7 @@
 
 "last_used" = "Last used";
 
+"carplay_available_in_sub_plans" = "Purchase OsmAnd Pro or Maps+ to use OsmAnd with CarPlay.";
 "carplay_active_message" = "Map is displayed via CarPlay";
 "carplay_profile" = "CarPlay profile";
 "carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";

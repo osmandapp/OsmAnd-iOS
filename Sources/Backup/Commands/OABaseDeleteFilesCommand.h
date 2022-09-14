@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) doInBackground;
 - (void) publishProgress:(id)object;
 
+- (void) setFilesToDelete:(NSArray *)files;
 - (void) deleteFiles:(NSArray<OARemoteFile *> *)remoteFiles;
 - (NSArray<id<OAOnDeleteFilesListener>> *)getListeners;
 

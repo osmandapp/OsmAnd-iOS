@@ -134,6 +134,11 @@
     return self.titleLabel.text;
 }
 
+- (UIColor *)navBarBackgroundColor
+{
+    return UIColorFromRGB(color_bottom_sheet_background);
+}
+
 - (void)setupButtons
 {
     BOOL isRemoveOld = _screenType == EOARemoveOldVersionsBackupScreenType;

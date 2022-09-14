@@ -80,6 +80,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
     NSMutableSet *_itemsProgress;
     OABackupHelper *_backupHelper;
     NSOperationQueue *_executor;
+    NSArray *_filesToDelete;
 }
 
 - (instancetype)initWithVersion:(BOOL)byVersion
@@ -116,9 +117,16 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
 {
     [self onPreExecute];
     [self doInBackground];
+    if (_filesToDelete && _filesToDelete.count > 0)
+        [self deleteFiles:_filesToDelete];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self onPostExecute];
     });
+}
+
+- (void)setFilesToDelete:(NSArray *)files
+{
+    _filesToDelete = files;
 }
 
 - (void) deleteFiles:(NSArray<OARemoteFile *> *)remoteFiles

@@ -12,8 +12,7 @@
 #import "OAMainSettingsViewController.h"
 #import "OABaseBackupTypesViewController.h"
 #import "OABackupTypesViewController.h"
-#import "OAMenuSimpleCell.h"
-#import "OATitleRightIconCell.h"
+#import "OAMultiIconsDescCustomCell.h"
 #import "OAAppSettings.h"
 #import "OABackupHelper.h"
 #import "OAPrepareBackupResult.h"
@@ -32,14 +31,16 @@
 
 @implementation OASettingsBackupViewController
 {
-    NSMutableArray<NSMutableDictionary *> *_data;
+    NSMutableArray<NSMutableArray<NSMutableDictionary *> *> *_data;
+    NSMutableDictionary<NSNumber *, NSString *> *_headers;
+    NSMutableDictionary<NSNumber *, NSString *> *_footers;
+
     OABackupHelper *_backupHelper;
     NSDictionary<NSString *, OARemoteFile *> *_uniqueRemoteFiles;
 
     NSIndexPath *_backupDataIndexPath;
     NSInteger _progressFilesCompleteCount;
     NSInteger _progressFilesTotalCount;
-    BOOL _needUpdateBackupDataCell;
 }
 
 - (instancetype)init
@@ -58,6 +59,8 @@
     _uniqueRemoteFiles = [_backupHelper.backup getRemoteFiles:EOARemoteFilesTypeUnique];
     _progressFilesCompleteCount = 0;
     _progressFilesTotalCount = 1;
+    _headers = [NSMutableDictionary dictionary];
+    _footers = [NSMutableDictionary dictionary];
 }
 
 - (void)viewDidLoad
@@ -66,6 +69,7 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.sectionFooterHeight = 0.001;
 
     [self setupView];
 }
@@ -96,60 +100,57 @@
 
 - (void)setupView
 {
-    NSMutableArray *data = [NSMutableArray array];
+    NSMutableArray<NSMutableArray <NSMutableDictionary *> *> *data = [NSMutableArray array];
 
     NSMutableArray<NSMutableDictionary *> *osmAndCloudCells = [NSMutableArray array];
-    NSMutableDictionary *osmAndCloudSection = [NSMutableDictionary dictionary];
-    osmAndCloudSection[@"header"] = OALocalizedString(@"osmand_cloud");
-    osmAndCloudSection[@"footer"] = OALocalizedString(@"select_backup_data_descr");
-    osmAndCloudSection[@"cells"] = osmAndCloudCells;
-    [data addObject:osmAndCloudSection];
+    [data addObject:osmAndCloudCells];
+    _headers[@(data.count - 1)] = OALocalizedString(@"osmand_cloud");
+    _footers[@(data.count - 1)] = OALocalizedString(@"select_backup_data_descr");
 
     NSMutableDictionary *backupData = [NSMutableDictionary dictionary];
     backupData[@"key"] = @"backup_data_cell";
-    backupData[@"type"] = [OAMenuSimpleCell getCellIdentifier];
+    backupData[@"type"] = [OAMultiIconsDescCustomCell getCellIdentifier];
     backupData[@"title"] = OALocalizedString(@"backup_data");
-    backupData[@"icon"] = @"ic_custom_cloud_upload_colored_day";
+    backupData[@"left_icon"] = @"ic_custom_cloud_upload_colored_day";
     NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:
             [OABaseBackupTypesViewController calculateItemsSize:_uniqueRemoteFiles.allValues]
                                                      countStyle:NSByteCountFormatterCountStyleFile];
+    backupData[@"right_icon"] = @"ic_custom_arrow_right";
     backupData[@"description"] = sizeBackupDataString;
     [osmAndCloudCells addObject:backupData];
     _backupDataIndexPath = [NSIndexPath indexPathForRow:[osmAndCloudCells indexOfObject:backupData]
-                                              inSection:[data indexOfObject:osmAndCloudSection]];
+                                              inSection:[data indexOfObject:osmAndCloudCells]];
 
     NSMutableArray<NSMutableDictionary *> *accountCells = [NSMutableArray array];
-    NSMutableDictionary *accountSection = [NSMutableDictionary dictionary];
-    accountSection[@"header"] = OALocalizedString(@"shared_string_account");
-    accountSection[@"cells"] = accountCells;
-    [data addObject:accountSection];
+    [data addObject:accountCells];
+    _headers[@(data.count - 1)] = OALocalizedString(@"shared_string_account");
 
     NSMutableDictionary *accountData = [NSMutableDictionary dictionary];
     accountData[@"key"] = @"account_cell";
-    accountData[@"type"] = [OATitleRightIconCell getCellIdentifier];
+    accountData[@"type"] = [OAMultiIconsDescCustomCell getCellIdentifier];
     accountData[@"title"] = [[OAAppSettings sharedManager].backupUserEmail get];
-    accountData[@"text_color"] = UIColor.blackColor;
+    accountData[@"right_icon"] = @"ic_custom_arrow_right";
     [accountCells addObject:accountData];
 
     NSMutableArray<NSMutableDictionary *> *dangerZoneCells = [NSMutableArray array];
-    NSMutableDictionary *dangerZoneSection = [NSMutableDictionary dictionary];
-    dangerZoneSection[@"header"] = OALocalizedString(@"backup_danger_zone");
-    dangerZoneSection[@"footer"] = OALocalizedString(@"backup_delete_all_data_or_versions_descr");
-    dangerZoneSection[@"cells"] = dangerZoneCells;
-    [data addObject:dangerZoneSection];
+    [data addObject:dangerZoneCells];
+    _headers[@(data.count - 1)] = OALocalizedString(@"backup_danger_zone");
+    _footers[@(data.count - 1)] = OALocalizedString(@"backup_delete_all_data_or_versions_descr");
 
     NSMutableDictionary *deleteAllData = [NSMutableDictionary dictionary];
     deleteAllData[@"key"] = @"delete_all_cell";
-    deleteAllData[@"type"] = [OATitleRightIconCell getCellIdentifier];
+    deleteAllData[@"type"] = [OAMultiIconsDescCustomCell getCellIdentifier];
     deleteAllData[@"title"] = OALocalizedString(@"backup_delete_all_data");
     deleteAllData[@"text_color"] = UIColorFromRGB(color_support_red);
+    deleteAllData[@"right_icon"] = @"ic_custom_arrow_right";
     [dangerZoneCells addObject:deleteAllData];
 
     NSMutableDictionary *removeVersionsData = [NSMutableDictionary dictionary];
     removeVersionsData[@"key"] = @"remove_versions_cell";
-    removeVersionsData[@"type"] = [OATitleRightIconCell getCellIdentifier];
+    removeVersionsData[@"type"] = [OAMultiIconsDescCustomCell getCellIdentifier];
     removeVersionsData[@"title"] = OALocalizedString(@"backup_delete_old_data");
     removeVersionsData[@"text_color"] = UIColorFromRGB(color_support_red);
+    removeVersionsData[@"right_icon"] = @"ic_custom_arrow_right";
     [dangerZoneCells addObject:removeVersionsData];
 
     _data = data;
@@ -157,24 +158,22 @@
 
 - (NSMutableDictionary *)getItem:(NSIndexPath *)indexPath
 {
-    return _data[indexPath.section][@"cells"][indexPath.row];
+    return _data[indexPath.section][indexPath.row];
 }
 
 - (void)updateAfterDeleted
 {
-    if (_needUpdateBackupDataCell && _backupDataIndexPath)
+    if (_backupDataIndexPath)
     {
         NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:
                 [OABaseBackupTypesViewController calculateItemsSize:_uniqueRemoteFiles.allValues]
                                                                         countStyle:NSByteCountFormatterCountStyleFile];
-        NSArray *cells = ((NSArray *) _data[_backupDataIndexPath.section][@"cells"]);
-        ((NSMutableDictionary *) cells[_backupDataIndexPath.row])[@"description"] = sizeBackupDataString;
+        _data[_backupDataIndexPath.section][_backupDataIndexPath.row][@"description"] = sizeBackupDataString;
         [UIView performWithoutAnimation:^{
             [self.tableView reloadRowsAtIndexPaths:@[_backupDataIndexPath]
                                   withRowAnimation:UITableViewRowAnimationNone];
         }];
 
-        _needUpdateBackupDataCell = NO;
         if (self.backupTypesDelegate)
             [self.backupTypesDelegate onAllFilesDeleted];
     }
@@ -211,7 +210,6 @@
 
 - (void)onAllFilesDeleted
 {
-    _needUpdateBackupDataCell = YES;
     [_backupHelper prepareBackup];
 }
 
@@ -305,7 +303,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return ((NSArray *) _data[section][@"cells"]).count;
+    return _data[section].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -314,60 +312,80 @@
     NSString *cellType = item[@"type"];
     UITableViewCell *outCell = nil;
 
-    if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAMultiIconsDescCustomCell getCellIdentifier]])
     {
-        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+        OAMultiIconsDescCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconsDescCustomCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMenuSimpleCell *) nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
-            [cell changeHeight:YES];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconsDescCustomCell getCellIdentifier] owner:self options:nil];
+            cell = (OAMultiIconsDescCustomCell *) nib[0];
+            [cell valueVisibility:NO];
         }
         if (cell)
         {
-            cell.imgView.image = [UIImage imageNamed:item[@"icon"]];
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"description"];
+            BOOL leftIconVisible = [item.allKeys containsObject:@"left_icon"];
+            cell.separatorInset = UIEdgeInsetsMake(0., leftIconVisible ? 66. : 20., 0., 0.);
+
+            [cell leftIconVisibility:leftIconVisible];
+            cell.leftIconView.image = [UIImage imageNamed:item[@"left_icon"]];
+
+            [cell rightIconVisibility:[item.allKeys containsObject:@"right_icon"]];
+            cell.rightIconView.image = [UIImage templateImageNamed:item[@"right_icon"]];
+            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
+
+            [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
+            cell.descriptionLabel.text = item[@"description"];
+
+            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"text_color"] ? item[@"text_color"] : UIColor.blackColor;
         }
         outCell = cell;
     }
-    else if ([cellType isEqualToString:[OATitleRightIconCell getCellIdentifier]])
-    {
-        OATitleRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *) nib[0];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
-            [cell setIconVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleView.text = item[@"title"];
-            cell.titleView.textColor = item[@"text_color"];
-        }
-        outCell =  cell;
-    }
 
-    [outCell updateConstraintsIfNeeded];
     return outCell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return _data[section][@"header"];
+    return _headers[@(section)];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return _data[section][@"footer"];
+    return _footers[@(section)];
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    NSString *header = _headers[@(section)];
+    if (header)
+    {
+        UIFont *font = [UIFont systemFontOfSize:13.];
+        CGFloat headerHeight = [OAUtilities calculateTextBounds:header
+                                                          width:tableView.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
+                                                           font:font].height + 38.;
+        return headerHeight;
+    }
+
+    return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    NSString *footer = _footers[@(section)];
+    if (footer)
+    {
+        UIFont *font = [UIFont systemFontOfSize:13.];
+        CGFloat footerHeight = [OAUtilities calculateTextBounds:footer
+                                                          width:tableView.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
+                                                           font:font].height + 16.;
+        return footerHeight;
+    }
+
+    return 0.001;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

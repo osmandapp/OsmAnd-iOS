@@ -21,7 +21,7 @@
 #import "OASettingsHelper.h"
 #import "OAColors.h"
 
-@interface OABaseBackupTypesViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OABaseBackupTypesViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 
@@ -37,6 +37,7 @@
     NSIndexPath *_selectedIndexPath;
     NSInteger _progressFilesCompleteCount;
     NSInteger _progressFilesTotalCount;
+    BOOL _isHeaderBlurred;
 }
 
 - (instancetype)init
@@ -64,6 +65,12 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.contentInset = UIEdgeInsetsMake(
+            self.navbarView.frame.size.height - [OAUtilities getTopMargin],
+            self.tableView.contentInset.left,
+            self.tableView.contentInset.bottom,
+            self.tableView.contentInset.bottom
+    );
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -452,6 +459,28 @@
         _selectedIndexPath = indexPath;
         [self onCellSelected];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat y = scrollView.contentOffset.y + scrollView.contentInset.top;
+
+    if (!_isHeaderBlurred && y > 0)
+    {
+        _isHeaderBlurred = YES;
+        [UIView animateWithDuration:.2 animations:^{
+            [self.navbarView addBlurEffect:YES cornerRadius:0. padding:0.];
+        }];
+    }
+    else if (_isHeaderBlurred && y <= 0.)
+    {
+        _isHeaderBlurred = NO;
+        [UIView animateWithDuration:.2 animations:^{
+            [self.navbarView removeBlurEffect:UIColorFromRGB(color_bottom_sheet_background)];
+        }];
     }
 }
 

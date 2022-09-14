@@ -33,7 +33,7 @@
 
 - (void) doInBackground
 {
-    [self deleteFiles:_remoteFiles];
+    [self setFilesToDelete:_remoteFiles];
 }
 
 @end

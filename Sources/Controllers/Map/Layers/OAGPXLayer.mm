@@ -276,9 +276,9 @@
                         {
                             points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
                         }
-                        if (points.size() > 1 && !_cachedColors[key].isEmpty() && segStartIndex < _cachedColors[key].size() && segStartIndex + points.size() - 1 < _cachedColors[key].size())
+                        if (points.size() > 1 && !_cachedColors[key].isEmpty() && segStartIndex < _cachedColors[key].size() && segStartIndex + seg->points.size() - 1 < _cachedColors[key].size())
                         {
-                            segmentColors = _cachedColors[key].mid(segStartIndex, points.size());
+                            segmentColors.append(_cachedColors[key].mid(segStartIndex, seg->points.size()));
                         }
                         else if ([cachedTrack[@"colorization_scheme"] intValue] == COLORIZATION_NONE && segmentColors.isEmpty() && gpx.color == 0)
                         {
@@ -287,8 +287,8 @@
                             const auto colorARGB = [UIColorFromARGB([gpxTrack getColor:kDefaultTrackColor]) toFColorARGB];
                             segmentColors.push_back(colorARGB);
                         }
-                        segStartIndex += points.size() - 1;
-                        if (!gpx.joinSegments || !segmentColors.isEmpty())
+                        segStartIndex += seg->points.count();
+                        if (!gpx.joinSegments)
                         {
                             if (isCurrentTrack)
                             {
@@ -303,7 +303,7 @@
                         }
                     }
                 }
-                if (gpx.joinSegments && segmentColors.isEmpty())
+                if (gpx.joinSegments)
                 {
                     if (isCurrentTrack)
                     {

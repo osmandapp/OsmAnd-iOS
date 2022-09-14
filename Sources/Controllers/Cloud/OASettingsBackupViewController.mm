@@ -32,7 +32,8 @@
 @implementation OASettingsBackupViewController
 {
     NSMutableArray<NSMutableArray<NSMutableDictionary *> *> *_data;
-    NSMutableDictionary<NSString *, NSString *> *_headersFooters;
+    NSMutableDictionary<NSNumber *, NSString *> *_headers;
+    NSMutableDictionary<NSNumber *, NSString *> *_footers;
 
     OABackupHelper *_backupHelper;
     NSDictionary<NSString *, OARemoteFile *> *_uniqueRemoteFiles;
@@ -58,7 +59,8 @@
     _uniqueRemoteFiles = [_backupHelper.backup getRemoteFiles:EOARemoteFilesTypeUnique];
     _progressFilesCompleteCount = 0;
     _progressFilesTotalCount = 1;
-    _headersFooters = [NSMutableDictionary dictionary];
+    _headers = [NSMutableDictionary dictionary];
+    _footers = [NSMutableDictionary dictionary];
 }
 
 - (void)viewDidLoad
@@ -102,8 +104,8 @@
 
     NSMutableArray<NSMutableDictionary *> *osmAndCloudCells = [NSMutableArray array];
     [data addObject:osmAndCloudCells];
-    _headersFooters[[NSString stringWithFormat:@"%li_header", data.count - 1]] = OALocalizedString(@"osmand_cloud");
-    _headersFooters[[NSString stringWithFormat:@"%li_footer", data.count - 1]] = OALocalizedString(@"select_backup_data_descr");
+    _headers[@(data.count - 1)] = OALocalizedString(@"osmand_cloud");
+    _footers[@(data.count - 1)] = OALocalizedString(@"select_backup_data_descr");
 
     NSMutableDictionary *backupData = [NSMutableDictionary dictionary];
     backupData[@"key"] = @"backup_data_cell";
@@ -121,7 +123,7 @@
 
     NSMutableArray<NSMutableDictionary *> *accountCells = [NSMutableArray array];
     [data addObject:accountCells];
-    _headersFooters[[NSString stringWithFormat:@"%li_header", data.count - 1]] = OALocalizedString(@"shared_string_account");
+    _headers[@(data.count - 1)] = OALocalizedString(@"shared_string_account");
 
     NSMutableDictionary *accountData = [NSMutableDictionary dictionary];
     accountData[@"key"] = @"account_cell";
@@ -132,8 +134,8 @@
 
     NSMutableArray<NSMutableDictionary *> *dangerZoneCells = [NSMutableArray array];
     [data addObject:dangerZoneCells];
-    _headersFooters[[NSString stringWithFormat:@"%li_header", data.count - 1]] = OALocalizedString(@"backup_danger_zone");
-    _headersFooters[[NSString stringWithFormat:@"%li_footer", data.count - 1]] = OALocalizedString(@"backup_delete_all_data_or_versions_descr");
+    _headers[@(data.count - 1)] = OALocalizedString(@"backup_danger_zone");
+    _footers[@(data.count - 1)] = OALocalizedString(@"backup_delete_all_data_or_versions_descr");
 
     NSMutableDictionary *deleteAllData = [NSMutableDictionary dictionary];
     deleteAllData[@"key"] = @"delete_all_cell";
@@ -345,19 +347,19 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return _headersFooters[[NSString stringWithFormat:@"%li_header", section]];
+    return _headers[@(section)];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return _headersFooters[[NSString stringWithFormat:@"%li_footer", section]];
+    return _footers[@(section)];
 }
 
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    NSString *header = _headersFooters[[NSString stringWithFormat:@"%li_header", section]];
+    NSString *header = _headers[@(section)];
     if (header)
     {
         UIFont *font = [UIFont systemFontOfSize:13.];
@@ -372,7 +374,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    NSString *footer = _headersFooters[[NSString stringWithFormat:@"%li_footer", section]];
+    NSString *footer = _footers[@(section)];
     if (footer)
     {
         UIFont *font = [UIFont systemFontOfSize:13.];

@@ -57,7 +57,11 @@
                                         </constraints>
                                     </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="kqU-pO-k5j" userLabel="Text Stack view">
+<<<<<<< HEAD:Sources/Controllers/Cells/Xibs/OACustomBasicTableCell.xib
                                         <rect key="frame" x="46" y="0.0" width="151" height="40"/>
+=======
+                                        <rect key="frame" x="46" y="0.0" width="188.5" height="40"/>
+>>>>>>> master:Sources/Controllers/Cells/Xibs/OAMultiIconsDescCustomCell.xib
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DNn-cO-u0A">
                                                 <rect key="frame" x="0.0" y="0.0" width="41.5" height="22"/>
@@ -80,6 +84,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="uIa-dR-sof" userLabel="Right Content Stack View">
+<<<<<<< HEAD:Sources/Controllers/Cells/Xibs/OACustomBasicTableCell.xib
                                         <rect key="frame" x="213" y="5" width="161" height="30"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="bfj-Sf-JQo" userLabel="Value Stack View">
@@ -87,14 +92,30 @@
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TSM-s1-nSn">
                                                         <rect key="frame" x="0.0" y="0.0" width="50" height="0.0"/>
+=======
+                                        <rect key="frame" x="250.5" y="5" width="123.5" height="30"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="bfj-Sf-JQo" userLabel="Value Stack View">
+                                                <rect key="frame" x="0.0" y="0.0" width="77.5" height="30"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TSM-s1-nSn">
+                                                        <rect key="frame" x="0.0" y="0.0" width="77.5" height="0.0"/>
+>>>>>>> master:Sources/Controllers/Cells/Xibs/OAMultiIconsDescCustomCell.xib
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" id="ybq-hc-lYC"/>
                                                         </constraints>
                                                     </view>
+<<<<<<< HEAD:Sources/Controllers/Cells/Xibs/OACustomBasicTableCell.xib
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9999" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fBh-49-iZq">
                                                         <rect key="frame" x="0.0" y="4" width="50" height="22"/>
                                                         <constraints>
+=======
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="999 bytes" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fBh-49-iZq">
+                                                        <rect key="frame" x="0.0" y="4" width="77.5" height="22"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="AuB-Fr-5Cz"/>
+>>>>>>> master:Sources/Controllers/Cells/Xibs/OAMultiIconsDescCustomCell.xib
                                                             <constraint firstAttribute="height" constant="22" id="WHE-WT-aSX"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -102,7 +123,11 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7ZP-Eg-nGe">
+<<<<<<< HEAD:Sources/Controllers/Cells/Xibs/OACustomBasicTableCell.xib
                                                         <rect key="frame" x="0.0" y="30" width="50" height="0.0"/>
+=======
+                                                        <rect key="frame" x="0.0" y="30" width="77.5" height="0.0"/>
+>>>>>>> master:Sources/Controllers/Cells/Xibs/OAMultiIconsDescCustomCell.xib
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" id="agT-ur-NYT"/>
@@ -111,7 +136,11 @@
                                                 </subviews>
                                             </stackView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pLg-lB-hcb">
+<<<<<<< HEAD:Sources/Controllers/Cells/Xibs/OACustomBasicTableCell.xib
                                                 <rect key="frame" x="66" y="0.0" width="30" height="30"/>
+=======
+                                                <rect key="frame" x="93.5" y="0.0" width="30" height="30"/>
+>>>>>>> master:Sources/Controllers/Cells/Xibs/OAMultiIconsDescCustomCell.xib
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="Ms9-oM-rfI"/>
                                                     <constraint firstAttribute="width" constant="30" id="bt0-aw-lch"/>

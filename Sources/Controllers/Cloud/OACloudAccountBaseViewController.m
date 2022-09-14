@@ -215,7 +215,7 @@
             cell.contentView.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.descriptionView.backgroundColor = UIColor.clearColor;
-            cell.textViewZeroHeightConstraint.priority = 1000;
+            cell.textViewZeroHeightConstraint.priority = UILayoutPriorityRequired;
             cell.textView.hidden = YES;
         }
         if (cell)

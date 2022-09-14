@@ -134,6 +134,11 @@
     return self.titleLabel.text;
 }
 
+- (UIColor *)navBarBackgroundColor
+{
+    return UIColorFromRGB(color_bottom_sheet_background);
+}
+
 - (void)setupButtons
 {
     BOOL isRemoveOld = _screenType == EOARemoveOldVersionsBackupScreenType;
@@ -399,7 +404,7 @@
             cell.progressStatusLabel.text = item[@"title"];
 
             float progress = (float) _progressFilesCompleteCount / _progressFilesTotalCount;
-            cell.progressValueLabel.text = [NSString stringWithFormat:@"%i%%", (int) progress * 100];
+            cell.progressValueLabel.text = [NSString stringWithFormat:@"%i%%", (int) (progress * 100)];
             [cell.progressBarView setProgress:progress];
         }
 

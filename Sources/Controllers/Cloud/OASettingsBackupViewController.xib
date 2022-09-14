@@ -13,6 +13,7 @@
             <connections>
                 <outlet property="backButton" destination="JHj-ue-qso" id="bBV-td-z8O"/>
                 <outlet property="navigationBarView" destination="Pfi-Ug-d0T" id="iuH-wS-h1L"/>
+                <outlet property="progressView" destination="taW-sp-CC3" id="rAM-bE-n2k"/>
                 <outlet property="tableView" destination="9d9-wq-QcD" id="0na-Je-z08"/>
                 <outlet property="titleLabel" destination="nD6-uK-bcg" id="qfz-S7-lnB"/>
                 <outlet property="view" destination="iSx-bc-WbD" id="toC-ZY-NOj"/>

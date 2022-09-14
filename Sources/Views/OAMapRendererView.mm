@@ -308,12 +308,25 @@
 
 - (OsmAnd::PointI)target31
 {
-    return _renderer->getState().target31;
+    auto fixedPixel = _renderer->getState().fixedPixel;
+    if (fixedPixel.x >= 0 && fixedPixel.y >= 0)
+        return _renderer->getState().fixedLocation31;
+    else
+        return _renderer->getState().target31;
 }
 
 - (void)setTarget31:(OsmAnd::PointI)target31
 {
-    _renderer->setTarget(target31);
+    if (_viewSize.x > 0 && _viewSize.y > 0)
+    {
+        _renderer->setTargetByPixelLocation(
+            OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0, _viewSize.y * _viewportYScale / 2.0),
+            target31);
+    }
+    else
+    {
+        _renderer->setTarget(target31);
+    }
 }
 
 - (float)zoom
@@ -814,13 +827,11 @@
 
         // Update size of renderer window and viewport
         _renderer->setWindowSize(_viewSize);
-        BOOL isYScaleDown = _viewportYScale < 1.0;
-        BOOL isXScaleDown = _viewportXScale < 1.0;
-        float correctedX = isXScaleDown ? -_viewSize.x * _viewportXScale : 0;
-        float correctedY = isYScaleDown ? -_viewSize.y * _viewportYScale : 0;
-        _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(correctedX, correctedY),
-                                             OsmAnd::PointI(_viewSize.x * (isXScaleDown ? 1.0 :_viewportXScale),
-                                                            _viewSize.y * (isYScaleDown ? 1.0 :_viewportYScale))));
+        _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(0, 0), _viewSize));
+        _renderer->setTargetByPixelLocation(
+            OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0,
+                           _viewSize.y * _viewportYScale / 2.0),
+            _renderer->getState().target31);
 
         _renderer->attachToRenderTarget();
     }

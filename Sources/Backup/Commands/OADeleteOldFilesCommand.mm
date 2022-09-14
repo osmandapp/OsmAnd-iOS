@@ -114,7 +114,7 @@
             }
             [self publishProgress:filesToDelete];
             if (filesToDelete.count > 0)
-                [self deleteFiles:filesToDelete];
+                [self setFilesToDelete:filesToDelete];
         }
         [operationLog finishOperation:[NSString stringWithFormat:@"%d %@", status, message]];
     }];

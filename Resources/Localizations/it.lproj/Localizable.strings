@@ -2231,3 +2231,6 @@
 "gpx_segment" = "Segmento";
 "map_settings_weather_temp" = "Temperatura";
 "navigate_point_olc_short" = "OLC";
+"simulation_real_mode_desc" = "• Sulle strade rettilinee, la velocità si considera prossima alla velocità massima consentita. \n• Agli incroci, la simulazione rallenta. \n• Altre penalizzazioni si applicano in caso di segnali stradali, di stop, ecc.";
+"coords_format_descr_quick_search" = "Puoi modificare il formato delle coordinate per il profilo nelle Impostazioni generali";
+"dialogs_and_notifications_descr" = "Controlla messaggi pop-up, finestre di dialogo e notifiche";

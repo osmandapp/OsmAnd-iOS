@@ -42,7 +42,8 @@
 - (void)onCellSelected
 {
     NSDictionary *item = [self getItem:[self getSelectedIndexPath]];
-    [self showClearTypeScreen:item[@"setting"]];
+    if (![item[@"key"] isEqualToString:@"manage_storage_progress_cell"])
+        [self showClearTypeScreen:item[@"setting"]];
 }
 
 - (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected

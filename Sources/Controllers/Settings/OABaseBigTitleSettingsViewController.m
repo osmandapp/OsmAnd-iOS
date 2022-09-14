@@ -20,7 +20,7 @@
 
 @implementation OABaseBigTitleSettingsViewController
 {
-    UIView *_navBarBackgroundView;
+    BOOL _isHeaderBlurred;
 }
 
 - (instancetype)init
@@ -35,10 +35,6 @@
     _tableView.estimatedRowHeight = 60.;
     _tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
     [self setTableHeaderView:self.getTableHeaderTitle];
-    
-    _navBarBackgroundView = [self createNavBarBackgroundView];
-    _navBarBackgroundView.frame = _navBarView.bounds;
-    [_navBarView insertSubview:_navBarBackgroundView atIndex:0];
 }
 
 - (void) setTableHeaderView:(NSString *)label
@@ -59,32 +55,18 @@
     return @""; // override
 }
 
-- (UIView *) createNavBarBackgroundView
-{
-    if (!UIAccessibilityIsReduceTransparencyEnabled())
-    {
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
-        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        blurEffectView.alpha = 0;
-        return blurEffectView;
-    }
-    else
-    {
-        UIView *res = [[UIView alloc] init];
-        res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        res.backgroundColor = [self navBarBackgroundColor];
-        res.alpha = 0;
-        return res;
-    }
-}
-
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self setTableHeaderView:self.getTableHeaderTitle];
+        [self onRotation];
         [_tableView reloadData];
     } completion:nil];
+}
+
+- (void)onRotation
+{
 }
 
 - (CGFloat) heightForLabel:(NSString *)text
@@ -117,22 +99,21 @@
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    
     CGFloat alpha = (_tableView.contentOffset.y + defaultNavBarHeight) < 0 ? 0 : ((_tableView.contentOffset.y + defaultNavBarHeight) / (fabs(_tableView.contentSize.height - _tableView.frame.size.height)));
-    if (alpha > 0)
+    if (!_isHeaderBlurred && alpha > 0)
     {
         [UIView animateWithDuration:.2 animations:^{
             _titleLabel.hidden = NO;
-            _navBarView.backgroundColor = UIColor.clearColor;
-            _navBarBackgroundView.alpha = 1;
+            [_navBarView addBlurEffect:YES cornerRadius:0. padding:0.];
+            _isHeaderBlurred = YES;
         }];
     }
-    else
+    else if (_isHeaderBlurred && alpha <= 0.)
     {
         [UIView animateWithDuration:.2 animations:^{
             _titleLabel.hidden = YES;
-            _navBarView.backgroundColor = [self navBarBackgroundColor];
-            _navBarBackgroundView.alpha = 0;
+            [_navBarView removeBlurEffect:[self navBarBackgroundColor]];
+            _isHeaderBlurred = NO;
         }];
     }
     [self onScrollViewDidScroll:scrollView];

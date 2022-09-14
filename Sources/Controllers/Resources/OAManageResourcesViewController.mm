@@ -545,7 +545,7 @@ static BOOL _repositoryUpdated = NO;
     int freeMaps = [OAIAPHelper freeMapsAvailable];
     EOASubscriptionBannerType bannerType = freeMaps > 0 ? EOASubscriptionBannerFree : EOASubscriptionBannerNoFree;
 
-    if (_subscriptionBannerView && _subscriptionBannerView.type == bannerType)
+    if (_subscriptionBannerView && _subscriptionBannerView.type == bannerType && _subscriptionBannerView.freeMapsCount == freeMaps)
         return;
 
     if (!_subscriptionBannerView || _subscriptionBannerView.type != bannerType)
@@ -553,6 +553,8 @@ static BOOL _repositoryUpdated = NO;
         _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:bannerType];
         _subscriptionBannerView.delegate = self;
     }
+
+    _subscriptionBannerView.freeMapsCount = freeMaps;
 
     NSString *title = freeMaps > 0
             ? [NSString stringWithFormat:OALocalizedString(@"subscription_banner_free_maps_title"), freeMaps]

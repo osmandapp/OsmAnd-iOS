@@ -142,7 +142,7 @@
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     int cacheSize = (screenSize.width * 2 / _resourcesManager->getTileSize()) * (screenSize.height * 2 / _resourcesManager->getTileSize());
     int rasterTileSize = (int) (_resourcesManager->getTileSize() * _resourcesManager->getDensityFactor());
-    _geoTileObjectsProvider = std::make_shared<OsmAnd::GeoTileObjectsProvider>(_resourcesManager, dateTime, band, cacheSize);
+    _geoTileObjectsProvider = std::make_shared<OsmAnd::GeoTileObjectsProvider>(_resourcesManager, dateTime, band, self.app.data.weatherUseOfflineData, cacheSize);
     _mapPrimitivesProvider = std::make_shared<OsmAnd::MapPrimitivesProvider>(
         _geoTileObjectsProvider,
         env.mapPrimitiviser,

@@ -60,8 +60,13 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self setTableHeaderView:self.getTableHeaderTitle];
+        [self onRotation];
         [_tableView reloadData];
     } completion:nil];
+}
+
+- (void)onRotation
+{
 }
 
 - (CGFloat) heightForLabel:(NSString *)text

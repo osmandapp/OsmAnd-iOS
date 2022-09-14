@@ -32,8 +32,7 @@
 @implementation OASettingsBackupViewController
 {
     NSMutableArray<NSMutableArray<NSMutableDictionary *> *> *_data;
-    NSMapTable<NSNumber *, NSString *> *_headers;
-    NSMapTable<NSNumber *, NSString *> *_footers;
+    NSMutableDictionary<NSString *, NSString *> *_headersFooters;
 
     OABackupHelper *_backupHelper;
     NSDictionary<NSString *, OARemoteFile *> *_uniqueRemoteFiles;
@@ -59,8 +58,7 @@
     _uniqueRemoteFiles = [_backupHelper.backup getRemoteFiles:EOARemoteFilesTypeUnique];
     _progressFilesCompleteCount = 0;
     _progressFilesTotalCount = 1;
-    _headers = [NSMapTable new];
-    _footers = [NSMapTable new];
+    _headersFooters = [NSMutableDictionary dictionary];
 }
 
 - (void)viewDidLoad
@@ -69,6 +67,7 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.sectionFooterHeight = 0.001;
 
     [self setupView];
 }
@@ -103,8 +102,8 @@
 
     NSMutableArray<NSMutableDictionary *> *osmAndCloudCells = [NSMutableArray array];
     [data addObject:osmAndCloudCells];
-    [_headers setObject:OALocalizedString(@"osmand_cloud") forKey:@(data.count - 1)];
-    [_footers setObject:OALocalizedString(@"select_backup_data_descr") forKey:@(data.count - 1)];
+    _headersFooters[[NSString stringWithFormat:@"%li_header", data.count - 1]] = OALocalizedString(@"osmand_cloud");
+    _headersFooters[[NSString stringWithFormat:@"%li_footer", data.count - 1]] = OALocalizedString(@"select_backup_data_descr");
 
     NSMutableDictionary *backupData = [NSMutableDictionary dictionary];
     backupData[@"key"] = @"backup_data_cell";
@@ -122,7 +121,7 @@
 
     NSMutableArray<NSMutableDictionary *> *accountCells = [NSMutableArray array];
     [data addObject:accountCells];
-    [_headers setObject:OALocalizedString(@"shared_string_account") forKey:@(data.count - 1)];
+    _headersFooters[[NSString stringWithFormat:@"%li_header", data.count - 1]] = OALocalizedString(@"shared_string_account");
 
     NSMutableDictionary *accountData = [NSMutableDictionary dictionary];
     accountData[@"key"] = @"account_cell";
@@ -133,8 +132,8 @@
 
     NSMutableArray<NSMutableDictionary *> *dangerZoneCells = [NSMutableArray array];
     [data addObject:dangerZoneCells];
-    [_headers setObject:OALocalizedString(@"backup_danger_zone") forKey:@(data.count - 1)];
-    [_footers setObject:OALocalizedString(@"backup_delete_all_data_or_versions_descr") forKey:@(data.count - 1)];
+    _headersFooters[[NSString stringWithFormat:@"%li_header", data.count - 1]] = OALocalizedString(@"backup_danger_zone");
+    _headersFooters[[NSString stringWithFormat:@"%li_footer", data.count - 1]] = OALocalizedString(@"backup_delete_all_data_or_versions_descr");
 
     NSMutableDictionary *deleteAllData = [NSMutableDictionary dictionary];
     deleteAllData[@"key"] = @"delete_all_cell";
@@ -346,41 +345,41 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [_headers objectForKey:@(section)];
+    return _headersFooters[[NSString stringWithFormat:@"%li_header", section]];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return [_footers objectForKey:@(section)];
+    return _headersFooters[[NSString stringWithFormat:@"%li_footer", section]];
 }
 
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if ([_headers.keyEnumerator.allObjects containsObject:@(section)])
+    NSString *header = _headersFooters[[NSString stringWithFormat:@"%li_header", section]];
+    if (header)
     {
         UIFont *font = [UIFont systemFontOfSize:13.];
-        CGFloat headerSize = [OAUtilities calculateTextBounds:[_headers objectForKey:@(section)]
-                                                        width:tableView.frame.size.width - [OAUtilities getLeftMargin] * 2
-                                                         font:font].height + (56. - font.lineHeight);
-
-        return round(headerSize);
+        CGFloat headerHeight = [OAUtilities calculateTextBounds:header
+                                                          width:tableView.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
+                                                           font:font].height + 38.;
+        return headerHeight;
     }
 
-    return 0.001;
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if ([_footers.keyEnumerator.allObjects containsObject:@(section)])
+    NSString *footer = _headersFooters[[NSString stringWithFormat:@"%li_footer", section]];
+    if (footer)
     {
         UIFont *font = [UIFont systemFontOfSize:13.];
-        CGFloat footerSize = [OAUtilities calculateTextBounds:[_footers objectForKey:@(section)]
-                                                        width:tableView.frame.size.width - [OAUtilities getLeftMargin] * 2
-                                                         font:font].height + (34. - font.lineHeight);
-
-        return round(footerSize);
+        CGFloat footerHeight = [OAUtilities calculateTextBounds:footer
+                                                          width:tableView.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
+                                                           font:font].height + 16.;
+        return footerHeight;
     }
 
     return 0.001;

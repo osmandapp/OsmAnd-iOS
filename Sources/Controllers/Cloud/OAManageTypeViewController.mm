@@ -52,16 +52,7 @@
 
     [self setupView];
 }
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        UIView *tableHeaderView = self.tableView.tableHeaderView;
-        CGRect frame = tableHeaderView.frame;
-        frame.size.height += 21.;
-        tableHeaderView.frame = frame;
-    } completion:nil];
-}
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     if (@available(iOS 13.0, *))
@@ -80,6 +71,14 @@
 - (NSString *)getTableHeaderTitle
 {
     return _settingsType.title;
+}
+
+- (void)onRotation
+{
+    UIView *tableHeaderView = self.tableView.tableHeaderView;
+    CGRect frame = tableHeaderView.frame;
+    frame.size.height += 21.;
+    tableHeaderView.frame = frame;
 }
 
 - (void)setupView

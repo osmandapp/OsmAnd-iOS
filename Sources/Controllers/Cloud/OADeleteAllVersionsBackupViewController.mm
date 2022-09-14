@@ -404,7 +404,7 @@
             cell.progressStatusLabel.text = item[@"title"];
 
             float progress = (float) _progressFilesCompleteCount / _progressFilesTotalCount;
-            cell.progressValueLabel.text = [NSString stringWithFormat:@"%i%%", (int) progress * 100];
+            cell.progressValueLabel.text = [NSString stringWithFormat:@"%i%%", (int) (progress * 100)];
             [cell.progressBarView setProgress:progress];
         }
 

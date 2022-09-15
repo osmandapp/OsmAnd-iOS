@@ -2749,10 +2749,12 @@
 "wikipedia_and_wikivoyage_offline" = "Wikipedia and Wikivoyage offline";
 "nautical_depth" = "Nautical depth";
 "terrain_maps" = "Terrain maps";
+"cross_buy" = "Cross-buy";
 
 "purchases_feature_desc_osmand_cloud" = "Store all OsmAnd data online. No lost data after reinstalling. Back up and restore all info easily.";
 "purchases_feature_desc_pro_widgets" = "Get access to OsmAnd Pro features: Route coloring and more.";
 "purchases_feature_desc_hourly_map_updates" = "Get access to more frequent map updates. Hourly, daily, or weekly updates. Updates are downloaded incrementally, only for the changed area.";
+"purchases_feature_desc_cross_buy" = "Use all subscription features for different device classes at no additional charge. Available at Android/iOS/Web.";
 "purchases_feature_desc_monthly_map_updates" = "Get access to regular monthly updates for offline maps.";
 "purchases_feature_desc_unlimited_map_download" = "Get unlimited downloads for all continents and regions offline maps.";
 "purchases_feature_desc_carplay" = "Brings OsmAnd offline maps and navigation to your vehicle screen and integrates with your vehicle\'s controls.";

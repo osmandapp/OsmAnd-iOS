@@ -14,6 +14,7 @@
 static OAFeature * OSMAND_CLOUD;
 static OAFeature * ADVANCED_WIDGETS;
 static OAFeature * HOURLY_MAP_UPDATES;
+static OAFeature * CROSS_BUY;
 static OAFeature * MONTHLY_MAP_UPDATES;
 static OAFeature * UNLIMITED_MAP_DOWNLOADS;
 static OAFeature * CARPLAY;
@@ -54,6 +55,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OALocalizedString(@"pro_features");
         case EOAFeatureHourlyMapUpdates:
             return OALocalizedString(@"daily_map_updates");
+        case EOAFeatureCrossBuy:
+            return OALocalizedString(@"cross_buy");
         case EOAFeatureMonthlyMapUpdates:
             return OALocalizedString(@"monthly_map_updates");
         case EOAFeatureUnlimitedMapDownloads:
@@ -114,6 +117,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OALocalizedString(@"purchases_feature_desc_pro_widgets");
         case EOAFeatureHourlyMapUpdates:
             return OALocalizedString(@"purchases_feature_desc_hourly_map_updates");
+        case EOAFeatureCrossBuy:
+            return OALocalizedString(@"purchases_feature_desc_cross_buy");
         case EOAFeatureMonthlyMapUpdates:
             return OALocalizedString(@"purchases_feature_desc_monthly_map_updates");
         case EOAFeatureUnlimitedMapDownloads:
@@ -147,6 +152,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return [UIImage imageNamed:@"ic_custom_pro_features_colored"];
         case EOAFeatureHourlyMapUpdates:
             return [UIImage imageNamed:@"ic_custom_map_updates_colored_day"];
+        case EOAFeatureCrossBuy:
+            return [UIImage imageNamed:@"ic_custom_cross_buy_colored_day"];
         case EOAFeatureMonthlyMapUpdates:
             return [UIImage imageNamed:@"ic_custom_monthly_map_updates_colored_day"];
         case EOAFeatureUnlimitedMapDownloads:
@@ -188,6 +195,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return [UIImage imageNamed:@"ic_custom_pro_features_colored_big"];
         case EOAFeatureHourlyMapUpdates:
             return [UIImage imageNamed:@"ic_custom_map_updates_colored_day_big"];
+        case EOAFeatureCrossBuy:
+            return [UIImage imageNamed:@"ic_custom_cross_buy_colored_day_big"];
         case EOAFeatureMonthlyMapUpdates:
             return [UIImage imageNamed:@"ic_custom_monthly_map_updates_colored_day_big"];
         case EOAFeatureUnlimitedMapDownloads:
@@ -248,6 +257,13 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     if (!HOURLY_MAP_UPDATES)
         HOURLY_MAP_UPDATES = [[OAFeature alloc] initWithFeature:EOAFeatureHourlyMapUpdates];
     return HOURLY_MAP_UPDATES;
+}
+
++ (OAFeature *)CROSS_BUY
+{
+    if (!CROSS_BUY)
+        CROSS_BUY = [[OAFeature alloc] initWithFeature:EOAFeatureCrossBuy];
+    return CROSS_BUY;
 }
 
 + (OAFeature *)MONTHLY_MAP_UPDATES
@@ -322,6 +338,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
 //                OAFeature.ADVANCED_WIDGETS,
                 OAFeature.WEATHER,
                 OAFeature.HOURLY_MAP_UPDATES,
+                OAFeature.CROSS_BUY,
                 OAFeature.MONTHLY_MAP_UPDATES,
                 OAFeature.UNLIMITED_MAP_DOWNLOADS,
                 OAFeature.CARPLAY,
@@ -398,6 +415,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OAFeature.ADVANCED_WIDGETS;
         case EOAFeatureHourlyMapUpdates:
             return OAFeature.HOURLY_MAP_UPDATES;
+        case EOAFeatureCrossBuy:
+            return OAFeature.CROSS_BUY;
         case EOAFeatureMonthlyMapUpdates:
             return OAFeature.MONTHLY_MAP_UPDATES;
         case EOAFeatureUnlimitedMapDownloads:

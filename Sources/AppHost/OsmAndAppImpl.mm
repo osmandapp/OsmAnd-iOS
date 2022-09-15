@@ -17,7 +17,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAUtilities.h"
 #import "OALog.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAManageResourcesViewController.h"
 #import "OAAppVersionDependentConstants.h"
 #import "OAPOIHelper.h"
@@ -519,7 +519,7 @@
     // Load resources list
     
     // If there's no repository available and there's internet connection, just update it
-    if (!self.resourcesManager->isRepositoryAvailable() && [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    if (!self.resourcesManager->isRepositoryAvailable() && AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [self startRepositoryUpdateAsync:YES];
     }
@@ -595,8 +595,10 @@
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     [helper reloadAllPoiFilters];
     [helper loadSelectedPoiFilters];
-    
-    [[Reachability reachabilityForInternetConnection] startNotifier];
+    [AFNetworkReachabilityManager.sharedManager startMonitoring];
+    [AFNetworkReachabilityManager.sharedManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        [NSNotificationCenter.defaultCenter postNotificationName:kReachabilityChangedNotification object:nil];
+    }];
     [self askReview];
     
     return YES;
@@ -923,7 +925,7 @@
 
 - (void)checkAndDownloadOsmAndLiveUpdates
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
         return;
     QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
     for (const auto& localResource : _resourcesManager->getLocalResources())
@@ -934,7 +936,7 @@
 
 - (void)checkAndDownloadWeatherForecastsUpdates
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
         return;
 
     OAWeatherHelper *weatherHelper = [OAWeatherHelper sharedInstance];

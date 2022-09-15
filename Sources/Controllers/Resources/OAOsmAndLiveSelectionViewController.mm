@@ -8,7 +8,7 @@
 
 #import "OAOsmAndLiveSelectionViewController.h"
 #import "Localization.h"
-#import "Reachability.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OsmAndApp.h"
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"

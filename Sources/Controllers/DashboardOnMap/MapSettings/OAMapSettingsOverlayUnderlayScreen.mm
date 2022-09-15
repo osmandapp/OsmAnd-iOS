@@ -24,6 +24,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAResourcesUIHelper.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #include <QSet>
 
@@ -456,7 +457,7 @@ static NSInteger kButtonsSection;
 
 - (void) installMorePressed
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOnlineSources];
         [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];

@@ -11,7 +11,6 @@
 #import "OACommonTypes.h"
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
-#import <Reachability.h>
 #import "OAAppSettings.h"
 #import "OAPOIType.h"
 

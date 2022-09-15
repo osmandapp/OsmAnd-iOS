@@ -28,6 +28,8 @@
 #import "OAPOIHelper.h"
 #import "OAColors.h"
 
+#import <AFNetworking/AFNetworkReachabilityManager.h>
+
 #define AMENITY_TEXT_LENGTH 255
 
 
@@ -87,7 +89,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     if ([settings.offlineEditing get]
-        || [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable
+        || !AFNetworkReachabilityManager.sharedManager.isReachable
         || [settings.osmUserName get].length == 0
         || [settings.osmUserPassword get].length == 0)
     {

@@ -11,9 +11,9 @@
 #import "OABackupInfo.h"
 #import "OABackupError.h"
 #import "OABackupHelper.h"
-#import "Reachability.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 @implementation OABackupStatus
 
@@ -157,7 +157,7 @@ static OABackupStatus *ERROR;
             return OABackupStatus.MAKE_BACKUP;
         }
     }
-    else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    else if (!AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         return OABackupStatus.NO_INTERNET_CONNECTION;
     }

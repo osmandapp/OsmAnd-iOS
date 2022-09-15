@@ -36,6 +36,7 @@
 #import "OASelectedGPXHelper.h"
 #import "OAGpxWptItem.h"
 #import "OASavingTrackHelper.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #include <OsmAndCore/Utilities.h>
 
@@ -362,7 +363,7 @@
                 [mapVC showProgressHUDWithMessage:OALocalizedString(@"osm_editing_loading_poi")];
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     id<OAOpenStreetMapUtilsProtocol> poiModificationUtil;
-                    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+                    if (AFNetworkReachabilityManager.sharedManager.isReachable)
                         poiModificationUtil = [_editingAddon getPoiModificationRemoteUtil];
                     else
                         poiModificationUtil = [_editingAddon getPoiModificationLocalUtil];

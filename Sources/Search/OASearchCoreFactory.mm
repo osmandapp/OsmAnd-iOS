@@ -1431,7 +1431,7 @@
             }
             else
             {
-                NSString *ref = [*poi getContentLanguage:REF lang:nil defLang:@"en"];
+                NSString *ref = [*poi getContentLanguage:POI_REF lang:nil defLang:@"en"];
                 if (!ref || ![ns matches:ref])
                 {
                     return NO;

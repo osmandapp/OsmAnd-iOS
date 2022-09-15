@@ -7,7 +7,7 @@
 //
 
 #import "OAResourcesUIHelper.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <MBProgressHUD.h>
 #import "OALog.h"
 #import "OAIAPHelper.h"
@@ -1243,7 +1243,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 + (NSString *)messageResourceStartDownload:(NSString *)resourceName stringifiedSize:(NSString *)stringifiedSize isOutdated:(BOOL)isOutdated
 {
     NSMutableString *message;
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
+    if (AFNetworkReachabilityManager.sharedManager.isReachableViaWWAN)
     {
         message = !isOutdated ? [[NSString stringWithFormat:OALocalizedString(@"res_inst_avail_cell_q"), resourceName, stringifiedSize] mutableCopy] : [OALocalizedString(@"res_upd_avail_q") mutableCopy];
         [message appendString:@" "];
@@ -1316,11 +1316,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     if (![self.class verifySpaceAvailableDownloadAndUnpackResource:spaceNeeded withResourceName:resourceName asUpdate:YES])
         return;
     
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [self showNoInternetAlert];
     }
-    else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWiFi)
+    else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
         [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
     }
@@ -1385,11 +1385,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     if (![self.class verifySpaceAvailableDownloadAndUnpackResource:totalSpaceNeeded withResourceName:resourceName asUpdate:YES])
         return;
     
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [self showNoInternetAlert];
     }
-    else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWiFi)
+    else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
         [self.class startDownloadOfItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
     }
@@ -1422,11 +1422,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     if (![self.class verifySpaceAvailableDownloadAndUnpackResource:spaceNeeded withResourceName:resourceName asUpdate:YES])
         return;
 
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [self showNoInternetAlert];
     }
-    else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWiFi)
+    else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
         [self.class startDownloadOf:resourceInRepository resourceName:resourceName onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
     }

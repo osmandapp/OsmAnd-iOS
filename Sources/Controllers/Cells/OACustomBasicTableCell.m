@@ -1,5 +1,5 @@
 //
-//  OAMultiIconsDescCustomCell.m
+//  OACustomBasicTableCell.m
 //  OsmAnd Maps
 //
 //  Created by Skalii on 08.09.2022.
@@ -25,6 +25,11 @@
 - (void)leftIconVisibility:(BOOL)show
 {
     self.leftIconView.hidden = !show;
+}
+
+- (void)titleVisibility:(BOOL)show
+{
+    self.titleLabel.hidden = !show;
 }
 
 - (void)descriptionVisibility:(BOOL)show

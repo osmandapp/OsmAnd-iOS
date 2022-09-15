@@ -29,9 +29,9 @@
     OAWeatherHelper *_weatherHelper;
     OAWorldRegion *_region;
     NSMutableArray<NSMutableArray<NSMutableDictionary *> *> *_data;
-    NSMapTable<NSNumber *, NSString *> *_headers;
-    NSMapTable<NSNumber *, NSString *> *_footers;
-    NSString *_accuracyDescription;
+    NSMutableDictionary<NSNumber *, NSString *> *_headers;
+    NSMutableDictionary<NSNumber *, NSString *> *_footers;
+    NSInteger _accuracySection;
 
     MBProgressHUD *_progressHUD;
     NSIndexPath *_sizeIndexPath;
@@ -64,8 +64,8 @@
             [[OAAutoObserverProxy alloc] initWith:self
                                       withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:)
                                        andObserve:[OAWeatherHelper sharedInstance].weatherForecastDownloadingObserver];
-    _headers = [NSMapTable new];
-    _footers = [NSMapTable new];
+    _headers = [NSMutableDictionary dictionary];
+    _footers = [NSMutableDictionary dictionary];
 }
 
 - (void)viewDidLoad
@@ -79,6 +79,8 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.sectionFooterHeight = 0.001;
+    self.tableView.sectionHeaderHeight = kHeaderHeightDefault;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 
     [self setupView];
@@ -122,7 +124,7 @@
     return _region.name;
 }
 
-- (void) setTableHeaderView:(NSString *)label
+- (void)setTableHeaderView:(NSString *)label
 {
     UIView *headerView = [OAUtilities setupTableHeaderViewWithText:label
                                                               font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold]
@@ -152,9 +154,8 @@
 
     NSMutableArray<NSMutableDictionary *> *infoCells = [NSMutableArray array];
     [data addObject:infoCells];
-
-    _accuracyDescription = [OAWeatherHelper getAccuracyDescription:_region.regionId];
-    [_headers setObject:_accuracyDescription forKey:@([data indexOfObject:infoCells])];
+    _accuracySection = data.count - 1;
+    _headers[@(_accuracySection)] = [OAWeatherHelper getAccuracyDescription:_region.regionId];
 
     NSMutableDictionary *updatedData = [NSMutableDictionary dictionary];
     updatedData[@"key"] = @"updated_cell";
@@ -201,8 +202,8 @@
 
     NSMutableArray<NSMutableDictionary *> *updatesCells = [NSMutableArray array];
     [data addObject:updatesCells];
-    [_headers setObject:OALocalizedString(@"update_parameters") forKey:@([data indexOfObject:updatesCells])];
-    [_footers setObject:OALocalizedString(@"weather_updates_automatically") forKey:@([data indexOfObject:updatesCells])];
+    _headers[@(data.count - 1)] = OALocalizedString(@"update_parameters");
+    _footers[@(data.count - 1)] = OALocalizedString(@"weather_updates_automatically");
 
     NSMutableDictionary *updatesFrequencyData = [NSMutableDictionary dictionary];
     updatesFrequencyData[@"key"] = @"updates_frequency_cell";
@@ -405,12 +406,12 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [_headers objectForKey:@(section)];
+    return _headers[@(section)];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return [_footers objectForKey:@(section)];
+    return _footers[@(section)];
 }
 
 #pragma mark - UITableViewDelegate
@@ -418,10 +419,9 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    NSString *header = [_headers objectForKey:@(section)];
-    if ([header isEqualToString:_accuracyDescription])
+    if (section == _accuracySection)
     {
-        customHeader.label.text = header;
+        customHeader.label.text = _headers[@(section)];
         customHeader.label.font = [UIFont systemFontOfSize:13];
         [customHeader setYOffset:20.];
         return customHeader;
@@ -431,40 +431,41 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if ([_headers.keyEnumerator.allObjects containsObject:@(section)])
+    NSString *header = _headers[@(section)];
+    if (header)
     {
-        NSString *header = [_headers objectForKey:@(section)];
-        if ([header isEqualToString:_accuracyDescription])
+        if (section == _accuracySection)
         {
             return [OATableViewCustomHeaderView getHeight:header
                                                     width:tableView.bounds.size.width
-                                                  xOffset:20.
+                                                  xOffset:kPaddingOnSideOfContent
                                                   yOffset:20.
                                                      font:[UIFont systemFontOfSize:13.]] + 15.;
         }
         else
         {
             UIFont *font = [UIFont systemFontOfSize:13.];
-            CGFloat headerSize = [OAUtilities calculateTextBounds:header
-                                                            width:tableView.frame.size.width - (20 + [OAUtilities getLeftMargin]) * 2
-                                                             font:font].height + 38.;
-            return round(headerSize);
+            CGFloat headerHeight = [OAUtilities calculateTextBounds:header
+                                                            width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
+                                                             font:font].height + kPaddingOnSideOfHeaderWithText;
+            return headerHeight;
         }
     }
 
-    return 34.;
+    return kHeaderHeightDefault;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if ([_footers.keyEnumerator.allObjects containsObject:@(section)])
+    NSString *footer = _footers[@(section)];
+    if (footer)
     {
         UIFont *font = [UIFont systemFontOfSize:13.];
-        CGFloat footerSize = [OAUtilities calculateTextBounds:[_footers objectForKey:@(section)]
-                                                        width:tableView.frame.size.width - (20 + [OAUtilities getLeftMargin]) * 2
-                                                        font:font].height + 16.;
+        CGFloat footerHeight = [OAUtilities calculateTextBounds:[_footers objectForKey:@(section)]
+                                                        width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
+                                                        font:font].height + kPaddingOnSideOfFooterWithText;
 
-        return round(footerSize);
+        return footerHeight;
     }
 
     return 0.001;

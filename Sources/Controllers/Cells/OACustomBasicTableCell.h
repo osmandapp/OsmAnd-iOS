@@ -1,5 +1,5 @@
 //
-//  OAMultiIconsDescCustomCell.h
+//  OACustomBasicTableCell.h
 //  OsmAnd
 //
 //  Created by SKalii on 08.09.2022.
@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, EOACustomCellContentStyle) {
 @property (weak, nonatomic) IBOutlet UISwitch *switchView;
 
 - (void)leftIconVisibility:(BOOL)show;
+- (void)titleVisibility:(BOOL)show;
 - (void)descriptionVisibility:(BOOL)show;
 - (void)valueVisibility:(BOOL)show;
 - (void)rightIconVisibility:(BOOL)show;

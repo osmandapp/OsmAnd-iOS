@@ -8,7 +8,7 @@
 
 #import "OAManageTypeViewController.h"
 #import "OABaseBackupTypesViewController.h"
-#import "OAMultiIconsDescCustomCell.h"
+#import "OACustomBasicTableCell.h"
 #import "OAExportSettingsType.h"
 #import "OASettingsCategoryItems.h"
 #import "OAColors.h"
@@ -23,7 +23,7 @@
     OAExportSettingsType *_settingsType;
     NSString *_size;
     NSArray<NSArray<NSDictionary *> *> *_data;
-    NSMapTable<NSNumber *, NSString *> *_footers;
+    NSMutableDictionary<NSNumber *, NSString *> *_footers;
 }
 
 - (instancetype)initWithSettingsType:(OAExportSettingsType *)settingsType size:(NSString *)size
@@ -33,7 +33,7 @@
     {
         _settingsType = settingsType;
         _size = size;
-        _footers = [NSMapTable new];
+        _footers = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -45,10 +45,7 @@
     self.titleLabel.hidden = YES;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    UIView *tableHeaderView = self.tableView.tableHeaderView;
-    CGRect frame = tableHeaderView.frame;
-    frame.size.height += 21.;
-    tableHeaderView.frame = frame;
+    [self increaseTableHeaderHeight];
 
     [self setupView];
 }
@@ -75,6 +72,11 @@
 
 - (void)onRotation
 {
+    [self increaseTableHeaderHeight];
+}
+
+- (void)increaseTableHeaderHeight
+{
     UIView *tableHeaderView = self.tableView.tableHeaderView;
     CGRect frame = tableHeaderView.frame;
     frame.size.height += 21.;
@@ -86,17 +88,16 @@
     _data = @[
             @[@{
                     @"key" : @"size_cell",
-                    @"type" : [OAMultiIconsDescCustomCell getCellIdentifier],
+                    @"type" : [OACustomBasicTableCell getCellIdentifier],
                     @"title" : OALocalizedString(@"res_size")
             }],
             @[@{
                     @"key" : @"delete_cell",
-                    @"type" : [OAMultiIconsDescCustomCell getCellIdentifier],
+                    @"type" : [OACustomBasicTableCell getCellIdentifier],
                     @"title" : OALocalizedString(@"shared_string_delete_data")
             }]
     ];
-    [_footers setObject:[NSString stringWithFormat:OALocalizedString(@"backup_delete_data_type_description"), _settingsType.title]
-                 forKey:@(_data.count - 1)];
+    _footers[@(_data.count - 1)] = [NSString stringWithFormat:OALocalizedString(@"backup_delete_data_type_description"), _settingsType.title];
 }
 
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
@@ -123,21 +124,18 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *outCell = nil;
-
     NSDictionary *item = [self getItem:indexPath];
-    NSString *cellType = item[@"type"];
-
-    if ([cellType isEqualToString:[OAMultiIconsDescCustomCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OACustomBasicTableCell getCellIdentifier]])
     {
-        OAMultiIconsDescCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconsDescCustomCell getCellIdentifier]];
+        OACustomBasicTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomBasicTableCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconsDescCustomCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMultiIconsDescCustomCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomBasicTableCell getCellIdentifier] owner:self options:nil];
+            cell = (OACustomBasicTableCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell rightIconVisibility:NO];
             [cell descriptionVisibility:NO];
+            [cell switchVisibility:NO];
         }
         if (cell)
         {
@@ -148,33 +146,18 @@
             cell.titleLabel.textColor = isSize ? UIColor.blackColor : UIColorFromRGB(color_support_red);
             cell.valueLabel.text = isSize ? _size : @"";
         }
-        outCell = cell;
+        return cell;
     }
 
-    return outCell;
+    return nil;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return [_footers objectForKey:@(section)];
+    return _footers[@(section)];
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    if ([_footers.keyEnumerator.allObjects containsObject:@(section)])
-    {
-        UIFont *font = [UIFont systemFontOfSize:13.];
-        CGFloat footerSize = [OAUtilities calculateTextBounds:[_footers objectForKey:@(section)]
-                                                        width:tableView.frame.size.width - [OAUtilities getLeftMargin] * 2
-                                                         font:font].height + (34. - font.lineHeight);
-
-        return round(footerSize);
-    }
-
-    return 36.;
-}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

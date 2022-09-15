@@ -27,7 +27,7 @@
 #import "OAGpxRouteApproximation.h"
 #import "OACurrentStreetName.h"
 
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <OsmAndCore/Utilities.h>
 
 #include <routeSegmentResult.h>
@@ -143,7 +143,7 @@ static double ARRIVAL_DISTANCE_FACTOR = 1;
         }
         return;
     }
-    BOOL onlineSourceWithoutInternet = ![res isCalculated] && [OARouteService isOnline:(EOARouteService)_params.mode.getRouterService] && [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable;
+    BOOL onlineSourceWithoutInternet = ![res isCalculated] && [OARouteService isOnline:(EOARouteService)_params.mode.getRouterService] && !AFNetworkReachabilityManager.sharedManager.isReachable;
     if (onlineSourceWithoutInternet && _settings.gpxRouteCalcOsmandParts.get)
     {
         if (_params.previousToRecalculate && [_params.previousToRecalculate isCalculated])

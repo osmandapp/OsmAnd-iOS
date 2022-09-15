@@ -19,7 +19,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OAResourcesUIHelper.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 @interface OAWeatherForecastViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, OAWeatherCacheSettingsDelegate, OAWeatherForecastDetails>
 
@@ -694,12 +694,12 @@
         if (forecastsToDownload.count > 0)
         {
             downloadingBlock = ^{
-                if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+                if (!AFNetworkReachabilityManager.sharedManager.isReachable)
                 {
                     [OAResourcesUIHelper showNoInternetAlert];
                     [forecastsToDownload removeAllObjects];
                 }
-                else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWiFi)
+                else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
                 {
                     [_weatherHelper downloadForecastsByRegionIds:forecastsToDownload];
                     [forecastsToDownload removeAllObjects];

@@ -10,7 +10,7 @@
 #import "OAMapSettingsViewController.h"
 #import "OARendererRegistry.h"
 #import "Localization.h"
-#import "Reachability.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAResourcesUIHelper.h"
 #import "OAIAPHelper.h"
 #import "OAIndexConstants.h"
@@ -301,7 +301,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         else
         {
-            if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            if (AFNetworkReachabilityManager.sharedManager.isReachable)
             {
                 OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOnlineSources];
                 [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];

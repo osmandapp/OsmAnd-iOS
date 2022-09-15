@@ -34,7 +34,7 @@
 #import "OAOpenStreetMapRemoteUtil.h"
 #import "OAOsmBugsRemoteUtil.h"
 #import "OAOsmBugsLocalUtil.h"
-#import "Reachability.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAEditPOIData.h"
 #import "OAOsmNotePoint.h"
 #import "OAOsmNoteBottomSheetViewController.h"
@@ -111,7 +111,7 @@
 
 - (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationUtil
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && !_settings.offlineEditing.get)
+    if (AFNetworkReachabilityManager.sharedManager.isReachable && !_settings.offlineEditing.get)
         return _remoteUtil;
     else
         return _localUtil;

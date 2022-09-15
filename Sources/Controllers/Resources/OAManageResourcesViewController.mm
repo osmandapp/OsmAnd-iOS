@@ -7,7 +7,7 @@
 //
 
 #import "OAManageResourcesViewController.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <MBProgressHUD.h>
 #import "UITableViewCell+getTableView.h"
 #import "OARootViewController.h"
@@ -354,7 +354,7 @@ static BOOL _repositoryUpdated = NO;
     if (!_viewAppeared)
     {
         if (!_app.isRepositoryUpdating &&
-            [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && self.region == _app.worldRegion && _currentScope != kLocalResourcesScope)
+            AFNetworkReachabilityManager.sharedManager.isReachable && self.region == _app.worldRegion && _currentScope != kLocalResourcesScope)
         {
             if (!_repositoryUpdated)
             {
@@ -363,7 +363,7 @@ static BOOL _repositoryUpdated = NO;
             }
         }
         else if (self.region == _app.worldRegion &&
-                 [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+                 !AFNetworkReachabilityManager.sharedManager.isReachable)
         {
             // show no internet popup
             [OAPluginPopupViewController showNoInternetConnectionFirst];
@@ -519,7 +519,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) reachabilityChanged:(NSNotification *)notification
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         // hide no internet popup
         [OAPluginPopupViewController hideNoInternetConnection];
@@ -1761,7 +1761,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)onRefreshRepositoryButtonClicked
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    if (AFNetworkReachabilityManager.sharedManager.isReachable)
         [self updateRepository];
     else
         [self showNoInternetAlertForCatalogUpdate];

@@ -497,7 +497,7 @@
 
 - (BOOL) isLocationAvailable
 {
-    return _app.locationServices.lastKnownLocation && _app.locationServices.status == OALocationServicesStatusActive && _app.locationServices.available && !_app.locationServices.denied;
+    return _app.locationServices.lastKnownLocation && _app.locationServices.status == OALocationServicesStatusActive && !_app.locationServices.denied;
 }
 
 - (void) updateMapModeButtonIfNeeded

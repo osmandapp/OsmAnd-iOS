@@ -439,7 +439,8 @@ static BOOL _favoritesLoaded = NO;
         }
         [OsmAndApp instance].favoritesCollection->removeFavoriteLocations(toDelete);
     }
-    [OAFavoritesHelper saveCurrentPointsIntoFile];
+    if (!isNewFavorite)
+        [OAFavoritesHelper saveCurrentPointsIntoFile];
     return YES;
 }
 

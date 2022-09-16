@@ -390,13 +390,14 @@
     BOOL needFullReload = (_inputText.length == 0 && textField.text.length > 0) || (_inputText.length > 0 && textField.text.length == 0);
     _inputText = textField.text;
     BOOL hadError = _errorMessage.length > 0;
-    BOOL isInvalidEmail = ![_inputText isValidEmail] && _inputText.length > 0;
-    if (isInvalidEmail)
-        self.errorMessage = OALocalizedString(@"login_error_email_invalid");
-    else
-        self.errorMessage = @"";
+    self.errorMessage = @"";
     [self generateData];
-    if ((hadError && !isInvalidEmail) || (!hadError && isInvalidEmail))
+    if ([self needEmailValidation])
+    {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        [self performSelector:@selector(checkEmailValidity) withObject:nil afterDelay:3];
+    }
+    if (hadError)
     {
         [self.tableView performBatchUpdates:^{
             [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -406,6 +407,28 @@
     else if (needFullReload)
     {
         [self updateAllSections];
+    }
+}
+
+- (BOOL) needEmailValidation
+{
+    return YES;
+}
+
+- (void) checkEmailValidity
+{
+    if (self.errorMessage.length > 0)
+        return;
+    
+    BOOL isInvalidEmail = ![_inputText isValidEmail] && _inputText.length > 0;
+    if (isInvalidEmail)
+    {
+        self.errorMessage = OALocalizedString(@"login_error_email_invalid");
+        [self generateData];
+        [self.tableView performBatchUpdates:^{
+            [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self updateAllSections];
+        } completion:nil];
     }
 }
 

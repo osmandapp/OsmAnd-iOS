@@ -23,6 +23,8 @@
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"
 
+#import <AFNetworking/AFNetworkReachabilityManager.h>
+
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
 
@@ -144,7 +146,7 @@
             
             [self addSubview:bannerView];
             
-            if (![helper productsLoaded] && [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            if (![helper productsLoaded] && AFNetworkReachabilityManager.sharedManager.isReachable)
             {
                 [helper requestProductsWithCompletionHandler:^(BOOL success) {
                     

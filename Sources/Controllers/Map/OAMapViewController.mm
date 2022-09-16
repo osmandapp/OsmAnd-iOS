@@ -65,6 +65,7 @@
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
 #import "OAAppVersionDependentConstants.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"

@@ -319,7 +319,7 @@
 {
     if (_viewSize.x > 0 && _viewSize.y > 0)
     {
-        _renderer->setTargetByPixelLocation(
+        _renderer->setMapTarget(
             OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0, _viewSize.y * _viewportYScale / 2.0),
             target31);
     }
@@ -828,7 +828,7 @@
         // Update size of renderer window and viewport
         _renderer->setWindowSize(_viewSize);
         _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(0, 0), _viewSize));
-        _renderer->setTargetByPixelLocation(
+        _renderer->setMapTarget(
             OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0,
                            _viewSize.y * _viewportYScale / 2.0),
             _renderer->getState().target31);

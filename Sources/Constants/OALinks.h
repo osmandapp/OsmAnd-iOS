@@ -65,8 +65,8 @@
 #define kUrlWikipediaOpenLocationCode  @"https://en.wikipedia.org/wiki/Open_Location_Code"
 
 #define kOsmAndPoll  @"https://osmand.net/ios-poll.html"
-#define kOsmAndFeatures  @"https://osmand.net/features"
-#define kOsmAndFeaturesContourLinesPlugin  @"https://osmand.net/features/contour-lines-plugin"
+#define kOsmAndFeatures  @"https://osmand.net/docs/user/plugins"
+#define kOsmAndFeaturesContourLinesPlugin  @"https://osmand.net/docs/user/plugins/contour-lines"
 #define kOsmAndTermsOfUse  @"https://osmand.net/help-online/terms-of-use/"
 #define kOsmAndPrivacyPolicy  @"https://osmand.net/help-online/privacy-policy"
 #define kOsmAndGiveaway  @"https://osmand.net/giveaway"

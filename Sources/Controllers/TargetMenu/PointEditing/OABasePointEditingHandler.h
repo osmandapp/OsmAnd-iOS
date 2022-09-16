@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isSpecialPoint;
 
 - (void)deleteItem;
+- (void) deleteItem:(BOOL)isNewItemAdding;
 - (NSDictionary *)checkDuplicates:(NSString *)name group:(NSString *)group;
 
 - (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint;

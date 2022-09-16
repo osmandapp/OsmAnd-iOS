@@ -15,7 +15,7 @@
 #import "OAWorldRegion.h"
 #import "Localization.h"
 
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -265,7 +265,7 @@ typedef enum
 
 - (void) startWizard
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [self startNoInternetWizard];
     }
@@ -501,11 +501,11 @@ typedef enum
             if (!_app.resourcesManager->isRepositoryAvailable())
             {
                 if (!_app.isRepositoryUpdating &&
-                    [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+                    AFNetworkReachabilityManager.sharedManager.isReachable)
                 {
                     [self updateRepository];
                 }
-                else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+                else if (!AFNetworkReachabilityManager.sharedManager.isReachable)
                 {
                     [self startNoInternetWizard];
                 }

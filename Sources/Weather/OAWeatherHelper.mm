@@ -16,6 +16,7 @@
 #import "OANativeUtilities.h"
 #import "OAIAPHelper.h"
 #import "OAColors.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #include <OsmAndCore/Map/WeatherTileResourceProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
@@ -151,8 +152,8 @@
 
 - (void)checkAndDownloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds
 {
-    NetworkStatus reachabilityStatus = [[Reachability reachabilityForInternetConnection] currentReachabilityStatus];
-    if (reachabilityStatus == NotReachable)
+    AFNetworkReachabilityStatus status = AFNetworkReachabilityManager.sharedManager.networkReachabilityStatus;
+    if (status == AFNetworkReachabilityStatusNotReachable)
         return;
 
     NSInteger forecastsDownloading = 0;
@@ -161,7 +162,7 @@
         if ([regionIds containsObject:region.regionId])
         {
             forecastsDownloading++;
-            if (reachabilityStatus != ReachableViaWiFi && [self.class getPreferenceWifi:region.regionId])
+            if (status != AFNetworkReachabilityStatusReachableViaWiFi && [self.class getPreferenceWifi:region.regionId])
                 continue;
 
             NSTimeInterval lastUpdateTime = [self.class getPreferenceLastUpdate:region.regionId];

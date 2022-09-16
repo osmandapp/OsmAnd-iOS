@@ -9,7 +9,7 @@
 //  git revision f5f971874f8bffbb6471d905f699874519957f4f
 
 #import "OADiscountHelper.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAAppSettings.h"
 #import "OADiscountToolbarViewController.h"
 #import "OARootViewController.h"
@@ -182,7 +182,7 @@ const static NSString *URL = @"https://osmand.net/api/motd";
         [self showDiscountBanner];
     
     NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
-    if ([OAAppSettings sharedManager].settingDoNotShowPromotions.get || currentTime - _lastCheckTime < 60 * 60 * 24 || [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if ([OAAppSettings sharedManager].settingDoNotShowPromotions.get || currentTime - _lastCheckTime < 60 * 60 * 24 || !AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         return;
     }
@@ -348,7 +348,7 @@ const static NSString *URL = @"https://osmand.net/api/motd";
                         }
                         _product = product;
                         
-                        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+                        if (AFNetworkReachabilityManager.sharedManager.isReachable)
                         {
                             [helper requestProductsWithCompletionHandler:^(BOOL success) {
                                 

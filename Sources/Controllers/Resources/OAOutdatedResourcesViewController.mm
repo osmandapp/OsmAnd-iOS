@@ -7,7 +7,7 @@
 //
 
 #import "OAOutdatedResourcesViewController.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <UIAlertView+Blocks.h>
 #import "Localization.h"
 #import "OAColors.h"
@@ -272,7 +272,7 @@
                                   [items count],
                                   OALocalizedString(@"res_updates_avail_q")] mutableCopy];
     
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
+    if (AFNetworkReachabilityManager.sharedManager.isReachableViaWWAN)
     {
         [message appendString:@" "];
         [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"), stringifiedSize]];

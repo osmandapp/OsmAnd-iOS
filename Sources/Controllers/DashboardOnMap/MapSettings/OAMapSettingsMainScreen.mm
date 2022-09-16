@@ -28,6 +28,8 @@
 #import "OAColors.h"
 #import "OAWeatherPlugin.h"
 
+#import <AFNetworking/AFNetworkReachabilityManager.h>
+
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
 #define kContourLinesColorScheme @"contourColorScheme"
@@ -1166,7 +1168,7 @@
 
 - (void)installMapLayerFor:(id)param
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOnlineSources param:param];
         [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];

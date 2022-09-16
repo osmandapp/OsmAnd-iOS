@@ -20,7 +20,7 @@
 #import "OAOsmNoteBottomSheetViewController.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmNotePoint.h"
-#import "Reachability.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAOnlineOsmNoteWrapper.h"
 
 @interface OAOsmNotesOnlineTargetViewController () <OAOsmEditingBottomSheetDelegate>

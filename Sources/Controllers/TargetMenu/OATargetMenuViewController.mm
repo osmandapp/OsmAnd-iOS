@@ -44,7 +44,7 @@
 #import "OAWorldRegion.h"
 #import "OAManageResourcesViewController.h"
 #import "OAResourcesUIHelper.h"
-#import "Reachability.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
@@ -337,7 +337,7 @@
                         [controller.delegate hideProgressBar];
                 });
                 
-                if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable || isDownloading)
+                if (AFNetworkReachabilityManager.sharedManager.isReachable || isDownloading)
                 {
                     controller.localMapIndexItem = item;
                     if (item && [controller isKindOfClass:OAPOIViewController.class])
@@ -349,7 +349,7 @@
     }
     else if (controller && targetPoint.type == OATargetMapDownload)
     {
-        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+        if (AFNetworkReachabilityManager.sharedManager.isReachable)
         {
             OAResourceItem *item = ((OADownloadMapObject *)targetPoint.targetObj).indexItem;
             OARepositoryResourceItem *repoItem = nil;
@@ -577,7 +577,7 @@
                 
                 if ([self.getTargetObj isKindOfClass:OADownloadMapObject.class])
                 {
-                    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+                    if (AFNetworkReachabilityManager.sharedManager.isReachable)
                     {
                         OAResourceItem *item = ((OADownloadMapObject *) self.getTargetObj).indexItem;
                         self.localMapIndexItem = [item isKindOfClass:OARepositoryResourceItem.class] ? (OARepositoryResourceItem *) item : nil;
@@ -589,7 +589,7 @@
                                                    resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
                                                      onComplete:^(NSArray<OAResourceItem *>* res) {
                         OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];
-                        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && item)
+                        if (AFNetworkReachabilityManager.sharedManager.isReachable && item)
                             self.localMapIndexItem = item;
                     }];
                 }

@@ -12,7 +12,7 @@
 #import "Localization.h"
 #import "OAPluginPopupViewController.h"
 #import "OAPurchasesViewController.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OASizes.h"
 #import "OARootViewController.h"
 #import "OAChoosePlanHelper.h"

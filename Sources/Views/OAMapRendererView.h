@@ -86,6 +86,7 @@ struct CLLocationCoordinate2D;
 - (BOOL) suspendGpuWorker;
 - (BOOL) resumeGpuWorker;
 - (void) invalidateFrame;
+- (void)setSymbolsOpacity:(float)opacityFactor;
 
 @property (nonatomic) CGFloat displayDensityFactor;
 @property (nonatomic) OsmAnd::PointI target31;

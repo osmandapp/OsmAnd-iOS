@@ -1029,4 +1029,9 @@
     return _renderer->resumeGpuWorker();
 }
 
+- (void)setSymbolsOpacity:(float)opacityFactor
+{
+    _renderer->setSymbolsOpacity(opacityFactor);
+}
+
 @end

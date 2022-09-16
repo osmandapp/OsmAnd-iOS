@@ -846,7 +846,7 @@
         if (_editPointType == EOAEditPointTypeWaypoint && !_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
 
-        [_pointHandler deleteItem];
+        [_pointHandler deleteItem:_isNewItemAdding];
         [self dismissViewControllerAnimated:YES completion:nil];
     }]];
     

@@ -49,6 +49,11 @@
     //override
 }
 
+- (void) deleteItem:(BOOL)isNewItemAdding
+{
+    //override
+}
+
 - (NSDictionary *)checkDuplicates:(NSString *)name group:(NSString *)group
 {
     return nil; //override

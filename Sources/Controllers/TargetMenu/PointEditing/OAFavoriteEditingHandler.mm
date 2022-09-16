@@ -142,6 +142,12 @@
         [OAFavoritesHelper deleteNewFavoriteItem:_favorite];
 }
 
+- (void) deleteItem:(BOOL)isNewItemAdding
+{
+    if (_favorite)
+        [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[_favorite] isNewFavorite:isNewItemAdding];
+}
+
 - (NSDictionary *)checkDuplicates:(NSString *)name group:(NSString *)group
 {
     OAFavoriteItem *comparingPoint = [[OAFavoriteItem alloc] initWithLat:_favorite.getLatitude lon:_favorite.getLongitude name:name category:group];

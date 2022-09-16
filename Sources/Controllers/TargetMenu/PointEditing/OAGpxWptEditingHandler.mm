@@ -210,6 +210,11 @@
         [self.gpxWptDelegate deleteGpxWpt:_gpxWpt docPath:_gpxFileName];
 }
 
+- (void)deleteItem:(BOOL)isNewItemAdding
+{
+    [self deleteItem];
+}
+
 - (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
 {
     [_gpxWpt.point setName:data.name];

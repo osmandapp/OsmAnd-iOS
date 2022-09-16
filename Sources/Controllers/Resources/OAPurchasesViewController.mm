@@ -16,6 +16,7 @@
 #import "OALargeImageTitleDescrTableViewCell.h"
 #import "OACardButtonCell.h"
 #import "OAIconTitleValueCell.h"
+#import "OASizes.h"
 #import "OAColors.h"
 #import "OALinks.h"
 #import <SafariServices/SafariServices.h>
@@ -44,8 +45,8 @@
 {
     OAIAPHelper *_iapHelper;
     NSArray<NSArray<NSDictionary *> *> *_data;
-    NSMapTable<NSNumber *, NSString *> *_headers;
-    
+    NSMutableDictionary<NSNumber *, NSString *> *_headers;
+
     BOOL _purchasesUpdated;
 }
 
@@ -63,6 +64,7 @@
     self.tableView.delegate = self;
 
     _iapHelper = [OAIAPHelper sharedInstance];
+    _headers = [NSMutableDictionary dictionary];
 
     [self updateLoadingView:_purchasesUpdated];
     [self generateData];
@@ -135,7 +137,6 @@
             }
         }
 
-        _headers = [NSMapTable new];
         OAAppSettings *settings = OAAppSettings.sharedManager;
         BOOL isProSubscriptionAvailable = [settings.backupPurchaseActive get];
         if (activeProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
@@ -205,7 +206,7 @@
                     }];
                 }
                 [data addObject:active];
-                [_headers setObject:OALocalizedString(@"menu_active_trips") forKey:@(data.count - 1)];
+                _headers[@(data.count - 1)] = OALocalizedString(@"menu_active_trips");
             }
             if (expiredProducts.count > 0)
             {
@@ -220,7 +221,7 @@
                     }];
                 }
                 [data addObject:expired];
-                [_headers setObject:OALocalizedString(@"expired") forKey:@(data.count - 1)];
+                _headers[@(data.count - 1)] = OALocalizedString(@"expired");
             }
             [data addObject:@[
                     @{
@@ -270,7 +271,7 @@
             @"tint_color": UIColorFromRGB(color_primary_purple)
         }
     ]];
-    [_headers setObject:OALocalizedString(@"menu_help") forKey:@(data.count - 1)];
+    _headers[@(data.count - 1)] = OALocalizedString(@"menu_help");
 
     _data = data;
 }
@@ -385,7 +386,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [_headers objectForKey:@(section)];
+    return _headers[@(section)];
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -409,7 +410,7 @@
             NSString *key = item[@"key"];
             CGFloat leftInset = [key isEqualToString: @"new_device_account"]
                     ? 0. : [key isEqualToString: @"contact_support_description"]
-                            ? CGFLOAT_MAX : 20. + [OAUtilities getLeftMargin];
+                            ? CGFLOAT_MAX : ([OAUtilities getLeftMargin] + kPaddingOnSideOfContent);
             cell.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
 
             UIColor *tintColor = [item.allKeys containsObject:@"tint_color"] ? item[@"tint_color"] : UIColor.blackColor;
@@ -497,7 +498,7 @@
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0, 66. + [OAUtilities getLeftMargin], 0, 0);
+            cell.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0, 0);
             OAProduct *product = item[@"product"];
             if (product)
             {

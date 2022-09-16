@@ -31,4 +31,10 @@
 #define kInfoViewLandscapeWidthPad 414
 #define kInfoViewPortraitWidthPad 375
 
+#define kPaddingOnSideOfContent 20
+#define kPaddingToLeftOfContentWithIcon 66
+#define kHeaderHeightDefault 36
+#define kPaddingOnSideOfHeaderWithText 38
+#define kPaddingOnSideOfFooterWithText 16
+
 #endif /* OASizes_h */

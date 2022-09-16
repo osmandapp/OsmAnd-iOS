@@ -7,9 +7,10 @@
 //
 
 #import "OAMappersViewController.h"
-#import "OAMultiIconsDescCustomCell.h"
+#import "OACustomBasicTableCell.h"
 #import "OAAppSettings.h"
 #import "OANetworkUtilities.h"
+#import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
 #import <SafariServices/SafariServices.h>
@@ -26,8 +27,8 @@
 @implementation OAMappersViewController
 {
     NSArray<NSArray *> *_data;
-    NSMapTable<NSNumber *, NSString *> *_headers;
-    NSMapTable<NSNumber *, NSString *> *_footers;
+    NSMutableDictionary<NSNumber *, NSString *> *_headers;
+    NSMutableDictionary<NSNumber *, NSString *> *_footers;
 
     OAAppSettings *_settings;
     NSDictionary<NSString *, NSNumber *> *_objectChanges;
@@ -46,8 +47,8 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
-    _headers = [NSMapTable new];
-    _footers = [NSMapTable new];
+    _headers = [NSMutableDictionary dictionary];
+    _footers = [NSMutableDictionary dictionary];
 
     [self generateData];
 }
@@ -59,6 +60,8 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.sectionFooterHeight = 0.001;
+    self.tableView.sectionHeaderHeight = kHeaderHeightDefault;
 
     self.subtitleLabel.text = @"";
     self.subtitleLabel.hidden = YES;
@@ -104,7 +107,7 @@
 
     [data addObject:@[
             @{
-                    @"type" : [OAMultiIconsDescCustomCell getCellIdentifier],
+                    @"type" : [OACustomBasicTableCell getCellIdentifier],
                     @"attributed_title" : [[NSAttributedString alloc] initWithString:availableTitle
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont systemFontOfSize:17.],
@@ -118,7 +121,7 @@
             },
             @{
                     @"key" : @"refresh_cell",
-                    @"type": [OAMultiIconsDescCustomCell getCellIdentifier],
+                    @"type": [OACustomBasicTableCell getCellIdentifier],
                     @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_refresh")
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont systemFontOfSize:17. weight:UIFontWeightMedium],
@@ -161,7 +164,7 @@
                                    range:[dateAttributed.string rangeOfString:[formatterYear stringFromDate:date]]];
 
             [dateCells addObject:@{
-                    @"type": [OAMultiIconsDescCustomCell getCellIdentifier],
+                    @"type": [OACustomBasicTableCell getCellIdentifier],
                     @"attributed_title": dateAttributed,
                     @"value": value,
                     @"original_value" : dateStr
@@ -176,7 +179,7 @@
     }
 
     [dateCells insertObject:@{
-            @"type": [OAMultiIconsDescCustomCell getCellIdentifier],
+            @"type": [OACustomBasicTableCell getCellIdentifier],
             @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"last_two_month_total")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont systemFontOfSize:17.],
@@ -193,7 +196,7 @@
                                         stringByAppendingString:@"/history"];
     [dateCells addObject:@{
             @"key" : @"profile_cell",
-            @"type" : [OAMultiIconsDescCustomCell getCellIdentifier],
+            @"type" : [OACustomBasicTableCell getCellIdentifier],
             @"attributed_title" : [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_profiles")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont systemFontOfSize:17. weight:UIFontWeightMedium],
@@ -203,10 +206,9 @@
             @"tint_color" : UIColorFromRGB(color_primary_purple),
             @"url" : [NSURL URLWithString:url]
     }];
-
     [data addObject:dateCells];
-    [_headers setObject:OALocalizedString(@"shared_string_contributions") forKey:@(data.count - 1)];
-    [_footers setObject:OALocalizedString(@"contributions_may_calculate_with_delay") forKey:@(data.count - 1)];
+    _headers[@(data.count - 1)] = OALocalizedString(@"shared_string_contributions");
+    _footers[@(data.count - 1)] = OALocalizedString(@"contributions_may_calculate_with_delay");
 
     _data = data;
 }
@@ -321,17 +323,15 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    UITableViewCell *outCell = nil;
-
-    NSString *type = item[@"type"];
-    if ([type isEqualToString:[OAMultiIconsDescCustomCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OACustomBasicTableCell getCellIdentifier]])
     {
-        OAMultiIconsDescCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconsDescCustomCell getCellIdentifier]];
+        OACustomBasicTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomBasicTableCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconsDescCustomCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMultiIconsDescCustomCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomBasicTableCell getCellIdentifier] owner:self options:nil];
+            cell = (OACustomBasicTableCell *) nib[0];
             [cell leftIconVisibility:NO];
+            [cell switchVisibility:NO];
         }
         if (cell)
         {
@@ -360,22 +360,37 @@
             [cell anchorContent:topRightContent ? EOACustomCellContentTopStyle : EOACustomCellContentCenterStyle];
             [cell textIndentsStyle:topRightContent ? EOACustomCellTextIncreasedTopCenterIndentStyle : EOACustomCellTextNormalIndentsStyle];
         }
-        outCell = cell;
+        return cell;
     }
 
-    return outCell;
+    return nil;
 }
 
 #pragma mark - UITableViewDelegate
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [_headers objectForKey:@(section)];
+    return _headers[@(section)];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return [_footers objectForKey:@(section)];
+    return _footers[@(section)];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    NSString *header = _headers[@(section)];
+    if (header)
+    {
+        UIFont *font = [UIFont systemFontOfSize:13.];
+        CGFloat headerHeight = [OAUtilities calculateTextBounds:header
+                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
+                                                           font:font].height + kPaddingOnSideOfHeaderWithText;
+        return headerHeight;
+    }
+
+    return kHeaderHeightDefault;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

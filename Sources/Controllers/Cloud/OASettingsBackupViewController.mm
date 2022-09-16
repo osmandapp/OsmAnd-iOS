@@ -12,10 +12,11 @@
 #import "OAMainSettingsViewController.h"
 #import "OABaseBackupTypesViewController.h"
 #import "OABackupTypesViewController.h"
-#import "OAMultiIconsDescCustomCell.h"
+#import "OACustomBasicTableCell.h"
 #import "OAAppSettings.h"
 #import "OABackupHelper.h"
 #import "OAPrepareBackupResult.h"
+#import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
 
@@ -109,7 +110,7 @@
 
     NSMutableDictionary *backupData = [NSMutableDictionary dictionary];
     backupData[@"key"] = @"backup_data_cell";
-    backupData[@"type"] = [OAMultiIconsDescCustomCell getCellIdentifier];
+    backupData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
     backupData[@"title"] = OALocalizedString(@"backup_data");
     backupData[@"left_icon"] = @"ic_custom_cloud_upload_colored_day";
     NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:
@@ -127,7 +128,7 @@
 
     NSMutableDictionary *accountData = [NSMutableDictionary dictionary];
     accountData[@"key"] = @"account_cell";
-    accountData[@"type"] = [OAMultiIconsDescCustomCell getCellIdentifier];
+    accountData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
     accountData[@"title"] = [[OAAppSettings sharedManager].backupUserEmail get];
     accountData[@"right_icon"] = @"ic_custom_arrow_right";
     [accountCells addObject:accountData];
@@ -139,7 +140,7 @@
 
     NSMutableDictionary *deleteAllData = [NSMutableDictionary dictionary];
     deleteAllData[@"key"] = @"delete_all_cell";
-    deleteAllData[@"type"] = [OAMultiIconsDescCustomCell getCellIdentifier];
+    deleteAllData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
     deleteAllData[@"title"] = OALocalizedString(@"backup_delete_all_data");
     deleteAllData[@"text_color"] = UIColorFromRGB(color_support_red);
     deleteAllData[@"right_icon"] = @"ic_custom_arrow_right";
@@ -147,7 +148,7 @@
 
     NSMutableDictionary *removeVersionsData = [NSMutableDictionary dictionary];
     removeVersionsData[@"key"] = @"remove_versions_cell";
-    removeVersionsData[@"type"] = [OAMultiIconsDescCustomCell getCellIdentifier];
+    removeVersionsData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
     removeVersionsData[@"title"] = OALocalizedString(@"backup_delete_old_data");
     removeVersionsData[@"text_color"] = UIColorFromRGB(color_support_red);
     removeVersionsData[@"right_icon"] = @"ic_custom_arrow_right";
@@ -309,22 +310,20 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    NSString *cellType = item[@"type"];
-    UITableViewCell *outCell = nil;
-
-    if ([cellType isEqualToString:[OAMultiIconsDescCustomCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OACustomBasicTableCell getCellIdentifier]])
     {
-        OAMultiIconsDescCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconsDescCustomCell getCellIdentifier]];
+        OACustomBasicTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomBasicTableCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconsDescCustomCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMultiIconsDescCustomCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomBasicTableCell getCellIdentifier] owner:self options:nil];
+            cell = (OACustomBasicTableCell *) nib[0];
             [cell valueVisibility:NO];
+            [cell switchVisibility:NO];
         }
         if (cell)
         {
             BOOL leftIconVisible = [item.allKeys containsObject:@"left_icon"];
-            cell.separatorInset = UIEdgeInsetsMake(0., leftIconVisible ? 66. : 20., 0., 0.);
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (leftIconVisible ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent), 0., 0.);
 
             [cell leftIconVisibility:leftIconVisible];
             cell.leftIconView.image = [UIImage imageNamed:item[@"left_icon"]];
@@ -339,10 +338,10 @@
             cell.titleLabel.text = item[@"title"];
             cell.titleLabel.textColor = [item.allKeys containsObject:@"text_color"] ? item[@"text_color"] : UIColor.blackColor;
         }
-        outCell = cell;
+        return cell;
     }
 
-    return outCell;
+    return nil;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -364,12 +363,12 @@
     {
         UIFont *font = [UIFont systemFontOfSize:13.];
         CGFloat headerHeight = [OAUtilities calculateTextBounds:header
-                                                          width:tableView.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
-                                                           font:font].height + 38.;
+                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
+                                                           font:font].height + kPaddingOnSideOfHeaderWithText;
         return headerHeight;
     }
 
-    return UITableViewAutomaticDimension;
+    return kHeaderHeightDefault;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -379,8 +378,8 @@
     {
         UIFont *font = [UIFont systemFontOfSize:13.];
         CGFloat footerHeight = [OAUtilities calculateTextBounds:footer
-                                                          width:tableView.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
-                                                           font:font].height + 16.;
+                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
+                                                           font:font].height + kPaddingOnSideOfFooterWithText;
         return footerHeight;
     }
 

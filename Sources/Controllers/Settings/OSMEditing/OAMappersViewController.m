@@ -16,7 +16,7 @@
 
 #define USER_CHANGES_URL @"https://osmand.net/changesets/user-changes"
 #define CONTRIBUTIONS_URL @"https://www.openstreetmap.org/user/"
-#define CHANGES_FOR_MAPPER_PROMO 15
+#define CHANGES_FOR_MAPPER_PROMO 30
 #define VISIBLE_MONTHS_COUNT 6
 
 @interface OAMappersViewController () <UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate>
@@ -141,12 +141,12 @@
         NSDateFormatter *formatterYear = [[NSDateFormatter alloc] init];
         [formatterYear setDateFormat:@"yyyy"];
 
-        for (NSString *dateStr in _objectChanges)
+        NSDate *date = [NSDate date];
+        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+        for (NSInteger i = 0; i < VISIBLE_MONTHS_COUNT; i ++)
         {
-            if (dateCells.count == VISIBLE_MONTHS_COUNT)
-                break;
-
-            NSDate *date = [formatterFrom dateFromString:dateStr];
+            NSString *dateStr = [formatterFrom stringFromDate:date];
+            NSString *value = [_objectChanges.allKeys containsObject:dateStr] ? [_objectChanges[dateStr] stringValue] : @"0";
 
             NSMutableAttributedString *dateAttributed =
                     [[NSMutableAttributedString alloc] initWithString:[formatterTo stringFromDate:date].capitalizedString];
@@ -163,9 +163,11 @@
             [dateCells addObject:@{
                     @"type": [OAMultiIconsDescCustomCell getCellIdentifier],
                     @"attributed_title": dateAttributed,
-                    @"value": [_objectChanges[dateStr] stringValue],
+                    @"value": value,
                     @"original_value" : dateStr
             }];
+
+            date = [calendar dateByAddingUnit:NSCalendarUnitMonth value:-1 toDate:date options:0];
         }
 
         [dateCells sortUsingComparator:^NSComparisonResult(NSDictionary *cell1, NSDictionary *cell2) {

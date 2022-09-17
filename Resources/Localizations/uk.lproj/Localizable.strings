@@ -2700,3 +2700,6 @@
 "benefits_for_contributors_primary_descr" = "Активні учасники OpenStreetMap.org мають право на необмежене погодинне оновлення мап.";
 "last_two_month_total" = "Загалом за останні два місяці";
 "carplay_available_in_sub_plans" = "Придбайте OsmAnd Pro або Maps+, щоб використовувати OsmAnd з CarPlay.";
+"cross_buy" = "Перехресна купівля";
+"cloud_confirm_delete_type" = "Ви дійсно хочете видалити «%@» з OsmAnd Cloud?";
+"purchases_feature_desc_cross_buy" = "Користуйтеся всіма функціями передплатами на кількох платформах без додаткових витрат. Доступно на Android/iOS/Web.";

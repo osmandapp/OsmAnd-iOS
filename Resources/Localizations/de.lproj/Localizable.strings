@@ -2705,3 +2705,4 @@
 "enough_contributions_descr" = "Herzlichen Glückwunsch, Sie haben genug OpenStreetMap-Beiträge geleistet und können nun unbegrenzte OsmAnd-Kartenaktualisierungen genießen!";
 "auth_error" = "Autorisierungsfehler";
 "cloud_confirm_delete_type" = "Sind Sie sicher, dass sie „%@” aus OsmAnd Cloud löschen möchten?";
+"purchases_feature_desc_cross_buy" = "Nutzen Sie alle Abo-Features auf allen Plattformen ohne zusätzliche Kosten. Verfügbar für Android/iOS/Web.";

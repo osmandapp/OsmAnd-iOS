@@ -2692,3 +2692,4 @@
 "not_enough_contributions_descr" = "Der kræves mindst %i ændringer i løbet af de sidste to måneder %@ for at få adgang til ubegrænsede kortopdateringer hver time.";
 "last_two_month_total" = "De sidste to måneder i alt";
 "auth_error" = "Godkendelsesfejl";
+"carplay_available_in_sub_plans" = "Køb OsmAnd Pro eller Maps+ for at bruge OsmAnd med CarPlay.";

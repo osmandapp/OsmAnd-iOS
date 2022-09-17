@@ -829,7 +829,7 @@
         _renderer->setMapTarget(
             OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0,
                            _viewSize.y * _viewportYScale / 2.0),
-            _renderer->getState().target31);
+            self.target31);
 
         _renderer->attachToRenderTarget();
     }

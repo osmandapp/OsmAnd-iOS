@@ -2704,3 +2704,4 @@
 "not_enough_contributions_descr" = "Mindestens %i Änderungen in den letzten zwei Monaten %@ sind erforderlich, um Zugriff auf unbegrenzte stündliche Kartenaktualisierungen zu erhalten.";
 "enough_contributions_descr" = "Herzlichen Glückwunsch, Sie haben genug OpenStreetMap-Beiträge geleistet und können nun unbegrenzte OsmAnd-Kartenaktualisierungen genießen!";
 "auth_error" = "Autorisierungsfehler";
+"cloud_confirm_delete_type" = "Sind Sie sicher, dass sie „%@” aus OsmAnd Cloud löschen möchten?";

@@ -2691,3 +2691,7 @@
 "open_street_map_login_mode_simple" = "Tem de iniciar sessão para enviar as suas alterações.";
 "not_enough_contributions_descr" = "É necessário um mínimo de %i alterações nos últimos dois meses %@ para ter acesso a atualizações ilimitadas a cada hora do mapa.";
 "auth_error" = "Erro de autorização";
+"carplay_available_in_sub_plans" = "Comprar OsmAnd Pro ou Maps+ para usar o OsmAnd com CarPlay.";
+"cloud_confirm_delete_type" = "Tem a certeza que quer eliminar \"%@\" do OsmAnd Cloud?";
+"cross_buy" = "Compra cruzada";
+"purchases_feature_desc_cross_buy" = "Utilizar todas as funcionalidades de subscrição em múltiplas plataformas sem custos adicionais. Disponível em Android/iOS/Web.";

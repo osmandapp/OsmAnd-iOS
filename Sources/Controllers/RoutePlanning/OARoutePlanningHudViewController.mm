@@ -270,8 +270,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
     _titleView.text = OALocalizedString(@"plan_route");
     
-    _layer.delegate = self;
-    
     [self adjustMapViewPort];
     [self changeMapRulerPosition];
     [self adjustActionButtonsPosition:self.getViewHeight];
@@ -301,6 +299,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
+    _layer.delegate = self;
 	if (_showSnapWarning)
 		[self enterApproximationMode];
 
@@ -1635,6 +1634,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             }
         }
         [_editingContext.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:_layer appMode:mode changeRouteType:changeRouteType pointIndex:_editingContext.selectedPointPosition]];
+        [_editingContext setSelectedPointPosition:-1];
 //        updateUndoRedoButton(false, redoBtn);
 //        updateUndoRedoButton(true, undoBtn);
 //        disable(upDownBtn);

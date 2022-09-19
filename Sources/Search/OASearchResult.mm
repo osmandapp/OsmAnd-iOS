@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchResult.java
-//  git revision 5bcaa01259c937fa29741117b23f89776a1098c6
+//  git revision 9ea32a8fb553ba22e188f6a7896b4868593ca808
 
 #import "OASearchResult.h"
 #import "OASearchPhrase.h"

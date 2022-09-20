@@ -2736,6 +2736,8 @@
 "backup_empty_data_from_category" = "OsmAnd Cloud doesn't include any data from this category.";
 "cloud_storage_used" = "%@ of %@ used";
 "cloud_confirm_delete_type" = "Are you sure you want to delete \"%@\" from OsmAnd Cloud?";
+"cloud_recent_changes" = "Recent changes";
+"cloud_pause_all" = "Pause all";
 
 "copy_address" = "Copy address";
 "copy_poi_name" = "Copy POI Name";

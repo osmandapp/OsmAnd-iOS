@@ -33,6 +33,7 @@
 #import "OASettingsBackupViewController.h"
 #import "OAExportSettingsType.h"
 #import "OABaseBackupTypesViewController.h"
+#import "OAStatusBackupViewController.h"
 
 @interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OABackupExportListener, OAImportListener, OAOnPrepareBackupListener, OABackupTypesDelegate>
 
@@ -57,6 +58,7 @@
     NSString *_error;
     
     OATitleIconProgressbarCell *_backupProgressCell;
+    NSIndexPath *_lastBackupIndexPath;
 }
 
 - (instancetype) initWithSourceType:(EOACloudScreenSourceType)type
@@ -198,8 +200,14 @@
     }
     else
     {
-        OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
         NSMutableArray<NSDictionary *> *backupRows = [NSMutableArray array];
+        NSDictionary *backupSection = @{
+            @"sectionHeader": OALocalizedString(@"cloud_backup"),
+            @"rows": backupRows
+        };
+        [result addObject:backupSection];
+
+        OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
         if (exportTask)
         {
             // TODO: show progress from HeaderStatusViewHolder.java
@@ -221,7 +229,8 @@
                 @"image": _status.statusIconName
             };
             [backupRows addObject:lastBackupCell];
-            
+            _lastBackupIndexPath = [NSIndexPath indexPathForRow:backupRows.count - 1 inSection:result.count - 1];
+
             if (_status.warningTitle != nil || _error.length > 0)
             {
                 BOOL hasWarningStatus = _status.warningTitle != nil;
@@ -292,12 +301,6 @@
                 [backupRows addObject:purchaseCell];
             }
         }
-        
-        NSDictionary *backupSection = @{
-            @"sectionHeader": OALocalizedString(@"cloud_backup"),
-            @"rows": backupRows
-        };
-        [result addObject:backupSection];
     }
     NSDictionary *restoreSection = @{
         @"sectionHeader" : OALocalizedString(@"restore"),
@@ -593,7 +596,12 @@
 {
     NSDictionary *item = _data[indexPath.section][@"rows"][indexPath.row];
     NSString *itemId = item[@"name"];
-    if ([itemId isEqualToString:@"backupIntoFile"])
+    if (indexPath == _lastBackupIndexPath)
+    {
+        OAStatusBackupViewController *recentChangesViewController = [[OAStatusBackupViewController alloc] init];
+        [self.navigationController pushViewController:recentChangesViewController animated:YES];
+    }
+    else if ([itemId isEqualToString:@"backupIntoFile"])
     {
         [self onBackupIntoFilePressed];
     }

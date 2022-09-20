@@ -1696,7 +1696,7 @@
 "rendering_attr_piste_type_nordic_name" = "Nordijsko smučanje";
 "rendering_attr_piste_type_connection_name" = "Povezovalna";
 "height_limit_description" = "Navedi višino svojega vozila, ker za visoka vozila lahko veljajo nekatere omejitve na poti.";
-"width_limit_description" = "Navediširino svojega vozila, ker za široka vozila lahko veljajo nekatere omejitve na poti.";
+"width_limit_description" = "Navedi širino svojega vozila, ker za široka vozila lahko veljajo nekatere omejitve na poti.";
 "user_login" = "Prijava";
 "weight_limit_description" = "Navedi težo svojega vozila, ker za težka vozila lahko veljajo nekatere omejitve na poti.";
 "reverse_route" = "Obrni pot";

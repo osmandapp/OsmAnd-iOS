@@ -1671,6 +1671,7 @@
 		DA1BC140233F9B01004DAF78 /* ic_custom_trip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA1BC113233F9B00004DAF78 /* ic_custom_trip@2x.png */; };
 		DA1CAF31211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
 		DA1F1E50251CCCC5003CAA55 /* navigation-profiles.html in Resources */ = {isa = PBXBuildFile; fileRef = DA1F1E4F251CCCC4003CAA55 /* navigation-profiles.html */; };
+		DA22D6CC28D8688C0074FA65 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA22D6CB28D8688C0074FA65 /* IOKit.framework */; };
 		DA22DC4E25C05F130070FFCA /* ic_custom_split_after@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA22DC4525C05F100070FFCA /* ic_custom_split_after@2x.png */; };
 		DA22DC5025C05F130070FFCA /* ic_custom_split_before@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA22DC4625C05F100070FFCA /* ic_custom_split_before@3x.png */; };
 		DA22DC5225C05F130070FFCA /* ic_custom_split_after@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA22DC4725C05F110070FFCA /* ic_custom_split_after@3x.png */; };
@@ -5144,6 +5145,7 @@
 		DA1BC113233F9B00004DAF78 /* ic_custom_trip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_trip@2x.png"; path = "Resources/Icons/ic_custom_trip@2x.png"; sourceTree = "<group>"; };
 		DA1CAF30211EC7DA00B0662E /* ja_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ja_tts.js; path = ../resources/voice/ja/ja_tts.js; sourceTree = "<group>"; };
 		DA1F1E4F251CCCC4003CAA55 /* navigation-profiles.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "navigation-profiles.html"; path = "../help/website/feature_articles/navigation-profiles.html"; sourceTree = "<group>"; };
+		DA22D6CB28D8688C0074FA65 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		DA22DC4525C05F100070FFCA /* ic_custom_split_after@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_split_after@2x.png"; path = "Resources/Icons/ic_custom_split_after@2x.png"; sourceTree = "<group>"; };
 		DA22DC4625C05F100070FFCA /* ic_custom_split_before@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_split_before@3x.png"; path = "Resources/Icons/ic_custom_split_before@3x.png"; sourceTree = "<group>"; };
 		DA22DC4725C05F110070FFCA /* ic_custom_split_after@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_split_after@3x.png"; path = "Resources/Icons/ic_custom_split_after@3x.png"; sourceTree = "<group>"; };
@@ -7625,6 +7627,7 @@
 				BBA3AF7C197FC4BB0039D991 /* libQt5Core.a in Frameworks */,
 				BBA3AF7D197FC4BB0039D991 /* libQt5Network.a in Frameworks */,
 				BBA3AF7F197FC4BB0039D991 /* libz.dylib in Frameworks */,
+				DA22D6CC28D8688C0074FA65 /* IOKit.framework in Frameworks */,
 				BBA3AF80197FC4BB0039D991 /* libbz2.dylib in Frameworks */,
 				BBA3AF81197FC4BB0039D991 /* libiconv.dylib in Frameworks */,
 				A166C762BD53085527F42840 /* libPods-OsmAnd Maps.a in Frameworks */,
@@ -9659,6 +9662,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA22D6CB28D8688C0074FA65 /* IOKit.framework */,
 				8AAFE752278DE23700F6504E /* libsqlite_static.a */,
 				8AF348762779D88100A64824 /* libproj_static.a */,
 				8A5A002727735D76002227DD /* libharfbuzz_static.a */,

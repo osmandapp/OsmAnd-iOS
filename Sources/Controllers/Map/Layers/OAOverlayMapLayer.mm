@@ -128,6 +128,7 @@
         [self.mapViewController runWithRenderSync:^{
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(self.app.data.overlayAlpha);
+            [self.mapViewController.mapView setSymbolsOpacity:(1.0f - self.app.data.overlayAlpha)];
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
         }];
     });

@@ -319,9 +319,7 @@
 {
     if (_viewSize.x > 0 && _viewSize.y > 0)
     {
-        _renderer->setMapTarget(
-            OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0, _viewSize.y * _viewportYScale / 2.0),
-            target31);
+        _renderer->setMapTargetLocation(OsmAnd::Utilities::normalizeCoordinates(target31, OsmAnd::ZoomLevel31));
     }
     else
     {
@@ -831,7 +829,7 @@
         _renderer->setMapTarget(
             OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0,
                            _viewSize.y * _viewportYScale / 2.0),
-            _renderer->getState().target31);
+            self.target31);
 
         _renderer->attachToRenderTarget();
     }
@@ -1038,6 +1036,11 @@
 - (BOOL) resumeGpuWorker
 {
     return _renderer->resumeGpuWorker();
+}
+
+- (void)setSymbolsOpacity:(float)opacityFactor
+{
+    _renderer->setSymbolsOpacity(opacityFactor);
 }
 
 @end

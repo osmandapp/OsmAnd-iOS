@@ -238,19 +238,19 @@
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLastMapSourceChanged)
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
-
+    
     /*
-    _app.resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
-                                                                 [self]
-                                                                 (const OsmAnd::ResourcesManager* const resourcesManager,
-                                                                  const QList< QString >& added,
-                                                                  const QList< QString >& removed,
-                                                                  const QList< QString >& updated)
-                                                                 {
-                                                                     QList< QString > merged;
-                                                                     merged << added << removed << updated;
-                                                                     [self onLocalResourcesChanged:merged];
-                                                                 });
+        _app.resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
+                                                                     [self]
+                                                                     (const OsmAnd::ResourcesManager* const resourcesManager,
+                                                                      const QList< QString >& added,
+                                                                      const QList< QString >& removed,
+                                                                      const QList< QString >& updated)
+                                                                     {
+                                                                         QList< QString > merged;
+                                                                         merged << added << removed << updated;
+                                                                         [self onLocalResourcesChanged:merged];
+                                                                     });
     */
     
     _dayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self

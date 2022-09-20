@@ -97,7 +97,7 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
                 if (!error)
                 {
                     NSString *ext = [[f pathExtension] lowercaseString];
-                    NSString *type = [[[f stringByDeletingPathExtension] pathExtension] lowercaseString];
+                    NSString *type = [[file componentsSeparatedByString:@" "].firstObject lowercaseString];
                     if ([ext isEqualToString:@"sqlitedb"] &&
                         (([type isEqualToString:@"hillshade"] && _terrainType == EOATerrainLayerTypeHillshade)
                          || ([type isEqualToString:@"slope"] && _terrainType == EOATerrainLayerTypeSlope)))

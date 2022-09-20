@@ -174,6 +174,7 @@
     OAAutoObserverProxy* _mapSettingsChangeObserver;
     OAAutoObserverProxy* _mapLayerChangeObserver;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
+    OAAutoObserverProxy* _localResourcesChangedObserver;
     OAAutoObserverProxy* _applicationModeChangedObserver;
     
     OAAutoObserverProxy* _stateObserver;
@@ -238,24 +239,14 @@
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLastMapSourceChanged)
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
-
-    /*
-    _app.resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
-                                                                 [self]
-                                                                 (const OsmAnd::ResourcesManager* const resourcesManager,
-                                                                  const QList< QString >& added,
-                                                                  const QList< QString >& removed,
-                                                                  const QList< QString >& updated)
-                                                                 {
-                                                                     QList< QString > merged;
-                                                                     merged << added << removed << updated;
-                                                                     [self onLocalResourcesChanged:merged];
-                                                                 });
-    */
     
     _dayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onDayNightModeChanged)
                                                   andObserve:_app.dayNightModeObservable];
+    
+    _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onLocalResourcesChanged)
+                                                                andObserve:_app.localResourcesChangedObservable];
 
     _mapSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                       withHandler:@selector(onMapSettingsChanged)
@@ -1680,7 +1671,7 @@
     });
 }
 
-- (void) onLocalResourcesChanged:(const QList< QString >&)ids
+- (void) onLocalResourcesChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.mapViewLoaded/* || self.view.window == nil*/)

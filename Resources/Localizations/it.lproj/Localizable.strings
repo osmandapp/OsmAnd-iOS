@@ -2389,3 +2389,11 @@
 "weather_offline_forecast" = "Previsioni offline";
 "weather_forecast" = "Previsioni meteorologiche";
 "subscription_banner_no_free_maps_title" = "Hai finito tutti i download gratuiti";
+"favorites_empty" = "Non hai alcun punto preferito salvato";
+"carplay_available_in_sub_plans" = "Acquista OsmAnd Pro oppure Maps+ per poter utilizzare OsmAnd con CarPlay.";
+"turn_arrows_descr" = "Controlla la visibilità delle frecce di direzione nella linea del percorso.";
+"fav_point_dublicate_message" = "Preferito rinominato in '%@' per evitare duplicati.";
+"default_color_descr" = "Questo colore verrà utilizzato per tutti i nuovi preferiti aggiunti al gruppo.";
+"save_heading_descr" = "Salva l'orientamento per ogni punto della traccia durante la registrazione";
+"gpx_export_failed" = "Impossibile salvare il percorso creato";
+"gpx_import_already_exists_short" = "Il file traccia specificato è già presente nella lista.";

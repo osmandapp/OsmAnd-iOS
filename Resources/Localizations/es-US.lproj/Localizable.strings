@@ -2602,3 +2602,5 @@
 "shared_string_delete_all" = "Borrar todo";
 "restore_from_osmand_cloud" = "Restaurar desde la nube de OsmAnd";
 "shared_string_data" = "Datos";
+"carplay_available_in_sub_plans" = "Compra OsmAnd «Pro» o «Maps+» para usar OsmAnd con CarPlay.";
+"shared_string_always_visible" = "Siempre visible";

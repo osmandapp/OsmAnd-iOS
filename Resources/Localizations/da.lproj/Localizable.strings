@@ -2693,3 +2693,6 @@
 "last_two_month_total" = "De sidste to måneder i alt";
 "auth_error" = "Godkendelsesfejl";
 "carplay_available_in_sub_plans" = "Køb OsmAnd Pro eller Maps+ for at bruge OsmAnd med CarPlay.";
+"cloud_confirm_delete_type" = "Er du sikker på, at du ønsker at slette \"%@\" fra OsmAnd Cloud?";
+"cross_buy" = "Krydskøb";
+"purchases_feature_desc_cross_buy" = "Brug alle abonnementsfunktioner på flere platforme uden ekstra omkostninger. Tilgængelig på Android/iOS/Web.";

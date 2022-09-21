@@ -78,7 +78,7 @@
 
 - (BOOL) allWordsMatched:(NSString *)name
 {
-    NSMutableArray<NSString *> * localResultNames = [OASearchPhrase splitWords:_localeName ws:[NSMutableArray array]];
+    NSMutableArray<NSString *> * localResultNames = [OASearchPhrase splitWords:name ws:[NSMutableArray array]];
     NSMutableArray<NSString *> * searchPhraseNames = [self getSearchPhraseNames];
     
     if ([searchPhraseNames count] == 0)

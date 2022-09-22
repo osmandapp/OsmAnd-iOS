@@ -519,6 +519,7 @@
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             cell.iconView.tintColor = UIColorFromRGB(nav_bar_day);
             [cell setOverflowVisibility:YES];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         cell.textView.text = item[@"title"];
         cell.descView.text = item[@"description"];
@@ -598,7 +599,7 @@
     NSString *itemId = item[@"name"];
     if (indexPath == _lastBackupIndexPath)
     {
-        OAStatusBackupViewController *recentChangesViewController = [[OAStatusBackupViewController alloc] init];
+        OAStatusBackupViewController *recentChangesViewController = [[OAStatusBackupViewController alloc] initWithBackup:_backup status:_status];
         [self.navigationController pushViewController:recentChangesViewController animated:YES];
     }
     else if ([itemId isEqualToString:@"backupIntoFile"])

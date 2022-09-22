@@ -8,6 +8,10 @@
 
 #import "OACompoundViewController.h"
 
+@class OAPrepareBackupResult, OABackupStatus;
+
 @interface OAStatusBackupViewController : OACompoundViewController
+
+- (instancetype) initWithBackup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status;
 
 @end

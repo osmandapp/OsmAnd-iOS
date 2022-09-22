@@ -19,9 +19,11 @@ typedef NS_ENUM(NSInteger, EOARecentChangesTable)
 
 @end
 
+@class OAPrepareBackupResult, OABackupStatus;
+
 @interface OAStatusBackupTableViewController : UITableViewController
 
-- (instancetype)initWithTableType:(EOARecentChangesTable)type;
+- (instancetype)initWithTableType:(EOARecentChangesTable)type backup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status;
 
 @property (nonatomic, weak) id<OAStatusBackupTableDelegate> delegate;
 

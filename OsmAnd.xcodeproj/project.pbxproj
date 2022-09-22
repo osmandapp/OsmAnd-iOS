@@ -1806,6 +1806,9 @@
 		DA54AA8524EFEFBE001E6560 /* ic_custom_elevation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA54AA8124EFEFBE001E6560 /* ic_custom_elevation@3x.png */; };
 		DA54AA8724EFEFBE001E6560 /* ic_custom_elevation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA54AA8224EFEFBE001E6560 /* ic_custom_elevation@2x.png */; };
 		DA578C4C26626422007A086E /* libqtpcre2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA578C4B266263D2007A086E /* libqtpcre2.a */; };
+		DA591EA928D9EAF20068CAC7 /* OATableViewDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA591EA828D9EAF20068CAC7 /* OATableViewDataModel.m */; };
+		DA591EAC28D9EB1B0068CAC7 /* OATableViewSectionData.m in Sources */ = {isa = PBXBuildFile; fileRef = DA591EAB28D9EB1B0068CAC7 /* OATableViewSectionData.m */; };
+		DA591EAF28D9EB2C0068CAC7 /* OATableViewRowData.m in Sources */ = {isa = PBXBuildFile; fileRef = DA591EAE28D9EB2C0068CAC7 /* OATableViewRowData.m */; };
 		DA5A5DE3276B445900ABC19D /* snowmobile.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA5A5DE2276B445800ABC19D /* snowmobile.render.xml */; };
 		DA5A812026C563A700F274C7 /* OAProducts.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A790126C5639F00F274C7 /* OAProducts.mm */; };
 		DA5A812126C563A700F274C7 /* OAAnalyticsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A790526C5639F00F274C7 /* OAAnalyticsHelper.m */; };
@@ -5319,6 +5322,12 @@
 		DA54AA8224EFEFBE001E6560 /* ic_custom_elevation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_elevation@2x.png"; path = "Resources/Icons/ic_custom_elevation@2x.png"; sourceTree = "<group>"; };
 		DA578C4B266263D2007A086E /* libqtpcre2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre2.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre2.a"; sourceTree = "<group>"; };
 		DA58337426FF436800BB42FF /* OAColorizationType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorizationType.h; sourceTree = "<group>"; };
+		DA591EA728D9EAF20068CAC7 /* OATableViewDataModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATableViewDataModel.h; sourceTree = "<group>"; };
+		DA591EA828D9EAF20068CAC7 /* OATableViewDataModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATableViewDataModel.m; sourceTree = "<group>"; };
+		DA591EAA28D9EB1B0068CAC7 /* OATableViewSectionData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATableViewSectionData.h; sourceTree = "<group>"; };
+		DA591EAB28D9EB1B0068CAC7 /* OATableViewSectionData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATableViewSectionData.m; sourceTree = "<group>"; };
+		DA591EAD28D9EB2C0068CAC7 /* OATableViewRowData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATableViewRowData.h; sourceTree = "<group>"; };
+		DA591EAE28D9EB2C0068CAC7 /* OATableViewRowData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATableViewRowData.m; sourceTree = "<group>"; };
 		DA5A5DE2276B445800ABC19D /* snowmobile.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = snowmobile.render.xml; path = ../resources/rendering_styles/snowmobile.render.xml; sourceTree = "<group>"; };
 		DA5A790126C5639F00F274C7 /* OAProducts.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAProducts.mm; sourceTree = "<group>"; };
 		DA5A790226C5639F00F274C7 /* OAAnalyticsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAnalyticsHelper.h; sourceTree = "<group>"; };
@@ -10525,6 +10534,12 @@
 				DA5A79C826C563A000F274C7 /* OALocationPoint.h */,
 				DA5A79C926C563A000F274C7 /* OAPointDescription.h */,
 				DA5A79CD26C563A000F274C7 /* OAPointDescription.mm */,
+				DA591EA728D9EAF20068CAC7 /* OATableViewDataModel.h */,
+				DA591EA828D9EAF20068CAC7 /* OATableViewDataModel.m */,
+				DA591EAA28D9EB1B0068CAC7 /* OATableViewSectionData.h */,
+				DA591EAB28D9EB1B0068CAC7 /* OATableViewSectionData.m */,
+				DA591EAD28D9EB2C0068CAC7 /* OATableViewRowData.h */,
+				DA591EAE28D9EB2C0068CAC7 /* OATableViewRowData.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -16056,6 +16071,7 @@
 				DA5A82E926C563A800F274C7 /* OAMenuSimpleCell.mm in Sources */,
 				DA5A830326C563A800F274C7 /* OAQuickActionCell.mm in Sources */,
 				DA5A812826C563A700F274C7 /* OAFavoritesMapLayerProvider.mm in Sources */,
+				DA591EA928D9EAF20068CAC7 /* OATableViewDataModel.m in Sources */,
 				DA5A82ED26C563A800F274C7 /* OAPointTableViewCell.m in Sources */,
 				DA5A819526C563A700F274C7 /* OANavStartStopAction.mm in Sources */,
 				DA5A84B626C563A900F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */,
@@ -16524,6 +16540,7 @@
 				DA5A820B26C563A700F274C7 /* OAProfileGeneralSettingsViewController.m in Sources */,
 				DA5A831A26C563A800F274C7 /* OATextInputFloatingCellWithIcon.mm in Sources */,
 				DA4ABF1B2876DA6800B996EF /* OAFavoritesSettingsItem.mm in Sources */,
+				DA591EAF28D9EB2C0068CAC7 /* OATableViewRowData.m in Sources */,
 				DA5A82F126C563A800F274C7 /* OALocationIconsTableViewCell.m in Sources */,
 				DA5A844026C563A900F274C7 /* OAUsernameFilterViewController.mm in Sources */,
 				DA5A84BC26C563A900F274C7 /* OABaseBottomSheetViewController.m in Sources */,
@@ -16543,6 +16560,7 @@
 				DA5A853826C563A900F274C7 /* OAFavoritesHelper.mm in Sources */,
 				DA5A845426C563A900F274C7 /* OARouteLayer.mm in Sources */,
 				DA5A818B26C563A700F274C7 /* OAShowHideLocalOSMChanges.m in Sources */,
+				DA591EAC28D9EB1B0068CAC7 /* OATableViewSectionData.m in Sources */,
 				DA5A824826C563A700F274C7 /* OARoadSpeedsViewController.mm in Sources */,
 				DA5A832526C563A800F274C7 /* OACollectionViewCellState.m in Sources */,
 				DA5A81BE26C563A700F274C7 /* OACustomSearchPoiFilter.m in Sources */,

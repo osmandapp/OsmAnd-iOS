@@ -231,6 +231,9 @@
 "speak_tunnels" = "Tunnels";
 "show_tunnels" = "Tunnels";
 
+"tts" = "TTS";
+"recorded_voice" = "Recorded";
+
 // Dirrection appearance
 "one" = "One";
 "two" = "Two";

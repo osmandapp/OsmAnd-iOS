@@ -8,6 +8,8 @@
 
 #import "OAStatusBackupViewController.h"
 #import "OAStatusBackupTableViewController.h"
+#import "OAPrepareBackupResult.h"
+#import "OABackupStatus.h"
 #import "Localization.h"
 
 @interface OAStatusBackupViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
@@ -30,6 +32,19 @@
     UIPageViewController *_pageController;
     OAStatusBackupTableViewController *_allTableViewController;
     OAStatusBackupTableViewController *_conflictsTableViewController;
+    
+    OAPrepareBackupResult *_backup;
+    OABackupStatus *_status;
+}
+
+- (instancetype) initWithBackup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status
+{
+    self = [super init];
+    if (self) {
+        _backup = backup;
+        _status = status;
+    }
+    return self;
 }
 
 - (void)applyLocalization
@@ -42,9 +57,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    UIImage *backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
+    [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
+                     forState:UIControlStateNormal];
 
-    _allTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesAll];
-    _conflictsTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesConflicts];
+    _allTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesAll backup:_backup status:_status];
+    _conflictsTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesConflicts backup:_backup status:_status];
 
     [self.segmentControl setTitle:OALocalizedString(@"shared_string_all") forSegmentAtIndex:EOARecentChangesAll];
     [self.segmentControl setTitle:OALocalizedString(@"cloud_conflicts") forSegmentAtIndex:EOARecentChangesConflicts];

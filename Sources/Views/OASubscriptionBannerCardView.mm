@@ -63,6 +63,7 @@
     {
         case EOASubscriptionBannerFree:
         {
+            self.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
             self.descriptionLabel.hidden = NO;
             self.separatorView.hidden = NO;
 
@@ -79,6 +80,7 @@
         }
         case EOASubscriptionBannerNoFree:
         {
+            self.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
             self.descriptionLabel.hidden = NO;
             self.separatorView.hidden = YES;
 
@@ -96,6 +98,7 @@
         }
         case EOASubscriptionBannerUpdates:
         {
+            self.titleLabel.font = [UIFont systemFontOfSize:17.];
             self.descriptionLabel.hidden = YES;
             self.separatorView.hidden = YES;
 

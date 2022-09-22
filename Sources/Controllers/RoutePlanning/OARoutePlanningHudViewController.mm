@@ -230,7 +230,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     [super viewDidLoad];
     _hudMode = EOAHudModeRoutePlanning;
-    
+    _cachedYViewPort = _mapPanel.mapViewController.mapView.viewportYScale;
+
     [_optionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
     [_addPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
     _optionButtonWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_options") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17]].width + 16;
@@ -487,17 +488,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if ([self isLeftSidePresentation] && self.currentState == EOADraggableMenuStateInitial)
     {
         mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
-        mapView.viewportYScale = _landscapeHeaderContainerView.frame.size.height / DeviceScreenHeight;
+        mapView.viewportYScale = (DeviceScreenHeight - _landscapeHeaderContainerView.frame.size.height) / DeviceScreenHeight;
     }
     else if ([self isLeftSidePresentation])
     {
         mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
-        mapView.viewportYScale = _landscapeHeaderContainerView.frame.size.height / DeviceScreenHeight;
+        mapView.viewportYScale = (DeviceScreenHeight - _landscapeHeaderContainerView.frame.size.height) / DeviceScreenHeight;
     }
     else
     {
         mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
-        mapView.viewportYScale = self.getViewHeight / DeviceScreenHeight;
+        mapView.viewportYScale = (DeviceScreenHeight - self.getViewHeight) / DeviceScreenHeight;
     }
 }
 

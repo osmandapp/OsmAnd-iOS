@@ -12,7 +12,9 @@
 #import "OAOsmLoginMainViewController.h"
 #import "OABenefitsOsmContributorsViewController.h"
 #import "OAMappersViewController.h"
-#import "OACustomBasicTableCell.h"
+#import "OATableViewCellSimple.h"
+#import "OATableViewCellRightIcon.h"
+#import "OATableViewCellSwitch.h"
 #import "OASizes.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -86,13 +88,12 @@
 
     NSMutableDictionary *credentialData = [NSMutableDictionary dictionary];
     credentialData[@"key"] = @"edit_credentials";
-    credentialData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    credentialData[@"type"] = [OATableViewCellSimple getCellIdentifier];
     credentialData[@"title"] = _isLogged ? [_settings.osmUserName get] : OALocalizedString(@"login_open_street_map_org");
     credentialData[@"title_color"] = _isLogged ? UIColor.blackColor : UIColorFromRGB(color_primary_purple);
     credentialData[@"title_font"] = [UIFont systemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium];
     credentialData[@"left_icon"] = @"ic_custom_user_profile";
-    credentialData[@"right_icon"] = @"ic_custom_arrow_right";
-    credentialData[@"right_icon_color"] = UIColorFromRGB(color_tint_gray);
+    credentialData[@"accessory_type"] = _isLogged ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone);
     [credentialCells addObject:credentialData];
     _credentialIndexPath = [NSIndexPath indexPathForRow:credentialCells.count - 1 inSection:data.count - 1];
 
@@ -102,9 +103,8 @@
 
     NSMutableDictionary *offlieneEditingData = [NSMutableDictionary dictionary];
     offlieneEditingData[@"key"] = @"offline_editing";
-    offlieneEditingData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    offlieneEditingData[@"type"] = [OATableViewCellSwitch getCellIdentifier];
     offlieneEditingData[@"title"] = OALocalizedString(@"osm_editing_offline");
-    offlieneEditingData[@"switch_cell"] = @(YES);
     [offlieneEditingCells addObject:offlieneEditingData];
 
     NSMutableArray<NSMutableDictionary *> *mappersCells = [NSMutableArray array];
@@ -112,11 +112,10 @@
 
     NSMutableDictionary *mappersData = [NSMutableDictionary dictionary];
     mappersData[@"key"] = @"updates_for_mappers";
-    mappersData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    mappersData[@"type"] = [OATableViewCellSimple getCellIdentifier];
     mappersData[@"title"] = OALocalizedString(@"map_updates_for_mappers");
     mappersData[@"description"] = [self getMappersDescription];
-    mappersData[@"right_icon"] = @"ic_custom_arrow_right";
-    mappersData[@"right_icon_color"] = UIColorFromRGB(color_tint_gray);
+    mappersData[@"accessory_type"] = @(UITableViewCellAccessoryDisclosureIndicator);
     [mappersCells addObject:mappersData];
     _mappersIndexPath = [NSIndexPath indexPathForRow:mappersCells.count - 1 inSection:data.count - 1];
 
@@ -141,13 +140,14 @@
                              range:NSMakeRange(0, actionsDescrAttr.length)];
 
     NSMutableDictionary *descriptionData = [NSMutableDictionary dictionary];
-    descriptionData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    descriptionData[@"type"] = [OATableViewCellSimple getCellIdentifier];
     descriptionData[@"description_attributed"] = actionsDescrAttr;
+    descriptionData[@"accessory_type"] = @(UITableViewCellAccessoryNone);
     [actionsCells addObject:descriptionData];
 
     NSMutableDictionary *editsData = [NSMutableDictionary dictionary];
     editsData[@"key"] = @"open_edits";
-    editsData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    editsData[@"type"] = [OATableViewCellRightIcon getCellIdentifier];
     editsData[@"title"] = OALocalizedString(@"osm_edits_title");
     editsData[@"title_color"] = UIColorFromRGB(color_primary_purple);
     editsData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
@@ -215,14 +215,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OACustomBasicTableCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OATableViewCellSimple getCellIdentifier]])
     {
-        OACustomBasicTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomBasicTableCell getCellIdentifier]];
+        OATableViewCellSimple *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSimple getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomBasicTableCell getCellIdentifier] owner:self options:nil];
-            cell = (OACustomBasicTableCell *) nib[0];
-            [cell valueVisibility:NO];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSimple getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSimple *) nib[0];
         }
         if (cell)
         {
@@ -232,13 +231,9 @@
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
             cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont systemFontOfSize:17.];
 
-            BOOL isSwitchCell = item[@"switch_cell"];
-            cell.selectionStyle = isSwitchCell || !title ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
-            [cell switchVisibility:isSwitchCell];
-
             BOOL hasLeftIcon = [item.allKeys containsObject:@"left_icon"];
             [cell leftIconVisibility:hasLeftIcon];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"left_icon"]];
+            cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item[@"left_icon"]] : nil;
             cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
 
             NSString *description = item[@"description"];
@@ -255,10 +250,51 @@
                 cell.descriptionLabel.text = description;
             }
 
-            NSString *rightIcon = item[@"right_icon"];
-            [cell rightIconVisibility:rightIcon != nil];
-            cell.rightIconView.image = [UIImage templateImageNamed:rightIcon];
+            cell.selectionStyle = cell.titleLabel.hidden ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
+            cell.accessoryType = (UITableViewCellAccessoryType) [item[@"accessory_type"] integerValue];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATableViewCellRightIcon getCellIdentifier]])
+    {
+        OATableViewCellRightIcon *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellRightIcon getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellRightIcon getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellRightIcon *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont systemFontOfSize:17.];
+
+            BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
+            cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
             cell.rightIconView.tintColor = item[@"right_icon_color"];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    {
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.switchView.on = [self isEnabled:item[@"key"]];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
@@ -365,6 +401,7 @@
         credentialData[@"title"] = _isLogged ? [_settings.osmUserName get] : OALocalizedString(@"login_open_street_map_org");
         credentialData[@"title_color"] = _isLogged ? UIColor.blackColor : UIColorFromRGB(color_primary_purple);
         credentialData[@"title_font"] = [UIFont systemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium];
+        credentialData[@"accessory_type"] = _isLogged ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone);
 
         NSMutableDictionary *mappersData = _data[_mappersIndexPath.section][_mappersIndexPath.row];
         mappersData[@"description"] = [self getMappersDescription];

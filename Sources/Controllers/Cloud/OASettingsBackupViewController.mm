@@ -12,7 +12,7 @@
 #import "OAMainSettingsViewController.h"
 #import "OABaseBackupTypesViewController.h"
 #import "OABackupTypesViewController.h"
-#import "OACustomBasicTableCell.h"
+#import "OATableViewCellSimple.h"
 #import "OAAppSettings.h"
 #import "OABackupHelper.h"
 #import "OAPrepareBackupResult.h"
@@ -110,13 +110,12 @@
 
     NSMutableDictionary *backupData = [NSMutableDictionary dictionary];
     backupData[@"key"] = @"backup_data_cell";
-    backupData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    backupData[@"type"] = [OATableViewCellSimple getCellIdentifier];
     backupData[@"title"] = OALocalizedString(@"backup_data");
     backupData[@"left_icon"] = @"ic_custom_cloud_upload_colored_day";
     NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:
             [OABaseBackupTypesViewController calculateItemsSize:_uniqueRemoteFiles.allValues]
                                                      countStyle:NSByteCountFormatterCountStyleFile];
-    backupData[@"right_icon"] = @"ic_custom_arrow_right";
     backupData[@"description"] = sizeBackupDataString;
     [osmAndCloudCells addObject:backupData];
     _backupDataIndexPath = [NSIndexPath indexPathForRow:[osmAndCloudCells indexOfObject:backupData]
@@ -128,9 +127,8 @@
 
     NSMutableDictionary *accountData = [NSMutableDictionary dictionary];
     accountData[@"key"] = @"account_cell";
-    accountData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    accountData[@"type"] = [OATableViewCellSimple getCellIdentifier];
     accountData[@"title"] = [[OAAppSettings sharedManager].backupUserEmail get];
-    accountData[@"right_icon"] = @"ic_custom_arrow_right";
     [accountCells addObject:accountData];
 
     NSMutableArray<NSMutableDictionary *> *dangerZoneCells = [NSMutableArray array];
@@ -140,18 +138,16 @@
 
     NSMutableDictionary *deleteAllData = [NSMutableDictionary dictionary];
     deleteAllData[@"key"] = @"delete_all_cell";
-    deleteAllData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    deleteAllData[@"type"] = [OATableViewCellSimple getCellIdentifier];
     deleteAllData[@"title"] = OALocalizedString(@"backup_delete_all_data");
     deleteAllData[@"text_color"] = UIColorFromRGB(color_support_red);
-    deleteAllData[@"right_icon"] = @"ic_custom_arrow_right";
     [dangerZoneCells addObject:deleteAllData];
 
     NSMutableDictionary *removeVersionsData = [NSMutableDictionary dictionary];
     removeVersionsData[@"key"] = @"remove_versions_cell";
-    removeVersionsData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    removeVersionsData[@"type"] = [OATableViewCellSimple getCellIdentifier];
     removeVersionsData[@"title"] = OALocalizedString(@"backup_delete_old_data");
     removeVersionsData[@"text_color"] = UIColorFromRGB(color_support_red);
-    removeVersionsData[@"right_icon"] = @"ic_custom_arrow_right";
     [dangerZoneCells addObject:removeVersionsData];
 
     _data = data;
@@ -310,15 +306,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OACustomBasicTableCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OATableViewCellSimple getCellIdentifier]])
     {
-        OACustomBasicTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomBasicTableCell getCellIdentifier]];
+        OATableViewCellSimple *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSimple getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomBasicTableCell getCellIdentifier] owner:self options:nil];
-            cell = (OACustomBasicTableCell *) nib[0];
-            [cell valueVisibility:NO];
-            [cell switchVisibility:NO];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSimple getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSimple *) nib[0];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
@@ -326,11 +321,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (leftIconVisible ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent), 0., 0.);
 
             [cell leftIconVisibility:leftIconVisible];
-            cell.leftIconView.image = [UIImage imageNamed:item[@"left_icon"]];
-
-            [cell rightIconVisibility:[item.allKeys containsObject:@"right_icon"]];
-            cell.rightIconView.image = [UIImage templateImageNamed:item[@"right_icon"]];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.image = leftIconVisible ? [UIImage imageNamed:item[@"left_icon"]] : nil;
 
             [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
             cell.descriptionLabel.text = item[@"description"];

@@ -45,9 +45,9 @@
     return @"history_markers";
 }
 
-- (NSString *)publicName
+- (NSString *)getPublicName
 {
-    return OALocalizedString(@"history_markers");
+    return OALocalizedString(@"markers_history");
 }
 
 - (NSString *)defaultFileExtension

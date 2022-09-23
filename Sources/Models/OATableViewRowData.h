@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSInteger iconTint;
 @property (nonatomic) NSString * secondaryIconName;
 
-- (void) setData:(id)data forKey:(nonnull NSString *)key;
+- (void) setObj:(id)data forKey:(nonnull NSString *)key;
 - (id) objForKey:(nonnull NSString *)key;
 
 - (NSString *) stringForKey:(nonnull NSString *)key;

@@ -61,13 +61,19 @@
     UIImage *backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
-
-    _allTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesAll backup:_backup status:_status];
-    _conflictsTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesConflicts backup:_backup status:_status];
-
+    
+    
+    
     [self.segmentControl setTitle:OALocalizedString(@"shared_string_all") forSegmentAtIndex:EOARecentChangesAll];
     [self.segmentControl setTitle:OALocalizedString(@"cloud_conflicts") forSegmentAtIndex:EOARecentChangesConflicts];
+    
+}
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    _allTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesAll backup:_backup status:_status];
+    _conflictsTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesConflicts backup:_backup status:_status];
     [self setupPageController];
     [_pageController setViewControllers:@[_allTableViewController]
                               direction:UIPageViewControllerNavigationDirectionForward
@@ -84,40 +90,9 @@
     _pageController.delegate = self;
 
     [self addChildViewController:_pageController];
+    _pageController.view.frame = self.contentView.bounds;
+    _pageController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.contentView addSubview:_pageController.view];
-
-    [NSLayoutConstraint constraintWithItem:self.contentView
-                                 attribute:NSLayoutAttributeTop
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:_pageController.view
-                                 attribute:NSLayoutAttributeTop
-                                multiplier:1.
-                                  constant:0.];
-
-    [NSLayoutConstraint constraintWithItem:self.contentView
-                                 attribute:NSLayoutAttributeBottom
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:_pageController.view
-                                 attribute:NSLayoutAttributeBottom
-                                multiplier:1.
-                                  constant:0.];
-
-    [NSLayoutConstraint constraintWithItem:self.contentView
-                                 attribute:NSLayoutAttributeLeading
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:_pageController.view
-                                 attribute:NSLayoutAttributeLeading
-                                multiplier:1.
-                                  constant:0.];
-
-    [NSLayoutConstraint constraintWithItem:self.contentView
-                                 attribute:NSLayoutAttributeTrailing
-                                 relatedBy:NSLayoutRelationEqual
-                                    toItem:_pageController.view
-                                 attribute:NSLayoutAttributeTrailing
-                                multiplier:1.
-                                  constant:0.];
-
     [_pageController didMoveToParentViewController:self];
 }
 

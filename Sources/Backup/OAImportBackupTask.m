@@ -107,6 +107,12 @@
 {
     _helper = OANetworkSettingsHelper.sharedInstance;
     _importer = [[OABackupImporter alloc] initWithListener:self];
+    _itemsProgress = [NSMutableDictionary dictionary];
+}
+
+- (OAItemProgressInfo *) getItemProgressInfo:(NSString *)type fileName:(NSString *)fileName
+{
+    return _itemsProgress[[type stringByAppendingString:fileName]];
 }
 
 - (void)main
@@ -236,18 +242,39 @@
     return duplicateItems;
 }
 
+- (void) onProgressUpdate:(OAItemProgressInfo *)info
+{
+    if (_importListener)
+    {
+        OAItemProgressInfo *prevInfo = [self getItemProgressInfo:info.type fileName:info.fileName];
+        if (prevInfo)
+            info.work = prevInfo.work;
+        
+        _itemsProgress[[info.type stringByAppendingString:info.fileName]] = info;
+        
+        if (info.finished)
+            [_importListener onImportItemFinished:info.type fileName:info.fileName];
+        else if (info.value == 0)
+            [_importListener onImportItemStarted:info.type fileName:info.fileName work:info.work];
+        else
+            [_importListener onImportItemProgress:info.type fileName:info.fileName value:info.value];
+    }
+}
+
 // MARK: OANetworkImportProgressListener
 
 - (void)itemExportDone:(nonnull NSString *)type fileName:(nonnull NSString *)fileName {
-    
+    [self onProgressUpdate:[[OAItemProgressInfo alloc] initWithType:type fileName:fileName progress:0 work:0 finished:YES]];
+    if ([self isCancelled])
+        _importer.cancelled = YES;
 }
 
 - (void)itemExportStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(NSInteger)work {
-    
+    [self onProgressUpdate:[[OAItemProgressInfo alloc] initWithType:type fileName:fileName progress:0 work:work finished:NO]];
 }
 
 - (void)updateItemProgress:(nonnull NSString *)type fileName:(nonnull NSString *)fileName progress:(NSInteger)progress {
-    
+    [self onProgressUpdate:[[OAItemProgressInfo alloc] initWithType:type fileName:fileName progress:progress work:0 finished:NO]];
 }
 
 // MARK: OAImportItemsListener

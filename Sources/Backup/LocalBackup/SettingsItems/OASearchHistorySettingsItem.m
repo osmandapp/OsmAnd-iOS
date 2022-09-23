@@ -51,7 +51,7 @@
     return @"search_history";
 }
 
-- (NSString *)publicName
+- (NSString *)getPublicName
 {
     return OALocalizedString(@"search_history");
 }

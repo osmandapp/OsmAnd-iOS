@@ -57,6 +57,11 @@
     return @"favourites";
 }
 
+- (NSString *)getPublicName
+{
+    return OALocalizedString(@"favorites");
+}
+
 - (NSString *) defaultFileExtension
 {
     return @".gpx";

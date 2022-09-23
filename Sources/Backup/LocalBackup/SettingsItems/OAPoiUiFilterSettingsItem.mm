@@ -62,6 +62,11 @@
     [_filtersHelper setLastModifiedTime:localModifiedTime];
 }
 
+- (NSString *)getPublicName
+{
+    return OALocalizedString(@"poi_type");
+}
+
 - (void) apply
 {
     NSArray<OAPOIUIFilter *> *newItems = [self getNewItems];

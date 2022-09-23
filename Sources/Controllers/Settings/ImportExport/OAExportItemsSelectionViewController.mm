@@ -230,7 +230,7 @@
     else if ([object isKindOfClass:OAGlobalSettingsItem.class])
     {
         OAGlobalSettingsItem *globalSettingsItem = object;
-        item[@"title"] = globalSettingsItem.publicName;
+        item[@"title"] = globalSettingsItem.getPublicName;
         item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_settings"];
     }
     else if ([object isKindOfClass:OADestination.class])

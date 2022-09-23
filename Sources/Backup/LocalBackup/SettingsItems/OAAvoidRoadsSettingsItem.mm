@@ -61,6 +61,11 @@
     return @"avoid_roads";
 }
 
+- (NSString *)getPublicName
+{
+    return OALocalizedString(@"avoid_road");
+}
+
 - (BOOL) isDuplicate:(OAAvoidRoadInfo *)item
 {
     for (OAAvoidRoadInfo *info in self.existingItems)

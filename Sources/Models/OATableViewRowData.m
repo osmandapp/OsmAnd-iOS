@@ -106,7 +106,7 @@
     _data[kCellIconTint] = @(iconTint);
 }
 
-- (void) setData:(id)data forKey:(nonnull NSString *)key
+- (void) setObj:(id)data forKey:(nonnull NSString *)key
 {
     _data[key] = data;
 }

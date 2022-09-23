@@ -48,6 +48,11 @@
     return EOASettingsItemFileSubtypeOther;
 }
 
+- (NSString *)getPublicName
+{
+    return OALocalizedString(@"shared_string_resources");
+}
+
 - (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     NSError *readError;

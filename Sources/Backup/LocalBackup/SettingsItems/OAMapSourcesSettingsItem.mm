@@ -68,6 +68,11 @@
     return EOASettingsItemTypeMapSources;
 }
 
+- (NSString *)getPublicName
+{
+    return OALocalizedString(@"map_sources");
+}
+
 - (long)localModifiedTime
 {
     long lastModifiedTime = 0;

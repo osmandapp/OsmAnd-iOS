@@ -85,9 +85,6 @@
     [OAIAPHelper.sharedInstance checkBackupPurchase];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
-    [_settingsHelper updateExportListener:self];
-    [_settingsHelper updateImportListener:self];
-    [_backupHelper addPrepareBackupListener:self];
     if (!_settingsHelper.isBackupExporting)
         [_backupHelper prepareBackup];
     [self generateData];
@@ -98,15 +95,19 @@
     self.tblView.rowHeight = UITableViewAutomaticDimension;
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
+    [_settingsHelper updateExportListener:self];
+    [_settingsHelper updateImportListener:self];
     [_backupHelper addPrepareBackupListener:self];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    [_settingsHelper updateExportListener:nil];
+    [_settingsHelper updateImportListener:nil];
     [_backupHelper removePrepareBackupListener:self];
 }
 

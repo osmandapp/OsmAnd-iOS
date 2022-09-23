@@ -121,7 +121,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="nrX-dw-Kr3"/>
-            <color key="backgroundColor" red="0.89803921568627454" green="0.89803921568627454" blue="0.89803921568627454" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="X4M-dx-i9z" firstAttribute="top" secondItem="mpS-Ar-qBN" secondAttribute="top" id="Imd-sn-AwK"/>
                 <constraint firstAttribute="bottom" secondItem="Zcf-ec-NaU" secondAttribute="bottom" id="KHa-w3-ld4"/>

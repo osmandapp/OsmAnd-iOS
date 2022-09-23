@@ -661,7 +661,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"uploadFile" debug:BACKUP_DEBUG_LOGS];
     [operationLog startOperation:[NSString stringWithFormat:@"%@ %@", type, fileName]];
     __block NSString *error = nil;
-    [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES delegate:self onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
+    [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
         if (((NSHTTPURLResponse *)response).statusCode != 200)
         {
             error = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;

@@ -1857,3 +1857,6 @@
 "lang_ckb" = "Soranska kurdščina";
 "in_grace_period" = "V roku odloga plačila";
 "on_hold" = "Načakanju";
+
+// Route planning
+"plan_route" = "Načrtuj pot";

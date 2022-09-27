@@ -2715,6 +2715,7 @@
 "cloud_make_backup" = "Make a backup";
 "cloud_make_backup_descr" = "There are many changes on this device, please make a backup of this data so as not to lose it.";
 "cloud_conflicts" = "Conflicts";
+"cloud_conflict" = "Conflict";
 "cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";
 "cloud_view_conflicts" = "View conflicts";
 "backup_data" = "Backup data";
@@ -2741,6 +2742,10 @@
 "cloud_confirm_delete_type" = "Are you sure you want to delete \"%@\" from OsmAnd Cloud?";
 "cloud_recent_changes" = "Recent changes";
 "cloud_pause_all" = "Pause all";
+"cloud_all_changes_uploaded" = "All changes uploaded";
+"cloud_all_changes_uploaded_descr" = "All changes made on this device are in synchronized with OsmAnd Cloud.";
+"cloud_no_conflicts" = "There is no conflicts";
+"cloud_no_conflicts_descr" = "The data on the device and in the OsmAnd Cloud are the same.";
 
 "copy_address" = "Copy address";
 "copy_poi_name" = "Copy POI Name";

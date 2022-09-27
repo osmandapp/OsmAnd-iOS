@@ -10,9 +10,12 @@
 #import "OAStatusBackupTableViewController.h"
 #import "OAPrepareBackupResult.h"
 #import "OABackupStatus.h"
+#import "OABackupInfo.h"
+#import "OANetworkSettingsHelper.h"
+#import "OAColors.h"
 #import "Localization.h"
 
-@interface OAStatusBackupViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
+@interface OAStatusBackupViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OAStatusBackupTableDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navigationBarView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -35,6 +38,7 @@
     
     OAPrepareBackupResult *_backup;
     OABackupStatus *_status;
+    OANetworkSettingsHelper *_settingsHelper;
 }
 
 - (instancetype) initWithBackup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status
@@ -50,8 +54,8 @@
 - (void)applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"cloud_recent_changes");
-    [self.backupNowButton setTitle:OALocalizedString(@"cloud_backup_now") forState:UIControlStateNormal];
-    [self.pauseAllButton setTitle:OALocalizedString(@"cloud_pause_all") forState:UIControlStateNormal];
+    [self.segmentControl setTitle:OALocalizedString(@"shared_string_all") forSegmentAtIndex:EOARecentChangesAll];
+    [self.segmentControl setTitle:OALocalizedString(@"cloud_conflicts") forSegmentAtIndex:EOARecentChangesConflicts];
 }
 
 - (void)viewDidLoad
@@ -61,19 +65,17 @@
     UIImage *backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
-    
-    
-    
-    [self.segmentControl setTitle:OALocalizedString(@"shared_string_all") forSegmentAtIndex:EOARecentChangesAll];
-    [self.segmentControl setTitle:OALocalizedString(@"cloud_conflicts") forSegmentAtIndex:EOARecentChangesConflicts];
-    
+    _settingsHelper = [OANetworkSettingsHelper sharedInstance];
+    [self setupBottomButtons:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     _allTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesAll backup:_backup status:_status];
+    [_allTableViewController setDelegate:self];
     _conflictsTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesConflicts backup:_backup status:_status];
+    [_conflictsTableViewController setDelegate:self];
     [self setupPageController];
     [_pageController setViewControllers:@[_allTableViewController]
                               direction:UIPageViewControllerNavigationDirectionForward
@@ -119,6 +121,62 @@
             break;
         }
     }
+}
+
+- (void)setupBottomButtons:(BOOL)enabled
+{
+    BOOL isExporting = [_settingsHelper isBackupExporting];
+    self.pauseAllButton.userInteractionEnabled = isExporting && enabled;
+    [self.pauseAllButton setTitle:OALocalizedString(@"cloud_pause_all") forState:UIControlStateNormal];
+    [self.pauseAllButton setTintColor:isExporting && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
+    [self.pauseAllButton setTitleColor:isExporting && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+                              forState:UIControlStateNormal];
+
+    BOOL isImporting = [_settingsHelper isBackupImporting];
+    self.backupNowButton.userInteractionEnabled = !isExporting && !isImporting && enabled;
+    [self.backupNowButton setTitle:OALocalizedString(@"cloud_backup_now") forState:UIControlStateNormal];
+    [self.backupNowButton setTintColor:!isExporting && !isImporting && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
+    [self.backupNowButton setTitleColor:!isExporting && !isImporting && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+                               forState:UIControlStateNormal];
+}
+
+- (IBAction)leftButtonPressed:(UIButton *)sender
+{
+    
+}
+
+- (IBAction)rightButtonPressed:(UIButton *)sender
+{
+    @try
+    {
+        NSArray<OASettingsItem *> *items = _backup.backupInfo.itemsToUpload;
+        if (items.count > 0 || _backup.backupInfo.filteredFilesToDelete.count > 0)
+        {
+            [_settingsHelper exportSettings:kBackupItemsKey
+                                      items:items
+                              itemsToDelete:_backup.backupInfo.itemsToDelete
+                                   listener:self.segmentControl.selectedSegmentIndex == 0 ? _allTableViewController : _conflictsTableViewController];
+        }
+    }
+    @catch (NSException *e)
+    {
+        NSLog(@"Backup generation error: %@", e.reason);
+    }
+}
+
+#pragma mark - OAStatusBackupTableDelegate
+
+- (void)disableBottomButtons
+{
+    [self setupBottomButtons:NO];
+}
+
+- (void)updateBackupStatus:(OAPrepareBackupResult *)backupResult
+{
+    _backup = backupResult;
+    _status = [OABackupStatus getBackupStatus:backupResult];
+
+    [self setupBottomButtons:YES];
 }
 
 #pragma mark - UIPageViewControllerDataSource

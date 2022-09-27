@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OANetworkSettingsHelper.h"
+
+@class OAPrepareBackupResult, OABackupStatus;
 
 typedef NS_ENUM(NSInteger, EOARecentChangesTable)
 {
@@ -16,15 +19,15 @@ typedef NS_ENUM(NSInteger, EOARecentChangesTable)
 
 @protocol OAStatusBackupTableDelegate
 
+- (void)disableBottomButtons;
+- (void)updateBackupStatus:(OAPrepareBackupResult *)backupResult;
 
 @end
 
-@class OAPrepareBackupResult, OABackupStatus;
-
-@interface OAStatusBackupTableViewController : UITableViewController
+@interface OAStatusBackupTableViewController : UITableViewController <OABackupExportListener>
 
 - (instancetype)initWithTableType:(EOARecentChangesTable)type backup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status;
 
-@property (nonatomic, weak) id<OAStatusBackupTableDelegate> delegate;
+- (void)setDelegate:(id<OAStatusBackupTableDelegate>)delegate;
 
 @end

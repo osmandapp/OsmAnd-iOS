@@ -1963,7 +1963,7 @@
 "nearest_point" = "Nächstgelegener Punkt";
 "start_of_track" = "Startpunkt des Tracks";
 "point_to_navigate" = "Navigation";
-"shared_string_gpx_track" = "Verfolgen";
+"shared_string_gpx_track" = "Track";
 "reverse_track_dir" = "Trackrichtung umkehren";
 "attach_to_the_roads" = "Auf Straßen einrasten";
 "select_another_track" = "Anderen Track wählen";

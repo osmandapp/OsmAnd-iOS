@@ -8,7 +8,8 @@
 
 #import "OAManageTypeViewController.h"
 #import "OABaseBackupTypesViewController.h"
-#import "OACustomBasicTableCell.h"
+#import "OATableViewCellSimple.h"
+#import "OATableViewCellValue.h"
 #import "OAExportSettingsType.h"
 #import "OASettingsCategoryItems.h"
 #import "OAColors.h"
@@ -88,12 +89,13 @@
     _data = @[
             @[@{
                     @"key" : @"size_cell",
-                    @"type" : [OACustomBasicTableCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"res_size")
+                    @"type" : [OATableViewCellValue getCellIdentifier],
+                    @"title" : OALocalizedString(@"res_size"),
+                    @"value" : _size
             }],
             @[@{
                     @"key" : @"delete_cell",
-                    @"type" : [OACustomBasicTableCell getCellIdentifier],
+                    @"type" : [OATableViewCellSimple getCellIdentifier],
                     @"title" : OALocalizedString(@"shared_string_delete_data")
             }]
     ];
@@ -125,26 +127,40 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OACustomBasicTableCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OATableViewCellSimple getCellIdentifier]])
     {
-        OACustomBasicTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomBasicTableCell getCellIdentifier]];
+        OATableViewCellSimple *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSimple getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomBasicTableCell getCellIdentifier] owner:self options:nil];
-            cell = (OACustomBasicTableCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSimple getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSimple *) nib[0];
+            cell.titleLabel.textColor = UIColorFromRGB(color_support_red);
+            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
             [cell leftIconVisibility:NO];
-            [cell rightIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            [cell switchVisibility:NO];
         }
         if (cell)
         {
-            BOOL isSize = [item[@"key"] isEqualToString:@"size_cell"];
-            cell.selectionStyle = isSize ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:isSize ? UIFontWeightRegular : UIFontWeightMedium];
-            cell.titleLabel.textColor = isSize ? UIColor.blackColor : UIColorFromRGB(color_support_red);
-            cell.valueLabel.text = isSize ? _size : @"";
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATableViewCellValue getCellIdentifier]])
+    {
+        OATableViewCellValue *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellValue getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellValue getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellValue *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.valueLabel.textColor = UIColor.blackColor;
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
         }
         return cell;
     }

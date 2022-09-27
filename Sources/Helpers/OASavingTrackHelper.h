@@ -37,6 +37,8 @@
 
 - (BOOL) saveIfNeeded;
 
+- (void) updateLocation:(CLLocation *)location heading:(CLLocationDirection)heading;
+
 - (void)addWpt:(OAWptPt *)wpt;
 - (void)deleteWpt:(OAWptPt *)wpt;
 - (void)deleteAllWpts;

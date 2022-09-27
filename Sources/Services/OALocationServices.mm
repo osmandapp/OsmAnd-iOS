@@ -21,6 +21,7 @@
 #import "OAVoiceRouter.h"
 #import "OALocationSimulation.h"
 #import "OAWaypointHelper.h"
+#import "OASavingTrackHelper.h"
 
 #import <FormatterKit/TTTLocationFormatter.h>
 
@@ -613,7 +614,7 @@
     // 1. Logging services
     if (location)
     {
-        //app.getSavingTrackHelper().updateLocation(location);
+        [OASavingTrackHelper.sharedInstance updateLocation:location heading:_lastHeading];
         //OsmandPlugin.updateLocationPlugins(location);
     }
     

@@ -248,11 +248,8 @@
         if (_listener != nil)
         {
             _deltaProgress += deltaWork;
-            if ((_deltaProgress > (_itemWork / 100)) || ((_itemProgress + _deltaProgress) >= _itemWork)) {
-                _itemProgress += _deltaProgress;
-                [_listener onItemUploadProgress:_item fileName:_itemFileName progress:_itemProgress deltaWork:_deltaProgress];
-                _deltaProgress = 0;
-            }
+            _itemProgress += _deltaProgress;
+            [_listener onItemUploadProgress:_item fileName:_itemFileName progress:progress deltaWork:_deltaProgress];
         }
     }
     else

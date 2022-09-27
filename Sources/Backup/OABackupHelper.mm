@@ -24,6 +24,7 @@
 #import "OADeleteFilesCommand.h"
 #import "OAWebClient.h"
 #import "OAOperationLog.h"
+#import "OAURLSessionProgress.h"
 #import "OADeleteAllFilesCommand.h"
 #import "OADeleteOldFilesCommand.h"
 #import "OARegisterUserCommand.h"
@@ -51,6 +52,8 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 @interface OABackupHelper () <OAOnPrepareBackupListener, NSURLSessionDelegate>
 
+@property (nonatomic, assign) NSInteger maximumAccountSize;
+
 @end
 
 @implementation OABackupHelper
@@ -63,7 +66,6 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
-    NSInteger _maximumAccountSize;
 }
 
 + (NSString *) INFO_EXT
@@ -648,6 +650,11 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 {
     [self checkRegistered];
     
+    OAURLSessionProgress *progress = [[OAURLSessionProgress alloc] init];
+    [progress setOnProgress:^(int progress, int64_t deltaWork) {
+        [listener onFileUploadProgress:type fileName:fileName progress:progress deltaWork:deltaWork];
+    }];
+    
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"deviceid"] = [self getDeviceId];
     params[@"accessToken"] = [self getAccessToken];
@@ -661,7 +668,8 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"uploadFile" debug:BACKUP_DEBUG_LOGS];
     [operationLog startOperation:[NSString stringWithFormat:@"%@ %@", type, fileName]];
     __block NSString *error = nil;
-    [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
+    [listener onFileUploadStarted:type fileName:fileName work:data.length];
+    [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
         if (((NSHTTPURLResponse *)response).statusCode != 200)
         {
             error = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;

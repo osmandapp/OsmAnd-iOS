@@ -8,6 +8,7 @@
 
 #import "OANetworkUtilities.h"
 #import "OAUtilities.h"
+#import "OAURLSessionProgress.h"
 
 #define BOUNDARY @"CowMooCowMooCowCowCow"
 
@@ -82,7 +83,7 @@
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
 
-+ (void) uploadFile:(NSString *)url fileName:(NSString *)fileName params:(NSDictionary<NSString *, NSString *> *)params headers:(NSDictionary<NSString *, NSString *> *)headers data:(NSData *)data gzip:(BOOL)gzip onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
++ (void) uploadFile:(NSString *)url fileName:(NSString *)fileName params:(NSDictionary<NSString *, NSString *> *)params headers:(NSDictionary<NSString *, NSString *> *)headers data:(NSData *)data gzip:(BOOL)gzip progress:(OAURLSessionProgress *)progress onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     NSURL *urlObj;
@@ -130,7 +131,8 @@
     [request setHTTPBody:postData];
 
     __block BOOL hasFinished = NO;
-    NSURLSessionDataTask *uploadTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration delegate:progress delegateQueue:nil];
+    NSURLSessionDataTask *uploadTask = [urlSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         hasFinished = YES;
         if (onComplete)
             onComplete(data, response, error);

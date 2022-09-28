@@ -275,7 +275,7 @@
         }
         if (progressInfo && !progressInfo.finished)
         {
-            progressView.progress = progressInfo.value / progressInfo.work;
+            progressView.progress = progressInfo.value / 100.;
         }
         else
         {
@@ -455,15 +455,15 @@
 
 - (void)updateCellProgress:(NSString * _Nonnull)fileName type:(NSString * _Nonnull)type {
     dispatch_async(dispatch_get_main_queue(), ^{
-//        NSArray *arr = [self rowAndIndexForType:type fileName:fileName];
-//        if (arr)
-//        {
-//            NSIndexPath *indPath = [NSIndexPath indexPathForRow:[arr.firstObject integerValue] inSection:1];
-//            OACustomBasicTableCell *cell = [self.tableView cellForRowAtIndexPath:indPath];
-//            if (cell)
-//                [self setupProgress:cell item:arr.lastObject];
-//        }
-        [self.tableView reloadData];
+        NSArray *arr = [self rowAndIndexForType:type fileName:fileName];
+        if (arr)
+        {
+            NSIndexPath *indPath = [NSIndexPath indexPathForRow:[arr.firstObject integerValue] inSection:1];
+            OACustomBasicTableCell *cell = [self.tableView cellForRowAtIndexPath:indPath];
+            if (cell)
+                [self setupProgress:cell item:arr.lastObject];
+            [self.tableView reloadRowsAtIndexPaths:@[indPath] withRowAnimation:UITableViewRowAnimationNone];
+        }
     });
 }
 

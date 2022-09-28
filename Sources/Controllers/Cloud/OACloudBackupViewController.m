@@ -105,7 +105,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
+    [super viewWillDisappear:animated];
     [_settingsHelper updateExportListener:nil];
     [_settingsHelper updateImportListener:nil];
     [_backupHelper removePrepareBackupListener:self];

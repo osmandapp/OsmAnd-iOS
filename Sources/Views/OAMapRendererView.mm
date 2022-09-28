@@ -344,7 +344,7 @@
 
 - (float)tileSizeOnScreenInPixels
 {
-    return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getTileSizeOnScreenInPixels();
+    return _renderer->getTileSizeOnScreenInPixels();
 }
 
 - (float)tileSizeOnScreenInMeters

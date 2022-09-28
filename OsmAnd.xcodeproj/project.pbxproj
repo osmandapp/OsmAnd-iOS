@@ -3095,6 +3095,7 @@
 		DAB985AE2124235E0081F8F8 /* da_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985AD2124235E0081F8F8 /* da_tts.js */; };
 		DAB985B1212423710081F8F8 /* en-gb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985B0212423710081F8F8 /* en-gb_tts.js */; };
 		DAB985B4212423990081F8F8 /* el_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985B3212423980081F8F8 /* el_tts.js */; };
+		DAB9AECD28E192D300AD01CE /* OAURLSessionProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB9AECC28E192D300AD01CE /* OAURLSessionProgress.m */; };
 		DABA3DD322686E72005BB777 /* ic_custom_overflow_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABA3DC422686E6D005BB777 /* ic_custom_overflow_menu@2x.png */; };
 		DABA3DD722686E72005BB777 /* ic_tabbar_trips@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABA3DC622686E6E005BB777 /* ic_tabbar_trips@2x.png */; };
 		DABA3DD922686E72005BB777 /* ic_tabbar_favorites@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABA3DC722686E6E005BB777 /* ic_tabbar_favorites@2x.png */; };
@@ -7446,6 +7447,8 @@
 		DAB985AD2124235E0081F8F8 /* da_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = da_tts.js; path = ../resources/voice/da/da_tts.js; sourceTree = "<group>"; };
 		DAB985B0212423710081F8F8 /* en-gb_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "en-gb_tts.js"; path = "../resources/voice/en-gb/en-gb_tts.js"; sourceTree = "<group>"; };
 		DAB985B3212423980081F8F8 /* el_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = el_tts.js; path = ../resources/voice/el/el_tts.js; sourceTree = "<group>"; };
+		DAB9AECB28E192D300AD01CE /* OAURLSessionProgress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAURLSessionProgress.h; sourceTree = "<group>"; };
+		DAB9AECC28E192D300AD01CE /* OAURLSessionProgress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAURLSessionProgress.m; sourceTree = "<group>"; };
 		DABA3DC422686E6D005BB777 /* ic_custom_overflow_menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_overflow_menu@2x.png"; path = "Resources/Icons/ic_custom_overflow_menu@2x.png"; sourceTree = "<group>"; };
 		DABA3DC622686E6E005BB777 /* ic_tabbar_trips@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_tabbar_trips@2x.png"; path = "Resources/Icons/ic_tabbar_trips@2x.png"; sourceTree = "<group>"; };
 		DABA3DC722686E6E005BB777 /* ic_tabbar_favorites@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_tabbar_favorites@2x.png"; path = "Resources/Icons/ic_tabbar_favorites@2x.png"; sourceTree = "<group>"; };
@@ -13032,6 +13035,8 @@
 				DA346373287C157300C18214 /* OAConcurrentCollections.m */,
 				DAD5B4CD288E80EC009CF611 /* OAOperationLog.h */,
 				DAD5B4CE288E80EC009CF611 /* OAOperationLog.m */,
+				DAB9AECB28E192D300AD01CE /* OAURLSessionProgress.h */,
+				DAB9AECC28E192D300AD01CE /* OAURLSessionProgress.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -16635,6 +16640,7 @@
 				DA5A852F26C563A900F274C7 /* OpenLocationCode.swift in Sources */,
 				DA5A850026C563A900F274C7 /* OARangeSlider.m in Sources */,
 				DA5A84CA26C563A900F274C7 /* OADeleteProfileBottomSheetViewController.m in Sources */,
+				DAB9AECD28E192D300AD01CE /* OAURLSessionProgress.m in Sources */,
 				DA5A833326C563A800F274C7 /* OABottomSheetHeaderIconCell.m in Sources */,
 				DA4E72B328784768007A894D /* OANetworkWriter.mm in Sources */,
 				DA5A856D26C563A900F274C7 /* OATargetPointsHelper.mm in Sources */,

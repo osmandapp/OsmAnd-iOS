@@ -2692,3 +2692,6 @@
 "benefits_for_contributors_secondary_descr" = "Connectez-vous à OpenStreetMap pour vérifier si vous êtes éligible aux mises à jour illimitées.";
 "map_updates_are_unavailable_yet" = "Les mises à jour de cartes ne sont pas disponibles pour l'instant . :-(";
 "not_enough_contributions_descr" = "Un minimum de %i modifications au cours des deux derniers mois %@ est requis pour bénéficier de la mise à jour horaire des cartes en illimité.";
+"carplay_available_in_sub_plans" = "Achetez OsmAnd Pro ou Maps+ pour utiliser OsmAnd avec CarPlay.";
+"cloud_confirm_delete_type" = "Voulez-vous supprimer \"%@\" depuis OsmAnd Cloud ?";
+"purchases_feature_desc_cross_buy" = "Utilisez toutes les fonctionnalités souscrites sur plusieurs plateformes sans coût supplémentaire. Disponible sur Android, iOS et le Web.";

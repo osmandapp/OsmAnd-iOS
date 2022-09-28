@@ -1864,7 +1864,7 @@
 "add_point" = "إضافة نقطة";
 
 // Route planning
-"plan_route" = "إضافة تخطيط مسار";
+"plan_route" = "تخطيط الطريق";
 "checking_for_duplicate_description" = "OsmAnd يتحقق %@ من التكرارات مع العناصر الموجودة في التطبيق. قد يستغرق الأمر بعض الوقت.";
 "checking_for_duplicates" = "التحقق من التكرارات ...";
 "added_items" = "العناصر المضافة: % @";

@@ -7,6 +7,8 @@
 //
 
 #import "OAStatusBackupTableViewController.h"
+#import "OAStatusBackupViewController.h"
+#import "OAStatusBackupConflictDetailsViewController.h"
 #import "OAColors.h"
 #import "OATableViewDataModel.h"
 #import "OATableViewSectionData.h"
@@ -37,6 +39,8 @@
 #import "OAImportBackupTask.h"
 #import "OAExportBackupTask.h"
 #import "OALocalFile.h"
+#import "OATableViewCustomHeaderView.h"
+#import "OASizes.h"
 
 @interface OAStatusBackupTableViewController () <OAOnDeleteFilesListener, OAImportListener, OAOnPrepareBackupListener>
 
@@ -47,10 +51,10 @@
     EOARecentChangesTable _tableType;
     OATableViewDataModel *_data;
     id<OAStatusBackupTableDelegate> _delegate;
+    NSInteger _itemsSection;
     
     OABackupStatus *_status;
     OAPrepareBackupResult *_backup;
-    
     OANetworkSettingsHelper *_settingsHelper;
     OABackupHelper *_backupHelper;
 }
@@ -77,8 +81,9 @@
     [super viewDidLoad];
     self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0.001, 0.001)];
-    _settingsHelper = OANetworkSettingsHelper.sharedInstance;
+    _settingsHelper = [OANetworkSettingsHelper sharedInstance];
     _backupHelper = [OABackupHelper sharedInstance];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     [self generateData];
 }
 
@@ -144,6 +149,9 @@
     }
 
     [_data addSection:itemsSection];
+    _itemsSection = _data.sectionCount - 1;
+    if (_tableType == EOARecentChangesConflicts && itemsSection.rowCount > 1)
+        [_data sectionDataForIndex:_itemsSection].headerText = OALocalizedString(@"backup_conflicts_descr");
 }
 
 - (OATableViewRowData *) rowFromConflictItems:(NSArray *)items
@@ -151,6 +159,7 @@
     OALocalFile *localFile = (OALocalFile *) items.firstObject;
     OARemoteFile *remoteFile = (OARemoteFile *) items.lastObject;
     OATableViewRowData *rowData = [self rowFromItem:localFile.item toDelete:NO];
+    [rowData setObj:localFile forKey:@"localConflictItem"];
     [rowData setObj:remoteFile forKey:@"remoteConflictItem"];
     NSString *conflictStr = [OALocalizedString(@"cloud_conflict") stringByAppendingString:@". "];
     NSMutableAttributedString *attributedDescr = [[NSMutableAttributedString alloc] initWithString:[conflictStr stringByAppendingString:rowData.descr]];
@@ -181,36 +190,17 @@
     [rowData setTitle:name];
     NSString *fileName = [OABackupHelper getItemFileName:item];
     [rowData setObj:fileName forKey:@"file_name"];
-    NSString *summary = OALocalizedString(@"cloud_last_backup");
-    OAUploadedFileInfo *info = [OABackupDbHelper.sharedDatabase getUploadedFileInfo:[OASettingsItemType typeName:item.type] name:fileName];
-    if (info)
-    {
-        NSString *time = [OAOsmAndFormatter getFormattedPassedTime:(info.uploadTime / 1000) def:OALocalizedString(@"shared_string_never")];
-        [rowData setDescr:[NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), summary, time]];
-    }
-    else
-    {
-        [rowData setDescr:[NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), summary, OALocalizedString(@"shared_string_never")]];
-    }
-    [self setRowIcon:rowData item:item];
-    [rowData setSecondaryIconName:toDelete ? @"ic_custom_remove" : @"ic_custom_cloud_done"];
-    return rowData;
-}
 
-- (void) setRowIcon:(OATableViewRowData *)rowData item:(OASettingsItem *)item
-{
-    if ([item isKindOfClass:OAProfileSettingsItem.class])
+    if (_delegate)
     {
-        OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *) item;
-        OAApplicationMode *mode = profileItem.appMode;
-        [rowData setObj:mode.getIcon forKey:@"icon"];
-        [rowData setIconTint:mode.getIconColor];
+        [rowData setDescr:[_delegate getDescriptionForItemType:item.type
+                                                      fileName:fileName
+                                                       summary:OALocalizedString(@"cloud_last_backup")]];
+        [_delegate setRowIcon:rowData item:item];
     }
-    OAExportSettingsType *type = [OAExportSettingsType getExportSettingsTypeForItem:item];
-    if (type != nil)
-    {
-        [rowData setObj:type.icon forKey:@"icon"];
-    }
+
+    [rowData setSecondaryIconName:toDelete ? @"ic_custom_remove" : @"ic_custom_cloud_alert"];
+    return rowData;
 }
 
 - (NSArray *) rowAndIndexForType:(NSString *)type fileName:(NSString *)fileName
@@ -322,6 +312,7 @@
         }
         if (cell)
         {
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
             cell.titleLabel.text = item.title;
             cell.descriptionLabel.text = item.descr;
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
@@ -339,6 +330,7 @@
         }
         if (cell)
         {
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
             cell.selectionStyle = [item objForKey:@"remoteConflictItem"] != nil ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
 
             NSString *description = item.descr;
@@ -391,8 +383,35 @@
 
 // MARK: UITableViewDelegate
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    NSString *header = [_data sectionDataForIndex:section].headerText;
+    if (header && section == _itemsSection && _tableType == EOARecentChangesConflicts)
+    {
+        customHeader.label.text = header;
+        customHeader.label.font = [UIFont systemFontOfSize:13.];
+        [customHeader setYOffset:2.];
+        return customHeader;
+    }
+    return nil;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    NSString *header = [_data sectionDataForIndex:section].headerText;
+    if (section == _itemsSection)
+    {
+        if (header && _tableType == EOARecentChangesConflicts)
+        {
+            return [OATableViewCustomHeaderView getHeight:header
+                                                    width:tableView.bounds.size.width
+                                                  xOffset:kPaddingOnSideOfContent
+                                                  yOffset:2.
+                                                     font:[UIFont systemFontOfSize:13.]] + 15.;
+        }
+        return kHeaderHeightDefault;
+    }
     return 0.001;
 }
 
@@ -402,6 +421,12 @@
     OARemoteFile *remoteConflictItem = [item objForKey:@"remoteConflictItem"];
     if (remoteConflictItem)
     {
+        OAStatusBackupConflictDetailsViewController *conflictDetailsViewController =
+        [[OAStatusBackupConflictDetailsViewController alloc] initWithLocalFile:[item objForKey:@"localConflictItem"]
+                                                                    remoteFile:[item objForKey:@"remoteConflictItem"]
+                                                    backupExportImportListener:self];
+        conflictDetailsViewController.delegate = _delegate;
+        [conflictDetailsViewController presentInViewController:self];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

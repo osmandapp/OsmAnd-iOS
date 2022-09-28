@@ -592,6 +592,7 @@
 "shared_string_unavailable" = "Unavailable";
 "shared_string_contributions" = "Contributions";
 "shared_string_refresh" = "Refresh";
+"shared_string_changed" = "Changed";
 
 "restart" = "Restart";
 
@@ -2746,6 +2747,11 @@
 "cloud_all_changes_uploaded_descr" = "All changes made on this device are in synchronized with OsmAnd Cloud.";
 "cloud_no_conflicts" = "There is no conflicts";
 "cloud_no_conflicts_descr" = "The data on the device and in the OsmAnd Cloud are the same.";
+"backup_conflicts_descr" = "Newer version of this files is stored on the server. You need to select action";
+"backup_conflicts_action_descr" = "Another version of this file is stored on the server. You need to select action";
+"cloud_contains_newer_changes" = "OsmAnd Cloud version contains newer changes.";
+"upload_local_version" = "Upload local version";
+"dowload_cloud_version" = "Dowload cloud version";
 
 "copy_address" = "Copy address";
 "copy_poi_name" = "Copy POI Name";

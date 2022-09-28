@@ -43,7 +43,7 @@
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recent changes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6oV-xs-nai" userLabel="Title Label">
-                            <rect key="frame" x="52" y="62.666666666666657" width="286" height="21"/>
+                            <rect key="frame" x="133.66666666666666" y="62.666666666666657" width="122.66666666666666" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
@@ -61,9 +61,9 @@
                     </subviews>
                     <color key="backgroundColor" red="1" green="0.53333333329999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="trailingMargin" secondItem="6oV-xs-nai" secondAttribute="trailing" constant="44" id="70f-Cc-q4f"/>
                         <constraint firstItem="fi2-pJ-e8t" firstAttribute="leading" secondItem="X4M-dx-i9z" secondAttribute="leading" constant="14" id="8kr-3f-6pe"/>
-                        <constraint firstItem="6oV-xs-nai" firstAttribute="leading" secondItem="X4M-dx-i9z" secondAttribute="leadingMargin" constant="44" id="DeD-w3-h4E"/>
+                        <constraint firstItem="6oV-xs-nai" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fi2-pJ-e8t" secondAttribute="trailing" constant="16" id="9EY-Z7-RMF"/>
+                        <constraint firstItem="6oV-xs-nai" firstAttribute="centerX" secondItem="X4M-dx-i9z" secondAttribute="centerX" id="H8W-Gt-gPo"/>
                         <constraint firstAttribute="trailingMargin" secondItem="uaW-9U-gWu" secondAttribute="trailing" constant="8" id="fpd-2b-6o4"/>
                         <constraint firstItem="uaW-9U-gWu" firstAttribute="leading" secondItem="X4M-dx-i9z" secondAttribute="leadingMargin" constant="8" id="pSn-He-jRl"/>
                         <constraint firstAttribute="bottom" secondItem="uaW-9U-gWu" secondAttribute="bottom" constant="8" id="uk6-Ug-FUx"/>

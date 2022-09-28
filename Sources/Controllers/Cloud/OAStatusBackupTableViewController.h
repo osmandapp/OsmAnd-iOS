@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "OANetworkSettingsHelper.h"
+#import "OASettingsItemType.h"
 
-@class OAPrepareBackupResult, OABackupStatus;
+@class OATableViewRowData, OAPrepareBackupResult, OABackupStatus;
 
 typedef NS_ENUM(NSInteger, EOARecentChangesTable)
 {
@@ -21,6 +22,9 @@ typedef NS_ENUM(NSInteger, EOARecentChangesTable)
 
 - (void)disableBottomButtons;
 - (void)updateBackupStatus:(OAPrepareBackupResult *)backupResult;
+
+- (void)setRowIcon:(OATableViewRowData *)rowData item:(OASettingsItem *)item;
+- (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary;
 
 @end
 

@@ -12,6 +12,12 @@
 #import "OABackupStatus.h"
 #import "OABackupInfo.h"
 #import "OANetworkSettingsHelper.h"
+#import "OAProfileSettingsItem.h"
+#import "OAExportSettingsType.h"
+#import "OAApplicationMode.h"
+#import "OABackupDbHelper.h"
+#import "OATableViewRowData.h"
+#import "OAOsmAndFormatter.h"
 #import "OAColors.h"
 #import "Localization.h"
 
@@ -177,6 +183,35 @@
     _status = [OABackupStatus getBackupStatus:backupResult];
 
     [self setupBottomButtons:YES];
+}
+
+- (void)setRowIcon:(OATableViewRowData *)rowData item:(OASettingsItem *)item
+{
+    if ([item isKindOfClass:OAProfileSettingsItem.class])
+    {
+        OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *) item;
+        OAApplicationMode *mode = profileItem.appMode;
+        [rowData setObj:[UIImage templateImageNamed:[mode getIconName]] forKey:@"icon"];
+        [rowData setIconTint:[mode getIconColor]];
+    }
+    OAExportSettingsType *type = [OAExportSettingsType getExportSettingsTypeForItem:item];
+    if (type != nil)
+        [rowData setObj:type.icon forKey:@"icon"];
+}
+
+- (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary
+{
+    OAUploadedFileInfo *info = [[OABackupDbHelper sharedDatabase] getUploadedFileInfo:[OASettingsItemType typeName:type] name:fileName];
+    if (info)
+    {
+        NSString *time = [OAOsmAndFormatter getFormattedPassedTime:(info.uploadTime / 1000)
+                                                               def:OALocalizedString(@"shared_string_never")];
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), summary, time];
+    }
+    else
+    {
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), summary, OALocalizedString(@"shared_string_never")];
+    }
 }
 
 #pragma mark - UIPageViewControllerDataSource

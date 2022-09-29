@@ -77,9 +77,7 @@
             cell.colorView.layer.borderWidth = 0;
         }
 
-        UIColor *aColor = UIColorFromARGB(color);
-        if (CGColorGetAlpha(aColor.CGColor) == 0.)
-            aColor = [aColor colorWithAlphaComponent:1.];
+        UIColor *aColor = UIColorFromRGB(color);
         cell.colorView.backgroundColor = aColor;
         cell.chessboardView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
         cell.chessboardView.tintColor = UIColorFromRGB(color);

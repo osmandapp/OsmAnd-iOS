@@ -229,12 +229,12 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         UIImage *icon;
         UIColor *textColor;
         NSString *vl = [self.poi getAdditionalInfo][key];
-
-        if ([key isEqualToString:@"image"]
-                || [key isEqualToString:MAPILLARY]
-                || [key isEqualToString:@"subway_region"]
-                || ([key isEqualToString:@"note"] && !osmEditingEnabled)
-                || [key hasPrefix:@"lang_yes"])
+        NSString *convertedKey = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
+        if ([convertedKey isEqualToString:@"image"]
+                || [convertedKey isEqualToString:MAPILLARY]
+                || [convertedKey isEqualToString:@"subway_region"]
+                || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
+                || [convertedKey hasPrefix:@"lang_yes"])
             continue;
 
         NSString *textPrefix = @"";
@@ -242,18 +242,18 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         BOOL collapsable = NO;
         BOOL isText = NO;
         BOOL isDescription = NO;
-        BOOL needLinks = !([key isEqualToString:@"population"] || [key isEqualToString:@"height"] || [key isEqualToString:OPENING_HOURS]);
-        BOOL needIntFormatting = [key isEqualToString:@"population"];
+        BOOL needLinks = !([convertedKey isEqualToString:@"population"] || [convertedKey isEqualToString:@"height"] || [convertedKey isEqualToString:OPENING_HOURS]);
+        BOOL needIntFormatting = [convertedKey isEqualToString:@"population"];
         BOOL isPhoneNumber = NO;
         BOOL isUrl = NO;
         BOOL isCuisine = NO;
         int poiTypeOrder = 0;
         NSString *poiTypeKeyName = @"";
 
-        OAPOIType *poiType = [self.poi.type.category getPoiTypeByKeyName:key];
-        OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:key];
+        OAPOIType *poiType = [self.poi.type.category getPoiTypeByKeyName:convertedKey];
+        OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
         if (!pt && vl && vl.length > 0 && vl.length < 50)
-            pt = [_poiHelper getAnyPoiAdditionalTypeByKey:[NSString stringWithFormat:@"%@_%@", key, vl]];
+            pt = [_poiHelper getAnyPoiAdditionalTypeByKey:[NSString stringWithFormat:@"%@_%@", convertedKey, vl]];
 
         OAPOIType *pType = nil;
         if (pt)
@@ -273,7 +273,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         }
         else if (needLinks)
         {
-            NSString *socialMediaUrl = [self getSocialMediaUrl:key value:vl];
+            NSString *socialMediaUrl = [self getSocialMediaUrl:convertedKey value:vl];
             if (socialMediaUrl)
             {
                 isUrl = YES;
@@ -318,16 +318,16 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
                 continue;
             }
         }
-        else if ([key hasPrefix:@"name:"])
+        else if ([convertedKey hasPrefix:@"name:"])
         {
             continue;
         }
-        else if ([key isEqualToString:COLLECTION_TIMES] || [key isEqualToString:SERVICE_TIMES])
+        else if ([convertedKey isEqualToString:COLLECTION_TIMES] || [convertedKey isEqualToString:SERVICE_TIMES])
         {
             iconId = @"ic_action_time";
             needLinks = NO;
         }
-        else if ([key isEqualToString:OPENING_HOURS])
+        else if ([convertedKey isEqualToString:OPENING_HOURS])
         {
             iconId = @"ic_action_time";
             collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
@@ -346,25 +346,25 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             vl = [vl stringByReplacingOccurrencesOfString:@"; " withString:@"\n"];
             needLinks = NO;
         }
-        else if ([kContactPhoneTags containsObject:key])
+        else if ([kContactPhoneTags containsObject:convertedKey])
         {
             iconId = @"ic_phone_number";
             textColor = UIColorFromRGB(kHyperlinkColor);
             isPhoneNumber = YES;
         }
-        else if ([key isEqualToString:WEBSITE] || [kContactUrlTags containsObject:key])
+        else if ([convertedKey isEqualToString:WEBSITE] || [kContactUrlTags containsObject:convertedKey])
         {
-            if ([kContactUrlTags containsObject:key])
+            if ([kContactUrlTags containsObject:convertedKey])
             {
-                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:key]];
+                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:convertedKey]];
                 if (!icon)
-                    icon = [OATargetInfoViewController getIcon:[OAUtilities drawablePath:[@"mm_" stringByAppendingString:key]]];
+                    icon = [OATargetInfoViewController getIcon:[OAUtilities drawablePath:[@"mm_" stringByAppendingString:convertedKey]]];
             }
             iconId = @"ic_website";
             textColor = UIColorFromRGB(kHyperlinkColor);
             isUrl = YES;
         }
-        else if ([key isEqualToString:CUISINE])
+        else if ([convertedKey isEqualToString:CUISINE])
         {
             isCuisine = YES;
             iconId = @"ic_cuisine";
@@ -384,15 +384,15 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             textPrefix = [_poiHelper getPhraseByName:@"cuisine"];
             vl = sb;
         }
-        else if ([key containsString:ROUTE]
-                || [key isEqualToString:WIKIDATA]
-                || [key isEqualToString:WIKIMEDIA_COMMONS])
+        else if ([convertedKey containsString:ROUTE]
+                || [convertedKey isEqualToString:WIKIDATA]
+                || [convertedKey isEqualToString:WIKIMEDIA_COMMONS])
         {
             continue;
         }
         else
         {
-            if ([key containsString:DESCRIPTION])
+            if ([convertedKey containsString:DESCRIPTION])
             {
                 iconId = @"ic_description";
             }
@@ -400,15 +400,15 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             {
                 iconId = @"ic_custom_wikipedia";
             }
-            else if ([key isEqualToString:@"addr:housename"] || [key isEqualToString:@"whitewater:rapid_name"])
+            else if ([convertedKey isEqualToString:@"addr:housename"] || [convertedKey isEqualToString:@"whitewater:rapid_name"])
             {
                 iconId = @"ic_custom_poi_name";
             }
-            else if ([key isEqualToString:@"operator"] || [key isEqualToString:@"brand"])
+            else if ([convertedKey isEqualToString:@"operator"] || [convertedKey isEqualToString:@"brand"])
             {
                 iconId = @"ic_custom_poi_brand";
             }
-            else if ([key isEqualToString:@"internet_access_fee_yes"])
+            else if ([convertedKey isEqualToString:@"internet_access_fee_yes"])
             {
                 iconId = @"ic_custom_internet_access_fee";
             }
@@ -457,15 +457,15 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             }
             else
             {
-                textPrefix = key.capitalizedString;
+                textPrefix = convertedKey.capitalizedString;
             }
         }
 
-        NSArray<NSString *> *formattedPrefixAndText = [self getFormattedPrefixAndText:key prefix:textPrefix value:vl amenity:self.poi];
+        NSArray<NSString *> *formattedPrefixAndText = [self getFormattedPrefixAndText:convertedKey prefix:textPrefix value:vl amenity:self.poi];
         textPrefix = formattedPrefixAndText[0];
         vl = formattedPrefixAndText[1];
 
-        if ([key isEqualToString:@"ele"] && [self isNumericValue:vl])
+        if ([convertedKey isEqualToString:@"ele"] && [self isNumericValue:vl])
         {
             float distance = [vl floatValue];
             vl = [OAOsmAndFormatter getFormattedAlt:distance];
@@ -485,7 +485,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         OARowInfo *row;
         if (isDescription)
         {
-            row = [[OARowInfo alloc] initWithKey:key
+            row = [[OARowInfo alloc] initWithKey:convertedKey
                                            icon:[UIImage imageNamed:@"ic_description"]
                                       textPrefix:textPrefix
                                             text:vl
@@ -499,7 +499,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         }
         else
         {
-            row = [[OARowInfo alloc] initWithKey:key
+            row = [[OARowInfo alloc] initWithKey:convertedKey
                                             icon:icon ? icon : [OATargetInfoViewController getIcon:iconId]
                                       textPrefix:textPrefix
                                             text:vl

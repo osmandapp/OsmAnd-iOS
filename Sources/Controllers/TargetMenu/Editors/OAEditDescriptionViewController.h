@@ -29,6 +29,8 @@
 
 @property (weak, nonatomic) id delegate;
 
--(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew isEditing:(BOOL)isEditing readOnly:(BOOL)readOnly;
+-(instancetype)initWithDescription:(NSString *)desc isNew:(BOOL)isNew isEditing:(BOOL)isEditing readOnly:(BOOL)readOnly;
+
+-(instancetype)initWithDescription:(NSString *)desc isNew:(BOOL)isNew isEditing:(BOOL)isEditing isComment:(BOOL)isComment readOnly:(BOOL)readOnly;
 
 @end

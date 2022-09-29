@@ -26,10 +26,16 @@
     BOOL _isNew;
     BOOL _readOnly;
     BOOL _isEditing;
+    BOOL _isComment;
     NSArray<NSDictionary<NSString *, NSString *> *> *_cellsData;
 }
 
--(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew isEditing:(BOOL)isEditing readOnly:(BOOL)readOnly
+-(instancetype)initWithDescription:(NSString *)desc isNew:(BOOL)isNew isEditing:(BOOL)isEditing readOnly:(BOOL)readOnly
+{
+    return [self initWithDescription:desc isNew:isNew isEditing:isEditing isComment:NO readOnly:readOnly];
+}
+
+-(instancetype)initWithDescription:(NSString *)desc isNew:(BOOL)isNew isEditing:(BOOL)isEditing isComment:(BOOL)isComment readOnly:(BOOL)readOnly
 {
     self = [super init];
     if (self)
@@ -38,6 +44,7 @@
         _isNew = isNew;
         _readOnly = readOnly;
         _keyboardHeight = 0.0;
+        _isComment = isComment;
         _isEditing = isEditing || ((desc.length == 0) && !readOnly);
     }
     return self;
@@ -131,7 +138,7 @@
     }
     else
     {
-        _titleView.text = OALocalizedString(@"description");
+        _titleView.text = _isComment ? OALocalizedString(@"osm_note_comment") : OALocalizedString(@"description");
         _editButton.hidden = _readOnly;
         _saveButton.hidden = YES;
         _toolbarView.backgroundColor = UIColorFromRGB(color_chart_orange);

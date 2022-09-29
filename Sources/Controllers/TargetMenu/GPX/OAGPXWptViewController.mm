@@ -128,6 +128,10 @@
     {
         [self buildDateRow:rows timestamp:[self getTimestamp]];
     }
+    if (self.wpt.point.comment)
+    {
+        [self buildCommentRow:rows comment:self.wpt.point.comment];
+    }
     
     //TODO: add extra fields
     //wpt.speed

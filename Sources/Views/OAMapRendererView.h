@@ -12,6 +12,7 @@
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Map/MapCommonTypes.h>
 #include <OsmAndCore/Map/MapAnimator.h>
+#include <OsmAndCore/Map/MapMarkersAnimator.h>
 #include <OsmAndCore/Map/MapRendererState.h>
 #include <OsmAndCore/Map/IMapLayerProvider.h>
 #include <OsmAndCore/Map/IMapElevationDataProvider.h>
@@ -128,7 +129,8 @@ struct CLLocationCoordinate2D;
 @property (readonly) OAObservable* framePreparedObservable;
 @property (nonatomic, weak) id<OAMapRendererDelegate> rendererDelegate;
 
-@property(nonatomic, readonly, getter=getAnimator) const std::shared_ptr<OsmAnd::MapAnimator>& animator;
+@property(nonatomic, readonly, getter=getMapAnimator) const std::shared_ptr<OsmAnd::MapAnimator>& mapAnimator;
+@property(nonatomic, readonly, getter=getMapMarkersAnimator) const std::shared_ptr<OsmAnd::MapMarkersAnimator>& mapMarkersAnimator;
 
 @property (nonatomic) int maxMissingDataZoomShift;
 @property (nonatomic) int maxMissingDataUnderZoomShift;

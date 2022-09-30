@@ -712,8 +712,8 @@
         }
     }
     // If user gesture should begin, stop all animations
-    _mapView.animator->pause();
-    _mapView.animator->cancelAllAnimations();
+    _mapView.mapAnimator->pause();
+    _mapView.mapAnimator->cancelAllAnimations();
 
     if (gestureRecognizer != _grPointContextMenu)
     {
@@ -866,10 +866,10 @@
     {
         CGFloat recognizerVelocity = pinchRecognizer ? pinchRecognizer.velocity : 0;
         float velocity = qBound(-kZoomVelocityAbsLimit, (float)recognizerVelocity, kZoomVelocityAbsLimit);
-        _mapView.animator->animateZoomWith(velocity,
+        _mapView.mapAnimator->animateZoomWith(velocity,
                                           kZoomDeceleration,
                                           kUserInteractionAnimationKey);
-        _mapView.animator->resume();
+        _mapView.mapAnimator->resume();
     }
 }
 
@@ -963,10 +963,10 @@
         velocity.x = -velocityInMapSpace.x * scale31;
         velocity.y = -velocityInMapSpace.y * scale31;
         
-        _mapView.animator->animateTargetWith(velocity,
+        _mapView.mapAnimator->animateTargetWith(velocity,
                                             OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31),
                                             kUserInteractionAnimationKey);
-        _mapView.animator->resume();
+        _mapView.mapAnimator->resume();
     }
     [recognizer setTranslation:CGPointZero inView:self.view];
 }
@@ -1046,10 +1046,10 @@
         velocity.x = -velocityInMapSpace.x * scale31;
         velocity.y = -velocityInMapSpace.y * scale31;
         
-        _mapView.animator->animateTargetWith(velocity,
+        _mapView.mapAnimator->animateTargetWith(velocity,
                                             OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31),
                                             kUserInteractionAnimationKey);
-        _mapView.animator->resume();
+        _mapView.mapAnimator->resume();
     }
 }
 
@@ -1139,7 +1139,7 @@
         //                                     kRotateDeceleration,
         //                                     kUserInteractionAnimationKey);
         
-        _mapView.animator->resume();
+        _mapView.mapAnimator->resume();
     }
     [recognizer setRotation:0];
 }
@@ -1169,20 +1169,20 @@
 
     OsmAnd::PointI destLocation(_mapView.target31.x / 2.0 + centerLocation.x / 2.0, _mapView.target31.y / 2.0 + centerLocation.y / 2.0);
     
-    _mapView.animator->animateTargetTo(destLocation,
+    _mapView.mapAnimator->animateTargetTo(destLocation,
                                       kQuickAnimationTime,
                                       OsmAnd::MapAnimator::TimingFunction::Victor_ReverseExponentialZoomIn,
                                       kUserInteractionAnimationKey);
     
     // Increate zoom by 1
     zoomDelta += 1.0f;
-    _mapView.animator->animateZoomBy(zoomDelta,
+    _mapView.mapAnimator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
                                     kUserInteractionAnimationKey);
     
     // Launch animation
-    _mapView.animator->resume();
+    _mapView.mapAnimator->resume();
 }
 
 - (void) zoomOutGestureDetected:(UITapGestureRecognizer *)recognizer
@@ -1219,20 +1219,20 @@
     
     OsmAnd::PointI destLocation(centerLocation.x - 2 * (centerLocation.x - _mapView.target31.x), centerLocation.y - 2 * (centerLocation.y - _mapView.target31.y));
     
-    _mapView.animator->animateTargetTo(destLocation,
+    _mapView.mapAnimator->animateTargetTo(destLocation,
                                       kQuickAnimationTime,
                                       OsmAnd::MapAnimator::TimingFunction::Victor_ReverseExponentialZoomOut,
                                       kUserInteractionAnimationKey);
     
     // Decrease zoom by 1
     zoomDelta -= 1.0f;
-    _mapView.animator->animateZoomBy(zoomDelta,
+    _mapView.mapAnimator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
                                     kUserInteractionAnimationKey);
     
     // Launch animation
-    _mapView.animator->resume();
+    _mapView.mapAnimator->resume();
 }
 
 - (void) elevationGestureDetected:(UIPanGestureRecognizer *)recognizer
@@ -1387,7 +1387,7 @@
     if (!self.mapViewLoaded)
         return 0.0f;
 
-    const auto currentZoomAnimation = _mapView.animator->getCurrentAnimation(kUserInteractionAnimationKey,
+    const auto currentZoomAnimation = _mapView.mapAnimator->getCurrentAnimation(kUserInteractionAnimationKey,
                                                                             OsmAnd::MapAnimator::AnimatedValue::Zoom);
     if (currentZoomAnimation)
     {
@@ -1437,15 +1437,15 @@
 
     // Animate zoom-in by +1
     zoomDelta += 1.0f;
-    _mapView.animator->pause();
-    _mapView.animator->cancelAllAnimations();
+    _mapView.mapAnimator->pause();
+    _mapView.mapAnimator->cancelAllAnimations();
     
-    _mapView.animator->animateZoomBy(zoomDelta,
+    _mapView.mapAnimator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
                                     kUserInteractionAnimationKey);
 
-    _mapView.animator->resume();
+    _mapView.mapAnimator->resume();
 
 }
 
@@ -1487,7 +1487,7 @@
     if (!self.mapViewLoaded)
         return 0.0f;
 
-    const auto currentZoomAnimation = _mapView.animator->getCurrentAnimation(kUserInteractionAnimationKey,
+    const auto currentZoomAnimation = _mapView.mapAnimator->getCurrentAnimation(kUserInteractionAnimationKey,
                                                                             OsmAnd::MapAnimator::AnimatedValue::Zoom);
     if (currentZoomAnimation)
     {
@@ -1537,14 +1537,14 @@
 
     // Animate zoom-in by -1
     zoomDelta -= 1.0f;
-    _mapView.animator->pause();
-    _mapView.animator->cancelAllAnimations();
+    _mapView.mapAnimator->pause();
+    _mapView.mapAnimator->cancelAllAnimations();
     
-    _mapView.animator->animateZoomBy(zoomDelta,
+    _mapView.mapAnimator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
                                     kUserInteractionAnimationKey);
-    _mapView.animator->resume();
+    _mapView.mapAnimator->resume();
     
 }
 
@@ -2065,16 +2065,16 @@
         CGFloat screensToFly = [self screensToFly:position31];
         
         _app.mapMode = OAMapModeFree;
-        _mapView.animator->pause();
-        _mapView.animator->cancelAllAnimations();
+        _mapView.mapAnimator->pause();
+        _mapView.mapAnimator->cancelAllAnimations();
         
         if (animated && screensToFly <= kScreensToFlyWithAnimation)
         {
-            _mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
+            _mapView.mapAnimator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
                                               kFastAnimationTime,
                                               OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                               kUserInteractionAnimationKey);
-            _mapView.animator->resume();
+            _mapView.mapAnimator->resume();
         }
         else
         {
@@ -2097,20 +2097,20 @@
         CGFloat screensToFly = [self screensToFly:position31];
         
         _app.mapMode = OAMapModeFree;
-        _mapView.animator->pause();
-        _mapView.animator->cancelAllAnimations();
+        _mapView.mapAnimator->pause();
+        _mapView.mapAnimator->cancelAllAnimations();
         
         if (animated && screensToFly <= kScreensToFlyWithAnimation)
         {
-            _mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
+            _mapView.mapAnimator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
                                               kFastAnimationTime,
                                               OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                               kUserInteractionAnimationKey);
-            _mapView.animator->animateZoomTo(z,
+            _mapView.mapAnimator->animateZoomTo(z,
                                             kFastAnimationTime,
                                             OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                             kUserInteractionAnimationKey);
-            _mapView.animator->resume();
+            _mapView.mapAnimator->resume();
         }
         else
         {

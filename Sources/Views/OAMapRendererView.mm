@@ -23,7 +23,6 @@
 #include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Map/IAtlasMapRenderer.h>
 #include <OsmAndCore/Map/AtlasMapRendererConfiguration.h>
-#include <OsmAndCore/Map/MapAnimator.h>
 #include <OsmAndCore/Map/AtlasMapRenderer_Metrics.h>
 
 #import "OALog.h"
@@ -52,7 +51,8 @@
     OsmAnd::PointI _viewSize;
 
     std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
-    std::shared_ptr<OsmAnd::MapAnimator> _animator;
+    std::shared_ptr<OsmAnd::MapAnimator> _mapAnimator;
+    std::shared_ptr<OsmAnd::MapMarkersAnimator> _mapMarkersAnimator;
 
     CGRect prevBounds;
 }
@@ -132,9 +132,13 @@
         });
 
     // Create animator for that map
-    _animator.reset(new OsmAnd::MapAnimator());
-    _animator->setMapRenderer(_renderer);
+    _mapAnimator.reset(new OsmAnd::MapAnimator());
+    _mapAnimator->setMapRenderer(_renderer);
     _renderer->setSymbolsUpdateInterval(kSymbolsUpdateInterval);
+
+    // Create animator for map markers
+    _mapMarkersAnimator.reset(new OsmAnd::MapMarkersAnimator());
+    _mapMarkersAnimator->setMapRenderer(_renderer);
 
     auto debugSettings = [self getMapDebugSettings];
     //debugSettings->disableSymbolsFastCheckByFrustum = true;
@@ -344,7 +348,7 @@
 
 - (float)tileSizeOnScreenInPixels
 {
-    return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getTileSizeOnScreenInPixels();
+    return _renderer->getTileSizeOnScreenInPixels();
 }
 
 - (float)tileSizeOnScreenInMeters
@@ -502,9 +506,14 @@
 
 @synthesize framePreparedObservable = _framePreparedObservable;
 
-- (const std::shared_ptr<OsmAnd::MapAnimator>&)getAnimator
+- (const std::shared_ptr<OsmAnd::MapAnimator>&) getMapAnimator
 {
-    return _animator;
+    return _mapAnimator;
+}
+
+- (const std::shared_ptr<OsmAnd::MapMarkersAnimator>&) getMapMarkersAnimator
+{
+    return _mapMarkersAnimator;
 }
 
 - (void)createContext
@@ -805,8 +814,9 @@
         return;
     }
 
-    // Update animator
-    _animator->update(displayLink.duration * displayLink.frameInterval);
+    // Update animators
+    _mapAnimator->update(displayLink.duration * displayLink.frameInterval);
+    _mapMarkersAnimator->update(displayLink.duration * displayLink.frameInterval);
 
     // Allocate buffers if they are not yet allocated
     if (_framebuffer == 0)

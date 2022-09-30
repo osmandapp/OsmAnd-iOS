@@ -124,7 +124,7 @@
             {
                 _item = item;
                 _isDirListener = NO;
-                return [_backupHelper uploadFile:fileName type:[OASettingsItemType typeName:item.type] data:[NSData dataWithContentsOfFile:filePath.toNSString() options:NSDataReadingMappedAlways error:NULL] uploadTime:uploadTime listener:self];
+                return [_backupHelper uploadFile:fileName type:[OASettingsItemType typeName:item.type] data:[NSData dataWithContentsOfFile:filePath.toNSString() options:NSDataReadingMappedAlways error:NULL] size:-1 uploadTime:uploadTime listener:self];
             }
         }
         return nil;
@@ -147,6 +147,8 @@
     {
         NSString *type = [OASettingsItemType typeName:itemWriter.item.type];
         NSData *data = [[NSData alloc] init];
+        NSInteger size = -1;
+        [self onFileUploadStarted:type fileName:fileName work:0];
         if (![self shouldUseEmptyWriter:itemWriter fileName:fileName])
         {
             OASettingsItem *item = itemWriter.item;
@@ -166,8 +168,17 @@
             if (ok)
                 data = [NSData dataWithContentsOfFile:filePath.toNSString() options:NSDataReadingMappedAlways error:NULL];
         }
-        
-        return [_backupHelper uploadFile:fileName type:type data:data uploadTime:uploadTime listener:self];
+        else
+        {
+            OASettingsItem *item = itemWriter.item;
+            if ([item isKindOfClass:OAFileSettingsItem.class])
+            {
+                OAFileSettingsItem *flItem = (OAFileSettingsItem *) item;
+                NSDictionary *attrs = [NSFileManager.defaultManager attributesOfItemAtPath:flItem.filePath error:nil];
+                size = attrs.fileSize / 1024;
+            }
+        }
+        return [_backupHelper uploadFile:fileName type:type data:data size:(int) size uploadTime:uploadTime listener:self];
     }
 }
 
@@ -243,20 +254,8 @@
 }
 
 - (void)onFileUploadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork {
-    if (_isDirListener)
-    {
-        if (_listener != nil)
-        {
-            _deltaProgress += deltaWork;
-            _itemProgress += _deltaProgress;
-            [_listener onItemUploadProgress:_item fileName:_itemFileName progress:progress deltaWork:_deltaProgress];
-        }
-    }
-    else
-    {
-        if (_listener != nil)
-            [_listener onItemUploadProgress:_item fileName:fileName progress:progress deltaWork:deltaWork];
-    }
+    if (_listener != nil)
+        [_listener onItemUploadProgress:_item fileName:fileName progress:progress deltaWork:deltaWork];
 }
 
 - (void)onFileUploadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work {
@@ -264,7 +263,7 @@
     {
         _uploadStarted = YES;
         if (_listener != nil)
-            [_listener onItemUploadStarted:_item fileName:_itemFileName work:work];
+            [_listener onItemUploadStarted:_item fileName:fileName work:work];
     }
     else
     {

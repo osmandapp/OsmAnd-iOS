@@ -276,7 +276,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
                 if (!progressView)
                 {
-                    FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
+                    progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
                     progressView.iconView = [[UIView alloc] init];
                     progressView.tintColor = UIColorFromRGB(color_primary_purple);
                     cell.accessoryView = progressView;

@@ -2744,8 +2744,8 @@
 "cloud_recent_changes" = "Recent changes";
 "cloud_pause_all" = "Pause all";
 "cloud_all_changes_uploaded" = "All changes uploaded";
-"cloud_all_changes_uploaded_descr" = "All changes made on this device are in synchronized with OsmAnd Cloud.";
-"cloud_no_conflicts" = "There is no conflicts";
+"cloud_all_changes_uploaded_descr" = "All changes made on this device are synchronized with OsmAnd Cloud.";
+"cloud_no_conflicts" = "There are no conflicts";
 "cloud_no_conflicts_descr" = "The data on the device and in the OsmAnd Cloud are the same.";
 "backup_conflicts_descr" = "Newer version of this files is stored on the server. You need to select action";
 "backup_conflicts_action_descr" = "Another version of this file is stored on the server. You need to select action";

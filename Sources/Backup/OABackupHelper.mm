@@ -52,8 +52,6 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 @interface OABackupHelper () <OAOnPrepareBackupListener, NSURLSessionDelegate>
 
-@property (nonatomic, assign) NSInteger maximumAccountSize;
-
 @end
 
 @implementation OABackupHelper
@@ -63,9 +61,9 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     NSHashTable<id<OAOnPrepareBackupListener>> *_prepareBackupListeners;
     
     OABackupDbHelper *_dbHelper;
-    
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
+    NSInteger _maximumAccountSize;
 }
 
 + (NSString *) INFO_EXT

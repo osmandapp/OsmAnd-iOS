@@ -17,7 +17,7 @@
 
 @required
 
-- (void)onAllFilesDeleted;
+- (void)onCompleteTasks;
 - (void)setProgressTotal:(NSInteger)total;
 
 @end

@@ -231,6 +231,9 @@
 "speak_tunnels" = "Tunnels";
 "show_tunnels" = "Tunnels";
 
+"tts" = "TTS";
+"recorded_voice" = "Recorded";
+
 // Dirrection appearance
 "one" = "One";
 "two" = "Two";
@@ -589,6 +592,7 @@
 "shared_string_unavailable" = "Unavailable";
 "shared_string_contributions" = "Contributions";
 "shared_string_refresh" = "Refresh";
+"shared_string_changed" = "Changed";
 
 "restart" = "Restart";
 
@@ -2712,6 +2716,7 @@
 "cloud_make_backup" = "Make a backup";
 "cloud_make_backup_descr" = "There are many changes on this device, please make a backup of this data so as not to lose it.";
 "cloud_conflicts" = "Conflicts";
+"cloud_conflict" = "Conflict";
 "cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";
 "cloud_view_conflicts" = "View conflicts";
 "backup_data" = "Backup data";
@@ -2736,6 +2741,17 @@
 "backup_empty_data_from_category" = "OsmAnd Cloud doesn't include any data from this category.";
 "cloud_storage_used" = "%@ of %@ used";
 "cloud_confirm_delete_type" = "Are you sure you want to delete \"%@\" from OsmAnd Cloud?";
+"cloud_recent_changes" = "Recent changes";
+"cloud_pause_all" = "Pause all";
+"cloud_all_changes_uploaded" = "All changes uploaded";
+"cloud_all_changes_uploaded_descr" = "All changes made on this device are synchronized with OsmAnd Cloud.";
+"cloud_no_conflicts" = "There are no conflicts";
+"cloud_no_conflicts_descr" = "The data on the device and in the OsmAnd Cloud are the same.";
+"backup_conflicts_descr" = "Newer version of this files is stored on the server. You need to select action";
+"backup_conflicts_action_descr" = "Another version of this file is stored on the server. You need to select action";
+"cloud_contains_newer_changes" = "OsmAnd Cloud version contains newer changes.";
+"upload_local_version" = "Upload local version";
+"dowload_cloud_version" = "Dowload cloud version";
 
 "copy_address" = "Copy address";
 "copy_poi_name" = "Copy POI Name";

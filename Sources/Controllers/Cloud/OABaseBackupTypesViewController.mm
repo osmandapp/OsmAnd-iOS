@@ -222,10 +222,10 @@
 
 #pragma mark - OABackupTypesDelegate
 
-- (void)onAllFilesDeleted
+- (void)onCompleteTasks
 {
     if (self.backupTypesDelegate)
-        [self.backupTypesDelegate onAllFilesDeleted];
+        [self.backupTypesDelegate onCompleteTasks];
 }
 
 - (void)setProgressTotal:(NSInteger)total
@@ -276,7 +276,7 @@
             _progressFilesTotalCount = 1;
             [self.progressView setProgress:_progressFilesCompleteCount animated:NO];
             if (self.backupTypesDelegate)
-                [self.backupTypesDelegate onAllFilesDeleted];
+                [self.backupTypesDelegate onCompleteTasks];
         }];
     });
 }
@@ -288,7 +288,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.progressView setProgress:_progressFilesCompleteCount animated:NO];
         if (self.backupTypesDelegate)
-            [self.backupTypesDelegate onAllFilesDeleted];
+            [self.backupTypesDelegate onCompleteTasks];
     });
 }
 

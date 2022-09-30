@@ -10,6 +10,7 @@
 #import "OASettingsItemReader.h"
 #import "OASettingsItemWriter.h"
 #import "OASettingsItemType.h"
+#import "Localization.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,7 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSString *fileName;
 @property (nonatomic, readonly) EOASettingsItemType type;
 @property (nonatomic, readonly) NSString *pluginId;
-@property (nonatomic, readonly) NSString *publicName;
 @property (nonatomic, readonly) NSString *defaultFileName;
 @property (nonatomic, readonly) NSString *defaultFileExtension;
 
@@ -45,6 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error;
 - (NSDictionary *) getSettingsJson;
 - (long) getEstimatedSize;
+- (NSString *)getPublicName;
 
 - (OASettingsItemReader *) getReader;
 - (OASettingsItemWriter *) getWriter;

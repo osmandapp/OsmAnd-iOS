@@ -41,6 +41,7 @@
         _helper = OANetworkSettingsHelper.sharedInstance;
         _listener = listener;
         _exporter = [[OABackupExporter alloc] initWithListener:self];
+        _itemsProgress = [NSMutableDictionary dictionary];
         OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
         for (OASettingsItem *item in items)
         {

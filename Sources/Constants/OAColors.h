@@ -228,4 +228,6 @@
 #define backup_restore_icons_yellow 0xFFC30D
 #define backup_restore_icons_green 0x12B38B
 
+#define color_tableview_background 0xE5E5E5
+
 #endif /* OAColors_h */

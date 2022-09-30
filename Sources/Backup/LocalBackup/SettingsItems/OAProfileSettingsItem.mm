@@ -47,7 +47,7 @@
     return _appMode.stringKey;
 }
 
-- (NSString *) publicName
+- (NSString *) getPublicName
 {
     if (_appMode.isCustomProfile)
         return _appMode.getUserProfileName;

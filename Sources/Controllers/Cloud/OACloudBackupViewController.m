@@ -33,6 +33,8 @@
 #import "OASettingsBackupViewController.h"
 #import "OAExportSettingsType.h"
 #import "OABaseBackupTypesViewController.h"
+#import "OAStatusBackupViewController.h"
+#import "OAExportBackupTask.h"
 
 @interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OABackupExportListener, OAImportListener, OAOnPrepareBackupListener, OABackupTypesDelegate>
 
@@ -57,6 +59,7 @@
     NSString *_error;
     
     OATitleIconProgressbarCell *_backupProgressCell;
+    NSIndexPath *_lastBackupIndexPath;
 }
 
 - (instancetype) initWithSourceType:(EOACloudScreenSourceType)type
@@ -83,9 +86,6 @@
     [OAIAPHelper.sharedInstance checkBackupPurchase];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
-    [_settingsHelper updateExportListener:self];
-    [_settingsHelper updateImportListener:self];
-    [_backupHelper addPrepareBackupListener:self];
     if (!_settingsHelper.isBackupExporting)
         [_backupHelper prepareBackup];
     [self generateData];
@@ -96,15 +96,19 @@
     self.tblView.rowHeight = UITableViewAutomaticDimension;
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
+    [_settingsHelper updateExportListener:self];
+    [_settingsHelper updateImportListener:self];
     [_backupHelper addPrepareBackupListener:self];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
+    [super viewWillDisappear:animated];
+    [_settingsHelper updateExportListener:nil];
+    [_settingsHelper updateImportListener:nil];
     [_backupHelper removePrepareBackupListener:self];
 }
 
@@ -198,8 +202,14 @@
     }
     else
     {
-        OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
         NSMutableArray<NSDictionary *> *backupRows = [NSMutableArray array];
+        NSDictionary *backupSection = @{
+            @"sectionHeader": OALocalizedString(@"cloud_backup"),
+            @"rows": backupRows
+        };
+        [result addObject:backupSection];
+
+        OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
         if (exportTask)
         {
             // TODO: show progress from HeaderStatusViewHolder.java
@@ -218,16 +228,19 @@
                 @"name": @"lastBackup",
                 @"title": _status.statusTitle,
                 @"description": backupTime,
-                @"image": _status.statusIconName
+                @"image": _status.statusIconName,
+                @"imageColor": @(_status.iconColor)
             };
             [backupRows addObject:lastBackupCell];
-            
+            _lastBackupIndexPath = [NSIndexPath indexPathForRow:backupRows.count - 1 inSection:result.count - 1];
+
             if (_status.warningTitle != nil || _error.length > 0)
             {
                 BOOL hasWarningStatus = _status.warningTitle != nil;
                 BOOL hasDescr = _error || _status.warningDescription;
                 NSString *descr = hasDescr && hasWarningStatus ? _status.warningDescription : _error;
-                NSInteger color = _status.iconColor;
+                NSInteger color = _status == OABackupStatus.CONFLICTS || _status == OABackupStatus.ERROR ? _status.iconColor
+                        : _status == OABackupStatus.MAKE_BACKUP ? profile_icon_color_green_light : -1;
                 NSDictionary *makeBackupWarningCell = @{
                     @"cellId": OATitleDescrRightIconTableViewCell.getCellIdentifier,
                     @"name": @"makeBackupWarning",
@@ -238,12 +251,6 @@
                 };
                 [backupRows addObject:makeBackupWarningCell];
             }
-            
-//            if (info != null && uploadItemsVisible) {
-//                items.addAll(info.itemsToUpload);
-//                items.addAll(info.itemsToDelete);
-//                items.addAll(info.filteredFilesToMerge);
-//            }
         }
             
         BOOL actionButtonHidden = _status == OABackupStatus.BACKUP_COMPLETE ||
@@ -292,12 +299,6 @@
                 [backupRows addObject:purchaseCell];
             }
         }
-        
-        NSDictionary *backupSection = @{
-            @"sectionHeader": OALocalizedString(@"cloud_backup"),
-            @"rows": backupRows
-        };
-        [result addObject:backupSection];
     }
     NSDictionary *restoreSection = @{
         @"sectionHeader" : OALocalizedString(@"restore"),
@@ -328,9 +329,11 @@
     OATitleIconProgressbarCell *resultCell = (OATitleIconProgressbarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
     [resultCell.progressBar setProgressTintColor:UIColorFromRGB(color_primary_purple)];
-    resultCell.textView.text = OALocalizedString(@"osm_edit_uploading");
-    resultCell.imgView.image = [UIImage imageNamed:@"ic_custom_cloud_upload"];
+    resultCell.textView.text = [OALocalizedString(@"osm_edit_uploading") stringByAppendingString:[NSString stringWithFormat:@"%i%%", 0]];
+    resultCell.imgView.image = [UIImage templateImageNamed:@"ic_custom_cloud_upload"];
+    resultCell.imgView.tintColor = UIColorFromRGB(color_primary_purple);
     resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    resultCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return resultCell;
 }
 
@@ -514,12 +517,13 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
-            cell.iconView.tintColor = UIColorFromRGB(nav_bar_day);
             [cell setOverflowVisibility:YES];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         cell.textView.text = item[@"title"];
         cell.descView.text = item[@"description"];
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"image"]]];
+        cell.iconView.tintColor = [item.allKeys containsObject:@"imageColor"] ? UIColorFromRGB([item[@"imageColor"] integerValue]) : UIColorFromRGB(color_primary_purple);
         return cell;
     }
     else if ([cellId isEqualToString:OAButtonRightIconCell.getCellIdentifier])
@@ -544,6 +548,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescrRightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleDescrRightIconTableViewCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.titleLabel.text = item[@"title"];
         cell.descriptionLabel.text = item[@"description"];
@@ -593,7 +598,13 @@
 {
     NSDictionary *item = _data[indexPath.section][@"rows"][indexPath.row];
     NSString *itemId = item[@"name"];
-    if ([itemId isEqualToString:@"backupIntoFile"])
+    if (indexPath == _lastBackupIndexPath)
+    {
+        OAStatusBackupViewController *statusBackupViewController = [[OAStatusBackupViewController alloc] initWithBackup:_backup status:_status];
+        statusBackupViewController.delegate = self;
+        [self.navigationController pushViewController:statusBackupViewController animated:YES];
+    }
+    else if ([itemId isEqualToString:@"backupIntoFile"])
     {
         [self onBackupIntoFilePressed];
     }
@@ -649,8 +660,14 @@
 - (void)onBackupExportProgressUpdate:(NSInteger)value
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_backupProgressCell && !isnan(value))
-            _backupProgressCell.progressBar.progress = value / 1000;
+        OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
+        if (_backupProgressCell && exportTask)
+        {
+            float progress = (float) exportTask.generalProgress / exportTask.maxProgress;
+            OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
+            _backupProgressCell.progressBar.progress = (float) exportTask.generalProgress / exportTask.maxProgress;
+            _backupProgressCell.textView.text = [OALocalizedString(@"osm_edit_uploading") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (progress * 100)]];
+        }
     });
 }
 
@@ -702,7 +719,7 @@
 
 #pragma mark - OABackupTypesDelegate
 
-- (void)onAllFilesDeleted
+- (void)onCompleteTasks
 {
     [self onBackupPrepared:_backupHelper.backup];
 }

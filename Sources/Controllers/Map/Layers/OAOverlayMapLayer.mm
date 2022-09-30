@@ -142,6 +142,11 @@
             {
                 [self.mapView resetProviderFor:self.layerIndex];
                 _rasterOverlayMapProvider.reset();
+                [self.mapViewController.mapView setSymbolsOpacity:1.0f];
+            }
+            else
+            {
+                [self.mapViewController.mapView setSymbolsOpacity:(1.0f - self.app.data.overlayAlpha)];
             }
         }];
     });

@@ -259,6 +259,15 @@
     }
 }
 
+- (void) buildCommentRow:(NSMutableArray<OARowInfo *> *)rows comment:(NSString *)comment
+{
+    if (comment.length > 0)
+    {
+        OARowInfo *commentRow = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_description"] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:4 typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
+        [rows addObject:commentRow];
+    }
+}
+
 - (void) calculateRowsHeight:(CGFloat)width
 {
     CGFloat regularTextWidth = width - kMarginLeft - kMarginRight;
@@ -1011,9 +1020,9 @@
         NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
-    else if ([info.typeName isEqualToString:kDescriptionRowType])
+    else if ([info.typeName isEqualToString:kDescriptionRowType] || [info.typeName isEqualToString:kCommentRowType])
     {
-        OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO readOnly:YES];
+        OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO isComment:[info.typeName isEqualToString:kCommentRowType] readOnly:YES];
         editDescController.delegate = self;
         [self.navController pushViewController:editDescController animated:YES];
     }

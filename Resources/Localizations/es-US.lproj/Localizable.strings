@@ -461,7 +461,7 @@
 "shared_string_modify" = "Editar";
 "shared_string_later" = "Luego";
 "shared_string_of" = "de";
-"shared_string_all" = "Todos";
+"shared_string_all" = "Todo";
 "shared_string_from" = "desde";
 "shared_string_time" = "Tiempo";
 "shared_string_time_of_day" = "Hora del día";
@@ -2251,7 +2251,7 @@
 "rendering_attr_surface_asphalt_name" = "Asfalto";
 "rendering_value_translucent_orange_name" = "Anaranjado translúcido";
 "rendering_attr_depthContours_description" = "Mostrar curvas y puntos de profundidad.";
-"rendering_value_thick_name" = "Espesor";
+"rendering_value_thick_name" = "Grueso";
 "routing_attr_avoid_ferry_name" = "Sin ferris o transbordadores";
 "routing_attr_width_name" = "Límite de anchura";
 "routing_attr_avoid_train_name" = "Sin trenes";

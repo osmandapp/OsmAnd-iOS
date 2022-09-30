@@ -87,6 +87,14 @@
     [_backupHelper removePrepareBackupListener:self];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
 - (EOARemoteFilesType)getRemoteFilesType
 {
     return EOARemoteFilesTypeAll;

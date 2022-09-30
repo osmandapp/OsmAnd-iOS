@@ -12,6 +12,7 @@
 
 #define kCollapseDetailsRowType @"kCollapseDetailsRowType"
 #define kDescriptionRowType @"kDescriptionRowType"
+#define kCommentRowType @"kCommentRowType"
 #define kTimestampRowType @"kTimestampRowType"
 #define kGroupRowType @"kGroupRowType"
 
@@ -27,6 +28,7 @@
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows;
 - (void) buildRowsInternal:(NSMutableArray<OARowInfo *> *)rows;
 - (void) buildDateRow:(NSMutableArray<OARowInfo *> *)rows timestamp:(NSDate *)timestamp;
+- (void) buildCommentRow:(NSMutableArray<OARowInfo *> *)rows comment:(NSString *)comment;
 - (void) rebuildRows;
 - (void) setRows:(NSMutableArray<OARowInfo *> *)rows;
 

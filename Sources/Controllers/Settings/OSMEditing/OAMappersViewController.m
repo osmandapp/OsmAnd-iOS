@@ -7,7 +7,8 @@
 //
 
 #import "OAMappersViewController.h"
-#import "OACustomBasicTableCell.h"
+#import "OATableViewCellRightIcon.h"
+#import "OATableViewCellValue.h"
 #import "OAAppSettings.h"
 #import "OANetworkUtilities.h"
 #import "OASizes.h"
@@ -107,21 +108,21 @@
 
     [data addObject:@[
             @{
-                    @"type" : [OACustomBasicTableCell getCellIdentifier],
+                    @"type" : [OATableViewCellRightIcon getCellIdentifier],
                     @"attributed_title" : [[NSAttributedString alloc] initWithString:availableTitle
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont systemFontOfSize:17.],
                                                                                  NSForegroundColorAttributeName : UIColor.blackColor
                                                                          }],
-                    @"bottom_description" : availableDescription,
-                    @"bottom_description_font" : [UIFont systemFontOfSize:15.],
+                    @"description" : availableDescription,
+                    @"description_font" : [UIFont systemFontOfSize:15.],
                     @"right_icon" : rightIcon,
                     @"tint_color" : UIColorFromRGB(color_primary_purple),
                     @"top_right_content" : @(YES)
             },
             @{
                     @"key" : @"refresh_cell",
-                    @"type": [OACustomBasicTableCell getCellIdentifier],
+                    @"type": [OATableViewCellRightIcon getCellIdentifier],
                     @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_refresh")
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont systemFontOfSize:17. weight:UIFontWeightMedium],
@@ -164,7 +165,7 @@
                                    range:[dateAttributed.string rangeOfString:[formatterYear stringFromDate:date]]];
 
             [dateCells addObject:@{
-                    @"type": [OACustomBasicTableCell getCellIdentifier],
+                    @"type": [OATableViewCellValue getCellIdentifier],
                     @"attributed_title": dateAttributed,
                     @"value": value,
                     @"original_value" : dateStr
@@ -179,14 +180,14 @@
     }
 
     [dateCells insertObject:@{
-            @"type": [OACustomBasicTableCell getCellIdentifier],
+            @"type": [OATableViewCellValue getCellIdentifier],
             @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"last_two_month_total")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont systemFontOfSize:17.],
                                                                          NSForegroundColorAttributeName : UIColor.blackColor
                                                                  }],
             @"value": [NSString stringWithFormat:@"%li", [self getChangesSize]],
-            @"bottom_description": [self getMonthPeriod]
+            @"description": [self getMonthPeriod]
     }
                     atIndex:0];
 
@@ -196,7 +197,7 @@
                                         stringByAppendingString:@"/history"];
     [dateCells addObject:@{
             @"key" : @"profile_cell",
-            @"type" : [OACustomBasicTableCell getCellIdentifier],
+            @"type" : [OATableViewCellRightIcon getCellIdentifier],
             @"attributed_title" : [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_profiles")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont systemFontOfSize:17. weight:UIFontWeightMedium],
@@ -323,15 +324,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OACustomBasicTableCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OATableViewCellRightIcon getCellIdentifier]])
     {
-        OACustomBasicTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomBasicTableCell getCellIdentifier]];
+        OATableViewCellRightIcon *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellRightIcon getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomBasicTableCell getCellIdentifier] owner:self options:nil];
-            cell = (OACustomBasicTableCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellRightIcon getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellRightIcon *) nib[0];
             [cell leftIconVisibility:NO];
-            [cell switchVisibility:NO];
         }
         if (cell)
         {
@@ -342,23 +342,40 @@
             cell.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
 
             cell.titleLabel.attributedText = item[@"attributed_title"];
+            [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
+            cell.descriptionLabel.text = item[@"description"];
+            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont systemFontOfSize:13.];
 
-            [cell valueVisibility:[item.allKeys containsObject:@"value"]];
-            cell.valueLabel.text = item[@"value"];
-            cell.valueLabel.textColor = UIColor.blackColor;
-
-            [cell descriptionVisibility:[item.allKeys containsObject:@"bottom_description"]];
-            cell.descriptionLabel.text = item[@"bottom_description"];
-            cell.descriptionLabel.font = [item.allKeys containsObject:@"bottom_description_font"] ? item[@"bottom_description_font"] : [UIFont systemFontOfSize:13.];
-
-            NSString *rightIcon = item[@"right_icon"];
-            [cell rightIconVisibility:rightIcon && rightIcon.length > 0];
-            cell.rightIconView.image = [UIImage templateImageNamed:rightIcon];
+            BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
+            cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
             cell.rightIconView.tintColor = item[@"tint_color"];
 
             BOOL topRightContent = item[@"top_right_content"];
-            [cell anchorContent:topRightContent ? EOACustomCellContentTopStyle : EOACustomCellContentCenterStyle];
-            [cell textIndentsStyle:topRightContent ? EOACustomCellTextIncreasedTopCenterIndentStyle : EOACustomCellTextNormalIndentsStyle];
+            [cell anchorContent:topRightContent ? EOATableViewCellContentTopStyle : EOATableViewCellContentCenterStyle];
+            [cell textIndentsStyle:topRightContent ? EOATableViewCellTextIncreasedTopCenterIndentStyle : EOATableViewCellTextNormalIndentsStyle];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATableViewCellValue getCellIdentifier]])
+    {
+        OATableViewCellValue *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellValue getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellValue getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellValue *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.valueLabel.textColor = UIColor.blackColor;
+            [cell leftIconVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
+            cell.titleLabel.attributedText = item[@"attributed_title"];
+            cell.valueLabel.text = item[@"value"];
+
+            [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
+            cell.descriptionLabel.text = item[@"description"];
+            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont systemFontOfSize:13.];
         }
         return cell;
     }

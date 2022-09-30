@@ -9,7 +9,10 @@
 #import "OAWeatherForecastDetailsViewController.h"
 #import "OAWeatherCacheSettingsViewController.h"
 #import "OAWeatherFrequencySettingsViewController.h"
-#import "OACustomBasicTableCell.h"
+#import "OATableViewCellSimple.h"
+#import "OATableViewCellRightIcon.h"
+#import "OATableViewCellValue.h"
+#import "OATableViewCellSwitch.h"
 #import "MBProgressHUD.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAResourcesUIHelper.h"
@@ -19,8 +22,6 @@
 #import "Localization.h"
 
 @interface OAWeatherForecastDetailsViewController  () <UITableViewDelegate, UITableViewDataSource, OAWeatherCacheSettingsDelegate, OAWeatherFrequencySettingsDelegate>
-
-@property (weak, nonatomic) IBOutlet UIView *viewNavigationSeparator;
 
 @end
 
@@ -36,7 +37,6 @@
     MBProgressHUD *_progressHUD;
     NSIndexPath *_sizeIndexPath;
     NSIndexPath *_updateNowIndexPath;
-    BOOL _isHeaderBlurred;
 
     OAAutoObserverProxy *_weatherSizeCalculatedObserver;
     OAAutoObserverProxy *_weatherForecastDownloadingObserver;
@@ -159,7 +159,7 @@
 
     NSMutableDictionary *updatedData = [NSMutableDictionary dictionary];
     updatedData[@"key"] = @"updated_cell";
-    updatedData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    updatedData[@"type"] = [OATableViewCellValue getCellIdentifier];
     updatedData[@"title"] = OALocalizedString(@"shared_string_updated");
     updatedData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:_region.regionId next:NO];
     updatedData[@"value_color"] = UIColor.blackColor;
@@ -168,7 +168,7 @@
 
     NSMutableDictionary *nextUpdateData = [NSMutableDictionary dictionary];
     nextUpdateData[@"key"] = @"next_update_cell";
-    nextUpdateData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    nextUpdateData[@"type"] = [OATableViewCellValue getCellIdentifier];
     nextUpdateData[@"title"] = OALocalizedString(@"shared_string_next_update");
     nextUpdateData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:_region.regionId next:YES];
     nextUpdateData[@"value_color"] = UIColor.blackColor;
@@ -177,26 +177,23 @@
 
     NSMutableDictionary *updatesSizeData = [NSMutableDictionary dictionary];
     updatesSizeData[@"key"] = @"updates_size_cell";
-    updatesSizeData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    updatesSizeData[@"type"] = [OATableViewCellValue getCellIdentifier];
     updatesSizeData[@"title"] = OALocalizedString(@"shared_string_updates_size");
     updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance] getOfflineForecastSizeInfo:_region.regionId local:YES]
                                                                      countStyle:NSByteCountFormatterCountStyleFile];
     updatesSizeData[@"value_color"] = UIColorFromRGB(color_text_footer);
-    updatesSizeData[@"right_icon"] = @"ic_custom_arrow_right";
-    updatesSizeData[@"right_icon_color"] = UIColorFromRGB(color_tint_gray);
     updatesSizeData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
     [infoCells addObject:updatesSizeData];
     _sizeIndexPath = [NSIndexPath indexPathForRow:infoCells.count - 1 inSection:data.count - 1];
 
     NSMutableDictionary *updateNowData = [NSMutableDictionary dictionary];
     updateNowData[@"key"] = @"update_now_cell";
-    updateNowData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    updateNowData[@"type"] = [OATableViewCellRightIcon getCellIdentifier];
     updateNowData[@"title"] = OALocalizedString(@"osmand_live_update_now");
     updateNowData[@"title_color"] = UIColorFromRGB(color_primary_purple);
+    updateNowData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
     updateNowData[@"right_icon"] = @"ic_custom_download";
     updateNowData[@"right_icon_color"] = UIColorFromRGB(color_primary_purple);
-    updateNowData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
-    updateNowData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
     [infoCells addObject:updateNowData];
     _updateNowIndexPath = [NSIndexPath indexPathForRow:infoCells.count - 1 inSection:data.count - 1];
 
@@ -207,21 +204,17 @@
 
     NSMutableDictionary *updatesFrequencyData = [NSMutableDictionary dictionary];
     updatesFrequencyData[@"key"] = @"updates_frequency_cell";
-    updatesFrequencyData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    updatesFrequencyData[@"type"] = [OATableViewCellValue getCellIdentifier];
     updatesFrequencyData[@"title"] = OALocalizedString(@"shared_string_updates_frequency");
     updatesFrequencyData[@"value"] = [OAWeatherHelper getFrequencyFormat:[OAWeatherHelper getPreferenceFrequency:_region.regionId]];
     updatesFrequencyData[@"value_color"] = UIColorFromRGB(color_text_footer);
-    updatesFrequencyData[@"right_icon"] = @"ic_custom_arrow_right";
-    updatesFrequencyData[@"right_icon_color"] = UIColorFromRGB(color_tint_gray);
     updatesFrequencyData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
     [updatesCells addObject:updatesFrequencyData];
 
     NSMutableDictionary *updateOnlyWiFiData = [NSMutableDictionary dictionary];
     updateOnlyWiFiData[@"key"] = @"update_only_wifi_cell";
-    updateOnlyWiFiData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    updateOnlyWiFiData[@"type"] = [OATableViewCellSwitch getCellIdentifier];
     updateOnlyWiFiData[@"title"] = OALocalizedString(@"update_only_over_wi_fi");
-    updateOnlyWiFiData[@"switch_cell"] = @(YES);
-    updateOnlyWiFiData[@"selection_style"] = @(UITableViewCellSelectionStyleNone);
     [updatesCells addObject:updateOnlyWiFiData];
 
     NSMutableArray<NSMutableDictionary *> *removeCells = [NSMutableArray array];
@@ -229,12 +222,11 @@
 
     NSMutableDictionary *removeForecastData = [NSMutableDictionary dictionary];
     removeForecastData[@"key"] = @"remove_forecast_cell";
-    removeForecastData[@"type"] = [OACustomBasicTableCell getCellIdentifier];
+    removeForecastData[@"type"] = [OATableViewCellSimple getCellIdentifier];
     removeForecastData[@"title"] = OALocalizedString(@"weather_remove_forecast");
     removeForecastData[@"title_color"] = UIColorFromRGB(color_primary_red);
     removeForecastData[@"title_alignment"] = @(NSTextAlignmentCenter);
     removeForecastData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
-    removeForecastData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
     [removeCells addObject:removeForecastData];
 
     _data = data;
@@ -324,21 +316,6 @@
     return _data[indexPath.section][indexPath.row];
 }
 
-- (void)onScrollViewDidScroll:(UIScrollView *)scrollView
-{
-    CGFloat alpha = (self.tableView.contentOffset.y + defaultNavBarHeight) < 0 ? 0 : ((self.tableView.contentOffset.y + defaultNavBarHeight) / (fabs(self.tableView.contentSize.height - self.tableView.frame.size.height)));
-    if (!_isHeaderBlurred && alpha > 0.)
-    {
-        self.viewNavigationSeparator.hidden = NO;
-        _isHeaderBlurred = YES;
-    }
-    else if (_isHeaderBlurred && alpha <= 0.)
-    {
-        self.viewNavigationSeparator.hidden = YES;
-        _isHeaderBlurred = NO;
-    }
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -354,29 +331,39 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OACustomBasicTableCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OATableViewCellSimple getCellIdentifier]])
     {
-        OACustomBasicTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomBasicTableCell getCellIdentifier]];
+        OATableViewCellSimple *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSimple getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomBasicTableCell getCellIdentifier] owner:self options:nil];
-            cell = (OACustomBasicTableCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSimple getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSimple *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.rightContentStackView.spacing = 0.;
         }
         if (cell)
         {
-            cell.selectionStyle = (UITableViewCellSelectionStyle) [item[@"selection_style"] integerValue];
-            [cell switchVisibility:item[@"switch_cell"]];
-
-            [cell valueVisibility:[item.allKeys containsObject:@"value"]];
-            cell.valueLabel.text = item[@"value"];
-            cell.valueLabel.textColor = item[@"value_color"];
-
             cell.titleLabel.text = item[@"title"];
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
             cell.titleLabel.textAlignment = [item.allKeys containsObject:@"title_alignment"] ? (NSTextAlignment) [item[@"title_alignment"] integerValue] : NSTextAlignmentNatural;
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont systemFontOfSize:17.];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATableViewCellRightIcon getCellIdentifier]])
+    {
+        OATableViewCellRightIcon *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellRightIcon getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellRightIcon getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellRightIcon *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
             cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont systemFontOfSize:17.];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
@@ -393,10 +380,52 @@
             else
             {
                 cell.accessoryView = nil;
-                cell.rightIconView.image = [UIImage templateImageNamed:item[@"right_icon"]];
+                cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
                 cell.rightIconView.tintColor = item[@"right_icon_color"];
             }
             [cell rightIconVisibility:hasRightIcon];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATableViewCellValue getCellIdentifier]])
+    {
+        OATableViewCellValue *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellValue getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellValue getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellValue *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.selectionStyle = (UITableViewCellSelectionStyle) [item[@"selection_style"] integerValue];
+            cell.accessoryType = cell.selectionStyle == UITableViewCellSelectionStyleDefault ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
+            cell.valueLabel.textColor = item[@"value_color"];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    {
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+
+            cell.switchView.on = [self isEnabled:item[@"key"]];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
@@ -548,8 +577,6 @@
 
         if ([item[@"key"] isEqualToString:@"update_only_wifi_cell"])
             [OAWeatherHelper setPreferenceWifi:_region.regionId value:switchView.isOn];
-
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 

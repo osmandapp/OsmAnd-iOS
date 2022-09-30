@@ -1009,7 +1009,7 @@
 "downloading" = "Преузима се";
 
 // Route planning
-"plan_route" = "Plan a route";
+"plan_route" = "План путовања";
 "add_point" = "Додај тачку";
 "point_num" = "Point %d";
 "points_count" = "Points:";
@@ -2554,3 +2554,4 @@
 "restore_from_osmand_cloud" = "Врати са OsmAnd облака";
 "in_grace_period" = "У грејс периоду";
 "shared_string_undefined" = "Неодређено";
+"lang_ckb" = "Централнокурдски";

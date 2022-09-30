@@ -38,9 +38,9 @@
     return @"suggested_downloads";
 }
 
-- (NSString *)publicName
+- (NSString *)getPublicName
 {
-    return @"suggested_downloads";
+    return OALocalizedString(@"Suggested maps");
 }
 
 - (long)getEstimatedSize

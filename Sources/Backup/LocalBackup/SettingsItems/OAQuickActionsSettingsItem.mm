@@ -69,6 +69,11 @@
     [_actionsRegistry setLastModifiedTime:localModifiedTime];
 }
 
+- (NSString *)getPublicName
+{
+    return OALocalizedString(@"shared_string_quick_actions");
+}
+
 - (void) apply
 {
     NSArray<OAQuickAction *> *newItems = [self getNewItems];

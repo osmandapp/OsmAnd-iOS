@@ -932,7 +932,7 @@
 "donation_to_osm" = "Допомога спільноті OpenStreetMap";
 "in_app_purchase" = "Купівля в застосунку";
 "in_app_purchase_desc" = "Одноразовий платіж";
-"in_app_purchase_desc_ex" = "Після покупки він буде завжди доступний для вас.";
+"in_app_purchase_desc_ex" = "Після придбання він буде завжди доступний для вас.";
 "unlock_all_features" = "Розблокувати усі можливості OsmAnd";
 "osm_live_subscribe_btn" = "Передплатити";
 "shared_string_email_address" = "Адреса електронної пошти";
@@ -2550,7 +2550,7 @@
 "product_desc_development" = "Для розробників і досвідчених користувачів";
 "restore_purchase" = "Відновити покупку";
 "product_desc_ext_development" = "Дозволяє налаштувати OsmAnd для тестування: симулювати навігаційні маршрути, перевіряти швидкість рендерингу екрана тощо. Плагін не потрібен для звичайного користування застосунком.";
-"restore_purchases" = "Відновлення покупок";
+"restore_purchases" = "Відновлення придбань";
 "transport_hazmat_no_desc" = "Деякими дорогами й тунелями перевезення небезпечних матеріалів заборонено.";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Без обмежень)";
 "unlimited_map_downloads" = "Необмежена кількість завантажень мап";

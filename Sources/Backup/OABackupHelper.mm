@@ -24,6 +24,7 @@
 #import "OADeleteFilesCommand.h"
 #import "OAWebClient.h"
 #import "OAOperationLog.h"
+#import "OAURLSessionProgress.h"
 #import "OADeleteAllFilesCommand.h"
 #import "OADeleteOldFilesCommand.h"
 #import "OARegisterUserCommand.h"
@@ -49,7 +50,7 @@ static NSString *DELETE_FILE_VERSION_URL = [SERVER_URL stringByAppendingPathComp
 static NSString *BACKUP_TYPE_PREFIX = @"backup_type_";
 static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
-@interface OABackupHelper () <OAOnPrepareBackupListener>
+@interface OABackupHelper () <OAOnPrepareBackupListener, NSURLSessionDelegate>
 
 @end
 
@@ -60,7 +61,6 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     NSHashTable<id<OAOnPrepareBackupListener>> *_prepareBackupListeners;
     
     OABackupDbHelper *_dbHelper;
-    
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     NSInteger _maximumAccountSize;
@@ -542,7 +542,21 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     }];
     
     const auto webClient = std::make_shared<OAWebClient>();
-    bool sucseess = webClient->downloadFile(QString::fromNSString(sb), QString::fromNSString(filePath));
+    int work = 0;
+    int progress = 0;
+    int deltaProgress = 0;
+    OsmAnd::IWebClient::RequestProgressCallbackSignature callback = [listener, type, fileName, work, deltaProgress, progress](const uint64_t transferredBytes,
+                                                                                               const uint64_t totalBytes) mutable {
+        int deltaWork = transferredBytes/totalBytes;
+        deltaProgress += deltaWork;
+        if ((deltaProgress > (work / 100)) || ((progress + deltaProgress) >= work)) {
+            progress += deltaProgress;
+            [listener onFileDownloadProgress:type fileName:fileName progress:progress deltaWork:deltaProgress itemFileName:nil];
+            deltaProgress = 0;
+        }
+        
+    };
+    bool sucseess = webClient->downloadFile(QString::fromNSString(sb), QString::fromNSString(filePath), nullptr, callback);
     if (!sucseess)
         error = [NSString stringWithFormat:@"Could not download remote file:%@", fileName];
     
@@ -629,10 +643,21 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 - (NSString *) uploadFile:(NSString *)fileName
                      type:(NSString *)type
                      data:(NSData *)data
+                     size:(int)size
                uploadTime:(NSTimeInterval)uploadTime
                  listener:(id<OAOnUploadFileListener>)listener
 {
     [self checkRegistered];
+    
+    OAURLSessionProgress *progress = nil;
+    BOOL hasSize = size != -1;
+    if (!hasSize)
+    {
+        progress = [[OAURLSessionProgress alloc] init];
+        [progress setOnProgress:^(int progress, int64_t deltaWork) {
+            [listener onFileUploadProgress:type fileName:fileName progress:progress deltaWork:deltaWork];
+        }];
+    }
     
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"deviceid"] = [self getDeviceId];
@@ -647,11 +672,14 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"uploadFile" debug:BACKUP_DEBUG_LOGS];
     [operationLog startOperation:[NSString stringWithFormat:@"%@ %@", type, fileName]];
     __block NSString *error = nil;
-    [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
+    [listener onFileUploadStarted:type fileName:fileName work:hasSize ? size : data.length];
+    [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
         if (((NSHTTPURLResponse *)response).statusCode != 200)
         {
             error = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
         }
+        if (hasSize)
+            [listener onFileUploadProgress:type fileName:fileName progress:100 deltaWork:size];
     }];
 //    NetworkResult networkResult = AndroidNetworkUtils.uploadFile(UPLOAD_FILE_URL, streamWriter, fileName, true, params, headers,
 //                                                                 new AbstractProgress() {

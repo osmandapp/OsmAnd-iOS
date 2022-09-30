@@ -665,6 +665,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
 - (void)applyLocalization
 {
     [super applyLocalization];

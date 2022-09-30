@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -33,6 +33,9 @@
                                     <constraint firstAttribute="width" constant="100" id="15x-mk-Rob"/>
                                     <constraint firstAttribute="height" constant="20" id="9g4-aR-Sm8"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p6l-Oe-MW0" userLabel="Progress Second View">
                                 <rect key="frame" x="100" y="0.0" width="50" height="20"/>
@@ -41,6 +44,9 @@
                                     <constraint firstAttribute="height" constant="20" id="beZ-QN-kCS"/>
                                     <constraint firstAttribute="width" constant="50" id="i5K-7Q-tWg"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AIc-EO-Z2l" userLabel="Pprogress Third View">
                                 <rect key="frame" x="150" y="0.0" width="10" height="20"/>
@@ -49,6 +55,9 @@
                                     <constraint firstAttribute="height" constant="20" id="QGQ-aG-vY4"/>
                                     <constraint firstAttribute="width" constant="10" id="puq-zQ-SZv"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
@@ -68,6 +77,7 @@
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                 <integer key="value" value="4"/>
                             </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SET-oh-YyK" userLabel="Description Container View">
@@ -181,21 +191,21 @@
             <connections>
                 <outlet property="descriptionContainerView" destination="SET-oh-YyK" id="PHN-mk-KTW"/>
                 <outlet property="firstDescriptionLabel" destination="aPW-C9-giS" id="FQ2-Y6-7rm"/>
-                <outlet property="valuesContainerView" destination="KoG-iN-Ayi" id="tYT-Rh-IEz"/>
                 <outlet property="firstValueDescriptionView" destination="g1A-2L-0zZ" id="ATK-oU-gGv"/>
                 <outlet property="firstValueView" destination="Qss-uc-g2q" id="kg8-sD-JMn"/>
                 <outlet property="firstValueViewWidth" destination="15x-mk-Rob" id="U6a-1W-ZYQ"/>
-                <outlet property="valuesNoDescriptionConstraint" destination="knj-QR-75P" id="slW-44-pwb"/>
+                <outlet property="secondDescriptionLabel" destination="cHd-Mk-dRh" id="vbu-Mx-To9"/>
                 <outlet property="secondValueDescriptionView" destination="TST-aB-gpG" id="hhs-0S-x7E"/>
                 <outlet property="secondValueView" destination="p6l-Oe-MW0" id="nyw-S1-2O7"/>
                 <outlet property="secondValueViewWidth" destination="i5K-7Q-tWg" id="6dw-GQ-SyQ"/>
+                <outlet property="thirdDescriptionLabel" destination="kJ5-7m-iq2" id="0qH-p3-3Uq"/>
                 <outlet property="thirdValueDescriptionView" destination="4Xb-K8-obh" id="Gci-bv-p2v"/>
                 <outlet property="thirdValueView" destination="AIc-EO-Z2l" id="bm4-Dm-eXz"/>
                 <outlet property="thirdValueViewWidth" destination="puq-zQ-SZv" id="oUy-WU-3BM"/>
-                <outlet property="valuesWithDescriptionConstraint" destination="Hvl-fy-4ZZ" id="hZ6-os-e29"/>
-                <outlet property="secondDescriptionLabel" destination="cHd-Mk-dRh" id="vbu-Mx-To9"/>
-                <outlet property="thirdDescriptionLabel" destination="kJ5-7m-iq2" id="0qH-p3-3Uq"/>
                 <outlet property="titleLabel" destination="tRQ-Yw-PeO" id="E4O-Gc-Hlh"/>
+                <outlet property="valuesContainerView" destination="KoG-iN-Ayi" id="tYT-Rh-IEz"/>
+                <outlet property="valuesNoDescriptionConstraint" destination="knj-QR-75P" id="slW-44-pwb"/>
+                <outlet property="valuesWithDescriptionConstraint" destination="Hvl-fy-4ZZ" id="hZ6-os-e29"/>
             </connections>
             <point key="canvasLocation" x="166.66666666666669" y="97.767857142857139"/>
         </tableViewCell>

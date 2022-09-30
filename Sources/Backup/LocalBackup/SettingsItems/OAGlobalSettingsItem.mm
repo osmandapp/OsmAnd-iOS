@@ -24,7 +24,7 @@
     return @"general_settings";
 }
 
-- (NSString *) publicName
+- (NSString *)getPublicName
 {
     return OALocalizedString(@"general_settings_2");
 }

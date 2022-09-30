@@ -251,7 +251,7 @@
     self.bottomButton.hidden = NO;
     self.buttonsContainerView.hidden = NO;
 
-    [self onAllFilesDeleted];
+    [self onCompleteTasks];
     _isDeleted = YES;
 }
 
@@ -351,10 +351,10 @@
     [self dismissViewController];
 }
 
-- (void)onAllFilesDeleted
+- (void)onCompleteTasks
 {
     if (!_isDeleted && self.deleteDelegate)
-        [self.deleteDelegate onAllFilesDeleted];
+        [self.deleteDelegate onCompleteTasks];
 }
 
 #pragma mark - UITableViewDataSource

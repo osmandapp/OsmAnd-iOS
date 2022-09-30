@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, EOADeleteBackupScreenType)
 @required
 
 - (void)onCloseDeleteAllBackupData;
-- (void)onAllFilesDeleted;
+- (void)onCompleteTasks;
 
 @end
 

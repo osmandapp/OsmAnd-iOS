@@ -63,8 +63,6 @@
     dispatch_queue_t syncQueue;
     
     CLLocationCoordinate2D lastPoint;
-    
-    OAAutoObserverProxy* _locationServicesUpdateObserver;
 }
 
 @synthesize lastTimeUpdated, points, isRecording, distance, currentTrack;
@@ -100,39 +98,13 @@
 
         if (![self saveIfNeeded])
             [self loadGpxFromDatabase];
-        
-        [self startLocationUpdate];
     }
     return self;
-}
-
-- (void) dealloc
-{
-    [self stopLocationUpdate];
 }
 
 - (void)onTrackRecordingChanged
 {
     //
-}
-
-- (void)startLocationUpdate
-{
-    if (_locationServicesUpdateObserver)
-        return;
-    
-    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(updateLocation)
-                                                                     andObserve:_app.locationServices.updateObserver];
-}
-
-- (void)stopLocationUpdate
-{
-    if (_locationServicesUpdateObserver)
-    {
-        [_locationServicesUpdateObserver detach];
-        _locationServicesUpdateObserver = nil;
-    }
 }
 
 - (void)createDb
@@ -612,10 +584,9 @@
     });
 }
 
-- (void) updateLocation
+- (void) updateLocation:(CLLocation *)location heading:(CLLocationDirection)heading
 {
     dispatch_sync(syncQueue, ^{
-        CLLocation* location = [_app.locationServices.lastKnownLocation copy];
         if (location)
         {
             long locationTime = (long)[location.timestamp timeIntervalSince1970];
@@ -623,11 +594,11 @@
             BOOL record = NO;
             
             OAAppSettings *settings = [OAAppSettings sharedManager];
-            double heading = _app.locationServices.lastKnownHeading;
-            if (heading != kTrackNoHeading && settings.saveHeadingToGpx.get)
-                heading = OsmAnd::Utilities::normalizedAngleDegrees(heading);
+            double headingNew = heading;
+            if (headingNew != kTrackNoHeading && settings.saveHeadingToGpx.get)
+                headingNew = OsmAnd::Utilities::normalizedAngleDegrees(headingNew);
             else
-                heading = kTrackNoHeading;
+                headingNew = kTrackNoHeading;
 
             if ([settings.saveTrackToGPX get]
                 && locationTime - lastTimeUpdated > [settings.mapSettingSaveTrackInterval get]
@@ -659,7 +630,7 @@
             
             if (record)
             {
-                [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:location.horizontalAccuracy time:[location.timestamp timeIntervalSince1970] heading:heading];
+                [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:location.horizontalAccuracy time:[location.timestamp timeIntervalSince1970] heading:headingNew];
                 
                 [[_app trackRecordingObservable] notifyEvent];
             }

@@ -2011,3 +2011,6 @@
 "shared_string_always_visible" = "一律可見";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (無限制)";
 "restore_from_osmand_cloud" = "從 OsmAnd Cloud 復原";
+
+// Route planning
+"plan_route" = "規劃路線";

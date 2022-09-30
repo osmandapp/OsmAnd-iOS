@@ -95,6 +95,7 @@
 - (NSString *) uploadFile:(NSString *)fileName
                      type:(NSString *)type
                      data:(NSData *)data
+                     size:(int)size
                uploadTime:(NSTimeInterval)uploadTime
                  listener:(id<OAOnUploadFileListener>)listener;
 

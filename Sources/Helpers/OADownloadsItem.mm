@@ -25,11 +25,6 @@
     return @"downloads";
 }
 
-- (NSString *)publicName
-{
-    return @"downloads";
-}
-
 - (void)readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     if (!json[@"items"])
@@ -58,6 +53,11 @@
 - (long)getEstimatedSize
 {
     return APPROXIMATE_DOWNLOAD_ITEM_SIZE_BYTES;
+}
+
+- (NSString *)getPublicName
+{
+    return OALocalizedString(@"welmode_download_maps");
 }
 
 - (OASettingsItemWriter *)getWriter

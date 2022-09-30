@@ -31,7 +31,7 @@
     return [self.plugin getId];
 }
 
-- (NSString *) publicName
+- (NSString *)getPublicName
 {
     return self.plugin.getName;
 }

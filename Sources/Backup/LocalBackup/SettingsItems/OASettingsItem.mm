@@ -212,6 +212,11 @@
     return -1; // override
 }
 
+- (NSString *)getPublicName
+{
+    return nil; // override
+}
+
 - (OASettingsItemReader *) getJsonReader
 {
     return [[OASettingsItemReader alloc] initWithItem:self];

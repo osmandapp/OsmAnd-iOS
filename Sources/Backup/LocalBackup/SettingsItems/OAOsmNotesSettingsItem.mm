@@ -95,7 +95,7 @@
     return @"osm_notes";
 }
 
-- (NSString *) publicName
+- (NSString *) getPublicName
 {
     return OALocalizedString(@"osm_notes");
 }

@@ -11,11 +11,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAStatusBackupViewController">
             <connections>
                 <outlet property="backButton" destination="fi2-pJ-e8t" id="YLh-e6-eBm"/>
-                <outlet property="backupNowButton" destination="OtT-YD-HbK" id="par-fO-hLt"/>
                 <outlet property="bottomButtonsContainerView" destination="Zcf-ec-NaU" id="Wsp-ca-xaC"/>
                 <outlet property="contentView" destination="n0A-4x-QAp" id="QSa-iw-WIM"/>
+                <outlet property="leftBottomButton" destination="9q6-TF-xEY" id="Pl0-oH-wrs"/>
                 <outlet property="navigationBarView" destination="X4M-dx-i9z" id="Ruo-Ag-fAD"/>
-                <outlet property="pauseAllButton" destination="9q6-TF-xEY" id="Pl0-oH-wrs"/>
+                <outlet property="rightBottomButton" destination="OtT-YD-HbK" id="par-fO-hLt"/>
                 <outlet property="segmentControl" destination="uaW-9U-gWu" id="qeE-CE-nWI"/>
                 <outlet property="titleLabel" destination="6oV-xs-nai" id="cSp-jq-fry"/>
                 <outlet property="view" destination="mpS-Ar-qBN" id="wYX-he-WHm"/>
@@ -91,7 +91,7 @@
                             <color key="tintColor" red="0.59215686270000001" green="0.56078431370000004" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                             <inset key="contentEdgeInsets" minX="9" minY="11" maxX="9" maxY="11"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" title="Pause all">
+                            <state key="normal" title="Cancel">
                                 <color key="titleColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
                             <connections>

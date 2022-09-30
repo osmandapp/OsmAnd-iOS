@@ -10,8 +10,12 @@
 
 @class OAPrepareBackupResult, OABackupStatus;
 
+@protocol OABackupTypesDelegate;
+
 @interface OAStatusBackupViewController : OACompoundViewController
 
 - (instancetype) initWithBackup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status;
+
+@property (nonatomic, weak) id<OABackupTypesDelegate> delegate;
 
 @end

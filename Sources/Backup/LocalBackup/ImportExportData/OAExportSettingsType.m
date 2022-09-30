@@ -217,7 +217,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)FAVORITES
 {
     if (!FAVORITES)
-        FAVORITES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"favorites") name:@"FAVORITES" itemName:@"FAVOURITES" icon:[UIImage templateImageNamed:@"ic_custom_favorites"]];
+        FAVORITES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"favorites") name:@"FAVORITES" itemName:@"FAVOURITES" icon:[UIImage templateImageNamed:@"ic_custom_my_places"]];
     return FAVORITES;
 }
 

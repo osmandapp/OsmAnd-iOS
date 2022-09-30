@@ -33,5 +33,6 @@ typedef NS_ENUM(NSInteger, EOARecentChangesTable)
 - (instancetype)initWithTableType:(EOARecentChangesTable)type backup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status;
 
 - (void)setDelegate:(id<OAStatusBackupTableDelegate>)delegate;
+- (void)updateData:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status;
 
 @end

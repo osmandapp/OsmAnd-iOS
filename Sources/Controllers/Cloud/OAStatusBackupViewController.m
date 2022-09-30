@@ -8,6 +8,7 @@
 
 #import "OAStatusBackupViewController.h"
 #import "OAStatusBackupTableViewController.h"
+#import "OABaseBackupTypesViewController.h"
 #import "OAPrepareBackupResult.h"
 #import "OABackupStatus.h"
 #import "OABackupInfo.h"
@@ -31,8 +32,8 @@
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 
 @property (weak, nonatomic) IBOutlet UIView *bottomButtonsContainerView;
-@property (weak, nonatomic) IBOutlet UIButton *pauseAllButton;
-@property (weak, nonatomic) IBOutlet UIButton *backupNowButton;
+@property (weak, nonatomic) IBOutlet UIButton *leftBottomButton;
+@property (weak, nonatomic) IBOutlet UIButton *rightBottomButton;
 
 @end
 
@@ -132,23 +133,25 @@
 - (void)setupBottomButtons:(BOOL)enabled
 {
     BOOL isExporting = [_settingsHelper isBackupExporting];
-    self.pauseAllButton.userInteractionEnabled = isExporting && enabled;
-    [self.pauseAllButton setTitle:OALocalizedString(@"cloud_pause_all") forState:UIControlStateNormal];
-    [self.pauseAllButton setTintColor:isExporting && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
-    [self.pauseAllButton setTitleColor:isExporting && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+    BOOL isImporting = [_settingsHelper isBackupImporting];
+
+    self.leftBottomButton.userInteractionEnabled = (isExporting || isImporting) && enabled;
+    [self.leftBottomButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [self.leftBottomButton setTintColor:(isExporting || isImporting) && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
+    [self.leftBottomButton setTitleColor:(isExporting || isImporting) && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
                               forState:UIControlStateNormal];
 
-    BOOL isImporting = [_settingsHelper isBackupImporting];
-    self.backupNowButton.userInteractionEnabled = !isExporting && !isImporting && enabled;
-    [self.backupNowButton setTitle:OALocalizedString(@"cloud_backup_now") forState:UIControlStateNormal];
-    [self.backupNowButton setTintColor:!isExporting && !isImporting && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
-    [self.backupNowButton setTitleColor:!isExporting && !isImporting && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+    self.rightBottomButton.userInteractionEnabled = !isExporting && !isImporting && enabled;
+    [self.rightBottomButton setTitle:OALocalizedString(@"cloud_backup_now") forState:UIControlStateNormal];
+    [self.rightBottomButton setTintColor:!isExporting && !isImporting && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
+    [self.rightBottomButton setTitleColor:!isExporting && !isImporting && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
                                forState:UIControlStateNormal];
 }
 
 - (IBAction)leftButtonPressed:(UIButton *)sender
 {
-    
+    [_settingsHelper cancelImport];
+    [_settingsHelper cancelExport];
 }
 
 - (IBAction)rightButtonPressed:(UIButton *)sender
@@ -181,8 +184,11 @@
 {
     _backup = backupResult;
     _status = [OABackupStatus getBackupStatus:backupResult];
-
     [self setupBottomButtons:YES];
+    if (self.delegate)
+        [self.delegate onCompleteTasks];
+    [self.segmentControl.selectedSegmentIndex == 0 ? _conflictsTableViewController : _allTableViewController updateData:_backup
+                                                                                                                 status:_status];
 }
 
 - (void)setRowIcon:(OATableViewRowData *)rowData item:(OASettingsItem *)item
@@ -192,11 +198,13 @@
         OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *) item;
         OAApplicationMode *mode = profileItem.appMode;
         [rowData setObj:[UIImage templateImageNamed:[mode getIconName]] forKey:@"icon"];
-        [rowData setIconTint:[mode getIconColor]];
     }
-    OAExportSettingsType *type = [OAExportSettingsType getExportSettingsTypeForItem:item];
-    if (type != nil)
-        [rowData setObj:type.icon forKey:@"icon"];
+    else
+    {
+        OAExportSettingsType *type = [OAExportSettingsType getExportSettingsTypeForItem:item];
+        if (type != nil)
+            [rowData setObj:type.icon forKey:@"icon"];
+    }
 }
 
 - (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary

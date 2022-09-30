@@ -172,7 +172,7 @@
         }];
 
         if (self.backupTypesDelegate)
-            [self.backupTypesDelegate onAllFilesDeleted];
+            [self.backupTypesDelegate onCompleteTasks];
     }
 }
 
@@ -205,7 +205,7 @@
 {
 }
 
-- (void)onAllFilesDeleted
+- (void)onCompleteTasks
 {
     [_backupHelper prepareBackup];
 }

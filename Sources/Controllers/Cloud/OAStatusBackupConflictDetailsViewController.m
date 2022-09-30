@@ -125,19 +125,26 @@
         kCellIconTint: @(color_primary_purple)
     }];
 
+    NSString *fileName = [OABackupHelper getItemFileName:_localeFile.item];
+    OAImportBackupTask *importTask = [_settingsHelper getImportTask:fileName];
+    OAExportBackupTask *exportTask = [_settingsHelper getExportTask:fileName];
+    BOOL enabled = exportTask == nil && importTask == nil;
+    [uploadLocalRow setObj:@(enabled) forKey:@"enabled"];
+    [downloadCloudRow setObj:@(enabled) forKey:@"enabled"];
+
     if (self.delegate)
     {
         [self.delegate setRowIcon:itemInfoRow item:_localeFile.item];
         [itemInfoRow setDescr:[self.delegate getDescriptionForItemType:_localeFile.item.type
-                                                              fileName:_localeFile.fileName
+                                                              fileName:fileName
                                                                summary:OALocalizedString(@"cloud_last_backup")]];
 
         [uploadLocalRow setDescr:[self.delegate getDescriptionForItemType:_localeFile.item.type
-                                                                 fileName:_localeFile.fileName
+                                                                 fileName:fileName
                                                                   summary:OALocalizedString(@"shared_string_changed")]];
 
         [downloadCloudRow setDescr:[self.delegate getDescriptionForItemType:_remoteFile.item.type
-                                                                   fileName:_remoteFile.item.fileName
+                                                                   fileName:fileName
                                                                     summary:OALocalizedString(@"shared_string_changed")]];
     }
     [itemInfoSection addRow:itemInfoRow];
@@ -194,12 +201,14 @@
             cell = (OATableViewCellRightIcon *) nib[0];
             [cell leftIconVisibility:NO];
             cell.rightIconView.tintColor = UIColorFromRGB(item.iconTint);
-            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
             cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
         }
         if (cell)
         {
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
+            BOOL enabled = [item boolForKey:@"enabled"];
+            cell.selectionStyle = enabled ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+            cell.titleLabel.textColor = enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
             cell.titleLabel.text = item.title;
             cell.descriptionLabel.text = item.descr;
             cell.rightIconView.image = [UIImage templateImageNamed:item.secondaryIconName];
@@ -249,19 +258,16 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     OATableViewRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item boolForKey:@"enabled"])
     {
         [self hide:YES completion:^{
             NSString *fileName = [OABackupHelper getItemFileName:_localeFile.item];
-
             if ([item.key isEqualToString:@"uploadLocal"])
             {
                 [_settingsHelper exportSettings:fileName items:@[_localeFile.item] itemsToDelete:@[] listener:_backupExportImportListener];
             }
             else if ([item.key isEqualToString:@"downloadCloud"])
             {
-                if (self.delegate)
-                    [self.delegate disableBottomButtons];
-
                 OASettingsItem *settingsItem = _remoteFile.item;
                 [settingsItem setShouldReplace:YES];
                 [_settingsHelper importSettings:fileName items:@[settingsItem] forceReadData:YES listener:_backupExportImportListener];

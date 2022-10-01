@@ -30,15 +30,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *restoreButton;
 
-@property (weak, nonatomic) IBOutlet UIView *loadingView;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingIndicator;
-@property (weak, nonatomic) IBOutlet UILabel *loadingLabel;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewTopWithLoadingViewConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewTopWithLoadingViewSafeAreaConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewTopNoLoadingViewConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewTopNoLoadingViewSafeAreaConstraint;
-
 @end
 
 @implementation OAPurchasesViewController
@@ -46,14 +37,13 @@
     OAIAPHelper *_iapHelper;
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSMutableDictionary<NSNumber *, NSString *> *_headers;
-
-    BOOL _purchasesUpdated;
 }
 
--(void) applyLocalization
+static BOOL _purchasesUpdated;
+
+- (void)applyLocalization
 {
     self.titleView.text = OALocalizedString(@"purchases");
-    self.loadingLabel.text = OALocalizedString(@"loading_purchase_information");
 }
 
 - (void) viewDidLoad
@@ -62,12 +52,14 @@
 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.sectionHeaderHeight = 0.001;
+    self.tableView.sectionFooterHeight = 0.001;
 
     _iapHelper = [OAIAPHelper sharedInstance];
     _headers = [NSMutableDictionary dictionary];
 
-    [self updateLoadingView:_purchasesUpdated];
     [self generateData];
+    [self updateLoadingView:!_purchasesUpdated];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -91,27 +83,62 @@
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self.tableView reloadData];
+        [self updateLoadingView:self.tableView.tableHeaderView != nil];
     } completion:nil];
 }
 
-- (void)updateLoadingView:(BOOL)purchasesUpdated
+- (void)updateLoadingView:(BOOL)show
 {
-    _purchasesUpdated = purchasesUpdated;
-    self.loadingView.hidden = purchasesUpdated;
+    self.tableView.tableHeaderView = show ? [self getHeaderView] : nil;
+}
 
-    self.tableViewTopWithLoadingViewConstraint.active = !_purchasesUpdated;
-    self.tableViewTopWithLoadingViewSafeAreaConstraint.active = !_purchasesUpdated;
+- (UIView *)getHeaderView
+{
+    CGFloat headerTopPadding = 40.;
+    UIFont *labelFont = [UIFont systemFontOfSize:17.];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, headerTopPadding + labelFont.lineHeight)];
+    headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    headerView.backgroundColor = UIColor.clearColor;
 
-    self.tableViewTopNoLoadingViewConstraint.active = _purchasesUpdated;
-    self.tableViewTopNoLoadingViewSafeAreaConstraint.active = _purchasesUpdated;
+    UIView *loadingContainerView = [[UIView alloc] init];
+    loadingContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [headerView addSubview:loadingContainerView];
 
-    [self.view setNeedsUpdateConstraints];
-    [self.view updateConstraintsIfNeeded];
+    UILabel *loadingLabel = [[UILabel alloc] init];
+    loadingLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    loadingLabel.text = OALocalizedString(@"loading_purchase_information");
+    loadingLabel.textColor = UIColorFromRGB(color_text_footer);
+    loadingLabel.font = labelFont;
+    [loadingContainerView addSubview:loadingLabel];
+
+    UIActivityIndicatorView *loadingIndicator = [[UIActivityIndicatorView alloc] init];
+    loadingIndicator.translatesAutoresizingMaskIntoConstraints = NO;
+    [loadingIndicator startAnimating];
+    [loadingContainerView addSubview:loadingIndicator];
+
+    CGFloat indicatorSideSize = 20.;
+    CGFloat indicatorTrailing = 10.;
+    CGFloat textWidthMax = self.tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2 - indicatorSideSize - indicatorTrailing;
+    CGFloat textWidth = [OAUtilities calculateTextBounds:loadingLabel.text width:textWidthMax height:labelFont.lineHeight font:labelFont].width;
+    [NSLayoutConstraint activateConstraints:@[
+        [loadingContainerView.topAnchor constraintEqualToAnchor:headerView.topAnchor constant:headerTopPadding],
+        [loadingContainerView.bottomAnchor constraintEqualToAnchor:headerView.bottomAnchor],
+        [loadingContainerView.centerXAnchor constraintEqualToAnchor:headerView.centerXAnchor],
+        [loadingContainerView.widthAnchor constraintEqualToConstant:indicatorSideSize + indicatorTrailing + textWidth],
+        [loadingIndicator.centerYAnchor constraintEqualToAnchor:loadingContainerView.centerYAnchor],
+        [loadingIndicator.leadingAnchor constraintEqualToAnchor:loadingContainerView.leadingAnchor],
+        [loadingLabel.centerYAnchor constraintEqualToAnchor:loadingContainerView.centerYAnchor],
+        [loadingLabel.leadingAnchor constraintEqualToAnchor:loadingIndicator.trailingAnchor constant:indicatorTrailing],
+        [loadingLabel.trailingAnchor constraintEqualToAnchor:loadingContainerView.trailingAnchor],
+        [loadingLabel.widthAnchor constraintEqualToConstant:textWidth]
+    ]];
+
+    return headerView;
 }
 
 - (void) generateData
 {
+    [_headers removeAllObjects];
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray array];
     if (_purchasesUpdated)
     {
@@ -326,7 +353,8 @@
 - (void)updateViewAfterProductsRequested
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateLoadingView:YES];
+        _purchasesUpdated = YES;
+        [self updateLoadingView:NO];
         [self generateData];
         [self.tableView reloadData];
     });
@@ -354,15 +382,9 @@
 
 - (IBAction) onRestoreButtonPressed:(id)sender
 {
-    [UIView transitionWithView:self.loadingView
-                      duration:.3
-                       options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
-                    animations:^(void) {
-                        [self updateLoadingView:NO];
-                    }
-                    completion:^(BOOL finished) {
-                        [[OARootViewController instance] restorePurchasesWithProgress:NO];
-                    }];
+    _purchasesUpdated = NO;
+    [self updateLoadingView:YES];
+    [[OARootViewController instance] restorePurchasesWithProgress:NO];
 }
 
 #pragma mark - SFSafariViewControllerDelegate
@@ -550,6 +572,21 @@
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    NSString *header = _headers[@(section)];
+    if (header)
+    {
+        UIFont *font = [UIFont systemFontOfSize:13.];
+        CGFloat headerHeight = [OAUtilities calculateTextBounds:header
+                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
+                                                           font:font].height + kPaddingOnSideOfHeaderWithText;
+        return headerHeight;
+    }
+
+    return kHeaderHeightDefault;
+}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

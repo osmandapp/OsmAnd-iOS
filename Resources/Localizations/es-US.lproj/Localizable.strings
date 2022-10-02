@@ -2537,7 +2537,7 @@
 "terrain_maps" = "Mapas del terreno";
 "purchases_feature_desc_hourly_map_updates" = "Obtén acceso a actualizaciones de mapas con mayor frecuencia, elige entre: actualizaciones horarias, diarias o semanales. Las actualizaciones se descargan de forma incremental, sólo para el área modificada.";
 "monthly_subscription" = "Suscripción mensual";
-"shared_string_stop" = "Parada";
+"shared_string_stop" = "Parar";
 "osm_live_banner_desc" = "Obtenga descargas ilimitadas de mapas, añadiendo actualizaciones semanales, diarias o incluso por hora.";
 "transport_hazmat_yes_desc" = "Debes elegir la categoría adecuada.";
 "purchases_feature_desc_combined_wiki" = "Explora los artículos de Wikipedia sobre la marcha, sin conexión a Internet. Datos sin conexión divididos por países y disponibles en todos los idiomas.";
@@ -2708,3 +2708,18 @@
 "compass_options_description" = "Pulsa en la brújula para cambiar el modo de orientación del mapa";
 "weather_clear_offline_cache" = "Esto vaciará toda la memoria caché de las teselas meteorológicas en línea.";
 "weather_clear_offline_cache_for" = "Esto vaciará toda la memoria caché de las teselas meteorológicas sin conexión de %@.";
+"shared_string_changed" = "Cambiado";
+"cloud_conflict" = "Conflicto";
+"cloud_recent_changes" = "Cambios recientes";
+"cloud_pause_all" = "Pausar todo";
+"cloud_all_changes_uploaded" = "Se cargaron todo los cambios";
+"cloud_all_changes_uploaded_descr" = "Todos los cambios hechos en este dispositivo se sincronizaron en OsmAnd Cloud.";
+"cloud_no_conflicts" = "Sin conflictos";
+"backup_conflicts_descr" = "Existe una versión más reciente de estos archivos en el servidor. Elige una acción.";
+"backup_conflicts_action_descr" = "Existe otra versión de este archivo en el servidor. Elige una acción.";
+"cloud_contains_newer_changes" = "La versión de OsmAnd Cloud contiene cambios más recientes.";
+"upload_local_version" = "Cargar versión local";
+"recorded_voice" = "Grabado";
+"tts" = "TTS";
+"cloud_no_conflicts_descr" = "Los datos en el dispositivo y en OsmAnd Cloud son los mismos.";
+"dowload_cloud_version" = "Descargar la versión de la nube";

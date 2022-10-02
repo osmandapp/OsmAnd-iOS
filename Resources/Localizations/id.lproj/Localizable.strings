@@ -218,11 +218,11 @@
 "auto_zoom_close" = "Untuk close-up";
 "auto_zoom_far" = "Ke mid-range";
 "auto_zoom_farthest" = "Ke jarak panjang";
-"keep_informing_never" = "Only manually (tap arrow)";
+"keep_informing_never" = "Hanya secara manual (ketuk panah)";
 "arrival_distance_factor_early" = "Lebih awal";
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Terlambat";
-"arrival_distance_factor_at_last" = "In the last meters";
+"arrival_distance_factor_at_last" = "Dalam meter akhir";
 "map_orientation_change_in_accordance_with_speed" = "Ambang orientasi peta";
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "Parameter rute";
@@ -302,7 +302,7 @@
 "app_mode_boat" = "Perahu";
 "app_mode_aircraft" = "Pesawat";
 "gpx_option_calculate_first_last_segment" = "Calculate OsmAnd route for first and last route segment";
-"gpx_option_from_start_point" = "Pass along entire track";
+"gpx_option_from_start_point" = "Lewati dengan seluruh trek";
 "gpx_option_reverse_route" = "Reverse GPX direction";
 "use_points_as_intermediates" = "Calculate route between points";
 "calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
@@ -333,7 +333,7 @@
 "stop_routing_confirm" = "Are you sure you want to stop the navigation?";
 "cancel_route" = "Dismiss route";
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
-"navigation_over_track" = "Start navigation along track?";
+"navigation_over_track" = "Mulai navigasi bersama trek?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
 "displayed_trips" = "Trek yang ditampilkan";
 "prev_route" = "Rute sebelumnya";
@@ -364,7 +364,7 @@
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Ambil %d keluar dan pergi";
 "route_kl" = "Tetap di kiri dan jalan";
-"route_kr" = "Keep right and go";
+"route_kr" = "Tetap kanan dan jalan";
 "route_tr" = "Belok kanan dan jalan";
 "route_tshr" = "Belok tajam ke kanan dan pergi";
 "route_tslr" = "Belok sedikit ke kanan dan jalan";
@@ -560,7 +560,7 @@
 "select_group" = "Pilih grup";
 "icon" = "Ikon";
 "shape" = "Bentuk";
-"fav_point_dublicate" = "Duplicate Favorite name specified";
+"fav_point_dublicate" = "Duplikat nama Favorit ditentukan";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
 "default_color" = "Warna bawaan";
@@ -1009,7 +1009,7 @@
 "downloading" = "Downloading";
 
 // Route planning
-"plan_route" = "Plan a route";
+"plan_route" = "Rencanakan rute";
 "add_point" = "Tambahkan titik";
 "point_num" = "Point %d";
 "points_count" = "Points:";
@@ -1976,7 +1976,7 @@
 "routing_attr_avoid_toll_name" = "Tidak ada jalan tol";
 "rendering_attr_appMode_description" = "Optimalkan peta untuk";
 "routing_attr_avoid_ice_roads_fords_name" = "Tidak ada jalan es atau arungan";
-"rendering_value_germanRoadAtlas_name" = "German road atlas";
+"rendering_value_germanRoadAtlas_name" = "Atlas jalan Jerman";
 "rendering_attr_hikingRoutesOSMC_name" = "Rute pendakian";
 "rendering_attr_showRoadMaps_name" = "Peta hanya jalan";
 "routing_attr_avoid_ferries_description" = "Menghindari kapal feri";
@@ -1984,7 +1984,7 @@
 "routing_attr_driving_style_name" = "Gaya berkendara";
 "rendering_attr_surface_pebblestone_name" = "Batu kerikil";
 "rendering_value_lightblue_name" = "Biru muda";
-"rendering_value_americanRoadAtlas_name" = "American road atlas";
+"rendering_value_americanRoadAtlas_name" = "Atlas jalan Amerika";
 "rendering_value_fine_name" = "Normal";
 "routing_attr_relief_smoothness_factor_plains_name" = "Kurang berbukit";
 "rendering_value_purple_name" = "Ungu";
@@ -2032,7 +2032,7 @@
 "rendering_attr_horseRoutes_name" = "Rute kuda";
 "routing_attr_avoid_ferry_description" = "Menghindari feri";
 "rendering_attr_highway_class_track_grade2_name" = "Tingkat 2";
-"rendering_attr_shareTaxiRoutes_name" = "Share taxi routes";
+"rendering_attr_shareTaxiRoutes_name" = "Bagikan rute taksi";
 "routing_attr_relief_smoothness_factor_hills_name" = "Berbukit";
 "rendering_attr_contourWidth_name" = "Lebar garis kontur";
 "routing_attr_piste_type_sled_description" = "Slopes for sled usage.";
@@ -2082,7 +2082,7 @@
 "routing_attr_height_obstacles_description" = "Factor in terrain elevation (via SRTM, ASTER, and EU-DEM data).";
 "rendering_attr_currentTrackColor_description" = "Warna GPX";
 "routing_attr_driving_style_speed_name" = "Rute lebih pendek";
-"routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
+"routing_attr_avoid_sett_description" = "Menghindari batu bulat dan sett";
 "rendering_attr_hikingRoutesOSMC_description" = "Render paths according to OSMC traces.";
 "rendering_value_car_name" = "Driving";
 "routing_attr_avoid_unpaved_name" = "Tidak ada jalan yang diaspal";
@@ -2132,11 +2132,11 @@
 "routing_attr_piste_type_skitour_name" = "Tur ski";
 "routing_attr_driving_style_prefer_unpaved_name" = "Utamakan jalan yang belum diaspal";
 "rendering_attr_surface_sand_name" = "Pasir";
-"routing_attr_no_new_routing_description" = "Do not use routing rules introduced in v1.9.";
+"routing_attr_no_new_routing_description" = "Jangan gunakan aturan perutean yang ditambahkan dalam v1.9.";
 "routing_attr_prefer_motorway_name" = "Utamakan jalan bebas hambatan";
 "rendering_attr_surface_cobblestone_name" = "Batu besar";
 "rendering_attr_highway_class_state_road_name" = "Jalan raya kota";
-"routing_attr_avoid_sett_name" = "No cobblestone or sett";
+"routing_attr_avoid_sett_name" = "Tidak ada batu bulat atau sett";
 "rendering_value_translucent_lightblue_name" = "Biru muda translucent";
 "rendering_attr_smoothness_good_name" = "Bagus";
 "routing_attr_weight_name" = "Batas berat";
@@ -2190,7 +2190,7 @@
 "rendering_attr_buildings15zoom_name" = "Buildings on zoom 15";
 "rendering_attr_tracktype_grade1_name" = "Padat (beraspal)";
 "routing_attr_avoid_train_description" = "Menghindari kereta api";
-"routing_attr_avoid_shuttle_train_name" = "No shuttle train";
+"routing_attr_avoid_shuttle_train_name" = "Tidak ada kereta antar jemput";
 "rendering_attr_contourColorScheme_description" = "Skema warna garis kontur";
 "rendering_value_boldOutline_name" = "Garis tebal";
 "routing_attr_avoid_toll_description" = "Menghindari jalan tol";
@@ -2208,11 +2208,11 @@
 "rendering_attr_noPolygons_description" = "Make all areal land features on map transparent.";
 "routing_attr_allow_classic_only_description" = "Routes groomed for classic style only without skating trails. This includes routes groomed by a smaller snowmobile with looser piste and tracks made manually by skiers.";
 "routing_attr_allow_skating_only_name" = "Allow skating only routes";
-"routing_attr_avoid_shuttle_train_description" = "Avoids using shuttle trains";
+"routing_attr_avoid_shuttle_train_description" = "Menghindari menggunakan kereta antar jemput";
 "routing_attr_driving_style_balance_name" = "Seimbang";
 "routing_attr_piste_type_nordic_name" = "Cross country/nordic ski";
 "routing_attr_avoid_bus_name" = "Larang bus";
-"rendering_value_highContrastRoads_name" = "High contrast roads";
+"rendering_value_highContrastRoads_name" = "Jalan kontras tinggi";
 "rendering_attr_highway_class_service_name" = "Layanan";
 "rendering_attr_showCycleRoutes_name" = "Rute bersepeda";
 "rendering_attr_surface_metal_name" = "Besi";
@@ -2241,7 +2241,7 @@
 "rendering_value_darkyellow_name" = "Kuning gelap";
 "routing_attr_prefer_unpaved_name" = "Utamakan jalan yang belum diaspal";
 "rendering_value_default_name" = "Default";
-"routing_attr_no_new_routing_name" = "No v1.9 routing rules";
+"routing_attr_no_new_routing_name" = "TIdak ada aturan perutean v1.9";
 "rendering_attr_subwayMode_name" = "Rute kereta bawah tanah";
 "rendering_attr_highway_class_motorway_name" = "Jalur lambat";
 "rendering_value_brown_name" = "Cokelat";

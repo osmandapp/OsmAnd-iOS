@@ -844,6 +844,9 @@
         _renderer->attachToRenderTarget();
     }
 
+    if (self.rendererDelegate)
+        [self.rendererDelegate frameAnimatorsUpdated];
+
     // Process update
     if (!_renderer->update())
     {
@@ -851,6 +854,9 @@
                     format:@"Failed to update OpenGLES2+ map renderer 0x%08x", glGetError()];
         return;
     }
+
+    if (self.rendererDelegate)
+        [self.rendererDelegate frameUpdated];
 
     // Perform rendering only if frame is marked as invalidated
     bool shouldRenderFrame = false;

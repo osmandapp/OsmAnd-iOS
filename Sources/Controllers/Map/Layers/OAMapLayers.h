@@ -81,6 +81,7 @@
 - (void) showLayer:(NSString *)layerId;
 - (void) hideLayer:(NSString *)layerId;
 
+- (void) onMapFrameAnimatorsUpdated;
 - (void) onMapFrameRendered;
 - (void) didReceiveMemoryWarning;
 

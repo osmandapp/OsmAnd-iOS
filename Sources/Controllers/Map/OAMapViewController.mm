@@ -432,6 +432,16 @@
 
 #pragma mark - OAMapRendererDelegate
 
+- (void) frameAnimatorsUpdated
+{
+    if (_mapLayers)
+        [_mapLayers onMapFrameAnimatorsUpdated];
+}
+
+- (void) frameUpdated
+{
+}
+
 - (void) frameRendered
 {
     if (_mapLayers)

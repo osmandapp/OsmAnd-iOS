@@ -49,6 +49,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 
 @protocol OAMapRendererDelegate
 
+- (void) frameAnimatorsUpdated;
+- (void) frameUpdated;
 - (void) frameRendered;
 
 @end

@@ -73,6 +73,7 @@ typedef enum {
 
 - (void) hideMarkers;
 - (void) updateLocation:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy heading:(CLLocationDirection)heading;
+- (OsmAnd::PointI) getPosition;
 
 @end
 
@@ -289,6 +290,68 @@ typedef enum {
     }
 }
 
+- (OsmAnd::PointI) getPosition
+{
+    std::shared_ptr<OsmAnd::MapMarker> marker;
+    OsmAnd::MapMarker::OnSurfaceIconKey iconKey = NULL;
+
+    switch (_state)
+    {
+        case OAMarkerColletionStateMove:
+        {
+            switch (_mode)
+            {
+                case OAMarkerColletionModeDay:
+                    marker = _courseMarkerDay;
+                    iconKey = _courseMainIconKeyDay;
+                    break;
+                case OAMarkerColletionModeNight:
+                    marker = _courseMarkerNight;
+                    iconKey = _courseMainIconKeyNight;
+                    break;
+
+                default:
+                    break;
+            }
+            break;
+        }
+        case OAMarkerColletionStateOutdatedLocation:
+        {
+            switch (_mode)
+            {
+                case OAMarkerColletionModeDay:
+                    marker = _locationMarkerLostDay;
+                    break;
+                case OAMarkerColletionModeNight:
+                    marker = _locationMarkerLostNight;
+                    break;
+
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+        {
+            switch (_mode)
+            {
+                case OAMarkerColletionModeDay:
+                    marker = _locationMarkerDay;
+                    iconKey = _locationHeadingIconKeyDay;
+                    break;
+                case OAMarkerColletionModeNight:
+                    marker = _locationMarkerNight;
+                    iconKey = _locationHeadingIconKeyNight;
+                    break;
+
+                default:
+                    break;
+            }
+            break;
+        }
+    }
+    return marker ? marker->getPosition() : OsmAnd::PointI();
+}
 @end
 
 @implementation OAMyPositionLayer
@@ -486,7 +549,11 @@ typedef enum {
 
     float animationDuration = 0;
     if (OAAppSettings.sharedManager.animateMyLocation.get && prevLocation && ![OAMapViewTrackingUtilities isSmallSpeedForAnimation:_lastLocation])
+    {
         animationDuration = [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp];
+        if (animationDuration > 5)
+            animationDuration = 0;
+    }
 
     if (newLocation.course >= 0)
     {
@@ -512,6 +579,18 @@ typedef enum {
     OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
     OAMarkerCollection *c = [_modeMarkers objectForKey:currentMode];
     [self updateLocation:c];
+}
+
+- (CLLocationCoordinate2D) getActiveMarkerLocation
+{
+    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
+    OAMarkerCollection *c = [_modeMarkers objectForKey:currentMode];
+    auto position31 = [c getPosition];
+    if (position31.x == 0 && position31.y == 0)
+        return kCLLocationCoordinate2DInvalid;
+
+    auto latLon = OsmAnd::Utilities::convert31ToLatLon(position31);
+    return CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
 }
 
 #pragma mark - OAContextMenuProvider

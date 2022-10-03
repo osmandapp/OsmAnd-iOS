@@ -21,6 +21,7 @@
 #import "OAPlugin.h"
 #import "OACustomPlugin.h"
 #import "OAColors.h"
+#import "OAAutoObserverProxy.h"
 
 #define kDefaultPluginsSection 0
 #define kCustomPluginsSection 1
@@ -42,6 +43,8 @@
     OASubscriptionBannerCardView *_subscriptionBannerView;
 
     NSArray<OACustomPlugin *> *_customPlugins;
+    
+    OAAutoObserverProxy *_addonsSwitchObserver;
     
     CALayer *_horizontalLine;
 }
@@ -94,6 +97,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
+    
+    _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                      withHandler:@selector(onAddonsSwitch:withKey:andValue:)
+                                                       andObserve:OsmAndApp.instance.addonsSwitchObservable];
 
     _customPlugins = [OAPlugin getCustomPlugins];
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
@@ -107,6 +114,8 @@
 - (void) viewWillDisappear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [_addonsSwitchObserver detach];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -115,6 +124,13 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self setupSubscriptionBanner];
     } completion:nil];
+}
+
+- (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
 }
 
 - (void)setupSubscriptionBanner
@@ -292,6 +308,8 @@
             if (disabled)
             {
                 [_iapHelper enableProduct:product.productIdentifier];
+                OAPlugin *plugin = [OAPlugin getPluginById:product.productIdentifier];
+                [plugin showInstalledScreen];
                 [OAPluginPopupViewController showProductAlert:product afterPurchase:NO];
             }
             else

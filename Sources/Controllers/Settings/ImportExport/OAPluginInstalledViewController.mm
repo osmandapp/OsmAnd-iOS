@@ -10,6 +10,7 @@
 #import "OATextViewSimpleCell.h"
 #import "OAPlugin.h"
 #import "OAColors.h"
+#import "OAProducts.h"
 #import "Localization.h"
 #import "OAResourcesUIHelper.h"
 #import "OAIAPHelper.h"
@@ -283,14 +284,26 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 - (IBAction)onDisablePressed:(UIButton *)sender
 {
     if (_plugin)
-        [OAPlugin enablePlugin:_plugin enable:NO];
+    {
+        OAProduct *product = [[OAIAPHelper sharedInstance] product:_pluginId];
+        if (product)
+            [_iapHelper disableProduct:_pluginId];
+        else
+            [OAPlugin enablePlugin:_plugin enable:NO showDialog:NO];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)onEnablePressed:(id)sender
 {
     if (_plugin)
-        [OAPlugin enablePlugin:_plugin enable:YES];
+    {
+        OAProduct *product = [[OAIAPHelper sharedInstance] product:_pluginId];
+        if (product)
+            [_iapHelper enableProduct:_pluginId];
+        else
+            [OAPlugin enablePlugin:_plugin enable:YES showDialog:NO];
+    }
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

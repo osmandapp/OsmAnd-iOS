@@ -41,7 +41,7 @@
 "transport_routes" = "Rutas";
 "transport_nearby_routes_within" = "Rutas a menos de";
 "transport_nearby_routes" = "A menos de";
-"transport_stop" = "Parar";
+"transport_stop" = "Parada";
 "cancel_navigation" = "Parar navegación";
 "start_navigation" = "Iniciar navegación";
 "intermediate_items_sort_by_distance" = "Ordenar puerta a puerta";
@@ -2251,7 +2251,7 @@
 "rendering_attr_surface_asphalt_name" = "Asfalto";
 "rendering_value_translucent_orange_name" = "Anaranjado translúcido";
 "rendering_attr_depthContours_description" = "Mostrar curvas y puntos de profundidad.";
-"rendering_value_thick_name" = "Espesor";
+"rendering_value_thick_name" = "Grueso";
 "routing_attr_avoid_ferry_name" = "Sin ferris o transbordadores";
 "routing_attr_width_name" = "Límite de anchura";
 "routing_attr_avoid_train_name" = "Sin trenes";

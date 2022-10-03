@@ -383,7 +383,7 @@
                     else
                     {
                         _mapView.mapAnimator->animateAzimuthTo(direction,
-                                                            kFastAnimationTime,
+                                                            kOneSecondAnimatonTime,
                                                             OsmAnd::MapAnimator::TimingFunction::Linear,
                                                             kLocationServicesAnimationKey);
                     }

@@ -44,6 +44,7 @@
 
 + (void) initPlugins;
 + (BOOL) enablePlugin:(OAPlugin *)plugin enable:(BOOL)enable;
++ (BOOL) enablePlugin:(OAPlugin *)plugin enable:(BOOL)enable showDialog:(BOOL)showDialog;
 + (void) refreshLayers;
 + (NSArray<OAPlugin *> *) getVisiblePlugins;
 + (NSArray<OAPlugin *> *) getAvailablePlugins;
@@ -78,6 +79,7 @@
 - (void) registerLayers;
 - (BOOL) destinationReached;
 - (void) updateLocation:(CLLocation *)location;
+- (void) showInstalledScreen;
 
 
 @end

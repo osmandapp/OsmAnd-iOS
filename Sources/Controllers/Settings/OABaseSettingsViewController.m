@@ -37,6 +37,12 @@
     [self setupNavBarHeight];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [self setupNavBarHeight];
+}
+
 - (void)applyLocalization
 {
     self.subtitleLabel.text = _appMode.toHumanString;
@@ -53,8 +59,7 @@
 
 - (void) setupNavBarHeight
 {
-    if ([self isModal])
-        self.navBarHeightConstraint.constant = modalNavBarHeight;
+    self.navBarHeightConstraint.constant = [self isModal] ? [OAUtilities isLandscape] ? defaultNavBarHeight : modalNavBarHeight : defaultNavBarHeight;
 }
 
 - (void) setupTableHeaderViewWithText:(NSString *)text

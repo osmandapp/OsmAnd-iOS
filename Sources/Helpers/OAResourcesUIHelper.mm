@@ -1636,10 +1636,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:view];
         [view addSubview:progressHUD];
         [progressHUD showAnimated:YES whileExecutingBlock:^{
-            [[OAWeatherHelper sharedInstance] prepareToStopDownloading:item.worldRegion.regionId];
-            if ([OAWeatherHelper getPreferenceDownloadState:item.worldRegion.regionId] == EOAWeatherForecastDownloadStateUndefined)
-                [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion.regionId refreshMap:NO];
-            else if ([OAWeatherHelper getPreferenceDownloadState:item.worldRegion.regionId] == EOAWeatherForecastDownloadStateFinished)
+            NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
+            [[OAWeatherHelper sharedInstance] prepareToStopDownloading:regionId];
+            if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined)
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId refreshMap:NO];
+            else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
                 [[OAWeatherHelper sharedInstance] calculateCacheSize:item.worldRegion onComplete:nil];
         } completionBlock:^{
             if (onTaskStop)
@@ -1713,8 +1714,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         {
             if (item.resourceType == OsmAndResourceType::WeatherForecast)
             {
-                [[OAWeatherHelper sharedInstance] prepareToStopDownloading:item.worldRegion.regionId];
-                [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion.regionId refreshMap:item == items.lastObject];
+                NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
+                [[OAWeatherHelper sharedInstance] prepareToStopDownloading:regionId];
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId refreshMap:item == items.lastObject];
             }
             else if ([item isKindOfClass:[OASqliteDbResourceItem class]])
             {

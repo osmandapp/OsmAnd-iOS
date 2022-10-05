@@ -13,6 +13,8 @@
 #include <OsmAndCore/Map/GeoCommonTypes.h>
 #include <OsmAndCore/Map/GeoBandSettings.h>
 
+#define kWeatherEntireWorldRegionId @"entire_world"
+
 typedef NS_ENUM(NSInteger, EOAWeatherForecastUpdatesFrequency)
 {
     EOAWeatherForecastUpdatesUndefined = -1,
@@ -48,6 +50,8 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 - (QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>>) getBandSettings;
 
 + (BOOL)shouldHaveWeatherForecast:(OAWorldRegion *)region;
++ (NSString *)checkAndGetRegionId:(OAWorldRegion *)region;
++ (NSString *)checkAndGetRegionName:(OAWorldRegion *)region;
 
 - (void)checkAndDownloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
 - (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
@@ -97,7 +101,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 + (void)setPreferenceFrequency:(NSString *)regionId value:(EOAWeatherForecastUpdatesFrequency)value;
 
 + (NSArray<NSString *> *)getPreferenceKeys:(NSString *)regionId;
-+ (void)removePreferences:(NSString *)regionId excludeKeys:(NSArray<NSString *> *)excludeKeys;
++ (void)removePreferences:(NSString *)regionId;
 
 @end
 

@@ -68,11 +68,6 @@
     self.subtitleLabel.hidden = YES;
 }
 
-- (void)setupNavBarHeight
-{
-    self.navBarHeightConstraint.constant = 56.;
-}
-
 - (void)applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"map_updates_for_mappers");

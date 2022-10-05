@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *backImageButton;
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
 
 - (IBAction)backImageButtonPressed:(id)sender;
 

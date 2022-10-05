@@ -47,7 +47,7 @@
 
 - (void)commonInit
 {
-    EOAWeatherForecastUpdatesFrequency frequency = [OAWeatherHelper getPreferenceFrequency:_region.regionId];
+    EOAWeatherForecastUpdatesFrequency frequency = [OAWeatherHelper getPreferenceFrequency:[OAWeatherHelper checkAndGetRegionId:_region]];
     _indexSelected = frequency == EOAWeatherForecastUpdatesSemiDaily ? kFrequencySemiDailyIndex
             : frequency == EOAWeatherForecastUpdatesDaily ? kFrequencyDailyIndex
                     : kFrequencyWeeklyIndex;
@@ -69,6 +69,7 @@
                                             textColor:UIColorFromRGB(color_text_footer)
                                           lineSpacing:0.0
                                               isTitle:NO];
+    self.subtitleLabel.hidden = YES;
     [self setupView];
 }
 
@@ -83,7 +84,7 @@
     frequencySection[@"cells"] = frequencyCells;
     frequencySection[@"footer"] = [NSString stringWithFormat:@"%@: %@",
             OALocalizedString(@"shared_string_next_update"),
-            [OAWeatherHelper getUpdatesDateFormat:_region.regionId next:YES]];
+            [OAWeatherHelper getUpdatesDateFormat:[OAWeatherHelper checkAndGetRegionId:_region] next:YES]];
     [data addObject:frequencySection];
 
     NSMutableDictionary *semiDailyData = [NSMutableDictionary dictionary];
@@ -169,27 +170,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
     _indexSelected = indexPath.row;
-    [OAWeatherHelper setPreferenceFrequency:_region.regionId
+    [OAWeatherHelper setPreferenceFrequency:[OAWeatherHelper checkAndGetRegionId:_region]
                                       value:_indexSelected == kFrequencySemiDailyIndex ? EOAWeatherForecastUpdatesSemiDaily
                                               : _indexSelected == kFrequencyDailyIndex ? EOAWeatherForecastUpdatesDaily
                                                       : EOAWeatherForecastUpdatesWeekly];
     if (self.frequencyDelegate)
         [self.frequencyDelegate onFrequencySelected];
 
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-    _data[indexPath.section][@"footer"] = [NSString stringWithFormat:@"%@: %@",
-                    OALocalizedString(@"shared_string_next_update"),
-                    [OAWeatherHelper getUpdatesDateFormat:_region.regionId next:YES]];
-    [UIView transitionWithView:tableView
-                      duration:.35f
-                       options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
-                    animations:^(void)
-                    {
-                        [tableView reloadData];
-                    }
-                    completion:nil];
+    [self dismissViewController];
 }
 
 @end

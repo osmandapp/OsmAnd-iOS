@@ -75,7 +75,7 @@
     self.backButton.hidden = YES;
     self.backImageButton.hidden = NO;
 
-    self.titleLabel.text = _region.name;
+    self.titleLabel.text = [OAWeatherHelper checkAndGetRegionName:_region];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -119,9 +119,14 @@
     return UIStatusBarStyleDefault;
 }
 
+- (BOOL)isSeparatorHidden
+{
+    return NO;
+}
+
 - (NSString *)getTableHeaderTitle
 {
-    return _region.name;
+    return [OAWeatherHelper checkAndGetRegionName:_region];
 }
 
 - (void)setTableHeaderView:(NSString *)label
@@ -151,17 +156,18 @@
 - (void)setupView
 {
     NSMutableArray<NSMutableArray<NSMutableDictionary *> *> *data = [NSMutableArray array];
+    NSString *regionId = [OAWeatherHelper checkAndGetRegionId:_region];
 
     NSMutableArray<NSMutableDictionary *> *infoCells = [NSMutableArray array];
     [data addObject:infoCells];
     _accuracySection = data.count - 1;
-    _headers[@(_accuracySection)] = [OAWeatherHelper getAccuracyDescription:_region.regionId];
+    _headers[@(_accuracySection)] = [OAWeatherHelper getAccuracyDescription:regionId];
 
     NSMutableDictionary *updatedData = [NSMutableDictionary dictionary];
     updatedData[@"key"] = @"updated_cell";
     updatedData[@"type"] = [OATableViewCellValue getCellIdentifier];
     updatedData[@"title"] = OALocalizedString(@"shared_string_updated");
-    updatedData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:_region.regionId next:NO];
+    updatedData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:regionId next:NO];
     updatedData[@"value_color"] = UIColor.blackColor;
     updatedData[@"selection_style"] = @(UITableViewCellSelectionStyleNone);
     [infoCells addObject:updatedData];
@@ -170,7 +176,7 @@
     nextUpdateData[@"key"] = @"next_update_cell";
     nextUpdateData[@"type"] = [OATableViewCellValue getCellIdentifier];
     nextUpdateData[@"title"] = OALocalizedString(@"shared_string_next_update");
-    nextUpdateData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:_region.regionId next:YES];
+    nextUpdateData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:regionId next:YES];
     nextUpdateData[@"value_color"] = UIColor.blackColor;
     nextUpdateData[@"selection_style"] = @(UITableViewCellSelectionStyleNone);
     [infoCells addObject:nextUpdateData];
@@ -179,8 +185,7 @@
     updatesSizeData[@"key"] = @"updates_size_cell";
     updatesSizeData[@"type"] = [OATableViewCellValue getCellIdentifier];
     updatesSizeData[@"title"] = OALocalizedString(@"shared_string_updates_size");
-    updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance] getOfflineForecastSizeInfo:_region.regionId local:YES]
-                                                                     countStyle:NSByteCountFormatterCountStyleFile];
+    updatesSizeData[@"value"] = OALocalizedString(@"calculating_progress");
     updatesSizeData[@"value_color"] = UIColorFromRGB(color_text_footer);
     updatesSizeData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
     [infoCells addObject:updatesSizeData];
@@ -206,7 +211,7 @@
     updatesFrequencyData[@"key"] = @"updates_frequency_cell";
     updatesFrequencyData[@"type"] = [OATableViewCellValue getCellIdentifier];
     updatesFrequencyData[@"title"] = OALocalizedString(@"shared_string_updates_frequency");
-    updatesFrequencyData[@"value"] = [OAWeatherHelper getFrequencyFormat:[OAWeatherHelper getPreferenceFrequency:_region.regionId]];
+    updatesFrequencyData[@"value"] = [OAWeatherHelper getFrequencyFormat:[OAWeatherHelper getPreferenceFrequency:regionId]];
     updatesFrequencyData[@"value_color"] = UIColorFromRGB(color_text_footer);
     updatesFrequencyData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
     [updatesCells addObject:updatesFrequencyData];
@@ -238,7 +243,7 @@
         if (value != _region || !_sizeIndexPath)
             return;
 
-        uint64_t sizeLocal = [_weatherHelper getOfflineForecastSizeInfo:_region.regionId local:YES];
+        uint64_t sizeLocal = [_weatherHelper getOfflineForecastSizeInfo:[OAWeatherHelper checkAndGetRegionId:_region] local:YES];
         NSMutableDictionary *totalSizeData = _data[_sizeIndexPath.section][_sizeIndexPath.row];
         NSString *sizeString = [NSByteCountFormatter stringFromByteCount:sizeLocal
                                                               countStyle:NSByteCountFormatterCountStyleFile];
@@ -254,8 +259,9 @@
 
     if (_updateNowIndexPath && _sizeIndexPath)
     {
-        BOOL statusSizeCalculating = ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:_region.regionId];
-        if ([OAWeatherHelper getPreferenceDownloadState:_region.regionId] == EOAWeatherForecastDownloadStateUndefined && !statusSizeCalculating)
+        NSString *regionId = [OAWeatherHelper checkAndGetRegionId:_region];
+        BOOL statusSizeCalculating = ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:regionId];
+        if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined && !statusSizeCalculating)
             return;
 
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -267,17 +273,17 @@
             }
 
             FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-            NSInteger progressDownloading = [_weatherHelper getOfflineForecastProgressInfo:_region.regionId];
-            NSInteger progressDownloadDestination = [[OAWeatherHelper sharedInstance] getProgressDestination:_region.regionId];
+            NSInteger progressDownloading = [_weatherHelper getOfflineForecastProgressInfo:regionId];
+            NSInteger progressDownloadDestination = [[OAWeatherHelper sharedInstance] getProgressDestination:regionId];
             CGFloat progressCompleted = (CGFloat) progressDownloading / progressDownloadDestination;
-            if (progressCompleted >= 0.001 && [OAWeatherHelper getPreferenceDownloadState:_region.regionId] == EOAWeatherForecastDownloadStateInProgress)
+            if (progressCompleted >= 0.001 && [OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
             {
                 progressView.iconPath = nil;
                 if (progressView.isSpinning)
                     [progressView stopSpinProgressBackgroundLayer];
                 progressView.progress = progressCompleted - 0.001;
             }
-            else if ([OAWeatherHelper getPreferenceDownloadState:_region.regionId] == EOAWeatherForecastDownloadStateFinished && !statusSizeCalculating)
+            else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished && !statusSizeCalculating)
             {
                 progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
                 progressView.progress = 0.;
@@ -306,7 +312,7 @@
 - (BOOL)isEnabled:(NSString *)key
 {
     if ([key isEqualToString:@"update_only_wifi_cell"])
-        return [OAWeatherHelper getPreferenceWifi:_region.regionId];
+        return [OAWeatherHelper getPreferenceWifi:[OAWeatherHelper checkAndGetRegionId:_region]];
 
     return NO;
 }
@@ -367,7 +373,7 @@
             cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont systemFontOfSize:17.];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
-            if (([item[@"key"] isEqualToString:@"update_now_cell"] && [OAWeatherHelper getPreferenceDownloadState:_region.regionId] == EOAWeatherForecastDownloadStateInProgress))
+            if (([item[@"key"] isEqualToString:@"update_now_cell"] && [OAWeatherHelper getPreferenceDownloadState:[OAWeatherHelper checkAndGetRegionId:_region]] == EOAWeatherForecastDownloadStateInProgress))
             {
                 FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
                 progressView.iconView = [[UIView alloc] init];
@@ -503,6 +509,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
+    NSString *regionId = [OAWeatherHelper checkAndGetRegionId:_region];
     if ([item[@"key"] isEqualToString:@"updates_size_cell"])
     {
         OAWeatherCacheSettingsViewController *controller = [[OAWeatherCacheSettingsViewController alloc] initWithRegion:_region];
@@ -511,9 +518,9 @@
     }
     else if ([item[@"key"] isEqualToString:@"update_now_cell"])
     {
-        if ([OAWeatherHelper getPreferenceDownloadState:_region.regionId] == EOAWeatherForecastDownloadStateInProgress)
+        if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
         {
-            [_weatherHelper prepareToStopDownloading:_region.regionId];
+            [_weatherHelper prepareToStopDownloading:regionId];
             [_weatherHelper calculateCacheSize:_region onComplete:nil];
         }
         else
@@ -525,7 +532,7 @@
     {
         UIAlertController *alert =
                 [UIAlertController alertControllerWithTitle:OALocalizedString(@"weather_remove_forecast")
-                                                    message:[NSString stringWithFormat:OALocalizedString(@"weather_remove_forecast_description"), _region.name]
+                                                    message:[NSString stringWithFormat:OALocalizedString(@"weather_remove_forecast_description"), [OAWeatherHelper checkAndGetRegionName:_region]]
                                              preferredStyle:UIAlertControllerStyleAlert];
 
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
@@ -537,8 +544,8 @@
                                                                  handler:^(UIAlertAction * _Nonnull action)
                                                                  {
                                                                      [_progressHUD showAnimated:YES whileExecutingBlock:^{
-                                                                         [_weatherHelper prepareToStopDownloading:_region.regionId];
-                                                                         [_weatherHelper removeLocalForecast:_region.regionId refreshMap:YES];
+                                                                         [_weatherHelper prepareToStopDownloading:regionId];
+                                                                         [_weatherHelper removeLocalForecast:regionId refreshMap:YES];
                                                                      } completionBlock:^{
                                                                          [self dismissViewController];
                                                                          if (self.delegate)
@@ -576,7 +583,7 @@
         NSDictionary *item = [self getItem:indexPath];
 
         if ([item[@"key"] isEqualToString:@"update_only_wifi_cell"])
-            [OAWeatherHelper setPreferenceWifi:_region.regionId value:switchView.isOn];
+            [OAWeatherHelper setPreferenceWifi:[OAWeatherHelper checkAndGetRegionId:_region] value:switchView.isOn];
     }
 }
 
@@ -591,6 +598,7 @@
 
 - (void)onFrequencySelected
 {
+    NSString *regionId = [OAWeatherHelper checkAndGetRegionId:_region];
     for (NSInteger i = 0; i < _data.count; i++)
     {
         NSArray<NSMutableDictionary *> *cells = _data[i];
@@ -599,13 +607,13 @@
             NSMutableDictionary *cell = cells[j];
             if ([cell[@"key"] isEqualToString:@"next_update_cell"])
             {
-                cell[@"value"] = [OAWeatherHelper getUpdatesDateFormat:_region.regionId next:YES];
+                cell[@"value"] = [OAWeatherHelper getUpdatesDateFormat:regionId next:YES];
                 [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:j inSection:i]]
                                       withRowAnimation:UITableViewRowAnimationAutomatic];
             }
             else if ([cell[@"key"] isEqualToString:@"updates_frequency_cell"])
             {
-                cell[@"value"] = [OAWeatherHelper getFrequencyFormat:[OAWeatherHelper getPreferenceFrequency:_region.regionId]];
+                cell[@"value"] = [OAWeatherHelper getFrequencyFormat:[OAWeatherHelper getPreferenceFrequency:regionId]];
                 [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:j inSection:i]]
                                       withRowAnimation:UITableViewRowAnimationAutomatic];
             }

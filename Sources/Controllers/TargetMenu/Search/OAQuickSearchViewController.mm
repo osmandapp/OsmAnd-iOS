@@ -1692,7 +1692,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         }
     }
     NSString *txt = [[self.searchUICore getPhrase] getText:YES];
-    [self replaceQueryWithText:txt];
+    self.searchQuery = txt;
     [self updateTextField:txt];
     OASearchSettings *settings = [self.searchUICore getSearchSettings];
     if ([settings getRadiusLevel] != 1)

@@ -838,7 +838,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 -(void)updateNavbar
 {
-    BOOL showBarActionView = _barActionType != BarActionNone && !_modalInput;
+    OASearchWord *lastWord = [self.searchUICore getPhrase].getLastSelectedWord;
+    BOOL hasLastWordWithLocation = lastWord && lastWord.getLocation;
+    BOOL showBarActionView = _barActionType != BarActionNone && (!_modalInput || hasLastWordWithLocation);
     BOOL showInputView = _barActionType != BarActionEditHistory;
     BOOL showMapCenterSearch = !showBarActionView && _searchNearMapCenter && self.searchQuery.length == 0 && _distanceFromMyLocation > 0;
     BOOL showTabs = [self tabsVisible] && _barActionType != BarActionEditHistory;
@@ -1691,6 +1693,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
     NSString *txt = [[self.searchUICore getPhrase] getText:YES];
     [self replaceQueryWithText:txt];
+    [self updateTextField:txt];
+    OASearchSettings *settings = [self.searchUICore getSearchSettings];
+    if ([settings getRadiusLevel] != 1)
+        [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
+
     [self runCoreSearch:txt updateResult:NO searchMore:NO];
 }
 
@@ -1698,25 +1705,10 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     self.searchQuery = txt;
     [self updateTextField:txt];
-    
-    OASearchWord *lastWord = [self.searchUICore getPhrase].getLastSelectedWord;
-    BOOL buttonToolbarVisible = self.searchType == OAQuickSearchType::REGULAR;
-    if (!buttonToolbarVisible)
-    {
-        if (!lastWord)
-            buttonToolbarVisible = YES;
-        else if (self.searchType != OAQuickSearchType::REGULAR && lastWord.getLocation)
-            buttonToolbarVisible = YES;
-    }
-    
-    if (buttonToolbarVisible)
-        [self restoreInputLayout];
-    
-    _barActionView.hidden = !buttonToolbarVisible;
-    [self updateBarActionView];
     OASearchSettings *settings = [self.searchUICore getSearchSettings];
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
+
     [self runCoreSearch:txt updateResult:NO searchMore:NO];
 }
 

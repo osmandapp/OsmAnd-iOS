@@ -484,7 +484,13 @@
     [((NSMutableArray *) currentSection[@"cells"]) removeObject:item];
     [destinationCells addObject:item];
 
-    [destinationCells sortUsingComparator:_regionsComparator];
+    [destinationCells sortUsingComparator:^NSComparisonResult(NSDictionary *dict1, NSDictionary *dict2) {
+        NSString *name1 = [OAWeatherHelper checkAndGetRegionName:dict1[@"region"]];
+        NSString *name2 = [OAWeatherHelper checkAndGetRegionName:dict2[@"region"]];
+        return [name1 isEqualToString:OALocalizedString(@"weather_entire_world")] ? NSOrderedAscending
+                : [name2 isEqualToString:OALocalizedString(@"weather_entire_world")] ? NSOrderedDescending
+                    : [name1 localizedCaseInsensitiveCompare:name2];
+    }];
 
     NSIndexPath *targetPath = [NSIndexPath indexPathForRow:[destinationCells indexOfObject:item]
                                                  inSection:[_data indexOfObject:destinationSection]];

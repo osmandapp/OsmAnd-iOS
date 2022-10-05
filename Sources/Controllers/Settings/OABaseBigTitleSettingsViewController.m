@@ -35,6 +35,8 @@
     _tableView.estimatedRowHeight = 60.;
     _tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
     [self setTableHeaderView:self.getTableHeaderTitle];
+    self.titleLabel.hidden = YES;
+    self.separatorView.hidden = YES;
 }
 
 - (void) setTableHeaderView:(NSString *)label
@@ -48,6 +50,11 @@
 - (void) applyLocalization
 {
     [_backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+}
+
+- (BOOL)isSeparatorHidden
+{
+    return YES;
 }
 
 - (NSString *) getTableHeaderTitle
@@ -99,23 +106,66 @@
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    CGFloat alpha = (_tableView.contentOffset.y + defaultNavBarHeight) < 0 ? 0 : ((_tableView.contentOffset.y + defaultNavBarHeight) / (fabs(_tableView.contentSize.height - _tableView.frame.size.height)));
-    if (!_isHeaderBlurred && alpha > 0)
+    CGFloat y = scrollView.contentOffset.y;
+    CGFloat navbarHeight = self.navBarView.frame.size.height - [OAUtilities getTopMargin];
+    CGFloat tableHeaderHeight = self.tableView.tableHeaderView.frame.size.height;
+    if (y > -(navbarHeight))
     {
-        [UIView animateWithDuration:.2 animations:^{
-            _titleLabel.hidden = NO;
-            [_navBarView addBlurEffect:YES cornerRadius:0. padding:0.];
-            _isHeaderBlurred = YES;
-        }];
+        if (!_isHeaderBlurred)
+        {
+            [UIView animateWithDuration:.2 animations:^{
+                [self.navBarView addBlurEffect:YES cornerRadius:0. padding:0.];
+                _isHeaderBlurred = YES;
+            }];
+        }
+        else if (y + navbarHeight > tableHeaderHeight * .75)
+        {
+            if (self.titleLabel.hidden)
+            {
+                [UIView animateWithDuration:.2 animations:^{
+                    self.titleLabel.hidden = NO;
+                }];
+            }
+
+            BOOL needToHideSeparator = y + navbarHeight <= tableHeaderHeight && !self.separatorView.hidden;
+            BOOL needToShowSeparator = y + navbarHeight >= tableHeaderHeight && self.separatorView.hidden;
+            if (![self isSeparatorHidden] && (needToHideSeparator || needToShowSeparator))
+            {
+                [UIView animateWithDuration:.2 animations:^{
+                    self.separatorView.hidden = needToHideSeparator;
+                }];
+            }
+        }
+        else if (y + navbarHeight < tableHeaderHeight * .75 && !self.titleLabel.hidden)
+        {
+            [UIView animateWithDuration:.2 animations:^{
+                self.titleLabel.hidden = YES;
+            }];
+        }
     }
-    else if (_isHeaderBlurred && alpha <= 0.)
+    else if (y == -(navbarHeight))
     {
-        [UIView animateWithDuration:.2 animations:^{
-            _titleLabel.hidden = YES;
-            [_navBarView removeBlurEffect:[self navBarBackgroundColor]];
-            _isHeaderBlurred = NO;
-        }];
+        BOOL isTitleLabelHidden = self.titleLabel.hidden;
+        BOOL isSeparatorHidden = self.separatorView.hidden;
+        if (!isTitleLabelHidden || !isSeparatorHidden)
+        {
+            [UIView animateWithDuration:.2 animations:^{
+                if (!isTitleLabelHidden)
+                    self.titleLabel.hidden = YES;
+                if (!isSeparatorHidden)
+                    self.separatorView.hidden = YES;
+            }];
+        }
+
+        if (_isHeaderBlurred)
+        {
+            [UIView animateWithDuration:.2 animations:^{
+                [self.navBarView removeBlurEffect:[self navBarBackgroundColor]];
+                _isHeaderBlurred = NO;
+            }];
+        }
     }
+
     [self onScrollViewDidScroll:scrollView];
 }
 

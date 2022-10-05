@@ -57,6 +57,7 @@
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
 
+    self.subtitleLabel.hidden = YES;
     [self setupView];
 }
 

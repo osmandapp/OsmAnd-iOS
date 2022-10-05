@@ -115,11 +115,6 @@
     } completion:nil];
 }
 
-- (void)setupNavBarHeight
-{
-    self.navBarHeightConstraint.constant = 56.;
-}
-
 - (void)applyLocalization
 {
     self.titleLabel.text = _isLogged ? OALocalizedString(@"shared_string_account") : OALocalizedString(@"shared_string_account_add");

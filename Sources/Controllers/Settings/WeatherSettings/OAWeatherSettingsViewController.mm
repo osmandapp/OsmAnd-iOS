@@ -124,11 +124,10 @@
             @"footer": OALocalizedString(@"weather_data_provider")
     }];
 
-    NSString *sizeString = [NSByteCountFormatter stringFromByteCount:0 countStyle:NSByteCountFormatterCountStyleFile];
     [cacheData addObject:@{
             @"key": @"online_cache",
             @"title": OALocalizedString(@"shared_string_online_cache"),
-            @"value": sizeString,
+            @"value": OALocalizedString(@"calculating_progress"),
             @"type": [OAIconTitleValueCell getCellIdentifier]
     }];
     _onlineDataIndexPath = [NSIndexPath indexPathForRow:cacheData.count - 1 inSection:data.count - 1];
@@ -136,7 +135,7 @@
     [cacheData addObject:@{
             @"key": @"offline_forecast",
             @"title": OALocalizedString(@"weather_offline_forecast"),
-            @"value": sizeString,
+            @"value": OALocalizedString(@"calculating_progress"),
             @"type": [OAIconTitleValueCell getCellIdentifier]
     }];
     _useOfflineDataIndexPath = [NSIndexPath indexPathForRow:cacheData.count - 1 inSection:data.count - 1];

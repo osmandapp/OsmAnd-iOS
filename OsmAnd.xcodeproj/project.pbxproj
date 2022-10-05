@@ -661,7 +661,6 @@
 		46DF1D8028C21B4300135D94 /* ic_custom_openstreetmap_logo_colored_day_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DF1D7C28C21B4200135D94 /* ic_custom_openstreetmap_logo_colored_day_big@3x.png */; };
 		46DF1D8128C21B4300135D94 /* img_openstreetmap_logo_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DF1D7D28C21B4200135D94 /* img_openstreetmap_logo_big@3x.png */; };
 		46DF1D8228C21B4300135D94 /* img_openstreetmap_logo_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DF1D7E28C21B4200135D94 /* img_openstreetmap_logo_big@2x.png */; };
-		46DF1D8528C21EDF00135D94 /* OAOsmAccountSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46DF1D8428C21EDF00135D94 /* OAOsmAccountSettingsViewController.xib */; };
 		46E0263927B6773F00E554DD /* ic_custom_terrain_any@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263127B6773E00E554DD /* ic_custom_terrain_any@3x.png */; };
 		46E0263A27B6773F00E554DD /* ic_custom_terrain_hilly@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263227B6773E00E554DD /* ic_custom_terrain_hilly@3x.png */; };
 		46E0263B27B6773F00E554DD /* ic_custom_terrain_hilly@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263327B6773E00E554DD /* ic_custom_terrain_hilly@2x.png */; };
@@ -4022,7 +4021,6 @@
 		46DF1D7C28C21B4200135D94 /* ic_custom_openstreetmap_logo_colored_day_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_openstreetmap_logo_colored_day_big@3x.png"; path = "Resources/Icons/ic_custom_openstreetmap_logo_colored_day_big@3x.png"; sourceTree = "<group>"; };
 		46DF1D7D28C21B4200135D94 /* img_openstreetmap_logo_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_openstreetmap_logo_big@3x.png"; path = "Resources/Icons/img_openstreetmap_logo_big@3x.png"; sourceTree = "<group>"; };
 		46DF1D7E28C21B4200135D94 /* img_openstreetmap_logo_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_openstreetmap_logo_big@2x.png"; path = "Resources/Icons/img_openstreetmap_logo_big@2x.png"; sourceTree = "<group>"; };
-		46DF1D8428C21EDF00135D94 /* OAOsmAccountSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAOsmAccountSettingsViewController.xib; sourceTree = "<group>"; };
 		46E0263127B6773E00E554DD /* ic_custom_terrain_any@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_any@3x.png"; path = "Resources/Icons/ic_custom_terrain_any@3x.png"; sourceTree = "<group>"; };
 		46E0263227B6773E00E554DD /* ic_custom_terrain_hilly@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_hilly@3x.png"; path = "Resources/Icons/ic_custom_terrain_hilly@3x.png"; sourceTree = "<group>"; };
 		46E0263327B6773E00E554DD /* ic_custom_terrain_hilly@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_hilly@2x.png"; path = "Resources/Icons/ic_custom_terrain_hilly@2x.png"; sourceTree = "<group>"; };
@@ -9230,7 +9228,6 @@
 				460743A728C10B2900F13A7A /* OAOsmLoginMainViewController.xib */,
 				CA4EDA40BF6F4AA69813EBFC /* OAOsmLoginMainViewController.m */,
 				CA4ED7170ED17BBBC870B2C8 /* OAOsmLoginMainViewController.h */,
-				46DF1D8428C21EDF00135D94 /* OAOsmAccountSettingsViewController.xib */,
 				CA4ED7A3E6BD049D88D80C97 /* OABenefitsOsmContributorsViewController.m */,
 				CA4ED074D84A2A7DDAE9C5A9 /* OABenefitsOsmContributorsViewController.h */,
 				CA4ED37FBC635563E4AD531F /* OAMappersViewController.m */,
@@ -14019,7 +14016,6 @@
 				0CF58566244072EC0081238D /* widget_marker_triangle_pin_4@3x.png in Resources */,
 				DA5A82BF26C563A800F274C7 /* OATextInputIconCell.xib in Resources */,
 				DA83602D23449C6B003374B5 /* ic_custom_options@3x.png in Resources */,
-				46DF1D8528C21EDF00135D94 /* OAOsmAccountSettingsViewController.xib in Resources */,
 				DA5A857326C567B400F274C7 /* OAPluginPopupViewController.xib in Resources */,
 				0A31AFCD26FBAC39000EE842 /* ic_small_speed@2x.png in Resources */,
 				DA5A851126C563A900F274C7 /* OADownloadProgressView.xib in Resources */,

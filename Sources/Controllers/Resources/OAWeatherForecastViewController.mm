@@ -53,6 +53,7 @@
     NSMutableArray<OAWorldRegion *> *_regionsSelected;
     NSMutableArray<OAWorldRegion *> *_regionsWithOfflineMaps;
     NSMutableArray<OAWorldRegion *> *_regionsOtherCountries;
+    NSComparator _regionsComparator;
 
     NSObject *_searchDataLock;
     NSArray<OAWorldRegion *> *_searchResults;
@@ -84,6 +85,13 @@
     _regionsSelected = [NSMutableArray array];
     _regionsWithOfflineMaps = [NSMutableArray array];
     _regionsOtherCountries = [NSMutableArray array];
+    _regionsComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
+        NSString *name1 = [OAWeatherHelper checkAndGetRegionName:region1];
+        NSString *name2 = [OAWeatherHelper checkAndGetRegionName:region2];
+        return [name1 isEqualToString:OALocalizedString(@"weather_entire_world")] ? NSOrderedAscending
+                : [name2 isEqualToString:OALocalizedString(@"weather_entire_world")] ? NSOrderedDescending
+                    : [name1 localizedCaseInsensitiveCompare:name2];
+    };
 
     _weatherSizeCalculatedObserver =
             [[OAAutoObserverProxy alloc] initWith:self
@@ -105,17 +113,8 @@
     NSPredicate *onlyWeatherPredicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary<NSString *, id> *bindings) {
         return [OAWeatherHelper shouldHaveWeatherForecast:evaluatedObject];
     }];
-
-    NSComparator regionComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
-        NSString *name1 = [OAWeatherHelper checkAndGetRegionName:region1];
-        NSString *name2 = [OAWeatherHelper checkAndGetRegionName:region2];
-        return [name1 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedAscending
-                : [name2 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedDescending
-                    : [name1 localizedCaseInsensitiveCompare:name2];
-    };
-
-    _filteredRegions = [@[_app.worldRegion] arrayByAddingObjectsFromArray:[
-        [_app.worldRegion.flattenedSubregions filteredArrayUsingPredicate:onlyWeatherPredicate] sortedArrayUsingComparator:regionComparator]];
+    _filteredRegions = [@[_app.worldRegion] arrayByAddingObjectsFromArray:
+        [[_app.worldRegion.flattenedSubregions filteredArrayUsingPredicate:onlyWeatherPredicate] sortedArrayUsingComparator:_regionsComparator]];
 
     [self setupView];
     self.searchBar.delegate = self;
@@ -485,13 +484,7 @@
     [((NSMutableArray *) currentSection[@"cells"]) removeObject:item];
     [destinationCells addObject:item];
 
-    [destinationCells sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
-        NSString *name1 = [OAWeatherHelper checkAndGetRegionName:obj1[@"region"]];
-        NSString *name2 = [OAWeatherHelper checkAndGetRegionName:obj2[@"region"]];
-        return [name1 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedAscending
-                : [name2 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedDescending
-                    : [name1 localizedCaseInsensitiveCompare:name2];
-    }];
+    [destinationCells sortUsingComparator:_regionsComparator];
 
     NSIndexPath *targetPath = [NSIndexPath indexPathForRow:[destinationCells indexOfObject:item]
                                                  inSection:[_data indexOfObject:destinationSection]];
@@ -514,14 +507,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (countOfItems > 0)
         {
-            NSComparator regionComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
-                NSString *name1 = [OAWeatherHelper checkAndGetRegionName:region1];
-                NSString *name2 = [OAWeatherHelper checkAndGetRegionName:region2];
-                return [name1 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedAscending
-                        : [name2 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedDescending
-                            : [name1 localizedCaseInsensitiveCompare:name2];
-            };
-
             UIAlertController *alert =
                     [UIAlertController alertControllerWithTitle:OALocalizedString(@"weather_remove_forecast")
                                                         message:[NSString stringWithFormat:OALocalizedString(@"weather_remove_forecasts_description"), countOfItems]
@@ -540,7 +525,7 @@
                                                                              onExecuting();
                                                                              [_regionsOtherCountries addObjectsFromArray:_regionsWithOfflineMaps];
                                                                              [_regionsWithOfflineMaps removeAllObjects];
-                                                                             [_regionsOtherCountries sortUsingComparator:regionComparator];
+                                                                             [_regionsOtherCountries sortUsingComparator:_regionsComparator];
                                                                              } completionBlock:onComplete];
                                                                      }
             ];
@@ -610,16 +595,8 @@
 
     [_regionsSelected addObjectsFromArray:_regionsWithOfflineMaps];
     [_regionsWithOfflineMaps removeAllObjects];
-
-    NSComparator regionComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
-        NSString *name1 = [OAWeatherHelper checkAndGetRegionName:region1];
-        NSString *name2 = [OAWeatherHelper checkAndGetRegionName:region2];
-        return [name1 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedAscending
-                : [name2 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedDescending
-                    : [name1 localizedCaseInsensitiveCompare:name2];
-    };
-    [_regionsSelected sortUsingComparator:regionComparator];
-    [_regionsOtherCountries sortUsingComparator:regionComparator];
+    [_regionsSelected sortUsingComparator:_regionsComparator];
+    [_regionsOtherCountries sortUsingComparator:_regionsComparator];
 }
 
 - (IBAction)backButtonClicked:(id)sender
@@ -871,15 +848,7 @@
             onlyContainsResult = [_filteredRegions filteredArrayUsingPredicate:anyOnlyContains];
         }
 
-        _searchResults = [[startsWithResult arrayByAddingObjectsFromArray:onlyContainsResult]
-                sortedArrayUsingComparator:^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
-                    NSString *name1 = [OAWeatherHelper checkAndGetRegionName:region1];
-                    NSString *name2 = [OAWeatherHelper checkAndGetRegionName:region2];
-                    return [name1 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedAscending
-                            : [name2 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedDescending
-                                : [name1 localizedCaseInsensitiveCompare:name2];
-                }
-        ];
+        _searchResults = [[startsWithResult arrayByAddingObjectsFromArray:onlyContainsResult] sortedArrayUsingComparator:_regionsComparator];
         [self setupView];
         [self.tableView reloadData];
     }
@@ -1092,13 +1061,7 @@
                                                                 [_weatherHelper removeLocalForecast:regionId refreshMap:NO];
                                                                 [((NSMutableArray *) _data[indexPath.section][@"cells"]) removeObjectAtIndex:indexPath.row];
                                                                 [_regionsOtherCountries addObject:item[@"region"]];
-                                                                [_regionsOtherCountries sortUsingComparator:^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
-                                                                    NSString *name1 = [OAWeatherHelper checkAndGetRegionName:region1];
-                                                                    NSString *name2 = [OAWeatherHelper checkAndGetRegionName:region2];
-                                                                    return [name1 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedAscending
-                                                                            : [name2 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedDescending
-                                                                                : [name1 localizedCaseInsensitiveCompare:name2];
-                                                                }];
+                                                                [_regionsOtherCountries sortUsingComparator:_regionsComparator];
                                                                 [_regionsSelected removeObject:item[@"region"]];
                                                             }
                                                             else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
@@ -1194,13 +1157,7 @@
             if (_regionsOtherCountries.count > 0)
             {
                 [_regionsOtherCountries addObject:item[@"region"]];
-                [_regionsOtherCountries sortUsingComparator:^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
-                    NSString *name1 = [OAWeatherHelper checkAndGetRegionName:region1];
-                    NSString *name2 = [OAWeatherHelper checkAndGetRegionName:region2];
-                    return [name1 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedAscending
-                    : [name2 isEqualToString:OALocalizedString(@"all_region")] ? NSOrderedDescending
-                    : [name1 localizedCaseInsensitiveCompare:name2];
-                }];
+                [_regionsOtherCountries sortUsingComparator:_regionsComparator];
             }
             [_regionsSelected removeObject:item[@"region"]];
         } completionBlock:^{

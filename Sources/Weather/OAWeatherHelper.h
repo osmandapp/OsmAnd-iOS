@@ -13,7 +13,7 @@
 #include <OsmAndCore/Map/GeoCommonTypes.h>
 #include <OsmAndCore/Map/GeoBandSettings.h>
 
-#define kWeatherAllWorldRegionId @"all_world"
+#define kWeatherEntireWorldRegionId @"entire_world"
 
 typedef NS_ENUM(NSInteger, EOAWeatherForecastUpdatesFrequency)
 {

@@ -151,7 +151,7 @@
     NSString *unitedKingdomRegionId = [NSString stringWithFormat:@"%@_gb", OsmAnd::WorldRegions::EuropeRegionId.toNSString()];
     NSString *russiaRegionId = OsmAnd::WorldRegions::RussiaRegionId.toNSString();
     NSInteger level = [region getLevel];
-    return [regionId isEqualToString:kWeatherAllWorldRegionId]
+    return [regionId isEqualToString:kWeatherEntireWorldRegionId]
             || (level == 1 && [regionId isEqualToString:russiaRegionId])
             || (level > 1 && ![regionId hasPrefix:russiaRegionId]
             && ((level == 2 && ![regionId hasPrefix:unitedKingdomRegionId])
@@ -160,18 +160,18 @@
 
 + (NSString *)checkAndGetRegionId:(OAWorldRegion *)region
 {
-    return region.regionId == nil ? kWeatherAllWorldRegionId : region.regionId;
+    return region.regionId == nil ? kWeatherEntireWorldRegionId : region.regionId;
 }
 
 + (NSString *)checkAndGetRegionName:(OAWorldRegion *)region
 {
-    return region.regionId == nil ? OALocalizedString(@"weather_all_world") : region.name;
+    return region.regionId == nil ? OALocalizedString(@"weather_entire_world") : region.name;
 }
 
 - (void)checkAndDownloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds
 {
-    AFNetworkReachabilityStatus status = AFNetworkReachabilityManager.sharedManager.networkReachabilityStatus;
-    if (status == AFNetworkReachabilityStatusNotReachable)
+    AFNetworkReachabilityManager *networkManager = [AFNetworkReachabilityManager sharedManager];
+    if (!networkManager.isReachable)
         return;
 
     NSInteger forecastsDownloading = 0;
@@ -181,7 +181,7 @@
         if ([regionIds containsObject:regionId])
         {
             forecastsDownloading++;
-            if (status != AFNetworkReachabilityStatusReachableViaWiFi && [self.class getPreferenceWifi:regionId])
+            if (!networkManager.isReachableViaWiFi && [self.class getPreferenceWifi:regionId])
                 continue;
 
             NSTimeInterval lastUpdateTime = [self.class getPreferenceLastUpdate:regionId];
@@ -222,15 +222,15 @@
 
     NSString *regionId = [self.class checkAndGetRegionId:region];
 
-    AFNetworkReachabilityStatus status = [AFNetworkReachabilityManager sharedManager].networkReachabilityStatus;
-    if (status == AFNetworkReachabilityStatusNotReachable)
+    AFNetworkReachabilityManager *networkManager = [AFNetworkReachabilityManager sharedManager];
+    if (!networkManager.isReachable)
         return;
-    else if (status != AFNetworkReachabilityStatusReachableViaWiFi && [self.class getPreferenceWifi:regionId])
+    else if (!networkManager.isReachableViaWiFi && [self.class getPreferenceWifi:regionId])
         return;
 
-    BOOL isAllWorld = [regionId isEqualToString:kWeatherAllWorldRegionId];
-    OsmAnd::LatLon latLonTopLeft = OsmAnd::LatLon(isAllWorld ? 90. : region.bboxTopLeft.latitude, isAllWorld ? -180. : region.bboxTopLeft.longitude);
-    OsmAnd::LatLon latLonBottomRight = OsmAnd::LatLon(isAllWorld ? -90. : region.bboxBottomRight.latitude, isAllWorld ? 180. : region.bboxBottomRight.longitude);
+    BOOL isEntireWorld = [regionId isEqualToString:kWeatherEntireWorldRegionId];
+    OsmAnd::LatLon latLonTopLeft = OsmAnd::LatLon(isEntireWorld ? 90. : region.bboxTopLeft.latitude, isEntireWorld ? -180. : region.bboxTopLeft.longitude);
+    OsmAnd::LatLon latLonBottomRight = OsmAnd::LatLon(isEntireWorld ? -90. : region.bboxBottomRight.latitude, isEntireWorld ? 180. : region.bboxBottomRight.longitude);
 
     [self.class updatePreferenceTileIdsIfNeeded:region];
 
@@ -649,7 +649,7 @@
 - (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region
 {
     NSString *regionId = [self.class checkAndGetRegionId:region];
-    BOOL isAllWorld = [regionId isEqualToString:kWeatherAllWorldRegionId];
+    BOOL isEntireWorld = [regionId isEqualToString:kWeatherEntireWorldRegionId];
     OAResourceItem *item;
     if ([self.class getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined
             || [self.class getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
@@ -672,7 +672,7 @@
     {
         item.resourceId = QString::fromNSString([regionId stringByAppendingString:@"_weather_forecast"]);
         item.resourceType = OsmAndResourceType::WeatherForecast;
-        item.title = isAllWorld ? OALocalizedString(@"weather_forecast_all_world") : OALocalizedString(@"weather_forecast");
+        item.title = isEntireWorld ? OALocalizedString(@"weather_forecast_entire_world") : OALocalizedString(@"weather_forecast");
         item.size = [self getOfflineForecastSizeInfo:regionId local:YES];
         item.sizePkg = [self getOfflineForecastSizeInfo:regionId local:NO];
         item.worldRegion = region;
@@ -864,9 +864,9 @@
     NSString *regionId = [self.class checkAndGetRegionId:region];
     if ([self getPreferenceTileIds:regionId].count == 0)
     {
-        BOOL isAllWorld = [regionId isEqualToString:kWeatherAllWorldRegionId];
-        OsmAnd::LatLon latLonTopLeft = OsmAnd::LatLon(isAllWorld ? 90. : region.bboxTopLeft.latitude, isAllWorld ? -180. : region.bboxTopLeft.longitude);
-        OsmAnd::LatLon latLonBottomRight = OsmAnd::LatLon(isAllWorld ? -90. : region.bboxBottomRight.latitude, isAllWorld ? 180. : region.bboxBottomRight.longitude);
+        BOOL isEntireWorld = [regionId isEqualToString:kWeatherEntireWorldRegionId];
+        OsmAnd::LatLon latLonTopLeft = OsmAnd::LatLon(isEntireWorld ? 90. : region.bboxTopLeft.latitude, isEntireWorld ? -180. : region.bboxTopLeft.longitude);
+        OsmAnd::LatLon latLonBottomRight = OsmAnd::LatLon(isEntireWorld ? -90. : region.bboxBottomRight.latitude, isEntireWorld ? 180. : region.bboxBottomRight.longitude);
         OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();
 
         QVector<OsmAnd::TileId> qTileIds = OsmAnd::WeatherTileResourcesManager::generateGeoTileIds(latLonTopLeft, latLonBottomRight, zoom);

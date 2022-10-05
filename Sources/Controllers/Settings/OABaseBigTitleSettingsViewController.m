@@ -37,6 +37,7 @@
     [self setTableHeaderView:self.getTableHeaderTitle];
     self.titleLabel.hidden = YES;
     self.separatorView.hidden = YES;
+    self.navBarView.backgroundColor = [self navBarBackgroundColor];
 }
 
 - (void) setTableHeaderView:(NSString *)label

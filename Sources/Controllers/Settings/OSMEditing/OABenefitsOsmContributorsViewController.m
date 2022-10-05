@@ -60,11 +60,6 @@
     self.separatorNavbarView.hidden = YES;
 }
 
-- (void)setupNavBarHeight
-{
-    self.navBarHeightConstraint.constant = defaultNavBarHeight;
-}
-
 - (void)generateData
 {
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray new];

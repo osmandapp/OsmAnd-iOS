@@ -14,5 +14,6 @@
 - (void) updateMyLocationCourseProvider;
 - (void) updateMode;
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading;
+- (CLLocationCoordinate2D) getActiveMarkerLocation;
 
 @end

@@ -788,17 +788,15 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-- (BOOL) updateCurrentRouteStatus:(CLLocation *)currentLocation posTolerance:(float)posTolerance
+- (int) calculateCurrentRoute:(CLLocation *)currentLocation posTolerance:(float)posTolerance routeNodes:(NSArray<CLLocation *> *)routeNodes currentRoute:(int)currentRoute updateAndNotify:(BOOL)updateAndNotify
 {
-    NSArray<CLLocation *> *routeNodes = [_route getImmutableAllLocations];
-    int currentRoute = _route.currentRoute;
     // 1. Try to proceed to next point using orthogonal distance (finding minimum orthogonal dist)
     while (currentRoute + 1 < routeNodes.count)
     {
         double dist = [currentLocation distanceFromLocation:routeNodes[currentRoute]];
         if (currentRoute > 0)
             dist = [OAMapUtils getOrthogonalDistance:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
-        
+
         BOOL processed = false;
         // if we are still too far try to proceed many points
         // if not then look ahead only 3 in order to catch sharp turns
@@ -843,24 +841,26 @@ static BOOL _isDeviatedFromRoute = false;
         if (processed)
         {
             // that node already passed
-            [_route updateCurrentRoute:newCurrentRoute + 1];
             currentRoute = newCurrentRoute + 1;
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                @synchronized (_listeners)
-                {
-                    NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
-                    for (id<OARouteInformationListener> l in _listeners)
+            if (updateAndNotify)
+            {
+                [_route updateCurrentRoute:newCurrentRoute + 1];
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    @synchronized (_listeners)
                     {
-                        if (l)
-                            [l routeWasUpdated];
-                        else
-                            [inactiveListeners addObject:l];
+                        NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
+                        for (id<OARouteInformationListener> l in _listeners)
+                        {
+                            if (l)
+                                [l routeWasUpdated];
+                            else
+                                [inactiveListeners addObject:l];
+                        }
+                        [_listeners removeObjectsInArray:inactiveListeners];
                     }
-                    [_listeners removeObjectsInArray:inactiveListeners];
-                }
-            });
-            
+                });
+            }
+
             // TODO notifications
             //app.getNotificationHelper().refreshNotification(NotificationType.NAVIGATION);
         }
@@ -869,6 +869,16 @@ static BOOL _isDeviatedFromRoute = false;
             break;
         }
     }
+    return currentRoute;
+}
+
+- (BOOL) updateCurrentRouteStatus:(CLLocation *)currentLocation posTolerance:(float)posTolerance
+{
+    NSArray<CLLocation *> *routeNodes = [_route getImmutableAllLocations];
+    int currentRoute = _route.currentRoute;
+
+    // 1. Try to proceed to next point using orthogonal distance (finding minimum orthogonal dist)
+    currentRoute = [self calculateCurrentRoute:currentLocation posTolerance:posTolerance routeNodes:routeNodes currentRoute:_route.currentRoute updateAndNotify:YES];
     
     // 2. check if intermediate found
     if ([_route getIntermediatePointsToPass]  > 0

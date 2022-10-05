@@ -33,6 +33,7 @@
 - (void) show;
 - (void) hide;
 
+- (void) onMapFrameAnimatorsUpdated;
 - (void) onMapFrameRendered;
 - (void) didReceiveMemoryWarning;
 

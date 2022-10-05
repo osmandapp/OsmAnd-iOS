@@ -168,6 +168,12 @@
         [layer hide];
 }
 
+- (void) onMapFrameAnimatorsUpdated
+{
+    for (OAMapLayer *layer in _layers.objectEnumerator)
+        [layer onMapFrameAnimatorsUpdated];
+}
+
 - (void) onMapFrameRendered
 {
     for (OAMapLayer *layer in _layers.objectEnumerator)

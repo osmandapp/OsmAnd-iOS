@@ -299,7 +299,7 @@
             [OAUtilities getBottomMargin] + 52.,
             0.
     );
-    self.scrollView.frame = CGRectMake(0., 0., self.view.frame.size.width, DeviceScreenHeight);
+    self.scrollView.frame = CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height);
     CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
     backgroundFrame.origin.y = -self.scrollView.contentInset.top;
     backgroundFrame.size.height = self.scrollView.contentInset.top;

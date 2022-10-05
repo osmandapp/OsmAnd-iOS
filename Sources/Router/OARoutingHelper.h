@@ -87,6 +87,7 @@ struct RouteSegmentResult;
 - (OAGPXRouteParamsBuilder *) getCurrentGPXRoute;
 - (void) setGpxParams:(OAGPXRouteParamsBuilder *)params;
 - (CLLocation *) getFinalLocation;
+- (int) calculateCurrentRoute:(CLLocation *)currentLocation posTolerance:(float)posTolerance routeNodes:(NSArray<CLLocation *> *)routeNodes currentRoute:(int)currentRoute updateAndNotify:(BOOL)updateAndNotify;
 
 - (void) addListener:(id<OARouteInformationListener>)l;
 - (BOOL) removeListener:(id<OARouteInformationListener>)lt;

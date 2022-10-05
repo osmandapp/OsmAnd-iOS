@@ -65,6 +65,10 @@
 {
 }
 
+- (void) onMapFrameAnimatorsUpdated
+{
+}
+
 - (void) onMapFrameRendered
 {
 }

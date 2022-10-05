@@ -12,7 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginTopStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *contentInsideStackView;
-@property (weak, nonatomic) IBOutlet UIStackView *textStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginBottomStackView;
 
 @end

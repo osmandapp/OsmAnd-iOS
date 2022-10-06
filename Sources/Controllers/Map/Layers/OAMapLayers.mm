@@ -90,7 +90,7 @@
     [self addLayer:_osmBugsLayer];
     
     _mapillaryLayer = [[OAMapillaryLayer alloc] initWithMapViewController:_mapViewController layerIndex:10];
-    [_mapillaryLayer setPointsOrder:-62000];
+    [_mapillaryLayer setPointsOrder:-100000];
     [self addLayer:_mapillaryLayer];
     
     _rulerByTapControlLayer = [[OARulerByTapControlLayer alloc] initWithMapViewController:_mapViewController baseOrder:-170000];

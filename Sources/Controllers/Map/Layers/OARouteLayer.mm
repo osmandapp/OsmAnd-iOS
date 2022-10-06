@@ -957,7 +957,7 @@
     }
     OsmAnd::MapMarkerBuilder xAxisMarkerBuilder;
     xAxisMarkerBuilder.setIsAccuracyCircleSupported(false);
-    xAxisMarkerBuilder.setBaseOrder([self getPointsOrder] - 25);
+    xAxisMarkerBuilder.setBaseOrder([self getPointsOrder] - 15);
     xAxisMarkerBuilder.setIsHidden(false);
     if (trackPoints.axisPointsInvalidated)
     {

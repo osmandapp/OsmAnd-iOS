@@ -1889,6 +1889,10 @@
             _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
                                                                                    rasterTileSize));
             [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
+            
+            BOOL isOverlayLayerDisplayed = _app.data.overlayMapSource;
+            float alpha = isOverlayLayerDisplayed ? (1.0f - _app.data.overlayAlpha) : 1.0f;
+            [_mapView setSymbolsOpacity:(alpha)];
 
             _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
         }

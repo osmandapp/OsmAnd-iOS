@@ -110,7 +110,7 @@
         _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
         if (_stopRoute)
         {
-            int pointsOrder = [self getPointsOrder] - 1;
+            int baseOrder = self.baseOrder;
             int lineId = 1;
             UIColor *c = [_stopRoute getColor:NO];
             CGFloat r, g, b, a;
@@ -122,7 +122,7 @@
                 if (points.size() > 1)
                 {
                     OsmAnd::VectorLineBuilder builder;
-                    builder.setBaseOrder(pointsOrder--)
+                    builder.setBaseOrder(baseOrder--)
                     .setIsHidden(points.size() == 0)
                     .setLineId(lineId++)
                     .setLineWidth(6 * self.displayDensityFactor)

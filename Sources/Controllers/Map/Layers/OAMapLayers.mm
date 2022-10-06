@@ -65,7 +65,7 @@
     _gpxRecMapLayer = [[OAGPXRecLayer alloc] initWithMapViewController:_mapViewController baseOrder:-110000];
     [self addLayer:_gpxRecMapLayer];
 
-    _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController baseOrder:200000];
+    _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController baseOrder:200000 pointsOrder:-150000];
     [self addLayer:_routeMapLayer];
     
     _routePreviewLayer = [[OAPreviewRouteLineLayer alloc] initWithMapViewController:_mapViewController baseOrder:-120000];

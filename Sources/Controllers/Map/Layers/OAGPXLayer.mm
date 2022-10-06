@@ -629,7 +629,7 @@ colorizationScheme:(int)colorizationScheme
     }
     
     _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(
-        [self getPointsOrder], UIScreen.mainScreen.scale, startFinishPoints, splitLabels,
+        [self getPointsOrder] - 20000, UIScreen.mainScreen.scale, startFinishPoints, splitLabels,
         [OANativeUtilities skImageFromPngResource:@"map_track_point_start"],
         [OANativeUtilities skImageFromPngResource:@"map_track_point_finish"],
         [OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"]));

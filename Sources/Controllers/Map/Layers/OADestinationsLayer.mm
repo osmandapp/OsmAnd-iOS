@@ -218,7 +218,7 @@
     
     OsmAnd::MapMarkerBuilder builder;
     builder.setIsAccuracyCircleSupported(false)
-    .setBaseOrder([self getPointsOrder])
+    .setBaseOrder(self.pointsOrder)
     .setIsHidden(false)
     .setPinIcon([OANativeUtilities skImageFromPngResource:markerResourceName])
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))

@@ -23,8 +23,9 @@
 @implementation OAMapLayer
 {
     MBProgressHUD *_progressHUD;
-    int _pointsOrder;
 }
+
+@synthesize pointsOrder = _pointsOrder;
 
 - (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController
 {
@@ -143,7 +144,7 @@
     return CLLocationCoordinate2DMake(lat, lon);
 }
 
-- (int) getPointsOrder
+- (int) pointsOrder
 {
     return _pointsOrder != 0 ? _pointsOrder : _baseOrder;
 }

@@ -68,7 +68,7 @@
     _contextPinMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
     _contextPinMarker = OsmAnd::MapMarkerBuilder()
     .setIsAccuracyCircleSupported(false)
-    .setBaseOrder([self getPointsOrder])
+    .setBaseOrder(self.pointsOrder)
     .setIsHidden(true)
     .setPinIcon([OANativeUtilities skImageFromPngResource:@"ic_map_pin"])
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)

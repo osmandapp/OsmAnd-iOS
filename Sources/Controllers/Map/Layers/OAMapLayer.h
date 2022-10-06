@@ -22,6 +22,7 @@
 @property (nonatomic, readonly) BOOL nightMode;
 @property (nonatomic, readonly) CGFloat displayDensityFactor;
 @property (nonatomic, readonly) int baseOrder;
+@property (nonatomic) int pointsOrder;
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController;
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder;
@@ -46,8 +47,5 @@
 - (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint;
 
 - (BOOL) isVisible;
-
-- (int) getPointsOrder;
-- (void) setPointsOrder:(int)pointsOrder;
 
 @end

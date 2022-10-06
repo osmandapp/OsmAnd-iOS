@@ -81,7 +81,7 @@
         const OsmAnd::LatLon latLon([pointToStart getLatitude], [pointToStart getLongitude]);
         _startPointMarker = OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
-        .setBaseOrder([self getPointsOrder])
+        .setBaseOrder(self.pointsOrder)
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skImageFromPngResource:@"map_start_point"])
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
@@ -95,7 +95,7 @@
         const OsmAnd::LatLon latLon([point getLatitude], [point getLongitude]);
         _targetPointMarker = OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
-        .setBaseOrder([self getPointsOrder] + 1)
+        .setBaseOrder(self.pointsOrder + 1)
         .setIsHidden(false)
         .setPinIcon([self getIntermediateImage:point])
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
@@ -110,7 +110,7 @@
         const OsmAnd::LatLon latLon([pointToNavigate getLatitude], [pointToNavigate getLongitude]);
         _targetPointMarker = OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
-        .setBaseOrder([self getPointsOrder] + 2)
+        .setBaseOrder(self.pointsOrder + 2)
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skImageFromPngResource:@"map_target_point"])
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)

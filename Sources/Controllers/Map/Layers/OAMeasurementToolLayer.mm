@@ -155,7 +155,7 @@
     {
         OsmAnd::MapMarkerBuilder pointMarkerBuilder;
         pointMarkerBuilder.setIsAccuracyCircleSupported(false);
-        pointMarkerBuilder.setBaseOrder([self getPointsOrder] - 15);
+        pointMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
         pointMarkerBuilder.setIsHidden(false);
         pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
         pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
@@ -314,7 +314,7 @@
     collection->removeAllMarkers();
     OsmAnd::MapMarkerBuilder pointMarkerBuilder;
     pointMarkerBuilder.setIsAccuracyCircleSupported(false);
-    pointMarkerBuilder.setBaseOrder([self getPointsOrder] - 15);
+    pointMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
     pointMarkerBuilder.setIsHidden(false);
     pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
     pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);

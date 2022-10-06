@@ -371,7 +371,7 @@ typedef enum {
 - (void) generateMarkersCollection
 {
     // Create location and course markers
-    int baseOrder = [self getPointsOrder];
+    int baseOrder = self.pointsOrder;
     
     _modeMarkers = [NSMapTable strongToStrongObjectsMapTable];
     NSArray<OAApplicationMode *> *modes = [OAApplicationMode allPossibleValues];

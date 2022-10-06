@@ -629,7 +629,7 @@ colorizationScheme:(int)colorizationScheme
     }
     
     _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(
-        [self getPointsOrder] - 20000, UIScreen.mainScreen.scale, startFinishPoints, splitLabels,
+                                                                      self.pointsOrder - 20000, UIScreen.mainScreen.scale, startFinishPoints, splitLabels,
         [OANativeUtilities skImageFromPngResource:@"map_track_point_start"],
         [OANativeUtilities skImageFromPngResource:@"map_track_point_finish"],
         [OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"]));
@@ -675,7 +675,7 @@ colorizationScheme:(int)colorizationScheme
         if (_hiddenPointPos31 != OsmAnd::PointI())
             hiddenPoints.append(_hiddenPointPos31);
             
-        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(points, [self getPointsOrder] - points.count() - 1, hiddenPoints,
+        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(points, self.pointsOrder - points.count() - 1, hiddenPoints,
                                                                     self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize));
         [self.mapView addTiledSymbolsProvider:_waypointsMapProvider];
     }

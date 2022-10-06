@@ -51,7 +51,7 @@
     
     OsmAnd::MapMarkerBuilder imageAndCourseMarkerBuilder;
     imageAndCourseMarkerBuilder.setIsAccuracyCircleSupported(false);
-    imageAndCourseMarkerBuilder.setBaseOrder([self getPointsOrder]);
+    imageAndCourseMarkerBuilder.setBaseOrder(self.pointsOrder);
     imageAndCourseMarkerBuilder.setIsHidden(true);
     
     _imageMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);

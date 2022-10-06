@@ -110,7 +110,7 @@
             hiddenPoints.append(_hiddenPointPos31);
         
         _favoritesMapProvider.reset(new OAFavoritesMapLayerProvider(self.app.favoritesCollection->getFavoriteLocations(),
-                                                                    self.baseOrder, hiddenPoints, self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize));
+                                                                    [self getPointsOrder], hiddenPoints, self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize));
         [self.mapView addTiledSymbolsProvider:_favoritesMapProvider];
     }];
 }

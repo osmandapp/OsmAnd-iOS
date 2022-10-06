@@ -110,7 +110,7 @@
         _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
         if (_stopRoute)
         {
-            int baseOrder = self.baseOrder;
+            int pointsOrder = [self getPointsOrder] - 1;
             int lineId = 1;
             UIColor *c = [_stopRoute getColor:NO];
             CGFloat r, g, b, a;
@@ -122,7 +122,7 @@
                 if (points.size() > 1)
                 {
                     OsmAnd::VectorLineBuilder builder;
-                    builder.setBaseOrder(baseOrder--)
+                    builder.setBaseOrder(pointsOrder--)
                     .setIsHidden(points.size() == 0)
                     .setLineId(lineId++)
                     .setLineWidth(6 * self.displayDensityFactor)
@@ -139,7 +139,7 @@
         if (_transportStopSymbolsProvider)
             [self.mapView removeTiledSymbolsProvider:_transportStopSymbolsProvider];
 
-        _transportStopSymbolsProvider.reset(new OsmAnd::TransportStopSymbolsProvider(self.app.resourcesManager->obfsCollection, self.baseOrder - 1000, _stopRoute.route, std::make_shared<OACoreResourcesTransportRouteIconProvider>(OsmAnd::getCoreResourcesProvider(), self.mapViewController.displayDensityFactor, 1.0)));
+        _transportStopSymbolsProvider.reset(new OsmAnd::TransportStopSymbolsProvider(self.app.resourcesManager->obfsCollection, [self getPointsOrder], _stopRoute.route, std::make_shared<OACoreResourcesTransportRouteIconProvider>(OsmAnd::getCoreResourcesProvider(), self.mapViewController.displayDensityFactor, 1.0)));
         
         [self.mapView addTiledSymbolsProvider:_transportStopSymbolsProvider];
     }];

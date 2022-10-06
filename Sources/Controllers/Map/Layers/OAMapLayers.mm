@@ -59,13 +59,13 @@
     _underlayMapLayer = [[OAUnderlayMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:-5];
     [self addLayer:_underlayMapLayer];
 
-    _gpxMapLayer = [[OAGPXLayer alloc] initWithMapViewController:_mapViewController baseOrder:-100000];
+    _gpxMapLayer = [[OAGPXLayer alloc] initWithMapViewController:_mapViewController baseOrder:500000 pointsOrder:-100000];
     [self addLayer:_gpxMapLayer];
 
     _gpxRecMapLayer = [[OAGPXRecLayer alloc] initWithMapViewController:_mapViewController baseOrder:-110000];
     [self addLayer:_gpxRecMapLayer];
 
-    _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController baseOrder:-150000];
+    _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController baseOrder:200000];
     [self addLayer:_routeMapLayer];
     
     _routePreviewLayer = [[OAPreviewRouteLineLayer alloc] initWithMapViewController:_mapViewController baseOrder:-120000];
@@ -90,12 +90,13 @@
     [self addLayer:_osmBugsLayer];
     
     _mapillaryLayer = [[OAMapillaryLayer alloc] initWithMapViewController:_mapViewController layerIndex:10];
+    [_mapillaryLayer setPointsOrder:-62000];
     [self addLayer:_mapillaryLayer];
     
     _rulerByTapControlLayer = [[OARulerByTapControlLayer alloc] initWithMapViewController:_mapViewController baseOrder:-170000];
     [self addLayer:_rulerByTapControlLayer];
 
-    _downloadedRegionsLayer = [[OADownloadedRegionsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-10000];
+    _downloadedRegionsLayer = [[OADownloadedRegionsLayer alloc] initWithMapViewController:_mapViewController baseOrder:1100000];
     [self addLayer:_downloadedRegionsLayer];
 
     _weatherLayerLow = [[OAWeatherRasterLayer alloc] initWithMapViewController:_mapViewController layerIndex:20 weatherLayer:WEATHER_LAYER_LOW date:_weatherDate];

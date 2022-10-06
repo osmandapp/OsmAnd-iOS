@@ -108,7 +108,7 @@
     
     OsmAnd::MapMarkerBuilder locationMarkerBuilder;
     locationMarkerBuilder.setIsAccuracyCircleSupported(false);
-    locationMarkerBuilder.setBaseOrder(self.baseOrder - 25);
+    locationMarkerBuilder.setBaseOrder([self getPointsOrder] - 600);
     locationMarkerBuilder.setIsHidden(true);
     
     _locationIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
@@ -957,7 +957,7 @@
     }
     OsmAnd::MapMarkerBuilder xAxisMarkerBuilder;
     xAxisMarkerBuilder.setIsAccuracyCircleSupported(false);
-    xAxisMarkerBuilder.setBaseOrder(self.baseOrder - 15);
+    xAxisMarkerBuilder.setBaseOrder([self getPointsOrder] - 500);
     xAxisMarkerBuilder.setIsHidden(false);
     if (trackPoints.axisPointsInvalidated)
     {

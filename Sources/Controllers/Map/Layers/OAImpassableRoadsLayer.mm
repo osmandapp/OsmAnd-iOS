@@ -76,7 +76,7 @@
             const OsmAnd::LatLon latLon(location.coordinate.latitude, location.coordinate.longitude);
             std::shared_ptr<OsmAnd::MapMarker> mapMarker = OsmAnd::MapMarkerBuilder()
             .setIsAccuracyCircleSupported(false)
-            .setBaseOrder(self.baseOrder + 1)
+            .setBaseOrder([self getPointsOrder])
             .setIsHidden(false)
             .setPinIcon([OANativeUtilities skImageFromPngResource:@"map_pin_avoid_road"])
             .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)

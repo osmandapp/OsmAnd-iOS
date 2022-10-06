@@ -23,6 +23,7 @@
 @implementation OAMapLayer
 {
     MBProgressHUD *_progressHUD;
+    int _pointsOrder;
 }
 
 - (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController
@@ -34,6 +35,28 @@
         _mapViewController = mapViewController;
         _mapView = mapViewController.mapView;
         _displayDensityFactor = mapViewController.displayDensityFactor;
+    }
+    return self;
+}
+
+- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder
+{
+    self = [self initWithMapViewController:mapViewController];
+    if (self)
+    {
+        _baseOrder = baseOrder;
+        _pointsOrder = 0;
+    }
+    return self;
+}
+
+- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder pointsOrder:(int)pointsOrder
+{
+    self = [self initWithMapViewController:mapViewController];
+    if (self)
+    {
+        _baseOrder = baseOrder;
+        _pointsOrder = pointsOrder;
     }
     return self;
 }
@@ -118,6 +141,16 @@
     double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
     double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
     return CLLocationCoordinate2DMake(lat, lon);
+}
+
+- (int) getPointsOrder
+{
+    return _pointsOrder != 0 ? _pointsOrder : _baseOrder;
+}
+
+- (void) setPointsOrder:(int)pointsOrder
+{
+    _pointsOrder = pointsOrder;
 }
 
 @end

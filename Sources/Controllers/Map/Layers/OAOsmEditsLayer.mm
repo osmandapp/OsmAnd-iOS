@@ -120,7 +120,7 @@
         NSString *description = [self getPointDescription:point];
         OsmAnd::MapMarkerBuilder builder;
         builder.setIsAccuracyCircleSupported(false)
-        .setBaseOrder(self.baseOrder)
+        .setBaseOrder([self getPointsOrder])
         .setIsHidden(false)
         .setPinIcon([self getIcon:point])
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon([point getLatitude], [point getLongitude])))

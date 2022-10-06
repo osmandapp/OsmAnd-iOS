@@ -25,16 +25,6 @@ const static float kTextSize = 13.0f;
 
 @implementation OASymbolMapLayer
 
-- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder
-{
-    self = [super initWithMapViewController:mapViewController];
-    if (self)
-    {
-        _baseOrder = baseOrder;
-    }
-    return self;
-}
-
 - (void) initLayer
 {
     [super initLayer];

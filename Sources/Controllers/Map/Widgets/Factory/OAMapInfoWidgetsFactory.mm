@@ -186,7 +186,7 @@
                             NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
                             formatter.locale = NSLocale.autoupdatingCurrentLocale;
 
-                            NSString *bandUnit = [formatter stringFromUnit:[[OAWeatherBand withWeatherBand:band] getBandUnit]];
+                            NSString *bandUnit = [formatter displayStringFromUnit:[[OAWeatherBand withWeatherBand:band] getBandUnit]];
 
                             BOOL unitsWithBigFont = band == WEATHER_BAND_TEMPERATURE;
                             if (unitsWithBigFont)

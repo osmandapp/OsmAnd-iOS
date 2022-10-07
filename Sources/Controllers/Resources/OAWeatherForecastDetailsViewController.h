@@ -16,6 +16,7 @@
 
 - (void)onRemoveForecast;
 - (void)onUpdateForecast;
+- (void)onClearForecastCache;
 
 @end
 

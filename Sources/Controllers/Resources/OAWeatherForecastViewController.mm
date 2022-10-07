@@ -315,7 +315,11 @@
             totalSizeData[@"key"] = @"data_cell_size";
             totalSizeData[@"type"] = [OATableViewCellValue getCellIdentifier];
             totalSizeData[@"title"] = OALocalizedString(@"shared_string_total_size");
-            totalSizeData[@"value"] = OALocalizedString(@"calculating_progress");
+            NSString *sizeString = _weatherHelper.offlineCacheSize > 0
+                    ? [NSByteCountFormatter stringFromByteCount:_weatherHelper.offlineCacheSize
+                                                     countStyle:NSByteCountFormatterCountStyleFile]
+                    : OALocalizedString(@"calculating_progress");
+            totalSizeData[@"value"] = sizeString;
             [dataCells addObject:totalSizeData];
 
             [data addObject:dataSection];

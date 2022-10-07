@@ -113,12 +113,19 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 @end
 
+@interface NSMeasurementFormatter (util)
+
+- (NSString *)displayStringFromUnit:(NSUnit *)unit;
+
+@end
+
 @interface NSUnit (util)
 
 + (NSUnit *) unitFromString:(NSString *)unitStr;
 
 + (NSUnit *) current;
 - (NSString *) name;
+- (NSString *) displaySymbol;
 
 @end
 

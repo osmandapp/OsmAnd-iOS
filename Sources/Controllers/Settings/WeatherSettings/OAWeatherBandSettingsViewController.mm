@@ -70,7 +70,7 @@
 
     NSUnit *unitDefault = [_band getDefaultBandUnit];
     NSString *nameDefault = OALocalizedString(@"device_settings");
-    NSString *unitDefaultStr = [NSString stringWithFormat:@" (%@)", [formatter stringFromUnit:unitDefault]];
+    NSString *unitDefaultStr = [NSString stringWithFormat:@" (%@)", [formatter displayStringFromUnit:unitDefault]];
 
     [data addObject:@{
             @"unit": unitDefault,
@@ -83,8 +83,8 @@
     for (NSInteger i = 0; i < units.count; i++)
     {
         NSUnit *unit = units[i];
-        NSString *name = unit.name != nil ? unit.name : [formatter stringFromUnit:unit];
-        NSString *unitStr = unit.name != nil ? [NSString stringWithFormat:@" (%@)", [formatter stringFromUnit:unit]] : nil;
+        NSString *name = unit.name != nil ? unit.name : [formatter displayStringFromUnit:unit];
+        NSString *unitStr = unit.name != nil ? [NSString stringWithFormat:@" (%@)", [formatter displayStringFromUnit:unit]] : nil;
 
         [data addObject:@{
                 @"unit": unit,

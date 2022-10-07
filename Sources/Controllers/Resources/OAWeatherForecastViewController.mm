@@ -11,9 +11,9 @@
 #import "OAWeatherForecastDetailsViewController.h"
 #import "MBProgressHUD.h"
 #import "OADeleteButtonTableViewCell.h"
-#import "OATableViewCellSimple.h"
-#import "OATableViewCellRightIcon.h"
-#import "OATableViewCellValue.h"
+#import "OASimpleTableViewCell.h"
+#import "OARightIconTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OALargeImageTitleDescrTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAWeatherHelper.h"
@@ -253,7 +253,7 @@
 
             NSMutableDictionary *selectData = [NSMutableDictionary dictionary];
             selectData[@"key"] = @"select_cell";
-            selectData[@"type"] = [OATableViewCellSimple getCellIdentifier];
+            selectData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
             selectData[@"title"] = OALocalizedString(@"shared_string_select");
             selectData[@"title_color"] = UIColorFromRGB(color_primary_purple);
             selectData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
@@ -270,7 +270,7 @@
 
             NSMutableDictionary *updateAllData = [NSMutableDictionary dictionary];
             updateAllData[@"key"] = @"update_cell_all";
-            updateAllData[@"type"] = [OATableViewCellRightIcon getCellIdentifier];
+            updateAllData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
             updateAllData[@"title"] = OALocalizedString(@"res_update_all");
             updateAllData[@"right_icon"] = @"ic_custom_download";
             [updateCells addObject:updateAllData];
@@ -290,7 +290,7 @@
                 {
                     NSMutableDictionary *offlineForecastData = [NSMutableDictionary dictionary];
                     offlineForecastData[@"key"] = [@"status_cell_" stringByAppendingString:regionId];
-                    offlineForecastData[@"type"] = [OATableViewCellSimple getCellIdentifier];
+                    offlineForecastData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
                     offlineForecastData[@"region"] = region;
                     offlineForecastData[@"description"] = [OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress
                             ? [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_loading")
@@ -313,7 +313,7 @@
 
             NSMutableDictionary *totalSizeData = [NSMutableDictionary dictionary];
             totalSizeData[@"key"] = @"data_cell_size";
-            totalSizeData[@"type"] = [OATableViewCellValue getCellIdentifier];
+            totalSizeData[@"type"] = [OAValueTableViewCell getCellIdentifier];
             totalSizeData[@"title"] = OALocalizedString(@"shared_string_total_size");
             NSString *sizeString = _weatherHelper.offlineCacheSize > 0
                     ? [NSByteCountFormatter stringFromByteCount:_weatherHelper.offlineCacheSize
@@ -889,13 +889,13 @@
     NSDictionary *item = [self getItem:indexPath];
     UITableViewCell *outCell = nil;
 
-    if ([item[@"type"] isEqualToString:[OATableViewCellSimple getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSimple *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSimple getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSimple getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSimple *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
         }
         if (cell)
@@ -927,13 +927,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellRightIcon getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATableViewCellRightIcon *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellRightIcon getCellIdentifier]];
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellRightIcon getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellRightIcon *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }
@@ -948,13 +948,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellValue getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATableViewCellValue *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellValue getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellValue getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellValue *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];

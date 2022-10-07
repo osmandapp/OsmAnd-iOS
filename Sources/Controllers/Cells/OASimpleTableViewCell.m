@@ -1,14 +1,14 @@
 //
-//  OATableViewCellSimple.m
+//  OASimpleTableViewCell.m
 //  OsmAnd Maps
 //
 //  Created by Skalii on 22.09.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewCellSimple.h"
+#import "OASimpleTableViewCell.h"
 
-@interface OATableViewCellSimple ()
+@interface OASimpleTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginTopStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *contentInsideStackView;
@@ -16,7 +16,7 @@
 
 @end
 
-@implementation OATableViewCellSimple
+@implementation OASimpleTableViewCell
 
 - (void)leftIconVisibility:(BOOL)show
 {

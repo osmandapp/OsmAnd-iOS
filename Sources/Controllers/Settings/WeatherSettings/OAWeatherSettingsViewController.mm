@@ -9,7 +9,7 @@
 #import "OAWeatherSettingsViewController.h"
 #import "OAWeatherBandSettingsViewController.h"
 #import "OAWeatherCacheSettingsViewController.h"
-#import "OATableViewCellValue.h"
+#import "OAValueTableViewCell.h"
 #import "OATableViewCellSwitch.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
@@ -77,7 +77,7 @@
                         @"key": localData ? @"offline_forecast" : @"online_cache",
                         @"title": OALocalizedString(localData ? @"weather_offline_forecast" : @"shared_string_online_cache"),
                         @"value": sizeString,
-                        @"type": [OATableViewCellValue getCellIdentifier]
+                        @"type": [OAValueTableViewCell getCellIdentifier]
                 };
 
                 [self.tableView reloadRowsAtIndexPaths:@[localData ? _useOfflineDataIndexPath : _onlineDataIndexPath]
@@ -100,7 +100,7 @@
         [measurementCells addObject:@{
                 @"key": [@"band_" stringByAppendingString:[band getMeasurementName]],
                 @"band": band,
-                @"type": [OATableViewCellValue getCellIdentifier]
+                @"type": [OAValueTableViewCell getCellIdentifier]
         }];
     }
     [data addObject:@{
@@ -135,7 +135,7 @@
             @"key": @"online_cache",
             @"title": OALocalizedString(@"shared_string_online_cache"),
             @"value": onlineCacheSizeString,
-            @"type": [OATableViewCellValue getCellIdentifier]
+            @"type": [OAValueTableViewCell getCellIdentifier]
     }];
     _onlineDataIndexPath = [NSIndexPath indexPathForRow:cacheData.count - 1 inSection:data.count - 1];
 
@@ -147,7 +147,7 @@
             @"key": @"offline_forecast",
             @"title": OALocalizedString(@"weather_offline_forecast"),
             @"value": offlineCacheSizeString,
-            @"type": [OATableViewCellValue getCellIdentifier]
+            @"type": [OAValueTableViewCell getCellIdentifier]
     }];
     _useOfflineDataIndexPath = [NSIndexPath indexPathForRow:cacheData.count - 1 inSection:data.count - 1];
 
@@ -186,13 +186,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OATableViewCellValue getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATableViewCellValue *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellValue getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellValue getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellValue *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);

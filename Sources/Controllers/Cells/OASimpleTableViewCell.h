@@ -1,5 +1,5 @@
 //
-//  OATableViewCellSimple.h
+//  OASimpleTableViewCell.h
 //  OsmAnd
 //
 //  Created by Skalii on 22.09.2022.
@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, EOATableViewCellContentStyle) {
     EOATableViewCellContentTopStyle
 };
 
-@interface OATableViewCellSimple : UITableViewCell
+@interface OASimpleTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIView *topContentSpaceView;
 @property (weak, nonatomic) IBOutlet UIImageView *leftIconView;

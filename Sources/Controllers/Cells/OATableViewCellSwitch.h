@@ -6,9 +6,9 @@
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewCellSimple.h"
+#import "OASimpleTableViewCell.h"
 
-@interface OATableViewCellSwitch : OATableViewCellSimple
+@interface OATableViewCellSwitch : OASimpleTableViewCell
 
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
 @property (weak, nonatomic) IBOutlet UISwitch *switchView;

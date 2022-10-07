@@ -31,8 +31,8 @@
 #import "OASettingsItemType.h"
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
-#import "OATableViewCellSimple.h"
-#import "OATableViewCellRightIcon.h"
+#import "OASimpleTableViewCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OALargeImageTitleDescrTableViewCell.h"
 #import "OATitleIconProgressbarCell.h"
 #import "FFCircularProgressView+isSpinning.h"
@@ -144,7 +144,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     else
     {
         [statusSection addRowFromDictionary:@{
-            kCellTypeKey: [OATableViewCellSimple getCellIdentifier],
+            kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
             kCellKeyKey: @"lastBackup",
             kCellTitleKey: _status.statusTitle,
             kCellDescrKey: backupTime,
@@ -214,7 +214,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (OATableViewRowData *) rowFromItem:(OASettingsItem *)item toDelete:(BOOL)toDelete
 {
     OATableViewRowData *rowData = [OATableViewRowData rowData];
-    [rowData setCellType:[OATableViewCellRightIcon getCellIdentifier]];
+    [rowData setCellType:[OARightIconTableViewCell getCellIdentifier]];
     [rowData setObj:item forKey:@"settings_item"];
     NSString *name = item.getPublicName;
     if ([item isKindOfClass:OAFileSettingsItem.class])
@@ -269,7 +269,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             NSIndexPath *indPath = [NSIndexPath indexPathForRow:[rowIndex.lastObject integerValue] inSection:_itemsSection];
             OATableViewRowData *item = [_data itemForIndexPath:indPath];
             BOOL hasConflict = [item objForKey:@"remoteConflictItem"] != nil;
-            OATableViewCellRightIcon *cell = [self.tableView cellForRowAtIndexPath:indPath];
+            OARightIconTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indPath];
             if (cell)
             {
                 [cell rightIconVisibility:hasConflict];
@@ -331,13 +331,13 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableViewRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item.cellType isEqualToString:[OATableViewCellSimple getCellIdentifier]])
+    if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSimple *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSimple getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSimple getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSimple *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
@@ -350,13 +350,13 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         }
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OATableViewCellRightIcon getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATableViewCellRightIcon *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellRightIcon getCellIdentifier]];
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellRightIcon getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellRightIcon *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
         }
         if (cell)
         {
@@ -495,7 +495,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         if (_lastBackupIndexPath)
         {
             OATableViewRowData *progressCell = [_data itemForIndexPath:_lastBackupIndexPath];
-            if ([progressCell.cellType isEqualToString:[OATableViewCellSimple getCellIdentifier]])
+            if ([progressCell.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
                 [progressCell setCellType:[OATitleIconProgressbarCell getCellIdentifier]];
             
             [progressCell setTitle:[OALocalizedString(@"osm_edit_uploading") stringByAppendingString:[NSString stringWithFormat:@"%i%%", 0]]];

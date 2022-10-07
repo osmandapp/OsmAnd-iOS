@@ -126,7 +126,7 @@
         
         OsmAnd::MapMarkerBuilder locationMarkerBuilder;
         locationMarkerBuilder.setIsAccuracyCircleSupported(false);
-        locationMarkerBuilder.setBaseOrder(self.baseOrder - 1000);
+        locationMarkerBuilder.setBaseOrder(self.pointsOrder - 1000);
         locationMarkerBuilder.setIsHidden(true);
         _locationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationMarkerBuilder.addOnMapSurfaceIcon(_locationMainIconKey,

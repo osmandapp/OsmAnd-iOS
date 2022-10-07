@@ -179,7 +179,7 @@
     {
         OsmAnd::MapMarkerBuilder builder;
         builder.setIsAccuracyCircleSupported(false)
-        .setBaseOrder(self.baseOrder)
+        .setBaseOrder(self.pointsOrder)
         .setIsHidden(false)
         .setPinIcon(settings.nightMode ? _centerIconNight : _centerIconDay)
         .setPosition(p)

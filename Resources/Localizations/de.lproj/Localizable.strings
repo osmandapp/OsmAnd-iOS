@@ -2722,3 +2722,5 @@
 "cloud_no_conflicts" = "Keine Konflikte";
 "upload_local_version" = "Lokale Version hochladen";
 "cross_buy" = "Cross-Buy";
+"weather_forecast_entire_world" = "Weltweite Wettervorhersage";
+"weather_entire_world" = "Weltweit";

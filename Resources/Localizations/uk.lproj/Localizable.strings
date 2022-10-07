@@ -2718,3 +2718,5 @@
 "cloud_contains_newer_changes" = "Версія на OsmAnd Cloud містить новіші зміни.";
 "upload_local_version" = "Вивантажити локальну версію";
 "dowload_cloud_version" = "Завантажити хмарну версію";
+"weather_forecast_entire_world" = "Прогноз погоди для всього світу";
+"weather_entire_world" = "Весь світ";

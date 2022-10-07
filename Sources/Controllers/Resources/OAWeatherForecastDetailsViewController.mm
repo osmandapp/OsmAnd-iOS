@@ -92,7 +92,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [_weatherHelper calculateCacheSize:_region onComplete:nil];
+    if (![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:_region]])
+        [_weatherHelper calculateCacheSize:_region onComplete:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -185,7 +186,8 @@
     updatesSizeData[@"key"] = @"updates_size_cell";
     updatesSizeData[@"type"] = [OATableViewCellValue getCellIdentifier];
     updatesSizeData[@"title"] = OALocalizedString(@"shared_string_updates_size");
-    updatesSizeData[@"value"] = OALocalizedString(@"calculating_progress");
+    updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance]getOfflineForecastSizeInfo:_region.regionId local:YES]
+                                                               countStyle:NSByteCountFormatterCountStyleFile];
     updatesSizeData[@"value_color"] = UIColorFromRGB(color_text_footer);
     updatesSizeData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
     [infoCells addObject:updatesSizeData];
@@ -592,6 +594,8 @@
 - (void)onCacheClear
 {
     [_weatherHelper calculateCacheSize:_region onComplete:nil];
+    if (self.delegate)
+        [self.delegate onClearForecastCache];
 }
 
 #pragma mark - OAWeatherFrequencySettingsDelegate

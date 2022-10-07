@@ -290,6 +290,7 @@
 
 - (void)prepareToStopDownloading:(NSString *)regionId
 {
+    _offlineCacheSize = 0.;
     if ([self.class getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
     {
         return;
@@ -318,10 +319,7 @@
     [self setOfflineForecastSizeInfo:regionId value:0 local:YES];
     [self setOfflineForecastSizeInfo:regionId value:0 local:NO];
     [self setOfflineForecastSizesInfoCalculated:regionId value:NO];
-
     [self.class updatePreferenceTileIdsIfNeeded:region];
-
-    [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
 
     NSArray<NSArray<NSNumber *> *> *tileIds = [self.class getPreferenceTileIds:regionId];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -352,13 +350,18 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         QList<OsmAnd::TileId> qTileIds = [OANativeUtilities convertToQListTileIds:[self getOfflineTileIds:nil]];
         OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();;
-        unsigned long long size = 0;
-        if (!localData || (localData && !qTileIds.isEmpty()))
+        unsigned long long size = localData ? self.offlineCacheSize : self.onlineCacheSize;
+        if (size == 0 && (!localData || (localData && !qTileIds.isEmpty())))
         {
             size = _weatherResourcesManager->calculateDbCacheSize(
                     localData ? qTileIds : QList<OsmAnd::TileId>(),
                     localData ? QList<OsmAnd::TileId>() : qTileIds,
                     zoom);
+
+            if (localData)
+                _offlineCacheSize = size;
+            else
+                _onlineCacheSize = size;
         }
 
         if (onComplete)
@@ -381,10 +384,10 @@
         for (NSString *regionId in regionIds)
         {
             [self setOfflineForecastSizeInfo:regionId value:0 local:YES];
-            if ([self.class getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
-                [self prepareToStopDownloading:regionId];
+            [self prepareToStopDownloading:regionId];
         }
     }
+    _onlineCacheSize = 0.;
 
     QList<OsmAnd::TileId> qTileIds = [OANativeUtilities convertToQListTileIds:[self getOfflineTileIds:regionIds]];
     OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();
@@ -403,11 +406,20 @@
 
 - (void)clearOutdatedCache
 {
+    _offlineCacheSize = 0.;
+    _onlineCacheSize = 0.;
     NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
     calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
     NSDate *date = [calendar startOfDayForDate:[NSDate date]];
     QDateTime dateTime = QDateTime::fromNSDate(date).toUTC();
     _weatherResourcesManager->clearDbCache(dateTime);
+
+    NSArray<NSString *> *downloadedRegionIds = [self getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateFinished)]];
+    for (OAWorldRegion *region in [@[_app.worldRegion] arrayByAddingObjectsFromArray:_app.worldRegion.flattenedSubregions])
+    {
+        if ([downloadedRegionIds containsObject:[self.class checkAndGetRegionId:region]])
+            [self calculateCacheSize:region onComplete:nil];
+    }
 }
 
 - (void)removeLocalForecast:(NSString *)regionId refreshMap:(BOOL)refreshMap
@@ -417,6 +429,8 @@
 
 - (void)removeLocalForecasts:(NSArray<NSString *> *)regionIds refreshMap:(BOOL)refreshMap
 {
+    _offlineCacheSize = 0.;
+    _onlineCacheSize = 0.;
     NSMutableArray<NSArray<NSNumber *> *> *tileIds = [NSMutableArray array];
     for (NSString *regionId in regionIds)
     {
@@ -427,8 +441,12 @@
                 [tileIds addObject:tileId];
         }
 
+        NSArray<NSArray<NSNumber *> *> *originalTileIds = [self.class getPreferenceTileIds:regionId];
         [self.class removePreferences:regionId];
         [self removeOfflineForecastInfo:regionId];
+        [self setOfflineForecastSizeInfo:regionId
+                                   value:kTileSize * originalTileIds.count * kForecastDatesCount
+                                   local:NO];
     }
 
     QList<OsmAnd::TileId> qTileIds = [OANativeUtilities convertToQListTileIds:tileIds];
@@ -577,7 +595,7 @@
     if (forecastInfo && [forecastInfo.allKeys containsObject:@"sizes_calculated"])
         return [forecastInfo[@"sizes_calculated"] boolValue];
 
-    return YES;
+    return NO;
 }
 
 - (void)setOfflineForecastProgressInfo:(NSString *)regionId value:(NSInteger)value
@@ -631,6 +649,8 @@
         calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
         NSTimeInterval timeInterval = [NSDate date].timeIntervalSince1970;
         [self.class setPreferenceLastUpdate:regionId value:timeInterval];
+        _offlineCacheSize = 0.;
+        _onlineCacheSize = 0.;
         [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
 
         dispatch_async(dispatch_get_main_queue(), ^{

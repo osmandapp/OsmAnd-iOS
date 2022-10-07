@@ -38,6 +38,8 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 
 @property (nonatomic, readonly) NSArray<OAWeatherBand *> *bands;
 @property (nonatomic, readonly) OAMapPresentationEnvironment *mapPresentationEnvironment;
+@property (nonatomic, readonly) CGFloat offlineCacheSize;
+@property (nonatomic, readonly) CGFloat onlineCacheSize;
 
 @property (readonly) OAObservable *weatherSizeCalculatedObserver;
 @property (readonly) OAObservable *weatherForecastDownloadingObserver;

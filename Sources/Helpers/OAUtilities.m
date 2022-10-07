@@ -531,6 +531,16 @@
 
 @end
 
+@implementation NSMeasurementFormatter (util)
+
+- (NSString *)displayStringFromUnit:(NSUnit *)unit
+{
+    NSString *displaySymbol = unit.displaySymbol;
+    return displaySymbol != nil ? displaySymbol : [self stringFromUnit:unit];
+}
+
+@end
+
 @implementation NSUnit (util)
 
 + (NSUnit *) unitFromString:(NSString *)unitStr
@@ -588,6 +598,11 @@
     return nil;
 }
 
+- (NSString *)displaySymbol
+{
+    return nil;
+}
+
 @end
 
 @implementation NSUnitTemperature (util)
@@ -605,10 +620,19 @@
 
 - (NSString *)name
 {
-    if (self == NSUnitTemperature.celsius)
+    if ([self.symbol isEqualToString:NSUnitTemperature.celsius.symbol])
         return OALocalizedString(@"weather_temp_unit_c");
-    else if (self == NSUnitTemperature.fahrenheit)
+    else if ([self.symbol isEqualToString:NSUnitTemperature.fahrenheit.symbol])
         return OALocalizedString(@"weather_temp_unit_f");
+    return nil;
+}
+
+- (NSString *)displaySymbol
+{
+    if ([self.symbol isEqualToString:NSUnitTemperature.celsius.symbol])
+        return @"°C";
+    else if ([self.symbol isEqualToString:NSUnitTemperature.fahrenheit.symbol])
+        return @"°F";
     return nil;
 }
 
@@ -628,13 +652,13 @@
 
 - (NSString *)name
 {
-    if (self == NSUnitSpeed.metersPerSecond)
+    if ([self.symbol isEqualToString:NSUnitSpeed.metersPerSecond.symbol])
         return OALocalizedString(@"weather_wind_unit_m_s");
-    else if (self == NSUnitSpeed.kilometersPerHour)
+    else if ([self.symbol isEqualToString:NSUnitSpeed.kilometersPerHour.symbol])
         return OALocalizedString(@"weather_wind_unit_km_per_hour");
-    else if (self == NSUnitSpeed.milesPerHour)
+    else if ([self.symbol isEqualToString:NSUnitSpeed.milesPerHour.symbol])
         return OALocalizedString(@"weather_wind_unit_mi_per_hour");
-    else if (self == NSUnitSpeed.knots)
+    else if ([self.symbol isEqualToString:NSUnitSpeed.knots.symbol])
         return OALocalizedString(@"weather_wind_unit_knots");
     return nil;
 }
@@ -655,11 +679,11 @@
 
 - (NSString *)name
 {
-    if (self == NSUnitPressure.hectopascals)
+    if ([self.symbol isEqualToString:NSUnitPressure.hectopascals.symbol])
         return OALocalizedString(@"weather_pressure_unit_hpa");
-    else if (self == NSUnitPressure.millimetersOfMercury)
+    else if ([self.symbol isEqualToString:NSUnitPressure.millimetersOfMercury.symbol])
         return OALocalizedString(@"weather_pressure_unit_mmhg");
-    else if (self == NSUnitPressure.inchesOfMercury)
+    else if ([self.symbol isEqualToString:NSUnitPressure.inchesOfMercury.symbol])
         return OALocalizedString(@"weather_pressure_unit_inhg");
     return nil;
 }
@@ -680,9 +704,9 @@
 
 - (NSString *)name
 {
-    if (self == NSUnitLength.millimeters)
+    if ([self.symbol isEqualToString:NSUnitLength.millimeters.symbol])
         return OALocalizedString(@"weather_precip_unit_mm");
-    else if (self == NSUnitLength.inches)
+    else if ([self.symbol isEqualToString:NSUnitLength.inches.symbol])
         return OALocalizedString(@"weather_precip_unit_in");
     return nil;
 }

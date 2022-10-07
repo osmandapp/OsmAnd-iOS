@@ -382,7 +382,6 @@
                                                          });
 
     [self instantiateWeatherResourcesManager];
-    [[OAWeatherHelper sharedInstance] clearOutdatedCache];
 
     // Check for NSURLIsExcludedFromBackupKey and setup if needed
     const auto& localResources = _resourcesManager->getLocalResources();
@@ -528,6 +527,8 @@
     [self loadWorldRegions];
     [OAManageResourcesViewController prepareData];
     [_worldRegion buildResourceGroupItem];
+
+    [[OAWeatherHelper sharedInstance] clearOutdatedCache];
 
     _defaultRoutingConfig = [self getDefaultRoutingConfig];
     [[OAAvoidSpecificRoads instance] initRouteObjects:NO];

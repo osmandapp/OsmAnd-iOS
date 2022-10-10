@@ -140,17 +140,13 @@
     
     UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(
         0.,
-        headerView.layer.frame.size.height + 7.,
+        headerView.layer.frame.size.height - 1.,
         DeviceScreenWidth,
         1.
     )];
     separator.backgroundColor = UIColorFromRGB(color_tint_gray);
     [headerView addSubview:separator];
 
-    CGRect frame = headerView.frame;
-    frame.size.height += 8.;
-    headerView.frame = frame;
-    
     self.tableView.tableHeaderView = headerView;
 }
 

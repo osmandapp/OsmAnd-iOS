@@ -2621,3 +2621,4 @@
 "weather_accuracy_forecast_description" = "Prognoza offline este disponibilă până la: %@.\nPrecizie: %@, din oră în oră. %@ la fiecare 3 ore.";
 "weather_forecast" = "Prognoza meteo";
 "weather_updates_automatically" = "OsmAnd va descărca automat actualizări atunci când este în funcțiune.";
+"recorded_voice" = "Înregistrată";

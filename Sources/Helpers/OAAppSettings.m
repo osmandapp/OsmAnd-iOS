@@ -377,6 +377,7 @@
 #define favoritesTabKey @"favoritesTab"
 
 #define fluorescentOverlaysKey @"fluorescentOverlays"
+#define keepMapLabelsVisibleKey @"keepMapLabelsVisible"
 
 #define numberOfFreeDownloadsKey @"numberOfFreeDownloads"
 
@@ -4261,6 +4262,9 @@
 
         _fluorescentOverlays = [[[OACommonBoolean withKey:fluorescentOverlaysKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_fluorescentOverlays forKey:@"fluorescent_overlays"];
+        
+        _keepMapLabelsVisible = [[[OACommonBoolean withKey:keepMapLabelsVisibleKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_keepMapLabelsVisible forKey:@"keep_map_labels_visible"];
 
         _numberOfFreeDownloads = [[OACommonInteger withKey:numberOfFreeDownloadsKey defValue:0] makeGlobal];
         [_globalPreferences setObject:_numberOfFreeDownloads forKey:@"free_downloads_v3"];

@@ -128,8 +128,8 @@
         [self.mapViewController runWithRenderSync:^{
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(self.app.data.overlayAlpha);
-            [self.mapViewController.mapView setSymbolsOpacity:(1.0f - self.app.data.overlayAlpha)];
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+            [self.mapViewController updateLayerProviderAlpha];
         }];
     });
 }
@@ -142,11 +142,11 @@
             {
                 [self.mapView resetProviderFor:self.layerIndex];
                 _rasterOverlayMapProvider.reset();
-                [self.mapViewController.mapView setSymbolsOpacity:1.0f];
+                [self.mapViewController updateLayerProviderAlpha];
             }
             else
             {
-                [self.mapViewController.mapView setSymbolsOpacity:(1.0f - self.app.data.overlayAlpha)];
+                [self.mapViewController updateLayerProviderAlpha];
             }
         }];
     });

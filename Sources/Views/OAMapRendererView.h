@@ -20,11 +20,15 @@
 #include <OsmAndCore/Map/IMapKeyedSymbolsProvider.h>
 #include <OsmAndCore/Map/MapRendererDebugSettings.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
+#include <OsmAndCore/Map/MapRendererTypes.h>
 
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
 
 #define kSymbolsUpdateInterval 2000
+
+#define kObfRasterLayer 0
+#define kObfSymbolSection 1
 
 #define _DECLARE_ENTRY(name)                                                                                                \
     OAMapRendererViewStateEntry##name = (NSUInteger)OsmAnd::MapRendererStateChange::name
@@ -74,6 +78,7 @@ struct CLLocationCoordinate2D;
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsIn:(OsmAnd::AreaI)screenArea strict:(BOOL)strict;
 
 - (void)addTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
+- (void)addTiledSymbolsProvider:(int)subsectionIndex provider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (void)addKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
 - (bool)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (bool)removeKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
@@ -89,7 +94,8 @@ struct CLLocationCoordinate2D;
 - (BOOL) suspendGpuWorker;
 - (BOOL) resumeGpuWorker;
 - (void) invalidateFrame;
-- (void)setSymbolsOpacity:(float)opacityFactor;
+- (void) setSymbolsOpacity:(float)opacityFactor;
+- (void) setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration;
 
 @property (nonatomic) CGFloat displayDensityFactor;
 @property (nonatomic) OsmAnd::PointI target31;

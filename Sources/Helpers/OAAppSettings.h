@@ -1113,6 +1113,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *favoritesTab;
 
 @property (nonatomic) OACommonBoolean *fluorescentOverlays;
+@property (nonatomic) OACommonBoolean *keepMapLabelsVisible;
 
 @property (nonatomic) OACommonInteger *numberOfFreeDownloads;
 

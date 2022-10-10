@@ -14,6 +14,8 @@
 #import "OAOcbfHelper.h"
 #import "OAWorldRegion.h"
 #import "Localization.h"
+#import "OAColors.h"
+#import "OALinks.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -91,6 +93,7 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIProgressView *progress2;
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel2;
 @property (weak, nonatomic) IBOutlet UIButton *btnGoToMap;
+@property (weak, nonatomic) IBOutlet UITextView *bottomTextView;
 
 @end
 
@@ -163,6 +166,36 @@ typedef enum
     _btnRestart1.hidden = YES;
     _btnRestart2.hidden = YES;
     [_btnGoToMap setTitle:OALocalizedString(@"show_region_on_map_go") forState:UIControlStateNormal];
+    
+    _bottomTextView.textContainerInset = UIEdgeInsetsZero;
+    _bottomTextView.textContainer.lineFragmentPadding = 0;
+    _bottomTextView.textContainer.maximumNumberOfLines = 0;
+    _bottomTextView.textContainer.lineBreakMode = NSLineBreakByWordWrapping;
+    _bottomTextView.userInteractionEnabled = YES;
+    _bottomTextView.editable = NO;
+    
+    NSMutableAttributedString *titleStr = [[NSMutableAttributedString alloc] initWithData:[OALocalizedString(@"map_download_privacy_descr") dataUsingEncoding:NSUTF8StringEncoding]
+                                                                   options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                                                                             NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
+                                                        documentAttributes:nil error:nil];
+    [titleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0] range:NSMakeRange(0, titleStr.length)];
+    [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, titleStr.length)];
+    __block BOOL first = YES;
+    [titleStr enumerateAttributesInRange:NSMakeRange(0, titleStr.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
+        if (attrs[@"NSLink"])
+        {
+            [titleStr removeAttribute:attrs[@"NSLink"] range:range];
+            [titleStr addAttribute:NSLinkAttributeName value:first ? kOsmAndTermsOfUse : kOsmAndPrivacyPolicy  range:range];
+            [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:range];
+            first = NO;
+        }
+    }];
+    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
+                                     NSFontAttributeName: [UIFont systemFontOfSize:15.],
+                                     NSUnderlineStyleAttributeName: @(NSUnderlineStyleNone)
+    };
+    _bottomTextView.linkTextAttributes = linkAttributes;
+    _bottomTextView.attributedText = titleStr;
     
     [self startWizard];
 }

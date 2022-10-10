@@ -15,7 +15,6 @@
 #import "OAWorldRegion.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OALinks.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -180,14 +179,13 @@ typedef enum
                                                         documentAttributes:nil error:nil];
     [titleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0] range:NSMakeRange(0, titleStr.length)];
     [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, titleStr.length)];
-    __block BOOL first = YES;
     [titleStr enumerateAttributesInRange:NSMakeRange(0, titleStr.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
         if (attrs[@"NSLink"])
         {
+            NSString *link = attrs[@"NSLink"];
             [titleStr removeAttribute:attrs[@"NSLink"] range:range];
-            [titleStr addAttribute:NSLinkAttributeName value:first ? kOsmAndTermsOfUse : kOsmAndPrivacyPolicy  range:range];
+            [titleStr addAttribute:NSLinkAttributeName value:link  range:range];
             [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:range];
-            first = NO;
         }
     }];
     NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),

@@ -8,6 +8,7 @@
 
 #import "OAOsmLoginMainViewController.h"
 #import "OAOsmAccountSettingsViewController.h"
+#import "OASizes.h"
 #import "Localization.h"
 
 @interface OAOsmLoginMainViewController () <OAAccountSettingDelegate>
@@ -24,6 +25,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *topButton;
 @property (weak, nonatomic) IBOutlet UIButton *bottomButton;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navBarHeightConstraint;
+
 @end
 
 @implementation OAOsmLoginMainViewController
@@ -35,6 +38,25 @@
     self.descriptionLabel.text = OALocalizedString(@"open_street_map_login_mode_simple");
     [self.topButton setTitle:OALocalizedString(@"sign_in_with_open_street_map") forState:UIControlStateNormal];
     [self.bottomButton setTitle:OALocalizedString(@"use_login_and_password") forState:UIControlStateNormal];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self setupNavBarHeight];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self setupNavBarHeight];
+    } completion:nil];
+}
+
+- (void)setupNavBarHeight
+{
+    self.navBarHeightConstraint.constant = [self isModal] ? [OAUtilities isLandscape] ? defaultNavBarHeight : modalNavBarHeight : defaultNavBarHeight;
 }
 
 - (IBAction)onBottomButtonPressed:(id)sender

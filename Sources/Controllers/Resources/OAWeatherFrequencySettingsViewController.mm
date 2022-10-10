@@ -68,7 +68,8 @@
                                                  font:[UIFont systemFontOfSize:13.]
                                             textColor:UIColorFromRGB(color_text_footer)
                                           lineSpacing:0.0
-                                              isTitle:NO];
+                                              isTitle:NO
+                                                    y:24.];
     self.subtitleLabel.hidden = YES;
     [self setupView];
 }

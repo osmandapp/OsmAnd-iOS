@@ -75,7 +75,8 @@
                                                                           font:[UIFont systemFontOfSize:15.]
                                                                      textColor:UIColorFromRGB(color_text_footer)
                                                                    lineSpacing:0.0
-                                                                       isTitle:NO];
+                                                                       isTitle:NO
+                                                                             y:20.];
 }
 
 - (void)generateData

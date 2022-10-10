@@ -527,8 +527,8 @@
 "units_min_km" = "min/km";
 "units_m_s" = "m/s";
 "towards" = "Imod";
-"route_roundabout" = "Rundkørsel: tag afkørsel %d";
-"route_roundabout_short" = "Tag %d afkørsel og forsæt";
+"route_roundabout" = "Rundkørsel: tag afkørsel %d og fortsæt";
+"route_roundabout_short" = "Tag %d afkørsel og fortsæt";
 "route_kl" = "Hold til venstre og kør";
 "route_kr" = "Hold til højre og kør";
 "route_tr" = "Drej til højre og kør";
@@ -1666,7 +1666,7 @@
 "map_settings_line_density_slowdown_warning" = "Høj linjetæthed kan bremse kortgengivelse";
 "m_style_pulic_transport" = "Offentlig transport";
 "transfers" = "Overførsler:";
-"consider_limitations_param" = "Overvej midlertidige begrænsninger";
+"consider_limitations_param" = "Tag højde for midlertidige begrænsninger";
 "avoid_transport_type" = "Undgå transporttyper";
 "allow_3d_descr" = "Aktivér indstillingen for at kunne se kortet i 2.5D-perspektivet";
 "allow_3d" = "Tillad 2.5D-visning";
@@ -2713,3 +2713,4 @@
 "recorded_voice" = "Optaget";
 "weather_forecast_entire_world" = "Vejrudsigt for hele verden";
 "weather_entire_world" = "Hele verden";
+"map_download_privacy_descr" = "Ved at downloade kort accepterer du <a href='https://osmand.net/docs/legal/terms-of-use'>Brugsbetingelser</a> og <a href='https://osmand.net/docs/legal/privacy-policy'>Privatlivspolitik</a>.";

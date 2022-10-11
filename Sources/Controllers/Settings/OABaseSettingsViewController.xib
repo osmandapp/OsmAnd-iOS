@@ -34,7 +34,7 @@
                             <rect key="frame" x="10" y="55" width="28" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="HwV-1V-VLE"/>
-                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="KUt-q7-anD"/>
+                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="KUt-q7-anD"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                             <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
@@ -49,7 +49,7 @@
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bTX-cG-3X8" userLabel="Cancel Button">
                             <rect key="frame" x="16" y="55" width="54" height="30"/>
                             <constraints>
-                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="0Dx-37-Hgt"/>
+                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="0Dx-37-Hgt"/>
                                 <constraint firstAttribute="height" constant="30" id="OIg-5V-jKP"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
@@ -95,7 +95,7 @@
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xMH-jv-0wi" userLabel="Done Button">
                             <rect key="frame" x="356" y="55" width="42" height="30"/>
                             <constraints>
-                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="3Nf-s3-dkX"/>
+                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="3Nf-s3-dkX"/>
                                 <constraint firstAttribute="height" constant="30" id="gde-zb-4HR"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>

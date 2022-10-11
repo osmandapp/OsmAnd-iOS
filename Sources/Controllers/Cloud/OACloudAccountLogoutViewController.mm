@@ -40,6 +40,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
 
+    self.subtitleLabel.hidden = YES;
     [self setupView];
 }
 

@@ -31,9 +31,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setupNavBarHeight];
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 60.;
-    _tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
+    _tableView.contentInset = UIEdgeInsetsMake(self.navBarHeightConstraint.constant, 0, 0, 0);
     [self setTableHeaderView:self.getTableHeaderTitle];
     self.titleLabel.hidden = YES;
     self.separatorView.hidden = YES;
@@ -53,6 +54,11 @@
     [_backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
+- (void)setupNavBarHeight
+{
+    self.navBarHeightConstraint.constant = [self isModal] ? [OAUtilities isLandscape] ? defaultNavBarHeight : modalNavBarHeight : defaultNavBarHeight;
+}
+
 - (BOOL)isSeparatorHidden
 {
     return YES;
@@ -67,6 +73,8 @@
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self setupNavBarHeight];
+        _tableView.contentInset = UIEdgeInsetsMake(self.navBarHeightConstraint.constant, 0, 0, 0);
         [self setTableHeaderView:self.getTableHeaderTitle];
         [self onRotation];
         [_tableView reloadData];
@@ -86,12 +94,12 @@
 
 - (IBAction)backImageButtonPressed:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 - (IBAction) backButtonClicked:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 - (UIColor *)navBarBackgroundColor
@@ -108,7 +116,7 @@
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
 {
     CGFloat y = scrollView.contentOffset.y;
-    CGFloat navbarHeight = self.navBarView.frame.size.height - [OAUtilities getTopMargin];
+    CGFloat navbarHeight = self.navBarView.frame.size.height - ([self isModal] ? 0. : [OAUtilities getTopMargin]);
     CGFloat tableHeaderHeight = self.tableView.tableHeaderView.frame.size.height;
     if (y > -(navbarHeight))
     {

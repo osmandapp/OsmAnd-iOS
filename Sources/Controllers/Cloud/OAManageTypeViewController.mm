@@ -29,7 +29,7 @@
 
 - (instancetype)initWithSettingsType:(OAExportSettingsType *)settingsType size:(NSString *)size
 {
-    self = [super initWithNibName:@"OAManageTypeViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _settingsType = settingsType;
@@ -43,10 +43,11 @@
 {
     [super viewDidLoad];
 
-    self.titleLabel.hidden = YES;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self increaseTableHeaderHeight];
+
+    self.backButton.hidden = YES;
+    self.backImageButton.hidden = NO;
 
     [self setupView];
 }
@@ -63,25 +64,12 @@
 {
     [super applyLocalization];
     self.titleLabel.text = _settingsType.title;
-    [self.backButton setTitle:OALocalizedString(@"manage_storage") forState:UIControlStateNormal];
+    [self.backImageButton setTitle:OALocalizedString(@"manage_storage") forState:UIControlStateNormal];
 }
 
 - (NSString *)getTableHeaderTitle
 {
     return _settingsType.title;
-}
-
-- (void)onRotation
-{
-    [self increaseTableHeaderHeight];
-}
-
-- (void)increaseTableHeaderHeight
-{
-    UIView *tableHeaderView = self.tableView.tableHeaderView;
-    CGRect frame = tableHeaderView.frame;
-    frame.size.height += 21.;
-    tableHeaderView.frame = frame;
 }
 
 - (void)setupView
@@ -174,6 +162,14 @@
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+        return 14.;
+
+    return UITableViewAutomaticDimension;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

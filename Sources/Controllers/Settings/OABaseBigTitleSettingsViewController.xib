@@ -13,6 +13,7 @@
             <connections>
                 <outlet property="backButton" destination="hGa-Ro-vvH" id="goR-d2-E81"/>
                 <outlet property="backImageButton" destination="b00-Ny-oNg" id="yBJ-wg-h73"/>
+                <outlet property="navBarHeightConstraint" destination="7Nx-Bn-fL3" id="SEa-V7-gry"/>
                 <outlet property="navBarView" destination="yiK-79-oTe" id="XQ7-W5-mSD"/>
                 <outlet property="separatorView" destination="cu8-8z-YEC" id="r3z-Gz-FXJ"/>
                 <outlet property="tableView" destination="YtK-gC-49g" id="NFS-JG-efm"/>
@@ -33,10 +34,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mid-CQ-zi3" userLabel="Title Label">
-                            <rect key="frame" x="189.5" y="59" width="35" height="22"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="22" id="8mm-Ti-7rm"/>
-                            </constraints>
+                            <rect key="frame" x="189.5" y="48" width="35" height="44"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
@@ -44,7 +42,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hGa-Ro-vvH" userLabel="Cancel Button">
                             <rect key="frame" x="16" y="55" width="55" height="30"/>
                             <constraints>
-                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="Rrg-5t-Q8U"/>
+                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="Rrg-5t-Q8U"/>
                                 <constraint firstAttribute="height" constant="30" id="Tbl-ad-I8c"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
@@ -57,12 +55,14 @@
                             </connections>
                         </button>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b00-Ny-oNg" userLabel="Back Button">
-                            <rect key="frame" x="10" y="55" width="30" height="30"/>
+                            <rect key="frame" x="10" y="55" width="28" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="H6J-Wy-j1e"/>
-                                <constraint firstAttribute="width" constant="30" id="KlE-kS-D4d"/>
+                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="KlE-kS-D4d"/>
                             </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                             <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <inset key="titleEdgeInsets" minX="-10" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" image="ic_navbar_chevron.png">
                                 <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
@@ -100,11 +100,12 @@
                 <constraint firstItem="YtK-gC-49g" firstAttribute="trailing" secondItem="K3o-j2-Txl" secondAttribute="trailing" id="Fcc-20-cN8"/>
                 <constraint firstItem="hGa-Ro-vvH" firstAttribute="leading" secondItem="yH7-8w-lGh" secondAttribute="leading" constant="16" id="I3L-xO-jGb"/>
                 <constraint firstItem="b00-Ny-oNg" firstAttribute="leading" secondItem="yH7-8w-lGh" secondAttribute="leading" constant="10" id="IJJ-eW-OiH"/>
+                <constraint firstItem="mid-CQ-zi3" firstAttribute="top" secondItem="yH7-8w-lGh" secondAttribute="top" id="MB8-CD-ZyC"/>
                 <constraint firstItem="yiK-79-oTe" firstAttribute="leading" secondItem="K3o-j2-Txl" secondAttribute="leading" id="TyQ-XC-zhg"/>
                 <constraint firstItem="YtK-gC-49g" firstAttribute="leading" secondItem="K3o-j2-Txl" secondAttribute="leading" id="ZhN-eX-WSi"/>
                 <constraint firstItem="yiK-79-oTe" firstAttribute="trailing" secondItem="K3o-j2-Txl" secondAttribute="trailing" id="acr-1H-8Aa"/>
                 <constraint firstItem="yiK-79-oTe" firstAttribute="top" secondItem="K3o-j2-Txl" secondAttribute="top" id="tn3-9O-cFX"/>
-                <constraint firstItem="yiK-79-oTe" firstAttribute="bottom" secondItem="mid-CQ-zi3" secondAttribute="bottom" constant="11" id="yX5-E1-raH"/>
+                <constraint firstItem="yiK-79-oTe" firstAttribute="bottom" secondItem="mid-CQ-zi3" secondAttribute="bottom" id="yX5-E1-raH"/>
                 <constraint firstItem="YtK-gC-49g" firstAttribute="top" secondItem="yH7-8w-lGh" secondAttribute="top" id="ysu-99-jd6"/>
             </constraints>
             <point key="canvasLocation" x="214" y="7"/>

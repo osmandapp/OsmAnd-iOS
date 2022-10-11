@@ -1926,6 +1926,11 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle
 {
+    return [self setupTableHeaderViewWithText:text font:font textColor:textColor lineSpacing:lineSpacing isTitle:isTitle y:12.];
+}
+
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle y:(CGFloat)y
+{
     CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
     if (!isTitle)
@@ -1943,11 +1948,10 @@ static const double d180PI = 180.0 / M_PI_2;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [label sizeToFit];
     CGRect frame = label.frame;
-    frame.size.height = label.frame.size.height + (isTitle ? 0.0 : 30.0);
     frame.size.width = textWidth;
-    frame.origin.y = 8.0;
+    frame.origin.y = isTitle ? 5. : y;
     label.frame = frame;
-    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 8)];
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + label.frame.origin.y + (isTitle ? 7. : 12.))];
     [tableHeaderView addSubview:label];
     return tableHeaderView;
 }

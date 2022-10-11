@@ -193,7 +193,7 @@
     [dateCells addObject:@{
             @"key" : @"profile_cell",
             @"type" : [OARightIconTableViewCell getCellIdentifier],
-            @"attributed_title" : [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_profiles")
+            @"attributed_title" : [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_profile")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont systemFontOfSize:17. weight:UIFontWeightMedium],
                                                                          NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple)

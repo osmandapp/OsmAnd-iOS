@@ -2715,3 +2715,4 @@
 "upload_local_version" = "تحميل الإصدار المحلي";
 "weather_entire_world" = "كل العالم";
 "weather_forecast_entire_world" = "توقعات الطقس العالمية";
+"map_download_privacy_descr" = "من خلال تنزيل الخرائط، فإنك توافق على شروط الاستخدام <a href='https://osmand.net/docs/legal/terms-of-use'> </a> وسياسة الخصوصية <a href='https://osmand.net/docs/legal/privacy-policy'> </a>.";

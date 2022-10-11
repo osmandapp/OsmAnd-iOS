@@ -67,8 +67,8 @@
 #define kOsmAndPoll  @"https://osmand.net/ios-poll.html"
 #define kOsmAndFeatures  @"https://osmand.net/docs/user/plugins"
 #define kOsmAndFeaturesContourLinesPlugin  @"https://osmand.net/docs/user/plugins/contour-lines"
-#define kOsmAndTermsOfUse  @"https://osmand.net/help-online/terms-of-use/"
-#define kOsmAndPrivacyPolicy  @"https://osmand.net/help-online/privacy-policy"
+#define kOsmAndTermsOfUse  @"https://osmand.net/docs/legal/terms-of-use"
+#define kOsmAndPrivacyPolicy  @"https://osmand.net/docs/legal/privacy-policy"
 #define kOsmAndGiveaway  @"https://osmand.net/giveaway"
 
 #define kAppleRedeemPromoCode  @"https://support.apple.com/en-gb/HT201209"

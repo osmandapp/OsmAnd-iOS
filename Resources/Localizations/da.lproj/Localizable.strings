@@ -2711,3 +2711,5 @@
 "cloud_contains_newer_changes" = "OsmAnd Cloud-version indeholder nyere ændringer.";
 "cloud_all_changes_uploaded" = "Alle ændringer er uploadet";
 "recorded_voice" = "Optaget";
+"weather_forecast_entire_world" = "Vejrudsigt for hele verden";
+"weather_entire_world" = "Hele verden";

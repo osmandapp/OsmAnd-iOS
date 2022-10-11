@@ -2713,3 +2713,5 @@
 "cloud_no_conflicts_descr" = "البيانات الموجودة على الجهاز على أوسماند كلاود متطابقة.";
 "backup_conflicts_action_descr" = "يتم تخزين أحدث إصدار من الملف على الخادم. تحتاج إلى تحديد الإجراء";
 "upload_local_version" = "تحميل الإصدار المحلي";
+"weather_entire_world" = "كل العالم";
+"weather_forecast_entire_world" = "توقعات الطقس العالمية";

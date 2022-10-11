@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,6 +17,7 @@
                 <outlet property="bottomViewHeigh" destination="EeE-6d-k0f" id="8Xa-dF-YLC"/>
                 <outlet property="cancelButtonLeftMarginNoIcon" destination="WDL-fk-eK7" id="tZd-sT-1QL"/>
                 <outlet property="cancelButtonLeftMarginWithIcon" destination="1vg-Pu-W0u" id="VAS-be-C5b"/>
+                <outlet property="navBarHeightConstraint" destination="BeD-vI-G7t" id="xMg-eK-ELs"/>
                 <outlet property="navBarView" destination="z1H-Xh-Vqx" id="Aoj-R8-MfJ"/>
                 <outlet property="primaryBottomButton" destination="BaW-Xn-8jB" id="UMw-gs-His"/>
                 <outlet property="primaryButtonHeight" destination="7Vi-jr-tCz" id="vGk-kb-WYP"/>
@@ -38,15 +39,15 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelection="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="047-sX-bmi">
-                    <rect key="frame" x="0.0" y="44" width="414" height="710"/>
+                    <rect key="frame" x="0.0" y="48" width="414" height="706"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z1H-Xh-Vqx" userLabel="navBarView">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kXa-gs-sfl">
-                    <rect key="frame" x="30" y="44" width="55" height="44"/>
+                    <rect key="frame" x="30" y="48" width="55" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="b6d-sH-jMu"/>
                     </constraints>
@@ -59,7 +60,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VY7-at-aSe">
-                    <rect key="frame" x="10" y="50" width="30" height="30"/>
+                    <rect key="frame" x="10" y="54" width="30" height="30"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="30" id="HOu-up-JIv"/>
                         <constraint firstAttribute="height" constant="30" id="ZpB-Dr-yKO"/>
@@ -71,7 +72,7 @@
                     </connections>
                 </button>
                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j9D-Qp-mxe" userLabel="navbar title label">
-                    <rect key="frame" x="207" y="44" width="0.0" height="44"/>
+                    <rect key="frame" x="207" y="48" width="0.0" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="oV9-hp-idC"/>
                     </constraints>
@@ -80,7 +81,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Emr-yd-xz4">
-                    <rect key="frame" x="325" y="44" width="73" height="44"/>
+                    <rect key="frame" x="325" y="48" width="73" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="omu-HG-x8E"/>
                     </constraints>

@@ -18,6 +18,7 @@
                 <outlet property="buttonsContainerView" destination="rDg-Li-A9R" id="iH4-yD-4u9"/>
                 <outlet property="buttonsContainerWithOneButtonConstraint" destination="dwJ-4Q-w39" id="5Ep-9G-hJa"/>
                 <outlet property="buttonsContainerWithTwoButtonsConstraint" destination="5iL-QV-AK0" id="tso-J4-PQG"/>
+                <outlet property="navBarHeightConstraint" destination="zYP-bd-ryv" id="m9Y-A4-Hdv"/>
                 <outlet property="navBarView" destination="ae6-tN-Wel" id="6hB-QS-IVY"/>
                 <outlet property="tableView" destination="k1D-Qa-msX" id="qxh-iE-jfE"/>
                 <outlet property="titleLabel" destination="MnW-MZ-zdE" id="Cmx-X3-NvV"/>

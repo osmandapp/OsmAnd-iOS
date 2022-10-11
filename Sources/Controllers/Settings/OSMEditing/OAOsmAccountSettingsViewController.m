@@ -11,15 +11,17 @@
 #import "OAInputCellWithTitle.h"
 #import "OAFilledButtonCell.h"
 #import "OADividerCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAAppSettings.h"
 #import "OAOsmBugsRemoteUtil.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmBugResult.h"
 #import "OAOsmNotePoint.h"
+#import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
 
-@interface OAOsmAccountSettingsViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
+@interface OAOsmAccountSettingsViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIGestureRecognizerDelegate>
 
 @end
 
@@ -27,9 +29,13 @@
 {
     NSArray<NSArray *> *_data;
     NSIndexPath *_loginIndexPath;
+    NSIndexPath *_userNameIndexPath;
+    NSIndexPath *_passwordIndexPath;
+    NSIndexPath *_errorEmptySpaceIndexPath;
 
     OAAppSettings *_settings;
     BOOL _isLogged;
+    NSString *_errorMessage;
 
     NSString *_newUserName;
     NSString *_newPassword;
@@ -78,13 +84,8 @@
                                                   isTitle:NO];
     }
 
-    self.backButton.hidden = YES;
-    self.cancelButton.hidden = NO;
-    [self.cancelButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-    self.cancelButton.tintColor = UIColorFromRGB(color_primary_purple);
-    UIEdgeInsets titleInsets = self.cancelButton.titleEdgeInsets;
-    titleInsets.left = -10.;
-    self.cancelButton.titleEdgeInsets = titleInsets;
+    self.backButton.hidden = NO;
+    self.cancelButton.hidden = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -98,7 +99,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self showKeyboardForCellForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if (!_isLogged && _userNameIndexPath)
+        [self showKeyboardForCellForIndexPath:_userNameIndexPath];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -118,34 +120,67 @@
 - (void)applyLocalization
 {
     self.titleLabel.text = _isLogged ? OALocalizedString(@"shared_string_account") : OALocalizedString(@"shared_string_account_add");
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void)generateData
 {
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray new];
 
-    [data addObject:@[
-            @{ @"type" : [OADividerCell getCellIdentifier] },
-            @{
-                    @"key" : @"email_input_cell",
-                    @"type" : [OAInputCellWithTitle getCellIdentifier]
-            },
-            @{ @"type" : [OADividerCell getCellIdentifier] },
-            @{
-                    @"key" : @"password_input_cell",
-                    @"type" : [OAInputCellWithTitle getCellIdentifier]
-            },
-            @{ @"type" : [OADividerCell getCellIdentifier] },
-    ]];
+    NSMutableArray<NSDictionary *> *loginLogoutSection = [NSMutableArray new];
+    [data addObject:loginLogoutSection];
 
-    [data addObject:@[
-            @{
-                    @"key" : @"login_logout_cell",
-                    @"type" : [OAFilledButtonCell getCellIdentifier],
-            }
-    ]];
-    _loginIndexPath = [NSIndexPath indexPathForRow:data[data.count - 1].count - 1 inSection:data.count - 1];
+    [loginLogoutSection addObject:@{
+        @"type" : [OADividerCell getCellIdentifier],
+        @"left_inset" : @(0.)
+    }];
+    [loginLogoutSection addObject:@{
+        @"key" : @"email_input_cell",
+        @"type" : [OAInputCellWithTitle getCellIdentifier]
+    }];
+    _userNameIndexPath = [NSIndexPath indexPathForRow:loginLogoutSection.count - 1 inSection:data.count - 1];
+
+    if (!_isLogged)
+    {
+        [loginLogoutSection addObject:@{
+            @"type" : [OADividerCell getCellIdentifier],
+            @"left_inset" : @([OAUtilities getLeftMargin] + kPaddingOnSideOfContent)
+        }];
+        [loginLogoutSection addObject:@{
+            @"key" : @"password_input_cell",
+            @"type" : [OAInputCellWithTitle getCellIdentifier]
+        }];
+        _passwordIndexPath = [NSIndexPath indexPathForRow:loginLogoutSection.count - 1 inSection:data.count - 1];
+    }
+
+    [loginLogoutSection addObject:@{
+        @"type" : [OADividerCell getCellIdentifier],
+        @"left_inset" : @(0.)
+    }];
+
+    if (_errorMessage)
+    {
+        [loginLogoutSection addObject:@{
+            @"key" : @"error_cell",
+            @"type" : [OASimpleTableViewCell getCellIdentifier],
+            @"title" : _errorMessage,
+            @"title_color" : UIColorFromRGB(color_primary_red)
+        }];
+    }
+    else
+    {
+        [loginLogoutSection addObject:@{
+            @"key" : @"empty_cell",
+            @"type" : [OADividerCell getCellIdentifier]
+        }];
+    }
+    _errorEmptySpaceIndexPath = [NSIndexPath indexPathForRow:loginLogoutSection.count - 1 inSection:data.count - 1];
+
+    [loginLogoutSection addObject:@{
+            @"key" : @"login_logout_cell",
+            @"type" : [OAFilledButtonCell getCellIdentifier]
+    }];
+    _loginIndexPath = [NSIndexPath indexPathForRow:loginLogoutSection.count - 1 inSection:data.count - 1];
 
     _data = data;
 }
@@ -161,7 +196,7 @@
     NSString *type = item[@"type"];
     if ([type isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        return 1. / [UIScreen mainScreen].scale;
+        return [item[@"key"] isEqualToString:@"empty_cell"] ? 30. : (1. / [UIScreen mainScreen].scale);
     }
     else if (estimated)
     {
@@ -174,10 +209,37 @@
     return UITableViewAutomaticDimension;
 }
 
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (_userNameIndexPath)
+    {
+        OAInputCellWithTitle *cell = [self.tableView cellForRowAtIndexPath:_userNameIndexPath];
+        [cell.inputField resignFirstResponder];
+    }
+    if (_passwordIndexPath)
+    {
+        OAInputCellWithTitle *cell = [self.tableView cellForRowAtIndexPath:_passwordIndexPath];
+        [cell.inputField resignFirstResponder];
+    }
+}
+
 #pragma mark - Selectors
 
 - (void)loginLogoutButtonPressed
 {
+    if (_userNameIndexPath)
+    {
+        OAInputCellWithTitle *cell = [self.tableView cellForRowAtIndexPath:_userNameIndexPath];
+        [cell.inputField resignFirstResponder];
+    }
+    if (_passwordIndexPath)
+    {
+        OAInputCellWithTitle *cell = [self.tableView cellForRowAtIndexPath:_passwordIndexPath];
+        [cell.inputField resignFirstResponder];
+    }
+
     if (!_isLogged)
     {
         [_settings.osmUserName set:_newUserName];
@@ -190,7 +252,16 @@
         {
             [_settings.osmUserName resetToDefault];
             [_settings.osmUserPassword resetToDefault];
-            [OAUtilities showToast:warning.length > 0 ? warning : OALocalizedString(@"auth_error") details:nil duration:4 inView:self.view];
+            _errorMessage = OALocalizedString(@"auth_error");
+
+            [self generateData];
+            [self.tableView performBatchUpdates:^{
+                if (_errorEmptySpaceIndexPath && _loginIndexPath)
+                {
+                    [self.tableView reloadRowsAtIndexPaths:@[_errorEmptySpaceIndexPath, _loginIndexPath]
+                                          withRowAnimation:UITableViewRowAnimationAutomatic];
+                }
+            } completion:nil];
         }
         else
         {
@@ -228,14 +299,33 @@
 
 - (void)textViewDidChange:(UITextField *)textField
 {
-    NSIndexPath *indexPath =[NSIndexPath indexPathForRow:textField.tag & 0x3FF inSection:textField.tag >> 10];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:textField.tag & 0x3FF inSection:textField.tag >> 10];
     NSDictionary *item = [self getItem:indexPath];
+
+    BOOL needToReloadCells = NO;
+    if (_errorMessage)
+    {
+        _errorMessage = nil;
+        [self generateData];
+        needToReloadCells = YES;
+    }
+    else if (((_newUserName.length == 0 || _newPassword.length == 0) && textField.text.length > 0) || textField.text.length == 0)
+    {
+        needToReloadCells = YES;
+    }
+
     if ([item[@"key"] isEqualToString:@"email_input_cell"])
         _newUserName = textField.text;
     else if ([item[@"key"] isEqualToString:@"password_input_cell"])
         _newPassword = textField.text;
 
-    [self.tableView reloadRowsAtIndexPaths:@[_loginIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView performBatchUpdates:^{
+        if (needToReloadCells && _errorEmptySpaceIndexPath && _loginIndexPath)
+        {
+            [self.tableView reloadRowsAtIndexPaths:@[_errorEmptySpaceIndexPath, _loginIndexPath]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+    } completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -276,6 +366,7 @@
             cell.titleLabel.text = isEmail ? OALocalizedString(@"shared_string_email") : OALocalizedString(@"shared_string_password");
             cell.titleLabel.textColor = [UIColor blackColor];
 
+            cell.inputField.userInteractionEnabled = !_isLogged;
             cell.inputField.text = isEmail ? _settings.osmUserName.get : _settings.osmUserPassword.get;
             cell.inputField.placeholder = isEmail ? OALocalizedString(@"email_example_hint") : OALocalizedString(@"shared_string_required");
             cell.inputField.textContentType = isEmail ? UITextContentTypeUsername : UITextContentTypePassword;
@@ -301,17 +392,17 @@
         }
         if (cell)
         {
-            cell.button.backgroundColor = _isLogged || _newUserName.length == 0 || _newPassword.length == 0
+            cell.button.backgroundColor = _isLogged || _newUserName.length == 0 || _newPassword.length == 0 || _errorMessage != nil
                     ? UIColorFromRGB(color_route_button_inactive)
                     : UIColorFromRGB(color_primary_purple);
             [cell.button setTitleColor:_isLogged
                             ? UIColorFromRGB(color_primary_purple)
-                            : _newUserName.length == 0 || _newPassword.length == 0
+                            : _newUserName.length == 0 || _newPassword.length == 0 || _errorMessage != nil
                                     ? UIColorFromRGB(color_text_footer) : UIColor.whiteColor
                               forState:UIControlStateNormal];
             [cell.button setTitle:_isLogged > 0 ? OALocalizedString(@"shared_string_logout") : OALocalizedString(@"user_login")
                          forState:UIControlStateNormal];
-            cell.button.userInteractionEnabled = _isLogged ? YES : _newUserName.length > 0 && _newPassword.length > 0;
+            cell.button.userInteractionEnabled = _isLogged ? YES : _newUserName.length > 0 && _newPassword.length > 0 && _errorMessage == nil;
             [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.button addTarget:self action:@selector(loginLogoutButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         }
@@ -324,19 +415,37 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = UIColorFromRGB(color_tint_gray);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
-            cell.dividerHight = 1. / [UIScreen mainScreen].scale;
-
-            if (indexPath.row == 0 || indexPath.row == [self.tableView numberOfRowsInSection:indexPath.section] - 1)
-                cell.dividerInsets = UIEdgeInsetsZero;
-            else
-                cell.dividerInsets = UIEdgeInsetsMake(0., 20. + [OAUtilities getLeftMargin], 0., 0.);
+            BOOL isErrorEmptyCell = [item[@"key"] isEqualToString:@"empty_cell"];
+            cell.backgroundColor = isErrorEmptyCell ? UIColor.clearColor : UIColor.whiteColor;
+            cell.dividerHight = isErrorEmptyCell ? 30. : (1. / [UIScreen mainScreen].scale);
+            cell.dividerInsets = UIEdgeInsetsMake(0., isErrorEmptyCell ? CGFLOAT_MAX : [item[@"left_inset"] floatValue], 0., 0.);
         }
         outCell = cell;
+    }
+    else if ([type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.titleLabel.font = [UIFont systemFontOfSize:15.];
+            cell.backgroundColor = UIColor.clearColor;
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
+        }
+        return cell;
     }
 
     if ([outCell needsUpdateConstraints])
@@ -359,7 +468,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return UITableViewAutomaticDimension;
+    return section == _userNameIndexPath.section ? 14. : UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -378,9 +487,25 @@
 
 #pragma mark - UITextFieldDelegate
 
-- (BOOL) textFieldShouldReturn:(UITextField *)sender
+- (BOOL) textFieldShouldReturn:(UITextField *)textField
 {
-    [sender resignFirstResponder];
+    if (!_isLogged && _passwordIndexPath && _userNameIndexPath)
+    {
+        if (_newPassword.length > 0 && _newUserName.length > 0)
+        {
+            [self loginLogoutButtonPressed];
+            [textField resignFirstResponder];
+        }
+        else
+        {
+            [self showKeyboardForCellForIndexPath:_newPassword.length == 0 ? _passwordIndexPath : _userNameIndexPath];
+        }
+    }
+    else
+    {
+        [textField resignFirstResponder];
+    }
+
     return YES;
 }
 
@@ -388,6 +513,14 @@
 {
     [textField resignFirstResponder];
     return NO;
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+        shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
 }
 
 #pragma mark - Keyboard Notifications

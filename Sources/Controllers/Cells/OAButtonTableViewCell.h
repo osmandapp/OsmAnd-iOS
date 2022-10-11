@@ -1,14 +1,14 @@
 //
-//  OATableViewCellButton.h
+//  OAButtonTableViewCell.h
 //  OsmAnd
 //
 //  Created by Skalii on 22.09.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewCellSimple.h"
+#import "OASimpleTableViewCell.h"
 
-@interface OATableViewCellButton : OATableViewCellSimple
+@interface OAButtonTableViewCell : OASimpleTableViewCell
 
 @property (weak, nonatomic) IBOutlet UIButton *button;
 

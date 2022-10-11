@@ -1,20 +1,20 @@
 //
-//  OATableViewCellValue.m
+//  OAValueTableViewCell.m
 //  OsmAnd Maps
 //
 //  Created by Skalii on 22.09.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewCellValue.h"
+#import "OAValueTableViewCell.h"
 
-@interface OATableViewCellValue ()
+@interface OAValueTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIStackView *valueStackView;
 
 @end
 
-@implementation OATableViewCellValue
+@implementation OAValueTableViewCell
 
 - (void)valueVisibility:(BOOL)show
 {

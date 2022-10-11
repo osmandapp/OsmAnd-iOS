@@ -8,8 +8,8 @@
 
 #import "OAStatusBackupConflictDetailsViewController.h"
 #import "OAStatusBackupTableViewController.h"
-#import "OATableViewCellSimple.h"
-#import "OATableViewCellRightIcon.h"
+#import "OASimpleTableViewCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OATableViewDataModel.h"
 #import "OATableViewSectionData.h"
@@ -103,14 +103,14 @@
     }
 
     OATableViewRowData *itemInfoRow = [[OATableViewRowData alloc] initWithData:@{
-        kCellTypeKey: [OATableViewCellSimple getCellIdentifier],
+        kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
         kCellKeyKey: @"itemInfo",
         kCellTitleKey: name,
         kCellIconTint: @(color_icon_inactive)
     }];
 
     OATableViewRowData *uploadLocalRow = [[OATableViewRowData alloc] initWithData:@{
-        kCellTypeKey: [OATableViewCellRightIcon getCellIdentifier],
+        kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
         kCellKeyKey: @"uploadLocal",
         kCellTitleKey: OALocalizedString(@"upload_local_version"),
         kCellSecondaryIconName: @"ic_custom_globe_upload",
@@ -118,7 +118,7 @@
     }];
 
     OATableViewRowData *downloadCloudRow = [[OATableViewRowData alloc] initWithData:@{
-        kCellTypeKey: [OATableViewCellRightIcon getCellIdentifier],
+        kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
         kCellKeyKey: @"downloadCloud",
         kCellTitleKey: OALocalizedString(@"dowload_cloud_version"),
         kCellSecondaryIconName: @"ic_custom_device_download",
@@ -173,13 +173,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableViewRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item.cellType isEqualToString:[OATableViewCellSimple getCellIdentifier]])
+    if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSimple *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSimple getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSimple getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSimple *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., 0., 0., 0.);
         }
@@ -192,13 +192,13 @@
         }
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OATableViewCellRightIcon getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATableViewCellRightIcon *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellRightIcon getCellIdentifier]];
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellRightIcon getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellRightIcon *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             cell.rightIconView.tintColor = UIColorFromRGB(item.iconTint);
             cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];

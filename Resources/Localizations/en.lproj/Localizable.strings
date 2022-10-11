@@ -593,6 +593,7 @@
 "shared_string_contributions" = "Contributions";
 "shared_string_refresh" = "Refresh";
 "shared_string_changed" = "Changed";
+"shared_string_profile" = "Profile";
 
 "restart" = "Restart";
 

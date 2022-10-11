@@ -9,9 +9,9 @@
 #import "OAWeatherForecastDetailsViewController.h"
 #import "OAWeatherCacheSettingsViewController.h"
 #import "OAWeatherFrequencySettingsViewController.h"
-#import "OATableViewCellSimple.h"
-#import "OATableViewCellRightIcon.h"
-#import "OATableViewCellValue.h"
+#import "OASimpleTableViewCell.h"
+#import "OARightIconTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OATableViewCellSwitch.h"
 #import "MBProgressHUD.h"
 #import "OATableViewCustomHeaderView.h"
@@ -140,17 +140,13 @@
     
     UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(
         0.,
-        headerView.layer.frame.size.height + 7.,
+        headerView.layer.frame.size.height - 1.,
         DeviceScreenWidth,
         1.
     )];
     separator.backgroundColor = UIColorFromRGB(color_tint_gray);
     [headerView addSubview:separator];
 
-    CGRect frame = headerView.frame;
-    frame.size.height += 8.;
-    headerView.frame = frame;
-    
     self.tableView.tableHeaderView = headerView;
 }
 
@@ -166,7 +162,7 @@
 
     NSMutableDictionary *updatedData = [NSMutableDictionary dictionary];
     updatedData[@"key"] = @"updated_cell";
-    updatedData[@"type"] = [OATableViewCellValue getCellIdentifier];
+    updatedData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updatedData[@"title"] = OALocalizedString(@"shared_string_updated");
     updatedData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:regionId next:NO];
     updatedData[@"value_color"] = UIColor.blackColor;
@@ -175,7 +171,7 @@
 
     NSMutableDictionary *nextUpdateData = [NSMutableDictionary dictionary];
     nextUpdateData[@"key"] = @"next_update_cell";
-    nextUpdateData[@"type"] = [OATableViewCellValue getCellIdentifier];
+    nextUpdateData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     nextUpdateData[@"title"] = OALocalizedString(@"shared_string_next_update");
     nextUpdateData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:regionId next:YES];
     nextUpdateData[@"value_color"] = UIColor.blackColor;
@@ -184,7 +180,7 @@
 
     NSMutableDictionary *updatesSizeData = [NSMutableDictionary dictionary];
     updatesSizeData[@"key"] = @"updates_size_cell";
-    updatesSizeData[@"type"] = [OATableViewCellValue getCellIdentifier];
+    updatesSizeData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updatesSizeData[@"title"] = OALocalizedString(@"shared_string_updates_size");
     updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance]getOfflineForecastSizeInfo:_region.regionId local:YES]
                                                                countStyle:NSByteCountFormatterCountStyleFile];
@@ -195,7 +191,7 @@
 
     NSMutableDictionary *updateNowData = [NSMutableDictionary dictionary];
     updateNowData[@"key"] = @"update_now_cell";
-    updateNowData[@"type"] = [OATableViewCellRightIcon getCellIdentifier];
+    updateNowData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
     updateNowData[@"title"] = OALocalizedString(@"osmand_live_update_now");
     updateNowData[@"title_color"] = UIColorFromRGB(color_primary_purple);
     updateNowData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
@@ -211,7 +207,7 @@
 
     NSMutableDictionary *updatesFrequencyData = [NSMutableDictionary dictionary];
     updatesFrequencyData[@"key"] = @"updates_frequency_cell";
-    updatesFrequencyData[@"type"] = [OATableViewCellValue getCellIdentifier];
+    updatesFrequencyData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updatesFrequencyData[@"title"] = OALocalizedString(@"shared_string_updates_frequency");
     updatesFrequencyData[@"value"] = [OAWeatherHelper getFrequencyFormat:[OAWeatherHelper getPreferenceFrequency:regionId]];
     updatesFrequencyData[@"value_color"] = UIColorFromRGB(color_text_footer);
@@ -229,7 +225,7 @@
 
     NSMutableDictionary *removeForecastData = [NSMutableDictionary dictionary];
     removeForecastData[@"key"] = @"remove_forecast_cell";
-    removeForecastData[@"type"] = [OATableViewCellSimple getCellIdentifier];
+    removeForecastData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     removeForecastData[@"title"] = OALocalizedString(@"weather_remove_forecast");
     removeForecastData[@"title_color"] = UIColorFromRGB(color_primary_red);
     removeForecastData[@"title_alignment"] = @(NSTextAlignmentCenter);
@@ -339,13 +335,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OATableViewCellSimple getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSimple *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSimple getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSimple getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSimple *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }
@@ -358,13 +354,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellRightIcon getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATableViewCellRightIcon *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellRightIcon getCellIdentifier]];
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellRightIcon getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellRightIcon *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }
@@ -395,13 +391,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellValue getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATableViewCellValue *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellValue getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellValue getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellValue *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

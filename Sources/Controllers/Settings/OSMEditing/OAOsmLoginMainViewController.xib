@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,10 +11,13 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAOsmLoginMainViewController">
             <connections>
                 <outlet property="bottomButton" destination="Lr4-GE-V1B" id="6KL-tV-AXx"/>
+                <outlet property="bottomButtonsContainerView" destination="Ntb-xu-L5o" id="ZQj-cD-azw"/>
                 <outlet property="cancelLabel" destination="k1E-d8-DFj" id="2V7-rZ-Yov"/>
                 <outlet property="contentScrollView" destination="zdt-N4-q5O" id="8NO-fD-Obo"/>
                 <outlet property="descriptionLabel" destination="klh-qf-J0z" id="7iL-Zw-dP0"/>
                 <outlet property="logoImageView" destination="KSU-qt-7Fu" id="0nk-Gu-UBY"/>
+                <outlet property="navBarHeightConstraint" destination="4IV-h3-USp" id="GSd-hg-NMJ"/>
+                <outlet property="navigationBarView" destination="AsI-Ne-V1n" id="Il8-zQ-Irx"/>
                 <outlet property="titleLabel" destination="m8c-v4-93J" id="QW3-W0-gIl"/>
                 <outlet property="topButton" destination="fbh-in-U7j" id="QLg-je-3Ep"/>
                 <outlet property="view" destination="NVL-sV-vRh" id="5zm-Wj-pD7"/>
@@ -26,10 +29,10 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AsI-Ne-V1n" userLabel="Navigation Bar View">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k1E-d8-DFj">
-                            <rect key="frame" x="16" y="45" width="54" height="33"/>
+                            <rect key="frame" x="16" y="49" width="54" height="33"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                             <color key="tintColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -43,13 +46,12 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="88" id="YlU-V2-zZp"/>
                         <constraint firstItem="k1E-d8-DFj" firstAttribute="leading" secondItem="AsI-Ne-V1n" secondAttribute="leadingMargin" constant="8" id="dmE-Bn-XV3"/>
                         <constraint firstAttribute="bottom" secondItem="k1E-d8-DFj" secondAttribute="bottom" constant="10" id="zqf-s5-mT0"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ntb-xu-L5o" userLabel="Bottom Buttons Container View">
-                    <rect key="frame" x="0.0" y="753" width="414" height="143"/>
+                    <rect key="frame" x="0.0" y="743" width="414" height="153"/>
                     <subviews>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fbh-in-U7j" userLabel="Top Button">
                             <rect key="frame" x="16" y="9" width="382" height="42"/>
@@ -97,16 +99,15 @@
                         <constraint firstItem="Lr4-GE-V1B" firstAttribute="leading" secondItem="Ntb-xu-L5o" secondAttribute="leadingMargin" constant="8" id="9VB-es-lPz"/>
                         <constraint firstItem="Lr4-GE-V1B" firstAttribute="top" secondItem="fbh-in-U7j" secondAttribute="bottom" constant="16" id="Cpy-Af-ADi"/>
                         <constraint firstAttribute="trailingMargin" secondItem="fbh-in-U7j" secondAttribute="trailing" constant="8" id="SYD-KN-V9T"/>
-                        <constraint firstAttribute="height" constant="143" id="fLU-2W-b9z"/>
                         <constraint firstAttribute="trailingMargin" secondItem="Lr4-GE-V1B" secondAttribute="trailing" constant="8" id="jUJ-Op-oam"/>
                         <constraint firstItem="fbh-in-U7j" firstAttribute="top" secondItem="Ntb-xu-L5o" secondAttribute="top" constant="9" id="xl3-GR-Fdi"/>
                     </constraints>
                 </view>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zdt-N4-q5O" userLabel="Content Scroll View">
-                    <rect key="frame" x="0.0" y="88" width="414" height="665"/>
+                    <rect key="frame" x="0.0" y="92" width="414" height="651"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="42Q-Qq-JDX" userLabel="Content Container View">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="665"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="651"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_openstreetmap_logo_big.png" translatesAutoresizingMaskIntoConstraints="NO" id="KSU-qt-7Fu" userLabel="Logo Image View">
                                     <rect key="frame" x="162" y="6" width="90" height="90"/>
@@ -161,11 +162,11 @@ You can log in using the safe OAuth method or use your login and password.</stri
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="Ntb-xu-L5o" firstAttribute="trailing" secondItem="NVL-sV-vRh" secondAttribute="trailing" id="0DE-3K-CCT"/>
+                <constraint firstItem="AsI-Ne-V1n" firstAttribute="bottom" secondItem="bdg-7Y-Gdc" secondAttribute="top" constant="44" id="4IV-h3-USp"/>
                 <constraint firstItem="zdt-N4-q5O" firstAttribute="leading" secondItem="bdg-7Y-Gdc" secondAttribute="leading" id="7QN-tm-bQ1"/>
                 <constraint firstItem="zdt-N4-q5O" firstAttribute="top" secondItem="AsI-Ne-V1n" secondAttribute="bottom" id="EBM-5G-MRE"/>
                 <constraint firstAttribute="bottom" secondItem="Ntb-xu-L5o" secondAttribute="bottom" id="I3e-O9-SMm"/>
-                <constraint firstItem="Ntb-xu-L5o" firstAttribute="top" secondItem="bdg-7Y-Gdc" secondAttribute="bottom" constant="-109" id="WDg-us-9qk"/>
-                <constraint firstItem="zdt-N4-q5O" firstAttribute="top" secondItem="bdg-7Y-Gdc" secondAttribute="top" constant="44" id="X2a-HS-LWi"/>
+                <constraint firstItem="bdg-7Y-Gdc" firstAttribute="bottom" secondItem="Lr4-GE-V1B" secondAttribute="bottom" constant="10" id="RNz-xZ-9i9"/>
                 <constraint firstItem="Ntb-xu-L5o" firstAttribute="leading" secondItem="NVL-sV-vRh" secondAttribute="leading" id="XAz-qz-7OI"/>
                 <constraint firstAttribute="top" secondItem="AsI-Ne-V1n" secondAttribute="top" id="hzO-Av-CNj"/>
                 <constraint firstItem="AsI-Ne-V1n" firstAttribute="trailing" secondItem="NVL-sV-vRh" secondAttribute="trailing" id="mZM-c8-Kk5"/>

@@ -8,8 +8,8 @@
 
 #import "OAManageTypeViewController.h"
 #import "OABaseBackupTypesViewController.h"
-#import "OATableViewCellSimple.h"
-#import "OATableViewCellValue.h"
+#import "OASimpleTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAExportSettingsType.h"
 #import "OASettingsCategoryItems.h"
 #import "OAColors.h"
@@ -77,13 +77,13 @@
     _data = @[
             @[@{
                     @"key" : @"size_cell",
-                    @"type" : [OATableViewCellValue getCellIdentifier],
+                    @"type" : [OAValueTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"res_size"),
                     @"value" : _size
             }],
             @[@{
                     @"key" : @"delete_cell",
-                    @"type" : [OATableViewCellSimple getCellIdentifier],
+                    @"type" : [OASimpleTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"shared_string_delete_data")
             }]
     ];
@@ -115,13 +115,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OATableViewCellSimple getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSimple *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSimple getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSimple getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSimple *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
             cell.titleLabel.textColor = UIColorFromRGB(color_support_red);
             cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
             [cell leftIconVisibility:NO];
@@ -133,13 +133,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellValue getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATableViewCellValue *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellValue getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellValue getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellValue *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.valueLabel.textColor = UIColor.blackColor;
             [cell leftIconVisibility:NO];

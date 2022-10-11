@@ -13,11 +13,11 @@
 #import "OARootViewController.h"
 #import "OAMapSettingsMapTypeScreen.h"
 #import "OAAppModeCell.h"
-#import "OATableViewCellSimple.h"
-#import "OATableViewCellRightIcon.h"
+#import "OASimpleTableViewCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OATableViewCellSwitch.h"
-#import "OATableViewCellValue.h"
-#import "OATableViewCellButton.h"
+#import "OAValueTableViewCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAChoosePlanHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OAGPXDatabase.h"
@@ -138,7 +138,7 @@
             @"name": OALocalizedString(@"poi_overlay"),
             @"value": [self getPOIDescription],
             @"image": @"ic_custom_info",
-            @"type": [OATableViewCellValue getCellIdentifier],
+            @"type": [OAValueTableViewCell getCellIdentifier],
             @"key": @"poi_layer"
     }];
 
@@ -155,7 +155,7 @@
                 @"name": OALocalizedString(@"product_title_wiki"),
                 @"image": hasWiki ? @"ic_custom_wikipedia" : @"ic_custom_wikipedia_download_colored",
                 hasWiki ? @"has_options" : @"desc": hasWiki ? @YES : OALocalizedString(@"explore_wikipedia_offline"),
-                @"type": hasWiki ? [OATableViewCellSwitch getCellIdentifier] : [OATableViewCellButton getCellIdentifier],
+                @"type": hasWiki ? [OATableViewCellSwitch getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
                 @"key": @"wikipedia_layer"
         }];
     }
@@ -176,7 +176,7 @@
         [showSectionData addObject:@{
                 @"name": OALocalizedString(@"tracks"),
                 @"image": @"ic_custom_trip",
-                @"type": [OATableViewCellSimple getCellIdentifier],
+                @"type": [OASimpleTableViewCell getCellIdentifier],
                 @"key": @"tracks"
         }];
     }
@@ -191,7 +191,7 @@
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.isOpen = [[NSUserDefaults standardUserDefaults] boolForKey:kOSMGroupOpen];
         group.groupName = OALocalizedString(@"shared_string_open_street_map");
-        group.type = [OATableViewCellRightIcon getCellIdentifier];
+        group.type = [OARightIconTableViewCell getCellIdentifier];
         group.groupType = EOATableCollapsableGroupMapSettingsOSM;
 
         NSMutableArray<NSDictionary *> *osmCells = [NSMutableArray array];
@@ -248,7 +248,7 @@
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.isOpen = isOpen;
         group.groupName = OALocalizedString(group.isOpen ? @"shared_string_collapse" : @"shared_string_show_all");
-        group.type = [OATableViewCellRightIcon getCellIdentifier];
+        group.type = [OARightIconTableViewCell getCellIdentifier];
         group.groupType = EOATableCollapsableGroupMapSettingsRoutes;
 
         NSMutableArray<NSDictionary *> *routeCells = [NSMutableArray array];
@@ -259,7 +259,7 @@
                     @"name": routeParameter.title,
                     @"image": [self getImageForParameterOrCategory:routeParameter.name],
                     @"key": [NSString stringWithFormat:@"routes_%@", routeParameter.name],
-                    @"type": [hasParameters containsObject:routeParameter.name] ? [OATableViewCellSimple getCellIdentifier] : [OATableViewCellSwitch getCellIdentifier]
+                    @"type": [hasParameters containsObject:routeParameter.name] ? [OASimpleTableViewCell getCellIdentifier] : [OATableViewCellSwitch getCellIdentifier]
             };
 
             if ([_routesWithoutGroup containsObject:routeParameter.name])
@@ -292,7 +292,7 @@
                     @"name": OALocalizedString(@"map_settings_type"),
                     @"value": mapStyleName,
                     @"image": @"ic_custom_map_style",
-                    @"type": [OATableViewCellValue getCellIdentifier],
+                    @"type": [OAValueTableViewCell getCellIdentifier],
                     @"key": @"map_type"
             }]
     }];
@@ -314,21 +314,21 @@
                 @"name": OALocalizedString(@"map_mode"),
                 @"value": modeStr,
                 @"image": @"ic_custom_sun",
-                @"type": [OATableViewCellValue getCellIdentifier],
+                @"type": [OAValueTableViewCell getCellIdentifier],
                 @"key": @"map_mode"
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_settings_map_magnifier"),
                 @"value": [self getPercentString:[_settings.mapDensity get]],
                 @"image": @"ic_custom_magnifier",
-                @"type": [OATableViewCellValue getCellIdentifier],
+                @"type": [OAValueTableViewCell getCellIdentifier],
                 @"key": @"map_magnifier"
         }];
         [mapStyleSectionData addObject:@{
                 @"name": OALocalizedString(@"map_settings_text_size"),
                 @"value": [self getPercentString:[_settings.textSize get:_settings.applicationMode.get]],
                 @"image": @"ic_custom_text_size",
-                @"type": [OATableViewCellValue getCellIdentifier],
+                @"type": [OAValueTableViewCell getCellIdentifier],
                 @"key": @"text_size"
         }];
 
@@ -340,7 +340,7 @@
                     @"name": [_styleSettings getCategoryTitle:cName],
                     @"image": [self getImageForParameterOrCategory:cName],
                     @"key": [NSString stringWithFormat:@"category_%@", cName],
-                    @"type": isTransport ? [OATableViewCellSwitch getCellIdentifier] : [OATableViewCellSimple getCellIdentifier],
+                    @"type": isTransport ? [OATableViewCellSwitch getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier],
                     isTransport ? @"has_options" : @"value": isTransport ? @YES : @""
             }];
         }
@@ -355,7 +355,7 @@
                         @"name": parameter.title,
                         @"image": [self getImageForParameterOrCategory:parameter.name],
                         @"value": val ? val : @"",
-                        @"type": [OATableViewCellValue getCellIdentifier],
+                        @"type": [OAValueTableViewCell getCellIdentifier],
                         @"key": [NSString stringWithFormat:@"filtered_%@", parameter.name]
                 }];
             }
@@ -385,7 +385,7 @@
                 @"name": OALocalizedString(@"shared_string_terrain"),
                 @"image": hasSRTM ? @"ic_custom_hillshade" : @"ic_custom_contour_lines_colored",
                 hasSRTM ? @"has_options" : @"desc": hasSRTM ? @YES : OALocalizedString(@"contour_lines_hillshades_slope"),
-                @"type": hasSRTM ? [OATableViewCellSwitch getCellIdentifier] : [OATableViewCellButton getCellIdentifier],
+                @"type": hasSRTM ? [OATableViewCellSwitch getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
                 @"key": @"terrain_layer"
         }];
     }
@@ -410,7 +410,7 @@
                 @"name": OALocalizedString(@"product_title_weather"),
                 @"image": @"ic_custom_umbrella",
                 hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"product_title_weather"),
-                @"type": hasWeather ? [OATableViewCellSwitch getCellIdentifier] : [OATableViewCellButton getCellIdentifier],
+                @"type": hasWeather ? [OATableViewCellSwitch getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
                 @"key": @"weather_layer"
         }];
     }
@@ -426,7 +426,7 @@
                     @"name": OALocalizedString(@"sett_lang"),
                     @"value": [self getMapLangValueStr],
                     @"image": @"ic_custom_map_languge",
-                    @"type": [OATableViewCellValue getCellIdentifier],
+                    @"type": [OAValueTableViewCell getCellIdentifier],
                     @"key": @"map_language"
             }]
     }];
@@ -801,13 +801,13 @@
         }
         return _appModeCell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellSimple getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSimple *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSimple getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSimple getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSimple *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -822,13 +822,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellValue getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATableViewCellValue *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellValue getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellValue getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellValue *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -889,13 +889,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellButton getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
-        OATableViewCellButton *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellButton getCellIdentifier]];
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellButton getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellButton *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.button.titleLabel.numberOfLines = 1;
             cell.button.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -920,11 +920,11 @@
     }
     else if (group)
     {
-        OATableViewCellRightIcon *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellRightIcon getCellIdentifier]];
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellRightIcon getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellRightIcon *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }
@@ -957,10 +957,10 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     OAMapSettingsViewController *mapSettingsViewController;
-    BOOL isPromoButton = [item[@"type"] isEqualToString:[OATableViewCellButton getCellIdentifier]];
+    BOOL isPromoButton = [item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]];
     BOOL isGroup = [self getCollapsableGroup:indexPath.section] != nil;
 
-    if (isGroup && [item[@"type"] isEqualToString:[OATableViewCellRightIcon getCellIdentifier]])
+    if (isGroup && [item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
         [self openCloseGroup:indexPath];
     else if ([item[@"key"] hasPrefix:@"collapsed_"])
         [self openCloseGroup:indexPath];

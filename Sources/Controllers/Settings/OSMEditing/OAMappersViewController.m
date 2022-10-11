@@ -7,8 +7,8 @@
 //
 
 #import "OAMappersViewController.h"
-#import "OATableViewCellRightIcon.h"
-#import "OATableViewCellValue.h"
+#import "OARightIconTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAAppSettings.h"
 #import "OANetworkUtilities.h"
 #import "OASizes.h"
@@ -103,7 +103,7 @@
 
     [data addObject:@[
             @{
-                    @"type" : [OATableViewCellRightIcon getCellIdentifier],
+                    @"type" : [OARightIconTableViewCell getCellIdentifier],
                     @"attributed_title" : [[NSAttributedString alloc] initWithString:availableTitle
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont systemFontOfSize:17.],
@@ -117,7 +117,7 @@
             },
             @{
                     @"key" : @"refresh_cell",
-                    @"type": [OATableViewCellRightIcon getCellIdentifier],
+                    @"type": [OARightIconTableViewCell getCellIdentifier],
                     @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_refresh")
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont systemFontOfSize:17. weight:UIFontWeightMedium],
@@ -160,7 +160,7 @@
                                    range:[dateAttributed.string rangeOfString:[formatterYear stringFromDate:date]]];
 
             [dateCells addObject:@{
-                    @"type": [OATableViewCellValue getCellIdentifier],
+                    @"type": [OAValueTableViewCell getCellIdentifier],
                     @"attributed_title": dateAttributed,
                     @"value": value,
                     @"original_value" : dateStr
@@ -175,7 +175,7 @@
     }
 
     [dateCells insertObject:@{
-            @"type": [OATableViewCellValue getCellIdentifier],
+            @"type": [OAValueTableViewCell getCellIdentifier],
             @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"last_two_month_total")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont systemFontOfSize:17.],
@@ -192,8 +192,8 @@
                                         stringByAppendingString:@"/history"];
     [dateCells addObject:@{
             @"key" : @"profile_cell",
-            @"type" : [OATableViewCellRightIcon getCellIdentifier],
-            @"attributed_title" : [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_profiles")
+            @"type" : [OARightIconTableViewCell getCellIdentifier],
+            @"attributed_title" : [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_profile")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont systemFontOfSize:17. weight:UIFontWeightMedium],
                                                                          NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple)
@@ -319,13 +319,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OATableViewCellRightIcon getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATableViewCellRightIcon *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellRightIcon getCellIdentifier]];
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellRightIcon getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellRightIcon *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
         }
         if (cell)
@@ -351,13 +351,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellValue getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATableViewCellValue *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellValue getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellValue getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellValue *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.valueLabel.textColor = UIColor.blackColor;
             [cell leftIconVisibility:NO];

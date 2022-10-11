@@ -1,14 +1,14 @@
 //
-//  OATableViewCellButton.m
+//  OAButtonTableViewCell.m
 //  OsmAnd Maps
 //
 //  Created by Skalii on 22.09.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewCellButton.h"
+#import "OAButtonTableViewCell.h"
 
-@implementation OATableViewCellButton
+@implementation OAButtonTableViewCell
 
 - (void)buttonVisibility:(BOOL)show
 {

@@ -12,7 +12,7 @@
 #import "OAMainSettingsViewController.h"
 #import "OABaseBackupTypesViewController.h"
 #import "OABackupTypesViewController.h"
-#import "OATableViewCellSimple.h"
+#import "OASimpleTableViewCell.h"
 #import "OAAppSettings.h"
 #import "OABackupHelper.h"
 #import "OAPrepareBackupResult.h"
@@ -110,7 +110,7 @@
 
     NSMutableDictionary *backupData = [NSMutableDictionary dictionary];
     backupData[@"key"] = @"backup_data_cell";
-    backupData[@"type"] = [OATableViewCellSimple getCellIdentifier];
+    backupData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     backupData[@"title"] = OALocalizedString(@"backup_data");
     backupData[@"left_icon"] = @"ic_custom_cloud_upload_colored_day";
     NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:
@@ -127,7 +127,7 @@
 
     NSMutableDictionary *accountData = [NSMutableDictionary dictionary];
     accountData[@"key"] = @"account_cell";
-    accountData[@"type"] = [OATableViewCellSimple getCellIdentifier];
+    accountData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     accountData[@"title"] = [[OAAppSettings sharedManager].backupUserEmail get];
     [accountCells addObject:accountData];
 
@@ -138,14 +138,14 @@
 
     NSMutableDictionary *deleteAllData = [NSMutableDictionary dictionary];
     deleteAllData[@"key"] = @"delete_all_cell";
-    deleteAllData[@"type"] = [OATableViewCellSimple getCellIdentifier];
+    deleteAllData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     deleteAllData[@"title"] = OALocalizedString(@"backup_delete_all_data");
     deleteAllData[@"text_color"] = UIColorFromRGB(color_support_red);
     [dangerZoneCells addObject:deleteAllData];
 
     NSMutableDictionary *removeVersionsData = [NSMutableDictionary dictionary];
     removeVersionsData[@"key"] = @"remove_versions_cell";
-    removeVersionsData[@"type"] = [OATableViewCellSimple getCellIdentifier];
+    removeVersionsData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     removeVersionsData[@"title"] = OALocalizedString(@"backup_delete_old_data");
     removeVersionsData[@"text_color"] = UIColorFromRGB(color_support_red);
     [dangerZoneCells addObject:removeVersionsData];
@@ -306,13 +306,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OATableViewCellSimple getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSimple *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSimple getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSimple getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSimple *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)

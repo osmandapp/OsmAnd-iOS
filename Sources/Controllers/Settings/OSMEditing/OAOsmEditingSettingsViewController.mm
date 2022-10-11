@@ -12,8 +12,8 @@
 #import "OAOsmLoginMainViewController.h"
 #import "OABenefitsOsmContributorsViewController.h"
 #import "OAMappersViewController.h"
-#import "OATableViewCellSimple.h"
-#import "OATableViewCellRightIcon.h"
+#import "OASimpleTableViewCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OATableViewCellSwitch.h"
 #import "OASizes.h"
 #import "Localization.h"
@@ -88,7 +88,7 @@
 
     NSMutableDictionary *credentialData = [NSMutableDictionary dictionary];
     credentialData[@"key"] = @"edit_credentials";
-    credentialData[@"type"] = [OATableViewCellSimple getCellIdentifier];
+    credentialData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     credentialData[@"title"] = _isLogged ? [_settings.osmUserName get] : OALocalizedString(@"login_open_street_map_org");
     credentialData[@"title_color"] = _isLogged ? UIColor.blackColor : UIColorFromRGB(color_primary_purple);
     credentialData[@"title_font"] = [UIFont systemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium];
@@ -112,7 +112,7 @@
 
     NSMutableDictionary *mappersData = [NSMutableDictionary dictionary];
     mappersData[@"key"] = @"updates_for_mappers";
-    mappersData[@"type"] = [OATableViewCellSimple getCellIdentifier];
+    mappersData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     mappersData[@"title"] = OALocalizedString(@"map_updates_for_mappers");
     mappersData[@"description"] = [self getMappersDescription];
     mappersData[@"accessory_type"] = @(UITableViewCellAccessoryDisclosureIndicator);
@@ -140,14 +140,14 @@
                              range:NSMakeRange(0, actionsDescrAttr.length)];
 
     NSMutableDictionary *descriptionData = [NSMutableDictionary dictionary];
-    descriptionData[@"type"] = [OATableViewCellSimple getCellIdentifier];
+    descriptionData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     descriptionData[@"description_attributed"] = actionsDescrAttr;
     descriptionData[@"accessory_type"] = @(UITableViewCellAccessoryNone);
     [actionsCells addObject:descriptionData];
 
     NSMutableDictionary *editsData = [NSMutableDictionary dictionary];
     editsData[@"key"] = @"open_edits";
-    editsData[@"type"] = [OATableViewCellRightIcon getCellIdentifier];
+    editsData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
     editsData[@"title"] = OALocalizedString(@"osm_edits_title");
     editsData[@"title_color"] = UIColorFromRGB(color_primary_purple);
     editsData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
@@ -215,13 +215,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OATableViewCellSimple getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSimple *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSimple getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSimple getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSimple *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
         }
         if (cell)
         {
@@ -255,13 +255,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellRightIcon getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATableViewCellRightIcon *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellRightIcon getCellIdentifier]];
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellRightIcon getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellRightIcon *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

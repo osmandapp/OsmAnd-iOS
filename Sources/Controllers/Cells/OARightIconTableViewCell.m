@@ -1,14 +1,14 @@
 //
-//  OATableViewCellRightIcon.m
+//  OARightIconTableViewCell.m
 //  OsmAnd Maps
 //
 //  Created by Skalii on 22.09.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewCellRightIcon.h"
+#import "OARightIconTableViewCell.h"
 
-@implementation OATableViewCellRightIcon
+@implementation OARightIconTableViewCell
 
 - (void)rightIconVisibility:(BOOL)show
 {

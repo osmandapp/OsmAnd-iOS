@@ -1,14 +1,14 @@
 //
-//  OATableViewCellRightIcon.h
+//  OARightIconTableViewCell.h
 //  OsmAnd
 //
 //  Created by Skalii on 22.09.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewCellSimple.h"
+#import "OASimpleTableViewCell.h"
 
-@interface OATableViewCellRightIcon : OATableViewCellSimple
+@interface OARightIconTableViewCell : OASimpleTableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *rightIconView;
 

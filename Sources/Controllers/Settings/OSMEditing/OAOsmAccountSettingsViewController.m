@@ -27,7 +27,6 @@
 
 @implementation OAOsmAccountSettingsViewController
 {
-    UIPanGestureRecognizer *_onScrollTableViewGestureRecognizer;
     NSArray<NSArray *> *_data;
     NSIndexPath *_loginIndexPath;
     NSIndexPath *_userNameIndexPath;
@@ -65,10 +64,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    _onScrollTableViewGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                                  action:@selector(onScrollTableViewDetected:)];
-    _onScrollTableViewGestureRecognizer.delegate = self;
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -214,16 +209,23 @@
     return UITableViewAutomaticDimension;
 }
 
-#pragma mark - Selectors
+#pragma mark - UIScrollViewDelegate
 
-- (void)onScrollTableViewDetected:(id)sender
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     if (_userNameIndexPath)
     {
         OAInputCellWithTitle *cell = [self.tableView cellForRowAtIndexPath:_userNameIndexPath];
         [cell.inputField resignFirstResponder];
     }
+    if (_passwordIndexPath)
+    {
+        OAInputCellWithTitle *cell = [self.tableView cellForRowAtIndexPath:_passwordIndexPath];
+        [cell.inputField resignFirstResponder];
+    }
 }
+
+#pragma mark - Selectors
 
 - (void)loginLogoutButtonPressed
 {
@@ -525,37 +527,29 @@
 
 - (void) keyboardWillShow:(NSNotification *)notification;
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.view addGestureRecognizer:_onScrollTableViewGestureRecognizer];
-
-        NSDictionary *userInfo = [notification userInfo];
-        NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-        CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
-        
-        CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-        NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-        UIEdgeInsets insets = [[self tableView] contentInset];
-        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-            [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
-            [[self view] layoutIfNeeded];
-        } completion:nil];
-    });
+    NSDictionary *userInfo = [notification userInfo];
+    NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
+    
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    UIEdgeInsets insets = [[self tableView] contentInset];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
+        [[self view] layoutIfNeeded];
+    } completion:nil];
 }
 
 - (void) keyboardWillHide:(NSNotification *)notification;
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.view removeGestureRecognizer:_onScrollTableViewGestureRecognizer];
-
-        NSDictionary *userInfo = [notification userInfo];
-        CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-        NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-        UIEdgeInsets insets = [[self tableView] contentInset];
-        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-            [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
-            [[self view] layoutIfNeeded];
-        } completion:nil];
-    });
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    UIEdgeInsets insets = [[self tableView] contentInset];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
+        [[self view] layoutIfNeeded];
+    } completion:nil];
 }
 
 

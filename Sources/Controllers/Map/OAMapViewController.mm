@@ -102,6 +102,7 @@
 #include <OsmAndCore/TileSqliteDatabasesCollection.h>
 #include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
+#include <OsmAndCore/Map/MapRendererTypes.h>
 
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
@@ -156,7 +157,7 @@
     CGFloat _contentScaleFactor;
     
     // Current provider of raster map
-    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProvider;
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _obfMapRasterLayerProvider;
     std::shared_ptr<OsmAnd::IWebClient> _webClient;
 
     // Offline-specific providers & resources
@@ -164,7 +165,7 @@
     std::shared_ptr<OsmAnd::MapPresentationEnvironment> _mapPresentationEnvironment;
     std::shared_ptr<OsmAnd::MapPrimitiviser> _mapPrimitiviser;
     std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
-    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProvider;
+    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _obfMapSymbolsProvider;
 
     std::shared_ptr<OsmAnd::ObfDataInterface> _obfsDataInterface;
 
@@ -1743,7 +1744,7 @@
         // Release previously-used resources (if any)
         [_mapLayers resetLayers];
         
-        _rasterMapProvider.reset();
+        _obfMapRasterLayerProvider.reset();
 
         _obfMapObjectsProvider.reset();
         _mapPrimitivesProvider.reset();
@@ -1751,9 +1752,9 @@
         _mapPrimitiviser.reset();
         [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:nil];
 
-        if (_mapObjectsSymbolsProvider)
-            [_mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProvider];
-        _mapObjectsSymbolsProvider.reset();
+        if (_obfMapSymbolsProvider)
+            [_mapView removeTiledSymbolsProvider:_obfMapSymbolsProvider];
+        _obfMapSymbolsProvider.reset();
 
         if (!_gpxDocFileTemp)
             _gpxDocsTemp.clear();
@@ -1883,13 +1884,15 @@
                     _mapPresentationEnvironment->setSettings(newSettings);
             }
         
-            _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
-            [_mapView setProvider:_rasterMapProvider forLayer:0];
+            _obfMapRasterLayerProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
+            [_mapView setProvider:_obfMapRasterLayerProvider forLayer:kObfRasterLayer];
 
-            _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
+            _obfMapSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
                                                                                    rasterTileSize));
-            [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
-
+            
+            [_mapView addTiledSymbolsProvider:kObfSymbolSection provider:_obfMapSymbolsProvider];
+            [self updateLayerProviderAlpha];
+            
             _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
         }
         else if (resourceType == OsmAndResourceType::OnlineTileSources || mapCreatorFilePath)
@@ -1907,8 +1910,8 @@
                     return;
                 }
                 onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
-                _rasterMapProvider = onlineMapTileProvider;
-                [_mapView setProvider:_rasterMapProvider forLayer:0];
+                _obfMapRasterLayerProvider = onlineMapTileProvider;
+                [_mapView setProvider:_obfMapRasterLayerProvider forLayer:kObfRasterLayer];
             }
             else
             {
@@ -1922,8 +1925,8 @@
                     return;
                 }
 
-                _rasterMapProvider = sqliteTileSourceMapProvider;
-                [_mapView setProvider:_rasterMapProvider forLayer:0];
+                _obfMapRasterLayerProvider = sqliteTileSourceMapProvider;
+                [_mapView setProvider:_obfMapRasterLayerProvider forLayer:kObfRasterLayer];
             }
             
             lastMapSource = [OAAppData defaultMapSource];
@@ -2004,6 +2007,23 @@
         [self hideProgressHUD];
         [_mapSourceUpdatedObservable notifyEvent];
     }
+}
+
+- (void) updateLayerProviderAlpha
+{
+    BOOL isOverlayLayerDisplayed = _app.data.overlayMapSource;
+    float alpha = isOverlayLayerDisplayed ? _app.data.overlayAlpha : 0.0f;
+    
+    OsmAnd::MapLayerConfiguration mapLayerConfiguration;
+    mapLayerConfiguration.setOpacityFactor(1.0f - _app.data.overlayAlpha);
+    [_mapView setMapLayerConfiguration:kObfRasterLayer configuration:mapLayerConfiguration forcedUpdate:NO];
+
+    BOOL keepLabels = [[OAAppSettings sharedManager].keepMapLabelsVisible get];
+    
+    alpha = keepLabels ? 1.0f : 1.0f - alpha;
+    OsmAnd::SymbolSubsectionConfiguration symbolSubsectionConfiguration;
+    symbolSubsectionConfiguration.setOpacityFactor(alpha);
+    [_mapView setSymbolSubsectionConfiguration:kObfSymbolSection configuration:symbolSubsectionConfiguration];
 }
 
 - (void) updatePoiLayer
@@ -3235,7 +3255,7 @@
                                   mapPresentationEnvironment:_mapPresentationEnvironment
                                              mapPrimitiviser:_mapPrimitiviser
                                        mapPrimitivesProvider:_mapPrimitivesProvider
-                                   mapObjectsSymbolsProvider:_mapObjectsSymbolsProvider
+                                   mapObjectsSymbolsProvider:_obfMapSymbolsProvider
                                            obfsDataInterface:_obfsDataInterface];
 }
 

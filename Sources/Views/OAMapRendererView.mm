@@ -224,6 +224,11 @@
     _renderer->addSymbolsProvider(provider);
 }
 
+- (void)addTiledSymbolsProvider:(int)subsectionIndex provider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider
+{
+    _renderer->addSymbolsProvider(subsectionIndex, provider);
+}
+
 - (void)addKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider
 {
     _renderer->addSymbolsProvider(provider);
@@ -1057,6 +1062,11 @@
 - (void)setSymbolsOpacity:(float)opacityFactor
 {
     _renderer->setSymbolsOpacity(opacityFactor);
+}
+
+- (void)setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration
+{
+    _renderer->setSymbolSubsectionConfiguration(subsectionIndex, configuration);
 }
 
 @end

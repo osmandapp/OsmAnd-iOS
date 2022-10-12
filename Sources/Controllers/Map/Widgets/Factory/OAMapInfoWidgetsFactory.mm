@@ -162,7 +162,7 @@
         cachedDate = date;
 
         OsmAnd::WeatherTileResourcesManager::ValueRequest _request;
-        _request.dataTime = QDateTime::fromNSDate(date).toUTC();
+        _request.dateTime = date.timeIntervalSince1970 * 1000;
         _request.point31 = target31;
         _request.zoom = zoom;
         _request.band = (OsmAnd::BandIndex)band;

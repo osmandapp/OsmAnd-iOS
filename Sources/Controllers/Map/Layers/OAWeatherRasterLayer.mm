@@ -107,7 +107,7 @@
 
         //[self showProgressHUD];
 
-        const auto dateTime = QDateTime::fromNSDate(_date).toUTC();
+        int64_t dateTime = _date.timeIntervalSince1970 * 1000;
         OsmAnd::WeatherLayer layer;
         switch (_weatherLayer) {
             case WEATHER_LAYER_LOW:

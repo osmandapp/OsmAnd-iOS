@@ -254,13 +254,11 @@
         NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
         calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
         NSDate *date = [calendar startOfDayForDate:[NSDate date]];
-
+        int64_t dateTime = date.timeIntervalSince1970 * 1000;
         for (NSInteger i = 0; i < kForecastDatesCount; i++)
         {
-            QDateTime dateTime = QDateTime::fromNSDate(date).toUTC();
-
             OsmAnd::WeatherTileResourcesManager::DownloadGeoTileRequest request;
-            request.dataTime = dateTime;
+            request.dateTime = dateTime;
             request.topLeft = latLonTopLeft;
             request.bottomRight = latLonBottomRight;
             request.forceDownload = true;
@@ -411,7 +409,7 @@
     NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
     calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
     NSDate *date = [calendar startOfDayForDate:[NSDate date]];
-    QDateTime dateTime = QDateTime::fromNSDate(date).toUTC();
+    int64_t dateTime = date.timeIntervalSince1970 * 1000;
     _weatherResourcesManager->clearDbCache(dateTime);
 
     NSArray<NSString *> *downloadedRegionIds = [self getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateFinished)]];

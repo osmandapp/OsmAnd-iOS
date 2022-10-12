@@ -563,6 +563,8 @@ colorizationScheme:(int)colorizationScheme
                 for (int i = 0; i < segments.size(); i++)
                 {
                     const auto& seg = segments[i];
+                    if (seg->points.count() < 2)
+                        continue;
                     if (gpx.joinSegments)
                     {
                         if (i == 0)

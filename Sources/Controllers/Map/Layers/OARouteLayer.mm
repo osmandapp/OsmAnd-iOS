@@ -988,7 +988,8 @@
 
 - (void) onMapFrameAnimatorsUpdated
 {
-    [self refreshRouteWithSync:NO];
+    if (_routingHelper && ![_routingHelper isPublicTransportMode])
+        [self refreshRouteWithSync:NO];
 }
 
 @end

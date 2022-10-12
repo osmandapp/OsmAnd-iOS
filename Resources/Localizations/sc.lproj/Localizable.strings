@@ -2740,3 +2740,4 @@
 "backup_conflicts_action_descr" = "In su serbidore b'at un'àtera versione de custu documentu. Depes seletzionare un'atzione";
 "weather_forecast_entire_world" = "Previsiones mèteu pro totu su mundu";
 "weather_entire_world" = "Totu su mundu";
+"map_download_privacy_descr" = "Iscarrighende mapas atzetas sas <a href='https://osmand.net/docs/legal/terms-of-use'> Cunditziones de Impreu</a> e sa <a href='https://osmand.net/docs/legal/privacy-policy'>Polìtica de Riservadesa</a>.";

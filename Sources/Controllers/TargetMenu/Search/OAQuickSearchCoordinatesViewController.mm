@@ -451,6 +451,15 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 - (void) parseLocation
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        if (_isOlcCitySearchRunning)
+        {
+            [[OAQuickSearchHelper instance] cancelSearchCities];
+            _isOlcCitySearchRunning = NO;
+            [self updateDistanceAndDirection:YES];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.view removeSpinner];
+            });
+        }
         CLLocation *loc = nil;
         CLLocation *additionalLoc = nil;
         try
@@ -743,14 +752,16 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         }
         else
         {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.view addSpinner];
+            });
             _searchLocation = mapLocation;
             _region = cityName;
             _isOlcCitySearchRunning = YES;
-            [OAQuickSearchHelper searchCities:cityName
+            [[OAQuickSearchHelper instance] searchCities:cityName
                                searchLocation:_searchLocation
                                  allowedTypes:@[@"city", @"town", @"village"]
                                     cityLimit:kSearchCityLimit
-                                         view:self.view
                                    onComplete:^(NSMutableArray *amenities)
                                    {
                                        _isOlcCitySearchRunning = NO;
@@ -763,6 +774,9 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                                                [self updateDistanceAndDirection:YES];
                                            }
                                        }
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            [self.view removeSpinner];
+                                        });
                                    }
             ];
         }

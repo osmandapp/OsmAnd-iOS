@@ -42,10 +42,10 @@
 - (void) setResultCollection:(OASearchResultCollection *)resultCollection;
 - (void) refreshCustomPoiFilters;
 
-+ (NSArray<OASearchResult *> *)searchCities:(NSString *)text
-                             searchLocation:(CLLocation *)searchLocation
-                               allowedTypes:(NSArray<NSString *> *)allowedTypes
-                                  cityLimit:(NSInteger)cityLimit
-                                       view:(UIView *)view
-                                 onComplete:(void (^)(NSMutableArray *amenities))onComplete;
+- (void)cancelSearchCities;
+- (void)searchCities:(NSString *)text
+      searchLocation:(CLLocation *)searchLocation
+        allowedTypes:(NSArray<NSString *> *)allowedTypes
+           cityLimit:(NSInteger)cityLimit
+          onComplete:(void (^)(NSMutableArray *amenities))onComplete;
 @end

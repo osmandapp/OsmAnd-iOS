@@ -596,6 +596,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         e.value = @"true";
         [exts addObject:e];
     }
+    [pt setAmenity:[self getAmenity]];
     pt.extensions = exts;
     pt.name = self.getName;
     pt.desc = self.getDescription;

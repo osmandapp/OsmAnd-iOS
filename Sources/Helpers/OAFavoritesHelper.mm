@@ -141,6 +141,7 @@ static BOOL _favoritesLoaded = NO;
         [point setIcon:[specialType getIconName]];
         [point setColor:[specialType getIconColor]];
         [point setTimestamp:pickupDate];
+        [point setCreationTime:[NSDate date]];
         [point setCalendarEvent:addToCalendar];
         [self addFavorite:point];
     }

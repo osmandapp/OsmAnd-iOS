@@ -374,6 +374,30 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
 }
 
+- (NSString *) getAmenityOriginName
+{
+    if (!self.favorite->getAmenityOriginName().isNull())
+        return self.favorite->getAmenityOriginName().toNSString();
+    return nil;
+}
+
+- (void) setAmenityOriginName:(NSString *)amenityOriginName
+{
+    self.favorite->setAmenityOriginName(QString::fromNSString(amenityOriginName));
+}
+
+- (NSString *) getComment
+{
+    if (!self.favorite->getAmenityOriginName().isNull())
+        return self.favorite->getComment().toNSString();
+    return nil;
+}
+
+- (void) setComment:(NSString *)comment
+{
+    self.favorite->setComment(QString::fromNSString(comment));
+}
+
 - (OAPOI *) getAmenity
 {
     const QHash<QString, QString> extensionsToRead = self.favorite->getExtensions();
@@ -572,16 +596,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         e.value = @"true";
         [exts addObject:e];
     }
-    [pt setAmenity:[self getAmenity]];
     pt.extensions = exts;
     pt.name = self.getName;
     pt.desc = self.getDescription;
     if (self.getCategory.length > 0)
         pt.type = self.getCategory;
-    // TODO: sync with Android after editing!
-//    if (getOriginObjectName().length() > 0) {
-//        pt.comment = getOriginObjectName();
-//    }
+    if (self.getAmenityOriginName.length > 0)
+        [pt setAmenityOriginName:self.getAmenityOriginName];
     return pt;
 }
 
@@ -598,10 +619,10 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
                                                     altitude:pt.elevation
                                                    timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
     [fp setDescription:pt.desc];
-
+    [fp setComment:pt.comment];
+    [fp setAmenityOriginName:pt.getAmenityOriginName];
+    
     // TODO: sync with Android
-//    if (pt.comment)
-//        [fp setOriginObjectName:pt.comment];
 
 //    OAGpxExtension *visitedDateExt = [pt getExtensionByKey:VISITED_TIME_EXTENSION];
 //    if (visitedDateExt)

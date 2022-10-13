@@ -92,6 +92,9 @@
 - (bool) getCalendarEvent;
 - (void) setCalendarEvent:(BOOL)calendarEvent;
 
+- (NSString *) getAmenityOriginName;
+- (void) setAmenityOriginName:(NSString *)amenityOriginName;
+
 + (NSString *) toStringDate:(NSDate *)date;
 
 - (OAWptPt *) toWpt;

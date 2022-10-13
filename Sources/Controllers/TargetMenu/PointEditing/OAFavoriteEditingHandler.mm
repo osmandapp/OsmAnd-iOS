@@ -97,6 +97,7 @@
         
         _favorite = [[OAFavoriteItem alloc] initWithFavorite:favorite];
         [_favorite setAmenity:poi];
+        [_favorite setAmenityOriginName:poi.toStringEn];
     }
     return self;
 }

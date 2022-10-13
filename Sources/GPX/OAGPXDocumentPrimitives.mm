@@ -329,6 +329,17 @@
     }
 }
 
+- (NSString *) getAmenityOriginName
+{
+    NSString *value = [self getExtensionByKey:AMENITY_ORIGIN_EXTENSION].value;
+    return value;
+}
+
+- (void) setAmenityOriginName:(NSString *)originName
+{
+    [self setExtension:AMENITY_ORIGIN_EXTENSION value:originName];
+}
+
 - (NSString *)getBackgroundIcon
 {
     NSString *value = [self getExtensionByKey:BACKGROUND_TYPE_EXTENSION].value;

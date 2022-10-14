@@ -222,7 +222,10 @@
 
 - (NSString *)toStringEn
 {
-    return [NSString stringWithFormat:@"Amenity:%@: %@:%@", self.localizedNames[@"en"], self.type.category.name, self.type.name];
+    NSString *nameEn = self.localizedNames[@"en"] ? self.localizedNames[@"en"] : @"";
+    NSString *type = self.type.category.name ? self.type.category.name : @"";
+    NSString *subType = self.type.name ? self.type.name : @"";
+    return [NSString stringWithFormat:@"Amenity:%@: %@:%@", nameEn, type, subType];
 }
 
 - (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix

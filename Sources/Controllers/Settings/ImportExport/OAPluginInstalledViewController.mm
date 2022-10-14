@@ -289,7 +289,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         if (product)
             [_iapHelper disableProduct:_pluginId];
         else
-            [OAPlugin enablePlugin:_plugin enable:NO showDialog:NO];
+            [OAPlugin enablePlugin:_plugin enable:NO];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -302,7 +302,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         if (product)
             [_iapHelper enableProduct:_pluginId];
         else
-            [OAPlugin enablePlugin:_plugin enable:YES showDialog:NO];
+            [OAPlugin enablePlugin:_plugin enable:YES];
     }
     
     [self dismissViewControllerAnimated:YES completion:nil];

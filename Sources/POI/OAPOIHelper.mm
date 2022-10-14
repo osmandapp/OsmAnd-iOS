@@ -781,6 +781,45 @@
         [_delegate searchDone:_breakSearch];
 }
 
++ (OAPOI *) findPOIByOriginName:(NSString *)originName lat:(double)lat lon:(double)lon
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+    
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    bool cancel = false;
+    ctrl.reset(new OsmAnd::FunctorQueryController([&cancel]
+                                                  (const OsmAnd::FunctorQueryController* const controller)
+                                                  {
+                                                      // should break?
+                                                      return cancel;
+                                                  }));
+    
+    const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
+    
+
+    OsmAnd::LatLon latLon(lat, lon);
+    const auto location = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(15, location);
+    
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+    OAPOI *res = nil;
+    search->performSearch(*searchCriteria,
+                          [&originName, &res, &cancel]
+                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+                                OAPOI *poi = [OAPOIHelper parsePOI:resultEntry];
+                                if (poi && [poi.toStringEn isEqualToString:originName])
+                                {
+                                    res = poi;
+                                    cancel = true;
+                                }
+                          },
+                          ctrl);
+    
+    return res;
+}
+
 + (NSArray<OAPOI *> *) findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius
 {
     OsmAndAppInstance _app = [OsmAndApp instance];

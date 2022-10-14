@@ -12,7 +12,10 @@
 
 #define TYPE @"type"
 #define SUBTYPE @"subtype"
+#define POI_NAME @"name"
 #define OPENING_HOURS @"opening_hours"
+#define COLLAPSABLE_PREFIX @"collapsable_"
+#define SEPARATOR @";"
 
 @implementation OAPOIRoutePoint
 
@@ -217,18 +220,29 @@
     return res;
 }
 
+- (NSString *)toStringEn
+{
+    return [NSString stringWithFormat:@"Amenity:%@: %@:%@", self.localizedNames[@"en"], self.type.category.name, self.type.name];
+}
+
 - (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix
 {
     NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary dictionary];
-    if (self.subType)
+    NSMutableDictionary<NSString *, NSArray<OAPOIType *> *> *collectedPoiAdditionalCategories = [NSMutableDictionary dictionary];
+    if (self.name)
     {
-        NSString *savingKey = [NSString stringWithFormat:@"%@%@", privatePrefix, SUBTYPE];
-        result[savingKey] = self.subType;
+        NSString *savingKey = [NSString stringWithFormat:@"%@%@", privatePrefix, POI_NAME];
+        result[savingKey] = self.name;
     }
     if (self.type)
     {
-        NSString *savingKey = [NSString stringWithFormat:@"%@%@", privatePrefix, TYPE];
+        NSString *savingKey = [NSString stringWithFormat:@"%@%@", privatePrefix, SUBTYPE];
         result[savingKey] = self.type.name;
+    }
+    if (self.type.category)
+    {
+        NSString *savingKey = [NSString stringWithFormat:@"%@%@", privatePrefix, TYPE];
+        result[savingKey] = self.type.category.name;
     }
     if (self.openingHours)
     {
@@ -237,16 +251,67 @@
     }
     
     NSDictionary<NSString *, NSString *> *additionalInfo = [self getAdditionalInfo];
-    if (additionalInfo && additionalInfo.count > 0)
+    if (additionalInfo.count > 0)
     {
-        for (NSString *key in additionalInfo.allKeys)
-        {
-            NSString *value = additionalInfo[key];
+        OAPOIHelper *poiHelper = OAPOIHelper.sharedInstance;
+        [additionalInfo enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
+            OAPOIBaseType *pt = [poiHelper getAnyPoiAdditionalTypeByKey:key];
+            if (pt == nil && value.length > 0 && value.length < 50)
+            {
+                pt = [poiHelper getAnyPoiAdditionalTypeByKey:[NSString stringWithFormat:@"%@_%@", key, value]];
+            }
+            OAPOIType *pType = nil;
+            if (pt)
+            {
+                pType = (OAPOIType *) pt;
+                if (pType.filterOnly)
+                    return;
+            }
+            if (pType != nil && !pType.isText)
+            {
+                NSString *categoryName = pType.poiAdditionalCategory;
+                if (categoryName.length > 0)
+                {
+                    NSArray<OAPOIType *> *poiAdditionalCategoryTypes = collectedPoiAdditionalCategories[categoryName];
+                    if (poiAdditionalCategoryTypes == nil)
+                        collectedPoiAdditionalCategories[categoryName] = @[pType];
+                    else
+                        collectedPoiAdditionalCategories[categoryName] = [poiAdditionalCategoryTypes arrayByAddingObject:pType];
+                    return;
+                }
+            }
+            
+            //save all other values to separate lines
+            if ([key hasSuffix:OPENING_HOURS])
+                return;
+            
+//            if (!HIDING_EXTENSIONS_AMENITY_TAGS.contains(key)) {
+//                key = OSM_PREFIX + key;
+//            }
             NSString *savingKey = [NSString stringWithFormat:@"%@%@", osmPrefix, key];
             result[savingKey] = value;
-        }
+        }];
+        
+        [collectedPoiAdditionalCategories enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSArray<OAPOIType *> * _Nonnull categoryTypes, BOOL * _Nonnull stop)
+         {
+            NSString *categoryName = [NSString stringWithFormat:@"%@%@", COLLAPSABLE_PREFIX, key];
+            if (categoryTypes.count > 0)
+            {
+                NSMutableString *res = [NSMutableString string];
+                for (OAPOIType *poiType in categoryTypes)
+                {
+                    if (res.length > 0)
+                    {
+                        [res appendString:SEPARATOR];
+                    }
+                    [res appendString:poiType.name];
+                }
+                result[categoryName] = res;
+            }
+        }];
+        
     }
-    return [NSDictionary dictionaryWithDictionary:result];
+    return result;
 }
 
 + (OAPOI *) fromTagValue:(NSDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix

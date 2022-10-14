@@ -23,6 +23,7 @@
 #import "OAColors.h"
 #import "OACollapsableCoordinatesView.h"
 #import "OATextMultiViewCell.h"
+#import "OAPOIHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -68,7 +69,7 @@
         
         QString elevation = QString();
         QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
-        QString creationTime = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
+        QString pickupTime = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
         
         QString title = QString::fromNSString(formattedLocation);
         
@@ -101,7 +102,7 @@
         auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
                                                                         elevation,
                                                                         time,
-                                                                        creationTime,
+                                                                        pickupTime,
                                                                         title,
                                                                         description,
                                                                         address,
@@ -125,13 +126,9 @@
 
 - (void) acquireOriginObject
 {
-    _originObject = [_favorite getAmenity];
+    _originObject = [OAPOIHelper findPOIByOriginName:_favorite.getAmenityOriginName lat:_favorite.getLatitude lon:_favorite.getLongitude];
     if (!_originObject)
-    {
-        //TODO: find poi by latlon
-        //String originObjectName = fav.getOriginObjectName();
-        //originObject = findAmenityObject(originObjectName, fav.getLatitude(), fav.getLongitude());
-    }
+        [_favorite getAmenity];
 }
 
 - (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows

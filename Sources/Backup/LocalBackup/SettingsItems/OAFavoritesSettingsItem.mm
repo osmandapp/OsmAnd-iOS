@@ -132,12 +132,12 @@
                         if (plugin)
                         {
                             NSDate *timestamp = [item getTimestamp];
-                            NSDate *creationTime = [item getCreationTime];
-                            BOOL isTimeRestricted = timestamp != nil && [timestamp timeIntervalSince1970] > 0;
+                            NSDate *pickupTime = [item getPickupTime];
+                            BOOL isTimeRestricted = pickupTime != nil && [pickupTime timeIntervalSince1970] > 0;
                             [plugin setParkingType:isTimeRestricted];
-                            [plugin setParkingTime:isTimeRestricted ? timestamp.timeIntervalSince1970 * 1000 : 0];
-                            if (creationTime)
-                                [plugin setParkingStartTime:creationTime.timeIntervalSince1970 * 1000];
+                            [plugin setParkingTime:isTimeRestricted ? pickupTime.timeIntervalSince1970 * 1000 : 0];
+                            if (timestamp)
+                                [plugin setParkingStartTime:timestamp.timeIntervalSince1970 * 1000];
                             [plugin setParkingPosition:item.getLatitude longitude:item.getLongitude];
                             [plugin addOrRemoveParkingEvent:item.getCalendarEvent];
                             if (item.getCalendarEvent)

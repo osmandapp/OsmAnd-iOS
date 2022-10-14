@@ -130,7 +130,7 @@ static BOOL _favoritesLoaded = NO;
     {
         [point setIcon:[specialType getIconName]];
         [point setAddress:address];
-        [point setTimestamp:pickupDate];
+        [point setPickupTime:pickupDate];
         [point setCalendarEvent:addToCalendar];
         [OAFavoritesHelper editFavorite:point lat:lat lon:lon description:[point getDescription]];
     }
@@ -140,8 +140,8 @@ static BOOL _favoritesLoaded = NO;
         [point setAddress:address];
         [point setIcon:[specialType getIconName]];
         [point setColor:[specialType getIconColor]];
-        [point setTimestamp:pickupDate];
-        [point setCreationTime:[NSDate date]];
+        [point setTimestamp:[NSDate date]];
+        [point setPickupTime:pickupDate];
         [point setCalendarEvent:addToCalendar];
         [self addFavorite:point];
     }

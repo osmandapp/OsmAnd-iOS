@@ -269,7 +269,7 @@
         {
             QString elevation = favorite->getElevation();
             QString time = favorite->getTime();
-            QString creationTime = favorite->getCreationTime();
+            QString pickupTime = favorite->getPickupTime();
             QString title = favorite->getTitle();
             QString description = favorite->getDescription();
             QString address = favorite->getAddress();
@@ -284,7 +284,7 @@
             const auto newItem = self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
                                                             elevation,
                                                             time,
-                                                            creationTime,
+                                                            pickupTime,
                                                             title,
                                                             description,
                                                             address,

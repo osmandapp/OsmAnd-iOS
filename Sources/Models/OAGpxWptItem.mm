@@ -44,6 +44,16 @@
     [_point setAmenity:amenity];
 }
 
+- (NSString *) getAmenityOriginName
+{
+    return [_point getAmenityOriginName];
+}
+
+- (void) setAmenityOriginName:(NSString *)originName
+{
+    [_point setAmenityOriginName:originName];
+}
+
 - (void) applyColor
 {
     if (!self.point)

@@ -38,9 +38,10 @@
 #define kGoToMyLocationZoom 15.0f
 #define kMapModeFollowDefaultZoom 18.0f
 #define kMapModeFollowDefaultElevationAngle kElevationMinAngle
-#define kQuickAnimationTime 0.1f
-#define kFastAnimationTime 0.25f
-#define kOneSecondAnimatonTime 0.5f
+#define kQuickAnimationTime 0.25f
+#define kFastAnimationTime 0.5f
+#define kOneSecondAnimatonTime 1.0f
+#define kHalfSecondAnimatonTime 0.5f
 #define kScreensToFlyWithAnimation 4.0
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)

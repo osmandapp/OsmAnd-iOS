@@ -860,17 +860,19 @@
         if (routeUpdated)
             _currentAnimatedRoute = 0;
 
+        BOOL initState = _currentAnimatedRoute == 0 && !_routingHelper.isFollowingMode;
+
         CLLocation *lastProj = nil;
         CLLocation *lastFixedLocation = [_routingHelper getLastFixedLocation];
         CLLocationCoordinate2D coord = self.mapViewController.mapLayers.myPositionLayer.getActiveMarkerLocation;
-        if (CLLocationCoordinate2DIsValid(coord))
+        if (!initState && CLLocationCoordinate2DIsValid(coord))
         {
             CLLocation *currentLocation = [[CLLocation alloc] initWithCoordinate:coord altitude:lastFixedLocation.altitude horizontalAccuracy:lastFixedLocation.horizontalAccuracy verticalAccuracy:lastFixedLocation.verticalAccuracy course:lastFixedLocation.course speed:lastFixedLocation.speed timestamp:lastFixedLocation.timestamp];
 
             double posTolerance = [OARoutingHelper getPosTolerance:currentLocation.horizontalAccuracy];
-            currentRoute = [_routingHelper calculateCurrentRoute:currentLocation posTolerance:posTolerance routeNodes:locations currentRoute:_currentAnimatedRoute updateAndNotify:NO];
-            lastProj = _currentAnimatedRoute > 0
-                ? [OAMapUtils getProjection:currentLocation fromLocation:locations[_currentAnimatedRoute - 1] toLocation:locations[_currentAnimatedRoute]]
+            currentRoute = MIN(currentRoute, [_routingHelper calculateCurrentRoute:currentLocation posTolerance:posTolerance routeNodes:locations currentRoute:_currentAnimatedRoute updateAndNotify:NO]);
+            lastProj = currentRoute > 0
+                ? [OAMapUtils getProjection:currentLocation fromLocation:locations[currentRoute - 1] toLocation:locations[currentRoute]]
                 : nil;
         }
 

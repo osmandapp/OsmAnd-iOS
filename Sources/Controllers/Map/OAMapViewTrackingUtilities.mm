@@ -189,7 +189,7 @@
                                                             OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                             kLocationServicesAnimationKey);
                         _mapView.mapAnimator->animateElevationAngleTo(_lastElevationAngle,
-                                                                   kOneSecondAnimatonTime,
+                                                                   kHalfSecondAnimatonTime,
                                                                    OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                                    kLocationServicesAnimationKey);
                         _mapView.mapAnimator->animateZoomTo(_lastZoom,
@@ -210,7 +210,7 @@
                             
                             if (_mapView.elevationAngle != kMapModePositionTrackingDefaultElevationAngle)
                                 _mapView.mapAnimator->animateElevationAngleTo(kMapModePositionTrackingDefaultElevationAngle,
-                                                                           kOneSecondAnimatonTime,
+                                                                           kHalfSecondAnimatonTime,
                                                                            OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                                            kLocationServicesAnimationKey);
                             
@@ -333,7 +333,7 @@
         if (_mapViewController && (!sameLocation || !sameHeading))
         {
             // Wait for Map Mode changing animation if any, to prevent animation lags
-            if (!newLocation || (CACurrentMediaTime() - _startChangingMapModeTime < kOneSecondAnimatonTime))
+            if (!newLocation || (CACurrentMediaTime() - _startChangingMapModeTime < kHalfSecondAnimatonTime))
             {
                 [_mapViewController updateLocation:newLocation heading:newHeading];
                 return;
@@ -415,7 +415,7 @@
                             if (prevLocation)
                                 duration = MAX(1.0, [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp]);
                             else
-                                duration = kOneSecondAnimatonTime;
+                                duration = kHalfSecondAnimatonTime;
 
                             _mapView.mapAnimator->animateTargetTo(newTarget31,
                                                                duration,

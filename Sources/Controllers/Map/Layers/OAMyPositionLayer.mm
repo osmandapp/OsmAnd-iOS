@@ -72,7 +72,7 @@ typedef enum {
 - (instancetype) initWithMapView:(OAMapRendererView *)mapView;
 
 - (void) hideMarkers;
-- (void) updateLocation:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy heading:(CLLocationDirection)heading;
+- (void) updateLocation:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy heading:(CLLocationDirection)heading visible:(BOOL)visible;
 - (OsmAnd::PointI) getPosition;
 
 @end
@@ -205,67 +205,10 @@ typedef enum {
     }
 }
 
-- (void) updateLocation:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy heading:(CLLocationDirection)heading
+- (void) updateLocation:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy heading:(CLLocationDirection)heading visible:(BOOL)visible
 {
-    std::shared_ptr<OsmAnd::MapMarker> marker;
-    OsmAnd::MapMarker::OnSurfaceIconKey iconKey = NULL;
-
-    switch (_state)
-    {
-        case OAMarkerColletionStateMove:
-        {
-            switch (_mode)
-            {
-                case OAMarkerColletionModeDay:
-                    marker = _courseMarkerDay;
-                    iconKey = _courseMainIconKeyDay;
-                    break;
-                case OAMarkerColletionModeNight:
-                    marker = _courseMarkerNight;
-                    iconKey = _courseMainIconKeyNight;
-                    break;
-                    
-                default:
-                    break;
-            }
-            break;
-        }
-        case OAMarkerColletionStateOutdatedLocation:
-        {
-            switch (_mode)
-            {
-                case OAMarkerColletionModeDay:
-                    marker = _locationMarkerLostDay;
-                    break;
-                case OAMarkerColletionModeNight:
-                    marker = _locationMarkerLostNight;
-                    break;
-                    
-                default:
-                    break;
-            }
-            break;
-        }
-        default:
-        {
-            switch (_mode)
-            {
-                case OAMarkerColletionModeDay:
-                    marker = _locationMarkerDay;
-                    iconKey = _locationHeadingIconKeyDay;
-                    break;
-                case OAMarkerColletionModeNight:
-                    marker = _locationMarkerNight;
-                    iconKey = _locationHeadingIconKeyNight;
-                    break;
-                    
-                default:
-                    break;
-            }
-            break;
-        }
-    }
-    
+    std::shared_ptr<OsmAnd::MapMarker> marker = [self getActiveMarker];
+    OsmAnd::MapMarker::OnSurfaceIconKey iconKey = [self getActiveIconKey];
     if (marker)
     {
         marker->setIsAccuracyCircleVisible(true);
@@ -285,16 +228,52 @@ typedef enum {
                 marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading));
         }
 
-        if (marker->isHidden())
+        if (visible && marker->isHidden())
             marker->setIsHidden(false);
     }
 }
 
-- (OsmAnd::PointI) getPosition
+- (void) updateOtherLocations:(OsmAnd::PointI)target31 horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy heading:(CLLocationDirection)heading
 {
-    std::shared_ptr<OsmAnd::MapMarker> marker;
-    OsmAnd::MapMarker::OnSurfaceIconKey iconKey = NULL;
+    std::shared_ptr<OsmAnd::MapMarker> marker = [self getActiveMarker];
 
+    if (marker != _courseMarkerDay)
+    {
+        _courseMarkerDay->setPosition(target31);
+        if (_courseMainIconKeyDay)
+            _courseMarkerDay->setOnMapSurfaceIconDirection(_courseMainIconKeyDay, OsmAnd::Utilities::normalizedAngleDegrees(heading));
+    }
+
+    if (marker != _courseMarkerNight)
+    {
+        _courseMarkerNight->setPosition(target31);
+        if (_courseMainIconKeyNight)
+            _courseMarkerNight->setOnMapSurfaceIconDirection(_courseMainIconKeyNight, OsmAnd::Utilities::normalizedAngleDegrees(heading));
+    }
+
+    if (marker != _locationMarkerLostDay)
+        _locationMarkerLostDay->setPosition(target31);
+
+    if (marker != _locationMarkerLostNight)
+        _locationMarkerLostNight->setPosition(target31);
+
+    if (marker != _locationMarkerDay)
+    {
+        _locationMarkerDay->setPosition(target31);
+        if (_locationHeadingIconKeyDay)
+            _locationMarkerDay->setOnMapSurfaceIconDirection(_locationHeadingIconKeyDay, OsmAnd::Utilities::normalizedAngleDegrees(heading));
+    }
+
+    if (marker != _locationMarkerNight)
+    {
+        _locationMarkerNight->setPosition(target31);
+        if (_locationHeadingIconKeyNight)
+            _locationMarkerNight->setOnMapSurfaceIconDirection(_locationHeadingIconKeyNight, OsmAnd::Utilities::normalizedAngleDegrees(heading));
+    }
+}
+
+- (std::shared_ptr<OsmAnd::MapMarker>) getActiveMarker
+{
     switch (_state)
     {
         case OAMarkerColletionStateMove:
@@ -302,16 +281,9 @@ typedef enum {
             switch (_mode)
             {
                 case OAMarkerColletionModeDay:
-                    marker = _courseMarkerDay;
-                    iconKey = _courseMainIconKeyDay;
-                    break;
+                    return _courseMarkerDay;
                 case OAMarkerColletionModeNight:
-                    marker = _courseMarkerNight;
-                    iconKey = _courseMainIconKeyNight;
-                    break;
-
-                default:
-                    break;
+                    return _courseMarkerNight;
             }
             break;
         }
@@ -320,14 +292,9 @@ typedef enum {
             switch (_mode)
             {
                 case OAMarkerColletionModeDay:
-                    marker = _locationMarkerLostDay;
-                    break;
+                    return _locationMarkerLostDay;
                 case OAMarkerColletionModeNight:
-                    marker = _locationMarkerLostNight;
-                    break;
-
-                default:
-                    break;
+                    return _locationMarkerLostNight;
             }
             break;
         }
@@ -336,20 +303,54 @@ typedef enum {
             switch (_mode)
             {
                 case OAMarkerColletionModeDay:
-                    marker = _locationMarkerDay;
-                    iconKey = _locationHeadingIconKeyDay;
-                    break;
+                    return _locationMarkerDay;
                 case OAMarkerColletionModeNight:
-                    marker = _locationMarkerNight;
-                    iconKey = _locationHeadingIconKeyNight;
-                    break;
-
-                default:
-                    break;
+                    return _locationMarkerNight;
             }
             break;
         }
     }
+    return nil;
+}
+
+- (OsmAnd::MapMarker::OnSurfaceIconKey) getActiveIconKey
+{
+    switch (_state)
+    {
+        case OAMarkerColletionStateMove:
+        {
+            switch (_mode)
+            {
+                case OAMarkerColletionModeDay:
+                    return _courseMainIconKeyDay;
+                case OAMarkerColletionModeNight:
+                    return _courseMainIconKeyNight;
+            }
+            break;
+        }
+        case OAMarkerColletionStateOutdatedLocation:
+        {
+            return NULL;
+        }
+        default:
+        {
+            switch (_mode)
+            {
+                case OAMarkerColletionModeDay:
+                    return _locationHeadingIconKeyDay;
+                case OAMarkerColletionModeNight:
+                    return _locationHeadingIconKeyNight;
+            }
+            break;
+        }
+    }
+    return NULL;
+}
+
+- (OsmAnd::PointI) getPosition
+{
+    std::shared_ptr<OsmAnd::MapMarker> marker = [self getActiveMarker];
+    OsmAnd::MapMarker::OnSurfaceIconKey iconKey = [self getActiveIconKey];
     return marker ? marker->getPosition() : OsmAnd::PointI();
 }
 @end
@@ -503,7 +504,7 @@ typedef enum {
             OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
             if (mode == currentMode)
             {
-                [self updateLocation:c];
+                [self updateLocation:mode];
                 [self.mapView addKeyedSymbolsProvider:c.markerCollection];
             }
             else
@@ -527,10 +528,12 @@ typedef enum {
     c.mode = [OAAppSettings sharedManager].nightMode ? OAMarkerColletionModeNight : OAMarkerColletionModeDay;
 }
 
-- (void) updateLocation:(OAMarkerCollection *)c
+- (void) updateLocation:(OAApplicationMode *)mode
 {
     if (!_initDone)
         return;
+
+    OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
 
     CLLocation *newLocation = _lastLocation;
     CLLocationDirection newHeading = _lastHeading;
@@ -555,15 +558,26 @@ typedef enum {
             animationDuration = 0;
     }
 
+    [self updateCollectionLocation:c newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:animationDuration visible:YES];
+
+    for (OAMarkerCollection *mc in _modeMarkers.objectEnumerator)
+        if (mc != c)
+            [self updateCollectionLocation:mc newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:NO];
+}
+
+- (void) updateCollectionLocation:(OAMarkerCollection *)c newLocation:(CLLocation *)newLocation newTarget31:(OsmAnd::PointI)newTarget31 newHeading:(CLLocationDirection)newHeading animationDuration:(float)animationDuration visible:(BOOL)visible
+{
     if (newLocation.course >= 0)
     {
         c.state = OAMarkerColletionStateMove;
-        [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course - 90];
+        [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course - 90 visible:visible];
+        [c updateOtherLocations:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course - 90];
     }
     else if (_mapViewTrackingUtilities.showViewAngle)
     {
         c.state = OAMarkerColletionStateStay;
-        [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy heading:newHeading];
+        [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy heading:newHeading visible:visible];
+        [c updateOtherLocations:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newHeading];
     }
 }
 
@@ -576,9 +590,8 @@ typedef enum {
     if (!_initDone)
         return;
     
-    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
-    OAMarkerCollection *c = [_modeMarkers objectForKey:currentMode];
-    [self updateLocation:c];
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
+    [self updateLocation:mode];
 }
 
 - (CLLocationCoordinate2D) getActiveMarkerLocation

@@ -79,6 +79,8 @@
 #define VERSION_3_14 3.14
 #define VERSION_4_2 4.2
 
+#define kMaxLogFiles 3
+
 #define kAppData @"app_data"
 #define kInstallDate @"install_date"
 #define kNumberOfStarts @"starts_num"
@@ -158,6 +160,7 @@
         _weatherForecastPath = [_cachePath stringByAppendingPathComponent:@"WeatherForecast"];
 
         [self buildFolders];
+        [self createLogFile];
 
         [self initOpeningHoursParser];
 
@@ -211,6 +214,28 @@
         if (!success)
             OALog(@"Error creating WeatherForecast folder: %@", error.localizedFailureReason);
     }
+}
+
+- (void) createLogFile
+{
+#if DEBUG
+    return;
+#else
+    NSFileManager *manager = NSFileManager.defaultManager;
+    NSString *logsPath = [_documentsPath stringByAppendingPathComponent:@"Logs"];
+    if (![manager fileExistsAtPath:logsPath])
+        [manager createDirectoryAtPath:logsPath withIntermediateDirectories:NO attributes:nil error:nil];
+    NSArray<NSString *> *files = [manager contentsOfDirectoryAtPath:logsPath error:nil];
+    for (NSInteger i = 0; i < files.count; i++)
+    {
+        if (i > kMaxLogFiles)
+           [manager removeItemAtPath:[logsPath stringByAppendingPathComponent:files[i]] error:nil];
+    }
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MMM dd, yyyy HH:mm"];
+    NSString *destPath = [[logsPath stringByAppendingPathComponent:[formatter stringFromDate:NSDate.date]] stringByAppendingPathExtension:@"log"];
+    freopen([destPath fileSystemRepresentation], "a+", stderr);
+#endif
 }
 
 - (void) initOpeningHoursParser

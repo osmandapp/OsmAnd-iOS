@@ -246,7 +246,7 @@
 "reminder_not_set_text" = "El recordatori automàtic no s'ha desat perquè no s'ha pogut accedir al calendari";
 //inapps
 "product_title_nautical" = "Mapa nàutic";
-"product_desc_nautical" = "Mapa nàutic d'arreu el món";
+"product_desc_nautical" = "Mapes vectorials adaptats per a la navegació marítima";
 "product_title_parking" = "Posició d'aparcament";
 "product_desc_parking" = "Us permet memoritzar fàcilment quan es va aparcar el vehicle i quant temps us queda si l'aparcament és per temps limitat";
 "product_title_skimap" = "Mapa d'esquí";
@@ -395,7 +395,7 @@
 "product_title_trip_planning" = "Planificació de viatges";
 "plugin_popup_ski_title" = "Activa l'estil de mapes Esquí";
 "product_desc_ext_skimap" = "Mapes d'esquí OsmAnd és un connector de l'aplicació de mapes i navegació OsmAnd dissenyat per navegar dins de centres esportius d'hivern. Us dona informació de pistes d'esquí, remuntadors i fins i tot del color de cada pista, que indica la seva dificultat. Obtindreu informació de les pistes així com de les infrastructures properes.\n\nInstruccions d'ús: Activeu el connector des l'aplicació OsmAnd prement el botó de configuració del mapa i seleccionant el seu tipus com Mapes d'esquí.";
-"product_desc_ext_track_recording" = "Enregistreu els vostres trajectes i deseu-los manualment utilitzant el connector d'enregistrament Trajecte OsmAnd. Exporteu el vostre trajecte com un fitxer GPX,  compartiu-lo o fins i tot utilitzeu-lo per col·laborar amb el projecte Openstreetmap. Una eina pràctica.per corredors, senderistes i qualsevol interessat en enregistrar els seus trajectes.";
+"product_desc_ext_track_recording" = "Enregistreu els vostres trajectes i deseu-los manualment utilitzant el connector d'enregistrament Trajecte OsmAnd. Exporteu el vostre trajecte com un fitxer GPX, compartiu-lo o fins i tot utilitzeu-lo per col·laborar amb el projecte Openstreetmap. Una eina pràctica.per corredors, senderistes i qualsevol interessat en enregistrar els seus trajectes.";
 "product_desc_ext_wiki" = "Obteniu informació de punts d'interès des la Viquipèdia. Serà la vostra guia de butxaca en desconnexió - només cal que activeu el connector Viquipèdia i fruireu dels articles que tracten de les coses que us rodegen.";
 "product_desc_ext_srtm" = "Aquest connector proporciona corbes de nivell i un ombrejat de relleu, que es poden veure als mapes locals d' OsmAnd. Les corbes de nivell informen de l'alçada d'una àrea mentre l'ombrejat permet la seva visualització. Utilitzant aquest connector podreu veure el nom dels de les muntanyes i de llocs concrets de la zona.\n\nLes dades globals (entre 70 graus nord i 70 graus sud) estan basades en mesures del SRTM (Shuttle Radar Topography Mission) i del ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), un instrument de generació d'imatges a bord de Terra, el satèl·lit insígnia del Sistema d'Observació de la Terra de la NASA. ASTER és un esforç de col·laboració entre la NASA, el Ministeri d'Economia i Comerç del Japó (METI) i la fundació Japan Space Systems (J-spacesystems).";
 "plugin_popup_ski_desc" = "Per activar l'estil <b>Mapa d'esquí</b> , aneu a l<b>Configuració del mapa</b> > <b>Tipus de mapa </b>";
@@ -1275,7 +1275,7 @@
 "gpx_descent" = "Descens";
 "gpx_avg_altitude" = "Altitud mitjana";
 "region_others" = "Altres mapes";
-"gpx_ascent" = "Ascens";
+"gpx_ascent" = "Ascensió";
 "download_depth_countours" = "Isòbates";
 "gpx_alt_range" = "Interval d\'altitud";
 "region_nautical" = "Cartes nàutiques";
@@ -1782,7 +1782,7 @@
 "osmand_profile" = "Perfil OsmAnd";
 "not_available_profile_name" = "Ja existeix un perfil amb aquest nom.";
 "err_profile_import" = "S'ha produït un error llegint l'element de dades: %@";
-"after_tapping_done" = "Un cop premeu Fet els perfils esborrats es perdran definitivament.";
+"after_tapping_done" = "Un cop premeu Fet, els perfils esborrats es perdran definitivament.";
 "rearrange_profile_descr" = "Els perfils predeterminats d'Osmand no es poden esborrar però els podeu desactivar a la pantalla anterior o arrossegar-los al final de la llista.";
 "base_profile_descr_aircraft" = "Avió, vol planat";
 "base_profile_descr_boat" = "Vaixell, rem, vela";
@@ -2222,3 +2222,19 @@
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Sense restriccions)";
 "shared_string_data" = "Dades";
 "shared_string_undefined" = "Indefinida";
+"restore_from_file" = "Restaura des d'un fitxer";
+"routing_attr_prefer_horse_routes_name" = "Prefereix les rutes eqüestres";
+"search_more" = "Cerca'n més…";
+"backup_and_restore" = "Còpia de seguretat i restauració";
+"routing_attr_hazmat_category_name" = "Transport de matèries perilloses";
+"routing_attr_only_permitted_ways_name" = "Vies expressament autoritzades";
+"horseback_riding" = "Equitació";
+"start_point" = "Comença";
+"map_widget_speed" = "Velocitat";
+"simulation_preview_mode_title" = "Mode previsualització ràpida";
+"routeInfo_horse_scale_name" = "Dificultat de les rutes eqüestres";
+"routing_attr_prefer_horse_routes_description" = "Prefereix les rutes eqüestres";
+"restore_from_osmand_cloud" = "Restaura des d'OsmAnd Clouf";
+"simulation_constant_mode_title" = "Velocitat constant";
+"speed_mode" = "Mode de velocitat";
+"simulation_real_mode_title" = "Simulació realista";

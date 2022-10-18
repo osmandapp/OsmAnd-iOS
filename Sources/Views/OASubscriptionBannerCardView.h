@@ -36,16 +36,9 @@ typedef NS_ENUM(NSInteger, EOASubscriptionBannerType)
 @property (weak, nonatomic) IBOutlet UIView *separatorView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonView;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomMargin;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleBottomNoDescriptionMargin;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomMargin;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionBottomNoSeparatorMargin;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconBottomMargin;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconBottomNoSeparatorMargin;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *separatorBottomMargin;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonBottomMargin;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonBottomNoSeparatorMargin;
-
 @property (nonatomic, weak) id<OASubscriptionBannerCardViewDelegate> delegate;
+
+- (void)updateView;
+- (void)updateFrame;
 
 @end

@@ -288,6 +288,9 @@ static BOOL _repositoryUpdated = NO;
     _searchController.obscuresBackgroundDuringPresentation = NO;
     self.tableView.tableHeaderView = _searchController.searchBar;
     
+    if (_displayBanner)
+        [self setupSubscriptionBanner];
+
     self.definesPresentationContext = YES;
 }
 
@@ -320,11 +323,6 @@ static BOOL _repositoryUpdated = NO;
     }
     
     self.updateButton.hidden = hideUpdateButton;
-
-    if (_displayBanner && !_subscriptionBannerView)
-        [self setupSubscriptionBanner];
-
-    [self.tableView reloadData];
 
     _weatherSizeCalculatedObserver =
             [[OAAutoObserverProxy alloc] initWith:self
@@ -552,7 +550,10 @@ static BOOL _repositoryUpdated = NO;
     EOASubscriptionBannerType bannerType = freeMaps > 0 ? EOASubscriptionBannerFree : EOASubscriptionBannerNoFree;
 
     if (_subscriptionBannerView && _subscriptionBannerView.type == bannerType && _subscriptionBannerView.freeMapsCount == freeMaps)
+    {
+        [_subscriptionBannerView updateFrame];
         return;
+    }
 
     if (!_subscriptionBannerView || _subscriptionBannerView.type != bannerType)
     {
@@ -560,28 +561,7 @@ static BOOL _repositoryUpdated = NO;
         _subscriptionBannerView.delegate = self;
     }
 
-    _subscriptionBannerView.freeMapsCount = freeMaps;
-
-    NSString *title = freeMaps > 0
-            ? [NSString stringWithFormat:OALocalizedString(@"subscription_banner_free_maps_title"), freeMaps]
-            : OALocalizedString(@"subscription_banner_no_free_maps_title");
-    NSString *description = OALocalizedString(@"subscription_banner_free_maps_description");
-    NSString *icon = freeMaps > 0 ? @"ic_custom_five_downloads_big" : @"ic_custom_zero_downloads_big";
-    NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"get_unlimited_access")];
-
-    [buttonTitle addAttribute:NSForegroundColorAttributeName
-                        value:freeMaps > 0 ? UIColorFromRGB(color_banner_button) : UIColorFromRGB(color_primary_purple)
-                        range:NSMakeRange(0, buttonTitle.string.length)];
-    [buttonTitle addAttribute:NSFontAttributeName
-                        value:[UIFont systemFontOfSize:freeMaps > 0 ? 17. : 15. weight:UIFontWeightSemibold]
-                        range:NSMakeRange(0, buttonTitle.string.length)];
-
-    _subscriptionBannerView.titleLabel.text = title;
-    _subscriptionBannerView.descriptionLabel.text = description;
-    [_subscriptionBannerView.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
-    _subscriptionBannerView.iconView.image = [UIImage templateImageNamed:icon];
-
-    [_subscriptionBannerView layoutSubviews];
+    [_subscriptionBannerView updateView];
 }
 
 - (void) resourceInstallationFailed:(NSNotification *)notification
@@ -598,12 +578,11 @@ static BOOL _repositoryUpdated = NO;
     [self updateMultipleResources];
     [self obtainDataAndItems];
     [self prepareContent];
+    [self setupSubscriptionBanner];
     [self refreshContent:YES];
 
     if ([self shouldDisplayWeatherForecast:self.region] && ![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:self.region]])
         [_weatherHelper calculateCacheSize:self.region onComplete:nil];
-
-    [self setupSubscriptionBanner];
 
     if (_repositoryUpdating)
     {
@@ -3303,6 +3282,7 @@ static BOOL _repositoryUpdated = NO;
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupSubscriptionBanner];
+        [self.tableView reloadData];
     });
 }
 

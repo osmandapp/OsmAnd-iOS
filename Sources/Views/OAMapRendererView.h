@@ -43,7 +43,6 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
     _DECLARE_ENTRY(Viewport),
     _DECLARE_ENTRY(FieldOfView),
     _DECLARE_ENTRY(SkyColor),
-    _DECLARE_ENTRY(FogConfiguration),
     _DECLARE_ENTRY(Azimuth),
     _DECLARE_ENTRY(ElevationAngle),
     _DECLARE_ENTRY(Target),

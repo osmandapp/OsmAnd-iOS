@@ -140,19 +140,6 @@
     {
         _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:EOASubscriptionBannerUpdates];
         _subscriptionBannerView.delegate = self;
-
-        _subscriptionBannerView.titleLabel.text = OALocalizedString(@"subscription_banner_osmand_pro_title");
-        _subscriptionBannerView.iconView.image = [UIImage templateImageNamed:@"ic_custom_osmand_pro_logo_monotone_big"];
-        _subscriptionBannerView.iconView.tintColor = UIColorFromRGB(color_banner_button);
-
-        NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"purchase_get")];
-        [buttonTitle addAttribute:NSForegroundColorAttributeName
-                            value:UIColorFromRGB(color_primary_purple)
-                            range:NSMakeRange(0, buttonTitle.string.length)];
-        [buttonTitle addAttribute:NSFontAttributeName
-                            value:[UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
-                            range:NSMakeRange(0, buttonTitle.string.length)];
-        [_subscriptionBannerView.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
     }
     else if (isPaid)
     {
@@ -160,7 +147,7 @@
     }
 
     if (_subscriptionBannerView)
-        [_subscriptionBannerView layoutSubviews];
+        [_subscriptionBannerView updateView];
 
     self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
 }

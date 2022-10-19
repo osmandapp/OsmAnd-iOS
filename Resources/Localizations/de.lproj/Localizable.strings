@@ -2724,3 +2724,4 @@
 "cross_buy" = "Cross-Buy";
 "weather_forecast_entire_world" = "Weltweite Wettervorhersage";
 "weather_entire_world" = "Weltweit";
+"map_download_privacy_descr" = "Beim Herunterladen von Karten stimmen Sie den <a href='https://osmand.net/docs/legal/terms-of-use'>Nutzungsbedingen</a> und den <a href='https://osmand.net/docs/legal/privacy-policy'>Datenschutzbestimmungen zu</a>.";

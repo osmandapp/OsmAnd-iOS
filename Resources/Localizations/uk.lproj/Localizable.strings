@@ -774,7 +774,7 @@
 "shared_setting_always_ask" = "Завжди питати";
 "recording_preferences_descr" = "Налаштування запису треку";
 "traffic_warning_tunnel" = "Тунель попереду";
-"poi_overlay" = "Шар з точками інтересу";
+"poi_overlay" = "Накладка з точками інтересу";
 "track_save_descr" = "Зберегти поточний трек як GPX-файл.";
 "poi_clear" = "Очистити";
 "track_during_nav" = "Автозапис треку";
@@ -2720,3 +2720,4 @@
 "dowload_cloud_version" = "Завантажити хмарну версію";
 "weather_forecast_entire_world" = "Прогноз погоди для всього світу";
 "weather_entire_world" = "Весь світ";
+"map_download_privacy_descr" = "Завантажуючи мапи, ви погоджуєтесь з Умовами використання <a href='https://osmand.net/docs/legal/terms-of-use'></a> та Політикою приватності <a href='https://osmand.net/docs/legal/privacy-policy'></a> .";

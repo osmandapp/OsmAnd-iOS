@@ -307,6 +307,8 @@
 		32309A752698D22F005751F5 /* ic_custom_direction_compass_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32309A712698D22E005751F5 /* ic_custom_direction_compass_night@3x.png */; };
 		32309A762698D22F005751F5 /* ic_custom_direction_compass_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32309A722698D22E005751F5 /* ic_custom_direction_compass_day@2x.png */; };
 		3234101A28889D1B00E90FBA /* OARowInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3234101928889D1B00E90FBA /* OARowInfo.m */; };
+		3236428E2900370800E18413 /* OAFPSTextInfoWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3236428D2900370800E18413 /* OAFPSTextInfoWidget.mm */; };
+		32364290290049FA00E18413 /* OAFPSTextInfoWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3236428F2900499400E18413 /* OAFPSTextInfoWidget.xib */; };
 		32388EE226E6AF770021F829 /* OAQuickSearchResultTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 32388EE126E6AF770021F829 /* OAQuickSearchResultTableViewCell.m */; };
 		32388EE326E6AFAF0021F829 /* OAQuickSearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32388EDF26E6AECF0021F829 /* OAQuickSearchResultTableViewCell.xib */; };
 		323BD8E32628850400D255ED /* ic_bg_point_comment_bottom_small@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 323BD8B1262884F300D255ED /* ic_bg_point_comment_bottom_small@3x.png */; };
@@ -3643,6 +3645,9 @@
 		32309A722698D22E005751F5 /* ic_custom_direction_compass_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_compass_day@2x.png"; path = "Resources/Icons/ic_custom_direction_compass_day@2x.png"; sourceTree = "<group>"; };
 		3234101828889D0900E90FBA /* OARowInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARowInfo.h; sourceTree = "<group>"; };
 		3234101928889D1B00E90FBA /* OARowInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARowInfo.m; sourceTree = "<group>"; };
+		3236428C290036FD00E18413 /* OAFPSTextInfoWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFPSTextInfoWidget.h; sourceTree = "<group>"; };
+		3236428D2900370800E18413 /* OAFPSTextInfoWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFPSTextInfoWidget.mm; sourceTree = "<group>"; };
+		3236428F2900499400E18413 /* OAFPSTextInfoWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAFPSTextInfoWidget.xib; sourceTree = "<group>"; };
 		32388EDF26E6AECF0021F829 /* OAQuickSearchResultTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuickSearchResultTableViewCell.xib; sourceTree = "<group>"; };
 		32388EE026E6AF740021F829 /* OAQuickSearchResultTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchResultTableViewCell.h; sourceTree = "<group>"; };
 		32388EE126E6AF770021F829 /* OAQuickSearchResultTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAQuickSearchResultTableViewCell.m; sourceTree = "<group>"; };
@@ -12361,6 +12366,8 @@
 			children = (
 				DA5A7F3C26C563A400F274C7 /* Factory */,
 				DA5A7F3826C563A400F274C7 /* OAAlarmWidget.h */,
+				3236428C290036FD00E18413 /* OAFPSTextInfoWidget.h */,
+				3236428D2900370800E18413 /* OAFPSTextInfoWidget.mm */,
 				DA5A7F3726C563A400F274C7 /* OAAlarmWidget.mm */,
 				DA5A7F3A26C563A400F274C7 /* OADestinationLineDelegate.h */,
 				DA5A7F2D26C563A400F274C7 /* OADestinationLineDelegate.m */,
@@ -12931,13 +12938,14 @@
 				DA5A807626C563A500F274C7 /* LaunchScreen.xib */,
 				DA5A807726C563A500F274C7 /* OARulerWidget.xib */,
 				DAC849B526CF97EE00018091 /* OADownloadMapWidget.xib */,
+				3236428F2900499400E18413 /* OAFPSTextInfoWidget.xib */,
+				DA5A807E26C563A500F274C7 /* OATargetPointView.xib */,
 				DA5A807826C563A500F274C7 /* OATopCoordinatesWidget.xib */,
 				DA5A807926C563A500F274C7 /* OAOverlayUnderlayView.xib */,
 				DA5A807A26C563A500F274C7 /* OARoutingProgressView.xib */,
 				DA5A807B26C563A500F274C7 /* OANextTurnWidget.xib */,
 				DA5A807C26C563A500F274C7 /* OATopTextView.xib */,
 				DA5A807D26C563A500F274C7 /* OATextInfoWidget.xib */,
-				DA5A807E26C563A500F274C7 /* OATargetPointView.xib */,
 				DA5A807F26C563A500F274C7 /* OptionsPanel.xib */,
 				DA5A808026C563A500F274C7 /* OADistanceControl.xib */,
 				DA5A808226C563A500F274C7 /* OAAlarmWidget.xib */,
@@ -14865,6 +14873,7 @@
 				DAF3459322F4482C009E2EB6 /* ic_custom_compound_action_hide_bottom@3x.png in Resources */,
 				32309A662698D1F7005751F5 /* ic_custom_direction_bearing_night@3x.png in Resources */,
 				DA540DA3229E8CF80069201E /* widget_mapillary_day@3x.png in Resources */,
+				32364290290049FA00E18413 /* OAFPSTextInfoWidget.xib in Resources */,
 				840C9FB61CF353C500F2F991 /* ic_coordinates_location@2x.png in Resources */,
 				DA5A827F26C563A700F274C7 /* OAMenuSimpleCell.xib in Resources */,
 				845E06081B5956E800DFC2A7 /* ic_arrow_open@3x.png in Resources */,
@@ -16744,6 +16753,7 @@
 				CA4EDBC475684B567F9345C9 /* OAWeatherPlugin.mm in Sources */,
 				CA4ED3D292CC8CAE7922DC3E /* OAWeatherSettingsViewController.mm in Sources */,
 				CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */,
+				3236428E2900370800E18413 /* OAFPSTextInfoWidget.mm in Sources */,
 				CA4ED8CAB7D105A8DAAF2A06 /* OAShowHideTemperatureAction.mm in Sources */,
 				CA4ED071F93DF4FB0368BACC /* OAShowHidePressureAction.mm in Sources */,
 				CA4ED8E8B076A382837AEF2D /* OAShowHideWindAction.mm in Sources */,
